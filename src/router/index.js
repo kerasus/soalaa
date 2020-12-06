@@ -16,6 +16,11 @@ export default new VueRouter({
             path: '/quest/create',
             name: 'quest.create',
             component: () => lazyLoadView(import('../components/QuestEditor/QuestEditor'))
+        },
+        {
+            path: '/TinymceEditor',
+            name: 'TinymceEditor',
+            component: () => lazyLoadView(import('../components/TinymceEditor/TinymceEditor'))
         }
     ]
 })
