@@ -38,6 +38,7 @@
 
 <script>
     import Menu from './components/Menu'
+    import './assets/scss/font.scss'
 
     export default {
         name: 'App',
@@ -55,3 +56,4 @@
         }
     };
 </script>
+
