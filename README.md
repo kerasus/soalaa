@@ -1,4 +1,4 @@
-# topic_tree_editor
+# Topic Tree Editor
 
 ## Project setup
 ```
