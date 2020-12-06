@@ -40,7 +40,7 @@
         }),
         mounted() {
             if (localStorage.getItem('tree')) {
-                this.data =  JSON.parse(localStorage.getItem('tree'))
+                this.data =  new Tree( [JSON.parse(localStorage.getItem('tree'))] )
             }
         },
         methods: {
@@ -58,7 +58,6 @@
             // //
             // onAddNode(params) {
             //     console.log(params)
-            //
             // },
             //
             // onClick(params) {
