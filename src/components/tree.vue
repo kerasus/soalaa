@@ -9,7 +9,7 @@
                 :model="data"
                 default-tree-node-name="ریشه جدید"
                 default-leaf-node-name="آیتم جدید"
-                v-bind:default-expanded="false"
+                v-bind:default-expanded="true"
         >
             <span class="icon" slot="addTreeNodeIcon">📂</span>
             <span class="icon" slot="addLeafNodeIcon">＋</span>
@@ -18,6 +18,8 @@
             <span class="icon" slot="leafNodeIcon">🍃</span>
             <span class="icon" slot="treeNodeIcon">🌲</span>
         </vue-tree-list>
+        <v-btn @click="save">save</v-btn>
+        <v-treeview :items="items.children[0].children"></v-treeview>
     </div>
 
 </template>
@@ -29,33 +31,29 @@
             VueTreeList
         },
         data: () => ({
-            name: '',
-            textshow: false,
-            newTree: {},
+            items: null,
             data: new Tree([
                 {
                     name: 'درخت دانش',
                     id: 1,
                     pid: 0,
-                    // children: [
-                    //     {
-                    //         name: 'Node 1-2',
-                    //         id: 2,
-                    //         isLeaf: true,
-                    //         pid: 1
-                    //     }
-                    // ]
                 },
             ])
         }),
+        mounted() {
+            if (localStorage.getItem('tree')) {
+                this.data =  new Tree( [JSON.parse(localStorage.getItem('tree'))] )
+            }
+            this.items = JSON.parse(localStorage.getItem('tree'))
+        },
         methods: {
-            // showtextfield() {
-            //     this.textshow = true
-            // },
-            // onDel(node) {
-            //     console.log(node)
-            //     node.remove()
-            // },
+            save() {
+              localStorage.setItem('tree', this.data)
+            },
+            onDel(node) {
+                console.log(node)
+                node.remove()
+            },
             //
             // onChangeName(params) {
             //     console.log(params)
@@ -63,7 +61,6 @@
             // //
             // onAddNode(params) {
             //     console.log(params)
-            //
             // },
             //
             // onClick(params) {
