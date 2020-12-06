@@ -19,7 +19,7 @@
             <span class="icon" slot="treeNodeIcon">🌲</span>
         </vue-tree-list>
         <v-btn @click="save">save</v-btn>
-        <v-treeview :items="items.children[0].children"></v-treeview>
+        <v-treeview v-if="items" :items="items.children[0].children"></v-treeview>
     </div>
 
 </template>
@@ -54,18 +54,18 @@
                 console.log(node)
                 node.remove()
             },
-            //
-            // onChangeName(params) {
-            //     console.log(params)
-            // },
-            // //
-            // onAddNode(params) {
-            //     console.log(params)
-            // },
-            //
-            // onClick(params) {
-            //     console.log(params)
-            // },
+
+            onChangeName(params) {
+                console.log(params)
+            },
+
+            onAddNode(params) {
+                console.log(params)
+            },
+
+            onClick(params) {
+                console.log(params)
+            },
 
             // addNode() {
             //     var node = new TreeNode({ name: this.name, isLeaf: false })
