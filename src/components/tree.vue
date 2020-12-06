@@ -19,6 +19,7 @@
             <span class="icon" slot="treeNodeIcon">🌲</span>
         </vue-tree-list>
         <v-btn @click="save">save</v-btn>
+        <v-treeview :items="items.children[0].children"></v-treeview>
     </div>
 
 </template>
@@ -30,6 +31,7 @@
             VueTreeList
         },
         data: () => ({
+            items: null,
             data: new Tree([
                 {
                     name: 'درخت دانش',
@@ -42,6 +44,7 @@
             if (localStorage.getItem('tree')) {
                 this.data =  new Tree( [JSON.parse(localStorage.getItem('tree'))] )
             }
+            this.items = JSON.parse(localStorage.getItem('tree'))
         },
         methods: {
             save() {
