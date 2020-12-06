@@ -28,7 +28,7 @@
             <span class="icon" slot="treeNodeIcon">🌲</span>
         </vue-tree-list>
         <v-btn @click="save">save</v-btn>
-<!--        <v-treeview :items="items.children[0].children"></v-treeview>-->
+<!--        <v-treeview v-if="items" :items="items.children[0].children"></v-treeview>-->
 <!--        <v-overlay-->
 <!--                :value="overlay"-->
 <!--        >-->
