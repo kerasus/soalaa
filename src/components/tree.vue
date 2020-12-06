@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div dir="ltr">
 <!--        <button @click="addNode">Add Node</button>-->
         <vue-tree-list
                 @click="onClick"
