@@ -2,6 +2,7 @@
     <div class="mt-4">
         <editor
                 api-key="no-api-key"
+                id="editor"
                 :init="{
                  height: 500,
                  menubar: false,
@@ -13,7 +14,10 @@
                  toolbar:
                    'undo redo | formatselect | bold italic backcolor | \
                    alignleft aligncenter alignright alignjustify | \
-                   bullist numlist outdent indent | removeformat | help'
+                   bullist numlist outdent indent | removeformat | help',
+                 directionality : 'rtl',
+                 auto_focus: 'editor',
+                 branding: false
                }"
         />
     </div>
