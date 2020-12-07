@@ -1,5 +1,6 @@
 <template>
     <div dir="ltr">
+        <v-text-field v-if="textfieldon" id="thename" /> <v-btn @click="checkname">save name</v-btn>
         <vue-tree-list
                 :key="componentKey"
                 @click="onClick"
@@ -7,7 +8,7 @@
                 @delete-node="onDel"
                 @add-node="onAddNode"
                 :model="data"
-                default-tree-node-name="ریشه جدید"
+                default-tree-node-name=""
                 default-leaf-node-name="آیتم جدید"
                 v-bind:default-expanded="true"
         >
@@ -15,17 +16,22 @@
             <template v-slot:leafNameDisplay="slotProps">
         <span>
           {{ slotProps.model.name }}
+
+
              <span>
             <v-btn  v-if="editing ===  slotProps.model.id" @click="saveNode(slotProps.model)">
                 <v-icon>
                 mdi-checkbox-marked-circle-outline
             </v-icon>
+
             </v-btn>
-                <v-btn  v-if="editing ===  slotProps.model.id" @click="close(slotProps.model.id)">
+                <v-btn  v-if="editing ===  slotProps.model.id" @click="close(slotProps.model)">
                 <v-icon>
                 mdi-window-close
             </v-icon>
             </v-btn>
+
+
         </span>
         </span>
             </template>
@@ -52,6 +58,9 @@
             VueTreeList
         },
         data: () => ({
+            defaultedit: false,
+            name:'',
+            textfieldon:false,
             showOptions: true,
 
             nodes: [{
@@ -83,33 +92,35 @@
         },
         methods: {
 
-
-            search(tree, target,newChild)  {
-                if (tree.id === target) {
-                    tree.children.push(newChild);
-                }
-
-                for (const child of tree.children) {
-                    const res = this.search(child, target,newChild);
-
-                    if (res) {
-                        return res;
-                    }
-                }
-            },
-
-
-
+            // search(tree, target,newChild)  {
+            //     if (tree.id === target) {
+            //         tree.children.push(newChild);
+            //     }
+            //
+            //     for (const child of tree.children) {
+            //         const res = this.search(child, target,newChild);
+            //
+            //         if (res) {
+            //             return res;
+            //         }
+            //     }
+            // },
             saveNode(node) {
                 this.node.id = node.id
                 this.node.parentId = node.pid
                 this.node.name = node.name
                 this.editing = null
                 this.showOptions = true
+                if (this.defaultedit === false) {
+                    node.changeName(this.name)
+                }
                 this.save()
 
             },
             close(item) {
+                item.remove()
+                this.editing = null
+                this.showOptions = true
                 console.log(item)
 
             },
@@ -125,23 +136,26 @@
             },
 
             onChangeName(params) {
+                this.defaultedit = true
                 console.log(params)
                 this.editing = params.id
                 this.showOptions = false
             },
-
             onAddNode(params) {
-                console.log(params)
+                this.textfieldon = true
                 params.addLeafNodeDisabled = true
                 this.editing = params.id
                 this.showOptions = false
+            },
 
+            checkname() {
+              this.name = document.getElementById("thename").value
+              this.textfieldon = false
             },
 
             onClick(params) {
                 console.log(params)
             },
-
         }
     }
 </script>
