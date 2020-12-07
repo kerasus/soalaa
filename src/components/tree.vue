@@ -1,5 +1,6 @@
 <template>
     <div dir="ltr">
+        <v-text-field v-if="textfieldon" :v-model="name"/>
         <vue-tree-list
                 :key="componentKey"
                 @click="onClick"
@@ -21,7 +22,7 @@
                 mdi-checkbox-marked-circle-outline
             </v-icon>
             </v-btn>
-                <v-btn  v-if="editing ===  slotProps.model.id" @click="close(slotProps.model.id)">
+                <v-btn  v-if="editing ===  slotProps.model.id" @click="close(slotProps.model)">
                 <v-icon>
                 mdi-window-close
             </v-icon>
@@ -52,6 +53,8 @@
             VueTreeList
         },
         data: () => ({
+            name:'',
+            textfieldon:false,
             showOptions: true,
 
             nodes: [{
@@ -83,20 +86,33 @@
         },
         methods: {
 
-
-            search(tree, target,newChild)  {
+            // search(tree, target,newChild)  {
+            //     if (tree.id === target) {
+            //         tree.children.push(newChild);
+            //     }
+            //
+            //     for (const child of tree.children) {
+            //         const res = this.search(child, target,newChild);
+            //
+            //         if (res) {
+            //             return res;
+            //         }
+            //     }
+            // },
+            search(tree, target)  {
                 if (tree.id === target) {
-                    tree.children.push(newChild);
+                    tree.remove()
                 }
 
                 for (const child of tree.children) {
-                    const res = this.search(child, target,newChild);
+                    const res = this.search(child, target);
 
                     if (res) {
                         return res;
                     }
                 }
             },
+
 
 
 
@@ -110,6 +126,9 @@
 
             },
             close(item) {
+                item.remove()
+                this.editing = null
+                this.showOptions = true
                 console.log(item)
 
             },
@@ -129,11 +148,20 @@
                 this.editing = params.id
                 this.showOptions = false
             },
+            changingName() {
+                this.textfieldon = true
 
-            onAddNode(params) {
+
+            },
+
+            async onAddNode(params) {
+                await this.changingName()
+                params.changeName(this.name)
                 console.log(params)
                 params.addLeafNodeDisabled = true
                 this.editing = params.id
+
+                params.changeName(this.name)
                 this.showOptions = false
 
             },
@@ -141,7 +169,6 @@
             onClick(params) {
                 console.log(params)
             },
-
         }
     }
 </script>
