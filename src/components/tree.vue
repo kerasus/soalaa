@@ -1,6 +1,8 @@
 <template>
     <div dir="ltr">
-        <v-text-field v-if="textfieldon" id="thename" /> <v-btn @click="checkname">save name</v-btn>
+        <v-dialog v-model="dialog" max-width="40%">
+            <v-text-field id="thename" style="background-color:aliceblue "/> <v-btn @click="checkname">save name</v-btn>
+        </v-dialog>
         <vue-tree-list
                 :key="componentKey"
                 @click="onClick"
@@ -58,6 +60,7 @@
             VueTreeList
         },
         data: () => ({
+            dialog: false,
             defaultedit: false,
             name:'',
             textfieldon:false,
@@ -142,7 +145,7 @@
                 this.showOptions = false
             },
             onAddNode(params) {
-                this.textfieldon = true
+                this.dialog = true
                 params.addLeafNodeDisabled = true
                 this.editing = params.id
                 this.showOptions = false
@@ -150,7 +153,7 @@
 
             checkname() {
               this.name = document.getElementById("thename").value
-              this.textfieldon = false
+              this.dialog = false
             },
 
             onClick(params) {
