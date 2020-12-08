@@ -1,23 +1,54 @@
 <template>
     <div dir="ltr">
-<!--        <button @click="addNode">Add Node</button>-->
+        <v-dialog v-model="dialog" max-width="40%">
+            <v-text-field id="thename" style="background-color:aliceblue "/> <v-btn @click="checkname">save name</v-btn>
+        </v-dialog>
         <vue-tree-list
+                :key="componentKey"
                 @click="onClick"
                 @change-name="onChangeName"
                 @delete-node="onDel"
                 @add-node="onAddNode"
                 :model="data"
-                default-tree-node-name="ریشه جدید"
+                default-tree-node-name=""
                 default-leaf-node-name="آیتم جدید"
-                v-bind:default-expanded="false"
+                v-bind:default-expanded="true"
         >
-            <span class="icon" slot="addTreeNodeIcon">📂</span>
-            <span class="icon" slot="addLeafNodeIcon">＋</span>
-            <span class="icon" slot="editNodeIcon">📃</span>
-            <span class="icon" slot="delNodeIcon">✂️</span>
+
+            <template v-slot:leafNameDisplay="slotProps">
+        <span>
+          {{ slotProps.model.name }}
+
+
+             <span>
+            <v-btn  v-if="editing ===  slotProps.model.id" @click="saveNode(slotProps.model)">
+                <v-icon>
+                mdi-checkbox-marked-circle-outline
+            </v-icon>
+
+            </v-btn>
+                <v-btn  v-if="editing ===  slotProps.model.id" @click="close(slotProps.model)">
+                <v-icon>
+                mdi-window-close
+            </v-icon>
+            </v-btn>
+
+
+        </span>
+        </span>
+            </template>
+            <span class="icon" slot="addTreeNodeIcon"><v-icon v-if="showOptions">mdi-plus</v-icon></span>
+            <span class="icon" slot="addLeafNodeIcon"></span>
+            <span class="icon" slot="editNodeIcon"><v-icon v-if="showOptions">mdi-pencil</v-icon></span>
+            <span class="icon" slot="delNodeIcon"><v-icon v-if="showOptions">mdi-delete</v-icon></span>
             <span class="icon" slot="leafNodeIcon">🍃</span>
             <span class="icon" slot="treeNodeIcon">🌲</span>
         </vue-tree-list>
+<!--        <v-treeview :items="items.children[0].children"></v-treeview>-->
+        <v-overlay
+                :value="overlay"
+        >
+        </v-overlay>
     </div>
 
 </template>
@@ -29,53 +60,105 @@
             VueTreeList
         },
         data: () => ({
-            name: '',
-            textshow: false,
-            newTree: {},
+            dialog: false,
+            defaultedit: false,
+            name:'',
+            textfieldon:false,
+            showOptions: true,
+
+            nodes: [{
+                name: 'درخت دانش',
+                id: 1,
+                pid: 0,
+                addLeafNodeDisabled: true,
+                children:[]
+            }],
+            node: {id: null, parentId: null, name: ''},
+            componentKey:0,
+            editing: null,
+            overlay: false,
+            items: null,
             data: new Tree([
                 {
                     name: 'درخت دانش',
                     id: 1,
                     pid: 0,
-                    // children: [
-                    //     {
-                    //         name: 'Node 1-2',
-                    //         id: 2,
-                    //         isLeaf: true,
-                    //         pid: 1
-                    //     }
-                    // ]
+                    addLeafNodeDisabled: true,
                 },
-            ])
+            ]),
         }),
+        mounted() {
+            if (localStorage.getItem('tree')) {
+                this.data =  new Tree( [JSON.parse(localStorage.getItem('tree'))] )
+            }
+            this.items = JSON.parse(localStorage.getItem('tree'))
+        },
         methods: {
-            // showtextfield() {
-            //     this.textshow = true
-            // },
-            // onDel(node) {
-            //     console.log(node)
-            //     node.remove()
-            // },
-            //
-            // onChangeName(params) {
-            //     console.log(params)
-            // },
-            // //
-            // onAddNode(params) {
-            //     console.log(params)
-            //
-            // },
-            //
-            // onClick(params) {
-            //     console.log(params)
-            // },
 
-            // addNode() {
-            //     var node = new TreeNode({ name: this.name, isLeaf: false })
-            //     if (!this.data.children) this.data.children = []
-            //     this.data.addChildren(node)
+            // search(tree, target,newChild)  {
+            //     if (tree.id === target) {
+            //         tree.children.push(newChild);
+            //     }
+            //
+            //     for (const child of tree.children) {
+            //         const res = this.search(child, target,newChild);
+            //
+            //         if (res) {
+            //             return res;
+            //         }
+            //     }
             // },
+            saveNode(node) {
+                this.node.id = node.id
+                this.node.parentId = node.pid
+                this.node.name = node.name
+                this.editing = null
+                this.showOptions = true
+                if (this.defaultedit === false) {
+                    node.changeName(this.name)
+                }
+                this.save()
 
+            },
+            close(item) {
+                item.remove()
+                this.editing = null
+                this.showOptions = true
+                console.log(item)
+
+            },
+            save() {
+              localStorage.setItem('tree', this.data.children[0])
+                this.overlay=true
+                this.componentKey += 1
+                this.overlay =false
+            },
+            onDel(node) {
+                node.remove()
+
+            },
+
+            onChangeName(params) {
+                this.defaultedit = true
+                console.log(params)
+                this.editing = params.id
+                this.showOptions = false
+            },
+            onAddNode(params) {
+                this.dialog = true
+                params.addLeafNodeDisabled = true
+                this.editing = params.id
+                this.showOptions = false
+            },
+
+            checkname() {
+              this.name = document.getElementById("thename").value
+              this.dialog = false
+            },
+
+            onClick(params) {
+                console.log(params)
+            },
         }
     }
 </script>
