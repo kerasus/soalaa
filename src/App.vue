@@ -38,6 +38,8 @@
 
 <script>
     import Menu from './components/Menu'
+    import './assets/scss/font.scss'
+    import '@mdi/font/css/materialdesignicons.css';
 
     export default {
         name: 'App',
@@ -55,3 +57,4 @@
         }
     };
 </script>
+
