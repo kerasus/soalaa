@@ -21,6 +21,11 @@ export default new VueRouter({
             path: '/TinymceEditor',
             name: 'TinymceEditor',
             component: () => lazyLoadView(import('../components/TinymceEditor/TinymceEditor'))
+        },
+        {
+            path: '/OnlineQuiz',
+            name: 'OnlineQuiz',
+            component: () => lazyLoadView(import('../components/OnlineQuiz/OnlineQuiz'))
         }
     ]
 })

@@ -1,5 +1,6 @@
 <template>
     <div dir="ltr">
+        {{items}}
         <v-dialog v-model="dialog" max-width="40%">
             <v-text-field id="thename" style="background-color:aliceblue "/> <v-btn @click="checkname">save name</v-btn>
         </v-dialog>
@@ -44,7 +45,7 @@
             <span class="icon" slot="leafNodeIcon">🍃</span>
             <span class="icon" slot="treeNodeIcon">🌲</span>
         </vue-tree-list>
-<!--        <v-treeview :items="items.children[0].children"></v-treeview>-->
+        <v-treeview selectable open-all :items="[data.children[0]]"></v-treeview>
         <v-overlay
                 :value="overlay"
         >
@@ -77,13 +78,13 @@
             componentKey:0,
             editing: null,
             overlay: false,
-            items: null,
             data: new Tree([
                 {
                     name: 'درخت دانش',
                     id: 1,
                     pid: 0,
                     addLeafNodeDisabled: true,
+                    children: null
                 },
             ]),
         }),
@@ -91,7 +92,7 @@
             if (localStorage.getItem('tree')) {
                 this.data =  new Tree( [JSON.parse(localStorage.getItem('tree'))] )
             }
-            this.items = JSON.parse(localStorage.getItem('tree'))
+
         },
         methods: {
 
