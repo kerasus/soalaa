@@ -46,7 +46,7 @@
                         // like adding custom buttons
                         editor.ui.registry.addButton('addFormula', {
                             text: 'Add Formula',
-                            icon: 'false',
+                            icon: 'character-count',
                             onAction: () => { this.that.addTextToEditor('$' + this.that.latexData + '$') }
                         });
                     }
