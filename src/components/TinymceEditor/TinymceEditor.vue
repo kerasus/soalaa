@@ -96,5 +96,9 @@
         border: 1px solid rgba(0, 0, 0, .3);
         box-shadow: 0 0 8px rgba(0, 0, 0, .2)
     }
+
+    .tox.tox-tinymce {
+        margin: 0 100px;
+    }
 </style>
 
