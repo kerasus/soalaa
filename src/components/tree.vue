@@ -52,6 +52,8 @@
                 :value="overlay"
         >
         </v-overlay>
+        <v-btn @click="selectModify">check selection</v-btn>
+        <br><br>
         <v-btn @click="showselecteds">show all selected path</v-btn>
         <div v-if="isShowSelections">
             <div v-for="t in allPath" :key="t.id">
@@ -60,6 +62,7 @@
 
             </div>
         </div>
+
     </div>
 
 </template>
@@ -129,6 +132,46 @@
 
         },
         methods: {
+            createPath(){
+                this.allSelections = []
+                this.selectedId = []
+                this.allPath = []
+                for (let i = 0; i < this.selection.length; i++) {
+                    this.selectedNode = {id: null, name: ''}
+                    this.selectedNode.id = this.selection[i]
+                    this.selectedNode.name = this.search(this.items[0], this.selection[i])
+                    this.allSelections.push(this.selectedNode)
+                }
+                for (let q=0;q<this.allSelections.length;q++) {
+                    this.selectedId.push(this.allSelections[q].id)
+                }
+
+                this.leaves = this.allSelections.filter(item => this.searchChildren(this.items[0], item.id).length === 0 || this.searchChildren(this.items[0], item.id).filter( k => this.selectedId.includes(k.id) ).length === 0 )
+
+                for (let w=0;w<this.leaves.length;w++){
+                    this.leaf = this.leaves[w]
+                    this.path.push(this.leaf)
+                    this.parent = { id:null , name :''}
+
+                    while (this.leaf.id !== 0 ) {
+                        this.parent.id = this.searchParent(this.items[0] , this.leaf.id)
+                        this.parent.name=this.search(this.items[0] , this.parent.id )
+                        this.leaf = this.parent
+                        this.path.push(this.leaf)
+                        this.parent = {}
+                    }
+                    this.allPath.push(this.path)
+                    this.path = []
+                }
+
+            },
+            selectModify() {
+                this.createPath()
+                for (let t=1;t<this.allPath[0].length -1 ;t++) {
+                    this.selection.push(this.allPath[0][t].id)
+                }
+
+            },
 
             search(tree, target) {
                 if (tree.id === target) {
@@ -181,37 +224,7 @@
             },
             showselecteds() {
 
-                this.allSelections = []
-                this.selectedId = []
-                this.allPath = []
-                for (let i = 0; i < this.selection.length; i++) {
-                    this.selectedNode = {id: null, name: ''}
-                    this.selectedNode.id = this.selection[i]
-                    this.selectedNode.name = this.search(this.items[0], this.selection[i])
-                    this.allSelections.push(this.selectedNode)
-                }
-                for (let q=0;q<this.allSelections.length;q++) {
-                    this.selectedId.push(this.allSelections[q].id)
-                }
-
-                this.leaves = this.allSelections.filter(item => this.searchChildren(this.items[0], item.id).length === 0 || this.searchChildren(this.items[0], item.id).filter( k => this.selectedId.includes(k.id) ).length === 0 )
-
-                for (let w=0;w<this.leaves.length;w++){
-                    this.leaf = this.leaves[w]
-                    this.path.push(this.leaf)
-                    this.parent = { id:null , name :''}
-
-                    while (this.leaf.id !== 0 ) {
-                        this.parent.id = this.searchParent(this.items[0] , this.leaf.id)
-                        this.parent.name=this.search(this.items[0] , this.parent.id )
-                        this.leaf = this.parent
-                        this.path.push(this.leaf)
-                        this.parent = {}
-                    }
-                    this.allPath.push(this.path)
-                    this.path = []
-                }
-
+                this.createPath()
                 this.isShowSelections = true
             },
 
