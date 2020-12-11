@@ -2,9 +2,7 @@
     <v-container :fluid="true">
         <v-row>
             <v-col :md="2">
-                <v-sheet color="#f1f1f1" width="100%">
-
-                </v-sheet>
+                <map-of-questions />
             </v-col>
             <v-col :md="10">
                 <v-sheet width="100%">
@@ -39,14 +37,12 @@
                                 </v-col>
                             </v-row>
                             <v-row class="question-answers">
-                                <v-col :md="6" class="answer-box" v-for="item in answers" :key="item.id" @click="answerClicked(item.id)">
-                                    <v-sheet :class="{ 'answer-sheet': true, active: item.active }">
+                                <v-col :md="6" class="answer-box">
+                                    <v-sheet class="answer-sheet">
                                         <div class="answer-text">
-                                            {{ item.body }}
+                                            واب سوال جواب سوال جواب سوال جواب سوال جواب سوال جواب سوال جواب سوال
                                         </div>
-<!--                                        <div class="answer-checkbox">-->
-<!--                                            <v-checkbox v-model="item.active" disabled />-->
-<!--                                        </div>-->
+                                        <div class="answer-checkbox"></div>
                                     </v-sheet>
                                 </v-col>
                             </v-row>
@@ -65,45 +61,19 @@
     // function handler() {
     //     inputText = document.getElementById('textfield').innerText
     // }
+    import Choice from "./Choice";
+    import MapOfQuestions from "./MapOfQuestions";
     export default {
-        name: "OnlineQuiz",
+        name: "Quiz",
+        components: {
+            Choice,
+            MapOfQuestions
+        },
         data () {
-            return {
-                answers: [
-                    {
-                        id: 0,
-                        body: 'جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ',
-                        active: false
-                    },
-                    {
-                        id: 1,
-                        body: 'جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ',
-                        active: false
-                    },
-                    {
-                        id: 2,
-                        body: 'جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ',
-                        active: false
-                    },
-                    {
-                        id: 3,
-                        body: 'جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ',
-                        active: false
-                    }
-                ]
-            }
+            return {}
         },
         methods: {
-            answerClicked (id) {
-                console.log(id)
-                for (let i = 0; i < this.answers.length; i++) {
-                    if (this.answers[i].id !== id) {
-                        this.answers[i].active = false
-                    } else {
-                        this.answers[i].active = true
-                    }
-                }
-            }
+
         }
     }
 </script>
@@ -127,25 +97,21 @@
     .answer-box {
         display: flex;
         justify-content: center;
-        min-height: 110px;
+        height: 135px;
         align-items: center;
     }
 
     .answer-sheet {
-        transition: all ease-in-out 0.3s;
         background: #f1f1f1;
         width: 90%;
-        min-height: 100px;
+        height: 100px;
         padding: 2% 3%;
         border-radius: 10px;
         cursor: pointer;
+        transition: all ease-in-out 0.3s;
         display: flex;
         flex-direction: row;
         justify-content: space-between;
-    }
-
-    .answer-sheet.active {
-        width: 100%;
     }
 
     .answer-sheet:hover {
@@ -162,13 +128,5 @@
     .answer-checkbox {
         height: 100%;
         width: 100px;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        transition: all ease-in-out 0.3s;
-    }
-
-    .answer-sheet.active .answer-checkbox {
-        width: 120px;
     }
 </style>

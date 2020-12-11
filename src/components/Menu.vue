@@ -26,7 +26,7 @@
                 </v-list-item>
             </router-link>
 
-            <router-link class="text-decoration-none" :to="{ name: 'OnlineQuiz' }">
+            <router-link class="text-decoration-none" :to="{ name: 'onlineQuiz.quiz' }">
                 <v-list-item>
                     <v-list-item-title>آزمون آنلاین</v-list-item-title>
                 </v-list-item>
