@@ -39,12 +39,14 @@
                                 </v-col>
                             </v-row>
                             <v-row class="question-answers">
-                                <v-col :md="6" class="answer-box">
-                                    <v-sheet class="answer-sheet">
+                                <v-col :md="6" class="answer-box" v-for="item in answers" :key="item.id" @click="answerClicked(item.id)">
+                                    <v-sheet :class="{ 'answer-sheet': true, active: item.active }">
                                         <div class="answer-text">
-                                            واب سوال جواب سوال جواب سوال جواب سوال جواب سوال جواب سوال جواب سوال
+                                            {{ item.body }}
                                         </div>
-                                        <div class="answer-checkbox"></div>
+<!--                                        <div class="answer-checkbox">-->
+<!--                                            <v-checkbox v-model="item.active" disabled />-->
+<!--                                        </div>-->
                                     </v-sheet>
                                 </v-col>
                             </v-row>
@@ -66,10 +68,42 @@
     export default {
         name: "OnlineQuiz",
         data () {
-            return {}
+            return {
+                answers: [
+                    {
+                        id: 0,
+                        body: 'جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ',
+                        active: false
+                    },
+                    {
+                        id: 1,
+                        body: 'جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ',
+                        active: false
+                    },
+                    {
+                        id: 2,
+                        body: 'جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ',
+                        active: false
+                    },
+                    {
+                        id: 3,
+                        body: 'جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ',
+                        active: false
+                    }
+                ]
+            }
         },
         methods: {
-
+            answerClicked (id) {
+                console.log(id)
+                for (let i = 0; i < this.answers.length; i++) {
+                    if (this.answers[i].id !== id) {
+                        this.answers[i].active = false
+                    } else {
+                        this.answers[i].active = true
+                    }
+                }
+            }
         }
     }
 </script>
@@ -93,21 +127,25 @@
     .answer-box {
         display: flex;
         justify-content: center;
-        height: 135px;
+        min-height: 110px;
         align-items: center;
     }
 
     .answer-sheet {
+        transition: all ease-in-out 0.3s;
         background: #f1f1f1;
         width: 90%;
-        height: 100px;
+        min-height: 100px;
         padding: 2% 3%;
         border-radius: 10px;
         cursor: pointer;
-        transition: all ease-in-out 0.3s;
         display: flex;
         flex-direction: row;
         justify-content: space-between;
+    }
+
+    .answer-sheet.active {
+        width: 100%;
     }
 
     .answer-sheet:hover {
@@ -124,5 +162,13 @@
     .answer-checkbox {
         height: 100%;
         width: 100px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        transition: all ease-in-out 0.3s;
+    }
+
+    .answer-sheet.active .answer-checkbox {
+        width: 120px;
     }
 </style>
