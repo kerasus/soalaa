@@ -2,20 +2,18 @@
     <v-container :fluid="true">
         <v-row>
             <v-col :md="2">
-                <map-of-questions />
+                <v-sheet color="#f1f1f1" width="100%">
+
+                </v-sheet>
             </v-col>
             <v-col :md="10">
                 <v-sheet width="100%">
                     <v-row>
-                        <v-col :md="1" class="d-flex justify-center align-center">
-                            <v-btn :min-width="32" class="px-0" :height="64" @click="changeQuestion(null, -1)" icon>
-                                <v-icon>mdi-chevron-right</v-icon>
-                            </v-btn>
-                        </v-col>
+                        <v-col :md="1"></v-col>
                         <v-col :md="10">
                             <v-row class="question-header">
                                 <div class="question-number">
-                                    <p>{{ currentQuestion.title }}</p>
+                                    <p>currentQuestion.title</p>
                                 </div>
                                 <div class="question-buttons">
                                     <v-btn icon>
@@ -25,7 +23,7 @@
                                         <v-icon>mdi-close</v-icon>
                                     </v-btn>
                                     <v-btn icon>
-                                        <v-icon>mdi-bookmark-outline</v-icon>
+                                        <v-icon>mdi-heart-outline</v-icon>
                                     </v-btn>
                                 </div>
                             </v-row>
@@ -37,14 +35,19 @@
                                 </v-col>
                             </v-row>
                             <v-row class="question-answers">
-                                <choice @answerClicked="answerClicked($event)" v-for="item in currentQuestion.choices.list" :key="item.id" :choice="item"/>
+                                <v-col :md="6" class="answer-box" v-for="item in currentQuestion.choices" :key="item.id" @click="answerClicked(item.id)">
+                                    <v-sheet :class="{ 'answer-sheet': true, active: item.active }">
+                                        <div class="answer-text">
+                                            {{ item.body }}
+                                        </div>
+<!--                                        <div class="answer-checkbox">-->
+<!--                                            <v-checkbox v-model="item.active" disabled />-->
+<!--                                        </div>-->
+                                    </v-sheet>
+                                </v-col>
                             </v-row>
                         </v-col>
-                        <v-col :md="1" class="d-flex justify-center align-center">
-                            <v-btn :min-width="32" class="px-0" :height="64" @click="changeQuestion(null, 1)" icon>
-                                <v-icon>mdi-chevron-left</v-icon>
-                            </v-btn>
-                        </v-col>
+                        <v-col :md="1"></v-col>
                     </v-row>
                 </v-sheet>
             </v-col>
@@ -58,16 +61,8 @@
     // function handler() {
     //     inputText = document.getElementById('textfield').innerText
     // }
-    import Choice from "./Choice";
-    import MapOfQuestions from "./MapOfQuestions";
-    import { QuestionList } from '../../../../models/Question'
-
     export default {
-        name: "Quiz",
-        components: {
-            Choice,
-            MapOfQuestions
-        },
+        name: "OnlineQuiz",
         data () {
             return {
                 questions: [
@@ -82,30 +77,24 @@
                             {
                                 id: 0,
                                 body: 'جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ',
-                                active: false,
-                                order: 0
+                                active: false
                             },
                             {
                                 id: 1,
                                 body: 'جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ',
-                                active: false,
-                                order: 1
+                                active: false
                             },
                             {
                                 id: 2,
                                 body: 'جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ',
-                                active: false,
-                                order: 2
+                                active: false
                             },
                             {
                                 id: 3,
                                 body: 'جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ',
-                                active: false,
-                                order: 3
+                                active: false
                             }
-                        ],
-                        order: 0,
-                        lesson: 'فارسی'
+                        ]
                     },
                     {
                         id: 1,
@@ -118,30 +107,24 @@
                             {
                                 id: 0,
                                 body: 'جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ',
-                                active: false,
-                                order: 0
+                                active: false
                             },
                             {
                                 id: 1,
                                 body: 'جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ',
-                                active: false,
-                                order: 1
+                                active: false
                             },
                             {
                                 id: 2,
                                 body: 'جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ',
-                                active: false,
-                                order: 2
+                                active: false
                             },
                             {
                                 id: 3,
                                 body: 'جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ',
-                                active: false,
-                                order: 3
+                                active: false
                             }
-                        ],
-                        order: 1,
-                        lesson: 'ریاضی'
+                        ]
                     }
                 ],
                 currentQuestionId: 0
@@ -149,13 +132,12 @@
         },
         methods: {
             answerClicked (id) {
-                for (let i = 0; i < this.questions.list[this.getQuestionIndexById(this.currentQuestionId)].choices.list.length; i++) {
-                    if (this.questions.list[this.getQuestionIndexById(this.currentQuestionId)].choices.list[i].id !== id) {
-                        this.questions.list[this.getQuestionIndexById(this.currentQuestionId)].choices.list[i].active = false
-                    } else if (this.questions.list[this.getQuestionIndexById(this.currentQuestionId)].choices.list[i].active) {
-                        this.questions.list[this.getQuestionIndexById(this.currentQuestionId)].choices.list[i].active = false
+                console.log(id)
+                for (let i = 0; i < this.answers.length; i++) {
+                    if (this.answers[i].id !== id) {
+                        this.answers[i].active = false
                     } else {
-                        this.questions.list[this.getQuestionIndexById(this.currentQuestionId)].choices.list[i].active = true
+                        this.answers[i].active = true
                     }
                 }
             },
@@ -163,33 +145,19 @@
                 if (id !== null) {
                     console.log('nothing')
                 } else if (count !== null) {
-                    this.currentQuestionId = this.questions.list[this.getQuestionIndexById(this.currentQuestionId) + count].id
+                    this.currentQuestionId = this.questions[this.currentQuestionId + 1].id
                 }
-            },
-            getQuestionIndexById (id) {
-                for (let i = 0; i < this.questions.list.length; i++) {
-                    if (this.questions.list[i].id === id) {
-                        return i
-                    }
-                }
-                return 0
             }
         },
         computed: {
             currentQuestion () {
-                for (let i = 0; i < this.questions.list.length; i++) {
-                    if (this.questions.list[i].id === this.currentQuestionId) {
-                        return this.questions.list[i]
+                for (let i = 0; i < this.questions.length; i++) {
+                    if (this.questions[i].id === this.currentQuestionId) {
+                        return this.questions[i]
                     }
                 }
                 return {}
-            },
-            lessons () {
-
             }
-        },
-        created() {
-            this.questions = new QuestionList(this.questions)
         }
     }
 </script>
@@ -213,21 +181,25 @@
     .answer-box {
         display: flex;
         justify-content: center;
-        height: 135px;
+        min-height: 110px;
         align-items: center;
     }
 
     .answer-sheet {
+        transition: all ease-in-out 0.3s;
         background: #f1f1f1;
         width: 90%;
-        height: 100px;
+        min-height: 100px;
         padding: 2% 3%;
         border-radius: 10px;
         cursor: pointer;
-        transition: all ease-in-out 0.3s;
         display: flex;
         flex-direction: row;
         justify-content: space-between;
+    }
+
+    .answer-sheet.active {
+        width: 95%;
     }
 
     .answer-sheet:hover {
@@ -244,5 +216,13 @@
     .answer-checkbox {
         height: 100%;
         width: 100px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        transition: all ease-in-out 0.3s;
+    }
+
+    .answer-sheet.active .answer-checkbox {
+        width: 120px;
     }
 </style>
