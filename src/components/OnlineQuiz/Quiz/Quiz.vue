@@ -2,9 +2,9 @@
     <v-container :fluid="true">
         <v-row>
             <v-col :md="2">
-                <map-of-questions />
+                <map-of-questions :questions="questions" :current-question="currentQuestionId" @changeQuestion="changeQuestion($event)" />
             </v-col>
-            <v-col :md="10">
+            <v-col :md="10" class="question-container">
                 <v-sheet width="100%">
                     <v-row>
                         <v-col :md="1" class="d-flex justify-center align-center">
@@ -18,14 +18,16 @@
                                     <p>{{ currentQuestion.title }}</p>
                                 </div>
                                 <div class="question-buttons">
-                                    <v-btn icon>
-                                        <v-icon>mdi-checkbox-blank-circle-outline</v-icon>
+                                    <v-btn icon @click="changeState('circle')">
+                                        <v-icon v-if="currentQuestion.state !== 'circle'">mdi-checkbox-blank-circle-outline</v-icon>
+                                        <v-icon v-if="currentQuestion.state === 'circle'" color="yellow">mdi-checkbox-blank-circle</v-icon>
                                     </v-btn>
-                                    <v-btn icon>
-                                        <v-icon>mdi-close</v-icon>
+                                    <v-btn icon @click="changeState('cross')">
+                                        <v-icon :color="currentQuestion.state === 'cross' ? 'red' : ''">mdi-close</v-icon>
                                     </v-btn>
-                                    <v-btn icon>
-                                        <v-icon>mdi-bookmark-outline</v-icon>
+                                    <v-btn icon @click="bookmark">
+                                        <v-icon v-if="!currentQuestion.bookmarked">mdi-bookmark-outline</v-icon>
+                                        <v-icon v-if="currentQuestion.bookmarked" color="blue">mdi-bookmark</v-icon>
                                     </v-btn>
                                 </div>
                             </v-row>
@@ -48,6 +50,9 @@
                     </v-row>
                 </v-sheet>
             </v-col>
+            <v-col :md="12" class="clock">
+                <Timer :daftarche="'عمومی'" :quiz-started-at="1607963897" :daftarche-end-time="1607963897"></Timer>
+            </v-col>
         </v-row>
     </v-container>
 </template>
@@ -60,13 +65,15 @@
     // }
     import Choice from "./Choice";
     import MapOfQuestions from "./MapOfQuestions";
-    import { QuestionList } from '../../../../models/Question'
+    import {Question, QuestionList} from '../../../../models/Question'
+    import Timer from './Timer'
 
     export default {
         name: "Quiz",
         components: {
             Choice,
-            MapOfQuestions
+            MapOfQuestions,
+            Timer
         },
         data () {
             return {
@@ -142,26 +149,55 @@
                         ],
                         order: 1,
                         lesson: 'ریاضی'
+                    },
+                    {
+                        id: 2,
+                        title: 'ادبیات فارسی - سوال شماره 11',
+                        body: 'متن سوال متن سوال متن سوال متن سوال متن سوال متن سوال متن سوال متن سوال متن سوال متن سوال متن سوال متن سوال ' +
+                            'متن سوال متن سوال متن سوال متن سوال متن سوال متن سوال متن سوال متن سوال متن سوال متن سوال متن سوال متن سوال متن سوال ' +
+                            'متن سوال متن سوال متن سوال متن سوال متن سوال متن سوال ' +
+                            'متن سوال متن سوال متن سوال متن سوال متن سوال متن سوال متن سوال ',
+                        choices: [
+                            {
+                                id: 0,
+                                body: 'جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ',
+                                active: false,
+                                order: 0
+                            },
+                            {
+                                id: 1,
+                                body: 'جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ',
+                                active: false,
+                                order: 1
+                            },
+                            {
+                                id: 2,
+                                body: 'جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ',
+                                active: false,
+                                order: 2
+                            },
+                            {
+                                id: 3,
+                                body: 'جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ',
+                                active: false,
+                                order: 3
+                            }
+                        ],
+                        order: 2,
+                        lesson: 'ریاضی'
                     }
                 ],
-                currentQuestionId: 0
+                currentQuestionId: 0,
+                testQuestion: new Question()
             }
         },
         methods: {
             answerClicked (id) {
-                for (let i = 0; i < this.questions.list[this.getQuestionIndexById(this.currentQuestionId)].choices.list.length; i++) {
-                    if (this.questions.list[this.getQuestionIndexById(this.currentQuestionId)].choices.list[i].id !== id) {
-                        this.questions.list[this.getQuestionIndexById(this.currentQuestionId)].choices.list[i].active = false
-                    } else if (this.questions.list[this.getQuestionIndexById(this.currentQuestionId)].choices.list[i].active) {
-                        this.questions.list[this.getQuestionIndexById(this.currentQuestionId)].choices.list[i].active = false
-                    } else {
-                        this.questions.list[this.getQuestionIndexById(this.currentQuestionId)].choices.list[i].active = true
-                    }
-                }
+                this.questions.list[this.getQuestionIndexById(this.currentQuestionId)].choiceClicked(id)
             },
             changeQuestion (id, count) {
                 if (id !== null) {
-                    console.log('nothing')
+                    this.currentQuestionId = id
                 } else if (count !== null) {
                     this.currentQuestionId = this.questions.list[this.getQuestionIndexById(this.currentQuestionId) + count].id
                 }
@@ -173,6 +209,12 @@
                     }
                 }
                 return 0
+            },
+            bookmark () {
+                this.questions.list[this.getQuestionIndexById(this.currentQuestionId)].bookmark()
+            },
+            changeState (newState) {
+                this.questions.list[this.getQuestionIndexById(this.currentQuestionId)].changeState(newState)
             }
         },
         computed: {
@@ -183,18 +225,20 @@
                     }
                 }
                 return {}
-            },
-            lessons () {
-
             }
         },
         created() {
             this.questions = new QuestionList(this.questions)
+            console.log(this.lessons)
         }
     }
 </script>
 
 <style scoped>
+    .question-container {
+        padding-bottom: 100px;
+    }
+
     .question-header {
         display: flex;
         flex-direction: row;
@@ -244,5 +288,16 @@
     .answer-checkbox {
         height: 100%;
         width: 100px;
+    }
+
+    .clock {
+        position: absolute;
+        bottom: 0;
+        right: 0;
+        left: 0;
+        padding: 0;
+        height: 100px;
+        display: flex;
+        justify-content: center;
     }
 </style>
