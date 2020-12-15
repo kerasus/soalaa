@@ -183,9 +183,6 @@
                     }
                 }
                 return {}
-            },
-            lessons () {
-
             }
         },
         created() {
