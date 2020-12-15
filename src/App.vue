@@ -15,17 +15,17 @@
                         width="200"
                 />
             </div>
-
             <v-spacer></v-spacer>
-
             <v-app-bar-nav-icon @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
-
         </v-app-bar>
         <v-navigation-drawer
                 v-model="drawer"
+                dark
+                src="https://cdn.vuetifyjs.com/images/backgrounds/bg-2.jpg"
                 absolute
                 bottom
                 temporary
+                right
         >
             <Menu/>
         </v-navigation-drawer>
