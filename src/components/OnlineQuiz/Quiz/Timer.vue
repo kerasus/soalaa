@@ -1,65 +1,66 @@
 <template>
-    <div style="margin-bottom: 30px">
+    <div style="margin-bottom: 0px">
 
-        <v-speed-dial
-                v-model="fab"
-                class="mr-8 mt-10"
-                :top="top"
-                :bottom="bottom"
-                :right="right"
-                :left="left"
-                :direction="direction"
-                :open-on-hover="hover"
-                :transition="transition"
-        >
-            <template v-slot:activator>
-                <v-btn
-                        v-model="fab"
-                        color="blue darken-2"
-                        dark
-                        fab
-                >
-                    <v-icon v-if="fab">
-                        mdi-close
-                    </v-icon>
-                    <v-icon v-else>
-                        mdi-clock
-                    </v-icon>
-                </v-btn>
-            </template>
-            <div class="timeCArd">
-                <v-row>
-                    <v-col cols="1"/>
-                    <v-col >
 
-                            {{ seconds}} : {{ minutes}} : {{hours}}
+        <div v-if="mob" id="test" class="timeCArd1">
 
-                        <span style="margin-right: 10px">
+            <v-row v-if="show">
+                <v-col>
+                    {{ seconds}} : {{ minutes}} : {{hours}}
+                </v-col>
+                <v-col>
+                    زمان گذشته
+                </v-col>
+            </v-row>
+            <v-row v-if="show">
+                <v-col>
+                    {{ seconds2}} : {{ minutes2}} : {{hours2}}
+                </v-col>
+                <v-col>
+                    دقیقه تا پایان مهلت پاسخگویی دفترچه عمومی
+                </v-col>
+            </v-row>
+            <v-btn @click="changeCss"  style="float: bottom;
+        height: 50px;width: 100px">
+                <v-icon>
+                    mdi-clock
+                </v-icon>
+            </v-btn>
+
+        </div>
+
+
+        <div class="timeCArd" id="test" v-if="!mob">
+            <v-btn @click="changeCss" style="float: left;
+        height: 100px">
+                <v-icon>
+                    mdi-clock
+                </v-icon>
+            </v-btn>
+            <v-row>
+                <v-col v-if="show">
+
+                    {{ seconds}} : {{ minutes}} : {{hours}}
+
+                    <span style="margin-right: 10px">
                             زمان گذشته
                         </span>
 
 
-                    </v-col>
-                    <v-col >
-                        {{ seconds2}} : {{ minutes2}} : {{hours2}}
-                        <span style="margin-right: 10px">
+                </v-col>
+                <v-col v-if="show">
+                    {{ seconds2}} : {{ minutes2}} : {{hours2}}
+                    <span style="margin-right: 10px">
                             دقیقه تا پایان مهلت پاسخگویی دفترچه عمومی
                         </span>
 
 
-                    </v-col>
+                </v-col>
 
-                </v-row>
-
-
+            </v-row>
 
 
-
-            </div>
-
-        </v-speed-dial>
-
-
+        </div>
     </div>
 </template>
 <!--height is 100px-->
@@ -67,6 +68,8 @@
     export default {
         name: "Timer",
         data: () => ({
+            mob: false,
+            show: false,
             direction: 'right',
             fab: false,
             fling: false,
@@ -107,7 +110,9 @@
                 hour: 1000 * 60 * 60,
                 day: 1000 * 60 * 60 * 24
             },
-            end: new Date()
+            end: new Date(),
+            newStyle: 'width: 1000px',
+            oldStyle: 'width: 100px'
 
 
         }),
@@ -124,6 +129,12 @@
 
         },
         mounted() {
+            if (window.screen.height < 800) {
+                this.mob = true
+                this.newStyle = ' width:300px;height:200px'
+            }
+
+
             this.interval = setInterval(() => {
                 this.updateDiffs();
             }, 1000);
@@ -135,11 +146,18 @@
         },
         methods: {
             changeCss() {
-                document.getElementById('test').style.cssText = 'width: 1000px;transition:50s'
+                if (this.show === false) {
+                    document.getElementById('test').style.cssText = this.newStyle
+                    setTimeout(() => this.show = true, 200)
+
+                } else {
+                    document.getElementById('test').style.cssText = this.oldStyle
+                    this.show = false
+                }
+
             },
 
             updateDiffs() {
-                //lets figure out our diffs
                 let diff = Math.abs(Date.now() - this.start.getTime());
                 this.days = Math.floor(diff / this.intervals.day);
                 diff -= this.days * this.intervals.day;
@@ -170,22 +188,21 @@
 
         background-color: #e1e1e1;
         height: 100px;
-        width: 1200px;
+        width: 100px;
         border-radius: 15px;
+        transition: 0.5s;
 
     }
+    .timeCArd1 {
 
-    /*div {*/
-    /*    width: 30px;*/
-    /*    transition: width 1s;*/
-    /*}*/
-    /*div:hover {*/
-    /*    width: 1000px;*/
-    /*}*/
-    .timer {
-        height: 100px;
-        border-radius: 55px;
-        background-color: darkgray;
+        background-color: #e1e1e1;
+        height: 50px;
+        width: 100px;
+        border-radius: 15px;
+        transition: 0.5s;
+        margin-left: 0;
+        padding-left: 0;
+
     }
 
 </style>

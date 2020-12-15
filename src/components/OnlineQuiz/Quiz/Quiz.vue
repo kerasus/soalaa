@@ -291,7 +291,9 @@
 
     .clock {
         float: left;
-        margin-left: 100px;
+        margin-left: 5px;
+        margin-bottom: 0;
+        margin-top: 200px;
 
     }
 </style>
