@@ -50,10 +50,9 @@
                     </v-row>
                 </v-sheet>
             </v-col>
-            <v-col :md="12" class="clock">
-                <Timer :daftarche="'عمومی'" :quiz-started-at="1607963897" :daftarche-end-time="1607963897"></Timer>
-            </v-col>
+
         </v-row>
+        <Timer class="clock" :daftarche="'عمومی'" :quiz-started-at="1607963897" :daftarche-end-time="1607963897"></Timer>
     </v-container>
 </template>
 
@@ -291,13 +290,8 @@
     }
 
     .clock {
-        position: absolute;
-        bottom: 0;
-        right: 0;
-        left: 0;
-        padding: 0;
-        height: 100px;
-        display: flex;
-        justify-content: center;
+        float: left;
+        margin-left: 100px;
+
     }
 </style>
