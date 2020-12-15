@@ -18,7 +18,10 @@ class Question extends Model {
                 key: 'choices',
                 relatedModel: ChoiceList
             },
-            { key: 'state' },
+            {
+                key: 'state',
+                default: ''
+            },
             {
                 key: 'bookmarked',
                 default: false
@@ -31,13 +34,46 @@ class Question extends Model {
         ])
     }
 
-    isAnswered (choicesList = this.choices.list) {
-        for (let i = 0; i < choicesList.length; i++) {
-            if (choicesList[i].active) {
+    isAnswered () {
+        for (let i = 0; i < this.choices.list.length; i++) {
+            if (this.choices.list[i].active) {
+                this.state = ''
                 return true
             }
         }
         return false
+    }
+
+    changeState (newState) {
+        this.uncheckChoices()
+        if (newState === this.state) {
+            this.state = ''
+            return
+        }
+        this.state = newState
+    }
+
+    bookmark () {
+        this.bookmarked = !this.bookmarked
+    }
+
+    choiceClicked (choiceId) {
+        this.state = ''
+        for (let i = 0; i < this.choices.list.length; i++) {
+            if (this.choices.list[i].id !== choiceId) {
+                this.choices.list[i].active = false
+            } else if (this.choices.list[i].active) {
+                this.choices.list[i].active = false
+            } else {
+                this.choices.list[i].active = true
+            }
+        }
+    }
+
+    uncheckChoices () {
+        for (let i = 0; i < this.choices.list.length; i++) {
+            this.choices.list[i].active = false
+        }
     }
 }
 
