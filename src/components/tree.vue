@@ -94,7 +94,6 @@
             name: '',
             textfieldon: false,
             showOptions: true,
-
             nodes: [{
                 name: 'درخت دانش',
                 id: 1,
