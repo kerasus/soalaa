@@ -50,7 +50,6 @@
                     </v-row>
                 </v-sheet>
             </v-col>
-
         </v-row>
         <Timer class="clock" :daftarche="'عمومی'" :quiz-started-at="1607963897" :daftarche-end-time="1607963897"></Timer>
     </v-container>
