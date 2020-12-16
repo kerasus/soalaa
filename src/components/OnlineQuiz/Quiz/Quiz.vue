@@ -73,8 +73,9 @@
     // }
     import Choice from "./Choice";
     import MapOfQuestions from "./MapOfQuestions";
-    import {Question, QuestionList} from '../../../../models/Question'
+    import {Question} from '../../../../models/Question'
     import Timer from './Timer'
+    import {Quiz} from "../../../../models/Quiz";
 
     export default {
         name: "Quiz",
@@ -85,183 +86,165 @@
         },
         data () {
             return {
-                questions: [
-                    {
-                        id: 0,
-                        title: 'ادبیات فارسی - سوال شماره 1',
-                        body: 'کدام دو کلمه متضاد هستند؟',
-                        choices: [
-                            {
-                                id: 0,
-                                body: 'آلاباما و قالی باف',
-                                active: false,
-                                order: 0
-                            },
-                            {
-                                id: 1,
-                                body: 'شهر و جوراب ',
-                                active: false,
-                                order: 1
-                            },
-                            {
-                                id: 2,
-                                body: 'عرفان و انسان',
-                                active: false,
-                                order: 2
-                            },
-                            {
-                                id: 3,
-                                body: 'آبی و انار',
-                                active: false,
-                                order: 3
-                            }
-                        ],
-                        order: 1,
-                        lesson: 'فارسی'
-                    },
-                    {
-                        id: 1,
-                        title: 'ادبیات فارسی - سوال شماره 2',
-                        body: 'این بیت به چه معناست؟ "الا یا ایها الساقی ادر کاسا و ناولها که عشق اسان نمود اول ولی افتاد مشکل ها',
-                        choices: [
-                            {
-                                id: 0,
-                                body: 'خیلی معنی خوبی میده',
-                                active: false,
-                                order: 0
-                            },
-                            {
-                                id: 1,
-                                body: 'خیلی معنی بدی میده',
-                                active: false,
-                                order: 1
-                            },
-                            {
-                                id: 2,
-                                body: 'نمیدونم',
-                                active: false,
-                                order: 2
-                            },
-                            {
-                                id: 3,
-                                body: 'هر چهار گزینه',
-                                active: false,
-                                order: 3
-                            }
-                        ],
-                        order: 2,
-                        lesson: 'فارسی'
-                    },
-                    {
-                        id: 2,
-                        title: 'ادبیات فارسی - سوال شماره 3',
-                        body: 'اگر آن ترک شیرازی بدست آرد دل مارا به خال هندویش بخشم',
-                        choices: [
-                            {
-                                id: 0,
-                                body: 'سمرقند و بخارا را',
-                                active: false,
-                                order: 0
-                            },
-                            {
-                                id: 1,
-                                body: 'سر و دست و تن و پارا',
-                                active: false,
-                                order: 1
-                            },
-                            {
-                                id: 2,
-                                body: 'تمام روح و اجزا را',
-                                active: false,
-                                order: 2
-                            },
-                            {
-                                id: 3,
-                                body: 'هیچی بهش نمیدم',
-                                active: false,
-                                order: 3
-                            }
-                        ],
-                        order: 3,
-                        lesson: 'فارسی'
-                    },
-                    {
-                        id: 3,
-                        title: 'زبان انگلیسی - سوال شماره 1',
-                        body: 'Compressi key shen board?',
-                        choices: [
-                            {
-                                id: 0,
-                                body: 'Northern Arizona',
-                                active: false,
-                                order: 0
-                            },
-                            {
-                                id: 1,
-                                body: 'Requiem for a Dream',
-                                active: false,
-                                order: 1
-                            },
-                            {
-                                id: 2,
-                                body: 'Eternal Sunshine of the Spotless Mind',
-                                active: false,
-                                order: 2
-                            },
-                            {
-                                id: 3,
-                                body: 'on the nature of daylight',
-                                active: false,
-                                order: 3
-                            }
-                        ],
-                        order: 4,
-                        lesson: 'زبان انگلیسی'
-                    }
-                ],
+                quizData: {
+                    title: 'آزمون آزمایشی',
+                    begin_datetime: '2021-01-23 08:00:00',
+                    finish_datetime: '2021-01-23 08:00:00',
+                    total_question_number: 3,
+                    questions: [
+                        {
+                            id: 0,
+                            title: 'ادبیات فارسی - سوال شماره 9',
+                            body: 'متن سوال متن سوال متن سوال متن سوال متن سوال متن سوال متن سواsssss سوال ' +
+                                'متن سوال متن سوال متن سوال متن سوال متن سوال متن سوال متن سوال متن سوال متن سواddddن سوال متن سوال ' +
+                                'متن سوال متن سوال متن سوال متن سوال متن سوال متن سوال ' +
+                                'متن سوال متن سوال متن سوال متن سوال متن سوال متن سوال متن سوال ',
+                            choices: [
+                                {
+                                    id: 0,
+                                    body: 'جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ',
+                                    active: false,
+                                    order: 0
+                                },
+                                {
+                                    id: 1,
+                                    body: 'جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ',
+                                    active: false,
+                                    order: 1
+                                },
+                                {
+                                    id: 2,
+                                    body: 'جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ',
+                                    active: false,
+                                    order: 2
+                                },
+                                {
+                                    id: 3,
+                                    body: 'جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ',
+                                    active: false,
+                                    order: 3
+                                }
+                            ],
+                            order: 0,
+                            lesson: 'فارسی'
+                        },
+                        {
+                            id: 1,
+                            title: 'ادبیات فارسی - سوال شماره 10',
+                            body: 'متن سوال متن سوال متن سوال متن سوال متن سوال متن سوال متن سوال متن gggggن سوال متن سوال ' +
+                                'متن سوال متن سوال متن سوال متن سوال متن سوال متن سوال متن سوال متن سوال مhhhhhتن سوال متن سوال متن سوال ' +
+                                'متن سوال متن سوال متن سوال متن سوال متن سوال متن سوال ' +
+                                'متن سوال متن سوال متن سوال متن سوال متن سوال متن سوال متن سوال ',
+                            choices: [
+                                {
+                                    id: 0,
+                                    body: 'جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ',
+                                    active: false,
+                                    order: 0
+                                },
+                                {
+                                    id: 1,
+                                    body: 'جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ',
+                                    active: false,
+                                    order: 1
+                                },
+                                {
+                                    id: 2,
+                                    body: 'جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ',
+                                    active: false,
+                                    order: 2
+                                },
+                                {
+                                    id: 3,
+                                    body: 'جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ',
+                                    active: false,
+                                    order: 3
+                                }
+                            ],
+                            order: 1,
+                            lesson: 'ریاضی'
+                        },
+                        {
+                            id: 2,
+                            title: 'ادبیات فارسی - سوال شماره 11',
+                            body: 'متن سوال متن سوال متن سوال متن سوال متن سوال متن سوالkkkkkkkتن سوال متن سوال متن سوال متن سوال ' +
+                                'متن سوال متن سوال متن سوال متن سوال متن سوال متن سوال متن سواllllll سوال متن سوال متن سوال متن سوال ' +
+                                'متن سوال متن سوال متن سوال متن سوال متن سوال متن سوال ' +
+                                'متن سوال متن سوال متن سوال متن سوال متن سوال متن سوال متن سوال ',
+                            choices: [
+                                {
+                                    id: 0,
+                                    body: 'جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ',
+                                    active: false,
+                                    order: 0
+                                },
+                                {
+                                    id: 1,
+                                    body: 'جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ',
+                                    active: false,
+                                    order: 1
+                                },
+                                {
+                                    id: 2,
+                                    body: 'جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ',
+                                    active: false,
+                                    order: 2
+                                },
+                                {
+                                    id: 3,
+                                    body: 'جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ',
+                                    active: false,
+                                    order: 3
+                                }
+                            ],
+                            order: 2,
+                            lesson: 'ریاضی'
+                        }
+                    ],
+                },
                 currentQuestionId: 0,
-                testQuestion: new Question()
+                quiz: new Quiz(),
+                testQuestion: new Question(),
+                currentQuestion: new Question(),
             }
         },
         methods: {
+            loadFirstQuestion () {
+                this.changeQuestion(this.quiz.questions.list[0].id)
+            },
+            loadQuiz () {
+                this.quiz = new Quiz(this.quizData)
+            },
             answerClicked (id) {
-                this.questions.list[this.getQuestionIndexById(this.currentQuestionId)].choiceClicked(id)
+                this.quiz.questions.getQuestionById(this.currentQuestion.id).choiceClicked(id)
             },
-            changeQuestion (id, count) {
-                if (id !== null) {
-                    this.currentQuestionId = id
-                } else if (count !== null) {
-                    this.currentQuestionId = this.questions.list[this.getQuestionIndexById(this.currentQuestionId) + count].id
+            goToNextQuestion () {
+                let question = this.quiz.questions.getNextQuestion(this.currentQuestion.id)
+                if (!question) {
+                    return
                 }
+                this.changeQuestion(question.id)
             },
-            getQuestionIndexById (id) {
-                for (let i = 0; i < this.questions.list.length; i++) {
-                    if (this.questions.list[i].id === id) {
-                        return i
-                    }
+            goToPrevQuestion () {
+                let question = this.quiz.questions.getPrevQuestion(this.currentQuestion.id)
+                if (!question) {
+                    return
                 }
-                return 0
+                this.changeQuestion(question.id)
+            },
+            changeQuestion (id) {
+                this.currentQuestion = this.quiz.questions.getQuestionById(id)
             },
             bookmark () {
-                this.questions.list[this.getQuestionIndexById(this.currentQuestionId)].bookmark()
+                this.quiz.questions.getQuestionById(this.currentQuestion.id).bookmark()
             },
             changeState (newState) {
-                this.questions.list[this.getQuestionIndexById(this.currentQuestionId)].changeState(newState)
-            }
-        },
-        computed: {
-            currentQuestion () {
-                for (let i = 0; i < this.questions.list.length; i++) {
-                    if (this.questions.list[i].id === this.currentQuestionId) {
-                        return this.questions.list[i]
-                    }
-                }
-                return {}
+                this.quiz.questions.getQuestionById(this.currentQuestion.id).changeState(newState)
             }
         },
         created() {
-            this.questions = new QuestionList(this.questions)
-            console.log(this.lessons)
+            this.loadQuiz()
+            this.loadFirstQuestion()
         }
     }
 </script>
