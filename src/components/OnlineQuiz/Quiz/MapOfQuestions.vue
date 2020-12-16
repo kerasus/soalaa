@@ -1,6 +1,6 @@
 <template>
     <v-sheet color="#f1f1f1" width="100%" class="map-of-questions">
-        <v-expansion-panels>
+        <v-expansion-panels accordion flat hover multiple>
             <v-expansion-panel
                     v-for="(item, index) in lessons"
                     :key="index"
