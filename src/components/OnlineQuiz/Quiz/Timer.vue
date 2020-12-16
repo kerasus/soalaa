@@ -2,60 +2,85 @@
     <div style="margin-bottom: 0px">
 
 
-        <div v-if="mob" id="test" class="timeCArd1">
+        <div v-if="mob " id="test" class="timeCArd1">
 
-            <v-row v-if="show">
-                <v-col>
-                    {{ seconds}} : {{ minutes}} : {{hours}}
-                </v-col>
-                <v-col>
+
+            <v-icon v-if="show" @click="changeCss" style="float: left;
+        background-color: #e1e1e1;margin-left: 10px;margin-top: 30px;font-size: 0.8em;margin-right: 0">
+            mdi-close
+        </v-icon>
+
+            <div v-if="show" style="padding-top: 10px;padding-bottom: 10px;width: 200px">
+
+
+                <p style="font-size: 0.6em;margin-right: 10px;width: 60%;margin-left: 10px">
                     زمان گذشته
-                </v-col>
-            </v-row>
-            <v-row v-if="show">
-                <v-col>
-                    {{ seconds2}} : {{ minutes2}} : {{hours2}}
-                </v-col>
-                <v-col>
+
+
+                    {{ seconds}} : {{ minutes}} : {{hours}}
+
+                </p>
+
+
+
+                <p style="font-size: 0.6em;margin-right: 10px">
                     دقیقه تا پایان مهلت پاسخگویی دفترچه عمومی
-                </v-col>
-            </v-row>
-            <v-btn @click="changeCss"  style="float: bottom;
-        height: 50px;width: 100px">
-                <v-icon>
-                    mdi-clock
-                </v-icon>
-            </v-btn>
+                    {{ seconds2}} : {{ minutes2}}
+                </p>
+
+
+            </div>
+
+
+
+            <v-icon v-if="!show" @click="changeCss" style="float: left;
+        background-color: #e1e1e1;margin-top: 15px;margin-left: 18px">
+                mdi-clock
+            </v-icon>
+
 
         </div>
 
 
         <div class="timeCArd" id="test" v-if="!mob">
-            <v-btn @click="changeCss" style="float: left;
-        height: 100px">
-                <v-icon>
-                    mdi-clock
-                </v-icon>
-            </v-btn>
+
+            <v-icon v-if="!show" @click="changeCss" style="float: left;
+        height: 10px;background-color: #e1e1e1;margin-top: 47px;margin-left: 30px">
+                mdi-clock
+            </v-icon>
+            <v-icon v-if="show" @click="changeCss" style="float: left;
+        height: 10px;background-color: #e1e1e1;margin-top: 47px;margin-left: 30px">
+                mdi-close
+            </v-icon>
+
+
             <v-row>
-                <v-col v-if="show">
+                <v-col cols="2">
+                    <v-icon v-if="show" style="color: darkgoldenrod;margin-top: 30px;margin-right: 30px">
+                        mdi-clock
+                    </v-icon>
+                </v-col>
+                <v-col v-if="show" style="margin-top: 30px">
 
-                    {{ seconds}} : {{ minutes}} : {{hours}}
+                    زمان گذشته
 
                     <span style="margin-right: 10px">
-                            زمان گذشته
+                         {{ seconds}} : {{ minutes}} : {{hours}}
+
                         </span>
 
 
                 </v-col>
-                <v-col v-if="show">
-                    {{ seconds2}} : {{ minutes2}} : {{hours2}}
+                <v-col v-if="show" style="margin-top: 30px">
+                    دقیقه تا پایان مهلت پاسخگویی دفترچه عمومی
                     <span style="margin-right: 10px">
-                            دقیقه تا پایان مهلت پاسخگویی دفترچه عمومی
+                        {{ seconds2}} : {{ minutes2}} : {{hours2}}
+
                         </span>
 
 
                 </v-col>
+
 
             </v-row>
 
@@ -111,7 +136,7 @@
                 day: 1000 * 60 * 60 * 24
             },
             end: new Date(),
-            newStyle: 'width: 1000px',
+            newStyle: 'width: 1200px',
             oldStyle: 'width: 100px'
 
 
@@ -131,7 +156,9 @@
         mounted() {
             if (window.screen.height < 800) {
                 this.mob = true
-                this.newStyle = ' width:300px;height:200px'
+                let cardWidth = window.screen.width - 90
+                this.newStyle = ' width:' + cardWidth + 'px;height:80px'
+                this.oldStyle= ' width:60px'
             }
 
 
@@ -193,11 +220,12 @@
         transition: 0.5s;
 
     }
+
     .timeCArd1 {
 
         background-color: #e1e1e1;
-        height: 50px;
-        width: 100px;
+        height: 60px;
+        width: 60px;
         border-radius: 15px;
         transition: 0.5s;
         margin-left: 0;
