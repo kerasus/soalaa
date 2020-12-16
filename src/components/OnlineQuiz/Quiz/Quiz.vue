@@ -2,13 +2,13 @@
     <v-container :fluid="true">
         <v-row>
             <v-col :md="2">
-                <map-of-questions :questions="questions" :current-question="currentQuestionId" @changeQuestion="changeQuestion($event)" />
+                <map-of-questions :questions="quiz.questions" :current-question="currentQuestion.id" @changeQuestion="changeQuestion" />
             </v-col>
             <v-col :md="10" class="question-container">
                 <v-sheet width="100%">
                     <v-row>
                         <v-col :md="1" class="d-flex justify-center align-center">
-                            <v-btn :min-width="32" class="px-0" :height="64" @click="changeQuestion(null, -1)" icon>
+                            <v-btn :min-width="32" class="px-0" :height="64" @click="goToPrevQuestion" icon>
                                 <v-icon>mdi-chevron-right</v-icon>
                             </v-btn>
                         </v-col>
@@ -39,11 +39,11 @@
                                 </v-col>
                             </v-row>
                             <v-row class="question-answers">
-                                <choice @answerClicked="answerClicked($event)" v-for="item in currentQuestion.choices.list" :key="item.id" :choice="item"/>
+                                <choice @answerClicked="answerClicked" v-for="item in currentQuestion.choices.list" :key="item.id" :choice="item"/>
                             </v-row>
                         </v-col>
                         <v-col :md="1" class="d-flex justify-center align-center">
-                            <v-btn :min-width="32" class="px-0" :height="64" @click="changeQuestion(null, 1)" icon>
+                            <v-btn :min-width="32" class="px-0" :height="64" @click="goToNextQuestion" icon>
                                 <v-icon>mdi-chevron-left</v-icon>
                             </v-btn>
                         </v-col>
@@ -64,8 +64,9 @@
     // }
     import Choice from "./Choice";
     import MapOfQuestions from "./MapOfQuestions";
-    import {Question, QuestionList} from '../../../../models/Question'
+    import {Question} from '../../../../models/Question'
     import Timer from './Timer'
+    import {Quiz} from "../../../../models/Quiz";
 
     export default {
         name: "Quiz",
@@ -76,159 +77,165 @@
         },
         data () {
             return {
-                questions: [
-                    {
-                        id: 0,
-                        title: 'ادبیات فارسی - سوال شماره 9',
-                        body: 'متن سوال متن سوال متن سوال متن سوال متن سوال متن سوال متن سوال متن سوال متن سوال متن سوال متن سوال متن سوال ' +
-                            'متن سوال متن سوال متن سوال متن سوال متن سوال متن سوال متن سوال متن سوال متن سوال متن سوال متن سوال متن سوال متن سوال ' +
-                            'متن سوال متن سوال متن سوال متن سوال متن سوال متن سوال ' +
-                            'متن سوال متن سوال متن سوال متن سوال متن سوال متن سوال متن سوال ',
-                        choices: [
-                            {
-                                id: 0,
-                                body: 'جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ',
-                                active: false,
-                                order: 0
-                            },
-                            {
-                                id: 1,
-                                body: 'جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ',
-                                active: false,
-                                order: 1
-                            },
-                            {
-                                id: 2,
-                                body: 'جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ',
-                                active: false,
-                                order: 2
-                            },
-                            {
-                                id: 3,
-                                body: 'جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ',
-                                active: false,
-                                order: 3
-                            }
-                        ],
-                        order: 0,
-                        lesson: 'فارسی'
-                    },
-                    {
-                        id: 1,
-                        title: 'ادبیات فارسی - سوال شماره 10',
-                        body: 'متن سوال متن سوال متن سوال متن سوال متن سوال متن سوال متن سوال متن سوال متن سوال متن سوال متن سوال متن سوال ' +
-                            'متن سوال متن سوال متن سوال متن سوال متن سوال متن سوال متن سوال متن سوال متن سوال متن سوال متن سوال متن سوال متن سوال ' +
-                            'متن سوال متن سوال متن سوال متن سوال متن سوال متن سوال ' +
-                            'متن سوال متن سوال متن سوال متن سوال متن سوال متن سوال متن سوال ',
-                        choices: [
-                            {
-                                id: 0,
-                                body: 'جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ',
-                                active: false,
-                                order: 0
-                            },
-                            {
-                                id: 1,
-                                body: 'جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ',
-                                active: false,
-                                order: 1
-                            },
-                            {
-                                id: 2,
-                                body: 'جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ',
-                                active: false,
-                                order: 2
-                            },
-                            {
-                                id: 3,
-                                body: 'جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ',
-                                active: false,
-                                order: 3
-                            }
-                        ],
-                        order: 1,
-                        lesson: 'ریاضی'
-                    },
-                    {
-                        id: 2,
-                        title: 'ادبیات فارسی - سوال شماره 11',
-                        body: 'متن سوال متن سوال متن سوال متن سوال متن سوال متن سوال متن سوال متن سوال متن سوال متن سوال متن سوال متن سوال ' +
-                            'متن سوال متن سوال متن سوال متن سوال متن سوال متن سوال متن سوال متن سوال متن سوال متن سوال متن سوال متن سوال متن سوال ' +
-                            'متن سوال متن سوال متن سوال متن سوال متن سوال متن سوال ' +
-                            'متن سوال متن سوال متن سوال متن سوال متن سوال متن سوال متن سوال ',
-                        choices: [
-                            {
-                                id: 0,
-                                body: 'جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ',
-                                active: false,
-                                order: 0
-                            },
-                            {
-                                id: 1,
-                                body: 'جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ',
-                                active: false,
-                                order: 1
-                            },
-                            {
-                                id: 2,
-                                body: 'جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ',
-                                active: false,
-                                order: 2
-                            },
-                            {
-                                id: 3,
-                                body: 'جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ',
-                                active: false,
-                                order: 3
-                            }
-                        ],
-                        order: 2,
-                        lesson: 'ریاضی'
-                    }
-                ],
+                quizData: {
+                    title: 'آزمون آزمایشی',
+                    begin_datetime: '2021-01-23 08:00:00',
+                    finish_datetime: '2021-01-23 08:00:00',
+                    total_question_number: 3,
+                    questions: [
+                        {
+                            id: 0,
+                            title: 'ادبیات فارسی - سوال شماره 9',
+                            body: 'متن سوال متن سوال متن سوال متن سوال متن سوال متن سوال متن سواsssss سوال ' +
+                                'متن سوال متن سوال متن سوال متن سوال متن سوال متن سوال متن سوال متن سوال متن سواddddن سوال متن سوال ' +
+                                'متن سوال متن سوال متن سوال متن سوال متن سوال متن سوال ' +
+                                'متن سوال متن سوال متن سوال متن سوال متن سوال متن سوال متن سوال ',
+                            choices: [
+                                {
+                                    id: 0,
+                                    body: 'جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ',
+                                    active: false,
+                                    order: 0
+                                },
+                                {
+                                    id: 1,
+                                    body: 'جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ',
+                                    active: false,
+                                    order: 1
+                                },
+                                {
+                                    id: 2,
+                                    body: 'جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ',
+                                    active: false,
+                                    order: 2
+                                },
+                                {
+                                    id: 3,
+                                    body: 'جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ',
+                                    active: false,
+                                    order: 3
+                                }
+                            ],
+                            order: 0,
+                            lesson: 'فارسی'
+                        },
+                        {
+                            id: 1,
+                            title: 'ادبیات فارسی - سوال شماره 10',
+                            body: 'متن سوال متن سوال متن سوال متن سوال متن سوال متن سوال متن سوال متن gggggن سوال متن سوال ' +
+                                'متن سوال متن سوال متن سوال متن سوال متن سوال متن سوال متن سوال متن سوال مhhhhhتن سوال متن سوال متن سوال ' +
+                                'متن سوال متن سوال متن سوال متن سوال متن سوال متن سوال ' +
+                                'متن سوال متن سوال متن سوال متن سوال متن سوال متن سوال متن سوال ',
+                            choices: [
+                                {
+                                    id: 0,
+                                    body: 'جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ',
+                                    active: false,
+                                    order: 0
+                                },
+                                {
+                                    id: 1,
+                                    body: 'جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ',
+                                    active: false,
+                                    order: 1
+                                },
+                                {
+                                    id: 2,
+                                    body: 'جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ',
+                                    active: false,
+                                    order: 2
+                                },
+                                {
+                                    id: 3,
+                                    body: 'جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ',
+                                    active: false,
+                                    order: 3
+                                }
+                            ],
+                            order: 1,
+                            lesson: 'ریاضی'
+                        },
+                        {
+                            id: 2,
+                            title: 'ادبیات فارسی - سوال شماره 11',
+                            body: 'متن سوال متن سوال متن سوال متن سوال متن سوال متن سوالkkkkkkkتن سوال متن سوال متن سوال متن سوال ' +
+                                'متن سوال متن سوال متن سوال متن سوال متن سوال متن سوال متن سواllllll سوال متن سوال متن سوال متن سوال ' +
+                                'متن سوال متن سوال متن سوال متن سوال متن سوال متن سوال ' +
+                                'متن سوال متن سوال متن سوال متن سوال متن سوال متن سوال متن سوال ',
+                            choices: [
+                                {
+                                    id: 0,
+                                    body: 'جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ',
+                                    active: false,
+                                    order: 0
+                                },
+                                {
+                                    id: 1,
+                                    body: 'جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ',
+                                    active: false,
+                                    order: 1
+                                },
+                                {
+                                    id: 2,
+                                    body: 'جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ',
+                                    active: false,
+                                    order: 2
+                                },
+                                {
+                                    id: 3,
+                                    body: 'جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ',
+                                    active: false,
+                                    order: 3
+                                }
+                            ],
+                            order: 2,
+                            lesson: 'ریاضی'
+                        }
+                    ],
+                },
                 currentQuestionId: 0,
-                testQuestion: new Question()
+                quiz: new Quiz(),
+                testQuestion: new Question(),
+                currentQuestion: new Question(),
             }
         },
         methods: {
+            loadFirstQuestion () {
+                this.changeQuestion(this.quiz.questions.list[0].id)
+            },
+            loadQuiz () {
+                this.quiz = new Quiz(this.quizData)
+            },
             answerClicked (id) {
-                this.questions.list[this.getQuestionIndexById(this.currentQuestionId)].choiceClicked(id)
+                this.quiz.questions.getQuestionById(this.currentQuestion.id).choiceClicked(id)
             },
-            changeQuestion (id, count) {
-                if (id !== null) {
-                    this.currentQuestionId = id
-                } else if (count !== null) {
-                    this.currentQuestionId = this.questions.list[this.getQuestionIndexById(this.currentQuestionId) + count].id
+            goToNextQuestion () {
+                let question = this.quiz.questions.getNextQuestion(this.currentQuestion.id)
+                if (!question) {
+                    return
                 }
+                this.changeQuestion(question.id)
             },
-            getQuestionIndexById (id) {
-                for (let i = 0; i < this.questions.list.length; i++) {
-                    if (this.questions.list[i].id === id) {
-                        return i
-                    }
+            goToPrevQuestion () {
+                let question = this.quiz.questions.getPrevQuestion(this.currentQuestion.id)
+                if (!question) {
+                    return
                 }
-                return 0
+                this.changeQuestion(question.id)
+            },
+            changeQuestion (id) {
+                this.currentQuestion = this.quiz.questions.getQuestionById(id)
             },
             bookmark () {
-                this.questions.list[this.getQuestionIndexById(this.currentQuestionId)].bookmark()
+                this.quiz.questions.getQuestionById(this.currentQuestion.id).bookmark()
             },
             changeState (newState) {
-                this.questions.list[this.getQuestionIndexById(this.currentQuestionId)].changeState(newState)
-            }
-        },
-        computed: {
-            currentQuestion () {
-                for (let i = 0; i < this.questions.list.length; i++) {
-                    if (this.questions.list[i].id === this.currentQuestionId) {
-                        return this.questions.list[i]
-                    }
-                }
-                return {}
+                this.quiz.questions.getQuestionById(this.currentQuestion.id).changeState(newState)
             }
         },
         created() {
-            this.questions = new QuestionList(this.questions)
-            console.log(this.lessons)
+            this.loadQuiz()
+            this.loadFirstQuestion()
         }
     }
 </script>
