@@ -1,22 +1,11 @@
 <template>
     <v-container :fluid="true" class="quiz-page">
         <v-row :style="{ height: '100%' }">
-            <v-col :md="2" class="map-of-questions-container">
-                <map-of-questions :questions="questions" :current-question="currentQuestionId" @changeQuestion="changeQuestion($event)" />
-            </v-col>
-            <v-col :md="10" class="question-container">
+            <v-col :md="12" class="question-container">
                 <v-sheet width="100%" color="#f4f4f4">
                     <v-row>
-                        <v-col :md="1" />
-                        <v-col :md="10" class="d-flex justify-end my-9">
-                            <p class="user-name">سید مصطفی کاظمی</p>
-                            <v-icon :size="40">mdi-account-circle</v-icon>
-                        </v-col>
-                        <v-col :md="1" />
-                    </v-row>
-                    <v-row>
                         <v-col :md="1" class="d-flex justify-center align-center">
-                            <v-btn :min-width="64" class="px-0" :height="64" @click="changeQuestion(null, -1)" icon>
+                            <v-btn :min-width="64" class="px-0" :height="64" @click="goToPrevQuestion" icon>
                                 <v-icon :size="40">mdi-chevron-right</v-icon>
                             </v-btn>
                         </v-col>
@@ -51,7 +40,7 @@
                             </v-row>
                         </v-col>
                         <v-col :md="1" class="d-flex justify-center align-center">
-                            <v-btn :min-width="64" class="px-0" :height="64" @click="changeQuestion(null, 1)" icon>
+                            <v-btn :min-width="64" class="px-0" :height="64" @click="goToNextQuestion" icon>
                                 <v-icon :size="40">mdi-chevron-left</v-icon>
                             </v-btn>
                         </v-col>
@@ -72,7 +61,6 @@
     //     inputText = document.getElementById('textfield').innerText
     // }
     import Choice from "./Choice";
-    import MapOfQuestions from "./MapOfQuestions";
     import {Question} from '../../../../models/Question'
     import Timer from './Timer'
     import {Quiz} from "../../../../models/Quiz";
@@ -81,7 +69,6 @@
         name: "Quiz",
         components: {
             Choice,
-            MapOfQuestions,
             Timer
         },
         data () {
@@ -203,9 +190,7 @@
                     ],
                 },
                 currentQuestionId: 0,
-                quiz: new Quiz(),
                 testQuestion: new Question(),
-                currentQuestion: new Question(),
             }
         },
         methods: {
@@ -240,6 +225,24 @@
             },
             changeState (newState) {
                 this.quiz.questions.getQuestionById(this.currentQuestion.id).changeState(newState)
+            }
+        },
+        computed: {
+            quiz: {
+                get () {
+                    return this.$store.getters.quiz
+                },
+                set (newInfo) {
+                    this.$store.commit('updateQuiz', newInfo)
+                }
+            },
+            currentQuestion: {
+                get () {
+                    return this.$store.getters.currentQuestion
+                },
+                set (newInfo) {
+                    this.$store.commit('updateCurrentQuestion', newInfo)
+                }
             }
         },
         created() {
