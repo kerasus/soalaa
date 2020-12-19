@@ -106,3 +106,8 @@
 }
 </style>
 
+<style>
+.v-navigation-drawer__border {
+    background: transparent !important;
+}
+</style>
