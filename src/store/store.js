@@ -23,6 +23,12 @@ const store = new Vuex.Store({
         updateCurrentQuestion (state, newInfo) {
             state.currentQuestion = newInfo
         },
+        goToNextQuestion (state) {
+          state.currentQuestion = state.quiz.questions.getNextQuestion(state.currentQuestion.id)
+        },
+        goToPrevQuestion (state) {
+            state.currentQuestion = state.quiz.questions.getPrevQuestion(state.currentQuestion.id)
+        },
         updateQuizPage (state, newInfo) {
             state.isQuizPage = newInfo
         }

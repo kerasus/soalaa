@@ -53,8 +53,15 @@
 </script>
 
 <style>
+.map-of-questions .v-expansion-panel-header {
+    transition: all ease-in-out 0.3s;
+}
+
 .map-of-questions .v-expansion-panel-header--active {
     background: #ffc107;
+    width: 80%;
+    border-radius: 40px;
+    margin: 2% 10%;
 }
 
 .map-of-questions .v-expansion-panel-content__wrap {
