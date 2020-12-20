@@ -10,7 +10,8 @@ const store = new Vuex.Store({
     state: {
         mapOfQuestionsDrawer: false,
         quiz: new Quiz(),
-        currentQuestion: new Question()
+        currentQuestion: new Question(),
+        isQuizPage: false
     },
     mutations: {
         updateMapOfQuestionsDrawer(state, newInfo) {
@@ -21,6 +22,9 @@ const store = new Vuex.Store({
         },
         updateCurrentQuestion (state, newInfo) {
             state.currentQuestion = newInfo
+        },
+        updateQuizPage (state, newInfo) {
+            state.isQuizPage = newInfo
         }
     },
     getters: {
@@ -32,6 +36,9 @@ const store = new Vuex.Store({
         },
         currentQuestion (state) {
             return state.currentQuestion
+        },
+        isQuizPage (state) {
+            return state.isQuizPage
         }
     }
 })

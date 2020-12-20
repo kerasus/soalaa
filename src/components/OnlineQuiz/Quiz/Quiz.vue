@@ -47,9 +47,6 @@
                     </v-row>
                 </v-sheet>
             </v-col>
-            <v-col :md="12" class="clock">
-                <Timer :daftarche="'عمومی'" :quiz-started-at="1607963897" :daftarche-end-time="1607963897" :height="100"></Timer>
-            </v-col>
         </v-row>
     </v-container>
 </template>
@@ -62,14 +59,12 @@
     // }
     import Choice from "./Choice";
     import {Question} from '../../../../models/Question'
-    import Timer from './Timer'
     import {Quiz} from "../../../../models/Quiz";
 
     export default {
         name: "Quiz",
         components: {
-            Choice,
-            Timer
+            Choice
         },
         data () {
             return {
@@ -248,15 +243,15 @@
         created() {
             this.loadQuiz()
             this.loadFirstQuestion()
+            this.$store.commit('updateQuizPage', true)
+        },
+        destroyed() {
+            this.$store.commit('updateQuizPage', false)
         }
     }
 </script>
 
 <style scoped>
-    .question-container {
-        padding-bottom: 100px;
-    }
-
     .question-header {
         display: flex;
         color: #666;
@@ -308,17 +303,6 @@
     .answer-checkbox {
         height: 100%;
         width: 100px;
-    }
-
-    .clock {
-        position: absolute;
-        bottom: 0;
-        right: 0;
-        left: 0;
-        padding: 0;
-        height: 100px;
-        display: flex;
-        justify-content: center;
     }
 
     .quiz-page {
