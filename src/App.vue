@@ -7,7 +7,8 @@
                 dark
         >
             <div class="header">
-                <v-app-bar-nav-icon @click.stop="toggleMapOfQuestionsDrawer" color="#666"></v-app-bar-nav-icon>
+                <div v-if="!isQuizPage" />
+                <v-app-bar-nav-icon @click.stop="toggleMapOfQuestionsDrawer" color="#666" v-if="isQuizPage"></v-app-bar-nav-icon>
                 <div class="d-flex justify-end">
                     <p class="user-name" :style="{ color: '#666', margin: '0 15px', 'align-self': 'center' }">سید مصطفی کاظمی</p>
                     <v-icon :size="40" color="#666">mdi-account-circle</v-icon>
@@ -36,6 +37,9 @@
         <v-main>
             <router-view></router-view>
         </v-main>
+        <v-footer class="d-flex justify-center" app>
+            <Timer :daftarche="'عمومی'" :quiz-started-at="1607963897" :daftarche-end-time="1607963897" :height="100"></Timer>
+        </v-footer>
     </v-app>
 </template>
 
@@ -44,6 +48,7 @@
     import './assets/scss/font.scss'
     import '@mdi/font/css/materialdesignicons.css';
     import MapOfQuestions from "./components/OnlineQuiz/Quiz/MapOfQuestions"
+    import Timer from "./components/OnlineQuiz/Quiz/Timer";
 
     export default {
         name: 'App',
@@ -58,7 +63,8 @@
         },
         components: {
             Menu,
-            MapOfQuestions
+            MapOfQuestions,
+            Timer
         },
         computed: {
             mapOfQuestionDrawer: {
@@ -84,6 +90,9 @@
                 set (newInfo) {
                     this.$store.commit('updateCurrentQuestion', newInfo)
                 }
+            },
+            isQuizPage () {
+                return this.$store.getters.isQuizPage
             }
         },
         methods: {
