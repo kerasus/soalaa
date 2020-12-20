@@ -1,5 +1,5 @@
 <template>
-    <v-col :md="6" class="answer-box" @click="answerClicked">
+    <v-col :md="6" :cols="12" class="answer-box" @click="answerClicked">
         <v-sheet :class="{ 'answer-sheet': true, active: choice.active }">
             <div class="answer-text">
                 {{ choice.body }}
@@ -35,14 +35,14 @@
     .answer-box {
         display: flex;
         justify-content: center;
-        height: 135px;
+        min-height: 135px;
         align-items: center;
     }
 
     .answer-sheet {
         background: #fff;
         width: 100%;
-        height: 100%;
+        height: max-content;
         padding: 2% 3%;
         border-radius: 10px;
         cursor: pointer;
@@ -57,7 +57,7 @@
     /*}*/
 
     .answer-text {
-        height: 100%;
+        height: max-content;
         width: 100%;
         display: flex;
         color: #777;
@@ -74,14 +74,15 @@
     /*}*/
 
     .answer-text {
-        height: 100%;
+        height: max-content;
         width: 100%;
         display: flex;
         align-content: center;
+        align-self: center;
     }
 
     .answer-checkbox {
-        height: 100%;
+        height: max-content;
         width: 85px;
         display: flex;
         justify-content: center;
