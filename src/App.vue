@@ -37,7 +37,7 @@
         <v-main>
             <router-view></router-view>
         </v-main>
-        <v-footer class="d-flex justify-center" app>
+        <v-footer class="d-flex justify-center" app :elevation="2">
             <Timer :daftarche="'عمومی'" :quiz-started-at="1607963897" :daftarche-end-time="1607963897" :height="100"></Timer>
         </v-footer>
     </v-app>

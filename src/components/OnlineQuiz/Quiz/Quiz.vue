@@ -1,15 +1,15 @@
 <template>
     <v-container :fluid="true" class="quiz-page">
-        <v-row :style="{ height: '100%' }">
+        <v-row>
             <v-col :md="12" class="question-container">
                 <v-sheet width="100%" color="#f4f4f4">
                     <v-row>
-                        <v-col :md="1" class="d-flex justify-center align-center">
+                        <v-col :md="1" class="d-md-flex justify-center align-center d-none">
                             <v-btn :min-width="64" class="px-0" :height="64" @click="goToPrevQuestion" icon>
                                 <v-icon :size="40">mdi-chevron-right</v-icon>
                             </v-btn>
                         </v-col>
-                        <v-col :md="10">
+                        <v-col :md="10" class="px-md-0 px-10">
                             <v-row class="question-header">
                                 <div class="question-number">
                                     <p>{{ currentQuestion.title }}</p>
@@ -40,7 +40,7 @@
                                 <choice @answerClicked="answerClicked($event)" v-for="item in currentQuestion.choices.list" :key="item.id" :choice="item"/>
                             </v-row>
                         </v-col>
-                        <v-col :md="1" class="d-flex justify-center align-center">
+                        <v-col :md="1" class="d-md-flex justify-center align-center d-none">
                             <v-btn :min-width="64" class="px-0" :height="64" @click="goToNextQuestion" icon>
                                 <v-icon :size="40">mdi-chevron-left</v-icon>
                             </v-btn>
@@ -256,6 +256,9 @@
             this.loadQuiz()
             this.loadFirstQuestion()
             this.$store.commit('updateQuizPage', true)
+            if (window.innerWidth > 980) {
+                this.$store.commit('updateMapOfQuestionsDrawer', true)
+            }
         },
         destroyed() {
             this.$store.commit('updateQuizPage', false)
@@ -268,9 +271,17 @@
     display: inline-block;
     direction: ltr;
 }
+
+.v-main {
+    background: #f4f4f4;
+}
 </style>
 
 <style scoped>
+    .question-number p {
+        margin-bottom: 0;
+        line-height: 40px;
+    }
     .question-header {
         display: flex;
         color: #666;
@@ -286,13 +297,6 @@
 
     .question-answers {
         margin-top: 50px;
-    }
-
-    .answer-box {
-        display: flex;
-        justify-content: center;
-        height: 135px;
-        align-items: center;
     }
 
     .answer-sheet {
@@ -340,5 +344,17 @@
         background: #fff;
         margin: -12px 0;
         padding: 20px 0;
+    }
+
+    @media only screen and (max-width: 960px) {
+        .question-body {
+            margin-top: 20px;
+        }
+    }
+
+    @media only screen and (max-width: 400px) {
+        .question-header {
+            justify-content: center;
+        }
     }
 </style>
