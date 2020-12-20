@@ -1,15 +1,12 @@
 <template>
-    <v-container :fluid="true">
-        <v-row>
-            <v-col :md="2">
-                <map-of-questions :questions="quiz.questions" :current-question="currentQuestion.id" @changeQuestion="changeQuestion" />
-            </v-col>
-            <v-col :md="10" class="question-container">
-                <v-sheet width="100%">
+    <v-container :fluid="true" class="quiz-page">
+        <v-row :style="{ height: '100%' }">
+            <v-col :md="12" class="question-container">
+                <v-sheet width="100%" color="#f4f4f4">
                     <v-row>
                         <v-col :md="1" class="d-flex justify-center align-center">
-                            <v-btn :min-width="32" class="px-0" :height="64" @click="goToPrevQuestion" icon>
-                                <v-icon>mdi-chevron-right</v-icon>
+                            <v-btn :min-width="64" class="px-0" :height="64" @click="goToPrevQuestion" icon>
+                                <v-icon :size="40">mdi-chevron-right</v-icon>
                             </v-btn>
                         </v-col>
                         <v-col :md="10">
@@ -19,15 +16,15 @@
                                 </div>
                                 <div class="question-buttons">
                                     <v-btn icon @click="changeState('circle')">
-                                        <v-icon v-if="currentQuestion.state !== 'circle'">mdi-checkbox-blank-circle-outline</v-icon>
-                                        <v-icon v-if="currentQuestion.state === 'circle'" color="yellow">mdi-checkbox-blank-circle</v-icon>
+                                        <v-icon v-if="currentQuestion.state !== 'circle'" color="#888" size="30">mdi-checkbox-blank-circle-outline</v-icon>
+                                        <v-icon v-if="currentQuestion.state === 'circle'" color="yellow" :size="30">mdi-checkbox-blank-circle</v-icon>
                                     </v-btn>
                                     <v-btn icon @click="changeState('cross')">
-                                        <v-icon :color="currentQuestion.state === 'cross' ? 'red' : ''">mdi-close</v-icon>
+                                        <v-icon :color="currentQuestion.state === 'cross' ? 'red' : '#888'" :size="30">mdi-close</v-icon>
                                     </v-btn>
                                     <v-btn icon @click="bookmark">
-                                        <v-icon v-if="!currentQuestion.bookmarked">mdi-bookmark-outline</v-icon>
-                                        <v-icon v-if="currentQuestion.bookmarked" color="blue">mdi-bookmark</v-icon>
+                                        <v-icon v-if="!currentQuestion.bookmarked" :size="30" color="#888">mdi-bookmark-outline</v-icon>
+                                        <v-icon v-if="currentQuestion.bookmarked" color="blue" :size="30">mdi-bookmark</v-icon>
                                     </v-btn>
                                 </div>
                             </v-row>
@@ -39,19 +36,21 @@
                                 </v-col>
                             </v-row>
                             <v-row class="question-answers">
-                                <choice @answerClicked="answerClicked" v-for="item in currentQuestion.choices.list" :key="item.id" :choice="item"/>
+                                <choice @answerClicked="answerClicked($event)" v-for="item in currentQuestion.choices.list" :key="item.id" :choice="item"/>
                             </v-row>
                         </v-col>
                         <v-col :md="1" class="d-flex justify-center align-center">
-                            <v-btn :min-width="32" class="px-0" :height="64" @click="goToNextQuestion" icon>
-                                <v-icon>mdi-chevron-left</v-icon>
+                            <v-btn :min-width="64" class="px-0" :height="64" @click="goToNextQuestion" icon>
+                                <v-icon :size="40">mdi-chevron-left</v-icon>
                             </v-btn>
                         </v-col>
                     </v-row>
                 </v-sheet>
             </v-col>
+            <v-col :md="12" class="clock">
+                <Timer :daftarche="'عمومی'" :quiz-started-at="1607963897" :daftarche-end-time="1607963897" :height="100"></Timer>
+            </v-col>
         </v-row>
-        <Timer class="clock" :daftarche="'عمومی'" :quiz-started-at="1607963897" :daftarche-end-time="1607963897"></Timer>
     </v-container>
 </template>
 
@@ -62,7 +61,6 @@
     //     inputText = document.getElementById('textfield').innerText
     // }
     import Choice from "./Choice";
-    import MapOfQuestions from "./MapOfQuestions";
     import {Question} from '../../../../models/Question'
     import Timer from './Timer'
     import {Quiz} from "../../../../models/Quiz";
@@ -71,7 +69,6 @@
         name: "Quiz",
         components: {
             Choice,
-            MapOfQuestions,
             Timer
         },
         data () {
@@ -193,9 +190,7 @@
                     ],
                 },
                 currentQuestionId: 0,
-                quiz: new Quiz(),
                 testQuestion: new Question(),
-                currentQuestion: new Question(),
             }
         },
         methods: {
@@ -232,6 +227,24 @@
                 this.quiz.questions.getQuestionById(this.currentQuestion.id).changeState(newState)
             }
         },
+        computed: {
+            quiz: {
+                get () {
+                    return this.$store.getters.quiz
+                },
+                set (newInfo) {
+                    this.$store.commit('updateQuiz', newInfo)
+                }
+            },
+            currentQuestion: {
+                get () {
+                    return this.$store.getters.currentQuestion
+                },
+                set (newInfo) {
+                    this.$store.commit('updateCurrentQuestion', newInfo)
+                }
+            }
+        },
         created() {
             this.loadQuiz()
             this.loadFirstQuestion()
@@ -246,6 +259,7 @@
 
     .question-header {
         display: flex;
+        color: #666;
         flex-direction: row;
         justify-content: space-between;
     }
@@ -253,6 +267,7 @@
     .question-body {
         margin-top: 50px;
         line-height: 35px;
+        color: #777;
     }
 
     .question-answers {
@@ -267,7 +282,7 @@
     }
 
     .answer-sheet {
-        background: #f1f1f1;
+        background: #fff;
         width: 90%;
         height: 100px;
         padding: 2% 3%;
@@ -296,10 +311,31 @@
     }
 
     .clock {
-        float: left;
-        margin-left: 5px;
-        margin-bottom: 0;
-        margin-top: 200px;
+        position: absolute;
+        bottom: 0;
+        right: 0;
+        left: 0;
+        padding: 0;
+        height: 100px;
+        display: flex;
+        justify-content: center;
+    }
 
+    .quiz-page {
+        background: #f4f4f4;
+        height: 100%;
+    }
+
+    .user-name {
+        margin-bottom: 0;
+        align-self: center;
+        margin-left: 10px;
+        color: #777;
+    }
+
+    .map-of-questions-container {
+        background: #fff;
+        margin: -12px 0;
+        padding: 20px 0;
     }
 </style>
