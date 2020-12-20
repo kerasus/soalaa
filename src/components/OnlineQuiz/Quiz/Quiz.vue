@@ -30,9 +30,10 @@
                             </v-row>
                             <v-row class="question-body">
                                 <v-col>
-                                    <p>
+                                    <div dir="rtl" v-katex:auto="{ options }">
                                         {{ currentQuestion.body }}
-                                    </p>
+                                    </div>
+
                                 </v-col>
                             </v-row>
                             <v-row class="question-answers">
@@ -57,9 +58,20 @@
     // function handler() {
     //     inputText = document.getElementById('textfield').innerText
     // }
+    import Vue from 'vue'
     import Choice from "./Choice";
     import {Question} from '../../../../models/Question'
     import {Quiz} from "../../../../models/Quiz";
+    import 'katex/dist/katex.min.css';
+
+    import VueKatex from 'vue-katex';
+    import 'katex/dist/katex.min.css';
+
+    Vue.use(VueKatex, {
+        globalOptions: {
+            //... Define globally applied KaTeX options here
+        }
+    });
 
     export default {
         name: "Quiz",
@@ -77,10 +89,7 @@
                         {
                             id: 0,
                             title: 'ادبیات فارسی - سوال شماره 9',
-                            body: 'متن سوال متن سوال متن سوال متن سوال متن سوال متن سوال متن سواsssss سوال ' +
-                                'متن سوال متن سوال متن سوال متن سوال متن سوال متن سوال متن سوال متن سوال متن سواddddن سوال متن سوال ' +
-                                'متن سوال متن سوال متن سوال متن سوال متن سوال متن سوال ' +
-                                'متن سوال متن سوال متن سوال متن سوال متن سوال متن سوال متن سوال ',
+                            body: 'متن سوال: این معادله $$x=\\frac{-b\\pm\\sqrt{b^2-4ac}}{2a}$$ را حل کنید',
                             choices: [
                                 {
                                     id: 0,
@@ -182,8 +191,11 @@
                             order: 2,
                             lesson: 'ریاضی'
                         }
-                    ],
+                    ]
                 },
+                options: [
+                    {left: "$$", right: "$$", display: true}
+                ],
                 currentQuestionId: 0,
                 testQuestion: new Question(),
             }
@@ -250,6 +262,13 @@
         }
     }
 </script>
+
+<style>
+.quiz-page .katex-display {
+    display: inline-block;
+    direction: ltr;
+}
+</style>
 
 <style scoped>
     .question-header {
