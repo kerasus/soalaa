@@ -36,7 +36,12 @@
                                 </v-col>
                             </v-row>
                             <v-row class="question-answers">
-                                <choice @answerClicked="answerClicked($event)" v-for="item in currentQuestion.choices.list" :key="item.id" :choice="item"/>
+                                <choice
+                                        @answerClicked="answerClicked($event)"
+                                        v-for="item in currentQuestion.choices.list"
+                                        :key="item.id"
+                                        :choice="item"
+                                />
                             </v-row>
                         </v-col>
                         <v-col :md="1" class="d-md-flex justify-center align-center d-none">
@@ -58,19 +63,19 @@
     //     inputText = document.getElementById('textfield').innerText
     // }
     import Vue from 'vue'
-    import Choice from "./Choice";
+    import Choice from './Choice'
     import {Question} from '../../../../models/Question'
-    import {Quiz} from "../../../../models/Quiz";
-    import 'katex/dist/katex.min.css';
+    import {Quiz} from "../../../../models/Quiz"
+    import 'katex/dist/katex.min.css'
 
-    import VueKatex from 'vue-katex';
-    import 'katex/dist/katex.min.css';
+    import VueKatex from 'vue-katex'
+    import 'katex/dist/katex.min.css'
 
     Vue.use(VueKatex, {
         globalOptions: {
             //... Define globally applied KaTeX options here
         }
-    });
+    })
 
     export default {
         name: "Quiz",
@@ -205,10 +210,16 @@
                 this.loadQuestionByNumber(1)
             },
             loadQuestionByNumber (number) {
-                this.changeQuestion(this.quiz.questions.list[this.getQuestionNumberFromIndex(number)].id)
+                let questionIndex = this.getQuestionNumberFromIndex(number)
+                this.changeQuestion(this.quiz.questions.list[questionIndex].id)
             },
             getQuestionNumberFromIndex (number) {
-                return number - 1;
+                number = parseInt(number)
+                return number - 1
+            },
+            getQuestionIndexFromNumber (index) {
+                index = parseInt(index)
+                return index + 1
             },
             loadQuiz () {
                 this.quiz = new Quiz(this.quizData)
@@ -231,6 +242,9 @@
                 this.changeQuestion(question.id)
             },
             changeQuestion (id) {
+                const questIndex = this.quiz.questions.getQuestionIndexById(id),
+                    questNumber = this.getQuestionIndexFromNumber(questIndex)
+                this.$router.push({ name: 'onlineQuiz.quiz', params: { quizId: this.quiz.id, questNumber } })
                 this.currentQuestion = this.quiz.questions.getQuestionById(id)
             },
             bookmark () {
@@ -259,12 +273,12 @@
             }
         },
         created() {
-            if (this.$route.params.quizId !== this.quiz.id) {
+            if (!this.quiz.id || parseInt(this.$route.params.quizId) !== parseInt(this.quiz.id)) {
                 this.loadQuiz()
             }
 
             if (this.$route.params.questNumber) {
-                this.loadQuestionByNumber(this.$route.params.id)
+                this.loadQuestionByNumber(this.$route.params.questNumber)
             } else {
                 this.loadFirstQuestion()
             }
