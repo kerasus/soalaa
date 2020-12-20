@@ -1,6 +1,7 @@
 import { Model, Collection } from 'js-abstract-model'
 import { AnswerList } from './Answer'
 import { ChoiceList } from './Choice'
+import {QuestCategory} from "./QuestCategory";
 
 class Question extends Model {
     constructor (data) {
@@ -13,6 +14,10 @@ class Question extends Model {
             {
                 key: 'answers',
                 relatedModel: AnswerList
+            },
+            {
+                key: 'sub_category',
+                relatedModel: QuestCategory
             },
             {
                 key: 'choices',
@@ -80,6 +85,35 @@ class Question extends Model {
 class QuestionList extends Collection {
     model () {
         return Question
+    }
+
+    getQuestionIndexById (questionId) {
+        return this.list.findIndex((item)=> parseInt(item.id) === parseInt(questionId))
+    }
+
+    getQuestionById (questionId) {
+        return this.list.find((item)=> parseInt(item.id) === parseInt(questionId))
+    }
+
+    getQuestionByIndex (questionIndex) {
+        let question = this.list[questionIndex]
+        if (question) {
+            return question
+        } else {
+            return false
+        }
+    }
+
+    getNextQuestion (questionId) {
+        let currentIndex = this.getQuestionIndexById(questionId),
+            nextIndex = ++currentIndex
+        return this.getQuestionByIndex(nextIndex)
+    }
+
+    getPrevQuestion (questionId) {
+        let currentIndex = this.getQuestionIndexById(questionId),
+            prevIndex = --currentIndex
+        return this.getQuestionByIndex(prevIndex)
     }
 
 }

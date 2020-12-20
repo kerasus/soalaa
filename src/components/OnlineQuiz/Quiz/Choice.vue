@@ -1,12 +1,12 @@
 <template>
-    <v-col :md="6" class="answer-box" @click="answerClicked">
+    <v-col :md="6" :cols="12" class="answer-box" @click="answerClicked">
         <v-sheet :class="{ 'answer-sheet': true, active: choice.active }">
             <div class="answer-text">
                 {{ choice.body }}
             </div>
-            <!--                                        <div class="answer-checkbox">-->
-            <!--                                            <v-checkbox v-model="choice.active" disabled />-->
-            <!--                                        </div>-->
+            <div class="answer-checkbox">
+                <v-checkbox v-model="choice.active" disabled />
+            </div>
         </v-sheet>
     </v-col>
 </template>
@@ -23,18 +23,26 @@
     }
 </script>
 
+<style>
+    .answer-box .mdi-checkbox-marked::before,
+    .answer-box .mdi-checkbox-blank-outline {
+        size: 40px;
+        font-size: 40px;
+    }
+</style>
+
 <style scoped>
     .answer-box {
         display: flex;
         justify-content: center;
-        height: 135px;
+        min-height: 135px;
         align-items: center;
     }
 
     .answer-sheet {
-        background: #f1f1f1;
-        width: 90%;
-        height: 100px;
+        background: #fff;
+        width: 100%;
+        height: max-content;
         padding: 2% 3%;
         border-radius: 10px;
         cursor: pointer;
@@ -44,54 +52,41 @@
         justify-content: space-between;
     }
 
-    .answer-sheet:hover {
-        background: #e1e1e1;
-    }
+    /*.answer-sheet:hover {*/
+    /*    background: rgba(245, 208, 22, 0.2);*/
+    /*}*/
 
     .answer-text {
-        height: 100%;
+        height: max-content;
         width: 100%;
         display: flex;
-        align-content: center;
-    }
-
-    .answer-checkbox {
-        height: 100%;
-        width: 100px;
+        color: #777;
+        padding-right: 30px;
+        align-items: center;
     }
 
     .answer-sheet.active {
-        width: 95%;
-        background: #55a1ed;
-        color: #fff;
-        height: 120px;
+        background: rgba(245, 208, 22, 0.6);
     }
-
-    .answer-sheet.active:hover {
-        background: #4a9bed;
-    }
-
-    .answer-sheet:hover {
-        background: #e1e1e1;
-    }
+    
+    /*.answer-sheet.active:hover {*/
+    /*    background: rgba(245, 208, 22, 0.6);*/
+    /*}*/
 
     .answer-text {
-        height: 100%;
+        height: max-content;
         width: 100%;
         display: flex;
         align-content: center;
+        align-self: center;
     }
 
     .answer-checkbox {
-        height: 100%;
-        width: 100px;
+        height: max-content;
+        width: 85px;
         display: flex;
         justify-content: center;
         align-items: center;
         transition: all ease-in-out 0.3s;
-    }
-
-    .answer-sheet.active .answer-checkbox {
-        width: 120px;
     }
 </style>
