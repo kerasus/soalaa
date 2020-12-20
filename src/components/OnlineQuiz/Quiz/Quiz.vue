@@ -256,7 +256,7 @@
             this.loadQuiz()
             this.loadFirstQuestion()
             this.$store.commit('updateQuizPage', true)
-            if (window.innerWidth > 980) {
+            if (window.innerWidth > 1263) {
                 this.$store.commit('updateMapOfQuestionsDrawer', true)
             }
         },
