@@ -1,5 +1,5 @@
 <template>
-    <v-container :fluid="true" class="quiz-page">
+    <v-container :fluid="true" class="quiz-page" :style="{ height: '100%' }">
         <v-row>
             <v-col :md="12" class="question-container">
                 <v-sheet width="100%" color="#f4f4f4">
@@ -53,6 +53,11 @@
                 </v-sheet>
             </v-col>
         </v-row>
+        <v-row class="timer-row">
+            <v-col class="d-flex justify-center timer-container">
+                <Timer :daftarche="'عمومی'" :quiz-started-at="1607963897" :daftarche-end-time="1607963897" :height="100"></Timer>
+            </v-col>
+        </v-row>
     </v-container>
 </template>
 
@@ -67,6 +72,7 @@
     import {Question} from '../../../../models/Question'
     import {Quiz} from "../../../../models/Quiz"
     import 'katex/dist/katex.min.css'
+    import Timer from "./Timer";
     import mixinQuiz from '@/mixin/Quiz'
 
     import VueKatex from 'vue-katex'
@@ -81,7 +87,8 @@
     export default {
         name: "Quiz",
         components: {
-            Choice
+            Choice,
+            Timer
         },
         mixins: [mixinQuiz],
         data () {
@@ -280,6 +287,18 @@
 </style>
 
 <style scoped>
+    .timer-row {
+        position: fixed;
+        bottom: 0;
+        justify-content: center;
+        width: 100%;
+    }
+
+    .timer-container {
+        width: 100%;
+        background: #f4f4f4;
+    }
+
     .question-number p {
         margin-bottom: 0;
         line-height: 40px;

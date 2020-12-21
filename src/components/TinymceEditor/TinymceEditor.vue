@@ -1,9 +1,11 @@
 <template>
     <div class="mt-4">
-        <editor
-                api-key="no-api-key"
-                id="editor"
-                :init="initObj"
+        <textarea class="md-text" rows="10" v-model="content"/>
+        <MarkdownitVue
+                class="md-body"
+                :content="content"
+                :options="options"
+                @render-complete=hdlCmplete
         />
         <div dir="ltr">
             <div id="mathfield" locale="fa">x=\frac{-b\pm \sqrt{b^2-4ac}}{2a}</div>
@@ -13,7 +15,7 @@
 </template>
 
 <script>
-    import Editor from '@tinymce/tinymce-vue'
+    import MarkdownitVue from 'markdown-it-vue'
     import MathLive from 'mathlive';
     import 'mathlive/dist/mathlive-fonts.css'
     import 'mathlive/dist/mathlive-static.css'
@@ -21,7 +23,7 @@
     export default {
         name: "TinymceEditor",
         components: {
-            'editor': Editor
+            MarkdownitVue
         },
         data () {
             return {
@@ -57,7 +59,109 @@
                     }
                 },
                 formula: '',
-                latexData: null
+                latexData: null,
+                options: {
+                    markdownIt: {
+                        linkify: true
+                    },
+                    linkAttributes: {
+                        attrs: {
+                            target: '_self',
+                            rel: 'noopener'
+                        }
+                    }
+                },
+                content:
+
+                    '## AsciiMath\n' +
+                    'Inline AsciiMath: \\`@(1/2[1-(1/2)^n])/(1-(1/2))=s_n@\\`\n' +
+                    '\\`\\`\\`AsciiMath\n' +
+                    'oint_Cx^3 dx+4y^2 dy\n' +
+                    '2=(((3-x)xx2)/(3-x))\n' +
+                    'sum_(m=1)^oosum_(n=1)^oo(m^2 n)/(3^m(m3^n+n3^m)\n' +
+                    '\\`\\`\\`\n' +
+                    '\\`\\`\\`ASCIIMath\n' +
+                    'phi_n(kappa) = 1/(4pi^2 kappa^2)\n' +
+                    ' int_0^oo (sin(kappa R))/(kappa R)\n' +
+                    ' del/(del R)\n' +
+                    '[R^2 (del D_n (R))/(del R)] del R\n' +
+                    '\\`\\`\\`\n' +
+                    '[AsciiMath Documentation](http://asciimath.org/)\n' +
+                    '        {\n' +
+                    '          "value": 274,\n' +
+                    '          "name": "联盟广告"\n' +
+                    '        },\n' +
+                    '        {\n' +
+                    '          "value": 310,\n' +
+                    '          "name": "邮件营销"\n' +
+                    '        },\n' +
+                    '        {\n' +
+                    '          "value": 335,\n' +
+                    '          "name": "直接访问"\n' +
+                    '        },\n' +
+                    '        {\n' +
+                    '          "value": 400,\n' +
+                    '          "name": "搜索引擎"\n' +
+                    '        }\n' +
+                    '      ]\n' +
+                    '    }\n' +
+                    '  ]\n' +
+                    '}\n' +
+                    '\\`\\`\\`\n' +
+                    '## code\n' +
+                    '### c\n' +
+                    '\\`\\`\\`c\n' +
+                    '#include <stdio.h>\n' +
+                    'int main(int argc char* argv[]) {\n' +
+                    '  printf("Hello, World!");\n' +
+                    '  return 0;\n' +
+                    '}\n' +
+                    '\\`\\`\\`\n' +
+                    '### json\n' +
+                    '\\`\\`\\`json\n' +
+                    '{\n' +
+                    '  "name": "markdown-it-vue"\n' +
+                    '}\n' +
+                    '\\`\\`\\`\n' +
+                    '### javascript\n' +
+                    '\\`\\`\\`json\n' +
+                    'import MarkdownItVue from \'markdown-it-vue\'\n' +
+                    'export default {\n' +
+                    '  components: {\n' +
+                    '    MarkdownItVue\n' +
+                    '  }\n' +
+                    '}\n' +
+                    '\\`\\`\\`\n' +
+                    '### bash\n' +
+                    '\\`\\`\\`bash\n' +
+                    'npm install markdown-it-vue\n' +
+                    '\\`\\`\\`\n' +
+                    '## table\n' +
+                    '| First Header  | Second Header |\n' +
+                    '| ------------- | ------------- |\n' +
+                    '| Content Cell  | Content Cell  |\n' +
+                    '| Content Cell  | Content Cell  |\n' +
+                    '## flowchart.js\n' +
+                    '\\`\\`\\`flowchart.js\n' +
+                    'st=>start: Start|past:>http://www.google.com[blank]\n' +
+                    'e=>end: End:>http://www.google.com\n' +
+                    'op1=>operation: My Operation|past\n' +
+                    'op2=>operation: Stuff|current\n' +
+                    'sub1=>subroutine: My Subroutine|invalid\n' +
+                    'cond=>condition: Yes\n' +
+                    'or No?|approved:>http://www.google.com\n' +
+                    'c2=>condition: Good idea|rejected\n' +
+                    'io=>inputoutput: catch something...|request\n' +
+                    'para=>parallel: parallel tasks\n' +
+                    'st->op1(right)->cond\n' +
+                    'cond(yes, right)->c2\n' +
+                    'cond(no)->para\n' +
+                    'c2(true)->io->e\n' +
+                    'c2(false)->e\n' +
+                    'para(path1, bottom)->sub1(left)->op1\n' +
+                    'para(path2, right)->op2->e\n' +
+                    'st@>op1({"stroke":"Red"})@>cond({"stroke":"Red","stroke-width":6,"arrow-end":"classic-wide-long"})@>c2({"stroke":"Red"})@>op2({"stroke":"Red"})@>e({"stroke":"Red"})\n' +
+                    '\\`\\`\\`'
             }
         },
         methods: {
@@ -85,6 +189,15 @@
 </script>
 
 <style>
+    .md-text {
+        width: 47%;
+    }
+
+    .md-body {
+        width: 50%;
+        margin-left: 20px;
+    }
+
     .tox.tox-silver-sink.tox-tinymce-aux {
         display: none;
     }
