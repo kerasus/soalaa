@@ -28,20 +28,25 @@
         data () {
             return {
                 initObj: {
-                    height: 500,
-                    menubar: false,
-                    plugins: [
-                        'advlist autolink lists link image charmap print preview anchor',
-                        'searchreplace visualblocks code fullscreen',
-                        'insertdatetime media table paste code help wordcount'
-                    ],
-                    toolbar:
-                        'undo redo | formatselect | bold italic backcolor | \
-                        alignleft aligncenter alignright alignjustify | \
-                        bullist numlist outdent indent | removeformat | help | addFormula',
-                    directionality : 'rtl',
-                    auto_focus: 'editor',
-                    branding: false,
+                    toolbar: 'bold markdown numlist bullist',
+                    height: 600,
+                    plugins: 'image table markdown lists advlist faketable',
+                    icons: 'markdown-labs-demo',
+                    // height: 500,
+                    // menubar: false,
+                    // plugin: 'textpattern',
+                    // plugins: [
+                    //     'advlist autolink lists link image charmap print preview anchor',
+                    //     'searchreplace visualblocks code fullscreen',
+                    //     'insertdatetime media table paste code help wordcount'
+                    // ],
+                    // toolbar:
+                    //     'undo redo | formatselect | bold italic backcolor | \
+                    //     alignleft aligncenter alignright alignjustify | \
+                    //     bullist numlist outdent indent | removeformat | help | addFormula',
+                    // directionality : 'rtl',
+                    // auto_focus: 'editor',
+                    // branding: false,
                     that: this,
                     setup:function(editor){
                         // You can do what you want here

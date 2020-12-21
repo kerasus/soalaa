@@ -73,6 +73,8 @@
     import {Quiz} from "../../../../models/Quiz"
     import 'katex/dist/katex.min.css'
     import Timer from "./Timer";
+    import mixinQuiz from '@/mixin/Quiz'
+
     import VueKatex from 'vue-katex'
     import 'katex/dist/katex.min.css'
 
@@ -88,6 +90,7 @@
             Choice,
             Timer
         },
+        mixins: [mixinQuiz],
         data () {
             return {
                 quizData: {
@@ -223,10 +226,6 @@
                 number = parseInt(number)
                 return number - 1
             },
-            getQuestionIndexFromNumber (index) {
-                index = parseInt(index)
-                return index + 1
-            },
             loadQuiz () {
                 this.quiz = new Quiz(this.quizData)
             },
@@ -247,35 +246,11 @@
                 }
                 this.changeQuestion(question.id)
             },
-            changeQuestion (id) {
-                const questIndex = this.quiz.questions.getQuestionIndexById(id),
-                    questNumber = this.getQuestionIndexFromNumber(questIndex)
-                this.$router.push({ name: 'onlineQuiz.quiz', params: { quizId: this.quiz.id, questNumber } })
-                this.currentQuestion = this.quiz.questions.getQuestionById(id)
-            },
             bookmark () {
                 this.quiz.questions.getQuestionById(this.currentQuestion.id).bookmark()
             },
             changeState (newState) {
                 this.quiz.questions.getQuestionById(this.currentQuestion.id).changeState(newState)
-            }
-        },
-        computed: {
-            quiz: {
-                get () {
-                    return this.$store.getters.quiz
-                },
-                set (newInfo) {
-                    this.$store.commit('updateQuiz', newInfo)
-                }
-            },
-            currentQuestion: {
-                get () {
-                    return this.$store.getters.currentQuestion
-                },
-                set (newInfo) {
-                    this.$store.commit('updateCurrentQuestion', newInfo)
-                }
             }
         },
         created() {
