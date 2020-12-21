@@ -271,6 +271,7 @@
         },
         destroyed() {
             this.$store.commit('updateQuizPage', false)
+            this.$store.commit('updateMapOfQuestionsDrawer', false)
         }
     }
 </script>

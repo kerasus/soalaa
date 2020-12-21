@@ -2,10 +2,10 @@
     <div class="mt-4">
         <textarea class="md-text" rows="10" v-model="content"/>
         <MarkdownitVue
+                ref="myMarkdownItVue"
                 class="md-body"
                 :content="content"
                 :options="options"
-                @render-complete=hdlCmplete
         />
         <div dir="ltr">
             <div id="mathfield" locale="fa">x=\frac{-b\pm \sqrt{b^2-4ac}}{2a}</div>
@@ -15,10 +15,12 @@
 </template>
 
 <script>
+
     import MarkdownitVue from 'markdown-it-vue'
     import MathLive from 'mathlive';
     import 'mathlive/dist/mathlive-fonts.css'
     import 'mathlive/dist/mathlive-static.css'
+    import MarkdownItKatex from 'markdown-it-katex'
 
     export default {
         name: "TinymceEditor",
@@ -72,9 +74,9 @@
                     }
                 },
                 content:
-
                     '## AsciiMath\n' +
                     'Inline AsciiMath: \\`@(1/2[1-(1/2)^n])/(1-(1/2))=s_n@\\`\n' +
+                    '\\x=\\frac{-b\\pm\\sqrt{b^2-4ac}}{2a}a \\n'+
                     '\\`\\`\\`AsciiMath\n' +
                     'oint_Cx^3 dx+4y^2 dy\n' +
                     '2=(((3-x)xx2)/(3-x))\n' +
@@ -184,6 +186,9 @@
                 //{ macros: { ...mf.getConfig('macros'), smallfrac: '{}^{#1}\\!\\!/\\!{}_{#2}', }, }
             );
             that.latexData = mf.getValue()
+        },
+        created() {
+            this.$refs.myMarkdownItVue.use(MarkdownItKatex)
         }
     }
 </script>
