@@ -32,10 +32,10 @@
                 app
                 right
         >
-            <map-of-questions :questions="quiz.questions" :current-question="currentQuestion.id" @changeQuestion="changeQuestion($event)"/>
+            <map-of-questions :questions="quiz.questions" @changeQuestion="changeQuestion($event)"/>
         </v-navigation-drawer>
         <v-main>
-            <router-view></router-view>
+            <router-view :key="$route.name + ($route.params.quizId || '') + ($route.params.questNumber || '')"></router-view>
         </v-main>
         <v-footer class="d-flex justify-center" app>
             <Timer :daftarche="'عمومی'" :quiz-started-at="1607963897" :daftarche-end-time="1607963897" :height="100"></Timer>
