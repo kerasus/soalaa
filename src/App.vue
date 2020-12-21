@@ -66,9 +66,11 @@
     import '@mdi/font/css/materialdesignicons.css';
     import MapOfQuestions from "./components/OnlineQuiz/Quiz/MapOfQuestions"
     import Timer from "./components/OnlineQuiz/Quiz/Timer";
+    import mixinQuiz from '@/mixin/Quiz'
 
     export default {
         name: 'App',
+        mixins: [mixinQuiz],
         data: () => ({
             drawer: false,
             group: null
@@ -82,43 +84,6 @@
             Menu,
             MapOfQuestions,
             Timer
-        },
-        computed: {
-            mapOfQuestionDrawer: {
-                get() {
-                    return this.$store.getters.mapOfQuestionsDrawer
-                },
-                set(newInfo) {
-                    this.$store.commit('updateMapOfQuestionsDrawer', newInfo)
-                }
-            },
-            quiz: {
-                get() {
-                    return this.$store.getters.quiz
-                },
-                set(newInfo) {
-                    this.$store.commit('updateQuiz', newInfo)
-                }
-            },
-            currentQuestion: {
-                get() {
-                    return this.$store.getters.currentQuestion
-                },
-                set(newInfo) {
-                    this.$store.commit('updateCurrentQuestion', newInfo)
-                }
-            },
-            isQuizPage() {
-                return this.$store.getters.isQuizPage
-            }
-        },
-        methods: {
-            toggleMapOfQuestionsDrawer() {
-                this.$store.commit('updateMapOfQuestionsDrawer', !this.$store.getters.mapOfQuestionsDrawer)
-            },
-            changeQuestion(id) {
-                this.currentQuestion = this.quiz.questions.getQuestionById(id)
-            }
         }
     };
 </script>
