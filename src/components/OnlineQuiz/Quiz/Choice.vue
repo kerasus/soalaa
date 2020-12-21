@@ -42,6 +42,7 @@
     .answer-sheet {
         background: #fff;
         width: 100%;
+        min-height: 125px;
         height: max-content;
         padding: 2% 3%;
         border-radius: 10px;
@@ -82,7 +83,7 @@
     }
 
     .answer-checkbox {
-        height: max-content;
+        height: 125px;
         width: 85px;
         display: flex;
         justify-content: center;
