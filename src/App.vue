@@ -68,8 +68,7 @@
         },
         components: {
             Menu,
-            MapOfQuestions,
-            Timer
+            MapOfQuestions
         }
     };
 </script>
