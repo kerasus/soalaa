@@ -1,11 +1,11 @@
 const mixinQuiz = {
   computed: {
-    mapOfQuestionDrawer: {
+    drawer: {
       get() {
         return this.$store.getters.mapOfQuestionsDrawer
       },
       set(newInfo) {
-        this.$store.commit('updateMapOfQuestionsDrawer', newInfo)
+        this.$store.commit('updateDrawer', newInfo)
       }
     },
     isQuizPage() {

@@ -13,32 +13,25 @@
                     <v-icon :size="40" color="#666">mdi-account-circle</v-icon>
                 </div>
                 <v-app-bar-nav-icon
-                        @click.stop="toggleMapOfQuestionsDrawer"
-                        color="#666"
                         v-if="isQuizPage"
+                        @click.stop="toggleDrawer"
+                        color="#666"
                 />
             </div>
-            <v-app-bar-nav-icon color="#666" @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
+            <v-app-bar-nav-icon color="#666" @click.stop="toggleDrawer"></v-app-bar-nav-icon>
         </v-app-bar>
         <v-navigation-drawer
                 v-model="drawer"
-                dark
-                src="https://cdn.vuetifyjs.com/images/backgrounds/bg-2.jpg"
-                absolute
-                bottom
-                temporary
-                right
-        >
-            <Menu/>
-        </v-navigation-drawer>
-
-        <v-navigation-drawer
-                v-model="mapOfQuestionDrawer"
                 app
                 right
                 absolute
         >
-            <map-of-questions :questions="quiz.questions" @changeQuestion="changeQuestion($event)"/>
+            <map-of-questions
+                    v-if="isQuizPage"
+                    :questions="quiz.questions"
+                    @changeQuestion="changeQuestion($event)"
+            />
+            <Menu v-if="!isQuizPage"/>
         </v-navigation-drawer>
 
         <v-main>
@@ -55,19 +48,11 @@
     import '@mdi/font/css/materialdesignicons.css';
     import MapOfQuestions from "./components/OnlineQuiz/Quiz/MapOfQuestions"
     import mixinQuiz from '@/mixin/Quiz'
+    import mixinDrawer from '@/mixin/Drawer'
 
     export default {
         name: 'App',
-        mixins: [mixinQuiz],
-        data: () => ({
-            drawer: false,
-            group: null
-        }),
-        watch: {
-            group() {
-                this.drawer = false
-            }
-        },
+        mixins: [mixinQuiz, mixinDrawer],
         components: {
             Menu,
             MapOfQuestions
