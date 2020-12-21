@@ -70,6 +70,7 @@
     width: 80%;
     border-radius: 40px;
     margin: 2% 10%;
+    min-height: 50px !important;
 }
 
 .map-of-questions .v-expansion-panel-content__wrap {

@@ -37,9 +37,6 @@
         <v-main>
             <router-view :key="$route.name + ($route.params.quizId || '') + ($route.params.questNumber || '')"></router-view>
         </v-main>
-        <v-footer class="d-flex justify-center" app>
-            <Timer :daftarche="'عمومی'" :quiz-started-at="1607963897" :daftarche-end-time="1607963897" :height="100"></Timer>
-        </v-footer>
     </v-app>
 </template>
 
@@ -48,7 +45,6 @@
     import './assets/scss/font.scss'
     import '@mdi/font/css/materialdesignicons.css';
     import MapOfQuestions from "./components/OnlineQuiz/Quiz/MapOfQuestions"
-    import Timer from "./components/OnlineQuiz/Quiz/Timer";
 
     export default {
         name: 'App',
@@ -63,8 +59,7 @@
         },
         components: {
             Menu,
-            MapOfQuestions,
-            Timer
+            MapOfQuestions
         },
         computed: {
             mapOfQuestionDrawer: {
