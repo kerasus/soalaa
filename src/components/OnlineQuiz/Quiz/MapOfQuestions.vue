@@ -10,7 +10,7 @@
                 </v-expansion-panel-header>
                 <v-expansion-panel-content>
                     <div v-for="question in questions.list" :key="question.id">
-                        <v-btn :class="{ active: currentQuestion === question.id }" block :elevation="0" v-if="question.lesson === item" @click="changeQuestion(question.id)">
+                        <v-btn :class="{ active: currentQuestion.id === question.id }" block :elevation="0" v-if="question.lesson === item" @click="changeQuestion(question.id)">
                             تست شماره {{ question.order }}
                             <v-icon v-if="question.state === 'cross'" color="red">
                                 mdi-close
@@ -30,33 +30,12 @@
 </template>
 
 <script>
+
+    import mixinQuiz from '@/mixin/Quiz'
     export default {
         name: "MapOfQuestions",
         props: ['questions'],
-        computed: {
-            currentQuestion: {
-                get () {
-                    return this.$store.getters.currentQuestion
-                },
-                set (newInfo) {
-                    this.$store.commit('updateCurrentQuestion', newInfo)
-                }
-            },
-            lessons () {
-                const lessons = []
-                for (let i = 0; i < this.questions.list.length; i++) {
-                    lessons.push(this.questions.list[i].lesson)
-                }
-                return lessons.filter(function(item, pos) {
-                    return lessons.indexOf(item) == pos;
-                })
-            }
-        },
-        methods: {
-            changeQuestion (id) {
-                this.$emit('changeQuestion', id)
-            }
-        }
+        mixins: [mixinQuiz]
     }
 </script>
 
@@ -69,8 +48,16 @@
     background: #ffc107;
     width: 80%;
     border-radius: 40px;
-    margin: 2% 10%;
-    min-height: 50px !important;
+    margin: 0 10%;
+    min-height: 42px !important;
+    max-height: 42px !important;
+    padding: 5px 24px;
+}
+.map-of-questions .v-expansion-panel-header {
+    min-height: 42px !important;
+    max-height: 42px !important;
+    width: 80%;
+    margin: 0 10%;
 }
 
 .map-of-questions .v-expansion-panel-content__wrap {
@@ -89,5 +76,13 @@
 
 .map-of-questions .v-btn.active {
     color: #6ad1ff;
+}
+
+.question-container .question-answers .answer-box,
+.map-of-questions .v-expansion-panel .v-expansion-panel-content .v-btn.v-size--default {
+    font-size: 0.87rem;
+}
+.map-of-questions .v-expansion-panel .v-expansion-panel-header {
+    font-size: 1.2rem;
 }
 </style>

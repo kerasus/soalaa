@@ -69,11 +69,11 @@
     // }
     import Vue from 'vue'
     import Choice from './Choice'
-    import {Question} from '../../../../models/Question'
-    import {Quiz} from "../../../../models/Quiz"
+    import {Question} from '@/models/Question'
+    import {Quiz} from '@/models/Quiz'
     import 'katex/dist/katex.min.css'
-    import Timer from "./Timer";
-    import mixinQuiz from '@/mixin/Quiz'
+    import Timer from "./Timer"
+    import { mixinQuiz, mixinDrawer } from '@/mixin/Mixins'
 
     import VueKatex from 'vue-katex'
     import 'katex/dist/katex.min.css'
@@ -90,7 +90,7 @@
             Choice,
             Timer
         },
-        mixins: [mixinQuiz],
+        mixins: [mixinQuiz, mixinDrawer],
         data () {
             return {
                 quizData: {
@@ -264,14 +264,12 @@
                 this.loadFirstQuestion()
             }
 
-            this.$store.commit('updateQuizPage', true)
             if (window.innerWidth > 1263) {
-                this.$store.commit('updateMapOfQuestionsDrawer', true)
+                this.$store.commit('updateDrawer', true)
             }
         },
         destroyed() {
-            this.$store.commit('updateQuizPage', false)
-            this.$store.commit('updateMapOfQuestionsDrawer', false)
+            // this.$store.commit('updateDrawer', false)
         }
     }
 </script>
@@ -288,6 +286,10 @@
 </style>
 
 <style scoped>
+    .question-buttons button {
+        margin-right: 20px;
+    }
+
     .timer-row {
         position: fixed;
         bottom: 0;
@@ -318,7 +320,7 @@
     }
 
     .question-answers {
-        margin-top: 50px;
+        margin-top: 90px;
     }
 
     .answer-sheet {
@@ -346,7 +348,7 @@
     }
 
     .answer-checkbox {
-        height: 100%;
+        height: 100px;
         width: 100px;
     }
 

@@ -1,17 +1,16 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-import { Quiz } from "../../models/Quiz"
-import { Question } from "../../models/Question";
+import { Quiz } from '@/models/Quiz'
+import { Question } from '@/models/Question';
 
 
 Vue.use(Vuex)
 
 const store = new Vuex.Store({
     state: {
-        drawer: false,
+        drawer: true,
         quiz: new Quiz(),
-        currentQuestion: new Question(),
-        isQuizPage: false
+        currentQuestion: new Question()
     },
     mutations: {
         updateDrawer(state, newInfo) {
@@ -28,9 +27,6 @@ const store = new Vuex.Store({
         },
         goToPrevQuestion (state) {
             state.currentQuestion = state.quiz.questions.getPrevQuestion(state.currentQuestion.id)
-        },
-        updateQuizPage (state, newInfo) {
-            state.isQuizPage = newInfo
         }
     },
     getters: {
@@ -45,9 +41,6 @@ const store = new Vuex.Store({
         },
         currentQuestion (state) {
             return state.currentQuestion
-        },
-        isQuizPage (state) {
-            return state.isQuizPage
         }
     }
 })

@@ -1,7 +1,7 @@
 import { Model, Collection } from 'js-abstract-model'
 import { AnswerList } from './Answer'
 import { ChoiceList } from './Choice'
-import {QuestCategory} from "./QuestCategory";
+import {QuestCategory} from './QuestCategory';
 
 class Question extends Model {
     constructor (data) {

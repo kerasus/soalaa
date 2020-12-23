@@ -1,5 +1,5 @@
 import { Model, Collection } from 'js-abstract-model'
-import {QuestionList} from "./Question";
+import {QuestionList} from './Question';
 
 class Quiz extends Model {
     constructor (data) {
