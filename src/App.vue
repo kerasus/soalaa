@@ -37,7 +37,7 @@
                             >
                                 سید مصطفی
                                 کاظمی
-                                <v-icon :size="40" color="#666">mdi-account-circle</v-icon>
+                                <v-icon :size="30" color="#666">mdi-account-circle</v-icon>
                             </v-btn>
                         </template>
                         <v-card
