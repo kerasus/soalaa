@@ -31,7 +31,7 @@
                                 <v-icon v-if="question.state === 'cross'" color="red">
                                     mdi-close
                                 </v-icon>
-                                <v-icon v-if="question.state === 'circle'" color="yellow">
+                                <v-icon v-if="question.state === 'circle'" color="yellow" size="15">
                                     mdi-checkbox-blank-circle
                                 </v-icon>
                                 <v-icon v-if="question.isAnswered()" color="green">
@@ -70,12 +70,18 @@
     padding: 11px 24px;
 }
 
+.map-of-questions .theme--light.v-expansion-panels .v-expansion-panel-header--active .v-expansion-panel-header__icon .v-icon {
+    color: white;
+}
+
+
 .map-of-questions .v-expansion-panel-header--active {
     background: #ffc107;
     border-radius: 40px;
     min-height: 42px !important;
     max-height: 42px !important;
     padding: 5px 24px;
+    color: white;
 }
 
 .map-of-questions .v-expansion-panel-content__wrap {

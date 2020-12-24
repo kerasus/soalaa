@@ -38,9 +38,9 @@
                                             v-on="on"
                                             elevation="0"
                                     >
+                                        <v-icon class="mr-2" :size="30" color="#666">mdi-account-circle</v-icon>
                                         سید مصطفی
                                         کاظمی
-                                        <v-icon class="ml-2" :size="30" color="#666">mdi-account-circle</v-icon>
                                     </v-btn>
                                 </template>
                                 <v-card
@@ -216,6 +216,12 @@
 </style>
 
 <style>
+    .v-navigation-drawer .v-navigation-drawer__content {
+        overflow-y: scroll;
+    }
+    .v-navigation-drawer .v-navigation-drawer__content .theme--light.v-btn {
+        color: #666;
+    }
     .v-navigation-drawer__border {
         background: transparent !important;
     }

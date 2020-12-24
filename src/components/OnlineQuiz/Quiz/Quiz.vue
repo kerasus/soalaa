@@ -1,8 +1,8 @@
 <template>
     <v-container :fluid="true" class="quiz-page" :style="{ height: '100%' }">
-        <v-row>
-            <v-col :md="12" class="question-container">
-                <v-sheet width="100%" color="#f4f4f4">
+        <v-row :style="{ 'min-height': '100%' }">
+            <v-col :md="12" class="question-container" :style="{ 'min-height': '100%' }">
+                <v-sheet class="d-flex align-stretch" width="100%" color="#f4f4f4" :style="{ 'min-height': '100%' }">
                     <v-row>
                         <v-col :md="1" class="d-md-flex justify-center align-center d-none">
                             <v-btn :min-width="64" class="px-0" :height="64" @click="goToPrevQuestion" icon>
