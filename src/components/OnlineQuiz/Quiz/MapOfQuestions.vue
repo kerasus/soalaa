@@ -1,31 +1,45 @@
 <template>
-    <v-sheet color="#f1f1f1" width="100%" class="map-of-questions">
-        <v-expansion-panels accordion flat hover dense>
-            <v-expansion-panel
-                    v-for="(item, index) in lessons"
-                    :key="index"
+    <v-sheet width="100%" class="map-of-questions">
+        <div v-for="(categoryItem) in quiz.categories.list" :key="'category-'+categoryItem.id">
+            {{ categoryItem.title }}
+            <v-expansion-panels
+                    accordion
+                    flat
+                    hover
+                    dense
             >
-                <v-expansion-panel-header>
-                    {{ item }}
-                </v-expansion-panel-header>
-                <v-expansion-panel-content>
-                    <div v-for="question in questions.list" :key="question.id">
-                        <v-btn :class="{ active: currentQuestion.id === question.id }" block :elevation="0" v-if="question.lesson === item" @click="changeQuestion(question.id)">
-                            تست شماره {{ question.order }}
-                            <v-icon v-if="question.state === 'cross'" color="red">
-                                mdi-close
-                            </v-icon>
-                            <v-icon v-if="question.state === 'circle'" color="yellow">
-                                mdi-checkbox-blank-circle
-                            </v-icon>
-                            <v-icon v-if="question.isAnswered()" color="green">
-                                mdi-check
-                            </v-icon>
-                        </v-btn>
-                    </div>
-                </v-expansion-panel-content>
-            </v-expansion-panel>
-        </v-expansion-panels>
+                <v-expansion-panel
+                        v-for="(subcategoryItem) in categoryItem.sub_categories.list"
+                        :key="'subcategory-'+subcategoryItem.id"
+                >
+                    <v-expansion-panel-header>
+                        {{ subcategoryItem.title }}
+                    </v-expansion-panel-header>
+                    <v-expansion-panel-content>
+                        <div v-for="(question, questionIndex) in questions.list" :key="'question-'+question.id">
+                            <v-btn v-if="question.sub_category.id === subcategoryItem.id"
+                                   :class="{ active: currentQuestion.id === question.id }"
+                                   :elevation="0"
+                                   @click="changeQuestion(question.id)"
+                                   block
+                            >
+                                تست شماره
+                                {{ getQuestionNumberFromIndex(questionIndex) }}
+                                <v-icon v-if="question.state === 'cross'" color="red">
+                                    mdi-close
+                                </v-icon>
+                                <v-icon v-if="question.state === 'circle'" color="yellow">
+                                    mdi-checkbox-blank-circle
+                                </v-icon>
+                                <v-icon v-if="question.isAnswered()" color="green">
+                                    mdi-check
+                                </v-icon>
+                            </v-btn>
+                        </div>
+                    </v-expansion-panel-content>
+                </v-expansion-panel>
+            </v-expansion-panels>
+        </div>
     </v-sheet>
 </template>
 

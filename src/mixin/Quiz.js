@@ -30,9 +30,13 @@ const mixinQuiz = {
     }
   },
   methods: {
-    getQuestionIndexFromNumber (index) {
+    getQuestionNumberFromIndex (index) {
       index = parseInt(index)
       return index + 1
+    },
+    getQuestionIndexFromNumber (number) {
+      number = parseInt(number)
+      return number - 1
     },
     changeQuestion(id) {
       if (parseInt(this.currentQuestion.id) === parseInt(id)) {
@@ -40,7 +44,7 @@ const mixinQuiz = {
       }
 
       const questIndex = this.quiz.questions.getQuestionIndexById(id),
-          questNumber = this.getQuestionIndexFromNumber(questIndex)
+          questNumber = this.getQuestionNumberFromIndex(questIndex)
 
       this.currentQuestion = this.quiz.questions.getQuestionById(id)
 
