@@ -1,7 +1,10 @@
 <template>
-    <v-sheet width="100%" class="map-of-questions">
+    <v-sheet class="map-of-questions">
         <div v-for="(categoryItem) in quiz.categories.list" :key="'category-'+categoryItem.id">
-            {{ categoryItem.title }}
+            <v-btn :elevation="0" block class="categoryItem">
+                {{ categoryItem.title }}
+            </v-btn>
+
             <v-expansion-panels
                     accordion
                     flat
@@ -54,24 +57,25 @@
 </script>
 
 <style>
+.map-of-questions {
+    min-height: 42px !important;
+    max-height: 42px !important;
+    width: 80%;
+    margin: 0 10%;
+}
+
 .map-of-questions .v-expansion-panel-header {
     transition: all ease-in-out 0.3s;
+    min-height: 42px;
+    padding: 11px 24px;
 }
 
 .map-of-questions .v-expansion-panel-header--active {
     background: #ffc107;
-    width: 80%;
     border-radius: 40px;
-    margin: 0 10%;
     min-height: 42px !important;
     max-height: 42px !important;
     padding: 5px 24px;
-}
-.map-of-questions .v-expansion-panel-header {
-    min-height: 42px !important;
-    max-height: 42px !important;
-    width: 80%;
-    margin: 0 10%;
 }
 
 .map-of-questions .v-expansion-panel-content__wrap {
@@ -95,6 +99,10 @@
 .question-container .question-answers .answer-box,
 .map-of-questions .v-expansion-panel .v-expansion-panel-content .v-btn.v-size--default {
     font-size: 0.87rem;
+}
+.map-of-questions .categoryItem.v-btn {
+    font-size: 1.2rem;
+    margin-top: 50px;
 }
 .map-of-questions .v-expansion-panel .v-expansion-panel-header {
     font-size: 1.2rem;

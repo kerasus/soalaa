@@ -16,15 +16,6 @@ class Question extends Model {
             { key: 'order' },
             { key: 'sub_category' },
             {
-                key: 'sub_category_id',
-                default: function (inputVal, inputData) {
-                    if (!inputData || !inputData['sub_category']) {
-                        return null
-                    }
-                    return inputData['sub_category'].id
-                }
-            },
-            {
                 key: 'answers',
                 relatedModel: AnswerList
             },

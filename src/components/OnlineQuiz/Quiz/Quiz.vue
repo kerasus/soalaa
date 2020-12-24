@@ -12,7 +12,12 @@
                         <v-col :md="10" class="px-md-0 px-10">
                             <v-row class="question-header">
                                 <div class="question-number">
-                                    <p>{{ currentQuestion.title }}</p>
+                                    <p>
+                                        {{ currentLessons.title }}
+                                        -
+                                        سوال شماره
+                                        {{ getQuestionNumberFromId(currentQuestion.id) }}
+                                    </p>
                                 </div>
                                 <div class="question-buttons">
                                     <v-btn icon @click="changeState('circle')">
@@ -36,11 +41,10 @@
                                 </v-col>
                             </v-row>
                             <v-row class="question-answers">
-                                <choice
-                                        @answerClicked="answerClicked($event)"
-                                        v-for="item in currentQuestion.choices.list"
+                                <choice v-for="item in currentQuestion.choices.list"
                                         :key="item.id"
                                         :choice="item"
+                                        @answerClicked="answerClicked($event)"
                                 />
                             </v-row>
                         </v-col>

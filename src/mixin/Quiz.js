@@ -19,20 +19,18 @@ const mixinQuiz = {
         this.$store.commit('updateCurrentQuestion', newInfo)
       }
     },
-    lessons () {
-      const lessons = []
-      for (let i = 0; i < this.questions.list.length; i++) {
-        lessons.push(this.questions.list[i].lesson)
-      }
-      return lessons.filter(function(item, pos) {
-        return lessons.indexOf(item) == pos;
-      })
+    currentLessons () {
+      return this.quiz.sub_categories.getItem('id', this.currentQuestion.sub_category.id)
     }
   },
   methods: {
     getQuestionNumberFromIndex (index) {
       index = parseInt(index)
       return index + 1
+    },
+    getQuestionNumberFromId (id) {
+      const questionIndex = this.quiz.questions.getIndex('id', id)
+      return this.getQuestionNumberFromIndex(questionIndex)
     },
     getQuestionIndexFromNumber (number) {
       number = parseInt(number)
