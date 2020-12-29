@@ -8,11 +8,18 @@ Vue.use(Vuex)
 
 const store = new Vuex.Store({
     state: {
+        windowSize: {
+            x: 0,
+            y: 0,
+        },
         drawer: true,
         quiz: new Quiz(),
         currentQuestion: new Question()
     },
     mutations: {
+        updateWindowSize (state, newInfo) {
+            state.windowSize = newInfo
+        },
         updateDrawer(state, newInfo) {
             state.drawer = newInfo
         },
@@ -35,6 +42,9 @@ const store = new Vuex.Store({
         },
         quiz (state) {
             return state.quiz
+        },
+        windowSize (state) {
+            return state.windowSize
         },
         drawer (state) {
             return state.drawer

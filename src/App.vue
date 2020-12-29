@@ -1,5 +1,5 @@
 <template>
-    <v-app>
+    <v-app v-resize="updateWindowSize">
         <v-navigation-drawer
                 v-model="drawer"
                 app
@@ -25,10 +25,11 @@
                 <v-row>
                     <v-col :md="1" class="d-md-flex justify-center align-center d-none"></v-col>
                     <v-col :md="10" class="px-md-0 px-10 d-flex justify-space-between">
-                        <div>
+                        <div class="rounded-b-xl rounded-r-xl">
                             <v-menu
                                     bottom
                                     :offset-y="true"
+                                    class="rounded-b-xl rounded-r-xl"
                             >
                                 <template v-slot:activator="{ on, attrs }">
                                     <v-btn
@@ -46,6 +47,7 @@
                                 <v-card
                                         max-width="375"
                                         class="mx-auto"
+                                        rounded="b-xl r-xl"
                                 >
                                     <v-img
                                             src="https://cdn.vuetifyjs.com/images/lists/ali.png"
@@ -183,13 +185,13 @@
 
 <script>
     import { Menu, MapOfQuestions } from '@/components/Menus'
-    import { mixinQuiz, mixinDrawer } from '@/mixin/Mixins'
+    import { mixinQuiz, mixinDrawer, mixinWindowSize } from '@/mixin/Mixins'
     import '@/assets/scss/font.scss'
     import '@mdi/font/css/materialdesignicons.css';
 
     export default {
         name: 'App',
-        mixins: [mixinQuiz, mixinDrawer],
+        mixins: [mixinQuiz, mixinDrawer, mixinWindowSize],
         watch: {
             selectedItem () {
                 this.selectedItem = null
@@ -216,6 +218,7 @@
 </style>
 
 <style>
+    .v-application > .v-menu__content
     .v-navigation-drawer .v-navigation-drawer__content {
         overflow-y: scroll;
     }

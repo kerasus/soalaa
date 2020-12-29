@@ -35,9 +35,7 @@
                             </v-row>
                             <v-row class="question-body">
                                 <v-col>
-                                    <div dir="rtl" v-katex:auto="{ options }">
-                                        {{ currentQuestion.body }}
-                                    </div>
+                                    <div class="renderedPanel" v-html="currentQuestionBody"></div>
                                 </v-col>
                             </v-row>
                             <v-row class="question-answers">
@@ -57,11 +55,21 @@
                 </v-sheet>
             </v-col>
         </v-row>
-        <v-row class="timer-row">
-            <v-col class="d-flex justify-center timer-container">
-                <Timer :daftarche="'عمومی'" :quiz-started-at="1607963897" :daftarche-end-time="1607963897" :height="100"></Timer>
-            </v-col>
-        </v-row>
+
+        <v-footer class="justify-center pl-0"
+                  color="transparent"
+                  elevation="0"
+                  padless
+                  inset
+                  app>
+            <v-container fluid class="py-0">
+                <v-row class="timer-row justify-center">
+                    <v-col :md="10" class="d-flex justify-center timer-container py-0">
+                        <Timer :daftarche="'عمومی'" :quiz-started-at="1607963897" :daftarche-end-time="1607963897" :height="100"></Timer>
+                    </v-col>
+                </v-row>
+            </v-container>
+        </v-footer>
     </v-container>
 </template>
 
@@ -71,28 +79,42 @@
     // function handler() {
     //     inputText = document.getElementById('textfield').innerText
     // }
-    import Vue from 'vue'
+
+    // import Vue from 'vue'
     import Choice from './Choice'
     import {Question} from '@/models/Question'
     import {Quiz} from '@/models/Quiz'
-    import Timer from "./Timer"
+    import Timer from '@/components/OnlineQuiz/Quiz/Timer/Timer'
     import FakeQuizData from '@/plugins/fakeQuizData'
     import { mixinQuiz, mixinDrawer } from '@/mixin/Mixins'
 
-    import VueKatex from 'vue-katex'
-    import 'katex/dist/katex.min.css'
+    // import VueKatex from 'vue-katex'
+    // import 'katex/dist/katex.min.css'
+    //
+    // Vue.use(VueKatex, {
+    //     globalOptions: {
+    //         //... Define globally applied KaTeX options here
+    //     }
+    // })
 
-    Vue.use(VueKatex, {
-        globalOptions: {
-            //... Define globally applied KaTeX options here
-        }
-    })
+
+    // import 'katex/dist/katex.min.css';
+    import 'github-markdown-css/github-markdown.css';
+    import '@/assets/scss/markdownKatex.scss';
+    var md = require('markdown-it')(),
+        mk = require('markdown-it-katex');
+    md.use(mk);
 
     export default {
         name: "Quiz",
         components: {
             Choice,
             Timer
+        },
+        computed: {
+            currentQuestionBody() {
+                return md.render(this.currentQuestion.body)
+            }
         },
         mixins: [mixinQuiz, mixinDrawer],
         data () {
@@ -179,16 +201,15 @@
     }
 
     .timer-row {
-        position: fixed;
-        bottom: 0;
-        justify-content: center;
-        width: 100%;
+        /*position: fixed;*/
+        /*bottom: 0;*/
+        /*justify-content: center;*/
+        /*width: 100%;*/
     }
 
-    .timer-container {
-        width: 100%;
-        background: #f4f4f4;
-    }
+    /*.timer-container {*/
+    /*    background: #f4f4f4;*/
+    /*}*/
 
     .question-number p {
         margin-bottom: 0;

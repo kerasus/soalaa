@@ -1,21 +1,51 @@
 <template>
     <div dir="ltr">
+
+        <v-row>
+            <v-col class="pl-5">
+                <v-textarea dir="rtl"
+                            clearable
+                            clear-icon="mdi-close-circle"
+                            auto-grow
+                            label="متن سوال"
+                            v-model="questMarkdownText"
+                            @input="updateRendered"
+                ></v-textarea>
+            </v-col>
+            <v-col>
+                <div class="renderedPanel" v-html="rendered">
+                </div>
+            </v-col>
+        </v-row>
+
+        <hr>
         <div id="mathfield" locale="fa">x=\frac{-b\pm \sqrt{b^2-4ac}}{2a}</div>
         <div class="latexData" v-html="latexData"></div>
 
-        <div dir="rtl" v-katex:auto>
-                        این یک فرمول ریاضی هست
-            <span dir="ltr">\(x=\frac{-b\pm\sqrt[]{b^2-4aca}}{2a}\)</span>
-                        ببینید جوابش چی میشه؟
-        </div>
-        <hr>
-        <div v-katex:auto>
-            \(x=\frac{-b\pm\sqrt[]{b^2-4aca}}{2a}\)
-        </div>
+<!--        <div dir="rtl" v-katex:auto>-->
+<!--                        این یک فرمول ریاضی هست-->
+<!--            <span dir="ltr">\(x=\frac{-b\pm\sqrt[]{b^2-4aca}}{2a}\)</span>-->
+<!--                        ببینید جوابش چی میشه؟-->
+<!--        </div>-->
+<!--        <hr>-->
+<!--        <div v-katex:auto>-->
+<!--            \(x=\frac{-b\pm\sqrt[]{b^2-4aca}}{2a}\)-->
+<!--        </div>-->
 
     </div>
 </template>
 <style>
+    .renderedPanel {
+        direction: rtl;
+    }
+    .renderedPanel .katex {
+        direction: ltr;
+    }
+    .renderedPanel strong>strong>s {
+        text-decoration: underline;
+        text-underline-position: under;
+    }
+
     .ML__virtual-keyboard-toggle {
         color: gray !important;
     }
@@ -30,20 +60,25 @@
     }
 </style>
 <script>
-    import Vue from 'vue';
+    // import Vue from 'vue';
     import MathLive from 'mathlive';
     import 'mathlive/dist/mathlive-fonts.css'
     import 'mathlive/dist/mathlive-static.css'
-    import 'katex/dist/katex.min.css';
 
-    import VueKatex from 'vue-katex';
-    import 'katex/dist/katex.min.css';
 
-    Vue.use(VueKatex, {
-        globalOptions: {
-            //... Define globally applied KaTeX options here
-        }
-    });
+    // import 'katex/dist/katex.min.css';
+    import 'github-markdown-css/github-markdown.css';
+    var md = require('markdown-it')(),
+        mk = require('markdown-it-katex');
+    md.use(mk);
+
+    // import VueKatex from 'vue-katex';
+    // import 'katex/dist/katex.min.css';
+    // Vue.use(VueKatex, {
+    //     globalOptions: {
+    //         //... Define globally applied KaTeX options here
+    //     }
+    // });
 
     // import Vue from 'vue'
     // import MathLive from "https://unpkg.com/mathlive/dist/mathlive.min.mjs";
@@ -61,11 +96,16 @@
         name: "QuestEditor",
         data: () => {
             return {
+                questMarkdownText: '# Math Rulez! \n  $x=\\frac{-b\\pm\\sqrt[]{b^2-4ac}}{2a}$',
+                rendered: '',
                 formula: '',
                 latexData: null
             }
         },
         methods: {
+            updateRendered () {
+                this.rendered = md.render(this.questMarkdownText);
+            },
             ping() {
 
             },
@@ -74,6 +114,10 @@
             }
         },
         mounted() {
+
+            // this.rendered = md.render();
+            // this.updateRendered();
+
             let that = this
             const mf = MathLive.makeMathField(
                 document.getElementById('mathfield'),
