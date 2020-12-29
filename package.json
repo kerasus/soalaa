@@ -14,7 +14,7 @@
     "babel-runtime": "^6.26.0",
     "core-js": "^3.6.5",
     "css-loader": "^5.0.1",
-    "js-abstract-model": "^0.1.14",
+    "js-abstract-model": "^0.1.15",
     "katex": "^0.12.0",
     "markdown-it-katex": "^2.0.3",
     "mathlive": "^0.59.0",
