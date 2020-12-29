@@ -1,8 +1,8 @@
 <template>
-    <v-container :fluid="true" class="quiz-page">
-        <v-row>
-            <v-col :md="12" class="question-container">
-                <v-sheet width="100%" color="#f4f4f4">
+    <v-container :fluid="true" class="quiz-page" :style="{ height: '100%' }">
+        <v-row :style="{ 'min-height': '100%' }">
+            <v-col :md="12" class="question-container" :style="{ 'min-height': '100%' }">
+                <v-sheet class="d-flex align-stretch" width="100%" color="#f4f4f4" :style="{ 'min-height': '100%' }">
                     <v-row>
                         <v-col :md="1" class="d-md-flex justify-center align-center d-none">
                             <v-btn :min-width="64" class="px-0" :height="64" @click="goToPrevQuestion" icon>
@@ -12,7 +12,12 @@
                         <v-col :md="10" class="px-md-0 px-10">
                             <v-row class="question-header">
                                 <div class="question-number">
-                                    <p>{{ currentQuestion.title }}</p>
+                                    <p>
+                                        {{ currentLessons.title }}
+                                        -
+                                        سوال شماره
+                                        {{ getQuestionNumberFromId(currentQuestion.id) }}
+                                    </p>
                                 </div>
                                 <div class="question-buttons">
                                     <v-btn icon @click="changeState('circle')">
@@ -30,17 +35,14 @@
                             </v-row>
                             <v-row class="question-body">
                                 <v-col>
-                                    <div dir="rtl" v-katex:auto="{ options }">
-                                        {{ currentQuestion.body }}
-                                    </div>
+                                    <div class="renderedPanel" v-html="currentQuestionBody"></div>
                                 </v-col>
                             </v-row>
                             <v-row class="question-answers">
-                                <choice
-                                        @answerClicked="answerClicked($event)"
-                                        v-for="item in currentQuestion.choices.list"
+                                <choice v-for="item in currentQuestion.choices.list"
                                         :key="item.id"
                                         :choice="item"
+                                        @answerClicked="answerClicked($event)"
                                 />
                             </v-row>
                         </v-col>
@@ -53,6 +55,21 @@
                 </v-sheet>
             </v-col>
         </v-row>
+
+        <v-footer class="justify-center pl-0"
+                  color="transparent"
+                  elevation="0"
+                  padless
+                  inset
+                  app>
+            <v-container fluid class="py-0">
+                <v-row class="timer-row justify-center">
+                    <v-col :md="10" class="d-flex justify-center timer-container py-0">
+                        <Timer :daftarche="'عمومی'" :quiz-started-at="1607963897" :daftarche-end-time="1607963897" :height="100"></Timer>
+                    </v-col>
+                </v-row>
+            </v-container>
+        </v-footer>
     </v-container>
 </template>
 
@@ -62,142 +79,47 @@
     // function handler() {
     //     inputText = document.getElementById('textfield').innerText
     // }
-    import Vue from 'vue'
+
+    // import Vue from 'vue'
     import Choice from './Choice'
-    import {Question} from '../../../../models/Question'
-    import {Quiz} from "../../../../models/Quiz"
-    import 'katex/dist/katex.min.css'
+    import {Question} from '@/models/Question'
+    import {Quiz} from '@/models/Quiz'
+    import Timer from '@/components/OnlineQuiz/Quiz/Timer/Timer'
+    import FakeQuizData from '@/plugins/fakeQuizData'
+    import { mixinQuiz, mixinDrawer } from '@/mixin/Mixins'
 
-    import VueKatex from 'vue-katex'
-    import 'katex/dist/katex.min.css'
+    // import VueKatex from 'vue-katex'
+    // import 'katex/dist/katex.min.css'
+    //
+    // Vue.use(VueKatex, {
+    //     globalOptions: {
+    //         //... Define globally applied KaTeX options here
+    //     }
+    // })
 
-    Vue.use(VueKatex, {
-        globalOptions: {
-            //... Define globally applied KaTeX options here
-        }
-    })
+
+    // import 'katex/dist/katex.min.css';
+    import 'github-markdown-css/github-markdown.css';
+    import '@/assets/scss/markdownKatex.scss';
+    var md = require('markdown-it')(),
+        mk = require('markdown-it-katex');
+    md.use(mk);
 
     export default {
         name: "Quiz",
         components: {
-            Choice
+            Choice,
+            Timer
         },
+        computed: {
+            currentQuestionBody() {
+                return md.render(this.currentQuestion.body)
+            }
+        },
+        mixins: [mixinQuiz, mixinDrawer],
         data () {
             return {
-                quizData: {
-                    id: 313,
-                    title: 'آزمون آزمایشی',
-                    begin_datetime: '2021-01-23 08:00:00',
-                    finish_datetime: '2021-01-23 08:00:00',
-                    total_question_number: 3,
-                    questions: [
-                        {
-                            id: 0,
-                            title: 'ادبیات فارسی - سوال شماره 9',
-                            body: 'متن سوال: این معادله $$x=\\frac{-b\\pm\\sqrt{b^2-4ac}}{2a}$$ را حل کنید',
-                            choices: [
-                                {
-                                    id: 0,
-                                    body: 'جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ',
-                                    active: false,
-                                    order: 0
-                                },
-                                {
-                                    id: 1,
-                                    body: 'جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ',
-                                    active: false,
-                                    order: 1
-                                },
-                                {
-                                    id: 2,
-                                    body: 'جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ',
-                                    active: false,
-                                    order: 2
-                                },
-                                {
-                                    id: 3,
-                                    body: 'جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ',
-                                    active: false,
-                                    order: 3
-                                }
-                            ],
-                            order: 0,
-                            lesson: 'فارسی'
-                        },
-                        {
-                            id: 1,
-                            title: 'ادبیات فارسی - سوال شماره 10',
-                            body: 'متن سوال متن سوال متن سوال متن سوال متن سوال متن سوال متن سوال متن gggggن سوال متن سوال ' +
-                                'متن سوال متن سوال متن سوال متن سوال متن سوال متن سوال متن سوال متن سوال مhhhhhتن سوال متن سوال متن سوال ' +
-                                'متن سوال متن سوال متن سوال متن سوال متن سوال متن سوال ' +
-                                'متن سوال متن سوال متن سوال متن سوال متن سوال متن سوال متن سوال ',
-                            choices: [
-                                {
-                                    id: 0,
-                                    body: 'جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ',
-                                    active: false,
-                                    order: 0
-                                },
-                                {
-                                    id: 1,
-                                    body: 'جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ',
-                                    active: false,
-                                    order: 1
-                                },
-                                {
-                                    id: 2,
-                                    body: 'جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ',
-                                    active: false,
-                                    order: 2
-                                },
-                                {
-                                    id: 3,
-                                    body: 'جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ',
-                                    active: false,
-                                    order: 3
-                                }
-                            ],
-                            order: 1,
-                            lesson: 'ریاضی'
-                        },
-                        {
-                            id: 2,
-                            title: 'ادبیات فارسی - سوال شماره 11',
-                            body: 'متن سوال متن سوال متن سوال متن سوال متن سوال متن سوالkkkkkkkتن سوال متن سوال متن سوال متن سوال ' +
-                                'متن سوال متن سوال متن سوال متن سوال متن سوال متن سوال متن سواllllll سوال متن سوال متن سوال متن سوال ' +
-                                'متن سوال متن سوال متن سوال متن سوال متن سوال متن سوال ' +
-                                'متن سوال متن سوال متن سوال متن سوال متن سوال متن سوال متن سوال ',
-                            choices: [
-                                {
-                                    id: 0,
-                                    body: 'جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ',
-                                    active: false,
-                                    order: 0
-                                },
-                                {
-                                    id: 1,
-                                    body: 'جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ',
-                                    active: false,
-                                    order: 1
-                                },
-                                {
-                                    id: 2,
-                                    body: 'جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ',
-                                    active: false,
-                                    order: 2
-                                },
-                                {
-                                    id: 3,
-                                    body: 'جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ',
-                                    active: false,
-                                    order: 3
-                                }
-                            ],
-                            order: 2,
-                            lesson: 'ریاضی'
-                        }
-                    ]
-                },
+                quizData: FakeQuizData,
                 options: [
                     {left: "$$", right: "$$", display: true}
                 ],
@@ -210,19 +132,12 @@
                 this.loadQuestionByNumber(1)
             },
             loadQuestionByNumber (number) {
-                let questionIndex = this.getQuestionNumberFromIndex(number)
+                let questionIndex = this.getQuestionIndexFromNumber(number)
                 this.changeQuestion(this.quiz.questions.list[questionIndex].id)
-            },
-            getQuestionNumberFromIndex (number) {
-                number = parseInt(number)
-                return number - 1
-            },
-            getQuestionIndexFromNumber (index) {
-                index = parseInt(index)
-                return index + 1
             },
             loadQuiz () {
                 this.quiz = new Quiz(this.quizData)
+                this.quiz.loadSubcategoriesOfCategories()
             },
             answerClicked (id) {
                 this.quiz.questions.getQuestionById(this.currentQuestion.id).choiceClicked(id)
@@ -241,35 +156,11 @@
                 }
                 this.changeQuestion(question.id)
             },
-            changeQuestion (id) {
-                const questIndex = this.quiz.questions.getQuestionIndexById(id),
-                    questNumber = this.getQuestionIndexFromNumber(questIndex)
-                this.$router.push({ name: 'onlineQuiz.quiz', params: { quizId: this.quiz.id, questNumber } })
-                this.currentQuestion = this.quiz.questions.getQuestionById(id)
-            },
             bookmark () {
                 this.quiz.questions.getQuestionById(this.currentQuestion.id).bookmark()
             },
             changeState (newState) {
                 this.quiz.questions.getQuestionById(this.currentQuestion.id).changeState(newState)
-            }
-        },
-        computed: {
-            quiz: {
-                get () {
-                    return this.$store.getters.quiz
-                },
-                set (newInfo) {
-                    this.$store.commit('updateQuiz', newInfo)
-                }
-            },
-            currentQuestion: {
-                get () {
-                    return this.$store.getters.currentQuestion
-                },
-                set (newInfo) {
-                    this.$store.commit('updateCurrentQuestion', newInfo)
-                }
             }
         },
         created() {
@@ -283,13 +174,12 @@
                 this.loadFirstQuestion()
             }
 
-            this.$store.commit('updateQuizPage', true)
             if (window.innerWidth > 1263) {
-                this.$store.commit('updateMapOfQuestionsDrawer', true)
+                this.$store.commit('updateDrawer', true)
             }
         },
         destroyed() {
-            this.$store.commit('updateQuizPage', false)
+            // this.$store.commit('updateDrawer', false)
         }
     }
 </script>
@@ -306,6 +196,21 @@
 </style>
 
 <style scoped>
+    .question-buttons button {
+        margin-right: 20px;
+    }
+
+    .timer-row {
+        /*position: fixed;*/
+        /*bottom: 0;*/
+        /*justify-content: center;*/
+        /*width: 100%;*/
+    }
+
+    /*.timer-container {*/
+    /*    background: #f4f4f4;*/
+    /*}*/
+
     .question-number p {
         margin-bottom: 0;
         line-height: 40px;
@@ -324,7 +229,7 @@
     }
 
     .question-answers {
-        margin-top: 50px;
+        margin-top: 90px;
     }
 
     .answer-sheet {
@@ -352,7 +257,7 @@
     }
 
     .answer-checkbox {
-        height: 100%;
+        height: 100px;
         width: 100px;
     }
 
