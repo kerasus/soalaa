@@ -1,13 +1,5 @@
 const mixinQuiz = {
   computed: {
-    mapOfQuestionDrawer: {
-      get() {
-        return this.$store.getters.mapOfQuestionsDrawer
-      },
-      set(newInfo) {
-        this.$store.commit('updateMapOfQuestionsDrawer', newInfo)
-      }
-    },
     isQuizPage() {
       return this.$store.getters.isQuizPage
     },
@@ -26,21 +18,37 @@ const mixinQuiz = {
       set (newInfo) {
         this.$store.commit('updateCurrentQuestion', newInfo)
       }
+    },
+    currentLessons () {
+      return this.quiz.sub_categories.getItem('id', this.currentQuestion.sub_category.id)
     }
   },
   methods: {
-    getQuestionIndexFromNumber (index) {
+    getQuestionNumberFromIndex (index) {
       index = parseInt(index)
       return index + 1
     },
-    toggleMapOfQuestionsDrawer() {
-      this.$store.commit('updateMapOfQuestionsDrawer', !this.$store.getters.mapOfQuestionsDrawer)
+    getQuestionNumberFromId (id) {
+      const questionIndex = this.quiz.questions.getIndex('id', id)
+      return this.getQuestionNumberFromIndex(questionIndex)
+    },
+    getQuestionIndexFromNumber (number) {
+      number = parseInt(number)
+      return number - 1
     },
     changeQuestion(id) {
+      if (parseInt(this.currentQuestion.id) === parseInt(id)) {
+        return
+      }
+
       const questIndex = this.quiz.questions.getQuestionIndexById(id),
-          questNumber = this.getQuestionIndexFromNumber(questIndex)
-      this.$router.push({ name: 'onlineQuiz.quiz', params: { quizId: this.quiz.id, questNumber } })
+          questNumber = this.getQuestionNumberFromIndex(questIndex)
+
       this.currentQuestion = this.quiz.questions.getQuestionById(id)
+
+      if (parseInt(this.$route.params.questNumber) !== parseInt(questNumber)) {
+        this.$router.push({ name: 'onlineQuiz.quiz', params: { quizId: this.quiz.id, questNumber } })
+      }
     }
   }
 }

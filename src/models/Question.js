@@ -1,23 +1,23 @@
 import { Model, Collection } from 'js-abstract-model'
 import { AnswerList } from './Answer'
 import { ChoiceList } from './Choice'
-import {QuestCategory} from "./QuestCategory";
 
 class Question extends Model {
     constructor (data) {
         super(data, [
+            {
+                key: 'baseRoute',
+                default: 'https://alaatv.com/api/aaa/v1/exam/1'
+            },
             { key: 'id' },
             { key: 'title' },
             { key: 'body' },
             { key: 'photo' },
             { key: 'order' },
+            { key: 'sub_category' },
             {
                 key: 'answers',
                 relatedModel: AnswerList
-            },
-            {
-                key: 'sub_category',
-                relatedModel: QuestCategory
             },
             {
                 key: 'choices',
@@ -85,6 +85,10 @@ class Question extends Model {
 class QuestionList extends Collection {
     model () {
         return Question
+    }
+
+    sortByOrder() {
+        return this.sortByKey('order');
     }
 
     getQuestionIndexById (questionId) {

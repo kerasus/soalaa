@@ -1,15 +1,13 @@
 import { Model, Collection } from 'js-abstract-model'
-import {QuestionList} from "./Question";
+import {QuestionList} from "@/models/Question";
 
-class Quiz extends Model {
+class QuestSubcategory extends Model {
     constructor (data) {
         super(data, [
             { key: 'id' },
             { key: 'title' },
             { key: 'order' },
-            { key: 'begin_datetime' },
-            { key: 'finish_datetime' },
-            { key: 'total_question_number' },
+            { key: 'category_id' },
             {
                 key: 'questions',
                 relatedModel: QuestionList
@@ -18,10 +16,10 @@ class Quiz extends Model {
     }
 }
 
-class QuizList extends Collection {
+class QuestSubcategoryList extends Collection {
     model () {
-        return Quiz
+        return QuestSubcategory
     }
 }
 
-export { Quiz, QuizList }
+export { QuestSubcategory, QuestSubcategoryList }
