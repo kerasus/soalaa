@@ -1,5 +1,5 @@
 <template>
-    <v-container :fluid="true" class="quiz-page">
+    <v-container :fluid="true" class="quiz-page" :style="{ height: '100%' }">
         <v-row>
             <v-col :md="12" class="question-container">
                 <v-sheet width="100%" color="#f4f4f4">
@@ -33,11 +33,15 @@
                                     <div dir="rtl" v-katex:auto="{ options }">
                                         {{ currentQuestion.body }}
                                     </div>
-
                                 </v-col>
                             </v-row>
                             <v-row class="question-answers">
-                                <choice @answerClicked="answerClicked($event)" v-for="item in currentQuestion.choices.list" :key="item.id" :choice="item"/>
+                                <choice
+                                        @answerClicked="answerClicked($event)"
+                                        v-for="item in currentQuestion.choices.list"
+                                        :key="item.id"
+                                        :choice="item"
+                                />
                             </v-row>
                         </v-col>
                         <v-col :md="1" class="d-md-flex justify-center align-center d-none">
@@ -47,6 +51,11 @@
                         </v-col>
                     </v-row>
                 </v-sheet>
+            </v-col>
+        </v-row>
+        <v-row class="timer-row">
+            <v-col class="d-flex justify-center timer-container">
+                <Timer :daftarche="'عمومی'" :quiz-started-at="1607963897" :daftarche-end-time="1607963897" :height="100"></Timer>
             </v-col>
         </v-row>
     </v-container>
@@ -59,28 +68,33 @@
     //     inputText = document.getElementById('textfield').innerText
     // }
     import Vue from 'vue'
-    import Choice from "./Choice";
+    import Choice from './Choice'
     import {Question} from '../../../../models/Question'
-    import {Quiz} from "../../../../models/Quiz";
-    import 'katex/dist/katex.min.css';
+    import {Quiz} from "../../../../models/Quiz"
+    import 'katex/dist/katex.min.css'
+    import Timer from "./Timer";
+    import mixinQuiz from '@/mixin/Quiz'
 
-    import VueKatex from 'vue-katex';
-    import 'katex/dist/katex.min.css';
+    import VueKatex from 'vue-katex'
+    import 'katex/dist/katex.min.css'
 
     Vue.use(VueKatex, {
         globalOptions: {
             //... Define globally applied KaTeX options here
         }
-    });
+    })
 
     export default {
         name: "Quiz",
         components: {
-            Choice
+            Choice,
+            Timer
         },
+        mixins: [mixinQuiz],
         data () {
             return {
                 quizData: {
+                    id: 313,
                     title: 'آزمون آزمایشی',
                     begin_datetime: '2021-01-23 08:00:00',
                     finish_datetime: '2021-01-23 08:00:00',
@@ -202,7 +216,15 @@
         },
         methods: {
             loadFirstQuestion () {
-                this.changeQuestion(this.quiz.questions.list[0].id)
+                this.loadQuestionByNumber(1)
+            },
+            loadQuestionByNumber (number) {
+                let questionIndex = this.getQuestionNumberFromIndex(number)
+                this.changeQuestion(this.quiz.questions.list[questionIndex].id)
+            },
+            getQuestionNumberFromIndex (number) {
+                number = parseInt(number)
+                return number - 1
             },
             loadQuiz () {
                 this.quiz = new Quiz(this.quizData)
@@ -224,9 +246,6 @@
                 }
                 this.changeQuestion(question.id)
             },
-            changeQuestion (id) {
-                this.currentQuestion = this.quiz.questions.getQuestionById(id)
-            },
             bookmark () {
                 this.quiz.questions.getQuestionById(this.currentQuestion.id).bookmark()
             },
@@ -234,27 +253,17 @@
                 this.quiz.questions.getQuestionById(this.currentQuestion.id).changeState(newState)
             }
         },
-        computed: {
-            quiz: {
-                get () {
-                    return this.$store.getters.quiz
-                },
-                set (newInfo) {
-                    this.$store.commit('updateQuiz', newInfo)
-                }
-            },
-            currentQuestion: {
-                get () {
-                    return this.$store.getters.currentQuestion
-                },
-                set (newInfo) {
-                    this.$store.commit('updateCurrentQuestion', newInfo)
-                }
-            }
-        },
         created() {
-            this.loadQuiz()
-            this.loadFirstQuestion()
+            if (!this.quiz.id || parseInt(this.$route.params.quizId) !== parseInt(this.quiz.id)) {
+                this.loadQuiz()
+            }
+
+            if (this.$route.params.questNumber) {
+                this.loadQuestionByNumber(this.$route.params.questNumber)
+            } else {
+                this.loadFirstQuestion()
+            }
+
             this.$store.commit('updateQuizPage', true)
             if (window.innerWidth > 1263) {
                 this.$store.commit('updateMapOfQuestionsDrawer', true)
@@ -262,6 +271,7 @@
         },
         destroyed() {
             this.$store.commit('updateQuizPage', false)
+            this.$store.commit('updateMapOfQuestionsDrawer', false)
         }
     }
 </script>
@@ -278,6 +288,18 @@
 </style>
 
 <style scoped>
+    .timer-row {
+        position: fixed;
+        bottom: 0;
+        justify-content: center;
+        width: 100%;
+    }
+
+    .timer-container {
+        width: 100%;
+        background: #f4f4f4;
+    }
+
     .question-number p {
         margin-bottom: 0;
         line-height: 40px;

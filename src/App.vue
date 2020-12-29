@@ -7,12 +7,16 @@
                 dark
         >
             <div class="header">
-                <div v-if="!isQuizPage" />
-                <v-app-bar-nav-icon @click.stop="toggleMapOfQuestionsDrawer" color="#666" v-if="isQuizPage"></v-app-bar-nav-icon>
-                <div class="d-flex justify-end">
-                    <p class="user-name" :style="{ color: '#666', margin: '0 15px', 'align-self': 'center' }">سید مصطفی کاظمی</p>
+                <div class="d-flex justify-end" :style="{ direction: 'rtl' }">
+                    <p class="user-name" :style="{ color: '#666', margin: '0 15px', 'align-self': 'center' }">سید مصطفی
+                        کاظمی</p>
                     <v-icon :size="40" color="#666">mdi-account-circle</v-icon>
                 </div>
+                <v-app-bar-nav-icon
+                        @click.stop="toggleMapOfQuestionsDrawer"
+                        color="#666"
+                        v-if="isQuizPage"
+                />
             </div>
             <v-app-bar-nav-icon color="#666" @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
         </v-app-bar>
@@ -27,19 +31,21 @@
         >
             <Menu/>
         </v-navigation-drawer>
+
         <v-navigation-drawer
                 v-model="mapOfQuestionDrawer"
                 app
                 right
+                absolute
         >
-            <map-of-questions :questions="quiz.questions" :current-question="currentQuestion.id" @changeQuestion="changeQuestion($event)"/>
+            <map-of-questions :questions="quiz.questions" @changeQuestion="changeQuestion($event)"/>
         </v-navigation-drawer>
+
         <v-main>
-            <router-view></router-view>
+            <router-view
+                    :key="$route.name + ($route.params.quizId || '') + ($route.params.questNumber || '')"></router-view>
+
         </v-main>
-        <v-footer class="d-flex justify-center" app>
-            <Timer :daftarche="'عمومی'" :quiz-started-at="1607963897" :daftarche-end-time="1607963897" :height="100"></Timer>
-        </v-footer>
     </v-app>
 </template>
 
@@ -48,10 +54,11 @@
     import './assets/scss/font.scss'
     import '@mdi/font/css/materialdesignicons.css';
     import MapOfQuestions from "./components/OnlineQuiz/Quiz/MapOfQuestions"
-    import Timer from "./components/OnlineQuiz/Quiz/Timer";
+    import mixinQuiz from '@/mixin/Quiz'
 
     export default {
         name: 'App',
+        mixins: [mixinQuiz],
         data: () => ({
             drawer: false,
             group: null
@@ -63,60 +70,23 @@
         },
         components: {
             Menu,
-            MapOfQuestions,
-            Timer
-        },
-        computed: {
-            mapOfQuestionDrawer: {
-                get () {
-                    return this.$store.getters.mapOfQuestionsDrawer
-                },
-                set (newInfo) {
-                    this.$store.commit('updateMapOfQuestionsDrawer', newInfo)
-                }
-            },
-            quiz: {
-                get () {
-                    return this.$store.getters.quiz
-                },
-                set (newInfo) {
-                    this.$store.commit('updateQuiz', newInfo)
-                }
-            },
-            currentQuestion: {
-                get () {
-                    return this.$store.getters.currentQuestion
-                },
-                set (newInfo) {
-                    this.$store.commit('updateCurrentQuestion', newInfo)
-                }
-            },
-            isQuizPage () {
-                return this.$store.getters.isQuizPage
-            }
-        },
-        methods: {
-            toggleMapOfQuestionsDrawer () {
-                this.$store.commit('updateMapOfQuestionsDrawer', !this.$store.getters.mapOfQuestionsDrawer)
-            },
-            changeQuestion (id) {
-                this.currentQuestion = this.quiz.questions.getQuestionById(id)
-            }
+            MapOfQuestions
         }
     };
 </script>
 
 <style scoped>
-.header {
-    display: flex;
-    width: 100%;
-    flex-direction: row;
-    justify-content: space-between;
-}
+    .header {
+        display: flex;
+        width: 100%;
+        flex-direction: row;
+        justify-content: space-between;
+        direction: ltr;
+    }
 </style>
 
 <style>
-.v-navigation-drawer__border {
-    background: transparent !important;
-}
+    .v-navigation-drawer__border {
+        background: transparent !important;
+    }
 </style>

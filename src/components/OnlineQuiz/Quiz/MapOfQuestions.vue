@@ -32,8 +32,16 @@
 <script>
     export default {
         name: "MapOfQuestions",
-        props: ['questions', 'currentQuestion'],
+        props: ['questions'],
         computed: {
+            currentQuestion: {
+                get () {
+                    return this.$store.getters.currentQuestion
+                },
+                set (newInfo) {
+                    this.$store.commit('updateCurrentQuestion', newInfo)
+                }
+            },
             lessons () {
                 const lessons = []
                 for (let i = 0; i < this.questions.list.length; i++) {
@@ -62,6 +70,7 @@
     width: 80%;
     border-radius: 40px;
     margin: 2% 10%;
+    min-height: 50px !important;
 }
 
 .map-of-questions .v-expansion-panel-content__wrap {
