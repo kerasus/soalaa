@@ -15,6 +15,7 @@
     "js-abstract-model": "^0.1.14",
     "katex": "^0.12.0",
     "mathlive": "^0.59.0",
+    "showdown": "^1.9.1",
     "vue": "^2.6.11",
     "vue-katex": "^0.5.0",
     "vue-tree-list": "^1.5.0",

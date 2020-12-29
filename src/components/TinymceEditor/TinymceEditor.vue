@@ -31,16 +31,30 @@
                     plugins: [
                         'advlist autolink lists link image charmap print preview anchor',
                         'searchreplace visualblocks code fullscreen',
-                        'insertdatetime media table paste code help wordcount'
+                        'insertdatetime media table paste code help wordcount codesample code textpattern markdown lists advlist faketable'
                     ],
                     toolbar:
                         'undo redo | formatselect | bold italic backcolor | \
                         alignleft aligncenter alignright alignjustify | \
-                        bullist numlist outdent indent | removeformat | help | addFormula',
+                        bullist numlist outdent indent | removeformat | help | addFormula | code markdown numlist bullist faketable',
+                    textpattern_patterns: [
+                        {start: '*', end: '*', format: 'italic'},
+                        {start: '**', end: '**', format: 'bold'},
+                        {start: '#', format: 'h1'},
+                        {start: '##', format: 'h2'},
+                        {start: '###', format: 'h3'},
+                        {start: '####', format: 'h4'},
+                        {start: '#####', format: 'h5'},
+                        {start: '######', format: 'h6'},
+                        {start: '1. ', cmd: 'InsertOrderedList'},
+                        {start: '* ', cmd: 'InsertUnorderedList'},
+                        {start: '- ', cmd: 'InsertUnorderedList'}
+                    ],
                     directionality : 'rtl',
                     auto_focus: 'editor',
                     branding: false,
                     that: this,
+                    icons: 'markdown-labs-demo',
                     setup:function(editor){
                         // You can do what you want here
                         // like adding custom buttons
@@ -49,7 +63,29 @@
                             icon: 'character-count',
                             onAction: () => { this.that.addTextToEditor('$' + this.that.latexData + '$') }
                         });
-                    }
+                        tinymce.IconManager.add('markdown-labs-demo', { // eslint-disable-line
+                            icons: {
+                                markdown: `<?xml version="1.0" encoding="UTF-8"?>
+        <svg width="24px" height="24px" viewBox="0 0 40 40" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+            <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                <g id="markdown-mark" transform="translate(2.000000, 12.000000)" fill="#222f3e" fill-rule="nonzero">
+                    <path d="M0.5,16 L0.5,0 L5.40322581,0 L10.3064516,5.88235294 L15.2096774,0 L20.1129032,0 L20.1129032,16 L15.2096774,16 L15.2096774,6.82352941 L10.3064516,12.7058824 L5.40322581,6.82352941 L5.40322581,16 L0.5,16 Z M31.1451613,16 L23.7903226,8.23529412 L28.6935484,8.23529412 L28.6935484,0 L33.5967742,0 L33.5967742,8.23529412 L38.5,8.23529412 L31.1451613,16 Z" id="Shape"></path>
+                </g>
+            </g>
+        </svg>`
+                            }
+                        });
+
+                        tinymce.PluginManager.add('faketable', function (editor) { // eslint-disable-line
+                            editor.ui.registry.addButton('faketable', {
+                                name: 'faketable',
+                                text: 'non-markdown-table',
+                                onAction: function (buttonApi) { // eslint-disable-line
+                                    editor.insertContent('<table><tbody><tr><th>No</th></tr></tbody></table>');
+                                }
+                            });
+                        });
+                    },
                 },
                 formula: '',
                 latexData: null
