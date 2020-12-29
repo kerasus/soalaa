@@ -1,0 +1,11 @@
+.renderedPanel {
+  direction: rtl;
+  &.ltr,
+  .katex {
+    direction: ltr;
+  }
+  strong>strong>s {
+    text-decoration: underline;
+    text-underline-position: under;
+  }
+}

@@ -98,7 +98,7 @@
     background: #fff !important;
 }
 
-.map-of-questions .v-btn.active {
+.v-navigation-drawer .v-navigation-drawer__content .map-of-questions .theme--light.v-btn.active {
     color: #6ad1ff;
 }
 

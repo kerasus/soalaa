@@ -1,9 +1,7 @@
 <template>
     <v-col :md="6" :cols="12" class="answer-box" @click="answerClicked">
         <v-sheet :class="{ 'answer-sheet': true, active: choice.active }">
-            <div class="answer-text">
-                {{ choice.body }}
-            </div>
+            <div class="answer-text renderedPanel" v-html="choiceBody"></div>
             <div class="answer-checkbox">
                 <v-checkbox v-model="choice.active" disabled />
             </div>
@@ -12,9 +10,22 @@
 </template>
 
 <script>
+    // import 'katex/dist/katex.min.css';
+    import 'github-markdown-css/github-markdown.css';
+    import '@/assets/scss/markdownKatex.scss';
+
+    var md = require('markdown-it')(),
+        mk = require('markdown-it-katex');
+    md.use(mk);
+
     export default {
         name: "Choice",
         props: ['choice'],
+        computed: {
+            choiceBody() {
+                return md.render(this.choice.body)
+            }
+        },
         methods: {
             answerClicked () {
                 this.$emit('answerClicked', this.choice.id)
