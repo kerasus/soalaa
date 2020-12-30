@@ -87,7 +87,6 @@
     // import Vue from 'vue'
     import Choice from './Choice'
     import {Question} from '@/models/Question'
-    import {Quiz} from '@/models/Quiz'
     import Timer from '@/components/OnlineQuiz/Quiz/Timer/Timer'
     import FakeQuizData from '@/plugins/fakeQuizData'
     import { mixinQuiz, mixinDrawer } from '@/mixin/Mixins'
@@ -129,28 +128,6 @@
                 ],
                 currentQuestionId: 0,
                 testQuestion: new Question(),
-            }
-        },
-        methods: {
-            loadFirstQuestion () {
-                this.loadQuestionByNumber(1)
-            },
-            loadQuestionByNumber (number) {
-                let questionIndex = this.getQuestionIndexFromNumber(number)
-                this.changeQuestion(this.quiz.questions.list[questionIndex].id)
-            },
-            loadQuiz () {
-                this.quiz = new Quiz(this.quizData)
-                this.quiz.loadSubcategoriesOfCategories()
-            },
-            answerClicked (id) {
-                this.quiz.questions.getQuestionById(this.currentQuestion.id).choiceClicked(id)
-            },
-            bookmark () {
-                this.quiz.questions.getQuestionById(this.currentQuestion.id).bookmark()
-            },
-            changeState (newState) {
-                this.quiz.questions.getQuestionById(this.currentQuestion.id).changeState(newState)
             }
         },
         created() {
