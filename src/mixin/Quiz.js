@@ -1,7 +1,16 @@
 import {Quiz} from "@/models/Quiz";
+// import 'katex/dist/katex.min.css';
+import 'github-markdown-css/github-markdown.css';
+import '@/assets/scss/markdownKatex.scss';
+var md = require('markdown-it')(),
+    mk = require('markdown-it-katex');
+md.use(mk);
 
 const mixinQuiz = {
   computed: {
+    currentQuestionBody() {
+      return md.render(this.currentQuestion.body)
+    },
     isQuizPage() {
       return this.$store.getters.isQuizPage
     },

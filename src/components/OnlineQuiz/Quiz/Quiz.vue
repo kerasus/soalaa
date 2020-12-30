@@ -78,56 +78,21 @@
 </template>
 
 <script>
-    // const inputText;
-    // document.getElementById('textfield').addEventListener('change', handler())
-    // function handler() {
-    //     inputText = document.getElementById('textfield').innerText
-    // }
-
-    // import Vue from 'vue'
-    import Choice from './Choice'
-    import {Question} from '@/models/Question'
-    import Timer from '@/components/OnlineQuiz/Quiz/Timer/Timer'
     import FakeQuizData from '@/plugins/fakeQuizData'
-    import { mixinQuiz, mixinDrawer } from '@/mixin/Mixins'
-
-    // import VueKatex from 'vue-katex'
-    // import 'katex/dist/katex.min.css'
-    //
-    // Vue.use(VueKatex, {
-    //     globalOptions: {
-    //         //... Define globally applied KaTeX options here
-    //     }
-    // })
-
-
-    // import 'katex/dist/katex.min.css';
-    import 'github-markdown-css/github-markdown.css';
-    import '@/assets/scss/markdownKatex.scss';
-    var md = require('markdown-it')(),
-        mk = require('markdown-it-katex');
-    md.use(mk);
+    import Choice from '@/components/OnlineQuiz/Quiz/Choice'
+    import Timer from '@/components/OnlineQuiz/Quiz/Timer/Timer'
+    import { mixinQuiz, mixinDrawer, mixinWindowSize } from '@/mixin/Mixins'
 
     export default {
-        name: "Quiz",
+        name: 'Quiz',
         components: {
             Choice,
             Timer
         },
-        computed: {
-            currentQuestionBody() {
-                return md.render(this.currentQuestion.body)
-            }
-        },
-        mixins: [mixinQuiz, mixinDrawer],
+        mixins: [mixinQuiz, mixinDrawer, mixinWindowSize],
         data () {
             return {
-                quizData: FakeQuizData,
-                options: [
-                    {left: "$$", right: "$$", display: true}
-                ],
-                currentQuestionId: 0,
-                testQuestion: new Question(),
+                quizData: FakeQuizData
             }
         },
         created() {
@@ -141,12 +106,9 @@
                 this.loadFirstQuestion()
             }
 
-            if (window.innerWidth > 1263) {
+            if (this.windowSize > 1263) {
                 this.$store.commit('updateDrawer', true)
             }
-        },
-        destroyed() {
-            // this.$store.commit('updateDrawer', false)
         }
     }
 </script>
