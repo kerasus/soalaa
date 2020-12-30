@@ -1,5 +1,16 @@
+import {Quiz} from "@/models/Quiz";
+// import 'katex/dist/katex.min.css';
+import 'github-markdown-css/github-markdown.css';
+import '@/assets/scss/markdownKatex.scss';
+var md = require('markdown-it')(),
+    mk = require('markdown-it-katex');
+md.use(mk);
+
 const mixinQuiz = {
   computed: {
+    currentQuestionBody() {
+      return md.render(this.currentQuestion.body)
+    },
     isQuizPage() {
       return this.$store.getters.isQuizPage
     },
@@ -24,6 +35,26 @@ const mixinQuiz = {
     }
   },
   methods: {
+    loadFirstQuestion () {
+      this.loadQuestionByNumber(1)
+    },
+    loadQuestionByNumber (number) {
+      let questionIndex = this.getQuestionIndexFromNumber(number)
+      this.changeQuestion(this.quiz.questions.list[questionIndex].id)
+    },
+    answerClicked (choiceId) {
+      this.quiz.questions.getQuestionById(this.currentQuestion.id).choiceClicked(choiceId)
+    },
+    bookmark () {
+      this.quiz.questions.getQuestionById(this.currentQuestion.id).bookmark()
+    },
+    changeState (newState) {
+      this.quiz.questions.getQuestionById(this.currentQuestion.id).changeState(newState)
+    },
+    loadQuiz () {
+      this.quiz = new Quiz(this.quizData)
+      this.quiz.loadSubcategoriesOfCategories()
+    },
     getQuestionNumberFromIndex (index) {
       index = parseInt(index)
       return index + 1
@@ -35,6 +66,20 @@ const mixinQuiz = {
     getQuestionIndexFromNumber (number) {
       number = parseInt(number)
       return number - 1
+    },
+    goToNextQuestion () {
+      let question = this.quiz.questions.getNextQuestion(this.currentQuestion.id)
+      if (!question) {
+        return
+      }
+      this.changeQuestion(question.id)
+    },
+    goToPrevQuestion () {
+      let question = this.quiz.questions.getPrevQuestion(this.currentQuestion.id)
+      if (!question) {
+        return
+      }
+      this.changeQuestion(question.id)
     },
     changeQuestion(id) {
       if (parseInt(this.currentQuestion.id) === parseInt(id)) {
