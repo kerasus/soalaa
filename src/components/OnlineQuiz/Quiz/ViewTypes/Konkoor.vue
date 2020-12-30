@@ -12,7 +12,8 @@
             <v-col :md="7" class="questions-list">
                 <div v-for="(group, index) in questionsInGroups" :key="index" class="question-group">
                     <div v-for="question in group" :key="question.id" class="question-in-list">
-                        {{ question.id }}
+                        <div :style="{ width: '24%' }">{{ question.order }}</div>
+                        <div v-for="choice in question.choices.list" :key="choice.id" :class="{ 'choice-in-list': true, active: choice.active }"></div>
                     </div>
                 </div>
             </v-col>
@@ -151,5 +152,18 @@ export default {
 
 .question-in-list {
     margin: 2px 0;
+    display: flex;
+    flex-direction: row;
+}
+
+.choice-in-list {
+    width: 19%;
+    margin: 2px;
+    border-radius: 6px;
+    border: 1px solid #ffda6a;
+}
+
+.choice-in-list.active {
+    background: #ffda6a;
 }
 </style>
