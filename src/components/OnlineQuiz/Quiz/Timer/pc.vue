@@ -17,13 +17,13 @@
                         </path>
                     </svg>
                 </v-col>
-                <v-col v-if="show" cols="3" class="textMarginTop">
+                <v-col v-if="show" cols="3" class="timerText" >
                     زمان گذشته:
-                    <span style="margin-right: 10px">
+                    <span class="timeMarginTop">
                         {{ seconds}} : {{ minutes}} : {{hours}}
                     </span>
                 </v-col>
-                <v-col v-if="show" cols="7" class="text-center textMarginTop" >
+                <v-col v-if="show" cols="7" class="text-center timerText"  >
                     زمان تا پایان مهلت پاسخگویی دفترچه عمومی:
                     <span class="timeMarginTop">
                         {{ seconds2}} : {{ minutes2}} : {{hours2}}
@@ -134,7 +134,17 @@
 </script>
 
 <style scoped>
-    .textMarginTop{
+    @media only screen and (max-width: 1040px) {
+        .timerText {
+            font-size: 12px;
+        }
+    }
+    @media only screen and (min-width: 1040px) {
+        .timerText {
+            font-size: 16px;
+        }
+    }
+    .timerText{
         margin-top: 30px
     }
     .timeMarginTop{
