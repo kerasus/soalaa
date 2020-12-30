@@ -1,76 +1,80 @@
 <template>
-    <v-container :fluid="true" class="quiz-page" :style="{ height: '100%' }">
-        <v-row :style="{ 'min-height': '100%' }">
-            <v-col :md="12" class="question-container" :style="{ 'min-height': '100%' }">
-                <v-sheet class="d-flex align-stretch" width="100%" color="#f4f4f4" :style="{ 'min-height': '100%' }">
-                    <v-row>
-                        <v-col :md="1" class="d-md-flex justify-center align-center d-none">
-                            <v-btn :min-width="64" class="px-0" :height="64" @click="goToPrevQuestion" icon>
-                                <v-icon :size="40">mdi-chevron-right</v-icon>
-                            </v-btn>
-                        </v-col>
-                        <v-col :md="10" class="px-md-0 px-10">
-                            <v-row class="question-header">
-                                <div class="question-number">
-                                    <p>
-                                        {{ currentLessons.title }}
-                                        -
-                                        سوال شماره
-                                        {{ getQuestionNumberFromId(currentQuestion.id) }}
-                                    </p>
-                                </div>
-                                <div class="question-buttons">
-                                    <v-btn icon @click="changeState('circle')">
-                                        <v-icon v-if="currentQuestion.state !== 'circle'" color="#888" size="30">mdi-checkbox-blank-circle-outline</v-icon>
-                                        <v-icon v-if="currentQuestion.state === 'circle'" color="yellow" :size="30">mdi-checkbox-blank-circle</v-icon>
-                                    </v-btn>
-                                    <v-btn icon @click="changeState('cross')">
-                                        <v-icon :color="currentQuestion.state === 'cross' ? 'red' : '#888'" :size="30">mdi-close</v-icon>
-                                    </v-btn>
-                                    <v-btn icon @click="bookmark">
-                                        <v-icon v-if="!currentQuestion.bookmarked" :size="30" color="#888">mdi-bookmark-outline</v-icon>
-                                        <v-icon v-if="currentQuestion.bookmarked" color="blue" :size="30">mdi-bookmark</v-icon>
-                                    </v-btn>
-                                </div>
-                            </v-row>
-                            <v-row class="question-body">
-                                <v-col>
-                                    <div class="renderedPanel" v-html="currentQuestionBody"></div>
-                                </v-col>
-                            </v-row>
-                            <v-row class="question-answers">
-                                <choice v-for="item in currentQuestion.choices.list"
-                                        :key="item.id"
-                                        :choice="item"
-                                        @answerClicked="answerClicked($event)"
-                                />
-                            </v-row>
-                        </v-col>
-                        <v-col :md="1" class="d-md-flex justify-center align-center d-none">
-                            <v-btn :min-width="64" class="px-0" :height="64" @click="goToNextQuestion" icon>
-                                <v-icon :size="40">mdi-chevron-left</v-icon>
-                            </v-btn>
+    <div>
+        <v-container :fluid="true" class="quiz-page" :style="{ height: '100%' }">
+            <v-row :style="{ 'min-height': '100%' }">
+                <v-col :md="12" class="question-container" :style="{ 'min-height': '100%' }">
+                    <v-sheet class="d-flex align-stretch" width="100%" color="#f4f4f4" :style="{ 'min-height': '100%' }">
+                        <v-row>
+                            <v-col :md="1" class="d-md-flex justify-center align-center d-none">
+                                <v-btn :min-width="64" class="px-0" :height="64" @click="goToPrevQuestion" icon>
+                                    <v-icon :size="40">mdi-chevron-right</v-icon>
+                                </v-btn>
+                            </v-col>
+                            <v-col :md="10" class="px-md-0 px-10">
+                                <v-row class="question-header">
+                                    <div class="question-number">
+                                        <p>
+                                            {{ currentLessons.title }}
+                                            -
+                                            سوال شماره
+                                            {{ getQuestionNumberFromId(currentQuestion.id) }}
+                                        </p>
+                                    </div>
+                                    <div class="question-buttons">
+                                        <v-btn icon @click="changeState('circle')">
+                                            <v-icon v-if="currentQuestion.state !== 'circle'" color="#888" size="30">mdi-checkbox-blank-circle-outline</v-icon>
+                                            <v-icon v-if="currentQuestion.state === 'circle'" color="yellow" :size="30">mdi-checkbox-blank-circle</v-icon>
+                                        </v-btn>
+                                        <v-btn icon @click="changeState('cross')">
+                                            <v-icon :color="currentQuestion.state === 'cross' ? 'red' : '#888'" :size="30">mdi-close</v-icon>
+                                        </v-btn>
+                                        <v-btn icon @click="bookmark">
+                                            <v-icon v-if="!currentQuestion.bookmarked" :size="30" color="#888">mdi-bookmark-outline</v-icon>
+                                            <v-icon v-if="currentQuestion.bookmarked" color="blue" :size="30">mdi-bookmark</v-icon>
+                                        </v-btn>
+                                    </div>
+                                </v-row>
+                                <v-row class="question-body">
+                                    <v-col>
+                                        <div class="renderedPanel" v-html="currentQuestionBody"></div>
+                                    </v-col>
+                                </v-row>
+                                <v-row class="question-answers">
+                                    <choice v-for="item in currentQuestion.choices.list"
+                                            :key="item.id"
+                                            :choice="item"
+                                            @answerClicked="answerClicked($event)"
+                                    />
+                                </v-row>
+                            </v-col>
+                            <v-col :md="1" class="d-md-flex justify-center align-center d-none">
+                                <v-btn :min-width="64" class="px-0" :height="64" @click="goToNextQuestion" icon>
+                                    <v-icon :size="40">mdi-chevron-left</v-icon>
+                                </v-btn>
+                            </v-col>
+                        </v-row>
+                    </v-sheet>
+                </v-col>
+
+            </v-row>
+
+            <v-footer class="justify-center pl-0"
+                      color="transparent"
+                      elevation="0"
+                      padless
+                      inset
+                      app>
+                <v-container fluid class="py-0">
+                    <v-row class="timer-row justify-center">
+                        <v-col :md="10" class="d-flex justify-center timer-container py-0">
+                            <Timer :daftarche="'عمومی'" :quiz-started-at="1607963897" :daftarche-end-time="1607963897" :height="100"></Timer>
                         </v-col>
                     </v-row>
-                </v-sheet>
-            </v-col>
-        </v-row>
+                </v-container>
+            </v-footer>
+        </v-container>
+    </div>
 
-        <v-footer class="justify-center pl-0"
-                  color="transparent"
-                  elevation="0"
-                  padless
-                  inset
-                  app>
-            <v-container fluid class="py-0">
-                <v-row class="timer-row justify-center">
-                    <v-col :md="10" class="d-flex justify-center timer-container py-0">
-                        <Timer :daftarche="'عمومی'" :quiz-started-at="1607963897" :daftarche-end-time="1607963897" :height="100"></Timer>
-                    </v-col>
-                </v-row>
-            </v-container>
-        </v-footer>
-    </v-container>
 </template>
 
 <script>
