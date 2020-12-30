@@ -146,20 +146,6 @@
             answerClicked (id) {
                 this.quiz.questions.getQuestionById(this.currentQuestion.id).choiceClicked(id)
             },
-            goToNextQuestion () {
-                let question = this.quiz.questions.getNextQuestion(this.currentQuestion.id)
-                if (!question) {
-                    return
-                }
-                this.changeQuestion(question.id)
-            },
-            goToPrevQuestion () {
-                let question = this.quiz.questions.getPrevQuestion(this.currentQuestion.id)
-                if (!question) {
-                    return
-                }
-                this.changeQuestion(question.id)
-            },
             bookmark () {
                 this.quiz.questions.getQuestionById(this.currentQuestion.id).bookmark()
             },

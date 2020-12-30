@@ -52,32 +52,32 @@
         name: 'MobileTimer',
         data: () => ({
             drawerVisible: false,
-        quizStartedAt: null,
-        today: null,
-        currentTime: null,
-        start: new Date(),
-        end: new Date(),
-        interval: null,
-        days: 0,
-        hours: 0,
-        minutes: 0,
-        seconds: 0,
-        intervals: {
-            second: 1000,
-            minute: 1000 * 60,
-            hour: 1000 * 60 * 60,
-            day: 1000 * 60 * 60 * 24
-        },
-        days2: 0,
-        hours2: 0,
-        minutes2: 0,
-        seconds2: 0,
-        intervals2: {
-            second: 1000,
-            minute: 1000 * 60,
-            hour: 1000 * 60 * 60,
-            day: 1000 * 60 * 60 * 24
-        }
+            quizStartedAt: null,
+            today: null,
+            currentTime: null,
+            start: new Date(),
+            end: new Date(),
+            interval: null,
+            days: 0,
+            hours: 0,
+            minutes: 0,
+            seconds: 0,
+            intervals: {
+                second: 1000,
+                minute: 1000 * 60,
+                hour: 1000 * 60 * 60,
+                day: 1000 * 60 * 60 * 24
+            },
+            days2: 0,
+            hours2: 0,
+            minutes2: 0,
+            seconds2: 0,
+            intervals2: {
+                second: 1000,
+                minute: 1000 * 60,
+                hour: 1000 * 60 * 60,
+                day: 1000 * 60 * 60 * 24
+            }
         }),
         methods: {
             drawerUp() {
