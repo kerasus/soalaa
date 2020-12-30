@@ -76,36 +76,10 @@
 </template>
 
 <script>
-    // const inputText;
-    // document.getElementById('textfield').addEventListener('change', handler())
-    // function handler() {
-    //     inputText = document.getElementById('textfield').innerText
-    // }
-
-    // import Vue from 'vue'
-    import Choice from '../Choice'
-    import {Question} from '@/models/Question'
-    import {Quiz} from '@/models/Quiz'
-    import Timer from '@/components/OnlineQuiz/Quiz/Timer/Timer'
     import FakeQuizData from '@/plugins/fakeQuizData'
-    import { mixinQuiz, mixinDrawer } from '@/mixin/Mixins'
-
-    // import VueKatex from 'vue-katex'
-    // import 'katex/dist/katex.min.css'
-    //
-    // Vue.use(VueKatex, {
-    //     globalOptions: {
-    //         //... Define globally applied KaTeX options here
-    //     }
-    // })
-
-
-    // import 'katex/dist/katex.min.css';
-    import 'github-markdown-css/github-markdown.css';
-    import '@/assets/scss/markdownKatex.scss';
-    var md = require('markdown-it')(),
-        mk = require('markdown-it-katex');
-    md.use(mk);
+    import Choice from '@/components/OnlineQuiz/Quiz/Choice'
+    import Timer from '@/components/OnlineQuiz/Quiz/Timer/Timer'
+    import { mixinQuiz, mixinDrawer, mixinWindowSize } from '@/mixin/Mixins'
 
     export default {
         name: "AlaaView",
@@ -113,56 +87,10 @@
             Choice,
             Timer
         },
-        computed: {
-            currentQuestionBody() {
-                return md.render(this.currentQuestion.body)
-            }
-        },
-        mixins: [mixinQuiz, mixinDrawer],
+        mixins: [mixinQuiz, mixinDrawer, mixinWindowSize],
         data () {
             return {
-                quizData: FakeQuizData,
-                options: [
-                    {left: "$$", right: "$$", display: true}
-                ],
-                currentQuestionId: 0,
-                testQuestion: new Question(),
-            }
-        },
-        methods: {
-            loadFirstQuestion () {
-                this.loadQuestionByNumber(1)
-            },
-            loadQuestionByNumber (number) {
-                let questionIndex = this.getQuestionIndexFromNumber(number)
-                this.changeQuestion(this.quiz.questions.list[questionIndex].id)
-            },
-            loadQuiz () {
-                this.quiz = new Quiz(this.quizData)
-                this.quiz.loadSubcategoriesOfCategories()
-            },
-            answerClicked (id) {
-                this.quiz.questions.getQuestionById(this.currentQuestion.id).choiceClicked(id)
-            },
-            goToNextQuestion () {
-                let question = this.quiz.questions.getNextQuestion(this.currentQuestion.id)
-                if (!question) {
-                    return
-                }
-                this.changeQuestion(question.id)
-            },
-            goToPrevQuestion () {
-                let question = this.quiz.questions.getPrevQuestion(this.currentQuestion.id)
-                if (!question) {
-                    return
-                }
-                this.changeQuestion(question.id)
-            },
-            bookmark () {
-                this.quiz.questions.getQuestionById(this.currentQuestion.id).bookmark()
-            },
-            changeState (newState) {
-                this.quiz.questions.getQuestionById(this.currentQuestion.id).changeState(newState)
+                quizData: FakeQuizData
             }
         },
         created() {
@@ -176,12 +104,9 @@
                 this.loadFirstQuestion()
             }
 
-            if (window.innerWidth > 1263) {
+            if (this.windowSize > 1263) {
                 this.$store.commit('updateDrawer', true)
             }
-        },
-        destroyed() {
-            // this.$store.commit('updateDrawer', false)
         }
     }
 </script>
