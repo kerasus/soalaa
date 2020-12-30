@@ -1,7 +1,7 @@
 <template>
     <div class="wrapper">
 
-        <mobile-timer v-if="windowSize < 800" />
+        <mobile-timer v-if="windowSize.x < 700" />
         <pc-timer v-else/>
 
     </div>
