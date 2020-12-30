@@ -36,6 +36,20 @@ const mixinQuiz = {
       number = parseInt(number)
       return number - 1
     },
+    goToNextQuestion () {
+      let question = this.quiz.questions.getNextQuestion(this.currentQuestion.id)
+      if (!question) {
+        return
+      }
+      this.changeQuestion(question.id)
+    },
+    goToPrevQuestion () {
+      let question = this.quiz.questions.getPrevQuestion(this.currentQuestion.id)
+      if (!question) {
+        return
+      }
+      this.changeQuestion(question.id)
+    },
     changeQuestion(id) {
       if (parseInt(this.currentQuestion.id) === parseInt(id)) {
         return
