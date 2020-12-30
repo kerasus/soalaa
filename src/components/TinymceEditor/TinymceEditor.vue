@@ -10,7 +10,6 @@
 </template>
 
 <script>
-    import './katex.css'
     import VueMarkdown from 'vue-markdown'
     import MathLive from 'mathlive';
     import 'mathlive/dist/mathlive-fonts.css'
