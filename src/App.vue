@@ -218,7 +218,11 @@
 </style>
 
 <style>
-    .v-application > .v-menu__content
+    .v-application > .v-menu__content {
+        border-top-right-radius: 24px !important;
+        border-bottom-left-radius: 24px !important;
+        border-bottom-right-radius: 24px !important;
+    }
     .v-navigation-drawer .v-navigation-drawer__content {
         overflow-y: scroll;
     }
