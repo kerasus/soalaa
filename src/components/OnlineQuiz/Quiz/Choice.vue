@@ -68,7 +68,7 @@
         cursor: pointer;
         transition: all ease 0.3s;
         display: flex;
-        flex-direction: row;
+        flex-direction: row-reverse;
         justify-content: space-between;
     }
 

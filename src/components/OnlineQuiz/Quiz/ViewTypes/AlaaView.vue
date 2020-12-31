@@ -123,10 +123,6 @@
 </style>
 
 <style scoped>
-    p {
-        margin-bottom: 0;
-    }
-
     .question-buttons button {
         margin-right: 20px;
     }

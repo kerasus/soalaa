@@ -5,15 +5,27 @@
                 <div v-for="item in quiz.questions.list" :key="item.id" class="question">
                     <p class="question-body renderedPanel" v-html="convertToMarkDown((item.order + 1) + ' - ' + item.body)" />
                     <v-row class="choices">
-                        <v-col :md="choiceClass(item)" class="choice renderedPanel" v-for="(choice, index) in item.choices.list" :key="choice.id" v-html="convertToMarkDown((index + 1) + ' ) ' + choice.body)" />
+                        <v-col
+                                :md="choiceClass(item)"
+                                class="choice renderedPanel"
+                                v-for="(choice, index) in item.choices.list"
+                                :key="choice.id"
+                                v-html="convertToMarkDown((index + 1) + ' ) ' + choice.body)"
+                                @click="choiceClicked(item.id, choice.id)"
+                        />
                     </v-row>
                 </div>
             </v-col>
             <v-col :md="7" class="questions-list">
                 <div v-for="(group, index) in questionsInGroups" :key="index" class="question-group">
                     <div v-for="question in group" :key="question.id" class="question-in-list">
-                        <div :style="{ width: '24%' }">{{ question.order }}</div>
-                        <div v-for="choice in question.choices.list" :key="choice.id" :class="{ 'choice-in-list': true, active: choice.active }"></div>
+                        <div :style="{ width: '24%' }">{{ question.order + 1 }}</div>
+                        <div
+                                v-for="choice in question.choices.list"
+                                :key="choice.id"
+                                :class="{ 'choice-in-list': true, active: choice.active }"
+                                @click="choiceClicked(question.id, choice.id)"
+                        />
                     </div>
                 </div>
             </v-col>
@@ -84,6 +96,23 @@ export default {
                 return 12
             }
             return 12
+        },
+        choiceClicked (questionId, choiceId) {
+            this.changeQuestion(questionId)
+            this.answerClicked(choiceId)
+        },
+        questionListHeight () {
+            // box is a col-7 with 12px padding
+            const boxSize = $('.questions-list').width() - 24
+            // each group width is 140px
+            const horizontalGroupAmounts = Math.floor(boxSize / 140)
+            const verticalGroupAmount = Math.ceil(this.questionsInGroups.length / horizontalGroupAmounts)
+            return verticalGroupAmount * 202 + 24
+        },
+        questionListPadding () {
+            const boxSize = $('.questions-list').width() - 24
+            const horizontalGroupAmounts = Math.floor(boxSize / 140)
+            return (boxSize - (horizontalGroupAmounts * 140)) / 2 - 10
         }
     },
     computed: {
@@ -98,39 +127,53 @@ export default {
                 }
             }
             return groups
-        },
-        questionListHeight () {
-            // box is a col-7 with 12px padding
-            const boxSize = $('.questions-list').width() - 24
-            // each group width is 130px
-            const horizontalGroupAmounts = Math.floor(boxSize / 130)
-            const verticalGroupAmount = Math.ceil(this.questionsInGroups.length / horizontalGroupAmounts)
-            return verticalGroupAmount * 202 + 24
-        },
-        questionListPadding () {
-            const boxSize = $('.questions-list').width() - 24
-            const horizontalGroupAmounts = Math.floor(boxSize / 130)
-            return boxSize - (horizontalGroupAmounts * 130) / 2 - 10
         }
     },
     mounted () {
-        $('.questions-list').height(this.questionListHeight)
+        $('.questions-list').height(this.questionListHeight())
+        $('.questions').height(this.windowSize.y - 96)
     },
     created () {
         this.loadQuiz()
+    },
+    watch: {
+        'windowSize.y': function () {
+            $('.questions').height(this.windowSize.y - 96)
+        },
+        'windowSize.x': function () {
+            console.log(this.questionListPadding())
+            $('.questions-list').height(this.questionListHeight())
+        }
     }
 }
 </script>
 
 <style scoped>
+.question-body {
+    margin-bottom: 20px;
+}
+
 .questions {
     background: #fff;
     overflow-y: auto;
 }
 
+.question {
+    margin-bottom: 50px;
+}
+
 .choices {
     display: flex;
     flex-direction: row;
+}
+
+.choice {
+    cursor: pointer;
+    transition: all ease-in-out 0.3s;
+}
+
+.choice:hover {
+    background: #e1e1e1;
 }
 
 .questions-list {
@@ -146,7 +189,7 @@ export default {
     border-radius: 10px;
     margin: 5px;
     padding: 5px 10px;
-    width: 120px;
+    width: 130px;
     font-size: 11px;
 }
 
@@ -161,9 +204,16 @@ export default {
     margin: 2px;
     border-radius: 6px;
     border: 1px solid #ffda6a;
+    cursor: pointer;
 }
 
 .choice-in-list.active {
     background: #ffda6a;
 }
+</style>
+
+<style>
+    .v-application p {
+        margin-bottom: 4px;
+    }
 </style>
