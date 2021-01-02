@@ -1,9 +1,9 @@
 <template>
     <div class="wrapper" >
-    <mobile-timer v-if="windowSize.x < 700"  :passed-time="timer.passedTime.info" :remaining-time="timer.remainingTime.info"/>
+    <mobile-timer v-if="windowSize.x < 700"  :passed-time="timer.passedTime" :remaining-time="timer.remainingTime"/>
 
 
-        <pc-timer  v-else :passed-time="timer.passedTime.info" :remaining-time="timer.remainingTime.info"/>
+        <pc-timer  v-else :passed-time="timer.passedTime" :remaining-time="timer.remainingTime"/>
     </div>
 </template>
 <script>

@@ -29,15 +29,15 @@ class Timer extends Model {
     }
 
     updateTimer() {
-        this.updateDiffs(Date.now(), this.start.getTime(), this.passedTime.info)
+        this.updateDiffs(Date.now(), this.start.getTime(), this.passedTime)
         if (this.end.getTime() > Date.now()) {
-            this.updateDiffs(this.end.getTime(), Date.now(), this.remainingTime.info)
+            this.updateDiffs(this.end.getTime(), Date.now(), this.remainingTime)
 
         } else {
-            this.remainingTime.info.days = 0
-            this.remainingTime.info.hours = 0
-            this.remainingTime.info.minutes = 0
-            this.remainingTime.info.seconds = 0
+            this.remainingTime.days = 0
+            this.remainingTime.hours = 0
+            this.remainingTime.minutes = 0
+            this.remainingTime.seconds = 0
         }
     }
 
