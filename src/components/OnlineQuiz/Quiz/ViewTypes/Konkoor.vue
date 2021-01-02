@@ -18,7 +18,7 @@
             </v-col>
             <v-col :md="7">
                 <v-row>
-                    <v-col class="px-10 d-flex justify-space-between" dir="ltr">
+                    <v-col class="px-10 py-0 d-flex justify-space-between" dir="ltr">
                         <div class="rounded-b-xl rounded-r-xl">
                             <v-menu
                                     bottom
