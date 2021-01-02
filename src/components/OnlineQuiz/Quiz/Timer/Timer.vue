@@ -1,23 +1,23 @@
 <template>
     <div class="wrapper" >
-    <mobile-timer v-if="windowSize.x < 700"  :passed-time="timer.passedTime" :remaining-time="timer.remainingTime"/>
+    <mobile-timer v-if="windowSize.x < 700"  :passed-time="timer.passedTime.info" :remaining-time="timer.remainingTime.info"/>
 
 
-        <pc-timer  v-else :passed-time="timer.passedTime" :remaining-time="timer.remainingTime"/>
+        <pc-timer  v-else :passed-time="timer.passedTime.info" :remaining-time="timer.remainingTime.info"/>
     </div>
 </template>
 <script>
     import MobileTimer from '@/components/OnlineQuiz/Quiz/Timer/mobile'
     import PcTimer from '@/components/OnlineQuiz/Quiz/Timer/pc'
     import {mixinWindowSize} from '@/mixin/Mixins'
-    import {Timer} from "@/models/timer";
+    import {Timer} from "@/models/Timer";
 
     export default {
         name: "Timer",
         data: () => ({
 
             interval: null,
-            timer: new Timer( )
+            timer: new Timer()
 
         }),
         mixins: [mixinWindowSize],
@@ -36,12 +36,9 @@
             clearInterval(this.interval);
         },
         created() {
-            // let quizStartedAt = null
-
-            // let currentTime = null
-
-
-            // quizStartedAt = event.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds()
+            let today = new Date()
+            this.timer.start.setMinutes(today.getMinutes() - 20)
+            this.timer.end.setMinutes(today.getMinutes() + 1)
         },
 
     }
