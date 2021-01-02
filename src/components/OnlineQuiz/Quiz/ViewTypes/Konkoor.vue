@@ -1,8 +1,8 @@
 <template>
-    <v-container :fluid="true" :style="{ height: '100%', background: 'rgb(244, 244, 244)' }" v-resize="updateWindowSize">
+    <v-container :fluid="true" :style="{ height: '100%', background: 'rgb(244, 244, 244)' }" v-resize="updateWindowSize" v-intersect="onIntersect($entries, 'test')">
         <v-row :style="{ 'min-height': '100%' }">
             <v-col :md="5" class="questions" :style="{ height: windowSize.y }">
-                <div v-for="item in quiz.questions.list" :key="item.id" class="question">
+                <div v-for="item in quiz.questions.list" :key="item.id" class="question" v-intersect="item.isInView">
                     <p class="question-body renderedPanel" v-html="convertToMarkDown((item.order + 1) + ' - ' + item.body)" />
                     <v-row class="choices">
                         <v-col
@@ -58,12 +58,19 @@ export default {
             options: [
                 {left: "$$", right: "$$", display: true}
             ],
-            height: 1000
+            height: 1000,
+            test: false
         }
     },
     methods: {
+        addIsInViewBoolean () {
+            for (let i = 0; i < this.quiz.questions.list.length; i++) {
+                this.quiz.questions.list[i].isInView = false
+            }
+        },
         loadQuiz () {
             this.quiz = new Quiz(this.quizData)
+            this.addIsInViewBoolean()
         },
         convertToMarkDown (body) {
             return md.render(body)
@@ -113,7 +120,10 @@ export default {
             const boxSize = $('.questions-list').width() - 24
             const horizontalGroupAmounts = Math.floor(boxSize / 140)
             return (boxSize - (horizontalGroupAmounts * 140)) / 2 - 10
-        }
+        },
+        onIntersect (entries) {
+            this.test = entries[0].isIntersecting
+        },
     },
     computed: {
         questionsInGroups () {
