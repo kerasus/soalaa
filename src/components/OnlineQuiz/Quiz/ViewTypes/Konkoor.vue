@@ -16,7 +16,7 @@
                     </v-row>
                 </div>
             </v-col>
-            <v-col :md="7">
+            <v-col :md="7" class="left-side-list">
                 <v-row>
                     <v-col class="px-10 py-0 d-flex justify-space-between" dir="ltr">
                         <div class="rounded-b-xl rounded-r-xl">
@@ -165,7 +165,7 @@
                     <v-col class="questions-list">
                         <div v-for="(group, index) in questionsInGroups" :key="index" class="question-group">
                             <div v-for="question in group" :key="question.id" class="question-in-list">
-                                <div :style="{ width: '24%' }">{{ question.order + 1 }}</div>
+                                <div :style="{ width: '24%', cursor: 'pointer' }" v-scroll-to="'.question:nth-child('+(quiz.questions.getQuestionIndexById(question.id) + 1)+')'">{{ question.order + 1 }}</div>
                                 <div
                                         v-for="choice in question.choices.list"
                                         :key="choice.id"
@@ -200,7 +200,7 @@ Vue.use(VueScrollTo, {
     container: "div.questions",
     duration: 500,
     easing: "ease",
-    offset: 0,
+    offset: -20,
     force: true,
     cancelable: true,
     onStart: false,
@@ -304,6 +304,7 @@ export default {
     mounted () {
         $('.questions-list').height(this.questionListHeight())
         $('.questions').height(this.windowSize.y - 24)
+        $('.left-side-list').height(this.windowSize.y - 24)
     },
     created () {
         this.loadQuiz()
@@ -313,15 +314,21 @@ export default {
     watch: {
         'windowSize.y': function () {
             $('.questions').height(this.windowSize.y - 24)
+            $('.left-side-list').height(this.windowSize.y - 24)
         },
         'windowSize.x': function () {
             $('.questions-list').height(this.questionListHeight())
+            this.$store.commit('updateDrawer', false)
         }
     }
 }
 </script>
 
 <style scoped>
+.left-side-list {
+    overflow-y: auto;
+}
+
 .question-body {
     margin-bottom: 20px;
 }
