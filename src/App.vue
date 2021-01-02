@@ -20,6 +20,7 @@
                 app
                 color="#f4f4f4"
                 elevate-on-scroll
+                v-if="appbar"
         >
             <div class="header">
                 <v-row>
@@ -195,6 +196,11 @@
         watch: {
             selectedItem () {
                 this.selectedItem = null
+            }
+        },
+        computed: {
+            appbar () {
+                return this.$store.getters.appbar
             }
         },
         components: {

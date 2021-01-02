@@ -1,5 +1,5 @@
 <template>
-    <v-container :fluid="true" :style="{ height: '100%', background: 'rgb(244, 244, 244)' }" v-resize="updateWindowSize">
+    <v-container class="konkoor-view" :fluid="true" :style="{ height: '100%', background: 'rgb(244, 244, 244)' }" v-resize="updateWindowSize">
         <v-row :style="{ 'min-height': '100%' }">
             <v-col :md="5" class="questions" :style="{ height: windowSize.y }">
                 <div v-for="item in quiz.questions.list" :key="item.id" class="question" v-intersect="onIntersect" :id="item.id">
@@ -7,7 +7,7 @@
                     <v-row class="choices">
                         <v-col
                                 :md="choiceClass(item)"
-                                class="choice renderedPanel"
+                                :class="{ choice: true, renderedPanel: true, active: choice.active }"
                                 v-for="(choice, index) in item.choices.list"
                                 :key="choice.id"
                                 v-html="convertToMarkDown((index + 1) + ' ) ' + choice.body)"
@@ -16,18 +16,28 @@
                     </v-row>
                 </div>
             </v-col>
-            <v-col :md="7" class="questions-list">
-                <div v-for="(group, index) in questionsInGroups" :key="index" class="question-group">
-                    <div v-for="question in group" :key="question.id" class="question-in-list">
-                        <div :style="{ width: '24%' }">{{ question.order + 1 }}</div>
-                        <div
-                                v-for="choice in question.choices.list"
-                                :key="choice.id"
-                                :class="{ 'choice-in-list': true, active: choice.active }"
-                                @click="choiceClicked(question.id, choice.id)"
-                        />
-                    </div>
-                </div>
+            <v-col :md="7">
+                <v-row>
+                    <v-col>
+
+                    </v-col>
+                </v-row>
+                <v-row>
+                    <v-col class="questions-list">
+                        <div v-for="(group, index) in questionsInGroups" :key="index" class="question-group">
+                            <div v-for="question in group" :key="question.id" class="question-in-list">
+                                <div :style="{ width: '24%' }">{{ question.order + 1 }}</div>
+                                <div
+                                        v-for="choice in question.choices.list"
+                                        :key="choice.id"
+                                        :class="{ 'choice-in-list': true, active: choice.active }"
+                                        @click="choiceClicked(question.id, choice.id)"
+                                        v-scroll-to="'.question:nth-child('+(quiz.questions.getQuestionIndexById(question.id) + 1)+')'"
+                                />
+                            </div>
+                        </div>
+                    </v-col>
+                </v-row>
             </v-col>
         </v-row>
     </v-container>
@@ -38,6 +48,8 @@ import FakeQuizData from '@/plugins/fakeQuizData'
 import 'github-markdown-css/github-markdown.css'
 import $ from 'jquery'
 import '@/assets/scss/markdownKatex.scss'
+import Vue from 'vue'
+import VueScrollTo from 'vue-scrollto'
 var md = require('markdown-it')(),
     mk = require('markdown-it-katex')
 md.use(mk);
@@ -45,6 +57,19 @@ import { mixinQuiz, mixinWindowSize } from '@/mixin/Mixins'
 // import {Question} from '@/models/Question'
 import {Quiz} from '@/models/Quiz'
 // import Timer from '@/components/OnlineQuiz/Quiz/Timer/Timer'
+Vue.use(VueScrollTo, {
+    container: "div.questions",
+    duration: 500,
+    easing: "ease",
+    offset: 0,
+    force: true,
+    cancelable: true,
+    onStart: false,
+    onDone: false,
+    onCancel: false,
+    x: false,
+    y: true
+})
 
 export default {
     name: 'KonkoorView',
@@ -139,17 +164,18 @@ export default {
     },
     mounted () {
         $('.questions-list').height(this.questionListHeight())
-        $('.questions').height(this.windowSize.y - 96)
+        $('.questions').height(this.windowSize.y - 24)
     },
     created () {
         this.loadQuiz()
+        this.$store.commit('updateAppbar', false)
+        this.$store.commit('updateDrawer', false)
     },
     watch: {
         'windowSize.y': function () {
-            $('.questions').height(this.windowSize.y - 96)
+            $('.questions').height(this.windowSize.y - 24)
         },
         'windowSize.x': function () {
-            console.log(this.questionListPadding())
             $('.questions-list').height(this.questionListHeight())
         }
     }
@@ -217,6 +243,10 @@ export default {
 
 .choice-in-list.active {
     background: #ffda6a;
+}
+
+.konkoor-view {
+    padding: 0;
 }
 </style>
 
