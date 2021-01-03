@@ -28,10 +28,11 @@ const store = new Vuex.Store({
             x: 0,
             y: 0,
         },
-        drawer: true,
+        drawer: false,
         quiz: new Quiz(),
         userAnswersOfOnlineQuiz: [],
-        currentQuestion: new Question()
+        currentQuestion: new Question(),
+        appbar: true
     },
     mutations: {
         updateWindowSize (state, newInfo) {
@@ -52,9 +53,11 @@ const store = new Vuex.Store({
         goToPrevQuestion (state) {
             state.currentQuestion = state.quiz.questions.getPrevQuestion(state.currentQuestion.id)
         },
-        answerQuestion (state, newInfo) {
-            state.quiz.questions.getQuestionById(newInfo.questionId).choiceClicked(newInfo.choiceId)
-            state.userAnswersOfOnlineQuiz = state.quiz.getUserAnswers()
+        updateAppbar (state, newInfo) {
+            state.appbar = newInfo
+        },
+        updateAppbar (state, newInfo) {
+            state.appbar = newInfo
         }
     },
     getters: {
@@ -75,6 +78,9 @@ const store = new Vuex.Store({
         },
         userAnswersOfOnlineQuiz (state) {
             return state.userAnswersOfOnlineQuiz
+        },
+        appbar (state) {
+            return state.appbar
         }
     }
 })

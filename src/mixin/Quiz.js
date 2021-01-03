@@ -99,7 +99,7 @@ const mixinQuiz = {
       this.currentQuestion = this.quiz.questions.getQuestionById(id)
 
       if (parseInt(this.$route.params.questNumber) !== parseInt(questNumber)) {
-        this.$router.push({ name: 'onlineQuiz.quiz', params: { quizId: this.quiz.id, questNumber } })
+          this.$router.push({ name: 'onlineQuiz.quiz', params: { quizId: this.quiz.id, questNumber } })
       }
     }
   }

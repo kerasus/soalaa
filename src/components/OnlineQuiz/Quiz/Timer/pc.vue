@@ -90,7 +90,7 @@
     .timeCArdDefault {
         height: 103px;
         width: 130px;
-        border-radius: 20px;
+        border-radius: 20px 20px 0 0 ;
         transition: 0.5s;
         background-color: white;
         justify-self: end;
@@ -101,7 +101,7 @@
     .timeCArdOpened {
         height: 103px;
         width: 100%;
-        border-radius: 20px;
+        border-radius: 20px 20px 0 0 ;
         transition: 0.5s;
         background-color: white;
         justify-self: end;

@@ -14,6 +14,10 @@ class Question extends Model {
             { key: 'body' },
             { key: 'photo' },
             { key: 'order' },
+            {
+                key: 'isInView',
+                default: false
+            },
             { key: 'sub_category' },
             {
                 key: 'answers',
