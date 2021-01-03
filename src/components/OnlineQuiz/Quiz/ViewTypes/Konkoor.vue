@@ -227,7 +227,7 @@ var md = require('markdown-it')(),
 md.use(mk);
 import { mixinQuiz, mixinWindowSize } from '@/mixin/Mixins'
 // import {Question} from '@/models/Question'
-import {Quiz} from '@/models/Quiz'
+// import {Quiz} from '@/models/Quiz'
 // import Timer from '@/components/OnlineQuiz/Quiz/Timer/Timer'
 Vue.use(VueScrollTo, {
     container: "div.questions",
@@ -264,9 +264,9 @@ export default {
                 this.quiz.questions.list[i].isInView = false
             }
         },
-        loadQuiz () {
-            this.quiz = new Quiz(this.quizData)
-        },
+        // loadQuiz () {
+        //     this.quiz = new Quiz(this.quizData)
+        // },
         convertToMarkDown (body) {
             return md.render(body)
         },
@@ -301,7 +301,7 @@ export default {
         },
         choiceClicked (questionId, choiceId) {
             this.changeQuestion(questionId)
-            this.answerClicked(choiceId)
+            this.answerClicked({questionId, choiceId})
         },
         questionListHeight () {
             // box is a col-7 with 12px padding
@@ -361,7 +361,13 @@ export default {
         $('.left-side-list').height(this.windowSize.y - 24)
     },
     created () {
-        this.loadQuiz()
+        // this.loadQuiz()
+        if (!this.quiz.id || parseInt(this.$route.params.quizId) !== parseInt(this.quiz.id)) {
+            this.loadQuiz()
+        } else {
+            // this.quiz = new Quiz(this.quiz)
+            this.loadUserAnswers()
+        }
         this.$store.commit('updateAppbar', false)
         this.$store.commit('updateDrawer', false)
     },
@@ -403,7 +409,7 @@ export default {
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     color: #ffda6a;
-    left: -6px;
+    left: -5px;
     font-size: 16px;
     top: -5px;
 }
