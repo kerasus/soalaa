@@ -9,11 +9,7 @@
             <div style="height: 150px;line-height: 150px;text-align: center;font-size: 4rem;color: #ffc107;">
                 لوگو
             </div>
-            <map-of-questions
-                    v-if="$route.name === 'onlineQuiz.quiz'"
-                    :questions="quiz.questions"
-                    @changeQuestion="changeQuestion($event)"
-            />
+            <map-of-questions v-if="$route.name === 'onlineQuiz.quiz'"/>
             <Menu v-else/>
         </v-navigation-drawer>
         <v-app-bar

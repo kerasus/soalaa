@@ -41,8 +41,9 @@
                             <v-row class="question-answers">
                                 <choice v-for="item in currentQuestion.choices.list"
                                         :key="item.id"
+                                        :question-id="currentQuestion.id"
                                         :choice="item"
-                                        @answerClicked="answerClicked($event)"
+                                        @answerClicked="answerClicked"
                                 />
                             </v-row>
                         </v-col>
@@ -80,6 +81,7 @@
     import Choice from '@/components/OnlineQuiz/Quiz/Choice'
     import Timer from '@/components/OnlineQuiz/Quiz/Timer/Timer'
     import { mixinQuiz, mixinDrawer, mixinWindowSize } from '@/mixin/Mixins'
+    import { Quiz } from '@/models/Quiz'
 
     export default {
         name: "AlaaView",
@@ -96,6 +98,9 @@
         created() {
             if (!this.quiz.id || parseInt(this.$route.params.quizId) !== parseInt(this.quiz.id)) {
                 this.loadQuiz()
+            } else {
+                this.quiz = new Quiz(this.quiz)
+                this.loadUserAnswers()
             }
 
             if (this.$route.params.questNumber) {

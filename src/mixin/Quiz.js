@@ -12,7 +12,10 @@ const mixinQuiz = {
       return md.render(this.currentQuestion.body)
     },
     isQuizPage() {
-      return this.$store.getters.isQuizPage
+      return this.$route.name === 'onlineQuiz.quiz'
+    },
+    userAnswersOfOnlineQuiz() {
+      return this.$store.getters.userAnswersOfOnlineQuiz
     },
     quiz: {
       get () {
@@ -42,8 +45,9 @@ const mixinQuiz = {
       let questionIndex = this.getQuestionIndexFromNumber(number)
       this.changeQuestion(this.quiz.questions.list[questionIndex].id)
     },
-    answerClicked (choiceId) {
-      this.quiz.questions.getQuestionById(this.currentQuestion.id).choiceClicked(choiceId)
+    answerClicked (data) {
+      // this.quiz.questions.getQuestionById(data.questionId).choiceClicked(data.choiceId)
+      this.$store.commit('answerQuestion', data)
     },
     bookmark () {
       this.quiz.questions.getQuestionById(this.currentQuestion.id).bookmark()
@@ -54,6 +58,9 @@ const mixinQuiz = {
     loadQuiz () {
       this.quiz = new Quiz(this.quizData)
       this.quiz.loadSubcategoriesOfCategories()
+    },
+    loadUserAnswers () {
+      this.quiz.setUserAnswers(this.userAnswersOfOnlineQuiz)
     },
     getQuestionNumberFromIndex (index) {
       index = parseInt(index)
