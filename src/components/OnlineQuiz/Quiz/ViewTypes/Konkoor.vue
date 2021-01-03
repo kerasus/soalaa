@@ -2,6 +2,7 @@
     <v-container class="konkoor-view" :fluid="true" :style="{ height: '100%', background: 'rgb(244, 244, 244)' }" v-resize="updateWindowSize">
         <v-row :style="{ 'min-height': '100%' }">
             <v-col :md="5" class="questions" :style="{ height: windowSize.y }">
+                <div class="test">ادبیات فارسی</div>
                 <div
                         v-for="item in quiz.questions.list"
                         :key="item.id"
@@ -16,15 +17,15 @@
                 >
                     <div class="buttons-group">
                         <v-btn icon @click="changeStateKonkoorView(item, 'circle')">
-                            <v-icon v-if="item.state !== 'circle'" color="#888" :size="30">mdi-checkbox-blank-circle-outline</v-icon>
-                            <v-icon v-if="item.state === 'circle'" color="yellow" :size="30">mdi-checkbox-blank-circle</v-icon>
+                            <v-icon v-if="item.state !== 'circle'" color="#888" :size="24">mdi-checkbox-blank-circle-outline</v-icon>
+                            <v-icon v-if="item.state === 'circle'" color="yellow" :size="24">mdi-checkbox-blank-circle</v-icon>
                         </v-btn>
                         <v-btn icon @click="changeStateKonkoorView(item ,'cross')">
-                            <v-icon :color="item.state === 'cross' ? 'red' : '#888'" :size="30">mdi-close</v-icon>
+                            <v-icon :color="item.state === 'cross' ? 'red' : '#888'" :size="24">mdi-close</v-icon>
                         </v-btn>
                         <v-btn icon @click="bookmarkKonkoorView(item)">
-                            <v-icon v-if="!item.bookmarked" :size="30" color="#888">mdi-bookmark-outline</v-icon>
-                            <v-icon v-if="item.bookmarked" color="blue" :size="30">mdi-bookmark</v-icon>
+                            <v-icon v-if="!item.bookmarked" :size="24" color="#888">mdi-bookmark-outline</v-icon>
+                            <v-icon v-if="item.bookmarked" color="blue" :size="24">mdi-bookmark</v-icon>
                         </v-btn>
                     </div>
                     <span class="question-body renderedPanel" v-html="convertToMarkDown((item.order + 1) + ' - ' + item.body)" />
@@ -233,7 +234,7 @@ md.use(mk);
 import { mixinQuiz, mixinWindowSize } from '@/mixin/Mixins'
 // import {Question} from '@/models/Question'
 
-import {Quiz} from '@/models/Quiz'
+// import {Quiz} from '@/models/Quiz'
 import Timer from '@/components/OnlineQuiz/Quiz/Timer/Timer'
 
 Vue.use(VueScrollTo, {
@@ -316,12 +317,13 @@ export default {
             // each group width is 140px
             const horizontalGroupAmounts = Math.floor(boxSize / 140)
             const verticalGroupAmount = Math.ceil(this.questionsInGroups.length / horizontalGroupAmounts)
-            return verticalGroupAmount * 202 + 24
+            return verticalGroupAmount * 182 + 8
         },
         questionListPadding () {
             const boxSize = $('.questions-list').width() - 24
-            const horizontalGroupAmounts = Math.floor(boxSize / 140)
-            return (boxSize - (horizontalGroupAmounts * 140)) / 2 - 10
+            const horizontalGroupAmounts = ($('.questions-list').height() - 8) / 182
+            const verticalGroupAmounts = Math.ceil(this.questionsInGroups.length / horizontalGroupAmounts)
+            return (boxSize - (verticalGroupAmounts * 140)) / 2 + 5
         },
         onIntersect (entries) {
             this.quiz.questions.getQuestionById(entries[0].target.id).isInView = entries[0].intersectionRatio >= 0.5
@@ -343,7 +345,7 @@ export default {
         },
         getQuestionNumber (question) {
             if (question.isInView === false) {
-                return '.question:nth-child('+(this.quiz.questions.getQuestionIndexById(question.id) + 1)+')'
+                return '.question:nth-child('+(this.quiz.questions.getQuestionIndexById(question.id) + 2)+')'
             }
             return ''
         },
@@ -367,6 +369,9 @@ export default {
                     group = []
                 }
             }
+            if (group.length > 0 && group.length < 10) {
+                groups.push(group)
+            }
             return groups
         }
     },
@@ -374,6 +379,11 @@ export default {
         $('.questions-list').height(this.questionListHeight())
         $('.questions').height(this.windowSize.y - 24)
         $('.left-side-list').height(this.windowSize.y - 24)
+        const padding = this.questionListPadding()
+        $('.questions-list').css({ 'padding-right': padding })
+        $('.questions-list').css({ 'padding-left': padding })
+        $('.questions-list').css({ 'padding-top': '20px' })
+
     },
     created () {
 
@@ -393,6 +403,9 @@ export default {
             $('.left-side-list').height(this.windowSize.y - 24)
         },
         'windowSize.x': function () {
+            const padding = this.questionListPadding()
+            $('.questions-list').css({ 'padding-right': padding })
+            $('.questions-list').css({ 'padding-left': padding })
             $('.questions-list').height(this.questionListHeight())
             this.$store.commit('updateDrawer', false)
         }
@@ -402,10 +415,10 @@ export default {
 
 <style scoped>
 .timer-row {
-    width: calc(58% - 50px);
+    width: calc(58% - 150px);
     position: absolute;
     bottom: 1px;
-    left: 50px;
+    left: 100px;
 }
 
 .buttons-group {
@@ -500,8 +513,7 @@ export default {
     flex-direction: column;
     flex-wrap: wrap;
     align-items: center;
-    margin-bottom: 100px;
-    justify-content: centers;
+    margin-bottom: 80px;
 }
 
 .question-group {
@@ -517,6 +529,7 @@ export default {
     margin: 2px 0;
     display: flex;
     flex-direction: row;
+    height: 14px;
 }
 
 .choice-in-list {
@@ -533,6 +546,11 @@ export default {
 
 .konkoor-view {
     padding: 0;
+}
+
+.test {
+    margin: 20px;
+    border-bottom: 1px solid;
 }
 </style>
 
