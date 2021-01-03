@@ -11,8 +11,11 @@
                                 mdi-chevron-right
                             </v-icon>
                         </v-col>
-                        <v-col class="d-flex justify-center">
-                            <span class="sideBtnIcons  ">|</span>
+                        <v-col class="d-flex justify-center align-center" >
+                            <svg class="spacer" viewBox="2228.5 627.403 0.20000000298023224 20">
+                                <path id="spacer" d="M 2228.5 627.4031982421875 L 2228.5 647.4031982421875">
+                                </path>
+                            </svg>
                         </v-col>
                         <v-col class="d-flex justify-center">
                             <v-icon class="sideBtnIcons  " @click="goToNextQuestion">
@@ -181,8 +184,7 @@
     .timeCArdMob {
         background-color: white;
         height: 50px;
-        /*border-radius: 15px 15px 0 0;*/
-        border-radius: 15px;
+        border-radius: 15px 15px 0 0;
     }
 
     .closeIcon {
@@ -204,7 +206,7 @@
         height: 50px;
         float: left;
         background-color: white;
-        border-radius: 15px;
+        border-radius: 15px 15px 0 0;
     }
 
 
@@ -225,9 +227,25 @@
         padding-bottom: 0;
         z-index: 200;
         transition: all 0.2s;
-        border-radius: 15px;
+        border-radius: 15px 15px 0 0;
         background-color: rgba(255, 255, 255, 1);
 
 
     }
+     #spacer {
+         fill: transparent;
+         stroke: rgba(112,112,112,1);
+         stroke-width: 0.20000000298023224px;
+         stroke-linejoin: miter;
+         stroke-linecap: butt;
+         stroke-miterlimit: 4;
+         shape-rendering: auto;
+     }
+     .spacer {
+         overflow: visible;
+         position: absolute;
+         width: 0.2px;
+         height: 20px;
+         transform: matrix(1,0,0,1,0,0);
+     }
 </style>
