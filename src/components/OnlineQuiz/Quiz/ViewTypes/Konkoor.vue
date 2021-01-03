@@ -3,7 +3,10 @@
         <v-row :style="{ 'min-height': '100%' }">
             <v-col :md="5" class="questions" :style="{ height: windowSize.y }">
                 <div v-for="item in quiz.questions.list" :key="item.id" class="question" v-intersect="onIntersect" :id="item.id">
-                    <p class="question-body renderedPanel" v-html="convertToMarkDown((item.order + 1) + ' - ' + item.body)" />
+                    <div class="buttons-group">
+                        <v-btn>hi</v-btn>
+                    </div>
+                    <span class="question-body renderedPanel" v-html="convertToMarkDown((item.order + 1) + ' - ' + item.body)" />
                     <v-row class="choices">
                         <v-col
                                 :md="choiceClass(item)"
@@ -325,6 +328,10 @@ export default {
 </script>
 
 <style scoped>
+.buttons-group {
+    float: left;
+}
+
 .left-side-list {
     overflow-y: auto;
 }
@@ -352,6 +359,9 @@ export default {
 .choice {
     cursor: pointer;
     transition: all ease-in-out 0.3s;
+}
+
+.choice.active::before {
 }
 
 .choice:hover {
@@ -390,7 +400,7 @@ export default {
 }
 
 .choice-in-list.active {
-    background: #ffda6a;
+    background: #888;
 }
 
 .konkoor-view {

@@ -10,7 +10,7 @@
                 لوگو
             </div>
             <map-of-questions
-                    v-if="$route.name === 'onlineQuiz.quiz'"
+                    v-if="$route.name === 'onlineQuiz.alaaView'"
                     :questions="quiz.questions"
                     @changeQuestion="changeQuestion($event)"
             />

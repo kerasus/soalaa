@@ -26,7 +26,7 @@
                 </v-list-item>
             </router-link>
 
-            <router-link class="text-decoration-none" :to="{ name: 'onlineQuiz.quiz', params: { quizId: 313, questNumber: 1 } }">
+            <router-link class="text-decoration-none" :to="{ name: 'onlineQuiz.alaaView', params: { quizId: 313, questNumber: 1 } }">
                 <v-list-item>
                     <v-list-item-title>آزمون آنلاین</v-list-item-title>
                 </v-list-item>
