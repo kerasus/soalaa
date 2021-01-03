@@ -2,9 +2,30 @@
     <v-container class="konkoor-view" :fluid="true" :style="{ height: '100%', background: 'rgb(244, 244, 244)' }" v-resize="updateWindowSize">
         <v-row :style="{ 'min-height': '100%' }">
             <v-col :md="5" class="questions" :style="{ height: windowSize.y }">
-                <div v-for="item in quiz.questions.list" :key="item.id" class="question" v-intersect="onIntersect" :id="item.id">
+                <div
+                        v-for="item in quiz.questions.list"
+                        :key="item.id"
+                        class="question"
+                        v-intersect=" {
+                            handler: onIntersect,
+                            options: {
+                                threshold: [0, 0.5, 1.0]
+                            }
+                        }"
+                        :id="item.id"
+                >
                     <div class="buttons-group">
-                        <v-btn>hi</v-btn>
+                        <v-btn icon @click="changeStateKonkoorView(item, 'circle')">
+                            <v-icon v-if="item.state !== 'circle'" color="#888" :size="30">mdi-checkbox-blank-circle-outline</v-icon>
+                            <v-icon v-if="item.state === 'circle'" color="yellow" :size="30">mdi-checkbox-blank-circle</v-icon>
+                        </v-btn>
+                        <v-btn icon @click="changeStateKonkoorView(item ,'cross')">
+                            <v-icon :color="item.state === 'cross' ? 'red' : '#888'" :size="30">mdi-close</v-icon>
+                        </v-btn>
+                        <v-btn icon @click="bookmarkKonkoorView(item)">
+                            <v-icon v-if="!item.bookmarked" :size="30" color="#888">mdi-bookmark-outline</v-icon>
+                            <v-icon v-if="item.bookmarked" color="blue" :size="30">mdi-bookmark</v-icon>
+                        </v-btn>
                     </div>
                     <span class="question-body renderedPanel" v-html="convertToMarkDown((item.order + 1) + ' - ' + item.body)" />
                     <v-row class="choices">
@@ -162,19 +183,28 @@
                                 </v-card>
                             </v-menu>
                         </div>
+                        <v-btn icon @click="changeView('alaa')">
+                            <v-icon>mdi-table-split-cell</v-icon>
+                        </v-btn>
                     </v-col>
                 </v-row>
                 <v-row>
                     <v-col class="questions-list">
                         <div v-for="(group, index) in questionsInGroups" :key="index" class="question-group">
                             <div v-for="question in group" :key="question.id" class="question-in-list">
-                                <div :style="{ width: '24%', cursor: 'pointer' }" v-scroll-to="'.question:nth-child('+(quiz.questions.getQuestionIndexById(question.id) + 1)+')'">{{ question.order + 1 }}</div>
+                                <div
+                                        :class="{ 'question-number-in-list': true, circle: question.state === 'circle', cross: question.state === 'cross' }"
+                                        :style="{ width: '24%', cursor: 'pointer' }"
+                                        v-scroll-to="getQuestionNumber(question)"
+                                >
+                                    {{ question.order + 1 }}
+                                </div>
                                 <div
                                         v-for="choice in question.choices.list"
                                         :key="choice.id"
                                         :class="{ 'choice-in-list': true, active: choice.active }"
                                         @click="choiceClicked(question.id, choice.id)"
-                                        v-scroll-to="'.question:nth-child('+(quiz.questions.getQuestionIndexById(question.id) + 1)+')'"
+                                        v-scroll-to="getQuestionNumber(question)"
                                 />
                             </div>
                         </div>
@@ -287,7 +317,28 @@ export default {
             return (boxSize - (horizontalGroupAmounts * 140)) / 2 - 10
         },
         onIntersect (entries) {
-            this.quiz.questions.getQuestionById(entries[0].target.id).isInView = entries[0].isIntersecting
+            this.quiz.questions.getQuestionById(entries[0].target.id).isInView = entries[0].intersectionRatio >= 0.5
+        },
+        bookmarkKonkoorView (question) {
+            this.currentQuestion = question
+            this.bookmark()
+        },
+        changeStateKonkoorView (question, state) {
+            this.currentQuestion = question
+            this.changeState(state)
+        },
+        getFirstInViewQuestionNumber () {
+            for (let i = 0; i < this.quiz.questions.list.length; i++) {
+                if (this.quiz.questions.list[i].isInView) {
+                    return this.quiz.questions.list[i].order + 1
+                }
+            }
+        },
+        getQuestionNumber (question) {
+            if (question.isInView === false) {
+                return '.question:nth-child('+(this.quiz.questions.getQuestionIndexById(question.id) + 1)+')'
+            }
+            return ''
         }
     },
     computed: {
@@ -330,14 +381,50 @@ export default {
 <style scoped>
 .buttons-group {
     float: left;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
 }
 
 .left-side-list {
     overflow-y: auto;
 }
 
+.question-number-in-list {
+    position: relative;
+}
+
+.question-number-in-list.circle::after {
+    content: "\F0130";
+    position: absolute;
+    font: normal normal normal 24px/1 "Material Design Icons";
+    text-rendering: auto;
+    line-height: inherit;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    color: #ffda6a;
+    left: -6px;
+    font-size: 16px;
+    top: -5px;
+}
+
+.question-number-in-list.cross::after {
+    content: "\F0156";
+    position: absolute;
+    font: normal normal normal 24px/1 "Material Design Icons";
+    text-rendering: auto;
+    line-height: inherit;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    color: red;
+    left: -6px;
+    font-size: 16px;
+    top: -5px;
+}
+
 .question-body {
     margin-bottom: 20px;
+    line-height: 40px;
 }
 
 .questions {
@@ -362,6 +449,16 @@ export default {
 }
 
 .choice.active::before {
+    content: "\F012C";
+    display: inline-block;
+    font: normal normal normal 24px/1 "Material Design Icons";
+    text-rendering: auto;
+    line-height: inherit;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    margin-left: 10px;
+    color: #4caf50;
+    font-size: 20px;
 }
 
 .choice:hover {
@@ -415,5 +512,9 @@ export default {
 
     html {
         overflow-y: auto;
+    }
+
+    .choice p {
+        display: inline-block;
     }
 </style>

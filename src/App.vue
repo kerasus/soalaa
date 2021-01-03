@@ -163,6 +163,9 @@
                             </v-menu>
                         </div>
                         <div>
+                            <v-btn v-if="$route.name === 'onlineQuiz.alaaView'" icon @click="changeView('konkoor')">
+                                <v-icon>mdi-dots-grid</v-icon>
+                            </v-btn>
                             <v-app-bar-nav-icon
                                     @click.stop="toggleDrawer"
                                     :color="(isQuizPage) ? '#fcaf25' : '#666'"
