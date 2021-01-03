@@ -53,7 +53,8 @@ const store = new Vuex.Store({
         goToPrevQuestion (state) {
             state.currentQuestion = state.quiz.questions.getPrevQuestion(state.currentQuestion.id)
         },
-        updateAppbar (state, newInfo) {
+        answerQuestion (state, newInfo) {
+            state.quiz.questions.getQuestionById(newInfo.questionId).choiceClicked(newInfo.choiceId)
             state.appbar = newInfo
         },
         updateAppbar (state, newInfo) {
