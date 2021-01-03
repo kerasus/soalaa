@@ -103,10 +103,10 @@
             } else {
                 this.loadFirstQuestion()
             }
-
-            if (this.windowSize > 1263) {
+            if (this.windowSize.x > 1263) {
                 this.$store.commit('updateDrawer', true)
             }
+            this.$store.commit('updateAppbar', true)
         }
     }
 </script>

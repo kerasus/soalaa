@@ -94,7 +94,16 @@ const mixinQuiz = {
       if (parseInt(this.$route.params.questNumber) !== parseInt(questNumber) && this.$route.name !== 'onlineQuiz.konkoorView') {
           this.$router.push({ name: 'onlineQuiz.alaaView', params: { quizId: this.quiz.id, questNumber } })
       }
-    }
+    },
+    changeView (type) {
+      if (type === 'alaa') {
+        const questNumber = this.getFirstInViewQuestionNumber()
+        this.$router.push({ name: 'onlineQuiz.alaaView', params: { quizId: this.quiz.id, questNumber } })
+      }
+      if (type === 'konkoor') {
+        this.$router.push({ name: 'onlineQuiz.konkoorView', params: { quizId: this.quiz.id } })
+      }
+    },
   }
 }
 
