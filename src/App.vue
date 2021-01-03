@@ -9,7 +9,7 @@
             <div style="height: 150px;line-height: 150px;text-align: center;font-size: 4rem;color: #ffc107;">
                 لوگو
             </div>
-            <map-of-questions v-if="$route.name === 'onlineQuiz.quiz'"/>
+            <map-of-questions v-if="$route.name === 'onlineQuiz.alaaView'"/>
             <Menu v-else/>
         </v-navigation-drawer>
         <v-app-bar

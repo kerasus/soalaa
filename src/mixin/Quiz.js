@@ -98,8 +98,8 @@ const mixinQuiz = {
 
       this.currentQuestion = this.quiz.questions.getQuestionById(id)
 
-      if (parseInt(this.$route.params.questNumber) !== parseInt(questNumber)) {
-          this.$router.push({ name: 'onlineQuiz.quiz', params: { quizId: this.quiz.id, questNumber } })
+      if (parseInt(this.$route.params.questNumber) !== parseInt(questNumber) && this.$route.name !== 'onlineQuiz.konkoorView') {
+          this.$router.push({ name: 'onlineQuiz.alaaView', params: { quizId: this.quiz.id, questNumber } })
       }
     }
   }
