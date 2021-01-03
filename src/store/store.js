@@ -1,12 +1,28 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import { Quiz } from '@/models/Quiz'
-import { Question } from '@/models/Question';
-
+import { Question } from '@/models/Question'
+// import createPersistedState from 'vuex-persistedstate'
+// import createMutationsSharer from 'vuex-shared-mutations'
 
 Vue.use(Vuex)
 
 const store = new Vuex.Store({
+    plugins: [
+        // createPersistedState({
+        //     storage: window.localStorage,
+        //     paths: ['userAnswersOfOnlineQuiz', 'currentQuestion']
+        // }),
+        // createMutationsSharer({
+        //     predicate: [
+        //         'updateDrawer',
+        //         'updateQuiz',
+        //         'updateCurrentQuestion',
+        //         'goToNextQuestion',
+        //         'goToPrevQuestion'
+        //     ]
+        // })
+    ],
     state: {
         windowSize: {
             x: 0,
@@ -14,6 +30,7 @@ const store = new Vuex.Store({
         },
         drawer: false,
         quiz: new Quiz(),
+        userAnswersOfOnlineQuiz: [],
         currentQuestion: new Question(),
         appbar: true
     },
@@ -36,6 +53,10 @@ const store = new Vuex.Store({
         goToPrevQuestion (state) {
             state.currentQuestion = state.quiz.questions.getPrevQuestion(state.currentQuestion.id)
         },
+        answerQuestion (state, newInfo) {
+            state.quiz.questions.getQuestionById(newInfo.questionId).choiceClicked(newInfo.choiceId)
+            state.appbar = newInfo
+        },
         updateAppbar (state, newInfo) {
             state.appbar = newInfo
         }
@@ -55,6 +76,9 @@ const store = new Vuex.Store({
         },
         currentQuestion (state) {
             return state.currentQuestion
+        },
+        userAnswersOfOnlineQuiz (state) {
+            return state.userAnswersOfOnlineQuiz
         },
         appbar (state) {
             return state.appbar
