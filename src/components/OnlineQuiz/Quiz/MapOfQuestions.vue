@@ -19,7 +19,7 @@
                         {{ subcategoryItem.title }}
                     </v-expansion-panel-header>
                     <v-expansion-panel-content>
-                        <div v-for="(question, questionIndex) in questions.list" :key="'question-'+question.id">
+                        <div v-for="(question, questionIndex) in quiz.questions.list" :key="'question-'+question.id">
                             <v-btn v-if="question.sub_category.id === subcategoryItem.id"
                                    :class="{ active: currentQuestion.id === question.id }"
                                    :elevation="0"
@@ -34,7 +34,7 @@
                                 <v-icon v-if="question.state === 'circle'" color="yellow" size="15">
                                     mdi-checkbox-blank-circle
                                 </v-icon>
-                                <v-icon v-if="question.isAnswered()" color="green">
+                                <v-icon v-if="typeof (question.isAnswered) === 'function' && question.isAnswered()" color="green">
                                     mdi-check
                                 </v-icon>
                             </v-btn>
@@ -47,11 +47,9 @@
 </template>
 
 <script>
-
     import mixinQuiz from '@/mixin/Quiz'
     export default {
         name: "MapOfQuestions",
-        props: ['questions'],
         mixins: [mixinQuiz]
     }
 </script>

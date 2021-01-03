@@ -43,14 +43,21 @@ class Question extends Model {
         ])
     }
 
+    getAnsweredChoice () {
+        return this.choices.list.find((item) => {
+            return (item.active === true)
+        })
+    }
+
     isAnswered () {
-        for (let i = 0; i < this.choices.list.length; i++) {
-            if (this.choices.list[i].active) {
-                this.state = ''
-                return true
-            }
+        let answeredChoice = this.getAnsweredChoice()
+
+        if (answeredChoice) {
+            this.state = ''
+            return true
+        } else {
+            return false
         }
-        return false
     }
 
     changeState (newState) {
@@ -67,22 +74,21 @@ class Question extends Model {
     }
 
     choiceClicked (choiceId) {
-        this.state = ''
-        for (let i = 0; i < this.choices.list.length; i++) {
-            if (this.choices.list[i].id !== choiceId) {
-                this.choices.list[i].active = false
-            } else if (this.choices.list[i].active) {
-                this.choices.list[i].active = false
+        this.choices.list.map((item)=> {
+            if (item.id !== choiceId) {
+                item.active = false
+            } else if (item.active) {
+                item.active = false
             } else {
-                this.choices.list[i].active = true
+                item.active = true
             }
-        }
+        })
     }
 
     uncheckChoices () {
-        for (let i = 0; i < this.choices.list.length; i++) {
-            this.choices.list[i].active = false
-        }
+        this.choices.list.map((item)=> {
+            item.active = false
+        })
     }
 }
 
@@ -123,7 +129,6 @@ class QuestionList extends Collection {
             prevIndex = --currentIndex
         return this.getQuestionByIndex(prevIndex)
     }
-
 }
 
 export { Question, QuestionList }

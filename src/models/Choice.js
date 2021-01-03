@@ -18,6 +18,10 @@ class ChoiceList extends Collection {
     model () {
         return Choice
     }
+
+    getSelected () {
+        return this.list.find((item) => item.active)
+    }
 }
 
 export { Choice, ChoiceList }
