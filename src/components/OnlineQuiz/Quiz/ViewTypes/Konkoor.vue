@@ -212,6 +212,11 @@
                 </v-row>
             </v-col>
         </v-row>
+        <v-row class="timer-row">
+            <v-col>
+                <Timer :daftarche="'عمومی'" :quiz-started-at="1607963897" :daftarche-end-time="1607963897" :height="100"></Timer>
+            </v-col>
+        </v-row>
     </v-container>
 </template>
 
@@ -228,10 +233,10 @@ md.use(mk);
 import { mixinQuiz, mixinWindowSize } from '@/mixin/Mixins'
 // import {Question} from '@/models/Question'
 import {Quiz} from '@/models/Quiz'
-// import Timer from '@/components/OnlineQuiz/Quiz/Timer/Timer'
+import Timer from '@/components/OnlineQuiz/Quiz/Timer/Timer'
 Vue.use(VueScrollTo, {
     container: "div.questions",
-    duration: 500,
+    duration: 0,
     easing: "ease",
     offset: -20,
     force: true,
@@ -246,9 +251,9 @@ Vue.use(VueScrollTo, {
 export default {
     name: 'KonkoorView',
     mixins: [mixinQuiz, mixinWindowSize],
-    // components: {
-    //     Timer
-    // },
+    components: {
+        Timer
+    },
     data () {
         return {
             quizData: FakeQuizData,
@@ -339,6 +344,14 @@ export default {
                 return '.question:nth-child('+(this.quiz.questions.getQuestionIndexById(question.id) + 1)+')'
             }
             return ''
+        },
+        renderQuestionBody () {
+            for (let i = 0; i < 10; i++) {
+                this.quiz.questions.list[i].body = this.convertToMarkDown((this.quiz.questions.list[i].order + 1) + ' - ' + this.quiz.questions.list[i].body)
+            }
+            for (let i = 10; i < this.quiz.questions.list.length; i++) {
+                setTimeout(() => { this.quiz.questions.list[i].body = this.convertToMarkDown((this.quiz.questions.list[i].order + 1) + ' - ' + this.quiz.questions.list[i].body) }, 1000 + i * 10)
+            }
         }
     },
     computed: {
@@ -361,9 +374,12 @@ export default {
         $('.left-side-list').height(this.windowSize.y - 24)
     },
     created () {
-        this.loadQuiz()
+        if (!this.quiz.id || parseInt(this.$route.params.quizId) !== parseInt(this.quiz.id)) {
+            this.loadQuiz()
+        }
         this.$store.commit('updateAppbar', false)
         this.$store.commit('updateDrawer', false)
+        // this.renderQuestionBody()
     },
     watch: {
         'windowSize.y': function () {
@@ -379,6 +395,13 @@ export default {
 </script>
 
 <style scoped>
+.timer-row {
+    width: calc(58% - 50px);
+    position: absolute;
+    bottom: 1px;
+    left: 50px;
+}
+
 .buttons-group {
     float: left;
     display: flex;
@@ -471,6 +494,7 @@ export default {
     flex-direction: column;
     flex-wrap: wrap;
     align-items: center;
+    margin-bottom: 100px;
 }
 
 .question-group {
@@ -506,6 +530,10 @@ export default {
 </style>
 
 <style>
+    .timer-row .col {
+        padding: 0;
+    }
+
     .v-application p {
         margin-bottom: 4px;
     }
