@@ -32,9 +32,9 @@
                         <v-col
                                 :md="choiceClass(item)"
                                 :class="{ choice: true, renderedPanel: true, active: choice.active }"
-                                v-for="(choice, index) in item.choices.list"
+                                v-for="(choice) in item.choices.list"
                                 :key="choice.id"
-                                v-html="convertToMarkDown((index + 1) + ' ) ' + choice.body)"
+                                v-html="convertToMarkDown(choice.body)"
                                 @click="choiceClicked(item.id, choice.id)"
                         />
                     </v-row>
@@ -214,7 +214,7 @@
         </v-row>
         <v-row class="timer-row">
             <v-col>
-                <Timer :daftarche="'عمومی'" :quiz-started-at="1607963897" :daftarche-end-time="1607963897" :height="100"></Timer>
+                <Timer :daftarche="'عمومی'" :quiz-started-at="1607963897" :daftarche-end-time="1607999897" :height="100"></Timer>
             </v-col>
         </v-row>
     </v-container>
@@ -495,6 +495,7 @@ export default {
     flex-wrap: wrap;
     align-items: center;
     margin-bottom: 100px;
+    justify-content: centers;
 }
 
 .question-group {
