@@ -40,7 +40,7 @@
                             </v-row>
                             <v-row class="question-answers">
                                 <choice v-for="item in currentQuestion.choices.list"
-                                        :key="item.id"
+                                        :key="item.id+((item.active)?'active':'')"
                                         :question-id="currentQuestion.id"
                                         :choice="item"
                                         @answerClicked="answerClicked"
@@ -72,8 +72,6 @@
             </v-container>
         </v-footer>
     </v-container>
-
-
 </template>
 
 <script>
@@ -81,7 +79,7 @@
     import Choice from '@/components/OnlineQuiz/Quiz/Choice'
     import Timer from '@/components/OnlineQuiz/Quiz/Timer/Timer'
     import { mixinQuiz, mixinDrawer, mixinWindowSize } from '@/mixin/Mixins'
-    import { Quiz } from '@/models/Quiz'
+    // import { Quiz } from '@/models/Quiz'
 
     export default {
         name: "AlaaView",
@@ -99,7 +97,7 @@
             if (!this.quiz.id || parseInt(this.$route.params.quizId) !== parseInt(this.quiz.id)) {
                 this.loadQuiz()
             } else {
-                this.quiz = new Quiz(this.quiz)
+                // this.quiz = new Quiz(this.quiz)
                 this.loadUserAnswers()
             }
 
