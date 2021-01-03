@@ -1,3 +1,4 @@
+import Vue from 'vue'
 import { Model, Collection } from 'js-abstract-model'
 import { AnswerList } from './Answer'
 import { ChoiceList } from './Choice'
@@ -76,11 +77,14 @@ class Question extends Model {
     choiceClicked (choiceId) {
         this.choices.list.map((item)=> {
             if (item.id !== choiceId) {
-                item.active = false
+                Vue.set(item, 'active', false)
+                // item.active = false
             } else if (item.active) {
-                item.active = false
+                Vue.set(item, 'active', false)
+                // item.active = false
             } else {
-                item.active = true
+                Vue.set(item, 'active', true)
+                // item.active = true
             }
         })
     }

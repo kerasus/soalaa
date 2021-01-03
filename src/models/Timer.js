@@ -8,7 +8,6 @@ class Timer extends Model {
                 key: 'passedTime',
                 relatedModel: TimerInfo
             },
-
             {
                 key: 'remainingTime',
                 relatedModel: TimerInfo
@@ -21,28 +20,12 @@ class Timer extends Model {
                 key: 'start',
                 default: new Date()
             }
-
-
         ])
 
 
     }
 
-    updateTimer() {
-        this.updateDiffs(Date.now(), this.start.getTime(), this.passedTime)
-        if (this.end.getTime() > Date.now()) {
-            this.updateDiffs(this.end.getTime(), Date.now(), this.remainingTime)
-
-        } else {
-            this.remainingTime.days = 0
-            this.remainingTime.hours = 0
-            this.remainingTime.minutes = 0
-            this.remainingTime.seconds = 0
-        }
-    }
-
     updateDiffs(upperTime, lowerTime, targetTime) {
-
         let second = 1000
         let minute = 1000 * 60
         let hour = 1000 * 60 * 60
@@ -58,6 +41,17 @@ class Timer extends Model {
         targetTime.seconds = Math.floor(diff / second);
     }
 
+    updateTimer() {
+        this.updateDiffs(Date.now(), this.start.getTime(), this.passedTime)
+        if (this.end.getTime() > Date.now()) {
+            this.updateDiffs(this.end.getTime(), Date.now(), this.remainingTime)
+        } else {
+            this.remainingTime.days = 0
+            this.remainingTime.hours = 0
+            this.remainingTime.minutes = 0
+            this.remainingTime.seconds = 0
+        }
+    }
 }
 
 

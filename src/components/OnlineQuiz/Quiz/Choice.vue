@@ -23,10 +23,16 @@
         name: "Choice",
         props: ['choice', 'questionId'],
         mixins: [mixinQuiz],
+        watch: {
+            'choice.active': function (data) {
+                console.log('choice.active', data)
+            }
+        },
         computed: {
             isSelected () {
-                let userAnswer = this.userAnswersOfOnlineQuiz.find((answer)=> answer.questionId === this.questionId)
-                return (userAnswer && parseInt(userAnswer.choiceId) === parseInt(this.choice.id))
+                return false
+                // let userAnswer = this.userAnswersOfOnlineQuiz.find((answer)=> answer.questionId === this.questionId)
+                // return (userAnswer && parseInt(userAnswer.choiceId) === parseInt(this.choice.id))
             },
             choiceBody() {
                 return md.render(this.choice.body)

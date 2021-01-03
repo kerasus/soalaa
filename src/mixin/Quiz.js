@@ -34,6 +34,7 @@ const mixinQuiz = {
       }
     },
     currentLessons () {
+      this.$store.commit('reloadQuizModel')
       return this.quiz.sub_categories.getItem('id', this.currentQuestion.sub_category.id)
     }
   },
@@ -46,13 +47,16 @@ const mixinQuiz = {
       this.changeQuestion(this.quiz.questions.list[questionIndex].id)
     },
     answerClicked (data) {
-      // this.quiz.questions.getQuestionById(data.questionId).choiceClicked(data.choiceId)
+      this.$store.commit('reloadQuizModel')
+      this.quiz.questions.getQuestionById(data.questionId).choiceClicked(data.choiceId)
       this.$store.commit('answerQuestion', data)
     },
     bookmark () {
+      this.$store.commit('reloadQuizModel')
       this.quiz.questions.getQuestionById(this.currentQuestion.id).bookmark()
     },
     changeState (newState) {
+      this.$store.commit('reloadQuizModel')
       this.quiz.questions.getQuestionById(this.currentQuestion.id).changeState(newState)
     },
     loadQuiz () {
@@ -60,7 +64,9 @@ const mixinQuiz = {
       this.quiz.loadSubcategoriesOfCategories()
     },
     loadUserAnswers () {
-      this.quiz.setUserAnswers(this.userAnswersOfOnlineQuiz)
+      this.$store.commit('loadUserAnswers')
+      // this.$store.commit('reloadQuizModel')
+      // this.quiz.setUserAnswers(this.userAnswersOfOnlineQuiz)
     },
     getQuestionNumberFromIndex (index) {
       index = parseInt(index)
@@ -75,6 +81,7 @@ const mixinQuiz = {
       return number - 1
     },
     goToNextQuestion () {
+      this.$store.commit('loadUserAnswers')
       let question = this.quiz.questions.getNextQuestion(this.currentQuestion.id)
       if (!question) {
         return
@@ -82,6 +89,7 @@ const mixinQuiz = {
       this.changeQuestion(question.id)
     },
     goToPrevQuestion () {
+      this.$store.commit('loadUserAnswers')
       let question = this.quiz.questions.getPrevQuestion(this.currentQuestion.id)
       if (!question) {
         return

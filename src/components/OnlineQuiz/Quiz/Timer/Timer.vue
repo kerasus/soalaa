@@ -27,10 +27,10 @@
         },
 
         mounted() {
-            this.interval = setInterval(() => {
-                this.timer.updateTimer();
-            }, 1000);
-            requestAnimationFrame(this.timer.updateTimer)
+            // this.interval = setInterval(() => {
+            //     this.timer.updateTimer();
+            // }, 1000);
+            // requestAnimationFrame(this.timer.updateTimer) // webpack-internal:///./src/models/Timer.js:58 Uncaught TypeError: Cannot read property 'updateDiffs' of undefined
         },
         destroyed() {
             clearInterval(this.interval);
