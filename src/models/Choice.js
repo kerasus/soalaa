@@ -1,4 +1,7 @@
 import { Model, Collection } from 'js-abstract-model'
+var md = require('markdown-it')(),
+    mk = require('markdown-it-katex')
+md.use(mk);
 
 class Choice extends Model {
     constructor (data) {
@@ -11,6 +14,9 @@ class Choice extends Model {
             },
             { key: 'order' }
         ])
+        if (typeof this.body === 'string') {
+            this.rendered_body = md.render(this.body)
+        }
     }
 }
 

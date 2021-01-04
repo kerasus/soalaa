@@ -2,44 +2,59 @@
     <v-container class="konkoor-view" :fluid="true" :style="{ height: '100%', background: 'rgb(244, 244, 244)' }" v-resize="updateWindowSize">
         <v-row :style="{ 'min-height': '100%' }">
             <v-col :md="5" class="questions" :style="{ height: windowSize.y }">
-                <div class="test">ادبیات فارسی</div>
-                <div
-                        v-for="item in quiz.questions.list"
-                        :key="item.id"
-                        class="question"
-                        v-intersect=" {
-                            handler: onIntersect,
-                            options: {
-                                threshold: [0, 0.5, 1.0]
-                            }
-                        }"
-                        :id="item.id"
+<!--                <div class="test">ادبیات فارسی</div>-->
+<!--                <div-->
+<!--                        v-for="item in quiz.questions.list"-->
+<!--                        :key="item.id"-->
+<!--                        class="question"-->
+<!--                        v-intersect=" {-->
+<!--                            handler: onIntersect,-->
+<!--                            options: {-->
+<!--                                threshold: [0, 0.5, 1.0]-->
+<!--                            }-->
+<!--                        }"-->
+<!--                        :id="item.id"-->
+<!--                >-->
+                <DynamicScroller
+                        :items="quiz.questions.list"
+                        :min-item-size="54"
+                        class="scroller"
                 >
-                    <div class="buttons-group">
-                        <v-btn icon @click="changeState(item, 'circle')">
-                            <v-icon v-if="item.state !== 'circle'" color="#888" :size="24">mdi-checkbox-blank-circle-outline</v-icon>
-                            <v-icon v-if="item.state === 'circle'" color="yellow" :size="24">mdi-checkbox-blank-circle</v-icon>
-                        </v-btn>
-                        <v-btn icon @click="changeState(item ,'cross')">
-                            <v-icon :color="item.state === 'cross' ? 'red' : '#888'" :size="24">mdi-close</v-icon>
-                        </v-btn>
-                        <v-btn icon @click="bookmark">
-                            <v-icon v-if="!item.bookmarked" :size="24" color="#888">mdi-bookmark-outline</v-icon>
-                            <v-icon v-if="item.bookmarked" color="blue" :size="24">mdi-bookmark</v-icon>
-                        </v-btn>
-                    </div>
-                    <span class="question-body renderedPanel" v-html="convertToMarkDown((item.order + 1) + ' - ' + item.body)" />
-                    <v-row class="choices">
-                        <v-col
-                                :md="choiceClass(item)"
-                                :class="{ choice: true, renderedPanel: true, active: choice.active }"
-                                v-for="(choice) in item.choices.list"
-                                :key="choice.id"
-                                v-html="convertToMarkDown(choice.body)"
-                                @click="choiceClicked(item.id, choice.id)"
-                        />
-                    </v-row>
-                </div>
+                    <template v-slot="{ item, index, active }">
+                        <DynamicScrollerItem
+                                :item="item"
+                                :active="active"
+                                :size-dependencies="[item.body, item.choices, item.choices.list, item.state, item.bookmarked]"
+                                :data-index="index"
+                        >
+                            <div class="buttons-group">
+                                <v-btn icon @click="changeState(item, 'circle')">
+                                    <v-icon v-if="item.state !== 'circle'" color="#888" :size="24">mdi-checkbox-blank-circle-outline</v-icon>
+                                    <v-icon v-if="item.state === 'circle'" color="yellow" :size="24">mdi-checkbox-blank-circle</v-icon>
+                                </v-btn>
+                                <v-btn icon @click="changeState(item ,'cross')">
+                                    <v-icon :color="item.state === 'cross' ? 'red' : '#888'" :size="24">mdi-close</v-icon>
+                                </v-btn>
+                                <v-btn icon @click="bookmark">
+                                    <v-icon v-if="!item.bookmarked" :size="24" color="#888">mdi-bookmark-outline</v-icon>
+                                    <v-icon v-if="item.bookmarked" color="blue" :size="24">mdi-bookmark</v-icon>
+                                </v-btn>
+                            </div>
+                            <span class="question-body renderedPanel" v-html="(item.order + 1) + '-' + item.rendered_body" />
+                            <v-row class="choices">
+                                <v-col
+                                        v-for="(choice) in item.choices.list"
+                                        :key="choice.id"
+                                        v-html="(choice.order+1) + ') ' + choice.rendered_body"
+                                        :md="choiceClass(item)"
+                                        :class="{ choice: true, renderedPanel: true, active: choice.active }"
+                                        @click="choiceClicked(item.id, choice.id)"
+                                />
+                            </v-row>
+                        </DynamicScrollerItem>
+                    </template>
+                </DynamicScroller>
+<!--                </div>-->
             </v-col>
             <v-col :md="7" class="left-side-list">
                 <v-row>
@@ -172,6 +187,13 @@ import VueScrollTo from 'vue-scrollto'
 var md = require('markdown-it')(),
     mk = require('markdown-it-katex')
 md.use(mk);
+
+import 'vue-virtual-scroller/dist/vue-virtual-scroller.css'
+import { DynamicScroller, DynamicScrollerItem } from 'vue-virtual-scroller'
+Vue.component('DynamicScroller', DynamicScroller)
+Vue.component('DynamicScrollerItem', DynamicScrollerItem)
+
+
 import { mixinQuiz, mixinWindowSize } from '@/mixin/Mixins'
 // import {Question} from '@/models/Question'
 
@@ -208,9 +230,6 @@ export default {
             for (let i = 0; i < this.quiz.questions.list.length; i++) {
                 this.quiz.questions.list[i].isInView = false
             }
-        },
-        convertToMarkDown (body) {
-            return md.render(body)
         },
         removeErab (string) {
             if (!string || string.length === 0) {
@@ -290,14 +309,6 @@ export default {
                 return '.question:nth-child('+(this.quiz.questions.getQuestionIndexById(question.id) + 2)+')'
             }
             return ''
-        },
-        renderQuestionBody () {
-            for (let i = 0; i < 10; i++) {
-                this.quiz.questions.list[i].body = this.convertToMarkDown((this.quiz.questions.list[i].order + 1) + ' - ' + this.quiz.questions.list[i].body)
-            }
-            for (let i = 10; i < this.quiz.questions.list.length; i++) {
-                setTimeout(() => { this.quiz.questions.list[i].body = this.convertToMarkDown((this.quiz.questions.list[i].order + 1) + ' - ' + this.quiz.questions.list[i].body) }, 1000 + i * 10)
-            }
         }
     },
     computed: {
@@ -350,6 +361,10 @@ export default {
 </script>
 
 <style scoped>
+.scroller {
+    height: 100%;
+}
+
 .timer-row {
     width: calc(58% - 150px);
     position: absolute;
@@ -409,7 +424,8 @@ export default {
     background: #fff;
     overflow-y: auto;
     position: relative;
-    padding-right: 25px;
+    /*padding-right: 25px;*/
+    padding: 0 25px 0 0;
 }
 
 .question {
