@@ -2,6 +2,9 @@ import Vue from 'vue'
 import { Model, Collection } from 'js-abstract-model'
 import { AnswerList } from './Answer'
 import { ChoiceList } from './Choice'
+var md = require('markdown-it')(),
+    mk = require('markdown-it-katex')
+md.use(mk);
 
 class Question extends Model {
     constructor (data) {
@@ -13,6 +16,7 @@ class Question extends Model {
             { key: 'id' },
             { key: 'title' },
             { key: 'body' },
+            { key: 'rendered_body' },
             { key: 'photo' },
             { key: 'order' },
             {
@@ -42,7 +46,12 @@ class Question extends Model {
                 default: false
             }
         ])
+
+        if (typeof this.body === 'string') {
+            this.rendered_body = md.render(this.body)
+        }
     }
+
 
     getAnsweredChoice () {
         return this.choices.list.find((item) => {
