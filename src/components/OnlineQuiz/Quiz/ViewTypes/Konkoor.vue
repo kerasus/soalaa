@@ -16,14 +16,14 @@
                         :id="item.id"
                 >
                     <div class="buttons-group">
-                        <v-btn icon @click="changeStateKonkoorView(item, 'circle')">
+                        <v-btn icon @click="changeState(item, 'circle')">
                             <v-icon v-if="item.state !== 'circle'" color="#888" :size="24">mdi-checkbox-blank-circle-outline</v-icon>
                             <v-icon v-if="item.state === 'circle'" color="yellow" :size="24">mdi-checkbox-blank-circle</v-icon>
                         </v-btn>
-                        <v-btn icon @click="changeStateKonkoorView(item ,'cross')">
+                        <v-btn icon @click="changeState(item ,'cross')">
                             <v-icon :color="item.state === 'cross' ? 'red' : '#888'" :size="24">mdi-close</v-icon>
                         </v-btn>
-                        <v-btn icon @click="bookmarkKonkoorView(item)">
+                        <v-btn icon @click="bookmark">
                             <v-icon v-if="!item.bookmarked" :size="24" color="#888">mdi-bookmark-outline</v-icon>
                             <v-icon v-if="item.bookmarked" color="blue" :size="24">mdi-bookmark</v-icon>
                         </v-btn>
@@ -200,11 +200,7 @@ export default {
     },
     data () {
         return {
-            quizData: FakeQuizData,
-            options: [
-                {left: "$$", right: "$$", display: true}
-            ],
-            height: 1000
+            quizData: FakeQuizData
         }
     },
     methods: {
@@ -213,13 +209,14 @@ export default {
                 this.quiz.questions.list[i].isInView = false
             }
         },
-        // loadQuiz () {
-        //     this.quiz = new Quiz(this.quizData)
-        // },
         convertToMarkDown (body) {
             return md.render(body)
         },
         removeErab (string) {
+            if (!string || string.length === 0) {
+                return ''
+            }
+
             let temp = string
             temp = temp.split('َ').join('')
             temp = temp.split('ُ').join('')
@@ -230,20 +227,27 @@ export default {
             temp = temp.split('ٍ').join('')
             return temp
         },
-        choiceClass (question) {
+        getLargestChoice (choices) {
             let largestChoice = 0
-            for (let i = 0; i < question.choices.list.length; i++) {
-                if (question.choices.list[i].body.length > largestChoice) {
-                    largestChoice = this.removeErab(question.choices.list[i].body).length
+            choices.list.forEach((item)=> {
+                if (item.body.length > largestChoice) {
+                    largestChoice = this.removeErab(item.body).length
                 }
-            }
-            if (this.windowSize.x * 0.4 / largestChoice > 48) {
+            })
+
+            return largestChoice
+        },
+        choiceClass (question) {
+            let QuestionWidthRatio = 0.4
+            let largestChoice = this.getLargestChoice(question.choices)
+            let largestChoiceWidth = this.windowSize.x * QuestionWidthRatio / largestChoice
+            if (largestChoiceWidth > 48) {
                 return 3
             }
-            if (this.windowSize.x * 0.4 / largestChoice > 24) {
+            if (largestChoiceWidth > 24) {
                 return 6
             }
-            if (this.windowSize.x * 0.4 / largestChoice > 12) {
+            if (largestChoiceWidth > 12) {
                 return 12
             }
             return 12
@@ -267,21 +271,18 @@ export default {
             return (boxSize - (verticalGroupAmounts * 140)) / 2 + 5
         },
         onIntersect (entries) {
-            this.quiz.questions.getQuestionById(entries[0].target.id).isInView = entries[0].intersectionRatio >= 0.5
+            this.quiz.questions.getQuestionById(entries[0].target.id).isInView = (entries[0].intersectionRatio >= 0.5)
         },
-        bookmarkKonkoorView (question) {
-            this.currentQuestion = question
-            this.bookmark()
-        },
-        changeStateKonkoorView (question, state) {
-            this.currentQuestion = question
-            this.changeState(state)
-        },
+        // ToDo: check for removal
         getFirstInViewQuestionNumber () {
-            for (let i = 0; i < this.quiz.questions.list.length; i++) {
-                if (this.quiz.questions.list[i].isInView) {
-                    return this.quiz.questions.list[i].order + 1
-                }
+            let firstQuestionInView = this.quiz.questions.list.filter( (item)=> {
+                return item.isInView === true
+            })
+
+            if (firstQuestionInView) {
+                return firstQuestionInView.order + 1
+            } else {
+                return false
             }
         },
         getQuestionNumber (question) {
@@ -301,18 +302,13 @@ export default {
     },
     computed: {
         questionsInGroups () {
-            const groups = []
-            let group = []
-            for (let i = 0; i < this.quiz.questions.list.length; i++) {
-                group.push(this.quiz.questions.list[i])
-                if (group.length === 10) {
-                    groups.push(group)
-                    group = []
-                }
+            let groups = [],
+                chunk = 10,
+                array = this.quiz.questions.list
+            for (let i=0,j=array.length; i<j; i+=chunk) {
+                groups.push(array.slice(i,i+chunk))
             }
-            if (group.length > 0 && group.length < 10) {
-                groups.push(group)
-            }
+
             return groups
         }
     },
@@ -331,7 +327,6 @@ export default {
         if (!this.quiz.id || parseInt(this.$route.params.quizId) !== parseInt(this.quiz.id)) {
             this.loadQuiz()
         } else {
-            // this.quiz = new Quiz(this.quiz)
             this.loadUserAnswers()
         }
         this.$store.commit('updateAppbar', false)

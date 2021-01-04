@@ -51,11 +51,14 @@ const mixinQuiz = {
       this.quiz.questions.getQuestionById(data.questionId).choiceClicked(data.choiceId)
       this.$store.commit('answerQuestion', data)
     },
-    bookmark () {
+    bookmark (question) {
+      if (this.currentQuestion.id !== question.id) {
+        this.currentQuestion = question
+      }
       this.$store.commit('reloadQuizModel')
       this.quiz.questions.getQuestionById(this.currentQuestion.id).bookmark()
     },
-    changeState (newState) {
+    changeState (question, newState) {
       this.$store.commit('reloadQuizModel')
       this.quiz.questions.getQuestionById(this.currentQuestion.id).changeState(newState)
     },
