@@ -19,6 +19,9 @@
                         :items="quiz.questions.list"
                         :min-item-size="54"
                         class="scroller"
+                        ref="scroller"
+                        :emitUpdate="true"
+                        @update="test"
                 >
                     <template v-slot="{ item, index, active }">
                         <DynamicScrollerItem
@@ -26,7 +29,9 @@
                                 :active="active"
                                 :size-dependencies="[item.body, item.choices, item.choices.list, item.state, item.bookmarked]"
                                 :data-index="index"
+                                :id="item.id"
                         >
+                            {{ active }}
                             <div class="buttons-group">
                                 <v-btn icon @click="changeState(item, 'circle')">
                                     <v-icon v-if="item.state !== 'circle'" color="#888" :size="24">mdi-checkbox-blank-circle-outline</v-icon>
@@ -35,17 +40,17 @@
                                 <v-btn icon @click="changeState(item ,'cross')">
                                     <v-icon :color="item.state === 'cross' ? 'red' : '#888'" :size="24">mdi-close</v-icon>
                                 </v-btn>
-                                <v-btn icon @click="bookmark">
+                                <v-btn icon @click="bookmark(item)">
                                     <v-icon v-if="!item.bookmarked" :size="24" color="#888">mdi-bookmark-outline</v-icon>
                                     <v-icon v-if="item.bookmarked" color="blue" :size="24">mdi-bookmark</v-icon>
                                 </v-btn>
                             </div>
-                            <span class="question-body renderedPanel" v-html="(item.order + 1) + '-' + item.rendered_body" />
+                            <span class="question-body renderedPanel" v-html="(item.order + 1) + '- ' + item.rendered_body" v-intersect="item.onIntersect" />
                             <v-row class="choices">
                                 <v-col
-                                        v-for="(choice) in item.choices.list"
+                                        v-for="(choice, index) in item.choices.list"
                                         :key="choice.id"
-                                        v-html="(choice.order+1) + ') ' + choice.rendered_body"
+                                        v-html="(choiceNumber[index]) + choice.rendered_body"
                                         :md="choiceClass(item)"
                                         :class="{ choice: true, renderedPanel: true, active: choice.active }"
                                         @click="choiceClicked(item.id, choice.id)"
@@ -152,7 +157,7 @@
                                 <div
                                         :class="{ 'question-number-in-list': true, circle: question.state === 'circle', cross: question.state === 'cross' }"
                                         :style="{ width: '24%', cursor: 'pointer' }"
-                                        v-scroll-to="getQuestionNumber(question)"
+                                        @click="scrollTo(question.id)"
                                 >
                                     {{ question.order + 1 }}
                                 </div>
@@ -161,7 +166,6 @@
                                         :key="choice.id"
                                         :class="{ 'choice-in-list': true, active: choice.active }"
                                         @click="choiceClicked(question.id, choice.id)"
-                                        v-scroll-to="getQuestionNumber(question)"
                                 />
                             </div>
                         </div>
@@ -183,7 +187,7 @@ import 'github-markdown-css/github-markdown.css'
 import $ from 'jquery'
 import '@/assets/scss/markdownKatex.scss'
 import Vue from 'vue'
-import VueScrollTo from 'vue-scrollto'
+// import VueScrollTo from 'vue-scrollto'
 var md = require('markdown-it')(),
     mk = require('markdown-it-katex')
 md.use(mk);
@@ -200,19 +204,19 @@ import { mixinQuiz, mixinWindowSize } from '@/mixin/Mixins'
 // import {Quiz} from '@/models/Quiz'
 import Timer from '@/components/OnlineQuiz/Quiz/Timer/Timer'
 
-Vue.use(VueScrollTo, {
-    container: "div.questions",
-    duration: 0,
-    easing: "ease",
-    offset: -20,
-    force: true,
-    cancelable: true,
-    onStart: false,
-    onDone: false,
-    onCancel: false,
-    x: false,
-    y: true
-})
+// Vue.use(VueScrollTo, {
+//     container: "div.questions",
+//     duration: 0,
+//     easing: "ease",
+//     offset: -20,
+//     force: true,
+//     cancelable: true,
+//     onStart: false,
+//     onDone: false,
+//     onCancel: false,
+//     x: false,
+//     y: true
+// })
 
 export default {
     name: 'KonkoorView',
@@ -222,10 +226,19 @@ export default {
     },
     data () {
         return {
-            quizData: FakeQuizData
+            quizData: FakeQuizData,
+            choiceNumber: {
+                0: 'الف) ',
+                1: 'ب) ',
+                2: 'ج) ',
+                3: 'د) '
+            }
         }
     },
     methods: {
+        test (first, last) {
+          console.log(first, last)
+        },
         addIsInViewBoolean () {
             for (let i = 0; i < this.quiz.questions.list.length; i++) {
                 this.quiz.questions.list[i].isInView = false
@@ -257,9 +270,10 @@ export default {
             return largestChoice
         },
         choiceClass (question) {
-            let QuestionWidthRatio = 0.4
+            // let QuestionWidthRatio = 0.4
+            // let largestChoiceWidth = this.windowSize.x * QuestionWidthRatio / largestChoice
             let largestChoice = this.getLargestChoice(question.choices)
-            let largestChoiceWidth = this.windowSize.x * QuestionWidthRatio / largestChoice
+            let largestChoiceWidth = $('.questions').width() / largestChoice
             if (largestChoiceWidth > 48) {
                 return 3
             }
@@ -272,8 +286,16 @@ export default {
             return 12
         },
         choiceClicked (questionId, choiceId) {
+            const questionIndex = this.quiz.questions.getQuestionIndexById(questionId)
+            this.$refs.scroller.scrollToItem(questionIndex)
+            setTimeout(() => { this.$refs.scroller.scrollToItem(questionIndex) }, 200)
             this.changeQuestion(questionId)
             this.answerClicked({questionId, choiceId})
+        },
+        scrollTo (questionId) {
+            const questionIndex = this.quiz.questions.getQuestionIndexById(questionId)
+            this.$refs.scroller.scrollToItem(questionIndex)
+            setTimeout(() => { this.$refs.scroller.scrollToItem(questionIndex) }, 200)
         },
         questionListHeight () {
             // box is a col-7 with 12px padding
@@ -309,7 +331,20 @@ export default {
                 return '.question:nth-child('+(this.quiz.questions.getQuestionIndexById(question.id) + 2)+')'
             }
             return ''
-        }
+        },
+        // calculateInViewQuestions () {
+        //     for (let i = 0; i < document.getElementsByClassName('vue-recycle-scroller__item-view').length; i++) {
+        //         const str = document.getElementsByClassName('vue-recycle-scroller__item-view')[i].style.transform.replace('translateY(','').replace('px)', '')
+        //         const id = document.getElementsByClassName('vue-recycle-scroller__item-view')[i].children[0].id
+        //         this.quiz.questions.getQuestionById(id).isInView = this.isThisInView(str)
+        //     }
+        // },
+        // isThisInView (elementY) {
+        //     if (elementY >= 0 && elementY <= $('.questions').height() ) {
+        //         return true
+        //     }
+        //     return false
+        // }
     },
     computed: {
         questionsInGroups () {
@@ -328,10 +363,12 @@ export default {
         $('.questions').height(this.windowSize.y - 24)
         $('.left-side-list').height(this.windowSize.y - 24)
         const padding = this.questionListPadding()
-        $('.questions-list').css({ 'padding-right': padding })
-        $('.questions-list').css({ 'padding-left': padding })
+        setTimeout(() => {
+            $('.questions-list').css({ 'padding-right': padding })
+            $('.questions-list').css({ 'padding-left': padding })
+        }, 1000)
         $('.questions-list').css({ 'padding-top': '20px' })
-
+        setTimeout(() => { this.calculateInViewQuestions() }, 2000)
     },
     created () {
 
@@ -521,5 +558,9 @@ export default {
 
     .choice p {
         display: inline-block;
+    }
+
+    .question-body p {
+        display: inline;
     }
 </style>
