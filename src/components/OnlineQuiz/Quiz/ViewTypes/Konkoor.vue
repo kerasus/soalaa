@@ -31,7 +31,6 @@
                                 :data-index="index"
                                 :id="item.id"
                         >
-                            {{ active }}
                             <div class="buttons-group">
                                 <v-btn icon @click="changeState(item, 'circle')">
                                     <v-icon v-if="item.state !== 'circle'" color="#888" :size="24">mdi-checkbox-blank-circle-outline</v-icon>
