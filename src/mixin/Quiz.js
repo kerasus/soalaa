@@ -59,6 +59,9 @@ const mixinQuiz = {
       this.quiz.questions.getQuestionById(this.currentQuestion.id).bookmark()
     },
     changeState (question, newState) {
+      if (this.currentQuestion.id !== question.id) {
+        this.currentQuestion = question
+      }
       this.$store.commit('reloadQuizModel')
       this.quiz.questions.getQuestionById(this.currentQuestion.id).changeState(newState)
     },
