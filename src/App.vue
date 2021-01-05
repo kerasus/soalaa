@@ -6,8 +6,10 @@
                 right
                 width="316"
         >
-            <div style="height: 150px;line-height: 150px;text-align: center;font-size: 4rem;color: #ffc107;">
-                لوگو
+            <div style="height: 150px;line-height: 150px;font-size: 4rem;color: rgb(255, 193, 7);display: flex;align-items: center;justify-content: center;">
+                <div style="display: block">
+                    <v-img src="/img/logo.png" width="50" />
+                </div>
             </div>
             <map-of-questions v-if="$route.name === 'onlineQuiz.alaaView'"/>
             <Menu v-else/>
