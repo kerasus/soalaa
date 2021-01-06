@@ -53,6 +53,11 @@ const store = new Vuex.Store({
                 state.quiz = new Quiz(state.quiz)
             }
         },
+        reloadCurrentQuestionModel (state) {
+            if (typeof state.currentQuestion.isAnswered !== 'function') {
+                state.currentQuestion = new Question(state.currentQuestion)
+            }
+        },
         // goToNextQuestion (state) {
         //   state.currentQuestion = state.quiz.questions.getNextQuestion(state.currentQuestion.id)
         // },
@@ -61,13 +66,13 @@ const store = new Vuex.Store({
         // },
         answerQuestion (state) {
             this.commit('reloadQuizModel')
-            // state.quiz.questions.getQuestionById(newInfo.questionId).choiceClicked(newInfo.choiceId)
-            state.userAnswersOfOnlineQuiz = state.quiz.getUserAnswers()
+            // state.quiz.questions.getQuestionById(newInfo.questionId).selectChoice(newInfo.choiceId)
+            state.userAnswersOfOnlineQuiz = state.quiz.getUserQuestionsData()
             this.commit('loadUserAnswers')
         },
         loadUserAnswers (state) {
             this.commit('reloadQuizModel')
-            state.quiz.setUserAnswers(state.userAnswersOfOnlineQuiz)
+            state.quiz.setUserQuestionsData(state.userAnswersOfOnlineQuiz)
         },
         updateAppbar (state, newInfo) {
             state.appbar = newInfo
