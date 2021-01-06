@@ -2,6 +2,7 @@ import { Model, Collection } from 'js-abstract-model'
 import {QuestionList} from './Question';
 import {QuestCategoryList} from "@/models/QuestCategory";
 import {QuestSubcategoryList} from '@/models/QuestSubcategory';
+import {CheckingTimeList} from "@/models/CheckingTime";
 
 class Quiz extends Model {
     constructor (data) {
@@ -36,17 +37,22 @@ class Quiz extends Model {
         })
     }
 
-    setUserAnswers (userAnswers) {
+    setUserQuestionsData (userData) {
         this.questions.list.map((question)=> {
-            let userAnswer = userAnswers.find((answer)=> answer.questionId === question.id)
-            if (userAnswer) {
+            let userQuestionData = userData.find((questionData)=> questionData.questionId === question.id)
+            if (userQuestionData) {
+                // load choice
                 question.uncheckChoices()
-                question.choiceClicked(userAnswer.choicesId)
+                question.selectChoice(userQuestionData.choicesId)
+
+                question.checking_times = new CheckingTimeList(userQuestionData.checking_times)
+                question.bookmarked = userQuestionData.bookmarked
+                question.state = userQuestionData.state
             }
         })
     }
 
-    getUserAnswers () {
+    getUserQuestionsData () {
         let selectedQuestions = this.questions.list.filter((item) => item.choices.getSelected())
         selectedQuestions.map((question, index, questionsList) => {
             let answeredChoice = question.getAnsweredChoice()
@@ -57,6 +63,9 @@ class Quiz extends Model {
 
             questionsList[index] = {
                 questionId: question.id,
+                checking_times: question.checking_times,
+                bookmarked: question.bookmarked,
+                state: question.state,
                 choicesId: answeredChoiceId
             }
         });
