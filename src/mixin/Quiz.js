@@ -116,6 +116,7 @@ const mixinQuiz = {
           this.$router.push({ name: 'onlineQuiz.alaaView', params: { quizId: this.quiz.id, questNumber } })
       }
     },
+    // ToDo: change argument (type, questNumber)
     changeView (type) {
       if (type === 'alaa') {
         const questNumber = this.getFirstInViewQuestionNumber()

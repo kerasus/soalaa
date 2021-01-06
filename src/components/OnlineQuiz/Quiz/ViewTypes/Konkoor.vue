@@ -62,6 +62,7 @@
                                   :data-sources="quiz.questions.list"
                                   :data-component="item"
                                   class="questions"
+                                  ref="scroller"
                     />
 <!--                </div>-->
             </v-col>
@@ -169,7 +170,7 @@
                                         v-for="choice in question.choices.list"
                                         :key="choice.id"
                                         :class="{ 'choice-in-list': true, active: choice.active }"
-                                        @click="choiceClicked(question.id, choice.id, true)"
+                                        @click="choiceClicked(question.id, choice.id)"
                                 />
                             </div>
                         </div>
@@ -244,9 +245,13 @@ export default {
             }
         },
         scrollTo (questionId) {
-            const questionIndex = this.quiz.questions.getQuestionIndexById(questionId)
-            this.$refs.scroller.scrollToItem(questionIndex)
-            setTimeout(() => { this.$refs.scroller.scrollToItem(questionIndex) }, 200)
+            if (this.quiz.questions.getQuestionById(questionId).isInView === false) {
+                const questionIndex = this.quiz.questions.getQuestionIndexById(questionId)
+                this.$refs.scroller.scrollToIndex(questionIndex)
+                for (let i = 1; i <= Math.ceil(this.quiz.questions.list.length / 100); i++) {
+                    setTimeout(() => { this.$refs.scroller.scrollToIndex(questionIndex) }, 500 / Math.ceil(this.quiz.questions.list.length / 100) * i)
+                }
+            }
         },
         questionListHeight () {
             // box is a col-7 with 12px padding
@@ -267,10 +272,11 @@ export default {
         },
         // ToDo: check for removal
         getFirstInViewQuestionNumber () {
-            let firstQuestionInView = this.quiz.questions.list.filter( (item)=> {
+            let firstQuestionInView = this.quiz.questions.list.find( (item)=> {
+                // console.log(item.id, item.isInView)
                 return item.isInView === true
             })
-
+            console.log(firstQuestionInView)
             if (firstQuestionInView) {
                 return firstQuestionInView.order + 1
             } else {
@@ -282,6 +288,11 @@ export default {
                 return '.question:nth-child('+(this.quiz.questions.getQuestionIndexById(question.id) + 2)+')'
             }
             return ''
+        },
+        choiceClicked (questionId, choiceId) {
+            this.scrollTo(questionId)
+            this.changeQuestion(questionId)
+            this.answerClicked({questionId, choiceId})
         },
         // calculateInViewQuestions () {
         //     for (let i = 0; i < document.getElementsByClassName('vue-recycle-scroller__item-view').length; i++) {
@@ -411,6 +422,7 @@ export default {
 .questions {
     background: #fff;
     overflow-y: auto;
+    overflow-x: hidden;
     position: relative;
     /*padding-right: 25px;*/
     padding: 0 25px 0 0;

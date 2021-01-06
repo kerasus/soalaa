@@ -103,6 +103,11 @@ class Question extends Model {
             item.active = false
         })
     }
+
+    onIntersect (entries) {
+        console.log(this.id, entries[0].isIntersecting)
+        this.isInView = entries[0].isIntersecting
+    }
 }
 
 class QuestionList extends Collection {

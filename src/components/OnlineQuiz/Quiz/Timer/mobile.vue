@@ -205,6 +205,7 @@
         width: 100%;
         height: 50px;
         float: left;
+        display: flex;
         background-color: white;
         border-radius: 15px 15px 0 0;
     }

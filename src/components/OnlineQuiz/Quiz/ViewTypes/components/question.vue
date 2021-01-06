@@ -1,6 +1,6 @@
 <template>
     <div>
-        <div class="buttons-group">-->
+        <div class="buttons-group">
             <v-btn icon @click="changeState(source, 'circle')">
                 <v-icon v-if="source.state !== 'circle'" color="#888" :size="24">mdi-checkbox-blank-circle-outline</v-icon>
                 <v-icon v-if="source.state === 'circle'" color="yellow" :size="24">mdi-checkbox-blank-circle</v-icon>
@@ -13,7 +13,7 @@
                 <v-icon v-if="source.bookmarked" color="blue" :size="24">mdi-bookmark</v-icon>
             </v-btn>
         </div>
-        <span class="question-body renderedPanel" v-html="(source.order + 1) + '- ' + source.rendered_body" v-intersect="source.onIntersect" />
+        <span class="question-body renderedPanel" v-html="(source.order + 1) + '- ' + source.rendered_body" v-intersect="onIntersect" />
         <v-row class="choices">
             <v-col
                     v-for="(choice, index) in source.choices.list"
@@ -21,7 +21,7 @@
                     v-html="(choiceNumber[index]) + choice.rendered_body"
                     :md="choiceClass(source)"
                     :class="{ choice: true, renderedPanel: true, active: choice.active }"
-                    @click="choiceClicked(source.id, choice.id, false)"
+                    @click="choiceClicked(source.id, choice.id)"
             />
         </v-row>
     </div>
@@ -61,16 +61,9 @@
         },
         methods: {
             onIntersect(entries) {
-                console.log('test')
-                this.source.test = entries[0].isIntersecting
+                this.source.onIntersect(entries)
             },
-            choiceClicked (questionId, choiceId, scroll) {
-                // if (scroll) {
-                //     const questionIndex = this.quiz.questions.getQuestionIndexById(questionId)
-                //     this.$refs.scroller.scrollTosource(questionIndex)
-                //     setTimeout(() => { this.$refs.scroller.scrollTosource(questionIndex) }, 200)
-                // }
-                console.log(scroll)
+            choiceClicked (questionId, choiceId) {
                 this.changeQuestion(questionId)
                 this.answerClicked({questionId, choiceId})
             },
@@ -118,3 +111,61 @@
         }
     }
 </script>
+
+<style scoped>
+
+
+    .choices {
+        display: flex;
+        flex-direction: row;
+    }
+
+    .choice {
+        cursor: pointer;
+        transition: all ease-in-out 0.3s;
+        display: flex;
+        align-items: flex-start;
+    }
+
+    .buttons-group {
+        float: left;
+        display: flex;
+        flex-direction: row;
+        justify-content: space-around;
+    }
+
+    .choice.active::before {
+        content: "\F012C";
+        display: inline-block;
+        font: normal normal normal 24px/1 "Material Design Icons";
+        text-rendering: auto;
+        line-height: inherit;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+        margin-left: 10px;
+        color: #4caf50;
+        font-size: 20px;
+    }
+
+    .choice:hover {
+        background: #e1e1e1;
+    }
+
+
+    .question-body {
+        margin-bottom: 20px;
+        line-height: 40px;
+    }
+
+    .questions {
+        background: #fff;
+        overflow-y: auto;
+        position: relative;
+        /*padding-right: 25px;*/
+        padding: 0 25px 0 0;
+    }
+
+    .question {
+        margin-bottom: 50px;
+    }
+</style>
