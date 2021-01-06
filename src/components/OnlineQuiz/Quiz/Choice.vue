@@ -10,6 +10,7 @@
 </template>
 
 <script>
+    import { mixinQuiz } from '@/mixin/Mixins'
     // import 'katex/dist/katex.min.css';
     import 'github-markdown-css/github-markdown.css';
     import '@/assets/scss/markdownKatex.scss';
@@ -20,15 +21,26 @@
 
     export default {
         name: "Choice",
-        props: ['choice'],
+        props: ['choice', 'questionId'],
+        mixins: [mixinQuiz],
+        watch: {
+            'choice.active': function (data) {
+                console.log('choice.active', data)
+            }
+        },
         computed: {
+            isSelected () {
+                return false
+                // let userAnswer = this.userAnswersOfOnlineQuiz.find((answer)=> answer.questionId === this.questionId)
+                // return (userAnswer && parseInt(userAnswer.choiceId) === parseInt(this.choice.id))
+            },
             choiceBody() {
                 return md.render(this.choice.body)
             }
         },
         methods: {
             answerClicked () {
-                this.$emit('answerClicked', this.choice.id)
+                this.$emit('answerClicked', { questionId: this.questionId, choiceId: this.choice.id })
             }
         }
     }
@@ -68,7 +80,7 @@
         cursor: pointer;
         transition: all ease 0.3s;
         display: flex;
-        flex-direction: row;
+        flex-direction: row-reverse;
         justify-content: space-between;
     }
 

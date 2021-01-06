@@ -80,7 +80,7 @@
     }
 
     .timerText {
-        margin-top: 30px
+        align-self: center;
     }
 
     .timeMarginTop {
@@ -107,6 +107,9 @@
         justify-self: end;
         margin-left: 0;
         float: left;
+        display: flex;
+        flex-direction: row-reverse;
+        align-items: center;
     }
 
     .timeCArdDefault:hover {
@@ -126,7 +129,6 @@
         float: left;
         height: 30px;
         background-color: rgba(255, 255, 255, 1);
-        margin-top: 42px;
         margin-left: 50px;
         color: rgba(136, 136, 136, 1);
         width: 30px;
@@ -136,7 +138,6 @@
     .timerRight {
         width: 28.632px;
         height: 33.403px;
-        margin-top: 25px;
         margin-right: 50px;
         transform: matrix(1, 0, 0, 1, 0, 0);
         fill: rgba(255, 193, 7, 1);

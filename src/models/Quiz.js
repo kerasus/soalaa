@@ -35,6 +35,34 @@ class Quiz extends Model {
             item.getSubcategories(subcategoryList)
         })
     }
+
+    setUserAnswers (userAnswers) {
+        this.questions.list.map((question)=> {
+            let userAnswer = userAnswers.find((answer)=> answer.questionId === question.id)
+            if (userAnswer) {
+                question.uncheckChoices()
+                question.choiceClicked(userAnswer.choicesId)
+            }
+        })
+    }
+
+    getUserAnswers () {
+        let selectedQuestions = this.questions.list.filter((item) => item.choices.getSelected())
+        selectedQuestions.map((question, index, questionsList) => {
+            let answeredChoice = question.getAnsweredChoice()
+            let answeredChoiceId = null
+            if (answeredChoice) {
+                answeredChoiceId = answeredChoice.id
+            }
+
+            questionsList[index] = {
+                questionId: question.id,
+                choicesId: answeredChoiceId
+            }
+        });
+
+        return selectedQuestions
+    }
 }
 
 class QuizList extends Collection {

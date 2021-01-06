@@ -29,13 +29,13 @@ export default new VueRouter({
         },
         {
             path: '/online_quiz/:quizId',
-            name: 'onlineQuiz.quiz',
+            name: 'onlineQuiz.konkoorView',
             component: () => lazyLoadView(import('@/components/OnlineQuiz/Quiz/ViewTypes/Konkoor'))
         },
         {
             path: '/online_quiz/:quizId/:questNumber',
-            name: 'onlineQuiz.quiz',
-            component: () => lazyLoadView(import('@/components/OnlineQuiz/Quiz/Quiz'))
+            name: 'onlineQuiz.alaaView',
+            component: () => lazyLoadView(import('@/components/OnlineQuiz/Quiz/ViewTypes/AlaaView'))
         }
     ]
 })
