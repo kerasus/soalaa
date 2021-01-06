@@ -15,49 +15,56 @@
 <!--                        }"-->
 <!--                        :id="item.id"-->
 <!--                >-->
-                <DynamicScroller
-                        :items="quiz.questions.list"
-                        :min-item-size="54"
-                        class="scroller"
-                        ref="scroller"
-                        :emitUpdate="true"
-                        @update="test"
-                >
-                    <template v-slot="{ item, index, active }">
-                        <DynamicScrollerItem
-                                :item="item"
-                                :active="active"
-                                :size-dependencies="[item.body, item.choices, item.choices.list, item.state, item.bookmarked]"
-                                :data-index="index"
-                                :id="item.id"
-                        >
-                            <div class="buttons-group">
-                                <v-btn icon @click="changeState(item, 'circle')">
-                                    <v-icon v-if="item.state !== 'circle'" color="#888" :size="24">mdi-checkbox-blank-circle-outline</v-icon>
-                                    <v-icon v-if="item.state === 'circle'" color="yellow" :size="24">mdi-checkbox-blank-circle</v-icon>
-                                </v-btn>
-                                <v-btn icon @click="changeState(item ,'cross')">
-                                    <v-icon :color="item.state === 'cross' ? 'red' : '#888'" :size="24">mdi-close</v-icon>
-                                </v-btn>
-                                <v-btn icon @click="bookmark(item)">
-                                    <v-icon v-if="!item.bookmarked" :size="24" color="#888">mdi-bookmark-outline</v-icon>
-                                    <v-icon v-if="item.bookmarked" color="blue" :size="24">mdi-bookmark</v-icon>
-                                </v-btn>
-                            </div>
-                            <span class="question-body renderedPanel" v-html="(item.order + 1) + '- ' + item.rendered_body" v-intersect="item.onIntersect" />
-                            <v-row class="choices">
-                                <v-col
-                                        v-for="(choice, index) in item.choices.list"
-                                        :key="choice.id"
-                                        v-html="(choiceNumber[index]) + choice.rendered_body"
-                                        :md="choiceClass(item)"
-                                        :class="{ choice: true, renderedPanel: true, active: choice.active }"
-                                        @click="selectChoice(item.id, choice.id)"
-                                />
-                            </v-row>
-                        </DynamicScrollerItem>
-                    </template>
-                </DynamicScroller>
+<!--                <DynamicScroller-->
+<!--                        :items="quiz.questions.list"-->
+<!--                        :min-item-size="54"-->
+<!--                        class="scroller"-->
+<!--                        ref="scroller"-->
+<!--                        :emitUpdate="true"-->
+<!--                >-->
+<!--                    <template v-slot="{ item, index, active }">-->
+<!--                        <DynamicScrollerItem-->
+<!--                                :item="item"-->
+<!--                                :active="active"-->
+<!--                                :size-dependencies="[item.body, item.choices, item.choices.list, item.state, item.bookmarked]"-->
+<!--                                :data-index="index"-->
+<!--                                :id="item.id"-->
+<!--                        >-->
+<!--                            <div class="buttons-group">-->
+<!--                                <v-btn icon @click="changeState(item, 'circle')">-->
+<!--                                    <v-icon v-if="item.state !== 'circle'" color="#888" :size="24">mdi-checkbox-blank-circle-outline</v-icon>-->
+<!--                                    <v-icon v-if="item.state === 'circle'" color="yellow" :size="24">mdi-checkbox-blank-circle</v-icon>-->
+<!--                                </v-btn>-->
+<!--                                <v-btn icon @click="changeState(item ,'cross')">-->
+<!--                                    <v-icon :color="item.state === 'cross' ? 'red' : '#888'" :size="24">mdi-close</v-icon>-->
+<!--                                </v-btn>-->
+<!--                                <v-btn icon @click="bookmark(item)">-->
+<!--                                    <v-icon v-if="!item.bookmarked" :size="24" color="#888">mdi-bookmark-outline</v-icon>-->
+<!--                                    <v-icon v-if="item.bookmarked" color="blue" :size="24">mdi-bookmark</v-icon>-->
+<!--                                </v-btn>-->
+<!--                            </div>-->
+<!--                            <span class="question-body renderedPanel" v-html="(item.order + 1) + '- ' + item.rendered_body" v-intersect="item.onIntersect" />-->
+<!--                            <v-row class="choices">-->
+<!--                                <v-col-->
+<!--                                        v-for="(choice, index) in item.choices.list"-->
+<!--                                        :key="choice.id"-->
+<!--                                        v-html="(choiceNumber[index]) + choice.rendered_body"-->
+<!--                                        :md="choiceClass(item)"-->
+<!--                                        :class="{ choice: true, renderedPanel: true, active: choice.active }"-->
+<!--                                        @click="choiceClicked(item.id, choice.id, false)"-->
+<!--                                />-->
+<!--                            </v-row>-->
+<!--                        </DynamicScrollerItem>-->
+<!--                    </template>-->
+<!--                </DynamicScroller>-->
+                    <virtual-list style="overflow-y: auto;"
+                                  :data-key="'id'"
+                                  :data-sources="quiz.questions.list"
+                                  :data-component="item"
+                                  class="questions"
+                                  ref="scroller"
+                                  @scroll="onScroll"
+                    />
 <!--                </div>-->
             </v-col>
             <v-col :md="7" class="left-side-list">
@@ -164,7 +171,7 @@
                                         v-for="choice in question.choices.list"
                                         :key="choice.id"
                                         :class="{ 'choice-in-list': true, active: choice.active }"
-                                        @click="selectChoice(question.id, choice.id)"
+                                        @click="choiceClicked(question.id, choice.id)"
                                 />
                             </div>
                         </div>
@@ -186,6 +193,7 @@ import 'github-markdown-css/github-markdown.css'
 import $ from 'jquery'
 import '@/assets/scss/markdownKatex.scss'
 import Vue from 'vue'
+import VirtualList from 'vue-virtual-scroll-list'
 // import VueScrollTo from 'vue-scrollto'
 var md = require('markdown-it')(),
     mk = require('markdown-it-katex')
@@ -193,6 +201,7 @@ md.use(mk);
 
 import 'vue-virtual-scroller/dist/vue-virtual-scroller.css'
 import { DynamicScroller, DynamicScrollerItem } from 'vue-virtual-scroller'
+import Item from './components/question'
 Vue.component('DynamicScroller', DynamicScroller)
 Vue.component('DynamicScrollerItem', DynamicScrollerItem)
 
@@ -221,80 +230,35 @@ export default {
     name: 'KonkoorView',
     mixins: [mixinQuiz, mixinWindowSize],
     components: {
-        Timer
+        Timer,
+        'virtual-list': VirtualList
     },
     data () {
         return {
             quizData: FakeQuizData,
-            choiceNumber: {
-                0: 'الف) ',
-                1: 'ب) ',
-                2: 'ج) ',
-                3: 'د) '
-            }
+            item: Item,
+            lastTimeScrollRange: { start: 0, end: 0 }
         }
     },
     methods: {
-        test (first, last) {
-          console.log(first, last)
+        onScroll (event, range) {
+            if (range.start !== this.lastTimeScrollRange.start || range.end !== this.lastTimeScrollRange.end) {
+                this.quiz.questions.turnIsInViewToFalse(range.start, range.end)
+            }
         },
         addIsInViewBoolean () {
             for (let i = 0; i < this.quiz.questions.list.length; i++) {
                 this.quiz.questions.list[i].isInView = false
             }
         },
-        removeErab (string) {
-            if (!string || string.length === 0) {
-                return ''
-            }
-
-            let temp = string
-            temp = temp.split('َ').join('')
-            temp = temp.split('ُ').join('')
-            temp = temp.split('ِ').join('')
-            temp = temp.split('ّ').join('')
-            temp = temp.split('ً').join('')
-            temp = temp.split('ٌ').join('')
-            temp = temp.split('ٍ').join('')
-            return temp
-        },
-        getLargestChoice (choices) {
-            let largestChoice = 0
-            choices.list.forEach((item)=> {
-                if (item.body.length > largestChoice) {
-                    largestChoice = this.removeErab(item.body).length
-                }
-            })
-
-            return largestChoice
-        },
-        choiceClass (question) {
-            // let QuestionWidthRatio = 0.4
-            // let largestChoiceWidth = this.windowSize.x * QuestionWidthRatio / largestChoice
-            let largestChoice = this.getLargestChoice(question.choices)
-            let largestChoiceWidth = $('.questions').width() / largestChoice
-            if (largestChoiceWidth > 48) {
-                return 3
-            }
-            if (largestChoiceWidth > 24) {
-                return 6
-            }
-            if (largestChoiceWidth > 12) {
-                return 12
-            }
-            return 12
-        },
-        selectChoice (questionId, choiceId) {
-            const questionIndex = this.quiz.questions.getQuestionIndexById(questionId)
-            this.$refs.scroller.scrollToItem(questionIndex)
-            setTimeout(() => { this.$refs.scroller.scrollToItem(questionIndex) }, 200)
-            this.changeQuestion(questionId)
-            this.answerClicked({questionId, choiceId})
-        },
         scrollTo (questionId) {
-            const questionIndex = this.quiz.questions.getQuestionIndexById(questionId)
-            this.$refs.scroller.scrollToItem(questionIndex)
-            setTimeout(() => { this.$refs.scroller.scrollToItem(questionIndex) }, 200)
+            if (this.quiz.questions.getQuestionById(questionId).isInView === false) {
+                const questionIndex = this.quiz.questions.getQuestionIndexById(questionId)
+                this.$refs.scroller.scrollToIndex(questionIndex)
+                for (let i = 1; i <= Math.ceil(this.quiz.questions.list.length / 100); i++) {
+                    setTimeout(() => { this.$refs.scroller.scrollToIndex(questionIndex) }, 500 / Math.ceil(this.quiz.questions.list.length / 100) * i)
+                }
+            }
         },
         questionListHeight () {
             // box is a col-7 with 12px padding
@@ -315,10 +279,11 @@ export default {
         },
         // ToDo: check for removal
         getFirstInViewQuestionNumber () {
-            let firstQuestionInView = this.quiz.questions.list.filter( (item)=> {
+            let firstQuestionInView = this.quiz.questions.list.find( (item)=> {
+                // console.log(item.id, item.isInView)
                 return item.isInView === true
             })
-
+            // console.log(firstQuestionInView)
             if (firstQuestionInView) {
                 return firstQuestionInView.order + 1
             } else {
@@ -330,6 +295,11 @@ export default {
                 return '.question:nth-child('+(this.quiz.questions.getQuestionIndexById(question.id) + 2)+')'
             }
             return ''
+        },
+        choiceClicked (questionId, choiceId) {
+            this.scrollTo(questionId)
+            this.changeQuestion(questionId)
+            this.answerClicked({questionId, choiceId})
         },
         // calculateInViewQuestions () {
         //     for (let i = 0; i < document.getElementsByClassName('vue-recycle-scroller__item-view').length; i++) {
@@ -359,7 +329,7 @@ export default {
     },
     mounted () {
         $('.questions-list').height(this.questionListHeight())
-        $('.questions').height(this.windowSize.y - 24)
+        $('.questions').height(this.windowSize.y)
         $('.left-side-list').height(this.windowSize.y - 24)
         const padding = this.questionListPadding()
         setTimeout(() => {
@@ -367,7 +337,7 @@ export default {
             $('.questions-list').css({ 'padding-left': padding })
         }, 1000)
         $('.questions-list').css({ 'padding-top': '20px' })
-        setTimeout(() => { this.calculateInViewQuestions() }, 2000)
+        // setTimeout(() => { this.calculateInViewQuestions() }, 2000)
     },
     created () {
 
@@ -382,7 +352,7 @@ export default {
     },
     watch: {
         'windowSize.y': function () {
-            $('.questions').height(this.windowSize.y - 24)
+            $('.questions').height(this.windowSize.y)
             $('.left-side-list').height(this.windowSize.y - 24)
         },
         'windowSize.x': function () {
@@ -459,6 +429,7 @@ export default {
 .questions {
     background: #fff;
     overflow-y: auto;
+    overflow-x: hidden;
     position: relative;
     /*padding-right: 25px;*/
     padding: 0 25px 0 0;
@@ -476,6 +447,8 @@ export default {
 .choice {
     cursor: pointer;
     transition: all ease-in-out 0.3s;
+    display: flex;
+    align-items: flex-start;
 }
 
 .choice.active::before {
@@ -557,9 +530,14 @@ export default {
 
     .choice p {
         display: inline-block;
+        margin-right: 5px;
     }
 
     .question-body p {
         display: inline;
+    }
+
+    .katex-display {
+        margin: 0;
     }
 </style>

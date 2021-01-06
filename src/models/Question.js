@@ -75,12 +75,19 @@ class Question extends Model {
     }
 
     changeState (newState) {
-        this.uncheckChoices()
+        console.log(this.id)
+        if (newState === 'cross') {
+            this.uncheckChoices()
+        }
+        console.log('newState: ', newState)
+        console.log('oldState: ', this.state)
         if (newState === this.state) {
-            this.state = ''
+            Vue.set(this, 'state', '')
             return
         }
-        this.state = newState
+        console.log('oldState: ', this.state)
+        Vue.set(this, 'state', newState)
+        console.log('oldState: ', this.state)
     }
 
     bookmark () {
@@ -96,6 +103,9 @@ class Question extends Model {
 
     selectChoice (choiceId) {
         this.choices.list.map((item)=> {
+            if (this.state === 'cross') {
+                this.state = ''
+            }
             if (item.id !== choiceId) {
                 Vue.set(item, 'active', false)
                 // item.active = false
@@ -113,6 +123,11 @@ class Question extends Model {
         this.choices.list.map((item)=> {
             item.active = false
         })
+    }
+
+    onIntersect (entries) {
+        console.log(this.id, entries[0].isIntersecting)
+        this.isInView = entries[0].isIntersecting
     }
 }
 
@@ -152,6 +167,16 @@ class QuestionList extends Collection {
         let currentIndex = this.getQuestionIndexById(questionId),
             prevIndex = --currentIndex
         return this.getQuestionByIndex(prevIndex)
+    }
+
+    turnIsInViewToFalse (startExceptionIndex, endExceptionIndex) {
+        const listLength = this.list.length
+        for (let i = 0; i < listLength; i++) {
+            if (i >= startExceptionIndex && i <= endExceptionIndex) {
+                continue
+            }
+            this.list[i].isInView = false
+        }
     }
 }
 

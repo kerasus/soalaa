@@ -2,27 +2,27 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 import { Quiz } from '@/models/Quiz'
 import { Question } from '@/models/Question'
-import createPersistedState from 'vuex-persistedstate'
-import createMutationsSharer from 'vuex-shared-mutations'
+// import createPersistedState from 'vuex-persistedstate'
+// import createMutationsSharer from 'vuex-shared-mutations'
 
 Vue.use(Vuex)
 
 const store = new Vuex.Store({
     plugins: [
-        createPersistedState({
-            storage: window.localStorage,
-            paths: ['userAnswersOfOnlineQuiz', 'currentQuestion']
-        }),
-        createMutationsSharer({
-            predicate: [
-                'updateQuiz',
-                'answerQuestion',
-                'loadUserAnswers',
-                'updateCurrentQuestion',
-                'goToNextQuestion',
-                'goToPrevQuestion'
-            ]
-        })
+        // createPersistedState({
+        //     storage: window.localStorage,
+        //     paths: ['userAnswersOfOnlineQuiz', 'currentQuestion']
+        // }),
+        // createMutationsSharer({
+        //     predicate: [
+        //         'updateQuiz',
+        //         'answerQuestion',
+        //         'loadUserAnswers',
+        //         'updateCurrentQuestion',
+        //         'goToNextQuestion',
+        //         'goToPrevQuestion'
+        //     ]
+        // })
     ],
     state: {
         windowSize: {

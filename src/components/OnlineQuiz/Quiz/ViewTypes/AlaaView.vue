@@ -17,6 +17,7 @@
                                         -
                                         سوال شماره
                                         {{ getQuestionNumberFromId(currentQuestion.id) }}
+                                        {{ currentQuestion.state }}
                                     </p>
                                 </div>
                                 <div class="question-buttons">
