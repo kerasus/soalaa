@@ -335,7 +335,7 @@ export default {
         setTimeout(() => {
             $('.questions-list').css({ 'padding-right': padding })
             $('.questions-list').css({ 'padding-left': padding })
-        }, 1000)
+        }, 10000)
         $('.questions-list').css({ 'padding-top': '20px' })
         // setTimeout(() => { this.calculateInViewQuestions() }, 2000)
     },
@@ -356,9 +356,9 @@ export default {
             $('.left-side-list').height(this.windowSize.y - 24)
         },
         'windowSize.x': function () {
-            const padding = this.questionListPadding()
-            $('.questions-list').css({ 'padding-right': padding })
-            $('.questions-list').css({ 'padding-left': padding })
+            // const padding = this.questionListPadding()
+            // $('.questions-list').css({ 'padding-right': padding })
+            // $('.questions-list').css({ 'padding-left': padding })
             $('.questions-list').height(this.questionListHeight())
             this.$store.commit('updateDrawer', false)
         }
