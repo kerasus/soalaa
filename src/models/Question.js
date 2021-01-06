@@ -148,7 +148,8 @@ class QuestionList extends Collection {
 
     getNextQuestion (questionId) {
         let currentIndex = this.getQuestionIndexById(questionId),
-            nextIndex = ++currentIndex
+            nextIndex = currentIndex + 1
+        console.log(currentIndex, nextIndex)
         return this.getQuestionByIndex(nextIndex)
     }
 
