@@ -59,8 +59,12 @@ const mixinQuiz = {
       this.quiz.questions.getQuestionById(this.currentQuestion.id).bookmark()
     },
     changeState (question, newState) {
+      if (this.currentQuestion.id !== question.id) {
+        this.currentQuestion = question
+      }
       this.$store.commit('reloadQuizModel')
       this.quiz.questions.getQuestionById(this.currentQuestion.id).changeState(newState)
+      console.log('test: ', this.currentQuestion.state)
     },
     loadQuiz () {
       this.quiz = new Quiz(this.quizData)
@@ -113,6 +117,7 @@ const mixinQuiz = {
           this.$router.push({ name: 'onlineQuiz.alaaView', params: { quizId: this.quiz.id, questNumber } })
       }
     },
+    // ToDo: change argument (type, questNumber)
     changeView (type) {
       if (type === 'alaa') {
         const questNumber = this.getFirstInViewQuestionNumber()
