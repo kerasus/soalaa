@@ -52,7 +52,7 @@
                                         v-html="(choiceNumber[index]) + choice.rendered_body"
                                         :md="choiceClass(item)"
                                         :class="{ choice: true, renderedPanel: true, active: choice.active }"
-                                        @click="choiceClicked(item.id, choice.id)"
+                                        @click="selectChoice(item.id, choice.id)"
                                 />
                             </v-row>
                         </DynamicScrollerItem>
@@ -164,7 +164,7 @@
                                         v-for="choice in question.choices.list"
                                         :key="choice.id"
                                         :class="{ 'choice-in-list': true, active: choice.active }"
-                                        @click="choiceClicked(question.id, choice.id)"
+                                        @click="selectChoice(question.id, choice.id)"
                                 />
                             </div>
                         </div>
@@ -284,7 +284,7 @@ export default {
             }
             return 12
         },
-        choiceClicked (questionId, choiceId) {
+        selectChoice (questionId, choiceId) {
             const questionIndex = this.quiz.questions.getQuestionIndexById(questionId)
             this.$refs.scroller.scrollToItem(questionIndex)
             setTimeout(() => { this.$refs.scroller.scrollToItem(questionIndex) }, 200)

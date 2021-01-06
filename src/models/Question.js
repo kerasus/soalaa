@@ -2,6 +2,7 @@ import Vue from 'vue'
 import { Model, Collection } from 'js-abstract-model'
 import { AnswerList } from './Answer'
 import { ChoiceList } from './Choice'
+import {CheckingTimeList} from "@/models/CheckingTime";
 var md = require('markdown-it')(),
     mk = require('markdown-it-katex')
 md.use(mk);
@@ -24,6 +25,10 @@ class Question extends Model {
                 default: false
             },
             { key: 'sub_category' },
+            {
+                key: 'checking_times',
+                relatedModel: CheckingTimeList
+            },
             {
                 key: 'answers',
                 relatedModel: AnswerList
@@ -51,7 +56,6 @@ class Question extends Model {
             this.rendered_body = md.render(this.body)
         }
     }
-
 
     getAnsweredChoice () {
         return this.choices.list.find((item) => {
@@ -83,12 +87,19 @@ class Question extends Model {
         this.bookmarked = !this.bookmarked
     }
 
-    choiceClicked (choiceId) {
+    enterQuestion () {
+        this.checking_times.addStart()
+    }
+    leaveQuestion () {
+        this.checking_times.addEnd()
+    }
+
+    selectChoice (choiceId) {
         this.choices.list.map((item)=> {
             if (item.id !== choiceId) {
                 Vue.set(item, 'active', false)
                 // item.active = false
-            } else if (item.active) {
+            } else if (!choiceId || item.active) {
                 Vue.set(item, 'active', false)
                 // item.active = false
             } else {
