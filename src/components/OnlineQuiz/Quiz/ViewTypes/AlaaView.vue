@@ -124,6 +124,15 @@
 .v-main {
     background: #f4f4f4;
 }
+
+.base.textstyle.uncramped {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+img {
+    max-width: 100%;
+}
 </style>
 
 <style scoped>
