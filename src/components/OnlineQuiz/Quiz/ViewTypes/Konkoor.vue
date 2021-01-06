@@ -237,7 +237,7 @@ export default {
         return {
             quizData: FakeQuizData,
             item: Item,
-            lastTimeScrollRange: { start: 0, end: 0 }
+            lastTimeScrollRange: { start: 0, end: 29 }
         }
     },
     methods: {
