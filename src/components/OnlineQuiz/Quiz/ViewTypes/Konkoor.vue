@@ -63,6 +63,7 @@
                                   :data-component="item"
                                   class="questions"
                                   ref="scroller"
+                                  @scroll="onScroll"
                     />
 <!--                </div>-->
             </v-col>
@@ -235,10 +236,16 @@ export default {
     data () {
         return {
             quizData: FakeQuizData,
-            item: Item
+            item: Item,
+            lastTimeScrollRange: { start: 0, end: 0 }
         }
     },
     methods: {
+        onScroll (event, range) {
+            if (range.start !== this.lastTimeScrollRange.start || range.end !== this.lastTimeScrollRange.end) {
+                this.quiz.questions.turnIsInViewToFalse(range.start, range.end)
+            }
+        },
         addIsInViewBoolean () {
             for (let i = 0; i < this.quiz.questions.list.length; i++) {
                 this.quiz.questions.list[i].isInView = false
@@ -276,7 +283,7 @@ export default {
                 // console.log(item.id, item.isInView)
                 return item.isInView === true
             })
-            console.log(firstQuestionInView)
+            // console.log(firstQuestionInView)
             if (firstQuestionInView) {
                 return firstQuestionInView.order + 1
             } else {

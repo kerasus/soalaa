@@ -13,7 +13,7 @@
                 <v-icon v-if="source.bookmarked" color="blue" :size="24">mdi-bookmark</v-icon>
             </v-btn>
         </div>
-        <span class="question-body renderedPanel" v-html="(source.order + 1) + '- ' + source.rendered_body" v-intersect="onIntersect" />
+        <span class="question-body renderedPanel" :id="'question' + source.id" v-html="(source.order + 1) + '- ' + source.rendered_body" v-intersect="onIntersect" />
         <v-row class="choices">
             <v-col
                     v-for="(choice, index) in source.choices.list"
@@ -61,6 +61,7 @@
         },
         methods: {
             onIntersect(entries) {
+                console.log(entries[0])
                 this.source.onIntersect(entries)
             },
             choiceClicked (questionId, choiceId) {
