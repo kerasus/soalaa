@@ -143,6 +143,34 @@ let FakeQuizData = {
             ],
             "order": 0,
             "sub_category": {"id": 1}
+        },{
+            "id": 0,
+            "body": "در کدام بیت **__~~غلط املایی~~__** وجود دارد ؟",
+            "choices": [
+                {
+                    "id": 0,
+                    "body": "شد روان از بادبان پر ساخته\t\t\tهمچو بت سینه بر آب انداخته",
+                    "active": false,
+                    "order": 0
+                }, {
+                    "id": 1,
+                    "body": "خداوندی است تدبیر جهان را\t\t\tبری از شبه و مثل و جنس و همتا",
+                    "active": false,
+                    "order": 1
+                }, {
+                    "id": 2,
+                    "body": "تو چنانی به حیلت و تلبیس \t\t\tکز تو اعتراض می کند ابلیس",
+                    "active": false,
+                    "order": 2
+                }, {
+                    "id": 3,
+                    "body": "دلم بردی به جانم قصد کردی \t\t\tمرا این واقعه بس مشکل افتاد",
+                    "active": false,
+                    "order": 3
+                }
+            ],
+            "order": 0,
+            "sub_category": {"id": 1}
         }, {
         "id": 1,
         "body": "در کدام بیت **__~~غلط املایی~~__** هست ؟",
@@ -3327,22 +3355,22 @@ let FakeQuizData = {
         "body": "نمودار $y=(1-x^2)(x^2-4)$ به کدام صورت است؟",
         "choices": [{
             "id": 0,
-            "body": "![](https://cdn.alaatv.com/upload/images/product/sr_rzi_20200905145608.jpg?w=331&h=331)",
+            "body": "![](http://cdn.alaatv.com/upload/onlineQuiz-sample-math-1.png?w=300&h=227)",
             "active": false,
             "order": 0
         }, {
             "id": 1,
-            "body": "![alt text](https://cdn.alaatv.com/upload/images/product/sr_rzi_20200905145608.jpg?w=331&h=331 \"Logo Title Text 1\")",
+            "body": "![alt text](https://cdn.alaatv.com/upload/onlineQuiz-sample-math-2.png?w=300&h=227 \"Logo Title Text 1\")",
             "active": false,
             "order": 1
         }, {
             "id": 2,
-            "body": "![alt text](https://cdn.alaatv.com/upload/images/product/sr_rzi_20200905145608.jpg?w=331&h=331 \"Logo Title Text 1\")",
+            "body": "![alt text](https://cdn.alaatv.com/upload/onlineQuiz-sample-math-3.png?w=300&h=227 \"Logo Title Text 1\")",
             "active": false,
             "order": 2
         }, {
             "id": 3,
-            "body": "![alt text](https://cdn.alaatv.com/upload/images/product/sr_rzi_20200905145608.jpg?w=331&h=331 \"Logo Title Text 1\")",
+            "body": "![alt text](https://cdn.alaatv.com/upload/onlineQuiz-sample-math-4.png?w=300&h=227 \"Logo Title Text 1\")",
             "active": false,
             "order": 3
         }],
