@@ -96,8 +96,6 @@
                                             style="width: 100%;background: #5cbf60;color: white;letter-spacing: inherit;"
                                             large
                                             tile
-                                            v-bind="attrs"
-                                            v-on="on"
                                             elevation="0"
                                     >
                                         ثبت و پایان آزمون

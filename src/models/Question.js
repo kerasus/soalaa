@@ -75,19 +75,19 @@ class Question extends Model {
     }
 
     changeState (newState) {
-        console.log(this.id)
+        // console.log(this.id)
         if (newState === 'cross') {
             this.uncheckChoices()
         }
-        console.log('newState: ', newState)
-        console.log('oldState: ', this.state)
+        // console.log('newState: ', newState)
+        // console.log('oldState: ', this.state)
         if (newState === this.state) {
             Vue.set(this, 'state', '')
             return
         }
-        console.log('oldState: ', this.state)
+        // console.log('oldState: ', this.state)
         Vue.set(this, 'state', newState)
-        console.log('oldState: ', this.state)
+        // console.log('oldState: ', this.state)
     }
 
     bookmark () {
@@ -102,6 +102,7 @@ class Question extends Model {
     }
 
     selectChoice (choiceId) {
+        console.log(choiceId)
         this.choices.list.map((item)=> {
             if (this.state === 'cross') {
                 this.state = ''
@@ -126,7 +127,6 @@ class Question extends Model {
     }
 
     onIntersect (entries) {
-        console.log(this.id, entries[0].isIntersecting)
         this.isInView = entries[0].isIntersecting
     }
 }
@@ -160,7 +160,6 @@ class QuestionList extends Collection {
     getNextQuestion (questionId) {
         let currentIndex = this.getQuestionIndexById(questionId),
             nextIndex = currentIndex + 1
-        console.log(currentIndex, nextIndex)
         return this.getQuestionByIndex(nextIndex)
     }
 

@@ -5673,7 +5673,7 @@ let FakeQuizData = {
             "\n" +
             "![alt text](https://cdn.alaatv.com/upload/images/product/sr_rzi_20200905145608.jpg?w=331&h=331 \"Logo Title Text 1\")\n" +
             "\n" +
-            "$$Mg(s)+2HCl(aq) - >MgCl_2(aq)+H_2(g)$$\n" +
+            "$Mg(s)+2HCl(aq) - >MgCl_2(aq)+H_2(g)$\n" +
             "\n" +
             "آ) واکنش تقریباً 40 ثانیه پس از آغاز آن به پایان رسیده است.\n" +
             "\n" +

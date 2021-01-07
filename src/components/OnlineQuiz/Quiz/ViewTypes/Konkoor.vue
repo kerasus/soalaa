@@ -72,9 +72,7 @@
                     <v-col class="px-10 py-0 d-flex justify-space-between" dir="ltr">
                         <div class="rounded-b-xl rounded-r-xl">
                             <v-menu
-                                    bottom
-                                    :offset-y="true"
-                                    class="rounded-b-xl rounded-r-xl"
+
                             >
                                 <template v-slot:activator="{ on, attrs }">
                                     <v-btn
@@ -142,8 +140,6 @@
                                             style="width: 100%;background: #5cbf60;color: white;letter-spacing: inherit;"
                                             large
                                             tile
-                                            v-bind="attrs"
-                                            v-on="on"
                                             elevation="0"
                                     >
                                         ثبت و پایان آزمون
@@ -237,7 +233,7 @@ export default {
         return {
             quizData: FakeQuizData,
             item: Item,
-            lastTimeScrollRange: { start: 0, end: 0 }
+            lastTimeScrollRange: { start: 0, end: 29 }
         }
     },
     methods: {
