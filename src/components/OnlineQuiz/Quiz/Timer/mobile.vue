@@ -1,8 +1,7 @@
 <template>
     <div style="bottom: 0">
         <v-row style="padding-left: 0">
-            <v-col cols="1" style="max-width: 40px"/>
-            <v-col cols="7 " class="col-sm-6" >
+            <v-col cols="7 " class="col-sm-6 btnCol" >
                 <div class="sideBtns  elevation-3">
                     <v-row>
 <!--                        <v-col cols="1"/>-->
@@ -26,9 +25,8 @@
                     </v-row>
                 </div>
             </v-col>
-            <div class="space">
-            </div>
-            <v-col class="col-sm-5 col-3 ">
+
+            <v-col class="col-sm-3 col-3 timerCol" >
                 <div class="timeCArdMob d-flex justify-center elevation-3" @click="drawerUp" id="clockBtn"
                      style="float:left;">
                     <svg class="timerMob  justify-center" viewBox="0 0.175 13.474 15.719">
@@ -92,6 +90,15 @@
      .col-sm-6, .col-sm-5,  .col-3 {
         padding-bottom: 0!important;
     }
+     .timerCol{
+         position: absolute;
+         left: 3%;
+     }
+     .btnCol{
+         padding-right: 0;
+         right: 5%;
+         position: relative;
+     }
     @media only screen and (max-width: 500px) {
         .timeCArdMob {
             margin-left: 0%;
@@ -103,8 +110,8 @@
         }
 
         .drawer {
-            width: 82vw;
-            left: 10vw;
+            width: 90%;
+            left: 5%;
         }
 
         .passedTimeText {
@@ -116,7 +123,7 @@
         }
     }
 
-    @media only screen and (min-width: 500px)and (max-width: 600px) {
+    @media only screen and (min-width: 500px)and (max-width: 601px) {
         .timeCArdMob {
             margin-left: 0%;
             width: 100%;
@@ -124,12 +131,12 @@
         }
 
         .space {
-            width: 13px;
+            width: 10%;
         }
 
         .drawer {
-            width: 82vw;
-            left: 8vw;
+            width: 90%;
+            left: 5%;
         }
 
         .passedTimeText {
@@ -141,7 +148,7 @@
         }
     }
 
-    @media only screen and (min-width: 600px)and (max-width: 700px) {
+    @media only screen and (min-width: 601px)and (max-width: 700px) {
         .timeCArdMob {
             margin-left: 6%;
             width: 80%;
@@ -152,8 +159,8 @@
         }
 
         .drawer {
-            width: 85vw;
-            left: 6vw;
+            width: 90%;
+            left: 5%;
         }
 
         .passedTimeText {
