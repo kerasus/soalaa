@@ -83,11 +83,15 @@ class Question extends Model {
         // console.log('oldState: ', this.state)
         if (newState === this.state) {
             Vue.set(this, 'state', '')
+            console.log('too in')
             return
         }
         // console.log('oldState: ', this.state)
         Vue.set(this, 'state', newState)
+        this.state = 'circle'
         // console.log('oldState: ', this.state)
+        console.log(this)
+        console.log(this.state)
     }
 
     bookmark () {
@@ -102,7 +106,6 @@ class Question extends Model {
     }
 
     selectChoice (choiceId) {
-        console.log(choiceId)
         this.choices.list.map((item)=> {
             if (this.state === 'cross') {
                 this.state = ''
@@ -110,7 +113,7 @@ class Question extends Model {
             if (item.id !== choiceId) {
                 Vue.set(item, 'active', false)
                 // item.active = false
-            } else if (!choiceId || item.active) {
+            } else if (choiceId == null || choiceId == undefined || item.active) {
                 Vue.set(item, 'active', false)
                 // item.active = false
             } else {
