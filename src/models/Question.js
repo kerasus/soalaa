@@ -102,7 +102,6 @@ class Question extends Model {
     }
 
     selectChoice (choiceId) {
-        console.log(choiceId)
         this.choices.list.map((item)=> {
             if (this.state === 'cross') {
                 this.state = ''
@@ -159,7 +158,7 @@ class QuestionList extends Collection {
 
     getNextQuestion (questionId) {
         let currentIndex = this.getQuestionIndexById(questionId),
-            nextIndex = currentIndex + 1
+            nextIndex = ++currentIndex
         return this.getQuestionByIndex(nextIndex)
     }
 
@@ -170,13 +169,11 @@ class QuestionList extends Collection {
     }
 
     turnIsInViewToFalse (startExceptionIndex, endExceptionIndex) {
-        const listLength = this.list.length
-        for (let i = 0; i < listLength; i++) {
-            if (i >= startExceptionIndex && i <= endExceptionIndex) {
-                continue
+        this.list.forEach((item, index) => {
+            if (index < startExceptionIndex || index > endExceptionIndex) {
+                this.list[index].isInView = false
             }
-            this.list[i].isInView = false
-        }
+        })
     }
 }
 

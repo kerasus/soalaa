@@ -2,27 +2,27 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 import { Quiz } from '@/models/Quiz'
 import { Question } from '@/models/Question'
-// import createPersistedState from 'vuex-persistedstate'
-// import createMutationsSharer from 'vuex-shared-mutations'
+import createPersistedState from 'vuex-persistedstate'
+import createMutationsSharer from 'vuex-shared-mutations'
 
 Vue.use(Vuex)
 
 const store = new Vuex.Store({
     plugins: [
-        // createPersistedState({
-        //     storage: window.localStorage,
-        //     paths: ['userAnswersOfOnlineQuiz', 'currentQuestion']
-        // }),
-        // createMutationsSharer({
-        //     predicate: [
-        //         'updateQuiz',
-        //         'answerQuestion',
-        //         'loadUserAnswers',
-        //         'updateCurrentQuestion',
-        //         'goToNextQuestion',
-        //         'goToPrevQuestion'
-        //     ]
-        // })
+        createPersistedState({
+            storage: window.localStorage,
+            paths: ['userAnswersOfOnlineQuiz', 'currentQuestion']
+        }),
+        createMutationsSharer({
+            predicate: [
+                'updateQuiz',
+                'answerQuestion',
+                'loadUserAnswers',
+                'updateCurrentQuestion',
+                'goToNextQuestion',
+                'goToPrevQuestion'
+            ]
+        })
     ],
     state: {
         windowSize: {
@@ -46,7 +46,19 @@ const store = new Vuex.Store({
             state.quiz = newInfo
         },
         updateCurrentQuestion (state, newInfo) {
-            state.currentQuestion = newInfo
+
+            this.commit('reloadQuizModel')
+            this.commit('reloadCurrentQuestionModel')
+
+            // set checking time
+            const oldQuestionId = state.currentQuestion.id
+            const newQuestionId = newInfo.id
+            if (newQuestionId !== oldQuestionId) {
+                state.quiz.questions.getQuestionById(newQuestionId).enterQuestion()
+                state.quiz.questions.getQuestionById(oldQuestionId).leaveQuestion()
+            }
+
+            state.currentQuestion = new Question(newInfo)
         },
         reloadQuizModel (state) {
             if (typeof state.quiz.questions.getNextQuestion !== 'function') {
