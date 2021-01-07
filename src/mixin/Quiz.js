@@ -70,7 +70,6 @@ const mixinQuiz = {
       }
       this.$store.commit('reloadQuizModel')
       this.quiz.questions.getQuestionById(this.currentQuestion.id).changeState(newState)
-      console.log('test: ', this.currentQuestion.state)
     },
     loadQuiz () {
       this.quiz = new Quiz(this.quizData)

@@ -72,7 +72,7 @@
                     <v-col class="px-10 py-0 d-flex justify-space-between" dir="ltr">
                         <div class="rounded-b-xl rounded-r-xl">
                             <v-menu
-
+                                bottom
                             >
                                 <template v-slot:activator="{ on, attrs }">
                                     <v-btn
@@ -327,13 +327,14 @@ export default {
         $('.questions-list').height(this.questionListHeight())
         $('.questions').height(this.windowSize.y)
         $('.left-side-list').height(this.windowSize.y - 24)
-        const padding = this.questionListPadding()
-        setTimeout(() => {
-            $('.questions-list').css({ 'padding-right': padding })
-            $('.questions-list').css({ 'padding-left': padding })
-        }, 10000)
+
         $('.questions-list').css({ 'padding-top': '20px' })
         // setTimeout(() => { this.calculateInViewQuestions() }, 2000)
+        this.$nextTick(() => {
+            const padding = this.questionListPadding()
+            $('.questions-list').css({ 'padding-right': padding })
+            $('.questions-list').css({ 'padding-left': padding })
+        });
     },
     created () {
 
