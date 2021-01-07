@@ -5,13 +5,13 @@
             <v-col cols="7 " class="col-sm-6" >
                 <div class="sideBtns  elevation-3">
                     <v-row>
-                        <v-col cols="1"/>
+<!--                        <v-col cols="1"/>-->
                         <v-col class="d-flex justify-center">
                             <v-icon class="sideBtnIcons " @click="goToPrevQuestion">
                                 mdi-chevron-right
                             </v-icon>
                         </v-col>
-                        <v-col class="d-flex justify-center align-center" >
+                        <v-col class="d-flex justify-center align-center" cols="1">
                             <svg class="spacer" viewBox="2228.5 627.403 0.20000000298023224 20">
                                 <path id="spacer" d="M 2228.5 627.4031982421875 L 2228.5 647.4031982421875">
                                 </path>
@@ -22,7 +22,7 @@
                                 mdi-chevron-left
                             </v-icon>
                         </v-col>
-                        <v-col cols="1"/>
+<!--                        <v-col cols="1"/>-->
                     </v-row>
                 </div>
             </v-col>
