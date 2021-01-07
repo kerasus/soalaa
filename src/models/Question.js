@@ -67,7 +67,7 @@ class Question extends Model {
         let answeredChoice = this.getAnsweredChoice()
 
         if (answeredChoice) {
-            this.state = ''
+            // this.state = ''
             return true
         } else {
             return false
@@ -75,23 +75,14 @@ class Question extends Model {
     }
 
     changeState (newState) {
-        // console.log(this.id)
         if (newState === 'cross') {
             this.uncheckChoices()
         }
-        // console.log('newState: ', newState)
-        // console.log('oldState: ', this.state)
         if (newState === this.state) {
             Vue.set(this, 'state', '')
-            console.log('too in')
             return
         }
-        // console.log('oldState: ', this.state)
         Vue.set(this, 'state', newState)
-        this.state = 'circle'
-        // console.log('oldState: ', this.state)
-        console.log(this)
-        console.log(this.state)
     }
 
     bookmark () {
