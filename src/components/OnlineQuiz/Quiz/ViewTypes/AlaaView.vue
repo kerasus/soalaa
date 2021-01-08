@@ -17,7 +17,6 @@
                                         -
                                         سوال شماره
                                         {{ getQuestionNumberFromId(currentQuestion.id) }}
-                                        {{ currentQuestion.state }}
                                     </p>
                                 </div>
                                 <div class="question-buttons">
@@ -36,7 +35,7 @@
                             </v-row>
                             <v-row class="question-body">
                                 <v-col>
-                                    <div class="renderedPanel" v-html="currentQuestionBody"></div>
+                                    <div class="renderedPanel" v-html="currentQuestion.rendered_body"></div>
                                 </v-col>
                             </v-row>
                             <v-row class="question-answers">
@@ -95,6 +94,8 @@
             }
         },
         created() {
+            console.log('alaa view created:' + this.$route.params.questNumber)
+
             if (!this.quiz.id || parseInt(this.$route.params.quizId) !== parseInt(this.quiz.id)) {
                 this.loadQuiz()
             } else {
@@ -123,6 +124,15 @@
 
 .v-main {
     background: #f4f4f4;
+}
+
+.base.textstyle.uncramped {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+img {
+    max-width: 100%;
 }
 </style>
 

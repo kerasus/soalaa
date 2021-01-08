@@ -61,7 +61,6 @@
         },
         methods: {
             onIntersect(entries) {
-                console.log(entries[0])
                 this.source.onIntersect(entries)
             },
             choiceClicked (questionId, choiceId) {

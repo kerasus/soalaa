@@ -2,15 +2,21 @@ import {Quiz} from "@/models/Quiz";
 // import 'katex/dist/katex.min.css';
 import 'github-markdown-css/github-markdown.css';
 import '@/assets/scss/markdownKatex.scss';
-var md = require('markdown-it')(),
-    mk = require('markdown-it-katex');
-md.use(mk);
 
 const mixinQuiz = {
+  watch: {
+    'currentQuestion.id' : function (newQuestionId, oldQuestionId) {
+      console.log('currentQuestion.id changed: from ' + oldQuestionId + ' to ' + newQuestionId)
+
+      // if (typeof oldQuestionId === 'undefined' || oldQuestionId === null) {
+      //   return
+      // }
+      // this.$store.commit('reloadCurrentQuestionModel')
+      // this.quiz.questions.getQuestionById(newQuestionId).enterQuestion()
+      // this.quiz.questions.getQuestionById(oldQuestionId).leaveQuestion()
+    }
+  },
   computed: {
-    currentQuestionBody() {
-      return md.render(this.currentQuestion.body)
-    },
     isQuizPage() {
       return this.$route.name === 'onlineQuiz.quiz'
     },
@@ -48,7 +54,7 @@ const mixinQuiz = {
     },
     answerClicked (data) {
       this.$store.commit('reloadQuizModel')
-      this.quiz.questions.getQuestionById(data.questionId).choiceClicked(data.choiceId)
+      this.quiz.questions.getQuestionById(data.questionId).selectChoice(data.choiceId)
       this.$store.commit('answerQuestion', data)
     },
     bookmark (question) {
@@ -64,7 +70,6 @@ const mixinQuiz = {
       }
       this.$store.commit('reloadQuizModel')
       this.quiz.questions.getQuestionById(this.currentQuestion.id).changeState(newState)
-      console.log('test: ', this.currentQuestion.state)
     },
     loadQuiz () {
       this.quiz = new Quiz(this.quizData)
@@ -72,8 +77,6 @@ const mixinQuiz = {
     },
     loadUserAnswers () {
       this.$store.commit('loadUserAnswers')
-      // this.$store.commit('reloadQuizModel')
-      // this.quiz.setUserAnswers(this.userAnswersOfOnlineQuiz)
     },
     getQuestionNumberFromIndex (index) {
       index = parseInt(index)

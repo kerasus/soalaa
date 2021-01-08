@@ -143,34 +143,6 @@ let FakeQuizData = {
             ],
             "order": 0,
             "sub_category": {"id": 1}
-        },{
-            "id": 0,
-            "body": "در کدام بیت **__~~غلط املایی~~__** وجود دارد ؟",
-            "choices": [
-                {
-                    "id": 0,
-                    "body": "شد روان از بادبان پر ساخته\t\t\tهمچو بت سینه بر آب انداخته",
-                    "active": false,
-                    "order": 0
-                }, {
-                    "id": 1,
-                    "body": "خداوندی است تدبیر جهان را\t\t\tبری از شبه و مثل و جنس و همتا",
-                    "active": false,
-                    "order": 1
-                }, {
-                    "id": 2,
-                    "body": "تو چنانی به حیلت و تلبیس \t\t\tکز تو اعتراض می کند ابلیس",
-                    "active": false,
-                    "order": 2
-                }, {
-                    "id": 3,
-                    "body": "دلم بردی به جانم قصد کردی \t\t\tمرا این واقعه بس مشکل افتاد",
-                    "active": false,
-                    "order": 3
-                }
-            ],
-            "order": 0,
-            "sub_category": {"id": 1}
         }, {
         "id": 1,
         "body": "در کدام بیت **__~~غلط املایی~~__** هست ؟",
@@ -5701,7 +5673,7 @@ let FakeQuizData = {
             "\n" +
             "![alt text](https://cdn.alaatv.com/upload/images/product/sr_rzi_20200905145608.jpg?w=331&h=331 \"Logo Title Text 1\")\n" +
             "\n" +
-            "$$Mg(s)+2HCl(aq) - >MgCl_2(aq)+H_2(g)$$\n" +
+            "$Mg(s)+2HCl(aq) - >MgCl_2(aq)+H_2(g)$\n" +
             "\n" +
             "آ) واکنش تقریباً 40 ثانیه پس از آغاز آن به پایان رسیده است.\n" +
             "\n" +

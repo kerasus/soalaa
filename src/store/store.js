@@ -2,27 +2,27 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 import { Quiz } from '@/models/Quiz'
 import { Question } from '@/models/Question'
-// import createPersistedState from 'vuex-persistedstate'
-// import createMutationsSharer from 'vuex-shared-mutations'
+import createPersistedState from 'vuex-persistedstate'
+import createMutationsSharer from 'vuex-shared-mutations'
 
 Vue.use(Vuex)
 
 const store = new Vuex.Store({
     plugins: [
-        // createPersistedState({
-        //     storage: window.localStorage,
-        //     paths: ['userAnswersOfOnlineQuiz', 'currentQuestion']
-        // }),
-        // createMutationsSharer({
-        //     predicate: [
-        //         'updateQuiz',
-        //         'answerQuestion',
-        //         'loadUserAnswers',
-        //         'updateCurrentQuestion',
-        //         'goToNextQuestion',
-        //         'goToPrevQuestion'
-        //     ]
-        // })
+        createPersistedState({
+            storage: window.localStorage,
+            paths: ['userAnswersOfOnlineQuiz', 'currentQuestion']
+        }),
+        createMutationsSharer({
+            predicate: [
+                'updateQuiz',
+                'answerQuestion',
+                'loadUserAnswers',
+                'updateCurrentQuestion',
+                'goToNextQuestion',
+                'goToPrevQuestion'
+            ]
+        })
     ],
     state: {
         windowSize: {
@@ -46,11 +46,28 @@ const store = new Vuex.Store({
             state.quiz = newInfo
         },
         updateCurrentQuestion (state, newInfo) {
-            state.currentQuestion = newInfo
+
+            this.commit('reloadQuizModel')
+            this.commit('reloadCurrentQuestionModel')
+
+            // set checking time
+            const oldQuestionId = state.currentQuestion.id
+            const newQuestionId = newInfo.id
+            if (newQuestionId !== oldQuestionId) {
+                state.quiz.questions.getQuestionById(newQuestionId).enterQuestion()
+                state.quiz.questions.getQuestionById(oldQuestionId).leaveQuestion()
+            }
+
+            state.currentQuestion = new Question(newInfo)
         },
         reloadQuizModel (state) {
             if (typeof state.quiz.questions.getNextQuestion !== 'function') {
                 state.quiz = new Quiz(state.quiz)
+            }
+        },
+        reloadCurrentQuestionModel (state) {
+            if (typeof state.currentQuestion.isAnswered !== 'function') {
+                state.currentQuestion = new Question(state.currentQuestion)
             }
         },
         // goToNextQuestion (state) {
@@ -61,13 +78,13 @@ const store = new Vuex.Store({
         // },
         answerQuestion (state) {
             this.commit('reloadQuizModel')
-            // state.quiz.questions.getQuestionById(newInfo.questionId).choiceClicked(newInfo.choiceId)
-            state.userAnswersOfOnlineQuiz = state.quiz.getUserAnswers()
+            // state.quiz.questions.getQuestionById(newInfo.questionId).selectChoice(newInfo.choiceId)
+            state.userAnswersOfOnlineQuiz = state.quiz.getUserQuestionsData()
             this.commit('loadUserAnswers')
         },
         loadUserAnswers (state) {
             this.commit('reloadQuizModel')
-            state.quiz.setUserAnswers(state.userAnswersOfOnlineQuiz)
+            state.quiz.setUserQuestionsData(state.userAnswersOfOnlineQuiz)
         },
         updateAppbar (state, newInfo) {
             state.appbar = newInfo

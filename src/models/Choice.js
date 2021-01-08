@@ -8,6 +8,7 @@ class Choice extends Model {
         super(data, [
             { key: 'id' },
             { key: 'body' },
+            { key: 'rendered_body' },
             {
                 key: 'active',
                 default: false

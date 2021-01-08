@@ -72,9 +72,7 @@
                     <v-col class="px-10 py-0 d-flex justify-space-between" dir="ltr">
                         <div class="rounded-b-xl rounded-r-xl">
                             <v-menu
-                                    bottom
-                                    :offset-y="true"
-                                    class="rounded-b-xl rounded-r-xl"
+                                bottom
                             >
                                 <template v-slot:activator="{ on, attrs }">
                                     <v-btn
@@ -142,8 +140,6 @@
                                             style="width: 100%;background: #5cbf60;color: white;letter-spacing: inherit;"
                                             large
                                             tile
-                                            v-bind="attrs"
-                                            v-on="on"
                                             elevation="0"
                                     >
                                         ثبت و پایان آزمون
@@ -237,7 +233,7 @@ export default {
         return {
             quizData: FakeQuizData,
             item: Item,
-            lastTimeScrollRange: { start: 0, end: 0 }
+            lastTimeScrollRange: { start: 0, end: 29 }
         }
     },
     methods: {
@@ -331,13 +327,14 @@ export default {
         $('.questions-list').height(this.questionListHeight())
         $('.questions').height(this.windowSize.y)
         $('.left-side-list').height(this.windowSize.y - 24)
-        const padding = this.questionListPadding()
-        setTimeout(() => {
-            $('.questions-list').css({ 'padding-right': padding })
-            $('.questions-list').css({ 'padding-left': padding })
-        }, 1000)
+
         $('.questions-list').css({ 'padding-top': '20px' })
         // setTimeout(() => { this.calculateInViewQuestions() }, 2000)
+        this.$nextTick(() => {
+            const padding = this.questionListPadding()
+            $('.questions-list').css({ 'padding-right': padding })
+            $('.questions-list').css({ 'padding-left': padding })
+        });
     },
     created () {
 
@@ -356,9 +353,9 @@ export default {
             $('.left-side-list').height(this.windowSize.y - 24)
         },
         'windowSize.x': function () {
-            const padding = this.questionListPadding()
-            $('.questions-list').css({ 'padding-right': padding })
-            $('.questions-list').css({ 'padding-left': padding })
+            // const padding = this.questionListPadding()
+            // $('.questions-list').css({ 'padding-right': padding })
+            // $('.questions-list').css({ 'padding-left': padding })
             $('.questions-list').height(this.questionListHeight())
             this.$store.commit('updateDrawer', false)
         }

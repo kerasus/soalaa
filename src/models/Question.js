@@ -2,6 +2,7 @@ import Vue from 'vue'
 import { Model, Collection } from 'js-abstract-model'
 import { AnswerList } from './Answer'
 import { ChoiceList } from './Choice'
+import {CheckingTimeList} from "@/models/CheckingTime";
 var md = require('markdown-it')(),
     mk = require('markdown-it-katex')
 md.use(mk);
@@ -24,6 +25,10 @@ class Question extends Model {
                 default: false
             },
             { key: 'sub_category' },
+            {
+                key: 'checking_times',
+                relatedModel: CheckingTimeList
+            },
             {
                 key: 'answers',
                 relatedModel: AnswerList
@@ -52,7 +57,6 @@ class Question extends Model {
         }
     }
 
-
     getAnsweredChoice () {
         return this.choices.list.find((item) => {
             return (item.active === true)
@@ -63,7 +67,7 @@ class Question extends Model {
         let answeredChoice = this.getAnsweredChoice()
 
         if (answeredChoice) {
-            this.state = ''
+            // this.state = ''
             return true
         } else {
             return false
@@ -71,26 +75,28 @@ class Question extends Model {
     }
 
     changeState (newState) {
-        console.log(this.id)
         if (newState === 'cross') {
             this.uncheckChoices()
         }
-        console.log('newState: ', newState)
-        console.log('oldState: ', this.state)
         if (newState === this.state) {
             Vue.set(this, 'state', '')
             return
         }
-        console.log('oldState: ', this.state)
         Vue.set(this, 'state', newState)
-        console.log('oldState: ', this.state)
     }
 
     bookmark () {
         this.bookmarked = !this.bookmarked
     }
 
-    choiceClicked (choiceId) {
+    enterQuestion () {
+        this.checking_times.addStart()
+    }
+    leaveQuestion () {
+        this.checking_times.addEnd()
+    }
+
+    selectChoice (choiceId) {
         this.choices.list.map((item)=> {
             if (this.state === 'cross') {
                 this.state = ''
@@ -98,7 +104,7 @@ class Question extends Model {
             if (item.id !== choiceId) {
                 Vue.set(item, 'active', false)
                 // item.active = false
-            } else if (item.active) {
+            } else if (choiceId == null || choiceId == undefined || item.active) {
                 Vue.set(item, 'active', false)
                 // item.active = false
             } else {
@@ -115,7 +121,6 @@ class Question extends Model {
     }
 
     onIntersect (entries) {
-        console.log(this.id, entries[0].isIntersecting)
         this.isInView = entries[0].isIntersecting
     }
 }
@@ -159,13 +164,11 @@ class QuestionList extends Collection {
     }
 
     turnIsInViewToFalse (startExceptionIndex, endExceptionIndex) {
-        const listLength = this.list.length
-        for (let i = 0; i < listLength; i++) {
-            if (i >= startExceptionIndex && i <= endExceptionIndex) {
-                continue
+        this.list.forEach((item, index) => {
+            if (index < startExceptionIndex || index > endExceptionIndex) {
+                this.list[index].isInView = false
             }
-            this.list[i].isInView = false
-        }
+        })
     }
 }
 
