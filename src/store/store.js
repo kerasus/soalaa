@@ -11,7 +11,7 @@ const store = new Vuex.Store({
     plugins: [
         createPersistedState({
             storage: window.localStorage,
-            paths: ['userAnswersOfOnlineQuiz', 'currentQuestion']
+            paths: ['userAnswersOfOnlineQuiz']
         }),
         createMutationsSharer({
             predicate: [
@@ -54,8 +54,15 @@ const store = new Vuex.Store({
             const oldQuestionId = state.currentQuestion.id
             const newQuestionId = newInfo.id
             if (newQuestionId !== oldQuestionId) {
-                state.quiz.questions.getQuestionById(newQuestionId).enterQuestion()
-                state.quiz.questions.getQuestionById(oldQuestionId).leaveQuestion()
+                let newQuestion = state.quiz.questions.getQuestionById(newQuestionId)
+                if(newQuestion) {
+                    newQuestion.enterQuestion()
+                }
+
+                let oldQuestion = state.quiz.questions.getQuestionById(oldQuestionId)
+                if(oldQuestion) {
+                    oldQuestion.leaveQuestion()
+                }
             }
 
             state.currentQuestion = new Question(newInfo)
@@ -79,7 +86,7 @@ const store = new Vuex.Store({
         answerQuestion (state) {
             this.commit('reloadQuizModel')
             // state.quiz.questions.getQuestionById(newInfo.questionId).selectChoice(newInfo.choiceId)
-            state.userAnswersOfOnlineQuiz = state.quiz.getUserQuestionsData()
+            state.userAnswersOfOnlineQuiz = state.quiz.getUserQuizData()
             this.commit('loadUserAnswers')
         },
         loadUserAnswers (state) {

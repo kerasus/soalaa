@@ -37,7 +37,7 @@ class Quiz extends Model {
         })
     }
 
-    setUserQuestionsData (userData) {
+    setUserQuizData (userData) {
         this.questions.list.map((question)=> {
             let userQuestionData = userData.find((questionData)=> questionData.questionId === question.id)
             if (userQuestionData) {
@@ -52,7 +52,7 @@ class Quiz extends Model {
         })
     }
 
-    getUserQuestionsData () {
+    getUserQuizData () {
         let selectedQuestions = this.questions.list.filter((item) => item.choices.getSelected())
         selectedQuestions.map((question, index, questionsList) => {
             let answeredChoice = question.getAnsweredChoice()
