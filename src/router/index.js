@@ -58,7 +58,7 @@ export default new VueRouter({
             component: () => lazyLoadView(import('@/components/OnlineQuiz/Quiz/ViewTypes/AlaaView'))
         },
         {
-            path: '/exams/:quizId',
+            path: '/exams-editor/',
             name: 'onlineQuiz.exams',
             component: () => lazyLoadView(import('@/components/OnlineQuiz/Quiz/exams'))
         }
