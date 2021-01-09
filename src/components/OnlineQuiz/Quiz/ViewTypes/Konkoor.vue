@@ -148,6 +148,7 @@ export default {
             if (range.start !== this.lastTimeScrollRange.start || range.end !== this.lastTimeScrollRange.end) {
                 this.quiz.questions.turnIsInViewToFalse(range.start, range.end)
             }
+            console.log(this.getFirstInViewQuestionNumber())
             this.changeCurrentQuestion(this.quiz.questions.getQuestionByIndex(this.getFirstInViewQuestionNumber() - 1))
         },
         addIsInViewBoolean () {
