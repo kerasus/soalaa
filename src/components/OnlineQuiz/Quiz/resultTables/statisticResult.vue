@@ -8,7 +8,7 @@
                 <v-col>
                     <v-row class=" d-flex justify-center">
                         <v-data-table
-                                style="width: 80%"
+                                hide-default-footer
                                 :headers="headers"
                                 :items="item"
                                 :items-per-page="5"
@@ -23,6 +23,7 @@
 
 <script>
     import Info from "@/components/OnlineQuiz/Quiz/resultTables/info";
+
     export default {
         name: "statisticResult",
         components: {Info},
@@ -47,13 +48,13 @@
                 ],
                 item: [
                     {
-                        row:'1',
-                        course:'ریاضی',
-                        percentage:90,
-                        level:5000,
-                        city:'تهران',
-                        state:'تهران',
-                        country:'ایران',
+                        row: '1',
+                        course: 'ریاضی',
+                        percentage: 90,
+                        level: 5000,
+                        city: 'تهران',
+                        state: 'تهران',
+                        country: 'ایران',
                         percentageMean: 80,
                         levelMean: 4000,
                     },
@@ -162,5 +163,6 @@
 
     .dataTable {
         margin-top: 20px;
+        width: 80%
     }
 </style>
