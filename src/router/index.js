@@ -23,6 +23,11 @@ export default new VueRouter({
             component: () => lazyLoadView(import('@/components/QuestEditor/QuestEditor'))
         },
         {
+            path: '/quiz/edit/:quizId',
+            name: 'quiz.edit',
+            component: () => lazyLoadView(import('@/components/QuizEditor/QuizEditor'))
+        },
+        {
             path: '/TinymceEditor',
             name: 'TinymceEditor',
             component: () => lazyLoadView(import('@/components/TinymceEditor/TinymceEditor'))
@@ -53,8 +58,8 @@ export default new VueRouter({
             component: () => lazyLoadView(import('@/components/OnlineQuiz/Quiz/ViewTypes/AlaaView'))
         },
         {
-            path: '/online_quiz/:quizId/:questNumber/exams',
-            name: 'onlineQuiz.alaaView',
+            path: '/exams-editor/',
+            name: 'onlineQuiz.exams',
             component: () => lazyLoadView(import('@/components/OnlineQuiz/Quiz/exams'))
         }
     ]

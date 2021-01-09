@@ -1,27 +1,35 @@
 <template>
     <v-container :fluid="true" dir="rtl">
-        <v-row>
-            <v-col :md="5" class="pl-5">
-                <v-textarea dir="rtl"
-                            clearable
-                            clear-icon="mdi-close-circle"
-                            auto-grow
-                            label="متن سوال"
-                            v-model="currentQuestion.statement"
-                            @input="updateRendered"
-                ></v-textarea>
-            </v-col>
-            <v-col :md="5">
-                <div class="renderedPanel" v-html="questRendered">
-                </div>
-            </v-col>
-            <v-col :md="2">
-                <v-select lable="آزمون" :items="fields" v-model="currentQuestion.exam_id" />
-                <v-select lable="درس" :items="fields" v-model="field" />
-            </v-col>
-        </v-row>
+        <v-sheet :elevation="1">
+            <v-row>
+                <v-col :md="4">
+                    <v-select lable="آزمون" :items="fields" v-model="currentQuestion.exam_id" dense />
+                </v-col>
+                <v-col :md="4">
+                    <v-select lable="درس" :items="fields" v-model="field" dense />
+                </v-col>
+                <v-col :md="4">
+                    <v-text-field label="ترتیب" v-model="currentQuestion.order" type="number"/>
+                </v-col>
+                <v-col :md="6" class="pl-5">
+                    <v-textarea dir="rtl"
+                                clearable
+                                outlined
+                                clear-icon="mdi-close-circle"
+                                auto-grow
+                                label="متن سوال"
+                                v-model="currentQuestion.statement"
+                                @input="updateRendered"
+                    ></v-textarea>
+                </v-col>
+                <v-col :md="6">
+                    <div class="renderedPanel" v-html="questRendered">
+                    </div>
+                </v-col>
+            </v-row>
+        </v-sheet>
         <v-radio-group v-model="trueChoiceIndex">
-            <v-row v-for="index in 4" :key="index">
+            <v-row v-for="index in 4" :key="index" :style="{ 'border-bottom': '1px solid #ececec' }">
                 <v-col class="pl-5" :md="5">
                     <v-text-field dir="rtl"
                                   clearable
@@ -45,6 +53,8 @@
         <hr>
         <div id="mathfield" locale="fa">x=\frac{-b\pm \sqrt{b^2-4ac}}{2a}</div>
         <div class="latexData" v-html="latexData"></div>
+        <v-text-field full-width label="url" v-model="url" dir="ltr"/>
+        <v-text-field readonly full-width :value="'![](' + url + ')'" dir="ltr"/>
 
 <!--        <div dir="rtl" v-katex:auto>-->
 <!--                        این یک فرمول ریاضی هست-->
@@ -165,7 +175,8 @@
                         }
                     ]
                 },
-                currentQuestion: new Question()
+                currentQuestion: new Question(),
+                url: ''
             }
         },
         methods: {
