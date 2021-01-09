@@ -2,10 +2,10 @@
     <v-row>
 
         <v-col cols="4">
-            <exam-list/>
+            <exam-list @update-exam-id="updateExamId"/>
         </v-col>
         <v-col >
-            <exam-info/>
+            <exam-info :exam="exam"/>
         </v-col>
     </v-row>
 
@@ -17,7 +17,16 @@
 
     export default {
         name: "exams",
-        components: {ExamList, ExamInfo}
+        data: () => ({
+
+            exam: {}
+        }),
+        components: {ExamList, ExamInfo},
+        methods:{
+            updateExamId(e){
+                this.exam = e
+            }
+        }
     }
 </script>
 

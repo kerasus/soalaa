@@ -4,7 +4,7 @@
 
 
             <div v-for="(exam) in examList.list" :key="exam.id" class="d-flex justify-center">
-                <v-btn >
+                <v-btn @click="selectExam(exam)" >
 
                     {{exam.title}}
 
@@ -36,6 +36,7 @@
                     id: 1
                 }, {
                     title: 'آزمون دوم',
+                    start_at:'11 صبح',
                     id: 2
                 }, {
                     title: 'آزمون سوم',
@@ -55,6 +56,11 @@
             ])
 
         }),
+        methods:{
+            selectExam(item){
+                this.$emit('update-exam-id', item)
+            }
+        }
     }
 </script>
 
