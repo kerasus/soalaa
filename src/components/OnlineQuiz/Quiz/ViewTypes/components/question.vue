@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div :class="{ 'current-question': this.currentQuestion.id === source.id, question: true }">
         <div class="buttons-group">
             <v-btn icon @click="changeState(source, 'circle')">
                 <v-icon v-if="source.state !== 'circle'" color="#888" :size="24">mdi-checkbox-blank-circle-outline</v-icon>
@@ -13,12 +13,17 @@
                 <v-icon v-if="source.bookmarked" color="blue" :size="24">mdi-bookmark</v-icon>
             </v-btn>
         </div>
-        <span class="question-body renderedPanel" :id="'question' + source.id" v-html="(source.order + 1) + '- ' + source.rendered_body" v-intersect="onIntersect" />
+        <span class="question-body renderedPanel" :id="'question' + source.id" v-html="(source.order + 1) + '- ' + source.rendered_statement" v-intersect="{
+            handler: onIntersect,
+            options: {
+              threshold: [0, 0.2, 0.4, 0.6, 0.8, 1.0]
+            }
+          }" />
         <v-row class="choices">
             <v-col
                     v-for="(choice, index) in source.choices.list"
                     :key="choice.id"
-                    v-html="(choiceNumber[index]) + choice.rendered_body"
+                    v-html="(choiceNumber[index]) + choice.rendered_title"
                     :md="choiceClass(source)"
                     :class="{ choice: true, renderedPanel: true, active: choice.active }"
                     @click="choiceClicked(source.id, choice.id)"
@@ -101,11 +106,10 @@
             getLargestChoice (choices) {
                 let largestChoice = 0
                 choices.list.forEach((source)=> {
-                    if (source.body.length > largestChoice) {
-                        largestChoice = this.removeErab(source.body).length
+                    if (source.title.length > largestChoice) {
+                        largestChoice = this.removeErab(source.title).length
                     }
                 })
-
                 return largestChoice
             },
         }
@@ -113,7 +117,9 @@
 </script>
 
 <style scoped>
-
+    .current-question {
+        background-color: #fffaee;
+    }
 
     .choices {
         display: flex;
@@ -162,10 +168,10 @@
         overflow-y: auto;
         position: relative;
         /*padding-right: 25px;*/
-        padding: 0 25px 0 0;
+        padding: 0;
     }
 
     .question {
-        margin-bottom: 50px;
+        padding: 10px 30px 10px 0;
     }
 </style>

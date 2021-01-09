@@ -16,15 +16,17 @@ class Question extends Model {
             },
             { key: 'id' },
             { key: 'title' },
-            { key: 'body' },
-            { key: 'rendered_body' },
+            { key: 'statement' },
+            { key: 'rendered_statement' },
             { key: 'photo' },
             { key: 'order' },
+            { key: 'exam_id' },
             {
                 key: 'isInView',
                 default: false
             },
             { key: 'sub_category' },
+            { key: 'sub_category_id' },
             {
                 key: 'checking_times',
                 relatedModel: CheckingTimeList
@@ -52,8 +54,8 @@ class Question extends Model {
             }
         ])
 
-        if (typeof this.body === 'string') {
-            this.rendered_body = md.render(this.body)
+        if (typeof this.statement === 'string') {
+            this.rendered_statement = md.render(this.statement)
         }
     }
 
@@ -121,7 +123,7 @@ class Question extends Model {
     }
 
     onIntersect (entries) {
-        this.isInView = entries[0].isIntersecting
+        this.isInView = entries[0].intersectionRatio >= 0.8
     }
 }
 
