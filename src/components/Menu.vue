@@ -8,6 +8,21 @@
                 v-model="group"
                 active-class="deep-purple--text text--accent-4"
         >
+            <router-link class="text-decoration-none" :to="{ name: 'onlineQuiz.result' }">
+                <v-list-item>
+                    <v-list-item-title>کارنامه</v-list-item-title>
+                </v-list-item>
+            </router-link>
+            <router-link class="text-decoration-none" :to="{ name: 'onlineQuiz.result.lessonDetails' }">
+                <v-list-item>
+                    <v-list-item-title>ریزدرس ها</v-list-item-title>
+                </v-list-item>
+            </router-link>
+            <router-link class="text-decoration-none" :to="{ name: 'onlineQuiz.result.topScore' }">
+                <v-list-item>
+                    <v-list-item-title>نتایج نفرات برتر</v-list-item-title>
+                </v-list-item>
+            </router-link>
             <router-link class="text-decoration-none" :to="{ name: 'tree.edit' }">
                 <v-list-item>
                     <v-list-item-title>ویرایش درخت دانش</v-list-item-title>

@@ -5,11 +5,16 @@ import '@/assets/scss/markdownKatex.scss';
 
 const mixinQuiz = {
   watch: {
-    // 'currentQuestion.id' : function (newQuestionId, oldQuestionId) {
-    //   this.$store.commit('reloadCurrentQuestionModel')
-    //   this.quiz.questions.getQuestionById(newQuestionId).enterQuestion()
-    //   this.quiz.questions.getQuestionById(oldQuestionId).leaveQuestion()
-    // }
+    'currentQuestion.id' : function (newQuestionId, oldQuestionId) {
+      console.log('currentQuestion.id changed: from ' + oldQuestionId + ' to ' + newQuestionId)
+
+      // if (typeof oldQuestionId === 'undefined' || oldQuestionId === null) {
+      //   return
+      // }
+      // this.$store.commit('reloadCurrentQuestionModel')
+      // this.quiz.questions.getQuestionById(newQuestionId).enterQuestion()
+      // this.quiz.questions.getQuestionById(oldQuestionId).leaveQuestion()
+    }
   },
   computed: {
     isQuizPage() {

@@ -1,4 +1,5 @@
 import {Collection, Model} from 'js-abstract-model'
+import Vue from 'vue'
 import Time from "@/plugins/time";
 
 class CheckingTime extends Model {
@@ -15,6 +16,14 @@ class CheckingTimeList extends Collection {
         return CheckingTime
     }
 
+    getLastItem () {
+        let listLength = this.list.length
+        if (listLength === 0) {
+            return false
+        }
+        return this.list[(listLength-1)]
+    }
+
     addStart() {
         this.addItem({
             start: Time.now()
@@ -22,11 +31,12 @@ class CheckingTimeList extends Collection {
     }
 
     addEnd() {
-        let listLength = this.list.length
-        if (listLength === 0) {
+        let lastItem = this.getLastItem()
+        if (!lastItem) {
             return
         }
-        this.list[(listLength-1)].end = Time.now()
+        Vue.set(lastItem, 'end', Time.now())
+        // lastItem.end = Time.now()
     }
 }
 
