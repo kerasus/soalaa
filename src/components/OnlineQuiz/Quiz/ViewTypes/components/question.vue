@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div :class="{ 'current-question': this.currentQuestion.id === source.id, question: true }">
         <div class="buttons-group">
             <v-btn icon @click="changeState(source, 'circle')">
                 <v-icon v-if="source.state !== 'circle'" color="#888" :size="24">mdi-checkbox-blank-circle-outline</v-icon>
@@ -13,7 +13,12 @@
                 <v-icon v-if="source.bookmarked" color="blue" :size="24">mdi-bookmark</v-icon>
             </v-btn>
         </div>
-        <span class="question-body renderedPanel" :id="'question' + source.id" v-html="(source.order + 1) + '- ' + source.rendered_body" v-intersect="onIntersect" />
+        <span class="question-body renderedPanel" :id="'question' + source.id" v-html="(source.order + 1) + '- ' + source.rendered_body" v-intersect="{
+            handler: onIntersect,
+            options: {
+              threshold: [0, 0.2, 0.4, 0.6, 0.8, 1.0]
+            }
+          }" />
         <v-row class="choices">
             <v-col
                     v-for="(choice, index) in source.choices.list"
@@ -113,7 +118,9 @@
 </script>
 
 <style scoped>
-
+    .current-question {
+        background-color: #fffaee;
+    }
 
     .choices {
         display: flex;
@@ -162,10 +169,10 @@
         overflow-y: auto;
         position: relative;
         /*padding-right: 25px;*/
-        padding: 0 25px 0 0;
+        padding: 0;
     }
 
     .question {
-        margin-bottom: 50px;
+        padding: 10px 30px 10px 0;
     }
 </style>

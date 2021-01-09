@@ -121,7 +121,7 @@ class Question extends Model {
     }
 
     onIntersect (entries) {
-        this.isInView = entries[0].isIntersecting
+        this.isInView = entries[0].intersectionRatio >= 0.8
     }
 }
 
