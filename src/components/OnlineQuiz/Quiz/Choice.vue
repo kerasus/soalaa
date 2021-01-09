@@ -1,6 +1,6 @@
 <template>
     <v-col :md="6" :cols="12" class="answer-box" @click="answerClicked">
-        <v-sheet :class="{ 'answer-sheet': true, active: choice.active }">
+        <v-sheet :class="{ 'answer-sheet': true, active: isSelected }">
             <div class="answer-text renderedPanel" v-html="choice.rendered_body"></div>
             <div class="answer-checkbox">
                 <v-checkbox v-model="choice.active" disabled />
@@ -26,9 +26,8 @@
         },
         computed: {
             isSelected () {
-                return false
-                // let userAnswer = this.userAnswersOfOnlineQuiz.find((answer)=> answer.questionId === this.questionId)
-                // return (userAnswer && parseInt(userAnswer.choiceId) === parseInt(this.choice.id))
+                const answeredChoice = this.currentQuestion.getAnsweredChoice()
+                return (answeredChoice && this.choice.id === answeredChoice.id)
             }
         },
         methods: {

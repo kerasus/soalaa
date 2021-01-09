@@ -53,9 +53,9 @@ const mixinQuiz = {
       this.changeQuestion(this.quiz.questions.list[questionIndex].id)
     },
     answerClicked (data) {
-      this.$store.commit('reloadQuizModel')
       this.quiz.questions.getQuestionById(data.questionId).selectChoice(data.choiceId)
-      this.$store.commit('answerQuestion', data)
+      this.currentQuestion.selectChoice(data.choiceId)
+      this.$store.commit('refreshUserQuizData')
     },
     bookmark (question) {
       if (this.currentQuestion.id !== question.id) {
@@ -74,6 +74,10 @@ const mixinQuiz = {
     loadQuiz () {
       this.quiz = new Quiz(this.quizData)
       this.quiz.loadSubcategoriesOfCategories()
+      this.loadUserQuizData()
+    },
+    loadUserQuizData () {
+      this.$store.commit('loadUserQuizData')
     },
     loadUserAnswers () {
       this.$store.commit('loadUserAnswers')
