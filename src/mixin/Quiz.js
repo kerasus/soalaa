@@ -63,6 +63,9 @@ const mixinQuiz = {
       }
       this.$store.commit('reloadQuizModel')
       this.quiz.questions.getQuestionById(this.currentQuestion.id).bookmark()
+      this.currentQuestion.bookmark()
+      this.$store.commit('refreshUserQuizData')
+
     },
     changeState (question, newState) {
       if (this.currentQuestion.id !== question.id) {
@@ -70,6 +73,8 @@ const mixinQuiz = {
       }
       this.$store.commit('reloadQuizModel')
       this.quiz.questions.getQuestionById(this.currentQuestion.id).changeState(newState)
+      this.currentQuestion.changeState(newState)
+      this.$store.commit('refreshUserQuizData')
     },
     loadQuiz () {
       this.quiz = new Quiz(this.quizData)

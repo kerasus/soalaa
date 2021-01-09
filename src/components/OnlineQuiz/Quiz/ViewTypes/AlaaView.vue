@@ -35,7 +35,7 @@
                             </v-row>
                             <v-row class="question-body">
                                 <v-col>
-                                    <div class="renderedPanel" v-html="currentQuestion.rendered_body"></div>
+                                    <div class="renderedPanel" v-html="currentQuestion.rendered_statement"></div>
                                 </v-col>
                             </v-row>
                             <v-row class="question-answers">
