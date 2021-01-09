@@ -11,7 +11,7 @@ const store = new Vuex.Store({
     plugins: [
         createPersistedState({
             storage: window.localStorage,
-            paths: ['userAnswersOfOnlineQuiz']
+            paths: ['userAnswersOfOnlineQuiz', 'userQuizData']
         }),
         createMutationsSharer({
             predicate: [
@@ -32,6 +32,7 @@ const store = new Vuex.Store({
         drawer: false,
         quiz: new Quiz(),
         userAnswersOfOnlineQuiz: [],
+        userQuizData: null,
         currentQuestion: new Question(),
         appbar: true
     },
@@ -83,15 +84,29 @@ const store = new Vuex.Store({
         // goToPrevQuestion (state) {
         //     state.currentQuestion = state.quiz.questions.getPrevQuestion(state.currentQuestion.id)
         // },
+        refreshUserQuizData () {
+            this.commit('saveUserQuizData')
+            this.commit('loadUserQuizData')
+        },
+        saveUserQuizData (state) {
+            this.commit('reloadQuizModel')
+            state.userQuizData = state.quiz.getUserQuizData()
+        },
+        loadUserQuizData (state) {
+            this.commit('reloadQuizModel')
+            state.quiz.setUserQuizData(state.userQuizData)
+        },
+
         answerQuestion (state) {
             this.commit('reloadQuizModel')
             // state.quiz.questions.getQuestionById(newInfo.questionId).selectChoice(newInfo.choiceId)
-            state.userAnswersOfOnlineQuiz = state.quiz.getUserQuizData()
+            state.userAnswersOfOnlineQuiz = state.quiz.getUserQuestionsData()
             this.commit('loadUserAnswers')
         },
+
         loadUserAnswers (state) {
             this.commit('reloadQuizModel')
-            state.quiz.setUserQuestionsData(state.userAnswersOfOnlineQuiz)
+            state.quiz.setUserQuizData(state.userQuizData)
         },
         updateAppbar (state, newInfo) {
             state.appbar = newInfo

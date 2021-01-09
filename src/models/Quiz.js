@@ -38,6 +38,9 @@ class Quiz extends Model {
     }
 
     setUserQuizData (userData) {
+        if (!userData) {
+            return
+        }
         this.questions.list.map((question)=> {
             let userQuestionData = userData.find((questionData)=> questionData.questionId === question.id)
             if (userQuestionData) {
@@ -63,7 +66,7 @@ class Quiz extends Model {
 
             questionsList[index] = {
                 questionId: question.id,
-                checking_times: question.checking_times,
+                checking_times: question.checking_times.list,
                 bookmarked: question.bookmarked,
                 state: question.state,
                 choicesId: answeredChoiceId

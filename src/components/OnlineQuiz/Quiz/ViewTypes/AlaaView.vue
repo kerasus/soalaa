@@ -40,7 +40,7 @@
                             </v-row>
                             <v-row class="question-answers">
                                 <choice v-for="item in currentQuestion.choices.list"
-                                        :key="item.id+((item.active)?'active':'')"
+                                        :key="item.id"
                                         :question-id="currentQuestion.id"
                                         :choice="item"
                                         @answerClicked="answerClicked"
@@ -99,8 +99,7 @@
             if (!this.quiz.id || parseInt(this.$route.params.quizId) !== parseInt(this.quiz.id)) {
                 this.loadQuiz()
             } else {
-                // this.quiz = new Quiz(this.quiz)
-                this.loadUserAnswers()
+                this.loadUserQuizData()
             }
 
             if (this.$route.params.questNumber) {
