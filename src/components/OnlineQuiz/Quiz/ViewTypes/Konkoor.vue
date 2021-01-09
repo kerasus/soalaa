@@ -2,78 +2,20 @@
     <v-container class="konkoor-view" :fluid="true" :style="{ height: '100%', background: 'rgb(244, 244, 244)' }" v-resize="updateWindowSize">
         <v-row :style="{ 'min-height': '100%' }">
             <v-col :md="5" class="questions" :style="{ height: windowSize.y }">
-<!--                <div class="test">ادبیات فارسی</div>-->
-<!--                <div-->
-<!--                        v-for="item in quiz.questions.list"-->
-<!--                        :key="item.id"-->
-<!--                        class="question"-->
-<!--                        v-intersect=" {-->
-<!--                            handler: onIntersect,-->
-<!--                            options: {-->
-<!--                                threshold: [0, 0.5, 1.0]-->
-<!--                            }-->
-<!--                        }"-->
-<!--                        :id="item.id"-->
-<!--                >-->
-<!--                <DynamicScroller-->
-<!--                        :items="quiz.questions.list"-->
-<!--                        :min-item-size="54"-->
-<!--                        class="scroller"-->
-<!--                        ref="scroller"-->
-<!--                        :emitUpdate="true"-->
-<!--                >-->
-<!--                    <template v-slot="{ item, index, active }">-->
-<!--                        <DynamicScrollerItem-->
-<!--                                :item="item"-->
-<!--                                :active="active"-->
-<!--                                :size-dependencies="[item.body, item.choices, item.choices.list, item.state, item.bookmarked]"-->
-<!--                                :data-index="index"-->
-<!--                                :id="item.id"-->
-<!--                        >-->
-<!--                            <div class="buttons-group">-->
-<!--                                <v-btn icon @click="changeState(item, 'circle')">-->
-<!--                                    <v-icon v-if="item.state !== 'circle'" color="#888" :size="24">mdi-checkbox-blank-circle-outline</v-icon>-->
-<!--                                    <v-icon v-if="item.state === 'circle'" color="yellow" :size="24">mdi-checkbox-blank-circle</v-icon>-->
-<!--                                </v-btn>-->
-<!--                                <v-btn icon @click="changeState(item ,'cross')">-->
-<!--                                    <v-icon :color="item.state === 'cross' ? 'red' : '#888'" :size="24">mdi-close</v-icon>-->
-<!--                                </v-btn>-->
-<!--                                <v-btn icon @click="bookmark(item)">-->
-<!--                                    <v-icon v-if="!item.bookmarked" :size="24" color="#888">mdi-bookmark-outline</v-icon>-->
-<!--                                    <v-icon v-if="item.bookmarked" color="blue" :size="24">mdi-bookmark</v-icon>-->
-<!--                                </v-btn>-->
-<!--                            </div>-->
-<!--                            <span class="question-body renderedPanel" v-html="(item.order + 1) + '- ' + item.rendered_body" v-intersect="item.onIntersect" />-->
-<!--                            <v-row class="choices">-->
-<!--                                <v-col-->
-<!--                                        v-for="(choice, index) in item.choices.list"-->
-<!--                                        :key="choice.id"-->
-<!--                                        v-html="(choiceNumber[index]) + choice.rendered_body"-->
-<!--                                        :md="choiceClass(item)"-->
-<!--                                        :class="{ choice: true, renderedPanel: true, active: choice.active }"-->
-<!--                                        @click="choiceClicked(item.id, choice.id, false)"-->
-<!--                                />-->
-<!--                            </v-row>-->
-<!--                        </DynamicScrollerItem>-->
-<!--                    </template>-->
-<!--                </DynamicScroller>-->
-                    <virtual-list style="overflow-y: auto;"
-                                  :data-key="'id'"
-                                  :data-sources="quiz.questions.list"
-                                  :data-component="item"
-                                  class="questions"
-                                  ref="scroller"
-                                  @scroll="onScroll"
-                    />
-<!--                </div>-->
+                <virtual-list style="overflow-y: auto;"
+                              :data-key="'id'"
+                              :data-sources="quiz.questions.list"
+                              :data-component="item"
+                              class="questions"
+                              ref="scroller"
+                              @scroll="onScroll"
+                />
             </v-col>
             <v-col :md="7" class="left-side-list">
                 <v-row>
                     <v-col class="px-10 py-0 d-flex justify-space-between" dir="ltr">
                         <div class="rounded-b-xl rounded-r-xl">
-                            <v-menu
-                                bottom
-                            >
+                            <v-menu bottom>
                                 <template v-slot:activator="{ on, attrs }">
                                     <v-btn
                                             large
@@ -153,24 +95,8 @@
                     </v-col>
                 </v-row>
                 <v-row>
-                    <v-col class="questions-list">
-                        <div v-for="(group, index) in questionsInGroups" :key="index" class="question-group">
-                            <div v-for="question in group" :key="question.id" class="question-in-list">
-                                <div
-                                        :class="{ 'question-number-in-list': true, circle: question.state === 'circle', cross: question.state === 'cross' }"
-                                        :style="{ width: '24%', cursor: 'pointer' }"
-                                        @click="scrollTo(question.id)"
-                                >
-                                    {{ question.order + 1 }}
-                                </div>
-                                <div
-                                        v-for="choice in question.choices.list"
-                                        :key="choice.id"
-                                        :class="{ 'choice-in-list': true, active: choice.active }"
-                                        @click="choiceClicked(question.id, choice.id)"
-                                />
-                            </div>
-                        </div>
+                    <v-col>
+                        <BubbleSheet :quiz="this.quiz" :info="{ type: 'pasokh-barg' }" @clickChoice="choiceClicked" @scrollTo="scrollTo"/>
                     </v-col>
                 </v-row>
             </v-col>
@@ -190,44 +116,25 @@ import $ from 'jquery'
 import '@/assets/scss/markdownKatex.scss'
 import Vue from 'vue'
 import VirtualList from 'vue-virtual-scroll-list'
-// import VueScrollTo from 'vue-scrollto'
-var md = require('markdown-it')(),
-    mk = require('markdown-it-katex')
-md.use(mk);
-
 import 'vue-virtual-scroller/dist/vue-virtual-scroller.css'
 import { DynamicScroller, DynamicScrollerItem } from 'vue-virtual-scroller'
 import Item from './components/question'
+import { mixinQuiz, mixinWindowSize } from '@/mixin/Mixins'
+import Timer from '@/components/OnlineQuiz/Quiz/Timer/Timer'
+import BubbleSheet from "@/components/OnlineQuiz/Quiz/BubbleSheet/BubbleSheet";
 Vue.component('DynamicScroller', DynamicScroller)
 Vue.component('DynamicScrollerItem', DynamicScrollerItem)
-
-
-import { mixinQuiz, mixinWindowSize } from '@/mixin/Mixins'
-// import {Question} from '@/models/Question'
-
-// import {Quiz} from '@/models/Quiz'
-import Timer from '@/components/OnlineQuiz/Quiz/Timer/Timer'
-
-// Vue.use(VueScrollTo, {
-//     container: "div.questions",
-//     duration: 0,
-//     easing: "ease",
-//     offset: -20,
-//     force: true,
-//     cancelable: true,
-//     onStart: false,
-//     onDone: false,
-//     onCancel: false,
-//     x: false,
-//     y: true
-// })
+var md = require('markdown-it')(),
+    mk = require('markdown-it-katex')
+md.use(mk);
 
 export default {
     name: 'KonkoorView',
     mixins: [mixinQuiz, mixinWindowSize],
     components: {
         Timer,
-        'virtual-list': VirtualList
+        'virtual-list': VirtualList,
+        BubbleSheet
     },
     data () {
         return {
@@ -241,6 +148,8 @@ export default {
             if (range.start !== this.lastTimeScrollRange.start || range.end !== this.lastTimeScrollRange.end) {
                 this.quiz.questions.turnIsInViewToFalse(range.start, range.end)
             }
+            console.log(this.getFirstInViewQuestionNumber())
+            this.changeCurrentQuestion(this.quiz.questions.getQuestionByIndex(this.getFirstInViewQuestionNumber() - 1))
         },
         addIsInViewBoolean () {
             for (let i = 0; i < this.quiz.questions.list.length; i++) {
@@ -252,23 +161,14 @@ export default {
                 const questionIndex = this.quiz.questions.getQuestionIndexById(questionId)
                 this.$refs.scroller.scrollToIndex(questionIndex)
                 for (let i = 1; i <= Math.ceil(this.quiz.questions.list.length / 100); i++) {
-                    setTimeout(() => { this.$refs.scroller.scrollToIndex(questionIndex) }, 500 / Math.ceil(this.quiz.questions.list.length / 100) * i)
+                    setTimeout(() => {
+                        this.$refs.scroller.scrollToIndex(questionIndex)
+                            this.changeCurrentQuestion(this.quiz.questions.getQuestionByIndex(this.getFirstInViewQuestionNumber() - 1))
+
+                        },
+                        500 / Math.ceil(this.quiz.questions.list.length / 100) * i)
                 }
             }
-        },
-        questionListHeight () {
-            // box is a col-7 with 12px padding
-            const boxSize = $('.questions-list').width() - 24
-            // each group width is 140px
-            const horizontalGroupAmounts = Math.floor(boxSize / 140)
-            const verticalGroupAmount = Math.ceil(this.questionsInGroups.length / horizontalGroupAmounts)
-            return verticalGroupAmount * 182 + 8
-        },
-        questionListPadding () {
-            const boxSize = $('.questions-list').width() - 24
-            const horizontalGroupAmounts = ($('.questions-list').height() - 8) / 182
-            const verticalGroupAmounts = Math.ceil(this.questionsInGroups.length / horizontalGroupAmounts)
-            return (boxSize - (verticalGroupAmounts * 140)) / 2 + 5
         },
         onIntersect (entries) {
             this.quiz.questions.getQuestionById(entries[0].target.id).isInView = (entries[0].intersectionRatio >= 0.5)
@@ -276,16 +176,20 @@ export default {
         // ToDo: check for removal
         getFirstInViewQuestionNumber () {
             let firstQuestionInView = this.quiz.questions.list.find( (item)=> {
-                // console.log(item.id, item.isInView)
                 return item.isInView === true
             })
-            // console.log(firstQuestionInView)
             if (firstQuestionInView) {
                 return firstQuestionInView.order + 1
             } else {
                 return false
             }
         },
+        // isThisFirstQuestionInView (questionId) {
+        //     if (this.getFirstInViewQuestionNumber().id === questionId) {
+        //         return true
+        //     }
+        //     return false
+        // },
         getQuestionNumber (question) {
             if (question.isInView === false) {
                 return '.question:nth-child('+(this.quiz.questions.getQuestionIndexById(question.id) + 2)+')'
@@ -297,54 +201,26 @@ export default {
             this.changeQuestion(questionId)
             this.answerClicked({questionId, choiceId})
         },
-        // calculateInViewQuestions () {
-        //     for (let i = 0; i < document.getElementsByClassName('vue-recycle-scroller__item-view').length; i++) {
-        //         const str = document.getElementsByClassName('vue-recycle-scroller__item-view')[i].style.transform.replace('translateY(','').replace('px)', '')
-        //         const id = document.getElementsByClassName('vue-recycle-scroller__item-view')[i].children[0].id
-        //         this.quiz.questions.getQuestionById(id).isInView = this.isThisInView(str)
-        //     }
-        // },
-        // isThisInView (elementY) {
-        //     if (elementY >= 0 && elementY <= $('.questions').height() ) {
-        //         return true
-        //     }
-        //     return false
-        // }
-    },
-    computed: {
-        questionsInGroups () {
-            let groups = [],
-                chunk = 10,
-                array = this.quiz.questions.list
-            for (let i=0,j=array.length; i<j; i+=chunk) {
-                groups.push(array.slice(i,i+chunk))
+        changeCurrentQuestion (question) {
+            if (question.id !== this.currentQuestion.id) {
+                this.currentQuestion = question
             }
-
-            return groups
         }
     },
     mounted () {
-        $('.questions-list').height(this.questionListHeight())
         $('.questions').height(this.windowSize.y)
         $('.left-side-list').height(this.windowSize.y - 24)
-
-        $('.questions-list').css({ 'padding-top': '20px' })
-        // setTimeout(() => { this.calculateInViewQuestions() }, 2000)
-        this.$nextTick(() => {
-            const padding = this.questionListPadding()
-            $('.questions-list').css({ 'padding-right': padding })
-            $('.questions-list').css({ 'padding-left': padding })
-        });
+        this.scrollTo(this.currentQuestion.id)
     },
     created () {
-
+        this.$store.commit('updateAppbar', false)
+        this.$store.commit('updateDrawer', false)
         if (!this.quiz.id || parseInt(this.$route.params.quizId) !== parseInt(this.quiz.id)) {
             this.loadQuiz()
         } else {
             this.loadUserAnswers()
         }
-        this.$store.commit('updateAppbar', false)
-        this.$store.commit('updateDrawer', false)
+
         // this.renderQuestionBody()
     },
     watch: {
@@ -386,38 +262,6 @@ export default {
     overflow-y: auto;
 }
 
-.question-number-in-list {
-    position: relative;
-}
-
-.question-number-in-list.circle::after {
-    content: "\F0130";
-    position: absolute;
-    font: normal normal normal 24px/1 "Material Design Icons";
-    text-rendering: auto;
-    line-height: inherit;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-    color: #ffda6a;
-    left: -5px;
-    font-size: 16px;
-    top: -5px;
-}
-
-.question-number-in-list.cross::after {
-    content: "\F0156";
-    position: absolute;
-    font: normal normal normal 24px/1 "Material Design Icons";
-    text-rendering: auto;
-    line-height: inherit;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-    color: red;
-    left: -6px;
-    font-size: 16px;
-    top: -5px;
-}
-
 .question-body {
     margin-bottom: 20px;
     line-height: 40px;
@@ -429,11 +273,11 @@ export default {
     overflow-x: hidden;
     position: relative;
     /*padding-right: 25px;*/
-    padding: 0 25px 0 0;
+    padding: 0;
 }
 
 .question {
-    margin-bottom: 50px;
+    padding: 10px 30px 10px 0;
 }
 
 .choices {
@@ -463,43 +307,6 @@ export default {
 
 .choice:hover {
     background: #e1e1e1;
-}
-
-.questions-list {
-    direction: ltr;
-    display: flex;
-    flex-direction: column;
-    flex-wrap: wrap;
-    align-items: center;
-    margin-bottom: 80px;
-}
-
-.question-group {
-    background: #fff;
-    border-radius: 10px;
-    margin: 5px;
-    padding: 5px 10px;
-    width: 130px;
-    font-size: 11px;
-}
-
-.question-in-list {
-    margin: 2px 0;
-    display: flex;
-    flex-direction: row;
-    height: 14px;
-}
-
-.choice-in-list {
-    width: 19%;
-    margin: 2px;
-    border-radius: 6px;
-    border: 1px solid #ffda6a;
-    cursor: pointer;
-}
-
-.choice-in-list.active {
-    background: #888;
 }
 
 .konkoor-view {

@@ -1,23 +1,47 @@
 <template>
-    <div dir="ltr">
-
+    <v-container :fluid="true" dir="rtl">
         <v-row>
-            <v-col class="pl-5">
+            <v-col :md="5" class="pl-5">
                 <v-textarea dir="rtl"
                             clearable
                             clear-icon="mdi-close-circle"
                             auto-grow
                             label="متن سوال"
-                            v-model="questMarkdownText"
+                            v-model="currentQuestion.statement"
                             @input="updateRendered"
                 ></v-textarea>
             </v-col>
-            <v-col>
-                <div class="renderedPanel" v-html="rendered">
+            <v-col :md="5">
+                <div class="renderedPanel" v-html="questRendered">
                 </div>
             </v-col>
+            <v-col :md="2">
+                <v-select lable="آزمون" :items="fields" v-model="currentQuestion.exam_id" />
+                <v-select lable="درس" :items="fields" v-model="field" />
+            </v-col>
         </v-row>
-
+        <v-radio-group v-model="trueChoiceIndex">
+            <v-row v-for="index in 4" :key="index">
+                <v-col class="pl-5" :md="5">
+                    <v-text-field dir="rtl"
+                                  clearable
+                                  clear-icon="mdi-close-circle"
+                                  auto-grow
+                                  :label="choiceNumber[index -1]"
+                                  v-model="currentQuestion.choices.list[index - 1].title"
+                                  @input="updateRendered"
+                    ></v-text-field>
+                </v-col>
+                <v-col :md="2">
+    <!--                <v-checkbox @click="changeTrueChoice(index - 1)" v-model="choicesMarkdownText[index - 1].true" />-->
+                    <v-radio :value="index - 1" />
+                </v-col>
+                <v-col :md="5">
+                    <div class="renderedPanel" v-html="choiceRendered[index - 1]">
+                    </div>
+                </v-col>
+            </v-row>
+        </v-radio-group>
         <hr>
         <div id="mathfield" locale="fa">x=\frac{-b\pm \sqrt{b^2-4ac}}{2a}</div>
         <div class="latexData" v-html="latexData"></div>
@@ -32,7 +56,7 @@
 <!--            \(x=\frac{-b\pm\sqrt[]{b^2-4aca}}{2a}\)-->
 <!--        </div>-->
 
-    </div>
+    </v-container>
 </template>
 <style>
     .renderedPanel {
@@ -64,6 +88,7 @@
     import MathLive from 'mathlive';
     import 'mathlive/dist/mathlive-fonts.css'
     import 'mathlive/dist/mathlive-static.css'
+    import { Question } from '@/models/Question'
 
 
     // import 'katex/dist/katex.min.css';
@@ -97,21 +122,72 @@
         data: () => {
             return {
                 questMarkdownText: '# Math Rulez! \n  $x=\\frac{-b\\pm\\sqrt[]{b^2-4ac}}{2a}$',
-                rendered: '',
+                choicesMarkdownText: ['', '', '', ''],
+                questRendered: '',
                 formula: '',
-                latexData: null
+                choiceRendered: ['', '', '', ''],
+                latexData: null,
+                choiceNumber: {
+                    0: 'الف ',
+                    1: 'ب ',
+                    2: 'ج ',
+                    3: 'د '
+                },
+                trueChoiceIndex: 0,
+                field: 'ریاضی',
+                fields: ['ریاضی', 'تجربی', 'انسانی'],
+                questionData: {
+                    statement: '',
+                    exam_id: '',
+                    category_id: '',
+                    sub_category_id: '',
+                    order: '',
+                    choices: [
+                        {
+                            title: '',
+                            order: 1,
+                            answer: true
+                        },
+                        {
+                            title: '',
+                            order: 2,
+                            answer: false
+                        },
+                        {
+                            title: '',
+                            order: 3,
+                            answer: false
+                        },
+                        {
+                            title: '',
+                            order: 4,
+                            answer: false
+                        }
+                    ]
+                },
+                currentQuestion: new Question()
             }
         },
         methods: {
             updateRendered () {
-                this.rendered = md.render(this.questMarkdownText);
+                this.questRendered = md.render(this.currentQuestion.statement);
+                for (let i = 0; i < 4; i++) {
+                    this.choiceRendered[i] = md.render(this.currentQuestion.choices.list[i].title)
+                }
             },
             ping() {
 
             },
             displayKeystroke() {
 
-            }
+            },
+            // changeTrueChoice (index) {
+            //     for (let i = 0; i < 4; i++) {
+            //         if (i === index) {
+            //
+            //         }
+            //     }
+            // }
         },
         mounted() {
 
@@ -132,6 +208,9 @@
                 //{ macros: { ...mf.getConfig('macros'), smallfrac: '{}^{#1}\\!\\!/\\!{}_{#2}', }, }
             );
             that.latexData = mf.getValue()
+        },
+        created() {
+            this.currentQuestion = new Question(this.questionData)
         }
     }
 </script>
