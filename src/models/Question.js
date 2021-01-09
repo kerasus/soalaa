@@ -137,11 +137,17 @@ class QuestionList extends Collection {
     }
 
     getQuestionIndexById (questionId) {
-        return this.list.findIndex((item)=> parseInt(item.id) === parseInt(questionId))
+        return this.list.findIndex(
+            (item)=>
+                questionId !== null && parseInt(item.id) === parseInt(questionId)
+        )
     }
 
     getQuestionById (questionId) {
-        return this.list.find((item)=> parseInt(item.id) === parseInt(questionId))
+        return this.list.find(
+            (item)=>
+                questionId !== null && parseInt(item.id) === parseInt(questionId)
+        )
     }
 
     getQuestionByIndex (questionIndex) {

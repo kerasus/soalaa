@@ -5,6 +5,13 @@
                 min-width="100%"
                 tile
         >
+            <v-btn
+                    :loading="true"
+                    :disabled="true"
+            >
+                Block Button
+            </v-btn>
+
             <v-list rounded>
                 <v-subheader>REPORTS</v-subheader>
                 <v-list-item-group
