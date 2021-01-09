@@ -28,19 +28,19 @@ export default new VueRouter({
             component: () => lazyLoadView(import('@/components/TinymceEditor/TinymceEditor'))
         },
         {
-            path: '/online_quiz/personal-result',
-            name: 'onlineQuiz.alaaView',
+            path: encodeURI('/آزمون_آنلاین/کارنامه'),
+            name: 'onlineQuiz.result',
             component: () => lazyLoadView(import('@/components/OnlineQuiz/Quiz/resultTables/personalResult'))
         },
         {
-            path: '/online_quiz/top-scores-result',
-            name: 'onlineQuiz.alaaView',
-            component: () => lazyLoadView(import('@/components/OnlineQuiz/Quiz/resultTables/topScoreResult'))
+            path: encodeURI('/آزمون_آنلاین/کارنامه/ریز درس_ها'),
+            name: 'onlineQuiz.result.lessonDetails',
+            component: () => lazyLoadView(import('@/components/OnlineQuiz/Quiz/resultTables/statisticResult'))
         },
         {
-            path: '/online_quiz/statistic-result',
-            name: 'onlineQuiz.alaaView',
-            component: () => lazyLoadView(import('@/components/OnlineQuiz/Quiz/resultTables/statisticResult'))
+            path: encodeURI('/آزمون_آنلاین/کارنامه/نتایج_نفرات_برتر'),
+            name: 'onlineQuiz.result.topScore',
+            component: () => lazyLoadView(import('@/components/OnlineQuiz/Quiz/resultTables/topScoreResult'))
         },
         {
             path: '/online_quiz/:quizId',
