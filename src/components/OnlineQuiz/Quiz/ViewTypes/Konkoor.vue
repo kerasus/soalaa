@@ -213,14 +213,14 @@ export default {
         this.scrollTo(this.currentQuestion.id)
     },
     created () {
-
+        this.$store.commit('updateAppbar', false)
+        this.$store.commit('updateDrawer', false)
         if (!this.quiz.id || parseInt(this.$route.params.quizId) !== parseInt(this.quiz.id)) {
             this.loadQuiz()
         } else {
             this.loadUserAnswers()
         }
-        this.$store.commit('updateAppbar', false)
-        this.$store.commit('updateDrawer', false)
+
         // this.renderQuestionBody()
     },
     watch: {

@@ -7,7 +7,7 @@
                             clear-icon="mdi-close-circle"
                             auto-grow
                             label="متن سوال"
-                            v-model="questMarkdownText"
+                            v-model="currentQuestion.statement"
                             @input="updateRendered"
                 ></v-textarea>
             </v-col>
@@ -16,7 +16,7 @@
                 </div>
             </v-col>
             <v-col :md="2">
-                <v-select lable="رشته" :items="fields" v-model="field" />
+                <v-select lable="آزمون" :items="fields" v-model="currentQuestion.exam_id" />
                 <v-select lable="درس" :items="fields" v-model="field" />
             </v-col>
         </v-row>
@@ -28,7 +28,7 @@
                                   clear-icon="mdi-close-circle"
                                   auto-grow
                                   :label="choiceNumber[index -1]"
-                                  v-model="choicesMarkdownText[index - 1]"
+                                  v-model="currentQuestion.choices.list[index - 1].title"
                                   @input="updateRendered"
                     ></v-text-field>
                 </v-col>
@@ -137,18 +137,42 @@
                 field: 'ریاضی',
                 fields: ['ریاضی', 'تجربی', 'انسانی'],
                 questionData: {
-                    body: '',
-                    sub_category: '',
-                    choices: []
+                    statement: '',
+                    exam_id: '',
+                    category_id: '',
+                    sub_category_id: '',
+                    order: '',
+                    choices: [
+                        {
+                            title: '',
+                            order: 1,
+                            answer: true
+                        },
+                        {
+                            title: '',
+                            order: 2,
+                            answer: false
+                        },
+                        {
+                            title: '',
+                            order: 3,
+                            answer: false
+                        },
+                        {
+                            title: '',
+                            order: 4,
+                            answer: false
+                        }
+                    ]
                 },
                 currentQuestion: new Question()
             }
         },
         methods: {
             updateRendered () {
-                this.questRendered = md.render(this.questMarkdownText);
+                this.questRendered = md.render(this.currentQuestion.statement);
                 for (let i = 0; i < 4; i++) {
-                    this.choiceRendered[i] = md.render(this.choicesMarkdownText[i])
+                    this.choiceRendered[i] = md.render(this.currentQuestion.choices.list[i].title)
                 }
             },
             ping() {
@@ -184,6 +208,9 @@
                 //{ macros: { ...mf.getConfig('macros'), smallfrac: '{}^{#1}\\!\\!/\\!{}_{#2}', }, }
             );
             that.latexData = mf.getValue()
+        },
+        created() {
+            this.currentQuestion = new Question(this.questionData)
         }
     }
 </script>
