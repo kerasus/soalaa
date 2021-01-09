@@ -23,6 +23,11 @@ export default new VueRouter({
             component: () => lazyLoadView(import('@/components/QuestEditor/QuestEditor'))
         },
         {
+            path: '/quiz/edit/:quizId',
+            name: 'quiz.edit',
+            component: () => lazyLoadView(import('@/components/QuizEditor/QuizEditor'))
+        },
+        {
             path: '/TinymceEditor',
             name: 'TinymceEditor',
             component: () => lazyLoadView(import('@/components/TinymceEditor/TinymceEditor'))
