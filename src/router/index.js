@@ -28,6 +28,21 @@ export default new VueRouter({
             component: () => lazyLoadView(import('@/components/TinymceEditor/TinymceEditor'))
         },
         {
+            path: '/online_quiz/personal-result',
+            name: 'onlineQuiz.alaaView',
+            component: () => lazyLoadView(import('@/components/OnlineQuiz/Quiz/resultTables/personalResult'))
+        },
+        {
+            path: '/online_quiz/top-scores-result',
+            name: 'onlineQuiz.alaaView',
+            component: () => lazyLoadView(import('@/components/OnlineQuiz/Quiz/resultTables/topScoreResult'))
+        },
+        {
+            path: '/online_quiz/statistic-result',
+            name: 'onlineQuiz.alaaView',
+            component: () => lazyLoadView(import('@/components/OnlineQuiz/Quiz/resultTables/statisticResult'))
+        },
+        {
             path: '/online_quiz/:quizId',
             name: 'onlineQuiz.konkoorView',
             component: () => lazyLoadView(import('@/components/OnlineQuiz/Quiz/ViewTypes/Konkoor'))
@@ -36,21 +51,6 @@ export default new VueRouter({
             path: '/online_quiz/:quizId/:questNumber',
             name: 'onlineQuiz.alaaView',
             component: () => lazyLoadView(import('@/components/OnlineQuiz/Quiz/ViewTypes/AlaaView'))
-        },
-        {
-            path: '/online_quiz/:quizId/:questNumber/personal-result',
-            name: 'onlineQuiz.alaaView',
-            component: () => lazyLoadView(import('@/components/OnlineQuiz/Quiz/resultTables/personalResult'))
-        },
-        {
-            path: '/online_quiz/:quizId/:questNumber/top-scores-result',
-            name: 'onlineQuiz.alaaView',
-            component: () => lazyLoadView(import('@/components/OnlineQuiz/Quiz/resultTables/topScoreResult'))
-        },
-        {
-            path: '/online_quiz/:quizId/:questNumber/statistic-result',
-            name: 'onlineQuiz.alaaView',
-            component: () => lazyLoadView(import('@/components/OnlineQuiz/Quiz/resultTables/statisticResult'))
         }
     ]
 })
