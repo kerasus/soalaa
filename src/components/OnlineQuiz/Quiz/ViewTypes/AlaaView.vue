@@ -102,14 +102,12 @@
                 this.loadUserQuizData()
             }
 
-            if (this.$route.params.questNumber) {
-                this.loadQuestionByNumber(this.$route.params.questNumber)
-            } else {
-                this.loadFirstQuestion()
-            }
+            this.loadQuestionByNumber(this.$route.params.questNumber)
+
             if (this.windowSize.x > 1263) {
                 this.$store.commit('updateDrawer', true)
             }
+
             this.$store.commit('updateAppbar', true)
         }
     }

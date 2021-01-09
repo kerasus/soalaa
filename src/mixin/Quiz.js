@@ -84,9 +84,6 @@ const mixinQuiz = {
     loadUserQuizData () {
       this.$store.commit('loadUserQuizData')
     },
-    loadUserAnswers () {
-      this.$store.commit('loadUserAnswers')
-    },
     getQuestionNumberFromIndex (index) {
       index = parseInt(index)
       return index + 1
@@ -100,7 +97,7 @@ const mixinQuiz = {
       return number - 1
     },
     goToNextQuestion () {
-      this.$store.commit('loadUserAnswers')
+      this.$store.commit('loadUserQuizData')
       let question = this.quiz.questions.getNextQuestion(this.currentQuestion.id)
       if (!question) {
         return
@@ -108,7 +105,7 @@ const mixinQuiz = {
       this.changeQuestion(question.id)
     },
     goToPrevQuestion () {
-      this.$store.commit('loadUserAnswers')
+      this.$store.commit('loadUserQuizData')
       let question = this.quiz.questions.getPrevQuestion(this.currentQuestion.id)
       if (!question) {
         return

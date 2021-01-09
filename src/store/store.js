@@ -11,13 +11,11 @@ const store = new Vuex.Store({
     plugins: [
         createPersistedState({
             storage: window.localStorage,
-            paths: ['userAnswersOfOnlineQuiz', 'userQuizData']
+            paths: ['userQuizData']
         }),
         createMutationsSharer({
             predicate: [
                 'updateQuiz',
-                'answerQuestion',
-                'loadUserAnswers',
                 'updateCurrentQuestion',
                 'goToNextQuestion',
                 'goToPrevQuestion'
@@ -54,7 +52,12 @@ const store = new Vuex.Store({
             // set checking time
             const oldQuestionId = state.currentQuestion.id
             const newQuestionId = newInfo.id
-            if (newQuestionId !== oldQuestionId) {
+            if (newQuestionId === 0 && oldQuestionId === null && newQuestionId !== oldQuestionId) {
+                let newQuestion = state.quiz.questions.getQuestionById(newQuestionId)
+                if(newQuestion) {
+                    newQuestion.enterQuestion()
+                }
+            } else if (newQuestionId && oldQuestionId && newQuestionId !== oldQuestionId) {
                 let newQuestion = state.quiz.questions.getQuestionById(newQuestionId)
                 if(newQuestion) {
                     newQuestion.enterQuestion()
@@ -67,6 +70,7 @@ const store = new Vuex.Store({
             }
 
             state.currentQuestion = new Question(newInfo)
+            this.commit('refreshUserQuizData')
         },
         reloadQuizModel (state) {
             if (typeof state.quiz.questions.getNextQuestion !== 'function') {
@@ -93,18 +97,6 @@ const store = new Vuex.Store({
             state.userQuizData = state.quiz.getUserQuizData()
         },
         loadUserQuizData (state) {
-            this.commit('reloadQuizModel')
-            state.quiz.setUserQuizData(state.userQuizData)
-        },
-
-        answerQuestion (state) {
-            this.commit('reloadQuizModel')
-            // state.quiz.questions.getQuestionById(newInfo.questionId).selectChoice(newInfo.choiceId)
-            state.userAnswersOfOnlineQuiz = state.quiz.getUserQuestionsData()
-            this.commit('loadUserAnswers')
-        },
-
-        loadUserAnswers (state) {
             this.commit('reloadQuizModel')
             state.quiz.setUserQuizData(state.userQuizData)
         },

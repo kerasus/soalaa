@@ -44,7 +44,7 @@
 
     export default {
         name: "examInfo",
-        props:[ 'examId' ],
+        props:[ 'exam' ],
         data: () => ({
 
 
