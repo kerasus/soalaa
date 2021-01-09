@@ -5,24 +5,45 @@
         </div>
         <div class="d-flex justify-center">
             <v-card elevation="3" class="infoCard d-flex justify-center">
+
                 <v-col>
                     <v-row class=" d-flex justify-center">
                         <v-data-table
-                                style="width: 80%"
+                                hide-default-footer
                                 :headers="headers1"
                                 :items="item1"
                                 :items-per-page="5"
                                 class="elevation-1 dataTable"
-                        ></v-data-table>
+                        >
+                            <template v-slot:top>
+                                <br>
+                                <span class="tableTitle">
+                                    جدول عملکرد دروس
+                                </span>
+                                <br>
+                                <br>
+                            </template>
+
+                        </v-data-table>
                     </v-row>
                     <v-row class=" d-flex justify-center">
                         <v-data-table
-                                style="width: 80%"
+                                hide-default-footer
                                 :headers="headers2"
                                 :items="item2"
                                 :items-per-page="5"
                                 class="elevation-1 dataTable"
-                        ></v-data-table>
+                        >
+                            <template v-slot:top>
+                                <br>
+                                <span class="tableTitle">
+                                    جدول نتیجه کلی
+                                </span>
+                                <br>
+                                <br>
+                            </template>
+
+                        </v-data-table>
                     </v-row>
                 </v-col>
 
@@ -94,7 +115,9 @@
 </script>
 
 <style scoped>
-
+    .tableTitle {
+        margin-right: 30px;
+    }
 
     .infoCard {
         margin-top: 10px;
@@ -116,6 +139,7 @@
 
     .dataTable {
         margin-top: 20px;
+        width: 80%
     }
 
 </style>

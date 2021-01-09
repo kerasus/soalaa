@@ -8,12 +8,21 @@
                 <v-col>
                     <v-row class=" d-flex justify-center">
                         <v-data-table
-                                style="width: 80%"
+                                hide-default-footer
                                 :headers="headers"
                                 :items="item"
                                 :items-per-page="5"
                                 class="elevation-1 dataTable"
-                        ></v-data-table>
+                        >
+                            <template v-slot:top>
+                                <br>
+                                <span class="tableTitle">
+                                    جدول نتایج نفرات برتر
+                                </span>
+                                <br>
+                                <br>
+                            </template>
+                        </v-data-table>
                     </v-row>
                 </v-col>
             </v-card>
@@ -42,10 +51,10 @@
                 ],
                 item: [
                     {
-                        row:'1',
-                        course:'ریاضی',
-                        percentage:90,
-                        level:5000,
+                        row: '1',
+                        course: 'ریاضی',
+                        percentage: 90,
+                        level: 5000,
                     },
 
                 ],
@@ -55,6 +64,10 @@
 </script>
 
 <style scoped>
+    .tableTitle {
+        margin-right: 30px;
+    }
+
     .infoCard {
         margin-top: 10px;
         width: 90%;
@@ -75,5 +88,6 @@
 
     .dataTable {
         margin-top: 20px;
+        width: 80%
     }
 </style>
