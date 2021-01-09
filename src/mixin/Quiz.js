@@ -114,7 +114,8 @@ const mixinQuiz = {
       const questIndex = this.quiz.questions.getQuestionIndexById(id),
           questNumber = this.getQuestionNumberFromIndex(questIndex)
 
-      this.currentQuestion = this.quiz.questions.getQuestionById(id)
+      const currentQuestion = this.quiz.questions.getQuestionById(id)
+      this.$store.commit('updateCurrentQuestion', currentQuestion)
 
       if (parseInt(this.$route.params.questNumber) !== parseInt(questNumber) && this.$route.name !== 'onlineQuiz.konkoorView') {
           this.$router.push({ name: 'onlineQuiz.alaaView', params: { quizId: this.quiz.id, questNumber } })

@@ -82,7 +82,7 @@
     // import { Quiz } from '@/models/Quiz'
 
     export default {
-        name: "AlaaView",
+        name: 'AlaaView',
         components: {
             Choice,
             Timer
