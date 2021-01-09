@@ -47,6 +47,54 @@
                         percentage:90,
                         level:5000,
                     },
+                    {
+                        row:'1',
+                        course:'ریاضی',
+                        percentage:90,
+                        level:5000,
+                    },
+                    {
+                        row:'1',
+                        course:'ریاضی',
+                        percentage:90,
+                        level:5000,
+                    },
+                    {
+                        row:'1',
+                        course:'ریاضی',
+                        percentage:90,
+                        level:5000,
+                    },
+                    {
+                        row:'1',
+                        course:'ریاضی',
+                        percentage:90,
+                        level:5000,
+                    },
+                    {
+                        row:'1',
+                        course:'ریاضی',
+                        percentage:90,
+                        level:5000,
+                    },
+                    {
+                        row:'1',
+                        course:'ریاضی',
+                        percentage:90,
+                        level:5000,
+                    },
+                    {
+                        row:'1',
+                        course:'ریاضی',
+                        percentage:90,
+                        level:5000,
+                    },
+                    {
+                        row:'1',
+                        course:'ریاضی',
+                        percentage:90,
+                        level:5000,
+                    },
 
                 ],
             }

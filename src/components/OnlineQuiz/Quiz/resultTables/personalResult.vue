@@ -62,6 +62,54 @@
                         wrong: 4.0,
                         empty: 1,
                     },
+                    {
+                        row: '1',
+                        course: 'ریاضی',
+                        total: 6.0,
+                        correct: 10,
+                        wrong: 4.0,
+                        empty: 1,
+                    },
+                    {
+                        row: '1',
+                        course: 'ریاضی',
+                        total: 6.0,
+                        correct: 10,
+                        wrong: 4.0,
+                        empty: 1,
+                    },
+                    {
+                        row: '1',
+                        course: 'ریاضی',
+                        total: 6.0,
+                        correct: 10,
+                        wrong: 4.0,
+                        empty: 1,
+                    },
+                    {
+                        row: '1',
+                        course: 'ریاضی',
+                        total: 6.0,
+                        correct: 10,
+                        wrong: 4.0,
+                        empty: 1,
+                    },
+                    {
+                        row: '1',
+                        course: 'ریاضی',
+                        total: 6.0,
+                        correct: 10,
+                        wrong: 4.0,
+                        empty: 1,
+                    },
+                    {
+                        row: '1',
+                        course: 'ریاضی',
+                        total: 6.0,
+                        correct: 10,
+                        wrong: 4.0,
+                        empty: 1,
+                    },
 
                 ],
                 headers2: [
@@ -78,6 +126,70 @@
                     {text: ' رتبه کشور', value: 'rankInCountry'},
                 ],
                 item2: [
+                    {
+                        subGroup: '1',
+                        rawPercentage: 90,
+                        level: 5000,
+                        rankInCity: 20,
+                        rankInState: 200,
+                        rankInCountry: 2000
+                    },
+                    {
+                        subGroup: '1',
+                        rawPercentage: 90,
+                        level: 5000,
+                        rankInCity: 20,
+                        rankInState: 200,
+                        rankInCountry: 2000
+                    },
+                    {
+                        subGroup: '1',
+                        rawPercentage: 90,
+                        level: 5000,
+                        rankInCity: 20,
+                        rankInState: 200,
+                        rankInCountry: 2000
+                    },
+                    {
+                        subGroup: '1',
+                        rawPercentage: 90,
+                        level: 5000,
+                        rankInCity: 20,
+                        rankInState: 200,
+                        rankInCountry: 2000
+                    },
+                    {
+                        subGroup: '1',
+                        rawPercentage: 90,
+                        level: 5000,
+                        rankInCity: 20,
+                        rankInState: 200,
+                        rankInCountry: 2000
+                    },
+                    {
+                        subGroup: '1',
+                        rawPercentage: 90,
+                        level: 5000,
+                        rankInCity: 20,
+                        rankInState: 200,
+                        rankInCountry: 2000
+                    },
+                    {
+                        subGroup: '1',
+                        rawPercentage: 90,
+                        level: 5000,
+                        rankInCity: 20,
+                        rankInState: 200,
+                        rankInCountry: 2000
+                    },
+                    {
+                        subGroup: '1',
+                        rawPercentage: 90,
+                        level: 5000,
+                        rankInCity: 20,
+                        rankInState: 200,
+                        rankInCountry: 2000
+                    },
                     {
                         subGroup: '1',
                         rawPercentage: 90,
