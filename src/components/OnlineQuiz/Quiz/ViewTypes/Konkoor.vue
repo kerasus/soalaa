@@ -218,7 +218,7 @@ export default {
         if (!this.quiz.id || parseInt(this.$route.params.quizId) !== parseInt(this.quiz.id)) {
             this.loadQuiz()
         } else {
-            this.loadUserAnswers()
+            this.loadUserQuizData()
         }
 
         // this.renderQuestionBody()
