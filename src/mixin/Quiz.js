@@ -2,6 +2,8 @@ import {Quiz} from "@/models/Quiz";
 // import 'katex/dist/katex.min.css';
 import 'github-markdown-css/github-markdown.css';
 import '@/assets/scss/markdownKatex.scss';
+import {QuestSubcategory} from "@/models/QuestSubcategory";
+import Assistant from "@/plugins/assistant";
 
 const mixinQuiz = {
   computed: {

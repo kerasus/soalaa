@@ -102,7 +102,6 @@
 </template>
 
 <script>
-    import FakeQuizData from '@/plugins/fakeQuizData'
     import 'github-markdown-css/github-markdown.css'
     import $ from 'jquery'
     import '@/assets/scss/markdownKatex.scss'
@@ -113,6 +112,7 @@
     import Item from './Question'
     import { mixinQuiz, mixinWindowSize } from '@/mixin/Mixins'
     import BubbleSheet from "./BubbleSheet";
+    import {Quiz} from "@/models/Quiz";
     Vue.component('DynamicScroller', DynamicScroller)
     Vue.component('DynamicScrollerItem', DynamicScrollerItem)
     var md = require('markdown-it')(),
@@ -128,7 +128,7 @@
         },
         data () {
             return {
-                quizData: FakeQuizData,
+                quizData: new Quiz(),
                 item: Item,
                 lastTimeScrollRange: { start: 0, end: 29 }
             }
@@ -201,11 +201,24 @@
         created () {
             this.$store.commit('updateAppbar', false)
             this.$store.commit('updateDrawer', false)
-            if (!this.quiz.id || (this.$route.params.quizId).toString() !== (this.quiz.id).toString()) {
-                this.loadQuiz()
-            } else {
-                this.loadUserAnswers()
-            }
+            console.log('birron')
+            this.quizData.show(this.$route.params.quizId).then((response) => {
+                console.log("toosh")
+                console.log(response)
+                $.getJSON(response.data.data.questions_file_url, function(data) {
+                    this.quizData = data
+                })
+            }).then(() => {
+                if (!this.quiz.id || (this.$route.params.quizId).toString() !== (this.quiz.id).toString()) {
+                    this.loadQuiz()
+                } else {
+                    this.loadUserAnswers()
+                }
+            }).catch((error) => {
+                console.log(error)
+            })
+
+
 
             // this.renderQuestionBody()
         },
