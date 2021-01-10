@@ -47,23 +47,49 @@
                         :key="item.id"
                 >
                     <td>{{ item.title }}</td>
-                    <td>{{ item.start_at }}</td>
-                    <td>{{ item.finish_at }}</td>
+                    <td>{{ item.shamsiDate('start_at').dateTime }}</td>
+                    <td>{{ item.shamsiDate('finish_at').dateTime }}</td>
                     <td>{{ item.delay_time }} دقیقه</td>
                     <td>
-                        <v-icon
-                                small
-                                class="mr-2"
+                        <v-btn
+                                class="mx-2"
+                                fab
+                                dark
+                                x-small
+                                color="cyan"
                                 @click="selectExam(item)"
                         >
-                            mdi-pencil
-                        </v-icon>
-                        <v-icon
-                                small
+                            <v-icon dark>
+                                mdi-pencil
+                            </v-icon>
+                        </v-btn>
+                        <v-btn
+                                class="mx-2"
+                                fab
+                                dark
+                                x-small
+                                color="primary"
+                        >
+                            <v-icon
+                                    small
+                            >
+                                mdi-arrow-up-bold-box-outline
+                            </v-icon>
+                        </v-btn>
+                        <v-btn
+                                class="mx-2"
+                                fab
+                                dark
+                                x-small
+                                color="pink"
                                 @click="deleteItem(item)"
                         >
-                            mdi-delete
-                        </v-icon>
+                            <v-icon
+                                    small
+                            >
+                                mdi-delete
+                            </v-icon>
+                        </v-btn>
                     </td>
                 </tr>
                 </tbody>

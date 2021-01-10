@@ -1,6 +1,6 @@
 <template>
     <v-row>
-        <v-col cols="4">
+        <v-col cols="7">
             <exam-list @update-exam-id="updateExamId" ref="examList"/>
         </v-col>
         <v-col>

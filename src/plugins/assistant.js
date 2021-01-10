@@ -7,11 +7,10 @@ let Assistant = function () {
         }
     }
 
-    function handleAxiosError(error) {
-        console.log('errors-------', error.errors)
-        console.log('message-------', error.message)
+    function handleAxiosError($toasted, error) {
+        console.log('error.response.data-------', error.response.data)
         for (const [key, value] of Object.entries(error.response.data)) {
-            this.$toasted.show(value, {
+            $toasted.show(value, {
                 theme: "toasted-primary",
                 position: "top-right",
                 duration : 2000
