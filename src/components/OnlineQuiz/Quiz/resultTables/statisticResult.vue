@@ -171,10 +171,10 @@
 
 
     .v-data-table >>> thead th:first-child {
-        border-radius: 0 20px 20px 0 !important;
+        border-radius: 0 20px 0 0 !important;
     }
     .v-data-table >>> thead th:last-child {
-        border-radius: 20px 0 0 20px !important;
+        border-radius: 20px 0 0 0 !important;
     }
 
 
