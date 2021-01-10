@@ -2,13 +2,15 @@
     <v-container class="konkoor-view" :fluid="true" :style="{ height: '100%', background: 'rgb(244, 244, 244)' }" v-resize="updateWindowSize">
         <v-row :style="{ 'min-height': '100%' }">
             <v-col :md="5" class="questions" :style="{ height: windowSize.y }">
-                <div class="lesson">{{ currentQuestion.sub_category }}</div>
+                <div class="lesson">{{ currentLessons.title }}</div>
                 <virtual-list style="overflow-y: auto;"
                               :data-key="'id'"
                               :data-sources="quiz.questions.list"
                               :data-component="item"
                               ref="scroller"
                               @scroll="onScroll"
+                              class="questionss"
+
                 />
             </v-col>
             <v-col :md="7" class="left-side-list">
@@ -145,6 +147,7 @@ export default {
     },
     methods: {
         onScroll (event, range) {
+            console.log('log')
             if (range.start !== this.lastTimeScrollRange.start || range.end !== this.lastTimeScrollRange.end) {
                 this.quiz.questions.turnIsInViewToFalse(range.start, range.end)
             }
@@ -178,6 +181,7 @@ export default {
             let firstQuestionInView = this.quiz.questions.list.find( (item)=> {
                 return item.isInView === true
             })
+            console.log(firstQuestionInView.id)
             if (firstQuestionInView) {
                 return firstQuestionInView.order + 1
             } else {
@@ -209,7 +213,11 @@ export default {
     },
     mounted () {
         $('.questions').height(this.windowSize.y)
+        $('.questionss').height(this.windowSize.y - 50)
         $('.left-side-list').height(this.windowSize.y - 24)
+        if (this.currentQuestion.id === null) {
+            this.loadFirstQuestion()
+        }
         this.scrollTo(this.currentQuestion.id)
     },
     created () {
@@ -226,6 +234,7 @@ export default {
     watch: {
         'windowSize.y': function () {
             $('.questions').height(this.windowSize.y)
+            $('.questionss').height(this.windowSize.y - 50)
             $('.left-side-list').height(this.windowSize.y - 24)
         },
         'windowSize.x': function () {
@@ -240,6 +249,18 @@ export default {
 </script>
 
 <style scoped>
+.lesson {
+    height: 50px;
+    border-bottom: 1px solid #ececec;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.questionss {
+    overflow: hidden;
+}
+
 .scroller {
     height: 100%;
 }

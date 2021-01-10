@@ -8,7 +8,7 @@
         >
             <div style="height: 150px;line-height: 150px;font-size: 4rem;color: rgb(255, 193, 7);display: flex;align-items: center;justify-content: center;">
                 <div style="display: block">
-                    <v-img src="/img/logo.png" width="50" />
+                    <v-img src="/img/logo-1.png" width="150" />
                 </div>
             </div>
             <map-of-questions v-if="$route.name === 'onlineQuiz.alaaView'"/>

@@ -29,11 +29,14 @@ const mixinQuiz = {
     },
     currentLessons () {
       this.$store.commit('reloadQuizModel')
+      if (this.currentQuestion.id === null) {
+        this.loadFirstQuestion()
+      }
       return this.quiz.sub_categories.getItem('id', this.currentQuestion.sub_category.id)
     },
     daftarche: {
       get () {
-        return 'omoomi'
+        return 'دفترچه سؤالات عمومی'
       }
     }
   },

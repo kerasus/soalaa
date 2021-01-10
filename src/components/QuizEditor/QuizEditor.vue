@@ -138,7 +138,6 @@
                 if (range.start !== this.lastTimeScrollRange.start || range.end !== this.lastTimeScrollRange.end) {
                     this.quiz.questions.turnIsInViewToFalse(range.start, range.end)
                 }
-                this.changeCurrentQuestion(this.quiz.questions.getQuestionByIndex(this.getFirstInViewQuestionNumber() - 1))
             },
             addIsInViewBoolean () {
                 for (let i = 0; i < this.quiz.questions.list.length; i++) {
