@@ -33,9 +33,13 @@ const store = new Vuex.Store({
         userAnswersOfOnlineQuiz: [],
         userQuizData: null,
         currentQuestion: new Question(),
-        appbar: true
+        appbar: true,
+        quizList: []
     },
     mutations: {
+        updateQuizList (state, newInfo) {
+            state.quizList = newInfo
+        },
         updateWindowSize (state, newInfo) {
             state.windowSize = newInfo
         },
@@ -107,6 +111,9 @@ const store = new Vuex.Store({
         }
     },
     getters: {
+        quizList (state) {
+            return state.quizList
+        },
         mapOfQuestionsDrawer (state) {
             return state.mapOfQuestionsDrawer
         },

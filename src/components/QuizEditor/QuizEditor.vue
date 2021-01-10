@@ -17,11 +17,11 @@
                             <v-menu bottom>
                                 <template v-slot:activator="{ on, attrs }">
                                     <v-btn
-                                            large
-                                            tile
-                                            v-bind="attrs"
-                                            v-on="on"
-                                            elevation="0"
+                                        large
+                                        tile
+                                        v-bind="attrs"
+                                        v-on="on"
+                                        elevation="0"
                                     >
                                         <v-icon class="mr-2" :size="30" color="#666">mdi-account-circle</v-icon>
                                         سید مصطفی
@@ -189,11 +189,11 @@
         created () {
             this.$store.commit('updateAppbar', false)
             this.$store.commit('updateDrawer', false)
-            console.log('birron')
             const that = this
             this.quizData.show(this.$route.params.quizId).then((response) => {
                 $.getJSON(response.data.data.questions_file_url, function(data) {
                     that.quizData = response.data.data
+                    console.log(response.data.data)
                     that.quizData.questions = new QuestionList(data)
                     that.loadQuiz()
                 })
