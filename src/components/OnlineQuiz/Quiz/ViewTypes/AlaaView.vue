@@ -112,6 +112,9 @@
 </script>
 
 <style>
+.v-navigation-drawer .v-navigation-drawer__content {
+    overflow-y: scroll;
+}
 .quiz-page .katex-display {
     display: inline-block;
     direction: ltr;
