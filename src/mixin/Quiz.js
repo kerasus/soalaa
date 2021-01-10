@@ -30,6 +30,11 @@ const mixinQuiz = {
     currentLessons () {
       this.$store.commit('reloadQuizModel')
       return this.quiz.sub_categories.getItem('id', this.currentQuestion.sub_category.id)
+    },
+    daftarche: {
+      get () {
+        return 'omoomi'
+      }
     }
   },
   methods: {
