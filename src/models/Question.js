@@ -2,7 +2,7 @@ import Vue from 'vue'
 import { Model, Collection } from 'js-abstract-model'
 import { AnswerList } from './Answer'
 import { ChoiceList } from './Choice'
-import {CheckingTimeList} from "@/models/CheckingTime";
+import { CheckingTimeList } from "@/models/CheckingTime";
 var md = require('markdown-it')(),
     mk = require('markdown-it-katex')
 md.use(mk);

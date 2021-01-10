@@ -2,6 +2,7 @@ import { Model, Collection } from 'js-abstract-model'
 import {QuestionList} from './Question';
 import {QuestCategoryList} from "@/models/QuestCategory";
 import {QuestSubcategoryList} from '@/models/QuestSubcategory';
+import { CheckingTimeList } from "@/models/CheckingTime";
 
 class Quiz extends Model {
     constructor (data) {
@@ -47,7 +48,7 @@ class Quiz extends Model {
                 question.uncheckChoices()
                 question.selectChoice(userQuestionData.choicesId)
 
-                question.checking_times = userQuestionData.checking_times.list
+                question.checking_times = new CheckingTimeList(userQuestionData.checking_times.list)
                 question.bookmarked = userQuestionData.bookmarked
                 question.state = userQuestionData.state
             }
@@ -55,7 +56,7 @@ class Quiz extends Model {
     }
 
     getUserQuizData () {
-        let selectedQuestions = this.questions.list.filter(
+        let questionsHasDataFiltered = this.questions.list.filter(
             (item) => {
                 const selected = item.choices.getSelected()
                 const bookmarked = item.bookmarked
@@ -65,23 +66,33 @@ class Quiz extends Model {
                 return (selected || bookmarked || state || checkingTimesLength)
             }
         )
-        selectedQuestions.map((question, index, questionsList) => {
+
+        let questionsHasData = [];
+
+        questionsHasDataFiltered.forEach((question) => {
             let answeredChoice = question.getAnsweredChoice()
             let answeredChoiceId = null
             if (answeredChoice) {
                 answeredChoiceId = answeredChoice.id
             }
+            let checkingTimes = []
+            question.checking_times.list.forEach((checkingTime)=> {
+                checkingTimes.push({
+                    start: checkingTime.start,
+                    end: checkingTime.end
+                })
+            })
 
-            questionsList[index] = {
+            questionsHasData.push({
                 questionId: question.id,
-                checking_times: question.checking_times.list,
+                checking_times: checkingTimes,
                 bookmarked: question.bookmarked,
                 state: question.state,
                 choicesId: answeredChoiceId
-            }
+            })
         });
 
-        return selectedQuestions
+        return questionsHasData
     }
 }
 
