@@ -10,7 +10,6 @@
                               ref="scroller"
                               @scroll="onScroll"
                               class="questionss"
-
                 />
             </v-col>
             <v-col :md="7" class="left-side-list">
@@ -98,7 +97,7 @@
                 </v-row>
                 <v-row>
                     <v-col>
-                        <BubbleSheet :quiz="this.quiz" :info="{ type: 'pasokh-barg' }" @clickChoice="choiceClicked" @scrollTo="scrollTo"/>
+                        <BubbleSheet :info="{ type: 'pasokh-barg' }" @clickChoice="choiceClicked" @scrollTo="scrollTo"/>
                     </v-col>
                 </v-row>
             </v-col>
