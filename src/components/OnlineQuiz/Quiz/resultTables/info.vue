@@ -1,6 +1,6 @@
 <template>
 
-        <v-card elevation="3" class="infoCard  infoText align-content-center">
+        <v-card elevation="1" class="infoCard  infoText align-content-center">
             <v-row class="infoHeight">
                 <v-col class="infoCols">
                     نام و نام خانوادگی : هلیا محمدی
