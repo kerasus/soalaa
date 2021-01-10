@@ -2,7 +2,7 @@
     <v-container class="konkoor-view" :fluid="true" :style="{ height: '100%', background: 'rgb(244, 244, 244)' }" v-resize="updateWindowSize">
         <v-row :style="{ 'min-height': '100%' }">
             <v-col :md="5" class="questions" :style="{ height: windowSize.y }">
-                <div class="lesson">{{ currentQuestion }}</div>
+                <div class="lesson">{{ currentQuestion.sub_category }}</div>
                 <virtual-list style="overflow-y: auto;"
                               :data-key="'id'"
                               :data-sources="quiz.questions.list"
