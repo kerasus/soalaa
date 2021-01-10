@@ -94,8 +94,6 @@
             }
         },
         created() {
-            console.log('alaa view created:' + this.$route.params.questNumber)
-
             if (!this.quiz.id || parseInt(this.$route.params.quizId) !== parseInt(this.quiz.id)) {
                 this.loadQuiz()
             } else {
