@@ -4,6 +4,7 @@ import { Quiz } from '@/models/Quiz'
 import { Question } from '@/models/Question'
 import createPersistedState from 'vuex-persistedstate'
 import createMutationsSharer from 'vuex-shared-mutations'
+import Assistant from '@/plugins/assistant'
 
 Vue.use(Vuex)
 
@@ -50,19 +51,20 @@ const store = new Vuex.Store({
             this.commit('reloadCurrentQuestionModel')
 
             // set checking time
-            const oldQuestionId = state.currentQuestion.id
-            const newQuestionId = newInfo.id
-            if (newQuestionId === 0 && oldQuestionId === null && newQuestionId !== oldQuestionId) {
-                let newQuestion = state.quiz.questions.getQuestionById(newQuestionId)
-                if(newQuestion) {
-                    newQuestion.enterQuestion()
-                }
-            } else if (newQuestionId && oldQuestionId && newQuestionId !== oldQuestionId) {
-                let newQuestion = state.quiz.questions.getQuestionById(newQuestionId)
-                if(newQuestion) {
-                    newQuestion.enterQuestion()
-                }
+            const oldQuestionId = Assistant.getId(state.currentQuestion.id)
+            const newQuestionId = Assistant.getId(newInfo.id)
 
+            if (newQuestionId === oldQuestionId) {
+                return
+            }
+
+            if (newQuestionId) {
+                let newQuestion = state.quiz.questions.getQuestionById(newQuestionId)
+                if(newQuestion) {
+                    newQuestion.enterQuestion()
+                }
+            }
+            if (oldQuestionId) {
                 let oldQuestion = state.quiz.questions.getQuestionById(oldQuestionId)
                 if(oldQuestion) {
                     oldQuestion.leaveQuestion()
@@ -94,7 +96,7 @@ const store = new Vuex.Store({
         },
         saveUserQuizData (state) {
             this.commit('reloadQuizModel')
-            state.userQuizData = state.quiz.getUserQuizData()
+            state.quiz.mergeUserQuizData(state.userQuizData)
         },
         loadUserQuizData (state) {
             this.commit('reloadQuizModel')
