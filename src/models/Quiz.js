@@ -143,6 +143,10 @@ class Quiz extends Model {
             choicesId: answeredChoiceId
         })
     }
+
+    // getCategoryFromSubCategory (subCategoryId) {
+    //     const categoryId = this.sub_categories.list.find((item) => { item.id })
+    // }
 }
 
 class QuizList extends Collection {

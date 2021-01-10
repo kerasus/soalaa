@@ -7,7 +7,7 @@
                         :style="{ width: '24%', cursor: 'pointer' }"
                         @click="clickQuestionNumber(question.id)"
                 >
-                    {{ question.order + 1 }}
+                    {{ getQuestionNumberFromId(question.id) }}
                 </div>
                 <div
                         v-for="choice in question.choices.list"
@@ -22,9 +22,11 @@
 
 <script>
     import $ from "jquery";
+    import { mixinQuiz } from "@/mixin/Mixins";
 
     export default {
         name: 'BubbleSheet',
+        mixins: [mixinQuiz],
         computed: {
             questionsInGroups () {
                 let groups = [],
@@ -36,7 +38,7 @@
                 return groups
             }
         },
-        props: ['quiz', 'info'],
+        props: ['info'],
         methods: {
             clickChoice (questionId, choiceId) {
                 this.$emit('clickChoice', questionId, choiceId)

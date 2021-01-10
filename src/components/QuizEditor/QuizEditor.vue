@@ -8,7 +8,6 @@
                               :data-component="item"
                               class="questions"
                               ref="scroller"
-                              @scroll="onScroll"
                 />
             </v-col>
             <v-col :md="7" class="left-side-list">
@@ -93,7 +92,7 @@
                 </v-row>
                 <v-row>
                     <v-col>
-                        <BubbleSheet :quiz="this.quiz" :info="{ type: 'pasokh-barg' }" @clickChoice="choiceClicked" @scrollTo="scrollTo"/>
+                        <BubbleSheet :info="{ type: 'pasokh-barg' }" @clickChoice="choiceClicked" @scrollTo="scrollTo"/>
                     </v-col>
                 </v-row>
             </v-col>
@@ -102,7 +101,6 @@
 </template>
 
 <script>
-    import FakeQuizData from '@/plugins/fakeQuizData'
     import 'github-markdown-css/github-markdown.css'
     import $ from 'jquery'
     import '@/assets/scss/markdownKatex.scss'
@@ -113,6 +111,8 @@
     import Item from './Question'
     import { mixinQuiz, mixinWindowSize } from '@/mixin/Mixins'
     import BubbleSheet from "./BubbleSheet";
+    import {Quiz, QuizList} from "@/models/Quiz";
+    import {QuestionList} from "@/models/Question";
     Vue.component('DynamicScroller', DynamicScroller)
     Vue.component('DynamicScrollerItem', DynamicScrollerItem)
     var md = require('markdown-it')(),
@@ -128,35 +128,22 @@
         },
         data () {
             return {
-                quizData: FakeQuizData,
+                quizData: new Quiz(),
                 item: Item,
-                lastTimeScrollRange: { start: 0, end: 29 }
+                lastTimeScrollRange: { start: 0, end: 29 },
+                quizList: []
             }
         },
         methods: {
-            onScroll (event, range) {
-                if (range.start !== this.lastTimeScrollRange.start || range.end !== this.lastTimeScrollRange.end) {
-                    this.quiz.questions.turnIsInViewToFalse(range.start, range.end)
-                }
-                this.changeCurrentQuestion(this.quiz.questions.getQuestionByIndex(this.getFirstInViewQuestionNumber() - 1))
-            },
-            addIsInViewBoolean () {
-                for (let i = 0; i < this.quiz.questions.list.length; i++) {
-                    this.quiz.questions.list[i].isInView = false
-                }
-            },
             scrollTo (questionId) {
-                if (this.quiz.questions.getQuestionById(questionId).isInView === false) {
-                    const questionIndex = this.quiz.questions.getQuestionIndexById(questionId)
-                    this.$refs.scroller.scrollToIndex(questionIndex)
-                    for (let i = 1; i <= Math.ceil(this.quiz.questions.list.length / 100); i++) {
-                        setTimeout(() => {
-                                this.$refs.scroller.scrollToIndex(questionIndex)
-                                this.changeCurrentQuestion(this.quiz.questions.getQuestionByIndex(this.getFirstInViewQuestionNumber() - 1))
+                const questionIndex = this.quiz.questions.getQuestionIndexById(questionId)
+                this.$refs.scroller.scrollToIndex(questionIndex)
+                for (let i = 1; i <= Math.ceil(this.quiz.questions.list.length / 100); i++) {
+                    setTimeout(() => {
+                            this.$refs.scroller.scrollToIndex(questionIndex)
 
-                            },
-                            500 / Math.ceil(this.quiz.questions.list.length / 100) * i)
-                    }
+                        },
+                        500 / Math.ceil(this.quiz.questions.list.length / 100) * i)
                 }
             },
             onIntersect (entries) {
@@ -202,11 +189,24 @@
         created () {
             this.$store.commit('updateAppbar', false)
             this.$store.commit('updateDrawer', false)
-            if (!this.quiz.id || (this.$route.params.quizId).toString() !== (this.quiz.id).toString()) {
-                this.loadQuiz()
-            } else {
-                this.loadUserAnswers()
-            }
+            console.log('birron')
+            const that = this
+            this.quizData.show(this.$route.params.quizId).then((response) => {
+                $.getJSON(response.data.data.questions_file_url, function(data) {
+                    that.quizData = response.data.data
+                    that.quizData.questions = new QuestionList(data)
+                    that.loadQuiz()
+                })
+                new QuizList().fetch().then((response) => {
+                    this.quizList = response.data.data
+                    console.log(response.data.data)
+                })
+            }).catch((error) => {
+                console.log(error)
+            })
+
+
+
 
             // this.renderQuestionBody()
         },

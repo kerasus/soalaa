@@ -1,11 +1,12 @@
 <template>
     <v-sheet class="map-of-questions">
         <div v-for="(categoryItem) in quiz.categories.list" :key="'category-'+categoryItem.id">
-            <v-btn :elevation="0" block class="categoryItem">
-                {{ categoryItem.title }}
-            </v-btn>
+            <div v-if="daftarche === categoryItem.title || daftarche === 'آزاد'">
+                <v-btn :elevation="0" block class="categoryItem">
+                    {{ categoryItem.title }}
+                </v-btn>
 
-            <v-expansion-panels
+                <v-expansion-panels
                     accordion
                     flat
                     hover
@@ -42,6 +43,7 @@
                     </v-expansion-panel-content>
                 </v-expansion-panel>
             </v-expansion-panels>
+            </div>
         </div>
     </v-sheet>
 </template>

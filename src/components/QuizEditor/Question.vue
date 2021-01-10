@@ -1,7 +1,7 @@
 <template>
     <div :class="{ 'current-question': this.currentQuestion.id === source.id, question: true }">
         <div class="buttons-group">
-            <v-select :items="quizList" chips multiple attach outlined dense full-width/>
+            <v-select :items="quizList" item-text="title" chips multiple attach outlined dense full-width/>
             <v-btn icon @click="removeQuestion(source.id)">
                 <v-icon :size="24">mdi-close</v-icon>
             </v-btn>
@@ -9,7 +9,7 @@
                 <v-icon :size="24">mdi-pencil</v-icon>
             </v-btn>
         </div>
-        <span class="question-body renderedPanel" :id="'question' + source.id" v-html="(source.order + 1) + '- ' + source.rendered_statement" v-intersect="{
+        <span class="question-body renderedPanel" :id="'question' + source.id" v-html="(getQuestionNumberFromId(source.id)) + '- ' + source.rendered_statement" v-intersect="{
             handler: onIntersect,
             options: {
               threshold: [0, 0.2, 0.4, 0.6, 0.8, 1.0]
@@ -32,6 +32,7 @@
     import '@/assets/scss/markdownKatex.scss'
     import { mixinQuiz, mixinWindowSize } from '@/mixin/Mixins'
     import $ from "jquery";
+
     var md = require('markdown-it')(),
         mk = require('markdown-it-katex')
     md.use(mk);
@@ -46,12 +47,7 @@
                     1: 'ب) ',
                     2: 'ج) ',
                     3: 'د) '
-                },
-                quizList: [
-                    'آزمون 1',
-                    'آزمون 2',
-                    'آزمو ن3'
-                ]
+                }
             }
         },
         props: {
@@ -61,6 +57,12 @@
             source: { // here is: {uid: 'unique_1', text: 'abc'}
                 default () {
                     return {}
+                }
+            },
+            quizList: {
+                type: Array,
+                default () {
+                    return []
                 }
             }
         },
@@ -118,6 +120,9 @@
             edit (questionId) {
                 console.log(questionId)
             }
+        },
+        created() {
+
         }
     }
 </script>
