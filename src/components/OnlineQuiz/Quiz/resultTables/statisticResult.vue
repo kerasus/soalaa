@@ -165,4 +165,20 @@
         margin-top: 20px;
         width: 80%
     }
+    .v-data-table >>> thead {
+        background-color: rgba(255, 193, 7, 0.3)!important;
+    }
+
+
+    .v-data-table >>> thead th:first-child {
+        border-radius: 0 20px 20px 0 !important;
+    }
+    .v-data-table >>> thead th:last-child {
+        border-radius: 20px 0 0 20px !important;
+    }
+
+
+    .v-data-table >>> tbody tr:nth-of-type(even) {
+        background-color: rgba(0, 0, 0,0.04)!important;
+    }
 </style>
