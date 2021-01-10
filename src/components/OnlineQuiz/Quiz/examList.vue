@@ -127,6 +127,7 @@
                 })
             },
             getExams () {
+                console.log('rereshExamList2')
                 this.examList.loading = true
                 this.examList.fetch()
                 .then((response) => {

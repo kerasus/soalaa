@@ -7,8 +7,20 @@ let Assistant = function () {
         }
     }
 
+    function handleAxiosError(error) {
+        for (const [key, value] of Object.entries(error.response.data)) {
+            this.$toasted.show(value, {
+                theme: "toasted-primary",
+                position: "top-right",
+                duration : 2000
+            })
+            console.log(`${key}: ${value}`);
+        }
+    }
+
     return {
-        getId
+        getId,
+        handleAxiosError
     };
 }();
 
