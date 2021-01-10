@@ -169,9 +169,6 @@
         border-bottom-left-radius: 24px !important;
         border-bottom-right-radius: 24px !important;
     }
-    .v-navigation-drawer .v-navigation-drawer__content {
-        overflow-y: scroll;
-    }
     .v-navigation-drawer .v-navigation-drawer__content .theme--light.v-btn {
         color: #666;
     }

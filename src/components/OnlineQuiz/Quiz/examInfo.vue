@@ -69,6 +69,7 @@
     import Vue from 'vue'
     import VuePersianDatetimePicker from 'vue-persian-datetime-picker'
     import {Exam} from "@/models/exam";
+    import Assistant from "@/plugins/assistant";
     Vue.component('date-picker', VuePersianDatetimePicker)
 
     export default {
@@ -84,28 +85,26 @@
                 this.examItem.holding_status = 1
                 this.examItem.photo = 'https://cdn.alaatv.com/upload/images/slideShow/home-slide-yalda-festival_20201219075413.jpg?w=1843&h=719'
                 this.examItem.create()
-                    .then((response) => {
+                    .then(() => {
                         this.examItem.loading = false
-                        for (const [key, value] of Object.entries(response.data)) {
-                            this.$toasted.show(value, {
-                                theme: "toasted-primary",
-                                position: "top-right",
-                                duration : 2000
-                            })
-                            console.log(`${key}: ${value}`);
-                            this.refreshExamList()
-                        }
+                        this.$toasted.show('ثبت با موفقیت انجام شد', {
+                            theme: "toasted-primary",
+                            position: "top-right",
+                            duration : 2000
+                        })
+                        this.refreshExamList()
                         // this.examList = new ExamList(response.data.data, {meta: response.data.meta, links: response.data.links})
                     })
                     .catch((error) => {
-                        console.log('error.response', error.response)
+                        Assistant.handleAxiosError(this.$toasted, error)
                         this.examItem.loading = false
                         this.examItem = new Exam()
                         this.refreshExamList()
                     })
             },
             refreshExamList () {
-                this.$emit('refreshExamList')
+                this.$emit('refresh-exam-list')
+                console.log('rereshExamList0')
             }
         }
     }

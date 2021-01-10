@@ -1,6 +1,6 @@
 <template>
     <v-row>
-        <v-col cols="4">
+        <v-col cols="7">
             <exam-list @update-exam-id="updateExamId" ref="examList"/>
         </v-col>
         <v-col>
@@ -22,6 +22,7 @@
         components: {ExamList, ExamInfo},
         methods: {
             rereshExamList () {
+                console.log('rereshExamList1')
                 this.$refs.examList.getExams()
             },
             updateExamId(e){
