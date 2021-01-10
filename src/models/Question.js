@@ -12,7 +12,7 @@ class Question extends Model {
         super(data, [
             {
                 key: 'baseRoute',
-                default: 'https://alaatv.com/api/aaa/v1/exam/1'
+                default: '/question'
             },
             { key: 'id' },
             { key: 'title' },
@@ -53,6 +53,20 @@ class Question extends Model {
                 default: false
             }
         ])
+
+        let that = this;
+        this.apiResource = {
+            fields: [
+                {key: 'statement'},
+                {key: 'sub_category_id'},
+                {
+                    key: 'choices',
+                    value: function () {
+                        return that.choices.list
+                    }
+                }
+            ]
+        }
 
         if (typeof this.statement === 'string') {
             this.rendered_statement = md.render(this.statement)

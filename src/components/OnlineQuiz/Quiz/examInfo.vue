@@ -96,7 +96,7 @@
                         // this.examList = new ExamList(response.data.data, {meta: response.data.meta, links: response.data.links})
                     })
                     .catch((error) => {
-                        console.log('error.response', error)
+                        console.log('error', error)
                         Assistant.handleAxiosError(error)
                         this.examItem.loading = false
                         this.examItem = new Exam()
