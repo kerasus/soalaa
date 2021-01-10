@@ -69,6 +69,7 @@
                                 dark
                                 x-small
                                 color="primary"
+                                :to="{ name: 'quiz.edit', params: { quizId: item.id}}"
                         >
                             <v-icon
                                     small

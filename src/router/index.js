@@ -18,8 +18,18 @@ export default new VueRouter({
             component: () => lazyLoadView(import('@/components/tree'))
         },
         {
+            path: '/exams-editor/',
+            name: 'onlineQuiz.exams',
+            component: () => lazyLoadView(import('@/components/OnlineQuiz/Quiz/exams'))
+        },
+        {
             path: '/quest/create',
             name: 'quest.create',
+            component: () => lazyLoadView(import('@/components/QuestEditor/QuestEditor'))
+        },
+        {
+            path: '/quest/:id',
+            name: 'quest.edit',
             component: () => lazyLoadView(import('@/components/QuestEditor/QuestEditor'))
         },
         {
@@ -56,11 +66,6 @@ export default new VueRouter({
             path: '/online_quiz/:quizId/:questNumber',
             name: 'onlineQuiz.alaaView',
             component: () => lazyLoadView(import('@/components/OnlineQuiz/Quiz/ViewTypes/AlaaView'))
-        },
-        {
-            path: '/exams-editor/',
-            name: 'onlineQuiz.exams',
-            component: () => lazyLoadView(import('@/components/OnlineQuiz/Quiz/exams'))
         }
     ]
 })
