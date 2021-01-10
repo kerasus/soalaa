@@ -1,7 +1,9 @@
 import {Quiz} from "@/models/Quiz";
+import Assistant from '@/plugins/assistant'
 // import 'katex/dist/katex.min.css';
 import 'github-markdown-css/github-markdown.css';
 import '@/assets/scss/markdownKatex.scss';
+import {QuestSubcategory} from "@/models/QuestSubcategory";
 
 const mixinQuiz = {
   computed: {
@@ -29,7 +31,14 @@ const mixinQuiz = {
     },
     currentLessons () {
       this.$store.commit('reloadQuizModel')
-      return this.quiz.sub_categories.getItem('id', this.currentQuestion.sub_category.id)
+      let currentLessons = null
+      if (!this.currentQuestion.sub_category) {
+        currentLessons = new QuestSubcategory()
+      }
+      let subCategoryId = Assistant.getId(this.currentQuestion.sub_category.id)
+      currentLessons = this.quiz.sub_categories.getItem('id', subCategoryId)
+
+      return currentLessons
     },
     daftarche: {
       get () {
@@ -106,14 +115,16 @@ const mixinQuiz = {
       this.changeQuestion(question.id)
     },
     changeQuestion(id) {
-      if (parseInt(this.currentQuestion.id) === parseInt(id)) {
+      let targetId = Assistant.getId(id)
+      let currentQuestionId = Assistant.getId(this.currentQuestion.id)
+      if (!targetId || currentQuestionId === targetId) {
         return
       }
 
-      const questIndex = this.quiz.questions.getQuestionIndexById(id),
+      const questIndex = this.quiz.questions.getQuestionIndexById(targetId),
           questNumber = this.getQuestionNumberFromIndex(questIndex)
 
-      const currentQuestion = this.quiz.questions.getQuestionById(id)
+      const currentQuestion = this.quiz.questions.getQuestionById(targetId)
       this.$store.commit('updateCurrentQuestion', currentQuestion)
 
       if (parseInt(this.$route.params.questNumber) !== parseInt(questNumber) && this.$route.name !== 'onlineQuiz.konkoorView') {

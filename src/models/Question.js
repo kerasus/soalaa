@@ -139,14 +139,14 @@ class QuestionList extends Collection {
     getQuestionIndexById (questionId) {
         return this.list.findIndex(
             (item)=>
-                questionId !== null && parseInt(item.id) === parseInt(questionId)
+                questionId !== null && (item.id).toString() === (questionId).toString()
         )
     }
 
     getQuestionById (questionId) {
         return this.list.find(
             (item)=>
-                questionId !== null && parseInt(item.id) === parseInt(questionId)
+                questionId !== null && (item.id).toString() === (questionId).toString()
         )
     }
 

@@ -94,7 +94,7 @@
             }
         },
         created() {
-            if (!this.quiz.id || parseInt(this.$route.params.quizId) !== parseInt(this.quiz.id)) {
+            if (!this.quiz.id || (this.$route.params.quizId).toString() !== (this.quiz.id).toString()) {
                 this.loadQuiz()
             } else {
                 this.loadUserQuizData()

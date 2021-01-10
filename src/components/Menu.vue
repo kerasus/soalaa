@@ -35,9 +35,9 @@
                 </v-list-item>
             </router-link>
 
-            <router-link class="text-decoration-none" :to="{ name: 'TinymceEditor' }">
+            <router-link class="text-decoration-none" :to="{ name: 'onlineQuiz.exams' }">
                 <v-list-item>
-                    <v-list-item-title>ویرایشگر</v-list-item-title>
+                    <v-list-item-title>لیست آزمون ها</v-list-item-title>
                 </v-list-item>
             </router-link>
 
