@@ -29,10 +29,15 @@ const mixinQuiz = {
     },
     currentLessons () {
       this.$store.commit('reloadQuizModel')
-      if (this.currentQuestion.id === null) {
+      let currentLessons = null
+      if (!this.currentQuestion.sub_category) {
+        currentLessons = new QuestSubcategory()
         this.loadFirstQuestion()
       }
-      return this.quiz.sub_categories.getItem('id', this.currentQuestion.sub_category.id)
+      let subCategoryId = Assistant.getId(this.currentQuestion.sub_category.id)
+      currentLessons = this.quiz.sub_categories.getItem('id', subCategoryId)
+
+      return currentLessons
     },
     daftarche: {
       get () {

@@ -1,62 +1,143 @@
 <template>
     <div >
-
-
-
-            <div v-for="(exam) in examList.list" :key="exam.id" class="d-flex justify-center">
-                <v-btn @click="selectExam(exam)" >
-
-                    {{exam.title}}
-
-                </v-btn>
-                <br><br>
-
-            </div>
-
-
+        <v-dialog v-model="dialogDelete" max-width="500px">
+            <v-card>
+                <v-card-title class="headline">از حذف آزمون اطمینان دارید؟</v-card-title>
+                <v-card-actions>
+                    <v-spacer></v-spacer>
+                    <v-btn color="blue darken-1" text @click="closeDelete">خیر</v-btn>
+                    <v-btn color="blue darken-1" text @click="deleteItemConfirm">بله</v-btn>
+                    <v-spacer></v-spacer>
+                </v-card-actions>
+            </v-card>
+        </v-dialog>
+        <v-progress-linear
+                color="deep-purple accent-4"
+                absolute
+                top
+                :active="examList.loading"
+                indeterminate
+                rounded
+                height="6"
+        ></v-progress-linear>
+        <v-simple-table v-if="!examList.loading">
+            <template v-slot:default>
+                <thead>
+                <tr>
+                    <th class="text-right">
+                        عنوان
+                    </th>
+                    <th class="text-right">
+                        شروع
+                    </th>
+                    <th class="text-right">
+                        پایان
+                    </th>
+                    <th class="text-right">
+                        میزان تاخیر
+                    </th>
+                    <th class="text-right">
+                        عملیات
+                    </th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr
+                        v-for="item in examList.list"
+                        :key="item.id"
+                >
+                    <td>{{ item.title }}</td>
+                    <td>{{ item.start_at }}</td>
+                    <td>{{ item.finish_at }}</td>
+                    <td>{{ item.delay_time }} دقیقه</td>
+                    <td>
+                        <v-icon
+                                small
+                                class="mr-2"
+                                @click="selectExam(item)"
+                        >
+                            mdi-pencil
+                        </v-icon>
+                        <v-icon
+                                small
+                                @click="deleteItem(item)"
+                        >
+                            mdi-delete
+                        </v-icon>
+                    </td>
+                </tr>
+                </tbody>
+            </template>
+        </v-simple-table>
+        <div class="text-center">
+            <v-btn elevation="2" @click="selectExam(null)">
+                ثبت آزمون جدید
+            </v-btn>
+        </div>
     </div>
 </template>
 
 <script>
-    import {ExamList} from "@/models/exam";
+    import Vue from 'vue'
+    import {Exam, ExamList} from "@/models/exam";
+    import Toasted from 'vue-toasted';
+    Vue.use(Toasted)
 
     export default {
-        name: "examList",
+        name: 'examList',
         data: () => ({
-
-
-            examList: new ExamList([
-                {
-                    title: 'آزمون اول',
-                    holding_status:'',
-                    start_at:'10صبح',
-                    finish_at:'',
-                    price:'',
-                    delay_time:'',
-                    id: 1
-                }, {
-                    title: 'آزمون دوم',
-                    start_at:'11 صبح',
-                    id: 2
-                }, {
-                    title: 'آزمون سوم',
-                    id: 3
-                }, {
-                    title: 'آزمون چهارم',
-                    id: 4
-                }, {
-                    title: 'آزمون پنجم',
-                    id: 5
-                }, {
-                    title: 'آزمون ششم',
-                    id: 6
-                },
-
-
-            ])
-
+            dialog: false,
+            dialogDelete: false,
+            examList: new ExamList(),
+            examItem: new Exam()
         }),
+        mounted() {
+            this.getExams()
+        },
         methods:{
+            editItem () {
+                // this.editedIndex = this.desserts.indexOf(item)
+                // this.editedItem = Object.assign({}, item)
+                this.dialog = true
+            },
+            deleteItem () {
+                // this.editedIndex = this.desserts.indexOf(item)
+                // this.editedItem = Object.assign({}, item)
+                this.dialogDelete = true
+            },
+            deleteItemConfirm () {
+                // this.desserts.splice(this.editedIndex, 1)
+                this.closeDelete()
+            },
+            save () {
+                this.close()
+            },
+            close () {
+                this.dialog = false
+                this.$nextTick(() => {
+                    // this.editedItem = Object.assign({}, this.defaultItem)
+                    // this.editedIndex = -1
+                })
+            },
+            closeDelete () {
+                this.dialogDelete = false
+                this.$nextTick(() => {
+                    // this.editedItem = Object.assign({}, this.defaultItem)
+                    // this.editedIndex = -1
+                })
+            },
+            getExams () {
+                this.examList.loading = true
+                this.examList.fetch()
+                .then((response) => {
+                    this.examList.loading = false
+                    this.examList = new ExamList(response.data.data, {meta: response.data.meta, links: response.data.links})
+                })
+                .catch(() => {
+                    this.examList.loading = false
+                    this.examList = new ExamList()
+                })
+            },
             selectExam(item){
                 this.$emit('update-exam-id', item)
             }
