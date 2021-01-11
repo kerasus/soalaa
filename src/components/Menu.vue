@@ -9,8 +9,11 @@
                 v-model="group"
                 active-class="deep-purple--text text--accent-4"
         >
-            <router-link class="text-decoration-none" :to="{ name: 'onlineQuiz.result' }">
+            <router-link class="text-decoration-none" :to="{ name: 'dashboard' }">
                 <v-list-item>
+                    <v-list-item-icon>
+                        <v-icon color="#fff">mdi-view-dashboard</v-icon>
+                    </v-list-item-icon>
                     <v-list-item-title>داشبورد</v-list-item-title>
                 </v-list-item>
             </router-link>
@@ -51,7 +54,6 @@
         </v-list-item-group>
         <v-list-item-group
                 class="admin-panel"
-                v-model="adminGroup"
                 active-class="deep-purple--text text--accent-4"
         >
             <router-link class="text-decoration-none" :to="{ name: 'onlineQuiz.result' }">
@@ -101,15 +103,14 @@
     export default {
         name: "Menu",
         data: () => ({
-            group: null,
-            adminGroup: null
+            group: null
         }),
     }
 </script>
 
 <style scoped>
     .admin-panel {
-        border-top: 1px solid #000;
+        border-top: 1px solid #fff;
     }
 </style>
 
@@ -117,5 +118,10 @@
     .menu .v-list-item__title {
         color: #fff;
         font-size: 16px !important;
+        font-weight: normal !important;
+    }
+
+    .menu .v-list-item__icon {
+        margin-left: 12px !important;
     }
 </style>

@@ -1,12 +1,16 @@
 <template>
     <div :class="{ 'current-question': this.currentQuestion.id === source.id, question: true }">
         <div class="buttons-group">
-            <v-select :items="quizList" item-text="title" chips multiple attach outlined dense full-width disabled/>
-            <v-btn icon @click="removeQuestion(source.id)" disabled>
+            <v-select :items="quizList" item-text="title" chips multiple attach outlined dense full-width disabled v-if="false"/>
+            <v-btn icon @click="removeQuestion(source.id)" disabled v-if="false">
                 <v-icon :size="24">mdi-close</v-icon>
             </v-btn>
-            <v-btn icon :to="{ name: 'quest.edit', params: { id: source.id } }" disabled>
+            <v-btn icon :to="{ name: 'quest.edit', params: { id: source.id } }" disabled v-if="false">
                 <v-icon :size="24">mdi-pencil</v-icon>
+            </v-btn>
+            <input :id="'question-id' + source.id" :value="source.id" type="text" />
+            <v-btn icon @click="copyIdToClipboard()">
+                <v-icon>mdi-content-copy</v-icon>
             </v-btn>
         </div>
         <span class="question-body renderedPanel" :id="'question' + source.id" v-html="(getQuestionNumberFromId(source.id)) + '- ' + source.rendered_statement" v-intersect="{
@@ -67,6 +71,11 @@
             }
         },
         methods: {
+            copyIdToClipboard () {
+                const questionIdElement = document.querySelector('#question-id' + this.source.id)
+                questionIdElement.select()
+                console.log(document.execCommand('copy'))
+            },
             onIntersect(entries) {
                 this.source.onIntersect(entries)
             },

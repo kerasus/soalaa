@@ -220,10 +220,13 @@
                 if (!this.editMode) {
                     this.currentQuestion.choices.list.forEach((item) => { item.answer = false })
                     this.currentQuestion.choices.list[this.trueChoiceIndex].answer = true
-                    this.currentQuestion.exams_ids = this.selectedQuizzes
+                    this.currentQuestion.exams = this.selectedQuizzes
                     this.currentQuestion.lesson = this.se
                     this.currentQuestion.create().then((response) => {
                         console.log(response)
+                        this.currentQuestion.statement = ''
+                        this.currentQuestion.choices.list.forEach((item) => { item.title = '' })
+                        this.currentQuestion.order++
                     }).catch((error) => {
                         Assistant.handleAxiosError(this.$toasted, error)
                     })
