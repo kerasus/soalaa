@@ -17,9 +17,9 @@
                     <v-list-item-title>داشبورد</v-list-item-title>
                 </v-list-item>
             </router-link>
-            <router-link class="text-decoration-none" :to="{ name: 'onlineQuiz.result.lessonDetails' }">
+            <router-link class="text-decoration-none" :to="{ name: 'user.onlineQuiz.list' }">
                 <v-list-item>
-                    <v-list-item-title>ریزدرس ها</v-list-item-title>
+                    <v-list-item-title>آزمون های سه آ</v-list-item-title>
                 </v-list-item>
             </router-link>
             <router-link class="text-decoration-none" :to="{ name: 'onlineQuiz.result.topScore' }">

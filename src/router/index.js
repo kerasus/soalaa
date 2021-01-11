@@ -74,6 +74,12 @@ const router = new VueRouter({
             meta: {middleware: auth}
         },
         {
+            path: encodeURI('/آزمون_های_سه_آ'),
+            name: 'user.onlineQuiz.list',
+            component: () => lazyLoadView(import('@/pages/user/exam/list')),
+            meta: {middleware: auth}
+        },
+        {
             path: '/online_quiz/:quizId',
             name: 'onlineQuiz.konkoorView',
             component: () => lazyLoadView(import('@/components/OnlineQuiz/Quiz/ViewTypes/Konkoor')),
