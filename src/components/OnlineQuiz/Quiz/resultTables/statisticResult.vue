@@ -1,22 +1,20 @@
 <template>
-    <div>
+    <div style="background-color: rgb(244, 244, 244)">
         <div class="d-flex justify-center">
             <info/>
         </div>
         <div class="d-flex justify-center">
-            <v-card elevation="3" class="infoCard d-flex justify-center">
-                <v-col>
-                    <v-row class=" d-flex justify-center">
-                        <v-data-table
-                                hide-default-footer
-                                :headers="headers"
-                                :items="item"
-                                :items-per-page="5"
-                                class="elevation-1 dataTable"
-                        ></v-data-table>
-                    </v-row>
-                </v-col>
-            </v-card>
+            <v-col>
+                <v-row class=" d-flex justify-center">
+                    <v-data-table
+                            hide-default-footer
+                            :headers="headers"
+                            :items="item"
+                            :items-per-page="5"
+                            class="elevation-1 dataTable"
+                    ></v-data-table>
+                </v-row>
+            </v-col>
         </div>
     </div>
 </template>
@@ -32,18 +30,18 @@
                 headers: [
                     {
                         text: 'ردیف',
-                        align: 'start',
+                        align: 'center',
                         sortable: false,
                         value: 'row',
                     },
-                    {text: 'درس', value: 'course'},
-                    {text: 'درصد', value: 'percentage'},
-                    {text: ' تراز', value: 'level'},
-                    {text: ' شهر', value: 'city'},
-                    {text: 'استان', value: 'state'},
-                    {text: 'کشور', value: 'country'},
-                    {text: 'میانگین درصد', value: 'percentageMean'},
-                    {text: 'میانگین تراز', value: 'levelMean'},
+                    {text: 'درس', value: 'course',align: 'center',sortable: false,},
+                    {text: 'درصد', value: 'percentage',align: 'center',sortable: false,},
+                    {text: ' تراز', value: 'level',align: 'center',sortable: false,},
+                    {text: ' شهر', value: 'city',align: 'center',sortable: false,},
+                    {text: 'استان', value: 'state',align: 'center',sortable: false,},
+                    {text: 'کشور', value: 'country',align: 'center',sortable: false,},
+                    {text: 'میانگین درصد', value: 'percentageMean',align: 'center',sortable: false,},
+                    {text: 'میانگین تراز', value: 'levelMean',align: 'center',sortable: false,},
 
                 ],
                 item: [
@@ -86,22 +84,36 @@
 
     .dataTable {
         margin-top: 20px;
-        width: 80%
+        height: 100%;
+        width: 90%;
+        border-radius: 15px
     }
+
     .v-data-table >>> thead {
-        background-color: rgba(255, 193, 7, 0.3)!important;
+        background-color: rgba(255, 193, 7, 0.3) !important;
     }
 
 
     .v-data-table >>> thead th:first-child {
         border-radius: 0 20px 0 0 !important;
     }
+
     .v-data-table >>> thead th:last-child {
         border-radius: 20px 0 0 0 !important;
     }
 
 
     .v-data-table >>> tbody tr:nth-of-type(even) {
-        background-color: rgba(0, 0, 0,0.04)!important;
+        background-color: rgba(0, 0, 0, 0.04) !important;
+    }
+
+    .v-data-table >>> .v-data-table__wrapper > table {
+        width: 96%;
+        border-spacing: 0;
+        margin: auto;
+    }
+    .v-data-table >>> thead tr th {
+        width: 125px!important;
+        text-align: center!important;
     }
 </style>
