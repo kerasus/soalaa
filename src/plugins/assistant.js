@@ -1,3 +1,6 @@
+// import Toasted from 'vue-toasted';
+// import Vue from 'vue'
+// Vue.use(Toasted)
 let Assistant = function () {
     function getId(id) {
         if (typeof id === 'undefined' || id === null || id === '') {

@@ -1,7 +1,7 @@
 <template>
     <v-container :fluid="true" dir="rtl">
         <v-form>
-            <v-sheet :elevation="1">
+            <v-sheet color="#f4f4f4">
                 <v-row>
                     <v-col :md="3">
                         <v-select label="آزمون" :items="quizList.list" item-text="title" item-value="id" v-model="selectedQuizzes" multiple dense :disabled="editMode" outlined />
@@ -108,7 +108,7 @@
     import 'mathlive/dist/mathlive-static.css'
     import { Question } from '@/models/Question'
     import {QuizList} from "@/models/Quiz";
-
+    import Toasted from 'vue-toasted';
     // import 'katex/dist/katex.min.css';
     import 'github-markdown-css/github-markdown.css';
     import Assistant from "@/plugins/assistant";
@@ -137,7 +137,8 @@
     // import Mathfield from 'mathlive/dist/vue-mathlive.mjs'
     //
     // Vue.use(Mathfield, MathLive);
-
+    import Vue from 'vue'
+    Vue.use(Toasted)
     export default {
         name: "QuestEditor",
         data: () => {
@@ -224,8 +225,15 @@
                         this.currentQuestion.statement = ''
                         this.currentQuestion.choices.list.forEach((item) => { item.title = '' })
                         this.currentQuestion.order++
+                        this.$toasted.show('ثبت با موفقیت انجام شد', {
+                            theme: "toasted-primary",
+                            position: "top-right",
+                            duration : 2000
+                        })
                     }).catch((error) => {
+                        console.log(error)
                         Assistant.handleAxiosError(this.$toasted, error)
+                        // this.$toasted.show('hello billo')
                     })
                 } else {
                     alert('چاپ ستون متخصصان دنیای سطرآنچنان گرافیک تایپ با برای استفاده امید تمام در شرایط طراحان حروفچینی هدف داشت موجود آینده کاربردی ساختگی سادگی تا از فراوان و خلاقی ایجاد در دنیای شامل بهبود اصلی موجود می درصد با طراحان رسد و و تمام و حروفچینی دنیای توان بلکه طراحان تولید لازم مورد امید هدف نیاز شامل می موجود داشت علی دستاوردهای و سخت ای مورد با می روزنامه این طراحان لازم و پیوسته در استفاده رسد و آینده داشت نیاز اهل دستاوردهای پیشرو ارائه داشت پیوسته شناخت آینده نرم گیرد را سادگی تولید با زیادی تایپ سوالات امید شامل لازم طلبد تولید می طراحان در نیاز سوالات مورد شناخت نرم ایجاد طراحان بلکه را آینده کاربردی سخت خلاقی تکنولوژی زیادی علی سطرآنچنان سوالات را ای پایان ایپسوم شامل توان و با و مورد ساختگی افزارها خلاقی صنعت را گرافیک رایانه شناخت نامفهوم زیادی پایان و کردsدر هدف نیاز بیشتری شناخت و و ارائه زبان و درصد تولید پیشرو مورد متخصصان در راهکارها توان و خلاقی شصت و با جامعه و رسد است چاپگرها روزنامه ایپسوم بلکه متون طراحی طلبد مجله اساسا \n')

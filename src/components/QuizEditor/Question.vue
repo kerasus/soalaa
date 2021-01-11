@@ -8,7 +8,7 @@
             <v-btn icon :to="{ name: 'quest.edit', params: { id: source.id } }" disabled v-if="false">
                 <v-icon :size="24">mdi-pencil</v-icon>
             </v-btn>
-            <input :id="'question-id' + source.id" :value="source.id" type="text" />
+            <input :id="'question-id' + source.id" :value="source.id" type="text" class="not-visible" />
             <v-btn icon @click="copyIdToClipboard()">
                 <v-icon>mdi-content-copy</v-icon>
             </v-btn>
@@ -137,6 +137,11 @@
 </script>
 
 <style scoped>
+    .not-visible {
+        max-width: 1px;
+        max-height: 1px;
+    }
+
     .current-question {
         background-color: #fffaee;
     }
