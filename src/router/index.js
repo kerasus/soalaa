@@ -9,14 +9,15 @@ const router = new VueRouter({
     mode: 'history',
     routes: [
         {
-            path: '/',
-            name: 'dashboard',
-            component: () => lazyLoadView(import('@/components/dashboard'))
-        },
-        {
             path: '/login',
             name: 'login',
             component: () => lazyLoadView(import('@/components/auth'))
+        },
+        {
+            path: '/',
+            name: 'dashboard',
+            component: () => lazyLoadView(import('@/components/dashboard')),
+            meta: {middleware: auth}
         },
         {
             path: '/tree/edit',
