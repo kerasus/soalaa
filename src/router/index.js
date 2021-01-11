@@ -9,20 +9,21 @@ const router = new VueRouter({
     mode: 'history',
     routes: [
         {
-            path: '/',
-            name: 'dashboard',
-            component: () => lazyLoadView(import('@/components/dashboard'))
-        },
-        {
             path: '/login',
             name: 'login',
             component: () => lazyLoadView(import('@/components/auth'))
         },
         {
+            path: '/',
+            name: 'dashboard',
+            component: () => lazyLoadView(import('@/components/dashboard')),
+            meta: {middleware: auth}
+        },
+        {
             path: '/tree/edit',
             name: 'tree.edit',
             component: () => lazyLoadView(import('@/components/tree')),
-            // meta: {middleware: auth}
+            meta: {middleware: auth}
         },
         {
             path: '/exams-editor/',
@@ -40,49 +41,49 @@ const router = new VueRouter({
             path: '/quest/:id',
             name: 'quest.edit',
             component: () => lazyLoadView(import('@/components/QuestEditor/QuestEditor')),
-            // meta: {middleware: auth}
+            meta: {middleware: auth}
         },
         {
             path: '/quiz/edit/:quizId',
             name: 'quiz.edit',
             component: () => lazyLoadView(import('@/components/QuizEditor/QuizEditor')),
-            // meta: {middleware: auth}
+            meta: {middleware: auth}
         },
         {
             path: '/TinymceEditor',
             name: 'TinymceEditor',
             component: () => lazyLoadView(import('@/components/TinymceEditor/TinymceEditor')),
-            // meta: {middleware: auth}
+            meta: {middleware: auth}
         },
         {
             path: encodeURI('/آزمون_آنلاین/کارنامه'),
             name: 'onlineQuiz.result',
             component: () => lazyLoadView(import('@/components/OnlineQuiz/Quiz/resultTables/personalResult')),
-            // meta: {middleware: auth}
+            meta: {middleware: auth}
         },
         {
             path: encodeURI('/آزمون_آنلاین/کارنامه/ریز درس_ها'),
             name: 'onlineQuiz.result.lessonDetails',
             component: () => lazyLoadView(import('@/components/OnlineQuiz/Quiz/resultTables/statisticResult')),
-            // meta: {middleware: auth}
+            meta: {middleware: auth}
         },
         {
             path: encodeURI('/آزمون_آنلاین/کارنامه/نتایج_نفرات_برتر'),
             name: 'onlineQuiz.result.topScore',
             component: () => lazyLoadView(import('@/components/OnlineQuiz/Quiz/resultTables/topScoreResult')),
-            // meta: {middleware: auth}
+            meta: {middleware: auth}
         },
         {
             path: '/online_quiz/:quizId',
             name: 'onlineQuiz.konkoorView',
             component: () => lazyLoadView(import('@/components/OnlineQuiz/Quiz/ViewTypes/Konkoor')),
-            // meta: {middleware: auth}
+            meta: {middleware: auth}
         },
         {
             path: '/online_quiz/:quizId/:questNumber',
             name: 'onlineQuiz.alaaView',
             component: () => lazyLoadView(import('@/components/OnlineQuiz/Quiz/ViewTypes/AlaaView')),
-            // meta: {middleware: auth}
+            meta: {middleware: auth}
         }
     ]
 })
