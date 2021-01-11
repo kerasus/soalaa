@@ -1,11 +1,11 @@
 <template>
     <div :class="{ 'current-question': this.currentQuestion.id === source.id, question: true }">
         <div class="buttons-group">
-            <v-select :items="quizList" item-text="title" chips multiple attach outlined dense full-width/>
-            <v-btn icon @click="removeQuestion(source.id)">
+            <v-select :items="quizList" item-text="title" chips multiple attach outlined dense full-width disabled/>
+            <v-btn icon @click="removeQuestion(source.id)" disabled>
                 <v-icon :size="24">mdi-close</v-icon>
             </v-btn>
-            <v-btn icon :to="{ name: 'quest.edit', params: { id: source.id } }">
+            <v-btn icon :to="{ name: 'quest.edit', params: { id: source.id } }" disabled>
                 <v-icon :size="24">mdi-pencil</v-icon>
             </v-btn>
         </div>

@@ -16,10 +16,6 @@ class Quiz extends Model {
             { key: 'price' },
             { key: 'delay_time' },
 
-
-
-
-
             { key: 'id' },
             { key: 'title' },
             { key: 'order' },
