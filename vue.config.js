@@ -12,9 +12,7 @@ module.exports = {
       },
       '/api/3a': {
         target: 'http://192.168.5.34',
-        pathRewrite: {'^/api/3a' : ''},
-        ws: true,
-        changeOrigin: true
+        pathRewrite: {'^/api/3a' : ''}
       }
     }
   }
