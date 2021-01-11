@@ -151,7 +151,11 @@
         },
         data: () => ({
             selectedItem: null
-        })
+        }),
+        created() {
+            this.$store.commit('updateAppbar', true)
+            this.$store.commit('updateDrawer', true)
+        }
     };
 </script>
 

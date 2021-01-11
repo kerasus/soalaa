@@ -6,7 +6,7 @@ class Exam extends Model {
         super(data, [
             {
                 key: 'baseRoute',
-                default: '/exam'
+                default: '/api/3a/exam'
             },
             { key: 'id' },
             { key: 'title' },

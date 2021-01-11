@@ -14,6 +14,11 @@ const router = new VueRouter({
             component: () => lazyLoadView(import('@/components/dashboard'))
         },
         {
+            path: '/login',
+            name: 'login',
+            component: () => lazyLoadView(import('@/components/auth'))
+        },
+        {
             path: '/tree/edit',
             name: 'tree.edit',
             component: () => lazyLoadView(import('@/components/tree')),
@@ -29,7 +34,7 @@ const router = new VueRouter({
             path: '/quest/create',
             name: 'quest.create',
             component: () => lazyLoadView(import('@/components/QuestEditor/QuestEditor')),
-            // meta: {middleware: auth}
+            meta: {middleware: auth}
         },
         {
             path: '/quest/:id',
