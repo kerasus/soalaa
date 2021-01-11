@@ -181,4 +181,8 @@
     .v-navigation-drawer__border {
         background: transparent !important;
     }
+
+    .v-main {
+        background: #f4f4f4;
+    }
 </style>
