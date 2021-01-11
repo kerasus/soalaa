@@ -110,7 +110,7 @@
 
 <style scoped>
     .admin-panel {
-        border-top: 1px solid #000;
+        border-top: 1px solid #fff;
     }
 </style>
 
