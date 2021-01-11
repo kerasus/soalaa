@@ -101,8 +101,12 @@
                 })
                 .then((response) => {
                     const access_token = response.data.data.access_token
+                    let redirect_to = window.localStorage.getItem('redirect_to')
                     window.localStorage.setItem('access_token', access_token)
-                    this.$router.push({ name: 'dashboard' })
+                    if (!redirect_to) {
+                        redirect_to = 'dashboard'
+                    }
+                    this.$router.push({ name: redirect_to })
                 })
                 .catch( (error) => {
                     Assistant.handleAxiosError(this.$toasted, error)
