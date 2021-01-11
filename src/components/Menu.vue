@@ -117,5 +117,6 @@
     .menu .v-list-item__title {
         color: #fff;
         font-size: 16px !important;
+        font-weight: normal !important;
     }
 </style>
