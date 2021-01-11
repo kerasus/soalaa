@@ -12,7 +12,7 @@ const store = new Vuex.Store({
     plugins: [
         createPersistedState({
             storage: window.localStorage,
-            paths: ['userQuizData']
+            paths: ['userQuizData', 'access_token']
         }),
         createMutationsSharer({
             predicate: [
@@ -32,6 +32,7 @@ const store = new Vuex.Store({
         quiz: new Quiz(),
         userAnswersOfOnlineQuiz: [],
         userQuizData: null,
+        accessToken: null,
         currentQuestion: new Question(),
         appbar: true
     },
@@ -44,6 +45,9 @@ const store = new Vuex.Store({
         },
         updateQuiz (state, newInfo) {
             state.quiz = newInfo
+        },
+        updateAccessToken (state, newInfo) {
+            state.accessToken = newInfo
         },
         updateCurrentQuestion (state, newInfo) {
 
@@ -112,6 +116,9 @@ const store = new Vuex.Store({
         },
         quiz (state) {
             return state.quiz
+        },
+        accessToken (state) {
+            return state.accessToken
         },
         windowSize (state) {
             return state.windowSize
