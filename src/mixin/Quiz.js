@@ -119,13 +119,16 @@ const mixinQuiz = {
       if (parseInt(this.currentQuestion.id) === parseInt(id)) {
         return
       }
+      // if (this.currentQuestion.id !== null) {
+      //     this.quiz.questions.getQuestionById(this.currentQuestion.id).leaveQuestion()
+      // }
 
       const questIndex = this.quiz.questions.getQuestionIndexById(id),
           questNumber = this.getQuestionNumberFromIndex(questIndex)
 
       const currentQuestion = this.quiz.questions.getQuestionById(id)
       this.$store.commit('updateCurrentQuestion', currentQuestion)
-
+      // this.quiz.questions.getQuestionById(this.currentQuestion.id).enterQuestion()
       if (parseInt(this.$route.params.questNumber) !== parseInt(questNumber) && this.$route.name !== 'onlineQuiz.konkoorView') {
           this.$router.push({ name: 'onlineQuiz.alaaView', params: { quizId: this.quiz.id, questNumber } })
       }

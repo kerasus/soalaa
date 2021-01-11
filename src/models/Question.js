@@ -109,6 +109,7 @@ class Question extends Model {
         this.checking_times.addStart()
     }
     leaveQuestion () {
+        console.log('leaveQuestion')
         this.checking_times.addEnd()
     }
 

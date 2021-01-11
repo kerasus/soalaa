@@ -83,11 +83,14 @@ class Quiz extends Model {
 
     mergeUserQuizData (userQuizData) {
         let questionsHasData = this.getQuestionsHasData()
+        console.log('questions with data', questionsHasData.length)
 
         questionsHasData.forEach((question) => {
             if (!userQuizData) {
                 userQuizData = []
                 this.addUserQuestionData(question, userQuizData)
+
+
             } else {
                 let userQuestionData = userQuizData.find((questionData)=> questionData.questionId === question.id)
                 if (!userQuestionData) {
@@ -97,7 +100,7 @@ class Quiz extends Model {
                 }
             }
         });
-
+        console.log('ADD', userQuizData)
         return userQuizData
     }
 
@@ -105,12 +108,26 @@ class Quiz extends Model {
         if (!checkingTimes) {
             return
         }
+
         question.checking_times.list.forEach((checkingTime)=> {
+            const oldCheckingTimeIndex = checkingTimes.findIndex((item) => item.start === checkingTime.start && item.end === null && checkingTime.end !== null)
+            if (oldCheckingTimeIndex !== -1) {
+                checkingTimes.splice(oldCheckingTimeIndex, 1)
+            }
             checkingTimes.push({
                 start: checkingTime.start,
                 end: checkingTime.end
             })
         })
+        console.log('checking times: ', checkingTimes)
+    }
+
+    loadCheckingTimesFromUserData (question, userQuizData) {
+        const userQuestionData = userQuizData.find((questionData) => questionData.questionId === question.id)
+        if (userQuestionData) {
+            question.checking_times = new CheckingTimeList(userQuestionData.checking_times)
+        }
+        console.log('userQuestionData: ', userQuestionData)
     }
 
     loadUserQuestionData (question, userQuestionData) {

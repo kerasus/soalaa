@@ -1,55 +1,60 @@
 <template>
     <v-container :fluid="true" dir="rtl">
-        <v-sheet :elevation="1">
-            <v-row>
-                <v-col :md="4">
-                    <v-select lable="آزمون" :items="fields" v-model="currentQuestion.exam_id" dense />
-                </v-col>
-                <v-col :md="4">
-                    <v-select lable="درس" :items="fields" v-model="field" dense />
-                </v-col>
-                <v-col :md="4">
-                    <v-text-field label="ترتیب" v-model="currentQuestion.order" type="number"/>
-                </v-col>
-                <v-col :md="6" class="pl-5">
-                    <v-textarea dir="rtl"
-                                clearable
-                                outlined
-                                clear-icon="mdi-close-circle"
-                                auto-grow
-                                label="متن سوال"
-                                v-model="currentQuestion.statement"
-                                @input="updateRendered"
-                    ></v-textarea>
-                </v-col>
-                <v-col :md="6">
-                    <div class="renderedPanel" v-html="questRendered">
-                    </div>
-                </v-col>
-            </v-row>
-        </v-sheet>
-        <v-radio-group v-model="trueChoiceIndex">
-            <v-row v-for="index in 4" :key="index" :style="{ 'border-bottom': '1px solid #ececec' }">
-                <v-col class="pl-5" :md="5">
-                    <v-text-field dir="rtl"
-                                  clearable
-                                  clear-icon="mdi-close-circle"
-                                  auto-grow
-                                  :label="choiceNumber[index -1]"
-                                  v-model="currentQuestion.choices.list[index - 1].title"
-                                  @input="updateRendered"
-                    ></v-text-field>
-                </v-col>
-                <v-col :md="2">
-    <!--                <v-checkbox @click="changeTrueChoice(index - 1)" v-model="choicesMarkdownText[index - 1].true" />-->
-                    <v-radio :value="index - 1" />
-                </v-col>
-                <v-col :md="5">
-                    <div class="renderedPanel" v-html="choiceRendered[index - 1]">
-                    </div>
-                </v-col>
-            </v-row>
-        </v-radio-group>
+        <v-form>
+            <v-sheet :elevation="1">
+                <v-row>
+                    <v-col :md="3">
+                        <v-select label="آزمون" :items="quizList.list" item-text="title" item-value="id" v-model="selectedQuizzes" multiple dense :disabled="editMode" outlined />
+                    </v-col>
+                    <v-col :md="3">
+                        <v-select label="درس" :items="subCategoriesList" item-text="title" item-value="id" v-model="currentQuestion.sub_category_id" dense :disabled="editMode" outlined />
+                    </v-col>
+                    <v-col :md="3">
+                        <v-text-field label="ترتیب" v-model="currentQuestion.order" type="number" :disabled="editMode" outlined />
+                    </v-col>
+                    <v-col :md="3">
+                        <v-btn color="primary" block>ثبت سوال</v-btn>
+                    </v-col>
+                    <v-col :md="6" class="pl-5">
+                        <v-textarea dir="rtl"
+                                    clearable
+                                    outlined
+                                    clear-icon="mdi-close-circle"
+                                    auto-grow
+                                    label="متن سوال"
+                                    v-model="currentQuestion.statement"
+                                    @input="updateRendered"
+                        ></v-textarea>
+                    </v-col>
+                    <v-col :md="6">
+                        <div class="renderedPanel" v-html="questRendered">
+                        </div>
+                    </v-col>
+                </v-row>
+            </v-sheet>
+            <v-radio-group v-model="trueChoiceIndex">
+                <v-row v-for="index in 4" :key="index" :style="{ 'border-bottom': '1px solid #ececec' }">
+                    <v-col class="pl-5" :md="5">
+                        <v-text-field dir="rtl"
+                                      clearable
+                                      clear-icon="mdi-close-circle"
+                                      auto-grow
+                                      :label="choiceNumber[index -1]"
+                                      v-model="currentQuestion.choices.list[index - 1].title"
+                                      @input="updateRendered"
+                        ></v-text-field>
+                    </v-col>
+                    <v-col :md="2">
+        <!--                <v-checkbox @click="changeTrueChoice(index - 1)" v-model="choicesMarkdownText[index - 1].true" />-->
+                        <v-radio :value="index - 1" :disabled="editMode" />
+                    </v-col>
+                    <v-col :md="5">
+                        <div class="renderedPanel" v-html="choiceRendered[index - 1]">
+                        </div>
+                    </v-col>
+                </v-row>
+            </v-radio-group>
+        </v-form>
         <hr>
         <div id="mathfield" locale="fa">x=\frac{-b\pm \sqrt{b^2-4ac}}{2a}</div>
         <div class="latexData" v-html="latexData"></div>
@@ -99,13 +104,14 @@
     import 'mathlive/dist/mathlive-fonts.css'
     import 'mathlive/dist/mathlive-static.css'
     import { Question } from '@/models/Question'
-
+    import {QuizList} from "@/models/Quiz";
 
     // import 'katex/dist/katex.min.css';
     import 'github-markdown-css/github-markdown.css';
     var md = require('markdown-it')(),
         mk = require('markdown-it-katex');
     md.use(mk);
+
 
     // import VueKatex from 'vue-katex';
     // import 'katex/dist/katex.min.css';
@@ -144,13 +150,12 @@
                     3: 'د '
                 },
                 trueChoiceIndex: 0,
-                field: 'ریاضی',
-                fields: ['ریاضی', 'تجربی', 'انسانی'],
+                fieldId: [0],
                 questionData: {
                     statement: '',
                     exam_id: '',
                     category_id: '',
-                    sub_category_id: '',
+                    sub_category_id: 1,
                     order: '',
                     choices: [
                         {
@@ -176,7 +181,52 @@
                     ]
                 },
                 currentQuestion: new Question(),
-                url: ''
+                url: '',
+                editMode: false,
+                quizList: new QuizList(),
+                subCategoriesList: [
+                    {
+                        id: 1,
+                        category_id: 1,
+                        title: "ادبیات فارسی"
+                    },
+                    {
+                        id: 2,
+                        category_id: 1,
+                        title: "زبان عربی"
+                    },
+                    {
+                        id: 3,
+                        category_id: 1,
+                        title: "تعلیمات دینی"
+                    },
+                    {
+                        id: 4,
+                        category_id: 1,
+                        title: "زبان خارجه"
+                    },
+                    {
+                        id: 5,
+                        category_id: 2,
+                        title: "زیست شناسی"
+                    },
+                    {
+                        id: 6,
+                        category_id: 2,
+                        title: "ریاضی"
+                    },
+                    {
+                        id: 7,
+                        category_id: 2,
+                        title: "فیزیک"
+                    },
+                    {
+                        id: 8,
+                        category_id: 2,
+                        title: "شیمی"
+                    }
+                ],
+                selectedQuizzes: []
             }
         },
         methods: {
@@ -222,6 +272,18 @@
         },
         created() {
             this.currentQuestion = new Question(this.questionData)
+            this.editMode = this.$route.name === 'quest.edit'
+            if (this.$route.name === 'quest.edit') {
+                console.log('quest.edit')
+            }
+            console.log('created')
+            new QuizList().fetch().then((response) => {
+                console.log(response.data.data)
+                this.quizList = new QuizList(response.data.data)
+                this.selectedQuizzes.push(this.quizList[0].id)
+            }).catch((error) => {
+                console.log(error)
+            })
         }
     }
 </script>
