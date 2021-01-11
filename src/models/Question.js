@@ -12,7 +12,7 @@ class Question extends Model {
         super(data, [
             {
                 key: 'baseRoute',
-                default: '/question'
+                default: '/api/3a/question'
             },
             { key: 'id' },
             { key: 'title' },
