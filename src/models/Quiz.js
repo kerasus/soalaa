@@ -9,7 +9,7 @@ class Quiz extends Model {
         super(data, [
             {
                 key: 'baseRoute',
-                default: '/exam'
+                default: '/api/3a/exam'
             },
             { key: 'holding_status' },
             { key: 'photo' },

@@ -5,7 +5,7 @@
         </div>
         <div class="d-flex justify-center wrapper" >
             <v-row>
-                <v-col cols="8">
+                <v-col cols="7">
 
 
                     <v-data-table
@@ -28,7 +28,7 @@
 
 
                 </v-col>
-                <v-col>
+                <v-col class="firstColPadding">
                     <v-data-table
                             hide-default-footer
                             :headers="headers2"
@@ -47,7 +47,7 @@
 
                     </v-data-table>
                     <v-row class="subRowHeight">
-                        <v-col>
+                        <v-col class="subColsPaddingBottom ">
                             <v-card class="subCards">
                                 <v-card-title class="cardTitle">ماکزمیم تراز کل زیر گروه</v-card-title>
 
@@ -56,7 +56,7 @@
                                 </span>
                             </v-card>
                         </v-col>
-                        <v-col>
+                        <v-col class="subColsPaddingBottom subColsPaddingRight" >
                             <v-card class="subCards">
                                 <v-card-title class="cardTitle">رتبه کل کشوری</v-card-title>
 
@@ -85,16 +85,16 @@
                 headers1: [
                     {
                         text: 'ردیف',
-                        align: 'start',
+                        align: 'center',
                         sortable: false,
                         value: 'row',
                     },
-                    {text: 'درس', value: 'course'},
-                    {text: ' تعداد کل', value: 'total'},
-                    {text: ' تعداد درست', value: 'correct'},
-                    {text: ' تعداد غلط', value: 'wrong'},
-                    {text: ' تعداد نزده', value: 'empty'},
-                    {text: ' درصد', value: 'percentage'},
+                    {text: 'درس', value: 'course',align: 'center',sortable: false,},
+                    {text: ' تعداد کل', value: 'total',align: 'center',sortable: false,},
+                    {text: ' تعداد درست', value: 'correct',align: 'center',sortable: false,},
+                    {text: ' تعداد غلط', value: 'wrong',align: 'center',sortable: false,},
+                    {text: ' تعداد نزده', value: 'empty',align: 'center',sortable: false,},
+                    {text: ' درصد', value: 'percentage',align: 'center',sortable: false,},
                 ],
                 item1: [
                     {
@@ -166,15 +166,15 @@
                 headers2: [
                     {
                         text: 'زیر گروه',
-                        align: 'start',
+                        align: 'center',
                         sortable: false,
-                        value: 'subGroup',
+                        value: 'subGroup'
                     },
-                    {text: 'درصد خام', value: 'rawPercentage'},
-                    {text: 'تراز', value: 'level'},
-                    {text: ' رتبه شهر', value: 'rankInCity'},
-                    {text: ' رتبه استان', value: 'rankInState'},
-                    {text: ' رتبه کشور', value: 'rankInCountry'},
+                    {text: 'درصد خام', value: 'rawPercentage',align: 'center',sortable: false,},
+                    {text: 'تراز', value: 'level',align: 'center',sortable: false,},
+                    {text: ' رتبه شهر', value: 'rankInCity',align: 'center',sortable: false,},
+                    {text: ' رتبه استان', value: 'rankInState',align: 'center',sortable: false,},
+                    {text: ' رتبه کشور', value: 'rankInCountry',align: 'center',sortable: false,},
                 ],
                 item2: [
                     {
@@ -258,11 +258,20 @@
 </script>
 
 <style scoped>
+    .subColsPaddingRight{
+        padding-right: 5px;
+    }
+    .subColsPaddingBottom{
+        padding-bottom: 3px
+    }
+    .firstColPadding{
+        padding-right: 5px;
+    }
     .wrapper{
-        width: 90%;margin: auto;height: 600px
+        width: 97%;margin: auto;height: 600px
     }
     .subRowHeight{
-        height: 30%
+        height: 33%
     }
     .subCards{
         border-radius: 15px;height: 100%;margin-top: 10px;
@@ -307,7 +316,7 @@
     }
 
     .dataTableHeight2 {
-        height: 70%;
+        height: 67%;
     }
 
     .infoCard {
@@ -351,6 +360,13 @@
     .v-data-table >>> tbody tr:nth-of-type(even) {
         background-color: rgba(0, 0, 0, 0.04) !important;
     }
+
+
+    .v-data-table >>> thead tr th {
+        width: 125px!important;
+        text-align: center!important;
+    }
+
 
     .v-data-table >>> .v-data-table__wrapper > table {
         width: 96%;

@@ -34,7 +34,7 @@
 <style scoped>
     .infoCard {
         margin-top: 10px;
-        width: 90%;
+        width: 97%;
         border-radius: 15px;
         height: 80px;
     }
