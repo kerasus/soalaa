@@ -1,55 +1,63 @@
 <template>
     <v-container :fluid="true" dir="rtl">
-        <v-sheet :elevation="1">
-            <v-row>
-                <v-col :md="4">
-                    <v-select lable="آزمون" :items="fields" v-model="currentQuestion.exam_id" dense />
-                </v-col>
-                <v-col :md="4">
-                    <v-select lable="درس" :items="fields" v-model="field" dense />
-                </v-col>
-                <v-col :md="4">
-                    <v-text-field label="ترتیب" v-model="currentQuestion.order" type="number"/>
-                </v-col>
-                <v-col :md="6" class="pl-5">
-                    <v-textarea dir="rtl"
-                                clearable
-                                outlined
-                                clear-icon="mdi-close-circle"
-                                auto-grow
-                                label="متن سوال"
-                                v-model="currentQuestion.statement"
-                                @input="updateRendered"
-                    ></v-textarea>
-                </v-col>
-                <v-col :md="6">
-                    <div class="renderedPanel" v-html="questRendered">
-                    </div>
-                </v-col>
-            </v-row>
-        </v-sheet>
-        <v-radio-group v-model="trueChoiceIndex">
-            <v-row v-for="index in 4" :key="index" :style="{ 'border-bottom': '1px solid #ececec' }">
-                <v-col class="pl-5" :md="5">
-                    <v-text-field dir="rtl"
-                                  clearable
-                                  clear-icon="mdi-close-circle"
-                                  auto-grow
-                                  :label="choiceNumber[index -1]"
-                                  v-model="currentQuestion.choices.list[index - 1].title"
-                                  @input="updateRendered"
-                    ></v-text-field>
-                </v-col>
-                <v-col :md="2">
-    <!--                <v-checkbox @click="changeTrueChoice(index - 1)" v-model="choicesMarkdownText[index - 1].true" />-->
-                    <v-radio :value="index - 1" />
-                </v-col>
-                <v-col :md="5">
-                    <div class="renderedPanel" v-html="choiceRendered[index - 1]">
-                    </div>
-                </v-col>
-            </v-row>
-        </v-radio-group>
+        <v-form>
+            <v-sheet :elevation="1">
+                <v-row>
+                    <v-col :md="3">
+                        <v-select label="آزمون" :items="quizList.list" item-text="title" item-value="id" v-model="selectedQuizzes" multiple dense :disabled="editMode" outlined />
+                    </v-col>
+                    <v-col :md="2">
+                        <v-btn @click="selectAllExams" color="secondary">انتخاب همه آزمون ها</v-btn>
+                    </v-col>
+                    <v-col :md="2">
+                        <v-select label="درس" :items="subCategoriesList.list" item-text="display_title" item-value="id" v-model="currentQuestion.sub_category_id" dense :disabled="editMode" outlined />
+                    </v-col>
+                    <v-col :md="2">
+                        <v-text-field label="ترتیب" v-model="currentQuestion.order" type="number" :disabled="editMode" outlined />
+                    </v-col>
+                    <v-col :md="3" @click="submitQuestion" type="submit">
+                        <v-btn color="primary" block>ثبت سوال</v-btn>
+                    </v-col>
+                    <v-col :md="6" class="pl-5">
+                        <v-textarea dir="rtl"
+                                    clearable
+                                    outlined
+                                    clear-icon="mdi-close-circle"
+                                    auto-grow
+                                    label="متن سوال"
+                                    v-model="currentQuestion.statement"
+                                    @input="updateRendered"
+                        ></v-textarea>
+                    </v-col>
+                    <v-col :md="6">
+                        <div class="renderedPanel" v-html="questRendered">
+                        </div>
+                    </v-col>
+                </v-row>
+            </v-sheet>
+            <v-radio-group v-model="trueChoiceIndex">
+                <v-row v-for="index in 4" :key="index" :style="{ 'border-bottom': '1px solid #ececec' }">
+                    <v-col class="pl-5" :md="5">
+                        <v-text-field dir="rtl"
+                                      clearable
+                                      clear-icon="mdi-close-circle"
+                                      auto-grow
+                                      :label="choiceNumber[index -1]"
+                                      v-model="currentQuestion.choices.list[index - 1].title"
+                                      @input="updateRendered"
+                        ></v-text-field>
+                    </v-col>
+                    <v-col :md="2">
+        <!--                <v-checkbox @click="changeTrueChoice(index - 1)" v-model="choicesMarkdownText[index - 1].true" />-->
+                        <v-radio :value="index - 1" :disabled="editMode" />
+                    </v-col>
+                    <v-col :md="5">
+                        <div class="renderedPanel" v-html="choiceRendered[index - 1]">
+                        </div>
+                    </v-col>
+                </v-row>
+            </v-radio-group>
+        </v-form>
         <hr>
         <div id="mathfield" locale="fa">x=\frac{-b\pm \sqrt{b^2-4ac}}{2a}</div>
         <div class="latexData" v-html="latexData"></div>
@@ -99,13 +107,16 @@
     import 'mathlive/dist/mathlive-fonts.css'
     import 'mathlive/dist/mathlive-static.css'
     import { Question } from '@/models/Question'
-
+    import {QuizList} from "@/models/Quiz";
 
     // import 'katex/dist/katex.min.css';
     import 'github-markdown-css/github-markdown.css';
+    import Assistant from "@/plugins/assistant";
+    import {QuestSubcategoryList} from "@/models/QuestSubcategory";
     var md = require('markdown-it')(),
         mk = require('markdown-it-katex');
     md.use(mk);
+
 
     // import VueKatex from 'vue-katex';
     // import 'katex/dist/katex.min.css';
@@ -131,6 +142,7 @@
         name: "QuestEditor",
         data: () => {
             return {
+                test: [true, false, false, false],
                 questMarkdownText: '# Math Rulez! \n  $x=\\frac{-b\\pm\\sqrt[]{b^2-4ac}}{2a}$',
                 choicesMarkdownText: ['', '', '', ''],
                 questRendered: '',
@@ -144,19 +156,18 @@
                     3: 'د '
                 },
                 trueChoiceIndex: 0,
-                field: 'ریاضی',
-                fields: ['ریاضی', 'تجربی', 'انسانی'],
+                fieldId: [0],
                 questionData: {
                     statement: '',
                     exam_id: '',
                     category_id: '',
-                    sub_category_id: '',
+                    sub_category_id: 1,
                     order: '',
                     choices: [
                         {
                             title: '',
                             order: 1,
-                            answer: true
+                            answer: false
                         },
                         {
                             title: '',
@@ -176,7 +187,11 @@
                     ]
                 },
                 currentQuestion: new Question(),
-                url: ''
+                url: '',
+                editMode: false,
+                quizList: new QuizList(),
+                subCategoriesList: new QuestSubcategoryList(),
+                selectedQuizzes: []
             }
         },
         methods: {
@@ -192,6 +207,28 @@
             displayKeystroke() {
 
             },
+            selectAllExams () {
+                if (this.selectedQuizzes.length !== this.quizList.list.length) {
+                    this.selectedQuizzes = []
+                    this.quizList.list.forEach((item) => { this.selectedQuizzes.push(item.id) })
+                }
+            },
+            submitQuestion () {
+                if (!this.editMode) {
+                    this.currentQuestion.choices.list.forEach((item) => { item.answer = false })
+                    this.currentQuestion.choices.list[this.trueChoiceIndex].answer = true
+                    this.currentQuestion.exams_ids = this.selectedQuizzes
+                    this.currentQuestion.lesson = this.se
+                    this.currentQuestion.create().then((response) => {
+                        console.log(response)
+                    }).catch((error) => {
+                        Assistant.handleAxiosError(this.$toasted, error)
+                    })
+                } else {
+                    alert('چاپ ستون متخصصان دنیای سطرآنچنان گرافیک تایپ با برای استفاده امید تمام در شرایط طراحان حروفچینی هدف داشت موجود آینده کاربردی ساختگی سادگی تا از فراوان و خلاقی ایجاد در دنیای شامل بهبود اصلی موجود می درصد با طراحان رسد و و تمام و حروفچینی دنیای توان بلکه طراحان تولید لازم مورد امید هدف نیاز شامل می موجود داشت علی دستاوردهای و سخت ای مورد با می روزنامه این طراحان لازم و پیوسته در استفاده رسد و آینده داشت نیاز اهل دستاوردهای پیشرو ارائه داشت پیوسته شناخت آینده نرم گیرد را سادگی تولید با زیادی تایپ سوالات امید شامل لازم طلبد تولید می طراحان در نیاز سوالات مورد شناخت نرم ایجاد طراحان بلکه را آینده کاربردی سخت خلاقی تکنولوژی زیادی علی سطرآنچنان سوالات را ای پایان ایپسوم شامل توان و با و مورد ساختگی افزارها خلاقی صنعت را گرافیک رایانه شناخت نامفهوم زیادی پایان و کردsدر هدف نیاز بیشتری شناخت و و ارائه زبان و درصد تولید پیشرو مورد متخصصان در راهکارها توان و خلاقی شصت و با جامعه و رسد است چاپگرها روزنامه ایپسوم بلکه متون طراحی طلبد مجله اساسا \n')
+                }
+
+            }
             // changeTrueChoice (index) {
             //     for (let i = 0; i < 4; i++) {
             //         if (i === index) {
@@ -200,6 +237,17 @@
             //     }
             // }
         },
+        // computed : {
+        //     subCategories () {
+        //         const sub_categories = []
+        //         for (let i = 0; i < this.categories.list.length; i++) {
+        //             for (let j = 0; j < this.categories.list[i].sub_categories.list.length; j++) {
+        //                 sub_categories.push({ category: this.categories.list[i].title, sub_category: this.this.categories.list[i].sub_categories.list[j] })
+        //             }
+        //         }
+        //         return sub_categories
+        //     }
+        // },
         mounted() {
 
             // this.rendered = md.render();
@@ -222,6 +270,24 @@
         },
         created() {
             this.currentQuestion = new Question(this.questionData)
+            this.editMode = this.$route.name === 'quest.edit'
+            if (this.$route.name === 'quest.edit') {
+                console.log('quest.edit')
+            }
+            console.log('created')
+            new QuizList().fetch().then((response) => {
+                console.log(response.data.data)
+                this.quizList = new QuizList(response.data.data)
+                this.selectedQuizzes.push(this.quizList[0].id)
+            }).catch((error) => {
+                console.log(error)
+            })
+            this.subCategoriesList.fetch().then((response) => {
+                console.log('sub categories: ', response.data)
+                this.subCategoriesList = new QuestSubcategoryList(response.data)
+            }).catch((error) => {
+                console.log('sub categories: ', error)
+            })
         }
     }
 </script>

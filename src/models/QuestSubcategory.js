@@ -4,8 +4,13 @@ import {QuestionList} from "@/models/Question";
 class QuestSubcategory extends Model {
     constructor (data) {
         super(data, [
+            {
+                key: 'baseRoute',
+                default: '/examCategories'
+            },
             { key: 'id' },
             { key: 'title' },
+            { key: 'display_title' }, // for admin
             { key: 'order' },
             { key: 'category_id' },
             {

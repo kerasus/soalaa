@@ -3,9 +3,55 @@
     <v-list
             nav
             dense
+            class="menu"
     >
         <v-list-item-group
                 v-model="group"
+                active-class="deep-purple--text text--accent-4"
+        >
+            <router-link class="text-decoration-none" :to="{ name: 'onlineQuiz.result' }">
+                <v-list-item>
+                    <v-list-item-title>داشبورد</v-list-item-title>
+                </v-list-item>
+            </router-link>
+            <router-link class="text-decoration-none" :to="{ name: 'onlineQuiz.result.lessonDetails' }">
+                <v-list-item>
+                    <v-list-item-title>ریزدرس ها</v-list-item-title>
+                </v-list-item>
+            </router-link>
+            <router-link class="text-decoration-none" :to="{ name: 'onlineQuiz.result.topScore' }">
+                <v-list-item>
+                    <v-list-item-title>نتایج نفرات برتر</v-list-item-title>
+                </v-list-item>
+            </router-link>
+            <router-link class="text-decoration-none" :to="{ name: 'tree.edit' }">
+                <v-list-item>
+                    <v-list-item-title>ویرایش درخت دانش</v-list-item-title>
+                </v-list-item>
+            </router-link>
+
+            <router-link class="text-decoration-none" :to="{ name: 'quest.create' }">
+                <v-list-item>
+                    <v-list-item-title>ساخت سوال</v-list-item-title>
+                </v-list-item>
+            </router-link>
+
+            <router-link class="text-decoration-none" :to="{ name: 'onlineQuiz.exams' }">
+                <v-list-item>
+                    <v-list-item-title>لیست آزمون ها</v-list-item-title>
+                </v-list-item>
+            </router-link>
+
+            <router-link class="text-decoration-none" :to="{ name: 'onlineQuiz.alaaView', params: { quizId: 313, questNumber: 1 } }">
+                <v-list-item>
+                    <v-list-item-title>آزمون آنلاین</v-list-item-title>
+                </v-list-item>
+            </router-link>
+
+        </v-list-item-group>
+        <v-list-item-group
+                class="admin-panel"
+                v-model="adminGroup"
                 active-class="deep-purple--text text--accent-4"
         >
             <router-link class="text-decoration-none" :to="{ name: 'onlineQuiz.result' }">
@@ -56,10 +102,20 @@
         name: "Menu",
         data: () => ({
             group: null,
+            adminGroup: null
         }),
     }
 </script>
 
 <style scoped>
+    .admin-panel {
+        border-top: 1px solid #000;
+    }
+</style>
 
+<style>
+    .menu .v-list-item__title {
+        color: #fff;
+        font-size: 16px !important;
+    }
 </style>

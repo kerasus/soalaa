@@ -20,7 +20,7 @@ class Question extends Model {
             { key: 'rendered_statement' },
             { key: 'photo' },
             { key: 'order' },
-            { key: 'exam_id' },
+            { key: 'exam_ids' },
             {
                 key: 'isInView',
                 default: false
@@ -59,6 +59,7 @@ class Question extends Model {
             fields: [
                 {key: 'statement'},
                 {key: 'sub_category_id'},
+                {key: 'exam_ids'},
                 {
                     key: 'choices',
                     value: function () {
@@ -109,6 +110,7 @@ class Question extends Model {
         this.checking_times.addStart()
     }
     leaveQuestion () {
+        console.log('leaveQuestion')
         this.checking_times.addEnd()
     }
 
