@@ -29,15 +29,16 @@
                         <v-sheet
                                 v-for="item in examList.list"
                                 :key="item.id"
-                                class="mb-5"
+                                class="mb-5 d-flex"
                                 color="white"
                                 elevation="0"
+                                height="70"
                                 outlined
                                 rounded
                                 shaped
                         >
-                            <v-row>
-                                <v-col cols="3" class="pr-7">
+                            <v-row class="justify-center">
+                                <v-col cols="3" class="pr-7 justify-center">
                                     {{ item.title }}
                                 </v-col>
                                 <v-col cols="3">
