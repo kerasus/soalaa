@@ -13,7 +13,7 @@
                 <v-icon>mdi-content-copy</v-icon>
             </v-btn>
         </div>
-        <span class="question-body renderedPanel" :id="'question' + source.id" v-html="(getQuestionNumberFromId(source.id)) + '- ' + source.rendered_statement" v-intersect="{
+        <span class="question-body renderedPanel" :id="'question' + source.id" v-html="(getQuestionNumberFromId(source.id)) + ' (' + source.order + ') - ' + source.rendered_statement" v-intersect="{
             handler: onIntersect,
             options: {
               threshold: [0, 0.2, 0.4, 0.6, 0.8, 1.0]
