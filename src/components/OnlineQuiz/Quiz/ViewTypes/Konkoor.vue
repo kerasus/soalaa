@@ -221,15 +221,17 @@ export default {
         this.scrollTo(this.currentQuestion.id)
     },
     created () {
-        // if (this.window)
-        this.$store.commit('updateAppbar', false)
-        this.$store.commit('updateDrawer', false)
-        if (!this.quiz.id || (this.$route.params.quizId).toString() !== (this.quiz.id).toString()) {
-            this.loadQuiz()
-        } else {
-            this.loadUserQuizData()
+        if (this.windowSize.x > 959) {
+            this.$store.commit('updateAppbar', false)
+            this.$store.commit('updateDrawer', false)
+            if (!this.quiz.id || (this.$route.params.quizId).toString() !== (this.quiz.id).toString()) {
+                this.loadQuiz()
+            } else {
+                this.loadUserQuizData()
+            }
+            this.setQuestionsLtr()
         }
-        this.setQuestionsLtr()
+        this.$router.push({ name: 'onlineQuiz.alaaView', params: { quizId: 313, questNumber: this.$route.params.quizId } })
         // this.renderQuestionBody()
     },
     watch: {
