@@ -1,16 +1,16 @@
 <template>
     <v-container class="quiz-editor" :fluid="true" :style="{ height: '100%', background: 'rgb(244, 244, 244)' }" v-resize="updateWindowSize">
         <v-row :style="{ 'min-height': '100%' }">
-            <v-col v-if="quiz.questions.list.length > 40" :md="5" class="questions" :style="{ height: windowSize.y }">
-                <virtual-list style="overflow-y: auto;"
-                              :data-key="'id'"
-                              :data-sources="quiz.questions.list"
-                              :data-component="item"
-                              class="questions"
-                              ref="scroller"
-                />
-            </v-col>
-            <v-col v-else :md="5" class="questions">
+<!--            <v-col v-if="quiz.questions.list.length > 40" :md="5" class="questions" :style="{ height: windowSize.y }">-->
+<!--                <virtual-list style="overflow-y: auto;"-->
+<!--                              :data-key="'id'"-->
+<!--                              :data-sources="quiz.questions.list"-->
+<!--                              :data-component="item"-->
+<!--                              class="questions"-->
+<!--                              ref="scroller"-->
+<!--                />-->
+<!--            </v-col>-->
+            <v-col :md="5" class="questions">
                 <item v-for="itemm in quiz.questions.list" :key="itemm.id" :source="itemm" />
             </v-col>
             <v-col :md="7" class="left-side-list">
@@ -109,7 +109,6 @@
     import $ from 'jquery'
     import '@/assets/scss/markdownKatex.scss'
     import Vue from 'vue'
-    import VirtualList from 'vue-virtual-scroll-list'
     import 'vue-virtual-scroller/dist/vue-virtual-scroller.css'
     import { DynamicScroller, DynamicScrollerItem } from 'vue-virtual-scroller'
     import Item from './Question'
@@ -124,11 +123,10 @@
     md.use(mk);
 
     export default {
-        name: 'KonkoorView',
+        name: 'adminView',
         mixins: [mixinQuiz, mixinWindowSize],
         components: {
             Item,
-            'virtual-list': VirtualList,
             BubbleSheet
         },
         data () {
