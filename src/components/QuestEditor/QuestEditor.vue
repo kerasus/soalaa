@@ -27,6 +27,7 @@
                                     label="متن سوال"
                                     v-model="currentQuestion.statement"
                                     @input="updateRendered"
+                                    @change="replaceNimFasele"
                         ></v-textarea>
                     </v-col>
                     <v-col :md="1">
@@ -219,6 +220,10 @@
             }
         },
         methods: {
+            replaceNimFasele () {
+                console.log('log')
+                this.currentQuestion.statement = this.currentQuestion.statement.replace('¬', '‌')
+            },
             hideForKonkoor () {
                 if (!this.currentQuestion.statement) {
                     this.currentQuestion.statement = ''
@@ -268,6 +273,7 @@
                 return this.quizList.list.find((quiz) => quiz.id === quizId )
             },
             updateRendered () {
+                this.replaceNimFasele()
                 this.questRendered = md.render(this.currentQuestion.statement.toString());
                 for (let i = 0; i < 4; i++) {
                     const title = this.currentQuestion.choices.list[i].title
@@ -365,11 +371,9 @@
             that.latexData = mf.getValue()
         },
         created() {
-            this.currentQuestion = new Question(this.questionData)
             this.editMode = this.$route.name === 'quest.edit'
             new QuizList().fetch().then((response) => {
                 this.quizList = new QuizList(response.data.data)
-                this.selectedQuizzes.push(this.quizList.list[0].id)
             }).catch((error) => {
                 Assistant.handleAxiosError(this.$toasted, error)
             })
@@ -378,6 +382,17 @@
             }).catch((error) => {
                 Assistant.handleAxiosError(this.$toasted, error)
             })
+            if (this.editMode) {
+                this.currentQuestion.show(null, '/api/3a/question/' + this.$route.params.id)
+                    .then((response) => {
+                        this.currentQuestion = new Question(response.data.data)
+                    }).catch((error) => {
+                        Assistant.handleAxiosError(this.$toasted, error)
+                    })
+            } else {
+                this.currentQuestion = new Question(this.questionData)
+                this.selectedQuizzes.push(this.quizList.list[0].id)
+            }
         },
         watch: {
             'selectedQuizzes': function () {
