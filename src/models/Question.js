@@ -160,7 +160,14 @@ class QuestionList extends Collection {
         return Question
     }
 
+    changeOrderToInt () {
+        this.list.forEach( (item, index, questions) => {
+            questions[index].order = parseInt(questions[index].order)
+        } )
+    }
+
     sortByOrder() {
+        this.changeOrderToInt()
         return this.sortByKey('order');
     }
 
