@@ -160,17 +160,20 @@ export default {
             if (this.quiz.questions.getQuestionById(questionId).isInView === false) {
                 const questionIndex = this.quiz.questions.getQuestionIndexById(questionId)
                 this.$refs.scroller.scrollToIndex(questionIndex)
-                for (let i = 1; i <= Math.ceil(this.quiz.questions.list.length / 100); i++) {
+                for (let i = 1; i <= 4; i++) {
+                    console.log('log')
                     setTimeout(() => {
                         this.$refs.scroller.scrollToIndex(questionIndex)
-                        },
-                        500 / Math.ceil(this.quiz.questions.list.length / 100) * i)
+                        this.changeCurrentQuestion(this.quiz.questions.getQuestionByIndex(this.getFirstInViewQuestionNumber() - 1))
+                        console.log('log1')
+                    },
+                    500 / Math.ceil(this.quiz.questions.list.length / 100) * i)
                 }
             }
         },
-        onIntersect (entries) {
-            this.quiz.questions.getQuestionById(entries[0].target.id).isInView = (entries[0].intersectionRatio >= 0.5)
-        },
+        // onIntersect (entries) {
+        //     this.quiz.questions.getQuestionById(entries[0].target.id).isInView = (entries[0].intersectionRatio >= 0.5)
+        // },
         // ToDo: check for removal
         getFirstInViewQuestionNumber () {
             let firstQuestionInView = this.quiz.questions.list.find( (item)=> {

@@ -37,6 +37,14 @@ class Quiz extends Model {
         ])
 
         this.questions.sortByOrder()
+        this.setQuestionsLtr()
+    }
+
+    setQuestionsLtr () {
+        const englishRegex = /^[A-Za-z0-9 :"'ʹ.<>%$&@!+()\-/\n,…?ᵒ]*$/
+        this.questions.list.forEach((question) => {
+            question.ltr = !!question.statement.match(englishRegex);
+        })
     }
 
     loadSubcategoriesOfCategories() {

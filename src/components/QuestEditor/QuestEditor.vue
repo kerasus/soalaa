@@ -13,7 +13,7 @@
                         <v-select label="درس" :items="subCategoriesList.list" item-text="display_title" item-value="id" v-model="currentQuestion.sub_category_id" dense :disabled="editMode" outlined />
                     </v-col>
                     <v-col :md="2">
-                        <v-text-field label="ترتیب" v-model="currentQuestion.order[index - 1]" type="number" :disabled="editMode" outlined  v-for="index in currentQuestion.exams.length" :key="index" />
+                        <v-text-field :label="'ترتیب در ' + getQuizById(selectedQuizzes[index - 1]).title" v-model="getExamById(selectedQuizzes[index - 1]).order" type="number" :disabled="editMode" outlined  v-for="index in selectedQuizzes.length" :key="index" />
                     </v-col>
                     <v-col :md="3" @click="submitQuestion" type="submit">
                         <v-btn color="primary" block>ثبت سوال</v-btn>
@@ -192,10 +192,17 @@
                 editMode: false,
                 quizList: new QuizList(),
                 subCategoriesList: new QuestSubcategoryList(),
-                selectedQuizzes: []
+                selectedQuizzes: [],
+                exams: []
             }
         },
         methods: {
+            getExamById (quizId) {
+                return this.exams.find((quiz) => quiz.exam_id === quizId )
+            },
+            getQuizById (quizId) {
+                return this.quizList.list.find((quiz) => quiz.id === quizId )
+            },
             updateRendered () {
                 this.questRendered = md.render(this.currentQuestion.statement.toString());
                 for (let i = 0; i < 4; i++) {
@@ -221,7 +228,7 @@
                 if (!this.editMode) {
                     this.currentQuestion.choices.list.forEach((item) => { item.answer = false })
                     this.currentQuestion.choices.list[this.trueChoiceIndex].answer = true
-                    this.currentQuestion.exams = this.selectedQuizzes
+                    this.currentQuestion.exams = this.exams
                     // this.currentQuestion.lesson = this.selec
                     this.currentQuestion.create().then((response) => {
                         console.log(response)
@@ -307,6 +314,12 @@
             }).catch((error) => {
                 console.log('sub categories: ', error)
             })
+        },
+        watch: {
+            'selectedQuizzes': function () {
+                this.exams = []
+                this.selectedQuizzes.forEach((item) => { this.exams.push({ exam_id: item, order: null }) })
+            }
         }
     }
 </script>
