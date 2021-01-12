@@ -221,6 +221,7 @@ export default {
         this.scrollTo(this.currentQuestion.id)
     },
     created () {
+
         if (this.windowSize.x > 959) {
             this.$store.commit('updateAppbar', false)
             this.$store.commit('updateDrawer', false)
@@ -229,8 +230,9 @@ export default {
             } else {
                 this.loadUserQuizData()
             }
+        } else {
+            this.$router.push({ name: 'onlineQuiz.alaaView', params: { quizId: 313, questNumber: this.$route.params.quizId } })
         }
-        this.$router.push({ name: 'onlineQuiz.alaaView', params: { quizId: 313, questNumber: this.$route.params.quizId } })
         // this.renderQuestionBody()
     },
     watch: {
@@ -343,6 +345,13 @@ export default {
 </style>
 
 <style>
+    .konkoor-view strong em strong {
+        display: none;
+        font-weight: normal;
+        font-style: normal;
+        text-decoration: none !important;
+    }
+
     .timer-row .col {
         padding: 0;
     }

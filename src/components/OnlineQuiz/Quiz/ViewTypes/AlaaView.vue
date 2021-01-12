@@ -113,6 +113,12 @@
 </script>
 
 <style>
+.quiz-page strong em strong {
+    font-weight: normal;
+    font-style: normal;
+    text-decoration: none !important;
+}
+
 .ltr .renderedPanel {
     direction: ltr !important;
 }
