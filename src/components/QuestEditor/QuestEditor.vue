@@ -315,8 +315,9 @@
             },
             submitQuestion () {
                 if (this.editMode) {
-                    this.currentQuestion.update('/api/3a/question/' + this.currentQuestion.id )
+                    this.currentQuestion.update('/3a/api/question/' + this.currentQuestion.id )
                         .then(() => {
+                            this.currentQuestion.choices.list.forEach((item) => { item.answer = false })
                             this.currentQuestion.choices.list[this.trueChoiceIndex].answer = true
                             this.currentQuestion.exams = this.exams
                             this.$toasted.show('ویرایش با موفقیت انجام شد', {
@@ -400,7 +401,7 @@
                 Assistant.handleAxiosError(this.$toasted, error)
             })
             if (this.editMode) {
-                this.currentQuestion.show(null, '/api/3a/question/' + this.$route.params.id)
+                this.currentQuestion.show(null, '/3a/api/question/' + this.$route.params.id)
                     .then((response) => {
                         this.currentQuestion = new Question(response.data.data)
                     }).catch((error) => {

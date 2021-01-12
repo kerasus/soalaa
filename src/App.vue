@@ -175,6 +175,9 @@
         border-bottom-left-radius: 24px !important;
         border-bottom-right-radius: 24px !important;
     }
+    .v-navigation-drawer {
+        filter: drop-shadow(-3px 0px 10px rgba(0, 0, 0, 0.102));
+    }
     .v-navigation-drawer .v-navigation-drawer__content .theme--light.v-btn {
         color: #666;
     }

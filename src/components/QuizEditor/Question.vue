@@ -124,7 +124,7 @@
                 return largestChoice
             },
             removeQuestion () {
-                this.source.show(null, '/api/3a/exam-question/detach/' + this.source.id).then(() => {
+                this.source.show(null, '/3a/api/exam-question/detach/' + this.source.id).then(() => {
 
                 }).catch((error) => { console.log(error) })
             },

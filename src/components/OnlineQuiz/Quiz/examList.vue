@@ -12,7 +12,7 @@
             </v-card>
         </v-dialog>
         <v-progress-linear
-                color="deep-purple accent-4"
+                color="#ffc107"
                 absolute
                 top
                 :active="examList.loading"
