@@ -11,9 +11,7 @@
 
 <script>
     import { mixinQuiz } from '@/mixin/Mixins'
-    // import 'katex/dist/katex.min.css';
-    import 'github-markdown-css/github-markdown.css';
-    import '@/assets/scss/markdownKatex.scss';
+    import '@/assets/scss/markdownKatex.scss'
 
     export default {
         name: "Choice",

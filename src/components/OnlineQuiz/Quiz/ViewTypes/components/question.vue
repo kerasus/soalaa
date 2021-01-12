@@ -33,7 +33,6 @@
 </template>
 
 <script>
-    import 'github-markdown-css/github-markdown.css'
     import '@/assets/scss/markdownKatex.scss'
     import { mixinQuiz, mixinWindowSize } from '@/mixin/Mixins'
     import $ from "jquery";
