@@ -324,7 +324,7 @@
         margin-right: 5px;
     }
 
-    .question-body p {
+    .question-body p:first-child {
         display: inline;
     }
 
