@@ -2,6 +2,7 @@
 
     <v-list
             nav
+            dense
             class="menu"
     >
         <v-list-item-group
@@ -18,7 +19,7 @@
             </router-link>
             <router-link class="text-decoration-none" :to="{ name: 'onlineQuiz.result.lessonDetails' }">
                 <v-list-item>
-                    <v-list-item-title>شرکت در آزمون</v-list-item-title>
+                    <v-list-item-title>آزمون های سه آ</v-list-item-title>
                 </v-list-item>
             </router-link>
             <router-link class="text-decoration-none" :to="{ name: 'onlineQuiz.result.topScore' }">
