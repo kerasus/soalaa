@@ -99,7 +99,7 @@ const router = new VueRouter({
         {
             path: '/online_quiz/:quizId/:questNumber/user-info',
             name: 'onlineQuiz.alaaView',
-            component: () => lazyLoadView(import('@/components/UserInfoForm'))
+            component: () => lazyLoadView(import('@/components/UserInfoForm')),
             meta: {middleware: auth}
         }
     ]
