@@ -160,7 +160,6 @@
                 fieldId: [0],
                 questionData: {
                     statement: '',
-                    exam_id: '',
                     category_id: '',
                     sub_category_id: 1,
                     order: [],
@@ -198,7 +197,7 @@
         },
         methods: {
             getExamById (quizId) {
-                return this.exams.find((quiz) => quiz.exam_id === quizId )
+                return this.exams.find((quiz) => quiz.id === quizId )
             },
             getQuizById (quizId) {
                 return this.quizList.list.find((quiz) => quiz.id === quizId )
@@ -318,7 +317,7 @@
         watch: {
             'selectedQuizzes': function () {
                 this.exams = []
-                this.selectedQuizzes.forEach((item) => { this.exams.push({ exam_id: item, order: null }) })
+                this.selectedQuizzes.forEach((item) => { this.exams.push({ id: item, order: null }) })
             }
         }
     }

@@ -191,7 +191,7 @@
             this.$store.commit('updateAppbar', false)
             this.$store.commit('updateDrawer', false)
             const that = this
-            this.quizData.show(this.$route.params.quizId).then((response) => {
+            this.quizData.show(this.$route.params.quizId, '/api/3a/exam-question/attach/show').then((response) => {
                 $.getJSON(response.data.data.questions_file_url, function(data) {
                     that.quizData = response.data.data
                     console.log(response.data.data)
