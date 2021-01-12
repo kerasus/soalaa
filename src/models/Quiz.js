@@ -42,6 +42,7 @@ class Quiz extends Model {
     }
 
     setQuestionsLtr () {
+        // const englishRegex = /^[A-Za-z0-9 :"'ʹ.<>%$&@!+()\-/\n,…?ᵒ*~]*$/
         const englishRegex = /^[A-Za-z0-9 :"'ʹ.<>%$&@!+()\-/\n,…?ᵒ*~]*$/
         this.questions.list.forEach((question) => {
             question.ltr = !!question.statement.match(englishRegex);
