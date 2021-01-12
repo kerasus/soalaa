@@ -90,6 +90,17 @@ const router = new VueRouter({
             name: 'onlineQuiz.alaaView',
             component: () => lazyLoadView(import('@/components/OnlineQuiz/Quiz/ViewTypes/AlaaView')),
             meta: {middleware: auth}
+        },
+        {
+            path: '/online_quiz/:quizId/:questNumber/exams',
+            name: 'onlineQuiz.alaaView',
+            component: () => lazyLoadView(import('@/components/OnlineQuiz/Quiz/exams'))
+        },
+        {
+            path: '/online_quiz/:quizId/:questNumber/user-info',
+            name: 'onlineQuiz.alaaView',
+            component: () => lazyLoadView(import('@/components/UserInfoForm'))
+            meta: {middleware: auth}
         }
     ]
 })
