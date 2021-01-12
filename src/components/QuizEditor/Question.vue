@@ -1,16 +1,16 @@
 <template>
-    <div :class="{ 'current-question': this.currentQuestion.id === source.id, question: true, ltr: source.ltr }">
+    <div :class="{ 'current-question': this.currentQuestion.id === source.id, question: true }">
         <div class="buttons-group">
-            <v-btn icon @click="changeState(source, 'circle')">
-                <v-icon v-if="source.state !== 'circle'" color="#888" :size="24">mdi-checkbox-blank-circle-outline</v-icon>
-                <v-icon v-if="source.state === 'circle'" color="yellow" :size="24">mdi-checkbox-blank-circle</v-icon>
+            <v-select :items="quizList" item-text="title" chips multiple attach outlined dense full-width disabled v-if="false"/>
+            <v-btn icon @click="removeQuestion(source.id)" disabled v-if="false">
+                <v-icon :size="24">mdi-close</v-icon>
             </v-btn>
-            <v-btn icon @click="changeState(source ,'cross')">
-                <v-icon :color="source.state === 'cross' ? 'red' : '#888'" :size="24">mdi-close</v-icon>
+            <v-btn icon :to="{ name: 'quest.edit', params: { id: source.id } }" disabled v-if="false">
+                <v-icon :size="24">mdi-pencil</v-icon>
             </v-btn>
-            <v-btn icon @click="bookmark(source)">
-                <v-icon v-if="!source.bookmarked" :size="24" color="#888">mdi-bookmark-outline</v-icon>
-                <v-icon v-if="source.bookmarked" color="blue" :size="24">mdi-bookmark</v-icon>
+            <input :id="'question-id' + source.id" :value="source.id" type="text" class="not-visible" />
+            <v-btn icon @click="copyIdToClipboard()">
+                <v-icon>mdi-content-copy</v-icon>
             </v-btn>
         </div>
         <span class="question-body renderedPanel" :id="'question' + source.id" v-html="(getQuestionNumberFromId(source.id)) + '- ' + source.rendered_statement" v-intersect="{
@@ -25,8 +25,7 @@
                     :key="choice.id"
                     v-html="(choiceNumber[index]) + choice.rendered_title"
                     :md="choiceClass(source)"
-                    :class="{ choice: true, renderedPanel: true, active: choice.active }"
-                    @click="choiceClicked(source.id, choice.id)"
+                    :class="{ choice: true, renderedPanel: true, active: choice.answer }"
             />
         </v-row>
     </div>
@@ -37,6 +36,7 @@
     import '@/assets/scss/markdownKatex.scss'
     import { mixinQuiz, mixinWindowSize } from '@/mixin/Mixins'
     import $ from "jquery";
+
     var md = require('markdown-it')(),
         mk = require('markdown-it-katex')
     md.use(mk);
@@ -62,9 +62,20 @@
                 default () {
                     return {}
                 }
+            },
+            quizList: {
+                type: Array,
+                default () {
+                    return []
+                }
             }
         },
         methods: {
+            copyIdToClipboard () {
+                const questionIdElement = document.querySelector('#question-id' + this.source.id)
+                questionIdElement.select()
+                console.log(document.execCommand('copy'))
+            },
             onIntersect(entries) {
                 this.source.onIntersect(entries)
             },
@@ -112,26 +123,23 @@
                 })
                 return largestChoice
             },
+            removeQuestion (questionId) {
+                console.log(questionId)
+            },
+            edit (questionId) {
+                console.log(questionId)
+            }
+        },
+        created() {
+
         }
     }
 </script>
 
 <style scoped>
-    .ltr.question {
-        padding: 10px 20px 10px 20px;
-    }
-
-    .ltr {
-        direction: ltr;
-    }
-
-    .ltr .choice {
-        direction: ltr;
-        text-align: left;
-    }
-
-    .ltr .buttons-group {
-        float: right;
+    .not-visible {
+        max-width: 1px;
+        max-height: 1px;
     }
 
     .current-question {
@@ -194,8 +202,15 @@
 </style>
 
 <style>
-    .ltr .choice p {
-        margin-left: 5px;
-        margin-right: 0;
+    .quiz-editor .v-select__slot .v-select__selections input {
+        display: none;
+    }
+
+    .quiz-editor .v-text-field__details {
+        display: none;
+    }
+
+    .quiz-editor .v-select.v-select--chips.v-select--is-multi {
+        min-width: 200px;
     }
 </style>

@@ -7,16 +7,17 @@ class Choice extends Model {
     constructor (data) {
         super(data, [
             { key: 'id' },
-            { key: 'body' },
-            { key: 'rendered_body' },
+            { key: 'title' },
+            { key: 'rendered_title' },
             {
                 key: 'active',
                 default: false
             },
-            { key: 'order' }
+            { key: 'order' },
+            { key: 'answer' }
         ])
-        if (typeof this.body === 'string') {
-            this.rendered_body = md.render(this.body)
+        if (typeof this.title === 'string') {
+            this.rendered_title = md.render(this.title)
         }
     }
 }

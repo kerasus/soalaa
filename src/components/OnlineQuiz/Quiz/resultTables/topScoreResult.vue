@@ -10,7 +10,7 @@
                                 hide-default-footer
                                 :headers="headers"
                                 :items="item"
-                                :items-per-page="5"
+                                :loading="true"
                                 class="elevation-1 dataTable"
                         >
                             <template v-slot:top>
@@ -53,6 +53,54 @@
                         course: 'ریاضی',
                         percentage: 90,
                         level: 5000,
+                    },
+                    {
+                        row:'1',
+                        course:'ریاضی',
+                        percentage:90,
+                        level:5000,
+                    },
+                    {
+                        row:'1',
+                        course:'ریاضی',
+                        percentage:90,
+                        level:5000,
+                    },
+                    {
+                        row:'1',
+                        course:'ریاضی',
+                        percentage:90,
+                        level:5000,
+                    },
+                    {
+                        row:'1',
+                        course:'ریاضی',
+                        percentage:90,
+                        level:5000,
+                    },
+                    {
+                        row:'1',
+                        course:'ریاضی',
+                        percentage:90,
+                        level:5000,
+                    },
+                    {
+                        row:'1',
+                        course:'ریاضی',
+                        percentage:90,
+                        level:5000,
+                    },
+                    {
+                        row:'1',
+                        course:'ریاضی',
+                        percentage:90,
+                        level:5000,
+                    },
+                    {
+                        row:'1',
+                        course:'ریاضی',
+                        percentage:90,
+                        level:5000,
                     },
 
                 ],

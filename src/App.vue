@@ -5,10 +5,12 @@
                 app
                 right
                 width="316"
+                :style="{ backgroundColor: $route.name === 'onlineQuiz.alaaView' ? '#fff' : '#ffc107' }"
         >
             <div style="height: 150px;line-height: 150px;font-size: 4rem;color: rgb(255, 193, 7);display: flex;align-items: center;justify-content: center;">
                 <div style="display: block">
-                    <v-img src="/img/logo.png" width="50" />
+                    <v-img src="/img/logo-1.png" width="150" v-if="$route.name === 'onlineQuiz.alaaView'" />
+                    <v-img src="/img/logo-2.png" width="150" v-else />
                 </div>
             </div>
             <map-of-questions v-if="$route.name === 'onlineQuiz.alaaView'"/>
@@ -149,7 +151,11 @@
         },
         data: () => ({
             selectedItem: null
-        })
+        }),
+        created() {
+            this.$store.commit('updateAppbar', true)
+            this.$store.commit('updateDrawer', true)
+        }
     };
 </script>
 
@@ -169,13 +175,14 @@
         border-bottom-left-radius: 24px !important;
         border-bottom-right-radius: 24px !important;
     }
-    .v-navigation-drawer .v-navigation-drawer__content {
-        overflow-y: scroll;
-    }
     .v-navigation-drawer .v-navigation-drawer__content .theme--light.v-btn {
         color: #666;
     }
     .v-navigation-drawer__border {
         background: transparent !important;
+    }
+
+    .v-main {
+        background: #f4f4f4;
     }
 </style>

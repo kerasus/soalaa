@@ -2,11 +2,20 @@ import { Model, Collection } from 'js-abstract-model'
 import {QuestionList} from './Question';
 import {QuestCategoryList} from "@/models/QuestCategory";
 import {QuestSubcategoryList} from '@/models/QuestSubcategory';
-import {CheckingTimeList} from "@/models/CheckingTime";
+import { CheckingTimeList } from "@/models/CheckingTime";
 
 class Quiz extends Model {
     constructor (data) {
         super(data, [
+            {
+                key: 'baseRoute',
+                default: '/api/3a/exam'
+            },
+            { key: 'holding_status' },
+            { key: 'photo' },
+            { key: 'price' },
+            { key: 'delay_time' },
+
             { key: 'id' },
             { key: 'title' },
             { key: 'order' },
@@ -28,6 +37,15 @@ class Quiz extends Model {
         ])
 
         this.questions.sortByOrder()
+        this.categories.sortByKey('end_at', 'asc')
+        this.setQuestionsLtr()
+    }
+
+    setQuestionsLtr () {
+        const englishRegex = /^[A-Za-z0-9 :"'ʹ.<>%$&@!+()\-/\n,…?ᵒ]*$/
+        this.questions.list.forEach((question) => {
+            question.ltr = !!question.statement.match(englishRegex);
+        })
     }
 
     loadSubcategoriesOfCategories() {
@@ -37,7 +55,23 @@ class Quiz extends Model {
         })
     }
 
-    setUserQuestionsData (userData) {
+    getQuestionsHasData () {
+        return this.questions.list.filter(
+            (item) => {
+                const selected = item.choices.getSelected()
+                const bookmarked = item.bookmarked
+                const state = item.state
+                const checkingTimesLength = item.checking_times.list.length
+
+                return (selected || bookmarked || state || checkingTimesLength)
+            }
+        )
+    }
+
+    setUserQuizData (userData) {
+        if (!userData) {
+            return
+        }
         this.questions.list.map((question)=> {
             let userQuestionData = userData.find((questionData)=> questionData.questionId === question.id)
             if (userQuestionData) {
@@ -45,33 +79,92 @@ class Quiz extends Model {
                 question.uncheckChoices()
                 question.selectChoice(userQuestionData.choicesId)
 
-                question.checking_times = new CheckingTimeList(userQuestionData.checking_times)
+                question.checking_times = new CheckingTimeList(userQuestionData.checking_times.list)
                 question.bookmarked = userQuestionData.bookmarked
                 question.state = userQuestionData.state
             }
         })
     }
 
-    getUserQuestionsData () {
-        let selectedQuestions = this.questions.list.filter((item) => item.choices.getSelected())
-        selectedQuestions.map((question, index, questionsList) => {
-            let answeredChoice = question.getAnsweredChoice()
-            let answeredChoiceId = null
-            if (answeredChoice) {
-                answeredChoiceId = answeredChoice.id
-            }
+    mergeUserQuizData (userQuizData) {
+        let questionsHasData = this.getQuestionsHasData()
 
-            questionsList[index] = {
-                questionId: question.id,
-                checking_times: question.checking_times,
-                bookmarked: question.bookmarked,
-                state: question.state,
-                choicesId: answeredChoiceId
+        questionsHasData.forEach((question) => {
+            if (!userQuizData) {
+                userQuizData = []
+                this.addUserQuestionData(question, userQuizData)
+
+
+            } else {
+                let userQuestionData = userQuizData.find((questionData)=> questionData.questionId === question.id)
+                if (!userQuestionData) {
+                    this.addUserQuestionData(question, userQuizData)
+                } else {
+                    this.loadUserQuestionData(question, userQuestionData)
+                }
             }
         });
-
-        return selectedQuestions
+        return userQuizData
     }
+
+    addUserQuestionDataCheckingTimes (question, checkingTimes) {
+        if (!checkingTimes) {
+            return
+        }
+
+        question.checking_times.list.forEach((checkingTime)=> {
+            const oldCheckingTimeIndex = checkingTimes.findIndex((item) => item.start === checkingTime.start && item.end === null && checkingTime.end !== null)
+            if (oldCheckingTimeIndex !== -1) {
+                checkingTimes.splice(oldCheckingTimeIndex, 1)
+            }
+            checkingTimes.push({
+                start: checkingTime.start,
+                end: checkingTime.end
+            })
+        })
+    }
+
+    loadCheckingTimesFromUserData (question, userQuizData) {
+        const userQuestionData = userQuizData.find((questionData) => questionData.questionId === question.id)
+        if (userQuestionData) {
+            question.checking_times = new CheckingTimeList(userQuestionData.checking_times)
+        }
+    }
+
+    loadUserQuestionData (question, userQuestionData) {
+        let answeredChoice = question.getAnsweredChoice()
+        userQuestionData.choicesId = null
+        if (answeredChoice) {
+            userQuestionData.choicesId = answeredChoice.id
+        }
+
+        this.addUserQuestionDataCheckingTimes (question, userQuestionData.checking_times)
+
+        userQuestionData.bookmarked = question.bookmarked
+        userQuestionData.state = question.state
+    }
+
+    addUserQuestionData (question, userQuizData) {
+        let answeredChoice = question.getAnsweredChoice()
+        let answeredChoiceId = null
+        if (answeredChoice) {
+            answeredChoiceId = answeredChoice.id
+        }
+        let checkingTimes = []
+        this.addUserQuestionDataCheckingTimes (question, checkingTimes)
+
+        userQuizData.push({
+            questionId: question.id,
+            checking_times: checkingTimes,
+            bookmarked: question.bookmarked,
+            state: question.state,
+            choicesId: answeredChoiceId
+        })
+    }
+
+    // getCategoryFromSubCategory (subCategoryId) {
+    //     const categoryId = this.sub_categories.list.find((item) => { item.id })
+    // }
 }
 
 class QuizList extends Collection {

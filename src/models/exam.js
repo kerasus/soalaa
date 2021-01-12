@@ -5,21 +5,17 @@ class Exam extends Model {
     constructor(data) {
         super(data, [
             {
-                key: 'title',
-                default: 'آزمون جامع'
+                key: 'baseRoute',
+                default: '/api/3a/exam'
             },
-            {key: 'holding_status',
-                default: ''},
-            {key: 'start_at',
-                default: '9 صبح'},
-            {key: 'finish_at',
-                default: '12 ظهر'},
-            {key: 'price',
-                default: ''},
-            {key: 'delay_time',
-                default: '10 دقیقه'},
-            {key: 'id'},
-
+            { key: 'id' },
+            { key: 'title' },
+            { key: 'holding_status' },
+            { key: 'photo' },
+            { key: 'start_at' },
+            { key: 'finish_at' },
+            { key: 'price' },
+            { key: 'delay_time' }
         ])
 
     }

@@ -2,20 +2,10 @@ import {Quiz} from "@/models/Quiz";
 // import 'katex/dist/katex.min.css';
 import 'github-markdown-css/github-markdown.css';
 import '@/assets/scss/markdownKatex.scss';
+import {QuestSubcategory} from "@/models/QuestSubcategory";
+import Assistant from "@/plugins/assistant";
 
 const mixinQuiz = {
-  watch: {
-    'currentQuestion.id' : function (newQuestionId, oldQuestionId) {
-      console.log('currentQuestion.id changed: from ' + oldQuestionId + ' to ' + newQuestionId)
-
-      // if (typeof oldQuestionId === 'undefined' || oldQuestionId === null) {
-      //   return
-      // }
-      // this.$store.commit('reloadCurrentQuestionModel')
-      // this.quiz.questions.getQuestionById(newQuestionId).enterQuestion()
-      // this.quiz.questions.getQuestionById(oldQuestionId).leaveQuestion()
-    }
-  },
   computed: {
     isQuizPage() {
       return this.$route.name === 'onlineQuiz.quiz'
@@ -41,7 +31,20 @@ const mixinQuiz = {
     },
     currentLessons () {
       this.$store.commit('reloadQuizModel')
-      return this.quiz.sub_categories.getItem('id', this.currentQuestion.sub_category.id)
+      let currentLessons = null
+      if (!this.currentQuestion.sub_category) {
+        currentLessons = new QuestSubcategory()
+        this.loadFirstQuestion()
+      }
+      let subCategoryId = Assistant.getId(this.currentQuestion.sub_category.id)
+      currentLessons = this.quiz.sub_categories.getItem('id', subCategoryId)
+
+      return currentLessons
+    },
+    daftarche: {
+      get () {
+        return 'دفترچه سؤالات عمومی'
+      }
     }
   },
   methods: {
@@ -53,9 +56,9 @@ const mixinQuiz = {
       this.changeQuestion(this.quiz.questions.list[questionIndex].id)
     },
     answerClicked (data) {
-      this.$store.commit('reloadQuizModel')
       this.quiz.questions.getQuestionById(data.questionId).selectChoice(data.choiceId)
-      this.$store.commit('answerQuestion', data)
+      this.currentQuestion.selectChoice(data.choiceId)
+      this.$store.commit('refreshUserQuizData')
     },
     bookmark (question) {
       if (this.currentQuestion.id !== question.id) {
@@ -63,6 +66,9 @@ const mixinQuiz = {
       }
       this.$store.commit('reloadQuizModel')
       this.quiz.questions.getQuestionById(this.currentQuestion.id).bookmark()
+      this.currentQuestion.bookmark()
+      this.$store.commit('refreshUserQuizData')
+
     },
     changeState (question, newState) {
       if (this.currentQuestion.id !== question.id) {
@@ -70,13 +76,16 @@ const mixinQuiz = {
       }
       this.$store.commit('reloadQuizModel')
       this.quiz.questions.getQuestionById(this.currentQuestion.id).changeState(newState)
+      this.currentQuestion.changeState(newState)
+      this.$store.commit('refreshUserQuizData')
     },
     loadQuiz () {
       this.quiz = new Quiz(this.quizData)
       this.quiz.loadSubcategoriesOfCategories()
+      this.loadUserQuizData()
     },
-    loadUserAnswers () {
-      this.$store.commit('loadUserAnswers')
+    loadUserQuizData () {
+      this.$store.commit('loadUserQuizData')
     },
     getQuestionNumberFromIndex (index) {
       index = parseInt(index)
@@ -91,7 +100,7 @@ const mixinQuiz = {
       return number - 1
     },
     goToNextQuestion () {
-      this.$store.commit('loadUserAnswers')
+      this.$store.commit('loadUserQuizData')
       let question = this.quiz.questions.getNextQuestion(this.currentQuestion.id)
       if (!question) {
         return
@@ -99,7 +108,7 @@ const mixinQuiz = {
       this.changeQuestion(question.id)
     },
     goToPrevQuestion () {
-      this.$store.commit('loadUserAnswers')
+      this.$store.commit('loadUserQuizData')
       let question = this.quiz.questions.getPrevQuestion(this.currentQuestion.id)
       if (!question) {
         return
@@ -110,12 +119,16 @@ const mixinQuiz = {
       if (parseInt(this.currentQuestion.id) === parseInt(id)) {
         return
       }
+      // if (this.currentQuestion.id !== null) {
+      //     this.quiz.questions.getQuestionById(this.currentQuestion.id).leaveQuestion()
+      // }
 
       const questIndex = this.quiz.questions.getQuestionIndexById(id),
           questNumber = this.getQuestionNumberFromIndex(questIndex)
 
-      this.currentQuestion = this.quiz.questions.getQuestionById(id)
-
+      const currentQuestion = this.quiz.questions.getQuestionById(id)
+      this.$store.commit('updateCurrentQuestion', currentQuestion)
+      // this.quiz.questions.getQuestionById(this.currentQuestion.id).enterQuestion()
       if (parseInt(this.$route.params.questNumber) !== parseInt(questNumber) && this.$route.name !== 'onlineQuiz.konkoorView') {
           this.$router.push({ name: 'onlineQuiz.alaaView', params: { quizId: this.quiz.id, questNumber } })
       }

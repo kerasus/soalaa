@@ -6,6 +6,8 @@ class QuestCategory extends Model {
         super(data, [
             { key: 'id' },
             { key: 'title' },
+            { key: 'end_at' },
+            { key: 'is_active' },
             {
                 key: 'sub_categories',
                 relatedModel: QuestSubcategoryList
@@ -15,9 +17,9 @@ class QuestCategory extends Model {
     }
 
     getSubcategories(subcategoryList) {
-        const thisCategoryId = parseInt(this.id)
+        const thisCategoryId = (this.id).toString()
         this.sub_categories = new QuestSubcategoryList(subcategoryList.list.filter((item) => {
-            return parseInt(item.category_id) === thisCategoryId
+            return (item.category_id).toString() === thisCategoryId
         }))
     }
 }

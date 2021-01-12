@@ -1,7 +1,7 @@
 <template>
     <v-container :fluid="true" class="quiz-page" :style="{ height: '100%' }">
         <v-row :style="{ 'min-height': '100%' }">
-            <v-col :md="12" class="question-container" :style="{ 'min-height': '100%' }">
+            <v-col :md="12" :class="{ 'question-container': true, ltr: currentQuestion.ltr }" :style="{ 'min-height': '100%' }">
                 <v-sheet class="d-flex align-stretch" width="100%" color="#f4f4f4" :style="{ 'min-height': '100%' }">
                     <v-row>
                         <v-col :md="1" class="d-md-flex justify-center align-center d-none">
@@ -35,12 +35,12 @@
                             </v-row>
                             <v-row class="question-body">
                                 <v-col>
-                                    <div class="renderedPanel" v-html="currentQuestion.rendered_body"></div>
+                                    <div class="renderedPanel" v-html="currentQuestion.rendered_statement"></div>
                                 </v-col>
                             </v-row>
                             <v-row class="question-answers">
                                 <choice v-for="item in currentQuestion.choices.list"
-                                        :key="item.id+((item.active)?'active':'')"
+                                        :key="item.id"
                                         :question-id="currentQuestion.id"
                                         :choice="item"
                                         @answerClicked="answerClicked"
@@ -82,7 +82,7 @@
     // import { Quiz } from '@/models/Quiz'
 
     export default {
-        name: "AlaaView",
+        name: 'AlaaView',
         components: {
             Choice,
             Timer
@@ -94,29 +94,32 @@
             }
         },
         created() {
-            console.log('alaa view created:' + this.$route.params.questNumber)
-
-            if (!this.quiz.id || parseInt(this.$route.params.quizId) !== parseInt(this.quiz.id)) {
+            if (!this.quiz.id || (this.$route.params.quizId).toString() !== (this.quiz.id).toString()) {
                 this.loadQuiz()
             } else {
-                // this.quiz = new Quiz(this.quiz)
-                this.loadUserAnswers()
+                this.loadUserQuizData()
             }
 
-            if (this.$route.params.questNumber) {
-                this.loadQuestionByNumber(this.$route.params.questNumber)
-            } else {
-                this.loadFirstQuestion()
-            }
+            this.loadQuestionByNumber(this.$route.params.questNumber)
+
             if (this.windowSize.x > 1263) {
                 this.$store.commit('updateDrawer', true)
             }
+
             this.$store.commit('updateAppbar', true)
+            this.setQuestionsLtr()
         }
     }
 </script>
 
 <style>
+.ltr .renderedPanel {
+    direction: ltr !important;
+}
+
+.v-navigation-drawer .v-navigation-drawer__content {
+    overflow-y: scroll;
+}
 .quiz-page .katex-display {
     display: inline-block;
     direction: ltr;

@@ -4,6 +4,7 @@ import { Quiz } from '@/models/Quiz'
 import { Question } from '@/models/Question'
 import createPersistedState from 'vuex-persistedstate'
 import createMutationsSharer from 'vuex-shared-mutations'
+import Assistant from '@/plugins/assistant'
 
 Vue.use(Vuex)
 
@@ -11,13 +12,11 @@ const store = new Vuex.Store({
     plugins: [
         createPersistedState({
             storage: window.localStorage,
-            paths: ['userAnswersOfOnlineQuiz', 'currentQuestion']
+            paths: ['userQuizData', 'access_token']
         }),
         createMutationsSharer({
             predicate: [
                 'updateQuiz',
-                'answerQuestion',
-                'loadUserAnswers',
                 'updateCurrentQuestion',
                 'goToNextQuestion',
                 'goToPrevQuestion'
@@ -32,10 +31,16 @@ const store = new Vuex.Store({
         drawer: false,
         quiz: new Quiz(),
         userAnswersOfOnlineQuiz: [],
+        userQuizData: null,
+        accessToken: null,
         currentQuestion: new Question(),
-        appbar: true
+        appbar: true,
+        quizList: []
     },
     mutations: {
+        updateQuizList (state, newInfo) {
+            state.quizList = newInfo
+        },
         updateWindowSize (state, newInfo) {
             state.windowSize = newInfo
         },
@@ -45,20 +50,38 @@ const store = new Vuex.Store({
         updateQuiz (state, newInfo) {
             state.quiz = newInfo
         },
+        updateAccessToken (state, newInfo) {
+            state.accessToken = newInfo
+        },
         updateCurrentQuestion (state, newInfo) {
 
             this.commit('reloadQuizModel')
             this.commit('reloadCurrentQuestionModel')
-
             // set checking time
-            const oldQuestionId = state.currentQuestion.id
-            const newQuestionId = newInfo.id
-            if (newQuestionId !== oldQuestionId) {
-                state.quiz.questions.getQuestionById(newQuestionId).enterQuestion()
-                state.quiz.questions.getQuestionById(oldQuestionId).leaveQuestion()
-            }
+            const oldQuestionId = Assistant.getId(state.currentQuestion.id)
+            const newQuestionId = Assistant.getId(newInfo.id)
 
+            if (newQuestionId === oldQuestionId) {
+                return
+            }
+            //
+            // if (newQuestionId) {
+            //     let newQuestion = state.quiz.questions.getQuestionById(newQuestionId)
+            //
+            //     if(newQuestion) {
+            //         newQuestion.enterQuestion()
+            //     }
+            // }
+            // if (oldQuestionId) {
+            //     let oldQuestion = state.quiz.questions.getQuestionById(oldQuestionId)
+            //     state.quiz.loadCheckingTimesFromUserData (oldQuestion, state.userQuizData)
+            //     if(oldQuestion) {
+            //         oldQuestion.leaveQuestion()
+            //     }
+            // }
             state.currentQuestion = new Question(newInfo)
+            this.commit('refreshUserQuizData')
+
         },
         reloadQuizModel (state) {
             if (typeof state.quiz.questions.getNextQuestion !== 'function') {
@@ -76,26 +99,35 @@ const store = new Vuex.Store({
         // goToPrevQuestion (state) {
         //     state.currentQuestion = state.quiz.questions.getPrevQuestion(state.currentQuestion.id)
         // },
-        answerQuestion (state) {
-            this.commit('reloadQuizModel')
-            // state.quiz.questions.getQuestionById(newInfo.questionId).selectChoice(newInfo.choiceId)
-            state.userAnswersOfOnlineQuiz = state.quiz.getUserQuestionsData()
-            this.commit('loadUserAnswers')
+        refreshUserQuizData () {
+            this.commit('saveUserQuizData')
+            this.commit('loadUserQuizData')
         },
-        loadUserAnswers (state) {
+        saveUserQuizData (state) {
+
             this.commit('reloadQuizModel')
-            state.quiz.setUserQuestionsData(state.userAnswersOfOnlineQuiz)
+            state.userQuizData = state.quiz.mergeUserQuizData(state.userQuizData)
+        },
+        loadUserQuizData (state) {
+            this.commit('reloadQuizModel')
+            state.quiz.setUserQuizData(state.userQuizData)
         },
         updateAppbar (state, newInfo) {
             state.appbar = newInfo
         }
     },
     getters: {
+        quizList (state) {
+            return state.quizList
+        },
         mapOfQuestionsDrawer (state) {
             return state.mapOfQuestionsDrawer
         },
         quiz (state) {
             return state.quiz
+        },
+        accessToken (state) {
+            return state.accessToken
         },
         windowSize (state) {
             return state.windowSize

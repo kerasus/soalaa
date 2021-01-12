@@ -2,7 +2,7 @@ import Vue from 'vue'
 import { Model, Collection } from 'js-abstract-model'
 import { AnswerList } from './Answer'
 import { ChoiceList } from './Choice'
-import {CheckingTimeList} from "@/models/CheckingTime";
+import { CheckingTimeList } from "@/models/CheckingTime";
 var md = require('markdown-it')(),
     mk = require('markdown-it-katex')
 md.use(mk);
@@ -12,19 +12,21 @@ class Question extends Model {
         super(data, [
             {
                 key: 'baseRoute',
-                default: 'https://alaatv.com/api/aaa/v1/exam/1'
+                default: '/api/3a/exam-question/attach'
             },
             { key: 'id' },
             { key: 'title' },
-            { key: 'body' },
-            { key: 'rendered_body' },
+            { key: 'statement' },
+            { key: 'rendered_statement' },
             { key: 'photo' },
             { key: 'order' },
+            { key: 'exams' },
             {
                 key: 'isInView',
                 default: false
             },
             { key: 'sub_category' },
+            { key: 'sub_category_id' },
             {
                 key: 'checking_times',
                 relatedModel: CheckingTimeList
@@ -42,6 +44,10 @@ class Question extends Model {
                 default: ''
             },
             {
+                key: 'ltr',
+                default: false
+            },
+            {
                 key: 'bookmarked',
                 default: false
             },
@@ -52,8 +58,23 @@ class Question extends Model {
             }
         ])
 
-        if (typeof this.body === 'string') {
-            this.rendered_body = md.render(this.body)
+        let that = this;
+        this.apiResource = {
+            fields: [
+                {key: 'statement'},
+                {key: 'sub_category_id'},
+                {key: 'exams'},
+                {
+                    key: 'choices',
+                    value: function () {
+                        return that.choices.list
+                    }
+                }
+            ]
+        }
+
+        if (typeof this.statement === 'string') {
+            this.rendered_statement = md.render(this.statement)
         }
     }
 
@@ -121,7 +142,7 @@ class Question extends Model {
     }
 
     onIntersect (entries) {
-        this.isInView = entries[0].isIntersecting
+        this.isInView = entries[0].intersectionRatio >= 0.8
     }
 }
 
@@ -135,11 +156,17 @@ class QuestionList extends Collection {
     }
 
     getQuestionIndexById (questionId) {
-        return this.list.findIndex((item)=> parseInt(item.id) === parseInt(questionId))
+        return this.list.findIndex(
+            (item)=>
+                questionId !== null && (item.id).toString() === (questionId).toString()
+        )
     }
 
     getQuestionById (questionId) {
-        return this.list.find((item)=> parseInt(item.id) === parseInt(questionId))
+        return this.list.find(
+            (item)=>
+                questionId !== null && (item.id).toString() === (questionId).toString()
+        )
     }
 
     getQuestionByIndex (questionIndex) {
