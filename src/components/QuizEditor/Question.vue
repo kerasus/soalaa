@@ -1,5 +1,5 @@
 <template>
-    <div :class="{ 'current-question': this.currentQuestion.id === source.id, question: true }">
+    <div :class="{ 'current-question': this.currentQuestion.id === source.id, question: true, ltr: source.ltr  }">
         <div class="buttons-group">
             <v-select :items="quizList" item-text="title" chips multiple attach outlined dense full-width disabled v-if="false"/>
             <v-btn icon @click="removeQuestion(source.id)" disabled v-if="false">
@@ -137,6 +137,23 @@
 </script>
 
 <style scoped>
+    .ltr.question {
+        padding: 10px 20px 10px 20px;
+    }
+
+    .ltr {
+        direction: ltr;
+    }
+
+    .ltr .choice {
+        direction: ltr;
+        text-align: left;
+    }
+
+    .ltr .buttons-group {
+        float: right;
+    }
+
     .not-visible {
         max-width: 1px;
         max-height: 1px;
@@ -212,5 +229,10 @@
 
     .quiz-editor .v-select.v-select--chips.v-select--is-multi {
         min-width: 200px;
+    }
+
+    .ltr .choice p {
+        margin-left: 5px;
+        margin-right: 0;
     }
 </style>

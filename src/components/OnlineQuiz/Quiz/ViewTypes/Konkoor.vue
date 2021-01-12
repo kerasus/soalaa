@@ -229,7 +229,6 @@ export default {
             } else {
                 this.loadUserQuizData()
             }
-            this.setQuestionsLtr()
         }
         this.$router.push({ name: 'onlineQuiz.alaaView', params: { quizId: 313, questNumber: this.$route.params.quizId } })
         // this.renderQuestionBody()
