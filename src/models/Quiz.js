@@ -38,6 +38,14 @@ class Quiz extends Model {
 
         this.questions.sortByOrder()
         this.categories.sortByKey('end_at', 'asc')
+        this.setQuestionsLtr()
+    }
+
+    setQuestionsLtr () {
+        const englishRegex = /^[A-Za-z0-9 :"'ʹ.<>%$&@!+()\-/\n,…?ᵒ]*$/
+        this.questions.list.forEach((question) => {
+            question.ltr = !!question.statement.match(englishRegex);
+        })
     }
 
     loadSubcategoriesOfCategories() {
@@ -80,7 +88,6 @@ class Quiz extends Model {
 
     mergeUserQuizData (userQuizData) {
         let questionsHasData = this.getQuestionsHasData()
-        console.log('questions with data', questionsHasData.length)
 
         questionsHasData.forEach((question) => {
             if (!userQuizData) {
@@ -97,7 +104,6 @@ class Quiz extends Model {
                 }
             }
         });
-        console.log('ADD', userQuizData)
         return userQuizData
     }
 
@@ -116,7 +122,6 @@ class Quiz extends Model {
                 end: checkingTime.end
             })
         })
-        console.log('checking times: ', checkingTimes)
     }
 
     loadCheckingTimesFromUserData (question, userQuizData) {
@@ -124,7 +129,6 @@ class Quiz extends Model {
         if (userQuestionData) {
             question.checking_times = new CheckingTimeList(userQuestionData.checking_times)
         }
-        console.log('userQuestionData: ', userQuestionData)
     }
 
     loadUserQuestionData (question, userQuestionData) {

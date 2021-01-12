@@ -12,7 +12,7 @@
                 <div
                         v-for="choice in question.choices.list"
                         :key="choice.id"
-                        :class="{ 'choice-in-list': true, active: choice.active }"
+                        :class="{ 'choice-in-list': true, active: choice.answer }"
                         @click="clickChoice(question.id, choice.id)"
                 />
             </div>

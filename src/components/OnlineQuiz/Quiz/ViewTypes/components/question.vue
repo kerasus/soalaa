@@ -1,5 +1,5 @@
 <template>
-    <div :class="{ 'current-question': this.currentQuestion.id === source.id, question: true }">
+    <div :class="{ 'current-question': this.currentQuestion.id === source.id, question: true, ltr: source.ltr }">
         <div class="buttons-group">
             <v-btn icon @click="changeState(source, 'circle')">
                 <v-icon v-if="source.state !== 'circle'" color="#888" :size="24">mdi-checkbox-blank-circle-outline</v-icon>
@@ -117,6 +117,23 @@
 </script>
 
 <style scoped>
+    .ltr.question {
+        padding: 10px 20px 10px 20px;
+    }
+
+    .ltr {
+        direction: ltr;
+    }
+
+    .ltr .choice {
+        direction: ltr;
+        text-align: left;
+    }
+
+    .ltr .buttons-group {
+        float: right;
+    }
+
     .current-question {
         background-color: #fffaee;
     }
@@ -173,5 +190,12 @@
 
     .question {
         padding: 10px 30px 10px 0;
+    }
+</style>
+
+<style>
+    .ltr .choice p {
+        margin-left: 5px;
+        margin-right: 0;
     }
 </style>

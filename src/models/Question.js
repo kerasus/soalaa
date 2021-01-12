@@ -20,7 +20,7 @@ class Question extends Model {
             { key: 'rendered_statement' },
             { key: 'photo' },
             { key: 'order' },
-            { key: 'exam_ids' },
+            { key: 'exams' },
             {
                 key: 'isInView',
                 default: false
@@ -44,6 +44,10 @@ class Question extends Model {
                 default: ''
             },
             {
+                key: 'ltr',
+                default: false
+            },
+            {
                 key: 'bookmarked',
                 default: false
             },
@@ -60,7 +64,6 @@ class Question extends Model {
                 {key: 'statement'},
                 {key: 'sub_category_id'},
                 {key: 'exams'},
-                {key: 'order'},
                 {
                     key: 'choices',
                     value: function () {
@@ -111,7 +114,6 @@ class Question extends Model {
         this.checking_times.addStart()
     }
     leaveQuestion () {
-        console.log('leaveQuestion')
         this.checking_times.addEnd()
     }
 
