@@ -1,7 +1,7 @@
 <template>
 
     <v-list
-            navserve
+            nav
             class="menu"
     >
         <v-list-item-group

@@ -197,9 +197,12 @@
         },
         methods: {
             updateRendered () {
-                this.questRendered = md.render(this.currentQuestion.statement);
+                this.questRendered = md.render(this.currentQuestion.statement.toString());
                 for (let i = 0; i < 4; i++) {
-                    this.choiceRendered[i] = md.render(this.currentQuestion.choices.list[i].title)
+                    const title = this.currentQuestion.choices.list[i].title
+                    if (title) {
+                        this.choiceRendered[i] = md.render(title.toString())
+                    }
                 }
             },
             ping() {
@@ -277,6 +280,12 @@
                 //{ macros: { ...mf.getConfig('macros'), smallfrac: '{}^{#1}\\!\\!/\\!{}_{#2}', }, }
             );
             that.latexData = mf.getValue()
+
+            this.$toasted.show('ثبت با موفقیت انجام شد', {
+                theme: "toasted-primary",
+                position: "top-right",
+                duration : 2000
+            })
         },
         created() {
             this.currentQuestion = new Question(this.questionData)
