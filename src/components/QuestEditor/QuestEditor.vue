@@ -27,6 +27,7 @@
                                     label="متن سوال"
                                     v-model="currentQuestion.statement"
                                     @input="updateRendered"
+                                    @change="replaceNimFasele"
                         ></v-textarea>
                     </v-col>
                     <v-col :md="1">
@@ -39,6 +40,12 @@
                         <v-btn outlined icon @click="spaceStatement">
                             <v-icon>mdi-keyboard-space</v-icon>
                         </v-btn>
+                        <v-btn outlined icon @click="hideForKonkoor">
+                            <v-icon>mdi-eye-off</v-icon>
+                        </v-btn>
+                        <v-btn outlined icon @click="addImageStatement">
+                            <v-icon>mdi-image</v-icon>
+                        </v-btn>
                     </v-col>
                     <v-col :md="5">
                         <div class="renderedPanel" v-html="questRendered">
@@ -49,18 +56,18 @@
             <v-radio-group v-model="trueChoiceIndex">
                 <v-row v-for="index in 4" :key="index" :style="{ 'border-bottom': '1px solid #ececec' }">
                     <v-col class="pl-5" :md="5">
-                        <v-text-field dir="rtl"
+                        <v-textarea dir="rtl"
                                       clearable
                                       clear-icon="mdi-close-circle"
                                       auto-grow
                                       :label="choiceNumber[index -1]"
                                       v-model="currentQuestion.choices.list[index - 1].title"
                                       @input="updateRendered"
-                        ></v-text-field>
+                        ></v-textarea>
                     </v-col>
                     <v-col :md="2">
         <!--                <v-checkbox @click="changeTrueChoice(index - 1)" v-model="choicesMarkdownText[index - 1].true" />-->
-                        <v-radio :value="index - 1" :disabled="editMode" />
+                        <v-radio :value="index - 1" />
                         <v-btn outlined icon @click="underlineChoice(currentQuestion.choices.list[index - 1])">
                             <v-icon>mdi-format-underline</v-icon>
                         </v-btn>
@@ -69,6 +76,9 @@
                         </v-btn>
                         <v-btn outlined icon @click="spaceChoice(currentQuestion.choices.list[index - 1])">
                             <v-icon>mdi-keyboard-space</v-icon>
+                        </v-btn>
+                        <v-btn outlined icon @click="addImageChoice(currentQuestion.choices.list[index - 1])">
+                            <v-icon>mdi-image</v-icon>
                         </v-btn>
                     </v-col>
                     <v-col :md="5">
@@ -82,7 +92,6 @@
         <div id="mathfield" locale="fa">x=\frac{-b\pm \sqrt{b^2-4ac}}{2a}</div>
         <div class="latexData" v-html="latexData"></div>
         <v-text-field full-width label="url" v-model="url" dir="ltr"/>
-        <v-text-field readonly full-width :value="'![](' + url + ')'" dir="ltr"/>
 
 <!--        <div dir="rtl" v-katex:auto>-->
 <!--                        این یک فرمول ریاضی هست-->
@@ -216,6 +225,30 @@
             }
         },
         methods: {
+            addImageChoice (choice) {
+                if (!choice.title) {
+                    choice.title = ''
+                }
+                this.currentQuestion.statement += '![](' + this.url + ')'
+            },
+            addImageStatement () {
+                if (!this.currentQuestion.statement) {
+                    this.currentQuestion.statement = ''
+                }
+                this.currentQuestion.statement += '![](' + this.url + ')'
+            },
+            replaceNimFasele () {
+                if (!this.currentQuestion.statement) {
+                    this.currentQuestion.statement = ''
+                }
+                this.currentQuestion.statement = this.currentQuestion.statement.replace('¬', '‌')
+            },
+            hideForKonkoor () {
+                if (!this.currentQuestion.statement) {
+                    this.currentQuestion.statement = ''
+                }
+                this.currentQuestion.statement += '__***این متن در نمای کنکور قابل مشاهده نیست***__'
+            },
             underlineChoice (choice) {
                 if (!choice.title) {
                     choice.title = ''
@@ -244,13 +277,13 @@
                 if (!choice.title) {
                     choice.title = ''
                 }
-                choice.title += '**_~~فاصله~~_**'
+                choice.title += '                   '
             },
             spaceStatement () {
                 if (!this.currentQuestion.statement) {
                     this.currentQuestion.statement = ''
                 }
-                this.currentQuestion.statement += '**_~~فاصله~~_**'
+                this.currentQuestion.statement += '                   '
             },
             getExamById (quizId) {
                 return this.exams.find((quiz) => quiz.id === quizId )
@@ -259,6 +292,7 @@
                 return this.quizList.list.find((quiz) => quiz.id === quizId )
             },
             updateRendered () {
+                this.replaceNimFasele()
                 this.questRendered = md.render(this.currentQuestion.statement.toString());
                 for (let i = 0; i < 4; i++) {
                     const title = this.currentQuestion.choices.list[i].title
@@ -281,14 +315,25 @@
             },
             submitQuestion () {
                 if (this.editMode) {
-                    alert('چاپ ستون متخصصان دنیای سطرآنچنان گرافیک تایپ با برای استفاده امید تمام در شرایط طراحان حروفچینی هدف داشت موجود آینده کاربردی ساختگی سادگی تا از فراوان و خلاقی ایجاد در دنیای شامل بهبود اصلی موجود می درصد با طراحان رسد و و تمام و حروفچینی دنیای توان بلکه طراحان تولید لازم مورد امید هدف نیاز شامل می موجود داشت علی دستاوردهای و سخت ای مورد با می روزنامه این طراحان لازم و پیوسته در استفاده رسد و آینده داشت نیاز اهل دستاوردهای پیشرو ارائه داشت پیوسته شناخت آینده نرم گیرد را سادگی تولید با زیادی تایپ سوالات امید شامل لازم طلبد تولید می طراحان در نیاز سوالات مورد شناخت نرم ایجاد طراحان بلکه را آینده کاربردی سخت خلاقی تکنولوژی زیادی علی سطرآنچنان سوالات را ای پایان ایپسوم شامل توان و با و مورد ساختگی افزارها خلاقی صنعت را گرافیک رایانه شناخت نامفهوم زیادی پایان و کردsدر هدف نیاز بیشتری شناخت و و ارائه زبان و درصد تولید پیشرو مورد متخصصان در راهکارها توان و خلاقی شصت و با جامعه و رسد است چاپگرها روزنامه ایپسوم بلکه متون طراحی طلبد مجله اساسا \n')
+                    this.currentQuestion.update('/api/3a/question/' + this.currentQuestion.id )
+                        .then(() => {
+                            this.currentQuestion.choices.list[this.trueChoiceIndex].answer = true
+                            this.currentQuestion.exams = this.exams
+                            this.$toasted.show('ویرایش با موفقیت انجام شد', {
+                                theme: "toasted-primary",
+                                position: "top-right",
+                                duration : 2000
+                            })
+                        }).catch((error) => {
+                        Assistant.handleAxiosError(this.$toasted, error)
+                        // this.$toasted.show('hello billo')
+                    })
                     return
                 }
 
                 this.currentQuestion.choices.list.forEach((item) => { item.answer = false })
                 this.currentQuestion.choices.list[this.trueChoiceIndex].answer = true
                 this.currentQuestion.exams = this.exams
-                // this.currentQuestion.lesson = this.selec
                 this.currentQuestion.create()
                     .then(() => {
                         this.currentQuestion.statement = ''
@@ -343,11 +388,9 @@
             that.latexData = mf.getValue()
         },
         created() {
-            this.currentQuestion = new Question(this.questionData)
             this.editMode = this.$route.name === 'quest.edit'
             new QuizList().fetch().then((response) => {
                 this.quizList = new QuizList(response.data.data)
-                this.selectedQuizzes.push(this.quizList.list[0].id)
             }).catch((error) => {
                 Assistant.handleAxiosError(this.$toasted, error)
             })
@@ -356,6 +399,17 @@
             }).catch((error) => {
                 Assistant.handleAxiosError(this.$toasted, error)
             })
+            if (this.editMode) {
+                this.currentQuestion.show(null, '/api/3a/question/' + this.$route.params.id)
+                    .then((response) => {
+                        this.currentQuestion = new Question(response.data.data)
+                    }).catch((error) => {
+                        Assistant.handleAxiosError(this.$toasted, error)
+                    })
+            } else {
+                this.currentQuestion = new Question(this.questionData)
+                this.selectedQuizzes.push(this.quizList.list[0].id)
+            }
         },
         watch: {
             'selectedQuizzes': function () {

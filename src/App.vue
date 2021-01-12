@@ -13,7 +13,7 @@
                     <v-img src="/img/logo-2.png" width="150" v-else />
                 </div>
             </div>
-            <map-of-questions v-if="$route.name === 'onlineQuiz.alaaView'"/>
+            <map-of-questions v-if="$route.name === 'onlineQuiz.alaaView' || $route.name === 'onlineQuiz.konkoorView'"/>
             <Menu v-else/>
         </v-navigation-drawer>
         <v-app-bar

@@ -2,7 +2,6 @@
 
     <v-list
             nav
-            dense
             class="menu"
     >
         <v-list-item-group
@@ -17,12 +16,12 @@
                     <v-list-item-title>داشبورد</v-list-item-title>
                 </v-list-item>
             </router-link>
-            <router-link class="text-decoration-none" :to="{ name: 'onlineQuiz.result.lessonDetails' }">
+            <router-link class="text-decoration-none" :to="{ name: 'onlineQuiz.result.lessonDetails' }" v-if="false">
                 <v-list-item>
-                    <v-list-item-title>آزمون های سه آ</v-list-item-title>
+                    <v-list-item-title>شرکت در آزمون</v-list-item-title>
                 </v-list-item>
             </router-link>
-            <router-link class="text-decoration-none" :to="{ name: 'onlineQuiz.result.topScore' }">
+            <router-link class="text-decoration-none" :to="{ name: 'user.onlineQuiz.list' }">
                 <v-list-item>
                     <v-list-item-title>آزمون های سه آ</v-list-item-title>
                 </v-list-item>
@@ -33,22 +32,18 @@
                 </v-list-item>
             </router-link>
 
-            <router-link class="text-decoration-none" :to="{ name: 'quest.create' }">
+            <router-link class="text-decoration-none" :to="{ name: 'quest.create' }" v-if="false">
                 <v-list-item>
                     <v-list-item-title>اطلاعیه و اصلاحیه</v-list-item-title>
                 </v-list-item>
             </router-link>
 
-        </v-list-item-group>
-        <v-list-item-group
-                class="admin-panel"
-                active-class="deep-purple--text text--accent-4"
-        >
             <router-link class="text-decoration-none" :to="{ name: 'onlineQuiz.result' }">
                 <v-list-item>
                     <v-list-item-title>کارنامه</v-list-item-title>
                 </v-list-item>
             </router-link>
+
             <router-link class="text-decoration-none" :to="{ name: 'onlineQuiz.result.lessonDetails' }">
                 <v-list-item>
                     <v-list-item-title>ریزدرس ها</v-list-item-title>
@@ -59,6 +54,12 @@
                     <v-list-item-title>نتایج نفرات برتر</v-list-item-title>
                 </v-list-item>
             </router-link>
+
+        </v-list-item-group>
+        <v-list-item-group
+                class="admin-panel"
+                active-class="deep-purple--text text--accent-4"
+        >
             <router-link class="text-decoration-none" :to="{ name: 'tree.edit' }">
                 <v-list-item>
                     <v-list-item-title>ویرایش درخت دانش</v-list-item-title>
@@ -111,5 +112,19 @@
 
     .menu .v-list-item__icon {
         margin-left: 12px !important;
+    }
+
+    .v-list.menu {
+        padding: 8px 0 !important;
+    }
+
+    .router-link-exact-active .v-list-item {
+        background: #ffb507;
+        padding: 0 8px 0 0 !important;
+        border-radius: 0 !important;
+    }
+
+    .router-link-exact-active .v-list-item .v-list-item__title {
+        border-left: 4px solid #fff;
     }
 </style>

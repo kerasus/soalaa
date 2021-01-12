@@ -225,6 +225,7 @@ export default {
         this.scrollTo(this.currentQuestion.id)
     },
     created () {
+
         if (this.windowSize.x > 959) {
             this.changeAppBarAndDrawer(false)
             if (!this.quiz.id || (this.$route.params.quizId).toString() !== (this.quiz.id).toString()) {
@@ -232,9 +233,9 @@ export default {
             } else {
                 this.loadUserQuizData()
             }
-            this.setQuestionsLtr()
+        } else {
+            this.$router.push({ name: 'onlineQuiz.alaaView', params: { quizId: 313, questNumber: this.$route.params.quizId } })
         }
-        this.$router.push({ name: 'onlineQuiz.alaaView', params: { quizId: 313, questNumber: this.$route.params.quizId } })
         // this.renderQuestionBody()
     },
     destroyed() {
@@ -350,6 +351,13 @@ export default {
 </style>
 
 <style>
+    .konkoor-view strong em strong {
+        display: none;
+        font-weight: normal;
+        font-style: normal;
+        text-decoration: none !important;
+    }
+
     .timer-row .col {
         padding: 0;
     }
@@ -367,7 +375,7 @@ export default {
         margin-right: 5px;
     }
 
-    .question-body p {
+    .question-body p:first-child {
         display: inline;
     }
 
