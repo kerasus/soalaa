@@ -1,6 +1,6 @@
 import moment from 'moment'
 import store from '@/store/store'
-import { Quiz } from '@/models/Quiz'
+// import { Quiz } from '@/models/Quiz'
 
 let Time = function () {
     function now() {
@@ -21,7 +21,8 @@ let Time = function () {
     }
 
     return {
-        now
+        now,
+        setStateOfExamCategories
     };
 }();
 
