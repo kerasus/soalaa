@@ -106,7 +106,7 @@
                             </v-menu>
                         </div>
                         <div>
-                            <v-btn v-if="$route.name === 'onlineQuiz.alaaView'" icon @click="changeView('konkoor')">
+                            <v-btn v-if="$route.name === 'onlineQuiz.alaaView'" class="switch-view-button" icon @click="changeView('konkoor')">
                                 <v-icon>mdi-dots-grid</v-icon>
                             </v-btn>
                             <v-app-bar-nav-icon
@@ -184,5 +184,18 @@
 
     .v-main {
         background: #f4f4f4;
+    }
+
+    @media only screen and (max-width: 960px) {
+        .switch-view-button {
+            display: none;
+        }
+    }
+
+    strong em s {
+        margin-left: 100px;
+        font-weight: normal;
+        text-decoration: none;
+        font-style: normal;
     }
 </style>

@@ -11,7 +11,7 @@ module.exports = {
         pathRewrite: {'^/api/v2' : ''}
       },
       '/api/3a': {
-        target: 'http://192.168.5.36',
+        target: 'http://192.168.5.34',
         pathRewrite: {'^/api/3a' : ''}
       }
     }

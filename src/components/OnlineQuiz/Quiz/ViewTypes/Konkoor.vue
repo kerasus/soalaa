@@ -221,6 +221,7 @@ export default {
         this.scrollTo(this.currentQuestion.id)
     },
     created () {
+        // if (this.window)
         this.$store.commit('updateAppbar', false)
         this.$store.commit('updateDrawer', false)
         if (!this.quiz.id || (this.$route.params.quizId).toString() !== (this.quiz.id).toString()) {
