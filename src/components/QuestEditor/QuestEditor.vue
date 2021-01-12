@@ -43,6 +43,9 @@
                         <v-btn outlined icon @click="hideForKonkoor">
                             <v-icon>mdi-eye-off</v-icon>
                         </v-btn>
+                        <v-btn outlined icon @click="addImageStatement">
+                            <v-icon>mdi-image</v-icon>
+                        </v-btn>
                     </v-col>
                     <v-col :md="5">
                         <div class="renderedPanel" v-html="questRendered">
@@ -74,6 +77,9 @@
                         <v-btn outlined icon @click="spaceChoice(currentQuestion.choices.list[index - 1])">
                             <v-icon>mdi-keyboard-space</v-icon>
                         </v-btn>
+                        <v-btn outlined icon @click="addImageChoice(currentQuestion.choices.list[index - 1])">
+                            <v-icon>mdi-image</v-icon>
+                        </v-btn>
                     </v-col>
                     <v-col :md="5">
                         <div class="renderedPanel" v-html="choiceRendered[index - 1]">
@@ -86,7 +92,6 @@
         <div id="mathfield" locale="fa">x=\frac{-b\pm \sqrt{b^2-4ac}}{2a}</div>
         <div class="latexData" v-html="latexData"></div>
         <v-text-field full-width label="url" v-model="url" dir="ltr"/>
-        <v-text-field readonly full-width :value="'![](' + url + ')'" dir="ltr"/>
 
 <!--        <div dir="rtl" v-katex:auto>-->
 <!--                        این یک فرمول ریاضی هست-->
@@ -220,8 +225,22 @@
             }
         },
         methods: {
+            addImageChoice (choice) {
+                if (!choice.title) {
+                    choice.title = ''
+                }
+                this.currentQuestion.statement += '![](' + this.url + ')'
+            },
+            addImageStatement () {
+                if (!this.currentQuestion.statement) {
+                    this.currentQuestion.statement = ''
+                }
+                this.currentQuestion.statement += '![](' + this.url + ')'
+            },
             replaceNimFasele () {
-                console.log('log')
+                if (!this.currentQuestion.statement) {
+                    this.currentQuestion.statement = ''
+                }
                 this.currentQuestion.statement = this.currentQuestion.statement.replace('¬', '‌')
             },
             hideForKonkoor () {
@@ -296,13 +315,10 @@
             },
             submitQuestion () {
                 if (this.editMode) {
-                    this.currentQuestion.choices.list.forEach((item) => { item.answer = false })
-                    this.currentQuestion.choices.list[this.trueChoiceIndex].answer = true
-                    this.currentQuestion.exams = this.exams
-                    this.currentQuestion.edit()
+                    this.currentQuestion.update('/api/3a/question/' + this.currentQuestion.id )
                         .then(() => {
-                            this.currentQuestion.statement = ''
-                            this.currentQuestion.choices.list.forEach((item) => { item.title = '' })
+                            this.currentQuestion.choices.list[this.trueChoiceIndex].answer = true
+                            this.currentQuestion.exams = this.exams
                             this.$toasted.show('ویرایش با موفقیت انجام شد', {
                                 theme: "toasted-primary",
                                 position: "top-right",
@@ -312,6 +328,7 @@
                         Assistant.handleAxiosError(this.$toasted, error)
                         // this.$toasted.show('hello billo')
                     })
+                    return
                 }
 
                 this.currentQuestion.choices.list.forEach((item) => { item.answer = false })
