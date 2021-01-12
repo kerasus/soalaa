@@ -3,11 +3,21 @@
         <v-row>
             <v-col>
 
-                <v-alert v-if="examList.list.length === 0" type="info">
+                <v-progress-linear
+                        color="#ffc107"
+                        absolute
+                        top
+                        :active="examList.loading"
+                        indeterminate
+                        rounded
+                        height="6"
+                ></v-progress-linear>
+
+                <v-alert v-if="examList.list.length === 0 && !examList.loading" type="info">
                     آزمونی وجود ندارد
                 </v-alert>
 
-                <v-row v-if="examList.list.length > 0">
+                <v-row v-if="examList.list.length > 0 && !examList.loading">
                     <v-col>
                         <v-row>
                             <v-col cols="3" class="pr-7">
@@ -53,12 +63,25 @@
                                 </v-col>
                                 <v-col cols="2">
                                     <v-btn
-                                            class="mx-2"
-                                            dark
+                                            text
                                             x-small
-                                            color="green"
+                                            color="#ffc107"
                                     >
                                         شرکت در آزمون
+                                    </v-btn>
+                                    <v-btn
+                                            text
+                                            x-small
+                                            color="#00b5e6"
+                                    >
+                                        شروع آزمون
+                                    </v-btn>
+                                    <v-btn
+                                            text
+                                            x-small
+                                            color="#00c753"
+                                    >
+                                        ثبت نام
                                     </v-btn>
                                 </v-col>
                             </v-row>
@@ -80,7 +103,7 @@
             examList: new ExamList(),
             examItem: new Exam()
         }),
-        mounted() {
+        created() {
             this.getExams()
         },
         methods: {
