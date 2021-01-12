@@ -140,6 +140,10 @@
             }
         },
         methods: {
+            changeAppBarAndDrawer (state) {
+                this.$store.commit('updateAppbar', state)
+                this.$store.commit('updateDrawer', state)
+            },
             scrollTo (questionId) {
                 const questionIndex = this.quiz.questions.getQuestionIndexById(questionId)
                 this.$refs.scroller.scrollToIndex(questionIndex)
@@ -192,10 +196,9 @@
             this.scrollTo(this.currentQuestion.id)
         },
         created () {
-            this.$store.commit('updateAppbar', false)
-            this.$store.commit('updateDrawer', false)
+            this.changeAppBarAndDrawer(false)
             // const that = this
-            const url = '/api/3a/exam-question/attach/show/' + this.$route.params.quizId
+            const url = '/3a/api/exam-question/attach/show/' + this.$route.params.quizId
             this.quizData.show(null, url)
                 .then((response) => {
                     this.quizData.questions = new QuestionList(response.data.data)
@@ -219,6 +222,9 @@
 
 
             // this.renderQuestionBody()
+        },
+        destroyed() {
+            this.changeAppBarAndDrawer(true)
         },
         watch: {
             'windowSize.y': function () {
