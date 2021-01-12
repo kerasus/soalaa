@@ -160,7 +160,6 @@
                 fieldId: [0],
                 questionData: {
                     statement: '',
-                    exam_id: '',
                     category_id: '',
                     sub_category_id: 1,
                     order: [],
@@ -197,8 +196,8 @@
             }
         },
         methods: {
-            getExamById (quizId) {
-                return this.exams.find((quiz) => quiz.exam_id === quizId )
+            getExamById (examId) {
+                return this.exams.find((exam) => exam.id === examId )
             },
             getQuizById (quizId) {
                 return this.quizList.list.find((quiz) => quiz.id === quizId )
@@ -225,13 +224,17 @@
                 }
             },
             submitQuestion () {
-                if (!this.editMode) {
-                    this.currentQuestion.choices.list.forEach((item) => { item.answer = false })
-                    this.currentQuestion.choices.list[this.trueChoiceIndex].answer = true
-                    this.currentQuestion.exams = this.exams
-                    // this.currentQuestion.lesson = this.selec
-                    this.currentQuestion.create().then((response) => {
-                        console.log(response)
+                if (this.editMode) {
+                    alert('چاپ ستون متخصصان دنیای سطرآنچنان گرافیک تایپ با برای استفاده امید تمام در شرایط طراحان حروفچینی هدف داشت موجود آینده کاربردی ساختگی سادگی تا از فراوان و خلاقی ایجاد در دنیای شامل بهبود اصلی موجود می درصد با طراحان رسد و و تمام و حروفچینی دنیای توان بلکه طراحان تولید لازم مورد امید هدف نیاز شامل می موجود داشت علی دستاوردهای و سخت ای مورد با می روزنامه این طراحان لازم و پیوسته در استفاده رسد و آینده داشت نیاز اهل دستاوردهای پیشرو ارائه داشت پیوسته شناخت آینده نرم گیرد را سادگی تولید با زیادی تایپ سوالات امید شامل لازم طلبد تولید می طراحان در نیاز سوالات مورد شناخت نرم ایجاد طراحان بلکه را آینده کاربردی سخت خلاقی تکنولوژی زیادی علی سطرآنچنان سوالات را ای پایان ایپسوم شامل توان و با و مورد ساختگی افزارها خلاقی صنعت را گرافیک رایانه شناخت نامفهوم زیادی پایان و کردsدر هدف نیاز بیشتری شناخت و و ارائه زبان و درصد تولید پیشرو مورد متخصصان در راهکارها توان و خلاقی شصت و با جامعه و رسد است چاپگرها روزنامه ایپسوم بلکه متون طراحی طلبد مجله اساسا \n')
+                    return
+                }
+
+                this.currentQuestion.choices.list.forEach((item) => { item.answer = false })
+                this.currentQuestion.choices.list[this.trueChoiceIndex].answer = true
+                this.currentQuestion.exams = this.exams
+                // this.currentQuestion.lesson = this.selec
+                this.currentQuestion.create()
+                    .then(() => {
                         this.currentQuestion.statement = ''
                         this.currentQuestion.choices.list.forEach((item) => { item.title = '' })
                         this.$toasted.show('ثبت با موفقیت انجام شد', {
@@ -240,13 +243,9 @@
                             duration : 2000
                         })
                     }).catch((error) => {
-                        console.log(error)
-                        Assistant.handleAxiosError(this.$toasted, error)
-                        // this.$toasted.show('hello billo')
-                    })
-                } else {
-                    alert('چاپ ستون متخصصان دنیای سطرآنچنان گرافیک تایپ با برای استفاده امید تمام در شرایط طراحان حروفچینی هدف داشت موجود آینده کاربردی ساختگی سادگی تا از فراوان و خلاقی ایجاد در دنیای شامل بهبود اصلی موجود می درصد با طراحان رسد و و تمام و حروفچینی دنیای توان بلکه طراحان تولید لازم مورد امید هدف نیاز شامل می موجود داشت علی دستاوردهای و سخت ای مورد با می روزنامه این طراحان لازم و پیوسته در استفاده رسد و آینده داشت نیاز اهل دستاوردهای پیشرو ارائه داشت پیوسته شناخت آینده نرم گیرد را سادگی تولید با زیادی تایپ سوالات امید شامل لازم طلبد تولید می طراحان در نیاز سوالات مورد شناخت نرم ایجاد طراحان بلکه را آینده کاربردی سخت خلاقی تکنولوژی زیادی علی سطرآنچنان سوالات را ای پایان ایپسوم شامل توان و با و مورد ساختگی افزارها خلاقی صنعت را گرافیک رایانه شناخت نامفهوم زیادی پایان و کردsدر هدف نیاز بیشتری شناخت و و ارائه زبان و درصد تولید پیشرو مورد متخصصان در راهکارها توان و خلاقی شصت و با جامعه و رسد است چاپگرها روزنامه ایپسوم بلکه متون طراحی طلبد مجله اساسا \n')
-                }
+                    Assistant.handleAxiosError(this.$toasted, error)
+                    // this.$toasted.show('hello billo')
+                })
 
             }
             // changeTrueChoice (index) {
@@ -279,46 +278,33 @@
                 {
                     virtualKeyboardMode: 'manual',
                     onContentDidChange: (mf) => {
-                        console.log(mf.getValue());
                         that.latexData = mf.getValue()
                     },
                 });
-            mf.$setConfig(
-                //{ macros: { ...mf.getConfig('macros'), smallfrac: '{}^{#1}\\!\\!/\\!{}_{#2}', }, }
-            );
+            // mf.$setConfig(
+            //     //{ macros: { ...mf.getConfig('macros'), smallfrac: '{}^{#1}\\!\\!/\\!{}_{#2}', }, }
+            // );
             that.latexData = mf.getValue()
-
-            this.$toasted.show('ثبت با موفقیت انجام شد', {
-                theme: "toasted-primary",
-                position: "top-right",
-                duration : 2000
-            })
         },
         created() {
             this.currentQuestion = new Question(this.questionData)
             this.editMode = this.$route.name === 'quest.edit'
-            if (this.$route.name === 'quest.edit') {
-                console.log('quest.edit')
-            }
-            console.log('created')
             new QuizList().fetch().then((response) => {
-                console.log('first response: ', response.data.data)
                 this.quizList = new QuizList(response.data.data)
                 this.selectedQuizzes.push(this.quizList.list[0].id)
             }).catch((error) => {
-                console.log('first error: ', error)
+                Assistant.handleAxiosError(this.$toasted, error)
             })
             this.subCategoriesList.fetch().then((response) => {
-                console.log('sub categories: ', response.data)
                 this.subCategoriesList = new QuestSubcategoryList(response.data)
             }).catch((error) => {
-                console.log('sub categories: ', error)
+                Assistant.handleAxiosError(this.$toasted, error)
             })
         },
         watch: {
             'selectedQuizzes': function () {
                 this.exams = []
-                this.selectedQuizzes.forEach((item) => { this.exams.push({ exam_id: item, order: null }) })
+                this.selectedQuizzes.forEach((item) => { this.exams.push({ id: item, order: null }) })
             }
         }
     }
