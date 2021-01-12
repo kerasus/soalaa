@@ -95,7 +95,7 @@
                 </v-row>
                 <v-row>
                     <v-col>
-                        <BubbleSheet :info="{ type: 'pasokh-barg' }" @clickChoice="choiceClicked" @scrollTo="scrollTo"/>
+                        <BubbleSheet :info="{ type: 'pasokh-barg' }"/>
                     </v-col>
                 </v-row>
             </v-col>
@@ -141,20 +141,6 @@
                 this.$store.commit('updateAppbar', state)
                 this.$store.commit('updateDrawer', state)
             },
-            scrollTo (questionId) {
-                const questionIndex = this.quiz.questions.getQuestionIndexById(questionId)
-                this.$refs.scroller.scrollToIndex(questionIndex)
-                for (let i = 1; i <= Math.ceil(this.quiz.questions.list.length / 100); i++) {
-                    setTimeout(() => {
-                            this.$refs.scroller.scrollToIndex(questionIndex)
-
-                        },
-                        500 / Math.ceil(this.quiz.questions.list.length / 100) * i)
-                }
-            },
-            onIntersect (entries) {
-                this.quiz.questions.getQuestionById(entries[0].target.id).isInView = (entries[0].intersectionRatio >= 0.5)
-            },
             // ToDo: check for removal
             // getFirstInViewQuestionNumber () {
             //     let firstQuestionInView = this.quiz.questions.list.find( (item)=> {
@@ -178,9 +164,6 @@
                 }
                 return ''
             },
-            choiceClicked (questionId) {
-                this.scrollTo(questionId)
-            },
             changeCurrentQuestion (question) {
                 if (question.id !== this.currentQuestion.id) {
                     this.currentQuestion = question
@@ -190,7 +173,6 @@
         mounted () {
             $('.questions').height(this.windowSize.y)
             $('.left-side-list').height(this.windowSize.y - 24)
-            this.scrollTo(this.currentQuestion.id)
         },
         created () {
             this.changeAppBarAndDrawer(false)
