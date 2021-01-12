@@ -1,7 +1,7 @@
 <template>
     <v-container class="quiz-editor" :fluid="true" :style="{ height: '100%', background: 'rgb(244, 244, 244)' }" v-resize="updateWindowSize">
         <v-row :style="{ 'min-height': '100%' }">
-            <v-col :md="5" class="questions" :style="{ height: windowSize.y }">
+            <v-col v-if="quiz.questions.list.length > 40" :md="5" class="questions" :style="{ height: windowSize.y }">
                 <virtual-list style="overflow-y: auto;"
                               :data-key="'id'"
                               :data-sources="quiz.questions.list"
@@ -9,6 +9,9 @@
                               class="questions"
                               ref="scroller"
                 />
+            </v-col>
+            <v-col v-else :md="5" class="questions">
+                <item v-for="itemm in quiz.questions.list" :key="itemm.id" :source="itemm" />
             </v-col>
             <v-col :md="7" class="left-side-list">
                 <v-row>
@@ -124,6 +127,7 @@
         name: 'KonkoorView',
         mixins: [mixinQuiz, mixinWindowSize],
         components: {
+            Item,
             'virtual-list': VirtualList,
             BubbleSheet
         },
@@ -195,11 +199,12 @@
             this.quizData.show(null, url)
                 .then((response) => {
                     this.quizData.questions = new QuestionList(response.data.data)
+                    this.quiz = new Quiz(this.quizData)
                     // $.getJSON(response.data.data.questions_file_url, function (data) {
                     //     that.quizData = response.data.data
                     //     console.log('response: ', response)
                     //     that.quizData.questions = new QuestionList(data)
-                    //     that.loadQuiz()
+                    //     this.loadQuiz()
                     // })
                     // new QuizList().fetch().then((response) => {
                     //     this.quizList = response.data.data

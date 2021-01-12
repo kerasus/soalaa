@@ -15,6 +15,7 @@ class Question extends Model {
                 default: '/api/3a/exam-question/attach'
             },
             { key: 'id' },
+            { key: '_id' },
             { key: 'title' },
             { key: 'statement' },
             { key: 'rendered_statement' },
@@ -57,6 +58,14 @@ class Question extends Model {
                 default: false
             }
         ])
+
+        if (this.id) {
+            this._id = this.id
+        }
+
+        if (this._id) {
+            this.id = this._id
+        }
 
         let that = this;
         this.apiResource = {
