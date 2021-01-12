@@ -6,6 +6,8 @@ class QuestCategory extends Model {
         super(data, [
             { key: 'id' },
             { key: 'title' },
+            { key: 'end_at' },
+            { key: 'is_active' },
             {
                 key: 'sub_categories',
                 relatedModel: QuestSubcategoryList
