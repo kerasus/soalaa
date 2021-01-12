@@ -1,8 +1,6 @@
 import axios from 'axios'
 
 export default function auth({ from, next, router }) {
-    console.log('from', from)
-
     window.localStorage.setItem('redirect_to', from.name)
 
     if (!window.localStorage.getItem('access_token')) {

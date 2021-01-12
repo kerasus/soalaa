@@ -90,10 +90,13 @@
             }
         },
         created() {
-            this.$store.commit('updateAppbar', false)
-            this.$store.commit('updateDrawer', false)
+            this.changeAppBarAndDrawer(false)
         },
         methods: {
+            changeAppBarAndDrawer (state) {
+                this.$store.commit('updateAppbar', state)
+                this.$store.commit('updateDrawer', state)
+            },
             login () {
                 axios.post('/api/v2/login', {
                     mobile: this.username,
@@ -106,6 +109,7 @@
                     if (!redirect_to) {
                         redirect_to = 'dashboard'
                     }
+                    this.changeAppBarAndDrawer(true)
                     this.$router.push({ name: redirect_to })
                 })
                 .catch( (error) => {
