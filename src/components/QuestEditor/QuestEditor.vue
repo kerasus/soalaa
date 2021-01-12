@@ -49,14 +49,14 @@
             <v-radio-group v-model="trueChoiceIndex">
                 <v-row v-for="index in 4" :key="index" :style="{ 'border-bottom': '1px solid #ececec' }">
                     <v-col class="pl-5" :md="5">
-                        <v-text-field dir="rtl"
+                        <v-textarea dir="rtl"
                                       clearable
                                       clear-icon="mdi-close-circle"
                                       auto-grow
                                       :label="choiceNumber[index -1]"
                                       v-model="currentQuestion.choices.list[index - 1].title"
                                       @input="updateRendered"
-                        ></v-text-field>
+                        ></v-textarea>
                     </v-col>
                     <v-col :md="2">
         <!--                <v-checkbox @click="changeTrueChoice(index - 1)" v-model="choicesMarkdownText[index - 1].true" />-->
