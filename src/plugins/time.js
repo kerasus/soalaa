@@ -9,6 +9,7 @@ let Time = function () {
 
     function setStateOfExamCategories() {
         // const now = this.now()
+        // console.log('store.getters.quiz.categories', store)
         // store.getters.quiz.categories.list.forEach( (category, index, categories) => {
         //     const prevCat = categories[index - 1]
         //
