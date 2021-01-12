@@ -315,11 +315,10 @@
             },
             submitQuestion () {
                 if (this.editMode) {
+                    this.currentQuestion.choices.list.forEach((item) => { item.answer = false })
+                    this.currentQuestion.choices.list[this.trueChoiceIndex].answer = true
                     this.currentQuestion.update('/3a/api/question/' + this.currentQuestion.id )
                         .then(() => {
-                            this.currentQuestion.choices.list.forEach((item) => { item.answer = false })
-                            this.currentQuestion.choices.list[this.trueChoiceIndex].answer = true
-                            this.currentQuestion.exams = this.exams
                             this.$toasted.show('ویرایش با موفقیت انجام شد', {
                                 theme: "toasted-primary",
                                 position: "top-right",

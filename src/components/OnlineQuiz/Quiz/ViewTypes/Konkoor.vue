@@ -167,12 +167,12 @@ export default {
             if (this.quiz.questions.getQuestionById(questionId).isInView === false) {
                 const questionIndex = this.quiz.questions.getQuestionIndexById(questionId)
                 this.$refs.scroller.scrollToIndex(questionIndex)
-                for (let i = 1; i <= 4; i++) {
+                for (let i = 1; i < 4; i++) {
                     console.log('log')
                     setTimeout(() => {
+                        console.log('log1')
                         this.$refs.scroller.scrollToIndex(questionIndex)
                         this.changeCurrentQuestion(this.quiz.questions.getQuestionByIndex(this.getFirstInViewQuestionNumber() - 1))
-                        console.log('log1')
                     },
                     500 / Math.ceil(this.quiz.questions.list.length / 100) * i)
                 }
