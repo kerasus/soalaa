@@ -29,7 +29,18 @@
                                     @input="updateRendered"
                         ></v-textarea>
                     </v-col>
-                    <v-col :md="6">
+                    <v-col :md="1">
+                        <v-btn outlined icon @click="underlineStatement">
+                            <v-icon>mdi-format-underline</v-icon>
+                        </v-btn>
+                        <v-btn outlined icon @click="boldStatement">
+                            <v-icon>mdi-format-bold</v-icon>
+                        </v-btn>
+                        <v-btn outlined icon @click="spaceStatement">
+                            <v-icon>mdi-keyboard-space</v-icon>
+                        </v-btn>
+                    </v-col>
+                    <v-col :md="5">
                         <div class="renderedPanel" v-html="questRendered">
                         </div>
                     </v-col>
@@ -50,6 +61,15 @@
                     <v-col :md="2">
         <!--                <v-checkbox @click="changeTrueChoice(index - 1)" v-model="choicesMarkdownText[index - 1].true" />-->
                         <v-radio :value="index - 1" :disabled="editMode" />
+                        <v-btn outlined icon @click="underlineChoice(currentQuestion.choices.list[index - 1])">
+                            <v-icon>mdi-format-underline</v-icon>
+                        </v-btn>
+                        <v-btn outlined icon @click="boldChoice(currentQuestion.choices.list[index - 1])">
+                            <v-icon>mdi-format-bold</v-icon>
+                        </v-btn>
+                        <v-btn outlined icon @click="spaceChoice(currentQuestion.choices.list[index - 1])">
+                            <v-icon>mdi-keyboard-space</v-icon>
+                        </v-btn>
                     </v-col>
                     <v-col :md="5">
                         <div class="renderedPanel" v-html="choiceRendered[index - 1]">
@@ -196,6 +216,42 @@
             }
         },
         methods: {
+            underlineChoice (choice) {
+                if (!choice.title) {
+                    choice.title = ''
+                }
+                choice.title += '**__~~آندرلاین~~__**'
+            },
+            underlineStatement () {
+                if (!this.currentQuestion.statement) {
+                    this.currentQuestion.statement = ''
+                }
+                this.currentQuestion.statement += '**__~~آندرلاین~~__**'
+            },
+            boldChoice (choice) {
+                if (!choice.title) {
+                    choice.title = ''
+                }
+                choice.title += '**بولد**'
+            },
+            boldStatement () {
+                if (!this.currentQuestion.statement) {
+                    this.currentQuestion.statement = ''
+                }
+                this.currentQuestion.statement += '**بولد**'
+            },
+            spaceChoice (choice) {
+                if (!choice.title) {
+                    choice.title = ''
+                }
+                choice.title += '**_~~فاصله~~_**'
+            },
+            spaceStatement () {
+                if (!this.currentQuestion.statement) {
+                    this.currentQuestion.statement = ''
+                }
+                this.currentQuestion.statement += '**_~~فاصله~~_**'
+            },
             getExamById (quizId) {
                 return this.exams.find((quiz) => quiz.id === quizId )
             },

@@ -193,7 +193,7 @@
     }
 
     strong em s {
-        margin-left: 100px;
+        margin-left: 50px;
         font-weight: normal;
         text-decoration: none;
         font-style: normal;
