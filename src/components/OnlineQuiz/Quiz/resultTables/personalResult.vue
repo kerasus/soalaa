@@ -3,7 +3,7 @@
         <div class="d-flex justify-center">
             <info/>
         </div>
-        <div class="d-flex justify-center wrapper" >
+        <div class="d-flex justify-center wrapper">
             <v-row>
                 <v-col cols="7">
 
@@ -56,7 +56,7 @@
                                 </span>
                             </v-card>
                         </v-col>
-                        <v-col class="subColsPaddingBottom subColsPaddingRight" >
+                        <v-col class="subColsPaddingBottom subColsPaddingRight">
                             <v-card class="subCards">
                                 <v-card-title class="cardTitle">رتبه کل کشوری</v-card-title>
 
@@ -89,12 +89,12 @@
                         sortable: false,
                         value: 'row',
                     },
-                    {text: 'درس', value: 'course',align: 'center',sortable: false,},
-                    {text: ' تعداد کل', value: 'total',align: 'center',sortable: false,},
-                    {text: ' تعداد درست', value: 'correct',align: 'center',sortable: false,},
-                    {text: ' تعداد غلط', value: 'wrong',align: 'center',sortable: false,},
-                    {text: ' تعداد نزده', value: 'empty',align: 'center',sortable: false,},
-                    {text: ' درصد', value: 'percentage',align: 'center',sortable: false,},
+                    {text: 'درس', value: 'course', align: 'center', sortable: false,},
+                    {text: ' تعداد کل', value: 'total', align: 'center', sortable: false,},
+                    {text: ' تعداد درست', value: 'correct', align: 'center', sortable: false,},
+                    {text: ' تعداد غلط', value: 'wrong', align: 'center', sortable: false,},
+                    {text: ' تعداد نزده', value: 'empty', align: 'center', sortable: false,},
+                    {text: ' درصد', value: 'percentage', align: 'center', sortable: false,},
                 ],
                 item1: [
                     {
@@ -122,11 +122,11 @@
                         sortable: false,
                         value: 'subGroup'
                     },
-                    {text: 'درصد خام', value: 'rawPercentage',align: 'center',sortable: false,},
-                    {text: 'تراز', value: 'level',align: 'center',sortable: false,},
-                    {text: ' رتبه شهر', value: 'rankInCity',align: 'center',sortable: false,},
-                    {text: ' رتبه استان', value: 'rankInState',align: 'center',sortable: false,},
-                    {text: ' رتبه کشور', value: 'rankInCountry',align: 'center',sortable: false,},
+                    {text: 'درصد خام', value: 'rawPercentage', align: 'center', sortable: false,},
+                    {text: 'تراز', value: 'level', align: 'center', sortable: false,},
+                    {text: ' رتبه شهر', value: 'rankInCity', align: 'center', sortable: false,},
+                    {text: ' رتبه استان', value: 'rankInState', align: 'center', sortable: false,},
+                    {text: ' رتبه کشور', value: 'rankInCountry', align: 'center', sortable: false,},
                 ],
                 item2: [
                     {
@@ -146,35 +146,49 @@
 </script>
 
 <style scoped>
-    .subColsPaddingRight{
+    .subColsPaddingRight {
         padding-right: 5px;
     }
-    .subColsPaddingBottom{
+
+    .subColsPaddingBottom {
         padding-bottom: 3px
     }
-    .firstColPadding{
+
+    .firstColPadding {
         padding-right: 5px;
     }
-    .wrapper{
-        width: 97%;margin: auto;height: 600px
+
+    .wrapper {
+        width: 97%;
+        margin: auto;
+        height: 600px
     }
-    .subRowHeight{
+
+    .subRowHeight {
         height: 33%
     }
-    .subCards{
-        border-radius: 15px;height: 100%;margin-top: 10px;
+
+    .subCards {
+        border-radius: 15px;
+        height: 100%;
+        margin-top: 10px;
     }
-    .cardContent{
+
+    .cardContent {
         white-space: nowrap;
         text-align: center;
         font-family: IRANSans(FaNum);
         font-style: normal;
         font-weight: normal;
         font-size: 40px;
-        color: rgba(51,51,51,1);display: flow-root;
+        color: rgba(51, 51, 51, 1);
+        display: flow-root;
     }
-    .cardTitle{
-        background-color: rgba(255, 193, 7, 0.3);  border-radius: 15px;  white-space: nowrap;
+
+    .cardTitle {
+        background-color: rgba(255, 193, 7, 0.3);
+        border-radius: 15px;
+        white-space: nowrap;
         line-height: 34px;
         margin-top: -8px;
         text-align: center;
@@ -182,8 +196,10 @@
         font-style: normal;
         font-weight: normal;
         font-size: 18px;
-        color: rgba(0,0,0,1);    place-content: space-evenly;
+        color: rgba(0, 0, 0, 1);
+        place-content: space-evenly;
     }
+
     .tableTitle {
         margin-right: 30px;
         white-space: nowrap;
@@ -251,8 +267,8 @@
 
 
     .v-data-table >>> thead tr th {
-        width: 125px!important;
-        text-align: center!important;
+        width: 125px !important;
+        text-align: center !important;
     }
 
 
@@ -261,8 +277,11 @@
         border-spacing: 0;
         margin: auto;
     }
+
     .v-card > *[data-v-338241d2]:first-child:not(.v-btn):not(.v-chip), .v-card > .v-card__progress + *[data-v-338241d2]:not(.v-btn):not(.v-chip) {
-         border-top-left-radius: 15px !important;
-         border-top-right-radius: 15px !important;
+        border-top-left-radius: 15px !important;
+        border-top-right-radius: 15px !important;
+        border-bottom-left-radius: 0 !important;
+        border-bottom-right-radius: 0 !important;
     }
 </style>
