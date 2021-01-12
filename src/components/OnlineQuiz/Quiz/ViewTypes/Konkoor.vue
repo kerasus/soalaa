@@ -145,6 +145,10 @@ export default {
         }
     },
     methods: {
+        changeAppBarAndDrawer (state) {
+            this.$store.commit('updateAppbar', state)
+            this.$store.commit('updateDrawer', state)
+        },
         onScroll (event, range) {
             if (range.start !== this.lastTimeScrollRange.start || range.end !== this.lastTimeScrollRange.end) {
                 this.quiz.questions.turnIsInViewToFalse(range.start, range.end)
@@ -223,8 +227,7 @@ export default {
     created () {
 
         if (this.windowSize.x > 959) {
-            this.$store.commit('updateAppbar', false)
-            this.$store.commit('updateDrawer', false)
+            this.changeAppBarAndDrawer(false)
             if (!this.quiz.id || (this.$route.params.quizId).toString() !== (this.quiz.id).toString()) {
                 this.loadQuiz()
             } else {
@@ -234,6 +237,9 @@ export default {
             this.$router.push({ name: 'onlineQuiz.alaaView', params: { quizId: 313, questNumber: this.$route.params.quizId } })
         }
         // this.renderQuestionBody()
+    },
+    destroyed() {
+        this.changeAppBarAndDrawer(true)
     },
     watch: {
         'windowSize.y': function () {

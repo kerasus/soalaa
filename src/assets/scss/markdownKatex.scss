@@ -3,6 +3,12 @@
   &.ltr,
   .katex {
     direction: ltr;
+    .katex-html {
+      .accent {
+        background-color: unset !important;
+        border-color: unset !important;
+      }
+    }
   }
   strong>strong>s {
     text-decoration: underline;

@@ -6,7 +6,7 @@ class QuestSubcategory extends Model {
         super(data, [
             {
                 key: 'baseRoute',
-                default: '/api/3a/examCategories'
+                default: '/3a/api/examCategories'
             },
             { key: 'id' },
             { key: 'title' },

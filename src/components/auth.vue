@@ -80,37 +80,68 @@
 <script>
     import axios from 'axios'
     import Assistant from "@/plugins/assistant";
+    import {User} from "@/models/User";
 
     export default {
         name: 'auth',
         data () {
             return {
+                user: new User(window.localStorage.getItem('user')),
                 username: null,
                 password: null
             }
         },
+        destroyed() {
+            this.changeAppBarAndDrawer(true)
+        },
         created() {
             this.changeAppBarAndDrawer(false)
+            this.getUserData()
+            if (!this.isLogin) {
+                this.getUserData()
+            }
         },
         methods: {
+            isLogin() {
+                let accessToken = window.localStorage.getItem('access_token')
+                return !!(accessToken)
+            },
+            getUserData () {
+                const token = window.localStorage.getItem('access_token')
+                if (token) {
+                    axios.defaults.headers.common['Authorization'] = 'Bearer ' + token
+                }
+                this.user.show(null, '/alaa/web/getUserFor3aWT')
+                .then( (response) => {
+                    this.user = new User(response.data.data)
+                    const userData = ''
+                    this.store.commit('updateUser', userData)
+                    this.redirectTo(this.user.token.access_token)
+                })
+                .catch( (error) => {
+                    console.log('error', error)
+                })
+            },
             changeAppBarAndDrawer (state) {
                 this.$store.commit('updateAppbar', state)
                 this.$store.commit('updateDrawer', state)
             },
+            redirectTo (access_token) {
+                let redirect_to = window.localStorage.getItem('redirect_to')
+                window.localStorage.setItem('access_token', access_token)
+                if (!redirect_to) {
+                    redirect_to = 'dashboard'
+                }
+                this.$router.push({ name: redirect_to })
+            },
             login () {
-                axios.post('/api/v2/login', {
+                axios.post('/alaa/api/v2/login', {
                     mobile: this.username,
                     password: this.password
                 })
                 .then((response) => {
                     const access_token = response.data.data.access_token
-                    let redirect_to = window.localStorage.getItem('redirect_to')
-                    window.localStorage.setItem('access_token', access_token)
-                    if (!redirect_to) {
-                        redirect_to = 'dashboard'
-                    }
-                    this.changeAppBarAndDrawer(true)
-                    this.$router.push({ name: redirect_to })
+                    this.redirectTo(access_token)
                 })
                 .catch( (error) => {
                     Assistant.handleAxiosError(this.$toasted, error)

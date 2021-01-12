@@ -6,13 +6,17 @@ module.exports = {
   devServer: {
     // proxy: 'http://192.168.5.34'
     proxy: {
-      '/api/v2': {
+      '/alaa/api/v2': {
         target: 'https://alaatv.com/api/v2',
-        pathRewrite: {'^/api/v2' : ''}
+        pathRewrite: {'^/alaa/api/v2' : ''}
       },
-      '/api/3a': {
+      '/alaa/web': {
+        target: 'https://alaatv.com/',
+        pathRewrite: {'^/alaa/web' : ''}
+      },
+      '/3a/api': {
         target: 'http://192.168.5.36',
-        pathRewrite: {'^/api/3a' : ''}
+        pathRewrite: {'^/3a/api' : ''}
       }
     }
   }

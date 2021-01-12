@@ -12,7 +12,7 @@ class Question extends Model {
         super(data, [
             {
                 key: 'baseRoute',
-                default: '/api/3a/exam-question/attach'
+                default: '/3a/api/exam-question/attach'
             },
             { key: 'id' },
             { key: '_id' },
