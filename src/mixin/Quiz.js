@@ -48,6 +48,12 @@ const mixinQuiz = {
     }
   },
   methods: {
+    setQuestionsLtr () {
+      const englishRegex = /^[A-Za-z0-9 :"'.<>%$&@!+()\-/\n,…?ᵒ]*$/
+      this.quiz.questions.list.forEach((question) => {
+          question.ltr = !!question.statement.match(englishRegex);
+      })
+    },
     loadFirstQuestion () {
       this.loadQuestionByNumber(1)
     },

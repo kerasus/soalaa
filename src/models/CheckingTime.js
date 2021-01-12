@@ -28,17 +28,14 @@ class CheckingTimeList extends Collection {
         this.addItem({
             start: Time.now()
         })
-        console.log('addItem', this)
     }
 
     addEnd() {
         let lastItem = this.getLastItem()
         if (!lastItem) {
-            console.log('thoosh', lastItem)
             return
         }
         Vue.set(lastItem, 'end', Time.now())
-        console.log(lastItem)
         // lastItem.end = Time.now()
     }
 }

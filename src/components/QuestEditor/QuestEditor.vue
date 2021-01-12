@@ -13,7 +13,7 @@
                         <v-select label="درس" :items="subCategoriesList.list" item-text="display_title" item-value="id" v-model="currentQuestion.sub_category_id" dense :disabled="editMode" outlined />
                     </v-col>
                     <v-col :md="2">
-                        <v-text-field label="ترتیب" v-model="currentQuestion.order" type="number" :disabled="editMode" outlined />
+                        <v-text-field label="ترتیب" v-model="currentQuestion.order[index - 1]" type="number" :disabled="editMode" outlined  v-for="index in currentQuestion.exams.length" :key="index" />
                     </v-col>
                     <v-col :md="3" @click="submitQuestion" type="submit">
                         <v-btn color="primary" block>ثبت سوال</v-btn>
@@ -163,7 +163,7 @@
                     exam_id: '',
                     category_id: '',
                     sub_category_id: 1,
-                    order: '',
+                    order: [],
                     choices: [
                         {
                             title: '',
@@ -219,12 +219,11 @@
                     this.currentQuestion.choices.list.forEach((item) => { item.answer = false })
                     this.currentQuestion.choices.list[this.trueChoiceIndex].answer = true
                     this.currentQuestion.exams = this.selectedQuizzes
-                    this.currentQuestion.lesson = this.se
+                    // this.currentQuestion.lesson = this.selec
                     this.currentQuestion.create().then((response) => {
                         console.log(response)
                         this.currentQuestion.statement = ''
                         this.currentQuestion.choices.list.forEach((item) => { item.title = '' })
-                        this.currentQuestion.order++
                         this.$toasted.show('ثبت با موفقیت انجام شد', {
                             theme: "toasted-primary",
                             position: "top-right",
@@ -287,11 +286,11 @@
             }
             console.log('created')
             new QuizList().fetch().then((response) => {
-                console.log(response.data.data)
+                console.log('first response: ', response.data.data)
                 this.quizList = new QuizList(response.data.data)
-                this.selectedQuizzes.push(this.quizList[0].id)
+                this.selectedQuizzes.push(this.quizList.list[0].id)
             }).catch((error) => {
-                console.log(error)
+                console.log('first error: ', error)
             })
             this.subCategoriesList.fetch().then((response) => {
                 console.log('sub categories: ', response.data)

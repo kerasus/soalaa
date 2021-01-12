@@ -146,11 +146,9 @@ export default {
     },
     methods: {
         onScroll (event, range) {
-            console.log('log')
             if (range.start !== this.lastTimeScrollRange.start || range.end !== this.lastTimeScrollRange.end) {
                 this.quiz.questions.turnIsInViewToFalse(range.start, range.end)
             }
-            console.log(this.getFirstInViewQuestionNumber())
             this.changeCurrentQuestion(this.quiz.questions.getQuestionByIndex(this.getFirstInViewQuestionNumber() - 1))
         },
         addIsInViewBoolean () {
@@ -165,8 +163,6 @@ export default {
                 for (let i = 1; i <= Math.ceil(this.quiz.questions.list.length / 100); i++) {
                     setTimeout(() => {
                         this.$refs.scroller.scrollToIndex(questionIndex)
-                            this.changeCurrentQuestion(this.quiz.questions.getQuestionByIndex(this.getFirstInViewQuestionNumber() - 1))
-
                         },
                         500 / Math.ceil(this.quiz.questions.list.length / 100) * i)
                 }
@@ -180,7 +176,6 @@ export default {
             let firstQuestionInView = this.quiz.questions.list.find( (item)=> {
                 return item.isInView === true
             })
-            console.log(firstQuestionInView.id)
             if (firstQuestionInView) {
                 return firstQuestionInView.order + 1
             } else {
@@ -227,7 +222,7 @@ export default {
         } else {
             this.loadUserQuizData()
         }
-
+        this.setQuestionsLtr()
         // this.renderQuestionBody()
     },
     watch: {

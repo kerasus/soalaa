@@ -44,6 +44,10 @@ class Question extends Model {
                 default: ''
             },
             {
+                key: 'ltr',
+                default: false
+            },
+            {
                 key: 'bookmarked',
                 default: false
             },
@@ -111,7 +115,6 @@ class Question extends Model {
         this.checking_times.addStart()
     }
     leaveQuestion () {
-        console.log('leaveQuestion')
         this.checking_times.addEnd()
     }
 

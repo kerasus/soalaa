@@ -79,7 +79,6 @@ class Quiz extends Model {
 
     mergeUserQuizData (userQuizData) {
         let questionsHasData = this.getQuestionsHasData()
-        console.log('questions with data', questionsHasData.length)
 
         questionsHasData.forEach((question) => {
             if (!userQuizData) {
@@ -96,7 +95,6 @@ class Quiz extends Model {
                 }
             }
         });
-        console.log('ADD', userQuizData)
         return userQuizData
     }
 
@@ -115,7 +113,6 @@ class Quiz extends Model {
                 end: checkingTime.end
             })
         })
-        console.log('checking times: ', checkingTimes)
     }
 
     loadCheckingTimesFromUserData (question, userQuizData) {
@@ -123,7 +120,6 @@ class Quiz extends Model {
         if (userQuestionData) {
             question.checking_times = new CheckingTimeList(userQuestionData.checking_times)
         }
-        console.log('userQuestionData: ', userQuestionData)
     }
 
     loadUserQuestionData (question, userQuestionData) {

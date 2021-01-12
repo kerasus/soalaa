@@ -70,27 +70,18 @@ const store = new Vuex.Store({
                 let newQuestion = state.quiz.questions.getQuestionById(newQuestionId)
 
                 if(newQuestion) {
-                    console.log('enter: ', newQuestionId)
                     newQuestion.enterQuestion()
-                    console.log('check', newQuestion.checking_times)
-                    console.log('double_check', state.quiz.questions.getQuestionById(newQuestion.id).checking_times)
-                    console.log('a long very before', state.quiz.questions.list)
                 }
             }
-            console.log('very before', state.quiz.questions.list)
             if (oldQuestionId) {
                 let oldQuestion = state.quiz.questions.getQuestionById(oldQuestionId)
                 state.quiz.loadCheckingTimesFromUserData (oldQuestion, state.userQuizData)
                 if(oldQuestion) {
-                    console.log('leave: ', oldQuestionId)
                     oldQuestion.leaveQuestion()
                 }
             }
-            console.log('before', state.quiz.questions.list)
             state.currentQuestion = new Question(newInfo)
             this.commit('refreshUserQuizData')
-            console.log('after', state.quiz.questions.list)
-            console.log('double_check', state.quiz.questions.getQuestionById(newQuestionId).checking_times)
 
         },
         reloadQuizModel (state) {
@@ -117,7 +108,6 @@ const store = new Vuex.Store({
 
             this.commit('reloadQuizModel')
             state.userQuizData = state.quiz.mergeUserQuizData(state.userQuizData)
-            console.log('SAVE', state.userQuizData)
         },
         loadUserQuizData (state) {
             this.commit('reloadQuizModel')
