@@ -39,6 +39,9 @@
                         <v-btn outlined icon @click="spaceStatement">
                             <v-icon>mdi-keyboard-space</v-icon>
                         </v-btn>
+                        <v-btn outlined icon @click="hideForKonkoor">
+                            <v-icon>mdi-eye-off</v-icon>
+                        </v-btn>
                     </v-col>
                     <v-col :md="5">
                         <div class="renderedPanel" v-html="questRendered">
@@ -60,7 +63,7 @@
                     </v-col>
                     <v-col :md="2">
         <!--                <v-checkbox @click="changeTrueChoice(index - 1)" v-model="choicesMarkdownText[index - 1].true" />-->
-                        <v-radio :value="index - 1" :disabled="editMode" />
+                        <v-radio :value="index - 1" />
                         <v-btn outlined icon @click="underlineChoice(currentQuestion.choices.list[index - 1])">
                             <v-icon>mdi-format-underline</v-icon>
                         </v-btn>
@@ -216,6 +219,12 @@
             }
         },
         methods: {
+            hideForKonkoor () {
+                if (!this.currentQuestion.statement) {
+                    this.currentQuestion.statement = ''
+                }
+                this.currentQuestion.statement += '__***این متن در نمای کنکور قابل مشاهده نیست***__'
+            },
             underlineChoice (choice) {
                 if (!choice.title) {
                     choice.title = ''
@@ -244,13 +253,13 @@
                 if (!choice.title) {
                     choice.title = ''
                 }
-                choice.title += '**_~~فاصله~~_**'
+                choice.title += '                   '
             },
             spaceStatement () {
                 if (!this.currentQuestion.statement) {
                     this.currentQuestion.statement = ''
                 }
-                this.currentQuestion.statement += '**_~~فاصله~~_**'
+                this.currentQuestion.statement += '                   '
             },
             getExamById (quizId) {
                 return this.exams.find((quiz) => quiz.id === quizId )
@@ -281,14 +290,27 @@
             },
             submitQuestion () {
                 if (this.editMode) {
-                    alert('چاپ ستون متخصصان دنیای سطرآنچنان گرافیک تایپ با برای استفاده امید تمام در شرایط طراحان حروفچینی هدف داشت موجود آینده کاربردی ساختگی سادگی تا از فراوان و خلاقی ایجاد در دنیای شامل بهبود اصلی موجود می درصد با طراحان رسد و و تمام و حروفچینی دنیای توان بلکه طراحان تولید لازم مورد امید هدف نیاز شامل می موجود داشت علی دستاوردهای و سخت ای مورد با می روزنامه این طراحان لازم و پیوسته در استفاده رسد و آینده داشت نیاز اهل دستاوردهای پیشرو ارائه داشت پیوسته شناخت آینده نرم گیرد را سادگی تولید با زیادی تایپ سوالات امید شامل لازم طلبد تولید می طراحان در نیاز سوالات مورد شناخت نرم ایجاد طراحان بلکه را آینده کاربردی سخت خلاقی تکنولوژی زیادی علی سطرآنچنان سوالات را ای پایان ایپسوم شامل توان و با و مورد ساختگی افزارها خلاقی صنعت را گرافیک رایانه شناخت نامفهوم زیادی پایان و کردsدر هدف نیاز بیشتری شناخت و و ارائه زبان و درصد تولید پیشرو مورد متخصصان در راهکارها توان و خلاقی شصت و با جامعه و رسد است چاپگرها روزنامه ایپسوم بلکه متون طراحی طلبد مجله اساسا \n')
-                    return
+                    this.currentQuestion.choices.list.forEach((item) => { item.answer = false })
+                    this.currentQuestion.choices.list[this.trueChoiceIndex].answer = true
+                    this.currentQuestion.exams = this.exams
+                    this.currentQuestion.edit()
+                        .then(() => {
+                            this.currentQuestion.statement = ''
+                            this.currentQuestion.choices.list.forEach((item) => { item.title = '' })
+                            this.$toasted.show('ویرایش با موفقیت انجام شد', {
+                                theme: "toasted-primary",
+                                position: "top-right",
+                                duration : 2000
+                            })
+                        }).catch((error) => {
+                        Assistant.handleAxiosError(this.$toasted, error)
+                        // this.$toasted.show('hello billo')
+                    })
                 }
 
                 this.currentQuestion.choices.list.forEach((item) => { item.answer = false })
                 this.currentQuestion.choices.list[this.trueChoiceIndex].answer = true
                 this.currentQuestion.exams = this.exams
-                // this.currentQuestion.lesson = this.selec
                 this.currentQuestion.create()
                     .then(() => {
                         this.currentQuestion.statement = ''

@@ -5,7 +5,7 @@
             <v-btn icon @click="removeQuestion(source.id)" disabled v-if="false">
                 <v-icon :size="24">mdi-close</v-icon>
             </v-btn>
-            <v-btn icon :to="{ name: 'quest.edit', params: { id: source.id } }" disabled v-if="false">
+            <v-btn icon :to="{ name: 'quest.edit', params: { id: source.id } }" >
                 <v-icon :size="24">mdi-pencil</v-icon>
             </v-btn>
             <input :id="'question-id' + source.id" :value="source.id" type="text" class="not-visible" />
