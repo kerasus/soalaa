@@ -196,8 +196,8 @@
             }
         },
         methods: {
-            getExamById (examId) {
-                return this.exams.find((exam) => exam.id === examId )
+            getExamById (quizId) {
+                return this.exams.find((quiz) => quiz.id === quizId )
             },
             getQuizById (quizId) {
                 return this.quizList.list.find((quiz) => quiz.id === quizId )

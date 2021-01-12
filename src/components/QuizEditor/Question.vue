@@ -25,7 +25,7 @@
                     :key="choice.id"
                     v-html="(choiceNumber[index]) + choice.rendered_title"
                     :md="choiceClass(source)"
-                    :class="{ choice: true, renderedPanel: true, active: choice.active }"
+                    :class="{ choice: true, renderedPanel: true, active: choice.answer }"
             />
         </v-row>
     </div>
