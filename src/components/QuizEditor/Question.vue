@@ -2,7 +2,7 @@
     <div :class="{ 'current-question': this.currentQuestion.id === source.id, question: true, ltr: source.ltr  }">
         <div class="buttons-group">
             <v-select :items="quizList" item-text="title" chips multiple attach outlined dense full-width disabled v-if="false"/>
-            <v-btn icon @click="removeQuestion(source.id)" disabled v-if="false">
+            <v-btn icon @click="removeQuestion()">
                 <v-icon :size="24">mdi-close</v-icon>
             </v-btn>
             <v-btn icon :to="{ name: 'quest.edit', params: { id: source.id } }" >
@@ -123,8 +123,10 @@
                 })
                 return largestChoice
             },
-            removeQuestion (questionId) {
-                console.log(questionId)
+            removeQuestion () {
+                this.source.show(null, '/api/3a/exam-question/detach/' + this.source.id).then(() => {
+
+                }).catch((error) => { console.log(error) })
             },
             edit (questionId) {
                 console.log(questionId)
