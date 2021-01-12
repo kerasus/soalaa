@@ -41,9 +41,7 @@
             </v-col>
             <v-col cols="4">
                 <div class="form-group m-form__group ">
-
                     <v-select :items="gender" label="جنسیت" outlined v-model="user.gender.id">
-
                     </v-select>
                     <!--                    <label>-->
                     <!--&lt;!&ndash;                        <span class="requiredItem" v-if="isRequired('gender')">*</span>&ndash;&gt;-->
@@ -85,7 +83,6 @@
             <v-col cols="6">
                 <div class="form-group m-form__group ">
                     <v-text-field outlined label="شهر" v-model="user.city"></v-text-field>
-
                     <!--                    <label>-->
                     <!--&lt;!&ndash;                        <span class="requiredItem" v-if="isRequired('city')">*</span>&ndash;&gt;-->
                     <!--                        <span class="requiredItem" >*</span>-->
@@ -104,7 +101,6 @@
             <v-col cols="4">
                 <div class="form-group m-form__group ">
                     <v-text-field outlined label="مدرسه" v-model="user.school"></v-text-field>
-
                     <!--                    <label>-->
                     <!--&lt;!&ndash;                        <span class="requiredItem" v-if="isRequired('school')">*</span>&ndash;&gt;-->
                     <!--                        <span class="requiredItem" >*</span>-->
@@ -172,7 +168,6 @@
                 </div>
             </v-col>
         </v-row>
-
         <v-row>
             <div class="col">
                 <!--                <div v-for="(item, index) in submitMessage" class="alert alert-danger alert-dismissible fade show" role="alert">-->
@@ -182,23 +177,17 @@
                 <!--                </div>-->
             </div>
         </v-row>
-
         <v-row>
             <v-col>
                 <!--                <button type="button" class="btn btn-primary a&#45;&#45;full-width btnSubmitEvent" @click="editUserInfo">ذخیره</button>-->
-
                 <v-btn>ذخیره</v-btn>
             </v-col>
         </v-row>
-
-
     </div>
 
 </template>
 
 <script>
-    // import Assist from "../../util/Assist";
-    import {User} from "@/models/User";
 
     export default {
         name: "UserInfoForm",
@@ -210,7 +199,6 @@
         },
         data() {
             return {
-                user: new User(),
                 userInfoInForm: {},
                 submitMessage: [],
                 firstNameDisabled: false,
@@ -222,52 +210,49 @@
         },
         watch: {},
         computed: {
-            // user() {
-            //     return this.$store.getters.user;
-            // }
+            user () {
+                return this.$store.getters.user;
+            }
         },
         methods: {
-            // isRequired(name) {
-            //     return this.requiredItems.includes(name);
-            // },
-            // canSubmit() {
-            //     let status = true;
-            //
-            //     if (!this.isValidString(this.user.first_name) && this.isRequired('first_name')) {
-            //         status = false;
-            //         this.submitMessage.push('نام خود را مشخص کنید.');
-            //     }
-            //     if (!this.isValidString(this.user.last_name) && this.isRequired('last_name')) {
-            //         status = false;
-            //         this.submitMessage.push('نام خانوادگی خود را مشخص کنید.');
-            //     }
-            //     if (!this.isValidString(this.user.province) && this.isRequired('province')) {
-            //         status = false;
-            //         this.submitMessage.push('استان خود را مشخص کنید.');
-            //     }
-            //     if (!this.isValidString(this.user.city) && this.isRequired('city')) {
-            //         status = false;
-            //         this.submitMessage.push('شهر خود را مشخص کنید.');
-            //     }
-            //     if (!this.isValidString(this.user.school) && this.isRequired('school')) {
-            //         status = false;
-            //         this.submitMessage.push('نام مدرسه خود را مشخص کنید.');
-            //     }
-            //     if (!this.isValidString(this.user.gender.id) && this.isRequired('gender')) {
-            //         status = false;
-            //         this.submitMessage.push('جنسیت خود را مشخص کنید.');
-            //     }
-            //     if (!this.isValidString(this.user.major.id) && this.isRequired('major')) {
-            //         status = false;
-            //         this.submitMessage.push('رشته خود را مشخص کنید.');
-            //     }
-            //     if (!this.isValidString(this.user.grade.id) && this.isRequired('grade')) {
-            //         status = false;
-            //         this.submitMessage.push('مقطع خود را مشخص کنید.');
-            //     }
-            //
-            //     return status;
-            // },
+            canSubmit() {
+                let status = true;
+
+                if (!this.isValidString(this.user.first_name)) {
+                    status = false;
+                    this.submitMessage.push('نام خود را مشخص کنید.');
+                }
+                if (!this.isValidString(this.user.last_name)) {
+                    status = false;
+                    this.submitMessage.push('نام خانوادگی خود را مشخص کنید.');
+                }
+                if (!this.isValidString(this.user.province)) {
+                    status = false;
+                    this.submitMessage.push('استان خود را مشخص کنید.');
+                }
+                if (!this.isValidString(this.user.city)) {
+                    status = false;
+                    this.submitMessage.push('شهر خود را مشخص کنید.');
+                }
+                if (!this.isValidString(this.user.school)) {
+                    status = false;
+                    this.submitMessage.push('نام مدرسه خود را مشخص کنید.');
+                }
+                if (!this.isValidString(this.user.gender.id)) {
+                    status = false;
+                    this.submitMessage.push('جنسیت خود را مشخص کنید.');
+                }
+                if (!this.isValidString(this.user.major.id)) {
+                    status = false;
+                    this.submitMessage.push('رشته خود را مشخص کنید.');
+                }
+                if (!this.isValidString(this.user.grade.id)) {
+                    status = false;
+                    this.submitMessage.push('مقطع خود را مشخص کنید.');
+                }
+
+                return status;
+            },
             // editUserInfo() {
             //
             //     if (!this.canSubmit()) {
@@ -304,9 +289,9 @@
             //     //         // Assist.handleErrorMessage(error);
             //     //     });
             // },
-            // isValidString(string) {
-            //     return (typeof string !== 'undefined' && string !== null && string.toString().trim().length > 0);
-            // }
+            isValidString(string) {
+                return (typeof string !== 'undefined' && string !== null && string.toString().trim().length > 0);
+            }
         },
         mounted: function () {
 

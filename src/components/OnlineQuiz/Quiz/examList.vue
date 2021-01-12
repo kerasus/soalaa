@@ -161,6 +161,7 @@
                     this.examList = new ExamList(response.data.data, {meta: response.data.meta, links: response.data.links})
                 })
                 .catch(() => {
+                    console.log('ffff')
                     this.examList.loading = false
                     this.examList = new ExamList()
                 })

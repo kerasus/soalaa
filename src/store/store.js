@@ -5,6 +5,7 @@ import { Question } from '@/models/Question'
 import createPersistedState from 'vuex-persistedstate'
 import createMutationsSharer from 'vuex-shared-mutations'
 import Assistant from '@/plugins/assistant'
+import {User} from '@/models/User'
 
 Vue.use(Vuex)
 
@@ -28,6 +29,7 @@ const store = new Vuex.Store({
             x: 0,
             y: 0,
         },
+        user: new User(),
         drawer: false,
         quiz: new Quiz(),
         userAnswersOfOnlineQuiz: [],
@@ -46,6 +48,10 @@ const store = new Vuex.Store({
         },
         updateDrawer(state, newInfo) {
             state.drawer = newInfo
+        },
+        updateUser (state, newInfo) {
+            window.localStorage.setItem('user', newInfo)
+            state.user = newInfo
         },
         updateQuiz (state, newInfo) {
             state.quiz = newInfo
@@ -143,6 +149,9 @@ const store = new Vuex.Store({
         },
         appbar (state) {
             return state.appbar
+        },
+        user (state) {
+            return state.user
         }
     }
 })
