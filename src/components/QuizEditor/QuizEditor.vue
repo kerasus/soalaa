@@ -112,7 +112,7 @@
     import Item from './Question'
     import { mixinQuiz, mixinWindowSize } from '@/mixin/Mixins'
     import BubbleSheet from "./BubbleSheet";
-    import {Quiz, QuizList} from "@/models/Quiz";
+    import {Quiz} from "@/models/Quiz";
     import {QuestionList} from "@/models/Question";
     Vue.component('DynamicScroller', DynamicScroller)
     Vue.component('DynamicScrollerItem', DynamicScrollerItem)
@@ -191,19 +191,19 @@
             this.$store.commit('updateAppbar', false)
             this.$store.commit('updateDrawer', false)
             const that = this
-            this.quizData.show(this.$route.params.quizId, '/api/3a/exam-question/attach/show').then((response) => {
+            this.quizData.show(null, '/api/3a/exam-question/attach/show/' + this.$route.params.quizId).then((response) => {
                 $.getJSON(response.data.data.questions_file_url, function(data) {
                     that.quizData = response.data.data
-                    console.log(response.data.data)
+                    console.log('response: ', response)
                     that.quizData.questions = new QuestionList(data)
                     that.loadQuiz()
                 })
-                new QuizList().fetch().then((response) => {
-                    this.quizList = response.data.data
-                    console.log(response.data.data)
-                })
+                // new QuizList().fetch().then((response) => {
+                //     this.quizList = response.data.data
+                //     console.log(response.data.data)
+                // })
             }).catch((error) => {
-                console.log(error)
+                console.log('error: ', error)
             })
 
 
