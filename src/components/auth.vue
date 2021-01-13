@@ -135,16 +135,16 @@
                 this.$router.push({ name: redirect_to })
             },
             login () {
+                let that = this
                 axios.post('/alaa/api/v2/login', {
                     mobile: this.username,
                     password: this.password
                 })
                 .then((response) => {
-                    this.user = new User(response.data.data.user)
-                    const userData = ''
-                    this.store.commit('updateUser', userData)
+                    that.user = new User(response.data.data.user)
+                    that.$store.commit('updateUser', JSON.stringify(that.user))
                     const access_token = response.data.data.access_token
-                    this.redirectTo(access_token)
+                    that.redirectTo(access_token)
                 })
                 .catch( (error) => {
                     Assistant.handleAxiosError(this.$toasted, error)
