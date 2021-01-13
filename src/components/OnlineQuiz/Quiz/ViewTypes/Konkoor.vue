@@ -26,8 +26,7 @@
                                             elevation="0"
                                     >
                                         <v-icon class="mr-2" :size="30" color="#666">mdi-account-circle</v-icon>
-                                        سید مصطفی
-                                        کاظمی
+                                        {{ $store.getters.user.first_name + ' ' + $store.getters.user.last_name }}
                                     </v-btn>
                                 </template>
                                 <v-card

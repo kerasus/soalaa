@@ -43,6 +43,9 @@ class User extends Model {
             },
             {
                 key: 'token'
+            },
+            {
+                key: 'has_admin_permission'
             }
 
         ])

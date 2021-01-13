@@ -5,7 +5,7 @@
                 app
                 right
                 width="316"
-                v-if="$route.name === 'onlineQuiz.alaaView'"
+                v-if="$route.name === 'onlineQuiz.alaaView' || $store.getters.user.has_admin_permission"
                 :style="{ backgroundColor: $route.name === 'onlineQuiz.alaaView' ? '#fff' : '#ffc107' }"
         >
             <div style="height: 150px;line-height: 150px;font-size: 4rem;color: rgb(255, 193, 7);display: flex;align-items: center;justify-content: center;">
@@ -42,8 +42,7 @@
                                             elevation="0"
                                     >
                                         <v-icon class="mr-2" :size="30" color="#666">mdi-account-circle</v-icon>
-                                        سید مصطفی
-                                        کاظمی
+                                        {{ $store.getters.user.first_name + ' ' + $store.getters.user.last_name }}
                                     </v-btn>
                                 </template>
                                 <v-card
