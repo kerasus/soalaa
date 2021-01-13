@@ -60,7 +60,6 @@ const store = new Vuex.Store({
             state.accessToken = newInfo
         },
         updateCurrentQuestion (state, newInfo) {
-            console.log('currentQuestionChanged')
             this.commit('reloadQuizModel')
             this.commit('reloadCurrentQuestionModel')
             // set checking time
