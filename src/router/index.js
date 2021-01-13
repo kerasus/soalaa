@@ -107,6 +107,12 @@ const router = new VueRouter({
             name: 'user-info',
             component: () => lazyLoadView(import('@/components/UserInfoForm')),
             meta: {middleware: auth}
+        },
+        {
+            path: '*',
+            name: 'NotFound',
+            component: () => lazyLoadView(import('@/pages/user/exam/list')),
+            meta: {middleware: auth}
         }
     ]
 })
