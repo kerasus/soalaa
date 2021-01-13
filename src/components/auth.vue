@@ -115,7 +115,7 @@
                 this.user.show(null, '/alaa/api/v2/getUserFor3a')
                 .then( (response) => {
                     that.user = new User(response.data.data)
-                    that.$store.commit('updateUser', JSON.stringify(that.user))
+                    that.$store.commit('updateUser', that.user)
                     that.redirectTo(token)
                 })
                 .catch( (error) => {
@@ -142,7 +142,7 @@
                 })
                 .then((response) => {
                     that.user = new User(response.data.data.user)
-                    that.$store.commit('updateUser', JSON.stringify(that.user))
+                    that.$store.commit('updateUser', that.user)
                     const access_token = response.data.data.access_token
                     that.redirectTo(access_token)
                 })
