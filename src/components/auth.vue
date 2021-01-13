@@ -112,7 +112,7 @@
                     axios.defaults.headers.common['Authorization'] = 'Bearer ' + token
                 }
                 let that = this
-                this.user.show(null, '/alaa/api/v2/getUserFor3aWT')
+                this.user.show(null, '/3a/api/getUserFor3aWT')
                 .then( (response) => {
                     that.user = new User(response.data.data)
                     that.$store.commit('updateUser', that.user)
