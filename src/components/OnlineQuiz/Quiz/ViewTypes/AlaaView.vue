@@ -99,7 +99,6 @@
             } else {
                 this.loadUserQuizData()
             }
-
             this.loadQuestionByNumber(this.$route.params.questNumber)
 
             if (this.windowSize.x > 1263) {

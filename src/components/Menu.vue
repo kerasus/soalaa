@@ -8,7 +8,7 @@
                 v-model="group"
                 active-class="deep-purple--text text--accent-4"
         >
-            <router-link class="text-decoration-none" :to="{ name: 'dashboard' }">
+            <router-link class="text-decoration-none" :to="{ name: 'dashboard' }" v-if="false">
                 <v-list-item>
                     <v-list-item-icon>
                         <v-icon color="#fff">mdi-view-dashboard</v-icon>
@@ -26,7 +26,7 @@
                     <v-list-item-title>آزمون های سه آ</v-list-item-title>
                 </v-list-item>
             </router-link>
-            <router-link class="text-decoration-none" :to="{ name: 'tree.edit' }">
+            <router-link class="text-decoration-none" :to="{ name: 'tree.edit' }" v-if="false">
                 <v-list-item>
                     <v-list-item-title>نتایج آزمون</v-list-item-title>
                 </v-list-item>
@@ -38,22 +38,28 @@
                 </v-list-item>
             </router-link>
 
-            <router-link class="text-decoration-none" :to="{ name: 'onlineQuiz.result' }">
+            <router-link class="text-decoration-none" :to="{ name: 'onlineQuiz.result' }" v-if="false">
                 <v-list-item>
                     <v-list-item-title>کارنامه</v-list-item-title>
                 </v-list-item>
             </router-link>
 
-            <router-link class="text-decoration-none" :to="{ name: 'onlineQuiz.result.lessonDetails' }">
+            <router-link class="text-decoration-none" :to="{ name: 'onlineQuiz.result.lessonDetails' }" v-if="false">
                 <v-list-item>
                     <v-list-item-title>ریزدرس ها</v-list-item-title>
                 </v-list-item>
             </router-link>
-            <router-link class="text-decoration-none" :to="{ name: 'onlineQuiz.result.topScore' }">
+            <router-link class="text-decoration-none" :to="{ name: 'onlineQuiz.result.topScore' }" v-if="false">
                 <v-list-item>
                     <v-list-item-title>نتایج نفرات برتر</v-list-item-title>
                 </v-list-item>
             </router-link>
+
+<!--            <a>-->
+<!--                <v-list-item>-->
+<!--                    <v-list-item-title>درباره ما</v-list-item-title>-->
+<!--                </v-list-item>-->
+<!--            </a>-->
 
         </v-list-item-group>
         <v-list-item-group

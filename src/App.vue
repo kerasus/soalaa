@@ -5,6 +5,7 @@
                 app
                 right
                 width="316"
+                v-if="$route.name === 'onlineQuiz.alaaView'"
                 :style="{ backgroundColor: $route.name === 'onlineQuiz.alaaView' ? '#fff' : '#ffc107' }"
         >
             <div style="height: 150px;line-height: 150px;font-size: 4rem;color: rgb(255, 193, 7);display: flex;align-items: center;justify-content: center;">
@@ -43,14 +44,13 @@
                                         <v-icon class="mr-2" :size="30" color="#666">mdi-account-circle</v-icon>
                                         سید مصطفی
                                         کاظمی
-                                        {{ $route.params.name }}
                                     </v-btn>
                                 </template>
                                 <v-card
                                         max-width="375"
                                         class="mx-auto"
                                         rounded="b-xl r-xl"
-                                        v-if="$route.params.name === 'onlineQuiz.alaaView'"
+                                        v-if="$route.name === 'onlineQuiz.alaaView'"
                                 >
                                     <v-img
                                             style="background-color: #e8e8e8;"
@@ -112,6 +112,8 @@
                                 <v-icon>mdi-dots-grid</v-icon>
                             </v-btn>
                             <v-app-bar-nav-icon
+                                    v-if="$route.name === 'onlineQuiz.alaaView'"
+
                                     @click.stop="toggleDrawer"
                                     :color="(isQuizPage) ? '#fcaf25' : '#666'"
                             />
