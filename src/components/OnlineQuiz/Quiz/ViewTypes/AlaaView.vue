@@ -107,7 +107,6 @@
             }
 
             this.$store.commit('updateAppbar', true)
-            this.setQuestionsLtr()
         }
     }
 </script>
