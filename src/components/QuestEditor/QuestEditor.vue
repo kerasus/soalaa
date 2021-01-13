@@ -131,15 +131,13 @@
     }
 </style>
 <script>
-    // import Vue from 'vue';
+    import '@/assets/scss/markdownKatex.scss'
     import MathLive from 'mathlive';
     import 'mathlive/dist/mathlive-fonts.css'
     import 'mathlive/dist/mathlive-static.css'
     import { Question } from '@/models/Question'
     import {QuizList} from "@/models/Quiz";
     import Toasted from 'vue-toasted';
-    // import 'katex/dist/katex.min.css';
-    import 'github-markdown-css/github-markdown.css';
     import Assistant from "@/plugins/assistant";
     import {QuestSubcategoryList} from "@/models/QuestSubcategory";
     var md = require('markdown-it')(),

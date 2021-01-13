@@ -4,18 +4,22 @@ module.exports = {
     "vuetify"
   ],
   devServer: {
-    // proxy: 'http://192.168.5.34'
+    port: 80,
+    disableHostCheck: true,
     proxy: {
       '/alaa/api/v2': {
-        target: 'https://alaatv.com/api/v2',
+        target: process.env.VUE_APP_ALAA_API,
+        changeOrigin: true,
         pathRewrite: {'^/alaa/api/v2' : ''}
       },
       '/alaa/web': {
-        target: 'https://alaatv.com/',
+        target: process.env.VUE_APP_ALAA_WEB,
+        changeOrigin: true,
         pathRewrite: {'^/alaa/web' : ''}
       },
       '/3a/api': {
-        target: 'http://192.168.5.36',
+        target: process.env.VUE_APP_3A_API,
+        changeOrigin: true,
         pathRewrite: {'^/3a/api' : ''}
       }
     }
