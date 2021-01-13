@@ -1,7 +1,7 @@
 <template>
     <div :class="{ 'current-question': this.currentQuestion.id === source.id, question: true, ltr: source.ltr  }">
         <div class="buttons-group">
-            <v-select :items="quizList" item-text="title" chips multiple attach outlined dense full-width disabled v-if="false"/>
+            <v-select :items="quizList.list" item-text="title" chips multiple attach outlined dense full-width v-if="false"/>
             <v-btn icon @click="removeQuestion()">
                 <v-icon :size="24">mdi-close</v-icon>
             </v-btn>

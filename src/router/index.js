@@ -50,6 +50,12 @@ const router = new VueRouter({
             meta: {middleware: auth}
         },
         {
+            path: '/quiz/edit-all',
+            name: 'quiz.allQuestions',
+            component: () => lazyLoadView(import('@/components/QuizEditor/AllQuestions')),
+            meta: {middleware: auth}
+        },
+        {
             path: '/TinymceEditor',
             name: 'TinymceEditor',
             component: () => lazyLoadView(import('@/components/TinymceEditor/TinymceEditor')),
