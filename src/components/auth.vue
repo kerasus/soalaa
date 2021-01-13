@@ -111,12 +111,12 @@
                 if (token) {
                     axios.defaults.headers.common['Authorization'] = 'Bearer ' + token
                 }
-                this.user.show(null, '/alaa/web/getUserFor3aWT')
+                let that = this
+                this.user.show(null, '/alaa/api/v2/getUserFor3a')
                 .then( (response) => {
-                    this.user = new User(response.data.data)
-                    const userData = ''
-                    this.store.commit('updateUser', userData)
-                    this.redirectTo(this.user.token.access_token)
+                    that.user = new User(response.data.data)
+                    that.$store.commit('updateUser', JSON.stringify(that.user))
+                    that.redirectTo(token)
                 })
                 .catch( (error) => {
                     console.log('error', error)
@@ -140,6 +140,9 @@
                     password: this.password
                 })
                 .then((response) => {
+                    this.user = new User(response.data.data.user)
+                    const userData = ''
+                    this.store.commit('updateUser', userData)
                     const access_token = response.data.data.access_token
                     this.redirectTo(access_token)
                 })

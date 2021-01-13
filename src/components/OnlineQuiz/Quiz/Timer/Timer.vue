@@ -1,9 +1,7 @@
 <template>
     <div class="wrapper" >
-    <mobile-timer v-if="windowSize.x < 700"  :passed-time="timer.passedTime" :remaining-time="timer.remainingTime"/>
-
-
-        <pc-timer  v-else :passed-time="timer.passedTime" :remaining-time="timer.remainingTime"/>
+        <mobile-timer v-if="windowSize.x < 700"  :passed-time="passedTime" :remaining-time="remainTime"/>
+        <pc-timer v-else :passed-time="passedTime" :remaining-time="remainTime"/>
     </div>
 </template>
 <script>
@@ -11,24 +9,26 @@
     import PcTimer from '@/components/OnlineQuiz/Quiz/Timer/pc'
     import {mixinWindowSize} from '@/mixin/Mixins'
     import {Timer} from "@/models/Timer";
+    import Time from "@/plugins/time";
 
     export default {
         name: "Timer",
         data: () => ({
-
             interval: null,
+            passedTime: '00:00:00',
+            remainTime: '00:00:00',
             timer: new Timer()
-
         }),
         mixins: [mixinWindowSize],
         components: {
             MobileTimer,
             PcTimer
         },
-
         mounted() {
             this.interval = setInterval(() => {
-                this.timer.updateTimer();
+                this.passedTime = Time.getPassedTime('2021-01-13 04:44:00')
+                this.remainTime = Time.getRemainTime('2021-01-13 08:44:00')
+                // this.timer.updateTimer();
             }, 1000);
             // requestAnimationFrame(this.timer.updateTimer) // webpack-internal:///./src/models/Timer.js:58 Uncaught TypeError: Cannot read property 'updateDiffs' of undefined
         },
