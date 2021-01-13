@@ -13,7 +13,7 @@
                     <v-img src="/img/logo-2.png" width="150" v-else />
                 </div>
             </div>
-            <map-of-questions v-if="$route.name === 'onlineQuiz.alaaView' || $route.name === 'onlineQuiz.konkoorView'"/>
+            <map-of-questions v-if="$route.name === 'onlineQuiz.alaaView'"/>
             <Menu v-else/>
         </v-navigation-drawer>
         <v-app-bar
@@ -43,12 +43,14 @@
                                         <v-icon class="mr-2" :size="30" color="#666">mdi-account-circle</v-icon>
                                         سید مصطفی
                                         کاظمی
+                                        {{ $route.params.name }}
                                     </v-btn>
                                 </template>
                                 <v-card
                                         max-width="375"
                                         class="mx-auto"
                                         rounded="b-xl r-xl"
+                                        v-if="$route.params.name === 'onlineQuiz.alaaView'"
                                 >
                                     <v-img
                                             style="background-color: #e8e8e8;"

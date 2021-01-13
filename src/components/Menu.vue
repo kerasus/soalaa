@@ -84,6 +84,12 @@
                 </v-list-item>
             </router-link>
 
+            <router-link class="text-decoration-none" :to="{ name: 'quiz.allQuestions' }">
+                <v-list-item>
+                    <v-list-item-title>همه سوالارو میخوام ببینم</v-list-item-title>
+                </v-list-item>
+            </router-link>
+
         </v-list-item-group>
     </v-list>
 </template>

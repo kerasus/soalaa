@@ -403,6 +403,8 @@
                 this.currentQuestion.show(null, '/3a/api/question/' + this.$route.params.id)
                     .then((response) => {
                         this.currentQuestion = new Question(response.data.data)
+                        this.trueChoiceIndex = this.currentQuestion.choices.list.findIndex((item) => item.answer )
+                        console.log(this.trueChoiceIndex)
                     }).catch((error) => {
                         Assistant.handleAxiosError(this.$toasted, error)
                     })

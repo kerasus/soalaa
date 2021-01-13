@@ -60,7 +60,7 @@ const store = new Vuex.Store({
             state.accessToken = newInfo
         },
         updateCurrentQuestion (state, newInfo) {
-
+            console.log('currentQuestionChanged')
             this.commit('reloadQuizModel')
             this.commit('reloadCurrentQuestionModel')
             // set checking time
@@ -71,20 +71,20 @@ const store = new Vuex.Store({
                 return
             }
 
-            // if (newQuestionId) {
-            //     let newQuestion = state.quiz.questions.getQuestionById(newQuestionId)
-            //
-            //     if(newQuestion) {
-            //         newQuestion.enterQuestion()
-            //     }
-            // }
-            // if (oldQuestionId) {
-            //     let oldQuestion = state.quiz.questions.getQuestionById(oldQuestionId)
-            //     state.quiz.loadCheckingTimesFromUserData (oldQuestion, state.userQuizData)
-            //     if(oldQuestion) {
-            //         oldQuestion.leaveQuestion()
-            //     }
-            // }
+            if (newQuestionId) {
+                let newQuestion = state.quiz.questions.getQuestionById(newQuestionId)
+
+                if(newQuestion) {
+                    newQuestion.enterQuestion()
+                }
+            }
+            if (oldQuestionId) {
+                let oldQuestion = state.quiz.questions.getQuestionById(oldQuestionId)
+                state.quiz.loadCheckingTimesFromUserData (oldQuestion, state.userQuizData)
+                if(oldQuestion) {
+                    oldQuestion.leaveQuestion()
+                }
+            }
             state.currentQuestion = new Question(newInfo)
             this.commit('refreshUserQuizData')
 

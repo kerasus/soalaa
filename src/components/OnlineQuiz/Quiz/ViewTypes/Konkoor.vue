@@ -153,7 +153,9 @@ export default {
             if (range.start !== this.lastTimeScrollRange.start || range.end !== this.lastTimeScrollRange.end) {
                 this.quiz.questions.turnIsInViewToFalse(range.start, range.end)
             }
-            this.changeCurrentQuestionToFirstQuestionInView()
+            setTimeout(() => {
+                this.changeCurrentQuestionToFirstQuestionInView()
+            }, 2000)
         },
         changeCurrentQuestionToFirstQuestionInView () {
             this.changeCurrentQuestion(this.quiz.questions.getQuestionByIndex(this.getFirstInViewQuestionNumber() - 1))
@@ -168,11 +170,8 @@ export default {
                 const questionIndex = this.quiz.questions.getQuestionIndexById(questionId)
                 this.$refs.scroller.scrollToIndex(questionIndex)
                 for (let i = 1; i < 4; i++) {
-                    console.log('log')
                     setTimeout(() => {
-                        console.log('log1')
                         this.$refs.scroller.scrollToIndex(questionIndex)
-                        this.changeCurrentQuestion(this.quiz.questions.getQuestionByIndex(this.getFirstInViewQuestionNumber() - 1))
                     },
                     500 / Math.ceil(this.quiz.questions.list.length / 100) * i)
                 }

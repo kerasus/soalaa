@@ -1,15 +1,15 @@
 <template>
     <v-container class="quiz-editor" :fluid="true" :style="{ height: '100%', background: 'rgb(244, 244, 244)' }" v-resize="updateWindowSize">
         <v-row :style="{ 'min-height': '100%' }">
-<!--            <v-col v-if="quiz.questions.list.length > 40" :md="5" class="questions" :style="{ height: windowSize.y }">-->
-<!--                <virtual-list style="overflow-y: auto;"-->
-<!--                              :data-key="'id'"-->
-<!--                              :data-sources="quiz.questions.list"-->
-<!--                              :data-component="item"-->
-<!--                              class="questions"-->
-<!--                              ref="scroller"-->
-<!--                />-->
-<!--            </v-col>-->
+            <!--            <v-col v-if="quiz.questions.list.length > 40" :md="5" class="questions" :style="{ height: windowSize.y }">-->
+            <!--                <virtual-list style="overflow-y: auto;"-->
+            <!--                              :data-key="'id'"-->
+            <!--                              :data-sources="quiz.questions.list"-->
+            <!--                              :data-component="item"-->
+            <!--                              class="questions"-->
+            <!--                              ref="scroller"-->
+            <!--                />-->
+            <!--            </v-col>-->
             <v-col :md="5" class="questions">
                 <item v-for="itemm in quiz.questions.list" :key="itemm.id" :source="itemm" />
             </v-col>
@@ -20,11 +20,11 @@
                             <v-menu bottom>
                                 <template v-slot:activator="{ on, attrs }">
                                     <v-btn
-                                        large
-                                        tile
-                                        v-bind="attrs"
-                                        v-on="on"
-                                        elevation="0"
+                                            large
+                                            tile
+                                            v-bind="attrs"
+                                            v-on="on"
+                                            elevation="0"
                                     >
                                         <v-icon class="mr-2" :size="30" color="#666">mdi-account-circle</v-icon>
                                         سید مصطفی
@@ -114,8 +114,9 @@
     import Item from './Question'
     import { mixinQuiz, mixinWindowSize } from '@/mixin/Mixins'
     import BubbleSheet from "./BubbleSheet";
-    import {Quiz} from "@/models/Quiz";
+    import {Quiz, QuizList} from "@/models/Quiz";
     import {QuestionList} from "@/models/Question";
+    import Assistant from "@/plugins/assistant";
     Vue.component('DynamicScroller', DynamicScroller)
     Vue.component('DynamicScrollerItem', DynamicScrollerItem)
     var md = require('markdown-it')(),
@@ -123,7 +124,7 @@
     md.use(mk);
 
     export default {
-        name: 'adminView',
+        name: 'allQuestions',
         mixins: [mixinQuiz, mixinWindowSize],
         components: {
             Item,
@@ -161,15 +162,22 @@
         created () {
             this.changeAppBarAndDrawer(false)
             // const that = this
-            const url = '/3a/api/exam-question/attach/show/' + this.$route.params.quizId
+            const url = '/3a/api/question'
             this.quizData.show(null, url)
                 .then((response) => {
                     this.quizData.questions = new QuestionList(response.data.data)
                     this.quiz = new Quiz(this.quizData)
+
                 })
                 .catch((error) => {
                     console.log('error: ', error)
                 })
+            new QuizList().fetch().then((response) => {
+                this.quizList = new QuizList(response.data.data)
+                console.log(this.quizList)
+            }).catch((error) => {
+                Assistant.handleAxiosError(this.$toasted, error)
+            })
         },
         destroyed() {
             this.changeAppBarAndDrawer(true)
