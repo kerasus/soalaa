@@ -9,9 +9,9 @@ function isLogin() {
     //     (process.env.VUE_APP_AUTH_MODE === 'SESSION' && user && user.id))
 }
 
-export default function auth({ from, to, next, router }) {
-    console.log('from', from)
-    console.log('to', to)
+export default function auth({ to, next, router }) {
+    // console.log('from', from)
+    // console.log('to', to)
     window.localStorage.setItem('redirect_to', to.name)
 
     if (!isLogin()) {

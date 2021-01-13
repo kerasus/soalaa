@@ -50,7 +50,7 @@ const store = new Vuex.Store({
             state.drawer = newInfo
         },
         updateUser (state, newInfo) {
-            window.localStorage.setItem('user', newInfo)
+            window.localStorage.setItem('user', JSON.stringify(newInfo))
             state.user = newInfo
         },
         updateQuiz (state, newInfo) {
