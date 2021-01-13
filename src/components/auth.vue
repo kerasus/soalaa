@@ -112,10 +112,11 @@
                     axios.defaults.headers.common['Authorization'] = 'Bearer ' + token
                 }
                 let that = this
-                this.user.show(null, '/alaa/api/v2/getUserFor3a')
+                this.user.show(null, '/api/v2/getUserFor3aWT')
                 .then( (response) => {
                     that.user = new User(response.data.data)
                     that.$store.commit('updateUser', that.user)
+                    axios.defaults.headers.common['Authorization'] = 'Bearer ' + response.data.data.token.access_token
                     that.redirectTo(token)
                 })
                 .catch( (error) => {

@@ -16,7 +16,8 @@ const router = new VueRouter({
         {
             path: '/',
             name: 'dashboard',
-            component: () => lazyLoadView(import('@/components/dashboard')),
+            component: () => lazyLoadView(import('@/pages/user/exam/list')),
+            // component: () => lazyLoadView(import('@/components/dashboard')),
             meta: {middleware: auth}
         },
         {
