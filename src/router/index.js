@@ -16,7 +16,8 @@ const router = new VueRouter({
         {
             path: '/',
             name: 'dashboard',
-            component: () => lazyLoadView(import('@/components/dashboard')),
+            component: () => lazyLoadView(import('@/pages/user/exam/list')),
+            // component: () => lazyLoadView(import('@/components/dashboard')),
             meta: {middleware: auth}
         },
         {
@@ -106,6 +107,12 @@ const router = new VueRouter({
             path: '/user-info',
             name: 'user-info',
             component: () => lazyLoadView(import('@/components/UserInfoForm')),
+            meta: {middleware: auth}
+        },
+        {
+            path: '*',
+            name: 'NotFound',
+            component: () => lazyLoadView(import('@/pages/user/exam/list')),
             meta: {middleware: auth}
         }
     ]
