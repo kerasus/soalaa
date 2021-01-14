@@ -77,6 +77,8 @@
         methods: {
             logout () {
                 window.localStorage.setItem('access_token', '')
+                window.localStorage.setItem('user', '')
+                this.$store.commit('updateUser', '')
                 this.$router.push({ name: 'login' })
             },
         }
