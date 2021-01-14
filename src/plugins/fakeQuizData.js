@@ -13,7 +13,7 @@ let FakeQuizData = {
             {
                 "id": 0,
                 "title" : "شد روان از بادبان پر ساخته\t\t\tهمچو بت سینه بر آب انداخته",
-                "active": false,
+                "active": true,
                 "answer": false,
                 "order": 0
             }, {
@@ -50,7 +50,7 @@ let FakeQuizData = {
             }, {
                 "id": 1,
                 "title"  : "نیست گفتار او مگر تلبیس\t\t\t\tنیست کردار او مگر تزویر",
-                "active": false,
+                "active": true,
                 "answer": false,
                 "order": 1
             }, {
@@ -80,7 +80,7 @@ let FakeQuizData = {
             }, {
                 "id": 1,
                 "title"  : "ور سایه ی عنایت تو بر سرم فتد\t\t\tخورشید و مه به تهنیت آید به روز غم",
-                "active": false,
+                "active": true,
                 "answer": true,
                 "order": 1
             }, {
@@ -186,7 +186,7 @@ let FakeQuizData = {
             }, {
                 "id": 3,
                 "title"  : "باز کش پای ز آزار همه\t\t\t\tدست بگشای به ایثار همه",
-                "active": false,
+                "active": true,
                 "answer": false,
                 "order": 3
             }],
@@ -198,7 +198,7 @@ let FakeQuizData = {
             "choices": [{
                 "id": 0,
                 "title"  : "هر که اینجا خواری و محنت کشید\t\tروح و راحت اندر آنجا او بدید",
-                "active": false,
+                "active": true,
                 "answer": true,
                 "order": 0
             }, {
