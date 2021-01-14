@@ -39,24 +39,7 @@
                         ></v-textarea>
                     </v-col>
                     <v-col :md="1">
-                        <v-btn outlined icon @click="addString(currentQuestion, 'statement', '**__~~آندرلاین~~__**')">
-                            <v-icon>mdi-format-underline</v-icon>
-                        </v-btn>
-                        <v-btn outlined icon @click="addString(currentQuestion, 'statement', '**بولد**')">
-                            <v-icon>mdi-format-bold</v-icon>
-                        </v-btn>
-                        <v-btn outlined icon @click="addString(currentQuestion, 'statement', whiteSpace)">
-                            <v-icon>mdi-keyboard-space</v-icon>
-                        </v-btn>
-                        <v-btn outlined icon @click="addString(currentQuestion, 'statement', '__***این متن در نمای کنکور قابل مشاهده نیست***__')">
-                            <v-icon>mdi-eye-off</v-icon>
-                        </v-btn>
-                        <v-btn outlined icon @click="addString(currentQuestion, 'statement', '![](' + url + ')')">
-                            <v-icon>mdi-image</v-icon>
-                        </v-btn>
-                        <v-btn outlined icon @click="addString(currentQuestion, 'statement', renderMatrixKatex())">
-                            <v-icon>mdi-matrix</v-icon>
-                        </v-btn>
+                        <markdown-btn :elem="currentQuestion" key="statement" :rendered-matrix-katex="renderedMatrixKatex" :url="url" @add="markdownBtnAddString" />
                     </v-col>
                     <v-col :md="5">
                         <div class="renderedPanel" v-html="questRendered">
@@ -78,23 +61,8 @@
                         ></v-textarea>
                     </v-col>
                     <v-col :md="2">
-                        <!--                <v-checkbox @click="changeTrueChoice(index - 1)" v-model="choicesMarkdownText[index - 1].true" />-->
                         <v-radio :value="index - 1" />
-                        <v-btn outlined icon @click="addString(currentQuestion.choices.list[index - 1], 'title', '**__~~آندرلاین~~__**')">
-                            <v-icon>mdi-format-underline</v-icon>
-                        </v-btn>
-                        <v-btn outlined icon @click="addString(currentQuestion.choices.list[index - 1], 'title', '**بولد**')">
-                            <v-icon>mdi-format-bold</v-icon>
-                        </v-btn>
-                        <v-btn outlined icon @click="addString(currentQuestion.choices.list[index - 1], 'title', whiteSpace)">
-                            <v-icon>mdi-keyboard-space</v-icon>
-                        </v-btn>
-                        <v-btn outlined icon @click="addString(currentQuestion.choices.list[index - 1], 'title', '![](' + url + ')')">
-                            <v-icon>mdi-image</v-icon>
-                        </v-btn>
-                        <v-btn outlined icon @click="addString(currentQuestion.choices.list[index - 1], 'title', renderMatrixKatex())">
-                            <v-icon>mdi-matrix</v-icon>
-                        </v-btn>
+                        <markdown-btn :elem="currentQuestion.choices.list[index - 1]" key="statement" :rendered-matrix-katex="renderedMatrixKatex" :url="url" @add="markdownBtnAddString" />
                     </v-col>
                     <v-col :md="5">
                         <div class="renderedPanel" v-html="choiceRendered[index - 1]">
@@ -154,6 +122,7 @@
     import Assistant from "@/plugins/assistant";
     import {QuestSubcategoryList} from "@/models/QuestSubcategory";
     import Vue from 'vue'
+    import MarkdownBtn from "@/components/QuizEditor/MarkdownBtn";
     Vue.use(Toasted)
 
     var md = require('markdown-it')(),
@@ -162,6 +131,12 @@
 
     export default {
         name: 'CreateOrEdit',
+        components: {MarkdownBtn},
+        computed: {
+            renderedMatrixKatex () {
+                return this.renderMatrixKatex()
+            }
+        },
         data: () => {
             return {
                 whiteSpace: '                   ',
@@ -263,6 +238,9 @@
                     this.currentQuestion.statement = ''
                 }
                 this.currentQuestion.statement = this.currentQuestion.statement.replace('¬', '‌')
+            },
+            markdownBtnAddString ({elem, key, string}) {
+                this.addString(elem, key, string)
             },
             addString (elem, key, string) {
                 if (!elem[key]) {
