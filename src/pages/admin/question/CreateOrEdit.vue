@@ -267,8 +267,8 @@
                     }
                 }
                 matrixKatex += '\\end{bmatrix}$$'
-                this.matrixTempHeight = 1
-                this.matrixTempWidth = 1
+                // this.matrixTempHeight = 1
+                // this.matrixTempWidth = 1
                 return matrixKatex
             },
             addImageChoice (choice) {
