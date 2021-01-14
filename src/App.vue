@@ -13,7 +13,6 @@
                     <v-img src="/img/logo-1.png" width="150" v-if="$route.name === 'onlineQuiz.alaaView'" />
                     <v-img src="/img/logo-2.png" width="150" v-else />
                 </div>
-
             </div>
             <map-of-questions v-if="$route.name === 'onlineQuiz.alaaView'"/>
             <Menu v-else/>
