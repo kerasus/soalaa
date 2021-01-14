@@ -99,11 +99,6 @@ const router = new VueRouter({
             meta: {middleware: auth}
         },
         {
-            path: '/online_quiz/:quizId/:questNumber/exams',
-            name: 'onlineQuiz.manage',
-            component: () => lazyLoadView(import('@/pages/admin/exam/Manage'))
-        },
-        {
             path: '/user-info',
             name: 'user-info',
             component: () => lazyLoadView(import('@/components/UserInfoForm')),

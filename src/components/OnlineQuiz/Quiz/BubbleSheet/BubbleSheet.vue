@@ -18,8 +18,8 @@
                     <v-icon v-if="info.type === 'pasokh-nameh' && choice.answer" size="12" :color="choice.answer === choice.active ? '#fff' : '#00c753'">
                         mdi-check
                     </v-icon>
-                    <v-icon v-if="info.type === 'pasokh-nameh' && choice.active" size="12" :color="choice.answer === choice.active ? '#fff' : '#00c753'">
-                        mdi-check
+                    <v-icon v-if="info.type === 'pasokh-nameh' && choice.active && !choice.answer" size="12" color="#fff">
+                        mdi-close
                     </v-icon>
                 </div>
             </div>
@@ -171,7 +171,8 @@
 </style>
 
 <style>
-    .pasokh-nameh .v-icon.mdi-check {
+    .pasokh-nameh .v-icon.mdi-check,
+    .pasokh-nameh .v-icon.mdi-close {
         top: -2px;
         left: 2px;
     }
