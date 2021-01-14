@@ -14,21 +14,25 @@ let FakeQuizData = {
                 "id": 0,
                 "title" : "شد روان از بادبان پر ساخته\t\t\tهمچو بت سینه بر آب انداخته",
                 "active": false,
+                "answer": false,
                 "order": 0
             }, {
                 "id": 1,
                 "title" : "خداوندی است تدبیر جهان را\t\t\tبری از شبه و مثل و جنس و همتا",
                 "active": false,
+                "answer": true,
                 "order": 1
             }, {
                 "id": 2,
                 "title" : "تو چنانی به حیلت و تلبیس \t\t\tکز تو اعتراض می کند ابلیس",
                 "active": false,
+                "answer": false,
                 "order": 2
             }, {
                 "id": 3,
                 "title" : "دلم بردی به جانم قصد کردی \t\t\tمرا این واقعه بس مشکل افتاد",
                 "active": false,
+                "answer": false,
                 "order": 3
             }
             ],
@@ -41,21 +45,25 @@ let FakeQuizData = {
                 "id": 0,
                 "title"  : "بر خستگی نیازمندان \t\t\t\tپیوسته ز لطف توست مرهم",
                 "active": false,
+                "answer": false,
                 "order": 0
             }, {
                 "id": 1,
                 "title"  : "نیست گفتار او مگر تلبیس\t\t\t\tنیست کردار او مگر تزویر",
                 "active": false,
+                "answer": false,
                 "order": 1
             }, {
                 "id": 2,
                 "title"  : "اگر شفا نفرستی به خستگان فراق\t\t ز بستگان ارادت علم دریغ مدار",
                 "active": false,
+                "answer": false,
                 "order": 2
             }, {
                 "id": 3,
                 "title"  : "از قضا بهر سود و سودایی\t\t\t\tخاست از شهر شور و غوغایی",
                 "active": false,
+                "answer": true,
                 "order": 3
             }],
             "order": 1,
@@ -67,21 +75,25 @@ let FakeQuizData = {
                 "id": 0,
                 "title"  : "آثار خصال جسم گم شد \t\t\tدر مطلع نور قرب جانان",
                 "active": false,
+                "answer": false,
                 "order": 0
             }, {
                 "id": 1,
                 "title"  : "ور سایه ی عنایت تو بر سرم فتد\t\t\tخورشید و مه به تهنیت آید به روز غم",
                 "active": false,
+                "answer": true,
                 "order": 1
             }, {
                 "id": 2,
                 "title"  : "محو گردی فانی مطلق شوی\t\t\tدر جهان عشق مستغرق شوی",
                 "active": false,
+                "answer": false,
                 "order": 2
             }, {
                 "id": 3,
                 "title"  : "چنین که من ز فراغ تو بر سر آمده ام\t\t\tگرم تو دست نگیری کجا توان برخاست",
                 "active": false,
+                "answer": false,
                 "order": 3
             }],
             "order": 2,
@@ -95,21 +107,25 @@ let FakeQuizData = {
                 "id": 0,
                 "title"  : "یک",
                 "active": false,
+                "answer": false,
                 "order": 0
             }, {
                 "id": 1,
                 "title"  : "دو",
                 "active": false,
+                "answer": true,
                 "order": 1
             }, {
                 "id": 2,
                 "title"  : "سه",
                 "active": false,
+                "answer": false,
                 "order": 2
             }, {
                 "id": 3,
                 "title"  : "چهار",
                 "active": false,
+                "answer": false,
                 "order": 3
             }],
             "order": 3,
@@ -123,21 +139,25 @@ let FakeQuizData = {
                 "id": 0,
                 "title"  : "یک",
                 "active": false,
+                "answer": false,
                 "order": 0
             }, {
                 "id": 1,
                 "title"  : "دو",
                 "active": false,
+                "answer": true,
                 "order": 1
             }, {
                 "id": 2,
                 "title"  : "سه",
                 "active": false,
+                "answer": false,
                 "order": 2
             }, {
                 "id": 3,
                 "title"  : "چهار",
                 "active": false,
+                "answer": false,
                 "order": 3
             }],
             "order": 4,
@@ -149,21 +169,25 @@ let FakeQuizData = {
                 "id": 0,
                 "title"  : "گهی در غربت از بیگانگانم \t\t\t\tگهی در فرقت از دیوانگانم",
                 "active": false,
+                "answer": false,
                 "order": 0
             }, {
                 "id": 1,
                 "title"  : "داعیه ی شوق نیست رفتن و باز آمدن \t\tقاعده ی مهر نیست بستن و بگسیختن",
                 "active": false,
+                "answer": false,
                 "order": 1
             }, {
                 "id": 2,
                 "title"  : "بنگر به ضعیف حال درویشان \t\t\tبگذار سپاس آنکه بر گاهی",
                 "active": false,
+                "answer": true,
                 "order": 2
             }, {
                 "id": 3,
                 "title"  : "باز کش پای ز آزار همه\t\t\t\tدست بگشای به ایثار همه",
                 "active": false,
+                "answer": false,
                 "order": 3
             }],
             "order": 5,
@@ -175,21 +199,25 @@ let FakeQuizData = {
                 "id": 0,
                 "title"  : "هر که اینجا خواری و محنت کشید\t\tروح و راحت اندر آنجا او بدید",
                 "active": false,
+                "answer": true,
                 "order": 0
             }, {
                 "id": 1,
                 "title"  : " دیدم نهان فرشتهٔ شرم و عفاف او\t\t\tآورده سر به گوش من و عذر خواهش است ",
                 "active": false,
+                "answer": false,
                 "order": 1
             }, {
                 "id": 2,
                 "title"  : "تو را همتا کجا باشد که در باغ جمال تو\t\t\tکند پسته شکرریزی کند سنبل ثمن سایی",
                 "active": false,
+                "answer": false,
                 "order": 2
             }, {
                 "id": 3,
                 "title"  : "ز لشکر هرآنکس که بد پيشرو\t\t\tبرانگيختند اسب و برخاست غو",
                 "active": false,
+                "answer": false,
                 "order": 3
             }],
             "order": 6,
@@ -201,21 +229,25 @@ let FakeQuizData = {
                 "id": 0,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": true,
                 "order": 0
             }, {
                 "id": 1,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 1
             }, {
                 "id": 2,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 2
             }, {
                 "id": 3,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 3
             }],
             "order": 7,
@@ -227,21 +259,25 @@ let FakeQuizData = {
                 "id": 0,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 0
             }, {
                 "id": 1,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 1
             }, {
                 "id": 2,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 2
             }, {
                 "id": 3,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": true,
                 "order": 3
             }],
             "order": 8,
@@ -253,21 +289,25 @@ let FakeQuizData = {
                 "id": 0,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 0
             }, {
                 "id": 1,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": true,
                 "order": 1
             }, {
                 "id": 2,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 2
             }, {
                 "id": 3,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 3
             }],
             "order": 9,
@@ -279,21 +319,25 @@ let FakeQuizData = {
                 "id": 0,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": true,
                 "order": 0
             }, {
                 "id": 1,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 1
             }, {
                 "id": 2,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 2
             }, {
                 "id": 3,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 3
             }],
             "order": 10,
@@ -305,21 +349,25 @@ let FakeQuizData = {
                 "id": 0,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": true,
                 "order": 0
             }, {
                 "id": 1,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 1
             }, {
                 "id": 2,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 2
             }, {
                 "id": 3,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 3
             }],
             "order": 11,
@@ -331,21 +379,25 @@ let FakeQuizData = {
                 "id": 0,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": true,
                 "order": 0
             }, {
                 "id": 1,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 1
             }, {
                 "id": 2,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 2
             }, {
                 "id": 3,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 3
             }],
             "order": 12,
@@ -357,21 +409,25 @@ let FakeQuizData = {
                 "id": 0,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": true,
                 "order": 0
             }, {
                 "id": 1,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 1
             }, {
                 "id": 2,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 2
             }, {
                 "id": 3,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 3
             }],
             "order": 13,
@@ -383,21 +439,25 @@ let FakeQuizData = {
                 "id": 0,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": true,
                 "order": 0
             }, {
                 "id": 1,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 1
             }, {
                 "id": 2,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 2
             }, {
                 "id": 3,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 3
             }],
             "order": 14,
@@ -409,21 +469,25 @@ let FakeQuizData = {
                 "id": 0,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": true,
                 "order": 0
             }, {
                 "id": 1,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 1
             }, {
                 "id": 2,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 2
             }, {
                 "id": 3,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 3
             }],
             "order": 15,
@@ -435,21 +499,25 @@ let FakeQuizData = {
                 "id": 0,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": true,
                 "order": 0
             }, {
                 "id": 1,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 1
             }, {
                 "id": 2,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 2
             }, {
                 "id": 3,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 3
             }],
             "order": 16,
@@ -461,21 +529,25 @@ let FakeQuizData = {
                 "id": 0,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": true,
                 "order": 0
             }, {
                 "id": 1,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 1
             }, {
                 "id": 2,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 2
             }, {
                 "id": 3,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 3
             }],
             "order": 17,
@@ -487,21 +559,25 @@ let FakeQuizData = {
                 "id": 0,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": true,
                 "order": 0
             }, {
                 "id": 1,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 1
             }, {
                 "id": 2,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 2
             }, {
                 "id": 3,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 3
             }],
             "order": 18,
@@ -513,21 +589,25 @@ let FakeQuizData = {
                 "id": 0,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": true,
                 "order": 0
             }, {
                 "id": 1,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 1
             }, {
                 "id": 2,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 2
             }, {
                 "id": 3,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 3
             }],
             "order": 19,
@@ -539,21 +619,25 @@ let FakeQuizData = {
                 "id": 0,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": true,
                 "order": 0
             }, {
                 "id": 1,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 1
             }, {
                 "id": 2,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 2
             }, {
                 "id": 3,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 3
             }],
             "order": 20,
@@ -565,21 +649,25 @@ let FakeQuizData = {
                 "id": 0,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": true,
                 "order": 0
             }, {
                 "id": 1,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 1
             }, {
                 "id": 2,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 2
             }, {
                 "id": 3,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 3
             }],
             "order": 21,
@@ -591,21 +679,25 @@ let FakeQuizData = {
                 "id": 0,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": true,
                 "order": 0
             }, {
                 "id": 1,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 1
             }, {
                 "id": 2,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 2
             }, {
                 "id": 3,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 3
             }],
             "order": 22,
@@ -617,21 +709,25 @@ let FakeQuizData = {
                 "id": 0,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": true,
                 "order": 0
             }, {
                 "id": 1,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 1
             }, {
                 "id": 2,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 2
             }, {
                 "id": 3,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 3
             }],
             "order": 23,
@@ -643,21 +739,25 @@ let FakeQuizData = {
                 "id": 0,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": true,
                 "order": 0
             }, {
                 "id": 1,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 1
             }, {
                 "id": 2,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 2
             }, {
                 "id": 3,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 3
             }],
             "order": 24,
@@ -669,21 +769,25 @@ let FakeQuizData = {
                 "id": 0,
                 "title"  : "یُفتَحُ بابُ مَدرستی فی السّاعةِ السَّبعةِ صباحاً!",
                 "active": false,
+                "answer": true,
                 "order": 0
             }, {
                 "id": 1,
                 "title"  : "کتبتُ مقالتینِ إثنتینِ فی مجالِ التَّربیةِ و التَّعلیمِ!",
                 "active": false,
+                "answer": false,
                 "order": 1
             }, {
                 "id": 2,
                 "title"  : "راجعتُ خُمس مرّاتٍ إلی الجامعةِ لإعلمَ درجاتي!",
                 "active": false,
+                "answer": false,
                 "order": 2
             }, {
                 "id": 3,
                 "title"  : "زرتُ ثلاثةَ بلادٍ و اشتریتُ رابعَ هدایا لأصدِقائي!",
                 "active": false,
+                "answer": false,
                 "order": 3
             }],
             "order": 25,
@@ -695,21 +799,25 @@ let FakeQuizData = {
                 "id": 0,
                 "title"  : "یأخُذُ الفائِزُ الأوّلُ جائزةً ذَهَبیّةً!\t",
                 "active": false,
+                "answer": true,
                 "order": 0
             }, {
                 "id": 1,
                 "title"  : "أرسلناهُ إلی مِئةِ ألف أو یزیدونَ",
                 "active": false,
+                "answer": false,
                 "order": 1
             }, {
                 "id": 2,
                 "title"  : "مَن جاءَ بِالحَسَنةِ فَلَهُ عَشرُ أمثالِها",
                 "active": false,
+                "answer": false,
                 "order": 2
             }, {
                 "id": 3,
                 "title"  : "قالَ اللهُ لا تَتّخذوا إلهینِ إثنینِ إنَّما هُوَ إلهٌ واحدٌ",
                 "active": false,
+                "answer": false,
                 "order": 3
             }],
             "order": 26,
@@ -721,21 +829,25 @@ let FakeQuizData = {
                 "id": 0,
                 "title"  : "إذا کانَ اثنانِ یَتَناجَیانِ فَلا تَدخل بَینَهُما!",
                 "active": false,
+                "answer": true,
                 "order": 0
             }, {
                 "id": 1,
                 "title"  : "أَنزَلَ فی الارضِ جُزءاً واحِداً فَمِنهُ یَتَراحَمُ الخَلقُ!",
                 "active": false,
+                "answer": false,
                 "order": 1
             }, {
                 "id": 2,
                 "title"  : "جاءَ مُعلِّمی بالهَدایا للفائزة الأولی فی الحَفلَةِ!\t",
                 "active": false,
+                "answer": false,
                 "order": 2
             }, {
                 "id": 3,
                 "title"  : "جَعَلَ الله الرَّحمةَ مِئَةَ جُزءٍ، فأمسَکَ عِندَهُ تسعةً و تِسعینَ ",
                 "active": false,
+                "answer": false,
                 "order": 3
             }],
             "order": 27,
@@ -747,21 +859,25 @@ let FakeQuizData = {
                 "id": 0,
                 "title"  : "إسرِعُوا ",
                 "active": false,
+                "answer": true,
                 "order": 0
             }, {
                 "id": 1,
                 "title"  : "أسرعون",
                 "active": false,
+                "answer": false,
                 "order": 1
             }, {
                 "id": 2,
                 "title"  : "اُسرعوا",
                 "active": false,
+                "answer": false,
                 "order": 2
             }, {
                 "id": 3,
                 "title"  : "أسرِعُوا",
                 "active": false,
+                "answer": false,
                 "order": 3
             }],
             "order": 28,
@@ -773,21 +889,25 @@ let FakeQuizData = {
                 "id": 0,
                 "title"  : "هنّ تَتَکاسَلنَ",
                 "active": false,
+                "answer": true,
                 "order": 0
             }, {
                 "id": 1,
                 "title"  : "إنتنّ یَتَکاسَلنَ",
                 "active": false,
+                "answer": false,
                 "order": 1
             }, {
                 "id": 2,
                 "title"  : "هما تَتَکاسلانِ",
                 "active": false,
+                "answer": false,
                 "order": 2
             }, {
                 "id": 3,
                 "title"  : "أنتما تَتَکاسلونَ",
                 "active": false,
+                "answer": false,
                 "order": 3
             }],
             "order": 29,
@@ -799,21 +919,25 @@ let FakeQuizData = {
                 "id": 0,
                 "title"  : "العُلَماء قاموا بِمُحاوَلاتٍ کثیرةٍ فی مجال الفلک!",
                 "active": false,
+                "answer": true,
                 "order": 0
             }, {
                 "id": 1,
                 "title"  : "یَئِسَ العُلَماءُ مِن مَعرِفَةِ سِرِّ تلک الظّاهرة العَجیبَة!",
                 "active": false,
+                "answer": false,
                 "order": 1
             }, {
                 "id": 2,
                 "title"  : "علی کُلِّ النّاسِ أن یَتَعایَشوا مَعَ بَعضِهم تَعایشاً سِلمیّاً!",
                 "active": false,
+                "answer": false,
                 "order": 2
             }, {
                 "id": 3,
                 "title"  : "هذا الإحتفالُ بِمُناسبَة أوَلِ یَومٍ مِن أیّامِ السَّنَةِ ا",
                 "active": false,
+                "answer": false,
                 "order": 3
             }],
             "order": 30,
@@ -825,21 +949,25 @@ let FakeQuizData = {
                 "id": 0,
                 "title"  : "هَل تصدّقُ أن تری أسماکاً تَتَساقَطُ؟",
                 "active": false,
+                "answer": true,
                 "order": 0
             }, {
                 "id": 1,
                 "title"  : "تَحدثُ هذه الظاهرةُ کلّ سنةٍ فیُلاحِظُ الناسُ غیمةً!",
                 "active": false,
+                "answer": false,
                 "order": 1
             }, {
                 "id": 2,
                 "title"  : "أرسلوا فریقاً لزیارةِ المکانِ و التعرّفِ علی الأسماکِ!",
                 "active": false,
+                "answer": false,
                 "order": 2
             }, {
                 "id": 3,
                 "title"  : "تعلَّمِ اللُّغةَ العربیَّةَ فإنَّها لغة القرآن!",
                 "active": false,
+                "answer": false,
                 "order": 3
             }],
             "order": 31,
@@ -851,21 +979,25 @@ let FakeQuizData = {
                 "id": 0,
                 "title"  : "ینتصرون",
                 "active": false,
+                "answer": true,
                 "order": 0
             }, {
                 "id": 1,
                 "title"  : "یجتنبون",
                 "active": false,
+                "answer": false,
                 "order": 1
             }, {
                 "id": 2,
                 "title"  : "ینتقمون",
                 "active": false,
+                "answer": false,
                 "order": 2
             }, {
                 "id": 3,
                 "title"  : "ینصرفون",
                 "active": false,
+                "answer": false,
                 "order": 3
             }],
             "order": 32,
@@ -877,21 +1009,25 @@ let FakeQuizData = {
                 "id": 0,
                 "title"  : "تعاوَنُوا: فعل امر",
                 "active": false,
+                "answer": true,
                 "order": 0
             }, {
                 "id": 1,
                 "title"  : "إکتَسَبُوا: فعل ماضی",
                 "active": false,
+                "answer": false,
                 "order": 1
             }, {
                 "id": 2,
                 "title"  : "تعاوَنُوا: فعل ماضی",
                 "active": false,
+                "answer": false,
                 "order": 2
             }, {
                 "id": 3,
                 "title"  : "إکتَسِبُوا: فعل ماضی",
                 "active": false,
+                "answer": false,
                 "order": 3
             }],
             "order": 33,
@@ -903,21 +1039,25 @@ let FakeQuizData = {
                 "id": 0,
                 "title"  : "أظُنُّ أنَّهُ قَد ذَهَبَ أَبي إلی مدینة طهران مَرّاتٍ! -> الجملة الإسمیّة",
                 "active": false,
+                "answer": true,
                 "order": 0
             }, {
                 "id": 1,
                 "title"  : "تُحَوِّلُ الأسماکُ المُضیئَةُ ظلامَ البحر إلَی نهارٍ مُضيءٍ! -> الجملة الفعلیّة",
                 "active": false,
+                "answer": false,
                 "order": 1
             }, {
                 "id": 2,
                 "title"  : "تَعَلُّم اللُّغَة العربیّة واجبٌ علی جمیع مُسلمي العالَم! -> الجملة الفعلیّة",
                 "active": false,
+                "answer": false,
                 "order": 2
             }, {
                 "id": 3,
                 "title"  : "أَحَبُّ عِبادِ اللهِ إلَی الله أنفَعُهُم لِعِبادِه! -> الجملة الفعلیّة",
                 "active": false,
+                "answer": false,
                 "order": 3
             }],
             "order": 34,
@@ -929,21 +1069,25 @@ let FakeQuizData = {
                 "id": 0,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": true,
                 "order": 0
             }, {
                 "id": 1,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 1
             }, {
                 "id": 2,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 2
             }, {
                 "id": 3,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 3
             }],
             "order": 35,
@@ -955,21 +1099,25 @@ let FakeQuizData = {
                 "id": 0,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": true,
                 "order": 0
             }, {
                 "id": 1,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 1
             }, {
                 "id": 2,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 2
             }, {
                 "id": 3,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 3
             }],
             "order": 36,
@@ -981,21 +1129,25 @@ let FakeQuizData = {
                 "id": 0,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": true,
                 "order": 0
             }, {
                 "id": 1,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 1
             }, {
                 "id": 2,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 2
             }, {
                 "id": 3,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 3
             }],
             "order": 37,
@@ -1007,21 +1159,25 @@ let FakeQuizData = {
                 "id": 0,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": true,
                 "order": 0
             }, {
                 "id": 1,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 1
             }, {
                 "id": 2,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 2
             }, {
                 "id": 3,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 3
             }],
             "order": 38,
@@ -1033,21 +1189,25 @@ let FakeQuizData = {
                 "id": 0,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": true,
                 "order": 0
             }, {
                 "id": 1,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 1
             }, {
                 "id": 2,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 2
             }, {
                 "id": 3,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 3
             }],
             "order": 39,
@@ -1059,21 +1219,25 @@ let FakeQuizData = {
                 "id": 0,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": true,
                 "order": 0
             }, {
                 "id": 1,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 1
             }, {
                 "id": 2,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 2
             }, {
                 "id": 3,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 3
             }],
             "order": 40,
@@ -1085,21 +1249,25 @@ let FakeQuizData = {
                 "id": 0,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": true,
                 "order": 0
             }, {
                 "id": 1,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 1
             }, {
                 "id": 2,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 2
             }, {
                 "id": 3,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 3
             }],
             "order": 41,
@@ -1111,21 +1279,25 @@ let FakeQuizData = {
                 "id": 0,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": true,
                 "order": 0
             }, {
                 "id": 1,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 1
             }, {
                 "id": 2,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 2
             }, {
                 "id": 3,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 3
             }],
             "order": 42,
@@ -1137,21 +1309,25 @@ let FakeQuizData = {
                 "id": 0,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": true,
                 "order": 0
             }, {
                 "id": 1,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 1
             }, {
                 "id": 2,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 2
             }, {
                 "id": 3,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 3
             }],
             "order": 43,
@@ -1163,21 +1339,25 @@ let FakeQuizData = {
                 "id": 0,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": true,
                 "order": 0
             }, {
                 "id": 1,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 1
             }, {
                 "id": 2,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 2
             }, {
                 "id": 3,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 3
             }],
             "order": 44,
@@ -1189,21 +1369,25 @@ let FakeQuizData = {
                 "id": 0,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": true,
                 "order": 0
             }, {
                 "id": 1,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 1
             }, {
                 "id": 2,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 2
             }, {
                 "id": 3,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 3
             }],
             "order": 45,
@@ -1215,21 +1399,25 @@ let FakeQuizData = {
                 "id": 0,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": true,
                 "order": 0
             }, {
                 "id": 1,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 1
             }, {
                 "id": 2,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 2
             }, {
                 "id": 3,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 3
             }],
             "order": 46,
@@ -1241,21 +1429,25 @@ let FakeQuizData = {
                 "id": 0,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": true,
                 "order": 0
             }, {
                 "id": 1,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 1
             }, {
                 "id": 2,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 2
             }, {
                 "id": 3,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 3
             }],
             "order": 47,
@@ -1267,21 +1459,25 @@ let FakeQuizData = {
                 "id": 0,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": true,
                 "order": 0
             }, {
                 "id": 1,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 1
             }, {
                 "id": 2,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 2
             }, {
                 "id": 3,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 3
             }],
             "order": 48,
@@ -1293,21 +1489,25 @@ let FakeQuizData = {
                 "id": 0,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": true,
                 "order": 0
             }, {
                 "id": 1,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 1
             }, {
                 "id": 2,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 2
             }, {
                 "id": 3,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 3
             }],
             "order": 49,
@@ -1319,21 +1519,25 @@ let FakeQuizData = {
                 "id": 0,
                 "title"  : "﴿مَا لَهُمْ مِنْ دُونِهِ مِنْ وَلِيٍّ﴾ ـ ﴿وَ لَمْ یَکُنْ لَهُ کُفُوًا أحَدٌ﴾",
                 "active": false,
+                "answer": true,
                 "order": 0
             }, {
                 "id": 1,
                 "title"  : "﴿مَا لَهُمْ مِنْ دُونِهِ مِنْ وَلِيٍّ﴾ ـ ﴿قُلِ اللهُ خَالِقُ کُلِّ شَيْءٍ﴾",
                 "active": false,
+                "answer": false,
                 "order": 1
             }, {
                 "id": 2,
                 "title"  : "﴿اللهُ نُورُ السَّمَاوَاتِ وَ الْأَرْضِ﴾ ـ ﴿قُلِ اللهُ خَالِقُ کُلِّ شَيْءٍ﴾",
                 "active": false,
+                "answer": false,
                 "order": 2
             }, {
                 "id": 3,
                 "title"  : "﴿اللهُ نُورُ السَّمَاوَاتِ وَ الْأَرْضِ﴾ ـ ﴿وَ لَمْ یَکُنْ لَهُ کُفُوًا أحَدٌ﴾",
                 "active": false,
+                "answer": false,
                 "order": 3
             }],
             "order": 50,
@@ -1345,21 +1549,25 @@ let FakeQuizData = {
                 "id": 0,
                 "title"  : "(قُلِ اللهُ خَالِقُ کُلِّ شَيْءٍ وَ هُوَ الْوَاحِدُ الْقَهَّارُ) ـ پذیرش توحید در ربوبیت",
                 "active": false,
+                "answer": true,
                 "order": 0
             }, {
                 "id": 1,
                 "title"  : "(قُلِ اللهُ خَالِقُ کُلِّ شَيْءٍ وَ هُوَ الْوَاحِدُ الْقَهَّارُ) ـ باور به توحید در خالقیت",
                 "active": false,
+                "answer": false,
                 "order": 1
             }, {
                 "id": 2,
                 "title"  : "(وَ أنِ اعْبُدُونِي هذَا صِرَاطٌ مُسْتَقِیمٌ) ـ پذیرش توحید در ربوبیت",
                 "active": false,
+                "answer": false,
                 "order": 2
             }, {
                 "id": 3,
                 "title"  : "(وَ أنِ اعْبُدُونِي هذَا صِرَاطٌ مُسْتَقِیمٌ) ـ باور به توحید در خالقیت",
                 "active": false,
+                "answer": false,
                 "order": 3
             }],
             "order": 51,
@@ -1371,21 +1579,25 @@ let FakeQuizData = {
                 "id": 0,
                 "title"  : "توحید در ربوبیّت ـ هدایت و امداد الهی",
                 "active": false,
+                "answer": true,
                 "order": 0
             }, {
                 "id": 1,
                 "title"  : "توحید در ربوبیّت ـ قدر و قضای الهی",
                 "active": false,
+                "answer": false,
                 "order": 1
             }, {
                 "id": 2,
                 "title"  : "توحید در خالقیّت ـ هدایت و امداد الهی",
                 "active": false,
+                "answer": false,
                 "order": 2
             }, {
                 "id": 3,
                 "title"  : "توحید در خالقیّت ـ قدر و قضای الهی",
                 "active": false,
+                "answer": false,
                 "order": 3
             }],
             "order": 52,
@@ -1397,21 +1609,25 @@ let FakeQuizData = {
                 "id": 0,
                 "title"  : "(قُلْ أ غَیْرَ اللهِ أبْغِي رَبّاً وَ هُوَ رَبُّ کُلِّ شَيْءٍ)",
                 "active": false,
+                "answer": true,
                 "order": 0
             }, {
                 "id": 1,
                 "title"  : "(قُلِ اللَّهُمَّ مَالِکَ الْمُلْکِ تُؤْتِي الْمُلْکَ مَنْ تَشَاءُ)",
                 "active": false,
+                "answer": false,
                 "order": 1
             }, {
                 "id": 2,
                 "title"  : "(إنَّ اللهَ رَبِّي وَ رَبُّکُمْ فَاعْبُدُوهُ هذَا صِرَاطٌ مُسْتَقِیمٌ)",
                 "active": false,
+                "answer": false,
                 "order": 2
             }, {
                 "id": 3,
                 "title"  : "(یَسْأَلُهُ مَنْ فِي السَّمَاوَاتِ وَ الْأَرْضِ کُلَّ یَوْمٍ هُوَ فِي شَأْنٍ)",
                 "active": false,
+                "answer": false,
                 "order": 3
             }],
             "order": 53,
@@ -1423,21 +1639,25 @@ let FakeQuizData = {
                 "id": 0,
                 "title"  : "مشرکان ـ طلب دعا و درخواست شفاعت را شرک می‌دانند.",
                 "active": false,
+                "answer": true,
                 "order": 0
             }, {
                 "id": 1,
                 "title"  : "تکفیری‌ها ـ طلب دعا و درخواست شفاعت را شرک می‌دانند.",
                 "active": false,
+                "answer": false,
                 "order": 1
             }, {
                 "id": 2,
                 "title"  : "مشرکان ـ استغفار پیامبران در حق منافقان را مؤثر می‌دانند.",
                 "active": false,
+                "answer": false,
                 "order": 2
             }, {
                 "id": 3,
                 "title"  : "تکفیری‌ها ـ استغفار پیامبران در حق منافقان را مؤثر می‌دانند.",
                 "active": false,
+                "answer": false,
                 "order": 3
             }],
             "order": 54,
@@ -1449,21 +1669,25 @@ let FakeQuizData = {
                 "id": 0,
                 "title"  : "ربوبیّت ـ خالقیّت",
                 "active": false,
+                "answer": true,
                 "order": 0
             }, {
                 "id": 1,
                 "title"  : "ربوبیّت ـ اصل توحید",
                 "active": false,
+                "answer": false,
                 "order": 1
             }, {
                 "id": 2,
                 "title"  : "خالقیّت ـ خالقیّت",
                 "active": false,
+                "answer": false,
                 "order": 2
             }, {
                 "id": 3,
                 "title"  : "خالقیّت ـ اصل توحید",
                 "active": false,
+                "answer": false,
                 "order": 3
             }],
             "order": 55,
@@ -1475,21 +1699,25 @@ let FakeQuizData = {
                 "id": 0,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": true,
                 "order": 0
             }, {
                 "id": 1,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 1
             }, {
                 "id": 2,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 2
             }, {
                 "id": 3,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 3
             }],
             "order": 56,
@@ -1501,21 +1729,25 @@ let FakeQuizData = {
                 "id": 0,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": true,
                 "order": 0
             }, {
                 "id": 1,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 1
             }, {
                 "id": 2,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 2
             }, {
                 "id": 3,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 3
             }],
             "order": 57,
@@ -1527,21 +1759,25 @@ let FakeQuizData = {
                 "id": 0,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": true,
                 "order": 0
             }, {
                 "id": 1,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 1
             }, {
                 "id": 2,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 2
             }, {
                 "id": 3,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 3
             }],
             "order": 58,
@@ -1553,21 +1789,25 @@ let FakeQuizData = {
                 "id": 0,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": true,
                 "order": 0
             }, {
                 "id": 1,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 1
             }, {
                 "id": 2,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 2
             }, {
                 "id": 3,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 3
             }],
             "order": 59,
@@ -1579,21 +1819,25 @@ let FakeQuizData = {
                 "id": 0,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": true,
                 "order": 0
             }, {
                 "id": 1,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 1
             }, {
                 "id": 2,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 2
             }, {
                 "id": 3,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 3
             }],
             "order": 60,
@@ -1605,21 +1849,25 @@ let FakeQuizData = {
                 "id": 0,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": true,
                 "order": 0
             }, {
                 "id": 1,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 1
             }, {
                 "id": 2,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 2
             }, {
                 "id": 3,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 3
             }],
             "order": 61,
@@ -1631,21 +1879,25 @@ let FakeQuizData = {
                 "id": 0,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": true,
                 "order": 0
             }, {
                 "id": 1,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 1
             }, {
                 "id": 2,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 2
             }, {
                 "id": 3,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 3
             }],
             "order": 62,
@@ -1657,21 +1909,25 @@ let FakeQuizData = {
                 "id": 0,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": true,
                 "order": 0
             }, {
                 "id": 1,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 1
             }, {
                 "id": 2,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 2
             }, {
                 "id": 3,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 3
             }],
             "order": 63,
@@ -1683,21 +1939,25 @@ let FakeQuizData = {
                 "id": 0,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": true,
                 "order": 0
             }, {
                 "id": 1,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 1
             }, {
                 "id": 2,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 2
             }, {
                 "id": 3,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 3
             }],
             "order": 64,
@@ -1709,21 +1969,25 @@ let FakeQuizData = {
                 "id": 0,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": true,
                 "order": 0
             }, {
                 "id": 1,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 1
             }, {
                 "id": 2,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 2
             }, {
                 "id": 3,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 3
             }],
             "order": 65,
@@ -1735,21 +1999,25 @@ let FakeQuizData = {
                 "id": 0,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": true,
                 "order": 0
             }, {
                 "id": 1,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 1
             }, {
                 "id": 2,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 2
             }, {
                 "id": 3,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 3
             }],
             "order": 66,
@@ -1761,21 +2029,25 @@ let FakeQuizData = {
                 "id": 0,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": true,
                 "order": 0
             }, {
                 "id": 1,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 1
             }, {
                 "id": 2,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 2
             }, {
                 "id": 3,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 3
             }],
             "order": 67,
@@ -1787,21 +2059,25 @@ let FakeQuizData = {
                 "id": 0,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": true,
                 "order": 0
             }, {
                 "id": 1,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 1
             }, {
                 "id": 2,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 2
             }, {
                 "id": 3,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 3
             }],
             "order": 68,
@@ -1813,21 +2089,25 @@ let FakeQuizData = {
                 "id": 0,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": true,
                 "order": 0
             }, {
                 "id": 1,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 1
             }, {
                 "id": 2,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 2
             }, {
                 "id": 3,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 3
             }],
             "order": 69,
@@ -1839,21 +2119,25 @@ let FakeQuizData = {
                 "id": 0,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": true,
                 "order": 0
             }, {
                 "id": 1,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 1
             }, {
                 "id": 2,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 2
             }, {
                 "id": 3,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 3
             }],
             "order": 70,
@@ -1865,21 +2149,25 @@ let FakeQuizData = {
                 "id": 0,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": true,
                 "order": 0
             }, {
                 "id": 1,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 1
             }, {
                 "id": 2,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 2
             }, {
                 "id": 3,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 3
             }],
             "order": 71,
@@ -1891,21 +2179,25 @@ let FakeQuizData = {
                 "id": 0,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": true,
                 "order": 0
             }, {
                 "id": 1,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 1
             }, {
                 "id": 2,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 2
             }, {
                 "id": 3,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 3
             }],
             "order": 72,
@@ -1917,21 +2209,25 @@ let FakeQuizData = {
                 "id": 0,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": true,
                 "order": 0
             }, {
                 "id": 1,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 1
             }, {
                 "id": 2,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 2
             }, {
                 "id": 3,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 3
             }],
             "order": 73,
@@ -1943,21 +2239,25 @@ let FakeQuizData = {
                 "id": 0,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": true,
                 "order": 0
             }, {
                 "id": 1,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 1
             }, {
                 "id": 2,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 2
             }, {
                 "id": 3,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 3
             }],
             "order": 74,
@@ -1969,21 +2269,25 @@ let FakeQuizData = {
                 "id": 0,
                 "title"  : "you should ",
                 "active": false,
+                "answer": true,
                 "order": 0
             }, {
                 "id": 1,
                 "title"  : "you might",
                 "active": false,
+                "answer": false,
                 "order": 1
             }, {
                 "id": 2,
                 "title"  : "would you",
                 "active": false,
+                "answer": false,
                 "order": 2
             }, {
                 "id": 3,
                 "title"  : "you are going to",
                 "active": false,
+                "answer": false,
                 "order": 3
             }],
             "order": 75,
@@ -1995,21 +2299,25 @@ let FakeQuizData = {
                 "id": 0,
                 "title"  : "will need",
                 "active": false,
+                "answer": true,
                 "order": 0
             }, {
                 "id": 1,
                 "title"  : "must need",
                 "active": false,
+                "answer": false,
                 "order": 1
             }, {
                 "id": 2,
                 "title"  : "should be needed",
                 "active": false,
+                "answer": false,
                 "order": 2
             }, {
                 "id": 3,
                 "title"  : "who are going to need",
                 "active": false,
+                "answer": false,
                 "order": 3
             }],
             "order": 76,
@@ -2021,21 +2329,25 @@ let FakeQuizData = {
                 "id": 0,
                 "title"  : "as generous as a ",
                 "active": false,
+                "answer": true,
                 "order": 0
             }, {
                 "id": 1,
                 "title"  : "a more generous",
                 "active": false,
+                "answer": false,
                 "order": 1
             }, {
                 "id": 2,
                 "title"  : "the most generous",
                 "active": false,
+                "answer": false,
                 "order": 2
             }, {
                 "id": 3,
                 "title"  : "the most generous of",
                 "active": false,
+                "answer": false,
                 "order": 3
             }],
             "order": 77,
@@ -2047,21 +2359,25 @@ let FakeQuizData = {
                 "id": 0,
                 "title"  : "things worst",
                 "active": false,
+                "answer": true,
                 "order": 0
             }, {
                 "id": 1,
                 "title"  : "worse things",
                 "active": false,
+                "answer": false,
                 "order": 1
             }, {
                 "id": 2,
                 "title"  : "the worst thing",
                 "active": false,
+                "answer": false,
                 "order": 2
             }, {
                 "id": 3,
                 "title"  : "the worst of things",
                 "active": false,
+                "answer": false,
                 "order": 3
             }],
             "order": 78,
@@ -2074,21 +2390,25 @@ let FakeQuizData = {
                 "id": 0,
                 "title"  : "who",
                 "active": false,
+                "answer": true,
                 "order": 0
             }, {
                 "id": 1,
                 "title"  : "they",
                 "active": false,
+                "answer": false,
                 "order": 1
             }, {
                 "id": 2,
                 "title"  : "themselves",
                 "active": false,
+                "answer": false,
                 "order": 2
             }, {
                 "id": 3,
                 "title"  : "were those",
                 "active": false,
+                "answer": false,
                 "order": 3
             }],
             "order": 79,
@@ -2100,21 +2420,25 @@ let FakeQuizData = {
                 "id": 0,
                 "title"  : "as good as",
                 "active": false,
+                "answer": true,
                 "order": 0
             }, {
                 "id": 1,
                 "title"  : "as well as",
                 "active": false,
+                "answer": false,
                 "order": 1
             }, {
                 "id": 2,
                 "title"  : "the best of",
                 "active": false,
+                "answer": false,
                 "order": 2
             }, {
                 "id": 3,
                 "title"  : "better than that",
                 "active": false,
+                "answer": false,
                 "order": 3
             }],
             "order": 80,
@@ -2126,21 +2450,25 @@ let FakeQuizData = {
                 "id": 0,
                 "title"  : "at",
                 "active": false,
+                "answer": true,
                 "order": 0
             }, {
                 "id": 1,
                 "title"  : "in",
                 "active": false,
+                "answer": false,
                 "order": 1
             }, {
                 "id": 2,
                 "title"  : "on",
                 "active": false,
+                "answer": false,
                 "order": 2
             }, {
                 "id": 3,
                 "title"  : "for",
                 "active": false,
+                "answer": false,
                 "order": 3
             }],
             "order": 81,
@@ -2152,21 +2480,25 @@ let FakeQuizData = {
                 "id": 0,
                 "title"  : "a car the fastest",
                 "active": false,
+                "answer": true,
                 "order": 0
             }, {
                 "id": 1,
                 "title"  : "fastest cars",
                 "active": false,
+                "answer": false,
                 "order": 1
             }, {
                 "id": 2,
                 "title"  : "a car is the fastest",
                 "active": false,
+                "answer": false,
                 "order": 2
             }, {
                 "id": 3,
                 "title"  : "the fastest ",
                 "active": false,
+                "answer": false,
                 "order": 3
             }],
             "order": 82,
@@ -2178,21 +2510,25 @@ let FakeQuizData = {
                 "id": 0,
                 "title"  : "on",
                 "active": false,
+                "answer": true,
                 "order": 0
             }, {
                 "id": 1,
                 "title"  : "at",
                 "active": false,
+                "answer": false,
                 "order": 1
             }, {
                 "id": 2,
                 "title"  : "in",
                 "active": false,
+                "answer": false,
                 "order": 2
             }, {
                 "id": 3,
                 "title"  : "for",
                 "active": false,
+                "answer": false,
                 "order": 3
             }],
             "order": 83,
@@ -2204,21 +2540,25 @@ let FakeQuizData = {
                 "id": 0,
                 "title"  : "than any other secretary",
                 "active": false,
+                "answer": true,
                 "order": 0
             }, {
                 "id": 1,
                 "title"  : "any other secretary than",
                 "active": false,
+                "answer": false,
                 "order": 1
             }, {
                 "id": 2,
                 "title"  : "secretary than any other",
                 "active": false,
+                "answer": false,
                 "order": 2
             }, {
                 "id": 3,
                 "title"  : "any other than secretary",
                 "active": false,
+                "answer": false,
                 "order": 3
             }],
             "order": 84,
@@ -2230,21 +2570,25 @@ let FakeQuizData = {
                 "id": 0,
                 "title"  : "as heavey as",
                 "active": false,
+                "answer": true,
                 "order": 0
             }, {
                 "id": 1,
                 "title"  : "heavier than",
                 "active": false,
+                "answer": false,
                 "order": 1
             }, {
                 "id": 2,
                 "title"  : "as heavy",
                 "active": false,
+                "answer": false,
                 "order": 2
             }, {
                 "id": 3,
                 "title"  : "one and two",
                 "active": false,
+                "answer": false,
                 "order": 3
             }],
             "order": 85,
@@ -2256,21 +2600,25 @@ let FakeQuizData = {
                 "id": 0,
                 "title"  : "longer",
                 "active": false,
+                "answer": true,
                 "order": 0
             }, {
                 "id": 1,
                 "title"  : "as long",
                 "active": false,
+                "answer": false,
                 "order": 1
             }, {
                 "id": 2,
                 "title"  : "as long as",
                 "active": false,
+                "answer": false,
                 "order": 2
             }, {
                 "id": 3,
                 "title"  : "longer than",
                 "active": false,
+                "answer": false,
                 "order": 3
             }],
             "order": 86,
@@ -2282,21 +2630,25 @@ let FakeQuizData = {
                 "id": 0,
                 "title"  : "few",
                 "active": false,
+                "answer": true,
                 "order": 0
             }, {
                 "id": 1,
                 "title"  : "a few",
                 "active": false,
+                "answer": false,
                 "order": 1
             }, {
                 "id": 2,
                 "title"  : "little",
                 "active": false,
+                "answer": false,
                 "order": 2
             }, {
                 "id": 3,
                 "title"  : "a little",
                 "active": false,
+                "answer": false,
                 "order": 3
             }],
             "order": 87,
@@ -2308,21 +2660,25 @@ let FakeQuizData = {
                 "id": 0,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": true,
                 "order": 0
             }, {
                 "id": 1,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 1
             }, {
                 "id": 2,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 2
             }, {
                 "id": 3,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 3
             }],
             "order": 88,
@@ -2334,21 +2690,25 @@ let FakeQuizData = {
                 "id": 0,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": true,
                 "order": 0
             }, {
                 "id": 1,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 1
             }, {
                 "id": 2,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 2
             }, {
                 "id": 3,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 3
             }],
             "order": 89,
@@ -2360,21 +2720,25 @@ let FakeQuizData = {
                 "id": 0,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": true,
                 "order": 0
             }, {
                 "id": 1,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 1
             }, {
                 "id": 2,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 2
             }, {
                 "id": 3,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 3
             }],
             "order": 90,
@@ -2386,21 +2750,25 @@ let FakeQuizData = {
                 "id": 0,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": true,
                 "order": 0
             }, {
                 "id": 1,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 1
             }, {
                 "id": 2,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 2
             }, {
                 "id": 3,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 3
             }],
             "order": 91,
@@ -2412,21 +2780,25 @@ let FakeQuizData = {
                 "id": 0,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": true,
                 "order": 0
             }, {
                 "id": 1,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 1
             }, {
                 "id": 2,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 2
             }, {
                 "id": 3,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 3
             }],
             "order": 92,
@@ -2438,21 +2810,25 @@ let FakeQuizData = {
                 "id": 0,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": true,
                 "order": 0
             }, {
                 "id": 1,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 1
             }, {
                 "id": 2,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 2
             }, {
                 "id": 3,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 3
             }],
             "order": 93,
@@ -2464,21 +2840,25 @@ let FakeQuizData = {
                 "id": 0,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": true,
                 "order": 0
             }, {
                 "id": 1,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 1
             }, {
                 "id": 2,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 2
             }, {
                 "id": 3,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 3
             }],
             "order": 94,
@@ -2490,21 +2870,25 @@ let FakeQuizData = {
                 "id": 0,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": true,
                 "order": 0
             }, {
                 "id": 1,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 1
             }, {
                 "id": 2,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 2
             }, {
                 "id": 3,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 3
             }],
             "order": 95,
@@ -2516,21 +2900,25 @@ let FakeQuizData = {
                 "id": 0,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": true,
                 "order": 0
             }, {
                 "id": 1,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 1
             }, {
                 "id": 2,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 2
             }, {
                 "id": 3,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 3
             }],
             "order": 96,
@@ -2542,21 +2930,25 @@ let FakeQuizData = {
                 "id": 0,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": true,
                 "order": 0
             }, {
                 "id": 1,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 1
             }, {
                 "id": 2,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 2
             }, {
                 "id": 3,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 3
             }],
             "order": 97,
@@ -2568,21 +2960,25 @@ let FakeQuizData = {
                 "id": 0,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": true,
                 "order": 0
             }, {
                 "id": 1,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 1
             }, {
                 "id": 2,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 2
             }, {
                 "id": 3,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 3
             }],
             "order": 98,
@@ -2594,21 +2990,25 @@ let FakeQuizData = {
                 "id": 0,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": true,
                 "order": 0
             }, {
                 "id": 1,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 1
             }, {
                 "id": 2,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 2
             }, {
                 "id": 3,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 3
             }],
             "order": 99,
@@ -2620,21 +3020,25 @@ let FakeQuizData = {
                 "id": 0,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": true,
                 "order": 0
             }, {
                 "id": 1,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 1
             }, {
                 "id": 2,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 2
             }, {
                 "id": 3,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 3
             }],
             "order": 100,
@@ -2646,21 +3050,25 @@ let FakeQuizData = {
                 "id": 0,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": true,
                 "order": 0
             }, {
                 "id": 1,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 1
             }, {
                 "id": 2,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 2
             }, {
                 "id": 3,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 3
             }],
             "order": 101,
@@ -2672,21 +3080,25 @@ let FakeQuizData = {
                 "id": 0,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": true,
                 "order": 0
             }, {
                 "id": 1,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 1
             }, {
                 "id": 2,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 2
             }, {
                 "id": 3,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 3
             }],
             "order": 102,
@@ -2698,21 +3110,25 @@ let FakeQuizData = {
                 "id": 0,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": true,
                 "order": 0
             }, {
                 "id": 1,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 1
             }, {
                 "id": 2,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 2
             }, {
                 "id": 3,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 3
             }],
             "order": 103,
@@ -2724,21 +3140,25 @@ let FakeQuizData = {
                 "id": 0,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": true,
                 "order": 0
             }, {
                 "id": 1,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 1
             }, {
                 "id": 2,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 2
             }, {
                 "id": 3,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 3
             }],
             "order": 104,
@@ -2750,21 +3170,25 @@ let FakeQuizData = {
                 "id": 0,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": true,
                 "order": 0
             }, {
                 "id": 1,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 1
             }, {
                 "id": 2,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 2
             }, {
                 "id": 3,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 3
             }],
             "order": 105,
@@ -2776,21 +3200,25 @@ let FakeQuizData = {
                 "id": 0,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": true,
                 "order": 0
             }, {
                 "id": 1,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 1
             }, {
                 "id": 2,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 2
             }, {
                 "id": 3,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 3
             }],
             "order": 106,
@@ -2802,21 +3230,25 @@ let FakeQuizData = {
                 "id": 0,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": true,
                 "order": 0
             }, {
                 "id": 1,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 1
             }, {
                 "id": 2,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 2
             }, {
                 "id": 3,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 3
             }],
             "order": 107,
@@ -2828,21 +3260,25 @@ let FakeQuizData = {
                 "id": 0,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": true,
                 "order": 0
             }, {
                 "id": 1,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 1
             }, {
                 "id": 2,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 2
             }, {
                 "id": 3,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 3
             }],
             "order": 108,
@@ -2854,21 +3290,25 @@ let FakeQuizData = {
                 "id": 0,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": true,
                 "order": 0
             }, {
                 "id": 1,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 1
             }, {
                 "id": 2,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 2
             }, {
                 "id": 3,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 3
             }],
             "order": 109,
@@ -2880,21 +3320,25 @@ let FakeQuizData = {
                 "id": 0,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": true,
                 "order": 0
             }, {
                 "id": 1,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 1
             }, {
                 "id": 2,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 2
             }, {
                 "id": 3,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 3
             }],
             "order": 110,
@@ -2906,21 +3350,25 @@ let FakeQuizData = {
                 "id": 0,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": true,
                 "order": 0
             }, {
                 "id": 1,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 1
             }, {
                 "id": 2,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 2
             }, {
                 "id": 3,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 3
             }],
             "order": 111,
@@ -2932,21 +3380,25 @@ let FakeQuizData = {
                 "id": 0,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": true,
                 "order": 0
             }, {
                 "id": 1,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 1
             }, {
                 "id": 2,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 2
             }, {
                 "id": 3,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 3
             }],
             "order": 112,
@@ -2958,21 +3410,25 @@ let FakeQuizData = {
                 "id": 0,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": true,
                 "order": 0
             }, {
                 "id": 1,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 1
             }, {
                 "id": 2,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 2
             }, {
                 "id": 3,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 3
             }],
             "order": 113,
@@ -2984,21 +3440,25 @@ let FakeQuizData = {
                 "id": 0,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": true,
                 "order": 0
             }, {
                 "id": 1,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 1
             }, {
                 "id": 2,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 2
             }, {
                 "id": 3,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 3
             }],
             "order": 114,
@@ -3010,21 +3470,25 @@ let FakeQuizData = {
                 "id": 0,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": true,
                 "order": 0
             }, {
                 "id": 1,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 1
             }, {
                 "id": 2,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 2
             }, {
                 "id": 3,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 3
             }],
             "order": 115,
@@ -3036,21 +3500,25 @@ let FakeQuizData = {
                 "id": 0,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": true,
                 "order": 0
             }, {
                 "id": 1,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 1
             }, {
                 "id": 2,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 2
             }, {
                 "id": 3,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 3
             }],
             "order": 116,
@@ -3062,21 +3530,25 @@ let FakeQuizData = {
                 "id": 0,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": true,
                 "order": 0
             }, {
                 "id": 1,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 1
             }, {
                 "id": 2,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 2
             }, {
                 "id": 3,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 3
             }],
             "order": 117,
@@ -3088,21 +3560,25 @@ let FakeQuizData = {
                 "id": 0,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": true,
                 "order": 0
             }, {
                 "id": 1,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 1
             }, {
                 "id": 2,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 2
             }, {
                 "id": 3,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 3
             }],
             "order": 118,
@@ -3114,21 +3590,25 @@ let FakeQuizData = {
                 "id": 0,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": true,
                 "order": 0
             }, {
                 "id": 1,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 1
             }, {
                 "id": 2,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 2
             }, {
                 "id": 3,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 3
             }],
             "order": 119,
@@ -3141,22 +3621,26 @@ let FakeQuizData = {
                     "id": 0,
                 "title"  : "$$-\\lbrack-6,4\\rbrack$$",
                     "active": false,
-                    "order": 0
+                "answer": true,
+                "order": 0
                 }, {
                     "id": 1,
                 "title"  : "$$x<-6$$",
                     "active": false,
-                    "order": 1
+                "answer": false,
+                "order": 1
                 }, {
                     "id": 2,
                 "title"  : "$$x>4$$",
                     "active": false,
-                    "order": 2
+                "answer": false,
+                "order": 2
                 }, {
                     "id": 3,
                 "title"  : "$$-\\lbrack-4,6\\rbrack$$",
                     "active": false,
-                    "order": 3
+                "answer": false,
+                "order": 3
                 }
             ],
             "order": 120,
@@ -3168,21 +3652,25 @@ let FakeQuizData = {
                 "id": 0,
                 "title"  : "$$\\lbrack-\\frac{2}{3},0)\\cup(0,\\frac{2}{3}\\rbrack$$",
                 "active": false,
+                "answer": true,
                 "order": 0
             }, {
                 "id": 1,
                 "title"  : "$$\\lbrack-\\frac{2}{3},0)\\cup(0,2\\rbrack$$",
                 "active": false,
+                "answer": false,
                 "order": 1
             }, {
                 "id": 2,
                 "title"  : "$$\\lbrack-\\frac{2}{3},\\frac{2}{3}\\rbrack$$",
                 "active": false,
+                "answer": false,
                 "order": 2
             }, {
                 "id": 3,
                 "title"  : "$$\\lbrack\\frac{2}{3},2\\rbrack$$",
                 "active": false,
+                "answer": false,
                 "order": 3
             }],
             "order": 121,
@@ -3194,21 +3682,25 @@ let FakeQuizData = {
                 "id": 0,
                 "title"  : "$$(-1,2)$$",
                 "active": false,
+                "answer": true,
                 "order": 0
             }, {
                 "id": 1,
                 "title"  : "$$(-1,2)\\cup(2,4)$$",
                 "active": false,
+                "answer": false,
                 "order": 1
             }, {
                 "id": 2,
                 "title"  : "$$(2,4)$$",
                 "active": false,
+                "answer": false,
                 "order": 2
             }, {
                 "id": 3,
                 "title"  : "$$(-4,1)\\cup(2,3)$$",
                 "active": false,
+                "answer": false,
                 "order": 3
             }],
             "order": 122,
@@ -3220,21 +3712,25 @@ let FakeQuizData = {
                 "id": 0,
                 "title"  : "![](http://cdn.alaatv.com/upload/onlineQuiz-sample-math-1.png?w=300&h=227)",
                 "active": false,
+                "answer": true,
                 "order": 0
             }, {
                 "id": 1,
                 "title"  : "![alt text](https://cdn.alaatv.com/upload/onlineQuiz-sample-math-2.png?w=300&h=227 \"Logo Title Text 1\")",
                 "active": false,
+                "answer": false,
                 "order": 1
             }, {
                 "id": 2,
                 "title"  : "![alt text](https://cdn.alaatv.com/upload/onlineQuiz-sample-math-3.png?w=300&h=227 \"Logo Title Text 1\")",
                 "active": false,
+                "answer": false,
                 "order": 2
             }, {
                 "id": 3,
                 "title"  : "![alt text](https://cdn.alaatv.com/upload/onlineQuiz-sample-math-4.png?w=300&h=227 \"Logo Title Text 1\")",
                 "active": false,
+                "answer": false,
                 "order": 3
             }],
             "order": 123,
@@ -3246,21 +3742,25 @@ let FakeQuizData = {
                 "id": 0,
                 "title"  : "صفر",
                 "active": false,
+                "answer": true,
                 "order": 0
             }, {
                 "id": 1,
                 "title"  : "1",
                 "active": false,
+                "answer": false,
                 "order": 1
             }, {
                 "id": 2,
                 "title"  : "2",
                 "active": false,
+                "answer": false,
                 "order": 2
             }, {
                 "id": 3,
                 "title"  : "$$\\sqrt[]{5}$$",
                 "active": false,
+                "answer": false,
                 "order": 3
             }],
             "order": 124,
@@ -3272,21 +3772,25 @@ let FakeQuizData = {
                 "id": 0,
                 "title"  : "$$\\frac{2}{3}$$",
                 "active": false,
+                "answer": true,
                 "order": 0
             }, {
                 "id": 1,
                 "title"  : "$$\\frac{3}{2}$$",
                 "active": false,
+                "answer": false,
                 "order": 1
             }, {
                 "id": 2,
                 "title"  : "$2$",
                 "active": false,
+                "answer": false,
                 "order": 2
             }, {
                 "id": 3,
                 "title"  : "$3$",
                 "active": false,
+                "answer": false,
                 "order": 3
             }],
             "order": 125,
@@ -3298,21 +3802,25 @@ let FakeQuizData = {
                 "id": 0,
                 "title"  : "32",
                 "active": false,
+                "answer": true,
                 "order": 0
             }, {
                 "id": 1,
                 "title"  : "45",
                 "active": false,
+                "answer": false,
                 "order": 1
             }, {
                 "id": 2,
                 "title"  : "48",
                 "active": false,
+                "answer": false,
                 "order": 2
             }, {
                 "id": 3,
                 "title"  : "50",
                 "active": false,
+                "answer": false,
                 "order": 3
             }],
             "order": 126,
@@ -3324,21 +3832,25 @@ let FakeQuizData = {
                 "id": 0,
                 "title"  : "$-2$",
                 "active": false,
+                "answer": true,
                 "order": 0
             }, {
                 "id": 1,
                 "title"  : "$-1$",
                 "active": false,
+                "answer": false,
                 "order": 1
             }, {
                 "id": 2,
                 "title"  : "$1$",
                 "active": false,
+                "answer": false,
                 "order": 2
             }, {
                 "id": 3,
                 "title"  : "$2$",
                 "active": false,
+                "answer": false,
                 "order": 3
             }],
             "order": 127,
@@ -3350,21 +3862,25 @@ let FakeQuizData = {
                 "id": 0,
                 "title"  : "$2$",
                 "active": false,
+                "answer": true,
                 "order": 0
             }, {
                 "id": 1,
                 "title"  : "$3$",
                 "active": false,
+                "answer": false,
                 "order": 1
             }, {
                 "id": 2,
                 "title"  : "$$2\\sqrt[]{3}$$",
                 "active": false,
+                "answer": false,
                 "order": 2
             }, {
                 "id": 3,
                 "title"  : "$4$",
                 "active": false,
+                "answer": false,
                 "order": 3
             }],
             "order": 128,
@@ -3376,21 +3892,25 @@ let FakeQuizData = {
                 "id": 0,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": true,
                 "order": 0
             }, {
                 "id": 1,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 1
             }, {
                 "id": 2,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 2
             }, {
                 "id": 3,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 3
             }],
             "order": 129,
@@ -3402,21 +3922,25 @@ let FakeQuizData = {
                 "id": 0,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": true,
                 "order": 0
             }, {
                 "id": 1,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 1
             }, {
                 "id": 2,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 2
             }, {
                 "id": 3,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 3
             }],
             "order": 130,
@@ -3428,21 +3952,25 @@ let FakeQuizData = {
                 "id": 0,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": true,
                 "order": 0
             }, {
                 "id": 1,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 1
             }, {
                 "id": 2,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 2
             }, {
                 "id": 3,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 3
             }],
             "order": 131,
@@ -3454,21 +3982,25 @@ let FakeQuizData = {
                 "id": 0,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": true,
                 "order": 0
             }, {
                 "id": 1,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 1
             }, {
                 "id": 2,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 2
             }, {
                 "id": 3,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 3
             }],
             "order": 132,
@@ -3480,21 +4012,25 @@ let FakeQuizData = {
                 "id": 0,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": true,
                 "order": 0
             }, {
                 "id": 1,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 1
             }, {
                 "id": 2,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 2
             }, {
                 "id": 3,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 3
             }],
             "order": 133,
@@ -3506,21 +4042,25 @@ let FakeQuizData = {
                 "id": 0,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": true,
                 "order": 0
             }, {
                 "id": 1,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 1
             }, {
                 "id": 2,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 2
             }, {
                 "id": 3,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 3
             }],
             "order": 134,
@@ -3532,21 +4072,25 @@ let FakeQuizData = {
                 "id": 0,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": true,
                 "order": 0
             }, {
                 "id": 1,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 1
             }, {
                 "id": 2,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 2
             }, {
                 "id": 3,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 3
             }],
             "order": 135,
@@ -3558,21 +4102,25 @@ let FakeQuizData = {
                 "id": 0,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": true,
                 "order": 0
             }, {
                 "id": 1,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 1
             }, {
                 "id": 2,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 2
             }, {
                 "id": 3,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 3
             }],
             "order": 136,
@@ -3584,21 +4132,25 @@ let FakeQuizData = {
                 "id": 0,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": true,
                 "order": 0
             }, {
                 "id": 1,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 1
             }, {
                 "id": 2,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 2
             }, {
                 "id": 3,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 3
             }],
             "order": 137,
@@ -3610,21 +4162,25 @@ let FakeQuizData = {
                 "id": 0,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": true,
                 "order": 0
             }, {
                 "id": 1,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 1
             }, {
                 "id": 2,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 2
             }, {
                 "id": 3,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 3
             }],
             "order": 138,
@@ -3636,21 +4192,25 @@ let FakeQuizData = {
                 "id": 0,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": true,
                 "order": 0
             }, {
                 "id": 1,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 1
             }, {
                 "id": 2,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 2
             }, {
                 "id": 3,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 3
             }],
             "order": 139,
@@ -3662,21 +4222,25 @@ let FakeQuizData = {
                 "id": 0,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": true,
                 "order": 0
             }, {
                 "id": 1,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 1
             }, {
                 "id": 2,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 2
             }, {
                 "id": 3,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 3
             }],
             "order": 140,
@@ -3688,21 +4252,25 @@ let FakeQuizData = {
                 "id": 0,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": true,
                 "order": 0
             }, {
                 "id": 1,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 1
             }, {
                 "id": 2,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 2
             }, {
                 "id": 3,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 3
             }],
             "order": 141,
@@ -3714,21 +4282,25 @@ let FakeQuizData = {
                 "id": 0,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": true,
                 "order": 0
             }, {
                 "id": 1,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 1
             }, {
                 "id": 2,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 2
             }, {
                 "id": 3,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 3
             }],
             "order": 142,
@@ -3740,21 +4312,25 @@ let FakeQuizData = {
                 "id": 0,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": true,
                 "order": 0
             }, {
                 "id": 1,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 1
             }, {
                 "id": 2,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 2
             }, {
                 "id": 3,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 3
             }],
             "order": 143,
@@ -3766,21 +4342,25 @@ let FakeQuizData = {
                 "id": 0,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": true,
                 "order": 0
             }, {
                 "id": 1,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 1
             }, {
                 "id": 2,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 2
             }, {
                 "id": 3,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 3
             }],
             "order": 144,
@@ -3802,21 +4382,25 @@ let FakeQuizData = {
                 "id": 0,
                 "title"  : "4",
                 "active": false,
+                "answer": true,
                 "order": 0
             }, {
                 "id": 1,
                 "title"  : "3",
                 "active": false,
+                "answer": false,
                 "order": 1
             }, {
                 "id": 2,
                 "title"  : "2",
                 "active": false,
+                "answer": false,
                 "order": 2
             }, {
                 "id": 3,
                 "title"  : "1",
                 "active": false,
+                "answer": false,
                 "order": 3
             }],
             "order": 145,
@@ -3836,21 +4420,25 @@ let FakeQuizData = {
                 "id": 0,
                 "title"  : "الف و ب",
                 "active": false,
+                "answer": true,
                 "order": 0
             }, {
                 "id": 1,
                 "title"  : "الف و ج",
                 "active": false,
+                "answer": false,
                 "order": 1
             }, {
                 "id": 2,
                 "title"  : "ب و د",
                 "active": false,
+                "answer": false,
                 "order": 2
             }, {
                 "id": 3,
                 "title"  : "ج و د",
                 "active": false,
+                "answer": false,
                 "order": 3
             }],
             "order": 146,
@@ -3874,21 +4462,25 @@ let FakeQuizData = {
                 "id": 0,
                 "title"  : "2",
                 "active": false,
+                "answer": true,
                 "order": 0
             }, {
                 "id": 1,
                 "title"  : "3",
                 "active": false,
+                "answer": false,
                 "order": 1
             }, {
                 "id": 2,
                 "title"  : "4",
                 "active": false,
+                "answer": false,
                 "order": 2
             }, {
                 "id": 3,
                 "title"  : "5",
                 "active": false,
+                "answer": false,
                 "order": 3
             }],
             "order": 147,
@@ -3900,21 +4492,25 @@ let FakeQuizData = {
                 "id": 0,
                 "title"  : "کانال‌های دریچه‌دار پتاسیمی باز باشند و تراکم پتاسیم داخل سلول شدیداً کاهش ‌یابد.",
                 "active": false,
+                "answer": true,
                 "order": 0
             }, {
                 "id": 1,
                 "title"  : "با مصرف ATP غلظت یون‌های سدیم و پتاسیم در دو سمت غشا به حالت آرامش بازگردد.",
                 "active": false,
+                "answer": false,
                 "order": 1
             }, {
                 "id": 2,
                 "title"  : "نفوذپذیری غشاء به یون‌های سدیمی بیشتر از نفوذپذیری آن به پتاسیم باشد.",
                 "active": false,
+                "answer": false,
                 "order": 2
             }, {
                 "id": 3,
                 "title"  : "کانال‌های دریچه‌دار پتاسیمی بسته باشند و مقدار یون‌های پتاسیم درون‌یاخته از بیرون آن بیشتر است.",
                 "active": false,
+                "answer": false,
                 "order": 3
             }],
             "order": 148,
@@ -3926,21 +4522,25 @@ let FakeQuizData = {
                 "id": 0,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": true,
                 "order": 0
             }, {
                 "id": 1,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 1
             }, {
                 "id": 2,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 2
             }, {
                 "id": 3,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 3
             }],
             "order": 149,
@@ -3952,21 +4552,25 @@ let FakeQuizData = {
                 "id": 0,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": true,
                 "order": 0
             }, {
                 "id": 1,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 1
             }, {
                 "id": 2,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 2
             }, {
                 "id": 3,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 3
             }],
             "order": 150,
@@ -3978,21 +4582,25 @@ let FakeQuizData = {
                 "id": 0,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": true,
                 "order": 0
             }, {
                 "id": 1,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 1
             }, {
                 "id": 2,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 2
             }, {
                 "id": 3,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 3
             }],
             "order": 151,
@@ -4004,21 +4612,25 @@ let FakeQuizData = {
                 "id": 0,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": true,
                 "order": 0
             }, {
                 "id": 1,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 1
             }, {
                 "id": 2,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 2
             }, {
                 "id": 3,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 3
             }],
             "order": 152,
@@ -4030,21 +4642,25 @@ let FakeQuizData = {
                 "id": 0,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": true,
                 "order": 0
             }, {
                 "id": 1,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 1
             }, {
                 "id": 2,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 2
             }, {
                 "id": 3,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 3
             }],
             "order": 153,
@@ -4056,21 +4672,25 @@ let FakeQuizData = {
                 "id": 0,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": true,
                 "order": 0
             }, {
                 "id": 1,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 1
             }, {
                 "id": 2,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 2
             }, {
                 "id": 3,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 3
             }],
             "order": 154,
@@ -4082,21 +4702,25 @@ let FakeQuizData = {
                 "id": 0,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": true,
                 "order": 0
             }, {
                 "id": 1,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 1
             }, {
                 "id": 2,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 2
             }, {
                 "id": 3,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 3
             }],
             "order": 155,
@@ -4108,21 +4732,25 @@ let FakeQuizData = {
                 "id": 0,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": true,
                 "order": 0
             }, {
                 "id": 1,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 1
             }, {
                 "id": 2,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 2
             }, {
                 "id": 3,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 3
             }],
             "order": 156,
@@ -4134,21 +4762,25 @@ let FakeQuizData = {
                 "id": 0,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": true,
                 "order": 0
             }, {
                 "id": 1,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 1
             }, {
                 "id": 2,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 2
             }, {
                 "id": 3,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 3
             }],
             "order": 157,
@@ -4160,21 +4792,25 @@ let FakeQuizData = {
                 "id": 0,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": true,
                 "order": 0
             }, {
                 "id": 1,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 1
             }, {
                 "id": 2,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 2
             }, {
                 "id": 3,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 3
             }],
             "order": 158,
@@ -4186,21 +4822,25 @@ let FakeQuizData = {
                 "id": 0,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": true,
                 "order": 0
             }, {
                 "id": 1,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 1
             }, {
                 "id": 2,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 2
             }, {
                 "id": 3,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 3
             }],
             "order": 159,
@@ -4212,21 +4852,25 @@ let FakeQuizData = {
                 "id": 0,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": true,
                 "order": 0
             }, {
                 "id": 1,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 1
             }, {
                 "id": 2,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 2
             }, {
                 "id": 3,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 3
             }],
             "order": 160,
@@ -4238,21 +4882,25 @@ let FakeQuizData = {
                 "id": 0,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": true,
                 "order": 0
             }, {
                 "id": 1,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 1
             }, {
                 "id": 2,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 2
             }, {
                 "id": 3,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 3
             }],
             "order": 161,
@@ -4264,21 +4912,25 @@ let FakeQuizData = {
                 "id": 0,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": true,
                 "order": 0
             }, {
                 "id": 1,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 1
             }, {
                 "id": 2,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 2
             }, {
                 "id": 3,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 3
             }],
             "order": 162,
@@ -4290,21 +4942,25 @@ let FakeQuizData = {
                 "id": 0,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": true,
                 "order": 0
             }, {
                 "id": 1,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 1
             }, {
                 "id": 2,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 2
             }, {
                 "id": 3,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 3
             }],
             "order": 163,
@@ -4316,21 +4972,25 @@ let FakeQuizData = {
                 "id": 0,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": true,
                 "order": 0
             }, {
                 "id": 1,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 1
             }, {
                 "id": 2,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 2
             }, {
                 "id": 3,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 3
             }],
             "order": 164,
@@ -4342,21 +5002,25 @@ let FakeQuizData = {
                 "id": 0,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": true,
                 "order": 0
             }, {
                 "id": 1,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 1
             }, {
                 "id": 2,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 2
             }, {
                 "id": 3,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 3
             }],
             "order": 165,
@@ -4368,21 +5032,25 @@ let FakeQuizData = {
                 "id": 0,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": true,
                 "order": 0
             }, {
                 "id": 1,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 1
             }, {
                 "id": 2,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 2
             }, {
                 "id": 3,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 3
             }],
             "order": 166,
@@ -4394,21 +5062,25 @@ let FakeQuizData = {
                 "id": 0,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": true,
                 "order": 0
             }, {
                 "id": 1,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 1
             }, {
                 "id": 2,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 2
             }, {
                 "id": 3,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 3
             }],
             "order": 167,
@@ -4420,21 +5092,25 @@ let FakeQuizData = {
                 "id": 0,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": true,
                 "order": 0
             }, {
                 "id": 1,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 1
             }, {
                 "id": 2,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 2
             }, {
                 "id": 3,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 3
             }],
             "order": 168,
@@ -4446,21 +5122,25 @@ let FakeQuizData = {
                 "id": 0,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": true,
                 "order": 0
             }, {
                 "id": 1,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 1
             }, {
                 "id": 2,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 2
             }, {
                 "id": 3,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 3
             }],
             "order": 169,
@@ -4472,21 +5152,25 @@ let FakeQuizData = {
                 "id": 0,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": true,
                 "order": 0
             }, {
                 "id": 1,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 1
             }, {
                 "id": 2,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 2
             }, {
                 "id": 3,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 3
             }],
             "order": 170,
@@ -4498,21 +5182,25 @@ let FakeQuizData = {
                 "id": 0,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": true,
                 "order": 0
             }, {
                 "id": 1,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 1
             }, {
                 "id": 2,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 2
             }, {
                 "id": 3,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 3
             }],
             "order": 171,
@@ -4524,21 +5212,25 @@ let FakeQuizData = {
                 "id": 0,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": true,
                 "order": 0
             }, {
                 "id": 1,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 1
             }, {
                 "id": 2,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 2
             }, {
                 "id": 3,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 3
             }],
             "order": 172,
@@ -4550,21 +5242,25 @@ let FakeQuizData = {
                 "id": 0,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": true,
                 "order": 0
             }, {
                 "id": 1,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 1
             }, {
                 "id": 2,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 2
             }, {
                 "id": 3,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 3
             }],
             "order": 173,
@@ -4576,21 +5272,25 @@ let FakeQuizData = {
                 "id": 0,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": true,
                 "order": 0
             }, {
                 "id": 1,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 1
             }, {
                 "id": 2,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 2
             }, {
                 "id": 3,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 3
             }],
             "order": 174,
@@ -4602,21 +5302,25 @@ let FakeQuizData = {
                 "id": 0,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": true,
                 "order": 0
             }, {
                 "id": 1,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 1
             }, {
                 "id": 2,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 2
             }, {
                 "id": 3,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 3
             }],
             "order": 175,
@@ -4628,21 +5332,25 @@ let FakeQuizData = {
                 "id": 0,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": true,
                 "order": 0
             }, {
                 "id": 1,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 1
             }, {
                 "id": 2,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 2
             }, {
                 "id": 3,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 3
             }],
             "order": 176,
@@ -4654,21 +5362,25 @@ let FakeQuizData = {
                 "id": 0,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": true,
                 "order": 0
             }, {
                 "id": 1,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 1
             }, {
                 "id": 2,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 2
             }, {
                 "id": 3,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 3
             }],
             "order": 177,
@@ -4680,21 +5392,25 @@ let FakeQuizData = {
                 "id": 0,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": true,
                 "order": 0
             }, {
                 "id": 1,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 1
             }, {
                 "id": 2,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 2
             }, {
                 "id": 3,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 3
             }],
             "order": 178,
@@ -4706,21 +5422,25 @@ let FakeQuizData = {
                 "id": 0,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": true,
                 "order": 0
             }, {
                 "id": 1,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 1
             }, {
                 "id": 2,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 2
             }, {
                 "id": 3,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 3
             }],
             "order": 179,
@@ -4732,21 +5452,25 @@ let FakeQuizData = {
                 "id": 0,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": true,
                 "order": 0
             }, {
                 "id": 1,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 1
             }, {
                 "id": 2,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 2
             }, {
                 "id": 3,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 3
             }],
             "order": 180,
@@ -4758,21 +5482,25 @@ let FakeQuizData = {
                 "id": 0,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": true,
                 "order": 0
             }, {
                 "id": 1,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 1
             }, {
                 "id": 2,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 2
             }, {
                 "id": 3,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 3
             }],
             "order": 181,
@@ -4784,21 +5512,25 @@ let FakeQuizData = {
                 "id": 0,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": true,
                 "order": 0
             }, {
                 "id": 1,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 1
             }, {
                 "id": 2,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 2
             }, {
                 "id": 3,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 3
             }],
             "order": 182,
@@ -4810,21 +5542,25 @@ let FakeQuizData = {
                 "id": 0,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": true,
                 "order": 0
             }, {
                 "id": 1,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 1
             }, {
                 "id": 2,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 2
             }, {
                 "id": 3,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 3
             }],
             "order": 183,
@@ -4836,21 +5572,25 @@ let FakeQuizData = {
                 "id": 0,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": true,
                 "order": 0
             }, {
                 "id": 1,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 1
             }, {
                 "id": 2,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 2
             }, {
                 "id": 3,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 3
             }],
             "order": 184,
@@ -4862,21 +5602,25 @@ let FakeQuizData = {
                 "id": 0,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": true,
                 "order": 0
             }, {
                 "id": 1,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 1
             }, {
                 "id": 2,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 2
             }, {
                 "id": 3,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 3
             }],
             "order": 185,
@@ -4888,21 +5632,25 @@ let FakeQuizData = {
                 "id": 0,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": true,
                 "order": 0
             }, {
                 "id": 1,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 1
             }, {
                 "id": 2,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 2
             }, {
                 "id": 3,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 3
             }],
             "order": 186,
@@ -4914,21 +5662,25 @@ let FakeQuizData = {
                 "id": 0,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": true,
                 "order": 0
             }, {
                 "id": 1,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 1
             }, {
                 "id": 2,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 2
             }, {
                 "id": 3,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 3
             }],
             "order": 187,
@@ -4940,21 +5692,25 @@ let FakeQuizData = {
                 "id": 0,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": true,
                 "order": 0
             }, {
                 "id": 1,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 1
             }, {
                 "id": 2,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 2
             }, {
                 "id": 3,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 3
             }],
             "order": 188,
@@ -4966,21 +5722,25 @@ let FakeQuizData = {
                 "id": 0,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": true,
                 "order": 0
             }, {
                 "id": 1,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 1
             }, {
                 "id": 2,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 2
             }, {
                 "id": 3,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 3
             }],
             "order": 189,
@@ -4992,21 +5752,25 @@ let FakeQuizData = {
                 "id": 0,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": true,
                 "order": 0
             }, {
                 "id": 1,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 1
             }, {
                 "id": 2,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 2
             }, {
                 "id": 3,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 3
             }],
             "order": 190,
@@ -5018,21 +5782,25 @@ let FakeQuizData = {
                 "id": 0,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": true,
                 "order": 0
             }, {
                 "id": 1,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 1
             }, {
                 "id": 2,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 2
             }, {
                 "id": 3,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 3
             }],
             "order": 191,
@@ -5044,21 +5812,25 @@ let FakeQuizData = {
                 "id": 0,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": true,
                 "order": 0
             }, {
                 "id": 1,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 1
             }, {
                 "id": 2,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 2
             }, {
                 "id": 3,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 3
             }],
             "order": 192,
@@ -5070,21 +5842,25 @@ let FakeQuizData = {
                 "id": 0,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": true,
                 "order": 0
             }, {
                 "id": 1,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 1
             }, {
                 "id": 2,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 2
             }, {
                 "id": 3,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 3
             }],
             "order": 193,
@@ -5096,21 +5872,25 @@ let FakeQuizData = {
                 "id": 0,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": true,
                 "order": 0
             }, {
                 "id": 1,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 1
             }, {
                 "id": 2,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 2
             }, {
                 "id": 3,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 3
             }],
             "order": 194,
@@ -5122,21 +5902,25 @@ let FakeQuizData = {
                 "id": 0,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": true,
                 "order": 0
             }, {
                 "id": 1,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 1
             }, {
                 "id": 2,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 2
             }, {
                 "id": 3,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 3
             }],
             "order": 195,
@@ -5148,21 +5932,25 @@ let FakeQuizData = {
                 "id": 0,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": true,
                 "order": 0
             }, {
                 "id": 1,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 1
             }, {
                 "id": 2,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 2
             }, {
                 "id": 3,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 3
             }],
             "order": 196,
@@ -5174,21 +5962,25 @@ let FakeQuizData = {
                 "id": 0,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": true,
                 "order": 0
             }, {
                 "id": 1,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 1
             }, {
                 "id": 2,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 2
             }, {
                 "id": 3,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 3
             }],
             "order": 197,
@@ -5200,21 +5992,25 @@ let FakeQuizData = {
                 "id": 0,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": true,
                 "order": 0
             }, {
                 "id": 1,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 1
             }, {
                 "id": 2,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 2
             }, {
                 "id": 3,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 3
             }],
             "order": 198,
@@ -5226,21 +6022,25 @@ let FakeQuizData = {
                 "id": 0,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": true,
                 "order": 0
             }, {
                 "id": 1,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 1
             }, {
                 "id": 2,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 2
             }, {
                 "id": 3,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 3
             }],
             "order": 199,
@@ -5252,21 +6052,25 @@ let FakeQuizData = {
                 "id": 0,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": true,
                 "order": 0
             }, {
                 "id": 1,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 1
             }, {
                 "id": 2,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 2
             }, {
                 "id": 3,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 3
             }],
             "order": 200,
@@ -5278,21 +6082,25 @@ let FakeQuizData = {
                 "id": 0,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": true,
                 "order": 0
             }, {
                 "id": 1,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 1
             }, {
                 "id": 2,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 2
             }, {
                 "id": 3,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 3
             }],
             "order": 201,
@@ -5304,21 +6112,25 @@ let FakeQuizData = {
                 "id": 0,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": true,
                 "order": 0
             }, {
                 "id": 1,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 1
             }, {
                 "id": 2,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 2
             }, {
                 "id": 3,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 3
             }],
             "order": 202,
@@ -5330,21 +6142,25 @@ let FakeQuizData = {
                 "id": 0,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": true,
                 "order": 0
             }, {
                 "id": 1,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 1
             }, {
                 "id": 2,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 2
             }, {
                 "id": 3,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 3
             }],
             "order": 203,
@@ -5356,21 +6172,25 @@ let FakeQuizData = {
                 "id": 0,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": true,
                 "order": 0
             }, {
                 "id": 1,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 1
             }, {
                 "id": 2,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 2
             }, {
                 "id": 3,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 3
             }],
             "order": 204,
@@ -5382,21 +6202,25 @@ let FakeQuizData = {
                 "id": 0,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": true,
                 "order": 0
             }, {
                 "id": 1,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 1
             }, {
                 "id": 2,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 2
             }, {
                 "id": 3,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 3
             }],
             "order": 205,
@@ -5408,21 +6232,25 @@ let FakeQuizData = {
                 "id": 0,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": true,
                 "order": 0
             }, {
                 "id": 1,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 1
             }, {
                 "id": 2,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 2
             }, {
                 "id": 3,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 3
             }],
             "order": 206,
@@ -5434,21 +6262,25 @@ let FakeQuizData = {
                 "id": 0,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": true,
                 "order": 0
             }, {
                 "id": 1,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 1
             }, {
                 "id": 2,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 2
             }, {
                 "id": 3,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 3
             }],
             "order": 207,
@@ -5460,21 +6292,25 @@ let FakeQuizData = {
                 "id": 0,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": true,
                 "order": 0
             }, {
                 "id": 1,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 1
             }, {
                 "id": 2,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 2
             }, {
                 "id": 3,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 3
             }],
             "order": 208,
@@ -5486,21 +6322,25 @@ let FakeQuizData = {
                 "id": 0,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": true,
                 "order": 0
             }, {
                 "id": 1,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 1
             }, {
                 "id": 2,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 2
             }, {
                 "id": 3,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 3
             }],
             "order": 209,
@@ -5513,21 +6353,25 @@ let FakeQuizData = {
                 "id": 0,
                 "title"  : "3-5",
                 "active": false,
+                "answer": true,
                 "order": 0
             }, {
                 "id": 1,
                 "title"  : "3-4",
                 "active": false,
+                "answer": false,
                 "order": 1
             }, {
                 "id": 2,
                 "title"  : "2-5",
                 "active": false,
+                "answer": false,
                 "order": 2
             }, {
                 "id": 3,
                 "title"  : "2-4",
                 "active": false,
+                "answer": false,
                 "order": 3
             }],
             "order": 210,
@@ -5539,21 +6383,25 @@ let FakeQuizData = {
                 "id": 0,
                 "title"  : "1/5",
                 "active": false,
+                "answer": true,
                 "order": 0
             }, {
                 "id": 1,
                 "title"  : "0/64",
                 "active": false,
+                "answer": false,
                 "order": 1
             }, {
                 "id": 2,
                 "title"  : "0/77",
                 "active": false,
+                "answer": false,
                 "order": 2
             }, {
                 "id": 3,
                 "title"  : "0/33",
                 "active": false,
+                "answer": false,
                 "order": 3
             }],
             "order": 211,
@@ -5577,21 +6425,25 @@ let FakeQuizData = {
                 "id": 0,
                 "title"  : "1",
                 "active": false,
+                "answer": true,
                 "order": 0
             }, {
                 "id": 1,
                 "title"  : "2",
                 "active": false,
+                "answer": false,
                 "order": 1
             }, {
                 "id": 2,
                 "title"  : "3",
                 "active": false,
+                "answer": false,
                 "order": 2
             }, {
                 "id": 3,
                 "title"  : "4",
                 "active": false,
+                "answer": false,
                 "order": 3
             }],
             "order": 212,
@@ -5603,21 +6455,25 @@ let FakeQuizData = {
                 "id": 0,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": true,
                 "order": 0
             }, {
                 "id": 1,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 1
             }, {
                 "id": 2,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 2
             }, {
                 "id": 3,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 3
             }],
             "order": 213,
@@ -5629,21 +6485,25 @@ let FakeQuizData = {
                 "id": 0,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": true,
                 "order": 0
             }, {
                 "id": 1,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 1
             }, {
                 "id": 2,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 2
             }, {
                 "id": 3,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 3
             }],
             "order": 214,
@@ -5655,21 +6515,25 @@ let FakeQuizData = {
                 "id": 0,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": true,
                 "order": 0
             }, {
                 "id": 1,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 1
             }, {
                 "id": 2,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 2
             }, {
                 "id": 3,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 3
             }],
             "order": 215,
@@ -5681,21 +6545,25 @@ let FakeQuizData = {
                 "id": 0,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": true,
                 "order": 0
             }, {
                 "id": 1,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 1
             }, {
                 "id": 2,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 2
             }, {
                 "id": 3,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 3
             }],
             "order": 216,
@@ -5707,21 +6575,25 @@ let FakeQuizData = {
                 "id": 0,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": true,
                 "order": 0
             }, {
                 "id": 1,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 1
             }, {
                 "id": 2,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 2
             }, {
                 "id": 3,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 3
             }],
             "order": 217,
@@ -5733,21 +6605,25 @@ let FakeQuizData = {
                 "id": 0,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": true,
                 "order": 0
             }, {
                 "id": 1,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 1
             }, {
                 "id": 2,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 2
             }, {
                 "id": 3,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 3
             }],
             "order": 218,
@@ -5759,21 +6635,25 @@ let FakeQuizData = {
                 "id": 0,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": true,
                 "order": 0
             }, {
                 "id": 1,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 1
             }, {
                 "id": 2,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 2
             }, {
                 "id": 3,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 3
             }],
             "order": 219,
@@ -5785,21 +6665,25 @@ let FakeQuizData = {
                 "id": 0,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": true,
                 "order": 0
             }, {
                 "id": 1,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 1
             }, {
                 "id": 2,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 2
             }, {
                 "id": 3,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 3
             }],
             "order": 220,
@@ -5811,21 +6695,25 @@ let FakeQuizData = {
                 "id": 0,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": true,
                 "order": 0
             }, {
                 "id": 1,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 1
             }, {
                 "id": 2,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 2
             }, {
                 "id": 3,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 3
             }],
             "order": 221,
@@ -5837,21 +6725,25 @@ let FakeQuizData = {
                 "id": 0,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": true,
                 "order": 0
             }, {
                 "id": 1,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 1
             }, {
                 "id": 2,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 2
             }, {
                 "id": 3,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 3
             }],
             "order": 222,
@@ -5863,21 +6755,25 @@ let FakeQuizData = {
                 "id": 0,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": true,
                 "order": 0
             }, {
                 "id": 1,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 1
             }, {
                 "id": 2,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 2
             }, {
                 "id": 3,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 3
             }],
             "order": 223,
@@ -5889,21 +6785,25 @@ let FakeQuizData = {
                 "id": 0,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": true,
                 "order": 0
             }, {
                 "id": 1,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 1
             }, {
                 "id": 2,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 2
             }, {
                 "id": 3,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 3
             }],
             "order": 224,
@@ -5915,21 +6815,25 @@ let FakeQuizData = {
                 "id": 0,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": true,
                 "order": 0
             }, {
                 "id": 1,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 1
             }, {
                 "id": 2,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 2
             }, {
                 "id": 3,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 3
             }],
             "order": 225,
@@ -5941,21 +6845,25 @@ let FakeQuizData = {
                 "id": 0,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": true,
                 "order": 0
             }, {
                 "id": 1,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 1
             }, {
                 "id": 2,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 2
             }, {
                 "id": 3,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 3
             }],
             "order": 226,
@@ -5967,21 +6875,25 @@ let FakeQuizData = {
                 "id": 0,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": true,
                 "order": 0
             }, {
                 "id": 1,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 1
             }, {
                 "id": 2,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 2
             }, {
                 "id": 3,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 3
             }],
             "order": 227,
@@ -5993,21 +6905,25 @@ let FakeQuizData = {
                 "id": 0,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": true,
                 "order": 0
             }, {
                 "id": 1,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 1
             }, {
                 "id": 2,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 2
             }, {
                 "id": 3,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 3
             }],
             "order": 228,
@@ -6019,21 +6935,25 @@ let FakeQuizData = {
                 "id": 0,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": true,
                 "order": 0
             }, {
                 "id": 1,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 1
             }, {
                 "id": 2,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 2
             }, {
                 "id": 3,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 3
             }],
             "order": 229,
@@ -6045,21 +6965,25 @@ let FakeQuizData = {
                 "id": 0,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": true,
                 "order": 0
             }, {
                 "id": 1,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 1
             }, {
                 "id": 2,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 2
             }, {
                 "id": 3,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 3
             }],
             "order": 230,
@@ -6071,21 +6995,25 @@ let FakeQuizData = {
                 "id": 0,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": true,
                 "order": 0
             }, {
                 "id": 1,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 1
             }, {
                 "id": 2,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 2
             }, {
                 "id": 3,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 3
             }],
             "order": 231,
@@ -6097,21 +7025,25 @@ let FakeQuizData = {
                 "id": 0,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": true,
                 "order": 0
             }, {
                 "id": 1,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 1
             }, {
                 "id": 2,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 2
             }, {
                 "id": 3,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 3
             }],
             "order": 232,
@@ -6123,21 +7055,25 @@ let FakeQuizData = {
                 "id": 0,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": true,
                 "order": 0
             }, {
                 "id": 1,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 1
             }, {
                 "id": 2,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 2
             }, {
                 "id": 3,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 3
             }],
             "order": 233,
@@ -6149,21 +7085,25 @@ let FakeQuizData = {
                 "id": 0,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": true,
                 "order": 0
             }, {
                 "id": 1,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 1
             }, {
                 "id": 2,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 2
             }, {
                 "id": 3,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 3
             }],
             "order": 234,
@@ -6175,21 +7115,25 @@ let FakeQuizData = {
                 "id": 0,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": true,
                 "order": 0
             }, {
                 "id": 1,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 1
             }, {
                 "id": 2,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 2
             }, {
                 "id": 3,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 3
             }],
             "order": 235,
@@ -6201,21 +7145,25 @@ let FakeQuizData = {
                 "id": 0,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": true,
                 "order": 0
             }, {
                 "id": 1,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 1
             }, {
                 "id": 2,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 2
             }, {
                 "id": 3,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 3
             }],
             "order": 236,
@@ -6227,21 +7175,25 @@ let FakeQuizData = {
                 "id": 0,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": true,
                 "order": 0
             }, {
                 "id": 1,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 1
             }, {
                 "id": 2,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 2
             }, {
                 "id": 3,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 3
             }],
             "order": 237,
@@ -6253,21 +7205,25 @@ let FakeQuizData = {
                 "id": 0,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": true,
                 "order": 0
             }, {
                 "id": 1,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 1
             }, {
                 "id": 2,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 2
             }, {
                 "id": 3,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 3
             }],
             "order": 238,
@@ -6279,21 +7235,25 @@ let FakeQuizData = {
                 "id": 0,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": true,
                 "order": 0
             }, {
                 "id": 1,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 1
             }, {
                 "id": 2,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 2
             }, {
                 "id": 3,
                 "title"  : "جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب جواب ",
                 "active": false,
+                "answer": false,
                 "order": 3
             }],
             "order": 239,
