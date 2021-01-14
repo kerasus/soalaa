@@ -75,14 +75,14 @@ const router = new VueRouter({
             meta: {middleware: auth}
         },
         {
-            path: '/quest/:id',
-            name: 'quest.edit',
+            path: '/quest/create',
+            name: 'quest.create',
             component: () => lazyLoadView(import('@/pages/admin/question/CreateOrEdit')),
             meta: {middleware: auth}
         },
         {
-            path: '/quest/create',
-            name: 'quest.create',
+            path: '/quest/:id',
+            name: 'quest.edit',
             component: () => lazyLoadView(import('@/pages/admin/question/CreateOrEdit')),
             meta: {middleware: auth}
         },
