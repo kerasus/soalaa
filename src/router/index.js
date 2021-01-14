@@ -120,6 +120,12 @@ const router = new VueRouter({
             name: 'NotFound',
             component: () => lazyLoadView(import('@/pages/user/exam/List')),
             meta: {middleware: auth}
+        },
+        {
+            path: '/video-analyze',
+            name: 'video-analyze',
+            component: () => lazyLoadView(import('@/components/AnalyzeByVideo')),
+            meta: {middleware: auth}
         }
     ]
 })
