@@ -100,7 +100,7 @@ const router = new VueRouter({
         },
         {
             path: '/online_quiz/:quizId/:questNumber/exams',
-            name: 'onlineQuiz.alaaView',
+            name: 'onlineQuiz.manage',
             component: () => lazyLoadView(import('@/pages/admin/exam/Manage'))
         },
         {
@@ -119,6 +119,12 @@ const router = new VueRouter({
             path: '*',
             name: 'NotFound',
             component: () => lazyLoadView(import('@/pages/user/exam/List')),
+            meta: {middleware: auth}
+        },
+        {
+            path: '/video-analyze',
+            name: 'video-analyze',
+            component: () => lazyLoadView(import('@/components/AnalyzeByVideo')),
             meta: {middleware: auth}
         }
     ]

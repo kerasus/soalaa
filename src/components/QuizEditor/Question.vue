@@ -36,6 +36,7 @@
     import '@/assets/scss/markdownKatex.scss'
     import { mixinQuiz, mixinWindowSize } from '@/mixin/Mixins'
     import $ from "jquery";
+    import Assistant from "@/plugins/assistant";
 
     var md = require('markdown-it')(),
         mk = require('markdown-it-katex')
@@ -43,8 +44,8 @@
 
     export default {
         name: 'item',
-        mixins: [ mixinQuiz, mixinWindowSize ],
-        data () {
+        mixins: [mixinQuiz, mixinWindowSize],
+        data() {
             return {
                 choiceNumber: {
                     0: 'الف) ',
@@ -59,19 +60,19 @@
                 type: Number
             },
             source: { // here is: {uid: 'unique_1', text: 'abc'}
-                default () {
+                default() {
                     return {}
                 }
             },
             quizList: {
                 type: Array,
-                default () {
+                default() {
                     return []
                 }
             }
         },
         methods: {
-            copyIdToClipboard () {
+            copyIdToClipboard() {
                 const questionIdElement = document.querySelector('#question-id' + this.source.id)
                 questionIdElement.select()
                 console.log(document.execCommand('copy'))
@@ -79,11 +80,11 @@
             onIntersect(entries) {
                 this.source.onIntersect(entries)
             },
-            choiceClicked (questionId, choiceId) {
+            choiceClicked(questionId, choiceId) {
                 this.changeQuestion(questionId)
                 this.answerClicked({questionId, choiceId})
             },
-            choiceClass (question) {
+            choiceClass(question) {
                 // let QuestionWidthRatio = 0.4
                 // let largestChoiceWidth = this.windowSize.x * QuestionWidthRatio / largestChoice
                 let largestChoice = this.getLargestChoice(question.choices)
@@ -99,7 +100,7 @@
                 }
                 return 12
             },
-            removeErab (string) {
+            removeErab(string) {
                 if (!string || string.length === 0) {
                     return ''
                 }
@@ -114,26 +115,38 @@
                 temp = temp.split('ٍ').join('')
                 return temp
             },
-            getLargestChoice (choices) {
+            getLargestChoice(choices) {
                 let largestChoice = 0
-                choices.list.forEach((source)=> {
+                choices.list.forEach((source) => {
                     if (source.title.length > largestChoice) {
                         largestChoice = this.removeErab(source.title).length
                     }
                 })
                 return largestChoice
             },
-            removeQuestion () {
+            removeQuestion() {
                 this.source.show(null, '/3a/api/exam-question/detach/' + this.source.id).then(() => {
 
-                }).catch((error) => { console.log(error) })
+                }).catch((error) => {
+                    console.log(error)
+                })
             },
-            edit (questionId) {
+            edit(questionId) {
                 console.log(questionId)
             }
         },
         created() {
 
+        },
+        computed: {
+            lesson() {
+                if (!this.source.sub_category.id) {
+                    return {title: 'صبر کنید'}
+                }
+                const subCategoryId = Assistant.getId(this.source.sub_category.id)
+                console.log(this.quiz.sub_categories)
+                return this.quiz.sub_categories.getItem('id', subCategoryId)
+            }
         }
     }
 </script>

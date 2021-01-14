@@ -146,11 +146,6 @@
                     return '.question:nth-child('+(this.quiz.questions.getQuestionIndexById(question.id) + 2)+')'
                 }
                 return ''
-            },
-            changeCurrentQuestion (question) {
-                if (question.id !== this.currentQuestion.id) {
-                    this.currentQuestion = question
-                }
             }
         },
         mounted () {
@@ -165,6 +160,7 @@
                 .then((response) => {
                     this.quizData.questions = new QuestionList(response.data.data)
                     this.quiz = new Quiz(this.quizData)
+                    console.log(this.quizData)
                 })
                 .catch((error) => {
                     console.log('error: ', error)
