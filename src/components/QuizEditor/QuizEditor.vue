@@ -219,6 +219,10 @@
 </script>
 
 <style scoped>
+    .questionss {
+        overflow-x: hidden
+    }
+
     .scroller {
         height: 100%;
     }
@@ -241,7 +245,7 @@
 
     .questions {
         background: #fff;
-        overflow-y: auto;
+        overflow-y: hidden;
         overflow-x: hidden;
         position: relative;
         /*padding-right: 25px;*/

@@ -231,6 +231,7 @@ export default {
                 this.loadUserQuizData()
             }
         } else {
+            console.log('too in')
             this.$router.push({ name: 'onlineQuiz.alaaView', params: { quizId: 313, questNumber: this.$route.params.quizId } })
         }
         // this.renderQuestionBody()
