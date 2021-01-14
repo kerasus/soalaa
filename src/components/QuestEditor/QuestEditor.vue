@@ -46,6 +46,9 @@
                         <v-btn outlined icon @click="addImageStatement">
                             <v-icon>mdi-image</v-icon>
                         </v-btn>
+                        <v-btn outlined icon @click="addMatrixStatement">
+                            <v-icon>mdi-matrix</v-icon>
+                        </v-btn>
                     </v-col>
                     <v-col :md="5">
                         <div class="renderedPanel" v-html="questRendered">
@@ -80,6 +83,9 @@
                         <v-btn outlined icon @click="addImageChoice(currentQuestion.choices.list[index - 1])">
                             <v-icon>mdi-image</v-icon>
                         </v-btn>
+                        <v-btn outlined icon @click="addMatrixChoice(currentQuestion.choices.list[index - 1])">
+                            <v-icon>mdi-matrix</v-icon>
+                        </v-btn>
                     </v-col>
                     <v-col :md="5">
                         <div class="renderedPanel" v-html="choiceRendered[index - 1]">
@@ -92,6 +98,30 @@
         <div id="mathfield" locale="fa">x=\frac{-b\pm \sqrt{b^2-4ac}}{2a}</div>
         <div class="latexData" v-html="latexData"></div>
         <v-text-field full-width label="url" v-model="url" dir="ltr"/>
+        <v-sheet width="500px">
+            <v-container :fluid="true">
+                <v-row>
+                    <v-col :md="2">
+                        <v-text-field label="عرض" outlined dense v-model="matrixWidth" type="number"/>
+                    </v-col>
+                    <v-col :md="2">
+                        <v-text-field label="ارتفاع" outlined dense v-model="matrixHeight" type="number"/>
+                    </v-col>
+                </v-row>
+                <div dir="ltr">
+                    <v-row v-for="indexY in parseInt(matrixTempHeight)" :key="indexY">
+                        <v-col v-for="indexX in parseInt(matrixTempWidth)" :key="indexX">
+                            <v-text-field v-model="matrix[indexY - 1][indexX - 1]" outlined :label="'(' + indexX + ', ' + indexX + ')'" dense></v-text-field>
+                        </v-col>
+                    </v-row>
+                    <v-row>
+                        <v-col>
+                            <v-btn @click="initMatrix">ایجاد ماتریکس</v-btn>
+                        </v-col>
+                    </v-row>
+                </div>
+            </v-container>
+        </v-sheet>
 
 <!--        <div dir="rtl" v-katex:auto>-->
 <!--                        این یک فرمول ریاضی هست-->
@@ -219,10 +249,60 @@
                 quizList: new QuizList(),
                 subCategoriesList: new QuestSubcategoryList(),
                 selectedQuizzes: [],
-                exams: []
+                exams: [],
+                matrixWidth: 1,
+                matrixHeight: 1,
+                matrixTempWidth: 1,
+                matrixTempHeight: 1,
+                matrix: [[]]
             }
         },
         methods: {
+            initMatrix () {
+                this.matrix = []
+                let row = []
+                for (let i = 0; i < this.matrixHeight; i++) {
+                    row = []
+                    for (let j = 0; j < this.matrixWidth; j++) {
+                        row.push(0)
+                    }
+                    this.matrix.push(row)
+                }
+                this.matrixTempWidth = this.matrixWidth
+                this.matrixTempHeight = this.matrixHeight
+            },
+            addMatrixStatement () {
+                if (!this.currentQuestion.statement) {
+                    this.currentQuestion.statement = ''
+                }
+                let matrixKatex = this.renderMatrixKatex()
+                this.currentQuestion.statement += matrixKatex
+            },
+            addMatrixChoice (choice) {
+                if (!choice.title) {
+                    choice.title = ''
+                }
+                choice.title += this.renderMatrixKatex()
+            },
+            renderMatrixKatex () {
+                let matrixKatex = ''
+                matrixKatex += '$$\\begin{bmatrix}'
+                for (let i = 0; i < this.matrixTempHeight; i++) {
+                    for (let j = 0; j < this.matrixTempWidth; j++) {
+                        matrixKatex += this.matrix[i][j]
+                        if (j !== this.matrixTempWidth - 1) {
+                            matrixKatex += ' & '
+                        }
+                    }
+                    if (i !== this.matrixTempHeight - 1) {
+                        matrixKatex += ' \\\\ '
+                    }
+                }
+                matrixKatex += '\\end{bmatrix}$$'
+                this.matrixTempHeight = 1
+                this.matrixTempWidth = 1
+                return matrixKatex
+            },
             addImageChoice (choice) {
                 if (!choice.title) {
                     choice.title = ''
@@ -364,6 +444,15 @@
         //             }
         //         }
         //         return sub_categories
+        //     }
+        // },
+        // computed: {
+        //     matrixValue () {
+        //         for (let i = 0; i < this.matrixHeight; i++) {
+        //             for (let j = 0; j < this.matrixWidth; j++) {
+        //                 this.matrix
+        //             }
+        //         }
         //     }
         // },
         mounted() {
