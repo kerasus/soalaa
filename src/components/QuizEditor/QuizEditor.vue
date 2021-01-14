@@ -159,7 +159,6 @@
                 return ''
             },
             scrollTo (questionId) {
-                console.log('scroll')
                 if (this.quiz.questions.getQuestionById(questionId).isInView === false) {
                     const questionIndex = this.quiz.questions.getQuestionIndexById(questionId)
                     this.$refs.scroller.scrollToIndex(questionIndex)
@@ -186,14 +185,12 @@
                 .then((response) => {
                     this.quizData.questions = new QuestionList(response.data.data)
                     this.quiz = new Quiz(this.quizData)
-                    console.log(this.quizData)
                 })
                 .catch((error) => {
                     console.log('error: ', error)
                 })
             this.subCategoriesList.fetch().then((response) => {
                 this.quiz.sub_categories = new QuestSubcategoryList(response.data)
-                console.log(this.quiz.sub_categories)
             }).catch((error) => {
                 Assistant.handleAxiosError(this.$toasted, error)
             })
