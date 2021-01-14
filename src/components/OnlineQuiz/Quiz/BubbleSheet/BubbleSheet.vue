@@ -18,6 +18,9 @@
                     <v-icon v-if="info.type === 'pasokh-nameh' && choice.answer" size="12" :color="choice.answer === choice.active ? '#fff' : '#00c753'">
                         mdi-check
                     </v-icon>
+                    <v-icon v-if="info.type === 'pasokh-nameh' && choice.active" size="12" :color="choice.answer === choice.active ? '#fff' : '#00c753'">
+                        mdi-check
+                    </v-icon>
                 </div>
             </div>
         </div>
@@ -48,9 +51,8 @@
                 this.$emit('clickChoice', questionId, choiceId)
             },
             clickQuestionNumber (questionId) {
-                if (this.info.type === 'pasokh-barg') {
-                    this.$emit('scrollTo', questionId)
-                }
+                console.log('scroLLL')
+                this.$emit('scrollTo', questionId)
             },
             questionListHeight () {
                 // box is a col-7 with 12px padding

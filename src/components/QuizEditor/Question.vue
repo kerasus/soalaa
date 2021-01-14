@@ -13,7 +13,7 @@
                 <v-icon>mdi-content-copy</v-icon>
             </v-btn>
         </div>
-        <span class="question-body renderedPanel" :id="'question' + source.id" v-html="(getQuestionNumberFromId(source.id)) + ' (' + source.order + ') - ' + source.rendered_statement" v-intersect="{
+        <span class="question-body renderedPanel" :id="'question' + source.id" v-html="(getQuestionNumberFromId(source.id)) + '(' + lesson.title + ')' + ' (' + source.order + ') - ' + source.rendered_statement" v-intersect="{
             handler: onIntersect,
             options: {
               threshold: [0, 0.2, 0.4, 0.6, 0.8, 1.0]
@@ -140,12 +140,13 @@
         },
         computed: {
             lesson() {
-                if (!this.source.sub_category.id) {
+                console.log(this.source.sub_categories)
+                if (!this.source.sub_categories) {
                     return {title: 'صبر کنید'}
                 }
                 const subCategoryId = Assistant.getId(this.source.sub_category.id)
                 console.log(this.quiz.sub_categories)
-                return this.quiz.sub_categories.getItem('id', subCategoryId)
+                return this.quiz.sub_categories.list.find((item) => item.id === subCategoryId)
             }
         }
     }
