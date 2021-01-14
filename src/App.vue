@@ -111,8 +111,7 @@
                                 <v-icon>mdi-dots-grid</v-icon>
                             </v-btn>
                             <v-app-bar-nav-icon
-                                    v-if="$route.name === 'onlineQuiz.alaaView'"
-
+                                    v-if="$route.name !== 'onlineQuiz.konkoorView'"
                                     @click.stop="toggleDrawer"
                                     :color="(isQuizPage) ? '#fcaf25' : '#666'"
                             />
