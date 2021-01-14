@@ -5,6 +5,7 @@ import { Question } from '@/models/Question'
 import createPersistedState from 'vuex-persistedstate'
 import createMutationsSharer from 'vuex-shared-mutations'
 import Assistant from '@/plugins/assistant'
+import {User} from '@/models/User'
 
 Vue.use(Vuex)
 
@@ -12,7 +13,7 @@ const store = new Vuex.Store({
     plugins: [
         createPersistedState({
             storage: window.localStorage,
-            paths: ['userQuizData', 'access_token']
+            paths: ['userQuizData', 'access_token', 'user']
         }),
         createMutationsSharer({
             predicate: [
@@ -28,6 +29,7 @@ const store = new Vuex.Store({
             x: 0,
             y: 0,
         },
+        user: new User(),
         drawer: false,
         quiz: new Quiz(),
         userAnswersOfOnlineQuiz: [],
@@ -44,8 +46,16 @@ const store = new Vuex.Store({
         updateWindowSize (state, newInfo) {
             state.windowSize = newInfo
         },
+        updateAppBarAndDrawer(state, newInfo) {
+            this.commit('updateAppbar', newInfo)
+            this.commit('updateDrawer', newInfo)
+        },
         updateDrawer(state, newInfo) {
             state.drawer = newInfo
+        },
+        updateUser (state, newInfo) {
+            window.localStorage.setItem('user', JSON.stringify(newInfo))
+            state.user = newInfo
         },
         updateQuiz (state, newInfo) {
             state.quiz = newInfo
@@ -54,7 +64,6 @@ const store = new Vuex.Store({
             state.accessToken = newInfo
         },
         updateCurrentQuestion (state, newInfo) {
-
             this.commit('reloadQuizModel')
             this.commit('reloadCurrentQuestionModel')
             // set checking time
@@ -64,21 +73,21 @@ const store = new Vuex.Store({
             if (newQuestionId === oldQuestionId) {
                 return
             }
-            //
-            // if (newQuestionId) {
-            //     let newQuestion = state.quiz.questions.getQuestionById(newQuestionId)
-            //
-            //     if(newQuestion) {
-            //         newQuestion.enterQuestion()
-            //     }
-            // }
-            // if (oldQuestionId) {
-            //     let oldQuestion = state.quiz.questions.getQuestionById(oldQuestionId)
-            //     state.quiz.loadCheckingTimesFromUserData (oldQuestion, state.userQuizData)
-            //     if(oldQuestion) {
-            //         oldQuestion.leaveQuestion()
-            //     }
-            // }
+
+            if (newQuestionId) {
+                let newQuestion = state.quiz.questions.getQuestionById(newQuestionId)
+
+                if(newQuestion) {
+                    newQuestion.enterQuestion()
+                }
+            }
+            if (oldQuestionId) {
+                let oldQuestion = state.quiz.questions.getQuestionById(oldQuestionId)
+                state.quiz.loadCheckingTimesFromUserData (oldQuestion, state.userQuizData)
+                if(oldQuestion) {
+                    oldQuestion.leaveQuestion()
+                }
+            }
             state.currentQuestion = new Question(newInfo)
             this.commit('refreshUserQuizData')
 
@@ -143,6 +152,9 @@ const store = new Vuex.Store({
         },
         appbar (state) {
             return state.appbar
+        },
+        user (state) {
+            return state.user
         }
     }
 })

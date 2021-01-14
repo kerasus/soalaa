@@ -7,8 +7,32 @@ let Time = function () {
         return moment().format('YYYY-MM-DD hh:mm:ss');
     }
 
+    function getPassedTime(startTime) {
+        let passedDiff = diff(now(), startTime)
+        return msToTime(passedDiff)
+    }
+
+    function getRemainTime(endTime) {
+        let remainDiff = diff(endTime, now())
+        return msToTime(remainDiff)
+    }
+
+    function msToTime(s) {
+        // Pad to 2 or 3 digits, default is 2
+        let pad = (n, z = 2) => ('00' + n).slice(-z);
+        //+ '.' + pad(s%1000, 3)
+        return pad(s/3.6e6|0) + ':' + pad((s%3.6e6)/6e4 | 0) + ':' + pad((s%6e4)/1000|0);
+    }
+
+    function diff(a, b) {
+        let aDiff = moment(a);
+        let bDiff = moment(b);
+        return aDiff.diff(bDiff) // 86400000
+    }
+
     function setStateOfExamCategories() {
         // const now = this.now()
+        // console.log('store.getters.quiz.categories', store)
         // store.getters.quiz.categories.list.forEach( (category, index, categories) => {
         //     const prevCat = categories[index - 1]
         //
@@ -22,6 +46,10 @@ let Time = function () {
 
     return {
         now,
+        diff,
+        msToTime,
+        getRemainTime,
+        getPassedTime,
         setStateOfExamCategories
     };
 }();

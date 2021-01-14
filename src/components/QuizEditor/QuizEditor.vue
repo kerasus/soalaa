@@ -1,14 +1,17 @@
 <template>
     <v-container class="quiz-editor" :fluid="true" :style="{ height: '100%', background: 'rgb(244, 244, 244)' }" v-resize="updateWindowSize">
         <v-row :style="{ 'min-height': '100%' }">
-            <v-col :md="5" class="questions" :style="{ height: windowSize.y }">
-                <virtual-list style="overflow-y: auto;"
-                              :data-key="'id'"
-                              :data-sources="quiz.questions.list"
-                              :data-component="item"
-                              class="questions"
-                              ref="scroller"
-                />
+<!--            <v-col v-if="quiz.questions.list.length > 40" :md="5" class="questions" :style="{ height: windowSize.y }">-->
+<!--                <virtual-list style="overflow-y: auto;"-->
+<!--                              :data-key="'id'"-->
+<!--                              :data-sources="quiz.questions.list"-->
+<!--                              :data-component="item"-->
+<!--                              class="questions"-->
+<!--                              ref="scroller"-->
+<!--                />-->
+<!--            </v-col>-->
+            <v-col :md="5" class="questions">
+                <item v-for="itemm in quiz.questions.list" :key="itemm.id" :source="itemm" />
             </v-col>
             <v-col :md="7" class="left-side-list">
                 <v-row>
@@ -92,7 +95,7 @@
                 </v-row>
                 <v-row>
                     <v-col>
-                        <BubbleSheet :info="{ type: 'pasokh-barg' }" @clickChoice="choiceClicked" @scrollTo="scrollTo"/>
+                        <BubbleSheet :info="{ type: 'pasokh-barg' }"/>
                     </v-col>
                 </v-row>
             </v-col>
@@ -102,17 +105,15 @@
 
 <script>
     // import FakeQuizData from "@/plugins/fakeQuizData";
-    import 'github-markdown-css/github-markdown.css'
     import $ from 'jquery'
     import '@/assets/scss/markdownKatex.scss'
     import Vue from 'vue'
-    import VirtualList from 'vue-virtual-scroll-list'
     import 'vue-virtual-scroller/dist/vue-virtual-scroller.css'
     import { DynamicScroller, DynamicScrollerItem } from 'vue-virtual-scroller'
     import Item from './Question'
     import { mixinQuiz, mixinWindowSize } from '@/mixin/Mixins'
-    import BubbleSheet from "./BubbleSheet";
-    import {Quiz, QuizList} from "@/models/Quiz";
+    import BubbleSheet from "@/components/OnlineQuiz/Quiz/BubbleSheet/BubbleSheet";
+    import {Quiz} from "@/models/Quiz";
     import {QuestionList} from "@/models/Question";
     Vue.component('DynamicScroller', DynamicScroller)
     Vue.component('DynamicScrollerItem', DynamicScrollerItem)
@@ -121,10 +122,10 @@
     md.use(mk);
 
     export default {
-        name: 'KonkoorView',
+        name: 'adminView',
         mixins: [mixinQuiz, mixinWindowSize],
         components: {
-            'virtual-list': VirtualList,
+            Item,
             BubbleSheet
         },
         data () {
@@ -136,45 +137,15 @@
             }
         },
         methods: {
-            scrollTo (questionId) {
-                const questionIndex = this.quiz.questions.getQuestionIndexById(questionId)
-                this.$refs.scroller.scrollToIndex(questionIndex)
-                for (let i = 1; i <= Math.ceil(this.quiz.questions.list.length / 100); i++) {
-                    setTimeout(() => {
-                            this.$refs.scroller.scrollToIndex(questionIndex)
-
-                        },
-                        500 / Math.ceil(this.quiz.questions.list.length / 100) * i)
-                }
+            changeAppBarAndDrawer (state) {
+                this.$store.commit('updateAppbar', state)
+                this.$store.commit('updateDrawer', state)
             },
-            onIntersect (entries) {
-                this.quiz.questions.getQuestionById(entries[0].target.id).isInView = (entries[0].intersectionRatio >= 0.5)
-            },
-            // ToDo: check for removal
-            // getFirstInViewQuestionNumber () {
-            //     let firstQuestionInView = this.quiz.questions.list.find( (item)=> {
-            //         return item.isInView === true
-            //     })
-            //     if (firstQuestionInView) {
-            //         return firstQuestionInView.order + 1
-            //     } else {
-            //         return false
-            //     }
-            // },
-            // isThisFirstQuestionInView (questionId) {
-            //     if (this.getFirstInViewQuestionNumber().id === questionId) {
-            //         return true
-            //     }
-            //     return false
-            // },
             getQuestionNumber (question) {
                 if (question.isInView === false) {
                     return '.question:nth-child('+(this.quiz.questions.getQuestionIndexById(question.id) + 2)+')'
                 }
                 return ''
-            },
-            choiceClicked (questionId) {
-                this.scrollTo(questionId)
             },
             changeCurrentQuestion (question) {
                 if (question.id !== this.currentQuestion.id) {
@@ -185,31 +156,22 @@
         mounted () {
             $('.questions').height(this.windowSize.y)
             $('.left-side-list').height(this.windowSize.y - 24)
-            this.scrollTo(this.currentQuestion.id)
         },
         created () {
-            this.$store.commit('updateAppbar', false)
-            this.$store.commit('updateDrawer', false)
-            const that = this
-            this.quizData.show(this.$route.params.quizId, '/api/3a/exam-question/attach/show').then((response) => {
-                $.getJSON(response.data.data.questions_file_url, function(data) {
-                    that.quizData = response.data.data
-                    console.log(response.data.data)
-                    that.quizData.questions = new QuestionList(data)
-                    that.loadQuiz()
+            this.changeAppBarAndDrawer(false)
+            // const that = this
+            const url = '/3a/api/exam-question/attach/show/' + this.$route.params.quizId
+            this.quizData.show(null, url)
+                .then((response) => {
+                    this.quizData.questions = new QuestionList(response.data.data)
+                    this.quiz = new Quiz(this.quizData)
                 })
-                new QuizList().fetch().then((response) => {
-                    this.quizList = response.data.data
-                    console.log(response.data.data)
+                .catch((error) => {
+                    console.log('error: ', error)
                 })
-            }).catch((error) => {
-                console.log(error)
-            })
-
-
-
-
-            // this.renderQuestionBody()
+        },
+        destroyed() {
+            this.changeAppBarAndDrawer(true)
         },
         watch: {
             'windowSize.y': function () {
@@ -315,7 +277,7 @@
         margin-right: 5px;
     }
 
-    .question-body p {
+    .question-body p:first-child {
         display: inline;
     }
 

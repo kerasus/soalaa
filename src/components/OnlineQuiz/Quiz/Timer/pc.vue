@@ -22,13 +22,13 @@
                 <v-col v-if="show" cols="3" class="timerText">
                     زمان گذشته:
                     <span class="timeMarginTop">
-                        {{ passedTime.seconds}} : {{ passedTime.minutes}} : {{passedTime.hours}}
+                        {{ passedTime }}
                     </span>
                 </v-col>
                 <v-col v-if="show" cols="7" class="text-center timerText">
                     زمان تا پایان مهلت پاسخگویی دفترچه عمومی:
                     <span class="timeMarginTop">
-                        {{ remainingTime.seconds}} : {{ remainingTime.minutes}} : {{remainingTime.hours}}
+                        {{ remainingTime }}
                     </span>
                 </v-col>
             </v-row>

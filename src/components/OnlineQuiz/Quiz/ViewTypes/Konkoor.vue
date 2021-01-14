@@ -26,8 +26,7 @@
                                             elevation="0"
                                     >
                                         <v-icon class="mr-2" :size="30" color="#666">mdi-account-circle</v-icon>
-                                        سید مصطفی
-                                        کاظمی
+                                        {{ $store.getters.user.first_name + ' ' + $store.getters.user.last_name }}
                                     </v-btn>
                                 </template>
                                 <v-card
@@ -112,7 +111,6 @@
 
 <script>
 import FakeQuizData from '@/plugins/fakeQuizData'
-import 'github-markdown-css/github-markdown.css'
 import $ from 'jquery'
 import '@/assets/scss/markdownKatex.scss'
 import Vue from 'vue'
@@ -145,11 +143,17 @@ export default {
         }
     },
     methods: {
+        changeAppBarAndDrawer (state) {
+            this.$store.commit('updateAppbar', state)
+            this.$store.commit('updateDrawer', state)
+        },
         onScroll (event, range) {
             if (range.start !== this.lastTimeScrollRange.start || range.end !== this.lastTimeScrollRange.end) {
                 this.quiz.questions.turnIsInViewToFalse(range.start, range.end)
             }
-            this.changeCurrentQuestionToFirstQuestionInView()
+            setTimeout(() => {
+                this.changeCurrentQuestionToFirstQuestionInView()
+            }, 2000)
         },
         changeCurrentQuestionToFirstQuestionInView () {
             this.changeCurrentQuestion(this.quiz.questions.getQuestionByIndex(this.getFirstInViewQuestionNumber() - 1))
@@ -163,12 +167,9 @@ export default {
             if (this.quiz.questions.getQuestionById(questionId).isInView === false) {
                 const questionIndex = this.quiz.questions.getQuestionIndexById(questionId)
                 this.$refs.scroller.scrollToIndex(questionIndex)
-                for (let i = 1; i <= 4; i++) {
-                    console.log('log')
+                for (let i = 1; i < 4; i++) {
                     setTimeout(() => {
                         this.$refs.scroller.scrollToIndex(questionIndex)
-                        this.changeCurrentQuestion(this.quiz.questions.getQuestionByIndex(this.getFirstInViewQuestionNumber() - 1))
-                        console.log('log1')
                     },
                     500 / Math.ceil(this.quiz.questions.list.length / 100) * i)
                 }
@@ -221,15 +222,21 @@ export default {
         this.scrollTo(this.currentQuestion.id)
     },
     created () {
-        this.$store.commit('updateAppbar', false)
-        this.$store.commit('updateDrawer', false)
-        if (!this.quiz.id || (this.$route.params.quizId).toString() !== (this.quiz.id).toString()) {
-            this.loadQuiz()
+
+        if (this.windowSize.x > 959) {
+            this.changeAppBarAndDrawer(false)
+            if (!this.quiz.id || (this.$route.params.quizId).toString() !== (this.quiz.id).toString()) {
+                this.loadQuiz()
+            } else {
+                this.loadUserQuizData()
+            }
         } else {
-            this.loadUserQuizData()
+            this.$router.push({ name: 'onlineQuiz.alaaView', params: { quizId: 313, questNumber: this.$route.params.quizId } })
         }
-        this.setQuestionsLtr()
         // this.renderQuestionBody()
+    },
+    destroyed() {
+        this.changeAppBarAndDrawer(true)
     },
     watch: {
         'windowSize.y': function () {
@@ -341,6 +348,13 @@ export default {
 </style>
 
 <style>
+    .konkoor-view strong em strong {
+        display: none;
+        font-weight: normal;
+        font-style: normal;
+        text-decoration: none !important;
+    }
+
     .timer-row .col {
         padding: 0;
     }
@@ -358,7 +372,7 @@ export default {
         margin-right: 5px;
     }
 
-    .question-body p {
+    .question-body p:first-child {
         display: inline;
     }
 

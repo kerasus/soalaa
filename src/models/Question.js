@@ -12,9 +12,10 @@ class Question extends Model {
         super(data, [
             {
                 key: 'baseRoute',
-                default: '/api/3a/exam-question/attach'
+                default: '/3a/api/exam-question/attach'
             },
             { key: 'id' },
+            { key: '_id' },
             { key: 'title' },
             { key: 'statement' },
             { key: 'rendered_statement' },
@@ -57,6 +58,14 @@ class Question extends Model {
                 default: false
             }
         ])
+
+        if (this.id) {
+            this._id = this.id
+        }
+
+        if (this._id) {
+            this.id = this._id
+        }
 
         let that = this;
         this.apiResource = {
@@ -151,7 +160,14 @@ class QuestionList extends Collection {
         return Question
     }
 
+    changeOrderToInt () {
+        this.list.forEach( (item, index, questions) => {
+            questions[index].order = parseInt(questions[index].order)
+        } )
+    }
+
     sortByOrder() {
+        this.changeOrderToInt()
         return this.sortByKey('order');
     }
 

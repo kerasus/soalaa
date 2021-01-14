@@ -12,7 +12,7 @@
             </v-card>
         </v-dialog>
         <v-progress-linear
-                color="deep-purple accent-4"
+                color="#ffc107"
                 absolute
                 top
                 :active="examList.loading"
@@ -161,6 +161,7 @@
                     this.examList = new ExamList(response.data.data, {meta: response.data.meta, links: response.data.links})
                 })
                 .catch(() => {
+                    console.log('ffff')
                     this.examList.loading = false
                     this.examList = new ExamList()
                 })

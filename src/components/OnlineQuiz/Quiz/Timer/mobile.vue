@@ -37,25 +37,20 @@
                 </div>
             </v-col>
         </v-row>
-
-
         <div
                 class="drawer elevation-3 d-flex justify-center "
                 :style="{height: drawerVisible ? '80px' : '0'}"
         >
-
-
             <div class="timerInfo">
                 <p class="passedTimeText">
                     زمان گذشته
-                    {{ passedTime.seconds}} : {{ passedTime.minutes}} : {{passedTime.hours}}
+                    {{ passedTime }}
                 </p>
                 <p class="remainingTimeText">
                     دقیقه تا پایان مهلت پاسخگویی دفترچه عمومی
-                    {{ remainingTime.seconds}} : {{ remainingTime.minutes}}
+                    {{ remainingTime }}
                 </p>
             </div>
-
             <v-icon @click="drawerVisible = false" class="closeIcon">
                 mdi-close
             </v-icon>
@@ -71,7 +66,6 @@
         name: 'MobileTimer',
         data: () => ({
             drawerVisible: false,
-
         }),
         props: [
             'passedTime',

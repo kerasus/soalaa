@@ -1,11 +1,11 @@
 <template>
-    <div :class="{ 'current-question': this.currentQuestion.id === source.id, question: true }">
+    <div :class="{ 'current-question': this.currentQuestion.id === source.id, question: true, ltr: source.ltr  }">
         <div class="buttons-group">
-            <v-select :items="quizList" item-text="title" chips multiple attach outlined dense full-width disabled v-if="false"/>
-            <v-btn icon @click="removeQuestion(source.id)" disabled v-if="false">
+            <v-select :items="quizList.list" item-text="title" chips multiple attach outlined dense full-width v-if="false"/>
+            <v-btn icon @click="removeQuestion()">
                 <v-icon :size="24">mdi-close</v-icon>
             </v-btn>
-            <v-btn icon :to="{ name: 'quest.edit', params: { id: source.id } }" disabled v-if="false">
+            <v-btn icon :to="{ name: 'quest.edit', params: { id: source.id } }" >
                 <v-icon :size="24">mdi-pencil</v-icon>
             </v-btn>
             <input :id="'question-id' + source.id" :value="source.id" type="text" class="not-visible" />
@@ -13,7 +13,7 @@
                 <v-icon>mdi-content-copy</v-icon>
             </v-btn>
         </div>
-        <span class="question-body renderedPanel" :id="'question' + source.id" v-html="(getQuestionNumberFromId(source.id)) + '- ' + source.rendered_statement" v-intersect="{
+        <span class="question-body renderedPanel" :id="'question' + source.id" v-html="(getQuestionNumberFromId(source.id)) + ' (' + source.order + ') - ' + source.rendered_statement" v-intersect="{
             handler: onIntersect,
             options: {
               threshold: [0, 0.2, 0.4, 0.6, 0.8, 1.0]
@@ -123,8 +123,10 @@
                 })
                 return largestChoice
             },
-            removeQuestion (questionId) {
-                console.log(questionId)
+            removeQuestion () {
+                this.source.show(null, '/3a/api/exam-question/detach/' + this.source.id).then(() => {
+
+                }).catch((error) => { console.log(error) })
             },
             edit (questionId) {
                 console.log(questionId)
@@ -137,6 +139,23 @@
 </script>
 
 <style scoped>
+    .ltr.question {
+        padding: 10px 20px 10px 20px;
+    }
+
+    .ltr {
+        direction: ltr;
+    }
+
+    .ltr .choice {
+        direction: ltr;
+        text-align: left;
+    }
+
+    .ltr .buttons-group {
+        float: right;
+    }
+
     .not-visible {
         max-width: 1px;
         max-height: 1px;
@@ -212,5 +231,10 @@
 
     .quiz-editor .v-select.v-select--chips.v-select--is-multi {
         min-width: 200px;
+    }
+
+    .ltr .choice p {
+        margin-left: 5px;
+        margin-right: 0;
     }
 </style>

@@ -99,7 +99,6 @@
             } else {
                 this.loadUserQuizData()
             }
-
             this.loadQuestionByNumber(this.$route.params.questNumber)
 
             if (this.windowSize.x > 1263) {
@@ -107,12 +106,17 @@
             }
 
             this.$store.commit('updateAppbar', true)
-            this.setQuestionsLtr()
         }
     }
 </script>
 
 <style>
+.quiz-page strong em strong {
+    font-weight: normal;
+    font-style: normal;
+    text-decoration: none !important;
+}
+
 .ltr .renderedPanel {
     direction: ltr !important;
 }

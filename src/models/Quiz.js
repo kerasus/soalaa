@@ -9,7 +9,7 @@ class Quiz extends Model {
         super(data, [
             {
                 key: 'baseRoute',
-                default: '/api/3a/exam'
+                default: '/3a/api/exam'
             },
             { key: 'holding_status' },
             { key: 'photo' },
@@ -42,7 +42,8 @@ class Quiz extends Model {
     }
 
     setQuestionsLtr () {
-        const englishRegex = /^[A-Za-z0-9 :"'ʹ.<>%$&@!+()\-/\n,…?ᵒ]*$/
+        // const englishRegex = /^[A-Za-z0-9 :"'ʹ.<>%$&@!+()\-/\n,…?ᵒ*~]*$/
+        const englishRegex = /^[A-Za-z0-9 :"'ʹ.<>%$&@!+()\-/\n,…?ᵒ*~]*$/
         this.questions.list.forEach((question) => {
             question.ltr = !!question.statement.match(englishRegex);
         })

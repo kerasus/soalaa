@@ -1,8 +1,19 @@
+//@import "~katex/dist/katex.min.css";
+//@import "katex.min.css";
+@import "~github-markdown-css/github-markdown.css";
+
+
 .renderedPanel {
   direction: rtl;
   &.ltr,
   .katex {
     direction: ltr;
+    .katex-html {
+      .accent {
+        background-color: unset !important;
+        border-color: unset !important;
+      }
+    }
   }
   strong>strong>s {
     text-decoration: underline;

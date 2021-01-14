@@ -5,6 +5,7 @@
                 app
                 right
                 width="316"
+                v-if="$route.name === 'onlineQuiz.alaaView' || $store.getters.user.has_admin_permission"
                 :style="{ backgroundColor: $route.name === 'onlineQuiz.alaaView' ? '#fff' : '#ffc107' }"
         >
             <div style="height: 150px;line-height: 150px;font-size: 4rem;color: rgb(255, 193, 7);display: flex;align-items: center;justify-content: center;">
@@ -41,8 +42,7 @@
                                             elevation="0"
                                     >
                                         <v-icon class="mr-2" :size="30" color="#666">mdi-account-circle</v-icon>
-                                        سید مصطفی
-                                        کاظمی
+                                        {{ $store.getters.user.first_name + ' ' + $store.getters.user.last_name }}
                                     </v-btn>
                                 </template>
                                 <v-card
@@ -50,66 +50,17 @@
                                         class="mx-auto"
                                         rounded="b-xl r-xl"
                                 >
-                                    <v-img
-                                            style="background-color: #e8e8e8;"
-                                            src="/img/account-circle.svg"
-                                            width="300px"
-                                            height="300px"
-                                            dark
-                                    >
-                                        <v-row class="fill-height">
-                                            <v-card-title v-if="false">
-                                                <v-btn
-                                                        dark
-                                                        icon
-                                                        :to="{ name: 'dashboard'}"
-                                                >
-                                                    <v-icon>mdi-chevron-left</v-icon>
-                                                </v-btn>
-
-                                                <v-spacer></v-spacer>
-
-                                                <v-btn
-                                                        dark
-                                                        icon
-                                                        class="mr-4"
-                                                >
-                                                    <v-icon>mdi-pencil</v-icon>
-                                                </v-btn>
-
-                                                <v-btn
-                                                        dark
-                                                        icon
-                                                >
-                                                    <v-icon>mdi-dots-vertical</v-icon>
-                                                </v-btn>
-                                            </v-card-title>
-
-                                            <v-spacer></v-spacer>
-
-                                            <v-card-title v-if="false" class="white--text pl-12 pt-12">
-                                                <div class="display-1 pl-12 pt-12">
-                                                    Ali Conners
-                                                </div>
-                                            </v-card-title>
-                                        </v-row>
-                                    </v-img>
-                                    <v-btn
-                                            style="width: 100%;background: #5cbf60;color: white;letter-spacing: inherit;"
-                                            large
-                                            tile
-                                            elevation="0"
-                                    >
-                                        ثبت و پایان آزمون
-                                    </v-btn>
+                                    <online-quiz v-if="$route.name === 'onlineQuiz.alaaView'"/>
+                                    <panel v-else/>
                                 </v-card>
                             </v-menu>
                         </div>
                         <div>
-                            <v-btn v-if="$route.name === 'onlineQuiz.alaaView'" icon @click="changeView('konkoor')">
+                            <v-btn v-if="$route.name === 'onlineQuiz.alaaView'" class="switch-view-button" icon @click="changeView('konkoor')">
                                 <v-icon>mdi-dots-grid</v-icon>
                             </v-btn>
                             <v-app-bar-nav-icon
+                                    v-if="$route.name !== 'onlineQuiz.konkoorView'"
                                     @click.stop="toggleDrawer"
                                     :color="(isQuizPage) ? '#fcaf25' : '#666'"
                             />
@@ -131,6 +82,8 @@
     import { mixinQuiz, mixinDrawer, mixinWindowSize } from '@/mixin/Mixins'
     import '@/assets/scss/font.scss'
     import '@mdi/font/css/materialdesignicons.css';
+    import OnlineQuiz from "@/components/topMenu/OnlineQuiz";
+    import Panel from "@/components/topMenu/Panel";
 
     export default {
         name: 'App',
@@ -146,6 +99,8 @@
             }
         },
         components: {
+            Panel,
+            OnlineQuiz,
             Menu,
             MapOfQuestions
         },
@@ -175,6 +130,10 @@
         border-bottom-left-radius: 24px !important;
         border-bottom-right-radius: 24px !important;
     }
+    /*ToDo: not suport IE*/
+    .v-navigation-drawer {
+        filter: drop-shadow(-3px 0px 10px rgba(0, 0, 0, 0.102));
+    }
     .v-navigation-drawer .v-navigation-drawer__content .theme--light.v-btn {
         color: #666;
     }
@@ -184,5 +143,18 @@
 
     .v-main {
         background: #f4f4f4;
+    }
+
+    @media only screen and (max-width: 960px) {
+        .switch-view-button {
+            display: none;
+        }
+    }
+
+    strong em s {
+        margin-left: 50px;
+        font-weight: normal;
+        text-decoration: none;
+        font-style: normal;
     }
 </style>
