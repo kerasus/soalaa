@@ -39,22 +39,22 @@
                         ></v-textarea>
                     </v-col>
                     <v-col :md="1">
-                        <v-btn outlined icon @click="underlineStatement">
+                        <v-btn outlined icon @click="addString(currentQuestion, 'statement', '**__~~آندرلاین~~__**')">
                             <v-icon>mdi-format-underline</v-icon>
                         </v-btn>
-                        <v-btn outlined icon @click="boldStatement">
+                        <v-btn outlined icon @click="addString(currentQuestion, 'statement', '**بولد**')">
                             <v-icon>mdi-format-bold</v-icon>
                         </v-btn>
-                        <v-btn outlined icon @click="spaceStatement">
+                        <v-btn outlined icon @click="addString(currentQuestion, 'statement', whiteSpace)">
                             <v-icon>mdi-keyboard-space</v-icon>
                         </v-btn>
-                        <v-btn outlined icon @click="hideForKonkoor">
+                        <v-btn outlined icon @click="addString(currentQuestion, 'statement', '__***این متن در نمای کنکور قابل مشاهده نیست***__')">
                             <v-icon>mdi-eye-off</v-icon>
                         </v-btn>
-                        <v-btn outlined icon @click="addImageStatement">
+                        <v-btn outlined icon @click="addString(currentQuestion, 'statement', '![](' + url + ')')">
                             <v-icon>mdi-image</v-icon>
                         </v-btn>
-                        <v-btn outlined icon @click="addMatrixStatement">
+                        <v-btn outlined icon @click="addString(currentQuestion, 'statement', renderMatrixKatex())">
                             <v-icon>mdi-matrix</v-icon>
                         </v-btn>
                     </v-col>
@@ -80,19 +80,19 @@
                     <v-col :md="2">
                         <!--                <v-checkbox @click="changeTrueChoice(index - 1)" v-model="choicesMarkdownText[index - 1].true" />-->
                         <v-radio :value="index - 1" />
-                        <v-btn outlined icon @click="underlineChoice(currentQuestion.choices.list[index - 1])">
+                        <v-btn outlined icon @click="addString(currentQuestion.choices.list[index - 1], 'title', '**__~~آندرلاین~~__**')">
                             <v-icon>mdi-format-underline</v-icon>
                         </v-btn>
-                        <v-btn outlined icon @click="boldChoice(currentQuestion.choices.list[index - 1])">
+                        <v-btn outlined icon @click="addString(currentQuestion.choices.list[index - 1], 'title', '**بولد**')">
                             <v-icon>mdi-format-bold</v-icon>
                         </v-btn>
-                        <v-btn outlined icon @click="spaceChoice(currentQuestion.choices.list[index - 1])">
+                        <v-btn outlined icon @click="addString(currentQuestion.choices.list[index - 1], 'title', whiteSpace)">
                             <v-icon>mdi-keyboard-space</v-icon>
                         </v-btn>
-                        <v-btn outlined icon @click="addImageChoice(currentQuestion.choices.list[index - 1])">
+                        <v-btn outlined icon @click="addString(currentQuestion.choices.list[index - 1], 'title', '![](' + url + ')')">
                             <v-icon>mdi-image</v-icon>
                         </v-btn>
-                        <v-btn outlined icon @click="addMatrixChoice(currentQuestion.choices.list[index - 1])">
+                        <v-btn outlined icon @click="addString(currentQuestion.choices.list[index - 1], 'title', renderMatrixKatex())">
                             <v-icon>mdi-matrix</v-icon>
                         </v-btn>
                     </v-col>
@@ -166,6 +166,7 @@
         name: 'CreateOrEdit',
         data: () => {
             return {
+                whiteSpace: '                   ',
                 test: [true, false, false, false],
                 questMarkdownText: '# Math Rulez! \n  $x=\\frac{-b\\pm\\sqrt[]{b^2-4ac}}{2a}$',
                 choicesMarkdownText: ['', '', '', ''],
@@ -237,21 +238,6 @@
                 this.matrixTempWidth = this.matrixWidth
                 this.matrixTempHeight = this.matrixHeight
             },
-            addMatrixStatement () {
-                if (!this.currentQuestion.statement) {
-                    this.currentQuestion.statement = ''
-                }
-                let matrixKatex = this.renderMatrixKatex()
-                this.currentQuestion.statement += matrixKatex
-                this.updateRendered()
-            },
-            addMatrixChoice (choice) {
-                if (!choice.title) {
-                    choice.title = ''
-                }
-                choice.title += this.renderMatrixKatex()
-                this.updateRendered()
-            },
             renderMatrixKatex () {
                 let matrixKatex = ''
                 matrixKatex += '$$\\begin{bmatrix}'
@@ -271,71 +257,17 @@
                 // this.matrixTempWidth = 1
                 return matrixKatex
             },
-            addImageChoice (choice) {
-                if (!choice.title) {
-                    choice.title = ''
-                }
-                this.currentQuestion.statement += '![](' + this.url + ')'
-                this.updateRendered()
-            },
-            addImageStatement () {
-                if (!this.currentQuestion.statement) {
-                    this.currentQuestion.statement = ''
-                }
-                this.currentQuestion.statement += '![](' + this.url + ')'
-                this.updateRendered()
-            },
             replaceNimFasele () {
                 if (!this.currentQuestion.statement) {
                     this.currentQuestion.statement = ''
                 }
                 this.currentQuestion.statement = this.currentQuestion.statement.replace('¬', '‌')
             },
-            hideForKonkoor () {
-                if (!this.currentQuestion.statement) {
-                    this.currentQuestion.statement = ''
+            addString (elem, key, string) {
+                if (!elem[key]) {
+                    elem[key] = ''
                 }
-                this.currentQuestion.statement += '__***این متن در نمای کنکور قابل مشاهده نیست***__'
-            },
-            addUnderline (statement) {
-                if (!statement) {
-                    statement = ''
-                }
-                statement += '**__~~آندرلاین~~__**'
-                this.updateRendered()
-            },
-            underlineChoice (choice) {
-                this.addUnderline(choice.title)
-            },
-            underlineStatement () {
-                this.addUnderline(this.currentQuestion.statement)
-            },
-            boldChoice (choice) {
-                if (!choice.title) {
-                    choice.title = ''
-                }
-                choice.title += '**بولد**'
-                this.updateRendered()
-            },
-            boldStatement () {
-                if (!this.currentQuestion.statement) {
-                    this.currentQuestion.statement = ''
-                }
-                this.currentQuestion.statement += '**بولد**'
-                this.updateRendered()
-            },
-            spaceChoice (choice) {
-                if (!choice.title) {
-                    choice.title = ''
-                }
-                choice.title += '                   '
-                this.updateRendered()
-            },
-            spaceStatement () {
-                if (!this.currentQuestion.statement) {
-                    this.currentQuestion.statement = ''
-                }
-                this.currentQuestion.statement += '                   '
+                Vue.set(elem, key, elem[key] + string)
                 this.updateRendered()
             },
             getExamById (quizId) {
@@ -348,18 +280,12 @@
                 this.replaceNimFasele()
                 this.questRendered = md.render(this.currentQuestion.statement.toString());
                 for (let i = 0; i < 4; i++) {
-                    const title = this.currentQuestion.choices.list[i].title
+                    const title = (typeof this.currentQuestion.choices.list[i] !== 'undefined') ? this.currentQuestion.choices.list[i].title : null
                     if (title) {
                         this.choiceRendered[i] = md.render(title.toString())
                     }
                 }
                 this.replaceNimFasele()
-            },
-            ping() {
-
-            },
-            displayKeystroke() {
-
             },
             selectAllExams () {
                 if (this.selectedQuizzes.length !== this.quizList.list.length) {
@@ -434,6 +360,9 @@
             this.editMode = this.$route.name === 'quest.edit'
             new QuizList().fetch().then((response) => {
                 this.quizList = new QuizList(response.data.data)
+                if (!this.editMode) {
+                    this.selectedQuizzes.push(this.quizList.list[0].id)
+                }
             }).catch((error) => {
                 Assistant.handleAxiosError(this.$toasted, error)
             })
@@ -453,7 +382,6 @@
                 })
             } else {
                 this.currentQuestion = new Question(this.questionData)
-                this.selectedQuizzes.push(this.quizList.list[0].id)
             }
         },
         watch: {
