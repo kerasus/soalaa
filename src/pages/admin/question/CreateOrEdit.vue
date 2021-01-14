@@ -39,7 +39,7 @@
                         ></v-textarea>
                     </v-col>
                     <v-col :md="1">
-                        <markdown-btn :elem="currentQuestion" key="statement" :rendered-matrix-katex="renderedMatrixKatex" :url="url" @add="markdownBtnAddString" />
+                        <markdown-btn :elem="currentQuestion" :elem-key="'statement'" :rendered-matrix-katex="renderedMatrixKatex" :url="url" @add="markdownBtnAddString" />
                     </v-col>
                     <v-col :md="5">
                         <div class="renderedPanel" v-html="questRendered">
@@ -62,7 +62,7 @@
                     </v-col>
                     <v-col :md="2">
                         <v-radio :value="index - 1" />
-                        <markdown-btn :elem="currentQuestion.choices.list[index - 1]" key="statement" :rendered-matrix-katex="renderedMatrixKatex" :url="url" @add="markdownBtnAddString" />
+                        <markdown-btn :elem="currentQuestion.choices.list[index - 1]" :elem-key="'title'" :rendered-matrix-katex="renderedMatrixKatex" :url="url" @add="markdownBtnAddString" />
                     </v-col>
                     <v-col :md="5">
                         <div class="renderedPanel" v-html="choiceRendered[index - 1]">
