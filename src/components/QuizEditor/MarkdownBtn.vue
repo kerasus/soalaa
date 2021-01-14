@@ -15,6 +15,21 @@
         <v-btn outlined icon @click="add(elem, elemKey, '![](' + url + ')')">
             <v-icon>mdi-image</v-icon>
         </v-btn>
+        <v-btn outlined icon @click="add(elem, elemKey, '$\\to$')">
+            <v-icon>mdi-arrow-right</v-icon>
+        </v-btn>
+        <v-btn outlined icon @click="add(elem, elemKey, '$\\gets$')">
+            <v-icon>mdi-arrow-left</v-icon>
+        </v-btn>
+        <v-btn outlined icon @click="add(elem, elemKey, '$\\leftrightharpoons$')">
+            <v-icon>mdi-swap-horizontal</v-icon>
+        </v-btn>
+        <v-btn outlined icon @click="add(elem, elemKey, '$\\begin{cases}\n'+
+                                                        '   a &\\text{if } b \\\\\n'+
+                                                        '   c &\\text{if } d\n'+
+                                                        '\\end{cases}$')">
+            <v-icon>mdi-tournament</v-icon>
+        </v-btn>
         <v-btn outlined icon @click="add(elem, elemKey, renderedMatrixKatex)">
             <v-icon>mdi-matrix</v-icon>
         </v-btn>
