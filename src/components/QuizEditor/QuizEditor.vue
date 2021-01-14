@@ -95,7 +95,7 @@
                 </v-row>
                 <v-row>
                     <v-col>
-                        <BubbleSheet :info="{ type: 'pasokh-barg' }"/>
+                        <BubbleSheet :info="{ type: 'pasokh-nameh' }"/>
                     </v-col>
                 </v-row>
             </v-col>

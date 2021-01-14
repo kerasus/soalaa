@@ -89,12 +89,12 @@
     }
 
     .pasokh-nameh .choice-in-list.active {
-        border: solid 1px #00c753;
+        border: solid 1px #ff4243;
         background-color: #ff4243;
     }
 
     .pasokh-nameh .choice-in-list.active.answer {
-        border: none;
+        border: solid 1px #00c753;
         background-color: #00c753;
     }
 
