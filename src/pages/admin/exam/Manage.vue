@@ -15,7 +15,7 @@
     import {Exam} from "@/models/exam";
 
     export default {
-        name: 'exams',
+        name: 'Manage',
         data: () => ({
             exam: new Exam()
         }),
@@ -31,3 +31,7 @@
         }
     }
 </script>
+
+<style scoped>
+
+</style>

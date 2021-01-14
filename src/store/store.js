@@ -13,7 +13,7 @@ const store = new Vuex.Store({
     plugins: [
         createPersistedState({
             storage: window.localStorage,
-            paths: ['userQuizData', 'access_token']
+            paths: ['userQuizData', 'access_token', 'user']
         }),
         createMutationsSharer({
             predicate: [
@@ -45,6 +45,10 @@ const store = new Vuex.Store({
         },
         updateWindowSize (state, newInfo) {
             state.windowSize = newInfo
+        },
+        updateAppBarAndDrawer(state, newInfo) {
+            this.commit('updateAppbar', newInfo)
+            this.commit('updateDrawer', newInfo)
         },
         updateDrawer(state, newInfo) {
             state.drawer = newInfo
