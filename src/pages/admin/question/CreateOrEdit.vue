@@ -95,7 +95,11 @@
                         <v-btn outlined icon @click="addString(currentQuestion.choices.list[index - 1], 'title', renderMatrixKatex())">
                             <v-icon>mdi-matrix</v-icon>
                         </v-btn>
+<!--                        <v-btn outlined icon @click="addString(currentQuestion.choices.list[index - 1], 'title', '$\\equiv$')">-->
+<!--                            <v-icon>mdi-view-sequential</v-icon>-->
+<!--                        </v-btn>-->
                     </v-col>
+
                     <v-col :md="5">
                         <div class="renderedPanel" v-html="choiceRendered[index - 1]">
                         </div>
@@ -117,7 +121,7 @@
                         <v-text-field label="ارتفاع" outlined dense v-model="matrixHeight" type="number" @input="initMatrix"/>
                     </v-col>
                     <v-col :md="4">
-                        <v-select outlined :items="matrixMenu" item-text="title" item-value="value" v-model="determinan" />
+                        <v-select outlined :items="matrixMenu" item-text="title" item-value="value" v-model="determinan" dense />
                     </v-col>
                 </v-row>
                 <div dir="ltr">

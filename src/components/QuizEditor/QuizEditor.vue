@@ -263,6 +263,10 @@
 </style>
 
 <style>
+    .base.textstyle.uncramped {
+        display: flex;
+        flex-wrap: wrap;
+    }
 
     .v-application p {
         margin-bottom: 4px;
