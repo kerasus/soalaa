@@ -49,60 +49,9 @@
                                         max-width="375"
                                         class="mx-auto"
                                         rounded="b-xl r-xl"
-                                        v-if="$route.name === 'onlineQuiz.alaaView'"
                                 >
-                                    <v-img
-                                            style="background-color: #e8e8e8;"
-                                            src="/img/account-circle.svg"
-                                            width="300px"
-                                            height="300px"
-                                            dark
-                                    >
-                                        <v-row class="fill-height">
-                                            <v-card-title v-if="false">
-                                                <v-btn
-                                                        dark
-                                                        icon
-                                                        :to="{ name: 'dashboard'}"
-                                                >
-                                                    <v-icon>mdi-chevron-left</v-icon>
-                                                </v-btn>
-
-                                                <v-spacer></v-spacer>
-
-                                                <v-btn
-                                                        dark
-                                                        icon
-                                                        class="mr-4"
-                                                >
-                                                    <v-icon>mdi-pencil</v-icon>
-                                                </v-btn>
-
-                                                <v-btn
-                                                        dark
-                                                        icon
-                                                >
-                                                    <v-icon>mdi-dots-vertical</v-icon>
-                                                </v-btn>
-                                            </v-card-title>
-
-                                            <v-spacer></v-spacer>
-
-                                            <v-card-title v-if="false" class="white--text pl-12 pt-12">
-                                                <div class="display-1 pl-12 pt-12">
-                                                    Ali Conners
-                                                </div>
-                                            </v-card-title>
-                                        </v-row>
-                                    </v-img>
-                                    <v-btn
-                                            style="width: 100%;background: #5cbf60;color: white;letter-spacing: inherit;"
-                                            large
-                                            tile
-                                            elevation="0"
-                                    >
-                                        ثبت و پایان آزمون
-                                    </v-btn>
+                                    <online-quiz v-if="$route.name === 'onlineQuiz.alaaView'"/>
+                                    <panel v-else/>
                                 </v-card>
                             </v-menu>
                         </div>
@@ -133,6 +82,8 @@
     import { mixinQuiz, mixinDrawer, mixinWindowSize } from '@/mixin/Mixins'
     import '@/assets/scss/font.scss'
     import '@mdi/font/css/materialdesignicons.css';
+    import OnlineQuiz from "@/components/topMenu/OnlineQuiz";
+    import Panel from "@/components/topMenu/Panel";
 
     export default {
         name: 'App',
@@ -148,6 +99,8 @@
             }
         },
         components: {
+            Panel,
+            OnlineQuiz,
             Menu,
             MapOfQuestions
         },
