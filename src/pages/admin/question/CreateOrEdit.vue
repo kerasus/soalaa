@@ -116,16 +116,14 @@
                     <v-col :md="2">
                         <v-text-field label="ارتفاع" outlined dense v-model="matrixHeight" type="number" @input="initMatrix"/>
                     </v-col>
+                    <v-col :md="4">
+                        <v-select outlined :items="matrixMenu" item-text="title" item-value="value" v-model="determinan" />
+                    </v-col>
                 </v-row>
                 <div dir="ltr">
                     <v-row v-for="indexY in parseInt(matrixTempHeight)" :key="indexY">
                         <v-col v-for="indexX in parseInt(matrixTempWidth)" :key="indexX">
                             <v-text-field v-model="matrix[indexY - 1][indexX - 1]" outlined :label="'(' + indexX + ', ' + indexX + ')'" dense></v-text-field>
-                        </v-col>
-                    </v-row>
-                    <v-row>
-                        <v-col>
-                            <v-btn @click="initMatrix">ایجاد ماتریکس</v-btn>
                         </v-col>
                     </v-row>
                 </div>
@@ -220,7 +218,9 @@
                 matrixHeight: 1,
                 matrixTempWidth: 1,
                 matrixTempHeight: 1,
-                matrix: [[]]
+                matrix: [[]],
+                determinan: false,
+                matrixMenu: [{ title: 'دترمینان', value: true}, { title: 'ماتریس', value: false}]
             }
         },
         methods: {
@@ -253,8 +253,9 @@
                 this.updateRendered()
             },
             renderMatrixKatex () {
+                let matrixType = this.determinan ? 'vmatrix' : 'bmatrix'
                 let matrixKatex = ''
-                matrixKatex += '$$\\begin{bmatrix}'
+                matrixKatex += '$\\begin{' + matrixType + '}'
                 for (let i = 0; i < this.matrixTempHeight; i++) {
                     for (let j = 0; j < this.matrixTempWidth; j++) {
                         matrixKatex += this.matrix[i][j]
@@ -266,7 +267,7 @@
                         matrixKatex += ' \\\\ '
                     }
                 }
-                matrixKatex += '\\end{bmatrix}$$'
+                matrixKatex += '\\end{' + matrixType + '}$'
                 // this.matrixTempHeight = 1
                 // this.matrixTempWidth = 1
                 return matrixKatex

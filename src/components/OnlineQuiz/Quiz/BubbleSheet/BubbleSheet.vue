@@ -12,9 +12,13 @@
                 <div
                         v-for="choice in question.choices.list"
                         :key="choice.id"
-                        :class="{ 'choice-in-list': true, active: choice.active }"
+                        :class="{ 'choice-in-list': true, active: choice.active, answer: choice.answer }"
                         @click="clickChoice(question.id, choice.id)"
-                />
+                >
+                    <v-icon v-if="info.type === 'pasokh-nameh' && choice.answer" size="12" :color="choice.answer === choice.active ? '#fff' : '#00c753'">
+                        mdi-check
+                    </v-icon>
+                </div>
             </div>
         </div>
     </div>
@@ -76,6 +80,24 @@
 </script>
 
 <style scoped>
+    .pasokh-nameh .choice-in-list {
+        position: relative;
+    }
+
+    .pasokh-nameh .choice-in-list.answer {
+        border: solid 1px #00c753;
+    }
+
+    .pasokh-nameh .choice-in-list.active {
+        border: solid 1px #00c753;
+        background-color: #ff4243;
+    }
+
+    .pasokh-nameh .choice-in-list.active.answer {
+        border: none;
+        background-color: #00c753;
+    }
+
     .question-group {
         background: #fff;
         border-radius: 10px;
@@ -143,5 +165,12 @@
         flex-wrap: wrap;
         align-items: center;
         margin-bottom: 80px;
+    }
+</style>
+
+<style>
+    .pasokh-nameh .v-icon.mdi-check {
+        top: -2px;
+        left: 2px;
     }
 </style>

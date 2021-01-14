@@ -113,7 +113,7 @@
     import { DynamicScroller, DynamicScrollerItem } from 'vue-virtual-scroller'
     import Item from './Question'
     import { mixinQuiz, mixinWindowSize } from '@/mixin/Mixins'
-    import BubbleSheet from "./BubbleSheet";
+    import BubbleSheet from "@/components/OnlineQuiz/Quiz/BubbleSheet/BubbleSheet";
     import {Quiz, QuizList} from "@/models/Quiz";
     import {QuestionList} from "@/models/Question";
     import Assistant from "@/plugins/assistant";

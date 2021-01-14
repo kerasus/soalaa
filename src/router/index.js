@@ -110,6 +110,12 @@ const router = new VueRouter({
             meta: {middleware: auth}
         },
         {
+            path: '/debug',
+            name: 'debug',
+            component: () => lazyLoadView(import('@/components/debug')),
+            meta: {middleware: auth}
+        },
+        {
             path: '*',
             name: 'NotFound',
             component: () => lazyLoadView(import('@/pages/user/exam/List')),
