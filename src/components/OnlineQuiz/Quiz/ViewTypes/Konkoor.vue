@@ -348,6 +348,11 @@ export default {
 </style>
 
 <style>
+    .base.textstyle.uncramped {
+        display: flex;
+        flex-wrap: wrap;
+    }
+
     .konkoor-view strong em strong {
         display: none;
         font-weight: normal;

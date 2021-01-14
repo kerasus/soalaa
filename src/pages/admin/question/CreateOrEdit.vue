@@ -63,7 +63,9 @@
                     <v-col :md="2">
                         <v-radio :value="index - 1" />
                         <markdown-btn :elem="currentQuestion.choices.list[index - 1]" :elem-key="'title'" :rendered-matrix-katex="renderedMatrixKatex" :url="url" @add="markdownBtnAddString" />
+
                     </v-col>
+
                     <v-col :md="5">
                         <div class="renderedPanel" v-html="choiceRendered[index - 1]">
                         </div>
@@ -85,7 +87,7 @@
                         <v-text-field label="ارتفاع" outlined dense v-model="matrixHeight" type="number" @input="initMatrix"/>
                     </v-col>
                     <v-col :md="4">
-                        <v-select outlined :items="matrixMenu" item-text="title" item-value="value" v-model="determinan" />
+                        <v-select outlined :items="matrixMenu" item-text="title" item-value="value" v-model="determinan" dense />
                     </v-col>
                 </v-row>
                 <div dir="ltr">
