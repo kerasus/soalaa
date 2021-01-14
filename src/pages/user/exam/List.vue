@@ -67,7 +67,7 @@
                                             x-small
                                             color="#ffc107"
                                     >
-                                        شرکت در آزمون
+                                        مشاهده نتایج
                                     </v-btn>
                                     <v-btn
                                             text
@@ -110,7 +110,9 @@
             getExams () {
                 this.examList.loading = true
                 this.examList.fetch()
+                // this.examList.fetch(null, '/3a/api/user')
                     .then((response) => {
+                        console.log('response', response.data)
                         this.examList.loading = false
                         this.examList = new ExamList(response.data.data, {meta: response.data.meta, links: response.data.links})
                     })

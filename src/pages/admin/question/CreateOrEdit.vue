@@ -13,7 +13,16 @@
                         <v-select label="درس" :items="subCategoriesList.list" item-text="display_title" item-value="id" v-model="currentQuestion.sub_category_id" dense :disabled="editMode" outlined />
                     </v-col>
                     <v-col :md="2">
-                        <v-text-field :label="'ترتیب در ' + getQuizById(selectedQuizzes[index - 1]).title" v-model="getExamById(selectedQuizzes[index - 1]).order" type="number" :disabled="editMode" outlined  v-for="index in selectedQuizzes.length" :key="index" />
+                        <div v-for="index in selectedQuizzes.length" :key="index">
+                            <v-text-field
+                                    v-if="typeof getQuizById(selectedQuizzes[index - 1]) !== 'undefined' && typeof getExamById(selectedQuizzes[index - 1]) !== 'undefined'"
+                                    :label="'ترتیب در ' + getQuizById(selectedQuizzes[index - 1]).title"
+                                    v-model="getExamById(selectedQuizzes[index - 1]).order"
+                                    type="number"
+                                    :disabled="editMode"
+                                    outlined
+                            />
+                        </div>
                     </v-col>
                     <v-col :md="3" @click="submitQuestion" type="submit">
                         <v-btn color="primary" block>ثبت سوال</v-btn>
@@ -27,7 +36,6 @@
                                     label="متن سوال"
                                     v-model="currentQuestion.statement"
                                     @input="updateRendered"
-                                    @change="replaceNimFasele"
                         ></v-textarea>
                     </v-col>
                     <v-col :md="1">
@@ -59,17 +67,18 @@
             <v-radio-group v-model="trueChoiceIndex">
                 <v-row v-for="index in 4" :key="index" :style="{ 'border-bottom': '1px solid #ececec' }">
                     <v-col class="pl-5" :md="5">
-                        <v-textarea dir="rtl"
-                                      clearable
-                                      clear-icon="mdi-close-circle"
-                                      auto-grow
-                                      :label="choiceNumber[index -1]"
-                                      v-model="currentQuestion.choices.list[index - 1].title"
-                                      @input="updateRendered"
+                        <v-textarea v-if="typeof currentQuestion.choices.list[index - 1] !== 'undefined'"
+                                    dir="rtl"
+                                    clearable
+                                    clear-icon="mdi-close-circle"
+                                    auto-grow
+                                    :label="choiceNumber[index -1]"
+                                    v-model="currentQuestion.choices.list[index - 1].title"
+                                    @input="updateRendered"
                         ></v-textarea>
                     </v-col>
                     <v-col :md="2">
-        <!--                <v-checkbox @click="changeTrueChoice(index - 1)" v-model="choicesMarkdownText[index - 1].true" />-->
+                        <!--                <v-checkbox @click="changeTrueChoice(index - 1)" v-model="choicesMarkdownText[index - 1].true" />-->
                         <v-radio :value="index - 1" />
                         <v-btn outlined icon @click="underlineChoice(currentQuestion.choices.list[index - 1])">
                             <v-icon>mdi-format-underline</v-icon>
@@ -102,10 +111,10 @@
             <v-container :fluid="true">
                 <v-row>
                     <v-col :md="2">
-                        <v-text-field label="عرض" outlined dense v-model="matrixWidth" type="number"/>
+                        <v-text-field label="عرض" outlined dense v-model="matrixWidth" type="number" @input="initMatrix"/>
                     </v-col>
                     <v-col :md="2">
-                        <v-text-field label="ارتفاع" outlined dense v-model="matrixHeight" type="number"/>
+                        <v-text-field label="ارتفاع" outlined dense v-model="matrixHeight" type="number" @input="initMatrix"/>
                     </v-col>
                 </v-row>
                 <div dir="ltr">
@@ -123,43 +132,19 @@
             </v-container>
         </v-sheet>
 
-<!--        <div dir="rtl" v-katex:auto>-->
-<!--                        این یک فرمول ریاضی هست-->
-<!--            <span dir="ltr">\(x=\frac{-b\pm\sqrt[]{b^2-4aca}}{2a}\)</span>-->
-<!--                        ببینید جوابش چی میشه؟-->
-<!--        </div>-->
-<!--        <hr>-->
-<!--        <div v-katex:auto>-->
-<!--            \(x=\frac{-b\pm\sqrt[]{b^2-4aca}}{2a}\)-->
-<!--        </div>-->
+        <!--        <div dir="rtl" v-katex:auto>-->
+        <!--                        این یک فرمول ریاضی هست-->
+        <!--            <span dir="ltr">\(x=\frac{-b\pm\sqrt[]{b^2-4aca}}{2a}\)</span>-->
+        <!--                        ببینید جوابش چی میشه؟-->
+        <!--        </div>-->
+        <!--        <hr>-->
+        <!--        <div v-katex:auto>-->
+        <!--            \(x=\frac{-b\pm\sqrt[]{b^2-4aca}}{2a}\)-->
+        <!--        </div>-->
 
     </v-container>
 </template>
-<style>
-    .renderedPanel {
-        direction: rtl;
-    }
-    .renderedPanel .katex {
-        direction: ltr;
-    }
-    .renderedPanel strong>strong>s {
-        text-decoration: underline;
-        text-underline-position: under;
-    }
 
-    .ML__virtual-keyboard-toggle {
-        color: gray !important;
-    }
-
-    #mathfield, .latexData {
-        font-size: 32px;
-        margin: 3em;
-        padding: 8px;
-        border-radius: 8px;
-        border: 1px solid rgba(0, 0, 0, .3);
-        box-shadow: 0 0 8px rgba(0, 0, 0, .2)
-    }
-</style>
 <script>
     import '@/assets/scss/markdownKatex.scss'
     import MathLive from 'mathlive';
@@ -170,34 +155,15 @@
     import Toasted from 'vue-toasted';
     import Assistant from "@/plugins/assistant";
     import {QuestSubcategoryList} from "@/models/QuestSubcategory";
+    import Vue from 'vue'
+    Vue.use(Toasted)
+
     var md = require('markdown-it')(),
         mk = require('markdown-it-katex');
     md.use(mk);
 
-
-    // import VueKatex from 'vue-katex';
-    // import 'katex/dist/katex.min.css';
-    // Vue.use(VueKatex, {
-    //     globalOptions: {
-    //         //... Define globally applied KaTeX options here
-    //     }
-    // });
-
-    // import Vue from 'vue'
-    // import MathLive from "https://unpkg.com/mathlive/dist/mathlive.min.mjs";
-    // import Mathfield from "https://unpkg.com/mathlive/dist/vue-mathlive.mjs";
-    //
-    // Vue.use(Mathfield, MathLive);
-
-    // import Vue from 'vue'
-    // import MathLive from 'mathlive/dist/mathlive.js'
-    // import Mathfield from 'mathlive/dist/vue-mathlive.mjs'
-    //
-    // Vue.use(Mathfield, MathLive);
-    import Vue from 'vue'
-    Vue.use(Toasted)
     export default {
-        name: "QuestEditor",
+        name: 'CreateOrEdit',
         data: () => {
             return {
                 test: [true, false, false, false],
@@ -277,12 +243,14 @@
                 }
                 let matrixKatex = this.renderMatrixKatex()
                 this.currentQuestion.statement += matrixKatex
+                this.updateRendered()
             },
             addMatrixChoice (choice) {
                 if (!choice.title) {
                     choice.title = ''
                 }
                 choice.title += this.renderMatrixKatex()
+                this.updateRendered()
             },
             renderMatrixKatex () {
                 let matrixKatex = ''
@@ -308,12 +276,14 @@
                     choice.title = ''
                 }
                 this.currentQuestion.statement += '![](' + this.url + ')'
+                this.updateRendered()
             },
             addImageStatement () {
                 if (!this.currentQuestion.statement) {
                     this.currentQuestion.statement = ''
                 }
                 this.currentQuestion.statement += '![](' + this.url + ')'
+                this.updateRendered()
             },
             replaceNimFasele () {
                 if (!this.currentQuestion.statement) {
@@ -327,41 +297,46 @@
                 }
                 this.currentQuestion.statement += '__***این متن در نمای کنکور قابل مشاهده نیست***__'
             },
-            underlineChoice (choice) {
-                if (!choice.title) {
-                    choice.title = ''
+            addUnderline (statement) {
+                if (!statement) {
+                    statement = ''
                 }
-                choice.title += '**__~~آندرلاین~~__**'
+                statement += '**__~~آندرلاین~~__**'
+                this.updateRendered()
+            },
+            underlineChoice (choice) {
+                this.addUnderline(choice.title)
             },
             underlineStatement () {
-                if (!this.currentQuestion.statement) {
-                    this.currentQuestion.statement = ''
-                }
-                this.currentQuestion.statement += '**__~~آندرلاین~~__**'
+                this.addUnderline(this.currentQuestion.statement)
             },
             boldChoice (choice) {
                 if (!choice.title) {
                     choice.title = ''
                 }
                 choice.title += '**بولد**'
+                this.updateRendered()
             },
             boldStatement () {
                 if (!this.currentQuestion.statement) {
                     this.currentQuestion.statement = ''
                 }
                 this.currentQuestion.statement += '**بولد**'
+                this.updateRendered()
             },
             spaceChoice (choice) {
                 if (!choice.title) {
                     choice.title = ''
                 }
                 choice.title += '                   '
+                this.updateRendered()
             },
             spaceStatement () {
                 if (!this.currentQuestion.statement) {
                     this.currentQuestion.statement = ''
                 }
                 this.currentQuestion.statement += '                   '
+                this.updateRendered()
             },
             getExamById (quizId) {
                 return this.exams.find((quiz) => quiz.id === quizId )
@@ -378,6 +353,7 @@
                         this.choiceRendered[i] = md.render(title.toString())
                     }
                 }
+                this.replaceNimFasele()
             },
             ping() {
 
@@ -435,26 +411,6 @@
             //     }
             // }
         },
-        // computed : {
-        //     subCategories () {
-        //         const sub_categories = []
-        //         for (let i = 0; i < this.categories.list.length; i++) {
-        //             for (let j = 0; j < this.categories.list[i].sub_categories.list.length; j++) {
-        //                 sub_categories.push({ category: this.categories.list[i].title, sub_category: this.this.categories.list[i].sub_categories.list[j] })
-        //             }
-        //         }
-        //         return sub_categories
-        //     }
-        // },
-        // computed: {
-        //     matrixValue () {
-        //         for (let i = 0; i < this.matrixHeight; i++) {
-        //             for (let j = 0; j < this.matrixWidth; j++) {
-        //                 this.matrix
-        //             }
-        //         }
-        //     }
-        // },
         mounted() {
 
             // this.rendered = md.render();
@@ -491,10 +447,10 @@
                     .then((response) => {
                         this.currentQuestion = new Question(response.data.data)
                         this.trueChoiceIndex = this.currentQuestion.choices.list.findIndex((item) => item.answer )
-                        console.log(this.trueChoiceIndex)
+                        this.updateRendered()
                     }).catch((error) => {
-                        Assistant.handleAxiosError(this.$toasted, error)
-                    })
+                    Assistant.handleAxiosError(this.$toasted, error)
+                })
             } else {
                 this.currentQuestion = new Question(this.questionData)
                 this.selectedQuizzes.push(this.quizList.list[0].id)
@@ -508,6 +464,32 @@
         }
     }
 </script>
+
+<style>
+    .renderedPanel {
+        direction: rtl;
+    }
+    .renderedPanel .katex {
+        direction: ltr;
+    }
+    .renderedPanel strong>strong>s {
+        text-decoration: underline;
+        text-underline-position: under;
+    }
+
+    .ML__virtual-keyboard-toggle {
+        color: gray !important;
+    }
+
+    #mathfield, .latexData {
+        font-size: 32px;
+        margin: 3em;
+        padding: 8px;
+        border-radius: 8px;
+        border: 1px solid rgba(0, 0, 0, .3);
+        box-shadow: 0 0 8px rgba(0, 0, 0, .2)
+    }
+</style>
 
 <style scoped>
 
