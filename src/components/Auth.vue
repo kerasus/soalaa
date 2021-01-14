@@ -87,22 +87,6 @@
                 let accessToken = window.localStorage.getItem('access_token')
                 return !!(accessToken)
             },
-            getGandDataOfUserForPermission () {
-                const token = window.localStorage.getItem('access_token')
-                if (token) {
-                    axios.defaults.headers.common['Authorization'] = 'Bearer ' + token
-                }
-                let that = this
-                this.user.show(null, '/alaa/api/v2/getUserFor3a')
-                    .then( (response) => {
-                        that.user = new User(response.data.data)
-                        that.$store.commit('updateUser', that.user)
-                        that.redirectTo(token)
-                    })
-                    .catch( (error) => {
-                        console.log('error', error)
-                    })
-            },
             getUserData () {
                 const token = window.localStorage.getItem('access_token')
                 if (token) {
@@ -138,7 +122,7 @@
                     that.user = new User(response.data.data.user)
                     that.$store.commit('updateUser', that.user)
                     const access_token = response.data.data.access_token
-                    that.getGandDataOfUserForPermission()
+                    that.getUserData()
                     that.redirectTo(access_token)
                 })
                 .catch( (error) => {
