@@ -14,6 +14,7 @@ class Choice extends Model {
                 default: false
             },
             { key: 'order' },
+            { key: 'answered_at' },
             { key: 'answer' }
         ])
         if (typeof this.title === 'string') {

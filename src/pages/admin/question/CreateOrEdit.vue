@@ -120,12 +120,10 @@
     import 'mathlive/dist/mathlive-static.css'
     import { Question } from '@/models/Question'
     import {QuizList} from "@/models/Quiz";
-    import Toasted from 'vue-toasted';
     import Assistant from "@/plugins/assistant";
     import {QuestSubcategoryList} from "@/models/QuestSubcategory";
     import Vue from 'vue'
     import MarkdownBtn from "@/components/QuizEditor/MarkdownBtn";
-    Vue.use(Toasted)
 
     var md = require('markdown-it')(),
         mk = require('markdown-it-katex');

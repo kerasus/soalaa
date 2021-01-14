@@ -3,6 +3,7 @@ import { Model, Collection } from 'js-abstract-model'
 import { AnswerList } from './Answer'
 import { ChoiceList } from './Choice'
 import { CheckingTimeList } from "@/models/CheckingTime";
+import Time from "@/plugins/time";
 var md = require('markdown-it')(),
     mk = require('markdown-it-katex')
 md.use(mk);
@@ -86,13 +87,11 @@ class Question extends Model {
             this.rendered_statement = md.render(this.statement)
         }
     }
-
     getAnsweredChoice () {
         return this.choices.list.find((item) => {
             return (item.active === true)
         })
     }
-
     isAnswered () {
         let answeredChoice = this.getAnsweredChoice()
 
@@ -103,7 +102,6 @@ class Question extends Model {
             return false
         }
     }
-
     changeState (newState) {
         if (newState === 'cross') {
             this.uncheckChoices()
@@ -114,20 +112,19 @@ class Question extends Model {
         }
         Vue.set(this, 'state', newState)
     }
-
     bookmark () {
         this.bookmarked = !this.bookmarked
     }
-
     enterQuestion () {
         this.checking_times.addStart()
     }
     leaveQuestion () {
         this.checking_times.addEnd()
     }
-
     selectChoice (choiceId) {
+        const answeredAt = Time.now()
         this.choices.list.map((item)=> {
+            Vue.set(item, 'answered_at', answeredAt)
             if (this.state === 'cross') {
                 this.state = ''
             }

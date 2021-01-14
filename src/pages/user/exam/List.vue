@@ -2,7 +2,6 @@
     <v-container>
         <v-row>
             <v-col>
-
                 <v-progress-linear
                         color="#ffc107"
                         absolute
@@ -12,11 +11,9 @@
                         rounded
                         height="6"
                 ></v-progress-linear>
-
                 <v-alert v-if="examList.list.length === 0 && !examList.loading" type="info">
                     آزمونی وجود ندارد
                 </v-alert>
-
                 <v-row v-if="examList.list.length > 0 && !examList.loading">
                     <v-col>
                         <v-row>
@@ -64,21 +61,18 @@
                                 <v-col cols="2">
                                     <v-btn
                                             text
-                                            x-small
                                             color="#ffc107"
                                     >
                                         مشاهده نتایج
                                     </v-btn>
                                     <v-btn
                                             text
-                                            x-small
                                             color="#00b5e6"
                                     >
                                         شروع آزمون
                                     </v-btn>
                                     <v-btn
                                             text
-                                            x-small
                                             color="#00c753"
                                     >
                                         ثبت نام
@@ -88,7 +82,6 @@
                         </v-sheet>
                     </v-col>
                 </v-row>
-
             </v-col>
         </v-row>
     </v-container>

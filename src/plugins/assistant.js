@@ -11,15 +11,30 @@ let Assistant = function () {
     }
 
     function handleAxiosError($toasted, error) {
-        console.log('error.response.data-------', error.response.data)
-        for (const [key, value] of Object.entries(error.response.data)) {
-            $toasted.show(value, {
+        let messages = []
+        if (error.response.data.errors) {
+            for (const [key, value] of Object.entries(error.response.data.errors)) {
+                messages.push(value)
+                console.log(`${key}: ${value}`);
+            }
+        } else {
+            for (const [key, value] of Object.entries(error.response.data)) {
+                messages.push(value)
+                console.log(`${key}: ${value}`);
+            }
+        }
+
+        toastMessages($toasted, messages)
+    }
+
+    function toastMessages($toasted, messages) {
+        messages.forEach( (item) => {
+            $toasted.show(item, {
                 theme: "toasted-primary",
                 position: "top-right",
                 duration : 2000
             })
-            console.log(`${key}: ${value}`);
-        }
+        })
     }
 
     return {
