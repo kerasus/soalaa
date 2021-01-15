@@ -222,9 +222,12 @@ export default {
         this.scrollTo(this.currentQuestion.id)
     },
     created () {
-        console.log(this.$route.params.quizId)
+        console.log('created')
         this.quizData.show(this.$route.params.quizId).then((response) => {
+            console.log('requested')
             console.log(response)
+        }).catch((error) => {
+            console.log(error)
         })
         if (this.windowSize.x > 959) {
             this.changeAppBarAndDrawer(false)

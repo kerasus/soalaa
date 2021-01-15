@@ -282,22 +282,14 @@
                     this.currentQuestion.choices.list[this.trueChoiceIndex].answer = true
                     this.currentQuestion.update('/3a/api/question/' + this.currentQuestion.id )
                         .then(() => {
-                            console.log('باید کار کنه')
                             this.$notify({
                                 group: 'notifs',
-                                title: 'ویرایش با موفقیت انجام شد',
-                                // text: 'ویرایش با موفقیت انجام'
+                                title: 'توجه',
+                                text: 'ویرایش با موفقیت انجام شد',
+                                type: 'success'
                             })
-                            // this.$toasted.show('ویرایش با موفقیت انجام شد', {
-                            //     theme: "toasted-primary",
-                            //     position: "top-right",
-                            //     duration : 2000
-                            // })
-                        }).catch((error) => {
-                        // Assistant.handleAxiosError(this.$toasted, error)
-                        // this.$toasted.show('hello billo')
-                        console.log(error)
-                    })
+
+                        })
                     return
                 }
 
@@ -308,16 +300,14 @@
                     .then(() => {
                         this.currentQuestion.statement = ''
                         this.currentQuestion.choices.list.forEach((item) => { item.title = '' })
-                        // this.$toasted.show('ثبت با موفقیت انجام شد', {
-                        //     theme: "toasted-primary",
-                        //     position: "top-right",
-                        //     duration : 2000
-                        // })
-                    }).catch((error) => {
-                    console.log('error', error)
-                    // Assistant.handleAxiosError(this.$toasted, error)
-                    // this.$toasted.show('hello billo')
-                })
+                        this.$notify({
+                            group: 'notifs',
+                            title: 'توجه',
+                            text: 'ثبت با موفقیت انجام شد',
+                            type: 'success'
+                        })
+
+                    })
 
             }
             // changeTrueChoice (index) {
@@ -354,9 +344,6 @@
                 if (!this.editMode) {
                     this.selectedQuizzes.push(this.quizList.list[0].id)
                 }
-            }).catch((error) => {
-                // Assistant.handleAxiosError(this.$toasted, error)
-                console.log(error)
             })
             this.subCategoriesList.fetch().then((response) => {
                 this.subCategoriesList = new QuestSubcategoryList(response.data)
@@ -370,10 +357,7 @@
                         this.currentQuestion = new Question(response.data.data)
                         this.trueChoiceIndex = this.currentQuestion.choices.list.findIndex((item) => item.answer )
                         this.updateRendered()
-                    }).catch((error) => {
-                    console.log(error)
-                    // Assistant.handleAxiosError(this.$toasted, error)
-                })
+                    })
             } else {
                 this.currentQuestion = new Question(this.questionData)
             }

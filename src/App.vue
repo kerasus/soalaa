@@ -127,6 +127,11 @@
 </style>
 
 <style>
+    .notification-title,
+    .notification-content {
+        text-align: right;
+    }
+
     .v-application > .v-menu__content {
         border-top-right-radius: 24px !important;
         border-bottom-left-radius: 24px !important;
