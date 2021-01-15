@@ -125,7 +125,6 @@
     import 'mathlive/dist/mathlive-static.css'
     import { Question } from '@/models/Question'
     import {QuizList} from "@/models/Quiz";
-    import Assistant from "@/plugins/assistant";
     import {QuestSubcategoryList} from "@/models/QuestSubcategory";
     import Vue from 'vue'
     import MarkdownBtn from "@/components/QuizEditor/MarkdownBtn";
@@ -283,14 +282,21 @@
                     this.currentQuestion.choices.list[this.trueChoiceIndex].answer = true
                     this.currentQuestion.update('/3a/api/question/' + this.currentQuestion.id )
                         .then(() => {
-                            this.$toasted.show('ویرایش با موفقیت انجام شد', {
-                                theme: "toasted-primary",
-                                position: "top-right",
-                                duration : 2000
+                            console.log('باید کار کنه')
+                            this.$notify({
+                                group: 'notifs',
+                                title: 'ویرایش با موفقیت انجام شد',
+                                // text: 'ویرایش با موفقیت انجام'
                             })
+                            // this.$toasted.show('ویرایش با موفقیت انجام شد', {
+                            //     theme: "toasted-primary",
+                            //     position: "top-right",
+                            //     duration : 2000
+                            // })
                         }).catch((error) => {
-                        Assistant.handleAxiosError(this.$toasted, error)
+                        // Assistant.handleAxiosError(this.$toasted, error)
                         // this.$toasted.show('hello billo')
+                        console.log(error)
                     })
                     return
                 }
@@ -302,13 +308,14 @@
                     .then(() => {
                         this.currentQuestion.statement = ''
                         this.currentQuestion.choices.list.forEach((item) => { item.title = '' })
-                        this.$toasted.show('ثبت با موفقیت انجام شد', {
-                            theme: "toasted-primary",
-                            position: "top-right",
-                            duration : 2000
-                        })
+                        // this.$toasted.show('ثبت با موفقیت انجام شد', {
+                        //     theme: "toasted-primary",
+                        //     position: "top-right",
+                        //     duration : 2000
+                        // })
                     }).catch((error) => {
-                    Assistant.handleAxiosError(this.$toasted, error)
+                    console.log('error', error)
+                    // Assistant.handleAxiosError(this.$toasted, error)
                     // this.$toasted.show('hello billo')
                 })
 
@@ -348,12 +355,14 @@
                     this.selectedQuizzes.push(this.quizList.list[0].id)
                 }
             }).catch((error) => {
-                Assistant.handleAxiosError(this.$toasted, error)
+                // Assistant.handleAxiosError(this.$toasted, error)
+                console.log(error)
             })
             this.subCategoriesList.fetch().then((response) => {
                 this.subCategoriesList = new QuestSubcategoryList(response.data)
             }).catch((error) => {
-                Assistant.handleAxiosError(this.$toasted, error)
+                // Assistant.handleAxiosError(this.$toasted, error)
+                console.log(error)
             })
             if (this.editMode) {
                 this.currentQuestion.show(null, '/3a/api/question/' + this.$route.params.id)
@@ -362,7 +371,8 @@
                         this.trueChoiceIndex = this.currentQuestion.choices.list.findIndex((item) => item.answer )
                         this.updateRendered()
                     }).catch((error) => {
-                    Assistant.handleAxiosError(this.$toasted, error)
+                    console.log(error)
+                    // Assistant.handleAxiosError(this.$toasted, error)
                 })
             } else {
                 this.currentQuestion = new Question(this.questionData)
