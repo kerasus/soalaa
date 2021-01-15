@@ -1,5 +1,6 @@
 import {Model} from 'js-abstract-model'
 import {ExamList} from "@/models/exam";
+import Time from "@/plugins/time";
 
 
 class User extends Model {
@@ -58,11 +59,18 @@ class User extends Model {
     }
 
     setUserExamStatus (exam) {
+        let status = null
         if (!exam.is_registered) {
-            return 'not registered'
+            status = 'not registered'
         } else if (exam.is_registered && !exam.accept_at) {
-            return 'not registered'
+            status = 'registered but did not participate'
+        } else if (exam.is_registered && exam.accept_at && Time.getPassedTime(exam.accept_at, false) < 0) {
+            status = 'has participated but not finished'
+        } else if (exam.is_registered && exam.accept_at && Time.getPassedTime(exam.accept_at, false) > 0) {
+            status = 'has participated and finished'
         }
+
+        exam.user_exam_status = status
     }
 
     loadUserExams (exams, userExams) {
@@ -74,6 +82,8 @@ class User extends Model {
             examItem.is_registered = !!(userExam)
             examItem.finished_at = (userExam) ? userExam.finished_at : null
             examItem.accept_at = (userExam) ? userExam.accept_at : null
+
+            this.setUserExamStatus(examItem)
 
             return examItem
         })
