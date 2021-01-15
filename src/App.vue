@@ -110,7 +110,7 @@
             selectedItem: null
         }),
         created() {
-            this.$store.commit('updateAppbar', true)
+            this.$store.commit('updateAppBar', true)
             this.$store.commit('updateDrawer', true)
         }
     };

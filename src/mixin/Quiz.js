@@ -1,4 +1,3 @@
-import {Quiz} from "@/models/Quiz";
 // import 'katex/dist/katex.min.css';
 import 'github-markdown-css/github-markdown.css';
 import '@/assets/scss/markdownKatex.scss';
@@ -9,6 +8,14 @@ const mixinQuiz = {
   computed: {
     isQuizPage() {
       return this.$route.name === 'onlineQuiz.quiz'
+    },
+    user: {
+      get () {
+        return this.$store.getters.user
+      },
+      set (newInfo) {
+        this.$store.commit('updateUser', newInfo)
+      }
     },
     quiz: {
       get () {
@@ -28,13 +35,15 @@ const mixinQuiz = {
     },
     currentLessons () {
       this.$store.commit('reloadQuizModel')
-      let currentLessons = null
+      let currentLessons = new QuestSubcategory()
       if (!this.currentQuestion.sub_category) {
-        currentLessons = new QuestSubcategory()
         this.loadFirstQuestion()
       }
-      let subCategoryId = Assistant.getId(this.currentQuestion.sub_category.id)
-      currentLessons = this.quiz.sub_categories.getItem('id', subCategoryId)
+
+      if (this.quiz.questions.list.length > 0) {
+        let subCategoryId = Assistant.getId(this.currentQuestion.sub_category.id)
+        currentLessons = this.quiz.sub_categories.getItem('id', subCategoryId)
+      }
 
       return currentLessons
     },
@@ -45,11 +54,21 @@ const mixinQuiz = {
     }
   },
   methods: {
+    startExam () {
+      if (this.needToLoadQuiaData) {
+        this.participateExam(this.$route.params.quizId)
+      } else {
+        this.loadUserQuizDataFromStorage()
+      }
+    },
     loadFirstQuestion () {
       this.loadQuestionByNumber(1)
     },
     loadQuestionByNumber (number) {
       let questionIndex = this.getQuestionIndexFromNumber(number)
+      if (this.quiz.questions.list.length === 0 || questionIndex < 0) {
+        return
+      }
       this.changeQuestion(this.quiz.questions.list[questionIndex].id)
     },
     answerClicked (data) {
@@ -76,14 +95,27 @@ const mixinQuiz = {
       this.currentQuestion.changeState(newState)
       this.$store.commit('refreshUserQuizData')
     },
-    loadQuiz () {
-      this.quiz = new Quiz(this.quizData)
-      this.quiz.loadSubcategoriesOfCategories()
-      this.loadUserQuizData(this.quiz)
+    needToLoadQuiaData () {
+      return (!this.quiz.id || Assistant.getId(this.$route.params.quizId) !== Assistant.getId(this.quiz.id))
     },
-    loadUserQuizData (quiz) {
-      this.$store.commit('updateCurrentQuiz', quiz)
+    participateExam (examId) {
+      this.user.participateExam(examId)
+          .then(({userExam}) => {
+            this.loadQuiz(userExam)
+          })
+    },
+    loadQuiz (userExamForParticipate) {
+      this.$store.commit('updateQuiz', userExamForParticipate)
+      this.quiz.loadSubcategoriesOfCategories()
+      this.loadUserQuizDataFromStorage(this.quiz)
+    },
+    loadUserQuizDataFromStorage () {
+      let questNumber = this.$route.params.questNumber
+      if (!questNumber) {
+        questNumber = 1
+      }
       this.$store.commit('loadUserQuizListData')
+      this.loadQuestionByNumber(questNumber)
     },
     getQuestionNumberFromIndex (index) {
       index = parseInt(index)
@@ -114,7 +146,7 @@ const mixinQuiz = {
       this.changeQuestion(question.id)
     },
     changeQuestion(id) {
-      if (parseInt(this.currentQuestion.id) === parseInt(id)) {
+      if (Assistant.getId(this.currentQuestion.id) === Assistant.getId(id)) {
         return
       }
       // if (this.currentQuestion.id !== null) {

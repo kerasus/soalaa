@@ -140,7 +140,7 @@
         },
         methods: {
             changeAppBarAndDrawer (state) {
-                this.$store.commit('updateAppbar', state)
+                this.$store.commit('updateAppBar', state)
                 this.$store.commit('updateDrawer', state)
             },
             getQuestionNumber (question) {

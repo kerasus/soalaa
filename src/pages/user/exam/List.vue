@@ -89,22 +89,22 @@
 
 <script>
     import {Exam} from "@/models/exam";
-    import {User} from "@/models/User";
-    // import Assistant from "@/plugins/assistant";
+    import { mixinQuiz } from '@/mixin/Mixins'
 
     export default {
         name: 'list',
         data: () => ({
-            user: new User(),
             examItem: new Exam()
         }),
+        mixins: [mixinQuiz],
         created() {
             this.getExams()
         },
         methods: {
             getExams () {
 
-                this.registerExam('5ffdcc5b5590063ba07fad36')
+                this.participateExam('5ffdcc5b5590063ba07fad36')
+
                 this.user.exams.loading = true
                 this.user.getUserExams()
                     .then(() => {

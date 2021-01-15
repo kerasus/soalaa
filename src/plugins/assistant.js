@@ -13,7 +13,9 @@ let Assistant = function () {
     function handleAxiosError(error) {
         let messages = []
         let statusCode = parseInt(error.response.status)
-        if (statusCode === 404) {
+        if (statusCode === 500) {
+            messages.push('مشکلی رخ داده است. مجدد تلاش کنید.')
+        } else if (statusCode === 404) {
             messages.push('موردی یافت نشد.')
         } else if (statusCode === 401) {
             messages.push('ابتدا وارد سامانه شوید.')
