@@ -29,11 +29,11 @@
 </template>
 
 <script>
-    import Info from "@/components/OnlineQuiz/Quiz/resultTables/info";
+    // import Info from "@/components/OnlineQuiz/Quiz/resultTables/info";
 
     export default {
         name: "topScoreResult",
-        components: {Info},
+        // components: {Info},
         data() {
             return {
                 headers: [

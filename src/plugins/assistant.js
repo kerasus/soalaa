@@ -1,5 +1,5 @@
 // import Toasted from 'vue-toasted';
-// import Vue from 'vue'
+import Vue from 'vue'
 // Vue.use(Toasted)
 let Assistant = function () {
     function getId(id) {
@@ -10,7 +10,7 @@ let Assistant = function () {
         }
     }
 
-    function handleAxiosError($toasted, error) {
+    function handleAxiosError(error) {
         let messages = []
         let statusCode = parseInt(error.response.status)
         if (statusCode === 404) {
@@ -33,15 +33,16 @@ let Assistant = function () {
             }
         }
 
-        toastMessages($toasted, messages)
+        toastMessages(messages)
     }
 
-    function toastMessages($toasted, messages) {
+    function toastMessages(messages) {
         messages.forEach( (item) => {
-            $toasted.show(item, {
-                theme: "toasted-primary",
-                position: "top-right",
-                duration : 2000
+            Vue.prototype.$notify({
+                group: 'notifs',
+                title: 'توجه!',
+                text: item,
+                type: 'error'
             })
         })
     }
@@ -56,7 +57,7 @@ let AjaxResponseMessages = function () {
     let messageMap = {
         '0': 'مشکلی پیش آمده است. مجدد تلاش کنید.',
         '400': 'ابتدا وارد سامانه شوید.',
-        '-1': 'پیش از این در این آزمون ثبت نام انجام شده است.'
+        '1': 'پیش از این در این آزمون ثبت نام انجام شده است.'
     }
 
     function isCustomMessage(statusCode) {

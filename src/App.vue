@@ -72,10 +72,10 @@
             </div>
         </v-app-bar>
         <v-main>
+            <notifications group="notifs" />
             <router-view :key="$route.name + ($route.params.quizId || '') + ($route.params.questNumber || '')">
             </router-view>
         </v-main>
-        <notifications group="notifs" />
     </v-app>
 </template>
 

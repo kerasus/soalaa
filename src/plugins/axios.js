@@ -29,7 +29,7 @@ let Axios = function () {
                 unauthorized()
             }
 
-            Assistant.handleAxiosError(this.$toasted, error)
+            Assistant.handleAxiosError(error)
 
             return Promise.reject(error);
         })

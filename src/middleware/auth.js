@@ -11,7 +11,7 @@ function isLogin() {
 
 export default function auth({ to, next, router }) {
     // console.log('from', from)
-    console.log('to', to)
+    // console.log('to', to)
     if (to.name !== 'login') {
         window.localStorage.setItem('redirect_to', to.name)
 
