@@ -110,7 +110,6 @@
 </template>
 
 <script>
-import FakeQuizData from '@/plugins/fakeQuizData'
 import $ from 'jquery'
 import '@/assets/scss/markdownKatex.scss'
 import Vue from 'vue'
@@ -121,6 +120,7 @@ import Item from './components/question'
 import { mixinQuiz, mixinWindowSize } from '@/mixin/Mixins'
 import Timer from '@/components/OnlineQuiz/Quiz/Timer/Timer'
 import BubbleSheet from "@/components/OnlineQuiz/Quiz/BubbleSheet/BubbleSheet";
+import {Quiz} from "@/models/Quiz";
 Vue.component('DynamicScroller', DynamicScroller)
 Vue.component('DynamicScrollerItem', DynamicScrollerItem)
 var md = require('markdown-it')(),
@@ -137,7 +137,7 @@ export default {
     },
     data () {
         return {
-            quizData: FakeQuizData,
+            quizData: new Quiz(),
             item: Item,
             lastTimeScrollRange: { start: 0, end: 29 }
         }
@@ -222,7 +222,10 @@ export default {
         this.scrollTo(this.currentQuestion.id)
     },
     created () {
-
+        console.log(this.$route.params.quizId)
+        this.quizData.show(this.$route.params.quizId).then((response) => {
+            console.log(response)
+        })
         if (this.windowSize.x > 959) {
             this.changeAppBarAndDrawer(false)
             if (!this.quiz.id || (this.$route.params.quizId).toString() !== (this.quiz.id).toString()) {

@@ -1,22 +1,14 @@
 <template>
-    <v-container class="quiz-editor" :fluid="true" :style="{ height: '100%', background: 'rgb(244, 244, 244)' }" v-resize="updateWindowSize">
+    <v-container class="konkoor-view" :fluid="true" :style="{ height: '100%', background: 'rgb(244, 244, 244)' }" v-resize="updateWindowSize">
         <v-row :style="{ 'min-height': '100%' }">
-            <!--            <v-col v-if="quiz.questions.list.length > 40" :md="5" class="questions" :style="{ height: windowSize.y }">-->
-            <!--                <virtual-list style="overflow-y: auto;"-->
-            <!--                              :data-key="'id'"-->
-            <!--                              :data-sources="quiz.questions.list"-->
-            <!--                              :data-component="item"-->
-            <!--                              class="questions"-->
-            <!--                              ref="scroller"-->
-            <!--                />-->
-            <!--            </v-col>-->
-            <v-col :md="5" class="questions">
-                <!--                <item v-for="itemm in quiz.questions.list" :key="itemm.id" :source="itemm" />-->
+            <v-col :md="5" class="questions" :style="{ height: windowSize.y }" v-if="!isMobile">
+                <div class="lesson">{{ currentLessons.title }}</div>
                 <virtual-list style="overflow-y: auto;"
                               :data-key="'id'"
                               :data-sources="quiz.questions.list"
                               :data-component="item"
                               ref="scroller"
+                              @scroll="onScroll"
                               class="questionss"
                 />
             </v-col>
@@ -34,8 +26,7 @@
                                             elevation="0"
                                     >
                                         <v-icon class="mr-2" :size="30" color="#666">mdi-account-circle</v-icon>
-                                        سید مصطفی
-                                        کاظمی
+                                        {{ $store.getters.user.first_name + ' ' + $store.getters.user.last_name }}
                                     </v-btn>
                                 </template>
                                 <v-card
@@ -98,11 +89,14 @@
                                 </v-card>
                             </v-menu>
                         </div>
+                        <v-btn icon @click="changeView('alaa')">
+                            <v-icon>mdi-table-split-cell</v-icon>
+                        </v-btn>
                     </v-col>
                 </v-row>
                 <v-row>
                     <v-col>
-                        <BubbleSheet :info="{ type: 'pasokh-nameh' }" @scrollTo="scrollTo" />
+                        <BubbleSheet :info="{ type: 'pasokh-nameh' }" @scrollTo="scrollTo"/>
                     </v-col>
                 </v-row>
             </v-col>
@@ -111,20 +105,16 @@
 </template>
 
 <script>
-    // import FakeQuizData from "@/plugins/fakeQuizData";
+    import FakeQuizData from '@/plugins/fakeQuizData'
     import $ from 'jquery'
-    import Item from '@/components/QuizEditor/Question'
-    import VirtualList from 'vue-virtual-scroll-list'
     import '@/assets/scss/markdownKatex.scss'
     import Vue from 'vue'
+    import VirtualList from 'vue-virtual-scroll-list'
     import 'vue-virtual-scroller/dist/vue-virtual-scroller.css'
     import { DynamicScroller, DynamicScrollerItem } from 'vue-virtual-scroller'
+    import Item from './question'
     import { mixinQuiz, mixinWindowSize } from '@/mixin/Mixins'
     import BubbleSheet from "@/components/OnlineQuiz/Quiz/BubbleSheet/BubbleSheet";
-    import {Quiz} from "@/models/Quiz";
-    import {QuestionList} from "@/models/Question";
-    import {QuestSubcategoryList} from "@/models/QuestSubcategory";
-    import Assistant from "@/plugins/assistant";
     Vue.component('DynamicScroller', DynamicScroller)
     Vue.component('DynamicScrollerItem', DynamicScrollerItem)
     var md = require('markdown-it')(),
@@ -132,7 +122,7 @@
     md.use(mk);
 
     export default {
-        name: 'QuestionsOfExam',
+        name: 'pasokhbarg-user',
         mixins: [mixinQuiz, mixinWindowSize],
         components: {
             'virtual-list': VirtualList,
@@ -140,11 +130,10 @@
         },
         data () {
             return {
-                quizData: new Quiz(),
+                quizData: FakeQuizData,
                 item: Item,
                 lastTimeScrollRange: { start: 0, end: 29 },
-                quizList: [],
-                subCategoriesList: new QuestSubcategoryList(),
+                isMobile: false
             }
         },
         methods: {
@@ -152,11 +141,15 @@
                 this.$store.commit('updateAppbar', state)
                 this.$store.commit('updateDrawer', state)
             },
-            getQuestionNumber (question) {
-                if (question.isInView === false) {
-                    return '.question:nth-child('+(this.quiz.questions.getQuestionIndexById(question.id) + 2)+')'
+            onScroll (event, range) {
+                if (range.start !== this.lastTimeScrollRange.start || range.end !== this.lastTimeScrollRange.end) {
+                    this.quiz.questions.turnIsInViewToFalse(range.start, range.end)
                 }
-                return ''
+            },
+            addIsInViewBoolean () {
+                for (let i = 0; i < this.quiz.questions.list.length; i++) {
+                    this.quiz.questions.list[i].isInView = false
+                }
             },
             scrollTo (questionId) {
                 if (this.quiz.questions.getQuestionById(questionId).isInView === false) {
@@ -169,32 +162,59 @@
                             500 / Math.ceil(this.quiz.questions.list.length / 100) * i)
                     }
                 }
+            },
+            // onIntersect (entries) {
+            //     this.quiz.questions.getQuestionById(entries[0].target.id).isInView = (entries[0].intersectionRatio >= 0.5)
+            // },
+            // ToDo: check for removal
+            getFirstInViewQuestionNumber () {
+                let firstQuestionInView = this.quiz.questions.list.find( (item)=> {
+                    return item.isInView === true
+                })
+                if (firstQuestionInView) {
+                    return firstQuestionInView.order + 1
+                } else {
+                    return false
+                }
+            },
+            // isThisFirstQuestionInView (questionId) {
+            //     if (this.getFirstInViewQuestionNumber().id === questionId) {
+            //         return true
+            //     }
+            //     return false
+            // },
+            getQuestionNumber (question) {
+                if (question.isInView === false) {
+                    return '.question:nth-child('+(this.quiz.questions.getQuestionIndexById(question.id) + 2)+')'
+                }
+                return ''
+            },
+            changeCurrentQuestion (question) {
+                if (question.id !== this.currentQuestion.id) {
+                    this.currentQuestion = question
+                }
             }
         },
         mounted () {
             $('.questions').height(this.windowSize.y)
+            $('.questionss').height(this.windowSize.y - 50)
             $('.left-side-list').height(this.windowSize.y - 24)
-            $('.questionss').height(this.windowSize.y)
-
+            if (this.currentQuestion.id === null) {
+                this.loadFirstQuestion()
+            }
         },
         created () {
-            this.changeAppBarAndDrawer(false)
-            // const that = this
-            const url = '/3a/api/exam-question/attach/show/' + this.$route.params.quizId
-            this.quizData.show(null, url)
-                .then((response) => {
-                    this.quizData.questions = new QuestionList(response.data.data)
-                    this.quiz = new Quiz(this.quizData)
-                })
-                .catch((error) => {
-                    console.log('error: ', error)
-                })
-            this.subCategoriesList.fetch().then((response) => {
-                this.quiz.sub_categories = new QuestSubcategoryList(response.data)
-                console.log(this.quiz.sub_categories)
-            }).catch((error) => {
-                Assistant.handleAxiosError(this.$toasted, error)
-            })
+            if (this.windowSize.x > 959) {
+                this.changeAppBarAndDrawer(false)
+                if (!this.quiz.id) {
+                    this.loadQuiz()
+                } else {
+                    this.loadUserQuizData()
+                }
+            } else {
+                this.isMobile = true
+            }
+            // this.renderQuestionBody()
         },
         destroyed() {
             this.changeAppBarAndDrawer(true)
@@ -202,7 +222,7 @@
         watch: {
             'windowSize.y': function () {
                 $('.questions').height(this.windowSize.y)
-                $('.questionss').height(this.windowSize.y)
+                $('.questionss').height(this.windowSize.y - 50)
                 $('.left-side-list').height(this.windowSize.y - 24)
             },
             'windowSize.x': function () {
@@ -217,12 +237,27 @@
 </script>
 
 <style scoped>
+    .lesson {
+        height: 50px;
+        border-bottom: 1px solid #ececec;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
     .questionss {
-        overflow-x: hidden
+        overflow: hidden;
     }
 
     .scroller {
         height: 100%;
+    }
+
+    .timer-row {
+        width: calc(58% - 150px);
+        position: absolute;
+        bottom: 1px;
+        left: 100px;
     }
 
     .buttons-group {
@@ -243,7 +278,7 @@
 
     .questions {
         background: #fff;
-        overflow-y: hidden;
+        overflow-y: auto;
         overflow-x: hidden;
         position: relative;
         /*padding-right: 25px;*/
@@ -283,7 +318,7 @@
         background: #e1e1e1;
     }
 
-    .quiz-editor {
+    .konkoor-view {
         padding: 0;
     }
 
@@ -297,6 +332,17 @@
     .base.textstyle.uncramped {
         display: flex;
         flex-wrap: wrap;
+    }
+
+    .konkoor-view strong em strong {
+        display: none;
+        font-weight: normal;
+        font-style: normal;
+        text-decoration: none !important;
+    }
+
+    .timer-row .col {
+        padding: 0;
     }
 
     .v-application p {
