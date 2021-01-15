@@ -17,7 +17,6 @@ const router = new VueRouter({
             path: '/',
             name: 'dashboard',
             component: () => lazyLoadView(import('@/pages/user/exam/List')),
-            // component: () => lazyLoadView(import('@/components/dashboard')),
             meta: {middleware: auth}
         },
         {
@@ -27,27 +26,21 @@ const router = new VueRouter({
             meta: {middleware: auth}
         },
         {
-            path: '/quiz/edit/:quizId',
-            name: 'quiz.edit',
-            component: () => lazyLoadView(import('@/components/QuizEditor/QuizEditor')),
-            meta: {middleware: auth}
-        },
-        {
             path: '/quiz/edit-all',
             name: 'quiz.allQuestions',
             component: () => lazyLoadView(import('@/components/QuizEditor/AllQuestions')),
             meta: {middleware: auth}
         },
         {
-            path: '/TinymceEditor',
-            name: 'TinymceEditor',
-            component: () => lazyLoadView(import('@/components/TinymceEditor/TinymceEditor')),
-            meta: {middleware: auth}
-        },
-        {
             path: encodeURI('/آزمون_آنلاین/کارنامه'),
             name: 'onlineQuiz.result',
             component: () => lazyLoadView(import('@/components/OnlineQuiz/Quiz/resultTables/personalResult')),
+            meta: {middleware: auth}
+        },
+        {
+            path: encodeURI('/آزمون_آنلاین/پاسخ_برگ'),
+            name: 'onlineQuiz.result.pasokhbarg',
+            component: () => lazyLoadView(import('@/components/OnlineQuiz/Quiz/resultTables/pasokhBarg')),
             meta: {middleware: auth}
         },
         {
@@ -72,6 +65,12 @@ const router = new VueRouter({
             path: '/online_quiz/:quizId/:questNumber',
             name: 'onlineQuiz.alaaView',
             component: () => lazyLoadView(import('@/components/OnlineQuiz/Quiz/ViewTypes/AlaaView')),
+            meta: {middleware: auth}
+        },
+        {
+            path: '/quiz/edit/:quizId',
+            name: 'quiz.edit',
+            component: () => lazyLoadView(import('@/pages/admin/question/QuestionsOfExam')),
             meta: {middleware: auth}
         },
         {
@@ -114,6 +113,12 @@ const router = new VueRouter({
             path: '*',
             name: 'NotFound',
             component: () => lazyLoadView(import('@/pages/user/exam/List')),
+            meta: {middleware: auth}
+        },
+        {
+            path: '/video-analyze',
+            name: 'video-analyze',
+            component: () => lazyLoadView(import('@/components/AnalyzeByVideo')),
             meta: {middleware: auth}
         }
     ]

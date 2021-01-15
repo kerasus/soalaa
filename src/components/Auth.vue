@@ -101,7 +101,7 @@
                     that.redirectTo(token)
                 })
                 .catch( (error) => {
-                    console.log('error', error)
+                    Assistant.handleAxiosError(this.$toasted, error)
                 })
             },
             redirectTo (access_token) {

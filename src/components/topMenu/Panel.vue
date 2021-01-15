@@ -76,9 +76,11 @@
         name: 'PannelPanel',
         methods: {
             logout () {
-                window.localStorage.setItem('access_token', '')
-                window.localStorage.setItem('user', '')
-                this.$store.commit('updateUser', '')
+                // window.localStorage.setItem('access_token', '')
+                // window.localStorage.setItem('user', '')
+                // window.localStorage.setItem('vuex', '')
+                // this.$store.commit('updateUser', '')
+                this.$store.commit('resetState')
                 this.$router.push({ name: 'login' })
             },
         }

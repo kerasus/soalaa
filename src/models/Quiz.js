@@ -89,17 +89,14 @@ class Quiz extends Model {
 
     mergeUserQuizData (userQuizData) {
         let questionsHasData = this.getQuestionsHasData()
-
         questionsHasData.forEach((question) => {
-            if (!userQuizData) {
-                userQuizData = []
-                this.addUserQuestionData(question, userQuizData)
-
-
+            if (!userQuizData.examData) {
+                userQuizData.examData = []
+                this.addUserQuestionData(question, userQuizData.examData)
             } else {
-                let userQuestionData = userQuizData.find((questionData)=> questionData.questionId === question.id)
+                let userQuestionData = userQuizData.examData.find((questionData)=> questionData.questionId === question.id)
                 if (!userQuestionData) {
-                    this.addUserQuestionData(question, userQuizData)
+                    this.addUserQuestionData(question, userQuizData.examData)
                 } else {
                     this.loadUserQuestionData(question, userQuestionData)
                 }
@@ -148,8 +145,10 @@ class Quiz extends Model {
     addUserQuestionData (question, userQuizData) {
         let answeredChoice = question.getAnsweredChoice()
         let answeredChoiceId = null
+        let answered_at = null
         if (answeredChoice) {
             answeredChoiceId = answeredChoice.id
+            answered_at = answeredChoice.answered_at
         }
         let checkingTimes = []
         this.addUserQuestionDataCheckingTimes (question, checkingTimes)
@@ -159,7 +158,8 @@ class Quiz extends Model {
             checking_times: checkingTimes,
             bookmarked: question.bookmarked,
             state: question.state,
-            choicesId: answeredChoiceId
+            choicesId: answeredChoiceId,
+            answered_at
         })
     }
 

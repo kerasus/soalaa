@@ -94,10 +94,11 @@
             }
         },
         created() {
+
             if (!this.quiz.id || (this.$route.params.quizId).toString() !== (this.quiz.id).toString()) {
                 this.loadQuiz()
             } else {
-                this.loadUserQuizData()
+                this.loadUserQuizData(this.quiz)
             }
             this.loadQuestionByNumber(this.$route.params.questNumber)
 

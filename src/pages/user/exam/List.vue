@@ -2,22 +2,19 @@
     <v-container>
         <v-row>
             <v-col>
-
                 <v-progress-linear
                         color="#ffc107"
                         absolute
                         top
-                        :active="examList.loading"
+                        :active="user.exams.loading"
                         indeterminate
                         rounded
                         height="6"
                 ></v-progress-linear>
-
-                <v-alert v-if="examList.list.length === 0 && !examList.loading" type="info">
+                <v-alert v-if="user.exams.list.length === 0 && !user.exams.loading" type="info">
                     آزمونی وجود ندارد
                 </v-alert>
-
-                <v-row v-if="examList.list.length > 0 && !examList.loading">
+                <v-row v-if="user.exams.list.length > 0 && !user.exams.loading">
                     <v-col>
                         <v-row>
                             <v-col cols="3" class="pr-7">
@@ -37,7 +34,7 @@
                             </v-col>
                         </v-row>
                         <v-sheet
-                                v-for="item in examList.list"
+                                v-for="item in user.exams.list"
                                 :key="item.id"
                                 class="mb-5 d-flex"
                                 color="white"
@@ -64,21 +61,18 @@
                                 <v-col cols="2">
                                     <v-btn
                                             text
-                                            x-small
                                             color="#ffc107"
                                     >
                                         مشاهده نتایج
                                     </v-btn>
                                     <v-btn
                                             text
-                                            x-small
                                             color="#00b5e6"
                                     >
                                         شروع آزمون
                                     </v-btn>
                                     <v-btn
                                             text
-                                            x-small
                                             color="#00c753"
                                     >
                                         ثبت نام
@@ -88,19 +82,20 @@
                         </v-sheet>
                     </v-col>
                 </v-row>
-
             </v-col>
         </v-row>
     </v-container>
 </template>
 
 <script>
-    import {Exam, ExamList} from "@/models/exam";
+    import {Exam} from "@/models/exam";
+    import {User} from "@/models/User";
+    // import Assistant from "@/plugins/assistant";
 
     export default {
         name: 'list',
         data: () => ({
-            examList: new ExamList(),
+            user: new User(),
             examItem: new Exam()
         }),
         created() {
@@ -108,17 +103,18 @@
         },
         methods: {
             getExams () {
-                this.examList.loading = true
-                this.examList.fetch()
-                // this.examList.fetch(null, '/3a/api/user')
-                    .then((response) => {
-                        console.log('response', response.data)
-                        this.examList.loading = false
-                        this.examList = new ExamList(response.data.data, {meta: response.data.meta, links: response.data.links})
+                // this.user.registerExam('5ffdcc5b5590063ba07fad36')
+                //     .then((response) => {
+                //         console.log(response)
+                //     })
+
+                this.user.exams.loading = true
+                this.user.getUserExams()
+                    .then(() => {
+                        this.user.exams.loading = false
                     })
                     .catch(() => {
-                        this.examList.loading = false
-                        this.examList = new ExamList()
+                        this.user.exams.loading = false
                     })
             },
         }

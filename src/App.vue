@@ -24,56 +24,58 @@
                 v-if="appbar"
         >
             <div class="header">
-                <v-row>
-                    <v-col :md="1" class="d-md-flex justify-center align-center d-none"></v-col>
-                    <v-col :md="10" class="px-md-0 px-10 d-flex justify-space-between">
-                        <div class="rounded-b-xl rounded-r-xl">
-                            <v-menu
-                                    bottom
-                                    :offset-y="true"
-                                    class="rounded-b-xl rounded-r-xl"
-                            >
-                                <template v-slot:activator="{ on, attrs }">
-                                    <v-btn
-                                            large
-                                            tile
-                                            v-bind="attrs"
-                                            v-on="on"
-                                            elevation="0"
-                                    >
-                                        <v-icon class="mr-2" :size="30" color="#666">mdi-account-circle</v-icon>
-                                        {{ $store.getters.user.first_name + ' ' + $store.getters.user.last_name }}
-                                    </v-btn>
-                                </template>
-                                <v-card
-                                        max-width="375"
-                                        class="mx-auto"
-                                        rounded="b-xl r-xl"
+                <v-container>
+                    <v-row>
+                        <v-col class="px-md-0 px-10 d-flex justify-space-between">
+                            <div class="rounded-b-xl rounded-r-xl">
+                                <v-menu
+                                        bottom
+                                        :offset-y="true"
+                                        class="rounded-b-xl rounded-r-xl"
                                 >
-                                    <online-quiz v-if="$route.name === 'onlineQuiz.alaaView'"/>
-                                    <panel v-else/>
-                                </v-card>
-                            </v-menu>
-                        </div>
-                        <div>
-                            <v-btn v-if="$route.name === 'onlineQuiz.alaaView'" class="switch-view-button" icon @click="changeView('konkoor')">
-                                <v-icon>mdi-dots-grid</v-icon>
-                            </v-btn>
-                            <v-app-bar-nav-icon
-                                    v-if="$route.name !== 'onlineQuiz.konkoorView'"
-                                    @click.stop="toggleDrawer"
-                                    :color="(isQuizPage) ? '#fcaf25' : '#666'"
-                            />
-                        </div>
-                    </v-col>
-                    <v-col :md="1" class="d-md-flex justify-center align-center d-none"></v-col>
-                </v-row>
+                                    <template v-slot:activator="{ on, attrs }">
+                                        <v-btn
+                                                large
+                                                tile
+                                                v-bind="attrs"
+                                                v-on="on"
+                                                elevation="0"
+                                                class="pl-3"
+                                        >
+                                            <v-icon class="mr-2" :size="30" color="#666">mdi-account-circle</v-icon>
+                                            {{ $store.getters.user.first_name + ' ' + $store.getters.user.last_name }}
+                                        </v-btn>
+                                    </template>
+                                    <v-card
+                                            max-width="375"
+                                            class="mx-auto"
+                                            rounded="b-xl r-xl"
+                                    >
+                                        <online-quiz v-if="$route.name === 'onlineQuiz.alaaView'"/>
+                                        <panel v-else/>
+                                    </v-card>
+                                </v-menu>
+                            </div>
+                            <div>
+                                <v-btn v-if="$route.name === 'onlineQuiz.alaaView'" class="switch-view-button" icon @click="changeView('konkoor')">
+                                    <v-icon>mdi-dots-grid</v-icon>
+                                </v-btn>
+                                <v-app-bar-nav-icon
+                                        v-if="$route.name !== 'onlineQuiz.konkoorView'"
+                                        @click.stop="toggleDrawer"
+                                        :color="(isQuizPage) ? '#fcaf25' : '#666'"
+                                />
+                            </div>
+                        </v-col>
+                    </v-row>
+                </v-container>
             </div>
         </v-app-bar>
         <v-main>
             <router-view :key="$route.name + ($route.params.quizId || '') + ($route.params.questNumber || '')">
             </router-view>
         </v-main>
+        <notifications group="notifs" />
     </v-app>
 </template>
 

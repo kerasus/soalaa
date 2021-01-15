@@ -10,9 +10,6 @@ const mixinQuiz = {
     isQuizPage() {
       return this.$route.name === 'onlineQuiz.quiz'
     },
-    userAnswersOfOnlineQuiz() {
-      return this.$store.getters.userAnswersOfOnlineQuiz
-    },
     quiz: {
       get () {
         return this.$store.getters.quiz
@@ -82,10 +79,11 @@ const mixinQuiz = {
     loadQuiz () {
       this.quiz = new Quiz(this.quizData)
       this.quiz.loadSubcategoriesOfCategories()
-      this.loadUserQuizData()
+      this.loadUserQuizData(this.quiz)
     },
-    loadUserQuizData () {
-      this.$store.commit('loadUserQuizData')
+    loadUserQuizData (quiz) {
+      this.$store.commit('updateCurrentQuiz', quiz)
+      this.$store.commit('loadUserQuizListData')
     },
     getQuestionNumberFromIndex (index) {
       index = parseInt(index)
@@ -100,7 +98,7 @@ const mixinQuiz = {
       return number - 1
     },
     goToNextQuestion () {
-      this.$store.commit('loadUserQuizData')
+      this.$store.commit('loadUserQuizListData')
       let question = this.quiz.questions.getNextQuestion(this.currentQuestion.id)
       if (!question) {
         return
@@ -108,7 +106,7 @@ const mixinQuiz = {
       this.changeQuestion(question.id)
     },
     goToPrevQuestion () {
-      this.$store.commit('loadUserQuizData')
+      this.$store.commit('loadUserQuizListData')
       let question = this.quiz.questions.getPrevQuestion(this.currentQuestion.id)
       if (!question) {
         return
