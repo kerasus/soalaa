@@ -1,4 +1,5 @@
 import {Model} from 'js-abstract-model'
+import {ExamList} from "@/models/exam";
 
 
 class User extends Model {
@@ -39,6 +40,10 @@ class User extends Model {
                 default:{ id: null}
             },
             {
+                key: 'exams',
+                relatedModel: ExamList
+            },
+            {
                 key: 'photo'
             },
             {
@@ -50,6 +55,60 @@ class User extends Model {
 
         ])
 
+    }
+
+    loadUserExams (exams, userExams) {
+        exams.forEach( (examItem) => {
+            let userExam = userExams.find( (userExamItem) => {
+                return (userExamItem.exam_id === examItem.id)
+            })
+
+            examItem.is_registered = !!(userExam)
+            examItem.finished_at = (userExam) ? userExam.finished_at : null
+            examItem.accept_at = (userExam) ? userExam.accept_at : null
+
+            return examItem
+        })
+
+        this.exams = new ExamList(exams)
+    }
+
+    getUserExams () {
+        let that = this
+        return new Promise(function(resolve, reject) {
+            that.exams.fetch(null, '/3a/api/examAndUser')
+                .then((response) => {
+                    let exams = response.data.data.exams
+                    let userExams = response.data.data.user_exams
+                    that.loadUserExams(exams, userExams)
+                })
+                .then((response) => {
+                    resolve(response)
+                })
+                .catch( (error) => {
+                    reject(error)
+                })
+        })
+    }
+
+    registerExam (exam_id) {
+        let that = this
+        return new Promise(function(resolve, reject) {
+            that.create({
+                exam_id
+            }, '/3a/api/user/registerExam')
+                .then((response) => {
+                    let exams = response.data.data.exams
+                    let userExams = response.data.data.user_exams
+                    that.loadUserExams(exams, userExams)
+                })
+                .then((response) => {
+                    resolve(response)
+                })
+                .catch( (error) => {
+                    reject(error)
+                })
+        })
     }
 }
 

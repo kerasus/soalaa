@@ -1,17 +1,17 @@
 <template>
     <v-container class="quiz-editor" :fluid="true" :style="{ height: '100%', background: 'rgb(244, 244, 244)' }" v-resize="updateWindowSize">
         <v-row :style="{ 'min-height': '100%' }">
-<!--            <v-col v-if="quiz.questions.list.length > 40" :md="5" class="questions" :style="{ height: windowSize.y }">-->
-<!--                <virtual-list style="overflow-y: auto;"-->
-<!--                              :data-key="'id'"-->
-<!--                              :data-sources="quiz.questions.list"-->
-<!--                              :data-component="item"-->
-<!--                              class="questions"-->
-<!--                              ref="scroller"-->
-<!--                />-->
-<!--            </v-col>-->
+            <!--            <v-col v-if="quiz.questions.list.length > 40" :md="5" class="questions" :style="{ height: windowSize.y }">-->
+            <!--                <virtual-list style="overflow-y: auto;"-->
+            <!--                              :data-key="'id'"-->
+            <!--                              :data-sources="quiz.questions.list"-->
+            <!--                              :data-component="item"-->
+            <!--                              class="questions"-->
+            <!--                              ref="scroller"-->
+            <!--                />-->
+            <!--            </v-col>-->
             <v-col :md="5" class="questions">
-<!--                <item v-for="itemm in quiz.questions.list" :key="itemm.id" :source="itemm" />-->
+                <!--                <item v-for="itemm in quiz.questions.list" :key="itemm.id" :source="itemm" />-->
                 <virtual-list style="overflow-y: auto;"
                               :data-key="'id'"
                               :data-sources="quiz.questions.list"
@@ -27,11 +27,11 @@
                             <v-menu bottom>
                                 <template v-slot:activator="{ on, attrs }">
                                     <v-btn
-                                        large
-                                        tile
-                                        v-bind="attrs"
-                                        v-on="on"
-                                        elevation="0"
+                                            large
+                                            tile
+                                            v-bind="attrs"
+                                            v-on="on"
+                                            elevation="0"
                                     >
                                         <v-icon class="mr-2" :size="30" color="#666">mdi-account-circle</v-icon>
                                         سید مصطفی
@@ -113,7 +113,7 @@
 <script>
     // import FakeQuizData from "@/plugins/fakeQuizData";
     import $ from 'jquery'
-    import Item from './Question'
+    import Item from '@/components/QuizEditor/Question'
     import VirtualList from 'vue-virtual-scroll-list'
     import '@/assets/scss/markdownKatex.scss'
     import Vue from 'vue'
@@ -132,7 +132,7 @@
     md.use(mk);
 
     export default {
-        name: 'adminView',
+        name: 'QuestionsOfExam',
         mixins: [mixinQuiz, mixinWindowSize],
         components: {
             'virtual-list': VirtualList,

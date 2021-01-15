@@ -12,7 +12,10 @@ let Assistant = function () {
 
     function handleAxiosError($toasted, error) {
         let messages = []
-        if (error.response.data.errors) {
+        let statusCode = parseInt(error.response.status)
+        if (AjaxResponseMessages.isCustomMessage(statusCode)) {
+            messages.push(AjaxResponseMessages.getMessage(statusCode))
+        } else if (error.response.data.errors) {
             for (const [key, value] of Object.entries(error.response.data.errors)) {
                 messages.push(value)
                 console.log(`${key}: ${value}`);
@@ -41,6 +44,26 @@ let Assistant = function () {
         getId,
         handleAxiosError
     };
+}();
+
+let AjaxResponseMessages = function () {
+    let messageMap = {
+        '400': 'ابتدا وارد سامانه شوید.',
+        '-1': 'پیش از این در این آزمون ثبت نام انجام شده است.'
+    }
+
+    function isCustomMessage(statusCode) {
+        return !!(messageMap[statusCode.toString()])
+    }
+
+    function getMessage (statusCode) {
+        return messageMap[statusCode]
+    }
+
+    return {
+        isCustomMessage,
+        getMessage
+    }
 }();
 
 export default Assistant

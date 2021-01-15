@@ -1,5 +1,6 @@
 import axios from 'axios'
 import router from '@/router/index'
+import Assistant from "@/plugins/assistant";
 
 let Axios = function () {
 
@@ -8,8 +9,12 @@ let Axios = function () {
     }
 
     function unauthorized() {
+        let loginRouteName = 'login'
+        if (router.history.current.name === loginRouteName) {
+            return
+        }
         console.log('Please login to access this resource')
-        router.push({ name: 'login' })
+        router.push({ name: loginRouteName })
     }
 
     function handleError() {
@@ -23,6 +28,8 @@ let Axios = function () {
             if (statusCode === 401) {
                 unauthorized()
             }
+
+            Assistant.handleAxiosError(this.$toasted, error)
 
             return Promise.reject(error);
         })
