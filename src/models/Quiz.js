@@ -90,13 +90,13 @@ class Quiz extends Model {
     mergeUserQuizData (userQuizData) {
         let questionsHasData = this.getQuestionsHasData()
         questionsHasData.forEach((question) => {
-            if (!userQuizData) {
-                userQuizData = []
-                this.addUserQuestionData(question, userQuizData)
+            if (!userQuizData.examData) {
+                userQuizData.examData = []
+                this.addUserQuestionData(question, userQuizData.examData)
             } else {
-                let userQuestionData = userQuizData.find((questionData)=> questionData.questionId === question.id)
+                let userQuestionData = userQuizData.examData.find((questionData)=> questionData.questionId === question.id)
                 if (!userQuestionData) {
-                    this.addUserQuestionData(question, userQuizData)
+                    this.addUserQuestionData(question, userQuizData.examData)
                 } else {
                     this.loadUserQuestionData(question, userQuestionData)
                 }
