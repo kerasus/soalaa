@@ -29,24 +29,33 @@ const store = new Vuex.Store({
             x: 0,
             y: 0,
         },
-        user: new User(),
+        user: null,
         drawer: false,
-        quiz: new Quiz(),
-        userAnswersOfOnlineQuiz: [],
+        quiz: null,
         userQuizListData: [],
         accessToken: null,
-        currentQuestion: new Question(),
-        currentQuizId: null,
-        appbar: true,
-        quizList: []
+        currentQuiz: null,
+        currentQuestion: null,
+        appbar: true
+        // quizList: []
     },
     mutations: {
-        updateQuizList (state, newInfo) {
-            state.quizList = newInfo
+        resetState () {
+            // Merge rather than replace so we don't lose observers
+            // https://github.com/vuejs/vuex/issues/1118
+            // Object.assign(state, getDefaultState())
+            window.localStorage.setItem('access_token', '')
+            window.localStorage.setItem('user', '')
+            this.commit('user', null)
+            this.commit('quiz', null)
+            this.commit('accessToken', null)
+            this.commit('currentQuiz', null)
+            this.commit('currentQuestion', null)
+            this.commit('userQuizListData', [])
         },
-        updateCurrentQuizId (state, newInfo) {
-            state.currentQuizId = newInfo
-        },
+        // updateQuizList (state, newInfo) {
+        //     state.quizList = newInfo
+        // },
         updateWindowSize (state, newInfo) {
             state.windowSize = newInfo
         },
@@ -66,6 +75,19 @@ const store = new Vuex.Store({
         },
         updateAccessToken (state, newInfo) {
             state.accessToken = newInfo
+        },
+        updateCurrentQuiz (state, newInfo) {
+            this.commit('reloadQuizModel')
+            let currentQuizData = state.userQuizListData.find( (item) => {
+                return item.examId = newInfo.id
+            })
+            if (!currentQuizData) {
+                state.userQuizListData.push({
+                    examId: newInfo.id,
+                    examData: []
+                })
+            }
+            state.currentQuiz = newInfo
         },
         updateCurrentQuestion (state, newInfo) {
             this.commit('reloadQuizModel')
@@ -89,11 +111,11 @@ const store = new Vuex.Store({
                 let oldQuestion = state.quiz.questions.getQuestionById(oldQuestionId)
                 // ToDo: find userQuizData
                 let currentQuizData = state.userQuizListData.find( (item) => {
-                    return item.examId = state.currentQuizId
+                    return item.examId = state.currentQuiz.id
                 })
                 if (!currentQuizData) {
                     currentQuizData = {
-                        examId: state.currentQuizId,
+                        examId: state.currentQuestion.id,
                         examData: []
                     }
                 }
@@ -106,12 +128,12 @@ const store = new Vuex.Store({
             this.commit('refreshUserQuizListData')
         },
         reloadQuizModel (state) {
-            if (typeof state.quiz.questions.getNextQuestion !== 'function') {
+            if (!state.quiz || !state.quiz.questions || typeof state.quiz.questions.getNextQuestion !== 'function') {
                 state.quiz = new Quiz(state.quiz)
             }
         },
         reloadCurrentQuestionModel (state) {
-            if (typeof state.currentQuestion.isAnswered !== 'function') {
+            if (!state.currentQuestion || typeof state.currentQuestion.isAnswered !== 'function') {
                 state.currentQuestion = new Question(state.currentQuestion)
             }
         },
@@ -126,31 +148,35 @@ const store = new Vuex.Store({
             this.commit('loadUserQuizListData')
         },
         saveUserQuizListData (state) {
+            this.commit('reloadCurrentQuestionModel')
             this.commit('reloadQuizModel')
             // ToDo: find userQuizData
             let currentQuizData = state.userQuizListData.find( (item) => {
-                return item.examId = state.currentQuizId
+                return item.examId = state.currentQuiz.id
             })
             if (!currentQuizData) {
                 currentQuizData = {
-                    examId: state.currentQuizId,
+                    examId: state.currentQuestion.id,
                     examData: []
                 }
             }
-            state.userQuizListData = state.quiz.mergeUserQuizData(currentQuizData.examData)
+            state.userQuizListData.forEach( () => {
+                return state.quiz.mergeUserQuizData(currentQuizData)
+            })
         },
         loadUserQuizListData (state) {
             this.commit('reloadQuizModel')
+            this.commit('reloadCurrentQuestionModel')
             // ToDo: find userQuizData
-            if (state.currentQuizId === null || state.currentQuizId === undefined) {
+            if (state.currentQuestion.id === null || state.currentQuestion.id === undefined) {
                 return
             }
             let currentQuizData = state.userQuizListData.find( (item) => {
-                return item.examId = state.currentQuizId
+                return item.examId = state.currentQuiz.id
             })
             if (!currentQuizData) {
                 currentQuizData = {
-                    examId: state.currentQuizId,
+                    examId: state.currentQuestion.id,
                     examData: []
                 }
             }
@@ -161,14 +187,14 @@ const store = new Vuex.Store({
         }
     },
     getters: {
-        quizList (state) {
-            return state.quizList
-        },
+        // quizList (state) {
+        //     return state.quizList
+        // },
         mapOfQuestionsDrawer (state) {
             return state.mapOfQuestionsDrawer
         },
         quiz (state) {
-            return state.quiz
+            return new Quiz(state.quiz)
         },
         accessToken (state) {
             return state.accessToken
@@ -180,16 +206,13 @@ const store = new Vuex.Store({
             return state.drawer
         },
         currentQuestion (state) {
-            return state.currentQuestion
-        },
-        userAnswersOfOnlineQuiz (state) {
-            return state.userAnswersOfOnlineQuiz
+            return new Question(state.currentQuestion)
         },
         appbar (state) {
             return state.appbar
         },
         user (state) {
-            return state.user
+            return new User(state.user)
         }
     }
 })

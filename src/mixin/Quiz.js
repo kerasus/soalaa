@@ -10,9 +10,6 @@ const mixinQuiz = {
     isQuizPage() {
       return this.$route.name === 'onlineQuiz.quiz'
     },
-    userAnswersOfOnlineQuiz() {
-      return this.$store.getters.userAnswersOfOnlineQuiz
-    },
     quiz: {
       get () {
         return this.$store.getters.quiz
@@ -82,9 +79,10 @@ const mixinQuiz = {
     loadQuiz () {
       this.quiz = new Quiz(this.quizData)
       this.quiz.loadSubcategoriesOfCategories()
-      this.loadUserQuizData()
+      this.loadUserQuizData(this.quiz)
     },
-    loadUserQuizData () {
+    loadUserQuizData (quiz) {
+      this.$store.commit('updateCurrentQuiz', quiz)
       this.$store.commit('loadUserQuizListData')
     },
     getQuestionNumberFromIndex (index) {
