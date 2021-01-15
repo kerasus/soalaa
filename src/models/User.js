@@ -98,11 +98,6 @@ class User extends Model {
                 exam_id
             }, '/3a/api/user/registerExam')
                 .then((response) => {
-                    let exams = response.data.data.exams
-                    let userExams = response.data.data.user_exams
-                    that.loadUserExams(exams, userExams)
-                })
-                .then((response) => {
                     resolve(response)
                 })
                 .catch( (error) => {

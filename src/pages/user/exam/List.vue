@@ -105,10 +105,7 @@
             getExams () {
                 // this.user.registerExam('5ffdcc5b5590063ba07fad36')
                 //     .then((response) => {
-                //         console.log('exams', response.data.data.exams)
-                //     })
-                //     .catch((error) => {
-                //         Assistant.handleAxiosError(error)
+                //         console.log(response)
                 //     })
 
                 this.user.exams.loading = true
