@@ -57,6 +57,14 @@ class User extends Model {
 
     }
 
+    setUserExamStatus (exam) {
+        if (!exam.is_registered) {
+            return 'not registered'
+        } else if (exam.is_registered && !exam.accept_at) {
+            return 'not registered'
+        }
+    }
+
     loadUserExams (exams, userExams) {
         exams.forEach( (examItem) => {
             let userExam = userExams.find( (userExamItem) => {
