@@ -7,14 +7,20 @@ let Time = function () {
         return moment().format('YYYY-MM-DD hh:mm:ss');
     }
 
-    function getPassedTime(startTime) {
+    function getPassedTime(startTime, formattedTime) {
         let passedDiff = diff(now(), startTime)
-        return msToTime(passedDiff)
+        if (typeof formattedTime === 'undefined' || formattedTime === true) {
+            return msToTime(passedDiff)
+        }
+        return passedDiff
     }
 
-    function getRemainTime(endTime) {
+    function getRemainTime(endTime, formattedTime) {
         let remainDiff = diff(endTime, now())
-        return msToTime(remainDiff)
+        if (typeof formattedTime === 'undefined' || formattedTime === true) {
+            return msToTime(remainDiff)
+        }
+        return remainDiff
     }
 
     function msToTime(s) {

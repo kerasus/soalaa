@@ -72,6 +72,11 @@
                     </v-col>
                 </v-row>
             </v-radio-group>
+            <v-row>
+                <v-col>
+                    <v-textarea v-model="currentQuestion.answer" outlined label="جواب تشریحی" />
+                </v-col>
+            </v-row>
         </v-form>
         <hr>
         <div id="mathfield" locale="fa">x=\frac{-b\pm \sqrt{b^2-4ac}}{2a}</div>

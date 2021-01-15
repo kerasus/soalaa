@@ -1,6 +1,5 @@
 import Vue from 'vue'
 import { Model, Collection } from 'js-abstract-model'
-import { AnswerList } from './Answer'
 import { ChoiceList } from './Choice'
 import { CheckingTimeList } from "@/models/CheckingTime";
 import Time from "@/plugins/time";
@@ -34,8 +33,7 @@ class Question extends Model {
                 relatedModel: CheckingTimeList
             },
             {
-                key: 'answers',
-                relatedModel: AnswerList
+                key: 'answer'
             },
             {
                 key: 'choices',

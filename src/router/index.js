@@ -38,6 +38,12 @@ const router = new VueRouter({
             meta: {middleware: auth}
         },
         {
+            path: encodeURI('/آزمون_آنلاین/پاسخ_برگ'),
+            name: 'onlineQuiz.result.pasokhbarg',
+            component: () => lazyLoadView(import('@/components/OnlineQuiz/Quiz/resultTables/pasokhBarg')),
+            meta: {middleware: auth}
+        },
+        {
             path: encodeURI('/آزمون_آنلاین/کارنامه/ریز درس_ها'),
             name: 'onlineQuiz.result.lessonDetails',
             component: () => lazyLoadView(import('@/components/OnlineQuiz/Quiz/resultTables/statisticResult')),
@@ -113,6 +119,12 @@ const router = new VueRouter({
             path: '/video-analyze',
             name: 'video-analyze',
             component: () => lazyLoadView(import('@/components/AnalyzeByVideo')),
+            meta: {middleware: auth}
+        },
+        {
+            path: '/common-questions',
+            name: 'common-questions',
+            component: () => lazyLoadView(import('@/components/commonQuestions')),
             meta: {middleware: auth}
         }
     ]

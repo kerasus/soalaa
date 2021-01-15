@@ -3,7 +3,7 @@
         <div v-for="(group, index) in questionsInGroups" :key="index" class="question-group">
             <div v-for="question in group" :key="question.id" class="question-in-list">
                 <div
-                        :class="{ 'question-number-in-list': true, circle: question.state === 'circle', cross: question.state === 'cross' }"
+                        :class="{ 'question-number-in-list': true, circle: question.state === 'circle', cross: question.state === 'cross', bookmark: question.bookmarked }"
                         :style="{ width: '24%', cursor: 'pointer' }"
                         @click="clickQuestionNumber(question.id)"
                 >
@@ -84,6 +84,7 @@
 <style scoped>
     .pasokh-nameh .choice-in-list {
         position: relative;
+        cursor: auto;
     }
 
     .pasokh-nameh .choice-in-list.answer {
@@ -155,6 +156,20 @@
         -webkit-font-smoothing: antialiased;
         -moz-osx-font-smoothing: grayscale;
         color: red;
+        left: -6px;
+        font-size: 16px;
+        top: -5px;
+    }
+
+    .pasokh-nameh .question-number-in-list.bookmark::after {
+        content: "\F00C3";
+        position: absolute;
+        font: normal normal normal 24px/1 "Material Design Icons";
+        text-rendering: auto;
+        line-height: inherit;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+        color: #2196F3;
         left: -6px;
         font-size: 16px;
         top: -5px;

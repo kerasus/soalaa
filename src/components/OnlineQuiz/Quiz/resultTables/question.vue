@@ -1,19 +1,12 @@
 <template>
-    <div :class="{ 'current-question': this.currentQuestion.id === source.id, question: true, ltr: source.ltr  }">
+    <div :class="{ question: true, ltr: source.ltr }">
         <div class="buttons-group">
-            <v-select :items="quizList.list" item-text="title" chips multiple attach outlined dense full-width v-if="false"/>
-            <v-btn icon @click="removeQuestion()">
-                <v-icon :size="24">mdi-close</v-icon>
-            </v-btn>
-            <v-btn icon :to="{ name: 'quest.edit', params: { id: source.id } }" >
-                <v-icon :size="24">mdi-pencil</v-icon>
-            </v-btn>
-            <input :id="'question-id' + source.id" :value="source.id" type="text" class="not-visible" />
-            <v-btn icon @click="copyIdToClipboard()">
-                <v-icon>mdi-content-copy</v-icon>
+            <v-btn icon @click="bookmark(source)">
+                <v-icon v-if="!source.bookmarked" :size="24" color="#888">mdi-bookmark-outline</v-icon>
+                <v-icon v-if="source.bookmarked" color="blue" :size="24">mdi-bookmark</v-icon>
             </v-btn>
         </div>
-        <span class="question-body renderedPanel" :id="'question' + source.id" v-html="(getQuestionNumberFromId(source.id)) + ' (' + source.order + ') - ' + source.rendered_statement" v-intersect="{
+        <span class="question-body renderedPanel" :id="'question' + source.id" v-html="(getQuestionNumberFromId(source.id)) + '- ' + source.rendered_statement" v-intersect="{
             handler: onIntersect,
             options: {
               threshold: [0, 0.2, 0.4, 0.6, 0.8, 1.0]
@@ -25,26 +18,24 @@
                     :key="choice.id"
                     v-html="(choiceNumber[index]) + choice.rendered_title"
                     :md="choiceClass(source)"
-                    :class="{ choice: true, renderedPanel: true, active: choice.answer }"
+                    :class="{ choice: true, renderedPanel: true, active: choice.active, answer: choice.answer }"
             />
         </v-row>
     </div>
 </template>
 
 <script>
-    import 'github-markdown-css/github-markdown.css'
     import '@/assets/scss/markdownKatex.scss'
     import { mixinQuiz, mixinWindowSize } from '@/mixin/Mixins'
     import $ from "jquery";
-
     var md = require('markdown-it')(),
         mk = require('markdown-it-katex')
     md.use(mk);
 
     export default {
         name: 'item',
-        mixins: [mixinQuiz, mixinWindowSize],
-        data() {
+        mixins: [ mixinQuiz, mixinWindowSize ],
+        data () {
             return {
                 choiceNumber: {
                     0: 'الف) ',
@@ -59,31 +50,16 @@
                 type: Number
             },
             source: { // here is: {uid: 'unique_1', text: 'abc'}
-                default() {
+                default () {
                     return {}
-                }
-            },
-            quizList: {
-                type: Array,
-                default() {
-                    return []
                 }
             }
         },
         methods: {
-            copyIdToClipboard() {
-                const questionIdElement = document.querySelector('#question-id' + this.source.id)
-                questionIdElement.select()
-                console.log(document.execCommand('copy'))
-            },
             onIntersect(entries) {
                 this.source.onIntersect(entries)
             },
-            choiceClicked(questionId, choiceId) {
-                this.changeQuestion(questionId)
-                this.answerClicked({questionId, choiceId})
-            },
-            choiceClass(question) {
+            choiceClass (question) {
                 // let QuestionWidthRatio = 0.4
                 // let largestChoiceWidth = this.windowSize.x * QuestionWidthRatio / largestChoice
                 let largestChoice = this.getLargestChoice(question.choices)
@@ -99,7 +75,7 @@
                 }
                 return 12
             },
-            removeErab(string) {
+            removeErab (string) {
                 if (!string || string.length === 0) {
                     return ''
                 }
@@ -114,39 +90,15 @@
                 temp = temp.split('ٍ').join('')
                 return temp
             },
-            getLargestChoice(choices) {
+            getLargestChoice (choices) {
                 let largestChoice = 0
-                choices.list.forEach((source) => {
+                choices.list.forEach((source)=> {
                     if (source.title.length > largestChoice) {
                         largestChoice = this.removeErab(source.title).length
                     }
                 })
                 return largestChoice
             },
-            removeQuestion() {
-                this.source.show(null, '/3a/api/exam-question/detach/' + this.source.id).then(() => {
-
-                }).catch((error) => {
-                    console.log(error)
-                })
-            },
-            edit(questionId) {
-                console.log(questionId)
-            }
-        },
-        created() {
-            setTimeout(() => {console.log(this.quiz)}, 2000)
-        },
-        computed: {
-            // lesson() {
-            //     console.log(this.source.sub_categories)
-            //     if (!this.source.sub_categories) {
-            //         return {title: 'صبر کنید'}
-            //     }
-            //     const subCategoryId = Assistant.getId(this.source.sub_category.id)
-            //     console.log(this.quiz.sub_categories)
-            //     return this.quiz.sub_categories.list.find((item) => item.id === subCategoryId)
-            // }
         }
     }
 </script>
@@ -169,11 +121,6 @@
         float: right;
     }
 
-    .not-visible {
-        max-width: 1px;
-        max-height: 1px;
-    }
-
     .current-question {
         background-color: #fffaee;
     }
@@ -184,7 +131,6 @@
     }
 
     .choice {
-        cursor: pointer;
         transition: all ease-in-out 0.3s;
         display: flex;
         align-items: flex-start;
@@ -198,7 +144,20 @@
     }
 
     .choice.active::before {
-        content: "\F012C";
+        content: "\F0156";
+        display: inline-block;
+        font: normal normal normal 24px/1 "Material Design Icons";
+        text-rendering: auto;
+        line-height: inherit;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+        margin-left: 10px;
+        color: red;
+        font-size: 20px;
+    }
+
+    .choice.answer::before {
+        content: "\F05E1";
         display: inline-block;
         font: normal normal normal 24px/1 "Material Design Icons";
         text-rendering: auto;
@@ -210,10 +169,18 @@
         font-size: 20px;
     }
 
-    .choice:hover {
-        background: #e1e1e1;
+    .choice.answer.active::before {
+        content: "\F05E0";
+        display: inline-block;
+        font: normal normal normal 24px/1 "Material Design Icons";
+        text-rendering: auto;
+        line-height: inherit;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+        margin-left: 10px;
+        color: #4caf50;
+        font-size: 20px;
     }
-
 
     .question-body {
         margin-bottom: 20px;
@@ -234,18 +201,6 @@
 </style>
 
 <style>
-    .quiz-editor .v-select__slot .v-select__selections input {
-        display: none;
-    }
-
-    .quiz-editor .v-text-field__details {
-        display: none;
-    }
-
-    .quiz-editor .v-select.v-select--chips.v-select--is-multi {
-        min-width: 200px;
-    }
-
     .ltr .choice p {
         margin-left: 5px;
         margin-right: 0;
