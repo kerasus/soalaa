@@ -1,8 +1,8 @@
 <template>
-    <div style="background-color: rgb(244, 244, 244)">
-        <div class="d-flex justify-center">
-            <info/>
-        </div>
+    <div >
+<!--        <div class="d-flex justify-center">-->
+<!--            <info/>-->
+<!--        </div>-->
         <div class="d-flex justify-center">
             <v-col>
                 <v-row class=" d-flex justify-center">
@@ -20,11 +20,11 @@
 </template>
 
 <script>
-    import Info from "@/components/OnlineQuiz/Quiz/resultTables/info";
+    // import Info from "@/components/OnlineQuiz/Quiz/resultTables/info";
 
     export default {
         name: "statisticResult",
-        components: {Info},
+        // components: {Info},
         data() {
             return {
                 headers: [

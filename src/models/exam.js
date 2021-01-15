@@ -17,6 +17,7 @@ class Exam extends Model {
             { key: 'finished_at' },
             { key: 'accept_at' },
             { key: 'is_registered' },
+            { key: 'user_exam_status' },
             { key: 'price' },
             { key: 'delay_time' }
         ])
