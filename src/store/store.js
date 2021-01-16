@@ -44,13 +44,14 @@ const store = new Vuex.Store({
             // Merge rather than replace so we don't lose observers
             // https://github.com/vuejs/vuex/issues/1118
             // Object.assign(state, getDefaultState())
-            window.localStorage.setItem('access_token', '')
-            window.localStorage.setItem('user', '')
             this.commit('user', null)
             this.commit('quiz', null)
             this.commit('accessToken', null)
             this.commit('currentQuestion', null)
             this.commit('userQuizListData', [])
+            window.localStorage.setItem('access_token', '')
+            window.localStorage.setItem('user', '')
+            // window.localStorage.setItem('vuex', '')
         },
         // updateQuizList (state, newInfo) {
         //     state.quizList = newInfo

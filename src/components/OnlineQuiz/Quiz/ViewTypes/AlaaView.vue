@@ -75,7 +75,7 @@
 </template>
 
 <script>
-    import FakeQuizData from '@/plugins/fakeQuizData'
+    // import FakeQuizData from '@/plugins/fakeQuizData'
     import Choice from '@/components/OnlineQuiz/Quiz/Choice'
     import Timer from '@/components/OnlineQuiz/Quiz/Timer/Timer'
     import { mixinQuiz, mixinDrawer, mixinWindowSize } from '@/mixin/Mixins'
@@ -89,7 +89,7 @@
         mixins: [mixinQuiz, mixinDrawer, mixinWindowSize],
         data () {
             return {
-                quizData: FakeQuizData
+                quizData: null
             }
         },
         created() {
