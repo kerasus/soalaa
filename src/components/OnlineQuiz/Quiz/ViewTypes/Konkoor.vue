@@ -141,7 +141,9 @@ export default {
         return {
             quizData: new Quiz(),
             item: Item,
-            lastTimeScrollRange: { start: 0, end: 29 }
+            lastTimeScrollRange: { start: 0, end: 29 },
+            scrollState: 'not scrolling',
+            timePassedSinceLastScroll: 0
         }
     },
     methods: {
@@ -149,15 +151,34 @@ export default {
             this.$store.commit('updateAppBar', state)
             this.$store.commit('updateDrawer', state)
         },
-        onScroll (event, range) {
-            if (range.start !== this.lastTimeScrollRange.start || range.end !== this.lastTimeScrollRange.end) {
-                this.quiz.questions.turnIsInViewToFalse(range.start, range.end)
-                this.lastTimeScrollRange.start = range.start
-                this.lastTimeScrollRange.end = range.end
-                // console.log(event, range, 'lastTimeScrollRange : ', this.lastTimeScrollRange)
-            }
-            this.changeCurrentQuestionToFirstQuestionInView()
+        changeCurrentQuestionIfScrollingIsDone (event, range) {
+            console.log('timePassedSinceLastScroll: ' ,this.timePassedSinceLastScroll)
+            if (this.timePassedSinceLastScroll >= 1000) {
+                console.log('oomad inja')
+                if (range.start !== this.lastTimeScrollRange.start || range.end !== this.lastTimeScrollRange.end) {
+                    this.quiz.questions.turnIsInViewToFalse(range.start, range.end)
+                    this.lastTimeScrollRange.start = range.start
+                    this.lastTimeScrollRange.end = range.end
+                    console.log('raft toosh')
 
+                    // console.log(event, range, 'lastTimeScrollRange : ', this.lastTimeScrollRange)
+                }
+                this.changeCurrentQuestionToFirstQuestionInView()
+                this.timePassedSinceLastScroll = 0
+                this.scrollState = 'not scrolling'
+                console.log("i've done it")
+                clearInterval()
+            }
+            this.timePassedSinceLastScroll += 250
+        },
+        onScroll (event, range) {
+            if (this.scrollState === 'not scrolling') {
+                setInterval(() => {
+                    this.changeCurrentQuestionIfScrollingIsDone(event, range)
+                }, 250)
+                this.scrollState = 'scrolling'
+            }
+            this.timePassedSinceLastScroll = 0
         },
         changeCurrentQuestionToFirstQuestionInView () {
             const firstInViewQuestion = this.getFirstInViewQuestionNumber()
