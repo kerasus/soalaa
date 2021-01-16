@@ -85,11 +85,13 @@ class Question extends Model {
             this.rendered_statement = md.render(this.statement)
         }
     }
+
     getAnsweredChoice () {
         return this.choices.list.find((item) => {
             return (item.active === true)
         })
     }
+
     isAnswered () {
         let answeredChoice = this.getAnsweredChoice()
 
@@ -100,6 +102,7 @@ class Question extends Model {
             return false
         }
     }
+
     changeState (newState) {
         if (newState === 'cross') {
             this.uncheckChoices()
@@ -110,15 +113,19 @@ class Question extends Model {
         }
         Vue.set(this, 'state', newState)
     }
+
     bookmark () {
         this.bookmarked = !this.bookmarked
     }
+
     enterQuestion () {
         this.checking_times.addStart()
     }
+
     leaveQuestion () {
         this.checking_times.addEnd()
     }
+
     selectChoice (choiceId) {
         const answeredAt = Time.now()
         this.choices.list.map((item)=> {
@@ -147,6 +154,10 @@ class Question extends Model {
 
     onIntersect (entries) {
         this.isInView = entries[0].intersectionRatio >= 0.8
+    }
+
+    sendAnswer () {
+        this.show(null, '/3a/api/temp-exam/answer/choice')
     }
 }
 
