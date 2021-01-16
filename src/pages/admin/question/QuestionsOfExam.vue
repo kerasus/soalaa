@@ -183,6 +183,7 @@
             const url = '/3a/api/exam-question/attach/show/' + this.$route.params.quizId
             this.quizData.show(null, url)
                 .then((response) => {
+                    console.log('test: ', response.data.data)
                     this.quizData.questions = new QuestionList(response.data.data)
                     this.quiz = new Quiz(this.quizData)
                 })
