@@ -117,7 +117,7 @@ const mixinQuiz = {
       let userQuestionData = userQuizData.examData.find((questionData)=> Assistant.getId(questionData.questionId) === Assistant.getId(this.currentQuestion.id))
 
       // set default data
-      let dataToSendAnswer = {question_id: data.questionId, choice_id: data.choiceId, selected_at: Time.now()}
+      let dataToSendAnswer = {question_id: data.question_id, choice_id: data.choiceId, selected_at: Time.now()}
       let dataToSendStatus = {question_id: data.question_id, status: data.status}
       let dataToSendBookmark = data.questionId
 
@@ -172,7 +172,7 @@ const mixinQuiz = {
       this.currentQuestion.changeState(newState)
       this.$store.commit('setCurrentQuestion', this.currentQuestion)
       this.$store.commit('refreshUserQuizListData')
-      this.sendQuestionData({ exam_user_id: this.quiz.user_exam_id, question_id: question.id, status: newState }, 'sendStatus')
+      this.sendQuestionData({ exam_user_id: this.quiz.user_exam_id, question_id: question.id, status: this.currentQuestion.state }, 'sendStatus')
     },
     needToLoadQuiaData () {
       return (!this.quiz.id || Assistant.getId(this.$route.params.quizId) !== Assistant.getId(this.quiz.id))
