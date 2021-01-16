@@ -4,7 +4,7 @@ import moment from 'moment'
 
 let Time = function () {
     function now() {
-        return moment().format('YYYY-MM-DD HH:MM:SS');
+        return moment().format('YYYY-MM-DD HH:mm:ss');
     }
 
     function getPassedTime(startTime, formattedTime) {
@@ -32,7 +32,7 @@ let Time = function () {
 
     function addTime(amount, type, formattedTime, base) {
         if (formattedTime) {
-            return moment(base).add(amount, type).format('YYYY-MM-DD HH:MM:SS')
+            return moment(base).add(amount, type).format('YYYY-MM-DD HH:mm:ss')
         }
         return moment().add(amount, type).unix()
     }
