@@ -245,7 +245,7 @@
 
     .questions {
         background: #fff;
-        overflow-y: hidden;
+        overflow-y: auto;
         overflow-x: hidden;
         position: relative;
         /*padding-right: 25px;*/
