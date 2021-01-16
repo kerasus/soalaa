@@ -146,6 +146,7 @@ const mixinQuiz = {
       this.changeQuestion(question.id)
     },
     changeQuestion(id) {
+      console.log('mixin quiz/ changeQuestion')
       if (Assistant.getId(this.currentQuestion.id) === Assistant.getId(id)) {
         return
       }

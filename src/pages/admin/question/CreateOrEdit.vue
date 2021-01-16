@@ -72,11 +72,11 @@
                     </v-col>
                 </v-row>
             </v-radio-group>
-            <v-row>
-                <v-col>
-                    <v-textarea v-model="currentQuestion.answer" outlined label="جواب تشریحی" />
-                </v-col>
-            </v-row>
+<!--            <v-row>-->
+<!--                <v-col>-->
+<!--                    <v-textarea v-model="currentQuestion.answer" outlined label="جواب تشریحی" />-->
+<!--                </v-col>-->
+<!--            </v-row>-->
         </v-form>
         <hr>
         <div id="mathfield" locale="fa">x=\frac{-b\pm \sqrt{b^2-4ac}}{2a}</div>
@@ -152,10 +152,10 @@
                 choiceRendered: ['', '', '', ''],
                 latexData: null,
                 choiceNumber: {
-                    0: 'الف ',
-                    1: 'ب ',
-                    2: 'ج ',
-                    3: 'د '
+                    0: '1 ',
+                    1: '2 ',
+                    2: '3 ',
+                    3: '4 '
                 },
                 trueChoiceIndex: 0,
                 fieldId: [0],

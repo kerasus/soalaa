@@ -130,7 +130,7 @@
         },
         methods: {
             getExams () {
-
+                // this.registerExam('5ffdcc5b5590063ba07fad36')
                 // this.participateExam('5ffdcc5b5590063ba07fad36')
 
                 this.loadingList = true
@@ -144,9 +144,6 @@
             },
             registerExam (examId) {
                 this.user.registerExam(examId)
-                    .then((response) => {
-                        console.log(response)
-                    })
             }
         }
     }

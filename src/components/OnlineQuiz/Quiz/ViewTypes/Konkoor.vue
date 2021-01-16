@@ -1,15 +1,17 @@
 <template>
     <v-container class="konkoor-view" :fluid="true" :style="{ height: '100%', background: 'rgb(244, 244, 244)' }" v-resize="updateWindowSize">
         <v-row :style="{ 'min-height': '100%' }">
-            <v-col :md="5" class="questions" :style="{ height: windowSize.y }">
+            <v-col :md="5" class="questions" id="questions" :style="{ height: windowSize.y }">
                 <div class="lesson">{{ currentLessons.title }}</div>
                 <virtual-list style="overflow-y: auto;"
                               :data-key="'id'"
                               :data-sources="quiz.questions.list"
                               :data-component="item"
+                              :keep="20"
+                              :estimate-size="100"
                               ref="scroller"
-                              @scroll="onScroll"
                               class="questionss"
+                              @scroll="onScroll"
                 />
             </v-col>
             <v-col :md="7" class="left-side-list">
@@ -112,20 +114,20 @@
 <script>
 import $ from 'jquery'
 import '@/assets/scss/markdownKatex.scss'
-import Vue from 'vue'
+// import Vue from 'vue'
 import VirtualList from 'vue-virtual-scroll-list'
 import 'vue-virtual-scroller/dist/vue-virtual-scroller.css'
-import { DynamicScroller, DynamicScrollerItem } from 'vue-virtual-scroller'
+// import { DynamicScroller, DynamicScrollerItem } from 'vue-virtual-scroller'
 import Item from './components/question'
 import { mixinQuiz, mixinWindowSize } from '@/mixin/Mixins'
 import Timer from '@/components/OnlineQuiz/Quiz/Timer/Timer'
 import BubbleSheet from "@/components/OnlineQuiz/Quiz/BubbleSheet/BubbleSheet";
 import {Quiz} from "@/models/Quiz";
-Vue.component('DynamicScroller', DynamicScroller)
-Vue.component('DynamicScrollerItem', DynamicScrollerItem)
-var md = require('markdown-it')(),
-    mk = require('markdown-it-katex')
-md.use(mk);
+// Vue.component('DynamicScroller', DynamicScroller)
+// Vue.component('DynamicScrollerItem', DynamicScrollerItem)
+// var md = require('markdown-it')(),
+//     mk = require('markdown-it-katex')
+// md.use(mk);
 
 export default {
     name: 'KonkoorView',
@@ -148,21 +150,20 @@ export default {
             this.$store.commit('updateDrawer', state)
         },
         onScroll (event, range) {
-            // if (range.start !== this.lastTimeScrollRange.start || range.end !== this.lastTimeScrollRange.end) {
-            //     this.quiz.questions.turnIsInViewToFalse(range.start, range.end)
-            // }
+            if (range.start !== this.lastTimeScrollRange.start || range.end !== this.lastTimeScrollRange.end) {
+                this.quiz.questions.turnIsInViewToFalse(range.start, range.end)
+                this.lastTimeScrollRange.start = range.start
+                this.lastTimeScrollRange.end = range.end
+                // console.log(event, range, 'lastTimeScrollRange : ', this.lastTimeScrollRange)
+            }
             // setTimeout(() => {
             //     this.changeCurrentQuestionToFirstQuestionInView()
             // }, 2000)
-            console.log(event, range)
+
         },
         changeCurrentQuestionToFirstQuestionInView () {
+            console.log('first :', this.getFirstInViewQuestionNumber())
             this.changeCurrentQuestion(this.quiz.questions.getQuestionByIndex(this.getFirstInViewQuestionNumber() - 1))
-        },
-        addIsInViewBoolean () {
-            for (let i = 0; i < this.quiz.questions.list.length; i++) {
-                this.quiz.questions.list[i].isInView = false
-            }
         },
         scrollTo (questionId) {
             if (this.quiz.questions.getQuestionById(questionId).isInView === false) {
@@ -223,11 +224,12 @@ export default {
         this.scrollTo(this.currentQuestion.id)
     },
     created () {
-        this.quizData.show(this.$route.params.quizId).then((response) => {
-            console.log(response)
-        }).catch((error) => {
-            console.log(error)
-        })
+        // this.quizData.show(this.$route.params.quizId).then((response) => {
+        //     console.log(response)
+        // }).catch((error) => {
+        //     console.log(error)
+        // })
+        this.startExam()
         if (this.windowSize.x > 959) {
             this.changeAppBarAndDrawer(false)
             if (!this.quiz.id || (this.$route.params.quizId).toString() !== (this.quiz.id).toString()) {
