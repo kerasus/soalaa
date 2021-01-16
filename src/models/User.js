@@ -32,6 +32,9 @@ class User extends Model {
                 key: 'school',
             },
             {
+                key: 'user_exam_status',
+            },
+            {
                 key: 'gender',
                 default:{ id: null}
             },
@@ -62,9 +65,9 @@ class User extends Model {
     }
 
     setUserExamStatus (exam) {
-        console.log(exam.title, ' passed time since start: ', Time.getPassedTime(exam.start_at))
-        console.log(exam.title, ' start at: ', exam.start_at)
-        console.log('now: ', Time.now())
+        // console.log(exam.title, ' passed time since start: ', Time.getPassedTime(exam.start_at))
+        // console.log(exam.title, ' start at: ', exam.start_at)
+        // console.log('now: ', Time.now())
         // console.log(Time.addTime(exam.delay_time, 'minutes', true, exam.start_at), false) > 0 && Time.getPassedTime(Time.now())
         // console.log(Time.addTime(exam.delay_time, 'minutes', true, exam.start_at), false) > 0 && Time.getPassedTime(Time.now())
         let status = null
@@ -113,6 +116,7 @@ class User extends Model {
                     let exams = response.data.data.exams
                     let userExams = response.data.data.user_exams
                     that.loadUserExams(exams, userExams)
+                    that.exams.loading = false
                 })
                 .then((response) => {
                     resolve(response)
