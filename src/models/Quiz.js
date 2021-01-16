@@ -3,6 +3,7 @@ import {QuestionList} from './Question';
 import {QuestCategoryList} from "@/models/QuestCategory";
 import {QuestSubcategoryList} from '@/models/QuestSubcategory';
 import { CheckingTimeList } from "@/models/CheckingTime";
+import Assistant from "@/plugins/assistant";
 
 class Quiz extends Model {
     constructor (data) {
@@ -89,6 +90,9 @@ class Quiz extends Model {
     }
 
     mergeUserQuizData (userQuizData) {
+        if (Assistant.getId(userQuizData.examId) !== Assistant.getId(this.id)) {
+            return
+        }
         let questionsHasData = this.getQuestionsHasData()
         questionsHasData.forEach((question) => {
             if (!userQuizData.examData) {

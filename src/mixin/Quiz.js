@@ -99,7 +99,7 @@ const mixinQuiz = {
     answerClicked (data) {
       this.quiz.questions.getQuestionById(data.questionId).selectChoice(data.choiceId)
       this.currentQuestion.selectChoice(data.choiceId)
-      this.$store.commit('setQuiz', this.quiz)
+      this.$store.commit('updateQuiz', this.quiz)
       this.$store.commit('setCurrentQuestion', this.currentQuestion)
       this.$store.commit('refreshUserQuizListData')
     },
@@ -169,7 +169,7 @@ const mixinQuiz = {
       const currentQuestion = this.quiz.questions.getQuestionById(id)
       this.$store.commit('updateCurrentQuestion', currentQuestion)
       // this.quiz.questions.getQuestionById(this.currentQuestion.id).enterQuestion()
-      if (parseInt(this.$route.params.questNumber) !== parseInt(questNumber) && this.$route.name !== 'onlineQuiz.konkoorView') {
+      if (parseInt(this.$route.params.questNumber) !== parseInt(questNumber) && this.$route.name !== 'onlineQuiz.konkoorView' && this.$route.name !== 'onlineQuiz.bubblesheet/view') {
           this.$router.push({ name: 'onlineQuiz.alaaView', params: { quizId: this.quiz.id, questNumber } })
       }
     },
