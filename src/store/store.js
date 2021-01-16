@@ -113,13 +113,14 @@ const store = new Vuex.Store({
                 return
             }
             console.log('came there')
-            if (newQuestionId) {
-                let newQuestion = state.quiz.questions.getQuestionById(newQuestionId)
-
-                if(newQuestion) {
-                    newQuestion.enterQuestion()
-                }
-            }
+            // ToDo: check in comment
+            // if (newQuestionId) {
+            //     let newQuestion = state.quiz.questions.getQuestionById(newQuestionId)
+            //
+            //     if(newQuestion) {
+            //         newQuestion.enterQuestion()
+            //     }
+            // }
             if (oldQuestionId) {
                 let currentQuizData = state.userQuizListData.find( (item) => {
                     return Assistant.getId(item.examId) === Assistant.getId(state.quiz.id)

@@ -133,7 +133,8 @@
         }),
         mixins: [mixinQuiz],
         created() {
-            console.log(Time.now())
+            console.log(
+                Time.now())
             this.getExams()
         },
         methods: {

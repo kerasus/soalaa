@@ -64,9 +64,10 @@ class Quiz extends Model {
                 const selected = item.choices.getSelected()
                 const bookmarked = item.bookmarked
                 const state = item.state
-                const checkingTimesLength = item.checking_times.list.length
+                // const checkingTimesLength = item.checking_times.list.length
 
-                return (selected || bookmarked || state || checkingTimesLength)
+                // return (selected || bookmarked || state || checkingTimesLength)
+                return (selected || bookmarked || state)
             }
         )
     }
@@ -82,7 +83,7 @@ class Quiz extends Model {
                 question.uncheckChoices()
                 question.selectChoice(userQuestionData.choicesId)
 
-                question.checking_times = new CheckingTimeList(userQuestionData.checking_times.list)
+                // question.checking_times = new CheckingTimeList(userQuestionData.checking_times.list)
                 question.bookmarked = userQuestionData.bookmarked
                 question.state = userQuestionData.state
             }
@@ -140,8 +141,8 @@ class Quiz extends Model {
         if (answeredChoice) {
             userQuestionData.choicesId = answeredChoice.id
         }
-
-        this.addUserQuestionDataCheckingTimes (question, userQuestionData.checking_times)
+        // Todo: check in time comment
+        // this.addUserQuestionDataCheckingTimes (question, userQuestionData.checking_times)
 
         userQuestionData.bookmarked = question.bookmarked
         userQuestionData.state = question.state
@@ -155,12 +156,14 @@ class Quiz extends Model {
             answeredChoiceId = answeredChoice.id
             answered_at = answeredChoice.answered_at
         }
-        let checkingTimes = []
-        this.addUserQuestionDataCheckingTimes (question, checkingTimes)
+        // Todo: check in time comment
+        // let checkingTimes = []
+        // this.addUserQuestionDataCheckingTimes (question, checkingTimes)
 
         userQuizData.push({
             questionId: question.id,
-            checking_times: checkingTimes,
+            // Todo: check in time comment
+            // checking_times: checkingTimes,
             bookmarked: question.bookmarked,
             state: question.state,
             choicesId: answeredChoiceId,
