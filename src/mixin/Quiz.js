@@ -117,7 +117,7 @@ const mixinQuiz = {
       // set default data
       let dataToSendAnswer = {question_id: data.questionId, choice_id: data.choiceId, selected_at: Time.now()}
       let dataToSendStatus = {question_id: data.question_id, status: data.status}
-      let dataToSendBookmark = {question_id: data.questionId}
+      let dataToSendBookmark = data.questionId
 
       // set data from localstorage of user
       if (userQuestionData) {
@@ -131,9 +131,9 @@ const mixinQuiz = {
       }
       if (actionType === 'sendBookmark') {
         if (data.bookmarked) {
-          question.sendBookmark(data.user_exam_id, dataToSendBookmark)
+          question.sendBookmark(data.exam_user_id, dataToSendBookmark)
         } else {
-          question.sendUnBookmark(data.user_exam_id, dataToSendBookmark)
+          question.sendUnBookmark(data.exam_user_id, dataToSendBookmark)
         }
       }
       if (actionType === 'sendStatus') {
@@ -158,7 +158,7 @@ const mixinQuiz = {
       this.currentQuestion.bookmark()
       this.$store.commit('setCurrentQuestion', this.currentQuestion)
       this.$store.commit('refreshUserQuizListData')
-      this.sendQuestionData({ exam_user_id: this.quiz.id, questionId: question.id, bookmarked: this.currentQuestion.bookmarked}, 'sendBookmark')
+      this.sendQuestionData({ exam_user_id: this.quiz.user_exam_id, questionId: question.id, bookmarked: this.currentQuestion.bookmarked}, 'sendBookmark')
     },
     changeState (question, newState) {
       if (this.currentQuestion.id !== question.id) {
@@ -170,7 +170,7 @@ const mixinQuiz = {
       this.currentQuestion.changeState(newState)
       this.$store.commit('setCurrentQuestion', this.currentQuestion)
       this.$store.commit('refreshUserQuizListData')
-      this.sendQuestionData({ exam_user_id: this.quiz.id, question_id: question.id, status: newState }, 'sendStatus')
+      this.sendQuestionData({ exam_user_id: this.quiz.user_exam_id, question_id: question.id, status: newState }, 'sendStatus')
     },
     needToLoadQuiaData () {
       return (!this.quiz.id || Assistant.getId(this.$route.params.quizId) !== Assistant.getId(this.quiz.id))
