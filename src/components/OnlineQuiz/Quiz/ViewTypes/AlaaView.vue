@@ -20,11 +20,11 @@
                                     </p>
                                 </div>
                                 <div class="question-buttons">
-                                    <v-btn icon @click="changeState(currentQuestion, 'circle')">
+                                    <v-btn icon @click="changeState(currentQuestion, 'o')">
                                         <v-icon v-if="currentQuestion.state !== 'o'" color="#888" size="30">mdi-checkbox-blank-circle-outline</v-icon>
                                         <v-icon v-if="currentQuestion.state === 'o'" color="yellow" :size="30">mdi-checkbox-blank-circle</v-icon>
                                     </v-btn>
-                                    <v-btn icon @click="changeState(currentQuestion, 'cross')">
+                                    <v-btn icon @click="changeState(currentQuestion, 'x')">
                                         <v-icon :color="currentQuestion.state === 'x' ? 'red' : '#888'" :size="30">mdi-close</v-icon>
                                     </v-btn>
                                     <v-btn icon @click="bookmark(currentQuestion)">
