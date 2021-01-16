@@ -30,6 +30,13 @@ let Time = function () {
         return pad(s/3.6e6|0) + ':' + pad((s%3.6e6)/6e4 | 0) + ':' + pad((s%6e4)/1000|0);
     }
 
+    function addTime(amount, type, formattedTime, base) {
+        if (formattedTime) {
+            return moment(base).add(amount, type).format('YYYY-MM-DD hh:mm:ss')
+        }
+        return moment().add(amount, type).unix()
+    }
+
     function diff(a, b) {
         let aDiff = moment(a);
         let bDiff = moment(b);
@@ -56,7 +63,8 @@ let Time = function () {
         msToTime,
         getRemainTime,
         getPassedTime,
-        setStateOfExamCategories
+        setStateOfExamCategories,
+        addTime
     };
 }();
 

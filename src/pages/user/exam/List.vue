@@ -46,7 +46,7 @@
                         >
                             <v-row class="justify-center">
                                 <v-col cols="3" class="pr-7 justify-center">
-                                    {{ item.title }}
+                                    {{ item.title }} {{ item.user_exam_status }}
                                 </v-col>
                                 <v-col cols="3">
                                     {{ item.shamsiDate('start_at').dateTime }}
@@ -62,11 +62,21 @@
                                     <v-btn
                                             text
                                             color="#ffc107"
+                                            v-if="item.user_exam_status === 'has participated and finished' || item.user_exam_status === 'registered but participation time passed'"
                                     >
                                         مشاهده نتایج
                                     </v-btn>
                                     <v-btn
                                             text
+                                            color="purple"
+                                            v-if="item.user_exam_status === 'has participated but not finished'"
+                                    >
+                                        ادامه آزمون
+                                    </v-btn>
+                                    <v-btn
+                                            v-if="item.user_exam_status === 'registered but did not participate'"
+                                            text
+                                            :to="{ name: 'onlineQuiz.alaaView', params: { quizId: item.id, questNumber: 1 }}"
                                             color="#00b5e6"
                                     >
                                         شروع آزمون
@@ -74,8 +84,25 @@
                                     <v-btn
                                             text
                                             color="#00c753"
+                                            v-if="item.user_exam_status === 'not registered'"
                                     >
                                         ثبت نام
+                                    </v-btn>
+                                    <v-btn
+                                            text
+                                            color="#00c753"
+                                            v-if="item.user_exam_status === 'not registered and registration time passed'"
+                                            disabled
+                                    >
+                                        اتمام مهلت ثبت نام
+                                    </v-btn>
+                                    <v-btn
+                                            text
+                                            color="#00c753"
+                                            v-if="item.user_exam_status === 'registered but not reached participation time'"
+                                            disabled
+                                    >
+                                        زمان آزمون فرا نرسیده
                                     </v-btn>
                                 </v-col>
                             </v-row>
@@ -90,6 +117,7 @@
 <script>
     import {Exam} from "@/models/exam";
     import {User} from "@/models/User";
+    import Time from "@/plugins/time";
     // import Assistant from "@/plugins/assistant";
 
     export default {
@@ -100,11 +128,16 @@
         }),
         created() {
             this.getExams()
+            console.log(Time.now())
+            console.log(Time.addTime(30, 'minutes'))
         },
         methods: {
             getExams () {
-
                 this.registerExam('5ffdcc5b5590063ba07fad36')
+                this.registerExam('6001e2214ad1f6448b2428a4')
+                this.registerExam('6001dfbe4ad1f6448b2428a2')
+                this.registerExam('6001a9495d85df2e5b5b49c6')
+                this.registerExam('6001c1af5d85df2e5b5b49c9')
                 this.user.exams.loading = true
                 this.user.getUserExams()
                     .then(() => {
