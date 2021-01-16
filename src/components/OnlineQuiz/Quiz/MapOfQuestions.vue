@@ -29,10 +29,10 @@
                             >
                                 تست شماره
                                 {{ getQuestionNumberFromIndex(questionIndex) }}
-                                <v-icon v-if="question.state === 'cross'" color="red">
+                                <v-icon v-if="question.state === 'x'" color="red">
                                     mdi-close
                                 </v-icon>
-                                <v-icon v-if="question.state === 'circle'" color="yellow" size="15">
+                                <v-icon v-if="question.state === 'o'" color="yellow" size="15">
                                     mdi-checkbox-blank-circle
                                 </v-icon>
                                 <v-icon v-if="typeof (question.isAnswered) === 'function' && question.isAnswered()" color="green">

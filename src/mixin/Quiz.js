@@ -3,6 +3,8 @@ import 'github-markdown-css/github-markdown.css';
 import '@/assets/scss/markdownKatex.scss';
 import {QuestSubcategory} from "@/models/QuestSubcategory";
 import Assistant from "@/plugins/assistant";
+import {Question} from "@/models/Question";
+import Time from "@/plugins/time";
 
 const mixinQuiz = {
   computed: {
@@ -24,6 +26,9 @@ const mixinQuiz = {
       set (newInfo) {
         this.$store.commit('updateQuiz', newInfo)
       }
+    },
+    userQuizListData() {
+      return this.$store.getters.userQuizListData
     },
     currentQuestion: {
       get () {
@@ -96,12 +101,52 @@ const mixinQuiz = {
       }
       this.changeQuestion(this.quiz.questions.list[questionIndex].id)
     },
+    sendQuestionData (data, actionType) {
+      // find quiz
+      let userQuizData = this.userQuizListData.find( (item) => {
+        return Assistant.getId(item.examId) === Assistant.getId(this.quiz.id)
+      })
+      if (!userQuizData || !this.currentQuestion || !Assistant.getId(this.currentQuestion.id)) {
+        return
+      }
+
+      // find question
+      let question = new Question()
+      let userQuestionData = userQuizData.examData.find((questionData)=> Assistant.getId(questionData.questionId) === Assistant.getId(this.currentQuestion.id))
+
+      // set default data
+      let dataToSendAnswer = {question_id: data.questionId, choice_id: data.choiceId, selected_at: Time.now()}
+      let dataToSendStatus = {question_id: data.questionId, status: ''}
+      let dataToSendBookmark = {question_id: data.questionId}
+
+      // set data from localstorage of user
+      if (userQuestionData) {
+        dataToSendAnswer.selected_at = userQuestionData.answered_at
+        dataToSendStatus.status = userQuestionData.state
+      }
+
+      // do action
+      if (actionType === 'sendAnswer') {
+        question.sendAnswer(this.quiz.user_exam_id, dataToSendAnswer)
+      }
+      if (actionType === 'sendBookmark') {
+        if (data.bookmarked) {
+          question.sendBookmark(data.user_exam_id, dataToSendBookmark)
+        } else {
+          question.sendUnBookmark(data.user_exam_id, dataToSendBookmark)
+        }
+      }
+      if (actionType === 'sendStatus') {
+        question.sendStatus(this.quiz.user_exam_id, dataToSendStatus)
+      }
+    },
     answerClicked (data) {
       this.quiz.questions.getQuestionById(data.questionId).selectChoice(data.choiceId)
       this.currentQuestion.selectChoice(data.choiceId)
       this.$store.commit('updateQuiz', this.quiz)
       this.$store.commit('setCurrentQuestion', this.currentQuestion)
       this.$store.commit('refreshUserQuizListData')
+      this.sendQuestionData(data, 'sendAnswer')
     },
     bookmark (question) {
       if (this.currentQuestion.id !== question.id) {
@@ -111,7 +156,7 @@ const mixinQuiz = {
       this.quiz.questions.getQuestionById(this.currentQuestion.id).bookmark()
       this.currentQuestion.bookmark()
       this.$store.commit('refreshUserQuizListData')
-
+      this.sendQuestionData({ exam_user_id: this.quiz.id, questionId: question.id, bookmarked: this.currentQuestion.bookmarked}, 'sendBookmark')
     },
     changeState (question, newState) {
       if (this.currentQuestion.id !== question.id) {
@@ -121,6 +166,7 @@ const mixinQuiz = {
       this.quiz.questions.getQuestionById(this.currentQuestion.id).changeState(newState)
       this.currentQuestion.changeState(newState)
       this.$store.commit('refreshUserQuizListData')
+      this.sendQuestionData({ exam_user_id: this.quiz.id, question_id: question.id, status: newState }, 'sendStatus')
     },
     needToLoadQuiaData () {
       return (!this.quiz.id || Assistant.getId(this.$route.params.quizId) !== Assistant.getId(this.quiz.id))

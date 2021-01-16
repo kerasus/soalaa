@@ -232,6 +232,9 @@ const store = new Vuex.Store({
         },
         user (state) {
             return new User(state.user)
+        },
+        userQuizListData (state) {
+            return state.userQuizListData
         }
     }
 })

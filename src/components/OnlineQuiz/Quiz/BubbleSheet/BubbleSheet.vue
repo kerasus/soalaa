@@ -3,7 +3,7 @@
         <div v-for="(group, index) in questionsInGroups" :key="index" class="question-group">
             <div v-for="question in group" :key="question.id" class="question-in-list">
                 <div
-                        :class="{ 'question-number-in-list': true, circle: question.state === 'circle', cross: question.state === 'cross', bookmark: question.bookmarked }"
+                        :class="{ 'question-number-in-list': true, circle: question.state === 'o', cross: question.state === 'cross', bookmark: question.bookmarked }"
                         :style="{ width: '24%', cursor: 'pointer' }"
                         @click="clickQuestionNumber(question.id)"
                 >

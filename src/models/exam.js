@@ -144,7 +144,7 @@ class Exam extends Model {
                 userQuizData.examData = []
                 this.addUserQuestionData(question, userQuizData.examData)
             } else {
-                let userQuestionData = userQuizData.examData.find((questionData)=> questionData.questionId === question.id)
+                let userQuestionData = userQuizData.examData.find((questionData)=> Assistant.getId(questionData.questionId) === Assistant.getId(question.id))
                 if (!userQuestionData) {
                     this.addUserQuestionData(question, userQuizData.examData)
                 } else {
