@@ -1,4 +1,5 @@
 import moment from 'moment'
+// import Assistant from "@/plugins/assistant";
 // import store from '@/store/store'
 // import { Quiz } from '@/models/Quiz'
 
@@ -43,19 +44,40 @@ let Time = function () {
         return aDiff.diff(bDiff) // 86400000
     }
 
-    function setStateOfExamCategories() {
-        // const now = this.now()
-        // console.log('store.getters.quiz.categories', store)
-        // store.getters.quiz.categories.list.forEach( (category, index, categories) => {
-        //     const prevCat = categories[index - 1]
-        //
-        //     if (prevCat && prevCat.end_at > now) {
-        //         category.is_active = false
-        //     } else category.is_active = category.end_at > now;
-        //
-        //     return category
-        // })
+    function setStateOfExamCategories(categories) {
+        const now = this.now()
+        categories.list.forEach( (category, index, categories) => {
+            const prevCat = categories[index - 1]
+            const nextCat = categories[index + 1]
+            const lastCat = categories[categories.length - 1]
+            // const isLastCat = Assistant.getId(lastCat.id) === Assistant.getId(category.id)
+
+            if (prevCat && getRemainTime(prevCat.accept_at) > 0) {
+                category.is_active = false
+            } else if (nextCat && getRemainTime(prevCat.accept_at) > 0) {
+                category.is_active = false
+            } else if (getPassedTime(lastCat.accept_at) > 0) {
+                category.is_active = true
+            } else category.is_active = category.accept_at > now;
+
+            return category
+        })
     }
+
+    // function getCurrentCategoryAcceptAt(categories) {
+    //     const now = this.now()
+    //     const currentCat = categories.list.find( (item) => item.is_active)
+    //     const lastCat = categories[categories.length - 1]
+    //     const isLastCat = Assistant.getId(lastCat.id) === Assistant.getId(category.id)
+    //
+    //     if (currentCat && !isLastCat) {
+    //         return currentCat
+    //     } else if (currentCat && isLastCat) {
+    //         return true
+    //     } else {
+    //         return false
+    //     }
+    // }
 
     return {
         now,
@@ -64,6 +86,7 @@ let Time = function () {
         getRemainTime,
         getPassedTime,
         setStateOfExamCategories,
+        // getNextCategoryAcceptAt,
         addTime
     };
 }();

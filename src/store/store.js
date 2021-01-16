@@ -175,8 +175,10 @@ const store = new Vuex.Store({
                     examData: []
                 }
             }
-            state.userQuizListData.map( () => {
-                return state.quiz.mergeUserQuizData(currentQuizData)
+            state.userQuizListData.map( (item) => {
+                if (Assistant.getId(item.examId) === Assistant.getId(state.quiz.id)) {
+                    return state.quiz.mergeUserQuizData(currentQuizData)
+                }
             })
         },
         loadUserQuizListData (state) {

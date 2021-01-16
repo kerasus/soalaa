@@ -42,6 +42,7 @@ class Exam extends Model {
             { key: 'start_at' },
             { key: 'finish_at' },
             { key: 'accept_at' },
+            { key: 'created_at' },
             { key: 'finished_at' },
             { key: 'is_registered' }
         ])

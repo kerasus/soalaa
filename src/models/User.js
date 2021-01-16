@@ -152,10 +152,12 @@ class User extends Model {
         let questions_file_url = response.data.data.questions_file_url
         let categories = response.data.data.categories
         let sub_categories = response.data.data.sub_categories
+        let created_at = response.data.data.created_at
 
 
         userExamForParticipate.id = exam_id
         userExamForParticipate.user_exam_id = user_exam_id
+        userExamForParticipate.created_at = created_at
         userExamForParticipate.questions_file_url = questions_file_url
         userExamForParticipate.categories = new QuestCategoryList(categories)
         userExamForParticipate.sub_categories = new QuestSubcategoryList(sub_categories)
