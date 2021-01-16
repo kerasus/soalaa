@@ -122,6 +122,7 @@
 <script>
     import {Exam} from "@/models/exam";
     import { mixinQuiz } from '@/mixin/Mixins'
+    import Time from "@/plugins/time";
 
     export default {
         name: 'list',
@@ -131,6 +132,7 @@
         }),
         mixins: [mixinQuiz],
         created() {
+            console.log(Time.now())
             this.getExams()
         },
         methods: {

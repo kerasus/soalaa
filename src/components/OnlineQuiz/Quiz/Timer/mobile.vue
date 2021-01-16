@@ -1,8 +1,8 @@
 <template>
     <div style="bottom: 0">
         <v-row style="padding-left: 0">
-            <v-col cols="7 " class="col-sm-6 btnCol" >
-                <div class="sideBtns  elevation-3">
+            <v-col cols="7 " class="col-sm-6 btnCol">
+                <div class="sideBtns  elevation-3" >
                     <v-row>
 <!--                        <v-col cols="1"/>-->
                         <v-col class="d-flex justify-center">
