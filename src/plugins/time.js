@@ -1,5 +1,5 @@
 import moment from 'moment'
-import Assistant from "@/plugins/assistant";
+// import Assistant from "@/plugins/assistant";
 // import store from '@/store/store'
 // import { Quiz } from '@/models/Quiz'
 
@@ -50,7 +50,7 @@ let Time = function () {
             const prevCat = categories[index - 1]
             const nextCat = categories[index + 1]
             const lastCat = categories[categories.length - 1]
-            const isLastCat = Assistant.getId(lastCat.id) === Assistant.getId(category.id)
+            // const isLastCat = Assistant.getId(lastCat.id) === Assistant.getId(category.id)
 
             if (prevCat && getRemainTime(prevCat.accept_at) > 0) {
                 category.is_active = false
@@ -64,20 +64,20 @@ let Time = function () {
         })
     }
 
-    function getCurrentCategoryAcceptAt(categories) {
-        const now = this.now()
-        const currentCat = categories.list.find( (item) => item.is_active)
-        const lastCat = categories[categories.length - 1]
-        const isLastCat = Assistant.getId(lastCat.id) === Assistant.getId(category.id)
-
-        if (currentCat && !isLastCat) {
-            return currentCat
-        } else if (currentCat && isLastCat) {
-            return true
-        } else {
-            return false
-        }
-    }
+    // function getCurrentCategoryAcceptAt(categories) {
+    //     const now = this.now()
+    //     const currentCat = categories.list.find( (item) => item.is_active)
+    //     const lastCat = categories[categories.length - 1]
+    //     const isLastCat = Assistant.getId(lastCat.id) === Assistant.getId(category.id)
+    //
+    //     if (currentCat && !isLastCat) {
+    //         return currentCat
+    //     } else if (currentCat && isLastCat) {
+    //         return true
+    //     } else {
+    //         return false
+    //     }
+    // }
 
     return {
         now,
@@ -86,7 +86,7 @@ let Time = function () {
         getRemainTime,
         getPassedTime,
         setStateOfExamCategories,
-        getNextCategoryAcceptAt,
+        // getNextCategoryAcceptAt,
         addTime
     };
 }();
