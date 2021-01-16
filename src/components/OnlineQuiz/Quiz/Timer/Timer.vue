@@ -7,7 +7,7 @@
 <script>
     import MobileTimer from '@/components/OnlineQuiz/Quiz/Timer/mobile'
     import PcTimer from '@/components/OnlineQuiz/Quiz/Timer/pc'
-    import {mixinWindowSize} from '@/mixin/Mixins'
+    import {mixinWindowSize, mixinQuiz} from '@/mixin/Mixins'
     import {Timer} from "@/models/Timer";
     import Time from "@/plugins/time";
 
@@ -19,14 +19,15 @@
             remainTime: '00:00:00',
             timer: new Timer()
         }),
-        mixins: [mixinWindowSize],
+        mixins: [mixinWindowSize, mixinQuiz],
         components: {
             MobileTimer,
             PcTimer
         },
         mounted() {
             this.interval = setInterval(() => {
-                this.passedTime = Time.getPassedTime('2021-01-13 04:44:00')
+                Time.setStateOfExamCategories(this.quiz.categories)
+                this.passedTime = Time.getPassedTime(this.quiz.created_at)
                 this.remainTime = Time.getRemainTime('2021-01-13 08:44:00')
                 // this.timer.updateTimer();
             }, 1000);
