@@ -121,7 +121,6 @@ const store = new Vuex.Store({
                 }
             }
             if (oldQuestionId) {
-                let oldQuestion = state.quiz.questions.getQuestionById(oldQuestionId)
                 let currentQuizData = state.userQuizListData.find( (item) => {
                     return Assistant.getId(item.examId) === Assistant.getId(state.quiz.id)
                 })
@@ -131,10 +130,12 @@ const store = new Vuex.Store({
                         examData: []
                     }
                 }
-                state.quiz.loadCheckingTimesFromUserData(oldQuestion, currentQuizData.examData)
-                if(oldQuestion) {
-                    oldQuestion.leaveQuestion()
-                }
+                // ToDo: checkin time is no optimize
+                // let oldQuestion = state.quiz.questions.getQuestionById(oldQuestionId)
+                // state.quiz.loadCheckingTimesFromUserData(oldQuestion, currentQuizData.examData)
+                // if(oldQuestion) {
+                //     oldQuestion.leaveQuestion()
+                // }
             }
             state.currentQuestion = new Question(newInfo)
             this.commit('refreshUserQuizListData')

@@ -3,6 +3,7 @@ import { Model, Collection } from 'js-abstract-model'
 import { ChoiceList } from './Choice'
 import { CheckingTimeList } from "@/models/CheckingTime";
 import Time from "@/plugins/time";
+import axios from "axios";
 var md = require('markdown-it')(),
     mk = require('markdown-it-katex')
 md.use(mk);
@@ -156,8 +157,17 @@ class Question extends Model {
         this.isInView = entries[0].intersectionRatio >= 0.8
     }
 
-    sendAnswer () {
-        this.show(null, '/3a/api/temp-exam/answer/choice')
+    sendAnswer (exam_user_id) {
+        axios.get('/3a/api/temp-exam/answer/choice/'+exam_user_id, {
+            params: {
+                question_id: this.id,
+                choice_id: this.id,
+                selected_at: this.id
+            }
+        }).then( () => {
+
+        })
+
     }
 }
 
