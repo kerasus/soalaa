@@ -55,7 +55,7 @@ const mixinQuiz = {
   },
   methods: {
     startExam () {
-      if (this.needToLoadQuiaData) {
+      if (this.needToLoadQuiaData() && this.$route.params.quizId) {
         this.participateExam(this.$route.params.quizId)
       } else {
         this.loadUserQuizDataFromStorage()
@@ -100,8 +100,8 @@ const mixinQuiz = {
     },
     participateExam (examId) {
       this.user.participateExam(examId)
-          .then(({userExam}) => {
-            this.loadQuiz(userExam)
+          .then(({userExamForParticipate}) => {
+            this.loadQuiz(userExamForParticipate)
           })
     },
     loadQuiz (userExamForParticipate) {

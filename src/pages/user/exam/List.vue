@@ -60,46 +60,48 @@
                                 </v-col>
                                 <v-col cols="2">
                                     <v-btn
+                                            v-if="item.user_exam_status === 'has participated and finished' || item.user_exam_status === 'registered but participation time passed'"
                                             text
                                             color="#ffc107"
-                                            v-if="item.user_exam_status === 'has participated and finished' || item.user_exam_status === 'registered but participation time passed'"
                                     >
                                         مشاهده نتایج
                                     </v-btn>
                                     <v-btn
+                                            v-if="item.user_exam_status === 'has participated but not finished'"
+                                            :to="{ name: 'onlineQuiz.alaaView', params: { quizId: item.id, questNumber: 1 } }"
                                             text
                                             color="purple"
-                                            v-if="item.user_exam_status === 'has participated but not finished'"
                                     >
                                         ادامه آزمون
                                     </v-btn>
                                     <v-btn
                                             v-if="item.user_exam_status === 'registered but did not participate'"
+                                            :to="{ name: 'onlineQuiz.alaaView', params: { quizId: item.id, questNumber: 1 } }"
                                             text
-                                            :to="{ name: 'onlineQuiz.alaaView', params: { quizId: item.id, questNumber: 1 }}"
                                             color="#00b5e6"
                                     >
                                         شروع آزمون
                                     </v-btn>
                                     <v-btn
+                                            v-if="item.user_exam_status === 'not registered'"
+                                            href="https://alaatv.com/landing/19"
                                             text
                                             color="#00c753"
-                                            v-if="item.user_exam_status === 'not registered'"
                                     >
                                         ثبت نام
                                     </v-btn>
                                     <v-btn
+                                            v-if="item.user_exam_status === 'not registered and registration time passed'"
                                             text
                                             color="#00c753"
-                                            v-if="item.user_exam_status === 'not registered and registration time passed'"
                                             disabled
                                     >
                                         اتمام مهلت ثبت نام
                                     </v-btn>
                                     <v-btn
+                                            v-if="item.user_exam_status === 'registered but not reached participation time'"
                                             text
                                             color="#00c753"
-                                            v-if="item.user_exam_status === 'registered but not reached participation time'"
                                             disabled
                                     >
                                         زمان آزمون فرا نرسیده
@@ -144,6 +146,15 @@
             },
             registerExam (examId) {
                 this.user.registerExam(examId)
+                    .then((response) => {
+                        this.$notify({
+                            group: 'notifs',
+                            title: 'توجه!',
+                            text: 'ثبت نام در آزمون با موفقیت انجام شد',
+                            type: 'success'
+                        })
+                        console.log(response)
+                    })
             }
         }
     }

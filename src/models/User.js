@@ -146,21 +146,29 @@ class User extends Model {
         return this.exams.list.find( (item) => Assistant.getId(item.user_exam_id) === userExamId)
     }
 
-    loadExamForParticipate (response) {
+    loadExamForParticipate (response, userExamForParticipate) {
         let user_exam_id = Assistant.getId(response.data.data.id)
         let exam_id = Assistant.getId(response.data.data.exam_id)
         let questions_file_url = response.data.data.questions_file_url
         let categories = response.data.data.categories
         let sub_categories = response.data.data.sub_categories
-        this.exams.list.map( (item) => {
-            if(Assistant.getId(item.id) === exam_id) {
-                item.user_exam_id = user_exam_id
-                item.questions_file_url = questions_file_url
-                item.categories = new QuestCategoryList(categories)
-                item.sub_categories = new QuestSubcategoryList(sub_categories)
-            }
-            return item
-        })
+
+
+        userExamForParticipate.id = exam_id
+        userExamForParticipate.user_exam_id = user_exam_id
+        userExamForParticipate.questions_file_url = questions_file_url
+        userExamForParticipate.categories = new QuestCategoryList(categories)
+        userExamForParticipate.sub_categories = new QuestSubcategoryList(sub_categories)
+
+        // this.exams.list.map( (item) => {
+        //     if(Assistant.getId(item.id) === exam_id) {
+        //         item.user_exam_id = user_exam_id
+        //         item.questions_file_url = questions_file_url
+        //         item.categories = new QuestCategoryList(categories)
+        //         item.sub_categories = new QuestSubcategoryList(sub_categories)
+        //     }
+        //     return item
+        // })
     }
 
     participateExam (exam_id) {
@@ -171,16 +179,16 @@ class User extends Model {
             }, '/3a/api/exam-user')
                 .then((response) => {
                     let userExamForParticipate = new Exam()
-                    let userExamId = Assistant.getId(response.data.data.id)
+                    // let userExamId = Assistant.getId(response.data.data.id)
                     that.loadExamForParticipate(response, userExamForParticipate)
-                    let userExam = that.getUsrExamByExamId(userExamId)
-                    if (!userExam) {
-                        userExam = new Exam()
-                    }
+                    // let userExam = that.getUsrExamByExamId(userExamId)
+                    // if (!userExam) {
+                    //     userExam = new Exam()
+                    // }
 
-                    userExam.loadQuestionsFromFile()
+                    userExamForParticipate.loadQuestionsFromFile()
                         .then( (data) => {
-                            resolve({response, userExam, data})
+                            resolve({response, userExamForParticipate, data})
                         })
                         .catch( (error) => {
                             reject(error)
