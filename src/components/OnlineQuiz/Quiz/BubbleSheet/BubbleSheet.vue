@@ -70,13 +70,14 @@
             }
         },
         mounted () {
+            console.log(this.questionListHeight())
+            setTimeout(() => { $('.questions-list').height(this.questionListHeight()) }, 3000)
+        },
+        'windowSize.x': function () {
+            // const padding = this.questionListPadding()
+            // $('.questions-list').css({ 'padding-right': padding })
+            // $('.questions-list').css({ 'padding-left': padding })
             $('.questions-list').height(this.questionListHeight())
-            $('.questions-list').css({ 'padding-top': '20px' })
-            this.$nextTick(() => {
-                const padding = this.questionListPadding()
-                $('.questions-list').css({ 'padding-right': padding })
-                $('.questions-list').css({ 'padding-left': padding })
-            });
         }
     }
 </script>
