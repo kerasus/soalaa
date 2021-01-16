@@ -135,6 +135,9 @@ class Exam extends Model {
     }
 
     mergeUserQuizData (userQuizData) {
+        if (Assistant.getId(userQuizData.examId) !== Assistant.getId(this.id)) {
+            return
+        }
         let questionsHasData = this.getQuestionsHasData()
         questionsHasData.forEach((question) => {
             if (!userQuizData.examData) {
