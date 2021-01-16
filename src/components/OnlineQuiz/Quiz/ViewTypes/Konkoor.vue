@@ -154,19 +154,18 @@ export default {
         },
         changeCurrentQuestionIfScrollingIsDone (event, range) {
             console.log('timePassedSinceLastScroll: ' ,this.timePassedSinceLastScroll)
+            console.log('range: ', range)
+            if (range.start !== this.lastTimeScrollRange.start || range.end !== this.lastTimeScrollRange.end) {
+                this.quiz.questions.turnIsInViewToFalse(range.start, range.end)
+                this.lastTimeScrollRange.start = range.start
+                this.lastTimeScrollRange.end = range.end
+                // console.log(event, range, 'lastTimeScrollRange : ', this.lastTimeScrollRange)
+            }
             if (this.timePassedSinceLastScroll >= 1000) {
-                console.log('oomad inja')
-                if (range.start !== this.lastTimeScrollRange.start || range.end !== this.lastTimeScrollRange.end) {
-                    this.quiz.questions.turnIsInViewToFalse(range.start, range.end)
-                    this.lastTimeScrollRange.start = range.start
-                    this.lastTimeScrollRange.end = range.end
-                    console.log('raft toosh')
-                    // console.log(event, range, 'lastTimeScrollRange : ', this.lastTimeScrollRange)
-                }
                 this.changeCurrentQuestionToFirstQuestionInView()
                 this.timePassedSinceLastScroll = 0
                 this.scrollState = 'not scrolling'
-                console.log("i've done it : ", this.currentQuestion.id)
+                console.log("i've done it : ", this.quiz.questions.getQuestionIndexById(this.currentQuestion.id) + 1)
                 clearInterval(this.setIntervalCallback)
                 this.setIntervalCallback = null
             }
@@ -205,7 +204,7 @@ export default {
         // },
         // ToDo: check for removal
         getFirstInViewQuestionNumber () {
-            let firstQuestionInView = this.quiz.questions.list.find( (item)=> {
+            let firstQuestionInView = this.quiz.questions.list.find((item)=> {
                 return item.isInView === true
             })
             if (firstQuestionInView) {
