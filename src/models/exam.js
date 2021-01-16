@@ -5,7 +5,7 @@ import {QuestSubcategoryList} from "@/models/QuestSubcategory";
 import $ from 'jquery'
 import {CheckingTimeList} from "@/models/CheckingTime";
 import Assistant from "@/plugins/assistant";
-// import axios from "axios";
+import Vue from 'vue'
 
 class Exam extends Model {
     constructor(data) {
@@ -145,11 +145,11 @@ class Exam extends Model {
                 userQuizData.examData = []
                 this.addUserQuestionData(question, userQuizData.examData)
             } else {
-                let userQuestionData = userQuizData.examData.find((questionData)=> Assistant.getId(questionData.questionId) === Assistant.getId(question.id))
-                if (!userQuestionData) {
+                let userQuestionDataIndex = userQuizData.examData.findIndex((questionData)=> Assistant.getId(questionData.questionId) === Assistant.getId(question.id))
+                if (!userQuestionDataIndex) {
                     this.addUserQuestionData(question, userQuizData.examData)
                 } else {
-                    this.loadUserQuestionData(question, userQuestionData)
+                    this.loadUserQuestionData(question, userQuizData.examData[userQuestionDataIndex])
                 }
             }
         });
@@ -193,8 +193,13 @@ class Exam extends Model {
 
         this.addUserQuestionDataCheckingTimes (question, userQuestionData.checking_times)
 
+        userQuestionData.answered_at = (answeredChoice) ? answeredChoice.answered_at : null
         userQuestionData.bookmarked = question.bookmarked
         userQuestionData.state = question.state
+
+        Vue.set(userQuestionData, 'answered_at', (answeredChoice) ? answeredChoice.answered_at : null)
+        Vue.set(userQuestionData, 'bookmarked', question.bookmarked)
+        Vue.set(userQuestionData, 'state', question.state)
     }
 
     addUserQuestionData (question, userQuizData) {
