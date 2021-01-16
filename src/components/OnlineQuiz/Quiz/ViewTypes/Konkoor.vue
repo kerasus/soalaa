@@ -154,7 +154,6 @@ export default {
         },
         changeCurrentQuestionIfScrollingIsDone (event, range) {
             console.log('timePassedSinceLastScroll: ' ,this.timePassedSinceLastScroll)
-            console.log('range: ', range)
             if (range.start !== this.lastTimeScrollRange.start || range.end !== this.lastTimeScrollRange.end) {
                 this.quiz.questions.turnIsInViewToFalse(range.start, range.end)
                 this.lastTimeScrollRange.start = range.start
@@ -185,7 +184,7 @@ export default {
             if (firstInViewQuestion.id === this.currentQuestion.id) {
                 return
             }
-            this.changeCurrentQuestion(this.quiz.questions.getQuestionByIndex(firstInViewQuestion - 1))
+            this.changeQuestion(firstInViewQuestion)
         },
         scrollTo (questionId) {
             if (this.quiz.questions.getQuestionById(questionId).isInView === false) {
@@ -207,8 +206,8 @@ export default {
             let firstQuestionInView = this.quiz.questions.list.find((item)=> {
                 return item.isInView === true
             })
-            if (firstQuestionInView) {
-                return firstQuestionInView.order + 1
+            if (firstQuestionInView.id !== null) {
+                return firstQuestionInView.id
             } else {
                 return false
             }
@@ -226,15 +225,16 @@ export default {
         //     return ''
         // },
         choiceClicked (questionId, choiceId) {
+            console.log('choiceClicked: ', choiceId)
             this.scrollTo(questionId)
             this.changeQuestion(questionId)
             this.answerClicked({questionId, choiceId})
         },
-        changeCurrentQuestion (question) {
-            if (question.id !== this.currentQuestion.id) {
-                this.currentQuestion = question
-            }
-        }
+        // changeCurrentQuestion (question) {
+        //     if (question.id !== this.currentQuestion.id) {
+        //         this.currentQuestion = question
+        //     }
+        // }
     },
     mounted () {
         $('.questions').height(this.windowSize.y)

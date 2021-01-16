@@ -92,11 +92,11 @@ const store = new Vuex.Store({
             // set checking time
             const oldQuestionId = Assistant.getId(state.currentQuestion.id)
             const newQuestionId = Assistant.getId(newInfo.id)
-
+            console.log('came here')
             if (newQuestionId === oldQuestionId) {
                 return
             }
-
+            console.log('came there')
             if (newQuestionId) {
                 let newQuestion = state.quiz.questions.getQuestionById(newQuestionId)
 
@@ -121,6 +121,7 @@ const store = new Vuex.Store({
                 }
             }
             state.currentQuestion = new Question(newInfo)
+            console.log('wanna commit')
             this.commit('refreshUserQuizListData')
         },
         reloadQuizModel (state) {
@@ -140,6 +141,7 @@ const store = new Vuex.Store({
         //     state.currentQuestion = state.quiz.questions.getPrevQuestion(state.currentQuestion.id)
         // },
         refreshUserQuizListData () {
+            console.log('refresh')
             this.commit('saveUserQuizListData')
             this.commit('loadUserQuizListData')
         },
