@@ -128,15 +128,17 @@ class Question extends Model {
 
     selectChoice (choiceId) {
         const answeredAt = Time.now()
+        let that = this
         this.choices.list.map((item)=> {
             Vue.set(item, 'answered_at', answeredAt)
-            if (this.state === 'x') {
-                this.state = ''
+            if (that.state === 'x') {
+                that.state = ''
+                Vue.set(that, 'state', '')
             }
             if (item.id !== choiceId) {
+                item.active = false
                 Vue.set(item, 'active', false)
-                // item.active = false
-            } else if (choiceId == null || choiceId == undefined || item.active) {
+            } else if (choiceId === null || typeof choiceId === 'undefined' || item.active) {
                 Vue.set(item, 'active', false)
                 // item.active = false
             } else {
@@ -149,6 +151,7 @@ class Question extends Model {
     uncheckChoices () {
         this.choices.list.map((item)=> {
             item.active = false
+            Vue.set(item, 'active', false)
         })
     }
 
@@ -157,27 +160,19 @@ class Question extends Model {
     }
 
     sendAnswer (exam_user_id, {question_id, choice_id, selected_at }) {
-        axios.post('/3a/api/temp-exam/answer/choice/', {
-            params: {exam_user_id, questions: [{question_id, choice_id, selected_at}] }
-        })
+        axios.post('/3a/api/temp-exam/answer/choice/', {exam_user_id, questions: [{question_id, choice_id, selected_at}] })
     }
 
     sendStatus (exam_user_id, {question_id, status }) {
-        axios.post('/3a/api/temp-exam/answer/status', {
-            params: {exam_user_id, question_id, status}
-        })
+        axios.post('/3a/api/temp-exam/answer/status', {exam_user_id, question_id, status})
     }
 
-    sendBookmark (exam_user_id, {question_id }) {
-        axios.post('/3a/api/temp-exam/answer/bookmark', {
-            params: {exam_user_id, question_id}
-        })
+    sendBookmark (exam_user_id, question_id) {
+        axios.post('/3a/api/temp-exam/answer/bookmark', {exam_user_id, question_id})
     }
 
-    sendUnBookmark (exam_user_id, {question_id }) {
-        axios.post('/3a/api/temp-exam/answer/bookmark', {
-            params: {exam_user_id, question_id}
-        })
+    sendUnBookmark (exam_user_id, question_id) {
+        axios.post('/3a/api/temp-exam/answer/unbookmark', {exam_user_id, question_id})
     }
 }
 
