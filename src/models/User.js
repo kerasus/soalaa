@@ -167,8 +167,8 @@ class User extends Model {
                         .then( (data) => {
                             resolve({response, userExam, data})
                         })
-                        .catch( (jqXHR, textStatus, errorThrown) => {
-                            reject({jqXHR, textStatus, errorThrown})
+                        .catch( (error) => {
+                            reject(error)
                         })
                 })
                 .catch( (error) => {

@@ -103,7 +103,7 @@
         methods: {
             getExams () {
 
-                this.participateExam('5ffdcc5b5590063ba07fad36')
+                // this.participateExam('5ffdcc5b5590063ba07fad36')
 
                 this.user.exams.loading = true
                 this.user.getUserExams()

@@ -12,6 +12,14 @@ let Assistant = function () {
 
     function handleAxiosError(error) {
         let messages = []
+        if (error === "can't get exam file") {
+            toastMessages(['مشکلی در دریافت اطلاعات رخ داده است. لطفا مجدد تلاش کنید.'])
+            return
+        }
+        if (!error.response) {
+            console.log(error.message)
+            return
+        }
         let statusCode = parseInt(error.response.status)
         if (statusCode === 500) {
             messages.push('مشکلی رخ داده است. مجدد تلاش کنید.')
