@@ -36,21 +36,22 @@ const store = new Vuex.Store({
         userQuizListData: [],
         accessToken: null,
         currentQuestion: null,
-        appbar: true
+        appbar: true,
+        overlay: false
         // quizList: []
     },
     mutations: {
-        resetState () {
+        resetState (state) {
             // Merge rather than replace so we don't lose observers
             // https://github.com/vuejs/vuex/issues/1118
             // Object.assign(state, getDefaultState())
-            this.commit('user', null)
-            this.commit('quiz', null)
-            this.commit('accessToken', null)
-            this.commit('currentQuestion', null)
-            this.commit('userQuizListData', [])
+            state.user = null
+            state.quiz = null
+            state.accessToken = null
+            state.currentQuestion = null
+            state.userQuizListData = []
             window.localStorage.setItem('access_token', '')
-            window.localStorage.setItem('user', '')
+            // window.localStorage.setItem('user', '')
             // window.localStorage.setItem('vuex', '')
         },
         // updateQuizList (state, newInfo) {
@@ -180,6 +181,9 @@ const store = new Vuex.Store({
         },
         updateAppBar (state, newInfo) {
             state.appbar = newInfo
+        },
+        updateOverlay (state, newInfo) {
+            state.overlay = newInfo
         }
     },
     getters: {
@@ -206,6 +210,9 @@ const store = new Vuex.Store({
         },
         appbar (state) {
             return state.appbar
+        },
+        overlay (state) {
+            return state.overlay
         },
         user (state) {
             return new User(state.user)

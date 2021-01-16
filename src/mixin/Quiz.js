@@ -55,11 +55,36 @@ const mixinQuiz = {
   },
   methods: {
     startExam () {
+      this.$store.commit('updateOverlay', true)
       if (this.needToLoadQuiaData() && this.$route.params.quizId) {
         this.participateExam(this.$route.params.quizId)
       } else {
         this.loadUserQuizDataFromStorage()
       }
+    },
+    participateExam (examId) {
+      this.user.participateExam(examId)
+          .then(({userExamForParticipate}) => {
+            this.loadQuiz(userExamForParticipate)
+          })
+          .catch( () => {
+            this.$store.commit('updateOverlay', false)
+            this.$router.push({ name: 'user.onlineQuiz.list' })
+          })
+    },
+    loadQuiz (userExamForParticipate) {
+      this.$store.commit('updateQuiz', userExamForParticipate)
+      this.quiz.loadSubcategoriesOfCategories()
+      this.loadUserQuizDataFromStorage(this.quiz)
+    },
+    loadUserQuizDataFromStorage () {
+      let questNumber = this.$route.params.questNumber
+      if (!questNumber) {
+        questNumber = 1
+      }
+      this.$store.commit('loadUserQuizListData')
+      this.loadQuestionByNumber(questNumber)
+      this.$store.commit('updateOverlay', false)
     },
     loadFirstQuestion () {
       this.loadQuestionByNumber(1)
@@ -97,25 +122,6 @@ const mixinQuiz = {
     },
     needToLoadQuiaData () {
       return (!this.quiz.id || Assistant.getId(this.$route.params.quizId) !== Assistant.getId(this.quiz.id))
-    },
-    participateExam (examId) {
-      this.user.participateExam(examId)
-          .then(({userExamForParticipate}) => {
-            this.loadQuiz(userExamForParticipate)
-          })
-    },
-    loadQuiz (userExamForParticipate) {
-      this.$store.commit('updateQuiz', userExamForParticipate)
-      this.quiz.loadSubcategoriesOfCategories()
-      this.loadUserQuizDataFromStorage(this.quiz)
-    },
-    loadUserQuizDataFromStorage () {
-      let questNumber = this.$route.params.questNumber
-      if (!questNumber) {
-        questNumber = 1
-      }
-      this.$store.commit('loadUserQuizListData')
-      this.loadQuestionByNumber(questNumber)
     },
     getQuestionNumberFromIndex (index) {
       index = parseInt(index)

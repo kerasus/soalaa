@@ -121,7 +121,7 @@
     direction: ltr !important;
 }
 
-.v-navigation-drawer .v-navigation-drawer__content {
+.v-navigation-drawer.mapOfQuestions .v-navigation-drawer__content {
     overflow-y: scroll;
 }
 .quiz-page .katex-display {
