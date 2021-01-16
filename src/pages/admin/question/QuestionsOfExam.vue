@@ -11,14 +11,14 @@
             <!--                />-->
             <!--            </v-col>-->
             <v-col :md="5" class="questions">
-                <!--                <item v-for="itemm in quiz.questions.list" :key="itemm.id" :source="itemm" />-->
-                <virtual-list style="overflow-y: auto;"
-                              :data-key="'id'"
-                              :data-sources="quiz.questions.list"
-                              :data-component="item"
-                              ref="scroller"
-                              class="questionss"
-                />
+                                <item v-for="itemm in quiz.questions.list" :key="itemm.id" :source="itemm" />
+<!--                <virtual-list style="overflow-y: auto;"-->
+<!--                              :data-key="'id'"-->
+<!--                              :data-sources="quiz.questions.list"-->
+<!--                              :data-component="item"-->
+<!--                              ref="scroller"-->
+<!--                              class="questionss"-->
+<!--                />-->
             </v-col>
             <v-col :md="7" class="left-side-list">
                 <v-row>
@@ -114,7 +114,7 @@
     // import FakeQuizData from "@/plugins/fakeQuizData";
     import $ from 'jquery'
     import Item from '@/components/QuizEditor/Question'
-    import VirtualList from 'vue-virtual-scroll-list'
+    // import VirtualList from 'vue-virtual-scroll-list'
     import '@/assets/scss/markdownKatex.scss'
     import Vue from 'vue'
     import 'vue-virtual-scroller/dist/vue-virtual-scroller.css'
@@ -135,7 +135,8 @@
         name: 'QuestionsOfExam',
         mixins: [mixinQuiz, mixinWindowSize],
         components: {
-            'virtual-list': VirtualList,
+            Item,
+            // 'virtual-list': VirtualList,
             BubbleSheet
         },
         data () {

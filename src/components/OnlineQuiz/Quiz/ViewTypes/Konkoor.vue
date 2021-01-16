@@ -156,14 +156,15 @@ export default {
                 this.lastTimeScrollRange.end = range.end
                 // console.log(event, range, 'lastTimeScrollRange : ', this.lastTimeScrollRange)
             }
-            // setTimeout(() => {
-            //     this.changeCurrentQuestionToFirstQuestionInView()
-            // }, 2000)
+            this.changeCurrentQuestionToFirstQuestionInView()
 
         },
         changeCurrentQuestionToFirstQuestionInView () {
-            console.log('first :', this.getFirstInViewQuestionNumber())
-            this.changeCurrentQuestion(this.quiz.questions.getQuestionByIndex(this.getFirstInViewQuestionNumber() - 1))
+            const firstInViewQuestion = this.getFirstInViewQuestionNumber()
+            if (firstInViewQuestion.id === this.currentQuestion.id) {
+                return
+            }
+            this.changeCurrentQuestion(this.quiz.questions.getQuestionByIndex(firstInViewQuestion - 1))
         },
         scrollTo (questionId) {
             if (this.quiz.questions.getQuestionById(questionId).isInView === false) {
