@@ -144,7 +144,7 @@ export default {
     },
     methods: {
         changeAppBarAndDrawer (state) {
-            this.$store.commit('updateAppbar', state)
+            this.$store.commit('updateAppBar', state)
             this.$store.commit('updateDrawer', state)
         },
         onScroll (event, range) {
@@ -234,7 +234,7 @@ export default {
             if (!this.quiz.id || (this.$route.params.quizId).toString() !== (this.quiz.id).toString()) {
                 this.loadQuiz()
             } else {
-                this.loadUserQuizData()
+                this.loadUserQuizDataFromStorage()
             }
         } else {
             console.log('too in')

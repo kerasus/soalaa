@@ -79,7 +79,6 @@
     import Choice from '@/components/OnlineQuiz/Quiz/Choice'
     import Timer from '@/components/OnlineQuiz/Quiz/Timer/Timer'
     import { mixinQuiz, mixinDrawer, mixinWindowSize } from '@/mixin/Mixins'
-    // import { Quiz } from '@/models/Quiz'
 
     export default {
         name: 'AlaaView',
@@ -94,19 +93,19 @@
             }
         },
         created() {
-
-            if (!this.quiz.id || (this.$route.params.quizId).toString() !== (this.quiz.id).toString()) {
-                this.loadQuiz()
-            } else {
-                this.loadUserQuizData(this.quiz)
+            this.showAppBar()
+            this.updateDrawerBasedOnWindowSize()
+            this.startExam()
+        },
+        methods: {
+            showAppBar () {
+                this.$store.commit('updateAppBar', true)
+            },
+            updateDrawerBasedOnWindowSize () {
+                if (this.windowSize.x > 1263) {
+                    this.$store.commit('updateDrawer', true)
+                }
             }
-            this.loadQuestionByNumber(this.$route.params.questNumber)
-
-            if (this.windowSize.x > 1263) {
-                this.$store.commit('updateDrawer', true)
-            }
-
-            this.$store.commit('updateAppbar', true)
         }
     }
 </script>

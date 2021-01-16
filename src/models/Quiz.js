@@ -39,6 +39,7 @@ class Quiz extends Model {
         this.questions.sortByOrder()
         this.categories.sortByKey('end_at', 'asc')
         this.setQuestionsLtr()
+        this.loadSubcategoriesOfCategories()
     }
 
     setQuestionsLtr () {
