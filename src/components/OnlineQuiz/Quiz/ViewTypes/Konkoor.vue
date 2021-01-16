@@ -143,7 +143,8 @@ export default {
             item: Item,
             lastTimeScrollRange: { start: 0, end: 29 },
             scrollState: 'not scrolling',
-            timePassedSinceLastScroll: 0
+            timePassedSinceLastScroll: 0,
+            setIntervalCallback: null
         }
     },
     methods: {
@@ -160,20 +161,20 @@ export default {
                     this.lastTimeScrollRange.start = range.start
                     this.lastTimeScrollRange.end = range.end
                     console.log('raft toosh')
-
                     // console.log(event, range, 'lastTimeScrollRange : ', this.lastTimeScrollRange)
                 }
                 this.changeCurrentQuestionToFirstQuestionInView()
                 this.timePassedSinceLastScroll = 0
                 this.scrollState = 'not scrolling'
-                console.log("i've done it")
-                clearInterval()
+                console.log("i've done it : ", this.currentQuestion.id)
+                clearInterval(this.setIntervalCallback)
+                this.setIntervalCallback = null
             }
             this.timePassedSinceLastScroll += 250
         },
         onScroll (event, range) {
             if (this.scrollState === 'not scrolling') {
-                setInterval(() => {
+                this.setIntervalCallback = setInterval(() => {
                     this.changeCurrentQuestionIfScrollingIsDone(event, range)
                 }, 250)
                 this.scrollState = 'scrolling'
