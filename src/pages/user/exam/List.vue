@@ -61,48 +61,51 @@
                                 <v-col cols="2">
                                     <v-btn
                                             v-if="item.user_exam_status === 'has participated and finished' || item.user_exam_status === 'registered but participation time passed'"
-                                            text
                                             color="#ffc107"
+                                            text
                                     >
                                         مشاهده نتایج
                                     </v-btn>
                                     <v-btn
                                             v-if="item.user_exam_status === 'has participated but not finished'"
                                             :to="{ name: 'onlineQuiz.alaaView', params: { quizId: item.id, questNumber: 1 } }"
-                                            text
                                             color="purple"
+                                            text
                                     >
                                         ادامه آزمون
                                     </v-btn>
                                     <v-btn
                                             v-if="item.user_exam_status === 'registered but did not participate'"
                                             :to="{ name: 'onlineQuiz.alaaView', params: { quizId: item.id, questNumber: 1 } }"
-                                            text
                                             color="#00b5e6"
+                                            text
                                     >
                                         شروع آزمون
                                     </v-btn>
+<!--                                    href="https://alaatv.com/landing/19"-->
                                     <v-btn
                                             v-if="item.user_exam_status === 'not registered'"
-                                            href="https://alaatv.com/landing/19"
-                                            text
+
+                                            @click="registerExam(item.id)"
                                             color="#00c753"
+                                            text
                                     >
                                         ثبت نام
                                     </v-btn>
                                     <v-btn
                                             v-if="item.user_exam_status === 'not registered and registration time passed'"
-                                            text
                                             color="#00c753"
                                             disabled
+                                            text
                                     >
                                         اتمام مهلت ثبت نام
                                     </v-btn>
+<!--                                    disabled-->
                                     <v-btn
                                             v-if="item.user_exam_status === 'registered but not reached participation time'"
-                                            text
+                                            :to="{ name: 'onlineQuiz.alaaView', params: { quizId: item.id, questNumber: 1 } }"
                                             color="#00c753"
-                                            disabled
+                                            text
                                     >
                                         زمان آزمون فرا نرسیده
                                     </v-btn>
@@ -146,14 +149,14 @@
             },
             registerExam (examId) {
                 this.user.registerExam(examId)
-                    .then((response) => {
+                    .then( () => {
                         this.$notify({
                             group: 'notifs',
                             title: 'توجه!',
                             text: 'ثبت نام در آزمون با موفقیت انجام شد',
                             type: 'success'
                         })
-                        console.log(response)
+                        this.getExams()
                     })
             }
         }

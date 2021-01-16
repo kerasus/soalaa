@@ -55,53 +55,21 @@ const mixinQuiz = {
   },
   methods: {
     startExam () {
+      this.$store.commit('updateOverlay', true)
       if (this.needToLoadQuiaData() && this.$route.params.quizId) {
         this.participateExam(this.$route.params.quizId)
       } else {
         this.loadUserQuizDataFromStorage()
       }
     },
-    loadFirstQuestion () {
-      this.loadQuestionByNumber(1)
-    },
-    loadQuestionByNumber (number) {
-      let questionIndex = this.getQuestionIndexFromNumber(number)
-      if (this.quiz.questions.list.length === 0 || questionIndex < 0) {
-        return
-      }
-      this.changeQuestion(this.quiz.questions.list[questionIndex].id)
-    },
-    answerClicked (data) {
-      this.quiz.questions.getQuestionById(data.questionId).selectChoice(data.choiceId)
-      this.currentQuestion.selectChoice(data.choiceId)
-      this.$store.commit('refreshUserQuizData')
-    },
-    bookmark (question) {
-      if (this.currentQuestion.id !== question.id) {
-        this.currentQuestion = question
-      }
-      this.$store.commit('reloadQuizModel')
-      this.quiz.questions.getQuestionById(this.currentQuestion.id).bookmark()
-      this.currentQuestion.bookmark()
-      this.$store.commit('refreshUserQuizData')
-
-    },
-    changeState (question, newState) {
-      if (this.currentQuestion.id !== question.id) {
-        this.currentQuestion = question
-      }
-      this.$store.commit('reloadQuizModel')
-      this.quiz.questions.getQuestionById(this.currentQuestion.id).changeState(newState)
-      this.currentQuestion.changeState(newState)
-      this.$store.commit('refreshUserQuizData')
-    },
-    needToLoadQuiaData () {
-      return (!this.quiz.id || Assistant.getId(this.$route.params.quizId) !== Assistant.getId(this.quiz.id))
-    },
     participateExam (examId) {
       this.user.participateExam(examId)
           .then(({userExamForParticipate}) => {
             this.loadQuiz(userExamForParticipate)
+          })
+          .catch( () => {
+            this.$store.commit('updateOverlay', false)
+            this.$router.push({ name: 'user.onlineQuiz.list' })
           })
     },
     loadQuiz (userExamForParticipate) {
@@ -116,6 +84,46 @@ const mixinQuiz = {
       }
       this.$store.commit('loadUserQuizListData')
       this.loadQuestionByNumber(questNumber)
+      this.$store.commit('updateOverlay', false)
+    },
+    loadFirstQuestion () {
+      this.loadQuestionByNumber(1)
+    },
+    loadQuestionByNumber (number) {
+      let questionIndex = this.getQuestionIndexFromNumber(number)
+      if (this.quiz.questions.list.length === 0 || questionIndex < 0) {
+        return
+      }
+      this.changeQuestion(this.quiz.questions.list[questionIndex].id)
+    },
+    answerClicked (data) {
+      this.quiz.questions.getQuestionById(data.questionId).selectChoice(data.choiceId)
+      this.currentQuestion.selectChoice(data.choiceId)
+      this.$store.commit('setQuiz', this.quiz)
+      this.$store.commit('setCurrentQuestion', this.currentQuestion)
+      this.$store.commit('refreshUserQuizListData')
+    },
+    bookmark (question) {
+      if (this.currentQuestion.id !== question.id) {
+        this.currentQuestion = question
+      }
+      this.$store.commit('reloadQuizModel')
+      this.quiz.questions.getQuestionById(this.currentQuestion.id).bookmark()
+      this.currentQuestion.bookmark()
+      this.$store.commit('refreshUserQuizListData')
+
+    },
+    changeState (question, newState) {
+      if (this.currentQuestion.id !== question.id) {
+        this.currentQuestion = question
+      }
+      this.$store.commit('reloadQuizModel')
+      this.quiz.questions.getQuestionById(this.currentQuestion.id).changeState(newState)
+      this.currentQuestion.changeState(newState)
+      this.$store.commit('refreshUserQuizListData')
+    },
+    needToLoadQuiaData () {
+      return (!this.quiz.id || Assistant.getId(this.$route.params.quizId) !== Assistant.getId(this.quiz.id))
     },
     getQuestionNumberFromIndex (index) {
       index = parseInt(index)
