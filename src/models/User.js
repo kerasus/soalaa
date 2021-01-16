@@ -32,6 +32,9 @@ class User extends Model {
                 key: 'school',
             },
             {
+                key: 'user_exam_status',
+            },
+            {
                 key: 'gender',
                 default:{ id: null}
             },
@@ -113,6 +116,7 @@ class User extends Model {
                     let exams = response.data.data.exams
                     let userExams = response.data.data.user_exams
                     that.loadUserExams(exams, userExams)
+                    that.exams.loading = false
                 })
                 .then((response) => {
                     resolve(response)
@@ -178,8 +182,8 @@ class User extends Model {
                         .then( (data) => {
                             resolve({response, userExam, data})
                         })
-                        .catch( (jqXHR, textStatus, errorThrown) => {
-                            reject({jqXHR, textStatus, errorThrown})
+                        .catch( (error) => {
+                            reject(error)
                         })
                 })
                 .catch( (error) => {

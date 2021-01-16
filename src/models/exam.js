@@ -4,6 +4,8 @@ import {QuestCategoryList} from "@/models/QuestCategory";
 import {QuestSubcategoryList} from "@/models/QuestSubcategory";
 import $ from 'jquery'
 import {CheckingTimeList} from "@/models/CheckingTime";
+import Assistant from "@/plugins/assistant";
+// import axios from "axios";
 
 class Exam extends Model {
     constructor(data) {
@@ -52,6 +54,20 @@ class Exam extends Model {
     loadQuestionsFromFile () {
         let that = this
         return new Promise(function(resolve, reject) {
+            // axios.get(that.questions_file_url)
+            //     .then( (response) => {
+            //         // console.log('response.data', data)
+            //         that.questions = new QuestionList(response.data)
+            //         resolve(response)
+            //     })
+            //     .catch( (error) => {
+            //         reject(error)
+            //     })
+
+            if (!that.questions_file_url) {
+                reject(null)
+            }
+
             $.ajax({
                     type: 'GET',
                     url: that.questions_file_url,
@@ -63,6 +79,7 @@ class Exam extends Model {
                         resolve(data)
                     },
                     error: function (jqXHR, textStatus, errorThrown) {
+                        Assistant.handleAxiosError("can't get exam file")
                         reject({jqXHR, textStatus, errorThrown})
                     }
                 }

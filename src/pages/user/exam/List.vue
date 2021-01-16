@@ -6,15 +6,15 @@
                         color="#ffc107"
                         absolute
                         top
-                        :active="user.exams.loading"
+                        :active="loadingList"
                         indeterminate
                         rounded
                         height="6"
                 ></v-progress-linear>
-                <v-alert v-if="user.exams.list.length === 0 && !user.exams.loading" type="info">
+                <v-alert v-if="user.exams.list.length === 0 && !loadingList" type="info">
                     آزمونی وجود ندارد
                 </v-alert>
-                <v-row v-if="user.exams.list.length > 0 && !user.exams.loading">
+                <v-row v-if="user.exams.list.length > 0 && !loadingList">
                     <v-col>
                         <v-row>
                             <v-col cols="3" class="pr-7">
@@ -46,7 +46,7 @@
                         >
                             <v-row class="justify-center">
                                 <v-col cols="3" class="pr-7 justify-center">
-                                    {{ item.title }} {{ item.user_exam_status }}
+                                    {{ item.title }}
                                 </v-col>
                                 <v-col cols="3">
                                     {{ item.shamsiDate('start_at').dateTime }}
@@ -121,7 +121,8 @@
     export default {
         name: 'list',
         data: () => ({
-            examItem: new Exam()
+            examItem: new Exam(),
+            loadingList: false
         }),
         mixins: [mixinQuiz],
         created() {
@@ -132,13 +133,13 @@
                 this.registerExam('5ffdcc5b5590063ba07fad36')
                 this.participateExam('5ffdcc5b5590063ba07fad36')
 
-                this.user.exams.loading = true
+                this.loadingList = true
                 this.user.getUserExams()
                     .then(() => {
-                        this.user.exams.loading = false
+                        this.loadingList = false
                     })
                     .catch(() => {
-                        this.user.exams.loading = false
+                        this.loadingList = false
                     })
             },
             registerExam (examId) {
