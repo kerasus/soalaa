@@ -14,7 +14,7 @@
             </v-btn>
         </div>
         <span class="question-body renderedPanel" :id="'question' + source.id" v-html="(getQuestionNumberFromId(source.id)) + '- ' + source.rendered_statement" v-intersect="{
-            handler: source.onIntersect,
+            handler: onIntersect,
             options: {
               threshold: [0, 0.8, 1.0]
             }
@@ -46,10 +46,10 @@
         data () {
             return {
                 choiceNumber: {
-                    0: 'الف) ',
-                    1: 'ب) ',
-                    2: 'ج) ',
-                    3: 'د) '
+                    0: '1) ',
+                    1: '2) ',
+                    2: '3) ',
+                    3: '4) '
                 }
             }
         },
@@ -64,9 +64,9 @@
             }
         },
         methods: {
-            // onIntersect(entries) {
-            //     this.source.onIntersect(entries)
-            // },
+            onIntersect(entries) {
+                this.source.onIntersect(entries)
+            },
             choiceClicked (questionId, choiceId) {
                 this.changeQuestion(questionId)
                 this.answerClicked({questionId, choiceId})

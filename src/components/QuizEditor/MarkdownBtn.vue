@@ -24,6 +24,9 @@
         <v-btn outlined icon @click="add(elem, elemKey, '$\\leftrightharpoons$')">
             <v-icon>mdi-swap-horizontal</v-icon>
         </v-btn>
+        <v-btn outlined icon @click="add(elem, elemKey, '$\\begin{matrix}1 \\\\ \\equiv\\end{matrix}$')">
+            <v-icon>mdi-view-sequential</v-icon>
+        </v-btn>
         <v-btn outlined icon @click="add(elem, elemKey, '$\\begin{cases}\n'+
                                                         '   a &\\text{if } b \\\\\n'+
                                                         '   c &\\text{if } d\n'+

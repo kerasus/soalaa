@@ -7,9 +7,11 @@
                               :data-key="'id'"
                               :data-sources="quiz.questions.list"
                               :data-component="item"
+                              :keep="20"
+                              :estimate-size="100"
                               ref="scroller"
-                              @scroll="onScroll"
                               class="questionss"
+                              @scroll="onScroll"
                 />
             </v-col>
             <v-col :md="7" class="left-side-list">
@@ -149,17 +151,18 @@ export default {
         },
         onScroll (event, range) {
             if (range.start !== this.lastTimeScrollRange.start || range.end !== this.lastTimeScrollRange.end) {
-                // this.quiz.questions.turnIsInViewToFalse(range.start, range.end)
+                this.quiz.questions.turnIsInViewToFalse(range.start, range.end)
                 this.lastTimeScrollRange.start = range.start
                 this.lastTimeScrollRange.end = range.end
                 // console.log(event, range, 'lastTimeScrollRange : ', this.lastTimeScrollRange)
             }
-            setTimeout(() => {
-                this.changeCurrentQuestionToFirstQuestionInView()
-            }, 2000)
+            // setTimeout(() => {
+            //     this.changeCurrentQuestionToFirstQuestionInView()
+            // }, 2000)
 
         },
         changeCurrentQuestionToFirstQuestionInView () {
+            console.log('first :', this.getFirstInViewQuestionNumber())
             this.changeCurrentQuestion(this.quiz.questions.getQuestionByIndex(this.getFirstInViewQuestionNumber() - 1))
         },
         scrollTo (questionId) {
