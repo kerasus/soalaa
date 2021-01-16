@@ -14,7 +14,7 @@
             </v-btn>
         </div>
         <span class="question-body renderedPanel" :id="'question' + source.id" v-html="(getQuestionNumberFromId(source.id)) + '- ' + source.rendered_statement" v-intersect="{
-            handler: onIntersect,
+            handler: source.onIntersect,
             options: {
               threshold: [0, 0.2, 0.4, 0.6, 0.8, 1.0]
             }
@@ -34,7 +34,7 @@
 
 <script>
     import '@/assets/scss/markdownKatex.scss'
-    import { mixinQuiz, mixinWindowSize } from '@/mixin/Mixins'
+    import { mixinQuiz } from '@/mixin/Mixins'
     import $ from "jquery";
     var md = require('markdown-it')(),
         mk = require('markdown-it-katex')
@@ -42,7 +42,7 @@
 
     export default {
         name: 'item',
-        mixins: [ mixinQuiz, mixinWindowSize ],
+        mixins: [ mixinQuiz ],
         data () {
             return {
                 choiceNumber: {
@@ -64,16 +64,14 @@
             }
         },
         methods: {
-            onIntersect(entries) {
-                this.source.onIntersect(entries)
-            },
+            // onIntersect(entries) {
+            //     this.source.onIntersect(entries)
+            // },
             choiceClicked (questionId, choiceId) {
                 this.changeQuestion(questionId)
                 this.answerClicked({questionId, choiceId})
             },
             choiceClass (question) {
-                // let QuestionWidthRatio = 0.4
-                // let largestChoiceWidth = this.windowSize.x * QuestionWidthRatio / largestChoice
                 let largestChoice = this.getLargestChoice(question.choices)
                 let largestChoiceWidth = $('.questions').width() / largestChoice
                 if (largestChoiceWidth > 48) {

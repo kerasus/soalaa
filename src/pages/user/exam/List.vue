@@ -121,14 +121,11 @@
     export default {
         name: 'list',
         data: () => ({
-            user: new User(),
             examItem: new Exam()
         }),
         mixins: [mixinQuiz],
         created() {
             this.getExams()
-            console.log(Time.now())
-            console.log(Time.addTime(30, 'minutes'))
         },
         methods: {
             getExams () {
