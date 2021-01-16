@@ -116,9 +116,7 @@
 
 <script>
     import {Exam} from "@/models/exam";
-    import {User} from "@/models/User";
-    import Time from "@/plugins/time";
-    // import Assistant from "@/plugins/assistant";
+    import { mixinQuiz } from '@/mixin/Mixins'
 
     export default {
         name: 'list',
@@ -126,6 +124,7 @@
             user: new User(),
             examItem: new Exam()
         }),
+        mixins: [mixinQuiz],
         created() {
             this.getExams()
             console.log(Time.now())
@@ -133,11 +132,9 @@
         },
         methods: {
             getExams () {
-                this.registerExam('5ffdcc5b5590063ba07fad36')
-                this.registerExam('6001e2214ad1f6448b2428a4')
-                this.registerExam('6001dfbe4ad1f6448b2428a2')
-                this.registerExam('6001a9495d85df2e5b5b49c6')
-                this.registerExam('6001c1af5d85df2e5b5b49c9')
+
+                this.participateExam('5ffdcc5b5590063ba07fad36')
+
                 this.user.exams.loading = true
                 this.user.getUserExams()
                     .then(() => {

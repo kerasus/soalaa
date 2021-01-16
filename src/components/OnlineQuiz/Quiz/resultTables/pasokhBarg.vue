@@ -138,7 +138,7 @@
         },
         methods: {
             changeAppBarAndDrawer (state) {
-                this.$store.commit('updateAppbar', state)
+                this.$store.commit('updateAppBar', state)
                 this.$store.commit('updateDrawer', state)
             },
             onScroll (event, range) {
@@ -209,7 +209,7 @@
                 if (!this.quiz.id) {
                     this.loadQuiz()
                 } else {
-                    this.loadUserQuizData()
+                    this.loadUserQuizDataFromStorage()
                 }
             } else {
                 this.isMobile = true

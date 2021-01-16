@@ -1,6 +1,9 @@
 import {Model} from 'js-abstract-model'
-import {ExamList} from "@/models/exam";
+import {Exam, ExamList} from "@/models/exam";
 import Time from "@/plugins/time";
+import Assistant from "@/plugins/assistant";
+import {QuestCategoryList} from "@/models/QuestCategory";
+import {QuestSubcategoryList} from "@/models/QuestSubcategory";
 
 
 class User extends Model {
@@ -128,6 +131,56 @@ class User extends Model {
             }, '/3a/api/user/registerExam')
                 .then((response) => {
                     resolve(response)
+                })
+                .catch( (error) => {
+                    reject(error)
+                })
+        })
+    }
+
+    getUsrExamByExamId (userExamId) {
+        return this.exams.list.find( (item) => Assistant.getId(item.user_exam_id) === userExamId)
+    }
+
+    loadExamForParticipate (response) {
+        let user_exam_id = Assistant.getId(response.data.data.id)
+        let exam_id = Assistant.getId(response.data.data.exam_id)
+        let questions_file_url = response.data.data.questions_file_url
+        let categories = response.data.data.categories
+        let sub_categories = response.data.data.sub_categories
+        this.exams.list.map( (item) => {
+            if(Assistant.getId(item.id) === exam_id) {
+                item.user_exam_id = user_exam_id
+                item.questions_file_url = questions_file_url
+                item.categories = new QuestCategoryList(categories)
+                item.sub_categories = new QuestSubcategoryList(sub_categories)
+            }
+            return item
+        })
+    }
+
+    participateExam (exam_id) {
+        let that = this
+        return new Promise(function(resolve, reject) {
+            that.create({
+                exam_id
+            }, '/3a/api/exam-user')
+                .then((response) => {
+                    let userExamForParticipate = new Exam()
+                    let userExamId = Assistant.getId(response.data.data.id)
+                    that.loadExamForParticipate(response, userExamForParticipate)
+                    let userExam = that.getUsrExamByExamId(userExamId)
+                    if (!userExam) {
+                        userExam = new Exam()
+                    }
+
+                    userExam.loadQuestionsFromFile()
+                        .then( (data) => {
+                            resolve({response, userExam, data})
+                        })
+                        .catch( (jqXHR, textStatus, errorThrown) => {
+                            reject({jqXHR, textStatus, errorThrown})
+                        })
                 })
                 .catch( (error) => {
                     reject(error)

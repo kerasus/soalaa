@@ -6,6 +6,7 @@ import createPersistedState from 'vuex-persistedstate'
 import createMutationsSharer from 'vuex-shared-mutations'
 import Assistant from '@/plugins/assistant'
 import {User} from '@/models/User'
+import {Exam} from "@/models/exam";
 
 Vue.use(Vuex)
 
@@ -34,7 +35,6 @@ const store = new Vuex.Store({
         quiz: null,
         userQuizListData: [],
         accessToken: null,
-        currentQuiz: null,
         currentQuestion: null,
         appbar: true
         // quizList: []
@@ -49,7 +49,6 @@ const store = new Vuex.Store({
             this.commit('user', null)
             this.commit('quiz', null)
             this.commit('accessToken', null)
-            this.commit('currentQuiz', null)
             this.commit('currentQuestion', null)
             this.commit('userQuizListData', [])
         },
@@ -60,7 +59,7 @@ const store = new Vuex.Store({
             state.windowSize = newInfo
         },
         updateAppBarAndDrawer(state, newInfo) {
-            this.commit('updateAppbar', newInfo)
+            this.commit('updateAppBar', newInfo)
             this.commit('updateDrawer', newInfo)
         },
         updateDrawer(state, newInfo) {
@@ -71,12 +70,6 @@ const store = new Vuex.Store({
             state.user = newInfo
         },
         updateQuiz (state, newInfo) {
-            state.quiz = newInfo
-        },
-        updateAccessToken (state, newInfo) {
-            state.accessToken = newInfo
-        },
-        updateCurrentQuiz (state, newInfo) {
             this.commit('reloadQuizModel')
             let currentQuizData = state.userQuizListData.find( (item) => {
                 return item.examId = newInfo.id
@@ -87,7 +80,10 @@ const store = new Vuex.Store({
                     examData: []
                 })
             }
-            state.currentQuiz = newInfo
+            state.quiz = newInfo
+        },
+        updateAccessToken (state, newInfo) {
+            state.accessToken = newInfo
         },
         updateCurrentQuestion (state, newInfo) {
             this.commit('reloadQuizModel')
@@ -109,9 +105,8 @@ const store = new Vuex.Store({
             }
             if (oldQuestionId) {
                 let oldQuestion = state.quiz.questions.getQuestionById(oldQuestionId)
-                // ToDo: find userQuizData
                 let currentQuizData = state.userQuizListData.find( (item) => {
-                    return item.examId = state.currentQuiz.id
+                    return item.examId = state.quiz.id
                 })
                 if (!currentQuizData) {
                     currentQuizData = {
@@ -152,7 +147,7 @@ const store = new Vuex.Store({
             this.commit('reloadQuizModel')
             // ToDo: find userQuizData
             let currentQuizData = state.userQuizListData.find( (item) => {
-                return item.examId = state.currentQuiz.id
+                return item.examId = state.quiz.id
             })
             if (!currentQuizData) {
                 currentQuizData = {
@@ -172,7 +167,7 @@ const store = new Vuex.Store({
                 return
             }
             let currentQuizData = state.userQuizListData.find( (item) => {
-                return item.examId = state.currentQuiz.id
+                return item.examId = state.quiz.id
             })
             if (!currentQuizData) {
                 currentQuizData = {
@@ -182,7 +177,7 @@ const store = new Vuex.Store({
             }
             state.quiz.setUserQuizData(currentQuizData.examData)
         },
-        updateAppbar (state, newInfo) {
+        updateAppBar (state, newInfo) {
             state.appbar = newInfo
         }
     },
@@ -194,7 +189,7 @@ const store = new Vuex.Store({
             return state.mapOfQuestionsDrawer
         },
         quiz (state) {
-            return new Quiz(state.quiz)
+            return new Exam(state.quiz)
         },
         accessToken (state) {
             return state.accessToken
