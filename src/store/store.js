@@ -71,6 +71,9 @@ const store = new Vuex.Store({
             window.localStorage.setItem('user', JSON.stringify(newInfo))
             state.user = newInfo
         },
+        setQuiz (state, newInfo) {
+            state.quiz = newInfo
+        },
         updateQuiz (state, newInfo) {
             this.commit('reloadQuizModel')
             let currentQuizData = state.userQuizListData.find( (item) => {
@@ -86,6 +89,9 @@ const store = new Vuex.Store({
         },
         updateAccessToken (state, newInfo) {
             state.accessToken = newInfo
+        },
+        setCurrentQuestion (state, newInfo) {
+            state.currentQuestion = new Question(newInfo)
         },
         updateCurrentQuestion (state, newInfo) {
             this.commit('reloadQuizModel')

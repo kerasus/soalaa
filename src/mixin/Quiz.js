@@ -99,7 +99,9 @@ const mixinQuiz = {
     answerClicked (data) {
       this.quiz.questions.getQuestionById(data.questionId).selectChoice(data.choiceId)
       this.currentQuestion.selectChoice(data.choiceId)
-      this.$store.commit('refreshUserQuizData')
+      this.$store.commit('setQuiz', this.quiz)
+      this.$store.commit('setCurrentQuestion', this.currentQuestion)
+      this.$store.commit('refreshUserQuizListData')
     },
     bookmark (question) {
       if (this.currentQuestion.id !== question.id) {
@@ -108,7 +110,7 @@ const mixinQuiz = {
       this.$store.commit('reloadQuizModel')
       this.quiz.questions.getQuestionById(this.currentQuestion.id).bookmark()
       this.currentQuestion.bookmark()
-      this.$store.commit('refreshUserQuizData')
+      this.$store.commit('refreshUserQuizListData')
 
     },
     changeState (question, newState) {
@@ -118,7 +120,7 @@ const mixinQuiz = {
       this.$store.commit('reloadQuizModel')
       this.quiz.questions.getQuestionById(this.currentQuestion.id).changeState(newState)
       this.currentQuestion.changeState(newState)
-      this.$store.commit('refreshUserQuizData')
+      this.$store.commit('refreshUserQuizListData')
     },
     needToLoadQuiaData () {
       return (!this.quiz.id || Assistant.getId(this.$route.params.quizId) !== Assistant.getId(this.quiz.id))
