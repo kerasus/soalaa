@@ -148,12 +148,13 @@ export default {
             this.$store.commit('updateDrawer', state)
         },
         onScroll (event, range) {
-            if (range.start !== this.lastTimeScrollRange.start || range.end !== this.lastTimeScrollRange.end) {
-                this.quiz.questions.turnIsInViewToFalse(range.start, range.end)
-            }
-            setTimeout(() => {
-                this.changeCurrentQuestionToFirstQuestionInView()
-            }, 2000)
+            // if (range.start !== this.lastTimeScrollRange.start || range.end !== this.lastTimeScrollRange.end) {
+            //     this.quiz.questions.turnIsInViewToFalse(range.start, range.end)
+            // }
+            // setTimeout(() => {
+            //     this.changeCurrentQuestionToFirstQuestionInView()
+            // }, 2000)
+            console.log(event, range)
         },
         changeCurrentQuestionToFirstQuestionInView () {
             this.changeCurrentQuestion(this.quiz.questions.getQuestionByIndex(this.getFirstInViewQuestionNumber() - 1))
@@ -195,12 +196,12 @@ export default {
         //     }
         //     return false
         // },
-        getQuestionNumber (question) {
-            if (question.isInView === false) {
-                return '.question:nth-child('+(this.quiz.questions.getQuestionIndexById(question.id) + 2)+')'
-            }
-            return ''
-        },
+        // getQuestionNumber (question) {
+        //     if (question.isInView === false) {
+        //         return '.question:nth-child('+(this.quiz.questions.getQuestionIndexById(question.id) + 2)+')'
+        //     }
+        //     return ''
+        // },
         choiceClicked (questionId, choiceId) {
             this.scrollTo(questionId)
             this.changeQuestion(questionId)
@@ -222,9 +223,10 @@ export default {
         this.scrollTo(this.currentQuestion.id)
     },
     created () {
-        console.log(this.$route.params.quizId)
         this.quizData.show(this.$route.params.quizId).then((response) => {
             console.log(response)
+        }).catch((error) => {
+            console.log(error)
         })
         if (this.windowSize.x > 959) {
             this.changeAppBarAndDrawer(false)
@@ -234,7 +236,6 @@ export default {
                 this.loadUserQuizDataFromStorage()
             }
         } else {
-            console.log('too in')
             this.$router.push({ name: 'onlineQuiz.alaaView', params: { quizId: 313, questNumber: this.$route.params.quizId } })
         }
         // this.renderQuestionBody()
@@ -301,7 +302,7 @@ export default {
 
 .questions {
     background: #fff;
-    overflow-y: auto;
+    overflow-y: hidden;
     overflow-x: hidden;
     position: relative;
     /*padding-right: 25px;*/
