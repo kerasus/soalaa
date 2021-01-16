@@ -117,7 +117,7 @@ const mixinQuiz = {
 
       // set default data
       let dataToSendAnswer = {question_id: data.questionId, choice_id: data.choiceId, selected_at: Time.now()}
-      let dataToSendStatus = {question_id: data.questionId, status: ''}
+      let dataToSendStatus = {question_id: data.question_id, status: data.status}
       let dataToSendBookmark = {question_id: data.questionId}
 
       // set data from localstorage of user
@@ -147,7 +147,7 @@ const mixinQuiz = {
       this.$store.commit('updateQuiz', this.quiz)
       this.$store.commit('setCurrentQuestion', this.currentQuestion)
       this.$store.commit('refreshUserQuizListData')
-      this.sendQuestionData(data, 'sendAnswer')
+      this.sendQuestionData({question_id: data.questionId, choice_id: data.choiceId}, 'sendAnswer')
     },
     bookmark (question) {
       if (this.currentQuestion.id !== question.id) {
@@ -155,7 +155,9 @@ const mixinQuiz = {
       }
       this.$store.commit('reloadQuizModel')
       this.quiz.questions.getQuestionById(this.currentQuestion.id).bookmark()
+      this.$store.commit('updateQuiz', this.quiz)
       this.currentQuestion.bookmark()
+      this.$store.commit('setCurrentQuestion', this.currentQuestion)
       this.$store.commit('refreshUserQuizListData')
       this.sendQuestionData({ exam_user_id: this.quiz.id, questionId: question.id, bookmarked: this.currentQuestion.bookmarked}, 'sendBookmark')
     },
@@ -165,7 +167,9 @@ const mixinQuiz = {
       }
       this.$store.commit('reloadQuizModel')
       this.quiz.questions.getQuestionById(this.currentQuestion.id).changeState(newState)
+      this.$store.commit('updateQuiz', this.quiz)
       this.currentQuestion.changeState(newState)
+      this.$store.commit('setCurrentQuestion', this.currentQuestion)
       this.$store.commit('refreshUserQuizListData')
       this.sendQuestionData({ exam_user_id: this.quiz.id, question_id: question.id, status: newState }, 'sendStatus')
     },
