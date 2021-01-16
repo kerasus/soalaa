@@ -1,5 +1,14 @@
 <template>
     <v-card class="elevation-12">
+        <v-progress-linear
+                color="#ffc107"
+                absolute
+                top
+                :active="loadingList"
+                indeterminate
+                rounded
+                height="6"
+        ></v-progress-linear>
         <v-toolbar
                 color="primary"
                 dark
@@ -53,7 +62,11 @@
             </v-form>
         </v-card-text>
         <v-card-actions>
-            <v-btn color="primary" @click="login">
+            <v-btn color="primary"
+                   @click="login"
+                   :loading="loadingList"
+                   :disabled="loadingList"
+            >
                 ورود
             </v-btn>
             <v-spacer></v-spacer>
@@ -71,6 +84,7 @@
         data () {
             return {
                 user: new User(window.localStorage.getItem('user')),
+                loadingList: false,
                 username: null,
                 password: null
             }
@@ -114,19 +128,21 @@
             },
             login () {
                 let that = this
+                this.loadingList = true
                 axios.post('/alaa/api/v2/login', {
                     mobile: this.username,
                     password: this.password
                 })
                 .then((response) => {
+                    this.loadingList = false
                     that.user = new User(response.data.data.user)
                     that.$store.commit('updateUser', that.user)
                     const access_token = response.data.data.access_token
                     that.getUserData()
                     that.redirectTo(access_token)
                 })
-                .catch( (error) => {
-                    Assistant.handleAxiosError(this.$toasted, error)
+                .catch( () => {
+                    this.loadingList = false
                 })
             }
         }

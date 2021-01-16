@@ -158,7 +158,11 @@ class Exam extends Model {
         }
 
         question.checking_times.list.forEach((checkingTime)=> {
-            const oldCheckingTimeIndex = checkingTimes.findIndex((item) => item.start === checkingTime.start && item.end === null && checkingTime.end !== null)
+            const oldCheckingTimeIndex = checkingTimes.findIndex((item) => {
+                return item.start === checkingTime.start &&
+                    item.end === null &&
+                    checkingTime.end !== null
+            })
             if (oldCheckingTimeIndex !== -1) {
                 checkingTimes.splice(oldCheckingTimeIndex, 1)
             }
