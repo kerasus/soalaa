@@ -154,19 +154,17 @@ export default {
         },
         changeCurrentQuestionIfScrollingIsDone (event, range) {
             console.log('timePassedSinceLastScroll: ' ,this.timePassedSinceLastScroll)
+            if (range.start !== this.lastTimeScrollRange.start || range.end !== this.lastTimeScrollRange.end) {
+                this.quiz.questions.turnIsInViewToFalse(range.start, range.end)
+                this.lastTimeScrollRange.start = range.start
+                this.lastTimeScrollRange.end = range.end
+                // console.log(event, range, 'lastTimeScrollRange : ', this.lastTimeScrollRange)
+            }
             if (this.timePassedSinceLastScroll >= 1000) {
-                console.log('oomad inja')
-                if (range.start !== this.lastTimeScrollRange.start || range.end !== this.lastTimeScrollRange.end) {
-                    this.quiz.questions.turnIsInViewToFalse(range.start, range.end)
-                    this.lastTimeScrollRange.start = range.start
-                    this.lastTimeScrollRange.end = range.end
-                    console.log('raft toosh')
-                    // console.log(event, range, 'lastTimeScrollRange : ', this.lastTimeScrollRange)
-                }
                 this.changeCurrentQuestionToFirstQuestionInView()
                 this.timePassedSinceLastScroll = 0
                 this.scrollState = 'not scrolling'
-                console.log("i've done it : ", this.currentQuestion.id)
+                console.log("i've done it : ", this.quiz.questions.getQuestionIndexById(this.currentQuestion.id) + 1)
                 clearInterval(this.setIntervalCallback)
                 this.setIntervalCallback = null
             }
@@ -186,7 +184,7 @@ export default {
             if (firstInViewQuestion.id === this.currentQuestion.id) {
                 return
             }
-            this.changeCurrentQuestion(this.quiz.questions.getQuestionByIndex(firstInViewQuestion - 1))
+            this.changeQuestion(firstInViewQuestion)
         },
         scrollTo (questionId) {
             if (this.quiz.questions.getQuestionById(questionId).isInView === false) {
@@ -205,11 +203,11 @@ export default {
         // },
         // ToDo: check for removal
         getFirstInViewQuestionNumber () {
-            let firstQuestionInView = this.quiz.questions.list.find( (item)=> {
+            let firstQuestionInView = this.quiz.questions.list.find((item)=> {
                 return item.isInView === true
             })
-            if (firstQuestionInView) {
-                return firstQuestionInView.order + 1
+            if (firstQuestionInView.id !== null) {
+                return firstQuestionInView.id
             } else {
                 return false
             }
@@ -227,15 +225,16 @@ export default {
         //     return ''
         // },
         choiceClicked (questionId, choiceId) {
+            console.log('choiceClicked: ', choiceId)
             this.scrollTo(questionId)
             this.changeQuestion(questionId)
             this.answerClicked({questionId, choiceId})
         },
-        changeCurrentQuestion (question) {
-            if (question.id !== this.currentQuestion.id) {
-                this.currentQuestion = question
-            }
-        }
+        // changeCurrentQuestion (question) {
+        //     if (question.id !== this.currentQuestion.id) {
+        //         this.currentQuestion = question
+        //     }
+        // }
     },
     mounted () {
         $('.questions').height(this.windowSize.y)

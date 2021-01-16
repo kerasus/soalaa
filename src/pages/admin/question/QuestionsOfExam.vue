@@ -176,7 +176,7 @@
             $('.questions').height(this.windowSize.y)
             $('.left-side-list').height(this.windowSize.y - 24)
             $('.questionss').height(this.windowSize.y)
-
+            console.log('in loge mane: ', this.quiz.questions.list[5].choices.list[0])
         },
         created () {
             this.changeAppBarAndDrawer(false)

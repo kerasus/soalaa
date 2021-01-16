@@ -63,6 +63,7 @@ const mixinQuiz = {
       this.$store.commit('updateOverlay', true)
       if (this.needToLoadQuiaData() && this.$route.params.quizId) {
         this.participateExam(this.$route.params.quizId)
+        console.log(this.$route.params.quizId)
       } else {
         this.loadUserQuizDataFromStorage()
       }
@@ -208,6 +209,7 @@ const mixinQuiz = {
       if (Assistant.getId(this.currentQuestion.id) === Assistant.getId(id)) {
         return
       }
+      console.log('assistanto radid')
       // if (this.currentQuestion.id !== null) {
       //     this.quiz.questions.getQuestionById(this.currentQuestion.id).leaveQuestion()
       // }
@@ -218,15 +220,15 @@ const mixinQuiz = {
       const currentQuestion = this.quiz.questions.getQuestionById(id)
       this.$store.commit('updateCurrentQuestion', currentQuestion)
       // this.quiz.questions.getQuestionById(this.currentQuestion.id).enterQuestion()
-      if (parseInt(this.$route.params.questNumber) !== parseInt(questNumber) && this.$route.name !== 'onlineQuiz.konkoorView' && this.$route.name !== 'onlineQuiz.bubblesheet/view') {
+      if (parseInt(this.$route.params.questNumber) !== parseInt(questNumber) && this.$route.name !== 'onlineQuiz.konkoorView' && this.$route.name !== 'onlineQuiz.bubblesheet-view') {
           this.$router.push({ name: 'onlineQuiz.alaaView', params: { quizId: this.quiz.id, questNumber } })
       }
     },
     // ToDo: change argument (type, questNumber)
     changeView (type) {
       if (type === 'alaa') {
-        const questNumber = this.getFirstInViewQuestionNumber()
-        this.$router.push({ name: 'onlineQuiz.alaaView', params: { quizId: this.quiz.id, questNumber } })
+        const questionNumber = this.quiz.questions.getQuestionIndexById(this.currentQuestion.id) + 1
+        this.$router.push({ name: 'onlineQuiz.alaaView', params: { quizId: this.quiz.id, questNumber: questionNumber } })
       }
       if (type === 'konkoor') {
         this.$router.push({ name: 'onlineQuiz.konkoorView', params: { quizId: this.quiz.id } })
