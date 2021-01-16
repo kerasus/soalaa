@@ -1,7 +1,7 @@
 <template>
     <v-sheet class="map-of-questions">
         <div v-for="(categoryItem) in quiz.categories.list" :key="'category-'+categoryItem.id">
-            <div v-if="daftarche === categoryItem.title || daftarche === 'آزاد'">
+            <div>
                 <v-btn :elevation="0" block class="categoryItem">
                     {{ categoryItem.title }}
                 </v-btn>
@@ -50,6 +50,8 @@
 
 <script>
     import mixinQuiz from '@/mixin/Quiz'
+
+
     export default {
         name: "MapOfQuestions",
         mixins: [mixinQuiz]
