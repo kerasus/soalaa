@@ -58,6 +58,7 @@ const mixinQuiz = {
       this.$store.commit('updateOverlay', true)
       if (this.needToLoadQuiaData() && this.$route.params.quizId) {
         this.participateExam(this.$route.params.quizId)
+        console.log(this.$route.params.quizId)
       } else {
         this.loadUserQuizDataFromStorage()
       }

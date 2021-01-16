@@ -122,6 +122,12 @@ const router = new VueRouter({
             meta: {middleware: auth}
         },
         {
+            path: '/bubblesheet-view/:quizId',
+            name: 'onlineQuiz.bubblesheet-view',
+            component: () => lazyLoadView(import('@/components/OnlineQuiz/Quiz/ViewTypes/BubblesheetView')),
+            meta: {middleware: auth}
+        },
+        {
             path: '/common-questions',
             name: 'common-questions',
             component: () => lazyLoadView(import('@/components/commonQuestions')),

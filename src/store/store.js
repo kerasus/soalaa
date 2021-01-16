@@ -148,7 +148,7 @@ const store = new Vuex.Store({
         //     state.currentQuestion = state.quiz.questions.getPrevQuestion(state.currentQuestion.id)
         // },
         refreshUserQuizListData () {
-            console.log('refresh')
+
             this.commit('saveUserQuizListData')
             this.commit('loadUserQuizListData')
         },
