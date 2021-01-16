@@ -99,7 +99,7 @@ const mixinQuiz = {
     answerClicked (data) {
       this.quiz.questions.getQuestionById(data.questionId).selectChoice(data.choiceId)
       this.currentQuestion.selectChoice(data.choiceId)
-      this.$store.commit('setQuiz', this.quiz)
+      this.$store.commit('updateQuiz', this.quiz)
       this.$store.commit('setCurrentQuestion', this.currentQuestion)
       this.$store.commit('refreshUserQuizListData')
     },

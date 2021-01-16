@@ -1,12 +1,11 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-import { Quiz } from '@/models/Quiz'
 import { Question } from '@/models/Question'
 import createPersistedState from 'vuex-persistedstate'
 import createMutationsSharer from 'vuex-shared-mutations'
 import Assistant from '@/plugins/assistant'
 import {User} from '@/models/User'
-import {Exam} from "@/models/exam";
+import { Exam } from "@/models/exam";
 
 Vue.use(Vuex)
 
@@ -71,21 +70,31 @@ const store = new Vuex.Store({
             window.localStorage.setItem('user', JSON.stringify(newInfo))
             state.user = newInfo
         },
-        setQuiz (state, newInfo) {
-            state.quiz = newInfo
+        setUserQuizListData (state, newInfo) {
+            state.userQuizListData = newInfo
         },
         updateQuiz (state, newInfo) {
             this.commit('reloadQuizModel')
+            state.quiz = newInfo
+
             let currentQuizData = state.userQuizListData.find( (item) => {
-                return item.examId = newInfo.id
+                return Assistant.getId(item.examId) === Assistant.getId(newInfo.id)
             })
             if (!currentQuizData) {
                 state.userQuizListData.push({
                     examId: newInfo.id,
                     examData: []
                 })
+            } else {
+                state.userQuizListData.map( (item) => {
+                    if (Assistant.getId(item.examId) === Assistant.getId(newInfo.id)) {
+                        item = state.quiz.mergeUserQuizData(item)
+                        return item
+                    }
+                })
             }
-            state.quiz = newInfo
+
+            this.commit('setUserQuizListData', state.userQuizListData)
         },
         updateAccessToken (state, newInfo) {
             state.accessToken = newInfo
@@ -114,7 +123,7 @@ const store = new Vuex.Store({
             if (oldQuestionId) {
                 let oldQuestion = state.quiz.questions.getQuestionById(oldQuestionId)
                 let currentQuizData = state.userQuizListData.find( (item) => {
-                    return item.examId = state.quiz.id
+                    return Assistant.getId(item.examId) === Assistant.getId(state.quiz.id)
                 })
                 if (!currentQuizData) {
                     currentQuizData = {
@@ -132,7 +141,7 @@ const store = new Vuex.Store({
         },
         reloadQuizModel (state) {
             if (!state.quiz || !state.quiz.questions || typeof state.quiz.questions.getNextQuestion !== 'function') {
-                state.quiz = new Quiz(state.quiz)
+                state.quiz = new Exam(state.quiz)
             }
         },
         reloadCurrentQuestionModel (state) {
@@ -155,7 +164,7 @@ const store = new Vuex.Store({
             this.commit('reloadQuizModel')
             // ToDo: find userQuizData
             let currentQuizData = state.userQuizListData.find( (item) => {
-                return item.examId = state.quiz.id
+                return Assistant.getId(item.examId) === Assistant.getId(state.quiz.id)
             })
             if (!currentQuizData) {
                 currentQuizData = {
@@ -163,7 +172,7 @@ const store = new Vuex.Store({
                     examData: []
                 }
             }
-            state.userQuizListData.forEach( () => {
+            state.userQuizListData.map( () => {
                 return state.quiz.mergeUserQuizData(currentQuizData)
             })
         },
@@ -175,7 +184,7 @@ const store = new Vuex.Store({
                 return
             }
             let currentQuizData = state.userQuizListData.find( (item) => {
-                return item.examId = state.quiz.id
+                return Assistant.getId(item.examId) === Assistant.getId(state.quiz.id)
             })
             if (!currentQuizData) {
                 currentQuizData = {
