@@ -16,7 +16,7 @@
         <span class="question-body renderedPanel" :id="'question' + source.id" v-html="(getQuestionNumberFromId(source.id)) + '- ' + source.rendered_statement" v-intersect="{
             handler: source.onIntersect,
             options: {
-              threshold: [0, 0.2, 0.4, 0.6, 0.8, 1.0]
+              threshold: [0, 0.8, 1.0]
             }
           }" />
         <v-row class="choices">
@@ -36,9 +36,9 @@
     import '@/assets/scss/markdownKatex.scss'
     import { mixinQuiz } from '@/mixin/Mixins'
     import $ from "jquery";
-    var md = require('markdown-it')(),
-        mk = require('markdown-it-katex')
-    md.use(mk);
+    // var md = require('markdown-it')(),
+    //     mk = require('markdown-it-katex')
+    // md.use(mk);
 
     export default {
         name: 'item',
