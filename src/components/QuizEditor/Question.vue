@@ -209,8 +209,6 @@
     .choice {
         cursor: pointer;
         transition: all ease-in-out 0.3s;
-        display: flex;
-        align-items: flex-start;
     }
 
     .buttons-group {
