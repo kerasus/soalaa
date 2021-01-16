@@ -45,39 +45,34 @@ let Time = function () {
     }
 
     function setStateOfExamCategories(categories) {
-        const now = this.now()
         categories.list.forEach( (category, index, categories) => {
             const prevCat = categories[index - 1]
-            const nextCat = categories[index + 1]
             const lastCat = categories[categories.length - 1]
-            // const isLastCat = Assistant.getId(lastCat.id) === Assistant.getId(category.id)
 
-            if (prevCat && getRemainTime(prevCat.accept_at) > 0) {
-                category.is_active = false
-            } else if (nextCat && getRemainTime(prevCat.accept_at) > 0) {
-                category.is_active = false
-            } else if (getPassedTime(lastCat.accept_at) > 0) {
+            if (lastCat && getPassedTime(lastCat.accept_at, false) > 0) {
                 category.is_active = true
-            } else category.is_active = category.accept_at > now;
+            } else if (prevCat && getRemainTime(prevCat.accept_at, false) > 0) {
+                category.is_active = false
+            } else if (getRemainTime(category.accept_at, false) > 0) {
+                category.is_active = true
+            } else if (getPassedTime(category.accept_at, false) > 0) {
+                category.is_active = false
+            }
 
             return category
         })
     }
 
-    // function getCurrentCategoryAcceptAt(categories) {
-    //     const now = this.now()
-    //     const currentCat = categories.list.find( (item) => item.is_active)
-    //     const lastCat = categories[categories.length - 1]
-    //     const isLastCat = Assistant.getId(lastCat.id) === Assistant.getId(category.id)
-    //
-    //     if (currentCat && !isLastCat) {
-    //         return currentCat
-    //     } else if (currentCat && isLastCat) {
-    //         return true
-    //     } else {
-    //         return false
-    //     }
-    // }
+    function getCurrentCategoryAcceptAt(categories) {
+        const currentCat = categories.list.find( (item) => item.is_active)
+        const lastCat = categories[categories.length - 1]
+
+        if (lastCat && getPassedTime(lastCat.accept_at, false) > 0) {
+            return false
+        } else if (currentCat && getRemainTime(currentCat.accept_at, false) > 0) {
+            return currentCat
+        }
+    }
 
     return {
         now,
@@ -86,7 +81,7 @@ let Time = function () {
         getRemainTime,
         getPassedTime,
         setStateOfExamCategories,
-        // getNextCategoryAcceptAt,
+        getCurrentCategoryAcceptAt,
         addTime
     };
 }();

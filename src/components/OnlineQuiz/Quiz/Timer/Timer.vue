@@ -16,7 +16,7 @@
         data: () => ({
             interval: null,
             passedTime: '00:00:00',
-            remainTime: '00:00:00',
+            remainTime: false,
             timer: new Timer()
         }),
         mixins: [mixinWindowSize, mixinQuiz],
@@ -28,7 +28,13 @@
             this.interval = setInterval(() => {
                 Time.setStateOfExamCategories(this.quiz.categories)
                 this.passedTime = Time.getPassedTime(this.quiz.created_at)
-                this.remainTime = Time.getRemainTime('2021-01-13 08:44:00')
+                const currentCat = Time.getCurrentCategoryAcceptAt(this.quiz.categories)
+                if (currentCat) {
+                    this.remainTime = Time.getRemainTime(currentCat.accept_at)
+                } else {
+                    this.remainTime = false
+                }
+
                 // this.timer.updateTimer();
             }, 1000);
             // requestAnimationFrame(this.timer.updateTimer) // webpack-internal:///./src/models/Timer.js:58 Uncaught TypeError: Cannot read property 'updateDiffs' of undefined

@@ -46,7 +46,7 @@
                     زمان گذشته
                     {{ passedTime }}
                 </p>
-                <p class="remainingTimeText">
+                <p v-if="remainingTime" class="remainingTimeText">
                     دقیقه تا پایان مهلت پاسخگویی دفترچه عمومی
                     {{ remainingTime }}
                 </p>
