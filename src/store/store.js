@@ -2,7 +2,7 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 import { Question } from '@/models/Question'
 import createPersistedState from 'vuex-persistedstate'
-import createMutationsSharer from 'vuex-shared-mutations'
+// import createMutationsSharer from 'vuex-shared-mutations'
 import Assistant from '@/plugins/assistant'
 import {User} from '@/models/User'
 import { Exam } from "@/models/exam";
@@ -14,15 +14,15 @@ const store = new Vuex.Store({
         createPersistedState({
             storage: window.localStorage,
             paths: ['userQuizListData', 'access_token', 'user']
-        }),
-        createMutationsSharer({
-            predicate: [
-                'updateQuiz',
-                'updateCurrentQuestion',
-                'goToNextQuestion',
-                'goToPrevQuestion'
-            ]
         })
+        // createMutationsSharer({
+        //     predicate: [
+        //         'updateQuiz',
+        //         'updateCurrentQuestion',
+        //         'goToNextQuestion',
+        //         'goToPrevQuestion'
+        //     ]
+        // })
     ],
     state: {
         windowSize: {
