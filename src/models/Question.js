@@ -3,6 +3,7 @@ import { Model, Collection } from 'js-abstract-model'
 import { ChoiceList } from './Choice'
 import { CheckingTimeList } from "@/models/CheckingTime";
 import Time from "@/plugins/time";
+import axios from "axios";
 var md = require('markdown-it')(),
     mk = require('markdown-it-katex')
 md.use(mk);
@@ -32,9 +33,8 @@ class Question extends Model {
                 key: 'checking_times',
                 relatedModel: CheckingTimeList
             },
-            {
-                key: 'answer'
-            },
+            {key: 'answer'},
+            {key: 'selected_at'},
             {
                 key: 'choices',
                 relatedModel: ChoiceList
@@ -104,7 +104,7 @@ class Question extends Model {
     }
 
     changeState (newState) {
-        if (newState === 'cross') {
+        if (newState === 'x') {
             this.uncheckChoices()
         }
         if (newState === this.state) {
@@ -130,7 +130,7 @@ class Question extends Model {
         const answeredAt = Time.now()
         this.choices.list.map((item)=> {
             Vue.set(item, 'answered_at', answeredAt)
-            if (this.state === 'cross') {
+            if (this.state === 'x') {
                 this.state = ''
             }
             if (item.id !== choiceId) {
@@ -156,8 +156,28 @@ class Question extends Model {
         this.isInView = entries[0].intersectionRatio >= 0.8
     }
 
-    sendAnswer () {
-        this.show(null, '/3a/api/temp-exam/answer/choice')
+    sendAnswer (exam_user_id, {question_id, choice_id, selected_at }) {
+        axios.post('/3a/api/temp-exam/answer/choice/', {
+            params: {exam_user_id, questions: [{question_id, choice_id, selected_at}] }
+        })
+    }
+
+    sendStatus (exam_user_id, {question_id, status }) {
+        axios.post('/3a/api/temp-exam/answer/status', {
+            params: {exam_user_id, question_id, status}
+        })
+    }
+
+    sendBookmark (exam_user_id, {question_id }) {
+        axios.post('/3a/api/temp-exam/answer/bookmark', {
+            params: {exam_user_id, question_id}
+        })
+    }
+
+    sendUnBookmark (exam_user_id, {question_id }) {
+        axios.post('/3a/api/temp-exam/answer/bookmark', {
+            params: {exam_user_id, question_id}
+        })
     }
 }
 
