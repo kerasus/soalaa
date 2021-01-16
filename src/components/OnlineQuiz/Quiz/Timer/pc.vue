@@ -25,7 +25,7 @@
                         {{ passedTime }}
                     </span>
                 </v-col>
-                <v-col v-if="show" cols="7" class="text-center timerText">
+                <v-col v-if="show && remainingTime" cols="7" class="text-center timerText">
                     زمان تا پایان مهلت پاسخگویی دفترچه عمومی:
                     <span class="timeMarginTop">
                         {{ remainingTime }}
