@@ -16,8 +16,8 @@ let Assistant = function () {
             toastMessages(['مشکلی در دریافت اطلاعات رخ داده است. لطفا مجدد تلاش کنید.'])
             return
         }
-        if (!error.response) {
-            console.log(error.message)
+        if (!error || !error.response) {
+            console.log(error)
             return
         }
         let statusCode = parseInt(error.response.status)

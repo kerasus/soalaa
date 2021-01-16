@@ -1,11 +1,12 @@
 <template>
     <v-app v-resize="updateWindowSize">
         <v-navigation-drawer
+                v-if="$route.name === 'onlineQuiz.alaaView' || $store.getters.user.has_admin_permission"
                 v-model="drawer"
                 app
                 right
                 width="316"
-                v-if="$route.name === 'onlineQuiz.alaaView' || $store.getters.user.has_admin_permission"
+                :class="{ 'mapOfQuestions': $route.name === 'onlineQuiz.alaaView'}"
                 :style="{ backgroundColor: $route.name === 'onlineQuiz.alaaView' ? '#fff' : '#ffc107' }"
         >
             <div style="height: 150px;line-height: 150px;font-size: 4rem;color: rgb(255, 193, 7);display: flex;align-items: center;justify-content: center;">
@@ -73,6 +74,11 @@
         </v-app-bar>
         <v-main>
             <notifications group="notifs" />
+            <v-overlay
+                    :absolute="true"
+                    :opacity="1"
+                    :value="overlay"
+            />
             <router-view :key="$route.name + ($route.params.quizId || '') + ($route.params.questNumber || '')">
             </router-view>
         </v-main>
@@ -98,6 +104,9 @@
         computed: {
             appbar () {
                 return this.$store.getters.appbar
+            },
+            overlay () {
+                return this.$store.getters.overlay
             }
         },
         components: {
