@@ -244,6 +244,7 @@ export default {
             this.loadFirstQuestion()
         }
         this.scrollTo(this.currentQuestion.id)
+        this.changeAppBarAndDrawer(false)
     },
     created () {
         // this.quizData.show(this.$route.params.quizId).then((response) => {
