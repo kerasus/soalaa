@@ -127,8 +127,11 @@ class Question extends Model {
         this.checking_times.addEnd()
     }
 
-    selectChoice (choiceId) {
-        const answeredAt = Time.now()
+    selectChoice (choiceId, selected_at) {
+        let answeredAt = Time.now()
+        if (selected_at) {
+            answeredAt = selected_at
+        }
         let that = this
         this.choices.list.map((item)=> {
             Vue.set(item, 'answered_at', answeredAt)

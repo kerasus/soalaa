@@ -87,6 +87,8 @@ const mixinQuiz = {
       this.quiz.getAnswerOfUserInExam()
           .then( (response) => {
             console.log('response', response)
+            this.quiz.mergeDbAnswerToLocalstorage(response.data.data)
+            this.$store.commit('updateQuiz', this.quiz)
           })
     },
     loadUserQuizDataFromStorage () {
@@ -122,7 +124,7 @@ const mixinQuiz = {
       let userQuestionData = userQuizData.examData.find((questionData)=> Assistant.getId(questionData.questionId) === Assistant.getId(this.currentQuestion.id))
 
       // set default data
-      let dataToSendAnswer = {question_id: data.question_id, choice_id: data.choiceId, selected_at: Time.now()}
+      let dataToSendAnswer = {question_id: data.question_id, choice_id: data.choice_id, selected_at: Time.now()}
       let dataToSendStatus = {question_id: data.question_id, status: data.status}
       let dataToSendBookmark = data.questionId
 
