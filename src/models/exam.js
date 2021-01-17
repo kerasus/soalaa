@@ -256,6 +256,10 @@ class Exam extends Model {
         return axios.get('/3a/api/temp-exam/answer/'+this.user_exam_id)
     }
 
+    getAnswerOfUserInResultPage () {
+        return axios.get('/3a/api/temp-exam/answer/'+this.user_exam_id)
+    }
+
 }
 
 class ExamList extends Collection {

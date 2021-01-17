@@ -43,7 +43,9 @@
                                             elevation="0"
                                     >
                                         <v-icon class="mr-2" :size="30" color="#666">mdi-account-circle</v-icon>
-                                        {{ $store.getters.user.first_name + ' ' + $store.getters.user.last_name }}
+                                        <span v-if="$store.getters.user.first_name || $store.getters.user.last_name">
+                                            {{ $store.getters.user.first_name + ' ' + $store.getters.user.last_name }}
+                                        </span>
                                     </v-btn>
                                 </template>
                                 <v-card

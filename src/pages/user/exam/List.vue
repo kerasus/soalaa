@@ -109,11 +109,12 @@
                                     </v-btn>
                                     <v-btn
                                             v-if="item.user_exam_status === 'not registered and registration time passed'"
+                                            @click="registerExam(item.id)"
                                             color="#00c753"
-                                            disabled
                                             text
                                     >
-                                        اتمام مهلت ثبت نام
+                                        ثبت نام
+<!--                                        اتمام مهلت ثبت نام-->
                                     </v-btn>
                                     <v-btn
                                             v-if="item.user_exam_status === 'registered but not reached participation time'"
