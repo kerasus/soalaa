@@ -228,11 +228,12 @@ const mixinQuiz = {
       const questIndex = this.quiz.questions.getQuestionIndexById(id),
           questNumber = this.getQuestionNumberFromIndex(questIndex)
 
-      const currentQuestion = this.quiz.questions.getQuestionById(id)
+      let currentQuestion = this.quiz.questions.getQuestionById(id)
       const categoryActiveStatus = this.getCategoryActiveStatus(currentQuestion.sub_category.category_id)
 
       if (!categoryActiveStatus) {
-        return
+        currentQuestion = this.currentQuestion
+        alert('پاسخ دهی به این دفترچه در حال حاضر امکان پذیر نمیباشد')
       }
 
       this.$store.commit('updateCurrentQuestion', currentQuestion)

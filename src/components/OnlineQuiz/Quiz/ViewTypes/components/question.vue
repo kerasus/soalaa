@@ -13,12 +13,7 @@
                 <v-icon v-if="source.bookmarked" color="blue" :size="24">mdi-bookmark</v-icon>
             </v-btn>
         </div>
-        <span class="question-body renderedPanel" :id="'question' + source.id" v-html="(getQuestionNumberFromId(source.id)) + '- ' + source.rendered_statement" v-intersect="{
-            handler: onIntersect,
-            options: {
-              threshold: [0, 0.2, 0.4, 0.6, 0.8, 1.0]
-            }
-          }" />
+        <span class="question-body renderedPanel" :id="'question' + source.id" v-html="(getQuestionNumberFromId(source.id)) + '- ' + source.rendered_statement"  />
         <v-row class="choices">
             <v-col
                     v-for="(choice, index) in source.choices.list"
@@ -132,9 +127,9 @@
         float: right;
     }
 
-    .current-question {
-        background-color: #fffaee;
-    }
+    /*.current-question {*/
+    /*    background-color: #fffaee;*/
+    /*}*/
 
     .choices {
         display: flex;
