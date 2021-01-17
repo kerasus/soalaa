@@ -91,9 +91,9 @@ class Exam extends Model {
 
     setQuestionsLtr () {
         // const englishRegex = /^[A-Za-z0-9 :"'ʹ.<>%$&@!+()\-/\n,…?ᵒ*~]*$/
-        const prersianRegex = /^[ا-ی]*$/
+        const englishRegex = /^[A-Za-z0-9 :"'ʹ.<>%$&@!+()\-/\n,…?ᵒ*~]*$/
         this.questions.list.forEach((question) => {
-            question.ltr = (!question.statement.match(prersianRegex));
+            question.ltr = !!question.statement.match(englishRegex);
         })
     }
 

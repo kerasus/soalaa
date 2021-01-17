@@ -94,6 +94,7 @@ class User extends Model {
             examItem.is_registered = !!(userExam)
             examItem.finished_at = (userExam) ? userExam.finished_at : null
             examItem.accept_at = (userExam) ? userExam.accept_at : null
+            examItem.user_exam_id = (userExam) ? userExam.id : null
 
             this.setUserExamStatus(examItem)
 

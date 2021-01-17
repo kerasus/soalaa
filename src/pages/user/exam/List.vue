@@ -76,10 +76,11 @@
                                     </v-btn>
                                     <v-btn
                                             v-if="item.user_exam_status === 'has participated and finished'"
+                                            @click="sendAnswersAndFinishExam(item)"
                                             color="#ffc107"
                                             text
                                     >
-                                        ثبت آزمون
+                                        ثبت پاسخنامه ذخیره شده در سیستم
                                     </v-btn>
                                     <v-btn
                                             v-if="item.user_exam_status === 'has participated but not finished' || item.user_exam_status === 'has participated and finished'"
@@ -171,6 +172,28 @@
                             title: 'توجه!',
                             text: 'ثبت نام در آزمون با موفقیت انجام شد',
                             type: 'success'
+                        })
+                        this.getExams()
+                    })
+            },
+            sendAnswersAndFinishExam (exam) {
+                exam.sendAnswersAndFinishExam()
+                    .then( () => {
+                        this.$store.commit('clearExamData', exam.id)
+                        this.$notify({
+                            group: 'notifs',
+                            text: 'اطلاعات آزمون شما ثبت شد.',
+                            type: 'success'
+                        })
+                        this.getExams()
+                    })
+                    .catch( () => {
+                        this.$notify({
+                            group: 'notifs',
+                            title: 'توجه!',
+                            text: 'مشکلی در ثبت اطلاعات آزمون شما رخ داده است. لطفا تا قبل از ساعت 24 اقدام به ارسال مجدد پاسخنامه نمایید.',
+                            type: 'warn',
+                            duration: 30000,
                         })
                         this.getExams()
                     })
