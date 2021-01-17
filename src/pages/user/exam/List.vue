@@ -75,7 +75,14 @@
                                         مشاهده نتایج
                                     </v-btn>
                                     <v-btn
-                                            v-if="item.user_exam_status === 'has participated but not finished'"
+                                            v-if="item.user_exam_status === 'has participated and finished'"
+                                            color="#ffc107"
+                                            text
+                                    >
+                                        ثبت آزمون
+                                    </v-btn>
+                                    <v-btn
+                                            v-if="item.user_exam_status === 'has participated but not finished' || item.user_exam_status === 'has participated and finished'"
                                             :to="{ name: 'onlineQuiz.alaaView', params: { quizId: item.id, questNumber: 1 } }"
                                             color="purple"
                                             text
@@ -90,10 +97,10 @@
                                     >
                                         شروع آزمون
                                     </v-btn>
-<!--                                    @click="registerExam(item.id)"-->
+<!--                                    href="https://alaatv.com/landing/19"-->
                                     <v-btn
                                             v-if="item.user_exam_status === 'not registered'"
-                                            href="https://alaatv.com/landing/19"
+                                            @click="registerExam(item.id)"
                                             color="#00c753"
                                             text
                                     >
