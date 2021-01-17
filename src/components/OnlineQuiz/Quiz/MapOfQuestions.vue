@@ -1,11 +1,11 @@
 <template>
     <v-sheet class="map-of-questions">
-        <div v-for="(categoryItem) in quiz.categories.list" :key="'category-'+categoryItem.id">
-            <div>
+        <div v-for="(categoryItem) in quiz.categories.list"
+             :key="'category-'+categoryItem.id">
+            <div v-if="categoryItem.is_active">
                 <v-btn :elevation="0" block class="categoryItem">
                     {{ categoryItem.title }}
                 </v-btn>
-
                 <v-expansion-panels
                     accordion
                     flat
@@ -50,11 +50,20 @@
 
 <script>
     import mixinQuiz from '@/mixin/Quiz'
-
+    import Time from "@/plugins/time";
 
     export default {
         name: "MapOfQuestions",
-        mixins: [mixinQuiz]
+        mixins: [mixinQuiz],
+        data: () => ({
+            currentCat: null,
+        }),
+        created() {
+            let that = this
+            this.interval = setInterval(() => {
+                that.currentCat = Time.getCurrentCategoryAcceptAt(that.quiz.categories)
+            }, 1000)
+        }
     }
 </script>
 

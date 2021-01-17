@@ -1,7 +1,7 @@
 <template>
     <div class="wrapper" >
-        <mobile-timer v-if="windowSize.x < 960"  :passed-time="passedTime" :remaining-time="remainTime"/>
-        <pc-timer v-else :passed-time="passedTime" :remaining-time="remainTime"/>
+        <mobile-timer v-if="windowSize.x < 960"  :passed-time="passedTime" :remaining-time="remainTime" :title="currentCat.title"/>
+        <pc-timer v-else :passed-time="passedTime" :remaining-time="remainTime" :title="currentCat.title"/>
     </div>
 </template>
 <script>
@@ -10,10 +10,12 @@
     import {mixinWindowSize, mixinQuiz} from '@/mixin/Mixins'
     import {Timer} from "@/models/Timer";
     import Time from "@/plugins/time";
+    import Assistant from "@/plugins/assistant";
 
     export default {
         name: "Timer",
         data: () => ({
+            currentCat: null,
             interval: null,
             passedTime: '00:00:00',
             remainTime: false,
@@ -25,18 +27,24 @@
             PcTimer
         },
         mounted() {
+            let that = this
             this.interval = setInterval(() => {
-                Time.setStateOfExamCategories(this.quiz.categories)
-                this.passedTime = Time.getPassedTime(this.quiz.created_at)
-                const currentCat = Time.getCurrentCategoryAcceptAt(this.quiz.categories)
-                if (currentCat) {
-                    this.remainTime = Time.getRemainTime(currentCat.accept_at)
+                Time.setStateOfExamCategories(that.quiz.categories)
+                that.passedTime = Time.getPassedTime(that.quiz.created_at)
+                const newCat = Time.getCurrentCategoryAcceptAt(that.quiz.categories)
+
+                if (newCat) {
+                    that.remainTime = Time.getRemainTime(newCat.accept_at)
                 } else {
-                    this.remainTime = false
+                    that.remainTime = false
                 }
 
-                // this.timer.updateTimer();
-            }, 1000);
+                if (!newCat || !that.currentCat || Assistant.getId(newCat.id) !== Assistant.getId(that.currentCat.id)) {
+                    that.currentCat = newCat
+                    that.$store.commit('updateQuiz', that.quiz)
+                    that.goToCategory(that.currentCat.id)
+                }
+            }, 1000)
             // requestAnimationFrame(this.timer.updateTimer) // webpack-internal:///./src/models/Timer.js:58 Uncaught TypeError: Cannot read property 'updateDiffs' of undefined
         },
         destroyed() {

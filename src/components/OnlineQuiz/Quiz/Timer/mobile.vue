@@ -47,7 +47,8 @@
                     {{ passedTime }}
                 </p>
                 <p v-if="remainingTime" class="remainingTimeText">
-                    دقیقه تا پایان مهلت پاسخگویی دفترچه عمومی
+                    دقیقه تا پایان مهلت پاسخگویی
+                    {{ title }}
                     {{ remainingTime }}
                 </p>
             </div>
@@ -68,8 +69,10 @@
             drawerVisible: false,
         }),
         props: [
+            'title',
             'passedTime',
-            'remainingTime'],
+            'remainingTime'
+        ],
         mixins: [mixinQuiz],
         methods: {
             drawerUp() {

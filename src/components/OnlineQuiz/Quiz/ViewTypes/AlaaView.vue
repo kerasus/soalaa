@@ -66,7 +66,7 @@
             <v-container fluid class="py-0">
                 <v-row class="timer-row justify-center">
                     <v-col :md="10" class="d-flex justify-center timer-container py-0">
-                        <Timer :daftarche="'عمومی'" :quiz-started-at="1607963897" :daftarche-end-time="1607963897" :height="100"></Timer>
+                        <Timer />
                     </v-col>
                 </v-row>
             </v-container>
