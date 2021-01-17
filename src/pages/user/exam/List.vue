@@ -116,8 +116,8 @@
                                     </v-btn>
                                     <v-btn
                                             v-if="item.user_exam_status === 'registered but not reached participation time'"
-                                            :to="{ name: 'onlineQuiz.alaaView', params: { quizId: item.id, questNumber: 1 } }"
                                             color="#00c753"
+                                            disabled
                                             text
                                     >
                                         زمان آزمون فرا نرسیده
