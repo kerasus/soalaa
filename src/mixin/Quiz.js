@@ -80,6 +80,7 @@ const mixinQuiz = {
     loadQuiz (userExamForParticipate) {
       this.$store.commit('updateQuiz', userExamForParticipate)
       this.quiz.loadSubcategoriesOfCategories()
+      Time.setStateOfExamCategories(this.quiz.categories)
       this.$store.commit('updateQuiz', this.quiz)
       this.loadUserQuizDataFromStorage(this.quiz)
     },
