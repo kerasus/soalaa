@@ -90,7 +90,6 @@
                                         ادامه آزمون
                                     </v-btn>
                                     <v-btn
-                                            v-if="item.user_exam_status === 'registered but did not participate'"
                                             :to="{ name: 'onlineQuiz.alaaView', params: { quizId: item.id, questNumber: 1 } }"
                                             color="#00b5e6"
                                             text
