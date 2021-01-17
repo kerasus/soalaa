@@ -45,7 +45,7 @@ const mixinQuiz = {
         this.loadFirstQuestion()
       }
 
-      if (this.quiz.questions.list.length > 0) {
+      if (this.quiz.questions.list.length > 0 && this.currentQuestion.sub_category) {
         let subCategoryId = Assistant.getId(this.currentQuestion.sub_category.id)
         currentLessons = this.quiz.sub_categories.getItem('id', subCategoryId)
       }
