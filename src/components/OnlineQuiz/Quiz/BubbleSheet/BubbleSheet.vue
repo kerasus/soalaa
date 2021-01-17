@@ -37,15 +37,20 @@
         computed: {
             questionsInGroups () {
                 let groups = [],
-                    chunk = 10,
+                chunk = 10
+                let array
+                if (this.exam.list.length > 0) {
+                    array = this.exam
+                } else {
                     array = this.quiz.questions.list
+                }
                 for (let i=0,j=array.length; i<j; i+=chunk) {
                     groups.push(array.slice(i,i+chunk))
                 }
                 return groups
             }
         },
-        props: ['info'],
+        props: ['info', 'exam'],
         methods: {
             clickChoice (questionId, choiceId) {
                 this.$emit('clickChoice', questionId, choiceId)
