@@ -1,6 +1,24 @@
 <template>
     <div :class="{ 'current-question': this.currentQuestion.id === source.id, question: true, ltr: source.ltr }">
-        <div class="buttons-group">
+        <div>
+            <v-sheet
+                    v-if="!source.in_active_category"
+                    color="warning"
+                    rounded
+                    dark
+                    height="200"
+                    elevation="1"
+                    class="d-flex align-center justify-center"
+            >
+                (
+                سوال شماره
+                {{ getQuestionNumberFromId(source.id) }}
+                )
+                <br>
+                در حال حاضر امکان مشاهده سوالات این دفترچه امکان پذیر نمی باشد
+            </v-sheet>
+        </div>
+        <div v-if="source.in_active_category" class="buttons-group">
             <v-btn icon @click="changeState(source, 'o')">
                 <v-icon v-if="source.state !== 'o'" color="#888" :size="24">mdi-checkbox-blank-circle-outline</v-icon>
                 <v-icon v-if="source.state === 'o'" color="yellow" :size="24">mdi-checkbox-blank-circle</v-icon>
@@ -13,13 +31,13 @@
                 <v-icon v-if="source.bookmarked" color="blue" :size="24">mdi-bookmark</v-icon>
             </v-btn>
         </div>
-        <span class="question-body renderedPanel" :id="'question' + source.id" v-html="(getQuestionNumberFromId(source.id)) + '- ' + source.rendered_statement" v-intersect="{
+        <span v-if="source.in_active_category" class="question-body renderedPanel" :id="'question' + source.id" v-html="(getQuestionNumberFromId(source.id)) + '- ' + source.rendered_statement" v-intersect="{
             handler: onIntersect,
             options: {
               threshold: [0, 0.2, 0.4, 0.6, 0.8, 1.0]
             }
           }" />
-        <v-row class="choices">
+        <v-row v-if="source.in_active_category" class="choices">
             <v-col
                     v-for="(choice, index) in source.choices.list"
                     :key="choice.id"

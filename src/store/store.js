@@ -101,6 +101,14 @@ const store = new Vuex.Store({
         setCurrentQuestion (state, newInfo) {
             state.currentQuestion = new Question(newInfo)
         },
+        clearExamData (state, examId) {
+            let currentQuizDataIndex = state.userQuizListData.findIndex( (item) => {
+                return Assistant.getId(item.examId) === Assistant.getId(examId)
+            })
+            if (currentQuizDataIndex) {
+                delete state.userQuizListData[currentQuizDataIndex]
+            }
+        },
         updateCurrentQuestion (state, newInfo) {
             this.commit('reloadQuizModel')
             this.commit('reloadCurrentQuestionModel')
