@@ -234,7 +234,6 @@ const mixinQuiz = {
 
       if (!categoryActiveStatus) {
         currentQuestion = this.currentQuestion
-        alert('پاسخ دهی به این دفترچه در حال حاضر امکان پذیر نمیباشد')
       }
 
       this.$store.commit('updateCurrentQuestion', currentQuestion)
