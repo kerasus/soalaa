@@ -7,7 +7,10 @@ class QuestCategory extends Model {
             { key: 'id' },
             { key: 'title' },
             { key: 'accept_at' },
-            { key: 'is_active' },
+            {
+                key: 'is_active',
+                default: false
+            },
             {
                 key: 'sub_categories',
                 relatedModel: QuestSubcategoryList
