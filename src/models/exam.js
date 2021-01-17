@@ -75,7 +75,6 @@ class Exam extends Model {
                     accept: "application/json; charset=utf-8",
                     dataType: "json",
                     success: function (data) {
-                        console.log('response.data', data)
                         that.questions = new QuestionList(data)
                         resolve(data)
                     },
