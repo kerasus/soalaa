@@ -40,7 +40,7 @@
                     </v-tab-item>
                     <v-tab-item>
                         <v-card flat>
-                            پاسخبرگ کلیدی
+                            <BubbleSheet :info="{ type: 'pasokh-nameh' }" />
                         </v-card>
                     </v-tab-item>
                     <v-tab-item>
@@ -118,10 +118,11 @@
     import Info from "@/components/OnlineQuiz/Quiz/resultTables/info";
     import TopScoreResult from "@/components/OnlineQuiz/Quiz/resultTables/topScoreResult";
     import StatisticResult from "@/components/OnlineQuiz/Quiz/resultTables/statisticResult";
+    import BubbleSheet from "@/components/OnlineQuiz/Quiz/BubbleSheet/BubbleSheet";
 
     export default {
         name: "Result",
-        components: {StatisticResult, TopScoreResult, Info},
+        components: {BubbleSheet, StatisticResult, TopScoreResult, Info},
         data: () => ({
             tab: null,
             videoAnalyzeTab: null,
