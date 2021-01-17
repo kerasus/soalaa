@@ -152,15 +152,23 @@
                 }
             },
             scrollTo (questionId) {
-                if (this.quiz.questions.getQuestionById(questionId).isInView === false) {
-                    const questionIndex = this.quiz.questions.getQuestionIndexById(questionId)
-                    this.$refs.scroller.scrollToIndex(questionIndex)
-                    for (let i = 1; i < 4; i++) {
-                        setTimeout(() => {
-                                this.$refs.scroller.scrollToIndex(questionIndex)
-                            },
-                            500 / Math.ceil(this.quiz.questions.list.length / 100) * i)
-                    }
+                // if (this.quiz.questions.getQuestionById(questionId).isInView === false) {
+                //     const questionIndex = this.quiz.questions.getQuestionIndexById(questionId)
+                //     this.$refs.scroller.scrollToIndex(questionIndex)
+                //     for (let i = 1; i < 4; i++) {
+                //         setTimeout(() => {
+                //                 this.$refs.scroller.scrollToIndex(questionIndex)
+                //             },
+                //             500 / Math.ceil(this.quiz.questions.list.length / 100) * i)
+                //     }
+                // }
+                const questionIndex = this.quiz.questions.getQuestionIndexById(questionId)
+                this.$refs.scroller.scrollToIndex(questionIndex)
+                for (let i = 1; i < 4; i++) {
+                    setTimeout(() => {
+                            this.$refs.scroller.scrollToIndex(questionIndex)
+                        },
+                        500 / Math.ceil(this.quiz.questions.list.length / 100) * i)
                 }
             },
             // onIntersect (entries) {
