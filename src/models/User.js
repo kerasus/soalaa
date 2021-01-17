@@ -68,6 +68,9 @@ class User extends Model {
         if (!exam.is_registered && !exam.accept_at && Time.getPassedTime(Time.addTime(exam.delay_time, 'minutes', true, exam.start_at), false) > 0) {
             status = 'not registered and registration time passed'
         }
+        else if (exam.finished_at) {
+            status = 'results recorded'
+        }
         else if (!exam.is_registered) {
             status = 'not registered'
         } else if (exam.is_registered && !exam.accept_at && Time.getRemainTime(Time.addTime(exam.delay_time, 'minutes', true, exam.start_at), false) > 0 && Time.getPassedTime(exam.start_at, false) > 0) {

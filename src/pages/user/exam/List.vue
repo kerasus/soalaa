@@ -72,7 +72,6 @@
                                             :to="{ name: 'onlineQuiz.alaaView', params: { quizId: item.id, questNumber: 1 } }"
                                             color="#ffc107"
                                             text
-                                            :to="{ name: 'user.exam.results', params: { user_exam_id: item.user_exam_id } }"
                                     >
                                         شروع آزمون
                                     </v-btn>
@@ -133,6 +132,14 @@
                                             text
                                     >
                                         زمان آزمون فرا نرسیده
+                                    </v-btn>
+                                    <v-btn
+                                            v-if="item.user_exam_status === 'results recorded'"
+                                            color="#00b5e6"
+                                            text
+                                            :to="{ name: 'user.exam.results', params: { user_exam_id: item.user_exam_id } }"
+                                    >
+                                        مشاهده نتایج
                                     </v-btn>
                                 </v-col>
                             </v-row>
