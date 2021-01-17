@@ -46,7 +46,7 @@
                         >
                             <v-row class="justify-center">
                                 <v-col cols="3" class="pr-7 justify-center">
-                                    {{ item.title }}
+                                    {{ item.title }} {{ item.user_exam_status }}
                                 </v-col>
                                 <v-col cols="3">
                                     {{ item.shamsiDate('start_at').dateTime }}
@@ -61,7 +61,6 @@
                                 <v-col cols="2">
                                     <v-btn
                                             v-if="item.user_exam_status === 'has participated and finished' || item.user_exam_status === 'registered but participation time passed'"
-                                            :to="{ name: 'onlineQuiz.alaaView', params: { quizId: item.id, questNumber: 1 } }"
                                             color="#ffc107"
                                             text
                                     >
@@ -104,7 +103,7 @@
 <!--                                    disabled-->
                                     <v-btn
                                             v-if="item.user_exam_status === 'registered but not reached participation time'"
-                                            :to="{ name: 'onlineQuiz.alaaView', params: { quizId: item.id, questNumber: 1 } }"
+                                            disabled
                                             color="#00c753"
                                             text
                                     >

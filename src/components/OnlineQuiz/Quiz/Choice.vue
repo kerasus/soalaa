@@ -76,10 +76,9 @@
     .answer-text {
         height: max-content;
         width: 100%;
-        display: flex;
         color: #777;
         padding-right: 30px;
-        align-items: center;
+        display: block;
     }
 
     .answer-sheet.active {
@@ -93,9 +92,6 @@
     .answer-text {
         height: max-content;
         width: 100%;
-        display: flex;
-        align-content: center;
-        align-self: center;
     }
 
     .answer-checkbox {

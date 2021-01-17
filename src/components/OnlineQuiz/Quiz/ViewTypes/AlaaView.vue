@@ -211,8 +211,7 @@ img {
     .answer-text {
         height: 100%;
         width: 100%;
-        display: flex;
-        align-content: center;
+        display: block !important;
     }
 
     .answer-checkbox {

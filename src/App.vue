@@ -140,6 +140,10 @@
         display: block;
     }
 
+    .answer-text p:nth-child(2n) {
+        display: block;
+    }
+
     .notification-title,
     .notification-content {
         text-align: right;
