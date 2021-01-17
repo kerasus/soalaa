@@ -17,11 +17,6 @@
         name: "Choice",
         props: ['choice', 'questionId'],
         mixins: [mixinQuiz],
-        watch: {
-            'choice.active': function (data) {
-                console.log('choice.active', data)
-            }
-        },
         computed: {
             isSelected () {
                 const answeredChoice = this.currentQuestion.getAnsweredChoice()

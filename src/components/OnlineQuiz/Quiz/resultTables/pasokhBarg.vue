@@ -105,7 +105,7 @@
 </template>
 
 <script>
-    import FakeQuizData from '@/plugins/fakeQuizData'
+    // import FakeQuizData from '@/plugins/fakeQuizData'
     import $ from 'jquery'
     import '@/assets/scss/markdownKatex.scss'
     import Vue from 'vue'
@@ -130,7 +130,7 @@
         },
         data () {
             return {
-                quizData: FakeQuizData,
+                quizData: null,
                 item: Item,
                 lastTimeScrollRange: { start: 0, end: 29 },
                 isMobile: false
