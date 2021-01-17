@@ -42,7 +42,9 @@
                 if (!newCat || !that.currentCat || Assistant.getId(newCat.id) !== Assistant.getId(that.currentCat.id)) {
                     that.currentCat = newCat
                     that.$store.commit('updateQuiz', that.quiz)
-                    that.goToCategory(that.currentCat.id)
+                    if (that.currentCat) {
+                        that.goToCategory(that.currentCat.id)
+                    }
                 }
             }, 1000)
             // requestAnimationFrame(this.timer.updateTimer) // webpack-internal:///./src/models/Timer.js:58 Uncaught TypeError: Cannot read property 'updateDiffs' of undefined

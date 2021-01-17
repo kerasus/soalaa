@@ -186,6 +186,9 @@ class Exam extends Model {
 
     loadUserQuestionData (question, userQuestionData) {
         let answeredChoice = question.getAnsweredChoice()
+        if (!userQuestionData) {
+            userQuestionData = {}
+        }
         userQuestionData.choicesId = null
         if (answeredChoice) {
             userQuestionData.choicesId = answeredChoice.id
