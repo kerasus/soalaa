@@ -257,7 +257,7 @@ class Exam extends Model {
     }
 
     getAnswerOfUserInResultPage () {
-        return axios.get('/3a/api/temp-exam/answer/'+this.user_exam_id)
+        return axios.get('/3a/api/temp-exam/answer/'+this.user_exam_id+'/withCorrect')
     }
 
 }

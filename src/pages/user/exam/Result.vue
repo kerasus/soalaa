@@ -14,7 +14,10 @@
                         <v-col>
                             <v-tabs v-model="tab" color="#ffc107" center-active>
                                 <v-tabs-slider color="yellow"></v-tabs-slider>
-                                <v-tab>نتایج آزمون اول سه‌آ - 1399/10/24 - رشته تجربی</v-tab>
+                                <v-tab disabled>
+                                    نتایج آزمون اول سه‌آ -
+                                    {{ exam.title }}
+                                </v-tab>
                                 <v-tab>ریزدرس ها</v-tab>
                                 <v-tab>پاسخبرگ کلیدی</v-tab>
                                 <v-tab>نتایج نفرات برتر</v-tab>
@@ -30,13 +33,11 @@
                 <v-tabs-items v-model="tab">
                     <v-tab-item>
                         <v-card flat>
-                            <top-score-result/>
+                            disabled tab
                         </v-card>
                     </v-tab-item>
                     <v-tab-item>
-                        <v-card flat>
-                            <statistic-result/>
-                        </v-card>
+                        <statistic-result/>
                     </v-tab-item>
                     <v-tab-item>
                         <v-card flat>
@@ -44,68 +45,60 @@
                         </v-card>
                     </v-tab-item>
                     <v-tab-item>
-                        <v-card flat>
-                            <top-score-result/>
-                        </v-card>
+                        <top-score-result/>
                     </v-tab-item>
                     <v-tab-item>
-                        <v-card flat>
-                            <v-row>
-                                <v-col>
-                                    <v-tabs color="#ffc107" vertical show-arrows grow>
-                                        <v-tabs-slider color="yellow"></v-tabs-slider>
-                                        <v-tab>
-                                            ادبیات فارسی
-                                        </v-tab>
-                                        <v-tab>
-                                            عربی
-                                        </v-tab>
-                                        <v-tab>
-                                            دین و زندگی
-                                        </v-tab>
-                                        <v-tab>
-                                            زبان انگلیسی
-                                        </v-tab>
-                                        <v-tab>
-                                            ریاضی
-                                        </v-tab>
-                                        <v-tab>
-                                            زیست شناسی
-                                        </v-tab>
-                                        <v-tab>
-                                            فیزیک
-                                        </v-tab>
-                                        <v-tab>
-                                            شیمی
-                                        </v-tab>
-                                        <v-tab-item>
-                                            <video/>
-                                        </v-tab-item>
-                                        <v-tab-item>
-                                            <video/>
-                                        </v-tab-item>
-                                        <v-tab-item>
-                                            <video/>
-                                        </v-tab-item>
-                                        <v-tab-item>
-                                            <video/>
-                                        </v-tab-item>
-                                        <v-tab-item>
-                                            <video/>
-                                        </v-tab-item>
-                                        <v-tab-item>
-                                            <video/>
-                                        </v-tab-item>
-                                        <v-tab-item>
-                                            <video/>
-                                        </v-tab-item>
-                                        <v-tab-item>
-                                            <video/>
-                                        </v-tab-item>
-                                    </v-tabs>
-                                </v-col>
-                            </v-row>
-                        </v-card>
+                        <v-tabs color="#ffc107" vertical show-arrows grow>
+                            <v-tabs-slider color="yellow"></v-tabs-slider>
+                            <v-tab>
+                                ادبیات فارسی
+                            </v-tab>
+                            <v-tab>
+                                عربی
+                            </v-tab>
+                            <v-tab>
+                                دین و زندگی
+                            </v-tab>
+                            <v-tab>
+                                زبان انگلیسی
+                            </v-tab>
+                            <v-tab>
+                                ریاضی
+                            </v-tab>
+                            <v-tab>
+                                زیست شناسی
+                            </v-tab>
+                            <v-tab>
+                                فیزیک
+                            </v-tab>
+                            <v-tab>
+                                شیمی
+                            </v-tab>
+                            <v-tab-item>
+                                <video/>
+                            </v-tab-item>
+                            <v-tab-item>
+                                <video/>
+                            </v-tab-item>
+                            <v-tab-item>
+                                <video/>
+                            </v-tab-item>
+                            <v-tab-item>
+                                <video/>
+                            </v-tab-item>
+                            <v-tab-item>
+                                <video/>
+                            </v-tab-item>
+                            <v-tab-item>
+                                <video/>
+                            </v-tab-item>
+                            <v-tab-item>
+                                <video/>
+                            </v-tab-item>
+                            <v-tab-item>
+                                <video/>
+                            </v-tab-item>
+                        </v-tabs>
                     </v-tab-item>
                 </v-tabs-items>
             </v-col>
@@ -190,9 +183,3 @@
         }
     }
 </script>
-<style>
-    /* Helper classes */
-    .basil--text {
-        color: #356859 !important;
-    }
-</style>
