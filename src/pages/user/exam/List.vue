@@ -71,11 +71,12 @@
                                             v-if="item.user_exam_status === 'has participated and finished' || item.user_exam_status === 'registered but participation time passed'"
                                             color="#ffc107"
                                             text
+                                            :to="{ name: 'user.exam.results', params: { user_exam_id: item.user_exam_id } }"
                                     >
                                         مشاهده نتایج
                                     </v-btn>
                                     <v-btn
-                                            v-if="item.user_exam_status === 'has participated and finished'"
+
                                             color="#ffc107"
                                             text
                                     >
@@ -90,6 +91,7 @@
                                         ادامه آزمون
                                     </v-btn>
                                     <v-btn
+                                            v-if="item.user_exam_status === 'registered but did not participate'"
                                             :to="{ name: 'onlineQuiz.alaaView', params: { quizId: item.id, questNumber: 1 } }"
                                             color="#00b5e6"
                                             text
@@ -114,7 +116,7 @@
                                         اتمام مهلت ثبت نام
                                     </v-btn>
                                     <v-btn
-                                            v-if="false"
+                                            v-if="item.user_exam_status === 'registered but not reached participation time'"
                                             color="#00c753"
                                             disabled
                                             text
