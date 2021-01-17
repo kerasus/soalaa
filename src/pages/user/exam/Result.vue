@@ -12,7 +12,7 @@
                     <v-row style="height: 50%;margin: inherit;
      ">
                         <v-col>
-                            <v-tabs v-model="tab" :style="{width: 'maxContent', margin: 'auto'}">
+                            <v-tabs v-model="tab" color="#ffc107" center-active>
                                 <v-tabs-slider color="yellow"></v-tabs-slider>
                                 <v-tab>نتایج آزمون اول سه‌آ - 1399/10/24 - رشته تجربی</v-tab>
                                 <v-tab>ریزدرس ها</v-tab>
@@ -50,47 +50,61 @@
                     </v-tab-item>
                     <v-tab-item>
                         <v-card flat>
-                            wwww
-                        </v-card>
-                    </v-tab-item>
-                    <v-tab-item>
-                        <v-card flat>
-                            <v-col cols="2" style="padding-right: 0px; height: fit-content; margin-top: 50px;">
-                                <v-card class="examItems" elevation="0" @click="loadLessons(0)">
-                                    <p style="    padding-top: 18px;">
-                                        ادبیات فارسی
-                                    </p>
-                                </v-card>
-                                <v-card class="examItems" elevation="0" @click="loadLessons(1)">
-                                    <p style="    padding-top: 18px;">
-                                        عربی</p>
-                                </v-card>
-                                <v-card class="examItems" elevation="0" @click="loadLessons(2)">
-                                    <p style="    padding-top: 18px;">
-                                        دین و زندگی</p>
-                                </v-card>
-                                <v-card class="examItems" elevation="0" @click="loadLessons(3)">
-                                    <p style="    padding-top: 18px;">
-                                        زبان انگلیسی</p>
-                                </v-card>
-                                <v-card class="examItems" elevation="0" @click="loadLessons(4)">
-                                    <p style="    padding-top: 18px;">
-                                        ریاضی</p>
-                                </v-card>
-                                <v-card class="examItems" elevation="0" @click="loadLessons(5)">
-                                    <p style="    padding-top: 18px;">
-                                        زیست شناسی</p>
-                                </v-card>
-                                <v-card class="examItems" elevation="0" @click="loadLessons(6)">
-                                    <p style="    padding-top: 18px;">
-                                        فیزیک</p>
-                                </v-card>
-                                <v-card class="examItems" elevation="0" @click="loadLessons(7)">
-                                    <p style="    padding-top: 18px;">
-                                        شیمی</p>
-                                </v-card>
-
-                            </v-col>
+                            <v-row>
+                                <v-col>
+                                    <v-tabs color="#ffc107" vertical show-arrows grow>
+                                        <v-tabs-slider color="yellow"></v-tabs-slider>
+                                        <v-tab>
+                                            ادبیات فارسی
+                                        </v-tab>
+                                        <v-tab>
+                                            عربی
+                                        </v-tab>
+                                        <v-tab>
+                                            دین و زندگی
+                                        </v-tab>
+                                        <v-tab>
+                                            زبان انگلیسی
+                                        </v-tab>
+                                        <v-tab>
+                                            ریاضی
+                                        </v-tab>
+                                        <v-tab>
+                                            زیست شناسی
+                                        </v-tab>
+                                        <v-tab>
+                                            فیزیک
+                                        </v-tab>
+                                        <v-tab>
+                                            شیمی
+                                        </v-tab>
+                                        <v-tab-item>
+                                            <video/>
+                                        </v-tab-item>
+                                        <v-tab-item>
+                                            <video/>
+                                        </v-tab-item>
+                                        <v-tab-item>
+                                            <video/>
+                                        </v-tab-item>
+                                        <v-tab-item>
+                                            <video/>
+                                        </v-tab-item>
+                                        <v-tab-item>
+                                            <video/>
+                                        </v-tab-item>
+                                        <v-tab-item>
+                                            <video/>
+                                        </v-tab-item>
+                                        <v-tab-item>
+                                            <video/>
+                                        </v-tab-item>
+                                        <v-tab-item>
+                                            <video/>
+                                        </v-tab-item>
+                                    </v-tabs>
+                                </v-col>
+                            </v-row>
                         </v-card>
                     </v-tab-item>
                 </v-tabs-items>
@@ -110,6 +124,7 @@
         components: {StatisticResult, TopScoreResult, Info},
         data: () => ({
             tab: null,
+            videoAnalyzeTab: null,
             exam: new Exam(),
             video_analyze: true,
             top_score_result: false,
@@ -175,85 +190,9 @@
         }
     }
 </script>
-
-<style scoped>
-    .v-tabs >>> .v-tabs-bar >>> {
-        height: 50px;
+<style>
+    /* Helper classes */
+    .basil--text {
+        color: #356859 !important;
     }
-
-    .dot {
-        height: 50px;
-        width: 50px;
-        background-color: rgba(241, 241, 241, 1);;
-        border-radius: 50%;
-        display: inline-block;
-    }
-
-    .examItems {
-        background-color: rgba(241, 241, 241, 1);
-        height: 60px;
-        white-space: nowrap;
-        text-align: center;
-        font-family: IRANSans;
-        font-style: normal;
-        font-weight: normal;
-        font-size: 16px;
-        color: rgba(68, 68, 68, 1);
-        margin-top: 10px;
-        border-radius: 15px;
-    }
-
-    .menuInfoText {
-        white-space: nowrap;
-
-        text-align: center;
-        font-family: IRANSans;
-        font-style: normal;
-        font-weight: normal;
-        font-size: 16px;
-        color: rgba(102, 102, 102, 1);
-    }
-
-    .v-tabs >>> .v-tabs-bar {
-        align-items: self-end !important;
-        margin-top: 10px !important;
-        height: 20px !important;
-    }
-
-    .v-tabs >>> .v-slide-group__wrapper {
-        color: rgba(255, 193, 7, 1) !important;
-    }
-
-    .tableTitle {
-        margin-right: 30px;
-        white-space: nowrap;
-        line-height: 34px;
-        margin-top: -9px;
-        text-align: right;
-        font-family: IRANSans;
-        font-style: normal;
-        font-weight: normal;
-        font-size: 16px;
-        color: rgba(102, 102, 102, 1);
-    }
-
-    .infoCard {
-        margin-top: 10px;
-        border-radius: 15px;
-    }
-
-
-    .v-card > *:last-child:not(.v-btn):not(.v-chip) {
-        border-bottom-left-radius: 0 !important;
-        border-bottom-right-radius: 0 !important;
-
-
-    }
-
-    .v-card > *:first-child:not(.v-btn):not(.v-chip), .v-card > .v-card__progress + *:not(.v-btn):not(.v-chip) {
-        border-top-left-radius: 0 !important;
-        border-top-right-radius: 0 !important;
-    }
-
-
 </style>
