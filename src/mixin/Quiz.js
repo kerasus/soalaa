@@ -229,11 +229,11 @@ const mixinQuiz = {
           questNumber = this.getQuestionNumberFromIndex(questIndex)
 
       const currentQuestion = this.quiz.questions.getQuestionById(id)
-      const categoryActiveStatus = this.getCategoryActiveStatus(currentQuestion.category_id)
+      // const categoryActiveStatus = this.getCategoryActiveStatus(currentQuestion.category_id)
 
-      if (!categoryActiveStatus) {
-        return
-      }
+      // if (!categoryActiveStatus) {
+      //   return
+      // }
 
       this.$store.commit('updateCurrentQuestion', currentQuestion)
       // this.quiz.questions.getQuestionById(this.currentQuestion.id).enterQuestion()
