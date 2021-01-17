@@ -163,6 +163,7 @@ const mixinQuiz = {
       this.sendQuestionData({ exam_user_id: this.quiz.user_exam_id, questionId: question.id, bookmarked: this.currentQuestion.bookmarked}, 'sendBookmark')
     },
     changeState (question, newState) {
+      console.log('oomad to change state ', newState)
       if (this.currentQuestion.id !== question.id) {
         this.currentQuestion = question
       }
