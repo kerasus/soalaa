@@ -61,7 +61,6 @@ class User extends Model {
             }
 
         ])
-
     }
 
     setUserExamStatus (exam) {
