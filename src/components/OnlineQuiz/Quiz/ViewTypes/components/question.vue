@@ -1,11 +1,11 @@
 <template>
     <div :class="{ 'current-question': this.currentQuestion.id === source.id, question: true, ltr: source.ltr }">
         <div class="buttons-group">
-            <v-btn icon @click="changeState(source, 'circle')">
+            <v-btn icon @click="changeState(source, 'o')">
                 <v-icon v-if="source.state !== 'o'" color="#888" :size="24">mdi-checkbox-blank-circle-outline</v-icon>
                 <v-icon v-if="source.state === 'o'" color="yellow" :size="24">mdi-checkbox-blank-circle</v-icon>
             </v-btn>
-            <v-btn icon @click="changeState(source ,'cross')">
+            <v-btn icon @click="changeState(source ,'x')">
                 <v-icon :color="source.state === 'o' ? 'red' : '#888'" :size="24">mdi-close</v-icon>
             </v-btn>
             <v-btn icon @click="bookmark(source)">

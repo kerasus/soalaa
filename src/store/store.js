@@ -86,10 +86,9 @@ const store = new Vuex.Store({
                     examData: []
                 })
             } else {
-                state.userQuizListData.map( (item) => {
+                state.userQuizListData.forEach( (item, index) => {
                     if (Assistant.getId(item.examId) === Assistant.getId(newInfo.id)) {
-                        item = state.quiz.mergeUserQuizData(item)
-                        return item
+                        state.userQuizListData[index] = state.quiz.mergeUserQuizData(item)
                     }
                 })
             }
