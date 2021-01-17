@@ -58,8 +58,32 @@
 </template>
 
 <script>
+    // import {Exam} from "@/models/exam";
+    import {mixinQuiz} from '@/mixin/Mixins'
+
     export default {
-        name: 'OnlineQuiz'
+        name: 'OnlineQuiz',
+        mixins: [mixinQuiz],
+        methods: {
+            sendAnswersAndFinishExam() {
+                this.quiz.sendAnswersAndFinishExam()
+                    .then( () => {
+                        this.$notify({
+                            group: 'notifs',
+                            text: 'اطلاعات آزمون شما ثبت شد.',
+                            type: 'error'
+                        })
+                    })
+                    .catch( () => {
+                        this.$notify({
+                            group: 'notifs',
+                            title: 'توجه!',
+                            text: 'item',
+                            type: 'error'
+                        })
+                    })
+            }
+        }
     }
 </script>
 

@@ -4,7 +4,7 @@
 
 <script>
     import BubbleSheet from "@/components/OnlineQuiz/Quiz/BubbleSheet/BubbleSheet";
-    import FakeQuizData from "@/plugins/fakeQuizData";
+    // import FakeQuizData from "@/plugins/fakeQuizData";
     import {mixinQuiz} from "@/mixin/Mixins";
     import {Quiz} from "@/models/Quiz";
     export default {
@@ -16,7 +16,7 @@
         },
         data () {
             return {
-                quizData: FakeQuizData
+                quizData: null
             }
         }
     }
