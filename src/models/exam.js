@@ -6,6 +6,7 @@ import $ from 'jquery'
 import {CheckingTimeList} from "@/models/CheckingTime";
 import Assistant from "@/plugins/assistant";
 import Vue from 'vue'
+import axios from "axios";
 
 class Exam extends Model {
     constructor(data) {
@@ -75,7 +76,6 @@ class Exam extends Model {
                     accept: "application/json; charset=utf-8",
                     dataType: "json",
                     success: function (data) {
-                        console.log('response.data', data)
                         that.questions = new QuestionList(data)
                         resolve(data)
                     },
@@ -221,6 +221,20 @@ class Exam extends Model {
             choicesId: answeredChoiceId,
             answered_at
         })
+    }
+
+    sendAnswersAndFinishExam () {
+        let answers = []
+        this.questions.list.forEach( (item) => {
+            const answeredChoice = item.getAnsweredChoice()
+            const choice_id = (answeredChoice) ? answeredChoice.id : null
+            answers.push({
+                question_id: item.id,
+                choice_id,
+                selected_at: answeredChoice.answered_at
+            })
+        })
+        return axios.post('/3a/api/temp-exam/answer/choice/', {exam_user_id: this.user_exam_id, finish: true, questions: answers })
     }
 
 }

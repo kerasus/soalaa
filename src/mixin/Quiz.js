@@ -63,7 +63,6 @@ const mixinQuiz = {
       this.$store.commit('updateOverlay', true)
       if (this.needToLoadQuiaData() && this.$route.params.quizId) {
         this.participateExam(this.$route.params.quizId)
-        console.log(this.$route.params.quizId)
       } else {
         this.loadUserQuizDataFromStorage()
       }
@@ -163,7 +162,6 @@ const mixinQuiz = {
       this.sendQuestionData({ exam_user_id: this.quiz.user_exam_id, questionId: question.id, bookmarked: this.currentQuestion.bookmarked}, 'sendBookmark')
     },
     changeState (question, newState) {
-      console.log('oomad to change state ', newState)
       if (this.currentQuestion.id !== question.id) {
         this.currentQuestion = question
       }
@@ -191,15 +189,7 @@ const mixinQuiz = {
       return number - 1
     },
     getCategoryActiveStatus (categoryId) {
-      const category = this.quiz.categories.list.find((item) => {
-          // const test = Assistant.getId(item.id) === Assistant.getId(categoryId)
-          const test = item.id === categoryId
-        return test
-      })
-      // let category
-      // for (let i = 0; i < this.quiz.categories.length; i++) {
-      //   if (this.quiz.categories)
-      // }
+      const category = this.quiz.categories.list.find((item) => Assistant.getId(item.id) === Assistant.getId(categoryId))
       return !category || category.is_active;
     },
     goToCategory (categoryId) {
