@@ -245,7 +245,7 @@ class Exam extends Model {
         this.questions.list.forEach( (item) => {
             let dbAnswer = dbAnswers.find( (answerItem) => answerItem.question_id === item.id)
             if (dbAnswer) {
-                item.selectChoice(dbAnswer.choice_id, dbAnswer.selected_at),
+                item.selectChoice(dbAnswer.choice_id, dbAnswer.selected_at)
                 item.state = dbAnswer.status
                 item.bookmarked = dbAnswer.bookmark
             }
