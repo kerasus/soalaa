@@ -241,14 +241,11 @@ class Exam extends Model {
         return axios.post('/3a/api/temp-exam/answer/choice/', {exam_user_id: this.user_exam_id, finish: true, questions: answers })
     }
 
-    mergeDbAnswerToLocalstorage (dbAnswers, setTrueChoice) {
+    mergeDbAnswerToLocalstorage (dbAnswers) {
         this.questions.list.forEach( (item) => {
             let dbAnswer = dbAnswers.find( (answerItem) => answerItem.question_id === item.id)
             if (dbAnswer) {
                 item.selectChoice(dbAnswer.choice_id, dbAnswer.selected_at)
-                if (setTrueChoice) {
-                    item.setTrueChoice(dbAnswer.correct_choice_id, dbAnswer.correct_choice_id)
-                }
                 item.state = dbAnswer.status
                 item.bookmarked = dbAnswer.bookmark
             }
@@ -271,7 +268,7 @@ class Exam extends Model {
                     that.title = examTitle
                     that.loadQuestionsFromFile()
                         .then( () => {
-                            that.mergeDbAnswerToLocalstorage(answers, true)
+                            that.mergeDbAnswerToLocalstorage(answers)
                             resolve()
                         })
                         .catch( () => {
