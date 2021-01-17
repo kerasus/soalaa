@@ -48,19 +48,19 @@
                                     {{ item.title }}
                                 </v-col>
                                 <v-col cols="12" md="3">
-                                    <span class="d-inline-block-md">
+                                    <span class="d-inline-block-md d-none">
                                         زمان شروع آزمون:
                                     </span>
                                     {{ item.shamsiDate('start_at').dateTime }}
                                 </v-col>
                                 <v-col cols="12" md="3">
-                                    <span class="d-inline-block-md">
+                                    <span class="d-inline-block-md d-none">
                                         زمان پایان آزمون:
                                     </span>
                                     {{ item.shamsiDate('finish_at').dateTime }}
                                 </v-col>
                                 <v-col cols="12" md="1">
-                                    <span class="d-inline-block-md">
+                                    <span class="d-inline-block-md d-none">
                                         میزان تاخیر مجاز:
                                     </span>
                                     {{ item.delay_time }}
