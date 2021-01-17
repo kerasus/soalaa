@@ -63,8 +63,6 @@
                                             v-if="item.user_exam_status === 'has participated and finished' || item.user_exam_status === 'registered but participation time passed'"
                                             color="#ffc107"
                                             text
-                                            :to="{ name: 'onlineQuiz.alaaView', params: { quizId: item.id, questNumber: 1 } }"
-
                                     >
                                         مشاهده نتایج
                                     </v-btn>
