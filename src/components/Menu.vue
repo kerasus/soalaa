@@ -26,35 +26,40 @@
                     <v-list-item-title>آزمون های سه آ</v-list-item-title>
                 </v-list-item>
             </router-link>
-            <router-link class="text-decoration-none" :to="{ name: 'tree.edit' }">
+            <router-link class="text-decoration-none" :to="{ name: 'common-questions' }">
+                <v-list-item>
+                    <v-list-item-title>سوالات متداول</v-list-item-title>
+                </v-list-item>
+            </router-link>
+            <router-link class="text-decoration-none" :to="{ name: 'tree.edit' }" v-if="false">
                 <v-list-item>
                     <v-list-item-title>نتایج آزمون</v-list-item-title>
                 </v-list-item>
             </router-link>
 
-            <router-link class="text-decoration-none" :to="{ name: 'quest.create' }">
+            <router-link class="text-decoration-none" :to="{ name: 'quest.create' }" v-if="false">
                 <v-list-item>
                     <v-list-item-title>اطلاعیه و اصلاحیه</v-list-item-title>
                 </v-list-item>
             </router-link>
 
-            <router-link class="text-decoration-none" :to="{ name: 'onlineQuiz.result' }">
+            <router-link class="text-decoration-none" :to="{ name: 'onlineQuiz.result' }" v-if="false">
                 <v-list-item>
                     <v-list-item-title>کارنامه</v-list-item-title>
                 </v-list-item>
             </router-link>
 
-            <router-link class="text-decoration-none" :to="{ name: 'onlineQuiz.result.lessonDetails' }">
+            <router-link class="text-decoration-none" :to="{ name: 'onlineQuiz.result.lessonDetails' }" v-if="false">
                 <v-list-item>
                     <v-list-item-title>ریزدرس ها</v-list-item-title>
                 </v-list-item>
             </router-link>
-            <router-link class="text-decoration-none" :to="{ name: 'onlineQuiz.result.topScore' }">
+            <router-link class="text-decoration-none" :to="{ name: 'onlineQuiz.result.topScore' }" v-if="false">
                 <v-list-item>
                     <v-list-item-title>نتایج نفرات برتر</v-list-item-title>
                 </v-list-item>
             </router-link>
-            <router-link class="text-decoration-none" :to="{ name: 'onlineQuiz.result.pasokhbarg' }">
+            <router-link class="text-decoration-none" :to="{ name: 'onlineQuiz.result.pasokhbarg' }" v-if="false">
                 <v-list-item>
                     <v-list-item-title>پاسخ برگ</v-list-item-title>
                 </v-list-item>
@@ -68,6 +73,7 @@
 
         </v-list-item-group>
         <v-list-item-group
+                v-if="$store.getters.user.has_admin_permission"
                 class="admin-panel"
                 active-class="deep-purple--text text--accent-4"
         >

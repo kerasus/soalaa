@@ -161,19 +161,19 @@ class Question extends Model {
     // }
 
     sendAnswer (exam_user_id, {question_id, choice_id, selected_at }) {
-        axios.post('/3a/api/temp-exam/answer/choice/', {exam_user_id, questions: [{question_id, choice_id, selected_at}] })
+        axios.post('/3a/rb/api/temp-exam/answer/choice/', {exam_user_id, questions: [{question_id, choice_id, selected_at}] })
     }
 
     sendStatus (exam_user_id, {question_id, status }) {
-        axios.post('/3a/api/temp-exam/answer/status', {exam_user_id, question_id, status})
+        axios.post('/3a/rb/api/temp-exam/answer/status', {exam_user_id, question_id, status})
     }
 
     sendBookmark (exam_user_id, question_id) {
-        axios.post('/3a/api/temp-exam/answer/bookmark', {exam_user_id, question_id})
+        axios.post('/3a/rb/api/temp-exam/answer/bookmark', {exam_user_id, question_id})
     }
 
     sendUnBookmark (exam_user_id, question_id) {
-        axios.post('/3a/api/temp-exam/answer/unbookmark', {exam_user_id, question_id})
+        axios.post('/3a/rb/api/temp-exam/answer/unbookmark', {exam_user_id, question_id})
     }
 }
 

@@ -16,7 +16,7 @@
                 </v-alert>
                 <v-row v-if="user.exams.list.length > 0 && !loadingList">
                     <v-col>
-                        <v-row>
+                        <v-row class="table-header">
                             <v-col cols="3" class="pr-7">
                                 عنوان
                             </v-col>
@@ -34,31 +34,39 @@
                             </v-col>
                         </v-row>
                         <v-sheet
-                                v-for="item in user.exams.list"
+                                v-for="item in exams.list"
                                 :key="item.id"
                                 class="mb-5 d-flex"
                                 color="white"
                                 elevation="0"
-                                height="70"
                                 outlined
                                 rounded
                                 shaped
                         >
-                            <v-row class="justify-center">
-                                <v-col cols="3" class="pr-7 justify-center">
-                                    {{ item.title }} {{ item.user_exam_status }}
+                            <v-row class="table-row justify-center">
+                                <v-col cols="12" md="3" class="pr-7 justify-center">
+                                    {{ item.title }}
                                 </v-col>
-                                <v-col cols="3">
+                                <v-col cols="12" md="3">
+                                    <span class="d-inline-block-md">
+                                        زمان شروع آزمون:
+                                    </span>
                                     {{ item.shamsiDate('start_at').dateTime }}
                                 </v-col>
-                                <v-col cols="3">
+                                <v-col cols="12" md="3">
+                                    <span class="d-inline-block-md">
+                                        زمان پایان آزمون:
+                                    </span>
                                     {{ item.shamsiDate('finish_at').dateTime }}
                                 </v-col>
-                                <v-col cols="1">
+                                <v-col cols="12" md="1">
+                                    <span class="d-inline-block-md">
+                                        میزان تاخیر مجاز:
+                                    </span>
                                     {{ item.delay_time }}
                                     دقیقه
                                 </v-col>
-                                <v-col cols="2">
+                                <v-col cols="12" md="2">
                                     <v-btn
                                             v-if="item.user_exam_status === 'has participated and finished' || item.user_exam_status === 'registered but participation time passed'"
                                             color="#ffc107"
@@ -82,11 +90,10 @@
                                     >
                                         شروع آزمون
                                     </v-btn>
-<!--                                    href="https://alaatv.com/landing/19"-->
+<!--                                    @click="registerExam(item.id)"-->
                                     <v-btn
                                             v-if="item.user_exam_status === 'not registered'"
-
-                                            @click="registerExam(item.id)"
+                                            href="https://alaatv.com/landing/19"
                                             color="#00c753"
                                             text
                                     >
@@ -100,11 +107,10 @@
                                     >
                                         اتمام مهلت ثبت نام
                                     </v-btn>
-<!--                                    disabled-->
                                     <v-btn
                                             v-if="item.user_exam_status === 'registered but not reached participation time'"
-                                            disabled
                                             color="#00c753"
+                                            disabled
                                             text
                                     >
                                         زمان آزمون فرا نرسیده
@@ -120,13 +126,14 @@
 </template>
 
 <script>
-    import {Exam} from "@/models/exam";
+    import {Exam, ExamList} from "@/models/exam";
     import { mixinQuiz } from '@/mixin/Mixins'
 
     export default {
         name: 'list',
         data: () => ({
             examItem: new Exam(),
+            exams: new ExamList(),
             loadingList: false
         }),
         mixins: [mixinQuiz],
@@ -138,13 +145,15 @@
                 // this.registerExam('5ffdcc5b5590063ba07fad36')
                 // this.participateExam('5ffdcc5b5590063ba07fad36')
 
+                let that = this
                 this.loadingList = true
                 this.user.getUserExams()
-                    .then(() => {
-                        this.loadingList = false
+                    .then((exams) => {
+                        that.exams = exams
+                        that.loadingList = false
                     })
                     .catch(() => {
-                        this.loadingList = false
+                        that.loadingList = false
                     })
             },
             registerExam (examId) {
@@ -164,5 +173,12 @@
 </script>
 
 <style scoped>
-
+    @media only screen and (max-width: 960px) {
+        .table-header {
+            display: none;
+        }
+        .table-row {
+            padding-right: 10px;
+        }
+    }
 </style>

@@ -1,7 +1,6 @@
 <template>
     <v-app v-resize="updateWindowSize">
         <v-navigation-drawer
-                v-if="$route.name === 'onlineQuiz.alaaView' || $store.getters.user.has_admin_permission"
                 v-model="drawer"
                 app
                 right
