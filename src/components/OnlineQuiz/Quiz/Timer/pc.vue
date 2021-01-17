@@ -25,9 +25,9 @@
                         {{ passedTime }}
                     </span>
                 </v-col>
-                <v-col v-if="show && remainingTime" cols="7" class="text-center timerText">
+                <v-col v-if="show && remainingTime && currentCat" cols="7" class="text-center timerText">
                     زمان تا پایان مهلت پاسخگویی
-                    {{ title }}
+                    {{ currentCat.title }}
                     :
                     <span class="timeMarginTop">
                         {{ remainingTime }}
@@ -42,7 +42,7 @@
     export default {
         name: 'PcTimer',
         props: [
-            'title',
+            'currentCat',
             'passedTime',
             'remainingTime'
         ],

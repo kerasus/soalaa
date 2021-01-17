@@ -1,4 +1,5 @@
 import moment from 'moment'
+import Assistant from "@/plugins/assistant";
 // import Assistant from "@/plugins/assistant";
 // import store from '@/store/store'
 // import { Quiz } from '@/models/Quiz'
@@ -74,6 +75,16 @@ let Time = function () {
         }
     }
 
+    function setStateOfQuestionsBasedOnActiveCategory(quiz) {
+        const currentActiveCategory = getCurrentCategoryAcceptAt(quiz.categories)
+        if (!currentActiveCategory) {
+            return
+        }
+        quiz.questions.list.forEach( (item, index) => {
+            quiz.questions.list[index].in_active_category = Assistant.getId(item.sub_category.category_id) === Assistant.getId(currentActiveCategory.id);
+        })
+    }
+
     return {
         now,
         diff,
@@ -82,6 +93,7 @@ let Time = function () {
         getPassedTime,
         setStateOfExamCategories,
         getCurrentCategoryAcceptAt,
+        setStateOfQuestionsBasedOnActiveCategory,
         addTime
     };
 }();

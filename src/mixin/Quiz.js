@@ -81,6 +81,7 @@ const mixinQuiz = {
       this.$store.commit('updateQuiz', userExamForParticipate)
       this.quiz.loadSubcategoriesOfCategories()
       Time.setStateOfExamCategories(this.quiz.categories)
+      Time.setStateOfQuestionsBasedOnActiveCategory(this.quiz)
       this.$store.commit('updateQuiz', this.quiz)
       this.loadUserQuizDataFromStorage(this.quiz)
     },
