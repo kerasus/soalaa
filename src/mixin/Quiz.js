@@ -74,7 +74,7 @@ const mixinQuiz = {
           })
           .catch( () => {
             this.$store.commit('updateOverlay', false)
-            this.$router.push({ name: 'user.onlineQuiz.list' })
+            this.$router.push({ name: 'user.exam.list' })
           })
     },
     loadQuiz (userExamForParticipate) {

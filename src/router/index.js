@@ -87,8 +87,14 @@ const router = new VueRouter({
         },
         {
             path: encodeURI('/آزمون_های_سه_آ'),
-            name: 'user.onlineQuiz.list',
+            name: 'user.exam.list',
             component: () => lazyLoadView(import('@/pages/user/exam/List')),
+            meta: {middleware: auth}
+        },
+        {
+            path: '/نتایج_آزمون/:user_exam_id',
+            name: 'user.exam.results',
+            component: () => lazyLoadView(import('@/pages/admin/question/CreateOrEdit')),
             meta: {middleware: auth}
         },
         {
@@ -110,12 +116,6 @@ const router = new VueRouter({
             meta: {middleware: auth}
         },
         {
-            path: '*',
-            name: 'NotFound',
-            component: () => lazyLoadView(import('@/pages/user/exam/List')),
-            meta: {middleware: auth}
-        },
-        {
             path: '/video-analyze',
             name: 'video-analyze',
             component: () => lazyLoadView(import('@/components/AnalyzeByVideo')),
@@ -132,7 +132,13 @@ const router = new VueRouter({
             name: 'common-questions',
             component: () => lazyLoadView(import('@/components/commonQuestions')),
             meta: {middleware: auth}
-        }
+        },
+        {
+            path: '*',
+            name: 'NotFound',
+            component: () => lazyLoadView(import('@/pages/user/exam/List')),
+            meta: {middleware: auth}
+        },
     ]
 })
 
