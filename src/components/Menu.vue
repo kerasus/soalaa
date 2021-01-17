@@ -21,7 +21,7 @@
                     <v-list-item-title>شرکت در آزمون</v-list-item-title>
                 </v-list-item>
             </router-link>
-            <router-link class="text-decoration-none" :to="{ name: 'user.onlineQuiz.list' }">
+            <router-link class="text-decoration-none" :to="{ name: 'user.exam.list' }">
                 <v-list-item>
                     <v-list-item-title>آزمون های سه آ</v-list-item-title>
                 </v-list-item>

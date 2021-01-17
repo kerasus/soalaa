@@ -76,7 +76,7 @@
                             text: 'اطلاعات آزمون شما ثبت شد.',
                             type: 'success'
                         })
-                        that.$router.push({ name: 'user.onlineQuiz.list'})
+                        that.$router.push({ name: 'user.exam.list'})
                     })
                     .catch( () => {
                         that.$notify({
@@ -86,7 +86,7 @@
                             type: 'warn',
                             duration: 30000,
                         })
-                        that.$router.push({ name: 'user.onlineQuiz.list'})
+                        that.$router.push({ name: 'user.exam.list'})
                     })
             }
         }

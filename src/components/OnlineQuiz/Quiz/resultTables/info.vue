@@ -1,6 +1,5 @@
 <template>
-
-        <v-card elevation="1" class="infoCard  infoText align-content-center">
+        <v-card class="infoCard infoText align-content-center">
             <v-row class="infoHeight">
                 <v-col class="infoCols">
                     نام و نام خانوادگی : هلیا محمدی
@@ -22,7 +21,6 @@
                 </v-col>
             </v-row>
         </v-card>
-
 </template>
 
 <script>
@@ -33,8 +31,8 @@
 
 <style scoped>
     .infoCard {
-        margin-top: 10px;
-        width: 97%;
+        /*margin-top: 10px;*/
+        /*width: 97%;*/
         border-radius: 15px;
         height: 80px;
     }

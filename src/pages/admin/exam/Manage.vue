@@ -24,7 +24,6 @@
         components: {ExamList, ExamInfo},
         methods: {
             rereshExamList () {
-                console.log('rereshExamList1')
                 this.$refs.examList.getExams()
             },
             updateExamId(e){

@@ -37,7 +37,6 @@
         },
         methods: {
             choiceClicked (questionId, choiceId) {
-                console.log('choiceClicked: ', choiceId)
                 this.answerClicked({questionId, choiceId})
             },
         }

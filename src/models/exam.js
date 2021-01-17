@@ -241,6 +241,25 @@ class Exam extends Model {
         return axios.post('/3a/api/temp-exam/answer/choice/', {exam_user_id: this.user_exam_id, finish: true, questions: answers })
     }
 
+    mergeDbAnswerToLocalstorage (dbAnswers) {
+        this.questions.list.forEach( (item) => {
+            let dbAnswer = dbAnswers.find( (answerItem) => answerItem.question_id === item.id)
+            if (dbAnswer) {
+                item.selectChoice(dbAnswer.choice_id, dbAnswer.selected_at)
+                item.state = dbAnswer.status
+                item.bookmarked = dbAnswer.bookmark
+            }
+        })
+    }
+
+    getAnswerOfUserInExam () {
+        return axios.get('/3a/api/temp-exam/answer/'+this.user_exam_id)
+    }
+
+    getAnswerOfUserInResultPage () {
+        return axios.get('/3a/api/temp-exam/answer/'+this.user_exam_id)
+    }
+
 }
 
 class ExamList extends Collection {

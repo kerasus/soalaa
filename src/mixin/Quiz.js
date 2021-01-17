@@ -45,7 +45,7 @@ const mixinQuiz = {
         this.loadFirstQuestion()
       }
 
-      if (this.quiz.questions.list.length > 0) {
+      if (this.quiz.questions.list.length > 0 && this.currentQuestion.sub_category) {
         let subCategoryId = Assistant.getId(this.currentQuestion.sub_category.id)
         currentLessons = this.quiz.sub_categories.getItem('id', subCategoryId)
       }
@@ -74,7 +74,7 @@ const mixinQuiz = {
           })
           .catch( () => {
             this.$store.commit('updateOverlay', false)
-            this.$router.push({ name: 'user.onlineQuiz.list' })
+            this.$router.push({ name: 'user.exam.list' })
           })
     },
     loadQuiz (userExamForParticipate) {
@@ -84,6 +84,12 @@ const mixinQuiz = {
       Time.setStateOfQuestionsBasedOnActiveCategory(this.quiz)
       this.$store.commit('updateQuiz', this.quiz)
       this.loadUserQuizDataFromStorage(this.quiz)
+      this.quiz.getAnswerOfUserInExam()
+          .then( (response) => {
+            console.log('response', response)
+            this.quiz.mergeDbAnswerToLocalstorage(response.data.data)
+            this.$store.commit('updateQuiz', this.quiz)
+          })
     },
     loadUserQuizDataFromStorage () {
       let questNumber = this.$route.params.questNumber
@@ -118,7 +124,7 @@ const mixinQuiz = {
       let userQuestionData = userQuizData.examData.find((questionData)=> Assistant.getId(questionData.questionId) === Assistant.getId(this.currentQuestion.id))
 
       // set default data
-      let dataToSendAnswer = {question_id: data.question_id, choice_id: data.choiceId, selected_at: Time.now()}
+      let dataToSendAnswer = {question_id: data.question_id, choice_id: data.choice_id, selected_at: Time.now()}
       let dataToSendStatus = {question_id: data.question_id, status: data.status}
       let dataToSendBookmark = data.questionId
 

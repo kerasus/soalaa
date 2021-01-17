@@ -347,9 +347,6 @@
             })
             this.subCategoriesList.fetch().then((response) => {
                 this.subCategoriesList = new QuestSubcategoryList(response.data)
-            }).catch((error) => {
-                // Assistant.handleAxiosError(this.$toasted, error)
-                console.log(error)
             })
             if (this.editMode) {
                 this.currentQuestion.show(null, '/3a/api/question/' + this.$route.params.id)
