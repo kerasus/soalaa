@@ -114,7 +114,7 @@
                                         اتمام مهلت ثبت نام
                                     </v-btn>
                                     <v-btn
-                                            v-if="item.user_exam_status === 'registered but not reached participation time'"
+                                            v-if="false"
                                             color="#00c753"
                                             disabled
                                             text
