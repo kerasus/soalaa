@@ -92,9 +92,15 @@ const router = new VueRouter({
             meta: {middleware: auth}
         },
         {
-            path: '/نتایج_آزمون/:user_exam_id',
+            path: encodeURI('/نتایج_آزمون/:user_exam_id'),
             name: 'user.exam.results',
-            component: () => lazyLoadView(import('@/pages/admin/question/CreateOrEdit')),
+            component: () => lazyLoadView(import('@/pages/user/exam/Result')),
+            meta: {middleware: auth}
+        },
+        {
+            path: encodeURI('/نتایج_آزمون'),
+            name: 'user.exam.results.test',
+            component: () => lazyLoadView(import('@/pages/user/exam/Result')),
             meta: {middleware: auth}
         },
         {
