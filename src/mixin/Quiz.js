@@ -191,7 +191,7 @@ const mixinQuiz = {
       return number - 1
     },
     getCategoryActiveStatus (categoryId) {
-      const category = this.quiz.categories.find((item) => Assistant.getId(item.id) === Assistant.getId(categoryId))
+      const category = this.quiz.categories.list.find((item) => Assistant.getId(item.id) === Assistant.getId(categoryId))
       return !category || category.is_active;
     },
     goToCategory (categoryId) {
@@ -217,9 +217,11 @@ const mixinQuiz = {
       this.changeQuestion(question.id)
     },
     changeQuestion(id) {
+      console.log('mixin quiz/ changeQuestion')
       if (Assistant.getId(this.currentQuestion.id) === Assistant.getId(id)) {
         return
       }
+      console.log('assistanto radid')
       // if (this.currentQuestion.id !== null) {
       //     this.quiz.questions.getQuestionById(this.currentQuestion.id).leaveQuestion()
       // }
@@ -227,12 +229,13 @@ const mixinQuiz = {
       const questIndex = this.quiz.questions.getQuestionIndexById(id),
           questNumber = this.getQuestionNumberFromIndex(questIndex)
 
-      const currentQuestion = this.quiz.questions.getQuestionById(id)
-      // const categoryActiveStatus = this.getCategoryActiveStatus(currentQuestion.category_id)
+      let currentQuestion = this.quiz.questions.getQuestionById(id)
+      const categoryActiveStatus = this.getCategoryActiveStatus(currentQuestion.sub_category.category_id)
 
-      // if (!categoryActiveStatus) {
-      //   return
-      // }
+      if (!categoryActiveStatus) {
+        currentQuestion = this.currentQuestion
+        alert('پاسخ دهی به این دفترچه در حال حاضر امکان پذیر نمیباشد')
+      }
 
       this.$store.commit('updateCurrentQuestion', currentQuestion)
       // this.quiz.questions.getQuestionById(this.currentQuestion.id).enterQuestion()

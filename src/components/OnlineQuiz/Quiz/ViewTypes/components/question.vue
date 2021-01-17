@@ -24,19 +24,14 @@
                 <v-icon v-if="source.state === 'o'" color="yellow" :size="24">mdi-checkbox-blank-circle</v-icon>
             </v-btn>
             <v-btn icon @click="changeState(source ,'x')">
-                <v-icon :color="source.state === 'o' ? 'red' : '#888'" :size="24">mdi-close</v-icon>
+                <v-icon :color="source.state === 'x' ? 'red' : '#888'" :size="24">mdi-close</v-icon>
             </v-btn>
             <v-btn icon @click="bookmark(source)">
                 <v-icon v-if="!source.bookmarked" :size="24" color="#888">mdi-bookmark-outline</v-icon>
                 <v-icon v-if="source.bookmarked" color="blue" :size="24">mdi-bookmark</v-icon>
             </v-btn>
         </div>
-        <span v-if="source.in_active_category" class="question-body renderedPanel" :id="'question' + source.id" v-html="(getQuestionNumberFromId(source.id)) + '- ' + source.rendered_statement" v-intersect="{
-            handler: onIntersect,
-            options: {
-              threshold: [0, 0.2, 0.4, 0.6, 0.8, 1.0]
-            }
-          }" />
+        <span v-if="source.in_active_category" class="question-body renderedPanel" :id="'question' + source.id" v-html="(getQuestionNumberFromId(source.id)) + '- ' + source.rendered_statement" />
         <v-row v-if="source.in_active_category" class="choices">
             <v-col
                     v-for="(choice, index) in source.choices.list"
@@ -150,9 +145,9 @@
         float: right;
     }
 
-    .current-question {
-        background-color: #fffaee;
-    }
+    /*.current-question {*/
+    /*    background-color: #fffaee;*/
+    /*}*/
 
     .choices {
         display: flex;
