@@ -25,7 +25,7 @@ module.exports = {
       '/3a/rb/api': {
         target: process.env.VUE_APP_3A_RB_API,
         changeOrigin: true,
-        pathRewrite: {'^/3a/api' : ''}
+        pathRewrite: {'^/3a/rb/api' : ''}
       }
     }
   }
