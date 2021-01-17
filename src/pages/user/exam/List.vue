@@ -2,15 +2,7 @@
     <v-container>
         <v-row>
             <v-col>
-                <v-progress-linear
-                        color="#ffc107"
-                        absolute
-                        top
-                        :active="loadingList"
-                        indeterminate
-                        rounded
-                        height="6"
-                ></v-progress-linear>
+                <progress-linear :active="loadingList" />
                 <v-alert v-if="user.exams.list.length === 0 && !loadingList" type="info">
                     آزمونی وجود ندارد
                 </v-alert>
@@ -154,9 +146,11 @@
 <script>
     import {Exam, ExamList} from "@/models/exam";
     import { mixinQuiz } from '@/mixin/Mixins'
+    import ProgressLinear from "@/components/ProgressLinear";
 
     export default {
         name: 'list',
+        components: {ProgressLinear},
         data: () => ({
             examItem: new Exam(),
             exams: new ExamList(),

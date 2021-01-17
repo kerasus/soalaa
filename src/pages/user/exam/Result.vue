@@ -11,13 +11,13 @@
                         style="height:60px; width: 100%">
                     <v-row style="height: 50%;margin: inherit;
      ">
+                        <v-col md="4">
+                            نتایج آزمون اول سه‌آ -
+                            {{ exam.title }}
+                        </v-col>
                         <v-col>
                             <v-tabs v-model="tab" color="#ffc107" center-active>
                                 <v-tabs-slider color="yellow"></v-tabs-slider>
-                                <v-tab disabled>
-                                    نتایج آزمون اول سه‌آ -
-                                    {{ exam.title }}
-                                </v-tab>
                                 <v-tab>ریزدرس ها</v-tab>
                                 <v-tab>پاسخبرگ کلیدی</v-tab>
                                 <v-tab>نتایج نفرات برتر</v-tab>
@@ -31,11 +31,6 @@
         <v-row class="d-flex justify-center">
             <v-col>
                 <v-tabs-items v-model="tab">
-                    <v-tab-item>
-                        <v-card flat>
-                            disabled tab
-                        </v-card>
-                    </v-tab-item>
                     <v-tab-item>
                         <statistic-result/>
                     </v-tab-item>
@@ -75,27 +70,35 @@
                                 شیمی
                             </v-tab>
                             <v-tab-item>
+                                <coming-soon/>
                                 <video/>
                             </v-tab-item>
                             <v-tab-item>
+                                <coming-soon/>
                                 <video/>
                             </v-tab-item>
                             <v-tab-item>
+                                <coming-soon/>
                                 <video/>
                             </v-tab-item>
                             <v-tab-item>
+                                <coming-soon/>
                                 <video/>
                             </v-tab-item>
                             <v-tab-item>
+                                <coming-soon/>
                                 <video/>
                             </v-tab-item>
                             <v-tab-item>
+                                <coming-soon/>
                                 <video/>
                             </v-tab-item>
                             <v-tab-item>
+                                <coming-soon/>
                                 <video/>
                             </v-tab-item>
                             <v-tab-item>
+                                <coming-soon/>
                                 <video/>
                             </v-tab-item>
                         </v-tabs>
@@ -112,10 +115,11 @@
     import TopScoreResult from "@/components/OnlineQuiz/Quiz/resultTables/topScoreResult";
     import StatisticResult from "@/components/OnlineQuiz/Quiz/resultTables/statisticResult";
     import BubbleSheet from "@/components/OnlineQuiz/Quiz/BubbleSheet/BubbleSheet";
+    import ComingSoon from "@/components/ComingSoon";
 
     export default {
         name: "Result",
-        components: {BubbleSheet, StatisticResult, TopScoreResult, Info},
+        components: {ComingSoon, BubbleSheet, StatisticResult, TopScoreResult, Info},
         data: () => ({
             tab: null,
             videoAnalyzeTab: null,
@@ -140,8 +144,8 @@
         created() {
             this.exam.user_exam_id = this.$route.params.user_exam_id
             this.exam.getAnswerOfUserInResultPage()
-            .then( (response) => {
-                console.log('response', response)
+            .then( () => {
+                this.$store.commit('setQuiz', this.exam)
             })
             .catch( () => {
                 this.$router.push({ name: 'user.exam.list'})

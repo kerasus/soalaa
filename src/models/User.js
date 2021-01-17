@@ -23,6 +23,9 @@ class User extends Model {
                 key: 'last_name',
             },
             {
+                key: 'mobile',
+            },
+            {
                 key: 'province',
             },
             {

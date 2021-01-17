@@ -241,11 +241,14 @@ class Exam extends Model {
         return axios.post('/3a/api/temp-exam/answer/choice/', {exam_user_id: this.user_exam_id, finish: true, questions: answers })
     }
 
-    mergeDbAnswerToLocalstorage (dbAnswers) {
+    mergeDbAnswerToLocalstorage (dbAnswers, setTrueChoice) {
         this.questions.list.forEach( (item) => {
             let dbAnswer = dbAnswers.find( (answerItem) => answerItem.question_id === item.id)
             if (dbAnswer) {
                 item.selectChoice(dbAnswer.choice_id, dbAnswer.selected_at)
+                if (setTrueChoice) {
+                    item.setTrueChoice(dbAnswer.correct_choice_id, dbAnswer.correct_choice_id)
+                }
                 item.state = dbAnswer.status
                 item.bookmarked = dbAnswer.bookmark
             }
@@ -257,7 +260,28 @@ class Exam extends Model {
     }
 
     getAnswerOfUserInResultPage () {
-        return axios.get('/3a/api/temp-exam/answer/'+this.user_exam_id+'/withCorrect')
+        let that = this
+        return new Promise(function(resolve, reject) {
+            axios.get('/3a/api/temp-exam/answer/'+that.user_exam_id+'/withCorrect')
+                .then( (response) => {
+                    const questions_file_url = response.data.data.exam.questions_file_url
+                    const examTitle = response.data.data.exam.title
+                    const answers = response.data.data.answers
+                    that.questions_file_url = questions_file_url
+                    that.title = examTitle
+                    that.loadQuestionsFromFile()
+                        .then( () => {
+                            that.mergeDbAnswerToLocalstorage(answers, true)
+                            resolve()
+                        })
+                        .catch( () => {
+                            reject(null)
+                        })
+                })
+                .catch( () => {
+                    reject(null)
+                })
+        })
     }
 
 }

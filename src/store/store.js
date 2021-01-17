@@ -73,6 +73,9 @@ const store = new Vuex.Store({
         setUserQuizListData (state, newInfo) {
             state.userQuizListData = newInfo
         },
+        setQuiz (state, newInfo) {
+            state.quiz = newInfo
+        },
         updateQuiz (state, newInfo) {
             this.commit('reloadQuizModel')
             state.quiz = newInfo

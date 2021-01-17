@@ -13,9 +13,12 @@ class Choice extends Model {
                 key: 'active',
                 default: false
             },
+            {
+                key: 'answer',
+                default: false
+            },
             { key: 'order' },
-            { key: 'answered_at' },
-            { key: 'answer' }
+            { key: 'answered_at' }
         ])
         if (typeof this.title === 'string') {
             this.rendered_title = md.render(this.title)
