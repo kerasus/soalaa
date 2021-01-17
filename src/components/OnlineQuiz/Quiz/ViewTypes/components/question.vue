@@ -81,7 +81,6 @@
                 this.source.onIntersect(entries)
             },
             choiceClicked (questionId, choiceId) {
-                console.log('choiceClicked: ', choiceId)
                 this.changeQuestion(questionId)
                 this.answerClicked({questionId, choiceId})
             },

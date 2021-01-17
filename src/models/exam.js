@@ -241,6 +241,10 @@ class Exam extends Model {
         return axios.post('/3a/api/temp-exam/answer/choice/', {exam_user_id: this.user_exam_id, finish: true, questions: answers })
     }
 
+    getAnswerOfUserInExam () {
+        return axios.get('/3a/api/temp-exam/answer/'+this.user_exam_id)
+    }
+
 }
 
 class ExamList extends Collection {

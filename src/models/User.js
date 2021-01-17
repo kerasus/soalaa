@@ -65,12 +65,6 @@ class User extends Model {
     }
 
     setUserExamStatus (exam) {
-        console.log('exam: ', exam)
-        console.log(exam.title, ' passed time since start: ', Time.getPassedTime(exam.start_at, false))
-        console.log(exam.title, ' start at: ', exam.start_at)
-        console.log('now: ', Time.now())
-        // console.log(Time.addTime(exam.delay_time, 'minutes', true, exam.start_at), false) > 0 && Time.getPassedTime(Time.now())
-        // console.log(Time.addTime(exam.delay_time, 'minutes', true, exam.start_at), false) > 0 && Time.getPassedTime(Time.now())
         let status = null
         if (!exam.is_registered && !exam.accept_at && Time.getPassedTime(Time.addTime(exam.delay_time, 'minutes', true, exam.start_at), false) > 0) {
             status = 'not registered and registration time passed'

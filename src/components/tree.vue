@@ -244,8 +244,6 @@
                 item.remove()
                 this.editing = null
                 this.showOptions = true
-                console.log(item)
-
             },
             save() {
                 localStorage.setItem('tree', this.data.children[0])
@@ -268,7 +266,6 @@
 
             onChangeName(params) {
                 this.defaultedit = true
-                console.log(params)
                 this.editing = params.id
                 this.showOptions = false
             },
@@ -284,8 +281,8 @@
                 this.dialog = false
             },
 
-            onClick(params) {
-                console.log(params)
+            onClick() {
+                // console.log(params)
             },
         }
     }

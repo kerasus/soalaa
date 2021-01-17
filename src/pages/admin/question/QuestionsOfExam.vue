@@ -124,7 +124,7 @@
     import {Quiz} from "@/models/Quiz";
     import {QuestionList} from "@/models/Question";
     import {QuestSubcategoryList} from "@/models/QuestSubcategory";
-    import Assistant from "@/plugins/assistant";
+
     Vue.component('DynamicScroller', DynamicScroller)
     Vue.component('DynamicScrollerItem', DynamicScrollerItem)
     var md = require('markdown-it')(),
@@ -176,7 +176,6 @@
             $('.questions').height(this.windowSize.y)
             $('.left-side-list').height(this.windowSize.y - 24)
             $('.questionss').height(this.windowSize.y)
-            console.log('in loge mane: ', this.quiz.questions.list[5].choices.list[0])
         },
         created () {
             this.changeAppBarAndDrawer(false)
@@ -184,18 +183,11 @@
             const url = '/3a/api/exam-question/attach/show/' + this.$route.params.quizId
             this.quizData.show(null, url)
                 .then((response) => {
-                    console.log('test: ', response.data.data)
                     this.quizData.questions = new QuestionList(response.data.data)
                     this.quiz = new Quiz(this.quizData)
                 })
-                .catch((error) => {
-                    console.log('error: ', error)
-                })
             this.subCategoriesList.fetch().then((response) => {
                 this.quiz.sub_categories = new QuestSubcategoryList(response.data)
-                console.log(this.quiz.sub_categories)
-            }).catch((error) => {
-                Assistant.handleAxiosError(this.$toasted, error)
             })
         },
         destroyed() {

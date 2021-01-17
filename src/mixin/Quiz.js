@@ -84,6 +84,10 @@ const mixinQuiz = {
       Time.setStateOfQuestionsBasedOnActiveCategory(this.quiz)
       this.$store.commit('updateQuiz', this.quiz)
       this.loadUserQuizDataFromStorage(this.quiz)
+      this.quiz.getAnswerOfUserInExam()
+          .then( (response) => {
+            console.log('response', response)
+          })
     },
     loadUserQuizDataFromStorage () {
       let questNumber = this.$route.params.questNumber

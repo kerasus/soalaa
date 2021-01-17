@@ -171,18 +171,15 @@ export default {
             this.$store.commit('updateDrawer', state)
         },
         // changeCurrentQuestionIfScrollingIsDone (event, range) {
-        //     console.log('timePassedSinceLastScroll: ' ,this.timePassedSinceLastScroll)
         //     if (range.start !== this.lastTimeScrollRange.start || range.end !== this.lastTimeScrollRange.end) {
         //         this.quiz.questions.turnIsInViewToFalse(range.start, range.end)
         //         this.lastTimeScrollRange.start = range.start
         //         this.lastTimeScrollRange.end = range.end
-        //         // console.log(event, range, 'lastTimeScrollRange : ', this.lastTimeScrollRange)
         //     }
         //     if (this.timePassedSinceLastScroll >= 1000) {
         //         this.changeCurrentQuestionToFirstQuestionInView()
         //         this.timePassedSinceLastScroll = 0
         //         this.scrollState = 'not scrolling'
-        //         console.log("i've done it : ", this.quiz.questions.getQuestionIndexById(this.currentQuestion.id) + 1)
         //         clearInterval(this.setIntervalCallback)
         //         this.setIntervalCallback = null
         //     }
@@ -253,7 +250,6 @@ export default {
         //     return ''
         // },
         choiceClicked (questionId, choiceId) {
-            console.log('choiceClicked: ', choiceId)
             this.scrollTo(questionId)
             this.changeQuestion(questionId)
             this.answerClicked({questionId, choiceId})
@@ -276,9 +272,7 @@ export default {
     },
     created () {
         // this.quizData.show(this.$route.params.quizId).then((response) => {
-        //     console.log(response)
         // }).catch((error) => {
-        //     console.log(error)
         // })
         this.startExam()
         if (this.windowSize.x > 959) {

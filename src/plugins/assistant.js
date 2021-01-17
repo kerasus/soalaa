@@ -17,7 +17,6 @@ let Assistant = function () {
             return
         }
         if (!error || !error.response) {
-            console.log(error)
             return
         }
         let statusCode = parseInt(error.response.status)
