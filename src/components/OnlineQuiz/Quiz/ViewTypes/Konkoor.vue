@@ -3,16 +3,31 @@
         <v-row :style="{ 'min-height': '100%' }">
             <v-col :md="5" class="questions" id="questions" :style="{ height: windowSize.y }">
 <!--                <div class="lesson">{{ currentLessons.title }}</div>-->
-                <virtual-list style="overflow-y: auto;"
-                              :data-key="'id'"
-                              :data-sources="quiz.questions.list"
-                              :data-component="item"
-                              :keep="20"
-                              :estimate-size="100"
-                              ref="scroller"
-                              class="questionss"
-                              @scroll="onScroll"
-                />
+<!--                <virtual-list style="overflow-y: auto;"-->
+<!--                              :data-key="'id'"-->
+<!--                              :data-sources="quiz.questions.list"-->
+<!--                              :data-component="item"-->
+<!--                              :keep="20"-->
+<!--                              :estimate-size="100"-->
+<!--                              ref="scroller"-->
+<!--                              class="questionss"-->
+<!--                />-->
+                <DynamicScroller
+                    :items="this.quiz.questions.list"
+                    :min-item-size="70"
+                    class="scroller questionss"
+                    ref="scroller"
+                >
+                    <template v-slot="{ item, index, active }">
+                        <DynamicScrollerItem
+                            :item="item"
+                            :active="active"
+                            :data-index="index"
+                        >
+                            <Item :source="item" />
+                        </DynamicScrollerItem>
+                    </template>
+                </DynamicScroller>
             </v-col>
             <v-col :md="7" class="left-side-list">
                 <v-row>
@@ -98,7 +113,7 @@
                 </v-row>
                 <v-row>
                     <v-col>
-                        <BubbleSheet :info="{ type: 'pasokh-barg' }" @clickChoice="choiceClicked" />
+                        <BubbleSheet :info="{ type: 'pasokh-barg' }" @clickChoice="choiceClicked" @scrollTo="scrollTo" />
                     </v-col>
                 </v-row>
             </v-col>
@@ -115,9 +130,9 @@
 import $ from 'jquery'
 import '@/assets/scss/markdownKatex.scss'
 // import Vue from 'vue'
-import VirtualList from 'vue-virtual-scroll-list'
+// import VirtualList from 'vue-virtual-scroll-list'
 import 'vue-virtual-scroller/dist/vue-virtual-scroller.css'
-// import { DynamicScroller, DynamicScrollerItem } from 'vue-virtual-scroller'
+import { DynamicScroller, DynamicScrollerItem } from 'vue-virtual-scroller'
 import Item from './components/question'
 import { mixinQuiz, mixinWindowSize } from '@/mixin/Mixins'
 import Timer from '@/components/OnlineQuiz/Quiz/Timer/Timer'
@@ -134,8 +149,11 @@ export default {
     mixins: [mixinQuiz, mixinWindowSize],
     components: {
         Timer,
-        'virtual-list': VirtualList,
-        BubbleSheet
+        // 'virtual-list': VirtualList,
+        BubbleSheet,
+        DynamicScroller,
+        DynamicScrollerItem,
+        Item
     },
     data () {
         return {
@@ -152,66 +170,76 @@ export default {
             this.$store.commit('updateAppBar', state)
             this.$store.commit('updateDrawer', state)
         },
-        changeCurrentQuestionIfScrollingIsDone (event, range) {
-            console.log('timePassedSinceLastScroll: ' ,this.timePassedSinceLastScroll)
-            if (range.start !== this.lastTimeScrollRange.start || range.end !== this.lastTimeScrollRange.end) {
-                this.quiz.questions.turnIsInViewToFalse(range.start, range.end)
-                this.lastTimeScrollRange.start = range.start
-                this.lastTimeScrollRange.end = range.end
-                // console.log(event, range, 'lastTimeScrollRange : ', this.lastTimeScrollRange)
-            }
-            if (this.timePassedSinceLastScroll >= 1000) {
-                this.changeCurrentQuestionToFirstQuestionInView()
-                this.timePassedSinceLastScroll = 0
-                this.scrollState = 'not scrolling'
-                console.log("i've done it : ", this.quiz.questions.getQuestionIndexById(this.currentQuestion.id) + 1)
-                clearInterval(this.setIntervalCallback)
-                this.setIntervalCallback = null
-            }
-            this.timePassedSinceLastScroll += 250
-        },
-        onScroll (event, range) {
-            if (this.scrollState === 'not scrolling') {
-                this.setIntervalCallback = setInterval(() => {
-                    this.changeCurrentQuestionIfScrollingIsDone(event, range)
-                }, 250)
-                this.scrollState = 'scrolling'
-            }
-            this.timePassedSinceLastScroll = 0
-        },
-        changeCurrentQuestionToFirstQuestionInView () {
-            const firstInViewQuestion = this.getFirstInViewQuestionNumber()
-            if (firstInViewQuestion.id === this.currentQuestion.id) {
-                return
-            }
-            this.changeQuestion(firstInViewQuestion)
-        },
+        // changeCurrentQuestionIfScrollingIsDone (event, range) {
+        //     console.log('timePassedSinceLastScroll: ' ,this.timePassedSinceLastScroll)
+        //     if (range.start !== this.lastTimeScrollRange.start || range.end !== this.lastTimeScrollRange.end) {
+        //         this.quiz.questions.turnIsInViewToFalse(range.start, range.end)
+        //         this.lastTimeScrollRange.start = range.start
+        //         this.lastTimeScrollRange.end = range.end
+        //         // console.log(event, range, 'lastTimeScrollRange : ', this.lastTimeScrollRange)
+        //     }
+        //     if (this.timePassedSinceLastScroll >= 1000) {
+        //         this.changeCurrentQuestionToFirstQuestionInView()
+        //         this.timePassedSinceLastScroll = 0
+        //         this.scrollState = 'not scrolling'
+        //         console.log("i've done it : ", this.quiz.questions.getQuestionIndexById(this.currentQuestion.id) + 1)
+        //         clearInterval(this.setIntervalCallback)
+        //         this.setIntervalCallback = null
+        //     }
+        //     this.timePassedSinceLastScroll += 250
+        // },
+        // onScroll (event, range) {
+        //     if (this.scrollState === 'not scrolling') {
+        //         this.setIntervalCallback = setInterval(() => {
+        //             this.changeCurrentQuestionIfScrollingIsDone(event, range)
+        //         }, 250)
+        //         this.scrollState = 'scrolling'
+        //     }
+        //     this.timePassedSinceLastScroll = 0
+        // },
+        // changeCurrentQuestionToFirstQuestionInView () {
+        //     const firstInViewQuestion = this.getFirstInViewQuestionNumber()
+        //     if (firstInViewQuestion.id === this.currentQuestion.id) {
+        //         return
+        //     }
+        //     this.changeQuestion(firstInViewQuestion)
+        // },
+        // scrollTo (questionId) {
+        //     if (this.quiz.questions.getQuestionById(questionId).isInView === false) {
+        //         const questionIndex = this.quiz.questions.getQuestionIndexById(questionId)
+        //         this.$refs.scroller.scrollToIndex(questionIndex)
+        //         for (let i = 1; i < 4; i++) {
+        //             setTimeout(() => {
+        //                 this.$refs.scroller.scrollToIndex(questionIndex)
+        //             },
+        //             500 / Math.ceil(this.quiz.questions.list.length / 100) * i)
+        //         }
+        //     }
+        // },
         scrollTo (questionId) {
-            if (this.quiz.questions.getQuestionById(questionId).isInView === false) {
-                const questionIndex = this.quiz.questions.getQuestionIndexById(questionId)
-                this.$refs.scroller.scrollToIndex(questionIndex)
-                for (let i = 1; i < 4; i++) {
-                    setTimeout(() => {
-                        this.$refs.scroller.scrollToIndex(questionIndex)
-                    },
-                    500 / Math.ceil(this.quiz.questions.list.length / 100) * i)
-                }
+            const questionIndex = this.quiz.questions.getQuestionIndexById(questionId)
+            this.$refs.scroller.scrollToItem(questionIndex)
+            for (let i = 1; i < 4; i++) {
+                setTimeout(() => {
+                    this.$refs.scroller.scrollToItem(questionIndex)
+                },
+                1000 / Math.ceil(this.quiz.questions.list.length / 100) * i)
             }
         },
         // onIntersect (entries) {
         //     this.quiz.questions.getQuestionById(entries[0].target.id).isInView = (entries[0].intersectionRatio >= 0.5)
         // },
         // ToDo: check for removal
-        getFirstInViewQuestionNumber () {
-            let firstQuestionInView = this.quiz.questions.list.find((item)=> {
-                return item.isInView === true
-            })
-            if (firstQuestionInView.id !== null) {
-                return firstQuestionInView.id
-            } else {
-                return false
-            }
-        },
+        // getFirstInViewQuestionNumber () {
+        //     let firstQuestionInView = this.quiz.questions.list.find((item)=> {
+        //         return item.isInView === true
+        //     })
+        //     if (firstQuestionInView.id !== null) {
+        //         return firstQuestionInView.id
+        //     } else {
+        //         return false
+        //     }
+        // },
         // isThisFirstQuestionInView (questionId) {
         //     if (this.getFirstInViewQuestionNumber().id === questionId) {
         //         return true
