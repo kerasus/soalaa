@@ -94,7 +94,6 @@
             copyIdToClipboard() {
                 const questionIdElement = document.querySelector('#question-id' + this.source.id)
                 questionIdElement.select()
-                console.log(document.execCommand('copy'))
             },
             onIntersect(entries) {
                 this.source.onIntersect(entries)
@@ -146,16 +145,14 @@
             removeQuestion() {
                 this.source.show(null, '/3a/api/exam-question/detach/' + this.source.id).then(() => {
 
-                }).catch((error) => {
-                    console.log(error)
                 })
             },
-            edit(questionId) {
-                console.log(questionId)
+            edit() {
+                // console.log(questionId)
             }
         },
         created() {
-            setTimeout(() => {console.log(this.quiz)}, 2000)
+            // setTimeout(() => {console.log(this.quiz)}, 2000)
         },
         computed: {
             // lesson() {

@@ -104,7 +104,6 @@
             },
             refreshExamList () {
                 this.$emit('refresh-exam-list')
-                console.log('rereshExamList0')
             }
         }
     }

@@ -64,8 +64,6 @@ class User extends Model {
     }
 
     setUserExamStatus (exam) {
-                // console.log(Time.addTime(exam.delay_time, 'minutes', true, exam.start_at), false) > 0 && Time.getPassedTime(Time.now())
-        // console.log(Time.addTime(exam.delay_time, 'minutes', true, exam.start_at), false) > 0 && Time.getPassedTime(Time.now())
         let status = null
         if (!exam.is_registered && !exam.accept_at && Time.getPassedTime(Time.addTime(exam.delay_time, 'minutes', true, exam.start_at), false) > 0) {
             status = 'not registered and registration time passed'
@@ -95,6 +93,7 @@ class User extends Model {
             examItem.is_registered = !!(userExam)
             examItem.finished_at = (userExam) ? userExam.finished_at : null
             examItem.accept_at = (userExam) ? userExam.accept_at : null
+            examItem.user_exam_id = (userExam) ? userExam.id : null
 
             this.setUserExamStatus(examItem)
 

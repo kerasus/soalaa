@@ -68,18 +68,28 @@
                                 </v-col>
                                 <v-col cols="12" md="2">
                                     <v-btn
-                                            v-if="item.user_exam_status === 'has participated and finished' || item.user_exam_status === 'registered but participation time passed'"
+                                            v-if="item.user_exam_status === 'registered but participation time passed' || item.user_exam_status === 'registered but did not participate'"
+                                            :to="{ name: 'onlineQuiz.alaaView', params: { quizId: item.id, questNumber: 1 } }"
                                             color="#ffc107"
                                             text
                                     >
-                                        مشاهده نتایج
+                                        شروع آزمون
                                     </v-btn>
                                     <v-btn
                                             v-if="item.user_exam_status === 'has participated and finished'"
                                             color="#ffc107"
                                             text
+                                            disabled
                                     >
-                                        ثبت آزمون
+                                        آزمون به پایان رسید
+                                    </v-btn>
+                                    <v-btn
+                                            v-if="item.user_exam_status === 'has participated and finished'"
+                                            @click="sendAnswersAndFinishExam(item)"
+                                            color="#ffc107"
+                                            text
+                                    >
+                                        ثبت پاسخنامه ذخیره شده در سیستم
                                     </v-btn>
                                     <v-btn
                                             v-if="item.user_exam_status === 'has participated but not finished' || item.user_exam_status === 'has participated and finished'"
@@ -107,11 +117,12 @@
                                     </v-btn>
                                     <v-btn
                                             v-if="item.user_exam_status === 'not registered and registration time passed'"
+                                            @click="registerExam(item.id)"
                                             color="#00c753"
-                                            disabled
                                             text
                                     >
-                                        اتمام مهلت ثبت نام
+                                        ثبت نام
+<!--                                        اتمام مهلت ثبت نام-->
                                     </v-btn>
                                     <v-btn
                                             v-if="false"
@@ -170,6 +181,28 @@
                             title: 'توجه!',
                             text: 'ثبت نام در آزمون با موفقیت انجام شد',
                             type: 'success'
+                        })
+                        this.getExams()
+                    })
+            },
+            sendAnswersAndFinishExam (exam) {
+                exam.sendAnswersAndFinishExam()
+                    .then( () => {
+                        this.$store.commit('clearExamData', exam.id)
+                        this.$notify({
+                            group: 'notifs',
+                            text: 'اطلاعات آزمون شما ثبت شد.',
+                            type: 'success'
+                        })
+                        this.getExams()
+                    })
+                    .catch( () => {
+                        this.$notify({
+                            group: 'notifs',
+                            title: 'توجه!',
+                            text: 'مشکلی در ثبت اطلاعات آزمون شما رخ داده است. لطفا تا قبل از ساعت 24 اقدام به ارسال مجدد پاسخنامه نمایید.',
+                            type: 'warn',
+                            duration: 30000,
                         })
                         this.getExams()
                     })

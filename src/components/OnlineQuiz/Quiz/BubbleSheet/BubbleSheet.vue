@@ -51,7 +51,6 @@
                 this.$emit('clickChoice', questionId, choiceId)
             },
             clickQuestionNumber (questionId) {
-                console.log('scroLLL')
                 this.$emit('scrollTo', questionId)
             },
             questionListHeight () {
@@ -70,7 +69,6 @@
             }
         },
         mounted () {
-            console.log(this.questionListHeight())
             setTimeout(() => { $('.questions-list').height(this.questionListHeight()) }, 3000)
         },
         'windowSize.x': function () {

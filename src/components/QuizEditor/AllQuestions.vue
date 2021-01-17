@@ -169,12 +169,8 @@
                     this.quiz = new Quiz(this.quizData)
 
                 })
-                .catch((error) => {
-                    console.log('error: ', error)
-                })
             new QuizList().fetch().then((response) => {
                 this.quizList = new QuizList(response.data.data)
-                console.log(this.quizList)
             }).catch((error) => {
                 Assistant.handleAxiosError(this.$toasted, error)
             })
