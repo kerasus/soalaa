@@ -63,7 +63,6 @@ const mixinQuiz = {
       this.$store.commit('updateOverlay', true)
       if (this.needToLoadQuiaData() && this.$route.params.quizId) {
         this.participateExam(this.$route.params.quizId)
-        console.log(this.$route.params.quizId)
       } else {
         this.loadUserQuizDataFromStorage()
       }
@@ -163,7 +162,6 @@ const mixinQuiz = {
       this.sendQuestionData({ exam_user_id: this.quiz.user_exam_id, questionId: question.id, bookmarked: this.currentQuestion.bookmarked}, 'sendBookmark')
     },
     changeState (question, newState) {
-      console.log('oomad to change state ', newState)
       if (this.currentQuestion.id !== question.id) {
         this.currentQuestion = question
       }
@@ -217,11 +215,9 @@ const mixinQuiz = {
       this.changeQuestion(question.id)
     },
     changeQuestion(id) {
-      console.log('mixin quiz/ changeQuestion')
       if (Assistant.getId(this.currentQuestion.id) === Assistant.getId(id)) {
         return
       }
-      console.log('assistanto radid')
       // if (this.currentQuestion.id !== null) {
       //     this.quiz.questions.getQuestionById(this.currentQuestion.id).leaveQuestion()
       // }
@@ -230,11 +226,11 @@ const mixinQuiz = {
           questNumber = this.getQuestionNumberFromIndex(questIndex)
 
       const currentQuestion = this.quiz.questions.getQuestionById(id)
-      const categoryActiveStatus = this.getCategoryActiveStatus(currentQuestion.category_id)
+      // const categoryActiveStatus = this.getCategoryActiveStatus(currentQuestion.category_id)
 
-      if (!categoryActiveStatus) {
-        return
-      }
+      // if (!categoryActiveStatus) {
+      //   return
+      // }
 
       this.$store.commit('updateCurrentQuestion', currentQuestion)
       // this.quiz.questions.getQuestionById(this.currentQuestion.id).enterQuestion()
