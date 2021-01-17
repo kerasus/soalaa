@@ -119,8 +119,8 @@ class User extends Model {
                     that.loadUserExams(exams, userExams)
                     that.exams.loading = false
                 })
-                .then((response) => {
-                    resolve(response)
+                .then(() => {
+                    resolve(that.exams)
                 })
                 .catch( (error) => {
                     reject(error)
