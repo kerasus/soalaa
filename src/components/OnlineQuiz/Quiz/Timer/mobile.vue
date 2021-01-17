@@ -46,9 +46,9 @@
                     زمان گذشته
                     {{ passedTime }}
                 </p>
-                <p v-if="remainingTime" class="remainingTimeText">
+                <p v-if="remainingTime && currentCat" class="remainingTimeText">
                     دقیقه تا پایان مهلت پاسخگویی
-                    {{ title }}
+                    {{ currentCat.title }}
                     {{ remainingTime }}
                 </p>
             </div>
@@ -69,7 +69,7 @@
             drawerVisible: false,
         }),
         props: [
-            'title',
+            'currentCat',
             'passedTime',
             'remainingTime'
         ],

@@ -35,10 +35,21 @@
                             </v-row>
                             <v-row class="question-body">
                                 <v-col>
-                                    <div class="renderedPanel" v-html="currentQuestion.rendered_statement"></div>
+                                    <div v-if="currentQuestion.in_active_category" class="renderedPanel" v-html="currentQuestion.rendered_statement"></div>
+                                    <v-sheet
+                                            v-if="!currentQuestion.in_active_category"
+                                            color="warning"
+                                            rounded
+                                            dark
+                                            height="400"
+                                            elevation="1"
+                                            class="d-flex align-center justify-center"
+                                    >
+                                        در حال حاضر امکان مشاهده سوالات این دفترچه امکان پذیر نمی باشد
+                                    </v-sheet>
                                 </v-col>
                             </v-row>
-                            <v-row class="question-answers">
+                            <v-row v-if="currentQuestion.in_active_category" class="question-answers">
                                 <choice v-for="item in currentQuestion.choices.list"
                                         :key="item.id"
                                         :question-id="currentQuestion.id"

@@ -51,6 +51,7 @@
                 tile
                 block
                 color="#5cbf60"
+                @click="sendAnswersAndFinishExam"
         >
             ثبت و پایان آزمون
         </v-btn>
@@ -66,21 +67,26 @@
         mixins: [mixinQuiz],
         methods: {
             sendAnswersAndFinishExam() {
+                let that = this
                 this.quiz.sendAnswersAndFinishExam()
                     .then( () => {
-                        this.$notify({
+                        that.$store.commit('clearExamData', that.quiz.id)
+                        that.$notify({
                             group: 'notifs',
                             text: 'اطلاعات آزمون شما ثبت شد.',
-                            type: 'error'
+                            type: 'success'
                         })
+                        that.$router.push({ name: 'user.onlineQuiz.list'})
                     })
                     .catch( () => {
-                        this.$notify({
+                        that.$notify({
                             group: 'notifs',
                             title: 'توجه!',
-                            text: 'item',
-                            type: 'error'
+                            text: 'مشکلی در ثبت اطلاعات آزمون شما رخ داده است. لطفا تا قبل از ساعت 24 اقدام به ارسال مجدد پاسخنامه نمایید.',
+                            type: 'warn',
+                            duration: 30000,
                         })
+                        that.$router.push({ name: 'user.onlineQuiz.list'})
                     })
             }
         }

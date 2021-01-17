@@ -230,12 +230,13 @@ class Exam extends Model {
         let answers = []
         this.questions.list.forEach( (item) => {
             const answeredChoice = item.getAnsweredChoice()
-            const choice_id = (answeredChoice) ? answeredChoice.id : null
-            answers.push({
-                question_id: item.id,
-                choice_id,
-                selected_at: answeredChoice.answered_at
-            })
+            if (answeredChoice) {
+                answers.push({
+                    question_id: item.id,
+                    choice_id: answeredChoice.id,
+                    selected_at: answeredChoice.answered_at
+                })
+            }
         })
         return axios.post('/3a/api/temp-exam/answer/choice/', {exam_user_id: this.user_exam_id, finish: true, questions: answers })
     }

@@ -20,6 +20,7 @@ class Question extends Model {
             { key: 'title' },
             { key: 'statement' },
             { key: 'rendered_statement' },
+            { key: 'in_active_category' },
             { key: 'photo' },
             { key: 'order' },
             { key: 'exams' },
