@@ -25,7 +25,12 @@
 
 <script>
     export default {
-        name: "info"
+        name: "info",
+        data () {
+            return {
+                user: this.$store.getters.user
+            }
+        }
     }
 </script>
 
