@@ -6,7 +6,7 @@
                 <v-icon v-if="source.state === 'o'" color="yellow" :size="24">mdi-checkbox-blank-circle</v-icon>
             </v-btn>
             <v-btn icon @click="changeState(source ,'x')">
-                <v-icon :color="source.state === 'o' ? 'red' : '#888'" :size="24">mdi-close</v-icon>
+                <v-icon :color="source.state === 'x' ? 'red' : '#888'" :size="24">mdi-close</v-icon>
             </v-btn>
             <v-btn icon @click="bookmark(source)">
                 <v-icon v-if="!source.bookmarked" :size="24" color="#888">mdi-bookmark-outline</v-icon>

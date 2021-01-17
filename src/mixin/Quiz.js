@@ -191,7 +191,15 @@ const mixinQuiz = {
       return number - 1
     },
     getCategoryActiveStatus (categoryId) {
-      const category = this.quiz.categories.find((item) => Assistant.getId(item.id) === Assistant.getId(categoryId))
+      const category = this.quiz.categories.list.find((item) => {
+          // const test = Assistant.getId(item.id) === Assistant.getId(categoryId)
+          const test = item.id === categoryId
+        return test
+      })
+      // let category
+      // for (let i = 0; i < this.quiz.categories.length; i++) {
+      //   if (this.quiz.categories)
+      // }
       return !category || category.is_active;
     },
     goToCategory (categoryId) {
@@ -230,7 +238,7 @@ const mixinQuiz = {
           questNumber = this.getQuestionNumberFromIndex(questIndex)
 
       const currentQuestion = this.quiz.questions.getQuestionById(id)
-      const categoryActiveStatus = this.getCategoryActiveStatus(currentQuestion.category_id)
+      const categoryActiveStatus = this.getCategoryActiveStatus(currentQuestion.sub_category.category_id)
 
       if (!categoryActiveStatus) {
         return
