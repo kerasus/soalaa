@@ -34,7 +34,7 @@
                             target="_blank"
                             v-on="on"
                     >
-                        <v-img src="https://cdn.alaatv.com/upload/footer-alaaLogo.png?w=30&h=40" width="20" />
+                        <v-img src="img/alaa-logo.png" width="50" />
                     </v-btn>
                 </template>
                 <span>آموزش مجازی آلاء</span>
