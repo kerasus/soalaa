@@ -91,9 +91,9 @@ class Exam extends Model {
 
     setQuestionsLtr () {
         // const englishRegex = /^[A-Za-z0-9 :"'ʹ.<>%$&@!+()\-/\n,…?ᵒ*~]*$/
-        const englishRegex = /^[A-Za-z0-9 :"'ʹ.<>%$&@!+()\-/\n,…?ᵒ*~]*$/
+        const prersianRegex = /^[ا-ی]*$/
         this.questions.list.forEach((question) => {
-            question.ltr = !!question.statement.match(englishRegex);
+            question.ltr = (!question.statement.match(prersianRegex));
         })
     }
 
@@ -245,7 +245,9 @@ class Exam extends Model {
         this.questions.list.forEach( (item) => {
             let dbAnswer = dbAnswers.find( (answerItem) => answerItem.question_id === item.id)
             if (dbAnswer) {
-                item.selectChoice(dbAnswer.choice_id, dbAnswer.selected_at)
+                item.selectChoice(dbAnswer.choice_id, dbAnswer.selected_at),
+                item.state = dbAnswer.status
+                item.bookmarked = dbAnswer.bookmark
             }
         })
     }
