@@ -78,7 +78,7 @@ const store = new Vuex.Store({
             state.quiz = newInfo
 
             let currentQuizData = state.userQuizListData.find( (item) => {
-                return Assistant.getId(item.examId) === Assistant.getId(newInfo.id)
+                return (item && Assistant.getId(item.examId) === Assistant.getId(newInfo.id))
             })
             if (!currentQuizData) {
                 state.userQuizListData.push({
@@ -87,7 +87,7 @@ const store = new Vuex.Store({
                 })
             } else {
                 state.userQuizListData.forEach( (item, index) => {
-                    if (Assistant.getId(item.examId) === Assistant.getId(newInfo.id)) {
+                    if (item && Assistant.getId(item.examId) === Assistant.getId(newInfo.id)) {
                         state.userQuizListData[index] = state.quiz.mergeUserQuizData(item)
                     }
                 })
@@ -103,7 +103,7 @@ const store = new Vuex.Store({
         },
         clearExamData (state, examId) {
             let currentQuizDataIndex = state.userQuizListData.findIndex( (item) => {
-                return Assistant.getId(item.examId) === Assistant.getId(examId)
+                return (item && Assistant.getId(item.examId) === Assistant.getId(examId))
             })
             if (currentQuizDataIndex) {
                 delete state.userQuizListData[currentQuizDataIndex]
@@ -128,7 +128,7 @@ const store = new Vuex.Store({
             // }
             if (oldQuestionId) {
                 let currentQuizData = state.userQuizListData.find( (item) => {
-                    return Assistant.getId(item.examId) === Assistant.getId(state.quiz.id)
+                    return (item && Assistant.getId(item.examId) === Assistant.getId(state.quiz.id))
                 })
                 if (!currentQuizData) {
                     currentQuizData = {
@@ -172,7 +172,7 @@ const store = new Vuex.Store({
             this.commit('reloadQuizModel')
             // ToDo: find userQuizData
             let currentQuizData = state.userQuizListData.find( (item) => {
-                return Assistant.getId(item.examId) === Assistant.getId(state.quiz.id)
+                return (item && Assistant.getId(item.examId) === Assistant.getId(state.quiz.id))
             })
             if (!currentQuizData) {
                 currentQuizData = {
@@ -194,7 +194,7 @@ const store = new Vuex.Store({
                 return
             }
             let currentQuizData = state.userQuizListData.find( (item) => {
-                return Assistant.getId(item.examId) === Assistant.getId(state.quiz.id)
+                return (item && Assistant.getId(item.examId) === Assistant.getId(state.quiz.id))
             })
             if (!currentQuizData) {
                 currentQuizData = {
