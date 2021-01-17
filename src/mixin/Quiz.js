@@ -190,6 +190,16 @@ const mixinQuiz = {
       number = parseInt(number)
       return number - 1
     },
+    getCategoryActiveStatus (categoryId) {
+      const category = this.quiz.categories.find((item) => Assistant.getId(item.id) === Assistant.getId(categoryId))
+      return !category || category.is_active;
+    },
+    goToCategory (categoryId) {
+      const nextCategoryQuestion = this.quiz.questions.list.find((item) => Assistant.getId(item.category_id) === Assistant.getId(categoryId))
+      if (nextCategoryQuestion) {
+        this.changeQuestion(nextCategoryQuestion.id)
+      }
+    },
     goToNextQuestion () {
       this.$store.commit('loadUserQuizListData')
       let question = this.quiz.questions.getNextQuestion(this.currentQuestion.id)
@@ -220,6 +230,12 @@ const mixinQuiz = {
           questNumber = this.getQuestionNumberFromIndex(questIndex)
 
       const currentQuestion = this.quiz.questions.getQuestionById(id)
+      const categoryActiveStatus = this.getCategoryActiveStatus(currentQuestion.category_id)
+
+      if (!categoryActiveStatus) {
+        return
+      }
+
       this.$store.commit('updateCurrentQuestion', currentQuestion)
       // this.quiz.questions.getQuestionById(this.currentQuestion.id).enterQuestion()
       if (parseInt(this.$route.params.questNumber) !== parseInt(questNumber) && this.$route.name !== 'onlineQuiz.konkoorView' && this.$route.name !== 'onlineQuiz.bubblesheet-view') {
