@@ -68,7 +68,15 @@
                                 </v-col>
                                 <v-col cols="12" md="2">
                                     <v-btn
-                                            v-if="item.user_exam_status === 'has participated and finished' || item.user_exam_status === 'registered but participation time passed'"
+                                            v-if="item.user_exam_status === 'registered but participation time passed'"
+                                            :to="{ name: 'onlineQuiz.alaaView', params: { quizId: item.id, questNumber: 1 } }"
+                                            color="#ffc107"
+                                            text
+                                    >
+                                        شروع آزمون
+                                    </v-btn>
+                                    <v-btn
+                                            v-if="item.user_exam_status === 'has participated and finished'"
                                             color="#ffc107"
                                             text
                                     >
