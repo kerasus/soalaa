@@ -11,7 +11,6 @@
                               :estimate-size="100"
                               ref="scroller"
                               class="questionss"
-                              @scroll="onScroll"
                 />
             </v-col>
             <v-col :md="7" class="left-side-list">
@@ -98,7 +97,7 @@
                 </v-row>
                 <v-row>
                     <v-col>
-                        <BubbleSheet :info="{ type: 'pasokh-barg' }" @clickChoice="choiceClicked" />
+                        <BubbleSheet :info="{ type: 'pasokh-barg' }" @clickChoice="choiceClicked" @scroll="scrollTo" />
                     </v-col>
                 </v-row>
             </v-col>
@@ -152,40 +151,40 @@ export default {
             this.$store.commit('updateAppBar', state)
             this.$store.commit('updateDrawer', state)
         },
-        changeCurrentQuestionIfScrollingIsDone (event, range) {
-            console.log('timePassedSinceLastScroll: ' ,this.timePassedSinceLastScroll)
-            if (range.start !== this.lastTimeScrollRange.start || range.end !== this.lastTimeScrollRange.end) {
-                this.quiz.questions.turnIsInViewToFalse(range.start, range.end)
-                this.lastTimeScrollRange.start = range.start
-                this.lastTimeScrollRange.end = range.end
-                // console.log(event, range, 'lastTimeScrollRange : ', this.lastTimeScrollRange)
-            }
-            if (this.timePassedSinceLastScroll >= 1000) {
-                this.changeCurrentQuestionToFirstQuestionInView()
-                this.timePassedSinceLastScroll = 0
-                this.scrollState = 'not scrolling'
-                console.log("i've done it : ", this.quiz.questions.getQuestionIndexById(this.currentQuestion.id) + 1)
-                clearInterval(this.setIntervalCallback)
-                this.setIntervalCallback = null
-            }
-            this.timePassedSinceLastScroll += 250
-        },
-        onScroll (event, range) {
-            if (this.scrollState === 'not scrolling') {
-                this.setIntervalCallback = setInterval(() => {
-                    this.changeCurrentQuestionIfScrollingIsDone(event, range)
-                }, 250)
-                this.scrollState = 'scrolling'
-            }
-            this.timePassedSinceLastScroll = 0
-        },
-        changeCurrentQuestionToFirstQuestionInView () {
-            const firstInViewQuestion = this.getFirstInViewQuestionNumber()
-            if (firstInViewQuestion.id === this.currentQuestion.id) {
-                return
-            }
-            this.changeQuestion(firstInViewQuestion)
-        },
+        // changeCurrentQuestionIfScrollingIsDone (event, range) {
+        //     console.log('timePassedSinceLastScroll: ' ,this.timePassedSinceLastScroll)
+        //     if (range.start !== this.lastTimeScrollRange.start || range.end !== this.lastTimeScrollRange.end) {
+        //         this.quiz.questions.turnIsInViewToFalse(range.start, range.end)
+        //         this.lastTimeScrollRange.start = range.start
+        //         this.lastTimeScrollRange.end = range.end
+        //         // console.log(event, range, 'lastTimeScrollRange : ', this.lastTimeScrollRange)
+        //     }
+        //     if (this.timePassedSinceLastScroll >= 1000) {
+        //         this.changeCurrentQuestionToFirstQuestionInView()
+        //         this.timePassedSinceLastScroll = 0
+        //         this.scrollState = 'not scrolling'
+        //         console.log("i've done it : ", this.quiz.questions.getQuestionIndexById(this.currentQuestion.id) + 1)
+        //         clearInterval(this.setIntervalCallback)
+        //         this.setIntervalCallback = null
+        //     }
+        //     this.timePassedSinceLastScroll += 250
+        // },
+        // onScroll (event, range) {
+        //     if (this.scrollState === 'not scrolling') {
+        //         this.setIntervalCallback = setInterval(() => {
+        //             this.changeCurrentQuestionIfScrollingIsDone(event, range)
+        //         }, 250)
+        //         this.scrollState = 'scrolling'
+        //     }
+        //     this.timePassedSinceLastScroll = 0
+        // },
+        // changeCurrentQuestionToFirstQuestionInView () {
+        //     const firstInViewQuestion = this.getFirstInViewQuestionNumber()
+        //     if (firstInViewQuestion.id === this.currentQuestion.id) {
+        //         return
+        //     }
+        //     this.changeQuestion(firstInViewQuestion)
+        // },
         scrollTo (questionId) {
             if (this.quiz.questions.getQuestionById(questionId).isInView === false) {
                 const questionIndex = this.quiz.questions.getQuestionIndexById(questionId)
@@ -202,16 +201,16 @@ export default {
         //     this.quiz.questions.getQuestionById(entries[0].target.id).isInView = (entries[0].intersectionRatio >= 0.5)
         // },
         // ToDo: check for removal
-        getFirstInViewQuestionNumber () {
-            let firstQuestionInView = this.quiz.questions.list.find((item)=> {
-                return item.isInView === true
-            })
-            if (firstQuestionInView.id !== null) {
-                return firstQuestionInView.id
-            } else {
-                return false
-            }
-        },
+        // getFirstInViewQuestionNumber () {
+        //     let firstQuestionInView = this.quiz.questions.list.find((item)=> {
+        //         return item.isInView === true
+        //     })
+        //     if (firstQuestionInView.id !== null) {
+        //         return firstQuestionInView.id
+        //     } else {
+        //         return false
+        //     }
+        // },
         // isThisFirstQuestionInView (questionId) {
         //     if (this.getFirstInViewQuestionNumber().id === questionId) {
         //         return true

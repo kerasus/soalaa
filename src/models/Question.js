@@ -155,9 +155,9 @@ class Question extends Model {
         })
     }
 
-    onIntersect (entries) {
-        this.isInView = entries[0].intersectionRatio >= 0.8
-    }
+    // onIntersect (entries) {
+    //     this.isInView = entries[0].intersectionRatio >= 0.8
+    // }
 
     sendAnswer (exam_user_id, {question_id, choice_id, selected_at }) {
         axios.post('/3a/api/temp-exam/answer/choice/', {exam_user_id, questions: [{question_id, choice_id, selected_at}] })
@@ -227,13 +227,13 @@ class QuestionList extends Collection {
         return this.getQuestionByIndex(prevIndex)
     }
 
-    turnIsInViewToFalse (startExceptionIndex, endExceptionIndex) {
-        this.list.forEach((item, index) => {
-            if (index < startExceptionIndex || index > endExceptionIndex) {
-                this.list[index].isInView = false
-            }
-        })
-    }
+    // turnIsInViewToFalse (startExceptionIndex, endExceptionIndex) {
+    //     this.list.forEach((item, index) => {
+    //         if (index < startExceptionIndex || index > endExceptionIndex) {
+    //             this.list[index].isInView = false
+    //         }
+    //     })
+    // }
 }
 
 export { Question, QuestionList }
