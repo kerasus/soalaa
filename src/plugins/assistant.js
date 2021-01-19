@@ -56,8 +56,35 @@ let Assistant = function () {
         })
     }
 
+    function reportErrors(location, message, data) {
+        // console.group();
+        console.groupCollapsed();
+        // console.table(data);
+        // console.count();
+
+        // console.time();
+        // for (i = 0; i < 100000; i++) {
+        //     // some code
+        // }
+        // console.timeEnd();
+
+        if (location) {
+            console.error('locationCode', location);
+        }
+        if (message) {
+            console.error('message', message);
+        }
+        if (data) {
+            console.error('data', data);
+        }
+
+        console.trace();
+        console.groupEnd();
+    }
+
     return {
         getId,
+        reportErrors,
         handleAxiosError
     };
 }();

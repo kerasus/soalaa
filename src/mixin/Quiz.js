@@ -51,11 +51,6 @@ const mixinQuiz = {
       }
 
       return currentLessons
-    },
-    daftarche: {
-      get () {
-        return 'دفترچه سؤالات عمومی'
-      }
     }
   },
   methods: {
@@ -69,6 +64,7 @@ const mixinQuiz = {
                 resolve()
               })
               .catch( () => {
+                Assistant.reportErrors('mixin/Quiz.js -> startExam()')
                 reject()
               })
         } else {
@@ -87,10 +83,12 @@ const mixinQuiz = {
                     resolve()
                   })
                   .catch( () => {
+                    Assistant.reportErrors('mixin/Quiz.js -> participateExam()')
                     reject()
                   })
             })
             .catch( () => {
+              Assistant.reportErrors('mixin/Quiz.js -> participateExam()')
               that.$store.commit('updateOverlay', false)
               that.$router.push({ name: 'user.exam.list' })
               reject()
@@ -106,12 +104,12 @@ const mixinQuiz = {
         that.loadUserQuizDataFromStorage(that.quiz)
         that.quiz.getAnswerOfUserInExam()
             .then((response) => {
-              console.log('response', response)
               that.quiz.mergeDbAnswerToLocalstorage(response.data.data)
               that.$store.commit('updateQuiz', that.quiz)
               resolve()
             })
             .catch( (error) => {
+              Assistant.reportErrors('mixin/Quiz.js -> loadQuiz()')
               reject(error)
             })
       })
@@ -250,27 +248,21 @@ const mixinQuiz = {
       this.changeQuestion(question.id)
     },
     changeQuestion(id) {
-      console.log('mixin quiz/ changeQuestion')
       if (Assistant.getId(this.currentQuestion.id) === Assistant.getId(id)) {
         return
       }
-      console.log('assistanto radid')
-      // if (this.currentQuestion.id !== null) {
-      //     this.quiz.questions.getQuestionById(this.currentQuestion.id).leaveQuestion()
-      // }
 
       const questIndex = this.quiz.questions.getQuestionIndexById(id),
           questNumber = this.getQuestionNumberFromIndex(questIndex)
 
       let currentQuestion = this.quiz.questions.getQuestionById(id)
-      const categoryActiveStatus = this.getCategoryActiveStatus(currentQuestion.sub_category.category_id)
+      const currentQuestionCategoryActiveStatus = this.getCategoryActiveStatus(currentQuestion.sub_category.category_id)
 
-      if (!categoryActiveStatus) {
-        currentQuestion = this.currentQuestion
+      if (!currentQuestionCategoryActiveStatus) {
+        return
       }
 
       this.$store.commit('updateCurrentQuestion', currentQuestion)
-      // this.quiz.questions.getQuestionById(this.currentQuestion.id).enterQuestion()
       if (parseInt(this.$route.params.questNumber) !== parseInt(questNumber) && this.$route.name !== 'onlineQuiz.konkoorView' && this.$route.name !== 'onlineQuiz.bubblesheet-view') {
           this.$router.push({ name: 'onlineQuiz.alaaView', params: { quizId: this.quiz.id, questNumber } })
       }

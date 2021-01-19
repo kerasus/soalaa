@@ -81,6 +81,7 @@ class Exam extends Model {
                         resolve(data)
                     },
                     error: function (jqXHR, textStatus, errorThrown) {
+                        Assistant.reportErrors('models/exam.js -> loadQuestionsFromFile() -> $.ajax.error', "can't get exam file", {jqXHR, textStatus, errorThrown})
                         Assistant.handleAxiosError("can't get exam file")
                         reject({jqXHR, textStatus, errorThrown})
                     }
@@ -272,12 +273,13 @@ class Exam extends Model {
                             that.mergeDbAnswerToLocalstorage(answers)
                             resolve()
                         })
-                        .catch( () => {
-                            reject(null)
+                        .catch( (error) => {
+                            reject(error)
                         })
                 })
-                .catch( () => {
-                    reject(null)
+                .catch( (error) => {
+                    Assistant.reportErrors('models/exam.js -> getAnswerOfUserInResultPage() -> axios.get.catch')
+                    reject(error)
                 })
         })
     }

@@ -166,7 +166,6 @@ const store = new Vuex.Store({
         //     state.currentQuestion = state.quiz.questions.getPrevQuestion(state.currentQuestion.id)
         // },
         refreshUserQuizListData () {
-
             this.commit('saveUserQuizListData')
             this.commit('loadUserQuizListData')
         },
@@ -184,7 +183,7 @@ const store = new Vuex.Store({
                 }
             }
             state.userQuizListData.map( (item) => {
-                if (Assistant.getId(item.examId) === Assistant.getId(state.quiz.id)) {
+                if (item && Assistant.getId(item.examId) === Assistant.getId(state.quiz.id)) {
                     return state.quiz.mergeUserQuizData(currentQuizData)
                 }
             })
