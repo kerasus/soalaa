@@ -56,7 +56,10 @@ let Assistant = function () {
         })
     }
 
-    function reportErrors(location, message, data) {
+    function reportErrors(error) {
+        const location = error.location,
+            message = error.message,
+            data = error.data
         // console.group();
         console.groupCollapsed();
         // console.table(data);

@@ -56,7 +56,7 @@ class Exam extends Model {
 
     loadQuestionsFromFile () {
         let that = this
-        return new Promise(function(resolve, reject) {
+        return new Promise(function(resolve) {
             // axios.get(that.questions_file_url)
             //     .then( (response) => {
             //         // console.log('response.data', data)
@@ -68,7 +68,7 @@ class Exam extends Model {
             //     })
 
             if (!that.questions_file_url) {
-                reject(null)
+                throw new Error({location: 'models/exam.js -> loadQuestionsFromFile()', message: "can't get exam file"})
             }
 
             $.ajax({
@@ -81,9 +81,8 @@ class Exam extends Model {
                         resolve(data)
                     },
                     error: function (jqXHR, textStatus, errorThrown) {
-                        Assistant.reportErrors('models/exam.js -> loadQuestionsFromFile() -> $.ajax.error', "can't get exam file", {jqXHR, textStatus, errorThrown})
                         Assistant.handleAxiosError("can't get exam file")
-                        reject({jqXHR, textStatus, errorThrown})
+                        throw new Error({jqXHR, textStatus, errorThrown})
                     }
                 }
             );
@@ -260,7 +259,7 @@ class Exam extends Model {
 
     getAnswerOfUserInResultPage () {
         let that = this
-        return new Promise(function(resolve, reject) {
+        return new Promise(function(resolve) {
             axios.get('/3a/api/temp-exam/answer/'+that.user_exam_id+'/withCorrect')
                 .then( (response) => {
                     const questions_file_url = response.data.data.exam.questions_file_url
@@ -274,12 +273,11 @@ class Exam extends Model {
                             resolve()
                         })
                         .catch( (error) => {
-                            reject(error)
+                            throw new Error(error)
                         })
                 })
                 .catch( (error) => {
-                    Assistant.reportErrors('models/exam.js -> getAnswerOfUserInResultPage() -> axios.get.catch')
-                    reject(error)
+                    throw new Error(error)
                 })
         })
     }

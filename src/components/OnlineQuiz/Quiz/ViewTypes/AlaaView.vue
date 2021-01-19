@@ -90,6 +90,7 @@
     import Choice from '@/components/OnlineQuiz/Quiz/Choice'
     import Timer from '@/components/OnlineQuiz/Quiz/Timer/Timer'
     import { mixinQuiz, mixinDrawer, mixinWindowSize } from '@/mixin/Mixins'
+    import Assistant from "@/plugins/assistant";
 
     export default {
         name: 'AlaaView',
@@ -110,7 +111,8 @@
                 .then(() => {
                     this.loadFirstActiveQuestionIfNeed()
                 })
-                .catch( () => {
+                .catch( (error) => {
+                    Assistant.reportErrors(error)
                     this.$notify({
                         group: 'notifs',
                         title: 'توجه!',

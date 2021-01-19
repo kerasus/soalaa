@@ -214,9 +214,6 @@ const store = new Vuex.Store({
         }
     },
     getters: {
-        // quizList (state) {
-        //     return state.quizList
-        // },
         mapOfQuestionsDrawer (state) {
             return state.mapOfQuestionsDrawer
         },

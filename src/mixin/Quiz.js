@@ -56,16 +56,15 @@ const mixinQuiz = {
   methods: {
     startExam () {
       let that = this
-      return new Promise(function(resolve, reject) {
+      return new Promise(function(resolve) {
         that.$store.commit('updateOverlay', true)
         if (that.needToLoadQuiaData() && that.$route.params.quizId) {
           that.participateExam(that.$route.params.quizId)
               .then(() => {
                 resolve()
               })
-              .catch( () => {
-                Assistant.reportErrors('mixin/Quiz.js -> startExam()')
-                reject()
+              .catch( (error) => {
+                throw new Error(error)
               })
         } else {
           that.loadUserQuizDataFromStorage()
@@ -75,29 +74,27 @@ const mixinQuiz = {
     },
     participateExam (examId) {
       let that = this
-      return new Promise(function(resolve, reject) {
+      return new Promise(function(resolve) {
         that.user.participateExam(examId)
             .then(({userExamForParticipate}) => {
               that.loadQuiz(userExamForParticipate)
                   .then(() => {
                     resolve()
                   })
-                  .catch( () => {
-                    Assistant.reportErrors('mixin/Quiz.js -> participateExam()')
-                    reject()
+                  .catch( (error) => {
+                    throw new Error(error)
                   })
             })
-            .catch( () => {
-              Assistant.reportErrors('mixin/Quiz.js -> participateExam()')
+            .catch( (error) => {
               that.$store.commit('updateOverlay', false)
               that.$router.push({ name: 'user.exam.list' })
-              reject()
+              throw new Error(error)
             })
       })
     },
     loadQuiz (userExamForParticipate) {
       let that = this
-      return new Promise(function(resolve, reject) {
+      return new Promise(function(resolve) {
         that.$store.commit('updateQuiz', userExamForParticipate)
         that.quiz.loadSubcategoriesOfCategories()
         Time.setStateOfExamCategories(that.quiz.categories)
@@ -109,8 +106,7 @@ const mixinQuiz = {
               resolve()
             })
             .catch( (error) => {
-              Assistant.reportErrors('mixin/Quiz.js -> loadQuiz()')
-              reject(error)
+              throw new Error(error)
             })
       })
     },
