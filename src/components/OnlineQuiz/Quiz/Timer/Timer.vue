@@ -41,14 +41,23 @@
 
                 if (!newCat || !that.currentCat || Assistant.getId(newCat.id) !== Assistant.getId(that.currentCat.id)) {
                     that.currentCat = newCat
-                    that.$store.commit('updateQuiz', that.quiz)
                     if (that.currentCat) {
                         that.goToCategory(that.currentCat.id)
                         Time.setStateOfQuestionsBasedOnActiveCategory(this.quiz)
                     }
+                    that.setExamAcceptAtIsPassedField()
+                    that.$store.commit('updateQuiz', that.quiz)
                 }
             }, 1000)
             // requestAnimationFrame(this.timer.updateTimer) // webpack-internal:///./src/models/Timer.js:58 Uncaught TypeError: Cannot read property 'updateDiffs' of undefined
+        },
+        methods: {
+            setExamAcceptAtIsPassedField () {
+                const newCat = Time.getCurrentCategoryAcceptAt(this.quiz.categories)
+                if (!newCat && this.quiz.categories.length > 0) {
+                    this.quiz.accept_at_is_passed = true
+                }
+            }
         },
         destroyed() {
             clearInterval(this.interval);

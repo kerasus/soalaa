@@ -25,6 +25,7 @@ class Exam extends Model {
             { key: 'user_exam_id' },
             { key: 'user_exam_status' },
             { key: 'questions_file_url' },
+            { key: 'accept_at_is_passed' },
             { key: 'total_question_number' },
 
             {

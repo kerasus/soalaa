@@ -123,7 +123,11 @@
             loadFirstActiveQuestionIfNeed () {
                 if (!this.currentQuestion.in_active_category) {
                     let firstActiveQuestion = this.quiz.questions.getFirstActiveQuestion()
-                    this.changeQuestion(firstActiveQuestion.id)
+                    if (!firstActiveQuestion) {
+                        this.loadFirstQuestion()
+                    } else {
+                        this.changeQuestion(firstActiveQuestion.id)
+                    }
                 }
             }
         }

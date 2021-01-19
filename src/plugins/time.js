@@ -78,6 +78,9 @@ let Time = function () {
     function setStateOfQuestionsBasedOnActiveCategory(quiz) {
         const currentActiveCategory = getCurrentCategoryAcceptAt(quiz.categories)
         if (!currentActiveCategory) {
+            quiz.questions.list.forEach( (item, index) => {
+                quiz.questions.list[index].in_active_category = true
+            })
             return
         }
         quiz.questions.list.forEach( (item, index) => {
