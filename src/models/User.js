@@ -4,7 +4,7 @@ import Time from "@/plugins/time";
 import Assistant from "@/plugins/assistant";
 import {QuestCategoryList} from "@/models/QuestCategory";
 import {QuestSubcategoryList} from "@/models/QuestSubcategory";
-
+// import axios from "axios";
 
 class User extends Model {
     constructor(data) {
@@ -89,6 +89,20 @@ class User extends Model {
         }
 
         exam.user_exam_status = status
+    }
+
+    getUserData () {
+        let that = this
+        return new Promise(function(resolve, reject) {
+            that.show(null, '/alaa/api/v2/getUserFor3a')
+                .then( (response) => {
+                    that = new User(response.data.data)
+                    resolve()
+                })
+                .catch( (error) => {
+                    reject(error)
+                })
+        })
     }
 
     loadUserExams (exams, userExams) {
