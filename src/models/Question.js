@@ -245,6 +245,10 @@ class QuestionList extends Collection {
         return this.getQuestionByIndex(prevIndex)
     }
 
+    getFirstActiveQuestion () {
+        return this.list.find( (item) => !!(item.in_active_category))
+    }
+
     // turnIsInViewToFalse (startExceptionIndex, endExceptionIndex) {
     //     this.list.forEach((item, index) => {
     //         if (index < startExceptionIndex || index > endExceptionIndex) {

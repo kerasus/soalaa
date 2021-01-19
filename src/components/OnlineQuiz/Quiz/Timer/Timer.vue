@@ -44,6 +44,7 @@
                     that.$store.commit('updateQuiz', that.quiz)
                     if (that.currentCat) {
                         that.goToCategory(that.currentCat.id)
+                        Time.setStateOfQuestionsBasedOnActiveCategory(this.quiz)
                     }
                 }
             }, 1000)

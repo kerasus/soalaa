@@ -107,6 +107,9 @@
             this.showAppBar()
             this.updateDrawerBasedOnWindowSize()
             this.startExam()
+                .then(() => {
+                    this.loadFirstActiveQuestionIfNeed()
+                })
         },
         methods: {
             showAppBar () {
@@ -115,6 +118,12 @@
             updateDrawerBasedOnWindowSize () {
                 if (this.windowSize.x > 1263) {
                     this.$store.commit('updateDrawer', true)
+                }
+            },
+            loadFirstActiveQuestionIfNeed () {
+                if (!this.currentQuestion.in_active_category) {
+                    let firstActiveQuestion = this.quiz.questions.getFirstActiveQuestion()
+                    this.changeQuestion(firstActiveQuestion.id)
                 }
             }
         }

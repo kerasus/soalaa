@@ -60,38 +60,65 @@ const mixinQuiz = {
   },
   methods: {
     startExam () {
-      this.$store.commit('updateOverlay', true)
-      if (this.needToLoadQuiaData() && this.$route.params.quizId) {
-        this.participateExam(this.$route.params.quizId)
-      } else {
-        this.loadUserQuizDataFromStorage()
-      }
+      let that = this
+      return new Promise(function(resolve, reject) {
+        that.$store.commit('updateOverlay', true)
+        if (that.needToLoadQuiaData() && that.$route.params.quizId) {
+          that.participateExam(that.$route.params.quizId)
+              .then(() => {
+                resolve()
+              })
+              .catch( () => {
+                reject()
+              })
+        } else {
+          that.loadUserQuizDataFromStorage()
+          resolve()
+        }
+      })
     },
     participateExam (examId) {
-      this.user.participateExam(examId)
-          .then(({userExamForParticipate}) => {
-            this.loadQuiz(userExamForParticipate)
-          })
-          .catch( () => {
-            this.$store.commit('updateOverlay', false)
-            this.$router.push({ name: 'user.exam.list' })
-          })
+      let that = this
+      return new Promise(function(resolve, reject) {
+        that.user.participateExam(examId)
+            .then(({userExamForParticipate}) => {
+              that.loadQuiz(userExamForParticipate)
+                  .then(() => {
+                    resolve()
+                  })
+                  .catch( () => {
+                    reject()
+                  })
+            })
+            .catch( () => {
+              that.$store.commit('updateOverlay', false)
+              that.$router.push({ name: 'user.exam.list' })
+              reject()
+            })
+      })
     },
     loadQuiz (userExamForParticipate) {
-      this.$store.commit('updateQuiz', userExamForParticipate)
-      this.quiz.loadSubcategoriesOfCategories()
-      Time.setStateOfExamCategories(this.quiz.categories)
-      Time.setStateOfQuestionsBasedOnActiveCategory(this.quiz)
-      this.$store.commit('updateQuiz', this.quiz)
-      this.loadUserQuizDataFromStorage(this.quiz)
-      this.quiz.getAnswerOfUserInExam()
-          .then( (response) => {
-            console.log('response', response)
-            this.quiz.mergeDbAnswerToLocalstorage(response.data.data)
-            this.$store.commit('updateQuiz', this.quiz)
-          })
+      let that = this
+      return new Promise(function(resolve, reject) {
+        that.$store.commit('updateQuiz', userExamForParticipate)
+        that.quiz.loadSubcategoriesOfCategories()
+        Time.setStateOfExamCategories(that.quiz.categories)
+        that.loadUserQuizDataFromStorage(that.quiz)
+        that.quiz.getAnswerOfUserInExam()
+            .then((response) => {
+              console.log('response', response)
+              that.quiz.mergeDbAnswerToLocalstorage(response.data.data)
+              that.$store.commit('updateQuiz', that.quiz)
+              resolve()
+            })
+            .catch( (error) => {
+              reject(error)
+            })
+      })
     },
     loadUserQuizDataFromStorage () {
+      Time.setStateOfQuestionsBasedOnActiveCategory(this.quiz)
+      this.$store.commit('updateQuiz', this.quiz)
       let questNumber = this.$route.params.questNumber
       if (!questNumber) {
         questNumber = 1
