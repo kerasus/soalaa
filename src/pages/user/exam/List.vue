@@ -39,13 +39,13 @@
                                 <v-col cols="12" md="3" class="pr-7 justify-center">
                                     {{ item.title }}
                                 </v-col>
-                                <v-col cols="12" md="3">
+                                <v-col cols="12" md="2">
                                     <span class="d-inline-block-md d-none">
                                         زمان شروع آزمون:
                                     </span>
                                     {{ item.shamsiDate('start_at').dateTime }}
                                 </v-col>
-                                <v-col cols="12" md="3">
+                                <v-col cols="12" md="2">
                                     <span class="d-inline-block-md d-none">
                                         زمان پایان آزمون:
                                     </span>
@@ -58,7 +58,7 @@
                                     {{ item.delay_time }}
                                     دقیقه
                                 </v-col>
-                                <v-col cols="12" md="2">
+                                <v-col cols="12" md="4">
                                     <v-btn
                                             v-if="item.user_exam_status === 'registered but participation time passed' || item.user_exam_status === 'registered but did not participate'"
                                             :to="{ name: 'onlineQuiz.alaaView', params: { quizId: item.id, questNumber: 1 } }"
