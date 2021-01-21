@@ -1,11 +1,12 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-import { Question } from '@/models/Question'
+import {Question} from '@/models/Question'
 import createPersistedState from 'vuex-persistedstate'
 // import createMutationsSharer from 'vuex-shared-mutations'
 import Assistant from '@/plugins/assistant'
 import {User} from '@/models/User'
 import { Exam } from "@/models/exam";
+import Time from "@/plugins/time";
 
 Vue.use(Vuex)
 
@@ -77,8 +78,22 @@ const store = new Vuex.Store({
             state.quiz = newInfo
         },
         updateQuiz (state, newInfo) {
+            if (!newInfo) {
+                return
+            }
+            // console.count('store updateQuiz');
+            // console.group();
+            // console.time();
+
+
+
+
+
+            // window.localStorage.setItem('currentExam.questions', JSON.stringify(newInfo.questions.list))
+            // newInfo.questions = new QuestionList()
             this.commit('reloadQuizModel')
             state.quiz = newInfo
+            // Object.freeze(state.quiz)
 
             let currentQuizData = state.userQuizListData.find( (item) => {
                 return (item && Assistant.getId(item.examId) === Assistant.getId(newInfo.id))
@@ -97,6 +112,29 @@ const store = new Vuex.Store({
             }
 
             this.commit('setUserQuizListData', state.userQuizListData)
+
+
+
+
+
+
+            // console.timeEnd();
+            // console.groupEnd();
+        },
+        setExamAcceptAtIsPassed (state) {
+            state.quiz.accept_at_is_passed = true
+        },
+        setActiveStateOfExamCategories (state) {
+            if (!state.quiz) {
+                return
+            }
+            Time.setStateOfExamCategories(state.quiz.categories)
+        },
+        setActiveStateOfQuestionsBasedOnActiveCategory (state) {
+            if (!state.quiz) {
+                return
+            }
+            Time.setStateOfQuestionsBasedOnActiveCategory(state.quiz)
         },
         updateAccessToken (state, newInfo) {
             state.accessToken = newInfo

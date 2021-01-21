@@ -12,8 +12,8 @@
                         <v-col :md="10" class="px-md-0 px-5">
                             <v-row class="question-header">
                                 <div class="question-number">
-                                    <p>
-                                        {{ currentLessons.title }}
+                                    <p v-if="currentLesson">
+                                        {{ currentLesson.title }}
                                         -
                                         سوال شماره
                                         {{ getQuestionNumberFromId(currentQuestion.id) }}
@@ -110,6 +110,7 @@
             this.startExam()
                 .then(() => {
                     this.loadFirstActiveQuestionIfNeed()
+                    this.$store.commit('updateOverlay', false)
                 })
                 .catch( (error) => {
                     Assistant.reportErrors(error)

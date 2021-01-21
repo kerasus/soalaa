@@ -21,6 +21,7 @@ const mixinQuiz = {
     },
     quiz: {
       get () {
+        console.count('computed quiz');
         return this.$store.getters.quiz
       },
       set (newInfo) {
@@ -38,43 +39,46 @@ const mixinQuiz = {
         this.$store.commit('updateCurrentQuestion', newInfo)
       }
     },
-    currentLessons () {
+    currentLesson () {
       this.$store.commit('reloadQuizModel')
-      let currentLessons = new QuestSubcategory()
+      let currentLesson = new QuestSubcategory()
       if (!this.currentQuestion.sub_category) {
         this.loadFirstQuestion()
       }
 
       if (this.quiz.questions.list.length > 0 && this.currentQuestion.sub_category) {
         let subCategoryId = Assistant.getId(this.currentQuestion.sub_category.id)
-        currentLessons = this.quiz.sub_categories.getItem('id', subCategoryId)
+        currentLesson = this.quiz.sub_categories.getItem('id', subCategoryId)
       }
 
-      return currentLessons
+      return currentLesson
     }
   },
   methods: {
     startExam () {
       let that = this
-      return new Promise(function(resolve) {
-        that.$store.commit('updateOverlay', true)
+      that.$store.commit('updateOverlay', true)
+      return new Promise(function(resolve, reject) {
         if (that.needToLoadQuiaData() && that.$route.params.quizId) {
           that.participateExam(that.$route.params.quizId)
               .then(() => {
                 resolve()
               })
               .catch( (error) => {
-                throw new Error(error)
+                that.$store.commit('updateOverlay', false)
+                Assistant.reportErrors('mixin/Quiz.js -> participateExam()')
+                reject(error)
               })
         } else {
           that.loadUserQuizDataFromStorage()
+          that.$store.commit('updateOverlay', false)
           resolve()
         }
       })
     },
     participateExam (examId) {
       let that = this
-      return new Promise(function(resolve) {
+      return new Promise(function(resolve, reject) {
         that.user.participateExam(examId)
             .then(({userExamForParticipate}) => {
               that.loadQuiz(userExamForParticipate)
@@ -82,13 +86,14 @@ const mixinQuiz = {
                     resolve()
                   })
                   .catch( (error) => {
-                    throw new Error(error)
+                    Assistant.reportErrors('mixin/Quiz.js -> loadQuiz()')
+                    reject(error)
                   })
             })
             .catch( (error) => {
-              that.$store.commit('updateOverlay', false)
               that.$router.push({ name: 'user.exam.list' })
-              throw new Error(error)
+              Assistant.reportErrors('mixin/Quiz.js -> participateExam()')
+              reject(error)
             })
       })
     },
@@ -99,6 +104,7 @@ const mixinQuiz = {
         that.quiz.loadSubcategoriesOfCategories()
         Time.setStateOfExamCategories(that.quiz.categories)
         that.loadUserQuizDataFromStorage(that.quiz)
+        // resolve()
         that.quiz.getAnswerOfUserInExam()
             .then((response) => {
               that.quiz.mergeDbAnswerToLocalstorage(response.data.data)
@@ -119,7 +125,6 @@ const mixinQuiz = {
       }
       this.$store.commit('loadUserQuizListData')
       this.loadQuestionByNumber(questNumber)
-      this.$store.commit('updateOverlay', false)
     },
     loadFirstQuestion () {
       this.loadQuestionByNumber(1)

@@ -29,33 +29,39 @@
         mounted() {
             let that = this
             this.interval = setInterval(() => {
-                Time.setStateOfExamCategories(that.quiz.categories)
-                that.passedTime = Time.getPassedTime(that.quiz.created_at)
                 const newCat = Time.getCurrentCategoryAcceptAt(that.quiz.categories)
-
-                if (newCat) {
-                    that.remainTime = Time.getRemainTime(newCat.accept_at)
-                } else {
-                    that.remainTime = false
-                }
-
-                if (!newCat || !that.currentCat || Assistant.getId(newCat.id) !== Assistant.getId(that.currentCat.id)) {
-                    that.currentCat = newCat
-                    if (that.currentCat) {
-                        that.goToCategory(that.currentCat.id)
-                        Time.setStateOfQuestionsBasedOnActiveCategory(this.quiz)
-                    }
-                    that.setExamAcceptAtIsPassedField()
-                    that.$store.commit('updateQuiz', that.quiz)
-                }
+                that.calcRemainAndPassedTime(newCat)
+                that.doActionsOnChangeCategory(newCat)
             }, 1000)
             // requestAnimationFrame(this.timer.updateTimer) // webpack-internal:///./src/models/Timer.js:58 Uncaught TypeError: Cannot read property 'updateDiffs' of undefined
         },
         methods: {
-            setExamAcceptAtIsPassedField () {
+            calcRemainAndPassedTime (newCat) {
+                this.passedTime = Time.getPassedTime(this.quiz.created_at)
+                this.calcRemainTime(newCat)
+            },
+            calcRemainTime (newCat) {
+                if (newCat) {
+                    this.remainTime = Time.getRemainTime(newCat.accept_at)
+                } else {
+                    this.remainTime = false
+                }
+            },
+            doActionsOnChangeCategory (newCat) {
+                if (!newCat || !this.currentCat || Assistant.getId(newCat.id) !== Assistant.getId(this.currentCat.id)) {
+                    this.currentCat = newCat
+                    this.$store.commit('setActiveStateOfExamCategories')
+                    if (this.currentCat) {
+                        this.goToCategory(this.currentCat.id)
+                        this.$store.commit('setActiveStateOfQuestionsBasedOnActiveCategory')
+                    }
+                    this.setExamAcceptAtIsPassedWhenAllCategoryIsPassed()
+                }
+            },
+            setExamAcceptAtIsPassedWhenAllCategoryIsPassed () {
                 const newCat = Time.getCurrentCategoryAcceptAt(this.quiz.categories)
                 if (!newCat && this.quiz.categories.length > 0) {
-                    this.quiz.accept_at_is_passed = true
+                    this.$store.commit('setExamAcceptAtIsPassed')
                 }
             }
         },

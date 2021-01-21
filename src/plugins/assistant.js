@@ -65,11 +65,15 @@ let Assistant = function () {
         // console.table(data);
         // console.count();
 
+
+
+        // console.group();
         // console.time();
-        // for (i = 0; i < 100000; i++) {
-        //     // some code
-        // }
+        // ...
         // console.timeEnd();
+        // console.groupEnd();
+
+
 
         if (location) {
             console.error('locationCode', location);

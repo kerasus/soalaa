@@ -93,14 +93,15 @@ class User extends Model {
 
     getUserData () {
         let that = this
-        return new Promise(function(resolve) {
+        return new Promise(function(resolve, reject) {
             that.show(null, '/alaa/api/v2/getUserFor3a')
                 .then( (response) => {
                     that = new User(response.data.data)
                     resolve()
                 })
                 .catch( (error) => {
-                    throw new Error(error)
+                    Assistant.reportErrors('models/User.js -> getUserData()')
+                    reject(error)
                 })
         })
     }
@@ -125,7 +126,7 @@ class User extends Model {
 
     getUserExams () {
         let that = this
-        return new Promise(function(resolve) {
+        return new Promise(function(resolve, reject) {
             that.exams.fetch(null, '/3a/api/examAndUser')
                 .then((response) => {
                     let exams = response.data.data.exams
@@ -137,14 +138,15 @@ class User extends Model {
                     resolve(that.exams)
                 })
                 .catch( (error) => {
-                    throw new Error(error)
+                    Assistant.reportErrors('models/User.js -> getUserExams()')
+                    reject(error)
                 })
         })
     }
 
     registerExam (exam_id) {
         let that = this
-        return new Promise(function(resolve) {
+        return new Promise(function(resolve, reject) {
             that.create({
                 exam_id
             }, '/3a/api/user/registerExam')
@@ -152,7 +154,8 @@ class User extends Model {
                     resolve(response)
                 })
                 .catch( (error) => {
-                    throw new Error(error)
+                    Assistant.reportErrors('models/User.js -> registerExam()')
+                    reject(error)
                 })
         })
     }
@@ -190,7 +193,7 @@ class User extends Model {
 
     participateExam (exam_id) {
         let that = this
-        return new Promise(function(resolve) {
+        return new Promise(function(resolve, reject) {
             that.create({
                 exam_id
             }, '/3a/api/exam-user')
@@ -202,11 +205,13 @@ class User extends Model {
                             resolve({response, userExamForParticipate, data})
                         })
                         .catch( (error) => {
-                            throw new Error(error)
+                            Assistant.reportErrors('models/User.js -> participateExam() -> exam-user.create.catch')
+                            reject(error)
                         })
                 })
                 .catch( (error) => {
-                    throw new Error(error)
+                    Assistant.reportErrors('models/User.js -> participateExam() -> exam-user.create.catch')
+                    reject(error)
                 })
         })
     }

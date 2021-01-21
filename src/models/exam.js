@@ -56,7 +56,7 @@ class Exam extends Model {
 
     loadQuestionsFromFile () {
         let that = this
-        return new Promise(function(resolve) {
+        return new Promise(function(resolve, reject) {
             // axios.get(that.questions_file_url)
             //     .then( (response) => {
             //         // console.log('response.data', data)
@@ -68,7 +68,7 @@ class Exam extends Model {
             //     })
 
             if (!that.questions_file_url) {
-                throw new Error({location: 'models/exam.js -> loadQuestionsFromFile()', message: "can't get exam file"})
+                reject(null)
             }
 
             $.ajax({
@@ -81,8 +81,9 @@ class Exam extends Model {
                         resolve(data)
                     },
                     error: function (jqXHR, textStatus, errorThrown) {
+                        Assistant.reportErrors('exam.js -> loadQuestionsFromFile() -> $.ajax.error', "can't get exam file", {jqXHR, textStatus, errorThrown})
                         Assistant.handleAxiosError("can't get exam file")
-                        throw new Error({jqXHR, textStatus, errorThrown})
+                        reject({jqXHR, textStatus, errorThrown})
                     }
                 }
             );
@@ -259,7 +260,7 @@ class Exam extends Model {
 
     getAnswerOfUserInResultPage () {
         let that = this
-        return new Promise(function(resolve) {
+        return new Promise(function(resolve, reject) {
             axios.get('/3a/api/temp-exam/answer/'+that.user_exam_id+'/withCorrect')
                 .then( (response) => {
                     const questions_file_url = response.data.data.exam.questions_file_url
@@ -272,12 +273,13 @@ class Exam extends Model {
                             that.mergeDbAnswerToLocalstorage(answers)
                             resolve()
                         })
-                        .catch( (error) => {
-                            throw new Error(error)
+                        .catch( ({jqXHR, textStatus, errorThrown}) => {
+                            reject({jqXHR, textStatus, errorThrown})
                         })
                 })
-                .catch( (error) => {
-                    throw new Error(error)
+                .catch( () => {
+                    Assistant.reportErrors('exam.js -> getAnswerOfUserInResultPage() -> axios.get.catch')
+                    reject(null)
                 })
         })
     }
