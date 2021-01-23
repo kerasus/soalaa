@@ -85,18 +85,11 @@ let Time = function () {
             for (const questionId in questions) {
                 questions[questionId].in_active_category = true
             }
-            // quiz.questions.list.forEach( (item, index) => {
-            //     quiz.questions.list[index].in_active_category = true
-            // })
             return
         }
         for (const questionId in questions) {
             questions[questionId].in_active_category = Assistant.getId(questions[questionId].sub_category.category_id) === Assistant.getId(currentActiveCategory.id);
         }
-
-        // quiz.questions.list.forEach( (item, index) => {
-        //     quiz.questions.list[index].in_active_category = Assistant.getId(item.sub_category.category_id) === Assistant.getId(currentActiveCategory.id);
-        // })
     }
 
     return {
