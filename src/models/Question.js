@@ -127,6 +127,20 @@ class Question extends Model {
         this.checking_times.addEnd()
     }
 
+    setTrueChoice (choiceId) {
+        this.choices.list.map((item)=> {
+            if (item.id === choiceId) {
+                item.answer = true
+                Vue.set(item, 'answer', true)
+            } else {
+                item.answer = false
+                Vue.set(item, 'answer', false)
+            }
+
+            return item
+        })
+    }
+
     selectChoice (choiceId, selected_at) {
         let answeredAt = Time.now()
         if (selected_at) {
@@ -229,6 +243,10 @@ class QuestionList extends Collection {
         let currentIndex = this.getQuestionIndexById(questionId),
             prevIndex = --currentIndex
         return this.getQuestionByIndex(prevIndex)
+    }
+
+    getFirstActiveQuestion () {
+        return this.list.find( (item) => !!(item.in_active_category))
     }
 
     // turnIsInViewToFalse (startExceptionIndex, endExceptionIndex) {

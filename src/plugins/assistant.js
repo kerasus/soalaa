@@ -56,8 +56,42 @@ let Assistant = function () {
         })
     }
 
+    function reportErrors(error) {
+        const location = error.location,
+            message = error.message,
+            data = error.data
+        // console.group();
+        console.groupCollapsed();
+        // console.table(data);
+        // console.count();
+
+
+
+        // console.group();
+        // console.time();
+        // ...
+        // console.timeEnd();
+        // console.groupEnd();
+
+
+
+        if (location) {
+            console.error('locationCode', location);
+        }
+        if (message) {
+            console.error('message', message);
+        }
+        if (data) {
+            console.error('data', data);
+        }
+
+        console.trace();
+        console.groupEnd();
+    }
+
     return {
         getId,
+        reportErrors,
         handleAxiosError
     };
 }();

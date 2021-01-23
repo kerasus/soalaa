@@ -25,6 +25,7 @@ class Exam extends Model {
             { key: 'user_exam_id' },
             { key: 'user_exam_status' },
             { key: 'questions_file_url' },
+            { key: 'accept_at_is_passed' },
             { key: 'total_question_number' },
 
             {
@@ -80,6 +81,7 @@ class Exam extends Model {
                         resolve(data)
                     },
                     error: function (jqXHR, textStatus, errorThrown) {
+                        Assistant.reportErrors('exam.js -> loadQuestionsFromFile() -> $.ajax.error', "can't get exam file", {jqXHR, textStatus, errorThrown})
                         Assistant.handleAxiosError("can't get exam file")
                         reject({jqXHR, textStatus, errorThrown})
                     }
@@ -257,7 +259,29 @@ class Exam extends Model {
     }
 
     getAnswerOfUserInResultPage () {
-        return axios.get('/3a/api/temp-exam/answer/'+this.user_exam_id)
+        let that = this
+        return new Promise(function(resolve, reject) {
+            axios.get('/3a/api/temp-exam/answer/'+that.user_exam_id+'/withCorrect')
+                .then( (response) => {
+                    const questions_file_url = response.data.data.exam.questions_file_url
+                    const examTitle = response.data.data.exam.title
+                    const answers = response.data.data.answers
+                    that.questions_file_url = questions_file_url
+                    that.title = examTitle
+                    that.loadQuestionsFromFile()
+                        .then( () => {
+                            that.mergeDbAnswerToLocalstorage(answers)
+                            resolve()
+                        })
+                        .catch( ({jqXHR, textStatus, errorThrown}) => {
+                            reject({jqXHR, textStatus, errorThrown})
+                        })
+                })
+                .catch( () => {
+                    Assistant.reportErrors('exam.js -> getAnswerOfUserInResultPage() -> axios.get.catch')
+                    reject(null)
+                })
+        })
     }
 
 }

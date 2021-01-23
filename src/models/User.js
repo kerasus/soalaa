@@ -4,7 +4,7 @@ import Time from "@/plugins/time";
 import Assistant from "@/plugins/assistant";
 import {QuestCategoryList} from "@/models/QuestCategory";
 import {QuestSubcategoryList} from "@/models/QuestSubcategory";
-
+// import axios from "axios";
 
 class User extends Model {
     constructor(data) {
@@ -21,6 +21,9 @@ class User extends Model {
             },
             {
                 key: 'last_name',
+            },
+            {
+                key: 'mobile',
             },
             {
                 key: 'province',
@@ -88,6 +91,21 @@ class User extends Model {
         exam.user_exam_status = status
     }
 
+    getUserData () {
+        let that = this
+        return new Promise(function(resolve, reject) {
+            that.show(null, '/alaa/api/v2/getUserFor3a')
+                .then( (response) => {
+                    that = new User(response.data.data)
+                    resolve()
+                })
+                .catch( (error) => {
+                    Assistant.reportErrors('models/User.js -> getUserData()')
+                    reject(error)
+                })
+        })
+    }
+
     loadUserExams (exams, userExams) {
         exams.forEach( (examItem) => {
             let userExam = userExams.find( (userExamItem) => {
@@ -120,6 +138,7 @@ class User extends Model {
                     resolve(that.exams)
                 })
                 .catch( (error) => {
+                    Assistant.reportErrors('models/User.js -> getUserExams()')
                     reject(error)
                 })
         })
@@ -135,6 +154,7 @@ class User extends Model {
                     resolve(response)
                 })
                 .catch( (error) => {
+                    Assistant.reportErrors('models/User.js -> registerExam()')
                     reject(error)
                 })
         })
@@ -179,22 +199,18 @@ class User extends Model {
             }, '/3a/api/exam-user')
                 .then((response) => {
                     let userExamForParticipate = new Exam()
-                    // let userExamId = Assistant.getId(response.data.data.id)
                     that.loadExamForParticipate(response, userExamForParticipate)
-                    // let userExam = that.getUsrExamByExamId(userExamId)
-                    // if (!userExam) {
-                    //     userExam = new Exam()
-                    // }
-
                     userExamForParticipate.loadQuestionsFromFile()
                         .then( (data) => {
                             resolve({response, userExamForParticipate, data})
                         })
                         .catch( (error) => {
+                            Assistant.reportErrors('models/User.js -> participateExam() -> exam-user.create.catch')
                             reject(error)
                         })
                 })
                 .catch( (error) => {
+                    Assistant.reportErrors('models/User.js -> participateExam() -> exam-user.create.catch')
                     reject(error)
                 })
         })

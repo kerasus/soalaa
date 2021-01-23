@@ -1,8 +1,6 @@
 <template>
     <div >
-<!--        <div class="d-flex justify-center">-->
-<!--            <info/>-->
-<!--        </div>-->
+        <coming-soon/>
         <div class="d-flex justify-center">
             <v-col>
                 <v-row class=" d-flex justify-center">
@@ -22,8 +20,10 @@
 <script>
     // import Info from "@/components/OnlineQuiz/Quiz/resultTables/info";
 
+    import ComingSoon from "@/components/ComingSoon";
     export default {
         name: "statisticResult",
+        components: {ComingSoon},
         // components: {Info},
         data() {
             return {

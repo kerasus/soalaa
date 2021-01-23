@@ -1,5 +1,13 @@
 <template>
     <div :class=" { 'bubble-sheet': true, 'questions-list': true, 'pasokh-nameh': info.type === 'pasokh-nameh', 'pasokh-barg': info.type === 'pasokh-barg' }">
+
+        <v-overlay
+                :absolute="true"
+                :opacity="0.9"
+                :value="overlay"
+        >
+            در حال ساخت پاسخبرگ
+        </v-overlay>
         <div v-for="(group, index) in questionsInGroups" :key="index" class="question-group">
             <div v-for="question in group" :key="question.id" class="question-in-list">
                 <div
@@ -30,6 +38,7 @@
 <script>
     import $ from "jquery";
     import { mixinQuiz } from "@/mixin/Mixins";
+    // import {Exam} from "@/models/exam";
 
     export default {
         name: 'BubbleSheet',
@@ -39,11 +48,12 @@
                 let groups = [],
                 chunk = 10
                 let array
-                if (this.exam.list.length > 0) {
-                    array = this.exam
-                } else {
-                    array = this.quiz.questions.list
-                }
+                // if (this.exam.questions.list.length > 0) {
+                //     array = this.exam.questions.list
+                // } else {
+                //     array = this.quiz.questions.list
+                // }
+                array = this.quiz.questions.list
                 for (let i=0,j=array.length; i<j; i+=chunk) {
                     groups.push(array.slice(i,i+chunk))
                 }
@@ -51,6 +61,9 @@
             }
         },
         props: ['info', 'exam'],
+        data: () => ({
+            overlay: false,
+        }),
         methods: {
             clickChoice (questionId, choiceId) {
                 this.$emit('clickChoice', questionId, choiceId)
@@ -73,8 +86,15 @@
                 return (boxSize - (verticalGroupAmounts * 140)) / 2 + 5
             }
         },
+        created() {
+            this.overlay = true
+        },
         mounted () {
-            setTimeout(() => { $('.questions-list').height(this.questionListHeight()) }, 3000)
+            let that = this
+            setTimeout(() => {
+                $('.questions-list').height(this.questionListHeight())
+                that.overlay = false
+            }, 3000)
         },
         'windowSize.x': function () {
             // const padding = this.questionListPadding()
@@ -86,6 +106,10 @@
 </script>
 
 <style scoped>
+    .v-overlay {
+        align-items: flex-start;
+        padding-top: 100px;
+    }
     .pasokh-nameh .choice-in-list {
         position: relative;
         cursor: auto;

@@ -34,7 +34,7 @@
                             target="_blank"
                             v-on="on"
                     >
-                        <v-img src="https://cdn.alaatv.com/upload/footer-alaaLogo.png?w=30&h=40" width="20" />
+                        <v-img src="img/alaa-logo.png" width="50" />
                     </v-btn>
                 </template>
                 <span>آموزش مجازی آلاء</span>
@@ -76,7 +76,6 @@
 
 <script>
     import axios from 'axios'
-    import Assistant from "@/plugins/assistant";
     import {User} from "@/models/User";
 
     export default {
@@ -90,33 +89,20 @@
             }
         },
         created() {
-            this.getUserData()
-            if (!this.isLogin) {
-                this.getUserData()
-                // this.getGandDataOfUserForPermission()
-            }
+            this.getUserData(this.getToken())
         },
         methods: {
-            isLogin() {
-                let accessToken = window.localStorage.getItem('access_token')
-                return !!(accessToken)
+            getToken () {
+                return window.localStorage.getItem('access_token')
             },
-            getUserData () {
-                const token = window.localStorage.getItem('access_token')
-                if (token) {
-                    axios.defaults.headers.common['Authorization'] = 'Bearer ' + token
-                }
+            getUserData (token) {
+                axios.defaults.headers.common['Authorization'] = 'Bearer ' + token
                 let that = this
-                this.user.show(null, '/alaa/api/v2/getUserFor3a')
-                .then( (response) => {
-                    that.user = new User(response.data.data)
-                    that.$store.commit('updateUser', that.user)
-                    // axios.defaults.headers.common['Authorization'] = 'Bearer ' + response.data.data.token.access_token
-                    that.redirectTo(token)
-                })
-                .catch( (error) => {
-                    Assistant.handleAxiosError(this.$toasted, error)
-                })
+                this.user.getUserData()
+                    .then( () => {
+                        that.$store.commit('updateUser', that.user)
+                        that.redirectTo(token)
+                    })
             },
             redirectTo (access_token) {
                 let redirect_to = window.localStorage.getItem('redirect_to')
@@ -138,8 +124,7 @@
                     that.user = new User(response.data.data.user)
                     that.$store.commit('updateUser', that.user)
                     const access_token = response.data.data.access_token
-                    that.getUserData()
-                    that.redirectTo(access_token)
+                    that.getUserData(access_token)
                 })
                 .catch( () => {
                     this.loadingList = false

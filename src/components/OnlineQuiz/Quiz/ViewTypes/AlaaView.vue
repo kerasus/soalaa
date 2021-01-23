@@ -12,8 +12,8 @@
                         <v-col :md="10" class="px-md-0 px-5">
                             <v-row class="question-header">
                                 <div class="question-number">
-                                    <p>
-                                        {{ currentLessons.title }}
+                                    <p v-if="currentLesson">
+                                        {{ currentLesson.title }}
                                         -
                                         سوال شماره
                                         {{ getQuestionNumberFromId(currentQuestion.id) }}
@@ -90,6 +90,7 @@
     import Choice from '@/components/OnlineQuiz/Quiz/Choice'
     import Timer from '@/components/OnlineQuiz/Quiz/Timer/Timer'
     import { mixinQuiz, mixinDrawer, mixinWindowSize } from '@/mixin/Mixins'
+    import Assistant from "@/plugins/assistant";
 
     export default {
         name: 'AlaaView',
@@ -107,6 +108,20 @@
             this.showAppBar()
             this.updateDrawerBasedOnWindowSize()
             this.startExam()
+                .then(() => {
+                    this.loadFirstActiveQuestionIfNeed()
+                    this.$store.commit('updateOverlay', false)
+                })
+                .catch( (error) => {
+                    Assistant.reportErrors(error)
+                    this.$notify({
+                        group: 'notifs',
+                        title: 'توجه!',
+                        text: 'مشکلی در دریافت اطلاعات آژمون رخ داده است. لطفا دوباره امتحان کنید.',
+                        type: 'error'
+                    })
+                    this.$route.push({ name: 'user.exam.list'})
+                })
         },
         methods: {
             showAppBar () {
@@ -115,6 +130,16 @@
             updateDrawerBasedOnWindowSize () {
                 if (this.windowSize.x > 1263) {
                     this.$store.commit('updateDrawer', true)
+                }
+            },
+            loadFirstActiveQuestionIfNeed () {
+                if (!this.currentQuestion.in_active_category) {
+                    let firstActiveQuestion = this.quiz.questions.getFirstActiveQuestion()
+                    if (!firstActiveQuestion) {
+                        this.loadFirstQuestion()
+                    } else {
+                        this.changeQuestion(firstActiveQuestion.id)
+                    }
                 }
             }
         }
