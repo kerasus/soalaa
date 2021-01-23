@@ -69,9 +69,25 @@ const mixinQuiz = {
     setCurrentExamQuestionIndexes (currentExamQuestionIndexes) {
       window.localStorage.setItem('currentExamQuestionIndexes', JSON.stringify(currentExamQuestionIndexes))
     },
-    getCurrentExamQuestions () {
-      return JSON.parse(window.localStorage.getItem('currentExamQuestions'))
+    getCurrentExamQuestions (array) {
+      let currentExamQuestions = JSON.parse(window.localStorage.getItem('currentExamQuestions'))
+      if (!array) {
+        return currentExamQuestions
+      }
+      let currentExamQuestionsArray = []
+      for (const questionId in currentExamQuestions) {
+        currentExamQuestionsArray.push(questions[questionId])
+      }
+
+      return currentExamQuestionsArray
     },
+    // getQuestionsOfSubcategory (subcatId) {
+    //   let currentExamQuestions = this.getCurrentExamQuestions()
+    //
+    //   for (const questionId in questions) {
+    //     questions[questionId].in_active_category = Assistant.getId(questions[questionId].sub_category.category_id) === Assistant.getId(currentActiveCategory.id);
+    //   }
+    // },
     setCurrentExamQuestions (currentExamQuestions) {
       window.localStorage.setItem('currentExamQuestions', JSON.stringify(currentExamQuestions))
     },
