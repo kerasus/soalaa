@@ -1,22 +1,35 @@
+
+
 <template>
-    <BubbleSheet :info="{ type: 'pasokh-nameh' }" />
+    <div :style="{ 'max-width': '700px'}">
+        <highcharts :options="chartOptions"></highcharts>
+    </div>
 </template>
 
 <script>
-    import BubbleSheet from "@/components/OnlineQuiz/Quiz/BubbleSheet/BubbleSheet";
-    // import FakeQuizData from "@/plugins/fakeQuizData";
-    import {mixinQuiz} from "@/mixin/Mixins";
-    import {Exam} from '@/models/exam'
+
+    import {Chart} from 'highcharts-vue'
+
     export default {
         name: 'debug',
-        components: {BubbleSheet},
-        mixins: [mixinQuiz],
-        created() {
-            this.quiz = new Exam(this.quizData)
+        components: {
+            highcharts: Chart
         },
-        data () {
+        data() {
             return {
-                quizData: null
+                chartOptions: {
+                    series: [
+                        {
+                            data: [1,2,3] // sample data
+                        },
+                        {
+                            name: 'test',
+                            data: [3,1,2] // sample data
+                        }
+                    ],
+                    chart: {
+                        height: 700,
+                    },                }
             }
         }
     }
