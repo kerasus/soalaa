@@ -31,12 +31,15 @@ const mixinQuiz = {
     userQuizListData() {
       return this.$store.getters.userQuizListData
     },
+    currentExamFrozenQuestions() {
+      return this.$store.getters.currentExamFrozenQuestions
+    },
     currentQuestion: {
       get () {
         return this.$store.getters.currentQuestion
       },
       set (newInfo) {
-        this.$store.commit('updateCurrentQuestion', newInfo)
+        this.$store.commit('updateCurrentQuestion', {newQuestionId: newInfo.id, currentExamQuestions: this.getCurrentExamQuestions()})
       }
     },
     currentLesson () {
@@ -89,6 +92,8 @@ const mixinQuiz = {
           currentExamQuestionsArray.push(currentExamQuestions[questionId])
         }
       }
+
+      return currentExamQuestionsArray
     },
     setCurrentExamQuestions (currentExamQuestions) {
       window.localStorage.setItem('currentExamQuestions', JSON.stringify(currentExamQuestions))
@@ -138,17 +143,6 @@ const mixinQuiz = {
             })
       })
     },
-    saveCurrentExamQuestions (questionsList) {
-      let currentExamQuestions = {}
-      let currentExamQuestionIndexes = {}
-      questionsList.forEach( (item, index) => {
-        item.index = index
-        currentExamQuestions[item.id.toString()] = item
-        currentExamQuestionIndexes[index.toString()] = item.id
-      })
-      this.setCurrentExamQuestionIndexes(currentExamQuestionIndexes)
-      this.setCurrentExamQuestions(currentExamQuestions)
-    },
     loadExam (examDataWithQuestions, viewType) {
       let that = this
       return new Promise(function(resolve, reject) {
@@ -179,6 +173,17 @@ const mixinQuiz = {
           resolve()
         }
       })
+    },
+    saveCurrentExamQuestions (questionsList) {
+      let currentExamQuestions = {}
+      let currentExamQuestionIndexes = {}
+      questionsList.forEach( (item, index) => {
+        item.index = index
+        currentExamQuestions[item.id.toString()] = item
+        currentExamQuestionIndexes[index.toString()] = item.id
+      })
+      this.setCurrentExamQuestionIndexes(currentExamQuestionIndexes)
+      this.setCurrentExamQuestions(currentExamQuestions)
     },
     loadExamExtraData (quiz) {
       let currentExamQuestions = this.getCurrentExamQuestions()
@@ -297,6 +302,15 @@ const mixinQuiz = {
       number = parseInt(number)
       return number - 1
     },
+    getFirstActiveQuestion () {
+      let questions = this.getCurrentExamQuestions()
+      for (const questionId in questions) {
+        if (questions[questionId].in_active_category) {
+          return questions[questionId]
+        }
+      }
+      return null
+    },
     getCategoryActiveStatus (categoryId) {
       const category = this.quiz.categories.list.find((item) => Assistant.getId(item.id) === Assistant.getId(categoryId))
       return !category || category.is_active;
@@ -357,15 +371,17 @@ const mixinQuiz = {
       const questIndex = this.getQuestionIndexById(id),
           questNumber = this.getQuestionNumberFromIndex(questIndex)
 
-
       let currentQuestion = this.getCurrentExamQuestions()[id]
-      const currentQuestionCategoryActiveStatus = this.getCategoryActiveStatus(currentQuestion.sub_category.category_id)
+      let currentQuestionCategoryActiveStatus = this.getCategoryActiveStatus(currentQuestion.sub_category.category_id)
 
       if (!currentQuestionCategoryActiveStatus) {
-        return
+        currentQuestion = this.getFirstActiveQuestion()
+        if (!currentQuestion) {
+          return
+        }
       }
 
-      this.$store.commit('updateCurrentQuestion', currentQuestion)
+      this.$store.commit('updateCurrentQuestion', {newQuestionId: currentQuestion.id, currentExamQuestions: this.getCurrentExamQuestions()})
       if (parseInt(this.$route.params.questNumber) !== parseInt(questNumber) && this.$route.name !== 'onlineQuiz.konkoorView' && this.$route.name !== 'onlineQuiz.bubblesheet-view') {
         this.loadExamPageByViewType(this.quiz.id, questNumber, viewType)
       }

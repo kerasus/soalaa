@@ -66,7 +66,7 @@
             }
         },
         destroyed() {
-            clearInterval(this.interval);
+            clearInterval(this.interval)
         },
         created() {
             let today = new Date()

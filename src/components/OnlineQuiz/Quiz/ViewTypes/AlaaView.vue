@@ -134,7 +134,6 @@
                 }
             },
             loadFirstActiveQuestionIfNeed () {
-                console.log('loadFirstActiveQuestionIfNeed->changeQuestion')
                 if (!this.currentQuestion.in_active_category) {
                     let firstActiveQuestion = this.quiz.questions.getFirstActiveQuestion()
                     if (!firstActiveQuestion) {
@@ -142,6 +141,14 @@
                     } else {
                         this.changeQuestion(firstActiveQuestion.id)
                     }
+                }
+            },
+            loadFirstActiveQuestion () {
+                let firstActiveQuestion = this.quiz.questions.getFirstActiveQuestion()
+                if (!firstActiveQuestion) {
+                    this.loadFirstQuestion()
+                } else {
+                    this.changeQuestion(firstActiveQuestion.id)
                 }
             }
         }

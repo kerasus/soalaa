@@ -37,6 +37,7 @@ const store = new Vuex.Store({
         userQuizListData: [],
         accessToken: null,
         currentQuestion: null,
+        currentExamFrozenQuestions: null,
         appbar: true,
         overlay: false
         // quizList: []
@@ -204,15 +205,17 @@ const store = new Vuex.Store({
             }
         },
         updateCurrentQuestion (state, newInfo) {
-            this.commit('reloadQuizModel')
-            this.commit('reloadCurrentQuestionModel')
+            // this.commit('reloadQuizModel')
+            // this.commit('reloadCurrentQuestionModel')
             // set checking time
-            const oldQuestionId = Assistant.getId(state.currentQuestion.id)
-            const newQuestionId = Assistant.getId(newInfo.id)
+
+            const oldQuestionId = (!state.currentQuestion) ? false : Assistant.getId(state.currentQuestion.id)
+            const newQuestionId = Assistant.getId(newInfo.newQuestionId)
             if (newQuestionId === oldQuestionId || !Assistant.getId(state.quiz.id)) {
                 return
             }
-            const currentExamQuestions = JSON.parse(window.localStorage.getItem('currentExamQuestions'))
+            const currentExamQuestions = newInfo.currentExamQuestions
+
             const currentQuestion = currentExamQuestions[newQuestionId]
             // ToDo: check in comment
             // if (newQuestionId) {
@@ -309,6 +312,9 @@ const store = new Vuex.Store({
         },
         updateOverlay (state, newInfo) {
             state.overlay = newInfo
+        },
+        updateCurrentExamFrozenQuestions (state, newInfo) {
+            state.currentExamFrozenQuestions = newInfo
         }
     },
     getters: {
@@ -317,6 +323,9 @@ const store = new Vuex.Store({
         },
         quiz (state) {
             return new Exam(state.quiz)
+        },
+        currentExamFrozenQuestions (state) {
+            return state.currentExamFrozenQuestions
         },
         accessToken (state) {
             return state.accessToken
