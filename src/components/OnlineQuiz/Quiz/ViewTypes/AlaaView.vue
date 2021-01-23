@@ -11,7 +11,7 @@
                         </v-col>
                         <v-col :md="10" class="px-md-0 px-5">
                             <v-row class="question-header">
-                                <div class="question-number">
+                                <div class="question-number" v-if="false">
                                     <p v-if="currentLesson">
                                         {{ currentLesson.title }}
                                         -
