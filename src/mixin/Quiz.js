@@ -276,8 +276,9 @@ const mixinQuiz = {
       if (this.currentQuestion.id !== question.id) {
         this.currentQuestion = question
       }
-      let oldStatus = this.userQuizListData[this.quiz.id][question.id].status
-      if (newState === oldStatus) {
+      let oldQuestion = this.userQuizListData[this.quiz.id][question.id]
+      let oldStatus = (!oldQuestion) ? false : oldQuestion.status
+      if (oldQuestion && newState === oldStatus) {
         newState = ''
       } else if (newState === 'x') {
         this.$store.commit('changeQuestion_SelectChoice', {exam_id: this.quiz.id, question_id: question.id, answered_choice_id: null})
