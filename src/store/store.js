@@ -98,9 +98,30 @@ const store = new Vuex.Store({
                     answered_at: item.selected_at,
                     answered_choice_id: item.choice_id,
                     bookmarked: item.bookmark,
-                    state: item.status
+                    status: item.status
                 }
             })
+        },
+        changeQuestion_Bookmark (state, payload) {
+            let examId = payload.exam_id
+            let questionId = payload.question_id
+            state.userQuizListData[examId][questionId].bookmarked = payload.bookmarked
+        },
+        changeQuestion_SelectChoice (state, payload) {
+            let examId = payload.exam_id
+            let questionId = payload.question_id
+            let answeredAt = Time.now()
+            if (payload.selected_at) {
+                answeredAt = payload.selected_at
+            }
+
+            state.userQuizListData[examId][questionId].answered_at = answeredAt
+            state.userQuizListData[examId][questionId].answered_choice_id = payload.choice_id
+        },
+        changeQuestion_Status (state, payload) {
+            let examId = payload.exam_id
+            let questionId = payload.question_id
+            state.userQuizListData[examId][questionId].status = payload.status
         },
         setUserQuizListData (state, payload) {
 

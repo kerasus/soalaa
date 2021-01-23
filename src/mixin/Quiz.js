@@ -251,35 +251,38 @@ const mixinQuiz = {
       }
     },
     answerClicked (data) {
-      this.quiz.questions.getQuestionById(data.questionId).selectChoice(data.choiceId)
-      this.currentQuestion.selectChoice(data.choiceId)
-      this.$store.commit('updateQuiz', this.quiz)
-      this.$store.commit('setCurrentQuestion', this.currentQuestion)
-      this.$store.commit('refreshUserQuizListData')
+      let oldStatus = this.userQuizListData[this.quiz.id][this.currentQuestion.id].status
+      let oldAnswered_choice_id = this.userQuizListData[this.quiz.id][this.currentQuestion.id].answered_choice_id
+      let newAnswered_choice_id = data.choiceId
+      if (oldAnswered_choice_id === newAnswered_choice_id) {
+        newAnswered_choice_id = null
+      } else if (oldStatus === 'x') {
+        let newState = ''
+        this.$store.commit('changeQuestion_Status', {exam_id: this.quiz.id, question_id: this.currentQuestion.id, status: newState})
+      }
+      this.$store.commit('changeQuestion_SelectChoice', {exam_id: this.quiz.id, question_id: this.currentQuestion.id, answered_choice_id: newAnswered_choice_id})
       this.sendQuestionData({question_id: data.questionId, choice_id: data.choiceId}, 'sendAnswer')
     },
     bookmark (question) {
       if (this.currentQuestion.id !== question.id) {
         this.currentQuestion = question
       }
-      this.$store.commit('reloadQuizModel')
-      this.quiz.questions.getQuestionById(this.currentQuestion.id).bookmark()
-      this.$store.commit('updateQuiz', this.quiz)
-      this.currentQuestion.bookmark()
-      this.$store.commit('setCurrentQuestion', this.currentQuestion)
-      this.$store.commit('refreshUserQuizListData')
-      this.sendQuestionData({ exam_user_id: this.quiz.user_exam_id, questionId: question.id, bookmarked: this.currentQuestion.bookmarked}, 'sendBookmark')
+      let oldBookmarked = this.userQuizListData[this.quiz.id][question.id].bookmarked
+      let newBookmark = !(oldBookmarked)
+      this.$store.commit('changeQuestion_Bookmark', {exam_id: this.quiz.id, question_id: question.id, bookmarked: newBookmark})
+      this.sendQuestionData({ exam_user_id: this.quiz.user_exam_id, questionId: question.id, bookmarked: newBookmark}, 'sendBookmark')
     },
     changeState (question, newState) {
       if (this.currentQuestion.id !== question.id) {
         this.currentQuestion = question
       }
-      this.$store.commit('reloadQuizModel')
-      this.quiz.questions.getQuestionById(this.currentQuestion.id).changeState(newState)
-      this.$store.commit('updateQuiz', this.quiz)
-      this.currentQuestion.changeState(newState)
-      this.$store.commit('setCurrentQuestion', this.currentQuestion)
-      this.$store.commit('refreshUserQuizListData')
+      let oldStatus = this.userQuizListData[this.quiz.id][question.id].status
+      if (newState === oldStatus) {
+        newState = ''
+      } else if (newState === 'x') {
+        this.$store.commit('changeQuestion_SelectChoice', {exam_id: this.quiz.id, question_id: question.id, answered_choice_id: null})
+      }
+      this.$store.commit('changeQuestion_Status', {exam_id: this.quiz.id, question_id: question.id, status: newState})
       this.sendQuestionData({ exam_user_id: this.quiz.user_exam_id, question_id: question.id, status: this.currentQuestion.state }, 'sendStatus')
     },
     needToLoadQuiaData () {
