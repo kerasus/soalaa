@@ -20,9 +20,8 @@
                         {{ subcategoryItem.title }}
                     </v-expansion-panel-header>
                     <v-expansion-panel-content>
-                        <div v-for="(question, questionIndex) in quiz.questions.list" :key="'question-'+question.id">
-                            <v-btn v-if="question.sub_category.id === subcategoryItem.id"
-                                   :class="{ active: currentQuestion.id === question.id }"
+                        <div v-for="(question, questionIndex) in getQuestionsOfSubcategory(subcategoryItem.id)" :key="'question-'+question.id">
+                            <v-btn :class="{ active: currentQuestion.id === question.id }"
                                    :elevation="0"
                                    @click="changeQuestion(question.id)"
                                    block
