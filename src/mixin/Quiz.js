@@ -76,18 +76,20 @@ const mixinQuiz = {
       }
       let currentExamQuestionsArray = []
       for (const questionId in currentExamQuestions) {
-        currentExamQuestionsArray.push(questions[questionId])
+        currentExamQuestionsArray.push(currentExamQuestions[questionId])
       }
 
       return currentExamQuestionsArray
     },
-    // getQuestionsOfSubcategory (subcatId) {
-    //   let currentExamQuestions = this.getCurrentExamQuestions()
-    //
-    //   for (const questionId in questions) {
-    //     questions[questionId].in_active_category = Assistant.getId(questions[questionId].sub_category.category_id) === Assistant.getId(currentActiveCategory.id);
-    //   }
-    // },
+    getQuestionsOfSubcategory (subcatId) {
+      let currentExamQuestions = this.getCurrentExamQuestions()
+      let currentExamQuestionsArray = []
+      for (const questionId in currentExamQuestions) {
+        if (Assistant.getId(currentExamQuestions[questionId].sub_category.id) === Assistant.getId(subcatId)) {
+          currentExamQuestionsArray.push(currentExamQuestions[questionId])
+        }
+      }
+    },
     setCurrentExamQuestions (currentExamQuestions) {
       window.localStorage.setItem('currentExamQuestions', JSON.stringify(currentExamQuestions))
     },
