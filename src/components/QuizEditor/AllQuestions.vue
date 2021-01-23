@@ -114,7 +114,7 @@
     import Item from './Question'
     import { mixinQuiz, mixinWindowSize } from '@/mixin/Mixins'
     import BubbleSheet from "@/components/OnlineQuiz/Quiz/BubbleSheet/BubbleSheet";
-    import {Quiz, QuizList} from "@/models/Quiz";
+    import {Exam, ExamList} from '@/models/exam'
     import {QuestionList} from "@/models/Question";
     import Assistant from "@/plugins/assistant";
     Vue.component('DynamicScroller', DynamicScroller)
@@ -132,7 +132,7 @@
         },
         data () {
             return {
-                quizData: new Quiz(),
+                quizData: new Exam(),
                 item: Item,
                 lastTimeScrollRange: { start: 0, end: 29 },
                 quizList: []
@@ -166,11 +166,11 @@
             this.quizData.show(null, url)
                 .then((response) => {
                     this.quizData.questions = new QuestionList(response.data.data)
-                    this.quiz = new Quiz(this.quizData)
+                    this.quiz = new Exam(this.quizData)
 
                 })
-            new QuizList().fetch().then((response) => {
-                this.quizList = new QuizList(response.data.data)
+            new ExamList().fetch().then((response) => {
+                this.quizList = new ExamList(response.data.data)
             }).catch((error) => {
                 Assistant.handleAxiosError(this.$toasted, error)
             })

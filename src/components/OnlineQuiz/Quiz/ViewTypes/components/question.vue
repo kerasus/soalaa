@@ -81,6 +81,7 @@
                 this.source.onIntersect(entries)
             },
             choiceClicked (questionId, choiceId) {
+                console.log('loadFirstActiveQuestionIfNeed->choiceClicked')
                 this.changeQuestion(questionId)
                 this.answerClicked({questionId, choiceId})
             },

@@ -6,13 +6,13 @@
     import BubbleSheet from "@/components/OnlineQuiz/Quiz/BubbleSheet/BubbleSheet";
     // import FakeQuizData from "@/plugins/fakeQuizData";
     import {mixinQuiz} from "@/mixin/Mixins";
-    import {Quiz} from "@/models/Quiz";
+    import {Exam} from '@/models/exam'
     export default {
         name: 'debug',
         components: {BubbleSheet},
         mixins: [mixinQuiz],
         created() {
-            this.quiz = new Quiz(this.quizData)
+            this.quiz = new Exam(this.quizData)
         },
         data () {
             return {

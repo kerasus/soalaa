@@ -13,7 +13,7 @@
 <!--                              class="questionss"-->
 <!--                />-->
                 <DynamicScroller
-                    :items="this.quiz.questions.list"
+                    :items="quiz.questions.list"
                     :min-item-size="70"
                     class="scroller questionss"
                     ref="scroller"
@@ -139,7 +139,7 @@ import Item from './components/question'
 import { mixinQuiz, mixinWindowSize } from '@/mixin/Mixins'
 import Timer from '@/components/OnlineQuiz/Quiz/Timer/Timer'
 import BubbleSheet from "@/components/OnlineQuiz/Quiz/BubbleSheet/BubbleSheet";
-import {Quiz} from "@/models/Quiz";
+import {Exam} from "@/models/exam";
 // Vue.component('DynamicScroller', DynamicScroller)
 // Vue.component('DynamicScrollerItem', DynamicScrollerItem)
 // var md = require('markdown-it')(),
@@ -159,7 +159,7 @@ export default {
     },
     data () {
         return {
-            quizData: new Quiz(),
+            quizData: new Exam(),
             item: Item,
             lastTimeScrollRange: { start: 0, end: 29 },
             scrollState: 'not scrolling',
@@ -252,6 +252,7 @@ export default {
         //     return ''
         // },
         choiceClicked (questionId, choiceId) {
+            console.log('loadFirstActiveQuestionIfNeed->choiceClicked')
             this.scrollTo(questionId)
             this.changeQuestion(questionId)
             this.answerClicked({questionId, choiceId})
@@ -273,6 +274,7 @@ export default {
         this.changeAppBarAndDrawer(false)
     },
     created () {
+        console.log('konkoor view created')
         // this.quizData.show(this.$route.params.quizId).then((response) => {
         // }).catch((error) => {
         // })

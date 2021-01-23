@@ -49,14 +49,18 @@ let Time = function () {
         categories.list.forEach( (category, index, categories) => {
             const prevCat = categories[index - 1]
             const lastCat = categories[categories.length - 1]
+            const lastCatAcceptAtPassedTime = (!lastCat) ? -1 : getPassedTime(lastCat.accept_at, false)
+            const prevCatAcceptAtRemainTime = (!prevCat) ? -1 : getRemainTime(prevCat.accept_at, false)
+            const categoryAcceptAtRemainTime = (!category) ? -1 : getRemainTime(category.accept_at, false)
+            const categoryAcceptAtPassedTime = (!category) ? -1 : getPassedTime(category.accept_at, false)
 
-            if (lastCat && getPassedTime(lastCat.accept_at, false) > 0) {
+            if (lastCat && lastCatAcceptAtPassedTime > 0) {
                 category.is_active = true
-            } else if (prevCat && getRemainTime(prevCat.accept_at, false) > 0) {
+            } else if (prevCat && prevCatAcceptAtRemainTime > 0) {
                 category.is_active = false
-            } else if (getRemainTime(category.accept_at, false) > 0) {
+            } else if (categoryAcceptAtRemainTime > 0) {
                 category.is_active = true
-            } else if (getPassedTime(category.accept_at, false) > 0) {
+            } else if (categoryAcceptAtPassedTime > 0) {
                 category.is_active = false
             }
 
@@ -75,17 +79,24 @@ let Time = function () {
         }
     }
 
-    function setStateOfQuestionsBasedOnActiveCategory(quiz) {
+    function setStateOfQuestionsBasedOnActiveCategory(quiz, questions) {
         const currentActiveCategory = getCurrentCategoryAcceptAt(quiz.categories)
         if (!currentActiveCategory) {
-            quiz.questions.list.forEach( (item, index) => {
-                quiz.questions.list[index].in_active_category = true
-            })
+            for (const questionId in questions) {
+                questions[questionId].in_active_category = true
+            }
+            // quiz.questions.list.forEach( (item, index) => {
+            //     quiz.questions.list[index].in_active_category = true
+            // })
             return
         }
-        quiz.questions.list.forEach( (item, index) => {
-            quiz.questions.list[index].in_active_category = Assistant.getId(item.sub_category.category_id) === Assistant.getId(currentActiveCategory.id);
-        })
+        for (const questionId in questions) {
+            questions[questionId].in_active_category = Assistant.getId(questions[questionId].sub_category.category_id) === Assistant.getId(currentActiveCategory.id);
+        }
+
+        // quiz.questions.list.forEach( (item, index) => {
+        //     quiz.questions.list[index].in_active_category = Assistant.getId(item.sub_category.category_id) === Assistant.getId(currentActiveCategory.id);
+        // })
     }
 
     return {
