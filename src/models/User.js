@@ -100,7 +100,7 @@ class User extends Model {
                     resolve()
                 })
                 .catch( (error) => {
-                    Assistant.reportErrors('models/User.js -> getUserData()')
+                    Assistant.reportErrors({location: 'models/User.js -> getUserData()'})
                     reject(error)
                 })
         })
@@ -138,7 +138,7 @@ class User extends Model {
                     resolve(that.exams)
                 })
                 .catch( (error) => {
-                    Assistant.reportErrors('models/User.js -> getUserExams()')
+                    Assistant.reportErrors({location: 'models/User.js -> getUserExams()'})
                     reject(error)
                 })
         })
@@ -154,7 +154,7 @@ class User extends Model {
                     resolve(response)
                 })
                 .catch( (error) => {
-                    Assistant.reportErrors('models/User.js -> registerExam()')
+                    Assistant.reportErrors({location: 'models/User.js -> registerExam()'})
                     reject(error)
                 })
         })
@@ -205,12 +205,12 @@ class User extends Model {
                             resolve({response, userExamForParticipate, data})
                         })
                         .catch( (error) => {
-                            Assistant.reportErrors('models/User.js -> participateExam() -> exam-user.create.catch')
+                            Assistant.reportErrors({location: 'models/User.js -> participateExam() -> exam-user.create.catch'})
                             reject(error)
                         })
                 })
                 .catch( (error) => {
-                    Assistant.reportErrors('models/User.js -> participateExam() -> exam-user.create.catch')
+                    Assistant.reportErrors({location: 'models/User.js -> participateExam() -> exam-user.create.catch'})
                     reject(error)
                 })
         })

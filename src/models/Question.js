@@ -18,6 +18,7 @@ class Question extends Model {
             { key: 'id' },
             { key: '_id' },
             { key: 'title' },
+            { key: 'index' },
             { key: 'statement' },
             { key: 'rendered_statement' },
             { key: 'in_active_category' },
@@ -210,39 +211,12 @@ class QuestionList extends Collection {
         return this.sortByKey('order');
     }
 
-    getQuestionIndexById (questionId) {
-        return this.list.findIndex(
-            (item)=>
-                questionId !== null && (item.id).toString() === (questionId).toString()
-        )
-    }
 
     getQuestionById (questionId) {
         return this.list.find(
             (item)=>
                 questionId !== null && (item.id).toString() === (questionId).toString()
         )
-    }
-
-    getQuestionByIndex (questionIndex) {
-        let question = this.list[questionIndex]
-        if (question) {
-            return question
-        } else {
-            return false
-        }
-    }
-
-    getNextQuestion (questionId) {
-        let currentIndex = this.getQuestionIndexById(questionId),
-            nextIndex = ++currentIndex
-        return this.getQuestionByIndex(nextIndex)
-    }
-
-    getPrevQuestion (questionId) {
-        let currentIndex = this.getQuestionIndexById(questionId),
-            prevIndex = --currentIndex
-        return this.getQuestionByIndex(prevIndex)
     }
 
     getFirstActiveQuestion () {

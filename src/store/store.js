@@ -1,12 +1,13 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-import {Question} from '@/models/Question'
+import {Question, QuestionList} from '@/models/Question'
 import createPersistedState from 'vuex-persistedstate'
 // import createMutationsSharer from 'vuex-shared-mutations'
 import Assistant from '@/plugins/assistant'
 import {User} from '@/models/User'
 import { Exam } from "@/models/exam";
 import Time from "@/plugins/time";
+// import {UserExamData} from "@/models/UserExamData";
 
 Vue.use(Vuex)
 
@@ -49,7 +50,7 @@ const store = new Vuex.Store({
             state.quiz = null
             state.accessToken = null
             state.currentQuestion = null
-            state.userQuizListData = []
+            state.userQuizListData = {}
             window.localStorage.setItem('access_token', '')
             // window.localStorage.setItem('user', '')
             // window.localStorage.setItem('vuex', '')
@@ -71,8 +72,78 @@ const store = new Vuex.Store({
             window.localStorage.setItem('user', JSON.stringify(newInfo))
             state.user = newInfo
         },
-        setUserQuizListData (state, newInfo) {
-            state.userQuizListData = newInfo
+        mergeDbAnswersIntoLocalstorage (state, payload) {
+            let dbAnswers = payload.dbAnswers
+            let examId = Assistant.getId(payload.exam_id)
+
+            if (!examId) {
+                return
+            }
+            if (!state.userQuizListData[examId]) {
+                state.userQuizListData[examId] = {}
+            }
+
+            dbAnswers.forEach( (item) => {
+                let questionId = Assistant.getId(item.question_id)
+
+                if (!questionId) {
+                    return
+                }
+                if (!state.userQuizListData[examId][questionId]) {
+                    state.userQuizListData[examId][questionId] = {}
+                }
+
+                state.userQuizListData[examId][questionId] = {
+                    answered_at: item.selected_at,
+                    answered_choice_id: item.choice_id,
+                    bookmarked: item.bookmark,
+                    state: item.status
+                }
+            })
+        },
+        setUserQuizListData (state, payload) {
+
+            let examId = Assistant.getId(payload.exam_id)
+            let questionId = Assistant.getId(payload.question_id)
+
+            if (!examId || !questionId) {
+                return
+            }
+
+            if (!state.userQuizListData[examId]) {
+                state.userQuizListData[examId] = {}
+            }
+            if (!state.userQuizListData[examId][questionId]) {
+                state.userQuizListData[examId][questionId] = {}
+            }
+
+            state.userQuizListData[examId][questionId] = {
+                answered_at: payload.answered_at,
+                answered_choice_id: payload.answered_choice_id,
+                checking_times: payload.checking_times,
+                bookmarked: payload.bookmarked,
+                state: payload.state
+            }
+
+            // let currentQuizData = state.userQuizListData[examId]
+
+            // let currentQuizData = state.userQuizListData.find( (item) => {
+            //     return (item && Assistant.getId(item.examId) === Assistant.getId(newInfo.id))
+            // })
+            // if (!currentQuizData) {
+            //     state.userQuizListData.push({
+            //         examId: newInfo.id,
+            //         examData: []
+            //     })
+            // } else {
+            //     state.userQuizListData.forEach( (item, index) => {
+            //         if (item && Assistant.getId(item.examId) === Assistant.getId(newInfo.id)) {
+            //             state.userQuizListData[index] = state.quiz.mergeUserQuizData(item)
+            //         }
+            //     })
+            // }
+            //
+            // state.userQuizListData = newInfo
         },
         setQuiz (state, newInfo) {
             state.quiz = newInfo
@@ -85,33 +156,15 @@ const store = new Vuex.Store({
             // console.group();
             // console.time();
 
-
-
-
-
             // window.localStorage.setItem('currentExam.questions', JSON.stringify(newInfo.questions.list))
-            // newInfo.questions = new QuestionList()
-            this.commit('reloadQuizModel')
+            newInfo.questions = new QuestionList()
+            // this.commit('reloadQuizModel')
             state.quiz = newInfo
-            // Object.freeze(state.quiz)
+            // state.quiz.questions.list = state.quiz.questions.list.map(item => {
+            //     return Object.freeze(item);
+            // })
 
-            let currentQuizData = state.userQuizListData.find( (item) => {
-                return (item && Assistant.getId(item.examId) === Assistant.getId(newInfo.id))
-            })
-            if (!currentQuizData) {
-                state.userQuizListData.push({
-                    examId: newInfo.id,
-                    examData: []
-                })
-            } else {
-                state.userQuizListData.forEach( (item, index) => {
-                    if (item && Assistant.getId(item.examId) === Assistant.getId(newInfo.id)) {
-                        state.userQuizListData[index] = state.quiz.mergeUserQuizData(item)
-                    }
-                })
-            }
-
-            this.commit('setUserQuizListData', state.userQuizListData)
+            // this.commit('setUserQuizListData')
 
 
 
@@ -156,9 +209,11 @@ const store = new Vuex.Store({
             // set checking time
             const oldQuestionId = Assistant.getId(state.currentQuestion.id)
             const newQuestionId = Assistant.getId(newInfo.id)
-            if (newQuestionId === oldQuestionId) {
+            if (newQuestionId === oldQuestionId || !Assistant.getId(state.quiz.id)) {
                 return
             }
+            const currentExamQuestions = JSON.parse(window.localStorage.getItem('currentExamQuestions'))
+            const currentQuestion = currentExamQuestions[newQuestionId]
             // ToDo: check in comment
             // if (newQuestionId) {
             //     let newQuestion = state.quiz.questions.getQuestionById(newQuestionId)
@@ -167,25 +222,29 @@ const store = new Vuex.Store({
             //         newQuestion.enterQuestion()
             //     }
             // }
-            if (oldQuestionId) {
-                let currentQuizData = state.userQuizListData.find( (item) => {
-                    return (item && Assistant.getId(item.examId) === Assistant.getId(state.quiz.id))
-                })
-                if (!currentQuizData) {
-                    currentQuizData = {
-                        examId: state.currentQuestion.id,
-                        examData: []
-                    }
-                }
-                // ToDo: checkin time is no optimize
-                // let oldQuestion = state.quiz.questions.getQuestionById(oldQuestionId)
-                // state.quiz.loadCheckingTimesFromUserData(oldQuestion, currentQuizData.examData)
-                // if(oldQuestion) {
-                //     oldQuestion.leaveQuestion()
-                // }
-            }
-            state.currentQuestion = new Question(newInfo)
-            this.commit('refreshUserQuizListData')
+            // if (oldQuestionId) {
+            //
+            //     // let currentQuizData = state.userQuizListData.find( (item) => {
+            //     //     return (item && Assistant.getId(item.examId) === Assistant.getId(state.quiz.id))
+            //     // })
+            //     // if (!currentQuizData) {
+            //     //     currentQuizData = {
+            //     //         examId: state.currentQuestion.id,
+            //     //         examData: []
+            //     //     }
+            //     // }
+            //
+            //     // ToDo: checkin time is no optimize
+            //     // let oldQuestion = state.quiz.questions.getQuestionById(oldQuestionId)
+            //     // state.quiz.loadCheckingTimesFromUserData(oldQuestion, currentQuizData.examData)
+            //     // if(oldQuestion) {
+            //     //     oldQuestion.leaveQuestion()
+            //     // }
+            // }
+
+
+            state.currentQuestion = new Question(currentQuestion)
+            // this.commit('refreshUserQuizListData')
         },
         reloadQuizModel (state) {
             if (!state.quiz || !state.quiz.questions || typeof state.quiz.questions.getNextQuestion !== 'function') {
@@ -211,6 +270,7 @@ const store = new Vuex.Store({
             this.commit('reloadCurrentQuestionModel')
             this.commit('reloadQuizModel')
             // ToDo: find userQuizData
+
             let currentQuizData = state.userQuizListData.find( (item) => {
                 return (item && Assistant.getId(item.examId) === Assistant.getId(state.quiz.id))
             })
