@@ -40,9 +40,9 @@ const mixinQuiz = {
       }
     },
     currentLesson () {
-      this.$store.commit('reloadQuizModel')
+      // this.$store.commit('reloadQuizModel')
       // let currentLesson = new QuestSubcategory()
-      if (!this.currentQuestion.sub_category) {
+      if (!this.currentQuestion || !this.currentQuestion.sub_category) {
         return new QuestSubcategory()
       }
       let currentSubCategoryId = this.currentQuestion.sub_category.id
