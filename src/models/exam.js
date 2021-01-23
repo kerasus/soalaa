@@ -81,7 +81,7 @@ class Exam extends Model {
                         resolve(data)
                     },
                     error: function (jqXHR, textStatus, errorThrown) {
-                        Assistant.reportErrors('exam.js -> loadQuestionsFromFile() -> $.ajax.error', "can't get exam file", {jqXHR, textStatus, errorThrown})
+                        Assistant.reportErrors({location: 'exam.js -> loadQuestionsFromFile() -> $.ajax.error', message: "can't get exam file", data: {jqXHR, textStatus, errorThrown}})
                         Assistant.handleAxiosError("can't get exam file")
                         reject({jqXHR, textStatus, errorThrown})
                     }

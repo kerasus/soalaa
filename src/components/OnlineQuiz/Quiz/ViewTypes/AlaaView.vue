@@ -104,23 +104,24 @@
                 quizData: null
             }
         },
-        created() {
+        mounted() {
+            let that = this
             this.showAppBar()
             this.updateDrawerBasedOnWindowSize()
-            this.startExam()
+            this.startExam(this.$route.params.quizId)
                 .then(() => {
-                    this.loadFirstActiveQuestionIfNeed()
-                    this.$store.commit('updateOverlay', false)
+                    that.loadFirstActiveQuestionIfNeed()
+                    that.$store.commit('updateOverlay', false)
                 })
                 .catch( (error) => {
                     Assistant.reportErrors(error)
-                    this.$notify({
+                    that.$notify({
                         group: 'notifs',
                         title: 'توجه!',
                         text: 'مشکلی در دریافت اطلاعات آژمون رخ داده است. لطفا دوباره امتحان کنید.',
                         type: 'error'
                     })
-                    this.$route.push({ name: 'user.exam.list'})
+                    that.$router.push({ name: 'user.exam.list'})
                 })
         },
         methods: {
@@ -133,6 +134,7 @@
                 }
             },
             loadFirstActiveQuestionIfNeed () {
+                console.log('loadFirstActiveQuestionIfNeed->changeQuestion')
                 if (!this.currentQuestion.in_active_category) {
                     let firstActiveQuestion = this.quiz.questions.getFirstActiveQuestion()
                     if (!firstActiveQuestion) {
