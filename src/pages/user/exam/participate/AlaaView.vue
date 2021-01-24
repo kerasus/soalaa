@@ -11,7 +11,7 @@
                         </v-col>
                         <v-col :md="10" class="px-md-0 px-5">
                             <v-row class="question-header">
-                                <div class="question-number" v-if="false">
+                                <div class="question-number">
                                     <p v-if="currentLesson">
                                         {{ currentLesson.title }}
                                         -
@@ -20,14 +20,14 @@
                                     </p>
                                 </div>
                                 <div class="question-buttons">
-                                    <v-btn icon @click="changeState(currentQuestion, 'o')">
+                                    <v-btn icon @click="changeStatus(currentQuestion.id, 'o')">
                                         <v-icon v-if="currentQuestion.state !== 'o'" color="#888" size="30">mdi-checkbox-blank-circle-outline</v-icon>
                                         <v-icon v-if="currentQuestion.state === 'o'" color="yellow" :size="30">mdi-checkbox-blank-circle</v-icon>
                                     </v-btn>
-                                    <v-btn icon @click="changeState(currentQuestion, 'x')">
+                                    <v-btn icon @click="changeStatus(currentQuestion.id, 'x')">
                                         <v-icon :color="currentQuestion.state === 'x' ? 'red' : '#888'" :size="30">mdi-close</v-icon>
                                     </v-btn>
-                                    <v-btn icon @click="bookmark(currentQuestion)">
+                                    <v-btn icon @click="changeBookmark(currentQuestion.id)">
                                         <v-icon v-if="!currentQuestion.bookmarked" :size="30" color="#888">mdi-bookmark-outline</v-icon>
                                         <v-icon v-if="currentQuestion.bookmarked" color="blue" :size="30">mdi-bookmark</v-icon>
                                     </v-btn>
@@ -88,7 +88,7 @@
 <script>
     import Choice from '@/components/OnlineQuiz/Quiz/Choice'
     import Timer from '@/components/OnlineQuiz/Quiz/Timer/Timer'
-    import { mixinQuiz, mixinDrawer, mixinWindowSize } from '@/mixin/Mixins'
+    import { mixinQuiz, mixinUserActionOnQuestion, mixinDrawer, mixinWindowSize } from '@/mixin/Mixins'
     import Assistant from "@/plugins/assistant";
 
     export default {
@@ -97,7 +97,7 @@
             Choice,
             Timer
         },
-        mixins: [mixinQuiz, mixinDrawer, mixinWindowSize],
+        mixins: [mixinQuiz, mixinUserActionOnQuestion, mixinDrawer, mixinWindowSize],
         data () {
             return {
                 quizData: null
@@ -140,14 +140,6 @@
                     } else {
                         this.changeQuestion(firstActiveQuestion.id)
                     }
-                }
-            },
-            loadFirstActiveQuestion () {
-                let firstActiveQuestion = this.quiz.questions.getFirstActiveQuestion()
-                if (!firstActiveQuestion) {
-                    this.loadFirstQuestion()
-                } else {
-                    this.changeQuestion(firstActiveQuestion.id)
                 }
             }
         }

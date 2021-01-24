@@ -3,9 +3,10 @@ import 'github-markdown-css/github-markdown.css';
 import '@/assets/scss/markdownKatex.scss';
 // import {QuestSubcategory} from "@/models/QuestSubcategory";
 import Assistant from "@/plugins/assistant";
-import {Question} from "@/models/Question";
+// import {Question} from "@/models/Question";
 import Time from "@/plugins/time";
 import {QuestSubcategory} from "@/models/QuestSubcategory";
+// import UserActionOnQuestion from "@/plugins/UserActionOnQuestion";
 
 const mixinQuiz = {
   computed: {
@@ -98,6 +99,7 @@ const mixinQuiz = {
     setCurrentExamQuestions (currentExamQuestions) {
       window.localStorage.setItem('currentExamQuestions', JSON.stringify(currentExamQuestions))
     },
+
     startExam (examId, viewType) {
       if (!Assistant.getId(examId)) {
         return
@@ -179,11 +181,17 @@ const mixinQuiz = {
       let currentExamQuestionIndexes = {}
       questionsList.forEach( (item, index) => {
         item.index = index
+        this.setQuestionsLtr(item)
         currentExamQuestions[item.id.toString()] = item
         currentExamQuestionIndexes[index.toString()] = item.id
       })
       this.setCurrentExamQuestionIndexes(currentExamQuestionIndexes)
       this.setCurrentExamQuestions(currentExamQuestions)
+    },
+    setQuestionsLtr (question) {
+      // const englishRegex = /^[A-Za-z0-9 :"'ʹ.<>%$&@!+()\-/\n,…?ᵒ*~]*$/
+      const englishRegex = /^[A-Za-z0-9 :"'ʹ.<>%$&@!+()\-_/\n,…?ᵒ*~]*$/
+      question.ltr = !!question.statement.match(englishRegex);
     },
     loadExamExtraData (quiz) {
       let currentExamQuestions = this.getCurrentExamQuestions()
@@ -211,81 +219,27 @@ const mixinQuiz = {
       }
       this.changeQuestion(questionId, viewType)
     },
-    sendQuestionData (data, actionType) {
-      // find quiz
-      let userQuizData = this.userQuizListData.find( (item) => {
-        return Assistant.getId(item.examId) === Assistant.getId(this.quiz.id)
-      })
-      if (!userQuizData || !this.currentQuestion || !Assistant.getId(this.currentQuestion.id)) {
-        return
-      }
 
-      // find question
-      let question = new Question()
-      let userQuestionData = userQuizData.examData.find((questionData)=> Assistant.getId(questionData.questionId) === Assistant.getId(this.currentQuestion.id))
 
-      // set default data
-      let dataToSendAnswer = {question_id: data.question_id, choice_id: data.choice_id, selected_at: Time.now()}
-      let dataToSendStatus = {question_id: data.question_id, status: data.status}
-      let dataToSendBookmark = data.questionId
-
-      // set data from localstorage of user
-      if (userQuestionData) {
-        dataToSendAnswer.selected_at = userQuestionData.answered_at
-        dataToSendStatus.status = userQuestionData.state
-      }
-
-      // do action
-      if (actionType === 'sendAnswer') {
-        question.sendAnswer(this.quiz.user_exam_id, dataToSendAnswer)
-      }
-      if (actionType === 'sendBookmark') {
-        if (data.bookmarked) {
-          question.sendBookmark(data.exam_user_id, dataToSendBookmark)
-        } else {
-          question.sendUnBookmark(data.exam_user_id, dataToSendBookmark)
-        }
-      }
-      if (actionType === 'sendStatus') {
-        question.sendStatus(this.quiz.user_exam_id, dataToSendStatus)
-      }
-    },
     answerClicked (data) {
-      let oldStatus = this.userQuizListData[this.quiz.id][this.currentQuestion.id].status
-      let oldAnswered_choice_id = this.userQuizListData[this.quiz.id][this.currentQuestion.id].answered_choice_id
-      let newAnswered_choice_id = data.choiceId
-      if (oldAnswered_choice_id === newAnswered_choice_id) {
-        newAnswered_choice_id = null
-      } else if (oldStatus === 'x') {
-        let newState = ''
-        this.$store.commit('changeQuestion_Status', {exam_id: this.quiz.id, question_id: this.currentQuestion.id, status: newState})
+      let questionId = data.questionId
+      let answerData = {
+        choiceId: data.choiceId
       }
-      this.$store.commit('changeQuestion_SelectChoice', {exam_id: this.quiz.id, question_id: this.currentQuestion.id, answered_choice_id: newAnswered_choice_id})
-      this.sendQuestionData({question_id: data.questionId, choice_id: data.choiceId}, 'sendAnswer')
+      this.userActionOnQuestion(questionId, answerData, 'answer')
     },
-    bookmark (question) {
-      if (this.currentQuestion.id !== question.id) {
-        this.currentQuestion = question
-      }
-      let oldBookmarked = this.userQuizListData[this.quiz.id][question.id].bookmarked
-      let newBookmark = !(oldBookmarked)
-      this.$store.commit('changeQuestion_Bookmark', {exam_id: this.quiz.id, question_id: question.id, bookmarked: newBookmark})
-      this.sendQuestionData({ exam_user_id: this.quiz.user_exam_id, questionId: question.id, bookmarked: newBookmark}, 'sendBookmark')
+    changeBookmark (questionId) {
+      this.userActionOnQuestion(questionId, {}, 'bookmark')
     },
-    changeState (question, newState) {
-      if (this.currentQuestion.id !== question.id) {
-        this.currentQuestion = question
-      }
-      let oldQuestion = this.userQuizListData[this.quiz.id][question.id]
-      let oldStatus = (!oldQuestion) ? false : oldQuestion.status
-      if (oldQuestion && newState === oldStatus) {
-        newState = ''
-      } else if (newState === 'x') {
-        this.$store.commit('changeQuestion_SelectChoice', {exam_id: this.quiz.id, question_id: question.id, answered_choice_id: null})
-      }
-      this.$store.commit('changeQuestion_Status', {exam_id: this.quiz.id, question_id: question.id, status: newState})
-      this.sendQuestionData({ exam_user_id: this.quiz.user_exam_id, question_id: question.id, status: this.currentQuestion.state }, 'sendStatus')
+    changeStatus (questionId, newStatus) {
+      this.userActionOnQuestion(questionId, {newStatus}, 'status')
     },
+
+
+
+
+
+
     needToLoadQuiaData () {
       return (!this.quiz.id || Assistant.getId(this.$route.params.quizId) !== Assistant.getId(this.quiz.id))
     },
