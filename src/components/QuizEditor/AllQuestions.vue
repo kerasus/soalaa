@@ -114,14 +114,11 @@
     import Item from './Question'
     import { mixinQuiz, mixinWindowSize } from '@/mixin/Mixins'
     import BubbleSheet from "@/components/OnlineQuiz/Quiz/BubbleSheet/BubbleSheet";
-    import {Exam, ExamList} from '@/models/exam'
+    import {Exam, ExamList} from '@/models/Exam'
     import {QuestionList} from "@/models/Question";
     import Assistant from "@/plugins/assistant";
     Vue.component('DynamicScroller', DynamicScroller)
     Vue.component('DynamicScrollerItem', DynamicScrollerItem)
-    var md = require('markdown-it')(),
-        mk = require('markdown-it-katex')
-    md.use(mk);
 
     export default {
         name: 'allQuestions',

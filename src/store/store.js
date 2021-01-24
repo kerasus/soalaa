@@ -5,7 +5,7 @@ import createPersistedState from 'vuex-persistedstate'
 // import createMutationsSharer from 'vuex-shared-mutations'
 import Assistant from '@/plugins/assistant'
 import {User} from '@/models/User'
-import { Exam } from "@/models/exam";
+import { Exam } from "@/models/Exam";
 import Time from "@/plugins/time";
 // import {UserExamData} from "@/models/UserExamData";
 
@@ -34,9 +34,10 @@ const store = new Vuex.Store({
         user: null,
         drawer: false,
         quiz: null,
-        userQuizListData: [],
+        userQuizListData: {},
         accessToken: null,
         currentQuestion: null,
+        currentExamFrozenQuestions: null,
         appbar: true,
         overlay: false
         // quizList: []
@@ -97,12 +98,45 @@ const store = new Vuex.Store({
                     answered_at: item.selected_at,
                     answered_choice_id: item.choice_id,
                     bookmarked: item.bookmark,
-                    state: item.status
+                    status: item.status
                 }
             })
         },
-        setUserQuizListData (state, payload) {
+        changeQuestion_RefreshQuestionObject (state, payload) {
+            let examId = payload.exam_id
+            let questionId = payload.question_id
+            if (!state.userQuizListData[examId]) {
+                state.userQuizListData[examId] = {}
+            }
+            if (!state.userQuizListData[examId][questionId]) {
+                state.userQuizListData[examId][questionId] = {}
+            }
+        },
+        changeQuestion_Bookmark (state, payload) {
+            let examId = payload.exam_id
+            let questionId = payload.question_id
+            this.commit('changeQuestion_RefreshQuestionObject', payload)
+            state.userQuizListData[examId][questionId].bookmarked = payload.bookmarked
+        },
+        changeQuestion_SelectChoice (state, payload) {
+            let examId = payload.exam_id
+            let questionId = payload.question_id
+            this.commit('changeQuestion_RefreshQuestionObject', payload)
+            let answeredAt = Time.now()
+            if (payload.selected_at) {
+                answeredAt = payload.selected_at
+            }
 
+            state.userQuizListData[examId][questionId].answered_at = answeredAt
+            state.userQuizListData[examId][questionId].answered_choice_id = payload.answered_choice_id
+        },
+        changeQuestion_Status (state, payload) {
+            let examId = payload.exam_id
+            let questionId = payload.question_id
+            this.commit('changeQuestion_RefreshQuestionObject', payload)
+            state.userQuizListData[examId][questionId].status = payload.status
+        },
+        setUserQuizListData (state, payload) {
             let examId = Assistant.getId(payload.exam_id)
             let questionId = Assistant.getId(payload.question_id)
 
@@ -204,15 +238,17 @@ const store = new Vuex.Store({
             }
         },
         updateCurrentQuestion (state, newInfo) {
-            this.commit('reloadQuizModel')
-            this.commit('reloadCurrentQuestionModel')
+            // this.commit('reloadQuizModel')
+            // this.commit('reloadCurrentQuestionModel')
             // set checking time
-            const oldQuestionId = Assistant.getId(state.currentQuestion.id)
-            const newQuestionId = Assistant.getId(newInfo.id)
+
+            const oldQuestionId = (!state.currentQuestion) ? false : Assistant.getId(state.currentQuestion.id)
+            const newQuestionId = Assistant.getId(newInfo.newQuestionId)
             if (newQuestionId === oldQuestionId || !Assistant.getId(state.quiz.id)) {
                 return
             }
-            const currentExamQuestions = JSON.parse(window.localStorage.getItem('currentExamQuestions'))
+            const currentExamQuestions = newInfo.currentExamQuestions
+
             const currentQuestion = currentExamQuestions[newQuestionId]
             // ToDo: check in comment
             // if (newQuestionId) {
@@ -309,6 +345,9 @@ const store = new Vuex.Store({
         },
         updateOverlay (state, newInfo) {
             state.overlay = newInfo
+        },
+        updateCurrentExamFrozenQuestions (state, newInfo) {
+            state.currentExamFrozenQuestions = newInfo
         }
     },
     getters: {
@@ -317,6 +356,9 @@ const store = new Vuex.Store({
         },
         quiz (state) {
             return new Exam(state.quiz)
+        },
+        currentExamFrozenQuestions (state) {
+            return state.currentExamFrozenQuestions
         },
         accessToken (state) {
             return state.accessToken

@@ -20,14 +20,14 @@
                         {{ subcategoryItem.title }}
                     </v-expansion-panel-header>
                     <v-expansion-panel-content>
-                        <div v-for="(question, questionIndex) in getQuestionsOfSubcategory(subcategoryItem.id)" :key="'question-'+question.id">
+                        <div v-for="(question) in getQuestionsOfSubcategory(subcategoryItem.id)" :key="'question-'+question.id">
                             <v-btn :class="{ active: currentQuestion.id === question.id }"
                                    :elevation="0"
                                    @click="changeQuestion(question.id)"
                                    block
                             >
                                 تست شماره
-                                {{ getQuestionNumberFromIndex(questionIndex) }}
+                                {{ getQuestionNumberFromIndex(question.index) }}
                                 <v-icon v-if="question.state === 'x'" color="red">
                                     mdi-close
                                 </v-icon>
@@ -52,7 +52,7 @@
     import Time from "@/plugins/time";
 
     export default {
-        name: "MapOfQuestions",
+        name: 'SideMenu_MapOfQuestions',
         mixins: [mixinQuiz],
         data: () => ({
             currentCat: null,

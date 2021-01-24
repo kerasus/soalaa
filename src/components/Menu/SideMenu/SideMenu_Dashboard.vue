@@ -107,7 +107,7 @@
 
 <script>
     export default {
-        name: "Menu",
+        name: "SideMenu_Dashboard",
         data: () => ({
             group: null
         }),

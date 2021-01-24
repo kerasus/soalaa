@@ -1,10 +1,9 @@
 import {Model} from 'js-abstract-model'
-import {Exam, ExamList} from "@/models/exam";
+import {Exam, ExamList} from "@/models/Exam";
 import Time from "@/plugins/time";
 import Assistant from "@/plugins/assistant";
 import {QuestCategoryList} from "@/models/QuestCategory";
 import {QuestSubcategoryList} from "@/models/QuestSubcategory";
-// import axios from "axios";
 
 class User extends Model {
     constructor(data) {

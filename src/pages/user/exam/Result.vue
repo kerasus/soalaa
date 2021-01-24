@@ -110,7 +110,7 @@
 </template>
 
 <script>
-    import {Exam} from "@/models/exam";
+    import {Exam} from "@/models/Exam";
     import Info from "@/components/OnlineQuiz/Quiz/resultTables/info";
     import TopScoreResult from "@/components/OnlineQuiz/Quiz/resultTables/topScoreResult";
     import StatisticResult from "@/components/OnlineQuiz/Quiz/resultTables/statisticResult";

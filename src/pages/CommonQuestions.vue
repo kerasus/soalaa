@@ -75,7 +75,7 @@
 
 <script>
     export default {
-        name: "commonQuestions"
+        name: "CommonQuestions"
     }
 </script>
 
