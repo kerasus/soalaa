@@ -93,6 +93,10 @@
 </style>
 
 <style>
+    .v-application {
+        font-family: 'IRANSans', 'Arial', 'Verdana', 'Tahoma', sans-serif;
+    }
+
     .choice p:nth-child(2n) {
         display: block;
     }
