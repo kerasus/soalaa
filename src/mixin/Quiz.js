@@ -230,23 +230,14 @@ const mixinQuiz = {
 
     answerClicked (data) {
       let questionId = data.questionId
-      let answerData = {
-        choiceId: data.choiceId
-      }
-      this.userActionOnQuestion(questionId, answerData, 'answer')
+      this.userActionOnQuestion(questionId, 'answer', {choiceId: data.choiceId})
     },
     changeBookmark (questionId) {
-      this.userActionOnQuestion(questionId, {}, 'bookmark')
+      this.userActionOnQuestion(questionId,  'bookmark')
     },
     changeStatus (questionId, newStatus) {
-      this.userActionOnQuestion(questionId, {newStatus}, 'status')
+      this.userActionOnQuestion(questionId, 'status', {newStatus})
     },
-
-
-
-
-
-
     needToLoadQuiaData () {
       return (!this.quiz.id || Assistant.getId(this.$route.params.quizId) !== Assistant.getId(this.quiz.id))
     },

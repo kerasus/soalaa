@@ -2,7 +2,7 @@ import {Question} from "@/models/Question";
 
 const mixinUserActionOnQuestion = {
   methods: {
-    userActionOnQuestion(questionId, data, actionType) {
+    userActionOnQuestion(questionId, actionType, data) {
       let examId = this.quiz.id
       let exam_user_id = this.quiz.user_exam_id
       this.beforeUserActionOnQuestion(examId, questionId)
@@ -19,7 +19,7 @@ const mixinUserActionOnQuestion = {
       if (actionType === 'answer') {
         this.userActionOnQuestion_answer(data, examId, questionId, userQuestionData)
       } else if (actionType === 'bookmark') {
-        this.userActionOnQuestion_bookmark(data, examId, questionId, userQuestionData)
+        this.userActionOnQuestion_bookmark(examId, questionId, userQuestionData)
       } else if (actionType === 'status') {
         this.userActionOnQuestion_status(data, examId, questionId, userQuestionData)
       }
@@ -66,7 +66,6 @@ const mixinUserActionOnQuestion = {
         question.sendStatus(examUserId, dataToSendStatus)
       }
     },
-
     userActionOnQuestion_answer(data, examId, questionId, userQuestionData) {
       let oldStatus = userQuestionData.status
       let oldAnswered_choice_id = userQuestionData.answered_choice_id
@@ -87,7 +86,7 @@ const mixinUserActionOnQuestion = {
         answered_choice_id: newAnswered_choice_id
       })
     },
-    userActionOnQuestion_bookmark(data, examId, questionId, userQuestionData) {
+    userActionOnQuestion_bookmark(examId, questionId, userQuestionData) {
       this.$store.commit('changeQuestion_RefreshQuestionObject', {
         exam_id: examId,
         question_id: questionId
