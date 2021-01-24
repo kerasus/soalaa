@@ -355,10 +355,9 @@ const mixinQuiz = {
     // ToDo: change argument (type, questNumber)
     changeView (type) {
       if (type === 'alaa') {
-        const questionNumber = this.quiz.questions.getQuestionIndexById(this.currentQuestion.id) + 1
+        const questionNumber = this.getQuestionNumberFromId(this.currentQuestion.id)
         this.$router.push({ name: 'onlineQuiz.alaaView', params: { quizId: this.quiz.id, questNumber: questionNumber } })
-      }
-      if (type === 'konkoor') {
+      } else if (type === 'konkoor') {
         this.$router.push({ name: 'onlineQuiz.konkoorView', params: { quizId: this.quiz.id } })
       }
     },
