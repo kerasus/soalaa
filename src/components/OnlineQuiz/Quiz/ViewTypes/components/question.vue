@@ -31,7 +31,7 @@
                 <v-icon v-if="source.bookmarked" color="blue" :size="24">mdi-bookmark</v-icon>
             </v-btn>
         </div>
-        <span v-if="source.in_active_category" class="question-body renderedPanel" :id="'question' + source.id" v-html="(getQuestionNumberFromId(source.id)) + '- ' + source.rendered_statement" />
+        <span v-if="source.in_active_category" class="question-body renderedPanel" :id="'question' + source.id" v-html="(getQuestionNumberFromId(source.id)) + '- ' + source.rendered_statement" v-intersect="onIntersect"/>
         <v-row v-if="source.in_active_category" class="choices">
             <v-col
                     v-for="(choice, index) in source.choices.list"
@@ -77,8 +77,11 @@
             }
         },
         methods: {
+            // test (entries) {
+            //     console.log('id: ', this.getQuestionNumberFromId(this.source.id), ' is Intersecting: ', entries[0].isIntersecting)
+            // },
             onIntersect(entries) {
-                this.source.onIntersect(entries)
+                this.source.isInView = entries[0].isIntersecting
             },
             choiceClicked (questionId, choiceId) {
                 console.log('loadFirstActiveQuestionIfNeed->choiceClicked')
