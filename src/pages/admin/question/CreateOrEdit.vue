@@ -124,7 +124,7 @@
     import 'mathlive/dist/mathlive-fonts.css'
     import 'mathlive/dist/mathlive-static.css'
     import { Question } from '@/models/Question'
-    import {ExamList} from '@/models/exam'
+    import {ExamList} from '@/models/Exam'
     import {QuestSubcategoryList} from "@/models/QuestSubcategory";
     import Vue from 'vue'
     import MarkdownBtn from "@/components/QuizEditor/MarkdownBtn";

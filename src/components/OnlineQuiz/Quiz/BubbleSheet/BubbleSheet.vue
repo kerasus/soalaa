@@ -38,7 +38,7 @@
 <script>
     import $ from "jquery";
     import { mixinQuiz } from "@/mixin/Mixins";
-    // import {Exam} from "@/models/exam";
+    // import {Exam} from "@/models/Exam";
 
     export default {
         name: 'BubbleSheet',

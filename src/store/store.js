@@ -5,7 +5,7 @@ import createPersistedState from 'vuex-persistedstate'
 // import createMutationsSharer from 'vuex-shared-mutations'
 import Assistant from '@/plugins/assistant'
 import {User} from '@/models/User'
-import { Exam } from "@/models/exam";
+import { Exam } from "@/models/Exam";
 import Time from "@/plugins/time";
 // import {UserExamData} from "@/models/UserExamData";
 

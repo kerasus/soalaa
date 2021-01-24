@@ -86,7 +86,6 @@
 </template>
 
 <script>
-    // import FakeQuizData from '@/plugins/fakeQuizData'
     import Choice from '@/components/OnlineQuiz/Quiz/Choice'
     import Timer from '@/components/OnlineQuiz/Quiz/Timer/Timer'
     import { mixinQuiz, mixinDrawer, mixinWindowSize } from '@/mixin/Mixins'
@@ -156,36 +155,36 @@
 </script>
 
 <style>
-.quiz-page strong em strong {
-    font-weight: normal;
-    font-style: normal;
-    text-decoration: none !important;
-}
+    .quiz-page strong em strong {
+        font-weight: normal;
+        font-style: normal;
+        text-decoration: none !important;
+    }
 
-.ltr .renderedPanel {
-    direction: ltr !important;
-}
+    .ltr .renderedPanel {
+        direction: ltr !important;
+    }
 
-.v-navigation-drawer.mapOfQuestions .v-navigation-drawer__content {
-    overflow-y: scroll;
-}
-.quiz-page .katex-display {
-    display: inline-block;
-    direction: ltr;
-}
+    .v-navigation-drawer.mapOfQuestions .v-navigation-drawer__content {
+        overflow-y: scroll;
+    }
+    .quiz-page .katex-display {
+        display: inline-block;
+        direction: ltr;
+    }
 
-.v-main {
-    background: #f4f4f4;
-}
+    .v-main {
+        background: #f4f4f4;
+    }
 
-.base.textstyle.uncramped {
-    display: flex;
-    flex-wrap: wrap;
-}
+    .base.textstyle.uncramped {
+        display: flex;
+        flex-wrap: wrap;
+    }
 
-img {
-    max-width: 100%;
-}
+    img {
+        max-width: 100%;
+    }
 </style>
 
 <style scoped>

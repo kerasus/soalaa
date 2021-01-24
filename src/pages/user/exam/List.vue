@@ -144,7 +144,7 @@
 </template>
 
 <script>
-    import {Exam, ExamList} from "@/models/exam";
+    import {Exam, ExamList} from "@/models/Exam";
     import { mixinQuiz } from '@/mixin/Mixins'
     import ProgressLinear from "@/components/ProgressLinear";
 

@@ -59,7 +59,7 @@
 </template>
 
 <script>
-    // import {Exam} from "@/models/exam";
+    // import {Exam} from "@/models/Exam";
     import {mixinQuiz} from '@/mixin/Mixins'
 
     export default {

@@ -8,7 +8,6 @@
     import MobileTimer from '@/components/OnlineQuiz/Quiz/Timer/mobile'
     import PcTimer from '@/components/OnlineQuiz/Quiz/Timer/pc'
     import {mixinWindowSize, mixinQuiz} from '@/mixin/Mixins'
-    import {Timer} from "@/models/Timer";
     import Time from "@/plugins/time";
     import Assistant from "@/plugins/assistant";
 
@@ -19,7 +18,6 @@
             interval: null,
             passedTime: '00:00:00',
             remainTime: false,
-            timer: new Timer()
         }),
         mixins: [mixinWindowSize, mixinQuiz],
         components: {
@@ -67,13 +65,7 @@
         },
         destroyed() {
             clearInterval(this.interval)
-        },
-        created() {
-            let today = new Date()
-            this.timer.start.setMinutes(today.getMinutes() - 20)
-            this.timer.end.setMinutes(today.getMinutes() + 20)
-        },
-
+        }
     }
 </script>
 
