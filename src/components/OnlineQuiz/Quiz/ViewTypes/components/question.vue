@@ -3,12 +3,18 @@
         <div>
             <v-sheet
                     v-if="!source.in_active_category"
-                    color="warning"
                     rounded
                     dark
                     height="200"
                     elevation="1"
                     class="d-flex align-center justify-center"
+                    :color="currentQuestion.id === source.id ? 'red' : '#fff'"
+                    v-intersect="{
+                        handler: onIntersect,
+                        options: {
+                          threshold: [0, 0.75]
+                        }
+                    }"
             >
                 (
                 سوال شماره
@@ -31,7 +37,18 @@
                 <v-icon v-if="source.bookmarked" color="blue" :size="24">mdi-bookmark</v-icon>
             </v-btn>
         </div>
-        <span v-if="source.in_active_category" class="question-body renderedPanel" :id="'question' + source.id" v-html="(getQuestionNumberFromId(source.id)) + '- ' + source.rendered_statement" v-intersect="onIntersect"/>
+        <span
+            v-intersect="{
+                handler: onIntersect,
+                options: {
+                  threshold: [0, 0.05, 0.1, 0.15, 0.2, 0.25, 0.3, 0.35, 0.4, 0.45, 0.5, 0.55, 0.6, 0.65, 0.7, 0.75, 0.8, 0.85, 0.9]
+                }
+            }"
+              v-if="source.in_active_category"
+            class="question-body renderedPanel"
+            :id="'question' + source.id"
+            v-html="(getQuestionNumberFromId(source.id)) + '- ' + source.rendered_statement"
+        />
         <v-row v-if="source.in_active_category" class="choices">
             <v-col
                     v-for="(choice, index) in source.choices.list"
@@ -81,7 +98,8 @@
             //     console.log('id: ', this.getQuestionNumberFromId(this.source.id), ' is Intersecting: ', entries[0].isIntersecting)
             // },
             onIntersect(entries) {
-                this.source.isInView = entries[0].isIntersecting
+                console.log(this.source.index, ': ', entries[0].intersectionRatio)
+                this.source.isInView = entries[0].intersectionRatio >= 0.75
             },
             choiceClicked (questionId, choiceId) {
                 console.log('loadFirstActiveQuestionIfNeed->choiceClicked')
@@ -148,9 +166,9 @@
         float: right;
     }
 
-    /*.current-question {*/
-    /*    background-color: #fffaee;*/
-    /*}*/
+    .current-question {
+        background-color: #fffaee;
+    }
 
     .choices {
         display: flex;

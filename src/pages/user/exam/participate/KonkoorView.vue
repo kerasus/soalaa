@@ -103,14 +103,14 @@
                 this.$store.commit('updateAppBar', state)
                 this.$store.commit('updateDrawer', state)
             },
-            changeCurrentQuestionIfScrollingIsDone (startIndex, endIndex) {
+            changeCurrentQuestionIfScrollingIsDone () {
                 // console.log('time since last: ', this.timePassedSinceLastScroll)
-                if (startIndex !== this.lastTimeScrollRange.start || endIndex !== this.lastTimeScrollRange.end) {
-                    this.lastTimeScrollRange.start = startIndex
-                    this.lastTimeScrollRange.end = endIndex
-                }
+                // if (startIndex !== this.lastTimeScrollRange.start || endIndex !== this.lastTimeScrollRange.end) {
+                //     this.lastTimeScrollRange.start = startIndex
+                //     this.lastTimeScrollRange.end = endIndex
+                // }
                 if (this.timePassedSinceLastScroll >= 1000) {
-                    this.changeCurrentQuestionToFirstQuestionInView(startIndex, endIndex)
+                    this.changeCurrentQuestionToFirstQuestionInView()
                     this.timePassedSinceLastScroll = 0
                     this.scrollState = 'not scrolling'
                     clearInterval(this.setIntervalCallback)
@@ -119,21 +119,22 @@
                 this.timePassedSinceLastScroll += 250
             },
             onScroll (startIndex, endIndex) {
+
                 this.renderedQuestions = { startIndex, endIndex }
                 if (this.scrollState === 'not scrolling') {
                     this.setIntervalCallback = setInterval(() => {
-                        this.changeCurrentQuestionIfScrollingIsDone(startIndex, endIndex)
+                        this.changeCurrentQuestionIfScrollingIsDone()
                     }, 250)
                     this.scrollState = 'scrolling'
                 }
                 this.timePassedSinceLastScroll = 0
             },
-            changeCurrentQuestionToFirstQuestionInView (startIndex, endIndex) {
-                const firstInViewQuestion = this.getFirstInViewQuestionNumber(startIndex, endIndex)
+            changeCurrentQuestionToFirstQuestionInView () {
+                const firstInViewQuestion = this.getFirstInViewQuestionNumber()
                 if (firstInViewQuestion.id === this.currentQuestion.id) {
                     return
                 }
-                this.changeQuestion(firstInViewQuestion)
+                this.changeQuestion(firstInViewQuestion.id, 'onlineQuiz.konkoorView')
             },
             // scrollTo (questionId) {
             //     if (this.quiz.questions.getQuestionById(questionId).isInView === false) {
@@ -161,12 +162,14 @@
             //     this.quiz.questions.getQuestionById(entries[0].target.id).isInView = (entries[0].intersectionRatio >= 0.5)
             // },
             // ToDo: check for removal
-            getFirstInViewQuestionNumber (startIndex, endIndex) {
+            getFirstInViewQuestionNumber () {
+                console.log(this.renderedQuestions.startIndex, this.renderedQuestions.endIndex, 'haha2')
                 let firstQuestionInView
-                for (let i = startIndex; i <= endIndex; i++) {
+                for (let i = this.renderedQuestions.startIndex; i <= this.renderedQuestions.endIndex; i++) {
+                    console.log(i, ': ', this.questions[i].isInView)
                     if (this.questions[i].isInView === true) {
                         firstQuestionInView = this.questions[i]
-                        console.log(i + 1)
+                        break
                     }
                 }
                 if (firstQuestionInView.id !== null) {
