@@ -73,9 +73,6 @@
     import Assistant from "@/plugins/assistant";
     // Vue.component('DynamicScroller', DynamicScroller)
     // Vue.component('DynamicScrollerItem', DynamicScrollerItem)
-    // var md = require('markdown-it')(),
-    //     mk = require('markdown-it-katex')
-    // md.use(mk);
 
     export default {
         name: 'KonkoorView',
