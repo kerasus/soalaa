@@ -48,12 +48,7 @@
                 let groups = [],
                 chunk = 10
                 let array
-                // if (this.exam.questions.list.length > 0) {
-                //     array = this.exam.questions.list
-                // } else {
-                //     array = this.quiz.questions.list
-                // }
-                array = this.quiz.questions.list
+                array = this.getCurrentExamQuestions(true)
                 for (let i=0,j=array.length; i<j; i+=chunk) {
                     groups.push(array.slice(i,i+chunk))
                 }
