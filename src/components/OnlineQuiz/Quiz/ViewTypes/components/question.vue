@@ -9,12 +9,6 @@
                     elevation="1"
                     class="d-flex align-center justify-center"
                     :color="currentQuestion.id === source.id ? 'red' : '#fff'"
-                    v-intersect="{
-                        handler: onIntersect,
-                        options: {
-                          threshold: [0, 0.75]
-                        }
-                    }"
             >
                 (
                 سوال شماره
@@ -37,14 +31,7 @@
                 <v-icon v-if="source.bookmarked" color="blue" :size="24">mdi-bookmark</v-icon>
             </v-btn>
         </div>
-        <span
-            v-intersect="{
-                handler: onIntersect,
-                options: {
-                  threshold: [0, 0.05, 0.1, 0.15, 0.2, 0.25, 0.3, 0.35, 0.4, 0.45, 0.5, 0.55, 0.6, 0.65, 0.7, 0.75, 0.8, 0.85, 0.9]
-                }
-            }"
-              v-if="source.in_active_category"
+        <span v-if="source.in_active_category"
             class="question-body renderedPanel"
             :id="'question' + source.id"
             v-html="(getQuestionNumberFromId(source.id)) + '- ' + source.rendered_statement"
@@ -73,8 +60,20 @@
     export default {
         name: 'item',
         mixins: [ mixinQuiz ],
+        mounted() {
+            this.observer = new IntersectionObserver(this.intersectionObserver, {threshold: [0.1, 0.95]});
+
+            this.observer.observe(this.$el);
+            console.log('mounted this.$el', this.$el)
+
+            // console.log('this.$el', this.$el)
+            // if (this.item) {
+            //     console.log('item', this.item.index)
+            // }
+        },
         data () {
             return {
+                observer: null,
                 choiceNumber: {
                     0: '1) ',
                     1: '2) ',
@@ -93,12 +92,27 @@
                 }
             }
         },
+        destroyed() {
+            this.observer.disconnect();
+        },
         methods: {
             // test (entries) {
             //     console.log('id: ', this.getQuestionNumberFromId(this.source.id), ' is Intersecting: ', entries[0].isIntersecting)
             // },
+            intersectionObserver(entries) {
+                // console.log(this.source.index, ': ', entries[0].intersectionRatio)
+                // this.source.isInView = entries[0].intersectionRatio >= 0.75
+
+                if (entries[0].intersectionRatio > 0.95) {
+                    console.log('in entry.intersectionRatio', entries[0].intersectionRatio)
+                    console.log('in this.$el', this.$el)
+                } else if (entries[0].intersectionRatio < 0.1) {
+                    console.log('out entry.intersectionRatio', entries[0].intersectionRatio)
+                    console.log('out this.$el', this.$el)
+                }
+            },
             onIntersect(entries) {
-                console.log(this.source.index, ': ', entries[0].intersectionRatio)
+                // console.log(this.source.index, ': ', entries[0].intersectionRatio)
                 this.source.isInView = entries[0].intersectionRatio >= 0.75
             },
             choiceClicked (questionId, choiceId) {

@@ -327,6 +327,10 @@ const mixinQuiz = {
       const questIndex = this.getQuestionIndexById(id),
           questNumber = this.getQuestionNumberFromIndex(questIndex)
 
+      if (typeof questIndex === 'undefined') {
+        return
+      }
+
       let currentQuestion = this.getCurrentExamQuestions()[id]
       let currentQuestionCategoryActiveStatus = this.getCategoryActiveStatus(currentQuestion.sub_category.category_id)
 
