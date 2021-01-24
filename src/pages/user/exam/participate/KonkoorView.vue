@@ -64,11 +64,11 @@
     // import VirtualList from 'vue-virtual-scroll-list'
     import 'vue-virtual-scroller/dist/vue-virtual-scroller.css'
     import { DynamicScroller, DynamicScrollerItem } from 'vue-virtual-scroller'
-    import Item from './components/question'
+    import Item from '@/components/OnlineQuiz/Quiz/ViewTypes/components/question'
     import { mixinQuiz, mixinWindowSize } from '@/mixin/Mixins'
     import Timer from '@/components/OnlineQuiz/Quiz/Timer/Timer'
     import BubbleSheet from "@/components/OnlineQuiz/Quiz/BubbleSheet/BubbleSheet";
-    import {Exam} from "@/models/exam";
+    import {Exam} from "@/models/Exam";
     import { TopMenu } from '@/components/Menu/Menus'
     import Assistant from "@/plugins/assistant";
     // Vue.component('DynamicScroller', DynamicScroller)
