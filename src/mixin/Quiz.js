@@ -79,9 +79,16 @@ const mixinQuiz = {
         return currentExamQuestions
       }
       let currentExamQuestionsArray = []
-      for (const questionId in currentExamQuestions) {
+      let currentExamQuestionIndexes = this.getCurrentExamQuestionIndexes()
+      let currentExamQuestionIndexesArray = Object.keys(currentExamQuestionIndexes)
+      currentExamQuestionIndexesArray.forEach( (item) => {
+        let questionId = currentExamQuestionIndexes[item]
         currentExamQuestionsArray.push(currentExamQuestions[questionId])
-      }
+      })
+
+      // for (const questionId in currentExamQuestions) {
+      //   currentExamQuestionsArray.push(currentExamQuestions[questionId])
+      // }
 
       return currentExamQuestionsArray
     },
