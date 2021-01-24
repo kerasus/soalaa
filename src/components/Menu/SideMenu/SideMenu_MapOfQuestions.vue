@@ -52,7 +52,7 @@
     import Time from "@/plugins/time";
 
     export default {
-        name: "MapOfQuestions",
+        name: 'SideMenu_MapOfQuestions',
         mixins: [mixinQuiz],
         data: () => ({
             currentCat: null,

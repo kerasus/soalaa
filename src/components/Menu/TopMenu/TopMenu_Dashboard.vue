@@ -73,7 +73,7 @@
 
 <script>
     export default {
-        name: 'PannelPanel',
+        name: 'TopMenu_Dashboard',
         methods: {
             logout () {
                 // window.localStorage.setItem('access_token', '')

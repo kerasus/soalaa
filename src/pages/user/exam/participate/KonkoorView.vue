@@ -33,80 +33,7 @@
                 <v-row>
                     <v-col class="px-10 py-0 d-flex justify-space-between" dir="ltr">
                         <div class="rounded-b-xl rounded-r-xl">
-                            <v-menu bottom>
-                                <template v-slot:activator="{ on, attrs }">
-                                    <v-btn
-                                            large
-                                            tile
-                                            v-bind="attrs"
-                                            v-on="on"
-                                            elevation="0"
-                                    >
-                                        <v-icon class="mr-2" :size="30" color="#666">mdi-account-circle</v-icon>
-                                        <span v-if="$store.getters.user.first_name || $store.getters.user.last_name">
-                                            {{ $store.getters.user.first_name + ' ' + $store.getters.user.last_name }}
-                                        </span>
-                                    </v-btn>
-                                </template>
-                                <v-card
-                                        max-width="375"
-                                        class="mx-auto"
-                                        rounded="b-xl r-xl"
-                                >
-                                    <v-img
-                                            style="background-color: #e8e8e8;"
-                                            src="/img/account-circle.svg"
-                                            width="300px"
-                                            height="300px"
-                                            dark
-                                    >
-                                        <v-row class="fill-height">
-                                            <v-card-title v-if="false">
-                                                <v-btn
-                                                        dark
-                                                        icon
-                                                        :to="{ name: 'dashboard'}"
-                                                >
-                                                    <v-icon>mdi-chevron-left</v-icon>
-                                                </v-btn>
-
-                                                <v-spacer></v-spacer>
-
-                                                <v-btn
-                                                        dark
-                                                        icon
-                                                        class="mr-4"
-                                                >
-                                                    <v-icon>mdi-pencil</v-icon>
-                                                </v-btn>
-
-                                                <v-btn
-                                                        dark
-                                                        icon
-                                                >
-                                                    <v-icon>mdi-dots-vertical</v-icon>
-                                                </v-btn>
-                                            </v-card-title>
-
-                                            <v-spacer></v-spacer>
-
-                                            <v-card-title v-if="false" class="white--text pl-12 pt-12">
-                                                <div class="display-1 pl-12 pt-12">
-                                                    Ali Conners
-                                                </div>
-                                            </v-card-title>
-                                        </v-row>
-                                    </v-img>
-                                    <v-btn
-                                            style="width: 100%;background: #5cbf60;color: white;letter-spacing: inherit;"
-                                            large
-                                            tile
-                                            elevation="0"
-                                    >
-                                        ثبت و پایان آزمون
-                                    </v-btn>
-                                </v-card>
-                            </v-menu>
+                            <TopMenu />
                         </div>
                         <v-btn icon @click="changeView('alaa')">
                             <v-icon>mdi-table-split-cell</v-icon>
@@ -139,6 +66,7 @@
     import { mixinQuiz, mixinWindowSize } from '@/mixin/Mixins'
     import Timer from '@/components/OnlineQuiz/Quiz/Timer/Timer'
     import BubbleSheet from "@/components/OnlineQuiz/Quiz/BubbleSheet/BubbleSheet";
+    import { TopMenu } from '@/components/Menu/Menus'
     import {Exam} from "@/models/Exam";
     // Vue.component('DynamicScroller', DynamicScroller)
     // Vue.component('DynamicScrollerItem', DynamicScrollerItem)
@@ -148,6 +76,7 @@
         mixins: [mixinQuiz, mixinWindowSize],
         components: {
             Timer,
+            TopMenu,
             // 'virtual-list': VirtualList,
             BubbleSheet,
             DynamicScroller,

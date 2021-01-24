@@ -63,7 +63,7 @@
     import {mixinQuiz} from '@/mixin/Mixins'
 
     export default {
-        name: 'OnlineQuiz',
+        name: 'TopMenu_OnlineQuiz',
         mixins: [mixinQuiz],
         methods: {
             sendAnswersAndFinishExam() {

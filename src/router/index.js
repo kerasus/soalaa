@@ -128,15 +128,9 @@ const router = new VueRouter({
             meta: {middleware: auth}
         },
         {
-            path: '/video-analyze',
-            name: 'video-analyze',
-            component: () => lazyLoadView(import('@/components/AnalyzeByVideo')),
-            meta: {middleware: auth}
-        },
-        {
-            path: '/common-questions',
+            path: encodeURI('/سوالات_متداول'),
             name: 'common-questions',
-            component: () => lazyLoadView(import('@/components/commonQuestions')),
+            component: () => lazyLoadView(import('@/pages/CommonQuestions')),
             meta: {middleware: auth}
         },
         {
