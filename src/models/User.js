@@ -1,10 +1,9 @@
 import {Model} from 'js-abstract-model'
-import {Exam, ExamList} from "@/models/exam";
+import {Exam, ExamList} from "@/models/Exam";
 import Time from "@/plugins/time";
 import Assistant from "@/plugins/assistant";
 import {QuestCategoryList} from "@/models/QuestCategory";
 import {QuestSubcategoryList} from "@/models/QuestSubcategory";
-// import axios from "axios";
 
 class User extends Model {
     constructor(data) {
@@ -100,7 +99,7 @@ class User extends Model {
                     resolve()
                 })
                 .catch( (error) => {
-                    Assistant.reportErrors('models/User.js -> getUserData()')
+                    Assistant.reportErrors({location: 'models/User.js -> getUserData()'})
                     reject(error)
                 })
         })
@@ -138,7 +137,7 @@ class User extends Model {
                     resolve(that.exams)
                 })
                 .catch( (error) => {
-                    Assistant.reportErrors('models/User.js -> getUserExams()')
+                    Assistant.reportErrors({location: 'models/User.js -> getUserExams()'})
                     reject(error)
                 })
         })
@@ -154,7 +153,7 @@ class User extends Model {
                     resolve(response)
                 })
                 .catch( (error) => {
-                    Assistant.reportErrors('models/User.js -> registerExam()')
+                    Assistant.reportErrors({location: 'models/User.js -> registerExam()'})
                     reject(error)
                 })
         })
@@ -205,12 +204,12 @@ class User extends Model {
                             resolve({response, userExamForParticipate, data})
                         })
                         .catch( (error) => {
-                            Assistant.reportErrors('models/User.js -> participateExam() -> exam-user.create.catch')
+                            Assistant.reportErrors({location: 'models/User.js -> participateExam() -> exam-user.create.catch'})
                             reject(error)
                         })
                 })
                 .catch( (error) => {
-                    Assistant.reportErrors('models/User.js -> participateExam() -> exam-user.create.catch')
+                    Assistant.reportErrors({location: 'models/User.js -> participateExam() -> exam-user.create.catch'})
                     reject(error)
                 })
         })

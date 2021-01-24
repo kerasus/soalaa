@@ -85,7 +85,7 @@
                                     </v-btn>
                                     <v-btn
                                             v-if="item.user_exam_status === 'has participated but not finished' || item.user_exam_status === 'has participated and finished'"
-                                            :to="{ name: 'onlineQuiz.alaaView', params: { quizId: item.id, questNumber: 1 } }"
+                                            @click="continueExam(item.id)"
                                             color="purple"
                                             text
                                     >
@@ -144,7 +144,7 @@
 </template>
 
 <script>
-    import {Exam, ExamList} from "@/models/exam";
+    import {Exam, ExamList} from "@/models/Exam";
     import { mixinQuiz } from '@/mixin/Mixins'
     import ProgressLinear from "@/components/ProgressLinear";
 
@@ -161,6 +161,9 @@
             this.getExams()
         },
         methods: {
+            continueExam (examId) {
+                this.startExam(examId)
+            },
             getExams () {
                 // this.registerExam('5ffdcc5b5590063ba07fad36')
                 // this.participateExam('5ffdcc5b5590063ba07fad36')

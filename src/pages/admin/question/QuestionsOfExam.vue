@@ -121,7 +121,7 @@
     import { DynamicScroller, DynamicScrollerItem } from 'vue-virtual-scroller'
     import { mixinQuiz, mixinWindowSize } from '@/mixin/Mixins'
     import BubbleSheet from "@/components/OnlineQuiz/Quiz/BubbleSheet/BubbleSheet";
-    import {Quiz} from "@/models/Quiz";
+    import {Exam} from '@/models/Exam'
     import {QuestionList} from "@/models/Question";
     import {QuestSubcategoryList} from "@/models/QuestSubcategory";
 
@@ -141,7 +141,7 @@
         },
         data () {
             return {
-                quizData: new Quiz(),
+                quizData: new Exam(),
                 item: Item,
                 lastTimeScrollRange: { start: 0, end: 29 },
                 quizList: [],
@@ -184,7 +184,7 @@
             this.quizData.show(null, url)
                 .then((response) => {
                     this.quizData.questions = new QuestionList(response.data.data)
-                    this.quiz = new Quiz(this.quizData)
+                    this.quiz = new Exam(this.quizData)
                 })
             this.subCategoriesList.fetch().then((response) => {
                 this.quiz.sub_categories = new QuestSubcategoryList(response.data)

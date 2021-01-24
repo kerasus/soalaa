@@ -46,49 +46,43 @@
         </v-img>
         <v-btn
                 style="letter-spacing: inherit;"
+                href="https://alaatv.com/"
                 large
                 dark
                 tile
                 block
-                color="#5cbf60"
-                @click="sendAnswersAndFinishExam"
+                color="#ffc107"
+                elevation="0"
         >
-            ثبت و پایان آزمون
+            آلاء
+        </v-btn>
+        <v-btn
+                style="letter-spacing: inherit;"
+                large
+                dark
+                tile
+                block
+                color="red"
+                elevation="0"
+                @click="logout"
+        >
+            خروج
         </v-btn>
     </div>
 </template>
 
 <script>
-    // import {Exam} from "@/models/exam";
-    import {mixinQuiz} from '@/mixin/Mixins'
-
     export default {
-        name: 'OnlineQuiz',
-        mixins: [mixinQuiz],
+        name: 'TopMenu_Dashboard',
         methods: {
-            sendAnswersAndFinishExam() {
-                let that = this
-                this.quiz.sendAnswersAndFinishExam()
-                    .then( () => {
-                        that.$store.commit('clearExamData', that.quiz.id)
-                        that.$notify({
-                            group: 'notifs',
-                            text: 'اطلاعات آزمون شما ثبت شد.',
-                            type: 'success'
-                        })
-                        that.$router.push({ name: 'user.exam.list'})
-                    })
-                    .catch( () => {
-                        that.$notify({
-                            group: 'notifs',
-                            title: 'توجه!',
-                            text: 'مشکلی در ثبت اطلاعات آزمون شما رخ داده است. لطفا تا قبل از ساعت 24 اقدام به ارسال مجدد پاسخنامه نمایید.',
-                            type: 'warn',
-                            duration: 30000,
-                        })
-                        that.$router.push({ name: 'user.exam.list'})
-                    })
-            }
+            logout () {
+                // window.localStorage.setItem('access_token', '')
+                // window.localStorage.setItem('user', '')
+                // window.localStorage.setItem('vuex', '')
+                // this.$store.commit('updateUser', '')
+                this.$store.commit('resetState')
+                this.$router.push({ name: 'login' })
+            },
         }
     }
 </script>

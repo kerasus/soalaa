@@ -106,7 +106,7 @@
 
 <script>
     import Vue from 'vue'
-    import {Exam, ExamList} from "@/models/exam";
+    import {Exam, ExamList} from "@/models/Exam";
     import Toasted from 'vue-toasted';
     Vue.use(Toasted)
 

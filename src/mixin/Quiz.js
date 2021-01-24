@@ -1,10 +1,11 @@
 // import 'katex/dist/katex.min.css';
 import 'github-markdown-css/github-markdown.css';
 import '@/assets/scss/markdownKatex.scss';
-import {QuestSubcategory} from "@/models/QuestSubcategory";
+// import {QuestSubcategory} from "@/models/QuestSubcategory";
 import Assistant from "@/plugins/assistant";
 import {Question} from "@/models/Question";
 import Time from "@/plugins/time";
+import {QuestSubcategory} from "@/models/QuestSubcategory";
 
 const mixinQuiz = {
   computed: {
@@ -21,7 +22,6 @@ const mixinQuiz = {
     },
     quiz: {
       get () {
-        console.count('computed quiz');
         return this.$store.getters.quiz
       },
       set (newInfo) {
@@ -31,110 +31,185 @@ const mixinQuiz = {
     userQuizListData() {
       return this.$store.getters.userQuizListData
     },
+    currentExamFrozenQuestions() {
+      return this.$store.getters.currentExamFrozenQuestions
+    },
     currentQuestion: {
       get () {
         return this.$store.getters.currentQuestion
       },
       set (newInfo) {
-        this.$store.commit('updateCurrentQuestion', newInfo)
+        this.$store.commit('updateCurrentQuestion', {newQuestionId: newInfo.id, currentExamQuestions: this.getCurrentExamQuestions()})
       }
     },
     currentLesson () {
-      this.$store.commit('reloadQuizModel')
-      let currentLesson = new QuestSubcategory()
-      if (!this.currentQuestion.sub_category) {
-        this.loadFirstQuestion()
+      // this.$store.commit('reloadQuizModel')
+      // let currentLesson = new QuestSubcategory()
+      if (!this.currentQuestion || !this.currentQuestion.sub_category) {
+        return new QuestSubcategory()
       }
+      let currentSubCategoryId = this.currentQuestion.sub_category.id
+      return this.quiz.sub_categories.list.find( (item) => Assistant.getId(item.id) === Assistant.getId(currentSubCategoryId))
+      // if (!this.currentQuestion.sub_category) {
+      //   this.loadFirstQuestion()
+      // }
 
-      if (this.quiz.questions.list.length > 0 && this.currentQuestion.sub_category) {
-        let subCategoryId = Assistant.getId(this.currentQuestion.sub_category.id)
-        currentLesson = this.quiz.sub_categories.getItem('id', subCategoryId)
-      }
+      // if (this.getCurrentExam().questions.list.length > 0 && this.currentQuestion.sub_category) {
+      //   let subCategoryId = Assistant.getId(this.currentQuestion.sub_category.id)
+      //   currentLesson = this.getCurrentExam().sub_categories.getItem('id', subCategoryId)
+      // }
 
-      return currentLesson
+      // return currentLesson
     }
   },
   methods: {
-    startExam () {
+    getCurrentExam () {
+      return this.$store.getters.quiz
+    },
+    getCurrentExamQuestionIndexes () {
+      return JSON.parse(window.localStorage.getItem('currentExamQuestionIndexes'))
+    },
+    setCurrentExamQuestionIndexes (currentExamQuestionIndexes) {
+      window.localStorage.setItem('currentExamQuestionIndexes', JSON.stringify(currentExamQuestionIndexes))
+    },
+    getCurrentExamQuestions (array) {
+      let currentExamQuestions = JSON.parse(window.localStorage.getItem('currentExamQuestions'))
+      if (!array) {
+        return currentExamQuestions
+      }
+      let currentExamQuestionsArray = []
+      for (const questionId in currentExamQuestions) {
+        currentExamQuestionsArray.push(currentExamQuestions[questionId])
+      }
+
+      return currentExamQuestionsArray
+    },
+    getQuestionsOfSubcategory (subcatId) {
+      let currentExamQuestions = this.getCurrentExamQuestions()
+      let currentExamQuestionsArray = []
+      for (const questionId in currentExamQuestions) {
+        if (Assistant.getId(currentExamQuestions[questionId].sub_category.id) === Assistant.getId(subcatId)) {
+          currentExamQuestionsArray.push(currentExamQuestions[questionId])
+        }
+      }
+
+      return currentExamQuestionsArray
+    },
+    setCurrentExamQuestions (currentExamQuestions) {
+      window.localStorage.setItem('currentExamQuestions', JSON.stringify(currentExamQuestions))
+    },
+    startExam (examId, viewType) {
+      if (!Assistant.getId(examId)) {
+        return
+      }
       let that = this
       that.$store.commit('updateOverlay', true)
       return new Promise(function(resolve, reject) {
-        if (that.needToLoadQuiaData() && that.$route.params.quizId) {
-          that.participateExam(that.$route.params.quizId)
+        if (that.needToLoadQuiaData() && examId) {
+          that.participateExam(examId, viewType)
               .then(() => {
                 resolve()
               })
               .catch( (error) => {
                 that.$store.commit('updateOverlay', false)
-                Assistant.reportErrors('mixin/Quiz.js -> participateExam()')
+                Assistant.reportErrors({location: 'mixin/Quiz.js -> participateExam()'})
                 reject(error)
               })
         } else {
-          that.loadUserQuizDataFromStorage()
+          that.loadExam()
           that.$store.commit('updateOverlay', false)
           resolve()
         }
       })
     },
-    participateExam (examId) {
+    participateExam (examId, viewType) {
       let that = this
       return new Promise(function(resolve, reject) {
         that.user.participateExam(examId)
             .then(({userExamForParticipate}) => {
-              that.loadQuiz(userExamForParticipate)
+              that.loadExam(userExamForParticipate, viewType)
                   .then(() => {
                     resolve()
                   })
                   .catch( (error) => {
-                    Assistant.reportErrors('mixin/Quiz.js -> loadQuiz()')
+                    Assistant.reportErrors({location: 'mixin/Quiz.js -> loadExam()'})
                     reject(error)
                   })
             })
             .catch( (error) => {
               that.$router.push({ name: 'user.exam.list' })
-              Assistant.reportErrors('mixin/Quiz.js -> participateExam()')
+              Assistant.reportErrors({location: 'mixin/Quiz.js -> participateExam()'})
               reject(error)
             })
       })
     },
-    loadQuiz (userExamForParticipate) {
+    loadExam (examDataWithQuestions, viewType) {
       let that = this
-      return new Promise(function(resolve) {
-        that.$store.commit('updateQuiz', userExamForParticipate)
-        that.quiz.loadSubcategoriesOfCategories()
-        Time.setStateOfExamCategories(that.quiz.categories)
-        that.loadUserQuizDataFromStorage(that.quiz)
-        // resolve()
-        that.quiz.getAnswerOfUserInExam()
-            .then((response) => {
-              that.quiz.mergeDbAnswerToLocalstorage(response.data.data)
-              that.$store.commit('updateQuiz', that.quiz)
-              resolve()
-            })
-            .catch( (error) => {
-              throw new Error(error)
-            })
+      return new Promise(function(resolve, reject) {
+        if (examDataWithQuestions) {
+          // save questions in localStorage
+          that.saveCurrentExamQuestions(examDataWithQuestions.questions.list)
+          // save exam info in vuex store (remove questions of exam then save in store)
+          that.$store.commit('updateQuiz', examDataWithQuestions)
+        }
+        that.loadExamExtraData(that.quiz)
+        that.loadCurrentQuestion(viewType)
+        if (examDataWithQuestions) {
+          that.quiz.getAnswerOfUserInExam()
+              .then((response) => {
+                that.$store.commit('mergeDbAnswersIntoLocalstorage', {
+                  dbAnswers: response.data.data,
+                  exam_id: that.quiz.id
+                })
+                // that.quiz.mergeDbAnswerToLocalstorage(response.data.data)
+                // that.$store.commit('updateQuiz', that.quiz)
+                resolve()
+              })
+              .catch((error) => {
+                Assistant.reportErrors({location: 'mixin/Quiz.js -> loadExam()'})
+                reject(error)
+              })
+        } else {
+          resolve()
+        }
       })
     },
-    loadUserQuizDataFromStorage () {
-      Time.setStateOfQuestionsBasedOnActiveCategory(this.quiz)
-      this.$store.commit('updateQuiz', this.quiz)
+    saveCurrentExamQuestions (questionsList) {
+      let currentExamQuestions = {}
+      let currentExamQuestionIndexes = {}
+      questionsList.forEach( (item, index) => {
+        item.index = index
+        currentExamQuestions[item.id.toString()] = item
+        currentExamQuestionIndexes[index.toString()] = item.id
+      })
+      this.setCurrentExamQuestionIndexes(currentExamQuestionIndexes)
+      this.setCurrentExamQuestions(currentExamQuestions)
+    },
+    loadExamExtraData (quiz) {
+      let currentExamQuestions = this.getCurrentExamQuestions()
+      this.quiz.loadSubcategoriesOfCategories()
+      Time.setStateOfExamCategories(quiz.categories)
+      Time.setStateOfQuestionsBasedOnActiveCategory(quiz, currentExamQuestions)
+      this.setCurrentExamQuestions(currentExamQuestions)
+      this.$store.commit('updateQuiz', quiz)
+    },
+    loadCurrentQuestion (viewType) {
       let questNumber = this.$route.params.questNumber
       if (!questNumber) {
         questNumber = 1
       }
-      this.$store.commit('loadUserQuizListData')
-      this.loadQuestionByNumber(questNumber)
+      this.loadQuestionByNumber(questNumber, viewType)
     },
     loadFirstQuestion () {
       this.loadQuestionByNumber(1)
     },
-    loadQuestionByNumber (number) {
-      let questionIndex = this.getQuestionIndexFromNumber(number)
-      if (this.quiz.questions.list.length === 0 || questionIndex < 0) {
+    loadQuestionByNumber (number, viewType) {
+      const questionIndex = this.getQuestionIndexFromNumber(number)
+      const questionId = this.getCurrentExamQuestionIndexes()[questionIndex]
+      if (questionIndex < 0 || !questionId) {
         return
       }
-      this.changeQuestion(this.quiz.questions.list[questionIndex].id)
+      this.changeQuestion(questionId, viewType)
     },
     sendQuestionData (data, actionType) {
       // find quiz
@@ -176,35 +251,39 @@ const mixinQuiz = {
       }
     },
     answerClicked (data) {
-      this.quiz.questions.getQuestionById(data.questionId).selectChoice(data.choiceId)
-      this.currentQuestion.selectChoice(data.choiceId)
-      this.$store.commit('updateQuiz', this.quiz)
-      this.$store.commit('setCurrentQuestion', this.currentQuestion)
-      this.$store.commit('refreshUserQuizListData')
+      let oldStatus = this.userQuizListData[this.quiz.id][this.currentQuestion.id].status
+      let oldAnswered_choice_id = this.userQuizListData[this.quiz.id][this.currentQuestion.id].answered_choice_id
+      let newAnswered_choice_id = data.choiceId
+      if (oldAnswered_choice_id === newAnswered_choice_id) {
+        newAnswered_choice_id = null
+      } else if (oldStatus === 'x') {
+        let newState = ''
+        this.$store.commit('changeQuestion_Status', {exam_id: this.quiz.id, question_id: this.currentQuestion.id, status: newState})
+      }
+      this.$store.commit('changeQuestion_SelectChoice', {exam_id: this.quiz.id, question_id: this.currentQuestion.id, answered_choice_id: newAnswered_choice_id})
       this.sendQuestionData({question_id: data.questionId, choice_id: data.choiceId}, 'sendAnswer')
     },
     bookmark (question) {
       if (this.currentQuestion.id !== question.id) {
         this.currentQuestion = question
       }
-      this.$store.commit('reloadQuizModel')
-      this.quiz.questions.getQuestionById(this.currentQuestion.id).bookmark()
-      this.$store.commit('updateQuiz', this.quiz)
-      this.currentQuestion.bookmark()
-      this.$store.commit('setCurrentQuestion', this.currentQuestion)
-      this.$store.commit('refreshUserQuizListData')
-      this.sendQuestionData({ exam_user_id: this.quiz.user_exam_id, questionId: question.id, bookmarked: this.currentQuestion.bookmarked}, 'sendBookmark')
+      let oldBookmarked = this.userQuizListData[this.quiz.id][question.id].bookmarked
+      let newBookmark = !(oldBookmarked)
+      this.$store.commit('changeQuestion_Bookmark', {exam_id: this.quiz.id, question_id: question.id, bookmarked: newBookmark})
+      this.sendQuestionData({ exam_user_id: this.quiz.user_exam_id, questionId: question.id, bookmarked: newBookmark}, 'sendBookmark')
     },
     changeState (question, newState) {
       if (this.currentQuestion.id !== question.id) {
         this.currentQuestion = question
       }
-      this.$store.commit('reloadQuizModel')
-      this.quiz.questions.getQuestionById(this.currentQuestion.id).changeState(newState)
-      this.$store.commit('updateQuiz', this.quiz)
-      this.currentQuestion.changeState(newState)
-      this.$store.commit('setCurrentQuestion', this.currentQuestion)
-      this.$store.commit('refreshUserQuizListData')
+      let oldQuestion = this.userQuizListData[this.quiz.id][question.id]
+      let oldStatus = (!oldQuestion) ? false : oldQuestion.status
+      if (oldQuestion && newState === oldStatus) {
+        newState = ''
+      } else if (newState === 'x') {
+        this.$store.commit('changeQuestion_SelectChoice', {exam_id: this.quiz.id, question_id: question.id, answered_choice_id: null})
+      }
+      this.$store.commit('changeQuestion_Status', {exam_id: this.quiz.id, question_id: question.id, status: newState})
       this.sendQuestionData({ exam_user_id: this.quiz.user_exam_id, question_id: question.id, status: this.currentQuestion.state }, 'sendStatus')
     },
     needToLoadQuiaData () {
@@ -215,16 +294,56 @@ const mixinQuiz = {
       return index + 1
     },
     getQuestionNumberFromId (id) {
-      const questionIndex = this.quiz.questions.getIndex('id', id)
+      let currentExamQuestions = this.getCurrentExamQuestions()
+      let targetQuestion = currentExamQuestions[id]
+      if (!targetQuestion) {
+        return 1
+      }
+      const questionIndex =  targetQuestion.index
       return this.getQuestionNumberFromIndex(questionIndex)
     },
     getQuestionIndexFromNumber (number) {
       number = parseInt(number)
       return number - 1
     },
+    getFirstActiveQuestion () {
+      let questions = this.getCurrentExamQuestions()
+      for (const questionId in questions) {
+        if (questions[questionId].in_active_category) {
+          return questions[questionId]
+        }
+      }
+      return null
+    },
     getCategoryActiveStatus (categoryId) {
       const category = this.quiz.categories.list.find((item) => Assistant.getId(item.id) === Assistant.getId(categoryId))
       return !category || category.is_active;
+    },
+    getQuestionIndexById (questionId) {
+      let currentExamQuestionIndexes = this.getCurrentExamQuestionIndexes()
+      for(let index in currentExamQuestionIndexes) {
+        if(currentExamQuestionIndexes[index] === questionId) {
+          return index
+        }
+      }
+    },
+    getQuestionByIndex (questionIndex) {
+      let question = this.getCurrentExamQuestions()[this.getCurrentExamQuestionIndexes()[questionIndex]]
+      if (question) {
+        return question
+      } else {
+        return false
+      }
+    },
+    getNextQuestion (questionId) {
+      let currentIndex = this.getQuestionIndexById(questionId),
+          nextIndex = ++currentIndex
+      return this.getQuestionByIndex(nextIndex)
+    },
+    getPrevQuestion (questionId) {
+      let currentIndex = this.getQuestionIndexById(questionId),
+          prevIndex = --currentIndex
+      return this.getQuestionByIndex(prevIndex)
     },
     goToCategory (categoryId) {
       const nextCategoryQuestion = this.quiz.questions.list.find((item) => Assistant.getId(item.category_id) === Assistant.getId(categoryId))
@@ -234,7 +353,7 @@ const mixinQuiz = {
     },
     goToNextQuestion () {
       this.$store.commit('loadUserQuizListData')
-      let question = this.quiz.questions.getNextQuestion(this.currentQuestion.id)
+      let question = this.getNextQuestion(this.currentQuestion.id)
       if (!question) {
         return
       }
@@ -242,31 +361,40 @@ const mixinQuiz = {
     },
     goToPrevQuestion () {
       this.$store.commit('loadUserQuizListData')
-      let question = this.quiz.questions.getPrevQuestion(this.currentQuestion.id)
+      let question = this.getPrevQuestion(this.currentQuestion.id)
       if (!question) {
         return
       }
       this.changeQuestion(question.id)
     },
-    changeQuestion(id) {
+    changeQuestion(id, viewType) {
       if (Assistant.getId(this.currentQuestion.id) === Assistant.getId(id)) {
         return
       }
 
-      const questIndex = this.quiz.questions.getQuestionIndexById(id),
+      const questIndex = this.getQuestionIndexById(id),
           questNumber = this.getQuestionNumberFromIndex(questIndex)
 
-      let currentQuestion = this.quiz.questions.getQuestionById(id)
-      const currentQuestionCategoryActiveStatus = this.getCategoryActiveStatus(currentQuestion.sub_category.category_id)
+      let currentQuestion = this.getCurrentExamQuestions()[id]
+      let currentQuestionCategoryActiveStatus = this.getCategoryActiveStatus(currentQuestion.sub_category.category_id)
 
       if (!currentQuestionCategoryActiveStatus) {
-        return
+        currentQuestion = this.getFirstActiveQuestion()
+        if (!currentQuestion) {
+          return
+        }
       }
 
-      this.$store.commit('updateCurrentQuestion', currentQuestion)
+      this.$store.commit('updateCurrentQuestion', {newQuestionId: currentQuestion.id, currentExamQuestions: this.getCurrentExamQuestions()})
       if (parseInt(this.$route.params.questNumber) !== parseInt(questNumber) && this.$route.name !== 'onlineQuiz.konkoorView' && this.$route.name !== 'onlineQuiz.bubblesheet-view') {
-          this.$router.push({ name: 'onlineQuiz.alaaView', params: { quizId: this.quiz.id, questNumber } })
+        this.loadExamPageByViewType(this.quiz.id, questNumber, viewType)
       }
+    },
+    loadExamPageByViewType (examId, questNumber, viewType) {
+      if (!viewType) {
+        viewType = 'onlineQuiz.alaaView'
+      }
+      this.$router.push({ name: viewType, params: { quizId: examId, questNumber } })
     },
     // ToDo: change argument (type, questNumber)
     changeView (type) {

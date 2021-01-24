@@ -95,12 +95,6 @@
                 </v-list-item>
             </router-link>
 
-            <router-link class="text-decoration-none" :to="{ name: 'onlineQuiz.alaaView', params: { quizId: 313, questNumber: 1 } }">
-                <v-list-item>
-                    <v-list-item-title>آزمون آنلاین</v-list-item-title>
-                </v-list-item>
-            </router-link>
-
             <router-link class="text-decoration-none" :to="{ name: 'quiz.allQuestions' }">
                 <v-list-item>
                     <v-list-item-title>همه سوالارو میخوام ببینم</v-list-item-title>
@@ -113,7 +107,7 @@
 
 <script>
     export default {
-        name: "Menu",
+        name: "SideMenu_Dashboard",
         data: () => ({
             group: null
         }),

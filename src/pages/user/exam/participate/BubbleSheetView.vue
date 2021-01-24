@@ -28,6 +28,7 @@
     import { mixinQuiz, mixinDrawer, mixinWindowSize } from '@/mixin/Mixins'
     import Timer from "@/components/OnlineQuiz/Quiz/Timer/Timer";
     export default {
+        name: 'BubbleSheetView',
         components: {BubbleSheet, Timer},
         mixins: [mixinQuiz, mixinDrawer, mixinWindowSize],
         created() {

@@ -124,7 +124,7 @@
     import 'mathlive/dist/mathlive-fonts.css'
     import 'mathlive/dist/mathlive-static.css'
     import { Question } from '@/models/Question'
-    import {QuizList} from "@/models/Quiz";
+    import {ExamList} from '@/models/Exam'
     import {QuestSubcategoryList} from "@/models/QuestSubcategory";
     import Vue from 'vue'
     import MarkdownBtn from "@/components/QuizEditor/MarkdownBtn";
@@ -190,7 +190,7 @@
                 currentQuestion: new Question(),
                 url: '',
                 editMode: false,
-                quizList: new QuizList(),
+                quizList: new ExamList(),
                 subCategoriesList: new QuestSubcategoryList(),
                 selectedQuizzes: [],
                 exams: [],
@@ -339,8 +339,8 @@
         },
         created() {
             this.editMode = this.$route.name === 'quest.edit'
-            new QuizList().fetch().then((response) => {
-                this.quizList = new QuizList(response.data.data)
+            new ExamList().fetch().then((response) => {
+                this.quizList = new ExamList(response.data.data)
                 if (!this.editMode) {
                     this.selectedQuizzes.push(this.quizList.list[0].id)
                 }

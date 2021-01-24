@@ -14,7 +14,7 @@
 <script>
     import ExamInfo from "@/components/OnlineQuiz/Quiz/examInfo";
     import ExamList from "@/components/OnlineQuiz/Quiz/examList";
-    import {Exam} from "@/models/exam";
+    import {Exam} from "@/models/Exam";
 
     export default {
         name: 'Manage',
