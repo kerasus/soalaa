@@ -65,7 +65,7 @@
     import 'vue-virtual-scroller/dist/vue-virtual-scroller.css'
     import { DynamicScroller, DynamicScrollerItem } from 'vue-virtual-scroller'
     import Item from '@/components/OnlineQuiz/Quiz/ViewTypes/components/question'
-    import { mixinQuiz, mixinWindowSize } from '@/mixin/Mixins'
+    import { mixinQuiz, mixinUserActionOnQuestion, mixinWindowSize } from '@/mixin/Mixins'
     import Timer from '@/components/OnlineQuiz/Quiz/Timer/Timer'
     import BubbleSheet from "@/components/OnlineQuiz/Quiz/BubbleSheet/BubbleSheet";
     import {Exam} from "@/models/Exam";
@@ -76,7 +76,7 @@
 
     export default {
         name: 'KonkoorView',
-        mixins: [mixinQuiz, mixinWindowSize],
+        mixins: [mixinQuiz, mixinUserActionOnQuestion, mixinWindowSize],
         components: {
             Timer,
             TopMenu,
