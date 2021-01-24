@@ -32,6 +32,15 @@ const mixinQuiz = {
     userQuizListData() {
       return this.$store.getters.userQuizListData
     },
+    userQuestionData() {
+      return (questionId) => {
+        let questionData = this.userQuizListData[this.quiz.id][questionId]
+        if (!questionData) {
+          questionData = this.getCurrentExamQuestions(false)[questionId]
+        }
+        return questionData
+      }
+    },
     currentExamFrozenQuestions() {
       return this.$store.getters.currentExamFrozenQuestions
     },

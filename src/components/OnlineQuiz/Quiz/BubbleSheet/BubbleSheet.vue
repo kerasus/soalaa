@@ -11,7 +11,7 @@
         <div v-for="(group, index) in questionsInGroups" :key="index" class="question-group">
             <div v-for="question in group" :key="question.id" class="question-in-list">
                 <div
-                        :class="{ 'question-number-in-list': true, circle: question.state === 'o', cross: question.state === 'x', bookmark: question.bookmarked }"
+                        :class="{ 'question-number-in-list': true, circle: userQuizListData[quiz.id][question.id] && userQuizListData[quiz.id][question.id].status === 'o', cross: userQuizListData[quiz.id][question.id] && userQuizListData[quiz.id][question.id].status === 'x', bookmark: userQuizListData[quiz.id][question.id] && userQuizListData[quiz.id][question.id].bookmarked }"
                         :style="{ width: '24%', cursor: 'pointer' }"
                         @click="clickQuestionNumber(question.id)"
                 >
@@ -21,7 +21,7 @@
                         v-for="choice in question.choices.list"
                         :key="choice.id"
                         :class="{ 'choice-in-list': true, active: choice.active, answer: choice.answer }"
-                        @click="clickChoice(question.id, choice.id)"
+                        @click="answerClicked({ questionId: question.id, choiceId: choice.id})"
                 >
                     <v-icon v-if="info.type === 'pasokh-nameh' && choice.answer" size="12" :color="choice.answer === choice.active ? '#fff' : '#00c753'">
                         mdi-check
@@ -37,12 +37,12 @@
 
 <script>
     import $ from "jquery";
-    import { mixinQuiz } from "@/mixin/Mixins";
+    import { mixinQuiz, mixinUserActionOnQuestion } from "@/mixin/Mixins";
     // import {Exam} from "@/models/Exam";
 
     export default {
         name: 'BubbleSheet',
-        mixins: [mixinQuiz],
+        mixins: [mixinQuiz, mixinUserActionOnQuestion],
         computed: {
             questionsInGroups () {
                 let groups = [],
