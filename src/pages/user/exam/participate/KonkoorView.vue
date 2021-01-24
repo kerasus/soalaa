@@ -13,10 +13,12 @@
                 <!--                              class="questionss"-->
                 <!--                />-->
                 <DynamicScroller
-                        :items="quiz.questions.list"
+                        :items="questions"
                         :min-item-size="70"
                         class="scroller questionss"
                         ref="scroller"
+                        :emitUpdate="true"
+                        @update="onScroll"
                 >
                     <template v-slot="{ item, index, active }">
                         <DynamicScrollerItem
@@ -62,14 +64,18 @@
     // import VirtualList from 'vue-virtual-scroll-list'
     import 'vue-virtual-scroller/dist/vue-virtual-scroller.css'
     import { DynamicScroller, DynamicScrollerItem } from 'vue-virtual-scroller'
-    import Item from '@/components/OnlineQuiz/Quiz/ViewTypes/components/question'
+    import Item from './components/question'
     import { mixinQuiz, mixinWindowSize } from '@/mixin/Mixins'
     import Timer from '@/components/OnlineQuiz/Quiz/Timer/Timer'
     import BubbleSheet from "@/components/OnlineQuiz/Quiz/BubbleSheet/BubbleSheet";
+    import {Exam} from "@/models/exam";
     import { TopMenu } from '@/components/Menu/Menus'
-    import {Exam} from "@/models/Exam";
+    import Assistant from "@/plugins/assistant";
     // Vue.component('DynamicScroller', DynamicScroller)
     // Vue.component('DynamicScrollerItem', DynamicScrollerItem)
+    // var md = require('markdown-it')(),
+    //     mk = require('markdown-it-katex')
+    // md.use(mk);
 
     export default {
         name: 'KonkoorView',
@@ -90,7 +96,9 @@
                 lastTimeScrollRange: { start: 0, end: 29 },
                 scrollState: 'not scrolling',
                 timePassedSinceLastScroll: 0,
-                setIntervalCallback: null
+                setIntervalCallback: null,
+                renderedQuestions: { startIndex: 0, endIndex: 0 },
+                questions: []
             }
         },
         methods: {
@@ -98,37 +106,38 @@
                 this.$store.commit('updateAppBar', state)
                 this.$store.commit('updateDrawer', state)
             },
-            // changeCurrentQuestionIfScrollingIsDone (event, range) {
-            //     if (range.start !== this.lastTimeScrollRange.start || range.end !== this.lastTimeScrollRange.end) {
-            //         this.quiz.questions.turnIsInViewToFalse(range.start, range.end)
-            //         this.lastTimeScrollRange.start = range.start
-            //         this.lastTimeScrollRange.end = range.end
-            //     }
-            //     if (this.timePassedSinceLastScroll >= 1000) {
-            //         this.changeCurrentQuestionToFirstQuestionInView()
-            //         this.timePassedSinceLastScroll = 0
-            //         this.scrollState = 'not scrolling'
-            //         clearInterval(this.setIntervalCallback)
-            //         this.setIntervalCallback = null
-            //     }
-            //     this.timePassedSinceLastScroll += 250
-            // },
-            // onScroll (event, range) {
-            //     if (this.scrollState === 'not scrolling') {
-            //         this.setIntervalCallback = setInterval(() => {
-            //             this.changeCurrentQuestionIfScrollingIsDone(event, range)
-            //         }, 250)
-            //         this.scrollState = 'scrolling'
-            //     }
-            //     this.timePassedSinceLastScroll = 0
-            // },
-            // changeCurrentQuestionToFirstQuestionInView () {
-            //     const firstInViewQuestion = this.getFirstInViewQuestionNumber()
-            //     if (firstInViewQuestion.id === this.currentQuestion.id) {
-            //         return
-            //     }
-            //     this.changeQuestion(firstInViewQuestion)
-            // },
+            changeCurrentQuestionIfScrollingIsDone (startIndex, endIndex) {
+                // console.log('time since last: ', this.timePassedSinceLastScroll)
+                if (startIndex !== this.lastTimeScrollRange.start || endIndex !== this.lastTimeScrollRange.end) {
+                    this.lastTimeScrollRange.start = startIndex
+                    this.lastTimeScrollRange.end = endIndex
+                }
+                if (this.timePassedSinceLastScroll >= 1000) {
+                    this.changeCurrentQuestionToFirstQuestionInView(startIndex, endIndex)
+                    this.timePassedSinceLastScroll = 0
+                    this.scrollState = 'not scrolling'
+                    clearInterval(this.setIntervalCallback)
+                    this.setIntervalCallback = null
+                }
+                this.timePassedSinceLastScroll += 250
+            },
+            onScroll (startIndex, endIndex) {
+                this.renderedQuestions = { startIndex, endIndex }
+                if (this.scrollState === 'not scrolling') {
+                    this.setIntervalCallback = setInterval(() => {
+                        this.changeCurrentQuestionIfScrollingIsDone(startIndex, endIndex)
+                    }, 250)
+                    this.scrollState = 'scrolling'
+                }
+                this.timePassedSinceLastScroll = 0
+            },
+            changeCurrentQuestionToFirstQuestionInView (startIndex, endIndex) {
+                const firstInViewQuestion = this.getFirstInViewQuestionNumber(startIndex, endIndex)
+                if (firstInViewQuestion.id === this.currentQuestion.id) {
+                    return
+                }
+                this.changeQuestion(firstInViewQuestion)
+            },
             // scrollTo (questionId) {
             //     if (this.quiz.questions.getQuestionById(questionId).isInView === false) {
             //         const questionIndex = this.quiz.questions.getQuestionIndexById(questionId)
@@ -142,7 +151,7 @@
             //     }
             // },
             scrollTo (questionId) {
-                const questionIndex = this.quiz.questions.getQuestionIndexById(questionId)
+                const questionIndex = this.getQuestionIndexById(questionId)
                 this.$refs.scroller.scrollToItem(questionIndex)
                 for (let i = 1; i < 4; i++) {
                     setTimeout(() => {
@@ -155,16 +164,20 @@
             //     this.quiz.questions.getQuestionById(entries[0].target.id).isInView = (entries[0].intersectionRatio >= 0.5)
             // },
             // ToDo: check for removal
-            // getFirstInViewQuestionNumber () {
-            //     let firstQuestionInView = this.quiz.questions.list.find((item)=> {
-            //         return item.isInView === true
-            //     })
-            //     if (firstQuestionInView.id !== null) {
-            //         return firstQuestionInView.id
-            //     } else {
-            //         return false
-            //     }
-            // },
+            getFirstInViewQuestionNumber (startIndex, endIndex) {
+                let firstQuestionInView
+                for (let i = startIndex; i <= endIndex; i++) {
+                    if (this.questions[i].isInView === true) {
+                        firstQuestionInView = this.questions[i]
+                        console.log(i + 1)
+                    }
+                }
+                if (firstQuestionInView.id !== null) {
+                    return firstQuestionInView
+                } else {
+                    return false
+                }
+            },
             // isThisFirstQuestionInView (questionId) {
             //     if (this.getFirstInViewQuestionNumber().id === questionId) {
             //         return true
@@ -178,7 +191,7 @@
             //     return ''
             // },
             choiceClicked (questionId, choiceId) {
-                console.log('loadFirstActiveQuestionIfNeed->choiceClicked')
+                // console.log('loadFirstActiveQuestionIfNeed->choiceClicked')
                 this.scrollTo(questionId)
                 this.changeQuestion(questionId)
                 this.answerClicked({questionId, choiceId})
@@ -200,21 +213,34 @@
             this.changeAppBarAndDrawer(false)
         },
         created () {
-            console.log('konkoor view created')
+
             // this.quizData.show(this.$route.params.quizId).then((response) => {
             // }).catch((error) => {
             // })
-            this.startExam()
+            let that = this
+            this.startExam(this.$route.params.quizId)
+                .then(() => {
+                    that.loadFirstActiveQuestionIfNeed()
+                    that.$store.commit('updateOverlay', false)
+                })
+                .catch( (error) => {
+                    Assistant.reportErrors(error)
+                    that.$notify({
+                        group: 'notifs',
+                        title: 'توجه!',
+                        text: 'مشکلی در دریافت اطلاعات آژمون رخ داده است. لطفا دوباره امتحان کنید.',
+                        type: 'error'
+                    })
+                    // ToDo: uncomment
+                    // that.$router.push({ name: 'user.exam.list'})
+                })
             if (this.windowSize.x > 959) {
                 this.changeAppBarAndDrawer(false)
-                if (!this.quiz.id || (this.$route.params.quizId).toString() !== (this.quiz.id).toString()) {
-                    this.loadQuiz()
-                } else {
-                    this.loadUserQuizDataFromStorage()
-                }
             } else {
                 this.$router.push({ name: 'onlineQuiz.alaaView', params: { quizId: 313, questNumber: this.$route.params.quizId } })
             }
+            this.questions = this.getCurrentExamQuestions(true)
+
             // this.renderQuestionBody()
         },
         destroyed() {
