@@ -163,16 +163,16 @@
             // },
             // ToDo: check for removal
             getFirstInViewQuestionNumber () {
-                console.log(this.renderedQuestions.startIndex, this.renderedQuestions.endIndex, 'haha2')
+                // console.log(this.renderedQuestions.startIndex, this.renderedQuestions.endIndex, 'haha2')
                 let firstQuestionInView
                 for (let i = this.renderedQuestions.startIndex; i <= this.renderedQuestions.endIndex; i++) {
-                    console.log(i, ': ', this.questions[i].isInView)
+                    // console.log(i, ': ', this.questions[i].isInView)
                     if (this.questions[i].isInView === true) {
                         firstQuestionInView = this.questions[i]
                         break
                     }
                 }
-                if (firstQuestionInView.id !== null) {
+                if (firstQuestionInView && firstQuestionInView.id !== null) {
                     return firstQuestionInView
                 } else {
                     return false

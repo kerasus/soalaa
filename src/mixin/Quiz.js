@@ -88,9 +88,16 @@ const mixinQuiz = {
         return currentExamQuestions
       }
       let currentExamQuestionsArray = []
-      for (const questionId in currentExamQuestions) {
+      let currentExamQuestionIndexes = this.getCurrentExamQuestionIndexes()
+      let currentExamQuestionIndexesArray = Object.keys(currentExamQuestionIndexes)
+      currentExamQuestionIndexesArray.forEach( (item) => {
+        let questionId = currentExamQuestionIndexes[item]
         currentExamQuestionsArray.push(currentExamQuestions[questionId])
-      }
+      })
+
+      // for (const questionId in currentExamQuestions) {
+      //   currentExamQuestionsArray.push(currentExamQuestions[questionId])
+      // }
 
       return currentExamQuestionsArray
     },
@@ -329,6 +336,10 @@ const mixinQuiz = {
       const questIndex = this.getQuestionIndexById(id),
           questNumber = this.getQuestionNumberFromIndex(questIndex)
 
+      if (typeof questIndex === 'undefined') {
+        return
+      }
+
       let currentQuestion = this.getCurrentExamQuestions()[id]
       let currentQuestionCategoryActiveStatus = this.getCategoryActiveStatus(currentQuestion.sub_category.category_id)
 
@@ -353,10 +364,9 @@ const mixinQuiz = {
     // ToDo: change argument (type, questNumber)
     changeView (type) {
       if (type === 'alaa') {
-        const questionNumber = this.quiz.questions.getQuestionIndexById(this.currentQuestion.id) + 1
+        const questionNumber = this.getQuestionNumberFromId(this.currentQuestion.id)
         this.$router.push({ name: 'onlineQuiz.alaaView', params: { quizId: this.quiz.id, questNumber: questionNumber } })
-      }
-      if (type === 'konkoor') {
+      } else if (type === 'konkoor') {
         this.$router.push({ name: 'onlineQuiz.konkoorView', params: { quizId: this.quiz.id } })
       }
     },

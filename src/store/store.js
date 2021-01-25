@@ -246,7 +246,7 @@ const store = new Vuex.Store({
 
             const oldQuestionId = (!state.currentQuestion) ? false : Assistant.getId(state.currentQuestion.id)
             const newQuestionId = Assistant.getId(newInfo.newQuestionId)
-            if (newQuestionId === oldQuestionId || !Assistant.getId(state.quiz.id)) {
+            if (!state.quiz || newQuestionId === oldQuestionId || !Assistant.getId(state.quiz.id)) {
                 return
             }
             const currentExamQuestions = newInfo.currentExamQuestions
