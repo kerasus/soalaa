@@ -19,16 +19,16 @@
             </v-sheet>
         </div>
         <div v-if="source.in_active_category" class="buttons-group">
-            <v-btn icon @click="changeState(source, 'o')">
-                <v-icon v-if="source.state !== 'o'" color="#888" :size="24">mdi-checkbox-blank-circle-outline</v-icon>
-                <v-icon v-if="source.state === 'o'" color="yellow" :size="24">mdi-checkbox-blank-circle</v-icon>
+            <v-btn icon @click="changeStatus(source.id, 'o')">
+                <v-icon v-if="userQuizListData[quiz.id][source.id] && userQuizListData[quiz.id][source.id].status !== 'o'" color="#888" :size="24">mdi-checkbox-blank-circle-outline</v-icon>
+                <v-icon v-if="userQuizListData[quiz.id][source.id] && userQuizListData[quiz.id][source.id].status === 'o'" color="yellow" :size="24">mdi-checkbox-blank-circle</v-icon>
             </v-btn>
-            <v-btn icon @click="changeState(source ,'x')">
-                <v-icon :color="source.state === 'x' ? 'red' : '#888'" :size="24">mdi-close</v-icon>
+            <v-btn icon @click="changeStatus(source.id ,'x')">
+                <v-icon :color="userQuizListData[quiz.id][source.id] && userQuizListData[quiz.id][source.id].status === 'x' ? 'red' : '#888'" :size="24">mdi-close</v-icon>
             </v-btn>
-            <v-btn icon @click="bookmark(source)">
-                <v-icon v-if="!source.bookmarked" :size="24" color="#888">mdi-bookmark-outline</v-icon>
-                <v-icon v-if="source.bookmarked" color="blue" :size="24">mdi-bookmark</v-icon>
+            <v-btn icon @click="changeBookmark(source.id)">
+                <v-icon v-if="userQuizListData[quiz.id][source.id] && !userQuizListData[quiz.id][source.id].bookmarked" :size="24" color="#888">mdi-bookmark-outline</v-icon>
+                <v-icon v-if="userQuizListData[quiz.id][source.id] && userQuizListData[quiz.id][source.id].bookmarked" color="blue" :size="24">mdi-bookmark</v-icon>
             </v-btn>
         </div>
         <span v-if="source.in_active_category"
@@ -43,7 +43,7 @@
                     v-html="(choiceNumber[index]) + choice.rendered_title"
                     :md="choiceClass(source)"
                     :class="{ choice: true, renderedPanel: true, active: choice.active }"
-                    @click="choiceClicked(source.id, choice.id)"
+                    @click="answerClicked({ questionId: source.id, choiceId: choice.id})"
             />
         </v-row>
     </div>
@@ -51,15 +51,13 @@
 
 <script>
     import '@/assets/scss/markdownKatex.scss'
-    import { mixinQuiz } from '@/mixin/Mixins'
+    import { mixinQuiz, mixinUserActionOnQuestion } from '@/mixin/Mixins'
     import $ from "jquery";
     // var md = require('markdown-it')(),
     //     mk = require('markdown-it-katex')
     // md.use(mk);
 
     export default {
-        name: 'item',
-        mixins: [ mixinQuiz ],
         mounted() {
             this.observer = new IntersectionObserver(this.intersectionObserver, {threshold: [0.1, 0.95]});
 
@@ -71,6 +69,7 @@
             //     console.log('item', this.item.index)
             // }
         },
+        mixins: [ mixinQuiz, mixinUserActionOnQuestion ],
         data () {
             return {
                 observer: null,
