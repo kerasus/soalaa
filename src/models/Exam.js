@@ -78,6 +78,7 @@ class Exam extends Model {
                     dataType: "json",
                     success: function (data) {
                         that.questions = new QuestionList(data)
+
                         resolve(data)
                     },
                     error: function (jqXHR, textStatus, errorThrown) {
@@ -250,6 +251,7 @@ class Exam extends Model {
                 item.selectChoice(dbAnswer.choice_id, dbAnswer.selected_at)
                 item.state = dbAnswer.status
                 item.bookmarked = dbAnswer.bookmark
+                console.log(item.order)
             }
         })
     }
@@ -260,17 +262,21 @@ class Exam extends Model {
 
     getAnswerOfUserInResultPage () {
         let that = this
+        console.log('test')
         return new Promise(function(resolve, reject) {
             axios.get('/3a/api/temp-exam/answer/'+that.user_exam_id+'/withCorrect')
                 .then( (response) => {
+                    console.log('test2')
                     const questions_file_url = response.data.data.exam.questions_file_url
                     const examTitle = response.data.data.exam.title
                     const answers = response.data.data.answers
                     that.questions_file_url = questions_file_url
                     that.title = examTitle
+                    console.log('test3')
                     that.loadQuestionsFromFile()
                         .then( () => {
                             that.mergeDbAnswerToLocalstorage(answers)
+                            console.log(answers)
                             resolve()
                         })
                         .catch( ({jqXHR, textStatus, errorThrown}) => {

@@ -20,13 +20,13 @@
                 <div
                         v-for="choice in question.choices.list"
                         :key="choice.id"
-                        :class="{ 'choice-in-list': true, active: choice.active, answer: choice.answer }"
+                        :class="{ 'choice-in-list': true, active: userQuizListData[quiz.id][question.id] && choice.id === userQuizListData[quiz.id][question.id].answered_choice_id, answer: choice.answer }"
                         @click="answerClicked({ questionId: question.id, choiceId: choice.id})"
                 >
-                    <v-icon v-if="info.type === 'pasokh-nameh' && choice.answer" size="12" :color="choice.answer === choice.active ? '#fff' : '#00c753'">
+                    <v-icon v-if="info.type === 'pasokh-nameh' && choice.answer" size="12" :color="userQuizListData[quiz.id][question.id] && choice.id === userQuizListData[quiz.id][question.id].answered_choice_id ? '#fff' : '#00c753'">
                         mdi-check
                     </v-icon>
-                    <v-icon v-if="info.type === 'pasokh-nameh' && choice.active && !choice.answer" size="12" color="#fff">
+                    <v-icon v-if="info.type === 'pasokh-nameh' && userQuizListData[quiz.id][question.id] && choice.id === userQuizListData[quiz.id][question.id].answered_choice_id && !choice.answer" size="12" color="#fff">
                         mdi-close
                     </v-icon>
                 </div>
@@ -89,7 +89,7 @@
             setTimeout(() => {
                 $('.questions-list').height(this.questionListHeight())
                 that.overlay = false
-            }, 3000)
+            }, 2000)
         },
         'windowSize.x': function () {
             // const padding = this.questionListPadding()

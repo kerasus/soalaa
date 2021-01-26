@@ -288,7 +288,8 @@ const mixinQuiz = {
         return 1
       }
       const questionIndex =  targetQuestion.index
-      return this.getQuestionNumberFromIndex(questionIndex)
+      // return this.getQuestionNumberFromIndex(questionIndex)
+      return +questionIndex + 1
     },
     getQuestionIndexFromNumber (number) {
       number = parseInt(number)

@@ -43,6 +43,9 @@ const store = new Vuex.Store({
         // quizList: []
     },
     mutations: {
+        updateUserQuizListDataExam (state, newInfo) {
+            state.userQuizListData = newInfo
+        },
         resetState (state) {
             // Merge rather than replace so we don't lose observers
             // https://github.com/vuejs/vuex/issues/1118
@@ -135,6 +138,7 @@ const store = new Vuex.Store({
 
             state.userQuizListData[examId][questionId].answered_at = answeredAt
             state.userQuizListData[examId][questionId].answered_choice_id = payload.answered_choice_id
+            console.log(state.userQuizListData[examId][questionId].answered_choice_id)
         },
         changeQuestion_Status (state, payload) {
             let examId = payload.exam_id
@@ -252,6 +256,7 @@ const store = new Vuex.Store({
             const currentExamQuestions = newInfo.currentExamQuestions
 
             const currentQuestion = currentExamQuestions[newQuestionId]
+            //
             // ToDo: check in comment
             // if (newQuestionId) {
             //     let newQuestion = state.quiz.questions.getQuestionById(newQuestionId)
@@ -267,6 +272,7 @@ const store = new Vuex.Store({
             //     // })
             //     // if (!currentQuizData) {
             //     //     currentQuizData = {
+            // ToDO : this makes no sense
             //     //         examId: state.currentQuestion.id,
             //     //         examData: []
             //     //     }
@@ -314,6 +320,8 @@ const store = new Vuex.Store({
             })
             if (!currentQuizData) {
                 currentQuizData = {
+                    // ToDO : this makes no sense
+
                     examId: state.currentQuestion.id,
                     examData: []
                 }
@@ -336,6 +344,7 @@ const store = new Vuex.Store({
             // })
             // if (!currentQuizData) {
             //     currentQuizData = {
+            // ToDO : this makes no sense
             //         examId: state.currentQuestion.id,
             //         examData: []
             //     }
