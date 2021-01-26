@@ -43,7 +43,7 @@
                         <top-score-result/>
                     </v-tab-item>
                     <v-tab-item>
-                        <v-tabs color="#ffc107" vertical show-arrows grow>
+                        <v-tabs @change="onVideoTabChange" color="#ffc107" vertical show-arrows grow>
                             <v-tabs-slider color="yellow"></v-tabs-slider>
                             <v-tab>
                                 ادبیات فارسی
@@ -70,19 +70,15 @@
                                 شیمی
                             </v-tab>
                             <v-tab-item>
-                                <coming-soon/>
                                 <video/>
                             </v-tab-item>
                             <v-tab-item>
-                                <coming-soon/>
                                 <video/>
                             </v-tab-item>
                             <v-tab-item>
-                                <coming-soon/>
                                 <video/>
                             </v-tab-item>
                             <v-tab-item>
-                                <coming-soon/>
                                 <video/>
                             </v-tab-item>
                             <v-tab-item>
@@ -118,6 +114,7 @@
     import ComingSoon from "@/components/ComingSoon";
     import Assistant from "@/plugins/assistant";
     import {mixinQuiz} from "@/mixin/Mixins";
+    import {AlaaSet} from "@/models/AlaaSet";
 
     export default {
         name: 'Result',
@@ -126,6 +123,8 @@
         data: () => ({
             tab: null,
             exam: new Exam(),
+            alaaSet: new AlaaSet(),
+            alaaVideos: null
         }),
         created() {
             // this.exam.user_exam_id = this.$route.params.user_exam_id
@@ -154,8 +153,28 @@
                     Assistant.reportErrors({location: 'pages/user/exam/Result.vue -> created()'})
                 })
 
+            this.getAlaaSet(1029)
+            // 24670
         },
         methods: {
+            getContent () {
+
+            },
+            getAlaaSet (setId) {
+                this.alaaSet.loading = true
+                this.alaaSet.show(setId)
+                .then( (response) => {
+                    this.alaaSet.loading = false
+                    this.alaaSet = new AlaaSet(response.data.data)
+                    this.alaaVideos = this.alaaSet.contents.getVideos()
+                })
+                .catch( () => {
+                    this.alaaSet.loading = false
+                })
+            },
+            onVideoTabChange (tabIndex) {
+                console.log('tabIndex', tabIndex)
+            }
         }
     }
 </script>
