@@ -92,8 +92,35 @@ const mixinQuiz = {
     setCurrentExamQuestionIndexes (currentExamQuestionIndexes) {
       window.localStorage.setItem('currentExamQuestionIndexes', JSON.stringify(currentExamQuestionIndexes))
     },
+    saveCurrentExamQuestions (questionsList) {
+      let currentExamQuestions = {}
+      let currentExamQuestionIndexes = {}
+
+      let sortList = Array.prototype.sort.bind(questionsList);
+      sortList(function ( a, b ) {
+        let sorta = a.order,
+            sortb = b.order
+        if (sorta < sortb) {
+          return -1
+        }
+        if (sorta > sortb) {
+          return 1
+        }
+        return 0
+      });
+
+      questionsList.forEach( (item, index) => {
+        item.index = index
+        this.setQuestionsLtr(item)
+        currentExamQuestions[item.id.toString()] = item
+        currentExamQuestionIndexes[index.toString()] = item.id
+      })
+      this.modifyCurrentExamQuestions(currentExamQuestions)
+      this.setCurrentExamQuestionIndexes(currentExamQuestionIndexes)
+      this.setCurrentExamQuestions(currentExamQuestions)
+    },
     getCurrentExamQuestions (array) {
-      if (this.currentExamQuestions) {
+      if (this.currentExamQuestions && !array) {
         return this.currentExamQuestions
       }
       let currentExamQuestions = JSON.parse(window.localStorage.getItem('currentExamQuestions'))
@@ -217,32 +244,6 @@ const mixinQuiz = {
           resolve()
         }
       })
-    },
-    saveCurrentExamQuestions (questionsList) {
-      let currentExamQuestions = {}
-      let currentExamQuestionIndexes = {}
-
-      let sortList = Array.prototype.sort.bind(questionsList);
-      sortList(function ( a, b ) {
-        let sorta = a.order,
-            sortb = b.order
-        if (sorta < sortb) {
-          return -1
-        }
-        if (sorta > sortb) {
-          return 1
-        }
-        return 0
-      });
-
-      questionsList.forEach( (item, index) => {
-        item.index = index
-        this.setQuestionsLtr(item)
-        currentExamQuestions[item.id.toString()] = item
-        currentExamQuestionIndexes[index.toString()] = item.id
-      })
-      this.setCurrentExamQuestionIndexes(currentExamQuestionIndexes)
-      this.setCurrentExamQuestions(currentExamQuestions)
     },
     setQuestionsLtr (question) {
       // const englishRegex = /^[A-Za-z0-9 :"'ʹ.<>%$&@!+()\-/\n,…?ᵒ*~]*$/
