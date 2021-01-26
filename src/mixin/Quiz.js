@@ -1,4 +1,5 @@
 // import 'katex/dist/katex.min.css';
+import Vue from 'vue'
 import 'github-markdown-css/github-markdown.css';
 import '@/assets/scss/markdownKatex.scss';
 // import {QuestSubcategory} from "@/models/QuestSubcategory";
@@ -87,7 +88,7 @@ const mixinQuiz = {
     setCurrentExamQuestionIndexes (currentExamQuestionIndexes) {
       let currentExamQuestions = JSON.stringify(currentExamQuestionIndexes)
       window.localStorage.setItem('currentExamQuestionIndexes', currentExamQuestions)
-      this.currentExamQuestions = currentExamQuestions
+      Vue.set(this, 'currentExamQuestions', Object.freeze(currentExamQuestions))
     },
     getCurrentExamQuestions (array) {
       if (this.currentExamQuestions) {
@@ -96,7 +97,7 @@ const mixinQuiz = {
       let currentExamQuestions = JSON.parse(window.localStorage.getItem('currentExamQuestions'))
       let currentExamQuestionsArray = []
       currentExamQuestionsArray = this.modifyCurrentExamQuestions(currentExamQuestions)
-      this.currentExamQuestions = currentExamQuestions
+      Vue.set(this, 'currentExamQuestions', Object.freeze(currentExamQuestions))
 
       if (!array) {
         return currentExamQuestions
