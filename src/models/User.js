@@ -97,7 +97,7 @@ class User extends Model {
             that.show(null, '/alaa/api/v2/getUserFor3a')
                 .then( (response) => {
                     that = new User(response.data.data)
-                    resolve()
+                    resolve(that)
                 })
                 .catch( (error) => {
                     Assistant.reportErrors({location: 'models/User.js -> getUserData()'})
