@@ -3,10 +3,11 @@ import {Question} from "@/models/Question";
 const mixinUserActionOnQuestion = {
   methods: {
     userActionOnQuestion(questionId, actionType, data) {
+      console.log('1: ', Date.now())
       let examId = this.quiz.id
       let exam_user_id = this.quiz.user_exam_id
       this.beforeUserActionOnQuestion(examId, questionId)
-
+      console.log('2: ', Date.now())
       let userExamData = this.userQuizListData[examId]
       if (!userExamData) {
         return
@@ -15,7 +16,7 @@ const mixinUserActionOnQuestion = {
       if (!userQuestionData) {
         return
       }
-
+      console.log('3: ', Date.now())
       if (actionType === 'answer') {
         this.userActionOnQuestion_answer(data, examId, questionId, userQuestionData)
       } else if (actionType === 'bookmark') {
@@ -23,8 +24,12 @@ const mixinUserActionOnQuestion = {
       } else if (actionType === 'status') {
         this.userActionOnQuestion_status(data, examId, questionId, userQuestionData)
       }
-
+      console.log(this.userQuizListData[examId][questionId].answered_choice_id)
+      console.log('3: ', Date.now())
+      this.afterUserActionOnQuestion()
+      console.log('4: ', Date.now())
       this.sendUserQuestionsDataToServer(exam_user_id, userExamData, questionId, actionType)
+      console.log('5: ', Date.now())
     },
     beforeUserActionOnQuestion(examId, questionId) {
       this.$store.commit('updateCurrentQuestion', {
@@ -35,6 +40,10 @@ const mixinUserActionOnQuestion = {
         exam_id: examId,
         question_id: questionId
       })
+    },
+    afterUserActionOnQuestion() {
+        this.$store.commit('updateUserQuizListDataExam', this.userQuizListData)
+        console.log('done')
     },
     sendUserQuestionsDataToServer(examUserId, userExamData, questionId, actionType) {
 
@@ -85,6 +94,7 @@ const mixinUserActionOnQuestion = {
         question_id: questionId,
         answered_choice_id: newAnswered_choice_id
       })
+      console.log(this.userQuizListData[examId][questionId].answered_choice_id)
     },
     userActionOnQuestion_bookmark(examId, questionId, userQuestionData) {
       this.$store.commit('changeQuestion_RefreshQuestionObject', {

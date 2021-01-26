@@ -20,14 +20,14 @@
         </div>
         <div v-if="source.in_active_category" class="buttons-group">
             <v-btn icon @click="changeStatus(source.id, 'o')">
-                <v-icon v-if="userQuizListData[quiz.id][source.id] && userQuizListData[quiz.id][source.id].status !== 'o'" color="#888" :size="24">mdi-checkbox-blank-circle-outline</v-icon>
+                <v-icon v-if="!userQuizListData[quiz.id][source.id] || userQuizListData[quiz.id][source.id].status !== 'o'" color="#888" :size="24">mdi-checkbox-blank-circle-outline</v-icon>
                 <v-icon v-if="userQuizListData[quiz.id][source.id] && userQuizListData[quiz.id][source.id].status === 'o'" color="yellow" :size="24">mdi-checkbox-blank-circle</v-icon>
             </v-btn>
             <v-btn icon @click="changeStatus(source.id ,'x')">
                 <v-icon :color="userQuizListData[quiz.id][source.id] && userQuizListData[quiz.id][source.id].status === 'x' ? 'red' : '#888'" :size="24">mdi-close</v-icon>
             </v-btn>
             <v-btn icon @click="changeBookmark(source.id)">
-                <v-icon v-if="userQuizListData[quiz.id][source.id] && !userQuizListData[quiz.id][source.id].bookmarked" :size="24" color="#888">mdi-bookmark-outline</v-icon>
+                <v-icon v-if="!userQuizListData[quiz.id][source.id] || !userQuizListData[quiz.id][source.id].bookmarked" :size="24" color="#888">mdi-bookmark-outline</v-icon>
                 <v-icon v-if="userQuizListData[quiz.id][source.id] && userQuizListData[quiz.id][source.id].bookmarked" color="blue" :size="24">mdi-bookmark</v-icon>
             </v-btn>
         </div>
@@ -42,8 +42,8 @@
                     :key="choice.id"
                     v-html="(choiceNumber[index]) + choice.rendered_title"
                     :md="choiceClass(source)"
-                    :class="{ choice: true, renderedPanel: true, active: choice.active }"
-                    @click="answerClicked({ questionId: source.id, choiceId: choice.id})"
+                    :class="{ choice: true, renderedPanel: true, active: userQuizListData[quiz.id][source.id] && choice.id === userQuizListData[quiz.id][source.id].answered_choice_id }"
+                    @click="answerClickedd({ questionId: source.id, choiceId: choice.id})"
             />
         </v-row>
     </div>
@@ -59,11 +59,10 @@
 
     export default {
         mounted() {
-            this.observer = new IntersectionObserver(this.intersectionObserver, {threshold: [0.1, 0.95]});
+            this.observer = new IntersectionObserver(this.intersectionObserver, {threshold: [0.7, 0.75, 0.8]});
 
             this.observer.observe(this.$el);
             console.log('mounted this.$el', this.$el)
-
             // console.log('this.$el', this.$el)
             // if (this.item) {
             //     console.log('item', this.item.index)
@@ -94,18 +93,30 @@
         destroyed() {
             this.observer.disconnect();
         },
+        watch: {
+            userQuizListData: {
+                deep: true,
+                handler (val) {
+                    console.log(val)
+                }
+            }
+        },
         methods: {
             // test (entries) {
             //     console.log('id: ', this.getQuestionNumberFromId(this.source.id), ' is Intersecting: ', entries[0].isIntersecting)
             // },
+            answerClickedd (payload) {
+                this.answerClicked(payload)
+                console.log('this is it: ', this.userQuizListData[this.quiz.id][this.source.id].answered_choice_id)
+            },
             intersectionObserver(entries) {
                 // console.log(this.source.index, ': ', entries[0].intersectionRatio)
                 // this.source.isInView = entries[0].intersectionRatio >= 0.75
-
-                if (entries[0].intersectionRatio > 0.95) {
+                this.source.isInView = entries[0].intersectionRatio >= 0.75
+                if (entries[0].intersectionRatio >= 0.75) {
                     console.log('in entry.intersectionRatio', entries[0].intersectionRatio)
                     console.log('in this.$el', this.$el)
-                } else if (entries[0].intersectionRatio < 0.1) {
+                } else if (entries[0].intersectionRatio < 0.75) {
                     console.log('out entry.intersectionRatio', entries[0].intersectionRatio)
                     console.log('out this.$el', this.$el)
                 }

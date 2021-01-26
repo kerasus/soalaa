@@ -22,6 +22,6 @@
         components: {
             TopMenu_Dashboard,
             TopMenu_OnlineQuiz
-        },
+        }
     }
 </script>
