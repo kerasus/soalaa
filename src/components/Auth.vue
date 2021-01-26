@@ -99,8 +99,8 @@
                 axios.defaults.headers.common['Authorization'] = 'Bearer ' + token
                 let that = this
                 this.user.getUserData()
-                    .then( () => {
-                        that.$store.commit('updateUser', that.user)
+                    .then( (user) => {
+                        that.$store.commit('updateUser', user)
                         that.redirectTo(token)
                     })
             },
