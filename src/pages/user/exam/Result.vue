@@ -42,8 +42,8 @@
                     <v-tab-item>
                         <top-score-result/>
                     </v-tab-item>
-                    <v-tab-item>
-                        <v-tabs @change="onVideoTabChange" color="#ffc107" vertical show-arrows grow>
+                    <v-tab-item class="video-tab">
+                        <v-tabs color="#ffc107" :vertical="windowSize.x > 960" center-active show-arrows grow @change="onVideoTabChange">
                             <v-tabs-slider color="yellow"></v-tabs-slider>
                             <v-tab>
                                 ادبیات فارسی
@@ -82,19 +82,15 @@
                                 <video/>
                             </v-tab-item>
                             <v-tab-item>
-                                <coming-soon/>
                                 <video/>
                             </v-tab-item>
                             <v-tab-item>
-                                <coming-soon/>
                                 <video/>
                             </v-tab-item>
                             <v-tab-item>
-                                <coming-soon/>
                                 <video/>
                             </v-tab-item>
                             <v-tab-item>
-                                <coming-soon/>
                                 <video/>
                             </v-tab-item>
                         </v-tabs>
@@ -111,17 +107,17 @@
     import TopScoreResult from "@/components/OnlineQuiz/Quiz/resultTables/topScoreResult";
     import PersonalResult from "@/components/OnlineQuiz/Quiz/resultTables/personalResult";
     import BubbleSheet from "@/components/OnlineQuiz/Quiz/BubbleSheet/BubbleSheet";
-    import ComingSoon from "@/components/ComingSoon";
     import Assistant from "@/plugins/assistant";
-    import {mixinQuiz} from "@/mixin/Mixins";
     import {AlaaSet} from "@/models/AlaaSet";
+    import {mixinQuiz, mixinWindowSize} from "@/mixin/Mixins";
 
     export default {
         name: 'Result',
-        components: {ComingSoon, BubbleSheet, TopScoreResult, Info, PersonalResult},
-        mixins: [mixinQuiz],
+        components: { BubbleSheet, TopScoreResult, Info, PersonalResult},
+        mixins: [mixinQuiz, mixinWindowSize],
         data: () => ({
             tab: null,
+            videoLesson: null,
             exam: new Exam(),
             alaaSet: new AlaaSet(),
             alaaVideos: null
@@ -178,3 +174,25 @@
         }
     }
 </script>
+
+<style>
+    @media only screen and (min-width: 960px) {
+        .video-tab,
+        .video-tab .v-tabs .v-slide-group__wrapper {
+            background-color: #f4f4f4 !important;
+        }
+
+        .video-tab .v-tabs .v-slide-group__wrapper {
+            padding: 25px 0;
+        }
+
+        .video-tab .v-window.v-item-group.theme--light.v-tabs-items {
+            border-radius: 25px;
+        }
+
+        .video-tab .v-tab {
+            width: 200px;
+            height: 54px !important;
+        }
+    }
+</style>
