@@ -85,10 +85,12 @@ const mixinQuiz = {
     getCurrentExamQuestionIndexes () {
       return JSON.parse(window.localStorage.getItem('currentExamQuestionIndexes'))
     },
-    setCurrentExamQuestionIndexes (currentExamQuestionIndexes) {
-      let currentExamQuestions = JSON.stringify(currentExamQuestionIndexes)
-      window.localStorage.setItem('currentExamQuestionIndexes', currentExamQuestions)
+    setCurrentExamQuestions (currentExamQuestions) {
+      window.localStorage.setItem('currentExamQuestions', JSON.stringify(currentExamQuestions))
       Vue.set(this, 'currentExamQuestions', Object.freeze(currentExamQuestions))
+    },
+    setCurrentExamQuestionIndexes (currentExamQuestionIndexes) {
+      window.localStorage.setItem('currentExamQuestionIndexes', JSON.stringify(currentExamQuestionIndexes))
     },
     getCurrentExamQuestions (array) {
       if (this.currentExamQuestions) {
@@ -129,9 +131,6 @@ const mixinQuiz = {
       }
 
       return currentExamQuestionsArray
-    },
-    setCurrentExamQuestions (currentExamQuestions) {
-      window.localStorage.setItem('currentExamQuestions', JSON.stringify(currentExamQuestions))
     },
 
     startExam (examId, viewType) {
