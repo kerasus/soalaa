@@ -4,6 +4,7 @@ import Time from "@/plugins/time";
 import Assistant from "@/plugins/assistant";
 import {QuestCategoryList} from "@/models/QuestCategory";
 import {QuestSubcategoryList} from "@/models/QuestSubcategory";
+import axios from "axios";
 
 class User extends Model {
     constructor(data) {
@@ -171,26 +172,35 @@ class User extends Model {
         let sub_categories = response.data.data.sub_categories
         let created_at = response.data.data.created_at
 
-
         userExamForParticipate.id = exam_id
         userExamForParticipate.user_exam_id = user_exam_id
         userExamForParticipate.created_at = created_at
         userExamForParticipate.questions_file_url = questions_file_url
         userExamForParticipate.categories = new QuestCategoryList(categories)
         userExamForParticipate.sub_categories = new QuestSubcategoryList(sub_categories)
-
-        // this.exams.list.map( (item) => {
-        //     if(Assistant.getId(item.id) === exam_id) {
-        //         item.user_exam_id = user_exam_id
-        //         item.questions_file_url = questions_file_url
-        //         item.categories = new QuestCategoryList(categories)
-        //         item.sub_categories = new QuestSubcategoryList(sub_categories)
-        //     }
-        //     return item
-        // })
     }
 
-    participateExam (exam_id) {
+    loadExamForShowResult (response, user_exam_id, userExamForParticipate) {
+
+        const questions_file_url = response.data.data.exam.questions_file_url
+        const examTitle = response.data.data.exam.title
+
+        // let exam_id = Assistant.getId(response.data.data.exam_id)
+        // let categories = response.data.data.categories
+        // let sub_categories = response.data.data.sub_categories
+        // let created_at = response.data.data.created_at
+
+        // userExamForParticipate.id = exam_id
+        // userExamForParticipate.created_at = created_at
+        // userExamForParticipate.categories = new QuestCategoryList(categories)
+        // userExamForParticipate.sub_categories = new QuestSubcategoryList(sub_categories)
+
+        userExamForParticipate.user_exam_id = Assistant.getId(user_exam_id)
+        userExamForParticipate.title = examTitle
+        userExamForParticipate.questions_file_url = questions_file_url
+    }
+
+    loadExamDataFroParticipate (exam_id) {
         let that = this
         return new Promise(function(resolve, reject) {
             that.create({
@@ -199,6 +209,29 @@ class User extends Model {
                 .then((response) => {
                     let userExamForParticipate = new Exam()
                     that.loadExamForParticipate(response, userExamForParticipate)
+                    userExamForParticipate.loadQuestionsFromFile()
+                        .then( (data) => {
+                            resolve({response, userExamForParticipate, data})
+                        })
+                        .catch( (error) => {
+                            Assistant.reportErrors({location: 'models/User.js -> participateExam() -> exam-user.create.catch'})
+                            reject(error)
+                        })
+                })
+                .catch( (error) => {
+                    Assistant.reportErrors({location: 'models/User.js -> participateExam() -> exam-user.create.catch'})
+                    reject(error)
+                })
+        })
+    }
+
+    loadExamDataForShowResult (user_exam_id) {
+        let that = this
+        return new Promise(function(resolve, reject) {
+            axios.get('/3a/api/temp-exam/answer/'+user_exam_id+'/withCorrect')
+                .then((response) => {
+                    let userExamForParticipate = new Exam()
+                    that.loadExamForShowResult(response, user_exam_id, userExamForParticipate)
                     userExamForParticipate.loadQuestionsFromFile()
                         .then( (data) => {
                             resolve({response, userExamForParticipate, data})

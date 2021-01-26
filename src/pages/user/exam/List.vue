@@ -129,7 +129,7 @@
                                             v-if="item.user_exam_status === 'results recorded'"
                                             color="#00b5e6"
                                             text
-                                            :to="{ name: 'user.exam.results', params: { user_exam_id: item.user_exam_id } }"
+                                            :to="{ name: 'user.exam.results', params: { user_exam_id: item.user_exam_id, exam_id: item.id } }"
                                     >
                                         مشاهده نتایج
                                     </v-btn>

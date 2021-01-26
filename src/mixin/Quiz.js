@@ -1,4 +1,5 @@
 // import 'katex/dist/katex.min.css';
+import Vue from 'vue'
 import 'github-markdown-css/github-markdown.css';
 import '@/assets/scss/markdownKatex.scss';
 // import {QuestSubcategory} from "@/models/QuestSubcategory";
@@ -72,6 +73,11 @@ const mixinQuiz = {
       // return currentLesson
     }
   },
+  data () {
+    return {
+      currentExamQuestions: null
+    }
+  },
   methods: {
     getCurrentExam () {
       return this.$store.getters.quiz
@@ -80,13 +86,30 @@ const mixinQuiz = {
       return JSON.parse(window.localStorage.getItem('currentExamQuestionIndexes'))
     },
     setCurrentExamQuestionIndexes (currentExamQuestionIndexes) {
-      window.localStorage.setItem('currentExamQuestionIndexes', JSON.stringify(currentExamQuestionIndexes))
+      let currentExamQuestions = JSON.stringify(currentExamQuestionIndexes)
+      window.localStorage.setItem('currentExamQuestionIndexes', currentExamQuestions)
+      Vue.set(this, 'currentExamQuestions', Object.freeze(currentExamQuestions))
     },
     getCurrentExamQuestions (array) {
+      if (this.currentExamQuestions) {
+        return this.currentExamQuestions
+      }
       let currentExamQuestions = JSON.parse(window.localStorage.getItem('currentExamQuestions'))
+      let currentExamQuestionsArray = []
+      currentExamQuestionsArray = this.modifyCurrentExamQuestions(currentExamQuestions)
+      Vue.set(this, 'currentExamQuestions', Object.freeze(currentExamQuestions))
+
       if (!array) {
         return currentExamQuestions
       }
+
+      // for (const questionId in currentExamQuestions) {
+      //   currentExamQuestionsArray.push(currentExamQuestions[questionId])
+      // }
+
+      return currentExamQuestionsArray
+    },
+    modifyCurrentExamQuestions (currentExamQuestions) {
       let currentExamQuestionsArray = []
       let currentExamQuestionIndexes = this.getCurrentExamQuestionIndexes()
       let currentExamQuestionIndexesArray = Object.keys(currentExamQuestionIndexes)
@@ -94,11 +117,6 @@ const mixinQuiz = {
         let questionId = currentExamQuestionIndexes[item]
         currentExamQuestionsArray.push(currentExamQuestions[questionId])
       })
-
-      // for (const questionId in currentExamQuestions) {
-      //   currentExamQuestionsArray.push(currentExamQuestions[questionId])
-      // }
-
       return currentExamQuestionsArray
     },
     getQuestionsOfSubcategory (subcatId) {
@@ -143,7 +161,7 @@ const mixinQuiz = {
     participateExam (examId, viewType) {
       let that = this
       return new Promise(function(resolve, reject) {
-        that.user.participateExam(examId)
+        that.user.loadExamDataFroParticipate(examId)
             .then(({userExamForParticipate}) => {
               that.loadExam(userExamForParticipate, viewType)
                   .then(() => {
@@ -161,20 +179,29 @@ const mixinQuiz = {
             })
       })
     },
-    loadExam (examDataWithQuestions, viewType) {
+    loadExam (examDataWithQuestions, viewType, exam_id) {
       let that = this
       return new Promise(function(resolve, reject) {
         if (examDataWithQuestions) {
           // save questions in localStorage
           that.saveCurrentExamQuestions(examDataWithQuestions.questions.list)
           // save exam info in vuex store (remove questions of exam then save in store)
+          if (exam_id) {
+            examDataWithQuestions.id = exam_id
+          }
           that.$store.commit('updateQuiz', examDataWithQuestions)
         }
-        that.loadExamExtraData(that.quiz)
-        that.loadCurrentQuestion(viewType)
+        that.loadExamExtraData(that.quiz, viewType)
+        if (viewType !== 'results') {
+          that.loadCurrentQuestion(viewType)
+        }
         if (examDataWithQuestions) {
           that.quiz.getAnswerOfUserInExam()
               .then((response) => {
+                if (!Assistant.getId(that.quiz.id)) {
+                  Assistant.reportErrors({location: 'mixin/Quiz.js -> loadExam() -> quiz.getAnswerOfUserInExam()', message: 'quiz.id not set'})
+                  reject()
+                }
                 that.$store.commit('mergeDbAnswersIntoLocalstorage', {
                   dbAnswers: response.data.data,
                   exam_id: that.quiz.id
@@ -195,6 +222,20 @@ const mixinQuiz = {
     saveCurrentExamQuestions (questionsList) {
       let currentExamQuestions = {}
       let currentExamQuestionIndexes = {}
+
+      let sortList = Array.prototype.sort.bind(questionsList);
+      sortList(function ( a, b ) {
+        let sorta = a.order,
+            sortb = b.order
+        if (sorta < sortb) {
+          return -1
+        }
+        if (sorta > sortb) {
+          return 1
+        }
+        return 0
+      });
+
       questionsList.forEach( (item, index) => {
         item.index = index
         this.setQuestionsLtr(item)
@@ -209,12 +250,16 @@ const mixinQuiz = {
       const englishRegex = /^[A-Za-z0-9 :"'ʹ.<>%$&@!+()\-_/\n,…?ᵒ*~]*$/
       question.ltr = !!question.statement.match(englishRegex);
     },
-    loadExamExtraData (quiz) {
-      let currentExamQuestions = this.getCurrentExamQuestions()
+    loadExamExtraData (quiz, viewType) {
       this.quiz.loadSubcategoriesOfCategories()
-      Time.setStateOfExamCategories(quiz.categories)
-      Time.setStateOfQuestionsBasedOnActiveCategory(quiz, currentExamQuestions)
-      this.setCurrentExamQuestions(currentExamQuestions)
+
+      if (viewType !== 'results') {
+        let currentExamQuestions = this.getCurrentExamQuestions()
+        Time.setStateOfExamCategories(quiz.categories)
+        Time.setStateOfQuestionsBasedOnActiveCategory(quiz, currentExamQuestions)
+        this.setCurrentExamQuestions(currentExamQuestions)
+      }
+
       this.$store.commit('updateQuiz', quiz)
     },
     loadCurrentQuestion (viewType) {
