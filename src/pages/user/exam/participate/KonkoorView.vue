@@ -155,7 +155,7 @@
                     setTimeout(() => {
                             this.$refs.scroller.scrollToItem(questionIndex)
                         },
-                        1000 / Math.ceil(this.quiz.questions.list.length / 100) * i)
+                        333 * i)
                 }
             },
             // onIntersect (entries) {
@@ -239,7 +239,7 @@
             } else {
                 this.$router.push({ name: 'onlineQuiz.alaaView', params: { quizId: 313, questNumber: this.$route.params.quizId } })
             }
-            this.questions = this.getCurrentExamQuestions(true)
+            this.questions = this.getCurrentExamQuestionsInArray()
 
             // this.renderQuestionBody()
         },

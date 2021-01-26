@@ -48,7 +48,7 @@
                 let groups = [],
                 chunk = 10
                 let array
-                array = this.getCurrentExamQuestions(true)
+                array = this.getCurrentExamQuestionsInArray()
                 for (let i=0,j=array.length; i<j; i+=chunk) {
                     groups.push(array.slice(i,i+chunk))
                 }
