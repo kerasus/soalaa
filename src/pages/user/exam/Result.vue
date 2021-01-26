@@ -43,7 +43,7 @@
                         <top-score-result/>
                     </v-tab-item>
                     <v-tab-item class="video-tab">
-                        <v-tabs color="#ffc107" vertical show-arrows grow>
+                        <v-tabs v-model="videoLesson" color="#ffc107" vertical show-arrows grow>
                             <v-tabs-slider color="yellow"></v-tabs-slider>
                             <v-tab>
                                 ادبیات فارسی
@@ -70,35 +70,27 @@
                                 شیمی
                             </v-tab>
                             <v-tab-item>
-                                <coming-soon/>
                                 <video/>
                             </v-tab-item>
                             <v-tab-item>
-                                <coming-soon/>
                                 <video/>
                             </v-tab-item>
                             <v-tab-item>
-                                <coming-soon/>
                                 <video/>
                             </v-tab-item>
                             <v-tab-item>
-                                <coming-soon/>
                                 <video/>
                             </v-tab-item>
                             <v-tab-item>
-                                <coming-soon/>
                                 <video/>
                             </v-tab-item>
                             <v-tab-item>
-                                <coming-soon/>
                                 <video/>
                             </v-tab-item>
                             <v-tab-item>
-                                <coming-soon/>
                                 <video/>
                             </v-tab-item>
                             <v-tab-item>
-                                <coming-soon/>
                                 <video/>
                             </v-tab-item>
                         </v-tabs>
@@ -115,16 +107,16 @@
     import TopScoreResult from "@/components/OnlineQuiz/Quiz/resultTables/topScoreResult";
     import PersonalResult from "@/components/OnlineQuiz/Quiz/resultTables/personalResult";
     import BubbleSheet from "@/components/OnlineQuiz/Quiz/BubbleSheet/BubbleSheet";
-    import ComingSoon from "@/components/ComingSoon";
     import Assistant from "@/plugins/assistant";
     import {mixinQuiz} from "@/mixin/Mixins";
 
     export default {
         name: 'Result',
-        components: {ComingSoon, BubbleSheet, TopScoreResult, Info, PersonalResult},
+        components: { BubbleSheet, TopScoreResult, Info, PersonalResult},
         mixins: [mixinQuiz],
         data: () => ({
             tab: null,
+            videoLesson: null,
             exam: new Exam(),
         }),
         created() {
@@ -161,7 +153,21 @@
 </script>
 
 <style>
-    .video-tab .v-item-group {
-        background-color: #f4f4f4;
+    .video-tab,
+    .video-tab .v-tabs .v-slide-group__wrapper {
+        background-color: #f4f4f4 !important;
+    }
+
+    .video-tab .v-tabs .v-slide-group__wrapper {
+        padding: 25px 0;
+    }
+
+    .video-tab .v-window.v-item-group.theme--light.v-tabs-items {
+        border-radius: 25px;
+    }
+
+    .video-tab .v-tab {
+        width: 200px;
+        height: 54px !important;
     }
 </style>
