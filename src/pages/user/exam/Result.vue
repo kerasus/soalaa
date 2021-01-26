@@ -42,7 +42,7 @@
                     <v-tab-item>
                         <top-score-result/>
                     </v-tab-item>
-                    <v-tab-item>
+                    <v-tab-item class="video-tab">
                         <v-tabs color="#ffc107" vertical show-arrows grow>
                             <v-tabs-slider color="yellow"></v-tabs-slider>
                             <v-tab>
@@ -159,3 +159,9 @@
         }
     }
 </script>
+
+<style>
+    .video-tab .v-item-group {
+        background-color: #f4f4f4;
+    }
+</style>
