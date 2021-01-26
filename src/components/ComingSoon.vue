@@ -2,7 +2,7 @@
     <v-overlay
             :absolute="true"
             :opacity="0.99"
-            :value="true"
+            :value="false"
     >
         <v-btn
                 color="orange lighten-2"

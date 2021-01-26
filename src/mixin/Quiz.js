@@ -72,6 +72,11 @@ const mixinQuiz = {
       // return currentLesson
     }
   },
+  data () {
+    return {
+      currentExamQuestions: null
+    }
+  },
   methods: {
     getCurrentExam () {
       return this.$store.getters.quiz
@@ -80,13 +85,30 @@ const mixinQuiz = {
       return JSON.parse(window.localStorage.getItem('currentExamQuestionIndexes'))
     },
     setCurrentExamQuestionIndexes (currentExamQuestionIndexes) {
-      window.localStorage.setItem('currentExamQuestionIndexes', JSON.stringify(currentExamQuestionIndexes))
+      let currentExamQuestions = JSON.stringify(currentExamQuestionIndexes)
+      window.localStorage.setItem('currentExamQuestionIndexes', currentExamQuestions)
+      this.currentExamQuestions = currentExamQuestions
     },
     getCurrentExamQuestions (array) {
+      if (this.currentExamQuestions) {
+        return this.currentExamQuestions
+      }
       let currentExamQuestions = JSON.parse(window.localStorage.getItem('currentExamQuestions'))
+      let currentExamQuestionsArray = []
+      currentExamQuestionsArray = this.modifyCurrentExamQuestions(currentExamQuestions)
+      this.currentExamQuestions = currentExamQuestions
+
       if (!array) {
         return currentExamQuestions
       }
+
+      // for (const questionId in currentExamQuestions) {
+      //   currentExamQuestionsArray.push(currentExamQuestions[questionId])
+      // }
+
+      return currentExamQuestionsArray
+    },
+    modifyCurrentExamQuestions (currentExamQuestions) {
       let currentExamQuestionsArray = []
       let currentExamQuestionIndexes = this.getCurrentExamQuestionIndexes()
       let currentExamQuestionIndexesArray = Object.keys(currentExamQuestionIndexes)
@@ -94,11 +116,6 @@ const mixinQuiz = {
         let questionId = currentExamQuestionIndexes[item]
         currentExamQuestionsArray.push(currentExamQuestions[questionId])
       })
-
-      // for (const questionId in currentExamQuestions) {
-      //   currentExamQuestionsArray.push(currentExamQuestions[questionId])
-      // }
-
       return currentExamQuestionsArray
     },
     getQuestionsOfSubcategory (subcatId) {
