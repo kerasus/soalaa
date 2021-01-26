@@ -32,7 +32,7 @@
             <v-col>
                 <v-tabs-items v-model="tab">
                     <v-tab-item>
-                        <statistic-result/>
+                        <PersonalResult/>
                     </v-tab-item>
                     <v-tab-item>
                         <v-card flat>
@@ -113,7 +113,7 @@
     import {Exam} from "@/models/Exam";
     import Info from "@/components/OnlineQuiz/Quiz/resultTables/info";
     import TopScoreResult from "@/components/OnlineQuiz/Quiz/resultTables/topScoreResult";
-    import StatisticResult from "@/components/OnlineQuiz/Quiz/resultTables/statisticResult";
+    import PersonalResult from "@/components/OnlineQuiz/Quiz/resultTables/personalResult";
     import BubbleSheet from "@/components/OnlineQuiz/Quiz/BubbleSheet/BubbleSheet";
     import ComingSoon from "@/components/ComingSoon";
     import Assistant from "@/plugins/assistant";
@@ -121,7 +121,7 @@
 
     export default {
         name: 'Result',
-        components: {ComingSoon, BubbleSheet, StatisticResult, TopScoreResult, Info},
+        components: {ComingSoon, BubbleSheet, TopScoreResult, Info, PersonalResult},
         mixins: [mixinQuiz],
         data: () => ({
             tab: null,
