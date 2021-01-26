@@ -5,7 +5,7 @@ class AlaaContent extends Model {
         super(data, [
             {
                 key: 'baseRoute',
-                default: '/alaa/api/v2/content'
+                default: '/alaa/api/v2/c'
             },
             {key: 'id'},
             {key: 'type'},

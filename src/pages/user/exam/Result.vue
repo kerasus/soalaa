@@ -32,7 +32,7 @@
             <v-col>
                 <v-tabs-items v-model="tab">
                     <v-tab-item>
-                        <PersonalResult/>
+                        <PersonalResult :report="report"/>
                     </v-tab-item>
                     <v-tab-item>
                         <v-card flat>
@@ -40,11 +40,11 @@
                         </v-card>
                     </v-tab-item>
                     <v-tab-item>
-                        <top-score-result/>
+                        <top-score-result :report="report"/>
                     </v-tab-item>
                     <v-tab-item class="video-tab">
                         <v-tabs color="#ffc107" :vertical="windowSize.x > 960" center-active show-arrows grow @change="onVideoTabChange">
-                            <v-tabs-slider color="yellow"></v-tabs-slider>
+                            <v-tabs-slider :color="windowSize.x > 960 ? 'transparent' : 'yellow'"></v-tabs-slider>
                             <v-tab>
                                 ادبیات فارسی
                             </v-tab>
@@ -70,7 +70,10 @@
                                 شیمی
                             </v-tab>
                             <v-tab-item>
-                                <video/>
+                                <video :src="currentVideo.file.video[1].link" type="video/mp4" controls :poster="currentVideo.photo" :width="'80%'" class="video-player"/>
+                                <v-btn outlined v-for="(video, index) in alaaVideos" :key="index" @click="getContent(video.id)">
+                                    {{ video.title }}
+                                </v-btn>
                             </v-tab-item>
                             <v-tab-item>
                                 <video/>
@@ -110,6 +113,7 @@
     import Assistant from "@/plugins/assistant";
     import {AlaaSet} from "@/models/AlaaSet";
     import {mixinQuiz, mixinWindowSize} from "@/mixin/Mixins";
+    import {AlaaContent} from "@/models/AlaaContent";
 
     export default {
         name: 'Result',
@@ -120,7 +124,10 @@
             videoLesson: null,
             exam: new Exam(),
             alaaSet: new AlaaSet(),
-            alaaVideos: null
+            alaaContent: new AlaaContent(),
+            alaaVideos: null,
+            currentVideo: null,
+            report: null
         }),
         created() {
             // this.exam.user_exam_id = this.$route.params.user_exam_id
@@ -138,6 +145,17 @@
                     that.loadExam(userExamForParticipate, 'results', that.$route.params.exam_id)
                         .then(() => {
                             that.quiz.id = that.$route.params.exam_id
+                            that.quiz.show('600eeaa608caac7e6892debe', '/3a/api/exam-report?exam_id=5ffdcc5b5590063ba07fad36')
+                            .then((response) => {
+                                this.report = response.data.data
+                                this.report.sub_category.forEach((item) => {
+                                    item.percent = item.percent.toFixed(1)
+                                    item.empty = item.total_answer - item.right_answer - item.wrong_answer
+                                })
+                                this.report.zirgorooh.forEach((item) => {
+                                    item.percent = item.percent.toFixed(1)
+                                })
+                            })
                         })
                         .catch( () => {
                             Assistant.reportErrors({location: 'pages/user/exam/Result.vue -> loadExam()'})
@@ -149,12 +167,15 @@
                     Assistant.reportErrors({location: 'pages/user/exam/Result.vue -> created()'})
                 })
 
-            this.getAlaaSet(1029)
+            this.getAlaaSet(1017)
             // 24670
         },
         methods: {
-            getContent () {
-
+            getContent (contentId) {
+                this.alaaContent.show(contentId)
+                .then((response) => {
+                    this.currentVideo = response.data.data
+                })
             },
             getAlaaSet (setId) {
                 this.alaaSet.loading = true
@@ -163,6 +184,7 @@
                     this.alaaSet.loading = false
                     this.alaaSet = new AlaaSet(response.data.data)
                     this.alaaVideos = this.alaaSet.contents.getVideos()
+                    this.getContent(this.alaaVideos[0].id)
                 })
                 .catch( () => {
                     this.alaaSet.loading = false
@@ -192,7 +214,30 @@
 
         .video-tab .v-tab {
             width: 200px;
+            background: #ebeaea;
+            margin: 10px 0 10px 20px;
             height: 54px !important;
+            border-radius: 10px;
         }
+
+        .video-tab .v-tab.v-tab--active {
+            background-color: #fff;
+            border-bottom-left-radius: 0;
+            border-top-left-radius: 0;
+            margin-left: 0 !important;
+            box-sizing: content-box;
+            border-right: 10px solid rgb(255, 193, 7);
+        }
+    }
+
+    .video-player {
+        border-radius: 25px;
+        margin: 50px 0;
+    }
+
+    .video-tab .v-window.v-item-group.theme--light.v-tabs-items .v-window__container .v-window-item {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
     }
 </style>

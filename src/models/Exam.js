@@ -46,9 +46,11 @@ class Exam extends Model {
             { key: 'accept_at' },
             { key: 'created_at' },
             { key: 'finished_at' },
-            { key: 'is_registered' }
+            { key: 'is_registered' },
+            { key: 'exam_id' }
         ])
 
+        this.exam_id = this.id
         this.questions.sortByOrder()
         this.categories.sortByKey('end_at', 'asc')
         this.setQuestionsLtr()

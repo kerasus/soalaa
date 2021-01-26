@@ -7,8 +7,9 @@
                         <v-data-table
                                 hide-default-footer
                                 :headers="headers"
-                                :items="item"
+                                :items="report.best.sub_category"
                                 :loading="true"
+                                :items-per-page="15"
                                 class="elevation-1 dataTable"
                         >
                             <template v-slot:top>
@@ -43,7 +44,7 @@
                         sortable: false,
                         value: 'row',
                     },
-                    {text: 'درس', value: 'course',align: 'center',sortable: false,},
+                    {text: 'درس', value: 'sub_category',align: 'center',sortable: false,},
                     {text: 'درصد', value: 'percentage',align: 'center',sortable: false,},
                     {text: ' تراز', value: 'level',align: 'center',sortable: false,},
                 ],
@@ -105,7 +106,8 @@
 
                 ],
             }
-        }
+        },
+        props: ['report']
     }
 </script>
 
