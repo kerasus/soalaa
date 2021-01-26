@@ -119,24 +119,26 @@ const mixinQuiz = {
       this.setCurrentExamQuestionIndexes(currentExamQuestionIndexes)
       this.setCurrentExamQuestions(currentExamQuestions)
     },
-    getCurrentExamQuestions (array) {
-      if (this.currentExamQuestions && !array) {
+    getCurrentExamQuestionsInArray () {
+      let currentExamQuestionsArray = []
+      let currentExamQuestionIndexes = this.getCurrentExamQuestionIndexes()
+      let currentExamQuestions = this.getCurrentExamQuestions()
+      let currentExamQuestionIndexesArray = Object.keys(currentExamQuestionIndexes)
+      currentExamQuestionIndexesArray.forEach( (item) => {
+        let questionId = currentExamQuestionIndexes[item]
+        currentExamQuestionsArray.push(currentExamQuestions[questionId])
+      })
+      return currentExamQuestionsArray
+    },
+    getCurrentExamQuestions () {
+      if (this.currentExamQuestions) {
         return this.currentExamQuestions
       }
       let currentExamQuestions = JSON.parse(window.localStorage.getItem('currentExamQuestions'))
-      let currentExamQuestionsArray = []
-      currentExamQuestionsArray = this.modifyCurrentExamQuestions(currentExamQuestions)
+      this.modifyCurrentExamQuestions(currentExamQuestions)
       Vue.set(this, 'currentExamQuestions', Object.freeze(currentExamQuestions))
 
-      if (!array) {
-        return currentExamQuestions
-      }
-
-      // for (const questionId in currentExamQuestions) {
-      //   currentExamQuestionsArray.push(currentExamQuestions[questionId])
-      // }
-
-      return currentExamQuestionsArray
+      return currentExamQuestions
     },
     modifyCurrentExamQuestions (currentExamQuestions) {
       let currentExamQuestionsArray = []
