@@ -43,7 +43,7 @@
                         <top-score-result/>
                     </v-tab-item>
                     <v-tab-item class="video-tab">
-                        <v-tabs v-model="videoLesson" color="#ffc107" vertical show-arrows grow>
+                        <v-tabs v-model="videoLesson" color="#ffc107" :vertical="windowSize.x > 960" center-active show-arrows grow>
                             <v-tabs-slider color="yellow"></v-tabs-slider>
                             <v-tab>
                                 ادبیات فارسی
@@ -108,12 +108,12 @@
     import PersonalResult from "@/components/OnlineQuiz/Quiz/resultTables/personalResult";
     import BubbleSheet from "@/components/OnlineQuiz/Quiz/BubbleSheet/BubbleSheet";
     import Assistant from "@/plugins/assistant";
-    import {mixinQuiz} from "@/mixin/Mixins";
+    import {mixinQuiz, mixinWindowSize} from "@/mixin/Mixins";
 
     export default {
         name: 'Result',
         components: { BubbleSheet, TopScoreResult, Info, PersonalResult},
-        mixins: [mixinQuiz],
+        mixins: [mixinQuiz, mixinWindowSize],
         data: () => ({
             tab: null,
             videoLesson: null,
@@ -153,21 +153,23 @@
 </script>
 
 <style>
-    .video-tab,
-    .video-tab .v-tabs .v-slide-group__wrapper {
-        background-color: #f4f4f4 !important;
-    }
+    @media only screen and (min-width: 960px) {
+        .video-tab,
+        .video-tab .v-tabs .v-slide-group__wrapper {
+            background-color: #f4f4f4 !important;
+        }
 
-    .video-tab .v-tabs .v-slide-group__wrapper {
-        padding: 25px 0;
-    }
+        .video-tab .v-tabs .v-slide-group__wrapper {
+            padding: 25px 0;
+        }
 
-    .video-tab .v-window.v-item-group.theme--light.v-tabs-items {
-        border-radius: 25px;
-    }
+        .video-tab .v-window.v-item-group.theme--light.v-tabs-items {
+            border-radius: 25px;
+        }
 
-    .video-tab .v-tab {
-        width: 200px;
-        height: 54px !important;
+        .video-tab .v-tab {
+            width: 200px;
+            height: 54px !important;
+        }
     }
 </style>
