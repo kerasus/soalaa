@@ -43,7 +43,7 @@
                         <top-score-result/>
                     </v-tab-item>
                     <v-tab-item class="video-tab">
-                        <v-tabs v-model="videoLesson" color="#ffc107" :vertical="windowSize.x > 960" center-active show-arrows grow>
+                        <v-tabs color="#ffc107" :vertical="windowSize.x > 960" center-active show-arrows grow @change="onVideoTabChange">
                             <v-tabs-slider color="yellow"></v-tabs-slider>
                             <v-tab>
                                 ادبیات فارسی
@@ -108,6 +108,7 @@
     import PersonalResult from "@/components/OnlineQuiz/Quiz/resultTables/personalResult";
     import BubbleSheet from "@/components/OnlineQuiz/Quiz/BubbleSheet/BubbleSheet";
     import Assistant from "@/plugins/assistant";
+    import {AlaaSet} from "@/models/AlaaSet";
     import {mixinQuiz, mixinWindowSize} from "@/mixin/Mixins";
 
     export default {
@@ -118,6 +119,8 @@
             tab: null,
             videoLesson: null,
             exam: new Exam(),
+            alaaSet: new AlaaSet(),
+            alaaVideos: null
         }),
         created() {
             // this.exam.user_exam_id = this.$route.params.user_exam_id
@@ -146,8 +149,28 @@
                     Assistant.reportErrors({location: 'pages/user/exam/Result.vue -> created()'})
                 })
 
+            this.getAlaaSet(1029)
+            // 24670
         },
         methods: {
+            getContent () {
+
+            },
+            getAlaaSet (setId) {
+                this.alaaSet.loading = true
+                this.alaaSet.show(setId)
+                .then( (response) => {
+                    this.alaaSet.loading = false
+                    this.alaaSet = new AlaaSet(response.data.data)
+                    this.alaaVideos = this.alaaSet.contents.getVideos()
+                })
+                .catch( () => {
+                    this.alaaSet.loading = false
+                })
+            },
+            onVideoTabChange (tabIndex) {
+                console.log('tabIndex', tabIndex)
+            }
         }
     }
 </script>
