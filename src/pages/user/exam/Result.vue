@@ -116,75 +116,46 @@
     import StatisticResult from "@/components/OnlineQuiz/Quiz/resultTables/statisticResult";
     import BubbleSheet from "@/components/OnlineQuiz/Quiz/BubbleSheet/BubbleSheet";
     import ComingSoon from "@/components/ComingSoon";
+    import Assistant from "@/plugins/assistant";
+    import {mixinQuiz} from "@/mixin/Mixins";
 
     export default {
-        name: "Result",
+        name: 'Result',
         components: {ComingSoon, BubbleSheet, StatisticResult, TopScoreResult, Info},
+        mixins: [mixinQuiz],
         data: () => ({
             tab: null,
-            videoAnalyzeTab: null,
             exam: new Exam(),
-            video_analyze: true,
-            top_score_result: false,
-            key_answers: false,
-            sub_lessons: false,
-            adabiat: false,
-            arabi: false,
-            lessons: [
-                {name: 'literature', isShown: false},
-                {name: 'arabic', isShown: false},
-                {name: 'english', isShown: false},
-                {name: 'religious', isShown: false},
-                {name: 'math', isShown: false},
-                {name: 'bio', isShown: false},
-                {name: 'physics', isShown: false},
-                {name: 'chemistry', isShown: false}
-                ]
         }),
         created() {
-            this.exam.user_exam_id = this.$route.params.user_exam_id
-            this.exam.getAnswerOfUserInResultPage()
-            .then( () => {
-                this.$store.commit('setQuiz', this.exam)
-            })
-            .catch( () => {
-                this.$router.push({ name: 'user.exam.list'})
-            })
+            // this.exam.user_exam_id = this.$route.params.user_exam_id
+            // this.exam.getAnswerOfUserInResultPage()
+            // .then( () => {
+            //     this.$store.commit('setQuiz', this.exam)
+            // })
+            // .catch( () => {
+            //     this.$router.push({ name: 'user.exam.list'})
+            // })
+
+            let that = this
+            this.user.loadExamDataForShowResult(this.$route.params.user_exam_id)
+                .then(({userExamForParticipate}) => {
+                    that.loadExam(userExamForParticipate, 'results', that.$route.params.exam_id)
+                        .then(() => {
+                            that.quiz.id = that.$route.params.exam_id
+                        })
+                        .catch( () => {
+                            Assistant.reportErrors({location: 'pages/user/exam/Result.vue -> loadExam()'})
+                            that.$router.push({ name: 'user.exam.list' })
+                        })
+                })
+                .catch( () => {
+                    that.$router.push({ name: 'user.exam.list' })
+                    Assistant.reportErrors({location: 'pages/user/exam/Result.vue -> created()'})
+                })
+
         },
         methods: {
-            loadLessons(index) {
-                for (let i = 0; i < 8; i++) {
-                    if (i !== index)
-                    {
-                        this.lessons[i].isShown = false
-                    }
-                }
-                this.lessons[index].isShown = true
-            },
-            loadVideoAnalyze() {
-                this.video_analyze = true
-                this.top_score_result = false
-                this.key_answers = false
-                this.sub_lessons = false
-            },
-            loadTopScores() {
-                this.video_analyze = false
-                this.top_score_result = true
-                this.key_answers = false
-                this.sub_lessons = false
-            },
-            loadKeyAnswers() {
-                this.video_analyze = false
-                this.top_score_result = false
-                this.key_answers = true
-                this.sub_lessons = false
-            },
-            loadSubLessons() {
-                this.video_analyze = false
-                this.top_score_result = false
-                this.key_answers = false
-                this.sub_lessons = true
-            }
         }
     }
 </script>
