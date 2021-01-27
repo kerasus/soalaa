@@ -86,6 +86,12 @@ const router = new VueRouter({
             meta: {middleware: auth}
         },
         {
+            path: '/subcategory/set',
+            name: 'video.set',
+            component: () => lazyLoadView(import('@/pages/admin/VideoSet/SetVideo')),
+            meta: {middleware: auth}
+        },
+        {
             path: '/quest/:id',
             name: 'quest.edit',
             component: () => lazyLoadView(import('@/pages/admin/question/CreateOrEdit')),

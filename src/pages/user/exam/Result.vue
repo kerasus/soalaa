@@ -11,7 +11,7 @@
                         style="height:60px; width: 100%">
                     <v-row style="height: 50%;margin: inherit;
      ">
-                        <v-col md="4">
+                        <v-col sm="4">
                             نتایج آزمون اول سه‌آ -
                             {{ exam.title }}
                         </v-col>
@@ -45,29 +45,8 @@
                     <v-tab-item class="video-tab">
                         <v-tabs color="#ffc107" :vertical="windowSize.x > 960" center-active show-arrows grow @change="onVideoTabChange">
                             <v-tabs-slider :color="windowSize.x > 960 ? 'transparent' : 'yellow'"></v-tabs-slider>
-                            <v-tab>
-                                ادبیات فارسی
-                            </v-tab>
-                            <v-tab>
-                                عربی
-                            </v-tab>
-                            <v-tab>
-                                دین و زندگی
-                            </v-tab>
-                            <v-tab>
-                                زبان انگلیسی
-                            </v-tab>
-                            <v-tab>
-                                ریاضی
-                            </v-tab>
-                            <v-tab>
-                                زیست شناسی
-                            </v-tab>
-                            <v-tab>
-                                فیزیک
-                            </v-tab>
-                            <v-tab>
-                                شیمی
+                            <v-tab v-for="(item, index) in report.sub_category" :key="index">
+                                {{ item.sub_category }}
                             </v-tab>
                             <v-tab-item>
                                 <video :src="currentVideo.file.video[1].link" type="video/mp4" controls :poster="currentVideo.photo" :width="'80%'" class="video-player"/>
@@ -155,6 +134,11 @@
                                 this.report.zirgorooh.forEach((item) => {
                                     item.percent = item.percent.toFixed(1)
                                 })
+                                this.report.best.sub_category.forEach((item) => {
+                                    item.top_ranks_taraaz_mean = item.top_ranks_taraaz_mean.toFixed(0)
+                                    item.mean = item.mean.toFixed(1)
+                                    item.top_ranks_percent_mean = item.top_ranks_percent_mean.toFixed(1)
+                                })
                             })
                         })
                         .catch( () => {
@@ -191,7 +175,7 @@
                 })
             },
             onVideoTabChange (tabIndex) {
-                console.log('tabIndex', tabIndex)
+                console.log('tabIndex', this.report.sub_category[tabIndex].sub_category)
             }
         }
     }
@@ -227,6 +211,7 @@
             margin-left: 0 !important;
             box-sizing: content-box;
             border-right: 10px solid rgb(255, 193, 7);
+            padding-right: 0;
         }
     }
 

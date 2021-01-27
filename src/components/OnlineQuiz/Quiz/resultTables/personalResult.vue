@@ -3,8 +3,6 @@
         <div class="d-flex justify-center wrapper">
             <v-row>
                 <v-col cols="7">
-
-
                     <v-data-table
                             hide-default-footer
                             :headers="headers1"
@@ -20,10 +18,7 @@
                             <br>
                             <br>
                         </template>
-
                     </v-data-table>
-
-
                 </v-col>
                 <v-col class="firstColPadding">
                     <v-data-table
@@ -65,8 +60,6 @@
                     </v-row>
                 </v-col>
             </v-row>
-
-
         </div>
     </div>
 </template>
