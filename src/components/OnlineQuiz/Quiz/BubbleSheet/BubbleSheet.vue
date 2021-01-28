@@ -55,7 +55,17 @@
                 return groups
             }
         },
-        props: ['info', 'exam'],
+        props: {
+            info: {
+                default: null
+            },
+            exam: {
+                default: null
+            },
+            delayTime: {
+                default: 2000
+            }
+        },
         data: () => ({
             overlay: false,
         }),
@@ -82,14 +92,16 @@
             }
         },
         created() {
-            this.overlay = true
+            if (this.delayTime) {
+                this.overlay = true
+            }
         },
         mounted () {
             let that = this
             setTimeout(() => {
                 $('.questions-list').height(this.questionListHeight())
                 that.overlay = false
-            }, 2000)
+            }, this.delayTime)
         },
         'windowSize.x': function () {
             // const padding = this.questionListPadding()

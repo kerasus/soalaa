@@ -222,7 +222,9 @@
 
     .dataTable {
         margin-top: 20px;
-        height: 100%;width: 90%;border-radius: 15px
+        height: 100%;
+        width: 90%;
+        border-radius: 15px;
     }
     .v-data-table >>> thead {
         background-color: rgba(255, 193, 7, 0.3)!important;
