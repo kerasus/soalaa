@@ -16,7 +16,7 @@
                         <v-text-field label="لینک ست" outlined dense v-model="setLink" />
                     </v-col>
                     <v-col :md="12" type="submit" @click="submit">
-                        <v-btn color="primary" block height="500" outlined>ثبت</v-btn>
+                        <v-btn color="primary" block height="750" outlined>ثبت</v-btn>
                     </v-col>
                 </v-row>
             </v-sheet>
@@ -27,8 +27,8 @@
 <script>
     import {Question} from '@/models/Question'
     import {ExamList} from '@/models/Exam'
-    import {QuestSubcategoryList} from "@/models/QuestSubcategory";
-    import $ from "jquery";
+    import {QuestSubcategoryList} from '@/models/QuestSubcategory'
+    import axios from 'axios'
 
     export default {
         name: 'setVideo',
@@ -62,19 +62,26 @@
                 this.selectedQuizzes.forEach((item) => {
                     exams.push({exam_id: item})
                 })
-                $.ajax({
-                        type: 'POST',
-                        url: 'http://localhost/blah',
-                        data: {
-                            sub_category_id: that.currentQuestion.sub_category_id,
-                            video: that.setLink,
-                            exams
-                        },
-                        success: function (data) {
-                            console.log(data)
-                        },
-                    }
-                );
+                axios.post('/3a/api/exam-question/attach/sub-category', {
+                    sub_category_id: that.currentQuestion.sub_category_id,
+                    video: that.setLink,
+                    exams,
+                }).then((response) => {
+                    console.log(response)
+                })
+                // $.ajax({
+                //         type: 'POST',
+                //         url: 'http://localhost/3a/api/exam-question/attach/sub-category',
+                //         data: {
+                //             sub_category_id: that.currentQuestion.sub_category_id,
+                //             video: that.setLink,
+                //             exams
+                //         },
+                //         success: function (data) {
+                //             console.log(data)
+                //         },
+                //     }
+                // );
             }
         },
         mounted() {

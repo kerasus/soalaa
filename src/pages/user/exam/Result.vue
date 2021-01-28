@@ -39,7 +39,7 @@
                     </v-tab-item>
                     <v-tab-item>
                         <v-card flat>
-                            <BubbleSheet :info="{ type: 'pasokh-nameh' }" />
+                            <BubbleSheet :info="{ type: 'pasokh-nameh' }" delay-time="0" />
                         </v-card>
                     </v-tab-item>
                     <v-tab-item>
@@ -56,7 +56,7 @@
                                 <video :src="currentVideo.file.video[1].link" type="video/mp4" controls :poster="currentVideo.photo" :width="'60%'" class="video-player" :title="currentVideo.title"/>
                                 <div class="d-flex flex-row" dir="ltr">
                                     <v-btn outlined v-for="(video, index) in alaaVideos" :key="index" @click="getContent(video.id)" icon :style="{ margin: '0 5px' }">
-                                        {{ index }}
+                                        {{ index + 1 }}
                                     </v-btn>
                                 </div>
                             </v-tab-item>
