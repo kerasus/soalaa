@@ -3,13 +3,11 @@
         <div class="d-flex justify-center wrapper">
             <v-row>
                 <v-col cols="7">
-
-
                     <v-data-table
                             hide-default-footer
                             :headers="headers1"
-                            :items="item1"
-                            :items-per-page="5"
+                            :items="report.sub_category"
+                            :items-per-page="15"
                             class="elevation-1 dataTable dataTableHeight1"
                     >
                         <template v-slot:top>
@@ -20,16 +18,13 @@
                             <br>
                             <br>
                         </template>
-
                     </v-data-table>
-
-
                 </v-col>
                 <v-col class="firstColPadding">
                     <v-data-table
                             hide-default-footer
                             :headers="headers2"
-                            :items="item2"
+                            :items="report.zirgorooh"
                             :items-per-page="5"
                             class="elevation-1 dataTable dataTableHeight2"
                     >
@@ -49,7 +44,7 @@
                                 <v-card-title class="cardTitle">ماکزمیم تراز کل زیر گروه</v-card-title>
 
                                 <span class="cardContent">
-                                    7210
+                                    {{ report.main.taraaz }}
                                 </span>
                             </v-card>
                         </v-col>
@@ -58,15 +53,13 @@
                                 <v-card-title class="cardTitle">رتبه کل کشوری</v-card-title>
 
                                 <span class="cardContent">
-                                    24000
+                                    {{ report.main.rank_country }}
                                 </span>
                             </v-card>
                         </v-col>
                     </v-row>
                 </v-col>
             </v-row>
-
-
         </div>
     </div>
 </template>
@@ -82,173 +75,173 @@
                         text: 'ردیف',
                         align: 'center',
                         sortable: false,
-                        value: 'row',
+                        value: 'order',
                     },
-                    {text: 'درس', value: 'course', align: 'center', sortable: false,},
-                    {text: ' تعداد کل', value: 'total', align: 'center', sortable: false,},
-                    {text: ' تعداد درست', value: 'correct', align: 'center', sortable: false,},
-                    {text: ' تعداد غلط', value: 'wrong', align: 'center', sortable: false,},
+                    {text: 'درس', value: 'sub_category', align: 'center', sortable: false,},
+                    {text: ' تعداد کل', value: 'total_answer', align: 'center', sortable: false,},
+                    {text: ' تعداد درست', value: 'right_answer', align: 'center', sortable: false,},
+                    {text: ' تعداد غلط', value: 'wrong_answer', align: 'center', sortable: false,},
                     {text: ' تعداد نزده', value: 'empty', align: 'center', sortable: false,},
-                    {text: ' درصد', value: 'percentage', align: 'center', sortable: false,},
+                    {text: ' درصد', value: 'percent', align: 'center', sortable: false,},
                 ],
-                item1: [
-                    {
-                        row: 1,
-                        course: 'ریاضی',
-                        total: 6.0,
-                        correct: 10,
-                        wrong: 4.0,
-                        empty: 1,
-                    },
-                    {
-                        row: 2,
-                        course: 'ریاضی',
-                        total: 6.0,
-                        correct: 10,
-                        wrong: 4.0,
-                        empty: 1,
-                    },
-                    {
-                        row: '1',
-                        course: 'ریاضی',
-                        total: 6.0,
-                        correct: 10,
-                        wrong: 4.0,
-                        empty: 1,
-                    },
-                    {
-                        row: '1',
-                        course: 'ریاضی',
-                        total: 6.0,
-                        correct: 10,
-                        wrong: 4.0,
-                        empty: 1,
-                    },
-                    {
-                        row: '1',
-                        course: 'ریاضی',
-                        total: 6.0,
-                        correct: 10,
-                        wrong: 4.0,
-                        empty: 1,
-                    },
-                    {
-                        row: '1',
-                        course: 'ریاضی',
-                        total: 6.0,
-                        correct: 10,
-                        wrong: 4.0,
-                        empty: 1,
-                    },
-                    {
-                        row: '1',
-                        course: 'ریاضی',
-                        total: 6.0,
-                        correct: 10,
-                        wrong: 4.0,
-                        empty: 1,
-                    },
-                    {
-                        row: '1',
-                        course: 'ریاضی',
-                        total: 6.0,
-                        correct: 10,
-                        wrong: 4.0,
-                        empty: 1,
-                    },
-
-                ],
+                // item1: [
+                //     {
+                //         row: 1,
+                //         course: 'ریاضی',
+                //         total: 6.0,
+                //         correct: 10,
+                //         wrong: 4.0,
+                //         empty: 1,
+                //     },
+                //     {
+                //         row: 2,
+                //         course: 'ریاضی',
+                //         total: 6.0,
+                //         correct: 10,
+                //         wrong: 4.0,
+                //         empty: 1,
+                //     },
+                //     {
+                //         row: '1',
+                //         course: 'ریاضی',
+                //         total: 6.0,
+                //         correct: 10,
+                //         wrong: 4.0,
+                //         empty: 1,
+                //     },
+                //     {
+                //         row: '1',
+                //         course: 'ریاضی',
+                //         total: 6.0,
+                //         correct: 10,
+                //         wrong: 4.0,
+                //         empty: 1,
+                //     },
+                //     {
+                //         row: '1',
+                //         course: 'ریاضی',
+                //         total: 6.0,
+                //         correct: 10,
+                //         wrong: 4.0,
+                //         empty: 1,
+                //     },
+                //     {
+                //         row: '1',
+                //         course: 'ریاضی',
+                //         total: 6.0,
+                //         correct: 10,
+                //         wrong: 4.0,
+                //         empty: 1,
+                //     },
+                //     {
+                //         row: '1',
+                //         course: 'ریاضی',
+                //         total: 6.0,
+                //         correct: 10,
+                //         wrong: 4.0,
+                //         empty: 1,
+                //     },
+                //     {
+                //         row: '1',
+                //         course: 'ریاضی',
+                //         total: 6.0,
+                //         correct: 10,
+                //         wrong: 4.0,
+                //         empty: 1,
+                //     },
+                //
+                // ],
                 headers2: [
                     {
                         text: 'زیر گروه',
                         align: 'center',
                         sortable: false,
-                        value: 'subGroup'
+                        value: 'title'
                     },
-                    {text: 'درصد خام', value: 'rawPercentage', align: 'center', sortable: false,},
-                    {text: 'تراز', value: 'level', align: 'center', sortable: false,},
-                    {text: ' رتبه شهر', value: 'rankInCity', align: 'center', sortable: false,},
-                    {text: ' رتبه استان', value: 'rankInState', align: 'center', sortable: false,},
-                    {text: ' رتبه کشور', value: 'rankInCountry', align: 'center', sortable: false,},
+                    {text: 'درصد خام', value: 'percent', align: 'center', sortable: false,},
+                    {text: 'تراز', value: 'taraaz', align: 'center', sortable: false,},
+                    // {text: ' رتبه شهر', value: 'rankInCity', align: 'center', sortable: false,},
+                    // {text: ' رتبه استان', value: 'rankInState', align: 'center', sortable: false,},
+                    {text: ' رتبه کشور', value: 'rank_country', align: 'center', sortable: false,},
                 ],
-                item2: [
-                    {
-                        subGroup: '1',
-                        rawPercentage: 90,
-                        level: 5000,
-                        rankInCity: 20,
-                        rankInState: 200,
-                        rankInCountry: 2000
-                    },
-                    {
-                        subGroup: '1',
-                        rawPercentage: 90,
-                        level: 5000,
-                        rankInCity: 20,
-                        rankInState: 200,
-                        rankInCountry: 2000
-                    },
-                    {
-                        subGroup: '1',
-                        rawPercentage: 90,
-                        level: 5000,
-                        rankInCity: 20,
-                        rankInState: 200,
-                        rankInCountry: 2000
-                    },
-                    {
-                        subGroup: '1',
-                        rawPercentage: 90,
-                        level: 5000,
-                        rankInCity: 20,
-                        rankInState: 200,
-                        rankInCountry: 2000
-                    },
-                    {
-                        subGroup: '1',
-                        rawPercentage: 90,
-                        level: 5000,
-                        rankInCity: 20,
-                        rankInState: 200,
-                        rankInCountry: 2000
-                    },
-                    {
-                        subGroup: '1',
-                        rawPercentage: 90,
-                        level: 5000,
-                        rankInCity: 20,
-                        rankInState: 200,
-                        rankInCountry: 2000
-                    },
-                    {
-                        subGroup: '1',
-                        rawPercentage: 90,
-                        level: 5000,
-                        rankInCity: 20,
-                        rankInState: 200,
-                        rankInCountry: 2000
-                    },
-                    {
-                        subGroup: '1',
-                        rawPercentage: 90,
-                        level: 5000,
-                        rankInCity: 20,
-                        rankInState: 200,
-                        rankInCountry: 2000
-                    },
-                    {
-                        subGroup: '1',
-                        rawPercentage: 90,
-                        level: 5000,
-                        rankInCity: 20,
-                        rankInState: 200,
-                        rankInCountry: 2000
-                    },
-
-                ],
+                // item2: [
+                //     {
+                //         subGroup: '1',
+                //         rawPercentage: 90,
+                //         level: 5000,
+                //         rankInCity: 20,
+                //         rankInState: 200,
+                //         rankInCountry: 2000
+                //     },
+                //     {
+                //         subGroup: '1',
+                //         rawPercentage: 90,
+                //         level: 5000,
+                //         rankInCity: 20,
+                //         rankInState: 200,
+                //         rankInCountry: 2000
+                //     },
+                //     {
+                //         subGroup: '1',
+                //         rawPercentage: 90,
+                //         level: 5000,
+                //         rankInCity: 20,
+                //         rankInState: 200,
+                //         rankInCountry: 2000
+                //     },
+                //     {
+                //         subGroup: '1',
+                //         rawPercentage: 90,
+                //         level: 5000,
+                //         rankInCity: 20,
+                //         rankInState: 200,
+                //         rankInCountry: 2000
+                //     },
+                //     {
+                //         subGroup: '1',
+                //         rawPercentage: 90,
+                //         level: 5000,
+                //         rankInCity: 20,
+                //         rankInState: 200,
+                //         rankInCountry: 2000
+                //     },
+                //     {
+                //         subGroup: '1',
+                //         rawPercentage: 90,
+                //         level: 5000,
+                //         rankInCity: 20,
+                //         rankInState: 200,
+                //         rankInCountry: 2000
+                //     },
+                //     {
+                //         subGroup: '1',
+                //         rawPercentage: 90,
+                //         level: 5000,
+                //         rankInCity: 20,
+                //         rankInState: 200,
+                //         rankInCountry: 2000
+                //     },
+                //     {
+                //         subGroup: '1',
+                //         rawPercentage: 90,
+                //         level: 5000,
+                //         rankInCity: 20,
+                //         rankInState: 200,
+                //         rankInCountry: 2000
+                //     },
+                //     {
+                //         subGroup: '1',
+                //         rawPercentage: 90,
+                //         level: 5000,
+                //         rankInCity: 20,
+                //         rankInState: 200,
+                //         rankInCountry: 2000
+                //     },
+                //
+                // ],
             }
         },
-
+        props: ['report']
     }
 </script>
 
@@ -268,7 +261,6 @@
     .wrapper {
         width: 97%;
         margin: auto;
-        height: 600px
     }
 
     .subRowHeight {

@@ -65,6 +65,7 @@
                 </v-list-item>
             </router-link>
 
+
 <!--            <a>-->
 <!--                <v-list-item>-->
 <!--                    <v-list-item-title>درباره ما</v-list-item-title>-->
@@ -95,11 +96,12 @@
                 </v-list-item>
             </router-link>
 
-            <router-link class="text-decoration-none" :to="{ name: 'quiz.allQuestions' }">
+            <router-link class="text-decoration-none" :to="{ name: 'video.set' }">
                 <v-list-item>
-                    <v-list-item-title>همه سوالارو میخوام ببینم</v-list-item-title>
+                    <v-list-item-title>ثبت ویدئو تحلیل</v-list-item-title>
                 </v-list-item>
             </router-link>
+
 
         </v-list-item-group>
     </v-list>

@@ -2,37 +2,44 @@
     <div >
         <coming-soon/>
         <div class="d-flex justify-center">
-                <v-col>
-                    <v-row class=" d-flex justify-center">
-                        <v-data-table
-                                hide-default-footer
-                                :headers="headers"
-                                :items="item"
-                                :loading="true"
-                                class="elevation-1 dataTable"
-                        >
-                            <template v-slot:top>
-                                <br>
-                                <span class="tableTitle">
-                                    جدول نتایج نفرات برتر
-                                </span>
-                                <br>
-                                <br>
-                            </template>
-                        </v-data-table>
-                    </v-row>
-                </v-col>
+            <v-col>
+                <v-row class=" d-flex justify-center">
+                    <v-data-table
+                            hide-default-footer
+                            :headers="headers"
+                            :items="report.best.sub_category"
+                            :items-per-page="15"
+                            class="elevation-1 dataTable"
+                    >
+                        <template v-slot:top>
+                            <br>
+                            <span class="tableTitle">
+                                جدول نتایج نفرات برتر
+                            </span>
+                            <br>
+                            <br>
+                        </template>
+                    </v-data-table>
+                </v-row>
+                <v-row>
+                    <v-col>
+                        <div :style="{ 'max-width': '1000px'}">
+                            <highcharts :options="chartOptions"></highcharts>
+                        </div>
+                    </v-col>
+                </v-row>
+            </v-col>
         </div>
     </div>
 </template>
 
 <script>
     // import Info from "@/components/OnlineQuiz/Quiz/resultTables/info";
-
+    import {Chart} from 'highcharts-vue'
     import ComingSoon from "@/components/ComingSoon";
     export default {
         name: "topScoreResult",
-        components: {ComingSoon},
+        components: {ComingSoon, highcharts: Chart},
         // components: {Info},
         data() {
             return {
@@ -43,9 +50,9 @@
                         sortable: false,
                         value: 'row',
                     },
-                    {text: 'درس', value: 'course',align: 'center',sortable: false,},
-                    {text: 'درصد', value: 'percentage',align: 'center',sortable: false,},
-                    {text: ' تراز', value: 'level',align: 'center',sortable: false,},
+                    {text: 'درس', value: 'sub_category',align: 'center',sortable: false,},
+                    {text: 'درصد', value: 'top_ranks_percent_mean',align: 'center',sortable: false,},
+                    {text: ' تراز', value: 'top_ranks_taraaz_mean',align: 'center',sortable: false,},
                 ],
                 item: [
                     {
@@ -104,7 +111,79 @@
                     },
 
                 ],
+                chartOptions: {
+
+                    series: [
+                    ],
+                    chart: {
+                        type: 'column',
+                        height: 700,
+                        style: {
+                            fontFamily: 'IranSans'
+                        }
+                    },
+                    title: {
+                        text: 'نمودار مقایسه عملکرد'
+                    },
+                    subtitle: {
+                        // text: 'Source: thesolarfoundation.com'
+                    },
+                    credits: {
+                        text: '3a.alaatv.com',
+                        href: 'https://www.3a.alaatv.com'
+                    },
+                    yAxis: {
+                        title: {
+                            text: 'درصد'
+                        },
+                        max: 100
+                    },
+                    xAxis: {
+                        categories: []
+                    },
+                }
             }
+        },
+        methods: {
+            getPercentDataForChart () {
+                let data = []
+                this.report.best.sub_category.forEach((item) => {
+                    data.push(parseInt(item.top_ranks_percent_mean))
+                })
+                this.chartOptions.series.push({
+                    name: 'نفرات برتر',
+                    color: 'green',
+                    data
+                })
+                data = []
+                this.report.sub_category.forEach((item) => {
+                    data.push(parseInt(item.percent))
+                })
+                this.chartOptions.series.push({
+                    name: 'من',
+                    color: 'red',
+                    data
+                })
+                data = []
+                this.report.best.sub_category.forEach((item) => {
+                    data.push(parseInt(item.mean))
+                })
+                this.chartOptions.series.push({
+                    name: 'همه',
+                    color: 'blue',
+                    data
+                })
+            },
+            getTaraazDataForChart () {
+
+            }
+        },
+        props: ['report'],
+        created() {
+            this.getPercentDataForChart()
+            this.report.sub_category.forEach((item) => {
+                this.chartOptions.xAxis.categories.push(item.sub_category)
+            })
         }
     }
 </script>
