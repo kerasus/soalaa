@@ -4,7 +4,7 @@ module.exports = {
     "vuetify"
   ],
   devServer: {
-    port: 80,
+    port: process.env.VUE_APP_PORT,
     disableHostCheck: true,
     proxy: {
       '/alaa/api/v2': {
