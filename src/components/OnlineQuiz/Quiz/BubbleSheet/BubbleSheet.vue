@@ -1,9 +1,17 @@
 <template>
     <div :class=" { 'bubble-sheet': true, 'questions-list': true, 'pasokh-nameh': info.type === 'pasokh-nameh', 'pasokh-barg': info.type === 'pasokh-barg' }">
+
+        <v-overlay
+                :absolute="true"
+                :opacity="0.9"
+                :value="overlay"
+        >
+            در حال ساخت پاسخبرگ
+        </v-overlay>
         <div v-for="(group, index) in questionsInGroups" :key="index" class="question-group">
             <div v-for="question in group" :key="question.id" class="question-in-list">
                 <div
-                        :class="{ 'question-number-in-list': true, circle: question.state === 'circle', cross: question.state === 'cross' }"
+                        :class="{ 'question-number-in-list': true, circle: userQuizListData[quiz.id][question.id] && userQuizListData[quiz.id][question.id].status === 'o', cross: userQuizListData[quiz.id][question.id] && userQuizListData[quiz.id][question.id].status === 'x', bookmark: userQuizListData[quiz.id][question.id] && userQuizListData[quiz.id][question.id].bookmarked }"
                         :style="{ width: '24%', cursor: 'pointer' }"
                         @click="clickQuestionNumber(question.id)"
                 >
@@ -12,11 +20,14 @@
                 <div
                         v-for="choice in question.choices.list"
                         :key="choice.id"
-                        :class="{ 'choice-in-list': true, active: choice.active, answer: choice.answer }"
-                        @click="clickChoice(question.id, choice.id)"
+                        :class="{ 'choice-in-list': true, active: userQuizListData[quiz.id][question.id] && choice.id === userQuizListData[quiz.id][question.id].answered_choice_id, answer: choice.answer }"
+                        @click="answerClicked({ questionId: question.id, choiceId: choice.id})"
                 >
-                    <v-icon v-if="info.type === 'pasokh-nameh' && choice.answer" size="12" :color="choice.answer === choice.active ? '#fff' : '#00c753'">
+                    <v-icon v-if="info.type === 'pasokh-nameh' && choice.answer" size="12" :color="userQuizListData[quiz.id][question.id] && choice.id === userQuizListData[quiz.id][question.id].answered_choice_id ? '#fff' : '#00c753'">
                         mdi-check
+                    </v-icon>
+                    <v-icon v-if="info.type === 'pasokh-nameh' && userQuizListData[quiz.id][question.id] && choice.id === userQuizListData[quiz.id][question.id].answered_choice_id && !choice.answer" size="12" color="#fff">
+                        mdi-close
                     </v-icon>
                 </div>
             </div>
@@ -26,31 +37,44 @@
 
 <script>
     import $ from "jquery";
-    import { mixinQuiz } from "@/mixin/Mixins";
+    import { mixinQuiz, mixinUserActionOnQuestion } from "@/mixin/Mixins";
+    // import {Exam} from "@/models/Exam";
 
     export default {
         name: 'BubbleSheet',
-        mixins: [mixinQuiz],
+        mixins: [mixinQuiz, mixinUserActionOnQuestion],
         computed: {
             questionsInGroups () {
                 let groups = [],
-                    chunk = 10,
-                    array = this.quiz.questions.list
+                chunk = 10
+                let array
+                array = this.getCurrentExamQuestionsInArray()
                 for (let i=0,j=array.length; i<j; i+=chunk) {
                     groups.push(array.slice(i,i+chunk))
                 }
                 return groups
             }
         },
-        props: ['info'],
+        props: {
+            info: {
+                default: null
+            },
+            exam: {
+                default: null
+            },
+            delayTime: {
+                default: 2000
+            }
+        },
+        data: () => ({
+            overlay: false,
+        }),
         methods: {
             clickChoice (questionId, choiceId) {
                 this.$emit('clickChoice', questionId, choiceId)
             },
             clickQuestionNumber (questionId) {
-                if (this.info.type === 'pasokh-barg') {
-                    this.$emit('scrollTo', questionId)
-                }
+                this.$emit('scrollTo', questionId)
             },
             questionListHeight () {
                 // box is a col-7 with 12px padding
@@ -67,21 +91,35 @@
                 return (boxSize - (verticalGroupAmounts * 140)) / 2 + 5
             }
         },
+        created() {
+            if (this.delayTime) {
+                this.overlay = true
+            }
+        },
         mounted () {
+            let that = this
+            setTimeout(() => {
+                $('.questions-list').height(this.questionListHeight())
+                that.overlay = false
+            }, this.delayTime)
+        },
+        'windowSize.x': function () {
+            // const padding = this.questionListPadding()
+            // $('.questions-list').css({ 'padding-right': padding })
+            // $('.questions-list').css({ 'padding-left': padding })
             $('.questions-list').height(this.questionListHeight())
-            $('.questions-list').css({ 'padding-top': '20px' })
-            this.$nextTick(() => {
-                const padding = this.questionListPadding()
-                $('.questions-list').css({ 'padding-right': padding })
-                $('.questions-list').css({ 'padding-left': padding })
-            });
         }
     }
 </script>
 
 <style scoped>
+    .v-overlay {
+        align-items: flex-start;
+        padding-top: 100px;
+    }
     .pasokh-nameh .choice-in-list {
         position: relative;
+        cursor: auto;
     }
 
     .pasokh-nameh .choice-in-list.answer {
@@ -89,12 +127,12 @@
     }
 
     .pasokh-nameh .choice-in-list.active {
-        border: solid 1px #00c753;
+        border: solid 1px #ff4243;
         background-color: #ff4243;
     }
 
     .pasokh-nameh .choice-in-list.active.answer {
-        border: none;
+        border: solid 1px #00c753;
         background-color: #00c753;
     }
 
@@ -158,6 +196,20 @@
         top: -5px;
     }
 
+    .pasokh-nameh .question-number-in-list.bookmark::after {
+        content: "\F00C3";
+        position: absolute;
+        font: normal normal normal 24px/1 "Material Design Icons";
+        text-rendering: auto;
+        line-height: inherit;
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+        color: #2196F3;
+        left: -6px;
+        font-size: 16px;
+        top: -5px;
+    }
+
     .questions-list {
         direction: ltr;
         display: flex;
@@ -169,7 +221,8 @@
 </style>
 
 <style>
-    .pasokh-nameh .v-icon.mdi-check {
+    .pasokh-nameh .v-icon.mdi-check,
+    .pasokh-nameh .v-icon.mdi-close {
         top: -2px;
         left: 2px;
     }

@@ -46,20 +46,44 @@
         </v-img>
         <v-btn
                 style="letter-spacing: inherit;"
+                href="https://alaatv.com/"
                 large
                 dark
                 tile
                 block
-                color="#5cbf60"
+                color="#ffc107"
+                elevation="0"
         >
-            ثبت و پایان آزمون
+            آلاء
+        </v-btn>
+        <v-btn
+                style="letter-spacing: inherit;"
+                large
+                dark
+                tile
+                block
+                color="red"
+                elevation="0"
+                @click="logout"
+        >
+            خروج
         </v-btn>
     </div>
 </template>
 
 <script>
     export default {
-        name: 'OnlineQuiz'
+        name: 'TopMenu_Dashboard',
+        methods: {
+            logout () {
+                // window.localStorage.setItem('access_token', '')
+                // window.localStorage.setItem('user', '')
+                // window.localStorage.setItem('vuex', '')
+                // this.$store.commit('updateUser', '')
+                this.$store.commit('resetState')
+                this.$router.push({ name: 'login' })
+            },
+        }
     }
 </script>
 

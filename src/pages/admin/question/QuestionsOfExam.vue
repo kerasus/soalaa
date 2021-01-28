@@ -11,7 +11,14 @@
             <!--                />-->
             <!--            </v-col>-->
             <v-col :md="5" class="questions">
-                <item v-for="itemm in quiz.questions.list" :key="itemm.id" :source="itemm" />
+                                <item v-for="itemm in quiz.questions.list" :key="itemm.id" :source="itemm" />
+<!--                <virtual-list style="overflow-y: auto;"-->
+<!--                              :data-key="'id'"-->
+<!--                              :data-sources="quiz.questions.list"-->
+<!--                              :data-component="item"-->
+<!--                              ref="scroller"-->
+<!--                              class="questionss"-->
+<!--                />-->
             </v-col>
             <v-col :md="7" class="left-side-list">
                 <v-row>
@@ -95,7 +102,7 @@
                 </v-row>
                 <v-row>
                     <v-col>
-                        <BubbleSheet :info="{ type: 'pasokh-barg' }"/>
+                        <BubbleSheet :info="{ type: 'pasokh-nameh' }" @scrollTo="scrollTo" />
                     </v-col>
                 </v-row>
             </v-col>
@@ -105,26 +112,31 @@
 
 <script>
     // import FakeQuizData from "@/plugins/fakeQuizData";
-    import 'github-markdown-css/github-markdown.css'
     import $ from 'jquery'
+    import Item from '@/components/QuizEditor/Question'
+    // import VirtualList from 'vue-virtual-scroll-list'
     import '@/assets/scss/markdownKatex.scss'
     import Vue from 'vue'
     import 'vue-virtual-scroller/dist/vue-virtual-scroller.css'
     import { DynamicScroller, DynamicScrollerItem } from 'vue-virtual-scroller'
-    import Item from './Question'
     import { mixinQuiz, mixinWindowSize } from '@/mixin/Mixins'
     import BubbleSheet from "@/components/OnlineQuiz/Quiz/BubbleSheet/BubbleSheet";
-    import {Exam, ExamList} from '@/models/Exam'
+    import {Exam} from '@/models/Exam'
     import {QuestionList} from "@/models/Question";
-    import Assistant from "@/plugins/assistant";
+    import {QuestSubcategoryList} from "@/models/QuestSubcategory";
+
     Vue.component('DynamicScroller', DynamicScroller)
     Vue.component('DynamicScrollerItem', DynamicScrollerItem)
+    var md = require('markdown-it')(),
+        mk = require('markdown-it-katex')
+    md.use(mk);
 
     export default {
-        name: 'allQuestions',
+        name: 'QuestionsOfExam',
         mixins: [mixinQuiz, mixinWindowSize],
         components: {
             Item,
+            // 'virtual-list': VirtualList,
             BubbleSheet
         },
         data () {
@@ -132,7 +144,8 @@
                 quizData: new Exam(),
                 item: Item,
                 lastTimeScrollRange: { start: 0, end: 29 },
-                quizList: []
+                quizList: [],
+                subCategoriesList: new QuestSubcategoryList(),
             }
         },
         methods: {
@@ -146,30 +159,35 @@
                 }
                 return ''
             },
-            changeCurrentQuestion (question) {
-                if (question.id !== this.currentQuestion.id) {
-                    this.currentQuestion = question
+            scrollTo (questionId) {
+                if (this.quiz.questions.getQuestionById(questionId).isInView === false) {
+                    const questionIndex = this.quiz.questions.getQuestionIndexById(questionId)
+                    this.$refs.scroller.scrollToIndex(questionIndex)
+                    for (let i = 1; i < 4; i++) {
+                        setTimeout(() => {
+                                this.$refs.scroller.scrollToIndex(questionIndex)
+                            },
+                            500 / Math.ceil(this.quiz.questions.list.length / 100) * i)
+                    }
                 }
             }
         },
         mounted () {
             $('.questions').height(this.windowSize.y)
             $('.left-side-list').height(this.windowSize.y - 24)
+            $('.questionss').height(this.windowSize.y)
         },
         created () {
             this.changeAppBarAndDrawer(false)
             // const that = this
-            const url = '/3a/api/question'
+            const url = '/3a/api/exam-question/attach/show/' + this.$route.params.quizId
             this.quizData.show(null, url)
                 .then((response) => {
                     this.quizData.questions = new QuestionList(response.data.data)
                     this.quiz = new Exam(this.quizData)
-
                 })
-            new ExamList().fetch().then((response) => {
-                this.quizList = new ExamList(response.data.data)
-            }).catch((error) => {
-                Assistant.handleAxiosError(this.$toasted, error)
+            this.subCategoriesList.fetch().then((response) => {
+                this.quiz.sub_categories = new QuestSubcategoryList(response.data)
             })
         },
         destroyed() {
@@ -178,6 +196,7 @@
         watch: {
             'windowSize.y': function () {
                 $('.questions').height(this.windowSize.y)
+                $('.questionss').height(this.windowSize.y)
                 $('.left-side-list').height(this.windowSize.y - 24)
             },
             'windowSize.x': function () {
@@ -192,6 +211,10 @@
 </script>
 
 <style scoped>
+    .questionss {
+        overflow-x: hidden
+    }
+
     .scroller {
         height: 100%;
     }
@@ -265,6 +288,10 @@
 </style>
 
 <style>
+    .base.textstyle.uncramped {
+        display: flex;
+        flex-wrap: wrap;
+    }
 
     .v-application p {
         margin-bottom: 4px;

@@ -10,13 +10,14 @@ function isLogin() {
 }
 
 export default function auth({ to, next, router }) {
-    // console.log('from', from)
-    // console.log('to', to)
-    window.localStorage.setItem('redirect_to', to.name)
+    if (to.name !== 'login') {
+        window.localStorage.setItem('redirect_to', to.name)
 
-    if (!isLogin()) {
-        return router.push({ name: 'login' });
+        if (!isLogin()) {
+            return router.push({ name: 'login' });
+        }
     }
+
     const token = window.localStorage.getItem('access_token')
     if (token) {
         axios.defaults.headers.common['Authorization'] = 'Bearer ' + token

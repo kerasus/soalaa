@@ -46,41 +46,49 @@
         </v-img>
         <v-btn
                 style="letter-spacing: inherit;"
-                href="https://alaatv.com/"
                 large
                 dark
                 tile
                 block
-                color="#ffc107"
-                elevation="0"
+                color="#5cbf60"
+                @click="sendAnswersAndFinishExam"
         >
-            آلاء
-        </v-btn>
-        <v-btn
-                style="letter-spacing: inherit;"
-                large
-                dark
-                tile
-                block
-                color="red"
-                elevation="0"
-                @click="logout"
-        >
-            خروج
+            ثبت و پایان آزمون
         </v-btn>
     </div>
 </template>
 
 <script>
+    // import {Exam} from "@/models/Exam";
+    import {mixinQuiz} from '@/mixin/Mixins'
+
     export default {
-        name: 'PannelPanel',
+        name: 'TopMenu_OnlineQuiz',
+        mixins: [mixinQuiz],
         methods: {
-            logout () {
-                window.localStorage.setItem('access_token', '')
-                window.localStorage.setItem('user', '')
-                this.$store.commit('updateUser', '')
-                this.$router.push({ name: 'login' })
-            },
+            sendAnswersAndFinishExam() {
+                let that = this
+                this.quiz.sendAnswersAndFinishExam()
+                    .then( () => {
+                        that.$store.commit('clearExamData', that.quiz.id)
+                        that.$notify({
+                            group: 'notifs',
+                            text: 'اطلاعات آزمون شما ثبت شد.',
+                            type: 'success'
+                        })
+                        that.$router.push({ name: 'user.exam.list'})
+                    })
+                    .catch( () => {
+                        that.$notify({
+                            group: 'notifs',
+                            title: 'توجه!',
+                            text: 'مشکلی در ثبت اطلاعات آزمون شما رخ داده است. لطفا تا قبل از ساعت 24 اقدام به ارسال مجدد پاسخنامه نمایید.',
+                            type: 'warn',
+                            duration: 30000,
+                        })
+                        that.$router.push({ name: 'user.exam.list'})
+                    })
+            }
         }
     }
 </script>

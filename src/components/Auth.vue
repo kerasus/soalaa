@@ -1,5 +1,14 @@
 <template>
     <v-card class="elevation-12">
+        <v-progress-linear
+                color="#ffc107"
+                absolute
+                top
+                :active="loadingList"
+                indeterminate
+                rounded
+                height="6"
+        ></v-progress-linear>
         <v-toolbar
                 color="primary"
                 dark
@@ -25,7 +34,7 @@
                             target="_blank"
                             v-on="on"
                     >
-                        <v-img src="https://cdn.alaatv.com/upload/footer-alaaLogo.png?w=30&h=40" width="20" />
+                        <v-img src="img/alaa-logo.png" width="50" />
                     </v-btn>
                 </template>
                 <span>آموزش مجازی آلاء</span>
@@ -53,7 +62,11 @@
             </v-form>
         </v-card-text>
         <v-card-actions>
-            <v-btn color="primary" @click="login">
+            <v-btn color="primary"
+                   @click="login"
+                   :loading="loadingList"
+                   :disabled="loadingList"
+            >
                 ورود
             </v-btn>
             <v-spacer></v-spacer>
@@ -63,7 +76,6 @@
 
 <script>
     import axios from 'axios'
-    import Assistant from "@/plugins/assistant";
     import {User} from "@/models/User";
 
     export default {
@@ -71,38 +83,31 @@
         data () {
             return {
                 user: new User(window.localStorage.getItem('user')),
+                loadingList: false,
                 username: null,
                 password: null
             }
         },
         created() {
-            this.getUserData()
-            if (!this.isLogin) {
-                this.getUserData()
-                // this.getGandDataOfUserForPermission()
-            }
+            this.getUserData(this.getToken())
+            console.log('process.env.VUE_APP_NEED_USER_INFO', process.env.VUE_APP_NEED_USER_INFO)
         },
         methods: {
-            isLogin() {
-                let accessToken = window.localStorage.getItem('access_token')
-                return !!(accessToken)
+            getToken () {
+                return window.localStorage.getItem('access_token')
             },
-            getUserData () {
-                const token = window.localStorage.getItem('access_token')
-                if (token) {
-                    axios.defaults.headers.common['Authorization'] = 'Bearer ' + token
-                }
+            getUserData (token) {
+                axios.defaults.headers.common['Authorization'] = 'Bearer ' + token
                 let that = this
-                this.user.show(null, '/alaa/api/v2/getUserFor3a')
-                .then( (response) => {
-                    that.user = new User(response.data.data)
-                    that.$store.commit('updateUser', that.user)
-                    // axios.defaults.headers.common['Authorization'] = 'Bearer ' + response.data.data.token.access_token
-                    that.redirectTo(token)
-                })
-                .catch( (error) => {
-                    console.log('error', error)
-                })
+                this.user.getUserData()
+                    .then( (user) => {
+                        that.$store.commit('updateUser', user)
+                        if (that.needToCompleteInfo() || process.env.VUE_APP_NEED_USER_INFO === 'true') {
+                            that.$router.push({name: 'user-info'})
+                        } else {
+                            that.redirectTo(token)
+                        }
+                    })
             },
             redirectTo (access_token) {
                 let redirect_to = window.localStorage.getItem('redirect_to')
@@ -112,21 +117,44 @@
                 }
                 this.$router.push({ name: redirect_to })
             },
+            needToCompleteInfo () {
+                let status = true
+                if (!this.user.first_name) {
+                    status = false
+                } else if (!this.user.last_name) {
+                    status = false
+                } else if (!this.user.major || !this.user.major.id) {
+                    status = false
+                } else if (!this.user.province) {
+                    status = false
+                } else if (!this.user.city) {
+                    status = false
+                } else if (!this.user.school) {
+                    status = false
+                } else if (!this.user.mobile_verified_at) {
+                    status = false
+                } else if (!this.user.grade) {
+                    status = false
+                }
+
+                return status
+            },
             login () {
                 let that = this
+                this.loadingList = true
                 axios.post('/alaa/api/v2/login', {
                     mobile: this.username,
                     password: this.password
                 })
                 .then((response) => {
+                    this.loadingList = false
                     that.user = new User(response.data.data.user)
                     that.$store.commit('updateUser', that.user)
                     const access_token = response.data.data.access_token
-                    that.getUserData()
-                    that.redirectTo(access_token)
+                    that.getUserData(access_token)
                 })
-                .catch( (error) => {
-                    Assistant.handleAxiosError(this.$toasted, error)
+                .catch( () => {
+                    this.loadingList = false
                 })
             }
         }

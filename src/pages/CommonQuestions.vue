@@ -16,7 +16,7 @@
                 <v-expansion-panel-content>
 
 
-                    سه آ شامل سه مرحله آزمونه که اولی با سر فصل جمع بندی نیم سال اول دوازدهم در 24 دی ماه، دمی با سرفصل جمع بندی پایه های دهم و یازدهم در 27 فروردین 1400 و سومی با سرفصل کنکور سراسری در اواخر خرداد ماه برگزار میشه                </v-expansion-panel-content>
+                    سه آ شامل سه مرحله آزمونه که اولی با سر فصل جمع بندی نیم سال اول دوازدهم در 28 دی ماه، دمی با سرفصل جمع بندی پایه های دهم و یازدهم در 27 فروردین 1400 و سومی با سرفصل کنکور سراسری در اواخر خرداد ماه برگزار میشه                </v-expansion-panel-content>
             </v-expansion-panel>
             <v-expansion-panel>
                 <v-expansion-panel-header>
@@ -75,7 +75,7 @@
 
 <script>
     export default {
-        name: "commonQuestions"
+        name: "CommonQuestions"
     }
 </script>
 

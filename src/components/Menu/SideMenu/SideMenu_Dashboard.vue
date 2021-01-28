@@ -21,9 +21,14 @@
                     <v-list-item-title>شرکت در آزمون</v-list-item-title>
                 </v-list-item>
             </router-link>
-            <router-link class="text-decoration-none" :to="{ name: 'user.onlineQuiz.list' }">
+            <router-link class="text-decoration-none" :to="{ name: 'user.exam.list' }">
                 <v-list-item>
                     <v-list-item-title>آزمون های سه آ</v-list-item-title>
+                </v-list-item>
+            </router-link>
+            <router-link class="text-decoration-none" :to="{ name: 'common-questions' }">
+                <v-list-item>
+                    <v-list-item-title>سوالات متداول</v-list-item-title>
                 </v-list-item>
             </router-link>
             <router-link class="text-decoration-none" :to="{ name: 'tree.edit' }" v-if="false">
@@ -54,6 +59,12 @@
                     <v-list-item-title>نتایج نفرات برتر</v-list-item-title>
                 </v-list-item>
             </router-link>
+            <router-link class="text-decoration-none" :to="{ name: 'onlineQuiz.result.pasokhbarg' }" v-if="false">
+                <v-list-item>
+                    <v-list-item-title>پاسخ برگ</v-list-item-title>
+                </v-list-item>
+            </router-link>
+
 
 <!--            <a>-->
 <!--                <v-list-item>-->
@@ -63,6 +74,7 @@
 
         </v-list-item-group>
         <v-list-item-group
+                v-if="$store.getters.user.has_admin_permission"
                 class="admin-panel"
                 active-class="deep-purple--text text--accent-4"
         >
@@ -84,25 +96,18 @@
                 </v-list-item>
             </router-link>
 
-            <router-link class="text-decoration-none" :to="{ name: 'onlineQuiz.alaaView', params: { quizId: 313, questNumber: 1 } }">
+            <router-link class="text-decoration-none" :to="{ name: 'video.set' }">
                 <v-list-item>
-                    <v-list-item-title>آزمون آنلاین</v-list-item-title>
+                    <v-list-item-title>ثبت ویدئو تحلیل</v-list-item-title>
                 </v-list-item>
             </router-link>
-
-            <router-link class="text-decoration-none" :to="{ name: 'quiz.allQuestions' }">
-                <v-list-item>
-                    <v-list-item-title>همه سوالارو میخوام ببینم</v-list-item-title>
-                </v-list-item>
-            </router-link>
-
         </v-list-item-group>
     </v-list>
 </template>
 
 <script>
     export default {
-        name: "Menu",
+        name: "SideMenu_Dashboard",
         data: () => ({
             group: null
         }),

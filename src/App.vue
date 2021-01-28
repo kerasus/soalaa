@@ -1,12 +1,8 @@
 <template>
     <v-app v-resize="updateWindowSize">
-        <v-navigation-drawer
-                v-model="drawer"
-                app
-                right
-                width="316"
-                v-if="$route.name === 'onlineQuiz.alaaView' || $store.getters.user.has_admin_permission"
-                :style="{ backgroundColor: $route.name === 'onlineQuiz.alaaView' ? '#fff' : '#ffc107' }"
+        <v-navigation-drawer app v-model="drawer" right width="316"
+                             :class="{ 'mapOfQuestions': $route.name === 'onlineQuiz.alaaView'}"
+                             :style="{ backgroundColor: $route.name === 'onlineQuiz.alaaView' ? '#fff' : '#ffc107' }"
         >
             <div style="height: 150px;line-height: 150px;font-size: 4rem;color: rgb(255, 193, 7);display: flex;align-items: center;justify-content: center;">
                 <div style="display: block">
@@ -14,63 +10,49 @@
                     <v-img src="/img/logo-2.png" width="150" v-else />
                 </div>
             </div>
-            <map-of-questions v-if="$route.name === 'onlineQuiz.alaaView'"/>
-            <Menu v-else/>
+            <SideMenu_MapOfQuestions v-if="$route.name === 'onlineQuiz.alaaView'"/>
+            <SideMenu_Dashboard v-else/>
         </v-navigation-drawer>
-        <v-app-bar
-                app
-                color="#f4f4f4"
-                elevate-on-scroll
-                v-if="appbar"
-        >
+        <v-app-bar v-if="appbar" app color="#f4f4f4" elevate-on-scroll>
             <div class="header">
-                <v-row>
-                    <v-col :md="1" class="d-md-flex justify-center align-center d-none"></v-col>
-                    <v-col :md="10" class="px-md-0 px-10 d-flex justify-space-between">
-                        <div class="rounded-b-xl rounded-r-xl">
-                            <v-menu
-                                    bottom
-                                    :offset-y="true"
-                                    class="rounded-b-xl rounded-r-xl"
-                            >
-                                <template v-slot:activator="{ on, attrs }">
-                                    <v-btn
-                                            large
-                                            tile
-                                            v-bind="attrs"
-                                            v-on="on"
-                                            elevation="0"
-                                    >
-                                        <v-icon class="mr-2" :size="30" color="#666">mdi-account-circle</v-icon>
-                                        {{ $store.getters.user.first_name + ' ' + $store.getters.user.last_name }}
-                                    </v-btn>
-                                </template>
-                                <v-card
-                                        max-width="375"
-                                        class="mx-auto"
-                                        rounded="b-xl r-xl"
-                                >
-                                    <online-quiz v-if="$route.name === 'onlineQuiz.alaaView'"/>
-                                    <panel v-else/>
-                                </v-card>
-                            </v-menu>
-                        </div>
-                        <div>
-                            <v-btn v-if="$route.name === 'onlineQuiz.alaaView'" class="switch-view-button" icon @click="changeView('konkoor')">
-                                <v-icon>mdi-dots-grid</v-icon>
-                            </v-btn>
-                            <v-app-bar-nav-icon
-                                    v-if="$route.name !== 'onlineQuiz.konkoorView'"
-                                    @click.stop="toggleDrawer"
-                                    :color="(isQuizPage) ? '#fcaf25' : '#666'"
-                            />
-                        </div>
-                    </v-col>
-                    <v-col :md="1" class="d-md-flex justify-center align-center d-none"></v-col>
-                </v-row>
+                <v-container>
+                    <v-row>
+                        <v-col class="px-md-0 px-10 d-flex justify-space-between">
+                            <div class="rounded-b-xl rounded-r-xl">
+                                <v-menu bottom :offset-y="true" class="rounded-b-xl rounded-r-xl">
+                                    <template v-slot:activator="{ on, attrs }">
+                                        <v-btn large tile v-bind="attrs" v-on="on" elevation="0" class="pl-3" >
+                                            <v-icon class="mr-2" :size="30" color="#666">mdi-account-circle</v-icon>
+                                            <span v-if="$store.getters.user.first_name || $store.getters.user.last_name">
+                                                {{ $store.getters.user.first_name + ' ' + $store.getters.user.last_name }}
+                                            </span>
+                                        </v-btn>
+                                    </template>
+                                    <v-card max-width="375" class="mx-auto" rounded="b-xl r-xl">
+                                        <TopMenu_OnlineQuiz v-if="$route.name === 'onlineQuiz.alaaView'"/>
+                                        <TopMenu_Dashboard v-else/>
+                                    </v-card>
+                                </v-menu>
+
+                            </div>
+                            <div>
+                                <v-btn v-if="$route.name === 'onlineQuiz.alaaView'" class="switch-view-button" icon @click="changeView('konkoor')">
+                                    <v-icon>mdi-dots-grid</v-icon>
+                                </v-btn>
+                                <v-app-bar-nav-icon
+                                        v-if="$route.name !== 'onlineQuiz.konkoorView'"
+                                        @click.stop="toggleDrawer"
+                                        :color="(isQuizPage) ? '#fcaf25' : '#666'"
+                                />
+                            </div>
+                        </v-col>
+                    </v-row>
+                </v-container>
             </div>
         </v-app-bar>
         <v-main>
+            <notifications group="notifs" />
+            <v-overlay :absolute="true" :opacity="1" :value="overlay" />
             <router-view :key="$route.name + ($route.params.quizId || '') + ($route.params.questNumber || '')">
             </router-view>
         </v-main>
@@ -78,12 +60,10 @@
 </template>
 
 <script>
-    import { Menu, MapOfQuestions } from '@/components/Menus'
     import { mixinQuiz, mixinDrawer, mixinWindowSize } from '@/mixin/Mixins'
     import '@/assets/scss/font.scss'
-    import '@mdi/font/css/materialdesignicons.css';
-    import OnlineQuiz from "@/components/topMenu/OnlineQuiz";
-    import Panel from "@/components/topMenu/Panel";
+    import '@mdi/font/css/materialdesignicons.css'
+    import { SideMenu_Dashboard, SideMenu_MapOfQuestions, TopMenu_OnlineQuiz, TopMenu_Dashboard } from '@/components/Menu/Menus'
 
     export default {
         name: 'App',
@@ -96,19 +76,22 @@
         computed: {
             appbar () {
                 return this.$store.getters.appbar
+            },
+            overlay () {
+                return this.$store.getters.overlay
             }
         },
         components: {
-            Panel,
-            OnlineQuiz,
-            Menu,
-            MapOfQuestions
+            TopMenu_OnlineQuiz,
+            TopMenu_Dashboard,
+            SideMenu_Dashboard,
+            SideMenu_MapOfQuestions
         },
         data: () => ({
             selectedItem: null
         }),
         created() {
-            this.$store.commit('updateAppbar', true)
+            this.$store.commit('updateAppBar', true)
             this.$store.commit('updateDrawer', true)
         }
     };
@@ -125,6 +108,23 @@
 </style>
 
 <style>
+    .v-application {
+        font-family: 'IRANSans', 'Arial', 'Verdana', 'Tahoma', sans-serif;
+    }
+
+    .choice p:nth-child(2n) {
+        display: block;
+    }
+
+    .answer-text p:nth-child(2n) {
+        display: block;
+    }
+
+    .notification-title,
+    .notification-content {
+        text-align: right;
+    }
+
     .v-application > .v-menu__content {
         border-top-right-radius: 24px !important;
         border-bottom-left-radius: 24px !important;

@@ -17,7 +17,6 @@ const router = new VueRouter({
             path: '/',
             name: 'dashboard',
             component: () => lazyLoadView(import('@/pages/user/exam/List')),
-            // component: () => lazyLoadView(import('@/components/dashboard')),
             meta: {middleware: auth}
         },
         {
@@ -27,27 +26,21 @@ const router = new VueRouter({
             meta: {middleware: auth}
         },
         {
-            path: '/quiz/edit/:quizId',
-            name: 'quiz.edit',
-            component: () => lazyLoadView(import('@/components/QuizEditor/QuizEditor')),
-            meta: {middleware: auth}
-        },
-        {
             path: '/quiz/edit-all',
             name: 'quiz.allQuestions',
             component: () => lazyLoadView(import('@/components/QuizEditor/AllQuestions')),
             meta: {middleware: auth}
         },
         {
-            path: '/TinymceEditor',
-            name: 'TinymceEditor',
-            component: () => lazyLoadView(import('@/components/TinymceEditor/TinymceEditor')),
-            meta: {middleware: auth}
-        },
-        {
             path: encodeURI('/آزمون_آنلاین/کارنامه'),
             name: 'onlineQuiz.result',
             component: () => lazyLoadView(import('@/components/OnlineQuiz/Quiz/resultTables/personalResult')),
+            meta: {middleware: auth}
+        },
+        {
+            path: encodeURI('/آزمون_آنلاین/پاسخ_برگ'),
+            name: 'onlineQuiz.result.pasokhbarg',
+            component: () => lazyLoadView(import('@/components/OnlineQuiz/Quiz/resultTables/pasokhBarg')),
             meta: {middleware: auth}
         },
         {
@@ -63,21 +56,27 @@ const router = new VueRouter({
             meta: {middleware: auth}
         },
         {
+            path: '/online_quiz-bubblesheet/:quizId',
+            name: 'onlineQuiz.bubblesheet-view',
+            component: () => lazyLoadView(import('@/pages/user/exam/participate/BubbleSheetView')),
+            meta: {middleware: auth}
+        },
+        {
             path: '/online_quiz/:quizId',
             name: 'onlineQuiz.konkoorView',
-            component: () => lazyLoadView(import('@/components/OnlineQuiz/Quiz/ViewTypes/Konkoor')),
+            component: () => lazyLoadView(import('@/pages/user/exam/participate/KonkoorView')),
             meta: {middleware: auth}
         },
         {
             path: '/online_quiz/:quizId/:questNumber',
             name: 'onlineQuiz.alaaView',
-            component: () => lazyLoadView(import('@/components/OnlineQuiz/Quiz/ViewTypes/AlaaView')),
+            component: () => lazyLoadView(import('@/pages/user/exam/participate/AlaaView')),
             meta: {middleware: auth}
         },
         {
-            path: '/quest/:id',
-            name: 'quest.edit',
-            component: () => lazyLoadView(import('@/pages/admin/question/CreateOrEdit')),
+            path: '/quiz/edit/:quizId',
+            name: 'quiz.edit',
+            component: () => lazyLoadView(import('@/pages/admin/question/QuestionsOfExam')),
             meta: {middleware: auth}
         },
         {
@@ -87,9 +86,33 @@ const router = new VueRouter({
             meta: {middleware: auth}
         },
         {
+            path: '/subcategory/set',
+            name: 'video.set',
+            component: () => lazyLoadView(import('@/pages/admin/VideoSet/SetVideo')),
+            meta: {middleware: auth}
+        },
+        {
+            path: '/quest/:id',
+            name: 'quest.edit',
+            component: () => lazyLoadView(import('@/pages/admin/question/CreateOrEdit')),
+            meta: {middleware: auth}
+        },
+        {
             path: encodeURI('/آزمون_های_سه_آ'),
-            name: 'user.onlineQuiz.list',
+            name: 'user.exam.list',
             component: () => lazyLoadView(import('@/pages/user/exam/List')),
+            meta: {middleware: auth}
+        },
+        {
+            path: encodeURI('/نتایج_آزمون/:user_exam_id/:exam_id'),
+            name: 'user.exam.results',
+            component: () => lazyLoadView(import('@/pages/user/exam/Result')),
+            meta: {middleware: auth}
+        },
+        {
+            path: encodeURI('/نتایج_آزمون'),
+            name: 'user.exam.results.test',
+            component: () => lazyLoadView(import('@/pages/user/exam/Result')),
             meta: {middleware: auth}
         },
         {
@@ -99,15 +122,10 @@ const router = new VueRouter({
             meta: {middleware: auth}
         },
         {
-            path: '/online_quiz/:quizId/:questNumber/exams',
-            name: 'onlineQuiz.alaaView',
-            component: () => lazyLoadView(import('@/pages/admin/exam/Manage'))
-        },
-        {
-            path: '/user-info',
+            path: '/تکمیل_اطلاعات',
             name: 'user-info',
-            component: () => lazyLoadView(import('@/components/UserInfoForm')),
-            meta: {middleware: auth}
+            component: () => lazyLoadView(import('@/pages/user/UserInfoForm')),
+            // meta: {middleware: auth}
         },
         {
             path: '/debug',
@@ -116,23 +134,17 @@ const router = new VueRouter({
             meta: {middleware: auth}
         },
         {
+            path: encodeURI('/سوالات_متداول'),
+            name: 'common-questions',
+            component: () => lazyLoadView(import('@/pages/CommonQuestions')),
+            meta: {middleware: auth}
+        },
+        {
             path: '*',
             name: 'NotFound',
             component: () => lazyLoadView(import('@/pages/user/exam/List')),
             meta: {middleware: auth}
         },
-        {
-            path: '/video-analyze',
-            name: 'video-analyze',
-            component: () => lazyLoadView(import('@/components/AnalyzeByVideo')),
-            meta: {middleware: auth}
-        },
-        {
-            path: '/common-questions',
-            name: 'common-questions',
-            component: () => lazyLoadView(import('@/components/commonQuestions')),
-            meta: {middleware: auth}
-        }
     ]
 })
 

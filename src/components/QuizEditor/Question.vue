@@ -13,7 +13,7 @@
                 <v-icon>mdi-content-copy</v-icon>
             </v-btn>
         </div>
-        <span class="question-body renderedPanel" :id="'question' + source.id" v-html="(getQuestionNumberFromId(source.id)) + ' (' + source.order + ') - ' + source.rendered_statement" v-intersect="{
+        <span class="question-body renderedPanel" :id="'question' + source.id" v-html="(getQuestionNumberFromId(source.id)) + '(' + getSubCategoryName + ')' + ' (' + source.order + ') - ' + source.rendered_statement" v-intersect="{
             handler: onIntersect,
             options: {
               threshold: [0, 0.2, 0.4, 0.6, 0.8, 1.0]
@@ -43,15 +43,35 @@
 
     export default {
         name: 'item',
-        mixins: [ mixinQuiz, mixinWindowSize ],
-        data () {
+        mixins: [mixinQuiz, mixinWindowSize],
+        data() {
             return {
                 choiceNumber: {
-                    0: 'الف) ',
-                    1: 'ب) ',
-                    2: 'ج) ',
-                    3: 'د) '
-                }
+                    0: '1) ',
+                    1: '2) ',
+                    2: '3) ',
+                    3: '4) '
+                },
+                sub__category: [
+                    {id: 1, category_id: 1, title: "ادبیات", display_title: "ادبیات عمومی"},
+                    {id: 2, category_id: 1, title: "عربی", display_title: "عربی عمومی"},
+                    {id: 3, category_id: 1, title: "دین و زندگی", display_title: "دین و زندگی"},
+                    {id: 4, category_id: 1, title: "زبان انگلیسی", display_title: "زبان انگلیسی"},
+                    {id: 5, category_id: 2, title: "زمین شناسی", display_title: "زمین شناسی"},
+                    {id: 6, category_id: 2, title: "زیست", display_title: "زیست"},
+                    {id: 7, category_id: 2, title: "ریاضی", display_title: "ریاضی"},
+                    {id: 8, category_id: 2, title: "فیزیک", display_title: "فیزیک"},
+                    {id: 9, category_id: 2, title: "شیمی", display_title: "شیمی"},
+                    {id: 10, category_id: 2, title: "حسابان", display_title: "حسابان"},
+                    {id: 11, category_id: 2, title: "هندسه", display_title: "هندسه"},
+                    {id: 12, category_id: 2, title: "گسسته", display_title: "گسسته"},
+                    {id: 13, category_id: 2, title: "زبان و ادبیات فارسی", display_title: "زبان و ادبیات فارسی انسانی"},
+                    {id: 14, category_id: 2, title: "عربی", display_title: "عربی انسانی"},
+                    {id: 15, category_id: 2, title: "تاریخ", display_title: "تاریخ"},
+                    {id: 16, category_id: 2, title: "جغرافیا", display_title: "جغرافیا"},
+                    {id: 17, category_id: 2, title: "علوم اجتماعی", display_title: "علوم اجتماعی"},
+                    {id: 18, category_id: 2, title: "فلسفه", display_title: "فلسفه"}
+                ]
             }
         },
         props: {
@@ -59,31 +79,31 @@
                 type: Number
             },
             source: { // here is: {uid: 'unique_1', text: 'abc'}
-                default () {
+                default() {
                     return {}
                 }
             },
             quizList: {
                 type: Array,
-                default () {
+                default() {
                     return []
                 }
             }
         },
         methods: {
-            copyIdToClipboard () {
+            copyIdToClipboard() {
                 const questionIdElement = document.querySelector('#question-id' + this.source.id)
                 questionIdElement.select()
-                console.log(document.execCommand('copy'))
             },
             onIntersect(entries) {
                 this.source.onIntersect(entries)
             },
-            choiceClicked (questionId, choiceId) {
+            choiceClicked(questionId, choiceId) {
+                console.log('loadFirstActiveQuestionIfNeed->choiceClicked')
                 this.changeQuestion(questionId)
                 this.answerClicked({questionId, choiceId})
             },
-            choiceClass (question) {
+            choiceClass(question) {
                 // let QuestionWidthRatio = 0.4
                 // let largestChoiceWidth = this.windowSize.x * QuestionWidthRatio / largestChoice
                 let largestChoice = this.getLargestChoice(question.choices)
@@ -99,7 +119,7 @@
                 }
                 return 12
             },
-            removeErab (string) {
+            removeErab(string) {
                 if (!string || string.length === 0) {
                     return ''
                 }
@@ -114,26 +134,40 @@
                 temp = temp.split('ٍ').join('')
                 return temp
             },
-            getLargestChoice (choices) {
+            getLargestChoice(choices) {
                 let largestChoice = 0
-                choices.list.forEach((source)=> {
+                choices.list.forEach((source) => {
                     if (source.title.length > largestChoice) {
                         largestChoice = this.removeErab(source.title).length
                     }
                 })
                 return largestChoice
             },
-            removeQuestion () {
+            removeQuestion() {
                 this.source.show(null, '/3a/api/exam-question/detach/' + this.source.id).then(() => {
 
-                }).catch((error) => { console.log(error) })
+                })
             },
-            edit (questionId) {
-                console.log(questionId)
+            edit() {
+                // console.log(questionId)
             }
         },
         created() {
-
+            // setTimeout(() => {console.log(this.quiz)}, 2000)
+        },
+        computed: {
+            // lesson() {
+            //     console.log(this.source.sub_categories)
+            //     if (!this.source.sub_categories) {
+            //         return {title: 'صبر کنید'}
+            //     }
+            //     const subCategoryId = Assistant.getId(this.source.sub_category.id)
+            //     console.log(this.quiz.sub_categories)
+            //     return this.quiz.sub_categories.list.find((item) => item.id === subCategoryId)
+            // }
+            getSubCategoryName () {
+                return this.sub__category.find((item) => item.id === this.source.sub_category.id).display_title
+            },
         }
     }
 </script>
@@ -173,8 +207,6 @@
     .choice {
         cursor: pointer;
         transition: all ease-in-out 0.3s;
-        display: flex;
-        align-items: flex-start;
     }
 
     .buttons-group {

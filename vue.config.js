@@ -4,7 +4,7 @@ module.exports = {
     "vuetify"
   ],
   devServer: {
-    port: 80,
+    port: process.env.VUE_APP_PORT,
     disableHostCheck: true,
     proxy: {
       '/alaa/api/v2': {
@@ -21,6 +21,11 @@ module.exports = {
         target: process.env.VUE_APP_3A_API,
         changeOrigin: true,
         pathRewrite: {'^/3a/api' : ''}
+      },
+      '/3a/rb/api': {
+        target: process.env.VUE_APP_3A_RB_API,
+        changeOrigin: true,
+        pathRewrite: {'^/3a/rb/api' : ''}
       }
     }
   }

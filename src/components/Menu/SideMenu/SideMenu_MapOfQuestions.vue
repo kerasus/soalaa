@@ -1,11 +1,11 @@
 <template>
     <v-sheet class="map-of-questions">
-        <div v-for="(categoryItem) in quiz.categories.list" :key="'category-'+categoryItem.id">
-            <div v-if="daftarche === categoryItem.title || daftarche === 'آزاد'">
+        <div v-for="(categoryItem) in quiz.categories.list"
+             :key="'category-'+categoryItem.id">
+            <div v-if="categoryItem.is_active">
                 <v-btn :elevation="0" block class="categoryItem">
                     {{ categoryItem.title }}
                 </v-btn>
-
                 <v-expansion-panels
                     accordion
                     flat
@@ -20,19 +20,18 @@
                         {{ subcategoryItem.title }}
                     </v-expansion-panel-header>
                     <v-expansion-panel-content>
-                        <div v-for="(question, questionIndex) in quiz.questions.list" :key="'question-'+question.id">
-                            <v-btn v-if="question.sub_category.id === subcategoryItem.id"
-                                   :class="{ active: currentQuestion.id === question.id }"
+                        <div v-for="(question) in getQuestionsOfSubcategory(subcategoryItem.id)" :key="'question-'+question.id">
+                            <v-btn :class="{ active: currentQuestion.id === question.id }"
                                    :elevation="0"
                                    @click="changeQuestion(question.id)"
                                    block
                             >
                                 تست شماره
-                                {{ getQuestionNumberFromIndex(questionIndex) }}
-                                <v-icon v-if="question.state === 'cross'" color="red">
+                                {{ getQuestionNumberFromIndex(question.index) }}
+                                <v-icon v-if="question.state === 'x'" color="red">
                                     mdi-close
                                 </v-icon>
-                                <v-icon v-if="question.state === 'circle'" color="yellow" size="15">
+                                <v-icon v-if="question.state === 'o'" color="yellow" size="15">
                                     mdi-checkbox-blank-circle
                                 </v-icon>
                                 <v-icon v-if="typeof (question.isAnswered) === 'function' && question.isAnswered()" color="green">
@@ -50,9 +49,20 @@
 
 <script>
     import mixinQuiz from '@/mixin/Quiz'
+    import Time from "@/plugins/time";
+
     export default {
-        name: "MapOfQuestions",
-        mixins: [mixinQuiz]
+        name: 'SideMenu_MapOfQuestions',
+        mixins: [mixinQuiz],
+        data: () => ({
+            currentCat: null,
+        }),
+        created() {
+            let that = this
+            this.interval = setInterval(() => {
+                that.currentCat = Time.getCurrentCategoryAcceptAt(that.quiz.categories)
+            }, 1000)
+        }
     }
 </script>
 

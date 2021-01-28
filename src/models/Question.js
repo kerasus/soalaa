@@ -1,8 +1,9 @@
 import Vue from 'vue'
 import { Model, Collection } from 'js-abstract-model'
-import { AnswerList } from './Answer'
 import { ChoiceList } from './Choice'
 import { CheckingTimeList } from "@/models/CheckingTime";
+import Time from "@/plugins/time";
+import axios from "axios";
 var md = require('markdown-it')(),
     mk = require('markdown-it-katex')
 md.use(mk);
@@ -17,8 +18,10 @@ class Question extends Model {
             { key: 'id' },
             { key: '_id' },
             { key: 'title' },
+            { key: 'index' },
             { key: 'statement' },
             { key: 'rendered_statement' },
+            { key: 'in_active_category' },
             { key: 'photo' },
             { key: 'order' },
             { key: 'exams' },
@@ -32,10 +35,8 @@ class Question extends Model {
                 key: 'checking_times',
                 relatedModel: CheckingTimeList
             },
-            {
-                key: 'answers',
-                relatedModel: AnswerList
-            },
+            {key: 'answer'},
+            {key: 'selected_at'},
             {
                 key: 'choices',
                 relatedModel: ChoiceList
@@ -105,7 +106,7 @@ class Question extends Model {
     }
 
     changeState (newState) {
-        if (newState === 'cross') {
+        if (newState === 'x') {
             this.uncheckChoices()
         }
         if (newState === this.state) {
@@ -122,19 +123,41 @@ class Question extends Model {
     enterQuestion () {
         this.checking_times.addStart()
     }
+
     leaveQuestion () {
         this.checking_times.addEnd()
     }
 
-    selectChoice (choiceId) {
+    setTrueChoice (choiceId) {
         this.choices.list.map((item)=> {
-            if (this.state === 'cross') {
-                this.state = ''
+            if (item.id === choiceId) {
+                item.answer = true
+                Vue.set(item, 'answer', true)
+            } else {
+                item.answer = false
+                Vue.set(item, 'answer', false)
+            }
+
+            return item
+        })
+    }
+
+    selectChoice (choiceId, selected_at) {
+        let answeredAt = Time.now()
+        if (selected_at) {
+            answeredAt = selected_at
+        }
+        let that = this
+        this.choices.list.map((item)=> {
+            Vue.set(item, 'answered_at', answeredAt)
+            if (that.state === 'x') {
+                that.state = ''
+                Vue.set(that, 'state', '')
             }
             if (item.id !== choiceId) {
+                item.active = false
                 Vue.set(item, 'active', false)
-                // item.active = false
-            } else if (choiceId == null || choiceId == undefined || item.active) {
+            } else if (choiceId === null || typeof choiceId === 'undefined' || item.active) {
                 Vue.set(item, 'active', false)
                 // item.active = false
             } else {
@@ -147,11 +170,28 @@ class Question extends Model {
     uncheckChoices () {
         this.choices.list.map((item)=> {
             item.active = false
+            Vue.set(item, 'active', false)
         })
     }
 
-    onIntersect (entries) {
-        this.isInView = entries[0].intersectionRatio >= 0.8
+    // onIntersect (entries) {
+    //     this.isInView = entries[0].intersectionRatio >= 0.8
+    // }
+
+    sendAnswer (exam_user_id, {question_id, choice_id, selected_at }) {
+        axios.post('/3a/rb/api/temp-exam/answer/choice/', {exam_user_id, questions: [{question_id, choice_id, selected_at}] })
+    }
+
+    sendStatus (exam_user_id, {question_id, status }) {
+        axios.post('/3a/rb/api/temp-exam/answer/status', {exam_user_id, question_id, status})
+    }
+
+    sendBookmark (exam_user_id, question_id) {
+        axios.post('/3a/rb/api/temp-exam/answer/bookmark', {exam_user_id, question_id})
+    }
+
+    sendUnBookmark (exam_user_id, question_id) {
+        axios.post('/3a/rb/api/temp-exam/answer/unbookmark', {exam_user_id, question_id})
     }
 }
 
@@ -171,12 +211,6 @@ class QuestionList extends Collection {
         return this.sortByKey('order');
     }
 
-    getQuestionIndexById (questionId) {
-        return this.list.findIndex(
-            (item)=>
-                questionId !== null && (item.id).toString() === (questionId).toString()
-        )
-    }
 
     getQuestionById (questionId) {
         return this.list.find(
@@ -185,34 +219,17 @@ class QuestionList extends Collection {
         )
     }
 
-    getQuestionByIndex (questionIndex) {
-        let question = this.list[questionIndex]
-        if (question) {
-            return question
-        } else {
-            return false
-        }
+    getFirstActiveQuestion () {
+        return this.list.find( (item) => !!(item.in_active_category))
     }
 
-    getNextQuestion (questionId) {
-        let currentIndex = this.getQuestionIndexById(questionId),
-            nextIndex = ++currentIndex
-        return this.getQuestionByIndex(nextIndex)
-    }
-
-    getPrevQuestion (questionId) {
-        let currentIndex = this.getQuestionIndexById(questionId),
-            prevIndex = --currentIndex
-        return this.getQuestionByIndex(prevIndex)
-    }
-
-    turnIsInViewToFalse (startExceptionIndex, endExceptionIndex) {
-        this.list.forEach((item, index) => {
-            if (index < startExceptionIndex || index > endExceptionIndex) {
-                this.list[index].isInView = false
-            }
-        })
-    }
+    // turnIsInViewToFalse (startExceptionIndex, endExceptionIndex) {
+    //     this.list.forEach((item, index) => {
+    //         if (index < startExceptionIndex || index > endExceptionIndex) {
+    //             this.list[index].isInView = false
+    //         }
+    //     })
+    // }
 }
 
 export { Question, QuestionList }

@@ -39,24 +39,7 @@
                         ></v-textarea>
                     </v-col>
                     <v-col :md="1">
-                        <v-btn outlined icon @click="underlineStatement">
-                            <v-icon>mdi-format-underline</v-icon>
-                        </v-btn>
-                        <v-btn outlined icon @click="boldStatement">
-                            <v-icon>mdi-format-bold</v-icon>
-                        </v-btn>
-                        <v-btn outlined icon @click="spaceStatement">
-                            <v-icon>mdi-keyboard-space</v-icon>
-                        </v-btn>
-                        <v-btn outlined icon @click="hideForKonkoor">
-                            <v-icon>mdi-eye-off</v-icon>
-                        </v-btn>
-                        <v-btn outlined icon @click="addImageStatement">
-                            <v-icon>mdi-image</v-icon>
-                        </v-btn>
-                        <v-btn outlined icon @click="addMatrixStatement">
-                            <v-icon>mdi-matrix</v-icon>
-                        </v-btn>
+                        <markdown-btn :elem="currentQuestion" :elem-key="'statement'" :rendered-matrix-katex="renderedMatrixKatex" :url="url" @add="markdownBtnAddString" />
                     </v-col>
                     <v-col :md="5">
                         <div class="renderedPanel" v-html="questRendered">
@@ -78,30 +61,22 @@
                         ></v-textarea>
                     </v-col>
                     <v-col :md="2">
-                        <!--                <v-checkbox @click="changeTrueChoice(index - 1)" v-model="choicesMarkdownText[index - 1].true" />-->
                         <v-radio :value="index - 1" />
-                        <v-btn outlined icon @click="underlineChoice(currentQuestion.choices.list[index - 1])">
-                            <v-icon>mdi-format-underline</v-icon>
-                        </v-btn>
-                        <v-btn outlined icon @click="boldChoice(currentQuestion.choices.list[index - 1])">
-                            <v-icon>mdi-format-bold</v-icon>
-                        </v-btn>
-                        <v-btn outlined icon @click="spaceChoice(currentQuestion.choices.list[index - 1])">
-                            <v-icon>mdi-keyboard-space</v-icon>
-                        </v-btn>
-                        <v-btn outlined icon @click="addImageChoice(currentQuestion.choices.list[index - 1])">
-                            <v-icon>mdi-image</v-icon>
-                        </v-btn>
-                        <v-btn outlined icon @click="addMatrixChoice(currentQuestion.choices.list[index - 1])">
-                            <v-icon>mdi-matrix</v-icon>
-                        </v-btn>
+                        <markdown-btn :elem="currentQuestion.choices.list[index - 1]" :elem-key="'title'" :rendered-matrix-katex="renderedMatrixKatex" :url="url" @add="markdownBtnAddString" />
+
                     </v-col>
+
                     <v-col :md="5">
                         <div class="renderedPanel" v-html="choiceRendered[index - 1]">
                         </div>
                     </v-col>
                 </v-row>
             </v-radio-group>
+<!--            <v-row>-->
+<!--                <v-col>-->
+<!--                    <v-textarea v-model="currentQuestion.answer" outlined label="جواب تشریحی" />-->
+<!--                </v-col>-->
+<!--            </v-row>-->
         </v-form>
         <hr>
         <div id="mathfield" locale="fa">x=\frac{-b\pm \sqrt{b^2-4ac}}{2a}</div>
@@ -117,7 +92,7 @@
                         <v-text-field label="ارتفاع" outlined dense v-model="matrixHeight" type="number" @input="initMatrix"/>
                     </v-col>
                     <v-col :md="4">
-                        <v-select outlined :items="matrixMenu" item-text="title" item-value="value" v-model="determinan" />
+                        <v-select outlined :items="matrixMenu" item-text="title" item-value="value" v-model="determinan" dense />
                     </v-col>
                 </v-row>
                 <div dir="ltr">
@@ -149,12 +124,10 @@
     import 'mathlive/dist/mathlive-fonts.css'
     import 'mathlive/dist/mathlive-static.css'
     import { Question } from '@/models/Question'
-    import {QuizList} from "@/models/Quiz";
-    import Toasted from 'vue-toasted';
-    import Assistant from "@/plugins/assistant";
+    import {ExamList} from '@/models/Exam'
     import {QuestSubcategoryList} from "@/models/QuestSubcategory";
     import Vue from 'vue'
-    Vue.use(Toasted)
+    import MarkdownBtn from "@/components/QuizEditor/MarkdownBtn";
 
     var md = require('markdown-it')(),
         mk = require('markdown-it-katex');
@@ -162,8 +135,15 @@
 
     export default {
         name: 'CreateOrEdit',
+        components: {MarkdownBtn},
+        computed: {
+            renderedMatrixKatex () {
+                return this.renderMatrixKatex()
+            }
+        },
         data: () => {
             return {
+                whiteSpace: '                   ',
                 test: [true, false, false, false],
                 questMarkdownText: '# Math Rulez! \n  $x=\\frac{-b\\pm\\sqrt[]{b^2-4ac}}{2a}$',
                 choicesMarkdownText: ['', '', '', ''],
@@ -172,10 +152,10 @@
                 choiceRendered: ['', '', '', ''],
                 latexData: null,
                 choiceNumber: {
-                    0: 'الف ',
-                    1: 'ب ',
-                    2: 'ج ',
-                    3: 'د '
+                    0: '1 ',
+                    1: '2 ',
+                    2: '3 ',
+                    3: '4 '
                 },
                 trueChoiceIndex: 0,
                 fieldId: [0],
@@ -210,7 +190,7 @@
                 currentQuestion: new Question(),
                 url: '',
                 editMode: false,
-                quizList: new QuizList(),
+                quizList: new ExamList(),
                 subCategoriesList: new QuestSubcategoryList(),
                 selectedQuizzes: [],
                 exams: [],
@@ -237,21 +217,6 @@
                 this.matrixTempWidth = this.matrixWidth
                 this.matrixTempHeight = this.matrixHeight
             },
-            addMatrixStatement () {
-                if (!this.currentQuestion.statement) {
-                    this.currentQuestion.statement = ''
-                }
-                let matrixKatex = this.renderMatrixKatex()
-                this.currentQuestion.statement += matrixKatex
-                this.updateRendered()
-            },
-            addMatrixChoice (choice) {
-                if (!choice.title) {
-                    choice.title = ''
-                }
-                choice.title += this.renderMatrixKatex()
-                this.updateRendered()
-            },
             renderMatrixKatex () {
                 let matrixType = this.determinan ? 'vmatrix' : 'bmatrix'
                 let matrixKatex = ''
@@ -272,71 +237,20 @@
                 // this.matrixTempWidth = 1
                 return matrixKatex
             },
-            addImageChoice (choice) {
-                if (!choice.title) {
-                    choice.title = ''
-                }
-                this.currentQuestion.statement += '![](' + this.url + ')'
-                this.updateRendered()
-            },
-            addImageStatement () {
-                if (!this.currentQuestion.statement) {
-                    this.currentQuestion.statement = ''
-                }
-                this.currentQuestion.statement += '![](' + this.url + ')'
-                this.updateRendered()
-            },
             replaceNimFasele () {
                 if (!this.currentQuestion.statement) {
                     this.currentQuestion.statement = ''
                 }
                 this.currentQuestion.statement = this.currentQuestion.statement.replace('¬', '‌')
             },
-            hideForKonkoor () {
-                if (!this.currentQuestion.statement) {
-                    this.currentQuestion.statement = ''
+            markdownBtnAddString ({elem, key, string}) {
+                this.addString(elem, key, string)
+            },
+            addString (elem, key, string) {
+                if (!elem[key]) {
+                    elem[key] = ''
                 }
-                this.currentQuestion.statement += '__***این متن در نمای کنکور قابل مشاهده نیست***__'
-            },
-            addUnderline (statement) {
-                if (!statement) {
-                    statement = ''
-                }
-                statement += '**__~~آندرلاین~~__**'
-                this.updateRendered()
-            },
-            underlineChoice (choice) {
-                this.addUnderline(choice.title)
-            },
-            underlineStatement () {
-                this.addUnderline(this.currentQuestion.statement)
-            },
-            boldChoice (choice) {
-                if (!choice.title) {
-                    choice.title = ''
-                }
-                choice.title += '**بولد**'
-                this.updateRendered()
-            },
-            boldStatement () {
-                if (!this.currentQuestion.statement) {
-                    this.currentQuestion.statement = ''
-                }
-                this.currentQuestion.statement += '**بولد**'
-                this.updateRendered()
-            },
-            spaceChoice (choice) {
-                if (!choice.title) {
-                    choice.title = ''
-                }
-                choice.title += '                   '
-                this.updateRendered()
-            },
-            spaceStatement () {
-                if (!this.currentQuestion.statement) {
-                    this.currentQuestion.statement = ''
-                }
-                this.currentQuestion.statement += '                   '
+                Vue.set(elem, key, elem[key] + string)
                 this.updateRendered()
             },
             getExamById (quizId) {
@@ -349,18 +263,12 @@
                 this.replaceNimFasele()
                 this.questRendered = md.render(this.currentQuestion.statement.toString());
                 for (let i = 0; i < 4; i++) {
-                    const title = this.currentQuestion.choices.list[i].title
+                    const title = (typeof this.currentQuestion.choices.list[i] !== 'undefined') ? this.currentQuestion.choices.list[i].title : null
                     if (title) {
                         this.choiceRendered[i] = md.render(title.toString())
                     }
                 }
                 this.replaceNimFasele()
-            },
-            ping() {
-
-            },
-            displayKeystroke() {
-
             },
             selectAllExams () {
                 if (this.selectedQuizzes.length !== this.quizList.list.length) {
@@ -374,15 +282,14 @@
                     this.currentQuestion.choices.list[this.trueChoiceIndex].answer = true
                     this.currentQuestion.update('/3a/api/question/' + this.currentQuestion.id )
                         .then(() => {
-                            this.$toasted.show('ویرایش با موفقیت انجام شد', {
-                                theme: "toasted-primary",
-                                position: "top-right",
-                                duration : 2000
+                            this.$notify({
+                                group: 'notifs',
+                                title: 'توجه',
+                                text: 'ویرایش با موفقیت انجام شد',
+                                type: 'success'
                             })
-                        }).catch((error) => {
-                        Assistant.handleAxiosError(this.$toasted, error)
-                        // this.$toasted.show('hello billo')
-                    })
+
+                        })
                     return
                 }
 
@@ -393,15 +300,14 @@
                     .then(() => {
                         this.currentQuestion.statement = ''
                         this.currentQuestion.choices.list.forEach((item) => { item.title = '' })
-                        this.$toasted.show('ثبت با موفقیت انجام شد', {
-                            theme: "toasted-primary",
-                            position: "top-right",
-                            duration : 2000
+                        this.$notify({
+                            group: 'notifs',
+                            title: 'توجه',
+                            text: 'ثبت با موفقیت انجام شد',
+                            type: 'success'
                         })
-                    }).catch((error) => {
-                    Assistant.handleAxiosError(this.$toasted, error)
-                    // this.$toasted.show('hello billo')
-                })
+
+                    })
 
             }
             // changeTrueChoice (index) {
@@ -433,15 +339,14 @@
         },
         created() {
             this.editMode = this.$route.name === 'quest.edit'
-            new QuizList().fetch().then((response) => {
-                this.quizList = new QuizList(response.data.data)
-            }).catch((error) => {
-                Assistant.handleAxiosError(this.$toasted, error)
+            new ExamList().fetch().then((response) => {
+                this.quizList = new ExamList(response.data.data)
+                if (!this.editMode) {
+                    this.selectedQuizzes.push(this.quizList.list[0].id)
+                }
             })
             this.subCategoriesList.fetch().then((response) => {
                 this.subCategoriesList = new QuestSubcategoryList(response.data)
-            }).catch((error) => {
-                Assistant.handleAxiosError(this.$toasted, error)
             })
             if (this.editMode) {
                 this.currentQuestion.show(null, '/3a/api/question/' + this.$route.params.id)
@@ -449,12 +354,9 @@
                         this.currentQuestion = new Question(response.data.data)
                         this.trueChoiceIndex = this.currentQuestion.choices.list.findIndex((item) => item.answer )
                         this.updateRendered()
-                    }).catch((error) => {
-                    Assistant.handleAxiosError(this.$toasted, error)
-                })
+                    })
             } else {
                 this.currentQuestion = new Question(this.questionData)
-                this.selectedQuizzes.push(this.quizList.list[0].id)
             }
         },
         watch: {

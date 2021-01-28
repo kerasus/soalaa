@@ -17,11 +17,6 @@
         name: "Choice",
         props: ['choice', 'questionId'],
         mixins: [mixinQuiz],
-        watch: {
-            'choice.active': function (data) {
-                console.log('choice.active', data)
-            }
-        },
         computed: {
             isSelected () {
                 const answeredChoice = this.currentQuestion.getAnsweredChoice()
@@ -81,10 +76,9 @@
     .answer-text {
         height: max-content;
         width: 100%;
-        display: flex;
         color: #777;
         padding-right: 30px;
-        align-items: center;
+        display: block;
     }
 
     .answer-sheet.active {
@@ -98,9 +92,6 @@
     .answer-text {
         height: max-content;
         width: 100%;
-        display: flex;
-        align-content: center;
-        align-self: center;
     }
 
     .answer-checkbox {

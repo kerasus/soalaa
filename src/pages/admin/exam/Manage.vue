@@ -1,18 +1,20 @@
 <template>
-    <v-row>
-        <v-col cols="7">
-            <exam-list @update-exam-id="updateExamId" ref="examList"/>
-        </v-col>
-        <v-col>
-            <exam-info :exam="exam" @refresh-exam-list="rereshExamList"/>
-        </v-col>
-    </v-row>
+    <v-container>
+        <v-row>
+            <v-col cols="7">
+                <exam-list @update-exam-id="updateExamId" ref="examList"/>
+            </v-col>
+            <v-col>
+                <exam-info :exam="exam" @refresh-exam-list="rereshExamList"/>
+            </v-col>
+        </v-row>
+    </v-container>
 </template>
 
 <script>
     import ExamInfo from "@/components/OnlineQuiz/Quiz/examInfo";
     import ExamList from "@/components/OnlineQuiz/Quiz/examList";
-    import {Exam} from "@/models/exam";
+    import {Exam} from "@/models/Exam";
 
     export default {
         name: 'Manage',
@@ -22,7 +24,6 @@
         components: {ExamList, ExamInfo},
         methods: {
             rereshExamList () {
-                console.log('rereshExamList1')
                 this.$refs.examList.getExams()
             },
             updateExamId(e){

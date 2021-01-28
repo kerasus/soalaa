@@ -1,32 +1,49 @@
 <template>
     <div :class="{ 'current-question': this.currentQuestion.id === source.id, question: true, ltr: source.ltr }">
-        <div class="buttons-group">
-            <v-btn icon @click="changeState(source, 'circle')">
-                <v-icon v-if="source.state !== 'circle'" color="#888" :size="24">mdi-checkbox-blank-circle-outline</v-icon>
-                <v-icon v-if="source.state === 'circle'" color="yellow" :size="24">mdi-checkbox-blank-circle</v-icon>
+        <div>
+            <v-sheet
+                    v-if="!source.in_active_category"
+                    rounded
+                    dark
+                    height="200"
+                    elevation="1"
+                    class="d-flex align-center justify-center"
+                    :color="currentQuestion.id === source.id ? 'red' : '#fff'"
+            >
+                (
+                سوال شماره
+                {{ getQuestionNumberFromId(source.id) }}
+                )
+                <br>
+                در حال حاضر امکان مشاهده سوالات این دفترچه امکان پذیر نمی باشد
+            </v-sheet>
+        </div>
+        <div v-if="source.in_active_category" class="buttons-group">
+            <v-btn icon @click="changeStatus(source.id, 'o')">
+                <v-icon v-if="!userQuizListData[quiz.id][source.id] || userQuizListData[quiz.id][source.id].status !== 'o'" color="#888" :size="24">mdi-checkbox-blank-circle-outline</v-icon>
+                <v-icon v-if="userQuizListData[quiz.id][source.id] && userQuizListData[quiz.id][source.id].status === 'o'" color="yellow" :size="24">mdi-checkbox-blank-circle</v-icon>
             </v-btn>
-            <v-btn icon @click="changeState(source ,'cross')">
-                <v-icon :color="source.state === 'cross' ? 'red' : '#888'" :size="24">mdi-close</v-icon>
+            <v-btn icon @click="changeStatus(source.id ,'x')">
+                <v-icon :color="userQuizListData[quiz.id][source.id] && userQuizListData[quiz.id][source.id].status === 'x' ? 'red' : '#888'" :size="24">mdi-close</v-icon>
             </v-btn>
-            <v-btn icon @click="bookmark(source)">
-                <v-icon v-if="!source.bookmarked" :size="24" color="#888">mdi-bookmark-outline</v-icon>
-                <v-icon v-if="source.bookmarked" color="blue" :size="24">mdi-bookmark</v-icon>
+            <v-btn icon @click="changeBookmark(source.id)">
+                <v-icon v-if="!userQuizListData[quiz.id][source.id] || !userQuizListData[quiz.id][source.id].bookmarked" :size="24" color="#888">mdi-bookmark-outline</v-icon>
+                <v-icon v-if="userQuizListData[quiz.id][source.id] && userQuizListData[quiz.id][source.id].bookmarked" color="blue" :size="24">mdi-bookmark</v-icon>
             </v-btn>
         </div>
-        <span class="question-body renderedPanel" :id="'question' + source.id" v-html="(getQuestionNumberFromId(source.id)) + '- ' + source.rendered_statement" v-intersect="{
-            handler: onIntersect,
-            options: {
-              threshold: [0, 0.2, 0.4, 0.6, 0.8, 1.0]
-            }
-          }" />
-        <v-row class="choices">
+        <span v-if="source.in_active_category"
+            class="question-body renderedPanel"
+            :id="'question' + source.id"
+            v-html="(getQuestionNumberFromId(source.id)) + '- ' + source.rendered_statement"
+        />
+        <v-row v-if="source.in_active_category" class="choices">
             <v-col
                     v-for="(choice, index) in source.choices.list"
                     :key="choice.id"
                     v-html="(choiceNumber[index]) + choice.rendered_title"
                     :md="choiceClass(source)"
-                    :class="{ choice: true, renderedPanel: true, active: choice.active }"
-                    @click="choiceClicked(source.id, choice.id)"
+                    :class="{ choice: true, renderedPanel: true, active: userQuizListData[quiz.id][source.id] && choice.id === userQuizListData[quiz.id][source.id].answered_choice_id }"
+                    @click="answerClickedd({ questionId: source.id, choiceId: choice.id})"
             />
         </v-row>
     </div>
@@ -34,22 +51,32 @@
 
 <script>
     import '@/assets/scss/markdownKatex.scss'
-    import { mixinQuiz, mixinWindowSize } from '@/mixin/Mixins'
+    import { mixinQuiz, mixinUserActionOnQuestion } from '@/mixin/Mixins'
     import $ from "jquery";
-    var md = require('markdown-it')(),
-        mk = require('markdown-it-katex')
-    md.use(mk);
+    // var md = require('markdown-it')(),
+    //     mk = require('markdown-it-katex')
+    // md.use(mk);
 
     export default {
-        name: 'item',
-        mixins: [ mixinQuiz, mixinWindowSize ],
+        mounted() {
+            this.observer = new IntersectionObserver(this.intersectionObserver, {threshold: [0.7, 0.75, 0.8]});
+
+            this.observer.observe(this.$el);
+            console.log('mounted this.$el', this.$el)
+            // console.log('this.$el', this.$el)
+            // if (this.item) {
+            //     console.log('item', this.item.index)
+            // }
+        },
+        mixins: [ mixinQuiz, mixinUserActionOnQuestion ],
         data () {
             return {
+                observer: null,
                 choiceNumber: {
-                    0: 'الف) ',
-                    1: 'ب) ',
-                    2: 'ج) ',
-                    3: 'د) '
+                    0: '1) ',
+                    1: '2) ',
+                    2: '3) ',
+                    3: '4) '
                 }
             }
         },
@@ -63,17 +90,47 @@
                 }
             }
         },
+        destroyed() {
+            this.observer.disconnect();
+        },
+        watch: {
+            userQuizListData: {
+                deep: true,
+                handler (val) {
+                    console.log(val)
+                }
+            }
+        },
         methods: {
+            // test (entries) {
+            //     console.log('id: ', this.getQuestionNumberFromId(this.source.id), ' is Intersecting: ', entries[0].isIntersecting)
+            // },
+            answerClickedd (payload) {
+                this.answerClicked(payload)
+                console.log('this is it: ', this.userQuizListData[this.quiz.id][this.source.id].answered_choice_id)
+            },
+            intersectionObserver(entries) {
+                // console.log(this.source.index, ': ', entries[0].intersectionRatio)
+                // this.source.isInView = entries[0].intersectionRatio >= 0.75
+                this.source.isInView = entries[0].intersectionRatio >= 0.75
+                if (entries[0].intersectionRatio >= 0.75) {
+                    console.log('in entry.intersectionRatio', entries[0].intersectionRatio)
+                    console.log('in this.$el', this.$el)
+                } else if (entries[0].intersectionRatio < 0.75) {
+                    console.log('out entry.intersectionRatio', entries[0].intersectionRatio)
+                    console.log('out this.$el', this.$el)
+                }
+            },
             onIntersect(entries) {
-                this.source.onIntersect(entries)
+                // console.log(this.source.index, ': ', entries[0].intersectionRatio)
+                this.source.isInView = entries[0].intersectionRatio >= 0.75
             },
             choiceClicked (questionId, choiceId) {
+                console.log('loadFirstActiveQuestionIfNeed->choiceClicked')
                 this.changeQuestion(questionId)
                 this.answerClicked({questionId, choiceId})
             },
             choiceClass (question) {
-                // let QuestionWidthRatio = 0.4
-                // let largestChoiceWidth = this.windowSize.x * QuestionWidthRatio / largestChoice
                 let largestChoice = this.getLargestChoice(question.choices)
                 let largestChoiceWidth = $('.questions').width() / largestChoice
                 if (largestChoiceWidth > 48) {
@@ -145,8 +202,6 @@
     .choice {
         cursor: pointer;
         transition: all ease-in-out 0.3s;
-        display: flex;
-        align-items: flex-start;
     }
 
     .buttons-group {

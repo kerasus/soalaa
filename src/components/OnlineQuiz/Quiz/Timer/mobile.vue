@@ -1,8 +1,8 @@
 <template>
     <div style="bottom: 0">
         <v-row style="padding-left: 0">
-            <v-col cols="7 " class="col-sm-6 btnCol" >
-                <div class="sideBtns  elevation-3">
+            <v-col cols="7 " class="col-sm-6 btnCol">
+                <div class="sideBtns  elevation-3" >
                     <v-row>
 <!--                        <v-col cols="1"/>-->
                         <v-col class="d-flex justify-center">
@@ -46,8 +46,9 @@
                     زمان گذشته
                     {{ passedTime }}
                 </p>
-                <p class="remainingTimeText">
-                    دقیقه تا پایان مهلت پاسخگویی دفترچه عمومی
+                <p v-if="remainingTime && currentCat" class="remainingTimeText">
+                    دقیقه تا پایان مهلت پاسخگویی
+                    {{ currentCat.title }}
                     {{ remainingTime }}
                 </p>
             </div>
@@ -68,8 +69,10 @@
             drawerVisible: false,
         }),
         props: [
+            'currentCat',
             'passedTime',
-            'remainingTime'],
+            'remainingTime'
+        ],
         mixins: [mixinQuiz],
         methods: {
             drawerUp() {

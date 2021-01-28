@@ -1,42 +1,51 @@
 <template>
-
-        <v-card elevation="1" class="infoCard  infoText align-content-center">
+        <v-card class="infoCard infoText align-content-center">
             <v-row class="infoHeight">
                 <v-col class="infoCols">
-                    نام و نام خانوادگی : هلیا محمدی
+                    نام و نام خانوادگی :
+                    {{ $store.getters.user.first_name }}
+                    {{ $store.getters.user.last_name }}
                 </v-col>
                 <v-col class="infoCols">
-                    کد ملی : 0020890222
+                    کد ملی :
+
                 </v-col>
                 <v-col class="infoCols">
-                    شماره موبایل : 09365491835
+                    شماره موبایل :
+                    {{ $store.getters.user.mobile }}
                 </v-col>
                 <v-col class="infoCols">
-                    رشته : ریاضی
+                    رشته :
+                    {{ $store.getters.user.major.name }}
                 </v-col>
                 <v-col class="infoCols">
-                    استان : البرز
+                    استان :
+                    {{ $store.getters.user.province }}
                 </v-col>
                 <v-col class="infoCols">
-                    شهر : کرج
+                    شهر :
+                    {{ $store.getters.user.city }}
                 </v-col>
             </v-row>
         </v-card>
-
 </template>
 
 <script>
     export default {
-        name: "info"
+        name: "info",
+        data () {
+            return {
+                user: this.$store.getters.user
+            }
+        }
     }
 </script>
 
 <style scoped>
     .infoCard {
-        margin-top: 10px;
-        width: 97%;
+        /*margin-top: 10px;*/
+        /*width: 97%;*/
         border-radius: 15px;
-        height: 80px;
     }
     .infoCols {
         text-align: center;

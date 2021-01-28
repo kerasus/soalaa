@@ -68,7 +68,7 @@
 <script>
     import Vue from 'vue'
     import VuePersianDatetimePicker from 'vue-persian-datetime-picker'
-    import {Exam} from "@/models/exam";
+    import {Exam} from "@/models/Exam";
     import Assistant from "@/plugins/assistant";
     Vue.component('date-picker', VuePersianDatetimePicker)
 
@@ -104,7 +104,6 @@
             },
             refreshExamList () {
                 this.$emit('refresh-exam-list')
-                console.log('rereshExamList0')
             }
         }
     }
