@@ -11,7 +11,7 @@ class User extends Model {
         super(data, [
             {
                 key: 'baseRoute',
-                default: '/api/v2/user'
+                default: '/alaa/api/v2/user/'
             },
             {
                 key: 'id',
@@ -61,6 +61,10 @@ class User extends Model {
             },
             {
                 key: 'has_admin_permission'
+            },
+            {
+                key: 'updateType',
+                default: 'profile'
             }
 
         ])

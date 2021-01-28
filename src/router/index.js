@@ -122,10 +122,10 @@ const router = new VueRouter({
             meta: {middleware: auth}
         },
         {
-            path: '/user-info',
+            path: '/تکمیل_اطلاعات',
             name: 'user-info',
-            component: () => lazyLoadView(import('@/components/UserInfoForm')),
-            meta: {middleware: auth}
+            component: () => lazyLoadView(import('@/pages/user/UserInfoForm')),
+            // meta: {middleware: auth}
         },
         {
             path: '/debug',
