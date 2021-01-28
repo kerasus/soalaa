@@ -8,7 +8,7 @@
         <v-row class="d-flex justify-center">
             <v-col>
                 <v-card elevation="0" class="infoCard align-content-center"
-                        style="height:60px; width: 100%">
+                        >
                     <v-row style="height: 50%;margin: inherit;
      ">
                         <v-col sm="4">
@@ -16,7 +16,7 @@
                             {{ exam.title }}
                         </v-col>
                         <v-col>
-                            <v-tabs v-model="tab" color="#ffc107" center-active>
+                            <v-tabs v-model="tab" color="#ffc107" center-active show-arrows>
                                 <v-tabs-slider color="yellow"></v-tabs-slider>
                                 <v-tab>ریزدرس ها</v-tab>
                                 <v-tab>پاسخبرگ کلیدی</v-tab>
@@ -49,10 +49,13 @@
                                 {{ item.sub_category }}
                             </v-tab>
                             <v-tab-item>
-                                <video :src="currentVideo.file.video[1].link" type="video/mp4" controls :poster="currentVideo.photo" :width="'80%'" class="video-player"/>
-                                <v-btn outlined v-for="(video, index) in alaaVideos" :key="index" @click="getContent(video.id)">
-                                    {{ video.title }}
-                                </v-btn>
+                                <p>{{ currentVideo.title }}</p>
+                                <video :src="currentVideo.file.video[1].link" type="video/mp4" controls :poster="currentVideo.photo" :width="'60%'" class="video-player" :title="currentVideo.title"/>
+                                <div class="d-flex flex-row" dir="ltr">
+                                    <v-btn outlined v-for="(video, index) in alaaVideos" :key="index" @click="getContent(video.id)" icon :style="{ margin: '0 5px' }">
+                                        {{ index }}
+                                    </v-btn>
+                                </div>
                             </v-tab-item>
                             <v-tab-item>
                                 <video/>
@@ -127,17 +130,23 @@
                             that.quiz.show('600eeaa608caac7e6892debe', '/3a/api/exam-report?exam_id=5ffdcc5b5590063ba07fad36')
                             .then((response) => {
                                 this.report = response.data.data
-                                this.report.sub_category.forEach((item) => {
+                                this.report.sub_category.forEach((item, index) => {
                                     item.percent = item.percent.toFixed(1)
+                                    item.taraaz = item.taraaz.toFixed(0)
                                     item.empty = item.total_answer - item.right_answer - item.wrong_answer
+                                    item.index = index + 1
+                                })
+                                this.report.zirgorooh.sort((first, second) => {
+                                    return first.title.localeCompare(second.title)
                                 })
                                 this.report.zirgorooh.forEach((item) => {
                                     item.percent = item.percent.toFixed(1)
                                 })
-                                this.report.best.sub_category.forEach((item) => {
+                                this.report.best.sub_category.forEach((item, index) => {
                                     item.top_ranks_taraaz_mean = item.top_ranks_taraaz_mean.toFixed(0)
                                     item.mean = item.mean.toFixed(1)
                                     item.top_ranks_percent_mean = item.top_ranks_percent_mean.toFixed(1)
+                                    item.index = index + 1
                                 })
                             })
                         })
@@ -175,7 +184,9 @@
                 })
             },
             onVideoTabChange (tabIndex) {
-                console.log('tabIndex', this.report.sub_category[tabIndex].sub_category)
+                if (this.report) {
+                    console.log('tabIndex', this.report.sub_category[tabIndex].sub_category)
+                }
             }
         }
     }
@@ -199,8 +210,8 @@
         .video-tab .v-tab {
             width: 200px;
             background: #ebeaea;
-            margin: 10px 0 10px 20px;
-            height: 54px !important;
+            margin: 5px 0 5px 20px;
+            height: 48px !important;
             border-radius: 10px;
         }
 
@@ -217,7 +228,7 @@
 
     .video-player {
         border-radius: 25px;
-        margin: 50px 0;
+        margin: 20px 0;
     }
 
     .video-tab .v-window.v-item-group.theme--light.v-tabs-items .v-window__container .v-window-item {

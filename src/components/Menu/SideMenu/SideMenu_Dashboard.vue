@@ -101,8 +101,6 @@
                     <v-list-item-title>ثبت ویدئو تحلیل</v-list-item-title>
                 </v-list-item>
             </router-link>
-
-
         </v-list-item-group>
     </v-list>
 </template>

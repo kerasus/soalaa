@@ -2,7 +2,7 @@
     <div style="background-color: rgb(244, 244, 244)">
         <div class="d-flex justify-center wrapper">
             <v-row>
-                <v-col cols="7">
+                <v-col md="7">
                     <v-data-table
                             hide-default-footer
                             :headers="headers1"
@@ -20,7 +20,7 @@
                         </template>
                     </v-data-table>
                 </v-col>
-                <v-col class="firstColPadding">
+                <v-col md="5" class="firstColPadding">
                     <v-data-table
                             hide-default-footer
                             :headers="headers2"
@@ -32,7 +32,7 @@
                             <br>
                             <span class="tableTitle ">
                                     نتیجه در زیر گروه ها
-                                </span>
+                            </span>
                             <br>
                             <br>
                         </template>
@@ -75,82 +75,16 @@
                         text: 'ردیف',
                         align: 'center',
                         sortable: false,
-                        value: 'order',
+                        value: 'index',
                     },
-                    {text: 'درس', value: 'sub_category', align: 'center', sortable: false,},
-                    {text: ' تعداد کل', value: 'total_answer', align: 'center', sortable: false,},
-                    {text: ' تعداد درست', value: 'right_answer', align: 'center', sortable: false,},
-                    {text: ' تعداد غلط', value: 'wrong_answer', align: 'center', sortable: false,},
-                    {text: ' تعداد نزده', value: 'empty', align: 'center', sortable: false,},
-                    {text: ' درصد', value: 'percent', align: 'center', sortable: false,},
+                    {text: 'درس', value: 'sub_category', align: 'center', sortable: false},
+                    {text: ' تعداد کل', value: 'total_answer', align: 'center', sortable: false},
+                    {text: ' تعداد درست', value: 'right_answer', align: 'center', sortable: false},
+                    {text: ' تعداد غلط', value: 'wrong_answer', align: 'center', sortable: false},
+                    {text: ' تعداد نزده', value: 'empty', align: 'center', sortable: false},
+                    {text: ' درصد', value: 'percent', align: 'center', sortable: false},
+                    {text: ' تراز', value: 'taraaz', align: 'center', sortable: false},
                 ],
-                // item1: [
-                //     {
-                //         row: 1,
-                //         course: 'ریاضی',
-                //         total: 6.0,
-                //         correct: 10,
-                //         wrong: 4.0,
-                //         empty: 1,
-                //     },
-                //     {
-                //         row: 2,
-                //         course: 'ریاضی',
-                //         total: 6.0,
-                //         correct: 10,
-                //         wrong: 4.0,
-                //         empty: 1,
-                //     },
-                //     {
-                //         row: '1',
-                //         course: 'ریاضی',
-                //         total: 6.0,
-                //         correct: 10,
-                //         wrong: 4.0,
-                //         empty: 1,
-                //     },
-                //     {
-                //         row: '1',
-                //         course: 'ریاضی',
-                //         total: 6.0,
-                //         correct: 10,
-                //         wrong: 4.0,
-                //         empty: 1,
-                //     },
-                //     {
-                //         row: '1',
-                //         course: 'ریاضی',
-                //         total: 6.0,
-                //         correct: 10,
-                //         wrong: 4.0,
-                //         empty: 1,
-                //     },
-                //     {
-                //         row: '1',
-                //         course: 'ریاضی',
-                //         total: 6.0,
-                //         correct: 10,
-                //         wrong: 4.0,
-                //         empty: 1,
-                //     },
-                //     {
-                //         row: '1',
-                //         course: 'ریاضی',
-                //         total: 6.0,
-                //         correct: 10,
-                //         wrong: 4.0,
-                //         empty: 1,
-                //     },
-                //     {
-                //         row: '1',
-                //         course: 'ریاضی',
-                //         total: 6.0,
-                //         correct: 10,
-                //         wrong: 4.0,
-                //         empty: 1,
-                //     },
-                //
-                // ],
                 headers2: [
                     {
                         text: 'زیر گروه',
@@ -164,81 +98,7 @@
                     // {text: ' رتبه استان', value: 'rankInState', align: 'center', sortable: false,},
                     {text: ' رتبه کشور', value: 'rank_country', align: 'center', sortable: false,},
                 ],
-                // item2: [
-                //     {
-                //         subGroup: '1',
-                //         rawPercentage: 90,
-                //         level: 5000,
-                //         rankInCity: 20,
-                //         rankInState: 200,
-                //         rankInCountry: 2000
-                //     },
-                //     {
-                //         subGroup: '1',
-                //         rawPercentage: 90,
-                //         level: 5000,
-                //         rankInCity: 20,
-                //         rankInState: 200,
-                //         rankInCountry: 2000
-                //     },
-                //     {
-                //         subGroup: '1',
-                //         rawPercentage: 90,
-                //         level: 5000,
-                //         rankInCity: 20,
-                //         rankInState: 200,
-                //         rankInCountry: 2000
-                //     },
-                //     {
-                //         subGroup: '1',
-                //         rawPercentage: 90,
-                //         level: 5000,
-                //         rankInCity: 20,
-                //         rankInState: 200,
-                //         rankInCountry: 2000
-                //     },
-                //     {
-                //         subGroup: '1',
-                //         rawPercentage: 90,
-                //         level: 5000,
-                //         rankInCity: 20,
-                //         rankInState: 200,
-                //         rankInCountry: 2000
-                //     },
-                //     {
-                //         subGroup: '1',
-                //         rawPercentage: 90,
-                //         level: 5000,
-                //         rankInCity: 20,
-                //         rankInState: 200,
-                //         rankInCountry: 2000
-                //     },
-                //     {
-                //         subGroup: '1',
-                //         rawPercentage: 90,
-                //         level: 5000,
-                //         rankInCity: 20,
-                //         rankInState: 200,
-                //         rankInCountry: 2000
-                //     },
-                //     {
-                //         subGroup: '1',
-                //         rawPercentage: 90,
-                //         level: 5000,
-                //         rankInCity: 20,
-                //         rankInState: 200,
-                //         rankInCountry: 2000
-                //     },
-                //     {
-                //         subGroup: '1',
-                //         rawPercentage: 90,
-                //         level: 5000,
-                //         rankInCity: 20,
-                //         rankInState: 200,
-                //         rankInCountry: 2000
-                //     },
-                //
-                // ],
+
             }
         },
         props: ['report']
