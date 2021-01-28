@@ -46,7 +46,6 @@
         /*margin-top: 10px;*/
         /*width: 97%;*/
         border-radius: 15px;
-        height: 80px;
     }
     .infoCols {
         text-align: center;

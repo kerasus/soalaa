@@ -178,10 +178,6 @@
         height: 100%;
     }
 
-    .dataTableHeight2 {
-        height: 67%;
-    }
-
     .infoCard {
         margin-top: 10px;
         border-radius: 15px;
