@@ -9,15 +9,15 @@
             <v-col>
                 <v-card elevation="0" class="infoCard align-content-center"
                         >
-                    <v-row style="height: 50%;margin: inherit;
-     ">
+                    <v-row style="height: 50%;margin: inherit;">
                         <v-col sm="4">
                             نتایج آزمون اول سه‌آ -
-                            {{ exam.title }}
+                            {{ quiz.title }}
                         </v-col>
                         <v-col>
                             <v-tabs v-model="tab" color="#ffc107" center-active show-arrows>
                                 <v-tabs-slider color="yellow"></v-tabs-slider>
+                                <v-tab>کارنامه</v-tab>
                                 <v-tab>ریزدرس ها</v-tab>
                                 <v-tab>پاسخبرگ کلیدی</v-tab>
                                 <v-tab>نتایج نفرات برتر</v-tab>
@@ -35,6 +35,9 @@
                         <PersonalResult :report="report"/>
                     </v-tab-item>
                     <v-tab-item>
+                        <StatisticResult :report="report"/>
+                    </v-tab-item>
+                    <v-tab-item>
                         <v-card flat>
                             <BubbleSheet :info="{ type: 'pasokh-nameh' }" />
                         </v-card>
@@ -43,7 +46,7 @@
                         <top-score-result :report="report"/>
                     </v-tab-item>
                     <v-tab-item class="video-tab">
-                        <v-tabs color="#ffc107" :vertical="windowSize.x > 960" center-active show-arrows grow @change="onVideoTabChange">
+                        <v-tabs v-if="report" color="#ffc107" :vertical="windowSize.x > 960" center-active show-arrows grow @change="onVideoTabChange">
                             <v-tabs-slider :color="windowSize.x > 960 ? 'transparent' : 'yellow'"></v-tabs-slider>
                             <v-tab v-for="(item, index) in report.sub_category" :key="index">
                                 {{ item.sub_category }}
@@ -87,7 +90,6 @@
 </template>
 
 <script>
-    import {Exam} from "@/models/Exam";
     import Info from "@/components/OnlineQuiz/Quiz/resultTables/info";
     import TopScoreResult from "@/components/OnlineQuiz/Quiz/resultTables/topScoreResult";
     import PersonalResult from "@/components/OnlineQuiz/Quiz/resultTables/personalResult";
@@ -96,15 +98,15 @@
     import {AlaaSet} from "@/models/AlaaSet";
     import {mixinQuiz, mixinWindowSize} from "@/mixin/Mixins";
     import {AlaaContent} from "@/models/AlaaContent";
+    import StatisticResult from "@/components/OnlineQuiz/Quiz/resultTables/statisticResult";
 
     export default {
         name: 'Result',
-        components: { BubbleSheet, TopScoreResult, Info, PersonalResult},
+        components: {StatisticResult, BubbleSheet, TopScoreResult, Info, PersonalResult},
         mixins: [mixinQuiz, mixinWindowSize],
         data: () => ({
             tab: null,
             videoLesson: null,
-            exam: new Exam(),
             alaaSet: new AlaaSet(),
             alaaContent: new AlaaContent(),
             alaaVideos: null,
