@@ -56,11 +56,12 @@
         methods: {
             loadDataTable () {
                 this.loadUserDataOfDataTable()
-                this.loadnBestAndAverageDataOfDataTable()
+                this.loadBestAndAverageDataOfDataTable()
             },
             loadUserDataOfDataTable () {
+                let that = this
                 this.report.sub_category.forEach( (item) => {
-                    this.dataTable.push({
+                    that.dataTable.push({
                         index: item.index,
                         sub_category: item.sub_category,
                         percent: item.percent,
@@ -69,19 +70,17 @@
                     })
                 })
             },
-            loadnBestAndAverageDataOfDataTable () {
+            loadBestAndAverageDataOfDataTable () {
+                let that = this
                 this.report.best.sub_category.forEach( (item) => {
-                    let targetIndex = this.dataTable.findIndex( (dataTableItem) => {
+                    let targetIndex = that.dataTable.findIndex( (dataTableItem) => {
                         return dataTableItem.sub_category === item.sub_category
                     })
-                    if (this.dataTable[targetIndex]) {
-                        this.dataTable[targetIndex].average = this.roundNumber(item.mean)
-                        this.dataTable[targetIndex].taraaz_average = this.roundNumber(item.taraaz_mean)
+                    if (that.dataTable[targetIndex]) {
+                        that.dataTable[targetIndex].average = parseFloat(item.mean).toFixed(1)
+                        that.dataTable[targetIndex].taraaz_average = parseFloat(item.taraaz_mean).toFixed(0)
                     }
                 })
-            },
-            roundNumber (number) {
-                return Math.round(number * 100) / 100
             }
         }
     }
