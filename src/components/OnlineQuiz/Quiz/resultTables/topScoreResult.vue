@@ -23,7 +23,7 @@
                 </v-row>
                 <v-row>
                     <v-col>
-                        <div :style="{ 'max-width': '1000px'}">
+                        <div :style="{ 'max-width': '100%'}">
                             <highcharts :options="chartOptions"></highcharts>
                         </div>
                     </v-col>
@@ -48,7 +48,7 @@
                         text: 'ردیف',
                         align: 'center',
                         sortable: false,
-                        value: 'row',
+                        value: 'index',
                     },
                     {text: 'درس', value: 'sub_category',align: 'center',sortable: false,},
                     {text: 'درصد', value: 'top_ranks_percent_mean',align: 'center',sortable: false,},
