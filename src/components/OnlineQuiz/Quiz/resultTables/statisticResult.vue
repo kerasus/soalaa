@@ -7,7 +7,7 @@
                     <v-data-table
                             hide-default-footer
                             :headers="headers"
-                            :items="item"
+                            :items="dataTable"
                             :items-per-page="5"
                             class="elevation-1 dataTable"
                     ></v-data-table>
@@ -23,118 +23,64 @@
     import ComingSoon from "@/components/ComingSoon";
     export default {
         name: "statisticResult",
+        props: ['report'],
         components: {ComingSoon},
         // components: {Info},
         data() {
             return {
+                dataTable: [],
                 headers: [
                     {
                         text: 'ردیف',
                         align: 'center',
                         sortable: false,
-                        value: 'row',
+                        value: 'index',
                     },
-                    {text: 'درس', value: 'course',align: 'center',sortable: false,},
-                    {text: 'درصد', value: 'percentage',align: 'center',sortable: false,},
-                    {text: ' تراز', value: 'level',align: 'center',sortable: false,},
-                    {text: ' شهر', value: 'city',align: 'center',sortable: false,},
-                    {text: 'استان', value: 'state',align: 'center',sortable: false,},
-                    {text: 'کشور', value: 'country',align: 'center',sortable: false,},
-                    {text: 'میانگین درصد', value: 'percentageMean',align: 'center',sortable: false,},
-                    {text: 'میانگین تراز', value: 'levelMean',align: 'center',sortable: false,},
+                    {text: 'درس', value: 'sub_category',align: 'center',sortable: true,},
+                    {text: 'درصد', value: 'percent',align: 'center',sortable: true,},
+                    {text: ' تراز', value: 'taraaz',align: 'center',sortable: true,},
+                    // {text: ' شهر', value: 'city',align: 'center',sortable: false,},
+                    // {text: 'استان', value: 'state',align: 'center',sortable: false,},
+                    {text: 'رتبه در کشور', value: 'rank_country',align: 'center',sortable: true,},
+                    {text: 'میانگین درصد', value: 'average',align: 'center',sortable: true,},
+                    {text: 'میانگین تراز', value: 'taraaz_average',align: 'center',sortable: true,},
 
-                ],
-                item: [
-                    {
-                        row: '1',
-                        course: 'ریاضی',
-                        percentage: 90,
-                        level: 5000,
-                        city: 'تهران',
-                        state: 'تهران',
-                        country: 'ایران',
-                        percentageMean: 80,
-                        levelMean: 4000,
-                    },
-                    {
-                        row:'1',
-                        course:'ریاضی',
-                        percentage:90,
-                        level:5000,
-                        city:'تهران',
-                        state:'تهران',
-                        country:'ایران',
-                        percentageMean: 80,
-                        levelMean: 4000,
-                    },
-                    {
-                        row:'1',
-                        course:'ریاضی',
-                        percentage:90,
-                        level:5000,
-                        city:'تهران',
-                        state:'تهران',
-                        country:'ایران',
-                        percentageMean: 80,
-                        levelMean: 4000,
-                    },
-                    {
-                        row:'1',
-                        course:'ریاضی',
-                        percentage:90,
-                        level:5000,
-                        city:'تهران',
-                        state:'تهران',
-                        country:'ایران',
-                        percentageMean: 80,
-                        levelMean: 4000,
-                    },
-                    {
-                        row:'1',
-                        course:'ریاضی',
-                        percentage:90,
-                        level:5000,
-                        city:'تهران',
-                        state:'تهران',
-                        country:'ایران',
-                        percentageMean: 80,
-                        levelMean: 4000,
-                    },
-                    {
-                        row:'1',
-                        course:'ریاضی',
-                        percentage:90,
-                        level:5000,
-                        city:'تهران',
-                        state:'تهران',
-                        country:'ایران',
-                        percentageMean: 80,
-                        levelMean: 4000,
-                    },
-                    {
-                        row:'1',
-                        course:'ریاضی',
-                        percentage:90,
-                        level:5000,
-                        city:'تهران',
-                        state:'تهران',
-                        country:'ایران',
-                        percentageMean: 80,
-                        levelMean: 4000,
-                    },
-                    {
-                        row:'1',
-                        course:'ریاضی',
-                        percentage:90,
-                        level:5000,
-                        city:'تهران',
-                        state:'تهران',
-                        country:'ایران',
-                        percentageMean: 80,
-                        levelMean: 4000,
-                    },
-
-                ],
+                ]
+            }
+        },
+        created() {
+            if (this.report && this.report.best) {
+                this.loadDataTable()
+            }
+        },
+        methods: {
+            loadDataTable () {
+                this.loadUserDataOfDataTable()
+                this.loadBestAndAverageDataOfDataTable()
+            },
+            loadUserDataOfDataTable () {
+                let that = this
+                this.report.sub_category.forEach( (item) => {
+                    that.dataTable.push({
+                        index: item.index,
+                        sub_category: item.sub_category,
+                        percent: item.percent,
+                        taraaz: item.taraaz,
+                        rank_country: item.rank_country
+                    })
+                })
+            },
+            loadBestAndAverageDataOfDataTable () {
+                let that = this
+                this.report.best.sub_category.forEach( (item) => {
+                    let targetIndex = that.dataTable.findIndex( (dataTableItem) => {
+                        return dataTableItem.sub_category === item.sub_category
+                    })
+                    if (that.dataTable[targetIndex]) {
+                        that.dataTable[targetIndex].average = parseFloat(item.mean).toFixed(1)
+                        that.dataTable[targetIndex].taraaz_average = parseFloat(item.taraaz_mean).toFixed(0)
+                    }
+                })
             }
         }
     }

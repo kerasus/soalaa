@@ -9,15 +9,15 @@
             <v-col>
                 <v-card elevation="0" class="infoCard align-content-center"
                         >
-                    <v-row style="height: 50%;margin: inherit;
-     ">
+                    <v-row style="height: 50%;margin: inherit;">
                         <v-col sm="4">
                             نتایج آزمون اول سه‌آ -
-                            {{ exam.title }}
+                            {{ quiz.title }}
                         </v-col>
                         <v-col>
                             <v-tabs v-model="tab" color="#ffc107" center-active show-arrows>
                                 <v-tabs-slider color="yellow"></v-tabs-slider>
+                                <v-tab>کارنامه</v-tab>
                                 <v-tab>ریزدرس ها</v-tab>
                                 <v-tab>پاسخبرگ کلیدی</v-tab>
                                 <v-tab>نتایج نفرات برتر</v-tab>
@@ -35,6 +35,9 @@
                         <PersonalResult :report="report"/>
                     </v-tab-item>
                     <v-tab-item>
+                        <StatisticResult :report="report"/>
+                    </v-tab-item>
+                    <v-tab-item>
                         <v-card flat>
                             <BubbleSheet :info="{ type: 'pasokh-nameh' }" delay-time="0" />
                         </v-card>
@@ -43,7 +46,7 @@
                         <top-score-result :report="report"/>
                     </v-tab-item>
                     <v-tab-item class="video-tab">
-                        <v-tabs color="#ffc107" :vertical="windowSize.x > 960" center-active show-arrows grow @change="onVideoTabChange">
+                        <v-tabs v-if="report" color="#ffc107" :vertical="windowSize.x > 960" center-active show-arrows grow @change="onVideoTabChange">
                             <v-tabs-slider :color="windowSize.x > 960 ? 'transparent' : 'yellow'"></v-tabs-slider>
                             <v-tab v-for="(item, index) in report.sub_category" :key="index">
                                 {{ item.sub_category }}
@@ -87,7 +90,6 @@
 </template>
 
 <script>
-    import {Exam} from "@/models/Exam";
     import Info from "@/components/OnlineQuiz/Quiz/resultTables/info";
     import TopScoreResult from "@/components/OnlineQuiz/Quiz/resultTables/topScoreResult";
     import PersonalResult from "@/components/OnlineQuiz/Quiz/resultTables/personalResult";
@@ -96,15 +98,15 @@
     import {AlaaSet} from "@/models/AlaaSet";
     import {mixinQuiz, mixinWindowSize} from "@/mixin/Mixins";
     import {AlaaContent} from "@/models/AlaaContent";
+    import StatisticResult from "@/components/OnlineQuiz/Quiz/resultTables/statisticResult";
 
     export default {
         name: 'Result',
-        components: { BubbleSheet, TopScoreResult, Info, PersonalResult},
+        components: {StatisticResult, BubbleSheet, TopScoreResult, Info, PersonalResult},
         mixins: [mixinQuiz, mixinWindowSize],
         data: () => ({
             tab: null,
             videoLesson: null,
-            exam: new Exam(),
             alaaSet: new AlaaSet(),
             alaaContent: new AlaaContent(),
             alaaVideos: null,
@@ -122,32 +124,17 @@
             // })
 
             let that = this
-            this.user.loadExamDataForShowResult(this.$route.params.user_exam_id)
+            let user_exam_id = this.$route.params.user_exam_id
+            let exam_id = this.$route.params.exam_id
+            this.user.loadExamDataForShowResult(user_exam_id)
                 .then(({userExamForParticipate}) => {
-                    that.loadExam(userExamForParticipate, 'results', that.$route.params.exam_id)
+                    that.loadExam(userExamForParticipate, 'results', exam_id)
                         .then(() => {
-                            that.quiz.id = that.$route.params.exam_id
-                            that.quiz.show('600eeaa608caac7e6892debe', '/3a/api/exam-report?exam_id=5ffdcc5b5590063ba07fad36')
+                            that.quiz.id = exam_id
+                            that.quiz.show(exam_id, '/3a/api/exam-report?exam_id='+exam_id)
                             .then((response) => {
                                 this.report = response.data.data
-                                this.report.sub_category.forEach((item, index) => {
-                                    item.percent = item.percent.toFixed(1)
-                                    item.taraaz = item.taraaz.toFixed(0)
-                                    item.empty = item.total_answer - item.right_answer - item.wrong_answer
-                                    item.index = index + 1
-                                })
-                                this.report.zirgorooh.sort((first, second) => {
-                                    return first.title.localeCompare(second.title)
-                                })
-                                this.report.zirgorooh.forEach((item) => {
-                                    item.percent = item.percent.toFixed(1)
-                                })
-                                this.report.best.sub_category.forEach((item, index) => {
-                                    item.top_ranks_taraaz_mean = item.top_ranks_taraaz_mean.toFixed(0)
-                                    item.mean = item.mean.toFixed(1)
-                                    item.top_ranks_percent_mean = item.top_ranks_percent_mean.toFixed(1)
-                                    item.index = index + 1
-                                })
+                                this.loadKarname(this.report)
                             })
                         })
                         .catch( () => {
@@ -164,6 +151,38 @@
             // 24670
         },
         methods: {
+            getReportFromQuiz () {
+
+            },
+            loadKarname (report) {
+                this.loadSubCategory(report.sub_category)
+                this.loadZirGrooh(report.zirgorooh)
+                this.loadBest(report.best)
+            },
+            loadBest (best) {
+                best.sub_category.forEach((item, index) => {
+                    item.top_ranks_taraaz_mean = parseFloat(item.top_ranks_taraaz_mean).toFixed(0)
+                    item.mean = parseFloat(item.mean).toFixed(1)
+                    item.top_ranks_percent_mean = parseFloat(item.top_ranks_percent_mean).toFixed(1)
+                    item.index = index + 1
+                })
+            },
+            loadSubCategory (sub_category) {
+                sub_category.forEach((item, index) => {
+                    item.percent = parseFloat(item.percent).toFixed(1)
+                    item.taraaz = parseFloat(item.taraaz).toFixed(0)
+                    item.empty = item.total_answer - item.right_answer - item.wrong_answer
+                    item.index = index + 1
+                })
+            },
+            loadZirGrooh (zirgorooh) {
+                zirgorooh.sort((first, second) => {
+                    return first.title.localeCompare(second.title)
+                })
+                zirgorooh.forEach((item) => {
+                    item.percent = parseFloat(item.percent).toFixed(1)
+                })
+            },
             getContent (contentId) {
                 this.alaaContent.show(contentId)
                 .then((response) => {

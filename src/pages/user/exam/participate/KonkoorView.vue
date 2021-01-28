@@ -35,7 +35,19 @@
                 <v-row>
                     <v-col class="px-10 py-0 d-flex justify-space-between" dir="ltr">
                         <div class="rounded-b-xl rounded-r-xl">
-                            <TopMenu />
+                            <v-menu bottom :offset-y="true" class="rounded-b-xl rounded-r-xl">
+                                <template v-slot:activator="{ on, attrs }">
+                                    <v-btn large tile v-bind="attrs" v-on="on" elevation="0" class="pl-3" >
+                                        <v-icon class="mr-2" :size="30" color="#666">mdi-account-circle</v-icon>
+                                        <span v-if="$store.getters.user.first_name || $store.getters.user.last_name">
+                                                {{ $store.getters.user.first_name + ' ' + $store.getters.user.last_name }}
+                                            </span>
+                                    </v-btn>
+                                </template>
+                                <v-card max-width="375" class="mx-auto" rounded="b-xl r-xl">
+                                    <TopMenu_OnlineQuiz/>
+                                </v-card>
+                            </v-menu>
                         </div>
                         <v-btn icon @click="changeView('alaa')">
                             <v-icon>mdi-table-split-cell</v-icon>
@@ -69,8 +81,8 @@
     import Timer from '@/components/OnlineQuiz/Quiz/Timer/Timer'
     import BubbleSheet from "@/components/OnlineQuiz/Quiz/BubbleSheet/BubbleSheet";
     import {Exam} from "@/models/Exam";
-    import { TopMenu } from '@/components/Menu/Menus'
     import Assistant from "@/plugins/assistant";
+    import { TopMenu_OnlineQuiz } from '@/components/Menu/Menus'
     // Vue.component('DynamicScroller', DynamicScroller)
     // Vue.component('DynamicScrollerItem', DynamicScrollerItem)
 
@@ -79,7 +91,7 @@
         mixins: [mixinQuiz, mixinUserActionOnQuestion, mixinWindowSize],
         components: {
             Timer,
-            TopMenu,
+            TopMenu_OnlineQuiz,
             // 'virtual-list': VirtualList,
             BubbleSheet,
             DynamicScroller,

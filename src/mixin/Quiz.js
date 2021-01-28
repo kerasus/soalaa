@@ -115,8 +115,8 @@ const mixinQuiz = {
         currentExamQuestions[item.id.toString()] = item
         currentExamQuestionIndexes[index.toString()] = item.id
       })
-      this.modifyCurrentExamQuestions(currentExamQuestions)
       this.setCurrentExamQuestionIndexes(currentExamQuestionIndexes)
+      this.modifyCurrentExamQuestions(currentExamQuestions)
       this.setCurrentExamQuestions(currentExamQuestions)
     },
     getCurrentExamQuestionsInArray () {

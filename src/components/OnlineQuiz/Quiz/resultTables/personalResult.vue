@@ -1,7 +1,7 @@
 <template>
     <div style="background-color: rgb(244, 244, 244)">
         <div class="d-flex justify-center wrapper">
-            <v-row>
+            <v-row v-if="report">
                 <v-col md="7">
                     <v-data-table
                             hide-default-footer
