@@ -47,12 +47,12 @@
                     {
                         text: 'ردیف',
                         align: 'center',
-                        sortable: false,
+                        sortable: true,
                         value: 'index',
                     },
                     {text: 'درس', value: 'sub_category',align: 'center',sortable: false,},
-                    {text: 'درصد', value: 'top_ranks_percent_mean',align: 'center',sortable: false,},
-                    {text: ' تراز', value: 'top_ranks_taraaz_mean',align: 'center',sortable: false,},
+                    {text: 'درصد', value: 'top_ranks_percent_mean',align: 'center',sortable: true,},
+                    {text: ' تراز', value: 'top_ranks_taraaz_mean',align: 'center',sortable: true,},
                 ],
                 item: [
                     {
