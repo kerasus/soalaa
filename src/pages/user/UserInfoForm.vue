@@ -150,6 +150,22 @@
             }
         },
         methods: {
+
+
+            // this.$notify({
+            //     group: 'notifs',
+            //     title: 'توجه',
+            //     text: 'ویرایش با موفقیت انجام شد',
+            //     type: 'success'
+            // })
+
+            // this.$notify({
+            //     group: 'notifs',
+            //     title: 'توجه!',
+            //     text: 'مشکلی در دریافت اطلاعات آژمون رخ داده است. لطفا دوباره امتحان کنید.',
+            //     type: 'error'
+            // })
+
             startTimer() {
                 this.timer = setInterval(() => this.countdown(), 1000);
 
@@ -170,15 +186,8 @@
                         console.log('response', response)
                     })
                 that.$store.commit('updateUser' , this.user )
-                if (this.user.city !== null &&
-                    this.user.first_name !== null &&
-                    this.user.last_name !== null &&
-                    this.user.gender !== null &&
-                    this.user.province !== null &&
-                    this.user.school !== null &&
-                    this.user.major !== null
-                    ) {
-                    this.$router.push('/آزمون_های_سه_آ')
+                if (!this.user.needToCompleteInfo()) {
+                    this.$router.push({ name: 'dashboard'})
                 }
             },
             sendCode() {
@@ -190,8 +199,6 @@
                     this.showTimer = true
 
                 })
-
-
             },
             verifyCode() {
                 let verifyCodeRoute = '/alaa/api/v2/mobile/verify' // post
