@@ -150,6 +150,22 @@
             }
         },
         methods: {
+
+
+            // this.$notify({
+            //     group: 'notifs',
+            //     title: 'توجه',
+            //     text: 'ویرایش با موفقیت انجام شد',
+            //     type: 'success'
+            // })
+
+            // this.$notify({
+            //     group: 'notifs',
+            //     title: 'توجه!',
+            //     text: 'مشکلی در دریافت اطلاعات آژمون رخ داده است. لطفا دوباره امتحان کنید.',
+            //     type: 'error'
+            // })
+
             startTimer() {
                 this.timer = setInterval(() => this.countdown(), 1000);
 
@@ -183,8 +199,6 @@
                     this.showTimer = true
 
                 })
-
-
             },
             verifyCode() {
                 let verifyCodeRoute = '/alaa/api/v2/mobile/verify' // post
