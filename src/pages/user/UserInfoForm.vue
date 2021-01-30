@@ -45,9 +45,9 @@
         </v-row>
 
         <v-row>
-            <v-col>
+            <v-col class="codeBtnPadding">
 
-                <v-btn v-if="!waiting" @click="sendCode">
+                <v-btn outlined color="blue" v-if="!waiting" @click="sendCode">
                     دریافت کد فعالسازی
                 </v-btn>
                 <div v-if="waiting && user.mobile_verified_at === null">
@@ -59,7 +59,7 @@
                 </div>
                     کد ارسال شده را وارد نمایید.
                 </div>
-                <div v-if="user.mobile_verified_at !== null">
+                <div style="color: #00c753" v-if="user.mobile_verified_at !== null">
                     شماره موبایل با موفقیت ثبت شد.
                 </div>
             </v-col>
@@ -68,15 +68,20 @@
 
                 </v-text-field>
             </v-col>
-            <v-col>
-                <v-btn v-if="waiting" @click="verifyCode">
+            <v-col class="codeBtnPadding">
+                <v-btn outlined color="blue" v-if="waiting" @click="verifyCode">
                     ثبت شماره موبایل
                 </v-btn>
             </v-col>
         </v-row>
+        <br/>
+        <br/>
+        <br/>
         <v-row>
-            <v-col>
-                <v-btn
+            <v-col/>
+            <v-col/>
+            <v-col cols="1">
+                <v-btn rounded width="100%"
                         @click="submit"
                 >ذخیره
                 </v-btn>
@@ -292,6 +297,9 @@
 </script>
 
 <style scoped>
+    .codeBtnPadding{
+        padding-top: 30px;
+    }
     .wrapper {
         width: 80%;
         margin: auto;
