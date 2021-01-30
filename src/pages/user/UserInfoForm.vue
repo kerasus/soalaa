@@ -190,7 +190,7 @@
                             text: 'ویرایش با موفقیت انجام شد',
                             type: 'success'
                         })
-                        if (!this.user.needToCompleteInfo()) {
+                        if (this.user.needToCompleteInfo()) {
                                     this.$router.push({ name: 'dashboard'})
                                 }
                     })
