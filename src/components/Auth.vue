@@ -100,7 +100,7 @@
                 this.user.getUserData()
                     .then( (user) => {
                         that.$store.commit('updateUser', user)
-                        if (that.user.needToCompleteInfo() || process.env.VUE_APP_NEED_USER_INFO === 'true') {
+                        if (that.user.needToCompleteInfo() && process.env.VUE_APP_NEED_USER_INFO === 'true') {
                             that.$router.push({name: 'user-info'})
                         } else {
                             that.redirectTo()
