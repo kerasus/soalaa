@@ -43,14 +43,20 @@
                 </div>
             </v-col>
         </v-row>
-
-        <v-row>
+<v-row>
+    <v-col>
+        <v-alert style="color: #00c753;width: 50%;margin: auto" :value="isCodeVerified">
+            شماره موبایل با موفقیت ثبت شد.
+        </v-alert>
+    </v-col>
+</v-row>
+        <v-row v-if="user.mobile_verified_at === null">
             <v-col class="codeBtnPadding">
 
                 <v-btn outlined color="blue" v-if="!waiting" @click="sendCode">
                     دریافت کد فعالسازی
                 </v-btn>
-                <div v-if="waiting && user.mobile_verified_at === null">
+                <div v-if="waiting && showTimer">
                 <div>
                     <span>{{ Math.floor(((totalTime) % 3600) / 60)}}</span>
                     <span>:</span>
@@ -59,9 +65,7 @@
                 </div>
                     کد ارسال شده را وارد نمایید.
                 </div>
-                <div style="color: #00c753" v-if="user.mobile_verified_at !== null">
-                    شماره موبایل با موفقیت ثبت شد.
-                </div>
+
             </v-col>
             <v-col>
                 <v-text-field label="کد فعالسازی" v-model="typedCode">
@@ -106,6 +110,8 @@
         },
         data() {
             return {
+                isCodeVerified :false,
+                showTimer : false,
                 mobileVerify:null,
                 timer: null,
                 totalTime: (3 * 60 ),
@@ -157,12 +163,21 @@
             },
 
             submit() {
+                let that = this
                 delete this.user.photo
                 this.user.update()
                     .then((response) => {
                         console.log('response', response)
                     })
-                if (this.user.city !== null) {
+                that.$store.commit('updateUser' , this.user )
+                if (this.user.city !== null &&
+                    this.user.first_name !== null &&
+                    this.user.last_name !== null &&
+                    this.user.gender !== null &&
+                    this.user.province !== null &&
+                    this.user.school !== null &&
+                    this.user.major !== null
+                    ) {
                     this.$router.push('/آزمون_های_سه_آ')
                 }
             },
@@ -171,9 +186,12 @@
                 let sendVerifyCodeRoute = '/alaa/api/v2/mobile/resend'
                 axios.get(sendVerifyCodeRoute).then(resp => {
                     this.code = resp
+                    this.startTimer()
+                    this.showTimer = true
+
                 })
 
-                this.startTimer()
+
             },
             verifyCode() {
                 let verifyCodeRoute = '/alaa/api/v2/mobile/verify' // post
@@ -182,6 +200,7 @@
                 }).then((response) => {
                     console.log(response);
                     this.user.mobile_verified_at = Time.now()
+                    this.isCodeVerified =true
                 }, (error) => {
                     console.log(error);
                 })
