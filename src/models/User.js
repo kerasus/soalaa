@@ -56,6 +56,29 @@ class User extends Model {
         ])
     }
 
+    needToCompleteInfo () {
+        let status = true
+        if (!this.first_name) {
+            status = false
+        } else if (!this.last_name) {
+            status = false
+        } else if (!this.major || !this.major.id) {
+            status = false
+        } else if (!this.province) {
+            status = false
+        } else if (!this.city) {
+            status = false
+        } else if (!this.school) {
+            status = false
+        } else if (!this.mobile_verified_at) {
+            status = false
+        } else if (!this.grade) {
+            status = false
+        }
+
+        return status
+    }
+
     setUserExamStatus (exam) {
         let status = null
         if (!exam.is_registered && !exam.accept_at && Time.getPassedTime(Time.addTime(exam.delay_time, 'minutes', true, exam.start_at), false) > 0) {

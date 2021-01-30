@@ -100,7 +100,7 @@
                 this.user.getUserData()
                     .then( (user) => {
                         that.$store.commit('updateUser', user)
-                        if (that.needToCompleteInfo() || process.env.VUE_APP_NEED_USER_INFO === 'true') {
+                        if (that.user.needToCompleteInfo() || process.env.VUE_APP_NEED_USER_INFO === 'true') {
                             that.$router.push({name: 'user-info'})
                         } else {
                             that.redirectTo()
@@ -109,7 +109,7 @@
             },
             setUserData (userData) {
                 this.user = new User(userData)
-                if (this.needToCompleteInfo() || process.env.VUE_APP_NEED_USER_INFO === 'true') {
+                if (this.user.needToCompleteInfo() && process.env.VUE_APP_NEED_USER_INFO === 'true') {
                     this.$router.push({name: 'user-info'})
                 } else {
                     this.redirectTo()
@@ -125,28 +125,6 @@
                     redirect_to = 'dashboard'
                 }
                 this.$router.push({ name: redirect_to })
-            },
-            needToCompleteInfo () {
-                let status = true
-                if (!this.user.first_name) {
-                    status = false
-                } else if (!this.user.last_name) {
-                    status = false
-                } else if (!this.user.major || !this.user.major.id) {
-                    status = false
-                } else if (!this.user.province) {
-                    status = false
-                } else if (!this.user.city) {
-                    status = false
-                } else if (!this.user.school) {
-                    status = false
-                } else if (!this.user.mobile_verified_at) {
-                    status = false
-                } else if (!this.user.grade) {
-                    status = false
-                }
-
-                return status
             },
             login () {
                 let that = this
