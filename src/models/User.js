@@ -26,6 +26,9 @@ class User extends Model {
                 key: 'mobile',
             },
             {
+                key: 'mobile_verified_at',
+            },
+            {
                 key: 'province',
             },
             {

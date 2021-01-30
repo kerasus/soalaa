@@ -109,6 +109,14 @@
                         }
                     })
             },
+            setUserData (token, userData) {
+                this.user = new User(userData)
+                if (this.needToCompleteInfo() || process.env.VUE_APP_NEED_USER_INFO === 'true') {
+                    this.$router.push({name: 'user-info'})
+                } else {
+                    this.redirectTo(token)
+                }
+            },
             redirectTo (access_token) {
                 let redirect_to = window.localStorage.getItem('redirect_to')
                 window.localStorage.setItem('access_token', access_token)
@@ -151,7 +159,7 @@
                     that.user = new User(response.data.data.user)
                     that.$store.commit('updateUser', that.user)
                     const access_token = response.data.data.access_token
-                    that.getUserData(access_token)
+                    that.setUserData(access_token, response.data.user)
                 })
                 .catch( () => {
                     this.loadingList = false
