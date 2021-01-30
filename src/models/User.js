@@ -13,33 +13,25 @@ class User extends Model {
                 key: 'baseRoute',
                 default: '/alaa/api/v2/user/'
             },
-            {
-                key: 'id',
-            },
-            {
-                key: 'first_name',
-            },
-            {
-                key: 'last_name',
-            },
-            {
-                key: 'mobile',
-            },
-            {
-                key: 'mobile_verified_at',
-            },
-            {
-                key: 'province',
-            },
-            {
-                key: 'city',
-            },
-            {
-                key: 'school',
-            },
-            {
-                key: 'user_exam_status',
-            },
+            { key: 'id' },
+            { key: 'first_name' },
+            { key: 'last_name' },
+            { key: 'mobile' },
+            { key: 'province' },
+            { key: 'city' },
+            { key: 'address' },
+            { key: 'postal_code' },
+            { key: 'email' },
+            { key: 'school' },
+            { key: 'user_exam_status' },
+            { key: 'photo' },
+            { key: 'token' },
+            { key: 'has_admin_permission' },
+
+            { key: 'mobile_verified_at' },
+            { key: 'wallet_balance' },
+            { key: 'profile_completion' },
+
             {
                 key: 'gender',
                 default:{ id: null}
@@ -55,15 +47,6 @@ class User extends Model {
             {
                 key: 'exams',
                 relatedModel: ExamList
-            },
-            {
-                key: 'photo'
-            },
-            {
-                key: 'token'
-            },
-            {
-                key: 'has_admin_permission'
             },
             {
                 key: 'updateType',
