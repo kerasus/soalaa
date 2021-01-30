@@ -90,14 +90,12 @@
         },
         created() {
             this.getUserData(this.getToken())
-            console.log('process.env.VUE_APP_NEED_USER_INFO', process.env.VUE_APP_NEED_USER_INFO)
         },
         methods: {
             getToken () {
                 return window.localStorage.getItem('access_token')
             },
-            getUserData (token) {
-                axios.defaults.headers.common['Authorization'] = 'Bearer ' + token
+            getUserData () {
                 let that = this
                 this.user.getUserData()
                     .then( (user) => {
@@ -105,21 +103,24 @@
                         if (that.needToCompleteInfo() || process.env.VUE_APP_NEED_USER_INFO === 'true') {
                             that.$router.push({name: 'user-info'})
                         } else {
-                            that.redirectTo(token)
+                            that.redirectTo()
                         }
                     })
             },
-            setUserData (token, userData) {
+            setUserData (userData) {
                 this.user = new User(userData)
                 if (this.needToCompleteInfo() || process.env.VUE_APP_NEED_USER_INFO === 'true') {
                     this.$router.push({name: 'user-info'})
                 } else {
-                    this.redirectTo(token)
+                    this.redirectTo()
                 }
             },
-            redirectTo (access_token) {
-                let redirect_to = window.localStorage.getItem('redirect_to')
+            setAccessToken (access_token) {
+                axios.defaults.headers.common['Authorization'] = 'Bearer ' + access_token
                 window.localStorage.setItem('access_token', access_token)
+            },
+            redirectTo () {
+                let redirect_to = window.localStorage.getItem('redirect_to')
                 if (!redirect_to) {
                     redirect_to = 'dashboard'
                 }
@@ -159,7 +160,8 @@
                     that.user = new User(response.data.data.user)
                     that.$store.commit('updateUser', that.user)
                     const access_token = response.data.data.access_token
-                    that.setUserData(access_token, response.data.user)
+                    this.setAccessToken(access_token)
+                    that.setUserData(response.data.user)
                 })
                 .catch( () => {
                     this.loadingList = false
