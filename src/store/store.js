@@ -84,7 +84,8 @@ const store = new Vuex.Store({
                 return
             }
             if (!state.userQuizListData[examId]) {
-                state.userQuizListData[examId] = {}
+                // state.userQuizListData[examId] = {}
+                Vue.set(state.userQuizListData, examId, {})
             }
 
             dbAnswers.forEach( (item) => {
@@ -94,25 +95,35 @@ const store = new Vuex.Store({
                     return
                 }
                 if (!state.userQuizListData[examId][questionId]) {
-                    state.userQuizListData[examId][questionId] = {}
+                    // state.userQuizListData[examId][questionId] = {}
+                    Vue.set(state.userQuizListData[examId], questionId, {})
                 }
 
-                state.userQuizListData[examId][questionId] = {
+                // state.userQuizListData[examId][questionId] = {
+                //     answered_at: item.selected_at,
+                //     answered_choice_id: item.choice_id,
+                //     bookmarked: item.bookmark,
+                //     status: item.status
+                // }
+
+                Vue.set(state.userQuizListData[examId], questionId, {
                     answered_at: item.selected_at,
                     answered_choice_id: item.choice_id,
                     bookmarked: item.bookmark,
                     status: item.status
-                }
+                })
             })
         },
         changeQuestion_RefreshQuestionObject (state, payload) {
             let examId = payload.exam_id
             let questionId = payload.question_id
             if (!state.userQuizListData[examId]) {
-                state.userQuizListData[examId] = {}
+                // state.userQuizListData[examId] = {}
+                Vue.set(state.userQuizListData, examId, {})
             }
             if (!state.userQuizListData[examId][questionId]) {
-                state.userQuizListData[examId][questionId] = {}
+                // state.userQuizListData[examId][questionId] = {}
+                Vue.set(state.userQuizListData[examId], questionId, {})
             }
         },
         changeQuestion_Bookmark (state, payload) {
@@ -122,7 +133,8 @@ const store = new Vuex.Store({
                 return
             }
             this.commit('changeQuestion_RefreshQuestionObject', payload)
-            state.userQuizListData[examId][questionId].bookmarked = payload.bookmarked
+            // state.userQuizListData[examId][questionId].bookmarked = payload.bookmarked
+            Vue.set(state.userQuizListData[examId][questionId], 'bookmarked', payload.bookmarked)
         },
         changeQuestion_SelectChoice (state, payload) {
             let examId = payload.exam_id
@@ -136,8 +148,12 @@ const store = new Vuex.Store({
                 answeredAt = payload.selected_at
             }
 
-            state.userQuizListData[examId][questionId].answered_at = answeredAt
-            state.userQuizListData[examId][questionId].answered_choice_id = payload.answered_choice_id
+            // state.userQuizListData[examId][questionId].answered_at = answeredAt
+            Vue.set(state.userQuizListData[examId][questionId], 'answered_at', answeredAt)
+
+            // state.userQuizListData[examId][questionId].answered_choice_id = payload.answered_choice_id
+            Vue.set(state.userQuizListData[examId][questionId], 'answered_choice_id', payload.answered_choice_id)
+
             console.log(state.userQuizListData[examId][questionId].answered_choice_id)
         },
         changeQuestion_Status (state, payload) {
@@ -147,7 +163,9 @@ const store = new Vuex.Store({
                 return
             }
             this.commit('changeQuestion_RefreshQuestionObject', payload)
-            state.userQuizListData[examId][questionId].status = payload.status
+            // state.userQuizListData[examId][questionId].status = payload.status
+            Vue.set(state.userQuizListData[examId][questionId], 'status', payload.status)
+
         },
         setUserQuizListData (state, payload) {
             let examId = Assistant.getId(payload.exam_id)
@@ -157,13 +175,21 @@ const store = new Vuex.Store({
             }
             this.commit('changeQuestion_RefreshQuestionObject', payload)
 
-            state.userQuizListData[examId][questionId] = {
+            // state.userQuizListData[examId][questionId] = {
+            //     answered_at: payload.answered_at,
+            //     answered_choice_id: payload.answered_choice_id,
+            //     checking_times: payload.checking_times,
+            //     bookmarked: payload.bookmarked,
+            //     status: payload.status
+            // }
+
+            Vue.set(state.userQuizListData[examId], questionId, {
                 answered_at: payload.answered_at,
                 answered_choice_id: payload.answered_choice_id,
                 checking_times: payload.checking_times,
                 bookmarked: payload.bookmarked,
                 status: payload.status
-            }
+            })
 
             // let currentQuizData = state.userQuizListData[examId]
 

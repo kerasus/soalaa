@@ -17,7 +17,6 @@
                                         -
                                         سوال شماره
                                         {{ getQuestionNumberFromId(currentQuestion.id) }}
-                                        {{ userQuizListData[quiz.id] }}
                                     </p>
                                 </div>
                                 <div class="question-buttons">
