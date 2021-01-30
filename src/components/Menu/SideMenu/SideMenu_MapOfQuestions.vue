@@ -28,13 +28,13 @@
                             >
                                 تست شماره
                                 {{ getQuestionNumberFromIndex(question.index) }}
-                                <v-icon v-if="question.state === 'x'" color="red">
+                                <v-icon v-if="userQuizListData[quiz.id][question.id] && userQuizListData[quiz.id][question.id].status === 'x'" color="red">
                                     mdi-close
                                 </v-icon>
-                                <v-icon v-if="question.state === 'o'" color="yellow" size="15">
+                                <v-icon v-if="userQuizListData[quiz.id][question.id] && userQuizListData[quiz.id][question.id].status === 'o'" color="yellow" size="15">
                                     mdi-checkbox-blank-circle
                                 </v-icon>
-                                <v-icon v-if="typeof (question.isAnswered) === 'function' && question.isAnswered()" color="green">
+                                <v-icon v-if="userQuizListData[quiz.id][question.id] && userQuizListData[quiz.id][question.id].answered_choice_id" color="green">
                                     mdi-check
                                 </v-icon>
                             </v-btn>

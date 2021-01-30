@@ -3,7 +3,7 @@
         <v-sheet :class="{ 'answer-sheet': true, active: isSelected }">
             <div class="answer-text renderedPanel" v-html="choice.rendered_title"></div>
             <div class="answer-checkbox">
-                <v-checkbox v-model="choice.active" disabled />
+                <v-checkbox v-model="isSelected" disabled />
             </div>
         </v-sheet>
     </v-col>
@@ -13,14 +13,16 @@
     import { mixinQuiz } from '@/mixin/Mixins'
     import '@/assets/scss/markdownKatex.scss'
 
+
     export default {
         name: "Choice",
         props: ['choice', 'questionId'],
         mixins: [mixinQuiz],
         computed: {
             isSelected () {
-                const answeredChoice = this.currentQuestion.getAnsweredChoice()
-                return (answeredChoice && this.choice.id === answeredChoice.id)
+                // const answeredChoice = this.currentQuestion.getAnsweredChoice()
+                // return (answeredChoice && this.choice.id === answeredChoice.id)
+                return this.userQuizListData[this.quiz.id][this.questionId] && this.choice.id === this.userQuizListData[this.quiz.id][this.questionId].answered_choice_id
             }
         },
         methods: {
