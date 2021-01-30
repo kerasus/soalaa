@@ -10,11 +10,11 @@
                 <v-card elevation="0" class="infoCard align-content-center"
                         >
                     <v-row style="height: 50%;margin: inherit;">
-                        <v-col sm="4">
+                        <v-col sm="4" class="exam-title">
                             نتایج آزمون اول سه‌آ -
                             {{ quiz.title }}
                         </v-col>
-                        <v-col>
+                        <v-col :style="{ padding: '0 12px' }">
                             <v-tabs v-model="tab" color="#ffc107" center-active show-arrows>
                                 <v-tabs-slider color="yellow"></v-tabs-slider>
                                 <v-tab>کارنامه</v-tab>
@@ -51,35 +51,15 @@
                             <v-tab v-for="(item, index) in report.sub_category" :key="index">
                                 {{ item.sub_category }}
                             </v-tab>
-                            <v-tab-item>
-                                <p>{{ currentVideo.title }}</p>
-                                <video :src="currentVideo.file.video[1].link" type="video/mp4" controls :poster="currentVideo.photo" :width="'60%'" class="video-player" :title="currentVideo.title"/>
-                                <div class="d-flex flex-row" dir="ltr">
+                            <v-tab-item v-for="item in report.sub_category" :key="item.sub_category">
+                                <p v-if="currentVideo" class="video-title">{{ currentVideo.title }}</p>
+                                <video v-if="currentVideo" :src="currentVideo.file.video[1].link" type="video/mp4" controls :poster="currentVideo.photo" :width="'60%'" class="video-player" :title="currentVideo.title"/>
+                                <div v-if="currentVideo" class="d-flex flex-row" dir="ltr">
                                     <v-btn outlined v-for="(video, index) in alaaVideos" :key="index" @click="getContent(video.id)" icon :style="{ margin: '0 5px' }">
                                         {{ index + 1 }}
                                     </v-btn>
                                 </div>
-                            </v-tab-item>
-                            <v-tab-item>
-                                <video/>
-                            </v-tab-item>
-                            <v-tab-item>
-                                <video/>
-                            </v-tab-item>
-                            <v-tab-item>
-                                <video/>
-                            </v-tab-item>
-                            <v-tab-item>
-                                <video/>
-                            </v-tab-item>
-                            <v-tab-item>
-                                <video/>
-                            </v-tab-item>
-                            <v-tab-item>
-                                <video/>
-                            </v-tab-item>
-                            <v-tab-item>
-                                <video/>
+                                <coming-soon v-else />
                             </v-tab-item>
                         </v-tabs>
                     </v-tab-item>
@@ -99,10 +79,11 @@
     import {mixinQuiz, mixinWindowSize} from "@/mixin/Mixins";
     import {AlaaContent} from "@/models/AlaaContent";
     import StatisticResult from "@/components/OnlineQuiz/Quiz/resultTables/statisticResult";
+    import ComingSoon from "@/components/ComingSoon";
 
     export default {
         name: 'Result',
-        components: {StatisticResult, BubbleSheet, TopScoreResult, Info, PersonalResult},
+        components: {ComingSoon, StatisticResult, BubbleSheet, TopScoreResult, Info, PersonalResult},
         mixins: [mixinQuiz, mixinWindowSize],
         data: () => ({
             tab: null,
@@ -114,14 +95,6 @@
             report: null
         }),
         created() {
-            // this.exam.user_exam_id = this.$route.params.user_exam_id
-            // this.exam.getAnswerOfUserInResultPage()
-            // .then( () => {
-            //     this.$store.commit('setQuiz', this.exam)
-            // })
-            // .catch( () => {
-            //     this.$router.push({ name: 'user.exam.list'})
-            // })
 
             let that = this
             let user_exam_id = this.$route.params.user_exam_id
@@ -188,6 +161,9 @@
                 .then((response) => {
                     this.currentVideo = response.data.data
                 })
+                .catch(() => {
+                    this.currentVideo = null
+                })
             },
             getAlaaSet (setId) {
                 this.alaaSet.loading = true
@@ -196,6 +172,7 @@
                     this.alaaSet.loading = false
                     this.alaaSet = new AlaaSet(response.data.data)
                     this.alaaVideos = this.alaaSet.contents.getVideos()
+                    console.log('alaaVideos: ', this.alaaVideos)
                     this.getContent(this.alaaVideos[0].id)
                 })
                 .catch( () => {
@@ -203,8 +180,13 @@
                 })
             },
             onVideoTabChange (tabIndex) {
-                if (this.report) {
-                    console.log('tabIndex', this.report.sub_category[tabIndex].sub_category)
+                if (this.report && this.report.sub_category[tabIndex].video_url) {
+                    console.log('tabIndex: ', this.report.sub_category[tabIndex].video_url)
+                    const parsed = this.report.sub_category[tabIndex].video_url.split('/')
+                    const setId = parsed[parsed.length - 1]
+                    this.getAlaaSet(setId)
+                } else {
+                    this.currentVideo = null
                 }
             }
         }
@@ -254,5 +236,16 @@
         display: flex;
         flex-direction: column;
         align-items: center;
+    }
+</style>
+
+<style scoped>
+    .exam-title {
+        display: flex;
+        align-items: center;
+    }
+
+    .video-title {
+        margin-top: 20px;
     }
 </style>
