@@ -13,7 +13,8 @@
             </v-col>
             <v-col cols="4">
                 <div class="form-group m-form__group ">
-                    <v-select :items="[genders[0].name,genders[1].name,genders[2].name]" label="جنسیت" outlined v-model="user.gender">
+                    <v-select :items="[genders[0].name,genders[1].name,genders[2].name]" label="جنسیت" outlined
+                              v-model="user.gender">
                     </v-select>
                 </div>
             </v-col>
@@ -43,13 +44,13 @@
                 </div>
             </v-col>
         </v-row>
-<!--<v-row>-->
-<!--    <v-col>-->
-<!--        <v-alert style="color: #00c753;width: 50%;margin: auto" :value="isCodeVerified">-->
-<!--            شماره موبایل با موفقیت ثبت شد.-->
-<!--        </v-alert>-->
-<!--    </v-col>-->
-<!--</v-row>-->
+        <!--<v-row>-->
+        <!--    <v-col>-->
+        <!--        <v-alert style="color: #00c753;width: 50%;margin: auto" :value="isCodeVerified">-->
+        <!--            شماره موبایل با موفقیت ثبت شد.-->
+        <!--        </v-alert>-->
+        <!--    </v-col>-->
+        <!--</v-row>-->
         <v-row v-if="user.mobile_verified_at === null">
             <v-col class="codeBtnPadding">
 
@@ -57,12 +58,12 @@
                     دریافت کد فعالسازی
                 </v-btn>
                 <div v-if="waiting && showTimer">
-                <div>
-                    <span>{{ Math.floor(((totalTime) % 3600) / 60)}}</span>
-                    <span>:</span>
-                    <span>{{ ((totalTime) % 3600)  % 60 }}</span>
+                    <div>
+                        <span>{{ Math.floor(((totalTime) % 3600) / 60)}}</span>
+                        <span>:</span>
+                        <span>{{ ((totalTime) % 3600)  % 60 }}</span>
 
-                </div>
+                    </div>
                     کد ارسال شده را وارد نمایید.
                 </div>
 
@@ -86,7 +87,7 @@
             <v-col/>
             <v-col cols="1">
                 <v-btn rounded width="100%"
-                        @click="submit"
+                       @click="submit"
                 >ذخیره
                 </v-btn>
 
@@ -110,13 +111,13 @@
         },
         data() {
             return {
-                isCodeVerified :false,
-                showTimer : false,
-                mobileVerify:null,
+                isCodeVerified: false,
+                showTimer: false,
+                mobileVerify: null,
                 timer: null,
-                totalTime: (3 * 60 ),
+                totalTime: (3 * 60),
                 minutes: null,
-                seconds:null,
+                seconds: null,
                 resetButton: false,
                 typedCode: null,
                 code: null,
@@ -170,7 +171,7 @@
                 this.timer = setInterval(() => this.countdown(), 1000);
 
             },
-            countdown: function() {
+            countdown: function () {
                 if (this.totalTime > 0) {
                     this.totalTime--;
                 } else {
@@ -203,16 +204,14 @@
 
 
                     .then((response) => {
-                        console.log('response', response)
-                        that.$store.commit('updateUser' , response.data.data )
+                        that.$store.commit('updateUser', response.data.data)
                         this.$notify({
                             group: 'notifs',
-                            title: 'توجه',
                             text: 'ویرایش با موفقیت انجام شد',
                             type: 'success'
                         })
-                    } , (error) => {
-                        console.log(error)
+                    })
+                    .catch(() => {
                         this.$notify({
                             group: 'notifs',
                             title: 'توجه!',
@@ -221,9 +220,8 @@
                         })
                     })
 
-                if (!this.user.needToCompleteInfo()) {
-                    this.$router.push({ name: 'dashboard'})
-                }
+
+
             },
             sendCode() {
 
@@ -240,15 +238,16 @@
                         type: 'success'
                     })
 
-                } , (error) => {
-                    console.log(error)
-                    this.$notify({
-                        group: 'notifs',
-                        title: 'توجه!',
-                        text: 'مشکلی در ارسال کد رخ داده است. لطفا دوباره امتحان کنید.',
-                        type: 'error'
-                    })
-                })
+                }).catch(
+                    ()=> {
+                        this.$notify({
+                            group: 'notifs',
+                            title: 'توجه!',
+                            text: 'مشکلی در ارسال کد رخ داده است. لطفا دوباره امتحان کنید.',
+                            type: 'error'
+                        })
+                    }
+                )
             },
             verifyCode() {
                 let verifyCodeRoute = '/alaa/api/v2/mobile/verify' // post
@@ -257,7 +256,7 @@
                 }).then((response) => {
                     console.log(response);
                     this.user.mobile_verified_at = Time.now()
-                    this.isCodeVerified =true
+                    this.isCodeVerified = true
                     this.$notify({
                         group: 'notifs',
                         title: 'توجه!',
@@ -266,15 +265,11 @@
                     })
 
 
-                }, (error) => {
-                    console.log(error);
-                    // this.$notify({
-                    //     group: 'notifs',
-                    //     title: 'توجه!',
-                    //     text: 'مشکلی در ارتباط رخ داده است. لطفا دوباره امتحان کنید.',
-                    //     type: 'success'
-                    // })
-                })
+                }).catch(
+                    (error)=> {
+                        console.log(error)
+                    }
+                )
             },
             changeAppBarAndDrawer(state) {
                 this.$store.commit('updateAppBar', state)
@@ -387,9 +382,10 @@
 </script>
 
 <style scoped>
-    .codeBtnPadding{
+    .codeBtnPadding {
         padding-top: 30px;
     }
+
     .wrapper {
         width: 80%;
         margin: auto;
