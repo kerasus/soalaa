@@ -44,16 +44,8 @@
                 </div>
             </v-col>
         </v-row>
-        <!--<v-row>-->
-        <!--    <v-col>-->
-        <!--        <v-alert style="color: #00c753;width: 50%;margin: auto" :value="isCodeVerified">-->
-        <!--            شماره موبایل با موفقیت ثبت شد.-->
-        <!--        </v-alert>-->
-        <!--    </v-col>-->
-        <!--</v-row>-->
         <v-row v-if="user.mobile_verified_at === null">
             <v-col class="codeBtnPadding">
-
                 <v-btn outlined color="blue" v-if="!waiting" @click="sendCode">
                     دریافت کد فعالسازی
                 </v-btn>
@@ -62,11 +54,9 @@
                         <span>{{ Math.floor(((totalTime) % 3600) / 60)}}</span>
                         <span>:</span>
                         <span>{{ ((totalTime) % 3600)  % 60 }}</span>
-
                     </div>
                     کد ارسال شده را وارد نمایید.
                 </div>
-
             </v-col>
             <v-col>
                 <v-text-field label="کد فعالسازی" v-model="typedCode">
@@ -94,11 +84,9 @@
             </v-col>
         </v-row>
     </div>
-
 </template>
 
 <script>
-
     import axios from "axios";
     import Time from "@/plugins/time";
 
@@ -151,25 +139,8 @@
             }
         },
         methods: {
-
-
-            // this.$notify({
-            //     group: 'notifs',
-            //     title: 'توجه',
-            //     text: 'ویرایش با موفقیت انجام شد',
-            //     type: 'success'
-            // })
-
-            // this.$notify({
-            //     group: 'notifs',
-            //     title: 'توجه!',
-            //     text: 'مشکلی در دریافت اطلاعات آژمون رخ داده است. لطفا دوباره امتحان کنید.',
-            //     type: 'error'
-            // })
-
             startTimer() {
                 this.timer = setInterval(() => this.countdown(), 1000);
-
             },
             countdown: function () {
                 if (this.totalTime > 0) {
@@ -178,31 +149,10 @@
                     this.waiting = false
                 }
             },
-
             submit() {
                 let that = this
                 delete this.user.photo
                 this.user.update()
-
-                    // .then( () => {
-                    //     this.$store.commit('clearExamData', exam.id)
-                    //     this.$notify({
-                    //         group: 'notifs',
-                    //         text: 'اطلاعات آزمون شما ثبت شد.',
-                    //         type: 'success'
-                    //     })
-                    // })
-                    // .catch( () => {
-                    //     this.$notify({
-                    //         group: 'notifs',
-                    //         title: 'توجه!',
-                    //         text: 'مشکلی در ثبت اطلاعات آزمون شما رخ داده است. لطفا تا قبل از ساعت 24 اقدام به ارسال مجدد پاسخنامه نمایید.',
-                    //         type: 'warn',
-                    //         duration: 30000,
-                    //     })
-                    // })
-
-
                     .then((response) => {
                         that.$store.commit('updateUser', response.data.data)
                         this.$notify({
@@ -210,9 +160,7 @@
                             text: 'ویرایش با موفقیت انجام شد',
                             type: 'success'
                         })
-                        if (this.user.needToCompleteInfo()) {
-                                    this.$router.push({ name: 'dashboard'})
-                                }
+                        this.$router.push({ name: 'dashboard'})
                     })
                     .catch(() => {
                         this.$notify({
@@ -222,12 +170,8 @@
                             type: 'error'
                         })
                     })
-
-
-
             },
             sendCode() {
-
                 let sendVerifyCodeRoute = '/alaa/api/v2/mobile/resend'
                 axios.get(sendVerifyCodeRoute).then((resp) => {
                     this.code = resp
@@ -240,9 +184,7 @@
                         text: 'کد فعالسازی با موفقیت ارسال شد.',
                         type: 'success'
                     })
-
-                }).catch(
-                    ()=> {
+                }).catch(()=> {
                         this.$notify({
                             group: 'notifs',
                             title: 'توجه!',
@@ -266,21 +208,14 @@
                         text: 'شماره موبایل با موفقیت ثبت شد.',
                         type: 'success'
                     })
-
-
                 }).catch(
                     (error)=> {
                         console.log(error)
                     }
                 )
             },
-            changeAppBarAndDrawer(state) {
-                this.$store.commit('updateAppBar', state)
-                this.$store.commit('updateDrawer', state)
-            },
             canSubmit() {
                 let status = true;
-
                 if (!this.isValidString(this.user.first_name)) {
                     status = false;
                     this.submitMessage.push('نام خود را مشخص کنید.');
@@ -316,70 +251,12 @@
 
                 return status;
             },
-            // editUserInfo() {
-            //
-            //     if (!this.canSubmit()) {
-            //         return;
-            //     }
-            //
-            //     // mApp.block('.btnSubmitEvent', {
-            //     //     type: "loader",
-            //     //     state: "info",
-            //     // });
-            //
-            //     // let that = this;
-            //     this.user.updateType = 'profile';
-            //     delete this.user.photo;
-            //
-            //     // this.user.update()
-            //     //     .then(function (response) {
-            //     //         if (response.errors) {
-            //     //             // var message = data.error.message;
-            //     //             // toastr.warning('خطای سیستمی رخ داده است.' + '<br>' + message);
-            //     //         } else {
-            //     //             let userData = response.data.data;
-            //     //             that.$store.dispatch('updateUserInfo', new User(userData)).then(response => {
-            //     //                 mApp.unblock('.btnSubmitEvent');
-            //     //                 that.$emit('userInfoUpdated');
-            //     //             }, error => {
-            //     //                 window.location.reload();
-            //     //             });
-            //     //         }
-            //     //     })
-            //     //     .catch(function (error) {
-            //     //         mApp.unblock('.btnSubmitEvent');
-            //     //         toastr.error('مشکلی رخ داده است.');
-            //     //         // Assist.handleErrorMessage(error);
-            //     //     });
-            // },
             isValidString(string) {
                 return (typeof string !== 'undefined' && string !== null && string.toString().trim().length > 0);
             }
         },
         mounted: function () {
-            // let sendVerifyCodeRoute = '/alaa/api/v2/mobile/resend'
-            // axios.get(sendVerifyCodeRoute, {
-            //
-            // })
-
-
-            // let verifyCodeRoute = '/alaa/api/v2/mobile/verify' // post
-            // axios.post(verifyCodeRoute, {
-            //     code: '75021'
-            // })
-
-            // this.user.first_name = 'ali'
-            // delete this.user.photo
-            // this.user.update()
-            //     .then((response) => {
-            //         console.log('response', response)
-            //     })
-
-            // let updateProfileRoute = '/alaa/api/v2/user/'+this.user.id
-            // axios.put(updateProfileRoute, {
-            //
-            // })
-            this.changeAppBarAndDrawer(false)
+            this.$store.commit('updateDrawer', false)
         }
     }
 </script>
