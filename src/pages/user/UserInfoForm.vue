@@ -182,6 +182,26 @@
                 let that = this
                 delete this.user.photo
                 this.user.update()
+
+                    // .then( () => {
+                    //     this.$store.commit('clearExamData', exam.id)
+                    //     this.$notify({
+                    //         group: 'notifs',
+                    //         text: 'اطلاعات آزمون شما ثبت شد.',
+                    //         type: 'success'
+                    //     })
+                    // })
+                    // .catch( () => {
+                    //     this.$notify({
+                    //         group: 'notifs',
+                    //         title: 'توجه!',
+                    //         text: 'مشکلی در ثبت اطلاعات آزمون شما رخ داده است. لطفا تا قبل از ساعت 24 اقدام به ارسال مجدد پاسخنامه نمایید.',
+                    //         type: 'warn',
+                    //         duration: 30000,
+                    //     })
+                    // })
+
+
                     .then((response) => {
                         console.log('response', response)
                         that.$store.commit('updateUser' , response.data.data )
