@@ -43,18 +43,51 @@
                 </div>
             </v-col>
         </v-row>
+
         <v-row>
             <v-col>
-                <v-btn>ذخیره</v-btn>
+
+                <v-btn v-if="!waiting" @click="sendCode">
+                    دریافت کد فعالسازی
+                </v-btn>
+                <div v-if="waiting">
+                <div>
+                    <span>{{ Math.floor(((totalTime) % 3600) / 60)}}</span>
+                    <span>:</span>
+                    <span>{{ ((totalTime) % 3600)  % 60 }}</span>
+
+                </div>
+                    کد ارسال شده را وارد نمایید.
+                </div>
+            </v-col>
+            <v-col>
+                <v-text-field label="کد فعالسازی" v-model="typedCode">
+
+                </v-text-field>
+            </v-col>
+            <v-col>
+                <v-btn v-if="waiting" @click="verifyCode">
+                    ثبت شماره موبایل
+                </v-btn>
             </v-col>
         </v-row>
+        <v-row>
+            <v-col>
+                <v-btn
+                        @click="submit"
+                >ذخیره
+                </v-btn>
+
+            </v-col>
+        </v-row>
+
     </div>
 
 </template>
 
 <script>
 
-    // import axios from "axios";
+    import axios from "axios";
 
     export default {
         name: "UserInfoForm",
@@ -65,6 +98,15 @@
         },
         data() {
             return {
+                mobileVerify:null,
+                timer: null,
+                totalTime: (3 * 60 ),
+                minutes: null,
+                seconds:null,
+                resetButton: false,
+                typedCode: null,
+                code: null,
+                waiting: false,
                 userInfoInForm: {},
                 submitMessage: [],
                 firstNameDisabled: false,
@@ -89,12 +131,48 @@
         },
         watch: {},
         computed: {
-            user () {
+            user() {
                 return this.$store.getters.user;
             }
         },
         methods: {
-            changeAppBarAndDrawer (state) {
+            startTimer() {
+                this.timer = setInterval(() => this.countdown(), 1000);
+
+            },
+            countdown: function() {
+                if (this.totalTime > 0) {
+                    this.totalTime--;
+                } else {
+                    this.waiting = false
+                }
+            },
+
+            submit() {
+                delete this.user.photo
+                this.user.update()
+                    .then((response) => {
+                        console.log('response', response)
+                    })
+                // if (this.user.mobile_verified_at !== null) {
+                //     this.$router.push('/آزمون_های_سه_آ')
+                // }
+            },
+            sendCode() {
+                this.waiting = true
+                let sendVerifyCodeRoute = '/alaa/api/v2/mobile/resend'
+                axios.get(sendVerifyCodeRoute).then(resp => {
+                    this.code = resp
+                })
+                this.startTimer()
+            },
+            verifyCode() {
+                let verifyCodeRoute = '/alaa/api/v2/mobile/verify' // post
+                axios.post(verifyCodeRoute, {
+                    code: this.typedCode
+                })
+            },
+            changeAppBarAndDrawer(state) {
                 this.$store.commit('updateAppBar', state)
                 this.$store.commit('updateDrawer', state)
             },
@@ -188,12 +266,12 @@
             //     code: '75021'
             // })
 
-            this.user.first_name = 'ali'
-            delete this.user.photo
-            this.user.update()
-            .then( (response) => {
-                console.log('response', response)
-            })
+            // this.user.first_name = 'ali'
+            // delete this.user.photo
+            // this.user.update()
+            //     .then((response) => {
+            //         console.log('response', response)
+            //     })
 
             // let updateProfileRoute = '/alaa/api/v2/user/'+this.user.id
             // axios.put(updateProfileRoute, {
