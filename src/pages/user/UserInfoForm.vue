@@ -13,7 +13,7 @@
             </v-col>
             <v-col cols="4">
                 <div class="form-group m-form__group ">
-                    <v-select :items="genders" label="جنسیت" outlined v-model="user.gender">
+                    <v-select :items="[genders[0].name,genders[1].name,genders[2].name]" label="جنسیت" outlined v-model="user.gender">
                     </v-select>
                 </div>
             </v-col>
@@ -39,7 +39,7 @@
             </v-col>
             <v-col cols="4">
                 <div class="form-group m-form__group ">
-                    <v-select label="رشته" :items="level" outlined v-model="user.major.id"></v-select>
+                    <v-select label="مقطع" :items="level" outlined v-model="user.major.id"></v-select>
                 </div>
             </v-col>
         </v-row>
@@ -50,7 +50,7 @@
                 <v-btn v-if="!waiting" @click="sendCode">
                     دریافت کد فعالسازی
                 </v-btn>
-                <div v-if="waiting">
+                <div v-if="waiting && user.mobile_verified_at === null">
                 <div>
                     <span>{{ Math.floor(((totalTime) % 3600) / 60)}}</span>
                     <span>:</span>
@@ -58,6 +58,9 @@
 
                 </div>
                     کد ارسال شده را وارد نمایید.
+                </div>
+                <div v-if="user.mobile_verified_at !== null">
+                    شماره موبایل با موفقیت ثبت شد.
                 </div>
             </v-col>
             <v-col>
@@ -80,7 +83,6 @@
 
             </v-col>
         </v-row>
-
     </div>
 
 </template>
@@ -88,6 +90,7 @@
 <script>
 
     import axios from "axios";
+    import Time from "@/plugins/time";
 
     export default {
         name: "UserInfoForm",
@@ -154,9 +157,9 @@
                     .then((response) => {
                         console.log('response', response)
                     })
-                // if (this.user.mobile_verified_at !== null) {
-                //     this.$router.push('/آزمون_های_سه_آ')
-                // }
+                if (this.user.city !== null) {
+                    this.$router.push('/آزمون_های_سه_آ')
+                }
             },
             sendCode() {
                 this.waiting = true
@@ -164,12 +167,18 @@
                 axios.get(sendVerifyCodeRoute).then(resp => {
                     this.code = resp
                 })
+
                 this.startTimer()
             },
             verifyCode() {
                 let verifyCodeRoute = '/alaa/api/v2/mobile/verify' // post
                 axios.post(verifyCodeRoute, {
                     code: this.typedCode
+                }).then((response) => {
+                    console.log(response);
+                    this.user.mobile_verified_at = Time.now()
+                }, (error) => {
+                    console.log(error);
                 })
             },
             changeAppBarAndDrawer(state) {
