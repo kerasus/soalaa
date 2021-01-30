@@ -170,15 +170,8 @@
                         console.log('response', response)
                     })
                 that.$store.commit('updateUser' , this.user )
-                if (this.user.city !== null &&
-                    this.user.first_name !== null &&
-                    this.user.last_name !== null &&
-                    this.user.gender !== null &&
-                    this.user.province !== null &&
-                    this.user.school !== null &&
-                    this.user.major !== null
-                    ) {
-                    this.$router.push('/آزمون_های_سه_آ')
+                if (!this.user.needToCompleteInfo()) {
+                    this.$router.push({ name: 'dashboard'})
                 }
             },
             sendCode() {
