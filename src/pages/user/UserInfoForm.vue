@@ -43,13 +43,13 @@
                 </div>
             </v-col>
         </v-row>
-<v-row>
-    <v-col>
-        <v-alert style="color: #00c753;width: 50%;margin: auto" :value="isCodeVerified">
-            شماره موبایل با موفقیت ثبت شد.
-        </v-alert>
-    </v-col>
-</v-row>
+<!--<v-row>-->
+<!--    <v-col>-->
+<!--        <v-alert style="color: #00c753;width: 50%;margin: auto" :value="isCodeVerified">-->
+<!--            شماره موبایل با موفقیت ثبت شد.-->
+<!--        </v-alert>-->
+<!--    </v-col>-->
+<!--</v-row>-->
         <v-row v-if="user.mobile_verified_at === null">
             <v-col class="codeBtnPadding">
 
@@ -184,20 +184,50 @@
                 this.user.update()
                     .then((response) => {
                         console.log('response', response)
+                        that.$store.commit('updateUser' , response.data.data )
+                        this.$notify({
+                            group: 'notifs',
+                            title: 'توجه',
+                            text: 'ویرایش با موفقیت انجام شد',
+                            type: 'success'
+                        })
+                    } , (error) => {
+                        console.log(error)
+                        this.$notify({
+                            group: 'notifs',
+                            title: 'توجه!',
+                            text: 'مشکلی در ویرایش اطلاعات رخ داده است. لطفا دوباره امتحان کنید.',
+                            type: 'error'
+                        })
                     })
-                that.$store.commit('updateUser' , this.user )
+
                 if (!this.user.needToCompleteInfo()) {
                     this.$router.push({ name: 'dashboard'})
                 }
             },
             sendCode() {
-                this.waiting = true
+
                 let sendVerifyCodeRoute = '/alaa/api/v2/mobile/resend'
-                axios.get(sendVerifyCodeRoute).then(resp => {
+                axios.get(sendVerifyCodeRoute).then((resp) => {
                     this.code = resp
                     this.startTimer()
+                    this.waiting = true
                     this.showTimer = true
+                    this.$notify({
+                        group: 'notifs',
+                        title: 'توجه!',
+                        text: 'کد فعالسازی با موفقیت ارسال شد.',
+                        type: 'success'
+                    })
 
+                } , (error) => {
+                    console.log(error)
+                    this.$notify({
+                        group: 'notifs',
+                        title: 'توجه!',
+                        text: 'مشکلی در ارسال کد رخ داده است. لطفا دوباره امتحان کنید.',
+                        type: 'error'
+                    })
                 })
             },
             verifyCode() {
@@ -208,8 +238,22 @@
                     console.log(response);
                     this.user.mobile_verified_at = Time.now()
                     this.isCodeVerified =true
+                    this.$notify({
+                        group: 'notifs',
+                        title: 'توجه!',
+                        text: 'شماره موبایل با موفقیت ثبت شد.',
+                        type: 'success'
+                    })
+
+
                 }, (error) => {
                     console.log(error);
+                    // this.$notify({
+                    //     group: 'notifs',
+                    //     title: 'توجه!',
+                    //     text: 'مشکلی در ارتباط رخ داده است. لطفا دوباره امتحان کنید.',
+                    //     type: 'success'
+                    // })
                 })
             },
             changeAppBarAndDrawer(state) {
