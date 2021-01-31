@@ -415,7 +415,8 @@ const mixinQuiz = {
         const questionNumber = this.getQuestionNumberFromId(this.currentQuestion.id)
         this.$router.push({ name: 'onlineQuiz.alaaView', params: { quizId: this.quiz.id, questNumber: questionNumber } })
       } else if (type === 'konkoor') {
-        this.$router.push({ name: 'onlineQuiz.konkoorView', params: { quizId: this.quiz.id } })
+        this.$store.commit('updateDrawer', false)
+        setTimeout(() => {this.$router.push({ name: 'onlineQuiz.konkoorView', params: { quizId: this.quiz.id } })}, 200)
       }
     },
   }

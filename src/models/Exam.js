@@ -127,7 +127,9 @@ class Exam extends Model {
             return
         }
         this.questions.list.map((question)=> {
-            let userQuestionData = userData.find((questionData)=> questionData.questionId === question.id)
+            // let userQuestionData = userData.find((questionData)=> questionData.questionId === )
+            let userQuestionData = userData[question.id]
+
             if (userQuestionData) {
                 // load choice
                 question.uncheckChoices()
@@ -183,7 +185,8 @@ class Exam extends Model {
     }
 
     loadCheckingTimesFromUserData (question, userQuizData) {
-        const userQuestionData = userQuizData.find((questionData) => questionData.questionId === question.id)
+        const userQuestionData = userQuizData[question.id]
+        // const userQuestionData = userQuizData.find((questionData) => questionData.questionId === question.id)
         if (userQuestionData) {
             question.checking_times = new CheckingTimeList(userQuestionData.checking_times)
         }

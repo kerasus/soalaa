@@ -2,7 +2,7 @@
     <v-app v-resize="updateWindowSize">
         <v-navigation-drawer app v-model="drawer" right width="316"
                              :class="{ 'mapOfQuestions': $route.name === 'onlineQuiz.alaaView'}"
-                             :style="{ backgroundColor: $route.name === 'onlineQuiz.alaaView' ? '#fff' : '#ffc107' }"
+                             :style="{ backgroundColor: $route.name === 'onlineQuiz.alaaView' || $route.name === 'onlineQuiz.konkoorView' ? '#fff' : '#ffc107' }"
         >
             <div style="height: 150px;line-height: 150px;font-size: 4rem;color: rgb(255, 193, 7);display: flex;align-items: center;justify-content: center;">
                 <div style="display: block">
@@ -10,7 +10,7 @@
                     <v-img src="/img/logo-2.png" width="150" v-else />
                 </div>
             </div>
-            <SideMenu_MapOfQuestions v-if="$route.name === 'onlineQuiz.alaaView'"/>
+            <SideMenu_MapOfQuestions v-if="$route.name === 'onlineQuiz.alaaView' || $route.name === 'onlineQuiz.konkoorView'"/>
             <SideMenu_Dashboard v-else/>
         </v-navigation-drawer>
         <v-app-bar v-if="appbar" app color="#f4f4f4" elevate-on-scroll>

@@ -124,6 +124,11 @@
                 })
         },
         methods: {
+            changeAppBarAndDrawer (state) {
+                console.log('log')
+                this.$store.commit('updateAppBar', state)
+                this.$store.commit('updateDrawer', state)
+            },
             showAppBar () {
                 this.$store.commit('updateAppBar', true)
             },
@@ -142,6 +147,10 @@
                     }
                 }
             }
+        },
+        destroyed() {
+            console.log('DRESTOREW:JFD:SKFJD:KS')
+            this.changeAppBarAndDrawer(false)
         }
     }
 </script>
