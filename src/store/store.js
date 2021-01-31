@@ -66,6 +66,7 @@ const store = new Vuex.Store({
             state.windowSize = newInfo
         },
         updateAppBarAndDrawer(state, newInfo) {
+            console.log('newInfo: ', newInfo)
             this.commit('updateAppBar', newInfo)
             this.commit('updateDrawer', newInfo)
         },
@@ -105,12 +106,13 @@ const store = new Vuex.Store({
                 //     bookmarked: item.bookmark,
                 //     status: item.status
                 // }
-
+                const check_in_times = state.userQuizListData[examId][questionId].check_in_times || []
                 Vue.set(state.userQuizListData[examId], questionId, {
                     answered_at: item.selected_at,
                     answered_choice_id: item.choice_id,
                     bookmarked: item.bookmark,
-                    status: item.status
+                    status: item.status,
+                    check_in_times
                 })
             })
         },
@@ -186,7 +188,7 @@ const store = new Vuex.Store({
             Vue.set(state.userQuizListData[examId], questionId, {
                 answered_at: payload.answered_at,
                 answered_choice_id: payload.answered_choice_id,
-                checking_times: payload.checking_times,
+                check_in_times: payload.check_in_times,
                 bookmarked: payload.bookmarked,
                 status: payload.status
             })
@@ -269,6 +271,32 @@ const store = new Vuex.Store({
                 delete state.userQuizListData[currentQuizDataIndex]
             }
         },
+        checkIfQuestionExistInUserQuizListData (state, questionId) {
+            if (!state.userQuizListData[state.quiz.id]) {
+                // state.userQuizListData[examId] = {}
+                Vue.set(state.userQuizListData, state.quiz.id, {})
+            }
+            if (!state.userQuizListData[state.quiz.id][questionId]) {
+                Vue.set(state.userQuizListData[state.quiz.id], questionId, {})
+            }
+        },
+        enterQuestion (state, questionId) {
+            this.commit('checkIfQuestionExistInUserQuizListData', questionId)
+            if (!state.userQuizListData[state.quiz.id][questionId].check_in_times) {
+                Vue.set(state.userQuizListData[state.quiz.id][questionId], 'check_in_times', [])
+            }
+            const check_in_times = state.userQuizListData[state.quiz.id][questionId].check_in_times
+            check_in_times.push({start: Time.now(), end: null})
+            Vue.set(state.userQuizListData[state.quiz.id][questionId], 'check_in_times', check_in_times)
+            console.log(state.userQuizListData[state.quiz.id][questionId].check_in_times, questionId)
+        },
+        leaveQuestion (state, questionId) {
+            this.commit('checkIfQuestionExistInUserQuizListData', questionId)
+            state.userQuizListData[state.quiz.id][questionId].check_in_times[state.userQuizListData[state.quiz.id][questionId].check_in_times.length - 1].end = Time.now()
+            state.userQuizListData[state.quiz.id][questionId].check_in_times = state.userQuizListData[state.quiz.id][questionId].check_in_times.filter((item) => {
+                return item.end
+            })
+        },
         updateCurrentQuestion (state, newInfo) {
             // this.commit('reloadQuizModel')
             // this.commit('reloadCurrentQuestionModel')
@@ -284,36 +312,40 @@ const store = new Vuex.Store({
             const currentQuestion = currentExamQuestions[newQuestionId]
             //
             // ToDo: check in comment
-            // if (newQuestionId) {
-            //     let newQuestion = state.quiz.questions.getQuestionById(newQuestionId)
-            //
-            //     if(newQuestion) {
-            //         newQuestion.enterQuestion()
-            //     }
-            // }
-            // if (oldQuestionId) {
-            //
-            //     // let currentQuizData = state.userQuizListData.find( (item) => {
-            //     //     return (item && Assistant.getId(item.examId) === Assistant.getId(state.quiz.id))
-            //     // })
-            //     // if (!currentQuizData) {
-            //     //     currentQuizData = {
-            // ToDO : this makes no sense
-            //     //         examId: state.currentQuestion.id,
-            //     //         examData: []
-            //     //     }
-            //     // }
-            //
-            //     // ToDo: checkin time is no optimize
-            //     // let oldQuestion = state.quiz.questions.getQuestionById(oldQuestionId)
-            //     // state.quiz.loadCheckingTimesFromUserData(oldQuestion, currentQuizData.examData)
-            //     // if(oldQuestion) {
-            //     //     oldQuestion.leaveQuestion()
-            //     // }
-            // }
+            console.log('newQuestionID: ', newQuestionId)
+            if (newQuestionId) {
+                let newQuestion = state.quiz.questions.getQuestionById(newQuestionId)
+                this.commit('enterQuestion', newQuestionId)
+                if(newQuestion) {
 
+                    // newQuestion.enterQuestion()
+                }
+            }
+            if (oldQuestionId) {
+
+                // let currentQuizData = state.userQuizListData.find( (item) => {
+                //     return (item && Assistant.getId(item.examId) === Assistant.getId(state.quiz.id))
+                // })
+                let currentQuizData = state.userQuizListData[state.quiz.id]
+                if (!currentQuizData) {
+                    currentQuizData = {
+            // ToDO : this makes no sense
+                        examId: state.currentQuestion.id,
+                        examData: []
+                    }
+                }
+                this.commit('leaveQuestion', oldQuestionId)
+                // ToDo: checkin time is not optimize
+                // let oldQuestion = state.quiz
+                // console.log('old question:::::: ', this.currentExamQuestions)
+                // state.quiz.loadCheckingTimesFromUserData(oldQuestion, currentQuizData.examData)
+                // if(oldQuestion) {
+                //     oldQuestion.leaveQuestion()
+                // }
+            }
 
             state.currentQuestion = new Question(currentQuestion)
+
             // this.commit('refreshUserQuizListData')
         },
         reloadQuizModel (state) {

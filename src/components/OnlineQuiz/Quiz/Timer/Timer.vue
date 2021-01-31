@@ -31,6 +31,9 @@
             //     that.calcRemainAndPassedTime(newCat)
             //     that.doActionsOnChangeCategory(newCat)
             // }, 1000)
+
+
+
             // requestAnimationFrame(this.timer.updateTimer) // webpack-internal:///./src/models/Timer.js:58 Uncaught TypeError: Cannot read property 'updateDiffs' of undefined
         },
         methods: {

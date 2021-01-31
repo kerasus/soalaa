@@ -56,7 +56,7 @@
                 </v-row>
                 <v-row>
                     <v-col>
-                        <BubbleSheet :info="{ type: 'pasokh-barg' }" @clickChoice="choiceClicked" @scrollTo="scrollTo" />
+                        <BubbleSheet :info="{ type: 'pasokh-barg' }" @clickChoice="choiceClicked" @scrollTo="scrollTo" :delay-time="0" />
                     </v-col>
                 </v-row>
             </v-col>
