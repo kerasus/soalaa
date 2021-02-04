@@ -25,10 +25,10 @@
         name: 'Login',
         components: {Auth},
         created() {
-            this.$store.commit('updateAppBarAndDrawer', false)
+            this.$store.commit('AppLayout/updateAppBarAndDrawer', false)
         },
         destroyed() {
-            this.$store.commit('updateAppBarAndDrawer', true)
+            this.$store.commit('AppLayout/updateAppBarAndDrawer', true)
         },
     }
 </script>

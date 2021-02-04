@@ -1,21 +1,23 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-import {Question, QuestionList} from '@/models/Question'
+import Time from '@/plugins/time'
+import Assistant from '@/plugins/assistant'
+import AppLayout from '@/store/modules/AppLayout'
+import Auth from '@/store/modules/Auth'
+import { Exam } from '@/models/Exam'
+import { Question, QuestionList } from '@/models/Question'
 import createPersistedState from 'vuex-persistedstate'
 // import createMutationsSharer from 'vuex-shared-mutations'
-import Assistant from '@/plugins/assistant'
-import {User} from '@/models/User'
-import { Exam } from "@/models/Exam";
-import Time from "@/plugins/time";
-// import {UserExamData} from "@/models/UserExamData";
 
 Vue.use(Vuex)
+
+const debug = process.env.VUE_APP_NODE_ENV !== 'production'
 
 const store = new Vuex.Store({
     plugins: [
         createPersistedState({
             storage: window.localStorage,
-            paths: ['userQuizListData', 'access_token', 'user']
+            paths: ['userQuizListData', 'Auth.accessToken', 'Auth.user']
         })
         // createMutationsSharer({
         //     predicate: [
@@ -26,18 +28,12 @@ const store = new Vuex.Store({
         //     ]
         // })
     ],
+    modules: {
+        Auth,
+        AppLayout
+    },
+    strict: debug,
     state: {
-        drawer: false,
-        windowSize: {
-            x: 0,
-            y: 0,
-        },
-        appbar: true,
-        overlay: false,
-
-        user: null,
-        accessToken: null,
-
         quiz: null,
         userQuizListData: {},
         currentQuestion: null,
@@ -57,34 +53,6 @@ const store = new Vuex.Store({
             // window.localStorage.setItem('user', '')
             // window.localStorage.setItem('vuex', '')
         },
-
-        updateDrawer(state, newInfo) {
-            state.drawer = newInfo
-        },
-        updateAppBar (state, newInfo) {
-            state.appbar = newInfo
-        },
-        updateOverlay (state, newInfo) {
-            state.overlay = newInfo
-        },
-        updateWindowSize (state, newInfo) {
-            state.windowSize = newInfo
-        },
-        updateAppBarAndDrawer(state, newInfo) {
-            console.log('newInfo: ', newInfo)
-            this.commit('updateAppBar', newInfo)
-            this.commit('updateDrawer', newInfo)
-        },
-
-        updateUser (state, newInfo) {
-            window.localStorage.setItem('user', JSON.stringify(newInfo))
-            state.user = newInfo
-        },
-        updateAccessToken (state, newInfo) {
-            state.accessToken = newInfo
-        },
-
-
 
         updateUserQuizListDataExam (state, newInfo) {
             state.userQuizListData = newInfo
@@ -275,25 +243,6 @@ const store = new Vuex.Store({
         }
     },
     getters: {
-        drawer (state) {
-            return state.drawer
-        },
-        appbar (state) {
-            return state.appbar
-        },
-        overlay (state) {
-            return state.overlay
-        },
-        windowSize (state) {
-            return state.windowSize
-        },
-
-        user (state) {
-            return new User(state.user)
-        },
-        accessToken (state) {
-            return state.accessToken
-        },
 
 
         quiz (state) {

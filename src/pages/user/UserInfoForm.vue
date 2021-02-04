@@ -40,7 +40,7 @@
             <v-col cols="4">
                 <div class="form-group m-form__group ">
                     <v-select label="رشته"
-                              :items="field"
+                              :items="fieldS"
                               v-model="user.major.id"
                               item-text="name"
                               item-value="id"
@@ -99,13 +99,15 @@
 </template>
 
 <script>
-    import axios from "axios";
-    import Time from "@/plugins/time";
-    import ProgressLinear from "@/components/ProgressLinear";
+    import axios from "axios"
+    import Time from "@/plugins/time"
+    import ProgressLinear from "@/components/ProgressLinear"
+    import {mixinAuth} from '@/mixin/Mixins'
 
     export default {
         name: "UserInfoForm",
         components: {ProgressLinear},
+        mixins: [mixinAuth],
         props: {
             requiredItems: {
                 type: Array
@@ -134,13 +136,8 @@
             }
         },
         watch: {},
-        computed: {
-            user() {
-                return this.$store.getters.user;
-            }
-        },
         mounted: function () {
-            this.$store.commit('updateDrawer', false)
+            this.$store.commit('AppLayout/updateDrawer', false)
             this.getUserFormData()
         },
         methods: {
@@ -199,7 +196,7 @@
                 this.user.update()
                     .then((response) => {
                         that.user.loading = false
-                        that.$store.commit('updateUser', response.data.data)
+                        that.$store.commit('Auth/updateUser', response.data.data)
                         that.$notify({
                             group: 'notifs',
                             text: 'ویرایش با موفقیت انجام شد',
