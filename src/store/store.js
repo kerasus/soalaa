@@ -27,24 +27,23 @@ const store = new Vuex.Store({
         // })
     ],
     state: {
+        drawer: false,
         windowSize: {
             x: 0,
             y: 0,
         },
+        appbar: true,
+        overlay: false,
+
         user: null,
-        drawer: false,
+        accessToken: null,
+
         quiz: null,
         userQuizListData: {},
-        accessToken: null,
         currentQuestion: null,
-        currentExamFrozenQuestions: null,
-        appbar: true,
-        overlay: false
+        currentExamFrozenQuestions: null
     },
     mutations: {
-        updateUserQuizListDataExam (state, newInfo) {
-            state.userQuizListData = newInfo
-        },
         resetState (state) {
             // Merge rather than replace so we don't lose observers
             // https://github.com/vuejs/vuex/issues/1118
@@ -58,6 +57,16 @@ const store = new Vuex.Store({
             // window.localStorage.setItem('user', '')
             // window.localStorage.setItem('vuex', '')
         },
+
+        updateDrawer(state, newInfo) {
+            state.drawer = newInfo
+        },
+        updateAppBar (state, newInfo) {
+            state.appbar = newInfo
+        },
+        updateOverlay (state, newInfo) {
+            state.overlay = newInfo
+        },
         updateWindowSize (state, newInfo) {
             state.windowSize = newInfo
         },
@@ -66,12 +75,19 @@ const store = new Vuex.Store({
             this.commit('updateAppBar', newInfo)
             this.commit('updateDrawer', newInfo)
         },
-        updateDrawer(state, newInfo) {
-            state.drawer = newInfo
-        },
+
         updateUser (state, newInfo) {
             window.localStorage.setItem('user', JSON.stringify(newInfo))
             state.user = newInfo
+        },
+        updateAccessToken (state, newInfo) {
+            state.accessToken = newInfo
+        },
+
+
+
+        updateUserQuizListDataExam (state, newInfo) {
+            state.userQuizListData = newInfo
         },
         mergeDbAnswersIntoLocalstorage (state, payload) {
             let dbAnswers = payload.dbAnswers
@@ -184,9 +200,6 @@ const store = new Vuex.Store({
             }
             Time.setStateOfQuestionsBasedOnActiveCategory(state.quiz)
         },
-        updateAccessToken (state, newInfo) {
-            state.accessToken = newInfo
-        },
         setCurrentQuestion (state, newInfo) {
             state.currentQuestion = new Question(newInfo)
         },
@@ -257,37 +270,13 @@ const store = new Vuex.Store({
                 state.currentQuestion = new Question(state.currentQuestion)
             }
         },
-        updateAppBar (state, newInfo) {
-            state.appbar = newInfo
-        },
-        updateOverlay (state, newInfo) {
-            state.overlay = newInfo
-        },
         updateCurrentExamFrozenQuestions (state, newInfo) {
             state.currentExamFrozenQuestions = newInfo
         }
     },
     getters: {
-        mapOfQuestionsDrawer (state) {
-            return state.mapOfQuestionsDrawer
-        },
-        quiz (state) {
-            return new Exam(state.quiz)
-        },
-        currentExamFrozenQuestions (state) {
-            return state.currentExamFrozenQuestions
-        },
-        accessToken (state) {
-            return state.accessToken
-        },
-        windowSize (state) {
-            return state.windowSize
-        },
         drawer (state) {
             return state.drawer
-        },
-        currentQuestion (state) {
-            return new Question(state.currentQuestion)
         },
         appbar (state) {
             return state.appbar
@@ -295,11 +284,32 @@ const store = new Vuex.Store({
         overlay (state) {
             return state.overlay
         },
+        windowSize (state) {
+            return state.windowSize
+        },
+
         user (state) {
             return new User(state.user)
         },
+        accessToken (state) {
+            return state.accessToken
+        },
+
+
+        quiz (state) {
+            return new Exam(state.quiz)
+        },
+        currentQuestion (state) {
+            return new Question(state.currentQuestion)
+        },
         userQuizListData (state) {
             return state.userQuizListData
+        },
+        mapOfQuestionsDrawer (state) {
+            return state.mapOfQuestionsDrawer
+        },
+        currentExamFrozenQuestions (state) {
+            return state.currentExamFrozenQuestions
         }
     }
 })
