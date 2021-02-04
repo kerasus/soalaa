@@ -23,7 +23,6 @@ const getters = {
 // mutations
 const mutations = {
     updateUser (state, newInfo) {
-        window.localStorage.setItem('user', JSON.stringify(newInfo))
         state.user = newInfo
     },
     updateAccessToken (state, newInfo) {
