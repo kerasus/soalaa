@@ -92,7 +92,7 @@
             }
         },
         created() {
-            if (this.delayTime) {
+            if (this.delayTime === 0) {
                 this.overlay = true
             }
         },

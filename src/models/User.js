@@ -57,23 +57,23 @@ class User extends Model {
     }
 
     needToCompleteInfo () {
-        let status = true
+        let status = false
         if (!this.first_name) {
-            status = false
+            status = true
         } else if (!this.last_name) {
-            status = false
+            status = true
         } else if (!this.major || !this.major.id) {
-            status = false
+            status = true
         } else if (!this.province) {
-            status = false
+            status = true
         } else if (!this.city) {
-            status = false
+            status = true
         } else if (!this.school) {
-            status = false
+            status = true
         } else if (!this.mobile_verified_at) {
-            status = false
+            status = true
         } else if (!this.grade) {
-            status = false
+            status = true
         }
 
         return status

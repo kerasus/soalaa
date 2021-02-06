@@ -110,7 +110,7 @@
             this.startExam(this.$route.params.quizId)
                 .then(() => {
                     that.loadFirstActiveQuestionIfNeed()
-                    that.$store.commit('updateOverlay', false)
+                    that.$store.commit('AppLayout/updateOverlay', false)
                 })
                 .catch( (error) => {
                     Assistant.reportErrors(error)
@@ -124,12 +124,16 @@
                 })
         },
         methods: {
+            changeAppBarAndDrawer (state) {
+                console.log('log')
+                this.$store.commit('AppLayout/updateAppBarAndDrawer', state)
+            },
             showAppBar () {
-                this.$store.commit('updateAppBar', true)
+                this.$store.commit('AppLayout/updateAppBar', true)
             },
             updateDrawerBasedOnWindowSize () {
                 if (this.windowSize.x > 1263) {
-                    this.$store.commit('updateDrawer', true)
+                    this.$store.commit('AppLayout/updateDrawer', true)
                 }
             },
             loadFirstActiveQuestionIfNeed () {
@@ -142,6 +146,10 @@
                     }
                 }
             }
+        },
+        destroyed() {
+            console.log('DRESTOREW:JFD:SKFJD:KS')
+            this.changeAppBarAndDrawer(false)
         }
     }
 </script>

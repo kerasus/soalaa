@@ -1,60 +1,66 @@
 <template>
     <div class="wrapper">
+        <progress-linear :active="user.loading" />
         <v-row>
             <v-col cols="4">
                 <div class="form-group m-form__group">
-                    <v-text-field outlined label="نام" v-model="user.first_name"></v-text-field>
+                    <v-text-field label="نام" v-model="user.first_name"></v-text-field>
                 </div>
             </v-col>
             <v-col cols="4">
                 <div class="form-group m-form__group">
-                    <v-text-field outlined label=" نام خانوادگی" v-model="user.last_name"></v-text-field>
+                    <v-text-field label=" نام خانوادگی" v-model="user.last_name"></v-text-field>
                 </div>
             </v-col>
             <v-col cols="4">
                 <div class="form-group m-form__group ">
-                    <v-select :items="[genders[0].name,genders[1].name,genders[2].name]" label="جنسیت" outlined
-                              v-model="user.gender">
-                    </v-select>
+                    <v-select :items="genders"
+                              label="جنسیت"
+                              v-model="user.gender"
+                              item-text="name"
+                              item-value="id"
+                    />
                 </div>
             </v-col>
             <v-col cols="6">
                 <div class="form-group m-form__group ">
-                    <v-text-field outlined label="استان" v-model="user.province"></v-text-field>
+                    <v-text-field label="استان" v-model="user.province"></v-text-field>
                 </div>
             </v-col>
             <v-col cols="6">
                 <div class="form-group m-form__group ">
-                    <v-text-field outlined label="شهر" v-model="user.city"></v-text-field>
+                    <v-text-field label="شهر" v-model="user.city"></v-text-field>
                 </div>
             </v-col>
             <v-col cols="4">
                 <div class="form-group m-form__group ">
-                    <v-text-field outlined label="مدرسه" v-model="user.school"></v-text-field>
+                    <v-text-field label="مدرسه" v-model="user.school"></v-text-field>
                 </div>
             </v-col>
             <v-col cols="4">
                 <div class="form-group m-form__group ">
-                    <v-select label="رشته" :items="field" outlined v-model="user.major.id"></v-select>
+                    <v-select label="رشته"
+                              :items="fieldS"
+                              v-model="user.major.id"
+                              item-text="name"
+                              item-value="id"
+                    />
                 </div>
             </v-col>
             <v-col cols="4">
                 <div class="form-group m-form__group ">
-                    <v-select label="مقطع" :items="level" outlined v-model="user.major.id"></v-select>
+                    <v-select label="مقطع"
+                              :items="grades"
+                              v-model="user.grade"
+                              item-text="name"
+                              item-value="id"
+                     />
                 </div>
             </v-col>
         </v-row>
-        <!--<v-row>-->
-        <!--    <v-col>-->
-        <!--        <v-alert style="color: #00c753;width: 50%;margin: auto" :value="isCodeVerified">-->
-        <!--            شماره موبایل با موفقیت ثبت شد.-->
-        <!--        </v-alert>-->
-        <!--    </v-col>-->
-        <!--</v-row>-->
         <v-row v-if="user.mobile_verified_at === null">
             <v-col class="codeBtnPadding">
-
-                <v-btn outlined color="blue" v-if="!waiting" @click="sendCode">
+                <v-btn color="blue" v-if="!waiting" @click="sendCode">
                     دریافت کد فعالسازی
                 </v-btn>
                 <div v-if="waiting && showTimer">
@@ -62,11 +68,9 @@
                         <span>{{ Math.floor(((totalTime) % 3600) / 60)}}</span>
                         <span>:</span>
                         <span>{{ ((totalTime) % 3600)  % 60 }}</span>
-
                     </div>
                     کد ارسال شده را وارد نمایید.
                 </div>
-
             </v-col>
             <v-col>
                 <v-text-field label="کد فعالسازی" v-model="typedCode">
@@ -74,7 +78,7 @@
                 </v-text-field>
             </v-col>
             <v-col class="codeBtnPadding">
-                <v-btn outlined color="blue" v-if="waiting" @click="verifyCode">
+                <v-btn color="blue" v-if="waiting" @click="verifyCode">
                     ثبت شماره موبایل
                 </v-btn>
             </v-col>
@@ -86,24 +90,24 @@
             <v-col/>
             <v-col/>
             <v-col cols="1">
-                <v-btn rounded width="100%"
-                       @click="submit"
-                >ذخیره
+                <v-btn rounded width="100%" @click="submit">
+                    ذخیره
                 </v-btn>
-
             </v-col>
         </v-row>
     </div>
-
 </template>
 
 <script>
-
-    import axios from "axios";
-    import Time from "@/plugins/time";
+    import axios from "axios"
+    import Time from "@/plugins/time"
+    import ProgressLinear from "@/components/ProgressLinear"
+    import {mixinAuth} from '@/mixin/Mixins'
 
     export default {
         name: "UserInfoForm",
+        components: {ProgressLinear},
+        mixins: [mixinAuth],
         props: {
             requiredItems: {
                 type: Array
@@ -126,50 +130,57 @@
                 submitMessage: [],
                 firstNameDisabled: false,
                 lastNameDisabled: false,
-                genders: [
-                    {
-                        id: 0,
-                        name: 'نامشخص'
-                    },
-                    {
-                        id: 1,
-                        name: 'آقا'
-                    },
-                    {
-                        id: 2,
-                        name: 'خانم'
-                    }
-                ],
-                field: ['انسانی', 'تجربی', 'ریاضی'],
-                level: ['هفتم', 'هشتم', 'نهم', 'دهم', 'یازدهم', 'دوازدهم', 'فارغ التحصیل نظام جدید', 'فارغ التحصیل نظام قدیم']
+                genders: [],
+                fieldS: [],
+                grades: []
             }
         },
         watch: {},
-        computed: {
-            user() {
-                return this.$store.getters.user;
-            }
+        mounted: function () {
+            this.$store.commit('AppLayout/updateDrawer', false)
+            this.getUserFormData()
         },
         methods: {
-
-
-            // this.$notify({
-            //     group: 'notifs',
-            //     title: 'توجه',
-            //     text: 'ویرایش با موفقیت انجام شد',
-            //     type: 'success'
-            // })
-
-            // this.$notify({
-            //     group: 'notifs',
-            //     title: 'توجه!',
-            //     text: 'مشکلی در دریافت اطلاعات آژمون رخ داده است. لطفا دوباره امتحان کنید.',
-            //     type: 'error'
-            // })
-
             startTimer() {
                 this.timer = setInterval(() => this.countdown(), 1000);
-
+            },
+            getUserFormData () {
+                this.user.loading = true
+                this.genders = [
+                    { id: 1, name: 'نامشخص'},
+                    { id: 2, name: 'آقا'},
+                    { id: 3, name: 'خانم'}
+                ]
+                this.fieldS = [
+                    { id: 1, name: 'ریاضی'},
+                    { id: 2, name: 'تجربی'},
+                    { id: 3, name: 'انسانی'}
+                ]
+                this.grades = [
+                    { id: 1, name: 'هفتم'},
+                    { id: 2, name: 'هشتم'},
+                    { id: 3, name: 'نهم'},
+                    { id: 4, name: 'دهم'},
+                    { id: 5, name: 'یازدهم'},
+                    { id: 6, name: 'دوازدهم'},
+                    { id: 7, name: 'فارغ التحصیل نظام جدید'},
+                    { id: 8, name: 'فارغ التحصیل نظام قدیم'}
+                ]
+                this.user.loading = false
+                //
+                // axios.get('/alaa/api/v2/megaroute/getUserFormData')
+                //     .then((resp) => {
+                //         console.log('resp', resp)
+                //     })
+                //     .catch(()=> {
+                //         this.$notify({
+                //             group: 'notifs',
+                //             title: 'توجه!',
+                //             text: 'مشکلی در گرفتن اطلاعات رخ داده است. لطفا دوباره امتحان کنید.',
+                //             type: 'error'
+                //         })
+                //     }
+                // )
             },
             countdown: function () {
                 if (this.totalTime > 0) {
@@ -178,52 +189,52 @@
                     this.waiting = false
                 }
             },
-
             submit() {
                 let that = this
                 delete this.user.photo
+                this.user.loading = true
                 this.user.update()
                     .then((response) => {
-                        that.$store.commit('updateUser', response.data.data)
-                        this.$notify({
+                        that.user.loading = false
+                        that.$store.commit('Auth/updateUser', response.data.data)
+                        that.$notify({
                             group: 'notifs',
                             text: 'ویرایش با موفقیت انجام شد',
                             type: 'success'
                         })
-                        if (this.user.needToCompleteInfo()) {
-                                    this.$router.push({ name: 'dashboard'})
-                                }
+                        that.$router.push({ name: 'dashboard'})
                     })
                     .catch(() => {
-                        this.$notify({
+                        that.user.loading = false
+                        that.$notify({
                             group: 'notifs',
                             title: 'توجه!',
                             text: 'مشکلی در ویرایش اطلاعات رخ داده است. لطفا دوباره امتحان کنید.',
                             type: 'error'
                         })
                     })
-
-
-
             },
             sendCode() {
-
+                let that = this
+                this.user.loading = true
                 let sendVerifyCodeRoute = '/alaa/api/v2/mobile/resend'
-                axios.get(sendVerifyCodeRoute).then((resp) => {
-                    this.code = resp
-                    this.startTimer()
-                    this.waiting = true
-                    this.showTimer = true
-                    this.$notify({
-                        group: 'notifs',
-                        title: 'توجه!',
-                        text: 'کد فعالسازی با موفقیت ارسال شد.',
-                        type: 'success'
+                axios.get(sendVerifyCodeRoute)
+                    .then((resp) => {
+                        that.user.loading = false
+                        that.code = resp
+                        that.startTimer()
+                        that.waiting = true
+                        that.showTimer = true
+                        that.$notify({
+                            group: 'notifs',
+                            title: 'توجه!',
+                            text: 'کد فعالسازی با موفقیت ارسال شد.',
+                            type: 'success'
+                        })
                     })
-
-                }).catch(
-                    ()=> {
-                        this.$notify({
+                    .catch(()=> {
+                        that.user.loading = false
+                        that.$notify({
                             group: 'notifs',
                             title: 'توجه!',
                             text: 'مشکلی در ارسال کد رخ داده است. لطفا دوباره امتحان کنید.',
@@ -233,34 +244,29 @@
                 )
             },
             verifyCode() {
+                let that = this
+                this.user.loading = true
                 let verifyCodeRoute = '/alaa/api/v2/mobile/verify' // post
-                axios.post(verifyCodeRoute, {
-                    code: this.typedCode
-                }).then((response) => {
-                    console.log(response);
-                    this.user.mobile_verified_at = Time.now()
-                    this.isCodeVerified = true
-                    this.$notify({
-                        group: 'notifs',
-                        title: 'توجه!',
-                        text: 'شماره موبایل با موفقیت ثبت شد.',
-                        type: 'success'
+                axios.post(verifyCodeRoute, { code: this.typedCode })
+                    .then((response) => {
+                        console.log(response)
+                        that.user.loading = false
+                        this.user.mobile_verified_at = Time.now()
+                        this.isCodeVerified = true
+                        this.$notify({
+                            group: 'notifs',
+                            title: 'توجه!',
+                            text: 'شماره موبایل با موفقیت ثبت شد.',
+                            type: 'success'
+                        })
                     })
-
-
-                }).catch(
-                    (error)=> {
+                    .catch((error)=> {
+                        that.user.loading = false
                         console.log(error)
-                    }
-                )
-            },
-            changeAppBarAndDrawer(state) {
-                this.$store.commit('updateAppBar', state)
-                this.$store.commit('updateDrawer', state)
+                    })
             },
             canSubmit() {
                 let status = true;
-
                 if (!this.isValidString(this.user.first_name)) {
                     status = false;
                     this.submitMessage.push('نام خود را مشخص کنید.');
@@ -296,70 +302,9 @@
 
                 return status;
             },
-            // editUserInfo() {
-            //
-            //     if (!this.canSubmit()) {
-            //         return;
-            //     }
-            //
-            //     // mApp.block('.btnSubmitEvent', {
-            //     //     type: "loader",
-            //     //     state: "info",
-            //     // });
-            //
-            //     // let that = this;
-            //     this.user.updateType = 'profile';
-            //     delete this.user.photo;
-            //
-            //     // this.user.update()
-            //     //     .then(function (response) {
-            //     //         if (response.errors) {
-            //     //             // var message = data.error.message;
-            //     //             // toastr.warning('خطای سیستمی رخ داده است.' + '<br>' + message);
-            //     //         } else {
-            //     //             let userData = response.data.data;
-            //     //             that.$store.dispatch('updateUserInfo', new User(userData)).then(response => {
-            //     //                 mApp.unblock('.btnSubmitEvent');
-            //     //                 that.$emit('userInfoUpdated');
-            //     //             }, error => {
-            //     //                 window.location.reload();
-            //     //             });
-            //     //         }
-            //     //     })
-            //     //     .catch(function (error) {
-            //     //         mApp.unblock('.btnSubmitEvent');
-            //     //         toastr.error('مشکلی رخ داده است.');
-            //     //         // Assist.handleErrorMessage(error);
-            //     //     });
-            // },
             isValidString(string) {
                 return (typeof string !== 'undefined' && string !== null && string.toString().trim().length > 0);
             }
-        },
-        mounted: function () {
-            // let sendVerifyCodeRoute = '/alaa/api/v2/mobile/resend'
-            // axios.get(sendVerifyCodeRoute, {
-            //
-            // })
-
-
-            // let verifyCodeRoute = '/alaa/api/v2/mobile/verify' // post
-            // axios.post(verifyCodeRoute, {
-            //     code: '75021'
-            // })
-
-            // this.user.first_name = 'ali'
-            // delete this.user.photo
-            // this.user.update()
-            //     .then((response) => {
-            //         console.log('response', response)
-            //     })
-
-            // let updateProfileRoute = '/alaa/api/v2/user/'+this.user.id
-            // axios.put(updateProfileRoute, {
-            //
-            // })
-            this.changeAppBarAndDrawer(false)
         }
     }
 </script>

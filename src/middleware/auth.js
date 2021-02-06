@@ -1,26 +1,19 @@
 import axios from 'axios'
 
-function isLogin() {
-    let accessToken = window.localStorage.getItem('access_token')
-    // let user = window.localStorage.getItem('user')
-    return !!(accessToken)
-    // return !!((!process.env.VUE_APP_AUTH_MODE && accessToken) ||
-    //     (process.env.VUE_APP_AUTH_MODE === 'TOKEN' && accessToken) ||
-    //     (process.env.VUE_APP_AUTH_MODE === 'SESSION' && user && user.id))
-}
+export default function auth({ store, to, next, router }) {
+    let token = store.getters['Auth/accessToken']
 
-export default function auth({ to, next, router }) {
-    if (to.name !== 'login') {
-        window.localStorage.setItem('redirect_to', to.name)
-
-        if (!isLogin()) {
-            return router.push({ name: 'login' });
-        }
+    if (to.name === 'login') {
+        return next();
     }
 
-    const token = window.localStorage.getItem('access_token')
     if (token) {
         axios.defaults.headers.common['Authorization'] = 'Bearer ' + token
+        return next();
     }
-    return next();
+
+    if (!token) {
+        store.commit('Auth/updateRedirectTo', to.name)
+        return router.push({ name: 'login' });
+    }
 }

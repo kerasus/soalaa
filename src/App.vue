@@ -2,7 +2,7 @@
     <v-app v-resize="updateWindowSize">
         <v-navigation-drawer app v-model="drawer" right width="316"
                              :class="{ 'mapOfQuestions': $route.name === 'onlineQuiz.alaaView'}"
-                             :style="{ backgroundColor: $route.name === 'onlineQuiz.alaaView' ? '#fff' : '#ffc107' }"
+                             :style="{ backgroundColor: $route.name === 'onlineQuiz.alaaView' || $route.name === 'onlineQuiz.konkoorView' ? '#fff' : '#ffc107' }"
         >
             <div style="height: 150px;line-height: 150px;font-size: 4rem;color: rgb(255, 193, 7);display: flex;align-items: center;justify-content: center;">
                 <div style="display: block">
@@ -10,10 +10,10 @@
                     <v-img src="/img/logo-2.png" width="150" v-else />
                 </div>
             </div>
-            <SideMenu_MapOfQuestions v-if="$route.name === 'onlineQuiz.alaaView'"/>
+            <SideMenu_MapOfQuestions v-if="$route.name === 'onlineQuiz.alaaView' || $route.name === 'onlineQuiz.konkoorView'"/>
             <SideMenu_Dashboard v-else/>
         </v-navigation-drawer>
-        <v-app-bar v-if="appbar" app color="#f4f4f4" elevate-on-scroll>
+        <v-app-bar v-if="appBar" app color="#f4f4f4" elevate-on-scroll>
             <div class="header">
                 <v-container>
                     <v-row>
@@ -23,8 +23,8 @@
                                     <template v-slot:activator="{ on, attrs }">
                                         <v-btn large tile v-bind="attrs" v-on="on" elevation="0" class="pl-3" >
                                             <v-icon class="mr-2" :size="30" color="#666">mdi-account-circle</v-icon>
-                                            <span v-if="$store.getters.user.first_name || $store.getters.user.last_name">
-                                                {{ $store.getters.user.first_name + ' ' + $store.getters.user.last_name }}
+                                            <span v-if="user.first_name || user.last_name">
+                                                {{ user.first_name + ' ' + user.last_name }}
                                             </span>
                                         </v-btn>
                                     </template>
@@ -60,25 +60,25 @@
 </template>
 
 <script>
-    import { mixinQuiz, mixinDrawer, mixinWindowSize } from '@/mixin/Mixins'
+    import { mixinAuth, mixinQuiz, mixinDrawer, mixinWindowSize } from '@/mixin/Mixins'
     import '@/assets/scss/font.scss'
     import '@mdi/font/css/materialdesignicons.css'
     import { SideMenu_Dashboard, SideMenu_MapOfQuestions, TopMenu_OnlineQuiz, TopMenu_Dashboard } from '@/components/Menu/Menus'
 
     export default {
         name: 'App',
-        mixins: [mixinQuiz, mixinDrawer, mixinWindowSize],
+        mixins: [mixinAuth, mixinQuiz, mixinDrawer, mixinWindowSize],
         watch: {
             selectedItem () {
                 this.selectedItem = null
             }
         },
         computed: {
-            appbar () {
-                return this.$store.getters.appbar
+            appBar () {
+                return this.$store.getters['AppLayout/appBar']
             },
             overlay () {
-                return this.$store.getters.overlay
+                return this.$store.getters['AppLayout/overlay']
             }
         },
         components: {
@@ -91,8 +91,7 @@
             selectedItem: null
         }),
         created() {
-            this.$store.commit('updateAppBar', true)
-            this.$store.commit('updateDrawer', true)
+            this.$store.commit('AppLayout/updateAppBarAndDrawer', true)
         }
     };
 </script>
