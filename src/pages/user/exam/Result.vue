@@ -20,6 +20,7 @@
                                 <v-tab>کارنامه</v-tab>
                                 <v-tab>ریزدرس ها</v-tab>
                                 <v-tab>پاسخبرگ کلیدی</v-tab>
+                                <v-tab>پاسخ نامه تشریحی</v-tab>
                                 <v-tab>نتایج نفرات برتر</v-tab>
                                 <v-tab>تحلیل ویدیویی</v-tab>
                             </v-tabs>
@@ -41,6 +42,9 @@
                         <v-card flat>
                             <BubbleSheet :info="{ type: 'pasokh-nameh' }" delay-time="0" />
                         </v-card>
+                    </v-tab-item>
+                    <v-tab-item>
+                        پاسخ نامه
                     </v-tab-item>
                     <v-tab-item>
                         <top-score-result :report="report"/>

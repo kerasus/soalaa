@@ -39,10 +39,14 @@ const store = new Vuex.Store({
         currentQuestion: null,
         currentExamFrozenQuestions: null,
         appbar: true,
-        overlay: false
+        overlay: false,
+        darkMode: false
         // quizList: []
     },
     mutations: {
+        updateDarkMode (state, newInfo) {
+            state.darkMode = newInfo
+        },
         updateUserQuizListDataExam (state, newInfo) {
             state.userQuizListData = newInfo
         },
@@ -421,6 +425,9 @@ const store = new Vuex.Store({
         }
     },
     getters: {
+        darkMode (state) {
+            return state.darkMode
+        },
         mapOfQuestionsDrawer (state) {
             return state.mapOfQuestionsDrawer
         },
