@@ -144,7 +144,7 @@
 
 <script>
     import {Exam, ExamList} from "@/models/Exam";
-    import { mixinQuiz } from '@/mixin/Mixins'
+    import { mixinAuth, mixinQuiz } from '@/mixin/Mixins'
     import ProgressLinear from "@/components/ProgressLinear";
 
     export default {
@@ -155,7 +155,7 @@
             exams: new ExamList(),
             loadingList: false
         }),
-        mixins: [mixinQuiz],
+        mixins: [mixinAuth, mixinQuiz],
         created() {
             this.getExams()
         },

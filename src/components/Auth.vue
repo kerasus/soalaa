@@ -76,6 +76,7 @@
 
 <script>
     import axios from 'axios'
+    import API_ADDRESS from "@/api/Addresses";
     import {User} from "@/models/User";
 
     export default {
@@ -93,20 +94,26 @@
         },
         methods: {
             getToken () {
-                return window.localStorage.getItem('access_token')
+                return this.$store.getters['Auth/accessToken']
             },
-            getUserData (token) {
-                axios.defaults.headers.common['Authorization'] = 'Bearer ' + token
+            getUserData () {
                 let that = this
                 this.user.getUserData()
                     .then( (user) => {
-                        that.$store.commit('updateUser', user)
-                        that.redirectTo(token)
+                        that.$store.commit('Auth/updateUser', user)
+                        that.redirectTo()
                     })
             },
-            redirectTo (access_token) {
+            setUserData (userData) {
+                this.user = new User(userData)
+                this.redirectTo()
+            },
+            setAccessToken (access_token) {
+                axios.defaults.headers.common['Authorization'] = 'Bearer ' + access_token
+                this.$store.commit('Auth/updateAccessToken', access_token)
+            },
+            redirectTo () {
                 let redirect_to = window.localStorage.getItem('redirect_to')
-                window.localStorage.setItem('access_token', access_token)
                 if (!redirect_to) {
                     redirect_to = 'dashboard'
                 }
@@ -115,16 +122,17 @@
             login () {
                 let that = this
                 this.loadingList = true
-                axios.post('/alaa/api/v2/login', {
+                axios.post(API_ADDRESS.auth.login, {
                     mobile: this.username,
                     password: this.password
                 })
                 .then((response) => {
                     this.loadingList = false
                     that.user = new User(response.data.data.user)
-                    that.$store.commit('updateUser', that.user)
+                    that.$store.commit('Auth/updateUser', that.user)
                     const access_token = response.data.data.access_token
-                    that.getUserData(access_token)
+                    this.setAccessToken(access_token)
+                    that.setUserData(response.data.user)
                 })
                 .catch( () => {
                     this.loadingList = false

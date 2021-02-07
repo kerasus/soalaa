@@ -1,5 +1,5 @@
 <template>
-    <v-app v-resize="updateWindowSize" :class="{ appDarkMode: darkMode }" :dark="true">
+    <v-app v-resize="updateWindowSize">
         <v-navigation-drawer app v-model="drawer" right width="316"
                              :class="{
                                  'mapOfQuestions': $route.name === 'onlineQuiz.alaaView' || $route.name === 'onlineQuiz.konkoorView',
@@ -25,8 +25,11 @@
                                     <template v-slot:activator="{ on, attrs }">
                                         <v-btn large tile v-bind="attrs" v-on="on" elevation="0" class="pl-3 topMenuOpenButton">
                                             <v-icon class="mr-2" :size="30" color="#666">mdi-account-circle</v-icon>
-                                            <span v-if="$store.getters.user.first_name || $store.getters.user.last_name">
-                                                {{ $store.getters.user.first_name + ' ' + $store.getters.user.last_name }}
+                                            <span v-if="user.last_name">
+                                                {{ user.last_name }}
+                                            </span>
+                                            <span v-if="user.first_name">
+                                                {{ user.first_name }}
                                             </span>
                                         </v-btn>
                                     </template>
@@ -35,16 +38,7 @@
                                         <TopMenu_Dashboard v-else/>
                                     </v-card>
                                 </v-menu>
-<!--                                <div dir="rtl">-->
-<!--                                    <v-switch-->
-<!--                                            flat-->
-<!--                                            inset-->
-<!--                                            dir="ltr"-->
-<!--                                            hide-details-->
-<!--                                            :dark="darkMode"-->
-<!--                                            v-model="darkMode"-->
-<!--                                    />-->
-<!--                                </div>-->
+
                             </div>
                             <div>
                                 <v-btn v-if="$route.name === 'onlineQuiz.alaaView'" class="switch-view-button" icon @click="changeView('konkoor')">
@@ -71,35 +65,25 @@
 </template>
 
 <script>
-    import { mixinQuiz, mixinDrawer, mixinWindowSize } from '@/mixin/Mixins'
+    import { mixinAuth, mixinQuiz, mixinDrawer, mixinWindowSize } from '@/mixin/Mixins'
     import '@/assets/scss/font.scss'
     import '@mdi/font/css/materialdesignicons.css'
     import { SideMenu_Dashboard, SideMenu_MapOfQuestions, TopMenu_OnlineQuiz, TopMenu_Dashboard } from '@/components/Menu/Menus'
-    const root =  document.querySelector(':root');
-    root.style.setProperty('--deg', '20deg');
 
     export default {
         name: 'App',
-        mixins: [mixinQuiz, mixinDrawer, mixinWindowSize],
+        mixins: [mixinAuth, mixinQuiz, mixinDrawer, mixinWindowSize],
         watch: {
             selectedItem () {
                 this.selectedItem = null
             }
         },
         computed: {
-            darkMode: {
-                get () {
-                    return this.$store.getters.darkMode
-                },
-                set (newInfo) {
-                    this.$store.commit('updateDarkMode', newInfo)
-                }
-            },
-            appbar () {
-                return this.$store.getters.appbar
+            appBar () {
+                return this.$store.getters['AppLayout/appBar']
             },
             overlay () {
-                return this.$store.getters.overlay
+                return this.$store.getters['AppLayout/overlay']
             }
         },
         components: {
@@ -112,13 +96,9 @@
             selectedItem: null
         }),
         created() {
-            this.$vuetify.theme.light = true
-            console.log('test: ', this.$vuetify.theme.themes.light)
-            this.$store.commit('updateAppBar', true)
-            this.$store.commit('updateDrawer', true)
+            this.$store.commit('AppLayout/updateAppBarAndDrawer', true)
         }
     };
-
 </script>
 
 <style scoped>

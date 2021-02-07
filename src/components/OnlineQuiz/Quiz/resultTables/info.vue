@@ -3,8 +3,8 @@
             <v-row class="infoHeight">
                 <v-col class="infoCols">
                     نام و نام خانوادگی :
-                    {{ $store.getters.user.first_name }}
-                    {{ $store.getters.user.last_name }}
+                    {{ user.first_name }}
+                    {{ user.last_name }}
                 </v-col>
                 <v-col class="infoCols">
                     کد ملی :
@@ -12,27 +12,30 @@
                 </v-col>
                 <v-col class="infoCols">
                     شماره موبایل :
-                    {{ $store.getters.user.mobile }}
+                    {{ user.mobile }}
                 </v-col>
                 <v-col class="infoCols">
                     رشته :
-                    {{ $store.getters.user.major.name }}
+                    {{ user.major.name }}
                 </v-col>
                 <v-col class="infoCols">
                     استان :
-                    {{ $store.getters.user.province }}
+                    {{ user.province }}
                 </v-col>
                 <v-col class="infoCols">
                     شهر :
-                    {{ $store.getters.user.city }}
+                    {{ user.city }}
                 </v-col>
             </v-row>
         </v-card>
 </template>
 
 <script>
+    import {mixinAuth} from '@/mixin/Mixins'
+
     export default {
         name: "info",
+        mixins: [mixinAuth],
         data () {
             return {
                 user: this.$store.getters.user

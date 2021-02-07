@@ -2,7 +2,7 @@
     <div>
         <v-img
                 style="background-color: #e8e8e8;"
-                :src="$store.getters.user.photo"
+                :src="user.photo"
                 width="300px"
                 height="300px"
                 dark
@@ -72,8 +72,11 @@
 </template>
 
 <script>
+    import {mixinAuth} from '@/mixin/Mixins'
+
     export default {
         name: 'TopMenu_Dashboard',
+        mixins: [mixinAuth],
         methods: {
             logout () {
                 // window.localStorage.setItem('access_token', '')

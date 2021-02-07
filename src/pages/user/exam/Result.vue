@@ -80,7 +80,7 @@
     import BubbleSheet from "@/components/OnlineQuiz/Quiz/BubbleSheet/BubbleSheet";
     import Assistant from "@/plugins/assistant";
     import {AlaaSet} from "@/models/AlaaSet";
-    import {mixinQuiz, mixinWindowSize} from "@/mixin/Mixins";
+    import {mixinAuth, mixinQuiz, mixinWindowSize} from "@/mixin/Mixins";
     import {AlaaContent} from "@/models/AlaaContent";
     import StatisticResult from "@/components/OnlineQuiz/Quiz/resultTables/statisticResult";
     import ComingSoon from "@/components/ComingSoon";
@@ -88,7 +88,7 @@
     export default {
         name: 'Result',
         components: {ComingSoon, StatisticResult, BubbleSheet, TopScoreResult, Info, PersonalResult},
-        mixins: [mixinQuiz, mixinWindowSize],
+        mixins: [mixinAuth, mixinQuiz, mixinWindowSize],
         data: () => ({
             tab: null,
             videoLesson: null,
