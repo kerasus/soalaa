@@ -213,6 +213,15 @@
                     .then( (user) => {
                         that.getUserFormData()
                         that.$store.commit('Auth/updateUser', user)
+                        if (!that.user.needToCompleteInfo()) {
+                            that.$router.push({ name: 'dashboard'})
+                        } else {
+                            that.$notify({
+                                group: 'notifs',
+                                text: 'همچنان نیاز به تکمیل اطلاعات هست.',
+                                type: 'warning'
+                            })
+                        }
                     })
             },
             startTimer() {
@@ -257,21 +266,13 @@
                 this.user.update()
                     .then((response) => {
                         that.user.loading = false
-                        that.$store.commit('Auth/updateUser', response.data.data)
                         that.$notify({
                             group: 'notifs',
                             text: 'ویرایش با موفقیت انجام شد',
                             type: 'success'
                         })
-                        if (!that.user.needToCompleteInfo()) {
-                            that.$router.push({ name: 'dashboard'})
-                        } else {
-                            that.$notify({
-                                group: 'notifs',
-                                text: 'همچنان نیاز به تکمیل اطلاعات هست.',
-                                type: 'warning'
-                            })
-                        }
+                        that.$store.commit('Auth/updateUser', response.data.data)
+                        that.getUserData()
                     })
                     .catch(() => {
                         that.user.loading = false
@@ -326,6 +327,7 @@
                             text: 'شماره موبایل با موفقیت ثبت شد.',
                             type: 'success'
                         })
+                        this.getUserData()
                     })
                     .catch((error)=> {
                         that.user.loading = false
