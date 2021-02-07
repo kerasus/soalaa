@@ -93,19 +93,20 @@ class User extends Model {
     }
 
     needToCompleteInfo () {
-        let completionInfoKeys = this.getCompletionInfoKeys()
-        let status = false
-        try {
-            completionInfoKeys.forEach(item => {
-                if (!this.checkInformationCompletionKey(item)) {
-                    throw 'needToCompleteInfo'
-                }
-            })
-        } catch (e) {
-            status = true
-        }
-
-        return status
+        return false
+        // let completionInfoKeys = this.getCompletionInfoKeys()
+        // let status = false
+        // try {
+        //     completionInfoKeys.forEach(item => {
+        //         if (!this.checkInformationCompletionKey(item)) {
+        //             throw 'needToCompleteInfo'
+        //         }
+        //     })
+        // } catch (e) {
+        //     status = true
+        // }
+        //
+        // return status
         // if (!this.first_name) {
         //     status = true
         // } else if (!this.last_name) {

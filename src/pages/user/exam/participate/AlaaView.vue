@@ -88,7 +88,7 @@
 <script>
     import Choice from '@/components/OnlineQuiz/Quiz/Choice'
     import Timer from '@/components/OnlineQuiz/Quiz/Timer/Timer'
-    import { mixinQuiz, mixinUserActionOnQuestion, mixinDrawer, mixinWindowSize } from '@/mixin/Mixins'
+    import { mixinAuth, mixinQuiz, mixinUserActionOnQuestion, mixinDrawer, mixinWindowSize } from '@/mixin/Mixins'
     import Assistant from "@/plugins/assistant";
 
     export default {
@@ -97,7 +97,7 @@
             Choice,
             Timer
         },
-        mixins: [mixinQuiz, mixinUserActionOnQuestion, mixinDrawer, mixinWindowSize],
+        mixins: [mixinAuth, mixinQuiz, mixinUserActionOnQuestion, mixinDrawer, mixinWindowSize],
         data () {
             return {
                 quizData: null
