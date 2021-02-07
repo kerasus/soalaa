@@ -150,8 +150,7 @@
         },
         methods: {
             changeAppBarAndDrawer (state) {
-                this.$store.commit('updateAppBar', state)
-                this.$store.commit('updateDrawer', state)
+                this.$store.commit('AppLayout/updateAppBarAndDrawer', state)
             },
             getQuestionNumber (question) {
                 if (question.isInView === false) {
@@ -204,7 +203,7 @@
                 // $('.questions-list').css({ 'padding-right': padding })
                 // $('.questions-list').css({ 'padding-left': padding })
                 $('.questions-list').height(this.questionListHeight())
-                this.$store.commit('updateDrawer', false)
+                this.$store.commit('AppLayout/updateDrawer', false)
             }
         }
     }

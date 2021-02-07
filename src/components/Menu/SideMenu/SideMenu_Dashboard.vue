@@ -74,7 +74,7 @@
 
         </v-list-item-group>
         <v-list-item-group
-                v-if="$store.getters.user.has_admin_permission"
+                v-if="$store.getters['Auth/user'].has_admin_permission"
                 class="admin-panel"
                 active-class="deep-purple--text text--accent-4"
         >

@@ -2,10 +2,10 @@ const mixinWindowSize = {
     computed: {
         windowSize: {
             get() {
-                return this.$store.getters.windowSize
+                return this.$store.getters['AppLayout/windowSize']
             },
             set(newInfo) {
-                this.$store.commit('updateWindowSize', newInfo)
+                this.$store.commit('AppLayout/updateWindowSize', newInfo)
             }
         }
     },
@@ -14,7 +14,7 @@ const mixinWindowSize = {
     },
     methods: {
         updateWindowSize() {
-            this.$store.commit('updateWindowSize', { x: window.innerWidth, y: window.innerHeight })
+            this.$store.commit('AppLayout/updateWindowSize', { x: window.innerWidth, y: window.innerHeight })
         }
     }
 }

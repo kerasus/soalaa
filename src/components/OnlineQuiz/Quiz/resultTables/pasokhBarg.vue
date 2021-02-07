@@ -26,8 +26,8 @@
                                             elevation="0"
                                     >
                                         <v-icon class="mr-2" :size="30" color="#666">mdi-account-circle</v-icon>
-                                        <span v-if="$store.getters.user.first_name || $store.getters.user.last_name">
-                                            {{ $store.getters.user.first_name + ' ' + $store.getters.user.last_name }}
+                                        <span v-if="user.first_name || user.last_name">
+                                            {{ user.first_name + ' ' + user.last_name }}
                                         </span>
                                     </v-btn>
                                 </template>
@@ -115,7 +115,7 @@
     import 'vue-virtual-scroller/dist/vue-virtual-scroller.css'
     import { DynamicScroller, DynamicScrollerItem } from 'vue-virtual-scroller'
     import Item from './question'
-    import { mixinQuiz, mixinWindowSize } from '@/mixin/Mixins'
+    import { mixinAuth, mixinQuiz, mixinWindowSize } from '@/mixin/Mixins'
     import BubbleSheet from "@/components/OnlineQuiz/Quiz/BubbleSheet/BubbleSheet";
     Vue.component('DynamicScroller', DynamicScroller)
     Vue.component('DynamicScrollerItem', DynamicScrollerItem)
@@ -125,7 +125,7 @@
 
     export default {
         name: 'pasokhbarg-user',
-        mixins: [mixinQuiz, mixinWindowSize],
+        mixins: [mixinAuth, mixinQuiz, mixinWindowSize],
         components: {
             'virtual-list': VirtualList,
             BubbleSheet
@@ -140,8 +140,7 @@
         },
         methods: {
             changeAppBarAndDrawer (state) {
-                this.$store.commit('updateAppBar', state)
-                this.$store.commit('updateDrawer', state)
+                this.$store.commit('AppLayout/updateAppBarAndDrawer', state)
             },
             onScroll (event, range) {
                 if (range.start !== this.lastTimeScrollRange.start || range.end !== this.lastTimeScrollRange.end) {
@@ -240,7 +239,7 @@
                 // $('.questions-list').css({ 'padding-right': padding })
                 // $('.questions-list').css({ 'padding-left': padding })
                 $('.questions-list').height(this.questionListHeight())
-                this.$store.commit('updateDrawer', false)
+                this.$store.commit('AppLayout/updateDrawer', false)
             }
         }
     }

@@ -2,7 +2,7 @@
     <div>
         <v-img
                 style="background-color: #e8e8e8;"
-                :src="$store.getters.user.photo"
+                :src="user.photo"
                 width="300px"
                 height="300px"
                 dark
@@ -60,11 +60,11 @@
 
 <script>
     // import {Exam} from "@/models/Exam";
-    import {mixinQuiz} from '@/mixin/Mixins'
+    import {mixinAuth, mixinQuiz} from '@/mixin/Mixins'
 
     export default {
         name: 'TopMenu_OnlineQuiz',
-        mixins: [mixinQuiz],
+        mixins: [mixinAuth, mixinQuiz],
         methods: {
             sendAnswersAndFinishExam() {
                 let that = this
