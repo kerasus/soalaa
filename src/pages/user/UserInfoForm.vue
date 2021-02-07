@@ -218,7 +218,7 @@
                         } else {
                             that.$notify({
                                 group: 'notifs',
-                                text: 'همچنان نیاز به تکمیل اطلاعات هست.',
+                                text: 'نیاز به تکمیل اطلاعات هست.',
                                 type: 'warning'
                             })
                         }
