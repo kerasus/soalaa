@@ -23,8 +23,11 @@
                                     <template v-slot:activator="{ on, attrs }">
                                         <v-btn large tile v-bind="attrs" v-on="on" elevation="0" class="pl-3" >
                                             <v-icon class="mr-2" :size="30" color="#666">mdi-account-circle</v-icon>
-                                            <span v-if="user.first_name || user.last_name">
-                                                {{ user.first_name + ' ' + user.last_name }}
+                                            <span v-if="user.last_name">
+                                                {{ user.last_name }}
+                                            </span>
+                                            <span v-if="user.first_name">
+                                                {{ user.first_name }}
                                             </span>
                                         </v-btn>
                                     </template>

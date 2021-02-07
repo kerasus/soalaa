@@ -18,7 +18,9 @@ class User extends Model {
             { key: 'last_name' },
             { key: 'mobile' },
             { key: 'province' },
+            { key: 'ostan_id' },
             { key: 'city' },
+            { key: 'shahr_id' },
             { key: 'address' },
             { key: 'postal_code' },
             { key: 'email' },
@@ -56,27 +58,73 @@ class User extends Model {
         ])
     }
 
+    getCompletionInfoKeys () {
+        return [
+            'first_name',
+            'last_name',
+            'major',
+            'province',
+            'city',
+            'school',
+            'mobile_verified_at',
+            'grade'
+        ]
+    }
+
+    checkInformationCompletionKey (key) {
+        return (
+            (this[key] !== null && typeof this[key] === 'object' && typeof this[key].id !== 'undefined' && this[key].id !== null) ||
+            (this[key]  && typeof this[key].id === 'undefined')
+        )
+    }
+
+    percentageOfInformationCompletion () {
+        let percentage = 0,
+            completionInfoKeys = this.getCompletionInfoKeys(),
+            percentageStep = (100 / completionInfoKeys.length)
+
+        completionInfoKeys.forEach(item => {
+            if (this.checkInformationCompletionKey(item)) {
+                percentage += percentageStep
+            }
+        })
+
+        return percentage
+    }
+
     needToCompleteInfo () {
+        let completionInfoKeys = this.getCompletionInfoKeys()
         let status = false
-        if (!this.first_name) {
-            status = true
-        } else if (!this.last_name) {
-            status = true
-        } else if (!this.major || !this.major.id) {
-            status = true
-        } else if (!this.province) {
-            status = true
-        } else if (!this.city) {
-            status = true
-        } else if (!this.school) {
-            status = true
-        } else if (!this.mobile_verified_at) {
-            status = true
-        } else if (!this.grade) {
+        try {
+            completionInfoKeys.forEach(item => {
+                if (!this.checkInformationCompletionKey(item)) {
+                    throw 'needToCompleteInfo'
+                }
+            })
+        } catch (e) {
             status = true
         }
 
         return status
+        // if (!this.first_name) {
+        //     status = true
+        // } else if (!this.last_name) {
+        //     status = true
+        // } else if (!this.major || !this.major.id) {
+        //     status = true
+        // } else if (!this.province) {
+        //     status = true
+        // } else if (!this.city) {
+        //     status = true
+        // } else if (!this.school) {
+        //     status = true
+        // } else if (!this.mobile_verified_at) {
+        //     status = true
+        // } else if (!this.grade) {
+        //     status = true
+        // }
+        //
+        // return status
     }
 
     setUserExamStatus (exam) {
