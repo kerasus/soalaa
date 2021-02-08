@@ -44,7 +44,47 @@
                         </v-card>
                     </v-tab-item>
                     <v-tab-item>
-                        پاسخ نامه
+                        <p class="tab-title">
+                            دانلود پاسخنامه تشریحی
+                        </p>
+                        <v-row class="download-row">
+                            <v-col md="6">
+                                <div class="download-box">
+                                    <p class="download-title">دانلود پاسخنامه تشریحی دروس عمومی رشته تجربی</p>
+                                    <v-btn outlined color="--primary-2" height="75px" width="250px">
+                                        دانلود فایل PDF
+                                        <v-icon class="donwload-icon">mdi-download</v-icon>
+                                    </v-btn>
+                                </div>
+                            </v-col>
+                            <v-col md="6">
+                                <div class="download-box">
+                                    <p class="download-title">دانلود پاسخنامه تشریحی دروس عمومی رشته تجربی</p>
+                                    <v-btn outlined color="--primary-2" height="75px" width="250px">
+                                        دانلود فایل PDF
+                                        <v-icon class="donwload-icon">mdi-download</v-icon>
+                                    </v-btn>
+                                </div>
+                            </v-col>
+                            <v-col md="6">
+                                <div class="download-box">
+                                    <p class="download-title">دانلود پاسخنامه تشریحی دروس عمومی رشته تجربی</p>
+                                    <v-btn outlined color="--primary-2" height="75px" width="250px">
+                                        دانلود فایل PDF
+                                        <v-icon class="donwload-icon">mdi-download</v-icon>
+                                    </v-btn>
+                                </div>
+                            </v-col>
+                            <v-col md="6">
+                                <div class="download-box">
+                                    <p class="download-title">دانلود پاسخنامه تشریحی دروس عمومی رشته تجربی</p>
+                                    <v-btn outlined color="--primary-2" height="75px" width="250px">
+                                        دانلود فایل PDF
+                                        <v-icon class="donwload-icon">mdi-download</v-icon>
+                                    </v-btn>
+                                </div>
+                            </v-col>
+                        </v-row>
                     </v-tab-item>
                     <v-tab-item>
                         <top-score-result :report="report"/>
@@ -56,6 +96,7 @@
                                 {{ item.sub_category }}
                             </v-tab>
                             <v-tab-item v-for="item in report.sub_category" :key="item.sub_category">
+                                <p v-if="!currentVideo" class="coming-soon" :style="{ 'margin-top': '50px'}">به زودی</p>
                                 <p v-if="currentVideo" class="video-title">{{ currentVideo.title }}</p>
                                 <video v-if="currentVideo" :src="currentVideo.file.video[1].link" type="video/mp4" controls :poster="currentVideo.photo" :width="'60%'" class="video-player" :title="currentVideo.title"/>
                                 <div v-if="currentVideo" class="d-flex flex-row" dir="ltr">
@@ -63,7 +104,6 @@
                                         {{ index + 1 }}
                                     </v-btn>
                                 </div>
-                                <coming-soon v-else />
                             </v-tab-item>
                         </v-tabs>
                     </v-tab-item>
@@ -83,11 +123,10 @@
     import {mixinAuth, mixinQuiz, mixinWindowSize} from "@/mixin/Mixins";
     import {AlaaContent} from "@/models/AlaaContent";
     import StatisticResult from "@/components/OnlineQuiz/Quiz/resultTables/statisticResult";
-    import ComingSoon from "@/components/ComingSoon";
 
     export default {
         name: 'Result',
-        components: {ComingSoon, StatisticResult, BubbleSheet, TopScoreResult, Info, PersonalResult},
+        components: { StatisticResult, BubbleSheet, TopScoreResult, Info, PersonalResult},
         mixins: [mixinAuth, mixinQuiz, mixinWindowSize],
         data: () => ({
             tab: null,
@@ -176,7 +215,6 @@
                     this.alaaSet.loading = false
                     this.alaaSet = new AlaaSet(response.data.data)
                     this.alaaVideos = this.alaaSet.contents.getVideos()
-                    console.log('alaaVideos: ', this.alaaVideos)
                     this.getContent(this.alaaVideos[0].id)
                 })
                 .catch( () => {
@@ -185,9 +223,11 @@
             },
             onVideoTabChange (tabIndex) {
                 if (this.report && this.report.sub_category[tabIndex].video_url) {
-                    console.log('tabIndex: ', this.report.sub_category[tabIndex].video_url)
                     const parsed = this.report.sub_category[tabIndex].video_url.split('/')
-                    const setId = parsed[parsed.length - 1]
+                    let setId = parsed[parsed.length - 1]
+                    if(setId === '') {
+                        setId = parsed[parsed.length - 2]
+                    }
                     this.getAlaaSet(setId)
                 } else {
                     this.currentVideo = null
@@ -231,6 +271,18 @@
         }
     }
 
+    .tab-title {
+        margin: 16px;
+    }
+
+    .download-box {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        margin: 50px 0;
+    }
+
     .video-player {
         border-radius: 25px;
         margin: 20px 0;
@@ -241,6 +293,15 @@
         flex-direction: column;
         align-items: center;
     }
+
+    .download-row .v-btn__content {
+        color: #666;
+    }
+
+    .download-row .v-btn--outlined {
+        border: 5px solid currentColor;
+        border-radius: 30px;
+    }
 </style>
 
 <style scoped>
@@ -248,6 +309,12 @@
         display: flex;
         align-items: center;
     }
+
+    .download-row {
+        margin: 0 10%;
+    }
+
+
 
     .video-title {
         margin-top: 20px;

@@ -15,7 +15,7 @@
             <SideMenu_MapOfQuestions v-if="$route.name === 'onlineQuiz.alaaView' || $route.name === 'onlineQuiz.konkoorView'"/>
             <SideMenu_Dashboard v-else/>
         </v-navigation-drawer>
-        <v-app-bar v-if="appbar" app color="--background-2" elevate-on-scroll>
+        <v-app-bar v-if="appBar" app color="--background-2" elevate-on-scroll>
             <div class="header">
                 <v-container>
                     <v-row>
