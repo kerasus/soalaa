@@ -112,9 +112,20 @@
 
                 ],
                 chartOptions: {
-
                     series: [
                     ],
+                    tooltip: {
+                        backgroundColor: '#FCFFC5',
+                        padding: 8,
+                        style: {
+                            direction: 'rtl',
+
+                        },
+                        formatter: function () {
+                            return   '<span :style="{ display:  }">' + this.y + ' درصد' + '</span>' + '<span>' + this.x + '</span>'  ;
+                        },
+                        useHTML: true,
+                    },
                     chart: {
                         type: 'column',
                         height: 700,

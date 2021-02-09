@@ -13,7 +13,7 @@
                 <div
                         :class="{ 'question-number-in-list': true, circle: userQuizListData[quiz.id][question.id] && userQuizListData[quiz.id][question.id].status === 'o', cross: userQuizListData[quiz.id][question.id] && userQuizListData[quiz.id][question.id].status === 'x', bookmark: userQuizListData[quiz.id][question.id] && userQuizListData[quiz.id][question.id].bookmarked }"
                         :style="{ width: '24%', cursor: 'pointer' }"
-                        @click="clickQuestionNumber(question.id)"
+                        @click="ClickQuestionNumber(question.id)"
                 >
                     {{ getQuestionNumberFromId(question.id) }}
                 </div>
@@ -21,7 +21,7 @@
                         v-for="choice in question.choices.list"
                         :key="choice.id"
                         :class="{ 'choice-in-list': true, active: userQuizListData[quiz.id][question.id] && choice.id === userQuizListData[quiz.id][question.id].answered_choice_id, answer: choice.answer }"
-                        @click="answerClicked({ questionId: question.id, choiceId: choice.id})"
+                        @click="AnswerClicked({ questionId: question.id, choiceId: choice.id})"
                 >
                     <v-icon v-if="info.type === 'pasokh-nameh' && choice.answer" size="12" :color="userQuizListData[quiz.id][question.id] && choice.id === userQuizListData[quiz.id][question.id].answered_choice_id ? '#fff' : '#00c753'">
                         mdi-check
@@ -70,6 +70,16 @@
             overlay: false,
         }),
         methods: {
+            AnswerClicked (payload) {
+                if (this.info.type !== 'pasokh-nameh') {
+                    this.answerClicked(payload)
+                }
+            },
+            ClickQuestionNumber (questionId) {
+                if (this.info.type !== 'pasokh-nameh') {
+                    this.clickQuestionNumber(questionId)
+                }
+            },
             clickChoice (questionId, choiceId) {
                 this.$emit('clickChoice', questionId, choiceId)
             },
