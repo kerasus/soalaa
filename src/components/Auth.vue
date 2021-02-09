@@ -90,7 +90,9 @@
             }
         },
         created() {
-            this.getUserData(this.getToken())
+            if (this.getToken()) {
+                this.getUserData()
+            }
         },
         methods: {
             getToken () {
@@ -105,7 +107,7 @@
                     })
             },
             setUserData (userData) {
-                this.user = new User(userData)
+                this.$store.commit('Auth/updateUser', new User(userData))
                 this.redirectTo()
             },
             setAccessToken (access_token) {
@@ -132,7 +134,7 @@
                     that.$store.commit('Auth/updateUser', that.user)
                     const access_token = response.data.data.access_token
                     this.setAccessToken(access_token)
-                    that.setUserData(response.data.user)
+                    that.setUserData(response.data.data.user)
                 })
                 .catch( () => {
                     this.loadingList = false
