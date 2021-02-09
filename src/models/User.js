@@ -5,13 +5,14 @@ import Assistant from "@/plugins/assistant";
 import {QuestCategoryList} from "@/models/QuestCategory";
 import {QuestSubcategoryList} from "@/models/QuestSubcategory";
 import axios from "axios";
+import API_ADDRESS from "@/api/Addresses";
 
 class User extends Model {
     constructor(data) {
         super(data, [
             {
                 key: 'baseRoute',
-                default: '/alaa/api/v2/user/'
+                default: API_ADDRESS.user.base
             },
             { key: 'id' },
             { key: 'first_name' },
@@ -93,7 +94,7 @@ class User extends Model {
     }
 
     needToCompleteInfo () {
-        return true
+        return false
         // let completionInfoKeys = this.getCompletionInfoKeys()
         // let status = false
         // try {
@@ -156,7 +157,7 @@ class User extends Model {
     getUserData () {
         let that = this
         return new Promise(function(resolve, reject) {
-            that.show(null, '/alaa/api/v2/getUserFor3a')
+            that.show(null, API_ADDRESS.user.show_user)
                 .then( (response) => {
                     that = new User(response.data.data)
                     resolve(that)
@@ -189,7 +190,7 @@ class User extends Model {
     getUserExams () {
         let that = this
         return new Promise(function(resolve, reject) {
-            that.exams.fetch(null, '/3a/api/examAndUser')
+            that.exams.fetch(null, API_ADDRESS.exam.userExamsList)
                 .then((response) => {
                     let exams = response.data.data.exams
                     let userExams = response.data.data.user_exams

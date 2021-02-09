@@ -29,6 +29,7 @@
     import {ExamList} from '@/models/Exam'
     import {QuestSubcategoryList} from '@/models/QuestSubcategory'
     import axios from 'axios'
+    import API_ADDRESS from "@/api/Addresses";
 
     export default {
         name: 'setVideo',
@@ -62,7 +63,7 @@
                 this.selectedQuizzes.forEach((item) => {
                     exams.push({exam_id: item})
                 })
-                axios.post('/3a/api/exam-question/attach/sub-category', {
+                axios.post(API_ADDRESS.question.attachSubCategoryToQuestion, {
                     sub_category_id: that.currentQuestion.sub_category_id,
                     video: that.setLink,
                     exams,
