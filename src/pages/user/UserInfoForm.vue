@@ -1,6 +1,17 @@
 <template>
     <div class="wrapper">
         <progress-linear :active="user.loading" />
+        <v-progress-linear v-if="percentageOfInformationCompletion > 0"
+                           :value="percentageOfInformationCompletion"
+                           absolute
+                           top
+                           color="amber"
+                           height="25"
+        >
+            <template v-slot:default="{ value }">
+                <strong>{{ Math.ceil(value) }} درصد از اطلاعات تکمیل شده</strong>
+            </template>
+        </v-progress-linear>
         <v-row>
             <v-col cols="4">
                 <div class="form-group m-form__group">
@@ -16,20 +27,32 @@
                 <div class="form-group m-form__group ">
                     <v-select :items="genders"
                               label="جنسیت"
-                              v-model="user.gender"
-                              item-text="name"
+                              v-model="user.gender.id"
+                              item-text="title"
                               item-value="id"
                     />
                 </div>
             </v-col>
             <v-col cols="6">
                 <div class="form-group m-form__group ">
-                    <v-text-field label="استان" v-model="user.province"></v-text-field>
+                    <v-autocomplete label="استان"
+                              :items="provinces"
+                              v-model="selectedProvince"
+                              item-text="title"
+                              item-value="id"
+                              no-data-text="داده ای یافت نشد"
+                    />
                 </div>
             </v-col>
             <v-col cols="6">
                 <div class="form-group m-form__group ">
-                    <v-text-field label="شهر" v-model="user.city"></v-text-field>
+                    <v-autocomplete label="شهر"
+                              :items="citiesForSelectedProvince"
+                              v-model="selectedCity"
+                              item-text="title"
+                              item-value="id"
+                              no-data-text="داده ای یافت نشد"
+                    />
                 </div>
             </v-col>
             <v-col cols="4">
@@ -40,9 +63,9 @@
             <v-col cols="4">
                 <div class="form-group m-form__group ">
                     <v-select label="رشته"
-                              :items="fieldS"
+                              :items="majors"
                               v-model="user.major.id"
-                              item-text="name"
+                              item-text="title"
                               item-value="id"
                     />
                 </div>
@@ -51,8 +74,8 @@
                 <div class="form-group m-form__group ">
                     <v-select label="مقطع"
                               :items="grades"
-                              v-model="user.grade"
-                              item-text="name"
+                              v-model="user.grade.id"
+                              item-text="title"
                               item-value="id"
                      />
                 </div>
@@ -103,10 +126,44 @@
     import Time from "@/plugins/time"
     import ProgressLinear from "@/components/ProgressLinear"
     import {mixinAuth} from '@/mixin/Mixins'
+    import API_ADDRESS from "@/api/Addresses";
+    import {User} from "@/models/User";
 
     export default {
         name: "UserInfoForm",
         components: {ProgressLinear},
+        watch: {
+            selectedProvince(newVal) {
+                if (newVal) {
+                    let selectedProvince = this.provinces.find( item => newVal === item.id)
+                    if (selectedProvince) {
+                        this.user.province = selectedProvince.title
+                        this.$store.commit('Auth/updateUser', new User(this.user))
+                    }
+                }
+            },
+            selectedCity(newVal) {
+                if (newVal) {
+                    let selectedCity = this.cities.find( item => newVal === item.id)
+                    if (selectedCity) {
+                        this.user.city = selectedCity.title
+                        this.$store.commit('Auth/updateUser', new User(this.user))
+                    }
+                }
+            }
+        },
+        computed: {
+            percentageOfInformationCompletion () {
+                return this.user.percentageOfInformationCompletion()
+            },
+            citiesForSelectedProvince () {
+                if (this.selectedProvince) {
+                    return this.cities.filter( item => item.province.id === this.selectedProvince)
+                }
+
+                return []
+            }
+        },
         mixins: [mixinAuth],
         props: {
             requiredItems: {
@@ -128,59 +185,72 @@
                 waiting: false,
                 userInfoInForm: {},
                 submitMessage: [],
+                selectedProvince: null,
+                selectedCity: null,
                 firstNameDisabled: false,
                 lastNameDisabled: false,
                 genders: [],
-                fieldS: [],
+                majors: [],
+                cities: [],
+                provinces: [],
                 grades: []
             }
         },
-        watch: {},
         mounted: function () {
+            this.getUserData()
             this.$store.commit('AppLayout/updateDrawer', false)
-            this.getUserFormData()
         },
         methods: {
+            loadSomeData () {
+                if (this.user.province) {
+                    let selectedProvince = this.provinces.find( item => item.title === this.user.province)
+                    this.selectedProvince = selectedProvince.id
+                    let selectedCity = this.cities.find( item => item.title === this.user.city)
+                    this.selectedCity = selectedCity.id
+                }
+            },
+            getUserData () {
+                let that = this
+                this.user.getUserData()
+                    .then( (user) => {
+                        that.getUserFormData()
+                        that.$store.commit('Auth/updateUser', user)
+                        if (!that.user.needToCompleteInfo()) {
+                            that.$router.push({ name: 'dashboard'})
+                        } else {
+                            that.$notify({
+                                group: 'notifs',
+                                text: 'نیاز به تکمیل اطلاعات هست.',
+                                type: 'warning'
+                            })
+                        }
+                    })
+            },
             startTimer() {
                 this.timer = setInterval(() => this.countdown(), 1000);
             },
             getUserFormData () {
                 this.user.loading = true
-                this.genders = [
-                    { id: 1, name: 'نامشخص'},
-                    { id: 2, name: 'آقا'},
-                    { id: 3, name: 'خانم'}
-                ]
-                this.fieldS = [
-                    { id: 1, name: 'ریاضی'},
-                    { id: 2, name: 'تجربی'},
-                    { id: 3, name: 'انسانی'}
-                ]
-                this.grades = [
-                    { id: 1, name: 'هفتم'},
-                    { id: 2, name: 'هشتم'},
-                    { id: 3, name: 'نهم'},
-                    { id: 4, name: 'دهم'},
-                    { id: 5, name: 'یازدهم'},
-                    { id: 6, name: 'دوازدهم'},
-                    { id: 7, name: 'فارغ التحصیل نظام جدید'},
-                    { id: 8, name: 'فارغ التحصیل نظام قدیم'}
-                ]
-                this.user.loading = false
-                //
-                // axios.get('/alaa/api/v2/megaroute/getUserFormData')
-                //     .then((resp) => {
-                //         console.log('resp', resp)
-                //     })
-                //     .catch(()=> {
-                //         this.$notify({
-                //             group: 'notifs',
-                //             title: 'توجه!',
-                //             text: 'مشکلی در گرفتن اطلاعات رخ داده است. لطفا دوباره امتحان کنید.',
-                //             type: 'error'
-                //         })
-                //     }
-                // )
+                axios.get(API_ADDRESS.user.formData)
+                    .then((resp) => {
+                        this.genders = resp.data.data.genders
+                        this.grades = resp.data.data.grades
+                        this.majors = resp.data.data.majors
+                        this.provinces = resp.data.data.provinces
+                        this.cities = resp.data.data.cities
+                        this.user.loading = false
+                        this.loadSomeData()
+                    })
+                    .catch(()=> {
+                        this.$notify({
+                            group: 'notifs',
+                            title: 'توجه!',
+                            text: 'مشکلی در گرفتن اطلاعات رخ داده است. لطفا دوباره امتحان کنید.',
+                            type: 'error'
+                        })
+                        this.user.loading = false
+                    }
+                )
             },
             countdown: function () {
                 if (this.totalTime > 0) {
@@ -193,16 +263,18 @@
                 let that = this
                 delete this.user.photo
                 this.user.loading = true
+                this.user.ostan_id = this.selectedProvince
+                this.user.shahr_id = this.selectedCity
                 this.user.update()
                     .then((response) => {
                         that.user.loading = false
-                        that.$store.commit('Auth/updateUser', response.data.data)
                         that.$notify({
                             group: 'notifs',
                             text: 'ویرایش با موفقیت انجام شد',
                             type: 'success'
                         })
-                        that.$router.push({ name: 'dashboard'})
+                        that.$store.commit('Auth/updateUser', response.data.data)
+                        that.getUserData()
                     })
                     .catch(() => {
                         that.user.loading = false
@@ -217,8 +289,7 @@
             sendCode() {
                 let that = this
                 this.user.loading = true
-                let sendVerifyCodeRoute = '/alaa/api/v2/mobile/resend'
-                axios.get(sendVerifyCodeRoute)
+                axios.get(API_ADDRESS.user.mobile.resend)
                     .then((resp) => {
                         that.user.loading = false
                         that.code = resp
@@ -246,8 +317,7 @@
             verifyCode() {
                 let that = this
                 this.user.loading = true
-                let verifyCodeRoute = '/alaa/api/v2/mobile/verify' // post
-                axios.post(verifyCodeRoute, { code: this.typedCode })
+                axios.post(API_ADDRESS.user.mobile.verify, { code: this.typedCode })
                     .then((response) => {
                         console.log(response)
                         that.user.loading = false
@@ -259,6 +329,7 @@
                             text: 'شماره موبایل با موفقیت ثبت شد.',
                             type: 'success'
                         })
+                        this.getUserData()
                     })
                     .catch((error)=> {
                         that.user.loading = false

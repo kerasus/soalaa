@@ -76,6 +76,7 @@
 
 <script>
     import axios from 'axios'
+    import API_ADDRESS from "@/api/Addresses";
     import {User} from "@/models/User";
 
     export default {
@@ -89,7 +90,9 @@
             }
         },
         created() {
-            this.getUserData(this.getToken())
+            if (this.getToken()) {
+                this.getUserData()
+            }
         },
         methods: {
             getToken () {
@@ -100,20 +103,12 @@
                 this.user.getUserData()
                     .then( (user) => {
                         that.$store.commit('Auth/updateUser', user)
-                        if (that.user.needToCompleteInfo() && process.env.VUE_APP_NEED_USER_INFO === 'true') {
-                            that.$router.push({name: 'user-info'})
-                        } else {
-                            that.redirectTo()
-                        }
+                        that.redirectTo()
                     })
             },
             setUserData (userData) {
-                this.user = new User(userData)
-                if (this.user.needToCompleteInfo() && process.env.VUE_APP_NEED_USER_INFO === 'true') {
-                    this.$router.push({name: 'user-info'})
-                } else {
-                    this.redirectTo()
-                }
+                this.$store.commit('Auth/updateUser', new User(userData))
+                this.redirectTo()
             },
             setAccessToken (access_token) {
                 axios.defaults.headers.common['Authorization'] = 'Bearer ' + access_token
@@ -129,7 +124,7 @@
             login () {
                 let that = this
                 this.loadingList = true
-                axios.post('/alaa/api/v2/login', {
+                axios.post(API_ADDRESS.auth.login, {
                     mobile: this.username,
                     password: this.password
                 })
@@ -139,7 +134,7 @@
                     that.$store.commit('Auth/updateUser', that.user)
                     const access_token = response.data.data.access_token
                     this.setAccessToken(access_token)
-                    that.setUserData(response.data.user)
+                    that.setUserData(response.data.data.user)
                 })
                 .catch( () => {
                     this.loadingList = false

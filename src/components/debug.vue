@@ -2,64 +2,37 @@
 
 <template>
     <div :style="{ 'max-width': '700px'}">
-        <highcharts :options="chartOptions"></highcharts>
+        <v-text-field outlined v-model="input" />
+        <button @click="generate">Generate</button>
     </div>
 </template>
 
 <script>
 
-    import {Chart} from 'highcharts-vue'
 
     export default {
         name: 'debug',
         components: {
-            highcharts: Chart
         },
         data() {
             return {
-                chartOptions: {
-                    series: [
-                        {
-                            data: [1,2,3] // sample data
-                        },
-                        {
-                            name: 'test',
-                            color: 'red',
-                            data: [3,1,2] // sample data
-                        }
-                    ],
-                    chart: {
-                        height: 700,
-                    },
-                    title: {
-                        text: 'Solar Employment Growth by Sector, 2010-2016'
-                    },
-                    subtitle: {
-                        text: 'Source: thesolarfoundation.com'
-                    },
-                    credits: {
-                        text: '3a.alaatv.com',
-                        href: 'https://www.3a.alaatv.com'
-                    },
-                    plotOptions: {
-                        series: {
-                            label: {
-                                connectorAllowed: false
-                            },
-                            pointStart: 2010
-                        }
-                    },
-                    yAxis: {
-                        title: {
-                            text: 'درصد'
-                        }
-                    },
-                    xAxis: {
-                        accessibility: {
-                            rangeDescription: 'Range: 2010 to 2017'
-                        }
-                    },
-                }
+                input: '',
+            }
+        },
+        methods: {
+            convertHexToRgbObject (hexColor) {  // '#f1f1f1'
+                const hexColorCode = hexColor.split('#').join('') // 'f1f1f1'
+                const red = parseInt('0x' + hexColorCode[0] + hexColorCode[1])
+                const green = parseInt('0x' + hexColorCode[2] + hexColorCode[3])
+                const blue = parseInt('0x' + hexColorCode[4] + hexColorCode[5])
+                return { red, green, blue }
+            },
+            convertRgbToObject (rgbColor) { // '(241, 241, 241)'
+                const rgbColorCode = rgbColor.split('(').join('').split(')').join('').split(',') // ['241', '241', '241']
+                const red = parseInt(rgbColorCode[0])
+                const green = parseInt(rgbColorCode[1])
+                const blue = parseInt(rgbColorCode[2])
+                return { red, green, blue }
             }
         }
     }

@@ -34,7 +34,7 @@
                                 <v-icon v-if="userQuizListData[quiz.id][question.id] && userQuizListData[quiz.id][question.id].status === 'o'" color="yellow" size="15">
                                     mdi-checkbox-blank-circle
                                 </v-icon>
-                                <v-icon v-if="userQuizListData[quiz.id][question.id] && userQuizListData[quiz.id][question.id].answered_choice_id" color="green">
+                                <v-icon v-if="userQuizListData[quiz.id][question.id] && userQuizListData[quiz.id][question.id].answered_choice_id" color="--success-1">
                                     mdi-check
                                 </v-icon>
                             </v-btn>
@@ -81,12 +81,12 @@
 }
 
 .map-of-questions .theme--light.v-expansion-panels .v-expansion-panel-header--active .v-expansion-panel-header__icon .v-icon {
-    color: white;
+    color: var(--text-3);
 }
 
 
 .map-of-questions .v-expansion-panel-header--active {
-    background: #ffc107;
+    background: var(--primary-1);
     border-radius: 40px;
     min-height: 42px !important;
     max-height: 42px !important;
@@ -105,11 +105,11 @@
 }
 
 .map-of-questions .v-btn {
-    background: #fff !important;
+    background: var(--surface-1) !important;
 }
 
 .v-navigation-drawer .v-navigation-drawer__content .map-of-questions .theme--light.v-btn.active {
-    color: #6ad1ff;
+    color: var(--accent-1);
 }
 
 .question-container .question-answers .answer-box,

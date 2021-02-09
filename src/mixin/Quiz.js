@@ -135,6 +135,9 @@ const mixinQuiz = {
     modifyCurrentExamQuestions (currentExamQuestions) {
       let currentExamQuestionsArray = []
       let currentExamQuestionIndexes = this.getCurrentExamQuestionIndexes()
+      if (!currentExamQuestionIndexes) {
+        return currentExamQuestionsArray
+      }
       let currentExamQuestionIndexesArray = Object.keys(currentExamQuestionIndexes)
       currentExamQuestionIndexesArray.forEach( (item) => {
         let questionId = currentExamQuestionIndexes[item]
@@ -295,6 +298,9 @@ const mixinQuiz = {
     },
     getQuestionNumberFromId (id) {
       let currentExamQuestions = this.getCurrentExamQuestions()
+      if (!currentExamQuestions || typeof id === 'undefined' || id === null) {
+        return 1
+      }
       let targetQuestion = currentExamQuestions[id]
       if (!targetQuestion) {
         return 1

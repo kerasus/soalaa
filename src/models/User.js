@@ -5,20 +5,23 @@ import Assistant from "@/plugins/assistant";
 import {QuestCategoryList} from "@/models/QuestCategory";
 import {QuestSubcategoryList} from "@/models/QuestSubcategory";
 import axios from "axios";
+import API_ADDRESS from "@/api/Addresses";
 
 class User extends Model {
     constructor(data) {
         super(data, [
             {
                 key: 'baseRoute',
-                default: '/alaa/api/v2/user/'
+                default: API_ADDRESS.user.base
             },
             { key: 'id' },
             { key: 'first_name' },
             { key: 'last_name' },
             { key: 'mobile' },
             { key: 'province' },
+            { key: 'ostan_id' },
             { key: 'city' },
+            { key: 'shahr_id' },
             { key: 'address' },
             { key: 'postal_code' },
             { key: 'email' },
@@ -56,27 +59,74 @@ class User extends Model {
         ])
     }
 
-    needToCompleteInfo () {
-        let status = false
-        if (!this.first_name) {
-            status = true
-        } else if (!this.last_name) {
-            status = true
-        } else if (!this.major || !this.major.id) {
-            status = true
-        } else if (!this.province) {
-            status = true
-        } else if (!this.city) {
-            status = true
-        } else if (!this.school) {
-            status = true
-        } else if (!this.mobile_verified_at) {
-            status = true
-        } else if (!this.grade) {
-            status = true
-        }
+    getCompletionInfoKeys () {
+        return [
+            'first_name',
+            'last_name',
+            'major',
+            'province',
+            'city',
+            'school',
+            'mobile_verified_at',
+            'grade'
+        ]
+    }
 
-        return status
+    checkInformationCompletionKey (key) {
+        return (
+            (this[key] !== null && typeof this[key] === 'object' && typeof this[key].id !== 'undefined' && this[key].id !== null) ||
+            (this[key]  && typeof this[key].id === 'undefined')
+        )
+    }
+
+    percentageOfInformationCompletion () {
+        let percentage = 0,
+            completionInfoKeys = this.getCompletionInfoKeys(),
+            percentageStep = (100 / completionInfoKeys.length)
+
+        completionInfoKeys.forEach(item => {
+            if (this.checkInformationCompletionKey(item)) {
+                percentage += percentageStep
+            }
+        })
+
+        return percentage
+    }
+
+    needToCompleteInfo () {
+        return false
+        // let completionInfoKeys = this.getCompletionInfoKeys()
+        // let status = false
+        // try {
+        //     completionInfoKeys.forEach(item => {
+        //         if (!this.checkInformationCompletionKey(item)) {
+        //             throw 'needToCompleteInfo'
+        //         }
+        //     })
+        // } catch (e) {
+        //     status = true
+        // }
+        //
+        // return status
+        // if (!this.first_name) {
+        //     status = true
+        // } else if (!this.last_name) {
+        //     status = true
+        // } else if (!this.major || !this.major.id) {
+        //     status = true
+        // } else if (!this.province) {
+        //     status = true
+        // } else if (!this.city) {
+        //     status = true
+        // } else if (!this.school) {
+        //     status = true
+        // } else if (!this.mobile_verified_at) {
+        //     status = true
+        // } else if (!this.grade) {
+        //     status = true
+        // }
+        //
+        // return status
     }
 
     setUserExamStatus (exam) {
@@ -107,7 +157,7 @@ class User extends Model {
     getUserData () {
         let that = this
         return new Promise(function(resolve, reject) {
-            that.show(null, '/alaa/api/v2/getUserFor3a')
+            that.show(null, API_ADDRESS.user.show_user)
                 .then( (response) => {
                     that = new User(response.data.data)
                     resolve(that)
@@ -140,7 +190,7 @@ class User extends Model {
     getUserExams () {
         let that = this
         return new Promise(function(resolve, reject) {
-            that.exams.fetch(null, '/3a/api/examAndUser')
+            that.exams.fetch(null, API_ADDRESS.exam.userExamsList)
                 .then((response) => {
                     let exams = response.data.data.exams
                     let userExams = response.data.data.user_exams

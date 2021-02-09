@@ -1,8 +1,10 @@
 <template>
     <v-app v-resize="updateWindowSize">
         <v-navigation-drawer app v-model="drawer" right width="316"
-                             :class="{ 'mapOfQuestions': $route.name === 'onlineQuiz.alaaView'}"
-                             :style="{ backgroundColor: $route.name === 'onlineQuiz.alaaView' || $route.name === 'onlineQuiz.konkoorView' ? '#fff' : '#ffc107' }"
+                             :class="{
+                                 'mapOfQuestions': $route.name === 'onlineQuiz.alaaView' || $route.name === 'onlineQuiz.konkoorView',
+                                 'right-drawer': $route.name !== 'onlineQuiz.alaaView' && $route.name !== 'onlineQuiz.konkoorView'
+                             }"
         >
             <div style="height: 150px;line-height: 150px;font-size: 4rem;color: rgb(255, 193, 7);display: flex;align-items: center;justify-content: center;">
                 <div style="display: block">
@@ -13,18 +15,21 @@
             <SideMenu_MapOfQuestions v-if="$route.name === 'onlineQuiz.alaaView' || $route.name === 'onlineQuiz.konkoorView'"/>
             <SideMenu_Dashboard v-else/>
         </v-navigation-drawer>
-        <v-app-bar v-if="appBar" app color="#f4f4f4" elevate-on-scroll>
+        <v-app-bar v-if="appBar" app color="--background-2" elevate-on-scroll>
             <div class="header">
                 <v-container>
                     <v-row>
                         <v-col class="px-md-0 px-10 d-flex justify-space-between">
-                            <div class="rounded-b-xl rounded-r-xl">
+                            <div class="rounded-b-xl rounded-r-xl d-flex flex-row align-center">
                                 <v-menu bottom :offset-y="true" class="rounded-b-xl rounded-r-xl">
                                     <template v-slot:activator="{ on, attrs }">
-                                        <v-btn large tile v-bind="attrs" v-on="on" elevation="0" class="pl-3" >
+                                        <v-btn large tile v-bind="attrs" v-on="on" elevation="0" class="pl-3 topMenuOpenButton">
                                             <v-icon class="mr-2" :size="30" color="#666">mdi-account-circle</v-icon>
-                                            <span v-if="user.first_name || user.last_name">
-                                                {{ user.first_name + ' ' + user.last_name }}
+                                            <span v-if="user.last_name">
+                                                {{ user.last_name }}
+                                            </span>
+                                            <span v-if="user.first_name">
+                                                {{ user.first_name }}
                                             </span>
                                         </v-btn>
                                     </template>
@@ -104,9 +109,41 @@
         justify-content: space-between;
         direction: ltr;
     }
+
+    .right-drawer {
+        background: var(--primary-1) !important;
+    }
+
+    .map-of-questions {
+        background: var(--surface-1) !important;
+    }
 </style>
 
 <style>
+    :root {
+        --background-1: #fff;
+        --background-2: #f5f5f5;
+        --background-3: red;
+        --surface-1: #fff;
+        --surface-2: #f1f1f1;
+        --surface-3: #f1f1f1;
+        --primary-1: #ffc107;
+        --primary-2: #fbcf4b;
+        --primary-3: #ffc107;
+        --text-1: #000;
+        --text-2: #666;
+        --text-3: #fff;
+        --accent-1: #2196F3;
+        --accent-2: #2196F3;
+        --accent-3: #2196F3;
+        --success-1: #4caf50;
+        --success-2: #4caf50;
+        --success-3: #4caf50;
+        --error-1: #f44336;
+        --error-2: #f44336;
+        --error-3: #f44336;
+    }
+
     .v-application {
         font-family: 'IRANSans', 'Arial', 'Verdana', 'Tahoma', sans-serif;
     }
@@ -141,7 +178,22 @@
     }
 
     .v-main {
-        background: #f4f4f4;
+        background: var(--background-2);
+    }
+
+    .appDarkMode * {
+        transition: 0.2s cubic-bezier(0.4, 0, 0.2, 1);;
+    }
+    .appDarkMode .v-main {
+        background: #242424;;
+    }
+    .appDarkMode header,
+    .appDarkMode .topMenuOpenButton {
+        background: #242424 !important;
+    }
+    .appDarkMode div,
+    .appDarkMode .topMenuOpenButton span {
+        color: #bfbfbf;
     }
 
     @media only screen and (max-width: 960px) {

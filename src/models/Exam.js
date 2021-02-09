@@ -7,13 +7,14 @@ import {CheckingTimeList} from "@/models/CheckingTime";
 import Assistant from "@/plugins/assistant";
 import Vue from 'vue'
 import axios from "axios";
+import API_ADDRESS from "@/api/Addresses";
 
 class Exam extends Model {
     constructor(data) {
         super(data, [
             {
                 key: 'baseRoute',
-                default: '/3a/api/exam'
+                default: API_ADDRESS.exam.base
             },
             { key: 'id' },
             { key: 'title' },
@@ -246,7 +247,7 @@ class Exam extends Model {
                 })
             }
         })
-        return axios.post('/3a/api/temp-exam/answer/choice/', {exam_user_id: this.user_exam_id, finish: true, questions: answers })
+        return axios.post(API_ADDRESS.exam.sendAnswersAndFinishExam, {exam_user_id: this.user_exam_id, finish: true, questions: answers })
     }
 
     mergeDbAnswerToLocalstorage (dbAnswers) {
@@ -262,14 +263,14 @@ class Exam extends Model {
     }
 
     getAnswerOfUserInExam () {
-        return axios.get('/3a/api/temp-exam/answer/'+this.user_exam_id)
+        return axios.get(API_ADDRESS.exam.getAnswerOfUser(this.user_exam_id))
     }
 
     getAnswerOfUserInResultPage () {
         let that = this
         console.log('test')
         return new Promise(function(resolve, reject) {
-            axios.get('/3a/api/temp-exam/answer/'+that.user_exam_id+'/withCorrect')
+            axios.get(API_ADDRESS.exam.getAnswerOfUserWithCorrect(that.user_exam_id))
                 .then( (response) => {
                     console.log('test2')
                     const questions_file_url = response.data.data.exam.questions_file_url
