@@ -129,7 +129,6 @@
 
     .subCards {
         border-radius: 15px;
-        height: 100%;
         margin-top: 10px;
     }
 

@@ -272,6 +272,10 @@
         }
     }
 
+    .text-center {
+        direction: ltr;
+    }
+
     .tab-title {
         margin: 16px;
     }

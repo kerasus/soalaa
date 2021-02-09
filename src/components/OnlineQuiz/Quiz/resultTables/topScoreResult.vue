@@ -112,7 +112,6 @@
 
                 ],
                 chartOptions: {
-
                     series: [
                     ],
                     chart: {
