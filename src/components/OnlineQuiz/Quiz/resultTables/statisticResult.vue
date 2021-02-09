@@ -1,6 +1,5 @@
 <template>
     <div >
-        <coming-soon/>
         <div class="d-flex justify-center">
             <v-col>
                 <v-row class=" d-flex justify-center">
@@ -8,7 +7,7 @@
                             hide-default-footer
                             :headers="headers"
                             :items="dataTable"
-                            :items-per-page="5"
+                            :items-per-page="15"
                             class="elevation-1 dataTable"
                     ></v-data-table>
                 </v-row>
@@ -20,11 +19,10 @@
 <script>
     // import Info from "@/components/OnlineQuiz/Quiz/resultTables/info";
 
-    import ComingSoon from "@/components/ComingSoon";
     export default {
         name: "statisticResult",
         props: ['report'],
-        components: {ComingSoon},
+        components: {},
         // components: {Info},
         data() {
             return {

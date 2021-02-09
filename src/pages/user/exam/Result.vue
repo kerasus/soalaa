@@ -50,8 +50,8 @@
                         <v-row class="download-row">
                             <v-col md="6">
                                 <div class="download-box">
-                                    <p class="download-title">دانلود پاسخنامه تشریحی دروس عمومی رشته تجربی</p>
-                                    <v-btn outlined color="--primary-2" height="75px" width="250px">
+                                    <p class="download-title">دانلود پاسخنامه تشریحی {{ report.exams_booklet[0].title }}</p>
+                                    <v-btn outlined color="--primary-2" height="75px" width="250px" :href="report.exams_booklet[0].descriptive_answers_url"  target="_blank">
                                         دانلود فایل PDF
                                         <v-icon class="donwload-icon">mdi-download</v-icon>
                                     </v-btn>
@@ -59,8 +59,8 @@
                             </v-col>
                             <v-col md="6">
                                 <div class="download-box">
-                                    <p class="download-title">دانلود پاسخنامه تشریحی دروس عمومی رشته تجربی</p>
-                                    <v-btn outlined color="--primary-2" height="75px" width="250px">
+                                    <p class="download-title">دانلود {{ report.exams_booklet[0].title }}</p>
+                                    <v-btn outlined color="--primary-2" height="75px" width="250px" :href="report.exams_booklet[0].questions_url" target="_blank">
                                         دانلود فایل PDF
                                         <v-icon class="donwload-icon">mdi-download</v-icon>
                                     </v-btn>
@@ -68,8 +68,8 @@
                             </v-col>
                             <v-col md="6">
                                 <div class="download-box">
-                                    <p class="download-title">دانلود پاسخنامه تشریحی دروس عمومی رشته تجربی</p>
-                                    <v-btn outlined color="--primary-2" height="75px" width="250px">
+                                    <p class="download-title">دانلود پاسخنامه تشریحی {{ report.exams_booklet[1].title }}</p>
+                                    <v-btn outlined color="--primary-2" height="75px" width="250px" :href="report.exams_booklet[0].descriptive_answers_url"  target="_blank">
                                         دانلود فایل PDF
                                         <v-icon class="donwload-icon">mdi-download</v-icon>
                                     </v-btn>
@@ -77,8 +77,8 @@
                             </v-col>
                             <v-col md="6">
                                 <div class="download-box">
-                                    <p class="download-title">دانلود پاسخنامه تشریحی دروس عمومی رشته تجربی</p>
-                                    <v-btn outlined color="--primary-2" height="75px" width="250px">
+                                    <p class="download-title">دانلود {{ report.exams_booklet[1].title }}</p>
+                                    <v-btn outlined color="--primary-2" height="75px" width="250px" :href="report.exams_booklet[0].questions_url" target="_blank">
                                         دانلود فایل PDF
                                         <v-icon class="donwload-icon">mdi-download</v-icon>
                                     </v-btn>
@@ -222,6 +222,7 @@
                 })
             },
             onVideoTabChange (tabIndex) {
+                console.log(this.report.sub_category[tabIndex])
                 if (this.report && this.report.sub_category[tabIndex].video_url) {
                     const parsed = this.report.sub_category[tabIndex].video_url.split('/')
                     let setId = parsed[parsed.length - 1]

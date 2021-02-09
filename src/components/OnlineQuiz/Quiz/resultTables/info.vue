@@ -1,5 +1,5 @@
 <template>
-        <v-card class="infoCard infoText align-content-center">
+        <v-card class="infoCard infoText align-content-center" :elevation="0">
             <v-row class="infoHeight">
                 <v-col class="infoCols">
                     نام و نام خانوادگی :
@@ -8,7 +8,7 @@
                 </v-col>
                 <v-col class="infoCols">
                     کد ملی :
-
+                    {{user.natio}}
                 </v-col>
                 <v-col class="infoCols">
                     شماره موبایل :
