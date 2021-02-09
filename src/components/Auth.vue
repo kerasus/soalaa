@@ -108,7 +108,7 @@
             },
             setUserData (userData) {
                 this.$store.commit('Auth/updateUser', new User(userData))
-                this.redirectTo()
+                // this.redirectTo()
             },
             setAccessToken (access_token) {
                 axios.defaults.headers.common['Authorization'] = 'Bearer ' + access_token
@@ -129,12 +129,16 @@
                     password: this.password
                 })
                 .then((response) => {
+
                     this.loadingList = false
+
                     that.user = new User(response.data.data.user)
                     that.$store.commit('Auth/updateUser', that.user)
                     const access_token = response.data.data.access_token
+
                     this.setAccessToken(access_token)
                     that.setUserData(response.data.data.user)
+                    this.getUserData()
                 })
                 .catch( () => {
                     this.loadingList = false
