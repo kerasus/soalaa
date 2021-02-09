@@ -2,7 +2,7 @@
     <v-container :fluid="true" class="quiz-page" :style="{ height: '100%' }">
         <v-row :style="{ 'min-height': '100%' }">
             <v-col :md="12" :class="{ 'question-container': true, ltr: currentQuestion.ltr }" :style="{ 'min-height': '100%' }">
-                <v-sheet class="d-flex align-stretch" width="100%" color="#f4f4f4" :style="{ 'min-height': '100%' }">
+                <v-sheet class="d-flex align-stretch" width="100%" color="--background-2" :style="{ 'min-height': '100%' }">
                     <v-row>
                         <v-col :md="1" class="d-md-flex justify-center align-center d-none">
                             <v-btn :min-width="64" class="px-0" :height="64" @click="goToPrevQuestion" icon>
@@ -22,14 +22,14 @@
                                 <div class="question-buttons">
                                     <v-btn icon @click="changeStatus(currentQuestion.id, 'o')">
                                         <v-icon v-if="!userQuizListData[quiz.id][currentQuestion.id] || userQuizListData[quiz.id][currentQuestion.id].status !== 'o'" color="#888" size="30">mdi-checkbox-blank-circle-outline</v-icon>
-                                        <v-icon v-if="userQuizListData[quiz.id][currentQuestion.id] && userQuizListData[quiz.id][currentQuestion.id].status === 'o'" color="yellow" :size="30">mdi-checkbox-blank-circle</v-icon>
+                                        <v-icon v-if="userQuizListData[quiz.id][currentQuestion.id] && userQuizListData[quiz.id][currentQuestion.id].status === 'o'" color="--primary-2" :size="30">mdi-checkbox-blank-circle</v-icon>
                                     </v-btn>
                                     <v-btn icon @click="changeStatus(currentQuestion.id, 'x')">
                                         <v-icon :color="userQuizListData[quiz.id][currentQuestion.id] && userQuizListData[quiz.id][currentQuestion.id].status === 'x' ? 'red' : '#888'" :size="30">mdi-close</v-icon>
                                     </v-btn>
                                     <v-btn icon @click="changeBookmark(currentQuestion.id)">
                                         <v-icon v-if="!userQuizListData[quiz.id][currentQuestion.id] || !userQuizListData[quiz.id][currentQuestion.id].bookmarked" :size="30" color="#888">mdi-bookmark-outline</v-icon>
-                                        <v-icon v-if="userQuizListData[quiz.id][currentQuestion.id] && userQuizListData[quiz.id][currentQuestion.id].bookmarked" color="blue" :size="30">mdi-bookmark</v-icon>
+                                        <v-icon v-if="userQuizListData[quiz.id][currentQuestion.id] && userQuizListData[quiz.id][currentQuestion.id].bookmarked" color="--accent-1" :size="30">mdi-bookmark</v-icon>
                                     </v-btn>
                                 </div>
                             </v-row>
@@ -173,10 +173,6 @@
         direction: ltr;
     }
 
-    .v-main {
-        background: #f4f4f4;
-    }
-
     .base.textstyle.uncramped {
         display: flex;
         flex-wrap: wrap;
@@ -192,24 +188,13 @@
         margin-right: 20px;
     }
 
-    .timer-row {
-        /*position: fixed;*/
-        /*bottom: 0;*/
-        /*justify-content: center;*/
-        /*width: 100%;*/
-    }
-
-    /*.timer-container {*/
-    /*    background: #f4f4f4;*/
-    /*}*/
-
     .question-number p {
         margin-bottom: 0;
         line-height: 40px;
     }
     .question-header {
         display: flex;
-        color: #666;
+        color: var(--text-2);
         flex-direction: row;
         justify-content: space-between;
     }
@@ -217,7 +202,7 @@
     .question-body {
         margin-top: 50px;
         line-height: 35px;
-        color: #777;
+        color: var(--text-2);
     }
 
     .question-answers {
@@ -225,7 +210,7 @@
     }
 
     .answer-sheet {
-        background: #fff;
+        background: var(--surface-1);
         width: 90%;
         height: 100px;
         padding: 2% 3%;
@@ -235,10 +220,6 @@
         display: flex;
         flex-direction: row;
         justify-content: space-between;
-    }
-
-    .answer-sheet:hover {
-        background: #e1e1e1;
     }
 
     .answer-text {
@@ -253,7 +234,7 @@
     }
 
     .quiz-page {
-        background: #f4f4f4;
+        background: var(--background-2);
         height: 100%;
     }
 
@@ -261,13 +242,7 @@
         margin-bottom: 0;
         align-self: center;
         margin-left: 10px;
-        color: #777;
-    }
-
-    .map-of-questions-container {
-        background: #fff;
-        margin: -12px 0;
-        padding: 20px 0;
+        color: var(--text-2);
     }
 
     @media only screen and (max-width: 960px) {

@@ -38,7 +38,7 @@
         mixins: [mixinAuth],
         data () {
             return {
-                user: this.$store.getters.user
+                // user: this.$store.getters.user
             }
         }
     }

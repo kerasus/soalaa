@@ -351,7 +351,7 @@
         -webkit-font-smoothing: antialiased;
         -moz-osx-font-smoothing: grayscale;
         margin-left: 10px;
-        color: #4caf50;
+        color: var(--success-1);
         font-size: 20px;
     }
 

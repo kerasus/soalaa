@@ -116,13 +116,13 @@
 
 <style scoped>
     .admin-panel {
-        border-top: 1px solid #fff;
+        border-top: 1px solid var(--surface-1);
     }
 </style>
 
 <style>
     .menu .v-list-item__title {
-        color: #fff;
+        color: var(--text-3);
         font-size: 16px !important;
         font-weight: normal !important;
     }
@@ -136,12 +136,12 @@
     }
 
     .router-link-exact-active .v-list-item {
-        background: #ffb507;
+        background: var(--primary-1);
         padding: 0 8px 0 0 !important;
         border-radius: 0 !important;
     }
 
     .router-link-exact-active .v-list-item .v-list-item__title {
-        border-left: 4px solid #fff;
+        border-left: 4px solid var(--surface-1);
     }
 </style>

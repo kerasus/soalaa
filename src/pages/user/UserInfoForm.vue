@@ -35,21 +35,23 @@
             </v-col>
             <v-col cols="6">
                 <div class="form-group m-form__group ">
-                    <v-select label="استان"
+                    <v-autocomplete label="استان"
                               :items="provinces"
                               v-model="selectedProvince"
                               item-text="title"
                               item-value="id"
+                              no-data-text="داده ای یافت نشد"
                     />
                 </div>
             </v-col>
             <v-col cols="6">
                 <div class="form-group m-form__group ">
-                    <v-select label="شهر"
+                    <v-autocomplete label="شهر"
                               :items="citiesForSelectedProvince"
                               v-model="selectedCity"
                               item-text="title"
                               item-value="id"
+                              no-data-text="داده ای یافت نشد"
                     />
                 </div>
             </v-col>

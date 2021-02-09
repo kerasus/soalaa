@@ -1,7 +1,6 @@
 <template>
     <v-overlay :absolute="true"
-            :opacity="0.99"
-            :value="false"
+            :opacity="0"
     >
         <v-btn color="orange lighten-2"
                 @click="overlay = false"

@@ -8,7 +8,7 @@
                     height="200"
                     elevation="1"
                     class="d-flex align-center justify-center"
-                    :color="currentQuestion.id === source.id ? 'red' : '#fff'"
+                    :color="currentQuestion.id === source.id ? '--error-1' : '#fff'"
             >
                 (
                 سوال شماره
