@@ -25,6 +25,7 @@
                     <v-col>
                         <div :style="{ 'max-width': '100%'}">
                             <highcharts :options="chartOptions"></highcharts>
+
                         </div>
                     </v-col>
                 </v-row>
@@ -43,6 +44,8 @@
         // components: {Info},
         data() {
             return {
+                test: 'test',
+
                 headers: [
                     {
                         text: 'ردیف',
@@ -112,9 +115,32 @@
 
                 ],
                 chartOptions: {
+                    tooltip: {
+                        backgroundColor: '#FCFFC5',
+                        padding:0,
 
-                    series: [
-                    ],
+                        style: {
+                        direction: 'ltr',
+                        },
+                        formatter: function () {
+                            return   '  <span>30 % </span>' ;
+                        }
+                    },
+                    series: [],
+                    // plotOptions: {
+                    //     series: {
+                    //         events: {
+                    //             legendItemClick: function(event) {
+                    //                 console.log(event.target.index)
+                    //                 console.log(this)
+                    //                 // this.chartSeriesVisibility[event.target.index].visibility = !this.chartSeriesVisibility[event.target.index].visibility
+                    //             },
+                    //         }
+                    //     }
+                    // },
+
+
+
                     chart: {
                         type: 'column',
                         height: 700,
@@ -141,7 +167,12 @@
                     xAxis: {
                         categories: []
                     },
-                }
+                },
+                chartSeriesVisibility: [
+                    {name:'topScores', visibility:true},
+                    {name:'me', visibility:true},
+                    {name:'all', visibility:true}
+                    ]
             }
         },
         methods: {
@@ -153,6 +184,7 @@
                 this.chartOptions.series.push({
                     name: 'نفرات برتر',
                     color: 'green',
+                    visible: true,
                     data
                 })
                 data = []
@@ -162,6 +194,7 @@
                 this.chartOptions.series.push({
                     name: 'من',
                     color: 'red',
+                    visible: true,
                     data
                 })
                 data = []
@@ -171,6 +204,7 @@
                 this.chartOptions.series.push({
                     name: 'همه',
                     color: 'blue',
+                    visible: true,
                     data
                 })
             },
