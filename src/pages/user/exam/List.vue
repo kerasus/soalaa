@@ -28,8 +28,7 @@
                         <v-sheet
                                 v-for="item in exams.list"
                                 :key="item.id"
-                                class="mb-5 d-flex"
-                                color="white"
+                                class="mb-5 d-flex exam-list-sheet"
                                 elevation="0"
                                 outlined
                                 rounded
@@ -145,7 +144,7 @@
 
 <script>
     import {Exam, ExamList} from "@/models/Exam";
-    import { mixinQuiz } from '@/mixin/Mixins'
+    import { mixinAuth, mixinQuiz } from '@/mixin/Mixins'
     import ProgressLinear from "@/components/ProgressLinear";
 
     export default {
@@ -156,7 +155,7 @@
             exams: new ExamList(),
             loadingList: false
         }),
-        mixins: [mixinQuiz],
+        mixins: [mixinAuth, mixinQuiz],
         created() {
             this.getExams()
         },
@@ -218,6 +217,14 @@
 </script>
 
 <style scoped>
+    .exam-list-sheet {
+        background: var(--surface-1);;
+    }
+
+    .appDarkMode .exam-list-sheet {
+        background: #1c1c21;
+    }
+
     @media only screen and (max-width: 960px) {
         .table-header {
             display: none;
@@ -225,5 +232,12 @@
         .table-row {
             padding-right: 10px;
         }
+    }
+</style>
+
+<style>
+    .appDarkMode .exam-list-sheet .v-btn--disabled span {
+        color: #bfbfbf !important;
+        opacity: 0.6;
     }
 </style>

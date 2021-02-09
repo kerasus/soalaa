@@ -10,93 +10,32 @@ Vue.use(VueRouter);
 const router = new VueRouter({
     mode: 'history',
     routes: [
+        // auth page
         {
-            path: '/login',
+            path: encodeURI('/ورود'),
             name: 'login',
             component: () => lazyLoadView(import('@/pages/auth/Login'))
         },
+
+        // dashboard page
         {
             path: '/',
             name: 'dashboard',
             component: () => lazyLoadView(import('@/pages/user/exam/List')),
             meta: {middleware: [auth, completeInfo]}
         },
+
+        // user pages
         {
-            path: '/tree/edit',
-            name: 'tree.edit',
-            component: () => lazyLoadView(import('@/components/tree')),
-            meta: {middleware: [auth, completeInfo]}
+            path: encodeURI('/تکمیل_اطلاعات'),
+            name: 'user-info',
+            component: () => lazyLoadView(import('@/pages/user/UserInfoForm')),
+            meta: {middleware: auth}
         },
         {
-            path: '/quiz/edit-all',
-            name: 'quiz.allQuestions',
-            component: () => lazyLoadView(import('@/components/QuizEditor/AllQuestions')),
-            meta: {middleware: [auth, completeInfo]}
-        },
-        {
-            path: encodeURI('/آزمون_آنلاین/کارنامه'),
-            name: 'onlineQuiz.result',
-            component: () => lazyLoadView(import('@/components/OnlineQuiz/Quiz/resultTables/personalResult')),
-            meta: {middleware: [auth, completeInfo]}
-        },
-        {
-            path: encodeURI('/آزمون_آنلاین/پاسخ_برگ'),
-            name: 'onlineQuiz.result.pasokhbarg',
-            component: () => lazyLoadView(import('@/components/OnlineQuiz/Quiz/resultTables/pasokhBarg')),
-            meta: {middleware: [auth, completeInfo]}
-        },
-        {
-            path: encodeURI('/آزمون_آنلاین/کارنامه/ریز درس_ها'),
-            name: 'onlineQuiz.result.lessonDetails',
-            component: () => lazyLoadView(import('@/components/OnlineQuiz/Quiz/resultTables/statisticResult')),
-            meta: {middleware: [auth, completeInfo]}
-        },
-        {
-            path: encodeURI('/آزمون_آنلاین/کارنامه/نتایج_نفرات_برتر'),
-            name: 'onlineQuiz.result.topScore',
-            component: () => lazyLoadView(import('@/components/OnlineQuiz/Quiz/resultTables/topScoreResult')),
-            meta: {middleware: [auth, completeInfo]}
-        },
-        {
-            path: '/online_quiz-bubblesheet/:quizId',
-            name: 'onlineQuiz.bubblesheet-view',
-            component: () => lazyLoadView(import('@/pages/user/exam/participate/BubbleSheetView')),
-            meta: {middleware: [auth, completeInfo]}
-        },
-        {
-            path: '/online_quiz/:quizId',
-            name: 'onlineQuiz.konkoorView',
-            component: () => lazyLoadView(import('@/pages/user/exam/participate/KonkoorView')),
-            meta: {middleware: [auth, completeInfo]}
-        },
-        {
-            path: '/online_quiz/:quizId/:questNumber',
-            name: 'onlineQuiz.alaaView',
-            component: () => lazyLoadView(import('@/pages/user/exam/participate/AlaaView')),
-            meta: {middleware: [auth, completeInfo]}
-        },
-        {
-            path: '/quiz/edit/:quizId',
-            name: 'quiz.edit',
-            component: () => lazyLoadView(import('@/pages/admin/question/QuestionsOfExam')),
-            meta: {middleware: [auth, completeInfo]}
-        },
-        {
-            path: '/quest/create',
-            name: 'quest.create',
-            component: () => lazyLoadView(import('@/pages/admin/question/CreateOrEdit')),
-            meta: {middleware: [auth, completeInfo]}
-        },
-        {
-            path: '/subcategory/set',
-            name: 'video.set',
-            component: () => lazyLoadView(import('@/pages/admin/VideoSet/SetVideo')),
-            meta: {middleware: [auth, completeInfo]}
-        },
-        {
-            path: '/quest/:id',
-            name: 'quest.edit',
-            component: () => lazyLoadView(import('@/pages/admin/question/CreateOrEdit')),
+            path: encodeURI('/سوالات_متداول'),
+            name: 'common-questions',
+            component: () => lazyLoadView(import('@/pages/CommonQuestions')),
             meta: {middleware: [auth, completeInfo]}
         },
         {
@@ -106,41 +45,84 @@ const router = new VueRouter({
             meta: {middleware: [auth, completeInfo]}
         },
         {
+            path: encodeURI('/شرکت در آزمون/نمای_تک_سوال/:quizId/:questNumber'),
+            name: 'onlineQuiz.alaaView',
+            component: () => lazyLoadView(import('@/pages/user/exam/participate/AlaaView')),
+            meta: {middleware: [auth, completeInfo]}
+        },
+        {
+            path: encodeURI('/شرکت در آزمون/نمای_کنکور/:quizId'),
+            name: 'onlineQuiz.konkoorView',
+            component: () => lazyLoadView(import('@/pages/user/exam/participate/KonkoorView')),
+            meta: {middleware: [auth, completeInfo]}
+        },
+        {
+            path: encodeURI('/شرکت در آزمون/نمای_پاسخبرگ/:quizId'),
+            name: 'onlineQuiz.bubblesheet-view',
+            component: () => lazyLoadView(import('@/pages/user/exam/participate/BubbleSheetView')),
+            meta: {middleware: [auth, completeInfo]}
+        },
+        {
             path: encodeURI('/نتایج_آزمون/:user_exam_id/:exam_id'),
             name: 'user.exam.results',
             component: () => lazyLoadView(import('@/pages/user/exam/Result')),
             meta: {middleware: [auth, completeInfo]}
         },
+
+        // admin pages
         {
-            path: encodeURI('/نتایج_آزمون'),
-            name: 'user.exam.results.test',
-            component: () => lazyLoadView(import('@/pages/user/exam/Result')),
+            path: encodeURI('/مدیریت/سوال/ساخت'),
+            name: 'quest.create',
+            component: () => lazyLoadView(import('@/pages/admin/question/CreateOrEdit')),
             meta: {middleware: [auth, completeInfo]}
         },
         {
-            path: '/exams-editor/',
+            path: encodeURI('/مدیریت/سوال/نمایش/:id'),
+            name: 'quest.edit',
+            component: () => lazyLoadView(import('@/pages/admin/question/CreateOrEdit')),
+            meta: {middleware: [auth, completeInfo]}
+        },
+        {
+            path: encodeURI('/مدیریت/آزمون'),
             name: 'onlineQuiz.exams',
             component: () => lazyLoadView(import('@/pages/admin/exam/Manage')),
             meta: {middleware: [auth, completeInfo]}
         },
         {
-            path: '/تکمیل_اطلاعات',
-            name: 'user-info',
-            component: () => lazyLoadView(import('@/pages/user/UserInfoForm')),
-            meta: {middleware: auth}
-        },
-        {
-            path: '/debug',
-            name: 'debug',
-            component: () => lazyLoadView(import('@/components/debug')),
+            path: encodeURI('/مدیریت/آزمون/ویرایش/:quizId'),
+            name: 'quiz.edit',
+            component: () => lazyLoadView(import('@/pages/admin/question/QuestionsOfExam')),
             meta: {middleware: [auth, completeInfo]}
         },
         {
-            path: encodeURI('/سوالات_متداول'),
-            name: 'common-questions',
-            component: () => lazyLoadView(import('@/pages/CommonQuestions')),
+            path: encodeURI('/مدیریت/درس'),
+            name: 'video.set',
+            component: () => lazyLoadView(import('@/pages/admin/VideoSet/SetVideo')),
             meta: {middleware: [auth, completeInfo]}
         },
+
+        // // dev pages
+        // {
+        //     path: '/quiz/edit-all',
+        //     name: 'quiz.allQuestions',
+        //     component: () => lazyLoadView(import('@/components/QuizEditor/AllQuestions')),
+        //     meta: {middleware: [auth, completeInfo]}
+        // },
+        // {
+        //     path: '/tree/edit',
+        //     name: 'tree.edit',
+        //     component: () => lazyLoadView(import('@/components/tree')),
+        //     meta: {middleware: [auth, completeInfo]}
+        // },
+        // {
+        //     path: '/debug',
+        //     name: 'debug',
+        //     component: () => lazyLoadView(import('@/components/debug')),
+        //     meta: {middleware: [auth, completeInfo]}
+        // },
+
+
+        // NotFound page
         {
             path: '*',
             name: 'NotFound',

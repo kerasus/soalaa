@@ -14,14 +14,6 @@ const mixinQuiz = {
     isQuizPage() {
       return this.$route.name === 'onlineQuiz.quiz'
     },
-    user: {
-      get () {
-        return this.$store.getters.user
-      },
-      set (newInfo) {
-        this.$store.commit('updateUser', newInfo)
-      }
-    },
     quiz: {
       get () {
         return this.$store.getters.quiz
@@ -143,6 +135,9 @@ const mixinQuiz = {
     modifyCurrentExamQuestions (currentExamQuestions) {
       let currentExamQuestionsArray = []
       let currentExamQuestionIndexes = this.getCurrentExamQuestionIndexes()
+      if (!currentExamQuestionIndexes) {
+        return currentExamQuestionsArray
+      }
       let currentExamQuestionIndexesArray = Object.keys(currentExamQuestionIndexes)
       currentExamQuestionIndexesArray.forEach( (item) => {
         let questionId = currentExamQuestionIndexes[item]
@@ -167,7 +162,7 @@ const mixinQuiz = {
         return
       }
       let that = this
-      that.$store.commit('updateOverlay', true)
+      that.$store.commit('AppLayout/updateOverlay', true)
       return new Promise(function(resolve, reject) {
         if (that.needToLoadQuiaData() && examId) {
           that.participateExam(examId, viewType)
@@ -175,13 +170,13 @@ const mixinQuiz = {
                 resolve()
               })
               .catch( (error) => {
-                that.$store.commit('updateOverlay', false)
+                that.$store.commit('AppLayout/updateOverlay', false)
                 Assistant.reportErrors({location: 'mixin/Quiz.js -> participateExam()'})
                 reject(error)
               })
         } else {
           that.loadExam()
-          that.$store.commit('updateOverlay', false)
+          that.$store.commit('AppLayout/updateOverlay', false)
           resolve()
         }
       })
@@ -303,6 +298,9 @@ const mixinQuiz = {
     },
     getQuestionNumberFromId (id) {
       let currentExamQuestions = this.getCurrentExamQuestions()
+      if (!currentExamQuestions || typeof id === 'undefined' || id === null) {
+        return 1
+      }
       let targetQuestion = currentExamQuestions[id]
       if (!targetQuestion) {
         return 1
@@ -415,7 +413,8 @@ const mixinQuiz = {
         const questionNumber = this.getQuestionNumberFromId(this.currentQuestion.id)
         this.$router.push({ name: 'onlineQuiz.alaaView', params: { quizId: this.quiz.id, questNumber: questionNumber } })
       } else if (type === 'konkoor') {
-        this.$router.push({ name: 'onlineQuiz.konkoorView', params: { quizId: this.quiz.id } })
+        this.$store.commit('AppLayout/updateDrawer', false)
+        setTimeout(() => {this.$router.push({ name: 'onlineQuiz.konkoorView', params: { quizId: this.quiz.id } })}, 200)
       }
     },
   }

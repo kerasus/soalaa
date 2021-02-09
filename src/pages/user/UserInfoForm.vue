@@ -1,60 +1,89 @@
 <template>
     <div class="wrapper">
+        <progress-linear :active="user.loading" />
+        <v-progress-linear v-if="percentageOfInformationCompletion > 0"
+                           :value="percentageOfInformationCompletion"
+                           absolute
+                           top
+                           color="amber"
+                           height="25"
+        >
+            <template v-slot:default="{ value }">
+                <strong>{{ Math.ceil(value) }} درصد از اطلاعات تکمیل شده</strong>
+            </template>
+        </v-progress-linear>
         <v-row>
             <v-col cols="4">
                 <div class="form-group m-form__group">
-                    <v-text-field outlined label="نام" v-model="user.first_name"></v-text-field>
+                    <v-text-field label="نام" v-model="user.first_name"></v-text-field>
                 </div>
             </v-col>
             <v-col cols="4">
                 <div class="form-group m-form__group">
-                    <v-text-field outlined label=" نام خانوادگی" v-model="user.last_name"></v-text-field>
+                    <v-text-field label=" نام خانوادگی" v-model="user.last_name"></v-text-field>
                 </div>
             </v-col>
             <v-col cols="4">
                 <div class="form-group m-form__group ">
-                    <v-select :items="[genders[0].name,genders[1].name,genders[2].name]" label="جنسیت" outlined
-                              v-model="user.gender">
-                    </v-select>
+                    <v-select :items="genders"
+                              label="جنسیت"
+                              v-model="user.gender.id"
+                              item-text="title"
+                              item-value="id"
+                    />
                 </div>
             </v-col>
             <v-col cols="6">
                 <div class="form-group m-form__group ">
-                    <v-text-field outlined label="استان" v-model="user.province"></v-text-field>
+                    <v-autocomplete label="استان"
+                              :items="provinces"
+                              v-model="selectedProvince"
+                              item-text="title"
+                              item-value="id"
+                              no-data-text="داده ای یافت نشد"
+                    />
                 </div>
             </v-col>
             <v-col cols="6">
                 <div class="form-group m-form__group ">
-                    <v-text-field outlined label="شهر" v-model="user.city"></v-text-field>
+                    <v-autocomplete label="شهر"
+                              :items="citiesForSelectedProvince"
+                              v-model="selectedCity"
+                              item-text="title"
+                              item-value="id"
+                              no-data-text="داده ای یافت نشد"
+                    />
                 </div>
             </v-col>
             <v-col cols="4">
                 <div class="form-group m-form__group ">
-                    <v-text-field outlined label="مدرسه" v-model="user.school"></v-text-field>
+                    <v-text-field label="مدرسه" v-model="user.school"></v-text-field>
                 </div>
             </v-col>
             <v-col cols="4">
                 <div class="form-group m-form__group ">
-                    <v-select label="رشته" :items="field" outlined v-model="user.major.id"></v-select>
+                    <v-select label="رشته"
+                              :items="majors"
+                              v-model="user.major.id"
+                              item-text="title"
+                              item-value="id"
+                    />
                 </div>
             </v-col>
             <v-col cols="4">
                 <div class="form-group m-form__group ">
-                    <v-select label="مقطع" :items="level" outlined v-model="user.major.id"></v-select>
+                    <v-select label="مقطع"
+                              :items="grades"
+                              v-model="user.grade.id"
+                              item-text="title"
+                              item-value="id"
+                     />
                 </div>
             </v-col>
         </v-row>
-        <!--<v-row>-->
-        <!--    <v-col>-->
-        <!--        <v-alert style="color: #00c753;width: 50%;margin: auto" :value="isCodeVerified">-->
-        <!--            شماره موبایل با موفقیت ثبت شد.-->
-        <!--        </v-alert>-->
-        <!--    </v-col>-->
-        <!--</v-row>-->
         <v-row v-if="user.mobile_verified_at === null">
             <v-col class="codeBtnPadding">
-
-                <v-btn outlined color="blue" v-if="!waiting" @click="sendCode">
+                <v-btn color="blue" v-if="!waiting" @click="sendCode">
                     دریافت کد فعالسازی
                 </v-btn>
                 <div v-if="waiting && showTimer">
@@ -62,11 +91,9 @@
                         <span>{{ Math.floor(((totalTime) % 3600) / 60)}}</span>
                         <span>:</span>
                         <span>{{ ((totalTime) % 3600)  % 60 }}</span>
-
                     </div>
                     کد ارسال شده را وارد نمایید.
                 </div>
-
             </v-col>
             <v-col>
                 <v-text-field label="کد فعالسازی" v-model="typedCode">
@@ -74,7 +101,7 @@
                 </v-text-field>
             </v-col>
             <v-col class="codeBtnPadding">
-                <v-btn outlined color="blue" v-if="waiting" @click="verifyCode">
+                <v-btn color="blue" v-if="waiting" @click="verifyCode">
                     ثبت شماره موبایل
                 </v-btn>
             </v-col>
@@ -86,24 +113,58 @@
             <v-col/>
             <v-col/>
             <v-col cols="1">
-                <v-btn rounded width="100%"
-                       @click="submit"
-                >ذخیره
+                <v-btn rounded width="100%" @click="submit">
+                    ذخیره
                 </v-btn>
-
             </v-col>
         </v-row>
     </div>
-
 </template>
 
 <script>
-
-    import axios from "axios";
-    import Time from "@/plugins/time";
+    import axios from "axios"
+    import Time from "@/plugins/time"
+    import ProgressLinear from "@/components/ProgressLinear"
+    import {mixinAuth} from '@/mixin/Mixins'
+    import API_ADDRESS from "@/api/Addresses";
+    import {User} from "@/models/User";
 
     export default {
         name: "UserInfoForm",
+        components: {ProgressLinear},
+        watch: {
+            selectedProvince(newVal) {
+                if (newVal) {
+                    let selectedProvince = this.provinces.find( item => newVal === item.id)
+                    if (selectedProvince) {
+                        this.user.province = selectedProvince.title
+                        this.$store.commit('Auth/updateUser', new User(this.user))
+                    }
+                }
+            },
+            selectedCity(newVal) {
+                if (newVal) {
+                    let selectedCity = this.cities.find( item => newVal === item.id)
+                    if (selectedCity) {
+                        this.user.city = selectedCity.title
+                        this.$store.commit('Auth/updateUser', new User(this.user))
+                    }
+                }
+            }
+        },
+        computed: {
+            percentageOfInformationCompletion () {
+                return this.user.percentageOfInformationCompletion()
+            },
+            citiesForSelectedProvince () {
+                if (this.selectedProvince) {
+                    return this.cities.filter( item => item.province.id === this.selectedProvince)
+                }
+
+                return []
+            }
+        },
+        mixins: [mixinAuth],
         props: {
             requiredItems: {
                 type: Array
@@ -124,52 +185,72 @@
                 waiting: false,
                 userInfoInForm: {},
                 submitMessage: [],
+                selectedProvince: null,
+                selectedCity: null,
                 firstNameDisabled: false,
                 lastNameDisabled: false,
-                genders: [
-                    {
-                        id: 0,
-                        name: 'نامشخص'
-                    },
-                    {
-                        id: 1,
-                        name: 'آقا'
-                    },
-                    {
-                        id: 2,
-                        name: 'خانم'
-                    }
-                ],
-                field: ['انسانی', 'تجربی', 'ریاضی'],
-                level: ['هفتم', 'هشتم', 'نهم', 'دهم', 'یازدهم', 'دوازدهم', 'فارغ التحصیل نظام جدید', 'فارغ التحصیل نظام قدیم']
+                genders: [],
+                majors: [],
+                cities: [],
+                provinces: [],
+                grades: []
             }
         },
-        watch: {},
-        computed: {
-            user() {
-                return this.$store.getters.user;
-            }
+        mounted: function () {
+            this.getUserData()
+            this.$store.commit('AppLayout/updateDrawer', false)
         },
         methods: {
-
-
-            // this.$notify({
-            //     group: 'notifs',
-            //     title: 'توجه',
-            //     text: 'ویرایش با موفقیت انجام شد',
-            //     type: 'success'
-            // })
-
-            // this.$notify({
-            //     group: 'notifs',
-            //     title: 'توجه!',
-            //     text: 'مشکلی در دریافت اطلاعات آژمون رخ داده است. لطفا دوباره امتحان کنید.',
-            //     type: 'error'
-            // })
-
+            loadSomeData () {
+                if (this.user.province) {
+                    let selectedProvince = this.provinces.find( item => item.title === this.user.province)
+                    this.selectedProvince = selectedProvince.id
+                    let selectedCity = this.cities.find( item => item.title === this.user.city)
+                    this.selectedCity = selectedCity.id
+                }
+            },
+            getUserData () {
+                let that = this
+                this.user.getUserData()
+                    .then( (user) => {
+                        that.getUserFormData()
+                        that.$store.commit('Auth/updateUser', user)
+                        if (!that.user.needToCompleteInfo()) {
+                            that.$router.push({ name: 'dashboard'})
+                        } else {
+                            that.$notify({
+                                group: 'notifs',
+                                text: 'نیاز به تکمیل اطلاعات هست.',
+                                type: 'warning'
+                            })
+                        }
+                    })
+            },
             startTimer() {
                 this.timer = setInterval(() => this.countdown(), 1000);
-
+            },
+            getUserFormData () {
+                this.user.loading = true
+                axios.get(API_ADDRESS.user.formData)
+                    .then((resp) => {
+                        this.genders = resp.data.data.genders
+                        this.grades = resp.data.data.grades
+                        this.majors = resp.data.data.majors
+                        this.provinces = resp.data.data.provinces
+                        this.cities = resp.data.data.cities
+                        this.user.loading = false
+                        this.loadSomeData()
+                    })
+                    .catch(()=> {
+                        this.$notify({
+                            group: 'notifs',
+                            title: 'توجه!',
+                            text: 'مشکلی در گرفتن اطلاعات رخ داده است. لطفا دوباره امتحان کنید.',
+                            type: 'error'
+                        })
+                        this.user.loading = false
+                    }
+                )
             },
             countdown: function () {
                 if (this.totalTime > 0) {
@@ -178,52 +259,53 @@
                     this.waiting = false
                 }
             },
-
             submit() {
                 let that = this
                 delete this.user.photo
+                this.user.loading = true
+                this.user.ostan_id = this.selectedProvince
+                this.user.shahr_id = this.selectedCity
                 this.user.update()
                     .then((response) => {
-                        that.$store.commit('updateUser', response.data.data)
-                        this.$notify({
+                        that.user.loading = false
+                        that.$notify({
                             group: 'notifs',
                             text: 'ویرایش با موفقیت انجام شد',
                             type: 'success'
                         })
-                        if (this.user.needToCompleteInfo()) {
-                                    this.$router.push({ name: 'dashboard'})
-                                }
+                        that.$store.commit('Auth/updateUser', response.data.data)
+                        that.getUserData()
                     })
                     .catch(() => {
-                        this.$notify({
+                        that.user.loading = false
+                        that.$notify({
                             group: 'notifs',
                             title: 'توجه!',
                             text: 'مشکلی در ویرایش اطلاعات رخ داده است. لطفا دوباره امتحان کنید.',
                             type: 'error'
                         })
                     })
-
-
-
             },
             sendCode() {
-
-                let sendVerifyCodeRoute = '/alaa/api/v2/mobile/resend'
-                axios.get(sendVerifyCodeRoute).then((resp) => {
-                    this.code = resp
-                    this.startTimer()
-                    this.waiting = true
-                    this.showTimer = true
-                    this.$notify({
-                        group: 'notifs',
-                        title: 'توجه!',
-                        text: 'کد فعالسازی با موفقیت ارسال شد.',
-                        type: 'success'
+                let that = this
+                this.user.loading = true
+                axios.get(API_ADDRESS.user.mobile.resend)
+                    .then((resp) => {
+                        that.user.loading = false
+                        that.code = resp
+                        that.startTimer()
+                        that.waiting = true
+                        that.showTimer = true
+                        that.$notify({
+                            group: 'notifs',
+                            title: 'توجه!',
+                            text: 'کد فعالسازی با موفقیت ارسال شد.',
+                            type: 'success'
+                        })
                     })
-
-                }).catch(
-                    ()=> {
-                        this.$notify({
+                    .catch(()=> {
+                        that.user.loading = false
+                        that.$notify({
                             group: 'notifs',
                             title: 'توجه!',
                             text: 'مشکلی در ارسال کد رخ داده است. لطفا دوباره امتحان کنید.',
@@ -233,34 +315,29 @@
                 )
             },
             verifyCode() {
-                let verifyCodeRoute = '/alaa/api/v2/mobile/verify' // post
-                axios.post(verifyCodeRoute, {
-                    code: this.typedCode
-                }).then((response) => {
-                    console.log(response);
-                    this.user.mobile_verified_at = Time.now()
-                    this.isCodeVerified = true
-                    this.$notify({
-                        group: 'notifs',
-                        title: 'توجه!',
-                        text: 'شماره موبایل با موفقیت ثبت شد.',
-                        type: 'success'
+                let that = this
+                this.user.loading = true
+                axios.post(API_ADDRESS.user.mobile.verify, { code: this.typedCode })
+                    .then((response) => {
+                        console.log(response)
+                        that.user.loading = false
+                        this.user.mobile_verified_at = Time.now()
+                        this.isCodeVerified = true
+                        this.$notify({
+                            group: 'notifs',
+                            title: 'توجه!',
+                            text: 'شماره موبایل با موفقیت ثبت شد.',
+                            type: 'success'
+                        })
+                        this.getUserData()
                     })
-
-
-                }).catch(
-                    (error)=> {
+                    .catch((error)=> {
+                        that.user.loading = false
                         console.log(error)
-                    }
-                )
-            },
-            changeAppBarAndDrawer(state) {
-                this.$store.commit('updateAppBar', state)
-                this.$store.commit('updateDrawer', state)
+                    })
             },
             canSubmit() {
                 let status = true;
-
                 if (!this.isValidString(this.user.first_name)) {
                     status = false;
                     this.submitMessage.push('نام خود را مشخص کنید.');
@@ -296,70 +373,9 @@
 
                 return status;
             },
-            // editUserInfo() {
-            //
-            //     if (!this.canSubmit()) {
-            //         return;
-            //     }
-            //
-            //     // mApp.block('.btnSubmitEvent', {
-            //     //     type: "loader",
-            //     //     state: "info",
-            //     // });
-            //
-            //     // let that = this;
-            //     this.user.updateType = 'profile';
-            //     delete this.user.photo;
-            //
-            //     // this.user.update()
-            //     //     .then(function (response) {
-            //     //         if (response.errors) {
-            //     //             // var message = data.error.message;
-            //     //             // toastr.warning('خطای سیستمی رخ داده است.' + '<br>' + message);
-            //     //         } else {
-            //     //             let userData = response.data.data;
-            //     //             that.$store.dispatch('updateUserInfo', new User(userData)).then(response => {
-            //     //                 mApp.unblock('.btnSubmitEvent');
-            //     //                 that.$emit('userInfoUpdated');
-            //     //             }, error => {
-            //     //                 window.location.reload();
-            //     //             });
-            //     //         }
-            //     //     })
-            //     //     .catch(function (error) {
-            //     //         mApp.unblock('.btnSubmitEvent');
-            //     //         toastr.error('مشکلی رخ داده است.');
-            //     //         // Assist.handleErrorMessage(error);
-            //     //     });
-            // },
             isValidString(string) {
                 return (typeof string !== 'undefined' && string !== null && string.toString().trim().length > 0);
             }
-        },
-        mounted: function () {
-            // let sendVerifyCodeRoute = '/alaa/api/v2/mobile/resend'
-            // axios.get(sendVerifyCodeRoute, {
-            //
-            // })
-
-
-            // let verifyCodeRoute = '/alaa/api/v2/mobile/verify' // post
-            // axios.post(verifyCodeRoute, {
-            //     code: '75021'
-            // })
-
-            // this.user.first_name = 'ali'
-            // delete this.user.photo
-            // this.user.update()
-            //     .then((response) => {
-            //         console.log('response', response)
-            //     })
-
-            // let updateProfileRoute = '/alaa/api/v2/user/'+this.user.id
-            // axios.put(updateProfileRoute, {
-            //
-            // })
-            this.changeAppBarAndDrawer(false)
         }
     }
 </script>

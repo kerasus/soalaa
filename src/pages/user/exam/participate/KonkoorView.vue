@@ -39,9 +39,12 @@
                                 <template v-slot:activator="{ on, attrs }">
                                     <v-btn large tile v-bind="attrs" v-on="on" elevation="0" class="pl-3" >
                                         <v-icon class="mr-2" :size="30" color="#666">mdi-account-circle</v-icon>
-                                        <span v-if="$store.getters.user.first_name || $store.getters.user.last_name">
-                                                {{ $store.getters.user.first_name + ' ' + $store.getters.user.last_name }}
-                                            </span>
+                                        <span v-if="user.last_name">
+                                            {{ user.last_name }}
+                                        </span>
+                                        <span v-if="user.first_name">
+                                            {{ user.first_name }}
+                                        </span>
                                     </v-btn>
                                 </template>
                                 <v-card max-width="375" class="mx-auto" rounded="b-xl r-xl">
@@ -56,7 +59,7 @@
                 </v-row>
                 <v-row>
                     <v-col>
-                        <BubbleSheet :info="{ type: 'pasokh-barg' }" @clickChoice="choiceClicked" @scrollTo="scrollTo" />
+                        <BubbleSheet :info="{ type: 'pasokh-barg' }" @clickChoice="choiceClicked" @scrollTo="scrollTo" :delay-time="0" />
                     </v-col>
                 </v-row>
             </v-col>
@@ -77,7 +80,7 @@
     import 'vue-virtual-scroller/dist/vue-virtual-scroller.css'
     import { DynamicScroller, DynamicScrollerItem } from 'vue-virtual-scroller'
     import Item from '@/components/OnlineQuiz/Quiz/ViewTypes/components/question'
-    import { mixinQuiz, mixinUserActionOnQuestion, mixinWindowSize } from '@/mixin/Mixins'
+    import { mixinAuth, mixinQuiz, mixinUserActionOnQuestion, mixinWindowSize } from '@/mixin/Mixins'
     import Timer from '@/components/OnlineQuiz/Quiz/Timer/Timer'
     import BubbleSheet from "@/components/OnlineQuiz/Quiz/BubbleSheet/BubbleSheet";
     import {Exam} from "@/models/Exam";
@@ -88,7 +91,7 @@
 
     export default {
         name: 'KonkoorView',
-        mixins: [mixinQuiz, mixinUserActionOnQuestion, mixinWindowSize],
+        mixins: [mixinAuth, mixinQuiz, mixinUserActionOnQuestion, mixinWindowSize],
         components: {
             Timer,
             TopMenu_OnlineQuiz,
@@ -112,8 +115,7 @@
         },
         methods: {
             changeAppBarAndDrawer (state) {
-                this.$store.commit('updateAppBar', state)
-                this.$store.commit('updateDrawer', state)
+                this.$store.commit('AppLayout/updateAppBarAndDrawer', state)
             },
             changeCurrentQuestionIfScrollingIsDone () {
                 // console.log('time since last: ', this.timePassedSinceLastScroll)
@@ -233,7 +235,7 @@
             this.startExam(this.$route.params.quizId)
                 .then(() => {
                     that.loadFirstActiveQuestionIfNeed()
-                    that.$store.commit('updateOverlay', false)
+                    that.$store.commit('AppLayout/updateOverlay', false)
                 })
                 .catch( (error) => {
                     Assistant.reportErrors(error)
@@ -269,7 +271,7 @@
                 // $('.questions-list').css({ 'padding-right': padding })
                 // $('.questions-list').css({ 'padding-left': padding })
                 $('.questions-list').height(this.questionListHeight())
-                this.$store.commit('updateDrawer', false)
+                this.$store.commit('AppLayout/updateDrawer', false)
             }
         }
     }
@@ -349,7 +351,7 @@
         -webkit-font-smoothing: antialiased;
         -moz-osx-font-smoothing: grayscale;
         margin-left: 10px;
-        color: #4caf50;
+        color: var(--success-1);
         font-size: 20px;
     }
 

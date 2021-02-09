@@ -1,12 +1,13 @@
 import {Model} from 'js-abstract-model'
 import {AlaaContentList} from "@/models/AlaaContent";
+import API_ADDRESS from "@/api/Addresses";
 
 class AlaaSet extends Model {
     constructor(data) {
         super(data, [
             {
                 key: 'baseRoute',
-                default: '/alaa/api/v2/set'
+                default: API_ADDRESS.set.base
             },
             {key: 'id'},
             {key: 'title'},

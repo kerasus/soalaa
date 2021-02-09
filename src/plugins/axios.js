@@ -1,6 +1,7 @@
 import axios from 'axios'
+import store from '@/store/store'
 import router from '@/router/index'
-import Assistant from "@/plugins/assistant";
+import Assistant from '@/plugins/assistant'
 
 let Axios = function () {
 
@@ -13,6 +14,8 @@ let Axios = function () {
         if (router.history.current.name === loginRouteName) {
             return
         }
+
+        store.commit('Auth/updateAccessToken', '')
         console.log('Please login to access this resource')
         router.push({ name: loginRouteName })
     }

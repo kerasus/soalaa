@@ -1,11 +1,8 @@
 <template>
-    <v-overlay
-            :absolute="true"
-            :opacity="0.99"
-            :value="false"
+    <v-overlay :absolute="true"
+            :opacity="0"
     >
-        <v-btn
-                color="orange lighten-2"
+        <v-btn color="orange lighten-2"
                 @click="overlay = false"
         >
             به زودی
@@ -15,7 +12,7 @@
 
 <script>
     export default {
-        name: "ComingSoon"
+        name: 'ComingSoon'
     }
 </script>
 
