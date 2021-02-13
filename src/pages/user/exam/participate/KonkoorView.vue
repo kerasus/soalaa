@@ -1,3 +1,4 @@
+
 <template>
     <v-container class="konkoor-view" :fluid="true" :style="{ height: '100%', background: 'rgb(244, 244, 244)' }" v-resize="updateWindowSize">
         <v-row :style="{ 'min-height': '100%' }">

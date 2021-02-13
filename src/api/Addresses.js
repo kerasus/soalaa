@@ -35,11 +35,28 @@ const API_ADDRESS = {
       return aaaServer + aaaApiVersion + '/temp-exam/answer/'+user_exam_id+'/withCorrect'
     },
     registerExam: aaaServer + aaaApiVersion + '/user/registerExam',
-    examUser: aaaServer + aaaApiVersion + '/exam-user'
+    examUser: aaaServer + aaaApiVersion + '/exam-user',
+    examQuestion (quizId) {
+      return aaaServer + aaaApiVersion + '/eam-question/attach/show/' + quizId
+    },
+    report: {
+      getReport (examId) {
+        return aaaServer + aaaApiVersion + '/exam-report?exam_id=' + examId
+      }
+    }
   },
   question: {
     base: aaaServer + aaaApiVersion + '/question',
     attachSubCategoryToQuestion: aaaServer + aaaApiVersion + '/exam-question/attach/sub-category',
+    updateQuestion (questionId) {
+      return aaaServer + aaaApiVersion + '/question/' + questionId
+    },
+    getCurrentQuestion (questionId) {
+      return aaaServer + aaaApiVersion + '/question/' + questionId
+    }
+  },
+  questionSubcategory: {
+    base: aaaServer + aaaApiVersion + '/examCategories'
   }
 }
 export default API_ADDRESS
