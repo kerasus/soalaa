@@ -33,7 +33,9 @@ const API_ADDRESS = {
     },
     getAnswerOfUserWithCorrect (user_exam_id) {
       return aaaServer + aaaApiVersion + '/temp-exam/answer/'+user_exam_id+'/withCorrect'
-    }
+    },
+    registerExam: aaaServer + aaaApiVersion + '/user/registerExam',
+    examUser: aaaServer + aaaApiVersion + '/exam-user'
   },
   question: {
     base: aaaServer + aaaApiVersion + '/question',

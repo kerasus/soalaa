@@ -18,9 +18,7 @@ class User extends Model {
             { key: 'first_name' },
             { key: 'last_name' },
             { key: 'mobile' },
-            { key: 'province' },
             { key: 'ostan_id' },
-            { key: 'city' },
             { key: 'shahr_id' },
             { key: 'address' },
             { key: 'postal_code' },
@@ -212,7 +210,7 @@ class User extends Model {
         return new Promise(function(resolve, reject) {
             that.create({
                 exam_id
-            }, '/3a/api/user/registerExam')
+            }, API_ADDRESS.exam.registerExam)
                 .then((response) => {
                     resolve(response)
                 })
@@ -268,7 +266,7 @@ class User extends Model {
         return new Promise(function(resolve, reject) {
             that.create({
                 exam_id
-            }, '/3a/api/exam-user')
+            }, API_ADDRESS.exam.examUser)
                 .then((response) => {
                     let userExamForParticipate = new Exam()
                     that.loadExamForParticipate(response, userExamForParticipate)
@@ -291,7 +289,7 @@ class User extends Model {
     loadExamDataForShowResult (user_exam_id) {
         let that = this
         return new Promise(function(resolve, reject) {
-            axios.get('/3a/api/temp-exam/answer/'+user_exam_id+'/withCorrect')
+            axios.get(API_ADDRESS.exam.getAnswerOfUserWithCorrect(user_exam_id))
                 .then((response) => {
                     let userExamForParticipate = new Exam()
                     that.loadExamForShowResult(response, user_exam_id, userExamForParticipate)
