@@ -1,12 +1,13 @@
 import { Model, Collection } from 'js-abstract-model'
-import {QuestionList} from "@/models/Question";
+import {QuestionList} from '@/models/Question'
+import API_ADDRESS from "@/api/Addresses";
 
 class QuestSubcategory extends Model {
     constructor (data) {
         super(data, [
             {
                 key: 'baseRoute',
-                default: '/3a/api/examCategories'
+                default: API_ADDRESS.questionSubcategory.base
             },
             { key: 'id' },
             { key: 'title' },

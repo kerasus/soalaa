@@ -123,6 +123,7 @@
     import {mixinAuth, mixinQuiz, mixinWindowSize} from "@/mixin/Mixins";
     import {AlaaContent} from "@/models/AlaaContent";
     import StatisticResult from "@/components/OnlineQuiz/Quiz/resultTables/statisticResult";
+    import API_ADDRESS from "@/api/Addresses";
 
     export default {
         name: 'Result',
@@ -147,7 +148,7 @@
                     that.loadExam(userExamForParticipate, 'results', exam_id)
                         .then(() => {
                             that.quiz.id = exam_id
-                            that.quiz.show(exam_id, '/3a/api/exam-report?exam_id='+exam_id)
+                            that.quiz.show(exam_id, API_ADDRESS.exam.report.getReport(exam_id))
                             .then((response) => {
                                 this.report = response.data.data
                                 this.loadKarname(this.report)
