@@ -18,6 +18,7 @@ class User extends Model {
             { key: 'first_name' },
             { key: 'last_name' },
             { key: 'mobile' },
+            { key: 'city' },
             { key: 'ostan_id' },
             { key: 'shahr_id' },
             { key: 'address' },
@@ -62,7 +63,6 @@ class User extends Model {
             'first_name',
             'last_name',
             'major',
-            'province',
             'city',
             'school',
             'mobile_verified_at',
@@ -92,39 +92,20 @@ class User extends Model {
     }
 
     needToCompleteInfo () {
-        return false
-        // let completionInfoKeys = this.getCompletionInfoKeys()
-        // let status = false
-        // try {
-        //     completionInfoKeys.forEach(item => {
-        //         if (!this.checkInformationCompletionKey(item)) {
-        //             throw 'needToCompleteInfo'
-        //         }
-        //     })
-        // } catch (e) {
-        //     status = true
-        // }
-        //
-        // return status
-        // if (!this.first_name) {
-        //     status = true
-        // } else if (!this.last_name) {
-        //     status = true
-        // } else if (!this.major || !this.major.id) {
-        //     status = true
-        // } else if (!this.province) {
-        //     status = true
-        // } else if (!this.city) {
-        //     status = true
-        // } else if (!this.school) {
-        //     status = true
-        // } else if (!this.mobile_verified_at) {
-        //     status = true
-        // } else if (!this.grade) {
-        //     status = true
-        // }
-        //
-        // return status
+        let completionInfoKeys = this.getCompletionInfoKeys()
+        let status = false
+        try {
+            completionInfoKeys.forEach(item => {
+                if (!this.checkInformationCompletionKey(item)) {
+                    console.log('needToCompleteInfo: '+item)
+                    throw 'needToCompleteInfo: '+item
+                }
+            })
+        } catch (e) {
+            status = true
+        }
+
+        return status
     }
 
     setUserExamStatus (exam) {

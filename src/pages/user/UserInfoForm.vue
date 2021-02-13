@@ -45,7 +45,7 @@
                 </div>
             </v-col>
             <v-col cols="6">
-                <div class="form-group m-form__group ">
+                <div class="form-group m-form__group">
                     <v-autocomplete label="شهر"
                               :items="citiesForSelectedProvince"
                               v-model="selectedCity"
@@ -201,13 +201,23 @@
             this.$store.commit('AppLayout/updateDrawer', false)
         },
         methods: {
-            loadSomeData () {
-                if (this.user.province) {
-                    let selectedProvince = this.provinces.find( item => item.title === this.user.province)
-                    this.selectedProvince = selectedProvince.id
-                    let selectedCity = this.cities.find( item => item.title === this.user.city)
-                    this.selectedCity = selectedCity.id
+            getUserProvince () {
+                if (!this.user.city && this.user.city.id !== null && typeof this.user.city.id !== 'undefined') {
+                    return
                 }
+
+                let userCity = this.cities.find(item => item.id = this.user.city.id)
+                let userProvince = null
+                if (userCity) {
+                    userProvince = userCity.province
+                }
+
+                return userProvince
+            },
+            loadUserCity () {
+                let userProvince = this.getUserProvince()
+                this.selectedProvince = userProvince.id
+                this.selectedCity = this.user.city.id
             },
             getUserData () {
                 let that = this
@@ -239,7 +249,8 @@
                         this.provinces = resp.data.data.provinces
                         this.cities = resp.data.data.cities
                         this.user.loading = false
-                        this.loadSomeData()
+                        // this.loadSomeData()
+                        this.loadUserCity()
                     })
                     .catch(()=> {
                         this.$notify({
