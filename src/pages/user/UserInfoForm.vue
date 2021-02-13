@@ -205,8 +205,11 @@
                 if (!this.user.city && this.user.city.id !== null && typeof this.user.city.id !== 'undefined') {
                     return
                 }
-
-                let userCity = this.cities.find(item => item.id = this.user.city.id)
+                console.log('user: ', this.user)
+                console.log(this.cities)
+                let userCity = this.cities.find(item => item.id === this.user.city.id)
+                console.log(this.user.city)
+                console.log('city: ', userCity)
                 let userProvince = null
                 if (userCity) {
                     userProvince = userCity.province
@@ -216,6 +219,7 @@
             },
             loadUserCity () {
                 let userProvince = this.getUserProvince()
+                console.log('ostan: ', userProvince)
                 this.selectedProvince = userProvince.id
                 this.selectedCity = this.user.city.id
             },
@@ -223,6 +227,7 @@
                 let that = this
                 this.user.getUserData()
                     .then( (user) => {
+                        console.log(user)
                         that.getUserFormData()
                         that.$store.commit('Auth/updateUser', user)
                         if (!that.user.needToCompleteInfo()) {
