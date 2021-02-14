@@ -100,7 +100,7 @@
                                     </v-btn>
 <!--                                    href="https://alaatv.com/landing/19"-->
                                     <v-btn
-                                            v-if="item.user_exam_status === 'not registered'"
+                                            v-if="item.user_exam_status === 'not registered' && false"
                                             @click="registerExam(item.id)"
                                             color="#00c753"
                                             text
@@ -108,7 +108,7 @@
                                         ثبت نام
                                     </v-btn>
                                     <v-btn
-                                            v-if="item.user_exam_status === 'not registered and registration time passed'"
+                                            v-if="item.user_exam_status === 'not registered and registration time passed' && false"
                                             @click="registerExam(item.id)"
                                             color="#00c753"
                                             text
