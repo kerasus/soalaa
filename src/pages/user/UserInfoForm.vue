@@ -206,7 +206,7 @@
                     return
                 }
 
-                let userCity = this.cities.find(item => item.id = this.user.city.id)
+                let userCity = this.cities.find(item => item.id === this.user.city.id)
                 let userProvince = null
                 if (userCity) {
                     userProvince = userCity.province
@@ -221,8 +221,10 @@
             },
             getUserData () {
                 let that = this
+                this.user.loading = true
                 this.user.getUserData()
                     .then( (user) => {
+                        this.user.loading = false
                         that.getUserFormData()
                         that.$store.commit('Auth/updateUser', user)
                         if (!that.user.needToCompleteInfo()) {
