@@ -215,6 +215,9 @@
                 return userProvince
             },
             loadUserCity () {
+                if (!this.user.city) {
+                    return
+                }
                 let userProvince = this.getUserProvince()
                 this.selectedProvince = userProvince.id
                 this.selectedCity = this.user.city.id
