@@ -93,7 +93,6 @@
                             duration : 2000
                         })
                         this.refreshExamList()
-                        // this.examList = new ExamList(response.data.data, {meta: response.data.meta, links: response.data.links})
                     })
                     .catch((error) => {
                         Assistant.handleAxiosError(this.$toasted, error)

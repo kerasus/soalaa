@@ -34,13 +34,11 @@
 </template>
 
 <script>
-    // import Info from "@/components/OnlineQuiz/Quiz/resultTables/info";
     import {Chart} from 'highcharts-vue'
     import ComingSoon from "@/components/ComingSoon";
     export default {
         name: "topScoreResult",
         components: {ComingSoon, highcharts: Chart},
-        // components: {Info},
         data() {
             return {
                 headers: [
@@ -135,9 +133,6 @@
                     },
                     title: {
                         text: 'نمودار مقایسه عملکرد'
-                    },
-                    subtitle: {
-                        // text: 'Source: thesolarfoundation.com'
                     },
                     credits: {
                         text: '3a.alaatv.com',

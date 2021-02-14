@@ -103,6 +103,7 @@ class User extends Model {
         //         }
         //     })
         // } catch (e) {
+
         //     status = true
         // }
         //

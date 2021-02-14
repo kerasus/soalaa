@@ -94,8 +94,6 @@
                     },
                     {text: 'درصد خام', value: 'percent', align: 'center', sortable: true,},
                     {text: 'تراز', value: 'taraaz', align: 'center', sortable: true,},
-                    // {text: ' رتبه شهر', value: 'rankInCity', align: 'center', sortable: true,},
-                    // {text: ' رتبه استان', value: 'rankInState', align: 'center', sortable: true,},
                     {text: ' رتبه کشور', value: 'rank_country', align: 'center', sortable: true,},
                 ],
 

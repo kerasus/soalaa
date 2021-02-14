@@ -17,13 +17,10 @@
 </template>
 
 <script>
-    // import Info from "@/components/OnlineQuiz/Quiz/resultTables/info";
 
     export default {
         name: "statisticResult",
         props: ['report'],
-        components: {},
-        // components: {Info},
         data() {
             return {
                 dataTable: [],
@@ -37,8 +34,6 @@
                     {text: 'درس', value: 'sub_category',align: 'center',sortable: true,},
                     {text: 'درصد', value: 'percent',align: 'center',sortable: true,},
                     {text: ' تراز', value: 'taraaz',align: 'center',sortable: true,},
-                    // {text: ' شهر', value: 'city',align: 'center',sortable: false,},
-                    // {text: 'استان', value: 'state',align: 'center',sortable: false,},
                     {text: 'رتبه در کشور', value: 'rank_country',align: 'center',sortable: true,},
                     {text: 'میانگین درصد', value: 'average',align: 'center',sortable: true,},
                     {text: 'میانگین تراز', value: 'taraaz_average',align: 'center',sortable: true,},

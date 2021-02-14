@@ -70,14 +70,7 @@
                                                     <v-icon>mdi-dots-vertical</v-icon>
                                                 </v-btn>
                                             </v-card-title>
-
                                             <v-spacer></v-spacer>
-
-                                            <v-card-title v-if="false" class="white--text pl-12 pt-12">
-                                                <div class="display-1 pl-12 pt-12">
-                                                    Ali Conners
-                                                </div>
-                                            </v-card-title>
                                         </v-row>
                                     </v-img>
                                     <v-btn
@@ -107,7 +100,6 @@
 </template>
 
 <script>
-    // import FakeQuizData from '@/plugins/fakeQuizData'
     import $ from 'jquery'
     import '@/assets/scss/markdownKatex.scss'
     import Vue from 'vue'
@@ -153,16 +145,6 @@
                 }
             },
             scrollTo (questionId) {
-                // if (this.quiz.questions.getQuestionById(questionId).isInView === false) {
-                //     const questionIndex = this.quiz.questions.getQuestionIndexById(questionId)
-                //     this.$refs.scroller.scrollToIndex(questionIndex)
-                //     for (let i = 1; i < 4; i++) {
-                //         setTimeout(() => {
-                //                 this.$refs.scroller.scrollToIndex(questionIndex)
-                //             },
-                //             500 / Math.ceil(this.quiz.questions.list.length / 100) * i)
-                //     }
-                // }
                 const questionIndex = this.quiz.questions.getQuestionIndexById(questionId)
                 this.$refs.scroller.scrollToIndex(questionIndex)
                 for (let i = 1; i < 4; i++) {
@@ -172,9 +154,6 @@
                         500 / Math.ceil(this.quiz.questions.list.length / 100) * i)
                 }
             },
-            // onIntersect (entries) {
-            //     this.quiz.questions.getQuestionById(entries[0].target.id).isInView = (entries[0].intersectionRatio >= 0.5)
-            // },
             // ToDo: check for removal
             getFirstInViewQuestionNumber () {
                 let firstQuestionInView = this.quiz.questions.list.find( (item)=> {
@@ -186,12 +165,6 @@
                     return false
                 }
             },
-            // isThisFirstQuestionInView (questionId) {
-            //     if (this.getFirstInViewQuestionNumber().id === questionId) {
-            //         return true
-            //     }
-            //     return false
-            // },
             getQuestionNumber (question) {
                 if (question.isInView === false) {
                     return '.question:nth-child('+(this.quiz.questions.getQuestionIndexById(question.id) + 2)+')'
@@ -223,7 +196,6 @@
             } else {
                 this.isMobile = true
             }
-            // this.renderQuestionBody()
         },
         destroyed() {
             this.changeAppBarAndDrawer(true)

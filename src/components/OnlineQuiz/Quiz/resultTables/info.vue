@@ -35,19 +35,12 @@
 
     export default {
         name: "info",
-        mixins: [mixinAuth],
-        data () {
-            return {
-                // user: this.$store.getters.user
-            }
-        }
+        mixins: [mixinAuth]
     }
 </script>
 
 <style scoped>
     .infoCard {
-        /*margin-top: 10px;*/
-        /*width: 97%;*/
         border-radius: 15px;
     }
     .infoCols {

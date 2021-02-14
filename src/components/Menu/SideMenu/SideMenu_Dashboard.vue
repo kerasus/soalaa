@@ -64,14 +64,6 @@
                     <v-list-item-title>پاسخ برگ</v-list-item-title>
                 </v-list-item>
             </router-link>
-
-
-<!--            <a>-->
-<!--                <v-list-item>-->
-<!--                    <v-list-item-title>درباره ما</v-list-item-title>-->
-<!--                </v-list-item>-->
-<!--            </a>-->
-
         </v-list-item-group>
         <v-list-item-group
                 v-if="$store.getters['Auth/user'].has_admin_permission"

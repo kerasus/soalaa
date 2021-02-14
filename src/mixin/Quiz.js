@@ -1,13 +1,9 @@
-// import 'katex/dist/katex.min.css';
 import Vue from 'vue'
 import 'github-markdown-css/github-markdown.css';
 import '@/assets/scss/markdownKatex.scss';
-// import {QuestSubcategory} from "@/models/QuestSubcategory";
 import Assistant from "@/plugins/assistant";
-// import {Question} from "@/models/Question";
 import Time from "@/plugins/time";
 import {QuestSubcategory} from "@/models/QuestSubcategory";
-// import UserActionOnQuestion from "@/plugins/UserActionOnQuestion";
 
 const mixinQuiz = {
   computed: {
@@ -229,8 +225,6 @@ const mixinQuiz = {
                   dbAnswers: response.data.data,
                   exam_id: that.quiz.id
                 })
-                // that.quiz.mergeDbAnswerToLocalstorage(response.data.data)
-                // that.$store.commit('updateQuiz', that.quiz)
                 resolve()
               })
               .catch((error) => {
@@ -243,7 +237,6 @@ const mixinQuiz = {
       })
     },
     setQuestionsLtr (question) {
-      // const englishRegex = /^[A-Za-z0-9 :"'ʹ.<>%$&@!+()\-/\n,…?ᵒ*~]*$/
       const englishRegex = /^[A-Za-z0-9 :"'ʹ.<>%$&@!+()\-_/\n,…?ᵒ*~]*$/
       question.ltr = !!question.statement.match(englishRegex);
     },

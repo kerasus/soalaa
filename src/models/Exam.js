@@ -60,16 +60,6 @@ class Exam extends Model {
     loadQuestionsFromFile () {
         let that = this
         return new Promise(function(resolve, reject) {
-            // axios.get(that.questions_file_url)
-            //     .then( (response) => {
-            //         // console.log('response.data', data)
-            //         that.questions = new QuestionList(response.data)
-            //         resolve(response)
-            //     })
-            //     .catch( (error) => {
-            //         reject(error)
-            //     })
-
             if (!that.questions_file_url) {
                 reject(null)
             }
