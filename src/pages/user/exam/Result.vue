@@ -47,7 +47,7 @@
                         <p class="tab-title">
                             دانلود پاسخنامه تشریحی
                         </p>
-                        <v-row class="download-row">
+                        <v-row v-if="report" class="download-row">
                             <v-col md="6">
                                 <div class="download-box">
                                     <p class="download-title">دانلود پاسخنامه تشریحی {{ report.exams_booklet[0].title }}</p>
@@ -223,7 +223,6 @@
                 })
             },
             onVideoTabChange (tabIndex) {
-                console.log(this.report.sub_category[tabIndex])
                 if (this.report && this.report.sub_category[tabIndex].video_url) {
                     const parsed = this.report.sub_category[tabIndex].video_url.split('/')
                     let setId = parsed[parsed.length - 1]
