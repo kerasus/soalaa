@@ -39,52 +39,52 @@
                         <StatisticResult :report="report"/>
                     </v-tab-item>
                     <v-tab-item>
-                        <v-card flat>
-                            <BubbleSheet :info="{ type: 'pasokh-nameh' }" delay-time="0" />
-                        </v-card>
+                        <BubbleSheet :info="{ type: 'pasokh-nameh' }" delay-time="0" />
                     </v-tab-item>
                     <v-tab-item>
-                        <p class="tab-title">
-                            دانلود پاسخنامه تشریحی
-                        </p>
-                        <v-row v-if="report" class="download-row">
-                            <v-col md="6">
-                                <div class="download-box">
-                                    <p class="download-title">دانلود پاسخنامه تشریحی {{ report.exams_booklet[0].title }}</p>
-                                    <v-btn outlined color="--primary-2" height="75px" width="250px" :href="report.exams_booklet[0].descriptive_answers_url"  target="_blank">
-                                        دانلود فایل PDF
-                                        <v-icon class="donwload-icon">mdi-download</v-icon>
-                                    </v-btn>
-                                </div>
-                            </v-col>
-                            <v-col md="6">
-                                <div class="download-box">
-                                    <p class="download-title">دانلود {{ report.exams_booklet[0].title }}</p>
-                                    <v-btn outlined color="--primary-2" height="75px" width="250px" :href="report.exams_booklet[0].questions_url" target="_blank">
-                                        دانلود فایل PDF
-                                        <v-icon class="donwload-icon">mdi-download</v-icon>
-                                    </v-btn>
-                                </div>
-                            </v-col>
-                            <v-col md="6">
-                                <div class="download-box">
-                                    <p class="download-title">دانلود پاسخنامه تشریحی {{ report.exams_booklet[1].title }}</p>
-                                    <v-btn outlined color="--primary-2" height="75px" width="250px" :href="report.exams_booklet[0].descriptive_answers_url"  target="_blank">
-                                        دانلود فایل PDF
-                                        <v-icon class="donwload-icon">mdi-download</v-icon>
-                                    </v-btn>
-                                </div>
-                            </v-col>
-                            <v-col md="6">
-                                <div class="download-box">
-                                    <p class="download-title">دانلود {{ report.exams_booklet[1].title }}</p>
-                                    <v-btn outlined color="--primary-2" height="75px" width="250px" :href="report.exams_booklet[0].questions_url" target="_blank">
-                                        دانلود فایل PDF
-                                        <v-icon class="donwload-icon">mdi-download</v-icon>
-                                    </v-btn>
-                                </div>
-                            </v-col>
-                        </v-row>
+                        <v-card flat>
+                            <p class="tab-title pt-5 pr-5">
+                                دانلود پاسخنامه تشریحی
+                            </p>
+                            <v-row v-if="report" class="download-row">
+                                <v-col md="6">
+                                    <div class="download-box">
+                                        <p class="download-title">دانلود پاسخنامه تشریحی {{ report.exams_booklet[0].title }}</p>
+                                        <v-btn outlined color="--primary-2" height="75px" width="250px" :href="report.exams_booklet[0].descriptive_answers_url"  target="_blank">
+                                            دانلود فایل PDF
+                                            <v-icon class="donwload-icon">mdi-download</v-icon>
+                                        </v-btn>
+                                    </div>
+                                </v-col>
+                                <v-col md="6">
+                                    <div class="download-box">
+                                        <p class="download-title">دانلود {{ report.exams_booklet[0].title }}</p>
+                                        <v-btn outlined color="--primary-2" height="75px" width="250px" :href="report.exams_booklet[0].questions_url" target="_blank">
+                                            دانلود فایل PDF
+                                            <v-icon class="donwload-icon">mdi-download</v-icon>
+                                        </v-btn>
+                                    </div>
+                                </v-col>
+                                <v-col md="6">
+                                    <div class="download-box">
+                                        <p class="download-title">دانلود پاسخنامه تشریحی {{ report.exams_booklet[1].title }}</p>
+                                        <v-btn outlined color="--primary-2" height="75px" width="250px" :href="report.exams_booklet[0].descriptive_answers_url"  target="_blank">
+                                            دانلود فایل PDF
+                                            <v-icon class="donwload-icon">mdi-download</v-icon>
+                                        </v-btn>
+                                    </div>
+                                </v-col>
+                                <v-col md="6">
+                                    <div class="download-box">
+                                        <p class="download-title">دانلود {{ report.exams_booklet[1].title }}</p>
+                                        <v-btn outlined color="--primary-2" height="75px" width="250px" :href="report.exams_booklet[0].questions_url" target="_blank">
+                                            دانلود فایل PDF
+                                            <v-icon class="donwload-icon">mdi-download</v-icon>
+                                        </v-btn>
+                                    </div>
+                                </v-col>
+                            </v-row>
+                        </v-card>
                     </v-tab-item>
                     <v-tab-item>
                         <top-score-result :report="report"/>
@@ -312,6 +312,9 @@
 </style>
 
 <style scoped>
+    .theme--light.v-tabs-items {
+        background-color: transparent;
+    }
     .exam-title {
         display: flex;
         align-items: center;
