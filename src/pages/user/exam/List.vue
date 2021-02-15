@@ -59,20 +59,20 @@
                                 </v-col>
                                 <v-col cols="12" md="4">
                                     <v-btn
-                                            v-if="item.user_exam_status === 'registered but participation time passed' || item.user_exam_status === 'registered but did not participate'"
-                                            :to="{ name: 'onlineQuiz.alaaView', params: { quizId: item.id, questNumber: 1 } }"
-                                            color="#ffc107"
-                                            text
-                                    >
-                                        شروع آزمون
-                                    </v-btn>
-                                    <v-btn
 
                                             color="#ffc107"
                                             text
                                             disabled
                                     >
                                         آزمون به پایان رسید
+                                    </v-btn>
+                                    <v-btn
+                                            v-if="item.user_exam_status === 'registered but participation time passed' || item.user_exam_status === 'registered but did not participate'"
+                                            :to="{ name: 'onlineQuiz.alaaView', params: { quizId: item.id, questNumber: 1 } }"
+                                            color="#ffc107"
+                                            text
+                                    >
+                                        شروع آزمون
                                     </v-btn>
                                     <v-btn
                                             v-if="item.user_exam_status === 'has participated and finished'"
@@ -83,7 +83,7 @@
                                         ثبت پاسخنامه ذخیره شده در سیستم
                                     </v-btn>
                                     <v-btn
-                                            v-if="item.user_exam_status === 'has participated but not finished' || item.user_exam_status === 'has participated and finished'"
+                                            v-if="item.user_exam_status === 'has participated but not finished' || item.user_exam_status === 'has participated and finished' && false"
                                             @click="continueExam(item.id)"
                                             color="purple"
                                             text
@@ -100,7 +100,7 @@
                                     </v-btn>
 <!--                                    href="https://alaatv.com/landing/19"-->
                                     <v-btn
-                                            v-if="item.user_exam_status === 'not registered'"
+                                            v-if="item.user_exam_status === 'not registered' && false"
                                             @click="registerExam(item.id)"
                                             color="#00c753"
                                             text
@@ -108,7 +108,7 @@
                                         ثبت نام
                                     </v-btn>
                                     <v-btn
-                                            v-if="item.user_exam_status === 'not registered and registration time passed'"
+                                            v-if="item.user_exam_status === 'not registered and registration time passed' && false"
                                             @click="registerExam(item.id)"
                                             color="#00c753"
                                             text
@@ -158,6 +158,7 @@
         mixins: [mixinAuth, mixinQuiz],
         created() {
             this.getExams()
+            this.$store.commit('AppLayout/updateAppBarAndDrawer', true)
         },
         methods: {
             continueExam (examId) {

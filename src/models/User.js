@@ -19,6 +19,7 @@ class User extends Model {
             { key: 'last_name' },
             { key: 'mobile' },
             { key: 'city' },
+            { key: 'province' },
             { key: 'ostan_id' },
             { key: 'shahr_id' },
             { key: 'address' },
@@ -87,6 +88,10 @@ class User extends Model {
                 percentage += percentageStep
             }
         })
+
+        if (percentage > 100) {
+            percentage = 100
+        }
 
         return percentage
     }

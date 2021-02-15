@@ -16,15 +16,15 @@
                 </v-col>
                 <v-col class="infoCols">
                     رشته :
-                    {{ user.major.name }}
+                    {{ user.major.title }}
                 </v-col>
-                <v-col class="infoCols">
+                <v-col v-if="user.province" class="infoCols">
                     استان :
-                    {{ user.province }}
+                    {{ user.province.title }}
                 </v-col>
-                <v-col class="infoCols">
+                <v-col v-if="user.city" class="infoCols">
                     شهر :
-                    {{ user.city }}
+                    {{ user.city.title }}
                 </v-col>
             </v-row>
         </v-card>

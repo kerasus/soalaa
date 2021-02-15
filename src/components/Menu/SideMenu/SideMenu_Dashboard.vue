@@ -1,5 +1,4 @@
 <template>
-
     <v-list
             nav
             class="menu"
@@ -21,19 +20,15 @@
                     <v-list-item-title>شرکت در آزمون</v-list-item-title>
                 </v-list-item>
             </router-link>
-            <router-link class="text-decoration-none" :to="{ name: 'user.exam.list' }">
+
+            <router-link
+                    v-for="item in userList"
+                    :key="item.displayName"
+                    class="text-decoration-none"
+                    :class="{'router-link-active': $route.name === item.to.name}"
+                    :to="item.to">
                 <v-list-item>
-                    <v-list-item-title>آزمون های سه آ</v-list-item-title>
-                </v-list-item>
-            </router-link>
-            <router-link class="text-decoration-none" :to="{ name: 'common-questions' }">
-                <v-list-item>
-                    <v-list-item-title>سوالات متداول</v-list-item-title>
-                </v-list-item>
-            </router-link>
-            <router-link class="text-decoration-none" :to="{ name: 'tree.edit' }" v-if="false">
-                <v-list-item>
-                    <v-list-item-title>نتایج آزمون</v-list-item-title>
+                    <v-list-item-title>{{ item.displayName }}</v-list-item-title>
                 </v-list-item>
             </router-link>
 
@@ -42,13 +37,11 @@
                     <v-list-item-title>اطلاعیه و اصلاحیه</v-list-item-title>
                 </v-list-item>
             </router-link>
-
             <router-link class="text-decoration-none" :to="{ name: 'onlineQuiz.result' }" v-if="false">
                 <v-list-item>
                     <v-list-item-title>کارنامه</v-list-item-title>
                 </v-list-item>
             </router-link>
-
             <router-link class="text-decoration-none" :to="{ name: 'onlineQuiz.result.lessonDetails' }" v-if="false">
                 <v-list-item>
                     <v-list-item-title>ریزدرس ها</v-list-item-title>
@@ -101,7 +94,17 @@
     export default {
         name: "SideMenu_Dashboard",
         data: () => ({
-            group: null
+            group: null,
+            userList: [
+                {
+                    displayName: 'آزمون های سه آ',
+                    to: { name: 'user.exam.list' }
+                },
+                {
+                    displayName: 'سوالات متداول',
+                    to: { name: 'common-questions' }
+                }
+            ]
         }),
     }
 </script>
