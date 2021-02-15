@@ -25,7 +25,7 @@
                     v-for="item in userList"
                     :key="item.displayName"
                     class="text-decoration-none"
-                    :class="{'router-link-active': $route.name === item.to}"
+                    :class="{'router-link-active': $route.name === item.to.name}"
                     :to="item.to">
                 <v-list-item>
                     <v-list-item-title>{{ item.displayName }}</v-list-item-title>
