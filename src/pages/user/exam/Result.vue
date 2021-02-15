@@ -2,7 +2,7 @@
     <v-container fluid>
         <v-row class="d-flex justify-center">
             <v-col>
-                <info/>
+                <info :report="report"/>
             </v-col>
         </v-row>
         <v-row class="d-flex justify-center">
