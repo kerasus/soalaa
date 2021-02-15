@@ -6,7 +6,11 @@ const state = () => ({
         y: 0,
     },
     appBar: true,
-    overlay: false,
+    overlay: {
+        show: false,
+        loading: false,
+        text: ''
+    },
 })
 
 // getters

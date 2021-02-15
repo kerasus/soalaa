@@ -143,6 +143,7 @@
             let that = this
             let user_exam_id = this.$route.params.user_exam_id
             let exam_id = this.$route.params.exam_id
+            this.$store.commit('AppLayout/updateOverlay', {show: true, loading: true, text: ''})
             this.user.loadExamDataForShowResult(user_exam_id)
                 .then(({userExamForParticipate}) => {
                     that.loadExam(userExamForParticipate, 'results', exam_id)
@@ -152,6 +153,7 @@
                             .then((response) => {
                                 this.report = response.data.data
                                 this.loadKarname(this.report)
+                                this.$store.commit('AppLayout/updateOverlay', {show: false, loading: false, text: ''})
                             })
                         })
                         .catch( () => {
