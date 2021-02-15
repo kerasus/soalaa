@@ -158,6 +158,7 @@
         mixins: [mixinAuth, mixinQuiz],
         created() {
             this.getExams()
+            this.$store.commit('AppLayout/updateAppBarAndDrawer', true)
         },
         methods: {
             continueExam (examId) {
