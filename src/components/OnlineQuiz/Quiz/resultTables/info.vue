@@ -7,16 +7,12 @@
                     {{ user.last_name }}
                 </v-col>
                 <v-col class="infoCols">
-                    کد ملی :
-                    {{user.natio}}
-                </v-col>
-                <v-col class="infoCols">
-                    شماره موبایل :
-                    {{ user.mobile }}
-                </v-col>
-                <v-col class="infoCols">
                     رشته :
                     {{ user.major.title }}
+                </v-col>
+                <v-col class="infoCols">
+                    مقطع :
+                    {{ user.grade.title }}
                 </v-col>
                 <v-col v-if="user.province" class="infoCols">
                     استان :
