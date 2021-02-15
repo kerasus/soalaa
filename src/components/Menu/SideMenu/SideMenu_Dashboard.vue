@@ -27,7 +27,7 @@
                     class="text-decoration-none"
                     :class="{'router-link-active': $route.name === item.to.name}"
                     :to="item.to">
-                <v-list-item>
+                <v-list-item :class="{ 'v-list-item--active': $route.name === item.to.name, 'v-list-item--link': $route.name === item.to.name, 'deep-purple--text': $route.name === item.to.name }">
                     <v-list-item-title>{{ item.displayName }}</v-list-item-title>
                 </v-list-item>
             </router-link>
