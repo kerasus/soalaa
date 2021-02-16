@@ -213,6 +213,9 @@
                         this.getExams()
                     })
             }
+        },
+        mounted() {
+            this.$store.commit('AppLayout/updateAppBarAndDrawer', true)
         }
     }
 </script>

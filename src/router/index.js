@@ -35,7 +35,7 @@ const router = new VueRouter({
         {
             path: encodeURI('/سوالات_متداول'),
             name: 'common-questions',
-            component: () => lazyLoadView(import('@/pages/CommonQuestions')),
+            component: () => lazyLoadView(import('@/pages/CommoهnQuestions')),
             meta: {middleware: [auth, completeInfo]}
         },
         {
@@ -45,19 +45,19 @@ const router = new VueRouter({
             meta: {middleware: [auth, completeInfo]}
         },
         {
-            path: encodeURI('/شرکت در آزمون/نمای_تک_سوال/:quizId/:questNumber'),
+            path: encodeURI('/شرکت_در_آزمون/نمای_تک_سوال/:quizId/:questNumber'),
             name: 'onlineQuiz.alaaView',
             component: () => lazyLoadView(import('@/pages/user/exam/participate/AlaaView')),
             meta: {middleware: [auth, completeInfo]}
         },
         {
-            path: encodeURI('/شرکت در آزمون/نمای_کنکور/:quizId'),
+            path: encodeURI('/شرکت_در_آزمون/نمای_کنکور/:quizId'),
             name: 'onlineQuiz.konkoorView',
             component: () => lazyLoadView(import('@/pages/user/exam/participate/KonkoorView')),
             meta: {middleware: [auth, completeInfo]}
         },
         {
-            path: encodeURI('/شرکت در آزمون/نمای_پاسخبرگ/:quizId'),
+            path: encodeURI('/شرکت_در_آزمون/نمای_پاسخبرگ/:quizId'),
             name: 'onlineQuiz.bubblesheet-view',
             component: () => lazyLoadView(import('@/pages/user/exam/participate/BubbleSheetView')),
             meta: {middleware: [auth, completeInfo]}
