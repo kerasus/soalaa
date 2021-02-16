@@ -35,7 +35,7 @@ const router = new VueRouter({
         {
             path: encodeURI('/سوالات_متداول'),
             name: 'common-questions',
-            component: () => lazyLoadView(import('@/pages/CommoهnQuestions')),
+            component: () => lazyLoadView(import('@/pages/CommonQuestions')),
             meta: {middleware: [auth, completeInfo]}
         },
         {
