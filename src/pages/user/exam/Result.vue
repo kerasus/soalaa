@@ -2,7 +2,7 @@
     <v-container fluid>
         <v-row class="d-flex justify-center">
             <v-col>
-                <info :report="report"/>
+                <info/>
             </v-col>
         </v-row>
         <v-row class="d-flex justify-center">
@@ -10,11 +10,19 @@
                 <v-card elevation="0" class="infoCard align-content-center"
                         >
                     <v-row style="height: 50%;margin: inherit;">
-                        <v-col sm="4" class="exam-title">
+                        <v-col xl="3" sm="6" cols="12" class="exam-title">
                             نتایج آزمون اول سه‌آ -
                             {{ quiz.title }}
                         </v-col>
-                        <v-col :style="{ padding: '0 12px' }">
+                        <v-col v-if="report" xl="1" sm='3' cols="6">
+                            شهر:
+                            {{ report.location.city }}
+                        </v-col>
+                        <v-col v-if="report" xl="1" sm='3' cols="6">
+                            استان:
+                            {{ report.location.province }}
+                        </v-col>
+                        <v-col xl="7" cols="12" :style="{ padding: '0 12px' }">
                             <v-tabs v-model="tab" color="#ffc107" center-active show-arrows>
                                 <v-tabs-slider color="yellow"></v-tabs-slider>
                                 <v-tab>کارنامه</v-tab>
@@ -212,19 +220,21 @@
                 })
             },
             getAlaaSet (setId) {
+                let that = this
                 this.alaaSet.loading = true
                 this.alaaSet.show(setId)
                 .then( (response) => {
-                    this.alaaSet.loading = false
-                    this.alaaSet = new AlaaSet(response.data.data)
-                    this.alaaVideos = this.alaaSet.contents.getVideos()
-                    this.getContent(this.alaaVideos[0].id)
+                    that.alaaSet.loading = false
+                    that.alaaSet = new AlaaSet(response.data.data)
+                    that.alaaVideos = that.alaaSet.contents.getVideos()
+                    that.getContent(that.alaaVideos[0].id)
                 })
                 .catch( () => {
-                    this.alaaSet.loading = false
+                    that.alaaSet.loading = false
                 })
             },
             onVideoTabChange (tabIndex) {
+
                 if (this.report && this.report.sub_category[tabIndex].video_url) {
                     const parsed = this.report.sub_category[tabIndex].video_url.split('/')
                     let setId = parsed[parsed.length - 1]
