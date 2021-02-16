@@ -14,13 +14,13 @@
                     مقطع :
                     {{ user.grade.title }}
                 </v-col>
-                <v-col v-if="report.location.province" class="infoCols">
+                <v-col v-if="user.province" class="infoCols">
                     استان :
-                    {{ report.location.province }}
+                    {{ user.province.title }}
                 </v-col>
-                <v-col v-if="report.location.city" class="infoCols">
+                <v-col v-if="user.city" class="infoCols">
                     شهر :
-                    {{ report.location.city }}
+                    {{ user.city.title }}
                 </v-col>
             </v-row>
         </v-card>
@@ -31,8 +31,7 @@
 
     export default {
         name: "info",
-        mixins: [mixinAuth],
-        props: ['report']
+        mixins: [mixinAuth]
     }
 </script>
 
