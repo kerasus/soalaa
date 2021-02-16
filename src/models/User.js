@@ -65,7 +65,7 @@ class User extends Model {
             'last_name',
             'major',
             'city',
-            'school',
+            // 'school',
             'mobile_verified_at',
             'grade'
         ]
@@ -97,22 +97,20 @@ class User extends Model {
     }
 
     needToCompleteInfo () {
-        return true
-        // let completionInfoKeys = this.getCompletionInfoKeys()
-        // let status = false
-        // try {
-        //     completionInfoKeys.forEach(item => {
-        //         if (!this.checkInformationCompletionKey(item)) {
-        //             console.log('needToCompleteInfo: '+item)
-        //             throw 'needToCompleteInfo: '+item
-        //         }
-        //     })
-        // } catch (e) {
+        let completionInfoKeys = this.getCompletionInfoKeys()
+        let status = false
+        try {
+            completionInfoKeys.forEach(item => {
+                if (!this.checkInformationCompletionKey(item)) {
+                    throw 'needToCompleteInfo: '+item
+                }
+            })
+        } catch (e) {
 
-        //     status = true
-        // }
-        //
-        // return status
+            status = true
+        }
+
+        return status
     }
 
     setUserExamStatus (exam) {
