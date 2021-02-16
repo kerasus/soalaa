@@ -38,22 +38,42 @@
                         </template>
 
                     </v-data-table>
-                    <v-row class="subRowHeight">
-                        <v-col class="subColsPaddingBottom ">
+                    <v-row class="subRowHeight final-report-scoreboard" >
+                        <v-col class="subColsPaddingBottom "  xl="4" cols="12">
                             <v-card class="subCards">
-                                <v-card-title class="cardTitle">ماکزمیم تراز کل زیر گروه</v-card-title>
+                                <v-card-title class="cardTitle">
+                                    <v-row>
+                                        <v-col>
+                                            ماکزمیم تراز کل زیر گروه
+                                        </v-col>
+                                    </v-row>
+                                </v-card-title>
 
                                 <span class="cardContent">
-                                    {{ report.main.taraaz }}
+                                    <v-row>
+                                        <v-col>
+                                            {{ report.main.taraaz }}
+                                        </v-col>
+                                    </v-row>
                                 </span>
                             </v-card>
                         </v-col>
-                        <v-col class="subColsPaddingBottom subColsPaddingRight">
+                        <v-col class="subColsPaddingBottom subColsPaddingRight" xl="8" cols="12">
                             <v-card class="subCards">
-                                <v-card-title class="cardTitle">رتبه کل کشوری</v-card-title>
+                                <v-card-title class="cardTitle">
+                                    <v-row>
+                                        <v-col cols="4">رتبه کل کشوری</v-col>
+                                        <v-col cols="4">رتبه در استان</v-col>
+                                        <v-col cols="4">رتبه در شهر</v-col>
+                                    </v-row>
+                                </v-card-title>
 
                                 <span class="cardContent">
-                                    {{ report.main.rank_country }}
+                                    <v-row>
+                                        <v-col cols="4">{{ report.main.rank_country }}</v-col>
+                                        <v-col cols="4">{{ report.main.rank_province }}</v-col>
+                                        <v-col cols="4">{{ report.main.rank_city }}</v-col>
+                                    </v-row>
                                 </span>
                             </v-card>
                         </v-col>
@@ -235,5 +255,15 @@
         border-top-right-radius: 15px !important;
         border-bottom-left-radius: 0 !important;
         border-bottom-right-radius: 0 !important;
+    }
+</style>
+
+<style>
+    .final-report-scoreboard .v-card__title.cardTitle {
+        padding: 0 10px;
+        font-size: 14px;
+    }
+    .final-report-scoreboard .cardContent {
+        font-size: 22px;
     }
 </style>
