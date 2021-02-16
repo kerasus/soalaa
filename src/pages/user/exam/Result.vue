@@ -9,7 +9,7 @@
             <v-col>
                 <v-card elevation="0" class="infoCard align-content-center"
                         >
-                    <v-row style="height: 50%;margin: inherit;">
+                    <v-row style="height: a50%;margin: inherit;">
                         <v-col xl="3" sm="6" cols="12" class="exam-title">
                             نتایج آزمون اول سه‌آ -
                             {{ quiz.title }}
