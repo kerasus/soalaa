@@ -40,8 +40,8 @@
                 <span>آموزش مجازی آلاء</span>
             </v-tooltip>
         </v-toolbar>
-        <v-card-text>
-            <v-form>
+        <v-form>
+            <v-card-text>
                 <v-text-field
                         id="username"
                         label="شماره همراه"
@@ -59,18 +59,19 @@
                         type="password"
                         v-model="password"
                 ></v-text-field>
-            </v-form>
-        </v-card-text>
-        <v-card-actions>
-            <v-btn color="primary"
-                   @click="login"
-                   :loading="loadingList"
-                   :disabled="loadingList"
-            >
-                ورود
-            </v-btn>
-            <v-spacer></v-spacer>
-        </v-card-actions>
+            </v-card-text>
+            <v-card-actions>
+                <v-btn color="primary"
+                       @click="login"
+                       :loading="loadingList"
+                       :disabled="loadingList"
+                       type="submit"
+                >
+                    ورود
+                </v-btn>
+                <v-spacer></v-spacer>
+            </v-card-actions>
+        </v-form>
     </v-card>
 </template>
 

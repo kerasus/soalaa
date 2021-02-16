@@ -4,8 +4,9 @@
             class="menu"
     >
         <v-list-item-group
-                v-model="group"
+                v-model="userGroup"
                 active-class="deep-purple--text text--accent-4"
+                @change="adminGroup = null"
         >
             <router-link class="text-decoration-none" :to="{ name: 'dashboard' }" v-if="false">
                 <v-list-item>
@@ -27,7 +28,7 @@
                     class="text-decoration-none"
                     :class="{'router-link-active': $route.name === item.to.name}"
                     :to="item.to">
-                <v-list-item>
+                <v-list-item :class="{ 'v-list-item--active': $route.name === item.to.name, 'v-list-item--link': $route.name === item.to.name, 'deep-purple--text': $route.name === item.to.name }">
                     <v-list-item-title>{{ item.displayName }}</v-list-item-title>
                 </v-list-item>
             </router-link>
@@ -57,41 +58,22 @@
                     <v-list-item-title>پاسخ برگ</v-list-item-title>
                 </v-list-item>
             </router-link>
-
-
-<!--            <a>-->
-<!--                <v-list-item>-->
-<!--                    <v-list-item-title>درباره ما</v-list-item-title>-->
-<!--                </v-list-item>-->
-<!--            </a>-->
-
         </v-list-item-group>
         <v-list-item-group
                 v-if="$store.getters['Auth/user'].has_admin_permission"
                 class="admin-panel"
                 active-class="deep-purple--text text--accent-4"
+                v-model="adminGroup"
+                @change="userGroup = null"
         >
-            <router-link class="text-decoration-none" :to="{ name: 'tree.edit' }">
-                <v-list-item>
-                    <v-list-item-title>ویرایش درخت دانش</v-list-item-title>
-                </v-list-item>
-            </router-link>
-
-            <router-link class="text-decoration-none" :to="{ name: 'quest.create' }">
-                <v-list-item>
-                    <v-list-item-title>ساخت سوال</v-list-item-title>
-                </v-list-item>
-            </router-link>
-
-            <router-link class="text-decoration-none" :to="{ name: 'onlineQuiz.exams' }">
-                <v-list-item>
-                    <v-list-item-title>لیست آزمون ها</v-list-item-title>
-                </v-list-item>
-            </router-link>
-
-            <router-link class="text-decoration-none" :to="{ name: 'video.set' }">
-                <v-list-item>
-                    <v-list-item-title>ثبت ویدئو تحلیل</v-list-item-title>
+            <router-link
+                    v-for="item in adminList"
+                    :key="item.displayName"
+                    class="text-decoration-none"
+                    :class="{'router-link-active': $route.name === item.to.name}"
+                    :to="item.to">
+                <v-list-item :class="{ 'v-list-item--active': $route.name === item.to.name, 'v-list-item--link': $route.name === item.to.name, 'deep-purple--text': $route.name === item.to.name }">
+                    <v-list-item-title>{{ item.displayName }}</v-list-item-title>
                 </v-list-item>
             </router-link>
         </v-list-item-group>
@@ -102,7 +84,8 @@
     export default {
         name: "SideMenu_Dashboard",
         data: () => ({
-            group: null,
+            userGroup: null,
+            adminGroup: null,
             userList: [
                 {
                     displayName: 'آزمون های سه آ',
@@ -112,6 +95,24 @@
                     displayName: 'سوالات متداول',
                     to: { name: 'common-questions' }
                 }
+            ],
+            adminList: [
+                {
+                    displayName: 'ویرایش درخت دانش',
+                    to: {name: 'tree.edit'}
+                },
+                {
+                    displayName: 'ساخت سوال',
+                    to: {name: 'quest.create'}
+                },
+                {
+                    displayName: 'لیست آزمون ها',
+                    to: {name: 'onlineQuiz.exams'}
+                },
+                {
+                    displayName: 'ثبت ویدئو تحلیل',
+                    to: {name: 'video.set'}
+                },
             ]
         }),
     }

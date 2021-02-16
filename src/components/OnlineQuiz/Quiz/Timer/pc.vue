@@ -48,7 +48,6 @@
         ],
         data: () => ({
             show: false,
-
         }),
         methods: {
             changeStyle(id, oldClass, newClass) {
@@ -59,19 +58,13 @@
                 if (this.show === false) {
                     this.changeStyle('timerCard', 'timeCArdDefault', 'timeCArdOpened')
                     setTimeout(() => this.show = true, 200)
-
                 }
             },
             timerClose() {
-
                 this.changeStyle('timerCard', 'timeCArdOpened', 'timeCArdDefault')
                 this.show = false
-
             },
-
-        }
-        ,
-
+        },
     }
 </script>
 

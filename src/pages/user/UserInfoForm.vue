@@ -55,12 +55,7 @@
                     />
                 </div>
             </v-col>
-            <v-col cols="4">
-                <div class="form-group m-form__group ">
-                    <v-text-field label="مدرسه" v-model="user.school"></v-text-field>
-                </div>
-            </v-col>
-            <v-col cols="4">
+            <v-col cols="6">
                 <div class="form-group m-form__group ">
                     <v-select label="رشته"
                               :items="majors"
@@ -70,7 +65,7 @@
                     />
                 </div>
             </v-col>
-            <v-col cols="4">
+            <v-col cols="6">
                 <div class="form-group m-form__group ">
                     <v-select label="مقطع"
                               :items="grades"
@@ -205,7 +200,6 @@
                 if (!this.user.city && this.user.city.id !== null && typeof this.user.city.id !== 'undefined') {
                     return
                 }
-
                 let userCity = this.cities.find(item => item.id === this.user.city.id)
                 let userProvince = null
                 if (userCity) {
@@ -369,10 +363,6 @@
                 if (!this.isValidString(this.user.city)) {
                     status = false;
                     this.submitMessage.push('شهر خود را مشخص کنید.');
-                }
-                if (!this.isValidString(this.user.school)) {
-                    status = false;
-                    this.submitMessage.push('نام مدرسه خود را مشخص کنید.');
                 }
                 if (!this.isValidString(this.user.gender.id)) {
                     status = false;
