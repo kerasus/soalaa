@@ -2,7 +2,7 @@
     <div style="background-color: rgb(244, 244, 244)">
         <div class="d-flex justify-center wrapper">
             <v-row v-if="report">
-                <v-col md="7">
+                <v-col md="7" cols="12">
                     <v-data-table
                             hide-default-footer
                             :headers="headers1"
@@ -20,7 +20,7 @@
                         </template>
                     </v-data-table>
                 </v-col>
-                <v-col md="5" class="firstColPadding">
+                <v-col md="5" cols="12" class="firstColPadding">
                     <v-data-table
                             hide-default-footer
                             :headers="headers2"
@@ -268,5 +268,8 @@
     }
     .final-report-scoreboard .cardContent {
         font-size: 22px;
+    }
+    .final-report-scoreboard {
+        display: block;
     }
 </style>
