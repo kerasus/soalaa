@@ -23,5 +23,10 @@ module.exports = {
         pathRewrite: {'^/3a/rb/api' : ''}
       }
     }
+  },
+  pluginOptions: {
+    webpackBundleAnalyzer: {
+      openAnalyzer: process.env.NODE_ENV === 'development'
+    }
   }
 }

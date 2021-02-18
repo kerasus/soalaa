@@ -147,7 +147,6 @@
             report: null
         }),
         created() {
-
             let that = this
             let user_exam_id = this.$route.params.user_exam_id
             let exam_id = this.$route.params.exam_id
@@ -163,14 +162,39 @@
                                 this.loadKarname(this.report)
                                 this.$store.commit('AppLayout/updateOverlay', {show: false, loading: false, text: ''})
                             })
+                            .catch( () => {
+                                that.goToExamList()
+                                this.$notify({
+                                    group: 'notifs',
+                                    title: 'توجه!',
+                                    text: 'مشکلی در بارگزاری اطلاعات آزمون رخ داده است.',
+                                    type: 'error',
+                                    duration: 30000,
+                                })
+                                Assistant.reportErrors({location: 'pages/user/exam/Result.vue -> loadExam()'})
+                            })
                         })
                         .catch( () => {
+                            that.goToExamList()
+                            this.$notify({
+                                group: 'notifs',
+                                title: 'توجه!',
+                                text: 'مشکلی در دریافت اطلاعات آزمون رخ داده است.',
+                                type: 'error',
+                                duration: 30000,
+                            })
                             Assistant.reportErrors({location: 'pages/user/exam/Result.vue -> loadExam()'})
-                            that.$router.push({ name: 'user.exam.list' })
                         })
                 })
                 .catch( () => {
-                    that.$router.push({ name: 'user.exam.list' })
+                    that.goToExamList()
+                    this.$notify({
+                        group: 'notifs',
+                        title: 'توجه!',
+                        text: 'مشکلی در دریافت اطلاعات نتایج آزمون رخ داده است.',
+                        type: 'error',
+                        duration: 30000,
+                    })
                     Assistant.reportErrors({location: 'pages/user/exam/Result.vue -> created()'})
                 })
 
@@ -178,8 +202,8 @@
             // 24670
         },
         methods: {
-            getReportFromQuiz () {
-
+            goToExamList () {
+                this.$router.push({ name: 'user.exam.list' })
             },
             loadKarname (report) {
                 this.loadSubCategory(report.sub_category)

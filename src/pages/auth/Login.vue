@@ -25,6 +25,7 @@
         name: 'Login',
         components: {Auth},
         created() {
+            this.$store.commit('AppLayout/updateOverlay', {show: false, loading: false, text: ''})
             this.$store.commit('AppLayout/updateAppBarAndDrawer', false)
         },
         destroyed() {
