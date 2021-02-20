@@ -39,7 +39,7 @@
 
                     </v-data-table>
                     <v-row class="subRowHeight final-report-scoreboard" >
-                        <v-col class="subColsPaddingBottom "  xl="4" cols="12">
+                        <v-col class="subColsPaddingBottom" cols="12">
                             <v-card class="subCards">
                                 <v-card-title class="cardTitle">
                                     <v-row>
@@ -58,7 +58,7 @@
                                 </span>
                             </v-card>
                         </v-col>
-                        <v-col class="subColsPaddingBottom subColsPaddingRight" xl="8" cols="12">
+                        <v-col class="subColsPaddingBottom subColsPaddingRight" cols="12">
                             <v-card class="subCards">
                                 <v-card-title class="cardTitle">
                                     <v-row>
