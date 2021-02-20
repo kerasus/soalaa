@@ -12,16 +12,16 @@
                             <v-col cols="3" class="pr-7">
                                 عنوان
                             </v-col>
-                            <v-col cols="3">
+                            <v-col cols="2">
                                 زمان شروع آزمون
                             </v-col>
-                            <v-col cols="3">
+                            <v-col cols="2">
                                 زمان پایان آزمون
                             </v-col>
                             <v-col cols="1">
                                 میزان تاخیر مجاز
                             </v-col>
-                            <v-col cols="2">
+                            <v-col cols="4">
                                 عملیات
                             </v-col>
                         </v-row>
