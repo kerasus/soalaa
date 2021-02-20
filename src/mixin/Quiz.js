@@ -158,7 +158,7 @@ const mixinQuiz = {
         return
       }
       let that = this
-      that.$store.commit('AppLayout/updateOverlay', true)
+      that.$store.commit('AppLayout/updateOverlay', {show: true, loading: true, text: ''})
       return new Promise(function(resolve, reject) {
         if (that.needToLoadQuiaData() && examId) {
           that.participateExam(examId, viewType)
@@ -166,13 +166,13 @@ const mixinQuiz = {
                 resolve()
               })
               .catch( (error) => {
-                that.$store.commit('AppLayout/updateOverlay', false)
+                that.$store.commit('AppLayout/updateOverlay', {show: false, loading: false, text: ''})
                 Assistant.reportErrors({location: 'mixin/Quiz.js -> participateExam()'})
                 reject(error)
               })
         } else {
           that.loadExam()
-          that.$store.commit('AppLayout/updateOverlay', false)
+          that.$store.commit('AppLayout/updateOverlay', {show: false, loading: false, text: ''})
           resolve()
         }
       })

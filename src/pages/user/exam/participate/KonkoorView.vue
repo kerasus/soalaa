@@ -236,7 +236,7 @@
             this.startExam(this.$route.params.quizId)
                 .then(() => {
                     that.loadFirstActiveQuestionIfNeed()
-                    that.$store.commit('AppLayout/updateOverlay', false)
+                    that.$store.commit('AppLayout/updateOverlay', {show: false, loading: false, text: ''})
                 })
                 .catch( (error) => {
                     Assistant.reportErrors(error)
