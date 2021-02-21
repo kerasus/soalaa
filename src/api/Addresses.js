@@ -1,8 +1,8 @@
 const alaaServer = '/alaa'
 const alaaApiVersion = '/api/v2'
 // const alaaServerWeb = '/web'
-const aaaServer = '/3a'
-const aaaApiVersion = '/api'
+const aaaServer = ''
+const aaaApiVersion = '/api/v1'
 // const aaaServerRabitApi = '/rb/api'
 
 const API_ADDRESS = {
