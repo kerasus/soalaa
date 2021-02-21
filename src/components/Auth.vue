@@ -40,7 +40,7 @@
                 <span>آموزش مجازی آلاء</span>
             </v-tooltip>
         </v-toolbar>
-        <v-form>
+        <v-form v-on:submit.prevent="login">
             <v-card-text>
                 <v-text-field
                         id="username"
@@ -62,7 +62,6 @@
             </v-card-text>
             <v-card-actions>
                 <v-btn color="primary"
-                       @click="login"
                        :loading="loadingList"
                        :disabled="loadingList"
                        type="submit"
@@ -123,6 +122,7 @@
                 this.$router.push({ name: redirect_to })
             },
             login () {
+                console.log('called')
                 let that = this
                 this.loadingList = true
                 axios.post(API_ADDRESS.auth.login, {
