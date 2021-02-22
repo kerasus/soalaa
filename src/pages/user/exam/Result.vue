@@ -233,7 +233,7 @@
                 })
                 zirgorooh.forEach((item) => {
                     item.percent = parseFloat(item.percent).toFixed(1)
-                    item.percent = parseFloat(item.taraaz).toFixed(0)
+                    item.taraaz = parseFloat(item.taraaz).toFixed(0)
                 })
             },
             getContent (contentId) {
