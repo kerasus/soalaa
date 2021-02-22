@@ -209,6 +209,7 @@
                 this.loadSubCategory(report.sub_category)
                 this.loadZirGrooh(report.zirgorooh)
                 this.loadBest(report.best)
+                report.main.taraaz = parseFloat(report.main.taraaz).toFixed(0)
             },
             loadBest (best) {
                 best.sub_category.forEach((item, index) => {
@@ -232,6 +233,7 @@
                 })
                 zirgorooh.forEach((item) => {
                     item.percent = parseFloat(item.percent).toFixed(1)
+                    item.percent = parseFloat(item.taraaz).toFixed(0)
                 })
             },
             getContent (contentId) {
