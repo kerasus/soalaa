@@ -1,32 +1,38 @@
-module.exports = {
-  runtimeCompiler: true,
-  "transpileDependencies": [
-    "vuetify"
-  ],
-  devServer: {
-    port: process.env.VUE_APP_PORT,
-    disableHostCheck: true,
-    proxy: {
-      '/alaa/api/v2': {
-        target: process.env.VUE_APP_ALAA_API,
-        changeOrigin: true,
-        pathRewrite: {'^/alaa/api/v2' : ''}
-      },
-      '/3a/api': {
-        target: process.env.VUE_APP_3A_API,
-        changeOrigin: true,
-        pathRewrite: {'^/3a/api' : ''}
-      },
-      '/3a/rb/api': {
-        target: process.env.VUE_APP_3A_RB_API,
-        changeOrigin: true,
-        pathRewrite: {'^/3a/rb/api' : ''}
-      }
+let config = {
+    runtimeCompiler: true,
+    "transpileDependencies": [
+        "vuetify"
+    ],
+    devServer: {
+        port: process.env.VUE_APP_PORT,
+        disableHostCheck: true,
+        proxy: {}
+    },
+    pluginOptions: {
+        webpackBundleAnalyzer: {
+            openAnalyzer: process.env.NODE_ENV === 'development'
+        }
     }
-  },
-  pluginOptions: {
-    webpackBundleAnalyzer: {
-      openAnalyzer: process.env.NODE_ENV === 'development'
-    }
+}
+
+function setProxy(proxy, key, target) {
+  proxy[key] = {
+    target: target,
+    changeOrigin: true,
+  }
+  let pathRewriteKey = '^'+key
+  config.devServer.proxy[key].pathRewrite = {
+    [pathRewriteKey]: ''
   }
 }
+
+// AUTH
+setProxy(config.devServer.proxy, process.env.VUE_APP_AUTH_INTERNAL_API_SERVER, process.env.VUE_APP_AUTH_TARGET_API_SERVER)
+// LUMEN API
+setProxy(config.devServer.proxy, process.env.VUE_APP_LUMEN_INTERNAL_API_SERVER, process.env.VUE_APP_LUMEN_TARGET_API_SERVER)
+// LUMEN RABBIT MQ
+setProxy(config.devServer.proxy, process.env.VUE_APP_LUMEN_INTERNAL_RABBIT_MQ_SERVER, process.env.VUE_APP_LUMEN_TARGET_RABBIT_MQ_SERVER)
+
+console.log('config.devServer.proxy', config.devServer.proxy)
+
+module.exports = config

@@ -1,62 +1,63 @@
-const alaaServer = '/alaa'
-const alaaApiVersion = '/api/v2'
-// const alaaServerWeb = '/web'
-const aaaServer = ''
-const aaaApiVersion = '/api/v1'
-// const aaaServerRabitApi = '/rb/api'
+const lumenServer = process.env.VUE_APP_LUMEN_INTERNAL_API_SERVER
+// const lumenRabbitMQ = process.env.VUE_APP_LUMEN_RABBIT_MQ_API_SERVER
+const authServer = process.env.VUE_APP_AUTH_INTERNAL_API_SERVER
 
 const API_ADDRESS = {
+  server: {
+    lumen: lumenServer,
+    auth: authServer
+  },
   auth: {
-    login: alaaServer + alaaApiVersion + '/login'
+    login: authServer + '/login'
   },
   user: {
-    base: alaaServer + alaaApiVersion + '/user',
+    base: authServer + '/user',
     mobile: {
-      resend: alaaServer + alaaApiVersion + '/mobile/resend',
-      verify: alaaServer + alaaApiVersion + '/mobile/verify'
+      resend: authServer + '/mobile/resend',
+      verify: authServer + '/mobile/verify'
     },
-    formData: alaaServer + alaaApiVersion + '/megaroute/getUserFormData',
-    show_user: alaaServer + alaaApiVersion + '/getUserFor3a'
+    formData: authServer + '/megaroute/getUserFormData',
+    show_user: authServer + '/getUserFor3a'
   },
   set: {
-    base: alaaServer + alaaApiVersion + '/set',
+    base: authServer + '/set',
   },
   content: {
-    base: alaaServer + alaaApiVersion + '/c',
+    base: authServer + '/c',
   },
   exam: {
-    base: aaaServer + aaaApiVersion + '/exam',
-    sendAnswersAndFinishExam: aaaServer + aaaApiVersion + '/temp-exam/answer/choice',
-    userExamsList: aaaServer + aaaApiVersion + '/examAndUser',
+    base: lumenServer + '/exam',
+    sendAnswersAndFinishExam: lumenServer + '/temp-exam/answer/choice',
+    userExamsList: lumenServer + '/examAndUser',
     getAnswerOfUser (user_exam_id) {
-      return aaaServer + aaaApiVersion + '/temp-exam/answer/'+user_exam_id
+      return lumenServer + '/temp-exam/answer/'+user_exam_id
     },
     getAnswerOfUserWithCorrect (user_exam_id) {
-      return aaaServer + aaaApiVersion + '/temp-exam/answer/'+user_exam_id+'/withCorrect'
+      return lumenServer + '/temp-exam/answer/'+user_exam_id+'/withCorrect'
     },
-    registerExam: aaaServer + aaaApiVersion + '/user/registerExam',
-    examUser: aaaServer + aaaApiVersion + '/exam-user',
+    registerExam: lumenServer + '/user/registerExam',
+    examUser: lumenServer + '/exam-user',
     examQuestion (quizId) {
-      return aaaServer + aaaApiVersion + '/eam-question/attach/show/' + quizId
+      return lumenServer + '/eam-question/attach/show/' + quizId
     },
     report: {
       getReport (examId) {
-        return aaaServer + aaaApiVersion + '/exam-report?exam_id=' + examId
+        return lumenServer + '/exam-report?exam_id=' + examId
       }
     }
   },
   question: {
-    base: aaaServer + aaaApiVersion + '/question',
-    attachSubCategoryToQuestion: aaaServer + aaaApiVersion + '/exam-question/attach/sub-category',
+    base: lumenServer + '/question',
+    attachSubCategoryToQuestion: lumenServer + '/exam-question/attach/sub-category',
     updateQuestion (questionId) {
-      return aaaServer + aaaApiVersion + '/question/' + questionId
+      return lumenServer + '/question/' + questionId
     },
     getCurrentQuestion (questionId) {
-      return aaaServer + aaaApiVersion + '/question/' + questionId
+      return lumenServer + '/question/' + questionId
     }
   },
   questionSubcategory: {
-    base: aaaServer + aaaApiVersion + '/examCategories'
+    base: lumenServer + '/examCategories'
   }
 }
 export default API_ADDRESS
