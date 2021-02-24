@@ -237,7 +237,7 @@ class Exam extends Model {
                 })
             }
         })
-        return axios.post(API_ADDRESS.exam.sendAnswersAndFinishExam, {exam_user_id: this.user_exam_id, finish: true, questions: answers })
+        return axios.post(API_ADDRESS.exam.sendAnswers, {exam_user_id: this.user_exam_id, finish: true, questions: answers })
     }
 
     mergeDbAnswerToLocalstorage (dbAnswers) {
