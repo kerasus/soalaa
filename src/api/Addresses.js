@@ -27,7 +27,10 @@ const API_ADDRESS = {
   },
   exam: {
     base: lumenServer + '/exam',
-    sendAnswersAndFinishExam: lumenServer + '/temp-exam/answer/choice',
+    sendAnswers: lumenServer + '/temp-exam/answer/choice',
+    sendStatus: lumenServer + '/temp-exam/answer/choice',
+    sendBookmark: lumenServer + '/temp-exam/answer/bookmark',
+    sendUnBookmark: lumenServer + '/temp-exam/answer/unbookmark',
     userExamsList: lumenServer + '/examAndUser',
     getAnswerOfUser (user_exam_id) {
       return lumenServer + '/temp-exam/answer/'+user_exam_id

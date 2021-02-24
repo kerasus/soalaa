@@ -4,6 +4,7 @@ import { ChoiceList } from './Choice'
 import { CheckingTimeList } from "@/models/CheckingTime";
 import Time from "@/plugins/time";
 import axios from "axios";
+import API_ADDRESS from "@/api/Addresses";
 var md = require('markdown-it')(),
     mk = require('markdown-it-katex')
 md.use(mk);
@@ -174,19 +175,19 @@ class Question extends Model {
     }
 
     sendAnswer (exam_user_id, {question_id, choice_id, selected_at }) {
-        axios.post('/3a/rb/api/temp-exam/answer/choice/', {exam_user_id, questions: [{question_id, choice_id, selected_at}] })
+        axios.post(API_ADDRESS.exam.sendAnswers, {exam_user_id, questions: [{question_id, choice_id, selected_at}] })
     }
 
     sendStatus (exam_user_id, {question_id, status }) {
-        axios.post('/3a/rb/api/temp-exam/answer/status', {exam_user_id, question_id, status})
+        axios.post(API_ADDRESS.exam.sendStatus, {exam_user_id, question_id, status})
     }
 
     sendBookmark (exam_user_id, question_id) {
-        axios.post('/3a/rb/api/temp-exam/answer/bookmark', {exam_user_id, question_id})
+        axios.post(API_ADDRESS.exam.sendBookmark, {exam_user_id, question_id})
     }
 
     sendUnBookmark (exam_user_id, question_id) {
-        axios.post('/3a/rb/api/temp-exam/answer/unbookmark', {exam_user_id, question_id})
+        axios.post(API_ADDRESS.exam.sendUnBookmark, {exam_user_id, question_id})
     }
 }
 
