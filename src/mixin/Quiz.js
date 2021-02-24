@@ -86,8 +86,8 @@ const mixinQuiz = {
 
       let sortList = Array.prototype.sort.bind(questionsList);
       sortList(function ( a, b ) {
-        let sorta = a.order,
-            sortb = b.order
+        let sorta = parseInt(a.order),
+            sortb = parseInt(b.order)
         if (sorta < sortb) {
           return -1
         }
