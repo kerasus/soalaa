@@ -165,6 +165,7 @@
             // },
             scrollTo (questionId) {
                 const questionIndex = this.getQuestionIndexById(questionId)
+                console.log(questionIndex)
                 this.$refs.scroller.scrollToItem(questionIndex)
                 for (let i = 1; i < 4; i++) {
                     setTimeout(() => {
@@ -205,11 +206,10 @@
             //     }
             //     return ''
             // },
-            choiceClicked (questionId, choiceId) {
+            choiceClicked (questionId) {
                 // console.log('loadFirstActiveQuestionIfNeed->choiceClicked')
                 this.scrollTo(questionId)
                 this.changeQuestion(questionId)
-                this.answerClicked({questionId, choiceId})
             },
             // changeCurrentQuestion (question) {
             //     if (question.id !== this.currentQuestion.id) {
