@@ -10,7 +10,7 @@ let config = {
     },
     pluginOptions: {
         webpackBundleAnalyzer: {
-            openAnalyzer: process.env.NODE_ENV === 'development'
+            openAnalyzer: process.env.VUE_APP_NODE_ENV === 'development'
         }
     }
 }
@@ -33,6 +33,8 @@ setProxy(config.devServer.proxy, process.env.VUE_APP_LUMEN_INTERNAL_API_SERVER, 
 // LUMEN RABBIT MQ
 setProxy(config.devServer.proxy, process.env.VUE_APP_LUMEN_INTERNAL_RABBIT_MQ_SERVER, process.env.VUE_APP_LUMEN_TARGET_RABBIT_MQ_SERVER)
 
-console.log('config.devServer.proxy', config.devServer.proxy)
+if (process.env.VUE_APP_NODE_ENV === 'development') {
+    console.log('config.devServer.proxy', config.devServer.proxy)
+}
 
 module.exports = config
