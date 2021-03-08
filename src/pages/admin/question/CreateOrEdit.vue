@@ -120,20 +120,19 @@
 
 <script>
     import '@/assets/scss/markdownKatex.scss'
-    import MathLive from 'mathlive';
+    import MathLive from 'mathlive'
     import 'mathlive/dist/mathlive-fonts.css'
     import 'mathlive/dist/mathlive-static.css'
     import { Question } from '@/models/Question'
     import {ExamList} from '@/models/Exam'
-    import {QuestSubcategoryList} from "@/models/QuestSubcategory";
+    import {QuestSubcategoryList} from '@/models/QuestSubcategory';
     import Vue from 'vue'
-    import MarkdownBtn from "@/components/QuizEditor/MarkdownBtn";
-    import API_ADDRESS from "@/api/Addresses"
+    import MarkdownBtn from '@/components/QuizEditor/MarkdownBtn';
+    import API_ADDRESS from '@/api/Addresses'
 
     var md = require('markdown-it')(),
-        mk = require('markdown-it-katex');
+        mk = require('markdown-it-new-katex');
     md.use(mk);
-
     export default {
         name: 'CreateOrEdit',
         components: {MarkdownBtn},

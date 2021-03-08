@@ -6,7 +6,7 @@ import Time from "@/plugins/time";
 import axios from "axios";
 import API_ADDRESS from "@/api/Addresses";
 var md = require('markdown-it')(),
-    mk = require('markdown-it-katex')
+    mk = require('markdown-it-new-katex')
 md.use(mk);
 
 class Question extends Model {
