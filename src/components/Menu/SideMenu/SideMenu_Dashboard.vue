@@ -93,7 +93,7 @@
                 },
                 {
                     displayName: 'سوالات متداول',
-                    to: { name: 'common-questions' }
+                    to: { name: 'faq' }
                 }
             ],
             adminList: [
