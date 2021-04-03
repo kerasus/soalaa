@@ -75,7 +75,7 @@
                                         شروع آزمون
                                     </v-btn>
                                     <v-btn
-                                            v-if="item.user_exam_status === 'has participated and finished'"
+                                            v-if="!preventStartExam && item.user_exam_status === 'has participated and finished'"
                                             @click="sendAnswersAndFinishExam(item)"
                                             color="#ffc107"
                                             text
@@ -91,7 +91,7 @@
                                         ادامه آزمون
                                     </v-btn>
                                     <v-btn
-                                            v-if="true || !preventStartExam && item.user_exam_status === 'registered but did not participate'"
+                                            v-if="!preventStartExam && item.user_exam_status === 'registered but did not participate'"
                                             :to="{ name: 'onlineQuiz.alaaView', params: { quizId: item.id, questNumber: 1 } }"
                                             color="#00b5e6"
                                             text
@@ -151,7 +151,7 @@
         name: 'list',
         components: {ProgressLinear},
         data: () => ({
-            preventStartExam: false,
+            preventStartExam: true,
             examItem: new Exam(),
             exams: new ExamList(),
             loadingList: false
