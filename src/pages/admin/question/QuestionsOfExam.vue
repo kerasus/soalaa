@@ -129,7 +129,7 @@
     Vue.component('DynamicScroller', DynamicScroller)
     Vue.component('DynamicScrollerItem', DynamicScrollerItem)
     var md = require('markdown-it')(),
-        mk = require('markdown-it-katex')
+        mk = require('markdown-it-new-katex')
     md.use(mk);
 
     export default {

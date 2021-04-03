@@ -1,6 +1,6 @@
 import { Model, Collection } from 'js-abstract-model'
 var md = require('markdown-it')(),
-    mk = require('markdown-it-katex')
+    mk = require('markdown-it-new-katex')
 md.use(mk);
 
 class Choice extends Model {

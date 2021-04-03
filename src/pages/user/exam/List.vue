@@ -151,7 +151,7 @@
         name: 'list',
         components: {ProgressLinear},
         data: () => ({
-            preventStartExam: true,
+            preventStartExam: false,
             examItem: new Exam(),
             exams: new ExamList(),
             loadingList: false
