@@ -10,6 +10,7 @@
   &.ltr,
   .katex {
     direction: ltr;
+    display: inline-block;
     .katex-html {
       .accent {
         background-color: unset !important;

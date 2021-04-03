@@ -108,12 +108,12 @@ const router = new VueRouter({
         //     component: () => lazyLoadView(import('@/components/QuizEditor/AllQuestions')),
         //     meta: {middleware: [auth, completeInfo]}
         // },
-        // {
-        //     path: '/tree/edit',
-        //     name: 'tree.edit',
-        //     component: () => lazyLoadView(import('@/components/tree')),
-        //     meta: {middleware: [auth, completeInfo]}
-        // },
+        {
+            path: '/tree/edit',
+            name: 'tree.edit',
+            component: () => lazyLoadView(import('@/components/tree')),
+            meta: {middleware: [auth, completeInfo]}
+        },
         // {
         //     path: '/debug',
         //     name: 'debug',
