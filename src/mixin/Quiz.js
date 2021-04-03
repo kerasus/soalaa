@@ -208,6 +208,7 @@ const mixinQuiz = {
           if (exam_id) {
             examDataWithQuestions.id = exam_id
           }
+
           that.$store.commit('updateQuiz', examDataWithQuestions)
         }
         that.loadExamExtraData(that.quiz, viewType)
@@ -240,7 +241,7 @@ const mixinQuiz = {
       const englishRegex = /^[A-Za-z0-9 :"'ʹ.<>%$&@!+()\-_/\n,…?ᵒ*~]*$/
       question.ltr = !!question.statement.match(englishRegex);
     },
-    loadExamExtraData (quiz, viewType) {
+      loadExamExtraData (quiz, viewType) {
       this.quiz.loadSubcategoriesOfCategories()
 
       if (viewType !== 'results') {
@@ -280,6 +281,7 @@ const mixinQuiz = {
       this.userActionOnQuestion(questionId,  'bookmark')
     },
     changeStatus (questionId, newStatus) {
+      console.log('changeStatus', newStatus)
       this.userActionOnQuestion(questionId, 'status', {newStatus})
     },
     needToLoadQuiaData () {
@@ -306,8 +308,12 @@ const mixinQuiz = {
       number = parseInt(number)
       return number - 1
     },
+    isSubcategoryExistInExam (subCategoryId) {
+      this.quiz.sub_categories.list.find( item => Assistant.getId(item.id) === Assistant.getId(subCategoryId) )
+    },
     getFirstActiveQuestion () {
       let questions = this.getCurrentExamQuestions()
+      // && this.isSubcategoryExistInExam(questions[questionId]).sub_category.id
       for (const questionId in questions) {
         if (questions[questionId].in_active_category) {
           return questions[questionId]
