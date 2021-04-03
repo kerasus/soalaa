@@ -1,5 +1,5 @@
 <template>
-    <div :class="{ 'current-question': this.currentQuestion.id === source.id, question: true, ltr: source.ltr }">
+    <div :class="{ 'current-question': this.currentQuestion.id === source.id, question: true, ltr: source.ltr}" v-intersect="test">
         <div>
             <v-sheet
                     v-if="!source.in_active_category"
@@ -59,9 +59,9 @@
 
     export default {
         mounted() {
-            this.observer = new IntersectionObserver(this.intersectionObserver, {threshold: [0.7, 0.75, 0.8]});
-            this.observer.observe(this.$el);
-            console.log('mounted this.$el', this.$el)
+            // this.observer = new IntersectionObserver(this.intersectionObserver, {threshold: [0.7, 0.75, 0.8]});
+            // this.observer.observe(this.$el);
+            // console.log('mounted this.$el', this.$el, this.getQuestionNumberFromId(this.source.id))
         },
         mixins: [ mixinQuiz, mixinUserActionOnQuestion ],
         data () {
@@ -97,6 +97,9 @@
             }
         },
         methods: {
+            test (payload) {
+                this.$emit('inView', { isInView: payload.isIntersecting, number: this.getQuestionNumberFromId(this.source.id) })
+            },
             answerClickedd (payload) {
                 this.answerClicked(payload)
                 console.log('this is it: ', this.userQuizListData[this.quiz.id][this.source.id].answered_choice_id)

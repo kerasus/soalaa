@@ -27,7 +27,7 @@
                                 :active="active"
                                 :data-index="index"
                         >
-                            <Item :source="item" />
+                            <Item :source="item" @inView="test"/>
                         </DynamicScrollerItem>
                     </template>
                 </DynamicScroller>
@@ -111,10 +111,29 @@
                 timePassedSinceLastScroll: 0,
                 setIntervalCallback: null,
                 renderedQuestions: { startIndex: 0, endIndex: 0 },
-                questions: []
+                questions: [],
+                inView: []
             }
         },
         methods: {
+            test (payload) {
+                console.log(payload.number)
+                if (payload.isInView) {
+                    for (let i = 0; i < this.inView.length; i++) {
+                        if (this.inView[i] === payload.number) {
+                            return
+                        }
+                    }
+                    this.inView.push(payload.number)
+                }
+                else {
+                    for (let i = 0; i < this.inView.length; i++) {
+                        if (this.inView[i] === payload.number) {
+                            this.inView.splice(i, 1)
+                        }
+                    }
+                }
+            },
             changeAppBarAndDrawer (state) {
                 this.$store.commit('AppLayout/updateAppBarAndDrawer', state)
             },
@@ -226,6 +245,10 @@
             }
             this.scrollTo(this.currentQuestion.id)
             this.changeAppBarAndDrawer(false)
+            // setInterval(() => {
+            //     console.clear()
+            //     console.log(this.inView)
+            // }, 5000)
         },
         created () {
 
