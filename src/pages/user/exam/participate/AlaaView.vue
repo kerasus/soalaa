@@ -131,7 +131,6 @@
                 return this.userQuizListData[this.quiz.id][this.currentQuestion.id]
             },
             changeAppBarAndDrawer (state) {
-                console.log('log')
                 this.$store.commit('AppLayout/updateAppBarAndDrawer', state)
             },
             showAppBar () {
