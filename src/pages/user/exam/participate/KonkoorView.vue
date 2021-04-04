@@ -224,7 +224,7 @@
             //     }
             //     return ''
             // },
-            choiceClicked (questionId, choiceId) {
+            choiceClicked (questionId) {
                 this.scrollTo(questionId)
                 this.changeQuestion(questionId)
             },
