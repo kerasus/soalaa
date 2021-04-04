@@ -120,19 +120,19 @@
 
 <script>
     import '@/assets/scss/markdownKatex.scss'
-    import MathLive from 'mathlive';
+    import MathLive from 'mathlive'
     import 'mathlive/dist/mathlive-fonts.css'
     import 'mathlive/dist/mathlive-static.css'
     import { Question } from '@/models/Question'
     import {ExamList} from '@/models/Exam'
-    import {QuestSubcategoryList} from "@/models/QuestSubcategory";
+    import {QuestSubcategoryList} from '@/models/QuestSubcategory';
     import Vue from 'vue'
-    import MarkdownBtn from "@/components/QuizEditor/MarkdownBtn";
+    import MarkdownBtn from '@/components/QuizEditor/MarkdownBtn';
+    import API_ADDRESS from '@/api/Addresses'
 
     var md = require('markdown-it')(),
-        mk = require('markdown-it-katex');
+        mk = require('markdown-it-new-katex');
     md.use(mk);
-
     export default {
         name: 'CreateOrEdit',
         components: {MarkdownBtn},
@@ -280,7 +280,7 @@
                 if (this.editMode) {
                     this.currentQuestion.choices.list.forEach((item) => { item.answer = false })
                     this.currentQuestion.choices.list[this.trueChoiceIndex].answer = true
-                    this.currentQuestion.update('/3a/api/question/' + this.currentQuestion.id )
+                    this.currentQuestion.update(API_ADDRESS.question.updateQuestion(this.currentQuestion.id))
                         .then(() => {
                             this.$notify({
                                 group: 'notifs',
@@ -292,7 +292,6 @@
                         })
                     return
                 }
-
                 this.currentQuestion.choices.list.forEach((item) => { item.answer = false })
                 this.currentQuestion.choices.list[this.trueChoiceIndex].answer = true
                 this.currentQuestion.exams = this.exams
@@ -349,7 +348,7 @@
                 this.subCategoriesList = new QuestSubcategoryList(response.data)
             })
             if (this.editMode) {
-                this.currentQuestion.show(null, '/3a/api/question/' + this.$route.params.id)
+                this.currentQuestion.show(null, API_ADDRESS.question.updateQuestion(this.$route.params.id))
                     .then((response) => {
                         this.currentQuestion = new Question(response.data.data)
                         this.trueChoiceIndex = this.currentQuestion.choices.list.findIndex((item) => item.answer )

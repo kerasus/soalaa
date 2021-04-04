@@ -194,7 +194,6 @@ const store = new Vuex.Store({
             const check_in_times = state.userQuizListData[state.quiz.id][questionId].check_in_times
             check_in_times.push({start: Time.now(), end: null})
             Vue.set(state.userQuizListData[state.quiz.id][questionId], 'check_in_times', check_in_times)
-            console.log(state.userQuizListData[state.quiz.id][questionId].check_in_times, questionId)
         },
         leaveQuestion (state, questionId) {
             this.commit('checkIfQuestionExistInUserQuizListData', questionId)

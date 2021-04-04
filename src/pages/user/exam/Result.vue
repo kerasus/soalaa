@@ -9,12 +9,20 @@
             <v-col>
                 <v-card elevation="0" class="infoCard align-content-center"
                         >
-                    <v-row style="height: 50%;margin: inherit;">
-                        <v-col sm="4" class="exam-title">
+                    <v-row style="height: 50% ;margin: inherit;">
+                        <v-col xl="3" sm="6" cols="12" class="exam-title">
                             نتایج آزمون اول سه‌آ -
                             {{ quiz.title }}
                         </v-col>
-                        <v-col :style="{ padding: '0 12px' }">
+                        <v-col v-if="report" xl="1" sm='3' cols="6">
+                            شهر:
+                            {{ report.location.city }}
+                        </v-col>
+                        <v-col v-if="report" xl="1" sm='3' cols="6">
+                            استان:
+                            {{ report.location.province }}
+                        </v-col>
+                        <v-col xl="7" cols="12" :style="{ padding: '0 12px' }">
                             <v-tabs v-model="tab" color="#ffc107" center-active show-arrows>
                                 <v-tabs-slider color="yellow"></v-tabs-slider>
                                 <v-tab>کارنامه</v-tab>
@@ -39,52 +47,52 @@
                         <StatisticResult :report="report"/>
                     </v-tab-item>
                     <v-tab-item>
-                        <v-card flat>
-                            <BubbleSheet :info="{ type: 'pasokh-nameh' }" delay-time="0" />
-                        </v-card>
+                        <BubbleSheet :info="{ type: 'pasokh-nameh' }" delay-time="0" />
                     </v-tab-item>
                     <v-tab-item>
-                        <p class="tab-title">
-                            دانلود پاسخنامه تشریحی
-                        </p>
-                        <v-row class="download-row">
-                            <v-col md="6">
-                                <div class="download-box">
-                                    <p class="download-title">دانلود پاسخنامه تشریحی دروس عمومی رشته تجربی</p>
-                                    <v-btn outlined color="--primary-2" height="75px" width="250px">
-                                        دانلود فایل PDF
-                                        <v-icon class="donwload-icon">mdi-download</v-icon>
-                                    </v-btn>
-                                </div>
-                            </v-col>
-                            <v-col md="6">
-                                <div class="download-box">
-                                    <p class="download-title">دانلود پاسخنامه تشریحی دروس عمومی رشته تجربی</p>
-                                    <v-btn outlined color="--primary-2" height="75px" width="250px">
-                                        دانلود فایل PDF
-                                        <v-icon class="donwload-icon">mdi-download</v-icon>
-                                    </v-btn>
-                                </div>
-                            </v-col>
-                            <v-col md="6">
-                                <div class="download-box">
-                                    <p class="download-title">دانلود پاسخنامه تشریحی دروس عمومی رشته تجربی</p>
-                                    <v-btn outlined color="--primary-2" height="75px" width="250px">
-                                        دانلود فایل PDF
-                                        <v-icon class="donwload-icon">mdi-download</v-icon>
-                                    </v-btn>
-                                </div>
-                            </v-col>
-                            <v-col md="6">
-                                <div class="download-box">
-                                    <p class="download-title">دانلود پاسخنامه تشریحی دروس عمومی رشته تجربی</p>
-                                    <v-btn outlined color="--primary-2" height="75px" width="250px">
-                                        دانلود فایل PDF
-                                        <v-icon class="donwload-icon">mdi-download</v-icon>
-                                    </v-btn>
-                                </div>
-                            </v-col>
-                        </v-row>
+                        <v-card flat>
+                            <p class="tab-title pt-5 pr-5">
+                                دانلود پاسخنامه تشریحی
+                            </p>
+                            <v-row v-if="report" class="download-row">
+                                <v-col md="6">
+                                    <div class="download-box">
+                                        <p class="download-title">دانلود پاسخنامه تشریحی {{ report.exams_booklet[0].title }}</p>
+                                        <v-btn outlined color="--primary-2" height="75px" width="250px" :href="report.exams_booklet[0].descriptive_answers_url"  target="_blank">
+                                            دانلود فایل PDF
+                                            <v-icon class="donwload-icon">mdi-download</v-icon>
+                                        </v-btn>
+                                    </div>
+                                </v-col>
+                                <v-col md="6">
+                                    <div class="download-box">
+                                        <p class="download-title">دانلود {{ report.exams_booklet[0].title }}</p>
+                                        <v-btn outlined color="--primary-2" height="75px" width="250px" :href="report.exams_booklet[0].questions_url" target="_blank">
+                                            دانلود فایل PDF
+                                            <v-icon class="donwload-icon">mdi-download</v-icon>
+                                        </v-btn>
+                                    </div>
+                                </v-col>
+                                <v-col md="6">
+                                    <div class="download-box">
+                                        <p class="download-title">دانلود پاسخنامه تشریحی {{ report.exams_booklet[1].title }}</p>
+                                        <v-btn outlined color="--primary-2" height="75px" width="250px" :href="report.exams_booklet[0].descriptive_answers_url"  target="_blank">
+                                            دانلود فایل PDF
+                                            <v-icon class="donwload-icon">mdi-download</v-icon>
+                                        </v-btn>
+                                    </div>
+                                </v-col>
+                                <v-col md="6">
+                                    <div class="download-box">
+                                        <p class="download-title">دانلود {{ report.exams_booklet[1].title }}</p>
+                                        <v-btn outlined color="--primary-2" height="75px" width="250px" :href="report.exams_booklet[0].questions_url" target="_blank">
+                                            دانلود فایل PDF
+                                            <v-icon class="donwload-icon">mdi-download</v-icon>
+                                        </v-btn>
+                                    </div>
+                                </v-col>
+                            </v-row>
+                        </v-card>
                     </v-tab-item>
                     <v-tab-item>
                         <top-score-result :report="report"/>
@@ -123,6 +131,7 @@
     import {mixinAuth, mixinQuiz, mixinWindowSize} from "@/mixin/Mixins";
     import {AlaaContent} from "@/models/AlaaContent";
     import StatisticResult from "@/components/OnlineQuiz/Quiz/resultTables/statisticResult";
+    import API_ADDRESS from "@/api/Addresses";
 
     export default {
         name: 'Result',
@@ -138,28 +147,54 @@
             report: null
         }),
         created() {
-
             let that = this
             let user_exam_id = this.$route.params.user_exam_id
             let exam_id = this.$route.params.exam_id
+            this.$store.commit('AppLayout/updateOverlay', {show: true, loading: true, text: ''})
             this.user.loadExamDataForShowResult(user_exam_id)
                 .then(({userExamForParticipate}) => {
                     that.loadExam(userExamForParticipate, 'results', exam_id)
                         .then(() => {
                             that.quiz.id = exam_id
-                            that.quiz.show(exam_id, '/3a/api/exam-report?exam_id='+exam_id)
+                            that.quiz.show(exam_id, API_ADDRESS.exam.report.getReport(exam_id))
                             .then((response) => {
                                 this.report = response.data.data
                                 this.loadKarname(this.report)
+                                this.$store.commit('AppLayout/updateOverlay', {show: false, loading: false, text: ''})
+                            })
+                            .catch( () => {
+                                this.$store.commit('AppLayout/updateOverlay', {show: false, loading: false, text: ''})
+                                that.goToExamList()
+                                this.$notify({
+                                    group: 'notifs',
+                                    title: 'توجه!',
+                                    text: 'مشکلی در بارگزاری اطلاعات آزمون رخ داده است.',
+                                    type: 'error'
+                                })
+                                Assistant.reportErrors({location: 'pages/user/exam/Result.vue -> loadExam()'})
                             })
                         })
                         .catch( () => {
+                            this.$store.commit('AppLayout/updateOverlay', {show: false, loading: false, text: ''})
+                            that.goToExamList()
+                            this.$notify({
+                                group: 'notifs',
+                                title: 'توجه!',
+                                text: 'مشکلی در دریافت اطلاعات آزمون رخ داده است.',
+                                type: 'error'
+                            })
                             Assistant.reportErrors({location: 'pages/user/exam/Result.vue -> loadExam()'})
-                            that.$router.push({ name: 'user.exam.list' })
                         })
                 })
                 .catch( () => {
-                    that.$router.push({ name: 'user.exam.list' })
+                    that.goToExamList()
+                    this.$notify({
+                        group: 'notifs',
+                        title: 'توجه!',
+                        text: 'مشکلی در دریافت اطلاعات نتایج آزمون رخ داده است.',
+                        type: 'error',
+                        duration: 30000,
+                    })
                     Assistant.reportErrors({location: 'pages/user/exam/Result.vue -> created()'})
                 })
 
@@ -167,13 +202,14 @@
             // 24670
         },
         methods: {
-            getReportFromQuiz () {
-
+            goToExamList () {
+                this.$router.push({ name: 'user.exam.list' })
             },
             loadKarname (report) {
                 this.loadSubCategory(report.sub_category)
                 this.loadZirGrooh(report.zirgorooh)
                 this.loadBest(report.best)
+                report.main.taraaz = parseFloat(report.main.taraaz).toFixed(0)
             },
             loadBest (best) {
                 best.sub_category.forEach((item, index) => {
@@ -197,6 +233,7 @@
                 })
                 zirgorooh.forEach((item) => {
                     item.percent = parseFloat(item.percent).toFixed(1)
+                    item.taraaz = parseFloat(item.taraaz).toFixed(0)
                 })
             },
             getContent (contentId) {
@@ -209,19 +246,21 @@
                 })
             },
             getAlaaSet (setId) {
+                let that = this
                 this.alaaSet.loading = true
                 this.alaaSet.show(setId)
                 .then( (response) => {
-                    this.alaaSet.loading = false
-                    this.alaaSet = new AlaaSet(response.data.data)
-                    this.alaaVideos = this.alaaSet.contents.getVideos()
-                    this.getContent(this.alaaVideos[0].id)
+                    that.alaaSet.loading = false
+                    that.alaaSet = new AlaaSet(response.data.data)
+                    that.alaaVideos = that.alaaSet.contents.getVideos()
+                    that.getContent(that.alaaVideos[0].id)
                 })
                 .catch( () => {
-                    this.alaaSet.loading = false
+                    that.alaaSet.loading = false
                 })
             },
             onVideoTabChange (tabIndex) {
+
                 if (this.report && this.report.sub_category[tabIndex].video_url) {
                     const parsed = this.report.sub_category[tabIndex].video_url.split('/')
                     let setId = parsed[parsed.length - 1]
@@ -271,6 +310,10 @@
         }
     }
 
+    .text-center {
+        direction: ltr;
+    }
+
     .tab-title {
         margin: 16px;
     }
@@ -305,6 +348,9 @@
 </style>
 
 <style scoped>
+    .theme--light.v-tabs-items {
+        background-color: transparent;
+    }
     .exam-title {
         display: flex;
         align-items: center;

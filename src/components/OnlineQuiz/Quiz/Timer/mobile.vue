@@ -4,7 +4,6 @@
             <v-col cols="7 " class="col-sm-6 btnCol">
                 <div class="sideBtns  elevation-3" >
                     <v-row>
-<!--                        <v-col cols="1"/>-->
                         <v-col class="d-flex justify-center">
                             <v-icon class="sideBtnIcons " @click="goToPrevQuestion">
                                 mdi-chevron-right
@@ -21,7 +20,6 @@
                                 mdi-chevron-left
                             </v-icon>
                         </v-col>
-<!--                        <v-col cols="1"/>-->
                     </v-row>
                 </div>
             </v-col>

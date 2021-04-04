@@ -54,19 +54,14 @@
     import { mixinQuiz, mixinUserActionOnQuestion } from '@/mixin/Mixins'
     import $ from "jquery";
     // var md = require('markdown-it')(),
-    //     mk = require('markdown-it-katex')
+    //     mk = require('markdown-it-new-katex')
     // md.use(mk);
 
     export default {
         mounted() {
             this.observer = new IntersectionObserver(this.intersectionObserver, {threshold: [0.7, 0.75, 0.8]});
-
             this.observer.observe(this.$el);
             console.log('mounted this.$el', this.$el)
-            // console.log('this.$el', this.$el)
-            // if (this.item) {
-            //     console.log('item', this.item.index)
-            // }
         },
         mixins: [ mixinQuiz, mixinUserActionOnQuestion ],
         data () {
@@ -102,16 +97,11 @@
             }
         },
         methods: {
-            // test (entries) {
-            //     console.log('id: ', this.getQuestionNumberFromId(this.source.id), ' is Intersecting: ', entries[0].isIntersecting)
-            // },
             answerClickedd (payload) {
                 this.answerClicked(payload)
                 console.log('this is it: ', this.userQuizListData[this.quiz.id][this.source.id].answered_choice_id)
             },
             intersectionObserver(entries) {
-                // console.log(this.source.index, ': ', entries[0].intersectionRatio)
-                // this.source.isInView = entries[0].intersectionRatio >= 0.75
                 this.source.isInView = entries[0].intersectionRatio >= 0.75
                 if (entries[0].intersectionRatio >= 0.75) {
                     console.log('in entry.intersectionRatio', entries[0].intersectionRatio)
@@ -122,7 +112,6 @@
                 }
             },
             onIntersect(entries) {
-                // console.log(this.source.index, ': ', entries[0].intersectionRatio)
                 this.source.isInView = entries[0].intersectionRatio >= 0.75
             },
             choiceClicked (questionId, choiceId) {

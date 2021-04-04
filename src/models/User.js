@@ -18,9 +18,9 @@ class User extends Model {
             { key: 'first_name' },
             { key: 'last_name' },
             { key: 'mobile' },
+            { key: 'city' },
             { key: 'province' },
             { key: 'ostan_id' },
-            { key: 'city' },
             { key: 'shahr_id' },
             { key: 'address' },
             { key: 'postal_code' },
@@ -64,9 +64,8 @@ class User extends Model {
             'first_name',
             'last_name',
             'major',
-            'province',
             'city',
-            'school',
+            // 'school',
             'mobile_verified_at',
             'grade'
         ]
@@ -90,43 +89,28 @@ class User extends Model {
             }
         })
 
+        if (percentage > 100) {
+            percentage = 100
+        }
+
         return percentage
     }
 
     needToCompleteInfo () {
-        return false
-        // let completionInfoKeys = this.getCompletionInfoKeys()
-        // let status = false
-        // try {
-        //     completionInfoKeys.forEach(item => {
-        //         if (!this.checkInformationCompletionKey(item)) {
-        //             throw 'needToCompleteInfo'
-        //         }
-        //     })
-        // } catch (e) {
-        //     status = true
-        // }
-        //
-        // return status
-        // if (!this.first_name) {
-        //     status = true
-        // } else if (!this.last_name) {
-        //     status = true
-        // } else if (!this.major || !this.major.id) {
-        //     status = true
-        // } else if (!this.province) {
-        //     status = true
-        // } else if (!this.city) {
-        //     status = true
-        // } else if (!this.school) {
-        //     status = true
-        // } else if (!this.mobile_verified_at) {
-        //     status = true
-        // } else if (!this.grade) {
-        //     status = true
-        // }
-        //
-        // return status
+        let completionInfoKeys = this.getCompletionInfoKeys()
+        let status = false
+        try {
+            completionInfoKeys.forEach(item => {
+                if (!this.checkInformationCompletionKey(item)) {
+                    throw 'needToCompleteInfo: '+item
+                }
+            })
+        } catch (e) {
+
+            status = true
+        }
+
+        return status
     }
 
     setUserExamStatus (exam) {
@@ -212,7 +196,7 @@ class User extends Model {
         return new Promise(function(resolve, reject) {
             that.create({
                 exam_id
-            }, '/3a/api/user/registerExam')
+            }, API_ADDRESS.exam.registerExam)
                 .then((response) => {
                     resolve(response)
                 })
@@ -268,7 +252,7 @@ class User extends Model {
         return new Promise(function(resolve, reject) {
             that.create({
                 exam_id
-            }, '/3a/api/exam-user')
+            }, API_ADDRESS.exam.examUser)
                 .then((response) => {
                     let userExamForParticipate = new Exam()
                     that.loadExamForParticipate(response, userExamForParticipate)
@@ -291,7 +275,7 @@ class User extends Model {
     loadExamDataForShowResult (user_exam_id) {
         let that = this
         return new Promise(function(resolve, reject) {
-            axios.get('/3a/api/temp-exam/answer/'+user_exam_id+'/withCorrect')
+            axios.get(API_ADDRESS.exam.getAnswerOfUserWithCorrect(user_exam_id))
                 .then((response) => {
                     let userExamForParticipate = new Exam()
                     that.loadExamForShowResult(response, user_exam_id, userExamForParticipate)

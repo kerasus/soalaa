@@ -34,13 +34,11 @@
 </template>
 
 <script>
-    // import Info from "@/components/OnlineQuiz/Quiz/resultTables/info";
     import {Chart} from 'highcharts-vue'
     import ComingSoon from "@/components/ComingSoon";
     export default {
         name: "topScoreResult",
         components: {ComingSoon, highcharts: Chart},
-        // components: {Info},
         data() {
             return {
                 headers: [
@@ -112,9 +110,20 @@
 
                 ],
                 chartOptions: {
-
                     series: [
                     ],
+                    tooltip: {
+                        backgroundColor: '#FCFFC5',
+                        padding: 8,
+                        style: {
+                            direction: 'rtl',
+
+                        },
+                        formatter: function () {
+                            return   '<span :style="{ display:  }">' + this.y + ' درصد' + '</span>' + '<span>' + this.x + '</span>'  ;
+                        },
+                        useHTML: true,
+                    },
                     chart: {
                         type: 'column',
                         height: 700,
@@ -124,9 +133,6 @@
                     },
                     title: {
                         text: 'نمودار مقایسه عملکرد'
-                    },
-                    subtitle: {
-                        // text: 'Source: thesolarfoundation.com'
                     },
                     credits: {
                         text: '3a.alaatv.com',

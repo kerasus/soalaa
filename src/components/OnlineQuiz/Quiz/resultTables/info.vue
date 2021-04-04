@@ -1,5 +1,5 @@
 <template>
-        <v-card class="infoCard infoText align-content-center">
+        <v-card class="infoCard infoText align-content-center" :elevation="0">
             <v-row class="infoHeight">
                 <v-col class="infoCols">
                     نام و نام خانوادگی :
@@ -7,24 +7,20 @@
                     {{ user.last_name }}
                 </v-col>
                 <v-col class="infoCols">
-                    کد ملی :
-
-                </v-col>
-                <v-col class="infoCols">
-                    شماره موبایل :
-                    {{ user.mobile }}
-                </v-col>
-                <v-col class="infoCols">
                     رشته :
-                    {{ user.major.name }}
+                    {{ user.major.title }}
                 </v-col>
                 <v-col class="infoCols">
+                    مقطع :
+                    {{ user.grade.title }}
+                </v-col>
+                <v-col v-if="user.province" class="infoCols">
                     استان :
-                    {{ user.province }}
+                    {{ user.province.title }}
                 </v-col>
-                <v-col class="infoCols">
+                <v-col v-if="user.city" class="infoCols">
                     شهر :
-                    {{ user.city }}
+                    {{ user.city.title }}
                 </v-col>
             </v-row>
         </v-card>
@@ -35,19 +31,12 @@
 
     export default {
         name: "info",
-        mixins: [mixinAuth],
-        data () {
-            return {
-                // user: this.$store.getters.user
-            }
-        }
+        mixins: [mixinAuth]
     }
 </script>
 
 <style scoped>
     .infoCard {
-        /*margin-top: 10px;*/
-        /*width: 97%;*/
         border-radius: 15px;
     }
     .infoCols {

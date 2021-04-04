@@ -25,12 +25,12 @@
             PcTimer
         },
         mounted() {
-            // let that = this
-            // this.interval = setInterval(() => {
-            //     const newCat = Time.getCurrentCategoryAcceptAt(that.quiz.categories)
-            //     that.calcRemainAndPassedTime(newCat)
-            //     that.doActionsOnChangeCategory(newCat)
-            // }, 1000)
+            let that = this
+            this.interval = setInterval(() => {
+                const newCat = Time.getCurrentCategoryAcceptAt(that.quiz.categories)
+                that.calcRemainAndPassedTime(newCat)
+                that.doActionsOnChangeCategory(newCat)
+            }, 1000)
 
 
 
