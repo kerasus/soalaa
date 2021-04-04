@@ -29,7 +29,7 @@
                                 :active="active"
                                 :data-index="index"
                         >
-                            <Item :source="item" />
+                            <Item :source="item" @inView="test"/>
                         </DynamicScrollerItem>
                     </template>
                 </DynamicScroller>
@@ -138,12 +138,31 @@
                 scrollState: 'not scrolling',
                 timePassedSinceLastScroll: 0,
                 setIntervalCallback: null,
-                renderedQuestions: {startIndex: 0, endIndex: 0},
-                questions: []
+                renderedQuestions: { startIndex: 0, endIndex: 0 },
+                questions: [],
+                inView: []
             }
         },
         methods: {
 
+            test (payload) {
+                console.log(payload.number)
+                if (payload.isInView) {
+                    for (let i = 0; i < this.inView.length; i++) {
+                        if (this.inView[i] === payload.number) {
+                            return
+                        }
+                    }
+                    this.inView.push(payload.number)
+                }
+                else {
+                    for (let i = 0; i < this.inView.length; i++) {
+                        if (this.inView[i] === payload.number) {
+                            this.inView.splice(i, 1)
+                        }
+                    }
+                }
+            },
             generateReport() {
 
 
@@ -166,7 +185,7 @@
             changeAppBarAndDrawer(state) {
                 this.$store.commit('AppLayout/updateAppBarAndDrawer', state)
             },
-            changeCurrentQuestionIfScrollingIsDone() {
+            changeCurrentQuestionIfScrollingIsDone () {
                 // console.log('time since last: ', this.timePassedSinceLastScroll)
                 // if (startIndex !== this.lastTimeScrollRange.start || endIndex !== this.lastTimeScrollRange.end) {
                 //     this.lastTimeScrollRange.start = startIndex
@@ -182,7 +201,6 @@
                 this.timePassedSinceLastScroll += 250
             },
             onScroll (startIndex, endIndex) {
-
                 this.renderedQuestions = { startIndex, endIndex }
                 if (this.scrollState === 'not scrolling') {
                     this.setIntervalCallback = setInterval(() => {
@@ -213,6 +231,7 @@
             // },
             scrollTo (questionId) {
                 const questionIndex = this.getQuestionIndexById(questionId)
+                console.log(questionIndex)
                 this.$refs.scroller.scrollToItem(questionIndex)
                 for (let i = 1; i < 4; i++) {
                     setTimeout(() => {
@@ -253,11 +272,9 @@
             //     }
             //     return ''
             // },
-            choiceClicked (questionId, choiceId) {
-                // console.log('loadFirstActiveQuestionIfNeed->choiceClicked')
+            choiceClicked (questionId) {
                 this.scrollTo(questionId)
                 this.changeQuestion(questionId)
-                this.answerClicked({questionId, choiceId})
             },
             // changeCurrentQuestion (question) {
             //     if (question.id !== this.currentQuestion.id) {
@@ -265,25 +282,11 @@
             //     }
             // }
         },
-        mounted () {
-            $('.questions').height(this.windowSize.y)
-            $('.questionss').height(this.windowSize.y)
-            $('.left-side-list').height(this.windowSize.y - 24)
-            if (this.currentQuestion.id === null) {
-                this.loadFirstQuestion()
-            }
-            this.scrollTo(this.currentQuestion.id)
-            this.changeAppBarAndDrawer(false)
-        },
         created () {
-
-            // this.quizData.show(this.$route.params.quizId).then((response) => {
-            // }).catch((error) => {
-            // })
             let that = this
-            this.startExam(this.$route.params.quizId)
+            this.startExam(this.$route.params.quizId, 'onlineQuiz.KonkoorView')
                 .then(() => {
-                    that.loadFirstActiveQuestionIfNeed()
+                    // that.loadFirstActiveQuestionIfNeed()
                     that.$store.commit('AppLayout/updateOverlay', {show: false, loading: false, text: ''})
                 })
                 .catch( (error) => {
@@ -303,8 +306,16 @@
                 this.$router.push({ name: 'onlineQuiz.alaaView', params: { quizId: 313, questNumber: this.$route.params.quizId } })
             }
             this.questions = this.getCurrentExamQuestionsInArray()
-
-            // this.renderQuestionBody()
+        },
+        mounted () {
+            $('.questions').height(this.windowSize.y)
+            $('.questionss').height(this.windowSize.y)
+            $('.left-side-list').height(this.windowSize.y - 24)
+            if (this.currentQuestion.id === null) {
+                this.loadFirstQuestion()
+            }
+            this.scrollTo(this.currentQuestion.id)
+            this.changeAppBarAndDrawer(false)
         },
         destroyed() {
             this.changeAppBarAndDrawer(true)

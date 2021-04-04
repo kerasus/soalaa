@@ -1,5 +1,5 @@
 <template>
-    <div :class="{ 'current-question': this.currentQuestion.id === source.id, question: true, ltr: source.ltr }">
+    <div :class="{ 'current-question': this.currentQuestion.id === source.id, question: true, ltr: source.ltr}" v-intersect="test">
         <div>
             <v-sheet
                     v-if="!source.in_active_category"
@@ -42,6 +42,7 @@
                     :key="choice.id"
                     v-html="(choiceNumber[index]) + choice.rendered_title"
                     :md="choiceClass(source)"
+                    :ref="'choice'+index"
                     :class="{ choice: true, renderedPanel: true, active: userQuizListData[quiz.id][source.id] && choice.id === userQuizListData[quiz.id][source.id].answered_choice_id }"
                     @click="answerClickedd({ questionId: source.id, choiceId: choice.id})"
             />
@@ -53,15 +54,10 @@
     import '@/assets/scss/markdownKatex.scss'
     import { mixinQuiz, mixinUserActionOnQuestion } from '@/mixin/Mixins'
     import $ from "jquery";
-    // var md = require('markdown-it')(),
-    //     mk = require('markdown-it-new-katex')
-    // md.use(mk);
-
     export default {
         mounted() {
             this.observer = new IntersectionObserver(this.intersectionObserver, {threshold: [0.7, 0.75, 0.8]});
             this.observer.observe(this.$el);
-            console.log('mounted this.$el', this.$el)
         },
         mixins: [ mixinQuiz, mixinUserActionOnQuestion ],
         data () {
@@ -88,40 +84,27 @@
         destroyed() {
             this.observer.disconnect();
         },
-        watch: {
-            userQuizListData: {
-                deep: true,
-                handler (val) {
-                    console.log(val)
-                }
-            }
-        },
         methods: {
+            test (payload) {
+                this.$emit('inView', { isInView: payload.isIntersecting, number: this.getQuestionNumberFromId(this.source.id) })
+            },
             answerClickedd (payload) {
                 this.answerClicked(payload)
-                console.log('this is it: ', this.userQuizListData[this.quiz.id][this.source.id].answered_choice_id)
             },
             intersectionObserver(entries) {
                 this.source.isInView = entries[0].intersectionRatio >= 0.75
-                if (entries[0].intersectionRatio >= 0.75) {
-                    console.log('in entry.intersectionRatio', entries[0].intersectionRatio)
-                    console.log('in this.$el', this.$el)
-                } else if (entries[0].intersectionRatio < 0.75) {
-                    console.log('out entry.intersectionRatio', entries[0].intersectionRatio)
-                    console.log('out this.$el', this.$el)
-                }
             },
             onIntersect(entries) {
                 this.source.isInView = entries[0].intersectionRatio >= 0.75
             },
             choiceClicked (questionId, choiceId) {
-                console.log('loadFirstActiveQuestionIfNeed->choiceClicked')
                 this.changeQuestion(questionId)
                 this.answerClicked({questionId, choiceId})
             },
             choiceClass (question) {
                 let largestChoice = this.getLargestChoice(question.choices)
                 let largestChoiceWidth = $('.questions').width() / largestChoice
+                console.log('this.$refs', this.$refs)
                 if (largestChoiceWidth > 48) {
                     return 3
                 }

@@ -1,6 +1,13 @@
 <template>
-    <div :class=" { 'bubble-sheet': true, 'questions-list': true, 'pasokh-nameh': info.type === 'pasokh-nameh', 'pasokh-barg': info.type === 'pasokh-barg' }">
-
+    <div
+        v-if="quiz.id !== null"
+        :class="{
+            'bubble-sheet': true,
+            'questions-list': true,
+            'pasokh-nameh': info.type === 'pasokh-nameh',
+            'pasokh-barg': info.type === 'pasokh-barg'
+        }"
+    >
         <v-overlay
                 :absolute="true"
                 :opacity="0.9"
@@ -72,6 +79,7 @@
             AnswerClicked (payload) {
                 if (this.info.type !== 'pasokh-nameh') {
                     this.answerClicked(payload)
+                    this.clickChoice(payload.questionId)
                 }
             },
             ClickQuestionNumber (questionId) {
@@ -79,8 +87,8 @@
                     this.clickQuestionNumber(questionId)
                 }
             },
-            clickChoice (questionId, choiceId) {
-                this.$emit('clickChoice', questionId, choiceId)
+            clickChoice (questionId) {
+                this.$emit('clickChoice', questionId)
             },
             clickQuestionNumber (questionId) {
                 this.$emit('scrollTo', questionId)
