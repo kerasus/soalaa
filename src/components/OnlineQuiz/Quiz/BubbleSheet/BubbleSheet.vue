@@ -79,6 +79,7 @@
             AnswerClicked (payload) {
                 if (this.info.type !== 'pasokh-nameh') {
                     this.answerClicked(payload)
+                    this.clickChoice(payload.questionId)
                 }
             },
             ClickQuestionNumber (questionId) {
@@ -86,8 +87,8 @@
                     this.clickQuestionNumber(questionId)
                 }
             },
-            clickChoice (questionId, choiceId) {
-                this.$emit('clickChoice', questionId, choiceId)
+            clickChoice (questionId) {
+                this.$emit('clickChoice', questionId)
             },
             clickQuestionNumber (questionId) {
                 this.$emit('scrollTo', questionId)

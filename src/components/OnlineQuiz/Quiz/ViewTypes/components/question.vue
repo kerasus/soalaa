@@ -1,5 +1,5 @@
 <template>
-    <div :class="{ 'current-question': this.currentQuestion.id === source.id, question: true, ltr: source.ltr }">
+    <div :class="{ 'current-question': this.currentQuestion.id === source.id, question: true, ltr: source.ltr}" v-intersect="test">
         <div>
             <v-sheet
                     v-if="!source.in_active_category"
@@ -85,6 +85,9 @@
             this.observer.disconnect();
         },
         methods: {
+            test (payload) {
+                this.$emit('inView', { isInView: payload.isIntersecting, number: this.getQuestionNumberFromId(this.source.id) })
+            },
             answerClickedd (payload) {
                 this.answerClicked(payload)
             },

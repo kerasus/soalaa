@@ -27,46 +27,34 @@
                     <v-col :md="3" @click="submitQuestion" type="submit">
                         <v-btn color="primary" block>ثبت سوال</v-btn>
                     </v-col>
-                    <v-col :md="6" class="pl-5">
-                        <v-textarea dir="rtl"
-                                    clearable
-                                    outlined
-                                    clear-icon="mdi-close-circle"
-                                    auto-grow
-                                    label="متن سوال"
-                                    v-model="currentQuestion.statement"
-                                    @input="updateRendered"
-                        ></v-textarea>
-                    </v-col>
-                    <v-col :md="1">
-                        <markdown-btn :elem="currentQuestion" :elem-key="'statement'" :rendered-matrix-katex="renderedMatrixKatex" :url="url" @add="markdownBtnAddString" />
-                    </v-col>
-                    <v-col :md="5">
+                    <v-col :md="12">
+                        متن سوال:
                         <div class="renderedPanel" v-html="questRendered">
                         </div>
                     </v-col>
                 </v-row>
             </v-sheet>
             <v-radio-group v-model="trueChoiceIndex">
-                <v-row v-for="index in 4" :key="index" :style="{ 'border-bottom': '1px solid #ececec' }">
-                    <v-col class="pl-5" :md="5">
-                        <v-textarea v-if="typeof currentQuestion.choices.list[index - 1] !== 'undefined'"
-                                    dir="rtl"
-                                    clearable
-                                    clear-icon="mdi-close-circle"
-                                    auto-grow
-                                    :label="choiceNumber[index -1]"
-                                    v-model="currentQuestion.choices.list[index - 1].title"
-                                    @input="updateRendered"
-                        ></v-textarea>
-                    </v-col>
-                    <v-col :md="2">
+                <v-row>
+                    <v-col md="6" v-for="index in 4" :key="index" :style="{ 'display': 'flex' }">
+    <!--                    <v-col class="pl-5" :md="5">-->
+<!--                            <v-textarea v-if="typeof currentQuestion.choices.list[index - 1] !== 'undefined'"-->
+<!--                                        dir="rtl"-->
+<!--                                        clearable-->
+<!--                                        clear-icon="mdi-close-circle"-->
+<!--                                        auto-grow-->
+<!--                                        :label="choiceNumber[index -1]"-->
+<!--                                        v-model="currentQuestion.choices.list[index - 1].title"-->
+<!--                                        @input="updateRendered"-->
+<!--                            ></v-textarea>-->
+    <!--                    </v-col>-->
+    <!--                    <v-col :md="2">-->
+    <!--                        <v-radio :value="index - 1" />-->
+    <!--                        <markdown-btn :elem="currentQuestion.choices.list[index - 1]" :elem-key="'title'" :rendered-matrix-katex="renderedMatrixKatex" :url="url" @add="markdownBtnAddString" />-->
+
+    <!--                    </v-col>-->
                         <v-radio :value="index - 1" />
-                        <markdown-btn :elem="currentQuestion.choices.list[index - 1]" :elem-key="'title'" :rendered-matrix-katex="renderedMatrixKatex" :url="url" @add="markdownBtnAddString" />
-
-                    </v-col>
-
-                    <v-col :md="5">
+                        {{ index }})
                         <div class="renderedPanel" v-html="choiceRendered[index - 1]">
                         </div>
                     </v-col>
@@ -79,6 +67,52 @@
 <!--            </v-row>-->
         </v-form>
         <hr>
+        <div class="d-flex justify-space-around mb-5 mt-5">
+            <v-btn-toggle v-model="selectedField">
+                <v-btn :value="0">
+                    متن سوال
+                </v-btn>
+
+                <v-btn :value="1">
+                    گزینه 1
+                </v-btn>
+
+                <v-btn :value="2">
+                    گزینه 2
+                </v-btn>
+
+                <v-btn :value="3">
+                    گزینه 3
+                </v-btn>
+
+                <v-btn :value="4">
+                    گزینه 4
+                </v-btn>
+            </v-btn-toggle>
+            <markdown-btn v-if="selectedQuizzes === 0" :elem="currentQuestion.choices.list[selectedField - 1]" :elem-key="'title'" :rendered-matrix-katex="renderedMatrixKatex" :url="url" @add="markdownBtnAddString" />
+        </div>
+        <v-textarea
+            v-if="selectedField === 0"
+            v-model="currentQuestion.statement"
+            outlined
+            dir="rtl"
+            clearable
+            clear-icon="mdi-close-circle"
+            auto-grow
+            :label="'متن'"
+            @input="updateRendered"
+        ></v-textarea>
+        <v-textarea
+                v-else
+                v-model="currentQuestion.choices.list[selectedField - 1].title"
+                outlined
+                dir="rtl"
+                clearable
+                clear-icon="mdi-close-circle"
+                auto-grow
+                :label="'متن'"
+                @input="updateRendered"
+        ></v-textarea>
         <div id="mathfield" locale="fa">x=\frac{-b\pm \sqrt{b^2-4ac}}{2a}</div>
         <div class="latexData" v-html="latexData"></div>
         <v-text-field full-width label="url" v-model="url" dir="ltr"/>
@@ -143,6 +177,7 @@
         },
         data: () => {
             return {
+                selectedField: 0,
                 whiteSpace: '                   ',
                 test: [true, false, false, false],
                 questMarkdownText: '# Math Rulez! \n  $x=\\frac{-b\\pm\\sqrt[]{b^2-4ac}}{2a}$',
