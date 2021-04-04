@@ -134,7 +134,6 @@
                 this.timePassedSinceLastScroll += 250
             },
             onScroll (startIndex, endIndex) {
-
                 this.renderedQuestions = { startIndex, endIndex }
                 if (this.scrollState === 'not scrolling') {
                     this.setIntervalCallback = setInterval(() => {
@@ -206,7 +205,6 @@
             //     return ''
             // },
             choiceClicked (questionId, choiceId) {
-                // console.log('loadFirstActiveQuestionIfNeed->choiceClicked')
                 this.scrollTo(questionId)
                 this.changeQuestion(questionId)
                 this.answerClicked({questionId, choiceId})
@@ -217,25 +215,11 @@
             //     }
             // }
         },
-        mounted () {
-            $('.questions').height(this.windowSize.y)
-            $('.questionss').height(this.windowSize.y)
-            $('.left-side-list').height(this.windowSize.y - 24)
-            if (this.currentQuestion.id === null) {
-                this.loadFirstQuestion()
-            }
-            this.scrollTo(this.currentQuestion.id)
-            this.changeAppBarAndDrawer(false)
-        },
         created () {
-
-            // this.quizData.show(this.$route.params.quizId).then((response) => {
-            // }).catch((error) => {
-            // })
             let that = this
-            this.startExam(this.$route.params.quizId)
+            this.startExam(this.$route.params.quizId, 'onlineQuiz.KonkoorView')
                 .then(() => {
-                    that.loadFirstActiveQuestionIfNeed()
+                    // that.loadFirstActiveQuestionIfNeed()
                     that.$store.commit('AppLayout/updateOverlay', {show: false, loading: false, text: ''})
                 })
                 .catch( (error) => {
@@ -255,8 +239,16 @@
                 this.$router.push({ name: 'onlineQuiz.alaaView', params: { quizId: 313, questNumber: this.$route.params.quizId } })
             }
             this.questions = this.getCurrentExamQuestionsInArray()
-
-            // this.renderQuestionBody()
+        },
+        mounted () {
+            $('.questions').height(this.windowSize.y)
+            $('.questionss').height(this.windowSize.y)
+            $('.left-side-list').height(this.windowSize.y - 24)
+            if (this.currentQuestion.id === null) {
+                this.loadFirstQuestion()
+            }
+            this.scrollTo(this.currentQuestion.id)
+            this.changeAppBarAndDrawer(false)
         },
         destroyed() {
             this.changeAppBarAndDrawer(true)
