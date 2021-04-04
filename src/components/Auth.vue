@@ -40,8 +40,8 @@
                 <span>آموزش مجازی آلاء</span>
             </v-tooltip>
         </v-toolbar>
-        <v-card-text>
-            <v-form>
+        <v-form v-on:submit.prevent="login">
+            <v-card-text>
                 <v-text-field
                         id="username"
                         label="شماره همراه"
@@ -59,18 +59,18 @@
                         type="password"
                         v-model="password"
                 ></v-text-field>
-            </v-form>
-        </v-card-text>
-        <v-card-actions>
-            <v-btn color="primary"
-                   @click="login"
-                   :loading="loadingList"
-                   :disabled="loadingList"
-            >
-                ورود
-            </v-btn>
-            <v-spacer></v-spacer>
-        </v-card-actions>
+            </v-card-text>
+            <v-card-actions>
+                <v-btn color="primary"
+                       :loading="loadingList"
+                       :disabled="loadingList"
+                       type="submit"
+                >
+                    ورود
+                </v-btn>
+                <v-spacer></v-spacer>
+            </v-card-actions>
+        </v-form>
     </v-card>
 </template>
 
@@ -108,7 +108,7 @@
             },
             setUserData (userData) {
                 this.$store.commit('Auth/updateUser', new User(userData))
-                this.redirectTo()
+                // this.redirectTo()
             },
             setAccessToken (access_token) {
                 axios.defaults.headers.common['Authorization'] = 'Bearer ' + access_token
@@ -122,6 +122,7 @@
                 this.$router.push({ name: redirect_to })
             },
             login () {
+                console.log('called')
                 let that = this
                 this.loadingList = true
                 axios.post(API_ADDRESS.auth.login, {
@@ -129,12 +130,16 @@
                     password: this.password
                 })
                 .then((response) => {
+
                     this.loadingList = false
+
                     that.user = new User(response.data.data.user)
                     that.$store.commit('Auth/updateUser', that.user)
                     const access_token = response.data.data.access_token
+
                     this.setAccessToken(access_token)
                     that.setUserData(response.data.data.user)
+                    this.getUserData()
                 })
                 .catch( () => {
                     this.loadingList = false

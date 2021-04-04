@@ -1,6 +1,5 @@
 <template>
     <div >
-        <coming-soon/>
         <div class="d-flex justify-center">
             <v-col>
                 <v-row class=" d-flex justify-center">
@@ -8,7 +7,7 @@
                             hide-default-footer
                             :headers="headers"
                             :items="dataTable"
-                            :items-per-page="5"
+                            :items-per-page="15"
                             class="elevation-1 dataTable"
                     ></v-data-table>
                 </v-row>
@@ -20,11 +19,10 @@
 <script>
     // import Info from "@/components/OnlineQuiz/Quiz/resultTables/info";
 
-    import ComingSoon from "@/components/ComingSoon";
     export default {
         name: "statisticResult",
         props: ['report'],
-        components: {ComingSoon},
+        components: {},
         // components: {Info},
         data() {
             return {
@@ -39,12 +37,10 @@
                     {text: 'درس', value: 'sub_category',align: 'center',sortable: true,},
                     {text: 'درصد', value: 'percent',align: 'center',sortable: true,},
                     {text: ' تراز', value: 'taraaz',align: 'center',sortable: true,},
-                    // {text: ' شهر', value: 'city',align: 'center',sortable: false,},
-                    // {text: 'استان', value: 'state',align: 'center',sortable: false,},
+                    {text: 'رتبه در شهر', value: 'rank_city',align: 'center',sortable: false,},
+                    {text: 'رتبه در استان', value: 'rank_province',align: 'center',sortable: false,},
                     {text: 'رتبه در کشور', value: 'rank_country',align: 'center',sortable: true,},
                     {text: 'میانگین درصد', value: 'average',align: 'center',sortable: true,},
-                    {text: 'میانگین تراز', value: 'taraaz_average',align: 'center',sortable: true,},
-
                 ]
             }
         },
@@ -66,7 +62,9 @@
                         sub_category: item.sub_category,
                         percent: item.percent,
                         taraaz: item.taraaz,
-                        rank_country: item.rank_country
+                        rank_country: item.rank_country,
+                        rank_province: item.rank_province,
+                        rank_city: item.rank_city
                     })
                 })
             },

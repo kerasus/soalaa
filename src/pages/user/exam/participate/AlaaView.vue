@@ -4,8 +4,8 @@
             <v-col :md="12" :class="{ 'question-container': true, ltr: currentQuestion.ltr }" :style="{ 'min-height': '100%' }">
                 <v-sheet class="d-flex align-stretch" width="100%" color="--background-2" :style="{ 'min-height': '100%' }">
                     <v-row>
-                        <v-col :md="1" class="d-md-flex justify-center align-center d-none">
-                            <v-btn :min-width="64" class="px-0" :height="64" @click="goToPrevQuestion" icon>
+                        <v-col :md="1" class="d-md-flex justify-center d-none">
+                            <v-btn :min-width="64" class="px-0" :height="400" @click="goToPrevQuestion" :elevation="0">
                                 <v-icon :size="40">mdi-chevron-right</v-icon>
                             </v-btn>
                         </v-col>
@@ -21,15 +21,15 @@
                                 </div>
                                 <div class="question-buttons">
                                     <v-btn icon @click="changeStatus(currentQuestion.id, 'o')">
-                                        <v-icon v-if="!userQuizListData[quiz.id][currentQuestion.id] || userQuizListData[quiz.id][currentQuestion.id].status !== 'o'" color="#888" size="30">mdi-checkbox-blank-circle-outline</v-icon>
-                                        <v-icon v-if="userQuizListData[quiz.id][currentQuestion.id] && userQuizListData[quiz.id][currentQuestion.id].status === 'o'" color="--primary-2" :size="30">mdi-checkbox-blank-circle</v-icon>
+                                        <v-icon v-if="!getUserQuestionData() || getUserQuestionData().status !== 'o'" color="#888" size="30">mdi-checkbox-blank-circle-outline</v-icon>
+                                        <v-icon v-if="getUserQuestionData() && getUserQuestionData().status === 'o'" color="--primary-2" :size="30">mdi-checkbox-blank-circle</v-icon>
                                     </v-btn>
                                     <v-btn icon @click="changeStatus(currentQuestion.id, 'x')">
-                                        <v-icon :color="userQuizListData[quiz.id][currentQuestion.id] && userQuizListData[quiz.id][currentQuestion.id].status === 'x' ? 'red' : '#888'" :size="30">mdi-close</v-icon>
+                                        <v-icon :color="getUserQuestionData() && getUserQuestionData().status === 'x' ? 'red' : '#888'" :size="30">mdi-close</v-icon>
                                     </v-btn>
                                     <v-btn icon @click="changeBookmark(currentQuestion.id)">
-                                        <v-icon v-if="!userQuizListData[quiz.id][currentQuestion.id] || !userQuizListData[quiz.id][currentQuestion.id].bookmarked" :size="30" color="#888">mdi-bookmark-outline</v-icon>
-                                        <v-icon v-if="userQuizListData[quiz.id][currentQuestion.id] && userQuizListData[quiz.id][currentQuestion.id].bookmarked" color="--accent-1" :size="30">mdi-bookmark</v-icon>
+                                        <v-icon v-if="!getUserQuestionData() || !getUserQuestionData().bookmarked" :size="30" color="#888">mdi-bookmark-outline</v-icon>
+                                        <v-icon v-if="getUserQuestionData() && getUserQuestionData().bookmarked" color="--accent-1" :size="30">mdi-bookmark</v-icon>
                                     </v-btn>
                                 </div>
                             </v-row>
@@ -58,8 +58,8 @@
                                 />
                             </v-row>
                         </v-col>
-                        <v-col :md="1" class="d-md-flex justify-center align-center d-none">
-                            <v-btn :min-width="64" class="px-0" :height="64" @click="goToNextQuestion" icon>
+                        <v-col :md="1" class="d-md-flex justify-center d-none">
+                            <v-btn :min-width="64" class="px-0" :height="400" @click="goToNextQuestion" :elevation="0">
                                 <v-icon :size="40">mdi-chevron-left</v-icon>
                             </v-btn>
                         </v-col>
@@ -107,10 +107,10 @@
             let that = this
             this.showAppBar()
             this.updateDrawerBasedOnWindowSize()
-            this.startExam(this.$route.params.quizId)
+            this.startExam(this.$route.params.quizId, 'onlineQuiz.alaaView')
                 .then(() => {
                     that.loadFirstActiveQuestionIfNeed()
-                    that.$store.commit('AppLayout/updateOverlay', false)
+                    that.$store.commit('AppLayout/updateOverlay', {show: false, loading: false, text: ''})
                 })
                 .catch( (error) => {
                     Assistant.reportErrors(error)
@@ -124,8 +124,13 @@
                 })
         },
         methods: {
+            getUserQuestionData () {
+                if (!this.quiz.id || !this.currentQuestion.id) {
+                    return false
+                }
+                return this.userQuizListData[this.quiz.id][this.currentQuestion.id]
+            },
             changeAppBarAndDrawer (state) {
-                console.log('log')
                 this.$store.commit('AppLayout/updateAppBarAndDrawer', state)
             },
             showAppBar () {
@@ -148,7 +153,6 @@
             }
         },
         destroyed() {
-            console.log('DRESTOREW:JFD:SKFJD:KS')
             this.changeAppBarAndDrawer(false)
         }
     }

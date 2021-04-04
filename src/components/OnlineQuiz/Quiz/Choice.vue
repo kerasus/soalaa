@@ -20,8 +20,6 @@
         mixins: [mixinQuiz],
         computed: {
             isSelected () {
-                // const answeredChoice = this.currentQuestion.getAnsweredChoice()
-                // return (answeredChoice && this.choice.id === answeredChoice.id)
                 return this.userQuizListData[this.quiz.id][this.questionId] && this.choice.id === this.userQuizListData[this.quiz.id][this.questionId].answered_choice_id
             }
         },
@@ -71,10 +69,6 @@
         justify-content: space-between;
     }
 
-    /*.answer-sheet:hover {*/
-    /*    background: rgba(245, 208, 22, 0.2);*/
-    /*}*/
-
     .answer-text {
         height: max-content;
         width: 100%;
@@ -86,10 +80,6 @@
     .answer-sheet.active {
         background: #fffaee;
     }
-
-    /*.answer-sheet.active:hover {*/
-    /*    background: rgba(245, 208, 22, 0.6);*/
-    /*}*/
 
     .answer-text {
         height: max-content;

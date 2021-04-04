@@ -1,3 +1,4 @@
+
 <template>
     <v-container class="konkoor-view" :fluid="true" :style="{ height: '100%', background: 'rgb(244, 244, 244)' }" v-resize="updateWindowSize">
         <v-row :style="{ 'min-height': '100%' }">
@@ -235,7 +236,7 @@
             this.startExam(this.$route.params.quizId)
                 .then(() => {
                     that.loadFirstActiveQuestionIfNeed()
-                    that.$store.commit('AppLayout/updateOverlay', false)
+                    that.$store.commit('AppLayout/updateOverlay', {show: false, loading: false, text: ''})
                 })
                 .catch( (error) => {
                     Assistant.reportErrors(error)

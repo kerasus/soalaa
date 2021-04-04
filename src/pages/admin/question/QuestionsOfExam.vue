@@ -124,11 +124,12 @@
     import {Exam} from '@/models/Exam'
     import {QuestionList} from "@/models/Question";
     import {QuestSubcategoryList} from "@/models/QuestSubcategory";
+    import API_ADDRESS from "@/api/Addresses";
 
     Vue.component('DynamicScroller', DynamicScroller)
     Vue.component('DynamicScrollerItem', DynamicScrollerItem)
     var md = require('markdown-it')(),
-        mk = require('markdown-it-katex')
+        mk = require('markdown-it-new-katex')
     md.use(mk);
 
     export default {
@@ -179,7 +180,7 @@
         created () {
             this.changeAppBarAndDrawer(false)
             // const that = this
-            const url = '/3a/api/exam-question/attach/show/' + this.$route.params.quizId
+            const url = API_ADDRESS.exam.examQuestion(this.$route.params.quizId)
             this.quizData.show(null, url)
                 .then((response) => {
                     this.quizData.questions = new QuestionList(response.data.data)

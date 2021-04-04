@@ -25,7 +25,6 @@
                     <v-col>
                         <div :style="{ 'max-width': '100%'}">
                             <highcharts :options="chartOptions"></highcharts>
-
                         </div>
                     </v-col>
                 </v-row>
@@ -35,17 +34,13 @@
 </template>
 
 <script>
-    // import Info from "@/components/OnlineQuiz/Quiz/resultTables/info";
     import {Chart} from 'highcharts-vue'
     import ComingSoon from "@/components/ComingSoon";
     export default {
         name: "topScoreResult",
         components: {ComingSoon, highcharts: Chart},
-        // components: {Info},
         data() {
             return {
-                test: 'test',
-
                 headers: [
                     {
                         text: 'ردیف',
@@ -115,32 +110,20 @@
 
                 ],
                 chartOptions: {
+                    series: [
+                    ],
                     tooltip: {
                         backgroundColor: '#FCFFC5',
-                        padding:0,
-
+                        padding: 8,
                         style: {
-                        direction: 'ltr',
+                            direction: 'rtl',
+
                         },
                         formatter: function () {
-                            return   '  <span>30 % </span>' ;
-                        }
+                            return   '<span :style="{ display:  }">' + this.y + ' درصد' + '</span>' + '<span>' + this.x + '</span>'  ;
+                        },
+                        useHTML: true,
                     },
-                    series: [],
-                    // plotOptions: {
-                    //     series: {
-                    //         events: {
-                    //             legendItemClick: function(event) {
-                    //                 console.log(event.target.index)
-                    //                 console.log(this)
-                    //                 // this.chartSeriesVisibility[event.target.index].visibility = !this.chartSeriesVisibility[event.target.index].visibility
-                    //             },
-                    //         }
-                    //     }
-                    // },
-
-
-
                     chart: {
                         type: 'column',
                         height: 700,
@@ -150,9 +133,6 @@
                     },
                     title: {
                         text: 'نمودار مقایسه عملکرد'
-                    },
-                    subtitle: {
-                        // text: 'Source: thesolarfoundation.com'
                     },
                     credits: {
                         text: '3a.alaatv.com',
@@ -167,12 +147,7 @@
                     xAxis: {
                         categories: []
                     },
-                },
-                chartSeriesVisibility: [
-                    {name:'topScores', visibility:true},
-                    {name:'me', visibility:true},
-                    {name:'all', visibility:true}
-                    ]
+                }
             }
         },
         methods: {
@@ -184,7 +159,6 @@
                 this.chartOptions.series.push({
                     name: 'نفرات برتر',
                     color: 'green',
-                    visible: true,
                     data
                 })
                 data = []
@@ -194,7 +168,6 @@
                 this.chartOptions.series.push({
                     name: 'من',
                     color: 'red',
-                    visible: true,
                     data
                 })
                 data = []
@@ -204,7 +177,6 @@
                 this.chartOptions.series.push({
                     name: 'همه',
                     color: 'blue',
-                    visible: true,
                     data
                 })
             },

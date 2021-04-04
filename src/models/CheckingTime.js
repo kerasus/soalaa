@@ -36,7 +36,6 @@ class CheckingTimeList extends Collection {
             return
         }
         Vue.set(lastItem, 'end', Time.now())
-        // lastItem.end = Time.now()
     }
 }
 

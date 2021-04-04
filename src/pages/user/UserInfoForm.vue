@@ -45,7 +45,7 @@
                 </div>
             </v-col>
             <v-col cols="6">
-                <div class="form-group m-form__group ">
+                <div class="form-group m-form__group">
                     <v-autocomplete label="شهر"
                               :items="citiesForSelectedProvince"
                               v-model="selectedCity"
@@ -55,12 +55,7 @@
                     />
                 </div>
             </v-col>
-            <v-col cols="4">
-                <div class="form-group m-form__group ">
-                    <v-text-field label="مدرسه" v-model="user.school"></v-text-field>
-                </div>
-            </v-col>
-            <v-col cols="4">
+            <v-col cols="6">
                 <div class="form-group m-form__group ">
                     <v-select label="رشته"
                               :items="majors"
@@ -70,7 +65,7 @@
                     />
                 </div>
             </v-col>
-            <v-col cols="4">
+            <v-col cols="6">
                 <div class="form-group m-form__group ">
                     <v-select label="مقطع"
                               :items="grades"
@@ -201,18 +196,32 @@
             this.$store.commit('AppLayout/updateDrawer', false)
         },
         methods: {
-            loadSomeData () {
-                if (this.user.province) {
-                    let selectedProvince = this.provinces.find( item => item.title === this.user.province)
-                    this.selectedProvince = selectedProvince.id
-                    let selectedCity = this.cities.find( item => item.title === this.user.city)
-                    this.selectedCity = selectedCity.id
+            getUserProvince () {
+                if (!this.user.city && this.user.city.id !== null && typeof this.user.city.id !== 'undefined') {
+                    return
                 }
+                let userCity = this.cities.find(item => item.id === this.user.city.id)
+                let userProvince = null
+                if (userCity) {
+                    userProvince = userCity.province
+                }
+
+                return userProvince
+            },
+            loadUserCity () {
+                if (!this.user.city) {
+                    return
+                }
+                let userProvince = this.getUserProvince()
+                this.selectedProvince = userProvince.id
+                this.selectedCity = this.user.city.id
             },
             getUserData () {
                 let that = this
+                this.user.loading = true
                 this.user.getUserData()
                     .then( (user) => {
+                        this.user.loading = false
                         that.getUserFormData()
                         that.$store.commit('Auth/updateUser', user)
                         if (!that.user.needToCompleteInfo()) {
@@ -239,7 +248,8 @@
                         this.provinces = resp.data.data.provinces
                         this.cities = resp.data.data.cities
                         this.user.loading = false
-                        this.loadSomeData()
+                        // this.loadSomeData()
+                        this.loadUserCity()
                     })
                     .catch(()=> {
                         this.$notify({
@@ -353,10 +363,6 @@
                 if (!this.isValidString(this.user.city)) {
                     status = false;
                     this.submitMessage.push('شهر خود را مشخص کنید.');
-                }
-                if (!this.isValidString(this.user.school)) {
-                    status = false;
-                    this.submitMessage.push('نام مدرسه خود را مشخص کنید.');
                 }
                 if (!this.isValidString(this.user.gender.id)) {
                     status = false;

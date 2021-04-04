@@ -100,7 +100,7 @@
                 this.subCategoriesList = new QuestSubcategoryList(response.data)
             })
             if (this.editMode) {
-                this.currentQuestion.show(null, '/3a/api/question/' + this.$route.params.id)
+                this.currentQuestion.show(null, API_ADDRESS.question.getCurrentQuestion(this.$route.params.id))
                     .then((response) => {
                         this.currentQuestion = new Question(response.data.data)
                         this.trueChoiceIndex = this.currentQuestion.choices.list.findIndex((item) => item.answer )
