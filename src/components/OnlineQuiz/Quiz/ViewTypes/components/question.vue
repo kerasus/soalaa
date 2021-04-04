@@ -20,15 +20,15 @@
         </div>
         <div v-if="source.in_active_category" class="buttons-group">
             <v-btn icon @click="changeStatus(source.id, 'o')">
-                <v-icon v-if="!userQuizListData[quiz.id][source.id] || userQuizListData[quiz.id][source.id].status !== 'o'" color="#888" :size="24">mdi-checkbox-blank-circle-outline</v-icon>
-                <v-icon v-if="userQuizListData[quiz.id][source.id] && userQuizListData[quiz.id][source.id].status === 'o'" color="yellow" :size="24">mdi-checkbox-blank-circle</v-icon>
+                <v-icon v-if="getChoiceStatus() === 'o'" color="yellow" :size="24">mdi-checkbox-blank-circle</v-icon>
+                <v-icon v-if="getChoiceStatus() !== 'o'" color="#888" :size="24">mdi-checkbox-blank-circle-outline</v-icon>
             </v-btn>
             <v-btn icon @click="changeStatus(source.id ,'x')">
-                <v-icon :color="userQuizListData[quiz.id][source.id] && userQuizListData[quiz.id][source.id].status === 'x' ? 'red' : '#888'" :size="24">mdi-close</v-icon>
+                <v-icon :color="getChoiceStatus() === 'x' ? 'red' : '#888'" :size="24">mdi-close</v-icon>
             </v-btn>
             <v-btn icon @click="changeBookmark(source.id)">
-                <v-icon v-if="!userQuizListData[quiz.id][source.id] || !userQuizListData[quiz.id][source.id].bookmarked" :size="24" color="#888">mdi-bookmark-outline</v-icon>
-                <v-icon v-if="userQuizListData[quiz.id][source.id] && userQuizListData[quiz.id][source.id].bookmarked" color="blue" :size="24">mdi-bookmark</v-icon>
+                <v-icon v-if="getChoiceBookmark()" color="blue" :size="24">mdi-bookmark</v-icon>
+                <v-icon v-else :size="24" color="#888">mdi-bookmark-outline</v-icon>
             </v-btn>
         </div>
         <span v-if="source.in_active_category"
@@ -42,8 +42,8 @@
                     :key="choice.id"
                     v-html="(choiceNumber[index]) + choice.rendered_title"
                     :md="choiceClass(source)"
-                    :ref="'choice'+index"
-                    :class="{ choice: true, renderedPanel: true, active: userQuizListData[quiz.id][source.id] && choice.id === userQuizListData[quiz.id][source.id].answered_choice_id }"
+                    ref="choices"
+                    :class="{ choice: true, renderedPanel: true, active: getAnsweredChoiceId() === choice.id }"
                     @click="answerClickedd({ questionId: source.id, choiceId: choice.id})"
             />
         </v-row>
@@ -53,7 +53,6 @@
 <script>
     import '@/assets/scss/markdownKatex.scss'
     import { mixinQuiz, mixinUserActionOnQuestion } from '@/mixin/Mixins'
-    import $ from "jquery";
     export default {
         mounted() {
             this.observer = new IntersectionObserver(this.intersectionObserver, {threshold: [0.7, 0.75, 0.8]});
@@ -62,6 +61,7 @@
         mixins: [ mixinQuiz, mixinUserActionOnQuestion ],
         data () {
             return {
+                widestChoiceWidth: 0,
                 observer: null,
                 choiceNumber: {
                     0: '1) ',
@@ -75,6 +75,11 @@
             index: { // index of current source
                 type: Number
             },
+            questionsColumn: { // here is: {uid: 'unique_1', text: 'abc'}
+                default () {
+                    return null
+                }
+            },
             source: { // here is: {uid: 'unique_1', text: 'abc'}
                 default () {
                     return {}
@@ -85,6 +90,39 @@
             this.observer.disconnect();
         },
         methods: {
+            getChoiceStatus () {
+                if (
+                    !this.userQuizListData ||
+                    !this.userQuizListData[this.quiz.id] ||
+                    !this.userQuizListData[this.quiz.id][this.source.id]
+                ) {
+                    return false
+                }
+
+                return this.userQuizListData[this.quiz.id][this.source.id].status
+            },
+            getChoiceBookmark () {
+                if (
+                    !this.userQuizListData ||
+                    !this.userQuizListData[this.quiz.id] ||
+                    !this.userQuizListData[this.quiz.id][this.source.id]
+                ) {
+                    return false
+                }
+
+                return this.userQuizListData[this.quiz.id][this.source.id].bookmarked
+            },
+            getAnsweredChoiceId () {
+                if (
+                    !this.userQuizListData ||
+                    !this.userQuizListData[this.quiz.id] ||
+                    !this.userQuizListData[this.quiz.id][this.source.id]
+                ) {
+                    return false
+                }
+
+                return this.userQuizListData[this.quiz.id][this.source.id].answered_choice_id
+            },
             test (payload) {
                 this.$emit('inView', { isInView: payload.isIntersecting, number: this.getQuestionNumberFromId(this.source.id) })
             },
@@ -103,8 +141,7 @@
             },
             choiceClass (question) {
                 let largestChoice = this.getLargestChoice(question.choices)
-                let largestChoiceWidth = $('.questions').width() / largestChoice
-                console.log('this.$refs', this.$refs)
+                let largestChoiceWidth = this.questionsColumn.clientWidth / largestChoice
                 if (largestChoiceWidth > 48) {
                     return 3
                 }

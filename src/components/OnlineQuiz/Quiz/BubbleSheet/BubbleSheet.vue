@@ -1,6 +1,7 @@
 <template>
     <div
         v-if="quiz.id !== null"
+        ref="bubbleSheet"
         :class="{
             'bubble-sheet': true,
             'questions-list': true,
@@ -43,7 +44,7 @@
 </template>
 
 <script>
-    import $ from "jquery";
+    // import $ from "jquery";
     import { mixinQuiz, mixinUserActionOnQuestion } from "@/mixin/Mixins";
 
     export default {
@@ -95,15 +96,15 @@
             },
             questionListHeight () {
                 // box is a col-7 with 12px padding
-                const boxSize = $('.questions-list').width() - 24
+                const boxSize = this.$refs.bubbleSheet.clientWidth - 24
                 // each group width is 140px
                 const horizontalGroupAmounts = Math.floor(boxSize / 140)
                 const verticalGroupAmount = Math.ceil(this.questionsInGroups.length / horizontalGroupAmounts)
                 return verticalGroupAmount * 182 + 20
             },
             questionListPadding () {
-                const boxSize = $('.questions-list').width() - 24
-                const horizontalGroupAmounts = ($('.questions-list').height() - 8) / 182
+                const boxSize = this.$refs.bubbleSheet.clientWidth - 24
+                const horizontalGroupAmounts = (this.$refs.bubbleSheet.clientHeight - 8) / 182
                 const verticalGroupAmounts = Math.ceil(this.questionsInGroups.length / horizontalGroupAmounts)
                 return (boxSize - (verticalGroupAmounts * 140)) / 2 + 5
             }
@@ -116,15 +117,17 @@
         mounted () {
             let that = this
             setTimeout(() => {
-                $('.questions-list').height(this.questionListHeight())
+                if (that.$refs.bubbleSheet) {
+                    that.$refs.bubbleSheet.style.height = that.questionListHeight()+'px'
+                }
+                // $('.questions-list').height(this.questionListHeight())
                 that.overlay = false
             }, this.delayTime)
         },
         'windowSize.x': function () {
-            // const padding = this.questionListPadding()
-            // $('.questions-list').css({ 'padding-right': padding })
-            // $('.questions-list').css({ 'padding-left': padding })
-            $('.questions-list').height(this.questionListHeight())
+            // this.$refs.bubbleSheet.offsetHeight()
+            this.$refs.bubbleSheet.style.height = this.questionListHeight()+'px'
+            // $('.questions-list').height(this.questionListHeight())
         }
     }
 </script>
