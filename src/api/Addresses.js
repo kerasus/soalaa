@@ -41,7 +41,7 @@ const API_ADDRESS = {
     registerExam: lumenServer + '/user/registerExam',
     examUser: lumenServer + '/exam-user',
     examQuestion (quizId) {
-      return lumenServer + '/eam-question/attach/show/' + quizId
+      return lumenServer + '/exam-question/attach/show/' + quizId
     },
     report: {
       getReport (examId) {
