@@ -1,6 +1,13 @@
 <template>
-    <div :class=" { 'bubble-sheet': true, 'questions-list': true, 'pasokh-nameh': info.type === 'pasokh-nameh', 'pasokh-barg': info.type === 'pasokh-barg' }">
-
+    <div
+        v-if="quiz.id !== null"
+        :class="{
+            'bubble-sheet': true,
+            'questions-list': true,
+            'pasokh-nameh': info.type === 'pasokh-nameh',
+            'pasokh-barg': info.type === 'pasokh-barg'
+        }"
+    >
         <v-overlay
                 :absolute="true"
                 :opacity="0.9"

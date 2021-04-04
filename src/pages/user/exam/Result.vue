@@ -163,25 +163,25 @@
                                 this.$store.commit('AppLayout/updateOverlay', {show: false, loading: false, text: ''})
                             })
                             .catch( () => {
+                                this.$store.commit('AppLayout/updateOverlay', {show: false, loading: false, text: ''})
                                 that.goToExamList()
                                 this.$notify({
                                     group: 'notifs',
                                     title: 'توجه!',
                                     text: 'مشکلی در بارگزاری اطلاعات آزمون رخ داده است.',
-                                    type: 'error',
-                                    duration: 30000,
+                                    type: 'error'
                                 })
                                 Assistant.reportErrors({location: 'pages/user/exam/Result.vue -> loadExam()'})
                             })
                         })
                         .catch( () => {
+                            this.$store.commit('AppLayout/updateOverlay', {show: false, loading: false, text: ''})
                             that.goToExamList()
                             this.$notify({
                                 group: 'notifs',
                                 title: 'توجه!',
                                 text: 'مشکلی در دریافت اطلاعات آزمون رخ داده است.',
-                                type: 'error',
-                                duration: 30000,
+                                type: 'error'
                             })
                             Assistant.reportErrors({location: 'pages/user/exam/Result.vue -> loadExam()'})
                         })
