@@ -1,6 +1,7 @@
-
 <template>
-    <v-container class="konkoor-view" :fluid="true" :style="{ height: '100%', background: 'rgb(244, 244, 244)' }" v-resize="updateWindowSize">
+    <v-container class="konkoor-view" :fluid="true" :style="{ height: '100%', background: 'rgb(244,244,244)' }"
+                 v-resize="updateWindowSize">
+        <v-btn @click="generateReport">دانلود pdf</v-btn>
         <v-row :style="{ 'min-height': '100%' }">
             <v-col :md="5" class="questions" id="questions" :style="{ height: windowSize.y }">
                 <!--                <div class="lesson">{{ currentLesson.title }}</div>-->
@@ -14,6 +15,7 @@
                 <!--                              class="questionss"-->
                 <!--                />-->
                 <DynamicScroller
+                        id="scroller"
                         :items="questions"
                         :min-item-size="70"
                         class="scroller questionss"
@@ -31,6 +33,27 @@
                         </DynamicScrollerItem>
                     </template>
                 </DynamicScroller>
+
+
+                <vue-html2pdf
+                        :show-layout="false"
+                        :float-layout="true"
+                        :enable-download="false"
+                        :preview-modal="true"
+                        :paginate-elements-by-height="1400"
+                        :pdf-quality="2"
+                        :manual-pagination="false"
+                        pdf-format="a4"
+                        pdf-orientation="landscape"
+                        pdf-content-width="800px"
+                        ref="html2Pdf"
+                >
+                    <section id="pdfContent" slot="pdf-content">
+
+                    </section>
+                </vue-html2pdf>
+
+
             </v-col>
             <v-col :md="7" class="left-side-list">
                 <v-row>
@@ -86,7 +109,11 @@
     import BubbleSheet from "@/components/OnlineQuiz/Quiz/BubbleSheet/BubbleSheet";
     import {Exam} from "@/models/Exam";
     import Assistant from "@/plugins/assistant";
-    import { TopMenu_OnlineQuiz } from '@/components/Menu/Menus'
+    import {TopMenu_OnlineQuiz} from '@/components/Menu/Menus';
+    import VueHtml2pdf from 'vue-html2pdf';
+    // import {jsPDF} from "jspdf";
+    // import fromHTML from 'from-html'
+    import html2pdf from 'html2pdf.js'
     // Vue.component('DynamicScroller', DynamicScroller)
     // Vue.component('DynamicScrollerItem', DynamicScrollerItem)
 
@@ -100,25 +127,46 @@
             BubbleSheet,
             DynamicScroller,
             DynamicScrollerItem,
-            Item
+            Item,
+            VueHtml2pdf,
         },
-        data () {
+        data() {
             return {
                 quizData: new Exam(),
                 item: Item,
-                lastTimeScrollRange: { start: 0, end: 29 },
+                lastTimeScrollRange: {start: 0, end: 29},
                 scrollState: 'not scrolling',
                 timePassedSinceLastScroll: 0,
                 setIntervalCallback: null,
-                renderedQuestions: { startIndex: 0, endIndex: 0 },
+                renderedQuestions: {startIndex: 0, endIndex: 0},
                 questions: []
             }
         },
         methods: {
-            changeAppBarAndDrawer (state) {
+
+            generateReport() {
+
+
+
+
+                var pdf = document.getElementById('scroller').innerHTML
+                html2pdf(pdf, {
+                    margin: 1,
+                    filename: 'document.pdf',
+                    image: { type: 'jpeg', quality: 0.98 },
+                    html2canvas: { dpi: 192, letterRendering: true },
+                    jsPDF: { unit: 'in', format: 'letter', orientation: 'landscape' , fontFamily: 'times'}
+                })
+
+
+                // var pdf = document.getElementById('scroller').innerHTML
+                // this.$refs.html2Pdf.generatePdf()
+                // html2pdf(pdf)
+            },
+            changeAppBarAndDrawer(state) {
                 this.$store.commit('AppLayout/updateAppBarAndDrawer', state)
             },
-            changeCurrentQuestionIfScrollingIsDone () {
+            changeCurrentQuestionIfScrollingIsDone() {
                 // console.log('time since last: ', this.timePassedSinceLastScroll)
                 // if (startIndex !== this.lastTimeScrollRange.start || endIndex !== this.lastTimeScrollRange.end) {
                 //     this.lastTimeScrollRange.start = startIndex

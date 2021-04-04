@@ -91,6 +91,20 @@
                                 mdi-delete
                             </v-icon>
                         </v-btn>
+                        <v-btn
+                                class="mx-2"
+                                fab
+                                dark
+                                x-small
+                                color="green"
+                                :to="{ name: 'onlineQuiz.exams.lessons', params: { quizId: item.id}}"
+                        >
+                            <v-icon
+                                    small
+                            >
+                                mdi-notebook-outline
+                            </v-icon>
+                        </v-btn>
                     </td>
                 </tr>
                 </tbody>

@@ -89,6 +89,18 @@ const router = new VueRouter({
             meta: {middleware: [auth, completeInfo]}
         },
         {
+            path: '/onlineQuiz/exams/lessons/:quizId',
+            name: 'onlineQuiz.exams.lessons',
+            component: () => lazyLoadView(import('@/pages/admin/exam/lessons')),
+            meta: {middleware: [auth, completeInfo]}
+        },
+        {
+            path: '/onlineQuiz/exams/lessons/:quizId/:lessonId',
+            name: 'onlineQuiz.exams.lessons.details',
+            component: () => lazyLoadView(import('@/pages/admin/exam/lessonDetails')),
+            meta: {middleware: [auth, completeInfo]}
+        },
+        {
             path: '/quiz/edit/:quizId',
             name: 'quiz.edit',
             component: () => lazyLoadView(import('@/pages/admin/question/QuestionsOfExam')),
