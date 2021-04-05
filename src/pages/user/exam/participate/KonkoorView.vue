@@ -3,7 +3,7 @@
                  v-resize="updateWindowSize">
         <v-btn @click="generateReport">دانلود pdf</v-btn>
         <v-row :style="{ 'min-height': '100%' }">
-            <v-col :md="5" class="questions" id="questions" :style="{ height: windowSize.y }">
+            <v-col :md="5" class="questions" ref="questionsColumn" id="questions" :style="{ height: windowSize.y }">
                 <!--                <div class="lesson">{{ currentLesson.title }}</div>-->
                 <!--                <virtual-list style="overflow-y: auto;"-->
                 <!--                              :data-key="'id'"-->
@@ -29,7 +29,7 @@
                                 :active="active"
                                 :data-index="index"
                         >
-                            <Item :source="item" @inView="test"/>
+                            <Item :source="item" :questions-column="$refs.questionsColumn" @inView="test"/>
                         </DynamicScrollerItem>
                     </template>
                 </DynamicScroller>
@@ -55,7 +55,7 @@
 
 
             </v-col>
-            <v-col :md="7" class="left-side-list">
+            <v-col :md="7" class="left-side-list" ref="leftSideList">
                 <v-row>
                     <v-col class="px-10 py-0 d-flex justify-space-between" dir="ltr">
                         <div class="rounded-b-xl rounded-r-xl">
@@ -95,12 +95,9 @@
         </v-row>
     </v-container>
 </template>
-
 <script>
-    import $ from 'jquery'
+    // import $ from 'jquery'
     import '@/assets/scss/markdownKatex.scss'
-    // import Vue from 'vue'
-    // import VirtualList from 'vue-virtual-scroll-list'
     import 'vue-virtual-scroller/dist/vue-virtual-scroller.css'
     import { DynamicScroller, DynamicScrollerItem } from 'vue-virtual-scroller'
     import Item from '@/components/OnlineQuiz/Quiz/ViewTypes/components/question'
@@ -110,12 +107,19 @@
     import {Exam} from "@/models/Exam";
     import Assistant from "@/plugins/assistant";
     import {TopMenu_OnlineQuiz} from '@/components/Menu/Menus';
-    import VueHtml2pdf from 'vue-html2pdf';
-    // import {jsPDF} from "jspdf";
-    // import fromHTML from 'from-html'
-    import html2pdf from 'html2pdf.js'
     // Vue.component('DynamicScroller', DynamicScroller)
     // Vue.component('DynamicScrollerItem', DynamicScrollerItem)
+
+
+
+    import VueHtml2pdf from 'vue-html2pdf';
+    // import domtoimage from 'dom-to-image';
+    // import Vue2Img from 'vue-2-img'
+    // import 'vue-2-img/dist/vue-2-img.css'
+    // import {jsPDF} from "jspdf";
+    // import html2canvas from 'html2canvas';
+    // import fromHTML from 'from-html'
+    // import html2pdf from 'html2pdf.js'
 
     export default {
         name: 'KonkoorView',
@@ -165,17 +169,22 @@
             },
             generateReport() {
 
+                // Vue2Img().image()
 
 
+                // html2canvas(document.body).then(function(canvas) {
+                //     document.body.appendChild(canvas);
+                // });
 
-                var pdf = document.getElementById('scroller').innerHTML
-                html2pdf(pdf, {
-                    margin: 1,
-                    filename: 'document.pdf',
-                    image: { type: 'jpeg', quality: 0.98 },
-                    html2canvas: { dpi: 192, letterRendering: true },
-                    jsPDF: { unit: 'in', format: 'letter', orientation: 'landscape' , fontFamily: 'times'}
-                })
+
+                // var pdf = document.getElementById('scroller').innerHTML
+                // html2pdf(pdf, {
+                //     margin: 1,
+                //     filename: 'document.pdf',
+                //     image: { type: 'jpeg', quality: 0.98 },
+                //     html2canvas: { dpi: 192, letterRendering: true },
+                //     jsPDF: { unit: 'in', format: 'letter', orientation: 'landscape' , fontFamily: 'times'}
+                // })
 
 
                 // var pdf = document.getElementById('scroller').innerHTML
@@ -281,6 +290,13 @@
             //         this.currentQuestion = question
             //     }
             // }
+            setHeights() {
+                this.$refs.questionsColumn.style.height = this.windowSize.y+'px'
+                if (this.$refs.scroller.$el) {
+                    this.$refs.scroller.$el.style.height = this.windowSize.y+'px'
+                }
+                this.$refs.leftSideList.style.height = (this.windowSize.y - 24)+'px'
+            }
         },
         created () {
             let that = this
@@ -308,9 +324,10 @@
             this.questions = this.getCurrentExamQuestionsInArray()
         },
         mounted () {
-            $('.questions').height(this.windowSize.y)
-            $('.questionss').height(this.windowSize.y)
-            $('.left-side-list').height(this.windowSize.y - 24)
+            this.setHeights()
+            // $('.questions').height(this.windowSize.y)
+            // $('.questionss').height(this.windowSize.y)
+            // $('.left-side-list').height(this.windowSize.y - 24)
             if (this.currentQuestion.id === null) {
                 this.loadFirstQuestion()
             }
@@ -322,15 +339,16 @@
         },
         watch: {
             'windowSize.y': function () {
-                $('.questions').height(this.windowSize.y)
-                $('.questionss').height(this.windowSize.y)
-                $('.left-side-list').height(this.windowSize.y - 24)
+                this.setHeights()
+                // $('.questions').height(this.windowSize.y)
+                // $('.questionss').height(this.windowSize.y)
+                // $('.left-side-list').height(this.windowSize.y - 24)
             },
             'windowSize.x': function () {
                 // const padding = this.questionListPadding()
                 // $('.questions-list').css({ 'padding-right': padding })
                 // $('.questions-list').css({ 'padding-left': padding })
-                $('.questions-list').height(this.questionListHeight())
+                // $('.questions-list').height(this.questionListHeight())
                 this.$store.commit('AppLayout/updateDrawer', false)
             }
         }

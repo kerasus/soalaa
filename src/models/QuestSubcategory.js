@@ -11,6 +11,7 @@ class QuestSubcategory extends Model {
             },
             { key: 'id' },
             { key: 'title' },
+            { key: 'permission' },
             { key: 'display_title' }, // for admin
             { key: 'order' },
             { key: 'category_id' },
