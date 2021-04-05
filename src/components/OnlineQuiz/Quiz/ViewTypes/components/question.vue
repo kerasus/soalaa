@@ -2,7 +2,7 @@
     <div :class="{ 'current-question': this.currentQuestion.id === source.id, question: true, ltr: source.ltr}" v-intersect="test">
         <div>
             <v-sheet
-                    v-if="!source.in_active_category"
+                    v-if="considerActiveCategory && !source.in_active_category"
                     rounded
                     dark
                     height="200"
@@ -18,7 +18,7 @@
                 در حال حاضر امکان مشاهده سوالات این دفترچه امکان پذیر نمی باشد
             </v-sheet>
         </div>
-        <div v-if="source.in_active_category" class="buttons-group">
+        <div v-if="(considerActiveCategory && source.in_active_category) || !considerActiveCategory" class="buttons-group">
             <v-btn icon @click="changeStatus(source.id, 'o')">
                 <v-icon v-if="getChoiceStatus() === 'o'" color="yellow" :size="24">mdi-checkbox-blank-circle</v-icon>
                 <v-icon v-if="getChoiceStatus() !== 'o'" color="#888" :size="24">mdi-checkbox-blank-circle-outline</v-icon>
@@ -31,12 +31,12 @@
                 <v-icon v-else :size="24" color="#888">mdi-bookmark-outline</v-icon>
             </v-btn>
         </div>
-        <span v-if="source.in_active_category"
+        <span v-if="(considerActiveCategory && source.in_active_category) || !considerActiveCategory"
             class="question-body renderedPanel"
             :id="'question' + source.id"
             v-html="(getQuestionNumberFromId(source.id)) + '- ' + source.rendered_statement"
         />
-        <v-row v-if="source.in_active_category" class="choices">
+        <v-row v-if="(considerActiveCategory && source.in_active_category) || !considerActiveCategory" class="choices">
             <v-col
                     v-for="(choice, index) in source.choices.list"
                     :key="choice.id"
@@ -54,10 +54,6 @@
     import '@/assets/scss/markdownKatex.scss'
     import { mixinQuiz, mixinUserActionOnQuestion } from '@/mixin/Mixins'
     export default {
-        mounted() {
-            this.observer = new IntersectionObserver(this.intersectionObserver, {threshold: [0.7, 0.75, 0.8]});
-            this.observer.observe(this.$el);
-        },
         mixins: [ mixinQuiz, mixinUserActionOnQuestion ],
         data () {
             return {
@@ -75,6 +71,10 @@
             index: { // index of current source
                 type: Number
             },
+            considerActiveCategory: { // index of current source
+                type: Boolean,
+                default: true
+            },
             questionsColumn: { // here is: {uid: 'unique_1', text: 'abc'}
                 default () {
                     return null
@@ -86,8 +86,9 @@
                 }
             }
         },
-        destroyed() {
-            this.observer.disconnect();
+        mounted() {
+            this.observer = new IntersectionObserver(this.intersectionObserver, {threshold: [0.7, 0.75, 0.8]});
+            this.observer.observe(this.$el);
         },
         methods: {
             getChoiceStatus () {
@@ -177,6 +178,9 @@
                 })
                 return largestChoice
             },
+        },
+        destroyed() {
+            this.observer.disconnect();
         }
     }
 </script>
