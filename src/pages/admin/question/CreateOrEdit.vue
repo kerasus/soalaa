@@ -164,9 +164,14 @@
     import MarkdownBtn from '@/components/QuizEditor/MarkdownBtn';
     import API_ADDRESS from '@/api/Addresses'
 
-    var md = require('markdown-it')(),
-        mk = require('markdown-it-new-katex');
-    md.use(mk);
+    var md = require('markdown-it')()
+    md.use(require('markdown-it-new-katex'))
+    md.use(require('markdown-it-container'), 'mesra')
+
+    // ::: spoiler click me
+    // *content*
+    // :::
+
     export default {
         name: 'CreateOrEdit',
         components: {MarkdownBtn},
