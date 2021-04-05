@@ -43,7 +43,7 @@
                                     dark
                                     x-small
                                     color="green"
-                                    :to="{ name: 'onlineQuiz.exams.lessons.details', params: { quizId: item.id}}"
+                                    :to="{ name: 'onlineQuiz.exams.lessons.details', params: { quizId: $route.params.quizId, lessonId: $route.params.quizId}}"
                             >
                                 <v-icon
                                         small
