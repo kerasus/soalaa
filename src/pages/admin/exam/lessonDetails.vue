@@ -1,28 +1,25 @@
 <template>
-
-
     <v-container class="konkoor-view" :fluid="true" :style="{ height: '100%', background: 'rgb(244, 244, 244)' }" v-resize="updateWindowSize">
         <v-row  :style="{ 'min-height': '100%' }">
             <v-col :md="5" class="questions" ref="questionsColumn" id="questions" :style="{ height: windowSize.y }">
-    <DynamicScroller
-            :items="questions"
-            :min-item-size="70"
-            class="scroller questionss"
-            ref="scroller"
-            :emitUpdate="true"
-            @update="onScroll"
-    >
-        <template v-slot="{ item, index, active }">
-            <DynamicScrollerItem
-                    :item="item"
-                    :active="active"
-                    :data-index="index"
-            >
-                <Item :source="item" :questions-column="$refs.questionsColumn" @inView="test"/>
-            </DynamicScrollerItem>
-        </template>
-    </DynamicScroller>
-
+                <DynamicScroller
+                        :items="questions"
+                        :min-item-size="70"
+                        class="scroller questionss"
+                        ref="scroller"
+                        :emitUpdate="true"
+                        @update="onScroll"
+                >
+                    <template v-slot="{ item, index, active }">
+                        <DynamicScrollerItem
+                                :item="item"
+                                :active="active"
+                                :data-index="index"
+                        >
+                            <Item :source="item" :consider-active-category="false" :questions-column="$refs.questionsColumn" @inView="test"/>
+                        </DynamicScrollerItem>
+                    </template>
+                </DynamicScroller>
             </v-col>
             <v-col  :md="7" class="left-side-list" ref="leftSideList">
                 <v-row>
@@ -55,11 +52,6 @@
                         <BubbleSheet :info="{ type: 'pasokh-barg' }" @clickChoice="choiceClicked" @scrollTo="scrollTo" :delay-time="0" />
                     </v-col>
                 </v-row>
-            </v-col>
-        </v-row>
-        <v-row   class="timer-row">
-            <v-col>
-                <Timer :daftarche="'عمومی'" :quiz-started-at="1607963897" :daftarche-end-time="1607999897" :height="100"></Timer>
             </v-col>
         </v-row>
     </v-container>
@@ -135,7 +127,7 @@
     // import ErrorReport from "@/components/errorReport";
     // import VueHtml2pdf from 'vue-html2pdf'
     // import ExamQuestionsWithBubbleSheet from "@/components/OnlineQuiz/Quiz/examQuestionsWithBubbleSheet";
-    import {mixinQuiz, mixinWindowSize} from '@/mixin/Mixins'
+    import { mixinAuth, mixinQuiz, mixinWindowSize } from '@/mixin/Mixins'
     import API_ADDRESS from "@/api/Addresses";
     import {QuestionList} from "@/models/Question";
     import axios from "axios";
@@ -143,21 +135,18 @@
     import {DynamicScroller, DynamicScrollerItem} from 'vue-virtual-scroller'
     import Item from '@/components/OnlineQuiz/Quiz/ViewTypes/components/question'
     import {Exam} from "@/models/Exam";
-    import Timer from '@/components/OnlineQuiz/Quiz/Timer/Timer'
 
 
 
     export default {
         name: "lessonDetails",
-        mixins: [mixinQuiz, mixinWindowSize],
+        mixins: [mixinAuth, mixinQuiz, mixinWindowSize],
         // components: {ExamQuestionsWithBubbleSheet},
         components: {
             DynamicScroller,
             DynamicScrollerItem,
-            Item,
-            Timer
+            Item
         },
-
         data: () => ({
             quizData: new Exam(),
             item: Item,
@@ -202,7 +191,7 @@
                 if (firstInViewQuestion.id === this.currentQuestion.id) {
                     return
                 }
-                this.changeQuestion(firstInViewQuestion.id, 'onlineQuiz.konkoorView')
+                // this.changeQuestion(firstInViewQuestion.id, 'onlineQuiz.konkoorView')
             },
             scrollTo (questionId) {
                 const questionIndex = this.getQuestionIndexById(questionId)
@@ -233,11 +222,11 @@
             },
             choiceClicked (questionId) {
                 this.scrollTo(questionId)
-                this.changeQuestion(questionId)
+                // this.changeQuestion(questionId)
             },
             setHeights() {
                 this.$refs.questionsColumn.style.height = this.windowSize.y+'px'
-                if (this.$refs.scroller.$el) {
+                if (this.$refs.scroller && this.$refs.scroller.$el) {
                     this.$refs.scroller.$el.style.height = this.windowSize.y+'px'
                 }
                 this.$refs.leftSideList.style.height = (this.windowSize.y - 24)+'px'
@@ -304,9 +293,9 @@
         },
         mounted () {
             this.setHeights()
-            if (this.currentQuestion.id === null) {
-                this.loadFirstQuestion()
-            }
+            // if (this.currentQuestion.id === null) {
+            //     this.loadFirstQuestion()
+            // }
             this.scrollTo(this.currentQuestion.id)
             this.changeAppBarAndDrawer(false)
         },
