@@ -1,67 +1,71 @@
 <template>
 
 
-    <v-container class="konkoor-view" :fluid="true" :style="{ height: '100%', background: 'rgb(244, 244, 244)' }" v-resize="updateWindowSize">
-        <v-row  :style="{ 'min-height': '100%' }">
+    <v-container class="konkoor-view" :fluid="true" :style="{ height: '100%', background: 'rgb(244, 244, 244)' }"
+                 v-resize="updateWindowSize">
+        <v-row :style="{ 'min-height': '100%' }">
             <v-col :md="5" class="questions" ref="questionsColumn" id="questions" :style="{ height: windowSize.y }">
-    <DynamicScroller
-            :items="questions"
-            :min-item-size="70"
-            class="scroller questionss"
-            ref="scroller"
-            :emitUpdate="true"
-            @update="onScroll"
-    >
-        <template v-slot="{ item, index, active }">
-            <DynamicScrollerItem
-                    :item="item"
-                    :active="active"
-                    :data-index="index"
-            >
-                <Item :source="item" :questions-column="$refs.questionsColumn" @inView="test"/>
-            </DynamicScrollerItem>
-        </template>
-    </DynamicScroller>
+                <DynamicScroller
+                        v-if="true"
+                        :items="questions"
+                        :min-item-size="70"
+                        class="scroller questionss"
+                        ref="scroller"
+                        :emitUpdate="true"
+                        @update="onScroll"
+                >
+                    <template v-slot="{ item, index, active }">
+                        <DynamicScrollerItem
+                                :item="item"
+                                :active="active"
+                                :data-index="index"
+                        >
+                            <Item :source="item" :questions-column="$refs.questionsColumn" @inView="test"/>
+                        </DynamicScrollerItem>
+                    </template>
+                </DynamicScroller>
 
             </v-col>
-            <v-col  :md="7" class="left-side-list" ref="leftSideList">
-                <v-row>
-                    <v-col class="px-10 py-0 d-flex justify-space-between" dir="ltr">
-                        <div class="rounded-b-xl rounded-r-xl">
-                            <v-menu bottom :offset-y="true" class="rounded-b-xl rounded-r-xl">
-                                <template v-slot:activator="{ on, attrs }">
-                                    <v-btn large tile v-bind="attrs" v-on="on" elevation="0" class="pl-3" >
-                                        <v-icon class="mr-2" :size="30" color="#666">mdi-account-circle</v-icon>
-                                        <span v-if="user.last_name">
-                                            {{ user.last_name }}
-                                        </span>
-                                        <span v-if="user.first_name">
-                                            {{ user.first_name }}
-                                        </span>
+                        <v-col :md="7" class="left-side-list" ref="leftSideList">
+                            <v-row>
+                                <v-col class="px-10 py-0 d-flex justify-space-between" dir="ltr">
+                                    <div class="rounded-b-xl rounded-r-xl">
+                                        <v-menu bottom :offset-y="true" class="rounded-b-xl rounded-r-xl">
+                                            <template v-slot:activator="{ on, attrs }">
+                                                <v-btn large tile v-bind="attrs" v-on="on" elevation="0" class="pl-3">
+                                                    <v-icon class="mr-2" :size="30" color="#666">mdi-account-circle</v-icon>
+                                                    <span v-if="user.last_name">
+                                                        {{ user.last_name }}
+                                                    </span>
+                                                    <span v-if="user.first_name">
+                                                        {{ user.first_name }}
+                                                    </span>
+                                                </v-btn>
+                                            </template>
+                                            <v-card v-if="false" max-width="375" class="mx-auto" rounded="b-xl r-xl">
+                                                <TopMenu_OnlineQuiz/>
+                                            </v-card>
+                                        </v-menu>
+                                    </div>
+                                    <v-btn icon @click="changeView('alaa')">
+                                        <v-icon>mdi-table-split-cell</v-icon>
                                     </v-btn>
-                                </template>
-                                <v-card v-if="false" max-width="375" class="mx-auto" rounded="b-xl r-xl">
-                                    <TopMenu_OnlineQuiz/>
-                                </v-card>
-                            </v-menu>
-                        </div>
-                        <v-btn icon @click="changeView('alaa')">
-                            <v-icon>mdi-table-split-cell</v-icon>
-                        </v-btn>
-                    </v-col>
-                </v-row>
-                <v-row>
-                    <v-col v-if="false">
-                        <BubbleSheet :info="{ type: 'pasokh-barg' }" @clickChoice="choiceClicked" @scrollTo="scrollTo" :delay-time="0" />
-                    </v-col>
-                </v-row>
-            </v-col>
+                                </v-col>
+                            </v-row>
+                            <v-row>
+                                <v-col v-if="false">
+                                    <BubbleSheet :info="{ type: 'pasokh-barg' }" @clickChoice="choiceClicked" @scrollTo="scrollTo"
+                                                 :delay-time="0"/>
+                                </v-col>
+                            </v-row>
+                        </v-col>
         </v-row>
-        <v-row   class="timer-row">
-            <v-col>
-                <Timer :daftarche="'عمومی'" :quiz-started-at="1607963897" :daftarche-end-time="1607999897" :height="100"></Timer>
-            </v-col>
-        </v-row>
+        <!--        <v-row class="timer-row">-->
+        <!--            <v-col>-->
+        <!--                <Timer :daftarche="'عمومی'" :quiz-started-at="1607963897" :daftarche-end-time="1607999897"-->
+        <!--                       :height="100"></Timer>-->
+        <!--            </v-col>-->
+        <!--        </v-row>-->
     </v-container>
 
     <!--    <exam-questions-with-bubble-sheet :questions="questions"/>-->
@@ -135,7 +139,7 @@
     // import ErrorReport from "@/components/errorReport";
     // import VueHtml2pdf from 'vue-html2pdf'
     // import ExamQuestionsWithBubbleSheet from "@/components/OnlineQuiz/Quiz/examQuestionsWithBubbleSheet";
-    import {mixinQuiz, mixinWindowSize} from '@/mixin/Mixins'
+    import {mixinQuiz, mixinWindowSize,mixinAuth} from '@/mixin/Mixins'
     import API_ADDRESS from "@/api/Addresses";
     import {QuestionList} from "@/models/Question";
     import axios from "axios";
@@ -143,29 +147,33 @@
     import {DynamicScroller, DynamicScrollerItem} from 'vue-virtual-scroller'
     import Item from '@/components/OnlineQuiz/Quiz/ViewTypes/components/question'
     import {Exam} from "@/models/Exam";
-    import Timer from '@/components/OnlineQuiz/Quiz/Timer/Timer'
+    import BubbleSheet from "@/components/OnlineQuiz/Quiz/BubbleSheet/BubbleSheet";
+    import { TopMenu_OnlineQuiz } from '@/components/Menu/Menus'
 
+
+    // import Timer from '@/components/OnlineQuiz/Quiz/Timer/Timer'
 
 
     export default {
         name: "lessonDetails",
-        mixins: [mixinQuiz, mixinWindowSize],
+        mixins: [mixinQuiz, mixinWindowSize,mixinAuth],
         // components: {ExamQuestionsWithBubbleSheet},
         components: {
             DynamicScroller,
             DynamicScrollerItem,
-            Item,
-            Timer
+            Item,BubbleSheet,
+            TopMenu_OnlineQuiz
+            // Timer
         },
 
         data: () => ({
             quizData: new Exam(),
             item: Item,
-            lastTimeScrollRange: { start: 0, end: 29 },
+            lastTimeScrollRange: {start: 0, end: 29},
             scrollState: 'not scrolling',
             timePassedSinceLastScroll: 0,
             setIntervalCallback: null,
-            renderedQuestions: { startIndex: 0, endIndex: 0 },
+            renderedQuestions: {startIndex: 0, endIndex: 0},
             dialog: false,
             items: [
                 'خارج از بودجه بندی آزمون ',
@@ -177,12 +185,12 @@
         }),
         methods: {
             updateWindowSize() {
-                this.$store.commit('AppLayout/updateWindowSize', { x: window.innerWidth, y: window.innerHeight })
+                this.$store.commit('AppLayout/updateWindowSize', {x: window.innerWidth, y: window.innerHeight})
             },
-            changeAppBarAndDrawer (state) {
+            changeAppBarAndDrawer(state) {
                 this.$store.commit('AppLayout/updateAppBarAndDrawer', state)
             },
-            changeCurrentQuestionIfScrollingIsDone () {
+            changeCurrentQuestionIfScrollingIsDone() {
                 // console.log('time since last: ', this.timePassedSinceLastScroll)
                 // if (startIndex !== this.lastTimeScrollRange.start || endIndex !== this.lastTimeScrollRange.end) {
                 //     this.lastTimeScrollRange.start = startIndex
@@ -197,14 +205,14 @@
                 }
                 this.timePassedSinceLastScroll += 250
             },
-            changeCurrentQuestionToFirstQuestionInView () {
+            changeCurrentQuestionToFirstQuestionInView() {
                 const firstInViewQuestion = this.getFirstInViewQuestionNumber()
                 if (firstInViewQuestion.id === this.currentQuestion.id) {
                     return
                 }
-                this.changeQuestion(firstInViewQuestion.id, 'onlineQuiz.konkoorView')
+                // this.changeQuestion(firstInViewQuestion.id, 'onlineQuiz.konkoorView')
             },
-            scrollTo (questionId) {
+            scrollTo(questionId) {
                 const questionIndex = this.getQuestionIndexById(questionId)
                 console.log(questionIndex)
                 this.$refs.scroller.scrollToItem(questionIndex)
@@ -215,7 +223,7 @@
                         333 * i)
                 }
             },
-            getFirstInViewQuestionNumber () {
+            getFirstInViewQuestionNumber() {
                 // console.log(this.renderedQuestions.startIndex, this.renderedQuestions.endIndex, 'haha2')
                 let firstQuestionInView
                 for (let i = this.renderedQuestions.startIndex; i <= this.renderedQuestions.endIndex; i++) {
@@ -231,18 +239,18 @@
                     return false
                 }
             },
-            choiceClicked (questionId) {
+            choiceClicked(questionId) {
                 this.scrollTo(questionId)
-                this.changeQuestion(questionId)
+                // this.changeQuestion(questionId)
             },
             setHeights() {
-                this.$refs.questionsColumn.style.height = this.windowSize.y+'px'
+                this.$refs.questionsColumn.style.height = this.windowSize.y + 'px'
                 if (this.$refs.scroller.$el) {
-                    this.$refs.scroller.$el.style.height = this.windowSize.y+'px'
+                    this.$refs.scroller.$el.style.height = this.windowSize.y + 'px'
                 }
-                this.$refs.leftSideList.style.height = (this.windowSize.y - 24)+'px'
+                // this.$refs.leftSideList.style.height = (this.windowSize.y - 24) + 'px'
             },
-            test (payload) {
+            test(payload) {
                 console.log(payload.number)
                 if (payload.isInView) {
                     for (let i = 0; i < this.inView.length; i++) {
@@ -251,8 +259,7 @@
                         }
                     }
                     this.inView.push(payload.number)
-                }
-                else {
+                } else {
                     for (let i = 0; i < this.inView.length; i++) {
                         if (this.inView[i] === payload.number) {
                             this.inView.splice(i, 1)
@@ -281,9 +288,18 @@
             const url = API_ADDRESS.exam.examQuestion(this.$route.params.quizId)
             axios.get(url)
                 .then((response) => {
-                    this.saveCurrentExamQuestions(new QuestionList(response.data.data).list)
+                    console.log(response)
+
+                    this.quizData.questions = new QuestionList(response.data.data).list
+                    this.saveCurrentExamQuestions(this.quizData.questions)
+                    // this.quiz = new Exam(this.quizData)
+
+
                     this.questions = this.getCurrentExamQuestionsInArray()
-                    console.log(this.questions[0])
+
+
+                    console.log(this.quizData.questions)
+
                 })
 
         },
@@ -302,10 +318,10 @@
                 this.$store.commit('AppLayout/updateDrawer', false)
             }
         },
-        mounted () {
+        mounted() {
             this.setHeights()
             if (this.currentQuestion.id === null) {
-                this.loadFirstQuestion()
+                // this.loadFirstQuestion()
             }
             this.scrollTo(this.currentQuestion.id)
             this.changeAppBarAndDrawer(false)

@@ -5,7 +5,7 @@
                 <!--                <div class="lesson">{{ currentLesson.title }}</div>-->
                 <!--                <virtual-list style="overflow-y: auto;"-->
                 <!--                              :data-key="'id'"-->
-                <!--                              :data-sources="quiz.questions.list"-->
+<!--                                              :data-sources="quiz.questions.list"-->
                 <!--                              :data-component="item"-->
                 <!--                              :keep="20"-->
                 <!--                              :estimate-size="100"-->
