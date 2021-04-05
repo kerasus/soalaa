@@ -15,7 +15,6 @@
                 <!--                              class="questionss"-->
                 <!--                />-->
                 <DynamicScroller
-                        id="scroller"
                         :items="questions"
                         :min-item-size="70"
                         class="scroller questionss"
@@ -33,27 +32,6 @@
                         </DynamicScrollerItem>
                     </template>
                 </DynamicScroller>
-
-
-                <vue-html2pdf
-                        :show-layout="false"
-                        :float-layout="true"
-                        :enable-download="false"
-                        :preview-modal="true"
-                        :paginate-elements-by-height="1400"
-                        :pdf-quality="2"
-                        :manual-pagination="false"
-                        pdf-format="a4"
-                        pdf-orientation="landscape"
-                        pdf-content-width="800px"
-                        ref="html2Pdf"
-                >
-                    <section id="pdfContent" slot="pdf-content">
-
-                    </section>
-                </vue-html2pdf>
-
-
             </v-col>
             <v-col :md="7" class="left-side-list" ref="leftSideList">
                 <v-row>
@@ -112,7 +90,7 @@
 
 
 
-    import VueHtml2pdf from 'vue-html2pdf';
+    // import VueHtml2pdf from 'vue-html2pdf';
     // import domtoimage from 'dom-to-image';
     // import Vue2Img from 'vue-2-img'
     // import 'vue-2-img/dist/vue-2-img.css'
@@ -132,7 +110,7 @@
             DynamicScroller,
             DynamicScrollerItem,
             Item,
-            VueHtml2pdf,
+            // VueHtml2pdf,
         },
         data() {
             return {
@@ -148,7 +126,6 @@
             }
         },
         methods: {
-
             test (payload) {
                 console.log(payload.number)
                 if (payload.isInView) {
@@ -166,30 +143,6 @@
                         }
                     }
                 }
-            },
-            generateReport() {
-
-                // Vue2Img().image()
-
-
-                // html2canvas(document.body).then(function(canvas) {
-                //     document.body.appendChild(canvas);
-                // });
-
-
-                // var pdf = document.getElementById('scroller').innerHTML
-                // html2pdf(pdf, {
-                //     margin: 1,
-                //     filename: 'document.pdf',
-                //     image: { type: 'jpeg', quality: 0.98 },
-                //     html2canvas: { dpi: 192, letterRendering: true },
-                //     jsPDF: { unit: 'in', format: 'letter', orientation: 'landscape' , fontFamily: 'times'}
-                // })
-
-
-                // var pdf = document.getElementById('scroller').innerHTML
-                // this.$refs.html2Pdf.generatePdf()
-                // html2pdf(pdf)
             },
             changeAppBarAndDrawer(state) {
                 this.$store.commit('AppLayout/updateAppBarAndDrawer', state)

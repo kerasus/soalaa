@@ -5,9 +5,10 @@ import { CheckingTimeList } from "@/models/CheckingTime";
 import Time from "@/plugins/time";
 import axios from "axios";
 import API_ADDRESS from "@/api/Addresses";
-var md = require('markdown-it')(),
-    mk = require('markdown-it-new-katex')
-md.use(mk);
+
+var md = require('markdown-it')()
+md.use(require('markdown-it-new-katex'))
+md.use(require('markdown-it-container'), 'mesra')
 
 class Question extends Model {
     constructor (data) {

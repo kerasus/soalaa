@@ -128,9 +128,9 @@
 
     Vue.component('DynamicScroller', DynamicScroller)
     Vue.component('DynamicScrollerItem', DynamicScrollerItem)
-    var md = require('markdown-it')(),
-        mk = require('markdown-it-new-katex')
-    md.use(mk);
+    var md = require('markdown-it')()
+    md.use(require('markdown-it-new-katex'));
+    md.use(require('markdown-it-container'), 'poem');
 
     export default {
         name: 'QuestionsOfExam',
