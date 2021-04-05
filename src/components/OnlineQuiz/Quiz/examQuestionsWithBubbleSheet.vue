@@ -1,6 +1,6 @@
 <template>
     <v-container class="konkoor-view" :fluid="true" :style="{ height: '100%', background: 'rgb(244, 244, 244)' }" v-resize="updateWindowSize">
-        <v-row :style="{ 'min-height': '100%' }">
+        <v-row  :style="{ 'min-height': '100%' }">
             <v-col :md="5" class="questions" ref="questionsColumn" id="questions" :style="{ height: windowSize.y }">
                 <!--                <div class="lesson">{{ currentLesson.title }}</div>-->
                 <!--                <virtual-list style="overflow-y: auto;"-->
@@ -31,7 +31,7 @@
                     </template>
                 </DynamicScroller>
             </v-col>
-            <v-col :md="7" class="left-side-list" ref="leftSideList">
+            <v-col v-if="false" :md="7" class="left-side-list" ref="leftSideList">
                 <v-row>
                     <v-col class="px-10 py-0 d-flex justify-space-between" dir="ltr">
                         <div class="rounded-b-xl rounded-r-xl">
@@ -47,7 +47,7 @@
                                         </span>
                                     </v-btn>
                                 </template>
-                                <v-card max-width="375" class="mx-auto" rounded="b-xl r-xl">
+                                <v-card v-if="false" max-width="375" class="mx-auto" rounded="b-xl r-xl">
                                     <TopMenu_OnlineQuiz/>
                                 </v-card>
                             </v-menu>
@@ -58,13 +58,13 @@
                     </v-col>
                 </v-row>
                 <v-row>
-                    <v-col>
+                    <v-col v-if="false">
                         <BubbleSheet :info="{ type: 'pasokh-barg' }" @clickChoice="choiceClicked" @scrollTo="scrollTo" :delay-time="0" />
                     </v-col>
                 </v-row>
             </v-col>
         </v-row>
-        <v-row class="timer-row">
+        <v-row  v-if="false" class="timer-row">
             <v-col>
                 <Timer :daftarche="'عمومی'" :quiz-started-at="1607963897" :daftarche-end-time="1607999897" :height="100"></Timer>
             </v-col>
@@ -76,28 +76,42 @@
     // import $ from 'jquery'
     import '@/assets/scss/markdownKatex.scss'
     import 'vue-virtual-scroller/dist/vue-virtual-scroller.css'
-    import { DynamicScroller, DynamicScrollerItem } from 'vue-virtual-scroller'
+    // import { DynamicScroller, DynamicScrollerItem } from 'vue-virtual-scroller'
     import Item from '@/components/OnlineQuiz/Quiz/ViewTypes/components/question'
-    import { mixinAuth, mixinQuiz, mixinUserActionOnQuestion, mixinWindowSize } from '@/mixin/Mixins'
-    import Timer from '@/components/OnlineQuiz/Quiz/Timer/Timer'
-    import BubbleSheet from "@/components/OnlineQuiz/Quiz/BubbleSheet/BubbleSheet";
+    import { mixinAuth, mixinQuiz, mixinUserActionOnQuestion ,mixinWindowSize} from '@/mixin/Mixins'
+    // import Timer from '@/components/OnlineQuiz/Quiz/Timer/Timer'
+    // import BubbleSheet from "@/components/OnlineQuiz/Quiz/BubbleSheet/BubbleSheet";
     import {Exam} from "@/models/Exam";
-    import Assistant from "@/plugins/assistant";
-    import { TopMenu_OnlineQuiz } from '@/components/Menu/Menus'
-    import API_ADDRESS from "@/api/Addresses";
-    import {QuestionList} from "@/models/Question";
+    // import { TopMenu_OnlineQuiz } from '@/components/Menu/Menus'
+    // import Assistant from "@/plugins/assistant";
+    // import API_ADDRESS from "@/api/Addresses";
+    // import {QuestionList} from "@/models/Question";
 
     export default {
-        name: 'examQuestionsWithBubbleSheet',
+        name: 'ExamQuestionsWithBubbleSheet',
         mixins: [mixinAuth, mixinQuiz, mixinUserActionOnQuestion, mixinWindowSize],
         components: {
-            Timer,
-            TopMenu_OnlineQuiz,
+            // Timer,
+            // TopMenu_OnlineQuiz,
+            // BubbleSheet,
+            // DynamicScroller,
+            // DynamicScrollerItem,
+            // Item
             // 'virtual-list': VirtualList,
-            BubbleSheet,
-            DynamicScroller,
-            DynamicScrollerItem,
-            Item
+
+        },
+        computed: {
+            windowSize: {
+                get() {
+                    return this.$store.getters['AppLayout/windowSize']
+                },
+                set(newInfo) {
+                    this.$store.commit('AppLayout/updateWindowSize', newInfo)
+                }
+            }
+        },
+        props:{
+          questions:{type:Array}
         },
         data () {
             return {
@@ -108,11 +122,16 @@
                 timePassedSinceLastScroll: 0,
                 setIntervalCallback: null,
                 renderedQuestions: { startIndex: 0, endIndex: 0 },
-                questions: [],
+                // questions: [],
                 inView: []
             }
         },
         methods: {
+
+            updateWindowSize() {
+                this.$store.commit('AppLayout/updateWindowSize', { x: window.innerWidth, y: window.innerHeight })
+            },
+
             test (payload) {
                 console.log(payload.number)
                 if (payload.isInView) {
@@ -239,37 +258,40 @@
             }
         },
         created () {
-            let that = this
-            this.startExam(this.$route.params.quizId, 'onlineQuiz.KonkoorView')
-                .then(() => {
-                    // that.loadFirstActiveQuestionIfNeed()
-                    that.$store.commit('AppLayout/updateOverlay', {show: false, loading: false, text: ''})
-                })
-                .catch( (error) => {
-                    Assistant.reportErrors(error)
-                    that.$notify({
-                        group: 'notifs',
-                        title: 'توجه!',
-                        text: 'مشکلی در دریافت اطلاعات آژمون رخ داده است. لطفا دوباره امتحان کنید.',
-                        type: 'error'
-                    })
-                    // ToDo: uncomment
-                    // that.$router.push({ name: 'user.exam.list'})
-                })
+            // let that = this
+            // this.startExam(this.$route.params.quizId, 'onlineQuiz.KonkoorView')
+            //     .then(() => {
+            //         // that.loadFirstActiveQuestionIfNeed()
+            //         that.$store.commit('AppLayout/updateOverlay', {show: false, loading: false, text: ''})
+            //     })
+            //     .catch( (error) => {
+            //         Assistant.reportErrors(error)
+            //         that.$notify({
+            //             group: 'notifs',
+            //             title: 'توجه!',
+            //             text: 'مشکلی در دریافت اطلاعات آژمون رخ داده است. لطفا دوباره امتحان کنید.',
+            //             type: 'error'
+            //         })
+            //         // ToDo: uncomment
+            //         // that.$router.push({ name: 'user.exam.list'})
+            //     })
+
+
             // if (this.windowSize.x > 959) {
             //     this.changeAppBarAndDrawer(false)
             // } else {
             //     this.$router.push({ name: 'onlineQuiz.alaaView', params: { quizId: 313, questNumber: this.$route.params.quizId } })
             // }
 
-            const url = API_ADDRESS.exam.examQuestion(this.$route.params.quizId)
-            this.axios.get(url)
-                .then((response) => {
-                    this.saveCurrentExamQuestions()
-                    this.quizData.questions = new QuestionList(response.data.data)
-                    this.quiz = new Exam(this.quizData)
-                    this.questions = this.getCurrentExamQuestionsInArray()
-                })
+            // that.$store.commit('AppLayout/updateOverlay', {show: false, loading: false, text: ''})
+            // const url = API_ADDRESS.exam.examQuestion(this.$route.params.quizId)
+            // this.axios.get(url)
+            //     .then((response) => {
+            //         this.saveCurrentExamQuestions()
+            //         this.quizData.questions = new QuestionList(response.data.data).list
+            //         this.quiz = new Exam(this.quizData)
+            //         this.questions = this.getCurrentExamQuestionsInArray()
+            //     })
         },
         mounted () {
             this.setHeights()
