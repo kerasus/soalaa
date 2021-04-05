@@ -43,6 +43,7 @@
         <v-form v-on:submit.prevent="login">
             <v-card-text>
                 <v-text-field
+                        @animationstart="checkAnimationUserName"
                         id="username"
                         label="شماره همراه"
                         name="login"
@@ -86,7 +87,9 @@
                 user: new User(window.localStorage.getItem('user')),
                 loadingList: false,
                 username: null,
-                password: null
+                password: null,
+                autofilledUsername:false,
+                autofilledPass:false
             }
         },
         created() {
@@ -95,6 +98,37 @@
             }
         },
         methods: {
+            checkAnimationUserName(e) {
+                if(e.animationName == "onAutoFillStart")
+                {
+                    this.autofilledUsername = true;
+                }
+                else if(e.animationName == "onAutoFillCancel")
+                {
+                    this.autofilledUsername = false;
+                }
+
+                // if (this.autofilledUsername) {
+                //     document.getElementById('username').focus()
+                //     document.getElementById('password').focus()
+                //     document.getElementById('username').focus()
+                // }
+            },
+            checkAnimationPass(e) {
+                if(e.animationName == "onAutoFillStart")
+                {
+                    this.autofilledPass = true;
+                }
+                else if(e.animationName == "onAutoFillCancel")
+                {
+                    this.autofilledPass = false;
+                }
+
+                if (this.autofilledPass) {
+                    document.getElementById('password').focus()
+                }
+            },
+
             getToken () {
                 return this.$store.getters['Auth/accessToken']
             },
@@ -148,3 +182,26 @@
         }
     }
 </script>
+
+
+<style>
+    :-webkit-autofill {
+        animation-name: onAutoFillStart;
+    }
+    :not(:-webkit-autofill) {
+        animation-name: onAutoFillCancel;
+    }
+    @keyframes onAutoFillStart {
+        from {
+        }
+        to {
+        }
+    }
+    @keyframes onAutoFillCancel {
+        from {
+        }
+        to {
+        }
+    }
+
+</style>
