@@ -48,8 +48,8 @@
                     </v-col>
                 </v-row>
                 <v-row>
-                    <v-col v-if="false">
-                        <BubbleSheet :info="{ type: 'pasokh-barg' }" @clickChoice="choiceClicked" @scrollTo="scrollTo" :delay-time="0" />
+                    <v-col >
+                        <BubbleSheet  :info="{ type: 'pasokh-barg' }" @clickChoice="choiceClicked" @scrollTo="scrollTo" :delay-time="0" />
                     </v-col>
                 </v-row>
             </v-col>
@@ -128,6 +128,7 @@
     // import VueHtml2pdf from 'vue-html2pdf'
     // import ExamQuestionsWithBubbleSheet from "@/components/OnlineQuiz/Quiz/examQuestionsWithBubbleSheet";
     import { mixinAuth, mixinQuiz, mixinWindowSize } from '@/mixin/Mixins'
+    import BubbleSheet from "@/components/OnlineQuiz/Quiz/BubbleSheet/BubbleSheet"
     import API_ADDRESS from "@/api/Addresses";
     import {QuestionList} from "@/models/Question";
     import axios from "axios";
@@ -143,6 +144,7 @@
         mixins: [mixinAuth, mixinQuiz, mixinWindowSize],
         // components: {ExamQuestionsWithBubbleSheet},
         components: {
+            BubbleSheet,
             DynamicScroller,
             DynamicScrollerItem,
             Item
@@ -225,9 +227,9 @@
                 // this.changeQuestion(questionId)
             },
             setHeights() {
-                this.$refs.questionsColumn.style.height = this.windowSize.y+'px'
+                this.$refs.questionsColumn.style.height =( this.windowSize.y - 24 )+'px'
                 if (this.$refs.scroller && this.$refs.scroller.$el) {
-                    this.$refs.scroller.$el.style.height = this.windowSize.y+'px'
+                    this.$refs.scroller.$el.style.height = ( this.windowSize.y - 24 ) +'px'
                 }
                 this.$refs.leftSideList.style.height = (this.windowSize.y - 24)+'px'
             },

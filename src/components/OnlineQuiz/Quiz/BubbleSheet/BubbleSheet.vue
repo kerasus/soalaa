@@ -1,14 +1,17 @@
 <template>
     <div
-        v-if="quiz.id !== null"
         ref="bubbleSheet"
         :class="{
             'bubble-sheet': true,
             'questions-list': true,
             'pasokh-nameh': info.type === 'pasokh-nameh',
-            'pasokh-barg': info.type === 'pasokh-barg'
+            'pasokh-barg': info.type === 'pasokh-barg',
+
         }"
     >
+
+<!--              v-if="quiz.id !== null"-->
+
         <v-overlay
                 :absolute="true"
                 :opacity="0.9"
@@ -55,14 +58,25 @@
                 let groups = [],
                 chunk = 10
                 let array
-                array = this.getCurrentExamQuestionsInArray()
-                for (let i=0,j=array.length; i<j; i+=chunk) {
-                    groups.push(array.slice(i,i+chunk))
+                if (this.questions === null){
+                    array = this.getCurrentExamQuestionsInArray()
+                    for (let i=0,j=array.length ; i<j; i+=chunk) {
+                        groups.push(array.slice(i,i+chunk))
+                    }
+                } else {
+                    array = this.questions
+                    for (let i=0,j=200 ; i<j; i+=chunk) {
+                        groups.push(array.slice(i,i+chunk))
+                    }
                 }
+
                 return groups
             }
         },
         props: {
+            questions: {
+              default:null
+            },
             info: {
                 default: null
             },
@@ -113,6 +127,8 @@
             if (this.delayTime === 0) {
                 this.overlay = true
             }
+            console.log(this.questions)
+            console.log(this.getCurrentExamQuestionsInArray())
         },
         mounted () {
             let that = this
@@ -238,6 +254,8 @@
         align-items: center;
         margin-bottom: 80px;
     }
+
+
 </style>
 
 <style>
