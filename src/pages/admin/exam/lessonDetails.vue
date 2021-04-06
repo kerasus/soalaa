@@ -1,7 +1,10 @@
 <template>
     <v-container class="konkoor-view" :fluid="true" :style="{ height: '100%', background: 'rgb(244, 244, 244)' }" v-resize="updateWindowSize">
+
+
+
         <v-row  :style="{ 'min-height': '100%' }">
-            <v-col :md="5" class="questions" ref="questionsColumn" id="questions" :style="{ height: windowSize.y }">
+            <v-col v-resize="updateRightColumnSize" :md="5" class="questions" ref="questionsColumn" id="questions" :style="{ height: windowSize.y , width: windowSize.x}">
                 <DynamicScroller
                         :items="questions"
                         :min-item-size="70"
@@ -21,7 +24,7 @@
                     </template>
                 </DynamicScroller>
             </v-col>
-            <v-col  :md="7" class="left-side-list" ref="leftSideList">
+            <v-col v-resize="updateLeftColumnSize"  :md="7" class="left-side-list" ref="leftSideList">
                 <v-row>
                     <v-col class="px-10 py-0 d-flex justify-space-between" dir="ltr">
                         <div class="rounded-b-xl rounded-r-xl">
@@ -139,6 +142,8 @@
 
 
 
+
+
     export default {
         name: "lessonDetails",
         mixins: [mixinAuth, mixinQuiz, mixinWindowSize],
@@ -164,11 +169,23 @@
                 'دارای غلط تایپی'
             ],
             questions: [],
-            inView: []
+            inView: [],
+            windowSize: {
+                x: 0,
+                y: 0,
+            },
+            windowVisible: true
         }),
         methods: {
             updateWindowSize() {
                 this.$store.commit('AppLayout/updateWindowSize', { x: window.innerWidth, y: window.innerHeight })
+                // this.windowSize = { x: window.innerWidth, y: window.innerHeight }
+            },
+            updateLeftColumnSize(){
+
+            },
+            updateRightColumnSize(){
+
             },
             changeAppBarAndDrawer (state) {
                 this.$store.commit('AppLayout/updateAppBarAndDrawer', state)
@@ -305,5 +322,15 @@
 </script>
 
 <style scoped>
-
+    .resizable-content {
+        background-position: top left;
+        width: 150px;
+        height: 150px;
+        padding: 0;
+        border: 1px solid #003eff;
+        background: #007fff;
+        font-weight: normal;
+        color: #ffffff;
+        position: relative;
+    }
 </style>

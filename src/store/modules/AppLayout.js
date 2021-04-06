@@ -11,6 +11,10 @@ const state = () => ({
         loading: false,
         text: ''
     },
+    ColumnsWidth :{
+        left:0,
+        right:0
+    }
 })
 
 // getters
@@ -27,6 +31,9 @@ const getters = {
     windowSize (state) {
         return state.windowSize
     },
+    ColumnsWidth (state) {
+        return state.ColumnsWidth
+    },
 }
 
 // mutations
@@ -42,6 +49,9 @@ const mutations = {
     },
     updateWindowSize (state, newInfo) {
         state.windowSize = newInfo
+    },
+    updateColumnsWidth (state, newInfo) {
+        state.ColumnsWidth = newInfo
     },
     updateAppBarAndDrawer(state, newInfo) {
         this.commit('AppLayout/updateAppBar', newInfo)
