@@ -112,13 +112,18 @@ const mixinQuiz = {
         },
         getCurrentExamQuestionsInArray() {
             let currentExamQuestionsArray = []
-            let currentExamQuestionIndexes = this.getCurrentExamQuestionIndexes()
-            let currentExamQuestions = this.getCurrentExamQuestions()
-            let currentExamQuestionIndexesArray = Object.keys(currentExamQuestionIndexes)
-            currentExamQuestionIndexesArray.forEach((item) => {
-                let questionId = currentExamQuestionIndexes[item]
-                currentExamQuestionsArray.push(currentExamQuestions[questionId])
-            })
+            if (this.quiZ !== {}) {
+                let currentExamQuestionIndexes = this.getCurrentExamQuestionIndexes()
+                let currentExamQuestions = this.getCurrentExamQuestions()
+                let currentExamQuestionIndexesArray = Object.keys(currentExamQuestionIndexes)
+                currentExamQuestionIndexesArray.forEach((item) => {
+                    let questionId = currentExamQuestionIndexes[item]
+                    currentExamQuestionsArray.push(currentExamQuestions[questionId])
+                })
+            }
+            else {
+                currentExamQuestionsArray = this.quiZ
+            }
             return currentExamQuestionsArray
         },
         getCurrentExamQuestions() {

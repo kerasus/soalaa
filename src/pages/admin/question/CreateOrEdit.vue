@@ -89,7 +89,8 @@
                     گزینه 4
                 </v-btn>
             </v-btn-toggle>
-            <markdown-btn v-if="selectedQuizzes === 0" :elem="currentQuestion.choices.list[selectedField - 1]" :elem-key="'title'" :rendered-matrix-katex="renderedMatrixKatex" :url="url" @add="markdownBtnAddString" />
+            <markdown-btn v-if="selectedField === 0" :elem="currentQuestion" :elem-key="'statement'" :rendered-matrix-katex="renderedMatrixKatex" :url="url" @add="markdownBtnAddString" />
+            <markdown-btn v-else :elem="currentQuestion.choices.list[selectedField - 1]" :elem-key="'title'" :rendered-matrix-katex="renderedMatrixKatex" :url="url" @add="markdownBtnAddString" />
         </div>
         <v-textarea
             v-if="selectedField === 0"
