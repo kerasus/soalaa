@@ -1,61 +1,47 @@
 <template>
     <v-container class="konkoor-view" :fluid="true" :style="{ height: '100%', background: 'rgb(244, 244, 244)' }" v-resize="updateWindowSize">
 
+        <div @mousemove="resizing" @mouseup="endResize">
+            <div class="ghostbar" ref="ghostbar" v-show="dragging">
+            </div>
+            <div class="sidebar" ref="sidebar">
+                <span></span>
+                <div class="dragbar" ref="dragbar" @mousedown="startResize"></div>
+<!--                <v-col   :md="7" class="left-side-list" ref="leftSideList">-->
+                        <v-col >
+                            <BubbleSheet ref="bubbleSheetC"  :style="{ height: 3740 }"  :info="{ type: 'pasokh-barg' }" @clickChoice="choiceClicked" @scrollTo="scrollTo" :delay-time="0" />
+                        </v-col>
+<!--                </v-col>-->
 
+            </div>
+            <div class="main" ref="main">
+                <div  :cols="8" class="questions" ref="questionsColumn" id="questions" >
+                    <DynamicScroller
+                            :items="questions"
+                            :min-item-size="70"
+                            class="scroller questionss"
+                            ref="scroller"
+                            :emitUpdate="true"
+                            @update="onScroll"
+                    >
+                        <template v-slot="{ item, index, active }">
+                            <DynamicScrollerItem
+                                    :item="item"
+                                    :active="active"
+                                    :data-index="index"
+                            >
+                                <Item :source="item" :consider-active-category="false" :questions-column="$refs.questionsColumn" @inView="test"/>
+                            </DynamicScrollerItem>
+                        </template>
+                    </DynamicScroller>
+                </div>
+
+            </div>
+
+
+        </div>
 
         <v-row  :style="{ 'min-height': '100%' }">
-            <v-col v-resize="updateRightColumnSize" :md="5" class="questions" ref="questionsColumn" id="questions" :style="{ height: windowSize.y , width: windowSize.x}">
-                <DynamicScroller
-                        :items="questions"
-                        :min-item-size="70"
-                        class="scroller questionss"
-                        ref="scroller"
-                        :emitUpdate="true"
-                        @update="onScroll"
-                >
-                    <template v-slot="{ item, index, active }">
-                        <DynamicScrollerItem
-                                :item="item"
-                                :active="active"
-                                :data-index="index"
-                        >
-                            <Item :source="item" :consider-active-category="false" :questions-column="$refs.questionsColumn" @inView="test"/>
-                        </DynamicScrollerItem>
-                    </template>
-                </DynamicScroller>
-            </v-col>
-            <v-col v-resize="updateLeftColumnSize"  :md="7" class="left-side-list" ref="leftSideList">
-                <v-row>
-                    <v-col class="px-10 py-0 d-flex justify-space-between" dir="ltr">
-                        <div class="rounded-b-xl rounded-r-xl">
-                            <v-menu bottom :offset-y="true" class="rounded-b-xl rounded-r-xl">
-                                <template v-slot:activator="{ on, attrs }">
-                                    <v-btn large tile v-bind="attrs" v-on="on" elevation="0" class="pl-3" >
-                                        <v-icon class="mr-2" :size="30" color="#666">mdi-account-circle</v-icon>
-                                        <span v-if="user.last_name">
-                                            {{ user.last_name }}
-                                        </span>
-                                        <span v-if="user.first_name">
-                                            {{ user.first_name }}
-                                        </span>
-                                    </v-btn>
-                                </template>
-                                <v-card v-if="false" max-width="375" class="mx-auto" rounded="b-xl r-xl">
-                                    <TopMenu_OnlineQuiz/>
-                                </v-card>
-                            </v-menu>
-                        </div>
-                        <v-btn icon @click="changeView('alaa')">
-                            <v-icon>mdi-table-split-cell</v-icon>
-                        </v-btn>
-                    </v-col>
-                </v-row>
-                <v-row>
-                    <v-col >
-                        <BubbleSheet  :info="{ type: 'pasokh-barg' }" @clickChoice="choiceClicked" @scrollTo="scrollTo" :delay-time="0" />
-                    </v-col>
-                </v-row>
-            </v-col>
         </v-row>
     </v-container>
 
@@ -155,6 +141,8 @@
             Item
         },
         data: () => ({
+            bubbleSheet:800,
+            dragging: false,
             quizData: new Exam(),
             item: Item,
             lastTimeScrollRange: { start: 0, end: 29 },
@@ -177,6 +165,50 @@
             windowVisible: true
         }),
         methods: {
+            questionListHeight() {
+                // box is a col-7 with 12px padding
+                const boxSize = this.bubbleSheet -24
+                // each group width is 140px
+                const horizontalGroupAmounts = Math.floor(boxSize / 140)
+                const verticalGroupAmount = Math.ceil(this.questionsInGroups.length / horizontalGroupAmounts)
+                return verticalGroupAmount * 182 + 20
+            },
+            startResize(e) {
+                e.preventDefault();
+                this.dragging = true;
+
+
+
+            },
+            resizing(e) {
+                e.preventDefault();
+
+                if (this.dragging){
+                    this.$refs.ghostbar.style.left = (e.pageX + 2) + 'px'
+                }
+
+
+            },
+            endResize(e) {
+                if (!this.dragging) {
+                    return
+                }
+
+                this.$refs.sidebar.style.width = (e.pageX + 2) + 'px'
+
+                this.$refs.main.style.left = (e.pageX + 2) + 'px'
+
+                // document.getElementById(document).unbind('mousemove');
+                this.dragging = false;
+                this.$store.commit('AppLayout/updateBubbleSize', e.pageX + 2)
+                this.$refs.bubbleSheetC.changeWidth()
+
+
+
+                // this.bubbleSheet  = (e.pageX + 2)
+                console.log('p',this.bubbleSheet)
+
+            },
             updateWindowSize() {
                 this.$store.commit('AppLayout/updateWindowSize', { x: window.innerWidth, y: window.innerHeight })
                 // this.windowSize = { x: window.innerWidth, y: window.innerHeight }
@@ -286,6 +318,7 @@
             }
         },
         created() {
+
             const url = API_ADDRESS.exam.examQuestion(this.$route.params.quizId)
             axios.get(url)
                 .then((response) => {
@@ -332,5 +365,51 @@
         font-weight: normal;
         color: #ffffff;
         position: relative;
+    }
+
+
+    body, html {
+        width: 100%;
+        height: 100%;
+        padding: 0;
+        margin: 0;
+    }
+
+    .main {
+        margin-left: 15px;
+        float: right;
+        position: absolute;
+        height: 200px;
+        right: 0;
+        left: 850px;
+        margin-top: 10px;
+
+    }
+
+    .sidebar {
+        margin-top: 10px;
+        width: 800px;
+        float: left;
+        height: 1200px;
+        display: flex;
+    }
+
+    .dragbar {
+        background-color: black;
+        height: 100%;
+        float: right;
+        width: 3px;
+        cursor: col-resize;
+    }
+
+    .ghostbar {
+        margin-top: 10px;
+        width: 3px;
+        background-color: #000;
+        opacity: 0.5;
+        cursor: col-resize;
+        z-index: 999;
+        position: absolute;
+        height: 100%;
     }
 </style>

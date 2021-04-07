@@ -5,6 +5,7 @@ const state = () => ({
         x: 0,
         y: 0,
     },
+    bubbleSize:600,
     appBar: true,
     overlay: {
         show: false,
@@ -34,6 +35,9 @@ const getters = {
     ColumnsWidth (state) {
         return state.ColumnsWidth
     },
+    bubbleSize(state){
+        return state.bubbleSize
+    }
 }
 
 // mutations
@@ -49,6 +53,9 @@ const mutations = {
     },
     updateWindowSize (state, newInfo) {
         state.windowSize = newInfo
+    },
+    updateBubbleSize (state, newInfo) {
+        state.bubbleSize = newInfo
     },
     updateColumnsWidth (state, newInfo) {
         state.ColumnsWidth = newInfo

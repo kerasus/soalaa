@@ -257,7 +257,8 @@ const store = new Vuex.Store({
         },
         currentExamFrozenQuestions (state) {
             return state.currentExamFrozenQuestions
-        }
+        },
+
     }
 })
 

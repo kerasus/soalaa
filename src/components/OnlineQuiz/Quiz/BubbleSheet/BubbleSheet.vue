@@ -1,16 +1,18 @@
 <template>
     <div
-        ref="bubbleSheet"
-        :class="{
+            ref="bubbleSheet"
+            :class="{
             'bubble-sheet': true,
             'questions-list': true,
             'pasokh-nameh': info.type === 'pasokh-nameh',
             'pasokh-barg': info.type === 'pasokh-barg',
 
         }"
+
+
     >
 
-<!--              v-if="quiz.id !== null"-->
+        <!--              v-if="quiz.id !== null"-->
 
         <v-overlay
                 :absolute="true"
@@ -19,7 +21,8 @@
         >
             در حال ساخت پاسخبرگ
         </v-overlay>
-        <div v-for="(group, index) in questionsInGroups" :key="index" class="question-group">
+
+        <v-col v-for="(group, index) in questionsInGroups" :key="index" class="question-group">
             <div v-for="question in group" :key="question.id" class="question-in-list">
                 <div
                         :class="{ 'question-number-in-list': true, circle: userQuizListData[quiz.id][question.id] && userQuizListData[quiz.id][question.id].status === 'o', cross: userQuizListData[quiz.id][question.id] && userQuizListData[quiz.id][question.id].status === 'x', bookmark: userQuizListData[quiz.id][question.id] && userQuizListData[quiz.id][question.id].bookmarked }"
@@ -34,39 +37,62 @@
                         :class="{ 'choice-in-list': true, active: userQuizListData[quiz.id][question.id] && choice.id === userQuizListData[quiz.id][question.id].answered_choice_id, answer: choice.answer }"
                         @click="AnswerClicked({ questionId: question.id, choiceId: choice.id})"
                 >
-                    <v-icon v-if="info.type === 'pasokh-nameh' && choice.answer" size="12" :color="userQuizListData[quiz.id][question.id] && choice.id === userQuizListData[quiz.id][question.id].answered_choice_id ? '#fff' : '#00c753'">
+                    <v-icon v-if="info.type === 'pasokh-nameh' && choice.answer" size="12"
+                            :color="userQuizListData[quiz.id][question.id] && choice.id === userQuizListData[quiz.id][question.id].answered_choice_id ? '#fff' : '#00c753'">
                         mdi-check
                     </v-icon>
-                    <v-icon v-if="info.type === 'pasokh-nameh' && userQuizListData[quiz.id][question.id] && choice.id === userQuizListData[quiz.id][question.id].answered_choice_id && !choice.answer" size="12" color="#fff">
+                    <v-icon v-if="info.type === 'pasokh-nameh' && userQuizListData[quiz.id][question.id] && choice.id === userQuizListData[quiz.id][question.id].answered_choice_id && !choice.answer"
+                            size="12" color="#fff">
                         mdi-close
                     </v-icon>
                 </div>
             </div>
-        </div>
+        </v-col>
+
+
     </div>
 </template>
 
 <script>
     // import $ from "jquery";
-    import { mixinQuiz, mixinUserActionOnQuestion } from "@/mixin/Mixins";
+    import {mixinQuiz, mixinUserActionOnQuestion} from "@/mixin/Mixins";
 
     export default {
         name: 'BubbleSheet',
         mixins: [mixinQuiz, mixinUserActionOnQuestion],
         computed: {
-            questionsInGroups () {
+
+
+            bubbleSize() {
+
+                return this.$store.getters['AppLayout/bubbleSize']
+
+            },
+
+
+            boxHeight() {
+                const boxSize = this.bubbleSheetWidth - 24
+                // each group width is 140px
+                const horizontalGroupAmounts = Math.floor(boxSize / 140)
+                const verticalGroupAmount = Math.ceil(this.questionsInGroups.length / horizontalGroupAmounts)
+                console.log(verticalGroupAmount * 182 + 20)
+                return verticalGroupAmount * 182 + 20
+            },
+
+
+            questionsInGroups() {
                 let groups = [],
-                chunk = 10
+                    chunk = 10
                 let array
-                if (this.questions === null){
+                if (this.questions === null) {
                     array = this.getCurrentExamQuestionsInArray()
-                    for (let i=0,j=array.length ; i<j; i+=chunk) {
-                        groups.push(array.slice(i,i+chunk))
+                    for (let i = 0, j = array.length; i < j; i += chunk) {
+                        groups.push(array.slice(i, i + chunk))
                     }
                 } else {
                     array = this.questions
-                    for (let i=0,j=200 ; i<j; i+=chunk) {
-                        groups.push(array.slice(i,i+chunk))
+                    for (let i = 0, j = 200; i < j; i += chunk) {
+                        groups.push(array.slice(i, i + chunk))
                     }
                 }
 
@@ -74,8 +100,11 @@
             }
         },
         props: {
+            bubbleSheetWidth: {
+                default: null
+            },
             questions: {
-              default:null
+                default: null
             },
             info: {
                 default: null
@@ -85,38 +114,46 @@
             },
             delayTime: {
                 default: 2000
-            }
+            },
+
         },
         data: () => ({
             overlay: false,
+            boxSize: 600
         }),
         methods: {
-            AnswerClicked (payload) {
+            changeWidth() {
+                // console.log('test')
+                this.$refs.bubbleSheet.style.height = this.questionListHeight() + 'px'
+            },
+            AnswerClicked(payload) {
                 if (this.info.type !== 'pasokh-nameh') {
                     this.answerClicked(payload)
                     this.clickChoice(payload.questionId)
                 }
             },
-            ClickQuestionNumber (questionId) {
+            ClickQuestionNumber(questionId) {
                 if (this.info.type !== 'pasokh-nameh') {
                     this.clickQuestionNumber(questionId)
                 }
             },
-            clickChoice (questionId) {
+            clickChoice(questionId) {
                 this.$emit('clickChoice', questionId)
             },
-            clickQuestionNumber (questionId) {
+            clickQuestionNumber(questionId) {
                 this.$emit('scrollTo', questionId)
             },
-            questionListHeight () {
+            questionListHeight() {
                 // box is a col-7 with 12px padding
-                const boxSize = this.$refs.bubbleSheet.clientWidth - 24
+                this.boxSize = this.bubbleSize
+                console.log(this.boxSize)
                 // each group width is 140px
-                const horizontalGroupAmounts = Math.floor(boxSize / 140)
+                const horizontalGroupAmounts = Math.floor(this.boxSize / 140)
                 const verticalGroupAmount = Math.ceil(this.questionsInGroups.length / horizontalGroupAmounts)
+                console.log(horizontalGroupAmounts, verticalGroupAmount)
                 return verticalGroupAmount * 182 + 20
             },
-            questionListPadding () {
+            questionListPadding() {
                 const boxSize = this.$refs.bubbleSheet.clientWidth - 24
                 const horizontalGroupAmounts = (this.$refs.bubbleSheet.clientHeight - 8) / 182
                 const verticalGroupAmounts = Math.ceil(this.questionsInGroups.length / horizontalGroupAmounts)
@@ -130,11 +167,11 @@
             console.log(this.questions)
             console.log(this.getCurrentExamQuestionsInArray())
         },
-        mounted () {
+        mounted() {
             let that = this
             setTimeout(() => {
                 if (that.$refs.bubbleSheet) {
-                    that.$refs.bubbleSheet.style.height = that.questionListHeight()+'px'
+                    that.$refs.bubbleSheet.style.height = that.questionListHeight() + 'px'
                 }
                 // $('.questions-list').height(this.questionListHeight())
                 that.overlay = false
@@ -142,7 +179,7 @@
         },
         'windowSize.x': function () {
             // this.$refs.bubbleSheet.offsetHeight()
-            this.$refs.bubbleSheet.style.height = this.questionListHeight()+'px'
+            this.$refs.bubbleSheet.style.height = this.questionListHeight() + 'px'
             // $('.questions-list').height(this.questionListHeight())
         }
     }
@@ -153,6 +190,7 @@
         align-items: flex-start;
         padding-top: 100px;
     }
+
     .pasokh-nameh .choice-in-list {
         position: relative;
         cursor: auto;
@@ -179,6 +217,8 @@
         padding: 5px 10px;
         width: 130px;
         font-size: 11px;
+        max-height: 175px;
+
     }
 
     .question-in-list {
