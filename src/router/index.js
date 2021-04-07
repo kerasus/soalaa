@@ -16,12 +16,6 @@ const router = new VueRouter({
             name: 'login',
             component: () => lazyLoadView(import('@/pages/auth/Login'))
         },
-        {
-            path: '/test',
-            name: 'test',
-            component: () => lazyLoadView(import('@/pages/user/exam/participate/test'))
-        },
-
         // dashboard page
         {
             path: '/',
