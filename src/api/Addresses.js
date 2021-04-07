@@ -53,7 +53,7 @@ const API_ADDRESS = {
     }
   },
   question: {
-    base: lumenServer + '/question',
+    base: lumenServer + '/exam-question/attach',
     attachSubCategoryToQuestion: lumenServer + '/exam-question/attach/sub-category',
     updateQuestion (questionId) {
       return lumenServer + '/question/' + questionId
