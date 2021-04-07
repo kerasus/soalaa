@@ -1,6 +1,7 @@
 <template>
     <v-sheet class="map-of-questions">
-        <div v-for="(categoryItem) in quiz.categories.list"
+        <div>
+            <div v-for="(categoryItem) in quiz.categories.list"
              :key="'category-'+categoryItem.id">
             <div v-if="categoryItem.is_active">
                 <v-btn :elevation="0" block class="categoryItem">
@@ -44,6 +45,8 @@
             </v-expansion-panels>
             </div>
         </div>
+        </div>
+        <v-btn :color="'#4caf50'" :style="{ backgroundColor: '#4caf50 !important' }" dark>ثبت و پایان آزمون</v-btn>
     </v-sheet>
 </template>
 
@@ -69,15 +72,19 @@
 <style>
 .map-of-questions {
     min-height: 42px !important;
-    max-height: 42px !important;
     width: 80%;
+    height: calc(100% - 200px);
     margin: 0 10%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
 }
 
 .map-of-questions .v-expansion-panel-header {
     transition: all ease-in-out 0.3s;
     min-height: 42px;
     padding: 11px 24px;
+
 }
 
 .map-of-questions .theme--light.v-expansion-panels .v-expansion-panel-header--active .v-expansion-panel-header__icon .v-icon {
