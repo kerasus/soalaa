@@ -75,6 +75,13 @@
                                         شروع آزمون
                                     </v-btn>
                                     <v-btn
+                                            :to="{ name: 'onlineQuiz.alaaView', params: { quizId: item.id, questNumber: 1 } }"
+                                            color="#ffc107"
+                                            text
+                                    >
+                                        شروع آزمون
+                                    </v-btn>
+                                    <v-btn
                                             v-if="!preventStartExam && item.user_exam_status === 'has participated and finished'"
                                             @click="sendAnswersAndFinishExam(item)"
                                             color="#ffc107"
