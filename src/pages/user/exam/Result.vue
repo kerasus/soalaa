@@ -106,7 +106,15 @@
                             <v-tab-item v-for="item in report.sub_category" :key="item.sub_category">
                                 <p v-if="!currentVideo" class="coming-soon" :style="{ 'margin-top': '50px'}">به زودی</p>
                                 <p v-if="currentVideo" class="video-title">{{ currentVideo.title }}</p>
-                                <video v-if="currentVideo" :src="currentVideo.file.video[1].link" type="video/mp4" controls :poster="currentVideo.photo" :width="'60%'" class="video-player" :title="currentVideo.title"/>
+                                <video v-if="currentVideo"
+                                       :src="currentVideo.file.video[1].link"
+                                       type="video/mp4"
+                                       controls
+                                       :poster="currentVideo.photo"
+                                       :width="'60%'"
+                                       class="video-player"
+                                       :title="currentVideo.title"
+                                />
                                 <div v-if="currentVideo" class="d-flex flex-row" dir="ltr">
                                     <v-btn outlined v-for="(video, index) in alaaVideos" :key="index" @click="getContent(video.id)" icon :style="{ margin: '0 5px' }">
                                         {{ index + 1 }}
@@ -122,6 +130,12 @@
 </template>
 
 <script>
+    import videojs from 'video.js'
+    // import 'video.js/dist/video-js.css'
+    // import '@silvermine/videojs-quality-selector/dist/css/quality-selector.css'
+    // // The following registers the plugin with `videojs`
+    // require('@silvermine/videojs-quality-selector')(videojs);
+
     import Info from "@/components/OnlineQuiz/Quiz/resultTables/info";
     import TopScoreResult from "@/components/OnlineQuiz/Quiz/resultTables/topScoreResult";
     import PersonalResult from "@/components/OnlineQuiz/Quiz/resultTables/personalResult";
