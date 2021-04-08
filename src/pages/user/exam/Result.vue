@@ -130,7 +130,7 @@
 </template>
 
 <script>
-    import videojs from 'video.js'
+    // import videojs from 'video.js'
     // import 'video.js/dist/video-js.css'
     // import '@silvermine/videojs-quality-selector/dist/css/quality-selector.css'
     // // The following registers the plugin with `videojs`

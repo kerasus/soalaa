@@ -16,6 +16,10 @@ let Assistant = function () {
             toastMessages(['مشکلی در دریافت اطلاعات آزمون رخ داده است. لطفا مجدد تلاش کنید.'])
             return
         }
+        if (error === 'exam file url is not set') {
+            toastMessages(['فایل آزمون ساخته نشده است.'])
+            return
+        }
         if (!error || !error.response) {
             return
         }
