@@ -261,12 +261,12 @@ class User extends Model {
                             resolve({response, userExamForParticipate, data})
                         })
                         .catch( (error) => {
-                            Assistant.reportErrors({location: 'models/User.js -> participateExam() -> exam-user.create.catch'})
+                            Assistant.reportErrors({location: 'models/User.js -> loadExamDataFroParticipate() -> loadQuestionsFromFile'})
                             reject(error)
                         })
                 })
                 .catch( (error) => {
-                    Assistant.reportErrors({location: 'models/User.js -> participateExam() -> exam-user.create.catch'})
+                    Assistant.reportErrors({location: 'models/User.js -> loadExamDataFroParticipate() -> exam-user.create.catch'})
                     reject(error)
                 })
         })
