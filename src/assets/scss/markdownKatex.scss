@@ -1,13 +1,12 @@
-//@import "~katex/dist/katex.min.css";
-//@import "katex.min.css";
+@import "~katex/dist/katex.css";
 @import "~github-markdown-css/github-markdown.css";
-
 
 .renderedPanel {
   direction: rtl;
   &.ltr,
   .katex {
     direction: ltr;
+    display: inline-block;
     .katex-html {
       .accent {
         background-color: unset !important;
@@ -18,5 +17,16 @@
   strong>strong>s {
     text-decoration: underline;
     text-underline-position: under;
+  }
+  .mesra {
+    width: 50%;
+    float: right;
+  }
+
+  @media only screen and (max-width: 800px) {
+    .mesra {
+      width: 100%;
+      float: none;
+    }
   }
 }

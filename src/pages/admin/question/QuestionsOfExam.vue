@@ -11,7 +11,7 @@
             <!--                />-->
             <!--            </v-col>-->
             <v-col :md="5" class="questions">
-                                <item v-for="itemm in quiz.questions.list" :key="itemm.id" :source="itemm" />
+                                <item v-for="itemm in quizData.questions.list" :key="itemm.id" :source="itemm" />
 <!--                <virtual-list style="overflow-y: auto;"-->
 <!--                              :data-key="'id'"-->
 <!--                              :data-sources="quiz.questions.list"-->
@@ -102,7 +102,7 @@
                 </v-row>
                 <v-row>
                     <v-col>
-                        <BubbleSheet :info="{ type: 'pasokh-nameh' }" @scrollTo="scrollTo" />
+                        <BubbleSheet :quiZ="quizData.questions.list" :info="{ type: 'pasokh-nameh' }" @scrollTo="scrollTo" />
                     </v-col>
                 </v-row>
             </v-col>
@@ -128,9 +128,9 @@
 
     Vue.component('DynamicScroller', DynamicScroller)
     Vue.component('DynamicScrollerItem', DynamicScrollerItem)
-    var md = require('markdown-it')(),
-        mk = require('markdown-it-katex')
-    md.use(mk);
+    var md = require('markdown-it')()
+    md.use(require('markdown-it-new-katex'));
+    md.use(require('markdown-it-container'), 'poem');
 
     export default {
         name: 'QuestionsOfExam',
@@ -140,6 +140,7 @@
             // 'virtual-list': VirtualList,
             BubbleSheet
         },
+
         data () {
             return {
                 quizData: new Exam(),
@@ -179,12 +180,15 @@
         },
         created () {
             this.changeAppBarAndDrawer(false)
-            // const that = this
+            const that = this
             const url = API_ADDRESS.exam.examQuestion(this.$route.params.quizId)
             this.quizData.show(null, url)
                 .then((response) => {
-                    this.quizData.questions = new QuestionList(response.data.data)
-                    this.quiz = new Exam(this.quizData)
+                    that.quizData.questions = new QuestionList(response.data.data)
+                    console.log(that.quiz)
+                    console.log(that.quiz)
+                    that.quiz = new Exam(that.quizData)
+                    that.QuIzDaTa = new Exam(that.quizData)
                 })
             this.subCategoriesList.fetch().then((response) => {
                 this.quiz.sub_categories = new QuestSubcategoryList(response.data)

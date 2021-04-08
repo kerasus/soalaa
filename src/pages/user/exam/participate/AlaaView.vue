@@ -4,8 +4,8 @@
             <v-col :md="12" :class="{ 'question-container': true, ltr: currentQuestion.ltr }" :style="{ 'min-height': '100%' }">
                 <v-sheet class="d-flex align-stretch" width="100%" color="--background-2" :style="{ 'min-height': '100%' }">
                     <v-row>
-                        <v-col :md="1" class="d-md-flex justify-center align-center d-none">
-                            <v-btn :min-width="64" class="px-0" :height="64" @click="goToPrevQuestion" icon>
+                        <v-col :md="1" class="d-md-flex justify-center d-none">
+                            <v-btn :min-width="64" class="px-0" :height="400" @click="goToPrevQuestion" :elevation="0">
                                 <v-icon :size="40">mdi-chevron-right</v-icon>
                             </v-btn>
                         </v-col>
@@ -58,8 +58,8 @@
                                 />
                             </v-row>
                         </v-col>
-                        <v-col :md="1" class="d-md-flex justify-center align-center d-none">
-                            <v-btn :min-width="64" class="px-0" :height="64" @click="goToNextQuestion" icon>
+                        <v-col :md="1" class="d-md-flex justify-center d-none">
+                            <v-btn :min-width="64" class="px-0" :height="400" @click="goToNextQuestion" :elevation="0">
                                 <v-icon :size="40">mdi-chevron-left</v-icon>
                             </v-btn>
                         </v-col>
@@ -131,7 +131,6 @@
                 return this.userQuizListData[this.quiz.id][this.currentQuestion.id]
             },
             changeAppBarAndDrawer (state) {
-                console.log('log')
                 this.$store.commit('AppLayout/updateAppBarAndDrawer', state)
             },
             showAppBar () {

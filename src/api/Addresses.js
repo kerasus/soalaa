@@ -28,12 +28,15 @@ const API_ADDRESS = {
   exam: {
     base: lumenServer + '/exam',
     sendAnswers: lumenServer + '/temp-exam/answer/choice',
-    sendStatus: lumenServer + '/temp-exam/answer/choice',
+    sendStatus: lumenServer + '/temp-exam/answer/status',
     sendBookmark: lumenServer + '/temp-exam/answer/bookmark',
     sendUnBookmark: lumenServer + '/temp-exam/answer/unbookmark',
     userExamsList: lumenServer + '/examAndUser',
     getAnswerOfUser (user_exam_id) {
       return lumenServer + '/temp-exam/answer/'+user_exam_id
+    },
+    getSubCategoriesWithPermissions (exam_id) {
+      return lumenServer + '/exam-question/show/sub-categories/'+ exam_id
     },
     getAnswerOfUserWithCorrect (user_exam_id) {
       return lumenServer + '/temp-exam/answer/'+user_exam_id+'/withCorrect'
@@ -41,7 +44,7 @@ const API_ADDRESS = {
     registerExam: lumenServer + '/user/registerExam',
     examUser: lumenServer + '/exam-user',
     examQuestion (quizId) {
-      return lumenServer + '/eam-question/attach/show/' + quizId
+      return lumenServer + '/exam-question/attach/show/' + quizId
     },
     report: {
       getReport (examId) {
@@ -50,7 +53,7 @@ const API_ADDRESS = {
     }
   },
   question: {
-    base: lumenServer + '/question',
+    base: lumenServer + '/exam-question/attach',
     attachSubCategoryToQuestion: lumenServer + '/exam-question/attach/sub-category',
     updateQuestion (questionId) {
       return lumenServer + '/question/' + questionId

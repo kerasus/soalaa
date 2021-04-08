@@ -10,7 +10,7 @@ export default new Vuetify({
             light: {
                 '--background-1': '#fff',
                 '--background-2': '#f5f5f5',
-                '--background-3': 'red',
+                '--background-3': '#ff0000',
                 '--surface-1': '#fff',
                 '--surface-2': '#f1f1f1',
                 '--surface-3': '#f1f1f1',
