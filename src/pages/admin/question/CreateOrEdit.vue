@@ -189,6 +189,10 @@
                 :label="'متن'"
                 @input="updateRendered"
         ></v-textarea>
+        <div v-if="currentQuestion.id">
+            <upload-image :url="'/api/v1/question/upload/'+currentQuestion.id" />
+<!--            <upload-files :post-action="'/api/v1/question/upload/'+currentQuestion.id" :put-action="'/api/v1/question/upload/'+currentQuestion.id" />-->
+        </div>
         <div id="mathfield" locale="fa">x=\frac{-b\pm \sqrt{b^2-4ac}}{2a}</div>
         <div class="latexData" v-html="latexData"></div>
         <v-text-field full-width label="url" v-model="url" dir="ltr"/>
@@ -238,6 +242,8 @@
     import {QuestSubcategoryList} from '@/models/QuestSubcategory';
     import Vue from 'vue'
     import MarkdownBtn from '@/components/QuizEditor/MarkdownBtn';
+    // import UploadFiles from '@/components/UploadFiles';
+    import UploadImage from '@/components/UploadImage';
     import API_ADDRESS from '@/api/Addresses'
 
     var md = require('markdown-it')()
@@ -250,7 +256,7 @@
 
     export default {
         name: 'CreateOrEdit',
-        components: {MarkdownBtn},
+        components: {MarkdownBtn, UploadImage},
         computed: {
             renderedMatrixKatex () {
                 return this.renderMatrixKatex()
@@ -263,7 +269,13 @@
                 return arr
             },
             getSubcategoryById () {
-                return this.subCategoriesList.list.find(item => item.id === this.currentQuestion.sub_category_id)
+                const target = this.subCategoriesList.list.find(item => item.id === this.currentQuestion.sub_category_id)
+
+                if (target) {
+                    return target
+                } else {
+                    return new QuestSubcategoryList()
+                }
             },
             getCurrentDifficultyTitle () {
                 return this.difficulties.find(item => item.id === this.currentQuestion.difficulty).title
@@ -355,6 +367,48 @@
             }
         },
         methods: {
+
+            /**
+             * Has changed
+             * @param  Object|undefined   newFile   Read only
+             * @param  Object|undefined   oldFile   Read only
+             * @return undefined
+             */
+            inputFile: function (newFile, oldFile) {
+                if (newFile && oldFile && !newFile.active && oldFile.active) {
+                    // Get response data
+                    console.log('response', newFile.response)
+                    if (newFile.xhr) {
+                        //  Get the response status code
+                        console.log('status', newFile.xhr.status)
+                    }
+                }
+            },
+            /**
+             * Pretreatment
+             * @param  Object|undefined   newFile   Read and write
+             * @param  Object|undefined   oldFile   Read only
+             * @param  Function           prevent   Prevent changing
+             * @return undefined
+             */
+            inputFilter: function (newFile, oldFile, prevent) {
+                if (newFile && !oldFile) {
+                    // Filter non-image file
+                    if (!/\.(jpeg|jpe|jpg|gif|png|webp)$/i.test(newFile.name)) {
+                        return prevent()
+                    }
+                }
+
+                // Create a blob field
+                newFile.blob = ''
+                let URL = window.URL || window.webkitURL
+                if (URL && URL.createObjectURL) {
+                    newFile.blob = URL.createObjectURL(newFile.file)
+                }
+            },
+
+
+
             initMatrix () {
                 this.matrix = []
                 let row = []
