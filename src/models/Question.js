@@ -59,6 +59,18 @@ class Question extends Model {
             {
                 key: 'seen',
                 default: false
+            },
+            {
+                key: 'recommendedTime',
+                default: 0
+            },
+            {
+                key: 'difficulty',
+                default: 1
+            },
+            {
+                key: 'creator',
+                default: 1
             }
         ])
 
