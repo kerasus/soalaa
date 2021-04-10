@@ -1,31 +1,106 @@
 <template>
     <v-container :fluid="true" dir="rtl">
-        <v-form>
-            <v-sheet color="#f4f4f4">
+        <v-dialog v-model="editDialog" max-width="1600px">
+            <v-sheet class="pa-5">
                 <v-row>
-                    <v-col :md="3">
+                    <v-col :md="4">
                         <v-select label="آزمون" :items="quizList.list" item-text="title" item-value="id" v-model="selectedQuizzes" multiple dense :disabled="editMode" outlined />
                     </v-col>
                     <v-col :md="2">
                         <v-btn @click="selectAllExams" color="secondary">انتخاب همه آزمون ها</v-btn>
                     </v-col>
-                    <v-col :md="2">
+                    <v-col :md="2" v-for="index in selectedQuizzes.length" :key="index">
+                        <v-text-field
+                                dense
+                                v-if="typeof getQuizById(selectedQuizzes[index - 1]) !== 'undefined' && typeof getExamById(selectedQuizzes[index - 1]) !== 'undefined'"
+                                :label="'ترتیب در ' + getQuizById(selectedQuizzes[index - 1]).title"
+                                v-model="getExamById(selectedQuizzes[index - 1]).order"
+                                type="number"
+                                :disabled="editMode"
+                                outlined
+                        />
+                    </v-col>
+                </v-row>
+                <v-row>
+                    <v-col :md="3">
                         <v-select label="درس" :items="subCategoriesList.list" item-text="display_title" item-value="id" v-model="currentQuestion.sub_category_id" dense :disabled="editMode" outlined />
                     </v-col>
-                    <v-col :md="2">
-                        <div v-for="index in selectedQuizzes.length" :key="index">
-                            <v-text-field
-                                    v-if="typeof getQuizById(selectedQuizzes[index - 1]) !== 'undefined' && typeof getExamById(selectedQuizzes[index - 1]) !== 'undefined'"
-                                    :label="'ترتیب در ' + getQuizById(selectedQuizzes[index - 1]).title"
-                                    v-model="getExamById(selectedQuizzes[index - 1]).order"
-                                    type="number"
-                                    :disabled="editMode"
-                                    outlined
-                            />
-                        </div>
+                    <v-col :md="3" class="d-flex justify-center">
+                        <v-text-field suffix="ثانیه" v-model="currentQuestion.recommendedTime" prepend-icon="mdi-timer-outline" outlined label="زمان پیشنهادی" :style="{ maxWidth: '170px' }" dense class="recommended-time" type="number"></v-text-field>
                     </v-col>
-                    <v-col :md="3" @click="submitQuestion" type="submit">
-                        <v-btn color="primary" block>ثبت سوال</v-btn>
+                    <v-col :md="3">
+                        <v-btn-toggle v-model="currentQuestion.difficulty" dense>
+                            <v-btn v-for="item in difficulties" :key="item.id" :value="item.id" dense>
+                                {{ item.title }}
+                            </v-btn>
+                        </v-btn-toggle>
+                    </v-col>
+
+                </v-row>
+            </v-sheet>
+        </v-dialog>
+        <v-form>
+            <v-sheet color="#f4f4f4">
+                <v-row>
+<!--                    <v-col :md="3">-->
+<!--                        <v-select label="آزمون" :items="quizList.list" item-text="title" item-value="id" v-model="selectedQuizzes" multiple dense :disabled="editMode" outlined />-->
+<!--                    </v-col>-->
+<!--                    <v-col :md="2">-->
+<!--                        <v-btn @click="selectAllExams" color="secondary">انتخاب همه آزمون ها</v-btn>-->
+<!--                    </v-col>-->
+<!--                    <v-col :md="2">-->
+<!--                        <v-select label="درس" :items="subCategoriesList.list" item-text="display_title" item-value="id" v-model="currentQuestion.sub_category_id" dense :disabled="editMode" outlined />-->
+<!--                    </v-col>-->
+<!--                    <v-col :md="2">-->
+<!--                        <div v-for="index in selectedQuizzes.length" :key="index">-->
+<!--                            <v-text-field-->
+<!--                                    v-if="typeof getQuizById(selectedQuizzes[index - 1]) !== 'undefined' && typeof getExamById(selectedQuizzes[index - 1]) !== 'undefined'"-->
+<!--                                    :label="'ترتیب در ' + getQuizById(selectedQuizzes[index - 1]).title"-->
+<!--                                    v-model="getExamById(selectedQuizzes[index - 1]).order"-->
+<!--                                    type="number"-->
+<!--                                    :disabled="editMode"-->
+<!--                                    outlined-->
+<!--                            />-->
+<!--                        </div>-->
+<!--                    </v-col>-->
+<!--                    <v-col :md="3" @click="submitQuestion" type="submit">-->
+<!--                        <v-btn color="primary" block>ثبت سوال</v-btn>-->
+<!--                    </v-col>-->
+                    <v-col :md="12" class="main-info-container">
+                        <v-row class="justify-center">
+                            <v-col :md="4" class="d-flex flex-row flex-wrap justify-space-between">
+                                <div class="question-info">
+                                    درس {{ getSubcategoryById.display_title }}
+                                </div>
+                                <div class="question-info">
+                                    زمان پیشنهادی: {{ currentQuestion.recommendedTime }} ثانیه
+                                </div>
+                                <div class="question-info">
+                                    طراح: {{ getQuestionCreator }}
+                                </div>
+                                <div class="question-info">
+                                    سختی: {{ getCurrentDifficultyTitle }}
+                                </div>
+                            </v-col>
+                            <v-col :md="3" class="d-flex flex-column align-center">
+                                <div v-for="(item, index) in getSelectedQuizzez" :key="index" class="order-show">
+                                    <p>
+                                        ترتیب در {{ item.title }}:
+                                    </p>
+                                    <p :style="{ 'margin-left': '40px' }">
+                                        {{ getExamById(item.id).order }}
+                                    </p>
+                                </div>
+                            </v-col>
+                            <v-col :md="1">
+                                <v-btn color="grey" block :style="{ height: '100%' }" @click="editDialog = !editDialog">
+                                    <v-icon>mdi-pencil</v-icon>
+                                </v-btn>
+                            </v-col>
+                            <v-col :md="1">
+                                <v-btn color="primary" block :style="{ height: '100%' }">ثبت سوال</v-btn>
+                            </v-col>
+                        </v-row>
                     </v-col>
                     <v-col :md="12">
                         متن سوال:
@@ -53,7 +128,7 @@
     <!--                        <markdown-btn :elem="currentQuestion.choices.list[index - 1]" :elem-key="'title'" :rendered-matrix-katex="renderedMatrixKatex" :url="url" @add="markdownBtnAddString" />-->
 
     <!--                    </v-col>-->
-                        <v-radio :value="index - 1" />
+                        <v-radio :value="index - 1" on-icon="mdi-check-circle-outline" off-icon="mdi-checkbox-blank-circle-outline" color="green"/>
                         {{ index }})
                         <div class="renderedPanel" v-html="choiceRendered[index - 1]">
                         </div>
@@ -174,10 +249,45 @@
         computed: {
             renderedMatrixKatex () {
                 return this.renderMatrixKatex()
+            },
+            getSelectedQuizzez () {
+                const arr = []
+                for (let i = 0; i < this.selectedQuizzes.length; i++) {
+                    arr.push(this.getQuizById(this.selectedQuizzes[i]))
+                }
+                return arr
+            },
+            getSubcategoryById () {
+                return this.subCategoriesList.list.find(item => item.id === this.currentQuestion.sub_category_id)
+            },
+            getCurrentDifficultyTitle () {
+                return this.difficulties.find(item => item.id === this.currentQuestion.difficulty).title
+            },
+            getQuestionCreator () {
+                return this.teachers.find(item => item.id === this.currentQuestion.creator).name
             }
         },
         data: () => {
             return {
+                editDialog: false,
+                teachers: [
+                    { name: 'ممد', id: 1 },
+                    { name: 'اصغر', id: 2 }
+                ],
+                difficulties: [
+                    {
+                        id: 1,
+                        title: 'ساده'
+                    },
+                    {
+                        id: 2,
+                        title: 'متوسط'
+                    },
+                    {
+                        id: 3,
+                        title: 'دشوار'
+                    },
+                ],
                 selectedField: 0,
                 whiteSpace: '                   ',
                 test: [true, false, false, false],
@@ -371,6 +481,7 @@
             //     //{ macros: { ...mf.getConfig('macros'), smallfrac: '{}^{#1}\\!\\!/\\!{}_{#2}', }, }
             // );
             that.latexData = mf.getValue()
+
         },
         created() {
             this.editMode = this.$route.name === 'quest.edit'
@@ -406,6 +517,7 @@
 <style>
     .renderedPanel {
         direction: rtl;
+        padding: 20px;
     }
     .renderedPanel .katex {
         direction: ltr;
@@ -427,8 +539,26 @@
         border: 1px solid rgba(0, 0, 0, .3);
         box-shadow: 0 0 8px rgba(0, 0, 0, .2)
     }
+
+    .recommended-time .v-text-field__details {
+        display: none;
+    }
 </style>
 
 <style scoped>
+    .order-show {
+        display: flex;
+        justify-content: space-between;
+        width: 100%;
+    }
 
+    .order-show p {
+        margin-top: 5px;
+        margin-bottom: 15px;
+    }
+
+    .question-info {
+        margin: 5px 0 15px;
+        width: 50%;
+    }
 </style>
