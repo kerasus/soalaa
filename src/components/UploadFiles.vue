@@ -209,7 +209,6 @@
                 </div>
                 <file-upload
                         :post-action="postAction"
-                        :put-action="putAction"
                         :extensions="extensions"
                         :accept="accept"
                         :multiple="multiple"
@@ -330,6 +329,16 @@
             FileUpload,
         },
         props: ['postAction', 'putAction'],
+        computed: {
+            accessToken () {
+                return this.$store.getters['Auth/accessToken']
+            },
+            headers () {
+                return {
+                    Authorization: 'Bearer ' + this.accessToken
+                }
+            }
+        },
         data() {
             return {
                 files: [],
@@ -349,9 +358,6 @@
                 name: 'file',
                 // postAction: '/upload/post',
                 // putAction: '/upload/put',
-                headers: {
-                    'X-Csrf-Token': 'xxxx',
-                },
                 data: {
                     '_csrf_token': 'xxxxxx',
                 },

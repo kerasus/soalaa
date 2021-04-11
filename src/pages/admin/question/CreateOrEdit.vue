@@ -190,8 +190,8 @@
                 @input="updateRendered"
         ></v-textarea>
         <div v-if="currentQuestion.id">
-            <upload-image :url="'/api/v1/question/upload/'+currentQuestion.id" />
-<!--            <upload-files :post-action="'/api/v1/question/upload/'+currentQuestion.id" :put-action="'/api/v1/question/upload/'+currentQuestion.id" />-->
+<!--            <upload-image :url="'/api/v1/question/upload/'+currentQuestion.id" />-->
+            <upload-files :post-action="'/api/v1/question/upload/'+currentQuestion.id" :put-action="'/api/v1/question/upload/'+currentQuestion.id" />
         </div>
         <div id="mathfield" locale="fa">x=\frac{-b\pm \sqrt{b^2-4ac}}{2a}</div>
         <div class="latexData" v-html="latexData"></div>
@@ -218,17 +218,6 @@
                 </div>
             </v-container>
         </v-sheet>
-
-        <!--        <div dir="rtl" v-katex:auto>-->
-        <!--                        این یک فرمول ریاضی هست-->
-        <!--            <span dir="ltr">\(x=\frac{-b\pm\sqrt[]{b^2-4aca}}{2a}\)</span>-->
-        <!--                        ببینید جوابش چی میشه؟-->
-        <!--        </div>-->
-        <!--        <hr>-->
-        <!--        <div v-katex:auto>-->
-        <!--            \(x=\frac{-b\pm\sqrt[]{b^2-4aca}}{2a}\)-->
-        <!--        </div>-->
-
     </v-container>
 </template>
 
@@ -242,8 +231,8 @@
     import {QuestSubcategoryList} from '@/models/QuestSubcategory';
     import Vue from 'vue'
     import MarkdownBtn from '@/components/QuizEditor/MarkdownBtn';
-    // import UploadFiles from '@/components/UploadFiles';
-    import UploadImage from '@/components/UploadImage';
+    import UploadFiles from '@/components/UploadFiles';
+    // import UploadImage from '@/components/UploadImage';
     import API_ADDRESS from '@/api/Addresses'
 
     var md = require('markdown-it')()
@@ -256,7 +245,7 @@
 
     export default {
         name: 'CreateOrEdit',
-        components: {MarkdownBtn, UploadImage},
+        components: {MarkdownBtn, UploadFiles},
         computed: {
             renderedMatrixKatex () {
                 return this.renderMatrixKatex()
