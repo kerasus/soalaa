@@ -167,6 +167,13 @@
                                         mdi-delete-forever
                                     </v-icon>
                                 </v-btn>
+                                <v-btn v-if="file.response && file.response.url" dark small fab color="blue"
+                                       @click.prevent="copyImageAddress(file.response.url)"
+                                >
+                                    <v-icon dark>
+                                        mdi-content-copy
+                                    </v-icon>
+                                </v-btn>
 
 
                                 <v-btn dark small fab color="purple"
@@ -405,6 +412,9 @@
             },
         },
         methods: {
+            copyImageAddress (url) {
+                console.log('url', url)
+            },
             formatSize (size) {
                 if (size > 1024 * 1024 * 1024 * 1024) {
                     return (size / 1024 / 1024 / 1024 / 1024).toFixed(2) + ' TB'
@@ -498,6 +508,8 @@
                     }
                     if (newFile.success && !oldFile.success) {
                         // success
+                        console.log('oldFile.response.url', oldFile.response.url)
+                        console.log('this.files', this.files)
                     }
                 }
                 if (!newFile && oldFile) {
