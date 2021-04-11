@@ -18,6 +18,13 @@
     text-decoration: underline;
     text-underline-position: under;
   }
+  .beit {
+    display: inline-block;
+    .mesra {
+      width: 50%;
+      float: right;
+    }
+  }
   .mesra {
     width: 50%;
     float: right;
