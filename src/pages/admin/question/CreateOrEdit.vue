@@ -238,7 +238,6 @@
     var md = require('markdown-it')()
     md.use(require('markdown-it-new-katex'))
     md.use(require('markdown-it-container'), 'mesra')
-
     md.use(require('markdown-it-container'), 'beit', {
 
         validate: function(params) {
@@ -377,13 +376,6 @@
             }
         },
         methods: {
-
-            /**
-             * Has changed
-             * @param  Object|undefined   newFile   Read only
-             * @param  Object|undefined   oldFile   Read only
-             * @return undefined
-             */
             inputFile: function (newFile, oldFile) {
                 if (newFile && oldFile && !newFile.active && oldFile.active) {
                     // Get response data
@@ -394,13 +386,6 @@
                     }
                 }
             },
-            /**
-             * Pretreatment
-             * @param  Object|undefined   newFile   Read and write
-             * @param  Object|undefined   oldFile   Read only
-             * @param  Function           prevent   Prevent changing
-             * @return undefined
-             */
             inputFilter: function (newFile, oldFile, prevent) {
                 if (newFile && !oldFile) {
                     // Filter non-image file
@@ -417,6 +402,14 @@
                 }
             },
 
+            loadnCurrentQuestionData () {
+                this.currentQuestion.show(null, API_ADDRESS.question.updateQuestion(this.$route.params.id))
+                    .then((response) => {
+                        this.currentQuestion = new Question(response.data.data)
+                        this.trueChoiceIndex = this.currentQuestion.choices.list.findIndex((item) => item.answer )
+                        this.updateRendered()
+                    })
+            },
 
 
             initMatrix () {
@@ -556,20 +549,12 @@
             this.editMode = this.$route.name === 'quest.edit'
             new ExamList().fetch().then((response) => {
                 this.quizList = new ExamList(response.data.data)
-                if (!this.editMode) {
-                    this.selectedQuizzes.push(this.quizList.list[0].id)
-                }
             })
             this.subCategoriesList.fetch().then((response) => {
                 this.subCategoriesList = new QuestSubcategoryList(response.data)
             })
             if (this.editMode) {
-                this.currentQuestion.show(null, API_ADDRESS.question.updateQuestion(this.$route.params.id))
-                    .then((response) => {
-                        this.currentQuestion = new Question(response.data.data)
-                        this.trueChoiceIndex = this.currentQuestion.choices.list.findIndex((item) => item.answer )
-                        this.updateRendered()
-                    })
+                this.loadnCurrentQuestionData()
             } else {
                 this.currentQuestion = new Question(this.questionData)
             }
