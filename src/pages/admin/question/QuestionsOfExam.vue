@@ -10,7 +10,7 @@
             <!--                              ref="scroller"-->
             <!--                />-->
             <!--            </v-col>-->
-            <v-col :md="12" class="questions">
+            <v-col :md="11" class="questions">
                                 <item v-for="itemm in quizData.questions.list" :key="itemm.id" :source="itemm" :exam-id="$route.params.quizId" />
 <!--                <virtual-list style="overflow-y: auto;"-->
 <!--                              :data-key="'id'"-->

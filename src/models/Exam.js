@@ -22,6 +22,7 @@ class Exam extends Model {
             { key: 'price' },
             { key: 'order' },
             { key: 'delay_time' },
+            { key: 'exam_actions' },
             { key: 'holding_status' },
             { key: 'user_exam_id' },
             { key: 'user_exam_status' },
