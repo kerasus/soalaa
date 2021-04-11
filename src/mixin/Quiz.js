@@ -175,7 +175,7 @@ const mixinQuiz = {
                         })
                         .catch((error) => {
                             that.$store.commit('AppLayout/updateOverlay', {show: false, loading: false, text: ''})
-                            Assistant.reportErrors({location: 'mixin/Quiz.js -> participateExam()'})
+                            Assistant.reportErrors({location: 'mixin/Quiz.js -> startExam()'})
                             reject(error)
                         })
                 } else {

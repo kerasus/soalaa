@@ -35,6 +35,9 @@ const API_ADDRESS = {
     getAnswerOfUser (user_exam_id) {
       return lumenServer + '/temp-exam/answer/'+user_exam_id
     },
+    getSubCategoriesWithPermissions (exam_id) {
+      return lumenServer + '/exam-question/show/sub-categories/'+ exam_id
+    },
     getAnswerOfUserWithCorrect (user_exam_id) {
       return lumenServer + '/temp-exam/answer/'+user_exam_id+'/withCorrect'
     },
@@ -50,7 +53,7 @@ const API_ADDRESS = {
     }
   },
   question: {
-    base: lumenServer + '/question',
+    base: lumenServer + '/exam-question/attach',
     attachSubCategoryToQuestion: lumenServer + '/exam-question/attach/sub-category',
     updateQuestion (questionId) {
       return lumenServer + '/question/' + questionId

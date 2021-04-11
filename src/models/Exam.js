@@ -61,7 +61,9 @@ class Exam extends Model {
         let that = this
         return new Promise(function(resolve, reject) {
             if (!that.questions_file_url) {
+                Assistant.handleAxiosError("exam file url is not set")
                 reject(null)
+                return
             }
 
             $.ajax({
@@ -258,17 +260,14 @@ class Exam extends Model {
 
     getAnswerOfUserInResultPage () {
         let that = this
-        console.log('test')
         return new Promise(function(resolve, reject) {
             axios.get(API_ADDRESS.exam.getAnswerOfUserWithCorrect(that.user_exam_id))
                 .then( (response) => {
-                    console.log('test2')
                     const questions_file_url = response.data.data.exam.questions_file_url
                     const examTitle = response.data.data.exam.title
                     const answers = response.data.data.answers
                     that.questions_file_url = questions_file_url
                     that.title = examTitle
-                    console.log('test3')
                     that.loadQuestionsFromFile()
                         .then( () => {
                             that.mergeDbAnswerToLocalstorage(answers)

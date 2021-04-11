@@ -37,9 +37,9 @@
     import { mixinQuiz, mixinWindowSize } from '@/mixin/Mixins'
     import $ from "jquery";
 
-    var md = require('markdown-it')(),
-        mk = require('markdown-it-new-katex')
-    md.use(mk);
+    var md = require('markdown-it')()
+    md.use(require('markdown-it-new-katex'))
+    md.use(require('markdown-it-container'), 'mesra')
 
     export default {
         name: 'item',

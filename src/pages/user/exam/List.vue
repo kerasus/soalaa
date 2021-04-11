@@ -90,7 +90,7 @@
                                         ثبت پاسخنامه ذخیره شده در سیستم
                                     </v-btn>
                                     <v-btn
-                                            v-if="!preventStartExam && item.user_exam_status === 'has participated but not finished' || item.user_exam_status === 'has participated and finished' && false"
+                                            v-if="true || !preventStartExam && item.user_exam_status === 'has participated but not finished' || item.user_exam_status === 'has participated and finished' && false"
                                             @click="continueExam(item.id)"
                                             color="purple"
                                             text

@@ -16,7 +16,6 @@ const router = new VueRouter({
             name: 'login',
             component: () => lazyLoadView(import('@/pages/auth/Login'))
         },
-
         // dashboard page
         {
             path: '/',
@@ -86,6 +85,18 @@ const router = new VueRouter({
             path: '/onlineQuiz/exams',
             name: 'onlineQuiz.exams',
             component: () => lazyLoadView(import('@/pages/admin/exam/Manage')),
+            meta: {middleware: [auth, completeInfo]}
+        },
+        {
+            path: '/onlineQuiz/exams/lessons/:quizId',
+            name: 'onlineQuiz.exams.lessons',
+            component: () => lazyLoadView(import('@/pages/admin/exam/lessons')),
+            meta: {middleware: [auth, completeInfo]}
+        },
+        {
+            path: '/onlineQuiz/exams/lessons/:quizId/:lessonId',
+            name: 'onlineQuiz.exams.lessons.details',
+            component: () => lazyLoadView(import('@/pages/admin/exam/lessonDetails')),
             meta: {middleware: [auth, completeInfo]}
         },
         {
