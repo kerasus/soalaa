@@ -413,7 +413,18 @@
         },
         methods: {
             copyImageAddress (url) {
-                console.log('url', url)
+                const el = document.createElement('textarea')
+                el.value = '![](' + url + ')'
+                document.body.appendChild(el)
+                el.select()
+                document.execCommand('copy')
+                document.body.removeChild(el)
+                this.$notify({
+                    group: 'notifs',
+                    title: 'توجه',
+                    text: 'آدرس فایل به کلیپبورد منتقل شد',
+                    type: 'success'
+                })
             },
             formatSize (size) {
                 if (size > 1024 * 1024 * 1024 * 1024) {

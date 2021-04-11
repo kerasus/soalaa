@@ -98,7 +98,7 @@
                                 </v-btn>
                             </v-col>
                             <v-col :md="1">
-                                <v-btn color="primary" block :style="{ height: '100%' }">ثبت سوال</v-btn>
+                                <v-btn color="primary" @click="submitQuestion" block :style="{ height: '100%' }">ثبت سوال</v-btn>
                             </v-col>
                         </v-row>
                     </v-col>
