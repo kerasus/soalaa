@@ -46,7 +46,7 @@
     import $ from "jquery";
     import API_ADDRESS from "@/api/Addresses"
     import VueConfirmDialog from 'vue-confirm-dialog'
-    import {Exam} from "@/models/Exam"
+    // import {Exam} from "@/models/Exam"
     import axios from 'axios'
     Vue.use(VueConfirmDialog)
     Vue.component('vue-confirm-dialog', VueConfirmDialog.default)
