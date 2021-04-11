@@ -38,6 +38,7 @@
     "showdown": "^1.9.1",
     "vue": "^2.6.11",
     "vue-chartjs": "^3.5.1",
+    "vue-confirm-dialog": "^1.0.2",
     "vue-highcharts": "^0.1.0",
     "vue-html2pdf": "^1.8.0",
     "vue-image-crop-upload": "^3.0.3",

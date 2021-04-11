@@ -164,8 +164,8 @@
             if (this.delayTime === 0) {
                 this.overlay = true
             }
-            console.log(this.questions)
-            console.log(this.getCurrentExamQuestionsInArray())
+            // console.log(this.questions)
+            // console.log(this.getCurrentExamQuestionsInArray())
         },
         mounted() {
             let that = this
