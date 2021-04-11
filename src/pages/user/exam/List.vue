@@ -26,7 +26,7 @@
                             </v-col>
                         </v-row>
                         <v-row v-for="item in exams.list" :key="item.id" >
-                            <v-col v-if="item.enable">
+                            <v-col>
                                 <v-sheet
                                         class="mb-5 d-flex exam-list-sheet"
                                         elevation="0"
