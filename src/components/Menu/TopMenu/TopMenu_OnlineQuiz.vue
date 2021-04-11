@@ -16,9 +16,7 @@
                     >
                         <v-icon>mdi-chevron-left</v-icon>
                     </v-btn>
-
                     <v-spacer></v-spacer>
-
                     <v-btn
                             dark
                             icon
@@ -26,7 +24,6 @@
                     >
                         <v-icon>mdi-pencil</v-icon>
                     </v-btn>
-
                     <v-btn
                             dark
                             icon
@@ -34,9 +31,7 @@
                         <v-icon>mdi-dots-vertical</v-icon>
                     </v-btn>
                 </v-card-title>
-
                 <v-spacer></v-spacer>
-
                 <v-card-title v-if="false" class="white--text pl-12 pt-12">
                     <div class="display-1 pl-12 pt-12">
                         Ali Conners
@@ -59,7 +54,6 @@
 </template>
 
 <script>
-    // import {Exam} from "@/models/Exam";
     import {mixinAuth, mixinQuiz} from '@/mixin/Mixins'
 
     export default {
