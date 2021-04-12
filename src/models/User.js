@@ -153,32 +153,12 @@ class User extends Model {
         })
     }
 
-    loadUserExams (exams, userExams) {
-        exams.forEach( (examItem) => {
-            let userExam = userExams.find( (userExamItem) => {
-                return (userExamItem.exam_id === examItem.id)
-            })
-            examItem.is_registered = !!(userExam)
-            examItem.finished_at = (userExam) ? userExam.finished_at : null
-            examItem.accept_at = (userExam) ? userExam.accept_at : null
-            examItem.user_exam_id = (userExam) ? userExam.id : null
-
-            this.setUserExamStatus(examItem)
-
-            return examItem
-        })
-
-        this.exams = new ExamList(exams)
-    }
-
     getUserExams () {
         let that = this
         return new Promise(function(resolve, reject) {
             that.exams.fetch(null, API_ADDRESS.exam.userExamsList)
                 .then((response) => {
-                    let exams = response.data.data.exams
-                    let userExams = response.data.data.user_exams
-                    that.loadUserExams(exams, userExams)
+                    that.exams = new ExamList(response.data.data.exams)
                     that.exams.loading = false
                 })
                 .then(() => {

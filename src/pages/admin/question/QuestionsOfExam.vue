@@ -10,8 +10,8 @@
             <!--                              ref="scroller"-->
             <!--                />-->
             <!--            </v-col>-->
-            <v-col :md="5" class="questions">
-                                <item v-for="itemm in quizData.questions.list" :key="itemm.id" :source="itemm" />
+            <v-col :md="11" class="questions" ref="questionsColumn">
+
 <!--                <virtual-list style="overflow-y: auto;"-->
 <!--                              :data-key="'id'"-->
 <!--                              :data-sources="quiz.questions.list"-->
@@ -19,8 +19,29 @@
 <!--                              ref="scroller"-->
 <!--                              class="questionss"-->
 <!--                />-->
+
+<!--                <item v-for="itemm in quizData.questions.list" :key="itemm.id" :source="itemm" :exam-id="$route.params.quizId" :sub-category="quizData.sub_categories" />-->
+
+                <DynamicScroller
+                        :items="quizData.questions.list"
+                        :min-item-size="70"
+                        class="scroller questionss"
+                        ref="scroller"
+                        :emitUpdate="true"
+                        @update="onScroll"
+                >
+                    <template v-slot="{ item, index, active }">
+                        <DynamicScrollerItem
+                                :item="item"
+                                :active="active"
+                                :data-index="index"
+                        >
+                            <Item :source="item" :questions-column="$refs.questionsColumn" @inView="test" :exam-id="$route.params.quizId" :sub-category="quizData.sub_categories" />
+                        </DynamicScrollerItem>
+                    </template>
+                </DynamicScroller>
             </v-col>
-            <v-col :md="7" class="left-side-list">
+            <v-col v-if="false" :md="7" class="left-side-list">
                 <v-row>
                     <v-col class="px-10 py-0 d-flex justify-space-between" dir="ltr">
                         <div class="rounded-b-xl rounded-r-xl">
@@ -130,7 +151,25 @@
     Vue.component('DynamicScrollerItem', DynamicScrollerItem)
     var md = require('markdown-it')()
     md.use(require('markdown-it-new-katex'));
-    md.use(require('markdown-it-container'), 'poem');
+    md.use(require('markdown-it-container'), 'beit', {
+
+        validate: function(params) {
+            return params.trim().match(/^beit\s+(.*)--\*mesra\*--(.*)$/)
+        },
+
+        render: function (tokens, idx) {
+            let m = tokens[idx].info.trim().match(/^beit\s+(.*)--\*mesra\*--(.*)$/)
+            if (m && m[1] && m[2] && tokens[idx].nesting === 1) {
+                let mesra1 = md.utils.escapeHtml(m[1])
+                let mesra2 = md.utils.escapeHtml(m[2])
+                // opening tag
+                return '<div class="beit"><div class="mesra">' + mesra1 + '</div><div class="mesra">'+ mesra2 +'</div>\n';
+            } else {
+                // closing tag
+                return '</div>\n';
+            }
+        }
+    });
 
     export default {
         name: 'QuestionsOfExam',
@@ -148,9 +187,63 @@
                 lastTimeScrollRange: { start: 0, end: 29 },
                 quizList: [],
                 subCategoriesList: new QuestSubcategoryList(),
+
+                inView: [],
+                scrollState: 'not scrolling',
+                setIntervalCallback: null,
+                timePassedSinceLastScroll: 0,
+                renderedQuestions: { startIndex: 0, endIndex: 0 },
             }
         },
         methods: {
+            onScroll (startIndex, endIndex) {
+                this.renderedQuestions = { startIndex, endIndex }
+                if (this.scrollState === 'not scrolling') {
+                    this.setIntervalCallback = setInterval(() => {
+                        // this.changeCurrentQuestionIfScrollingIsDone()
+                    }, 250)
+                    this.scrollState = 'scrolling'
+                }
+                this.timePassedSinceLastScroll = 0
+            },
+            test (payload) {
+                console.log(payload.number)
+                if (payload.isInView) {
+                    for (let i = 0; i < this.inView.length; i++) {
+                        if (this.inView[i] === payload.number) {
+                            return
+                        }
+                    }
+                    this.inView.push(payload.number)
+                }
+                else {
+                    for (let i = 0; i < this.inView.length; i++) {
+                        if (this.inView[i] === payload.number) {
+                            this.inView.splice(i, 1)
+                        }
+                    }
+                }
+            },
+
+            loadSubCategories (quizResponse) {
+                const that = this
+                this.subCategoriesList.fetch().then((response) => {
+                    // that.quiz.sub_categories = new QuestSubcategoryList(response.data)
+                    that.quizData.sub_categories = new QuestSubcategoryList(response.data)
+                    let questions = quizResponse.data.data
+                    that.sortQuestions (questions)
+                    that.quizData.questions = new QuestionList(questions)
+                    // that.quiz = new Exam(that.quizData)
+                    that.QuIzDaTa = new Exam(that.quizData)
+                })
+            },
+            loadQuizDataAndSubCategories () {
+                const that = this
+                this.quizData.show(null, API_ADDRESS.exam.examQuestion(this.$route.params.quizId))
+                    .then((response) => {
+                        that.loadSubCategories(response)
+                    })
+            },
             changeAppBarAndDrawer (state) {
                 this.$store.commit('AppLayout/updateAppBarAndDrawer', state)
             },
@@ -180,19 +273,7 @@
         },
         created () {
             this.changeAppBarAndDrawer(false)
-            const that = this
-            const url = API_ADDRESS.exam.examQuestion(this.$route.params.quizId)
-            this.quizData.show(null, url)
-                .then((response) => {
-                    that.quizData.questions = new QuestionList(response.data.data)
-                    console.log(that.quiz)
-                    console.log(that.quiz)
-                    that.quiz = new Exam(that.quizData)
-                    that.QuIzDaTa = new Exam(that.quizData)
-                })
-            this.subCategoriesList.fetch().then((response) => {
-                this.quiz.sub_categories = new QuestSubcategoryList(response.data)
-            })
+            this.loadQuizDataAndSubCategories()
         },
         destroyed() {
             this.changeAppBarAndDrawer(true)
