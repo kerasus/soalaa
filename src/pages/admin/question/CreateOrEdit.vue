@@ -495,8 +495,8 @@
                             }
                             else if (dollarSignCounter % 2 === 0 && this.currentQuestion.statement[i - 1] === ' ') {
                                 this.currentQuestion.statement = this.currentQuestion.statement.slice(0, i - 1) + this.currentQuestion.statement.slice(i)
-                                if (this.currentQuestion.statement[i - 1] === ' ') {
-                                    i--
+                                if (this.currentQuestion.statement[i - 2] === ' ') {
+                                    i = i - 2
                                     dollarSignCounter--
                                 }
                             }
