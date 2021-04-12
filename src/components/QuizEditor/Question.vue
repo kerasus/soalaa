@@ -48,6 +48,7 @@
     import VueConfirmDialog from 'vue-confirm-dialog'
     // import {Exam} from "@/models/Exam"
     import axios from 'axios'
+    import {QuestSubcategoryList} from "@/models/QuestSubcategory";
     Vue.use(VueConfirmDialog)
     Vue.component('vue-confirm-dialog', VueConfirmDialog.default)
 
@@ -85,35 +86,19 @@
                     1: '2) ',
                     2: '3) ',
                     3: '4) '
-                },
-                sub__category: [
-                    {id: 1, category_id: 1, title: "ادبیات", display_title: "ادبیات عمومی"},
-                    {id: 2, category_id: 1, title: "عربی", display_title: "عربی عمومی"},
-                    {id: 3, category_id: 1, title: "دین و زندگی", display_title: "دین و زندگی"},
-                    {id: 4, category_id: 1, title: "زبان انگلیسی", display_title: "زبان انگلیسی"},
-                    {id: 5, category_id: 2, title: "زمین شناسی", display_title: "زمین شناسی"},
-                    {id: 6, category_id: 2, title: "زیست", display_title: "زیست"},
-                    {id: 7, category_id: 2, title: "ریاضی", display_title: "ریاضی"},
-                    {id: 8, category_id: 2, title: "فیزیک", display_title: "فیزیک"},
-                    {id: 9, category_id: 2, title: "شیمی", display_title: "شیمی"},
-                    {id: 10, category_id: 2, title: "حسابان", display_title: "حسابان"},
-                    {id: 11, category_id: 2, title: "هندسه", display_title: "هندسه"},
-                    {id: 12, category_id: 2, title: "گسسته", display_title: "گسسته"},
-                    {id: 13, category_id: 2, title: "زبان و ادبیات فارسی", display_title: "زبان و ادبیات فارسی انسانی"},
-                    {id: 14, category_id: 2, title: "عربی", display_title: "عربی انسانی"},
-                    {id: 15, category_id: 2, title: "تاریخ", display_title: "تاریخ"},
-                    {id: 16, category_id: 2, title: "جغرافیا", display_title: "جغرافیا"},
-                    {id: 17, category_id: 2, title: "علوم اجتماعی", display_title: "علوم اجتماعی"},
-                    {id: 18, category_id: 2, title: "فلسفه", display_title: "فلسفه"}
-                ]
+                }
             }
         },
         props: {
+            subCategory: {
+                default() {
+                    return new QuestSubcategoryList()
+                }
+            },
             index: { // index of current source
                 type: Number
             },
             examId: {
-                type: Number,
                 default() {
                     return null
                 }
@@ -136,7 +121,9 @@
                 document.execCommand('copy')
             },
             onIntersect(entries) {
-                this.source.onIntersect(entries)
+                if (typeof this.source.onIntersect === 'function') {
+                    this.source.onIntersect(entries)
+                }
             },
             choiceClicked(questionId, choiceId) {
                 console.log('loadFirstActiveQuestionIfNeed->choiceClicked')
@@ -229,7 +216,12 @@
             //     return this.quiz.sub_categories.list.find((item) => item.id === subCategoryId)
             // }
             getSubCategoryName () {
-                return this.sub__category.find((item) => item.id === this.source.sub_category.id).display_title
+                const target = this.subCategory.list.find((item) => item.id === this.source.sub_category.id)
+                if (target) {
+                    return target.display_title
+                } else {
+                    return ''
+                }
             },
         }
     }
