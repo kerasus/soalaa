@@ -83,11 +83,8 @@ const mixinQuiz = {
         setCurrentExamQuestionIndexes(currentExamQuestionIndexes) {
             window.localStorage.setItem('currentExamQuestionIndexes', JSON.stringify(currentExamQuestionIndexes))
         },
-        saveCurrentExamQuestions(questionsList) {
-            let currentExamQuestions = {}
-            let currentExamQuestionIndexes = {}
-
-            let sortList = Array.prototype.sort.bind(questionsList);
+        sortQuestions (questions) {
+            let sortList = Array.prototype.sort.bind(questions);
             sortList(function (a, b) {
                 let sorta = parseInt(a.order),
                     sortb = parseInt(b.order)
@@ -99,6 +96,24 @@ const mixinQuiz = {
                 }
                 return 0
             });
+        },
+        saveCurrentExamQuestions(questionsList) {
+            let currentExamQuestions = {}
+            let currentExamQuestionIndexes = {}
+
+            this.sortQuestions (questionsList)
+            // let sortList = Array.prototype.sort.bind(questionsList);
+            // sortList(function (a, b) {
+            //     let sorta = parseInt(a.order),
+            //         sortb = parseInt(b.order)
+            //     if (sorta < sortb) {
+            //         return -1
+            //     }
+            //     if (sorta > sortb) {
+            //         return 1
+            //     }
+            //     return 0
+            // });
 
             questionsList.forEach((item, index) => {
                 item.index = index

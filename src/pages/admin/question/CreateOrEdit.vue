@@ -238,6 +238,26 @@
     var md = require('markdown-it')()
     md.use(require('markdown-it-new-katex'))
     md.use(require('markdown-it-container'), 'mesra')
+    md.use(require('markdown-it-container'), 'beit', {
+
+        validate: function(params) {
+            return params.trim().match(/^beit\s+(.*)--\*mesra\*--(.*)$/)
+        },
+
+        render: function (tokens, idx) {
+            let m = tokens[idx].info.trim().match(/^beit\s+(.*)--\*mesra\*--(.*)$/)
+            if (m && m[1] && m[2] && tokens[idx].nesting === 1) {
+                let mesra1 = md.utils.escapeHtml(m[1])
+                let mesra2 = md.utils.escapeHtml(m[2])
+                // opening tag
+                return '<div class="beit"><div class="mesra">' + mesra1 + '</div><div class="mesra">'+ mesra2 +'</div>\n';
+            } else {
+                // closing tag
+                return '</div>\n';
+            }
+        }
+    });
+    // ::: beit 111--*mesra*--222:::
 
     // ::: spoiler click me
     // *content*
@@ -356,13 +376,6 @@
             }
         },
         methods: {
-
-            /**
-             * Has changed
-             * @param  Object|undefined   newFile   Read only
-             * @param  Object|undefined   oldFile   Read only
-             * @return undefined
-             */
             inputFile: function (newFile, oldFile) {
                 if (newFile && oldFile && !newFile.active && oldFile.active) {
                     // Get response data
@@ -373,13 +386,6 @@
                     }
                 }
             },
-            /**
-             * Pretreatment
-             * @param  Object|undefined   newFile   Read and write
-             * @param  Object|undefined   oldFile   Read only
-             * @param  Function           prevent   Prevent changing
-             * @return undefined
-             */
             inputFilter: function (newFile, oldFile, prevent) {
                 if (newFile && !oldFile) {
                     // Filter non-image file
@@ -396,6 +402,14 @@
                 }
             },
 
+            loadnCurrentQuestionData () {
+                this.currentQuestion.show(null, API_ADDRESS.question.updateQuestion(this.$route.params.id))
+                    .then((response) => {
+                        this.currentQuestion = new Question(response.data.data)
+                        this.trueChoiceIndex = this.currentQuestion.choices.list.findIndex((item) => item.answer )
+                        this.updateRendered()
+                    })
+            },
 
 
             initMatrix () {
@@ -535,20 +549,12 @@
             this.editMode = this.$route.name === 'quest.edit'
             new ExamList().fetch().then((response) => {
                 this.quizList = new ExamList(response.data.data)
-                if (!this.editMode) {
-                    this.selectedQuizzes.push(this.quizList.list[0].id)
-                }
             })
             this.subCategoriesList.fetch().then((response) => {
                 this.subCategoriesList = new QuestSubcategoryList(response.data)
             })
             if (this.editMode) {
-                this.currentQuestion.show(null, API_ADDRESS.question.updateQuestion(this.$route.params.id))
-                    .then((response) => {
-                        this.currentQuestion = new Question(response.data.data)
-                        this.trueChoiceIndex = this.currentQuestion.choices.list.findIndex((item) => item.answer )
-                        this.updateRendered()
-                    })
+                this.loadnCurrentQuestionData()
             } else {
                 this.currentQuestion = new Question(this.questionData)
             }

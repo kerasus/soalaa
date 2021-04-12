@@ -8,10 +8,16 @@
             <v-btn icon :to="{ name: 'quest.edit', params: { id: source.id } }" >
                 <v-icon :size="24">mdi-pencil</v-icon>
             </v-btn>
-            <input :id="'question-id' + source.id" :value="source.id" type="text" class="not-visible" />
-            <v-btn icon @click="copyIdToClipboard()">
+            <input :id="'question-id' + source.id" :ref="'question-id-' + source.id" :value="source.id" type="text" class="not-visible" />
+            <v-btn icon @click="copyIdToClipboard(source.id)">
                 <v-icon>mdi-content-copy</v-icon>
             </v-btn>
+            <v-switch
+                    v-model="confirm"
+                    color="success"
+                    value="1"
+                    hide-details
+            ></v-switch>
         </div>
         <span class="question-body renderedPanel" :id="'question' + source.id" v-html="(getQuestionNumberFromId(source.id)) + '(' + getSubCategoryName + ')' + ' (' + source.order + ') - ' + source.rendered_statement" v-intersect="{
             handler: onIntersect,
@@ -28,55 +34,74 @@
                     :class="{ choice: true, renderedPanel: true, active: choice.answer }"
             />
         </v-row>
+        <vue-confirm-dialog></vue-confirm-dialog>
     </div>
 </template>
 
 <script>
+    import Vue from 'vue'
     import 'github-markdown-css/github-markdown.css'
     import '@/assets/scss/markdownKatex.scss'
     import { mixinQuiz, mixinWindowSize } from '@/mixin/Mixins'
     import $ from "jquery";
+    import API_ADDRESS from "@/api/Addresses"
+    import VueConfirmDialog from 'vue-confirm-dialog'
+    // import {Exam} from "@/models/Exam"
+    import axios from 'axios'
+    import {QuestSubcategoryList} from "@/models/QuestSubcategory";
+    Vue.use(VueConfirmDialog)
+    Vue.component('vue-confirm-dialog', VueConfirmDialog.default)
 
     var md = require('markdown-it')()
     md.use(require('markdown-it-new-katex'))
     md.use(require('markdown-it-container'), 'mesra')
+    md.use(require('markdown-it-container'), 'beit', {
+
+        validate: function(params) {
+            return params.trim().match(/^beit\s+(.*)--\*mesra\*--(.*)$/)
+        },
+
+        render: function (tokens, idx) {
+            let m = tokens[idx].info.trim().match(/^beit\s+(.*)--\*mesra\*--(.*)$/)
+            if (m && m[1] && m[2] && tokens[idx].nesting === 1) {
+                let mesra1 = md.utils.escapeHtml(m[1])
+                let mesra2 = md.utils.escapeHtml(m[2])
+                // opening tag
+                return '<div class="beit"><div class="mesra">' + mesra1 + '</div><div class="mesra">'+ mesra2 +'</div>\n';
+            } else {
+                // closing tag
+                return '</div>\n';
+            }
+        }
+    });
 
     export default {
         name: 'item',
         mixins: [mixinQuiz, mixinWindowSize],
         data() {
             return {
+                confirm: false,
                 choiceNumber: {
                     0: '1) ',
                     1: '2) ',
                     2: '3) ',
                     3: '4) '
-                },
-                sub__category: [
-                    {id: 1, category_id: 1, title: "ادبیات", display_title: "ادبیات عمومی"},
-                    {id: 2, category_id: 1, title: "عربی", display_title: "عربی عمومی"},
-                    {id: 3, category_id: 1, title: "دین و زندگی", display_title: "دین و زندگی"},
-                    {id: 4, category_id: 1, title: "زبان انگلیسی", display_title: "زبان انگلیسی"},
-                    {id: 5, category_id: 2, title: "زمین شناسی", display_title: "زمین شناسی"},
-                    {id: 6, category_id: 2, title: "زیست", display_title: "زیست"},
-                    {id: 7, category_id: 2, title: "ریاضی", display_title: "ریاضی"},
-                    {id: 8, category_id: 2, title: "فیزیک", display_title: "فیزیک"},
-                    {id: 9, category_id: 2, title: "شیمی", display_title: "شیمی"},
-                    {id: 10, category_id: 2, title: "حسابان", display_title: "حسابان"},
-                    {id: 11, category_id: 2, title: "هندسه", display_title: "هندسه"},
-                    {id: 12, category_id: 2, title: "گسسته", display_title: "گسسته"},
-                    {id: 13, category_id: 2, title: "زبان و ادبیات فارسی", display_title: "زبان و ادبیات فارسی انسانی"},
-                    {id: 14, category_id: 2, title: "عربی", display_title: "عربی انسانی"},
-                    {id: 15, category_id: 2, title: "تاریخ", display_title: "تاریخ"},
-                    {id: 16, category_id: 2, title: "جغرافیا", display_title: "جغرافیا"},
-                    {id: 17, category_id: 2, title: "علوم اجتماعی", display_title: "علوم اجتماعی"},
-                    {id: 18, category_id: 2, title: "فلسفه", display_title: "فلسفه"}
-                ]
+                }
             }
         },
         props: {
+            subCategory: {
+                default() {
+                    return new QuestSubcategoryList()
+                }
+            },
             index: { // index of current source
                 type: Number
+            },
+            examId: {
+                default() {
+                    return null
+                }
             },
             source: { // here is: {uid: 'unique_1', text: 'abc'}
                 default() {
@@ -91,12 +116,14 @@
             }
         },
         methods: {
-            copyIdToClipboard() {
-                const questionIdElement = document.querySelector('#question-id' + this.source.id)
-                questionIdElement.select()
+            copyIdToClipboard(sourceId) {
+                this.$refs['question-id-' + sourceId].select()
+                document.execCommand('copy')
             },
             onIntersect(entries) {
-                this.source.onIntersect(entries)
+                if (typeof this.source.onIntersect === 'function') {
+                    this.source.onIntersect(entries)
+                }
             },
             choiceClicked(questionId, choiceId) {
                 console.log('loadFirstActiveQuestionIfNeed->choiceClicked')
@@ -144,9 +171,32 @@
                 return largestChoice
             },
             removeQuestion() {
-                this.source.show(null, '/3a/api/exam-question/detach/' + this.source.id).then(() => {
-
-                })
+                this.$confirm(
+                    {
+                        message: 'از حذف سوال اطمینان دارید؟',
+                        button: {
+                            no: 'خیر',
+                            yes: 'بله'
+                        },
+                        /**
+                         * Callback Function
+                         * @param {Boolean} confirm
+                         */
+                        callback: confirm => {
+                            if (confirm) {
+                                axios.post(API_ADDRESS.question.detach(this.source.id), {
+                                    exam_id: this.examId
+                                })
+                                .then(() => {
+                                    window.location.reload()
+                                })
+                                // this.source.show(null, API_ADDRESS.question.detach(this.source.id)).then(() => {
+                                //     window.location.reload()
+                                // })
+                            }
+                        }
+                    }
+                )
             },
             edit() {
                 // console.log(questionId)
@@ -166,7 +216,12 @@
             //     return this.quiz.sub_categories.list.find((item) => item.id === subCategoryId)
             // }
             getSubCategoryName () {
-                return this.sub__category.find((item) => item.id === this.source.sub_category.id).display_title
+                const target = this.subCategory.list.find((item) => item.id === this.source.sub_category.id)
+                if (target) {
+                    return target.display_title
+                } else {
+                    return ''
+                }
             },
         }
     }
