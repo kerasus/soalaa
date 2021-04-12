@@ -46,7 +46,7 @@
             </div>
         </div>
         </div>
-        <v-btn :color="'#4caf50'" :style="{ backgroundColor: '#4caf50 !important' }" dark>ثبت و پایان آزمون</v-btn>
+        <v-btn @click="sendAnswersAndFinishExam" :color="'#4caf50'" :style="{ backgroundColor: '#4caf50 !important' }" dark class="end-exam-btn">ثبت و پایان آزمون</v-btn>
     </v-sheet>
 </template>
 
@@ -65,11 +65,41 @@
             this.interval = setInterval(() => {
                 that.currentCat = Time.getCurrentCategoryAcceptAt(that.quiz.categories)
             }, 1000)
+        },
+        methods: {
+            sendAnswersAndFinishExam() {
+                let that = this
+                this.quiz.sendAnswersAndFinishExam()
+                    .then( () => {
+                        that.$store.commit('clearExamData', that.quiz.id)
+                        that.$notify({
+                            group: 'notifs',
+                            text: 'اطلاعات آزمون شما ثبت شد.',
+                            type: 'success'
+                        })
+                        that.$router.push({ name: 'user.exam.list'})
+                    })
+                    .catch( () => {
+                        that.$notify({
+                            group: 'notifs',
+                            title: 'توجه!',
+                            text: 'مشکلی در ثبت اطلاعات آزمون شما رخ داده است. لطفا تا قبل از ساعت 24 اقدام به ارسال مجدد پاسخنامه نمایید.',
+                            type: 'warn',
+                            duration: 30000,
+                        })
+                        that.$router.push({ name: 'user.exam.list'})
+                    })
+            }
         }
     }
 </script>
 
 <style>
+.end-exam-btn .v-btn__content {
+    display: flex;
+    justify-content: center !important;
+}
+
 .map-of-questions {
     min-height: 42px !important;
     width: 80%;
