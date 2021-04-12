@@ -478,7 +478,30 @@
                     if (!this.currentQuestion.statement) {
                         this.currentQuestion.statement = ''
                     }
-
+                    while (this.currentQuestion.statement.indexOf('$$') !== -1) {
+                        console.log(this.currentQuestion.statement.indexOf('$$'))
+                        this.currentQuestion.statement = this.currentQuestion.statement.replace('$$', '$')
+                    }
+                    let dollarSignCounter = 0
+                    for (let i = 0; i < this.currentQuestion.statement.length; i++) {
+                        if (this.currentQuestion.statement[i] === '$') {
+                            dollarSignCounter++
+                            if (dollarSignCounter % 2 === 1 && this.currentQuestion.statement[i + 1] === ' ') {
+                                this.currentQuestion.statement = this.currentQuestion.statement.slice(0, i + 1) + this.currentQuestion.statement.slice(i + 2)
+                                if (this.currentQuestion.statement[i + 1] === ' ') {
+                                    i--
+                                    dollarSignCounter--
+                                }
+                            }
+                            else if (dollarSignCounter % 2 === 0 && this.currentQuestion.statement[i - 1] === ' ') {
+                                this.currentQuestion.statement = this.currentQuestion.statement.slice(0, i - 1) + this.currentQuestion.statement.slice(i)
+                                if (this.currentQuestion.statement[i - 1] === ' ') {
+                                    i--
+                                    dollarSignCounter--
+                                }
+                            }
+                        }
+                    }
                 }
             },
             updateRendered () {
