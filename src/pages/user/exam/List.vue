@@ -59,7 +59,7 @@
                                         </v-col>
                                         <v-col cols="12" md="4">
                                             <v-btn
-                                                    v-if="false"
+                                                    v-if="item.holding_status === 'not_started'"
                                                     color="#00c753"
                                                     disabled
                                                     text
@@ -67,7 +67,7 @@
                                                 زمان آزمون فرا نرسیده
                                             </v-btn>
                                             <v-btn
-                                                    v-if="item.can_register"
+                                                    v-if="item.exam_actions.can_register"
                                                     @click="registerExam(item.id)"
                                                     color="#00c753"
                                                     text
@@ -75,7 +75,7 @@
                                                 ثبت نام
                                             </v-btn>
                                             <v-btn
-                                                    v-if="item.can_start"
+                                                    v-if="item.exam_actions.can_start"
                                                     :to="{ name: 'onlineQuiz.alaaView', params: { quizId: item.id, questNumber: 1 } }"
                                                     color="#ffc107"
                                                     text
@@ -83,7 +83,7 @@
                                                 شروع آزمون
                                             </v-btn>
                                             <v-btn
-                                                    v-if="item.can_continue"
+                                                    v-if="item.exam_actions.can_continue"
                                                     @click="continueExam(item.id)"
                                                     color="purple"
                                                     text
@@ -91,7 +91,7 @@
                                                 ادامه آزمون
                                             </v-btn>
                                             <v-btn
-                                                    v-if="item.can_submit_answer"
+                                                    v-if="item.exam_actions.can_submit_answer"
                                                     @click="sendAnswersAndFinishExam(item)"
                                                     color="#ffc107"
                                                     text
@@ -99,7 +99,7 @@
                                                 ثبت پاسخنامه ذخیره شده در سیستم
                                             </v-btn>
                                             <v-btn
-                                                    v-if="item.can_see_report"
+                                                    v-if="item.exam_actions.can_see_report"
                                                     color="#00b5e6"
                                                     text
                                                     :to="{ name: 'user.exam.results', params: { user_exam_id: item.user_exam_id, exam_id: item.id } }"
@@ -107,7 +107,7 @@
                                                 مشاهده نتایج
                                             </v-btn>
                                             <v-btn
-                                                    v-if="false"
+                                                    v-if="item.holding_status === 'finished'"
                                                     color="#ffc107"
                                                     text
                                                     disabled
