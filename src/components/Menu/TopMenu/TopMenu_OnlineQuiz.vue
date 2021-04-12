@@ -39,17 +39,17 @@
                 </v-card-title>
             </v-row>
         </v-img>
-        <v-btn
-                style="letter-spacing: inherit;"
-                large
-                dark
-                tile
-                block
-                color="#5cbf60"
-                @click="sendAnswersAndFinishExam"
-        >
-            ثبت و پایان آزمون
-        </v-btn>
+<!--        <v-btn-->
+<!--                style="letter-spacing: inherit;"-->
+<!--                large-->
+<!--                dark-->
+<!--                tile-->
+<!--                block-->
+<!--                color="#5cbf60"-->
+<!--                @click="sendAnswersAndFinishExam"-->
+<!--        >-->
+<!--            ثبت و پایان آزمون-->
+<!--        </v-btn>-->
     </div>
 </template>
 

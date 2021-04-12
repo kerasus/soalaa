@@ -467,8 +467,46 @@
             getQuizById (quizId) {
                 return this.quizList.list.find((quiz) => quiz.id === quizId )
             },
+            // replaceNimFasele () {
+            //     if (!this.currentQuestion.statement) {
+            //         this.currentQuestion.statement = ''
+            //     }
+            //     this.currentQuestion.statement = this.currentQuestion.statement.replace('¬', '‌')
+            // },
+            replaceExtraSpaceAroundDollarSign () {
+                if (this.selectedField === 0) {
+                    if (!this.currentQuestion.statement) {
+                        this.currentQuestion.statement = ''
+                    }
+                    while (this.currentQuestion.statement.indexOf('$$') !== -1) {
+                        console.log(this.currentQuestion.statement.indexOf('$$'))
+                        this.currentQuestion.statement = this.currentQuestion.statement.replace('$$', '$')
+                    }
+                    let dollarSignCounter = 0
+                    for (let i = 0; i < this.currentQuestion.statement.length; i++) {
+                        if (this.currentQuestion.statement[i] === '$') {
+                            dollarSignCounter++
+                            if (dollarSignCounter % 2 === 1 && this.currentQuestion.statement[i + 1] === ' ') {
+                                this.currentQuestion.statement = this.currentQuestion.statement.slice(0, i + 1) + this.currentQuestion.statement.slice(i + 2)
+                                if (this.currentQuestion.statement[i + 1] === ' ') {
+                                    i--
+                                    dollarSignCounter--
+                                }
+                            }
+                            else if (dollarSignCounter % 2 === 0 && this.currentQuestion.statement[i - 1] === ' ') {
+                                this.currentQuestion.statement = this.currentQuestion.statement.slice(0, i - 1) + this.currentQuestion.statement.slice(i)
+                                if (this.currentQuestion.statement[i - 1] === ' ') {
+                                    i--
+                                    dollarSignCounter--
+                                }
+                            }
+                        }
+                    }
+                }
+            },
             updateRendered () {
                 this.replaceNimFasele()
+                this.replaceExtraSpaceAroundDollarSign()
                 this.questRendered = md.render(this.currentQuestion.statement.toString());
                 for (let i = 0; i < 4; i++) {
                     const title = (typeof this.currentQuestion.choices.list[i] !== 'undefined') ? this.currentQuestion.choices.list[i].title : null
