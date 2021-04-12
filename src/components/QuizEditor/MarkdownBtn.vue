@@ -15,6 +15,9 @@
         <v-btn outlined icon @click="add(elem, elemKey, '![](' + url + ')')">
             <v-icon>mdi-image</v-icon>
         </v-btn>
+        <v-btn outlined icon @click="add(elem, elemKey, '::: beit mesra1--*mesra*--mesra2 \n:::')">
+            <v-icon>mdi-format-columns</v-icon>
+        </v-btn>
         <v-btn outlined icon @click="add(elem, elemKey, '$\\to$')">
             <v-icon>mdi-arrow-right</v-icon>
         </v-btn>
