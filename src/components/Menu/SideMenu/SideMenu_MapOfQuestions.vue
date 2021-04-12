@@ -1,5 +1,6 @@
 <template>
     <v-sheet class="map-of-questions">
+        <vue-confirm-dialog />
         <div>
             <div v-for="(categoryItem) in quiz.categories.list"
              :key="'category-'+categoryItem.id">
@@ -46,13 +47,18 @@
             </div>
         </div>
         </div>
-        <v-btn @click="sendAnswersAndFinishExam" :color="'#4caf50'" :style="{ backgroundColor: '#4caf50 !important' }" dark class="end-exam-btn">ثبت و پایان آزمون</v-btn>
+        <v-btn @click="getConfirmation" :color="'#4caf50'" :style="{ backgroundColor: '#4caf50 !important' }" dark class="end-exam-btn">ثبت و پایان آزمون</v-btn>
     </v-sheet>
 </template>
 
 <script>
     import mixinQuiz from '@/mixin/Quiz'
     import Time from "@/plugins/time";
+    import Vue from 'vue'
+    import VueConfirmDialog from 'vue-confirm-dialog'
+
+    Vue.use(VueConfirmDialog)
+    Vue.component('vue-confirm-dialog', VueConfirmDialog.default)
 
     export default {
         name: 'SideMenu_MapOfQuestions',
@@ -67,6 +73,22 @@
             }, 1000)
         },
         methods: {
+            getConfirmation(){
+                this.$confirm(
+                    {
+                        message: `Are you sure?`,
+                        button: {
+                            no: 'No',
+                            yes: 'Yes'
+                        },
+                        callback: confirm => {
+                            if (confirm) {
+                                this.sendAnswersAndFinishExam()
+                            }
+                        }
+                    }
+                )
+            },
             sendAnswersAndFinishExam() {
                 let that = this
                 this.quiz.sendAnswersAndFinishExam()

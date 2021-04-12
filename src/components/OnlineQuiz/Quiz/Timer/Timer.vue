@@ -1,7 +1,7 @@
 <template>
     <div class="wrapper" >
         <mobile-timer v-if="windowSize.x < 960"  :passed-time="passedTime" :remaining-time="remainTime" :current-cat="currentCat"/>
-        <pc-timer v-else :passed-time="passedTime" :remaining-time="remainTime" :current-cat="currentCat"/>
+        <pc-timer @timerOpen="passEvent" v-else :passed-time="passedTime" :remaining-time="remainTime" :current-cat="currentCat"/>
     </div>
 </template>
 <script>
@@ -37,6 +37,9 @@
             // requestAnimationFrame(this.timer.updateTimer) // webpack-internal:///./src/models/Timer.js:58 Uncaught TypeError: Cannot read property 'updateDiffs' of undefined
         },
         methods: {
+            passEvent (value) {
+                this.$emit('timerOpen', value)
+            },
             calcRemainAndPassedTime (newCat) {
                 this.passedTime = Time.getPassedTime(this.quiz.created_at)
                 this.calcRemainTime(newCat)
