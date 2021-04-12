@@ -185,7 +185,7 @@
                         callback: confirm => {
                             if (confirm) {
                                 axios.post(API_ADDRESS.question.detach(this.source.id), {
-                                    exam_id: this.examId
+                                    exams: [this.examId]
                                 })
                                 .then(() => {
                                     window.location.reload()
