@@ -55,12 +55,14 @@
                 document.getElementById(id).classList.add(newClass)
             },
             timerOpen() {
+                this.$emit('timerOpen', true)
                 if (this.show === false) {
                     this.changeStyle('timerCard', 'timeCArdDefault', 'timeCArdOpened')
                     setTimeout(() => this.show = true, 200)
                 }
             },
             timerClose() {
+                this.$emit('timerOpen', false)
                 this.changeStyle('timerCard', 'timeCArdOpened', 'timeCArdDefault')
                 this.show = false
             },

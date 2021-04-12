@@ -507,7 +507,6 @@
                         this.currentQuestion.choices.list[this.selectedField - 1].title = ''
                     }
                     while (this.currentQuestion.choices.list[this.selectedField - 1].title.indexOf('$$') !== -1) {
-                        console.log(this.currentQuestion.choices.list[this.selectedField - 1].title.indexOf('$$'))
                         this.currentQuestion.choices.list[this.selectedField - 1].title = this.currentQuestion.choices.list[this.selectedField - 1].title.replace('$$', '$')
                     }
                     let dollarSignCounter = 0
