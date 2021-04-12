@@ -134,6 +134,7 @@
 <script>
     // import FakeQuizData from "@/plugins/fakeQuizData";
     import $ from 'jquery'
+    import axios from 'axios'
     import Item from '@/components/QuizEditor/Question'
     // import VirtualList from 'vue-virtual-scroll-list'
     import '@/assets/scss/markdownKatex.scss'
@@ -239,7 +240,7 @@
             },
             loadQuizDataAndSubCategories () {
                 const that = this
-                this.quizData.show(null, API_ADDRESS.exam.examQuestion(this.$route.params.quizId))
+                axios.post(API_ADDRESS.exam.examQuestion(this.$route.params.quizId))
                     .then((response) => {
                         that.loadSubCategories(response)
                     })
