@@ -453,8 +453,23 @@
             getQuizById (quizId) {
                 return this.quizList.list.find((quiz) => quiz.id === quizId )
             },
+            // replaceNimFasele () {
+            //     if (!this.currentQuestion.statement) {
+            //         this.currentQuestion.statement = ''
+            //     }
+            //     this.currentQuestion.statement = this.currentQuestion.statement.replace('¬', '‌')
+            // },
+            replaceExtraSpaceAroundDollarSign () {
+                if (this.selectedField === 0) {
+                    if (!this.currentQuestion.statement) {
+                        this.currentQuestion.statement = ''
+                    }
+
+                }
+            },
             updateRendered () {
                 this.replaceNimFasele()
+                this.replaceExtraSpaceAroundDollarSign()
                 this.questRendered = md.render(this.currentQuestion.statement.toString());
                 for (let i = 0; i < 4; i++) {
                     const title = (typeof this.currentQuestion.choices.list[i] !== 'undefined') ? this.currentQuestion.choices.list[i].title : null
