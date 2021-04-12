@@ -59,7 +59,7 @@
                                         </v-col>
                                         <v-col cols="12" md="4">
                                             <v-btn
-                                                    v-if="false"
+                                                    v-if="item.holding_status === 'not_started'"
                                                     color="#00c753"
                                                     disabled
                                                     text
@@ -107,7 +107,7 @@
                                                 مشاهده نتایج
                                             </v-btn>
                                             <v-btn
-                                                    v-if="false"
+                                                    v-if="item.holding_status === 'finished'"
                                                     color="#ffc107"
                                                     text
                                                     disabled
