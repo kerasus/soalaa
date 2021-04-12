@@ -495,8 +495,36 @@
                             }
                             else if (dollarSignCounter % 2 === 0 && this.currentQuestion.statement[i - 1] === ' ') {
                                 this.currentQuestion.statement = this.currentQuestion.statement.slice(0, i - 1) + this.currentQuestion.statement.slice(i)
-                                if (this.currentQuestion.statement[i - 1] === ' ') {
+                                if (this.currentQuestion.statement[i - 2] === ' ') {
+                                    i = i - 2
+                                    dollarSignCounter--
+                                }
+                            }
+                        }
+                    }
+                } else {
+                    if (!this.currentQuestion.choices.list[this.selectedField - 1].title) {
+                        this.currentQuestion.choices.list[this.selectedField - 1].title = ''
+                    }
+                    while (this.currentQuestion.choices.list[this.selectedField - 1].title.indexOf('$$') !== -1) {
+                        console.log(this.currentQuestion.choices.list[this.selectedField - 1].title.indexOf('$$'))
+                        this.currentQuestion.choices.list[this.selectedField - 1].title = this.currentQuestion.choices.list[this.selectedField - 1].title.replace('$$', '$')
+                    }
+                    let dollarSignCounter = 0
+                    for (let i = 0; i < this.currentQuestion.choices.list[this.selectedField - 1].title.length; i++) {
+                        if (this.currentQuestion.choices.list[this.selectedField - 1].title[i] === '$') {
+                            dollarSignCounter++
+                            if (dollarSignCounter % 2 === 1 && this.currentQuestion.choices.list[this.selectedField - 1].title[i + 1] === ' ') {
+                                this.currentQuestion.choices.list[this.selectedField - 1].title = this.currentQuestion.choices.list[this.selectedField - 1].title.slice(0, i + 1) + this.currentQuestion.choices.list[this.selectedField - 1].title.slice(i + 2)
+                                if (this.currentQuestion.choices.list[this.selectedField - 1].title[i + 1] === ' ') {
                                     i--
+                                    dollarSignCounter--
+                                }
+                            }
+                            else if (dollarSignCounter % 2 === 0 && this.currentQuestion.choices.list[this.selectedField - 1].title[i - 1] === ' ') {
+                                this.currentQuestion.choices.list[this.selectedField - 1].title = this.currentQuestion.choices.list[this.selectedField - 1].title.slice(0, i - 1) + this.currentQuestion.choices.list[this.selectedField - 1].title.slice(i)
+                                if (this.currentQuestion.choices.list[this.selectedField - 1].title[i - 2] === ' ') {
+                                    i = i - 2
                                     dollarSignCounter--
                                 }
                             }
