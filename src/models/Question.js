@@ -118,6 +118,12 @@ class Question extends Model {
                     value: function () {
                         return that.recommendedTime
                     }
+                },
+                {
+                    key: 'level',
+                    value: function () {
+                        return that.difficulty
+                    }
                 }
             ]
         }
