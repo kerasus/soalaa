@@ -93,7 +93,7 @@ class Question extends Model {
             },
             {
                 key: 'confirmed',
-                default: true
+                default: false
             }
         ])
 
