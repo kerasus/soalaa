@@ -1,26 +1,19 @@
 @import "~katex/dist/katex.css";
 @import "~github-markdown-css/github-markdown.css";
 
-td, th {
-  text-align: center;
-  padding: 10px 20px;
-  border: 1px solid black;
-}
-
-th {
-  border-bottom: 2px solid #000;
-}
-
-table {
-  border-collapse: collapse;
-}
 
 .renderedPanel {
   direction: rtl;
+
+  img {
+    max-width: 100%;
+  }
+
   &.ltr,
   .katex {
     direction: ltr;
     display: inline-block;
+
     .katex-html {
       .accent {
         background-color: unset !important;
@@ -28,22 +21,40 @@ table {
       }
     }
   }
-  strong>strong>s {
+
+  strong > strong > s {
     text-decoration: underline;
     text-underline-position: under;
   }
+
   .beit {
     display: inline-block;
     white-space: nowrap;
     width: 100%;
+
     .mesra {
       width: 50%;
       float: right;
     }
   }
+
   .mesra {
     width: 50%;
     float: right;
+  }
+
+  td, th {
+    text-align: center;
+    padding: 10px 20px;
+    border: 1px solid black;
+  }
+
+  th {
+    border-bottom: 2px solid #000;
+  }
+
+  table {
+    border-collapse: collapse;
   }
 
   @media only screen and (max-width: 800px) {
