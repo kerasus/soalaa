@@ -1,6 +1,5 @@
 <template>
     <v-row>
-
         <v-col cols="12 ">
             <div class="tableSize">
                 <v-btn
@@ -37,13 +36,13 @@
                         <td>{{ item.title }}</td>
                         <td class="actionsColumn">
                             <v-btn
-                                    v-if="item.permission.view"
+                                    v-if="item.permissions.view"
                                     class="mx-2"
                                     fab
                                     dark
                                     x-small
                                     color="green"
-                                    :to="{ name: 'onlineQuiz.exams.lessons.details', params: { quizId: $route.params.quizId, lessonId: $route.params.quizId}}"
+                                    :to="{ name: 'onlineQuiz.exams.lessons.details', params: { quizId: $route.params.quizId, lessonId: item.id}}"
                             >
                                 <v-icon
                                         small
@@ -57,19 +56,16 @@
                 </template>
             </v-simple-table>
         </v-col>
-
-
     </v-row>
 </template>
 
 <script>
-
     import axios from "axios";
     import API_ADDRESS from "@/api/Addresses";
     import {QuestSubcategoryList} from "@/models/QuestSubcategory";
 
     export default {
-        name: "lessonsList",
+        name: 'lessonsList',
         data: () => ({
             lessonsList: new QuestSubcategoryList()
         }),

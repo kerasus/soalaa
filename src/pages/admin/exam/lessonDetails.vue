@@ -12,12 +12,11 @@
                             <BubbleSheet ref="bubbleSheetC"  :style="{ height: 3740 }"  :info="{ type: 'pasokh-barg' }" @clickChoice="choiceClicked" @scrollTo="scrollTo" :delay-time="0" />
                         </v-col>
 <!--                </v-col>-->
-
             </div>
             <div class="main" ref="main">
                 <div  :cols="8" class="questions" ref="questionsColumn" id="questions" >
                     <DynamicScroller
-                            :items="questions"
+                            :items="quizData.questions.list"
                             :min-item-size="70"
                             class="scroller questionss"
                             ref="scroller"
@@ -30,17 +29,19 @@
                                     :active="active"
                                     :data-index="index"
                             >
-                                <Item :source="item" :consider-active-category="false" :questions-column="$refs.questionsColumn" @inView="test"/>
+                                <Item :source="item"
+                                      :consider-active-category="false"
+                                      :questions-column="$refs.questionsColumn"
+                                      @inView="test"
+                                      :exam-id="$route.params.quizId"
+                                      :sub-category="quizData.sub_categories"
+                                />
                             </DynamicScrollerItem>
                         </template>
                     </DynamicScroller>
                 </div>
-
             </div>
-
-
         </div>
-
         <v-row  :style="{ 'min-height': '100%' }">
         </v-row>
     </v-container>
@@ -123,8 +124,10 @@
     import axios from "axios";
     import 'vue-virtual-scroller/dist/vue-virtual-scroller.css'
     import {DynamicScroller, DynamicScrollerItem} from 'vue-virtual-scroller'
-    import Item from '@/components/OnlineQuiz/Quiz/ViewTypes/components/question'
+    // import Item from '@/components/OnlineQuiz/Quiz/ViewTypes/components/question'
+    import Item from '@/components/QuizEditor/Question'
     import {Exam} from "@/models/Exam";
+    import {QuestSubcategoryList} from "@/models/QuestSubcategory";
 
 
 
@@ -144,6 +147,7 @@
             bubbleSheet:800,
             dragging: false,
             quizData: new Exam(),
+            subCategoriesList: new QuestSubcategoryList(),
             item: Item,
             lastTimeScrollRange: { start: 0, end: 29 },
             scrollState: 'not scrolling',
@@ -156,12 +160,7 @@
                 'خارج از چارچوب کتاب درسی',
                 'دارای غلط تایپی'
             ],
-            questions: [],
             inView: [],
-            windowSize: {
-                x: 0,
-                y: 0,
-            },
             windowVisible: true
         }),
         methods: {
@@ -176,9 +175,6 @@
             startResize(e) {
                 e.preventDefault();
                 this.dragging = true;
-
-
-
             },
             resizing(e) {
                 e.preventDefault();
@@ -186,8 +182,6 @@
                 if (this.dragging){
                     this.$refs.ghostbar.style.left = (e.pageX + 2) + 'px'
                 }
-
-
             },
             endResize(e) {
                 if (!this.dragging) {
@@ -259,9 +253,9 @@
                 // console.log(this.renderedQuestions.startIndex, this.renderedQuestions.endIndex, 'haha2')
                 let firstQuestionInView
                 for (let i = this.renderedQuestions.startIndex; i <= this.renderedQuestions.endIndex; i++) {
-                    // console.log(i, ': ', this.questions[i].isInView)
-                    if (this.questions[i].isInView === true) {
-                        firstQuestionInView = this.questions[i]
+                    // console.log(i, ': ', this.quizData.questions.list[i].isInView)
+                    if (this.quizData.questions.list[i].isInView === true) {
+                        firstQuestionInView = this.quizData.questions.list[i]
                         break
                     }
                 }
@@ -280,7 +274,9 @@
                 if (this.$refs.scroller && this.$refs.scroller.$el) {
                     this.$refs.scroller.$el.style.height = ( this.windowSize.y - 24 ) +'px'
                 }
-                this.$refs.leftSideList.style.height = (this.windowSize.y - 24)+'px'
+                if (this.$refs.leftSideList) {
+                    this.$refs.leftSideList.style.height = (this.windowSize.y - 24)+'px'
+                }
             },
             test (payload) {
                 console.log(payload.number)
@@ -315,18 +311,40 @@
             },
             generateReport() {
                 this.$refs.html2Pdf.generatePdf()
-            }
+            },
+
+
+
+            loadSubCategories (quizResponse) {
+                const that = this
+                this.subCategoriesList.fetch().then((response) => {
+                    // that.quiz.sub_categories = new QuestSubcategoryList(response.data)
+                    that.quizData.sub_categories = new QuestSubcategoryList(response.data)
+                    let questions = quizResponse.data.data
+                    that.sortQuestions (questions)
+                    that.quizData.questions = new QuestionList(questions)
+                    // that.quiz = new Exam(that.quizData)
+                    that.QuIzDaTa = new Exam(that.quizData)
+                })
+            },
+            loadQuizDataAndSubCategories () {
+                const that = this
+                axios.post(API_ADDRESS.exam.examQuestion(this.$route.params.quizId), {
+                    sub_categories: [this.$route.params.lessonId]
+                })
+                    .then((response) => {
+                        that.loadSubCategories(response)
+                    })
+            },
         },
         created() {
-
-            const url = API_ADDRESS.exam.examQuestion(this.$route.params.quizId)
-            axios.get(url)
-                .then((response) => {
-                    this.saveCurrentExamQuestions(new QuestionList(response.data.data).list)
-                    this.questions = this.getCurrentExamQuestionsInArray()
-                    console.log(this.questions[0])
-                })
-
+            this.loadQuizDataAndSubCategories()
+            // axios.get(API_ADDRESS.exam.examQuestion(this.$route.params.quizId))
+            //     .then((response) => {
+            //         this.saveCurrentExamQuestions(new QuestionList(response.data.data).list)
+            //         this.quizData.questions = this.getCurrentExamQuestionsInArray()
+            //         console.log(this.quizData.questions.list[0])
+            //     })
         },
         watch: {
             'windowSize.y': function () {

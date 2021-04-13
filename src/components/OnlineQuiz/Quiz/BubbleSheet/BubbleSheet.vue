@@ -25,7 +25,12 @@
         <v-col v-for="(group, index) in questionsInGroups" :key="index" class="question-group">
             <div v-for="question in group" :key="question.id" class="question-in-list">
                 <div
-                        :class="{ 'question-number-in-list': true, circle: userQuizListData[quiz.id][question.id] && userQuizListData[quiz.id][question.id].status === 'o', cross: userQuizListData[quiz.id][question.id] && userQuizListData[quiz.id][question.id].status === 'x', bookmark: userQuizListData[quiz.id][question.id] && userQuizListData[quiz.id][question.id].bookmarked }"
+                        :class="{
+                                    'question-number-in-list': true,
+                                    circle: getUserQuestionData(question.id) && getUserQuestionData(question.id).status === 'o',
+                                    cross: getUserQuestionData(question.id) && getUserQuestionData(question.id).status === 'x',
+                                    bookmark: getUserQuestionData(question.id) && getUserQuestionData(question.id).bookmarked
+                        }"
                         :style="{ width: '24%', cursor: 'pointer' }"
                         @click="ClickQuestionNumber(question.id)"
                 >
@@ -34,14 +39,18 @@
                 <div
                         v-for="choice in question.choices.list"
                         :key="choice.id"
-                        :class="{ 'choice-in-list': true, active: userQuizListData[quiz.id][question.id] && choice.id === userQuizListData[quiz.id][question.id].answered_choice_id, answer: choice.answer }"
+                        :class="{
+                            'choice-in-list': true,
+                            active: getUserQuestionData(question.id) && choice.id === getUserQuestionData(question.id).answered_choice_id,
+                            answer: choice.answer
+                        }"
                         @click="AnswerClicked({ questionId: question.id, choiceId: choice.id})"
                 >
                     <v-icon v-if="info.type === 'pasokh-nameh' && choice.answer" size="12"
-                            :color="userQuizListData[quiz.id][question.id] && choice.id === userQuizListData[quiz.id][question.id].answered_choice_id ? '#fff' : '#00c753'">
+                            :color="getUserQuestionData(question.id) && choice.id === getUserQuestionData(question.id).answered_choice_id ? '#fff' : '#00c753'">
                         mdi-check
                     </v-icon>
-                    <v-icon v-if="info.type === 'pasokh-nameh' && userQuizListData[quiz.id][question.id] && choice.id === userQuizListData[quiz.id][question.id].answered_choice_id && !choice.answer"
+                    <v-icon v-if="info.type === 'pasokh-nameh' && getUserQuestionData(question.id) && choice.id === getUserQuestionData(question.id).answered_choice_id && !choice.answer"
                             size="12" color="#fff">
                         mdi-close
                     </v-icon>
@@ -122,6 +131,15 @@
             boxSize: 600
         }),
         methods: {
+            getUserQuestionData (question_id) {
+                if (typeof question_id === 'undefined') {
+                    question_id = this.currentQuestion.id
+                }
+                if (!this.quiz.id || !question_id) {
+                    return false
+                }
+                return this.userQuizListData[this.quiz.id][question_id]
+            },
             changeWidth() {
                 // console.log('test')
                 this.$refs.bubbleSheet.style.height = this.questionListHeight() + 'px'
