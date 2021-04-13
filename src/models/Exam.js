@@ -26,6 +26,7 @@ class Exam extends Model {
             { key: 'holding_status' }, // not_started - holding - in_extra_time - finished
             { key: 'user_exam_id' },
             { key: 'user_exam_status' },
+            { key: 'alaa_product_link' },
             { key: 'questions_file_url' },
             { key: 'accept_at_is_passed' },
             { key: 'total_question_number' },

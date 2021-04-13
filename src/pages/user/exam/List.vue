@@ -68,7 +68,7 @@
                                             </v-btn>
                                             <v-btn
                                                     v-if="item.exam_actions.can_register"
-                                                    @click="registerExam(item.id)"
+                                                    @click="registerExam(item)"
                                                     color="#00c753"
                                                     text
                                             >
@@ -175,17 +175,18 @@
                         that.loadingList = false
                     })
             },
-            registerExam (examId) {
-                this.user.registerExam(examId)
-                    .then( () => {
-                        this.$notify({
-                            group: 'notifs',
-                            title: 'توجه!',
-                            text: 'ثبت نام در آزمون با موفقیت انجام شد',
-                            type: 'success'
-                        })
-                        this.getExams()
-                    })
+            registerExam (exam) {
+                window.location.href = exam.alaa_product_link
+                // this.user.registerExam(exam.id())
+                //     .then( () => {
+                //         this.$notify({
+                //             group: 'notifs',
+                //             title: 'توجه!',
+                //             text: 'ثبت نام در آزمون با موفقیت انجام شد',
+                //             type: 'success'
+                //         })
+                //         this.getExams()
+                //     })
             },
             sendAnswersAndFinishExam (exam) {
                 exam.sendAnswersAndFinishExam()
