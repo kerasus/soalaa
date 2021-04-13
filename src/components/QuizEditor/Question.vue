@@ -185,7 +185,7 @@
                         callback: confirm => {
                             if (confirm) {
                                 axios.post(API_ADDRESS.question.detach(this.source.id), {
-                                    exam_id: this.examId
+                                    exams: [this.examId]
                                 })
                                 .then(() => {
                                     window.location.reload()
@@ -216,7 +216,19 @@
             //     return this.quiz.sub_categories.list.find((item) => item.id === subCategoryId)
             // }
             getSubCategoryName () {
-                const target = this.subCategory.list.find((item) => item.id === this.source.sub_category.id)
+                const target = this.subCategory.list.find(
+                    (item) =>
+                        // item.id === this.source.sub_category.id
+                {
+                        if (item && item.id && this.source.sub_category) {
+                            if (item.id === this.source.sub_category.id) {
+                                return true
+                            }
+                            return false
+                        }
+                        return false
+                    }
+                )
                 if (target) {
                     return target.display_title
                 } else {

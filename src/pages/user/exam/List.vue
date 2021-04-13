@@ -121,6 +121,14 @@
                                             >
                                                 آزمون به پایان رسید
                                             </v-btn>
+                                            <v-btn
+                                                    v-if="!item.exam_actions.is_registered"
+                                                    color="#ffc107"
+                                                    text
+                                                    disabled
+                                            >
+                                                ثبت نام انجام نشده
+                                            </v-btn>
                                         </v-col>
                                     </v-row>
                                 </v-sheet>
