@@ -63,6 +63,9 @@ const API_ADDRESS = {
     },
     getCurrentQuestion (questionId) {
       return lumenServer + '/question/' + questionId
+    },
+    confirm (questionId) {
+      return lumenServer + '/question/confirm/' + questionId
     }
   },
   questionSubcategory: {
