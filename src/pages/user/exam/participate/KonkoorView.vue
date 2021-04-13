@@ -1,7 +1,7 @@
 <template>
     <v-container class="konkoor-view" :fluid="true" :style="{ height: '100%', background: 'rgb(244,244,244)' }"
                  v-resize="updateWindowSize">
-        <v-btn @click="generateReport">دانلود pdf</v-btn>
+        <vue-confirm-dialog />
         <v-row :style="{ 'min-height': '100%' }">
             <v-col :md="5" class="questions" ref="questionsColumn" id="questions" :style="{ height: windowSize.y }">
                 <!--                <div class="lesson">{{ currentLesson.title }}</div>-->
@@ -67,8 +67,9 @@
             </v-col>
         </v-row>
         <v-row class="timer-row">
-            <v-col>
-                <Timer :daftarche="'عمومی'" :quiz-started-at="1607963897" :daftarche-end-time="1607999897" :height="100"></Timer>
+            <v-btn class="end-exam-btn" @click="getConfirmation">ثبت و پایان آزمون</v-btn>
+            <v-col :class="{ 'high-z-index': timerIsOpen }">
+                <Timer @timerOpen="timerOpen" :daftarche="'عمومی'" :quiz-started-at="1607963897" :daftarche-end-time="1607999897" :height="100"></Timer>
             </v-col>
         </v-row>
     </v-container>
@@ -85,6 +86,11 @@
     import {Exam} from "@/models/Exam";
     import Assistant from "@/plugins/assistant";
     import {TopMenu_OnlineQuiz} from '@/components/Menu/Menus';
+    import Vue from 'vue'
+    import VueConfirmDialog from 'vue-confirm-dialog'
+
+    Vue.use(VueConfirmDialog)
+    Vue.component('vue-confirm-dialog', VueConfirmDialog.default)
     // Vue.component('DynamicScroller', DynamicScroller)
     // Vue.component('DynamicScrollerItem', DynamicScrollerItem)
 
@@ -122,10 +128,53 @@
                 setIntervalCallback: null,
                 renderedQuestions: { startIndex: 0, endIndex: 0 },
                 questions: [],
-                inView: []
+                inView: [],
+                timerIsOpen: false
             }
         },
         methods: {
+            timerOpen(value) {
+                this.timerIsOpen = value
+            },
+            getConfirmation(){
+                this.$confirm(
+                    {
+                        message: `Are you sure?`,
+                        button: {
+                            no: 'No',
+                            yes: 'Yes'
+                        },
+                        callback: confirm => {
+                            if (confirm) {
+                                this.sendAnswersAndFinishExam()
+                            }
+                        }
+                    }
+                )
+            },
+            sendAnswersAndFinishExam() {
+                let that = this
+                this.quiz.sendAnswersAndFinishExam()
+                    .then( () => {
+                        that.$store.commit('clearExamData', that.quiz.id)
+                        that.$notify({
+                            group: 'notifs',
+                            text: 'اطلاعات آزمون شما ثبت شد.',
+                            type: 'success'
+                        })
+                        that.$router.push({ name: 'user.exam.list'})
+                    })
+                    .catch( () => {
+                        that.$notify({
+                            group: 'notifs',
+                            title: 'توجه!',
+                            text: 'مشکلی در ثبت اطلاعات آزمون شما رخ داده است. لطفا تا قبل از ساعت 24 اقدام به ارسال مجدد پاسخنامه نمایید.',
+                            type: 'warn',
+                            duration: 30000,
+                        })
+                        that.$router.push({ name: 'user.exam.list'})
+                    })
+            },
             test (payload) {
                 console.log(payload.number)
                 if (payload.isInView) {
@@ -309,6 +358,23 @@
 </script>
 
 <style scoped>
+    .high-z-index {
+        z-index: 3;
+    }
+
+    .end-exam-btn {
+        position: absolute;
+        bottom: 0;
+        background: rgb(76, 175, 80) !important;
+        color: #fff;
+        font-weight: bold;
+        font-size: 16px;
+        height: 103px !important;
+        box-shadow: 0px 3px 3px -2px rgb(0 0 0 / 20%), 0px 3px 4px 0px rgb(0 0 0 / 14%), 0px 1px 8px 0px rgb(0 0 0 / 12%);
+        width: 200px;
+        border-radius: 20px 20px 0 0;
+    }
+
     .lesson {
         height: 50px;
         border-bottom: 1px solid #ececec;

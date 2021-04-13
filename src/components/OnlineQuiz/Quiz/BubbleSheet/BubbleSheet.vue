@@ -84,7 +84,6 @@
                 // each group width is 140px
                 const horizontalGroupAmounts = Math.floor(boxSize / 140)
                 const verticalGroupAmount = Math.ceil(this.questionsInGroups.length / horizontalGroupAmounts)
-                console.log(verticalGroupAmount * 182 + 20)
                 return verticalGroupAmount * 182 + 20
             },
 
@@ -142,7 +141,7 @@
             },
             changeWidth() {
                 // console.log('test')
-                this.$refs.bubbleSheet.style.height = this.questionListHeight() + 'px'
+                this.$refs.bubbleSheet.style.height = this.questionListHeight() - 24 + 'px'
             },
             AnswerClicked(payload) {
                 if (this.info.type !== 'pasokh-nameh') {
@@ -164,12 +163,10 @@
             questionListHeight() {
                 // box is a col-7 with 12px padding
                 this.boxSize = this.bubbleSize
-                console.log(this.boxSize)
                 // each group width is 140px
                 const horizontalGroupAmounts = Math.floor(this.boxSize / 140)
                 const verticalGroupAmount = Math.ceil(this.questionsInGroups.length / horizontalGroupAmounts)
-                console.log(horizontalGroupAmounts, verticalGroupAmount)
-                return verticalGroupAmount * 182 + 20
+                return verticalGroupAmount * 182 - 4
             },
             questionListPadding() {
                 const boxSize = this.$refs.bubbleSheet.clientWidth - 24
@@ -189,7 +186,7 @@
             let that = this
             setTimeout(() => {
                 if (that.$refs.bubbleSheet) {
-                    that.$refs.bubbleSheet.style.height = that.questionListHeight() + 'px'
+                    that.$refs.bubbleSheet.style.height = that.questionListHeight() - 24 + 'px'
                 }
                 // $('.questions-list').height(this.questionListHeight())
                 that.overlay = false
@@ -197,7 +194,7 @@
         },
         'windowSize.x': function () {
             // this.$refs.bubbleSheet.offsetHeight()
-            this.$refs.bubbleSheet.style.height = this.questionListHeight() + 'px'
+            this.$refs.bubbleSheet.style.height = this.questionListHeight() - 24 + 'px'
             // $('.questions-list').height(this.questionListHeight())
         }
     }
