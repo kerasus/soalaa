@@ -164,8 +164,8 @@
                     گزینه 4
                 </v-btn>
             </v-btn-toggle>
-            <markdown-btn v-if="selectedField === 0" :elem="currentQuestion" :elem-key="'statement'" :rendered-matrix-katex="renderedMatrixKatex" :url="url" @add="markdownBtnAddString" />
-            <markdown-btn v-else :elem="currentQuestion.choices.list[selectedField - 1]" :elem-key="'title'" :rendered-matrix-katex="renderedMatrixKatex" :url="url" @add="markdownBtnAddString" />
+            <markdown-btn v-if="selectedField === 0" :elem="currentQuestion" :elem-key="'statement'" :rendered-matrix-katex="renderedMatrixKatex" :rendered-table-katex="renderedTableKatex" :url="url" @add="markdownBtnAddString" />
+            <markdown-btn v-else :elem="currentQuestion.choices.list[selectedField - 1]" :elem-key="'title'" :rendered-matrix-katex="renderedMatrixKatex" :rendered-table-katex="renderedTableKatex" :url="url" @add="markdownBtnAddString" />
         </div>
         <v-textarea
             v-if="selectedField === 0"
@@ -196,28 +196,58 @@
         <div id="mathfield" locale="fa">x=\frac{-b\pm \sqrt{b^2-4ac}}{2a}</div>
         <div class="latexData" v-html="latexData"></div>
         <v-text-field full-width label="url" v-model="url" dir="ltr"/>
-        <v-sheet width="500px">
-            <v-container :fluid="true">
-                <v-row>
-                    <v-col :md="2">
-                        <v-text-field label="عرض" outlined dense v-model="matrixWidth" type="number" @input="initMatrix"/>
-                    </v-col>
-                    <v-col :md="2">
-                        <v-text-field label="ارتفاع" outlined dense v-model="matrixHeight" type="number" @input="initMatrix"/>
-                    </v-col>
-                    <v-col :md="4">
-                        <v-select outlined :items="matrixMenu" item-text="title" item-value="value" v-model="determinan" dense />
-                    </v-col>
-                </v-row>
-                <div dir="ltr">
-                    <v-row v-for="indexY in parseInt(matrixTempHeight)" :key="indexY">
-                        <v-col v-for="indexX in parseInt(matrixTempWidth)" :key="indexX">
-                            <v-text-field v-model="matrix[indexY - 1][indexX - 1]" outlined :label="'(' + indexX + ', ' + indexX + ')'" dense></v-text-field>
-                        </v-col>
-                    </v-row>
-                </div>
-            </v-container>
-        </v-sheet>
+        <v-row>
+            <v-col>
+                <v-sheet width="500px">
+                    <v-container :fluid="true">
+                        <v-row>
+                            <v-col :md="2">
+                                <v-text-field label="عرض" outlined dense v-model="matrixWidth" type="number" @input="initMatrix"/>
+                            </v-col>
+                            <v-col :md="2">
+                                <v-text-field label="ارتفاع" outlined dense v-model="matrixHeight" type="number" @input="initMatrix"/>
+                            </v-col>
+                            <v-col :md="4">
+                                <v-select outlined :items="matrixMenu" item-text="title" item-value="value" v-model="determinan" dense />
+                            </v-col>
+                        </v-row>
+                        <div dir="ltr">
+                            <v-row v-for="indexY in parseInt(matrixTempHeight)" :key="indexY">
+                                <v-col v-for="indexX in parseInt(matrixTempWidth)" :key="indexX">
+                                    <v-text-field v-model="matrix[indexY - 1][indexX - 1]" outlined :label="'(' + indexX + ', ' + indexX + ')'" dense></v-text-field>
+                                </v-col>
+                            </v-row>
+                        </div>
+                    </v-container>
+                </v-sheet>
+            </v-col>
+            <v-col>
+                <v-sheet width="500px" color="#e1e1e1">
+                    <v-container :fluid="true">
+                        <v-row>
+                            <v-col :md="2">
+                                <v-text-field label="عرض" outlined dense v-model="tableWidth" type="number" @input="initTable"/>
+                            </v-col>
+                            <v-col :md="2">
+                                <v-text-field label="ارتفاع" outlined dense v-model="tableHeight" type="number" @input="initTable"/>
+                            </v-col>
+                            <v-col :md="5">
+<!--                                <v-select outlined :items="tableMenu" item-text="title" item-value="value" v-model="tableHeader" dense />-->
+                            </v-col>
+                        </v-row>
+                        <div dir="ltr">
+                            <v-row v-for="indexY in parseInt(tableTempHeight)" :key="indexY">
+                                <v-col v-for="indexX in parseInt(tableTempWidth)" :key="indexX">
+                                    <v-text-field v-model="table[indexY - 1][indexX - 1]" outlined :label="'(' + indexX + ', ' + indexX + ')'" dense></v-text-field>
+                                </v-col>
+                            </v-row>
+                        </div>
+                    </v-container>
+                </v-sheet>
+            </v-col>
+        </v-row>
+
+
     </v-container>
 </template>
 
@@ -267,6 +297,9 @@
         name: 'CreateOrEdit',
         components: {MarkdownBtn, UploadFiles},
         computed: {
+            renderedTableKatex () {
+                return this.renderTableKatex()
+            },
             renderedMatrixKatex () {
                 return this.renderMatrixKatex()
             },
@@ -371,8 +404,15 @@
                 matrixTempWidth: 1,
                 matrixTempHeight: 1,
                 matrix: [[]],
+                tableWidth: 1,
+                tableHeight: 1,
+                tableTempWidth: 1,
+                tableTempHeight: 1,
+                table: [[]],
                 determinan: false,
-                matrixMenu: [{ title: 'دترمینان', value: true}, { title: 'ماتریس', value: false}]
+                matrixMenu: [{ title: 'دترمینان', value: true}, { title: 'ماتریس', value: false }],
+                tableHeader: true,
+                tableMenu: [{ title: 'جدول با هدر', value: true}, { title: 'جدول ساده', value: false }]
             }
         },
         methods: {
@@ -412,6 +452,19 @@
             },
 
 
+            initTable () {
+                this.table = []
+                let row = []
+                for (let i = 0; i < this.tableHeight; i++) {
+                    row = []
+                    for (let j = 0; j < this.tableWidth; j++) {
+                        row.push(0)
+                    }
+                    this.table.push(row)
+                }
+                this.tableTempWidth = this.tableWidth
+                this.tableTempHeight = this.tableHeight
+            },
             initMatrix () {
                 this.matrix = []
                 let row = []
@@ -424,6 +477,24 @@
                 }
                 this.matrixTempWidth = this.matrixWidth
                 this.matrixTempHeight = this.matrixHeight
+            },
+            renderTableKatex () {
+                let tableKatex = ''
+                for (let i = 0; i < this.tableTempHeight; i++) {
+                    for (let j = 0; j < this.tableTempWidth; j++) {
+                        tableKatex += ' | ' + this.table[i][j]
+                    }
+                    tableKatex += ' |\n'
+                    if (i === 0 && this.tableHeader) {
+                        for (let x = 0; x < this.tableTempWidth; x++) {
+                            tableKatex += '|:-------------:'
+                        }
+                        tableKatex += '|\n'
+                    }
+                }
+                // this.matrixTempHeight = 1
+                // this.matrixTempWidth = 1
+                return tableKatex
             },
             renderMatrixKatex () {
                 let matrixType = this.determinan ? 'vmatrix' : 'bmatrix'
