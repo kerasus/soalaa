@@ -204,6 +204,9 @@
         watch: {
             selectedTimepoint () {
                 this.playTimePoint()
+            },
+            tab () {
+                this.player.pause()
             }
         },
         data: () => ({
