@@ -6,7 +6,9 @@
             </div>
             <div class="sidebar" ref="sidebar">
                 <span></span>
-                <div class="dragbar" ref="dragbar" @mousedown="startResize"></div>
+                <div class="dragbar" ref="dragbar" @mousedown="startResize">
+                    <v-icon>mdi-drag-vertical-variant</v-icon>
+                </div>
 <!--                <v-col   :md="7" class="left-side-list" ref="leftSideList">-->
                 <v-col >
                     <BubbleSheet ref="bubbleSheetC"  :style="{ height: 3740 }"  :info="{ type: 'pasokh-barg' }" @clickChoice="choiceClicked" @scrollTo="scrollTo" :delay-time="0" />
@@ -166,7 +168,7 @@
         methods: {
             questionListHeight() {
                 // box is a col-7 with 12px padding
-                const boxSize = this.bubbleSheet -24
+                const boxSize = this.$refs.bubbleSheet.clientWidth - 24
                 // each group width is 140px
                 const horizontalGroupAmounts = Math.floor(boxSize / 140)
                 const verticalGroupAmount = Math.ceil(this.questionsInGroups.length / horizontalGroupAmounts)
@@ -232,10 +234,10 @@
                 this.timePassedSinceLastScroll += 250
             },
             changeCurrentQuestionToFirstQuestionInView () {
-                const firstInViewQuestion = this.getFirstInViewQuestionNumber()
-                if (firstInViewQuestion.id === this.currentQuestion.id) {
-                    return
-                }
+                // const firstInViewQuestion = this.getFirstInViewQuestionNumber()
+                // if (firstInViewQuestion.id === this.currentQuestion.id) {
+                //     return
+                // }
                 // this.changeQuestion(firstInViewQuestion.id, 'onlineQuiz.konkoorView')
             },
             scrollTo (questionId) {
@@ -251,19 +253,19 @@
             },
             getFirstInViewQuestionNumber () {
                 // console.log(this.renderedQuestions.startIndex, this.renderedQuestions.endIndex, 'haha2')
-                let firstQuestionInView
-                for (let i = this.renderedQuestions.startIndex; i <= this.renderedQuestions.endIndex; i++) {
-                    // console.log(i, ': ', this.quizData.questions.list[i].isInView)
-                    if (this.quizData.questions.list[i].isInView === true) {
-                        firstQuestionInView = this.quizData.questions.list[i]
-                        break
-                    }
-                }
-                if (firstQuestionInView && firstQuestionInView.id !== null) {
-                    return firstQuestionInView
-                } else {
-                    return false
-                }
+                // let firstQuestionInView
+                // for (let i = this.renderedQuestions.startIndex; i <= this.renderedQuestions.endIndex; i++) {
+                //     // console.log(i, ': ', this.quizData.questions.list[i].isInView)
+                //     if (this.quizData.questions.list[i].isInView === true) {
+                //         firstQuestionInView = this.quizData.questions.list[i]
+                //         break
+                //     }
+                // }
+                // if (firstQuestionInView && firstQuestionInView.id !== null) {
+                //     return firstQuestionInView
+                // } else {
+                //     return false
+                // }
             },
             choiceClicked (questionId) {
                 this.scrollTo(questionId)
@@ -280,21 +282,21 @@
             },
             test (payload) {
                 console.log(payload.number)
-                if (payload.isInView) {
-                    for (let i = 0; i < this.inView.length; i++) {
-                        if (this.inView[i] === payload.number) {
-                            return
-                        }
-                    }
-                    this.inView.push(payload.number)
-                }
-                else {
-                    for (let i = 0; i < this.inView.length; i++) {
-                        if (this.inView[i] === payload.number) {
-                            this.inView.splice(i, 1)
-                        }
-                    }
-                }
+                // if (payload.isInView) {
+                //     for (let i = 0; i < this.inView.length; i++) {
+                //         if (this.inView[i] === payload.number) {
+                //             return
+                //         }
+                //     }
+                //     this.inView.push(payload.number)
+                // }
+                // else {
+                //     for (let i = 0; i < this.inView.length; i++) {
+                //         if (this.inView[i] === payload.number) {
+                //             this.inView.splice(i, 1)
+                //         }
+                //     }
+                // }
             },
             onScroll(startIndex, endIndex) {
                 this.renderedQuestions = {startIndex, endIndex}
@@ -332,9 +334,15 @@
                 axios.post(API_ADDRESS.exam.examQuestion(this.$route.params.quizId), {
                     sub_categories: [this.$route.params.lessonId]
                 })
-                    .then((response) => {
+                .then((response) => {
+                    if (response.data.data.length) {
                         that.loadSubCategories(response)
-                    })
+                    } else {
+                        this.$router.push({ name: 'onlineQuiz.exams' })
+                    }
+
+                })
+
             },
         },
         created() {
@@ -413,11 +421,14 @@
     }
 
     .dragbar {
-        background-color: black;
+        background-color: #d6d6d6;
         height: 100%;
         float: right;
-        width: 3px;
+        width: 20px;
         cursor: col-resize;
+        display: flex;
+        justify-content: center;
+        align-items: center;
     }
 
     .ghostbar {

@@ -62,7 +62,7 @@ const router = new VueRouter({
             meta: {middleware: [auth, completeInfo]}
         },
         {
-            path: '/onlineQuiz/results/:exam_id',
+            path: '/onlineQuiz/results/:exam_id/:user_exam_id',
             name: 'user.exam.results',
             component: () => lazyLoadView(import('@/pages/user/exam/Result')),
             meta: {middleware: [auth, completeInfo]}

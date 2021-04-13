@@ -103,23 +103,73 @@
                             <v-tab v-for="(item, index) in report.sub_category" :key="index">
                                 {{ item.sub_category }}
                             </v-tab>
-                            <v-tab-item v-for="item in report.sub_category" :key="item.sub_category">
-                                <p v-if="!currentVideo" class="coming-soon" :style="{ 'margin-top': '50px'}">به زودی</p>
-                                <p v-if="currentVideo" class="video-title">{{ currentVideo.title }}</p>
-                                <video v-if="currentVideo"
-                                       :src="currentVideo.file.video[1].link"
-                                       type="video/mp4"
-                                       controls
-                                       :poster="currentVideo.photo"
-                                       :width="'60%'"
-                                       class="video-player"
-                                       :title="currentVideo.title"
-                                />
-                                <div v-if="currentVideo" class="d-flex flex-row" dir="ltr">
-                                    <v-btn outlined v-for="(video, index) in alaaVideos" :key="index" @click="getContent(video.id)" icon :style="{ margin: '0 5px' }">
-                                        {{ index + 1 }}
-                                    </v-btn>
-                                </div>
+                            <v-tab-item v-for="(item, index) in report.sub_category" :key="item.sub_category" class="pt-5">
+                                <v-alert
+                                        v-if="!currentVideo"
+                                        dense
+                                        outlined
+                                        text
+                                        type="info"
+                                >
+                                    به زودی
+                                </v-alert>
+                                <v-alert v-if="currentVideo" class="text-center">
+                                    {{ currentVideo.title }}
+                                </v-alert>
+<!--                                <p v-if="!currentVideo" class="coming-soon" :style="{ 'margin-top': '50px'}">به زودی</p>-->
+<!--                                <p v-if="currentVideo" class="video-title">{{ currentVideo.title }}</p>-->
+                                <v-row v-if="currentVideo">
+                                    <v-col>
+                                        <v-row no-gutters>
+                                            <v-col md="3" class="vjs-playlist" :style="{ height: timepointsHeights+'px'}">
+                                                <v-card
+                                                        class="mx-auto"
+                                                        tile
+                                                >
+                                                    <v-list dense shaped>
+                                                        <v-subheader>زمان کوب ها</v-subheader>
+                                                        <v-list-item-group
+                                                                v-model="selectedTimepoint"
+                                                                color="primary"
+                                                        >
+                                                            <v-list-item
+                                                                    v-for="(item, i) in currentVideo.timepoints"
+                                                                    :key="i"
+                                                            >
+                                                                <v-list-item-content>
+                                                                    <v-list-item-title v-text="item.title"></v-list-item-title>
+                                                                </v-list-item-content>
+                                                            </v-list-item>
+                                                        </v-list-item-group>
+                                                    </v-list>
+                                                </v-card>
+                                            </v-col>
+                                            <v-col md="9">
+                                                <video :ref="'videoPlayer'+index" class="video-js vjs-default-skin vjs-16-9 vjs-fluid" />
+                                            </v-col>
+                                        </v-row>
+                                    </v-col>
+                                </v-row>
+                                <v-row v-if="currentVideo">
+                                    <v-col>
+                                        <div class="d-flex flex-row justify-center" dir="ltr">
+                                            <v-btn outlined v-for="(video, index) in alaaVideos" :key="index" @click="getContent(video.id)" icon :style="{ margin: '0 5px' }">
+                                                {{ index + 1 }}
+                                            </v-btn>
+                                        </div>
+                                    </v-col>
+                                </v-row>
+
+<!--                                <video v-if="currentVideo"-->
+<!--                                       :src="currentVideo.file.video[1].link"-->
+<!--                                       type="video/mp4"-->
+<!--                                       controls-->
+<!--                                       :poster="currentVideo.photo"-->
+<!--                                       :width="'60%'"-->
+<!--                                       class="video-player"-->
+<!--                                       :title="currentVideo.title"-->
+<!--                                />-->
+
                             </v-tab-item>
                         </v-tabs>
                     </v-tab-item>
@@ -130,11 +180,11 @@
 </template>
 
 <script>
-    // import videojs from 'video.js'
-    // import 'video.js/dist/video-js.css'
-    // import '@silvermine/videojs-quality-selector/dist/css/quality-selector.css'
-    // // The following registers the plugin with `videojs`
-    // require('@silvermine/videojs-quality-selector')(videojs);
+    import videojs from 'video.js'
+    import 'video.js/dist/video-js.css'
+    import '@silvermine/videojs-quality-selector/dist/css/quality-selector.css'
+    // The following registers the plugin with `videojs`
+    require('@silvermine/videojs-quality-selector')(videojs);
 
     import Info from "@/components/OnlineQuiz/Quiz/resultTables/info";
     import TopScoreResult from "@/components/OnlineQuiz/Quiz/resultTables/topScoreResult";
@@ -151,16 +201,24 @@
         name: 'Result',
         components: { StatisticResult, BubbleSheet, TopScoreResult, Info, PersonalResult},
         mixins: [mixinAuth, mixinQuiz, mixinWindowSize],
+        watch: {
+            selectedTimepoint () {
+                this.playTimePoint()
+            }
+        },
         data: () => ({
             tab: null,
+            selectedTimepoint: null,
+            timepointsHeights: 0,
             videoLesson: null,
             alaaSet: new AlaaSet(),
             alaaContent: new AlaaContent(),
             alaaVideos: null,
             currentVideo: null,
-            report: null
+            report: null,
+            player: null
         }),
-        created() {
+        mounted() {
             let that = this
             let user_exam_id = this.$route.params.user_exam_id
             let exam_id = this.$route.params.exam_id
@@ -172,14 +230,14 @@
                             that.quiz.id = exam_id
                             that.quiz.show(exam_id, API_ADDRESS.exam.report.getReport(exam_id))
                             .then((response) => {
-                                this.report = response.data.data
-                                this.loadKarname(this.report)
-                                this.$store.commit('AppLayout/updateOverlay', {show: false, loading: false, text: ''})
+                                that.report = response.data.data
+                                that.loadKarname(that.report)
+                                that.$store.commit('AppLayout/updateOverlay', {show: false, loading: false, text: ''})
                             })
                             .catch( () => {
-                                this.$store.commit('AppLayout/updateOverlay', {show: false, loading: false, text: ''})
+                                that.$store.commit('AppLayout/updateOverlay', {show: false, loading: false, text: ''})
                                 that.goToExamList()
-                                this.$notify({
+                                that.$notify({
                                     group: 'notifs',
                                     title: 'توجه!',
                                     text: 'مشکلی در بارگزاری اطلاعات آزمون رخ داده است.',
@@ -189,9 +247,9 @@
                             })
                         })
                         .catch( () => {
-                            this.$store.commit('AppLayout/updateOverlay', {show: false, loading: false, text: ''})
+                            that.$store.commit('AppLayout/updateOverlay', {show: false, loading: false, text: ''})
                             that.goToExamList()
-                            this.$notify({
+                            that.$notify({
                                 group: 'notifs',
                                 title: 'توجه!',
                                 text: 'مشکلی در دریافت اطلاعات آزمون رخ داده است.',
@@ -213,10 +271,56 @@
                     this.$store.commit('AppLayout/updateOverlay', {show: false, loading: false, text: ''})
                 })
 
-            this.getAlaaSet(1017)
+            // this.getAlaaSet(1017)
             // 24670
         },
         methods: {
+            initVideoJs (srcs, sub_categoryIndex) {
+                if (!this.$refs['videoPlayer'+sub_categoryIndex]) {
+                    return
+                }
+                let that = this
+                this.player = videojs(that.$refs['videoPlayer'+sub_categoryIndex][0], {
+                        language: 'fa',
+                        controls: true
+                    },
+                    function onPlayerReady() {
+                        console.log('onPlayerReady', this)
+                    })
+                this.player.controlBar.addChild('QualitySelector')
+                this.updateTimepointsHeights(sub_categoryIndex)
+                this.updateVideoSrc(srcs)
+            },
+            updateVideoSrc (srcs) {
+                let updatedSrcs = this.getVideoSrcs(srcs)
+                console.log('updatedSrcs', updatedSrcs)
+                this.player.pause()
+                this.player.src(updatedSrcs)
+                this.player.load()
+            },
+            updateTimepointsHeights (sub_categoryIndex) {
+                console.log('gg', this.$refs['videoPlayer'+sub_categoryIndex][0].clientHeight)
+                this.timepointsHeights = this.$refs['videoPlayer'+sub_categoryIndex][0].clientHeight
+            },
+            playTimePoint () {
+                this.player.pause()
+                this.player.currentTime(this.currentVideo.timepoints[this.selectedTimepoint].time)
+                this.player.play()
+            },
+            getVideoSrcs (srcs) {
+                let updatedSrcs = []
+                srcs.forEach( video => {
+                    updatedSrcs.push({
+                        src: video.link,
+                        type: 'video/'+video.ext,
+                        res: video.res,
+                        default: (video.res === '240p'),
+                        label: video.caption
+                    })
+                })
+
+                return updatedSrcs
+            },
             goToExamList () {
                 if (this.$route.name !== 'user.exam.list') {
                     this.$router.push({ name: 'user.exam.list' })
@@ -226,6 +330,7 @@
                 this.loadSubCategory(report.sub_category)
                 this.loadZirGrooh(report.zirgorooh)
                 this.loadBest(report.best)
+                this.loadFirstVideoTab()
                 report.main.taraaz = parseFloat(report.main.taraaz).toFixed(0)
             },
             loadBest (best) {
@@ -253,16 +358,19 @@
                     item.taraaz = parseFloat(item.taraaz).toFixed(0)
                 })
             },
-            getContent (contentId) {
+            getContent (contentId, sub_categoryIndex) {
+                let that = this
                 this.alaaContent.show(contentId)
                 .then((response) => {
-                    this.currentVideo = response.data.data
+                    that.currentVideo = response.data.data
+                    that.initVideoJs(that.currentVideo.file.video, sub_categoryIndex)
                 })
-                .catch(() => {
-                    this.currentVideo = null
+                .catch((error) => {
+                    Assistant.reportErrors(error)
+                    that.currentVideo = null
                 })
             },
-            getAlaaSet (setId) {
+            getAlaaSet (setId, sub_categoryIndex) {
                 let that = this
                 this.alaaSet.loading = true
                 this.alaaSet.show(setId)
@@ -270,13 +378,19 @@
                     that.alaaSet.loading = false
                     that.alaaSet = new AlaaSet(response.data.data)
                     that.alaaVideos = that.alaaSet.contents.getVideos()
-                    that.getContent(that.alaaVideos[0].id)
+                    that.getContent(that.alaaVideos[0].id, sub_categoryIndex)
                 })
                 .catch( () => {
                     that.alaaSet.loading = false
                 })
             },
+            loadFirstVideoTab () {
+                this.onVideoTabChange(0)
+            },
             onVideoTabChange (tabIndex) {
+                if (this.player) {
+                    this.player.pause()
+                }
 
                 if (this.report && this.report.sub_category[tabIndex].video_url) {
                     const parsed = this.report.sub_category[tabIndex].video_url.split('/')
@@ -284,7 +398,7 @@
                     if(setId === '') {
                         setId = parsed[parsed.length - 2]
                     }
-                    this.getAlaaSet(setId)
+                    this.getAlaaSet(setId, tabIndex)
                 } else {
                     this.currentVideo = null
                 }
@@ -294,6 +408,16 @@
 </script>
 
 <style>
+    .vjs-menu-button-popup .vjs-menu {
+        left: auto;
+        right: 0;
+    }
+    .vjs-player {
+    }
+    .vjs-playlist {
+        overflow: auto;
+    }
+
     @media only screen and (min-width: 960px) {
         .video-tab,
         .video-tab .v-tabs .v-slide-group__wrapper {
@@ -346,12 +470,6 @@
     .video-player {
         border-radius: 25px;
         margin: 20px 0;
-    }
-
-    .video-tab .v-window.v-item-group.theme--light.v-tabs-items .v-window__container .v-window-item {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
     }
 
     .download-row .v-btn__content {
