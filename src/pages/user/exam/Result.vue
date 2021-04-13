@@ -210,6 +210,7 @@
                         duration: 30000,
                     })
                     Assistant.reportErrors({location: 'pages/user/exam/Result.vue -> created()'})
+                    this.$store.commit('AppLayout/updateOverlay', {show: false, loading: false, text: ''})
                 })
 
             this.getAlaaSet(1017)
@@ -217,7 +218,9 @@
         },
         methods: {
             goToExamList () {
-                this.$router.push({ name: 'user.exam.list' })
+                if (this.$route.name !== 'user.exam.list') {
+                    this.$router.push({ name: 'user.exam.list' })
+                }
             },
             loadKarname (report) {
                 this.loadSubCategory(report.sub_category)
