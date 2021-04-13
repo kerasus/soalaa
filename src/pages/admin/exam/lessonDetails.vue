@@ -166,7 +166,7 @@
         methods: {
             questionListHeight() {
                 // box is a col-7 with 12px padding
-                const boxSize = this.bubbleSheet -24
+                const boxSize = this.$refs.bubbleSheet.clientWidth - 24
                 // each group width is 140px
                 const horizontalGroupAmounts = Math.floor(boxSize / 140)
                 const verticalGroupAmount = Math.ceil(this.questionsInGroups.length / horizontalGroupAmounts)

@@ -13,7 +13,7 @@
                 <v-icon>mdi-content-copy</v-icon>
             </v-btn>
             <v-switch
-                    v-model="confirm"
+                    v-model="source.confiremd"
                     color="success"
                     value="1"
                     hide-details

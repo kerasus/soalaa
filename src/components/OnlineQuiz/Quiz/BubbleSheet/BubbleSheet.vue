@@ -58,7 +58,6 @@
             </div>
 
         </v-col>
-<!--        <v-btn @click="test" >click</v-btn>-->
     </div>
 </template>
 
@@ -162,12 +161,12 @@
             },
             questionListHeight() {
                 // box is a col-7 with 12px padding
-                this.boxSize = this.$refs.bubbleSheet.clientWidth
-                console.log('test', this.$refs.bubbleSheet.clientWidth)
+                this.boxSize = this.$refs.bubbleSheet.clientWidth - 24
+                console.log('box', this.boxSize)
                 // each group width is 140px
                 const horizontalGroupAmounts = Math.floor(this.boxSize / 140)
                 const verticalGroupAmount = Math.ceil(this.questionsInGroups.length / horizontalGroupAmounts)
-                return verticalGroupAmount * 182 - 4
+                return verticalGroupAmount * 185 + 24
             },
             questionListPadding() {
                 const boxSize = this.$refs.bubbleSheet.clientWidth - 24

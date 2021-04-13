@@ -90,6 +90,10 @@ class Question extends Model {
             {
                 key: 'creator',
                 default: 1
+            },
+            {
+                key: 'confirmed',
+                default: true
             }
         ])
 
