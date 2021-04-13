@@ -13,9 +13,9 @@
                 <v-icon>mdi-content-copy</v-icon>
             </v-btn>
             <v-switch
-                    v-model="confirm"
+                    @change="confirmQuestion"
+                    v-model="source.confirmed"
                     color="success"
-                    value="1"
                     hide-details
             ></v-switch>
         </div>
@@ -116,6 +116,15 @@
             }
         },
         methods: {
+            confirmQuestion () {
+                axios.get(API_ADDRESS.question.confirm(this.source.id))
+                .then((response) => {
+                    this.source.confirmed = response.data.data.confirmed
+                })
+                .catch(() => {
+                    this.source.confirmed = !this.source.confirmed
+                })
+            },
             copyIdToClipboard(sourceId) {
                 this.$refs['question-id-' + sourceId].select()
                 document.execCommand('copy')
