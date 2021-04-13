@@ -73,7 +73,6 @@
 </template>
 
 <script>
-    // import $ from 'jquery'
     import '@/assets/scss/markdownKatex.scss'
     import 'vue-virtual-scroller/dist/vue-virtual-scroller.css'
     // import { DynamicScroller, DynamicScrollerItem } from 'vue-virtual-scroller'

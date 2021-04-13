@@ -63,7 +63,6 @@
 </template>
 
 <script>
-    // import $ from "jquery";
     import {mixinQuiz, mixinUserActionOnQuestion} from "@/mixin/Mixins";
 
     export default {

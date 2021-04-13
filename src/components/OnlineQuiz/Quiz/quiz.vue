@@ -184,7 +184,6 @@
             // },
             // ToDo: check for removal
             getFirstInViewQuestionNumber () {
-                // console.log(this.renderedQuestions.startIndex, this.renderedQuestions.endIndex, 'haha2')
                 let firstQuestionInView
                 for (let i = this.renderedQuestions.startIndex; i <= this.renderedQuestions.endIndex; i++) {
                     // console.log(i, ': ', this.questions[i].isInView)
@@ -199,28 +198,10 @@
                     return false
                 }
             },
-            // isThisFirstQuestionInView (questionId) {
-            //     if (this.getFirstInViewQuestionNumber().id === questionId) {
-            //         return true
-            //     }
-            //     return false
-            // },
-            // getQuestionNumber (question) {
-            //     if (question.isInView === false) {
-            //         return '.question:nth-child('+(this.quiz.questions.getQuestionIndexById(question.id) + 2)+')'
-            //     }
-            //     return ''
-            // },
             choiceClicked (questionId) {
-                // console.log('loadFirstActiveQuestionIfNeed->choiceClicked')
                 this.scrollTo(questionId)
                 this.changeQuestion(questionId)
-            },
-            // changeCurrentQuestion (question) {
-            //     if (question.id !== this.currentQuestion.id) {
-            //         this.currentQuestion = question
-            //     }
-            // }
+            }
         },
         mounted () {
             $('.questions').height(this.windowSize.y)
