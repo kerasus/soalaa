@@ -458,7 +458,7 @@
                 for (let i = 0; i < this.tableHeight; i++) {
                     row = []
                     for (let j = 0; j < this.tableWidth; j++) {
-                        row.push(0)
+                        row.push('')
                     }
                     this.table.push(row)
                 }
