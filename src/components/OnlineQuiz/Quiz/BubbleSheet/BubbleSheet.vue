@@ -56,9 +56,9 @@
                     </v-icon>
                 </div>
             </div>
+
         </v-col>
-
-
+<!--        <v-btn @click="test" >click</v-btn>-->
     </div>
 </template>
 
@@ -162,7 +162,8 @@
             },
             questionListHeight() {
                 // box is a col-7 with 12px padding
-                this.boxSize = this.bubbleSize
+                this.boxSize = this.$refs.bubbleSheet.clientWidth
+                console.log('test', this.$refs.bubbleSheet.clientWidth)
                 // each group width is 140px
                 const horizontalGroupAmounts = Math.floor(this.boxSize / 140)
                 const verticalGroupAmount = Math.ceil(this.questionsInGroups.length / horizontalGroupAmounts)
@@ -173,6 +174,9 @@
                 const horizontalGroupAmounts = (this.$refs.bubbleSheet.clientHeight - 8) / 182
                 const verticalGroupAmounts = Math.ceil(this.questionsInGroups.length / horizontalGroupAmounts)
                 return (boxSize - (verticalGroupAmounts * 140)) / 2 + 5
+            },
+            test () {
+                this.$refs.bubbleSheet.style.height = this.questionListHeight() - 24 + 'px'
             }
         },
         created() {
