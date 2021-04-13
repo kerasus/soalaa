@@ -69,6 +69,12 @@
         data: () => ({
             lessonsList: new QuestSubcategoryList()
         }),
+        created() {
+            this.$store.commit('AppLayout/updateDrawer', true)
+        },
+        mounted() {
+            this.getLessons()
+        },
         methods: {
             goBack() {
                 this.$router.push('/onlineQuiz/exams')
@@ -88,9 +94,6 @@
                         this.lessonsList = new QuestSubcategoryList()
                     })
             }
-        },
-        mounted() {
-            this.getLessons()
         }
     }
 </script>
