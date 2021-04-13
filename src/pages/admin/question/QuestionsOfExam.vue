@@ -36,7 +36,13 @@
                                 :active="active"
                                 :data-index="index"
                         >
-                            <Item :source="item" :questions-column="$refs.questionsColumn" @inView="test" :exam-id="$route.params.quizId" :sub-category="quizData.sub_categories" />
+                            <Item :source="item"
+                                  :consider-active-category="false"
+                                  :questions-column="$refs.questionsColumn"
+                                  @inView="test"
+                                  :exam-id="$route.params.quizId"
+                                  :sub-category="quizData.sub_categories"
+                            />
                         </DynamicScrollerItem>
                     </template>
                 </DynamicScroller>
