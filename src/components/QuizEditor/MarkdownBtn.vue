@@ -39,6 +39,9 @@
         <v-btn outlined icon @click="add(elem, elemKey, renderedMatrixKatex)">
             <v-icon>mdi-matrix</v-icon>
         </v-btn>
+        <v-btn outlined icon @click="add(elem, elemKey, renderedTableKatex)">
+            <v-icon>mdi-table-large</v-icon>
+        </v-btn>
     </div>
 </template>
 
@@ -50,6 +53,7 @@
             'url',
             'elemKey',
             'renderedMatrixKatex',
+            'renderedTableKatex'
         ],
         data: () => {
             return {
