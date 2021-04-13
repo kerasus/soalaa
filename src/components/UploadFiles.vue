@@ -353,7 +353,7 @@
                 extensions: 'gif,jpg,jpeg,png,webp',
                 // extensions: ['gif', 'jpg', 'jpeg','png', 'webp'],
                 // extensions: /\.(gif|jpe?g|png|webp)$/i,
-                minSize: 1024,
+                minSize: 1,
                 size: 1024 * 1024 * 10,
                 multiple: true,
                 directory: false,
