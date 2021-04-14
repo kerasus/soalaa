@@ -176,7 +176,7 @@
                 })
             },
             continueExam (examId) {
-                this.startExam(examId)
+                this.$router.push({name: 'onlineQuiz.alaaView', params: {quizId: examId, questNumber: 1}})
             },
             getExams () {
                 let that = this

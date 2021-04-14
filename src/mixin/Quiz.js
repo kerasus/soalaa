@@ -184,6 +184,7 @@ const mixinQuiz = {
             if (!Assistant.getId(examId)) {
                 return
             }
+            window.currentExamQuestions = null
             let that = this
             that.$store.commit('AppLayout/updateOverlay', {show: true, loading: true, text: ''})
             return new Promise(function (resolve, reject) {
@@ -268,11 +269,12 @@ const mixinQuiz = {
             })
         },
         setQuestionsLtr(question) {
-            if (!question.statement) {
-                return
-            }
-            const englishRegex = /^[A-Za-z0-9 :"'ʹ.<>%$&@!+()\-_/\n,…?ᵒ*~]*$/
-            question.ltr = !!question.statement.match(englishRegex);
+            question.ltr = this.isLtrString(question.statement)
+            // if (!question.statement) {
+            //     return
+            // }
+            // const englishRegex = /^[A-Za-z0-9 :"'ʹ.<>%$&@!+()\-_/\n,…?ᵒ*~]*$/
+            // question.ltr = !!question.statement.match(englishRegex);
         },
         loadExamExtraData(quiz, viewType) {
             this.quiz.loadSubcategoriesOfCategories()
@@ -452,7 +454,8 @@ const mixinQuiz = {
                 return
             }
 
-            let currentQuestion = this.getCurrentExamQuestions()[id]
+            let currentExamQuestions = this.getCurrentExamQuestions()
+            let currentQuestion = currentExamQuestions[id]
             let currentQuestionCategoryActiveStatus = this.getCategoryActiveStatus(currentQuestion.sub_category.category_id)
 
             if (!currentQuestionCategoryActiveStatus) {

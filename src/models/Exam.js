@@ -59,6 +59,10 @@ class Exam extends Model {
         this.setQuestionsLtr()
     }
 
+    getFirstActiveCategory () {
+        return this.categories.list.find( (item) => !!(item.is_active))
+    }
+
     loadQuestionsFromFile () {
         let that = this
         return new Promise(function(resolve, reject) {
