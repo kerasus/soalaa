@@ -92,7 +92,7 @@
                                             </v-btn>
                                             <v-btn
                                                     v-if="item.exam_actions.can_submit_answer"
-                                                    @click="sendAnswersAndFinishExam(item)"
+                                                    @click="getConfirmation"
                                                     color="#ffc107"
                                                     text
                                             >
@@ -138,6 +138,11 @@
     import {Exam, ExamList} from "@/models/Exam";
     import { mixinAuth, mixinQuiz } from '@/mixin/Mixins'
     import ProgressLinear from "@/components/ProgressLinear";
+    import VueConfirmDialog from 'vue-confirm-dialog'
+    import Vue from 'vue'
+
+    Vue.use(VueConfirmDialog)
+    Vue.component('vue-confirm-dialog', VueConfirmDialog.default)
 
     export default {
         name: 'list',
@@ -153,6 +158,22 @@
             this.getExams()
         },
         methods: {
+            getConfirmation(){
+                this.$confirm(
+                    {
+                        message: `مطمئنی؟ نتیجه شما پس از تایید، ثبت و رتبه شما محاسبه خواهد شد و به اندازه میانگین درصدهای شما، کد تخفیف همه محصولات آلاء برای شما ارسال خواهد شد. مثلا اگر میانگین درصدهای شما 60% باشد یک کد تخفیف 60% دریافت خواهید کرد`,
+                        button: {
+                            no: 'ادامه میدم',
+                            yes: 'ثبت میکنم'
+                        },
+                        callback: confirm => {
+                            if (confirm) {
+                                this.sendAnswersAndFinishExam()
+                            }
+                        }
+                    }
+                )
+            },
             continueExam (examId) {
                 this.startExam(examId)
             },
@@ -181,26 +202,27 @@
                 //         this.getExams()
                 //     })
             },
-            sendAnswersAndFinishExam (exam) {
-                exam.sendAnswersAndFinishExam()
+            sendAnswersAndFinishExam() {
+                let that = this
+                this.quiz.sendAnswersAndFinishExam()
                     .then( () => {
-                        this.$store.commit('clearExamData', exam.id)
-                        this.$notify({
+                        that.$store.commit('clearExamData', that.quiz.id)
+                        that.$notify({
                             group: 'notifs',
                             text: 'اطلاعات آزمون شما ثبت شد.',
                             type: 'success'
                         })
-                        this.getExams()
+                        that.$router.push({ name: 'user.exam.list'})
                     })
                     .catch( () => {
-                        this.$notify({
+                        that.$notify({
                             group: 'notifs',
                             title: 'توجه!',
                             text: 'مشکلی در ثبت اطلاعات آزمون شما رخ داده است. لطفا تا قبل از ساعت 24 اقدام به ارسال مجدد پاسخنامه نمایید.',
                             type: 'warn',
                             duration: 30000,
                         })
-                        this.getExams()
+                        that.$router.push({ name: 'user.exam.list'})
                     })
             }
         },
