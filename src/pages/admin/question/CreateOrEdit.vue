@@ -246,6 +246,36 @@
                 </v-sheet>
             </v-col>
         </v-row>
+        <v-row>
+            <v-col>
+                <v-sheet color="#fff">
+                    <v-row>
+                        <v-col :md="3">
+                            <v-text-field label="آدرس عکس" outlined v-model="resizerUrl" dense  @input="setWidth"/>
+                            <v-slider
+                                    class="mt-5"
+                                    v-if="resizerImgSize"
+                                    v-model="resizerImgFinalWidth"
+                                    label="سایز عکس"
+                                    thumb-color="red"
+                                    thumb-label="always"
+                                    inverse-label
+                            ></v-slider>
+                            <v-btn icon @click="copyResizedImgUrl">
+                                <v-icon>
+                                    mdi-content-copy
+                                </v-icon>
+                            </v-btn>
+                        </v-col>
+                        <v-col :md="9">
+                            <img ref="resizerimg" :src="resizerUrl" v-if="resizerUrl !== ''" :width="resizerImgFinalWidth ? resizerImgSize / 100 * resizerImgFinalWidth : 'auto'"/>
+                        </v-col>
+                    </v-row>
+
+
+                </v-sheet>
+            </v-col>
+        </v-row>
 
 
     </v-container>
@@ -328,6 +358,10 @@
         },
         data: () => {
             return {
+                resizerImgFinalWidth: 0,
+                resizerImgSize: 0,
+                resizerImgHSize: 0,
+                resizerUrl: '',
                 editDialog: false,
                 teachers: [
                     { name: 'ممد', id: 1 },
@@ -416,6 +450,33 @@
             }
         },
         methods: {
+            copyResizedImgUrl () {
+                let size = '?'
+                size += 'w=' + Math.floor(this.resizerImgSize * (this.resizerImgFinalWidth / 100))
+                size += '&h=' + Math.floor(this.resizerImgHSize * (this.resizerImgFinalWidth / 100))
+                this.copyToClipboard('![](' + this.resizerUrl + size + ')')
+            },
+            setWidth () {
+                setTimeout(() => {
+                    this.resizerImgSize = this.$refs.resizerimg.clientWidth
+                    this.resizerImgHSize = this.$refs.resizerimg.clientHeight
+                    this.resizerImgFinalWidth = this.resizerImgSize
+                },500)
+            },
+            copyToClipboard (text) {
+                const el = document.createElement('textarea')
+                el.value = text
+                document.body.appendChild(el)
+                el.select()
+                document.execCommand('copy')
+                document.body.removeChild(el)
+                this.$notify({
+                    group: 'notifs',
+                    title: 'توجه',
+                    text: 'آدرس فایل به کلیپبورد منتقل شد',
+                    type: 'success'
+                })
+            },
             inputFile: function (newFile, oldFile) {
                 if (newFile && oldFile && !newFile.active && oldFile.active) {
                     // Get response data
