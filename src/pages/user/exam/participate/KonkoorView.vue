@@ -1,7 +1,6 @@
 <template>
     <v-container class="konkoor-view" :fluid="true" :style="{ height: '100%', background: 'rgb(244,244,244)' }"
                  v-resize="updateWindowSize">
-        <vue-confirm-dialog />
         <v-row :style="{ 'min-height': '100%' }">
             <v-col :md="5" class="questions" ref="questionsColumn" id="questions" :style="{ height: windowSize.y }">
                 <!--                <div class="lesson">{{ currentLesson.title }}</div>-->
@@ -137,20 +136,20 @@
                 this.timerIsOpen = value
             },
             getConfirmation(){
-                this.$confirm(
-                    {
-                        message: `مطمئنی؟ نتیجه شما پس از تایید، ثبت و رتبه شما محاسبه خواهد شد و به اندازه میانگین درصدهای شما، کد تخفیف همه محصولات آلاء برای شما ارسال خواهد شد. مثلا اگر میانگین درصدهای شما 60% باشد یک کد تخفیف 60% دریافت خواهید کرد`,
-                        button: {
-                            no: 'ادامه میدم',
-                            yes: 'ثبت میکنم'
-                        },
-                        callback: confirm => {
-                            if (confirm) {
-                                this.sendAnswersAndFinishExam()
-                            }
+                let that = this
+                this.$store.commit('AppLayout/showConfirmDialog', {
+                    message: `مطمئنی؟ نتیجه شما پس از تایید، ثبت و رتبه شما محاسبه خواهد شد و به اندازه میانگین درصدهای شما، کد تخفیف همه محصولات آلاء برای شما ارسال خواهد شد. مثلا اگر میانگین درصدهای شما 60% باشد یک کد تخفیف 60% دریافت خواهید کرد`,
+                    button: {
+                        no: 'ادامه میدم',
+                        yes: 'ثبت میکنم'
+                    },
+                    callback: (confirm) => {
+                        if (!confirm) {
+                            return
                         }
+                        that.sendAnswersAndFinishExam()
                     }
-                )
+                })
             },
             sendAnswersAndFinishExam() {
                 let that = this
