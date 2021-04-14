@@ -139,10 +139,10 @@
             getConfirmation(){
                 this.$confirm(
                     {
-                        message: `Are you sure?`,
+                        message: `مطمئنی؟ نتیجه شما پس از تایید، ثبت و رتبه شما محاسبه خواهد شد و به اندازه میانگین درصدهای شما، کد تخفیف همه محصولات آلاء برای شما ارسال خواهد شد. مثلا اگر میانگین درصدهای شما 60% باشد یک کد تخفیف 60% دریافت خواهید کرد`,
                         button: {
-                            no: 'No',
-                            yes: 'Yes'
+                            no: 'ادامه میدم',
+                            yes: 'ثبت میکنم'
                         },
                         callback: confirm => {
                             if (confirm) {
@@ -323,7 +323,9 @@
             } else {
                 this.$router.push({ name: 'onlineQuiz.alaaView', params: { quizId: 313, questNumber: this.$route.params.quizId } })
             }
-            this.questions = this.getCurrentExamQuestionsInArray()
+            if (!this.questions.length) {
+                this.questions = this.getCurrentExamQuestionsInArray()
+            }
         },
         mounted () {
             this.setHeights()
