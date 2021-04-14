@@ -91,14 +91,14 @@
             },
             sendAnswersAndFinishExam() {
                 let that = this
-                this.quiz.sendAnswersAndFinishExam()
+                this.sendUserQuestionsDataToServerAndFinishExam(this.quiz.id, this.quiz.user_exam_id)
                     .then( () => {
-                        that.$store.commit('clearExamData', that.quiz.id)
                         that.$notify({
                             group: 'notifs',
                             text: 'اطلاعات آزمون شما ثبت شد.',
                             type: 'success'
                         })
+                        that.$store.commit('clearExamData', that.quiz.id)
                         that.$router.push({ name: 'user.exam.list'})
                     })
                     .catch( () => {
@@ -106,7 +106,7 @@
                             group: 'notifs',
                             title: 'توجه!',
                             text: 'مشکلی در ثبت اطلاعات آزمون شما رخ داده است. لطفا تا قبل از ساعت 24 اقدام به ارسال مجدد پاسخنامه نمایید.',
-                            type: 'warn',
+                            type: 'error',
                             duration: 30000,
                         })
                         that.$router.push({ name: 'user.exam.list'})

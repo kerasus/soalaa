@@ -20,13 +20,22 @@
         mixins: [mixinQuiz],
         computed: {
             isSelected () {
-                return this.userQuizListData[this.quiz.id][this.questionId] && this.choice.id === this.userQuizListData[this.quiz.id][this.questionId].answered_choice_id
+                return this.getUserQuestionData(this.questionId) && this.choice.id === this.getUserQuestionData(this.questionId).answered_choice_id
             }
         },
         methods: {
             answerClicked () {
                 this.$emit('answerClicked', { questionId: this.questionId, choiceId: this.choice.id })
-            }
+            },
+            getUserQuestionData (question_id) {
+                if (typeof question_id === 'undefined') {
+                    question_id = this.currentQuestion.id
+                }
+                if (!this.quiz.id || !question_id) {
+                    return false
+                }
+                return this.userQuizListData[this.quiz.id][question_id]
+            },
         }
     }
 </script>

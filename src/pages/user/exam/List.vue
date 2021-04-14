@@ -92,7 +92,7 @@
                                             </v-btn>
                                             <v-btn
                                                     v-if="item.exam_actions.can_submit_answer"
-                                                    @click="sendAnswersAndFinishExam(item)"
+                                                    @click="sendAnswersAndFinishExam(item.id, item.user_exam_id)"
                                                     color="#ffc107"
                                                     text
                                             >
@@ -181,26 +181,36 @@
                 //         this.getExams()
                 //     })
             },
-            sendAnswersAndFinishExam (exam) {
-                exam.sendAnswersAndFinishExam()
+            sendAnswersAndFinishExam (examId, examUserId) {
+                if (!this.hasExamDataOnThisDeviseStorage(examId)) {
+                    this.$notify({
+                        group: 'notifs',
+                        title: 'توجه!',
+                        text: 'در این سیستم پاسخنامه شما ثبت نشده است. لطفا از سیستمی که با آن در آزمون شرکت کرده اید استفاده کنید و این دکمه را بزنید.',
+                        type: 'error',
+                        duration: 30000,
+                    })
+                    return
+                }
+                let that = this
+                this.sendUserQuestionsDataToServerAndFinishExam(examId, examUserId)
                     .then( () => {
-                        this.$store.commit('clearExamData', exam.id)
-                        this.$notify({
+                        that.$notify({
                             group: 'notifs',
                             text: 'اطلاعات آزمون شما ثبت شد.',
                             type: 'success'
                         })
-                        this.getExams()
+                        that.$store.commit('clearExamData', examId)
+                        that.$router.push({ name: 'user.exam.list'})
                     })
                     .catch( () => {
-                        this.$notify({
+                        that.$notify({
                             group: 'notifs',
                             title: 'توجه!',
                             text: 'مشکلی در ثبت اطلاعات آزمون شما رخ داده است. لطفا تا قبل از ساعت 24 اقدام به ارسال مجدد پاسخنامه نمایید.',
-                            type: 'warn',
+                            type: 'error',
                             duration: 30000,
                         })
-                        this.getExams()
                     })
             }
         },

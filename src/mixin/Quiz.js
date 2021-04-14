@@ -4,6 +4,8 @@ import '@/assets/scss/markdownKatex.scss';
 import Assistant from "@/plugins/assistant";
 import Time from "@/plugins/time";
 import {QuestSubcategory} from "@/models/QuestSubcategory";
+import axios from "axios";
+import API_ADDRESS from "@/api/Addresses";
 
 const mixinQuiz = {
     computed: {
@@ -300,6 +302,31 @@ const mixinQuiz = {
             }
             this.changeQuestion(questionId, viewType)
         },
+
+
+        hasExamDataOnThisDeviseStorage (examId) {
+            return !!this.userQuizListData[examId]
+        },
+        sendUserQuestionsDataToServerAndFinishExam(examId, examUserId) {
+            const userExamData = this.userQuizListData[examId]
+            let answers = []
+
+            for (const questionId in userExamData) {
+                if (userExamData[questionId].answered_choice_id) {
+                    answers.push({
+                        question_id: questionId,
+                        answered_choice_id: userExamData[questionId].answered_choice_id,
+                        selected_at : (!userExamData[questionId].answered_at) ? null: userExamData[questionId].answered_at,
+                        bookmarked: userExamData[questionId].bookmarked,
+                        status: userExamData[questionId].status,
+                        check_in_times: userExamData[questionId].check_in_times,
+                    })
+                }
+            }
+
+            return axios.post(API_ADDRESS.exam.sendAnswers, {exam_user_id: examUserId, finish: true, questions: answers })
+        },
+
 
 
         answerClicked(data) {
