@@ -131,10 +131,6 @@
     import {Exam} from "@/models/Exam";
     import {QuestSubcategoryList} from "@/models/QuestSubcategory";
 
-
-
-
-
     export default {
         name: "lessonDetails",
         mixins: [mixinAuth, mixinQuiz, mixinWindowSize],
@@ -407,7 +403,7 @@
         position: absolute;
         height: 200px;
         right: 0;
-        left: 850px;
+        left: 800px;
         margin-top: 10px;
 
     }

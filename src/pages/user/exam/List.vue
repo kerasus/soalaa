@@ -93,7 +93,7 @@
                                             </v-btn>
                                             <v-btn
                                                     v-if="item.exam_actions.can_submit_answer"
-                                                    @click="getConfirmation"
+                                                    @click="getConfirmation(item.id, item.user_exam_id)"
                                                     color="#ffc107"
                                                     text
                                             >
@@ -159,7 +159,7 @@
             this.getExams()
         },
         methods: {
-            getConfirmation(){
+            getConfirmation(examId, examUserId){
                 this.$confirm(
                     {
                         message: `مطمئنی؟ نتیجه شما پس از تایید، ثبت و رتبه شما محاسبه خواهد شد و به اندازه میانگین درصدهای شما، کد تخفیف همه محصولات آلاء برای شما ارسال خواهد شد. مثلا اگر میانگین درصدهای شما 60% باشد یک کد تخفیف 60% دریافت خواهید کرد`,
@@ -169,7 +169,7 @@
                         },
                         callback: confirm => {
                             if (confirm) {
-                                this.sendAnswersAndFinishExam()
+                                this.sendAnswersAndFinishExam(examId, examUserId)
                             }
                         }
                     }

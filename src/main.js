@@ -4,7 +4,7 @@ import vuetify from '@/plugins/vuetify'
 import router from '@/router/index'
 import store from '@/store/store'
 import Axios from '@/plugins/axios'
-import VueNotification from "vue-notification"
+import VueNotification from 'vue-notification'
 
 Vue.use(VueNotification)
 

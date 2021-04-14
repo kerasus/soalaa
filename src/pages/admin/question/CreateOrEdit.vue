@@ -276,16 +276,10 @@
                 </v-sheet>
             </v-col>
         </v-row>
-
-
     </v-container>
 </template>
 
 <script>
-    import '@/assets/scss/markdownKatex.scss'
-    import MathLive from 'mathlive'
-    import 'mathlive/dist/mathlive-fonts.css'
-    import 'mathlive/dist/mathlive-static.css'
     import { Question } from '@/models/Question'
     import {ExamList} from '@/models/Exam'
     import {QuestSubcategoryList} from '@/models/QuestSubcategory';
@@ -294,38 +288,15 @@
     import UploadFiles from '@/components/UploadFiles';
     // import UploadImage from '@/components/UploadImage';
     import API_ADDRESS from '@/api/Addresses'
-
-    var md = require('markdown-it')()
-    md.use(require('markdown-it-new-katex'))
-    md.use(require('markdown-it-container'), 'mesra')
-    md.use(require('markdown-it-container'), 'beit', {
-
-        validate: function(params) {
-            return params.trim().match(/^beit\s+(.*)--\*mesra\*--(.*)$/)
-        },
-
-        render: function (tokens, idx) {
-            let m = tokens[idx].info.trim().match(/^beit\s+(.*)--\*mesra\*--(.*)$/)
-            if (m && m[1] && m[2] && tokens[idx].nesting === 1) {
-                let mesra1 = md.utils.escapeHtml(m[1])
-                let mesra2 = md.utils.escapeHtml(m[2])
-                // opening tag
-                return '<div class="beit"><div class="mesra">' + mesra1 + '</div><div class="mesra">'+ mesra2 +'</div>\n';
-            } else {
-                // closing tag
-                return '</div>\n';
-            }
-        }
-    });
-    // ::: beit 111--*mesra*--222:::
-
-    // ::: spoiler click me
-    // *content*
-    // :::
+    import {mixinMarkdownAndKatex} from "@/mixin/Mixins"
+    import 'mathlive/dist/mathlive-fonts.css'
+    import 'mathlive/dist/mathlive-static.css'
+    import MathLive from 'mathlive'
 
     export default {
         name: 'CreateOrEdit',
         components: {MarkdownBtn, UploadFiles},
+        mixins: [mixinMarkdownAndKatex],
         computed: {
             renderedTableKatex () {
                 return this.renderTableKatex()
@@ -666,11 +637,11 @@
             updateRendered () {
                 this.replaceNimFasele()
                 this.replaceExtraSpaceAroundDollarSign()
-                this.questRendered = md.render(this.currentQuestion.statement.toString());
+                this.questRendered = this.markdown.render(this.currentQuestion.statement.toString());
                 for (let i = 0; i < 4; i++) {
                     const title = (typeof this.currentQuestion.choices.list[i] !== 'undefined') ? this.currentQuestion.choices.list[i].title : null
                     if (title) {
-                        this.choiceRendered[i] = md.render(title.toString())
+                        this.choiceRendered[i] = this.markdown.render(title.toString())
                     }
                 }
                 this.replaceNimFasele()
@@ -724,7 +695,7 @@
         },
         mounted() {
 
-            // this.rendered = md.render();
+            // this.rendered = this.markdown.render();
             // this.updateRendered();
 
             let that = this
