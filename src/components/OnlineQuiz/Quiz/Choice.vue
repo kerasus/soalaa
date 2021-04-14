@@ -52,6 +52,10 @@
     .answer-sheet.active {
         box-shadow: 0 3px 5px -1px rgba(255, 191, 7, 0.10), 0 5px 8px 0 rgba(255, 191, 7, 0.06), 0 1px 14px 0 rgba(255, 191, 7, 0.02) !important;
     }
+
+    .answer-sheet p {
+        margin-bottom: 0;
+    }
 </style>
 
 <style scoped>
@@ -76,7 +80,10 @@
         display: flex;
         flex-direction: row-reverse;
         justify-content: space-between;
+        align-items: center;
     }
+
+
 
     .answer-text {
         height: max-content;
