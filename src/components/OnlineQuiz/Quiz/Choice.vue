@@ -1,6 +1,6 @@
 <template>
     <v-col :md="6" :cols="12" class="answer-box" @click="answerClicked">
-        <v-sheet :class="{ 'answer-sheet': true, active: isSelected }">
+        <v-sheet :class="{ 'answer-sheet': true, active: isSelected, ltr: isRtl }">
             <div class="answer-text renderedPanel" v-html="choice.rendered_title"></div>
             <div class="answer-checkbox">
                 <v-checkbox v-model="isSelected" disabled />
@@ -15,8 +15,8 @@
 
 
     export default {
-        name: "Choice",
-        props: ['choice', 'questionId'],
+        name: 'Choice',
+        props: ['choice', 'questionId', 'isRtl'],
         mixins: [mixinQuiz],
         computed: {
             isSelected () {

@@ -7,7 +7,7 @@ import {CheckingTimeList} from "@/models/CheckingTime";
 import Assistant from "@/plugins/assistant";
 import Vue from 'vue'
 import axios from "axios";
-import API_ADDRESS from "@/api/Addresses";
+import API_ADDRESS from "@/api/Addresses"
 
 class Exam extends Model {
     constructor(data) {
