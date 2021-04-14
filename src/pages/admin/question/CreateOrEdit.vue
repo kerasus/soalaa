@@ -428,6 +428,11 @@
                 this.copyToClipboard('![](' + this.resizerUrl + size + ')')
             },
             setWidth () {
+                this.resizerUrl = this.resizerUrl.replace('![](https://cdn.alaatv.com', 'https://cdn.alaatv.com')
+                this.resizerUrl = this.resizerUrl.replace('.png)', '.png')
+                this.resizerUrl = this.resizerUrl.replace('.jpg)', '.jpg')
+                this.resizerUrl = this.resizerUrl.replace('.jpeg)', '.jpeg')
+
                 setTimeout(() => {
                     this.resizerImgSize = this.$refs.resizerimg.clientWidth
                     this.resizerImgHSize = this.$refs.resizerimg.clientHeight
