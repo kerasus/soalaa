@@ -5,6 +5,11 @@
 .renderedPanel {
   direction: rtl;
 
+  &.choice {
+    display: flex;
+    flex-direction: row;
+  }
+
   img {
     max-width: 100%;
   }

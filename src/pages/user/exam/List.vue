@@ -1,5 +1,6 @@
 <template>
     <v-container>
+        <vue-confirm-dialog />
         <v-row>
             <v-col>
                 <progress-linear :active="loadingList" />
