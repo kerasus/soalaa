@@ -1,5 +1,6 @@
 <template>
     <v-container>
+        <vue-confirm-dialog />
         <v-row>
             <v-col>
                 <progress-linear :active="loadingList" />
@@ -92,7 +93,7 @@
                                             </v-btn>
                                             <v-btn
                                                     v-if="item.exam_actions.can_submit_answer"
-                                                    @click="sendAnswersAndFinishExam(item.id, item.user_exam_id)"
+                                                    @click="getConfirmation"
                                                     color="#ffc107"
                                                     text
                                             >
@@ -138,6 +139,11 @@
     import {Exam, ExamList} from "@/models/Exam";
     import { mixinAuth, mixinQuiz } from '@/mixin/Mixins'
     import ProgressLinear from "@/components/ProgressLinear";
+    import VueConfirmDialog from 'vue-confirm-dialog'
+    import Vue from 'vue'
+
+    Vue.use(VueConfirmDialog)
+    Vue.component('vue-confirm-dialog', VueConfirmDialog.default)
 
     export default {
         name: 'list',
@@ -153,6 +159,22 @@
             this.getExams()
         },
         methods: {
+            getConfirmation(){
+                this.$confirm(
+                    {
+                        message: `مطمئنی؟ نتیجه شما پس از تایید، ثبت و رتبه شما محاسبه خواهد شد و به اندازه میانگین درصدهای شما، کد تخفیف همه محصولات آلاء برای شما ارسال خواهد شد. مثلا اگر میانگین درصدهای شما 60% باشد یک کد تخفیف 60% دریافت خواهید کرد`,
+                        button: {
+                            no: 'ادامه میدم',
+                            yes: 'ثبت میکنم'
+                        },
+                        callback: confirm => {
+                            if (confirm) {
+                                this.sendAnswersAndFinishExam()
+                            }
+                        }
+                    }
+                )
+            },
             continueExam (examId) {
                 this.startExam(examId)
             },
@@ -211,6 +233,7 @@
                             type: 'error',
                             duration: 30000,
                         })
+                        this.getExams()
                     })
             }
         },
