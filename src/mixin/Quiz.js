@@ -1,4 +1,3 @@
-import Vue from 'vue'
 import 'github-markdown-css/github-markdown.css';
 import '@/assets/scss/markdownKatex.scss';
 import Assistant from "@/plugins/assistant";
@@ -83,7 +82,7 @@ const mixinQuiz = {
         },
         setCurrentExamQuestions(currentExamQuestions) {
             window.localStorage.setItem('currentExamQuestions', JSON.stringify(currentExamQuestions))
-            Vue.set(this, 'currentExamQuestions', Object.freeze(currentExamQuestions))
+            // Vue.set(this, 'currentExamQuestions', Object.freeze(currentExamQuestions))
         },
         setCurrentExamQuestionIndexes(currentExamQuestionIndexes) {
             window.localStorage.setItem('currentExamQuestionIndexes', JSON.stringify(currentExamQuestionIndexes))
@@ -152,7 +151,7 @@ const mixinQuiz = {
             }
             window.currentExamQuestions = JSON.parse(window.localStorage.getItem('currentExamQuestions'))
             this.modifyCurrentExamQuestions(window.currentExamQuestions)
-            Vue.set(this, 'currentExamQuestions', Object.freeze(window.currentExamQuestions))
+            // Vue.set(this, 'currentExamQuestions', Object.freeze(window.currentExamQuestions))
 
             return window.currentExamQuestions
         },
@@ -269,6 +268,9 @@ const mixinQuiz = {
             })
         },
         setQuestionsLtr(question) {
+            if (!question.statement) {
+                return
+            }
             const englishRegex = /^[A-Za-z0-9 :"'ʹ.<>%$&@!+()\-_/\n,…?ᵒ*~]*$/
             question.ltr = !!question.statement.match(englishRegex);
         },
@@ -330,6 +332,9 @@ const mixinQuiz = {
 
 
         isLtrString (string) {
+            if (!string) {
+                return false
+            }
             // const englishRegex = /^[A-Za-z0-9 :"'ʹ.<>%$&@!+()\-/\n,…?;ᵒ*~]*$/
             // return !!string.match(englishRegex)
             const persianRegex = /[\u0600-\u06FF]/

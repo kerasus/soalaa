@@ -165,7 +165,6 @@
                 return largestChoice
             },
             detachQuestion() {
-
                 this.$store.commit('AppLayout/showConfirmDialog', {
                     message: 'از حذف سوال از آزمون اطمینان دارید؟',
                     button: {
