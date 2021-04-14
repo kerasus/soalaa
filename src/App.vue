@@ -73,6 +73,7 @@
 
 <script>
     import { mixinAuth, mixinQuiz, mixinDrawer, mixinWindowSize } from '@/mixin/Mixins'
+    import '@/assets/scss/app.scss'
     import '@/assets/scss/font.scss'
     import '@mdi/font/css/materialdesignicons.css'
     import { SideMenu_Dashboard, SideMenu_MapOfQuestions, TopMenu_OnlineQuiz, TopMenu_Dashboard } from '@/components/Menu/Menus'

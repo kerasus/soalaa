@@ -329,6 +329,11 @@ const mixinQuiz = {
 
 
 
+        isLtrString (string) {
+            // const englishRegex = /^[A-Za-z0-9 :"'ʹ.<>%$&@!+()\-/\n,…?ᵒ*~]*$/
+            const englishRegex = /^[A-Za-z0-9 :"'ʹ.<>%$&@!+()\-/\n,…?;ᵒ*~]*$/
+            return !!string.match(englishRegex)
+        },
         answerClicked(data) {
             let questionId = data.questionId
             this.userActionOnQuestion(questionId, 'answer', {choiceId: data.choiceId})

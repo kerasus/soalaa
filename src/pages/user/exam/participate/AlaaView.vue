@@ -34,8 +34,8 @@
                                 </div>
                             </v-row>
                             <v-row class="question-body">
-                                <v-col>
-                                    <div v-if="currentQuestion.in_active_category" class="renderedPanel" v-html="currentQuestion.rendered_statement"></div>
+                                <v-col :class="{ ltr: isLtrString(currentQuestion.rendered_statement) }">
+                                    <div v-if="currentQuestion.in_active_category" class="renderedPanel" :class="{ ltr: isLtrString(currentQuestion.rendered_statement) }" v-html="currentQuestion.rendered_statement"></div>
                                     <v-sheet
                                             v-if="!currentQuestion.in_active_category"
                                             color="warning"

@@ -1,14 +1,16 @@
 <template>
     <div :class="{ 'current-question': this.currentQuestion.id === source.id, question: true, ltr: source.ltr  }">
         <div class="buttons-group">
-            <v-select :items="quizList.list" item-text="title" chips multiple attach outlined dense full-width v-if="false"/>
+            <v-select :items="quizList.list" item-text="title" chips multiple attach outlined dense full-width
+                      v-if="false"/>
             <v-btn icon @click="removeQuestion()">
                 <v-icon :size="24">mdi-close</v-icon>
             </v-btn>
-            <v-btn icon :to="{ name: 'quest.edit', params: { id: source.id } }" >
+            <v-btn icon :to="{ name: 'quest.edit', params: { id: source.id } }">
                 <v-icon :size="24">mdi-pencil</v-icon>
             </v-btn>
-            <input :id="'question-id' + source.id" :ref="'question-id-' + source.id" :value="source.id" type="text" class="not-visible" />
+            <input :id="'question-id' + source.id" :ref="'question-id-' + source.id" :value="source.id" type="text"
+                   class="not-visible"/>
             <v-btn icon @click="copyIdToClipboard(source.id)">
                 <v-icon>mdi-content-copy</v-icon>
             </v-btn>
@@ -19,19 +21,24 @@
                     hide-details
             ></v-switch>
         </div>
-        <span class="question-body renderedPanel" :id="'question' + source.id" v-html="(getQuestionNumberFromId(source.id)) + '(' + getSubCategoryName + ')' + ' (' + source.order + ') - ' + source.rendered_statement" v-intersect="{
-            handler: onIntersect,
-            options: {
-              threshold: [0, 0.2, 0.4, 0.6, 0.8, 1.0]
-            }
-          }" />
+        <span class="question-body renderedPanel"
+              :class="{ ltr: isLtrString(source.rendered_statement) }"
+              :id="'question' + source.id"
+              v-html="(getQuestionNumberFromId(source.id)) + '(' + getSubCategoryName + ')' + ' (' + source.order + ') - ' + source.rendered_statement"
+              v-intersect="{
+                handler: onIntersect,
+                options: {
+                  threshold: [0, 0.2, 0.4, 0.6, 0.8, 1.0]
+                }
+              }"
+        />
         <v-row class="choices">
             <v-col
                     v-for="(choice, index) in source.choices.list"
                     :key="choice.id"
                     v-html="(choiceNumber[index]) + choice.rendered_title"
                     :md="choiceClass(source)"
-                    :class="{ choice: true, renderedPanel: true, active: choice.answer }"
+                    :class="{ choice: true, renderedPanel: true, active: choice.answer, ltr: isLtrString(choice.rendered_title) }"
             />
         </v-row>
         <vue-confirm-dialog></vue-confirm-dialog>
@@ -42,13 +49,14 @@
     import Vue from 'vue'
     import 'github-markdown-css/github-markdown.css'
     import '@/assets/scss/markdownKatex.scss'
-    import { mixinQuiz, mixinWindowSize } from '@/mixin/Mixins'
+    import {mixinQuiz, mixinWindowSize} from '@/mixin/Mixins'
     import $ from "jquery";
     import API_ADDRESS from "@/api/Addresses"
     import VueConfirmDialog from 'vue-confirm-dialog'
     // import {Exam} from "@/models/Exam"
     import axios from 'axios'
     import {QuestSubcategoryList} from "@/models/QuestSubcategory";
+
     Vue.use(VueConfirmDialog)
     Vue.component('vue-confirm-dialog', VueConfirmDialog.default)
 
@@ -57,7 +65,7 @@
     md.use(require('markdown-it-container'), 'mesra')
     md.use(require('markdown-it-container'), 'beit', {
 
-        validate: function(params) {
+        validate: function (params) {
             return params.trim().match(/^beit\s+(.*)--\*mesra\*--(.*)$/)
         },
 
@@ -67,7 +75,7 @@
                 let mesra1 = md.utils.escapeHtml(m[1])
                 let mesra2 = md.utils.escapeHtml(m[2])
                 // opening tag
-                return '<div class="beit"><div class="mesra">' + mesra1 + '</div><div class="mesra">'+ mesra2 +'</div>\n';
+                return '<div class="beit"><div class="mesra">' + mesra1 + '</div><div class="mesra">' + mesra2 + '</div>\n';
             } else {
                 // closing tag
                 return '</div>\n';
@@ -116,14 +124,14 @@
             }
         },
         methods: {
-            confirmQuestion () {
+            confirmQuestion() {
                 axios.get(API_ADDRESS.question.confirm(this.source.id))
-                .then((response) => {
-                    this.source.confirmed = response.data.data.confirmed
-                })
-                .catch(() => {
-                    this.source.confirmed = !this.source.confirmed
-                })
+                    .then((response) => {
+                        this.source.confirmed = response.data.data.confirmed
+                    })
+                    .catch(() => {
+                        this.source.confirmed = !this.source.confirmed
+                    })
             },
             copyIdToClipboard(sourceId) {
                 this.$refs['question-id-' + sourceId].select()
@@ -196,9 +204,9 @@
                                 axios.post(API_ADDRESS.question.detach(this.source.id), {
                                     exams: [this.examId]
                                 })
-                                .then(() => {
-                                    window.location.reload()
-                                })
+                                    .then(() => {
+                                        window.location.reload()
+                                    })
                                 // this.source.show(null, API_ADDRESS.question.detach(this.source.id)).then(() => {
                                 //     window.location.reload()
                                 // })
@@ -224,11 +232,11 @@
             //     console.log(this.quiz.sub_categories)
             //     return this.quiz.sub_categories.list.find((item) => item.id === subCategoryId)
             // }
-            getSubCategoryName () {
+            getSubCategoryName() {
                 const target = this.subCategory.list.find(
                     (item) =>
                         // item.id === this.source.sub_category.id
-                {
+                    {
                         if (item && item.id && this.source.sub_category) {
                             if (item.id === this.source.sub_category.id) {
                                 return true

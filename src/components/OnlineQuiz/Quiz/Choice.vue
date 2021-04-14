@@ -1,7 +1,7 @@
 <template>
     <v-col :md="6" :cols="12" class="answer-box" @click="answerClicked">
         <v-sheet :class="{ 'answer-sheet': true, active: isSelected }">
-            <div class="answer-text renderedPanel" v-html="choice.rendered_title"></div>
+            <div class="answer-text renderedPanel" :class="{ ltr: isLtrString(choice.rendered_title) }" v-html="choice.rendered_title"></div>
             <div class="answer-checkbox">
                 <v-checkbox v-model="isSelected" disabled />
             </div>
