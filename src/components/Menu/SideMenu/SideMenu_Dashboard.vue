@@ -115,6 +115,19 @@
                 },
             ]
         }),
+        created() {
+            if (
+                !this.$store.getters['Auth/user'].has_admin_permission &&
+                this.$store.getters['Auth/user'].has_educational_permission
+            ) {
+                this.adminList = [
+                    {
+                        displayName: 'لیست آزمون ها',
+                        to: {name: 'onlineQuiz.exams'}
+                    }
+                ]
+            }
+        }
     }
 </script>
 

@@ -160,20 +160,20 @@
         },
         methods: {
             getConfirmation(examId, examUserId){
-                this.$confirm(
-                    {
-                        message: `مطمئنی؟ نتیجه شما پس از تایید، ثبت و رتبه شما محاسبه خواهد شد و به اندازه میانگین درصدهای شما، کد تخفیف همه محصولات آلاء برای شما ارسال خواهد شد. مثلا اگر میانگین درصدهای شما 60% باشد یک کد تخفیف 60% دریافت خواهید کرد`,
-                        button: {
-                            no: 'ادامه میدم',
-                            yes: 'ثبت میکنم'
-                        },
-                        callback: confirm => {
-                            if (confirm) {
-                                this.sendAnswersAndFinishExam(examId, examUserId)
-                            }
+                let that = this
+                this.$store.commit('AppLayout/showConfirmDialog', {
+                    message: `مطمئنی؟ نتیجه شما پس از تایید، ثبت و رتبه شما محاسبه خواهد شد و به اندازه میانگین درصدهای شما، کد تخفیف همه محصولات آلاء برای شما ارسال خواهد شد. مثلا اگر میانگین درصدهای شما 60% باشد یک کد تخفیف 60% دریافت خواهید کرد`,
+                    button: {
+                        no: 'ادامه میدم',
+                        yes: 'ثبت میکنم'
+                    },
+                    callback: (confirm) => {
+                        if (!confirm) {
+                            return
                         }
+                        that.sendAnswersAndFinishExam(examId, examUserId)
                     }
-                )
+                })
             },
             continueExam (examId) {
                 this.startExam(examId)
