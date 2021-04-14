@@ -1,5 +1,7 @@
 var md = require('markdown-it')()
-md.use(require('markdown-it-new-katex'))
+// https://www.npmjs.com/package/markdown-it-new-katex
+// https://katex.org/docs/options.html
+md.use(require('markdown-it-new-katex'), {trust: true, strict: false, throwOnError: false})
 md.use(require('markdown-it-container'), 'mesra')
 md.use(require('markdown-it-container'), 'beit', {
     validate: function(params) {
