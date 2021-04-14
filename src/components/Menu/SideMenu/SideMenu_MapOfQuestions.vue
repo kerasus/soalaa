@@ -99,7 +99,6 @@
                             type: 'success'
                         })
                         that.$store.commit('clearExamData', that.quiz.id)
-                        that.$store.commit('clearExamData', that.quiz.user_exam_id)
                         that.$router.push({ name: 'user.exam.list'})
                     })
                     .catch( () => {
