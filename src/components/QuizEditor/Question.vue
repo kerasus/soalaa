@@ -3,7 +3,10 @@
         <div class="buttons-group">
             <v-select :items="quizList.list" item-text="title" chips multiple attach outlined dense full-width
                       v-if="false"/>
-            <v-btn icon @click="removeQuestion()">
+            <v-btn icon color="red" @click="deleteQuestion()">
+                <v-icon :size="24">mdi-close</v-icon>
+            </v-btn>
+            <v-btn icon @click="detachQuestion()">
                 <v-icon :size="24">mdi-close</v-icon>
             </v-btn>
             <v-btn icon :to="{ name: 'quest.edit', params: { id: source.id } }">
@@ -22,7 +25,7 @@
             ></v-switch>
         </div>
         <span class="question-body renderedPanel"
-              :class="{ ltr: isLtrString(source.rendered_statement) }"
+              :class="{ ltr: isRtl }"
               :id="'question' + source.id"
               v-html="(getQuestionNumberFromId(source.id)) + '(' + getSubCategoryName + ')' + ' (' + source.order + ') - ' + source.rendered_statement"
               v-intersect="{
@@ -38,56 +41,30 @@
                     :key="choice.id"
                     v-html="(choiceNumber[index]) + choice.rendered_title"
                     :md="choiceClass(source)"
-                    :class="{ choice: true, renderedPanel: true, active: choice.answer, ltr: isLtrString(choice.rendered_title) }"
+                    :class="{ choice: true, renderedPanel: true, active: choice.answer, ltr: isRtl }"
             />
         </v-row>
-        <vue-confirm-dialog></vue-confirm-dialog>
     </div>
 </template>
 
 <script>
     import Vue from 'vue'
-    import 'github-markdown-css/github-markdown.css'
-    import '@/assets/scss/markdownKatex.scss'
-    import {mixinQuiz, mixinWindowSize} from '@/mixin/Mixins'
+    import {mixinQuiz, mixinWindowSize, mixinMarkdownAndKatex} from '@/mixin/Mixins'
     import $ from "jquery";
     import API_ADDRESS from "@/api/Addresses"
     import VueConfirmDialog from 'vue-confirm-dialog'
-    // import {Exam} from "@/models/Exam"
     import axios from 'axios'
     import {QuestSubcategoryList} from "@/models/QuestSubcategory";
 
     Vue.use(VueConfirmDialog)
     Vue.component('vue-confirm-dialog', VueConfirmDialog.default)
 
-    var md = require('markdown-it')()
-    md.use(require('markdown-it-new-katex'))
-    md.use(require('markdown-it-container'), 'mesra')
-    md.use(require('markdown-it-container'), 'beit', {
-
-        validate: function (params) {
-            return params.trim().match(/^beit\s+(.*)--\*mesra\*--(.*)$/)
-        },
-
-        render: function (tokens, idx) {
-            let m = tokens[idx].info.trim().match(/^beit\s+(.*)--\*mesra\*--(.*)$/)
-            if (m && m[1] && m[2] && tokens[idx].nesting === 1) {
-                let mesra1 = md.utils.escapeHtml(m[1])
-                let mesra2 = md.utils.escapeHtml(m[2])
-                // opening tag
-                return '<div class="beit"><div class="mesra">' + mesra1 + '</div><div class="mesra">' + mesra2 + '</div>\n';
-            } else {
-                // closing tag
-                return '</div>\n';
-            }
-        }
-    });
-
     export default {
         name: 'item',
-        mixins: [mixinQuiz, mixinWindowSize],
+        mixins: [mixinQuiz, mixinWindowSize, mixinMarkdownAndKatex],
         data() {
             return {
+                isRtl: false,
                 confirm: false,
                 choiceNumber: {
                     0: '1) ',
@@ -187,39 +164,53 @@
                 })
                 return largestChoice
             },
-            removeQuestion() {
-                this.$confirm(
-                    {
-                        message: 'از حذف سوال اطمینان دارید؟',
-                        button: {
-                            no: 'خیر',
-                            yes: 'بله'
-                        },
-                        /**
-                         * Callback Function
-                         * @param {Boolean} confirm
-                         */
-                        callback: confirm => {
-                            if (confirm) {
-                                axios.post(API_ADDRESS.question.detach(this.source.id), {
-                                    exams: [this.examId]
-                                })
-                                    .then(() => {
-                                        window.location.reload()
-                                    })
-                                // this.source.show(null, API_ADDRESS.question.detach(this.source.id)).then(() => {
-                                //     window.location.reload()
-                                // })
-                            }
+            detachQuestion() {
+
+                this.$store.commit('AppLayout/showConfirmDialog', {
+                    message: 'از حذف سوال از آزمون اطمینان دارید؟',
+                    button: {
+                        no: 'خیر',
+                        yes: 'بله'
+                    },
+                    callback: (confirm) => {
+                        if (!confirm) {
+                            return
                         }
+                        axios.post(API_ADDRESS.question.detach(this.source.id), {
+                            exams: [this.examId]
+                        })
+                        .then(() => {
+                            window.location.reload()
+                        })
                     }
-                )
+                })
+            },
+            deleteQuestion() {
+                this.$store.commit('AppLayout/showConfirmDialog', {
+                    message: 'از حذف کامل سوال از پایگاه داده و حذف از تمامی آزمون ها اطمینان دارید؟',
+                    button: {
+                        no: 'خیر',
+                        yes: 'بله'
+                    },
+                    callback: (confirm) => {
+                        if (!confirm) {
+                            return
+                        }
+                        axios.delete(API_ADDRESS.question.delete(this.source.id), {
+                            exams: [this.examId]
+                        })
+                        .then(() => {
+                            window.location.reload()
+                        })
+                    }
+                })
             },
             edit() {
                 // console.log(questionId)
             }
         },
         created() {
+            this.isRtl = this.isLtrString(this.source.rendered_statement)
             // setTimeout(() => {console.log(this.quiz)}, 2000)
         },
         computed: {

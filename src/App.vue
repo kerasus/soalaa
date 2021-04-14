@@ -67,16 +67,21 @@
             </v-overlay>
             <router-view :key="$route.name + ($route.params.quizId || '') + ($route.params.questNumber || '')">
             </router-view>
+
+            <vue-confirm-dialog></vue-confirm-dialog>
         </v-main>
     </v-app>
 </template>
 
 <script>
+    import Vue from 'vue'
+    import VueConfirmDialog from 'vue-confirm-dialog'
     import { mixinAuth, mixinQuiz, mixinDrawer, mixinWindowSize } from '@/mixin/Mixins'
     import '@/assets/scss/app.scss'
     import '@/assets/scss/font.scss'
     import '@mdi/font/css/materialdesignicons.css'
     import { SideMenu_Dashboard, SideMenu_MapOfQuestions, TopMenu_OnlineQuiz, TopMenu_Dashboard } from '@/components/Menu/Menus'
+    Vue.component('vue-confirm-dialog', VueConfirmDialog.default)
 
     export default {
         name: 'App',
@@ -92,6 +97,9 @@
             },
             overlay () {
                 return this.$store.getters['AppLayout/overlay']
+            },
+            confirmDialog () {
+                return this.$store.getters['AppLayout/confirmDialog']
             }
         },
         components: {
