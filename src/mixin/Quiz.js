@@ -288,7 +288,10 @@ const mixinQuiz = {
         },
         loadCurrentQuestion(viewType) {
             let questNumber = this.$route.params.questNumber
-            if (!questNumber) {
+            if (this.currentQuestion.order) {
+                questNumber = this.currentQuestion.order
+            }
+            else if (!questNumber) {
                 questNumber = 1
             }
             this.loadQuestionByNumber(questNumber, viewType)
@@ -478,6 +481,7 @@ const mixinQuiz = {
         },
         // ToDo: change argument (type, questNumber)
         changeView(type) {
+            console.log('changeView', this.currentQuestion.id)
             if (type === 'alaa') {
                 const questionNumber = this.getQuestionNumberFromId(this.currentQuestion.id)
                 this.$router.push({

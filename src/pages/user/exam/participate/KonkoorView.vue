@@ -241,7 +241,7 @@
             // },
             scrollTo (questionId) {
                 const questionIndex = this.getQuestionIndexById(questionId)
-                console.log(questionIndex)
+                console.log('quest index', questionIndex, questionId)
                 this.$refs.scroller.scrollToItem(questionIndex)
                 for (let i = 1; i < 4; i++) {
                     setTimeout(() => {
@@ -300,6 +300,7 @@
             }
         },
         created () {
+            console.log('konkoor created', this.currentQuestion.id)
             let that = this
             this.startExam(this.$route.params.quizId, 'onlineQuiz.KonkoorView')
                 .then(() => {
@@ -327,6 +328,7 @@
             }
         },
         mounted () {
+            console.log('konkoor mount', this.currentQuestion.id)
             this.setHeights()
             // $('.questions').height(this.windowSize.y)
             // $('.questionss').height(this.windowSize.y)
@@ -336,6 +338,8 @@
             }
             this.scrollTo(this.currentQuestion.id)
             this.changeAppBarAndDrawer(false)
+            console.log('konkoor mounted', this.currentQuestion.id)
+
         },
         destroyed() {
             this.changeAppBarAndDrawer(true)
