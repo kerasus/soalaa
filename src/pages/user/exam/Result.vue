@@ -29,7 +29,6 @@
                                 <v-tab>ریزدرس ها</v-tab>
                                 <v-tab>پاسخبرگ کلیدی</v-tab>
                                 <v-tab>پاسخ نامه تشریحی</v-tab>
-                                <v-tab>نتایج نفرات برتر</v-tab>
                                 <v-tab>تحلیل ویدیویی</v-tab>
                             </v-tabs>
                         </v-col>
@@ -93,9 +92,6 @@
                                 </v-col>
                             </v-row>
                         </v-card>
-                    </v-tab-item>
-                    <v-tab-item>
-                        <top-score-result :report="report"/>
                     </v-tab-item>
                     <v-tab-item class="video-tab">
                         <v-tabs v-if="report" color="#ffc107" :vertical="windowSize.x > 960" center-active show-arrows grow @change="onVideoTabChange">
@@ -184,26 +180,28 @@
     import 'video.js/dist/video-js.css'
     import '@silvermine/videojs-quality-selector/dist/css/quality-selector.css'
     // The following registers the plugin with `videojs`
-    require('@silvermine/videojs-quality-selector')(videojs);
+    require('@silvermine/videojs-quality-selector')(videojs)
 
-    import Info from "@/components/OnlineQuiz/Quiz/resultTables/info";
-    import TopScoreResult from "@/components/OnlineQuiz/Quiz/resultTables/topScoreResult";
-    import PersonalResult from "@/components/OnlineQuiz/Quiz/resultTables/personalResult";
-    import BubbleSheet from "@/components/OnlineQuiz/Quiz/BubbleSheet/BubbleSheet";
-    import Assistant from "@/plugins/assistant";
-    import {AlaaSet} from "@/models/AlaaSet";
-    import {mixinAuth, mixinQuiz, mixinWindowSize} from "@/mixin/Mixins";
-    import {AlaaContent} from "@/models/AlaaContent";
-    import StatisticResult from "@/components/OnlineQuiz/Quiz/resultTables/statisticResult";
-    import API_ADDRESS from "@/api/Addresses";
+    import Info from '@/components/OnlineQuiz/Quiz/resultTables/info'
+    import PersonalResult from '@/components/OnlineQuiz/Quiz/resultTables/personalResult'
+    import BubbleSheet from '@/components/OnlineQuiz/Quiz/BubbleSheet/BubbleSheet'
+    import Assistant from '@/plugins/assistant'
+    import {AlaaSet} from '@/models/AlaaSet'
+    import {mixinAuth, mixinQuiz, mixinWindowSize} from '@/mixin/Mixins'
+    import {AlaaContent} from '@/models/AlaaContent'
+    import StatisticResult from '@/components/OnlineQuiz/Quiz/resultTables/statisticResult'
+    import API_ADDRESS from '@/api/Addresses'
 
     export default {
         name: 'Result',
-        components: { StatisticResult, BubbleSheet, TopScoreResult, Info, PersonalResult},
+        components: { StatisticResult, BubbleSheet, Info, PersonalResult},
         mixins: [mixinAuth, mixinQuiz, mixinWindowSize],
         watch: {
             selectedTimepoint () {
                 this.playTimePoint()
+            },
+            tab () {
+                this.player.pause()
             }
         },
         data: () => ({
@@ -327,7 +325,7 @@
                 }
             },
             loadKarname (report) {
-                this.loadSubCategory(report.sub_category)
+                this.loadSubCategory(report)
                 this.loadZirGrooh(report.zirgorooh)
                 this.loadBest(report.best)
                 this.loadFirstVideoTab()
@@ -341,12 +339,19 @@
                     item.index = index + 1
                 })
             },
-            loadSubCategory (sub_category) {
-                sub_category.forEach((item, index) => {
+            loadSubCategory (report) {
+                report.sub_category.forEach((item, index) => {
+                    let targetBest = report.best.sub_category.find( sub_categoryItem => sub_categoryItem.sub_category ===  item.sub_category)
                     item.percent = parseFloat(item.percent).toFixed(1)
                     item.taraaz = parseFloat(item.taraaz).toFixed(0)
                     item.empty = item.total_answer - item.right_answer - item.wrong_answer
                     item.index = index + 1
+                    if (targetBest) {
+                        item.top_ranks_taraaz_mean = parseFloat(targetBest.top_ranks_taraaz_mean).toFixed(0)
+                        item.top_ranks_percent_mean = parseFloat(targetBest.top_ranks_percent_mean).toFixed(1)
+                        item.average = parseFloat(targetBest.mean).toFixed(1)
+                        item.taraaz_average = parseFloat(targetBest.taraaz_mean).toFixed(1)
+                    }
                 })
             },
             loadZirGrooh (zirgorooh) {

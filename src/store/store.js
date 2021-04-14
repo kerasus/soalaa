@@ -171,12 +171,7 @@ const store = new Vuex.Store({
             state.currentQuestion = new Question(newInfo)
         },
         clearExamData (state, examId) {
-            let currentQuizDataIndex = state.userQuizListData.findIndex( (item) => {
-                return (item && Assistant.getId(item.examId) === Assistant.getId(examId))
-            })
-            if (currentQuizDataIndex) {
-                delete state.userQuizListData[currentQuizDataIndex]
-            }
+            delete state.userQuizListData[examId]
         },
         checkIfQuestionExistInUserQuizListData (state, questionId) {
             if (!state.userQuizListData[state.quiz.id]) {

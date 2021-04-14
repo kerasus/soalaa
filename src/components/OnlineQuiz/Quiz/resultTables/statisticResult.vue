@@ -11,19 +11,25 @@
                             class="elevation-1 dataTable"
                     ></v-data-table>
                 </v-row>
+                <v-row>
+                    <v-col>
+                        <div :style="{ 'max-width': '100%'}">
+                            <highcharts :options="chartOptions"></highcharts>
+                        </div>
+                    </v-col>
+                </v-row>
             </v-col>
         </div>
     </div>
 </template>
 
 <script>
-    // import Info from "@/components/OnlineQuiz/Quiz/resultTables/info";
+    import {Chart} from 'highcharts-vue'
 
     export default {
         name: "statisticResult",
         props: ['report'],
-        components: {},
-        // components: {Info},
+        components: {highcharts: Chart},
         data() {
             return {
                 dataTable: [],
@@ -36,48 +42,104 @@
                     },
                     {text: 'درس', value: 'sub_category',align: 'center',sortable: true,},
                     {text: 'درصد', value: 'percent',align: 'center',sortable: true,},
+                    {text: 'میانگین درصد نفرات برتر', value: 'top_ranks_percent_mean',align: 'center',sortable: true,},
                     {text: ' تراز', value: 'taraaz',align: 'center',sortable: true,},
+                    {text: ' میانگین تراز نفرات برتر', value: 'top_ranks_taraaz_mean',align: 'center',sortable: true,},
                     {text: 'رتبه در شهر', value: 'rank_city',align: 'center',sortable: false,},
                     {text: 'رتبه در استان', value: 'rank_province',align: 'center',sortable: false,},
                     {text: 'رتبه در کشور', value: 'rank_country',align: 'center',sortable: true,},
                     {text: 'میانگین درصد', value: 'average',align: 'center',sortable: true,},
-                ]
+                ],
+                chartOptions: {
+                    series: [
+                    ],
+                    tooltip: {
+                        backgroundColor: '#FCFFC5',
+                        padding: 8,
+                        style: {
+                            direction: 'rtl',
+
+                        },
+                        formatter: function () {
+                            return   '<span :style="{ display:  }">' + this.y + ' درصد' + '</span>' + '<span>' + this.x + '</span>'  ;
+                        },
+                        useHTML: true,
+                    },
+                    chart: {
+                        type: 'column',
+                        height: 700,
+                        style: {
+                            fontFamily: 'IranSans'
+                        }
+                    },
+                    title: {
+                        text: 'نمودار مقایسه عملکرد'
+                    },
+                    credits: {
+                        text: '3a.alaatv.com',
+                        href: 'https://www.3a.alaatv.com'
+                    },
+                    yAxis: {
+                        title: {
+                            text: 'درصد'
+                        },
+                        max: 100
+                    },
+                    xAxis: {
+                        categories: []
+                    },
+                }
             }
         },
         created() {
             if (this.report && this.report.best) {
                 this.loadDataTable()
+                this.loadChart()
             }
         },
         methods: {
+            getPercentDataForChart () {
+                let data = []
+                this.report.best.sub_category.forEach((item) => {
+                    data.push(parseInt(item.top_ranks_percent_mean))
+                })
+                this.chartOptions.series.push({
+                    name: 'نفرات برتر',
+                    color: 'green',
+                    data
+                })
+                data = []
+                this.report.sub_category.forEach((item) => {
+                    data.push(parseInt(item.percent))
+                })
+                this.chartOptions.series.push({
+                    name: 'من',
+                    color: 'red',
+                    data
+                })
+                data = []
+                this.report.best.sub_category.forEach((item) => {
+                    data.push(parseInt(item.mean))
+                })
+                this.chartOptions.series.push({
+                    name: 'همه',
+                    color: 'blue',
+                    data
+                })
+            },
             loadDataTable () {
                 this.loadUserDataOfDataTable()
-                this.loadBestAndAverageDataOfDataTable()
+            },
+            loadChart () {
+                this.getPercentDataForChart()
+                this.report.sub_category.forEach((item) => {
+                    this.chartOptions.xAxis.categories.push(item.sub_category)
+                })
             },
             loadUserDataOfDataTable () {
                 let that = this
                 this.report.sub_category.forEach( (item) => {
-                    that.dataTable.push({
-                        index: item.index,
-                        sub_category: item.sub_category,
-                        percent: item.percent,
-                        taraaz: item.taraaz,
-                        rank_country: item.rank_country,
-                        rank_province: item.rank_province,
-                        rank_city: item.rank_city
-                    })
-                })
-            },
-            loadBestAndAverageDataOfDataTable () {
-                let that = this
-                this.report.best.sub_category.forEach( (item) => {
-                    let targetIndex = that.dataTable.findIndex( (dataTableItem) => {
-                        return dataTableItem.sub_category === item.sub_category
-                    })
-                    if (that.dataTable[targetIndex]) {
-                        that.dataTable[targetIndex].average = parseFloat(item.mean).toFixed(1)
-                        that.dataTable[targetIndex].taraaz_average = parseFloat(item.taraaz_mean).toFixed(0)
-                    }
+                    that.dataTable.push(item)
                 })
             }
         }
