@@ -156,6 +156,7 @@
         },
         destroyed() {
             this.changeAppBarAndDrawer(false)
+            console.log('alaa destoryed', this.currentQuestion.id)
         }
     }
 </script>
@@ -226,7 +227,6 @@
         display: flex;
         flex-direction: row;
         justify-content: space-between;
-        align-items: center;
     }
 
     .answer-text {
