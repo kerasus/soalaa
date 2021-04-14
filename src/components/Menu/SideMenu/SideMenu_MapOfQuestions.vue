@@ -91,14 +91,15 @@
             },
             sendAnswersAndFinishExam() {
                 let that = this
-                this.quiz.sendAnswersAndFinishExam()
+                this.sendUserQuestionsDataToServerAndFinishExam(this.quiz.id, this.quiz.user_exam_id)
                     .then( () => {
-                        that.$store.commit('clearExamData', that.quiz.id)
                         that.$notify({
                             group: 'notifs',
                             text: 'اطلاعات آزمون شما ثبت شد.',
                             type: 'success'
                         })
+                        that.$store.commit('clearExamData', that.quiz.id)
+                        that.$store.commit('clearExamData', that.quiz.user_exam_id)
                         that.$router.push({ name: 'user.exam.list'})
                     })
                     .catch( () => {

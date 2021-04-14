@@ -37,8 +37,7 @@ const mixinUserActionOnQuestion = {
     afterUserActionOnQuestion() {
         this.$store.commit('updateUserQuizListDataExam', this.userQuizListData)
     },
-    sendUserQuestionsDataToServer(examUserId, userExamData, questionId, actionType) {
-
+    getUserQuestionDataFromLocalstorage (userExamData, questionId) {
       // find question
       let userQuestionData = userExamData[questionId]
 
@@ -51,20 +50,30 @@ const mixinUserActionOnQuestion = {
       let dataToSendStatus = {question_id: questionId, status: userQuestionData.status}
       let dataToSendBookmark = questionId
 
+      return {
+        dataToSendAnswer,
+        dataToSendStatus,
+        dataToSendBookmark
+      }
+    },
+    sendUserQuestionsDataToServer(examUserId, userExamData, questionId, actionType) {
+
+      let userQuestionDataFromLocalstorage = this.getUserQuestionDataFromLocalstorage(userExamData, questionId)
+
       // send data
       let question = new Question()
       if (actionType === 'answer') {
-        question.sendAnswer(examUserId, dataToSendAnswer)
+        question.sendAnswer(examUserId, userQuestionDataFromLocalstorage.dataToSendAnswer)
       }
       if (actionType === 'bookmark') {
-        if (userQuestionData.bookmarked) {
-          question.sendBookmark(examUserId, dataToSendBookmark)
+        if (userQuestionDataFromLocalstorage.userQuestionData.bookmarked) {
+          question.sendBookmark(examUserId, userQuestionDataFromLocalstorage.dataToSendBookmark)
         } else {
-          question.sendUnBookmark(examUserId, dataToSendBookmark)
+          question.sendUnBookmark(examUserId, userQuestionDataFromLocalstorage.dataToSendBookmark)
         }
       }
       if (actionType === 'status') {
-        question.sendStatus(examUserId, dataToSendStatus)
+        question.sendStatus(examUserId, userQuestionDataFromLocalstorage.dataToSendStatus)
       }
     },
     userActionOnQuestion_answer(data, examId, questionId, userQuestionData) {
@@ -118,6 +127,9 @@ const mixinUserActionOnQuestion = {
         question_id: questionId,
         status: newStatus
       })
+    },
+    sendAnswersAndFinishExam () {
+
     }
   }
 }
