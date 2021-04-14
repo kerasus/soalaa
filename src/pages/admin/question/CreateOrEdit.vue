@@ -246,16 +246,40 @@
                 </v-sheet>
             </v-col>
         </v-row>
+        <v-row>
+            <v-col>
+                <v-sheet color="#fff">
+                    <v-row>
+                        <v-col :md="3">
+                            <v-text-field label="آدرس عکس" outlined v-model="resizerUrl" dense  @input="setWidth"/>
+                            <v-slider
+                                    class="mt-5"
+                                    v-if="resizerImgSize"
+                                    v-model="resizerImgFinalWidth"
+                                    label="سایز عکس"
+                                    thumb-color="red"
+                                    thumb-label="always"
+                                    inverse-label
+                            ></v-slider>
+                            <v-btn icon @click="copyResizedImgUrl">
+                                <v-icon>
+                                    mdi-content-copy
+                                </v-icon>
+                            </v-btn>
+                        </v-col>
+                        <v-col :md="9">
+                            <img ref="resizerimg" :src="resizerUrl" v-if="resizerUrl !== ''" :width="resizerImgFinalWidth ? resizerImgSize / 100 * resizerImgFinalWidth : 'auto'"/>
+                        </v-col>
+                    </v-row>
 
 
+                </v-sheet>
+            </v-col>
+        </v-row>
     </v-container>
 </template>
 
 <script>
-    import '@/assets/scss/markdownKatex.scss'
-    import MathLive from 'mathlive'
-    import 'mathlive/dist/mathlive-fonts.css'
-    import 'mathlive/dist/mathlive-static.css'
     import { Question } from '@/models/Question'
     import {ExamList} from '@/models/Exam'
     import {QuestSubcategoryList} from '@/models/QuestSubcategory';
@@ -264,38 +288,15 @@
     import UploadFiles from '@/components/UploadFiles';
     // import UploadImage from '@/components/UploadImage';
     import API_ADDRESS from '@/api/Addresses'
-
-    var md = require('markdown-it')()
-    md.use(require('markdown-it-new-katex'))
-    md.use(require('markdown-it-container'), 'mesra')
-    md.use(require('markdown-it-container'), 'beit', {
-
-        validate: function(params) {
-            return params.trim().match(/^beit\s+(.*)--\*mesra\*--(.*)$/)
-        },
-
-        render: function (tokens, idx) {
-            let m = tokens[idx].info.trim().match(/^beit\s+(.*)--\*mesra\*--(.*)$/)
-            if (m && m[1] && m[2] && tokens[idx].nesting === 1) {
-                let mesra1 = md.utils.escapeHtml(m[1])
-                let mesra2 = md.utils.escapeHtml(m[2])
-                // opening tag
-                return '<div class="beit"><div class="mesra">' + mesra1 + '</div><div class="mesra">'+ mesra2 +'</div>\n';
-            } else {
-                // closing tag
-                return '</div>\n';
-            }
-        }
-    });
-    // ::: beit 111--*mesra*--222:::
-
-    // ::: spoiler click me
-    // *content*
-    // :::
+    import {mixinMarkdownAndKatex} from "@/mixin/Mixins"
+    import 'mathlive/dist/mathlive-fonts.css'
+    import 'mathlive/dist/mathlive-static.css'
+    import MathLive from 'mathlive'
 
     export default {
         name: 'CreateOrEdit',
         components: {MarkdownBtn, UploadFiles},
+        mixins: [mixinMarkdownAndKatex],
         computed: {
             renderedTableKatex () {
                 return this.renderTableKatex()
@@ -328,6 +329,10 @@
         },
         data: () => {
             return {
+                resizerImgFinalWidth: 0,
+                resizerImgSize: 0,
+                resizerImgHSize: 0,
+                resizerUrl: '',
                 editDialog: false,
                 teachers: [
                     { name: 'ممد', id: 1 },
@@ -416,6 +421,33 @@
             }
         },
         methods: {
+            copyResizedImgUrl () {
+                let size = '?'
+                size += 'w=' + Math.floor(this.resizerImgSize * (this.resizerImgFinalWidth / 100))
+                size += '&h=' + Math.floor(this.resizerImgHSize * (this.resizerImgFinalWidth / 100))
+                this.copyToClipboard('![](' + this.resizerUrl + size + ')')
+            },
+            setWidth () {
+                setTimeout(() => {
+                    this.resizerImgSize = this.$refs.resizerimg.clientWidth
+                    this.resizerImgHSize = this.$refs.resizerimg.clientHeight
+                    this.resizerImgFinalWidth = this.resizerImgSize
+                },500)
+            },
+            copyToClipboard (text) {
+                const el = document.createElement('textarea')
+                el.value = text
+                document.body.appendChild(el)
+                el.select()
+                document.execCommand('copy')
+                document.body.removeChild(el)
+                this.$notify({
+                    group: 'notifs',
+                    title: 'توجه',
+                    text: 'آدرس فایل به کلیپبورد منتقل شد',
+                    type: 'success'
+                })
+            },
             inputFile: function (newFile, oldFile) {
                 if (newFile && oldFile && !newFile.active && oldFile.active) {
                     // Get response data
@@ -605,11 +637,11 @@
             updateRendered () {
                 this.replaceNimFasele()
                 this.replaceExtraSpaceAroundDollarSign()
-                this.questRendered = md.render(this.currentQuestion.statement.toString());
+                this.questRendered = this.markdown.render(this.currentQuestion.statement.toString());
                 for (let i = 0; i < 4; i++) {
                     const title = (typeof this.currentQuestion.choices.list[i] !== 'undefined') ? this.currentQuestion.choices.list[i].title : null
                     if (title) {
-                        this.choiceRendered[i] = md.render(title.toString())
+                        this.choiceRendered[i] = this.markdown.render(title.toString())
                     }
                 }
                 this.replaceNimFasele()
@@ -663,7 +695,7 @@
         },
         mounted() {
 
-            // this.rendered = md.render();
+            // this.rendered = this.markdown.render();
             // this.updateRendered();
 
             let that = this

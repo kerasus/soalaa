@@ -61,6 +61,9 @@ const API_ADDRESS = {
     detach (questionId) {
       return lumenServer + '/exam-question/detach/'+questionId
     },
+    delete (questionId) {
+      return lumenServer + '/question/'+questionId
+    },
     getCurrentQuestion (questionId) {
       return lumenServer + '/question/' + questionId
     },

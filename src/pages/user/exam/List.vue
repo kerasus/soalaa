@@ -1,5 +1,6 @@
 <template>
     <v-container>
+        <vue-confirm-dialog />
         <v-row>
             <v-col>
                 <progress-linear :active="loadingList" />
@@ -92,7 +93,7 @@
                                             </v-btn>
                                             <v-btn
                                                     v-if="item.exam_actions.can_submit_answer"
-                                                    @click="sendAnswersAndFinishExam(item)"
+                                                    @click="getConfirmation(item.id, item.user_exam_id)"
                                                     color="#ffc107"
                                                     text
                                             >
@@ -138,6 +139,11 @@
     import {Exam, ExamList} from "@/models/Exam";
     import { mixinAuth, mixinQuiz } from '@/mixin/Mixins'
     import ProgressLinear from "@/components/ProgressLinear";
+    import VueConfirmDialog from 'vue-confirm-dialog'
+    import Vue from 'vue'
+
+    Vue.use(VueConfirmDialog)
+    Vue.component('vue-confirm-dialog', VueConfirmDialog.default)
 
     export default {
         name: 'list',
@@ -153,6 +159,22 @@
             this.getExams()
         },
         methods: {
+            getConfirmation(examId, examUserId){
+                this.$confirm(
+                    {
+                        message: `مطمئنی؟ نتیجه شما پس از تایید، ثبت و رتبه شما محاسبه خواهد شد و به اندازه میانگین درصدهای شما، کد تخفیف همه محصولات آلاء برای شما ارسال خواهد شد. مثلا اگر میانگین درصدهای شما 60% باشد یک کد تخفیف 60% دریافت خواهید کرد`,
+                        button: {
+                            no: 'ادامه میدم',
+                            yes: 'ثبت میکنم'
+                        },
+                        callback: confirm => {
+                            if (confirm) {
+                                this.sendAnswersAndFinishExam(examId, examUserId)
+                            }
+                        }
+                    }
+                )
+            },
             continueExam (examId) {
                 this.startExam(examId)
             },
@@ -181,23 +203,34 @@
                 //         this.getExams()
                 //     })
             },
-            sendAnswersAndFinishExam (exam) {
-                exam.sendAnswersAndFinishExam()
+            sendAnswersAndFinishExam (examId, examUserId) {
+                if (!this.hasExamDataOnThisDeviseStorage(examId)) {
+                    this.$notify({
+                        group: 'notifs',
+                        title: 'توجه!',
+                        text: 'در این سیستم پاسخنامه شما ثبت نشده است. لطفا از سیستمی که با آن در آزمون شرکت کرده اید استفاده کنید و این دکمه را بزنید.',
+                        type: 'error',
+                        duration: 30000,
+                    })
+                    return
+                }
+                let that = this
+                this.sendUserQuestionsDataToServerAndFinishExam(examId, examUserId)
                     .then( () => {
-                        this.$store.commit('clearExamData', exam.id)
-                        this.$notify({
+                        that.$notify({
                             group: 'notifs',
                             text: 'اطلاعات آزمون شما ثبت شد.',
                             type: 'success'
                         })
-                        this.getExams()
+                        that.$store.commit('clearExamData', examId)
+                        that.$router.push({ name: 'user.exam.list'})
                     })
                     .catch( () => {
-                        this.$notify({
+                        that.$notify({
                             group: 'notifs',
                             title: 'توجه!',
                             text: 'مشکلی در ثبت اطلاعات آزمون شما رخ داده است. لطفا تا قبل از ساعت 24 اقدام به ارسال مجدد پاسخنامه نمایید.',
-                            type: 'warn',
+                            type: 'error',
                             duration: 30000,
                         })
                         this.getExams()

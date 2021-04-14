@@ -4,6 +4,8 @@ import '@/assets/scss/markdownKatex.scss';
 import Assistant from "@/plugins/assistant";
 import Time from "@/plugins/time";
 import {QuestSubcategory} from "@/models/QuestSubcategory";
+import axios from "axios";
+import API_ADDRESS from "@/api/Addresses";
 
 const mixinQuiz = {
     computed: {
@@ -62,11 +64,14 @@ const mixinQuiz = {
             // }
 
             // return currentLesson
+        },
+        currentExamQuestions() {
+            return window.currentExamQuestions
         }
     },
     data() {
         return {
-            currentExamQuestions: null
+
         }
     },
     methods: {
@@ -142,14 +147,14 @@ const mixinQuiz = {
             return currentExamQuestionsArray
         },
         getCurrentExamQuestions() {
-            if (this.currentExamQuestions) {
+            if (window.currentExamQuestions) {
                 return this.currentExamQuestions
             }
-            let currentExamQuestions = JSON.parse(window.localStorage.getItem('currentExamQuestions'))
-            this.modifyCurrentExamQuestions(currentExamQuestions)
-            Vue.set(this, 'currentExamQuestions', Object.freeze(currentExamQuestions))
+            window.currentExamQuestions = JSON.parse(window.localStorage.getItem('currentExamQuestions'))
+            this.modifyCurrentExamQuestions(window.currentExamQuestions)
+            Vue.set(this, 'currentExamQuestions', Object.freeze(window.currentExamQuestions))
 
-            return currentExamQuestions
+            return window.currentExamQuestions
         },
         modifyCurrentExamQuestions(currentExamQuestions) {
             let currentExamQuestionsArray = []
@@ -299,6 +304,37 @@ const mixinQuiz = {
         },
 
 
+        hasExamDataOnThisDeviseStorage (examId) {
+            return !!this.userQuizListData[examId]
+        },
+        sendUserQuestionsDataToServerAndFinishExam(examId, examUserId) {
+            const userExamData = this.userQuizListData[examId]
+            let answers = []
+
+            for (const questionId in userExamData) {
+                if (userExamData[questionId].answered_choice_id) {
+                    answers.push({
+                        question_id: questionId,
+                        answered_choice_id: userExamData[questionId].answered_choice_id,
+                        selected_at : (!userExamData[questionId].answered_at) ? null: userExamData[questionId].answered_at,
+                        bookmarked: userExamData[questionId].bookmarked,
+                        status: userExamData[questionId].status,
+                        check_in_times: userExamData[questionId].check_in_times,
+                    })
+                }
+            }
+
+            return axios.post(API_ADDRESS.exam.sendAnswers, {exam_user_id: examUserId, finish: true, questions: answers })
+        },
+
+
+
+        isLtrString (string) {
+            // const englishRegex = /^[A-Za-z0-9 :"'ʹ.<>%$&@!+()\-/\n,…?;ᵒ*~]*$/
+            // return !!string.match(englishRegex)
+            const persianRegex = /[\u0600-\u06FF]/
+            return !string.match(persianRegex)
+        },
         answerClicked(data) {
             let questionId = data.questionId
             this.userActionOnQuestion(questionId, 'answer', {choiceId: data.choiceId})

@@ -1,5 +1,6 @@
 <template>
-    <div :class="{ 'current-question': this.currentQuestion.id === source.id, question: true, ltr: source.ltr}" v-intersect="test">
+    <div :class="{ 'current-question': this.currentQuestion.id === source.id, question: true, ltr: source.ltr}"
+         v-intersect="test">
         <div>
             <v-sheet
                     v-if="considerActiveCategory && !source.in_active_category"
@@ -18,10 +19,12 @@
                 در حال حاضر امکان مشاهده سوالات این دفترچه امکان پذیر نمی باشد
             </v-sheet>
         </div>
-        <div v-if="(considerActiveCategory && source.in_active_category) || !considerActiveCategory" class="buttons-group">
+        <div v-if="(considerActiveCategory && source.in_active_category) || !considerActiveCategory"
+             class="buttons-group">
             <v-btn icon @click="changeStatus(source.id, 'o')">
                 <v-icon v-if="getChoiceStatus() === 'o'" color="yellow" :size="24">mdi-checkbox-blank-circle</v-icon>
-                <v-icon v-if="getChoiceStatus() !== 'o'" color="#888" :size="24">mdi-checkbox-blank-circle-outline</v-icon>
+                <v-icon v-if="getChoiceStatus() !== 'o'" color="#888" :size="24">mdi-checkbox-blank-circle-outline
+                </v-icon>
             </v-btn>
             <v-btn icon @click="changeStatus(source.id ,'x')">
                 <v-icon :color="getChoiceStatus() === 'x' ? 'red' : '#888'" :size="24">mdi-close</v-icon>
@@ -32,9 +35,10 @@
             </v-btn>
         </div>
         <span v-if="(considerActiveCategory && source.in_active_category) || !considerActiveCategory"
-            class="question-body renderedPanel"
-            :id="'question' + source.id"
-            v-html="(getQuestionNumberFromId(source.id)) + '- ' + source.rendered_statement"
+              class="question-body renderedPanel"
+              :class="{ ltr: isRtl }"
+              :id="'question' + source.id"
+              v-html="(getQuestionNumberFromId(source.id)) + '- ' + source.rendered_statement"
         />
         <v-row v-if="(considerActiveCategory && source.in_active_category) || !considerActiveCategory" class="choices">
             <v-col
@@ -43,7 +47,8 @@
                     v-html="(choiceNumber[index]) + choice.rendered_title"
                     :md="choiceClass(source)"
                     ref="choices"
-                    :class="{ choice: true, renderedPanel: true, active: getAnsweredChoiceId() === choice.id }"
+                    class="choice renderedPanel"
+                    :class="{ active: getAnsweredChoiceId() === choice.id, ltr: isRtl }"
                     @click="answerClickedd({ questionId: source.id, choiceId: choice.id})"
             />
         </v-row>
@@ -52,11 +57,13 @@
 
 <script>
     import '@/assets/scss/markdownKatex.scss'
-    import { mixinQuiz, mixinUserActionOnQuestion } from '@/mixin/Mixins'
+    import {mixinQuiz, mixinUserActionOnQuestion} from '@/mixin/Mixins'
+
     export default {
-        mixins: [ mixinQuiz, mixinUserActionOnQuestion ],
-        data () {
+        mixins: [mixinQuiz, mixinUserActionOnQuestion],
+        data() {
             return {
+                isRtl: false,
                 widestChoiceWidth: 0,
                 observer: null,
                 choiceNumber: {
@@ -76,22 +83,23 @@
                 default: true
             },
             questionsColumn: { // here is: {uid: 'unique_1', text: 'abc'}
-                default () {
+                default() {
                     return null
                 }
             },
             source: { // here is: {uid: 'unique_1', text: 'abc'}
-                default () {
+                default() {
                     return {}
                 }
             }
         },
         mounted() {
-            this.observer = new IntersectionObserver(this.intersectionObserver, {threshold: [0.7, 0.75, 0.8]});
-            this.observer.observe(this.$el);
+            this.observer = new IntersectionObserver(this.intersectionObserver, {threshold: [0.7, 0.75, 0.8]})
+            this.observer.observe(this.$el)
+            this.isRtl = this.isLtrString(this.source.rendered_statement)
         },
         methods: {
-            getChoiceStatus () {
+            getChoiceStatus() {
                 if (
                     !this.userQuizListData ||
                     !this.userQuizListData[this.quiz.id] ||
@@ -102,7 +110,7 @@
 
                 return this.userQuizListData[this.quiz.id][this.source.id].status
             },
-            getChoiceBookmark () {
+            getChoiceBookmark() {
                 if (
                     !this.userQuizListData ||
                     !this.userQuizListData[this.quiz.id] ||
@@ -113,7 +121,7 @@
 
                 return this.userQuizListData[this.quiz.id][this.source.id].bookmarked
             },
-            getAnsweredChoiceId () {
+            getAnsweredChoiceId() {
                 if (
                     !this.userQuizListData ||
                     !this.userQuizListData[this.quiz.id] ||
@@ -124,10 +132,13 @@
 
                 return this.userQuizListData[this.quiz.id][this.source.id].answered_choice_id
             },
-            test (payload) {
-                this.$emit('inView', { isInView: payload.isIntersecting, number: this.getQuestionNumberFromId(this.source.id) })
+            test(payload) {
+                this.$emit('inView', {
+                    isInView: payload.isIntersecting,
+                    number: this.getQuestionNumberFromId(this.source.id)
+                })
             },
-            answerClickedd (payload) {
+            answerClickedd(payload) {
                 this.answerClicked(payload)
             },
             intersectionObserver(entries) {
@@ -136,11 +147,11 @@
             onIntersect(entries) {
                 this.source.isInView = entries[0].intersectionRatio >= 0.75
             },
-            choiceClicked (questionId, choiceId) {
+            choiceClicked(questionId, choiceId) {
                 this.changeQuestion(questionId)
                 this.answerClicked({questionId, choiceId})
             },
-            choiceClass (question) {
+            choiceClass(question) {
                 let largestChoice = this.getLargestChoice(question.choices)
                 let largestChoiceWidth = this.questionsColumn.clientWidth / largestChoice
                 if (largestChoiceWidth > 48) {
@@ -154,7 +165,7 @@
                 }
                 return 12
             },
-            removeErab (string) {
+            removeErab(string) {
                 if (!string || string.length === 0) {
                     return ''
                 }
@@ -169,9 +180,9 @@
                 temp = temp.split('ٍ').join('')
                 return temp
             },
-            getLargestChoice (choices) {
+            getLargestChoice(choices) {
                 let largestChoice = 0
-                choices.list.forEach((source)=> {
+                choices.list.forEach((source) => {
                     if (source.title.length > largestChoice) {
                         largestChoice = this.removeErab(source.title).length
                     }

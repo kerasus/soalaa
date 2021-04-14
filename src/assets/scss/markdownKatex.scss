@@ -5,6 +5,11 @@
 .renderedPanel {
   direction: rtl;
 
+  &.choice {
+    display: flex;
+    flex-direction: row;
+  }
+
   img {
     max-width: 100%;
   }
@@ -29,7 +34,6 @@
 
   .beit {
     display: inline-block;
-    white-space: nowrap;
     width: 100%;
 
     .mesra {
