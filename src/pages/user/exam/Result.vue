@@ -330,7 +330,7 @@
                 }
             },
             loadKarname (report) {
-                this.loadSubCategory(report.sub_category)
+                this.loadSubCategory(report)
                 this.loadZirGrooh(report.zirgorooh)
                 this.loadBest(report.best)
                 this.loadFirstVideoTab()
@@ -344,12 +344,19 @@
                     item.index = index + 1
                 })
             },
-            loadSubCategory (sub_category) {
-                sub_category.forEach((item, index) => {
+            loadSubCategory (report) {
+                report.sub_category.forEach((item, index) => {
+                    let targetBest = report.best.sub_category.find( sub_categoryItem => sub_categoryItem.sub_category ===  item.sub_category)
                     item.percent = parseFloat(item.percent).toFixed(1)
                     item.taraaz = parseFloat(item.taraaz).toFixed(0)
                     item.empty = item.total_answer - item.right_answer - item.wrong_answer
                     item.index = index + 1
+                    if (targetBest) {
+                        item.top_ranks_taraaz_mean = parseFloat(targetBest.top_ranks_taraaz_mean).toFixed(0)
+                        item.top_ranks_percent_mean = parseFloat(targetBest.top_ranks_percent_mean).toFixed(1)
+                        item.average = parseFloat(targetBest.mean).toFixed(1)
+                        item.taraaz_average = parseFloat(targetBest.taraaz_mean).toFixed(1)
+                    }
                 })
             },
             loadZirGrooh (zirgorooh) {

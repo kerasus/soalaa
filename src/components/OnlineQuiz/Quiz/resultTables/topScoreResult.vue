@@ -179,9 +179,6 @@
                     color: 'blue',
                     data
                 })
-            },
-            getTaraazDataForChart () {
-
             }
         },
         props: ['report'],
