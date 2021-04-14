@@ -106,7 +106,7 @@
                             group: 'notifs',
                             title: 'توجه!',
                             text: 'مشکلی در ثبت اطلاعات آزمون شما رخ داده است. لطفا تا قبل از ساعت 24 اقدام به ارسال مجدد پاسخنامه نمایید.',
-                            type: 'warn',
+                            type: 'error',
                             duration: 30000,
                         })
                         that.$router.push({ name: 'user.exam.list'})

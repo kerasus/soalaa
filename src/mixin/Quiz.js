@@ -304,6 +304,9 @@ const mixinQuiz = {
         },
 
 
+        hasExamDataOnThisDeviseStorage (examId) {
+            return !!this.userQuizListData[examId]
+        },
         sendUserQuestionsDataToServerAndFinishExam(examId, examUserId) {
             const userExamData = this.userQuizListData[examId]
             let answers = []
