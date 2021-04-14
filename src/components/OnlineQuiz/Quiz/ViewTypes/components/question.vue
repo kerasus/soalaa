@@ -36,7 +36,7 @@
         </div>
         <span v-if="(considerActiveCategory && source.in_active_category) || !considerActiveCategory"
               class="question-body renderedPanel"
-              :class="{ ltr: isLtrString(source.rendered_statement) }"
+              :class="{ ltr: isRtl }"
               :id="'question' + source.id"
               v-html="(getQuestionNumberFromId(source.id)) + '- ' + source.rendered_statement"
         />
@@ -48,7 +48,7 @@
                     :md="choiceClass(source)"
                     ref="choices"
                     class="choice renderedPanel"
-                    :class="{ active: getAnsweredChoiceId() === choice.id, ltr: isLtrString(choice.rendered_title) }"
+                    :class="{ active: getAnsweredChoiceId() === choice.id, ltr: isRtl }"
                     @click="answerClickedd({ questionId: source.id, choiceId: choice.id})"
             />
         </v-row>
@@ -63,6 +63,7 @@
         mixins: [mixinQuiz, mixinUserActionOnQuestion],
         data() {
             return {
+                isRtl: false,
                 widestChoiceWidth: 0,
                 observer: null,
                 choiceNumber: {
@@ -93,8 +94,9 @@
             }
         },
         mounted() {
-            this.observer = new IntersectionObserver(this.intersectionObserver, {threshold: [0.7, 0.75, 0.8]});
-            this.observer.observe(this.$el);
+            this.observer = new IntersectionObserver(this.intersectionObserver, {threshold: [0.7, 0.75, 0.8]})
+            this.observer.observe(this.$el)
+            this.isRtl = this.isLtrString(this.source.rendered_statement)
         },
         methods: {
             getChoiceStatus() {

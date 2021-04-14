@@ -330,9 +330,10 @@ const mixinQuiz = {
 
 
         isLtrString (string) {
-            // const englishRegex = /^[A-Za-z0-9 :"'ʹ.<>%$&@!+()\-/\n,…?ᵒ*~]*$/
-            const englishRegex = /^[A-Za-z0-9 :"'ʹ.<>%$&@!+()\-/\n,…?;ᵒ*~]*$/
-            return !!string.match(englishRegex)
+            // const englishRegex = /^[A-Za-z0-9 :"'ʹ.<>%$&@!+()\-/\n,…?;ᵒ*~]*$/
+            // return !!string.match(englishRegex)
+            const persianRegex = /[\u0600-\u06FF]/
+            return !!!string.match(persianRegex)
         },
         answerClicked(data) {
             let questionId = data.questionId

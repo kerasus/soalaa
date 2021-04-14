@@ -35,7 +35,7 @@
                             </v-row>
                             <v-row class="question-body">
                                 <v-col :class="{ ltr: isLtrString(currentQuestion.rendered_statement) }">
-                                    <div v-if="currentQuestion.in_active_category" class="renderedPanel" :class="{ ltr: isLtrString(currentQuestion.rendered_statement) }" v-html="currentQuestion.rendered_statement"></div>
+                                    <div v-if="currentQuestion.in_active_category" class="renderedPanel" :class="{ ltr: isRtl }" v-html="currentQuestion.rendered_statement"></div>
                                     <v-sheet
                                             v-if="!currentQuestion.in_active_category"
                                             color="warning"
@@ -54,6 +54,7 @@
                                         :key="item.id"
                                         :question-id="currentQuestion.id"
                                         :choice="item"
+                                        :is-rtl="isRtl"
                                         @answerClicked="answerClicked"
                                 />
                             </v-row>
@@ -100,7 +101,7 @@
         mixins: [mixinAuth, mixinQuiz, mixinUserActionOnQuestion, mixinDrawer, mixinWindowSize],
         data () {
             return {
-                quizData: null
+                isRtl: false
             }
         },
         mounted() {
@@ -110,6 +111,7 @@
             this.startExam(this.$route.params.quizId, 'onlineQuiz.alaaView')
                 .then(() => {
                     that.loadFirstActiveQuestionIfNeed()
+                    that.isRtl = that.isLtrString(that.currentQuestion.rendered_statement)
                     that.$store.commit('AppLayout/updateOverlay', {show: false, loading: false, text: ''})
                 })
                 .catch( (error) => {
