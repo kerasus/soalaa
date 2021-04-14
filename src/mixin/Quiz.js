@@ -64,11 +64,14 @@ const mixinQuiz = {
             // }
 
             // return currentLesson
+        },
+        currentExamQuestions() {
+            return window.currentExamQuestions
         }
     },
     data() {
         return {
-            currentExamQuestions: null
+
         }
     },
     methods: {
@@ -144,14 +147,14 @@ const mixinQuiz = {
             return currentExamQuestionsArray
         },
         getCurrentExamQuestions() {
-            if (this.currentExamQuestions) {
+            if (window.currentExamQuestions) {
                 return this.currentExamQuestions
             }
-            let currentExamQuestions = JSON.parse(window.localStorage.getItem('currentExamQuestions'))
-            this.modifyCurrentExamQuestions(currentExamQuestions)
-            Vue.set(this, 'currentExamQuestions', Object.freeze(currentExamQuestions))
+            window.currentExamQuestions = JSON.parse(window.localStorage.getItem('currentExamQuestions'))
+            this.modifyCurrentExamQuestions(window.currentExamQuestions)
+            Vue.set(this, 'currentExamQuestions', Object.freeze(window.currentExamQuestions))
 
-            return currentExamQuestions
+            return window.currentExamQuestions
         },
         modifyCurrentExamQuestions(currentExamQuestions) {
             let currentExamQuestionsArray = []
