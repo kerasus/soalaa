@@ -58,7 +58,7 @@
             </v-col>
         </v-row>
         <v-row class="timer-row">
-            <v-btn class="end-exam-btn" @click="getConfirmation">ثبت و پایان آزمون</v-btn>
+            <v-btn class="end-exam-btn" @click="getConfirmation">ارسال پاسخنامه</v-btn>
             <v-col :class="{ 'high-z-index': timerIsOpen }">
                 <Timer @timerOpen="timerOpen" :daftarche="'عمومی'" :quiz-started-at="1607963897"
                        :daftarche-end-time="1607999897" :height="100"></Timer>

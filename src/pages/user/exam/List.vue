@@ -19,10 +19,10 @@
                             <v-col cols="2">
                                 زمان پایان آزمون
                             </v-col>
-                            <v-col cols="1">
+                            <v-col v-if="false" cols="1">
                                 میزان تاخیر مجاز
                             </v-col>
-                            <v-col cols="4">
+                            <v-col cols="5">
                                 عملیات
                             </v-col>
                         </v-row>
@@ -46,19 +46,19 @@
                                             {{ item.shamsiDate('start_at').dateTime }}
                                         </v-col>
                                         <v-col cols="12" md="2">
-                                    <span class="d-inline-block-md d-none">
-                                        زمان پایان آزمون:
-                                    </span>
+                                            <span class="d-inline-block-md d-none">
+                                                زمان پایان آزمون:
+                                            </span>
                                             {{ item.shamsiDate('finish_at').dateTime }}
                                         </v-col>
-                                        <v-col cols="12" md="1">
-                                    <span class="d-inline-block-md d-none">
-                                        میزان تاخیر مجاز:
-                                    </span>
+                                        <v-col v-if="false" cols="12" md="1">
+                                            <span class="d-inline-block-md d-none">
+                                                میزان تاخیر مجاز:
+                                            </span>
                                             {{ item.delay_time }}
                                             دقیقه
                                         </v-col>
-                                        <v-col cols="12" md="4">
+                                        <v-col cols="12" md="5">
                                             <v-btn
                                                     v-if="item.holding_status === 'not_started'"
                                                     color="#00c753"
