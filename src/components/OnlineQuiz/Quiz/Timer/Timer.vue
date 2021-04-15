@@ -4,6 +4,7 @@
         <pc-timer @timerOpen="passEvent" v-else :passed-time="passedTime" :remaining-time="remainTime" :current-cat="currentCat"/>
     </div>
 </template>
+
 <script>
     import MobileTimer from '@/components/OnlineQuiz/Quiz/Timer/mobile'
     import PcTimer from '@/components/OnlineQuiz/Quiz/Timer/pc'
