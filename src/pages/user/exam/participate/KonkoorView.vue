@@ -229,7 +229,6 @@
                     })
             },
             test(payload) {
-                console.log(payload.number)
                 if (payload.isInView) {
                     for (let i = 0; i < this.inView.length; i++) {
                         if (this.inView[i] === payload.number) {
@@ -294,7 +293,6 @@
             // },
             scrollTo(questionId) {
                 const questionIndex = this.getQuestionIndexById(questionId)
-                console.log(questionIndex)
                 this.$refs.scroller.scrollToItem(questionIndex)
                 for (let i = 1; i < 4; i++) {
                     setTimeout(() => {

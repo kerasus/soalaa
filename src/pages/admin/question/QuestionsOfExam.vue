@@ -192,7 +192,6 @@
                 this.timePassedSinceLastScroll = 0
             },
             test (payload) {
-                console.log(payload.number)
                 if (payload.isInView) {
                     for (let i = 0; i < this.inView.length; i++) {
                         if (this.inView[i] === payload.number) {

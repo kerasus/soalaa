@@ -6,6 +6,10 @@
 .renderedPanel {
   direction: rtl;
 
+  p:first-child {
+    display: inline-block;
+  }
+  
   &.choice {
     display: flex;
     flex-direction: row;
@@ -18,7 +22,7 @@
   &.ltr,
   .katex {
     direction: ltr;
-    display: inline-block;
+    //display: inline-block;
 
     .katex-html {
       .accent {
