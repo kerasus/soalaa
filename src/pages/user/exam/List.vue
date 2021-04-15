@@ -123,6 +123,14 @@
                                             >
                                                 ثبت نام انجام نشده
                                             </v-btn>
+                                            <v-btn
+                                                    v-if="item.exam_actions.is_registered && !item.exam_actions.can_see_report && !item.exam_actions.can_continue && !item.exam_actions.can_start"
+                                                    color="#ffc107"
+                                                    text
+                                                    disabled
+                                            >
+                                                در انتظار کارنامه
+                                            </v-btn>
                                         </v-col>
                                     </v-row>
                                 </v-sheet>
