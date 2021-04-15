@@ -24,7 +24,7 @@ let Assistant = function () {
             return
         }
         let statusCode = parseInt(error.response.status)
-        if (statusCode === 500 || statusCode === 503) {
+        if (statusCode >= 500 || statusCode <= 599) {
             messages.push('مشکلی رخ داده است. مجدد تلاش کنید.')
         } else if (statusCode === 404) {
             messages.push('موردی یافت نشد.')
