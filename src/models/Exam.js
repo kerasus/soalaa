@@ -261,7 +261,8 @@ class Exam extends Model {
     }
 
     getAnswerOfUserInExam () {
-        return axios.get(API_ADDRESS.exam.getAnswerOfUser(this.user_exam_id))
+        // return axios.get(API_ADDRESS.exam.getAnswerOfUser(this.user_exam_id))
+        return axios.get(API_ADDRESS.exam.getAllAnswerOfUser(this.user_exam_id))
     }
 
     getAnswerOfUserInResultPage () {
