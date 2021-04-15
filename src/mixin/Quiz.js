@@ -254,7 +254,7 @@ const mixinQuiz = {
                                 reject()
                             }
                             that.$store.commit('mergeDbAnswersIntoLocalstorage', {
-                                dbAnswers: response.data.data,
+                                dbAnswers: response.data,
                                 exam_id: that.quiz.id
                             })
                             resolve()
@@ -459,14 +459,15 @@ const mixinQuiz = {
 
             let currentExamQuestions = this.getCurrentExamQuestions()
             let currentQuestion = currentExamQuestions[id]
-            let currentQuestionCategoryActiveStatus = this.getCategoryActiveStatus(currentQuestion.sub_category.category_id)
-
-            if (!currentQuestionCategoryActiveStatus) {
-                currentQuestion = this.getFirstActiveQuestion()
-                if (!currentQuestion) {
-                    return
-                }
-            }
+            // ToDo: disable active category
+            // let currentQuestionCategoryActiveStatus = this.getCategoryActiveStatus(currentQuestion.sub_category.category_id)
+            //
+            // if (!currentQuestionCategoryActiveStatus) {
+            //     currentQuestion = this.getFirstActiveQuestion()
+            //     if (!currentQuestion) {
+            //         return
+            //     }
+            // }
 
             this.$store.commit('updateCurrentQuestion', {
                 newQuestionId: currentQuestion.id,

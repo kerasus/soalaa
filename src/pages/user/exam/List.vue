@@ -16,13 +16,13 @@
                             <v-col cols="2">
                                 زمان شروع آزمون
                             </v-col>
-                            <v-col cols="2">
+                            <v-col v-if="false" cols="2">
                                 زمان پایان آزمون
                             </v-col>
                             <v-col v-if="false" cols="1">
                                 میزان تاخیر مجاز
                             </v-col>
-                            <v-col cols="5">
+                            <v-col cols="7">
                                 عملیات
                             </v-col>
                         </v-row>
@@ -45,7 +45,7 @@
                                             </span>
                                             {{ item.shamsiDate('start_at').dateTime }}
                                         </v-col>
-                                        <v-col cols="12" md="2">
+                                        <v-col v-if="false" cols="12" md="2">
                                             <span class="d-inline-block-md d-none">
                                                 زمان پایان آزمون:
                                             </span>
@@ -58,7 +58,7 @@
                                             {{ item.delay_time }}
                                             دقیقه
                                         </v-col>
-                                        <v-col cols="12" md="5">
+                                        <v-col cols="12" md="7">
                                             <v-btn
                                                     v-if="item.holding_status === 'not_started'"
                                                     color="#00c753"
