@@ -291,13 +291,11 @@
             },
             updateVideoSrc (srcs) {
                 let updatedSrcs = this.getVideoSrcs(srcs)
-                console.log('updatedSrcs', updatedSrcs)
                 this.player.pause()
                 this.player.src(updatedSrcs)
                 this.player.load()
             },
             updateTimepointsHeights (sub_categoryIndex) {
-                console.log('gg', this.$refs['videoPlayer'+sub_categoryIndex][0].clientHeight)
                 this.timepointsHeights = this.$refs['videoPlayer'+sub_categoryIndex][0].clientHeight
             },
             playTimePoint () {

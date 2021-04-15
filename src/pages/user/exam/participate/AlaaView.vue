@@ -1,7 +1,7 @@
 <template>
     <v-container :fluid="true" class="quiz-page" :style="{ height: '100%' }">
         <v-row :style="{ 'min-height': '100%' }">
-            <v-col :md="12" :class="{ 'question-container': true, ltr: currentQuestion.ltr }" :style="{ 'min-height': '100%' }">
+            <v-col :md="12" :class="{ 'question-container': true }" :style="{ 'min-height': '100%' }">
                 <v-sheet class="d-flex align-stretch" width="100%" color="--background-2" :style="{ 'min-height': '100%' }">
                     <v-row>
                         <v-col :md="1" class="d-md-flex justify-center d-none">
@@ -156,7 +156,6 @@
         },
         destroyed() {
             this.changeAppBarAndDrawer(false)
-            console.log('alaa destoryed', this.currentQuestion.id)
         }
     }
 </script>

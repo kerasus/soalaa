@@ -328,8 +328,7 @@
                 let that = this
                 this.user.loading = true
                 axios.post(API_ADDRESS.user.mobile.verify, { code: this.typedCode })
-                    .then((response) => {
-                        console.log(response)
+                    .then(() => {
                         that.user.loading = false
                         this.user.mobile_verified_at = Time.now()
                         this.isCodeVerified = true
@@ -341,9 +340,8 @@
                         })
                         this.getUserData()
                     })
-                    .catch((error)=> {
+                    .catch(()=> {
                         that.user.loading = false
-                        console.log(error)
                     })
             },
             canSubmit() {
