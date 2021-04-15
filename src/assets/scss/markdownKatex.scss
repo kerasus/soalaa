@@ -10,6 +10,10 @@
     display: inline-block;
   }
 
+  &.ltr {
+    direction: ltr;
+  }
+
   &.choice {
     display: flex;
     flex-direction: row;
@@ -19,7 +23,6 @@
     max-width: 100%;
   }
 
-  &.ltr,
   .katex {
     direction: ltr;
     display: inline-block;
