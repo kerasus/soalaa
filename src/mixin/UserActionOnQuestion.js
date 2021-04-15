@@ -51,6 +51,7 @@ const mixinUserActionOnQuestion = {
       let dataToSendBookmark = questionId
 
       return {
+        userQuestionData,
         dataToSendAnswer,
         dataToSendStatus,
         dataToSendBookmark
