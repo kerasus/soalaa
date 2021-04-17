@@ -79,6 +79,7 @@
     import axios from 'axios'
     import API_ADDRESS from "@/api/Addresses";
     import {User} from "@/models/User";
+    import { mixinAuth } from '@/mixin/Mixins'
 
     export default {
         name: 'Auth',
@@ -92,9 +93,10 @@
                 autofilledPass:false
             }
         },
+        mixins: [mixinAuth],
         created() {
             if (this.getToken()) {
-                this.getUserData()
+                this.getUserData( () => { this.redirectTo() })
             }
         },
         methods: {
@@ -132,14 +134,6 @@
             getToken () {
                 return this.$store.getters['Auth/accessToken']
             },
-            getUserData () {
-                let that = this
-                this.user.getUserData()
-                    .then( (user) => {
-                        that.$store.commit('Auth/updateUser', user)
-                        that.redirectTo()
-                    })
-            },
             setUserData (userData) {
                 this.$store.commit('Auth/updateUser', new User(userData))
                 // this.redirectTo()
@@ -173,7 +167,7 @@
 
                     this.setAccessToken(access_token)
                     that.setUserData(response.data.data.user)
-                    this.getUserData()
+                    this.getUserData(() => { this.redirectTo() })
                 })
                 .catch( () => {
                     this.loadingList = false
