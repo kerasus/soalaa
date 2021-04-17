@@ -44,6 +44,9 @@
                                 <v-card-title class="cardTitle">
                                     <v-row>
                                         <v-col>
+                                            تعداد کل شرکت کنندگان
+                                        </v-col>
+                                        <v-col>
                                             ماکزمیم تراز کل زیر گروه
                                         </v-col>
                                     </v-row>
@@ -51,6 +54,9 @@
 
                                 <span class="cardContent">
                                     <v-row>
+                                        <v-col>
+                                            {{ report.n_normal_participants }}
+                                        </v-col>
                                         <v-col>
                                             {{ report.main.taraaz }}
                                         </v-col>
