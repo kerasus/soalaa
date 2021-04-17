@@ -11,8 +11,9 @@
                         >
                     <v-row style="height: 50% ;margin: inherit;">
                         <v-col xl="3" sm="6" cols="12" class="exam-title">
-                            نتایج آزمون اول سه‌آ -
+                            نتیجه
                             {{ quiz.title }}
+                            سه آ
                         </v-col>
                         <v-col v-if="report" xl="1" sm='3' cols="6">
                             شهر:
