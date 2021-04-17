@@ -217,6 +217,9 @@
             report: null,
             player: null
         }),
+        created() {
+            this.getUserData()
+        },
         mounted() {
             let that = this
             let user_exam_id = this.$route.params.user_exam_id
