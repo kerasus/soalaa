@@ -77,7 +77,7 @@
             </v-col>
         </v-row>
         <v-row v-if="user.mobile_verified_at === null">
-            <v-col class="codeBtnPadding">
+            <v-col class="codeBtnPadding" md="12" sm="12">
                 <v-btn color="blue" v-if="!waiting" @click="sendCode">
                     دریافت کد فعالسازی
                 </v-btn>
@@ -90,12 +90,12 @@
                     کد ارسال شده را وارد نمایید.
                 </div>
             </v-col>
-            <v-col>
+            <v-col md="12" sm="12">
                 <v-text-field label="کد فعالسازی" v-model="typedCode">
 
                 </v-text-field>
             </v-col>
-            <v-col class="codeBtnPadding">
+            <v-col class="codeBtnPadding" md="12" sm="12">
                 <v-btn color="blue" v-if="waiting" @click="verifyCode">
                     ثبت شماره موبایل
                 </v-btn>
@@ -328,8 +328,7 @@
                 let that = this
                 this.user.loading = true
                 axios.post(API_ADDRESS.user.mobile.verify, { code: this.typedCode })
-                    .then((response) => {
-                        console.log(response)
+                    .then(() => {
                         that.user.loading = false
                         this.user.mobile_verified_at = Time.now()
                         this.isCodeVerified = true
@@ -341,9 +340,8 @@
                         })
                         this.getUserData()
                     })
-                    .catch((error)=> {
+                    .catch(()=> {
                         that.user.loading = false
-                        console.log(error)
                     })
             },
             canSubmit() {

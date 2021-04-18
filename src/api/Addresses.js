@@ -36,6 +36,9 @@ const API_ADDRESS = {
     getAnswerOfUser (user_exam_id) {
       return lumenServer + '/temp-exam/answer/'+user_exam_id
     },
+    getAllAnswerOfUser (user_exam_id) {
+      return lumenServer + '/temp-exam/allAnswer/'+user_exam_id
+    },
     getSubCategoriesWithPermissions (exam_id) {
       return lumenServer + '/exam-question/show/sub-categories/'+ exam_id
     },

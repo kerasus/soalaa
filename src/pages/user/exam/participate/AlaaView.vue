@@ -1,7 +1,7 @@
 <template>
     <v-container :fluid="true" class="quiz-page" :style="{ height: '100%' }">
         <v-row :style="{ 'min-height': '100%' }">
-            <v-col :md="12" :class="{ 'question-container': true, ltr: currentQuestion.ltr }" :style="{ 'min-height': '100%' }">
+            <v-col :md="12" :class="{ 'question-container': true }" :style="{ 'min-height': '100%' }">
                 <v-sheet class="d-flex align-stretch" width="100%" color="--background-2" :style="{ 'min-height': '100%' }">
                     <v-row>
                         <v-col :md="1" class="d-md-flex justify-center d-none">
@@ -35,9 +35,9 @@
                             </v-row>
                             <v-row class="question-body">
                                 <v-col :class="{ ltr: isLtrString(currentQuestion.rendered_statement) }">
-                                    <div v-if="currentQuestion.in_active_category" class="renderedPanel" :class="{ ltr: isRtl }" v-html="currentQuestion.rendered_statement"></div>
+                                    <div v-if="currentQuestion.in_active_category || true" class="renderedPanel" :class="{ ltr: isRtl }" v-html="currentQuestion.rendered_statement"></div>
                                     <v-sheet
-                                            v-if="!currentQuestion.in_active_category"
+                                            v-if="!currentQuestion.in_active_category && false"
                                             color="warning"
                                             rounded
                                             dark
@@ -49,7 +49,7 @@
                                     </v-sheet>
                                 </v-col>
                             </v-row>
-                            <v-row v-if="currentQuestion.in_active_category" class="question-answers">
+                            <v-row v-if="currentQuestion.in_active_category || true" class="question-answers">
                                 <choice v-for="item in currentQuestion.choices.list"
                                         :key="item.id"
                                         :question-id="currentQuestion.id"
@@ -110,7 +110,7 @@
             this.updateDrawerBasedOnWindowSize()
             this.startExam(this.$route.params.quizId, 'onlineQuiz.alaaView')
                 .then(() => {
-                    that.loadFirstActiveQuestionIfNeed()
+                    // that.loadFirstActiveQuestionIfNeed()
                     that.isRtl = that.isLtrString(that.currentQuestion.rendered_statement)
                     that.$store.commit('AppLayout/updateOverlay', {show: false, loading: false, text: ''})
                 })
@@ -156,7 +156,6 @@
         },
         destroyed() {
             this.changeAppBarAndDrawer(false)
-            console.log('alaa destoryed', this.currentQuestion.id)
         }
     }
 </script>

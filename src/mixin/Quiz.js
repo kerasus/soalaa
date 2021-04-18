@@ -184,6 +184,7 @@ const mixinQuiz = {
             if (!Assistant.getId(examId)) {
                 return
             }
+            window.currentExamQuestions = null
             let that = this
             that.$store.commit('AppLayout/updateOverlay', {show: true, loading: true, text: ''})
             return new Promise(function (resolve, reject) {
@@ -253,7 +254,7 @@ const mixinQuiz = {
                                 reject()
                             }
                             that.$store.commit('mergeDbAnswersIntoLocalstorage', {
-                                dbAnswers: response.data.data,
+                                dbAnswers: response.data,
                                 exam_id: that.quiz.id
                             })
                             resolve()
@@ -268,11 +269,12 @@ const mixinQuiz = {
             })
         },
         setQuestionsLtr(question) {
-            if (!question.statement) {
-                return
-            }
-            const englishRegex = /^[A-Za-z0-9 :"'ʹ.<>%$&@!+()\-_/\n,…?ᵒ*~]*$/
-            question.ltr = !!question.statement.match(englishRegex);
+            question.ltr = this.isLtrString(question.statement)
+            // if (!question.statement) {
+            //     return
+            // }
+            // const englishRegex = /^[A-Za-z0-9 :"'ʹ.<>%$&@!+()\-_/\n,…?ᵒ*~]*$/
+            // question.ltr = !!question.statement.match(englishRegex);
         },
         loadExamExtraData(quiz, viewType) {
             this.quiz.loadSubcategoriesOfCategories()
@@ -455,15 +457,17 @@ const mixinQuiz = {
                 return
             }
 
-            let currentQuestion = this.getCurrentExamQuestions()[id]
-            let currentQuestionCategoryActiveStatus = this.getCategoryActiveStatus(currentQuestion.sub_category.category_id)
-
-            if (!currentQuestionCategoryActiveStatus) {
-                currentQuestion = this.getFirstActiveQuestion()
-                if (!currentQuestion) {
-                    return
-                }
-            }
+            let currentExamQuestions = this.getCurrentExamQuestions()
+            let currentQuestion = currentExamQuestions[id]
+            // ToDo: disable active category
+            // let currentQuestionCategoryActiveStatus = this.getCategoryActiveStatus(currentQuestion.sub_category.category_id)
+            //
+            // if (!currentQuestionCategoryActiveStatus) {
+            //     currentQuestion = this.getFirstActiveQuestion()
+            //     if (!currentQuestion) {
+            //         return
+            //     }
+            // }
 
             this.$store.commit('updateCurrentQuestion', {
                 newQuestionId: currentQuestion.id,

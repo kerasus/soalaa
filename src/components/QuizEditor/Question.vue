@@ -1,5 +1,5 @@
 <template>
-    <div :class="{ 'current-question': this.currentQuestion.id === source.id, question: true, ltr: source.ltr  }">
+    <div :class="{ 'current-question': this.currentQuestion.id === source.id, question: true, ltr: isLtr  }">
         <div class="buttons-group">
             <v-select :items="quizList.list" item-text="title" chips multiple attach outlined dense full-width
                       v-if="false"/>
@@ -25,7 +25,7 @@
             ></v-switch>
         </div>
         <span class="question-body renderedPanel"
-              :class="{ ltr: isRtl }"
+              :class="{ ltr: isLtr }"
               :id="'question' + source.id"
               v-html="(getQuestionNumberFromId(source.id)) + '(' + getSubCategoryName + ')' + ' (' + source.order + ') - ' + source.rendered_statement"
               v-intersect="{
@@ -41,7 +41,7 @@
                     :key="choice.id"
                     v-html="(choiceNumber[index]) + choice.rendered_title"
                     :md="choiceClass(source)"
-                    :class="{ choice: true, renderedPanel: true, active: choice.answer, ltr: isRtl }"
+                    :class="{ choice: true, renderedPanel: true, active: choice.answer, ltr: isLtr }"
             />
         </v-row>
     </div>
@@ -64,7 +64,7 @@
         mixins: [mixinQuiz, mixinWindowSize, mixinMarkdownAndKatex],
         data() {
             return {
-                isRtl: false,
+                isLtr: false,
                 confirm: false,
                 choiceNumber: {
                     0: '1) ',
@@ -120,7 +120,7 @@
                 }
             },
             choiceClicked(questionId, choiceId) {
-                console.log('loadFirstActiveQuestionIfNeed->choiceClicked')
+                // console.log('loadFirstActiveQuestionIfNeed->choiceClicked')
                 this.changeQuestion(questionId)
                 this.answerClicked({questionId, choiceId})
             },
@@ -209,7 +209,7 @@
             }
         },
         created() {
-            this.isRtl = this.isLtrString(this.source.rendered_statement)
+            this.isLtr = this.isLtrString(this.source.rendered_statement)
             // setTimeout(() => {console.log(this.quiz)}, 2000)
         },
         computed: {

@@ -58,6 +58,18 @@
         </v-btn>
         <v-btn
                 style="letter-spacing: inherit;"
+                :to="{ name: 'dashboard' }"
+                large
+                dark
+                tile
+                block
+                color="orange"
+                elevation="0"
+        >
+            سه آ
+        </v-btn>
+        <v-btn
+                style="letter-spacing: inherit;"
                 large
                 dark
                 tile

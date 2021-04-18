@@ -86,7 +86,7 @@
                                             tile
                                             elevation="0"
                                     >
-                                        ثبت و پایان آزمون
+                                        ارسال پاسخنامه
                                     </v-btn>
                                 </v-card>
                             </v-menu>

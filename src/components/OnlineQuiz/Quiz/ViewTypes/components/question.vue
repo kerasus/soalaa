@@ -3,13 +3,13 @@
          v-intersect="test">
         <div>
             <v-sheet
-                    v-if="considerActiveCategory && !source.in_active_category"
+                    v-if="considerActiveCategory && !source.in_active_category && false"
                     rounded
                     dark
                     height="200"
                     elevation="1"
                     class="d-flex align-center justify-center"
-                    :color="currentQuestion.id === source.id ? '--error-1' : '#fff'"
+                    :color="currentQuestion.id === source.id ? '--error-1' : 'warning'"
             >
                 (
                 سوال شماره
@@ -19,8 +19,8 @@
                 در حال حاضر امکان مشاهده سوالات این دفترچه امکان پذیر نمی باشد
             </v-sheet>
         </div>
-        <div v-if="(considerActiveCategory && source.in_active_category) || !considerActiveCategory"
-             class="buttons-group">
+<!--        <div v-if="(considerActiveCategory && source.in_active_category) || !considerActiveCategory || true"-->
+        <div class="buttons-group">
             <v-btn icon @click="changeStatus(source.id, 'o')">
                 <v-icon v-if="getChoiceStatus() === 'o'" color="yellow" :size="24">mdi-checkbox-blank-circle</v-icon>
                 <v-icon v-if="getChoiceStatus() !== 'o'" color="#888" :size="24">mdi-checkbox-blank-circle-outline
@@ -34,13 +34,15 @@
                 <v-icon v-else :size="24" color="#888">mdi-bookmark-outline</v-icon>
             </v-btn>
         </div>
-        <span v-if="(considerActiveCategory && source.in_active_category) || !considerActiveCategory"
+<!--        <span v-if="(considerActiveCategory && source.in_active_category) || !considerActiveCategory || true"-->
+        <span
               class="question-body renderedPanel"
               :class="{ ltr: isRtl }"
               :id="'question' + source.id"
               v-html="(getQuestionNumberFromId(source.id)) + '- ' + source.rendered_statement"
         />
-        <v-row v-if="(considerActiveCategory && source.in_active_category) || !considerActiveCategory" class="choices">
+<!--        <v-row v-if="(considerActiveCategory && source.in_active_category) || !considerActiveCategory || true" class="choices">-->
+        <v-row class="choices">
             <v-col
                     v-for="(choice, index) in source.choices.list"
                     :key="choice.id"

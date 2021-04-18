@@ -4,15 +4,6 @@
         <v-row :style="{ 'min-height': '100%' }">
             <v-col :md="5" class="questions" ref="questionsColumn" id="questions" :style="{ height: windowSize.y }">
                 <!--                <div class="lesson">{{ currentLesson.title }}</div>-->
-                <!--                <virtual-list style="overflow-y: auto;"-->
-                <!--                              :data-key="'id'"-->
-                <!--                              :data-sources="quiz.questions.list"-->
-                <!--                              :data-component="item"-->
-                <!--                              :keep="20"-->
-                <!--                              :estimate-size="100"-->
-                <!--                              ref="scroller"-->
-                <!--                              class="questionss"-->
-                <!--                />-->
                 <DynamicScroller
                         :items="questions"
                         :min-item-size="70"
@@ -38,7 +29,7 @@
                         <div class="rounded-b-xl rounded-r-xl">
                             <v-menu bottom :offset-y="true" class="rounded-b-xl rounded-r-xl">
                                 <template v-slot:activator="{ on, attrs }">
-                                    <v-btn large tile v-bind="attrs" v-on="on" elevation="0" class="pl-3" >
+                                    <v-btn large tile v-bind="attrs" v-on="on" elevation="0" class="pl-3">
                                         <v-icon class="mr-2" :size="30" color="#666">mdi-account-circle</v-icon>
                                         <span v-if="user.last_name">
                                             {{ user.last_name }}
@@ -60,26 +51,27 @@
                 </v-row>
                 <v-row>
                     <v-col>
-                        <BubbleSheet :info="{ type: 'pasokh-barg' }" @clickChoice="choiceClicked" @scrollTo="scrollTo" :delay-time="0" />
+                        <BubbleSheet :info="{ type: 'pasokh-barg' }" @clickChoice="choiceClicked" @scrollTo="scrollTo"
+                                     :delay-time="0"/>
                     </v-col>
                 </v-row>
             </v-col>
         </v-row>
         <v-row class="timer-row">
-            <v-btn class="end-exam-btn" @click="getConfirmation">ثبت و پایان آزمون</v-btn>
+            <v-btn class="end-exam-btn" @click="getConfirmation">ارسال پاسخنامه</v-btn>
             <v-col :class="{ 'high-z-index': timerIsOpen }">
-                <Timer @timerOpen="timerOpen" :daftarche="'عمومی'" :quiz-started-at="1607963897" :daftarche-end-time="1607999897" :height="100"></Timer>
+                <Timer @timerOpen="timerOpen" :daftarche="'عمومی'" :quiz-started-at="1607963897"
+                       :daftarche-end-time="1607999897" :height="100"></Timer>
             </v-col>
         </v-row>
     </v-container>
 </template>
 <script>
-    // import $ from 'jquery'
     import '@/assets/scss/markdownKatex.scss'
     import 'vue-virtual-scroller/dist/vue-virtual-scroller.css'
-    import { DynamicScroller, DynamicScrollerItem } from 'vue-virtual-scroller'
+    import {DynamicScroller, DynamicScrollerItem} from 'vue-virtual-scroller'
     import Item from '@/components/OnlineQuiz/Quiz/ViewTypes/components/question'
-    import { mixinAuth, mixinQuiz, mixinUserActionOnQuestion, mixinWindowSize } from '@/mixin/Mixins'
+    import {mixinAuth, mixinQuiz, mixinUserActionOnQuestion, mixinWindowSize} from '@/mixin/Mixins'
     import Timer from '@/components/OnlineQuiz/Quiz/Timer/Timer'
     import BubbleSheet from "@/components/OnlineQuiz/Quiz/BubbleSheet/BubbleSheet";
     import {Exam} from "@/models/Exam";
@@ -90,19 +82,6 @@
 
     Vue.use(VueConfirmDialog)
     Vue.component('vue-confirm-dialog', VueConfirmDialog.default)
-    // Vue.component('DynamicScroller', DynamicScroller)
-    // Vue.component('DynamicScrollerItem', DynamicScrollerItem)
-
-
-
-    // import VueHtml2pdf from 'vue-html2pdf';
-    // import domtoimage from 'dom-to-image';
-    // import Vue2Img from 'vue-2-img'
-    // import 'vue-2-img/dist/vue-2-img.css'
-    // import {jsPDF} from "jspdf";
-    // import html2canvas from 'html2canvas';
-    // import fromHTML from 'from-html'
-    // import html2pdf from 'html2pdf.js'
 
     export default {
         name: 'KonkoorView',
@@ -110,12 +89,18 @@
         components: {
             Timer,
             TopMenu_OnlineQuiz,
-            // 'virtual-list': VirtualList,
             BubbleSheet,
             DynamicScroller,
             DynamicScrollerItem,
-            Item,
-            // VueHtml2pdf,
+            Item
+        },
+        watch: {
+            'windowSize.y': function () {
+                this.setHeights()
+            },
+            'windowSize.x': function () {
+                this.$store.commit('AppLayout/updateDrawer', false)
+            }
         },
         data() {
             return {
@@ -125,17 +110,86 @@
                 scrollState: 'not scrolling',
                 timePassedSinceLastScroll: 0,
                 setIntervalCallback: null,
-                renderedQuestions: { startIndex: 0, endIndex: 0 },
+                renderedQuestions: {startIndex: 0, endIndex: 0},
                 questions: [],
                 inView: [],
                 timerIsOpen: false
             }
         },
+        created() {
+            let that = this
+            this.startExam(this.$route.params.quizId, 'onlineQuiz.KonkoorView')
+                .then(() => {
+                    // that.loadFirstActiveQuestionIfNeed()
+                    that.$store.commit('AppLayout/updateOverlay', {show: false, loading: false, text: ''})
+                })
+                .catch((error) => {
+                    Assistant.reportErrors(error)
+                    that.$notify({
+                        group: 'notifs',
+                        title: 'توجه!',
+                        text: 'مشکلی در دریافت اطلاعات آژمون رخ داده است. لطفا دوباره امتحان کنید.',
+                        type: 'error'
+                    })
+                    // ToDo: uncomment
+                    // that.$router.push({ name: 'user.exam.list'})
+                })
+            if (this.windowSize.x > 959) {
+                this.changeAppBarAndDrawer(false)
+            } else {
+                this.$router.push({
+                    name: 'onlineQuiz.alaaView',
+                    params: {quizId: 313, questNumber: this.$route.params.quizId}
+                })
+            }
+            if (!this.questions.length) {
+                this.questions = this.getCurrentExamQuestionsInArray()
+            }
+        },
+        mounted() {
+            this.setHeights()
+            if (this.currentQuestion.id === null) {
+                this.loadFirstQuestion()
+            }
+            this.scrollTo(this.currentQuestion.id)
+            this.changeAppBarAndDrawer(false)
+        },
+        destroyed() {
+            this.changeAppBarAndDrawer(true)
+        },
         methods: {
+            loadFirstActiveQuestionIfNeed() {
+                let activeCcategory = this.quiz.getFirstActiveCategory()
+                if (!activeCcategory) {
+                    this.loadFirstQuestion()
+                } else {
+                    if (
+                        Assistant.getId(this.currentQuestion.sub_category.category_id) !== Assistant.getId(activeCcategory.id) &&
+                        activeCcategory.sub_categories.list.length > 0
+                    ) {
+                        let questionsOfSubcategory = this.getQuestionsOfSubcategory(activeCcategory.sub_categories.list[0].id)
+                        if (questionsOfSubcategory.length > 0) {
+                            this.currentQuestion = questionsOfSubcategory[0]
+                        }
+                    }
+                }
+
+                this.scrollTo(this.currentQuestion.id)
+
+                // if (!this.currentQuestion.in_active_category) {//category_id
+                //     let firstActiveQuestion = this.quiz.questions.getFirstActiveQuestion()
+                //     if (!firstActiveQuestion) {
+                //         this.loadFirstQuestion()
+                //     } else {
+                //         this.changeQuestion(firstActiveQuestion.id)
+                //     }
+                //     this.scrollTo(this.currentQuestion.id)
+                // }
+            },
             timerOpen(value) {
                 this.timerIsOpen = value
             },
-            getConfirmation(){
+            getConfirmation() {
                 let that = this
                 this.$store.commit('AppLayout/showConfirmDialog', {
                     message: `مطمئنی؟ نتیجه شما پس از تایید، ثبت و رتبه شما محاسبه خواهد شد و به اندازه میانگین درصدهای شما، کد تخفیف همه محصولات آلاء برای شما ارسال خواهد شد. مثلا اگر میانگین درصدهای شما 60% باشد یک کد تخفیف 60% دریافت خواهید کرد`,
@@ -154,16 +208,16 @@
             sendAnswersAndFinishExam() {
                 let that = this
                 this.quiz.sendAnswersAndFinishExam()
-                    .then( () => {
+                    .then(() => {
                         that.$store.commit('clearExamData', that.quiz.id)
                         that.$notify({
                             group: 'notifs',
                             text: 'اطلاعات آزمون شما ثبت شد.',
                             type: 'success'
                         })
-                        that.$router.push({ name: 'user.exam.list'})
+                        that.$router.push({name: 'user.exam.list'})
                     })
-                    .catch( () => {
+                    .catch(() => {
                         that.$notify({
                             group: 'notifs',
                             title: 'توجه!',
@@ -171,11 +225,10 @@
                             type: 'warn',
                             duration: 30000,
                         })
-                        that.$router.push({ name: 'user.exam.list'})
+                        that.$router.push({name: 'user.exam.list'})
                     })
             },
-            test (payload) {
-                console.log(payload.number)
+            test(payload) {
                 if (payload.isInView) {
                     for (let i = 0; i < this.inView.length; i++) {
                         if (this.inView[i] === payload.number) {
@@ -183,8 +236,7 @@
                         }
                     }
                     this.inView.push(payload.number)
-                }
-                else {
+                } else {
                     for (let i = 0; i < this.inView.length; i++) {
                         if (this.inView[i] === payload.number) {
                             this.inView.splice(i, 1)
@@ -195,7 +247,7 @@
             changeAppBarAndDrawer(state) {
                 this.$store.commit('AppLayout/updateAppBarAndDrawer', state)
             },
-            changeCurrentQuestionIfScrollingIsDone () {
+            changeCurrentQuestionIfScrollingIsDone() {
                 // console.log('time since last: ', this.timePassedSinceLastScroll)
                 // if (startIndex !== this.lastTimeScrollRange.start || endIndex !== this.lastTimeScrollRange.end) {
                 //     this.lastTimeScrollRange.start = startIndex
@@ -210,8 +262,8 @@
                 }
                 this.timePassedSinceLastScroll += 250
             },
-            onScroll (startIndex, endIndex) {
-                this.renderedQuestions = { startIndex, endIndex }
+            onScroll(startIndex, endIndex) {
+                this.renderedQuestions = {startIndex, endIndex}
                 if (this.scrollState === 'not scrolling') {
                     this.setIntervalCallback = setInterval(() => {
                         this.changeCurrentQuestionIfScrollingIsDone()
@@ -220,7 +272,7 @@
                 }
                 this.timePassedSinceLastScroll = 0
             },
-            changeCurrentQuestionToFirstQuestionInView () {
+            changeCurrentQuestionToFirstQuestionInView() {
                 const firstInViewQuestion = this.getFirstInViewQuestionNumber()
                 if (firstInViewQuestion.id === this.currentQuestion.id) {
                     return
@@ -239,9 +291,8 @@
             //         }
             //     }
             // },
-            scrollTo (questionId) {
+            scrollTo(questionId) {
                 const questionIndex = this.getQuestionIndexById(questionId)
-                console.log('quest index', questionIndex, questionId)
                 this.$refs.scroller.scrollToItem(questionIndex)
                 for (let i = 1; i < 4; i++) {
                     setTimeout(() => {
@@ -254,7 +305,7 @@
             //     this.quiz.questions.getQuestionById(entries[0].target.id).isInView = (entries[0].intersectionRatio >= 0.5)
             // },
             // ToDo: check for removal
-            getFirstInViewQuestionNumber () {
+            getFirstInViewQuestionNumber() {
                 // console.log(this.renderedQuestions.startIndex, this.renderedQuestions.endIndex, 'haha2')
                 let firstQuestionInView
                 for (let i = this.renderedQuestions.startIndex; i <= this.renderedQuestions.endIndex; i++) {
@@ -282,7 +333,7 @@
             //     }
             //     return ''
             // },
-            choiceClicked (questionId) {
+            choiceClicked(questionId) {
                 this.scrollTo(questionId)
                 this.changeQuestion(questionId)
             },
@@ -292,71 +343,11 @@
             //     }
             // }
             setHeights() {
-                this.$refs.questionsColumn.style.height = this.windowSize.y+'px'
+                this.$refs.questionsColumn.style.height = this.windowSize.y + 'px'
                 if (this.$refs.scroller.$el) {
-                    this.$refs.scroller.$el.style.height = this.windowSize.y+'px'
+                    this.$refs.scroller.$el.style.height = this.windowSize.y + 'px'
                 }
-                this.$refs.leftSideList.style.height = (this.windowSize.y - 24)+'px'
-            }
-        },
-        created () {
-            console.log('konkoor created', this.currentQuestion.id)
-            let that = this
-            this.startExam(this.$route.params.quizId, 'onlineQuiz.KonkoorView')
-                .then(() => {
-                    // that.loadFirstActiveQuestionIfNeed()
-                    that.$store.commit('AppLayout/updateOverlay', {show: false, loading: false, text: ''})
-                })
-                .catch( (error) => {
-                    Assistant.reportErrors(error)
-                    that.$notify({
-                        group: 'notifs',
-                        title: 'توجه!',
-                        text: 'مشکلی در دریافت اطلاعات آژمون رخ داده است. لطفا دوباره امتحان کنید.',
-                        type: 'error'
-                    })
-                    // ToDo: uncomment
-                    // that.$router.push({ name: 'user.exam.list'})
-                })
-            if (this.windowSize.x > 959) {
-                this.changeAppBarAndDrawer(false)
-            } else {
-                this.$router.push({ name: 'onlineQuiz.alaaView', params: { quizId: 313, questNumber: this.$route.params.quizId } })
-            }
-            if (!this.questions.length) {
-                this.questions = this.getCurrentExamQuestionsInArray()
-            }
-        },
-        mounted () {
-            console.log('konkoor mount', this.currentQuestion.id)
-            this.setHeights()
-            // $('.questions').height(this.windowSize.y)
-            // $('.questionss').height(this.windowSize.y)
-            // $('.left-side-list').height(this.windowSize.y - 24)
-            if (this.currentQuestion.id === null) {
-                this.loadFirstQuestion()
-            }
-            this.scrollTo(this.currentQuestion.id)
-            this.changeAppBarAndDrawer(false)
-            console.log('konkoor mounted', this.currentQuestion.id)
-
-        },
-        destroyed() {
-            this.changeAppBarAndDrawer(true)
-        },
-        watch: {
-            'windowSize.y': function () {
-                this.setHeights()
-                // $('.questions').height(this.windowSize.y)
-                // $('.questionss').height(this.windowSize.y)
-                // $('.left-side-list').height(this.windowSize.y - 24)
-            },
-            'windowSize.x': function () {
-                // const padding = this.questionListPadding()
-                // $('.questions-list').css({ 'padding-right': padding })
-                // $('.questions-list').css({ 'padding-left': padding })
-                // $('.questions-list').height(this.questionListHeight())
-                this.$store.commit('AppLayout/updateDrawer', false)
+                this.$refs.leftSideList.style.height = (this.windowSize.y - 24) + 'px'
             }
         }
     }
