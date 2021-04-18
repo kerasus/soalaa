@@ -59,6 +59,10 @@ class Exam extends Model {
         this.setQuestionsLtr()
     }
 
+    getFirstActiveCategory () {
+        return this.categories.list.find( (item) => !!(item.is_active))
+    }
+
     loadQuestionsFromFile () {
         let that = this
         return new Promise(function(resolve, reject) {
@@ -257,7 +261,8 @@ class Exam extends Model {
     }
 
     getAnswerOfUserInExam () {
-        return axios.get(API_ADDRESS.exam.getAnswerOfUser(this.user_exam_id))
+        // return axios.get(API_ADDRESS.exam.getAnswerOfUser(this.user_exam_id))
+        return axios.get(API_ADDRESS.exam.getAllAnswerOfUser(this.user_exam_id))
     }
 
     getAnswerOfUserInResultPage () {

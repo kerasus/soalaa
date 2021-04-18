@@ -198,7 +198,7 @@
 
 
                 // this.bubbleSheet  = (e.pageX + 2)
-                console.log('p',this.bubbleSheet)
+                // console.log('p',this.bubbleSheet)
 
             },
             updateWindowSize() {
@@ -215,7 +215,6 @@
                 this.$store.commit('AppLayout/updateAppBarAndDrawer', state)
             },
             changeCurrentQuestionIfScrollingIsDone () {
-                // console.log('time since last: ', this.timePassedSinceLastScroll)
                 // if (startIndex !== this.lastTimeScrollRange.start || endIndex !== this.lastTimeScrollRange.end) {
                 //     this.lastTimeScrollRange.start = startIndex
                 //     this.lastTimeScrollRange.end = endIndex
@@ -238,7 +237,6 @@
             },
             scrollTo (questionId) {
                 const questionIndex = this.getQuestionIndexById(questionId)
-                console.log(questionIndex)
                 this.$refs.scroller.scrollToItem(questionIndex)
                 for (let i = 1; i < 4; i++) {
                     setTimeout(() => {
@@ -248,7 +246,6 @@
                 }
             },
             getFirstInViewQuestionNumber () {
-                // console.log(this.renderedQuestions.startIndex, this.renderedQuestions.endIndex, 'haha2')
                 // let firstQuestionInView
                 // for (let i = this.renderedQuestions.startIndex; i <= this.renderedQuestions.endIndex; i++) {
                 //     // console.log(i, ': ', this.quizData.questions.list[i].isInView)

@@ -10,8 +10,9 @@
                 <v-card elevation="0" class="infoCard align-content-center">
                     <v-row style="height: 50% ;margin: inherit;">
                         <v-col xl="3" sm="6" cols="12" class="exam-title">
-                            نتایج آزمون اول سه‌آ -
+                            نتیجه
                             {{ quiz.title }}
+                            سه آ
                         </v-col>
                         <v-col v-if="report" xl="1" sm='3' cols="6">
                             شهر:
@@ -220,6 +221,9 @@
             report: null,
             player: null
         }),
+        created() {
+            this.getUserData()
+        },
         mounted() {
             let that = this
             let user_exam_id = this.$route.params.user_exam_id
@@ -295,13 +299,11 @@
             },
             updateVideoSrc (srcs) {
                 let updatedSrcs = this.getVideoSrcs(srcs)
-                console.log('updatedSrcs', updatedSrcs)
                 this.player.pause()
                 this.player.src(updatedSrcs)
                 this.player.load()
             },
             updateTimepointsHeights (sub_categoryIndex) {
-                console.log('gg', this.$refs['videoPlayer'+sub_categoryIndex][0].clientHeight)
                 this.timepointsHeights = this.$refs['videoPlayer'+sub_categoryIndex][0].clientHeight
             },
             playTimePoint () {

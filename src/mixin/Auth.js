@@ -9,9 +9,17 @@ const mixinAuth = {
             }
         }
     },
-    mounted() {
-    },
     methods: {
+        getUserData (callbasck) {
+            let that = this
+            this.user.getUserData()
+                .then( (user) => {
+                    that.$store.commit('Auth/updateUser', user)
+                    if (typeof callbasck === 'function') {
+                        callbasck()
+                    }
+                })
+        }
     }
 }
 

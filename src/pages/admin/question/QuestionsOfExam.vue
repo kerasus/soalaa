@@ -120,7 +120,7 @@
                                             tile
                                             elevation="0"
                                     >
-                                        ثبت و پایان آزمون
+                                        ارسال پاسخنامه
                                     </v-btn>
                                 </v-card>
                             </v-menu>
@@ -192,7 +192,6 @@
                 this.timePassedSinceLastScroll = 0
             },
             test (payload) {
-                console.log(payload.number)
                 if (payload.isInView) {
                     for (let i = 0; i < this.inView.length; i++) {
                         if (this.inView[i] === payload.number) {
