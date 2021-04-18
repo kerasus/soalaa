@@ -24,7 +24,6 @@
                                         type="number"
                                         v-model="percents[props.item.sub_category_id]"
                                 />
-                                {{props.item.sub_category_id}}
                             </template>
                         </v-data-table>
                     </v-col>
