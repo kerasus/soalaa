@@ -24,6 +24,7 @@
                                         type="number"
                                         v-model="percents[props.item.sub_category_id]"
                                 />
+                                {{props.item.sub_category_id}}
                             </template>
                         </v-data-table>
                     </v-col>
@@ -87,9 +88,7 @@
                         </v-row>
                     </v-col>
                 </v-row>
-
             </div>
-
         </div>
         <v-row>
             <v-btn @click="sendData">تخمین رتبه</v-btn>
@@ -162,7 +161,6 @@
                     {text: ' رتبه شهر', value: 'rank_city', align: 'center', sortable: true,},
                     {text: ' رتبه استان', value: 'rank_province', align: 'center', sortable: true,},
                     {text: ' رتبه کشور', value: 'rank_country', align: 'center', sortable: true,},
-
                 ],
             }
         },
