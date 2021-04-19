@@ -6,6 +6,7 @@
                     <v-data-table
                             hide-default-footer
                             :headers="headers1"
+                            :header-props="{sortByText: 'ترتیب'}"
                             :items="report.sub_category"
                             :items-per-page="15"
                             class="elevation-1 dataTable dataTableHeight1"
@@ -24,6 +25,7 @@
                     <v-data-table
                             hide-default-footer
                             :headers="headers2"
+                            :header-props="{sortByText: 'ترتیب'}"
                             :items="report.zirgorooh"
                             :items-per-page="5"
                             class="elevation-1 dataTable dataTableHeight2"
