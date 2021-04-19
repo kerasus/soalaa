@@ -110,7 +110,6 @@
             this.updateDrawerBasedOnWindowSize()
             this.startExam(this.$route.params.quizId, 'onlineQuiz.alaaView')
                 .then(() => {
-                    // that.loadFirstActiveQuestionIfNeed()
                     that.isRtl = that.isLtrString(that.currentQuestion.rendered_statement)
                     that.$store.commit('AppLayout/updateOverlay', {show: false, loading: false, text: ''})
                 })
@@ -141,16 +140,6 @@
             updateDrawerBasedOnWindowSize () {
                 if (this.windowSize.x > 1263) {
                     this.$store.commit('AppLayout/updateDrawer', true)
-                }
-            },
-            loadFirstActiveQuestionIfNeed () {
-                if (!this.currentQuestion.in_active_category) {
-                    let firstActiveQuestion = this.quiz.questions.getFirstActiveQuestion()
-                    if (!firstActiveQuestion) {
-                        this.loadFirstQuestion()
-                    } else {
-                        this.changeQuestion(firstActiveQuestion.id)
-                    }
                 }
             }
         },

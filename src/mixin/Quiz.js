@@ -2,9 +2,13 @@ import 'github-markdown-css/github-markdown.css';
 import '@/assets/scss/markdownKatex.scss';
 import Assistant from "@/plugins/assistant";
 import Time from "@/plugins/time";
-import {QuestSubcategory} from "@/models/QuestSubcategory";
+import {QuestSubcategory, QuestSubcategoryList} from "@/models/QuestSubcategory";
 import axios from "axios";
 import API_ADDRESS from "@/api/Addresses";
+import {Exam} from "@/models/Exam";
+import {QuestCategoryList} from "@/models/QuestCategory";
+import $ from "jquery";
+import {QuestionList} from "@/models/Question";
 
 const mixinQuiz = {
     computed: {
@@ -70,7 +74,7 @@ const mixinQuiz = {
     },
     data() {
         return {
-
+            considerActiveCategoryAndSubcategory: false
         }
     },
     methods: {
@@ -147,7 +151,7 @@ const mixinQuiz = {
         },
         getCurrentExamQuestions() {
             if (window.currentExamQuestions) {
-                return this.currentExamQuestions
+                return window.currentExamQuestions
             }
             window.currentExamQuestions = JSON.parse(window.localStorage.getItem('currentExamQuestions'))
             this.modifyCurrentExamQuestions(window.currentExamQuestions)
@@ -380,12 +384,8 @@ const mixinQuiz = {
             number = parseInt(number)
             return number - 1
         },
-        isSubcategoryExistInExam(subCategoryId) {
-            this.quiz.sub_categories.list.find(item => Assistant.getId(item.id) === Assistant.getId(subCategoryId))
-        },
         getFirstActiveQuestion() {
             let questions = this.getCurrentExamQuestions()
-            // && this.isSubcategoryExistInExam(questions[questionId]).sub_category.id
             for (const questionId in questions) {
                 if (questions[questionId].in_active_category) {
                     return questions[questionId]
@@ -450,7 +450,7 @@ const mixinQuiz = {
                 return
             }
 
-            const questIndex = this.getQuestionIndexById(id),
+            let questIndex = this.getQuestionIndexById(id),
                 questNumber = this.getQuestionNumberFromIndex(questIndex)
 
             if (typeof questIndex === 'undefined') {
@@ -459,15 +459,19 @@ const mixinQuiz = {
 
             let currentExamQuestions = this.getCurrentExamQuestions()
             let currentQuestion = currentExamQuestions[id]
-            // ToDo: disable active category
-            // let currentQuestionCategoryActiveStatus = this.getCategoryActiveStatus(currentQuestion.sub_category.category_id)
-            //
-            // if (!currentQuestionCategoryActiveStatus) {
-            //     currentQuestion = this.getFirstActiveQuestion()
-            //     if (!currentQuestion) {
-            //         return
-            //     }
-            // }
+
+            if (this.considerActiveCategoryAndSubcategory) {
+                let currentQuestionCategoryActiveStatus = this.getCategoryActiveStatus(currentQuestion.sub_category.category_id)
+
+                if (!currentQuestionCategoryActiveStatus) {
+                    currentQuestion = this.getFirstActiveQuestion()
+                    if (!currentQuestion) {
+                        return
+                    }
+                    questIndex = this.getQuestionIndexById(currentQuestion.id)
+                    questNumber = this.getQuestionNumberFromIndex(questIndex)
+                }
+            }
 
             this.$store.commit('updateCurrentQuestion', {
                 newQuestionId: currentQuestion.id,
@@ -499,6 +503,53 @@ const mixinQuiz = {
                 }, 200)
             }
         },
+
+
+
+        getExamUserData (exam_id) {
+            return new Promise(function (resolve, reject) {
+                axios.post(API_ADDRESS.exam.examUser, {exam_id})
+                    .then((response) => {
+                        let userExamForParticipate = new Exam()
+                        userExamForParticipate.id =  Assistant.getId(response.data.data.exam_id)
+                        userExamForParticipate.user_exam_id = Assistant.getId(response.data.data.id)
+                        userExamForParticipate.created_at = response.data.data.created_at
+                        userExamForParticipate.questions_file_url = response.data.data.questions_file_url
+                        userExamForParticipate.categories = new QuestCategoryList(response.data.data.categories)
+                        userExamForParticipate.sub_categories = new QuestSubcategoryList(response.data.data.sub_categories)
+                        resolve(userExamForParticipate)
+                    })
+                    .catch((error) => {
+                        Assistant.reportErrors({location: 'GetExamDataFroParticipate'})
+                        reject(error)
+                    })
+            })
+        },
+        getQuestionsOfExam (questions_file_url) {
+            return new Promise(function(resolve, reject) {
+                if (!questions_file_url) {
+                    Assistant.handleAxiosError("exam file url is not set")
+                    reject(null)
+                    return
+                }
+
+                $.ajax({
+                        type: 'GET',
+                        url: questions_file_url,
+                        accept: "application/json; charset=utf-8",
+                        dataType: "json",
+                        success: function (data) {
+                            resolve(new QuestionList(data))
+                        },
+                        error: function (jqXHR, textStatus, errorThrown) {
+                            Assistant.reportErrors({location: 'GetQuestionsOfExam', message: "can't get exam file", data: {jqXHR, textStatus, errorThrown}})
+                            Assistant.handleAxiosError("can't get exam file")
+                            reject({jqXHR, textStatus, errorThrown})
+                        }
+                    }
+                );
+            })
+        }
     }
 }
 

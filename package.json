@@ -10,6 +10,7 @@
   "dependencies": {
     "@jhuix/vue-showdowns-editor": "^1.0.4",
     "@mdi/font": "^5.8.55",
+    "@nodeguy/server-date": "^4.0.3",
     "@silvermine/videojs-quality-selector": "^1.2.4",
     "@tinymce/tinymce-vue": "^3.2.6",
     "@xkeshi/image-compressor": "^0.5.3",
