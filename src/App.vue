@@ -81,6 +81,7 @@
 
 <script>
     import Vue from 'vue'
+    import Time from '@/plugins/time'
     import VueConfirmDialog from 'vue-confirm-dialog'
     import {mixinAuth, mixinQuiz, mixinDrawer, mixinWindowSize} from '@/mixin/Mixins'
     import '@/assets/scss/app.scss'
@@ -124,6 +125,7 @@
             selectedItem: null
         }),
         created() {
+            Time.synchronizeTime()
             this.$store.commit('AppLayout/updateAppBarAndDrawer', true)
         }
     };

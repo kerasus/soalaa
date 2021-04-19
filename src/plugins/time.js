@@ -1,12 +1,24 @@
 import moment from 'moment'
+import { getServerDate } from '@nodeguy/server-date'
 import Assistant from "@/plugins/assistant";
 // import Assistant from "@/plugins/assistant";
 // import store from '@/store/store'
 // import { Quiz } from '@/models/Quiz'
 
 let Time = function () {
+    async function synchronizeTime () {
+        window.serverDate = {}
+        const { date, offset, uncertainty } = await getServerDate();
+        window.serverDate = { date, offset, uncertainty }
+        console.log(`The server's date is ${date} +/- ${uncertainty} milliseconds. offset:`+offset);
+    }
+
     function now() {
-        return moment().format('YYYY-MM-DD HH:mm:ss');
+        if (!window.serverDate.offset) {
+            window.serverDate.offset = 0
+        }
+        const serverDate = new Date(Date.now() + window.serverDate.offset);
+        return moment(serverDate).format('YYYY-MM-DD HH:mm:ss');
     }
 
     function getPassedTime(startTime, formattedTime) {
@@ -102,6 +114,7 @@ let Time = function () {
         now,
         diff,
         msToTime,
+        synchronizeTime,
         getRemainTime,
         getPassedTime,
         setStateOfExamCategories,
