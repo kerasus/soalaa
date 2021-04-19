@@ -45,8 +45,14 @@ let Time = function () {
         return aDiff.diff(bDiff) // 86400000
     }
 
-    function setStateOfExamCategories(categories) {
+    function setStateOfExamCategories(categories, newState) {
         categories.list.forEach( (category, index, categories) => {
+            if (newState === true) {
+                category.is_active = true
+
+                return category
+            }
+
             const prevCat = categories[index - 1]
             const lastCat = categories[categories.length - 1]
             const lastCatAcceptAtPassedTime = (!lastCat) ? -1 : getPassedTime(lastCat.accept_at, false)
@@ -63,7 +69,6 @@ let Time = function () {
             } else if (categoryAcceptAtPassedTime > 0) {
                 category.is_active = false
             }
-            category.is_active = true
 
             return category
         })

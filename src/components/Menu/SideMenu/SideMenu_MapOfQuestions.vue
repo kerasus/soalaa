@@ -46,7 +46,20 @@
             </div>
         </div>
         </div>
-        <v-btn @click="getConfirmation" :color="'#4caf50'" :style="{ backgroundColor: '#4caf50 !important' }" dark class="end-exam-btn">ارسال پاسخنامه</v-btn>
+        <div>
+            <v-btn @click="getConfirmation"
+                   :color="'#4caf50'"
+                   :style="{ backgroundColor: '#4caf50 !important' }"
+                   dark
+                   block
+                   class="end-exam-btn">
+                ارسال پاسخنامه
+            </v-btn>
+            <br>
+            <br>
+            <br>
+            <br>
+        </div>
     </v-sheet>
 </template>
 

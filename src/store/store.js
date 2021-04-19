@@ -185,11 +185,11 @@ const store = new Vuex.Store({
         setExamAcceptAtIsPassed (state) {
             state.quiz.accept_at_is_passed = true
         },
-        setActiveStateOfExamCategories (state) {
+        setActiveStateOfExamCategories (state, newInfo) {
             if (!state.quiz) {
                 return
             }
-            Time.setStateOfExamCategories(state.quiz.categories)
+            Time.setStateOfExamCategories(state.quiz.categories, newInfo)
         },
         setActiveStateOfQuestionsBasedOnActiveCategory (state) {
             if (!state.quiz) {

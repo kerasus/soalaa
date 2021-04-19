@@ -52,10 +52,11 @@
             doActionsOnChangeCategory (newCat) {
                 if (!newCat || !this.currentCat || Assistant.getId(newCat.id) !== Assistant.getId(this.currentCat.id)) {
                     this.currentCat = newCat
-                    this.$store.commit('setActiveStateOfExamCategories')
+                    this.$store.commit('setActiveStateOfExamCategories', !this.considerActiveCategoryAndSubcategory)
                     if (this.currentCat) {
                         this.goToCategory(this.currentCat.id)
-                        this.$store.commit('setActiveStateOfQuestionsBasedOnActiveCategory')
+                        Time.setStateOfQuestionsBasedOnActiveCategory(this.quiz, this.getCurrentExamQuestions())
+                        // this.$store.commit('setActiveStateOfQuestionsBasedOnActiveCategory')
                     }
                     this.setExamAcceptAtIsPassedWhenAllCategoryIsPassed()
                 }
