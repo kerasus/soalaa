@@ -3,40 +3,40 @@
         <div style="background-color: rgb(244, 244, 244)">
             <div class="d-flex justify-center wrapper">
                 <v-row v-if="report">
+                    <v-col cols="12">
+                        <v-btn block dark color="cyan" @click="sendData">تخمین رتبه</v-btn>
+                    </v-col>
                     <v-col md="7" cols="12">
                         <v-data-table
                                 hide-default-footer
                                 :headers="headers1"
+                                :header-props="{sortByText: 'ترتیب'}"
                                 :items="takhminReport.sub_category"
-                                :key="takhminReport_PROCESS_ID"
-                                :items-per-page="15"
+                                :items-per-page="99"
                                 class="elevation-1 dataTable dataTableHeight1"
                         >
                             <template v-slot:top>
-                                <br>
                                 <span class="tableTitle">
-                                        جدول عملکرد دروس
-                                    </span>
-                                <br>
-                                <br>
+                                    جدول عملکرد دروس
+                                </span>
                             </template>
                             <template v-slot:item.percent="props">
                                 <v-text-field
-                                        type="number"
                                         v-model="percents[props.item.sub_category_id]"
+                                        :rules="[numberRule, percentRule]"
                                         @input.native="resetAnswerCount(props.item.sub_category_id)"
                                 />
                             </template>
                             <template v-slot:item.right_answer="props">
                                 <v-text-field
-                                        type="number"
+                                        :rules="[numberRule]"
                                         v-model="answerCounts[props.item.sub_category_id].correct"
                                         @input.native="calcPercent(props.item.sub_category_id, $event.target)"
                                 />
                             </template>
                             <template v-slot:item.wrong_answer="props">
                                 <v-text-field
-                                        type="number"
+                                        :rules="[numberRule]"
                                         v-model="answerCounts[props.item.sub_category_id].incorrect"
                                         @input.native="calcPercent(props.item.sub_category_id, $event.target)"
                                 />
@@ -47,17 +47,15 @@
                         <v-data-table
                                 hide-default-footer
                                 :headers="headers2"
+                                :header-props="{sortByText: 'ترتیب'}"
                                 :items="takhminReport.zirgorooh"
                                 :items-per-page="5"
                                 class="elevation-1 dataTable dataTableHeight2"
                         >
                             <template v-slot:top>
-                                <br>
                                 <span class="tableTitle ">
-                                        نتیجه در زیر گروه ها
+                                    نتیجه در زیر گروه ها
                                 </span>
-                                <br>
-                                <br>
                             </template>
 
                         </v-data-table>
@@ -105,9 +103,6 @@
                 </v-row>
             </div>
         </div>
-        <v-row>
-            <v-btn @click="sendData">تخمین رتبه</v-btn>
-        </v-row>
     </div>
 </template>
 
@@ -120,7 +115,15 @@
         name: 'takhminRotbe',
         data() {
             return {
-                takhminReport_PROCESS_ID: Date.now(),
+                numberRule: v  => {
+                    if (!isNaN(v) && v !== ' ' && v !== '') return true;
+                    return 'مقدار وارد شده عدد نیست.';
+                },
+                percentRule: v  => {
+                    if (!v.toString().trim()) return true;
+                    if (!isNaN(parseFloat(v)) && v >= -33.33 && v <= 100) return true;
+                    return 'درصد می بایست عددی در بازه 33.33- درصد تا 100 درصد باشد.';
+                },
                 takhminReport: {
                     main: {
                         percent: 0,
@@ -173,7 +176,7 @@
                     this.$notify({
                         group: 'notifs',
                         title: 'توجه!',
-                        text: 'درصد می بایست در بازه -33.33 و 100 قرار داشته باشد.',
+                        text: 'درصد می بایست در بازه 33.33- درصد تا 100 درصد باشد.',
                         type: 'error'
                     })
                     Vue.set(this.percents, subcategoryId, 0)
@@ -185,8 +188,10 @@
                 if (
                     typeof this.answerCounts[subcategoryId].correct === 'undefined' ||
                     this.answerCounts[subcategoryId].correct === null ||
+                    isNaN(this.answerCounts[subcategoryId].correct) ||
                     typeof this.answerCounts[subcategoryId].incorrect === 'undefined' ||
-                    this.answerCounts[subcategoryId].incorrect === null
+                    this.answerCounts[subcategoryId].incorrect === null ||
+                    isNaN(this.answerCounts[subcategoryId].incorrect)
                 ) {
                     Vue.set(this.percents, subcategoryId, 0)
                     return false
@@ -232,6 +237,9 @@
 
                 let calculated = (((correct * 3) - incorrect) /  (totalQuestions * 3)) * 100
                 calculated = parseFloat(calculated).toFixed(1)
+                if (isNaN(calculated)) {
+                    calculated = 0
+                }
                 Vue.set(this.percents, subcategoryId, calculated)
 
                 this.prepareTakhmineRotbeReport()
@@ -266,17 +274,46 @@
 
                 Vue.set(this, 'takhminReport', takhminReport)
             },
+            validateSendData () {
+                let status = true
+                for (const subcategoryId in this.percents) {
+                    let percent = this.percents[subcategoryId]
+                    if (isNaN(percent)) {
+                        this.$notify({
+                            group: 'notifs',
+                            title: 'توجه!',
+                            text: 'مقدار صحیحی برای درصد وارد نشده است.',
+                            type: 'error'
+                        })
+                        status = false
+                    }
+                    percent = parseInt(percent)
+                    if (percent > 100 || percent < -33.33) {
+                        this.$notify({
+                            group: 'notifs',
+                            title: 'توجه!',
+                            text: 'درصد می بایست در بازه 33.33- درصد تا 100 درصد باشد.',
+                            type: 'error'
+                        })
+                        status = false
+                    }
+                }
+
+                return status
+            },
             sendData () {
+                if (!this.validateSendData()) {
+                    return
+                }
+
                 let that = this
                 const keys = Object.keys(this.percents)
                 let sentPercents = []
                 for (let i = 0; i < keys.length; i++) {
-                    sentPercents.push(
-                        {
-                            percent: parseFloat(this.percents[keys[i]]),
-                            sub_category_id: keys[i]
-                        }
-                    )
+                    sentPercents.push({
+                        percent: parseFloat(this.percents[keys[i]]),
+                        sub_category_id: keys[i]
+                    })
                 }
                 axios.post(API_ADDRESS.exam.takhminRotbe, {
                     exam_user_id: that.takhminReport.exam_user_id,
