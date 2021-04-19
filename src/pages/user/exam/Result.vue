@@ -7,8 +7,7 @@
         </v-row>
         <v-row class="d-flex justify-center">
             <v-col>
-                <v-card elevation="0" class="infoCard align-content-center"
-                        >
+                <v-card elevation="0" class="infoCard align-content-center">
                     <v-row style="height: 50% ;margin: inherit;">
                         <v-col xl="3" sm="6" cols="12" class="exam-title">
                             نتیجه
@@ -27,6 +26,7 @@
                             <v-tabs v-model="tab" color="#ffc107" center-active show-arrows>
                                 <v-tabs-slider color="yellow"></v-tabs-slider>
                                 <v-tab>کارنامه</v-tab>
+                                <v-tab>تخمین رتبه</v-tab>
                                 <v-tab>ریزدرس ها</v-tab>
                                 <v-tab>پاسخبرگ کلیدی</v-tab>
                                 <v-tab>پاسخ نامه تشریحی</v-tab>
@@ -42,6 +42,9 @@
                 <v-tabs-items v-model="tab">
                     <v-tab-item>
                         <PersonalResult :report="report"/>
+                    </v-tab-item>
+                    <v-tab-item>
+                        <takhmin-rotbe :report="report" />
                     </v-tab-item>
                     <v-tab-item>
                         <StatisticResult :report="report"/>
@@ -76,7 +79,7 @@
                                 <v-col md="6">
                                     <div class="download-box">
                                         <p class="download-title">دانلود پاسخنامه تشریحی {{ report.exams_booklet[1].title }}</p>
-                                        <v-btn outlined color="--primary-2" height="75px" width="250px" :href="report.exams_booklet[0].descriptive_answers_url"  target="_blank">
+                                        <v-btn outlined color="--primary-2" height="75px" width="250px" :href="report.exams_booklet[1].descriptive_answers_url"  target="_blank">
                                             دانلود فایل PDF
                                             <v-icon class="donwload-icon">mdi-download</v-icon>
                                         </v-btn>
@@ -85,7 +88,7 @@
                                 <v-col md="6">
                                     <div class="download-box">
                                         <p class="download-title">دانلود {{ report.exams_booklet[1].title }}</p>
-                                        <v-btn outlined color="--primary-2" height="75px" width="250px" :href="report.exams_booklet[0].questions_url" target="_blank">
+                                        <v-btn outlined color="--primary-2" height="75px" width="250px" :href="report.exams_booklet[1].questions_url" target="_blank">
                                             دانلود فایل PDF
                                             <v-icon class="donwload-icon">mdi-download</v-icon>
                                         </v-btn>
@@ -192,10 +195,11 @@
     import {AlaaContent} from '@/models/AlaaContent'
     import StatisticResult from '@/components/OnlineQuiz/Quiz/resultTables/statisticResult'
     import API_ADDRESS from '@/api/Addresses'
+    import TakhminRotbe from "@/components/OnlineQuiz/Quiz/TakhminRotbe";
 
     export default {
         name: 'Result',
-        components: { StatisticResult, BubbleSheet, Info, PersonalResult},
+        components: {TakhminRotbe, StatisticResult, BubbleSheet, Info, PersonalResult},
         mixins: [mixinAuth, mixinQuiz, mixinWindowSize],
         watch: {
             selectedTimepoint () {
