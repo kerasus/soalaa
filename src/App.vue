@@ -174,8 +174,8 @@
         --error-3: #f44336;
     }
 
-    .v-application {
-        font-family: 'IRANSans', 'Arial', 'Verdana', 'Tahoma', sans-serif;
+    .v-application, .v-application .headline {
+        font-family: 'IRANSans', 'Arial', 'Verdana', 'Tahoma', sans-serif !important;
     }
 
     .choice p:nth-child(2n) {
