@@ -206,6 +206,9 @@
                 this.playTimePoint()
             },
             tab () {
+                if (!this.player) {
+                    return
+                }
                 this.player.pause()
             }
         },

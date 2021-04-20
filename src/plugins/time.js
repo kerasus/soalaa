@@ -1,12 +1,24 @@
 import moment from 'moment'
+import { getServerDate } from '@nodeguy/server-date'
 import Assistant from "@/plugins/assistant";
 // import Assistant from "@/plugins/assistant";
 // import store from '@/store/store'
 // import { Quiz } from '@/models/Quiz'
 
 let Time = function () {
+    async function synchronizeTime () {
+        window.serverDate = {}
+        const { date, offset, uncertainty } = await getServerDate();
+        window.serverDate = { date, offset, uncertainty }
+        console.log(`The server's date is ${date} +/- ${uncertainty} milliseconds. offset:`+offset);
+    }
+
     function now() {
-        return moment().format('YYYY-MM-DD HH:mm:ss');
+        if (!window.serverDate.offset) {
+            window.serverDate.offset = 0
+        }
+        const serverDate = new Date(Date.now() + window.serverDate.offset);
+        return moment(serverDate).format('YYYY-MM-DD HH:mm:ss');
     }
 
     function getPassedTime(startTime, formattedTime) {
@@ -45,8 +57,14 @@ let Time = function () {
         return aDiff.diff(bDiff) // 86400000
     }
 
-    function setStateOfExamCategories(categories) {
+    function setStateOfExamCategories(categories, newState) {
         categories.list.forEach( (category, index, categories) => {
+            if (newState === true) {
+                category.is_active = true
+
+                return category
+            }
+
             const prevCat = categories[index - 1]
             const lastCat = categories[categories.length - 1]
             const lastCatAcceptAtPassedTime = (!lastCat) ? -1 : getPassedTime(lastCat.accept_at, false)
@@ -63,7 +81,6 @@ let Time = function () {
             } else if (categoryAcceptAtPassedTime > 0) {
                 category.is_active = false
             }
-            category.is_active = true
 
             return category
         })
@@ -97,6 +114,7 @@ let Time = function () {
         now,
         diff,
         msToTime,
+        synchronizeTime,
         getRemainTime,
         getPassedTime,
         setStateOfExamCategories,

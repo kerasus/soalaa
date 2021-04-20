@@ -46,7 +46,20 @@
             </div>
         </div>
         </div>
-        <v-btn @click="getConfirmation" :color="'#4caf50'" :style="{ backgroundColor: '#4caf50 !important' }" dark class="end-exam-btn">ارسال پاسخنامه</v-btn>
+        <div>
+            <v-btn @click="getConfirmation"
+                   :color="'#4caf50'"
+                   :style="{ backgroundColor: '#4caf50 !important' }"
+                   dark
+                   block
+                   class="end-exam-btn">
+                ارسال پاسخنامه
+            </v-btn>
+            <br>
+            <br>
+            <br>
+            <br>
+        </div>
     </v-sheet>
 </template>
 
@@ -75,7 +88,7 @@
             getConfirmation(){
                 let that = this
                 this.$store.commit('AppLayout/showConfirmDialog', {
-                    message: `مطمئنی؟ نتیجه شما پس از تایید، ثبت و رتبه شما محاسبه خواهد شد و به اندازه میانگین درصدهای شما، کد تخفیف همه محصولات آلاء برای شما ارسال خواهد شد. مثلا اگر میانگین درصدهای شما 60% باشد یک کد تخفیف 60% دریافت خواهید کرد`,
+                    message: `مطمئنی؟ نتیجه شما پس از تایید، ثبت و رتبه شما محاسبه خواهد شد `,
                     button: {
                         no: 'ادامه میدم',
                         yes: 'ثبت میکنم'

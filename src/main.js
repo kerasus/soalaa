@@ -11,7 +11,7 @@ Vue.use(VueNotification)
 Vue.config.productionTip = false
 Axios.handleError()
 
-new Vue({
+window.VueApp = new Vue({
   store,
   vuetify,
   router,

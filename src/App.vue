@@ -1,6 +1,9 @@
 <template>
     <v-app v-resize="updateWindowSize">
-        <v-navigation-drawer app v-model="drawer" right width="316"
+        <v-navigation-drawer app
+                             v-model="drawer"
+                             right
+                             width="316"
                              :class="{
                                  'mapOfQuestions': $route.name === 'onlineQuiz.alaaView' || $route.name === 'onlineQuiz.konkoorView',
                                  'right-drawer': $route.name !== 'onlineQuiz.alaaView' && $route.name !== 'onlineQuiz.konkoorView'
@@ -8,11 +11,12 @@
         >
             <div style="height: 150px;line-height: 150px;font-size: 4rem;color: rgb(255, 193, 7);display: flex;align-items: center;justify-content: center;">
                 <div style="display: block">
-                    <v-img src="/img/logo-1.png" width="150" v-if="$route.name === 'onlineQuiz.alaaView'" />
-                    <v-img src="/img/logo-2.png" width="150" v-else />
+                    <v-img src="/img/logo-1.png" width="150" v-if="$route.name === 'onlineQuiz.alaaView'"/>
+                    <v-img src="/img/logo-2.png" width="150" v-else/>
                 </div>
             </div>
-            <SideMenu_MapOfQuestions v-if="$route.name === 'onlineQuiz.alaaView' || $route.name === 'onlineQuiz.konkoorView'"/>
+            <SideMenu_MapOfQuestions
+                    v-if="$route.name === 'onlineQuiz.alaaView' || $route.name === 'onlineQuiz.konkoorView'"/>
             <SideMenu_Dashboard v-else/>
         </v-navigation-drawer>
         <v-app-bar v-if="appBar" app color="--background-2" elevate-on-scroll>
@@ -23,7 +27,8 @@
                             <div class="rounded-b-xl rounded-r-xl d-flex flex-row align-center">
                                 <v-menu bottom :offset-y="true" class="rounded-b-xl rounded-r-xl">
                                     <template v-slot:activator="{ on, attrs }">
-                                        <v-btn large tile v-bind="attrs" v-on="on" elevation="0" class="pl-3 topMenuOpenButton">
+                                        <v-btn large tile v-bind="attrs" v-on="on" elevation="0"
+                                               class="pl-3 topMenuOpenButton">
                                             <v-icon class="mr-2" :size="30" color="#666">mdi-account-circle</v-icon>
                                             <span v-if="user.last_name">
                                                 {{ user.last_name }}
@@ -41,7 +46,8 @@
 
                             </div>
                             <div>
-                                <v-btn v-if="$route.name === 'onlineQuiz.alaaView'" class="switch-view-button" icon @click="changeView('konkoor')">
+                                <v-btn v-if="$route.name === 'onlineQuiz.alaaView'" class="switch-view-button" icon
+                                       @click="changeView('konkoor')">
                                     <v-icon>mdi-dots-grid</v-icon>
                                 </v-btn>
                                 <v-app-bar-nav-icon
@@ -56,7 +62,7 @@
             </div>
         </v-app-bar>
         <v-main>
-            <notifications group="notifs" />
+            <notifications group="notifs"/>
             <v-overlay :absolute="true" :opacity="0.5" :value="overlay.show">
                 <v-progress-circular
                         v-if="overlay.loading"
@@ -75,30 +81,37 @@
 
 <script>
     import Vue from 'vue'
+    import Time from '@/plugins/time'
     import VueConfirmDialog from 'vue-confirm-dialog'
-    import { mixinAuth, mixinQuiz, mixinDrawer, mixinWindowSize } from '@/mixin/Mixins'
+    import {mixinAuth, mixinQuiz, mixinDrawer, mixinWindowSize} from '@/mixin/Mixins'
     import '@/assets/scss/app.scss'
     import '@/assets/scss/font.scss'
     import '@mdi/font/css/materialdesignicons.css'
-    import { SideMenu_Dashboard, SideMenu_MapOfQuestions, TopMenu_OnlineQuiz, TopMenu_Dashboard } from '@/components/Menu/Menus'
+    import {
+        SideMenu_Dashboard,
+        SideMenu_MapOfQuestions,
+        TopMenu_OnlineQuiz,
+        TopMenu_Dashboard
+    } from '@/components/Menu/Menus'
+
     Vue.component('vue-confirm-dialog', VueConfirmDialog.default)
 
     export default {
         name: 'App',
         mixins: [mixinAuth, mixinQuiz, mixinDrawer, mixinWindowSize],
         watch: {
-            selectedItem () {
+            selectedItem() {
                 this.selectedItem = null
             }
         },
         computed: {
-            appBar () {
+            appBar() {
                 return this.$store.getters['AppLayout/appBar']
             },
-            overlay () {
+            overlay() {
                 return this.$store.getters['AppLayout/overlay']
             },
-            confirmDialog () {
+            confirmDialog() {
                 return this.$store.getters['AppLayout/confirmDialog']
             }
         },
@@ -112,6 +125,7 @@
             selectedItem: null
         }),
         created() {
+            Time.synchronizeTime()
             this.$store.commit('AppLayout/updateAppBarAndDrawer', true)
         }
     };
@@ -160,8 +174,8 @@
         --error-3: #f44336;
     }
 
-    .v-application {
-        font-family: 'IRANSans', 'Arial', 'Verdana', 'Tahoma', sans-serif;
+    .v-application, .v-application .headline {
+        font-family: 'IRANSans', 'Arial', 'Verdana', 'Tahoma', sans-serif !important;
     }
 
     .choice p:nth-child(2n) {
@@ -182,13 +196,16 @@
         border-bottom-left-radius: 24px !important;
         border-bottom-right-radius: 24px !important;
     }
+
     /*ToDo: not suport IE*/
     .v-navigation-drawer {
         filter: drop-shadow(-3px 0px 10px rgba(0, 0, 0, 0.102));
     }
+
     .v-navigation-drawer .v-navigation-drawer__content .theme--light.v-btn {
         color: #666;
     }
+
     .v-navigation-drawer__border {
         background: transparent !important;
     }
@@ -200,13 +217,16 @@
     .appDarkMode * {
         transition: 0.2s cubic-bezier(0.4, 0, 0.2, 1);;
     }
+
     .appDarkMode .v-main {
         background: #242424;;
     }
+
     .appDarkMode header,
     .appDarkMode .topMenuOpenButton {
         background: #242424 !important;
     }
+
     .appDarkMode div,
     .appDarkMode .topMenuOpenButton span {
         color: #bfbfbf;

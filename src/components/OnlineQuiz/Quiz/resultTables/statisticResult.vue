@@ -6,6 +6,7 @@
                     <v-data-table
                             hide-default-footer
                             :headers="headers"
+                            :header-props="{sortByText: 'ترتیب'}"
                             :items="dataTable"
                             :items-per-page="15"
                             class="elevation-1 dataTable"

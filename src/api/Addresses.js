@@ -62,6 +62,7 @@ const API_ADDRESS = {
     updateQuestion (questionId) {
       return lumenServer + '/question/' + questionId
     },
+    attach: lumenServer + '/exam-question/attach/v2',
     detach (questionId) {
       return lumenServer + '/exam-question/detach/'+questionId
     },

@@ -1,94 +1,182 @@
 <template>
     <v-container :fluid="true" dir="rtl">
-        <v-dialog v-model="editDialog" max-width="1600px">
+        <v-row>
+            <v-col md="12">
+                <v-data-table
+                        :headers="selectedQuizzesHeaders"
+                        :items="selectedQuizzes"
+                        :loading="attachLoading"
+                        loading-text="کمی صبر کنید..."
+                        dense
+                        sort-by="title"
+                        class="elevation-1"
+                >
+                    <template v-slot:top>
+                        <v-toolbar
+                                flat
+                        >
+                            <v-toolbar-title>آزمون های تخصیص داده شده</v-toolbar-title>
+                            <v-divider
+                                    class="mx-4"
+                                    inset
+                                    vertical
+                            ></v-divider>
+                            <v-spacer></v-spacer>
+                            <v-dialog
+                                    v-model="dialog"
+                                    max-width="500px"
+                            >
+                                <template v-slot:activator="{ on, attrs }">
+                                    <v-btn
+                                            color="primary"
+                                            dark
+                                            class="mb-2"
+                                            v-bind="attrs"
+                                            v-on="on"
+                                    >
+                                        آزمون جدید
+                                    </v-btn>
+                                </template>
+                                <v-card>
+                                    <v-card-title>
+                                        <span class="headline">تخصیص سوال به آزمون</span>
+                                    </v-card-title>
+                                    <v-card-text>
+                                        <v-container>
+                                            <v-row>
+                                                <v-col cols="12">
+                                                    <v-autocomplete
+                                                            v-model="attachExamID"
+                                                            :items="totalExams"
+                                                            label="آزمون"
+                                                            item-text="title"
+                                                            item-value="id"
+                                                            dense
+                                                            outlined
+                                                    ></v-autocomplete>
+                                                </v-col>
+                                                <v-col cols="12">
+                                                    <v-autocomplete
+                                                            v-model="attachSubcategoryID"
+                                                            :items="subCategoriesList.list"
+                                                            label="درس"
+                                                            item-text="display_title"
+                                                            item-value="id"
+                                                            dense
+                                                            outlined
+                                                    ></v-autocomplete>
+                                                </v-col>
+                                                <v-col cols="12">
+                                                    <v-text-field dense
+                                                                  label="ترتیب"
+                                                                  v-model="attachOrder"
+                                                                  type="number"
+                                                                  outlined
+                                                    />
+                                                </v-col>
+                                            </v-row>
+                                        </v-container>
+                                    </v-card-text>
+                                    <v-card-actions>
+                                        <v-spacer></v-spacer>
+                                        <v-btn
+                                                color="blue darken-1"
+                                                text
+                                                @click="close"
+                                        >
+                                            انصراف
+                                        </v-btn>
+                                        <v-btn
+                                                dark
+                                                color="green"
+                                                @click="attachQuestion"
+                                        >
+                                            افزودن
+                                        </v-btn>
+                                    </v-card-actions>
+                                </v-card>
+                            </v-dialog>
+                            <v-dialog v-model="dialogDelete" max-width="500px">
+                                <v-card>
+                                    <v-card-title class="headline">از حذف سوال از این آزمون اطمینان دارید؟</v-card-title>
+                                    <v-card-actions>
+                                        <v-spacer></v-spacer>
+                                        <v-btn color="blue darken-1" text @click="closeDelete">خیر</v-btn>
+                                        <v-btn color="blue darken-1" text @click="deleteItemConfirm">بله</v-btn>
+                                        <v-spacer></v-spacer>
+                                    </v-card-actions>
+                                </v-card>
+                            </v-dialog>
+                        </v-toolbar>
+                    </template>
+                    <template v-slot:item.actions="{ item }">
+                        <v-icon
+                                color="pink"
+                                @click="detachQuestion(item)"
+                        >
+                            mdi-delete
+                        </v-icon>
+                    </template>
+                </v-data-table>
+            </v-col>
+            <v-col cols="12">
+                <v-btn color="light-green" dark @click="submitQuestion" block>ثبت سوال</v-btn>
+            </v-col>
+        </v-row>
+        <v-dialog v-if="false" v-model="editDialog" max-width="1600px">
             <v-sheet class="pa-5">
                 <v-row>
-                    <v-col :md="4">
-                        <v-select label="آزمون" :items="quizList.list" item-text="title" item-value="id" v-model="selectedQuizzes" multiple dense :disabled="editMode" outlined />
-                    </v-col>
-                    <v-col :md="2">
-                        <v-btn @click="selectAllExams" color="secondary">انتخاب همه آزمون ها</v-btn>
-                    </v-col>
-                    <v-col :md="2" v-for="index in selectedQuizzes.length" :key="index">
+                    <v-col v-show="false" :md="3" class="d-flex justify-center">
                         <v-text-field
-                                dense
-                                v-if="typeof getQuizById(selectedQuizzes[index - 1]) !== 'undefined' && typeof getExamById(selectedQuizzes[index - 1]) !== 'undefined'"
-                                :label="'ترتیب در ' + getQuizById(selectedQuizzes[index - 1]).title"
-                                v-model="getExamById(selectedQuizzes[index - 1]).order"
-                                type="number"
-                                :disabled="editMode"
+                                suffix="ثانیه"
+                                v-model="currentQuestion.recommendedTime"
+                                prepend-icon="mdi-timer-outline"
                                 outlined
+                                label="زمان پیشنهادی"
+                                :style="{ maxWidth: '170px' }"
+                                dense
+                                class="recommended-time"
+                                type="number"
                         />
                     </v-col>
-                </v-row>
-                <v-row>
-                    <v-col :md="3">
-                        <v-select label="درس" :items="subCategoriesList.list" item-text="display_title" item-value="id" v-model="currentQuestion.sub_category_id" dense :disabled="editMode" outlined />
-                    </v-col>
-                    <v-col :md="3" class="d-flex justify-center">
-                        <v-text-field suffix="ثانیه" v-model="currentQuestion.recommendedTime" prepend-icon="mdi-timer-outline" outlined label="زمان پیشنهادی" :style="{ maxWidth: '170px' }" dense class="recommended-time" type="number"></v-text-field>
-                    </v-col>
-                    <v-col :md="3">
+                    <v-col v-show="false" :md="3">
                         <v-btn-toggle v-model="currentQuestion.difficulty" dense>
                             <v-btn v-for="item in difficulties" :key="item.id" :value="item.id" dense>
                                 {{ item.title }}
                             </v-btn>
                         </v-btn-toggle>
                     </v-col>
-
+                    <v-col v-if="editMode" :md="12">
+                        <v-btn dark color="blue" block>
+                            ویرایش
+                        </v-btn>
+                    </v-col>
                 </v-row>
             </v-sheet>
         </v-dialog>
         <v-form>
             <v-sheet color="#f4f4f4">
                 <v-row>
-<!--                    <v-col :md="3">-->
-<!--                        <v-select label="آزمون" :items="quizList.list" item-text="title" item-value="id" v-model="selectedQuizzes" multiple dense :disabled="editMode" outlined />-->
-<!--                    </v-col>-->
-<!--                    <v-col :md="2">-->
-<!--                        <v-btn @click="selectAllExams" color="secondary">انتخاب همه آزمون ها</v-btn>-->
-<!--                    </v-col>-->
-<!--                    <v-col :md="2">-->
-<!--                        <v-select label="درس" :items="subCategoriesList.list" item-text="display_title" item-value="id" v-model="currentQuestion.sub_category_id" dense :disabled="editMode" outlined />-->
-<!--                    </v-col>-->
-<!--                    <v-col :md="2">-->
-<!--                        <div v-for="index in selectedQuizzes.length" :key="index">-->
-<!--                            <v-text-field-->
-<!--                                    v-if="typeof getQuizById(selectedQuizzes[index - 1]) !== 'undefined' && typeof getExamById(selectedQuizzes[index - 1]) !== 'undefined'"-->
-<!--                                    :label="'ترتیب در ' + getQuizById(selectedQuizzes[index - 1]).title"-->
-<!--                                    v-model="getExamById(selectedQuizzes[index - 1]).order"-->
-<!--                                    type="number"-->
-<!--                                    :disabled="editMode"-->
-<!--                                    outlined-->
-<!--                            />-->
-<!--                        </div>-->
-<!--                    </v-col>-->
-<!--                    <v-col :md="3" @click="submitQuestion" type="submit">-->
-<!--                        <v-btn color="primary" block>ثبت سوال</v-btn>-->
-<!--                    </v-col>-->
-                    <v-col :md="12" class="main-info-container">
+                    <v-col v-if="false" :md="12" class="main-info-container">
                         <v-row class="justify-center">
                             <v-col :md="4" class="d-flex flex-row flex-wrap justify-space-between">
-                                <div class="question-info">
-                                    درس {{ getSubcategoryById.display_title }}
-                                </div>
-                                <div class="question-info">
+                                <div v-show="false" class="question-info">
                                     زمان پیشنهادی: {{ currentQuestion.recommendedTime }} ثانیه
                                 </div>
-                                <div class="question-info">
+                                <div v-show="false" class="question-info">
                                     طراح: {{ getQuestionCreator }}
                                 </div>
-                                <div class="question-info">
+                                <div v-show="false" class="question-info">
                                     سختی: {{ getCurrentDifficultyTitle }}
                                 </div>
                             </v-col>
                             <v-col :md="3" class="d-flex flex-column align-center">
-                                <div v-for="(item, index) in getSelectedQuizzez" :key="index" class="order-show">
+                                <div v-for="(item, index) in selectedQuizzes" :key="index" class="order-show">
                                     <p>
                                         ترتیب در {{ item.title }}:
                                     </p>
                                     <p :style="{ 'margin-left': '40px' }">
-                                        {{ getExamById(item.id).order }}
+                                        {{ item.order }}
                                     </p>
                                 </div>
                             </v-col>
@@ -96,9 +184,6 @@
                                 <v-btn color="grey" block :style="{ height: '100%' }" @click="editDialog = !editDialog">
                                     <v-icon>mdi-pencil</v-icon>
                                 </v-btn>
-                            </v-col>
-                            <v-col :md="1">
-                                <v-btn color="primary" @click="submitQuestion" block :style="{ height: '100%' }">ثبت سوال</v-btn>
                             </v-col>
                         </v-row>
                     </v-col>
@@ -284,6 +369,7 @@
     import {ExamList} from '@/models/Exam'
     import {QuestSubcategoryList} from '@/models/QuestSubcategory';
     import Vue from 'vue'
+    import axios from 'axios'
     import MarkdownBtn from '@/components/QuizEditor/MarkdownBtn';
     import UploadFiles from '@/components/UploadFiles';
     // import UploadImage from '@/components/UploadImage';
@@ -292,6 +378,8 @@
     import 'mathlive/dist/mathlive-fonts.css'
     import 'mathlive/dist/mathlive-static.css'
     import MathLive from 'mathlive'
+    import Assistant from "@/plugins/assistant";
+    // import Assistant from "@/plugins/assistant";
 
     export default {
         name: 'CreateOrEdit',
@@ -311,15 +399,6 @@
                 }
                 return arr
             },
-            getSubcategoryById () {
-                const target = this.subCategoriesList.list.find(item => item.id === this.currentQuestion.sub_category_id)
-
-                if (target) {
-                    return target
-                } else {
-                    return new QuestSubcategoryList()
-                }
-            },
             getCurrentDifficultyTitle () {
                 return this.difficulties.find(item => item.id === this.currentQuestion.difficulty).title
             },
@@ -327,8 +406,64 @@
                 return this.teachers.find(item => item.id === this.currentQuestion.creator).name
             }
         },
+        created() {
+            this.setEditModeState()
+            this.loanExamList()
+            this.loadSubcategories()
+            if (this.editMode) {
+                this.loadnCurrentQuestionData()
+            } else {
+                this.currentQuestion = new Question(this.questionData)
+            }
+        },
+        mounted() {
+            // this.rendered = this.markdown.render();
+            // this.updateRendered();
+
+            let that = this
+            const mf = MathLive.makeMathField(
+                document.getElementById('mathfield'),
+                {
+                    virtualKeyboardMode: 'manual',
+                    onContentDidChange: (mf) => {
+                        that.latexData = mf.getValue()
+                    },
+                });
+            // mf.$setConfig(
+            //     //{ macros: { ...mf.getConfig('macros'), smallfrac: '{}^{#1}\\!\\!/\\!{}_{#2}', }, }
+            // );
+            that.latexData = mf.getValue()
+
+        },
         data: () => {
             return {
+                dialog: false,
+                dialogDelete: false,
+                selectedQuizzesHeaders: [
+                    {
+                        text: 'آزمون',
+                        align: 'start',
+                        sortable: false,
+                        value: 'title',
+                    },
+                    {
+                        text: 'درس',
+                        align: 'start',
+                        sortable: false,
+                        value: 'sub_category_title',
+                    },
+                    {
+                        text: 'ترتیب',
+                        align: 'start',
+                        sortable: false,
+                        value: 'order',
+                    },
+                    { text: '', value: 'actions', sortable: false }
+                ],
+                attachLoading: false,
+                attachExamID: null,
+                attachOrder: null,
+                attachSubcategoryID: null,
                 resizerImgFinalWidth: 0,
                 resizerImgSize: 0,
                 resizerImgHSize: 0,
@@ -400,10 +535,10 @@
                 currentQuestion: new Question(),
                 url: '',
                 editMode: false,
-                quizList: new ExamList(),
+                examList: new ExamList(),
+                totalExams: [],
                 subCategoriesList: new QuestSubcategoryList(),
                 selectedQuizzes: [],
-                exams: [],
                 matrixWidth: 1,
                 matrixHeight: 1,
                 matrixTempWidth: 1,
@@ -421,6 +556,134 @@
             }
         },
         methods: {
+            deleteItem (item) {
+                console.log('item', item)
+                this.editedIndex = this.selectedQuizzes.indexOf(item)
+                this.editedItem = Object.assign({}, item)
+                this.dialogDelete = true
+            },
+            deleteItemConfirm () {
+                this.selectedQuizzes.splice(this.editedIndex, 1)
+                this.closeDelete()
+            },
+            close () {
+                this.dialog = false
+                this.$nextTick(() => {
+                    // this.editedItem = Object.assign({}, this.defaultItem)
+                    this.editedIndex = -1
+                })
+            },
+            closeDelete () {
+                this.dialogDelete = false
+                this.$nextTick(() => {
+                    // this.editedItem = Object.assign({}, this.defaultItem)
+                    this.editedIndex = -1
+                })
+            },
+
+            attachQuestionOnEditMode () {
+                this.attachLoading = true
+                axios.post(API_ADDRESS.question.attach, {
+                    order: this.attachOrder,
+                    exam_id: this.attachExamID,
+                    question_id: this.$route.params.id,
+                    sub_category_id: this.attachSubcategoryID
+                })
+                    .then( response => {
+                        this.updateAttachList(response.data.data)
+                        console.log('response', response)
+                        this.attachLoading = false
+                        this.dialog = false
+                    })
+                    .catch( () => {
+                        this.attachLoading = false
+                        this.dialog = false
+                    })
+            },
+            attachQuestionOnCreateMode () {
+                const targetExamIndex = this.totalExams.findIndex(examItem => Assistant.getId(examItem.id) === Assistant.getId(this.attachExamID))
+                const targetSubCategoryIndex = this.subCategoriesList.list.findIndex(subCategoryItem => Assistant.getId(subCategoryItem.id) === Assistant.getId(this.attachSubcategoryID))
+                this.totalExams[targetExamIndex].order = this.attachOrder
+                this.totalExams[targetExamIndex].sub_category_id = this.attachSubcategoryID
+                this.totalExams[targetExamIndex].sub_category_title = this.subCategoriesList.list[targetSubCategoryIndex].display_title
+                this.selectedQuizzes.push(JSON.parse(JSON.stringify(this.totalExams[targetExamIndex])))
+                this.dialog = false
+            },
+            attachQuestion () {
+                if (this.editMode) {
+                    this.attachQuestionOnEditMode()
+                } else {
+                    this.attachQuestionOnCreateMode()
+                }
+            },
+            detachQuestionOnEditMode(item) {
+                this.attachLoading = true
+                axios.post(API_ADDRESS.question.detach(this.$route.params.id), {
+                    exams: [item.id]
+                })
+                    .then((response) => {
+                        console.log('response', response)
+                        // this.currentQuestion = new Question(responseData)
+                        // this.trueChoiceIndex = this.currentQuestion.choices.list.findIndex((item) => item.answer )
+                        // this.updateAttachList(response.data.data)
+                        const detachedExamIndex = this.selectedQuizzes.indexOf(examItem => Assistant.getId(examItem.id) === Assistant.getId(item.id))
+                        this.selectedQuizzes.splice(detachedExamIndex, 1)
+                        this.attachLoading = false
+                        this.dialog = false
+                    })
+                    .catch( () => {
+                        this.attachLoading = false
+                        this.dialog = false
+                    })
+            },
+            detachQuestionOnCreateMode(item) {
+                const detachedExamIndex = this.selectedQuizzes.indexOf(item)
+                this.selectedQuizzes.splice(detachedExamIndex, 1)
+                this.dialog = false
+            },
+            detachQuestion(item) {
+                let that = this
+                this.$store.commit('AppLayout/showConfirmDialog', {
+                    message: 'از حذف سوال از آزمون اطمینان دارید؟',
+                    button: {
+                        no: 'خیر',
+                        yes: 'بله'
+                    },
+                    callback: (confirm) => {
+                        if (!confirm) {
+                            return
+                        }
+                        if (that.editMode) {
+                            that.detachQuestionOnEditMode(item)
+                        } else {
+                            that.detachQuestionOnCreateMode(item)
+                        }
+                    }
+                })
+            },
+            setEditModeState () {
+                this.editMode = this.$route.name === 'quest.edit'
+            },
+            loanExamList () {
+                new ExamList().fetch().then((response) => {
+                    this.examList = new ExamList(response.data.data)
+                    this.totalExams = []
+                    this.examList.list.forEach(item => {
+                        this.totalExams.push({
+                            order: 0,
+                            sub_category_id: null,
+                            sub_category_title: '',
+                            title: item.title,
+                            id: item.id
+                        })
+                    })
+                })
+            },
+            loadSubcategories () {
+                this.subCategoriesList.fetch().then((response) => {
+                    this.subCategoriesList = new QuestSubcategoryList(response.data)
+                })
+            },
             copyResizedImgUrl () {
                 let size = '?'
                 size += 'w=' + Math.floor(this.resizerImgSize * (this.resizerImgFinalWidth / 100))
@@ -453,16 +716,6 @@
                     type: 'success'
                 })
             },
-            inputFile: function (newFile, oldFile) {
-                if (newFile && oldFile && !newFile.active && oldFile.active) {
-                    // Get response data
-                    console.log('response', newFile.response)
-                    if (newFile.xhr) {
-                        //  Get the response status code
-                        console.log('status', newFile.xhr.status)
-                    }
-                }
-            },
             inputFilter: function (newFile, oldFile, prevent) {
                 if (newFile && !oldFile) {
                     // Filter non-image file
@@ -478,17 +731,26 @@
                     newFile.blob = URL.createObjectURL(newFile.file)
                 }
             },
-
+            updateAttachList(exams) {
+                this.selectedQuizzes = []
+                exams.forEach( item => {
+                    const targetExamIndex = this.totalExams.findIndex(examItem => Assistant.getId(examItem.id) === Assistant.getId(item.exam_id))
+                    this.totalExams[targetExamIndex].order = item.order
+                    this.totalExams[targetExamIndex].sub_category_id = item.sub_category.id
+                    this.totalExams[targetExamIndex].sub_category_title = item.sub_category.title
+                    this.selectedQuizzes.push(this.totalExams[targetExamIndex])
+                })
+            },
             loadnCurrentQuestionData () {
+                let that = this
                 this.currentQuestion.show(null, API_ADDRESS.question.updateQuestion(this.$route.params.id))
                     .then((response) => {
                         this.currentQuestion = new Question(response.data.data)
                         this.trueChoiceIndex = this.currentQuestion.choices.list.findIndex((item) => item.answer )
-                        this.updateRendered()
+                        that.updateAttachList(response.data.data.exams)
+                        that.updateRendered()
                     })
             },
-
-
             initTable () {
                 this.table = []
                 let row = []
@@ -569,11 +831,8 @@
                 Vue.set(elem, key, elem[key] + string)
                 this.updateRendered()
             },
-            getExamById (quizId) {
-                return this.exams.find((quiz) => quiz.id === quizId )
-            },
             getQuizById (quizId) {
-                return this.quizList.list.find((quiz) => quiz.id === quizId )
+                return this.examList.list.find((quiz) => quiz.id === quizId )
             },
             // replaceNimFasele () {
             //     if (!this.currentQuestion.statement) {
@@ -587,7 +846,6 @@
                         this.currentQuestion.statement = ''
                     }
                     while (this.currentQuestion.statement.indexOf('$$') !== -1) {
-                        console.log(this.currentQuestion.statement.indexOf('$$'))
                         this.currentQuestion.statement = this.currentQuestion.statement.replace('$$', '$')
                     }
                     let dollarSignCounter = 0
@@ -652,9 +910,9 @@
                 this.replaceNimFasele()
             },
             selectAllExams () {
-                if (this.selectedQuizzes.length !== this.quizList.list.length) {
+                if (this.selectedQuizzes.length !== this.examList.list.length) {
                     this.selectedQuizzes = []
-                    this.quizList.list.forEach((item) => { this.selectedQuizzes.push(item.id) })
+                    this.examList.list.forEach((item) => { this.selectedQuizzes.push(item.id) })
                 }
             },
             submitQuestion () {
@@ -675,7 +933,7 @@
                 }
                 this.currentQuestion.choices.list.forEach((item) => { item.answer = false })
                 this.currentQuestion.choices.list[this.trueChoiceIndex].answer = true
-                this.currentQuestion.exams = this.exams
+                this.currentQuestion.exams = this.selectedQuizzes
                 this.currentQuestion.create()
                     .then(() => {
                         this.currentQuestion.statement = ''
@@ -686,7 +944,6 @@
                             text: 'ثبت با موفقیت انجام شد',
                             type: 'success'
                         })
-
                     })
 
             }
@@ -697,46 +954,6 @@
             //         }
             //     }
             // }
-        },
-        mounted() {
-
-            // this.rendered = this.markdown.render();
-            // this.updateRendered();
-
-            let that = this
-            const mf = MathLive.makeMathField(
-                document.getElementById('mathfield'),
-                {
-                    virtualKeyboardMode: 'manual',
-                    onContentDidChange: (mf) => {
-                        that.latexData = mf.getValue()
-                    },
-                });
-            // mf.$setConfig(
-            //     //{ macros: { ...mf.getConfig('macros'), smallfrac: '{}^{#1}\\!\\!/\\!{}_{#2}', }, }
-            // );
-            that.latexData = mf.getValue()
-
-        },
-        created() {
-            this.editMode = this.$route.name === 'quest.edit'
-            new ExamList().fetch().then((response) => {
-                this.quizList = new ExamList(response.data.data)
-            })
-            this.subCategoriesList.fetch().then((response) => {
-                this.subCategoriesList = new QuestSubcategoryList(response.data)
-            })
-            if (this.editMode) {
-                this.loadnCurrentQuestionData()
-            } else {
-                this.currentQuestion = new Question(this.questionData)
-            }
-        },
-        watch: {
-            'selectedQuizzes': function () {
-                this.exams = []
-                this.selectedQuizzes.forEach((item) => { this.exams.push({ id: item, order: null }) })
-            }
         }
     }
 </script>
