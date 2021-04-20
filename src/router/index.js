@@ -112,7 +112,7 @@ const router = new VueRouter({
             meta: {middleware: [auth, completeInfo]}
         },
 
-        // // dev pages
+        // dev pages
         // {
         //     path: '/quiz/edit-all',
         //     name: 'quiz.allQuestions',
@@ -125,12 +125,12 @@ const router = new VueRouter({
             component: () => lazyLoadView(import('@/components/tree')),
             meta: {middleware: [auth, completeInfo]}
         },
-        // {
-        //     path: '/debug',
-        //     name: 'debug',
-        //     component: () => lazyLoadView(import('@/components/debug')),
-        //     meta: {middleware: [auth, completeInfo]}
-        // },
+        {
+            path: '/debug',
+            name: 'debug',
+            component: () => lazyLoadView(import('@/components/debug')),
+            meta: {middleware: [auth, completeInfo]}
+        },
 
 
         // NotFound page
