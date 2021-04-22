@@ -556,6 +556,9 @@
             }
         },
         methods: {
+            getExamById (quizId) {
+                return this.totalExams.find(item => item.id == quizId);
+            },
             deleteItem (item) {
                 console.log('item', item)
                 this.editedIndex = this.selectedQuizzes.indexOf(item)
@@ -590,7 +593,7 @@
                     sub_category_id: this.attachSubcategoryID
                 })
                     .then( response => {
-                        this.updateAttachList(response.data.data)
+                        this.updateAttachList(response.data.data.exams)
                         console.log('response', response)
                         this.attachLoading = false
                         this.dialog = false
@@ -623,11 +626,19 @@
                 })
                     .then((response) => {
                         console.log('response', response)
+                        this.selectedQuizzes = []
+                        response.data.data.exams.forEach(item => {
+                            this.selectedQuizzes.push({
+                                id: item.exam_id,
+                                order: item.order,
+                                sub_category_id: item.sub_category.category_id,
+                                sub_category_title: item.sub_category.display_title,
+                                title: this.getExamById(item.exam_id).title
+                            })
+                        })
                         // this.currentQuestion = new Question(responseData)
                         // this.trueChoiceIndex = this.currentQuestion.choices.list.findIndex((item) => item.answer )
                         // this.updateAttachList(response.data.data)
-                        const detachedExamIndex = this.selectedQuizzes.indexOf(examItem => Assistant.getId(examItem.id) === Assistant.getId(item.id))
-                        this.selectedQuizzes.splice(detachedExamIndex, 1)
                         this.attachLoading = false
                         this.dialog = false
                     })
