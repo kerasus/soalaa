@@ -266,11 +266,11 @@
         methods: {
             getDataFromApi () {
                 this.loading = true
-                this.fakeApiCall().then(data => {
-                    this.desserts = data.items
-                    this.totalDesserts = data.total
-                    this.loading = false
-                })
+                // this.fakeApiCall().then(data => {
+                //     this.desserts = data.items
+                //     this.totalDesserts = data.total
+                //     this.loading = false
+                // })
             },
         },
         watch: {
