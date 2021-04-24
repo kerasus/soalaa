@@ -1,14 +1,26 @@
-
-
 <template>
-    <quiz />
+    <div>
+        test
+    </div>
 </template>
 
 <script>
 
-    import quiz from "@/components/OnlineQuiz/Quiz/quiz";
+
     export default {
         name: 'debug',
-        components: [quiz]
+        data () {
+            return {
+            }
+        },
+        components: {
+
+        },
+        methods: {
+
+        },
+        mounted () {
+
+        }
     }
 </script>
