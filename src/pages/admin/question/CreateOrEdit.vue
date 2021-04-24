@@ -702,15 +702,28 @@
                 this.copyToClipboard('![](' + this.resizerUrl + size + ')')
             },
             setWidth () {
+                let resizedWidth = 0
+                if (this.resizerUrl.indexOf('?w=') !== -1) {
+                    resizedWidth = parseInt(this.resizerUrl.slice(this.resizerUrl.indexOf('?w=') + 3, this.resizerUrl.indexOf('&h=')))
+                }
                 this.resizerUrl = this.resizerUrl.replace('![](https://cdn.alaatv.com', 'https://cdn.alaatv.com')
-                this.resizerUrl = this.resizerUrl.replace('.png)', '.png')
-                this.resizerUrl = this.resizerUrl.replace('.jpg)', '.jpg')
-                this.resizerUrl = this.resizerUrl.replace('.jpeg)', '.jpeg')
+                if (this.resizerUrl.indexOf('.png') !== -1) {
+                    this.resizerUrl = this.resizerUrl.slice(0, this.resizerUrl.indexOf('.png') + 4)
+                }
+                if (this.resizerUrl.indexOf('.jpg') !== -1) {
+                    this.resizerUrl = this.resizerUrl.slice(0, this.resizerUrl.indexOf('.jpg') + 4)
+                }
+                if (this.resizerUrl.indexOf('.jpeg') !== -1) {
+                    this.resizerUrl = this.resizerUrl.slice(0, this.resizerUrl.indexOf('.jpeg') + 5)
+                }
 
                 setTimeout(() => {
                     this.resizerImgSize = this.$refs.resizerimg.clientWidth
                     this.resizerImgHSize = this.$refs.resizerimg.clientHeight
-                    this.resizerImgFinalWidth = this.resizerImgSize
+                    if (resizedWidth) {
+                        console.log('tes')
+                    }
+                    this.resizerImgFinalWidth = 100
                 },500)
             },
             copyToClipboard (text) {
