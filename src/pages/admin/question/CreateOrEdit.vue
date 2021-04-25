@@ -720,10 +720,8 @@
                     this.resizerImgSize = this.$refs.resizerimg.clientWidth
                     this.resizerImgHSize = this.$refs.resizerimg.clientHeight
                     if (resizedWidth !== 0) {
-                        console.log(resizedWidth, this.resizerImgSize)
                         this.resizerImgFinalWidth = resizedWidth / this.resizerImgSize * 100
                     } else {
-                        console.log('2')
                         this.resizerImgFinalWidth = 100
                     }
                 },500)

@@ -394,6 +394,13 @@
         margin: 0;
     }
 
+    .konkoor-view strong em strong {
+        display: none;
+        font-weight: normal;
+        font-style: normal;
+        text-decoration: none !important;
+    }
+
     .main {
         margin-left: 15px;
         float: right;
