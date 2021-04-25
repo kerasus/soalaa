@@ -1,11 +1,11 @@
 <template>
     <v-container>
         <v-row>
-            <v-col cols="7">
+            <v-col col-lg="7" cols="12">
                 <exam-list @update-exam-id="updateExamId" ref="examList"/>
             </v-col>
             <v-col>
-                <exam-info :exam="exam" @refresh-exam-list="rereshExamList"/>
+                <exam-info col-lg="5" cols="12" :exam="exam" @refresh-exam-list="rereshExamList"/>
             </v-col>
         </v-row>
     </v-container>
