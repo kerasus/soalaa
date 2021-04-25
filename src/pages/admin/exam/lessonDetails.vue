@@ -11,6 +11,19 @@
                 </div>
 <!--                <v-col   :md="7" class="left-side-list" ref="leftSideList">-->
                 <v-col >
+                    <v-toolbar class="mb-5">
+                        <v-btn-toggle v-model="questionFilterMethod" mandatory>
+                            <v-btn value="not-filtered">
+                                نمایش همه
+                            </v-btn>
+                            <v-btn value="not-confirmed-at-all">
+                                کلا تایید نشده
+                            </v-btn>
+                            <v-btn value="not-confirmed-by-me">
+                                من تایید نکردم
+                            </v-btn>
+                        </v-btn-toggle>
+                    </v-toolbar>
                     <BubbleSheet ref="bubbleSheetC"  :style="{ height: 3740 }"  :info="{ type: 'pasokh-barg' }" @clickChoice="choiceClicked" @scrollTo="scrollTo" :delay-time="0" />
                 </v-col>
 <!--                </v-col>-->
@@ -18,7 +31,7 @@
             <div class="main" ref="main">
                 <div  :cols="8" class="questions" ref="questionsColumn" id="questions" >
                     <DynamicScroller
-                            :items="quizData.questions.list"
+                            :items="filteredQuestions"
                             :min-item-size="70"
                             class="scroller questionss"
                             ref="scroller"
@@ -142,6 +155,7 @@
             Item
         },
         data: () => ({
+            questionFilterMethod: 'not-filtered',
             bubbleSheet:800,
             dragging: false,
             quizData: new Exam(),
@@ -370,6 +384,17 @@
             this.scrollTo(this.currentQuestion.id)
             this.changeAppBarAndDrawer(false)
         },
+        computed: {
+            filteredQuestions () {
+                if (this.questionFilterMethod === 'not-confirmed-at-all') {
+                    return this.quizData.questions.list.filter(item => item.confirmers.length === 0 && item.confirmed === false)
+                } else if (this.questionFilterMethod === 'not-confirmed-by-me') {
+                    return this.quizData.questions.list.filter(item => item.confirmed === false)
+                } else {
+                    return this.quizData.questions.list
+                }
+            }
+        }
     }
 </script>
 
