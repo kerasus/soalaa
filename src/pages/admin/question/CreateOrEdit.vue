@@ -356,8 +356,6 @@
                             <img ref="resizerimg" :src="resizerUrl" v-if="resizerUrl !== ''" :width="resizerImgFinalWidth ? resizerImgSize / 100 * resizerImgFinalWidth : 'auto'"/>
                         </v-col>
                     </v-row>
-
-
                 </v-sheet>
             </v-col>
         </v-row>
@@ -702,6 +700,7 @@
                 this.copyToClipboard('![](' + this.resizerUrl + size + ')')
             },
             setWidth () {
+                this.resizerImgFinalWidth = 0
                 let resizedWidth = 0
                 if (this.resizerUrl.indexOf('?w=') !== -1) {
                     resizedWidth = parseInt(this.resizerUrl.slice(this.resizerUrl.indexOf('?w=') + 3, this.resizerUrl.indexOf('&h=')))
@@ -720,10 +719,11 @@
                 setTimeout(() => {
                     this.resizerImgSize = this.$refs.resizerimg.clientWidth
                     this.resizerImgHSize = this.$refs.resizerimg.clientHeight
-                    if (resizedWidth) {
-                        console.log('tes')
+                    if (resizedWidth !== 0) {
+                        this.resizerImgFinalWidth = resizedWidth / this.resizerImgSize * 100
+                    } else {
+                        this.resizerImgFinalWidth = 100
                     }
-                    this.resizerImgFinalWidth = 100
                 },500)
             },
             copyToClipboard (text) {
