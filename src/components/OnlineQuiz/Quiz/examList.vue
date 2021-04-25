@@ -63,13 +63,27 @@
                                 mdi-pencil
                             </v-icon>
                         </v-btn>
+<!--                        <v-btn-->
+<!--                                class="mx-2"-->
+<!--                                fab-->
+<!--                                dark-->
+<!--                                x-small-->
+<!--                                color="primary"-->
+<!--                                :to="{ name: 'quiz.edit', params: { quizId: item.id}}"-->
+<!--                        >-->
+<!--                            <v-icon-->
+<!--                                    small-->
+<!--                            >-->
+<!--                                mdi-arrow-up-bold-box-outline-->
+<!--                            </v-icon>-->
+<!--                        </v-btn>-->
                         <v-btn
                                 class="mx-2"
                                 fab
                                 dark
                                 x-small
                                 color="primary"
-                                :to="{ name: 'quiz.edit', params: { quizId: item.id}}"
+                                :to="{ name: 'onlineQuiz.exams.lessons', params: { quizId: item.id}}"
                         >
                             <v-icon
                                     small
