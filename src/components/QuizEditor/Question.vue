@@ -37,6 +37,7 @@
                     @change="confirmQuestion"
                     v-model="source.confirmed"
                     color="success"
+                    :loading="confirmLoading"
                     hide-details
             ></v-switch>
         </div>
@@ -80,6 +81,7 @@
         mixins: [mixinQuiz, mixinWindowSize, mixinMarkdownAndKatex],
         data() {
             return {
+                confirmLoading: false,
                 isLtr: false,
                 confirm: false,
                 choiceNumber: {
@@ -118,13 +120,16 @@
         },
         methods: {
             confirmQuestion() {
+                this.confirmLoading = true
                 axios.get(API_ADDRESS.question.confirm(this.source.id))
                     .then((response) => {
                         this.source.confirmed = response.data.data.confirmed
                         this.source.confirmers = response.data.data.confirmers
+                        this.confirmLoading = false
                     })
                     .catch(() => {
                         this.source.confirmed = !this.source.confirmed
+                        this.confirmLoading = false
                     })
             },
             copyIdToClipboard(sourceId) {
