@@ -47,7 +47,7 @@
                                                 <v-col cols="12">
                                                     <v-autocomplete
                                                             v-model="attachExamID"
-                                                            :items="totalExams"
+                                                            :items="totalExamsFiltered"
                                                             label="آزمون"
                                                             item-text="title"
                                                             item-value="id"
@@ -384,6 +384,13 @@
         components: {MarkdownBtn, UploadFiles},
         mixins: [mixinMarkdownAndKatex],
         computed: {
+            totalExamsFiltered () {
+                let filtered = this.totalExams
+                for (let i = 0; i < this.selectedQuizzes.length; i++) {
+                    filtered = filtered.filter(item => item.id !== this.selectedQuizzes[i].id)
+                }
+                return filtered
+            },
             renderedTableKatex () {
                 return this.renderTableKatex()
             },
