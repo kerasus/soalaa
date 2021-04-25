@@ -40,7 +40,7 @@
                     v-for="(choice, index) in source.choices.list"
                     :key="choice.id"
                     v-html="(choiceNumber[index]) + choice.rendered_title"
-                    :md="choiceClass(source)"
+                    :cols="choiceClass"
                     :class="{ choice: true, renderedPanel: true, active: choice.answer, ltr: isLtr }"
             />
         </v-row>
@@ -124,22 +124,6 @@
                 this.changeQuestion(questionId)
                 this.answerClicked({questionId, choiceId})
             },
-            choiceClass(question) {
-                // let QuestionWidthRatio = 0.4
-                // let largestChoiceWidth = this.windowSize.x * QuestionWidthRatio / largestChoice
-                let largestChoice = this.getLargestChoice(question.choices)
-                let largestChoiceWidth = $('.questions').width() / largestChoice
-                if (largestChoiceWidth > 48) {
-                    return 3
-                }
-                if (largestChoiceWidth > 24) {
-                    return 6
-                }
-                if (largestChoiceWidth > 12) {
-                    return 12
-                }
-                return 12
-            },
             removeErab(string) {
                 if (!string || string.length === 0) {
                     return ''
@@ -213,6 +197,27 @@
             // setTimeout(() => {console.log(this.quiz)}, 2000)
         },
         computed: {
+            choiceClass() {
+                // let QuestionWidthRatio = 0.4
+                // let largestChoiceWidth = this.windowSize.x * QuestionWidthRatio / largestChoice
+                let largestChoice = this.getLargestChoice(this.source.choices)
+                let largestChoiceWidth = $('.questions').width() / largestChoice
+                // console.log('order', this.source.order)
+                if (largestChoiceWidth > 48) {
+                    // console.log('col-3')
+                    return 3
+                }
+                if (largestChoiceWidth > 24) {
+                    // console.log('col-6')
+                    return 6
+                }
+                if (largestChoiceWidth > 12) {
+                    // console.log('col-12')
+                    return 12
+                }
+                // console.log('col-12')
+                return 12
+            },
             // lesson() {
             //     console.log(this.source.sub_categories)
             //     if (!this.source.sub_categories) {
