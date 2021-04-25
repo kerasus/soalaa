@@ -373,6 +373,15 @@
     }
 </script>
 
+<style>
+    .konkoor-view strong em strong {
+        display: none;
+        font-weight: normal;
+        font-style: normal;
+        text-decoration: none !important;
+    }
+</style>
+
 <style scoped>
     .resizable-content {
         background-position: top left;
@@ -392,13 +401,6 @@
         height: 100%;
         padding: 0;
         margin: 0;
-    }
-
-    .konkoor-view strong em strong {
-        display: none;
-        font-weight: normal;
-        font-style: normal;
-        text-decoration: none !important;
     }
 
     .main {
