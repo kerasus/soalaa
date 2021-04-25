@@ -124,7 +124,7 @@
                                                 ثبت نام انجام نشده
                                             </v-btn>
                                             <v-btn
-                                                    v-if="item.exam.holding_status == 'finished' && item.exam_actions.is_registered && !item.exam_actions.can_see_report && !item.exam_actions.can_continue && !item.exam_actions.can_start"
+                                                    v-if="item.exam_actions.is_registered && item.exam_actions.has_participated && !item.exam_actions.can_see_report && !item.exam_actions.can_continue && !item.exam_actions.can_start"
                                                     color="#ffc107"
                                                     text
                                                     disabled
