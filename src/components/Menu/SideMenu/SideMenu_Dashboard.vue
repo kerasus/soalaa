@@ -77,6 +77,24 @@
                 </v-list-item>
             </router-link>
         </v-list-item-group>
+        <v-list-item-group
+                v-if="$store.getters['Auth/user'].has_educational_permission && !$store.getters['Auth/user'].has_admin_permission"
+                class="admin-panel"
+                active-class="deep-purple--text text--accent-4"
+                v-model="adminGroup"
+                @change="userGroup = null"
+        >
+            <router-link
+                    v-for="item in educationList"
+                    :key="item.displayName"
+                    class="text-decoration-none"
+                    :class="{'router-link-active': $route.name === item.to.name}"
+                    :to="item.to">
+                <v-list-item :class="{ 'v-list-item--active': $route.name === item.to.name, 'v-list-item--link': $route.name === item.to.name, 'deep-purple--text': $route.name === item.to.name }">
+                    <v-list-item-title>{{ item.displayName }}</v-list-item-title>
+                </v-list-item>
+            </router-link>
+        </v-list-item-group>
     </v-list>
 </template>
 
@@ -112,6 +130,12 @@
                 {
                     displayName: 'ثبت ویدئو تحلیل',
                     to: {name: 'video.set'}
+                },
+            ],
+            educationList: [
+                {
+                    displayName: 'لیست آزمون ها',
+                    to: {name: 'onlineQuiz.exams'}
                 },
             ]
         }),
