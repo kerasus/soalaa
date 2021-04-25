@@ -281,13 +281,13 @@
                 // this.changeQuestion(questionId)
             },
             setHeights() {
-                const unknownNumber = (this.windowSize.y - 100) +'px'
-                this.$refs.questionsColumn.style.height = unknownNumber
+                const magicalNumber = (this.windowSize.y - 100) +'px'
+                this.$refs.questionsColumn.style.height = magicalNumber
                 if (this.$refs.scroller && this.$refs.scroller.$el) {
-                    this.$refs.scroller.$el.style.height = unknownNumber
+                    this.$refs.scroller.$el.style.height = magicalNumber
                 }
                 if (this.$refs.leftSideList) {
-                    this.$refs.leftSideList.style.height = unknownNumber
+                    this.$refs.leftSideList.style.height = magicalNumber
                 }
             },
             test (payload) {
