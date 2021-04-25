@@ -394,7 +394,7 @@
         computed: {
             filteredQuestions () {
                 if (this.questionFilterMethod === 'not-confirmed-at-all') {
-                    return this.quizData.questions.list.filter(item => item.confirmers.length === 0 && item.confirmed === false)
+                    return this.quizData.questions.list.filter(item => item.confirmers.length === 0)
                 } else if (this.questionFilterMethod === 'not-confirmed-by-me') {
                     return this.quizData.questions.list.filter(item => item.confirmed === false)
                 } else {
