@@ -1,5 +1,21 @@
 <template>
     <div :class="{ 'current-question': this.currentQuestion.id === source.id, question: true, ltr: isLtr  }">
+        <v-row>
+            <v-col>
+                <div class="d-inline" v-if="source.confirmers.length">تایید شده توسط: </div>
+                <v-chip
+                        color="#C8E6C9"
+                        class="ml-3"
+                        pill
+                        v-for="(item, index) in source.confirmers" :key="index"
+                >
+                    <v-avatar left>
+                        <v-img :src="item.photo"></v-img>
+                    </v-avatar>
+                    {{ item.first_name + ' ' + item.last_name }}
+                </v-chip>
+            </v-col>
+        </v-row>
         <div class="buttons-group">
             <v-select :items="quizList.list" item-text="title" chips multiple attach outlined dense full-width
                       v-if="false"/>
@@ -105,6 +121,7 @@
                 axios.get(API_ADDRESS.question.confirm(this.source.id))
                     .then((response) => {
                         this.source.confirmed = response.data.data.confirmed
+                        this.source.confirmers = response.data.data.confirmers
                     })
                     .catch(() => {
                         this.source.confirmed = !this.source.confirmed
