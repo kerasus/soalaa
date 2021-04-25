@@ -463,6 +463,10 @@
 </style>
 
 <style>
+    /*.choices {*/
+    /*    display: block !important;*/
+    /*}*/
+
     .base.textstyle.uncramped {
         display: flex;
         flex-wrap: wrap;
