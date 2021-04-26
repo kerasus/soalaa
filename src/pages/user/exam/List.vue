@@ -113,7 +113,7 @@
                                                     text
                                                     disabled
                                             >
-                                                آزمون به پایان رسید
+                                                زمان مجاز شرکت در آزمون تمام شده
                                             </v-btn>
                                             <v-btn
                                                     v-if="!item.exam_actions.is_registered"
