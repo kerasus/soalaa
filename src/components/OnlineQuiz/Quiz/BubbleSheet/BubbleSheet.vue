@@ -132,7 +132,7 @@
                 if (typeof question_id === 'undefined') {
                     question_id = this.currentQuestion.id
                 }
-                if (!this.quiz.id || !question_id) {
+                if (!this.quiz.id || !question_id || !this.userQuizListData[this.quiz.id]) {
                     return false
                 }
                 return this.userQuizListData[this.quiz.id][question_id]
