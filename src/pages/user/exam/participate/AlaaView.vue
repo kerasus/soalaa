@@ -126,7 +126,11 @@
         },
         methods: {
             getUserQuestionData () {
-                if (!this.quiz.id || !this.currentQuestion.id) {
+                if (
+                    !this.quiz.id ||
+                    !this.currentQuestion.id ||
+                    !this.userQuizListData[this.quiz.id]
+                ) {
                     return false
                 }
                 return this.userQuizListData[this.quiz.id][this.currentQuestion.id]

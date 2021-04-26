@@ -29,13 +29,13 @@
                             >
                                 تست شماره
                                 {{ getQuestionNumberFromIndex(question.index) }}
-                                <v-icon v-if="userQuizListData[quiz.id][question.id] && userQuizListData[quiz.id][question.id].status === 'x'" color="red">
+                                <v-icon v-if="getUserQuestionData(question.id) && getUserQuestionData(question.id).status === 'x'" color="red">
                                     mdi-close
                                 </v-icon>
-                                <v-icon v-if="userQuizListData[quiz.id][question.id] && userQuizListData[quiz.id][question.id].status === 'o'" color="yellow" size="15">
+                                <v-icon v-if="getUserQuestionData(question.id) && getUserQuestionData(question.id).status === 'o'" color="yellow" size="15">
                                     mdi-checkbox-blank-circle
                                 </v-icon>
-                                <v-icon v-if="userQuizListData[quiz.id][question.id] && userQuizListData[quiz.id][question.id].answered_choice_id" color="--success-1">
+                                <v-icon v-if="getUserQuestionData(question.id) && getUserQuestionData(question.id).answered_choice_id" color="--success-1">
                                     mdi-check
                                 </v-icon>
                             </v-btn>
@@ -85,6 +85,12 @@
             }, 1000)
         },
         methods: {
+            getUserQuestionData (questionId) {
+                if (!this.quiz.id || !questionId || !this.userQuizListData[this.quiz.id]) {
+                    return false
+                }
+                return this.userQuizListData[this.quiz.id][questionId]
+            },
             getConfirmation(){
                 let that = this
                 this.$store.commit('AppLayout/showConfirmDialog', {
