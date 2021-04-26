@@ -1,5 +1,21 @@
 <template>
     <div :class="{ 'current-question': this.currentQuestion.id === source.id, question: true, ltr: isLtr  }">
+        <v-row>
+            <v-col>
+                <div class="d-inline" v-if="source.confirmers.length">تایید شده توسط: </div>
+                <v-chip
+                        color="#C8E6C9"
+                        class="ml-3"
+                        pill
+                        v-for="(item, index) in source.confirmers" :key="index"
+                >
+                    <v-avatar left>
+                        <v-img :src="item.photo"></v-img>
+                    </v-avatar>
+                    {{ item.first_name + ' ' + item.last_name }}
+                </v-chip>
+            </v-col>
+        </v-row>
         <div class="buttons-group">
             <v-select :items="quizList.list" item-text="title" chips multiple attach outlined dense full-width
                       v-if="false"/>
@@ -21,6 +37,7 @@
                     @change="confirmQuestion"
                     v-model="source.confirmed"
                     color="success"
+                    :loading="confirmLoading"
                     hide-details
             ></v-switch>
         </div>
@@ -40,7 +57,7 @@
                     v-for="(choice, index) in source.choices.list"
                     :key="choice.id"
                     v-html="(choiceNumber[index]) + choice.rendered_title"
-                    :md="choiceClass(source)"
+                    :cols="choiceClass"
                     :class="{ choice: true, renderedPanel: true, active: choice.answer, ltr: isLtr }"
             />
         </v-row>
@@ -64,6 +81,7 @@
         mixins: [mixinQuiz, mixinWindowSize, mixinMarkdownAndKatex],
         data() {
             return {
+                confirmLoading: false,
                 isLtr: false,
                 confirm: false,
                 choiceNumber: {
@@ -102,12 +120,16 @@
         },
         methods: {
             confirmQuestion() {
+                this.confirmLoading = true
                 axios.get(API_ADDRESS.question.confirm(this.source.id))
                     .then((response) => {
                         this.source.confirmed = response.data.data.confirmed
+                        this.source.confirmers = response.data.data.confirmers
+                        this.confirmLoading = false
                     })
                     .catch(() => {
                         this.source.confirmed = !this.source.confirmed
+                        this.confirmLoading = false
                     })
             },
             copyIdToClipboard(sourceId) {
@@ -123,22 +145,6 @@
                 // console.log('loadFirstActiveQuestionIfNeed->choiceClicked')
                 this.changeQuestion(questionId)
                 this.answerClicked({questionId, choiceId})
-            },
-            choiceClass(question) {
-                // let QuestionWidthRatio = 0.4
-                // let largestChoiceWidth = this.windowSize.x * QuestionWidthRatio / largestChoice
-                let largestChoice = this.getLargestChoice(question.choices)
-                let largestChoiceWidth = $('.questions').width() / largestChoice
-                if (largestChoiceWidth > 48) {
-                    return 3
-                }
-                if (largestChoiceWidth > 24) {
-                    return 6
-                }
-                if (largestChoiceWidth > 12) {
-                    return 12
-                }
-                return 12
             },
             removeErab(string) {
                 if (!string || string.length === 0) {
@@ -213,6 +219,27 @@
             // setTimeout(() => {console.log(this.quiz)}, 2000)
         },
         computed: {
+            choiceClass() {
+                // let QuestionWidthRatio = 0.4
+                // let largestChoiceWidth = this.windowSize.x * QuestionWidthRatio / largestChoice
+                let largestChoice = this.getLargestChoice(this.source.choices)
+                let largestChoiceWidth = $('.questions').width() / largestChoice
+                // console.log('order', this.source.order)
+                if (largestChoiceWidth > 48) {
+                    // console.log('col-3')
+                    return 3
+                }
+                if (largestChoiceWidth > 24) {
+                    // console.log('col-6')
+                    return 6
+                }
+                if (largestChoiceWidth > 12) {
+                    // console.log('col-12')
+                    return 12
+                }
+                // console.log('col-12')
+                return 12
+            },
             // lesson() {
             //     console.log(this.source.sub_categories)
             //     if (!this.source.sub_categories) {

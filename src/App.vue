@@ -4,6 +4,7 @@
                              v-model="drawer"
                              right
                              width="316"
+                             disable-resize-watcher
                              :class="{
                                  'mapOfQuestions': $route.name === 'onlineQuiz.alaaView' || $route.name === 'onlineQuiz.konkoorView',
                                  'right-drawer': $route.name !== 'onlineQuiz.alaaView' && $route.name !== 'onlineQuiz.konkoorView'

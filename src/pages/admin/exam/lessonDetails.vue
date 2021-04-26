@@ -4,21 +4,35 @@
         <div @mousemove="resizing" @mouseup="endResize">
             <div class="ghostbar" ref="ghostbar" v-show="dragging">
             </div>
-            <div class="sidebar" ref="sidebar">
+            <div class="sidebar d-none d-lg-block" ref="sidebar">
                 <span></span>
                 <div class="dragbar" ref="dragbar" @mousedown="startResize">
                     <v-icon>mdi-drag-vertical-variant</v-icon>
                 </div>
 <!--                <v-col   :md="7" class="left-side-list" ref="leftSideList">-->
                 <v-col >
+
                     <BubbleSheet ref="bubbleSheetC"  :style="{ height: 3740 }"  :info="{ type: 'pasokh-barg' }" @clickChoice="choiceClicked" @scrollTo="scrollTo" :delay-time="0" />
                 </v-col>
 <!--                </v-col>-->
             </div>
             <div class="main" ref="main">
+                <v-toolbar class="mb-5">
+                    <v-btn-toggle v-model="questionFilterMethod" mandatory>
+                        <v-btn value="not-filtered">
+                            نمایش همه
+                        </v-btn>
+                        <v-btn value="not-confirmed-at-all">
+                            کلا تایید نشده
+                        </v-btn>
+                        <v-btn value="not-confirmed-by-me">
+                            من تایید نکردم
+                        </v-btn>
+                    </v-btn-toggle>
+                </v-toolbar>
                 <div  :cols="8" class="questions" ref="questionsColumn" id="questions" >
                     <DynamicScroller
-                            :items="quizData.questions.list"
+                            :items="filteredQuestions"
                             :min-item-size="70"
                             class="scroller questionss"
                             ref="scroller"
@@ -119,6 +133,7 @@
     // import ErrorReport from "@/components/errorReport";
     // import VueHtml2pdf from 'vue-html2pdf'
     // import ExamQuestionsWithBubbleSheet from "@/components/OnlineQuiz/Quiz/examQuestionsWithBubbleSheet";
+    import $ from 'jquery'
     import { mixinAuth, mixinQuiz, mixinWindowSize } from '@/mixin/Mixins'
     import BubbleSheet from "@/components/OnlineQuiz/Quiz/BubbleSheet/BubbleSheet"
     import API_ADDRESS from "@/api/Addresses";
@@ -142,6 +157,7 @@
             Item
         },
         data: () => ({
+            questionFilterMethod: 'not-filtered',
             bubbleSheet:800,
             dragging: false,
             quizData: new Exam(),
@@ -265,12 +281,13 @@
                 // this.changeQuestion(questionId)
             },
             setHeights() {
-                this.$refs.questionsColumn.style.height =( this.windowSize.y - 24 )+'px'
+                const magicalNumber = (this.windowSize.y - 100) +'px'
+                this.$refs.questionsColumn.style.height = magicalNumber
                 if (this.$refs.scroller && this.$refs.scroller.$el) {
-                    this.$refs.scroller.$el.style.height = ( this.windowSize.y - 24 ) +'px'
+                    this.$refs.scroller.$el.style.height = magicalNumber
                 }
                 if (this.$refs.leftSideList) {
-                    this.$refs.leftSideList.style.height = (this.windowSize.y - 24)+'px'
+                    this.$refs.leftSideList.style.height = magicalNumber
                 }
             },
             test (payload) {
@@ -340,6 +357,7 @@
         },
         created() {
             this.loadQuizDataAndSubCategories()
+
             // axios.get(API_ADDRESS.exam.examQuestion(this.$route.params.quizId))
             //     .then((response) => {
             //         this.saveCurrentExamQuestions(new QuestionList(response.data.data).list)
@@ -369,11 +387,56 @@
             // }
             this.scrollTo(this.currentQuestion.id)
             this.changeAppBarAndDrawer(false)
+            $('.sidebar').height(this.windowSize.y)
+            console.log('lofdsafadfasfag', $('.sidebar'))
+            console.log('lofdsafadfasfag', $('.sidebar')[0])
         },
+        computed: {
+            filteredQuestions () {
+                if (this.questionFilterMethod === 'not-confirmed-at-all') {
+                    return this.quizData.questions.list.filter(item => item.confirmers.length === 0)
+                } else if (this.questionFilterMethod === 'not-confirmed-by-me') {
+                    return this.quizData.questions.list.filter(item => item.confirmed === false)
+                } else {
+                    return this.quizData.questions.list
+                }
+            }
+        }
     }
 </script>
 
+<style>
+    .konkoor-view strong em strong {
+        display: none;
+        font-weight: normal;
+        font-style: normal;
+        text-decoration: none !important;
+    }
+
+    .konkoor-view.container--fluid {
+        padding-top: 0;
+    }
+
+    .sidebar {
+        overflow-y: auto;
+    }
+
+    /*.choices {*/
+    /*    display: block !important;*/
+    /*}*/
+
+    @media only screen and (max-width: 1263px) {
+        .main {
+            left: 0 !important;
+        }
+    }
+</style>
+
 <style scoped>
+    .questions-list {
+        margin-bottom: 0;
+    }
+
     .resizable-content {
         background-position: top left;
         width: 150px;
@@ -406,10 +469,8 @@
     }
 
     .sidebar {
-        margin-top: 10px;
         width: 800px;
         float: left;
-        height: 1200px;
         display: flex;
     }
 

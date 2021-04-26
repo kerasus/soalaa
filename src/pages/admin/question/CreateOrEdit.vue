@@ -47,7 +47,7 @@
                                                 <v-col cols="12">
                                                     <v-autocomplete
                                                             v-model="attachExamID"
-                                                            :items="totalExams"
+                                                            :items="totalExamsFiltered"
                                                             label="آزمون"
                                                             item-text="title"
                                                             item-value="id"
@@ -356,8 +356,6 @@
                             <img ref="resizerimg" :src="resizerUrl" v-if="resizerUrl !== ''" :width="resizerImgFinalWidth ? resizerImgSize / 100 * resizerImgFinalWidth : 'auto'"/>
                         </v-col>
                     </v-row>
-
-
                 </v-sheet>
             </v-col>
         </v-row>
@@ -386,6 +384,13 @@
         components: {MarkdownBtn, UploadFiles},
         mixins: [mixinMarkdownAndKatex],
         computed: {
+            totalExamsFiltered () {
+                let filtered = this.totalExams
+                for (let i = 0; i < this.selectedQuizzes.length; i++) {
+                    filtered = filtered.filter(item => item.id !== this.selectedQuizzes[i].id)
+                }
+                return filtered
+            },
             renderedTableKatex () {
                 return this.renderTableKatex()
             },
@@ -556,6 +561,9 @@
             }
         },
         methods: {
+            getExamById (quizId) {
+                return this.totalExams.find(item => item.id == quizId);
+            },
             deleteItem (item) {
                 console.log('item', item)
                 this.editedIndex = this.selectedQuizzes.indexOf(item)
@@ -590,7 +598,7 @@
                     sub_category_id: this.attachSubcategoryID
                 })
                     .then( response => {
-                        this.updateAttachList(response.data.data)
+                        this.updateAttachList(response.data.data.exams)
                         console.log('response', response)
                         this.attachLoading = false
                         this.dialog = false
@@ -623,11 +631,19 @@
                 })
                     .then((response) => {
                         console.log('response', response)
+                        this.selectedQuizzes = []
+                        response.data.data.exams.forEach(item => {
+                            this.selectedQuizzes.push({
+                                id: item.exam_id,
+                                order: item.order,
+                                sub_category_id: item.sub_category.category_id,
+                                sub_category_title: item.sub_category.display_title,
+                                title: this.getExamById(item.exam_id).title
+                            })
+                        })
                         // this.currentQuestion = new Question(responseData)
                         // this.trueChoiceIndex = this.currentQuestion.choices.list.findIndex((item) => item.answer )
                         // this.updateAttachList(response.data.data)
-                        const detachedExamIndex = this.selectedQuizzes.indexOf(examItem => Assistant.getId(examItem.id) === Assistant.getId(item.id))
-                        this.selectedQuizzes.splice(detachedExamIndex, 1)
                         this.attachLoading = false
                         this.dialog = false
                     })
@@ -691,15 +707,30 @@
                 this.copyToClipboard('![](' + this.resizerUrl + size + ')')
             },
             setWidth () {
+                this.resizerImgFinalWidth = 0
+                let resizedWidth = 0
+                if (this.resizerUrl.indexOf('?w=') !== -1) {
+                    resizedWidth = parseInt(this.resizerUrl.slice(this.resizerUrl.indexOf('?w=') + 3, this.resizerUrl.indexOf('&h=')))
+                }
                 this.resizerUrl = this.resizerUrl.replace('![](https://cdn.alaatv.com', 'https://cdn.alaatv.com')
-                this.resizerUrl = this.resizerUrl.replace('.png)', '.png')
-                this.resizerUrl = this.resizerUrl.replace('.jpg)', '.jpg')
-                this.resizerUrl = this.resizerUrl.replace('.jpeg)', '.jpeg')
+                if (this.resizerUrl.indexOf('.png') !== -1) {
+                    this.resizerUrl = this.resizerUrl.slice(0, this.resizerUrl.indexOf('.png') + 4)
+                }
+                if (this.resizerUrl.indexOf('.jpg') !== -1) {
+                    this.resizerUrl = this.resizerUrl.slice(0, this.resizerUrl.indexOf('.jpg') + 4)
+                }
+                if (this.resizerUrl.indexOf('.jpeg') !== -1) {
+                    this.resizerUrl = this.resizerUrl.slice(0, this.resizerUrl.indexOf('.jpeg') + 5)
+                }
 
                 setTimeout(() => {
                     this.resizerImgSize = this.$refs.resizerimg.clientWidth
                     this.resizerImgHSize = this.$refs.resizerimg.clientHeight
-                    this.resizerImgFinalWidth = this.resizerImgSize
+                    if (resizedWidth !== 0) {
+                        this.resizerImgFinalWidth = resizedWidth / this.resizerImgSize * 100
+                    } else {
+                        this.resizerImgFinalWidth = 100
+                    }
                 },500)
             },
             copyToClipboard (text) {
