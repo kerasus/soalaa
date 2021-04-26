@@ -60,14 +60,6 @@
                                         </v-col>
                                         <v-col cols="12" md="7">
                                             <v-btn
-                                                    v-if="item.holding_status === 'not_started'"
-                                                    color="#00c753"
-                                                    disabled
-                                                    text
-                                            >
-                                                زمان آزمون فرا نرسیده
-                                            </v-btn>
-                                            <v-btn
                                                     v-if="item.exam_actions.can_register"
                                                     @click="registerExam(item)"
                                                     color="#00c753"
@@ -108,28 +100,12 @@
                                                 مشاهده نتایج
                                             </v-btn>
                                             <v-btn
-                                                    v-if="item.holding_status === 'finished'"
+                                                    v-if="!!item.holding_status"
                                                     color="#ffc107"
                                                     text
                                                     disabled
                                             >
-                                                زمان مجاز شرکت در آزمون تمام شده
-                                            </v-btn>
-                                            <v-btn
-                                                    v-if="!item.exam_actions.is_registered"
-                                                    color="#ffc107"
-                                                    text
-                                                    disabled
-                                            >
-                                                ثبت نام انجام نشده
-                                            </v-btn>
-                                            <v-btn
-                                                    v-if="item.exam_actions.is_registered && item.exam_actions.has_participated && !item.exam_actions.can_see_report && !item.exam_actions.can_continue && !item.exam_actions.can_start"
-                                                    color="#ffc107"
-                                                    text
-                                                    disabled
-                                            >
-                                                در انتظار کارنامه
+                                                {{ item.holding_status }}
                                             </v-btn>
                                         </v-col>
                                     </v-row>
