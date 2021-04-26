@@ -192,7 +192,7 @@
             getConfirmation() {
                 let that = this
                 this.$store.commit('AppLayout/showConfirmDialog', {
-                    message: `مطمئنی؟ نتیجه شما پس از تایید، ثبت و رتبه شما محاسبه خواهد شد `,
+                    message: 'از ارسال پاسخ ها اطمینان دارید؟',
                     button: {
                         no: 'ادامه میدم',
                         yes: 'ثبت میکنم'

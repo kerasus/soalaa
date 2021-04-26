@@ -278,8 +278,8 @@
 <!--            <upload-image :url="'/api/v1/question/upload/'+currentQuestion.id" />-->
             <upload-files :post-action="'/api/v1/question/upload/'+currentQuestion.id" :put-action="'/api/v1/question/upload/'+currentQuestion.id" />
         </div>
-        <div id="mathfield" locale="fa">x=\frac{-b\pm \sqrt{b^2-4ac}}{2a}</div>
-        <div class="latexData" v-html="latexData"></div>
+        <div id="mathfield" dir="ltr" locale="fa">x=\frac{-b\pm \sqrt{b^2-4ac}}{2a}</div>
+        <div class="latexData" dir="ltr" v-html="latexData"></div>
         <v-text-field full-width label="url" v-model="url" dir="ltr"/>
         <v-row>
             <v-col>
