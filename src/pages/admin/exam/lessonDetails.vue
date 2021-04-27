@@ -12,7 +12,7 @@
 <!--                <v-col   :md="7" class="left-side-list" ref="leftSideList">-->
                 <v-col >
 
-                    <BubbleSheet ref="bubbleSheetC"  :style="{ height: 3740 }"  :info="{ type: 'pasokh-barg' }" @clickChoice="choiceClicked" @scrollTo="scrollTo" :delay-time="0" />
+                    <BubbleSheet ref="bubbleSheetC" :style="{ height: 3740 }" :info="{ type: 'pasokh-barg' }" @clickChoice="choiceClicked" @scrollTo="scrollTo" :delay-time="0" />
                 </v-col>
 <!--                </v-col>-->
             </div>

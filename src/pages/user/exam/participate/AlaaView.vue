@@ -5,7 +5,7 @@
                 <v-sheet class="d-flex align-stretch" width="100%" color="--background-2" :style="{ 'min-height': '100%' }">
                     <v-row>
                         <v-col :md="1" class="d-md-flex justify-center d-none">
-                            <v-btn :min-width="64" class="px-0" :height="400" @click="goToPrevQuestion" :elevation="0">
+                            <v-btn :min-width="64" class="px-0" :height="400" @click="goToPrevQuestion" :elevation="0" v-if="getQuestionNumberFromId(currentQuestion.id) !== 1">
                                 <v-icon :size="40">mdi-chevron-right</v-icon>
                             </v-btn>
                         </v-col>
@@ -60,7 +60,7 @@
                             </v-row>
                         </v-col>
                         <v-col :md="1" class="d-md-flex justify-center d-none">
-                            <v-btn :min-width="64" class="px-0" :height="400" @click="goToNextQuestion" :elevation="0">
+                            <v-btn :min-width="64" class="px-0" :height="400" @click="goToNextQuestion" :elevation="0" v-if="getQuestionNumberFromId(currentQuestion.id) !== getCurrentExamQuestionsInArray().length">
                                 <v-icon :size="40">mdi-chevron-left</v-icon>
                             </v-btn>
                         </v-col>
@@ -105,6 +105,7 @@
             }
         },
         mounted() {
+            console.log('tt', this.getCurrentExamQuestionsInArray())
             let that = this
             this.showAppBar()
             this.updateDrawerBasedOnWindowSize()
