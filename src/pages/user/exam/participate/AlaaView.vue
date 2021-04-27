@@ -5,7 +5,7 @@
                 <v-sheet class="d-flex align-stretch" width="100%" color="--background-2" :style="{ 'min-height': '100%' }">
                     <v-row>
                         <v-col :md="1" class="d-md-flex justify-center d-none">
-                            <v-btn :min-width="64" class="px-0" :height="400" @click="goToPrevQuestion" :elevation="0">
+                            <v-btn :min-width="64" class="px-0" :height="400" @click="goToPrevQuestion" :elevation="0" v-if="getQuestionNumberFromId(currentQuestion.id) !== 1">
                                 <v-icon :size="40">mdi-chevron-right</v-icon>
                             </v-btn>
                         </v-col>
@@ -21,15 +21,15 @@
                                 </div>
                                 <div class="question-buttons">
                                     <v-btn icon @click="changeStatus(currentQuestion.id, 'o')">
-                                        <v-icon v-if="!getUserQuestionData() || getUserQuestionData().status !== 'o'" color="#888" size="30">mdi-checkbox-blank-circle-outline</v-icon>
-                                        <v-icon v-if="getUserQuestionData() && getUserQuestionData().status === 'o'" color="--primary-2" :size="30">mdi-checkbox-blank-circle</v-icon>
+                                        <v-icon v-if="!getUserQuestionData(quiz.id, currentQuestion.id) || getUserQuestionData(quiz.id, currentQuestion.id).status !== 'o'" color="#888" size="30">mdi-checkbox-blank-circle-outline</v-icon>
+                                        <v-icon v-if="getUserQuestionData(quiz.id, currentQuestion.id) && getUserQuestionData(quiz.id, currentQuestion.id).status === 'o'" color="--primary-2" :size="30">mdi-checkbox-blank-circle</v-icon>
                                     </v-btn>
                                     <v-btn icon @click="changeStatus(currentQuestion.id, 'x')">
-                                        <v-icon :color="getUserQuestionData() && getUserQuestionData().status === 'x' ? 'red' : '#888'" :size="30">mdi-close</v-icon>
+                                        <v-icon :color="getUserQuestionData(quiz.id, currentQuestion.id) && getUserQuestionData(quiz.id, currentQuestion.id).status === 'x' ? 'red' : '#888'" :size="30">mdi-close</v-icon>
                                     </v-btn>
                                     <v-btn icon @click="changeBookmark(currentQuestion.id)">
-                                        <v-icon v-if="!getUserQuestionData() || !getUserQuestionData().bookmarked" :size="30" color="#888">mdi-bookmark-outline</v-icon>
-                                        <v-icon v-if="getUserQuestionData() && getUserQuestionData().bookmarked" color="--accent-1" :size="30">mdi-bookmark</v-icon>
+                                        <v-icon v-if="!getUserQuestionData(quiz.id, currentQuestion.id) || !getUserQuestionData(quiz.id, currentQuestion.id).bookmarked" :size="30" color="#888">mdi-bookmark-outline</v-icon>
+                                        <v-icon v-if="getUserQuestionData(quiz.id, currentQuestion.id) && getUserQuestionData(quiz.id, currentQuestion.id).bookmarked" color="--accent-1" :size="30">mdi-bookmark</v-icon>
                                     </v-btn>
                                 </div>
                             </v-row>
@@ -60,7 +60,7 @@
                             </v-row>
                         </v-col>
                         <v-col :md="1" class="d-md-flex justify-center d-none">
-                            <v-btn :min-width="64" class="px-0" :height="400" @click="goToNextQuestion" :elevation="0">
+                            <v-btn :min-width="64" class="px-0" :height="400" @click="goToNextQuestion" :elevation="0" v-if="getQuestionNumberFromId(currentQuestion.id) !== getCurrentExamQuestionsInArray().length">
                                 <v-icon :size="40">mdi-chevron-left</v-icon>
                             </v-btn>
                         </v-col>
@@ -125,16 +125,6 @@
                 })
         },
         methods: {
-            getUserQuestionData () {
-                if (
-                    !this.quiz.id ||
-                    !this.currentQuestion.id ||
-                    !this.userQuizListData[this.quiz.id]
-                ) {
-                    return false
-                }
-                return this.userQuizListData[this.quiz.id][this.currentQuestion.id]
-            },
             changeAppBarAndDrawer (state) {
                 this.$store.commit('AppLayout/updateAppBarAndDrawer', state)
             },

@@ -102,15 +102,12 @@
         },
         methods: {
             getChoiceStatus() {
-                if (
-                    !this.userQuizListData ||
-                    !this.userQuizListData[this.quiz.id] ||
-                    !this.userQuizListData[this.quiz.id][this.source.id]
-                ) {
+                let userQuestionData = this.getUserQuestionData(this.quiz.id, this.source.id)
+                if (!userQuestionData) {
                     return false
                 }
 
-                return this.userQuizListData[this.quiz.id][this.source.id].status
+                return userQuestionData.status
             },
             getChoiceBookmark() {
                 if (
