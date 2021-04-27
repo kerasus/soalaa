@@ -1,14 +1,28 @@
 import moment from 'moment'
 import { getServerDate } from '@nodeguy/server-date'
 import Assistant from "@/plugins/assistant";
-// import Assistant from "@/plugins/assistant";
-// import store from '@/store/store'
-// import { Quiz } from '@/models/Quiz'
 
 let Time = function () {
     async function synchronizeTime () {
         window.serverDate = {}
-        const { date, offset, uncertainty } = await getServerDate();
+        const { date, offset, uncertainty } = await getServerDate( {fetchSample: async () => {
+                const requestDate = new Date();
+
+                const { headers, ok, statusText } = await fetch(window.location.origin, {
+                    cache: `no-store`,
+                    method: `HEAD`,
+                });
+
+                if (!ok) {
+                    throw new Error(`Bad date sample from server: ${statusText}`);
+                }
+
+                return {
+                    requestDate,
+                    responseDate: new Date(),
+                    serverDate: new Date(headers.get(`Date`)),
+                };
+            }});
         window.serverDate = { date, offset, uncertainty }
         console.log(`The server's date is ${date} +/- ${uncertainty} milliseconds. offset:`+offset);
     }
