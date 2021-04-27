@@ -344,7 +344,7 @@ const mixinQuiz = {
                 if (userExamData[questionId].answered_choice_id) {
                     answers.push({
                         question_id: questionId,
-                        answered_choice_id: userExamData[questionId].answered_choice_id,
+                        choice_id: userExamData[questionId].answered_choice_id,
                         selected_at : (!userExamData[questionId].answered_at) ? null: userExamData[questionId].answered_at,
                         bookmarked: userExamData[questionId].bookmarked,
                         status: userExamData[questionId].status,
