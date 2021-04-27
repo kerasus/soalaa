@@ -78,6 +78,24 @@ const mixinQuiz = {
         }
     },
     methods: {
+        getUserQuestionData (quizId, question_id) {
+            if (typeof question_id === 'undefined') {
+                question_id = this.currentQuestion.id
+            }
+            if (typeof quizId === 'undefined') {
+                quizId = this.quiz.id
+            }
+            if (
+                !quizId ||
+                !question_id ||
+                !this.userQuizListData ||
+                !this.userQuizListData[quizId]
+            ) {
+                return false
+            }
+            return this.userQuizListData[quizId][question_id]
+        },
+
         getCurrentExam() {
             return this.$store.getters.quiz
         },
