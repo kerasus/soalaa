@@ -95,7 +95,7 @@
         created() {
             if (this.report && this.report.best) {
                 if (this.report.sub_category[0].rank_school) {
-                    this.headers2.splice(9, 0, {text: ' رتبه مدرسه', value: 'rank_school', align: 'center', sortable: true,})
+                    this.headers.splice(9, 0, {text: ' رتبه مدرسه', value: 'rank_school', align: 'center', sortable: true,})
                 }
                 this.loadDataTable()
                 this.loadChart()
