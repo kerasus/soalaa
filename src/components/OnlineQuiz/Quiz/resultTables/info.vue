@@ -22,6 +22,10 @@
                     شهر :
                     {{ user.city.title }}
                 </v-col>
+                <v-col v-if="user.school" class="infoCols">
+                    مدرسه :
+                    {{ user.school }}
+                </v-col>
             </v-row>
         </v-card>
 </template>
