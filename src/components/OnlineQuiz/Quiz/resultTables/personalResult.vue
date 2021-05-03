@@ -70,17 +70,19 @@
                             <v-card class="subCards">
                                 <v-card-title class="cardTitle">
                                     <v-row>
-                                        <v-col cols="4">رتبه کل کشوری</v-col>
-                                        <v-col cols="4">رتبه در استان</v-col>
-                                        <v-col cols="4">رتبه در شهر</v-col>
+                                        <v-col :cols="(report.main.school) ? 3 : 4">رتبه کل کشوری</v-col>
+                                        <v-col :cols="(report.main.school) ? 3 : 4">رتبه در استان</v-col>
+                                        <v-col :cols="(report.main.school) ? 3 : 4">رتبه در شهر</v-col>
+                                        <v-col v-if="report.main.school" cols="3">رتبه در مدرسه</v-col>
                                     </v-row>
                                 </v-card-title>
 
                                 <span class="cardContent">
                                     <v-row>
-                                        <v-col cols="4">{{ report.main.rank_country }}</v-col>
-                                        <v-col cols="4">{{ report.main.rank_province }}</v-col>
-                                        <v-col cols="4">{{ report.main.rank_city }}</v-col>
+                                        <v-col :cols="(report.main.school) ? 3 : 4">{{ report.main.rank_country }}</v-col>
+                                        <v-col :cols="(report.main.school) ? 3 : 4">{{ report.main.rank_province }}</v-col>
+                                        <v-col :cols="(report.main.school) ? 3 : 4">{{ report.main.rank_city }}</v-col>
+                                        <v-col v-if="report.main.school" cols="3">{{ report.main.school }}</v-col>
                                     </v-row>
                                 </span>
                             </v-card>
@@ -128,12 +130,7 @@
         ],
       }
     },
-    props: ['report'],
-    created() {
-      if (this.report.zirgorooh[0].school) {
-        this.headers2.splice(3, 0, {text: ' رتبه مدرسه', value: 'school', align: 'center', sortable: true,})
-      }
-    }
+    props: ['report']
   }
 </script>
 
