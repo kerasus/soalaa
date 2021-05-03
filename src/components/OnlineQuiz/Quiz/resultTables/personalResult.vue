@@ -70,19 +70,19 @@
                             <v-card class="subCards">
                                 <v-card-title class="cardTitle">
                                     <v-row>
-                                        <v-col :cols="(report.main.school) ? 3 : 4">رتبه کل کشوری</v-col>
-                                        <v-col :cols="(report.main.school) ? 3 : 4">رتبه در استان</v-col>
-                                        <v-col :cols="(report.main.school) ? 3 : 4">رتبه در شهر</v-col>
-                                        <v-col v-if="report.main.school" cols="3">رتبه در مدرسه</v-col>
+                                        <v-col :cols="(report.main.rank_school) ? 3 : 4">رتبه کل کشوری</v-col>
+                                        <v-col :cols="(report.main.rank_school) ? 3 : 4">رتبه در استان</v-col>
+                                        <v-col :cols="(report.main.rank_school) ? 3 : 4">رتبه در شهر</v-col>
+                                        <v-col v-if="report.main.rank_school" cols="3">رتبه در مدرسه</v-col>
                                     </v-row>
                                 </v-card-title>
 
                                 <span class="cardContent">
                                     <v-row>
-                                        <v-col :cols="(report.main.school) ? 3 : 4">{{ report.main.rank_country }}</v-col>
-                                        <v-col :cols="(report.main.school) ? 3 : 4">{{ report.main.rank_province }}</v-col>
-                                        <v-col :cols="(report.main.school) ? 3 : 4">{{ report.main.rank_city }}</v-col>
-                                        <v-col v-if="report.main.school" cols="3">{{ report.main.school }}</v-col>
+                                        <v-col :cols="(report.main.rank_school) ? 3 : 4">{{ report.main.rank_country }}</v-col>
+                                        <v-col :cols="(report.main.rank_school) ? 3 : 4">{{ report.main.rank_province }}</v-col>
+                                        <v-col :cols="(report.main.rank_school) ? 3 : 4">{{ report.main.rank_city }}</v-col>
+                                        <v-col v-if="report.main.rank_school" cols="3">{{ report.main.rank_school }}</v-col>
                                     </v-row>
                                 </span>
                             </v-card>
