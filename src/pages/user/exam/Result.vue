@@ -111,12 +111,12 @@
                                         text
                                         type="info"
                                 >
-                                    به زودی
+                                    منتشر نشده
                                 </v-alert>
                                 <v-alert v-if="currentVideo" class="text-center">
                                     {{ currentVideo.title }}
                                 </v-alert>
-<!--                                <p v-if="!currentVideo" class="coming-soon" :style="{ 'margin-top': '50px'}">به زودی</p>-->
+<!--                                <p v-if="!currentVideo" class="coming-soon" :style="{ 'margin-top': '50px'}">منتشر نشده</p>-->
 <!--                                <p v-if="currentVideo" class="video-title">{{ currentVideo.title }}</p>-->
                                 <v-row v-if="currentVideo">
                                     <v-col>
