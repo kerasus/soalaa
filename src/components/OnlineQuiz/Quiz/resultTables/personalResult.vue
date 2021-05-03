@@ -40,7 +40,7 @@
                         </template>
 
                     </v-data-table>
-                    <v-row class="subRowHeight final-report-scoreboard" >
+                    <v-row class="subRowHeight final-report-scoreboard">
                         <v-col class="subColsPaddingBottom" cols="12">
                             <v-card class="subCards">
                                 <v-card-title class="cardTitle">
@@ -94,44 +94,47 @@
 
 <script>
 
-    export default {
-        name: 'PersonalResult',
-        data() {
-            return {
-                headers1: [
-                    {
-                        text: 'ردیف',
-                        align: 'center',
-                        sortable: true,
-                        value: 'index',
-                    },
-                    {text: 'درس', value: 'sub_category', align: 'center', sortable: false},
-                    {text: ' تعداد کل', value: 'total_answer', align: 'center', sortable: false},
-                    {text: ' تعداد درست', value: 'right_answer', align: 'center', sortable: false},
-                    {text: ' تعداد غلط', value: 'wrong_answer', align: 'center', sortable: false},
-                    {text: ' تعداد نزده', value: 'empty', align: 'center', sortable: true},
-                    {text: ' درصد', value: 'percent', align: 'center', sortable: true},
-                    {text: ' تراز', value: 'taraaz', align: 'center', sortable: true},
-                ],
-                headers2: [
-                    {
-                        text: 'زیر گروه',
-                        align: 'center',
-                        sortable: true,
-                        value: 'title'
-                    },
-                    {text: 'درصد خام', value: 'percent', align: 'center', sortable: true,},
-                    {text: 'تراز', value: 'taraaz', align: 'center', sortable: true,},
-                    {text: ' رتبه شهر', value: 'rank_city', align: 'center', sortable: true,},
-                    {text: ' رتبه استان', value: 'rank_province', align: 'center', sortable: true,},
-                    {text: ' رتبه کشور', value: 'rank_country', align: 'center', sortable: true,},
-
-                ],
-
-            }
-        },
-        props: ['report']
+  export default {
+    name : 'PersonalResult',
+    data() {
+      return {
+        headers1: [
+          {
+            text    : 'ردیف',
+            align   : 'center',
+            sortable: true,
+            value   : 'index',
+          },
+          {text: 'درس', value: 'sub_category', align: 'center', sortable: false},
+          {text: ' تعداد کل', value: 'total_answer', align: 'center', sortable: false},
+          {text: ' تعداد درست', value: 'right_answer', align: 'center', sortable: false},
+          {text: ' تعداد غلط', value: 'wrong_answer', align: 'center', sortable: false},
+          {text: ' تعداد نزده', value: 'empty', align: 'center', sortable: true},
+          {text: ' درصد', value: 'percent', align: 'center', sortable: true},
+          {text: ' تراز', value: 'taraaz', align: 'center', sortable: true},
+        ],
+        headers2: [
+          {
+            text    : 'زیر گروه',
+            align   : 'center',
+            sortable: true,
+            value   : 'title'
+          },
+          {text: 'درصد خام', value: 'percent', align: 'center', sortable: true,},
+          {text: 'تراز', value: 'taraaz', align: 'center', sortable: true,},
+          {text: ' رتبه شهر', value: 'rank_city', align: 'center', sortable: true,},
+          {text: ' رتبه استان', value: 'rank_province', align: 'center', sortable: true,},
+          {text: ' رتبه کشور', value: 'rank_country', align: 'center', sortable: true,},
+        ],
+      }
+    },
+    props: ['report'],
+    created() {
+      if (report.zirgorooh[0].school) {
+        this.headers2.splice(3, 0, {text: ' رتبه مدرسه', value: 'school', align: 'center', sortable: true,})
+      }
     }
+  }
 </script>
 
 <style scoped>
@@ -274,9 +277,11 @@
         padding: 0 10px;
         font-size: 14px;
     }
+
     .final-report-scoreboard .cardContent {
         font-size: 22px;
     }
+
     .final-report-scoreboard {
         display: block;
     }
