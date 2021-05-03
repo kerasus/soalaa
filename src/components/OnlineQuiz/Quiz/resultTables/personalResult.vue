@@ -130,7 +130,7 @@
     },
     props: ['report'],
     created() {
-      if (report.zirgorooh[0].school) {
+      if (this.report.zirgorooh[0].school) {
         this.headers2.splice(3, 0, {text: ' رتبه مدرسه', value: 'school', align: 'center', sortable: true,})
       }
     }
