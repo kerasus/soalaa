@@ -51,74 +51,110 @@
                     <td>{{ item.shamsiDate('finish_at').dateTime }}</td>
                     <td>{{ item.delay_time }} دقیقه</td>
                     <td>
-                        <v-btn
-                                class="mx-2"
-                                fab
-                                dark
-                                x-small
-                                color="cyan"
-                                @click="selectExam(item)"
-                        >
-                            <v-icon dark>
-                                mdi-pencil
-                            </v-icon>
-                        </v-btn>
-<!--                        <v-btn-->
-<!--                                class="mx-2"-->
-<!--                                fab-->
-<!--                                dark-->
-<!--                                x-small-->
-<!--                                color="primary"-->
-<!--                                :to="{ name: 'quiz.edit', params: { quizId: item.id}}"-->
-<!--                        >-->
-<!--                            <v-icon-->
-<!--                                    small-->
-<!--                            >-->
-<!--                                mdi-arrow-up-bold-box-outline-->
-<!--                            </v-icon>-->
-<!--                        </v-btn>-->
-                        <v-btn
-                                class="mx-2"
-                                fab
-                                dark
-                                x-small
-                                color="primary"
-                                :to="{ name: 'onlineQuiz.exams.lessons', params: { quizId: item.id}}"
-                        >
-                            <v-icon
-                                    small
-                            >
-                                mdi-arrow-up-bold-box-outline
-                            </v-icon>
-                        </v-btn>
-                        <v-btn
-                                class="mx-2"
-                                fab
-                                dark
-                                x-small
-                                color="pink"
-                                @click="deleteItem(item)"
-                        >
-                            <v-icon
-                                    small
-                            >
-                                mdi-delete
-                            </v-icon>
-                        </v-btn>
-                        <v-btn
-                                class="mx-2"
-                                fab
-                                dark
-                                x-small
-                                color="green"
-                                :to="{ name: 'onlineQuiz.exams.lessons', params: { quizId: item.id}}"
-                        >
-                            <v-icon
-                                    small
-                            >
-                                mdi-notebook-outline
-                            </v-icon>
-                        </v-btn>
+                        <v-tooltip top v-if="false">
+                            <template v-slot:activator="{ on, attrs }">
+                                <v-btn
+                                        class="mx-2"
+                                        fab
+                                        dark
+                                        x-small
+                                        color="orange"
+                                        @click="selectExam(item)"
+                                        v-bind="attrs"
+                                        v-on="on"
+                                >
+                                    <v-icon dark>
+                                        mdi-pencil
+                                    </v-icon>
+                                </v-btn>
+                            </template>
+                            <span>ویرایش</span>
+                        </v-tooltip>
+                        <v-tooltip top v-if="false">
+                            <template v-slot:activator="{ on, attrs }">
+                                <v-btn
+                                        class="mx-2"
+                                        fab
+                                        dark
+                                        x-small
+                                        color="primary"
+                                        :to="{ name: 'onlineQuiz.exams.lessons', params: { quizId: item.id}}"
+                                        v-bind="attrs"
+                                        v-on="on"
+                                >
+                                    <v-icon
+                                            small
+                                    >
+                                        mdi-arrow-up-bold-box-outline
+                                    </v-icon>
+                                </v-btn>
+                            </template>
+                            <span>مشاهده تمام سوالات</span>
+                        </v-tooltip>
+                        <v-tooltip top>
+                            <template v-slot:activator="{ on, attrs }">
+                                <v-btn
+                                        class="mx-2"
+                                        fab
+                                        dark
+                                        x-small
+                                        color="cyan"
+                                        :to="{name: 'exam.results', params: {examId: item.id}}"
+                                        v-bind="attrs"
+                                        v-on="on"
+                                >
+                                    <v-icon
+                                            small
+                                    >
+                                        mdi-clipboard-list-outline
+                                    </v-icon>
+                                </v-btn>
+                            </template>
+                            <span>مشاهده نتایج تمام شرکت کنندگان</span>
+                        </v-tooltip>
+                        <v-tooltip top>
+                            <template v-slot:activator="{ on, attrs }">
+                                <v-btn
+                                        class="mx-2"
+                                        fab
+                                        dark
+                                        x-small
+                                        color="light-blue"
+                                        :to="{ name: 'onlineQuiz.exams.lessons', params: { quizId: item.id}}"
+                                        v-bind="attrs"
+                                        v-on="on"
+                                >
+                                    <v-icon
+                                            small
+                                    >
+                                        mdi-book-open-page-variant
+                                    </v-icon>
+                                </v-btn>
+                            </template>
+                            <span>مشاهده سوالات به تفکیک درس</span>
+                        </v-tooltip>
+                        <v-tooltip top>
+                            <template v-slot:activator="{ on, attrs }">
+                                <v-btn
+                                        class="mx-2"
+                                        fab
+                                        dark
+                                        x-small
+                                        color="pink"
+                                        @click="deleteItem(item)"
+                                        v-bind="attrs"
+                                        v-on="on"
+                                >
+                                    <v-icon
+                                            small
+                                    >
+                                        mdi-delete
+                                    </v-icon>
+                                </v-btn>
+                            </template>
+                            <span>حذف آزمون</span>
+                        </v-tooltip>
+
                     </td>
                 </tr>
                 </tbody>

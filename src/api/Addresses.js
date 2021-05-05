@@ -33,6 +33,7 @@ const API_ADDRESS = {
     sendUnBookmark: lumenServer + '/temp-exam/answer/unbookmark',
     userExamsList: lumenServer + '/examAndUser',
     takhminRotbe: lumenServer + '/exam-report/rankSimulator',
+    examReportIndex: lumenServer + '/exam-report/index',
     getAnswerOfUser (user_exam_id) {
       return lumenServer + '/temp-exam/answer/'+user_exam_id
     },

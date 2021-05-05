@@ -106,6 +106,12 @@ const router = new VueRouter({
             meta: {middleware: [auth, completeInfo]}
         },
         {
+            path: '/exam/results/:examId',
+            name: 'exam.results',
+            component: () => lazyLoadView(import('@/pages/admin/exam/results')),
+            meta: {middleware: [auth, completeInfo]}
+        },
+        {
             path: '/video/set',
             name: 'video.set',
             component: () => lazyLoadView(import('@/pages/admin/VideoSet/SetVideo')),
