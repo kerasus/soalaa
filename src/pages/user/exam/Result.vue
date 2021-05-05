@@ -76,7 +76,7 @@
                                         </v-btn>
                                     </div>
                                 </v-col>
-                                <v-col md="6">
+                                <v-col v-if="report.exams_booklet[1]" md="6">
                                     <div class="download-box">
                                         <p class="download-title">دانلود پاسخنامه تشریحی {{ report.exams_booklet[1].title }}</p>
                                         <v-btn outlined color="--primary-2" height="75px" width="250px" :href="report.exams_booklet[1].descriptive_answers_url"  target="_blank">
@@ -85,7 +85,7 @@
                                         </v-btn>
                                     </div>
                                 </v-col>
-                                <v-col md="6">
+                                <v-col v-if="report.exams_booklet[1]" md="6">
                                     <div class="download-box">
                                         <p class="download-title">دانلود {{ report.exams_booklet[1].title }}</p>
                                         <v-btn outlined color="--primary-2" height="75px" width="250px" :href="report.exams_booklet[1].questions_url" target="_blank">
@@ -111,12 +111,12 @@
                                         text
                                         type="info"
                                 >
-                                    به زودی
+                                    منتشر نشده
                                 </v-alert>
                                 <v-alert v-if="currentVideo" class="text-center">
                                     {{ currentVideo.title }}
                                 </v-alert>
-<!--                                <p v-if="!currentVideo" class="coming-soon" :style="{ 'margin-top': '50px'}">به زودی</p>-->
+<!--                                <p v-if="!currentVideo" class="coming-soon" :style="{ 'margin-top': '50px'}">منتشر نشده</p>-->
 <!--                                <p v-if="currentVideo" class="video-title">{{ currentVideo.title }}</p>-->
                                 <v-row v-if="currentVideo">
                                     <v-col>

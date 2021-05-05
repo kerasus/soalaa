@@ -28,7 +28,8 @@
                     class="text-decoration-none"
                     :class="{'router-link-active': $route.name === item.to.name}"
                     :to="item.to">
-                <v-list-item :class="{ 'v-list-item--active': $route.name === item.to.name, 'v-list-item--link': $route.name === item.to.name, 'deep-purple--text': $route.name === item.to.name }">
+                <v-list-item
+                        :class="{ 'v-list-item--active': $route.name === item.to.name, 'v-list-item--link': $route.name === item.to.name, 'deep-purple--text': $route.name === item.to.name }">
                     <v-list-item-title>{{ item.displayName }}</v-list-item-title>
                 </v-list-item>
             </router-link>
@@ -60,7 +61,7 @@
             </router-link>
         </v-list-item-group>
         <v-list-item-group
-                v-if="$store.getters['Auth/user'].has_admin_permission"
+                v-if="user.has_admin_permission"
                 class="admin-panel"
                 active-class="deep-purple--text text--accent-4"
                 v-model="adminGroup"
@@ -72,13 +73,14 @@
                     class="text-decoration-none"
                     :class="{'router-link-active': $route.name === item.to.name}"
                     :to="item.to">
-                <v-list-item :class="{ 'v-list-item--active': $route.name === item.to.name, 'v-list-item--link': $route.name === item.to.name, 'deep-purple--text': $route.name === item.to.name }">
+                <v-list-item
+                        :class="{ 'v-list-item--active': $route.name === item.to.name, 'v-list-item--link': $route.name === item.to.name, 'deep-purple--text': $route.name === item.to.name }">
                     <v-list-item-title>{{ item.displayName }}</v-list-item-title>
                 </v-list-item>
             </router-link>
         </v-list-item-group>
         <v-list-item-group
-                v-if="$store.getters['Auth/user'].has_educational_permission && !$store.getters['Auth/user'].has_admin_permission"
+                v-if="user.has_educational_permission && !user.has_admin_permission"
                 class="admin-panel"
                 active-class="deep-purple--text text--accent-4"
                 v-model="adminGroup"
@@ -90,7 +92,8 @@
                     class="text-decoration-none"
                     :class="{'router-link-active': $route.name === item.to.name}"
                     :to="item.to">
-                <v-list-item :class="{ 'v-list-item--active': $route.name === item.to.name, 'v-list-item--link': $route.name === item.to.name, 'deep-purple--text': $route.name === item.to.name }">
+                <v-list-item
+                        :class="{ 'v-list-item--active': $route.name === item.to.name, 'v-list-item--link': $route.name === item.to.name, 'deep-purple--text': $route.name === item.to.name }">
                     <v-list-item-title>{{ item.displayName }}</v-list-item-title>
                 </v-list-item>
             </router-link>
@@ -99,60 +102,64 @@
 </template>
 
 <script>
-    export default {
-        name: "SideMenu_Dashboard",
-        data: () => ({
-            userGroup: null,
-            adminGroup: null,
-            userList: [
-                {
-                    displayName: 'آزمون های سه آ',
-                    to: { name: 'user.exam.list' }
-                },
-                {
-                    displayName: 'سوالات متداول',
-                    to: { name: 'faq' }
-                }
-            ],
-            adminList: [
-                {
-                    displayName: 'ویرایش درخت دانش',
-                    to: {name: 'tree.edit'}
-                },
-                {
-                    displayName: 'ساخت سوال',
-                    to: {name: 'quest.create'}
-                },
-                {
-                    displayName: 'لیست آزمون ها',
-                    to: {name: 'onlineQuiz.exams'}
-                },
-                {
-                    displayName: 'ثبت ویدئو تحلیل',
-                    to: {name: 'video.set'}
-                },
-            ],
-            educationList: [
-                {
-                    displayName: 'لیست آزمون ها',
-                    to: {name: 'onlineQuiz.exams'}
-                },
-            ]
-        }),
-        created() {
-            if (
-                !this.$store.getters['Auth/user'].has_admin_permission &&
-                this.$store.getters['Auth/user'].has_educational_permission
-            ) {
-                this.adminList = [
-                    {
-                        displayName: 'لیست آزمون ها',
-                        to: {name: 'onlineQuiz.exams'}
-                    }
-                ]
-            }
+  import {mixinAuth} from '@/mixin/Mixins'
+
+  export default {
+    name: "SideMenu_Dashboard",
+    mixins: [mixinAuth],
+    data: () => ({
+      userGroup: null,
+      adminGroup: null,
+      userList: [
+        {
+          displayName: 'آزمون های سه آ',
+          to: {name: 'user.exam.list'}
+        },
+        {
+          displayName: 'سوالات متداول',
+          to: {name: 'faq'}
         }
+      ],
+      adminList: [
+        {
+          displayName: 'ویرایش درخت دانش',
+          to: {name: 'tree.edit'}
+        },
+        {
+          displayName: 'ساخت سوال',
+          to: {name: 'quest.create'}
+        },
+        {
+          displayName: 'لیست آزمون ها',
+          to: {name: 'onlineQuiz.exams'}
+        },
+        {
+          displayName: 'ثبت ویدئو تحلیل',
+          to: {name: 'video.set'}
+        },
+      ],
+      educationList: [
+        {
+          displayName: 'لیست آزمون ها',
+          to: {name: 'onlineQuiz.exams'}
+        },
+      ]
+    }),
+    created() {
+      if (
+              !this.user.has_admin_permission &&
+              this.user.has_educational_permission
+      )
+      {
+        this.adminList = [
+          {
+            displayName: 'لیست آزمون ها',
+            to: {name: 'onlineQuiz.exams'}
+          }
+        ]
+      }
     }
+  }
 </script>
 
 <style scoped>
