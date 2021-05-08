@@ -28,6 +28,7 @@
                             <th>
                                 شهر
                             </th>
+                            <th></th>
                             <template
                                     v-for="item in results[0].sub_category"
                             >
@@ -57,18 +58,34 @@
                             </td>
                             <td>{{ item.location.province }}</td>
                             <td>{{ item.location.city }}</td>
+                            <td>
+                                <v-tooltip top>
+                                    <template v-slot:activator="{ on, attrs }">
+                                        <v-btn
+                                                icon
+                                                :to="{name: 'user.exam.results', params: {exam_id: item.exam_id, user_exam_id: item.exam_user_id}}"
+                                                color="cyan"
+                                                v-bind="attrs"
+                                                v-on="on"
+                                        >
+                                            <v-icon>mdi-eye-circle-outline</v-icon>
+                                        </v-btn>
+                                    </template>
+                                    <span>مشاهده کارنامه</span>
+                                </v-tooltip>
+                            </td>
                             <template
                                     v-for="(sub_categoryItem, sub_categoryIndex) in item.sub_category"
                             >
-                                <th class="bordered-right" :key="'bodyColumns_percent_'+sub_categoryItem.sub_category_order+sub_categoryIndex+'_'+item.exam_user_id">
+                                <td class="bordered-right" :key="'bodyColumns_percent_'+sub_categoryItem.sub_category_order+sub_categoryIndex+'_'+item.exam_user_id">
                                     {{ sub_categoryItem.percent }}
-                                </th>
-                                <th :key="'bodyColumns_taraz_'+sub_categoryItem.sub_category_order+sub_categoryIndex+'_'+item.exam_user_id">
+                                </td>
+                                <td :key="'bodyColumns_taraz_'+sub_categoryItem.sub_category_order+sub_categoryIndex+'_'+item.exam_user_id">
                                     {{ sub_categoryItem.taraaz }}
-                                </th>
-                                <th class="bordered-left" :key="'bodyColumns_rank_'+sub_categoryItem.sub_category_order+sub_categoryIndex+'_'+item.exam_user_id">
+                                </td>
+                                <td class="bordered-left" :key="'bodyColumns_rank_'+sub_categoryItem.sub_category_order+sub_categoryIndex+'_'+item.exam_user_id">
                                     {{ sub_categoryItem.rank_country }}
-                                </th>
+                                </td>
                             </template>
                         </tr>
                     </tbody>
