@@ -237,7 +237,7 @@
                     that.loadExam(userExamForParticipate, 'results', exam_id)
                         .then(() => {
                             that.quiz.id = exam_id
-                            that.quiz.show(exam_id, API_ADDRESS.exam.report.getReport(exam_id))
+                            that.quiz.show(exam_id, API_ADDRESS.exam.report.getReport(user_exam_id))
                             .then((response) => {
                                 that.report = response.data.data
                                 that.loadKarname(that.report)

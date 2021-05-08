@@ -52,8 +52,8 @@ const API_ADDRESS = {
       return lumenServer + '/exam-question/attach/show/' + quizId
     },
     report: {
-      getReport (examId) {
-        return lumenServer + '/exam-report?exam_id=' + examId
+      getReport (userExamId) {
+        return lumenServer + '/exam-report?user_exam_id=' + userExamId
       }
     }
   },
