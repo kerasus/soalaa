@@ -1,294 +1,498 @@
 <template>
     <div>
-        <v-data-table
-            :headers="tableHeaders"
-            :items="tableData.data"
-            :options.sync="options"
-            :server-items-length="perPage"
-            :loading="loadingTable"
-            class="elevation-1"
-        />
+<!--        <vue-tiptap-plus v-model="html"/>-->
+        <div v-html="convertToMarkdownKatex(html)"/>
+        <div v-html="(merkdownTesti)"/>
     </div>
 </template>
 
 <script>
+  import {mixinMarkdownAndKatex} from '@/mixin/Mixins'
+  import TurndownService from 'turndown/lib/turndown.browser.umd'
+  // import VueTiptapPlus from '@/components/tiptap/vue-tiptap-plus'
 
+  export default {
+    mixins: [mixinMarkdownAndKatex],
+    // components: {VueTiptapPlus},
+    mounted() {
+    },
+    data() {
+      return {
+        html: '<p>I’m running tiptap with Vue.js. 🎉</p>',
+        innerHTML: 'hi',
+        merkdownTesti: ''
+      }
+    },
+    methods: {
+      convertTables(htmlString) {
+        var wrapper = document.createElement('div');
+        wrapper.innerHTML = htmlString;
+        // var doc = new DOMParser().parseFromString(htmlString, "text/xml");
+        // this.innerHTML = doc.innerHTML
+        // let tables = doc.querySelectorAll('table')
+        let tables = wrapper.querySelectorAll('table')
+        // let tables = this.$refs.table.querySelectorAll('table')
+        tables.forEach(item => {
+          let markdownTable = ''
+          let headRows = []
+          if (item.tHead)
+          {
+            headRows = item.tHead.rows
+            // headRows = item.querySelectorAll('thead tr')
+          } else if (item.querySelectorAll('tr th').length > 0)
+          {
+            let rows = item.querySelectorAll('tr')
+            rows.forEach(row => {
+              if (row.querySelectorAll('th').length > 0)
+              {
+                headRows.push(row)
+              }
+            })
+            // headRows = item.querySelectorAll('tr th')[0].parentNode.cells
+          }
+          let bodyRows = []
+          // if (item.tBodies && item.tBodies[0]) {
+          //   bodyRows = item.tBodies[0].rows
+          //   // bodyRows = item.querySelectorAll('tbody tr')
+          // } else
+          if (item.querySelectorAll('tr td').length > 0)
+          {
+            let rows = item.querySelectorAll('tr')
+            rows.forEach(row => {
+              if (row.querySelectorAll('td').length > 0)
+              {
+                bodyRows.push(row)
+              }
+            })
+            // headRows = item.querySelectorAll('tr th')[0].parentNode.cells
+          }
 
-    export default {
-        name: 'debug',
-        data () {
-            return {
-                options: {},
-                tableHeaders: [
-                    {
-                        text: 'fdfsdfsdfsdfas',
-                        sortable: true,
-                        value: 'title'
-                    }
-                ],
-                loadingTable: false,
-                perPage: 0,
-                tableData: {
-                    "data": [
-                        {
-                            "id": 1084,
-                            "redirect_url": null,
-                            "title": "پاسخنامه تصویری آزمون سه آ روانشناسی با تدریس منوچهر ستینه",
-                            "short_title": "روانشناسی",
-                            "photo": "https://cdn.alaatv.com/upload/contentset/departmentlesson/set_3a2_pt_ravanshenasi_20210416135611.jpg",
-                            "url": {
-                                "web": "https://alaatv.com/set/1084",
-                                "api": "https://alaatv.com/api/v2/set/1084"
-                            },
-                            "contents_count": 3,
-                            "author": {
-                                "id": 1071397,
-                                "first_name": "گروه آموزشی",
-                                "last_name": "سه آ",
-                                "photo": "https://cdn.alaatv.com/upload/images/profile/Logo (3)_20210111085318.png?w=100&h=100"
-                            },
-                            "contents": null,
-                            "created_at": "2021-04-10 07:37:16",
-                            "updated_at": "2021-04-16 09:26:12"
-                        },
-                        {
-                            "id": 1083,
-                            "redirect_url": null,
-                            "title": "پاسخنامه تصویری آزمون سه آ زمین شناسی با تدریس رضا ملکان پور",
-                            "short_title": "زمین شناسی",
-                            "photo": "https://cdn.alaatv.com/upload/contentset/departmentlesson/set_3a2_pt_zaminshenasi_20210416135647.jpg",
-                            "url": {
-                                "web": "https://alaatv.com/set/1083",
-                                "api": "https://alaatv.com/api/v2/set/1083"
-                            },
-                            "contents_count": 3,
-                            "author": {
-                                "id": 1071397,
-                                "first_name": "گروه آموزشی",
-                                "last_name": "سه آ",
-                                "photo": "https://cdn.alaatv.com/upload/images/profile/Logo (3)_20210111085318.png?w=100&h=100"
-                            },
-                            "contents": null,
-                            "created_at": "2021-04-10 01:34:14",
-                            "updated_at": "2021-04-16 09:26:48"
-                        },
-                        {
-                            "id": 1059,
-                            "redirect_url": null,
-                            "title": "مشاوره تصویری درسی تفتان",
-                            "short_title": "مشاوره",
-                            "photo": "https://cdn.alaatv.com/upload/contentset/departmentlesson/taftan moshavere bg_20210319152544.jpg",
-                            "url": {
-                                "web": "https://alaatv.com/set/1059",
-                                "api": "https://alaatv.com/api/v2/set/1059"
-                            },
-                            "contents_count": 13,
-                            "author": {
-                                "id": 37214,
-                                "first_name": "محمد رضا",
-                                "last_name": "حسینی فرد",
-                                "photo": "https://cdn.alaatv.com/upload/images/profile/286003rxdf.mp4_snapshot_00.00.05.000_20190817083939.jpg?w=100&h=100"
-                            },
-                            "contents": null,
-                            "created_at": "2021-03-19 05:00:19",
-                            "updated_at": "2021-03-19 11:57:38"
-                        },
-                        {
-                            "id": 1047,
-                            "redirect_url": null,
-                            "title": "خط به خط ادبیات هفتم (نظام آموزشی جدید) (1400-1399) رضا اسکندری",
-                            "short_title": "خط به خط ادبیات هفتم",
-                            "photo": "https://cdn.alaatv.com/upload/contentset/departmentlesson/adabiat7_kh_set_20210315122639.jpg",
-                            "url": {
-                                "web": "https://alaatv.com/set/1047",
-                                "api": "https://alaatv.com/api/v2/set/1047"
-                            },
-                            "contents_count": 8,
-                            "author": {
-                                "id": 1153162,
-                                "first_name": "رضا",
-                                "last_name": "اسکندری",
-                                "photo": "https://cdn.alaatv.com/upload/images/profile/default_avatar.jpg?w=100&h=100"
-                            },
-                            "contents": null,
-                            "created_at": "2021-03-02 05:53:35",
-                            "updated_at": "2021-04-07 11:23:40"
-                        },
-                        {
-                            "id": 1043,
-                            "redirect_url": null,
-                            "title": "صفر تا صد ادبیات دوازدهم (نظام آموزشی جدید) (1400-1399) عبدالرضا مرادی",
-                            "short_title": null,
-                            "photo": "https://cdn.alaatv.com/upload/contentset/departmentlesson/adabiat12_0100_set2_20210221094217.jpg",
-                            "url": {
-                                "web": "https://alaatv.com/set/1043",
-                                "api": "https://alaatv.com/api/v2/set/1043"
-                            },
-                            "contents_count": 22,
-                            "author": {
-                                "id": 37208,
-                                "first_name": "عبدالرضا",
-                                "last_name": "مرادی",
-                                "photo": "https://cdn.alaatv.com/upload/images/profile/moradi_20200920065725.jpg?w=100&h=100"
-                            },
-                            "contents": null,
-                            "created_at": "2021-02-15 03:34:55",
-                            "updated_at": "2021-02-24 13:36:17"
-                        },
-                        {
-                            "id": 1042,
-                            "redirect_url": null,
-                            "title": "خط به خط ریاضی هفتم (نظام آموزشی جدید) (1400-1399) رضا موحد",
-                            "short_title": "خط به خط ریاضی هفتم",
-                            "photo": "https://cdn.alaatv.com/upload/contentset/departmentlesson/riazi7_kh_set_20210221094207.jpg",
-                            "url": {
-                                "web": "https://alaatv.com/set/1042",
-                                "api": "https://alaatv.com/api/v2/set/1042"
-                            },
-                            "contents_count": 32,
-                            "author": {
-                                "id": 1105773,
-                                "first_name": "رضا",
-                                "last_name": "موحد",
-                                "photo": "https://cdn.alaatv.com/upload/images/profile/movahed_20210302090106.jpg?w=100&h=100"
-                            },
-                            "contents": null,
-                            "created_at": "2021-02-11 04:26:32",
-                            "updated_at": "2021-03-02 05:49:52"
-                        },
-                        {
-                            "id": 1041,
-                            "redirect_url": null,
-                            "title": "صفر تا صد دین و زندگی یازدهم (نظام آموزشی جدید) (1400-1399) هادی ناصری",
-                            "short_title": "دین و زندگی یازدهم",
-                            "photo": "https://cdn.alaatv.com/upload/contentset/departmentlesson/dini11_0100_set_20210131100637.jpg",
-                            "url": {
-                                "web": "https://alaatv.com/set/1041",
-                                "api": "https://alaatv.com/api/v2/set/1041"
-                            },
-                            "contents_count": 18,
-                            "author": {
-                                "id": 287450,
-                                "first_name": "هادی",
-                                "last_name": "ناصری",
-                                "photo": "https://cdn.alaatv.com/upload/images/profile/AXIS V5915_2020-05-19_16_00_47_018_20200520105240.jpg?w=100&h=100"
-                            },
-                            "contents": null,
-                            "created_at": "2021-01-26 03:21:47",
-                            "updated_at": "2021-01-31 06:36:38"
-                        },
-                        {
-                            "id": 1038,
-                            "redirect_url": null,
-                            "title": "پاسخنامه تصویری آزمون سه آ شیمی با تدریس احسان گودرزی",
-                            "short_title": "شیمی",
-                            "photo": "https://cdn.alaatv.com/upload/contentset/departmentlesson/set_3a2_pt_shimi_20210416133758.jpg",
-                            "url": {
-                                "web": "https://alaatv.com/set/1038",
-                                "api": "https://alaatv.com/api/v2/set/1038"
-                            },
-                            "contents_count": 12,
-                            "author": {
-                                "id": 1071397,
-                                "first_name": "گروه آموزشی",
-                                "last_name": "سه آ",
-                                "photo": "https://cdn.alaatv.com/upload/images/profile/Logo (3)_20210111085318.png?w=100&h=100"
-                            },
-                            "contents": null,
-                            "created_at": "2021-01-11 09:00:03",
-                            "updated_at": "2021-04-16 09:07:59"
-                        },
-                        {
-                            "id": 1037,
-                            "redirect_url": null,
-                            "title": "پاسخنامه تصویری آزمون سه آ ریاضی تجربی با تدریس محمد مصطفی ابراهیمی",
-                            "short_title": "ریاضی تجربی",
-                            "photo": "https://cdn.alaatv.com/upload/contentset/departmentlesson/set_3a2_pt_riazit_20210416134152.jpg",
-                            "url": {
-                                "web": "https://alaatv.com/set/1037",
-                                "api": "https://alaatv.com/api/v2/set/1037"
-                            },
-                            "contents_count": 8,
-                            "author": {
-                                "id": 1071397,
-                                "first_name": "گروه آموزشی",
-                                "last_name": "سه آ",
-                                "photo": "https://cdn.alaatv.com/upload/images/profile/Logo (3)_20210111085318.png?w=100&h=100"
-                            },
-                            "contents": null,
-                            "created_at": "2021-01-11 08:59:27",
-                            "updated_at": "2021-04-16 09:11:53"
-                        },
-                        {
-                            "id": 1036,
-                            "redirect_url": null,
-                            "title": "پاسخنامه تصویری آزمون سه آ-فیزیک رشته ریاضی با تدریس البرز امینیان",
-                            "short_title": "فیزیک رشته ریاضی",
-                            "photo": "https://cdn.alaatv.com/upload/contentset/departmentlesson/set_3a2_pt_fizikr_20210416134300.jpg",
-                            "url": {
-                                "web": "https://alaatv.com/set/1036",
-                                "api": "https://alaatv.com/api/v2/set/1036"
-                            },
-                            "contents_count": 10,
-                            "author": {
-                                "id": 1071397,
-                                "first_name": "گروه آموزشی",
-                                "last_name": "سه آ",
-                                "photo": "https://cdn.alaatv.com/upload/images/profile/Logo (3)_20210111085318.png?w=100&h=100"
-                            },
-                            "contents": null,
-                            "created_at": "2021-01-11 05:19:53",
-                            "updated_at": "2021-04-16 09:13:02"
-                        }
-                    ],
-                    "meta": {
-                        "count": 10,
-                        "current_page": 1,
-                        "from": 1,
-                        "last_page": 29,
-                        "path": "https://alaatv.com/api/v2/set",
-                        "per_page": 10,
-                        "to": 10,
-                        "total": 284
-                    },
-                    "links": {
-                        "first": "https://alaatv.com/api/v2/set?enable=1&display=1&contentsetPage=1",
-                        "last": "https://alaatv.com/api/v2/set?enable=1&display=1&contentsetPage=29",
-                        "prev": null,
-                        "next": "https://alaatv.com/api/v2/set?enable=1&display=1&contentsetPage=2"
-                    }
-                }
+          // table head
+          let maxTheadCellCount = 0
+          headRows.forEach(row => {
+            let theadCellCount = 0
+            let cells = row.querySelectorAll('th')
+            cells.forEach(cell => {
+              markdownTable += '|' + this.htmlToMarkdown(cell.innerHTML)
+              theadCellCount++
+            })
+            if (theadCellCount > maxTheadCellCount)
+            {
+              maxTheadCellCount = theadCellCount
             }
-        },
-        components: {
+            markdownTable += '|' + '<br>'
+          })
+          for (let i = 0; i < maxTheadCellCount; i++)
+          {
+            markdownTable += '|:-------------:'
+          }
+          markdownTable += '|' + '<br>'
+          // table body
+          bodyRows.forEach(row => {
+            let cells = row.cells
+            cells.forEach(cell => {
+              markdownTable += '|' + this.htmlToMarkdown(cell.innerHTML)
+            })
+            markdownTable += '|' + '<br>'
+          })
 
-        },
-        methods: {
-            getDataFromApi () {
-                this.loading = true
-                // this.fakeApiCall().then(data => {
-                //     this.desserts = data.items
-                //     this.totalDesserts = data.total
-                //     this.loading = false
-                // })
-            },
-        },
-        watch: {
-            options: {
-                handler () {
-                    this.getDataFromApi()
-                },
-                deep: true,
-            },
-        },
-        mounted () {
+          var tableWrapper = document.createElement('div');
+          tableWrapper.innerHTML = markdownTable;
 
-        },
-        created() {
-            // this.tableData = JSON.parse(this.tableData)
-            this.perPage = this.tableData.meta.total
-            this.options.itemsPerPage = this.tableData.meta.count
-            console.log(this.perPage)
+          item.replaceChild(tableWrapper, item.childNodes[0]);
+
+        })
+
+        return wrapper.innerHTML
+      },
+      convertToMarkdownKatex(string) {
+        string = this.convertTables(string)
+        const markdown = this.htmlToMarkdown(string)
+        // return this.markdown.render(string.replace('<div class="question" dir="rtl">', ''))
+        return this.markdown.render(markdown)
+      },
+      htmlToMarkdown(htmlString) {
+        TurndownService.prototype.escape = function (string) {
+          let escapes = [
+            [
+              /\s\$/g,
+              '$'
+            ],
+            [
+              /\$\s/g,
+              '$'
+            ],
+            [
+              /\{align\*\}/g,
+              '{cases}'
+            ],
+            // [/\\/g, '\\\\'],
+            // [/\*/g, '\\*'],
+            // [/^-/g, '\\-'],
+            // [/^\+ /g, '\\+ '],
+            // [/^(=+)/g, '\\$1'],
+            // [/^(#{1,6}) /g, '\\$1 '],
+            // [/`/g, '\\`'],
+            // [/^~~~/g, '\\~~~'],
+            // [/\[/g, '\\['],
+            // [/\]/g, '\\]'],
+            // [/^>/g, '\\>'],
+            // [/_/g, '\\_'],
+            // [/^(\d+)\. /g, '$1\\. ']
+          ];
+          return escapes.reduce(function (accumulator, escape) {
+            return accumulator.replace(escape[0], escape[1])
+          }, string)
+        }
+
+        function repeat (character, count) {
+          return Array(count + 1).join(character)
+        }
+
+        function cleanAttribute (attribute) {
+          return attribute ? attribute.replace(/(\n+\s*)+/g, '\n') : ''
+        }
+
+        var rules = {};
+
+        rules.paragraph = {
+          filter: 'p',
+
+          replacement: function (content) {
+            return '\n\n' + content + '\n\n'
+          }
+        };
+
+        rules.lineBreak = {
+          filter: 'br',
+
+          replacement: function (content, node, options) {
+            return options.br + '\n'
+          }
+        };
+
+        rules.heading = {
+          filter: ['h1', 'h2', 'h3', 'h4', 'h5', 'h6'],
+
+          replacement: function (content, node, options) {
+            var hLevel = Number(node.nodeName.charAt(1));
+
+            if (options.headingStyle === 'setext' && hLevel < 3) {
+              var underline = repeat((hLevel === 1 ? '=' : '-'), content.length);
+              return (
+                      '\n\n' + content + '\n' + underline + '\n\n'
+              )
+            } else {
+              return '\n\n' + repeat('#', hLevel) + ' ' + content + '\n\n'
+            }
+          }
+        };
+
+        rules.blockquote = {
+          filter: 'blockquote',
+
+          replacement: function (content) {
+            content = content.replace(/^\n+|\n+$/g, '');
+            content = content.replace(/^/gm, '> ');
+            return '\n\n' + content + '\n\n'
+          }
+        };
+
+        rules.list = {
+          filter: ['ul', 'ol'],
+
+          replacement: function (content, node) {
+            var parent = node.parentNode;
+            if (parent.nodeName === 'LI' && parent.lastElementChild === node) {
+              return '\n' + content
+            } else {
+              return '\n\n' + content + '\n\n'
+            }
+          }
+        };
+
+        rules.listItem = {
+          filter: 'li',
+
+          replacement: function (content, node, options) {
+            content = content
+                    .replace(/^\n+/, '') // remove leading newlines
+                    .replace(/\n+$/, '\n') // replace trailing newlines with just a single one
+                    .replace(/\n/gm, '\n    '); // indent
+            var prefix = options.bulletListMarker + '   ';
+            var parent = node.parentNode;
+            if (parent.nodeName === 'OL') {
+              var start = parent.getAttribute('start');
+              var index = Array.prototype.indexOf.call(parent.children, node);
+              prefix = (start ? Number(start) + index : index + 1) + '.  ';
+            }
+            return (
+                    prefix + content + (node.nextSibling && !/\n$/.test(content) ? '\n' : '')
+            )
+          }
+        };
+
+        rules.indentedCodeBlock = {
+          filter: function (node, options) {
+            return (
+                    options.codeBlockStyle === 'indented' &&
+                    node.nodeName === 'PRE' &&
+                    node.firstChild &&
+                    node.firstChild.nodeName === 'CODE'
+            )
+          },
+
+          replacement: function (content, node) {
+            return (
+                    '\n\n    ' +
+                    node.firstChild.textContent.replace(/\n/g, '\n    ') +
+                    '\n\n'
+            )
+          }
+        };
+
+        rules.fencedCodeBlock = {
+          filter: function (node, options) {
+            return (
+                    options.codeBlockStyle === 'fenced' &&
+                    node.nodeName === 'PRE' &&
+                    node.firstChild &&
+                    node.firstChild.nodeName === 'CODE'
+            )
+          },
+
+          replacement: function (content, node, options) {
+            var className = node.firstChild.getAttribute('class') || '';
+            var language = (className.match(/language-(\S+)/) || [null, ''])[1];
+            var code = node.firstChild.textContent;
+
+            var fenceChar = options.fence.charAt(0);
+            var fenceSize = 3;
+            var fenceInCodeRegex = new RegExp('^' + fenceChar + '{3,}', 'gm');
+
+            var match;
+            while ((match = fenceInCodeRegex.exec(code))) {
+              if (match[0].length >= fenceSize) {
+                fenceSize = match[0].length + 1;
+              }
+            }
+
+            var fence = repeat(fenceChar, fenceSize);
+
+            return (
+                    '\n\n' + fence + language + '\n' +
+                    code.replace(/\n$/, '') +
+                    '\n' + fence + '\n\n'
+            )
+          }
+        };
+
+        rules.horizontalRule = {
+          filter: 'hr',
+
+          replacement: function (content, node, options) {
+            return '\n\n' + options.hr + '\n\n'
+          }
+        };
+
+        rules.inlineLink = {
+          filter: function (node, options) {
+            return (
+                    options.linkStyle === 'inlined' &&
+                    node.nodeName === 'A' &&
+                    node.getAttribute('href')
+            )
+          },
+
+          replacement: function (content, node) {
+            var href = node.getAttribute('href');
+            var title = cleanAttribute(node.getAttribute('title'));
+            if (title) title = ' "' + title + '"';
+            return '[' + content + '](' + href + title + ')'
+          }
+        };
+
+        rules.referenceLink = {
+          filter: function (node, options) {
+            return (
+                    options.linkStyle === 'referenced' &&
+                    node.nodeName === 'A' &&
+                    node.getAttribute('href')
+            )
+          },
+
+          replacement: function (content, node, options) {
+            var href = node.getAttribute('href');
+            var title = cleanAttribute(node.getAttribute('title'));
+            if (title) title = ' "' + title + '"';
+            var replacement;
+            var reference;
+
+            switch (options.linkReferenceStyle) {
+              case 'collapsed':
+                replacement = '[' + content + '][]';
+                reference = '[' + content + ']: ' + href + title;
+                break
+              case 'shortcut':
+                replacement = '[' + content + ']';
+                reference = '[' + content + ']: ' + href + title;
+                break
+              default:
+                var id = this.references.length + 1;
+                replacement = '[' + content + '][' + id + ']';
+                reference = '[' + id + ']: ' + href + title;
+            }
+
+            this.references.push(reference);
+            return replacement
+          },
+
+          references: [],
+
+          append: function () {
+            var references = '';
+            if (this.references.length) {
+              references = '\n\n' + this.references.join('\n') + '\n\n';
+              this.references = []; // Reset references
+            }
+            return references
+          }
+        };
+
+        rules.emphasis = {
+          filter: ['em', 'i'],
+
+          replacement: function (content, node, options) {
+            if (!content.trim()) return ''
+            return options.emDelimiter + content + options.emDelimiter
+          }
+        };
+
+        rules.strong = {
+          filter: ['strong', 'b'],
+
+          replacement: function (content, node, options) {
+            if (!content.trim()) return ''
+            return options.strongDelimiter + content + options.strongDelimiter
+          }
+        };
+
+        rules.code = {
+          filter: function (node) {
+            var hasSiblings = node.previousSibling || node.nextSibling;
+            var isCodeBlock = node.parentNode.nodeName === 'PRE' && !hasSiblings;
+
+            return node.nodeName === 'CODE' && !isCodeBlock
+          },
+
+          replacement: function (content) {
+            if (!content.trim()) return ''
+
+            var delimiter = '`';
+            var leadingSpace = '';
+            var trailingSpace = '';
+            var matches = content.match(/`+/gm);
+            if (matches) {
+              if (/^`/.test(content)) leadingSpace = ' ';
+              if (/`$/.test(content)) trailingSpace = ' ';
+              while (matches.indexOf(delimiter) !== -1) delimiter = delimiter + '`';
+            }
+
+            return delimiter + leadingSpace + content + trailingSpace + delimiter
+          }
+        };
+
+        rules.image = {
+          filter: 'img',
+
+          replacement: function (content, node) {
+            var alt = cleanAttribute(node.getAttribute('alt'));
+            var src = node.getAttribute('src') || '';
+            var title = cleanAttribute(node.getAttribute('title'));
+            var titlePart = title ? ' "' + title + '"' : '';
+            return src ? '![' + alt + ']' + '(' + src + titlePart + ')' : ''
+          }
+        };
+
+        // create an instance of Turndown service
+        const turndownService = new TurndownService({
+          rules: rules,
+          headingStyle: 'setext',
+          hr: '* * *',
+          bulletListMarker: '*',
+          codeBlockStyle: 'indented',
+          fence: '```',
+          emDelimiter: '_',
+          strongDelimiter: '**',
+          linkStyle: 'inlined',
+          linkReferenceStyle: 'full',
+          br: '',
+          blankReplacement: function (content, node) {
+            return node.isBlock ? '\n\n' : ''
+          },
+          keepReplacement: function (content, node) {
+            return node.isBlock ? '\n\n' + node.outerHTML + '\n\n' : node.outerHTML
+          },
+          defaultReplacement: function (content, node) {
+            return node.isBlock ? '\n\n' + content + '\n\n' : content
+          }
+        })
+        // turndownService.keep(['$'])
+        // convert HTML to Markdown
+        return turndownService.turndown(htmlString)
+      }
+    }
+  }
+</script>
+
+<style lang="scss">
+    table {
+        border-collapse: collapse;
+        table-layout: fixed;
+        width: 100%;
+        margin: 0;
+        overflow: hidden;
+
+        td,
+        th {
+            min-width: 1em;
+            border: 2px solid #ced4da;
+            padding: 3px 5px;
+            vertical-align: top;
+            box-sizing: border-box;
+            position: relative;
+
+            > * {
+                margin-bottom: 0;
+            }
+        }
+
+        th {
+            font-weight: bold;
+            text-align: left;
+            background-color: #f1f3f5;
+        }
+
+        .selectedCell:after {
+            z-index: 2;
+            position: absolute;
+            content: "";
+            left: 0;
+            right: 0;
+            top: 0;
+            bottom: 0;
+            background: rgba(200, 200, 255, 0.4);
+            pointer-events: none;
+        }
+
+        .column-resize-handle {
+            position: absolute;
+            right: -2px;
+            top: 0;
+            bottom: -2px;
+            width: 4px;
+            background-color: #adf;
+            pointer-events: none;
         }
     }
-</script>
+</style>
