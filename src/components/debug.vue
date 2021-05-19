@@ -1,6 +1,6 @@
 <template>
     <div>
-<!--        <vue-tiptap-plus v-model="html"/>-->
+        <vue-tiptap-plus v-model="html"/>
         <div v-html="convertToMarkdownKatex(html)"/>
         <div v-html="(merkdownTesti)"/>
     </div>
@@ -9,11 +9,11 @@
 <script>
   import {mixinMarkdownAndKatex} from '@/mixin/Mixins'
   import TurndownService from 'turndown/lib/turndown.browser.umd'
-  // import VueTiptapPlus from '@/components/tiptap/vue-tiptap-plus'
+  import VueTiptapPlus from '@/components/tiptap/vue-tiptap-plus'
 
   export default {
     mixins: [mixinMarkdownAndKatex],
-    // components: {VueTiptapPlus},
+    components: {VueTiptapPlus},
     mounted() {
     },
     data() {

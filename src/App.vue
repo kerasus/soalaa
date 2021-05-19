@@ -64,7 +64,7 @@
         </v-app-bar>
         <v-main>
             <notifications group="notifs"/>
-            <v-overlay :absolute="true" :opacity="0.5" :value="overlay.show">
+            <v-overlay :opacity="0.5" :value="overlay.show">
                 <v-progress-circular
                         v-if="overlay.loading"
                         indeterminate

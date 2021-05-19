@@ -70,6 +70,12 @@ const router = new VueRouter({
 
         // admin pages
         {
+            path: '/quest/index',
+            name: 'quest.index',
+            component: () => lazyLoadView(import('@/pages/admin/question/Index')),
+            meta: {middleware: [auth, completeInfo]}
+        },
+        {
             path: '/quest/create',
             name: 'quest.create',
             component: () => lazyLoadView(import('@/pages/admin/question/CreateOrEdit')),
