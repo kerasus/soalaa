@@ -43,7 +43,15 @@
                               {{ getQuestionNumberFromId(question.id) }}
                               </span>
                         </template>
-                        <span>{{ showAnsweredAt(getUserQuestionData(question.id).answered_at) }}</span>
+                        <span>
+                            <v-icon v-if="showDateOfAnsweredAt" dark>
+                                mdi-calendar-check-outline
+                            </v-icon>
+                            <v-icon v-else dark>
+                                mdi-clock-check-outline
+                            </v-icon>
+                            {{ showAnsweredAt(getUserQuestionData(question.id).answered_at) }}
+                        </span>
                     </v-tooltip>
                     <span v-else>
                         {{ getQuestionNumberFromId(question.id) }}
