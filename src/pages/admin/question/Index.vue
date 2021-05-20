@@ -1,13 +1,12 @@
 <template>
     <v-row>
-        <v-col style="padding-top: 80px">
-            <v-app-bar
+        <v-col>
+            <v-toolbar
+                    class="fixed-bar"
                     src="https://picsum.photos/1920/1080?random"
                     color="yellow"
                     height="110"
                     elevate-on-scroll
-                    app
-                    style="top: 64px; z-index: 4;"
             >
                 <v-row no-gutters class="justify-center">
                     <v-col cols="12">
@@ -190,7 +189,7 @@
                         </v-card>
                     </v-col>
                 </v-row>
-            </v-app-bar>
+            </v-toolbar>
 
             <v-card v-for="item in filteredQuestions" :key="item.id" elevation="3" class="mr-2 ml-2 mt-2">
                 <v-card-text v-if="item" class="renderedText">
@@ -475,6 +474,15 @@
     }
   }
 </script>
+
+<style scoped>
+    .fixed-bar {
+        position: sticky;
+        position: -webkit-sticky; /* for Safari */
+        top: 64px;
+        z-index: 2;
+    }
+</style>
 
 <style>
     .v-toolbar .v-text-field__details {
