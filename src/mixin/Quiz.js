@@ -341,7 +341,7 @@ const mixinQuiz = {
             let answers = []
 
             for (const questionId in userExamData) {
-                if (userExamData[questionId].answered_choice_id) {
+                if (userExamData[questionId].answered_at) {
                     answers.push({
                         question_id: questionId,
                         answered_choice_id: userExamData[questionId].answered_choice_id,
