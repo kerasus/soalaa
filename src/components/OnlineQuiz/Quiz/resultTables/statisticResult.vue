@@ -94,6 +94,9 @@
         },
         created() {
             if (this.report && this.report.best) {
+                if (this.report.sub_category[0].rank_school) {
+                    this.headers.splice(9, 0, {text: ' رتبه مدرسه', value: 'rank_school', align: 'center', sortable: true,})
+                }
                 this.loadDataTable()
                 this.loadChart()
             }
@@ -101,8 +104,8 @@
         methods: {
             getPercentDataForChart () {
                 let data = []
-                this.report.best.sub_category.forEach((item) => {
-                    data.push(parseInt(item.top_ranks_percent_mean))
+                this.dataTable.forEach((item) => {
+                    data.push(parseFloat(item.top_ranks_percent_mean))
                 })
                 this.chartOptions.series.push({
                     name: 'نفرات برتر',
@@ -110,8 +113,8 @@
                     data
                 })
                 data = []
-                this.report.sub_category.forEach((item) => {
-                    data.push(parseInt(item.percent))
+                this.dataTable.forEach((item) => {
+                    data.push(parseFloat(item.percent))
                 })
                 this.chartOptions.series.push({
                     name: 'من',
@@ -119,8 +122,8 @@
                     data
                 })
                 data = []
-                this.report.best.sub_category.forEach((item) => {
-                    data.push(parseInt(item.mean))
+                this.dataTable.forEach((item) => {
+                    data.push(parseFloat(item.average))
                 })
                 this.chartOptions.series.push({
                     name: 'همه',

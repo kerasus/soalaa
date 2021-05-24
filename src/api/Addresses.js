@@ -33,6 +33,7 @@ const API_ADDRESS = {
     sendUnBookmark: lumenServer + '/temp-exam/answer/unbookmark',
     userExamsList: lumenServer + '/examAndUser',
     takhminRotbe: lumenServer + '/exam-report/rankSimulator',
+    examReportIndex: lumenServer + '/exam-report/index',
     getAnswerOfUser (user_exam_id) {
       return lumenServer + '/temp-exam/answer/'+user_exam_id
     },
@@ -51,12 +52,13 @@ const API_ADDRESS = {
       return lumenServer + '/exam-question/attach/show/' + quizId
     },
     report: {
-      getReport (examId) {
-        return lumenServer + '/exam-report?exam_id=' + examId
+      getReport (userExamId) {
+        return lumenServer + '/exam-report?user_exam_id=' + userExamId
       }
     }
   },
   question: {
+    index: lumenServer + '/question/search-monta',
     base: lumenServer + '/exam-question/attach',
     attachSubCategoryToQuestion: lumenServer + '/exam-question/attach/sub-category',
     updateQuestion (questionId) {

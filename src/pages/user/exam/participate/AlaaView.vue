@@ -105,7 +105,6 @@
             }
         },
         mounted() {
-            console.log('tt', this.getCurrentExamQuestionsInArray())
             let that = this
             this.showAppBar()
             this.updateDrawerBasedOnWindowSize()
