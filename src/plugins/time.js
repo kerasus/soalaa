@@ -32,7 +32,7 @@ let Time = function () {
             window.serverDate.offset = 0
         }
         const serverDate = new Date(Date.now() + window.serverDate.offset);
-        return moment(serverDate).format('YYYY-MM-DD HH:mm:ss');
+        return moment(serverDate).format('YYYY-MM-DD HH:mm:ss.SSS');
     }
 
     function getPassedTime(startTime, formattedTime) {

@@ -64,19 +64,19 @@
         </v-app-bar>
         <v-main>
             <notifications group="notifs"/>
-            <v-overlay :absolute="true" :opacity="0.5" :value="overlay.show">
-                <v-progress-circular
-                        v-if="overlay.loading"
-                        indeterminate
-                        size="64"
-                ></v-progress-circular>
-                <p>{{ overlay.text }}</p>
-            </v-overlay>
             <router-view :key="$route.name + ($route.params.quizId || '') + ($route.params.questNumber || '')">
             </router-view>
 
             <vue-confirm-dialog></vue-confirm-dialog>
         </v-main>
+        <v-overlay :opacity="0.5" :value="overlay.show">
+            <v-progress-circular
+                    v-if="overlay.loading"
+                    indeterminate
+                    size="64"
+            ></v-progress-circular>
+            <p>{{ overlay.text }}</p>
+        </v-overlay>
     </v-app>
 </template>
 

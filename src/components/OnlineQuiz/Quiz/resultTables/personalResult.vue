@@ -40,7 +40,7 @@
                         </template>
 
                     </v-data-table>
-                    <v-row class="subRowHeight final-report-scoreboard" >
+                    <v-row class="subRowHeight final-report-scoreboard">
                         <v-col class="subColsPaddingBottom" cols="12">
                             <v-card class="subCards">
                                 <v-card-title class="cardTitle">
@@ -70,17 +70,19 @@
                             <v-card class="subCards">
                                 <v-card-title class="cardTitle">
                                     <v-row>
-                                        <v-col cols="4">رتبه کل کشوری</v-col>
-                                        <v-col cols="4">رتبه در استان</v-col>
-                                        <v-col cols="4">رتبه در شهر</v-col>
+                                        <v-col :cols="(report.main.rank_school) ? 3 : 4">رتبه کل کشوری</v-col>
+                                        <v-col :cols="(report.main.rank_school) ? 3 : 4">رتبه در استان</v-col>
+                                        <v-col :cols="(report.main.rank_school) ? 3 : 4">رتبه در شهر</v-col>
+                                        <v-col v-if="report.main.rank_school" cols="3">رتبه در مدرسه</v-col>
                                     </v-row>
                                 </v-card-title>
 
                                 <span class="cardContent">
                                     <v-row>
-                                        <v-col cols="4">{{ report.main.rank_country }}</v-col>
-                                        <v-col cols="4">{{ report.main.rank_province }}</v-col>
-                                        <v-col cols="4">{{ report.main.rank_city }}</v-col>
+                                        <v-col :cols="(report.main.rank_school) ? 3 : 4">{{ report.main.rank_country }}</v-col>
+                                        <v-col :cols="(report.main.rank_school) ? 3 : 4">{{ report.main.rank_province }}</v-col>
+                                        <v-col :cols="(report.main.rank_school) ? 3 : 4">{{ report.main.rank_city }}</v-col>
+                                        <v-col v-if="report.main.rank_school" cols="3">{{ report.main.rank_school }}</v-col>
                                     </v-row>
                                 </span>
                             </v-card>
@@ -94,44 +96,42 @@
 
 <script>
 
-    export default {
-        name: 'PersonalResult',
-        data() {
-            return {
-                headers1: [
-                    {
-                        text: 'ردیف',
-                        align: 'center',
-                        sortable: true,
-                        value: 'index',
-                    },
-                    {text: 'درس', value: 'sub_category', align: 'center', sortable: false},
-                    {text: ' تعداد کل', value: 'total_answer', align: 'center', sortable: false},
-                    {text: ' تعداد درست', value: 'right_answer', align: 'center', sortable: false},
-                    {text: ' تعداد غلط', value: 'wrong_answer', align: 'center', sortable: false},
-                    {text: ' تعداد نزده', value: 'empty', align: 'center', sortable: true},
-                    {text: ' درصد', value: 'percent', align: 'center', sortable: true},
-                    {text: ' تراز', value: 'taraaz', align: 'center', sortable: true},
-                ],
-                headers2: [
-                    {
-                        text: 'زیر گروه',
-                        align: 'center',
-                        sortable: true,
-                        value: 'title'
-                    },
-                    {text: 'درصد خام', value: 'percent', align: 'center', sortable: true,},
-                    {text: 'تراز', value: 'taraaz', align: 'center', sortable: true,},
-                    {text: ' رتبه شهر', value: 'rank_city', align: 'center', sortable: true,},
-                    {text: ' رتبه استان', value: 'rank_province', align: 'center', sortable: true,},
-                    {text: ' رتبه کشور', value: 'rank_country', align: 'center', sortable: true,},
-
-                ],
-
-            }
-        },
-        props: ['report']
-    }
+  export default {
+    name : 'PersonalResult',
+    data() {
+      return {
+        headers1: [
+          {
+            text    : 'ردیف',
+            align   : 'center',
+            sortable: true,
+            value   : 'index',
+          },
+          {text: 'درس', value: 'sub_category', align: 'center', sortable: false},
+          {text: ' تعداد کل', value: 'total_answer', align: 'center', sortable: false},
+          {text: ' تعداد درست', value: 'right_answer', align: 'center', sortable: false},
+          {text: ' تعداد غلط', value: 'wrong_answer', align: 'center', sortable: false},
+          {text: ' تعداد نزده', value: 'empty', align: 'center', sortable: true},
+          {text: ' درصد', value: 'percent', align: 'center', sortable: true},
+          {text: ' تراز', value: 'taraaz', align: 'center', sortable: true},
+        ],
+        headers2: [
+          {
+            text    : 'زیر گروه',
+            align   : 'center',
+            sortable: true,
+            value   : 'title'
+          },
+          {text: 'درصد خام', value: 'percent', align: 'center', sortable: true,},
+          {text: 'تراز', value: 'taraaz', align: 'center', sortable: true,},
+          {text: ' رتبه شهر', value: 'rank_city', align: 'center', sortable: true,},
+          {text: ' رتبه استان', value: 'rank_province', align: 'center', sortable: true,},
+          {text: ' رتبه کشور', value: 'rank_country', align: 'center', sortable: true,},
+        ],
+      }
+    },
+    props: ['report']
+  }
 </script>
 
 <style scoped>
@@ -274,9 +274,11 @@
         padding: 0 10px;
         font-size: 14px;
     }
+
     .final-report-scoreboard .cardContent {
         font-size: 22px;
     }
+
     .final-report-scoreboard {
         display: block;
     }

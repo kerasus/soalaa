@@ -70,6 +70,12 @@ const router = new VueRouter({
 
         // admin pages
         {
+            path: '/quest/index',
+            name: 'quest.index',
+            component: () => lazyLoadView(import('@/pages/admin/question/Index')),
+            meta: {middleware: [auth, completeInfo]}
+        },
+        {
             path: '/quest/create',
             name: 'quest.create',
             component: () => lazyLoadView(import('@/pages/admin/question/CreateOrEdit')),
@@ -103,6 +109,12 @@ const router = new VueRouter({
             path: '/quiz/edit/:quizId',
             name: 'quiz.edit',
             component: () => lazyLoadView(import('@/pages/admin/question/QuestionsOfExam')),
+            meta: {middleware: [auth, completeInfo]}
+        },
+        {
+            path: '/exam/results/:examId',
+            name: 'exam.results',
+            component: () => lazyLoadView(import('@/pages/admin/exam/results')),
             meta: {middleware: [auth, completeInfo]}
         },
         {

@@ -227,6 +227,9 @@ const mixinQuiz = {
                 }
             })
         },
+        needToLoadQuiaData() {
+            return (!this.quiz.id || Assistant.getId(this.$route.params.quizId) !== Assistant.getId(this.quiz.id))
+        },
         participateExam(examId, viewType) {
             let that = this
             return new Promise(function (resolve, reject) {
@@ -265,7 +268,7 @@ const mixinQuiz = {
                 if (viewType !== 'results') {
                     that.loadCurrentQuestion(viewType)
                 }
-                if (examDataWithQuestions) {
+                // if (examDataWithQuestions) {
                     that.quiz.getAnswerOfUserInExam()
                         .then((response) => {
                             if (!Assistant.getId(that.quiz.id)) {
@@ -285,9 +288,9 @@ const mixinQuiz = {
                             Assistant.reportErrors({location: 'mixin/Quiz.js -> loadExam()'})
                             reject(error)
                         })
-                } else {
-                    resolve()
-                }
+                // } else {
+                //     resolve()
+                // }
             })
         },
         setQuestionsLtr(question) {
@@ -344,7 +347,7 @@ const mixinQuiz = {
                 if (userExamData[questionId].answered_at) {
                     answers.push({
                         question_id: questionId,
-                        answered_choice_id: userExamData[questionId].answered_choice_id,
+                        choice_id: userExamData[questionId].answered_choice_id,
                         selected_at : (!userExamData[questionId].answered_at) ? null: userExamData[questionId].answered_at,
                         bookmarked: userExamData[questionId].bookmarked,
                         status: userExamData[questionId].status,
@@ -377,9 +380,6 @@ const mixinQuiz = {
         changeStatus(questionId, newStatus) {
             console.log('changeStatus', newStatus)
             this.userActionOnQuestion(questionId, 'status', {newStatus})
-        },
-        needToLoadQuiaData() {
-            return (!this.quiz.id || Assistant.getId(this.$route.params.quizId) !== Assistant.getId(this.quiz.id))
         },
         getQuestionNumberFromIndex(index) {
             index = parseInt(index)
