@@ -100,6 +100,10 @@ const mixinQuiz = {
             return this.$store.getters.quiz
         },
         getCurrentExamQuestionIndexes() {
+            if (window.currentExamQuestionIndexes) {
+                return window.currentExamQuestionIndexes
+            }
+            window.currentExamQuestionIndexes = JSON.parse(window.localStorage.getItem('currentExamQuestionIndexes'))
             return JSON.parse(window.localStorage.getItem('currentExamQuestionIndexes'))
         },
         setCurrentExamQuestions(currentExamQuestions) {
@@ -207,6 +211,7 @@ const mixinQuiz = {
                 return
             }
             window.currentExamQuestions = null
+            window.currentExamQuestionIndexes = null
             let that = this
             that.$store.commit('AppLayout/updateOverlay', {show: true, loading: true, text: ''})
             return new Promise(function (resolve, reject) {
