@@ -137,6 +137,10 @@
           displayName: 'ثبت ویدئو تحلیل',
           to: {name: 'video.set'}
         },
+        {
+          displayName: 'بانک سوال',
+          to: {name: 'quest.index'}
+        },
       ],
       educationList: [
         {

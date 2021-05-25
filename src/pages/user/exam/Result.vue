@@ -226,18 +226,21 @@
         }),
         created() {
             this.getUserData()
+            window.currentExamQuestions = null
+            window.currentExamQuestionIndexes = null
         },
         mounted() {
             let that = this
             let user_exam_id = this.$route.params.user_exam_id
             let exam_id = this.$route.params.exam_id
+
             this.$store.commit('AppLayout/updateOverlay', {show: true, loading: true, text: ''})
             this.user.loadExamDataForShowResult(user_exam_id)
                 .then(({userExamForParticipate}) => {
                     that.loadExam(userExamForParticipate, 'results', exam_id)
                         .then(() => {
                             that.quiz.id = exam_id
-                            that.quiz.show(exam_id, API_ADDRESS.exam.report.getReport(exam_id))
+                            that.quiz.show(exam_id, API_ADDRESS.exam.report.getReport(user_exam_id))
                             .then((response) => {
                                 that.report = response.data.data
                                 that.loadKarname(that.report)

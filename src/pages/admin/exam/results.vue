@@ -28,6 +28,7 @@
                             <th>
                                 شهر
                             </th>
+                            <th></th>
                             <template
                                     v-for="item in results[0].sub_category"
                             >
@@ -57,18 +58,34 @@
                             </td>
                             <td>{{ item.location.province }}</td>
                             <td>{{ item.location.city }}</td>
+                            <td>
+                                <v-tooltip top>
+                                    <template v-slot:activator="{ on, attrs }">
+                                        <v-btn
+                                                icon
+                                                :to="{name: 'user.exam.results', params: {exam_id: item.exam_id, user_exam_id: item.exam_user_id}}"
+                                                color="cyan"
+                                                v-bind="attrs"
+                                                v-on="on"
+                                        >
+                                            <v-icon>mdi-eye-circle-outline</v-icon>
+                                        </v-btn>
+                                    </template>
+                                    <span>مشاهده کارنامه</span>
+                                </v-tooltip>
+                            </td>
                             <template
                                     v-for="(sub_categoryItem, sub_categoryIndex) in item.sub_category"
                             >
-                                <th class="bordered-right" :key="'bodyColumns_percent_'+sub_categoryItem.sub_category_order+sub_categoryIndex+'_'+item.exam_user_id">
+                                <td class="bordered-right" :key="'bodyColumns_percent_'+sub_categoryItem.sub_category_order+sub_categoryIndex+'_'+item.exam_user_id">
                                     {{ sub_categoryItem.percent }}
-                                </th>
-                                <th :key="'bodyColumns_taraz_'+sub_categoryItem.sub_category_order+sub_categoryIndex+'_'+item.exam_user_id">
+                                </td>
+                                <td :key="'bodyColumns_taraz_'+sub_categoryItem.sub_category_order+sub_categoryIndex+'_'+item.exam_user_id">
                                     {{ sub_categoryItem.taraaz }}
-                                </th>
-                                <th class="bordered-left" :key="'bodyColumns_rank_'+sub_categoryItem.sub_category_order+sub_categoryIndex+'_'+item.exam_user_id">
+                                </td>
+                                <td class="bordered-left" :key="'bodyColumns_rank_'+sub_categoryItem.sub_category_order+sub_categoryIndex+'_'+item.exam_user_id">
                                     {{ sub_categoryItem.rank_country }}
-                                </th>
+                                </td>
                             </template>
                         </tr>
                     </tbody>
@@ -90,101 +107,7 @@
       return {
         results: [],
         lastLoadTime: Date.now(),
-        nextPage: '',
-        paginate: {
-          links: {
-            "first": "http://192.168.4.3:500/api/v1/exam-report/index?page=1",
-            "last": "http://192.168.4.3:500/api/v1/exam-report/index?page=57",
-            "prev": null,
-            "next": "http://192.168.4.3:500/api/v1/exam-report/index?page=2"
-          },
-          meta: {
-            "current_page": 1,
-            "from": 1,
-            "last_page": 57,
-            "links": [
-              {
-                "url": null,
-                "label": "pagination.previous",
-                "active": false
-              },
-              {
-                "url": "http://192.168.4.3:500/api/v1/exam-report/index?page=1",
-                "label": 1,
-                "active": true
-              },
-              {
-                "url": "http://192.168.4.3:500/api/v1/exam-report/index?page=2",
-                "label": 2,
-                "active": false
-              },
-              {
-                "url": "http://192.168.4.3:500/api/v1/exam-report/index?page=3",
-                "label": 3,
-                "active": false
-              },
-              {
-                "url": "http://192.168.4.3:500/api/v1/exam-report/index?page=4",
-                "label": 4,
-                "active": false
-              },
-              {
-                "url": "http://192.168.4.3:500/api/v1/exam-report/index?page=5",
-                "label": 5,
-                "active": false
-              },
-              {
-                "url": "http://192.168.4.3:500/api/v1/exam-report/index?page=6",
-                "label": 6,
-                "active": false
-              },
-              {
-                "url": "http://192.168.4.3:500/api/v1/exam-report/index?page=7",
-                "label": 7,
-                "active": false
-              },
-              {
-                "url": "http://192.168.4.3:500/api/v1/exam-report/index?page=8",
-                "label": 8,
-                "active": false
-              },
-              {
-                "url": "http://192.168.4.3:500/api/v1/exam-report/index?page=9",
-                "label": 9,
-                "active": false
-              },
-              {
-                "url": "http://192.168.4.3:500/api/v1/exam-report/index?page=10",
-                "label": 10,
-                "active": false
-              },
-              {
-                "url": null,
-                "label": "...",
-                "active": false
-              },
-              {
-                "url": "http://192.168.4.3:500/api/v1/exam-report/index?page=56",
-                "label": 56,
-                "active": false
-              },
-              {
-                "url": "http://192.168.4.3:500/api/v1/exam-report/index?page=57",
-                "label": 57,
-                "active": false
-              },
-              {
-                "url": "http://192.168.4.3:500/api/v1/exam-report/index?page=2",
-                "label": "pagination.next",
-                "active": false
-              }
-            ],
-            "path": "http://192.168.4.3:500/api/v1/exam-report/index",
-            "per_page": 10,
-            "to": 10,
-            "total": 568
-          }
-        }
+        nextPage: ''
       }
     },
     components: {
