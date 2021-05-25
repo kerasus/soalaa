@@ -20,146 +20,269 @@
                 rounded
                 height="6"
         ></v-progress-linear>
-        <v-simple-table v-if="!examList.loading">
-            <template v-slot:default>
-                <thead>
-                <tr>
-                    <th class="text-right">
-                        عنوان
-                    </th>
-                    <th class="text-right">
-                        شروع
-                    </th>
-                    <th class="text-right">
-                        پایان
-                    </th>
-                    <th class="text-right">
-                        میزان تاخیر
-                    </th>
-                    <th class="text-right">
-                        عملیات
-                    </th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr
-                        v-for="item in examList.list"
-                        :key="item.id"
-                >
-                    <td>{{ item.title }}</td>
-                    <td>{{ item.shamsiDate('start_at').dateTime }}</td>
-                    <td>{{ item.shamsiDate('finish_at').dateTime }}</td>
-                    <td>{{ item.delay_time }} دقیقه</td>
-                    <td>
-                        <v-tooltip top v-if="false">
-                            <template v-slot:activator="{ on, attrs }">
-                                <v-btn
-                                        class="mx-2"
-                                        fab
-                                        dark
-                                        x-small
-                                        color="orange"
-                                        @click="selectExam(item)"
-                                        v-bind="attrs"
-                                        v-on="on"
-                                >
-                                    <v-icon dark>
-                                        mdi-pencil
-                                    </v-icon>
-                                </v-btn>
-                            </template>
-                            <span>ویرایش</span>
-                        </v-tooltip>
-                        <v-tooltip top v-if="false">
-                            <template v-slot:activator="{ on, attrs }">
-                                <v-btn
-                                        class="mx-2"
-                                        fab
-                                        dark
-                                        x-small
-                                        color="primary"
-                                        :to="{ name: 'onlineQuiz.exams.lessons', params: { quizId: item.id}}"
-                                        v-bind="attrs"
-                                        v-on="on"
-                                >
-                                    <v-icon
-                                            small
-                                    >
-                                        mdi-arrow-up-bold-box-outline
-                                    </v-icon>
-                                </v-btn>
-                            </template>
-                            <span>مشاهده تمام سوالات</span>
-                        </v-tooltip>
-                        <v-tooltip top>
-                            <template v-slot:activator="{ on, attrs }">
-                                <v-btn
-                                        class="mx-2"
-                                        fab
-                                        dark
-                                        x-small
-                                        color="cyan"
-                                        :to="{name: 'exam.results', params: {examId: item.id}}"
-                                        v-bind="attrs"
-                                        v-on="on"
-                                >
-                                    <v-icon
-                                            small
-                                    >
-                                        mdi-clipboard-list-outline
-                                    </v-icon>
-                                </v-btn>
-                            </template>
-                            <span>مشاهده نتایج تمام شرکت کنندگان</span>
-                        </v-tooltip>
-                        <v-tooltip top>
-                            <template v-slot:activator="{ on, attrs }">
-                                <v-btn
-                                        class="mx-2"
-                                        fab
-                                        dark
-                                        x-small
-                                        color="light-blue"
-                                        :to="{ name: 'onlineQuiz.exams.lessons', params: { quizId: item.id}}"
-                                        v-bind="attrs"
-                                        v-on="on"
-                                >
-                                    <v-icon
-                                            small
-                                    >
-                                        mdi-book-open-page-variant
-                                    </v-icon>
-                                </v-btn>
-                            </template>
-                            <span>مشاهده سوالات به تفکیک درس</span>
-                        </v-tooltip>
-                        <v-tooltip top>
-                            <template v-slot:activator="{ on, attrs }">
-                                <v-btn
-                                        class="mx-2"
-                                        fab
-                                        dark
-                                        x-small
-                                        color="pink"
-                                        @click="deleteItem(item)"
-                                        v-bind="attrs"
-                                        v-on="on"
-                                >
-                                    <v-icon
-                                            small
-                                    >
-                                        mdi-delete
-                                    </v-icon>
-                                </v-btn>
-                            </template>
-                            <span>حذف آزمون</span>
-                        </v-tooltip>
+<!--        <v-simple-table v-if="!examList.loading">-->
+<!--            <template v-slot:default>-->
+<!--                <thead>-->
+<!--                <tr>-->
+<!--                    <th class="text-right">-->
+<!--                        عنوان-->
+<!--                    </th>-->
+<!--                    <th class="text-right">-->
+<!--                        شروع-->
+<!--                    </th>-->
+<!--                    <th class="text-right">-->
+<!--                        پایان-->
+<!--                    </th>-->
+<!--                    <th class="text-right">-->
+<!--                        میزان تاخیر-->
+<!--                    </th>-->
+<!--                    <th class="text-right">-->
+<!--                        عملیات-->
+<!--                    </th>-->
+<!--                </tr>-->
+<!--                </thead>-->
+<!--                <tbody>-->
+<!--                <tr-->
+<!--                        v-for="item in examList.list"-->
+<!--                        :key="item.id"-->
+<!--                >-->
+<!--                    <td>{{ item.title }}</td>-->
+<!--                    <td>{{ item.shamsiDate('start_at').dateTime }}</td>-->
+<!--                    <td>{{ item.shamsiDate('finish_at').dateTime }}</td>-->
+<!--                    <td>{{ item.delay_time }} دقیقه</td>-->
+<!--                    <td>-->
+<!--                        <v-tooltip top v-if="false">-->
+<!--                            <template v-slot:activator="{ on, attrs }">-->
+<!--                                <v-btn-->
+<!--                                        class="mx-2"-->
+<!--                                        fab-->
+<!--                                        dark-->
+<!--                                        x-small-->
+<!--                                        color="orange"-->
+<!--                                        @click="selectExam(item)"-->
+<!--                                        v-bind="attrs"-->
+<!--                                        v-on="on"-->
+<!--                                >-->
+<!--                                    <v-icon dark>-->
+<!--                                        mdi-pencil-->
+<!--                                    </v-icon>-->
+<!--                                </v-btn>-->
+<!--                            </template>-->
+<!--                            <span>ویرایش</span>-->
+<!--                        </v-tooltip>-->
+<!--                        <v-tooltip top v-if="false">-->
+<!--                            <template v-slot:activator="{ on, attrs }">-->
+<!--                                <v-btn-->
+<!--                                        class="mx-2"-->
+<!--                                        fab-->
+<!--                                        dark-->
+<!--                                        x-small-->
+<!--                                        color="primary"-->
+<!--                                        :to="{ name: 'onlineQuiz.exams.lessons', params: { quizId: item.id}}"-->
+<!--                                        v-bind="attrs"-->
+<!--                                        v-on="on"-->
+<!--                                >-->
+<!--                                    <v-icon-->
+<!--                                            small-->
+<!--                                    >-->
+<!--                                        mdi-arrow-up-bold-box-outline-->
+<!--                                    </v-icon>-->
+<!--                                </v-btn>-->
+<!--                            </template>-->
+<!--                            <span>مشاهده تمام سوالات</span>-->
+<!--                        </v-tooltip>-->
+<!--                        <v-tooltip top>-->
+<!--                            <template v-slot:activator="{ on, attrs }">-->
+<!--                                <v-btn-->
+<!--                                        class="mx-2"-->
+<!--                                        fab-->
+<!--                                        dark-->
+<!--                                        x-small-->
+<!--                                        color="cyan"-->
+<!--                                        :to="{name: 'exam.results', params: {examId: item.id}}"-->
+<!--                                        v-bind="attrs"-->
+<!--                                        v-on="on"-->
+<!--                                >-->
+<!--                                    <v-icon-->
+<!--                                            small-->
+<!--                                    >-->
+<!--                                        mdi-clipboard-list-outline-->
+<!--                                    </v-icon>-->
+<!--                                </v-btn>-->
+<!--                            </template>-->
+<!--                            <span>مشاهده نتایج تمام شرکت کنندگان</span>-->
+<!--                        </v-tooltip>-->
+<!--                        <v-tooltip top>-->
+<!--                            <template v-slot:activator="{ on, attrs }">-->
+<!--                                <v-btn-->
+<!--                                        class="mx-2"-->
+<!--                                        fab-->
+<!--                                        dark-->
+<!--                                        x-small-->
+<!--                                        color="light-blue"-->
+<!--                                        :to="{ name: 'onlineQuiz.exams.lessons', params: { quizId: item.id}}"-->
+<!--                                        v-bind="attrs"-->
+<!--                                        v-on="on"-->
+<!--                                >-->
+<!--                                    <v-icon-->
+<!--                                            small-->
+<!--                                    >-->
+<!--                                        mdi-book-open-page-variant-->
+<!--                                    </v-icon>-->
+<!--                                </v-btn>-->
+<!--                            </template>-->
+<!--                            <span>مشاهده سوالات به تفکیک درس</span>-->
+<!--                        </v-tooltip>-->
+<!--                        <v-tooltip top>-->
+<!--                            <template v-slot:activator="{ on, attrs }">-->
+<!--                                <v-btn-->
+<!--                                        class="mx-2"-->
+<!--                                        fab-->
+<!--                                        dark-->
+<!--                                        x-small-->
+<!--                                        color="pink"-->
+<!--                                        @click="deleteItem(item)"-->
+<!--                                        v-bind="attrs"-->
+<!--                                        v-on="on"-->
+<!--                                >-->
+<!--                                    <v-icon-->
+<!--                                            small-->
+<!--                                    >-->
+<!--                                        mdi-delete-->
+<!--                                    </v-icon>-->
+<!--                                </v-btn>-->
+<!--                            </template>-->
+<!--                            <span>حذف آزمون</span>-->
+<!--                        </v-tooltip>-->
 
-                    </td>
-                </tr>
-                </tbody>
+<!--                    </td>-->
+<!--                </tr>-->
+<!--                </tbody>-->
+<!--            </template>-->
+<!--        </v-simple-table>-->
+        <v-data-table
+                :headers="headers"
+                :items="rows.list"
+                :options.sync="options"
+                :server-items-length="totalRows"
+                :loading="loading"
+                class="elevation-1"
+        >
+            <template v-slot:item.start="{ item }">
+                {{ item.shamsiDate('start_at').dateTime }}
             </template>
-        </v-simple-table>
+            <template v-slot:item.end="{ item }">
+                {{ item.shamsiDate('finish_at').dateTime }}
+            </template>
+            <template v-slot:item.delay_time="{ item }">
+                {{ item.delay_time }} دقیقه
+            </template>
+            <template v-slot:item.options="{ item }">
+                <v-tooltip top v-if="false">
+                    <template v-slot:activator="{ on, attrs }">
+                        <v-btn
+                                class="mx-2"
+                                fab
+                                dark
+                                x-small
+                                color="orange"
+                                @click="selectExam(item)"
+                                v-bind="attrs"
+                                v-on="on"
+                        >
+                            <v-icon dark>
+                                mdi-pencil
+                            </v-icon>
+                        </v-btn>
+                    </template>
+                    <span>ویرایش</span>
+                </v-tooltip>
+                <v-tooltip top v-if="false">
+                    <template v-slot:activator="{ on, attrs }">
+                        <v-btn
+                                class="mx-2"
+                                fab
+                                dark
+                                x-small
+                                color="primary"
+                                :to="{ name: 'onlineQuiz.exams.lessons', params: { quizId: item.id}}"
+                                v-bind="attrs"
+                                v-on="on"
+                        >
+                            <v-icon
+                                    small
+                            >
+                                mdi-arrow-up-bold-box-outline
+                            </v-icon>
+                        </v-btn>
+                    </template>
+                    <span>مشاهده تمام سوالات</span>
+                </v-tooltip>
+                <v-tooltip top>
+                    <template v-slot:activator="{ on, attrs }">
+                        <v-btn
+                                class="mx-2"
+                                fab
+                                dark
+                                x-small
+                                color="cyan"
+                                :to="{name: 'exam.results', params: {examId: item.id}}"
+                                v-bind="attrs"
+                                v-on="on"
+                        >
+                            <v-icon
+                                    small
+                            >
+                                mdi-clipboard-list-outline
+                            </v-icon>
+                        </v-btn>
+                    </template>
+                    <span>مشاهده نتایج تمام شرکت کنندگان</span>
+                </v-tooltip>
+                <v-tooltip top>
+                    <template v-slot:activator="{ on, attrs }">
+                        <v-btn
+                                class="mx-2"
+                                fab
+                                dark
+                                x-small
+                                color="light-blue"
+                                :to="{ name: 'onlineQuiz.exams.lessons', params: { quizId: item.id}}"
+                                v-bind="attrs"
+                                v-on="on"
+                        >
+                            <v-icon
+                                    small
+                            >
+                                mdi-book-open-page-variant
+                            </v-icon>
+                        </v-btn>
+                    </template>
+                    <span>مشاهده سوالات به تفکیک درس</span>
+                </v-tooltip>
+                <v-tooltip top>
+                    <template v-slot:activator="{ on, attrs }">
+                        <v-btn
+                                class="mx-2"
+                                fab
+                                dark
+                                x-small
+                                color="pink"
+                                @click="deleteItem(item)"
+                                v-bind="attrs"
+                                v-on="on"
+                        >
+                            <v-icon
+                                    small
+                            >
+                                mdi-delete
+                            </v-icon>
+                        </v-btn>
+                    </template>
+                    <span>حذف آزمون</span>
+                </v-tooltip>
+            </template>
+        </v-data-table>
         <div class="text-center">
             <v-btn elevation="2" @click="selectExam(null)">
                 ثبت آزمون جدید
@@ -180,7 +303,20 @@
             dialog: false,
             dialogDelete: false,
             examList: new ExamList(),
-            examItem: new Exam()
+            examItem: new Exam(),
+            headers: [
+                { text: 'عنوان', value: 'title' },
+                { text: 'شروع', value: 'start' },
+                { text: 'پایان', value: 'end' },
+                { text: 'میزان تاخیر', value: 'delay_time' },
+                { text: 'عملیات', value: 'options' }
+            ],
+            rows: [],
+            options: {
+                itemsPerPage: 15
+            },
+            totalRows: 0,
+            loading: true
         }),
         mounted() {
             this.getExams()
@@ -218,14 +354,19 @@
                 })
             },
             getExams () {
+                this.loading = true
                 this.examList.loading = true
                 this.examList.fetch()
                 .then((response) => {
                     this.examList.loading = false
+                    this.totalRows = response.data.meta.total
+                    this.rows = new ExamList(response.data.data, {meta: response.data.meta, links: response.data.links})
+                    this.loading = false
                     this.examList = new ExamList(response.data.data, {meta: response.data.meta, links: response.data.links})
                 })
                 .catch(() => {
                     this.examList.loading = false
+                    this.loading = false
                     this.examList = new ExamList()
                 })
             },
