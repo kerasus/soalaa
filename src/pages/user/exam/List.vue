@@ -26,10 +26,10 @@
                                 عملیات
                             </v-col>
                         </v-row>
-                        <v-row v-for="item in exams.list" :key="item.id" >
+                        <v-row v-for="item in exams.list" :key="item.id" class="exam-info-bar">
                             <v-col>
                                 <v-sheet
-                                        class="mb-5 d-flex exam-list-sheet"
+                                        class="d-flex exam-list-sheet"
                                         elevation="0"
                                         outlined
                                         rounded
@@ -230,6 +230,7 @@
 <style scoped>
     .exam-list-sheet {
         background: var(--surface-1);;
+        min-height: 50px;
     }
 
     .appDarkMode .exam-list-sheet {
@@ -250,5 +251,13 @@
     .appDarkMode .exam-list-sheet .v-btn--disabled span {
         color: #bfbfbf !important;
         opacity: 0.6;
+    }
+
+    .exam-info-bar .col {
+        padding: 6px 12px;
+    }
+
+    .table-row {
+        align-items: center;
     }
 </style>
