@@ -41,7 +41,11 @@ let Assistant = function () {
             messages.push(AjaxResponseMessages.getMessage(error.response.data.error.code))
         } else if (error.response.data) {
             for (const [key, value] of Object.entries(error.response.data)) {
-                messages.push(value)
+                if (typeof value === 'string') {
+                    messages.push(value)
+                } else {
+                    messages = messages.concat(getMessagesFromArrayWithRecursion(value))
+                }
                 console.log(`${key}: ${value}`);
             }
         }
@@ -58,6 +62,19 @@ let Assistant = function () {
                 type: 'error'
             })
         })
+    }
+
+    function getMessagesFromArrayWithRecursion (array) {
+        // let messages = []
+        // array.forEach(item => {
+        //     if (typeof item === 'string') {
+        //         messages.push(item)
+        //     } else {
+        //         messages = messages.concat(getMessagesFromArrayWithRecursion(item))
+        //     }
+        // })
+        // return messages
+        return array.flat(Math.min())
     }
 
     function reportErrors(error) {
