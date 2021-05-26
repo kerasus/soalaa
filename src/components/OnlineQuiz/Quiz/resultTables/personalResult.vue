@@ -3,19 +3,13 @@
         <div class="d-flex justify-center wrapper">
             <v-row v-if="report">
                 <v-col md="7" cols="12" class="mb-2">
-<!--                    <v-data-table-->
-<!--                        hide-default-footer-->
-<!--                        :headers="headers3"-->
-<!--                    >-->
-
-<!--                    </v-data-table>-->
                     <v-data-table
                             hide-default-footer
                             :headers="headers1"
                             :header-props="{sortByText: 'ترتیب'}"
                             :items="report.sub_category"
                             :items-per-page="15"
-                            class="elevation-1 dataTable dataTableHeight1"
+                            class="elevation-1 dataTable "
                     >
                         <template v-slot:top>
                             <br>
@@ -26,6 +20,21 @@
                             <br>
                         </template>
                     </v-data-table>
+                    <v-data-table
+                            hide-default-footer
+                            :headers="headers3"
+                            class="elevation-1 dataTable dataTableHeight1"
+
+                            :items="[report.exam_user]"
+                    >
+                        <template v-slot:item.created_at="{ item }">
+                            {{ shamsiDate(item.created_at) }}
+                        </template>
+                        <template v-slot:item.accept_at="{ item }">
+                            {{ shamsiDate(item.accept_at) }}
+                        </template>
+                    </v-data-table>
+
                 </v-col>
                 <v-col md="5" cols="12" class="firstColPadding">
                     <v-data-table
@@ -101,10 +110,25 @@
 </template>
 
 <script>
-
+    import moment from 'moment-jalaali'
   export default {
     name : 'PersonalResult',
-    data() {
+      mounted() {
+        // let that = this
+        //   let start_at = moment(that.report.exam_user.start_at, 'YYYY/M/D HH:mm:ss')
+        //   console.log(start_at.format('jYYYY/jM/Jd HH:mm:ss'))
+        //   let accept_at = moment(that.report.exam_user.accept_at, 'YYYY/M/D HH:mm:ss')
+        //   accept_at.format('jYYYY/jM/Jd HH:mm:ss')
+
+      },
+      computed: {
+        shamsiDate() {
+            return (date) => {
+                return  moment(date, 'YYYY/M/D HH:mm:ss').format('jYYYY/jM/jD HH:mm:ss')
+            }
+        }
+      },
+      data() {
       return {
         headers1: [
           {
@@ -139,9 +163,9 @@
                   text    : 'زمان شروع آزمون',
                   align   : 'center',
                   sortable: false,
-                  value   : 'start_time'
+                  value   : 'created_at'
               },
-              {text: 'زمان پایان آزمون', value: 'finish_time', align: 'center', sortable: false,},
+              {text: 'زمان مجاز آزمون', value: 'accept_at', align: 'center', sortable: false,},
           ],
       }
     },
