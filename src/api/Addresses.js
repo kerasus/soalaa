@@ -32,7 +32,7 @@ const API_ADDRESS = {
     sendUnBookmark: lumenServer + '/temp-exam/answer/unbookmark',
     userExamsList: lumenServer + '/examAndUser',
     takhminRotbe: lumenServer + '/exam-report/rankSimulator',
-    examReportIndex: lumenServer + '/exam-report/index',
+    examReportIndex: lumenServer + '/exam-report/index/participants',
     base (page_number) {
       if (page_number) {
         return lumenServer + '/exam?page=' + page_number
@@ -63,7 +63,7 @@ const API_ADDRESS = {
     },
     report: {
       getReport (userExamId) {
-        return lumenServer + '/exam-report?user_exam_id=' + userExamId
+        return lumenServer + '/exam-report/show?user_exam_id=' + userExamId
       }
     }
   },
