@@ -2,7 +2,7 @@
     <div style="background-color: rgb(244, 244, 244)">
         <div class="d-flex justify-center wrapper">
             <v-row v-if="report">
-                <v-col md="7" cols="12">
+                <v-col md="7" cols="12" class="mb-2">
                     <v-data-table
                             hide-default-footer
                             :headers="headers1"
@@ -137,10 +137,12 @@
 <style scoped>
     .subColsPaddingRight {
         padding-right: 5px;
+        margin-bottom: 20px;
     }
 
     .subColsPaddingBottom {
-        padding-bottom: 3px
+        padding-bottom: 3px;
+        margin-top: 10px;
     }
 
     .firstColPadding {
@@ -170,9 +172,13 @@
         font-size: 40px;
         color: rgba(51, 51, 51, 1);
         display: flow-root;
+        height: 50px;
+        margin-top: 15px;
     }
 
     .cardTitle {
+
+        height: 50px;
         background-color: rgba(255, 193, 7, 0.3);
         border-radius: 15px;
         white-space: nowrap;
