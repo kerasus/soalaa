@@ -230,6 +230,27 @@
                                 fab
                                 dark
                                 x-small
+                                color="light-blue"
+                                :to="{ name: 'onlineQuiz.exams.lessons', params: { quizId: item.id}}"
+                                v-bind="attrs"
+                                v-on="on"
+                        >
+                            <v-icon
+                                    small
+                            >
+                                mdi-book-open-page-variant
+                            </v-icon>
+                        </v-btn>
+                    </template>
+                    <span>مشاهده سوالات به تفکیک درس</span>
+                </v-tooltip>
+                <v-tooltip top>
+                    <template v-slot:activator="{ on, attrs }">
+                        <v-btn
+                                class="mx-2"
+                                fab
+                                dark
+                                x-small
                                 color="cyan"
                                 :to="{name: 'exam.results', params: {examId: item.id}}"
                                 v-bind="attrs"
@@ -251,19 +272,40 @@
                                 fab
                                 dark
                                 x-small
-                                color="light-blue"
-                                :to="{ name: 'onlineQuiz.exams.lessons', params: { quizId: item.id}}"
+                                color="orange"
+                                @click="generateJsonFile(item, false)"
                                 v-bind="attrs"
                                 v-on="on"
                         >
                             <v-icon
                                     small
                             >
-                                mdi-book-open-page-variant
+                                mdi-beaker
                             </v-icon>
                         </v-btn>
                     </template>
-                    <span>مشاهده سوالات به تفکیک درس</span>
+                    <span>ساخت فایل سوالات</span>
+                </v-tooltip>
+                <v-tooltip top>
+                    <template v-slot:activator="{ on, attrs }">
+                        <v-btn
+                                class="mx-2"
+                                fab
+                                dark
+                                x-small
+                                color="orange darken-4"
+                                @click="generateJsonFile(item, true)"
+                                v-bind="attrs"
+                                v-on="on"
+                        >
+                            <v-icon
+                                    small
+                            >
+                                mdi-beaker-check
+                            </v-icon>
+                        </v-btn>
+                    </template>
+                    <span>ساخت فایل سوالات با جواب</span>
                 </v-tooltip>
                 <v-tooltip top>
                     <template v-slot:activator="{ on, attrs }">
@@ -302,6 +344,7 @@
     import Toasted from 'vue-toasted';
     import API_ADDRESS from "@/api/Addresses";
     Vue.use(Toasted)
+    import Axios from "axios";
 
     export default {
         name: 'examList',
@@ -336,6 +379,21 @@
           }
         },
         methods:{
+            generateJsonFile (exam, withAnswer) {
+                this.examList.loading = true
+                const that = this
+                Axios.post(API_ADDRESS.exam.generateExamFile(exam.id, withAnswer))
+                    .then(() => {
+                        that.$notify({
+                            group: 'notifs',
+                            text: 'ساخت فایل با موفقیت انجام شد',
+                            type: 'success'
+                        })
+                    })
+                    .catch( () => {
+                        this.examList.loading = false
+                    })
+            },
             editItem () {
                 // this.editedIndex = this.desserts.indexOf(item)
                 // this.editedItem = Object.assign({}, item)

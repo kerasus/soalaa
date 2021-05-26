@@ -40,6 +40,10 @@ const API_ADDRESS = {
         return lumenServer + '/exam'
       }
     },
+    generateExamFile (exam_id, with_answer) {
+      const baseFileRoute = lumenServer + '/exam-question/file/' + exam_id
+      return with_answer ? (baseFileRoute + '/with_answer') : baseFileRoute
+    },
     getAnswerOfUser (user_exam_id) {
       return lumenServer + '/temp-exam/answer/'+user_exam_id
     },

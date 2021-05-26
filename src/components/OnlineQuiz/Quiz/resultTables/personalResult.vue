@@ -3,6 +3,12 @@
         <div class="d-flex justify-center wrapper">
             <v-row v-if="report">
                 <v-col md="7" cols="12" class="mb-2">
+<!--                    <v-data-table-->
+<!--                        hide-default-footer-->
+<!--                        :headers="headers3"-->
+<!--                    >-->
+
+<!--                    </v-data-table>-->
                     <v-data-table
                             hide-default-footer
                             :headers="headers1"
@@ -128,6 +134,15 @@
           {text: ' رتبه استان', value: 'rank_province', align: 'center', sortable: true,},
           {text: ' رتبه کشور', value: 'rank_country', align: 'center', sortable: true,},
         ],
+          headers3: [
+              {
+                  text    : 'زمان شروع آزمون',
+                  align   : 'center',
+                  sortable: false,
+                  value   : 'start_time'
+              },
+              {text: 'زمان پایان آزمون', value: 'finish_time', align: 'center', sortable: false,},
+          ],
       }
     },
     props: ['report']
