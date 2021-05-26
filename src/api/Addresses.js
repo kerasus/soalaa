@@ -26,7 +26,6 @@ const API_ADDRESS = {
     base: authServer + '/c',
   },
   exam: {
-    base: lumenServer + '/exam',
     sendAnswers: lumenServer + '/temp-exam/answer/choice',
     sendStatus: lumenServer + '/temp-exam/answer/status',
     sendBookmark: lumenServer + '/temp-exam/answer/bookmark',
@@ -34,6 +33,13 @@ const API_ADDRESS = {
     userExamsList: lumenServer + '/examAndUser',
     takhminRotbe: lumenServer + '/exam-report/rankSimulator',
     examReportIndex: lumenServer + '/exam-report/index',
+    base (page_number) {
+      if (page_number) {
+        return lumenServer + '/exam?page=' + page_number
+      } else {
+        return lumenServer + '/exam'
+      }
+    },
     getAnswerOfUser (user_exam_id) {
       return lumenServer + '/temp-exam/answer/'+user_exam_id
     },

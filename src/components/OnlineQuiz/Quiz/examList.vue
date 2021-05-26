@@ -161,12 +161,17 @@
 <!--            </template>-->
 <!--        </v-simple-table>-->
         <v-data-table
+                :footer-props="{
+                    disableItemsPerPage: true,
+                    itemsPerPageText: 'تعداد ردیف در هر صفحه',
+                    pageText: 'صفحه ' + options.page + ' از ' + Math.ceil(totalRows / options.itemsPerPage)
+                }"
                 :headers="headers"
                 :items="rows.list"
                 :options.sync="options"
                 :server-items-length="totalRows"
-                :loading="loading"
                 class="elevation-1"
+                disable-sort
         >
             <template v-slot:item.start="{ item }">
                 {{ item.shamsiDate('start_at').dateTime }}
@@ -295,6 +300,7 @@
     import Vue from 'vue'
     import {Exam, ExamList} from "@/models/Exam";
     import Toasted from 'vue-toasted';
+    import API_ADDRESS from "@/api/Addresses";
     Vue.use(Toasted)
 
     export default {
@@ -313,13 +319,21 @@
             ],
             rows: [],
             options: {
-                itemsPerPage: 15
+                itemsPerPage: 15,
+                page: 1
             },
             totalRows: 0,
-            loading: true
+
         }),
         mounted() {
             this.getExams()
+        },
+        watch: {
+          options: {
+              handler () {
+                  this.getExams()
+              }
+          }
         },
         methods:{
             editItem () {
@@ -354,21 +368,18 @@
                 })
             },
             getExams () {
-                this.loading = true
                 this.examList.loading = true
-                this.examList.fetch()
-                .then((response) => {
-                    this.examList.loading = false
-                    this.totalRows = response.data.meta.total
-                    this.rows = new ExamList(response.data.data, {meta: response.data.meta, links: response.data.links})
-                    this.loading = false
-                    this.examList = new ExamList(response.data.data, {meta: response.data.meta, links: response.data.links})
-                })
-                .catch(() => {
-                    this.examList.loading = false
-                    this.loading = false
-                    this.examList = new ExamList()
-                })
+                this.examList.fetch(null, API_ADDRESS.exam.base(this.options.page))
+                    .then((response) => {
+                        this.examList.loading = false
+                        this.totalRows = response.data.meta.total
+                        this.rows = new ExamList(response.data.data, {meta: response.data.meta, links: response.data.links})
+                        this.examList = new ExamList(response.data.data, {meta: response.data.meta, links: response.data.links})
+                    })
+                    .catch(() => {
+                        this.examList.loading = false
+                        this.examList = new ExamList()
+                    })
             },
             selectExam(item){
                 this.$emit('update-exam-id', item)
