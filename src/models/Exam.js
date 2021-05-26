@@ -63,6 +63,8 @@ class Exam extends Model {
         return this.categories.list.find( (item) => !!(item.is_active))
     }
 
+
+
     loadQuestionsFromFile () {
         let that = this
         return new Promise(function(resolve, reject) {
