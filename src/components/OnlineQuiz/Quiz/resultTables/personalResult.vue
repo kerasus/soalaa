@@ -2,14 +2,14 @@
     <div style="background-color: rgb(244, 244, 244)">
         <div class="d-flex justify-center wrapper">
             <v-row v-if="report">
-                <v-col md="7" cols="12">
+                <v-col md="7" cols="12" class="mb-2">
                     <v-data-table
                             hide-default-footer
                             :headers="headers1"
                             :header-props="{sortByText: 'ترتیب'}"
                             :items="report.sub_category"
                             :items-per-page="15"
-                            class="elevation-1 dataTable dataTableHeight1"
+                            class="elevation-1 dataTable "
                     >
                         <template v-slot:top>
                             <br>
@@ -20,6 +20,21 @@
                             <br>
                         </template>
                     </v-data-table>
+                    <v-data-table
+                            hide-default-footer
+                            :headers="headers3"
+                            class="elevation-1 dataTable dataTableHeight1"
+
+                            :items="[report.exam_user]"
+                    >
+                        <template v-slot:item.created_at="{ item }">
+                            {{ shamsiDate(item.created_at) }}
+                        </template>
+                        <template v-slot:item.accept_at="{ item }">
+                            {{ shamsiDate(item.accept_at) }}
+                        </template>
+                    </v-data-table>
+
                 </v-col>
                 <v-col md="5" cols="12" class="firstColPadding">
                     <v-data-table
@@ -95,10 +110,25 @@
 </template>
 
 <script>
-
+    import moment from 'moment-jalaali'
   export default {
     name : 'PersonalResult',
-    data() {
+      mounted() {
+        // let that = this
+        //   let start_at = moment(that.report.exam_user.start_at, 'YYYY/M/D HH:mm:ss')
+        //   console.log(start_at.format('jYYYY/jM/Jd HH:mm:ss'))
+        //   let accept_at = moment(that.report.exam_user.accept_at, 'YYYY/M/D HH:mm:ss')
+        //   accept_at.format('jYYYY/jM/Jd HH:mm:ss')
+
+      },
+      computed: {
+        shamsiDate() {
+            return (date) => {
+                return  moment(date, 'YYYY/M/D HH:mm:ss').format('jYYYY/jM/jD HH:mm:ss')
+            }
+        }
+      },
+      data() {
       return {
         headers1: [
           {
@@ -128,6 +158,15 @@
           {text: ' رتبه استان', value: 'rank_province', align: 'center', sortable: true,},
           {text: ' رتبه کشور', value: 'rank_country', align: 'center', sortable: true,},
         ],
+          headers3: [
+              {
+                  text    : 'زمان شروع آزمون',
+                  align   : 'center',
+                  sortable: false,
+                  value   : 'created_at'
+              },
+              {text: 'زمان مجاز آزمون', value: 'accept_at', align: 'center', sortable: false,},
+          ],
       }
     },
     props: ['report']
@@ -137,10 +176,12 @@
 <style scoped>
     .subColsPaddingRight {
         padding-right: 5px;
+        margin-bottom: 20px;
     }
 
     .subColsPaddingBottom {
-        padding-bottom: 3px
+        padding-bottom: 3px;
+        margin-top: 10px;
     }
 
     .firstColPadding {
@@ -170,9 +211,13 @@
         font-size: 40px;
         color: rgba(51, 51, 51, 1);
         display: flow-root;
+        height: 50px;
+        margin-top: 15px;
     }
 
     .cardTitle {
+
+        height: 50px;
         background-color: rgba(255, 193, 7, 0.3);
         border-radius: 15px;
         white-space: nowrap;
