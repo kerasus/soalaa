@@ -5,6 +5,7 @@
                 <v-data-table
                         :headers="selectedQuizzesHeaders"
                         :items="selectedQuizzes"
+                        item-key="subId"
                         :loading="attachLoading"
                         loading-text="کمی صبر کنید..."
                         dense
@@ -414,10 +415,14 @@
         },
         created() {
             this.setEditModeState()
-            this.loanExamList()
-            this.loadSubcategories()
+          const loanExamListPromise = this.loanExamList()
+          const loadSubcategoriesPromise = this.loadSubcategories()
+
             if (this.editMode) {
+              Promise.all([loanExamListPromise, loadSubcategoriesPromise])
+            .then(() => {
                 this.loadnCurrentQuestionData()
+              })
             } else {
                 this.currentQuestion = new Question(this.questionData)
             }
@@ -562,6 +567,15 @@
             }
         },
         methods: {
+
+          updateSelectedQuizzes () {
+            let selectedQuizzes = JSON.parse(JSON.stringify(this.selectedQuizzes))
+            selectedQuizzes.forEach((item, i) => {
+              selectedQuizzes[i].subId = i + 1;
+            })
+
+            this.selectedQuizzes = selectedQuizzes
+          },
             getExamById (quizId) {
                 return this.totalExams.find(item => item.id == quizId);
             },
@@ -574,6 +588,7 @@
             deleteItemConfirm () {
                 this.selectedQuizzes.splice(this.editedIndex, 1)
                 this.closeDelete()
+              this.updateSelectedQuizzes()
             },
             close () {
                 this.dialog = false
@@ -617,6 +632,7 @@
                 this.totalExams[targetExamIndex].sub_category_title = this.subCategoriesList.list[targetSubCategoryIndex].display_title
                 this.selectedQuizzes.push(JSON.parse(JSON.stringify(this.totalExams[targetExamIndex])))
                 this.dialog = false
+              this.updateSelectedQuizzes()
             },
             attachQuestion () {
                 if (this.editMode) {
@@ -642,6 +658,7 @@
                                 title: this.getExamById(item.exam_id).title
                             })
                         })
+                      this.updateSelectedQuizzes()
                         // this.currentQuestion = new Question(responseData)
                         // this.trueChoiceIndex = this.currentQuestion.choices.list.findIndex((item) => item.answer )
                         // this.updateAttachList(response.data.data)
@@ -657,6 +674,7 @@
                 const detachedExamIndex = this.selectedQuizzes.indexOf(item)
                 this.selectedQuizzes.splice(detachedExamIndex, 1)
                 this.dialog = false
+              this.updateSelectedQuizzes()
             },
             detachQuestion(item) {
                 let that = this
@@ -682,24 +700,40 @@
                 this.editMode = this.$route.name === 'quest.edit'
             },
             loanExamList () {
-                new ExamList().fetch().then((response) => {
-                    this.examList = new ExamList(response.data.data)
-                    this.totalExams = []
-                    this.examList.list.forEach(item => {
-                        this.totalExams.push({
-                            order: 0,
-                            sub_category_id: null,
-                            sub_category_title: '',
-                            title: item.title,
-                            id: item.id
+              let that = this
+              return new Promise(function(resolve, reject) {
+                new ExamList().fetch()
+                        .then((response) => {
+                          that.examList = new ExamList(response.data.data)
+                          that.totalExams = []
+                          that.examList.list.forEach(item => {
+                            that.totalExams.push({
+                              order: 0,
+                              sub_category_id: null,
+                              sub_category_title: '',
+                              title: item.title,
+                              id: item.id
+                            })
+                          })
+                          resolve()
                         })
-                    })
+                .catch( () => {
+                  reject()
                 })
+              })
             },
             loadSubcategories () {
-                this.subCategoriesList.fetch().then((response) => {
-                    this.subCategoriesList = new QuestSubcategoryList(response.data)
-                })
+              let that = this
+              return new Promise(function(resolve, reject) {
+                that.subCategoriesList.fetch()
+                    .then((response) => {
+                        that.subCategoriesList = new QuestSubcategoryList(response.data)
+                      resolve()
+                    })
+                    .catch( () => {
+                      reject()
+                    })
+              })
             },
             copyResizedImgUrl () {
                 let size = '?'
@@ -764,14 +798,16 @@
                 }
             },
             updateAttachList(exams) {
+              let that = this
                 this.selectedQuizzes = []
                 exams.forEach( item => {
-                    const targetExamIndex = this.totalExams.findIndex(examItem => Assistant.getId(examItem.id) === Assistant.getId(item.exam_id))
-                    this.totalExams[targetExamIndex].order = item.order
-                    this.totalExams[targetExamIndex].sub_category_id = item.sub_category.id
-                    this.totalExams[targetExamIndex].sub_category_title = item.sub_category.title
-                    this.selectedQuizzes.push(this.totalExams[targetExamIndex])
+                    const targetExamIndex = that.totalExams.findIndex(examItem => Assistant.getId(examItem.id) === Assistant.getId(item.exam_id))
+                    that.totalExams[targetExamIndex].order = item.order
+                    that.totalExams[targetExamIndex].sub_category_id = item.sub_category.id
+                    that.totalExams[targetExamIndex].sub_category_title = item.sub_category.title
+                    that.selectedQuizzes.push(that.totalExams[targetExamIndex])
                 })
+              this.updateSelectedQuizzes()
             },
             loadnCurrentQuestionData () {
                 let that = this
@@ -945,6 +981,7 @@
                 if (this.selectedQuizzes.length !== this.examList.list.length) {
                     this.selectedQuizzes = []
                     this.examList.list.forEach((item) => { this.selectedQuizzes.push(item.id) })
+                  this.updateSelectedQuizzes()
                 }
             },
             submitQuestion () {
