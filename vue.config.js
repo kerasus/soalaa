@@ -12,7 +12,8 @@ let config = {
         webpackBundleAnalyzer: {
             openAnalyzer: process.env.VUE_APP_NODE_ENV === 'development'
         }
-    }
+    },
+    outputDir: 'dist'
 }
 
 function setProxy(proxy, key, target) {
