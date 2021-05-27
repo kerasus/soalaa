@@ -1029,6 +1029,7 @@
             if (!string) {
               return string
             }
+            string = string.replace(/\n/g,'<br>')
             TurndownService.prototype.escape = function (string) {
               let escapes = [
                 [/\s\$/g, '$'],
