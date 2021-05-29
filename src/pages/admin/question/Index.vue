@@ -1,6 +1,6 @@
 <template>
     <v-row>
-        <v-col>
+        <v-col v-if="montaTree">
             <v-toolbar
                     class="fixed-bar"
                     src="https://picsum.photos/1920/1080?random"
@@ -331,7 +331,6 @@
   import Vue from 'vue'
   import ScrollLoader from 'vue-scroll-loader'
   import axios from 'axios'
-    import montaTree from '@/assets/montaTree'
   import {mixinMarkdownAndKatex} from '@/mixin/Mixins'
   import TurndownService from 'turndown/lib/turndown.browser.umd'
   import topic from '@/components/Question/topic'
@@ -343,9 +342,7 @@
     name: 'Index',
     mixins: [mixinMarkdownAndKatex],
     computed: {
-      montaTree() {
-        return montaTree
-      },
+
     },
     components: {
       // InfiniteLoading,
@@ -353,6 +350,7 @@
     },
     data() {
       return {
+          montaTree: null,
         disableLoadingList: false,
         totalFilteredQuestions: '...',
         lastLoadTime: Date.now(),
@@ -521,7 +519,14 @@
         // return this.markdown.render(string.replace('<div class="question" dir="rtl">', ''))
         return this.markdown.render(markdown, {strict: false})
       },
-    }
+    },
+      created() {
+          axios.get('/cdn/upload/knowledgeTree.json')
+          .then((response) => {
+              console.log(response.data, 'respones')
+              this.montaTree = response.data
+          })
+      }
   }
 </script>
 
