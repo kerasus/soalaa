@@ -180,6 +180,8 @@
 </template>
 
 <script>
+  // import $ from 'jquery'
+  // import axios from 'axios'
     import videojs from 'video.js'
     import 'video.js/dist/video-js.css'
     import '@silvermine/videojs-quality-selector/dist/css/quality-selector.css'
@@ -196,6 +198,125 @@
     import StatisticResult from '@/components/OnlineQuiz/Quiz/resultTables/statisticResult'
     import API_ADDRESS from '@/api/Addresses'
     import TakhminRotbe from "@/components/OnlineQuiz/Quiz/TakhminRotbe";
+  import {QuestionList} from "@/models/Question";
+  import {Exam} from "@/models/Exam";
+
+  // class ExamData {
+  //
+  //   constructor() {
+  //     this.rollbacks = []
+  //     this.commands = []
+  //     this.status = true
+  //     this.questions = []
+  //     this.questionsFileUrl = null
+  //     this.axiosError = null
+  //
+  //   }
+  //
+  //   run() {
+  //     this.commands.reduce(function (prev, curr) {
+  //       return prev.promise.then((result) => {
+  //         prev.then(result)
+  //         curr.promise
+  //       });
+  //     })
+  //             .then(function (result) {
+  //               console.log('RESULT is ' + result);  // prints "RESULT is 7"
+  //             });
+  //
+  //     // this.setPromisesResolveAndReject()
+  //     // this.commands[0].promise()
+  //     // return new Promise(function (resolve, reject) {
+  //     //   Promise.all(this.promises)
+  //     //           .then((values) => {
+  //     //             resolve(values)
+  //     //           })
+  //     //           .catch(error => {
+  //     //             reject(error)
+  //     //           })
+  //     // })
+  //   }
+  //
+  //   setPromiseResolveAndReject (command, nextCommand) {
+  //     command.promise
+  //             .then( response => {
+  //               command.then(response)
+  //               if (nextCommand) {
+  //                 return nextCommand.promise
+  //               }
+  //             })
+  //             .catch( error => {
+  //               command.catch(error)
+  //             })
+  //   }
+  //
+  //   setPromisesResolveAndReject () {
+  //     let that = this
+  //     this.commands.forEach( (command, index) => {
+  //       let nextCommand = null
+  //       if (typeof that.commands[index + 1] !== 'undefined') {
+  //         nextCommand = that.commands[index + 1]
+  //       }
+  //       that.setPromiseResolveAndReject(command, nextCommand)
+  //     })
+  //   }
+  //
+  //   loadQuestionsFromFile () {
+  //     let that = this
+  //     this.commands.push({
+  //       promise: axios.get(that.questionsFileUrl),
+  //       //         new Promise(function(resolve, reject) {
+  //       //   if (!that.questionsFileUrl) {
+  //       //     Assistant.handleAxiosError("exam file url is not set")
+  //       //     reject("exam file url is not set")
+  //       //   }
+  //       //
+  //       //   $.ajax({
+  //       //             type: 'GET',
+  //       //             url: that.questionsFileUrl,
+  //       //             accept: "application/json; charset=utf-8",
+  //       //             dataType: "json",
+  //       //             success: function (data) {
+  //       //               that.questions = new QuestionList(data)
+  //       //               resolve(data)
+  //       //             },
+  //       //             error: function (jqXHR, textStatus, errorThrown) {
+  //       //               reject({jqXHR, textStatus, errorThrown})
+  //       //             }
+  //       //           }
+  //       //   );
+  //       // }),
+  //       then: (data) => {
+  //         that.questions = new QuestionList(data)
+  //       },
+  //       catch: (error) => error,
+  //       name: 'loadQuestionsFromFile'
+  //     })
+  //
+  //     return this
+  //     // https://node3.alaatv.com/aaa/questionFiles/3a_1400_ensani_final_202104150852_withAnswer.json
+  //   }
+  //
+  //   getUserAnswersAndExamFileWithAnswerUrl(user_exam_id) {
+  //     let that = this
+  //     this.commands.push({
+  //       promise: axios.get(API_ADDRESS.exam.getAnswerOfUserWithCorrect(user_exam_id)),
+  //       then: (response) => {
+  //         let userExamForParticipate = new Exam()
+  //         userExamForParticipate.user_exam_id = Assistant.getId(user_exam_id)
+  //         userExamForParticipate.title = response.data.data.exam.title
+  //         userExamForParticipate.questions_file_url = response.data.data.exam.questions_file_url
+  //         that.questionsFileUrl = response.data.data.exam.questions_file_url
+  //       },
+  //       catch: (error) => error,
+  //       name: 'getUserAnswersAndExamFileWithAnswerUrl'
+  //     })
+  //
+  //     return this
+  //   }
+  //
+  // }
+
 
     export default {
         name: 'Result',
@@ -233,6 +354,9 @@
             let that = this
             let user_exam_id = this.$route.params.user_exam_id
             let exam_id = this.$route.params.exam_id
+
+          // let examData = new ExamData()
+          // examData.getUserAnswersAndExamFileWithAnswerUrl(user_exam_id).loadQuestionsFromFile().run()
 
             this.$store.commit('AppLayout/updateOverlay', {show: true, loading: true, text: ''})
             this.user.loadExamDataForShowResult(user_exam_id)

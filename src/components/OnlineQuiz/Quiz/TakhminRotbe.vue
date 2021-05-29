@@ -316,7 +316,7 @@
                     })
                 }
                 axios.post(API_ADDRESS.exam.takhminRotbe, {
-                    exam_user_id: that.takhminReport.exam_user_id,
+                    exam_user_id: that.takhminReport.exam_user.id,
                     percents: sentPercents
                 })
                 .then(response => {
