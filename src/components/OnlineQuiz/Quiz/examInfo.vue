@@ -82,24 +82,43 @@
             create () {
                 this.examItem = this.exam
                 this.examItem.loading = true
-                this.examItem.holding_status = 1
+                this.examItem.holding_status = "1"
                 this.examItem.photo = 'https://cdn.alaatv.com/upload/images/slideShow/home-slide-yalda-festival_20201219075413.jpg?w=1843&h=719'
-                this.examItem.create()
-                    .then(() => {
-                        this.examItem.loading = false
-                        this.$toasted.show('ثبت با موفقیت انجام شد', {
-                            theme: "toasted-primary",
-                            position: "top-right",
-                            duration : 2000
+                if (this.examItem.id) {
+                    this.examItem.update()
+                        .then(() => {
+                            this.examItem.loading = false
+                            this.$toasted.show('ثبت با موفقیت انجام شد', {
+                                theme: "toasted-primary",
+                                position: "top-right",
+                                duration : 2000
+                            })
+                            this.refreshExamList()
                         })
-                        this.refreshExamList()
-                    })
-                    .catch((error) => {
-                        Assistant.handleAxiosError(this.$toasted, error)
-                        this.examItem.loading = false
-                        this.examItem = new Exam()
-                        this.refreshExamList()
-                    })
+                        .catch((error) => {
+                            Assistant.handleAxiosError(this.$toasted, error)
+                            this.examItem.loading = false
+                            this.refreshExamList()
+                        })
+                } else {
+                    this.examItem.create()
+                        .then(() => {
+                            this.examItem.loading = false
+                            this.$toasted.show('ثبت با موفقیت انجام شد', {
+                                theme: "toasted-primary",
+                                position: "top-right",
+                                duration : 2000
+                            })
+                            this.refreshExamList()
+                        })
+                        .catch((error) => {
+                            Assistant.handleAxiosError(this.$toasted, error)
+                            this.examItem.loading = false
+                            this.examItem = new Exam()
+                            this.refreshExamList()
+                        })
+                }
+
             },
             refreshExamList () {
                 this.$emit('refresh-exam-list')
