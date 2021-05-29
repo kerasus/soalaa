@@ -183,7 +183,7 @@
                 {{ item.delay_time }} دقیقه
             </template>
             <template v-slot:item.options="{ item }">
-                <v-tooltip top v-if="false">
+                <v-tooltip top>
                     <template v-slot:activator="{ on, attrs }">
                         <v-btn
                                 class="mx-2"
@@ -369,7 +369,7 @@
 
         }),
         mounted() {
-            this.getExams()
+            // this.getExams()
         },
         watch: {
           options: {

@@ -1,6 +1,6 @@
 <template>
     <v-row>
-        <v-col>
+        <v-col v-if="montaTree">
             <v-toolbar
                     class="fixed-bar"
                     src="https://picsum.photos/1920/1080?random"
@@ -331,21 +331,19 @@
   import Vue from 'vue'
   import ScrollLoader from 'vue-scroll-loader'
   import axios from 'axios'
-    import montaTree from '@/assets/montaTree'
   import {mixinMarkdownAndKatex} from '@/mixin/Mixins'
   import TurndownService from 'turndown/lib/turndown.browser.umd'
   import topic from '@/components/Question/topic'
   import Assistant from "@/plugins/assistant";
   import API_ADDRESS from "@/api/Addresses";
+  import $ from "jquery";
   Vue.use(ScrollLoader);
 
   export default {
     name: 'Index',
     mixins: [mixinMarkdownAndKatex],
     computed: {
-      montaTree() {
-        return montaTree
-      },
+
     },
     components: {
       // InfiniteLoading,
@@ -353,6 +351,7 @@
     },
     data() {
       return {
+          montaTree: null,
         disableLoadingList: false,
         totalFilteredQuestions: '...',
         lastLoadTime: Date.now(),
@@ -522,7 +521,30 @@
         // return this.markdown.render(string.replace('<div class="question" dir="rtl">', ''))
         return this.markdown.render(markdown, {strict: false})
       },
-    }
+    },
+      created() {
+          // axios.get('/cdn/upload/knowledgeTree.json')
+          // .then((response) => {
+          //     console.log(response.data, 'respones')
+          //     this.montaTree = response.data
+          // })
+
+          $.ajax({
+                  type: 'GET',
+                  url: 'https://cdn.alaatv.com/upload/knowledgeTree.json',
+                  accept: "application/json; charset=utf-8",
+                  dataType: "json",
+                  success: function (response) {
+                      this.montaTree = response.data
+                  },
+                  error: function () {
+                      // Assistant.reportErrors({location: 'GetQuestionsOfExam', message: "can't get exam file", data: {jqXHR, textStatus, errorThrown}})
+                      // Assistant.handleAxiosError("can't get exam file")
+                      // reject({jqXHR, textStatus, errorThrown})
+                  }
+              }
+          );
+      }
   }
 </script>
 

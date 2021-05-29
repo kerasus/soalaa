@@ -30,7 +30,18 @@ class Exam extends Model {
             { key: 'questions_file_url' },
             { key: 'accept_at_is_passed' },
             { key: 'total_question_number' },
-
+            {
+                key: 'is_open',
+                default: false
+            },
+            {
+                key: 'is_register_open',
+                default: false
+            },
+            {
+                key: 'opening_policy',
+                default: false
+            },
             {
                 key: 'questions',
                 relatedModel: QuestionList
