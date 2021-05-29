@@ -523,7 +523,8 @@
       },
     },
       created() {
-          // axios.get('/cdn/upload/knowledgeTree.json')
+      let that = this
+          // axios.get('https://cdn.alaatv.com/upload/knowledgeTree.json')
           // .then((response) => {
           //     console.log(response.data, 'respones')
           //     this.montaTree = response.data
@@ -535,7 +536,8 @@
                   accept: "application/json; charset=utf-8",
                   dataType: "json",
                   success: function (response) {
-                      this.montaTree = response.data
+                        console.log('respones', response)
+                    that.montaTree = response
                   },
                   error: function () {
                       // Assistant.reportErrors({location: 'GetQuestionsOfExam', message: "can't get exam file", data: {jqXHR, textStatus, errorThrown}})
