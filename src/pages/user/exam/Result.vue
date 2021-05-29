@@ -198,8 +198,8 @@
     import StatisticResult from '@/components/OnlineQuiz/Quiz/resultTables/statisticResult'
     import API_ADDRESS from '@/api/Addresses'
     import TakhminRotbe from "@/components/OnlineQuiz/Quiz/TakhminRotbe";
-  import {QuestionList} from "@/models/Question";
-  import {Exam} from "@/models/Exam";
+  // import {QuestionList} from "@/models/Question";
+  // import {Exam} from "@/models/Exam";
 
   // class ExamData {
   //
