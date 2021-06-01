@@ -2,7 +2,6 @@
     <div>
         <vue-tiptap-plus v-model="html"/>
         <div v-html="convertToMarkdownKatex(html)"/>
-        <div v-html="(merkdownTesti)"/>
     </div>
 </template>
 
@@ -20,7 +19,6 @@
       return {
         html: '<p>I’m running tiptap with Vue.js. 🎉</p>',
         innerHTML: 'hi',
-        merkdownTesti: ''
       }
     },
     methods: {
