@@ -9,7 +9,7 @@ function convertPoem(htmlString) {
   // let tables = doc.querySelectorAll('table')
   let tables = wrapper.querySelectorAll('table.layoutPoem')
   // let tables = this.$refs.table.querySelectorAll('table')
-  tables.forEach((item, index) => {
+  tables.forEach((item) => {
 	let markdownTable = ''
 	let rows = item.querySelectorAll('tr')
 

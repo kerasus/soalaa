@@ -1,8 +1,19 @@
 <template>
-    <div class="wrapper" >
-        <mobile-timer v-if="windowSize.x < 960"  :passed-time="passedTime" :remaining-time="remainTime" :current-cat="currentCat"/>
-        <pc-timer @timerOpen="passEvent" v-else :passed-time="passedTime" :remaining-time="remainTime" :current-cat="currentCat"/>
-    </div>
+  <div class="wrapper">
+    <mobile-timer
+      v-if="windowSize.x < 960"
+      :passed-time="passedTime"
+      :remaining-time="remainTime"
+      :current-cat="currentCat"
+    />
+    <pc-timer
+      v-else
+      :passed-time="passedTime"
+      :remaining-time="remainTime"
+      :current-cat="currentCat"
+      @timerOpen="passEvent"
+    />
+  </div>
 </template>
 
 <script>
@@ -14,17 +25,17 @@
 
     export default {
         name: "Timer",
+        components: {
+            MobileTimer,
+            PcTimer
+        },
+        mixins: [mixinWindowSize, mixinQuiz],
         data: () => ({
             currentCat: null,
             interval: null,
             passedTime: '00:00:00',
             remainTime: false,
         }),
-        mixins: [mixinWindowSize, mixinQuiz],
-        components: {
-            MobileTimer,
-            PcTimer
-        },
         mounted() {
             let that = this
             this.interval = setInterval(() => {
@@ -33,6 +44,9 @@
                 that.doActionsOnChangeCategory(newCat)
             }, 1000)
             // requestAnimationFrame(this.timer.updateTimer) // webpack-internal:///./src/models/Timer.js:58 Uncaught TypeError: Cannot read property 'updateDiffs' of undefined
+        },
+        destroyed() {
+            clearInterval(this.interval)
         },
         methods: {
             passEvent (value) {
@@ -67,9 +81,6 @@
                     this.$store.commit('setExamAcceptAtIsPassed')
                 }
             }
-        },
-        destroyed() {
-            clearInterval(this.interval)
         }
     }
 </script>

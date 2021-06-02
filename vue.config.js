@@ -1,4 +1,5 @@
 let config = {
+    lintOnSave: true,
     runtimeCompiler: true,
     "transpileDependencies": [
         "vuetify"

@@ -1,67 +1,107 @@
 <template>
-    <div :class="{ 'current-question': this.currentQuestion.id === source.id, question: true, ltr: isLtr  }">
-        <v-row>
-            <v-col>
-                <div class="d-inline" v-if="source.confirmers.length">تایید شده توسط: </div>
-                <v-chip
-                        color="#C8E6C9"
-                        class="ml-3"
-                        pill
-                        v-for="(item, index) in source.confirmers" :key="index"
-                >
-                    <v-avatar left>
-                        <v-img :src="item.photo"></v-img>
-                    </v-avatar>
-                    {{ item.first_name + ' ' + item.last_name }}
-                </v-chip>
-            </v-col>
-        </v-row>
-        <div class="buttons-group">
-            <v-select :items="quizList.list" item-text="title" chips multiple attach outlined dense full-width
-                      v-if="false"/>
-            <v-btn icon color="red" @click="deleteQuestion()">
-                <v-icon :size="24">mdi-close</v-icon>
-            </v-btn>
-            <v-btn icon @click="detachQuestion()">
-                <v-icon :size="24">mdi-close</v-icon>
-            </v-btn>
-            <v-btn icon :to="{ name: 'quest.edit', params: { id: source.id } }">
-                <v-icon :size="24">mdi-pencil</v-icon>
-            </v-btn>
-            <input :id="'question-id' + source.id" :ref="'question-id-' + source.id" :value="source.id" type="text"
-                   class="not-visible"/>
-            <v-btn icon @click="copyIdToClipboard(source.id)">
-                <v-icon>mdi-content-copy</v-icon>
-            </v-btn>
-            <v-switch
-                    @change="confirmQuestion"
-                    v-model="source.confirmed"
-                    color="success"
-                    :loading="confirmLoading"
-                    hide-details
-            ></v-switch>
+  <div :class="{ 'current-question': this.currentQuestion.id === source.id, question: true, ltr: isLtr }">
+    <v-row>
+      <v-col>
+        <div
+          v-if="source.confirmers.length"
+          class="d-inline"
+        >
+          تایید شده توسط:
         </div>
-        <span class="question-body renderedPanel"
-              :class="{ ltr: isLtr }"
-              :id="'question' + source.id"
-              v-html="(getQuestionNumberFromId(source.id)) + '(' + getSubCategoryName + ')' + ' (' + source.order + ') - ' + source.rendered_statement"
-              v-intersect="{
-                handler: onIntersect,
-                options: {
-                  threshold: [0, 0.2, 0.4, 0.6, 0.8, 1.0]
-                }
-              }"
-        />
-        <v-row class="choices">
-            <v-col
-                    v-for="(choice, index) in source.choices.list"
-                    :key="choice.id"
-                    v-html="(choiceNumber[index]) + choice.rendered_title"
-                    :cols="choiceClass"
-                    :class="{ choice: true, renderedPanel: true, active: choice.answer, ltr: isLtr }"
-            />
-        </v-row>
+        <v-chip
+          v-for="(item, index) in source.confirmers"
+          :key="index"
+          color="#C8E6C9"
+          class="ml-3"
+          pill
+        >
+          <v-avatar left>
+            <v-img :src="item.photo" />
+          </v-avatar>
+          {{ item.first_name + ' ' + item.last_name }}
+        </v-chip>
+      </v-col>
+    </v-row>
+    <div class="buttons-group">
+      <v-select
+        v-if="false"
+        :items="quizList.list"
+        item-text="title"
+        chips
+        multiple
+        attach
+        outlined
+        dense
+        full-width
+      />
+      <v-btn
+        icon
+        color="red"
+        @click="deleteQuestion()"
+      >
+        <v-icon :size="24">
+          mdi-close
+        </v-icon>
+      </v-btn>
+      <v-btn
+        icon
+        @click="detachQuestion()"
+      >
+        <v-icon :size="24">
+          mdi-close
+        </v-icon>
+      </v-btn>
+      <v-btn
+        icon
+        :to="{ name: 'quest.edit', params: { id: source.id } }"
+      >
+        <v-icon :size="24">
+          mdi-pencil
+        </v-icon>
+      </v-btn>
+      <input
+        :id="'question-id' + source.id"
+        :ref="'question-id-' + source.id"
+        :value="source.id"
+        type="text"
+        class="not-visible"
+      >
+      <v-btn
+        icon
+        @click="copyIdToClipboard(source.id)"
+      >
+        <v-icon>mdi-content-copy</v-icon>
+      </v-btn>
+      <v-switch
+        v-model="source.confirmed"
+        color="success"
+        :loading="confirmLoading"
+        hide-details
+        @change="confirmQuestion"
+      />
     </div>
+    <span
+      :id="'question' + source.id"
+      v-intersect="{
+        handler: onIntersect,
+        options: {
+          threshold: [0, 0.2, 0.4, 0.6, 0.8, 1.0]
+        }
+      }"
+      class="question-body renderedPanel"
+      :class="{ ltr: isLtr }"
+      v-html="(getQuestionNumberFromId(source.id)) + '(' + getSubCategoryName + ')' + ' (' + source.order + ') - ' + source.rendered_statement"
+    />
+    <v-row class="choices">
+      <v-col
+        v-for="(choice, index) in source.choices.list"
+        :key="choice.id"
+        :cols="choiceClass"
+        :class="{ choice: true, renderedPanel: true, active: choice.answer, ltr: isLtr }"
+        v-html="(choiceNumber[index]) + choice.rendered_title"
+      />
+    </v-row>
+  </div>
 </template>
 
 <script>
@@ -77,21 +117,8 @@
     Vue.component('vue-confirm-dialog', VueConfirmDialog.default)
 
     export default {
-        name: 'item',
+        name: 'Item',
         mixins: [mixinQuiz, mixinWindowSize, mixinMarkdownAndKatex],
-        data() {
-            return {
-                confirmLoading: false,
-                isLtr: false,
-                confirm: false,
-                choiceNumber: {
-                    0: '1) ',
-                    1: '2) ',
-                    2: '3) ',
-                    3: '4) '
-                }
-            }
-        },
         props: {
             subCategory: {
                 default() {
@@ -117,6 +144,75 @@
                     return []
                 }
             }
+        },
+        data() {
+            return {
+                confirmLoading: false,
+                isLtr: false,
+                confirm: false,
+                choiceNumber: {
+                    0: '1) ',
+                    1: '2) ',
+                    2: '3) ',
+                    3: '4) '
+                }
+            }
+        },
+        computed: {
+            choiceClass() {
+                // let QuestionWidthRatio = 0.4
+                // let largestChoiceWidth = this.windowSize.x * QuestionWidthRatio / largestChoice
+                let largestChoice = this.getLargestChoice(this.source.choices)
+                let largestChoiceWidth = $('.questions').width() / largestChoice
+                // console.log('order', this.source.order)
+                if (largestChoiceWidth > 48) {
+                    // console.log('col-3')
+                    return 3
+                }
+                if (largestChoiceWidth > 24) {
+                    // console.log('col-6')
+                    return 6
+                }
+                if (largestChoiceWidth > 12) {
+                    // console.log('col-12')
+                    return 12
+                }
+                // console.log('col-12')
+                return 12
+            },
+            // lesson() {
+            //     console.log(this.source.sub_categories)
+            //     if (!this.source.sub_categories) {
+            //         return {title: 'صبر کنید'}
+            //     }
+            //     const subCategoryId = Assistant.getId(this.source.sub_category.id)
+            //     console.log(this.quiz.sub_categories)
+            //     return this.quiz.sub_categories.list.find((item) => item.id === subCategoryId)
+            // }
+            getSubCategoryName() {
+                const target = this.subCategory.list.find(
+                    (item) =>
+                        // item.id === this.source.sub_category.id
+                    {
+                        if (item && item.id && this.source.sub_category) {
+                            if (item.id === this.source.sub_category.id) {
+                                return true
+                            }
+                            return false
+                        }
+                        return false
+                    }
+                )
+                if (target) {
+                    return target.display_title
+                } else {
+                    return ''
+                }
+            },
+        },
+        created() {
+            this.isLtr = this.isLtrString(this.source.rendered_statement)
+            // setTimeout(() => {console.log(this.quiz)}, 2000)
         },
         methods: {
             confirmQuestion() {
@@ -213,62 +309,6 @@
             edit() {
                 // console.log(questionId)
             }
-        },
-        created() {
-            this.isLtr = this.isLtrString(this.source.rendered_statement)
-            // setTimeout(() => {console.log(this.quiz)}, 2000)
-        },
-        computed: {
-            choiceClass() {
-                // let QuestionWidthRatio = 0.4
-                // let largestChoiceWidth = this.windowSize.x * QuestionWidthRatio / largestChoice
-                let largestChoice = this.getLargestChoice(this.source.choices)
-                let largestChoiceWidth = $('.questions').width() / largestChoice
-                // console.log('order', this.source.order)
-                if (largestChoiceWidth > 48) {
-                    // console.log('col-3')
-                    return 3
-                }
-                if (largestChoiceWidth > 24) {
-                    // console.log('col-6')
-                    return 6
-                }
-                if (largestChoiceWidth > 12) {
-                    // console.log('col-12')
-                    return 12
-                }
-                // console.log('col-12')
-                return 12
-            },
-            // lesson() {
-            //     console.log(this.source.sub_categories)
-            //     if (!this.source.sub_categories) {
-            //         return {title: 'صبر کنید'}
-            //     }
-            //     const subCategoryId = Assistant.getId(this.source.sub_category.id)
-            //     console.log(this.quiz.sub_categories)
-            //     return this.quiz.sub_categories.list.find((item) => item.id === subCategoryId)
-            // }
-            getSubCategoryName() {
-                const target = this.subCategory.list.find(
-                    (item) =>
-                        // item.id === this.source.sub_category.id
-                    {
-                        if (item && item.id && this.source.sub_category) {
-                            if (item.id === this.source.sub_category.id) {
-                                return true
-                            }
-                            return false
-                        }
-                        return false
-                    }
-                )
-                if (target) {
-                    return target.display_title
-                } else {
-                    return ''
-                }
-            },
         }
     }
 </script>

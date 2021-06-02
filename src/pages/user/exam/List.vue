@@ -1,122 +1,156 @@
 <template>
-    <v-container>
-        <vue-confirm-dialog />
-        <v-row>
-            <v-col>
-                <progress-linear :active="loadingList" />
-                <v-alert v-if="exams.list.length === 0 && !loadingList" type="info">
-                    آزمونی وجود ندارد
-                </v-alert>
-                <v-row v-if="exams.list.length > 0 && !loadingList">
-                    <v-col>
-                        <v-row class="table-header">
-                            <v-col cols="3" class="pr-7">
-                                عنوان
-                            </v-col>
-                            <v-col cols="2">
-                                زمان شروع آزمون
-                            </v-col>
-                            <v-col v-if="false" cols="2">
-                                زمان پایان آزمون
-                            </v-col>
-                            <v-col v-if="false" cols="1">
-                                میزان تاخیر مجاز
-                            </v-col>
-                            <v-col cols="7">
-                                عملیات
-                            </v-col>
-                        </v-row>
-                        <v-row v-for="item in exams.list" :key="item.id" class="exam-info-bar">
-                            <v-col>
-                                <v-sheet
-                                        class="d-flex exam-list-sheet"
-                                        elevation="0"
-                                        outlined
-                                        rounded
-                                        shaped
-                                >
-                                    <v-row class="table-row justify-center">
-                                        <v-col cols="12" md="3" class="pr-7 justify-center">
-                                            {{ item.title }}
-                                        </v-col>
-                                        <v-col cols="12" md="2">
-                                            <span class="d-inline-block-md d-none">
-                                                زمان شروع آزمون:
-                                            </span>
-                                            {{ item.shamsiDate('start_at').dateTime }}
-                                        </v-col>
-                                        <v-col v-if="false" cols="12" md="2">
-                                            <span class="d-inline-block-md d-none">
-                                                زمان پایان آزمون:
-                                            </span>
-                                            {{ item.shamsiDate('finish_at').dateTime }}
-                                        </v-col>
-                                        <v-col v-if="false" cols="12" md="1">
-                                            <span class="d-inline-block-md d-none">
-                                                میزان تاخیر مجاز:
-                                            </span>
-                                            {{ item.delay_time }}
-                                            دقیقه
-                                        </v-col>
-                                        <v-col cols="12" md="7">
-                                            <v-btn
-                                                    v-if="item.exam_actions.can_register"
-                                                    @click="registerExam(item)"
-                                                    color="#00c753"
-                                                    text
-                                            >
-                                                ثبت نام
-                                            </v-btn>
-                                            <v-btn
-                                                    v-if="item.exam_actions.can_start"
-                                                    :to="{ name: 'onlineQuiz.alaaView', params: { quizId: item.id, questNumber: 1 } }"
-                                                    color="#ffc107"
-                                                    text
-                                            >
-                                                شروع آزمون
-                                            </v-btn>
-                                            <v-btn
-                                                    v-if="item.exam_actions.can_continue"
-                                                    @click="continueExam(item.id)"
-                                                    color="purple"
-                                                    text
-                                            >
-                                                ادامه آزمون
-                                            </v-btn>
-                                            <v-btn
-                                                    v-if="item.exam_actions.can_submit_answer"
-                                                    @click="getConfirmation(item.id, item.user_exam_id)"
-                                                    color="#ffc107"
-                                                    text
-                                            >
-                                                ثبت پاسخنامه ذخیره شده در سیستم
-                                            </v-btn>
-                                            <v-btn
-                                                    v-if="item.exam_actions.can_see_report"
-                                                    color="#00b5e6"
-                                                    text
-                                                    :to="{ name: 'user.exam.results', params: { user_exam_id: item.user_exam_id, exam_id: item.id } }"
-                                            >
-                                                مشاهده نتایج
-                                            </v-btn>
-                                            <v-btn
-                                                    v-if="!!item.holding_status"
-                                                    color="#ffc107"
-                                                    text
-                                                    disabled
-                                            >
-                                                {{ item.holding_status }}
-                                            </v-btn>
-                                        </v-col>
-                                    </v-row>
-                                </v-sheet>
-                            </v-col>
-                        </v-row>
+  <v-container>
+    <vue-confirm-dialog />
+    <v-row>
+      <v-col>
+        <progress-linear :active="loadingList" />
+        <v-alert
+          v-if="exams.list.length === 0 && !loadingList"
+          type="info"
+        >
+          آزمونی وجود ندارد
+        </v-alert>
+        <v-row v-if="exams.list.length > 0 && !loadingList">
+          <v-col>
+            <v-row class="table-header">
+              <v-col
+                cols="3"
+                class="pr-7"
+              >
+                عنوان
+              </v-col>
+              <v-col cols="2">
+                زمان شروع آزمون
+              </v-col>
+              <v-col
+                v-if="false"
+                cols="2"
+              >
+                زمان پایان آزمون
+              </v-col>
+              <v-col
+                v-if="false"
+                cols="1"
+              >
+                میزان تاخیر مجاز
+              </v-col>
+              <v-col cols="7">
+                عملیات
+              </v-col>
+            </v-row>
+            <v-row
+              v-for="item in exams.list"
+              :key="item.id"
+              class="exam-info-bar"
+            >
+              <v-col>
+                <v-sheet
+                  class="d-flex exam-list-sheet"
+                  elevation="0"
+                  outlined
+                  rounded
+                  shaped
+                >
+                  <v-row class="table-row justify-center">
+                    <v-col
+                      cols="12"
+                      md="3"
+                      class="pr-7 justify-center"
+                    >
+                      {{ item.title }}
                     </v-col>
-                </v-row>
-            </v-col>
+                    <v-col
+                      cols="12"
+                      md="2"
+                    >
+                      <span class="d-inline-block-md d-none">
+                        زمان شروع آزمون:
+                      </span>
+                      {{ item.shamsiDate('start_at').dateTime }}
+                    </v-col>
+                    <v-col
+                      v-if="false"
+                      cols="12"
+                      md="2"
+                    >
+                      <span class="d-inline-block-md d-none">
+                        زمان پایان آزمون:
+                      </span>
+                      {{ item.shamsiDate('finish_at').dateTime }}
+                    </v-col>
+                    <v-col
+                      v-if="false"
+                      cols="12"
+                      md="1"
+                    >
+                      <span class="d-inline-block-md d-none">
+                        میزان تاخیر مجاز:
+                      </span>
+                      {{ item.delay_time }}
+                      دقیقه
+                    </v-col>
+                    <v-col
+                      cols="12"
+                      md="7"
+                    >
+                      <v-btn
+                        v-if="item.exam_actions.can_register"
+                        color="#00c753"
+                        text
+                        @click="registerExam(item)"
+                      >
+                        ثبت نام
+                      </v-btn>
+                      <v-btn
+                        v-if="item.exam_actions.can_start"
+                        :to="{ name: 'onlineQuiz.alaaView', params: { quizId: item.id, questNumber: 1 } }"
+                        color="#ffc107"
+                        text
+                      >
+                        شروع آزمون
+                      </v-btn>
+                      <v-btn
+                        v-if="item.exam_actions.can_continue"
+                        color="purple"
+                        text
+                        @click="continueExam(item.id)"
+                      >
+                        ادامه آزمون
+                      </v-btn>
+                      <v-btn
+                        v-if="item.exam_actions.can_submit_answer"
+                        color="#ffc107"
+                        text
+                        @click="getConfirmation(item.id, item.user_exam_id)"
+                      >
+                        ثبت پاسخنامه ذخیره شده در سیستم
+                      </v-btn>
+                      <v-btn
+                        v-if="item.exam_actions.can_see_report"
+                        color="#00b5e6"
+                        text
+                        :to="{ name: 'user.exam.results', params: { user_exam_id: item.user_exam_id, exam_id: item.id } }"
+                      >
+                        مشاهده نتایج
+                      </v-btn>
+                      <v-btn
+                        v-if="!!item.holding_status"
+                        color="#ffc107"
+                        text
+                        disabled
+                      >
+                        {{ item.holding_status }}
+                      </v-btn>
+                    </v-col>
+                  </v-row>
+                </v-sheet>
+              </v-col>
+            </v-row>
+          </v-col>
         </v-row>
-    </v-container>
+      </v-col>
+    </v-row>
+  </v-container>
 </template>
 
 <script>
@@ -130,17 +164,20 @@
     Vue.component('vue-confirm-dialog', VueConfirmDialog.default)
 
     export default {
-        name: 'list',
+        name: 'List',
         components: {ProgressLinear},
+        mixins: [mixinAuth, mixinQuiz],
         data: () => ({
             preventStartExam: false,
             examItem: new Exam(),
             exams: new ExamList(),
             loadingList: false
         }),
-        mixins: [mixinAuth, mixinQuiz],
         created() {
             this.getExams()
+        },
+        mounted() {
+            this.$store.commit('AppLayout/updateAppBarAndDrawer', true)
         },
         methods: {
             getConfirmation(examId, examUserId){
@@ -220,9 +257,6 @@
                         this.getExams()
                     })
             }
-        },
-        mounted() {
-            this.$store.commit('AppLayout/updateAppBarAndDrawer', true)
         }
     }
 </script>

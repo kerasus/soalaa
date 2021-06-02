@@ -1,198 +1,310 @@
 <template>
-    <v-container fluid>
-        <v-row class="d-flex justify-center">
-            <v-col>
-                <info/>
+  <v-container fluid>
+    <v-row class="d-flex justify-center">
+      <v-col>
+        <info />
+      </v-col>
+    </v-row>
+    <v-row class="d-flex justify-center">
+      <v-col>
+        <v-card
+          elevation="0"
+          class="infoCard align-content-center"
+        >
+          <v-row style="height: 50% ;margin: inherit;">
+            <v-col
+              xl="3"
+              sm="6"
+              cols="12"
+              class="exam-title"
+            >
+              نتیجه
+              {{ quiz.title }}
+              سه آ
             </v-col>
-        </v-row>
-        <v-row class="d-flex justify-center">
-            <v-col>
-                <v-card elevation="0" class="infoCard align-content-center">
-                    <v-row style="height: 50% ;margin: inherit;">
-                        <v-col xl="3" sm="6" cols="12" class="exam-title">
-                            نتیجه
-                            {{ quiz.title }}
-                            سه آ
-                        </v-col>
-                        <v-col v-if="report" xl="1" sm='3' cols="6">
-                            شهر:
-                            {{ report.location.city }}
-                        </v-col>
-                        <v-col v-if="report" xl="1" sm='3' cols="6">
-                            استان:
-                            {{ report.location.province }}
-                        </v-col>
-                        <v-col xl="7" cols="12" :style="{ padding: '0 12px' }">
-                            <v-tabs v-model="tab" color="#ffc107" center-active show-arrows>
-                                <v-tabs-slider color="yellow"></v-tabs-slider>
-                                <v-tab>کارنامه</v-tab>
-                                <v-tab>تخمین رتبه</v-tab>
-                                <v-tab>ریزدرس ها</v-tab>
-                                <v-tab>پاسخبرگ کلیدی</v-tab>
-                                <v-tab>پاسخ نامه تشریحی</v-tab>
-                                <v-tab>تحلیل ویدیویی</v-tab>
-                            </v-tabs>
-                        </v-col>
-                    </v-row>
-                </v-card>
+            <v-col
+              v-if="report"
+              xl="1"
+              sm="3"
+              cols="6"
+            >
+              شهر:
+              {{ report.location.city }}
             </v-col>
-        </v-row>
-        <v-row class="d-flex justify-center">
-            <v-col>
-                <v-tabs-items v-model="tab">
-                    <v-tab-item>
-                        <PersonalResult :report="report"/>
-                    </v-tab-item>
-                    <v-tab-item>
-                        <takhmin-rotbe :report="report"/>
-                    </v-tab-item>
-                    <v-tab-item>
-                        <StatisticResult :report="report"/>
-                    </v-tab-item>
-                    <v-tab-item>
-                        <BubbleSheet :info="{ type: 'pasokh-nameh' }" delay-time="0"/>
-                    </v-tab-item>
-                    <v-tab-item>
-                        <v-card flat>
-                            <p class="tab-title pt-5 pr-5">
-                                دانلود پاسخنامه تشریحی
-                            </p>
-                            <v-row v-if="report" class="download-row">
-                                <v-col md="6">
-                                    <div class="download-box">
-                                        <p class="download-title">دانلود پاسخنامه تشریحی {{
-                                            report.exams_booklet[0].title }}</p>
-                                        <v-btn outlined color="--primary-2" height="75px" width="250px"
-                                               :href="report.exams_booklet[0].descriptive_answers_url" target="_blank">
-                                            دانلود فایل PDF
-                                            <v-icon class="donwload-icon">mdi-download</v-icon>
-                                        </v-btn>
-                                    </div>
-                                </v-col>
-                                <v-col md="6">
-                                    <div class="download-box">
-                                        <p class="download-title">دانلود {{ report.exams_booklet[0].title }}</p>
-                                        <v-btn outlined color="--primary-2" height="75px" width="250px"
-                                               :href="report.exams_booklet[0].questions_url" target="_blank">
-                                            دانلود فایل PDF
-                                            <v-icon class="donwload-icon">mdi-download</v-icon>
-                                        </v-btn>
-                                    </div>
-                                </v-col>
-                                <v-col v-if="report.exams_booklet[1]" md="6">
-                                    <div class="download-box">
-                                        <p class="download-title">دانلود پاسخنامه تشریحی {{
-                                            report.exams_booklet[1].title }}</p>
-                                        <v-btn outlined color="--primary-2" height="75px" width="250px"
-                                               :href="report.exams_booklet[1].descriptive_answers_url" target="_blank">
-                                            دانلود فایل PDF
-                                            <v-icon class="donwload-icon">mdi-download</v-icon>
-                                        </v-btn>
-                                    </div>
-                                </v-col>
-                                <v-col v-if="report.exams_booklet[1]" md="6">
-                                    <div class="download-box">
-                                        <p class="download-title">دانلود {{ report.exams_booklet[1].title }}</p>
-                                        <v-btn outlined color="--primary-2" height="75px" width="250px"
-                                               :href="report.exams_booklet[1].questions_url" target="_blank">
-                                            دانلود فایل PDF
-                                            <v-icon class="donwload-icon">mdi-download</v-icon>
-                                        </v-btn>
-                                    </div>
-                                </v-col>
-                            </v-row>
+            <v-col
+              v-if="report"
+              xl="1"
+              sm="3"
+              cols="6"
+            >
+              استان:
+              {{ report.location.province }}
+            </v-col>
+            <v-col
+              xl="7"
+              cols="12"
+              :style="{ padding: '0 12px' }"
+            >
+              <v-tabs
+                v-model="tab"
+                color="#ffc107"
+                center-active
+                show-arrows
+              >
+                <v-tabs-slider color="yellow" />
+                <v-tab>کارنامه</v-tab>
+                <v-tab>تخمین رتبه</v-tab>
+                <v-tab>ریزدرس ها</v-tab>
+                <v-tab>پاسخبرگ کلیدی</v-tab>
+                <v-tab>پاسخ نامه تشریحی</v-tab>
+                <v-tab>تحلیل ویدیویی</v-tab>
+              </v-tabs>
+            </v-col>
+          </v-row>
+        </v-card>
+      </v-col>
+    </v-row>
+    <v-row class="d-flex justify-center">
+      <v-col>
+        <v-tabs-items v-model="tab">
+          <v-tab-item>
+            <PersonalResult :report="report" />
+          </v-tab-item>
+          <v-tab-item>
+            <takhmin-rotbe :report="report" />
+          </v-tab-item>
+          <v-tab-item>
+            <StatisticResult :report="report" />
+          </v-tab-item>
+          <v-tab-item>
+            <BubbleSheet
+              :info="{ type: 'pasokh-nameh' }"
+              delay-time="0"
+            />
+          </v-tab-item>
+          <v-tab-item>
+            <v-card flat>
+              <p class="tab-title pt-5 pr-5">
+                دانلود پاسخنامه تشریحی
+              </p>
+              <v-row
+                v-if="report"
+                class="download-row"
+              >
+                <v-col md="6">
+                  <div class="download-box">
+                    <p class="download-title">
+                      دانلود پاسخنامه تشریحی {{
+                        report.exams_booklet[0].title }}
+                    </p>
+                    <v-btn
+                      outlined
+                      color="--primary-2"
+                      height="75px"
+                      width="250px"
+                      :href="report.exams_booklet[0].descriptive_answers_url"
+                      target="_blank"
+                    >
+                      دانلود فایل PDF
+                      <v-icon class="donwload-icon">
+                        mdi-download
+                      </v-icon>
+                    </v-btn>
+                  </div>
+                </v-col>
+                <v-col md="6">
+                  <div class="download-box">
+                    <p class="download-title">
+                      دانلود {{ report.exams_booklet[0].title }}
+                    </p>
+                    <v-btn
+                      outlined
+                      color="--primary-2"
+                      height="75px"
+                      width="250px"
+                      :href="report.exams_booklet[0].questions_url"
+                      target="_blank"
+                    >
+                      دانلود فایل PDF
+                      <v-icon class="donwload-icon">
+                        mdi-download
+                      </v-icon>
+                    </v-btn>
+                  </div>
+                </v-col>
+                <v-col
+                  v-if="report.exams_booklet[1]"
+                  md="6"
+                >
+                  <div class="download-box">
+                    <p class="download-title">
+                      دانلود پاسخنامه تشریحی {{
+                        report.exams_booklet[1].title }}
+                    </p>
+                    <v-btn
+                      outlined
+                      color="--primary-2"
+                      height="75px"
+                      width="250px"
+                      :href="report.exams_booklet[1].descriptive_answers_url"
+                      target="_blank"
+                    >
+                      دانلود فایل PDF
+                      <v-icon class="donwload-icon">
+                        mdi-download
+                      </v-icon>
+                    </v-btn>
+                  </div>
+                </v-col>
+                <v-col
+                  v-if="report.exams_booklet[1]"
+                  md="6"
+                >
+                  <div class="download-box">
+                    <p class="download-title">
+                      دانلود {{ report.exams_booklet[1].title }}
+                    </p>
+                    <v-btn
+                      outlined
+                      color="--primary-2"
+                      height="75px"
+                      width="250px"
+                      :href="report.exams_booklet[1].questions_url"
+                      target="_blank"
+                    >
+                      دانلود فایل PDF
+                      <v-icon class="donwload-icon">
+                        mdi-download
+                      </v-icon>
+                    </v-btn>
+                  </div>
+                </v-col>
+              </v-row>
+            </v-card>
+          </v-tab-item>
+          <v-tab-item class="video-tab">
+            <v-tabs
+              v-if="report"
+              color="#ffc107"
+              :vertical="windowSize.x > 960"
+              center-active
+              show-arrows
+              grow
+              @change="onVideoTabChange"
+            >
+              <v-tabs-slider :color="windowSize.x > 960 ? 'transparent' : 'yellow'" />
+              <v-tab
+                v-for="(item, index) in report.sub_category"
+                :key="index"
+              >
+                {{ item.sub_category }}
+              </v-tab>
+              <v-tab-item
+                v-for="(item, index) in report.sub_category"
+                :key="item.sub_category"
+                class="pt-5"
+              >
+                <v-alert
+                  v-if="!currentVideo"
+                  dense
+                  outlined
+                  text
+                  type="info"
+                >
+                  منتشر نشده
+                </v-alert>
+                <v-alert
+                  v-if="currentVideo"
+                  class="text-center"
+                >
+                  {{ currentVideo.title }}
+                </v-alert>
+                <!--                                <p v-if="!currentVideo" class="coming-soon" :style="{ 'margin-top': '50px'}">منتشر نشده</p>-->
+                <!--                                <p v-if="currentVideo" class="video-title">{{ currentVideo.title }}</p>-->
+                <v-row v-if="currentVideo">
+                  <v-col>
+                    <v-row no-gutters>
+                      <v-col
+                        md="3"
+                        class="vjs-playlist"
+                        :style="{ height: timepointsHeights+'px'}"
+                      >
+                        <v-card
+                          class="mx-auto"
+                          tile
+                        >
+                          <v-list
+                            dense
+                            shaped
+                          >
+                            <v-subheader>زمان کوب ها</v-subheader>
+                            <v-list-item-group
+                              v-model="selectedTimepoint"
+                              color="primary"
+                            >
+                              <v-list-item
+                                v-for="(item, i) in currentVideo.timepoints"
+                                :key="i"
+                              >
+                                <v-list-item-content>
+                                  <v-list-item-title
+                                    v-text="item.title"
+                                  />
+                                </v-list-item-content>
+                              </v-list-item>
+                            </v-list-item-group>
+                          </v-list>
                         </v-card>
-                    </v-tab-item>
-                    <v-tab-item class="video-tab">
-                        <v-tabs v-if="report" color="#ffc107" :vertical="windowSize.x > 960" center-active show-arrows
-                                grow @change="onVideoTabChange">
-                            <v-tabs-slider :color="windowSize.x > 960 ? 'transparent' : 'yellow'"></v-tabs-slider>
-                            <v-tab v-for="(item, index) in report.sub_category" :key="index">
-                                {{ item.sub_category }}
-                            </v-tab>
-                            <v-tab-item v-for="(item, index) in report.sub_category" :key="item.sub_category"
-                                        class="pt-5">
-                                <v-alert
-                                        v-if="!currentVideo"
-                                        dense
-                                        outlined
-                                        text
-                                        type="info"
-                                >
-                                    منتشر نشده
-                                </v-alert>
-                                <v-alert v-if="currentVideo" class="text-center">
-                                    {{ currentVideo.title }}
-                                </v-alert>
-                                <!--                                <p v-if="!currentVideo" class="coming-soon" :style="{ 'margin-top': '50px'}">منتشر نشده</p>-->
-                                <!--                                <p v-if="currentVideo" class="video-title">{{ currentVideo.title }}</p>-->
-                                <v-row v-if="currentVideo">
-                                    <v-col>
-                                        <v-row no-gutters>
-                                            <v-col md="3" class="vjs-playlist"
-                                                   :style="{ height: timepointsHeights+'px'}">
-                                                <v-card
-                                                        class="mx-auto"
-                                                        tile
-                                                >
-                                                    <v-list dense shaped>
-                                                        <v-subheader>زمان کوب ها</v-subheader>
-                                                        <v-list-item-group
-                                                                v-model="selectedTimepoint"
-                                                                color="primary"
-                                                        >
-                                                            <v-list-item
-                                                                    v-for="(item, i) in currentVideo.timepoints"
-                                                                    :key="i"
-                                                            >
-                                                                <v-list-item-content>
-                                                                    <v-list-item-title
-                                                                            v-text="item.title"></v-list-item-title>
-                                                                </v-list-item-content>
-                                                            </v-list-item>
-                                                        </v-list-item-group>
-                                                    </v-list>
-                                                </v-card>
-                                            </v-col>
-                                            <v-col md="9">
-                                                <video :ref="'videoPlayer'+index"
-                                                       class="video-js vjs-default-skin vjs-16-9 vjs-fluid"/>
-                                            </v-col>
-                                        </v-row>
-                                    </v-col>
-                                </v-row>
-                                <v-row v-if="currentVideo">
-                                    <v-col>
-                                        <div class="d-flex flex-row justify-center" dir="ltr">
-                                            <v-btn outlined v-for="(video, index) in alaaVideos" :key="index"
-                                                   @click="getContent(video.id)" icon :style="{ margin: '0 5px' }">
-                                                {{ index + 1 }}
-                                            </v-btn>
-                                        </div>
-                                    </v-col>
-                                </v-row>
+                      </v-col>
+                      <v-col md="9">
+                        <video
+                          :ref="'videoPlayer'+index"
+                          class="video-js vjs-default-skin vjs-16-9 vjs-fluid"
+                        />
+                      </v-col>
+                    </v-row>
+                  </v-col>
+                </v-row>
+                <v-row v-if="currentVideo">
+                  <v-col>
+                    <div
+                      class="d-flex flex-row justify-center"
+                      dir="ltr"
+                    >
+                      <v-btn
+                        v-for="(video, index) in alaaVideos"
+                        :key="index"
+                        outlined
+                        icon
+                        :style="{ margin: '0 5px' }"
+                        @click="getContent(video.id)"
+                      >
+                        {{ index + 1 }}
+                      </v-btn>
+                    </div>
+                  </v-col>
+                </v-row>
 
-                                <!--                                <video v-if="currentVideo"-->
-                                <!--                                       :src="currentVideo.file.video[1].link"-->
-                                <!--                                       type="video/mp4"-->
-                                <!--                                       controls-->
-                                <!--                                       :poster="currentVideo.photo"-->
-                                <!--                                       :width="'60%'"-->
-                                <!--                                       class="video-player"-->
-                                <!--                                       :title="currentVideo.title"-->
-                                <!--                                />-->
-
-                            </v-tab-item>
-                        </v-tabs>
-                    </v-tab-item>
-                </v-tabs-items>
-            </v-col>
-        </v-row>
-    </v-container>
+                <!--                                <video v-if="currentVideo"-->
+                <!--                                       :src="currentVideo.file.video[1].link"-->
+                <!--                                       type="video/mp4"-->
+                <!--                                       controls-->
+                <!--                                       :poster="currentVideo.photo"-->
+                <!--                                       :width="'60%'"-->
+                <!--                                       class="video-player"-->
+                <!--                                       :title="currentVideo.title"-->
+                <!--                                />-->
+              </v-tab-item>
+            </v-tabs>
+          </v-tab-item>
+        </v-tabs-items>
+      </v-col>
+    </v-row>
+  </v-container>
 </template>
 
 <script>
-  import axios from 'axios'
+
   import videojs from 'video.js'
   import 'video.js/dist/video-js.css'
   import '@silvermine/videojs-quality-selector/dist/css/quality-selector.css'
@@ -217,18 +329,6 @@
 	  mixinQuiz,
 	  mixinWindowSize
 	],
-	watch: {
-	  selectedTimepoint() {
-		this.playTimePoint()
-	  },
-	  tab() {
-		if (!this.player)
-		{
-		  return
-		}
-		this.player.pause()
-	  }
-	},
 	data: () => ({
 	  tab: null,
 	  selectedTimepoint: null,
@@ -241,6 +341,18 @@
 	  report: null,
 	  player: null
 	}),
+	watch: {
+	  selectedTimepoint() {
+		this.playTimePoint()
+	  },
+	  tab() {
+		if (!this.player)
+		{
+		  return
+		}
+		this.player.pause()
+	  }
+	},
 	created() {
 	  this.getUserData()
 	  window.currentExamQuestions = null

@@ -134,7 +134,9 @@
                         <img :src="data.item.pic">
                       </v-list-item-avatar>
                       <v-list-item-content>
+                        <!-- eslint-disable vue/no-v-html -->
                         <v-list-item-title v-html="data.item.name" />
+                        <!--eslint-enable-->
                       </v-list-item-content>
                     </template>
                   </template>
@@ -205,10 +207,7 @@
           elevation="3"
           class="mr-2 ml-2 mt-2 renderedPanel"
         >
-          <v-card-text
-            v-if="item"
-            class="renderedText"
-          >
+          <v-card-text v-if="item">
             <v-card v-if="item.source_data.question">
               <v-card-text v-html="convertToMarkdownKatex(item.source_data.question)" />
             </v-card>
@@ -218,22 +217,50 @@
                   <v-list-item-group color="primary">
                     <v-list-item v-if="item.source_data.choiceDescription1">
                       <v-list-item-content>
-                        <v-list-item-title v-html="'الف)' + convertToMarkdownKatex(item.source_data.choiceDescription1)" />
+                        <v-list-item-title>
+                          <!-- eslint-disable vue/no-v-html -->
+                          <div
+                            class="renderedText"
+                            v-html="'<span>1)</span>' + convertToMarkdownKatex(item.source_data.choiceDescription1)"
+                          />
+                          <!--eslint-enable-->
+                        </v-list-item-title>
                       </v-list-item-content>
                     </v-list-item>
                     <v-list-item v-if="item.source_data.choiceDescription2">
                       <v-list-item-content>
-                        <v-list-item-title v-html="'ب)' + convertToMarkdownKatex(item.source_data.choiceDescription2)" />
+                        <v-list-item-title>
+                          <!-- eslint-disable vue/no-v-html -->
+                          <div
+                            class="renderedText"
+                            v-html="'<span>2)</span>' + convertToMarkdownKatex(item.source_data.choiceDescription2)"
+                          />
+                          <!--eslint-enable-->
+                        </v-list-item-title>
                       </v-list-item-content>
                     </v-list-item>
                     <v-list-item v-if="item.source_data.choiceDescription3">
                       <v-list-item-content>
-                        <v-list-item-title v-html="'ج)' + convertToMarkdownKatex(item.source_data.choiceDescription3)" />
+                        <v-list-item-title>
+                          <!-- eslint-disable vue/no-v-html -->
+                          <div
+                            class="renderedText"
+                            v-html="'<span>3)</span>' + convertToMarkdownKatex(item.source_data.choiceDescription3)"
+                          />
+                          <!--eslint-enable-->
+                        </v-list-item-title>
                       </v-list-item-content>
                     </v-list-item>
                     <v-list-item v-if="item.source_data.choiceDescription4">
                       <v-list-item-content>
-                        <v-list-item-title v-html="'د)' + convertToMarkdownKatex(item.source_data.choiceDescription4)" />
+                        <v-list-item-title>
+                          <!-- eslint-disable vue/no-v-html -->
+                          <div
+                            class="renderedText"
+                            v-html="'<span>4)</span>' + convertToMarkdownKatex(item.source_data.choiceDescription4)"
+                          />
+                          <!--eslint-enable-->
+                        </v-list-item-title>
                       </v-list-item-content>
                     </v-list-item>
                   </v-list-item-group>
@@ -550,7 +577,7 @@
         // let tables = doc.querySelectorAll('table')
         let tables = wrapper.querySelectorAll('table.layoutPoem')
         // let tables = this.$refs.table.querySelectorAll('table')
-        tables.forEach((item, index) => {
+        tables.forEach((item) => {
           let markdownTable = ''
           let rows = item.querySelectorAll('tr')
 

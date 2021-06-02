@@ -1,89 +1,183 @@
 <template>
-    <v-container :fluid="true" class="quiz-page" :style="{ height: '100%' }">
-        <v-row :style="{ 'min-height': '100%' }">
-            <v-col :md="12" :class="{ 'question-container': true }" :style="{ 'min-height': '100%' }">
-                <v-sheet class="d-flex align-stretch" width="100%" color="--background-2" :style="{ 'min-height': '100%' }">
-                    <v-row>
-                        <v-col :md="1" class="d-md-flex justify-center d-none">
-                            <v-btn :min-width="64" class="px-0" :height="400" @click="goToPrevQuestion" :elevation="0" v-if="getQuestionNumberFromId(currentQuestion.id) !== 1">
-                                <v-icon :size="40">mdi-chevron-right</v-icon>
-                            </v-btn>
-                        </v-col>
-                        <v-col :md="10" class="px-md-0 px-5">
-                            <v-row class="question-header">
-                                <div class="question-number">
-                                    <p v-if="currentLesson">
-                                        {{ currentLesson.title }}
-                                        -
-                                        سوال شماره
-                                        {{ getQuestionNumberFromId(currentQuestion.id) }}
-                                    </p>
-                                </div>
-                                <div class="question-buttons">
-                                    <v-btn icon @click="changeStatus(currentQuestion.id, 'o')">
-                                        <v-icon v-if="!getUserQuestionData(quiz.id, currentQuestion.id) || getUserQuestionData(quiz.id, currentQuestion.id).status !== 'o'" color="#888" size="30">mdi-checkbox-blank-circle-outline</v-icon>
-                                        <v-icon v-if="getUserQuestionData(quiz.id, currentQuestion.id) && getUserQuestionData(quiz.id, currentQuestion.id).status === 'o'" color="--primary-2" :size="30">mdi-checkbox-blank-circle</v-icon>
-                                    </v-btn>
-                                    <v-btn icon @click="changeStatus(currentQuestion.id, 'x')">
-                                        <v-icon :color="getUserQuestionData(quiz.id, currentQuestion.id) && getUserQuestionData(quiz.id, currentQuestion.id).status === 'x' ? 'red' : '#888'" :size="30">mdi-close</v-icon>
-                                    </v-btn>
-                                    <v-btn icon @click="changeBookmark(currentQuestion.id)">
-                                        <v-icon v-if="!getUserQuestionData(quiz.id, currentQuestion.id) || !getUserQuestionData(quiz.id, currentQuestion.id).bookmarked" :size="30" color="#888">mdi-bookmark-outline</v-icon>
-                                        <v-icon v-if="getUserQuestionData(quiz.id, currentQuestion.id) && getUserQuestionData(quiz.id, currentQuestion.id).bookmarked" color="--accent-1" :size="30">mdi-bookmark</v-icon>
-                                    </v-btn>
-                                </div>
-                            </v-row>
-                            <v-row class="question-body">
-                                <v-col :class="{ ltr: isLtrString(currentQuestion.rendered_statement) }">
-                                    <div v-if="currentQuestion.in_active_category || true" class="renderedPanel" :class="{ ltr: isRtl }" v-html="currentQuestion.rendered_statement"></div>
-                                    <v-sheet
-                                            v-if="!currentQuestion.in_active_category && false"
-                                            color="warning"
-                                            rounded
-                                            dark
-                                            height="400"
-                                            elevation="1"
-                                            class="d-flex align-center justify-center"
-                                    >
-                                        در حال حاضر امکان مشاهده سوالات این دفترچه امکان پذیر نمی باشد
-                                    </v-sheet>
-                                </v-col>
-                            </v-row>
-                            <v-row v-if="currentQuestion.in_active_category || true" class="question-answers">
-                                <choice v-for="item in currentQuestion.choices.list"
-                                        :key="item.id"
-                                        :question-id="currentQuestion.id"
-                                        :choice="item"
-                                        :is-rtl="isRtl"
-                                        @answerClicked="answerClicked"
-                                />
-                            </v-row>
-                        </v-col>
-                        <v-col :md="1" class="d-md-flex justify-center d-none">
-                            <v-btn :min-width="64" class="px-0" :height="400" @click="goToNextQuestion" :elevation="0" v-if="getQuestionNumberFromId(currentQuestion.id) !== getCurrentExamQuestionsInArray().length">
-                                <v-icon :size="40">mdi-chevron-left</v-icon>
-                            </v-btn>
-                        </v-col>
-                    </v-row>
-                </v-sheet>
-            </v-col>
-        </v-row>
-        <v-footer class="justify-center pl-0"
-                  color="transparent"
-                  elevation="0"
-                  padless
-                  inset
-                  app
+  <v-container
+    :fluid="true"
+    class="quiz-page"
+    :style="{ height: '100%' }"
+  >
+    <v-row :style="{ 'min-height': '100%' }">
+      <v-col
+        :md="12"
+        :class="{ 'question-container': true }"
+        :style="{ 'min-height': '100%' }"
+      >
+        <v-sheet
+          class="d-flex align-stretch"
+          width="100%"
+          color="--background-2"
+          :style="{ 'min-height': '100%' }"
         >
-            <v-container fluid class="py-0">
-                <v-row class="timer-row justify-center">
-                    <v-col :md="10" class="d-flex justify-center timer-container py-0">
-                        <Timer />
-                    </v-col>
-                </v-row>
-            </v-container>
-        </v-footer>
-    </v-container>
+          <v-row>
+            <v-col
+              :md="1"
+              class="d-md-flex justify-center d-none"
+            >
+              <v-btn
+                v-if="getQuestionNumberFromId(currentQuestion.id) !== 1"
+                :min-width="64"
+                class="px-0"
+                :height="400"
+                :elevation="0"
+                @click="goToPrevQuestion"
+              >
+                <v-icon :size="40">
+                  mdi-chevron-right
+                </v-icon>
+              </v-btn>
+            </v-col>
+            <v-col
+              :md="10"
+              class="px-md-0 px-5"
+            >
+              <v-row class="question-header">
+                <div class="question-number">
+                  <p v-if="currentLesson">
+                    {{ currentLesson.title }}
+                    -
+                    سوال شماره
+                    {{ getQuestionNumberFromId(currentQuestion.id) }}
+                  </p>
+                </div>
+                <div class="question-buttons">
+                  <v-btn
+                    icon
+                    @click="changeStatus(currentQuestion.id, 'o')"
+                  >
+                    <v-icon
+                      v-if="!getUserQuestionData(quiz.id, currentQuestion.id) || getUserQuestionData(quiz.id, currentQuestion.id).status !== 'o'"
+                      color="#888"
+                      size="30"
+                    >
+                      mdi-checkbox-blank-circle-outline
+                    </v-icon>
+                    <v-icon
+                      v-if="getUserQuestionData(quiz.id, currentQuestion.id) && getUserQuestionData(quiz.id, currentQuestion.id).status === 'o'"
+                      color="--primary-2"
+                      :size="30"
+                    >
+                      mdi-checkbox-blank-circle
+                    </v-icon>
+                  </v-btn>
+                  <v-btn
+                    icon
+                    @click="changeStatus(currentQuestion.id, 'x')"
+                  >
+                    <v-icon
+                      :color="getUserQuestionData(quiz.id, currentQuestion.id) && getUserQuestionData(quiz.id, currentQuestion.id).status === 'x' ? 'red' : '#888'"
+                      :size="30"
+                    >
+                      mdi-close
+                    </v-icon>
+                  </v-btn>
+                  <v-btn
+                    icon
+                    @click="changeBookmark(currentQuestion.id)"
+                  >
+                    <v-icon
+                      v-if="!getUserQuestionData(quiz.id, currentQuestion.id) || !getUserQuestionData(quiz.id, currentQuestion.id).bookmarked"
+                      :size="30"
+                      color="#888"
+                    >
+                      mdi-bookmark-outline
+                    </v-icon>
+                    <v-icon
+                      v-if="getUserQuestionData(quiz.id, currentQuestion.id) && getUserQuestionData(quiz.id, currentQuestion.id).bookmarked"
+                      color="--accent-1"
+                      :size="30"
+                    >
+                      mdi-bookmark
+                    </v-icon>
+                  </v-btn>
+                </div>
+              </v-row>
+              <v-row class="question-body">
+                <v-col :class="{ ltr: isLtrString(currentQuestion.rendered_statement) }">
+                  <div
+                    v-if="currentQuestion.in_active_category || true"
+                    class="renderedPanel"
+                    :class="{ ltr: isRtl }"
+                    v-html="currentQuestion.rendered_statement"
+                  />
+                  <v-sheet
+                    v-if="!currentQuestion.in_active_category && false"
+                    color="warning"
+                    rounded
+                    dark
+                    height="400"
+                    elevation="1"
+                    class="d-flex align-center justify-center"
+                  >
+                    در حال حاضر امکان مشاهده سوالات این دفترچه امکان پذیر نمی باشد
+                  </v-sheet>
+                </v-col>
+              </v-row>
+              <v-row
+                v-if="currentQuestion.in_active_category || true"
+                class="question-answers"
+              >
+                <choice
+                  v-for="item in currentQuestion.choices.list"
+                  :key="item.id"
+                  :question-id="currentQuestion.id"
+                  :choice="item"
+                  :is-rtl="isRtl"
+                  @answerClicked="answerClicked"
+                />
+              </v-row>
+            </v-col>
+            <v-col
+              :md="1"
+              class="d-md-flex justify-center d-none"
+            >
+              <v-btn
+                v-if="getQuestionNumberFromId(currentQuestion.id) !== getCurrentExamQuestionsInArray().length"
+                :min-width="64"
+                class="px-0"
+                :height="400"
+                :elevation="0"
+                @click="goToNextQuestion"
+              >
+                <v-icon :size="40">
+                  mdi-chevron-left
+                </v-icon>
+              </v-btn>
+            </v-col>
+          </v-row>
+        </v-sheet>
+      </v-col>
+    </v-row>
+    <v-footer
+      class="justify-center pl-0"
+      color="transparent"
+      elevation="0"
+      padless
+      inset
+      app
+    >
+      <v-container
+        fluid
+        class="py-0"
+      >
+        <v-row class="timer-row justify-center">
+          <v-col
+            :md="10"
+            class="d-flex justify-center timer-container py-0"
+          >
+            <Timer />
+          </v-col>
+        </v-row>
+      </v-container>
+    </v-footer>
+  </v-container>
 </template>
 
 <script>
@@ -124,6 +218,9 @@
                     that.$router.push({ name: 'user.exam.list'})
                 })
         },
+        destroyed() {
+            this.changeAppBarAndDrawer(false)
+        },
         methods: {
             changeAppBarAndDrawer (state) {
                 this.$store.commit('AppLayout/updateAppBarAndDrawer', state)
@@ -136,9 +233,6 @@
                     this.$store.commit('AppLayout/updateDrawer', true)
                 }
             }
-        },
-        destroyed() {
-            this.changeAppBarAndDrawer(false)
         }
     }
 </script>

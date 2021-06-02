@@ -1,66 +1,88 @@
 <template>
-    <v-sheet class="map-of-questions">
-        <div>
-            <div v-for="(categoryItem) in quiz.categories.list"
-             :key="'category-'+categoryItem.id">
-            <div v-if="categoryItem.is_active">
-                <v-btn :elevation="0" block class="categoryItem">
-                    {{ categoryItem.title }}
-                </v-btn>
-                <v-expansion-panels
-                    accordion
-                    flat
-                    hover
-                    dense
+  <v-sheet class="map-of-questions">
+    <div>
+      <div
+        v-for="(categoryItem) in quiz.categories.list"
+        :key="'category-'+categoryItem.id"
+      >
+        <div v-if="categoryItem.is_active">
+          <v-btn
+            :elevation="0"
+            block
+            class="categoryItem"
+          >
+            {{ categoryItem.title }}
+          </v-btn>
+          <v-expansion-panels
+            accordion
+            flat
+            hover
+            dense
+          >
+            <v-expansion-panel
+              v-for="(subcategoryItem) in categoryItem.sub_categories.list"
+              :key="'subcategory-'+subcategoryItem.id"
             >
-                <v-expansion-panel
-                        v-for="(subcategoryItem) in categoryItem.sub_categories.list"
-                        :key="'subcategory-'+subcategoryItem.id"
+              <v-expansion-panel-header>
+                {{ subcategoryItem.title }}
+              </v-expansion-panel-header>
+              <v-expansion-panel-content>
+                <div
+                  v-for="(question) in getQuestionsOfSubcategory(subcategoryItem.id)"
+                  :key="'question-'+question.id"
                 >
-                    <v-expansion-panel-header>
-                        {{ subcategoryItem.title }}
-                    </v-expansion-panel-header>
-                    <v-expansion-panel-content>
-                        <div v-for="(question) in getQuestionsOfSubcategory(subcategoryItem.id)" :key="'question-'+question.id">
-                            <v-btn :class="{ active: currentQuestion.id === question.id }"
-                                   :elevation="0"
-                                   @click="changeQuestion(question.id)"
-                                   block
-                            >
-                                تست شماره
-                                {{ getQuestionNumberFromIndex(question.index) }}
-                                <v-icon v-if="getUserQuestionData(question.id) && getUserQuestionData(question.id).status === 'x'" color="red">
-                                    mdi-close
-                                </v-icon>
-                                <v-icon v-if="getUserQuestionData(question.id) && getUserQuestionData(question.id).status === 'o'" color="yellow" size="15">
-                                    mdi-checkbox-blank-circle
-                                </v-icon>
-                                <v-icon v-if="getUserQuestionData(question.id) && getUserQuestionData(question.id).answered_choice_id" color="--success-1">
-                                    mdi-check
-                                </v-icon>
-                            </v-btn>
-                        </div>
-                    </v-expansion-panel-content>
-                </v-expansion-panel>
-            </v-expansion-panels>
-            </div>
+                  <v-btn
+                    :class="{ active: currentQuestion.id === question.id }"
+                    :elevation="0"
+                    block
+                    @click="changeQuestion(question.id)"
+                  >
+                    تست شماره
+                    {{ getQuestionNumberFromIndex(question.index) }}
+                    <v-icon
+                      v-if="getUserQuestionData(question.id) && getUserQuestionData(question.id).status === 'x'"
+                      color="red"
+                    >
+                      mdi-close
+                    </v-icon>
+                    <v-icon
+                      v-if="getUserQuestionData(question.id) && getUserQuestionData(question.id).status === 'o'"
+                      color="yellow"
+                      size="15"
+                    >
+                      mdi-checkbox-blank-circle
+                    </v-icon>
+                    <v-icon
+                      v-if="getUserQuestionData(question.id) && getUserQuestionData(question.id).answered_choice_id"
+                      color="--success-1"
+                    >
+                      mdi-check
+                    </v-icon>
+                  </v-btn>
+                </div>
+              </v-expansion-panel-content>
+            </v-expansion-panel>
+          </v-expansion-panels>
         </div>
-        </div>
-        <div>
-            <v-btn @click="getConfirmation"
-                   :color="'#4caf50'"
-                   :style="{ backgroundColor: '#4caf50 !important' }"
-                   dark
-                   block
-                   class="end-exam-btn">
-                ارسال پاسخنامه
-            </v-btn>
-            <br>
-            <br>
-            <br>
-            <br>
-        </div>
-    </v-sheet>
+      </div>
+    </div>
+    <div>
+      <v-btn
+        :color="'#4caf50'"
+        :style="{ backgroundColor: '#4caf50 !important' }"
+        dark
+        block
+        class="end-exam-btn"
+        @click="getConfirmation"
+      >
+        ارسال پاسخنامه
+      </v-btn>
+      <br>
+      <br>
+      <br>
+      <br>
+    </div>
+  </v-sheet>
 </template>
 
 <script>
@@ -73,7 +95,7 @@
     Vue.component('vue-confirm-dialog', VueConfirmDialog.default)
 
     export default {
-        name: 'SideMenu_MapOfQuestions',
+        name: 'SideMenuMapOfQuestions',
         mixins: [mixinQuiz],
         data: () => ({
             currentCat: null,

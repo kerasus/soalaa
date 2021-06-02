@@ -1,85 +1,104 @@
 <template>
-    <div
-            ref="bubbleSheet"
-            :class="{
-            'bubble-sheet': true,
-            'questions-list': true,
-            'pasokh-nameh': info.type === 'pasokh-nameh',
-            'pasokh-barg': info.type === 'pasokh-barg',
+  <div
+    ref="bubbleSheet"
+    :class="{
+      'bubble-sheet': true,
+      'questions-list': true,
+      'pasokh-nameh': info.type === 'pasokh-nameh',
+      'pasokh-barg': info.type === 'pasokh-barg',
 
-        }"
+    }"
+  >
+    <!--              v-if="quiz.id !== null"-->
 
-
+    <v-overlay
+      :absolute="true"
+      :opacity="0.9"
+      :value="overlay"
     >
+      در حال ساخت پاسخبرگ
+    </v-overlay>
 
-        <!--              v-if="quiz.id !== null"-->
-
-        <v-overlay
-                :absolute="true"
-                :opacity="0.9"
-                :value="overlay"
+    <v-col
+      v-for="(group, index) in questionsInGroups"
+      :key="index"
+      class="question-group"
+    >
+      <div
+        v-for="question in group"
+        :key="question.id"
+        class="question-in-list"
+      >
+        <div
+          :class="{
+            'question-number-in-list': true,
+            circle: getUserQuestionData(question.id) && getUserQuestionData(question.id).status === 'o',
+            cross: getUserQuestionData(question.id) && getUserQuestionData(question.id).status === 'x',
+            bookmark: getUserQuestionData(question.id) && getUserQuestionData(question.id).bookmarked
+          }"
+          :style="{ width: '24%', cursor: 'pointer' }"
+          @click="ClickQuestionNumber(question.id)"
         >
-            در حال ساخت پاسخبرگ
-        </v-overlay>
-
-        <v-col v-for="(group, index) in questionsInGroups" :key="index" class="question-group">
-            <div v-for="question in group" :key="question.id" class="question-in-list">
-                <div
-                        :class="{
-                                    'question-number-in-list': true,
-                                    circle: getUserQuestionData(question.id) && getUserQuestionData(question.id).status === 'o',
-                                    cross: getUserQuestionData(question.id) && getUserQuestionData(question.id).status === 'x',
-                                    bookmark: getUserQuestionData(question.id) && getUserQuestionData(question.id).bookmarked
-                        }"
-                        :style="{ width: '24%', cursor: 'pointer' }"
-                        @click="ClickQuestionNumber(question.id)"
-                >
-                    <v-tooltip v-if="getUserQuestionData(question.id)" bottom>
-                        <template v-slot:activator="{ on, attrs }">
-                              <span
-                                  v-bind="attrs"
-                                  v-on="on"
-                              >
-                              {{ getQuestionNumberFromId(question.id) }}
-                              </span>
-                        </template>
-                        <span>
-                            <v-icon v-if="showDateOfAnsweredAt" dark>
-                                mdi-calendar-check-outline
-                            </v-icon>
-                            <v-icon v-else dark>
-                                mdi-clock-check-outline
-                            </v-icon>
-                            {{ showAnsweredAt(getUserQuestionData(question.id).answered_at) }}
-                        </span>
-                    </v-tooltip>
-                    <span v-else>
-                        {{ getQuestionNumberFromId(question.id) }}
-                    </span>
-                </div>
-                <div
-                        v-for="choice in question.choices.list"
-                        :key="choice.id"
-                        :class="{
-                            'choice-in-list': true,
-                            active: getUserQuestionData(question.id) && choice.id === getUserQuestionData(question.id).answered_choice_id,
-                            answer: choice.answer
-                        }"
-                        @click="AnswerClicked({ questionId: question.id, choiceId: choice.id})"
-                >
-                    <v-icon v-if="info.type === 'pasokh-nameh' && choice.answer" size="12"
-                            :color="getUserQuestionData(question.id) && choice.id === getUserQuestionData(question.id).answered_choice_id ? '#fff' : '#00c753'">
-                        mdi-check
-                    </v-icon>
-                    <v-icon v-if="info.type === 'pasokh-nameh' && getUserQuestionData(question.id) && choice.id === getUserQuestionData(question.id).answered_choice_id && !choice.answer"
-                            size="12" color="#fff">
-                        mdi-close
-                    </v-icon>
-                </div>
-            </div>
-
-        </v-col>
-    </div>
+          <v-tooltip
+            v-if="getUserQuestionData(question.id)"
+            bottom
+          >
+            <template v-slot:activator="{ on, attrs }">
+              <span
+                v-bind="attrs"
+                v-on="on"
+              >
+                {{ getQuestionNumberFromId(question.id) }}
+              </span>
+            </template>
+            <span>
+              <v-icon
+                v-if="showDateOfAnsweredAt"
+                dark
+              >
+                mdi-calendar-check-outline
+              </v-icon>
+              <v-icon
+                v-else
+                dark
+              >
+                mdi-clock-check-outline
+              </v-icon>
+              {{ showAnsweredAt(getUserQuestionData(question.id).answered_at) }}
+            </span>
+          </v-tooltip>
+          <span v-else>
+            {{ getQuestionNumberFromId(question.id) }}
+          </span>
+        </div>
+        <div
+          v-for="choice in question.choices.list"
+          :key="choice.id"
+          :class="{
+            'choice-in-list': true,
+            active: getUserQuestionData(question.id) && choice.id === getUserQuestionData(question.id).answered_choice_id,
+            answer: choice.answer
+          }"
+          @click="AnswerClicked({ questionId: question.id, choiceId: choice.id})"
+        >
+          <v-icon
+            v-if="info.type === 'pasokh-nameh' && choice.answer"
+            size="12"
+            :color="getUserQuestionData(question.id) && choice.id === getUserQuestionData(question.id).answered_choice_id ? '#fff' : '#00c753'"
+          >
+            mdi-check
+          </v-icon>
+          <v-icon
+            v-if="info.type === 'pasokh-nameh' && getUserQuestionData(question.id) && choice.id === getUserQuestionData(question.id).answered_choice_id && !choice.answer"
+            size="12"
+            color="#fff"
+          >
+            mdi-close
+          </v-icon>
+        </div>
+      </div>
+    </v-col>
+  </div>
 </template>
 
 <script>
@@ -92,6 +111,28 @@
       mixinQuiz,
       mixinUserActionOnQuestion
     ],
+    props: {
+      bubbleSheetWidth: {
+        default: null
+      },
+      questions: {
+        default: null
+      },
+      info: {
+        default: null
+      },
+      exam: {
+        default: null
+      },
+      delayTime: {
+        default: 2000
+      },
+    },
+    data: () => ({
+      showDateOfAnsweredAt: false,
+      overlay: false,
+      boxSize: 600
+    }),
     computed: {
       bubbleSize() {
         return this.$store.getters['AppLayout/bubbleSize']
@@ -125,28 +166,27 @@
         return groups
       }
     },
-    props: {
-      bubbleSheetWidth: {
-        default: null
-      },
-      questions: {
-        default: null
-      },
-      info: {
-        default: null
-      },
-      exam: {
-        default: null
-      },
-      delayTime: {
-        default: 2000
-      },
+    created() {
+      if (this.delayTime === 0)
+      {
+        this.overlay = true
+      }
+      // console.log(this.questions)
+      // console.log(this.getCurrentExamQuestionsInArray())
     },
-    data: () => ({
-      showDateOfAnsweredAt: false,
-      overlay: false,
-      boxSize: 600
-    }),
+    mounted() {
+      let that = this
+      setTimeout(() => {
+        if (that.$refs.bubbleSheet)
+        {
+          that.$refs.bubbleSheet.style.height = that.questionListHeight() - 24 + 'px'
+        }
+        // $('.questions-list').height(this.questionListHeight())
+        that.overlay = false
+      }, this.delayTime)
+
+      this.checkForShowDateOfAnsweredAt()
+    },
     methods: {
       showAnsweredAt (answeredAt) {
         let formatString = 'HH:mm:ss'
@@ -227,27 +267,6 @@
       test() {
         this.$refs.bubbleSheet.style.height = this.questionListHeight() - 24 + 'px'
       }
-    },
-    created() {
-      if (this.delayTime === 0)
-      {
-        this.overlay = true
-      }
-      // console.log(this.questions)
-      // console.log(this.getCurrentExamQuestionsInArray())
-    },
-    mounted() {
-      let that = this
-      setTimeout(() => {
-        if (that.$refs.bubbleSheet)
-        {
-          that.$refs.bubbleSheet.style.height = that.questionListHeight() - 24 + 'px'
-        }
-        // $('.questions-list').height(this.questionListHeight())
-        that.overlay = false
-      }, this.delayTime)
-
-      this.checkForShowDateOfAnsweredAt()
     },
     'windowSize.x': function () {
       // this.$refs.bubbleSheet.offsetHeight()

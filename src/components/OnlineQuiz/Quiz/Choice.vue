@@ -1,12 +1,23 @@
 <template>
-    <v-col :md="6" :cols="12" class="answer-box" @click="answerClicked">
-        <v-sheet :class="{ 'answer-sheet': true, active: isSelected, ltr: isRtl }">
-            <div class="answer-text renderedPanel" v-html="choice.rendered_title"></div>
-            <div class="answer-checkbox">
-                <v-checkbox v-model="isSelected" disabled />
-            </div>
-        </v-sheet>
-    </v-col>
+  <v-col
+    :md="6"
+    :cols="12"
+    class="answer-box"
+    @click="answerClicked"
+  >
+    <v-sheet :class="{ 'answer-sheet': true, active: isSelected, ltr: isRtl }">
+      <div
+        class="answer-text renderedPanel"
+        v-html="choice.rendered_title"
+      />
+      <div class="answer-checkbox">
+        <v-checkbox
+          v-model="isSelected"
+          disabled
+        />
+      </div>
+    </v-sheet>
+  </v-col>
 </template>
 
 <script>
@@ -16,8 +27,8 @@
 
     export default {
         name: 'Choice',
-        props: ['choice', 'questionId', 'isRtl'],
         mixins: [mixinQuiz],
+        props: ['choice', 'questionId', 'isRtl'],
         computed: {
             isSelected () {
                 return this.getUserQuestionData(this.quiz.id, this.questionId) && this.choice.id === this.getUserQuestionData(this.quiz.id, this.questionId).answered_choice_id

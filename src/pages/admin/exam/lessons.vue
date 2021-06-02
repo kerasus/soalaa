@@ -1,11 +1,11 @@
 <template>
-    <lessons-list/>
+  <lessons-list />
 </template>
 
 <script>
     import LessonsList from "@/components/OnlineQuiz/Quiz/lessonsList";
     export default {
-        name: "lessons",
+        name: "Lessons",
         components: {LessonsList}
     }
 </script>
