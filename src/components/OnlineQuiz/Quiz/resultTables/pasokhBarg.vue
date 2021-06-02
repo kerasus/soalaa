@@ -1,102 +1,133 @@
 <template>
-    <v-container class="konkoor-view" :fluid="true" :style="{ height: '100%', background: 'rgb(244, 244, 244)' }" v-resize="updateWindowSize">
-        <v-row :style="{ 'min-height': '100%' }">
-            <v-col :md="5" class="questions" :style="{ height: windowSize.y }" v-if="!isMobile">
-                <div class="lesson">{{ currentLesson.title }}</div>
-                <virtual-list style="overflow-y: auto;"
-                              :data-key="'id'"
-                              :data-sources="quiz.questions.list"
-                              :data-component="item"
-                              ref="scroller"
-                              @scroll="onScroll"
-                              class="questionss"
-                />
-            </v-col>
-            <v-col :md="7" class="left-side-list">
-                <v-row>
-                    <v-col class="px-10 py-0 d-flex justify-space-between" dir="ltr">
-                        <div class="rounded-b-xl rounded-r-xl">
-                            <v-menu bottom>
-                                <template v-slot:activator="{ on, attrs }">
-                                    <v-btn
-                                            large
-                                            tile
-                                            v-bind="attrs"
-                                            v-on="on"
-                                            elevation="0"
-                                    >
-                                        <v-icon class="mr-2" :size="30" color="#666">mdi-account-circle</v-icon>
-                                        <span v-if="user.first_name || user.last_name">
-                                            {{ user.first_name + ' ' + user.last_name }}
-                                        </span>
-                                    </v-btn>
-                                </template>
-                                <v-card
-                                        max-width="375"
-                                        class="mx-auto"
-                                        rounded="b-xl r-xl"
-                                >
-                                    <v-img
-                                            style="background-color: #e8e8e8;"
-                                            src="/img/account-circle.svg"
-                                            width="300px"
-                                            height="300px"
-                                            dark
-                                    >
-                                        <v-row class="fill-height">
-                                            <v-card-title v-if="false">
-                                                <v-btn
-                                                        dark
-                                                        icon
-                                                        :to="{ name: 'dashboard'}"
-                                                >
-                                                    <v-icon>mdi-chevron-left</v-icon>
-                                                </v-btn>
-
-                                                <v-spacer></v-spacer>
-
-                                                <v-btn
-                                                        dark
-                                                        icon
-                                                        class="mr-4"
-                                                >
-                                                    <v-icon>mdi-pencil</v-icon>
-                                                </v-btn>
-
-                                                <v-btn
-                                                        dark
-                                                        icon
-                                                >
-                                                    <v-icon>mdi-dots-vertical</v-icon>
-                                                </v-btn>
-                                            </v-card-title>
-                                            <v-spacer></v-spacer>
-                                        </v-row>
-                                    </v-img>
-                                    <v-btn
-                                            style="width: 100%;background: #5cbf60;color: white;letter-spacing: inherit;"
-                                            large
-                                            tile
-                                            elevation="0"
-                                    >
-                                        ارسال پاسخنامه
-                                    </v-btn>
-                                </v-card>
-                            </v-menu>
-                        </div>
-                        <v-btn icon @click="changeView('alaa')">
-                            <v-icon>mdi-table-split-cell</v-icon>
+  <v-container
+    v-resize="updateWindowSize"
+    class="konkoor-view"
+    :fluid="true"
+    :style="{ height: '100%', background: 'rgb(244, 244, 244)' }"
+  >
+    <v-row :style="{ 'min-height': '100%' }">
+      <v-col
+        v-if="!isMobile"
+        :md="5"
+        class="questions"
+        :style="{ height: windowSize.y }"
+      >
+        <div class="lesson">
+          {{ currentLesson.title }}
+        </div>
+        <virtual-list
+          ref="scroller"
+          style="overflow-y: auto;"
+          :data-key="'id'"
+          :data-sources="quiz.questions.list"
+          :data-component="item"
+          class="questionss"
+          @scroll="onScroll"
+        />
+      </v-col>
+      <v-col
+        :md="7"
+        class="left-side-list"
+      >
+        <v-row>
+          <v-col
+            class="px-10 py-0 d-flex justify-space-between"
+            dir="ltr"
+          >
+            <div class="rounded-b-xl rounded-r-xl">
+              <v-menu bottom>
+                <template v-slot:activator="{ on, attrs }">
+                  <v-btn
+                    large
+                    tile
+                    v-bind="attrs"
+                    elevation="0"
+                    v-on="on"
+                  >
+                    <v-icon
+                      class="mr-2"
+                      :size="30"
+                      color="#666"
+                    >
+                      mdi-account-circle
+                    </v-icon>
+                    <span v-if="user.first_name || user.last_name">
+                      {{ user.first_name + ' ' + user.last_name }}
+                    </span>
+                  </v-btn>
+                </template>
+                <v-card
+                  max-width="375"
+                  class="mx-auto"
+                  rounded="b-xl r-xl"
+                >
+                  <v-img
+                    style="background-color: #e8e8e8;"
+                    src="/img/account-circle.svg"
+                    width="300px"
+                    height="300px"
+                    dark
+                  >
+                    <v-row class="fill-height">
+                      <v-card-title v-if="false">
+                        <v-btn
+                          dark
+                          icon
+                          :to="{ name: 'dashboard'}"
+                        >
+                          <v-icon>mdi-chevron-left</v-icon>
                         </v-btn>
-                    </v-col>
-                </v-row>
-                <v-row>
-                    <v-col>
-                        <BubbleSheet :info="{ type: 'pasokh-nameh' }" @scrollTo="scrollTo"/>
-                    </v-col>
-                </v-row>
-            </v-col>
+
+                        <v-spacer />
+
+                        <v-btn
+                          dark
+                          icon
+                          class="mr-4"
+                        >
+                          <v-icon>mdi-pencil</v-icon>
+                        </v-btn>
+
+                        <v-btn
+                          dark
+                          icon
+                        >
+                          <v-icon>mdi-dots-vertical</v-icon>
+                        </v-btn>
+                      </v-card-title>
+                      <v-spacer />
+                    </v-row>
+                  </v-img>
+                  <v-btn
+                    style="width: 100%;background: #5cbf60;color: white;letter-spacing: inherit;"
+                    large
+                    tile
+                    elevation="0"
+                  >
+                    ارسال پاسخنامه
+                  </v-btn>
+                </v-card>
+              </v-menu>
+            </div>
+            <v-btn
+              icon
+              @click="changeView('alaa')"
+            >
+              <v-icon>mdi-table-split-cell</v-icon>
+            </v-btn>
+          </v-col>
         </v-row>
-    </v-container>
+        <v-row>
+          <v-col>
+            <BubbleSheet
+              :info="{ type: 'pasokh-nameh' }"
+              @scrollTo="scrollTo"
+            />
+          </v-col>
+        </v-row>
+      </v-col>
+    </v-row>
+  </v-container>
 </template>
 
 <script>
@@ -112,12 +143,12 @@
     Vue.component('DynamicScrollerItem', DynamicScrollerItem)
 
     export default {
-        name: 'pasokhbarg-user',
-        mixins: [mixinAuth, mixinQuiz, mixinWindowSize],
+        name: 'PasokhbargUser',
         components: {
             'virtual-list': VirtualList,
             BubbleSheet
         },
+        mixins: [mixinAuth, mixinQuiz, mixinWindowSize],
         data () {
             return {
                 quizData: null,
@@ -125,6 +156,43 @@
                 lastTimeScrollRange: { start: 0, end: 29 },
                 isMobile: false
             }
+        },
+        watch: {
+            'windowSize.y': function () {
+                $('.questions').height(this.windowSize.y)
+                $('.questionss').height(this.windowSize.y - 50)
+                $('.left-side-list').height(this.windowSize.y - 24)
+            },
+            'windowSize.x': function () {
+                // const padding = this.questionListPadding()
+                // $('.questions-list').css({ 'padding-right': padding })
+                // $('.questions-list').css({ 'padding-left': padding })
+                $('.questions-list').height(this.questionListHeight())
+                this.$store.commit('AppLayout/updateDrawer', false)
+            }
+        },
+        mounted () {
+            $('.questions').height(this.windowSize.y)
+            $('.questionss').height(this.windowSize.y - 50)
+            $('.left-side-list').height(this.windowSize.y - 24)
+            if (this.currentQuestion.id === null) {
+                this.loadFirstQuestion()
+            }
+        },
+        created () {
+            if (this.windowSize.x > 959) {
+                this.changeAppBarAndDrawer(false)
+                if (!this.quiz.id) {
+                    this.loadQuiz()
+                } else {
+                    this.loadUserQuizDataFromStorage()
+                }
+            } else {
+                this.isMobile = true
+            }
+        },
+        destroyed() {
+            this.changeAppBarAndDrawer(true)
         },
         methods: {
             changeAppBarAndDrawer (state) {
@@ -171,43 +239,6 @@
                 if (question.id !== this.currentQuestion.id) {
                     this.currentQuestion = question
                 }
-            }
-        },
-        mounted () {
-            $('.questions').height(this.windowSize.y)
-            $('.questionss').height(this.windowSize.y - 50)
-            $('.left-side-list').height(this.windowSize.y - 24)
-            if (this.currentQuestion.id === null) {
-                this.loadFirstQuestion()
-            }
-        },
-        created () {
-            if (this.windowSize.x > 959) {
-                this.changeAppBarAndDrawer(false)
-                if (!this.quiz.id) {
-                    this.loadQuiz()
-                } else {
-                    this.loadUserQuizDataFromStorage()
-                }
-            } else {
-                this.isMobile = true
-            }
-        },
-        destroyed() {
-            this.changeAppBarAndDrawer(true)
-        },
-        watch: {
-            'windowSize.y': function () {
-                $('.questions').height(this.windowSize.y)
-                $('.questionss').height(this.windowSize.y - 50)
-                $('.left-side-list').height(this.windowSize.y - 24)
-            },
-            'windowSize.x': function () {
-                // const padding = this.questionListPadding()
-                // $('.questions-list').css({ 'padding-right': padding })
-                // $('.questions-list').css({ 'padding-left': padding })
-                $('.questions-list').height(this.questionListHeight())
-                this.$store.commit('AppLayout/updateDrawer', false)
             }
         }
     }

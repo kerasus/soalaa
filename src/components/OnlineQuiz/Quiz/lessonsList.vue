@@ -1,62 +1,62 @@
 <template>
-    <v-row>
-        <v-col cols="12 ">
-            <div class="tableSize">
+  <v-row>
+    <v-col cols="12 ">
+      <div class="tableSize">
+        <v-btn
+          class="mx-2 backBtnPosition"
+          fab
+          x-small
+          color="white"
+          @click="goBack"
+        >
+          <v-icon dark>
+            mdi-chevron-left
+          </v-icon>
+        </v-btn>
+      </div>
+    </v-col>
+    <v-col cols="12">
+      <v-simple-table class="tableSize">
+        <template v-slot:default>
+          <thead>
+            <tr>
+              <th class="text-right">
+                عنوان
+              </th>
+              <th class="text-right">
+                عملیات
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr
+              v-for="item in lessonsList.list"
+              :key="item.id"
+            >
+              <td>{{ item.title }}</td>
+              <td class="actionsColumn">
                 <v-btn
-                        class="mx-2 backBtnPosition"
-                        fab
-                        x-small
-                        color="white"
-                        @click="goBack"
+                  v-if="item.permissions.view"
+                  class="mx-2"
+                  fab
+                  dark
+                  x-small
+                  color="green"
+                  :to="{ name: 'onlineQuiz.exams.lessons.details', params: { quizId: $route.params.quizId, lessonId: item.id}}"
                 >
-                    <v-icon dark>
-                        mdi-chevron-left
-                    </v-icon>
+                  <v-icon
+                    small
+                  >
+                    mdi-notebook-outline
+                  </v-icon>
                 </v-btn>
-            </div>
-        </v-col>
-        <v-col cols="12">
-            <v-simple-table class="tableSize">
-                <template v-slot:default>
-                    <thead>
-                    <tr>
-                        <th class="text-right">
-                            عنوان
-                        </th>
-                        <th class="text-right">
-                            عملیات
-                        </th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr
-                            v-for="item in lessonsList.list"
-                            :key="item.id"
-                    >
-                        <td>{{ item.title }}</td>
-                        <td class="actionsColumn">
-                            <v-btn
-                                    v-if="item.permissions.view"
-                                    class="mx-2"
-                                    fab
-                                    dark
-                                    x-small
-                                    color="green"
-                                    :to="{ name: 'onlineQuiz.exams.lessons.details', params: { quizId: $route.params.quizId, lessonId: item.id}}"
-                            >
-                                <v-icon
-                                        small
-                                >
-                                    mdi-notebook-outline
-                                </v-icon>
-                            </v-btn>
-                        </td>
-                    </tr>
-                    </tbody>
-                </template>
-            </v-simple-table>
-        </v-col>
-    </v-row>
+              </td>
+            </tr>
+          </tbody>
+        </template>
+      </v-simple-table>
+    </v-col>
+  </v-row>
 </template>
 
 <script>
@@ -65,7 +65,7 @@
     import {QuestSubcategoryList} from "@/models/QuestSubcategory";
 
     export default {
-        name: 'lessonsList',
+        name: 'LessonsList',
         data: () => ({
             lessonsList: new QuestSubcategoryList()
         }),

@@ -1,14 +1,14 @@
 <template>
-    <node-view-wrapper class="vue-component">
-        <span class="label">Vue Component</span>
+  <node-view-wrapper class="vue-component">
+    <span class="label">Vue Component</span>
 
-        <div class="content">
-            <div v-html="katex" />
-            <button @click="increase">
-                This button has been clicked {{ node.attrs.count }} times.
-            </button>
-        </div>
-    </node-view-wrapper>
+    <div class="content">
+      <div v-html="katex" />
+      <button @click="increase">
+        This button has been clicked {{ node.attrs.count }} times.
+      </button>
+    </div>
+  </node-view-wrapper>
 </template>
 
 <script>

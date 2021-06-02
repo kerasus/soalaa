@@ -1,27 +1,47 @@
 <template>
-    <div :class="{ question: true, ltr: source.ltr }">
-        <div class="buttons-group">
-            <v-btn icon @click="bookmark(source)">
-                <v-icon v-if="!source.bookmarked" :size="24" color="#888">mdi-bookmark-outline</v-icon>
-                <v-icon v-if="source.bookmarked" color="blue" :size="24">mdi-bookmark</v-icon>
-            </v-btn>
-        </div>
-        <span class="question-body renderedPanel" :id="'question' + source.id" v-html="(getQuestionNumberFromId(source.id)) + '- ' + source.rendered_statement" v-intersect="{
-            handler: onIntersect,
-            options: {
-              threshold: [0, 0.2, 0.4, 0.6, 0.8, 1.0]
-            }
-          }" />
-        <v-row class="choices">
-            <v-col
-                    v-for="(choice, index) in source.choices.list"
-                    :key="choice.id"
-                    v-html="(choiceNumber[index]) + choice.rendered_title"
-                    :md="choiceClass(source)"
-                    :class="{ choice: true, renderedPanel: true, active: choice.active, answer: choice.answer }"
-            />
-        </v-row>
+  <div :class="{ question: true, ltr: source.ltr }">
+    <div class="buttons-group">
+      <v-btn
+        icon
+        @click="bookmark(source)"
+      >
+        <v-icon
+          v-if="!source.bookmarked"
+          :size="24"
+          color="#888"
+        >
+          mdi-bookmark-outline
+        </v-icon>
+        <v-icon
+          v-if="source.bookmarked"
+          color="blue"
+          :size="24"
+        >
+          mdi-bookmark
+        </v-icon>
+      </v-btn>
     </div>
+    <span
+      :id="'question' + source.id"
+      v-intersect="{
+        handler: onIntersect,
+        options: {
+          threshold: [0, 0.2, 0.4, 0.6, 0.8, 1.0]
+        }
+      }"
+      class="question-body renderedPanel"
+      v-html="(getQuestionNumberFromId(source.id)) + '- ' + source.rendered_statement"
+    />
+    <v-row class="choices">
+      <v-col
+        v-for="(choice, index) in source.choices.list"
+        :key="choice.id"
+        :md="choiceClass(source)"
+        :class="{ choice: true, renderedPanel: true, active: choice.active, answer: choice.answer }"
+        v-html="(choiceNumber[index]) + choice.rendered_title"
+      />
+    </v-row>
+  </div>
 </template>
 
 <script>
@@ -30,18 +50,8 @@
     import $ from "jquery";
 
     export default {
-        name: 'item',
+        name: 'Item',
         mixins: [ mixinQuiz, mixinWindowSize ],
-        data () {
-            return {
-                choiceNumber: {
-                    0: '1) ',
-                    1: '2) ',
-                    2: '3) ',
-                    3: '4) '
-                }
-            }
-        },
         props: {
             index: { // index of current source
                 type: Number
@@ -49,6 +59,16 @@
             source: { // here is: {uid: 'unique_1', text: 'abc'}
                 default () {
                     return {}
+                }
+            }
+        },
+        data () {
+            return {
+                choiceNumber: {
+                    0: '1) ',
+                    1: '2) ',
+                    2: '3) ',
+                    3: '4) '
                 }
             }
         },

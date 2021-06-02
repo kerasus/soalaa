@@ -1,43 +1,43 @@
 <template>
-    <div>
-        <v-card
-                class="mx-auto"
-                min-width="100%"
-                tile
-        >
-            <v-btn
-                    :loading="true"
-                    :disabled="true"
-            >
-                Block Button
-            </v-btn>
+  <div>
+    <v-card
+      class="mx-auto"
+      min-width="100%"
+      tile
+    >
+      <v-btn
+        :loading="true"
+        :disabled="true"
+      >
+        Block Button
+      </v-btn>
 
-            <v-list rounded>
-                <v-subheader>REPORTS</v-subheader>
-                <v-list-item-group
-                        v-model="selectedItem"
-                        color="primary"
-                >
-                    <v-list-item
-                            v-for="(item, i) in items"
-                            :key="i"
-                    >
-                        <v-list-item-icon>
-                            <v-icon v-text="item.icon"></v-icon>
-                        </v-list-item-icon>
-                        <v-list-item-content>
-                            <v-list-item-title v-text="item.text"></v-list-item-title>
-                        </v-list-item-content>
-                    </v-list-item>
-                </v-list-item-group>
-            </v-list>
-        </v-card>
-    </div>
+      <v-list rounded>
+        <v-subheader>REPORTS</v-subheader>
+        <v-list-item-group
+          v-model="selectedItem"
+          color="primary"
+        >
+          <v-list-item
+            v-for="(item, i) in items"
+            :key="i"
+          >
+            <v-list-item-icon>
+              <v-icon v-text="item.icon" />
+            </v-list-item-icon>
+            <v-list-item-content>
+              <v-list-item-title v-text="item.text" />
+            </v-list-item-content>
+          </v-list-item>
+        </v-list-item-group>
+      </v-list>
+    </v-card>
+  </div>
 </template>
 
 <script>
     export default {
-        name: "dashboard",
+        name: "Dashboard",
         data: () => ({
             selectedItem: 1,
             items: [

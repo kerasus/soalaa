@@ -1,111 +1,147 @@
 <template>
-    <v-list
-            nav
-            class="menu"
+  <v-list
+    nav
+    class="menu"
+  >
+    <v-list-item-group
+      v-model="userGroup"
+      active-class="deep-purple--text text--accent-4"
+      @change="adminGroup = null"
     >
-        <v-list-item-group
-                v-model="userGroup"
-                active-class="deep-purple--text text--accent-4"
-                @change="adminGroup = null"
-        >
-            <router-link class="text-decoration-none" :to="{ name: 'dashboard' }" v-if="false">
-                <v-list-item>
-                    <v-list-item-icon>
-                        <v-icon color="#fff">mdi-view-dashboard</v-icon>
-                    </v-list-item-icon>
-                    <v-list-item-title>داشبورد</v-list-item-title>
-                </v-list-item>
-            </router-link>
-            <router-link class="text-decoration-none" :to="{ name: 'onlineQuiz.result.lessonDetails' }" v-if="false">
-                <v-list-item>
-                    <v-list-item-title>شرکت در آزمون</v-list-item-title>
-                </v-list-item>
-            </router-link>
+      <router-link
+        v-if="false"
+        class="text-decoration-none"
+        :to="{ name: 'dashboard' }"
+      >
+        <v-list-item>
+          <v-list-item-icon>
+            <v-icon color="#fff">
+              mdi-view-dashboard
+            </v-icon>
+          </v-list-item-icon>
+          <v-list-item-title>داشبورد</v-list-item-title>
+        </v-list-item>
+      </router-link>
+      <router-link
+        v-if="false"
+        class="text-decoration-none"
+        :to="{ name: 'onlineQuiz.result.lessonDetails' }"
+      >
+        <v-list-item>
+          <v-list-item-title>شرکت در آزمون</v-list-item-title>
+        </v-list-item>
+      </router-link>
 
-            <router-link
-                    v-for="item in userList"
-                    :key="item.displayName"
-                    class="text-decoration-none"
-                    :class="{'router-link-active': $route.name === item.to.name}"
-                    :to="item.to">
-                <v-list-item
-                        :class="{ 'v-list-item--active': $route.name === item.to.name, 'v-list-item--link': $route.name === item.to.name, 'deep-purple--text': $route.name === item.to.name }">
-                    <v-list-item-title>{{ item.displayName }}</v-list-item-title>
-                </v-list-item>
-            </router-link>
+      <router-link
+        v-for="item in userList"
+        :key="item.displayName"
+        class="text-decoration-none"
+        :class="{'router-link-active': $route.name === item.to.name}"
+        :to="item.to"
+      >
+        <v-list-item
+          :class="{ 'v-list-item--active': $route.name === item.to.name, 'v-list-item--link': $route.name === item.to.name, 'deep-purple--text': $route.name === item.to.name }"
+        >
+          <v-list-item-title>{{ item.displayName }}</v-list-item-title>
+        </v-list-item>
+      </router-link>
 
-            <router-link class="text-decoration-none" :to="{ name: 'quest.create' }" v-if="false">
-                <v-list-item>
-                    <v-list-item-title>اطلاعیه و اصلاحیه</v-list-item-title>
-                </v-list-item>
-            </router-link>
-            <router-link class="text-decoration-none" :to="{ name: 'onlineQuiz.result' }" v-if="false">
-                <v-list-item>
-                    <v-list-item-title>کارنامه</v-list-item-title>
-                </v-list-item>
-            </router-link>
-            <router-link class="text-decoration-none" :to="{ name: 'onlineQuiz.result.lessonDetails' }" v-if="false">
-                <v-list-item>
-                    <v-list-item-title>ریزدرس ها</v-list-item-title>
-                </v-list-item>
-            </router-link>
-            <router-link class="text-decoration-none" :to="{ name: 'onlineQuiz.result.topScore' }" v-if="false">
-                <v-list-item>
-                    <v-list-item-title>نتایج نفرات برتر</v-list-item-title>
-                </v-list-item>
-            </router-link>
-            <router-link class="text-decoration-none" :to="{ name: 'onlineQuiz.result.pasokhbarg' }" v-if="false">
-                <v-list-item>
-                    <v-list-item-title>پاسخ برگ</v-list-item-title>
-                </v-list-item>
-            </router-link>
-        </v-list-item-group>
-        <v-list-item-group
-                v-if="user.has_admin_permission"
-                class="admin-panel"
-                active-class="deep-purple--text text--accent-4"
-                v-model="adminGroup"
-                @change="userGroup = null"
+      <router-link
+        v-if="false"
+        class="text-decoration-none"
+        :to="{ name: 'quest.create' }"
+      >
+        <v-list-item>
+          <v-list-item-title>اطلاعیه و اصلاحیه</v-list-item-title>
+        </v-list-item>
+      </router-link>
+      <router-link
+        v-if="false"
+        class="text-decoration-none"
+        :to="{ name: 'onlineQuiz.result' }"
+      >
+        <v-list-item>
+          <v-list-item-title>کارنامه</v-list-item-title>
+        </v-list-item>
+      </router-link>
+      <router-link
+        v-if="false"
+        class="text-decoration-none"
+        :to="{ name: 'onlineQuiz.result.lessonDetails' }"
+      >
+        <v-list-item>
+          <v-list-item-title>ریزدرس ها</v-list-item-title>
+        </v-list-item>
+      </router-link>
+      <router-link
+        v-if="false"
+        class="text-decoration-none"
+        :to="{ name: 'onlineQuiz.result.topScore' }"
+      >
+        <v-list-item>
+          <v-list-item-title>نتایج نفرات برتر</v-list-item-title>
+        </v-list-item>
+      </router-link>
+      <router-link
+        v-if="false"
+        class="text-decoration-none"
+        :to="{ name: 'onlineQuiz.result.pasokhbarg' }"
+      >
+        <v-list-item>
+          <v-list-item-title>پاسخ برگ</v-list-item-title>
+        </v-list-item>
+      </router-link>
+    </v-list-item-group>
+    <v-list-item-group
+      v-if="user.has_admin_permission"
+      v-model="adminGroup"
+      class="admin-panel"
+      active-class="deep-purple--text text--accent-4"
+      @change="userGroup = null"
+    >
+      <router-link
+        v-for="item in adminList"
+        :key="item.displayName"
+        class="text-decoration-none"
+        :class="{'router-link-active': $route.name === item.to.name}"
+        :to="item.to"
+      >
+        <v-list-item
+          :class="{ 'v-list-item--active': $route.name === item.to.name, 'v-list-item--link': $route.name === item.to.name, 'deep-purple--text': $route.name === item.to.name }"
         >
-            <router-link
-                    v-for="item in adminList"
-                    :key="item.displayName"
-                    class="text-decoration-none"
-                    :class="{'router-link-active': $route.name === item.to.name}"
-                    :to="item.to">
-                <v-list-item
-                        :class="{ 'v-list-item--active': $route.name === item.to.name, 'v-list-item--link': $route.name === item.to.name, 'deep-purple--text': $route.name === item.to.name }">
-                    <v-list-item-title>{{ item.displayName }}</v-list-item-title>
-                </v-list-item>
-            </router-link>
-        </v-list-item-group>
-        <v-list-item-group
-                v-if="user.has_educational_permission && !user.has_admin_permission"
-                class="admin-panel"
-                active-class="deep-purple--text text--accent-4"
-                v-model="adminGroup"
-                @change="userGroup = null"
+          <v-list-item-title>{{ item.displayName }}</v-list-item-title>
+        </v-list-item>
+      </router-link>
+    </v-list-item-group>
+    <v-list-item-group
+      v-if="user.has_educational_permission && !user.has_admin_permission"
+      v-model="adminGroup"
+      class="admin-panel"
+      active-class="deep-purple--text text--accent-4"
+      @change="userGroup = null"
+    >
+      <router-link
+        v-for="item in educationList"
+        :key="item.displayName"
+        class="text-decoration-none"
+        :class="{'router-link-active': $route.name === item.to.name}"
+        :to="item.to"
+      >
+        <v-list-item
+          :class="{ 'v-list-item--active': $route.name === item.to.name, 'v-list-item--link': $route.name === item.to.name, 'deep-purple--text': $route.name === item.to.name }"
         >
-            <router-link
-                    v-for="item in educationList"
-                    :key="item.displayName"
-                    class="text-decoration-none"
-                    :class="{'router-link-active': $route.name === item.to.name}"
-                    :to="item.to">
-                <v-list-item
-                        :class="{ 'v-list-item--active': $route.name === item.to.name, 'v-list-item--link': $route.name === item.to.name, 'deep-purple--text': $route.name === item.to.name }">
-                    <v-list-item-title>{{ item.displayName }}</v-list-item-title>
-                </v-list-item>
-            </router-link>
-        </v-list-item-group>
-    </v-list>
+          <v-list-item-title>{{ item.displayName }}</v-list-item-title>
+        </v-list-item>
+      </router-link>
+    </v-list-item-group>
+  </v-list>
 </template>
 
 <script>
   import {mixinAuth} from '@/mixin/Mixins'
 
   export default {
-    name: "SideMenu_Dashboard",
+    name: "SideMenuDashboard",
     mixins: [mixinAuth],
     data: () => ({
       userGroup: null,

@@ -1,70 +1,129 @@
 <template>
-    <v-container class="konkoor-view" :fluid="true" :style="{ height: '100%', background: 'rgb(244,244,244)' }"
-                 v-resize="updateWindowSize">
-        <v-row :style="{ 'min-height': '100%' }">
-            <v-col :md="5" class="questions" ref="questionsColumn" id="questions" :style="{ height: windowSize.y }">
-                <!--                <div class="lesson">{{ currentLesson.title }}</div>-->
-                <DynamicScroller
-                        :items="questions"
-                        :min-item-size="70"
-                        class="scroller questionss"
-                        ref="scroller"
-                        :emitUpdate="true"
-                        @update="onScroll"
+  <v-container
+    v-resize="updateWindowSize"
+    class="konkoor-view"
+    :fluid="true"
+    :style="{ height: '100%', background: 'rgb(244,244,244)' }"
+  >
+    <v-row :style="{ 'min-height': '100%' }">
+      <v-col
+        id="questions"
+        ref="questionsColumn"
+        :md="5"
+        class="questions"
+        :style="{ height: windowSize.y }"
+      >
+        <!--                <div class="lesson">{{ currentLesson.title }}</div>-->
+        <DynamicScroller
+          ref="scroller"
+          :items="questions"
+          :min-item-size="70"
+          class="scroller questionss"
+          :emit-update="true"
+          @update="onScroll"
+        >
+          <template v-slot="{ item, index, active }">
+            <DynamicScrollerItem
+              :item="item"
+              :active="active"
+              :data-index="index"
+            >
+              <Item
+                :source="item"
+                :questions-column="$refs.questionsColumn"
+                @inView="test"
+              />
+            </DynamicScrollerItem>
+          </template>
+        </DynamicScroller>
+      </v-col>
+      <v-col
+        ref="leftSideList"
+        :md="7"
+        class="left-side-list"
+      >
+        <v-row>
+          <v-col
+            class="px-10 py-0 d-flex justify-space-between"
+            dir="ltr"
+          >
+            <div class="rounded-b-xl rounded-r-xl">
+              <v-menu
+                bottom
+                :offset-y="true"
+                class="rounded-b-xl rounded-r-xl"
+              >
+                <template v-slot:activator="{ on, attrs }">
+                  <v-btn
+                    large
+                    tile
+                    v-bind="attrs"
+                    elevation="0"
+                    class="pl-3"
+                    v-on="on"
+                  >
+                    <v-icon
+                      class="mr-2"
+                      :size="30"
+                      color="#666"
+                    >
+                      mdi-account-circle
+                    </v-icon>
+                    <span v-if="user.last_name">
+                      {{ user.last_name }}
+                    </span>
+                    <span v-if="user.first_name">
+                      {{ user.first_name }}
+                    </span>
+                  </v-btn>
+                </template>
+                <v-card
+                  max-width="375"
+                  class="mx-auto"
+                  rounded="b-xl r-xl"
                 >
-                    <template v-slot="{ item, index, active }">
-                        <DynamicScrollerItem
-                                :item="item"
-                                :active="active"
-                                :data-index="index"
-                        >
-                            <Item :source="item" :questions-column="$refs.questionsColumn" @inView="test"/>
-                        </DynamicScrollerItem>
-                    </template>
-                </DynamicScroller>
-            </v-col>
-            <v-col :md="7" class="left-side-list" ref="leftSideList">
-                <v-row>
-                    <v-col class="px-10 py-0 d-flex justify-space-between" dir="ltr">
-                        <div class="rounded-b-xl rounded-r-xl">
-                            <v-menu bottom :offset-y="true" class="rounded-b-xl rounded-r-xl">
-                                <template v-slot:activator="{ on, attrs }">
-                                    <v-btn large tile v-bind="attrs" v-on="on" elevation="0" class="pl-3">
-                                        <v-icon class="mr-2" :size="30" color="#666">mdi-account-circle</v-icon>
-                                        <span v-if="user.last_name">
-                                            {{ user.last_name }}
-                                        </span>
-                                        <span v-if="user.first_name">
-                                            {{ user.first_name }}
-                                        </span>
-                                    </v-btn>
-                                </template>
-                                <v-card max-width="375" class="mx-auto" rounded="b-xl r-xl">
-                                    <TopMenu_OnlineQuiz/>
-                                </v-card>
-                            </v-menu>
-                        </div>
-                        <v-btn icon @click="changeView('alaa')">
-                            <v-icon>mdi-table-split-cell</v-icon>
-                        </v-btn>
-                    </v-col>
-                </v-row>
-                <v-row>
-                    <v-col>
-                        <BubbleSheet :info="{ type: 'pasokh-barg' }" @clickChoice="choiceClicked" @scrollTo="scrollTo"
-                                     :delay-time="0"/>
-                    </v-col>
-                </v-row>
-            </v-col>
+                  <TopMenu_OnlineQuiz />
+                </v-card>
+              </v-menu>
+            </div>
+            <v-btn
+              icon
+              @click="changeView('alaa')"
+            >
+              <v-icon>mdi-table-split-cell</v-icon>
+            </v-btn>
+          </v-col>
         </v-row>
-        <v-row class="timer-row">
-            <v-btn class="end-exam-btn" @click="getConfirmation">ارسال پاسخنامه</v-btn>
-            <v-col :class="{ 'high-z-index': timerIsOpen }">
-                <Timer @timerOpen="timerOpen" :daftarche="'عمومی'" :quiz-started-at="1607963897"
-                       :daftarche-end-time="1607999897" :height="100"></Timer>
-            </v-col>
+        <v-row>
+          <v-col>
+            <BubbleSheet
+              :info="{ type: 'pasokh-barg' }"
+              :delay-time="0"
+              @clickChoice="choiceClicked"
+              @scrollTo="scrollTo"
+            />
+          </v-col>
         </v-row>
-    </v-container>
+      </v-col>
+    </v-row>
+    <v-row class="timer-row">
+      <v-btn
+        class="end-exam-btn"
+        @click="getConfirmation"
+      >
+        ارسال پاسخنامه
+      </v-btn>
+      <v-col :class="{ 'high-z-index': timerIsOpen }">
+        <Timer
+          :daftarche="'عمومی'"
+          :quiz-started-at="1607963897"
+          :daftarche-end-time="1607999897"
+          :height="100"
+          @timerOpen="timerOpen"
+        />
+      </v-col>
+    </v-row>
+  </v-container>
 </template>
 <script>
     import '@/assets/scss/markdownKatex.scss'
@@ -85,7 +144,6 @@
 
     export default {
         name: 'KonkoorView',
-        mixins: [mixinAuth, mixinQuiz, mixinUserActionOnQuestion, mixinWindowSize],
         components: {
             Timer,
             TopMenu_OnlineQuiz,
@@ -94,14 +152,7 @@
             DynamicScrollerItem,
             Item
         },
-        watch: {
-            'windowSize.y': function () {
-                this.setHeights()
-            },
-            'windowSize.x': function () {
-                this.$store.commit('AppLayout/updateDrawer', false)
-            }
-        },
+        mixins: [mixinAuth, mixinQuiz, mixinUserActionOnQuestion, mixinWindowSize],
         data() {
             return {
                 quizData: new Exam(),
@@ -114,6 +165,14 @@
                 questions: [],
                 inView: [],
                 timerIsOpen: false
+            }
+        },
+        watch: {
+            'windowSize.y': function () {
+                this.setHeights()
+            },
+            'windowSize.x': function () {
+                this.$store.commit('AppLayout/updateDrawer', false)
             }
         },
         created() {

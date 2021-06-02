@@ -1,14 +1,16 @@
 <template>
-    <v-overlay :absolute="true"
-            :opacity="0"
-               v-if="false"
+  <v-overlay
+    v-if="false"
+    :absolute="true"
+    :opacity="0"
+  >
+    <v-btn
+      color="orange lighten-2"
+      @click="overlay = false"
     >
-        <v-btn color="orange lighten-2"
-                @click="overlay = false"
-        >
-            به زودی
-        </v-btn>
-    </v-overlay>
+      به زودی
+    </v-btn>
+  </v-overlay>
 </template>
 
 <script>

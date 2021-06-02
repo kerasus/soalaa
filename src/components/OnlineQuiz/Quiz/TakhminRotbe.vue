@@ -1,109 +1,134 @@
 <template>
-    <div>
-        <div style="background-color: rgb(244, 244, 244)">
-            <div class="d-flex justify-center wrapper">
-                <v-row v-if="report">
-                    <v-col cols="12">
-                        <v-btn block dark color="cyan" @click="sendData">تخمین رتبه</v-btn>
-                    </v-col>
-                    <v-col md="7" cols="12">
-                        <v-data-table
-                                hide-default-footer
-                                :headers="headers1"
-                                :header-props="{sortByText: 'ترتیب'}"
-                                :items="takhminReport.sub_category"
-                                :items-per-page="99"
-                                class="elevation-1 dataTable dataTableHeight1"
-                        >
-                            <template v-slot:top>
-                                <span class="tableTitle">
-                                    جدول عملکرد دروس
-                                </span>
-                            </template>
-                            <template v-slot:item.percent="props">
-                                <v-text-field
-                                        v-model="percents[props.item.sub_category_id]"
-                                        :rules="[numberRule, percentRule]"
-                                        @input.native="resetAnswerCount(props.item.sub_category_id)"
-                                />
-                            </template>
-                            <template v-slot:item.right_answer="props">
-                                <v-text-field
-                                        :rules="[numberRule]"
-                                        v-model="answerCounts[props.item.sub_category_id].correct"
-                                        @input.native="calcPercent(props.item.sub_category_id, $event.target)"
-                                />
-                            </template>
-                            <template v-slot:item.wrong_answer="props">
-                                <v-text-field
-                                        :rules="[numberRule]"
-                                        v-model="answerCounts[props.item.sub_category_id].incorrect"
-                                        @input.native="calcPercent(props.item.sub_category_id, $event.target)"
-                                />
-                            </template>
-                        </v-data-table>
-                    </v-col>
-                    <v-col md="5" cols="12" class="firstColPadding">
-                        <v-data-table
-                                hide-default-footer
-                                :headers="headers2"
-                                :header-props="{sortByText: 'ترتیب'}"
-                                :items="takhminReport.zirgorooh"
-                                :items-per-page="5"
-                                class="elevation-1 dataTable dataTableHeight2"
-                        >
-                            <template v-slot:top>
-                                <span class="tableTitle ">
-                                    نتیجه در زیر گروه ها
-                                </span>
-                            </template>
+  <div>
+    <div style="background-color: rgb(244, 244, 244)">
+      <div class="d-flex justify-center wrapper">
+        <v-row v-if="report">
+          <v-col cols="12">
+            <v-btn
+              block
+              dark
+              color="cyan"
+              @click="sendData"
+            >
+              تخمین رتبه
+            </v-btn>
+          </v-col>
+          <v-col
+            md="7"
+            cols="12"
+          >
+            <v-data-table
+              hide-default-footer
+              :headers="headers1"
+              :header-props="{sortByText: 'ترتیب'}"
+              :items="takhminReport.sub_category"
+              :items-per-page="99"
+              class="elevation-1 dataTable dataTableHeight1"
+            >
+              <template v-slot:top>
+                <span class="tableTitle">
+                  جدول عملکرد دروس
+                </span>
+              </template>
+              <template v-slot:item.percent="props">
+                <v-text-field
+                  v-model="percents[props.item.sub_category_id]"
+                  :rules="[numberRule, percentRule]"
+                  @input.native="resetAnswerCount(props.item.sub_category_id)"
+                />
+              </template>
+              <template v-slot:item.right_answer="props">
+                <v-text-field
+                  v-model="answerCounts[props.item.sub_category_id].correct"
+                  :rules="[numberRule]"
+                  @input.native="calcPercent(props.item.sub_category_id, $event.target)"
+                />
+              </template>
+              <template v-slot:item.wrong_answer="props">
+                <v-text-field
+                  v-model="answerCounts[props.item.sub_category_id].incorrect"
+                  :rules="[numberRule]"
+                  @input.native="calcPercent(props.item.sub_category_id, $event.target)"
+                />
+              </template>
+            </v-data-table>
+          </v-col>
+          <v-col
+            md="5"
+            cols="12"
+            class="firstColPadding"
+          >
+            <v-data-table
+              hide-default-footer
+              :headers="headers2"
+              :header-props="{sortByText: 'ترتیب'}"
+              :items="takhminReport.zirgorooh"
+              :items-per-page="5"
+              class="elevation-1 dataTable dataTableHeight2"
+            >
+              <template v-slot:top>
+                <span class="tableTitle ">
+                  نتیجه در زیر گروه ها
+                </span>
+              </template>
+            </v-data-table>
+            <v-row class="subRowHeight final-report-scoreboard">
+              <v-col
+                class="subColsPaddingBottom"
+                cols="12"
+              >
+                <v-card class="subCards">
+                  <v-card-title class="cardTitle">
+                    <v-row>
+                      <v-col>
+                        ماکزمیم تراز کل زیر گروه
+                      </v-col>
+                    </v-row>
+                  </v-card-title>
 
-                        </v-data-table>
-                        <v-row class="subRowHeight final-report-scoreboard" >
-                            <v-col class="subColsPaddingBottom" cols="12">
-                                <v-card class="subCards">
-                                    <v-card-title class="cardTitle">
-                                        <v-row>
-                                            <v-col>
-                                                ماکزمیم تراز کل زیر گروه
-                                            </v-col>
-                                        </v-row>
-                                    </v-card-title>
+                  <span class="cardContent">
+                    <v-row>
+                      <v-col>
+                        {{ takhminReport.main.taraaz }}
+                      </v-col>
+                    </v-row>
+                  </span>
+                </v-card>
+              </v-col>
+              <v-col
+                class="subColsPaddingBottom subColsPaddingRight"
+                cols="12"
+              >
+                <v-card class="subCards">
+                  <v-card-title class="cardTitle">
+                    <v-row>
+                      <v-col cols="4">
+                        رتبه کل کشوری
+                      </v-col>
+                      <v-col cols="4">
+                        رتبه در استان
+                      </v-col>
+                      <v-col cols="4">
+                        رتبه در شهر
+                      </v-col>
+                    </v-row>
+                  </v-card-title>
 
-                                    <span class="cardContent">
-                                        <v-row>
-                                            <v-col>
-                                                {{ takhminReport.main.taraaz }}
-                                            </v-col>
-                                        </v-row>
-                                    </span>
-                                </v-card>
-                            </v-col>
-                            <v-col class="subColsPaddingBottom subColsPaddingRight" cols="12">
-                                <v-card class="subCards">
-                                    <v-card-title class="cardTitle">
-                                        <v-row>
-                                            <v-col cols="4">رتبه کل کشوری</v-col>
-                                            <v-col cols="4">رتبه در استان</v-col>
-                                            <v-col cols="4">رتبه در شهر</v-col>
-                                        </v-row>
-                                    </v-card-title>
-
-                                    <span class="cardContent">
-                                        <v-row>
-                                            <v-col cols="4">{{ takhminReport.main.rank_country }}</v-col>
-                                            <v-col cols="4">{{ takhminReport.main.rank_province }}</v-col>
-                                            <v-col cols="4">{{ takhminReport.main.rank_city }}</v-col>
-                                        </v-row>
-                                    </span>
-                                </v-card>
-                            </v-col>
-                        </v-row>
-                    </v-col>
-                </v-row>
-            </div>
-        </div>
+                  <span class="cardContent">
+                    <v-row>
+                      <v-col cols="4">{{ takhminReport.main.rank_country }}</v-col>
+                      <v-col cols="4">{{ takhminReport.main.rank_province }}</v-col>
+                      <v-col cols="4">{{ takhminReport.main.rank_city }}</v-col>
+                    </v-row>
+                  </span>
+                </v-card>
+              </v-col>
+            </v-row>
+          </v-col>
+        </v-row>
+      </div>
     </div>
+  </div>
 </template>
 
 <script>
@@ -112,7 +137,8 @@
     import API_ADDRESS from "@/api/Addresses";
     // import Assistant from "@/plugins/assistant";
     export default {
-        name: 'takhminRotbe',
+        name: 'TakhminRotbe',
+        props: ['report'],
         data() {
             return {
                 numberRule: v  => {
@@ -164,7 +190,6 @@
         created() {
             this.prepareTakhmineRotbeReport(true)
         },
-        props: ['report'],
         methods: {
             resetAnswerCount (subcategoryId) {
                 for (const sub_category_id in this.answerCounts) {
@@ -316,7 +341,7 @@
                     })
                 }
                 axios.post(API_ADDRESS.exam.takhminRotbe, {
-                    exam_user_id: that.takhminReport.exam_user_id,
+                    exam_user_id: that.takhminReport.exam_user.id,
                     percents: sentPercents
                 })
                 .then(response => {

@@ -1,6 +1,7 @@
 import { Model, Collection } from 'js-abstract-model'
 import md from '@/plugins/Markdown'
 import TurndownService from "turndown/lib/turndown.browser.umd";
+import convertToMarkdownKatex from "@/plugins/ConvertToMarkdownKatex"
 
 class Choice extends Model {
     constructor (data) {
@@ -20,17 +21,19 @@ class Choice extends Model {
             { key: 'answered_at' }
         ])
 
-        this.title = this.convertToMarkdownKatex(this.title)
+        this.title = convertToMarkdownKatex(this.title)
 
         if (typeof this.title === 'string') {
             this.rendered_title = md.render(this.title)
         }
     }
 
-    convertToMarkdownKatex (string) {
+    convertToMarkdownKatex1 (string) {
         if (!string) {
             return string
         }
+        string = string.replace(/\n/g,'<br>')
+
         TurndownService.prototype.escape = function (string) {
             let escapes = [
                 [/\s\$/g, '$'],

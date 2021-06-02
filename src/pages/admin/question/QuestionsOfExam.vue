@@ -1,140 +1,169 @@
 <template>
-    <v-container class="quiz-editor" :fluid="true" :style="{ height: '100%', background: 'rgb(244, 244, 244)' }" v-resize="updateWindowSize">
-        <v-row :style="{ 'min-height': '100%' }">
-            <!--            <v-col v-if="quiz.questions.list.length > 40" :md="5" class="questions" :style="{ height: windowSize.y }">-->
-            <!--                <virtual-list style="overflow-y: auto;"-->
-            <!--                              :data-key="'id'"-->
-            <!--                              :data-sources="quiz.questions.list"-->
-            <!--                              :data-component="item"-->
-            <!--                              class="questions"-->
-            <!--                              ref="scroller"-->
-            <!--                />-->
-            <!--            </v-col>-->
-            <v-col :md="11" class="questions" ref="questionsColumn">
+  <v-container
+    v-resize="updateWindowSize"
+    class="quiz-editor"
+    :fluid="true"
+    :style="{ height: '100%', background: 'rgb(244, 244, 244)' }"
+  >
+    <v-row :style="{ 'min-height': '100%' }">
+      <!--            <v-col v-if="quiz.questions.list.length > 40" :md="5" class="questions" :style="{ height: windowSize.y }">-->
+      <!--                <virtual-list style="overflow-y: auto;"-->
+      <!--                              :data-key="'id'"-->
+      <!--                              :data-sources="quiz.questions.list"-->
+      <!--                              :data-component="item"-->
+      <!--                              class="questions"-->
+      <!--                              ref="scroller"-->
+      <!--                />-->
+      <!--            </v-col>-->
+      <v-col
+        ref="questionsColumn"
+        :md="11"
+        class="questions"
+      >
+        <!--                <virtual-list style="overflow-y: auto;"-->
+        <!--                              :data-key="'id'"-->
+        <!--                              :data-sources="quiz.questions.list"-->
+        <!--                              :data-component="item"-->
+        <!--                              ref="scroller"-->
+        <!--                              class="questionss"-->
+        <!--                />-->
 
-<!--                <virtual-list style="overflow-y: auto;"-->
-<!--                              :data-key="'id'"-->
-<!--                              :data-sources="quiz.questions.list"-->
-<!--                              :data-component="item"-->
-<!--                              ref="scroller"-->
-<!--                              class="questionss"-->
-<!--                />-->
+        <!--                <item v-for="itemm in quizData.questions.list" :key="itemm.id" :source="itemm" :exam-id="$route.params.quizId" :sub-category="quizData.sub_categories" />-->
 
-<!--                <item v-for="itemm in quizData.questions.list" :key="itemm.id" :source="itemm" :exam-id="$route.params.quizId" :sub-category="quizData.sub_categories" />-->
-
-                <DynamicScroller
-                        :items="quizData.questions.list"
-                        :min-item-size="70"
-                        class="scroller questionss"
-                        ref="scroller"
-                        :emitUpdate="true"
-                        @update="onScroll"
+        <DynamicScroller
+          ref="scroller"
+          :items="quizData.questions.list"
+          :min-item-size="70"
+          class="scroller questionss"
+          :emit-update="true"
+          @update="onScroll"
+        >
+          <template v-slot="{ item, index, active }">
+            <DynamicScrollerItem
+              :item="item"
+              :active="active"
+              :data-index="index"
+            >
+              <Item
+                :source="item"
+                :consider-active-category="false"
+                :questions-column="$refs.questionsColumn"
+                :exam-id="$route.params.quizId"
+                :sub-category="quizData.sub_categories"
+                @inView="test"
+              />
+            </DynamicScrollerItem>
+          </template>
+        </DynamicScroller>
+      </v-col>
+      <v-col
+        v-if="false"
+        :md="7"
+        class="left-side-list"
+      >
+        <v-row>
+          <v-col
+            class="px-10 py-0 d-flex justify-space-between"
+            dir="ltr"
+          >
+            <div class="rounded-b-xl rounded-r-xl">
+              <v-menu bottom>
+                <template v-slot:activator="{ on, attrs }">
+                  <v-btn
+                    large
+                    tile
+                    v-bind="attrs"
+                    elevation="0"
+                    v-on="on"
+                  >
+                    <v-icon
+                      class="mr-2"
+                      :size="30"
+                      color="#666"
+                    >
+                      mdi-account-circle
+                    </v-icon>
+                    سید مصطفی
+                    کاظمی
+                  </v-btn>
+                </template>
+                <v-card
+                  max-width="375"
+                  class="mx-auto"
+                  rounded="b-xl r-xl"
                 >
-                    <template v-slot="{ item, index, active }">
-                        <DynamicScrollerItem
-                                :item="item"
-                                :active="active"
-                                :data-index="index"
+                  <v-img
+                    style="background-color: #e8e8e8;"
+                    src="/img/account-circle.svg"
+                    width="300px"
+                    height="300px"
+                    dark
+                  >
+                    <v-row class="fill-height">
+                      <v-card-title v-if="false">
+                        <v-btn
+                          dark
+                          icon
+                          :to="{ name: 'dashboard'}"
                         >
-                            <Item :source="item"
-                                  :consider-active-category="false"
-                                  :questions-column="$refs.questionsColumn"
-                                  @inView="test"
-                                  :exam-id="$route.params.quizId"
-                                  :sub-category="quizData.sub_categories"
-                            />
-                        </DynamicScrollerItem>
-                    </template>
-                </DynamicScroller>
-            </v-col>
-            <v-col v-if="false" :md="7" class="left-side-list">
-                <v-row>
-                    <v-col class="px-10 py-0 d-flex justify-space-between" dir="ltr">
-                        <div class="rounded-b-xl rounded-r-xl">
-                            <v-menu bottom>
-                                <template v-slot:activator="{ on, attrs }">
-                                    <v-btn
-                                            large
-                                            tile
-                                            v-bind="attrs"
-                                            v-on="on"
-                                            elevation="0"
-                                    >
-                                        <v-icon class="mr-2" :size="30" color="#666">mdi-account-circle</v-icon>
-                                        سید مصطفی
-                                        کاظمی
-                                    </v-btn>
-                                </template>
-                                <v-card
-                                        max-width="375"
-                                        class="mx-auto"
-                                        rounded="b-xl r-xl"
-                                >
-                                    <v-img
-                                            style="background-color: #e8e8e8;"
-                                            src="/img/account-circle.svg"
-                                            width="300px"
-                                            height="300px"
-                                            dark
-                                    >
-                                        <v-row class="fill-height">
-                                            <v-card-title v-if="false">
-                                                <v-btn
-                                                        dark
-                                                        icon
-                                                        :to="{ name: 'dashboard'}"
-                                                >
-                                                    <v-icon>mdi-chevron-left</v-icon>
-                                                </v-btn>
+                          <v-icon>mdi-chevron-left</v-icon>
+                        </v-btn>
 
-                                                <v-spacer></v-spacer>
+                        <v-spacer />
 
-                                                <v-btn
-                                                        dark
-                                                        icon
-                                                        class="mr-4"
-                                                >
-                                                    <v-icon>mdi-pencil</v-icon>
-                                                </v-btn>
+                        <v-btn
+                          dark
+                          icon
+                          class="mr-4"
+                        >
+                          <v-icon>mdi-pencil</v-icon>
+                        </v-btn>
 
-                                                <v-btn
-                                                        dark
-                                                        icon
-                                                >
-                                                    <v-icon>mdi-dots-vertical</v-icon>
-                                                </v-btn>
-                                            </v-card-title>
+                        <v-btn
+                          dark
+                          icon
+                        >
+                          <v-icon>mdi-dots-vertical</v-icon>
+                        </v-btn>
+                      </v-card-title>
 
-                                            <v-spacer></v-spacer>
+                      <v-spacer />
 
-                                            <v-card-title v-if="false" class="white--text pl-12 pt-12">
-                                                <div class="display-1 pl-12 pt-12">
-                                                    Ali Conners
-                                                </div>
-                                            </v-card-title>
-                                        </v-row>
-                                    </v-img>
-                                    <v-btn
-                                            style="width: 100%;background: #5cbf60;color: white;letter-spacing: inherit;"
-                                            large
-                                            tile
-                                            elevation="0"
-                                    >
-                                        ارسال پاسخنامه
-                                    </v-btn>
-                                </v-card>
-                            </v-menu>
+                      <v-card-title
+                        v-if="false"
+                        class="white--text pl-12 pt-12"
+                      >
+                        <div class="display-1 pl-12 pt-12">
+                          Ali Conners
                         </div>
-                    </v-col>
-                </v-row>
-                <v-row>
-                    <v-col>
-                        <BubbleSheet :quiZ="quizData.questions.list" :info="{ type: 'pasokh-nameh' }" @scrollTo="scrollTo" />
-                    </v-col>
-                </v-row>
-            </v-col>
+                      </v-card-title>
+                    </v-row>
+                  </v-img>
+                  <v-btn
+                    style="width: 100%;background: #5cbf60;color: white;letter-spacing: inherit;"
+                    large
+                    tile
+                    elevation="0"
+                  >
+                    ارسال پاسخنامه
+                  </v-btn>
+                </v-card>
+              </v-menu>
+            </div>
+          </v-col>
         </v-row>
-    </v-container>
+        <v-row>
+          <v-col>
+            <BubbleSheet
+              :qui-z="quizData.questions.list"
+              :info="{ type: 'pasokh-nameh' }"
+              @scrollTo="scrollTo"
+            />
+          </v-col>
+        </v-row>
+      </v-col>
+    </v-row>
+  </v-container>
 </template>
 
 <script>
@@ -158,12 +187,12 @@
 
     export default {
         name: 'QuestionsOfExam',
-        mixins: [mixinQuiz, mixinWindowSize],
         components: {
             Item,
             // 'virtual-list': VirtualList,
             BubbleSheet
         },
+        mixins: [mixinQuiz, mixinWindowSize],
 
         data () {
             return {
@@ -179,6 +208,32 @@
                 timePassedSinceLastScroll: 0,
                 renderedQuestions: { startIndex: 0, endIndex: 0 },
             }
+        },
+        watch: {
+            'windowSize.y': function () {
+                $('.questions').height(this.windowSize.y)
+                $('.questionss').height(this.windowSize.y)
+                $('.left-side-list').height(this.windowSize.y - 24)
+            },
+            'windowSize.x': function () {
+                // const padding = this.questionListPadding()
+                // $('.questions-list').css({ 'padding-right': padding })
+                // $('.questions-list').css({ 'padding-left': padding })
+                $('.questions-list').height(this.questionListHeight())
+                this.$store.commit('AppLayout/updateDrawer', false)
+            }
+        },
+        mounted () {
+            $('.questions').height(this.windowSize.y)
+            $('.left-side-list').height(this.windowSize.y - 24)
+            $('.questionss').height(this.windowSize.y)
+        },
+        created () {
+            this.changeAppBarAndDrawer(false)
+            this.loadQuizDataAndSubCategories()
+        },
+        destroyed() {
+            this.changeAppBarAndDrawer(true)
         },
         methods: {
             onScroll (startIndex, endIndex) {
@@ -248,32 +303,6 @@
                             500 / Math.ceil(this.quiz.questions.list.length / 100) * i)
                     }
                 }
-            }
-        },
-        mounted () {
-            $('.questions').height(this.windowSize.y)
-            $('.left-side-list').height(this.windowSize.y - 24)
-            $('.questionss').height(this.windowSize.y)
-        },
-        created () {
-            this.changeAppBarAndDrawer(false)
-            this.loadQuizDataAndSubCategories()
-        },
-        destroyed() {
-            this.changeAppBarAndDrawer(true)
-        },
-        watch: {
-            'windowSize.y': function () {
-                $('.questions').height(this.windowSize.y)
-                $('.questionss').height(this.windowSize.y)
-                $('.left-side-list').height(this.windowSize.y - 24)
-            },
-            'windowSize.x': function () {
-                // const padding = this.questionListPadding()
-                // $('.questions-list').css({ 'padding-right': padding })
-                // $('.questions-list').css({ 'padding-left': padding })
-                $('.questions-list').height(this.questionListHeight())
-                this.$store.commit('AppLayout/updateDrawer', false)
             }
         }
     }

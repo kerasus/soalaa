@@ -1,21 +1,27 @@
 <template>
-    <span>
-        <topic v-if="topic.parentTopic" :topic="topic.parentTopic" />
-        <v-chip dark color="purple lighten-1">
-            {{ topic.name }}
-        </v-chip>
-    </span>
+  <span>
+    <topic
+      v-if="topic.parentTopic"
+      :topic="topic.parentTopic"
+    />
+    <v-chip
+      dark
+      color="purple lighten-1"
+    >
+      {{ topic.name }}
+    </v-chip>
+  </span>
 </template>
 
 <script>
   import topic from '@/components/Question/topic'
 
   export default {
-    name: 'topic',
-    props: ['topic'],
+    name: 'Topic',
     components: {
       topic
     },
+    props: ['topic'],
     computed: {
       majorName () {
         if (this.topic.module && this.topic.module.major) {

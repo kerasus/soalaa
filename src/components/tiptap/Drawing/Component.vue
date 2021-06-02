@@ -1,28 +1,34 @@
 <template>
-    <node-view-wrapper class="draw">
-        <input type="color" v-model="color">
-        <input
-                type="number"
-                min="1"
-                max="10"
-                v-model="size"
-        >
-        <button @click="clear">
-            clear
-        </button>
-        <svg viewBox="0 0 500 250" ref="canvas">
-            <template v-for="item in node.attrs.lines">
-                <path
-                        v-if="item.id !== id"
-                        :key="item.id"
-                        :d="item.path"
-                        :id="`id-${item.id}`"
-                        :stroke="item.color"
-                        :stroke-width="item.size"
-                />
-            </template>
-        </svg>
-    </node-view-wrapper>
+  <node-view-wrapper class="draw">
+    <input
+      v-model="color"
+      type="color"
+    >
+    <input
+      v-model="size"
+      type="number"
+      min="1"
+      max="10"
+    >
+    <button @click="clear">
+      clear
+    </button>
+    <svg
+      ref="canvas"
+      viewBox="0 0 500 250"
+    >
+      <template v-for="item in node.attrs.lines">
+        <path
+          v-if="item.id !== id"
+          :id="`id-${item.id}`"
+          :key="item.id"
+          :d="item.path"
+          :stroke="item.color"
+          :stroke-width="item.size"
+        />
+      </template>
+    </svg>
+  </node-view-wrapper>
 </template>
 
 <script>
@@ -72,6 +78,18 @@
         drawing: false,
         id: uuid(),
       }
+    },
+
+    mounted() {
+      this.svg = d3.select(this.$refs.canvas)
+
+      this.svg
+              .on('mousedown', this.onStartDrawing)
+              .on('mouseup', this.onEndDrawing)
+              .on('mouseleave', this.onEndDrawing)
+              .on('touchstart', this.onStartDrawing)
+              .on('touchend', this.onEndDrawing)
+              .on('touchleave', this.onEndDrawing)
     },
 
     methods: {
@@ -146,18 +164,6 @@
           lines: [],
         })
       },
-    },
-
-    mounted() {
-      this.svg = d3.select(this.$refs.canvas)
-
-      this.svg
-              .on('mousedown', this.onStartDrawing)
-              .on('mouseup', this.onEndDrawing)
-              .on('mouseleave', this.onEndDrawing)
-              .on('touchstart', this.onStartDrawing)
-              .on('touchend', this.onEndDrawing)
-              .on('touchleave', this.onEndDrawing)
     },
   }
 </script>

@@ -1,27 +1,70 @@
 <template>
-    <v-container :fluid="true" dir="rtl">
-        <v-form>
-            <v-sheet color="#f4f4f4">
-                <v-row>
-                    <v-col :md="3">
-                        <v-select label="آزمون" :items="quizList.list" item-text="title" item-value="id" v-model="selectedQuizzes" multiple dense :disabled="editMode" outlined />
-                    </v-col>
-                    <v-col :md="2">
-                        <v-btn @click="selectAllExams" color="secondary">انتخاب همه آزمون ها</v-btn>
-                    </v-col>
-                    <v-col :md="2">
-                        <v-select label="درس" :items="subCategoriesList.list" item-text="display_title" item-value="id" v-model="currentQuestion.sub_category_id" dense :disabled="editMode" outlined />
-                    </v-col>
-                    <v-col :md="5">
-                        <v-text-field label="لینک ست" outlined dense v-model="setLink" />
-                    </v-col>
-                    <v-col :md="12" type="submit" @click="submit">
-                        <v-btn color="primary" block height="750" outlined>ثبت</v-btn>
-                    </v-col>
-                </v-row>
-            </v-sheet>
-        </v-form>
-    </v-container>
+  <v-container
+    :fluid="true"
+    dir="rtl"
+  >
+    <v-form>
+      <v-sheet color="#f4f4f4">
+        <v-row>
+          <v-col :md="3">
+            <v-select
+              v-model="selectedQuizzes"
+              label="آزمون"
+              :items="quizList.list"
+              item-text="title"
+              item-value="id"
+              multiple
+              dense
+              :disabled="editMode"
+              outlined
+            />
+          </v-col>
+          <v-col :md="2">
+            <v-btn
+              color="secondary"
+              @click="selectAllExams"
+            >
+              انتخاب همه آزمون ها
+            </v-btn>
+          </v-col>
+          <v-col :md="2">
+            <v-select
+              v-model="currentQuestion.sub_category_id"
+              label="درس"
+              :items="subCategoriesList.list"
+              item-text="display_title"
+              item-value="id"
+              dense
+              :disabled="editMode"
+              outlined
+            />
+          </v-col>
+          <v-col :md="5">
+            <v-text-field
+              v-model="setLink"
+              label="لینک ست"
+              outlined
+              dense
+            />
+          </v-col>
+          <v-col
+            :md="12"
+            type="submit"
+            @click="submit"
+          >
+            <v-btn
+              color="primary"
+              block
+              height="750"
+              outlined
+            >
+              ثبت
+            </v-btn>
+          </v-col>
+        </v-row>
+      </v-sheet>
+    </v-form>
+  </v-container>
 </template>
 
 <script>
@@ -32,7 +75,7 @@
     import API_ADDRESS from "@/api/Addresses";
 
     export default {
-        name: 'setVideo',
+        name: 'SetVideo',
         data: () => {
             return {
                 setLink: null,
@@ -40,6 +83,37 @@
                 subCategoriesList: new QuestSubcategoryList(),
                 selectedQuizzes: [],
                 exams: [],
+            }
+        },
+        watch: {
+            'selectedQuizzes': function () {
+                this.exams = []
+                this.selectedQuizzes.forEach((item) => { this.exams.push({ id: item, order: null }) })
+            }
+        },
+        mounted() {
+
+        },
+        created() {
+            this.editMode = this.$route.name === 'quest.edit'
+            new ExamList().fetch().then((response) => {
+                this.quizList = new ExamList(response.data.data)
+                if (!this.editMode) {
+                    this.selectedQuizzes.push(this.quizList.list[0].id)
+                }
+            })
+            this.subCategoriesList.fetch().then((response) => {
+                this.subCategoriesList = new QuestSubcategoryList(response.data)
+            })
+            if (this.editMode) {
+                this.currentQuestion.show(null, API_ADDRESS.question.getCurrentQuestion(this.$route.params.id))
+                    .then((response) => {
+                        this.currentQuestion = new Question(response.data.data)
+                        this.trueChoiceIndex = this.currentQuestion.choices.list.findIndex((item) => item.answer )
+                        this.updateRendered()
+                    })
+            } else {
+                this.currentQuestion = new Question(this.questionData)
             }
         },
         methods: {
@@ -83,37 +157,6 @@
                 //         },
                 //     }
                 // );
-            }
-        },
-        mounted() {
-
-        },
-        created() {
-            this.editMode = this.$route.name === 'quest.edit'
-            new ExamList().fetch().then((response) => {
-                this.quizList = new ExamList(response.data.data)
-                if (!this.editMode) {
-                    this.selectedQuizzes.push(this.quizList.list[0].id)
-                }
-            })
-            this.subCategoriesList.fetch().then((response) => {
-                this.subCategoriesList = new QuestSubcategoryList(response.data)
-            })
-            if (this.editMode) {
-                this.currentQuestion.show(null, API_ADDRESS.question.getCurrentQuestion(this.$route.params.id))
-                    .then((response) => {
-                        this.currentQuestion = new Question(response.data.data)
-                        this.trueChoiceIndex = this.currentQuestion.choices.list.findIndex((item) => item.answer )
-                        this.updateRendered()
-                    })
-            } else {
-                this.currentQuestion = new Question(this.questionData)
-            }
-        },
-        watch: {
-            'selectedQuizzes': function () {
-                this.exams = []
-                this.selectedQuizzes.forEach((item) => { this.exams.push({ id: item, order: null }) })
             }
         }
     }
