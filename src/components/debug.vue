@@ -1,11 +1,8 @@
 <template>
-  <div>
-    <vue-tiptap-plus v-model="html" />
-    <!-- eslint-disable vue/no-v-html -->
-    <div v-html="convertToMarkdownKatex(html)" />
-    <div v-html="(merkdownTesti)" />
-    <!--eslint-enable-->
-  </div>
+    <div>
+        <vue-tiptap-plus v-model="html"/>
+        <div v-html="convertToMarkdownKatex(html)"/>
+    </div>
 </template>
 
 <script>
@@ -14,50 +11,18 @@
   import VueTiptapPlus from '@/components/tiptap/vue-tiptap-plus'
 
   export default {
-    components: {VueTiptapPlus},
     mixins: [mixinMarkdownAndKatex],
-    data() {
-      return {
-        beit: '<div class=\\"choice\\" dir=\\"rtl\\"><table class=\\"layoutPoem\\"><tbody><tr><td class=\\"poemCellLeft\\">&nbsp;به عذار جسم منگر که بپوسد و بریزد<br></td><td class=\\"poemCentralEmptyCell\\">&nbsp;</td><td class=\\"poemCellRight\\">به عذار جان نگر که خوش و خوش‌عذار بادا<br></td></tr></tbody></table></div>',
-        html: '<p>I’m running tiptap with Vue.js. 🎉</p>',
-        innerHTML: 'hi',
-        merkdownTesti: ''
-      }
-    },
+    components: {VueTiptapPlus},
     mounted() {
     },
+    data() {
+      return {
+        html: '<p>I’m running tiptap with Vue.js. 🎉</p>',
+        innerHTML: 'hi',
+      }
+    },
     methods: {
-      convertPoem(htmlString) {
-        var wrapper = document.createElement('div');
-        wrapper.innerHTML = htmlString;
-        // var doc = new DOMParser().parseFromString(htmlString, "text/xml");
-        // this.innerHTML = doc.innerHTML
-        // let tables = doc.querySelectorAll('table')
-        let tables = wrapper.querySelectorAll('table.layoutPoem')
-        // let tables = this.$refs.table.querySelectorAll('table')
-        tables.forEach(item => {
-          let markdownTable = ''
-          let rows = item.querySelectorAll('tr')
-
-          // table head
-          rows.forEach(row => {
-            let poemCellLeft = row.querySelectorAll('td.poemCellLeft')[0]
-            let poemCellRight = row.querySelectorAll('td.poemCellRight')[0]
-            markdownTable += '::: beit ' + poemCellLeft + '--*mesra*--' + poemCellRight + ' \n' +
-                '::: \n'
-          })
-
-          var tableWrapper = document.createElement('div');
-          tableWrapper.innerHTML = markdownTable;
-
-          item.replaceChild(tableWrapper, item.childNodes[0]);
-
-        })
-
-        return wrapper.innerHTML
-      },
       convertTables(htmlString) {
-        htmlString = this.convertPoem(htmlString)
         var wrapper = document.createElement('div');
         wrapper.innerHTML = htmlString;
         // var doc = new DOMParser().parseFromString(htmlString, "text/xml");
@@ -132,8 +97,7 @@
           var tableWrapper = document.createElement('div');
           tableWrapper.innerHTML = markdownTable;
 
-          // item.replaceChild(tableWrapper, item.childNodes[0]);
-          item.outerHTML = tableWrapper.innerHTML
+          item.replaceChild(tableWrapper, item.childNodes[0]);
 
         })
 
@@ -141,9 +105,6 @@
       },
       convertToMarkdownKatex(string) {
         string = this.convertTables(string)
-
-        string = string.replace(/\n/g,'<br>')
-
         const markdown = this.htmlToMarkdown(string)
         // return this.markdown.render(string.replace('<div class="question" dir="rtl">', ''))
         return this.markdown.render(markdown)

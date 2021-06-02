@@ -174,7 +174,7 @@
       }
     },
     methods: {
-      getData () {
+      getData ($state) {
         this.showLoading()
         let that = this
         axios.get(API_ADDRESS.exam.examReportIndex('participants') + that.nextPage, {
@@ -187,11 +187,11 @@
           that.results = that.results.concat(response.data.data)
           if(typeof response.data.links === 'undefined' || response.data.links.next === null) {
             that.nextPage = ''
-            that.$state.complete()
+            $state.complete()
             return
           }
           that.nextPage = response.data.links.next.replace(response.data.meta.path, '')
-          that.$state.loaded()
+          $state.loaded()
           that.lastLoadTime = Date.now()
         })
         .catch( error => {
@@ -200,14 +200,16 @@
           this.hideLoading()
           console.log('error', error)
         })
-          axios.get(API_ADDRESS.exam.examReportIndex('lessons'), {
-              params: {
-                  exam_id: that.$route.params.examId
-              }
-          })
-          .then((response) => {
-              that.lessonsResults = response.data.data
-          })
+          if (!this.lessonsResults.length) {
+              axios.get(API_ADDRESS.exam.examReportIndex('lessons'), {
+                  params: {
+                      exam_id: that.$route.params.examId
+                  }
+              })
+                  .then((response) => {
+                      that.lessonsResults = response.data.data
+                  })
+          }
       },
       showLoading () {
         this.$store.commit('AppLayout/updateOverlay', { show: true, loading: true, text: ''})

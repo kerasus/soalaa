@@ -100,6 +100,7 @@
         // triggered on every change
         onUpdate() {
           that.$emit('input', this.getHTML())
+            console.log('html', this.getHTML())
           // const json =
           // send the content to an API here
         },
