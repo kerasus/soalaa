@@ -1,26 +1,35 @@
 <template>
-    <div class="wrapperSize">
-        <v-select :items="items" solo label="نوع خطا" v-model="errorMessage.type">
-
-        </v-select>
-        <v-textarea v-model="errorMessage.text" solo/>
-        <v-btn @click="emitData" class="submitBtnPosition">
-            ثبت
-        </v-btn>
-    </div>
+  <div class="wrapperSize">
+    <v-select
+      v-model="errorMessage.type"
+      :items="items"
+      solo
+      label="نوع خطا"
+    />
+    <v-textarea
+      v-model="errorMessage.text"
+      solo
+    />
+    <v-btn
+      class="submitBtnPosition"
+      @click="emitData"
+    >
+      ثبت
+    </v-btn>
+  </div>
 </template>
 
 <script>
     export default {
-        name: "errorReport",
-        data: () => ({
-            errorMessage:{type:'', text:''},
-        }),
+        name: "ErrorReport",
         props:{
             items:{
                 type:Array,
             }
         },
+        data: () => ({
+            errorMessage:{type:'', text:''},
+        }),
         methods:{
             emitData(){
                 this.$emit('clicked', this.errorMessage)

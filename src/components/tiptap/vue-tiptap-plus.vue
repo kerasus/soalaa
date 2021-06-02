@@ -1,32 +1,32 @@
 <template>
-    <div dir="rtl">
-        <v-card elevation="3">
-            <v-card-title>
-                <slot name="toolbar">
-                    <toolbar :editor="editor"/>
-                </slot>
-            </v-card-title>
-            <v-card-text class="pa-0">
-                <bubble-menu
-                        class="bubble-menu"
-                        :tippy-options="{ duration: 100 }"
-                        :editor="editor"
-                        v-if="editor"
-                >
-                    <slot-bubble-menu :editor="editor"/>
-                </bubble-menu>
-                <floating-menu
-                        class="floating-menu"
-                        :tippy-options="{ duration: 100 }"
-                        :editor="editor"
-                        v-if="editor"
-                >
-                    <slot-floafing-menu :editor="editor"/>
-                </floating-menu>
-                <editor-content :editor="editor"/>
-            </v-card-text>
-        </v-card>
-    </div>
+  <div dir="rtl">
+    <v-card elevation="3">
+      <v-card-title>
+        <slot name="toolbar">
+          <toolbar :editor="editor" />
+        </slot>
+      </v-card-title>
+      <v-card-text class="pa-0">
+        <bubble-menu
+          v-if="editor"
+          class="bubble-menu"
+          :tippy-options="{ duration: 100 }"
+          :editor="editor"
+        >
+          <slot-bubble-menu :editor="editor" />
+        </bubble-menu>
+        <floating-menu
+          v-if="editor"
+          class="floating-menu"
+          :tippy-options="{ duration: 100 }"
+          :editor="editor"
+        >
+          <slot-floafing-menu :editor="editor" />
+        </floating-menu>
+        <editor-content :editor="editor" />
+      </v-card-text>
+    </v-card>
+  </div>
 </template>
 
 <script>
@@ -60,7 +60,6 @@
 
   export default {
     name: 'VueTiptapPlus',
-    props: ['value'],
     components: {
       EditorContent,
       BubbleMenu,
@@ -69,6 +68,7 @@
       SlotBubbleMenu,
       SlotFloafingMenu
     },
+    props: ['value'],
     data() {
       return {
         editor: null,
@@ -108,6 +108,9 @@
 
       // this.editor.on('focus', this.focusHandler)
       // this.editor.on('blur', this.blurHandler)
+    },
+    beforeDestroy() {
+      this.editor.destroy()
     },
     methods: {
       // focusHandler() {
@@ -160,9 +163,6 @@
       //   // })
       //   // this.show()
       // }
-    },
-    beforeDestroy() {
-      this.editor.destroy()
     },
   }
 </script>

@@ -1,70 +1,115 @@
 <template>
-    <div dir="ltr">
-        <br>
-                <v-text-field v-model="searchInTree" label="جستجو" style="width: 50%"/>
-        <v-dialog persistent v-model="dialog" max-width="40%">
-            <v-text-field id="thename" style="background-color:aliceblue "/>
-            <v-btn @click="checkname">save name</v-btn>
-        </v-dialog>
-        <vue-tree-list
-                :key="componentKey"
-                @click="onClick"
-                @change-name="onChangeName"
-                @delete-node="onDel"
-                @add-node="onAddNode"
-                :model="data"
-                default-tree-node-name=""
-                default-leaf-node-name="آیتم جدید"
-                v-bind:default-expanded="true"
-        >
-
-            <template v-slot:leafNameDisplay="slotProps">
+  <div dir="ltr">
+    <br>
+    <v-text-field
+      v-model="searchInTree"
+      label="جستجو"
+      style="width: 50%"
+    />
+    <v-dialog
+      v-model="dialog"
+      persistent
+      max-width="40%"
+    >
+      <v-text-field
+        id="thename"
+        style="background-color:aliceblue "
+      />
+      <v-btn @click="checkname">
+        save name
+      </v-btn>
+    </v-dialog>
+    <vue-tree-list
+      :key="componentKey"
+      :model="data"
+      default-tree-node-name=""
+      default-leaf-node-name="آیتم جدید"
+      :default-expanded="true"
+      @click="onClick"
+      @change-name="onChangeName"
+      @delete-node="onDel"
+      @add-node="onAddNode"
+    >
+      <template v-slot:leafNameDisplay="slotProps">
         <span>
           {{ slotProps.model.name }}
 
 
-             <span>
-            <v-btn v-if="editing ===  slotProps.model.id" @click="saveNode(slotProps.model)">
-                <v-icon>
+          <span>
+            <v-btn
+              v-if="editing === slotProps.model.id"
+              @click="saveNode(slotProps.model)"
+            >
+              <v-icon>
                 mdi-checkbox-marked-circle-outline
-            </v-icon>
+              </v-icon>
 
             </v-btn>
-                <v-btn v-if="editing ===  slotProps.model.id" @click="close(slotProps.model)">
-                <v-icon>
+            <v-btn
+              v-if="editing === slotProps.model.id"
+              @click="close(slotProps.model)"
+            >
+              <v-icon>
                 mdi-window-close
-            </v-icon>
+              </v-icon>
             </v-btn>
 
 
+          </span>
         </span>
-        </span>
-            </template>
-            <span class="icon" slot="addTreeNodeIcon"><v-icon v-if="showOptions">mdi-plus</v-icon></span>
-            <span class="icon" slot="addLeafNodeIcon"></span>
-            <span class="icon" slot="editNodeIcon"><v-icon v-if="showOptions">mdi-pencil</v-icon></span>
-            <span class="icon" slot="delNodeIcon"><v-icon v-if="showOptions">mdi-delete</v-icon></span>
-            <span class="icon" slot="leafNodeIcon">🍃</span>
-            <span class="icon" slot="treeNodeIcon">🌲</span>
-        </vue-tree-list>
-        <v-treeview :search="searchInTree" selection-type="independent" selectable :items="items" v-model="selection"></v-treeview>
-        <v-overlay
-                :value="overlay"
-        >
-        </v-overlay>
-        <v-btn @click="selectModify">check selection</v-btn>
-        <br><br>
-        <v-btn @click="showselecteds">show all selected path</v-btn>
-        <div v-if="isShowSelections">
-            <div v-for="t in allPath" :key="t.id">
-                {{ t }}
-                <hr>
-
-            </div>
-        </div>
-
+      </template>
+      <span
+        slot="addTreeNodeIcon"
+        class="icon"
+      ><v-icon v-if="showOptions">mdi-plus</v-icon></span>
+      <span
+        slot="addLeafNodeIcon"
+        class="icon"
+      />
+      <span
+        slot="editNodeIcon"
+        class="icon"
+      ><v-icon v-if="showOptions">mdi-pencil</v-icon></span>
+      <span
+        slot="delNodeIcon"
+        class="icon"
+      ><v-icon v-if="showOptions">mdi-delete</v-icon></span>
+      <span
+        slot="leafNodeIcon"
+        class="icon"
+      >🍃</span>
+      <span
+        slot="treeNodeIcon"
+        class="icon"
+      >🌲</span>
+    </vue-tree-list>
+    <v-treeview
+      v-model="selection"
+      :search="searchInTree"
+      selection-type="independent"
+      selectable
+      :items="items"
+    />
+    <v-overlay
+      :value="overlay"
+    />
+    <v-btn @click="selectModify">
+      check selection
+    </v-btn>
+    <br><br>
+    <v-btn @click="showselecteds">
+      show all selected path
+    </v-btn>
+    <div v-if="isShowSelections">
+      <div
+        v-for="t in allPath"
+        :key="t.id"
+      >
+        {{ t }}
+        <hr>
+      </div>
     </div>
-
+  </div>
 </template>
 
 <script>

@@ -1,21 +1,32 @@
 <template>
-
-    <div @mousemove="resizing" @mouseup="endResize">
-        <div class="ghostbar" ref="ghostbar" v-show="dragging">
-        </div>
-        <div class="sidebar" ref="sidebar">
-            <span></span>
-            <div class="dragbar" ref="dragbar" @mousedown="startResize"></div>
-            sidebar
-        </div>
-        <div class="main" ref="main">
-            main
-        </div>
-
-
+  <div
+    @mousemove="resizing"
+    @mouseup="endResize"
+  >
+    <div
+      v-show="dragging"
+      ref="ghostbar"
+      class="ghostbar"
+    />
+    <div
+      ref="sidebar"
+      class="sidebar"
+    >
+      <span />
+      <div
+        ref="dragbar"
+        class="dragbar"
+        @mousedown="startResize"
+      />
+      sidebar
     </div>
-
-
+    <div
+      ref="main"
+      class="main"
+    >
+      main
+    </div>
+  </div>
 </template>
 
 
@@ -26,19 +37,19 @@
 
 
     export default {
-        name: "test",
-        data: () => ({
-            leftColumnWidth: 500,
-            rightColumnWidth: 200,
-            resizeCount: 0,
-            dragging: false
-        }),
+        name: "Test",
         directives: {
             resize,
         },
         components: {
             // VueDragResize
         },
+        data: () => ({
+            leftColumnWidth: 500,
+            rightColumnWidth: 200,
+            resizeCount: 0,
+            dragging: false
+        }),
         computed: {
             height() {
                 return this.$refs.main.clientHeight

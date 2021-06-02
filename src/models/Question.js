@@ -7,6 +7,7 @@ import axios from "axios";
 import API_ADDRESS from "@/api/Addresses"
 import md from '@/plugins/Markdown'
 import TurndownService from 'turndown/lib/turndown.browser.umd'
+import convertToMarkdownKatex from "@/plugins/ConvertToMarkdownKatex"
 
 class Question extends Model {
     constructor (data) {
@@ -115,17 +116,20 @@ class Question extends Model {
             ]
         }
 
-        this.statement = this.convertToMarkdownKatex(this.statement)
+        this.statement = convertToMarkdownKatex(this.statement)
 
         if (typeof this.statement === 'string') {
             this.rendered_statement = md.render(this.statement)
         }
     }
 
-    convertToMarkdownKatex (string) {
+    convertToMarkdownKatex1 (string) {
         if (!string) {
             return string
         }
+
+        string = string.replace(/\n/g,'<br>')
+
         TurndownService.prototype.escape = function (string) {
             let escapes = [
                 [/\s\$/g, '$'],

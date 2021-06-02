@@ -1,13 +1,13 @@
 <template>
-    <v-progress-linear
-            color="#ffc107"
-            absolute
-            top
-            :active="active"
-            indeterminate
-            rounded
-            height="6"
-    ></v-progress-linear>
+  <v-progress-linear
+    color="#ffc107"
+    absolute
+    top
+    :active="active"
+    indeterminate
+    rounded
+    height="6"
+  />
 </template>
 
 <script>

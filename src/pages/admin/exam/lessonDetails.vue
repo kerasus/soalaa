@@ -1,132 +1,164 @@
 <template>
-    <v-container class="konkoor-view" :fluid="true" :style="{ height: '100%', background: 'rgb(244, 244, 244)' }" v-resize="updateWindowSize">
-
-        <div @mousemove="resizing" @mouseup="endResize">
-            <div class="ghostbar" ref="ghostbar" v-show="dragging">
-            </div>
-            <div class="sidebar d-none d-lg-block" ref="sidebar">
-                <span></span>
-                <div class="dragbar" ref="dragbar" @mousedown="startResize">
-                    <v-icon>mdi-drag-vertical-variant</v-icon>
-                </div>
-<!--                <v-col   :md="7" class="left-side-list" ref="leftSideList">-->
-                <v-col >
-
-                    <BubbleSheet ref="bubbleSheetC" :style="{ height: 3740 }" :info="{ type: 'pasokh-barg' }" @clickChoice="choiceClicked" @scrollTo="scrollTo" :delay-time="0" />
-                </v-col>
-<!--                </v-col>-->
-            </div>
-            <div class="main" ref="main">
-                <v-toolbar class="mb-5">
-                    <v-btn-toggle v-model="questionFilterMethod" mandatory>
-                        <v-btn value="not-filtered">
-                            نمایش همه
-                        </v-btn>
-                        <v-btn value="not-confirmed-at-all">
-                            کلا تایید نشده
-                        </v-btn>
-                        <v-btn value="not-confirmed-by-me">
-                            من تایید نکردم
-                        </v-btn>
-                    </v-btn-toggle>
-                </v-toolbar>
-                <div  :cols="8" class="questions" ref="questionsColumn" id="questions" >
-                    <DynamicScroller
-                            :items="filteredQuestions"
-                            :min-item-size="70"
-                            class="scroller questionss"
-                            ref="scroller"
-                            :emitUpdate="true"
-                            @update="onScroll"
-                    >
-                        <template v-slot="{ item, index, active }">
-                            <DynamicScrollerItem
-                                    :item="item"
-                                    :active="active"
-                                    :data-index="index"
-                            >
-                                <Item :source="item"
-                                      :consider-active-category="false"
-                                      :questions-column="$refs.questionsColumn"
-                                      @inView="test"
-                                      :exam-id="$route.params.quizId"
-                                      :sub-category="quizData.sub_categories"
-                                />
-                            </DynamicScrollerItem>
-                        </template>
-                    </DynamicScroller>
-                </div>
-            </div>
+  <v-container
+    v-resize="updateWindowSize"
+    class="konkoor-view"
+    :fluid="true"
+    :style="{ height: '100%', background: 'rgb(244, 244, 244)' }"
+  >
+    <div
+      @mousemove="resizing"
+      @mouseup="endResize"
+    >
+      <div
+        v-show="dragging"
+        ref="ghostbar"
+        class="ghostbar"
+      />
+      <div
+        ref="sidebar"
+        class="sidebar d-none d-lg-block"
+      >
+        <span />
+        <div
+          ref="dragbar"
+          class="dragbar"
+          @mousedown="startResize"
+        >
+          <v-icon>mdi-drag-vertical-variant</v-icon>
         </div>
-        <v-row  :style="{ 'min-height': '100%' }">
-        </v-row>
-    </v-container>
+        <!--                <v-col   :md="7" class="left-side-list" ref="leftSideList">-->
+        <v-col>
+          <BubbleSheet
+            ref="bubbleSheetC"
+            :style="{ height: 3740 }"
+            :info="{ type: 'pasokh-barg' }"
+            :delay-time="0"
+            @clickChoice="choiceClicked"
+            @scrollTo="scrollTo"
+          />
+        </v-col>
+        <!--                </v-col>-->
+      </div>
+      <div
+        ref="main"
+        class="main"
+      >
+        <v-toolbar class="mb-5">
+          <v-btn-toggle
+            v-model="questionFilterMethod"
+            mandatory
+          >
+            <v-btn value="not-filtered">
+              نمایش همه
+            </v-btn>
+            <v-btn value="not-confirmed-at-all">
+              کلا تایید نشده
+            </v-btn>
+            <v-btn value="not-confirmed-by-me">
+              من تایید نکردم
+            </v-btn>
+          </v-btn-toggle>
+        </v-toolbar>
+        <div
+          id="questions"
+          ref="questionsColumn"
+          :cols="8"
+          class="questions"
+        >
+          <DynamicScroller
+            ref="scroller"
+            :items="filteredQuestions"
+            :min-item-size="70"
+            class="scroller questionss"
+            :emit-update="true"
+            @update="onScroll"
+          >
+            <template v-slot="{ item, index, active }">
+              <DynamicScrollerItem
+                :item="item"
+                :active="active"
+                :data-index="index"
+              >
+                <Item
+                  :source="item"
+                  :consider-active-category="false"
+                  :questions-column="$refs.questionsColumn"
+                  :exam-id="$route.params.quizId"
+                  :sub-category="quizData.sub_categories"
+                  @inView="test"
+                />
+              </DynamicScrollerItem>
+            </template>
+          </DynamicScroller>
+        </div>
+      </div>
+    </div>
+    <v-row :style="{ 'min-height': '100%' }" />
+  </v-container>
 
-    <!--    <exam-questions-with-bubble-sheet :questions="questions"/>-->
+  <!--    <exam-questions-with-bubble-sheet :questions="questions"/>-->
 
 
-    <!--        <v-dialog-->
-    <!--                v-model="dialog"-->
-    <!--                width="500"-->
-    <!--        >-->
-    <!--            <template v-slot:activator="{ on, attrs }">-->
-    <!--                <v-btn-->
-    <!--                        color="red lighten-2"-->
-    <!--                        dark-->
-    <!--                        fab-->
-    <!--                        v-bind="attrs"-->
-    <!--                        v-on="on"-->
-    <!--                >-->
-    <!--                    <v-icon>-->
-    <!--                        mdi-alert-circle-->
-    <!--                    </v-icon>-->
-    <!--                </v-btn>-->
-    <!--            </template>-->
+  <!--        <v-dialog-->
+  <!--                v-model="dialog"-->
+  <!--                width="500"-->
+  <!--        >-->
+  <!--            <template v-slot:activator="{ on, attrs }">-->
+  <!--                <v-btn-->
+  <!--                        color="red lighten-2"-->
+  <!--                        dark-->
+  <!--                        fab-->
+  <!--                        v-bind="attrs"-->
+  <!--                        v-on="on"-->
+  <!--                >-->
+  <!--                    <v-icon>-->
+  <!--                        mdi-alert-circle-->
+  <!--                    </v-icon>-->
+  <!--                </v-btn>-->
+  <!--            </template>-->
 
-    <!--            <v-card>-->
-    <!--                <v-card-title class="headline grey lighten-2">-->
-    <!--                    ثبت خطا-->
-    <!--                </v-card-title>-->
+  <!--            <v-card>-->
+  <!--                <v-card-title class="headline grey lighten-2">-->
+  <!--                    ثبت خطا-->
+  <!--                </v-card-title>-->
 
-    <!--                <v-card-text>-->
-    <!--                    <error-report @clicked="onClickErrorSend" :items="items"/>-->
-    <!--                </v-card-text>-->
+  <!--                <v-card-text>-->
+  <!--                    <error-report @clicked="onClickErrorSend" :items="items"/>-->
+  <!--                </v-card-text>-->
 
-    <!--                <v-divider></v-divider>-->
+  <!--                <v-divider></v-divider>-->
 
-    <!--                <v-card-actions>-->
-    <!--                    <v-spacer></v-spacer>-->
-    <!--                    <v-btn-->
-    <!--                            color="primary"-->
-    <!--                            text-->
-    <!--                            @click="dialog = false"-->
-    <!--                    >-->
-    <!--                        انصراف-->
-    <!--                    </v-btn>-->
-    <!--                </v-card-actions>-->
-    <!--            </v-card>-->
-    <!--        </v-dialog>-->
+  <!--                <v-card-actions>-->
+  <!--                    <v-spacer></v-spacer>-->
+  <!--                    <v-btn-->
+  <!--                            color="primary"-->
+  <!--                            text-->
+  <!--                            @click="dialog = false"-->
+  <!--                    >-->
+  <!--                        انصراف-->
+  <!--                    </v-btn>-->
+  <!--                </v-card-actions>-->
+  <!--            </v-card>-->
+  <!--        </v-dialog>-->
 
-    <!--        <v-btn @click="generateReport">دانلود pdf</v-btn>-->
-    <!--        <vue-html2pdf-->
-    <!--                :show-layout="false"-->
-    <!--                :float-layout="true"-->
-    <!--                :enable-download="true"-->
-    <!--                :preview-modal="true"-->
-    <!--                :paginate-elements-by-height="1400"-->
-    <!--                :pdf-quality="2"-->
-    <!--                :manual-pagination="false"-->
-    <!--                pdf-format="a4"-->
-    <!--                pdf-orientation="landscape"-->
-    <!--                pdf-content-width="800px"-->
-    <!--                ref="html2Pdf"-->
-    <!--        >-->
-    <!--            <section slot="pdf-content">-->
-    <!--test-->
-    <!--            </section>-->
-    <!--        </vue-html2pdf>-->
-
-
+  <!--        <v-btn @click="generateReport">دانلود pdf</v-btn>-->
+  <!--        <vue-html2pdf-->
+  <!--                :show-layout="false"-->
+  <!--                :float-layout="true"-->
+  <!--                :enable-download="true"-->
+  <!--                :preview-modal="true"-->
+  <!--                :paginate-elements-by-height="1400"-->
+  <!--                :pdf-quality="2"-->
+  <!--                :manual-pagination="false"-->
+  <!--                pdf-format="a4"-->
+  <!--                pdf-orientation="landscape"-->
+  <!--                pdf-content-width="800px"-->
+  <!--                ref="html2Pdf"-->
+  <!--        >-->
+  <!--            <section slot="pdf-content">-->
+  <!--test-->
+  <!--            </section>-->
+  <!--        </vue-html2pdf>-->
 </template>
 
 <script>
@@ -147,8 +179,7 @@
     import {QuestSubcategoryList} from "@/models/QuestSubcategory";
 
     export default {
-        name: "lessonDetails",
-        mixins: [mixinAuth, mixinQuiz, mixinWindowSize],
+        name: "LessonDetails",
         // components: {ExamQuestionsWithBubbleSheet},
         components: {
             BubbleSheet,
@@ -156,6 +187,7 @@
             DynamicScrollerItem,
             Item
         },
+        mixins: [mixinAuth, mixinQuiz, mixinWindowSize],
         data: () => ({
             questionFilterMethod: 'not-filtered',
             bubbleSheet:800,
@@ -177,6 +209,53 @@
             inView: [],
             windowVisible: true
         }),
+        computed: {
+            filteredQuestions () {
+                if (this.questionFilterMethod === 'not-confirmed-at-all') {
+                    return this.quizData.questions.list.filter(item => item.confirmers.length === 0)
+                } else if (this.questionFilterMethod === 'not-confirmed-by-me') {
+                    return this.quizData.questions.list.filter(item => item.confirmed === false)
+                } else {
+                    return this.quizData.questions.list
+                }
+            }
+        },
+        watch: {
+            'windowSize.y': function () {
+                this.setHeights()
+                // $('.questions').height(this.windowSize.y)
+                // $('.questionss').height(this.windowSize.y)
+                // $('.left-side-list').height(this.windowSize.y - 24)
+            },
+            'windowSize.x': function () {
+                // const padding = this.questionListPadding()
+                // $('.questions-list').css({ 'padding-right': padding })
+                // $('.questions-list').css({ 'padding-left': padding })
+                // $('.questions-list').height(this.questionListHeight())
+                this.$store.commit('AppLayout/updateDrawer', false)
+            }
+        },
+        created() {
+            this.loadQuizDataAndSubCategories()
+
+            // axios.get(API_ADDRESS.exam.examQuestion(this.$route.params.quizId))
+            //     .then((response) => {
+            //         this.saveCurrentExamQuestions(new QuestionList(response.data.data).list)
+            //         this.quizData.questions = this.getCurrentExamQuestionsInArray()
+            //         console.log(this.quizData.questions.list[0])
+            //     })
+        },
+        mounted () {
+            this.setHeights()
+            // if (this.currentQuestion.id === null) {
+            //     this.loadFirstQuestion()
+            // }
+            this.scrollTo(this.currentQuestion.id)
+            this.changeAppBarAndDrawer(false)
+            $('.sidebar').height(this.windowSize.y)
+            console.log('lofdsafadfasfag', $('.sidebar'))
+            console.log('lofdsafadfasfag', $('.sidebar')[0])
+        },
         methods: {
             questionListHeight() {
                 // box is a col-7 with 12px padding
@@ -354,53 +433,6 @@
                 })
 
             },
-        },
-        created() {
-            this.loadQuizDataAndSubCategories()
-
-            // axios.get(API_ADDRESS.exam.examQuestion(this.$route.params.quizId))
-            //     .then((response) => {
-            //         this.saveCurrentExamQuestions(new QuestionList(response.data.data).list)
-            //         this.quizData.questions = this.getCurrentExamQuestionsInArray()
-            //         console.log(this.quizData.questions.list[0])
-            //     })
-        },
-        watch: {
-            'windowSize.y': function () {
-                this.setHeights()
-                // $('.questions').height(this.windowSize.y)
-                // $('.questionss').height(this.windowSize.y)
-                // $('.left-side-list').height(this.windowSize.y - 24)
-            },
-            'windowSize.x': function () {
-                // const padding = this.questionListPadding()
-                // $('.questions-list').css({ 'padding-right': padding })
-                // $('.questions-list').css({ 'padding-left': padding })
-                // $('.questions-list').height(this.questionListHeight())
-                this.$store.commit('AppLayout/updateDrawer', false)
-            }
-        },
-        mounted () {
-            this.setHeights()
-            // if (this.currentQuestion.id === null) {
-            //     this.loadFirstQuestion()
-            // }
-            this.scrollTo(this.currentQuestion.id)
-            this.changeAppBarAndDrawer(false)
-            $('.sidebar').height(this.windowSize.y)
-            console.log('lofdsafadfasfag', $('.sidebar'))
-            console.log('lofdsafadfasfag', $('.sidebar')[0])
-        },
-        computed: {
-            filteredQuestions () {
-                if (this.questionFilterMethod === 'not-confirmed-at-all') {
-                    return this.quizData.questions.list.filter(item => item.confirmers.length === 0)
-                } else if (this.questionFilterMethod === 'not-confirmed-by-me') {
-                    return this.quizData.questions.list.filter(item => item.confirmed === false)
-                } else {
-                    return this.quizData.questions.list
-                }
-            }
         }
     }
 </script>
