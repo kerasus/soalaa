@@ -89,7 +89,7 @@ const API_ADDRESS = {
     }
   },
   questionSubcategory: {
-    base: lumenServer + '/examCategories'
+    base: lumenServer + '/sub-category'
   }
 }
 export default API_ADDRESS

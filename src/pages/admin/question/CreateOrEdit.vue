@@ -63,7 +63,7 @@
                           <v-autocomplete
                             v-model="attachSubcategoryID"
                             :items="subCategoriesList.list"
-                            label="درس"
+                            label="درسدرس"
                             item-text="display_title"
                             item-value="id"
                             dense
