@@ -1,40 +1,81 @@
 <template>
     <node-view-wrapper class="vue-component">
-        <span class="label">Vue Component</span>
+<!--        <span class="label">Formula</span>-->
+        <div id="mathfield" ref="mathfield" dir="ltr" locale="fa" :class="{ 'editable': editMode }">x=\frac{-b\pm \sqrt{b^2-4ac}}{2a}</div>
+<!--        <v-btn v-if="!editMode" icon @click="editMode = true">-->
+<!--            <v-icon>-->
+<!--                mdi-pencil-->
+<!--            </v-icon>-->
+<!--        </v-btn>-->
+<!--        <v-btn v-if="editMode" icon @click="editMode = false">-->
+<!--            <v-icon>-->
+<!--                mdi-check-->
+<!--            </v-icon>-->
+<!--        </v-btn>-->
+<!--        <div class="latexData" dir="ltr" v-html="latexData"></div>-->
 
-        <div class="content">
-            <div v-html="katex" />
-            <button @click="increase">
-                This button has been clicked {{ node.attrs.count }} times.
-            </button>
-        </div>
     </node-view-wrapper>
 </template>
 
 <script>
-  import {mixinMarkdownAndKatex} from '@/mixin/Mixins'
   import { NodeViewWrapper, nodeViewProps } from '@tiptap/vue-2'
+  import { mixinMarkdownAndKatex } from "@/mixin/Mixins"
+  import 'mathlive/dist/mathlive-fonts.css'
+  import 'mathlive/dist/mathlive-static.css'
+  import MathLive from 'mathlive'
 
   export default {
     components: {
       NodeViewWrapper,
     },
     mixins: [mixinMarkdownAndKatex],
-    props: nodeViewProps,
+    props: {
+        nodeViewProps,
+        node: {
+            type: Object,
+            required: true
+        },
+        updateAttributes: {
+            type: Function,
+            required: true,
+        },
+    },
     data: () => {
       return {
+          editModal: false,
+          latexData: null,
+          formula: '',
+          editMode: false,
+          questMarkdownText: '# Math Rulez! \n  $x=\\frac{-b\\pm\\sqrt[]{b^2-4ac}}{2a}$',
         katex: '$$x=\\frac{-b\\pm\\sqrt[]{b^2-4ac}}{2a}$$'
       }
     },
     mounted() {
-      this.katex = this.markdown.render(this.katex)
+        setTimeout(() => {
+            this.katex = this.markdown.render(this.katex)
+            let that = this
+            const mf = MathLive.makeMathField(
+                this.$refs.mathfield,
+                {
+                    virtualKeyboardMode: 'manual',
+                    onContentDidChange: (mf) => {
+                        that.latexData = mf.getValue()
+                    },
+                });
+            // mf.$setConfig(
+            //     //{ macros: { ...mf.getConfig('macros'), smallfrac: '{}^{#1}\\!\\!/\\!{}_{#2}', }, }
+            // );
+            that.latexData = mf.getValue()
+        }, 500)
     },
+        watch: {
+            latexData: function () {
+                this.updateAttributes({
+                    katex: this.latexData
+                })
+            }
+        },
     methods: {
-      increase() {
-        this.updateAttributes({
-          count: this.node.attrs.count + 1,
-        })
-      },
     },
   }
 </script>
@@ -42,8 +83,8 @@
 
 <style lang="scss" scoped>
     .vue-component {
-        background: #FAF594;
-        border: 3px solid #0D0D0D;
+        /*background: #FAF594;*/
+        /*border: 1px solid #0D0D0D;*/
         border-radius: 0.5rem;
         margin: 1rem 0;
         position: relative;
@@ -66,5 +107,19 @@
     .content {
         margin-top: 1.5rem;
         padding: 1rem;
+    }
+
+    /*#mathfield, .latexData {*/
+    /*    padding: 8px;*/
+    /*    font-size: 20px;*/
+    /*}*/
+
+    #mathfield, .latexData {
+        font-size: 32px;
+        margin: 0;
+        padding: 8px;
+        border-radius: 8px;
+        border: 1px solid rgba(0, 0, 0, .3);
+        box-shadow: 0 0 8px rgba(0, 0, 0, .2)
     }
 </style>

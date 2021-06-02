@@ -47,7 +47,17 @@
     .mesra {
       width: 50%;
       float: right;
+      p {
+        position: relative;
+        margin: 0;
+      }
     }
+
+    .mesra:first-child {
+      margin-left: 20px;
+      width: calc( 50% - 20px );
+    }
+
   }
 
   .mesra {

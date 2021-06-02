@@ -1,20 +1,25 @@
 <template>
-    <div>
-        <a class="btn" @click="toggleShow">set avatar</a>
-        <my-upload field="file"
-                   @crop-success="cropSuccess"
-                   @crop-upload-success="cropUploadSuccess"
-                   @crop-upload-fail="cropUploadFail"
-                   v-model="show"
-                   :width="300"
-                   :height="300"
-                   :url="url"
-                   :params="params"
-                   :lang-type="langType"
-                   :headers="headers"
-                   img-format="png"></my-upload>
-        <img :src="imgDataUrl">
-    </div>
+  <div>
+    <a
+      class="btn"
+      @click="toggleShow"
+    >set avatar</a>
+    <my-upload
+      v-model="show"
+      field="file"
+      :width="300"
+      :height="300"
+      :url="url"
+      :params="params"
+      :lang-type="langType"
+      :headers="headers"
+      img-format="png"
+      @crop-success="cropSuccess"
+      @crop-upload-success="cropUploadSuccess"
+      @crop-upload-fail="cropUploadFail"
+    />
+    <img :src="imgDataUrl">
+  </div>
 </template>
 
 <script>
@@ -23,6 +28,9 @@
 
     export default {
         name: "UploadImage",
+        components: {
+            'my-upload': myUpload
+        },
         props: ['url'],
         data: () => {
             return {
@@ -44,9 +52,6 @@
                     Authorization: 'Bearer ' + this.accessToken
                 }
             }
-        },
-        components: {
-            'my-upload': myUpload
         },
         methods: {
             toggleShow() {

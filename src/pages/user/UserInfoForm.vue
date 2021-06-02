@@ -1,119 +1,155 @@
 <template>
-    <div class="wrapper">
-        <progress-linear :active="user.loading" />
-        <v-progress-linear v-if="percentageOfInformationCompletion > 0"
-                           :value="percentageOfInformationCompletion"
-                           absolute
-                           top
-                           color="amber"
-                           height="25"
+  <div class="wrapper">
+    <progress-linear :active="user.loading" />
+    <v-progress-linear
+      v-if="percentageOfInformationCompletion > 0"
+      :value="percentageOfInformationCompletion"
+      absolute
+      top
+      color="amber"
+      height="25"
+    >
+      <template v-slot:default="{ value }">
+        <strong>{{ Math.ceil(value) }} درصد از اطلاعات تکمیل شده</strong>
+      </template>
+    </v-progress-linear>
+    <v-row>
+      <v-col cols="4">
+        <div class="form-group m-form__group">
+          <v-text-field
+            v-model="user.first_name"
+            label="نام"
+          />
+        </div>
+      </v-col>
+      <v-col cols="4">
+        <div class="form-group m-form__group">
+          <v-text-field
+            v-model="user.last_name"
+            label=" نام خانوادگی"
+          />
+        </div>
+      </v-col>
+      <v-col cols="4">
+        <div class="form-group m-form__group ">
+          <v-select
+            v-model="user.gender.id"
+            :items="genders"
+            label="جنسیت"
+            item-text="title"
+            item-value="id"
+          />
+        </div>
+      </v-col>
+      <v-col cols="6">
+        <div class="form-group m-form__group ">
+          <v-autocomplete
+            v-model="selectedProvince"
+            label="استان"
+            :items="provinces"
+            item-text="title"
+            item-value="id"
+            no-data-text="داده ای یافت نشد"
+          />
+        </div>
+      </v-col>
+      <v-col cols="6">
+        <div class="form-group m-form__group">
+          <v-autocomplete
+            v-model="selectedCity"
+            label="شهر"
+            :items="citiesForSelectedProvince"
+            item-text="title"
+            item-value="id"
+            no-data-text="داده ای یافت نشد"
+          />
+        </div>
+      </v-col>
+      <v-col cols="6">
+        <div class="form-group m-form__group ">
+          <v-select
+            v-model="user.major.id"
+            label="رشته"
+            :items="majors"
+            item-text="title"
+            item-value="id"
+          />
+        </div>
+      </v-col>
+      <v-col cols="6">
+        <div class="form-group m-form__group ">
+          <v-select
+            v-model="user.grade.id"
+            label="مقطع"
+            :items="grades"
+            item-text="title"
+            item-value="id"
+          />
+        </div>
+      </v-col>
+    </v-row>
+    <v-row v-if="user.mobile_verified_at === null">
+      <v-col
+        class="codeBtnPadding"
+        md="12"
+        sm="12"
+      >
+        <v-btn
+          v-if="!waiting"
+          color="blue"
+          @click="sendCode"
         >
-            <template v-slot:default="{ value }">
-                <strong>{{ Math.ceil(value) }} درصد از اطلاعات تکمیل شده</strong>
-            </template>
-        </v-progress-linear>
-        <v-row>
-            <v-col cols="4">
-                <div class="form-group m-form__group">
-                    <v-text-field label="نام" v-model="user.first_name"></v-text-field>
-                </div>
-            </v-col>
-            <v-col cols="4">
-                <div class="form-group m-form__group">
-                    <v-text-field label=" نام خانوادگی" v-model="user.last_name"></v-text-field>
-                </div>
-            </v-col>
-            <v-col cols="4">
-                <div class="form-group m-form__group ">
-                    <v-select :items="genders"
-                              label="جنسیت"
-                              v-model="user.gender.id"
-                              item-text="title"
-                              item-value="id"
-                    />
-                </div>
-            </v-col>
-            <v-col cols="6">
-                <div class="form-group m-form__group ">
-                    <v-autocomplete label="استان"
-                              :items="provinces"
-                              v-model="selectedProvince"
-                              item-text="title"
-                              item-value="id"
-                              no-data-text="داده ای یافت نشد"
-                    />
-                </div>
-            </v-col>
-            <v-col cols="6">
-                <div class="form-group m-form__group">
-                    <v-autocomplete label="شهر"
-                              :items="citiesForSelectedProvince"
-                              v-model="selectedCity"
-                              item-text="title"
-                              item-value="id"
-                              no-data-text="داده ای یافت نشد"
-                    />
-                </div>
-            </v-col>
-            <v-col cols="6">
-                <div class="form-group m-form__group ">
-                    <v-select label="رشته"
-                              :items="majors"
-                              v-model="user.major.id"
-                              item-text="title"
-                              item-value="id"
-                    />
-                </div>
-            </v-col>
-            <v-col cols="6">
-                <div class="form-group m-form__group ">
-                    <v-select label="مقطع"
-                              :items="grades"
-                              v-model="user.grade.id"
-                              item-text="title"
-                              item-value="id"
-                     />
-                </div>
-            </v-col>
-        </v-row>
-        <v-row v-if="user.mobile_verified_at === null">
-            <v-col class="codeBtnPadding" md="12" sm="12">
-                <v-btn color="blue" v-if="!waiting" @click="sendCode">
-                    دریافت کد فعالسازی
-                </v-btn>
-                <div v-if="waiting && showTimer">
-                    <div>
-                        <span>{{ Math.floor(((totalTime) % 3600) / 60)}}</span>
-                        <span>:</span>
-                        <span>{{ ((totalTime) % 3600)  % 60 }}</span>
-                    </div>
-                    کد ارسال شده را وارد نمایید.
-                </div>
-            </v-col>
-            <v-col md="12" sm="12">
-                <v-text-field label="کد فعالسازی" v-model="typedCode">
-
-                </v-text-field>
-            </v-col>
-            <v-col class="codeBtnPadding" md="12" sm="12">
-                <v-btn color="blue" v-if="waiting" @click="verifyCode">
-                    ثبت شماره موبایل
-                </v-btn>
-            </v-col>
-        </v-row>
-        <br/>
-        <br/>
-        <br/>
-        <v-row>
-            <v-col/>
-            <v-col/>
-            <v-col cols="1">
-                <v-btn rounded width="100%" @click="submit">
-                    ذخیره
-                </v-btn>
-            </v-col>
-        </v-row>
-    </div>
+          دریافت کد فعالسازی
+        </v-btn>
+        <div v-if="waiting && showTimer">
+          <div>
+            <span>{{ Math.floor(((totalTime) % 3600) / 60) }}</span>
+            <span>:</span>
+            <span>{{ ((totalTime) % 3600) % 60 }}</span>
+          </div>
+          کد ارسال شده را وارد نمایید.
+        </div>
+      </v-col>
+      <v-col
+        md="12"
+        sm="12"
+      >
+        <v-text-field
+          v-model="typedCode"
+          label="کد فعالسازی"
+        />
+      </v-col>
+      <v-col
+        class="codeBtnPadding"
+        md="12"
+        sm="12"
+      >
+        <v-btn
+          v-if="waiting"
+          color="blue"
+          @click="verifyCode"
+        >
+          ثبت شماره موبایل
+        </v-btn>
+      </v-col>
+    </v-row>
+    <br>
+    <br>
+    <br>
+    <v-row>
+      <v-col />
+      <v-col />
+      <v-col cols="1">
+        <v-btn
+          rounded
+          width="100%"
+          @click="submit"
+        >
+          ذخیره
+        </v-btn>
+      </v-col>
+    </v-row>
+  </div>
 </template>
 
 <script>
@@ -127,38 +163,6 @@
     export default {
         name: "UserInfoForm",
         components: {ProgressLinear},
-        watch: {
-            selectedProvince(newVal) {
-                if (newVal) {
-                    let selectedProvince = this.provinces.find( item => newVal === item.id)
-                    if (selectedProvince) {
-                        this.user.province = selectedProvince.title
-                        this.$store.commit('Auth/updateUser', new User(this.user))
-                    }
-                }
-            },
-            selectedCity(newVal) {
-                if (newVal) {
-                    let selectedCity = this.cities.find( item => newVal === item.id)
-                    if (selectedCity) {
-                        this.user.city = selectedCity.title
-                        this.$store.commit('Auth/updateUser', new User(this.user))
-                    }
-                }
-            }
-        },
-        computed: {
-            percentageOfInformationCompletion () {
-                return this.user.percentageOfInformationCompletion()
-            },
-            citiesForSelectedProvince () {
-                if (this.selectedProvince) {
-                    return this.cities.filter( item => item.province.id === this.selectedProvince)
-                }
-
-                return []
-            }
-        },
         mixins: [mixinAuth],
         props: {
             requiredItems: {
@@ -189,6 +193,38 @@
                 cities: [],
                 provinces: [],
                 grades: []
+            }
+        },
+        computed: {
+            percentageOfInformationCompletion () {
+                return this.user.percentageOfInformationCompletion()
+            },
+            citiesForSelectedProvince () {
+                if (this.selectedProvince) {
+                    return this.cities.filter( item => item.province.id === this.selectedProvince)
+                }
+
+                return []
+            }
+        },
+        watch: {
+            selectedProvince(newVal) {
+                if (newVal) {
+                    let selectedProvince = this.provinces.find( item => newVal === item.id)
+                    if (selectedProvince) {
+                        this.user.province = selectedProvince.title
+                        this.$store.commit('Auth/updateUser', new User(this.user))
+                    }
+                }
+            },
+            selectedCity(newVal) {
+                if (newVal) {
+                    let selectedCity = this.cities.find( item => newVal === item.id)
+                    if (selectedCity) {
+                        this.user.city = selectedCity.title
+                        this.$store.commit('Auth/updateUser', new User(this.user))
+                    }
+                }
             }
         },
         mounted: function () {

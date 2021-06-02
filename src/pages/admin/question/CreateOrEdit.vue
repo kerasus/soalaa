@@ -1,366 +1,576 @@
 <template>
-    <v-container :fluid="true" dir="rtl">
+  <v-container
+    :fluid="true"
+    dir="rtl"
+  >
+    <v-row>
+      <v-col md="12">
+        <v-data-table
+          :headers="selectedQuizzesHeaders"
+          :items="selectedQuizzes"
+          item-key="subId"
+          :loading="attachLoading"
+          loading-text="کمی صبر کنید..."
+          dense
+          sort-by="title"
+          class="elevation-1"
+        >
+          <template v-slot:top>
+            <v-toolbar
+              flat
+            >
+              <v-toolbar-title>آزمون های تخصیص داده شده</v-toolbar-title>
+              <v-divider
+                class="mx-4"
+                inset
+                vertical
+              />
+              <v-spacer />
+              <v-dialog
+                v-model="dialog"
+                max-width="500px"
+              >
+                <template v-slot:activator="{ on, attrs }">
+                  <v-btn
+                    color="primary"
+                    dark
+                    class="mb-2"
+                    v-bind="attrs"
+                    v-on="on"
+                  >
+                    آزمون جدید
+                  </v-btn>
+                </template>
+                <v-card>
+                  <v-card-title>
+                    <span class="headline">تخصیص سوال به آزمون</span>
+                  </v-card-title>
+                  <v-card-text>
+                    <v-container>
+                      <v-row>
+                        <v-col cols="12">
+                          <v-autocomplete
+                            v-model="attachExamID"
+                            :items="totalExamsFiltered"
+                            label="آزمون"
+                            item-text="title"
+                            item-value="id"
+                            dense
+                            outlined
+                          />
+                        </v-col>
+                        <v-col cols="12">
+                          <v-autocomplete
+                            v-model="attachSubcategoryID"
+                            :items="subCategoriesList.list"
+                            label="درسدرس"
+                            item-text="display_title"
+                            item-value="id"
+                            dense
+                            outlined
+                          />
+                        </v-col>
+                        <v-col cols="12">
+                          <v-text-field
+                            v-model="attachOrder"
+                            dense
+                            label="ترتیب"
+                            type="number"
+                            outlined
+                          />
+                        </v-col>
+                      </v-row>
+                    </v-container>
+                  </v-card-text>
+                  <v-card-actions>
+                    <v-spacer />
+                    <v-btn
+                      color="blue darken-1"
+                      text
+                      @click="close"
+                    >
+                      انصراف
+                    </v-btn>
+                    <v-btn
+                      dark
+                      color="green"
+                      @click="attachQuestion"
+                    >
+                      افزودن
+                    </v-btn>
+                  </v-card-actions>
+                </v-card>
+              </v-dialog>
+              <v-dialog
+                v-model="dialogDelete"
+                max-width="500px"
+              >
+                <v-card>
+                  <v-card-title class="headline">
+                    از حذف سوال از این آزمون اطمینان دارید؟
+                  </v-card-title>
+                  <v-card-actions>
+                    <v-spacer />
+                    <v-btn
+                      color="blue darken-1"
+                      text
+                      @click="closeDelete"
+                    >
+                      خیر
+                    </v-btn>
+                    <v-btn
+                      color="blue darken-1"
+                      text
+                      @click="deleteItemConfirm"
+                    >
+                      بله
+                    </v-btn>
+                    <v-spacer />
+                  </v-card-actions>
+                </v-card>
+              </v-dialog>
+            </v-toolbar>
+          </template>
+          <template v-slot:item.actions="{ item }">
+            <v-icon
+              color="pink"
+              @click="detachQuestion(item)"
+            >
+              mdi-delete
+            </v-icon>
+          </template>
+        </v-data-table>
+      </v-col>
+      <v-col cols="12">
+        <v-btn
+          color="light-green"
+          dark
+          block
+          @click="submitQuestion"
+        >
+          ثبت سوال
+        </v-btn>
+      </v-col>
+    </v-row>
+    <v-dialog
+      v-if="false"
+      v-model="editDialog"
+      max-width="1600px"
+    >
+      <v-sheet class="pa-5">
         <v-row>
-            <v-col md="12">
-                <v-data-table
-                        :headers="selectedQuizzesHeaders"
-                        :items="selectedQuizzes"
-                        item-key="subId"
-                        :loading="attachLoading"
-                        loading-text="کمی صبر کنید..."
-                        dense
-                        sort-by="title"
-                        class="elevation-1"
-                >
-                    <template v-slot:top>
-                        <v-toolbar
-                                flat
-                        >
-                            <v-toolbar-title>آزمون های تخصیص داده شده</v-toolbar-title>
-                            <v-divider
-                                    class="mx-4"
-                                    inset
-                                    vertical
-                            ></v-divider>
-                            <v-spacer></v-spacer>
-                            <v-dialog
-                                    v-model="dialog"
-                                    max-width="500px"
-                            >
-                                <template v-slot:activator="{ on, attrs }">
-                                    <v-btn
-                                            color="primary"
-                                            dark
-                                            class="mb-2"
-                                            v-bind="attrs"
-                                            v-on="on"
-                                    >
-                                        آزمون جدید
-                                    </v-btn>
-                                </template>
-                                <v-card>
-                                    <v-card-title>
-                                        <span class="headline">تخصیص سوال به آزمون</span>
-                                    </v-card-title>
-                                    <v-card-text>
-                                        <v-container>
-                                            <v-row>
-                                                <v-col cols="12">
-                                                    <v-autocomplete
-                                                            v-model="attachExamID"
-                                                            :items="totalExamsFiltered"
-                                                            label="آزمون"
-                                                            item-text="title"
-                                                            item-value="id"
-                                                            dense
-                                                            outlined
-                                                    ></v-autocomplete>
-                                                </v-col>
-                                                <v-col cols="12">
-                                                    <v-autocomplete
-                                                            v-model="attachSubcategoryID"
-                                                            :items="subCategoriesList.list"
-                                                            label="درس"
-                                                            item-text="display_title"
-                                                            item-value="id"
-                                                            dense
-                                                            outlined
-                                                    ></v-autocomplete>
-                                                </v-col>
-                                                <v-col cols="12">
-                                                    <v-text-field dense
-                                                                  label="ترتیب"
-                                                                  v-model="attachOrder"
-                                                                  type="number"
-                                                                  outlined
-                                                    />
-                                                </v-col>
-                                            </v-row>
-                                        </v-container>
-                                    </v-card-text>
-                                    <v-card-actions>
-                                        <v-spacer></v-spacer>
-                                        <v-btn
-                                                color="blue darken-1"
-                                                text
-                                                @click="close"
-                                        >
-                                            انصراف
-                                        </v-btn>
-                                        <v-btn
-                                                dark
-                                                color="green"
-                                                @click="attachQuestion"
-                                        >
-                                            افزودن
-                                        </v-btn>
-                                    </v-card-actions>
-                                </v-card>
-                            </v-dialog>
-                            <v-dialog v-model="dialogDelete" max-width="500px">
-                                <v-card>
-                                    <v-card-title class="headline">از حذف سوال از این آزمون اطمینان دارید؟</v-card-title>
-                                    <v-card-actions>
-                                        <v-spacer></v-spacer>
-                                        <v-btn color="blue darken-1" text @click="closeDelete">خیر</v-btn>
-                                        <v-btn color="blue darken-1" text @click="deleteItemConfirm">بله</v-btn>
-                                        <v-spacer></v-spacer>
-                                    </v-card-actions>
-                                </v-card>
-                            </v-dialog>
-                        </v-toolbar>
-                    </template>
-                    <template v-slot:item.actions="{ item }">
-                        <v-icon
-                                color="pink"
-                                @click="detachQuestion(item)"
-                        >
-                            mdi-delete
-                        </v-icon>
-                    </template>
-                </v-data-table>
-            </v-col>
-            <v-col cols="12">
-                <v-btn color="light-green" dark @click="submitQuestion" block>ثبت سوال</v-btn>
-            </v-col>
-        </v-row>
-        <v-dialog v-if="false" v-model="editDialog" max-width="1600px">
-            <v-sheet class="pa-5">
-                <v-row>
-                    <v-col v-show="false" :md="3" class="d-flex justify-center">
-                        <v-text-field
-                                suffix="ثانیه"
-                                v-model="currentQuestion.recommendedTime"
-                                prepend-icon="mdi-timer-outline"
-                                outlined
-                                label="زمان پیشنهادی"
-                                :style="{ maxWidth: '170px' }"
-                                dense
-                                class="recommended-time"
-                                type="number"
-                        />
-                    </v-col>
-                    <v-col v-show="false" :md="3">
-                        <v-btn-toggle v-model="currentQuestion.difficulty" dense>
-                            <v-btn v-for="item in difficulties" :key="item.id" :value="item.id" dense>
-                                {{ item.title }}
-                            </v-btn>
-                        </v-btn-toggle>
-                    </v-col>
-                    <v-col v-if="editMode" :md="12">
-                        <v-btn dark color="blue" block>
-                            ویرایش
-                        </v-btn>
-                    </v-col>
-                </v-row>
-            </v-sheet>
-        </v-dialog>
-        <v-form>
-            <v-sheet color="#f4f4f4">
-                <v-row>
-                    <v-col v-if="false" :md="12" class="main-info-container">
-                        <v-row class="justify-center">
-                            <v-col :md="4" class="d-flex flex-row flex-wrap justify-space-between">
-                                <div v-show="false" class="question-info">
-                                    زمان پیشنهادی: {{ currentQuestion.recommendedTime }} ثانیه
-                                </div>
-                                <div v-show="false" class="question-info">
-                                    طراح: {{ getQuestionCreator }}
-                                </div>
-                                <div v-show="false" class="question-info">
-                                    سختی: {{ getCurrentDifficultyTitle }}
-                                </div>
-                            </v-col>
-                            <v-col :md="3" class="d-flex flex-column align-center">
-                                <div v-for="(item, index) in selectedQuizzes" :key="index" class="order-show">
-                                    <p>
-                                        ترتیب در {{ item.title }}:
-                                    </p>
-                                    <p :style="{ 'margin-left': '40px' }">
-                                        {{ item.order }}
-                                    </p>
-                                </div>
-                            </v-col>
-                            <v-col :md="1">
-                                <v-btn color="grey" block :style="{ height: '100%' }" @click="editDialog = !editDialog">
-                                    <v-icon>mdi-pencil</v-icon>
-                                </v-btn>
-                            </v-col>
-                        </v-row>
-                    </v-col>
-                    <v-col :md="12">
-                        متن سوال:
-                        <div class="renderedPanel" v-html="questRendered">
-                        </div>
-                    </v-col>
-                </v-row>
-            </v-sheet>
-            <v-radio-group v-model="trueChoiceIndex">
-                <v-row>
-                    <v-col md="6" v-for="index in 4" :key="index" :style="{ 'display': 'flex' }">
-    <!--                    <v-col class="pl-5" :md="5">-->
-<!--                            <v-textarea v-if="typeof currentQuestion.choices.list[index - 1] !== 'undefined'"-->
-<!--                                        dir="rtl"-->
-<!--                                        clearable-->
-<!--                                        clear-icon="mdi-close-circle"-->
-<!--                                        auto-grow-->
-<!--                                        :label="choiceNumber[index -1]"-->
-<!--                                        v-model="currentQuestion.choices.list[index - 1].title"-->
-<!--                                        @input="updateRendered"-->
-<!--                            ></v-textarea>-->
-    <!--                    </v-col>-->
-    <!--                    <v-col :md="2">-->
-    <!--                        <v-radio :value="index - 1" />-->
-    <!--                        <markdown-btn :elem="currentQuestion.choices.list[index - 1]" :elem-key="'title'" :rendered-matrix-katex="renderedMatrixKatex" :url="url" @add="markdownBtnAddString" />-->
-
-    <!--                    </v-col>-->
-                        <v-radio :value="index - 1" on-icon="mdi-check-circle-outline" off-icon="mdi-checkbox-blank-circle-outline" color="green"/>
-                        {{ index }})
-                        <div class="renderedPanel" v-html="choiceRendered[index - 1]">
-                        </div>
-                    </v-col>
-                </v-row>
-            </v-radio-group>
-<!--            <v-row>-->
-<!--                <v-col>-->
-<!--                    <v-textarea v-model="currentQuestion.answer" outlined label="جواب تشریحی" />-->
-<!--                </v-col>-->
-<!--            </v-row>-->
-        </v-form>
-        <hr>
-        <div class="d-flex justify-space-around mb-5 mt-5">
-            <v-btn-toggle v-model="selectedField">
-                <v-btn :value="0">
-                    متن سوال
-                </v-btn>
-
-                <v-btn :value="1">
-                    گزینه 1
-                </v-btn>
-
-                <v-btn :value="2">
-                    گزینه 2
-                </v-btn>
-
-                <v-btn :value="3">
-                    گزینه 3
-                </v-btn>
-
-                <v-btn :value="4">
-                    گزینه 4
-                </v-btn>
+          <v-col
+            v-show="false"
+            :md="3"
+            class="d-flex justify-center"
+          >
+            <v-text-field
+              v-model="currentQuestion.recommendedTime"
+              suffix="ثانیه"
+              prepend-icon="mdi-timer-outline"
+              outlined
+              label="زمان پیشنهادی"
+              :style="{ maxWidth: '170px' }"
+              dense
+              class="recommended-time"
+              type="number"
+            />
+          </v-col>
+          <v-col
+            v-show="false"
+            :md="3"
+          >
+            <v-btn-toggle
+              v-model="currentQuestion.difficulty"
+              dense
+            >
+              <v-btn
+                v-for="item in difficulties"
+                :key="item.id"
+                :value="item.id"
+                dense
+              >
+                {{ item.title }}
+              </v-btn>
             </v-btn-toggle>
-            <markdown-btn v-if="selectedField === 0" :elem="currentQuestion" :elem-key="'statement'" :rendered-matrix-katex="renderedMatrixKatex" :rendered-table-katex="renderedTableKatex" :url="url" @add="markdownBtnAddString" />
-            <markdown-btn v-else :elem="currentQuestion.choices.list[selectedField - 1]" :elem-key="'title'" :rendered-matrix-katex="renderedMatrixKatex" :rendered-table-katex="renderedTableKatex" :url="url" @add="markdownBtnAddString" />
-        </div>
-        <v-textarea
-            v-if="selectedField === 0"
-            v-model="currentQuestion.statement"
-            outlined
-            dir="rtl"
-            clearable
-            clear-icon="mdi-close-circle"
-            auto-grow
-            :label="'متن'"
-            @input="updateRendered"
-        ></v-textarea>
-        <v-textarea
-                v-else
-                v-model="currentQuestion.choices.list[selectedField - 1].title"
+          </v-col>
+          <v-col
+            v-if="editMode"
+            :md="12"
+          >
+            <v-btn
+              dark
+              color="blue"
+              block
+            >
+              ویرایش
+            </v-btn>
+          </v-col>
+        </v-row>
+      </v-sheet>
+    </v-dialog>
+    <v-form>
+      <v-sheet color="#f4f4f4">
+        <v-row>
+          <v-col
+            v-if="false"
+            :md="12"
+            class="main-info-container"
+          >
+            <v-row class="justify-center">
+              <v-col
+                :md="4"
+                class="d-flex flex-row flex-wrap justify-space-between"
+              >
+                <div
+                  v-show="false"
+                  class="question-info"
+                >
+                  زمان پیشنهادی: {{ currentQuestion.recommendedTime }} ثانیه
+                </div>
+                <div
+                  v-show="false"
+                  class="question-info"
+                >
+                  طراح: {{ getQuestionCreator }}
+                </div>
+                <div
+                  v-show="false"
+                  class="question-info"
+                >
+                  سختی: {{ getCurrentDifficultyTitle }}
+                </div>
+              </v-col>
+              <v-col
+                :md="3"
+                class="d-flex flex-column align-center"
+              >
+                <div
+                  v-for="(item, index) in selectedQuizzes"
+                  :key="index"
+                  class="order-show"
+                >
+                  <p>
+                    ترتیب در {{ item.title }}:
+                  </p>
+                  <p :style="{ 'margin-left': '40px' }">
+                    {{ item.order }}
+                  </p>
+                </div>
+              </v-col>
+              <v-col :md="1">
+                <v-btn
+                  color="grey"
+                  block
+                  :style="{ height: '100%' }"
+                  @click="editDialog = !editDialog"
+                >
+                  <v-icon>mdi-pencil</v-icon>
+                </v-btn>
+              </v-col>
+            </v-row>
+          </v-col>
+          <v-col :md="12">
+            متن سوال:
+            <!-- eslint-disable vue/no-v-html -->
+            <div
+              class="renderedPanel"
+              v-html="questRendered"
+            />
+            <!--eslint-enable-->
+          </v-col>
+        </v-row>
+      </v-sheet>
+      <v-radio-group v-model="trueChoiceIndex">
+        <v-row>
+          <v-col
+            v-for="index in 4"
+            :key="index"
+            md="6"
+            :style="{ 'display': 'flex' }"
+          >
+            <!--                    <v-col class="pl-5" :md="5">-->
+            <!--                            <v-textarea v-if="typeof currentQuestion.choices.list[index - 1] !== 'undefined'"-->
+            <!--                                        dir="rtl"-->
+            <!--                                        clearable-->
+            <!--                                        clear-icon="mdi-close-circle"-->
+            <!--                                        auto-grow-->
+            <!--                                        :label="choiceNumber[index -1]"-->
+            <!--                                        v-model="currentQuestion.choices.list[index - 1].title"-->
+            <!--                                        @input="updateRendered"-->
+            <!--                            ></v-textarea>-->
+            <!--                    </v-col>-->
+            <!--                    <v-col :md="2">-->
+            <!--                        <v-radio :value="index - 1" />-->
+            <!--                        <markdown-btn :elem="currentQuestion.choices.list[index - 1]" :elem-key="'title'" :rendered-matrix-katex="renderedMatrixKatex" :url="url" @add="markdownBtnAddString" />-->
+
+            <!--                    </v-col>-->
+            <v-radio
+              :value="index - 1"
+              on-icon="mdi-check-circle-outline"
+              off-icon="mdi-checkbox-blank-circle-outline"
+              color="green"
+            />
+            {{ index }})
+            <!-- eslint-disable vue/no-v-html -->
+            <div
+              class="renderedPanel"
+              v-html="choiceRendered[index - 1]"
+            />
+            <!--eslint-enable-->
+          </v-col>
+        </v-row>
+      </v-radio-group>
+      <!--            <v-row>-->
+      <!--                <v-col>-->
+      <!--                    <v-textarea v-model="currentQuestion.answer" outlined label="جواب تشریحی" />-->
+      <!--                </v-col>-->
+      <!--            </v-row>-->
+    </v-form>
+    <hr>
+    <div class="d-flex justify-space-around mb-5 mt-5">
+      <v-btn-toggle v-model="selectedField">
+        <v-btn :value="0">
+          متن سوال
+        </v-btn>
+
+        <v-btn :value="1">
+          گزینه 1
+        </v-btn>
+
+        <v-btn :value="2">
+          گزینه 2
+        </v-btn>
+
+        <v-btn :value="3">
+          گزینه 3
+        </v-btn>
+
+        <v-btn :value="4">
+          گزینه 4
+        </v-btn>
+      </v-btn-toggle>
+      <markdown-btn
+        v-if="selectedField === 0"
+        :elem="currentQuestion"
+        :elem-key="'statement'"
+        :rendered-matrix-katex="renderedMatrixKatex"
+        :rendered-table-katex="renderedTableKatex"
+        :url="url"
+        @add="markdownBtnAddString"
+      />
+      <markdown-btn
+        v-else
+        :elem="currentQuestion.choices.list[selectedField - 1]"
+        :elem-key="'title'"
+        :rendered-matrix-katex="renderedMatrixKatex"
+        :rendered-table-katex="renderedTableKatex"
+        :url="url"
+        @add="markdownBtnAddString"
+      />
+    </div>
+    <v-textarea
+      v-if="selectedField === 0"
+      v-model="currentQuestion.statement"
+      outlined
+      dir="rtl"
+      clearable
+      clear-icon="mdi-close-circle"
+      auto-grow
+      :label="'متن'"
+      @input="updateRendered"
+    />
+    <v-textarea
+      v-else
+      v-model="currentQuestion.choices.list[selectedField - 1].title"
+      outlined
+      dir="rtl"
+      clearable
+      clear-icon="mdi-close-circle"
+      auto-grow
+      :label="'متن'"
+      @input="updateRendered"
+    />
+    <div v-if="currentQuestion.id">
+      <!--            <upload-image :url="'/api/v1/question/upload/'+currentQuestion.id" />-->
+      <upload-files
+        :post-action="'/api/v1/question/upload/'+currentQuestion.id"
+        :put-action="'/api/v1/question/upload/'+currentQuestion.id"
+      />
+    </div>
+    <div
+      id="mathfield"
+      dir="ltr"
+      locale="fa"
+    >
+      x=\frac{-b\pm \sqrt{b^2-4ac}}{2a}
+    </div>
+    <!-- eslint-disable vue/no-v-html -->
+    <div
+      class="latexData"
+      dir="ltr"
+      v-html="latexData"
+    />
+    <!--eslint-enable-->
+    <v-text-field
+      v-model="url"
+      full-width
+      label="url"
+      dir="ltr"
+    />
+    <v-row>
+      <v-col>
+        <v-sheet width="500px">
+          <v-container :fluid="true">
+            <v-row>
+              <v-col :md="2">
+                <v-text-field
+                  v-model="matrixWidth"
+                  label="عرض"
+                  outlined
+                  dense
+                  type="number"
+                  @input="initMatrix"
+                />
+              </v-col>
+              <v-col :md="2">
+                <v-text-field
+                  v-model="matrixHeight"
+                  label="ارتفاع"
+                  outlined
+                  dense
+                  type="number"
+                  @input="initMatrix"
+                />
+              </v-col>
+              <v-col :md="4">
+                <v-select
+                  v-model="determinan"
+                  outlined
+                  :items="matrixMenu"
+                  item-text="title"
+                  item-value="value"
+                  dense
+                />
+              </v-col>
+            </v-row>
+            <div dir="ltr">
+              <v-row
+                v-for="indexY in parseInt(matrixTempHeight)"
+                :key="indexY"
+              >
+                <v-col
+                  v-for="indexX in parseInt(matrixTempWidth)"
+                  :key="indexX"
+                >
+                  <v-text-field
+                    v-model="matrix[indexY - 1][indexX - 1]"
+                    outlined
+                    :label="'(' + indexX + ', ' + indexX + ')'"
+                    dense
+                  />
+                </v-col>
+              </v-row>
+            </div>
+          </v-container>
+        </v-sheet>
+      </v-col>
+      <v-col>
+        <v-sheet
+          width="500px"
+          color="#e1e1e1"
+        >
+          <v-container :fluid="true">
+            <v-row>
+              <v-col :md="2">
+                <v-text-field
+                  v-model="tableWidth"
+                  label="عرض"
+                  outlined
+                  dense
+                  type="number"
+                  @input="initTable"
+                />
+              </v-col>
+              <v-col :md="2">
+                <v-text-field
+                  v-model="tableHeight"
+                  label="ارتفاع"
+                  outlined
+                  dense
+                  type="number"
+                  @input="initTable"
+                />
+              </v-col>
+              <v-col :md="5">
+                <!--                                <v-select outlined :items="tableMenu" item-text="title" item-value="value" v-model="tableHeader" dense />-->
+              </v-col>
+            </v-row>
+            <div dir="ltr">
+              <v-row
+                v-for="indexY in parseInt(tableTempHeight)"
+                :key="indexY"
+              >
+                <v-col
+                  v-for="indexX in parseInt(tableTempWidth)"
+                  :key="indexX"
+                >
+                  <v-text-field
+                    v-model="table[indexY - 1][indexX - 1]"
+                    outlined
+                    :label="'(' + indexX + ', ' + indexX + ')'"
+                    dense
+                  />
+                </v-col>
+              </v-row>
+            </div>
+          </v-container>
+        </v-sheet>
+      </v-col>
+    </v-row>
+    <v-row>
+      <v-col>
+        <v-sheet color="#fff">
+          <v-row>
+            <v-col :md="3">
+              <v-text-field
+                v-model="resizerUrl"
+                label="آدرس عکس"
                 outlined
-                dir="rtl"
-                clearable
-                clear-icon="mdi-close-circle"
-                auto-grow
-                :label="'متن'"
-                @input="updateRendered"
-        ></v-textarea>
-        <div v-if="currentQuestion.id">
-<!--            <upload-image :url="'/api/v1/question/upload/'+currentQuestion.id" />-->
-            <upload-files :post-action="'/api/v1/question/upload/'+currentQuestion.id" :put-action="'/api/v1/question/upload/'+currentQuestion.id" />
-        </div>
-        <div id="mathfield" dir="ltr" locale="fa">x=\frac{-b\pm \sqrt{b^2-4ac}}{2a}</div>
-        <div class="latexData" dir="ltr" v-html="latexData"></div>
-        <v-text-field full-width label="url" v-model="url" dir="ltr"/>
-        <v-row>
-            <v-col>
-                <v-sheet width="500px">
-                    <v-container :fluid="true">
-                        <v-row>
-                            <v-col :md="2">
-                                <v-text-field label="عرض" outlined dense v-model="matrixWidth" type="number" @input="initMatrix"/>
-                            </v-col>
-                            <v-col :md="2">
-                                <v-text-field label="ارتفاع" outlined dense v-model="matrixHeight" type="number" @input="initMatrix"/>
-                            </v-col>
-                            <v-col :md="4">
-                                <v-select outlined :items="matrixMenu" item-text="title" item-value="value" v-model="determinan" dense />
-                            </v-col>
-                        </v-row>
-                        <div dir="ltr">
-                            <v-row v-for="indexY in parseInt(matrixTempHeight)" :key="indexY">
-                                <v-col v-for="indexX in parseInt(matrixTempWidth)" :key="indexX">
-                                    <v-text-field v-model="matrix[indexY - 1][indexX - 1]" outlined :label="'(' + indexX + ', ' + indexX + ')'" dense></v-text-field>
-                                </v-col>
-                            </v-row>
-                        </div>
-                    </v-container>
-                </v-sheet>
+                dense
+                @input="setWidth"
+              />
+              <v-slider
+                v-if="resizerImgSize"
+                v-model="resizerImgFinalWidth"
+                class="mt-5"
+                label="سایز عکس"
+                thumb-color="red"
+                thumb-label="always"
+                inverse-label
+              />
+              <v-btn
+                icon
+                @click="copyResizedImgUrl"
+              >
+                <v-icon>
+                  mdi-content-copy
+                </v-icon>
+              </v-btn>
             </v-col>
-            <v-col>
-                <v-sheet width="500px" color="#e1e1e1">
-                    <v-container :fluid="true">
-                        <v-row>
-                            <v-col :md="2">
-                                <v-text-field label="عرض" outlined dense v-model="tableWidth" type="number" @input="initTable"/>
-                            </v-col>
-                            <v-col :md="2">
-                                <v-text-field label="ارتفاع" outlined dense v-model="tableHeight" type="number" @input="initTable"/>
-                            </v-col>
-                            <v-col :md="5">
-<!--                                <v-select outlined :items="tableMenu" item-text="title" item-value="value" v-model="tableHeader" dense />-->
-                            </v-col>
-                        </v-row>
-                        <div dir="ltr">
-                            <v-row v-for="indexY in parseInt(tableTempHeight)" :key="indexY">
-                                <v-col v-for="indexX in parseInt(tableTempWidth)" :key="indexX">
-                                    <v-text-field v-model="table[indexY - 1][indexX - 1]" outlined :label="'(' + indexX + ', ' + indexX + ')'" dense></v-text-field>
-                                </v-col>
-                            </v-row>
-                        </div>
-                    </v-container>
-                </v-sheet>
+            <v-col :md="9">
+              <img
+                v-if="resizerUrl !== ''"
+                ref="resizerimg"
+                :src="resizerUrl"
+                :width="resizerImgFinalWidth ? resizerImgSize / 100 * resizerImgFinalWidth : 'auto'"
+              >
             </v-col>
-        </v-row>
-        <v-row>
-            <v-col>
-                <v-sheet color="#fff">
-                    <v-row>
-                        <v-col :md="3">
-                            <v-text-field label="آدرس عکس" outlined v-model="resizerUrl" dense  @input="setWidth"/>
-                            <v-slider
-                                    class="mt-5"
-                                    v-if="resizerImgSize"
-                                    v-model="resizerImgFinalWidth"
-                                    label="سایز عکس"
-                                    thumb-color="red"
-                                    thumb-label="always"
-                                    inverse-label
-                            ></v-slider>
-                            <v-btn icon @click="copyResizedImgUrl">
-                                <v-icon>
-                                    mdi-content-copy
-                                </v-icon>
-                            </v-btn>
-                        </v-col>
-                        <v-col :md="9">
-                            <img ref="resizerimg" :src="resizerUrl" v-if="resizerUrl !== ''" :width="resizerImgFinalWidth ? resizerImgSize / 100 * resizerImgFinalWidth : 'auto'"/>
-                        </v-col>
-                    </v-row>
-                </v-sheet>
-            </v-col>
-        </v-row>
-    </v-container>
+          </v-row>
+        </v-sheet>
+      </v-col>
+    </v-row>
+  </v-container>
 </template>
 
 <script>
@@ -385,67 +595,6 @@
         name: 'CreateOrEdit',
         components: {MarkdownBtn, UploadFiles},
         mixins: [mixinMarkdownAndKatex],
-        computed: {
-            totalExamsFiltered () {
-                let filtered = this.totalExams
-                for (let i = 0; i < this.selectedQuizzes.length; i++) {
-                    filtered = filtered.filter(item => item.id !== this.selectedQuizzes[i].id)
-                }
-                return filtered
-            },
-            renderedTableKatex () {
-                return this.renderTableKatex()
-            },
-            renderedMatrixKatex () {
-                return this.renderMatrixKatex()
-            },
-            getSelectedQuizzez () {
-                const arr = []
-                for (let i = 0; i < this.selectedQuizzes.length; i++) {
-                    arr.push(this.getQuizById(this.selectedQuizzes[i]))
-                }
-                return arr
-            },
-            getCurrentDifficultyTitle () {
-                return this.difficulties.find(item => item.id === this.currentQuestion.difficulty).title
-            },
-            getQuestionCreator () {
-                return this.teachers.find(item => item.id === this.currentQuestion.creator).name
-            }
-        },
-        created() {
-            this.setEditModeState()
-          const loanExamListPromise = this.loanExamList()
-          const loadSubcategoriesPromise = this.loadSubcategories()
-
-            if (this.editMode) {
-              Promise.all([loanExamListPromise, loadSubcategoriesPromise])
-            .then(() => {
-                this.loadnCurrentQuestionData()
-              })
-            } else {
-                this.currentQuestion = new Question(this.questionData)
-            }
-        },
-        mounted() {
-            // this.rendered = this.markdown.render();
-            // this.updateRendered();
-
-            let that = this
-            const mf = MathLive.makeMathField(
-                document.getElementById('mathfield'),
-                {
-                    virtualKeyboardMode: 'manual',
-                    onContentDidChange: (mf) => {
-                        that.latexData = mf.getValue()
-                    },
-                });
-            // mf.$setConfig(
-            //     //{ macros: { ...mf.getConfig('macros'), smallfrac: '{}^{#1}\\!\\!/\\!{}_{#2}', }, }
-            // );
-            that.latexData = mf.getValue()
-
-        },
         data: () => {
             return {
                 dialog: false,
@@ -565,6 +714,67 @@
                 tableHeader: true,
                 tableMenu: [{ title: 'جدول با هدر', value: true}, { title: 'جدول ساده', value: false }]
             }
+        },
+        computed: {
+            totalExamsFiltered () {
+                let filtered = this.totalExams
+                for (let i = 0; i < this.selectedQuizzes.length; i++) {
+                    filtered = filtered.filter(item => item.id !== this.selectedQuizzes[i].id)
+                }
+                return filtered
+            },
+            renderedTableKatex () {
+                return this.renderTableKatex()
+            },
+            renderedMatrixKatex () {
+                return this.renderMatrixKatex()
+            },
+            getSelectedQuizzez () {
+                const arr = []
+                for (let i = 0; i < this.selectedQuizzes.length; i++) {
+                    arr.push(this.getQuizById(this.selectedQuizzes[i]))
+                }
+                return arr
+            },
+            getCurrentDifficultyTitle () {
+                return this.difficulties.find(item => item.id === this.currentQuestion.difficulty).title
+            },
+            getQuestionCreator () {
+                return this.teachers.find(item => item.id === this.currentQuestion.creator).name
+            }
+        },
+        created() {
+            this.setEditModeState()
+          const loanExamListPromise = this.loanExamList()
+          const loadSubcategoriesPromise = this.loadSubcategories()
+
+            if (this.editMode) {
+              Promise.all([loanExamListPromise, loadSubcategoriesPromise])
+            .then(() => {
+                this.loadnCurrentQuestionData()
+              })
+            } else {
+                this.currentQuestion = new Question(this.questionData)
+            }
+        },
+        mounted() {
+            // this.rendered = this.markdown.render();
+            // this.updateRendered();
+
+            let that = this
+            const mf = MathLive.makeMathField(
+                document.getElementById('mathfield'),
+                {
+                    virtualKeyboardMode: 'manual',
+                    onContentDidChange: (mf) => {
+                        that.latexData = mf.getValue()
+                    },
+                });
+            // mf.$setConfig(
+            //     //{ macros: { ...mf.getConfig('macros'), smallfrac: '{}^{#1}\\!\\!/\\!{}_{#2}', }, }
+            // );
+            that.latexData = mf.getValue()
+
         },
         methods: {
 
@@ -1025,7 +1235,7 @@
             // }
 
 
-          convertToMarkdownKatex (string) {
+          convertToMarkdownKatex1 (string) {
             if (!string) {
               return string
             }

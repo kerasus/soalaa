@@ -1,78 +1,85 @@
 <template>
-    <v-card class="elevation-12">
-        <v-progress-linear
-                color="#ffc107"
-                absolute
-                top
-                :active="loadingList"
-                indeterminate
-                rounded
-                height="6"
-        ></v-progress-linear>
-        <v-toolbar
-                color="primary"
-                dark
-                flat
-        >
-            <v-toolbar-title>
-                <v-row>
-                    <v-col>
-                        <v-img src="/img/logo.png" width="20" />
-                    </v-col>
-                    <v-col>
-                        ورود / ثبت نام
-                    </v-col>
-                </v-row>
-            </v-toolbar-title>
-            <v-spacer></v-spacer>
-            <v-tooltip bottom>
-                <template v-slot:activator="{ on }">
-                    <v-btn
-                            :href="'https://alaatv.com/'"
-                            icon
-                            small
-                            target="_blank"
-                            v-on="on"
-                    >
-                        <v-img src="img/alaa-logo.png" width="50" />
-                    </v-btn>
-                </template>
-                <span>آموزش مجازی آلاء</span>
-            </v-tooltip>
-        </v-toolbar>
-        <v-form v-on:submit.prevent="login">
-            <v-card-text>
-                <v-text-field
-                        @animationstart="checkAnimationUserName"
-                        id="username"
-                        label="شماره همراه"
-                        name="login"
-                        prepend-icon="mdi-account"
-                        type="text"
-                        v-model="username"
-                ></v-text-field>
+  <v-card class="elevation-12">
+    <v-progress-linear
+      color="#ffc107"
+      absolute
+      top
+      :active="loadingList"
+      indeterminate
+      rounded
+      height="6"
+    />
+    <v-toolbar
+      color="primary"
+      dark
+      flat
+    >
+      <v-toolbar-title>
+        <v-row>
+          <v-col>
+            <v-img
+              src="/img/logo.png"
+              width="20"
+            />
+          </v-col>
+          <v-col>
+            ورود / ثبت نام
+          </v-col>
+        </v-row>
+      </v-toolbar-title>
+      <v-spacer />
+      <v-tooltip bottom>
+        <template v-slot:activator="{ on }">
+          <v-btn
+            :href="'https://alaatv.com/'"
+            icon
+            small
+            target="_blank"
+            v-on="on"
+          >
+            <v-img
+              src="img/alaa-logo.png"
+              width="50"
+            />
+          </v-btn>
+        </template>
+        <span>آموزش مجازی آلاء</span>
+      </v-tooltip>
+    </v-toolbar>
+    <v-form @submit.prevent="login">
+      <v-card-text>
+        <v-text-field
+          id="username"
+          v-model="username"
+          label="شماره همراه"
+          name="login"
+          prepend-icon="mdi-account"
+          type="text"
+          @animationstart="checkAnimationUserName"
+        />
 
-                <v-text-field
-                        id="password"
-                        label="کد ملی"
-                        name="password"
-                        prepend-icon="mdi-lock"
-                        type="password"
-                        v-model="password"
-                ></v-text-field>
-            </v-card-text>
-            <v-card-actions>
-                <v-btn color="primary"
-                       :loading="loadingList"
-                       :disabled="loadingList"
-                       type="submit"
-                >
-                    ورود
-                </v-btn>
-                <v-spacer></v-spacer>
-            </v-card-actions>
-        </v-form>
-    </v-card>
+        <v-text-field
+          id="password"
+          v-model="password"
+          label="کد ملی"
+          name="password"
+          prepend-icon="mdi-lock"
+          type="password"
+        />
+      </v-card-text>
+      <v-card-actions>
+        <v-btn
+          color="primary"
+          :loading="loadingList"
+          :disabled="loadingList"
+          type="submit"
+        >
+          ورود
+        </v-btn>
+        <v-spacer />
+      </v-card-actions>
+    </v-form>
+  </v-card>
 </template>
 
 <script>
@@ -83,9 +90,10 @@
 
     export default {
         name: 'Auth',
+        mixins: [mixinAuth],
         data () {
             return {
-                user: new User(window.localStorage.getItem('user')),
+                // user: new User(window.localStorage.getItem('user')),
                 loadingList: false,
                 username: null,
                 password: null,
@@ -93,11 +101,11 @@
                 autofilledPass:false
             }
         },
-        mixins: [mixinAuth],
         created() {
             if (this.getToken()) {
                 this.getUserData( () => { this.redirectTo() })
             }
+
         },
         methods: {
             checkAnimationUserName(e) {

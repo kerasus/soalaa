@@ -2,7 +2,6 @@
     <div>
         <vue-tiptap-plus v-model="html"/>
         <div v-html="convertToMarkdownKatex(html)"/>
-        <div v-html="(merkdownTesti)"/>
     </div>
 </template>
 
@@ -20,7 +19,6 @@
       return {
         html: '<p>I’m running tiptap with Vue.js. 🎉</p>',
         innerHTML: 'hi',
-        merkdownTesti: ''
       }
     },
     methods: {
@@ -107,9 +105,6 @@
       },
       convertToMarkdownKatex(string) {
         string = this.convertTables(string)
-
-        string = string.replace(/\n/g,'<br>')
-
         const markdown = this.htmlToMarkdown(string)
         // return this.markdown.render(string.replace('<div class="question" dir="rtl">', ''))
         return this.markdown.render(markdown)

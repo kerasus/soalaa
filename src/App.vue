@@ -1,83 +1,123 @@
 <template>
-    <v-app v-resize="updateWindowSize">
-        <v-navigation-drawer app
-                             v-model="drawer"
-                             right
-                             width="316"
-                             disable-resize-watcher
-                             :class="{
-                                 'mapOfQuestions': $route.name === 'onlineQuiz.alaaView' || $route.name === 'onlineQuiz.konkoorView',
-                                 'right-drawer': $route.name !== 'onlineQuiz.alaaView' && $route.name !== 'onlineQuiz.konkoorView'
-                             }"
-        >
-            <div style="height: 150px;line-height: 150px;font-size: 4rem;color: rgb(255, 193, 7);display: flex;align-items: center;justify-content: center;">
-                <div style="display: block">
-                    <v-img src="/img/logo-1.png" width="150" v-if="$route.name === 'onlineQuiz.alaaView'"/>
-                    <v-img src="/img/logo-2.png" width="150" v-else/>
-                </div>
-            </div>
-            <SideMenu_MapOfQuestions
-                    v-if="$route.name === 'onlineQuiz.alaaView' || $route.name === 'onlineQuiz.konkoorView'"/>
-            <SideMenu_Dashboard v-else/>
-        </v-navigation-drawer>
-        <v-app-bar v-if="appBar" app color="--background-2" elevate-on-scroll>
-            <div class="header">
-                <v-container>
-                    <v-row>
-                        <v-col class="px-md-0 px-10 d-flex justify-space-between">
-                            <div class="rounded-b-xl rounded-r-xl d-flex flex-row align-center">
-                                <v-menu bottom :offset-y="true" class="rounded-b-xl rounded-r-xl">
-                                    <template v-slot:activator="{ on, attrs }">
-                                        <v-btn large tile v-bind="attrs" v-on="on" elevation="0"
-                                               class="pl-3 topMenuOpenButton">
-                                            <v-icon class="mr-2" :size="30" color="#666">mdi-account-circle</v-icon>
-                                            <span v-if="user.last_name">
-                                                {{ user.last_name }}
-                                            </span>
-                                            <span v-if="user.first_name">
-                                                {{ user.first_name }}
-                                            </span>
-                                        </v-btn>
-                                    </template>
-                                    <v-card max-width="375" class="mx-auto" rounded="b-xl r-xl">
-                                        <TopMenu_OnlineQuiz v-if="$route.name === 'onlineQuiz.alaaView'"/>
-                                        <TopMenu_Dashboard v-else/>
-                                    </v-card>
-                                </v-menu>
+  <v-app v-resize="updateWindowSize">
+    <v-navigation-drawer
+      v-model="drawer"
+      app
+      right
+      width="316"
+      disable-resize-watcher
+      :class="{
+        'mapOfQuestions': $route.name === 'onlineQuiz.alaaView' || $route.name === 'onlineQuiz.konkoorView',
+        'right-drawer': $route.name !== 'onlineQuiz.alaaView' && $route.name !== 'onlineQuiz.konkoorView'
+      }"
+    >
+      <div style="height: 150px;line-height: 150px;font-size: 4rem;color: rgb(255, 193, 7);display: flex;align-items: center;justify-content: center;">
+        <div style="display: block">
+          <v-img
+            v-if="$route.name === 'onlineQuiz.alaaView'"
+            src="/img/logo-1.png"
+            width="150"
+          />
+          <v-img
+            v-else
+            src="/img/logo-2.png"
+            width="150"
+          />
+        </div>
+      </div>
+      <SideMenu_MapOfQuestions
+        v-if="$route.name === 'onlineQuiz.alaaView' || $route.name === 'onlineQuiz.konkoorView'"
+      />
+      <SideMenu_Dashboard v-else />
+    </v-navigation-drawer>
+    <v-app-bar
+      v-if="appBar"
+      app
+      color="--background-2"
+      elevate-on-scroll
+    >
+      <div class="header">
+        <v-container>
+          <v-row>
+            <v-col class="px-md-0 px-10 d-flex justify-space-between">
+              <div class="rounded-b-xl rounded-r-xl d-flex flex-row align-center">
+                <v-menu
+                  bottom
+                  :offset-y="true"
+                  class="rounded-b-xl rounded-r-xl"
+                >
+                  <template v-slot:activator="{ on, attrs }">
+                    <v-btn
+                      large
+                      tile
+                      v-bind="attrs"
+                      elevation="0"
+                      class="pl-3 topMenuOpenButton"
+                      v-on="on"
+                    >
+                      <v-icon
+                        class="mr-2"
+                        :size="30"
+                        color="#666"
+                      >
+                        mdi-account-circle
+                      </v-icon>
+                      <span v-if="user.last_name">
+                        {{ user.last_name }}
+                      </span>
+                      <span v-if="user.first_name">
+                        {{ user.first_name }}
+                      </span>
+                    </v-btn>
+                  </template>
+                  <v-card
+                    max-width="375"
+                    class="mx-auto"
+                    rounded="b-xl r-xl"
+                  >
+                    <TopMenu_OnlineQuiz v-if="$route.name === 'onlineQuiz.alaaView'" />
+                    <TopMenu_Dashboard v-else />
+                  </v-card>
+                </v-menu>
+              </div>
+              <div>
+                <v-btn
+                  v-if="$route.name === 'onlineQuiz.alaaView'"
+                  class="switch-view-button"
+                  icon
+                  @click="changeView('konkoor')"
+                >
+                  <v-icon>mdi-dots-grid</v-icon>
+                </v-btn>
+                <v-app-bar-nav-icon
+                  v-if="$route.name !== 'onlineQuiz.konkoorView'"
+                  :color="(isQuizPage) ? '#fcaf25' : '#666'"
+                  @click.stop="toggleDrawer"
+                />
+              </div>
+            </v-col>
+          </v-row>
+        </v-container>
+      </div>
+    </v-app-bar>
+    <v-main>
+      <notifications group="notifs" />
+      <router-view :key="$route.name + ($route.params.quizId || '') + ($route.params.questNumber || '')" />
 
-                            </div>
-                            <div>
-                                <v-btn v-if="$route.name === 'onlineQuiz.alaaView'" class="switch-view-button" icon
-                                       @click="changeView('konkoor')">
-                                    <v-icon>mdi-dots-grid</v-icon>
-                                </v-btn>
-                                <v-app-bar-nav-icon
-                                        v-if="$route.name !== 'onlineQuiz.konkoorView'"
-                                        @click.stop="toggleDrawer"
-                                        :color="(isQuizPage) ? '#fcaf25' : '#666'"
-                                />
-                            </div>
-                        </v-col>
-                    </v-row>
-                </v-container>
-            </div>
-        </v-app-bar>
-        <v-main>
-            <notifications group="notifs"/>
-            <router-view :key="$route.name + ($route.params.quizId || '') + ($route.params.questNumber || '')">
-            </router-view>
-
-            <vue-confirm-dialog></vue-confirm-dialog>
-        </v-main>
-        <v-overlay :opacity="0.5" :value="overlay.show">
-            <v-progress-circular
-                    v-if="overlay.loading"
-                    indeterminate
-                    size="64"
-            ></v-progress-circular>
-            <p>{{ overlay.text }}</p>
-        </v-overlay>
-    </v-app>
+      <vue-confirm-dialog />
+    </v-main>
+    <v-overlay
+      :opacity="0.5"
+      :value="overlay.show"
+    >
+      <v-progress-circular
+        v-if="overlay.loading"
+        indeterminate
+        size="64"
+      />
+      <p>{{ overlay.text }}</p>
+    </v-overlay>
+  </v-app>
 </template>
 
 <script>
@@ -99,12 +139,16 @@
 
     export default {
         name: 'App',
-        mixins: [mixinAuth, mixinQuiz, mixinDrawer, mixinWindowSize],
-        watch: {
-            selectedItem() {
-                this.selectedItem = null
-            }
+        components: {
+            TopMenu_OnlineQuiz,
+            TopMenu_Dashboard,
+            SideMenu_Dashboard,
+            SideMenu_MapOfQuestions
         },
+        mixins: [mixinAuth, mixinQuiz, mixinDrawer, mixinWindowSize],
+        data: () => ({
+            selectedItem: null
+        }),
         computed: {
             appBar() {
                 return this.$store.getters['AppLayout/appBar']
@@ -116,15 +160,11 @@
                 return this.$store.getters['AppLayout/confirmDialog']
             }
         },
-        components: {
-            TopMenu_OnlineQuiz,
-            TopMenu_Dashboard,
-            SideMenu_Dashboard,
-            SideMenu_MapOfQuestions
+        watch: {
+            selectedItem() {
+                this.selectedItem = null
+            }
         },
-        data: () => ({
-            selectedItem: null
-        }),
         created() {
             Time.synchronizeTime()
             this.$store.commit('AppLayout/updateAppBarAndDrawer', true)

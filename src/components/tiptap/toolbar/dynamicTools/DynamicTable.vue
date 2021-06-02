@@ -1,18 +1,20 @@
 <template>
-    <v-btn-toggle
-            v-model="bubbleMenuItems"
-            dense
-            background-color="primary"
-            dark
-            multiple
+  <v-btn-toggle
+    v-model="bubbleMenuItems"
+    dense
+    background-color="primary"
+    dark
+    multiple
+  >
+    <v-btn
+      v-for="item in computedBubbleMenuItems"
+      :key="'DynamicTable_'+item.name"
+      :value="item.name"
+      @click="editor.chain().focus()[item.name]().run()"
     >
-        <v-btn v-for="item in computedBubbleMenuItems"
-               :key="'DynamicTable_'+item.name"
-               :value="item.name"
-               @click="editor.chain().focus()[item.name]().run()">
-            <v-icon>{{ item.icon }}</v-icon>
-        </v-btn>
-    </v-btn-toggle>
+      <v-icon>{{ item.icon }}</v-icon>
+    </v-btn>
+  </v-btn-toggle>
 <!--    <button @click="editor.chain().focus().mergeOrSplit().run()" :disabled="!editor.can().mergeOrSplit()">-->
 <!--        mergeOrSplit-->
 <!--    </button>-->
@@ -34,24 +36,6 @@
   export default {
     name: 'DynamicTable',
     props: ['editor'],
-    watch: {
-      computedBubbleMenuItems () {
-        this.bubbleMenuItems = this.computedBubbleMenuItems
-      }
-    },
-    computed: {
-      computedBubbleMenuItems() {
-        let items = []
-
-        this.items.forEach( item => {
-          let can = this.editor.can()[item.name]()
-          if (can) {
-            items.push(item)
-          }
-        })
-        return items
-      }
-    },
     data () {
       return {
         visibleItems: [],
@@ -106,6 +90,24 @@
           },
         ],
         bubbleMenuItems: [],
+      }
+    },
+    computed: {
+      computedBubbleMenuItems() {
+        let items = []
+
+        this.items.forEach( item => {
+          let can = this.editor.can()[item.name]()
+          if (can) {
+            items.push(item)
+          }
+        })
+        return items
+      }
+    },
+    watch: {
+      computedBubbleMenuItems () {
+        this.bubbleMenuItems = this.computedBubbleMenuItems
       }
     }
   }

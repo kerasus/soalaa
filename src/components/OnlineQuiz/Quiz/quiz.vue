@@ -1,71 +1,124 @@
 <template>
-    <div>
-        <v-container class="konkoor-view" :fluid="true" :style="{ height: '100%', background: 'rgb(244, 244, 244)' }" v-resize="updateWindowSize">
-            <v-row :style="{ 'min-height': '100%' }">
-                <div v-if="type === 'konkoorView'">
-                    <v-col :md="5" class="questions" id="questions" :style="{ height: windowSize.y }">
-                        <DynamicScroller
-                                :items="questions"
-                                :min-item-size="70"
-                                class="scroller questionss"
-                                ref="scroller"
-                                :emitUpdate="true"
-                                @update="onScroll"
-                        >
-                            <template v-slot="{ item, index, active }">
-                                <DynamicScrollerItem
-                                        :item="item"
-                                        :active="active"
-                                        :data-index="index"
-                                >
-                                    <Item :source="item" @inView="test"/>
-                                </DynamicScrollerItem>
-                            </template>
-                        </DynamicScroller>
-                    </v-col>
-                </div>
-                <v-col :md="7" class="left-side-list">
-                    <v-row>
-                        <v-col class="px-10 py-0 d-flex justify-space-between" dir="ltr">
-                            <div class="rounded-b-xl rounded-r-xl">
-                                <v-menu bottom :offset-y="true" class="rounded-b-xl rounded-r-xl">
-                                    <template v-slot:activator="{ on, attrs }">
-                                        <v-btn large tile v-bind="attrs" v-on="on" elevation="0" class="pl-3" >
-                                            <v-icon class="mr-2" :size="30" color="#666">mdi-account-circle</v-icon>
-                                            <span v-if="user.last_name">
-                                                {{ user.last_name }}
-                                            </span>
-                                            <span v-if="user.first_name">
-                                                {{ user.first_name }}
-                                            </span>
-                                        </v-btn>
-                                    </template>
-                                    <v-card max-width="375" class="mx-auto" rounded="b-xl r-xl">
-                                        <TopMenu_OnlineQuiz/>
-                                    </v-card>
-                                </v-menu>
-                            </div>
-                            <v-btn icon @click="changeView('alaa')">
-                                <v-icon>mdi-table-split-cell</v-icon>
-                            </v-btn>
-                        </v-col>
-                    </v-row>
-                    <v-row>
-                        <v-col>
-                            <BubbleSheet :info="{ type: 'pasokh-barg' }" @clickChoice="choiceClicked" @scrollTo="scrollTo" :delay-time="0" />
-                        </v-col>
-                    </v-row>
-                </v-col>
-            </v-row>
-            <div v-if="type === 'konkoorView'">
-                <v-row class="timer-row">
-                    <v-col>
-                        <Timer :daftarche="'عمومی'" :quiz-started-at="1607963897" :daftarche-end-time="1607999897" :height="100"></Timer>
-                    </v-col>
-                </v-row>
-            </div>
-        </v-container>
-    </div>
+  <div>
+    <v-container
+      v-resize="updateWindowSize"
+      class="konkoor-view"
+      :fluid="true"
+      :style="{ height: '100%', background: 'rgb(244, 244, 244)' }"
+    >
+      <v-row :style="{ 'min-height': '100%' }">
+        <div v-if="type === 'konkoorView'">
+          <v-col
+            id="questions"
+            :md="5"
+            class="questions"
+            :style="{ height: windowSize.y }"
+          >
+            <DynamicScroller
+              ref="scroller"
+              :items="questions"
+              :min-item-size="70"
+              class="scroller questionss"
+              :emit-update="true"
+              @update="onScroll"
+            >
+              <template v-slot="{ item, index, active }">
+                <DynamicScrollerItem
+                  :item="item"
+                  :active="active"
+                  :data-index="index"
+                >
+                  <Item
+                    :source="item"
+                    @inView="test"
+                  />
+                </DynamicScrollerItem>
+              </template>
+            </DynamicScroller>
+          </v-col>
+        </div>
+        <v-col
+          :md="7"
+          class="left-side-list"
+        >
+          <v-row>
+            <v-col
+              class="px-10 py-0 d-flex justify-space-between"
+              dir="ltr"
+            >
+              <div class="rounded-b-xl rounded-r-xl">
+                <v-menu
+                  bottom
+                  :offset-y="true"
+                  class="rounded-b-xl rounded-r-xl"
+                >
+                  <template v-slot:activator="{ on, attrs }">
+                    <v-btn
+                      large
+                      tile
+                      v-bind="attrs"
+                      elevation="0"
+                      class="pl-3"
+                      v-on="on"
+                    >
+                      <v-icon
+                        class="mr-2"
+                        :size="30"
+                        color="#666"
+                      >
+                        mdi-account-circle
+                      </v-icon>
+                      <span v-if="user.last_name">
+                        {{ user.last_name }}
+                      </span>
+                      <span v-if="user.first_name">
+                        {{ user.first_name }}
+                      </span>
+                    </v-btn>
+                  </template>
+                  <v-card
+                    max-width="375"
+                    class="mx-auto"
+                    rounded="b-xl r-xl"
+                  >
+                    <TopMenu_OnlineQuiz />
+                  </v-card>
+                </v-menu>
+              </div>
+              <v-btn
+                icon
+                @click="changeView('alaa')"
+              >
+                <v-icon>mdi-table-split-cell</v-icon>
+              </v-btn>
+            </v-col>
+          </v-row>
+          <v-row>
+            <v-col>
+              <BubbleSheet
+                :info="{ type: 'pasokh-barg' }"
+                :delay-time="0"
+                @clickChoice="choiceClicked"
+                @scrollTo="scrollTo"
+              />
+            </v-col>
+          </v-row>
+        </v-col>
+      </v-row>
+      <div v-if="type === 'konkoorView'">
+        <v-row class="timer-row">
+          <v-col>
+            <Timer
+              :daftarche="'عمومی'"
+              :quiz-started-at="1607963897"
+              :daftarche-end-time="1607999897"
+              :height="100"
+            />
+          </v-col>
+        </v-row>
+      </div>
+    </v-container>
+  </div>
 </template>
 
 <script>
@@ -79,8 +132,7 @@
     import BubbleSheet from "@/components/OnlineQuiz/Quiz/BubbleSheet/BubbleSheet";
     import { TopMenu_OnlineQuiz } from '@/components/Menu/Menus'
     export default {
-        name: "quiz",
-        mixins: [mixinAuth, mixinQuiz, mixinUserActionOnQuestion, mixinWindowSize],
+        name: "Quiz",
         components: {
             Timer,
             TopMenu_OnlineQuiz,
@@ -89,6 +141,15 @@
             DynamicScroller,
             DynamicScrollerItem,
             Item
+        },
+        mixins: [mixinAuth, mixinQuiz, mixinUserActionOnQuestion, mixinWindowSize],
+        props: {
+            type: {
+                default: 'konkoorView'
+            },
+            questions: {
+                default: []
+            }
         },
         data () {
             return {
@@ -100,6 +161,45 @@
                 renderedQuestions: { startIndex: 0, endIndex: 0 },
                 inView: []
             }
+        },
+        watch: {
+            'windowSize.y': function () {
+                $('.questions').height(this.windowSize.y)
+                $('.questionss').height(this.windowSize.y)
+                $('.left-side-list').height(this.windowSize.y - 24)
+            },
+            'windowSize.x': function () {
+                // const padding = this.questionListPadding()
+                // $('.questions-list').css({ 'padding-right': padding })
+                // $('.questions-list').css({ 'padding-left': padding })
+                $('.questions-list').height(this.questionListHeight())
+                this.$store.commit('AppLayout/updateDrawer', false)
+            }
+        },
+        mounted () {
+            $('.questions').height(this.windowSize.y)
+            $('.questionss').height(this.windowSize.y)
+            $('.left-side-list').height(this.windowSize.y - 24)
+            if (this.currentQuestion.id === null) {
+                this.loadFirstQuestion()
+            }
+            this.scrollTo(this.currentQuestion.id)
+            this.changeAppBarAndDrawer(false)
+            // setInterval(() => {
+            //     console.clear()
+            //     console.log(this.inView)
+            // }, 5000)
+        },
+        created () {
+            if (this.windowSize.x > 959) {
+                this.changeAppBarAndDrawer(false)
+            } else {
+                this.$router.push({ name: 'onlineQuiz.alaaView', params: { quizId: 313, questNumber: this.$route.params.quizId } })
+            }
+            this.questions = this.getCurrentExamQuestionsInArray()
+        },
+        destroyed() {
+            this.changeAppBarAndDrawer(true)
         },
         methods: {
             test (payload) {
@@ -201,53 +301,6 @@
             choiceClicked (questionId) {
                 this.scrollTo(questionId)
                 this.changeQuestion(questionId)
-            }
-        },
-        mounted () {
-            $('.questions').height(this.windowSize.y)
-            $('.questionss').height(this.windowSize.y)
-            $('.left-side-list').height(this.windowSize.y - 24)
-            if (this.currentQuestion.id === null) {
-                this.loadFirstQuestion()
-            }
-            this.scrollTo(this.currentQuestion.id)
-            this.changeAppBarAndDrawer(false)
-            // setInterval(() => {
-            //     console.clear()
-            //     console.log(this.inView)
-            // }, 5000)
-        },
-        created () {
-            if (this.windowSize.x > 959) {
-                this.changeAppBarAndDrawer(false)
-            } else {
-                this.$router.push({ name: 'onlineQuiz.alaaView', params: { quizId: 313, questNumber: this.$route.params.quizId } })
-            }
-            this.questions = this.getCurrentExamQuestionsInArray()
-        },
-        destroyed() {
-            this.changeAppBarAndDrawer(true)
-        },
-        watch: {
-            'windowSize.y': function () {
-                $('.questions').height(this.windowSize.y)
-                $('.questionss').height(this.windowSize.y)
-                $('.left-side-list').height(this.windowSize.y - 24)
-            },
-            'windowSize.x': function () {
-                // const padding = this.questionListPadding()
-                // $('.questions-list').css({ 'padding-right': padding })
-                // $('.questions-list').css({ 'padding-left': padding })
-                $('.questions-list').height(this.questionListHeight())
-                this.$store.commit('AppLayout/updateDrawer', false)
-            }
-        },
-        props: {
-            type: {
-                default: 'konkoorView'
-            },
-            questions: {
-                default: []
             }
         }
     }

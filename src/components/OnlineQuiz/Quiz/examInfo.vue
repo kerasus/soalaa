@@ -1,68 +1,86 @@
 <template>
-    <div class="d-flex justify-center">
-        <v-progress-linear
-                color="deep-purple accent-4"
-                absolute
-                top
-                :active="exam.loading"
-                indeterminate
-                rounded
-                height="6"
-        ></v-progress-linear>
-        <v-col cols="8">
-            <v-row>
-                <v-text-field label="عنوان" v-model="exam.title">
-                    {{exam.title}}
-                </v-text-field>
-            </v-row>
-            <v-row>
-                <v-col cols="12">
-                    زمان شروع
-                </v-col>
-                <v-col cols="12">
-                    <date-picker
-                            v-model="exam.start_at"
-                            type="datetime"
-                            :editable="true"
-                            format="YYYY-MM-DD HH:mm:ss"
-                            display-format="dddd jDD jMMMM jYYYY ساعت HH:mm" />
-                </v-col>
-            </v-row>
-            <v-row>
-                <v-col cols="12">
-                    زمان پایان
-                </v-col>
-                <v-col cols="12">
-                    <date-picker
-                            v-model="exam.finish_at"
-                            type="datetime"
-                            :editable="true"
-                            format="YYYY-MM-DD HH:mm:ss"
-                            display-format="dddd jDD jMMMM jYYYY ساعت HH:mm" />
-                </v-col>
-            </v-row>
-            <v-row>
-                <v-text-field label="قیمت" v-model="exam.price">
-                </v-text-field>
-            </v-row>
-            <v-row>
-                <v-text-field label="زمان تاخیر (دقیقه)" v-model="exam.delay_time">
-                </v-text-field>
-            </v-row>
-            <v-row>
-                <v-col>
-                    <div class="text-center">
-                        <v-btn :disabled="exam.loading" :loading="exam.loading" elevation="2" @click="create">
-                            ثبت
-                        </v-btn>
-                        <v-btn :disabled="exam.loading" :loading="exam.loading" elevation="2">
-                            حذف
-                        </v-btn>
-                    </div>
-                </v-col>
-            </v-row>
+  <div class="d-flex justify-center">
+    <v-progress-linear
+      color="deep-purple accent-4"
+      absolute
+      top
+      :active="exam.loading"
+      indeterminate
+      rounded
+      height="6"
+    />
+    <v-col cols="8">
+      <v-row>
+        <v-text-field
+          v-model="exam.title"
+          label="عنوان"
+        >
+          {{ exam.title }}
+        </v-text-field>
+      </v-row>
+      <v-row>
+        <v-col cols="12">
+          زمان شروع
         </v-col>
-    </div>
+        <v-col cols="12">
+          <date-picker
+            v-model="exam.start_at"
+            type="datetime"
+            :editable="true"
+            format="YYYY-MM-DD HH:mm:ss"
+            display-format="dddd jDD jMMMM jYYYY ساعت HH:mm"
+          />
+        </v-col>
+      </v-row>
+      <v-row>
+        <v-col cols="12">
+          زمان پایان
+        </v-col>
+        <v-col cols="12">
+          <date-picker
+            v-model="exam.finish_at"
+            type="datetime"
+            :editable="true"
+            format="YYYY-MM-DD HH:mm:ss"
+            display-format="dddd jDD jMMMM jYYYY ساعت HH:mm"
+          />
+        </v-col>
+      </v-row>
+      <v-row>
+        <v-text-field
+          v-model="exam.price"
+          label="قیمت"
+        />
+      </v-row>
+      <v-row>
+        <v-text-field
+          v-model="exam.delay_time"
+          label="زمان تاخیر (دقیقه)"
+        />
+      </v-row>
+      <v-row>
+        <v-col>
+          <div class="text-center">
+            <v-btn
+              :disabled="exam.loading"
+              :loading="exam.loading"
+              elevation="2"
+              @click="create"
+            >
+              ثبت
+            </v-btn>
+            <v-btn
+              :disabled="exam.loading"
+              :loading="exam.loading"
+              elevation="2"
+            >
+              حذف
+            </v-btn>
+          </div>
+        </v-col>
+      </v-row>
+    </v-col>
+  </div>
 </template>
 
 <script>
@@ -73,7 +91,7 @@
     Vue.component('date-picker', VuePersianDatetimePicker)
 
     export default {
-        name: 'examInfo',
+        name: 'ExamInfo',
         props:[ 'exam' ],
         data: () => ({
             examItem: new Exam()

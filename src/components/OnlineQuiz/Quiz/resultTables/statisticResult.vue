@@ -1,36 +1,36 @@
 <template>
-    <div >
-        <div class="d-flex justify-center">
-            <v-col>
-                <v-row class=" d-flex justify-center">
-                    <v-data-table
-                            hide-default-footer
-                            :headers="headers"
-                            :header-props="{sortByText: 'ترتیب'}"
-                            :items="dataTable"
-                            :items-per-page="15"
-                            class="elevation-1 dataTable"
-                    ></v-data-table>
-                </v-row>
-                <v-row>
-                    <v-col>
-                        <div :style="{ 'max-width': '100%'}">
-                            <highcharts :options="chartOptions"></highcharts>
-                        </div>
-                    </v-col>
-                </v-row>
-            </v-col>
-        </div>
+  <div>
+    <div class="d-flex justify-center">
+      <v-col>
+        <v-row class=" d-flex justify-center">
+          <v-data-table
+            hide-default-footer
+            :headers="headers"
+            :header-props="{sortByText: 'ترتیب'}"
+            :items="dataTable"
+            :items-per-page="15"
+            class="elevation-1 dataTable"
+          />
+        </v-row>
+        <v-row>
+          <v-col>
+            <div :style="{ 'max-width': '100%'}">
+              <highcharts :options="chartOptions" />
+            </div>
+          </v-col>
+        </v-row>
+      </v-col>
     </div>
+  </div>
 </template>
 
 <script>
     import {Chart} from 'highcharts-vue'
 
     export default {
-        name: "statisticResult",
-        props: ['report'],
+        name: "StatisticResult",
         components: {highcharts: Chart},
+        props: ['report'],
         data() {
             return {
                 dataTable: [],

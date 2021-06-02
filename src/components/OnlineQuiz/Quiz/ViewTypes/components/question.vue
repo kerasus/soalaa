@@ -1,60 +1,99 @@
 <template>
-    <div :class="{ 'current-question': this.currentQuestion.id === source.id, question: true, ltr: source.ltr}"
-         v-intersect="test">
-        <div>
-            <v-sheet
-                    v-if="considerActiveCategory && !source.in_active_category && false"
-                    rounded
-                    dark
-                    height="200"
-                    elevation="1"
-                    class="d-flex align-center justify-center"
-                    :color="currentQuestion.id === source.id ? '--error-1' : 'warning'"
-            >
-                (
-                سوال شماره
-                {{ getQuestionNumberFromId(source.id) }}
-                )
-                <br>
-                در حال حاضر امکان مشاهده سوالات این دفترچه امکان پذیر نمی باشد
-            </v-sheet>
-        </div>
-<!--        <div v-if="(considerActiveCategory && source.in_active_category) || !considerActiveCategory || true"-->
-        <div class="buttons-group">
-            <v-btn icon @click="changeStatus(source.id, 'o')">
-                <v-icon v-if="getChoiceStatus() === 'o'" color="yellow" :size="24">mdi-checkbox-blank-circle</v-icon>
-                <v-icon v-if="getChoiceStatus() !== 'o'" color="#888" :size="24">mdi-checkbox-blank-circle-outline
-                </v-icon>
-            </v-btn>
-            <v-btn icon @click="changeStatus(source.id ,'x')">
-                <v-icon :color="getChoiceStatus() === 'x' ? 'red' : '#888'" :size="24">mdi-close</v-icon>
-            </v-btn>
-            <v-btn icon @click="changeBookmark(source.id)">
-                <v-icon v-if="getChoiceBookmark()" color="blue" :size="24">mdi-bookmark</v-icon>
-                <v-icon v-else :size="24" color="#888">mdi-bookmark-outline</v-icon>
-            </v-btn>
-        </div>
-<!--        <span v-if="(considerActiveCategory && source.in_active_category) || !considerActiveCategory || true"-->
-        <span
-              class="question-body renderedPanel"
-              :class="{ ltr: isRtl }"
-              :id="'question' + source.id"
-              v-html="(getQuestionNumberFromId(source.id)) + '- ' + source.rendered_statement"
-        />
-<!--        <v-row v-if="(considerActiveCategory && source.in_active_category) || !considerActiveCategory || true" class="choices">-->
-        <v-row class="choices">
-            <v-col
-                    v-for="(choice, index) in source.choices.list"
-                    :key="choice.id"
-                    v-html="(choiceNumber[index]) + choice.rendered_title"
-                    :md="choiceClass(source)"
-                    ref="choices"
-                    class="choice renderedPanel"
-                    :class="{ active: getAnsweredChoiceId() === choice.id, ltr: isRtl }"
-                    @click="answerClickedd({ questionId: source.id, choiceId: choice.id})"
-            />
-        </v-row>
+  <div
+    v-intersect="test"
+    :class="{ 'current-question': this.currentQuestion.id === source.id, question: true, ltr: source.ltr}"
+  >
+    <div>
+      <v-sheet
+        v-if="considerActiveCategory && !source.in_active_category && false"
+        rounded
+        dark
+        height="200"
+        elevation="1"
+        class="d-flex align-center justify-center"
+        :color="currentQuestion.id === source.id ? '--error-1' : 'warning'"
+      >
+        (
+        سوال شماره
+        {{ getQuestionNumberFromId(source.id) }}
+        )
+        <br>
+        در حال حاضر امکان مشاهده سوالات این دفترچه امکان پذیر نمی باشد
+      </v-sheet>
     </div>
+    <!--        <div v-if="(considerActiveCategory && source.in_active_category) || !considerActiveCategory || true"-->
+    <div class="buttons-group">
+      <v-btn
+        icon
+        @click="changeStatus(source.id, 'o')"
+      >
+        <v-icon
+          v-if="getChoiceStatus() === 'o'"
+          color="yellow"
+          :size="24"
+        >
+          mdi-checkbox-blank-circle
+        </v-icon>
+        <v-icon
+          v-if="getChoiceStatus() !== 'o'"
+          color="#888"
+          :size="24"
+        >
+          mdi-checkbox-blank-circle-outline
+        </v-icon>
+      </v-btn>
+      <v-btn
+        icon
+        @click="changeStatus(source.id ,'x')"
+      >
+        <v-icon
+          :color="getChoiceStatus() === 'x' ? 'red' : '#888'"
+          :size="24"
+        >
+          mdi-close
+        </v-icon>
+      </v-btn>
+      <v-btn
+        icon
+        @click="changeBookmark(source.id)"
+      >
+        <v-icon
+          v-if="getChoiceBookmark()"
+          color="blue"
+          :size="24"
+        >
+          mdi-bookmark
+        </v-icon>
+        <v-icon
+          v-else
+          :size="24"
+          color="#888"
+        >
+          mdi-bookmark-outline
+        </v-icon>
+      </v-btn>
+    </div>
+    <!--        <span v-if="(considerActiveCategory && source.in_active_category) || !considerActiveCategory || true"-->
+    <span
+      :id="'question' + source.id"
+      class="question-body renderedPanel"
+      :class="{ ltr: isRtl }"
+      v-html="(getQuestionNumberFromId(source.id)) + '- ' + source.rendered_statement"
+    />
+    <!--        <v-row v-if="(considerActiveCategory && source.in_active_category) || !considerActiveCategory || true" class="choices">-->
+    <v-row class="choices">
+      <v-col
+        v-for="(choice, index) in source.choices.list"
+        :key="choice.id"
+        ref="choices"
+        :md="choiceClass(source)"
+        class="choice renderedPanel"
+        :class="{ active: getAnsweredChoiceId() === choice.id, ltr: isRtl }"
+        @click="answerClickedd({ questionId: source.id, choiceId: choice.id})"
+        v-html="(choiceNumber[index]) + choice.rendered_title"
+      />
+    </v-row>
+  </div>
 </template>
 
 <script>
@@ -63,19 +102,6 @@
 
     export default {
         mixins: [mixinQuiz, mixinUserActionOnQuestion],
-        data() {
-            return {
-                isRtl: false,
-                widestChoiceWidth: 0,
-                observer: null,
-                choiceNumber: {
-                    0: '1) ',
-                    1: '2) ',
-                    2: '3) ',
-                    3: '4) '
-                }
-            }
-        },
         props: {
             index: { // index of current source
                 type: Number
@@ -95,10 +121,26 @@
                 }
             }
         },
+        data() {
+            return {
+                isRtl: false,
+                widestChoiceWidth: 0,
+                observer: null,
+                choiceNumber: {
+                    0: '1) ',
+                    1: '2) ',
+                    2: '3) ',
+                    3: '4) '
+                }
+            }
+        },
         mounted() {
             this.observer = new IntersectionObserver(this.intersectionObserver, {threshold: [0.7, 0.75, 0.8]})
             this.observer.observe(this.$el)
             this.isRtl = this.isLtrString(this.source.rendered_statement)
+        },
+        destroyed() {
+            this.observer.disconnect();
         },
         methods: {
             getChoiceStatus() {
@@ -188,9 +230,6 @@
                 })
                 return largestChoice
             },
-        },
-        destroyed() {
-            this.observer.disconnect();
         }
     }
 </script>
