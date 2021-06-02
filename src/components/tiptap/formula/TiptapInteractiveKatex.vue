@@ -1,7 +1,17 @@
 <template>
     <node-view-wrapper class="vue-component">
 <!--        <span class="label">Formula</span>-->
-        <div id="mathfield" dir="ltr" locale="fa">x=\frac{-b\pm \sqrt{b^2-4ac}}{2a}</div>
+        <div id="mathfield" ref="mathfield" dir="ltr" locale="fa" :class="{ 'editable': editMode }">x=\frac{-b\pm \sqrt{b^2-4ac}}{2a}</div>
+<!--        <v-btn v-if="!editMode" icon @click="editMode = true">-->
+<!--            <v-icon>-->
+<!--                mdi-pencil-->
+<!--            </v-icon>-->
+<!--        </v-btn>-->
+<!--        <v-btn v-if="editMode" icon @click="editMode = false">-->
+<!--            <v-icon>-->
+<!--                mdi-check-->
+<!--            </v-icon>-->
+<!--        </v-btn>-->
 <!--        <div class="latexData" dir="ltr" v-html="latexData"></div>-->
 
     </node-view-wrapper>
@@ -35,6 +45,7 @@
           editModal: false,
           latexData: null,
           formula: '',
+          editMode: false,
           questMarkdownText: '# Math Rulez! \n  $x=\\frac{-b\\pm\\sqrt[]{b^2-4ac}}{2a}$',
         katex: '$$x=\\frac{-b\\pm\\sqrt[]{b^2-4ac}}{2a}$$'
       }
@@ -43,12 +54,8 @@
         setTimeout(() => {
             this.katex = this.markdown.render(this.katex)
             let that = this
-            document.getElementById('mathfield')
-            console.log(document.querySelector('#mathfield'))
-            console.log(MathLive.makeMathField)
-
             const mf = MathLive.makeMathField(
-                document.getElementById('mathfield'),
+                this.$refs.mathfield,
                 {
                     virtualKeyboardMode: 'manual',
                     onContentDidChange: (mf) => {
@@ -101,6 +108,11 @@
         margin-top: 1.5rem;
         padding: 1rem;
     }
+
+    /*#mathfield, .latexData {*/
+    /*    padding: 8px;*/
+    /*    font-size: 20px;*/
+    /*}*/
 
     #mathfield, .latexData {
         font-size: 32px;
