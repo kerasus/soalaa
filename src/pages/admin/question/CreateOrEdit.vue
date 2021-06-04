@@ -392,7 +392,7 @@
       @input="updateRendered"
     />
     <div v-if="currentQuestion.id">
-      <!--            <upload-image :url="'/api/v1/question/upload/'+currentQuestion.id" />-->
+<!--                  <upload-image :url="'/api/v1/question/upload/'+currentQuestion.id" />-->
       <upload-files
         :post-action="'/api/v1/question/upload/'+currentQuestion.id"
         :put-action="'/api/v1/question/upload/'+currentQuestion.id"
