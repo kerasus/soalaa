@@ -93,7 +93,7 @@
         mixins: [mixinAuth],
         data () {
             return {
-                user: new User(window.localStorage.getItem('user')),
+                // user: new User(window.localStorage.getItem('user')),
                 loadingList: false,
                 username: null,
                 password: null,
@@ -105,6 +105,7 @@
             if (this.getToken()) {
                 this.getUserData( () => { this.redirectTo() })
             }
+
         },
         methods: {
             checkAnimationUserName(e) {
