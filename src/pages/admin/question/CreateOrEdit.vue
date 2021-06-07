@@ -64,7 +64,7 @@
                             v-model="attachSubcategoryID"
                             :items="subCategoriesList.list"
                             label="درس"
-                            item-text="display_title"
+                            item-text="title"
                             item-value="id"
                             dense
                             outlined
@@ -839,7 +839,7 @@
                 const targetSubCategoryIndex = this.subCategoriesList.list.findIndex(subCategoryItem => Assistant.getId(subCategoryItem.id) === Assistant.getId(this.attachSubcategoryID))
                 this.totalExams[targetExamIndex].order = this.attachOrder
                 this.totalExams[targetExamIndex].sub_category_id = this.attachSubcategoryID
-                this.totalExams[targetExamIndex].sub_category_title = this.subCategoriesList.list[targetSubCategoryIndex].display_title
+                this.totalExams[targetExamIndex].sub_category_title = this.subCategoriesList.list[targetSubCategoryIndex].title
                 this.selectedQuizzes.push(JSON.parse(JSON.stringify(this.totalExams[targetExamIndex])))
                 this.dialog = false
               this.updateSelectedQuizzes()
@@ -864,7 +864,7 @@
                                 id: item.exam_id,
                                 order: item.order,
                                 sub_category_id: item.sub_category.category_id,
-                                sub_category_title: item.sub_category.display_title,
+                                sub_category_title: item.sub_category.title,
                                 title: this.getExamById(item.exam_id).title
                             })
                         })

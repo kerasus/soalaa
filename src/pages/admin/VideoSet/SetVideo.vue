@@ -32,7 +32,7 @@
               v-model="currentQuestion.sub_category_id"
               label="درس"
               :items="subCategoriesList.list"
-              item-text="display_title"
+              item-text="title"
               item-value="id"
               dense
               :disabled="editMode"
