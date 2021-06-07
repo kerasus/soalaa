@@ -63,7 +63,7 @@
                           <v-autocomplete
                             v-model="attachSubcategoryID"
                             :items="subCategoriesList.list"
-                            label="درسدرس"
+                            label="درس"
                             item-text="display_title"
                             item-value="id"
                             dense
@@ -937,7 +937,7 @@
               return new Promise(function(resolve, reject) {
                 that.subCategoriesList.fetch()
                     .then((response) => {
-                        that.subCategoriesList = new QuestSubcategoryList(response.data)
+                        that.subCategoriesList = new QuestSubcategoryList(response.data.data)
                       resolve()
                     })
                     .catch( () => {
