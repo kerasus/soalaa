@@ -1,6 +1,8 @@
 <template>
     <node-view-wrapper class="vue-component">
-        <div id="mathfield" ref="mathfield" dir="ltr" locale="fa" :class="{ 'editable': editMode }" v-show="editMode">x=\frac{-b\pm \sqrt{b^2-4ac}}{2a}</div>
+        <div id="mathfield" ref="mathfield" dir="ltr" locale="fa" :class="{ 'editable': editMode }" v-show="editMode">
+            x=\frac{-b\pm \sqrt{b^2-4ac}}{2a}
+        </div>
         <div class="converted" v-html="convertMarkdown" dir="ltr" v-show="!editMode" @click="editMode = true"/>
 
 
@@ -57,6 +59,10 @@
       }
     },
     mounted() {
+        console.log('katex', this.node.attrs.katex)
+        // if (node.attrs.katex) {
+        //     this.katex = '$' + this.node.attrs.katex + '$'
+        // }
         setTimeout(() => {
             this.katex = this.markdown.render(this.katex)
             let that = this
@@ -76,17 +82,17 @@
                             {
                                 class: "keycap tex",
                                 insert: "$$\\leftrightharpoons$$",
-                                label: "<i data-v-11cdb290=\"\" aria-hidden=\"true\" class=\"v-icon notranslate mdi mdi-swap-horizontal theme--dark\"></i>"
+                                label: "<i aria-hidden=\"true\" class=\"v-icon mdi mdi-swap-horizontal theme--dark\"></i>"
                             },
                             {
                                 class: "keycap tex",
                                 insert: "$$\\gets$$",
-                                label: "<i data-v-11cdb290=\"\" aria-hidden=\"true\" class=\"v-icon notranslate mdi mdi-arrow-left theme--dark\"></i>"
+                                label: "<i aria-hidden=\"true\" class=\"v-icon mdi mdi-arrow-left theme--dark\"></i>"
                             },
                             {
                                 class: "keycap tex",
                                 insert: "$$\\to$$",
-                                label: "<i data-v-11cdb290=\"\" aria-hidden=\"true\" class=\"v-icon notranslate mdi mdi-arrow-right theme--dark\"></i>"
+                                label: "<i aria-hidden=\"true\" class=\"v-icon mdi mdi-arrow-right theme--dark\"></i>"
                             },
                             { class: "separator w5" },
                             { label: "17", key: "17", latex: '$$17$$', insert: '$$17$$' },
@@ -116,8 +122,16 @@
                             }
                         ],
                         [
-                            { class: "tex", latex: "b" },
-                            { class: "tex", latex: "y" },
+                            {
+                                class: "keycap tex",
+                                insert: "$$\\cap$$",
+                                label: "<i data-v-11cdb290=\"\" aria-hidden=\"true\" class=\"v-icon notranslate mdi mdi-swap-horizontal theme--dark\"></i>"
+                            },
+                            {
+                                class: "keycap tex",
+                                insert: "$$\\leftrightharpoons$$",
+                                label: "<i data-v-11cdb290=\"\" aria-hidden=\"true\" class=\"v-icon notranslate mdi mdi-swap-horizontal theme--dark\"></i>"
+                            },
                             { class: "separator w5" },
                             { label: "4", latex:"4" },
                             { label: "5", key: "5" },

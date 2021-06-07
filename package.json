@@ -64,6 +64,7 @@
     "vue-chartjs": "^3.5.1",
     "vue-codemirror": "^4.0.6",
     "vue-confirm-dialog": "^1.0.2",
+    "vue-drag-resize": "^1.5.4",
     "vue-highcharts": "^0.1.0",
     "vue-html2pdf": "^1.8.0",
     "vue-image-crop-upload": "^3.0.3",

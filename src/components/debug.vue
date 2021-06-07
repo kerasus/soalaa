@@ -1,8 +1,8 @@
 <template>
     <div>
         <vue-tiptap-plus v-model="html"/>
-<!--        <div v-html="convertToMarkdownKatex(html)"/>-->
-    </div>
+        <div v-html="convertToMarkdownKatex(html)"/>
+    </div> 
 </template>
 
 <script>
@@ -16,6 +16,7 @@
     mounted() {
     },
     data() {
+
       return {
         html: '<p>I’m running tiptap with Vue.js. 🎉</p>',
         innerHTML: 'hi',
@@ -103,6 +104,23 @@
 
         return wrapper.innerHTML
       },
+        convertImage(htmlString) {
+            var wrapper = document.createElement('div');
+            wrapper.innerHTML = htmlString;
+            let images = wrapper.querySelectorAll('tiptap-interactive-image-upload')
+            images.forEach(item => {
+                let markdownImage = item.attributes[0].nodeValue
+                if (markdownImage) {
+                    markdownImage = '![](' + item.attributes[0].nodeValue + '?w=' + item.attributes[1].nodeValue + '&h=' + item.attributes[2].nodeValue + ')'
+
+                    var imageWrapper = document.createElement('div');
+                    imageWrapper.innerHTML = markdownImage;
+                    item.replaceWith(imageWrapper);
+                }
+            })
+
+            return wrapper.innerHTML
+        },
         convertKatex(htmlString) {
             var wrapper = document.createElement('div');
             wrapper.innerHTML = htmlString;
@@ -120,9 +138,52 @@
 
             return wrapper.innerHTML
         },
+        convertMarkdownKatexToHtml (markdownString, index = 0) {
+          const startIndex = markdownString.indexOf('$', index)
+            if (startIndex === -1) {
+                return markdownString
+            }
+            const endIndex = markdownString.indexOf('$', index + 1)
+            const firstThird = markdownString.slice(0, startIndex)
+            const secondThird = markdownString.slice(startIndex + 1, endIndex)
+            const remaining = markdownString.slice(endIndex + 1)
+            markdownString = firstThird + '<tiptap-interactive-katex katex="' +
+                    secondThird + '"></tiptap-interactive-katex>' + remaining
+            return this.convertMarkdownKatexToHtml(markdownString)
+        },
+        convertMarkdownImageToHtml (markdownString, index = 0) {
+            const startIndex = markdownString.indexOf('![](', index)
+            if (startIndex === -1) {
+                return markdownString
+            }
+            const endIndex = markdownString.indexOf(')', startIndex)
+            const firstThird = markdownString.slice(0, startIndex)
+            const secondThird = markdownString.slice(startIndex + 4, endIndex)
+            const remaining = markdownString.slice(endIndex + 1)
+            const widthIndex = markdownString.indexOf('?w=', startIndex)
+            if (widthIndex !== -1 && widthIndex < endIndex) {
+                let width, height
+                width = parseInt(markdownString.slice(widthIndex + 3, markdownString.indexOf('&h', widthIndex)))
+                height = parseInt(markdownString.slice(markdownString.indexOf('&h=', widthIndex) + 3, markdownString.indexOf(')', widthIndex)))
+                markdownString = firstThird + '<tiptap-interactive-image-upload url="'
+                    + secondThird.slice(0, secondThird.indexOf('?w=')) + '" width="' + width + '" height="' + height + '"></tiptap-interactive-image-upload>'+ remaining
+            } else {
+                // this need to be completed, what if width and height of the image is not equal
+                markdownString = firstThird + '<tiptap-interactive-image-upload url="'
+                    + secondThird + '" width="100" height="100"></tiptap-interactive-image-upload>' + remaining
+            }
+            return this.convertMarkdownImageToHtml(markdownString, endIndex)
+        },
+        convertToTiptap (string = '') {
+          string = '![](https://cdn.alaatv.com/aaa/questionPhotos/Asset_5%402x-9243251.png?w=305&h=305)![](https://cdn.alaatv.com/aaa/questionPhotos/Asset_5%402x-9243251.png?w=200&h=200)'
+            string = this.convertMarkdownImageToHtml(string)
+            string = this.convertMarkdownKatexToHtml(string)
+            return string
+        },
       convertToMarkdownKatex(string) {
-        string = this.convertTables(string)
+          string = this.convertTables(string)
           string = this.convertKatex(string)
+          string = this.convertImage(string)
         const markdown = this.htmlToMarkdown(string)
           console.log(markdown)
         // return this.markdown.render(string.replace('<div class="question" dir="rtl">', ''))
@@ -458,7 +519,10 @@
         // convert HTML to Markdown
         return turndownService.turndown(htmlString)
       }
-    }
+    },
+      created() {
+        this.html = this.convertToTiptap(this.html)
+      }
   }
 </script>
 
