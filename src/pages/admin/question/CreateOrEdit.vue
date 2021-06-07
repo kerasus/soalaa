@@ -1015,7 +1015,7 @@
                     that.totalExams[targetExamIndex].order = item.order
                     that.totalExams[targetExamIndex].sub_category_id = item.sub_category.id
                     that.totalExams[targetExamIndex].sub_category_title = item.sub_category.title
-                    that.selectedQuizzes.push(that.totalExams[targetExamIndex])
+                    that.selectedQuizzes.push(JSON.parse(JSON.stringify(that.totalExams[targetExamIndex])))
                 })
               this.updateSelectedQuizzes()
             },
