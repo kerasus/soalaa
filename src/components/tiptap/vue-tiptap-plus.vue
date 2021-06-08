@@ -1,7 +1,7 @@
 <template>
-  <div dir="rtl">
-    <v-card elevation="3">
-      <v-card-title>
+  <div dir="rtl" class="tiptap-plus-container">
+    <v-card elevation="3" class="tiptap-plus">
+      <v-card-title class="tiptap-header">
         <slot name="toolbar">
           <toolbar :editor="editor" />
         </slot>
@@ -34,6 +34,7 @@
   import SlotBubbleMenu from "@/components/tiptap/SlotBubbleMenu"
   import SlotFloafingMenu from "@/components/tiptap/SlotFloafingMenu"
   import TiptapInteractiveKatex from '@/components/tiptap/formula/extention'
+  import TiptapInteractiveImageUpload from "@/components/tiptap/ImageUpload/extension";
 
   import StarterKit from '@tiptap/starter-kit'
   import Table from '@tiptap/extension-table'
@@ -95,7 +96,8 @@
           TableRow,
           TableHeader,
           TableCell,
-          TiptapInteractiveKatex
+          TiptapInteractiveKatex,
+          TiptapInteractiveImageUpload
         ],
         // triggered on every change
         onUpdate() {
@@ -168,11 +170,23 @@
 </script>
 
 <style>
-    .ProseMirror {
-        outline: none;
-        padding: 20px;
-        border-top: solid 1px #dedede;
-    }
+  .ProseMirror {
+      outline: none;
+      padding: 20px;
+      border-top: solid 1px #dedede;
+  }
+
+  .tiptap-plus-container {
+    width: 90%;
+    margin: 0 5%;
+    border-radius: 10px;
+
+  }
+
+  .tiptap-plus .tiptap-header {
+    background-color: #e9ecf4;
+      padding: 8px;
+  }
 </style>
 
 <style lang="scss">

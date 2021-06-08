@@ -1,19 +1,25 @@
 <template>
     <node-view-wrapper class="vue-component">
-<!--        <span class="label">Formula</span>-->
-        <div id="mathfield" ref="mathfield" dir="ltr" locale="fa" :class="{ 'editable': editMode }">x=\frac{-b\pm \sqrt{b^2-4ac}}{2a}</div>
-<!--        <v-btn v-if="!editMode" icon @click="editMode = true">-->
-<!--            <v-icon>-->
-<!--                mdi-pencil-->
-<!--            </v-icon>-->
-<!--        </v-btn>-->
-<!--        <v-btn v-if="editMode" icon @click="editMode = false">-->
-<!--            <v-icon>-->
-<!--                mdi-check-->
-<!--            </v-icon>-->
-<!--        </v-btn>-->
-<!--        <div class="latexData" dir="ltr" v-html="latexData"></div>-->
+        <div id="mathfield" ref="mathfield" dir="ltr" locale="fa" :class="{ 'editable': editMode }" v-show="editMode">x=\frac{-b\pm \sqrt{b^2-4ac}}{2a}</div>
+        <div class="converted" v-html="convertMarkdown" dir="ltr" v-show="!editMode" @click="editMode = true"/>
 
+
+        <v-btn
+            icon
+            @click="editMode = true"
+            v-if="!editMode"
+            color="blue"
+        >
+            <v-icon>mdi-pencil</v-icon>
+        </v-btn>
+        <v-btn
+            icon
+            @click="editMode = false"
+            v-if="editMode"
+            color="green"
+        >
+            <v-icon>mdi-check</v-icon>
+        </v-btn>
     </node-view-wrapper>
 </template>
 
@@ -47,7 +53,7 @@
           formula: '',
           editMode: false,
           questMarkdownText: '# Math Rulez! \n  $x=\\frac{-b\\pm\\sqrt[]{b^2-4ac}}{2a}$',
-        katex: '$$x=\\frac{-b\\pm\\sqrt[]{b^2-4ac}}{2a}$$'
+        katex: '$x=\\frac{-b\\pm\\sqrt[]{b^2-4ac}}{2a}$'
       }
     },
     mounted() {
@@ -62,6 +68,320 @@
                         that.latexData = mf.getValue()
                     },
                 });
+            const EXTRA_KEYBOARD_LAYER = {
+                "extra-keyboard-layer": {
+                    styles: "",
+                    rows: [
+                        [
+                            {
+                                class: "keycap tex",
+                                insert: "$$\\leftrightharpoons$$",
+                                label: "<i data-v-11cdb290=\"\" aria-hidden=\"true\" class=\"v-icon notranslate mdi mdi-swap-horizontal theme--dark\"></i>"
+                            },
+                            {
+                                class: "keycap tex",
+                                insert: "$$\\gets$$",
+                                label: "<i data-v-11cdb290=\"\" aria-hidden=\"true\" class=\"v-icon notranslate mdi mdi-arrow-left theme--dark\"></i>"
+                            },
+                            {
+                                class: "keycap tex",
+                                insert: "$$\\to$$",
+                                label: "<i data-v-11cdb290=\"\" aria-hidden=\"true\" class=\"v-icon notranslate mdi mdi-arrow-right theme--dark\"></i>"
+                            },
+                            { class: "separator w5" },
+                            { label: "17", key: "17", latex: '$$17$$', insert: '$$17$$' },
+                            // Will display the label using the system font. To display
+                            // with the TeX font, use:
+                            // { class: "tex", label: "7", key: "7" },
+                            // or
+                            // { latex: "7"},
+                            { label: "8", key: "8" },
+                            { label: "9", key: "9" },
+                            { latex: "\\div" },
+                            { class: "separator w5" },
+                            {
+                                class: "tex small",
+                                label: "<span><i>x</i>&thinsp;²</span>",
+                                insert: "$$#@^{2}$$"
+                            },
+                            {
+                                class: "tex small",
+                                label: "<span><i>x</i><sup>&thinsp;<i>n</i></sup></span>",
+                                insert: "$$#@^{}$$"
+                            },
+                            {
+                                class: "small",
+                                latex: "\\sqrt{#0}",
+                                insert: "$$\\sqrt{#0}$$",
+                            }
+                        ],
+                        [
+                            { class: "tex", latex: "b" },
+                            { class: "tex", latex: "y" },
+                            { class: "separator w5" },
+                            { label: "4", latex:"4" },
+                            { label: "5", key: "5" },
+                            { label: "6", key: "6" },
+                            { latex: "\\times" },
+                            { class: "separator w5" },
+                            { class: "small", latex: "\\frac{#0}{#0}" },
+                            { class: "separator" },
+                            { class: "separator" }
+                        ],
+                        [
+                            { class: "tex", label: "<i>c</i>" },
+                            { class: "tex", label: "<i>z</i>" },
+                            { class: "separator w5" },
+                            { label: "1", key: "1" },
+                            { label: "2", key: "2" },
+                            { label: "3", key: "3" },
+                            { latex: "-" },
+                            { class: "separator w5" },
+                            { class: "separator" },
+                            { class: "separator" },
+                            { class: "separator" }
+                        ],
+                        [
+                            { latex: "(" },
+                            { latex: ")" },
+
+                            { class: "separator w5" },
+                            { label: "0", key: "0" },
+                            { latex: "." },
+                            { latex: "\\pi" },
+                            { latex: "+" },
+                            { class: "separator w5" },
+                            {
+                                class: "action",
+                                label: "<svg><use xlink:href='#svg-arrow-left' /></svg>",
+                                command: ["performWithFeedback", "moveToPreviousChar"]
+                            },
+                            {
+                                class: "action",
+                                label: "<svg><use xlink:href='#svg-arrow-right' /></svg>",
+                                command: ["performWithFeedback", "moveToNextChar"]
+                            },
+                            {
+                                class: "action font-glyph bottom right",
+                                label: "&#x232b;",
+                                command: ["performWithFeedback", "deleteBackward"]
+                            }
+                        ]
+                    ]
+                },
+                "matrix-keyboard-layer": {
+                    styles: "",
+                    rows: [
+                        [
+                            {
+                                class: "keycap tex",
+                                insert: "$$\\begin{bmatrix}0\\end{bmatrix}$$",
+                                label: "M(1,1)",
+                            },
+                            {
+                                class: "keycap tex",
+                                insert: "$$\\begin{bmatrix}0 & 0\\end{bmatrix}$$",
+                                label: "M(1,2)"
+                            },
+                            {
+                                class: "keycap tex",
+                                insert: "$$\\begin{bmatrix}0 & 0 & 0\\end{bmatrix}$$",
+                                label: "M(1,3)"
+                            },
+                            {
+                                class: "keycap tex",
+                                insert: "$$\\begin{bmatrix}0 & 0 & 0 & 0\\end{bmatrix}$$",
+                                label: "M(1,4)"
+                            },
+                            {
+                                class: "keycap tex",
+                                insert: "$$\\begin{bmatrix}0 & 0 & 0 & 0 & 0\\end{bmatrix}$$",
+                                label: "M(1,5)"
+                            },
+                            {
+                                class: "keycap tex",
+                                insert: "$$\\begin{bmatrix}0 & 0 & 0 & 0 & 0 & 0\\end{bmatrix}$$",
+                                label: "M(1,6)"
+                            },
+                            { class: "separator w5" },
+                            { label: "17", key: "17", latex: '$$17$$', insert: '$$17$$' },
+                            // Will display the label using the system font. To display
+                            // with the TeX font, use:
+                            // { class: "tex", label: "7", key: "7" },
+                            // or
+                            // { latex: "7"},
+                            { label: "8", key: "8" },
+                            { label: "9", key: "9" },
+                            { latex: "\\div" },
+                            { class: "separator w5" },
+                            {
+                                class: "tex small",
+                                label: "<span><i>x</i>&thinsp;²</span>",
+                                insert: "$$#@^{2}$$"
+                            },
+                            {
+                                class: "tex small",
+                                label: "<span><i>x</i><sup>&thinsp;<i>n</i></sup></span>",
+                                insert: "$$#@^{}$$"
+                            },
+                            {
+                                class: "small",
+                                latex: "\\sqrt{#0}",
+                                insert: "$$\\sqrt{#0}$$",
+                            }
+                        ],
+                        [
+                            {
+                                class: "keycap tex",
+                                insert: "$$\\begin{bmatrix}0 \\\\ 0\\end{bmatrix}$$",
+                                label: "M(2,1)",
+                            },
+                            {
+                                class: "keycap tex",
+                                insert: "$$\\begin{bmatrix}0 & 0\\\\ 0 & 0\\end{bmatrix}$$",
+                                label: "M(2,2)",
+                            },
+                            {
+                                class: "keycap tex",
+                                insert: "$$\\begin{bmatrix}0 & 0 & 0\\\\ 0 & 0 & 0\\end{bmatrix}$$",
+                                label: "M(2,3)",
+                            },
+                            {
+                                class: "keycap tex",
+                                insert: "$$\\begin{bmatrix}0 & 0 & 0 & 0\\\\ 0 & 0 & 0 & 0\\end{bmatrix}$$",
+                                label: "M(2,4)",
+                            },
+                            {
+                                class: "keycap tex",
+                                insert: "$$\\begin{bmatrix}0 & 0 & 0 & 0 & 0\\\\ 0 & 0 & 0 & 0 & 0\\end{bmatrix}$$",
+                                label: "M(2,5)",
+                            },
+                            {
+                                class: "keycap tex",
+                                insert: "$$\\begin{bmatrix}0 & 0 & 0 & 0 & 0 & 0\\\\ 0 & 0 & 0 & 0 & 0 & 0\\end{bmatrix}$$",
+                                label: "M(2,6)",
+                            },
+                            { class: "separator w5" },
+                            { label: "4", latex:"4" },
+                            { label: "5", key: "5" },
+                            { label: "6", key: "6" },
+                            { latex: "\\times" },
+                            { class: "separator w5" },
+                            { class: "small", latex: "\\frac{#0}{#0}" },
+                            { class: "separator" },
+                            { class: "separator" }
+                        ],
+                        [
+                            { class: "tex", label: "<i>c</i>" },
+                            { class: "tex", label: "<i>z</i>" },
+                            { class: "separator w5" },
+                            { label: "1", key: "1" },
+                            { label: "2", key: "2" },
+                            { label: "3", key: "3" },
+                            { latex: "-" },
+                            { class: "separator w5" },
+                            { class: "separator" },
+                            { class: "separator" },
+                            { class: "separator" }
+                        ],
+                        [
+                            { latex: "(" },
+                            { latex: ")" },
+
+                            { class: "separator w5" },
+                            { label: "0", key: "0" },
+                            { latex: "." },
+                            { latex: "\\pi" },
+                            { latex: "+" },
+                            { class: "separator w5" },
+                            {
+                                class: "action",
+                                label: "<svg><use xlink:href='#svg-arrow-left' /></svg>",
+                                command: ["performWithFeedback", "moveToPreviousChar"]
+                            },
+                            {
+                                class: "action",
+                                label: "<svg><use xlink:href='#svg-arrow-right' /></svg>",
+                                command: ["performWithFeedback", "moveToNextChar"]
+                            },
+                            {
+                                class: "action font-glyph bottom right",
+                                label: "&#x232b;",
+                                command: ["performWithFeedback", "deleteBackward"]
+                            }
+                        ],
+                        [
+                            { latex: "(" },
+                            { latex: ")" },
+
+                            { class: "separator w5" },
+                            { label: "0", key: "0" },
+                            { latex: "." },
+                            { latex: "\\pi" },
+                            { latex: "+" },
+                            { class: "separator w5" },
+                            {
+                                class: "action",
+                                label: "<svg><use xlink:href='#svg-arrow-left' /></svg>",
+                                command: ["performWithFeedback", "moveToPreviousChar"]
+                            },
+                            {
+                                class: "action",
+                                label: "<svg><use xlink:href='#svg-arrow-right' /></svg>",
+                                command: ["performWithFeedback", "moveToNextChar"]
+                            },
+                            {
+                                class: "action font-glyph bottom right",
+                                label: "&#x232b;",
+                                command: ["performWithFeedback", "deleteBackward"]
+                            }
+                        ],
+                        [
+                            { latex: "(" },
+                            { latex: ")" },
+
+                            { class: "separator w5" },
+                            { label: "0", key: "0" },
+                            { latex: "." },
+                            { latex: "\\pi" },
+                            { latex: "+" },
+                            { class: "separator w5" },
+                            {
+                                class: "action",
+                                label: "<svg><use xlink:href='#svg-arrow-left' /></svg>",
+                                command: ["performWithFeedback", "moveToPreviousChar"]
+                            },
+                            {
+                                class: "action",
+                                label: "<svg><use xlink:href='#svg-arrow-right' /></svg>",
+                                command: ["performWithFeedback", "moveToNextChar"]
+                            },
+                            {
+                                class: "action font-glyph bottom right",
+                                label: "&#x232b;",
+                                command: ["performWithFeedback", "deleteBackward"]
+                            }
+                        ],
+                    ]
+                }
+            };
+            const EXTRA_KEYBOARD = {
+                "extra-keyboard": {
+                    "label": "Others", // Label displayed in the Virtual Keyboard Switcher
+                    "tooltip": "High School Level", // Tooltip when hovering over the label
+                    "layer": "extra-keyboard-layer"
+                },
+                "matrix-keyboard": {
+                    "label": "Matrix", // Label displayed in the Virtual Keyboard Switcher
+                    "tooltip": "Matrix Keyboard", // Tooltip when hovering over the label
+                    "layer": "matrix-keyboard-layer"
+                }
+            };
+            mf.setOptions({
+                "customVirtualKeyboardLayers": EXTRA_KEYBOARD_LAYER,
+                "customVirtualKeyboards": EXTRA_KEYBOARD,
+                "virtualKeyboards": "numeric functions symbols roman  greek matrix-keyboard extra-keyboard"
+            });
             // mf.$setConfig(
             //     //{ macros: { ...mf.getConfig('macros'), smallfrac: '{}^{#1}\\!\\!/\\!{}_{#2}', }, }
             // );
@@ -75,19 +395,28 @@
                 })
             }
         },
-    methods: {
+    computed: {
+        convertMarkdown () {
+            return this.markdown.render('$' + this.node.attrs.katex + '$')
+        }
     },
   }
 </script>
 
 
 <style lang="scss" scoped>
+
     .vue-component {
         /*background: #FAF594;*/
         /*border: 1px solid #0D0D0D;*/
         border-radius: 0.5rem;
         margin: 1rem 0;
         position: relative;
+        white-space: normal;
+        display: flex;
+        flex-direction: row-reverse;
+        justify-content: space-between;
+        align-items: center;
     }
 
     .label {
@@ -114,6 +443,10 @@
     /*    font-size: 20px;*/
     /*}*/
 
+    #mathfield {
+        width: 95%;
+    }
+
     #mathfield, .latexData {
         font-size: 32px;
         margin: 0;
@@ -121,5 +454,11 @@
         border-radius: 8px;
         border: 1px solid rgba(0, 0, 0, .3);
         box-shadow: 0 0 8px rgba(0, 0, 0, .2)
+    }
+</style>
+
+<style>
+    .converted p {
+        margin-bottom: 0 !important;
     }
 </style>

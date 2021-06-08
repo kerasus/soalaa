@@ -116,10 +116,9 @@ class Question extends Model {
             ]
         }
 
-        this.statement = convertToMarkdownKatex(this.statement)
-
         if (typeof this.statement === 'string') {
-            this.rendered_statement = md.render(this.statement)
+            this.rendered_statement = convertToMarkdownKatex(this.rendered_statement)
+            // this.rendered_statement = md.render(this.statement)
         }
     }
 
