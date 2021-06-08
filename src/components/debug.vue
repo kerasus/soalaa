@@ -1,7 +1,7 @@
 <template>
     <div>
         <vue-tiptap-plus v-model="html"/>
-        <div v-html="convertToMarkdownKatex(html)"/>
+<!--        <div v-html="convertToMarkdownKatex(html)"/>-->
     </div>
 </template>
 
@@ -103,9 +103,28 @@
 
         return wrapper.innerHTML
       },
+        convertKatex(htmlString) {
+            var wrapper = document.createElement('div');
+            wrapper.innerHTML = htmlString;
+            let katexes = wrapper.querySelectorAll('tiptap-interactive-katex')
+            katexes.forEach(item => {
+                let markdownKatex = item.attributes[0].nodeValue
+                if (markdownKatex) {
+                    markdownKatex = '$' + markdownKatex + '$'
+
+                    var katexWrapper = document.createElement('div');
+                    katexWrapper.innerHTML = markdownKatex;
+                    item.replaceWith(markdownKatex);
+                }
+            })
+
+            return wrapper.innerHTML
+        },
       convertToMarkdownKatex(string) {
         string = this.convertTables(string)
+          string = this.convertKatex(string)
         const markdown = this.htmlToMarkdown(string)
+          console.log(markdown)
         // return this.markdown.render(string.replace('<div class="question" dir="rtl">', ''))
         return this.markdown.render(markdown)
       },
