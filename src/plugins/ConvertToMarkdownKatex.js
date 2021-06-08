@@ -444,10 +444,11 @@ function convertToMarkdownKatex (string) {
   if (!string) {
 	return string
   }
-  string = convertTables(string)
+  // string = convertTables(string)
+  // string = string.replace(/\n/g,'<br>')
+  // const markdown = htmlToMarkdown(string)
+  const markdown = string
 
-  string = string.replace(/\n/g,'<br>')
-  const markdown = htmlToMarkdown(string)
   return md.render(markdown, {strict: false})
 }
 
