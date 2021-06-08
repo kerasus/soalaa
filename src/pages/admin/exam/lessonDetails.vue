@@ -410,7 +410,7 @@
                 const that = this
                 this.subCategoriesList.fetch().then((response) => {
                     // that.quiz.sub_categories = new QuestSubcategoryList(response.data)
-                    that.quizData.sub_categories = new QuestSubcategoryList(response.data)
+                    that.quizData.sub_categories = new QuestSubcategoryList(response.data.data)
                     let questions = quizResponse.data.data
                     that.sortQuestions (questions)
                     that.quizData.questions = new QuestionList(questions)

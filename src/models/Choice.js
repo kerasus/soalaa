@@ -22,7 +22,7 @@ class Choice extends Model {
         ])
 
         if (typeof this.title === 'string') {
-            this.rendered_title = convertToMarkdownKatex(this.rendered_title)
+            this.rendered_title = convertToMarkdownKatex(this.title)
             // this.rendered_title = md.render(this.title)
         }
     }
