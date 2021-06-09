@@ -143,13 +143,22 @@
             if (startIndex === -1) {
                 return markdownString
             }
+            if (markdownString[startIndex -1] === '\\') {
+                return this.convertMarkdownKatexToHtml(markdownString, startIndex + 1)
+            }
             const endIndex = markdownString.indexOf('$', index + 1)
+            if (endIndex === -1) {
+                return markdownString
+            }
+            if (markdownString[endIndex -1] === '\\') {
+                return this.convertMarkdownKatexToHtml(markdownString, endIndex + 1)
+            }
             const firstThird = markdownString.slice(0, startIndex)
             const secondThird = markdownString.slice(startIndex + 1, endIndex)
             const remaining = markdownString.slice(endIndex + 1)
             markdownString = firstThird + '<tiptap-interactive-katex katex="' +
                     secondThird + '"></tiptap-interactive-katex>' + remaining
-            return this.convertMarkdownKatexToHtml(markdownString)
+            return this.convertMarkdownKatexToHtml(markdownString, endIndex)
         },
         convertMarkdownImageToHtml (markdownString, index = 0) {
             const startIndex = markdownString.indexOf('![](', index)
