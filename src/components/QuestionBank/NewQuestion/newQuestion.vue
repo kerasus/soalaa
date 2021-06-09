@@ -1,12 +1,17 @@
 <template>
   <div>
-new
+    <exams></exams>
   </div>
 </template>
 
 <script>
+import exams  from "@/components/QuestionBank/NewQuestion/Exams/exams";
 export default {
-  name: "newQuestion"
+  name: "newQuestion",
+
+  components:{
+    exams:exams
+  }
 }
 </script>
 
