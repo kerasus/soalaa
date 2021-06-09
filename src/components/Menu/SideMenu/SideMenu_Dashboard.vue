@@ -31,7 +31,6 @@
           <v-list-item-title>شرکت در آزمون</v-list-item-title>
         </v-list-item>
       </router-link>
-
       <router-link
         v-for="item in userList"
         :key="item.displayName"
@@ -45,7 +44,6 @@
           <v-list-item-title>{{ item.displayName }}</v-list-item-title>
         </v-list-item>
       </router-link>
-
       <router-link
         v-if="false"
         class="text-decoration-none"
@@ -82,6 +80,37 @@
           <v-list-item-title>نتایج نفرات برتر</v-list-item-title>
         </v-list-item>
       </router-link>
+      <v-list-item>
+        <v-list-item-title>
+          <v-list-group   prepend-icon="mdi-bank-outline">
+            <template v-slot:activator>
+              <v-list-item-title>Users</v-list-item-title>
+            </template>
+            <v-list-item>
+                <router-link
+               to="/newQuestion" >
+                  <v-list-item-title>
+                    test 1
+                  </v-list-item-title>
+                </router-link>
+            </v-list-item>
+            <v-list-item>
+                <v-list-item-title>
+                  test 1
+                </v-list-item-title>
+
+            </v-list-item>
+            <v-list-item>
+                <v-list-item-title>
+                  test 1
+                </v-list-item-title>
+            </v-list-item>
+
+
+
+          </v-list-group>
+        </v-list-item-title>
+      </v-list-item>
       <router-link
         v-if="false"
         class="text-decoration-none"
@@ -134,6 +163,7 @@
         </v-list-item>
       </router-link>
     </v-list-item-group>
+
   </v-list>
 </template>
 
