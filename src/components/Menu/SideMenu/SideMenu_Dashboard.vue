@@ -84,26 +84,29 @@
         <v-list-item-title>
           <v-list-group   prepend-icon="mdi-bank-outline">
             <template v-slot:activator>
-              <v-list-item-title>Users</v-list-item-title>
+              <v-list-item-title>بانک سوال</v-list-item-title>
             </template>
             <v-list-item>
-                <router-link
-               to="/newQuestion" >
+                <router-link to="/newQuestion">
                   <v-list-item-title>
-                    test 1
+                    سوال جدید
                   </v-list-item-title>
                 </router-link>
             </v-list-item>
             <v-list-item>
-                <v-list-item-title>
-                  test 1
-                </v-list-item-title>
+                <router-link to="/questionFactory">
+                  <v-list-item-title>
+                    کارخانه ی سوال
+                  </v-list-item-title>
+                </router-link>
 
             </v-list-item>
             <v-list-item>
-                <v-list-item-title>
-                  test 1
-                </v-list-item-title>
+               <router-link  to="editQuestion">
+                 <v-list-item-title >
+                   ویرایش سوال
+                 </v-list-item-title>
+               </router-link>
             </v-list-item>
 
 
