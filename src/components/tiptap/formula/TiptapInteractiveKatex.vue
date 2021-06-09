@@ -1,7 +1,7 @@
 <template>
     <node-view-wrapper class="vue-component">
         <div id="mathfield" ref="mathfield" dir="ltr" locale="fa" :class="{ 'editable': editMode }" v-show="editMode">
-            x=\frac{-b\pm \sqrt{b^2-4ac}}{2a}
+            {{ katex }}
         </div>
         <div class="converted" v-html="convertMarkdown" dir="ltr" v-show="!editMode" @click="editMode = true"/>
 
@@ -55,7 +55,7 @@
           formula: '',
           editMode: false,
           questMarkdownText: '# Math Rulez! \n  $x=\\frac{-b\\pm\\sqrt[]{b^2-4ac}}{2a}$',
-        katex: '$x=\\frac{-b\\pm\\sqrt[]{b^2-4ac}}{2a}$'
+        katex: '$x=\\frac{-5b\\pm\\sqrt[]{b^2-4ac}}{2a}$'
       }
     },
     mounted() {
@@ -602,18 +602,21 @@
             that.latexData = mf.getValue()
         }, 500)
     },
-        watch: {
-            latexData: function () {
-                this.updateAttributes({
-                    katex: this.latexData
-                })
-            }
-        },
+    watch: {
+        latexData: function () {
+            this.updateAttributes({
+                katex: this.latexData
+            })
+        }
+    },
     computed: {
         convertMarkdown () {
             return this.markdown.render('$' + this.node.attrs.katex + '$')
         }
     },
+      created () {
+        this.katex = this.node.attrs.katex
+      }
   }
 </script>
 

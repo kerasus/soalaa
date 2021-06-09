@@ -184,7 +184,6 @@
             return this.convertMarkdownImageToHtml(markdownString, endIndex)
         },
         convertToTiptap (string = '') {
-          string = '![](https://cdn.alaatv.com/aaa/questionPhotos/Asset_5%402x-9243251.png?w=305&h=305)![](https://cdn.alaatv.com/aaa/questionPhotos/Asset_5%402x-9243251.png?w=200&h=200)'
             string = this.convertMarkdownImageToHtml(string)
             string = this.convertMarkdownKatexToHtml(string)
             return string
