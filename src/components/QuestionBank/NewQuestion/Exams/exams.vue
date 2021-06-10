@@ -10,7 +10,6 @@
                 md="4"
             >
               <v-card  elevation="0"> test </v-card>
-
             </v-col>
           </v-row>
         </v-container>
