@@ -854,7 +854,11 @@
             detachQuestionOnEditMode(item) {
                 this.attachLoading = true
                 axios.post(API_ADDRESS.question.detach(this.$route.params.id), {
-                    exams: [item.id]
+                  detaches: [{
+                    exam_id: item.id,
+                    order: item.order,
+                    sub_category_id: item.sub_category_id
+                  }]
                 })
                     .then((response) => {
                         console.log('response', response)
