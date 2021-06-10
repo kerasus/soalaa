@@ -367,11 +367,81 @@
                 v-bind="attrs"
                 @click="editor.chain().focus().insertTable({ rows: 3, cols: 3, withHeaderRow: true }).run()"
         >
-          <v-icon>mdi-table-plus</v-icon>
+          <v-icon>mdi-table</v-icon>
         </v-btn>
       </template>
       <span>Table</span>
     </v-tooltip>
+
+    <v-tooltip top>
+      <template v-slot:activator="{ on, attrs }">
+        <v-btn
+                small
+                tile
+                icon
+                v-on="on"
+                v-bind="attrs"
+                @click="editor.chain().focus().addColumnBefore().run()"
+                :disabled="!editor.can().addColumnBefore()"
+        >
+          <v-icon>mdi-table-column-plus-after</v-icon>
+        </v-btn>
+      </template>
+      <span>Add Column</span>
+    </v-tooltip>
+
+    <v-tooltip top>
+      <template v-slot:activator="{ on, attrs }">
+        <v-btn
+                small
+                tile
+                icon
+                v-on="on"
+                v-bind="attrs"
+                @click="editor.chain().focus().addRowAfter().run()"
+                :disabled="!editor.can().addRowAfter()"
+        >
+          <v-icon>mdi-table-row-plus-after</v-icon>
+        </v-btn>
+      </template>
+      <span>Add Row</span>
+    </v-tooltip>
+
+    <v-tooltip top>
+      <template v-slot:activator="{ on, attrs }">
+        <v-btn
+                small
+                tile
+                icon
+                v-on="on"
+                v-bind="attrs"
+                @click="editor.chain().focus().deleteColumn().run()"
+                :disabled="!editor.can().deleteColumn()"
+        >
+          <v-icon>mdi-table-column-remove</v-icon>
+        </v-btn>
+      </template>
+      <span>Remove Column</span>
+    </v-tooltip>
+
+    <v-tooltip top>
+      <template v-slot:activator="{ on, attrs }">
+        <v-btn
+                small
+                tile
+                icon
+                v-on="on"
+                v-bind="attrs"
+                @click="editor.chain().focus().deleteRow().run()"
+                :disabled="!editor.can().deleteRow()"
+        >
+          <v-icon>mdi-table-row-remove</v-icon>
+        </v-btn>
+      </template>
+      <span>Remove Row</span>
+    </v-tooltip>
+
+    <v-divider class="mx-3" vertical></v-divider>
 
     <!--        <v-btn small tile icon @click="editor.chain().focus().insertContent('<vue-component></vue-component>').run()">-->
 
