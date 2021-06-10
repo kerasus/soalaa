@@ -1,281 +1,435 @@
 <template>
-  <div id="app" class="transparent">
-    <v-app id="inspire"  justify="space-around" align="center" class="transparent">
-      <span> title</span>
-      <v-container class="transparent" justify="space-around" align="center px-4" >
-           <v-row >
-             <v-col lg="12">
-               <v-row justify="space-between">
-                 <v-col
-                     lg="2"
-                 >
-                   <v-chip
-                       class="pa-2"
-                       elevation="0"
-                   >
-                     جدید ترین
-                   </v-chip>
-                 </v-col>
-                 <v-col lg="6" justify="space-around">
-                   <v-chip>
-                     همه
-                   </v-chip>
-                   <v-chip>
-                     در انتظار تایپ
-                   </v-chip>
-                   <v-chip>
-                     نیازمند ویرایش
-                   </v-chip>
-                   <v-chip>
-                     نمونه خوانی
-                   </v-chip>
-                   <v-chip>
-                     برسی نهایی
-                   </v-chip>
-                   <v-chip>
-                     رد شده
-                   </v-chip>
-                 </v-col>
-                 <v-col
-                     key="n"
-                     lg="2"
-                 >
-                   <v-chip
-                       class="pa-2"
-                       elevation="0"
-                   >
-                     سوال جدید +
-                   </v-chip>
-                 </v-col>
-               </v-row>
-               <v-row justify="space-between">
-                 <v-col lg="12">
-                   <v-card
-                       elevation="0"
-                       class="rounded-lg" rounded
-                   >
-                     <v-chip
-                         class="ma-2"
-                     >
-                       Default
-                     </v-chip>
+  <div id="app">
+    <v-app id="inspire" class="transparent">
+      <v-container >
+        <v-row class="mx-4">
+          <v-col class="ml-auto">
+ <!--  -------------------- nav bar ----------------------------------------------------------------- -->
+            <v-row justify="space-between">
+              <v-col cols="2" data-text-align="left" >
+                <v-btn
+                    elevation="0"
+                    class="white">
+                  جدید ترین
+                  <v-icon class="mr-4">
+                    mdi-plus
+                  </v-icon>
+                </v-btn>
+              </v-col>
+              <v-col cols="6">
+                <v-row>
+                  <v-col>
+                    <v-chip-group class="white px-6 rounded" >
+                      <v-row justify="space-between">
+                        <v-col><v-chip class="amber lighten-3">test</v-chip></v-col>
+                        <v-col><v-chip class="transparent">test</v-chip></v-col>
+                        <v-col><v-chip class="transparent"> test</v-chip></v-col>
+                        <v-col><v-chip class="transparent">test</v-chip></v-col>
+                        <v-col><v-chip class="transparent">test</v-chip></v-col>
+                        <v-col><v-chip class="transparent">test</v-chip></v-col>
+                      </v-row>
+                    </v-chip-group>
+                  </v-col>
+                </v-row>
+              </v-col>
+              <v-col cols="2" class="text-left">
+                <v-btn rounded
+                    elevation="0"
+                    class="white">
+                  <v-icon class="ml-4">
+                    mdi-plus
+                  </v-icon>
+                  سوال جدید
+                </v-btn>
+              </v-col>
+            </v-row>
+ <!--  -------------------- table title ------------------------------------------------------------ -->
+            <v-card class="transparent" elevation="0">
+              <v-row class="">
+                <v-col no-gutters cols="1">
+                  <v-card class="pa-1 transparent" tile outlined>
+                    #
+                  </v-card>
+                </v-col>
+                <v-col no-gutters cols="3">
+                  <v-card class="pa-2 transparent" tile outlined>
+                    سوال
+                  </v-card>
+                </v-col>
+                <v-col no-gutters cols="2">
+                  <v-card class="pa-2 transparent" tile outlined>
+                    تاریخ ایجاد
+                  </v-card>
+                </v-col>
+                <v-col no-gutters cols="2">
+                  <v-card class="pa-2 transparent" tile outlined>
+                    درس
+                  </v-card>
+                </v-col>
+                <v-col no-gutters cols="3">
+                  <v-card class="pa-2 transparent" tile outlined>
+                    وضعیت
+                  </v-card>
+                </v-col>
+                <v-col no-gutters cols="1">
+                  <v-card class="pa-2 transparent" tile outlined>
+                    عملیات
+                  </v-card>
+                </v-col>
+              </v-row>
+            </v-card>
+  <!--  -------------------- table content ------------------------------------------------------------ -->
+            <v-card class="mb-4 rounded" elevation="0">
+              <v-row class="mb-6">
+                <v-col no-gutters cols="1">
+                  <v-card class="pa-2 transparent" tile outlined>
+                    1232
+                  </v-card>
+                </v-col>
+                <v-col no-gutters cols="3">
+                  <v-card class="pa-2 transparent" tile outlined>
+                    بیسار مشکل
+                  </v-card>
+                </v-col>
+                <v-col no-gutters cols="2">
+                  <v-card class="pa-2 transparent" tile outlined>
+                    1399/07/01
+                  </v-card>
+                </v-col>
+                <v-col no-gutters cols="1">
+                  <v-card class="pa-2 transparent" tile outlined>
+                    <v-chip>دینی</v-chip>
+                  </v-card>
+                </v-col>
+                <v-col no-gutters cols="3">
+                  <v-card class="pa-2 transparent" tile outlined>
+                    <v-chip class="red px-4 ml-4" dark>نیازمند ویرایش</v-chip>
+                    <v-chip class="red" dark> 2</v-chip>
+                  </v-card>
+                </v-col>
+                <v-col no-gutters cols="2">
+                  <v-card class="pa-2 transparent" tile outlined>
+                    <v-icon class="ml-4">
+                      mdi-eye-outline
+                    </v-icon>
+                    <v-icon class="ml-4">
+                      mdi-pencil-outline
+                    </v-icon>
+                    <v-icon class="ml-4">
+                      mdi-dots-horizontal
+                    </v-icon>
+                  </v-card>
+                </v-col>
+              </v-row>
+            </v-card>
+            <v-card class="mb-4 rounded" elevation="0">
+              <v-row class="mb-6">
+                <v-col no-gutters cols="1">
+                  <v-card class="pa-2 transparent" tile outlined>
+                    1232
+                  </v-card>
+                </v-col>
+                <v-col no-gutters cols="3">
+                  <v-card class="pa-2 transparent" tile outlined>
+                    بیسار مشکل
+                  </v-card>
+                </v-col>
+                <v-col no-gutters cols="2">
+                  <v-card class="pa-2 transparent" tile outlined>
+                    1399/07/01
+                  </v-card>
+                </v-col>
+                <v-col no-gutters cols="1">
+                  <v-card class="pa-2 transparent" tile outlined>
+                    <v-chip>دینی</v-chip>
+                  </v-card>
+                </v-col>
+                <v-col no-gutters cols="3">
+                  <v-card class="pa-2 transparent" tile outlined>
+                    <v-chip class="red px-4 ml-4" dark>نیازمند ویرایش</v-chip>
+                    <v-chip class="red" dark> 2</v-chip>
+                  </v-card>
+                </v-col>
+                <v-col no-gutters cols="2">
+                  <v-card class="pa-2 transparent" tile outlined>
+                    <v-icon class="ml-4">
+                      mdi-eye-outline
+                    </v-icon>
+                    <v-icon class="ml-4">
+                      mdi-pencil-outline
+                    </v-icon>
+                    <v-icon class="ml-4">
+                      mdi-dots-horizontal
+                    </v-icon>
+                  </v-card>
+                </v-col>
+              </v-row>
+            </v-card>
+            <v-card class="mb-4 rounded" elevation="0">
+              <v-row class="mb-6">
+                <v-col no-gutters cols="1">
+                  <v-card class="pa-2 transparent" tile outlined>
+                    1232
+                  </v-card>
+                </v-col>
+                <v-col no-gutters cols="3">
+                  <v-card class="pa-2 transparent" tile outlined>
+                   یه مشکل دیگه
+                  </v-card>
+                </v-col>
+                <v-col no-gutters cols="2">
+                  <v-card class="pa-2 transparent" tile outlined>
+                    1399/11/01
+                  </v-card>
+                </v-col>
+                <v-col no-gutters cols="1">
+                  <v-card class="pa-2 transparent" tile outlined>
+                    <v-chip>زیست شناسی</v-chip>
+                  </v-card>
+                </v-col>
+                <v-col no-gutters cols="3">
+                  <v-card class="pa-2 transparent" tile outlined>
+                    <v-chip class="amber lighten-1 px-4 ml-4" dark>نیازمند ویرایش</v-chip>
 
-                     <v-chip
-                         class="ma-2"
+                  </v-card>
+                </v-col>
+                <v-col no-gutters cols="2">
+                  <v-card class="pa-2 transparent" tile outlined>
+                    <v-icon class="ml-4">
+                      mdi-eye-outline
+                    </v-icon>
+                    <v-icon class="ml-4">
+                      mdi-pencil-outline
+                    </v-icon>
+                    <v-icon class="ml-4">
+                      mdi-dots-horizontal
+                    </v-icon>
+                  </v-card>
+                </v-col>
+              </v-row>
+            </v-card>
+            <v-card class="mb-4 rounded" elevation="0">
+              <v-row class="mb-6">
+                <v-col no-gutters cols="1">
+                  <v-card class="pa-2 transparent" tile outlined>
+                    124
+                  </v-card>
+                </v-col>
+                <v-col no-gutters cols="3">
+                  <v-card class="pa-2 transparent" tile outlined>
+                   اون یکی مشکل
+                  </v-card>
+                </v-col>
+                <v-col no-gutters cols="1">
+                  <v-card class="pa-2 transparent" tile outlined>
+                    1400/07/01
+                  </v-card>
+                </v-col>
+                <v-col no-gutters cols="2">
+                  <v-card class="pa-2 transparent" tile outlined>
+                    <v-chip>دیفرانسیل</v-chip>
+                  </v-card>
+                </v-col>
+                <v-col no-gutters cols="3">
+                  <v-card class="pa-2 transparent" tile outlined>
+                    <v-chip class="green darken-1 px-4 ml-4" dark>نیازمند ویرایش</v-chip>
 
-                     >
-                       Primary
-                     </v-chip>
+                  </v-card>
+                </v-col>
+                <v-col no-gutters cols="2">
+                  <v-card class="pa-2 transparent" tile outlined>
+                    <v-icon class="ml-4">
+                      mdi-eye-outline
+                    </v-icon>
+                    <v-icon class="ml-4">
+                      mdi-pencil-outline
+                    </v-icon>
+                    <v-icon class="ml-4">
+                      mdi-dots-horizontal
+                    </v-icon>
+                  </v-card>
+                </v-col>
+              </v-row>
+            </v-card>
+            <v-card class="mb-4 rounded" elevation="0">
+              <v-row class="mb-6">
+                <v-col no-gutters cols="1">
+                  <v-card class="pa-2 transparent" tile outlined>
+                    1232
+                  </v-card>
+                </v-col>
+                <v-col no-gutters cols="3">
+                  <v-card class="pa-2 transparent" tile outlined>
+                    بیسار مشکل
+                  </v-card>
+                </v-col>
+                <v-col no-gutters cols="2">
+                  <v-card class="pa-2 transparent" tile outlined>
+                    1399/07/01
+                  </v-card>
+                </v-col>
+                <v-col no-gutters cols="1">
+                  <v-card class="pa-2 transparent" tile outlined>
+                    <v-chip>دینی</v-chip>
+                  </v-card>
+                </v-col>
+                <v-col no-gutters cols="3">
+                  <v-card class="pa-2 transparent" tile outlined>
+                    <v-chip class="red px-4 ml-4" dark>نیازمند ویرایش</v-chip>
+                    <v-chip class="red" dark> 2</v-chip>
+                  </v-card>
+                </v-col>
+                <v-col no-gutters cols="2">
+                  <v-card class="pa-2 transparent" tile outlined>
+                    <v-icon class="ml-4">
+                      mdi-eye-outline
+                    </v-icon>
+                    <v-icon class="ml-4">
+                      mdi-pencil-outline
+                    </v-icon>
+                    <v-icon class="ml-4">
+                      mdi-dots-horizontal
+                    </v-icon>
+                  </v-card>
+                </v-col>
+              </v-row>
+            </v-card>
+            <v-card class="mb-4 rounded" elevation="0">
+              <v-row class="mb-6">
+                <v-col no-gutters cols="1">
+                  <v-card class="pa-2 transparent" tile outlined>
+                    1232
+                  </v-card>
+                </v-col>
+                <v-col no-gutters cols="3">
+                  <v-card class="pa-2 transparent" tile outlined>
+                    بیسار مشکل
+                  </v-card>
+                </v-col>
+                <v-col no-gutters cols="2">
+                  <v-card class="pa-2 transparent" tile outlined>
+                    1399/07/01
+                  </v-card>
+                </v-col>
+                <v-col no-gutters cols="1">
+                  <v-card class="pa-2 transparent" tile outlined>
+                    <v-chip>دینی</v-chip>
+                  </v-card>
+                </v-col>
+                <v-col no-gutters cols="3">
+                  <v-card class="pa-2 transparent" tile outlined>
+                    <v-chip class="red px-4 ml-4" dark>نیازمند ویرایش</v-chip>
+                    <v-chip class="red" dark> 2</v-chip>
+                  </v-card>
+                </v-col>
+                <v-col no-gutters cols="2">
+                  <v-card class="pa-2 transparent" tile outlined>
+                    <v-icon class="ml-4">
+                      mdi-eye-outline
+                    </v-icon>
+                    <v-icon class="ml-4">
+                      mdi-pencil-outline
+                    </v-icon>
+                    <v-icon class="ml-4">
+                      mdi-dots-horizontal
+                    </v-icon>
+                  </v-card>
+                </v-col>
+              </v-row>
+            </v-card>
+            <v-card class="mb-4 rounded" elevation="0">
+              <v-row class="mb-6">
+                <v-col no-gutters cols="1">
+                  <v-card class="pa-2 transparent" tile outlined>
+                    1232
+                  </v-card>
+                </v-col>
+                <v-col no-gutters cols="3">
+                  <v-card class="pa-2 transparent" tile outlined>
+                    بیسار مشکل
+                  </v-card>
+                </v-col>
+                <v-col no-gutters cols="2">
+                  <v-card class="pa-2 transparent" tile outlined>
+                    1399/07/01
+                  </v-card>
+                </v-col>
+                <v-col no-gutters cols="1">
+                  <v-card class="pa-2 transparent" tile outlined>
+                    <v-chip>دینی</v-chip>
+                  </v-card>
+                </v-col>
+                <v-col no-gutters cols="3">
+                  <v-card class="pa-2 transparent" tile outlined>
+                    <v-chip class="red px-4 ml-4" dark>نیازمند ویرایش</v-chip>
+                    <v-chip class="red" dark> 2</v-chip>
+                  </v-card>
+                </v-col>
+                <v-col no-gutters cols="2">
+                  <v-card class="pa-2 transparent" tile outlined>
+                    <v-icon class="ml-4">
+                      mdi-eye-outline
+                    </v-icon>
+                    <v-icon class="ml-4">
+                      mdi-pencil-outline
+                    </v-icon>
+                    <v-icon class="ml-4">
+                      mdi-dots-horizontal
+                    </v-icon>
+                  </v-card>
+                </v-col>
+              </v-row>
+            </v-card>
+            <v-card class="mb-4 rounded" elevation="0">
+              <v-row class="mb-6">
+                <v-col no-gutters cols="1">
+                  <v-card class="pa-2 transparent" tile outlined>
+                    1232
+                  </v-card>
+                </v-col>
+                <v-col no-gutters cols="3">
+                  <v-card class="pa-2 transparent" tile outlined>
+                    بیسار مشکل
+                  </v-card>
+                </v-col>
+                <v-col no-gutters cols="2">
+                  <v-card class="pa-2 transparent" tile outlined>
+                    1399/07/01
+                  </v-card>
+                </v-col>
+                <v-col no-gutters cols="1">
+                  <v-card class="pa-2 transparent" tile outlined>
+                    <v-chip>دینی</v-chip>
+                  </v-card>
+                </v-col>
+                <v-col no-gutters cols="3">
+                  <v-card class="pa-2 transparent" tile outlined>
+                    <v-chip class="red px-4 ml-4" dark>نیازمند ویرایش</v-chip>
+                    <v-chip class="red" dark> 2</v-chip>
+                  </v-card>
+                </v-col>
+                <v-col no-gutters cols="2">
+                  <v-card class="pa-2 transparent" tile outlined>
+                    <v-icon class="ml-4">
+                      mdi-eye-outline
+                    </v-icon>
+                    <v-icon class="ml-4">
+                      mdi-pencil-outline
+                    </v-icon>
+                    <v-icon class="ml-4">
+                      mdi-dots-horizontal
+                    </v-icon>
+                  </v-card>
+                </v-col>
+              </v-row>
+            </v-card>
 
-                     <v-chip
-                         class="ma-2"
-
-                     >
-                       Secondary
-                     </v-chip>
-
-                     <v-chip
-                         class="ma-2"
-
-
-                     >
-                       Red Chip
-                     </v-chip>
-
-                     <v-chip
-                         class="ma-2"
-
-
-                     >
-                       Green Chip
-                     </v-chip>
-                   </v-card>
-                 </v-col>
-               </v-row>
-               <v-row justify="space-between">
-                 <v-col lg="12">
-                   <v-card
-                       elevation="0"
-                       class="rounded-lg" rounded
-                   >
-                     <v-chip
-                         class="ma-2"
-                     >
-                       Default
-                     </v-chip>
-
-                     <v-chip
-                         class="ma-2"
-
-                     >
-                       Primary
-                     </v-chip>
-
-                     <v-chip
-                         class="ma-2"
-
-                     >
-                       Secondary
-                     </v-chip>
-
-                     <v-chip
-                         class="ma-2"
-
-
-                     >
-                       Red Chip
-                     </v-chip>
-
-                     <v-chip
-                         class="ma-2"
-
-
-                     >
-                       Green Chip
-                     </v-chip>
-                   </v-card>
-                 </v-col>
-               </v-row>
-               <v-row justify="space-between">
-                 <v-col lg="12">
-                   <v-card
-                       elevation="0"
-                       class="rounded-lg" rounded
-                   >
-                     <v-chip
-                         class="ma-2"
-                     >
-                       Default
-                     </v-chip>
-
-                     <v-chip
-                         class="ma-2"
-
-                     >
-                       Primary
-                     </v-chip>
-
-                     <v-chip
-                         class="ma-2"
-
-                     >
-                       Secondary
-                     </v-chip>
-
-                     <v-chip
-                         class="ma-2"
-
-
-                     >
-                       Red Chip
-                     </v-chip>
-
-                     <v-chip
-                         class="ma-2"
-
-
-                     >
-                       Green Chip
-                     </v-chip>
-                   </v-card>
-                 </v-col>
-               </v-row>
-               <v-row justify="space-between">
-                 <v-col lg="12">
-                   <v-card
-                       elevation="0"
-                       class="rounded-lg" rounded
-                   >
-                     <v-chip
-                         class="ma-2"
-                     >
-                       Default
-                     </v-chip>
-
-                     <v-chip
-                         class="ma-2"
-
-                     >
-                       Primary
-                     </v-chip>
-
-                     <v-chip
-                         class="ma-2"
-
-                     >
-                       Secondary
-                     </v-chip>
-
-                     <v-chip
-                         class="ma-2"
-
-
-                     >
-                       Red Chip
-                     </v-chip>
-
-                     <v-chip
-                         class="ma-2"
-
-
-                     >
-                       Green Chip
-                     </v-chip>
-                   </v-card>
-                 </v-col>
-               </v-row>
-               <v-row justify="space-between">
-               <v-col lg="12">
-                 <v-card
-                     elevation="0"
-                     class="rounded-lg" rounded
-                 >
-                   <v-chip
-                       class="ma-2"
-                   >
-                     Default
-                   </v-chip>
-
-                   <v-chip
-                       class="ma-2"
-
-                   >
-                     Primary
-                   </v-chip>
-
-                   <v-chip
-                       class="ma-2"
-
-                   >
-                     Secondary
-                   </v-chip>
-
-                   <v-chip
-                       class="ma-2"
-
-
-                   >
-                     Red Chip
-                   </v-chip>
-
-                   <v-chip
-                       class="ma-2"
-
-
-                   >
-                     Green Chip
-                   </v-chip>
-                 </v-card>
-               </v-col>
-             </v-row>
-
-             </v-col>
-           </v-row>
+          </v-col>
+        </v-row>
       </v-container>
     </v-app>
   </div>
 </template>
-
 <script>
 export default {
   name: "questionFactory",
