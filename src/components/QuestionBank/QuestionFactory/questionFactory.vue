@@ -3,9 +3,9 @@
     <v-app id="inspire" class="transparent">
       <v-container >
         <v-row class="mx-4">
-          <v-col class="ml-auto">
+          <v-col >
  <!--  -------------------- nav bar ----------------------------------------------------------------- -->
-            <v-row justify="space-between">
+            <v-row justify="space-between my-10">
               <v-col cols="2" data-text-align="left" >
                 <v-btn
                     elevation="0"
