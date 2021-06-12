@@ -3,7 +3,7 @@
     <v-app id="inspire" class="transparent">
       <v-container>
         <v-row class="mx-4">
-          <v-col :cols="12 - colsNumber" >
+          <v-col :cols="questionColsNumber" >
             <v-row>
               <v-col>
                 <!-- ------------------------- title -------------------------------  -->
@@ -128,7 +128,7 @@
             </v-row>
             <!-- ------------------------- type question -----------------------   -->
           </v-col>
-          <v-col :cols ="colsNumber" :class="displayEditQuestion">
+          <v-col :cols ="uploadImgColsNumber" :class="displayEditQuestion ? '' : 'd-none'">
             <v-card flat height="1856">
               <!-- ------------------------- type question  title-----------------------   -->
              <div class="pa-6">
@@ -145,7 +145,6 @@
              </div>
               <!-- ------------------------- type question  content-----------------------   -->
               <v-card height="1099" color="#f5f5f5" flat class="ma-7">
-
               </v-card>
             </v-card>
           </v-col>
@@ -159,23 +158,25 @@ export default {
   name: "editQuestion",
   data(){
     return {
-     colsNumber:0,
-      displayEditQuestion:'d-none'
+      questionColsNumber:12,
+      uploadImgColsNumber:0,
+      displayEditQuestion:false
     }
   },
   methods: {
     closeDrawer (){
       console.log('save click')
-      this.displayEditQuestion=""
-      this.$store.commit('AppLayout/updateAppBarAndDrawer', false)
-      this.colsNumber=5;
-
+      this.displayEditQuestion=true
+      this.questionColsNumber=7;
+      this.uploadImgColsNumber=5;
+      this.$store.commit('AppLayout/updateDrawer', false)
     },
     openDrawer(){
       console.log('close click')
-      this.displayEditQuestion="d-none"
-      this.$store.commit('AppLayout/updateAppBarAndDrawer', true)
-      this.colsNumber = 0;
+      this.displayEditQuestion=false
+      this.$store.commit('AppLayout/updateDrawer', true)
+      this.questionColsNumber=12;
+      this.uploadImgColsNumber=0;
     }
   },
 }
