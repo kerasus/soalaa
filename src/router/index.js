@@ -144,21 +144,21 @@ const router = new VueRouter({
             meta: {middleware: [auth, completeInfo]}
         },
         {
-            path: '/newQuestion',
-            name: 'newQuestion',
-            component: () => lazyLoadView(import('@/components/QuestionBank/NewQuestion/newQuestion')),
+            path: '/creatQuestion',
+            name: 'creatQuestion',
+            component: () => lazyLoadView(import('@/pages/admin/question/newPage')),
             meta: {middleware: [auth, completeInfo]}
         },
         {
             path: '/questionFactory',
             name: 'questionFactory',
-            component: () => lazyLoadView(import('@/components/QuestionBank/QuestionFactory/questionFactory')),
+            component: () => lazyLoadView(import('@/pages/admin/question/newQuestionFactory')),
             meta: {middleware: [auth, completeInfo]}
         },
         {
             path: '/editQuestion',
             name: 'editQuestion',
-            component: () => lazyLoadView(import('@/components/QuestionBank/EditQuestion/editQuestion')),
+            component: () => lazyLoadView(import('@/pages/admin/question/newPage')),
             meta: {middleware: [auth, completeInfo]}
         },
         // NotFound page

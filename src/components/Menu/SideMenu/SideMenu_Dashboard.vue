@@ -82,35 +82,31 @@
       </router-link>
       <v-list-item>
         <v-list-item-title>
-          <v-list-group   prepend-icon="mdi-bank-outline">
+          <v-list-group prepend-icon="mdi-bank-outline">
             <template v-slot:activator>
               <v-list-item-title>بانک سوال</v-list-item-title>
             </template>
             <v-list-item>
-                <router-link to="/newQuestion">
-                  <v-list-item-title>
-                    سوال جدید
-                  </v-list-item-title>
-                </router-link>
+              <router-link to="/creatQuestion">
+                <v-list-item-title>
+                  سوال جدید
+                </v-list-item-title>
+              </router-link>
             </v-list-item>
             <v-list-item>
-                <router-link to="/questionFactory">
-                  <v-list-item-title>
-                    کارخانه ی سوال
-                  </v-list-item-title>
-                </router-link>
-
+              <router-link to="/questionFactory">
+                <v-list-item-title>
+                  کارخانه ی سوال
+                </v-list-item-title>
+              </router-link>
             </v-list-item>
             <v-list-item>
-               <router-link  to="editQuestion">
-                 <v-list-item-title >
-                   ویرایش سوال
-                 </v-list-item-title>
-               </router-link>
+              <router-link to="editQuestion">
+                <v-list-item-title>
+                  ویرایش سوال
+                </v-list-item-title>
+              </router-link>
             </v-list-item>
-
-
-
           </v-list-group>
         </v-list-item-title>
       </v-list-item>
@@ -166,7 +162,6 @@
         </v-list-item>
       </router-link>
     </v-list-item-group>
-
   </v-list>
 </template>
 
