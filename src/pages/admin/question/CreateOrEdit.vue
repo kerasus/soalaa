@@ -63,8 +63,8 @@
                           <v-autocomplete
                             v-model="attachSubcategoryID"
                             :items="subCategoriesList.list"
-                            label="درسدرس"
-                            item-text="display_title"
+                            label="درس"
+                            item-text="title"
                             item-value="id"
                             dense
                             outlined
@@ -839,7 +839,7 @@
                 const targetSubCategoryIndex = this.subCategoriesList.list.findIndex(subCategoryItem => Assistant.getId(subCategoryItem.id) === Assistant.getId(this.attachSubcategoryID))
                 this.totalExams[targetExamIndex].order = this.attachOrder
                 this.totalExams[targetExamIndex].sub_category_id = this.attachSubcategoryID
-                this.totalExams[targetExamIndex].sub_category_title = this.subCategoriesList.list[targetSubCategoryIndex].display_title
+                this.totalExams[targetExamIndex].sub_category_title = this.subCategoriesList.list[targetSubCategoryIndex].title
                 this.selectedQuizzes.push(JSON.parse(JSON.stringify(this.totalExams[targetExamIndex])))
                 this.dialog = false
               this.updateSelectedQuizzes()
@@ -868,7 +868,7 @@
                                 id: item.exam_id,
                                 order: item.order,
                                 sub_category_id: item.sub_category.id,
-                                sub_category_title: item.sub_category.display_title,
+                                sub_category_title: item.sub_category.title,
                                 title: this.getExamById(item.exam_id).title
                             })
                         })
@@ -941,7 +941,7 @@
               return new Promise(function(resolve, reject) {
                 that.subCategoriesList.fetch()
                     .then((response) => {
-                        that.subCategoriesList = new QuestSubcategoryList(response.data)
+                        that.subCategoriesList = new QuestSubcategoryList(response.data.data)
                       resolve()
                     })
                     .catch( () => {
@@ -1019,7 +1019,7 @@
                     that.totalExams[targetExamIndex].order = item.order
                     that.totalExams[targetExamIndex].sub_category_id = item.sub_category.id
                     that.totalExams[targetExamIndex].sub_category_title = item.sub_category.title
-                    that.selectedQuizzes.push(that.totalExams[targetExamIndex])
+                    that.selectedQuizzes.push(JSON.parse(JSON.stringify(that.totalExams[targetExamIndex])))
                 })
               this.updateSelectedQuizzes()
             },

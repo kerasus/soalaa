@@ -204,7 +204,7 @@
                     }
                 )
                 if (target) {
-                    return target.display_title
+                    return target.title
                 } else {
                     return ''
                 }
