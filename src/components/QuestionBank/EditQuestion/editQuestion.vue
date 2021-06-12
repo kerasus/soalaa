@@ -124,7 +124,6 @@
                     </v-row>
                   </v-col>
                 </v-row>
-
               </v-col>
             </v-row>
             <!-- ------------------------- type question -----------------------   -->
@@ -154,15 +153,13 @@
       </v-container>
     </v-app>
   </div>
-
 </template>
-
 <script>
 export default {
   name: "editQuestion",
   data(){
     return {
-     colsNumber:5,
+     colsNumber:0,
       displayEditQuestion:'d-none'
     }
   },
