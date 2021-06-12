@@ -867,7 +867,7 @@
                             this.selectedQuizzes.push({
                                 id: item.exam_id,
                                 order: item.order,
-                                sub_category_id: item.sub_category.category_id,
+                                sub_category_id: item.sub_category.id,
                                 sub_category_title: item.sub_category.title,
                                 title: this.getExamById(item.exam_id).title
                             })
