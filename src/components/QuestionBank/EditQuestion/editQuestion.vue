@@ -3,7 +3,7 @@
     <v-app id="inspire" class="transparent">
       <v-container>
         <v-row class="mx-4">
-          <v-col >
+          <v-col :cols="12 - colsNumber" >
             <v-row>
               <v-col>
                 <!-- ------------------------- title -------------------------------  -->
@@ -63,11 +63,11 @@
                   <v-col cols="6">
                     <v-sheet rounded="lg">
                       <v-row justify="space-between" align="center">
-                        <v-col cols="3">
-                          <v-sheet class="gray" rounded="lg">صورت سوال</v-sheet>
+                        <v-col cols="3" >
+                          <v-sheet  rounded="lg">صورت سوال</v-sheet>
                         </v-col>
-                        <v-col cols="3" class="text-center">
-                          <v-sheet class="ma=0" height="60" width="60" color="grey lighten-2" rounded="lg"></v-sheet>
+                        <v-col cols="3" class="text-right">
+                          <v-img src="https://picsum.photos/id/11/500/300" width="60" height="60" rounded="lg"></v-img>
                         </v-col>
                       </v-row>
                     </v-sheet>
@@ -78,8 +78,8 @@
                         <v-col cols="3">
                           <v-sheet class="gray" rounded="lg">پاسخ سوال</v-sheet>
                         </v-col>
-                        <v-col cols="3" class="text-center">
-                          <v-sheet class="ma=0" height="60" width="60" color="grey lighten-2" rounded="lg"></v-sheet>
+                        <v-col cols="3" class="text-right">
+                          <v-img src="https://picsum.photos/id/11/500/300" width="60" height="60"></v-img>
                         </v-col>
                       </v-row>
                     </v-sheet>
@@ -114,7 +114,7 @@
                   <v-col>
                     <v-row justify="space-around">
                       <v-col cols="4">
-                        <v-btn color="green darken-1 " dark class="ml-13 " large>
+                        <v-btn color="green darken-1 " dark class="ml-13 " large @click="closeDrawer">
                           ذخیره
                         </v-btn>
                         <span>
@@ -124,17 +124,30 @@
                     </v-row>
                   </v-col>
                 </v-row>
-                <!-- ------------------------- type question -----------------------   -->
+
               </v-col>
             </v-row>
+            <!-- ------------------------- type question -----------------------   -->
           </v-col>
-          <v-col cols="0">
-            <v-card elevation="0" height="1856">
-              <div class="pt-10 pb-6 pr-8">
-                <span> فایل های بارگزاری شده</span>
-              </div>
-              <v-sheet width="750" height="1099" ccolor="grey lighten-3" rounded="lg">
-              </v-sheet>
+          <v-col :cols ="colsNumber" :class="displayEditQuestion">
+            <v-card flat height="1856">
+              <!-- ------------------------- type question  title-----------------------   -->
+             <div class="pa-6">
+               <v-row justify="space-between" >
+                 <v-col >
+                   <span> فایل های بارگزاری شده</span>
+                 </v-col>
+                 <v-col class="text-left">
+                   <v-icon class="ml-4" @click="openDrawer">
+                     mdi-close
+                   </v-icon>
+                 </v-col>
+               </v-row>
+             </div>
+              <!-- ------------------------- type question  content-----------------------   -->
+              <v-card height="1099" color="#f5f5f5" flat class="ma-7">
+
+              </v-card>
             </v-card>
           </v-col>
         </v-row>
@@ -146,7 +159,28 @@
 
 <script>
 export default {
-  name: "editQuestion"
+  name: "editQuestion",
+  data(){
+    return {
+     colsNumber:5,
+      displayEditQuestion:'d-none'
+    }
+  },
+  methods: {
+    closeDrawer (){
+      console.log('save click')
+      this.displayEditQuestion=""
+      this.$store.commit('AppLayout/updateAppBarAndDrawer', false)
+      this.colsNumber=5;
+
+    },
+    openDrawer(){
+      console.log('close click')
+      this.displayEditQuestion="d-none"
+      this.$store.commit('AppLayout/updateAppBarAndDrawer', true)
+      this.colsNumber = 0;
+    }
+  },
 }
 </script>
 
