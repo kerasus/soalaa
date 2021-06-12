@@ -44,200 +44,157 @@
               </v-col>
             </v-row>
  <!--  -------------------- table title ------------------------------------------------------------ -->
-            <v-card class="transparent" elevation="0">
+            <v-card class="rounded py-2 transparent"  flat  >
               <v-row class="">
                 <v-col no-gutters cols="1">
-                  <v-card class="pa-1 transparent" tile outlined>
+                  <span class="pa-1 mr-4">
                     #
-                  </v-card>
+                  </span>
                 </v-col>
                 <v-col no-gutters cols="3">
-                  <v-card class="pa-2 transparent" tile outlined>
+                  <span class="pa-2">
                     سوال
-                  </v-card>
-                </v-col>
-                <v-col no-gutters cols="2">
-                  <v-card class="pa-2 transparent" tile outlined>
-                    تاریخ ایجاد
-                  </v-card>
-                </v-col>
-                <v-col no-gutters cols="2">
-                  <v-card class="pa-2 transparent" tile outlined>
-                    درس
-                  </v-card>
-                </v-col>
-                <v-col no-gutters cols="3">
-                  <v-card class="pa-2 transparent" tile outlined>
-                    وضعیت
-                  </v-card>
+                  </span>
                 </v-col>
                 <v-col no-gutters cols="1">
-                  <v-card class="pa-2 transparent" tile outlined>
+                  <span class="pa-2">
+                    تاریخ ایجاد
+                  </span>
+                </v-col>
+                <v-col no-gutters cols="2">
+                  <span class="pa-2">
+                    درس
+                  </span>
+                </v-col>
+                <v-col no-gutters cols="3">
+                  <span class="pa-2">
+                    وضعیت
+                  </span>
+                </v-col>
+                <v-col no-gutters cols="2">
+                  <span class="pa-2">
                     عملیات
-                  </v-card>
+                  </span>
                 </v-col>
               </v-row>
             </v-card>
   <!--  -------------------- table content ------------------------------------------------------------ -->
-            <v-card class="mb-4 rounded" elevation="0">
-              <v-row class="mb-6">
+            <v-card class="mb-4 rounded py-2"  flat >
+              <v-row class="ma-auto" align="center">
                 <v-col no-gutters cols="1">
-                  <v-card class="pa-2 transparent" tile outlined>
-                    1232
-                  </v-card>
-                </v-col>
-                <v-col no-gutters cols="3">
-                  <v-card class="pa-2 transparent" tile outlined>
-                    بیسار مشکل
-                  </v-card>
-                </v-col>
-                <v-col no-gutters cols="2">
-                  <v-card class="pa-2 transparent" tile outlined>
-                    1399/07/01
-                  </v-card>
-                </v-col>
-                <v-col no-gutters cols="1">
-                  <v-card class="pa-2 transparent" tile outlined>
-                    <v-chip>دینی</v-chip>
-                  </v-card>
-                </v-col>
-                <v-col no-gutters cols="3">
-                  <v-card class="pa-2 transparent" tile outlined>
-                    <v-chip class="red px-4 ml-4" dark>نیازمند ویرایش</v-chip>
-                    <v-chip class="red" dark> 2</v-chip>
-                  </v-card>
-                </v-col>
-                <v-col no-gutters cols="2">
-                  <v-card class="pa-2 transparent" tile outlined>
-                    <v-icon class="ml-4">
-                      mdi-eye-outline
-                    </v-icon>
-                    <v-icon class="ml-4">
-                      mdi-pencil-outline
-                    </v-icon>
-                    <v-icon class="ml-4">
-                      mdi-dots-horizontal
-                    </v-icon>
-                  </v-card>
-                </v-col>
-              </v-row>
-            </v-card>
-            <v-card class="mb-4 rounded" elevation="0">
-              <v-row class="mb-6">
-                <v-col no-gutters cols="1">
-                  <v-card class="pa-2 transparent" tile outlined>
-                    1232
-                  </v-card>
-                </v-col>
-                <v-col no-gutters cols="3">
-                  <v-card class="pa-2 transparent" tile outlined>
-                    بیسار مشکل
-                  </v-card>
-                </v-col>
-                <v-col no-gutters cols="2">
-                  <v-card class="pa-2 transparent" tile outlined>
-                    1399/07/01
-                  </v-card>
-                </v-col>
-                <v-col no-gutters cols="1">
-                  <v-card class="pa-2 transparent" tile outlined>
-                    <v-chip>دینی</v-chip>
-                  </v-card>
-                </v-col>
-                <v-col no-gutters cols="3">
-                  <v-card class="pa-2 transparent" tile outlined>
-                    <v-chip class="red px-4 ml-4" dark>نیازمند ویرایش</v-chip>
-                    <v-chip class="red" dark> 2</v-chip>
-                  </v-card>
-                </v-col>
-                <v-col no-gutters cols="2">
-                  <v-card class="pa-2 transparent" tile outlined>
-                    <v-icon class="ml-4">
-                      mdi-eye-outline
-                    </v-icon>
-                    <v-icon class="ml-4">
-                      mdi-pencil-outline
-                    </v-icon>
-                    <v-icon class="ml-4">
-                      mdi-dots-horizontal
-                    </v-icon>
-                  </v-card>
-                </v-col>
-              </v-row>
-            </v-card>
-            <v-card class="mb-4 rounded" elevation="0">
-              <v-row class="mb-6">
-                <v-col no-gutters cols="1">
-                  <v-card class="pa-2 transparent" tile outlined>
-                    1232
-                  </v-card>
-                </v-col>
-                <v-col no-gutters cols="3">
-                  <v-card class="pa-2 transparent" tile outlined>
-                   یه مشکل دیگه
-                  </v-card>
-                </v-col>
-                <v-col no-gutters cols="2">
-                  <v-card class="pa-2 transparent" tile outlined>
-                    1399/11/01
-                  </v-card>
-                </v-col>
-                <v-col no-gutters cols="1">
-                  <v-card class="pa-2 transparent" tile outlined>
-                    <v-chip>زیست شناسی</v-chip>
-                  </v-card>
-                </v-col>
-                <v-col no-gutters cols="3">
-                  <v-card class="pa-2 transparent" tile outlined>
-                    <v-chip class="amber lighten-1 px-4 ml-4" dark>نیازمند ویرایش</v-chip>
-
-                  </v-card>
-                </v-col>
-                <v-col no-gutters cols="2">
-                  <v-card class="pa-2 transparent" tile outlined>
-                    <v-icon class="ml-4">
-                      mdi-eye-outline
-                    </v-icon>
-                    <v-icon class="ml-4">
-                      mdi-pencil-outline
-                    </v-icon>
-                    <v-icon class="ml-4">
-                      mdi-dots-horizontal
-                    </v-icon>
-                  </v-card>
-                </v-col>
-              </v-row>
-            </v-card>
-            <v-card class="mb-4 rounded" elevation="0">
-              <v-row class="mb-6">
-                <v-col no-gutters cols="1">
-                  <v-card class="pa-2 transparent" tile outlined>
+                  <div class="pa-2 mr-4">
                     124
-                  </v-card>
+                  </div>
                 </v-col>
                 <v-col no-gutters cols="3">
-                  <v-card class="pa-2 transparent" tile outlined>
+                  <span class="pa-2">
                    اون یکی مشکل
-                  </v-card>
+                  </span>
                 </v-col>
                 <v-col no-gutters cols="1">
-                  <v-card class="pa-2 transparent" tile outlined>
+                  <span class="pa-2">
                     1400/07/01
-                  </v-card>
+                  </span>
                 </v-col>
                 <v-col no-gutters cols="2">
-                  <v-card class="pa-2 transparent" tile outlined>
+                  <span class="pa-2">
                     <v-chip>دیفرانسیل</v-chip>
-                  </v-card>
+                  </span>
                 </v-col>
                 <v-col no-gutters cols="3">
-                  <v-card class="pa-2 transparent" tile outlined>
+                  <span class="pa-2">
+                    <v-chip class="red darken-1 px-4 ml-4" dark>نیازمند ویرایش</v-chip>
+                    <v-chip class="red" dark> 2</v-chip>
+                  </span>
+                </v-col>
+                <v-col no-gutters cols="2">
+                  <span class="pa-2">
+                    <v-icon class="ml-4">
+                      mdi-eye-outline
+                    </v-icon>
+                    <v-icon class="ml-4">
+                      mdi-pencil-outline
+                    </v-icon>
+                    <v-icon class="ml-4">
+                      mdi-dots-horizontal
+                    </v-icon>
+                  </span>
+                </v-col>
+              </v-row>
+
+            </v-card>
+            <v-card class="mb-4 rounded py-2"  flat >
+              <v-row class="ma-auto" align="center">
+                <v-col no-gutters cols="1">
+                  <div class="pa-2 mr-4">
+                    124
+                  </div>
+                </v-col>
+                <v-col no-gutters cols="3">
+                  <span class="pa-2">
+                   اون یکی مشکل
+                  </span>
+                </v-col>
+                <v-col no-gutters cols="1">
+                  <span class="pa-2">
+                    1400/07/01
+                  </span>
+                </v-col>
+                <v-col no-gutters cols="2">
+                  <span class="pa-2">
+                    <v-chip>دیفرانسیل</v-chip>
+                  </span>
+                </v-col>
+                <v-col no-gutters cols="3">
+                  <span class="pa-2">
                     <v-chip class="green darken-1 px-4 ml-4" dark>نیازمند ویرایش</v-chip>
+                  </span>
+                </v-col>
+                <v-col no-gutters cols="2">
+                  <span class="pa-2">
+                    <v-icon class="ml-4">
+                      mdi-eye-outline
+                    </v-icon>
+                    <v-icon class="ml-4">
+                      mdi-pencil-outline
+                    </v-icon>
+                    <v-icon class="ml-4">
+                      mdi-dots-horizontal
+                    </v-icon>
+                  </span>
+                </v-col>
+              </v-row>
 
-                  </v-card>
+            </v-card>
+            <v-card class="mb-4 rounded py-2"  flat >
+              <v-row class="ma-auto" align="center">
+                <v-col no-gutters cols="1">
+                  <div class="pa-2 mr-4">
+                    124
+                  </div>
+                </v-col>
+                <v-col no-gutters cols="3">
+                  <span class="pa-2">
+                   اون یکی مشکل
+                  </span>
+                </v-col>
+                <v-col no-gutters cols="1">
+                  <span class="pa-2">
+                    1400/07/01
+                  </span>
                 </v-col>
                 <v-col no-gutters cols="2">
-                  <v-card class="pa-2 transparent" tile outlined>
+                  <span class="pa-2">
+                    <v-chip>دیفرانسیل</v-chip>
+                  </span>
+                </v-col>
+                <v-col no-gutters cols="3">
+                  <span class="pa-2">
+                    <v-chip class="green darken-1 px-4 ml-4" dark>نیازمند ویرایش</v-chip>
+                  </span>
+                </v-col>
+                <v-col no-gutters cols="2">
+                  <span class="pa-2">
                     <v-icon class="ml-4">
                       mdi-eye-outline
                     </v-icon>
@@ -247,183 +204,140 @@
                     <v-icon class="ml-4">
                       mdi-dots-horizontal
                     </v-icon>
-                  </v-card>
+                  </span>
                 </v-col>
               </v-row>
-            </v-card>
-            <v-card class="mb-4 rounded" elevation="0">
-              <v-row class="mb-6">
-                <v-col no-gutters cols="1">
-                  <v-card class="pa-2 transparent" tile outlined>
-                    1232
-                  </v-card>
-                </v-col>
-                <v-col no-gutters cols="3">
-                  <v-card class="pa-2 transparent" tile outlined>
-                    بیسار مشکل
-                  </v-card>
-                </v-col>
-                <v-col no-gutters cols="2">
-                  <v-card class="pa-2 transparent" tile outlined>
-                    1399/07/01
-                  </v-card>
-                </v-col>
-                <v-col no-gutters cols="1">
-                  <v-card class="pa-2 transparent" tile outlined>
-                    <v-chip>دینی</v-chip>
-                  </v-card>
-                </v-col>
-                <v-col no-gutters cols="3">
-                  <v-card class="pa-2 transparent" tile outlined>
-                    <v-chip class="red px-4 ml-4" dark>نیازمند ویرایش</v-chip>
-                    <v-chip class="red" dark> 2</v-chip>
-                  </v-card>
-                </v-col>
-                <v-col no-gutters cols="2">
-                  <v-card class="pa-2 transparent" tile outlined>
-                    <v-icon class="ml-4">
-                      mdi-eye-outline
-                    </v-icon>
-                    <v-icon class="ml-4">
-                      mdi-pencil-outline
-                    </v-icon>
-                    <v-icon class="ml-4">
-                      mdi-dots-horizontal
-                    </v-icon>
-                  </v-card>
-                </v-col>
-              </v-row>
-            </v-card>
-            <v-card class="mb-4 rounded" elevation="0">
-              <v-row class="mb-6">
-                <v-col no-gutters cols="1">
-                  <v-card class="pa-2 transparent" tile outlined>
-                    1232
-                  </v-card>
-                </v-col>
-                <v-col no-gutters cols="3">
-                  <v-card class="pa-2 transparent" tile outlined>
-                    بیسار مشکل
-                  </v-card>
-                </v-col>
-                <v-col no-gutters cols="2">
-                  <v-card class="pa-2 transparent" tile outlined>
-                    1399/07/01
-                  </v-card>
-                </v-col>
-                <v-col no-gutters cols="1">
-                  <v-card class="pa-2 transparent" tile outlined>
-                    <v-chip>دینی</v-chip>
-                  </v-card>
-                </v-col>
-                <v-col no-gutters cols="3">
-                  <v-card class="pa-2 transparent" tile outlined>
-                    <v-chip class="red px-4 ml-4" dark>نیازمند ویرایش</v-chip>
-                    <v-chip class="red" dark> 2</v-chip>
-                  </v-card>
-                </v-col>
-                <v-col no-gutters cols="2">
-                  <v-card class="pa-2 transparent" tile outlined>
-                    <v-icon class="ml-4">
-                      mdi-eye-outline
-                    </v-icon>
-                    <v-icon class="ml-4">
-                      mdi-pencil-outline
-                    </v-icon>
-                    <v-icon class="ml-4">
-                      mdi-dots-horizontal
-                    </v-icon>
-                  </v-card>
-                </v-col>
-              </v-row>
-            </v-card>
-            <v-card class="mb-4 rounded" elevation="0">
-              <v-row class="mb-6">
-                <v-col no-gutters cols="1">
-                  <v-card class="pa-2 transparent" tile outlined>
-                    1232
-                  </v-card>
-                </v-col>
-                <v-col no-gutters cols="3">
-                  <v-card class="pa-2 transparent" tile outlined>
-                    بیسار مشکل
-                  </v-card>
-                </v-col>
-                <v-col no-gutters cols="2">
-                  <v-card class="pa-2 transparent" tile outlined>
-                    1399/07/01
-                  </v-card>
-                </v-col>
-                <v-col no-gutters cols="1">
-                  <v-card class="pa-2 transparent" tile outlined>
-                    <v-chip>دینی</v-chip>
-                  </v-card>
-                </v-col>
-                <v-col no-gutters cols="3">
-                  <v-card class="pa-2 transparent" tile outlined>
-                    <v-chip class="red px-4 ml-4" dark>نیازمند ویرایش</v-chip>
-                    <v-chip class="red" dark> 2</v-chip>
-                  </v-card>
-                </v-col>
-                <v-col no-gutters cols="2">
-                  <v-card class="pa-2 transparent" tile outlined>
-                    <v-icon class="ml-4">
-                      mdi-eye-outline
-                    </v-icon>
-                    <v-icon class="ml-4">
-                      mdi-pencil-outline
-                    </v-icon>
-                    <v-icon class="ml-4">
-                      mdi-dots-horizontal
-                    </v-icon>
-                  </v-card>
-                </v-col>
-              </v-row>
-            </v-card>
-            <v-card class="mb-4 rounded" elevation="0">
-              <v-row class="mb-6">
-                <v-col no-gutters cols="1">
-                  <v-card class="pa-2 transparent" tile outlined>
-                    1232
-                  </v-card>
-                </v-col>
-                <v-col no-gutters cols="3">
-                  <v-card class="pa-2 transparent" tile outlined>
-                    بیسار مشکل
-                  </v-card>
-                </v-col>
-                <v-col no-gutters cols="2">
-                  <v-card class="pa-2 transparent" tile outlined>
-                    1399/07/01
-                  </v-card>
-                </v-col>
-                <v-col no-gutters cols="1">
-                  <v-card class="pa-2 transparent" tile outlined>
-                    <v-chip>دینی</v-chip>
-                  </v-card>
-                </v-col>
-                <v-col no-gutters cols="3">
-                  <v-card class="pa-2 transparent" tile outlined>
-                    <v-chip class="red px-4 ml-4" dark>نیازمند ویرایش</v-chip>
-                    <v-chip class="red" dark> 2</v-chip>
-                  </v-card>
-                </v-col>
-                <v-col no-gutters cols="2">
-                  <v-card class="pa-2 transparent" tile outlined>
-                    <v-icon class="ml-4">
-                      mdi-eye-outline
-                    </v-icon>
-                    <v-icon class="ml-4">
-                      mdi-pencil-outline
-                    </v-icon>
-                    <v-icon class="ml-4">
-                      mdi-dots-horizontal
-                    </v-icon>
-                  </v-card>
-                </v-col>
-              </v-row>
-            </v-card>
 
+            </v-card>
+            <v-card class="mb-4 rounded py-2"  flat >
+              <v-row class="ma-auto" align="center">
+                <v-col no-gutters cols="1">
+                  <div class="pa-2 mr-4">
+                    124
+                  </div>
+                </v-col>
+                <v-col no-gutters cols="3">
+                  <span class="pa-2">
+                   اون یکی مشکل
+                  </span>
+                </v-col>
+                <v-col no-gutters cols="1">
+                  <span class="pa-2">
+                    1400/07/01
+                  </span>
+                </v-col>
+                <v-col no-gutters cols="2">
+                  <span class="pa-2">
+                    <v-chip>دیفرانسیل</v-chip>
+                  </span>
+                </v-col>
+                <v-col no-gutters cols="3">
+                  <span class="pa-2">
+                    <v-chip class="green darken-1 px-4 ml-4" dark>نیازمند ویرایش</v-chip>
+                  </span>
+                </v-col>
+                <v-col no-gutters cols="2">
+                  <span class="pa-2">
+                    <v-icon class="ml-4">
+                      mdi-eye-outline
+                    </v-icon>
+                    <v-icon class="ml-4">
+                      mdi-pencil-outline
+                    </v-icon>
+                    <v-icon class="ml-4">
+                      mdi-dots-horizontal
+                    </v-icon>
+                  </span>
+                </v-col>
+              </v-row>
+
+            </v-card>
+            <v-card class="mb-4 rounded py-2"  flat >
+              <v-row class="ma-auto" align="center">
+                <v-col no-gutters cols="1">
+                  <div class="pa-2 mr-4">
+                    124
+                  </div>
+                </v-col>
+                <v-col no-gutters cols="3">
+                  <span class="pa-2">
+                   اون یکی مشکل
+                  </span>
+                </v-col>
+                <v-col no-gutters cols="1">
+                  <span class="pa-2">
+                    1400/07/01
+                  </span>
+                </v-col>
+                <v-col no-gutters cols="2">
+                  <span class="pa-2">
+                    <v-chip>دیفرانسیل</v-chip>
+                  </span>
+                </v-col>
+                <v-col no-gutters cols="3">
+                  <span class="pa-2">
+                    <v-chip class="green darken-1 px-4 ml-4" dark>نیازمند ویرایش</v-chip>
+                  </span>
+                </v-col>
+                <v-col no-gutters cols="2">
+                  <span class="pa-2">
+                    <v-icon class="ml-4">
+                      mdi-eye-outline
+                    </v-icon>
+                    <v-icon class="ml-4">
+                      mdi-pencil-outline
+                    </v-icon>
+                    <v-icon class="ml-4">
+                      mdi-dots-horizontal
+                    </v-icon>
+                  </span>
+                </v-col>
+              </v-row>
+
+            </v-card>
+            <v-card class="mb-4 rounded py-2"  flat >
+              <v-row class="ma-auto" align="center">
+                <v-col no-gutters cols="1">
+                  <div class="pa-2 mr-4">
+                    124
+                  </div>
+                </v-col>
+                <v-col no-gutters cols="3">
+                  <span class="pa-2">
+                   اون یکی مشکل
+                  </span>
+                </v-col>
+                <v-col no-gutters cols="1">
+                  <span class="pa-2">
+                    1400/07/01
+                  </span>
+                </v-col>
+                <v-col no-gutters cols="2">
+                  <span class="pa-2">
+                    <v-chip>دیفرانسیل</v-chip>
+                  </span>
+                </v-col>
+                <v-col no-gutters cols="3">
+                  <span class="pa-2">
+                    <v-chip class="green darken-1 px-4 ml-4" dark>نیازمند ویرایش</v-chip>
+                  </span>
+                </v-col>
+                <v-col no-gutters cols="2">
+                  <span class="pa-2">
+                    <v-icon class="ml-4">
+                      mdi-eye-outline
+                    </v-icon>
+                    <v-icon class="ml-4">
+                      mdi-pencil-outline
+                    </v-icon>
+                    <v-icon class="ml-4">
+                      mdi-dots-horizontal
+                    </v-icon>
+                  </span>
+                </v-col>
+              </v-row>
+
+            </v-card>
           </v-col>
         </v-row>
       </v-container>
