@@ -6,90 +6,55 @@
           <v-col :cols="questionColsNumber" >
             <v-row>
               <v-col>
+                <Question></Question>
                 <!-- ------------------------- title -------------------------------  -->
-                <div>
-                  <v-row>
-                    <v-col cols="3 mb-10">
-                      <span> سوال #123 </span>
-                    </v-col>
-                    <v-col>
-                      <span> سازنده سوال : فیلان دبیر </span>
-                    </v-col>
-                  </v-row>
-                </div>
+<!--                <div>-->
+<!--                  <v-row>-->
+<!--                    <v-col cols="3 mb-10">-->
+<!--                      <span> سوال #123 </span>-->
+<!--                    </v-col>-->
+<!--                    <v-col>-->
+<!--                      <span> سازنده سوال : فیلان دبیر </span>-->
+<!--                    </v-col>-->
+<!--                  </v-row>-->
+<!--                </div>-->
                 <!-- ------------------------- exam -------------------------------  -->
-                <v-row>
-                  <v-col cols="8">
-                    <div class="mb-6">
-                      <span> آزمون ها </span>
-                    </div>
-                    <div class="mb-12">
-                      <v-row no-gutters>
-                        <v-col cols="5">
-                          <v-sheet rounded="lg" class="pa-1 ma-2">g</v-sheet>
-                        </v-col>
-                        <v-col cols="4">
-                          <v-sheet rounded="lg" class="pa-1 ma-2">g</v-sheet>
-                        </v-col>
-                        <v-col cols="2">
-                          <v-sheet rounded="lg" class="pa-1 ma-2">g</v-sheet>
-                        </v-col>
-                        <v-col cols="1">
-                          <v-sheet rounded="lg" class="pa-1 ma-2">g</v-sheet>
-                        </v-col>
-                      </v-row>
-                      <v-row no-gutters>
-                        <v-col cols="5" class="pa-1">
-                          <v-sheet rounded="lg" l class="ma-2 pa-1">g</v-sheet>
-                        </v-col>
-                        <v-col cols="4">
-                          <v-sheet rounded="lg" class="pa-1 ma-2">g</v-sheet>
-                        </v-col>
-                        <v-col cols="2">
-                          <v-sheet rounded="lg" class="pa-1 ma-2">g</v-sheet>
-                        </v-col>
-                        <v-col cols="1">
-                          <v-sheet rounded="lg" class="pa-1 ma-2">g</v-sheet>
-                        </v-col>
-                      </v-row>
-                    </div>
-                  </v-col>
-                </v-row>
+
                 <!-- ------------------------- upload file -------------------------   -->
-                <div class="mb-6">
-                  <span> فایل های بارگزاری شده </span>
-                </div>
-                <v-row class="mb-12">
-                  <v-col cols="6">
-                    <v-sheet rounded="lg">
-                      <v-row justify="space-between" align="center">
-                        <v-col cols="3" >
-                          <v-sheet  rounded="lg">صورت سوال</v-sheet>
-                        </v-col>
-                        <v-col cols="3" class="text-right">
-                          <v-img src="https://picsum.photos/id/11/500/300" width="60" height="60" rounded="lg"></v-img>
-                        </v-col>
-                      </v-row>
-                    </v-sheet>
-                  </v-col>
-                  <v-col cols="6">
-                    <v-sheet rounded="lg">
-                      <v-row justify="space-between" align="center">
-                        <v-col cols="3">
-                          <v-sheet class="gray" rounded="lg">پاسخ سوال</v-sheet>
-                        </v-col>
-                        <v-col cols="3" class="text-right">
-                          <v-img src="https://picsum.photos/id/11/500/300" width="60" height="60"></v-img>
-                        </v-col>
-                      </v-row>
-                    </v-sheet>
-                  </v-col>
-                </v-row>
+<!--                <div class="mb-6">-->
+<!--                  <span> فایل های بارگزاری شده </span>-->
+<!--                </div>-->
+<!--                <v-row class="mb-12">-->
+<!--                  <v-col cols="6">-->
+<!--                    <v-sheet rounded="lg">-->
+<!--                      <v-row justify="space-between" align="center">-->
+<!--                        <v-col cols="3" >-->
+<!--                          <v-sheet  rounded="lg">صورت سوال</v-sheet>-->
+<!--                        </v-col>-->
+<!--                        <v-col cols="3" class="text-right">-->
+<!--                          <v-img src="https://picsum.photos/id/11/500/300" width="60" height="60" rounded="lg"></v-img>-->
+<!--                        </v-col>-->
+<!--                      </v-row>-->
+<!--                    </v-sheet>-->
+<!--                  </v-col>-->
+<!--                  <v-col cols="6">-->
+<!--                    <v-sheet rounded="lg">-->
+<!--                      <v-row justify="space-between" align="center">-->
+<!--                        <v-col cols="3">-->
+<!--                          <v-sheet class="gray" rounded="lg">پاسخ سوال</v-sheet>-->
+<!--                        </v-col>-->
+<!--                        <v-col cols="3" class="text-right">-->
+<!--                          <v-img src="https://picsum.photos/id/11/500/300" width="60" height="60"></v-img>-->
+<!--                        </v-col>-->
+<!--                      </v-row>-->
+<!--                    </v-sheet>-->
+<!--                  </v-col>-->
+<!--                </v-row>-->
                 <!-- ------------------------- upload file -------------------------   -->
-                <div class="mb-6">
+                <div class="mb-6" v-if="false">
                   <span>تایپ سوال</span>
                 </div>
-                <v-row>
+                <v-row v-if="false">
                   <v-col cols="12">
                     <v-sheet class="mb-10" height="200" rounded="lg">
                     </v-sheet>
@@ -110,7 +75,7 @@
                     </v-sheet>
                   </v-col>
                 </v-row>
-                <v-row>
+                <v-row v-if="false">
                   <v-col>
                     <v-row justify="space-around">
                       <v-col cols="4">
@@ -154,6 +119,7 @@
   </div>
 </template>
 <script>
+import Question from './Question/questions';
 export default {
   name: "editQuestion",
   data(){
@@ -179,6 +145,9 @@ export default {
       this.uploadImgColsNumber=0;
     }
   },
+  components:{
+    Question:Question,
+  }
 }
 </script>
 
