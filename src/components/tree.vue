@@ -327,7 +327,7 @@
             },
 
             onClick() {
-                // console.log(params)
+                // console.Log(params)
             },
         }
     }

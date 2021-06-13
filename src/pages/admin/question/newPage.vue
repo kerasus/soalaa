@@ -6,7 +6,7 @@
     >
       <v-container>
         <v-row>
-          <v-col :cols="questionColsNumber">
+          <v-col cols="9">
             <navBar />
             <Question
               v-model="value"
@@ -40,87 +40,74 @@
             />
             <v-row>
               <v-col cols="5">
-                <p class="font-weight-medium mb-10">
-                  فایل های آپلود شده:
-                </p>
-                <v-card
-                  height="138"
-                  flat
-                >
-                  <v-row justify="space-between">
-                    <v-col>
-                      <p>صورت سوال</p>
-                      <v-img
-                        src="https://picsum.photos/id/11/500/300"
-                        width="60"
-                        height="60"
-                        rounded="lg"
-                        @click="closeDrawer"
-                      />
-                    </v-col>
-                    <v-col>
-                      <p>جواب سوال</p>
-                      <v-row>
-                        <v-col>
-                          <v-img
-                            src="https://picsum.photos/id/11/500/300"
-                            width="60"
-                            height="60"
-                            rounded="lg"
-                            @click="closeDrawer"
-                          />
-                        </v-col>
-                        <v-col>
-                          <v-img
-                            src="https://picsum.photos/id/11/500/300"
-                            width="60"
-                            height="60"
-                            rounded="lg"
-                            @click="closeDrawer"
-                          />
-                        </v-col>
-                      </v-row>
-                    </v-col>
-                  </v-row>
-                </v-card>
+               <div>
+                 <p class="font-weight-medium mb-10">
+                   فایل های آپلود شده:
+                 </p>
+                 <v-card
+                     height="138"
+                     flat
+                 >
+                   <v-row justify="space-between">
+                     <v-col>
+                       <p>صورت سوال</p>
+                       <v-img
+                           src="https://picsum.photos/id/11/500/300"
+                           width="60"
+                           height="60"
+                           rounded="lg"
+                           @click="closeDrawer"
+                       />
+                     </v-col>
+                     <v-col>
+                       <p>جواب سوال</p>
+                       <v-row>
+                         <v-col>
+                           <v-img
+                               src="https://picsum.photos/id/11/500/300"
+                               width="60"
+                               height="60"
+                               rounded="lg"
+                               @click="closeDrawer"
+                           />
+                         </v-col>
+                         <v-col>
+                           <v-img
+                               src="https://picsum.photos/id/11/500/300"
+                               width="60"
+                               height="60"
+                               rounded="lg"
+                               @click="closeDrawer"
+                           />
+                         </v-col>
+                       </v-row>
+                     </v-col>
+                   </v-row>
+                 </v-card>
+               </div>
               </v-col>
               <v-col cols="7">
                 <Exams />
               </v-col>
             </v-row>
           </v-col>
-          <v-col
-            :cols="uploadImgColsNumber"
-            :class="displayEditQuestion ? '' : 'd-none'"
-          >
-            <v-card
+          <v-card
               flat
               height="1856"
-            >
-              <!-- ------------------------- type question  title-----------------------   -->
-              <div class="pa-6">
-                <v-row justify="space-between">
-                  <v-col>
-                    <span> فایل های بارگزاری شده</span>
-                  </v-col>
-                  <v-col class="text-left">
-                    <v-icon
-                      class="ml-4"
-                      @click="openDrawer"
-                    >
-                      mdi-close
-                    </v-icon>
-                  </v-col>
-                </v-row>
-              </div>
-              <!-- ------------------------- type question  content-----------------------   -->
-              <v-card
+              class="rounded-card"
+          >
+            <Log></Log>
+          </v-card>
+
+          <v-col cols="3"
+          >
+            <v-card
+                v-if="false"
                 height="1099"
                 color="#f5f5f5"
                 flat
                 class="ma-7"
-              />
-            </v-card>
+            />
           </v-col>
         </v-row>
       </v-container>
@@ -132,7 +119,8 @@ import navBar from '@/components/QuestionBank/EditQuestion/NavBar/navBar.vue';
 import Question from '@/components/Question/questionField';
 import UploadImg from '@/components/QuestionBank/EditQuestion/UploadImgs/uploadImg';
 import Exams from '@/components/QuestionBank/EditQuestion/Exams/exams';
-import Status from '@/components/QuestionBank/EditQuestion/Status/stsatus'
+import Status from '@/components/QuestionBank/EditQuestion/Status/stsatus';
+import Log from '@/components/QuestionBank/EditQuestion/Log/Log';
 export default {
   name: "NewPage",
   components:{
@@ -140,7 +128,8 @@ export default {
   Question,
   UploadImg,
   Exams,
-    Status
+  Status,
+  Log
   },
   data (){
     return {
@@ -192,5 +181,7 @@ export default {
 </script>
 
 <style scoped>
-
+.rounded-card{
+  border-radius: 10px;
+}
 </style>

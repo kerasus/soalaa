@@ -187,7 +187,7 @@
             this.changeAppBarAndDrawer(false)
             // setInterval(() => {
             //     console.clear()
-            //     console.log(this.inView)
+            //     console.Log(this.inView)
             // }, 5000)
         },
         created () {
@@ -224,7 +224,7 @@
                 this.$store.commit('AppLayout/updateAppBarAndDrawer', state)
             },
             changeCurrentQuestionIfScrollingIsDone () {
-                // console.log('time since last: ', this.timePassedSinceLastScroll)
+                // console.Log('time since last: ', this.timePassedSinceLastScroll)
                 // if (startIndex !== this.lastTimeScrollRange.start || endIndex !== this.lastTimeScrollRange.end) {
                 //     this.lastTimeScrollRange.start = startIndex
                 //     this.lastTimeScrollRange.end = endIndex
@@ -286,7 +286,7 @@
             getFirstInViewQuestionNumber () {
                 let firstQuestionInView
                 for (let i = this.renderedQuestions.startIndex; i <= this.renderedQuestions.endIndex; i++) {
-                    // console.log(i, ': ', this.questions[i].isInView)
+                    // console.Log(i, ': ', this.questions[i].isInView)
                     if (this.questions[i].isInView === true) {
                         firstQuestionInView = this.questions[i]
                         break
