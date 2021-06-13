@@ -7,8 +7,9 @@
       <v-container class="pa-6">
         <v-row>
           <v-col :cols="questionColsNumber">
-            <navBar />
-            <QuestionAnswer />
+            <navBar :status="urlPathName" />
+
+            <QuestionAnswer :status="urlPathName" />
             <!-- -------------------------- upload file ---------------------->
             <div>
               <v-row>
@@ -25,11 +26,11 @@
             <SaveChange />
           </v-col>
           <v-card
-              flat
-              height="1856"
-              class="rounded-card"
+            flat
+            height="1856"
+            class="rounded-card"
           >
-            <Log></Log>
+            <Log />
           </v-card>
           <!-- -------------------------- show img---------------------------->
           <v-col
@@ -67,17 +68,20 @@ export default {
   },
   data() {
     return {
-      statusType:'',
+      urlPathName:'',
       questionColsNumber: 12,
       uploadImgColsNumber: 0,
       displayEditQuestion: false,
     }
   },
   created() {
-    this.statusType=this.$route.name
-    console.log( this.$route.name)
+  this.getUrl()
   },
   methods: {
+    getUrl (){
+      this.urlPathName=this.$route.name
+      console.log(this.urlPathName)
+    },
     closeDrawer() {
       console.log('save click')
       this.displayEditQuestion = true

@@ -112,18 +112,18 @@
         </v-list-item>
       </router-link>
     </v-list-item-group>
-<!--    <v-list-item-group-->
-<!--      v-if="user.has_educational_permission && !user.has_admin_permission"-->
-<!--      v-model="adminGroup"-->
-<!--      class="admin-panel"-->
-<!--      active-class="deep-purple&#45;&#45;text text&#45;&#45;accent-4"-->
-<!--      @change="userGroup = null"-->
-<!--    >-->
+    <!--    <v-list-item-group-->
+    <!--      v-if="user.has_educational_permission && !user.has_admin_permission"-->
+    <!--      v-model="adminGroup"-->
+    <!--      class="admin-panel"-->
+    <!--      active-class="deep-purple&#45;&#45;text text&#45;&#45;accent-4"-->
+    <!--      @change="userGroup = null"-->
+    <!--    >-->
     <v-list-item-group
-        v-model="adminGroup"
-        class="admin-panel"
-        active-class="deep-purple--text text--accent-4"
-        @change="userGroup = null"
+      v-model="adminGroup"
+      class="admin-panel"
+      active-class="deep-purple--text text--accent-4"
+      @change="userGroup = null"
     >
       <router-link
         v-for="item in educationList"
@@ -144,29 +144,17 @@
             <template v-slot:activator>
               <v-list-item-title>بانک سوال</v-list-item-title>
             </template>
-            <router-link :to="{ name: 'creatQuestion' }">
+            <router-link :to="{ name:'question.create'}">
               <v-list-item>
-
                 <v-list-item-title>
                   سوال جدید
                 </v-list-item-title>
-
               </v-list-item>
             </router-link>
-            <router-link :to="{ name: 'questionFactory' }">
+            <router-link :to="{ name:'question.list'}">
               <v-list-item>
-
                 <v-list-item-title>
                   کارخانه ی سوال
-                </v-list-item-title>
-
-              </v-list-item>
-            </router-link>
-            <router-link :to="{ name: 'editQuestion' }">
-              <v-list-item>
-
-                <v-list-item-title>
-                  ویرایش سوال
                 </v-list-item-title>
               </v-list-item>
             </router-link>
