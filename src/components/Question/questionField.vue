@@ -24,13 +24,13 @@
           v-if="editStatus"
           flat
           solo
-          :label="title"
-          :rows="line"
+          :label="data.label"
+          :rows="data.line"
         />
         <v-card
           v-else
           flat
-          class=""
+          class="transparent"
           :color="color"
           v-html="value"
         />
@@ -38,11 +38,16 @@
     </v-row>
   </div>
 </template>
-
 <script>
 export default {
   name: 'QuestionField',
   props: {
+    data: {
+      default () {
+        return {}
+      },
+      type: Object
+    },
     value: {
       default: '',
       type: String
@@ -65,6 +70,10 @@ export default {
     },
     color: {
       default: 'transparent',
+      type: String
+    }
+    ,label:{
+      default: '',
       type: String
     }
   }
