@@ -392,7 +392,7 @@
       @input="updateRendered"
     />
     <div v-if="currentQuestion.id">
-<!--                  <upload-image :url="'/api/v1/question/upload/'+currentQuestion.id" />-->
+      <!--                  <upload-image :url="'/api/v1/question/upload/'+currentQuestion.id" />-->
       <upload-files
         :post-action="'/api/v1/question/upload/'+currentQuestion.id"
         :put-action="'/api/v1/question/upload/'+currentQuestion.id"
@@ -873,7 +873,7 @@
                             })
                         })
                       this.updateSelectedQuizzes()
-                        // this.currentQuestion = new Question(responseData)
+                        // this.currentQuestion = new QuestionAnswer(responseData)
                         // this.trueChoiceIndex = this.currentQuestion.choices.list.findIndex((item) => item.answer )
                         // this.updateAttachList(response.data.data)
                         this.attachLoading = false

@@ -24,7 +24,7 @@
           v-if="editStatus"
           flat
           solo
-          :label="title"
+          :label="label"
           :rows="line"
         />
         <v-card
@@ -38,7 +38,6 @@
     </v-row>
   </div>
 </template>
-
 <script>
 export default {
   name: 'QuestionField',
@@ -65,6 +64,10 @@ export default {
     },
     color: {
       default: 'transparent',
+      type: String
+    }
+    ,label:{
+      default: '',
       type: String
     }
   }

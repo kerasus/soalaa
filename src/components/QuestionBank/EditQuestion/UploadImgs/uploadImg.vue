@@ -3,12 +3,11 @@
     <p class="font-weight-medium">
       فایل های آپلود شده:
     </p>
-
-    <v-row justify="space-between">
-      <v-card
-        height="138"
-        flat
-      >
+    <v-card
+      flat
+      height="138"
+    >
+      <v-row justify="space-between">
         <v-col>
           <p>صورت سوال</p>
           <v-img
@@ -39,11 +38,10 @@
             </v-col>
           </v-row>
         </v-col>
-      </v-card>
-    </v-row>
+      </v-row>
+    </v-card>
   </div>
 </template>
-
 <script>
 export default {
   name: "UploadImg"
