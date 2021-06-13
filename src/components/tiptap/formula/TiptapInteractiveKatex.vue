@@ -1,5 +1,5 @@
 <template>
-    <node-view-wrapper class="vue-component">
+    <node-view-wrapper :class="{ 'vue-component': true, 'inline': node.attrs.inline }">
         <div id="mathfield" ref="mathfield" dir="ltr" locale="fa" :class="{ 'editable': editMode }" v-show="editMode">
             {{ katex }}
         </div>
@@ -59,7 +59,6 @@
       }
     },
     mounted() {
-        console.log('katex', this.node.attrs.katex)
         // if (node.attrs.katex) {
         //     this.katex = '$' + this.node.attrs.katex + '$'
         // }
@@ -634,6 +633,10 @@
         flex-direction: row-reverse;
         justify-content: space-between;
         align-items: center;
+    }
+
+    .vue-component.inline {
+        display: inline-flex;
     }
 
     .label {

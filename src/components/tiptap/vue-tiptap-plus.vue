@@ -34,6 +34,7 @@
   import SlotBubbleMenu from "@/components/tiptap/SlotBubbleMenu"
   import SlotFloafingMenu from "@/components/tiptap/SlotFloafingMenu"
   import TiptapInteractiveKatex from '@/components/tiptap/formula/extention'
+  import TiptapInteractiveKatexInline from '@/components/tiptap/formula/entensionInline'
   import TiptapInteractiveImageUpload from "@/components/tiptap/ImageUpload/extension";
 
   import StarterKit from '@tiptap/starter-kit'
@@ -97,6 +98,7 @@
           TableHeader,
           TableCell,
           TiptapInteractiveKatex,
+          TiptapInteractiveKatexInline,
           TiptapInteractiveImageUpload
         ],
         // triggered on every change

@@ -1,18 +1,18 @@
 <template>
     <div>
-        <vue-tiptap-plus v-model="html"/>
+        <vue-tiptap-katex v-model="html"/>
         <div v-html="convertToMarkdownKatex(html)"/>
     </div> 
 </template>
 
 <script>
+  import VueTiptapKatex from 'vue-tiptap-katex'
   import {mixinMarkdownAndKatex} from '@/mixin/Mixins'
   import TurndownService from 'turndown/lib/turndown.browser.umd'
-  import VueTiptapPlus from '@/components/tiptap/vue-tiptap-plus'
 
   export default {
     mixins: [mixinMarkdownAndKatex],
-    components: {VueTiptapPlus},
+    components: {VueTiptapKatex},
     mounted() {
     },
     data() {
@@ -125,6 +125,17 @@
             var wrapper = document.createElement('div');
             wrapper.innerHTML = htmlString;
             let katexes = wrapper.querySelectorAll('tiptap-interactive-katex')
+            katexes.forEach(item => {
+                let markdownKatex = item.attributes[0].nodeValue
+                if (markdownKatex) {
+                    markdownKatex = '$' + markdownKatex + '$'
+
+                    var katexWrapper = document.createElement('div');
+                    katexWrapper.innerHTML = markdownKatex;
+                    item.replaceWith(markdownKatex);
+                }
+            })
+            katexes = wrapper.querySelectorAll('tiptap-interactive-katex-inline')
             katexes.forEach(item => {
                 let markdownKatex = item.attributes[0].nodeValue
                 if (markdownKatex) {

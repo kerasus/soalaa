@@ -203,14 +203,14 @@
                         <thead>
                         <tr>
                             <th>#</th>
-                            <th>تصویر</th>
-                            <th>نام فایل</th>
-                            <th>عرض</th>
-                            <th>ارتفاع</th>
-                            <th>حجم</th>
-                            <th>سرعت</th>
-                            <th>وضعیت</th>
-                            <th>فعالیت</th>
+                            <th>Image</th>
+                            <th>Filename</th>
+                            <th>Width</th>
+                            <th>Height</th>
+                            <th>Size</th>
+                            <th>Upload Speed</th>
+                            <th>Status</th>
+                            <th>Actions</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -1085,5 +1085,10 @@
         font-size: 40px;
         color: #fff;
         padding: 0;
+    }
+
+    .example-full .upload th {
+        text-align: center !important;
+        line-height: 48px;
     }
 </style>
