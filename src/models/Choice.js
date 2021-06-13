@@ -21,10 +21,9 @@ class Choice extends Model {
             { key: 'answered_at' }
         ])
 
-        this.title = convertToMarkdownKatex(this.title)
-
         if (typeof this.title === 'string') {
-            this.rendered_title = md.render(this.title)
+            this.rendered_title = convertToMarkdownKatex(this.title)
+            // this.rendered_title = md.render(this.title)
         }
     }
 

@@ -242,7 +242,7 @@
             //     .then((response) => {
             //         this.saveCurrentExamQuestions(new QuestionList(response.data.data).list)
             //         this.quizData.questions = this.getCurrentExamQuestionsInArray()
-            //         console.log(this.quizData.questions.list[0])
+            //         console.Log(this.quizData.questions.list[0])
             //     })
         },
         mounted () {
@@ -293,7 +293,7 @@
 
 
                 // this.bubbleSheet  = (e.pageX + 2)
-                // console.log('p',this.bubbleSheet)
+                // console.Log('p',this.bubbleSheet)
 
             },
             updateWindowSize() {
@@ -343,7 +343,7 @@
             getFirstInViewQuestionNumber () {
                 // let firstQuestionInView
                 // for (let i = this.renderedQuestions.startIndex; i <= this.renderedQuestions.endIndex; i++) {
-                //     // console.log(i, ': ', this.quizData.questions.list[i].isInView)
+                //     // console.Log(i, ': ', this.quizData.questions.list[i].isInView)
                 //     if (this.quizData.questions.list[i].isInView === true) {
                 //         firstQuestionInView = this.quizData.questions.list[i]
                 //         break
@@ -410,7 +410,7 @@
                 const that = this
                 this.subCategoriesList.fetch().then((response) => {
                     // that.quiz.sub_categories = new QuestSubcategoryList(response.data)
-                    that.quizData.sub_categories = new QuestSubcategoryList(response.data)
+                    that.quizData.sub_categories = new QuestSubcategoryList(response.data.data)
                     let questions = quizResponse.data.data
                     that.sortQuestions (questions)
                     that.quizData.questions = new QuestionList(questions)

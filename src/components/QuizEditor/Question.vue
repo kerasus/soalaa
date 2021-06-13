@@ -164,29 +164,29 @@
                 // let largestChoiceWidth = this.windowSize.x * QuestionWidthRatio / largestChoice
                 let largestChoice = this.getLargestChoice(this.source.choices)
                 let largestChoiceWidth = $('.questions').width() / largestChoice
-                // console.log('order', this.source.order)
+                // console.Log('order', this.source.order)
                 if (largestChoiceWidth > 48) {
-                    // console.log('col-3')
+                    // console.Log('col-3')
                     return 3
                 }
                 if (largestChoiceWidth > 24) {
-                    // console.log('col-6')
+                    // console.Log('col-6')
                     return 6
                 }
                 if (largestChoiceWidth > 12) {
-                    // console.log('col-12')
+                    // console.Log('col-12')
                     return 12
                 }
-                // console.log('col-12')
+                // console.Log('col-12')
                 return 12
             },
             // lesson() {
-            //     console.log(this.source.sub_categories)
+            //     console.Log(this.source.sub_categories)
             //     if (!this.source.sub_categories) {
             //         return {title: 'صبر کنید'}
             //     }
             //     const subCategoryId = Assistant.getId(this.source.sub_category.id)
-            //     console.log(this.quiz.sub_categories)
+            //     console.Log(this.quiz.sub_categories)
             //     return this.quiz.sub_categories.list.find((item) => item.id === subCategoryId)
             // }
             getSubCategoryName() {
@@ -204,7 +204,7 @@
                     }
                 )
                 if (target) {
-                    return target.display_title
+                    return target.title
                 } else {
                     return ''
                 }
@@ -212,7 +212,7 @@
         },
         created() {
             this.isLtr = this.isLtrString(this.source.rendered_statement)
-            // setTimeout(() => {console.log(this.quiz)}, 2000)
+            // setTimeout(() => {console.Log(this.quiz)}, 2000)
         },
         methods: {
             confirmQuestion() {
@@ -238,7 +238,7 @@
                 }
             },
             choiceClicked(questionId, choiceId) {
-                // console.log('loadFirstActiveQuestionIfNeed->choiceClicked')
+                // console.Log('loadFirstActiveQuestionIfNeed->choiceClicked')
                 this.changeQuestion(questionId)
                 this.answerClicked({questionId, choiceId})
             },
@@ -307,7 +307,7 @@
                 })
             },
             edit() {
-                // console.log(questionId)
+                // console.Log(questionId)
             }
         }
     }

@@ -760,7 +760,7 @@
                     //         this.updateAttributes({
                     //             url: file.response.url
                     //         })
-                    //         console.log(this.node.attrs.url, 'url')
+                    //         console.Log(this.node.attrs.url, 'url')
                     //     }
                     // })
                 }
