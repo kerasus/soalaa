@@ -31,7 +31,6 @@
           <v-list-item-title>شرکت در آزمون</v-list-item-title>
         </v-list-item>
       </router-link>
-
       <router-link
         v-for="item in userList"
         :key="item.displayName"
@@ -45,7 +44,6 @@
           <v-list-item-title>{{ item.displayName }}</v-list-item-title>
         </v-list-item>
       </router-link>
-
       <router-link
         v-if="false"
         class="text-decoration-none"
@@ -82,6 +80,7 @@
           <v-list-item-title>نتایج نفرات برتر</v-list-item-title>
         </v-list-item>
       </router-link>
+
       <router-link
         v-if="false"
         class="text-decoration-none"
@@ -113,12 +112,18 @@
         </v-list-item>
       </router-link>
     </v-list-item-group>
+<!--    <v-list-item-group-->
+<!--      v-if="user.has_educational_permission && !user.has_admin_permission"-->
+<!--      v-model="adminGroup"-->
+<!--      class="admin-panel"-->
+<!--      active-class="deep-purple&#45;&#45;text text&#45;&#45;accent-4"-->
+<!--      @change="userGroup = null"-->
+<!--    >-->
     <v-list-item-group
-      v-if="user.has_educational_permission && !user.has_admin_permission"
-      v-model="adminGroup"
-      class="admin-panel"
-      active-class="deep-purple--text text--accent-4"
-      @change="userGroup = null"
+        v-model="adminGroup"
+        class="admin-panel"
+        active-class="deep-purple--text text--accent-4"
+        @change="userGroup = null"
     >
       <router-link
         v-for="item in educationList"
@@ -133,6 +138,41 @@
           <v-list-item-title>{{ item.displayName }}</v-list-item-title>
         </v-list-item>
       </router-link>
+      <v-list-item>
+        <v-list-item-title>
+          <v-list-group prepend-icon="mdi-bank-outline">
+            <template v-slot:activator>
+              <v-list-item-title>بانک سوال</v-list-item-title>
+            </template>
+            <router-link :to="{ name: 'creatQuestion' }">
+              <v-list-item>
+
+                <v-list-item-title>
+                  سوال جدید
+                </v-list-item-title>
+
+              </v-list-item>
+            </router-link>
+            <router-link :to="{ name: 'questionFactory' }">
+              <v-list-item>
+
+                <v-list-item-title>
+                  کارخانه ی سوال
+                </v-list-item-title>
+
+              </v-list-item>
+            </router-link>
+            <router-link :to="{ name: 'editQuestion' }">
+              <v-list-item>
+
+                <v-list-item-title>
+                  ویرایش سوال
+                </v-list-item-title>
+              </v-list-item>
+            </router-link>
+          </v-list-group>
+        </v-list-item-title>
+      </v-list-item>
     </v-list-item-group>
   </v-list>
 </template>

@@ -18,7 +18,6 @@ class QuestSubcategory extends Model {
                     view: false
                 }
             },
-            { key: 'display_title' }, // for admin
             { key: 'order' },
             { key: 'category_id' },
             {

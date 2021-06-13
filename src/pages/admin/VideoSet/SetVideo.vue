@@ -32,7 +32,7 @@
               v-model="currentQuestion.sub_category_id"
               label="درس"
               :items="subCategoriesList.list"
-              item-text="display_title"
+              item-text="title"
               item-value="id"
               dense
               :disabled="editMode"
@@ -153,7 +153,7 @@
                 //             exams
                 //         },
                 //         success: function (data) {
-                //             console.log(data)
+                //             console.Log(data)
                 //         },
                 //     }
                 // );
