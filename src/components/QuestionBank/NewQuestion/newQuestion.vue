@@ -47,7 +47,6 @@
                 </v-col>
               </v-row>
             </div>
-
             <div class="my-10">
               <question-field
                 v-model="statement"

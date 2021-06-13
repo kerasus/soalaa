@@ -1,26 +1,41 @@
 <template>
   <div>
-    <!--   -------------------- title --------------------------  --><!--   -------------------- title --------------------------  -->
-    <v-card
-      v-if="title.length > 0"
-      class="font-weight-medium mb-4"
-      v-text="title"
-    />
-    <!-- -------------------- data --------------------------  -->
-    <v-card
-      v-if="editStatus"
-      flat
-      class="transparent"
-      :color="color"
-      v-html="value"
-    />
-    <v-card
-      v-else
-      flat
-      height="160"
-      class="pa-7 px-11"
-      v-html="value"
-    />
+    <v-row>
+      <v-col
+        v-if="title.length > 0 && !titleTopPosition"
+        cols="1"
+        class="text-left"
+      >
+        <span
+          flat
+          class="font-weight-medium mb-4 transparent"
+          v-text="title"
+        />
+      </v-col>
+      <v-col>
+        <v-card
+          v-if="title.length > 0 && titleTopPosition"
+          flat
+          class="font-weight-medium mb-4 transparent"
+          v-text="title"
+        />
+        <!-- -------------------- data --------------------------  -->
+        <v-textarea
+          v-if="editStatus"
+          flat
+          solo
+          :label="title"
+          :rows="line"
+        />
+        <v-card
+          v-else
+          flat
+          class=""
+          :color="color"
+          v-html="value"
+        />
+      </v-col>
+    </v-row>
   </div>
 </template>
 
@@ -36,16 +51,16 @@ export default {
       default: '',
       type: String
     },
-    titlePosition: {
-      default: 'top', // top - right
-      type: String
+    titleTopPosition: {
+      default: true, // top - right
+      type: Boolean
     },
     editStatus: {
-      default: true,
+      default: false,
       type: Boolean
     },
     line: {
-      default: 3,
+      default: 2,
       type: Number
     },
     color: {
