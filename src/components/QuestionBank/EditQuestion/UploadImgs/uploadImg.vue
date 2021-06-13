@@ -11,10 +11,11 @@
         <v-col>
           <p>صورت سوال</p>
           <v-img
-            src="https://picsum.photos/id/11/500/300"
+            :src="srcImg"
             width="60"
             height="60"
             rounded="lg"
+            @click="showImgPanel(srcImg)"
           />
         </v-col>
         <v-col>
@@ -22,18 +23,20 @@
           <v-row>
             <v-col>
               <v-img
-                src="https://picsum.photos/id/11/500/300"
+                :src="srcImg"
                 width="60"
                 height="60"
                 rounded="lg"
+                @click="showImgPanel(srcImg)"
               />
             </v-col>
             <v-col>
               <v-img
-                src="https://picsum.photos/id/11/500/300"
+                :src="srcImg"
                 width="60"
                 height="60"
                 rounded="lg"
+                @click="showImgPanel(srcImg)"
               />
             </v-col>
           </v-row>
@@ -44,7 +47,18 @@
 </template>
 <script>
 export default {
-  name: "UploadImg"
+  name: "UploadImg",
+  data(){
+    return {
+      srcImg:'https://picsum.photos/id/11/500/300',
+    }
+  },
+  methods :{
+    showImgPanel(src){
+      this.$emit("imgClick",src);
+
+    }
+  }
 }
 </script>
 

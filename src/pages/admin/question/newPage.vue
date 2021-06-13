@@ -6,7 +6,7 @@
     >
       <v-container class="pa-6">
         <v-row>
-          <v-col>
+          <v-col :cols="questionColsNumber">
             <navBar />
             <QuestionAnswer />
             <!-- -------------------------- upload file ---------------------->
@@ -24,10 +24,10 @@
             <!-- -------------------------- save change--------------------------->
             <SaveChange />
           </v-col>
-
           <!-- -------------------------- show img---------------------------->
           <v-col
-            v-if="false"
+            :cols="uploadImgColsNumber"
+            :class="displayEditQuestion ? '' : 'd-none'"
           >
             <ShowImg />
           </v-col>
@@ -57,19 +57,15 @@ export default {
   },
   data() {
     return {
-      value2: '',
-      value: '  هر رشتۀ پلی‌نوکلئوتیدی دنا مشاهده شونداست بین زیرواحد‌های سازندۀ',
-      editStatus: true,
-      line: 5,
-      color: '',
-
-
+      statusType:'',
       questionColsNumber: 12,
       uploadImgColsNumber: 0,
       displayEditQuestion: false,
-
     }
-
+  },
+  created() {
+    this.statusType=this.$route.name
+    console.log( this.$route.name)
   },
   methods: {
     closeDrawer() {
@@ -86,7 +82,7 @@ export default {
       this.questionColsNumber = 12;
       this.uploadImgColsNumber = 0;
     }
-  },
+  }
 }
 </script>
 

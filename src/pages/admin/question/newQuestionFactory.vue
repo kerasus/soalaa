@@ -1,10 +1,14 @@
 <template>
-  <div>factory</div>
+  <QuestionFactory />
 </template>
 
 <script>
+import  QuestionFactory from '@/components/QuestionBank/QuestionFactory/questionFactory'
 export default {
-  name: "NewQuestionFactory"
+  name: "NewQuestionFactory",
+  components:{
+    QuestionFactory
+  }
 }
 </script>
 

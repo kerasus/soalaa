@@ -11,7 +11,7 @@
         <v-col class="text-left">
           <v-icon
             class="ml-4"
-            @click="openDrawer"
+            @click="closeImgPanel"
           >
             mdi-close
           </v-icon>
@@ -30,7 +30,16 @@
 <script>
 export default {
   name: "ShowImg",
+  data(){
+    return{
+      imgSrc:''
+    }
+  },
+methods:{
+  closeImgPanel (){
 
+  }
+}
 }
 </script>
 
