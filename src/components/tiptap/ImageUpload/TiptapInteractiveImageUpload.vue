@@ -1,6 +1,6 @@
 <template>
     <node-view-wrapper class="vue-component">
-        <div class="example-full">
+        <div class="example-full" v-if="editMode">
 <!--            <v-menu-->
 <!--                    v-if="false"-->
 <!--                    :close-on-content-click="false"-->
@@ -291,6 +291,19 @@
                                     </v-icon>
                                 </v-btn>
 
+                                <v-btn
+                                    v-if="node.attrs.url"
+                                    small
+                                    dark
+                                    fab
+                                    color="green"
+                                    @click="editMode = false"
+                                >
+                                    <v-icon dark>
+                                        mdi-check
+                                    </v-icon>
+                                </v-btn>
+
 
                                 <v-btn
                                         v-if="false"
@@ -392,13 +405,14 @@
                         <v-btn
                                 dark
                                 color="purple"
+                                v-if="!node.attrs.url"
                         >
                             یک فایل را انتخاب کنید
                         </v-btn>
                     </file-upload>
-                    <v-divider />
+                    <v-divider v-if="!node.attrs.url" />
                     <v-btn
-                            v-if="!$refs.upload || !$refs.upload.active"
+                            v-if="!$refs.upload || !$refs.upload.active && !node.attrs.url"
                             dark
                             color="purple"
                             @click.prevent="$refs.upload.active = true"
@@ -406,7 +420,7 @@
                         شروع آپلود
                     </v-btn>
                     <v-btn
-                            v-else
+                            v-else-if="!node.attrs.url"
                             dark
                             color="purple"
                             @click.prevent="$refs.upload.active = false"
@@ -631,6 +645,25 @@
                 </div>
             </div>
         </div>
+        <div :style="{ width: '100%', height: editMode? 0 + 'px' : height + 'px', position: 'relative' }" ref="resizer">
+            <VueDragResize
+                    v-if="!editMode"
+                    :sticks="['br']"
+                    :aspectRatio="true"
+                    :x="left"
+                    :y="top"
+                    :isActive="true"
+                    :isDraggable="false"
+                    :w="width"
+                    :h="height"
+                    :parentW="$refs.resizer.clientWidth"
+                    :parentH="800"
+                    :parentLimitation="true"
+                    v-on:resizing="resize"
+            >
+                <v-img :src="node.attrs.url" width="100%" />
+            </VueDragResize>
+        </div>
     </node-view-wrapper>
 </template>
 
@@ -638,12 +671,18 @@
     import Cropper from 'cropperjs'
     import ImageCompressor from '@xkeshi/image-compressor'
     import FileUpload from 'vue-upload-component'
+    import Vue from 'vue'
+    import VueDragResize from 'vue-drag-resize'
     import { NodeViewWrapper, nodeViewProps } from '@tiptap/vue-2'
+
+    Vue.component('vue-drag-resize', VueDragResize)
+
 
     export default {
         components: {
             FileUpload,
-            NodeViewWrapper
+            NodeViewWrapper,
+            VueDragResize
         },
         props: {
             nodeViewProps,
@@ -660,8 +699,13 @@
         },
         data() {
             return {
-                postAction: '/api/v1/question/upload/132',
-                putAction: '/api/v1/question/upload/132',
+                width: 0,
+                height: 0,
+                top: 0,
+                left: 20,
+                editMode: true,
+                postAction: '/api/v1/question/upload/5ffdf5345590063ba07fad54',
+                putAction: '/api/v1/question/upload/5ffdf5345590063ba07fad54',
                 url: '',
                 files: [],
                 accept: 'image/png,image/gif,image/jpeg,image/webp',
@@ -708,6 +752,19 @@
             }
         },
         watch: {
+            watch: {
+                width: function () {
+                    console.log('watch')
+                    // this.files.forEach((file) => {
+                    //     if (file.response.url) {
+                    //         this.updateAttributes({
+                    //             url: file.response.url
+                    //         })
+                    //         console.log(this.node.attrs.url, 'url')
+                    //     }
+                    // })
+                }
+            },
             'editFile.show'(newValue, oldValue) {
                 // 关闭了 自动删除 error
                 if (!newValue && oldValue) {
@@ -737,6 +794,14 @@
             },
         },
         methods: {
+            resize(newRect) {
+                this.width = newRect.width;
+                this.height = newRect.height;
+                this.updateAttributes({
+                    width: this.width,
+                    height: this.height
+                })
+            },
             copyImageAddress (url) {
                 const el = document.createElement('textarea')
                 el.value = '![](' + url + ')'
@@ -825,6 +890,19 @@
                     img.src = newFile.blob
                 }
             },
+            updateNodeAfterUpload () {
+                this.files.forEach((file) => {
+                    if (file.response.url) {
+                        this.updateAttributes({
+                            url: file.response.url,
+                            width: file.width,
+                            height: file.height
+                        })
+                        this.height = file.height
+                        this.width = file.width
+                    }
+                })
+            },
             // add, update, remove File Event
             inputFile(newFile, oldFile) {
                 if (newFile && oldFile) {
@@ -846,6 +924,7 @@
                         // success
                         console.log('oldFile.response.url', oldFile.response.url)
                         console.log('this.files', this.files)
+                        this.updateNodeAfterUpload()
                     }
                 }
                 if (!newFile && oldFile) {
@@ -929,7 +1008,14 @@
             }
         },
         created() {
-            console.log('deployed')
+            setTimeout(() => {
+                if (this.node.attrs.url) {
+                    this.editMode = false
+                    this.height = this.node.attrs.height
+                    this.width = this.node.attrs.width
+                }
+            }, 550)
+
         }
     }
 </script>
