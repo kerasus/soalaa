@@ -24,6 +24,13 @@
             <!-- -------------------------- save change--------------------------->
             <SaveChange />
           </v-col>
+          <v-card
+              flat
+              height="1856"
+              class="rounded-card"
+          >
+            <Log></Log>
+          </v-card>
           <!-- -------------------------- show img---------------------------->
           <v-col
             :cols="uploadImgColsNumber"
@@ -44,6 +51,8 @@ import Exams from '@/components/QuestionBank/EditQuestion/Exams/exams';
 import Status from '@/components/QuestionBank/EditQuestion/Status/stsatus';
 import ShowImg from '@/components/QuestionBank/EditQuestion/ShowImg/showImg';
 import SaveChange from '@/components/QuestionBank/EditQuestion/SaveChange/saveChange'
+import Log from '@/components/QuestionBank/EditQuestion/Log/Log';
+
 export default {
   name: "NewPage",
   components: {
@@ -53,6 +62,7 @@ export default {
     Exams,
     ShowImg,
     Status,
+    Log,
     SaveChange
   },
   data() {
@@ -87,5 +97,7 @@ export default {
 </script>
 
 <style scoped>
-
+.rounded-card{
+  border-radius: 10px;
+}
 </style>

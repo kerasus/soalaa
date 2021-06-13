@@ -460,7 +460,7 @@
       let that = this
           // axios.get('https://cdn.alaatv.com/upload/knowledgeTree.json')
           // .then((response) => {
-          //     console.log(response.data, 'respones')
+          //     console.Log(response.data, 'respones')
           //     this.montaTree = response.data
           // })
 
