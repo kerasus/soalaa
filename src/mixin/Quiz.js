@@ -9,6 +9,7 @@ import {Exam} from "@/models/Exam";
 import {QuestCategoryList} from "@/models/QuestCategory";
 import $ from "jquery";
 import {QuestionList} from "@/models/Question";
+// import ExamData from "@/assets/js/ExamData";
 
 const mixinQuiz = {
     computed: {
@@ -207,15 +208,64 @@ const mixinQuiz = {
         },
 
         startExam(examId, viewType) {
+
             if (!Assistant.getId(examId)) {
                 return
             }
             window.currentExamQuestions = null
             window.currentExamQuestionIndexes = null
             let that = this
-            that.$store.commit('AppLayout/updateOverlay', {show: true, loading: true, text: ''})
             return new Promise(function (resolve, reject) {
-                if (that.needToLoadQuiaData() && examId) {
+
+                // let userExamId = undefined
+                // let examData = new ExamData()
+                // if (that.needToLoadQuizData()) {
+                //     that.$store.commit('AppLayout/updateOverlay', {show: true, loading: true, text: ''})
+                //     examData.getExamDataAndParticipate(examId)
+                //     examData.loadQuestionsFromFile()
+                // } else {
+                //     userExamId = that.quiz.user_exam_id
+                // }
+                // examData.getUserExamData(userExamId)
+                //         .run()
+                //         .then((result) => {
+                //             try
+                //             {
+                //                 let currentExamQuestions = that.getCurrentExamQuestions()
+                //                 if (that.needToLoadQuizData()) {
+                //                     // save questions in localStorage
+                //                     that.saveCurrentExamQuestions(examData.exam.questions.list)
+                //                     // save exam info in vuex store (remove questions of exam then save in store)
+                //                     examData.exam.loadSubcategoriesOfCategories()
+                //                     Time.setStateOfExamCategories(examData.exam.categories)
+                //                     Time.setStateOfQuestionsBasedOnActiveCategory(examData.exam, currentExamQuestions)
+                //                     that.$store.commit('updateQuiz', examData.exam)
+                //                     that.setCurrentExamQuestions(currentExamQuestions)
+                //                 } else {
+                //                     examData.exam = that.quiz
+                //                 }
+                //                 that.$store.commit('mergeDbAnswersIntoLocalstorage', {
+                //                     dbAnswers: examData.userExamData,
+                //                     exam_id: examData.exam.id
+                //                 })
+                //                 that.loadCurrentQuestion(viewType)
+                //                 resolve(result)
+                //             } catch(error) {
+                //                 console.error(error)
+                //                 that.$router.push({ name: 'user.exam.list'})
+                //                 reject(error)
+                //             }
+                //         })
+                //         .catch((error) => {
+                //             reject(error)
+                //             that.$router.push({ name: 'user.exam.list'})
+                //         })
+                //   .finally(() => {
+                //       that.$store.commit('AppLayout/updateOverlay', {show: false, loading: false, text: ''})
+                //   })
+
+
+                if (that.needToLoadQuizData() && examId) {
                     that.participateExam(examId, viewType)
                         .then(() => {
                             resolve()
@@ -232,8 +282,8 @@ const mixinQuiz = {
                 }
             })
         },
-        needToLoadQuiaData() {
-            return (!this.quiz.id || Assistant.getId(this.$route.params.quizId) !== Assistant.getId(this.quiz.id))
+        needToLoadQuizData() {
+            return (!Assistant.getId(this.quiz.id) || !Assistant.getId(this.quiz.user_exam_id) || Assistant.getId(this.$route.params.quizId) !== Assistant.getId(this.quiz.id))
         },
         participateExam(examId, viewType) {
             let that = this

@@ -1,9 +1,9 @@
 module.exports = {
   env: {
-		node: true,
+		node: false,
 		commonjs: true
   },
-	parser: 'babel-eslint',
+	// parser: 'babel-eslint',
 	parserOptions: {
 		sourceType: 'module',
 		allowImportExportEverywhere: true
