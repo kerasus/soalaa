@@ -153,7 +153,7 @@
                 //             exams
                 //         },
                 //         success: function (data) {
-                //             console.log(data)
+                //             console.Log(data)
                 //         },
                 //     }
                 // );
