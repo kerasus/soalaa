@@ -32,12 +32,14 @@
           </div>
           <div v-for="(item, index) in logData.commnets" :key="index">
             :{{ item.author }}
-            <div>
+            <div class="log-comment">
+            <div class="comment-text">
               {{ item.text }}
             </div>
-            <div>
+            <div class="comment-date">
               {{ item.date }}
             </div>
+              </div>
           </div>
         </v-col>
       </v-row>
@@ -71,6 +73,15 @@ export default {
 .v-chip.v-size--default {
   font-size: 12px;
   height: 20px;
+}
+.log-comment{
+  padding: 5px 5px 0px 5px;
+  background-color: #fff5d6;
+  border-radius: 10px 0px 10px 10px;
+}
+.comment-date{
+  text-align: left;
+  font-size: 8px;
 }
 /*.eye-icon{*/
 /*  width: 12px;*/
