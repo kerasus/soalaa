@@ -35,7 +35,7 @@
           height="1856"
           class="rounded-card"
         >
-          <div v-if="false">
+          <div >
             <Log />
           </div>
         </v-card>

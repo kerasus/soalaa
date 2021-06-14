@@ -1,18 +1,19 @@
 <template>
-  <div>
+  <div class="log">
     <log-item v-for="(item, index) in logs" :key="index" :log-data="item"></log-item>
   </div>
 </template>
 
 <script>
 import LogItem from "@/components/QuestionBank/EditQuestion/Log/LogItem/LogItem";
+
 export default {
   components: {
     LogItem
   },
-  props : {
-    logs:{
-      default(){
+  props: {
+    logs: {
+      default() {
         return [
           {
             editor: 'شهاب عبادی',
@@ -54,12 +55,16 @@ export default {
       }
     }
   },
-  name : "log",
-  data (){
+  name: "log",
+  data() {
     return {}
   }
 }
 
 </script>
 
-<style scoped></style>
+<style scoped>
+.log {
+  width: 100%;
+}
+</style>
