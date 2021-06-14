@@ -3,7 +3,7 @@
     <v-row>
       <v-col><span> سوال #1231</span></v-col>
       <v-col><span> سازنده سوال:</span> <span> فیلان دبیر</span></v-col>
-      <v-col v-if="false">
+      <v-col v-if="status == 'question.show' || status == 'question.edit'">
         <v-row>
           <v-col>
             <span> وضعیت:</span>
@@ -52,7 +52,12 @@
 
 <script>
 export default {
-  name: "NavBar"
+  name: "NavBar",
+  props: {
+    status,
+  }
+
+
 }
 </script>
 
