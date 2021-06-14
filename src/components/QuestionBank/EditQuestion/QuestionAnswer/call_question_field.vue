@@ -3,6 +3,7 @@
   <div>
     <call_question_field
       v-model="question_data.statement"
+      class="my-10"
       :edit-status="status"
       title="تایپ سوال"
       placeholder="صورت سوال"
@@ -40,6 +41,7 @@
       :edit-status="status"
       title="پاسخ تشریحی"
       placeholder="پاسخ تشریحی"
+      class="mb-16"
     />
   </div>
 </template>

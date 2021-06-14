@@ -284,6 +284,7 @@ export default {
       edit_status:true,
       questionColsNumber: 12,
       uploadImgColsNumber: 0,
+      log_component_number:0,
       displayEditQuestion: false,
       question: new Question()
     }
@@ -299,30 +300,39 @@ export default {
       this.urlPathName=this.$route.name
     },
     checkUrl(){
-      if (this.urlPathName == 'question.create' || this.urlPathName == 'question.edit'){
+      if (this.urlPathName === 'question.create' || this.urlPathName === 'question.edit'){
         this.edit_status = true
       }else {
         this.edit_status = false
       }
-      console.log('url path name :'+this.edit_status)
+      if(this.urlPathName === 'question.show' || this.urlPathName === 'question.edit'){
+        this.questionColsNumber = 9
+        this.log_component_number = 3
+      }
     },
    openShowImgPanel(src) {
-     if(this.edit_status){
        this.imgSrc=src;
        this.displayEditQuestion = true
-       this.questionColsNumber = 7;
-       this.uploadImgColsNumber = 5;
+       this.questionColsNumber = 7
+       this.log_component_number= 0
+       this.uploadImgColsNumber = 5
        this.$store.commit('AppLayout/updateDrawer', false)
-     }
+
     },
     closeShowImgPanel() {
-      if(this.edit_status){
-        this.displayEditQuestion = false
-        this.$store.commit('AppLayout/updateDrawer', true)
-        this.questionColsNumber = 12;
-        this.uploadImgColsNumber = 0;
+      this.displayEditQuestion = false
+      this.$store.commit('AppLayout/updateDrawer', true)
+      if(this.urlPathName === 'question.show' || this.urlPathName === 'question.edit'){
+        this.questionColsNumber = 9
+        this.log_component_number= 3
+      }else {
+        this.questionColsNumber = 12
+        this.uploadImgColsNumber = 0
       }
-    }
+
+
+
+    },
   }
 }
 </script>
