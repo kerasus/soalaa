@@ -1,8 +1,8 @@
 <template>
-    <div>
-        <vue-tiptap-katex v-model="html"/>
-        <div v-html="convertToMarkdownKatex(html)"/>
-    </div> 
+  <div>
+    <vue-tiptap-katex v-model="html" />
+    <div v-html="convertToMarkdownKatex(html)" />
+  </div>
 </template>
 
 <script>
@@ -11,10 +11,8 @@
   import TurndownService from 'turndown/lib/turndown.browser.umd'
 
   export default {
-    mixins: [mixinMarkdownAndKatex],
     components: {VueTiptapKatex},
-    mounted() {
-    },
+    mixins: [mixinMarkdownAndKatex],
     data() {
 
       return {
@@ -22,6 +20,11 @@
         innerHTML: 'hi',
       }
     },
+    mounted() {
+    },
+      created() {
+        this.html = this.convertToTiptap(this.html)
+      },
     methods: {
       convertTables(htmlString) {
         var wrapper = document.createElement('div');
@@ -538,10 +541,7 @@
         // convert HTML to Markdown
         return turndownService.turndown(htmlString)
       }
-    },
-      created() {
-        this.html = this.convertToTiptap(this.html)
-      }
+    }
   }
 </script>
 

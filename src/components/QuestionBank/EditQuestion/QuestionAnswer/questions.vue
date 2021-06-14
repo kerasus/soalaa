@@ -3,7 +3,7 @@
   <div>
     <div v-if="status == 'question.create'">
       <Question
-        v-for="(item, index) in fakeData"
+        v-for="(item, index) in fakeData2"
         :key="index"
         v-model="item.value"
         :edit-status="item.editStatus"
