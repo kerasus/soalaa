@@ -1,18 +1,19 @@
 <template>
-  <div>
+  <div class="log">
     <log-item v-for="(item, index) in logs" :key="index" :log-data="item"></log-item>
   </div>
 </template>
 
 <script>
 import LogItem from "@/components/QuestionBank/EditQuestion/Log/LogItem/LogItem";
+
 export default {
   components: {
     LogItem
   },
-  props : {
-    logs:{
-      default(){
+  props: {
+    logs: {
+      default() {
         return [
           {
             editor: 'شهاب عبادی',
@@ -22,11 +23,11 @@ export default {
             commnets: [
               {
                 author: 'شهاب عبادی',
-                text: 'توی صورت سوال غلط املایی وجود داره لطفا اصلاح شه',
+                text: 'توی صورت سوال غلط املایی وجود داره لطفا اصلاح شههههههههههههه',
                 date: '11/9/2020'
               },
               {
-                author: 'مصطفی عبادی',
+                author: 'سجاد شهلایی',
                 text: 'موردی دیده نشد، متن سوال مطابق عکس دبیره',
                 date: '11/9/2020'
               },
@@ -40,12 +41,12 @@ export default {
             commnets: [
               {
                 author: 'شهاب عبادی',
-                text: 'توی صورت سوال',
+                text: 'توی صورت سوال غلط املایی وجود داره لطفا اصلاح شه',
                 date: '11/9/2020'
               },
               {
-                author: 'مصطفی عبادی',
-                text: 'توی صورت سوال',
+                author: 'سجاد شهلایی',
+                text: 'موردی دیده نشد، متن سوال مطابق عکس دبیره',
                 date: '11/9/2020'
               },
             ]
@@ -54,12 +55,16 @@ export default {
       }
     }
   },
-  name : "log",
-  data (){
+  name: "log",
+  data() {
     return {}
   }
 }
 
 </script>
 
-<style scoped></style>
+<style scoped>
+.log {
+  width: 100%;
+}
+</style>
