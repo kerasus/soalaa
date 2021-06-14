@@ -392,7 +392,7 @@
       @input="updateRendered"
     />
     <div v-if="currentQuestion.id">
-<!--                  <upload-image :url="'/api/v1/question/upload/'+currentQuestion.id" />-->
+      <!--                  <upload-image :url="'/api/v1/question/upload/'+currentQuestion.id" />-->
       <upload-files
         :post-action="'/api/v1/question/upload/'+currentQuestion.id"
         :put-action="'/api/v1/question/upload/'+currentQuestion.id"
@@ -854,7 +854,11 @@
             detachQuestionOnEditMode(item) {
                 this.attachLoading = true
                 axios.post(API_ADDRESS.question.detach(this.$route.params.id), {
-                    exams: [item.id]
+                  detaches: [{
+                    exam_id: item.id,
+                    order: item.order,
+                    sub_category_id: item.sub_category_id
+                  }]
                 })
                     .then((response) => {
                         console.log('response', response)
@@ -863,13 +867,13 @@
                             this.selectedQuizzes.push({
                                 id: item.exam_id,
                                 order: item.order,
-                                sub_category_id: item.sub_category.category_id,
+                                sub_category_id: item.sub_category.id,
                                 sub_category_title: item.sub_category.title,
                                 title: this.getExamById(item.exam_id).title
                             })
                         })
                       this.updateSelectedQuizzes()
-                        // this.currentQuestion = new Question(responseData)
+                        // this.currentQuestion = new QuestionAnswer(responseData)
                         // this.trueChoiceIndex = this.currentQuestion.choices.list.findIndex((item) => item.answer )
                         // this.updateAttachList(response.data.data)
                         this.attachLoading = false
