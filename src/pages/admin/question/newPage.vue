@@ -22,7 +22,7 @@
           </div>
           <!-- -------------------------- status --------------------------->
           <div
-            v-if="urlPathName == 'question.edit' || urlPathName == 'question.show' "
+            v-if="urlPathName === 'question.edit' || urlPathName === 'question.show' "
             class="my-10"
           >
             <StatusComponent />
@@ -30,15 +30,7 @@
           <!-- -------------------------- save change--------------------------->
           <SaveChange />
         </v-col>
-        <v-card
-          flat
-          height="1856"
-          class="rounded-card"
-        >
-          <div v-if="false">
-            <Log />
-          </div>
-        </v-card>
+
         <!-- -------------------------- show img---------------------------->
         <v-col
           :cols="uploadImgColsNumber"
@@ -49,13 +41,25 @@
             @closePanel="closeShowImgPanel"
           />
         </v-col>
+        <!-- -------------------------- log --------------------------->
+        <v-col :cols="log_component_number">
+          <div v-if="urlPathName === 'question.edit' || urlPathName === 'question.show'">
+            <v-card
+              flat
+              height="1856"
+              class="rounded-card"
+            >
+              <Log />
+            </v-card>
+          </div>
+        </v-col>
       </v-row>
     </v-container>
   </div>
 </template>
 <script>
 import navBar from '@/components/QuestionBank/EditQuestion/NavBar/navBar.vue';
-import QuestionAnswer from '@/components/QuestionBank/EditQuestion/QuestionAnswer/questionField';
+import QuestionAnswer from '@/components/QuestionBank/EditQuestion/QuestionAnswer/call_question_field';
 import UploadImg from '@/components/QuestionBank/EditQuestion/UploadImgs/uploadImg';
 import Exams from '@/components/QuestionBank/EditQuestion/Exams/exams';
 import StatusComponent from '@/components/QuestionBank/EditQuestion/StatusComponent/stsatus';
@@ -280,6 +284,7 @@ export default {
       edit_status:true,
       questionColsNumber: 12,
       uploadImgColsNumber: 0,
+      log_component_number:0,
       displayEditQuestion: false,
       question: new Question()
     }
@@ -295,30 +300,39 @@ export default {
       this.urlPathName=this.$route.name
     },
     checkUrl(){
-      if (this.urlPathName == 'question.create' || this.urlPathName == 'question.edit'){
+      if (this.urlPathName === 'question.create' || this.urlPathName === 'question.edit'){
         this.edit_status = true
       }else {
         this.edit_status = false
       }
-      console.log('url path name :'+this.edit_status)
+      if(this.urlPathName === 'question.show' || this.urlPathName === 'question.edit'){
+        this.questionColsNumber = 9
+        this.log_component_number = 3
+      }
     },
    openShowImgPanel(src) {
-     if(this.edit_status){
        this.imgSrc=src;
        this.displayEditQuestion = true
-       this.questionColsNumber = 7;
-       this.uploadImgColsNumber = 5;
+       this.questionColsNumber = 7
+       this.log_component_number= 0
+       this.uploadImgColsNumber = 5
        this.$store.commit('AppLayout/updateDrawer', false)
-     }
+
     },
     closeShowImgPanel() {
-      if(this.edit_status){
-        this.displayEditQuestion = false
-        this.$store.commit('AppLayout/updateDrawer', true)
-        this.questionColsNumber = 12;
-        this.uploadImgColsNumber = 0;
+      this.displayEditQuestion = false
+      this.$store.commit('AppLayout/updateDrawer', true)
+      if(this.urlPathName === 'question.show' || this.urlPathName === 'question.edit'){
+        this.questionColsNumber = 9
+        this.log_component_number= 3
+      }else {
+        this.questionColsNumber = 12
+        this.uploadImgColsNumber = 0
       }
-    }
+
+
+
+    },
   }
 }
 </script>
