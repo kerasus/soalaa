@@ -78,9 +78,9 @@ let Assistant = function () {
     }
 
     function reportErrors(error) {
-        const location = error.location,
-            message = error.message,
-            data = error.data
+        const location = (error && error.location) ? error.location : 'undefined error',
+            message = (error && error.message) ? error.message : 'undefined error',
+            data = (error && error.data) ? error.data : 'undefined error'
         // console.group();
         console.groupCollapsed();
         // console.table(data);
