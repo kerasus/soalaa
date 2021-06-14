@@ -19,7 +19,7 @@
           class="font-weight-medium mb-4 transparent"
           v-text="title"
         />
-        <!-- -------------------- data --------------------------  -->
+        <!--        &#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45; data &#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;-->
         <v-textarea
           v-if="editStatus"
           flat
@@ -27,6 +27,10 @@
           :label="data.label"
           :rows="data.line"
         />
+        <!--        <vue-tiptap-katex-->
+        <!--          v-if="editStatus"-->
+        <!--          v-html="value"-->
+        <!--        />-->
         <v-card
           v-else
           flat
@@ -39,8 +43,13 @@
   </div>
 </template>
 <script>
+  import VueTiptapKatex from 'vue-tiptap-katex'
+
 export default {
   name: 'QuestionField',
+  components: {
+    VueTiptapKatex,
+  },
   props: {
     data: {
       default () {
