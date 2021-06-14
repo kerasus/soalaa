@@ -73,6 +73,7 @@ export default {
   },
   created() {
     this.html = this.value
+    this.html = this.convertToTiptap(this.html)
   },
   methods: {
     updateValue() {
