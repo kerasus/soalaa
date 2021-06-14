@@ -36,7 +36,7 @@
           flat
           class="transparent"
           :color="color"
-          v-html="value"
+          v-html="data.value"
         />
       </v-col>
     </v-row>

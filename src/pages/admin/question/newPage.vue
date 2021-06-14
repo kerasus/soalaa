@@ -7,13 +7,13 @@
       <v-container class="pa-6">
         <v-row>
           <v-col :cols="questionColsNumber">
-            <navBar />
-            <QuestionAnswer />
+            <navBar :status="urlPathName" />
+            <QuestionAnswer :status="urlPathName" />
             <!-- -------------------------- upload file ---------------------->
             <div>
               <v-row>
                 <v-col cols="5">
-                  <UploadImg />
+                  <UploadImg @imgClicked="openShowImgPanel" />
                 </v-col>
                 <!-- -------------------------- show exams  ---------------------->
                 <v-col cols="7">
@@ -25,18 +25,24 @@
             <SaveChange />
           </v-col>
           <v-card
-              flat
-              height="1856"
-              class="rounded-card"
+            flat
+            height="1856"
+            class="rounded-card"
           >
-            <Log></Log>
+            <div v-if="false">
+              <Log />
+            </div>
           </v-card>
           <!-- -------------------------- show img---------------------------->
           <v-col
+
             :cols="uploadImgColsNumber"
             :class="displayEditQuestion ? '' : 'd-none'"
           >
-            <ShowImg />
+            <ShowImg
+              :test="imgSrc"
+              @closePanel="closeShowImgPanel"
+            />
           </v-col>
         </v-row>
       </v-container>
@@ -67,25 +73,30 @@ export default {
   },
   data() {
     return {
-      statusType:'',
+      imgSrc:'',
+      urlPathName:'',
       questionColsNumber: 12,
       uploadImgColsNumber: 0,
       displayEditQuestion: false,
     }
   },
   created() {
-    this.statusType=this.$route.name
-    console.log( this.$route.name)
+  this.getUrl()
   },
   methods: {
-    closeDrawer() {
-      console.log('save click')
+    getUrl (){
+      this.urlPathName=this.$route.name
+      console.log('url path name :'+this.urlPathName)
+    },
+   openShowImgPanel(src) {
+
+      this.imgSrc=src;
       this.displayEditQuestion = true
       this.questionColsNumber = 7;
       this.uploadImgColsNumber = 5;
       this.$store.commit('AppLayout/updateDrawer', false)
     },
-    openDrawer() {
+    closeShowImgPanel() {
       console.log('close click')
       this.displayEditQuestion = false
       this.$store.commit('AppLayout/updateDrawer', true)
