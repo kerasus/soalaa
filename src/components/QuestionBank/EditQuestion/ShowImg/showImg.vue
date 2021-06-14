@@ -2,6 +2,7 @@
   <v-card
     flat
     height="1856"
+    class="rounded-card"
   >
     <div class="pa-6">
       <v-row justify="space-between">
@@ -22,22 +23,33 @@
       height="1099"
       color="#f5f5f5"
       flat
-      class="ma-7"
-    />
+      class="ma-7 rounded-card"
+    >
+      <v-img
+        :src="test"
+      />
+    </v-card>
   </v-card>
 </template>
 
 <script>
 export default {
   name: "ShowImg",
+  props:{
+    test:{
+      default: '',
+      type: String
+    },
+  },
   data(){
     return{
-      imgSrc:''
+      image:'',
+
     }
   },
 methods:{
   closeImgPanel (){
-
+    this.$emit("closePanel");
   }
 }
 }
