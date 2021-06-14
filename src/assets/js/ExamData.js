@@ -47,12 +47,10 @@ class ExamData {
 					}
 				})
 						 .then(response => {
-							 console.log('loadQuestionsFromFile is done')
 							 that.exam.questions = new QuestionList(response.data)
 							 resolve(response.data)
 						 })
 						 .catch(error => {
-							 console.log('loadQuestionsFromFile is catch')
 							 reject(error)
 						 })
 			}),
@@ -133,12 +131,10 @@ class ExamData {
 				}
 				axios.get(API_ADDRESS.exam.getAllAnswerOfUser(user_exam_id))
 						 .then(response => {
-							 console.log('getUserExamData is done')
 							 that.userExamData = response.data
 							 resolve(response)
 						 })
 						 .catch(error => {
-							 console.log('getUserExamData is catch')
 							 reject(error)
 						 })
 			}),
@@ -160,7 +156,6 @@ class ExamData {
 				}
 				axios.post(API_ADDRESS.exam.examUser, {exam_id})
 						 .then(response => {
-							 console.log('getExamDataAndParticipate is done')
 							 that.exam = new Exam()
 							 // ToDo: attention on user_exam_id and exam_id
 							 that.exam.id = Assistant.getId(response.data.data.exam_id)
@@ -173,7 +168,6 @@ class ExamData {
 							 resolve(response)
 						 })
 						 .catch(error => {
-							 console.log('getExamDataAndParticipate is catch')
 							 reject(error)
 						 })
 			}),
