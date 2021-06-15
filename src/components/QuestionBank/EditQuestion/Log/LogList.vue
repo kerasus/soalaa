@@ -1,5 +1,5 @@
 <template>
-  <div class="log">
+  <div class="logList">
     <log-item v-for="(item, index) in logs" :key="index" :log-data="item"></log-item>
   </div>
 </template>
@@ -55,7 +55,7 @@ export default {
       }
     }
   },
-  name: "log",
+  name: "logList",
   data() {
     return {}
   }
@@ -64,7 +64,7 @@ export default {
 </script>
 
 <style scoped>
-.log {
+.logList {
   width: 100%;
 }
 </style>

@@ -49,7 +49,7 @@
               height="1856"
               class="rounded-card"
             >
-              <Log />
+              <LogList />
             </v-card>
           </div>
         </v-col>
@@ -65,7 +65,7 @@ import Exams from '@/components/QuestionBank/EditQuestion/Exams/exams';
 import StatusComponent from '@/components/QuestionBank/EditQuestion/StatusComponent/status';
 import ShowImg from '@/components/QuestionBank/EditQuestion/ShowImg/showImg';
 import SaveChange from '@/components/QuestionBank/EditQuestion/SaveChange/saveChange'
-import Log from '@/components/QuestionBank/EditQuestion/Log/Log';
+import LogList from '@/components/QuestionBank/EditQuestion/Log/LogList';
 import { Question } from '@/models/Question'
 import {ExamList} from "@/models/Exam";
 import {QuestSubcategoryList} from "@/models/QuestSubcategory";
@@ -82,7 +82,7 @@ export default {
     Exams,
     ShowImg,
     StatusComponent,
-    Log,
+    LogList,
     SaveChange
   },
   data() {
