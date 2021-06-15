@@ -10,21 +10,21 @@
             :status="edit_status"
             @input="updateQuestion"
           />
-          <!-- -------------------------- upload file ---------------------->
           <div>
             <v-row>
-              <v-col cols="5">
-                <UploadImg @imgClicked="openShowImgPanel" />
-              </v-col>
               <!-- -------------------------- show exams  ---------------------->
-              <v-col cols="7">
+              <v-col cols="12">
                 <Exams
-                  :exams="currentQuestion.exams"
-                  :exam-list="examList"
-                  :sub-categoies="subCategoriesList"
-                  @detach="detachQuestion"
-                  @atach="attachQuestion"
+                    :exams="currentQuestion.exams"
+                    :exam-list="examList"
+                    :sub-categories="subCategoriesList"
+                    @detach="detachQuestion"
+                    @atach="attachQuestion"
                 />
+              </v-col>
+              <!-- -------------------------- upload file ---------------------->
+              <v-col cols="12">
+                <UploadImg v-model="currentQuestion" :edit-status="edit_status" @imgClicked="openShowImgPanel" />
               </v-col>
             </v-row>
           </div>
