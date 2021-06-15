@@ -18,7 +18,11 @@
               </v-col>
               <!-- -------------------------- show exams  ---------------------->
               <v-col cols="7">
-                <Exams :exams="currentQuestion.exams" />
+                <Exams
+                  :exams="currentQuestion.exams"
+                  :exam-list="examList"
+                  :sub-categoies="subCategoriesList"
+                />
               </v-col>
             </v-row>
           </div>
