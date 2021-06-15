@@ -147,7 +147,7 @@
   </div>
 </template>
 <script>
-import Question from './QuestionAnswer/call_question_field';
+import Question from './question-layout/call_question_field';
 export default {
   name: "EditQuestion",
   components:{
