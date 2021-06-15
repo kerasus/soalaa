@@ -8,6 +8,7 @@
             v-if="!loading"
             v-model="currentQuestion"
             :status="edit_status"
+            @input="updateQuestion"
           />
           <!-- -------------------------- upload file ---------------------->
           <div>
@@ -138,6 +139,9 @@ export default {
     this.getStatus()
   },
   methods: {
+    updateQuestion (eventData) {
+      this.currentQuestion = new Question(eventData)
+    },
     getStatus () {
       this.questionStatuses.fetch()
       .then((response) => {
