@@ -12,9 +12,16 @@ class Log extends Model {
             { key: 'id' },
             { key: 'title' },
             { key: 'description' },
+            // {
+            //     key: 'causer',
+            //     relatedModel: User
+            // },
             {
                 key: 'causer',
-                relatedModel: User
+                default: {
+                    id: null,
+                    full_name: null
+                }
             },
             {
                 key: 'subject',
