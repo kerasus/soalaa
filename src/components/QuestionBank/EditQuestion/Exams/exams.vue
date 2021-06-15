@@ -33,6 +33,7 @@
             <v-btn
                 small
                 text
+                @click="attach"
             >
               <v-icon>mdi-plus</v-icon>
             </v-btn>
@@ -46,7 +47,7 @@
       <v-col class="choose-exam" cols="5">
         <v-card flat height="36">
           <v-card-text class=text-center>
-            {{ exam.title }}
+            {{ exam.exam.title }}
           </v-card-text>
         </v-card>
       </v-col>
@@ -64,12 +65,13 @@
           </v-card-text>
         </v-card>
       </v-col>
-      <v-col class="attach-or-dettach" cols="1">
+      <v-col class="attach-or-detach" cols="1">
         <v-card flat height="36">
           <v-card-text class=text-center>
             <v-btn
                 small
                 text
+                @click="detach"
             >
               <v-icon>mdi-trash-can-outline</v-icon>
             </v-btn>
@@ -92,38 +94,7 @@ export default {
   props: {
     exams: {
       default: () => {
-        return [
-          {
-            "sub_category": {
-              "id": "60b7875428f350277f04c5e4",
-              "title": "عربی عمومی",
-              "category_id": "60b7858d743940688b23c7f3"
-            },
-            "title": "60924621ade9711661048075",
-            "exam_id": "60924621ade9711661048075",
-            "order": 26
-          },
-          {
-            "sub_category": {
-              "id": "60b7875428f350277f04c5e4",
-              "title": "عربی عمومی",
-              "category_id": "60b7858d743940688b23c7f3"
-            },
-            "title": "60924621ade9711661048075",
-            "exam_id": "60924621ade9711661048075",
-            "order": 26
-          },
-          {
-            "sub_category": {
-              "id": "60b7875428f350277f04c5e4",
-              "title": "عربی عمومی",
-              "category_id": "60b7858d743940688b23c7f3"
-            },
-            "title": "60924621ade9711661048075",
-            "exam_id": "60924621ade9711661048075",
-            "order": 26
-          },
-        ]
+        return []
       },
       type: Array
     }
@@ -150,6 +121,11 @@ export default {
             this.attachLoading = false
             this.dialog = false
           })
+    },
+    detach (){
+      this.$emit('detach',)
+    },
+    attach(){
     }
   }
 }
