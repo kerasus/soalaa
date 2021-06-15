@@ -101,6 +101,7 @@ export default {
   },
   data() {
     return {
+      selectedQuizzes: [],
       imgSrc:'',
       urlPathName:'',
       edit_status:true,
@@ -210,11 +211,12 @@ export default {
     },
     detachQuestionOnEditMode(item) {
       this.attachLoading = true
-      axios.post(API_ADDRESS.question.detach(this.$route.params.id), {
+      console.log('item', item)
+      axios.post(API_ADDRESS.question.detach(this.$route.params.question_id), {
         detaches: [{
-          exam_id: item.id,
+          exam_id: item.exam.id,
           order: item.order,
-          sub_category_id: item.sub_category_id
+          sub_category_id: item.subCategory.id
         }]
       })
       .then((response) => {
