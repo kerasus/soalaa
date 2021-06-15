@@ -159,14 +159,22 @@
 import Cropper from 'cropperjs'
 import ImageCompressor from '@xkeshi/image-compressor'
 import FileUpload from 'vue-upload-component'
+import {Question} from "@/models/Question";
 
 export default {
   name: "UploadImg",
   components: {
     FileUpload,
   },
+  props: {
+    value: {
+      type: Question,
+      default: new Question()
+    }
+  },
   data(){
     return {
+      question: new Question(),
       files: [],
       questionFile: [],
       answerFiles: [],
@@ -231,6 +239,9 @@ export default {
       }
     },
   },
+  created() {
+    this.question = this.value
+  },
   methods :{
     showImgPanel(src){
       this.$emit("imgClicked",src);
@@ -241,8 +252,12 @@ export default {
         questionFile: this.questionFile,
         answerFiles: this.answerFiles
       }
-      this.$emit('update', files)
+
+      this.question.statement_photo = this.questionFile.blob
+      this.question.answer_photos = this.answerFiles.map( item => item.blob)
       console.log('files', files)
+      console.log('this.question', this.question)
+      this.$emit('input', this.question)
     },
     copyImageAddress (url) {
       const el = document.createElement('textarea')
