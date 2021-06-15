@@ -215,6 +215,8 @@
         --error-3: #f44336;
     }
 
+    .v-application .subtitle-1,
+    .v-application .subtitle-2,
     .v-application, .v-application .headline {
         font-family: 'IRANSans', 'Arial', 'Verdana', 'Tahoma', sans-serif !important;
     }
