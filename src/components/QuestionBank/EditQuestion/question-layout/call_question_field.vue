@@ -2,12 +2,13 @@
   <!-- ------------------------- question -------------------------------  -->
   <div class=" ma-4">
     <div class="mx-5 mb-10">
-      <call_question_field
-        v-model="question_data.statement"
+      <question_field
+        v-model="question.statement"
         class="my-10"
         :edit-status="status"
         title="تایپ سوال"
         placeholder="صورت سوال"
+        @input="updateQuestion"
       />
     </div>
     <div
@@ -18,7 +19,7 @@
       <div
         v-if="item.answer"
         class="answer-icon-box"
-        @click="clicked(item.id)"
+        @click="clicked(item.order)"
       >
         <v-icon
           color="green"
@@ -31,7 +32,7 @@
       <div
         v-else
         class="mx-4"
-        @click="clicked(item.id)"
+        @click="clicked(item.order)"
       >
         <v-btn
           class=""
@@ -42,7 +43,7 @@
         />
       </div>
       <div class="answer-editor ma-4">
-        <call_question_field
+        <question_field
           v-model="item.title"
           :title="(index + 1) + ') '"
           :choices="question_data.choices.list"
@@ -52,7 +53,7 @@
     </div>
     <!-- ------------------------- answer -------------------------------  -->
     <div class="ma-5">
-      <call_question_field
+      <question_field
         v-model="question_data.descriptive_answer"
         :edit-status="status"
         title="پاسخ تشریحی"
@@ -63,38 +64,54 @@
   </div>
 </template>
 <script>
-import call_question_field from '@/components/Question/questionField'
+import question_field from '@/components/Question/questionField'
+import { Question } from "@/models/Question";
 
 export default {
   name: "Questions",
   components: {
-    call_question_field,
+    question_field,
   },
-  props:
-   ['status',
-   'question_data']
-    ,
-  data() {
-    return {
-      correct_answer:this.question_data.choices.list
+  props: {
+    value: {
+      type: Question,
+      default: new Question()
+    },
+    status: {
+      type: Boolean,
+      default: false
+    },
+    question_data: {
+      type: Question,
+      default: new Question()
     }
   },
-  watch:{
-    correct_answer : () =>{
-      console.log('data is changed')
-    },
-
+  data() {
+    return {
+      question: new Question(),
+      selected_item: false
+    }
   },
+  created() {
+    this.question = this.value
+  },
+  // watch:{
+  //   value : () =>{
+  //     this.question = this.value
+  //   },
+  // },
   methods:{
-    clicked(id){
-     this.correct_answer.forEach(item => {
-       if(item.id === id){
-         item.answer = true
-       }else {
-         item.answer = false
-       }
-     })
-
+    updateQuestion () {
+      this.$emit('input', this.question)
+    },
+    clicked(order){
+      this.question.choices.list.forEach(item => {
+          if(item.order === order){
+            item.answer = true
+          }else {
+            item.answer = false
+          }
+        })
     }
   }
 }

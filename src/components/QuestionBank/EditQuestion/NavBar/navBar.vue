@@ -145,9 +145,6 @@ export default {
   props: {
     status,
   },
-  created() {
-    console.log(this.status)
-  },
   methods:{
     edit_clicked(){
       this.$emit("edit");
