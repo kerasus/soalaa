@@ -117,7 +117,6 @@ export default {
 </script>
 
 <style scoped>
-
 .answers-box{
   display: flex;
   align-items: center;
@@ -125,17 +124,7 @@ export default {
   border-radius: 10px;
 
 }
-.answers-box .answer-icon-box{
-
+.answers-box .answer-editor{
+width: 100%;
 }
-/*.answer-editor {*/
-/*  display: inline-block;*/
-/*  width: calc(100% - 36px)*/
-/*}*/
-/* .right-answer-icon{*/
-/*  display: inline-block; */
-/*   width: 36px;*/
-/*}*/
-/*v-if="item.answer"*/
-
 </style>
