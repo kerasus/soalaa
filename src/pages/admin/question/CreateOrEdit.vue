@@ -873,7 +873,7 @@
                             })
                         })
                       this.updateSelectedQuizzes()
-                        // this.currentQuestion = new QuestionAnswer(responseData)
+                        // this.currentQuestion = new question-layout(responseData)
                         // this.trueChoiceIndex = this.currentQuestion.choices.list.findIndex((item) => item.answer )
                         // this.updateAttachList(response.data.data)
                         this.attachLoading = false
