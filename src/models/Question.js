@@ -13,6 +13,10 @@ import {LogList} from "@/models/Log";
 class Question extends Model {
     constructor (data) {
         super(data, [
+            {
+                key: 'baseRoute',
+                default: API_ADDRESS.question.base
+            },
             { key: 'id' },
             { key: '_id' },
             { key: 'title' },

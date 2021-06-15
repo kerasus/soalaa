@@ -15,16 +15,20 @@
               <!-- -------------------------- show exams  ---------------------->
               <v-col cols="12">
                 <Exams
-                    :exams="currentQuestion.exams"
-                    :exam-list="examList"
-                    :sub-categories="subCategoriesList"
-                    @detach="detachQuestion"
-                    @atach="attachQuestion"
+                  :exams="currentQuestion.exams"
+                  :exam-list="examList.list"
+                  :sub-categories="subCategoriesList.list"
+                  @detach="detachQuestion"
+                  @atach="attachQuestion"
                 />
               </v-col>
               <!-- -------------------------- upload file ---------------------->
               <v-col cols="12">
-                <UploadImg v-model="currentQuestion" :edit-status="edit_status" @imgClicked="openShowImgPanel" />
+                <UploadImg
+                  v-model="currentQuestion"
+                  :edit-status="edit_status"
+                  @imgClicked="openShowImgPanel"
+                />
               </v-col>
             </v-row>
           </div>
@@ -68,7 +72,7 @@
 
 <script>
 import navBar from '@/components/QuestionBank/EditQuestion/NavBar/navBar.vue';
-import QuestionAnswer from '@/components/QuestionBank/EditQuestion/question-layout/call_question_field';
+import QuestionAnswer from '@/components/QuestionBank/EditQuestion/question-layout/question_layout';
 import UploadImg from '@/components/QuestionBank/EditQuestion/UploadImgs/uploadImg';
 import Exams from '@/components/QuestionBank/EditQuestion/Exams/exams';
 import StatusComponent from '@/components/QuestionBank/EditQuestion/StatusComponent/status';
@@ -87,7 +91,7 @@ export default {
   name: "NewPage",
   components: {
     navBar,
-    QuestionAnswer ,
+    QuestionAnswer,
     UploadImg,
     Exams,
     ShowImg,
@@ -269,16 +273,34 @@ export default {
       }
 
       if (this.doesQuestionAlreadyExist()) {
+        console.log('in too')
         const loanExamListPromise = this.loanExamList()
         const loadSubcategoriesPromise = this.loadSubcategories()
         Promise.all([loanExamListPromise, loadSubcategoriesPromise])
         .then(() => {
-          this.loadnCurrentQuestionData()
+          this.loadCurrentQuestionData()
+          this.setNullKeys()
           this.loading = false
         })
       } else {
         this.currentQuestion = new Question(this.questionData)
+        console.log('currentQuestion', this.questionData, new Question(this.questionData))
+        this.setNullKeys()
         this.loading = false
+      }
+    },
+    setNullKeys () {
+      console.log('test', this.currentQuestion.statement)
+      if (!this.currentQuestion.statement) {
+        this.currentQuestion.statement = ''
+      }
+      this.currentQuestion.choices.list.forEach((item) => {
+        if (!item.title) {
+          item.title = ''
+        }
+      })
+      if (!this.currentQuestion.descriptive_answer) {
+        this.currentQuestion.descriptive_answer = ''
       }
     },
     loanExamList () {
@@ -320,10 +342,13 @@ export default {
         })
       })
     },
-    loadnCurrentQuestionData () {
+    loadCurrentQuestionData () {
       let that = this
+      console.log('ooooooooooo')
+      console.log(this.currentQuestion)
       this.currentQuestion.show(null, API_ADDRESS.question.updateQuestion(this.$route.params.question_id))
           .then((response) => {
+            console.log('ooooooooooo')
             console.log('response', response)
             that.currentQuestion = new Question(response.data.data)
             that.trueChoiceIndex = that.currentQuestion.choices.list.findIndex((item) => item.answer )
