@@ -6,7 +6,7 @@
           <navBar :status="urlPathName" />
           <QuestionAnswer
             :status="edit_status"
-            :question_data="question"
+            :question_data="currentQuestion"
           />
           <!-- -------------------------- upload file ---------------------->
           <div>
@@ -25,7 +25,7 @@
             v-if="urlPathName === 'question.edit' || urlPathName === 'question.show' "
             class="my-10"
           >
-            <StatusComponent />
+            <StatusComponent :statuses="questionStatuses" />
           </div>
           <!-- -------------------------- save change--------------------------->
           <SaveChange />
@@ -59,14 +59,19 @@
 </template>
 <script>
 import navBar from '@/components/QuestionBank/EditQuestion/NavBar/navBar.vue';
-import QuestionAnswer from '@/components/QuestionBank/EditQuestion/QuestionAnswer/call_question_field';
+import QuestionAnswer from '@/components/QuestionBank/EditQuestion/question-layout/call_question_field';
 import UploadImg from '@/components/QuestionBank/EditQuestion/UploadImgs/uploadImg';
 import Exams from '@/components/QuestionBank/EditQuestion/Exams/exams';
-import StatusComponent from '@/components/QuestionBank/EditQuestion/StatusComponent/stsatus';
+import StatusComponent from '@/components/QuestionBank/EditQuestion/StatusComponent/status';
 import ShowImg from '@/components/QuestionBank/EditQuestion/ShowImg/showImg';
 import SaveChange from '@/components/QuestionBank/EditQuestion/SaveChange/saveChange'
 import Log from '@/components/QuestionBank/EditQuestion/Log/Log';
 import { Question } from '@/models/Question'
+import {ExamList} from "@/models/Exam";
+import {QuestSubcategoryList} from "@/models/QuestSubcategory";
+import API_ADDRESS from "@/api/Addresses";
+import Assistant from "@/plugins/assistant";
+import {QuestionStatusList} from "@/models/QuestionStatus";
 
 export default {
   name: "NewPage",
@@ -82,203 +87,6 @@ export default {
   },
   data() {
     return {
-      fakeData: {
-        "id": "60a5fa0af55154475e630b95",
-        "statement": "In free writing, you should not worry about spelling or punctuating correctly, about erasing mistakes, about organizing material, or .................. exact words.",
-        "choices": [
-          {
-            "id": 1,
-            "title": "finding",
-            "order": 1,
-            "answer": false
-          },
-          {
-            "id": 2,
-            "title": "how to find",
-            "order": 2,
-            "answer": false
-          },
-          {
-            "id": 3,
-            "title": "about finding",
-            "order": 3,
-            "answer": true
-          },
-          {
-            "id": 4,
-            "title": "the finding of",
-            "order": 4,
-            "answer": false
-          }
-        ],
-        "exams": [
-          {
-            "sub_category": {
-              "id": "60b7875428f350277f04c5e5",
-              "title": "زبان انگلیسی",
-              "category_id": "60b7858d743940688b23c7f3"
-            },
-            "exam_id": "60ad57d5446d341648416363",
-            "order": 76
-          }
-        ],
-        "level": 1,
-        "photos": [],
-        "author": [],
-        "confirmers": [
-          {
-            "first_name": "هانیه",
-            "last_name": "نوروزی",
-            "photo": "https://cdn.alaatv.com/upload/images/profile/default_avatar.jpg?w=100&h=100"
-          }
-        ],
-        "confirmed": false,
-        "source_data": {
-          "resultText": "Done",
-          "totalUsageCount": 415,
-          "answerId": "1356276",
-          "rowNo": 1477,
-          "choice1selectedCounts": 585,
-          "correctCounts": 486,
-          "choiceId3": "1356276",
-          "hasHint": false,
-          "discriminationIndex": 0.19,
-          "choiceId2": "1356275",
-          "choiceId1": "1356274",
-          "resultCode": 1,
-          "overallQuestionCount": "15149",
-          "choiceId4": "1356277",
-          "questionTypeId": "10",
-          "noAnswerCounts": 648,
-          "choiceDescription2": "<div class=\"choice\" dir=\"ltr\">how to find</div>",
-          "createdAt": "1598960249083",
-          "choiceDescription1": "<div class=\"choice\" dir=\"ltr\">finding</div>",
-          "incorrectCounts": 869,
-          "choice3selectedCounts": 486,
-          "unVerifiedCommentNo": 0,
-          "popularity": 12,
-          "origins": {
-            "questionOriginList": [
-              {
-                "originId": 20,
-                "publishYear": {
-                  "id": 21,
-                  "name": "1399",
-                  "title": "99 - 98"
-                },
-                "examNo": 99,
-                "majorId": 60,
-                "pageNo": null,
-                "publisherBookId": null,
-                "imageExtension": null,
-                "publisherBookImage": null,
-                "publisherBookName": null,
-                "questionOrder": 76,
-                "origin": {
-                  "id": 20,
-                  "name": "سراسری",
-                  "pic": "https://www.monta.ir/client_resources/images/img/source-domestic-color.svg"
-                }
-              }
-            ]
-          },
-          "id": "577414",
-          "mediaRequestCount": 3,
-          "choiceDescription4": "<div class=\"choice\" dir=\"ltr\">the finding of</div>",
-          "choiceDescription3": "<div class=\"choice\" dir=\"ltr\">about finding</div>",
-          "answerAuthorInfo": "{\"personInfoList\":[{\"id\":15063,\"imageId\":570126,\"name\":\"سعید ابراهیمی\"}]}",
-          "commentNo": 0,
-          "question": "<div class=\"question\" dir=\"ltr\">In free writing, you should not worry about spelling or punctuating correctly, about erasing mistakes, about organizing material, or&nbsp;<span class=\"vacancy\">..................</span>&nbsp;exact words.</div>",
-          "like": false,
-          "entryDate": "1601467432507",
-          "mediaHasRequested": false,
-          "topics": "{\"idList\":[{\"id\":23499}]}",
-          "cnt": "15149",
-          "hasNote": false,
-          "bookmark": false,
-          "choicesColumnNo": 4,
-          "numberOfChildren": 0,
-          "choice4selectedCounts": 80,
-          "answer": "<div class=\"answer\" dir=\"rtl\"><div>در سبک نوشتاری آزاد، شما نباید دربارۀ املا و نقطه‌گذاری درست، دربارۀ پاک کردن اشتباهات، دربارۀ مرتب کردن موضوعات، یا دربارۀ پیدا کردن کلمه‌های دقیق نگران باشید.&nbsp;</div><div>اگر به قبل از جای خالی نگاه کنیم متوجه می شویم که از یک ساختار یکسان استفاده شده است و همۀ عبارت‌ها با حرف اضافه مربوط به فعل worry آمده‌اند، درنتیجه همۀ گزینه‌های دیگر رد می‌شوند و در جای خالی یک ساختار مشابه مانند about spelling و about erasing تکرار می‌شود. پس about finding گزینۀ درست است.</div><div></div></div>",
-          "countQuestionTypeId": "15074",
-          "disable": false,
-          "bookmarkCount": 0,
-          "difficultyLevelId": "20",
-          "choice2selectedCounts": 204,
-          "creatorsLastUsageDate": "1601982253360",
-          "topicList": [
-            {
-              "id": 23499,
-              "name": "گرامر",
-              "deph": 0,
-              "moduleId": 413,
-              "parentTopicId": 23490,
-              "order": 20,
-              "isDisabled": false,
-              "parentTopic": {
-                "id": 23490,
-                "name": "درس اول",
-                "deph": 0,
-                "moduleId": 413,
-                "order": 5,
-                "isDisabled": false
-              },
-              "module": {
-                "id": 413,
-                "name": "انگلیسی 3",
-                "moduleGroupId": 5,
-                "isCommon": true,
-                "isDisabled": false,
-                "hasOnlineContents": true,
-                "moduleGroup": {
-                  "id": 5,
-                  "name": "زبان انگلیسی"
-                },
-                "majors": [
-                  {
-                    "id": 60,
-                    "name": "رياضي"
-                  },
-                  {
-                    "id": 61,
-                    "name": "تجربي"
-                  },
-                  {
-                    "id": 62,
-                    "name": "انساني"
-                  }
-                ],
-                "grade": {
-                  "id": 12,
-                  "name": "دوازدهم",
-                  "levelId": 60,
-                  "level": {
-                    "id": 60,
-                    "name": "دبیرستان دوره دوم"
-                  }
-                }
-              }
-            }
-          ],
-          "difficultyLevel": {
-            "id": 20,
-            "value": 3,
-            "name": "متوسط"
-          }
-        },
-        "descriptive_answer": null,
-        "statement_photo": null,
-        "answer_photos": [],
-        "status": {
-          "id": "60c6e233fa6da442c2244123",
-          "title": "draft",
-          "display_title": "پیش نویس",
-          "updated_at": "2021-06-14 09:29:31",
-          "created_at": "2021-06-14 09:29:31"
-        },
-        "updated_at": "2021-05-26 12:26:48",
-        "created_at": "2020-09-01 16:07:29"
-      },
       imgSrc:'',
       urlPathName:'',
       edit_status:true,
@@ -286,32 +94,220 @@ export default {
       uploadImgColsNumber: 0,
       log_component_number:0,
       displayEditQuestion: false,
-      question: new Question()
+      currentQuestion: new Question(),
+      examList: new ExamList(),
+      subCategoriesList: new QuestSubcategoryList(),
+      questionData: {
+        statement: '',
+        category_id: '',
+        sub_category_id: 1,
+        order: [],
+        choices: [
+          {
+            title: '',
+            order: 1,
+            answer: false
+          },
+          {
+            title: '',
+            order: 2,
+            answer: false
+          },
+          {
+            title: '',
+            order: 3,
+            answer: false
+          },
+          {
+            title: '',
+            order: 4,
+            answer: false
+          }
+        ]
+      },
+      totalExams: [],
+      trueChoiceIndex: 0,
+      questionStatuses: new QuestionStatusList()
     }
   },
   created() {
     this.getUrl()
     this.checkUrl()
-    this.question = new Question(this.fakeData)
-    console.log(this.question)
+    this.getStatus()
   },
   methods: {
-    getUrl (){
-      this.urlPathName=this.$route.name
+    getStatus () {
+      this.questionStatuses.fetch()
+      .then((response) => {
+        this.questionStatuses = new QuestionStatusList(response.data.data)
+      })
+      .catch((error) => {
+        console.log('error', error)
+      })
     },
-    checkUrl(){
-      if (this.urlPathName === 'question.create' || this.urlPathName === 'question.edit'){
-        this.edit_status = true
-      }else {
-        this.edit_status = false
-      }
+    getUrl () {
+      this.urlPathName = this.$route.name
+    },
+    doesQuestionAlreadyExist () {
+      return this.urlPathName === 'question.show' || this.urlPathName === 'question.edit'
+    },
+    checkUrl () {
+      this.edit_status = this.urlPathName === 'question.create' || this.urlPathName === 'question.edit';
       if(this.urlPathName === 'question.show' || this.urlPathName === 'question.edit'){
         this.questionColsNumber = 9
         this.log_component_number = 3
       }
+
+      if (this.doesQuestionAlreadyExist()) {
+        const loanExamListPromise = this.loanExamList()
+        const loadSubcategoriesPromise = this.loadSubcategories()
+        Promise.all([loanExamListPromise, loadSubcategoriesPromise])
+        .then(() => {
+          this.loadnCurrentQuestionData()
+        })
+      } else {
+        this.currentQuestion = new Question(this.questionData)
+      }
     },
-   openShowImgPanel(src) {
-       this.imgSrc=src;
+    loanExamList () {
+      let that = this
+      return new Promise(function(resolve, reject) {
+        new ExamList().fetch()
+        .then((response) => {
+          console.log('responseExam', response)
+          that.examList = new ExamList(response.data.data)
+          that.totalExams = []
+          that.examList.list.forEach(item => {
+            that.totalExams.push({
+              order: 0,
+              sub_category_id: null,
+              sub_category_title: '',
+              title: item.title,
+              id: item.id
+            })
+          })
+          resolve()
+        })
+        .catch( () => {
+          reject()
+        })
+      })
+    },
+    loadSubcategories () {
+      let that = this
+      return new Promise(function(resolve, reject) {
+        that.subCategoriesList.fetch()
+        .then((response) => {
+          console.log('responseSub', response)
+          that.subCategoriesList = new QuestSubcategoryList(response.data.data)
+          resolve()
+        })
+        .catch( () => {
+          console.log('error')
+          reject()
+        })
+      })
+    },
+    loadnCurrentQuestionData () {
+      let that = this
+      this.currentQuestion.show(null, API_ADDRESS.question.updateQuestion(this.$route.params.question_id))
+          .then((response) => {
+            console.log('response', response)
+            that.currentQuestion = new Question(response.data.data)
+            that.trueChoiceIndex = that.currentQuestion.choices.list.findIndex((item) => item.answer )
+            that.updateAttachList(response.data.data.exams)
+            that.updateRendered()
+          })
+    },
+    updateRendered () {
+      this.replaceNimFasele()
+      this.replaceExtraSpaceAroundDollarSign()
+      this.questRendered = this.markdown.render(this.currentQuestion.statement.toString());
+      for (let i = 0; i < 4; i++) {
+        const title = (typeof this.currentQuestion.choices.list[i] !== 'undefined') ? this.currentQuestion.choices.list[i].title : null
+        if (title) {
+          this.choiceRendered[i] = this.markdown.render(title.toString())
+        }
+      }
+      this.replaceNimFasele()
+    },
+    replaceExtraSpaceAroundDollarSign () {
+      if (this.selectedField === 0) {
+        if (!this.currentQuestion.statement) {
+          this.currentQuestion.statement = ''
+        }
+        while (this.currentQuestion.statement.indexOf('$$') !== -1) {
+          this.currentQuestion.statement = this.currentQuestion.statement.replace('$$', '$')
+        }
+        let dollarSignCounter = 0
+        for (let i = 0; i < this.currentQuestion.statement.length; i++) {
+          if (this.currentQuestion.statement[i] === '$') {
+            dollarSignCounter++
+            if (dollarSignCounter % 2 === 1 && this.currentQuestion.statement[i + 1] === ' ') {
+              this.currentQuestion.statement = this.currentQuestion.statement.slice(0, i + 1) + this.currentQuestion.statement.slice(i + 2)
+              if (this.currentQuestion.statement[i + 1] === ' ') {
+                i--
+                dollarSignCounter--
+              }
+            }
+            else if (dollarSignCounter % 2 === 0 && this.currentQuestion.statement[i - 1] === ' ') {
+              this.currentQuestion.statement = this.currentQuestion.statement.slice(0, i - 1) + this.currentQuestion.statement.slice(i)
+              if (this.currentQuestion.statement[i - 2] === ' ') {
+                i = i - 2
+                dollarSignCounter--
+              }
+            }
+          }
+        }
+      } else {
+        if (!this.currentQuestion.choices.list[this.selectedField - 1].title) {
+          this.currentQuestion.choices.list[this.selectedField - 1].title = ''
+        }
+        while (this.currentQuestion.choices.list[this.selectedField - 1].title.indexOf('$$') !== -1) {
+          this.currentQuestion.choices.list[this.selectedField - 1].title = this.currentQuestion.choices.list[this.selectedField - 1].title.replace('$$', '$')
+        }
+        let dollarSignCounter = 0
+        for (let i = 0; i < this.currentQuestion.choices.list[this.selectedField - 1].title.length; i++) {
+          if (this.currentQuestion.choices.list[this.selectedField - 1].title[i] === '$') {
+            dollarSignCounter++
+            if (dollarSignCounter % 2 === 1 && this.currentQuestion.choices.list[this.selectedField - 1].title[i + 1] === ' ') {
+              this.currentQuestion.choices.list[this.selectedField - 1].title = this.currentQuestion.choices.list[this.selectedField - 1].title.slice(0, i + 1) + this.currentQuestion.choices.list[this.selectedField - 1].title.slice(i + 2)
+              if (this.currentQuestion.choices.list[this.selectedField - 1].title[i + 1] === ' ') {
+                i--
+                dollarSignCounter--
+              }
+            }
+            else if (dollarSignCounter % 2 === 0 && this.currentQuestion.choices.list[this.selectedField - 1].title[i - 1] === ' ') {
+              this.currentQuestion.choices.list[this.selectedField - 1].title = this.currentQuestion.choices.list[this.selectedField - 1].title.slice(0, i - 1) + this.currentQuestion.choices.list[this.selectedField - 1].title.slice(i)
+              if (this.currentQuestion.choices.list[this.selectedField - 1].title[i - 2] === ' ') {
+                i = i - 2
+                dollarSignCounter--
+              }
+            }
+          }
+        }
+      }
+    },
+    replaceNimFasele () {
+      if (!this.currentQuestion.statement) {
+        this.currentQuestion.statement = ''
+      }
+      this.currentQuestion.statement = this.currentQuestion.statement.replace('¬', '‌')
+    },
+    updateAttachList(exams) {
+      let that = this
+      this.selectedQuizzes = []
+      exams.forEach( item => {
+        const targetExamIndex = that.totalExams.findIndex(examItem => Assistant.getId(examItem.id) === Assistant.getId(item.exam_id))
+        that.totalExams[targetExamIndex].order = item.order
+        that.totalExams[targetExamIndex].sub_category_id = item.sub_category.id
+        that.totalExams[targetExamIndex].sub_category_title = item.sub_category.title
+        that.selectedQuizzes.push(JSON.parse(JSON.stringify(that.totalExams[targetExamIndex])))
+      })
+      this.updateSelectedQuizzes()
+    },
+    openShowImgPanel (src) {
+       this.imgSrc = src
        this.displayEditQuestion = true
        this.questionColsNumber = 7
        this.log_component_number= 0
@@ -329,9 +325,6 @@ export default {
         this.questionColsNumber = 12
         this.uploadImgColsNumber = 0
       }
-
-
-
     },
   }
 }

@@ -145,7 +145,7 @@
     // import { TopMenu_OnlineQuiz } from '@/components/Menu/Menus'
     // import Assistant from "@/plugins/assistant";
     // import API_ADDRESS from "@/api/Addresses";
-    // import {QuestionList} from "@/models/QuestionAnswer";
+    // import {QuestionList} from "@/models/question-layout";
 
     export default {
         name: 'ExamQuestionsWithBubbleSheet',
