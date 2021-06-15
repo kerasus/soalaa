@@ -22,7 +22,7 @@
                   class="ml-2"
                   dark
                   width="120"
-                  @click="create_click"
+                  @click="btn_clicked('create')"
                 >
                   <span color="green">
                     ذخیره
@@ -35,7 +35,7 @@
                   rounded
                   color="white"
                   width="130"
-                  @click="save_draft_click"
+                  @click="btn_clicked('save')"
                 >
                   <v-icon color="#666666">
                     mdi-square-edit-outline
@@ -68,7 +68,7 @@
                   dark
                   class="ml-2"
                   width="100"
-                  @click="save_click"
+                  @click="btn_clicked('save')"
                 >
                   <span color="#666666">
                     ذخیره
@@ -81,7 +81,7 @@
                   rounded
                   color="white"
                   width="100"
-                  @click="cancel_click"
+                  @click="btn_clicked('cancel')"
                 >
                   لغو 
                 </v-btn>
@@ -110,7 +110,7 @@
                   color="white"
                   class="ml-2"
                   width="110"
-                  @click="edit_clicked"
+                  @click="btn_clicked('edit')"
                 >
                   <v-icon color="#666666">
                     mdi-square-edit-outline
@@ -126,7 +126,7 @@
                   rounded
                   color="white"
                   width="100"
-                  @click="remove_clicked"
+                  @click="btn_clicked('remove')"
                 >
                   حذف
                 </v-btn>
@@ -146,24 +146,9 @@ export default {
     status,
   },
   methods:{
-    edit_clicked(){
-      this.$emit("edit");
+    btn_clicked(name){
+      this.$emit(name);
     },
-    remove_clicked(){
-      this.$emit("remove");
-    },
-    save_click(){
-      this.$emit("save");
-    },
-    cancel_click(){
-      this.$emit("cancel");
-    },
-    save_draft_click(){
-      this.$emit("save_draft");
-    },
-    create_click(){
-      this.$emit("create");
-    }
   }
 }
 </script>

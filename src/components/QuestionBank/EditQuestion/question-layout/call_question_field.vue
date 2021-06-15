@@ -12,7 +12,7 @@
       />
     </div>
     <div
-      v-for="(item, index) in question_data.choices.list"
+      v-for="(item, index) in question.choices.list"
       :key="index"
       class="mb-6 answers-box mx-4"
     >
@@ -46,7 +46,7 @@
         <question_field
           v-model="item.title"
           :title="(index + 1) + ') '"
-          :choices="question_data.choices.list"
+          :choices="question.choices.list"
           :edit-status="status"
         />
       </div>
@@ -54,11 +54,12 @@
     <!-- ------------------------- answer -------------------------------  -->
     <div class="ma-5">
       <question_field
-        v-model="question_data.descriptive_answer"
+        v-model="question.descriptive_answer"
         :edit-status="status"
         title="پاسخ تشریحی"
         placeholder="پاسخ تشریحی"
         class="mb-16"
+        @input="updateQuestion"
       />
     </div>
   </div>
@@ -81,10 +82,6 @@ export default {
       type: Boolean,
       default: false
     },
-    question_data: {
-      type: Question,
-      default: new Question()
-    }
   },
   data() {
     return {
@@ -92,14 +89,15 @@ export default {
       selected_item: false
     }
   },
+  watch: {
+    value: function () {
+      this.question = this.value
+      console.log('question changed', this.question)
+    }
+  },
   created() {
     this.question = this.value
   },
-  // watch:{
-  //   value : () =>{
-  //     this.question = this.value
-  //   },
-  // },
   methods:{
     updateQuestion () {
       this.$emit('input', this.question)
@@ -112,8 +110,9 @@ export default {
             item.answer = false
           }
         })
+      this.updateQuestion()
     }
-  }
+  },
 }
 </script>
 
@@ -133,7 +132,6 @@ export default {
 /*  display: inline-block;*/
 /*  width: calc(100% - 36px)*/
 /*}*/
-
 /* .right-answer-icon{*/
 /*  display: inline-block; */
 /*   width: 36px;*/
