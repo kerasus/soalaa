@@ -15,16 +15,20 @@
               <!-- -------------------------- show exams  ---------------------->
               <v-col cols="12">
                 <Exams
-                    :exams="currentQuestion.exams"
-                    :exam-list="examList"
-                    :sub-categories="subCategoriesList"
-                    @detach="detachQuestion"
-                    @atach="attachQuestion"
+                  :exams="currentQuestion.exams"
+                  :exam-list="examList.list"
+                  :sub-categories="subCategoriesList.list"
+                  @detach="detachQuestion"
+                  @atach="attachQuestion"
                 />
               </v-col>
               <!-- -------------------------- upload file ---------------------->
               <v-col cols="12">
-                <UploadImg v-model="currentQuestion" :edit-status="edit_status" @imgClicked="openShowImgPanel" />
+                <UploadImg
+                  v-model="currentQuestion"
+                  :edit-status="edit_status"
+                  @imgClicked="openShowImgPanel"
+                />
               </v-col>
             </v-row>
           </div>
@@ -269,11 +273,12 @@ export default {
       }
 
       if (this.doesQuestionAlreadyExist()) {
+        console.log('in too')
         const loanExamListPromise = this.loanExamList()
         const loadSubcategoriesPromise = this.loadSubcategories()
         Promise.all([loanExamListPromise, loadSubcategoriesPromise])
         .then(() => {
-          this.loadnCurrentQuestionData()
+          this.loadCurrentQuestionData()
           this.setNullKeys()
           this.loading = false
         })
@@ -337,10 +342,13 @@ export default {
         })
       })
     },
-    loadnCurrentQuestionData () {
+    loadCurrentQuestionData () {
       let that = this
+      console.log('ooooooooooo')
+      console.log(this.currentQuestion)
       this.currentQuestion.show(null, API_ADDRESS.question.updateQuestion(this.$route.params.question_id))
           .then((response) => {
+            console.log('ooooooooooo')
             console.log('response', response)
             that.currentQuestion = new Question(response.data.data)
             that.trueChoiceIndex = that.currentQuestion.choices.list.findIndex((item) => item.answer )
