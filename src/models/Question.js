@@ -5,9 +5,9 @@ import { CheckingTimeList } from "@/models/CheckingTime";
 import Time from "@/plugins/time";
 import axios from "axios";
 import API_ADDRESS from "@/api/Addresses"
-import md from '@/plugins/Markdown'
 import TurndownService from 'turndown/lib/turndown.browser.umd'
 import convertToMarkdownKatex from "@/plugins/ConvertToMarkdownKatex"
+import { QuestionStatus } from "@/models/QuestionStatus";
 
 class Question extends Model {
     constructor (data) {
@@ -41,6 +41,10 @@ class Question extends Model {
             {
                 key: 'choices',
                 relatedModel: ChoiceList
+            },
+            {
+                key: 'status',
+                relatedModel: QuestionStatus
             },
             {
                 key: 'state',
