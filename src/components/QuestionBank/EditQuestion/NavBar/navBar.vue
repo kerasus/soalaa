@@ -7,7 +7,10 @@
       <v-col cols="3">
         <span> سازنده سوال:</span> <span> فیلان دبیر</span>
       </v-col>
-      <v-col v-if="status === 'question.create'">
+      <v-col
+        v-if="status === 'question.create'"
+        cols="4"
+      >
         <v-row>
           <v-col>
             <v-row>
@@ -15,9 +18,11 @@
                 <v-btn
                   depressed
                   rounded
-                  color="white"
+                  color="green"
                   class="ml-2"
+                  dark
                   width="120"
+                  @click="btn_clicked('create')"
                 >
                   <span color="green">
                     ذخیره
@@ -30,6 +35,7 @@
                   rounded
                   color="white"
                   width="130"
+                  @click="btn_clicked('save')"
                 >
                   <v-icon color="#666666">
                     mdi-square-edit-outline
@@ -62,6 +68,7 @@
                   dark
                   class="ml-2"
                   width="100"
+                  @click="btn_clicked('save')"
                 >
                   <span color="#666666">
                     ذخیره
@@ -74,6 +81,7 @@
                   rounded
                   color="white"
                   width="100"
+                  @click="btn_clicked('cancel')"
                 >
                   لغو 
                 </v-btn>
@@ -102,6 +110,7 @@
                   color="white"
                   class="ml-2"
                   width="110"
+                  @click="btn_clicked('edit')"
                 >
                   <v-icon color="#666666">
                     mdi-square-edit-outline
@@ -117,6 +126,7 @@
                   rounded
                   color="white"
                   width="100"
+                  @click="btn_clicked('remove')"
                 >
                   حذف
                 </v-btn>
@@ -135,8 +145,10 @@ export default {
   props: {
     status,
   },
-  created() {
-    console.log(this.status)
+  methods:{
+    btn_clicked(name){
+      this.$emit(name);
+    },
   }
 }
 </script>
