@@ -1,6 +1,10 @@
 <template>
   <div class="logList">
-    <log-item v-for="(item, index) in logs" :key="index" :log-data="item"></log-item>
+    <log-item
+        v-for="(item, index) in logs.list"
+        :key="index"
+        :log="item"
+    />
   </div>
 </template>
 
@@ -174,46 +178,6 @@ export default {
           }
         ])
       },
-// {
-//         return [
-//           {
-//             editor: 'شهاب عبادی',
-//             date: '11/9/2020',
-//             previousStatus: 'نمونه خوانی',
-//             currentStatus: 'نیازمند ویرایش',
-//             commnets: [
-//               {
-//                 author: 'شهاب عبادی',
-//                 text: 'توی صورت سوال غلط املایی وجود داره لطفا اصلاح شههههههههههههه',
-//                 date: '11/9/2020'
-//               },
-//               {
-//                 author: 'سجاد شهلایی',
-//                 text: 'موردی دیده نشد، متن سوال مطابق عکس دبیره',
-//                 date: '11/9/2020'
-//               },
-//             ]
-//           },
-//           {
-//             editor: 'مصطفی عبادی',
-//             date: '11/9/2020',
-//             previousStatus: 'ویرایش خوانی',
-//             currentStatus: 'نمونه ویرایش',
-//             commnets: [
-//               {
-//                 author: 'شهاب عبادی',
-//                 text: 'توی صورت سوال غلط املایی وجود داره لطفا اصلاح شه',
-//                 date: '11/9/2020'
-//               },
-//               {
-//                 author: 'سجاد شهلایی',
-//                 text: 'موردی دیده نشد، متن سوال مطابق عکس دبیره',
-//                 date: '11/9/2020'
-//               },
-//             ]
-//           }
-//         ]
-//       }
     }
   },
   name: "logList",
