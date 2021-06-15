@@ -14,7 +14,7 @@
                 به‌روزشده توسط
                 <span class="log-editor">{{ log.causer.full_name }}</span>
                 در
-                <span class="log-date">{{ log.date }}</span>
+                <span class="log-date">{{ log.created_at }}</span>
               </div>
             </v-col>
             <v-col class="eye-icon">
@@ -25,12 +25,12 @@
           </v-row>
           <div class="log-status">
             وضعیت از
-            <v-chip color="orange" text-color="white">{{ log.previousStatus }}</v-chip>
+            <v-chip color="orange" text-color="white">{{ log.properties.old.status.display_title }}</v-chip>
             به
-            <v-chip color="red" text-color="white">{{ log.currentStatus }}</v-chip>
+            <v-chip color="red" text-color="white">{{ log.properties.new.status.display_title }}</v-chip>
             تغییر یافت.
           </div>
-          <div v-for="(comment, index) in log.commnets" :key="index">
+          <div v-for="(comment, index) in log.comments" :key="index">
             <div class="log-author">
               :{{ comment.user.full_name }}
             </div>

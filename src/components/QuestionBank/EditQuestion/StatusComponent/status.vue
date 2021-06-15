@@ -66,9 +66,6 @@ export default {
     },
     loading: false
   }),
-  created() {
-    console.log('statuses', this.statuses)
-  },
   methods: {
     sendStatus() {
       this.$emit('update', this.newStatus)
