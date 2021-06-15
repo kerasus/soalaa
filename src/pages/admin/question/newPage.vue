@@ -6,8 +6,8 @@
           <navBar :status="urlPathName" />
           <QuestionAnswer
             v-if="!loading"
+            v-model="currentQuestion"
             :status="edit_status"
-            :question_data="currentQuestion"
           />
           <!-- -------------------------- upload file ---------------------->
           <div>
