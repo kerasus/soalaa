@@ -16,10 +16,10 @@
               <v-col cols="12">
                 <Exams
                   :exams="currentQuestion.exams"
-                  :exam-list="examList.list"
-                  :sub-categories="subCategoriesList.list"
+                  :exam-list="examList"
+                  :sub-categories="subCategoriesList"
                   @detach="detachQuestion"
-                  @atach="attachQuestion"
+                  @attach="attachQuestion"
                 />
               </v-col>
               <!-- -------------------------- upload file ---------------------->
@@ -153,17 +153,19 @@ export default {
     this.getStatus()
   },
   methods: {
-    attachQuestionOnEditMode () {
+    attachQuestionOnEditMode (item) {
+      console.log('attach', item)
       this.attachLoading = true
       axios.post(API_ADDRESS.question.attach, {
-        order: this.attachOrder,
-        exam_id: this.attachExamID,
-        question_id: this.$route.params.id,
-        sub_category_id: this.attachSubcategoryID
+        order: item.order,
+        exam_id: item.exam.id,
+        question_id: this.$route.params.question_id,
+        sub_category_id: item.sub_category.id
       })
       .then( response => {
-        this.updateAttachList(response.data.data.exams)
+        // this.updateAttachList(response.data.data.exams)
         console.log('response', response)
+        this.currentQuestion.exams = response.data.data.exams
         this.attachLoading = false
         this.dialog = false
       })
@@ -182,11 +184,12 @@ export default {
       this.dialog = false
       this.updateSelectedQuizzes()
     },
-    attachQuestion () {
+    attachQuestion (item) {
+      console.log('statejdfklsjd;aslfkjdas;flk', this.urlPathName === 'question.edit' || this.urlPathName === 'question.show', item)
       if (this.urlPathName === 'question.edit' || this.urlPathName === 'question.show') {
-        this.attachQuestionOnEditMode()
+        this.attachQuestionOnEditMode(item)
       } else {
-        this.attachQuestionOnCreateMode()
+        this.attachQuestionOnCreateMode(item)
       }
     },
     detachQuestion(item) {
@@ -216,7 +219,7 @@ export default {
         detaches: [{
           exam_id: item.exam.id,
           order: item.order,
-          sub_category_id: item.subCategory.id
+          sub_category_id: item.sub_category.id
         }]
       })
       .then((response) => {
@@ -349,13 +352,15 @@ export default {
     },
     loadCurrentQuestionData () {
       let that = this
-      console.log('ooooooooooo')
       console.log(this.currentQuestion)
       this.currentQuestion.show(null, API_ADDRESS.question.updateQuestion(this.$route.params.question_id))
           .then((response) => {
-            console.log('ooooooooooo')
             console.log('response', response)
             that.currentQuestion = new Question(response.data.data)
+            that.currentQuestion.logs.fetch(null, API_ADDRESS.question.log.base(this.$route.params.question_id))
+              .then((response) => {
+                console.log('reeeeeeeeeeeeeeeeeeeeeeeeee', response)
+              })
             that.trueChoiceIndex = that.currentQuestion.choices.list.findIndex((item) => item.answer )
             that.updateAttachList(response.data.data.exams)
             that.updateRendered()
