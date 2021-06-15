@@ -13,7 +13,9 @@
       </v-col>
       <v-col class="choose-listen" cols="4">
         <v-select
-            items="items"
+            :items="subCategories.list"
+            item-text="title"
+            item-value="id"
             label="انتخاب درس"
             dense
             solo
@@ -33,6 +35,7 @@
             <v-btn
                 small
                 text
+                @click="attach"
             >
               <v-icon>mdi-plus</v-icon>
             </v-btn>
@@ -42,34 +45,36 @@
       </v-col>
     </v-row>
 
-    <v-row v-for="(exam, index) in exams" :key="index" class="exam-section">
+    <v-row v-for="(item, index) in exams" :key="index" class="exam-section">
       <v-col class="choose-exam" cols="5">
         <v-card flat height="36">
           <v-card-text class=text-center>
-            {{ exam.title }}
+            {{ item.exam.title }}
           </v-card-text>
         </v-card>
       </v-col>
       <v-col class="choose-listen" cols="4">
         <v-card flat height="36">
           <v-card-text class=text-center>
-            {{ exam.sub_category.title }}
+            {{ item.sub_category.title }}
           </v-card-text>
         </v-card>
       </v-col>
       <v-col class="exam-order" cols="2">
         <v-card flat height="36">
           <v-card-text class=text-center>
-            {{ exam.order }}
+            {{ item.order }}
           </v-card-text>
         </v-card>
       </v-col>
-      <v-col class="attach-or-dettach" cols="1">
+      <v-col class="attach-or-detach" cols="1">
         <v-card flat height="36">
           <v-card-text class=text-center>
             <v-btn
                 small
                 text
+                @click="detach(item)"
+
             >
               <v-icon>mdi-trash-can-outline</v-icon>
             </v-btn>
@@ -92,45 +97,30 @@ export default {
   props: {
     exams: {
       default: () => {
-        return [
-          {
-            "sub_category": {
-              "id": "60b7875428f350277f04c5e4",
-              "title": "عربی عمومی",
-              "category_id": "60b7858d743940688b23c7f3"
-            },
-            "title": "60924621ade9711661048075",
-            "exam_id": "60924621ade9711661048075",
-            "order": 26
-          },
-          {
-            "sub_category": {
-              "id": "60b7875428f350277f04c5e4",
-              "title": "عربی عمومی",
-              "category_id": "60b7858d743940688b23c7f3"
-            },
-            "title": "60924621ade9711661048075",
-            "exam_id": "60924621ade9711661048075",
-            "order": 26
-          },
-          {
-            "sub_category": {
-              "id": "60b7875428f350277f04c5e4",
-              "title": "عربی عمومی",
-              "category_id": "60b7858d743940688b23c7f3"
-            },
-            "title": "60924621ade9711661048075",
-            "exam_id": "60924621ade9711661048075",
-            "order": 26
-          },
-        ]
+        return []
+      },
+      type: Array
+    },
+    examList: {
+      default: () => {
+        return []
+      },
+      type: Array
+    },
+    subCategories: {
+      default: () => {
+        return []
       },
       type: Array
     }
+
   },
   created() {
     console.log('exams', this.exams)
-  },
+    console.log('examList', this.examList)
+    console.log('subCategories', this.subCategories)
+  }
+  ,
   methods: {
     attachQuestionOnEditMode() {
       this.attachLoading = true
@@ -150,6 +140,23 @@ export default {
             this.attachLoading = false
             this.dialog = false
           })
+    },
+    detach(item) {
+      // const exam = this.examList.find( examItem => examItem.id === item.exam.id )
+      const emitData = {
+        exam: item.exam,
+        subCategory: item.sub_category,
+        order: item.order
+      }
+      this.$emit('detach', emitData)
+    },
+    attach() {
+      const emitData = {
+        exam: item.exam,
+        subCategory: item.sub_category,
+        order: item.order
+      }
+      this.$emit('detach', emitData)
     }
   }
 }

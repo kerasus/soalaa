@@ -10,21 +10,21 @@
             :status="edit_status"
             @input="updateQuestion"
           />
-          <!-- -------------------------- upload file ---------------------->
           <div>
             <v-row>
-              <v-col cols="5">
-                <UploadImg @imgClicked="openShowImgPanel" />
-              </v-col>
               <!-- -------------------------- show exams  ---------------------->
-              <v-col cols="7">
+              <v-col cols="12">
                 <Exams
-                  :exams="currentQuestion.exams"
-                  :exam-list="examList"
-                  :sub-categoies="subCategoriesList"
-                  @detach="detachQuestion"
-                  @atach="attachQuestion"
+                    :exams="currentQuestion.exams"
+                    :exam-list="examList"
+                    :sub-categories="subCategoriesList"
+                    @detach="detachQuestion"
+                    @atach="attachQuestion"
                 />
+              </v-col>
+              <!-- -------------------------- upload file ---------------------->
+              <v-col cols="12">
+                <UploadImg v-model="currentQuestion" :edit-status="edit_status" @imgClicked="openShowImgPanel" />
               </v-col>
             </v-row>
           </div>
@@ -57,7 +57,7 @@
               height="1856"
               class="rounded-card"
             >
-              <Log />
+              <LogList />
             </v-card>
           </div>
         </v-col>
@@ -71,10 +71,10 @@ import navBar from '@/components/QuestionBank/EditQuestion/NavBar/navBar.vue';
 import QuestionAnswer from '@/components/QuestionBank/EditQuestion/question-layout/call_question_field';
 import UploadImg from '@/components/QuestionBank/EditQuestion/UploadImgs/uploadImg';
 import Exams from '@/components/QuestionBank/EditQuestion/Exams/exams';
-import StatusComponent from '@/components/QuestionBank/EditQuestion/StatusComponent/stsatus';
+import StatusComponent from '@/components/QuestionBank/EditQuestion/StatusComponent/status';
 import ShowImg from '@/components/QuestionBank/EditQuestion/ShowImg/showImg';
 import SaveChange from '@/components/QuestionBank/EditQuestion/SaveChange/saveChange'
-import Log from '@/components/QuestionBank/EditQuestion/Log/Log';
+import LogList from '@/components/QuestionBank/EditQuestion/Log/LogList';
 import { Question } from '@/models/Question'
 import {ExamList} from "@/models/Exam";
 import {QuestSubcategoryList} from "@/models/QuestSubcategory";
@@ -92,7 +92,7 @@ export default {
     Exams,
     ShowImg,
     StatusComponent,
-    Log,
+    LogList,
     SaveChange
   },
   data() {

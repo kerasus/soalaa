@@ -67,10 +67,21 @@ const API_ADDRESS = {
       }
     }
   },
+  log: {
+    base: lumenServer + '/activity-log',
+  },
   question: {
     index: lumenServer + '/question/search-monta',
     status: {
       base: lumenServer + '/question/statuses',
+    },
+    log: {
+      base (questionId, pagination) {
+        if (!pagination) {
+          pagination = 0
+        }
+        return lumenServer + '/activity-log?subject_id='+questionId+'&subject=question&titile=update&description=update_qestion_status&with_pagination='+pagination
+      },
     },
     base: lumenServer + '/exam-question/attach',
     attachSubCategoryToQuestion: lumenServer + '/exam-question/attach/sub-category',
