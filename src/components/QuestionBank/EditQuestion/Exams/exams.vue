@@ -1,8 +1,8 @@
 <template>
-  <div class="exam mb-2" >
+  <div class="exam">
     <p class="font-weight-medium">آزمون ها</p>
 
-    <v-row class="exam-section">
+    <v-row class="exam-section  mb-1">
       <v-col class="choose-exam" cols="5">
         <v-select
             :items="examList.list"
@@ -132,12 +132,6 @@ export default {
       ]
     }
   },
-  created() {
-    console.log('exams', this.exams)
-    console.log('examList', this.examList)
-    console.log('subCategories', this.subCategories)
-  }
-  ,
   methods: {
     attachQuestionOnEditMode() {
       this.attachLoading = true
@@ -159,19 +153,14 @@ export default {
           })
     },
     detach(item) {
-
-      const emitData = {
-        exam: item.exam,
-        subCategory: item.sub_category,
-        order: item.order
-      }
-      this.$emit('detach', emitData)
+      this.$emit('detach', item)
     },
     attach() {
-      // const exam = this.examList.find( examItem => examItem.id === item.exam.id )
+      const exam = this.examList.find(examItem => examItem.id === this.chooseExam)
+      const sub_category = this.subCategories.find(subCategoryItem => subCategoryItem.id === this.chooseLesson)
       const emitData = {
-        exam: this.chooseExam,
-        subCategory: this.chooseLesson,
+        exam,
+        sub_category,
         order: this.examOrder
       }
       this.$emit('attach', emitData)
