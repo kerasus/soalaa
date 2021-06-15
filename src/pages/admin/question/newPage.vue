@@ -87,7 +87,7 @@ export default {
   name: "NewPage",
   components: {
     navBar,
-    QuestionAnswer ,
+    QuestionAnswer,
     UploadImg,
     Exams,
     ShowImg,
@@ -274,11 +274,28 @@ export default {
         Promise.all([loanExamListPromise, loadSubcategoriesPromise])
         .then(() => {
           this.loadnCurrentQuestionData()
+          this.setNullKeys()
           this.loading = false
         })
       } else {
         this.currentQuestion = new Question(this.questionData)
+        console.log('currentQuestion', this.questionData, new Question(this.questionData))
+        this.setNullKeys()
         this.loading = false
+      }
+    },
+    setNullKeys () {
+      console.log('test', this.currentQuestion.statement)
+      if (!this.currentQuestion.statement) {
+        this.currentQuestion.statement = ''
+      }
+      this.currentQuestion.choices.list.forEach((item) => {
+        if (!item.title) {
+          item.title = ''
+        }
+      })
+      if (!this.currentQuestion.descriptive_answer) {
+        this.currentQuestion.descriptive_answer = ''
       }
     },
     loanExamList () {
