@@ -22,6 +22,8 @@
                   :exams="currentQuestion.exams"
                   :exam-list="examList"
                   :sub-categoies="subCategoriesList"
+                  @detach="detachQuestion"
+                  @atach="attachQuestion"
                 />
               </v-col>
             </v-row>
@@ -63,6 +65,7 @@
     </v-container>
   </div>
 </template>
+
 <script>
 import navBar from '@/components/QuestionBank/EditQuestion/NavBar/navBar.vue';
 import QuestionAnswer from '@/components/QuestionBank/EditQuestion/question-layout/call_question_field';
@@ -78,6 +81,7 @@ import {QuestSubcategoryList} from "@/models/QuestSubcategory";
 import API_ADDRESS from "@/api/Addresses";
 import Assistant from "@/plugins/assistant";
 import {QuestionStatusList} from "@/models/QuestionStatus";
+import axios from "axios";
 
 export default {
   name: "NewPage",
@@ -134,7 +138,8 @@ export default {
       totalExams: [],
       trueChoiceIndex: 0,
       questionStatuses: new QuestionStatusList(),
-      loading: true
+      loading: true,
+      attachLoading: false,
     }
   },
   created() {
@@ -143,6 +148,101 @@ export default {
     this.getStatus()
   },
   methods: {
+    attachQuestionOnEditMode () {
+      this.attachLoading = true
+      axios.post(API_ADDRESS.question.attach, {
+        order: this.attachOrder,
+        exam_id: this.attachExamID,
+        question_id: this.$route.params.id,
+        sub_category_id: this.attachSubcategoryID
+      })
+      .then( response => {
+        this.updateAttachList(response.data.data.exams)
+        console.log('response', response)
+        this.attachLoading = false
+        this.dialog = false
+      })
+      .catch( () => {
+        this.attachLoading = false
+        this.dialog = false
+      })
+    },
+    attachQuestionOnCreateMode () {
+      const targetExamIndex = this.totalExams.findIndex(examItem => Assistant.getId(examItem.id) === Assistant.getId(this.attachExamID))
+      const targetSubCategoryIndex = this.subCategoriesList.list.findIndex(subCategoryItem => Assistant.getId(subCategoryItem.id) === Assistant.getId(this.attachSubcategoryID))
+      this.totalExams[targetExamIndex].order = this.attachOrder
+      this.totalExams[targetExamIndex].sub_category_id = this.attachSubcategoryID
+      this.totalExams[targetExamIndex].sub_category_title = this.subCategoriesList.list[targetSubCategoryIndex].title
+      this.selectedQuizzes.push(JSON.parse(JSON.stringify(this.totalExams[targetExamIndex])))
+      this.dialog = false
+      this.updateSelectedQuizzes()
+    },
+    attachQuestion () {
+      if (this.urlPathName === 'question.edit' || this.urlPathName === 'question.show') {
+        this.attachQuestionOnEditMode()
+      } else {
+        this.attachQuestionOnCreateMode()
+      }
+    },
+    detachQuestion(item) {
+      let that = this
+      this.$store.commit('AppLayout/showConfirmDialog', {
+        message: 'از حذف سوال از آزمون اطمینان دارید؟',
+        button: {
+          no: 'خیر',
+          yes: 'بله'
+        },
+        callback: (confirm) => {
+          if (!confirm) {
+            return
+          }
+          if (that.urlPathName === 'question.edit' || that.urlPathName === 'question.show') {
+            that.detachQuestionOnEditMode(item)
+          } else {
+            that.detachQuestionOnCreateMode(item)
+          }
+        }
+      })
+    },
+    detachQuestionOnEditMode(item) {
+      this.attachLoading = true
+      axios.post(API_ADDRESS.question.detach(this.$route.params.id), {
+        detaches: [{
+          exam_id: item.id,
+          order: item.order,
+          sub_category_id: item.sub_category_id
+        }]
+      })
+      .then((response) => {
+        console.log('response', response)
+        this.selectedQuizzes = []
+        response.data.data.exams.forEach(item => {
+          this.selectedQuizzes.push({
+            id: item.exam.id,
+            order: item.order,
+            sub_category_id: item.sub_category.id,
+            sub_category_title: item.sub_category.title,
+            title: item.exam.title
+          })
+        })
+        this.updateSelectedQuizzes()
+        // this.currentQuestion = new question-layout(responseData)
+        // this.trueChoiceIndex = this.currentQuestion.choices.list.findIndex((item) => item.answer )
+        // this.updateAttachList(response.data.data)
+        this.attachLoading = false
+        this.dialog = false
+      })
+      .catch( () => {
+        this.attachLoading = false
+        this.dialog = false
+      })
+    },
+    detachQuestionOnCreateMode(item) {
+      const detachedExamIndex = this.selectedQuizzes.indexOf(item)
+      this.selectedQuizzes.splice(detachedExamIndex, 1)
+      this.dialog = false
+      this.updateSelectedQuizzes()
+    },
     updateQuestion (eventData) {
       this.currentQuestion = new Question(eventData)
     },

@@ -11,7 +11,10 @@
           </v-card-title>
           <v-card-text>
             <v-row>
-              <v-col v-show="questionFile.length === 0">
+              <v-col
+                v-if="editStatus"
+                v-show="questionFile.length === 0"
+              >
                 <file-upload
                   ref="questionFile"
                   v-model="questionFile"
@@ -41,24 +44,25 @@
               </v-col>
               <v-col
                 v-for="(file, index) in questionFile"
-                :key="file.id + ' ' + index"
+                :key="index"
               >
                 <v-card>
                   <v-img
-                    v-if="file.thumb"
-                    :src="file.thumb"
+                    v-if="(editStatus && file.thumb) || (!editStatus && file)"
+                    :src="(editStatus) ? file.thumb : file"
                     width="100%"
                     height="60"
                     class="mt-3"
-                    @click="showImgPanel(file.thumb)"
+                    @click="showImgPanel(((editStatus) ? file.thumb : file))"
                   />
                   <span v-else>No Image</span>
                   <v-card-title
+                    v-if="editStatus"
                     class="caption"
                     v-text="formatSize(file.size)"
                   />
-
                   <v-btn
+                    v-if="editStatus"
                     fab
                     dark
                     x-small
@@ -70,6 +74,29 @@
                       mdi-close
                     </v-icon>
                   </v-btn>
+                </v-card>
+              </v-col>
+              <v-col
+                v-if="!editStatus && questionFile.length === 0"
+              >
+                <v-card>
+                  <v-img
+                    width="100%"
+                    height="60"
+                  >
+                    <template v-slot:placeholder>
+                      <v-row
+                        no-gutters
+                        class="fill-height"
+                      >
+                        <v-col class="d-flex justify-center align-center">
+                          <v-icon size="50px">
+                            mdi-image-off
+                          </v-icon>
+                        </v-col>
+                      </v-row>
+                    </template>
+                  </v-img>
                 </v-card>
               </v-col>
             </v-row>
@@ -85,25 +112,27 @@
             <v-row>
               <v-col
                 v-for="(file, index) in answerFiles"
-                :key="file.id + ' ' + index"
+                :key="index"
                 cols="3"
               >
                 <v-card>
                   <v-img
-                    v-if="file.thumb"
-                    :src="file.thumb"
+                    v-if="(editStatus && file.thumb) || (!editStatus && file)"
+                    :src="(editStatus) ? file.thumb : file"
                     width="100%"
                     height="60"
                     class="mt-3"
-                    @click="showImgPanel(file.thumb)"
+                    @click="showImgPanel(((editStatus) ? file.thumb : file))"
                   />
                   <span v-else>No Image</span>
                   <v-card-title
+                    v-if="editStatus"
                     class="caption"
                     v-text="formatSize(file.size)"
                   />
 
                   <v-btn
+                    v-if="editStatus"
                     fab
                     dark
                     x-small
@@ -117,7 +146,10 @@
                   </v-btn>
                 </v-card>
               </v-col>
-              <v-col cols="3">
+              <v-col
+                v-if="editStatus"
+                cols="3"
+              >
                 <div>
                   <file-upload
                     ref="answerImages"
@@ -147,6 +179,29 @@
                   </file-upload>
                 </div>
               </v-col>
+              <v-col
+                v-if="!editStatus && answerFiles.length === 0"
+              >
+                <v-card>
+                  <v-img
+                    width="100%"
+                    height="60"
+                  >
+                    <template v-slot:placeholder>
+                      <v-row
+                        no-gutters
+                        class="fill-height"
+                      >
+                        <v-col class="d-flex justify-center align-center">
+                          <v-icon size="50px">
+                            mdi-image-off
+                          </v-icon>
+                        </v-col>
+                      </v-row>
+                    </template>
+                  </v-img>
+                </v-card>
+              </v-col>
             </v-row>
           </v-card-text>
         </v-card>
@@ -159,14 +214,26 @@
 import Cropper from 'cropperjs'
 import ImageCompressor from '@xkeshi/image-compressor'
 import FileUpload from 'vue-upload-component'
+import {Question} from "@/models/Question";
 
 export default {
   name: "UploadImg",
   components: {
     FileUpload,
   },
+  props: {
+    value: {
+      type: Question,
+      default: new Question()
+    },
+    editStatus: {
+      type: Boolean,
+      default: false
+    }
+  },
   data(){
     return {
+      question: new Question(),
       files: [],
       questionFile: [],
       answerFiles: [],
@@ -231,6 +298,13 @@ export default {
       }
     },
   },
+  created() {
+    this.question = this.value
+    if (!this.editStatus) {
+      this.questionFile = (this.question.statement_photo) ? [this.question.statement_photo] : []
+      this.answerFiles = this.question.answer_photos
+    }
+  },
   methods :{
     showImgPanel(src){
       this.$emit("imgClicked",src);
@@ -241,8 +315,12 @@ export default {
         questionFile: this.questionFile,
         answerFiles: this.answerFiles
       }
-      this.$emit('update', files)
+
+      this.question.statement_photo = this.questionFile.blob
+      this.question.answer_photos = this.answerFiles.map( item => item.blob)
       console.log('files', files)
+      console.log('this.question', this.question)
+      this.$emit('input', this.question)
     },
     copyImageAddress (url) {
       const el = document.createElement('textarea')
