@@ -8,7 +8,10 @@
         <v-row class="mx-4">
           <v-col>
             <!--  -------------------- nav bar ----------------------------------------------------------------- -->
-            <v-row justify="space-between my-10">
+            <v-row
+              justify="space-between"
+              class="my-10"
+            >
               <v-col
                 cols="2"
                 data-text-align="left"

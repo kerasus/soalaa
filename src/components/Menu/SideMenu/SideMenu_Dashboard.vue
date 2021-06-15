@@ -138,22 +138,30 @@
           <v-list-item-title>{{ item.displayName }}</v-list-item-title>
         </v-list-item>
       </router-link>
-      <v-list-item>
+      <v-list-item class="question_bank">
         <v-list-item-title>
-          <v-list-group prepend-icon="mdi-bank-outline">
-            <template v-slot:activator>
-              <v-list-item-title>بانک سوال</v-list-item-title>
+          <v-list-group>
+            <template
+              v-slot:activator
+              class=""
+              color="white"
+            >
+              <v-list-item-title>
+                <v-icon color="white">
+                  mdi-bank-outline
+                </v-icon> بانک سوال
+              </v-list-item-title>
             </template>
             <router-link :to="{ name:'question.create'}">
               <v-list-item>
-                <v-list-item-title>
+                <v-list-item-title class="question_bank_item_list">
                   سوال جدید
                 </v-list-item-title>
               </v-list-item>
             </router-link>
             <router-link :to="{ name:'question.list'}">
               <v-list-item>
-                <v-list-item-title>
+                <v-list-item-title class="question_bank_item_list">
                   کارخانه ی سوال
                 </v-list-item-title>
               </v-list-item>
@@ -250,7 +258,12 @@
     .v-list.menu {
         padding: 8px 0 !important;
     }
-
+    .menu .v-list-item-group .question_bank{
+      padding: 0;
+    }
+    .menu .v-list-item-group .question_bank .question_bank_item_list{
+      text-decoration: none;
+    }
     .router-link-exact-active .v-list-item {
         background: var(--primary-1);
         padding: 0 8px 0 0 !important;
