@@ -123,7 +123,7 @@ export default {
           })
     },
     detach (){
-      this.$emit('detach',)
+      // this.$emit('detach',)
     },
     attach(){
     }

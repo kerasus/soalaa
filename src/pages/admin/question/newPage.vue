@@ -68,7 +68,7 @@ import navBar from '@/components/QuestionBank/EditQuestion/NavBar/navBar.vue';
 import QuestionAnswer from '@/components/QuestionBank/EditQuestion/question-layout/call_question_field';
 import UploadImg from '@/components/QuestionBank/EditQuestion/UploadImgs/uploadImg';
 import Exams from '@/components/QuestionBank/EditQuestion/Exams/exams';
-import StatusComponent from '@/components/QuestionBank/EditQuestion/StatusComponent/stsatus';
+import StatusComponent from '@/components/QuestionBank/EditQuestion/StatusComponent/status';
 import ShowImg from '@/components/QuestionBank/EditQuestion/ShowImg/showImg';
 import SaveChange from '@/components/QuestionBank/EditQuestion/SaveChange/saveChange'
 import LogList from '@/components/QuestionBank/EditQuestion/Log/LogList';
