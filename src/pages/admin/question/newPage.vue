@@ -6,8 +6,9 @@
           <navBar :status="urlPathName" />
           <QuestionAnswer
             v-if="!loading"
+            v-model="currentQuestion"
             :status="edit_status"
-            :question_data="currentQuestion"
+            @input="updateQuestion"
           />
           <!-- -------------------------- upload file ---------------------->
           <div>
@@ -138,6 +139,9 @@ export default {
     this.getStatus()
   },
   methods: {
+    updateQuestion (eventData) {
+      this.currentQuestion = new Question(eventData)
+    },
     getStatus () {
       this.questionStatuses.fetch()
       .then((response) => {
