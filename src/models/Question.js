@@ -21,6 +21,7 @@ class Question extends Model {
             { key: 'title' },
             { key: 'index' },
             { key: 'statement' },
+            { key: 'statement_photo' },
             { key: 'rendered_statement' },
             { key: 'in_active_category' },
             { key: 'photo' },
@@ -37,6 +38,12 @@ class Question extends Model {
                 relatedModel: CheckingTimeList
             },
             {key: 'answer'},
+            {
+                key: 'answer_photos',
+                default: []
+            },
+            {key: 'descriptive_answer'},
+            { key: 'rendered_descriptive_answer' },
             {key: 'selected_at'},
             {
                 key: 'choices',
@@ -122,6 +129,10 @@ class Question extends Model {
 
         if (typeof this.statement === 'string') {
             this.rendered_statement = convertToMarkdownKatex(this.statement)
+            // this.rendered_statement = md.render(this.statement)
+        }
+        if (typeof this.descriptive_answer === 'string') {
+            this.rendered_descriptive_answer = convertToMarkdownKatex(this.descriptive_answer)
             // this.rendered_statement = md.render(this.statement)
         }
     }
