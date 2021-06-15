@@ -15,163 +15,165 @@ export default {
   props: {
     logs: {
       type: LogList,
-      default: new LogList([
-        {
-          causer: {
-            id: 123,
-            full_name: 'full_name'
-          },
-          comments: [
-            {
-              user: {
-                id: 24,
-                full_name: 'adfasdfsafd'
+      default() {
+        return new LogList([
+          {
+            causer: {
+              id: 123,
+              full_name: 'full_name'
+            },
+            comments: [
+              {
+                user: {
+                  id: 24,
+                  full_name: 'adfasdfsafd'
+                },
+                comment: 'sadfhkjashdfjasldkjf',
+                created_at: 'afsdfd'
+              }
+            ],
+            properties: {
+              old: {
+                status: {
+                  id: 1342143,
+                  display_title: 'fgsdfgdfgfsd'
+                }
               },
-              comment: 'sadfhkjashdfjasldkjf',
-              created_at: 'afsdfd'
-            }
-          ],
-          properties: {
-            old: {
-              status: {
-                id: 1342143,
-                display_title: 'fgsdfgdfgfsd'
+              new: {
+                status: {
+                  id: 1343,
+                  display_title: 'fg453242534sd'
+                }
               }
             },
-            new: {
-              status: {
-                id: 1343,
-                display_title: 'fg453242534sd'
+            created_at: '32131538546'
+          },
+          {
+            causer: {
+              id: 123,
+              full_name: 'full_name'
+            },
+            comments: [
+              {
+                user: {
+                  id: 24,
+                  full_name: 'adfasdfsafd'
+                },
+                comment: 'sadfhkjashdfjasldkjf',
+                created_at: 'afsdfd'
               }
-            }
-          },
-          created_at: '32131538546'
-        },
-        {
-          causer: {
-            id: 123,
-            full_name: 'full_name'
-          },
-          comments: [
-            {
-              user: {
-                id: 24,
-                full_name: 'adfasdfsafd'
+            ],
+            properties: {
+              old: {
+                status: {
+                  id: 1342143,
+                  display_title: 'fgsdfgdfgfsd'
+                }
               },
-              comment: 'sadfhkjashdfjasldkjf',
-              created_at: 'afsdfd'
-            }
-          ],
-          properties: {
-            old: {
-              status: {
-                id: 1342143,
-                display_title: 'fgsdfgdfgfsd'
+              new: {
+                status: {
+                  id: 1343,
+                  display_title: 'fg453242534sd'
+                }
               }
             },
-            new: {
-              status: {
-                id: 1343,
-                display_title: 'fg453242534sd'
+            created_at: '32131538546'
+          },
+          {
+            causer: {
+              id: 123,
+              full_name: 'full_name'
+            },
+            comments: [
+              {
+                user: {
+                  id: 24,
+                  full_name: 'adfasdfsafd'
+                },
+                comment: 'sadfhkjashdfjasldkjf',
+                created_at: 'afsdfd'
               }
-            }
-          },
-          created_at: '32131538546'
-        },
-        {
-          causer: {
-            id: 123,
-            full_name: 'full_name'
-          },
-          comments: [
-            {
-              user: {
-                id: 24,
-                full_name: 'adfasdfsafd'
+            ],
+            properties: {
+              old: {
+                status: {
+                  id: 1342143,
+                  display_title: 'fgsdfgdfgfsd'
+                }
               },
-              comment: 'sadfhkjashdfjasldkjf',
-              created_at: 'afsdfd'
-            }
-          ],
-          properties: {
-            old: {
-              status: {
-                id: 1342143,
-                display_title: 'fgsdfgdfgfsd'
+              new: {
+                status: {
+                  id: 1343,
+                  display_title: 'fg453242534sd'
+                }
               }
             },
-            new: {
-              status: {
-                id: 1343,
-                display_title: 'fg453242534sd'
+            created_at: '32131538546'
+          },
+          {
+            causer: {
+              id: 123,
+              full_name: 'full_name'
+            },
+            comments: [
+              {
+                user: {
+                  id: 24,
+                  full_name: 'adfasdfsafd'
+                },
+                comment: 'sadfhkjashdfjasldkjf',
+                created_at: 'afsdfd'
               }
-            }
-          },
-          created_at: '32131538546'
-        },
-        {
-          causer: {
-            id: 123,
-            full_name: 'full_name'
-          },
-          comments: [
-            {
-              user: {
-                id: 24,
-                full_name: 'adfasdfsafd'
+            ],
+            properties: {
+              old: {
+                status: {
+                  id: 1342143,
+                  display_title: 'fgsdfgdfgfsd'
+                }
               },
-              comment: 'sadfhkjashdfjasldkjf',
-              created_at: 'afsdfd'
-            }
-          ],
-          properties: {
-            old: {
-              status: {
-                id: 1342143,
-                display_title: 'fgsdfgdfgfsd'
+              new: {
+                status: {
+                  id: 1343,
+                  display_title: 'fg453242534sd'
+                }
               }
             },
-            new: {
-              status: {
-                id: 1343,
-                display_title: 'fg453242534sd'
+            created_at: '32131538546'
+          },
+          {
+            causer: {
+              id: 123,
+              full_name: 'full_name'
+            },
+            comments: [
+              {
+                user: {
+                  id: 24,
+                  full_name: 'adfasdfsafd'
+                },
+                comment: 'sadfhkjashdfjasldkjf',
+                created_at: 'afsdfd'
               }
-            }
-          },
-          created_at: '32131538546'
-        },
-        {
-          causer: {
-            id: 123,
-            full_name: 'full_name'
-          },
-          comments: [
-            {
-              user: {
-                id: 24,
-                full_name: 'adfasdfsafd'
+            ],
+            properties: {
+              old: {
+                status: {
+                  id: 1342143,
+                  display_title: 'fgsdfgdfgfsd'
+                }
               },
-              comment: 'sadfhkjashdfjasldkjf',
-              created_at: 'afsdfd'
-            }
-          ],
-          properties: {
-            old: {
-              status: {
-                id: 1342143,
-                display_title: 'fgsdfgdfgfsd'
+              new: {
+                status: {
+                  id: 1343,
+                  display_title: 'fg453242534sd'
+                }
               }
             },
-            new: {
-              status: {
-                id: 1343,
-                display_title: 'fg453242534sd'
-              }
-            }
-          },
-          created_at: '32131538546'
-        }
-      ]),
+            created_at: '32131538546'
+          }
+        ])
+      },
 // {
 //         return [
 //           {

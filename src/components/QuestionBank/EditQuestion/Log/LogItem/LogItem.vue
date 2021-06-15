@@ -55,7 +55,9 @@ import {Log} from "@/models/Log";
 export default {
   props: {
     log: {
-      default: new Log(),
+      default() {
+        return new Log()
+      },
       type: Log
     }
   },
