@@ -2,23 +2,24 @@
   <!-- ------------------------- question -------------------------------  -->
   <div class=" ma-4">
     <div class="mx-5 mb-10">
-      <call_question_field
-        v-model="question_data.statement"
+      <question_field
+        v-model="question.statement"
         class="my-10"
         :edit-status="status"
         title="تایپ سوال"
         placeholder="صورت سوال"
+        @input="updateQuestion"
       />
     </div>
     <div
-      v-for="(item, index) in question_data.choices.list"
+      v-for="(item, index) in question.choices.list"
       :key="index"
       class="mb-6 answers-box mx-4"
     >
       <div
         v-if="item.answer"
         class="answer-icon-box"
-        @click="clicked(item.id)"
+        @click="clicked(item.order)"
       >
         <v-icon
           color="green"
@@ -31,7 +32,7 @@
       <div
         v-else
         class="mx-4"
-        @click="clicked(item.id)"
+        @click="clicked(item.order)"
       >
         <v-btn
           class=""
@@ -42,61 +43,76 @@
         />
       </div>
       <div class="answer-editor ma-4">
-        <call_question_field
+        <question_field
           v-model="item.title"
           :title="(index + 1) + ') '"
-          :choices="question_data.choices.list"
+          :choices="question.choices.list"
           :edit-status="status"
         />
       </div>
     </div>
     <!-- ------------------------- answer -------------------------------  -->
     <div class="ma-5">
-      <call_question_field
-        v-model="question_data.descriptive_answer"
+      <question_field
+        v-model="question.descriptive_answer"
         :edit-status="status"
         title="پاسخ تشریحی"
         placeholder="پاسخ تشریحی"
         class="mb-16"
+        @input="updateQuestion"
       />
     </div>
   </div>
 </template>
 <script>
-import call_question_field from '@/components/Question/questionField'
+import question_field from '@/components/Question/questionField'
+import { Question } from "@/models/Question";
 
 export default {
   name: "Questions",
   components: {
-    call_question_field,
+    question_field,
   },
-  props:
-   ['status',
-   'question_data']
-    ,
+  props: {
+    value: {
+      type: Question,
+      default: new Question()
+    },
+    status: {
+      type: Boolean,
+      default: false
+    },
+  },
   data() {
     return {
-      correct_answer:this.question_data.choices.list
+      question: new Question(),
+      selected_item: false
     }
   },
-  watch:{
-    correct_answer : () =>{
-      console.log('data is changed')
-    },
-
+  watch: {
+    value: function () {
+      this.question = this.value
+      console.log('question changed', this.question)
+    }
+  },
+  created() {
+    this.question = this.value
   },
   methods:{
-    clicked(id){
-     this.correct_answer.forEach(item => {
-       if(item.id === id){
-         item.answer = true
-       }else {
-         item.answer = false
-       }
-     })
-
+    updateQuestion () {
+      this.$emit('input', this.question)
+    },
+    clicked(order){
+      this.question.choices.list.forEach(item => {
+          if(item.order === order){
+            item.answer = true
+          }else {
+            item.answer = false
+          }
+        })
+      this.updateQuestion()
     }
-  }
+  },
 }
 </script>
 
@@ -116,7 +132,6 @@ export default {
 /*  display: inline-block;*/
 /*  width: calc(100% - 36px)*/
 /*}*/
-
 /* .right-answer-icon{*/
 /*  display: inline-block; */
 /*   width: 36px;*/
