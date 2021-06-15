@@ -5,6 +5,7 @@
         <v-col :cols="questionColsNumber">
           <navBar :status="urlPathName" />
           <QuestionAnswer
+            v-if="!loading"
             :status="edit_status"
             :question_data="currentQuestion"
           />
@@ -16,7 +17,7 @@
               </v-col>
               <!-- -------------------------- show exams  ---------------------->
               <v-col cols="7">
-                <Exams />
+                <Exams :exams="currentQuestion.exams" />
               </v-col>
             </v-row>
           </div>
@@ -62,7 +63,7 @@ import navBar from '@/components/QuestionBank/EditQuestion/NavBar/navBar.vue';
 import QuestionAnswer from '@/components/QuestionBank/EditQuestion/question-layout/call_question_field';
 import UploadImg from '@/components/QuestionBank/EditQuestion/UploadImgs/uploadImg';
 import Exams from '@/components/QuestionBank/EditQuestion/Exams/exams';
-import StatusComponent from '@/components/QuestionBank/EditQuestion/StatusComponent/status';
+import StatusComponent from '@/components/QuestionBank/EditQuestion/StatusComponent/stsatus';
 import ShowImg from '@/components/QuestionBank/EditQuestion/ShowImg/showImg';
 import SaveChange from '@/components/QuestionBank/EditQuestion/SaveChange/saveChange'
 import Log from '@/components/QuestionBank/EditQuestion/Log/Log';
@@ -127,7 +128,8 @@ export default {
       },
       totalExams: [],
       trueChoiceIndex: 0,
-      questionStatuses: new QuestionStatusList()
+      questionStatuses: new QuestionStatusList(),
+      loading: true
     }
   },
   created() {
@@ -164,9 +166,11 @@ export default {
         Promise.all([loanExamListPromise, loadSubcategoriesPromise])
         .then(() => {
           this.loadnCurrentQuestionData()
+          this.loading = false
         })
       } else {
         this.currentQuestion = new Question(this.questionData)
+        this.loading = false
       }
     },
     loanExamList () {
