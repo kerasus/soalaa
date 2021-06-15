@@ -72,7 +72,7 @@
 
 <script>
 import navBar from '@/components/QuestionBank/EditQuestion/NavBar/navBar.vue';
-import QuestionAnswer from '@/components/QuestionBank/EditQuestion/question-layout/call_question_field';
+import QuestionAnswer from '@/components/QuestionBank/EditQuestion/question-layout/question_layout';
 import UploadImg from '@/components/QuestionBank/EditQuestion/UploadImgs/uploadImg';
 import Exams from '@/components/QuestionBank/EditQuestion/Exams/exams';
 import StatusComponent from '@/components/QuestionBank/EditQuestion/StatusComponent/status';
