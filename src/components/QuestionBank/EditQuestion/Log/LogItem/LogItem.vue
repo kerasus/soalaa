@@ -12,9 +12,9 @@
             <v-col cols="10">
               <div>
                 به‌روزشده توسط
-                <span class="log-editor">{{ logData.editor }}</span>
+                <span class="log-editor">{{ log.causer.full_name }}</span>
                 در
-                <span class="log-date">{{ logData.date }}</span>
+                <span class="log-date">{{ log.date }}</span>
               </div>
             </v-col>
             <v-col class="eye-icon">
@@ -25,21 +25,21 @@
           </v-row>
           <div class="log-status">
             وضعیت از
-            <v-chip color="orange" text-color="white">{{ logData.previousStatus }}</v-chip>
+            <v-chip color="orange" text-color="white">{{ log.previousStatus }}</v-chip>
             به
-            <v-chip color="red" text-color="white">{{ logData.currentStatus }}</v-chip>
+            <v-chip color="red" text-color="white">{{ log.currentStatus }}</v-chip>
             تغییر یافت.
           </div>
-          <div v-for="(item, index) in logData.commnets" :key="index">
+          <div v-for="(comment, index) in log.commnets" :key="index">
             <div class="log-author">
-              :{{ item.author }}
+              :{{ comment.user.full_name }}
             </div>
             <div class="log-comment">
               <div class="comment-text">
-                {{ item.text }}
+                {{ comment.comment }}
               </div>
               <div class="comment-date">
-                {{ item.date }}
+                {{ comment.created_at }}
               </div>
             </div>
           </div>
@@ -50,10 +50,13 @@
 </template>
 
 <script>
+import {Log} from "@/models/Log";
+
 export default {
   props: {
-    logData: {
-      default: ''
+    log: {
+      default: new Log(),
+      type: Log
     }
   },
   name: "logItem",
