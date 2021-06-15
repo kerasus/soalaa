@@ -8,14 +8,11 @@ import API_ADDRESS from "@/api/Addresses"
 import TurndownService from 'turndown/lib/turndown.browser.umd'
 import convertToMarkdownKatex from "@/plugins/ConvertToMarkdownKatex"
 import { QuestionStatus } from "@/models/QuestionStatus";
+import {LogList} from "@/models/Log";
 
 class Question extends Model {
     constructor (data) {
         super(data, [
-            {
-                key: 'baseRoute',
-                default: API_ADDRESS.question.base
-            },
             { key: 'id' },
             { key: '_id' },
             { key: 'title' },
@@ -36,6 +33,10 @@ class Question extends Model {
             {
                 key: 'checking_times',
                 relatedModel: CheckingTimeList
+            },
+            {
+                key: 'logs',
+                relatedModel: LogList
             },
             {key: 'answer'},
             {
