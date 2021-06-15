@@ -236,8 +236,12 @@ export default {
       this.$emit("imgClicked",src);
     },
 
-    testFunction () {
-      const files = this.$refs.answerImages.get()
+    fileUpdated () {
+      const files = {
+        questionFile: this.questionFile,
+        answerFiles: this.answerFiles
+      }
+      this.$emit('update', files)
       console.log('files', files)
     },
     copyImageAddress (url) {
@@ -267,8 +271,6 @@ export default {
       return size.toString() + ' B'
     },
     inputFilter(newFile, oldFile, prevent) {
-      console.log('inputFilter: this.answerFiles', this.answerFiles)
-
       if (newFile && !oldFile) {
         // Before adding a file
         // 添加文件前
@@ -332,7 +334,7 @@ export default {
     },
     // add, update, remove File Event
     inputFile(newFile, oldFile) {
-      console.log('inputFile: this.answerFiles', this.answerFiles)
+      this.fileUpdated()
 
       if (newFile && oldFile) {
         // update
