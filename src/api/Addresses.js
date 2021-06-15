@@ -69,6 +69,9 @@ const API_ADDRESS = {
   },
   question: {
     index: lumenServer + '/question/search-monta',
+    status: {
+      base: lumenServer + '/question/statuses',
+    },
     base: lumenServer + '/exam-question/attach',
     attachSubCategoryToQuestion: lumenServer + '/exam-question/attach/sub-category',
     updateQuestion (questionId) {

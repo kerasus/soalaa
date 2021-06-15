@@ -6,11 +6,13 @@ class QuestionStatus extends Model {
         super(data, [
             {
                 key: 'baseRoute',
-                default: API_ADDRESS.questionSubcategory.base
+                default: API_ADDRESS.question.status.base
             },
             { key: 'id' },
             { key: 'title' },
-            { key: 'display_title' }
+            { key: 'display_title' },
+            { key: 'created_at' },
+            { key: 'updated_at' }
         ])
     }
 }
