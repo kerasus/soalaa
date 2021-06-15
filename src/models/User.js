@@ -17,6 +17,7 @@ class User extends Model {
             { key: 'id' },
             { key: 'first_name' },
             { key: 'last_name' },
+            { key: 'full_name' },
             { key: 'mobile' },
             { key: 'city' },
             { key: 'province' },
@@ -58,6 +59,10 @@ class User extends Model {
             }
 
         ])
+
+        if (!this.full_name) {
+            this.full_name = this.first_name + ' ' + this.last_name
+        }
     }
 
     getCompletionInfoKeys () {
