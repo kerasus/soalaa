@@ -823,16 +823,16 @@
                     question_id: this.$route.params.id,
                     sub_category_id: this.attachSubcategoryID
                 })
-                    .then( response => {
-                        this.updateAttachList(response.data.data.exams)
-                        console.log('response', response)
-                        this.attachLoading = false
-                        this.dialog = false
-                    })
-                    .catch( () => {
-                        this.attachLoading = false
-                        this.dialog = false
-                    })
+                .then( response => {
+                    this.updateAttachList(response.data.data.exams)
+                    console.log('response', response)
+                    this.attachLoading = false
+                    this.dialog = false
+                })
+                .catch( () => {
+                    this.attachLoading = false
+                    this.dialog = false
+                })
             },
             attachQuestionOnCreateMode () {
                 const targetExamIndex = this.totalExams.findIndex(examItem => Assistant.getId(examItem.id) === Assistant.getId(this.attachExamID))
