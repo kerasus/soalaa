@@ -25,7 +25,7 @@
             v-if="urlPathName === 'question.edit' || urlPathName === 'question.show' "
             class="my-10"
           >
-            <StatusComponent />
+            <StatusComponent :statuses="questionStatuses" />
           </div>
           <!-- -------------------------- save change--------------------------->
           <SaveChange />
@@ -62,7 +62,7 @@ import navBar from '@/components/QuestionBank/EditQuestion/NavBar/navBar.vue';
 import QuestionAnswer from '@/components/QuestionBank/EditQuestion/question-layout/call_question_field';
 import UploadImg from '@/components/QuestionBank/EditQuestion/UploadImgs/uploadImg';
 import Exams from '@/components/QuestionBank/EditQuestion/Exams/exams';
-import StatusComponent from '@/components/QuestionBank/EditQuestion/StatusComponent/stsatus';
+import StatusComponent from '@/components/QuestionBank/EditQuestion/StatusComponent/status';
 import ShowImg from '@/components/QuestionBank/EditQuestion/ShowImg/showImg';
 import SaveChange from '@/components/QuestionBank/EditQuestion/SaveChange/saveChange'
 import Log from '@/components/QuestionBank/EditQuestion/Log/Log';
@@ -70,6 +70,8 @@ import { Question } from '@/models/Question'
 import {ExamList} from "@/models/Exam";
 import {QuestSubcategoryList} from "@/models/QuestSubcategory";
 import API_ADDRESS from "@/api/Addresses";
+import Assistant from "@/plugins/assistant";
+import {QuestionStatusList} from "@/models/QuestionStatus";
 
 export default {
   name: "NewPage",
@@ -94,7 +96,7 @@ export default {
       displayEditQuestion: false,
       currentQuestion: new Question(),
       examList: new ExamList(),
-      ubCategoriesList: new QuestSubcategoryList(),
+      subCategoriesList: new QuestSubcategoryList(),
       questionData: {
         statement: '',
         category_id: '',
@@ -123,13 +125,26 @@ export default {
           }
         ]
       },
+      totalExams: [],
+      trueChoiceIndex: 0,
+      questionStatuses: new QuestionStatusList()
     }
   },
   created() {
     this.getUrl()
     this.checkUrl()
+    this.getStatus()
   },
   methods: {
+    getStatus () {
+      this.questionStatuses.fetch()
+      .then((response) => {
+        this.questionStatuses = new QuestionStatusList(response.data.data)
+      })
+      .catch((error) => {
+        console.log('error', error)
+      })
+    },
     getUrl () {
       this.urlPathName = this.$route.name
     },
@@ -159,6 +174,7 @@ export default {
       return new Promise(function(resolve, reject) {
         new ExamList().fetch()
         .then((response) => {
+          console.log('responseExam', response)
           that.examList = new ExamList(response.data.data)
           that.totalExams = []
           that.examList.list.forEach(item => {
@@ -182,12 +198,14 @@ export default {
       return new Promise(function(resolve, reject) {
         that.subCategoriesList.fetch()
         .then((response) => {
+          console.log('responseSub', response)
           that.subCategoriesList = new QuestSubcategoryList(response.data.data)
           resolve()
         })
         .catch( () => {
-                  reject()
-                })
+          console.log('error')
+          reject()
+        })
       })
     },
     loadnCurrentQuestionData () {
@@ -195,13 +213,99 @@ export default {
       this.currentQuestion.show(null, API_ADDRESS.question.updateQuestion(this.$route.params.question_id))
           .then((response) => {
             console.log('response', response)
-            this.currentQuestion = new Question(response.data.data)
-            this.trueChoiceIndex = this.currentQuestion.choices.list.findIndex((item) => item.answer )
+            that.currentQuestion = new Question(response.data.data)
+            that.trueChoiceIndex = that.currentQuestion.choices.list.findIndex((item) => item.answer )
             that.updateAttachList(response.data.data.exams)
             that.updateRendered()
           })
     },
-
+    updateRendered () {
+      this.replaceNimFasele()
+      this.replaceExtraSpaceAroundDollarSign()
+      this.questRendered = this.markdown.render(this.currentQuestion.statement.toString());
+      for (let i = 0; i < 4; i++) {
+        const title = (typeof this.currentQuestion.choices.list[i] !== 'undefined') ? this.currentQuestion.choices.list[i].title : null
+        if (title) {
+          this.choiceRendered[i] = this.markdown.render(title.toString())
+        }
+      }
+      this.replaceNimFasele()
+    },
+    replaceExtraSpaceAroundDollarSign () {
+      if (this.selectedField === 0) {
+        if (!this.currentQuestion.statement) {
+          this.currentQuestion.statement = ''
+        }
+        while (this.currentQuestion.statement.indexOf('$$') !== -1) {
+          this.currentQuestion.statement = this.currentQuestion.statement.replace('$$', '$')
+        }
+        let dollarSignCounter = 0
+        for (let i = 0; i < this.currentQuestion.statement.length; i++) {
+          if (this.currentQuestion.statement[i] === '$') {
+            dollarSignCounter++
+            if (dollarSignCounter % 2 === 1 && this.currentQuestion.statement[i + 1] === ' ') {
+              this.currentQuestion.statement = this.currentQuestion.statement.slice(0, i + 1) + this.currentQuestion.statement.slice(i + 2)
+              if (this.currentQuestion.statement[i + 1] === ' ') {
+                i--
+                dollarSignCounter--
+              }
+            }
+            else if (dollarSignCounter % 2 === 0 && this.currentQuestion.statement[i - 1] === ' ') {
+              this.currentQuestion.statement = this.currentQuestion.statement.slice(0, i - 1) + this.currentQuestion.statement.slice(i)
+              if (this.currentQuestion.statement[i - 2] === ' ') {
+                i = i - 2
+                dollarSignCounter--
+              }
+            }
+          }
+        }
+      } else {
+        if (!this.currentQuestion.choices.list[this.selectedField - 1].title) {
+          this.currentQuestion.choices.list[this.selectedField - 1].title = ''
+        }
+        while (this.currentQuestion.choices.list[this.selectedField - 1].title.indexOf('$$') !== -1) {
+          this.currentQuestion.choices.list[this.selectedField - 1].title = this.currentQuestion.choices.list[this.selectedField - 1].title.replace('$$', '$')
+        }
+        let dollarSignCounter = 0
+        for (let i = 0; i < this.currentQuestion.choices.list[this.selectedField - 1].title.length; i++) {
+          if (this.currentQuestion.choices.list[this.selectedField - 1].title[i] === '$') {
+            dollarSignCounter++
+            if (dollarSignCounter % 2 === 1 && this.currentQuestion.choices.list[this.selectedField - 1].title[i + 1] === ' ') {
+              this.currentQuestion.choices.list[this.selectedField - 1].title = this.currentQuestion.choices.list[this.selectedField - 1].title.slice(0, i + 1) + this.currentQuestion.choices.list[this.selectedField - 1].title.slice(i + 2)
+              if (this.currentQuestion.choices.list[this.selectedField - 1].title[i + 1] === ' ') {
+                i--
+                dollarSignCounter--
+              }
+            }
+            else if (dollarSignCounter % 2 === 0 && this.currentQuestion.choices.list[this.selectedField - 1].title[i - 1] === ' ') {
+              this.currentQuestion.choices.list[this.selectedField - 1].title = this.currentQuestion.choices.list[this.selectedField - 1].title.slice(0, i - 1) + this.currentQuestion.choices.list[this.selectedField - 1].title.slice(i)
+              if (this.currentQuestion.choices.list[this.selectedField - 1].title[i - 2] === ' ') {
+                i = i - 2
+                dollarSignCounter--
+              }
+            }
+          }
+        }
+      }
+    },
+    replaceNimFasele () {
+      if (!this.currentQuestion.statement) {
+        this.currentQuestion.statement = ''
+      }
+      this.currentQuestion.statement = this.currentQuestion.statement.replace('¬', '‌')
+    },
+    updateAttachList(exams) {
+      let that = this
+      this.selectedQuizzes = []
+      exams.forEach( item => {
+        const targetExamIndex = that.totalExams.findIndex(examItem => Assistant.getId(examItem.id) === Assistant.getId(item.exam_id))
+        that.totalExams[targetExamIndex].order = item.order
+        that.totalExams[targetExamIndex].sub_category_id = item.sub_category.id
+        that.totalExams[targetExamIndex].sub_category_title = item.sub_category.title
+        that.selectedQuizzes.push(JSON.parse(JSON.stringify(that.totalExams[targetExamIndex])))
+      })
+      this.updateSelectedQuizzes()
+    },
     openShowImgPanel (src) {
        this.imgSrc = src
        this.displayEditQuestion = true
@@ -221,9 +325,6 @@ export default {
         this.questionColsNumber = 12
         this.uploadImgColsNumber = 0
       }
-
-
-
     },
   }
 }
