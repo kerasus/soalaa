@@ -74,16 +74,20 @@ export default {
   },
   watch: {
     value: function () {
-      console.log('change watch', this.value)
-      this.html = this.value
-      this.html = this.convertToTiptap(this.html)
+      this.getHtmlValueFromValueProp()
     }
   },
   created () {
-    this.html = this.value
-    this.html = this.convertToTiptap(this.html)
+    this.getHtmlValueFromValueProp()
   },
   methods: {
+    getHtmlValueFromValueProp () {
+      this.html = this.value
+      if (this.html === null || typeof this.html === 'undefined') {
+        this.html = ''
+      }
+      this.html = this.convertToTiptap(this.html)
+    },
     updateValue() {
       this.$emit('input', this.convertToMarkdownKatex(this.html))
     },
