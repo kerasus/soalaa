@@ -222,14 +222,17 @@ export default {
       .then((response) => {
         console.log('response', response)
         this.selectedQuizzes = []
+        // response.data.data.exams.forEach(item => {
+          // this.selectedQuizzes.push({
+          //   id: item.exam.id,
+          //   order: item.order,
+          //   sub_category_id: item.sub_category.id,
+          //   sub_category_title: item.sub_category.title,
+          //   title: item.exam.title
+          // })
+          this.currentQuestion.exams = []
         response.data.data.exams.forEach(item => {
-          this.selectedQuizzes.push({
-            id: item.exam.id,
-            order: item.order,
-            sub_category_id: item.sub_category.id,
-            sub_category_title: item.sub_category.title,
-            title: item.exam.title
-          })
+          this.currentQuestion.exams.push(item)
         })
         this.updateSelectedQuizzes()
         // this.currentQuestion = new question-layout(responseData)
