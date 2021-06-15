@@ -6,16 +6,16 @@
     <v-row>
       <v-col md="4">
         <v-card>
-          <v-card-title class="subtitle-1">
+          <v-card-title class="body-1">
             صورت سوال
           </v-card-title>
           <v-card-text>
-            <v-row no-gutters>
-              <v-col cols="3">
+            <v-row>
+              <v-col v-show="questionFile.length === 0">
                 <file-upload
-                  ref="questionImage"
+                  ref="questionFile"
                   v-model="questionFile"
-                  input-id="questionImage"
+                  input-id="questionFile"
                   :extensions="extensions"
                   :accept="accept"
                   :multiple="false"
@@ -42,17 +42,35 @@
               <v-col
                 v-for="(file, index) in questionFile"
                 :key="file.id + ' ' + index"
-                cols="3"
               >
-                <v-img
-                  v-if="file.thumb"
-                  :src="file.thumb"
-                  width="60"
-                  height="60"
-                  class="mt-3"
-                  @click="showImgPanel(file.thumb)"
-                />
-                <span v-else>No Image</span>
+                <v-card>
+                  <v-img
+                    v-if="file.thumb"
+                    :src="file.thumb"
+                    width="100%"
+                    height="60"
+                    class="mt-3"
+                    @click="showImgPanel(file.thumb)"
+                  />
+                  <span v-else>No Image</span>
+                  <v-card-title
+                    class="caption"
+                    v-text="formatSize(file.size)"
+                  />
+
+                  <v-btn
+                    fab
+                    dark
+                    x-small
+                    color="error"
+                    class="btnRemoveFile"
+                    @click.prevent="$refs.questionFile.remove(file)"
+                  >
+                    <v-icon dark>
+                      mdi-close
+                    </v-icon>
+                  </v-btn>
+                </v-card>
               </v-col>
             </v-row>
           </v-card-text>
@@ -60,33 +78,44 @@
       </v-col>
       <v-col md="8">
         <v-card>
-          <v-card-title class="subtitle-1">
+          <v-card-title class="body-1">
             جواب سوال
           </v-card-title>
           <v-card-text>
-            <v-row no-gutters>
+            <v-row>
               <v-col
                 v-for="(file, index) in answerFiles"
                 :key="file.id + ' ' + index"
                 cols="3"
               >
-                <v-badge
-                  bordered
-                  color="error"
-                  icon="mdi-close"
-                  overlap
-                  @click.prevent="$refs.answerImages.remove(file)"
-                >
+                <v-card>
                   <v-img
                     v-if="file.thumb"
                     :src="file.thumb"
-                    width="60"
+                    width="100%"
                     height="60"
                     class="mt-3"
                     @click="showImgPanel(file.thumb)"
                   />
                   <span v-else>No Image</span>
-                </v-badge>
+                  <v-card-title
+                    class="caption"
+                    v-text="formatSize(file.size)"
+                  />
+
+                  <v-btn
+                    fab
+                    dark
+                    x-small
+                    color="error"
+                    class="btnRemoveFile"
+                    @click.prevent="$refs.answerImages.remove(file)"
+                  >
+                    <v-icon dark>
+                      mdi-close
+                    </v-icon>
+                  </v-btn>
+                </v-card>
               </v-col>
               <v-col cols="3">
                 <div>
@@ -416,6 +445,13 @@ export default {
   opacity: 0.08;
   background-color: currentColor;
 }
+
+.SelectImageBox .btnRemoveFile {
+  position: absolute;
+  top: -16px;
+  left: -16px;
+}
+
 .SelectImageBox .file-uploads {
   display: flex;
   align-items: center;
