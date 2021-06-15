@@ -7,7 +7,10 @@
       <v-col cols="3">
         <span> سازنده سوال:</span> <span> فیلان دبیر</span>
       </v-col>
-      <v-col v-if="status === 'question.create'">
+      <v-col
+        v-if="status === 'question.create'"
+        cols="4"
+      >
         <v-row>
           <v-col>
             <v-row>
@@ -15,9 +18,11 @@
                 <v-btn
                   depressed
                   rounded
-                  color="white"
+                  color="green"
                   class="ml-2"
+                  dark
                   width="120"
+                  @click="create_click"
                 >
                   <span color="green">
                     ذخیره
@@ -30,6 +35,7 @@
                   rounded
                   color="white"
                   width="130"
+                  @click="save_draft_click"
                 >
                   <v-icon color="#666666">
                     mdi-square-edit-outline
@@ -62,6 +68,7 @@
                   dark
                   class="ml-2"
                   width="100"
+                  @click="save_click"
                 >
                   <span color="#666666">
                     ذخیره
@@ -74,6 +81,7 @@
                   rounded
                   color="white"
                   width="100"
+                  @click="cancel_click"
                 >
                   لغو 
                 </v-btn>
@@ -102,6 +110,7 @@
                   color="white"
                   class="ml-2"
                   width="110"
+                  @click="edit_clicked"
                 >
                   <v-icon color="#666666">
                     mdi-square-edit-outline
@@ -117,6 +126,7 @@
                   rounded
                   color="white"
                   width="100"
+                  @click="remove_clicked"
                 >
                   حذف
                 </v-btn>
@@ -137,6 +147,26 @@ export default {
   },
   created() {
     console.log(this.status)
+  },
+  methods:{
+    edit_clicked(){
+      this.$emit("edit");
+    },
+    remove_clicked(){
+      this.$emit("remove");
+    },
+    save_click(){
+      this.$emit("save");
+    },
+    cancel_click(){
+      this.$emit("cancel");
+    },
+    save_draft_click(){
+      this.$emit("save_draft");
+    },
+    create_click(){
+      this.$emit("create");
+    }
   }
 }
 </script>
