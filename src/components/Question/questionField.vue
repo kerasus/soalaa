@@ -28,6 +28,7 @@
       <!--                  :rows="data.line"-->
       <!--                />-->
       <vue-tiptap-katex
+        v-if="html !== null"
         v-model="html"
         @input="updateValue"
       />
@@ -71,7 +72,14 @@ export default {
       html: '<p>I’m running tiptap with Vue.js. 🎉</p>',
     }
   },
-  created() {
+  watch: {
+    value: function () {
+      console.log('change watch', this.value)
+      this.html = this.value
+      this.html = this.convertToTiptap(this.html)
+    }
+  },
+  created () {
     this.html = this.value
     this.html = this.convertToTiptap(this.html)
   },
