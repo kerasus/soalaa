@@ -51,7 +51,7 @@
         </v-col>
         <!-- -------------------------- log --------------------------->
         <v-col :cols="log_component_number">
-          <div v-if="urlPathName === 'question.edit' || urlPathName === 'question.show'">
+          <div v-if="getPageStatus() !== 'create'">
             <v-card
               flat
               height="1856"
@@ -228,8 +228,7 @@ export default {
       })
       .then( response => {
         // this.updateAttachList(response.data.data.exams)
-        console.log('response', response)
-        this.currentQuestion.exams = response.data.data.exams
+        this.selectedQuizzes = response.data.data.exams
         this.attachLoading = false
         this.dialog = false
       })
