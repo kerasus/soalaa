@@ -33,6 +33,7 @@
           solo
         />
       </v-col>
+
       <v-col
         class="exam-order"
         cols="2"
@@ -209,11 +210,18 @@ export default {
 }
 </script>
 
+<style>
+.exam .exam-order .v-input__control .v-text-field__details {
+  position: relative;
+  top: -62px;
+  left: 9px;
+}
+</style>
 <style scoped>
 .v-text-field.v-text-field--enclosed {
   height: 40px;
-}
 
+}
 .row + .row {
   margin-top: 0px;
 }
