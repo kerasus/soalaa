@@ -1,9 +1,9 @@
 <template>
   <div class="logList">
     <log-item
-        v-for="(item, index) in logs.list"
-        :key="index"
-        :log="item"
+      v-for="(item, index) in logs.list"
+      :key="index"
+      :log="item"
     />
   </div>
 </template>
@@ -13,6 +13,7 @@ import LogItem from "@/components/QuestionBank/EditQuestion/Log/LogItem/LogItem"
 import {LogList} from "@/models/Log";
 
 export default {
+  name: "LogList",
   components: {
     LogItem
   },
@@ -180,7 +181,6 @@ export default {
       },
     }
   },
-  name: "logList",
   data() {
     return {}
   }

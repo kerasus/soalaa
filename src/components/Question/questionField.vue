@@ -1,46 +1,52 @@
 <template>
-  <div>
-    <v-row>
-      <!--      <v-col-->
-      <!--        v-if="label.length > 0 && !titleTopPosition"-->
-      <!--        cols="1"-->
-      <!--        class="text-left"-->
-      <!--      >-->
-      <!--        <span-->
-      <!--          flat-->
-      <!--          class="font-weight-medium mb-4 transparent"-->
-      <!--          v-text="label"-->
-      <!--        />-->
-      <!--      </v-col>-->
-      <!--      <v-col>-->
-      <!--        <v-card-->
-      <!--          v-if="label.length > 0 && titleTopPosition"-->
-      <!--          flat-->
-      <!--          class="font-weight-medium mb-4 transparent"-->
-      <!--          v-text="label"-->
-      <!--        />-->
-      <!--                &#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45; data &#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;-->
-      <!--                <v-textarea-->
-      <!--                  v-if="editStatus"-->
-      <!--                  flat-->
-      <!--                  solo-->
-      <!--                  :label="data.label"-->
-      <!--                  :rows="data.line"-->
-      <!--                />-->
+  <v-row>
+    <v-col v-if="editStatus">
       <vue-tiptap-katex
-        v-if="html !== null"
         v-model="html"
         @input="updateValue"
       />
-      <!--        <v-card-->
-      <!--          flat-->
-      <!--          class="transparent"-->
-      <!--          :color="color"-->
-      <!--          v-html="data.value"-->
-      <!--        />-->
-      <!--      </v-col>-->
-    </v-row>
-  </div>
+    </v-col>
+    <!-- eslint-disable vue/no-v-html -->
+    <v-col
+      v-else
+      v-html="html"
+    />
+    <!--eslint-enable-->
+
+    <!--      <v-col-->
+    <!--        v-if="label.length > 0 && !titleTopPosition"-->
+    <!--        cols="1"-->
+    <!--        class="text-left"-->
+    <!--      >-->
+    <!--        <span-->
+    <!--          flat-->
+    <!--          class="font-weight-medium mb-4 transparent"-->
+    <!--          v-text="label"-->
+    <!--        />-->
+    <!--      </v-col>-->
+    <!--      <v-col>-->
+    <!--        <v-card-->
+    <!--          v-if="label.length > 0 && titleTopPosition"-->
+    <!--          flat-->
+    <!--          class="font-weight-medium mb-4 transparent"-->
+    <!--          v-text="label"-->
+    <!--        />-->
+    <!--                &#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45; data &#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;-->
+    <!--                <v-textarea-->
+    <!--                  v-if="editStatus"-->
+    <!--                  flat-->
+    <!--                  solo-->
+    <!--                  :label="data.label"-->
+    <!--                  :rows="data.line"-->
+    <!--                />-->
+    <!--        <v-card-->
+    <!--          flat-->
+    <!--          class="transparent"-->
+    <!--          :color="color"-->
+    <!--          v-html="data.value"-->
+    <!--        />-->
+    <!--      </v-col>-->
+  </v-row>
 </template>
 <script>
   import VueTiptapKatex from 'vue-tiptap-katex'
@@ -69,7 +75,7 @@ export default {
   },
   data() {
     return {
-      html: '<p>I’m running tiptap with Vue.js. 🎉</p>',
+      html: '',
     }
   },
   watch: {
@@ -225,7 +231,7 @@ export default {
       if (markdownString[startIndex -1] === '\\') {
         return this.convertMarkdownKatexToHtml(markdownString, startIndex + 1)
       }
-      const endIndex = markdownString.indexOf('$', index + 1)
+      const endIndex = markdownString.indexOf('$', startIndex + 1)
       if (endIndex === -1) {
         return markdownString
       }
@@ -235,8 +241,9 @@ export default {
       const firstThird = markdownString.slice(0, startIndex)
       const secondThird = markdownString.slice(startIndex + 1, endIndex)
       const remaining = markdownString.slice(endIndex + 1)
-      markdownString = firstThird + '<tiptap-interactive-katex katex="' +
-              secondThird + '"></tiptap-interactive-katex>' + remaining
+      console.log('second third', startIndex, endIndex, secondThird)
+      markdownString = firstThird + '<tiptap-interactive-katex-inline katex="' +
+              secondThird + '"></tiptap-interactive-katex-inline>' + remaining
       return this.convertMarkdownKatexToHtml(markdownString, endIndex)
     },
     convertMarkdownImageToHtml (markdownString, index = 0) {
@@ -263,6 +270,7 @@ export default {
       return this.convertMarkdownImageToHtml(markdownString, endIndex)
     },
     convertToTiptap (string = '') {
+
       string = this.convertMarkdownImageToHtml(string)
       string = this.convertMarkdownKatexToHtml(string)
       return string
@@ -612,4 +620,10 @@ export default {
 
 <style scoped>
 
+</style>
+
+<style>
+.inline .v-btn.blue--text {
+  display: none;
+}
 </style>

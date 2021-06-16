@@ -778,14 +778,14 @@
         },
         methods: {
 
-          updateSelectedQuizzes () {
-            let selectedQuizzes = JSON.parse(JSON.stringify(this.selectedQuizzes))
-            selectedQuizzes.forEach((item, i) => {
-              selectedQuizzes[i].subId = i + 1;
-            })
+            updateSelectedQuizzes () {
+              let selectedQuizzes = JSON.parse(JSON.stringify(this.selectedQuizzes))
+              selectedQuizzes.forEach((item, i) => {
+                selectedQuizzes[i].subId = i + 1;
+              })
 
-            this.selectedQuizzes = selectedQuizzes
-          },
+              this.selectedQuizzes = selectedQuizzes
+            },
             getExamById (quizId) {
                 return this.totalExams.find(item => item.id == quizId);
             },

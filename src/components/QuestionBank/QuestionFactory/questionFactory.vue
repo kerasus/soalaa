@@ -199,12 +199,18 @@
                   cols="2"
                 >
                   <span class="pa-2">
-                    <router-link :to="{ name:'question.show'}">
+                    <router-link
+                      :to="{ name:'question.show'}"
+                      style="text-decoration: none;"
+                    >
                       <v-icon class="ml-4">
                         mdi-eye-outline
                       </v-icon>
                     </router-link>
-                    <router-link :to="{ name:'question.edit'}">
+                    <router-link
+                      :to="{ name:'question.edit'}"
+                      style="text-decoration: none;"
+                    >
                       <v-icon class="ml-4">
                         mdi-pencil-outline
                       </v-icon>
