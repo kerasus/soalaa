@@ -138,28 +138,39 @@
           <v-list-item-title>{{ item.displayName }}</v-list-item-title>
         </v-list-item>
       </router-link>
-      <v-list-item class="question_bank">
+      <v-list-item
+        class="question_bank"
+        dark
+      >
         <v-list-item-title>
-          <v-list-group>
+          <v-list-group dark>
             <template
               v-slot:activator
-              class=""
-              color="white"
             >
-              <v-list-item-title>
-                <v-icon color="white">
+              <v-list-item-title
+                class="test"
+              >
+                <v-icon
+                  dark
+                >
                   mdi-bank-outline
                 </v-icon> بانک سوال
               </v-list-item-title>
             </template>
-            <router-link :to="{ name:'question.create'}">
+            <router-link
+              :to="{ name:'question.create'}"
+              class="question_bank_item_list_router"
+            >
               <v-list-item>
                 <v-list-item-title class="question_bank_item_list">
                   سوال جدید
                 </v-list-item-title>
               </v-list-item>
             </router-link>
-            <router-link :to="{ name:'question.list'}">
+            <router-link
+              :to="{ name:'question.list'}"
+              class="question_bank_item_list_router"
+            >
               <v-list-item>
                 <v-list-item-title class="question_bank_item_list">
                   کارخانه ی سوال
@@ -261,11 +272,18 @@
     .menu .v-list-item-group .question_bank{
       padding: 0;
     }
-    .menu .v-list-item-group .question_bank .question_bank_item_list{
+    .menu .v-list-item-group  .question_bank .question_bank_item_list{
+      margin-right: 30px;
+      font-size: 14px !important;
+    }
+    .menu .v-list-item-group  .question_bank .v-list .v-list-item--active .v-icon{
+      color: white;
+    }
+    .menu .v-list-item-group .question_bank_item_list_router{
       text-decoration: none;
     }
     .router-link-exact-active .v-list-item {
-        background: var(--primary-1);
+        /*background: var(--primary-1);*/
         padding: 0 8px 0 0 !important;
         border-radius: 0 !important;
     }
@@ -273,4 +291,5 @@
     .router-link-exact-active .v-list-item .v-list-item__title {
         border-left: 4px solid var(--surface-1);
     }
+
 </style>
