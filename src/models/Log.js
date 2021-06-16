@@ -1,6 +1,6 @@
 import { Model, Collection } from 'js-abstract-model'
 import API_ADDRESS from "@/api/Addresses";
-import {User} from "@/models/User";
+import {CommentList} from "@/models/Comment";
 
 class Log extends Model {
     constructor (data) {
@@ -32,7 +32,7 @@ class Log extends Model {
             },
             {
                 key: 'comments',
-                default: []
+                relatedModel: CommentList
             },
             { key: 'properties' },
             { key: 'created_at' },
