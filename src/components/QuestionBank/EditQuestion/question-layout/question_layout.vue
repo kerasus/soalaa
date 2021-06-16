@@ -1,14 +1,17 @@
 <template>
   <!-- ------------------------- question -------------------------------  -->
-  <div class=" ma-4">
-    <div class="mx-5 mb-10">
-      <div v-if="status">
+  <div class=" ma-4 page-layout">
+    <div class="question ">
+      <div
+        v-if="status"
+        class="mb-5 "
+      >
         تایپ سوال
       </div>
       <question_field
         :key="'statement' + domKey"
         v-model="question.statement"
-        class="my-10"
+        class="mb-10"
         :edit-status="status"
         placeholder="صورت سوال"
         @input="updateQuestion"
@@ -17,7 +20,7 @@
     <div
       v-for="(item, index) in question.choices.list"
       :key="index"
-      class="mb-6 answers-box mx-4"
+      :class="status ? 'mb-6  mx-4 question-options white': '  mx-4 question-options'"
     >
       <div
         v-if="item.answer"
@@ -33,7 +36,7 @@
         </v-icon>
       </div>
       <div
-        v-else
+        v-else-if="status"
         class="mx-4"
         @click="clicked(item.order)"
       >
@@ -45,10 +48,10 @@
           height="36"
         />
       </div>
+      <div>
+        {{ (index + 1) + ') ' }}
+      </div>
       <div class="answer-editor ma-4">
-        <div>
-          {{ (index + 1) + ') ' }}
-        </div>
         <div>
           <question_field
             :key="'choices' + (index + 1) + domKey"
@@ -60,8 +63,8 @@
       </div>
     </div>
     <!-- ------------------------- answer -------------------------------  -->
-    <div class="ma-5">
-      <div>
+    <div class="ma-5 question-answer ">
+      <div class="mb-5">
         پاسخ تشریحی
       </div>
       <div>
@@ -129,14 +132,26 @@ export default {
 </script>
 
 <style scoped>
-.answers-box{
+.question-options{
   display: flex;
   align-items: center;
-  background-color: white;
   border-radius: 10px;
+}
+.background-color-test{
+  background-color: white;
 
 }
-.answers-box .answer-editor{
+.question-answer{
+  padding: 10px;
+}
+
+.question-options .answer-editor{
 width: 100%;
+}
+
+</style>
+<style>
+.tiptap-plus v-card v-sheet theme--light elevation-3{
+  box-shadow: 0 0;
 }
 </style>
