@@ -14,7 +14,7 @@
                 به‌روزشده توسط
                 <span class="log-editor">{{ log.causer.full_name }}</span>
                 در
-                <span class="log-date">{{ log.created_at }}</span>
+                <span class="log-date">{{ log.shamsiDate('created_at').dateTime }}</span>
               </div>
             </v-col>
             <v-col class="eye-icon">
@@ -41,18 +41,18 @@
             تغییر یافت.
           </div>
           <div
-            v-for="(comment, index) in log.comments"
+            v-for="(comment, index) in log.comments.list"
             :key="index"
           >
             <div class="log-author">
-              :{{ comment.full_name.name }}
+              {{ comment.full_name.name }}:
             </div>
             <div class="log-comment">
               <div class="comment-text">
                 {{ comment.comment }}
               </div>
               <div class="comment-date">
-                {{ comment.created_at }}
+                {{ comment.shamsiDate('created_at').dateTime }}
               </div>
             </div>
           </div>

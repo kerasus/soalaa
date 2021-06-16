@@ -3,8 +3,11 @@
     <v-container class="pa-6">
       <v-row>
         <v-col :cols="questionColsNumber">
-          <navBar :status="urlPathName" />
-          <QuestionAnswer
+          <navBar
+            :question="currentQuestion"
+            :edit-status="edit_status"
+          />
+          <question-layout
             v-if="!loading"
             v-model="currentQuestion"
             :status="edit_status"
@@ -42,10 +45,7 @@
               @update="changeStatus"
             />
           </div>
-          <!-- -------------------------- save change--------------------------->
-          <SaveChange />
         </v-col>
-
         <!-- -------------------------- show img---------------------------->
         <v-col
           :cols="uploadImgColsNumber"
@@ -75,12 +75,11 @@
 
 <script>
 import navBar from '@/components/QuestionBank/EditQuestion/NavBar/navBar.vue';
-import QuestionAnswer from '@/components/QuestionBank/EditQuestion/question-layout/question_layout';
+import QuestionLayout from '@/components/QuestionBank/EditQuestion/question-layout/question_layout';
 import UploadImg from '@/components/QuestionBank/EditQuestion/UploadImgs/uploadImg';
 import Exams from '@/components/QuestionBank/EditQuestion/Exams/exams';
 import StatusComponent from '@/components/QuestionBank/EditQuestion/StatusComponent/status';
 import ShowImg from '@/components/QuestionBank/EditQuestion/ShowImg/showImg';
-import SaveChange from '@/components/QuestionBank/EditQuestion/SaveChange/saveChange'
 import LogListComponent from '@/components/QuestionBank/EditQuestion/Log/LogList';
 import { Question } from '@/models/Question'
 import { LogList } from '@/models/Log'
@@ -89,19 +88,18 @@ import {QuestSubcategoryList} from "@/models/QuestSubcategory";
 import API_ADDRESS from "@/api/Addresses";
 import Assistant from "@/plugins/assistant";
 import {QuestionStatusList} from "@/models/QuestionStatus";
-import axios from "axios";
+import axios from 'axios'
 
 export default {
   name: "NewPage",
   components: {
     navBar,
-    QuestionAnswer,
+    QuestionLayout,
     UploadImg,
     Exams,
     ShowImg,
     StatusComponent,
-    LogListComponent,
-    SaveChange
+    LogListComponent
   },
   data() {
     return {

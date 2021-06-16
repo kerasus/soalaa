@@ -231,7 +231,7 @@ export default {
       if (markdownString[startIndex -1] === '\\') {
         return this.convertMarkdownKatexToHtml(markdownString, startIndex + 1)
       }
-      const endIndex = markdownString.indexOf('$', index + 1)
+      const endIndex = markdownString.indexOf('$', startIndex + 1)
       if (endIndex === -1) {
         return markdownString
       }
@@ -241,8 +241,9 @@ export default {
       const firstThird = markdownString.slice(0, startIndex)
       const secondThird = markdownString.slice(startIndex + 1, endIndex)
       const remaining = markdownString.slice(endIndex + 1)
-      markdownString = firstThird + '<tiptap-interactive-katex katex="' +
-              secondThird + '"></tiptap-interactive-katex>' + remaining
+      console.log('second third', startIndex, endIndex, secondThird)
+      markdownString = firstThird + '<tiptap-interactive-katex-inline katex="' +
+              secondThird + '"></tiptap-interactive-katex-inline>' + remaining
       return this.convertMarkdownKatexToHtml(markdownString, endIndex)
     },
     convertMarkdownImageToHtml (markdownString, index = 0) {
@@ -269,6 +270,7 @@ export default {
       return this.convertMarkdownImageToHtml(markdownString, endIndex)
     },
     convertToTiptap (string = '') {
+
       string = this.convertMarkdownImageToHtml(string)
       string = this.convertMarkdownKatexToHtml(string)
       return string
@@ -617,4 +619,10 @@ export default {
 </script>
 
 <style scoped>
+</style>
+
+<style>
+.inline .v-btn.blue--text {
+  display: none;
+}
 </style>
