@@ -23,7 +23,7 @@
       class="question-layout-options"
       :class="status ? 'mb-6  mx-4 question-options white': '  mx-4 question-options'"
     >
-      <div class="px-4">
+      <div :class="status ?'px-4' :'px-2'">
         <div
           v-if="item.answer"
           @click="clicked(item.order)"
