@@ -3,7 +3,10 @@
     <v-container class="pa-6">
       <v-row>
         <v-col :cols="questionColsNumber">
-          <navBar :status="urlPathName" />
+          <navBar
+            :status="urlPathName"
+            @save="submitQuestion"
+          />
           <QuestionAnswer
             v-if="!loading"
             v-model="currentQuestion"
@@ -157,6 +160,35 @@ export default {
     this.getStatus()
   },
   methods: {
+    submitQuestion () {
+      if (this.urlPathName === 'question.edit') {
+        this.currentQuestion.update(API_ADDRESS.question.updateQuestion(this.currentQuestion.id))
+          .then(() => {
+            this.$notify({
+              group: 'notifs',
+              title: 'توجه',
+              text: 'ویرایش با موفقیت انجام شد',
+              type: 'success'
+            })
+          })
+        return
+      }
+      this.currentQuestion.choices.list.forEach((item) => { item.answer = false })
+      this.currentQuestion.choices.list[this.trueChoiceIndex].answer = true
+      this.currentQuestion.exams = this.selectedQuizzes
+      this.currentQuestion.create()
+        .then(() => {
+          this.currentQuestion.statement = ''
+          this.currentQuestion.choices.list.forEach((item) => { item.title = '' })
+          this.$notify({
+            group: 'notifs',
+            title: 'توجه',
+            text: 'ثبت با موفقیت انجام شد',
+            type: 'success'
+          })
+        })
+
+    },
     changeStatus (newStatus) {
       let that = this
       axios.post(API_ADDRESS.question.status.changeStatus(this.$route.params.question_id), {
