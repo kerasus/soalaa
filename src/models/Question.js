@@ -5,9 +5,10 @@ import { CheckingTimeList } from "@/models/CheckingTime";
 import Time from "@/plugins/time";
 import axios from "axios";
 import API_ADDRESS from "@/api/Addresses"
-import md from '@/plugins/Markdown'
 import TurndownService from 'turndown/lib/turndown.browser.umd'
 import convertToMarkdownKatex from "@/plugins/ConvertToMarkdownKatex"
+import { QuestionStatus } from "@/models/QuestionStatus";
+import {LogList} from "@/models/Log";
 
 class Question extends Model {
     constructor (data) {
@@ -21,6 +22,7 @@ class Question extends Model {
             { key: 'title' },
             { key: 'index' },
             { key: 'statement' },
+            { key: 'statement_photo' },
             { key: 'rendered_statement' },
             { key: 'in_active_category' },
             { key: 'photo' },
@@ -36,11 +38,25 @@ class Question extends Model {
                 key: 'checking_times',
                 relatedModel: CheckingTimeList
             },
+            {
+                key: 'logs',
+                relatedModel: LogList
+            },
             {key: 'answer'},
+            {
+                key: 'answer_photos',
+                default: []
+            },
+            {key: 'descriptive_answer'},
+            { key: 'rendered_descriptive_answer' },
             {key: 'selected_at'},
             {
                 key: 'choices',
                 relatedModel: ChoiceList
+            },
+            {
+                key: 'status',
+                relatedModel: QuestionStatus
             },
             {
                 key: 'state',
@@ -78,7 +94,9 @@ class Question extends Model {
             {
                 key: 'confirmers',
                 default: []
-            }
+            },
+            { key: 'created_at' },
+            { key: 'updated_at' }
         ])
 
         if (this.id) {
@@ -118,6 +136,10 @@ class Question extends Model {
 
         if (typeof this.statement === 'string') {
             this.rendered_statement = convertToMarkdownKatex(this.statement)
+            // this.rendered_statement = md.render(this.statement)
+        }
+        if (typeof this.descriptive_answer === 'string') {
+            this.rendered_descriptive_answer = convertToMarkdownKatex(this.descriptive_answer)
             // this.rendered_statement = md.render(this.statement)
         }
     }

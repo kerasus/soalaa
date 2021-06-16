@@ -460,7 +460,7 @@
       let that = this
           // axios.get('https://cdn.alaatv.com/upload/knowledgeTree.json')
           // .then((response) => {
-          //     console.log(response.data, 'respones')
+          //     console.Log(response.data, 'respones')
           //     this.montaTree = response.data
           // })
 
@@ -542,7 +542,7 @@
           that.totalFilteredQuestions = '...'
         }
         that.showLoading()
-        axios.get(API_ADDRESS.question.index + that.nextPage, {
+        axios.get(API_ADDRESS.question.indexMonta + that.nextPage, {
           params: this.filterQuestions
         })
         .then( (response => {

@@ -67,8 +67,43 @@ const API_ADDRESS = {
       }
     }
   },
+  log: {
+    base: lumenServer + '/activity-log',
+  },
   question: {
-    index: lumenServer + '/question/search-monta',
+    indexMonta: lumenServer + '/question/search-monta',
+    index (statuses, page) {
+      statuses = statuses.join('&statuses[]=')
+      if (statuses) {
+        statuses = '&statuses[]=' + statuses
+      }
+
+      if (typeof page !== 'undefined') {
+        page = '&page='+page
+      } else {
+        page = ''
+      }
+      let queryParam = statuses + page
+      if (queryParam.length > 0) {
+        queryParam = queryParam.substr(1)
+      }
+      return lumenServer + '/question?'+queryParam
+    },
+    status: {
+      base: lumenServer + '/question/statuses',
+      changeStatus (questionId) {
+        return lumenServer + '/question/' + questionId + '/status'
+      }
+    },
+    log: {
+      base (questionId, pagination) {
+        if (!pagination) {
+          pagination = 0
+        }
+        return lumenServer + '/activity-log?subject_id='+questionId+'&subject=question&title=update&description=update_question_status&with_pagination=0'
+      },
+
+    },
     base: lumenServer + '/exam-question/attach',
     attachSubCategoryToQuestion: lumenServer + '/exam-question/attach/sub-category',
     updateQuestion (questionId) {
