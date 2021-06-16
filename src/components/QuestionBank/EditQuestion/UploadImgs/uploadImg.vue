@@ -1,6 +1,6 @@
 <template>
-  <div class="SelectImageBox mb-10">
-    <p class="font-weight-medium mb-11">
+  <div class="SelectImageBox">
+    <p class="font-weight-medium mb-5">
       فایل های آپلود شده:
     </p>
     <v-row>

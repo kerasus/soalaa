@@ -2,18 +2,24 @@
   <div class="exam">
     <p class="font-weight-medium">آزمون ها</p>
 
-    <v-row class="exam-section">
+    <v-row class="exam-section  mb-1">
       <v-col class="choose-exam" cols="5">
         <v-select
-            items="items"
+            :items="examList.list"
+            item-text="title"
+            item-value="id"
+            v-model="chooseExam"
             label="انتخاب آزمون"
             dense
             solo
         ></v-select>
       </v-col>
-      <v-col class="choose-listen" cols="4">
+      <v-col class="choose-lesson" cols="4">
         <v-select
-            items="items"
+            :items="subCategories.list"
+            v-model="chooseLesson"
+            item-text="title"
+            item-value="id"
             label="انتخاب درس"
             dense
             solo
@@ -22,6 +28,8 @@
       <v-col class="exam-order" cols="2">
         <v-text-field
             height="36"
+            v-model="examOrder"
+            :rules="numberRules"
             label="ترتیب"
             solo
             dense
@@ -33,6 +41,7 @@
             <v-btn
                 small
                 text
+                @click="attach"
             >
               <v-icon>mdi-plus</v-icon>
             </v-btn>
@@ -42,34 +51,36 @@
       </v-col>
     </v-row>
 
-    <v-row v-for="(exam, index) in exams" :key="index" class="exam-section">
+    <v-row v-for="(item, index) in exams" :key="index" class="exam-section">
       <v-col class="choose-exam" cols="5">
         <v-card flat height="36">
           <v-card-text class=text-center>
-            {{ exam.title }}
+            {{ item.exam.title }}
           </v-card-text>
         </v-card>
       </v-col>
-      <v-col class="choose-listen" cols="4">
+      <v-col class="choose-lesson" cols="4">
         <v-card flat height="36">
           <v-card-text class=text-center>
-            {{ exam.sub_category.title }}
+            {{ item.sub_category.title }}
           </v-card-text>
         </v-card>
       </v-col>
       <v-col class="exam-order" cols="2">
         <v-card flat height="36">
           <v-card-text class=text-center>
-            {{ exam.order }}
+            {{ item.order }}
           </v-card-text>
         </v-card>
       </v-col>
-      <v-col class="attach-or-dettach" cols="1">
+      <v-col class="attach-or-detach" cols="1">
         <v-card flat height="36">
           <v-card-text class=text-center>
             <v-btn
                 small
                 text
+                @click="detach(item)"
+
             >
               <v-icon>mdi-trash-can-outline</v-icon>
             </v-btn>
@@ -92,44 +103,34 @@ export default {
   props: {
     exams: {
       default: () => {
-        return [
-          {
-            "sub_category": {
-              "id": "60b7875428f350277f04c5e4",
-              "title": "عربی عمومی",
-              "category_id": "60b7858d743940688b23c7f3"
-            },
-            "title": "60924621ade9711661048075",
-            "exam_id": "60924621ade9711661048075",
-            "order": 26
-          },
-          {
-            "sub_category": {
-              "id": "60b7875428f350277f04c5e4",
-              "title": "عربی عمومی",
-              "category_id": "60b7858d743940688b23c7f3"
-            },
-            "title": "60924621ade9711661048075",
-            "exam_id": "60924621ade9711661048075",
-            "order": 26
-          },
-          {
-            "sub_category": {
-              "id": "60b7875428f350277f04c5e4",
-              "title": "عربی عمومی",
-              "category_id": "60b7858d743940688b23c7f3"
-            },
-            "title": "60924621ade9711661048075",
-            "exam_id": "60924621ade9711661048075",
-            "order": 26
-          },
-        ]
+        return []
+      },
+      type: Array
+    },
+    examList: {
+      default: () => {
+        return []
+      },
+      type: Array
+    },
+    subCategories: {
+      default: () => {
+        return []
       },
       type: Array
     }
+
   },
-  created() {
-    console.log('exams', this.exams)
+  data() {
+    return {
+      chooseExam: '',
+      chooseLesson: '',
+      examOrder: '',
+      numberRules: [
+        v => v.length > 0 || 'پر کردن این فیلد الزامی است.',
+        v => Number.isInteger(Number(v)) || 'یک عدد وارد کنید.'
+      ]
+    }
   },
   methods: {
     attachQuestionOnEditMode() {
@@ -150,6 +151,19 @@ export default {
             this.attachLoading = false
             this.dialog = false
           })
+    },
+    detach(item) {
+      this.$emit('detach', item)
+    },
+    attach() {
+      const exam = this.examList.find(examItem => examItem.id === this.chooseExam)
+      const sub_category = this.subCategories.find(subCategoryItem => subCategoryItem.id === this.chooseLesson)
+      const emitData = {
+        exam,
+        sub_category,
+        order: this.examOrder
+      }
+      this.$emit('attach', emitData)
     }
   }
 }
