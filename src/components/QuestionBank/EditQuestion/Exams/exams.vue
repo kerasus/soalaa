@@ -2,18 +2,22 @@
   <div class="exam">
     <p class="font-weight-medium">آزمون ها</p>
 
-    <v-row class="exam-section">
+    <v-row class="exam-section  mb-1">
       <v-col class="choose-exam" cols="5">
         <v-select
-            items="items"
+            :items="examList.list"
+            item-text="title"
+            item-value="id"
+            v-model="chooseExam"
             label="انتخاب آزمون"
             dense
             solo
         ></v-select>
       </v-col>
-      <v-col class="choose-listen" cols="4">
+      <v-col class="choose-lesson" cols="4">
         <v-select
             :items="subCategories.list"
+            v-model="chooseLesson"
             item-text="title"
             item-value="id"
             label="انتخاب درس"
@@ -24,6 +28,8 @@
       <v-col class="exam-order" cols="2">
         <v-text-field
             height="36"
+            v-model="examOrder"
+            :rules="numberRules"
             label="ترتیب"
             solo
             dense
@@ -53,7 +59,7 @@
           </v-card-text>
         </v-card>
       </v-col>
-      <v-col class="choose-listen" cols="4">
+      <v-col class="choose-lesson" cols="4">
         <v-card flat height="36">
           <v-card-text class=text-center>
             {{ item.sub_category.title }}
@@ -115,12 +121,17 @@ export default {
     }
 
   },
-  created() {
-    console.log('exams', this.exams)
-    console.log('examList', this.examList)
-    console.log('subCategories', this.subCategories)
-  }
-  ,
+  data() {
+    return {
+      chooseExam: '',
+      chooseLesson: '',
+      examOrder: '',
+      numberRules: [
+        v => v.length > 0 || 'پر کردن این فیلد الزامی است.',
+        v => Number.isInteger(Number(v)) || 'یک عدد وارد کنید.'
+      ]
+    }
+  },
   methods: {
     attachQuestionOnEditMode() {
       this.attachLoading = true
@@ -142,21 +153,17 @@ export default {
           })
     },
     detach(item) {
-      // const exam = this.examList.find( examItem => examItem.id === item.exam.id )
-      const emitData = {
-        exam: item.exam,
-        subCategory: item.sub_category,
-        order: item.order
-      }
-      this.$emit('detach', emitData)
+      this.$emit('detach', item)
     },
     attach() {
+      const exam = this.examList.find(examItem => examItem.id === this.chooseExam)
+      const sub_category = this.subCategories.find(subCategoryItem => subCategoryItem.id === this.chooseLesson)
       const emitData = {
-        exam: item.exam,
-        subCategory: item.sub_category,
-        order: item.order
+        exam,
+        sub_category,
+        order: this.examOrder
       }
-      this.$emit('detach', emitData)
+      this.$emit('attach', emitData)
     }
   }
 }
