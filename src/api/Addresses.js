@@ -97,7 +97,7 @@ const API_ADDRESS = {
         if (!pagination) {
           pagination = 0
         }
-        return lumenServer + '/activity-log?subject_id='+questionId+'&subject=question&titile=update&description=update_qestion_status&with_pagination='+pagination
+        return lumenServer + '/activity-log?subject_id='+questionId+'&subject=question&titile=update&description=update_qestion_status&with_pagination=0'
       },
     },
     base: lumenServer + '/exam-question/attach',
