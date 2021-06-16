@@ -52,7 +52,7 @@
           </v-col>
         </v-row>
       </v-col>
-      <v-col v-if="question.id !== null">
+      <v-col v-if="question.id">
         <v-row>
           <v-col>
             <span> وضعیت:</span>

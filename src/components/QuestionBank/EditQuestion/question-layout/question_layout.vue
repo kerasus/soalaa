@@ -1,6 +1,6 @@
 <template>
   <!-- ------------------------- question -------------------------------  -->
-  <div class=" ma-4 page-layout">
+  <div class=" ma-4 question-layout">
     <div class="question ">
       <div
         v-if="status"
@@ -20,38 +20,37 @@
     <div
       v-for="(item, index) in question.choices.list"
       :key="index"
+      class="question-layout-options"
       :class="status ? 'mb-6  mx-4 question-options white': '  mx-4 question-options'"
     >
-      <div
-        v-if="item.answer"
-        class="answer-icon-box"
-        @click="clicked(item.order)"
-      >
-        <v-icon
-          color="green"
-          :size="36"
-          class="mx-4"
+      <div class="px-4">
+        <div
+          v-if="item.answer"
+          @click="clicked(item.order)"
         >
-          mdi-checkbox-marked-circle
-        </v-icon>
+          <v-icon
+            color="green"
+            :size="!status? 28 : 36"
+          >
+            mdi-checkbox-marked-circle
+          </v-icon>
+        </div>
+        <div
+          v-else-if="status"
+          @click="clicked(item.order)"
+        >
+          <v-btn
+            fab
+            depressed
+            width="36"
+            height="36"
+          />
+        </div>
       </div>
-      <div
-        v-else-if="status"
-        class="mx-4"
-        @click="clicked(item.order)"
-      >
-        <v-btn
-          class=""
-          fab
-          depressed
-          width="36"
-          height="36"
-        />
-      </div>
-      <div>
+      <div class="ml-2">
         {{ (index + 1) + ') ' }}
       </div>
-      <div class="answer-editor ma-4">
+      <div class="answer-editor">
         <div>
           <question_field
             :key="'choices' + (index + 1) + domKey"
@@ -132,6 +131,12 @@ export default {
 </script>
 
 <style scoped>
+.question-layout-options{
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+
+}
 .question-options{
   display: flex;
   align-items: center;
@@ -151,7 +156,8 @@ width: 100%;
 
 </style>
 <style>
-.tiptap-plus v-card v-sheet theme--light elevation-3{
-  box-shadow: 0 0;
+.question-layout .tiptap-plus.v-card {
+  box-shadow: none !important;
 }
+
 </style>
