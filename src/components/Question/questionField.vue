@@ -644,4 +644,8 @@ export default {
 .inline .v-btn.blue--text {
   display: none;
 }
+
+.tiptap-plus-container.focused {
+  border: solid 1px #dedede;
+}
 </style>

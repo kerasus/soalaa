@@ -19,6 +19,7 @@
             :attaches="selectedQuizzes"
             :exam-list="examList"
             :sub-categories="subCategoriesList"
+            :loading="attachLoading"
             @detach="detachQuestion"
             @attach="attachQuestion"
           />
