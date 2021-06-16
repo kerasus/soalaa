@@ -41,18 +41,18 @@
             تغییر یافت.
           </div>
           <div
-            v-for="(comment, index) in log.comments"
+            v-for="(comment, index) in log.comments.list"
             :key="index"
           >
             <div class="log-author">
-              :{{ comment.full_name.name }}
+              {{ comment.full_name.name }}:
             </div>
             <div class="log-comment">
               <div class="comment-text">
                 {{ comment.comment }}
               </div>
               <div class="comment-date">
-                {{ comment.created_at }}
+                {{ comment.shamsiDate('created_at').date }}
               </div>
             </div>
           </div>
