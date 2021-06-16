@@ -3,6 +3,7 @@
     <v-col v-if="editStatus">
       <vue-tiptap-katex
         v-model="html"
+        :loading="loading"
         @input="updateValue"
       />
     </v-col>
@@ -76,6 +77,7 @@ export default {
   data() {
     return {
       html: '',
+      loading: false
     }
   },
   watch: {
@@ -85,6 +87,7 @@ export default {
   },
   created () {
     this.getHtmlValueFromValueProp()
+    this.loading = true
   },
   methods: {
     getHtmlValueFromValueProp () {
@@ -93,6 +96,7 @@ export default {
         this.html = ''
       }
       this.html = this.convertToTiptap(this.html)
+      this.loading = false
     },
     updateValue() {
       this.$emit('input', this.convertToMarkdownKatex(this.html))
@@ -619,7 +623,6 @@ export default {
 </script>
 
 <style scoped>
-
 </style>
 
 <style>
