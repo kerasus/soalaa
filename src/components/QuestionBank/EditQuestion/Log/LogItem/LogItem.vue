@@ -14,7 +14,7 @@
                 به‌روزشده توسط
                 <span class="log-editor">{{ log.causer.full_name }}</span>
                 در
-                <span class="log-date">{{ log.created_at }}</span>
+                <span class="log-date">{{ log.shamsiDate('created_at').dateTime }}</span>
               </div>
             </v-col>
             <v-col class="eye-icon">
@@ -52,7 +52,7 @@
                 {{ comment.comment }}
               </div>
               <div class="comment-date">
-                {{ comment.shamsiDate('created_at').date }}
+                {{ comment.shamsiDate('created_at').dateTime }}
               </div>
             </div>
           </div>

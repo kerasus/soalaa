@@ -2,13 +2,18 @@
   <div>
     <v-row>
       <v-col cols="3">
-        <span> سوال #1231</span>
+        <span v-if="question.id">
+          سوال #
+          {{ question.id }}
+        </span>
       </v-col>
       <v-col cols="3">
-        <span> سازنده سوال:</span> <span> فیلان دبیر</span>
+        <p v-if="question.id">
+          <span> سازنده سوال :</span> <span> فیلان دبیر</span>
+        </p>
       </v-col>
       <v-col
-        v-if="status === 'question.create'"
+        v-if="question.id === null"
         cols="4"
       >
         <v-row>
@@ -40,22 +45,22 @@
                   <v-icon color="#666666">
                     mdi-square-edit-outline
                   </v-icon>
-                  پیش نویس 
+                  پیش نویس
                 </v-btn>
               </v-col>
             </v-row>
           </v-col>
         </v-row>
-      </v-col>
-      <v-col v-if="status === 'question.edit'">
+      </v-col> 
+      <v-col v-if="question.id">
         <v-row>
           <v-col>
-            <span> وضعیت:</span>
+            <span> وضعیت : </span>
             <v-chip
               color="#44a3ff"
               dark
             >
-              بررسی نهایی
+              {{ question.status.display_title }}
             </v-chip>
           </v-col>
           <v-col>
@@ -83,55 +88,42 @@
                   width="100"
                   @click="btn_clicked('cancel')"
                 >
-                  لغو 
+                  لغو
                 </v-btn>
               </v-col>
             </v-row>
           </v-col>
         </v-row>
       </v-col>
-      <v-col v-if="status === 'question.show'">
+      <v-col v-if="!editStatus && status">
         <v-row>
           <v-col>
-            <span> وضعیت:</span>
-            <v-chip
-              color="#44a3ff"
-              dark
+            <v-btn
+              depressed
+              rounded
+              color="white"
+              class="ml-2"
+              width="110"
+              @click="btn_clicked('edit')"
             >
-              بررسی نهایی
-            </v-chip>
+              <v-icon color="#666666">
+                mdi-square-edit-outline
+              </v-icon>
+              <span color="#666666">
+                ویرایش
+              </span>
+            </v-btn>
           </v-col>
           <v-col>
-            <v-row>
-              <v-col>
-                <v-btn
-                  depressed
-                  rounded
-                  color="white"
-                  class="ml-2"
-                  width="110"
-                  @click="btn_clicked('edit')"
-                >
-                  <v-icon color="#666666">
-                    mdi-square-edit-outline
-                  </v-icon>
-                  <span color="#666666">
-                    ویرایش
-                  </span>
-                </v-btn>
-              </v-col>
-              <v-col>
-                <v-btn
-                  depressed
-                  rounded
-                  color="white"
-                  width="100"
-                  @click="btn_clicked('remove')"
-                >
-                  حذف
-                </v-btn>
-              </v-col>
-            </v-row>
+            <v-btn
+              depressed
+              rounded
+              color="white"
+              width="100"
+              @click="btn_clicked('remove')"
+            >
+              حذف
+            </v-btn>
           </v-col>
         </v-row>
       </v-col>
@@ -140,10 +132,19 @@
 </template>
 
 <script>
+import {Question} from "@/models/Question";
+
 export default {
   name: "NavBar",
   props: {
-    status,
+    question: {
+      type: Question,
+      default: new Question()
+    },
+    editStatus: {
+      type: Boolean,
+      default: false
+    },
   },
   methods:{
     btn_clicked(name){

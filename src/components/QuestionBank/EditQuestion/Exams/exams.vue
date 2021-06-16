@@ -33,6 +33,7 @@
           solo
         />
       </v-col>
+
       <v-col
         class="exam-order"
         cols="2"
@@ -68,7 +69,7 @@
     </v-row>
 
     <v-row
-      v-for="(item, index) in exams"
+      v-for="(item, index) in attaches"
       :key="index"
       class="exam-section"
     >
@@ -141,7 +142,7 @@ import API_ADDRESS from '@/api/Addresses'
 export default {
   name: 'Exams',
   props: {
-    exams: {
+    attaches: {
       default: () => {
         return []
       },
@@ -151,13 +152,13 @@ export default {
       default: () => {
         return []
       },
-      type: Array
+      type: Object
     },
     subCategories: {
       default: () => {
         return []
       },
-      type: Array
+      type: Object
     }
 
   },
@@ -209,11 +210,18 @@ export default {
 }
 </script>
 
+<style>
+.exam .exam-order .v-input__control .v-text-field__details {
+  position: relative;
+  top: -62px;
+  left: 9px;
+}
+</style>
 <style scoped>
 .v-text-field.v-text-field--enclosed {
   height: 40px;
-}
 
+}
 .row + .row {
   margin-top: 0px;
 }
