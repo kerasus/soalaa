@@ -51,7 +51,7 @@
             </v-row>
           </v-col>
         </v-row>
-      </v-col> 
+      </v-col>
       <v-col v-if="question.id">
         <v-row>
           <v-col>
