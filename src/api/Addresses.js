@@ -73,7 +73,11 @@ const API_ADDRESS = {
   question: {
     indexMonta: lumenServer + '/question/search-monta',
     index (statuses, page) {
-      statuses = '&statuses[]=' + statuses.join('&statuses[]=')
+      statuses = statuses.join('&statuses[]=')
+      if (statuses) {
+        statuses = '&statuses[]=' + statuses
+      }
+
       if (typeof page !== 'undefined') {
         page = '&page='+page
       } else {
