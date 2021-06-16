@@ -16,10 +16,10 @@
               <v-col cols="12">
                 <Exams
                   :exams="currentQuestion.exams"
-                  :exam-list="examList.list"
-                  :sub-categories="subCategoriesList.list"
+                  :exam-list="examList"
+                  :sub-categories="subCategoriesList"
                   @detach="detachQuestion"
-                  @atach="attachQuestion"
+                  @attach="attachQuestion"
                 />
               </v-col>
               <!-- -------------------------- upload file ---------------------->
@@ -37,7 +37,10 @@
             v-if="urlPathName === 'question.edit' || urlPathName === 'question.show' "
             class="my-10"
           >
-            <StatusComponent :statuses="questionStatuses" />
+            <StatusComponent
+              :statuses="questionStatuses"
+              @update="changeStatus"
+            />
           </div>
           <!-- -------------------------- save change--------------------------->
           <SaveChange />
@@ -61,7 +64,7 @@
               height="1856"
               class="rounded-card"
             >
-              <LogList />
+              <LogListComponent :logs="currentQuestion.logs" />
             </v-card>
           </div>
         </v-col>
@@ -78,8 +81,9 @@ import Exams from '@/components/QuestionBank/EditQuestion/Exams/exams';
 import StatusComponent from '@/components/QuestionBank/EditQuestion/StatusComponent/status';
 import ShowImg from '@/components/QuestionBank/EditQuestion/ShowImg/showImg';
 import SaveChange from '@/components/QuestionBank/EditQuestion/SaveChange/saveChange'
-import LogList from '@/components/QuestionBank/EditQuestion/Log/LogList';
+import LogListComponent from '@/components/QuestionBank/EditQuestion/Log/LogList';
 import { Question } from '@/models/Question'
+import { LogList } from '@/models/Log'
 import {ExamList} from "@/models/Exam";
 import {QuestSubcategoryList} from "@/models/QuestSubcategory";
 import API_ADDRESS from "@/api/Addresses";
@@ -96,11 +100,12 @@ export default {
     Exams,
     ShowImg,
     StatusComponent,
-    LogList,
+    LogListComponent,
     SaveChange
   },
   data() {
     return {
+      selectedQuizzes: [],
       imgSrc:'',
       urlPathName:'',
       edit_status:true,
@@ -152,17 +157,29 @@ export default {
     this.getStatus()
   },
   methods: {
-    attachQuestionOnEditMode () {
+    changeStatus (newStatus) {
+      let that = this
+      axios.post(API_ADDRESS.question.status.changeStatus(this.$route.params.question_id), {
+        status_id: newStatus.changeState,
+        comment: newStatus.commentAdded
+      })
+      .then((response) => {
+        that.currentQuestion.status = response.data.data.status
+        that.getLogs()
+      })
+    },
+    attachQuestionOnEditMode (item) {
       this.attachLoading = true
       axios.post(API_ADDRESS.question.attach, {
-        order: this.attachOrder,
-        exam_id: this.attachExamID,
-        question_id: this.$route.params.id,
-        sub_category_id: this.attachSubcategoryID
+        order: item.order,
+        exam_id: item.exam.id,
+        question_id: this.$route.params.question_id,
+        sub_category_id: item.sub_category.id
       })
       .then( response => {
-        this.updateAttachList(response.data.data.exams)
+        // this.updateAttachList(response.data.data.exams)
         console.log('response', response)
+        this.currentQuestion.exams = response.data.data.exams
         this.attachLoading = false
         this.dialog = false
       })
@@ -181,11 +198,12 @@ export default {
       this.dialog = false
       this.updateSelectedQuizzes()
     },
-    attachQuestion () {
+    attachQuestion (item) {
+      console.log('statejdfklsjd;aslfkjdas;flk', this.urlPathName === 'question.edit' || this.urlPathName === 'question.show', item)
       if (this.urlPathName === 'question.edit' || this.urlPathName === 'question.show') {
-        this.attachQuestionOnEditMode()
+        this.attachQuestionOnEditMode(item)
       } else {
-        this.attachQuestionOnCreateMode()
+        this.attachQuestionOnCreateMode(item)
       }
     },
     detachQuestion(item) {
@@ -210,24 +228,28 @@ export default {
     },
     detachQuestionOnEditMode(item) {
       this.attachLoading = true
-      axios.post(API_ADDRESS.question.detach(this.$route.params.id), {
+      console.log('item', item)
+      axios.post(API_ADDRESS.question.detach(this.$route.params.question_id), {
         detaches: [{
-          exam_id: item.id,
+          exam_id: item.exam.id,
           order: item.order,
-          sub_category_id: item.sub_category_id
+          sub_category_id: item.sub_category.id
         }]
       })
       .then((response) => {
         console.log('response', response)
         this.selectedQuizzes = []
+        // response.data.data.exams.forEach(item => {
+          // this.selectedQuizzes.push({
+          //   id: item.exam.id,
+          //   order: item.order,
+          //   sub_category_id: item.sub_category.id,
+          //   sub_category_title: item.sub_category.title,
+          //   title: item.exam.title
+          // })
+          this.currentQuestion.exams = []
         response.data.data.exams.forEach(item => {
-          this.selectedQuizzes.push({
-            id: item.exam.id,
-            order: item.order,
-            sub_category_id: item.sub_category.id,
-            sub_category_title: item.sub_category.title,
-            title: item.exam.title
-          })
+          this.currentQuestion.exams.push(item)
         })
         this.updateSelectedQuizzes()
         // this.currentQuestion = new question-layout(responseData)
@@ -342,15 +364,20 @@ export default {
         })
       })
     },
+    getLogs () {
+      this.currentQuestion.logs.fetch(null, API_ADDRESS.question.log.base(this.$route.params.question_id))
+        .then((response) => {
+          this.currentQuestion.logs = new LogList(response.data.data)
+        })
+    },
     loadCurrentQuestionData () {
       let that = this
-      console.log('ooooooooooo')
       console.log(this.currentQuestion)
       this.currentQuestion.show(null, API_ADDRESS.question.updateQuestion(this.$route.params.question_id))
           .then((response) => {
-            console.log('ooooooooooo')
             console.log('response', response)
             that.currentQuestion = new Question(response.data.data)
+            that.getLogs()
             that.trueChoiceIndex = that.currentQuestion.choices.list.findIndex((item) => item.answer )
             that.updateAttachList(response.data.data.exams)
             that.updateRendered()

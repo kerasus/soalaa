@@ -25,14 +25,27 @@
           </v-row>
           <div class="log-status">
             وضعیت از
-            <v-chip color="orange" text-color="white">{{ log.properties.old.status.display_title }}</v-chip>
+            <v-chip
+              color="orange"
+              text-color="white"
+            >
+              {{ log.properties.old.status.display_title }}
+            </v-chip>
             به
-            <v-chip color="red" text-color="white">{{ log.properties.new.status.display_title }}</v-chip>
+            <v-chip
+              color="red"
+              text-color="white"
+            >
+              {{ log.properties.new.status.display_title }}
+            </v-chip>
             تغییر یافت.
           </div>
-          <div v-for="(comment, index) in log.comments" :key="index">
+          <div
+            v-for="(comment, index) in log.comments"
+            :key="index"
+          >
             <div class="log-author">
-              :{{ comment.user.full_name }}
+              :{{ comment.full_name.name }}
             </div>
             <div class="log-comment">
               <div class="comment-text">
@@ -53,6 +66,7 @@
 import {Log} from "@/models/Log";
 
 export default {
+  name: "LogItem",
   props: {
     log: {
       default() {
@@ -61,7 +75,6 @@ export default {
       type: Log
     }
   },
-  name: "logItem",
   data() {
     return {}
   }
