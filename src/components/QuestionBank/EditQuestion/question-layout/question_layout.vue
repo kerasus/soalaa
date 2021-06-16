@@ -2,11 +2,14 @@
   <!-- ------------------------- question -------------------------------  -->
   <div class=" ma-4">
     <div class="mx-5 mb-10">
+      <div v-if="status">
+        تایپ سوال
+      </div>
       <question_field
+        :key="'statement' + domKey"
         v-model="question.statement"
         class="my-10"
         :edit-status="status"
-        title="تایپ سوال"
         placeholder="صورت سوال"
         @input="updateQuestion"
       />
@@ -43,33 +46,43 @@
         />
       </div>
       <div class="answer-editor ma-4">
-        <question_field
-          v-model="item.title"
-          :title="(index + 1) + ') '"
-          :choices="question.choices.list"
-          :edit-status="status"
-        />
+        <div>
+          {{ (index + 1) + ') ' }}
+        </div>
+        <div>
+          <question_field
+            :key="'choices' + (index + 1) + domKey"
+            v-model="item.title"
+            :edit-status="status"
+            @input="updateQuestion"
+          />
+        </div>
       </div>
     </div>
     <!-- ------------------------- answer -------------------------------  -->
     <div class="ma-5">
-      <question_field
-        v-model="question.descriptive_answer"
-        :edit-status="status"
-        title="پاسخ تشریحی"
-        placeholder="پاسخ تشریحی"
-        class="mb-16"
-        @input="updateQuestion"
-      />
+      <div>
+        پاسخ تشریحی
+      </div>
+      <div>
+        <question_field
+          :key="'descriptive_answer' + domKey"
+          v-model="question.descriptive_answer"
+          :edit-status="status"
+          placeholder="پاسخ تشریحی"
+          class="mb-16"
+          @input="updateQuestion"
+        />
+      </div>
     </div>
   </div>
 </template>
 <script>
+import { Question } from '@/models/Question'
 import question_field from '@/components/Question/questionField'
-import { Question } from "@/models/Question";
 
 export default {
-  name: "Questions",
+  name: 'QuestionLayout',
   components: {
     question_field,
   },
@@ -86,17 +99,20 @@ export default {
   data() {
     return {
       question: new Question(),
-      selected_item: false
+      domKey: Date.now()
     }
   },
   watch: {
     value: function () {
       this.question = this.value
-      console.log('question changed', this.question)
     }
   },
   created() {
     this.question = this.value
+    let that = this
+    setTimeout(() => {
+      that.domKey = Date.now()
+    }, 100)
   },
   methods:{
     updateQuestion () {
@@ -104,11 +120,7 @@ export default {
     },
     clicked(order){
       this.question.choices.list.forEach(item => {
-          if(item.order === order){
-            item.answer = true
-          }else {
-            item.answer = false
-          }
+          item.answer = item.order === order;
         })
       this.updateQuestion()
     }

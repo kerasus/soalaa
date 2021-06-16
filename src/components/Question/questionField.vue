@@ -1,46 +1,52 @@
 <template>
-  <div>
-    <v-row>
-      <!--      <v-col-->
-      <!--        v-if="label.length > 0 && !titleTopPosition"-->
-      <!--        cols="1"-->
-      <!--        class="text-left"-->
-      <!--      >-->
-      <!--        <span-->
-      <!--          flat-->
-      <!--          class="font-weight-medium mb-4 transparent"-->
-      <!--          v-text="label"-->
-      <!--        />-->
-      <!--      </v-col>-->
-      <!--      <v-col>-->
-      <!--        <v-card-->
-      <!--          v-if="label.length > 0 && titleTopPosition"-->
-      <!--          flat-->
-      <!--          class="font-weight-medium mb-4 transparent"-->
-      <!--          v-text="label"-->
-      <!--        />-->
-      <!--                &#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45; data &#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;-->
-      <!--                <v-textarea-->
-      <!--                  v-if="editStatus"-->
-      <!--                  flat-->
-      <!--                  solo-->
-      <!--                  :label="data.label"-->
-      <!--                  :rows="data.line"-->
-      <!--                />-->
+  <v-row>
+    <v-col v-if="editStatus">
       <vue-tiptap-katex
-        v-if="html !== null"
         v-model="html"
         @input="updateValue"
       />
-      <!--        <v-card-->
-      <!--          flat-->
-      <!--          class="transparent"-->
-      <!--          :color="color"-->
-      <!--          v-html="data.value"-->
-      <!--        />-->
-      <!--      </v-col>-->
-    </v-row>
-  </div>
+    </v-col>
+    <!-- eslint-disable vue/no-v-html -->
+    <v-col
+      v-else
+      v-html="html"
+    />
+    <!--eslint-enable-->
+
+    <!--      <v-col-->
+    <!--        v-if="label.length > 0 && !titleTopPosition"-->
+    <!--        cols="1"-->
+    <!--        class="text-left"-->
+    <!--      >-->
+    <!--        <span-->
+    <!--          flat-->
+    <!--          class="font-weight-medium mb-4 transparent"-->
+    <!--          v-text="label"-->
+    <!--        />-->
+    <!--      </v-col>-->
+    <!--      <v-col>-->
+    <!--        <v-card-->
+    <!--          v-if="label.length > 0 && titleTopPosition"-->
+    <!--          flat-->
+    <!--          class="font-weight-medium mb-4 transparent"-->
+    <!--          v-text="label"-->
+    <!--        />-->
+    <!--                &#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45; data &#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;-->
+    <!--                <v-textarea-->
+    <!--                  v-if="editStatus"-->
+    <!--                  flat-->
+    <!--                  solo-->
+    <!--                  :label="data.label"-->
+    <!--                  :rows="data.line"-->
+    <!--                />-->
+    <!--        <v-card-->
+    <!--          flat-->
+    <!--          class="transparent"-->
+    <!--          :color="color"-->
+    <!--          v-html="data.value"-->
+    <!--        />-->
+    <!--      </v-col>-->
+  </v-row>
 </template>
 <script>
   import VueTiptapKatex from 'vue-tiptap-katex'
@@ -69,7 +75,7 @@ export default {
   },
   data() {
     return {
-      html: '<p>I’m running tiptap with Vue.js. 🎉</p>',
+      html: '',
     }
   },
   watch: {

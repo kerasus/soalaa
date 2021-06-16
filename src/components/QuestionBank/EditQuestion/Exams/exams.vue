@@ -1,96 +1,136 @@
 <template>
   <div class="exam">
-    <p class="font-weight-medium">آزمون ها</p>
+    <p class="font-weight-medium">
+      آزمون ها
+    </p>
 
     <v-row class="exam-section  mb-1">
-      <v-col class="choose-exam" cols="5">
+      <v-col
+        class="choose-exam"
+        cols="5"
+      >
         <v-select
-            :items="examList.list"
-            item-text="title"
-            item-value="id"
-            v-model="chooseExam"
-            label="انتخاب آزمون"
-            dense
-            solo
-        ></v-select>
+          v-model="chooseExam"
+          :items="examList.list"
+          item-text="title"
+          item-value="id"
+          label="انتخاب آزمون"
+          dense
+          solo
+        />
       </v-col>
-      <v-col class="choose-lesson" cols="4">
+      <v-col
+        class="choose-lesson"
+        cols="4"
+      >
         <v-select
-            :items="subCategories.list"
-            v-model="chooseLesson"
-            item-text="title"
-            item-value="id"
-            label="انتخاب درس"
-            dense
-            solo
-        ></v-select>
+          v-model="chooseLesson"
+          :items="subCategories.list"
+          item-text="title"
+          item-value="id"
+          label="انتخاب درس"
+          dense
+          solo
+        />
       </v-col>
-      <v-col class="exam-order" cols="2">
+      <v-col
+        class="exam-order"
+        cols="2"
+      >
         <v-text-field
-            height="36"
-            v-model="examOrder"
-            :rules="numberRules"
-            label="ترتیب"
-            solo
-            dense
-        ></v-text-field>
+          v-model="examOrder"
+          height="36"
+          :rules="numberRules"
+          label="ترتیب"
+          solo
+          dense
+        />
       </v-col>
-      <v-col class="attach-or-dettach" cols="1">
-        <v-card flat height="36">
-          <v-card-text class=text-center>
+      <v-col
+        class="attach-or-dettach"
+        cols="1"
+      >
+        <v-card
+          flat
+          height="36"
+        >
+          <v-card-text class="text-center">
             <v-btn
-                small
-                text
-                @click="attach"
+              small
+              text
+              @click="attach"
             >
               <v-icon>mdi-plus</v-icon>
             </v-btn>
-
           </v-card-text>
         </v-card>
       </v-col>
     </v-row>
 
-    <v-row v-for="(item, index) in exams" :key="index" class="exam-section">
-      <v-col class="choose-exam" cols="5">
-        <v-card flat height="36">
-          <v-card-text class=text-center>
+    <v-row
+      v-for="(item, index) in exams"
+      :key="index"
+      class="exam-section"
+    >
+      <v-col
+        class="choose-exam"
+        cols="5"
+      >
+        <v-card
+          flat
+          height="36"
+        >
+          <v-card-text class="text-center">
             {{ item.exam.title }}
           </v-card-text>
         </v-card>
       </v-col>
-      <v-col class="choose-lesson" cols="4">
-        <v-card flat height="36">
-          <v-card-text class=text-center>
+      <v-col
+        class="choose-lesson"
+        cols="4"
+      >
+        <v-card
+          flat
+          height="36"
+        >
+          <v-card-text class="text-center">
             {{ item.sub_category.title }}
           </v-card-text>
         </v-card>
       </v-col>
-      <v-col class="exam-order" cols="2">
-        <v-card flat height="36">
-          <v-card-text class=text-center>
+      <v-col
+        class="exam-order"
+        cols="2"
+      >
+        <v-card
+          flat
+          height="36"
+        >
+          <v-card-text class="text-center">
             {{ item.order }}
           </v-card-text>
         </v-card>
       </v-col>
-      <v-col class="attach-or-detach" cols="1">
-        <v-card flat height="36">
-          <v-card-text class=text-center>
+      <v-col
+        class="attach-or-detach"
+        cols="1"
+      >
+        <v-card
+          flat
+          height="36"
+        >
+          <v-card-text class="text-center">
             <v-btn
-                small
-                text
-                @click="detach(item)"
-
+              small
+              text
+              @click="detach(item)"
             >
               <v-icon>mdi-trash-can-outline</v-icon>
             </v-btn>
-
           </v-card-text>
         </v-card>
       </v-col>
     </v-row>
-
-
   </div>
 </template>
 
@@ -99,7 +139,7 @@ import axios from 'axios'
 import API_ADDRESS from '@/api/Addresses'
 
 export default {
-  name: 'exams',
+  name: 'Exams',
   props: {
     exams: {
       default: () => {
@@ -156,8 +196,8 @@ export default {
       this.$emit('detach', item)
     },
     attach() {
-      const exam = this.examList.find(examItem => examItem.id === this.chooseExam)
-      const sub_category = this.subCategories.find(subCategoryItem => subCategoryItem.id === this.chooseLesson)
+      const exam = this.examList.list.find(examItem => examItem.id === this.chooseExam)
+      const sub_category = this.subCategories.list.find(subCategoryItem => subCategoryItem.id === this.chooseLesson)
       const emitData = {
         exam,
         sub_category,
