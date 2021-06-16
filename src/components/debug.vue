@@ -14,7 +14,6 @@
     components: {VueTiptapKatex},
     mixins: [mixinMarkdownAndKatex],
     data() {
-
       return {
         html: '<p>I’m running tiptap with Vue.js. 🎉</p>',
         innerHTML: 'hi',
