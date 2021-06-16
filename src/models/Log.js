@@ -1,6 +1,5 @@
 import { Model, Collection } from 'js-abstract-model'
 import API_ADDRESS from "@/api/Addresses";
-import {User} from "@/models/User";
 import {CommentList} from "@/models/Comment";
 
 class Log extends Model {
