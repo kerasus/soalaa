@@ -542,7 +542,7 @@
           that.totalFilteredQuestions = '...'
         }
         that.showLoading()
-        axios.get(API_ADDRESS.question.index + that.nextPage, {
+        axios.get(API_ADDRESS.question.indexMonta + that.nextPage, {
           params: this.filterQuestions
         })
         .then( (response => {
