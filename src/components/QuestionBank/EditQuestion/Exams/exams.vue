@@ -60,6 +60,8 @@
               small
               text
               @click="attach"
+              :loading="loading"
+              :disabled="loading"
             >
               <v-icon>mdi-plus</v-icon>
             </v-btn>
@@ -125,6 +127,8 @@
               small
               text
               @click="detach(item)"
+              :loading="loading"
+              :disabled="loading"
             >
               <v-icon>mdi-trash-can-outline</v-icon>
             </v-btn>
@@ -159,6 +163,12 @@ export default {
         return []
       },
       type: Object
+    },
+    loading: {
+      default: () => {
+        return false
+      },
+      type: Boolean
     }
 
   },

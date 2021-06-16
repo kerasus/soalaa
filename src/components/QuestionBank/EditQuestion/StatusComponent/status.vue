@@ -40,6 +40,7 @@
       <v-btn
         color="success"
         :loading="loading"
+        :disabled="loading"
         @click="sendStatus"
       >
         ذخیره
@@ -57,14 +58,19 @@ export default {
     statuses: {
       type: QuestionStatusList,
       default: new QuestionStatusList()
+    },
+    loading: {
+      default: () => {
+        return false
+      },
+      type: Boolean
     }
   },
   data: () => ({
     newStatus: {
       changeState: null,
       commentAdded: null,
-    },
-    loading: false
+    }
   }),
   methods: {
     sendStatus() {

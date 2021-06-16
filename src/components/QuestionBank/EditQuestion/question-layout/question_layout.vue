@@ -21,7 +21,7 @@
       v-for="(item, index) in question.choices.list"
       :key="index"
       class="question-layout-options"
-      :class="status ? 'mb-6  mx-4 question-options white': '  mx-4 question-options'"
+      :class="status ? 'mb-6   question-options white': '  question-options'"
     >
       <div :class="status ?'px-4' :'px-2'">
         <div
@@ -62,7 +62,7 @@
       </div>
     </div>
     <!-- ------------------------- answer -------------------------------  -->
-    <div class="ma-5 question-answer ">
+    <div class="mb-5 question-answer ">
       <div class="mb-5">
         پاسخ تشریحی
       </div>
