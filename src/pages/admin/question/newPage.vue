@@ -6,6 +6,7 @@
           <navBar
             :question="currentQuestion"
             :edit-status="edit_status"
+            @save="submitQuestion"
           />
           <question-layout
             v-if="!loading"
@@ -13,28 +14,20 @@
             :status="edit_status"
             @input="updateQuestion"
           />
-          <div>
-            <v-row>
-              <!-- -------------------------- show exams  ---------------------->
-              <v-col cols="12">
-                <Exams
-                  :exams="currentQuestion.exams"
-                  :exam-list="examList"
-                  :sub-categories="subCategoriesList"
-                  @detach="detachQuestion"
-                  @attach="attachQuestion"
-                />
-              </v-col>
-              <!-- -------------------------- upload file ---------------------->
-              <v-col cols="12">
-                <UploadImg
-                  v-model="currentQuestion"
-                  :edit-status="edit_status"
-                  @imgClicked="openShowImgPanel"
-                />
-              </v-col>
-            </v-row>
-          </div>
+          <!-- -------------------------- show exams  ---------------------->
+          <Exams
+            :attaches="selectedQuizzes"
+            :exam-list="examList"
+            :sub-categories="subCategoriesList"
+            @detach="detachQuestion"
+            @attach="attachQuestion"
+          />
+          <!-- -------------------------- upload file ---------------------->
+          <UploadImg
+            v-model="currentQuestion"
+            :edit-status="edit_status"
+            @imgClicked="openShowImgPanel"
+          />
           <!-- -------------------------- status --------------------------->
           <div
             v-if="urlPathName === 'question.edit' || urlPathName === 'question.show' "
@@ -58,7 +51,7 @@
         </v-col>
         <!-- -------------------------- log --------------------------->
         <v-col :cols="log_component_number">
-          <div v-if="urlPathName === 'question.edit' || urlPathName === 'question.show'">
+          <div v-if="getPageStatus() !== 'create'">
             <v-card
               flat
               height="1856"
@@ -74,6 +67,7 @@
 </template>
 
 <script>
+import Vue from 'vue'
 import navBar from '@/components/QuestionBank/EditQuestion/NavBar/navBar.vue';
 import QuestionLayout from '@/components/QuestionBank/EditQuestion/question-layout/question_layout';
 import UploadImg from '@/components/QuestionBank/EditQuestion/UploadImgs/uploadImg';
@@ -83,11 +77,11 @@ import ShowImg from '@/components/QuestionBank/EditQuestion/ShowImg/showImg';
 import LogListComponent from '@/components/QuestionBank/EditQuestion/Log/LogList';
 import { Question } from '@/models/Question'
 import { LogList } from '@/models/Log'
-import {ExamList} from "@/models/Exam";
-import {QuestSubcategoryList} from "@/models/QuestSubcategory";
+import { ExamList } from "@/models/Exam";
+import { QuestSubcategoryList } from "@/models/QuestSubcategory";
 import API_ADDRESS from "@/api/Addresses";
 import Assistant from "@/plugins/assistant";
-import {QuestionStatusList} from "@/models/QuestionStatus";
+import { QuestionStatusList } from "@/models/QuestionStatus";
 import axios from 'axios'
 
 export default {
@@ -103,6 +97,20 @@ export default {
   },
   data() {
     return {
+      pageStatuses: [
+        {
+          title: 'show',
+          state: false
+        },
+        {
+          title: 'create',
+          state: false
+        },
+        {
+          title: 'edit',
+          state: false
+        }
+      ],
       selectedQuizzes: [],
       imgSrc:'',
       urlPathName:'',
@@ -150,11 +158,55 @@ export default {
     }
   },
   created() {
-    this.getUrl()
+    this.setPageStatus()
     this.checkUrl()
     this.getStatus()
   },
   methods: {
+    submitQuestion () {
+      if (this.urlPathName === 'question.edit') {
+        this.currentQuestion.update(API_ADDRESS.question.updateQuestion(this.currentQuestion.id))
+            .then(() => {
+              this.$notify({
+                group: 'notifs',
+                title: 'توجه',
+                text: 'ویرایش با موفقیت انجام شد',
+                type: 'success'
+              })
+            })
+        return
+      }
+      this.currentQuestion.choices.list.forEach((item) => { item.answer = false })
+      this.currentQuestion.choices.list[this.trueChoiceIndex].answer = true
+      this.currentQuestion.exams = this.selectedQuizzes
+      this.currentQuestion.create()
+          .then(() => {
+            this.currentQuestion.statement = ''
+            this.currentQuestion.choices.list.forEach((item) => { item.title = '' })
+            this.$notify({
+              group: 'notifs',
+              title: 'توجه',
+              text: 'ثبت با موفقیت انجام شد',
+              type: 'success'
+            })
+          })
+
+    },
+    setPageStatus () {
+      let that = this
+      const title = that.$route.name.replace('question.', '')
+      this.pageStatuses.forEach( item => {
+        if (item.title === title) {
+          item.state = true
+        } else {
+          item.state = false
+        }
+      })
+    },
+    getPageStatus () {
+      const target = this.pageStatuses.find( item => item.state)
+      return (target) ? target.title : false
+    },
     changeStatus (newStatus) {
       let that = this
       axios.post(API_ADDRESS.question.status.changeStatus(this.$route.params.question_id), {
@@ -176,8 +228,7 @@ export default {
       })
       .then( response => {
         // this.updateAttachList(response.data.data.exams)
-        console.log('response', response)
-        this.currentQuestion.exams = response.data.data.exams
+        this.selectedQuizzes = response.data.data.exams
         this.attachLoading = false
         this.dialog = false
       })
@@ -186,19 +237,29 @@ export default {
         this.dialog = false
       })
     },
-    attachQuestionOnCreateMode () {
-      const targetExamIndex = this.totalExams.findIndex(examItem => Assistant.getId(examItem.id) === Assistant.getId(this.attachExamID))
-      const targetSubCategoryIndex = this.subCategoriesList.list.findIndex(subCategoryItem => Assistant.getId(subCategoryItem.id) === Assistant.getId(this.attachSubcategoryID))
-      this.totalExams[targetExamIndex].order = this.attachOrder
-      this.totalExams[targetExamIndex].sub_category_id = this.attachSubcategoryID
-      this.totalExams[targetExamIndex].sub_category_title = this.subCategoriesList.list[targetSubCategoryIndex].title
-      this.selectedQuizzes.push(JSON.parse(JSON.stringify(this.totalExams[targetExamIndex])))
+    attachQuestionOnCreateMode (item) {
+      const targetExamIndex = this.totalExams.findIndex(examItem => Assistant.getId(examItem.id) === Assistant.getId(item.exam.id))
+      // const targetSubCategoryIndex = this.subCategoriesList.list.findIndex(subCategoryItem => Assistant.getId(subCategoryItem.id) === Assistant.getId(item.sub_category.id))
+      let selectedQuizzes = this.selectedQuizzes
+      this.totalExams[targetExamIndex] = item
+      // this.totalExams[targetExamIndex].sub_category = item.sub_category
+      // this.totalExams[targetExamIndex].sub_category_title = this.subCategoriesList.list[targetSubCategoryIndex].title
+      selectedQuizzes.push(JSON.parse(JSON.stringify(this.totalExams[targetExamIndex])))
+
+      Vue.set(this, 'selectedQuizzes', selectedQuizzes)
       this.dialog = false
       this.updateSelectedQuizzes()
     },
+    updateSelectedQuizzes () {
+      let selectedQuizzes = JSON.parse(JSON.stringify(this.selectedQuizzes))
+      selectedQuizzes.forEach((item, i) => {
+        selectedQuizzes[i].subId = i + 1;
+      })
+
+      this.selectedQuizzes = selectedQuizzes
+    },
     attachQuestion (item) {
-      console.log('statejdfklsjd;aslfkjdas;flk', this.urlPathName === 'question.edit' || this.urlPathName === 'question.show', item)
-      if (this.urlPathName === 'question.edit' || this.urlPathName === 'question.show') {
+      if (this.getPageStatus() === 'edit' || this.getPageStatus() === 'show') {
         this.attachQuestionOnEditMode(item)
       } else {
         this.attachQuestionOnCreateMode(item)
@@ -216,7 +277,7 @@ export default {
           if (!confirm) {
             return
           }
-          if (that.urlPathName === 'question.edit' || that.urlPathName === 'question.show') {
+          if (this.getPageStatus() === 'edit' || this.getPageStatus() === 'show') {
             that.detachQuestionOnEditMode(item)
           } else {
             that.detachQuestionOnCreateMode(item)
@@ -279,35 +340,29 @@ export default {
         console.log('error', error)
       })
     },
-    getUrl () {
-      this.urlPathName = this.$route.name
-    },
-    doesQuestionAlreadyExist () {
-      return this.urlPathName === 'question.show' || this.urlPathName === 'question.edit'
-    },
     checkUrl () {
-      this.edit_status = this.urlPathName === 'question.create' || this.urlPathName === 'question.edit';
-      if(this.urlPathName === 'question.show' || this.urlPathName === 'question.edit'){
+      // set edit_status
+      this.edit_status = (this.getPageStatus() === 'create' || this.getPageStatus() === 'edit');
+
+      if(this.getPageStatus() !== 'create') {
         this.questionColsNumber = 9
         this.log_component_number = 3
       }
 
-      if (this.doesQuestionAlreadyExist()) {
-        console.log('in too')
-        const loanExamListPromise = this.loanExamList()
-        const loadSubcategoriesPromise = this.loadSubcategories()
-        Promise.all([loanExamListPromise, loadSubcategoriesPromise])
-        .then(() => {
-          this.loadCurrentQuestionData()
-          this.setNullKeys()
-          this.loading = false
-        })
-      } else {
-        this.currentQuestion = new Question(this.questionData)
-        console.log('currentQuestion', this.questionData, new Question(this.questionData))
-        this.setNullKeys()
-        this.loading = false
-      }
+      let that = this
+      const loanExamListPromise = this.loanExamList()
+      const loadSubcategoriesPromise = this.loadSubcategories()
+      Promise.all([loanExamListPromise, loadSubcategoriesPromise])
+             .then(() => {
+               if(that.getPageStatus() !== 'create') {
+                 that.loadCurrentQuestionData()
+               } else {
+                 that.currentQuestion = new Question(that.questionData)
+               }
+
+               that.setNullKeys()
+               that.loading = false
+             })
     },
     setNullKeys () {
       console.log('test', this.currentQuestion.statement)
@@ -330,16 +385,16 @@ export default {
         .then((response) => {
           console.log('responseExam', response)
           that.examList = new ExamList(response.data.data)
-          that.totalExams = []
-          that.examList.list.forEach(item => {
-            that.totalExams.push({
-              order: 0,
-              sub_category_id: null,
-              sub_category_title: '',
-              title: item.title,
-              id: item.id
-            })
-          })
+          // that.totalExams = []
+          // that.examList.list.forEach(item => {
+          //   that.totalExams.push({
+          //     order: 0,
+          //     sub_category_id: null,
+          //     sub_category_title: '',
+          //     title: item.title,
+          //     id: item.id
+          //   })
+          // })
           resolve()
         })
         .catch( () => {
@@ -457,15 +512,15 @@ export default {
       this.currentQuestion.statement = this.currentQuestion.statement.replace('¬', '‌')
     },
     updateAttachList(exams) {
-      let that = this
-      this.selectedQuizzes = []
-      exams.forEach( item => {
-        const targetExamIndex = that.totalExams.findIndex(examItem => Assistant.getId(examItem.id) === Assistant.getId(item.exam_id))
-        that.totalExams[targetExamIndex].order = item.order
-        that.totalExams[targetExamIndex].sub_category_id = item.sub_category.id
-        that.totalExams[targetExamIndex].sub_category_title = item.sub_category.title
-        that.selectedQuizzes.push(JSON.parse(JSON.stringify(that.totalExams[targetExamIndex])))
-      })
+      // let that = this
+      this.selectedQuizzes = exams
+      // exams.forEach( item => {
+      //   const targetExamIndex = that.totalExams.findIndex(examItem => Assistant.getId(examItem.id) === Assistant.getId(item.exam_id))
+      //   that.totalExams[targetExamIndex].order = item.order
+      //   that.totalExams[targetExamIndex].sub_category_id = item.sub_category.id
+      //   that.totalExams[targetExamIndex].sub_category_title = item.sub_category.title
+      //   that.selectedQuizzes.push(JSON.parse(JSON.stringify(that.totalExams[targetExamIndex])))
+      // })
       this.updateSelectedQuizzes()
     },
     openShowImgPanel (src) {
@@ -480,7 +535,7 @@ export default {
     closeShowImgPanel() {
       this.displayEditQuestion = false
       this.$store.commit('AppLayout/updateDrawer', true)
-      if(this.urlPathName === 'question.show' || this.urlPathName === 'question.edit'){
+      if(this.$route.name === 'question.show' || this.$route.name === 'question.edit'){
         this.questionColsNumber = 9
         this.log_component_number= 3
       }else {

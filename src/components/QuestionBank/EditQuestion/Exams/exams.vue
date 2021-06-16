@@ -71,7 +71,7 @@
     </v-row>
 
     <v-row
-      v-for="(item, index) in exams"
+      v-for="(item, index) in attaches"
       :key="index"
       class="exam-section"
     >
@@ -146,7 +146,7 @@ import API_ADDRESS from '@/api/Addresses'
 export default {
   name: 'Exams',
   props: {
-    exams: {
+    attaches: {
       default: () => {
         return []
       },
@@ -156,13 +156,13 @@ export default {
       default: () => {
         return []
       },
-      type: Array
+      type: Object
     },
     subCategories: {
       default: () => {
         return []
       },
-      type: Array
+      type: Object
     },
     loading: {
       default: () => {
