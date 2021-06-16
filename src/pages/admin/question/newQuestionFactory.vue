@@ -1,10 +1,16 @@
 <template>
   <v-row class="mx-4">
     <v-col>
+      <p
+        class="font-weight-medium"
+      >
+        کارخانه سوال
+      </p>
       <!--  -------------------- nav bar ----------------------------------------------------------------- -->
       <v-row
         justify="space-between"
-        class="my-10"
+        class=""
+        align="center"
       >
         <v-col
           cols="2"
@@ -12,33 +18,34 @@
         >
           <v-btn
             elevation="0"
-            class="white"
+            class="white py-5 custom-border-radius"
           >
             جدید ترین
             <v-icon class="mr-4">
-              mdi-plus
+              mdi-chevron-down
             </v-icon>
           </v-btn>
         </v-col>
         <v-col cols="6">
-          <v-row>
-            <v-col>
-              <v-chip-group class="white px-6 rounded">
-                <v-row justify="space-between">
-                  <v-col
-                    v-for="(item, index) in questionStatusList.list"
-                    :key="index"
-                  >
-                    <v-chip
-                      :class="{'amber lighten-3': (selectedStatusId === item.id), 'transparent': (selectedStatusId !== item.id), }"
-                      @click="filter(item.id)"
-                      v-text="item.display_title"
-                    />
-                  </v-col>
-                </v-row>
-              </v-chip-group>
-            </v-col>
-          </v-row>
+          <v-sheet
+            class="custom-border-radius"
+            flat
+          >
+            <v-chip-group class="transparent">
+              <v-row justify="space-between">
+                <v-col
+                  v-for="(item, index) in questionStatusList.list"
+                  :key="index"
+                >
+                  <v-chip
+                    :class="{'amber lighten-3': (selectedStatusId === item.id), 'transparent': (selectedStatusId !== item.id), }"
+                    @click="filter(item.id)"
+                    v-text="item.display_title"
+                  />
+                </v-col>
+              </v-row>
+            </v-chip-group>
+          </v-sheet>
         </v-col>
         <v-col
           cols="2"
@@ -47,7 +54,7 @@
           <v-btn
             rounded
             elevation="0"
-            class="white"
+            class="white py-5 custom-border-radius"
             :to="{name: 'question.create'}"
           >
             <v-icon class="ml-4">
@@ -72,7 +79,7 @@
       </v-row>
       <!--  -------------------- table title ------------------------------------------------------------ -->
       <v-card
-        class="rounded py-2 transparent"
+        class="py-2 transparent mb-5"
         flat
       >
         <v-row class="">
@@ -119,88 +126,99 @@
         </v-row>
       </v-card>
       <!--  -------------------- table content ------------------------------------------------------------ -->
-      <v-card
-        v-for="(item, index) in questions.list"
-        :key="index"
-        class="mb-4 rounded py-2"
-        flat
-      >
-        <v-row
-          class="ma-auto"
-          align="center"
-        >
-          <!--  -------------------- column id ------------------------------------------------------------ -->
-          <v-col
-            no-gutters
-            cols="2"
+      <v-row align="center">
+        <v-col>
+          <v-card
+            v-for="(item, index) in questions.list"
+            :key="index"
+            class="mb-7 custom-border-radius table-content-card"
+            flat
+            height="80"
           >
-            <div
-              class="pa-2 mr-4"
-              v-text="item.id"
-            />
-          </v-col>
-          <!--  -------------------- column statement ------------------------------------------------------------ -->
-          <v-col
-            no-gutters
-            cols="3"
-          >
-            <span
-              class="pa-2"
-              v-html="item.rendered_statement"
-            />
-          </v-col>
-          <!--  -------------------- column created_at ------------------------------------------------------------ -->
-          <v-col
-            no-gutters
-            cols="2"
-          >
-            <span
-              class="pa-2"
-              v-text="item.shamsiDate('created_at').dateTime"
-            />
-          </v-col>
-          <!--  -------------------- column status ------------------------------------------------------------ -->
-          <v-col
-            no-gutters
-            cols="3"
-          >
-            <span class="pa-2">
-              <v-chip
-                class="red darken-1 px-4 ml-4"
-                dark
-                v-text="item.status.display_title"
-              />
-            </span>
-          </v-col>
-          <!--  -------------------- column actions ------------------------------------------------------------ -->
-          <v-col
-            no-gutters
-            cols="2"
-          >
-            <span class="pa-2">
-              <router-link :to="{ name:'question.show', params: { question_id: item.id }}">
-                <v-icon class="ml-4">
-                  mdi-eye-outline
-                </v-icon>
-              </router-link>
-              <router-link :to="{ name:'question.edit', params: { question_id: item.id }}">
-                <v-icon class="ml-4">
-                  mdi-pencil-outline
-                </v-icon>
-              </router-link>
-              <v-icon class="ml-4">
-                mdi-dots-horizontal
-              </v-icon>
-            </span>
-          </v-col>
-        </v-row>
-      </v-card>
+            <v-row
+              align="center"
+            >
+              <!--  -------------------- column id ------------------------------------------------------------ -->
+              <v-col
+                no-gutters
+                cols="2"
+              >
+                <div
+                  class="mr-4"
+                  v-text="item.id"
+                />
+              </v-col>
+              <!--  -------------------- column statement ------------------------------------------------------------ -->
+              <v-col
+                no-gutters
+                cols="3"
+              >
+                <span
+
+                  v-html="item.rendered_statement"
+                />
+              </v-col>
+              <!--  -------------------- column created_at ------------------------------------------------------------ -->
+              <v-col
+                no-gutters
+                cols="2"
+              >
+                <span
+
+                  v-text="item.shamsiDate('created_at').dateTime"
+                />
+              </v-col>
+              <!--  -------------------- column status ------------------------------------------------------------ -->
+              <v-col
+                no-gutters
+                cols="3"
+              >
+                <span>
+                  <v-chip
+                    class="red darken-1 px-4 ml-4"
+                    dark
+                    v-text="item.status.display_title"
+                  />
+                </span>
+              </v-col>
+              <!--  -------------------- column actions ------------------------------------------------------------ -->
+              <v-col
+                no-gutters
+                cols="2"
+              >
+                <span>
+                  <router-link
+                    :to="{ name:'question.show', params: { question_id: item.id }}"
+                    class="link-text-decoration"
+                  >
+                    <v-icon class="ml-4">
+                      mdi-eye-outline
+                    </v-icon>
+                  </router-link>
+                  <router-link
+                    :to="{ name:'question.edit', params: { question_id: item.id }}"
+                    class="link-text-decoration"
+                  >
+                    <v-icon class="ml-4">
+                      mdi-pencil-outline
+                    </v-icon>
+                  </router-link>
+                  <v-icon class="ml-4">
+                    mdi-dots-horizontal
+                  </v-icon>
+                </span>
+              </v-col>
+            </v-row>
+          </v-card>
+        </v-col>
+      </v-row>
+
       <!--  -------------------- pagination ------------------------------------------------------------ -->
       <v-row>
         <v-col>
           <v-pagination
             v-model="page"
-            class="my-4"
+            class="my-2"
             :length="pageCount"
             :total-visible="7"
             @input="filter(selectedStatusId, page)"
@@ -258,5 +276,14 @@ export default {
 </script>
 
 <style scoped>
-
+.custom-border-radius{
+  border-radius: 15px;
+}
+.link-text-decoration{
+  text-decoration: none;
+}
+.table-content-card{
+  display: flex;
+  align-items: center;
+}
 </style>
