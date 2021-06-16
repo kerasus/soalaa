@@ -153,10 +153,12 @@
                 no-gutters
                 cols="3"
               >
-                <span
-
-                  v-html="item.rendered_statement"
-                />
+                <div class="column-statement">
+                  <p
+                    class="column-statement-text"
+                    v-html="item.rendered_statement"
+                  />
+                </div>
               </v-col>
               <!--  -------------------- column created_at ------------------------------------------------------------ -->
               <v-col
@@ -259,14 +261,19 @@ export default {
     filter (itemId, page) {
       if (itemId) {
         this.selectedStatusId = itemId
+        console.log('selected status:',this.selectedStatusId , 'item id : ',itemId)
       }
       let that = this
       that.$store.commit('AppLayout/updateOverlay', {show: true, loading: true, text: 'کمی صبر کنید...'})
       const statusesId = (!itemId) ? [] : [itemId]
+      console.log('status id :' , statusesId)
+      console.log( 'api :', API_ADDRESS.question.index(statusesId, page))
       axios.get(API_ADDRESS.question.index(statusesId, page))
            .then( response => {
              that.questions = new QuestionList(response.data.data)
+             console.log('question :',that.question)
              that.page = response.data.meta.current_page
+             console.log('that page :',that.page)
              that.pageCount = Math.ceil(response.data.meta.total / response.data.meta.per_page)
              that.$store.commit('AppLayout/updateOverlay', {show: false, loading: false, text: ''})
            })
@@ -285,5 +292,19 @@ export default {
 .table-content-card{
   display: flex;
   align-items: center;
+}
+.column-statement{
+  display: flex;
+  align-items: center;
+}
+.column-statement-text{
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 2; /* number of lines to show */
+  -webkit-box-orient: vertical;
+}
+.column-statement :first-child{
+  margin: 0;
 }
 </style>

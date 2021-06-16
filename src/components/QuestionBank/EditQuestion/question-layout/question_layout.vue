@@ -1,14 +1,17 @@
 <template>
   <!-- ------------------------- question -------------------------------  -->
-  <div class=" ma-4">
-    <div class="mx-5 mb-10">
-      <div v-if="status">
+  <div class=" ma-4 question-layout">
+    <div class="question ">
+      <div
+        v-if="status"
+        class="mb-5 "
+      >
         تایپ سوال
       </div>
       <question_field
         :key="'statement' + domKey"
         v-model="question.statement"
-        class="my-10"
+        class="mb-10"
         :edit-status="status"
         placeholder="صورت سوال"
         @input="updateQuestion"
@@ -17,38 +20,37 @@
     <div
       v-for="(item, index) in question.choices.list"
       :key="index"
-      class="mb-6 answers-box mx-4"
+      class="question-layout-options"
+      :class="status ? 'mb-6  mx-4 question-options white': '  mx-4 question-options'"
     >
-      <div
-        v-if="item.answer"
-        class="answer-icon-box"
-        @click="clicked(item.order)"
-      >
-        <v-icon
-          color="green"
-          :size="36"
-          class="mx-4"
+      <div :class="status ?'px-4' :'px-2'">
+        <div
+          v-if="item.answer"
+          @click="clicked(item.order)"
         >
-          mdi-checkbox-marked-circle
-        </v-icon>
-      </div>
-      <div
-        v-else
-        class="mx-4"
-        @click="clicked(item.order)"
-      >
-        <v-btn
-          class=""
-          fab
-          depressed
-          width="36"
-          height="36"
-        />
-      </div>
-      <div class="answer-editor ma-4">
-        <div>
-          {{ (index + 1) + ') ' }}
+          <v-icon
+            color="green"
+            :size="!status? 28 : 36"
+          >
+            mdi-checkbox-marked-circle
+          </v-icon>
         </div>
+        <div
+          v-else-if="status"
+          @click="clicked(item.order)"
+        >
+          <v-btn
+            fab
+            depressed
+            width="36"
+            height="36"
+          />
+        </div>
+      </div>
+      <div class="ml-2">
+        {{ (index + 1) + ') ' }}
+      </div>
+      <div class="answer-editor">
         <div>
           <question_field
             :key="'choices' + (index + 1) + domKey"
@@ -60,8 +62,8 @@
       </div>
     </div>
     <!-- ------------------------- answer -------------------------------  -->
-    <div class="ma-5">
-      <div>
+    <div class="ma-5 question-answer ">
+      <div class="mb-5">
         پاسخ تشریحی
       </div>
       <div>
@@ -129,14 +131,33 @@ export default {
 </script>
 
 <style scoped>
-.answers-box{
+.question-layout-options{
   display: flex;
   align-items: center;
-  background-color: white;
-  border-radius: 10px;
+  margin-bottom: 10px;
 
 }
-.answers-box .answer-editor{
+.question-options{
+  display: flex;
+  align-items: center;
+  border-radius: 10px;
+}
+.background-color-test{
+  background-color: white;
+
+}
+.question-answer{
+  padding: 10px;
+}
+
+.question-options .answer-editor{
 width: 100%;
 }
+
+</style>
+<style>
+.question-layout .tiptap-plus.v-card {
+  box-shadow: none !important;
+}
+
 </style>

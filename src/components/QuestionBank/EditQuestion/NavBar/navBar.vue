@@ -9,7 +9,7 @@
       </v-col>
       <v-col cols="3">
         <p v-if="question.id">
-          <span> سازنده سوال:</span> <span> فیلان دبیر</span>
+          <span> سازنده سوال :</span> <span> فیلان دبیر</span>
         </p>
       </v-col>
       <v-col
@@ -51,11 +51,11 @@
             </v-row>
           </v-col>
         </v-row>
-      </v-col>
-      <v-col v-if="question.id !== null">
+      </v-col> 
+      <v-col v-if="question.id">
         <v-row>
           <v-col>
-            <span> وضعیت:</span>
+            <span> وضعیت : </span>
             <v-chip
               color="#44a3ff"
               dark
@@ -95,48 +95,35 @@
           </v-col>
         </v-row>
       </v-col>
-      <v-col v-if="!editStatus">
+      <v-col v-if="!editStatus && status">
         <v-row>
           <v-col>
-            <span> وضعیت:</span>
-            <v-chip
-              color="#44a3ff"
-              dark
+            <v-btn
+              depressed
+              rounded
+              color="white"
+              class="ml-2"
+              width="110"
+              @click="btn_clicked('edit')"
             >
-              بررسی نهایی
-            </v-chip>
+              <v-icon color="#666666">
+                mdi-square-edit-outline
+              </v-icon>
+              <span color="#666666">
+                ویرایش
+              </span>
+            </v-btn>
           </v-col>
           <v-col>
-            <v-row>
-              <v-col>
-                <v-btn
-                  depressed
-                  rounded
-                  color="white"
-                  class="ml-2"
-                  width="110"
-                  @click="btn_clicked('edit')"
-                >
-                  <v-icon color="#666666">
-                    mdi-square-edit-outline
-                  </v-icon>
-                  <span color="#666666">
-                    ویرایش
-                  </span>
-                </v-btn>
-              </v-col>
-              <v-col>
-                <v-btn
-                  depressed
-                  rounded
-                  color="white"
-                  width="100"
-                  @click="btn_clicked('remove')"
-                >
-                  حذف
-                </v-btn>
-              </v-col>
-            </v-row>
+            <v-btn
+              depressed
+              rounded
+              color="white"
+              width="100"
+              @click="btn_clicked('remove')"
+            >
+              حذف
+            </v-btn>
           </v-col>
         </v-row>
       </v-col>
