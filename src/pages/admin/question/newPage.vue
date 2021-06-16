@@ -37,7 +37,10 @@
             v-if="urlPathName === 'question.edit' || urlPathName === 'question.show' "
             class="my-10"
           >
-            <StatusComponent :statuses="questionStatuses" />
+            <StatusComponent
+              :statuses="questionStatuses"
+              @update="changeStatus"
+            />
           </div>
           <!-- -------------------------- save change--------------------------->
           <SaveChange />
@@ -153,8 +156,10 @@ export default {
     this.getStatus()
   },
   methods: {
+    changeStatus (newStatus) {
+      axios.post()
+    },
     attachQuestionOnEditMode (item) {
-      console.log('attach', item)
       this.attachLoading = true
       axios.post(API_ADDRESS.question.attach, {
         order: item.order,
