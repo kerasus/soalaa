@@ -94,7 +94,9 @@ class Question extends Model {
             {
                 key: 'confirmers',
                 default: []
-            }
+            },
+            { key: 'created_at' },
+            { key: 'updated_at' }
         ])
 
         if (this.id) {
