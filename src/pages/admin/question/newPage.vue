@@ -37,7 +37,10 @@
             v-if="urlPathName === 'question.edit' || urlPathName === 'question.show' "
             class="my-10"
           >
-            <StatusComponent :statuses="questionStatuses" />
+            <StatusComponent
+              :statuses="questionStatuses"
+              @update="changeStatus"
+            />
           </div>
           <!-- -------------------------- save change--------------------------->
           <SaveChange />
@@ -61,7 +64,7 @@
               height="1856"
               class="rounded-card"
             >
-              <LogList />
+              <LogListComponent :logs="currentQuestion.logs" />
             </v-card>
           </div>
         </v-col>
@@ -78,8 +81,9 @@ import Exams from '@/components/QuestionBank/EditQuestion/Exams/exams';
 import StatusComponent from '@/components/QuestionBank/EditQuestion/StatusComponent/status';
 import ShowImg from '@/components/QuestionBank/EditQuestion/ShowImg/showImg';
 import SaveChange from '@/components/QuestionBank/EditQuestion/SaveChange/saveChange'
-import LogList from '@/components/QuestionBank/EditQuestion/Log/LogList';
+import LogListComponent from '@/components/QuestionBank/EditQuestion/Log/LogList';
 import { Question } from '@/models/Question'
+import { LogList } from '@/models/Log'
 import {ExamList} from "@/models/Exam";
 import {QuestSubcategoryList} from "@/models/QuestSubcategory";
 import API_ADDRESS from "@/api/Addresses";
@@ -96,7 +100,7 @@ export default {
     Exams,
     ShowImg,
     StatusComponent,
-    LogList,
+    LogListComponent,
     SaveChange
   },
   data() {
@@ -153,8 +157,18 @@ export default {
     this.getStatus()
   },
   methods: {
+    changeStatus (newStatus) {
+      let that = this
+      axios.post(API_ADDRESS.question.status.changeStatus(this.$route.params.question_id), {
+        status_id: newStatus.changeState,
+        comment: newStatus.commentAdded
+      })
+      .then((response) => {
+        that.currentQuestion.status = response.data.data.status
+        that.getLogs()
+      })
+    },
     attachQuestionOnEditMode (item) {
-      console.log('attach', item)
       this.attachLoading = true
       axios.post(API_ADDRESS.question.attach, {
         order: item.order,
@@ -350,6 +364,12 @@ export default {
         })
       })
     },
+    getLogs () {
+      this.currentQuestion.logs.fetch(null, API_ADDRESS.question.log.base(this.$route.params.question_id))
+        .then((response) => {
+          this.currentQuestion.logs = new LogList(response.data.data)
+        })
+    },
     loadCurrentQuestionData () {
       let that = this
       console.log(this.currentQuestion)
@@ -357,10 +377,7 @@ export default {
           .then((response) => {
             console.log('response', response)
             that.currentQuestion = new Question(response.data.data)
-            that.currentQuestion.logs.fetch(null, API_ADDRESS.question.log.base(this.$route.params.question_id))
-              .then((response) => {
-                console.log('reeeeeeeeeeeeeeeeeeeeeeeeee', response)
-              })
+            that.getLogs()
             that.trueChoiceIndex = that.currentQuestion.choices.list.findIndex((item) => item.answer )
             that.updateAttachList(response.data.data.exams)
             that.updateRendered()

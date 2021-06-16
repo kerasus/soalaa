@@ -91,14 +91,18 @@ const API_ADDRESS = {
     },
     status: {
       base: lumenServer + '/question/statuses',
+      changeStatus (questionId) {
+        return lumenServer + '/question/' + questionId + '/status'
+      }
     },
     log: {
       base (questionId, pagination) {
         if (!pagination) {
           pagination = 0
         }
-        return lumenServer + '/activity-log?subject_id='+questionId+'&subject=question&titile=update&description=update_qestion_status&with_pagination=0'
+        return lumenServer + '/activity-log?subject_id='+questionId+'&subject=question&title=update&description=update_question_status&with_pagination=0'
       },
+
     },
     base: lumenServer + '/exam-question/attach',
     attachSubCategoryToQuestion: lumenServer + '/exam-question/attach/sub-category',
