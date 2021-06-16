@@ -61,14 +61,14 @@ export default {
   },
   data: () => ({
     newStatus: {
-      changeState: '',
-      commentAdded: '',
+      changeState: null,
+      commentAdded: null,
     },
     loading: false
   }),
   methods: {
     sendStatus() {
-      this.$emit('update', this.newStatus.changeState)
+      this.$emit('update', this.newStatus)
       this.newStatus.changeState = null
       this.newStatus.commentAdded = null
     }
