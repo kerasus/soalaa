@@ -6,6 +6,7 @@
           <navBar
             :question="currentQuestion"
             :edit-status="edit_status"
+            @save="submitQuestion"
           />
           <question-layout
             v-if="!loading"
