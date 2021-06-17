@@ -19,6 +19,7 @@
             :attaches="selectedQuizzes"
             :exam-list="examList"
             :sub-categories="subCategoriesList"
+            :loading="attachLoading"
             @detach="detachQuestion"
             @attach="attachQuestion"
           />
@@ -30,11 +31,12 @@
           />
           <!-- -------------------------- status --------------------------->
           <div
-            v-if="urlPathName === 'question.edit' || urlPathName === 'question.show' "
+            v-if="getPageStatus() !== 'create'"
             class="my-10"
           >
             <StatusComponent
               :statuses="questionStatuses"
+              :loading="changeStatusLoading"
               @update="changeStatus"
             />
           </div>
@@ -155,6 +157,7 @@ export default {
       questionStatuses: new QuestionStatusList(),
       loading: true,
       attachLoading: false,
+      changeStatusLoading: false
     }
   },
   created() {
@@ -209,6 +212,7 @@ export default {
     },
     changeStatus (newStatus) {
       let that = this
+      this.changeStatusLoading = true
       axios.post(API_ADDRESS.question.status.changeStatus(this.$route.params.question_id), {
         status_id: newStatus.changeState,
         comment: newStatus.commentAdded
@@ -216,6 +220,7 @@ export default {
       .then((response) => {
         that.currentQuestion.status = response.data.data.status
         that.getLogs()
+        this.changeStatusLoading = false
       })
     },
     attachQuestionOnEditMode (item) {
