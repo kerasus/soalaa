@@ -111,6 +111,7 @@ class Question extends Model {
         this.apiResource = {
             fields: [
                 {key: 'statement'},
+                {key: 'descriptive_answer'},
                 {key: 'sub_category_id'},
                 {key: 'exams'},
                 {
