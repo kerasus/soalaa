@@ -193,6 +193,7 @@ export default {
       })
 
 
+      let that = this
       if (this.currentQuestion.statement_photo !== null) {
         let formData = new FormData();
         formData.append('status_id', statusId);
@@ -200,7 +201,19 @@ export default {
         this.currentQuestion.answer_photos.forEach( (item, key) => {
           formData.append('answer_photos[' + key + ']', item);
         })
-        axios.post(this.currentQuestion.baseRoute, formData)
+        axios.post(API_ADDRESS.question.create, formData)
+             .then((response) => {
+               const questionId = response.data.data.id
+               that.$router.push({name: 'question.show', params: {question_id: questionId}})
+               // this.currentQuestion.statement = ''
+               // this.currentQuestion.choices.list.forEach((item) => { item.title = '' })
+               // this.$notify({
+               //   group: 'notifs',
+               //   title: 'توجه',
+               //   text: 'ثبت با موفقیت انجام شد',
+               //   type: 'success'
+               // })
+             })
 
         return
       }
