@@ -2,10 +2,17 @@
   <v-row>
     <v-col v-if="editStatus">
       <vue-tiptap-katex
+        v-if="true"
         v-model="html"
         :loading="loading"
         @input="updateValue"
       />
+      <input
+        v-if="false"
+        v-model="html"
+        style="border: solid 1px gray;"
+        @input="updateValue"
+      >
     </v-col>
     <!-- eslint-disable vue/no-v-html -->
     <v-col
@@ -206,7 +213,7 @@ export default {
       katexes.forEach(item => {
         let markdownKatex = item.attributes[0].nodeValue
         if (markdownKatex) {
-          markdownKatex = '$' + markdownKatex + '$'
+          markdownKatex = '$$' + markdownKatex + '$$'
 
           var katexWrapper = document.createElement('div');
           katexWrapper.innerHTML = markdownKatex;
@@ -235,20 +242,35 @@ export default {
       if (markdownString[startIndex -1] === '\\') {
         return this.convertMarkdownKatexToHtml(markdownString, startIndex + 1)
       }
-      const endIndex = markdownString.indexOf('$', startIndex + 1)
-      if (endIndex === -1) {
-        return markdownString
-      }
-      if (markdownString[endIndex -1] === '\\') {
+      if (markdownString[startIndex + 1] === '$') {
+        const endIndex = markdownString.indexOf('$$', startIndex + 2)
+        if (endIndex === -1) {
+          return markdownString
+        }
+        if (markdownString[endIndex -1] === '\\') {
+          return this.convertMarkdownKatexToHtml(markdownString, endIndex + 2)
+        }
+        const firstThird = markdownString.slice(0, startIndex)
+        const secondThird = markdownString.slice(startIndex + 2, endIndex)
+        const remaining = markdownString.slice(endIndex + 2)
+        markdownString = firstThird + '<tiptap-interactive-katex katex="' +
+                secondThird + '"></tiptap-interactive-katex>' + remaining
         return this.convertMarkdownKatexToHtml(markdownString, endIndex + 1)
+      } else {
+        const endIndex = markdownString.indexOf('$', startIndex + 1)
+        if (endIndex === -1) {
+          return markdownString
+        }
+        if (markdownString[endIndex -1] === '\\') {
+          return this.convertMarkdownKatexToHtml(markdownString, endIndex + 1)
+        }
+        const firstThird = markdownString.slice(0, startIndex)
+        const secondThird = markdownString.slice(startIndex + 1, endIndex)
+        const remaining = markdownString.slice(endIndex + 1)
+        markdownString = firstThird + '<tiptap-interactive-katex-inline katex="' +
+                secondThird + '"></tiptap-interactive-katex-inline>' + remaining
+        return this.convertMarkdownKatexToHtml(markdownString, endIndex)
       }
-      const firstThird = markdownString.slice(0, startIndex)
-      const secondThird = markdownString.slice(startIndex + 1, endIndex)
-      const remaining = markdownString.slice(endIndex + 1)
-      console.log('second third', startIndex, endIndex, secondThird)
-      markdownString = firstThird + '<tiptap-interactive-katex-inline katex="' +
-              secondThird + '"></tiptap-interactive-katex-inline>' + remaining
-      return this.convertMarkdownKatexToHtml(markdownString, endIndex)
     },
     convertMarkdownImageToHtml (markdownString, index = 0) {
       const startIndex = markdownString.indexOf('![](', index)
@@ -274,7 +296,7 @@ export default {
       return this.convertMarkdownImageToHtml(markdownString, endIndex)
     },
     convertToTiptap (string = '') {
-
+      string = this.htmlToMarkdown(string)
       string = this.convertMarkdownImageToHtml(string)
       string = this.convertMarkdownKatexToHtml(string)
       return string
@@ -628,5 +650,9 @@ export default {
 <style>
 .inline .v-btn.blue--text {
   display: none;
+}
+
+.tiptap-plus-container.focused {
+  border: solid 1px #dedede;
 }
 </style>

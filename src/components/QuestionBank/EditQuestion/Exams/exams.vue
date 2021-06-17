@@ -4,7 +4,7 @@
       آزمون ها
     </p>
 
-    <v-row class="exam-section  mb-1">
+    <v-row class="exam-section">
       <v-col
         class="choose-exam"
         cols="5"
@@ -17,6 +17,7 @@
           label="انتخاب آزمون"
           dense
           solo
+          flat
         />
       </v-col>
       <v-col
@@ -31,6 +32,7 @@
           label="انتخاب درس"
           dense
           solo
+          flat
         />
       </v-col>
 
@@ -45,6 +47,7 @@
           label="ترتیب"
           solo
           dense
+          flat
         />
       </v-col>
       <v-col
@@ -60,6 +63,8 @@
               small
               text
               @click="attach"
+              :loading="loading"
+              :disabled="loading"
             >
               <v-icon>mdi-plus</v-icon>
             </v-btn>
@@ -125,6 +130,8 @@
               small
               text
               @click="detach(item)"
+              :loading="loading"
+              :disabled="loading"
             >
               <v-icon>mdi-trash-can-outline</v-icon>
             </v-btn>
@@ -159,6 +166,12 @@ export default {
         return []
       },
       type: Object
+    },
+    loading: {
+      default: () => {
+        return false
+      },
+      type: Boolean
     }
 
   },
@@ -216,6 +229,9 @@ export default {
   top: -62px;
   left: 9px;
 }
+.exam .exam-order .v-text-field fieldset, .v-text-field .v-input__control, .v-text-field .v-input__slot {
+  border-radius: 10px;
+}
 </style>
 <style scoped>
 .v-text-field.v-text-field--enclosed {
@@ -235,4 +251,5 @@ export default {
   min-width: 0px;
   padding: 0 0px;
 }
+
 </style>

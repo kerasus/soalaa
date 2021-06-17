@@ -297,6 +297,16 @@ export default {
         this.addData.content = ''
       }
     },
+    value: {
+      handler: function(newValue) {
+        this.question = newValue
+        if (!this.editStatus) {
+          this.questionFile = (this.question.statement_photo) ? [this.question.statement_photo] : []
+          this.answerFiles = this.question.answer_photos
+        }
+      },
+      deep: true
+    }
   },
   created() {
     this.question = this.value
@@ -316,8 +326,8 @@ export default {
         answerFiles: this.answerFiles
       }
 
-      this.question.statement_photo = this.questionFile.blob
-      this.question.answer_photos = this.answerFiles.map( item => item.blob)
+      this.question.statement_photo = this.questionFile[0].file
+      this.question.answer_photos = this.answerFiles.map( item => item.file)
       console.log('files', files)
       console.log('this.question', this.question)
       this.$emit('input', this.question)
