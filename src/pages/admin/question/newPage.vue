@@ -82,6 +82,7 @@ import Exams from '@/components/QuestionBank/EditQuestion/Exams/exams';
 import StatusComponent from '@/components/QuestionBank/EditQuestion/StatusComponent/status';
 import ShowImg from '@/components/QuestionBank/EditQuestion/ShowImg/showImg';
 import LogListComponent from '@/components/QuestionBank/EditQuestion/Log/LogList';
+import {mixinMarkdownAndKatex} from "@/mixin/Mixins"
 import { Question } from '@/models/Question'
 import { LogList } from '@/models/Log'
 import { ExamList } from "@/models/Exam";
@@ -92,7 +93,7 @@ import { QuestionStatusList } from "@/models/QuestionStatus";
 import axios from 'axios'
 
 export default {
-  name: "NewPage",
+  name: 'NewPage',
   components: {
     navBar,
     QuestionLayout,
@@ -102,6 +103,7 @@ export default {
     StatusComponent,
     LogListComponent
   },
+  mixins: [mixinMarkdownAndKatex],
   data() {
     return {
       pageStatuses: [
@@ -122,9 +124,11 @@ export default {
       imgSrc:'',
       urlPathName:'',
       edit_status:true,
+      selectedField: 0,
       questionColsNumber: 12,
       uploadImgColsNumber: 0,
       log_component_number:0,
+      choiceRendered: ['', '', '', ''],
       displayEditQuestion: false,
       currentQuestion: new Question(),
       examList: new ExamList(),
@@ -180,7 +184,27 @@ export default {
       this.currentQuestion.choices.list.forEach((item) => { item.answer = false })
       this.currentQuestion.choices.list[this.trueChoiceIndex].answer = true
       this.currentQuestion.status_id = statusId
-      this.currentQuestion.exams = this.selectedQuizzes
+      this.currentQuestion.exams = this.selectedQuizzes.map( item => {
+        return {
+          id: item.exam.id,
+          sub_category_id: item.sub_category.id,
+          order: item.order
+        }
+      })
+
+
+      if (this.currentQuestion.statement_photo !== null) {
+        let formData = new FormData();
+        formData.append('status_id', statusId);
+        formData.append('statement_photo', this.currentQuestion.statement_photo);
+        this.currentQuestion.answer_photos.forEach( (item, key) => {
+          formData.append('answer_photos[' + key + ']', item);
+        })
+        axios.post(this.currentQuestion.baseRoute, formData)
+
+        return
+      }
+
       this.currentQuestion.create()
           .then(() => {
             // this.currentQuestion.statement = ''
@@ -197,6 +221,8 @@ export default {
       this.navBarAction_create(this.questionStatusId_pending_to_type)
     },
     navBarAction_save () {
+      this.currentQuestion.choices.list.forEach((item) => { item.answer = false })
+      this.currentQuestion.choices.list[this.trueChoiceIndex].answer = true
       this.currentQuestion.update(API_ADDRESS.question.updateQuestion(this.currentQuestion.id))
           .then(() => {
             this.$notify({
@@ -208,13 +234,29 @@ export default {
           })
     },
     navBarAction_cancel () {
-      console.log('navBarAction_cancel')
+      this.$router.push({name: 'question.show', params: { question_id: this.$route.params.question_id}})
     },
     navBarAction_edit () {
-      console.log('navBarAction_edit')
+      this.$router.push({name: 'question.edit', params: { question_id: this.$route.params.question_id}})
     },
     navBarAction_remove () {
-      console.log('navBarAction_remove')
+      let that = this
+      this.$store.commit('AppLayout/showConfirmDialog', {
+        message: 'از حذف کامل سوال از پایگاه داده و حذف از تمامی آزمون ها اطمینان دارید؟',
+        button: {
+          no: 'خیر',
+          yes: 'بله'
+        },
+        callback: (confirm) => {
+          if (!confirm) {
+            return
+          }
+          axios.delete(API_ADDRESS.question.delete(this.$route.params.question_id))
+         .then(() => {
+           that.$router.push({name: 'question.list'})
+         })
+        }
+      })
     },
     setPageStatus () {
       let that = this
@@ -311,7 +353,6 @@ export default {
     },
     detachQuestionOnEditMode(item) {
       this.attachLoading = true
-      console.log('item', item)
       axios.post(API_ADDRESS.question.detach(this.$route.params.question_id), {
         detaches: [{
           exam_id: item.exam.id,
@@ -320,7 +361,6 @@ export default {
         }]
       })
       .then((response) => {
-        console.log('response', response)
         this.selectedQuizzes = []
         // response.data.data.exams.forEach(item => {
           // this.selectedQuizzes.push({
@@ -362,8 +402,7 @@ export default {
         this.questionStatusId_draft = this.questionStatuses.list.find( item => item.title === 'draft').id
         this.questionStatusId_pending_to_type = this.questionStatuses.list.find( item => item.title === 'pending_to_type').id
       })
-      .catch((error) => {
-        console.log('error', error)
+      .catch(() => {
       })
     },
     checkUrl () {
@@ -391,7 +430,6 @@ export default {
              })
     },
     setNullKeys () {
-      console.log('test', this.currentQuestion.statement)
       if (!this.currentQuestion.statement) {
         this.currentQuestion.statement = ''
       }
@@ -409,7 +447,6 @@ export default {
       return new Promise(function(resolve, reject) {
         new ExamList().fetch()
         .then((response) => {
-          console.log('responseExam', response)
           that.examList = new ExamList(response.data.data)
           // that.totalExams = []
           // that.examList.list.forEach(item => {
@@ -433,12 +470,10 @@ export default {
       return new Promise(function(resolve, reject) {
         that.subCategoriesList.fetch()
         .then((response) => {
-          console.log('responseSub', response)
           that.subCategoriesList = new QuestSubcategoryList(response.data.data)
           resolve()
         })
         .catch( () => {
-          console.log('error')
           reject()
         })
       })
@@ -451,10 +486,8 @@ export default {
     },
     loadCurrentQuestionData () {
       let that = this
-      console.log(this.currentQuestion)
       this.currentQuestion.show(null, API_ADDRESS.question.updateQuestion(this.$route.params.question_id))
           .then((response) => {
-            console.log('response', response)
             that.currentQuestion = new Question(response.data.data)
             that.getLogs()
             that.trueChoiceIndex = that.currentQuestion.choices.list.findIndex((item) => item.answer )

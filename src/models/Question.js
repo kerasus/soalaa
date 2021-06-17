@@ -114,8 +114,6 @@ class Question extends Model {
                 {key: 'descriptive_answer'},
                 {key: 'sub_category_id'},
                 {key: 'exams'},
-                {key: 'statement_photo'},
-                {key: 'answer_photos'},
                 {
                     key: 'choices',
                     value: function () {
