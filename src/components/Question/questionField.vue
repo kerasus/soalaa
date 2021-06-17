@@ -2,10 +2,17 @@
   <v-row>
     <v-col v-if="editStatus">
       <vue-tiptap-katex
+        v-if="true"
         v-model="html"
         :loading="loading"
         @input="updateValue"
       />
+      <input
+        v-if="false"
+        v-model="html"
+        style="border: solid 1px gray;"
+        @input="updateValue"
+      >
     </v-col>
     <!-- eslint-disable vue/no-v-html -->
     <v-col
