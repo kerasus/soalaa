@@ -226,6 +226,106 @@ export default {
   top: -62px;
   left: 9px;
 }
+.exam .exam-order .v-input__control .v-text-field__details {
+  position: relative;
+  top: -62px;
+  left: 9px;
+}
+.exam .exam-order .v-input__control .v-text-field__details{
+  position: relative;
+  top: -62px;
+  left: 9px;
+}
+.exam .exam-order .v-input__control .v-text-field__details{
+  position: relative;
+  top: -62px;
+  left: 9px;
+}
+.exam .exam-order .v-input__control .v-text-field__details{
+  position: relative;
+  top: -62px;
+  left: 9px;
+}
+.exam .exam-order .v-input__control .v-text-field__details{
+  position: relative;
+  top: -62px;
+  left: 9px;
+}
+.exam .exam-order .v-input__control .v-text-field__details{
+  position: relative;
+  top: -62px;
+  left: 9px;
+}
+.exam .exam-order .v-input__control .v-text-field__details{
+  position: relative;
+  top: -62px;
+  left: 9px;
+}
+.exam .exam-order .v-input__control .v-text-field__details{
+  position: relative;
+  top: -62px;
+  left: 9px;
+}
+.exam .exam-order .v-input__control .v-text-field__details{
+  position: relative;
+  top: -62px;
+  left: 9px;
+}
+.exam .exam-order .v-input__control .v-text-field__details{
+  position: relative;
+  top: -62px;
+  left: 9px;
+}
+.exam .exam-order .v-input__control .v-text-field__details{
+  position: relative;
+  top: -62px;
+  left: 9px;
+}
+.exam .exam-order .v-input__control .v-text-field__details{
+  position: relative;
+  top: -62px;
+  left: 9px;
+}
+.exam .exam-order .v-input__control .v-text-field__details{
+  position: relative;
+  top: -62px;
+  left: 9px;
+}
+.exam .exam-order .v-input__control .v-text-field__details{
+  position: relative;
+  top: -62px;
+  left: 9px;
+}
+.exam .exam-order .v-input__control .v-text-field__details{
+  position: relative;
+  top: -62px;
+  left: 9px;
+}
+.exam .exam-order .v-input__control .v-text-field__details{
+  position: relative;
+  top: -62px;
+  left: 9px;
+}
+.exam .exam-order .v-input__control .v-text-field__details{
+  position: relative;
+  top: -62px;
+  left: 9px;
+}
+.exam .exam-order .v-input__control .v-text-field__details{
+  position: relative;
+  top: -62px;
+  left: 9px;
+}
+.exam .exam-order .v-input__control .v-text-field__details{
+  position: relative;
+  top: -62px;
+  left: 9px;
+}
+.exam .exam-order .v-input__control .v-text-field__details{
+  position: relative;
+  top: -62px;
+  left: 9px;
+}
 </style>
 <style scoped>
 .v-text-field.v-text-field--enclosed {
