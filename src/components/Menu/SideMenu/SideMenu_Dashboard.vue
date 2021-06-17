@@ -295,7 +295,7 @@ background-color: darkred;
     .v-list-group--active > .v-list-group__header .v-list-item, .v-list-group--active > .v-list-group__header .v-list-item__content, .v-list-group--active > .v-list-group__header .v-list-group__header__prepend-icon .v-icon {
       color: white;
     }
-    .theme--light.v-icon {
+    .menu .theme--light.v-icon {
       color: white !important;
     }
 </style>
