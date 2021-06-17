@@ -40,7 +40,7 @@
                   rounded
                   color="white"
                   width="130"
-                  @click="btn_clicked('save_draft')"
+                  @click="btn_clicked('saveDraft')"
                 >
                   <v-icon color="#666666">
                     mdi-square-edit-outline
