@@ -3,10 +3,15 @@
     <v-container class="pa-6">
       <v-row>
         <v-col :cols="questionColsNumber">
-          <navBar
+          <nav-bar
             :question="currentQuestion"
             :edit-status="edit_status"
-            @save="submitQuestion"
+            @create="navBarAction_create"
+            @saveDraft="navBarAction_saveDraft"
+            @save="navBarAction_save"
+            @cancel="navBarAction_cancel"
+            @edit="navBarAction_edit"
+            @remove="navBarAction_remove"
           />
           <question-layout
             v-if="!loading"
@@ -155,6 +160,9 @@ export default {
       questionStatuses: new QuestionStatusList(),
       loading: true,
       attachLoading: false,
+
+      questionStatusId_draft: null,
+      questionStatusId_pending_to_type: null
     }
   },
   created() {
@@ -163,34 +171,48 @@ export default {
     this.getStatus()
   },
   methods: {
-    submitQuestion () {
-      if (this.urlPathName === 'question.edit') {
-        this.currentQuestion.update(API_ADDRESS.question.updateQuestion(this.currentQuestion.id))
-            .then(() => {
-              this.$notify({
-                group: 'notifs',
-                title: 'توجه',
-                text: 'ویرایش با موفقیت انجام شد',
-                type: 'success'
-              })
-            })
-        return
+    navBarAction_create (statusId) {
+      if (!statusId) {
+        statusId = this.questionStatusId_draft
       }
       this.currentQuestion.choices.list.forEach((item) => { item.answer = false })
       this.currentQuestion.choices.list[this.trueChoiceIndex].answer = true
+      this.currentQuestion.status_id = statusId
       this.currentQuestion.exams = this.selectedQuizzes
       this.currentQuestion.create()
           .then(() => {
-            this.currentQuestion.statement = ''
-            this.currentQuestion.choices.list.forEach((item) => { item.title = '' })
+            // this.currentQuestion.statement = ''
+            // this.currentQuestion.choices.list.forEach((item) => { item.title = '' })
+            // this.$notify({
+            //   group: 'notifs',
+            //   title: 'توجه',
+            //   text: 'ثبت با موفقیت انجام شد',
+            //   type: 'success'
+            // })
+          })
+    },
+    navBarAction_saveDraft () {
+      this.navBarAction_create(this.questionStatusId_pending_to_type)
+    },
+    navBarAction_save () {
+      this.currentQuestion.update(API_ADDRESS.question.updateQuestion(this.currentQuestion.id))
+          .then(() => {
             this.$notify({
               group: 'notifs',
               title: 'توجه',
-              text: 'ثبت با موفقیت انجام شد',
+              text: 'ویرایش با موفقیت انجام شد',
               type: 'success'
             })
           })
-
+    },
+    navBarAction_cancel () {
+      console.log('navBarAction_cancel')
+    },
+    navBarAction_edit () {
+      console.log('navBarAction_edit')
+    },
+    navBarAction_remove () {
+      console.log('navBarAction_remove')
     },
     setPageStatus () {
       let that = this
@@ -335,6 +357,8 @@ export default {
       this.questionStatuses.fetch()
       .then((response) => {
         this.questionStatuses = new QuestionStatusList(response.data.data)
+        this.questionStatusId_draft = this.questionStatuses.list.find( item => item.title === 'draft').id
+        this.questionStatusId_pending_to_type = this.questionStatuses.list.find( item => item.title === 'pending_to_type').id
       })
       .catch((error) => {
         console.log('error', error)
