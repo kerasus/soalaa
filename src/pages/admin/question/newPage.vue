@@ -49,7 +49,6 @@
         <!-- -------------------------- show img---------------------------->
         <v-col
           :cols="uploadImgColsNumber"
-          :class="displayEditQuestion ? '' : 'd-none'"
         >
           <ShowImg
             :test="imgSrc"
@@ -58,11 +57,7 @@
         </v-col>
         <!-- -------------------------- log --------------------------->
         <v-col :cols="log_component_number">
-          <div v-if="getPageStatus() !== 'create'">
-
-              <LogListComponent :logs="currentQuestion.logs" />
-
-          </div>
+          <LogListComponent :logs="currentQuestion.logs" />
         </v-col>
       </v-row>
     </v-container>
@@ -171,6 +166,7 @@ export default {
     this.setPageStatus()
     this.checkUrl()
     this.getStatus()
+
   },
   methods: {
     navBarAction_create (statusId) {
@@ -280,6 +276,7 @@ export default {
     },
     getPageStatus () {
       const target = this.pageStatuses.find( item => item.state)
+      console.log('traget :', target.title)
       return (target) ? target.title : false
     },
     changeStatus (newStatus) {
@@ -419,10 +416,14 @@ export default {
       this.edit_status = (this.getPageStatus() === 'create' || this.getPageStatus() === 'edit');
 
       if(this.getPageStatus() !== 'create') {
-        this.questionColsNumber = 9
-        this.log_component_number = 3
+        if(this.currentQuestion.logs.length>0){
+          this.questionColsNumber = 9
+          this.log_component_number = 3
+        }else {
+          this.questionColsNumber = 12
+          this.log_component_number = 0
+        }
       }
-
       let that = this
       const loanExamListPromise = this.loanExamList()
       const loadSubcategoriesPromise = this.loadSubcategories()
@@ -492,6 +493,7 @@ export default {
         .then((response) => {
           this.currentQuestion.logs = new LogList(response.data.data)
         })
+      console.log('log list from get log',this.currentQuestion.logs)
     },
     loadCurrentQuestionData () {
       let that = this
@@ -593,7 +595,6 @@ export default {
     },
     openShowImgPanel (src) {
        this.imgSrc = src
-       this.displayEditQuestion = true
        this.questionColsNumber = 7
        this.log_component_number= 0
        this.uploadImgColsNumber = 5
@@ -601,15 +602,16 @@ export default {
 
     },
     closeShowImgPanel() {
-      this.displayEditQuestion = false
+      this.uploadImgColsNumber = 0
       this.$store.commit('AppLayout/updateDrawer', true)
-      if(this.$route.name === 'question.show' || this.$route.name === 'question.edit'){
-        this.questionColsNumber = 9
-        this.log_component_number= 3
-      }else {
-        this.questionColsNumber = 12
-        this.uploadImgColsNumber = 0
-      }
+        if(this.currentQuestion.logs.length>0){
+          this.questionColsNumber = 9
+          this.log_component_number= 3
+
+        }else {
+          this.questionColsNumber = 12
+          this.log_component_number= 0}
+
     },
   }
 }
