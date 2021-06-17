@@ -54,13 +54,9 @@
         <!-- -------------------------- log --------------------------->
         <v-col :cols="log_component_number">
           <div v-if="getPageStatus() !== 'create'">
-            <v-card
-              flat
-              height="1856"
-              class="rounded-card"
-            >
+
               <LogListComponent :logs="currentQuestion.logs" />
-            </v-card>
+
           </div>
         </v-col>
       </v-row>
@@ -553,7 +549,5 @@ export default {
 </script>
 
 <style scoped>
-.rounded-card{
-  border-radius: 10px;
-}
+
 </style>

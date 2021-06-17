@@ -4,7 +4,7 @@
       آزمون ها
     </p>
 
-    <v-row class="exam-section  mb-1">
+    <v-row class="exam-section">
       <v-col
         class="choose-exam"
         cols="5"
@@ -231,106 +231,6 @@ export default {
 }
 .exam .exam-order .v-text-field fieldset, .v-text-field .v-input__control, .v-text-field .v-input__slot {
   border-radius: 10px;
-}
-.exam .exam-order .v-input__control .v-text-field__details {
-  position: relative;
-  top: -62px;
-  left: 9px;
-}
-.exam .exam-order .v-input__control .v-text-field__details{
-  position: relative;
-  top: -62px;
-  left: 9px;
-}
-.exam .exam-order .v-input__control .v-text-field__details{
-  position: relative;
-  top: -62px;
-  left: 9px;
-}
-.exam .exam-order .v-input__control .v-text-field__details{
-  position: relative;
-  top: -62px;
-  left: 9px;
-}
-.exam .exam-order .v-input__control .v-text-field__details{
-  position: relative;
-  top: -62px;
-  left: 9px;
-}
-.exam .exam-order .v-input__control .v-text-field__details{
-  position: relative;
-  top: -62px;
-  left: 9px;
-}
-.exam .exam-order .v-input__control .v-text-field__details{
-  position: relative;
-  top: -62px;
-  left: 9px;
-}
-.exam .exam-order .v-input__control .v-text-field__details{
-  position: relative;
-  top: -62px;
-  left: 9px;
-}
-.exam .exam-order .v-input__control .v-text-field__details{
-  position: relative;
-  top: -62px;
-  left: 9px;
-}
-.exam .exam-order .v-input__control .v-text-field__details{
-  position: relative;
-  top: -62px;
-  left: 9px;
-}
-.exam .exam-order .v-input__control .v-text-field__details{
-  position: relative;
-  top: -62px;
-  left: 9px;
-}
-.exam .exam-order .v-input__control .v-text-field__details{
-  position: relative;
-  top: -62px;
-  left: 9px;
-}
-.exam .exam-order .v-input__control .v-text-field__details{
-  position: relative;
-  top: -62px;
-  left: 9px;
-}
-.exam .exam-order .v-input__control .v-text-field__details{
-  position: relative;
-  top: -62px;
-  left: 9px;
-}
-.exam .exam-order .v-input__control .v-text-field__details{
-  position: relative;
-  top: -62px;
-  left: 9px;
-}
-.exam .exam-order .v-input__control .v-text-field__details{
-  position: relative;
-  top: -62px;
-  left: 9px;
-}
-.exam .exam-order .v-input__control .v-text-field__details{
-  position: relative;
-  top: -62px;
-  left: 9px;
-}
-.exam .exam-order .v-input__control .v-text-field__details{
-  position: relative;
-  top: -62px;
-  left: 9px;
-}
-.exam .exam-order .v-input__control .v-text-field__details{
-  position: relative;
-  top: -62px;
-  left: 9px;
-}
-.exam .exam-order .v-input__control .v-text-field__details{
-  position: relative;
-  top: -62px;
-  left: 9px;
 }
 </style>
 <style scoped>
