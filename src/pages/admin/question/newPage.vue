@@ -24,6 +24,7 @@
             :attaches="selectedQuizzes"
             :exam-list="examList"
             :sub-categories="subCategoriesList"
+            :loading="attachLoading"
             @detach="detachQuestion"
             @attach="attachQuestion"
           />
@@ -35,11 +36,12 @@
           />
           <!-- -------------------------- status --------------------------->
           <div
-            v-if="urlPathName === 'question.edit' || urlPathName === 'question.show' "
+            v-if="getPageStatus() !== 'create'"
             class="my-10"
           >
             <StatusComponent
               :statuses="questionStatuses"
+              :loading="changeStatusLoading"
               @update="changeStatus"
             />
           </div>
@@ -160,7 +162,7 @@ export default {
       questionStatuses: new QuestionStatusList(),
       loading: true,
       attachLoading: false,
-
+      changeStatusLoading: false,
       questionStatusId_draft: null,
       questionStatusId_pending_to_type: null
     }
