@@ -40,7 +40,7 @@
                   rounded
                   color="white"
                   width="130"
-                  @click="btn_clicked('save')"
+                  @click="btn_clicked('saveDraft')"
                 >
                   <v-icon color="#666666">
                     mdi-square-edit-outline
@@ -51,8 +51,8 @@
             </v-row>
           </v-col>
         </v-row>
-      </v-col> 
-      <v-col v-if="question.id">
+      </v-col>
+      <v-col v-if="question.id && editStatus">
         <v-row>
           <v-col>
             <span> وضعیت : </span>
@@ -95,7 +95,7 @@
           </v-col>
         </v-row>
       </v-col>
-      <v-col v-if="!editStatus && status">
+      <v-col v-if="!editStatus">
         <v-row>
           <v-col>
             <v-btn
