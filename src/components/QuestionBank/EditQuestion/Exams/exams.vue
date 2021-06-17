@@ -17,6 +17,7 @@
           label="انتخاب آزمون"
           dense
           solo
+          flat
         />
       </v-col>
       <v-col
@@ -31,6 +32,7 @@
           label="انتخاب درس"
           dense
           solo
+          flat
         />
       </v-col>
 
@@ -45,6 +47,7 @@
           label="ترتیب"
           solo
           dense
+          flat
         />
       </v-col>
       <v-col
@@ -226,6 +229,9 @@ export default {
   top: -62px;
   left: 9px;
 }
+.exam .exam-order .v-text-field fieldset, .v-text-field .v-input__control, .v-text-field .v-input__slot {
+  border-radius: 10px;
+}
 .exam .exam-order .v-input__control .v-text-field__details {
   position: relative;
   top: -62px;
@@ -345,4 +351,5 @@ export default {
   min-width: 0px;
   padding: 0 0px;
 }
+
 </style>

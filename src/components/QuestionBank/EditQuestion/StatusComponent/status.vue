@@ -1,6 +1,6 @@
 <template>
-  <v-row align="center">
-    <v-col>
+  <v-row align="center" class="status">
+    <v-col class="status-details">
       <p class="font-weight-medium">
         تغییر وضعیت
       </p>
@@ -16,10 +16,11 @@
           item-value="id"
           dense
           solo
+          flat
         />
       </v-card>
     </v-col>
-    <v-col>
+    <v-col class="status-details">
       <p class="font-weight-medium">
         افزودن کامنت
       </p>
@@ -33,15 +34,17 @@
           height="36"
           solo
           dense
+          flat
         />
       </v-card>
     </v-col>
-    <v-col class="mt-7">
+    <v-col class="mt-7" flat>
       <v-btn
         color="success"
         :loading="loading"
         :disabled="loading"
         @click="sendStatus"
+        class="status-button"
       >
         ذخیره
       </v-btn>
@@ -82,6 +85,12 @@ export default {
 }
 </script>
 
-<style scoped>
-
+<style>
+.status-details .v-sheet.v-card {
+  border-radius: 10px;
+}
+.status .v-btn {
+  box-shadow: none;
+  border-radius: 10px;
+}
 </style>
