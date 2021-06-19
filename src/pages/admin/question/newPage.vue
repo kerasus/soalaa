@@ -31,7 +31,7 @@
           <!-- -------------------------- upload file ---------------------->
           <UploadImg
             v-model="currentQuestion"
-            :edit-status="edit_status"
+            :edit-status="upload_img_status"
             @imgClicked="openShowImgPanel"
           />
           <!-- -------------------------- status --------------------------->
@@ -48,7 +48,8 @@
         </v-col>
         <!-- -------------------------- show img---------------------------->
         <v-col
-          :cols="uploadImgColsNumber"
+          v-if="uploadImgColsNumber.show"
+          :cols="5"
         >
           <ShowImg
             :test="imgSrc"
@@ -56,7 +57,10 @@
           />
         </v-col>
         <!-- -------------------------- log --------------------------->
-        <v-col :cols="log_component_number">
+        <v-col
+          v-if="true"
+          :cols="3"
+        >
           <LogListComponent :logs="currentQuestion.logs" />
         </v-col>
       </v-row>
@@ -115,10 +119,13 @@ export default {
       imgSrc:'',
       urlPathName:'',
       edit_status:true,
+      upload_img_status:true,
       selectedField: 0,
       questionColsNumber: 12,
-      uploadImgColsNumber: 0,
-      log_component_number:0,
+      uploadImgColsNumber: {
+        cols:0,
+        show:false
+      },
       choiceRendered: ['', '', '', ''],
       displayEditQuestion: false,
       currentQuestion: new Question(),
@@ -414,7 +421,7 @@ export default {
     checkUrl () {
       // set edit_status
       this.edit_status = (this.getPageStatus() === 'create' || this.getPageStatus() === 'edit');
-
+      this.upload_img_status = (this.getPageStatus() === 'create');
       if(this.getPageStatus() !== 'create') {
         if(this.currentQuestion.logs.length>0){
           this.questionColsNumber = 9
@@ -493,7 +500,7 @@ export default {
         .then((response) => {
           this.currentQuestion.logs = new LogList(response.data.data)
         })
-      console.log('log list from get log',this.currentQuestion.logs)
+      console.log('log list from get log :',this.currentQuestion.logs.list.length)
     },
     loadCurrentQuestionData () {
       let that = this
@@ -596,13 +603,12 @@ export default {
     openShowImgPanel (src) {
        this.imgSrc = src
        this.questionColsNumber = 7
-       this.log_component_number= 0
-       this.uploadImgColsNumber = 5
+       this.uploadImgColsNumber.show = true
        this.$store.commit('AppLayout/updateDrawer', false)
-
     },
     closeShowImgPanel() {
-      this.uploadImgColsNumber = 0
+      this.uploadImgColsNumber.show = false
+
       this.$store.commit('AppLayout/updateDrawer', true)
         if(this.currentQuestion.logs.length>0){
           this.questionColsNumber = 9
