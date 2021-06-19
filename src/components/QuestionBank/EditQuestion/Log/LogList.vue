@@ -1,10 +1,8 @@
 <template>
   <div>
-    <v-card height="100">
-      <p class="mt-2">
-        سابقه
-      </p>
-    </v-card>
+    <p class="mt-2 font-weight-medium">
+      سابقه
+    </p>
     <v-card
       flat
       class="rounded-card"

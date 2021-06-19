@@ -1,9 +1,8 @@
 <template>
-  <div class="exam">
+  <div class="exam mb-10">
     <p class="font-weight-medium">
       آزمون ها
     </p>
-
     <v-row class="exam-section">
       <v-col
         class="choose-exam"
@@ -62,9 +61,9 @@
             <v-btn
               small
               text
-              @click="attach"
               :loading="loading"
               :disabled="loading"
+              @click="attach"
             >
               <v-icon>mdi-plus</v-icon>
             </v-btn>
@@ -129,9 +128,9 @@
             <v-btn
               small
               text
-              @click="detach(item)"
               :loading="loading"
               :disabled="loading"
+              @click="detach(item)"
             >
               <v-icon>mdi-trash-can-outline</v-icon>
             </v-btn>
