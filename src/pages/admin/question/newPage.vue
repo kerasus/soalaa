@@ -2,7 +2,7 @@
   <div id="app">
     <v-container class="pa-6">
       <v-row>
-        <v-col :cols="(currentQuestion.logs.list.length > 0) ? 9 : questionColsNumber">
+        <v-col :cols="questionColsNumber">
           <nav-bar
             :question="currentQuestion"
             :edit-status="edit_status"
@@ -58,7 +58,7 @@
         </v-col>
         <!-- -------------------------- log --------------------------->
         <v-col
-          v-if="currentQuestion.logs.list.length > 0"
+          v-if="currentQuestion.logs.list.length > 0 && !uploadImgColsNumber.show"
           :cols="3"
         >
           <LogListComponent :logs="currentQuestion.logs" />
@@ -400,9 +400,6 @@ export default {
       this.currentQuestion = new Question(eventData)
     },
 
-
-
-
     getQuestionData(){
       let that = this
       if (that.getPageStatus() === 'create') {
@@ -421,8 +418,8 @@ export default {
       this.setEditStatus()
       // set upload_img_status
 
-      // set questionColsNumber
-      this.setQuestionColsNumber()
+
+
       // load exams and subcategories
       // load question data if in show or edit mode
       let that = this
@@ -459,13 +456,11 @@ export default {
       this.upload_img_status = (this.getPageStatus() === 'create');
     },
     setQuestionColsNumber() {
-      console.log('currentQuestion.logs.length' , this.currentQuestion.logs)
-      if (this.currentQuestion.logs.length > 0) {
-
+      if (this.currentQuestion.logs.list.length > 0) {
         this.questionColsNumber = 9
       } else {
         this.questionColsNumber = 12
-        console.log('else run ')
+
       }
     },
     loadExamsAndSubcategoriesAndQuestionStatuses() {
@@ -563,6 +558,8 @@ export default {
       this.currentQuestion.logs.fetch(null, API_ADDRESS.question.log.base(this.$route.params.question_id))
           .then((response) => {
             this.currentQuestion.logs = new LogList(response.data.data)
+            // set questionColsNumber
+            this.setQuestionColsNumber()
           })
     },
 
@@ -649,7 +646,7 @@ export default {
     closeShowImgPanel() {
       this.uploadImgColsNumber.show = false
       this.$store.commit('AppLayout/updateDrawer', true)
-      if (this.currentQuestion.logs.length > 0) {
+      if (this.currentQuestion.logs.list.length > 0) {
         this.questionColsNumber = 9
       } else {
         this.questionColsNumber = 12
