@@ -20,7 +20,7 @@
             @input="updateQuestion"
           />
           <!-- -------------------------- show exams  ---------------------->
-          <Exams
+          <attach_list
             :attaches="selectedQuizzes"
             :exam-list="examList"
             :sub-categories="subCategoriesList"
@@ -73,7 +73,7 @@ import Vue from 'vue'
 import navBar from '@/components/QuestionBank/EditQuestion/NavBar/navBar.vue';
 import QuestionLayout from '@/components/QuestionBank/EditQuestion/question-layout/question_layout';
 import UploadImg from '@/components/QuestionBank/EditQuestion/UploadImgs/uploadImg';
-import Exams from '@/components/QuestionBank/EditQuestion/Exams/exams';
+import attach_list from '@/components/QuestionBank/EditQuestion/Exams/exams';
 import StatusComponent from '@/components/QuestionBank/EditQuestion/StatusComponent/status';
 import ShowImg from '@/components/QuestionBank/EditQuestion/ShowImg/showImg';
 import LogListComponent from '@/components/QuestionBank/EditQuestion/Log/LogList';
@@ -86,6 +86,7 @@ import API_ADDRESS from "@/api/Addresses";
 import Assistant from "@/plugins/assistant";
 import {QuestionStatusList} from "@/models/QuestionStatus";
 import axios from 'axios'
+import {ChoiceList} from "@/models/Choice";
 
 export default {
   name: 'NewPage',
@@ -93,7 +94,7 @@ export default {
     navBar,
     QuestionLayout,
     UploadImg,
-    Exams,
+    attach_list,
     ShowImg,
     StatusComponent,
     LogListComponent
@@ -120,45 +121,14 @@ export default {
       urlPathName: '',
       edit_status: true,
       upload_img_status: true,
-      selectedField: 0,
       questionColsNumber: 12,
       uploadImgColsNumber: {
         cols: 0,
         show: false
       },
-      choiceRendered: ['', '', '', ''],
-      displayEditQuestion: false,
       currentQuestion: new Question(),
       examList: new ExamList(),
       subCategoriesList: new QuestSubcategoryList(),
-      questionData: {
-        statement: '',
-        category_id: '',
-        sub_category_id: 1,
-        order: [],
-        choices: [
-          {
-            title: '',
-            order: 1,
-            answer: false
-          },
-          {
-            title: '',
-            order: 2,
-            answer: false
-          },
-          {
-            title: '',
-            order: 3,
-            answer: false
-          },
-          {
-            title: '',
-            order: 4,
-            answer: false
-          }
-        ]
-      },
       totalExams: [],
       trueChoiceIndex: 0,
       questionStatuses: new QuestionStatusList(),
@@ -174,7 +144,6 @@ export default {
   },
   methods: {
     navBarAction_create(statusId) {
-
       if (!statusId) {
         statusId = this.questionStatusId_draft
       }
@@ -190,7 +159,6 @@ export default {
           order: item.order
         }
       })
-
 
       let that = this
       if (this.currentQuestion.statement_photo !== null) {
@@ -273,6 +241,27 @@ export default {
       })
     },
 
+    initData() {
+      this.setPageStatus()
+      this.setEditStatus()
+      this.setUploadImgStatus()
+
+      // load exams and subcategories
+      // load question
+      let that = this
+      const loanExamListPromise = this.loanExamList()
+      const loadSubcategoriesPromise = this.loadSubcategories()
+      const promiseArray = [loanExamListPromise, loadSubcategoriesPromise]
+      if (that.getPageStatus() === 'create') {
+        const getQuestionStatusesPromise = this.getQuestionStatuses()
+        promiseArray.push(getQuestionStatusesPromise)
+      }
+      Promise.all(promiseArray)
+          .then(() => {
+            this.loadQuestion()
+            that.loading = false
+          })
+    },
     getPageStatus() {
       const target = this.pageStatuses.find(item => item.state)
       return (target) ? target.title : false
@@ -325,14 +314,13 @@ export default {
       selectedQuizzes.forEach((item, i) => {
         selectedQuizzes[i].subId = i + 1;
       })
-
       this.selectedQuizzes = selectedQuizzes
     },
     attachQuestion(item) {
-      if (this.getPageStatus() === 'edit' || this.getPageStatus() === 'show') {
-        this.attachQuestionOnEditMode(item)
-      } else {
+      if (this.getPageStatus() === 'creat') {
         this.attachQuestionOnCreateMode(item)
+      } else {
+        this.attachQuestionOnEditMode(item)
       }
     },
     detachQuestion(item) {
@@ -400,42 +388,57 @@ export default {
       this.currentQuestion = new Question(eventData)
     },
 
-    getQuestionData(){
+
+
+    loadQuestion() {
       let that = this
       if (that.getPageStatus() === 'create') {
-        that.currentQuestion = new Question(that.questionData)
+        that.loadEmptyQuestion()
       } else {
-        that.loadCurrentQuestionData()
+        that.loadQuestionFromServer()
       }
+      // ToDo: must remove
       that.convertNullToEmptyString()
-
-
     },
- //init data----------------------------------------------------------------
-    initData() {
-      this.setPageStatus()
-      // set edit_status
-      this.setEditStatus()
-      // set upload_img_status
-
-
-
-      // load exams and subcategories
-      // load question data if in show or edit mode
+    loadEmptyQuestion () {
+      this.currentQuestion = new Question({
+        // statement: '',
+        // category_id: '',
+        // sub_category_id: 1,
+        // order: [],
+        choices: [
+          {
+            title: '',
+            order: 1,
+            answer: false
+          },
+          {
+            title: '',
+            order: 2,
+            answer: false
+          },
+          {
+            title: '',
+            order: 3,
+            answer: false
+          },
+          {
+            title: '',
+            order: 4,
+            answer: false
+          }
+        ]
+      })
+    },
+    loadQuestionFromServer () {
       let that = this
-      this.setUploadImgStatus()
-      const loanExamListPromise = this.loanExamList()
-      const loadSubcategoriesPromise = this.loadSubcategories()
-      const getQuestionStatusesPromise = this.getQuestionStatuses()
-      const promiseArray = [loanExamListPromise, loadSubcategoriesPromise, ]
-     if (that.getPageStatus() === 'create'){
-       promiseArray.push(getQuestionStatusesPromise)
-     }
-      Promise.all(promiseArray)
-          .then(() => {
-            //check page status and get data
-            this.getQuestionData()
-            that.loading = false
+      this.currentQuestion.show(null, API_ADDRESS.question.updateQuestion(this.$route.params.question_id))
+          .then((response) => {
+            that.currentQuestion = new Question(response.data.data)
+            that.trueChoiceIndex = that.currentQuestion.choices.list.findIndex((item) => item.answer)
+
+            that.getLogs()
+            that.updateAttachList(response.data.data.exams)
           })
     },
     setPageStatus() {
@@ -531,17 +534,6 @@ export default {
             })
       })
     },
-    loadCurrentQuestionData() {
-      let that = this
-      this.currentQuestion.show(null, API_ADDRESS.question.updateQuestion(this.$route.params.question_id))
-          .then((response) => {
-            that.currentQuestion = new Question(response.data.data)
-            that.getLogs()
-            that.trueChoiceIndex = that.currentQuestion.choices.list.findIndex((item) => item.answer)
-            that.updateAttachList(response.data.data.exams)
-            that.updateRendered()
-          })
-    },
     updateAttachList(exams) {
       // let that = this
       this.selectedQuizzes = exams
@@ -561,80 +553,6 @@ export default {
             // set questionColsNumber
             this.setQuestionColsNumber()
           })
-    },
-
-    updateRendered() {
-      this.replaceNimFasele()
-      this.replaceExtraSpaceAroundDollarSign()
-      this.questRendered = this.markdown.render(this.currentQuestion.statement.toString());
-      for (let i = 0; i < 4; i++) {
-        const title = (typeof this.currentQuestion.choices.list[i] !== 'undefined') ? this.currentQuestion.choices.list[i].title : null
-        if (title) {
-          this.choiceRendered[i] = this.markdown.render(title.toString())
-        }
-      }
-      this.replaceNimFasele()
-    },
-    replaceExtraSpaceAroundDollarSign() {
-      if (this.selectedField === 0) {
-        if (!this.currentQuestion.statement) {
-          this.currentQuestion.statement = ''
-        }
-        while (this.currentQuestion.statement.indexOf('$$') !== -1) {
-          this.currentQuestion.statement = this.currentQuestion.statement.replace('$$', '$')
-        }
-        let dollarSignCounter = 0
-        for (let i = 0; i < this.currentQuestion.statement.length; i++) {
-          if (this.currentQuestion.statement[i] === '$') {
-            dollarSignCounter++
-            if (dollarSignCounter % 2 === 1 && this.currentQuestion.statement[i + 1] === ' ') {
-              this.currentQuestion.statement = this.currentQuestion.statement.slice(0, i + 1) + this.currentQuestion.statement.slice(i + 2)
-              if (this.currentQuestion.statement[i + 1] === ' ') {
-                i--
-                dollarSignCounter--
-              }
-            } else if (dollarSignCounter % 2 === 0 && this.currentQuestion.statement[i - 1] === ' ') {
-              this.currentQuestion.statement = this.currentQuestion.statement.slice(0, i - 1) + this.currentQuestion.statement.slice(i)
-              if (this.currentQuestion.statement[i - 2] === ' ') {
-                i = i - 2
-                dollarSignCounter--
-              }
-            }
-          }
-        }
-      } else {
-        if (!this.currentQuestion.choices.list[this.selectedField - 1].title) {
-          this.currentQuestion.choices.list[this.selectedField - 1].title = ''
-        }
-        while (this.currentQuestion.choices.list[this.selectedField - 1].title.indexOf('$$') !== -1) {
-          this.currentQuestion.choices.list[this.selectedField - 1].title = this.currentQuestion.choices.list[this.selectedField - 1].title.replace('$$', '$')
-        }
-        let dollarSignCounter = 0
-        for (let i = 0; i < this.currentQuestion.choices.list[this.selectedField - 1].title.length; i++) {
-          if (this.currentQuestion.choices.list[this.selectedField - 1].title[i] === '$') {
-            dollarSignCounter++
-            if (dollarSignCounter % 2 === 1 && this.currentQuestion.choices.list[this.selectedField - 1].title[i + 1] === ' ') {
-              this.currentQuestion.choices.list[this.selectedField - 1].title = this.currentQuestion.choices.list[this.selectedField - 1].title.slice(0, i + 1) + this.currentQuestion.choices.list[this.selectedField - 1].title.slice(i + 2)
-              if (this.currentQuestion.choices.list[this.selectedField - 1].title[i + 1] === ' ') {
-                i--
-                dollarSignCounter--
-              }
-            } else if (dollarSignCounter % 2 === 0 && this.currentQuestion.choices.list[this.selectedField - 1].title[i - 1] === ' ') {
-              this.currentQuestion.choices.list[this.selectedField - 1].title = this.currentQuestion.choices.list[this.selectedField - 1].title.slice(0, i - 1) + this.currentQuestion.choices.list[this.selectedField - 1].title.slice(i)
-              if (this.currentQuestion.choices.list[this.selectedField - 1].title[i - 2] === ' ') {
-                i = i - 2
-                dollarSignCounter--
-              }
-            }
-          }
-        }
-      }
-    },
-    replaceNimFasele() {
-      if (!this.currentQuestion.statement) {
-        this.currentQuestion.statement = ''
-      }
-      this.currentQuestion.statement = this.currentQuestion.statement.replace('¬', '‌')
     },
 
     openShowImgPanel(src) {
