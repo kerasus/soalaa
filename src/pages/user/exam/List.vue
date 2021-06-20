@@ -212,17 +212,17 @@
                     })
             },
             registerExam (exam) {
-                window.location.href = exam.alaa_product_link
-                // this.user.registerExam(exam.id())
-                //     .then( () => {
-                //         this.$notify({
-                //             group: 'notifs',
-                //             title: 'توجه!',
-                //             text: 'ثبت نام در آزمون با موفقیت انجام شد',
-                //             type: 'success'
-                //         })
-                //         this.getExams()
-                //     })
+              let that = this
+                this.user.registerExam(exam.id)
+                    .then( () => {
+                      that.$notify({
+                            group: 'notifs',
+                            title: 'توجه!',
+                            text: 'ثبت نام در آزمون با موفقیت انجام شد',
+                            type: 'success'
+                        })
+                      that.getExams()
+                    })
             },
             sendAnswersAndFinishExam (examId, examUserId) {
                 if (!this.hasExamDataOnThisDeviseStorage(examId)) {
