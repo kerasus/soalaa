@@ -213,6 +213,7 @@
                     })
             },
             registerExam (exam) {
+
                 // window.location.href = exam.alaa_product_link
                 this.user.registerExam(exam.id)
                     .then( () => {
@@ -222,12 +223,8 @@
                             text: 'ثبت نام در آزمون با موفقیت انجام شد',
                             type: 'success'
                         })
-                        this.getExams()
+                      that.getExams()
                     })
-                axios.get('/foo')
-                  .catch(function (error) {
-                    console.log(error.response.status)
-                  });
             },
             sendAnswersAndFinishExam (examId, examUserId) {
                 if (!this.hasExamDataOnThisDeviseStorage(examId)) {
