@@ -143,15 +143,15 @@ export default {
     this.initData()
   },
   methods: {
-    navBarAction_create(statusId) {
-      if (!statusId) {
-        statusId = this.questionStatusId_draft
-      }
+    createNewQuestionChoices(status_id){
       this.currentQuestion.choices.list.forEach((item) => {
         item.answer = false
       })
       this.currentQuestion.choices.list[this.trueChoiceIndex].answer = true
-      this.currentQuestion.status_id = statusId
+      this.currentQuestion.status_id = status_id
+
+    },
+    createNewQuestionExams(){
       this.currentQuestion.exams = this.selectedQuizzes.map(item => {
         return {
           id: item.exam.id,
@@ -159,7 +159,14 @@ export default {
           order: item.order
         }
       })
-
+    },
+    navBarAction_create(statusId) {
+      if (!statusId) {
+        statusId = this.questionStatusId_draft
+      }
+      this.createNewQuestionChoices(statusId),
+      this.createNewQuestionExams()
+      
       let that = this
       if (this.currentQuestion.statement_photo !== null) {
         let formData = new FormData();
@@ -184,7 +191,6 @@ export default {
 
         return
       }
-
       this.currentQuestion.create()
           .then(() => {
             // this.currentQuestion.statement = ''
@@ -465,9 +471,6 @@ export default {
         this.questionColsNumber = 12
 
       }
-    },
-    loadExamsAndSubcategoriesAndQuestionStatuses() {
-
     },
     //------------------------------------------
     loanExamList() {
