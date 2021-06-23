@@ -216,7 +216,9 @@
                 // window.location.href = exam.alaa_product_link
                 this.user.registerExam(exam.id)
                     .then( (response) => {
-                      if (!response.data.data.redirect_url) {
+                      if (response.data.data.redirect_url) {
+                        window.location.href = response.data.data.redirect_url
+                      } else {
                         this.$notify({
                           group: 'notifs',
                           title: 'توجه!',
@@ -224,8 +226,6 @@
                           type: 'success'
                         })
                         this.getExams()
-                      } else {
-                        window.location.href = response.data.data.redirect_url
                       }
                     })
                 axios.get('/foo')
