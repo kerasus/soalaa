@@ -228,10 +228,6 @@
                         this.getExams()
                       }
                     })
-                axios.get('/foo')
-                  .catch(function (error) {
-                    console.log(error.response.status)
-                  });
             },
             sendAnswersAndFinishExam (examId, examUserId) {
                 if (!this.hasExamDataOnThisDeviseStorage(examId)) {
