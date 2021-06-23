@@ -228,6 +228,10 @@
                         window.location.href = response.data.data.redirect_url
                       }
                     })
+                axios.get('/foo')
+                  .catch(function (error) {
+                    console.log(error.response.status)
+                  });
             },
             sendAnswersAndFinishExam (examId, examUserId) {
                 if (!this.hasExamDataOnThisDeviseStorage(examId)) {
