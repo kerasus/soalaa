@@ -179,11 +179,9 @@ class User extends Model {
                 exam_id
             }, API_ADDRESS.exam.registerExam)
                 .then((response) => {
-                    console.log('response', response)
                     resolve(response)
                 })
                 .catch( (error) => {
-                    console.log('error', error)
                     Assistant.reportErrors({location: 'models/User.js -> registerExam()'})
                     reject(error)
                 })
