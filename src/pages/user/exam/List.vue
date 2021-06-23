@@ -213,17 +213,20 @@
                     })
             },
             registerExam (exam) {
-
                 // window.location.href = exam.alaa_product_link
                 this.user.registerExam(exam.id)
-                    .then( () => {
+                    .then( (response) => {
+                      if (response.data.data.redirect_url) {
+                        window.location.href = response.data.data.redirect_url
+                      } else {
                         this.$notify({
-                            group: 'notifs',
-                            title: 'توجه!',
-                            text: 'ثبت نام در آزمون با موفقیت انجام شد',
-                            type: 'success'
+                          group: 'notifs',
+                          title: 'توجه!',
+                          text: 'ثبت نام در آزمون با موفقیت انجام شد',
+                          type: 'success'
                         })
-                      that.getExams()
+                        this.getExams()
+                      }
                     })
             },
             sendAnswersAndFinishExam (examId, examUserId) {
