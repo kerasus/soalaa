@@ -159,7 +159,6 @@
     import ProgressLinear from "@/components/ProgressLinear";
     import VueConfirmDialog from 'vue-confirm-dialog'
     import Vue from 'vue'
-    import axios from "axios";
 
     Vue.use(VueConfirmDialog)
     Vue.component('vue-confirm-dialog', VueConfirmDialog.default)
@@ -213,11 +212,10 @@
                     })
             },
             registerExam (exam) {
-
-                // window.location.href = exam.alaa_product_link
+              let that = this
                 this.user.registerExam(exam.id)
                     .then( () => {
-                        this.$notify({
+                      that.$notify({
                             group: 'notifs',
                             title: 'توجه!',
                             text: 'ثبت نام در آزمون با موفقیت انجام شد',
