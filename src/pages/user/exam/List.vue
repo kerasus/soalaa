@@ -213,7 +213,7 @@
                     })
             },
             registerExam (exam) {
-                // window.location.href = exam.alaa_product_link
+                // window.location.href = exam.alcaa_product_link
                 this.user.registerExam(exam.id)
                     .then( (response) => {
                       if (response.data.data.redirect_url) {
