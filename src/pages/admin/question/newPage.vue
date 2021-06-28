@@ -51,21 +51,21 @@
               @input="updateQuestion"
           />
           <!-- -------------------------- show exams  ---------------------->
-          <Exams
-              :attaches="selectedQuizzes"
-              :exam-list="examList"
-              :sub-categories="subCategoriesList"
-              :loading="attachLoading"
-              @detach="detachQuestion"
-              @attach="attachQuestion"
+          <attach_list
+            :attaches="selectedQuizzes"
+            :exam-list="examList"
+            :sub-categories="subCategoriesList"
+            :loading="attachLoading"
+            @detach="detachQuestion"
+            @attach="attachQuestion"
           />
         </div>
           <!-- -------------------------- upload file ---------------------->
           <UploadImg
               v-if="questionType === 'typeImage' || this.getPageStatus() !== 'create'"
               v-model="currentQuestion"
-              :edit-status="edit_status"
-              @imgClicked="makeShowImgPanelVisible"
+              :edit-status="upload_img_status"
+              @imgClicked="openShowImgPanel"
           />
           <!-- -------------------------- status --------------------------->
           <div
@@ -81,8 +81,9 @@
         </v-col>
         <!-- -------------------------- show img---------------------------->
         <v-col
-            :cols="uploadImgColsNumber"
-            :class="displayEditQuestion ? '' : 'd-none'"
+          v-if="uploadImgColsNumber.show"
+          :cols="5"
+          :class="displayEditQuestion ? '' : 'd-none'"
         >
           <ShowImg
               :test="imgSrc"
@@ -90,11 +91,12 @@
           />
         </v-col>
         <!-- -------------------------- log --------------------------->
-        <v-col :cols="log_component_number">
+        <v-col
+          v-if="currentQuestion.logs.list.length > 0 && !uploadImgColsNumber.show"
+          :cols="3"
+        >
           <div v-if="getPageStatus() !== 'create'">
-
-            <LogListComponent :logs="currentQuestion.logs"/>
-
+            <LogListComponent :logs="currentQuestion.logs" />
           </div>
         </v-col>
       </v-row>
@@ -107,7 +109,7 @@ import Vue from 'vue'
 import navBar from '@/components/QuestionBank/EditQuestion/NavBar/navBar.vue';
 import QuestionLayout from '@/components/QuestionBank/EditQuestion/question-layout/question_layout';
 import UploadImg from '@/components/QuestionBank/EditQuestion/UploadImgs/uploadImg';
-import Exams from '@/components/QuestionBank/EditQuestion/Exams/exams';
+import attach_list from '@/components/QuestionBank/EditQuestion/Exams/exams';
 import StatusComponent from '@/components/QuestionBank/EditQuestion/StatusComponent/status';
 import ShowImg from '@/components/QuestionBank/EditQuestion/ShowImg/showImg';
 import LogListComponent from '@/components/QuestionBank/EditQuestion/Log/LogList';
@@ -118,8 +120,9 @@ import {ExamList} from "@/models/Exam";
 import {QuestSubcategoryList} from "@/models/QuestSubcategory";
 import API_ADDRESS from "@/api/Addresses";
 import Assistant from "@/plugins/assistant";
-import {QuestionStatusList} from "@/models/QuestionStatus";
+import { QuestionStatusList } from "@/models/QuestionStatus";
 import axios from 'axios'
+import {ChoiceList} from "@/models/Choice";
 
 export default {
   name: 'NewPage',
@@ -127,7 +130,7 @@ export default {
     navBar,
     QuestionLayout,
     UploadImg,
-    Exams,
+    attach_list,
     ShowImg,
     StatusComponent,
     LogListComponent
@@ -153,6 +156,7 @@ export default {
       imgSrc: '',
       urlPathName: '',
       edit_status: true,
+      upload_img_status: true,
       selectedField: 0,
       questionColsNumber: 12,
       uploadImgColsNumber: 0,
@@ -585,7 +589,7 @@ export default {
       var currentQuestion = this.currentQuestion
       return (currentQuestion.answer_photos !== null || currentQuestion.answer_photos.length !== 0 || currentQuestion.statement_photo !== null)
     }
-}
+  }
 }
 </script>
 
