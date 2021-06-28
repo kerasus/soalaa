@@ -43,7 +43,7 @@
               @edit="navBarAction_edit"
               @remove="navBarAction_remove"
           />
-        <div v-if="questionType === 'typeText' || this.getPageStatus() !== 'create'">
+        <div v-if=" questionType === 'typeText' || this.checkQuestionLayoutCondition()">
           <question-layout
               v-if="!loading"
               v-model="currentQuestion"
@@ -62,7 +62,7 @@
         </div>
           <!-- -------------------------- upload file ---------------------->
           <UploadImg
-              v-if="questionType === 'typeImage' || this.getPageStatus() !== 'create'"
+              v-if=" questionType === 'typeImage' || this.checkImageComponentCondition()"
               v-model="currentQuestion"
               :edit-status="upload_img_status"
               @imgClicked="makeShowImgPanelVisible($event)"
@@ -84,7 +84,6 @@
           v-if="uploadImgColsNumber.show"
           :cols="5"
         >
-<!--          :class="displayEditQuestion ? '' : 'd-none'"-->
           <ShowImg
               :test="imgSrc"
               @closePanel="makeShowImgPanelInvisible"
@@ -213,7 +212,7 @@ export default {
     this.checkUrl()
     this.getQuestionStatus()
     if (this.getPageStatus() === 'create') {
-      this.showPageDialog()
+      this.showPageDialog() //یاس
     }
     else {
       this.setMainChoicesInOtherModes()
@@ -230,7 +229,7 @@ export default {
       this.currentQuestion.status_id = statusId
 
       // set choices
-      this.setMainChoicesInCreateMode(statusId)
+      this.setMainChoicesInCreateMode(statusId)   //یاس
     },
 
     navBarAction_saveDraft() {
@@ -279,7 +278,7 @@ export default {
       })
     },
 
-    setQuestionPhotos(statusId) {
+    setQuestionPhotos(statusId) {  //یاس
       this.$store.commit('AppLayout/updateOverlay', {show: true, loading: true, text: 'کمی صبر کنید...'})
       let formData = new FormData();
       formData.append('status_id', statusId);
@@ -342,16 +341,13 @@ export default {
               that.loadCurrentQuestionData()
             } else {
               if (that.currentQuestion.choices === null) {
-                that.currentQuestion.choices
+                // that.currentQuestion.choices
               }
               that.currentQuestion = new Question(that.questionData)
             }
             that.setNullKeys()
             that.loading = false
           })
-    },
-    testEmitDAta(n){
-      console.log('n : >>>>>>>>>>>>>>>>>>', n)
     },
     changeStatus(newStatus) {
       let that = this
@@ -544,21 +540,21 @@ export default {
       }
     },
 
-    showPageDialog()  {
+    showPageDialog()  {  //یاس
       this.dialog = true
     },
 
-    setQuestionTypeText() {
+    setQuestionTypeText() {  //یاس
       this.questionType = 'typeText'
       this.dialog = false
     },
 
-    setQuestionTypeImage() {
+    setQuestionTypeImage() {  //یاس
       this.questionType = 'typeImage'
       this.dialog = false
     },
 
-    setInsertedQuestions() {
+    setInsertedQuestions() {  //یاس
 
       var currentQuestion = this.currentQuestion
       currentQuestion.choices.list.forEach((item) => {
@@ -592,19 +588,16 @@ export default {
           })
     },
 
-    doesPhotosExist() {
+    doesPhotosExist() {  //یاس
       var currentQuestion = this.currentQuestion
       return (currentQuestion.answer_photos !== null || currentQuestion.answer_photos.length !== 0 || currentQuestion.statement_photo !== null)
     },
 
     setUploadImgStatus() {
-      // if(this.questionType === 'typeText'){
-      //
-      // }
       this.upload_img_status = (this.getPageStatus() === 'create');
     },
 
-    setMainChoicesInCreateMode(statusId){
+    setMainChoicesInCreateMode(statusId){   //یاس
       if (this.questionType === 'typeText' ) {
         this.setInsertedQuestions()
       } else if (this.questionType === 'typeImage') {
@@ -613,20 +606,47 @@ export default {
         }
       }
     },
-    setMainChoicesInOtherModes(){
+    setMainChoicesInOtherModes(){   //یاس
       if(this.doesPhotosExist()){
         this.setQuestionTypeImage()
         console.log(this.questionType)
 
       }
       else{
-        this.setQuestionTypeText()
+        this.setQuestionTypeText()   //یاس
         console.log(this.questionType)
       }
 
+    },
+    checkImageComponentCondition(){ //یاس
+      if (this.getPageStatus() !== 'create'){
+        if (!this.doesPhotosExist()){
+          return false
+        } else {
+          return true
+        }
+      }
+    },
+    checkQuestionLayoutCondition(){ //یاس
+      if (this.getPageStatus() !== 'create'){
+        if (this.getPageStatus() === 'show'){
+          if (!this.checkTextCondition()){
+            return false
+          }
+          this.questionType = 'typeText'
+        }
+        else if (this.getPageStatus() === 'edit'){ //یاس
+          return true
+        }
+      }
+    },
+    checkTextCondition(){
+      var currentQuestion = this.currentQuestion
+      return (currentQuestion.choices.list !== null || currentQuestion.choices.list.length !== 0 || currentQuestion.answer !== null)
+
     }
     // ,
-    // checkQuestionTypeInModes(){
+    // checkQuestionTypeInModes(){  //یاس
     //   if(this.getPageStatus() !== 'create'){
     //     if(this.questionType === 'typeText'){
     //
