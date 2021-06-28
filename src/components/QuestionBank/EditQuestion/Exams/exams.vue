@@ -1,5 +1,5 @@
 <template>
-  <div class="exam">
+  <div class="exam mb-10">
     <p class="font-weight-medium">
       آزمون ها
     </p>
