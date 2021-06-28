@@ -598,9 +598,9 @@ export default {
     },
 
     setUploadImgStatus() {
-      if(this.questionType === 'typeText'){
-
-      }
+      // if(this.questionType === 'typeText'){
+      //
+      // }
       this.upload_img_status = (this.getPageStatus() === 'create');
     },
 
