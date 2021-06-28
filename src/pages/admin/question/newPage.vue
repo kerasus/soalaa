@@ -65,7 +65,7 @@
               v-if="questionType === 'typeImage' || this.getPageStatus() !== 'create'"
               v-model="currentQuestion"
               :edit-status="upload_img_status"
-              @imgClicked="openShowImgPanel"
+              @imgClicked="makeShowImgPanelVisible($event)"
           />
           <!-- -------------------------- status --------------------------->
           <div
@@ -83,8 +83,8 @@
         <v-col
           v-if="uploadImgColsNumber.show"
           :cols="5"
-          :class="displayEditQuestion ? '' : 'd-none'"
         >
+<!--          :class="displayEditQuestion ? '' : 'd-none'"-->
           <ShowImg
               :test="imgSrc"
               @closePanel="makeShowImgPanelInvisible"
@@ -122,7 +122,6 @@ import API_ADDRESS from "@/api/Addresses";
 import Assistant from "@/plugins/assistant";
 import { QuestionStatusList } from "@/models/QuestionStatus";
 import axios from 'axios'
-import {ChoiceList} from "@/models/Choice";
 
 export default {
   name: 'NewPage',
@@ -159,7 +158,10 @@ export default {
       upload_img_status: true,
       selectedField: 0,
       questionColsNumber: 12,
-      uploadImgColsNumber: 0,
+      uploadImgColsNumber: {
+        cols: 0,
+        show: false
+      },
       log_component_number: 0,
       choiceRendered: ['', '', '', ''],
       displayEditQuestion: false,
@@ -203,7 +205,7 @@ export default {
       questionStatusId_draft: null,
       questionStatusId_pending_to_type: null,
       dialog: false,
-      questionType: null
+      questionType: ''
     }
   },
   created() {
@@ -213,6 +215,10 @@ export default {
     if (this.getPageStatus() === 'create') {
       this.showPageDialog()
     }
+    else {
+      this.setMainChoicesInOtherModes()
+    }
+    this.setUploadImgStatus()
     console.log(this.currentQuestion)
   },
   methods: {
@@ -224,14 +230,7 @@ export default {
       this.currentQuestion.status_id = statusId
 
       // set choices
-      if (this.questionType === 'typeImage') {
-        this.setInsertedQuestions()
-      } else if (this.questionType === 'typeText') {
-        if (this.checkPhotosExistence()) {
-          this.setQuestionPhotos(statusId)
-        }
-
-      }
+      this.setMainChoicesInCreateMode(statusId)
     },
 
     navBarAction_saveDraft() {
@@ -351,7 +350,9 @@ export default {
             that.loading = false
           })
     },
-
+    testEmitDAta(n){
+      console.log('n : >>>>>>>>>>>>>>>>>>', n)
+    },
     changeStatus(newStatus) {
       let that = this
       axios.post(API_ADDRESS.question.status.changeStatus(this.$route.params.question_id), {
@@ -526,24 +527,20 @@ export default {
     },
 
     makeShowImgPanelVisible(src) {
+      console.log( 'src in new page --------------------', src)
       this.imgSrc = src
-      this.displayEditQuestion = true
       this.questionColsNumber = 7
-      this.log_component_number = 0
-      this.uploadImgColsNumber = 5
+      this.uploadImgColsNumber.show = true
       this.$store.commit('AppLayout/updateDrawer', false)
-
     },
 
     makeShowImgPanelInvisible() {
-      this.displayEditQuestion = false
+      this.uploadImgColsNumber.show = false
       this.$store.commit('AppLayout/updateDrawer', true)
-      if (this.$route.name === 'question.show' || this.$route.name === 'question.edit') {
+      if (this.currentQuestion.logs.list.length > 0) {
         this.questionColsNumber = 9
-        this.log_component_number = 3
       } else {
         this.questionColsNumber = 12
-        this.uploadImgColsNumber = 0
       }
     },
 
@@ -578,17 +575,64 @@ export default {
         }
       })
       currentQuestion
-          .create(this.currentQuestion, API_ADDRESS.question.create)
-          .then(() => {
+          .create()
+          .then((response) => {
             this.$store.commit('AppLayout/updateOverlay', {show: false, loading: false, text: ''})
+            const questionId = response.data.data.id
+            this.$router.push({name: 'question.show', params: {question_id: questionId}})
+            this.questionType = 'typeText'
+            this.currentQuestion.statement = ''
+            this.currentQuestion.choices.list.forEach((item) => { item.title = '' })
+            this.$notify({
+              group: 'notifs',
+              title: 'توجه',
+              text: 'ثبت با موفقیت انجام شد',
+              type: 'success'
+            })
           })
-
     },
 
-    checkPhotosExistence() {
+    doesPhotosExist() {
       var currentQuestion = this.currentQuestion
       return (currentQuestion.answer_photos !== null || currentQuestion.answer_photos.length !== 0 || currentQuestion.statement_photo !== null)
+    },
+
+    setUploadImgStatus() {
+      if(this.questionType === 'typeText'){
+
+      }
+      this.upload_img_status = (this.getPageStatus() === 'create');
+    },
+
+    setMainChoicesInCreateMode(statusId){
+      if (this.questionType === 'typeText' ) {
+        this.setInsertedQuestions()
+      } else if (this.questionType === 'typeImage') {
+        if (this.doesPhotosExist()) {
+          this.setQuestionPhotos(statusId)
+        }
+      }
+    },
+    setMainChoicesInOtherModes(){
+      if(this.doesPhotosExist()){
+        this.setQuestionTypeImage()
+        console.log(this.questionType)
+
+      }
+      else{
+        this.setQuestionTypeText()
+        console.log(this.questionType)
+      }
+
     }
+    // ,
+    // checkQuestionTypeInModes(){
+    //   if(this.getPageStatus() !== 'create'){
+    //     if(this.questionType === 'typeText'){
+    //
+    //     }
+    //   }
+    // }
   }
 }
 </script>

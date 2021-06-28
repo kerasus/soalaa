@@ -124,7 +124,10 @@
                     class="mt-3"
                     @click="showImgPanel(((editStatus) ? file.thumb : file))"
                   />
+
                   <span v-else>No Image</span>
+
+
                   <v-card-title
                     v-if="editStatus"
                     class="caption"
@@ -317,9 +320,9 @@ export default {
   },
   methods :{
     showImgPanel(src){
-      this.$emit("imgClicked",src);
+      console.log("src -----------", src)
+      this.$emit("imgClicked", src);
     },
-
     fileUpdated () {
       const files = {
         questionFile: this.questionFile,
