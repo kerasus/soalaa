@@ -97,7 +97,7 @@
       </v-col>
       <v-col v-if="!editStatus">
         <v-row>
-          <v-col>
+          <v-col cols="3">
             <v-btn
               depressed
               rounded
@@ -114,7 +114,7 @@
               </span>
             </v-btn>
           </v-col>
-          <v-col>
+          <v-col cols="3">
             <v-btn
               depressed
               rounded

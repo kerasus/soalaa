@@ -142,7 +142,6 @@
         class="question_bank"
         prepend-icon="mdi-bank-outline"
         color="white"
-        active-class="test"
       >
         <template
           v-slot:activator
@@ -254,13 +253,8 @@
       margin-right: 30px;
       font-size: 14px !important;
     }
-
 .v-list .v-list-item--active .v-icon{
   color: white;
-}
-.test{
-background-color: darkred;
-
 }
 </style>
 

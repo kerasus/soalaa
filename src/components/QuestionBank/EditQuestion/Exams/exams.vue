@@ -1,9 +1,15 @@
 <template>
   <div class="exam mb-10">
-    <p class="font-weight-medium">
+    <p
+      v-if="status"
+      class="font-weight-medium"
+    >
       آزمون ها
     </p>
-    <v-row class="exam-section">
+    <v-row
+      v-if="status"
+      class="exam-section"
+    >
       <v-col
         class="choose-exam"
         cols="5"
@@ -71,7 +77,32 @@
         </v-card>
       </v-col>
     </v-row>
-
+    <v-row v-if="!status && attaches.length>0">
+      <v-col cols="5">
+        <v-card
+          flat
+          class="transparent px-4 font-weight-medium"
+        >
+          آزمون
+        </v-card>
+      </v-col>
+      <v-col cols="4 px-4 font-weight-medium">
+        <v-card
+          flat
+          class="transparent"
+        >
+          درس
+        </v-card>
+      </v-col>
+      <v-col cols="2 px-4 font-weight-medium">
+        <v-card
+          flat
+          class="transparent"
+        >
+          ترتیب
+        </v-card>
+      </v-col>
+    </v-row>
     <v-row
       v-for="(item, index) in attaches"
       :key="index"
@@ -95,7 +126,7 @@
         cols="4"
       >
         <v-card
-          flat
+          flata
           height="36"
         >
           <v-card-text class="text-center">
@@ -117,6 +148,7 @@
         </v-card>
       </v-col>
       <v-col
+        v-if="status"
         class="attach-or-detach"
         cols="1"
       >
@@ -171,8 +203,11 @@ export default {
         return false
       },
       type: Boolean
-    }
-
+    },
+    status:{
+     type: Boolean,
+      default: false
+         }
   },
   data() {
     return {

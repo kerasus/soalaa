@@ -21,7 +21,6 @@
               >
                 تایپ سوال
               </v-btn>
-
               <v-spacer class="mx-10" />
               <v-btn
                 color="amber lighten-1"
@@ -44,16 +43,16 @@
             @edit="navBarAction_edit"
             @remove="navBarAction_remove"
           />
-          <div>
+          <div v-if="this.showQuestionComponentStatus()">
             <question-layout
               v-if="!loading"
               v-model="currentQuestion"
               :status="edit_status"
-              :has-text="questionHasTextStatus"
               @input="updateQuestion"
             />
             <!-- -------------------------- show exams  ---------------------->
             <attach_list
+              :status="edit_status"
               :attaches="selectedQuizzes"
               :exam-list="examList"
               :sub-categories="subCategoriesList"
@@ -64,14 +63,14 @@
           </div>
           <!-- -------------------------- upload file ---------------------->
           <UploadImg
-            v-if=" questionType === 'typeImage' || this.doesPhotosExist()"
+            v-if="this.showImgComponentStatus()"
             v-model="currentQuestion"
             :edit-status="upload_img_status"
             @imgClicked="makeShowImgPanelVisible($event)"
           />
           <!-- -------------------------- status --------------------------->
           <div
-            v-if="getPageStatus() !== 'create'"
+            v-if="edit_status"
             class="my-10"
           >
             <StatusComponent
@@ -121,7 +120,7 @@ import {ExamList} from "@/models/Exam";
 import {QuestSubcategoryList} from "@/models/QuestSubcategory";
 import API_ADDRESS from "@/api/Addresses";
 import Assistant from "@/plugins/assistant";
-import { QuestionStatusList } from "@/models/QuestionStatus";
+import {QuestionStatusList} from "@/models/QuestionStatus";
 import axios from 'axios'
 
 export default {
@@ -138,7 +137,7 @@ export default {
   mixins: [mixinMarkdownAndKatex],
   data() {
     return {
-      questionHasTextStatus:false,
+      temp: null,
       pageStatuses: [
         {
           title: 'show',
@@ -158,13 +157,12 @@ export default {
       urlPathName: '',
       edit_status: true,
       upload_img_status: true,
+
       selectedField: 0,
       questionColsNumber: 12,
       uploadImgColsNumber: {
-        cols: 0,
         show: false
       },
-      log_component_number: 0,
       choiceRendered: ['', '', '', ''],
       displayEditQuestion: false,
       currentQuestion: new Question(),
@@ -210,21 +208,22 @@ export default {
       questionType: ''
     }
   },
+  watch: {
+    'currentQuestion.logs.list': function (newData) {
+      console.log('watch: ', newData)
+      console.log('watch2: ', this.currentQuestion.logs.list)
+    }
+  },
   created() {
     this.setPageStatus()
     this.checkUrl()
     this.getQuestionStatus()
     if (this.getPageStatus() === 'create') {
       this.showPageDialog() //یاس
-    }
-    else {
+    } else {
       this.setMainChoicesInOtherModes()
     }
-
     this.setUploadImgStatus()
-
-
-    this.questionHasText()
   },
   methods: {
     navBarAction_create(statusId) {
@@ -297,7 +296,9 @@ export default {
             const questionId = response.data.data.id
             this.$router.push({name: 'question.show', params: {question_id: questionId}})
             this.$store.commit('AppLayout/updateOverlay', {show: false, loading: false, text: ''})
-          })
+          }).catch(() => {
+        this.$store.commit('AppLayout/updateOverlay', {show: false, loading: false, text: ''})
+      });
     },
 
     setPageStatus() {
@@ -331,13 +332,7 @@ export default {
     },
 
     checkUrl() {
-
       this.edit_status = (this.getPageStatus() === 'create' || this.getPageStatus() === 'edit');
-      if (this.getPageStatus() !== 'create') {
-        this.questionColsNumber = 9
-        this.log_component_number = 3
-      }
-
       let that = this
       const loadExamListPromise = this.loadExamList()
       const loadSubcategoriesPromise = this.loadSubcategories()
@@ -355,6 +350,7 @@ export default {
             that.loading = false
           })
     },
+
     changeStatus(newStatus) {
       let that = this
       axios.post(API_ADDRESS.question.status.changeStatus(this.$route.params.question_id), {
@@ -458,27 +454,52 @@ export default {
       this.updateSelectedQuizzes()
     },
 
+    showImgComponentStatus() {
+
+      if (this.getPageStatus() === 'create') {
+        return this.questionType === 'typeImage';
+
+      }
+      return  this.doesPhotosExist()
+    },
+
+    showQuestionComponentStatus() {
+      if (this.getPageStatus() === 'create') {
+        return this.questionType === 'typeText';
+
+      } else if (this.getPageStatus() === 'show') {
+        return this.checkTextCondition()
+      }
+      // in edit page
+      return true
+    },
     loadCurrentQuestionData() {
       let that = this
       this.currentQuestion.show(null, API_ADDRESS.question.updateQuestion(this.$route.params.question_id))
           .then((response) => {
             that.currentQuestion = new Question(response.data.data)
+            that.temp = that.currentQuestion
             that.checkTextCondition()
             that.getLogs()
             that.trueChoiceIndex = that.currentQuestion.choices.list.findIndex((item) => item.answer)
             that.updateAttachList(response.data.data.exams)
+            console.log('list ', that.currentQuestion)
+
           })
     },
 
     getLogs() {
       this.currentQuestion.logs.fetch(null, API_ADDRESS.question.log.base(this.$route.params.question_id))
           .then((response) => {
-            this.currentQuestion.logs = new LogList(response.data.data)
+            // this.currentQuestion.logs = new LogList(response.data.data)
+            Vue.set(this.currentQuestion, 'logs', new LogList(response.data.data))
+            this.setQuestionLayoutCols()
           })
     },
 
     updateQuestion(eventData) {
-      this.currentQuestion = new Question(eventData)
+      // this.currentQuestion = new Question(eventData)
+      Vue.set(this, 'currentQuestion', new Question(eventData))
     },
 
     updateAttachList(exams) {
@@ -530,13 +551,11 @@ export default {
     },
 
     makeShowImgPanelVisible(src) {
-      console.log( 'src in new page --------------------', src)
       this.imgSrc = src
       this.questionColsNumber = 7
       this.uploadImgColsNumber.show = true
       this.$store.commit('AppLayout/updateDrawer', false)
     },
-
     makeShowImgPanelInvisible() {
       this.uploadImgColsNumber.show = false
       this.$store.commit('AppLayout/updateDrawer', true)
@@ -546,8 +565,17 @@ export default {
         this.questionColsNumber = 12
       }
     },
+    setQuestionLayoutCols(){
+      console.log('im in set lay out')
+      console.log( this.currentQuestion.logs, this.currentQuestion ,)
+      console.log(this.currentQuestion.logs.list.length )
+     if(this.currentQuestion.logs.list.length >0 ){
+        this.questionColsNumber=9
 
-    showPageDialog()  {  //یاس
+     }
+
+    },
+    showPageDialog() {  //یاس
       this.dialog = true
     },
 
@@ -585,7 +613,9 @@ export default {
             this.$router.push({name: 'question.show', params: {question_id: questionId}})
             this.questionType = 'typeText'
             this.currentQuestion.statement = ''
-            this.currentQuestion.choices.list.forEach((item) => { item.title = '' })
+            this.currentQuestion.choices.list.forEach((item) => {
+              item.title = ''
+            })
             this.$notify({
               group: 'notifs',
               title: 'توجه',
@@ -595,21 +625,24 @@ export default {
           })
     },
 
-    doesPhotosExist() {  //یاس
-      // console.log('im  doesPhotosExist() and currentQuestion.answer_photos is :', this.currentQuestion.answer_photos)
-      // console.log('this.currentQuestion.answer_photos.length  is : ' ,this.currentQuestion.answer_photos.length !== 0 )
-      // console.log('this.currentQuestion.statement_photo  is :' , this.currentQuestion.statement_photo !== null)
-      // console.log('answer is :', this.currentQuestion.answer_photos.length !== 0 || this.currentQuestion.statement_photo !== null )
-      // console.log('this.currentQuestion.answer_photos answer is ' ,this.currentQuestion.answer_photos !== null )
-      return (this.currentQuestion.answer_photos.length !== 0 || this.currentQuestion.statement_photo !== null)
+    doesPhotosExist() {
+      if(this.currentQuestion.answer_photos){
+       if (this.currentQuestion.answer_photos.length>0) {
+         return true
+       }
+      }
+      if(this.currentQuestion.statement_photo ){
+        if (this.currentQuestion.statement_photo.length>0){
+          return true
+        }
+      }
+      return false
     },
-
     setUploadImgStatus() {
       this.upload_img_status = (this.getPageStatus() === 'create');
     },
-
-    setMainChoicesInCreateMode(statusId){   //یاس
-      if (this.questionType === 'typeText' ) {
+    setMainChoicesInCreateMode(statusId) {   //یاس
+      if (this.questionType === 'typeText') {
         this.setInsertedQuestions()
       } else if (this.questionType === 'typeImage') {
         if (this.doesPhotosExist()) {
@@ -617,60 +650,40 @@ export default {
         }
       }
     },
-    setMainChoicesInOtherModes(){   //یاس
-      if(this.doesPhotosExist()){
+    setMainChoicesInOtherModes() {   //یاس
+      if (this.doesPhotosExist()) {
         this.setQuestionTypeImage()
-        console.log(this.questionType)
-
-      }
-      else{
+        // console.log(this.questionType)
+      } else {
         this.setQuestionTypeText()   //یاس
-        console.log(this.questionType)
+        // console.log(this.questionType)
       }
-
     },
+    checkImageComponentCondition() { //یاس
+      if (!this.doesPhotosExist()) {
+        return false
+      } else {
+        return true
+      }
+    },
+    checkQuestionLayoutCondition() { //یاس
+      if (this.getPageStatus() !== 'create') {
 
-    checkImageComponentCondition(){ //یاس
-        if (!this.doesPhotosExist()){
-          return false
-        } else {
+        if (this.getPageStatus() === 'show') {
+          return this.checkTextCondition()
+        } else if (this.getPageStatus() === 'edit') { //یاس
           return true
         }
-    },
-    checkQuestionLayoutCondition(){ //یاس
-      if (this.getPageStatus() !== 'create'){
-        if (this.getPageStatus() === 'show'){
-
-          return this.questionHasTextStatus
-        }
-        else if (this.getPageStatus() === 'edit'){ //یاس
-          return true
-        }
+      } else {
+        return true
       }
     },
-    checkTextCondition(){
-      var currentQuestion = this.currentQuestion
-         if(currentQuestion.statement){
-        return this.questionHasTextStatus = true
+    checkTextCondition() {
+      if (this.currentQuestion.statement) {
+        return  true
       }
-         return this.questionHasTextStatus = false
-      // console.log('answer is : ', currentQuestion.choices.list !== null || currentQuestion.choices.list.length !== 0 || currentQuestion.answer !== null)
-      // console.log('currentQuestion.choices.list is ' , currentQuestion.choices.list)
-      // console.log('currentQuestion.choices.list.length is :', currentQuestion.choices.list.length)
-      // console.log('currentQuestion.answer is :' , currentQuestion.answer)
-      //
-      //
-      // return (currentQuestion.statement.length > 0)
-
+      return false
     }
-    // ,
-    // checkQuestionTypeInModes(){  //یاس
-    //   if(this.getPageStatus() !== 'create'){
-    //     if(this.questionType === 'typeText'){
-    //
-    //     }
-    //   }
-    // }
   }
 }
 </script>
