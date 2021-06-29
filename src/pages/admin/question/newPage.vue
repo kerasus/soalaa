@@ -3,29 +3,30 @@
     <v-container class="pa-6">
       <v-row>
         <v-dialog
-            v-model="dialog"
-            persistent
-            max-width="290"
+          v-model="dialog"
+          persistent
+          max-width="290"
         >
           <v-card>
-            <v-card-title class="dialog-title" >
+            <v-card-title class="dialog-title">
               سوال را به کدام صورت درج می کنید؟
             </v-card-title>
             <v-card-text> لطفا انتخاب کنید که سوال را به کدام روش ثبت می کنید.</v-card-text>
             <v-card-actions>
-              <v-spacer></v-spacer>
+              <v-spacer />
               <v-btn
-                  color="amber lighten-1"
-                  text
-                  @click="setQuestionTypeText"
+                color="amber lighten-1"
+                text
+                @click="setQuestionTypeText"
               >
                 تایپ سوال
               </v-btn>
-              <v-spacer class="mx-10"></v-spacer>
+
+              <v-spacer class="mx-10" />
               <v-btn
-                  color="amber lighten-1"
-                  text
-                  @click="setQuestionTypeImage"
+                color="amber lighten-1"
+                text
+                @click="setQuestionTypeImage"
               >
                 آپلود فایل
               </v-btn>
@@ -34,48 +35,49 @@
         </v-dialog>
         <v-col :cols="questionColsNumber">
           <nav-bar
-              :question="currentQuestion"
-              :edit-status="edit_status"
-              @create="navBarAction_create"
-              @saveDraft="navBarAction_saveDraft"
-              @save="navBarAction_save"
-              @cancel="navBarAction_cancel"
-              @edit="navBarAction_edit"
-              @remove="navBarAction_remove"
+            :question="currentQuestion"
+            :edit-status="edit_status"
+            @create="navBarAction_create"
+            @saveDraft="navBarAction_saveDraft"
+            @save="navBarAction_save"
+            @cancel="navBarAction_cancel"
+            @edit="navBarAction_edit"
+            @remove="navBarAction_remove"
           />
-        <div v-if=" questionType === 'typeText' || this.checkQuestionLayoutCondition()">
-          <question-layout
+          <div>
+            <question-layout
               v-if="!loading"
               v-model="currentQuestion"
               :status="edit_status"
+              :has-text="questionHasTextStatus"
               @input="updateQuestion"
-          />
-          <!-- -------------------------- show exams  ---------------------->
-          <attach_list
-            :attaches="selectedQuizzes"
-            :exam-list="examList"
-            :sub-categories="subCategoriesList"
-            :loading="attachLoading"
-            @detach="detachQuestion"
-            @attach="attachQuestion"
-          />
-        </div>
+            />
+            <!-- -------------------------- show exams  ---------------------->
+            <attach_list
+              :attaches="selectedQuizzes"
+              :exam-list="examList"
+              :sub-categories="subCategoriesList"
+              :loading="attachLoading"
+              @detach="detachQuestion"
+              @attach="attachQuestion"
+            />
+          </div>
           <!-- -------------------------- upload file ---------------------->
           <UploadImg
-              v-if=" questionType === 'typeImage' || this.checkImageComponentCondition()"
-              v-model="currentQuestion"
-              :edit-status="upload_img_status"
-              @imgClicked="makeShowImgPanelVisible($event)"
+            v-if=" questionType === 'typeImage' || this.doesPhotosExist()"
+            v-model="currentQuestion"
+            :edit-status="upload_img_status"
+            @imgClicked="makeShowImgPanelVisible($event)"
           />
           <!-- -------------------------- status --------------------------->
           <div
-              v-if="getPageStatus() !== 'create'"
-              class="my-10"
+            v-if="getPageStatus() !== 'create'"
+            class="my-10"
           >
             <StatusComponent
-                :statuses="questionStatuses"
-                :loading="changeStatusLoading"
-                @update="changeStatus"
+              :statuses="questionStatuses"
+              :loading="changeStatusLoading"
+              @update="changeStatus"
             />
           </div>
         </v-col>
@@ -85,8 +87,8 @@
           :cols="5"
         >
           <ShowImg
-              :test="imgSrc"
-              @closePanel="makeShowImgPanelInvisible"
+            :test="imgSrc"
+            @closePanel="makeShowImgPanelInvisible"
           />
         </v-col>
         <!-- -------------------------- log --------------------------->
@@ -136,6 +138,7 @@ export default {
   mixins: [mixinMarkdownAndKatex],
   data() {
     return {
+      questionHasTextStatus:false,
       pageStatuses: [
         {
           title: 'show',
@@ -217,8 +220,11 @@ export default {
     else {
       this.setMainChoicesInOtherModes()
     }
+
     this.setUploadImgStatus()
-    console.log(this.currentQuestion)
+
+
+    this.questionHasText()
   },
   methods: {
     navBarAction_create(statusId) {
@@ -457,6 +463,7 @@ export default {
       this.currentQuestion.show(null, API_ADDRESS.question.updateQuestion(this.$route.params.question_id))
           .then((response) => {
             that.currentQuestion = new Question(response.data.data)
+            that.checkTextCondition()
             that.getLogs()
             that.trueChoiceIndex = that.currentQuestion.choices.list.findIndex((item) => item.answer)
             that.updateAttachList(response.data.data.exams)
@@ -589,8 +596,12 @@ export default {
     },
 
     doesPhotosExist() {  //یاس
-      var currentQuestion = this.currentQuestion
-      return (currentQuestion.answer_photos !== null || currentQuestion.answer_photos.length !== 0 || currentQuestion.statement_photo !== null)
+      // console.log('im  doesPhotosExist() and currentQuestion.answer_photos is :', this.currentQuestion.answer_photos)
+      // console.log('this.currentQuestion.answer_photos.length  is : ' ,this.currentQuestion.answer_photos.length !== 0 )
+      // console.log('this.currentQuestion.statement_photo  is :' , this.currentQuestion.statement_photo !== null)
+      // console.log('answer is :', this.currentQuestion.answer_photos.length !== 0 || this.currentQuestion.statement_photo !== null )
+      // console.log('this.currentQuestion.answer_photos answer is ' ,this.currentQuestion.answer_photos !== null )
+      return (this.currentQuestion.answer_photos.length !== 0 || this.currentQuestion.statement_photo !== null)
     },
 
     setUploadImgStatus() {
@@ -618,22 +629,19 @@ export default {
       }
 
     },
+
     checkImageComponentCondition(){ //یاس
-      if (this.getPageStatus() !== 'create'){
         if (!this.doesPhotosExist()){
           return false
         } else {
           return true
         }
-      }
     },
     checkQuestionLayoutCondition(){ //یاس
       if (this.getPageStatus() !== 'create'){
         if (this.getPageStatus() === 'show'){
-          if (!this.checkTextCondition()){
-            return false
-          }
-          this.questionType = 'typeText'
+
+          return this.questionHasTextStatus
         }
         else if (this.getPageStatus() === 'edit'){ //یاس
           return true
@@ -642,7 +650,17 @@ export default {
     },
     checkTextCondition(){
       var currentQuestion = this.currentQuestion
-      return (currentQuestion.choices.list !== null || currentQuestion.choices.list.length !== 0 || currentQuestion.answer !== null)
+         if(currentQuestion.statement){
+        return this.questionHasTextStatus = true
+      }
+         return this.questionHasTextStatus = false
+      // console.log('answer is : ', currentQuestion.choices.list !== null || currentQuestion.choices.list.length !== 0 || currentQuestion.answer !== null)
+      // console.log('currentQuestion.choices.list is ' , currentQuestion.choices.list)
+      // console.log('currentQuestion.choices.list.length is :', currentQuestion.choices.list.length)
+      // console.log('currentQuestion.answer is :' , currentQuestion.answer)
+      //
+      //
+      // return (currentQuestion.statement.length > 0)
 
     }
     // ,

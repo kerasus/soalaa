@@ -14,6 +14,7 @@
               <v-col
                 v-if="editStatus"
                 v-show="questionFile.length === 0"
+                class="test"
               >
                 <file-upload
                   ref="questionFile"
@@ -42,9 +43,11 @@
                   </v-btn>
                 </file-upload>
               </v-col>
+<!--  gbfh  --------------------------------------------------------------------------------------------->
               <v-col
                 v-for="(file, index) in questionFile"
                 :key="index"
+                class="test2"
               >
                 <v-card>
                   <v-img
@@ -61,6 +64,7 @@
                     class="caption"
                     v-text="formatSize(file.size)"
                   />
+                  <!-- delete img ----------------------------------------------------------->
                   <v-btn
                     v-if="editStatus"
                     fab
@@ -76,29 +80,30 @@
                   </v-btn>
                 </v-card>
               </v-col>
-              <v-col
-                v-if="!editStatus && questionFile.length === 0"
-              >
-                <v-card>
-                  <v-img
-                    width="100%"
-                    height="60"
-                  >
-                    <template v-slot:placeholder>
-                      <v-row
-                        no-gutters
-                        class="fill-height"
-                      >
-                        <v-col class="d-flex justify-center align-center">
-                          <v-icon size="50px">
-                            mdi-image-off
-                          </v-icon>
-                        </v-col>
-                      </v-row>
-                    </template>
-                  </v-img>
-                </v-card>
-              </v-col>
+              <!--              <v-col-->
+              <!--                v-if="!editStatus && questionFile.length === 0"-->
+              <!--              >-->
+              <!--                <v-card>-->
+              <!--                  <v-img-->
+              <!--                    width="100%"-->
+              <!--                    height="60"-->
+              <!--                  >-->
+              <!--                    <template v-slot:placeholder>-->
+              <!--                      <v-row-->
+              <!--                        no-gutters-->
+              <!--                        class="fill-height"-->
+              <!--                      >-->
+              <!--                        <v-col class="d-flex justify-center align-center">-->
+              <!--                          <v-icon size="50px">-->
+              <!--                            mdi-image-off-->
+              <!--                          </v-icon>-->
+              <!--                        </v-col>-->
+              <!--                      </v-row>-->
+              <!--                    </template>-->
+              <!--                  </v-img>-->
+              <!--                </v-card>-->
+              <!--              </v-col>-->
+              <p>no img</p>
             </v-row>
           </v-card-text>
         </v-card>
@@ -267,9 +272,6 @@ export default {
         show: false,
         name: '',
       },
-
-      srcImg1:'https://picsum.photos/id/11/500/300',
-      srcImg2:'https://picsum.photos/500/300'
     }
   },
   watch: {
@@ -544,7 +546,12 @@ export default {
   top: -16px;
   left: -16px;
 }
-
+.test{
+  border: 1px solid red;
+}
+.test2{
+  border: 1px solid #0037ff;
+}
 .SelectImageBox .file-uploads {
   display: flex;
   align-items: center;
