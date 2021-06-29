@@ -208,12 +208,6 @@ export default {
       questionType: ''
     }
   },
-  watch: {
-    'currentQuestion.logs.list': function (newData) {
-      console.log('watch: ', newData)
-      console.log('watch2: ', this.currentQuestion.logs.list)
-    }
-  },
   created() {
     this.setPageStatus()
     this.checkUrl()
@@ -483,8 +477,6 @@ export default {
             that.getLogs()
             that.trueChoiceIndex = that.currentQuestion.choices.list.findIndex((item) => item.answer)
             that.updateAttachList(response.data.data.exams)
-            console.log('list ', that.currentQuestion)
-
           })
     },
 
@@ -566,9 +558,6 @@ export default {
       }
     },
     setQuestionLayoutCols(){
-      console.log('im in set lay out')
-      console.log( this.currentQuestion.logs, this.currentQuestion ,)
-      console.log(this.currentQuestion.logs.list.length )
      if(this.currentQuestion.logs.list.length >0 ){
         this.questionColsNumber=9
 
@@ -653,10 +642,8 @@ export default {
     setMainChoicesInOtherModes() {   //یاس
       if (this.doesPhotosExist()) {
         this.setQuestionTypeImage()
-        // console.log(this.questionType)
       } else {
         this.setQuestionTypeText()   //یاس
-        // console.log(this.questionType)
       }
     },
     checkImageComponentCondition() { //یاس
