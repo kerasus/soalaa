@@ -34,8 +34,10 @@
         </v-dialog>
         <v-col :cols="questionColsNumber">
           <nav-bar
+            v-if="this.checkNavbarVisibility()"
             :question="currentQuestion"
             :edit-status="edit_status"
+            :page-name="this.getPageStatus()"
             @create="navBarAction_create"
             @saveDraft="navBarAction_saveDraft"
             @save="navBarAction_save"
@@ -70,7 +72,7 @@
           />
           <!-- -------------------------- status --------------------------->
           <div
-            v-if="edit_status"
+            v-if="this.getPageStatus() === 'edit'"
             class="my-10"
           >
             <StatusComponent
@@ -95,9 +97,7 @@
           v-if="currentQuestion.logs.list.length > 0 && !uploadImgColsNumber.show"
           :cols="3"
         >
-          <div v-if="getPageStatus() !== 'create'">
-            <LogListComponent :logs="currentQuestion.logs" />
-          </div>
+          <LogListComponent :logs="currentQuestion.logs" />
         </v-col>
       </v-row>
     </v-container>
@@ -157,7 +157,7 @@ export default {
       urlPathName: '',
       edit_status: true,
       upload_img_status: true,
-
+      NavbarVisibilityOnCreatPage:false,
       selectedField: 0,
       questionColsNumber: 12,
       uploadImgColsNumber: {
@@ -246,10 +246,12 @@ export default {
               text: 'ویرایش با موفقیت انجام شد',
               type: 'success'
             })
+            this.$router.push({name: 'question.show', params: {question_id: this.$route.params.question_id}})
           })
     },
 
     navBarAction_cancel() {
+      console.log('navBarAction_cancel')
       this.$router.push({name: 'question.show', params: {question_id: this.$route.params.question_id}})
     },
 
@@ -467,6 +469,7 @@ export default {
       // in edit page
       return true
     },
+
     loadCurrentQuestionData() {
       let that = this
       this.currentQuestion.show(null, API_ADDRESS.question.updateQuestion(this.$route.params.question_id))
@@ -548,6 +551,7 @@ export default {
       this.uploadImgColsNumber.show = true
       this.$store.commit('AppLayout/updateDrawer', false)
     },
+
     makeShowImgPanelInvisible() {
       this.uploadImgColsNumber.show = false
       this.$store.commit('AppLayout/updateDrawer', true)
@@ -557,6 +561,7 @@ export default {
         this.questionColsNumber = 12
       }
     },
+
     setQuestionLayoutCols(){
      if(this.currentQuestion.logs.list.length >0 ){
         this.questionColsNumber=9
@@ -564,28 +569,25 @@ export default {
      }
 
     },
+
     showPageDialog() {  //یاس
       this.dialog = true
     },
 
-    setQuestionTypeText() {  //یاس
+    setQuestionTypeText() {
       this.questionType = 'typeText'
       this.dialog = false
+      this.checkNavbarVisibilityOnCreatPage()
     },
 
-    setQuestionTypeImage() {  //یاس
+    setQuestionTypeImage() {
       this.questionType = 'typeImage'
       this.dialog = false
+      this.checkNavbarVisibilityOnCreatPage()
     },
 
     setInsertedQuestions() {  //یاس
-
       var currentQuestion = this.currentQuestion
-      currentQuestion.choices.list.forEach((item) => {
-        item.answer = false
-      })
-      currentQuestion.choices.list[this.trueChoiceIndex].answer = true
-
       // set exams
       currentQuestion.exams = this.selectedQuizzes.map(item => {
         return {
@@ -627,10 +629,12 @@ export default {
       }
       return false
     },
+
     setUploadImgStatus() {
       this.upload_img_status = (this.getPageStatus() === 'create');
     },
-    setMainChoicesInCreateMode(statusId) {   //یاس
+
+    setMainChoicesInCreateMode(statusId) {
       if (this.questionType === 'typeText') {
         this.setInsertedQuestions()
       } else if (this.questionType === 'typeImage') {
@@ -639,39 +643,30 @@ export default {
         }
       }
     },
-    setMainChoicesInOtherModes() {   //یاس
+
+    setMainChoicesInOtherModes() {
       if (this.doesPhotosExist()) {
         this.setQuestionTypeImage()
       } else {
-        this.setQuestionTypeText()   //یاس
+        this.setQuestionTypeText()
       }
     },
-    checkImageComponentCondition() { //یاس
-      if (!this.doesPhotosExist()) {
-        return false
-      } else {
-        return true
-      }
-    },
-    checkQuestionLayoutCondition() { //یاس
-      if (this.getPageStatus() !== 'create') {
 
-        if (this.getPageStatus() === 'show') {
-          return this.checkTextCondition()
-        } else if (this.getPageStatus() === 'edit') { //یاس
-          return true
-        }
-      } else {
-        return true
-      }
-    },
     checkTextCondition() {
-      if (this.currentQuestion.statement) {
-        return  true
+      return !!this.currentQuestion.statement;
+    },
+
+    checkNavbarVisibility(){
+      if (this.getPageStatus() === 'create'){
+        return this.NavbarVisibilityOnCreatPage
       }
-      return false
+      return true
+    },
+
+    checkNavbarVisibilityOnCreatPage(){
+      this.NavbarVisibilityOnCreatPage = true
     }
-  }
+  },
 }
 </script>
 

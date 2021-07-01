@@ -59,22 +59,17 @@
         class="attach-or-dettach"
         cols="1"
       >
-        <v-card
-          flat
+        <v-btn
           height="36"
+          width="100%"
+          class="text-center white"
+          text
+          :loading="loading"
+          :disabled="loading"
+          @click="attach"
         >
-          <v-card-text class="text-center">
-            <v-btn
-              small
-              text
-              :loading="loading"
-              :disabled="loading"
-              @click="attach"
-            >
-              <v-icon>mdi-plus</v-icon>
-            </v-btn>
-          </v-card-text>
-        </v-card>
+          <v-icon>mdi-plus</v-icon>
+        </v-btn>
       </v-col>
     </v-row>
     <v-row v-if="!status && attaches.length>0">
@@ -126,7 +121,7 @@
         cols="4"
       >
         <v-card
-          flata
+          flat
           height="36"
         >
           <v-card-text class="text-center">
@@ -150,24 +145,19 @@
       <v-col
         v-if="status"
         class="attach-or-detach"
-        cols="1"
       >
-        <v-card
-          flat
+        <v-btn
+          small
           height="36"
+          width="100%"
+          text
+          class="text-center white"
+          :loading="loading"
+          :disabled="loading"
+          @click="detach(item)"
         >
-          <v-card-text class="text-center">
-            <v-btn
-              small
-              text
-              :loading="loading"
-              :disabled="loading"
-              @click="detach(item)"
-            >
-              <v-icon>mdi-trash-can-outline</v-icon>
-            </v-btn>
-          </v-card-text>
-        </v-card>
+          <v-icon>mdi-trash-can-outline</v-icon>
+        </v-btn>
       </v-col>
     </v-row>
   </div>
@@ -204,10 +194,10 @@ export default {
       },
       type: Boolean
     },
-    status:{
-     type: Boolean,
+    status: {
+      type: Boolean,
       default: false
-         }
+    }
   },
   data() {
     return {
@@ -263,6 +253,7 @@ export default {
   top: -62px;
   left: 9px;
 }
+
 .exam .exam-order .v-text-field fieldset, .v-text-field .v-input__control, .v-text-field .v-input__slot {
   border-radius: 10px;
 }
@@ -272,6 +263,7 @@ export default {
   height: 40px;
 
 }
+
 .row + .row {
   margin-top: 0px;
 }

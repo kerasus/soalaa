@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-row>
+    <v-row justify="space-between">
       <v-col cols="3">
         <span v-if="question.id">
           سوال #
@@ -18,7 +18,9 @@
       >
         <v-row>
           <v-col>
-            <v-row>
+            <v-row
+              justify="end"
+            >
               <v-col>
                 <v-btn
                   depressed
@@ -26,7 +28,7 @@
                   color="green"
                   class="ml-2"
                   dark
-                  width="120"
+                  width="100"
                   @click="btn_clicked('create')"
                 >
                   <span color="green">
@@ -52,6 +54,7 @@
           </v-col>
         </v-row>
       </v-col>
+      <!--    --------------------------------------------------------------  edit page-->
       <v-col v-if="question.id && editStatus">
         <v-row>
           <v-col>
@@ -95,8 +98,13 @@
           </v-col>
         </v-row>
       </v-col>
-      <v-col v-if="!editStatus">
-        <v-row>
+      <!--    --------------------------------------------------------------  show page-->
+
+      <v-col
+        v-if="!editStatus"
+        data-text-align="left"
+      >
+        <v-row justify="end">
           <v-col cols="3">
             <v-btn
               depressed
@@ -128,8 +136,10 @@
         </v-row>
       </v-col>
     </v-row>
+    <!--    --------------------------------------------------------------------;-->
   </div>
 </template>
+
 
 <script>
 import {Question} from "@/models/Question";
@@ -145,9 +155,13 @@ export default {
       type: Boolean,
       default: false
     },
+    pageName: {
+      type: String,
+      default: ''
+    }
   },
-  methods:{
-    btn_clicked(name){
+  methods: {
+    btn_clicked(name) {
       this.$emit(name);
     },
   }
