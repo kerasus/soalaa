@@ -89,7 +89,16 @@ const API_ADDRESS = {
     }
   },
   questionSubcategory: {
-    base: lumenServer + '/sub-category'
+    base: lumenServer + '/sub-category',
+    update (id) {
+      return lumenServer + '/sub-category/' + id
+    }
+  },
+  questionCategory: {
+    base: lumenServer + 'category',
+    update (id) {
+      return lumenServer + '/category/' + id
+    }
   }
 }
 export default API_ADDRESS

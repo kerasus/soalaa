@@ -90,19 +90,20 @@
               <v-row
                 v-if="report"
                 class="download-row"
+                v-for="(item, index) in report.exams_booklet" :key="index"
               >
                 <v-col md="6">
-                  <div class="download-box">
+                  <div class="download-box" v-if="item.descriptive_answers_url">
                     <p class="download-title">
                       دانلود پاسخنامه تشریحی {{
-                        report.exams_booklet[0].title }}
+                        item.title }}
                     </p>
                     <v-btn
                       outlined
                       color="--primary-2"
                       height="75px"
                       width="250px"
-                      :href="report.exams_booklet[0].descriptive_answers_url"
+                      :href="item.descriptive_answers_url"
                       target="_blank"
                     >
                       دانلود فایل PDF
@@ -113,63 +114,16 @@
                   </div>
                 </v-col>
                 <v-col md="6">
-                  <div class="download-box">
+                  <div class="download-box" v-if="item.questions_url">
                     <p class="download-title">
-                      دانلود {{ report.exams_booklet[0].title }}
+                      دانلود سوالات {{ item.title }}
                     </p>
                     <v-btn
                       outlined
                       color="--primary-2"
                       height="75px"
                       width="250px"
-                      :href="report.exams_booklet[0].questions_url"
-                      target="_blank"
-                    >
-                      دانلود فایل PDF
-                      <v-icon class="donwload-icon">
-                        mdi-download
-                      </v-icon>
-                    </v-btn>
-                  </div>
-                </v-col>
-                <v-col
-                  v-if="report.exams_booklet[1]"
-                  md="6"
-                >
-                  <div class="download-box">
-                    <p class="download-title">
-                      دانلود پاسخنامه تشریحی {{
-                        report.exams_booklet[1].title }}
-                    </p>
-                    <v-btn
-                      outlined
-                      color="--primary-2"
-                      height="75px"
-                      width="250px"
-                      :href="report.exams_booklet[1].descriptive_answers_url"
-                      target="_blank"
-                    >
-                      دانلود فایل PDF
-                      <v-icon class="donwload-icon">
-                        mdi-download
-                      </v-icon>
-                    </v-btn>
-                  </div>
-                </v-col>
-                <v-col
-                  v-if="report.exams_booklet[1]"
-                  md="6"
-                >
-                  <div class="download-box">
-                    <p class="download-title">
-                      دانلود {{ report.exams_booklet[1].title }}
-                    </p>
-                    <v-btn
-                      outlined
-                      color="--primary-2"
-                      height="75px"
-                      width="250px"
-                      :href="report.exams_booklet[1].questions_url"
+                      :href="item.questions_url"
                       target="_blank"
                     >
                       دانلود فایل PDF

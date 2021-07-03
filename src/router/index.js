@@ -123,6 +123,18 @@ const router = new VueRouter({
             component: () => lazyLoadView(import('@/pages/admin/VideoSet/SetVideo')),
             meta: {middleware: [auth, completeInfo]}
         },
+        {
+            path: '/sub_category/edit',
+            name: 'subCategory.edit',
+            component: () => lazyLoadView(import('@/pages/admin/subCategory/edit')),
+            meta: {middleware: [auth, completeInfo]}
+        },
+        {
+            path: '/category/edit',
+            name: 'category.edit',
+            component: () => lazyLoadView(import('@/pages/admin/category/edit')),
+            meta: {middleware: [auth, completeInfo]}
+        },
 
         // dev pages
         // {
