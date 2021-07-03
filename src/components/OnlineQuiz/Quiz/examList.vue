@@ -409,8 +409,9 @@
                     .then(() => {
                         that.$notify({
                             group: 'notifs',
-                            text: 'ساخت فایل با موفقیت انجام شد',
-                            type: 'success'
+                            text: 'ساخت فایل ' + exam.title + ' با موفقیت انجام شد',
+                            type: 'success',
+                            duration: -1
                         })
                         this.examList.loading = false
                     })
