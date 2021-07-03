@@ -174,7 +174,8 @@ export default {
   },
   computed: {
     filteredItems () {
-      return this.subCategoriesList.list.filter(item => item.title.includes(this.searchValue))
+      let that = this
+      return this.subCategoriesList.list.filter(item => item.title.includes(this.searchValue) || that.getCategoryById(item.category_id).title.includes(this.searchValue))
     },
     iconPicker () {
       return (title) => {
