@@ -4,6 +4,9 @@
         max-width="800px"
         class="mx-auto"
     >
+      <v-overlay v-if="loading" absolute>
+        <v-progress-circular indeterminate></v-progress-circular>
+      </v-overlay>
       <v-toolbar
           color="light-blue px-2"
           dark
@@ -106,37 +109,6 @@
             </div>
           </v-list-item-action>
         </v-list-item>
-
-<!--        <v-divider inset></v-divider>-->
-
-<!--        <v-subheader inset>Files</v-subheader>-->
-
-<!--        <v-list-item-->
-<!--            v-for="file in files"-->
-<!--            :key="file.title"-->
-<!--        >-->
-<!--          <v-list-item-avatar>-->
-<!--            <v-icon-->
-<!--                :class="file.color"-->
-<!--                dark-->
-<!--                v-text="file.icon"-->
-<!--            ></v-icon>-->
-<!--          </v-list-item-avatar>-->
-
-<!--          <v-list-item-content>-->
-<!--            <v-list-item-title v-text="file.title"></v-list-item-title>-->
-
-<!--            <v-list-item-subtitle v-text="file.subtitle"></v-list-item-subtitle>-->
-<!--          </v-list-item-content>-->
-
-<!--          <v-list-item-action>-->
-<!--            <v-btn icon>-->
-<!--              <v-icon color="grey lighten-1">mdi-information</v-icon>-->
-<!--            </v-btn>-->
-<!--          </v-list-item-action>-->
-<!--        </v-list-item>-->
-
-
       </v-list>
     </v-card>
   </v-container>
@@ -156,20 +128,6 @@ export default {
       categoryList: new QuestCategoryList(),
       loading: false,
       searchValue: '',
-      folders: [
-        {
-          color: 'blue',
-          icon: 'mdi-clipboard-text',
-          subtitle: 'Jan 20, 2014',
-          title: 'Vacation itinerary',
-        },
-        {
-          color: 'amber',
-          icon: 'mdi-gesture-tap-button',
-          subtitle: 'Jan 10, 2014',
-          title: 'Kitchen remodel',
-        },
-      ],
     }
   },
   computed: {
@@ -266,7 +224,7 @@ export default {
       item.apply()
       axios.put(API_ADDRESS.questionSubcategory.update(item.id), item)
       .then(response => {
-        item = new QuestCategory(response.data.data)
+        item = new QuestSubcategory(response.data.data)
       })
     },
     create (item) {

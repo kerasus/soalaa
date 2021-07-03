@@ -15,7 +15,11 @@ class QuestCategory extends Model {
                 key: 'sub_categories',
                 relatedModel: QuestSubcategoryList
             },
-            { key: 'order' }
+            { key: 'order' },
+            {
+                key: 'editable',
+                default: false
+            }
         ])
     }
 
