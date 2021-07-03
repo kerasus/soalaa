@@ -24,7 +24,15 @@ class QuestSubcategory extends Model {
                 key: 'questions',
                 relatedModel: QuestionList
             },
+            {
+                key: 'editable',
+                default: false
+            }
         ])
+
+        if (this.title === null) {
+            this.title = ''
+        }
     }
 }
 

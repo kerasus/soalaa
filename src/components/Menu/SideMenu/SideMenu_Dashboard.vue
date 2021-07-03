@@ -177,6 +177,10 @@
           displayName: 'بانک سوال',
           to: {name: 'quest.index'}
         },
+        {
+          displayName: 'لیست دروس',
+          to: {name: 'subCategory.edit'}
+        },
       ],
       educationList: [
         {
