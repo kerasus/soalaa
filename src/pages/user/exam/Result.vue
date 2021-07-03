@@ -93,7 +93,7 @@
                 v-for="(item, index) in report.exams_booklet" :key="index"
               >
                 <v-col md="6">
-                  <div class="download-box">
+                  <div class="download-box" v-if="item.descriptive_answers_url">
                     <p class="download-title">
                       دانلود پاسخنامه تشریحی {{
                         item.title }}
@@ -114,7 +114,7 @@
                   </div>
                 </v-col>
                 <v-col md="6">
-                  <div class="download-box">
+                  <div class="download-box" v-if="item.questions_url">
                     <p class="download-title">
                       دانلود سوالات {{ item.title }}
                     </p>
