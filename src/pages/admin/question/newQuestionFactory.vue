@@ -261,19 +261,14 @@ export default {
     filter (itemId, page) {
       if (itemId) {
         this.selectedStatusId = itemId
-        console.log('selected status:',this.selectedStatusId , 'item id : ',itemId)
       }
       let that = this
       that.$store.commit('AppLayout/updateOverlay', {show: true, loading: true, text: 'کمی صبر کنید...'})
       const statusesId = (!itemId) ? [] : [itemId]
-      console.log('status id :' , statusesId)
-      console.log( 'api :', API_ADDRESS.question.index(statusesId, page))
       axios.get(API_ADDRESS.question.index(statusesId, page))
            .then( response => {
              that.questions = new QuestionList(response.data.data)
-             console.log('question :',that.question)
              that.page = response.data.meta.current_page
-             console.log('that page :',that.page)
              that.pageCount = Math.ceil(response.data.meta.total / response.data.meta.per_page)
              that.$store.commit('AppLayout/updateOverlay', {show: false, loading: false, text: ''})
            })
