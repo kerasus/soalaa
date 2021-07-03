@@ -4,6 +4,9 @@
         max-width="800px"
         class="mx-auto"
     >
+      <v-overlay v-if="loading" absolute>
+        <v-progress-circular indeterminate></v-progress-circular>
+      </v-overlay>
       <v-toolbar
           color="light-blue px-2"
           dark
