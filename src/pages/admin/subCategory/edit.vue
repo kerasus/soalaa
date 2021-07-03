@@ -261,6 +261,7 @@ export default {
   methods: {
     update (item) {
       item.editMode = false
+      item.title = item.title.trim()
       item.apply()
       axios.put(API_ADDRESS.questionSubcategory.update(item.id), item)
       .then(response => {
@@ -269,9 +270,13 @@ export default {
     },
     create (item) {
       item.editable = false
+      item.title = item.title.trim()
       axios.post(API_ADDRESS.questionSubcategory.base, item)
       .then(response => {
         item = new QuestSubcategory(response.data.data)
+      })
+      .catch(() => {
+        this.deleteItem(item)
       })
     },
     cancelEdit (item) {
