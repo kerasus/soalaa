@@ -412,6 +412,7 @@
                             text: 'ساخت فایل با موفقیت انجام شد',
                             type: 'success'
                         })
+                        this.examList.loading = false
                     })
                     .catch( () => {
                         this.examList.loading = false
