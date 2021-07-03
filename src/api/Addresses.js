@@ -95,7 +95,10 @@ const API_ADDRESS = {
     }
   },
   questionCategory: {
-    base: lumenServer + 'category?with_pagination=0'
+    base: lumenServer + 'category',
+    update (id) {
+      return lumenServer + '/category/' + id
+    }
   }
 }
 export default API_ADDRESS
