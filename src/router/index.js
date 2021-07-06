@@ -135,7 +135,6 @@ const router = new VueRouter({
             component: () => lazyLoadView(import('@/pages/admin/category/edit')),
             meta: {middleware: [auth, completeInfo]}
         },
-
         // dev pages
         // {
         //     path: '/quiz/edit-all',
