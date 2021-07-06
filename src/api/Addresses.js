@@ -98,7 +98,7 @@ const API_ADDRESS = {
     }
   },
   questionCategory: {
-    base: lumenServer + 'category',
+    base: lumenServer + '/category',
     update (id) {
       return lumenServer + '/category/' + id
     }
