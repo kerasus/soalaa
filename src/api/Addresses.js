@@ -65,6 +65,9 @@ const API_ADDRESS = {
       getReport (userExamId) {
         return lumenServer + '/exam-report/show?user_exam_id=' + userExamId
       }
+    },
+    examBookletUpload (exam_id) {
+      return lumenServer + '/exam-question/booklet-file/' + exam_id
     }
   },
   question: {
