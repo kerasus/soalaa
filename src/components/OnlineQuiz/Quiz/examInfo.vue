@@ -65,6 +65,9 @@
         <v-col :cols="12">
           <v-checkbox label="شرکت در آزمون باز است" v-model="exam.is_open" />
         </v-col>
+        <v-col :cols="12">
+          <v-checkbox label="تولید اتوماتیک کارنامه" v-model="exam.generate_automatic_report" />
+        </v-col>
       </v-row>
       <v-row>
         <v-col>
