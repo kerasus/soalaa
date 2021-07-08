@@ -20,7 +20,6 @@
       </v-row>
     </div>
     <v-card
-      height="1099"
       color="#f5f5f5"
       flat
       class="ma-7 rounded-card"

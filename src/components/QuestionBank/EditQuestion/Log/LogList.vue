@@ -1,10 +1,12 @@
 <template>
   <div>
-    <p class="mt-2">سابقه</p>
+    <p class="mt-2 font-weight-medium">
+      سابقه
+    </p>
     <v-card
-          flat
-          class="rounded-card"
-          max-height="1600"
+      flat
+      class="rounded-card"
+      max-height="1600"
     >
       <div class="logList">
         <log-item

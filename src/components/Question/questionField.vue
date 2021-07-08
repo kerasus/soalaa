@@ -93,8 +93,9 @@ export default {
     }
   },
   created () {
-    this.getHtmlValueFromValueProp()
     this.loading = true
+    this.getHtmlValueFromValueProp()
+
   },
   methods: {
     getHtmlValueFromValueProp () {
@@ -306,7 +307,7 @@ export default {
       string = this.convertKatex(string)
       string = this.convertImage(string)
       const markdown = this.htmlToMarkdown(string)
-      console.log('markdown', markdown)
+      // console.log('markdown', markdown)
       // return this.markdown.render(string.replace('<div class="question" dir="rtl">', ''))
       return markdown
     },
