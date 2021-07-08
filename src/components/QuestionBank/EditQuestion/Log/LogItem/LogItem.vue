@@ -45,7 +45,7 @@
             :key="index"
           >
             <div class="log-author">
-              {{ comment.user.full_name}}:
+              {{ comment.user.full_name }}:
             </div>
             <div class="log-comment">
               <div class="comment-text">
@@ -56,6 +56,32 @@
               </div>
             </div>
           </div>
+          <v-btn
+            v-if="!canComment"
+            block
+            color="primary"
+            height="20"
+            class="mt-3"
+            @click="canComment = true"
+          >
+            افزودن کامنت
+          </v-btn>
+          <v-textarea
+            v-if="canComment"
+            outlined
+            rounded
+            v-model="commentText"
+            class="mt-3"
+          />
+          <v-btn
+            v-if="canComment"
+            color="primary"
+            block
+            height="20"
+            @click="addComment"
+          >
+            ارسال کامنت
+          </v-btn>
         </v-col>
       </v-row>
     </v-container>
@@ -76,7 +102,17 @@ export default {
     }
   },
   data() {
-    return {}
+    return {
+      canComment: false,
+      commentText: ''
+    }
+  },
+  methods: {
+    addComment () {
+      this.$emit('addComment', { text: this.commentText, logId: this.log.id })
+      this.commentText = ''
+      this.canComment = false
+    }
   }
 }
 
