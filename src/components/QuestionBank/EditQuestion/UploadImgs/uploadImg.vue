@@ -1,6 +1,6 @@
 <template>
   <div class="SelectImageBox">
-    <p class="font-weight-medium mb-5">
+    <p class="font-weight-medium mb-5 mt-5">
       فایل های آپلود شده:
     </p>
     <v-row>
@@ -14,6 +14,7 @@
               <v-col
                 v-if="editStatus"
                 v-show="questionFile.length === 0"
+                class="test"
               >
                 <file-upload
                   ref="questionFile"
@@ -45,6 +46,7 @@
               <v-col
                 v-for="(file, index) in questionFile"
                 :key="index"
+                class="test2"
               >
                 <v-card>
                   <v-img
@@ -61,6 +63,7 @@
                     class="caption"
                     v-text="formatSize(file.size)"
                   />
+                  <!-- delete img ----------------------------------------------------------->
                   <v-btn
                     v-if="editStatus"
                     fab
@@ -124,7 +127,10 @@
                     class="mt-3"
                     @click="showImgPanel(((editStatus) ? file.thumb : file))"
                   />
+
                   <span v-else>No Image</span>
+
+
                   <v-card-title
                     v-if="editStatus"
                     class="caption"
@@ -264,9 +270,6 @@ export default {
         show: false,
         name: '',
       },
-
-      srcImg1:'https://picsum.photos/id/11/500/300',
-      srcImg2:'https://picsum.photos/500/300'
     }
   },
   watch: {
@@ -317,9 +320,9 @@ export default {
   },
   methods :{
     showImgPanel(src){
-      this.$emit("imgClicked",src);
+      console.log("src -----------", src)
+      this.$emit("imgClicked", src);
     },
-
     fileUpdated () {
       const files = {
         questionFile: this.questionFile,
@@ -541,7 +544,6 @@ export default {
   top: -16px;
   left: -16px;
 }
-
 .SelectImageBox .file-uploads {
   display: flex;
   align-items: center;

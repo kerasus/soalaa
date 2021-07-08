@@ -102,6 +102,7 @@ export default {
   created () {
     this.loading = true
     this.getHtmlValueFromValueProp()
+
   },
   methods: {
     getHtmlValueFromValueProp () {
