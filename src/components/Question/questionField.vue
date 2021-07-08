@@ -5,6 +5,8 @@
         v-if="true"
         v-model="html"
         :loading="loading"
+        :access-token="$store.getters['Auth/accessToken']"
+        :upload-url="'/api/v1/question/upload/' + questionId"
         @input="updateValue"
       />
       <input
@@ -80,6 +82,11 @@ export default {
       default: false,
       type: Boolean
     },
+    questionId: {
+      default: null,
+      required: true,
+      type: String
+    }
   },
   data() {
     return {
@@ -93,8 +100,8 @@ export default {
     }
   },
   created () {
-    this.getHtmlValueFromValueProp()
     this.loading = true
+    this.getHtmlValueFromValueProp()
   },
   methods: {
     getHtmlValueFromValueProp () {

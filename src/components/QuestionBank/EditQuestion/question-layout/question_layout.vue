@@ -14,6 +14,7 @@
         class="mb-10"
         :edit-status="status"
         placeholder="صورت سوال"
+        :question-id="value.id"
         @input="updateQuestion"
       />
     </div>
@@ -56,6 +57,7 @@
             :key="'choices' + (index + 1) + domKey"
             v-model="item.title"
             :edit-status="status"
+            :question-id="value.id"
             @input="updateQuestion"
           />
         </div>
