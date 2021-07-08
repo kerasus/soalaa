@@ -45,7 +45,7 @@
             :key="index"
           >
             <div class="log-author">
-              {{ comment.full_name.name }}:
+              {{ comment.user.full_name}}:
             </div>
             <div class="log-comment">
               <div class="comment-text">
