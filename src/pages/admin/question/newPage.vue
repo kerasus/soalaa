@@ -264,7 +264,6 @@ export default {
     },
 
     navBarAction_cancel() {
-      console.log('navBarAction_cancel')
       this.$router.push({name: 'question.show', params: {question_id: this.$route.params.question_id}})
     },
 

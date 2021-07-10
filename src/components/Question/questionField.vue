@@ -83,7 +83,6 @@ export default {
       type: Boolean
     },
     questionId: {
-      default: null,
       required: true,
       type: String
     }
@@ -314,7 +313,6 @@ export default {
       string = this.convertKatex(string)
       string = this.convertImage(string)
       const markdown = this.htmlToMarkdown(string)
-      console.log('markdown', markdown)
       // return this.markdown.render(string.replace('<div class="question" dir="rtl">', ''))
       return markdown
     },
