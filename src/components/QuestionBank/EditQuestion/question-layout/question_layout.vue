@@ -9,13 +9,12 @@
         تایپ سوال
       </div>
       <question_field
-        v-if="value.id"
         :key="'statement' + domKey"
         v-model="question.statement"
         class="mb-10"
         :edit-status="status"
         placeholder="صورت سوال"
-        :question-id="value.id"
+        :question-id="value.id ? value.id : 'null'"
         @input="updateQuestion"
       />
     </div>
@@ -55,11 +54,10 @@
       <div class="answer-editor">
         <div>
           <question_field
-            v-if="value.id"
             :key="'choices' + (index + 1) + domKey"
             v-model="item.title"
             :edit-status="status"
-            :question-id="value.id"
+            :question-id="value.id ? value.id : 'null'"
             @input="updateQuestion"
           />
         </div>
@@ -72,10 +70,9 @@
       </div>
       <div>
         <question_field
-          v-if="value.id"
           :key="'descriptive_answer' + domKey"
           v-model="question.descriptive_answer"
-          :question-id="value.id"
+          :question-id="value.id ? value.id : 'null'"
           :edit-status="status"
           placeholder="پاسخ تشریحی"
           class="mb-16"
