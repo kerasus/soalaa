@@ -34,6 +34,7 @@
   import SlotBubbleMenu from "@/components/tiptap/SlotBubbleMenu"
   import SlotFloafingMenu from "@/components/tiptap/SlotFloafingMenu"
   import TiptapInteractiveKatex from '@/components/tiptap/formula/extention'
+  import TiptapInteractiveKatexInline from '@/components/tiptap/formula/entensionInline'
   import TiptapInteractiveImageUpload from "@/components/tiptap/ImageUpload/extension";
 
   import StarterKit from '@tiptap/starter-kit'
@@ -97,6 +98,7 @@
           TableHeader,
           TableCell,
           TiptapInteractiveKatex,
+          TiptapInteractiveKatexInline,
           TiptapInteractiveImageUpload
         ],
         // triggered on every change
@@ -116,12 +118,12 @@
     },
     methods: {
       // focusHandler() {
-      //   console.log('focusHandler -> this.editor.view', this.editor.view)
+      //   console.Log('focusHandler -> this.editor.view', this.editor.view)
       //   // we use `setTimeout` to make sure `selection` is already updated
       //   setTimeout(() => this.update(this.editor.view))
       // },
       // blurHandler(data) {
-      //   console.log('blurHandler -> data', data)
+      //   console.Log('blurHandler -> data', data)
       //   // if (this.preventHide) {
       //   //   this.preventHide = false
       //   //
@@ -150,8 +152,8 @@
       //   const from = Math.min(...ranges.map(range => range.$from.pos))
       //   const to = Math.max(...ranges.map(range => range.$to.pos))
       //
-      //   console.log('report : ', {from, to, empty, $anchor, ranges})
-      //   console.log('report222 : ', posToDOMRect(view, from, to))
+      //   console.Log('report : ', {from, to, empty, $anchor, ranges})
+      //   console.Log('report222 : ', posToDOMRect(view, from, to))
       //   // Sometime check for `empty` is not enough.
       //   // Doubleclick an empty paragraph returns a node size of 2.
       //   // So we check also for an empty text size.

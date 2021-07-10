@@ -171,8 +171,8 @@
       {
         this.overlay = true
       }
-      // console.log(this.questions)
-      // console.log(this.getCurrentExamQuestionsInArray())
+      // console.Log(this.questions)
+      // console.Log(this.getCurrentExamQuestionsInArray())
     },
     mounted() {
       let that = this
@@ -227,7 +227,7 @@
         return this.userQuizListData[this.quiz.id][question_id]
       },
       changeWidth() {
-        // console.log('test')
+        // console.Log('test')
         this.$refs.bubbleSheet.style.height = this.questionListHeight() - 24 + 'px'
       },
       AnswerClicked(payload) {

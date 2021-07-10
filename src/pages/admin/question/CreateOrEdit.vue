@@ -392,7 +392,7 @@
       @input="updateRendered"
     />
     <div v-if="currentQuestion.id">
-<!--                  <upload-image :url="'/api/v1/question/upload/'+currentQuestion.id" />-->
+      <!--                  <upload-image :url="'/api/v1/question/upload/'+currentQuestion.id" />-->
       <upload-files
         :post-action="'/api/v1/question/upload/'+currentQuestion.id"
         :put-action="'/api/v1/question/upload/'+currentQuestion.id"
@@ -778,19 +778,18 @@
         },
         methods: {
 
-          updateSelectedQuizzes () {
-            let selectedQuizzes = JSON.parse(JSON.stringify(this.selectedQuizzes))
-            selectedQuizzes.forEach((item, i) => {
-              selectedQuizzes[i].subId = i + 1;
-            })
+            updateSelectedQuizzes () {
+              let selectedQuizzes = JSON.parse(JSON.stringify(this.selectedQuizzes))
+              selectedQuizzes.forEach((item, i) => {
+                selectedQuizzes[i].subId = i + 1;
+              })
 
-            this.selectedQuizzes = selectedQuizzes
-          },
+              this.selectedQuizzes = selectedQuizzes
+            },
             getExamById (quizId) {
                 return this.totalExams.find(item => item.id == quizId);
             },
             deleteItem (item) {
-                console.log('item', item)
                 this.editedIndex = this.selectedQuizzes.indexOf(item)
                 this.editedItem = Object.assign({}, item)
                 this.dialogDelete = true
@@ -823,16 +822,15 @@
                     question_id: this.$route.params.id,
                     sub_category_id: this.attachSubcategoryID
                 })
-                    .then( response => {
-                        this.updateAttachList(response.data.data.exams)
-                        console.log('response', response)
-                        this.attachLoading = false
-                        this.dialog = false
-                    })
-                    .catch( () => {
-                        this.attachLoading = false
-                        this.dialog = false
-                    })
+                .then( response => {
+                    this.updateAttachList(response.data.data.exams)
+                    this.attachLoading = false
+                    this.dialog = false
+                })
+                .catch( () => {
+                    this.attachLoading = false
+                    this.dialog = false
+                })
             },
             attachQuestionOnCreateMode () {
                 const targetExamIndex = this.totalExams.findIndex(examItem => Assistant.getId(examItem.id) === Assistant.getId(this.attachExamID))
@@ -861,7 +859,6 @@
                   }]
                 })
                     .then((response) => {
-                        console.log('response', response)
                         this.selectedQuizzes = []
                         response.data.data.exams.forEach(item => {
                             this.selectedQuizzes.push({
@@ -873,7 +870,7 @@
                             })
                         })
                       this.updateSelectedQuizzes()
-                        // this.currentQuestion = new Question(responseData)
+                        // this.currentQuestion = new question-layout(responseData)
                         // this.trueChoiceIndex = this.currentQuestion.choices.list.findIndex((item) => item.answer )
                         // this.updateAttachList(response.data.data)
                         this.attachLoading = false
