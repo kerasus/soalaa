@@ -311,7 +311,7 @@
                     </v-list-item>
                     <v-list-item>
                       <v-list-item-action>
-                        <v-btn :to="{name: 'quest.edit', params: { id: (item.id) ? item.id : item._id }}">
+                        <v-btn :to="{name: 'question.edit', params: { question_id: (item.id) ? item.id : item._id }}">
                           مشاهده
                         </v-btn>
                       </v-list-item-action>

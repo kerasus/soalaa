@@ -53,7 +53,7 @@
       </v-btn>
       <v-btn
         icon
-        :to="{ name: 'quest.edit', params: { id: source.id } }"
+        :to="{ name: 'question.edit', params: { question_id: source.id } }"
       >
         <v-icon :size="24">
           mdi-pencil
