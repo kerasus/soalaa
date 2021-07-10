@@ -13,6 +13,7 @@
           v-for="(item, index) in logs.list"
           :key="index"
           :log="item"
+          @addComment="addComment"
         />
       </div>
     </v-card>
@@ -194,6 +195,11 @@ export default {
   },
   data() {
     return {}
+  },
+  methods: {
+    addComment (eventData) {
+      this.$emit('addComment', eventData)
+    }
   }
 }
 

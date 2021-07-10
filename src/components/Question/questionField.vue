@@ -5,6 +5,8 @@
         v-if="true"
         v-model="html"
         :loading="loading"
+        :access-token="$store.getters['Auth/accessToken']"
+        :upload-url="'/api/v1/question/upload/' + questionId"
         @input="updateValue"
       />
       <input
@@ -80,6 +82,10 @@ export default {
       default: false,
       type: Boolean
     },
+    questionId: {
+      required: true,
+      type: String
+    }
   },
   data() {
     return {
@@ -307,7 +313,6 @@ export default {
       string = this.convertKatex(string)
       string = this.convertImage(string)
       const markdown = this.htmlToMarkdown(string)
-      // console.log('markdown', markdown)
       // return this.markdown.render(string.replace('<div class="question" dir="rtl">', ''))
       return markdown
     },

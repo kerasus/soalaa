@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <v-container class="pa-6">
+    <v-container :fluid="true" class="pa-6">
       <v-row>
         <v-dialog
           v-model="dialog"
@@ -97,7 +97,7 @@
           v-if="currentQuestion.logs.list.length > 0 && !uploadImgColsNumber.show"
           :cols="3"
         >
-          <LogListComponent :logs="currentQuestion.logs" />
+          <LogListComponent @addComment="addComment" :logs="currentQuestion.logs" />
         </v-col>
       </v-row>
     </v-container>
@@ -115,7 +115,7 @@ import ShowImg from '@/components/QuestionBank/EditQuestion/ShowImg/showImg';
 import LogListComponent from '@/components/QuestionBank/EditQuestion/Log/LogList';
 import {mixinMarkdownAndKatex} from "@/mixin/Mixins"
 import {Question} from '@/models/Question'
-import {LogList} from '@/models/Log'
+import {Log, LogList} from '@/models/Log'
 import {ExamList} from "@/models/Exam";
 import {QuestSubcategoryList} from "@/models/QuestSubcategory";
 import API_ADDRESS from "@/api/Addresses";
@@ -220,6 +220,19 @@ export default {
     this.setUploadImgStatus()
   },
   methods: {
+    addComment (eventData) {
+      axios.post(API_ADDRESS.log.addComment(eventData.logId), { comment: eventData.text })
+      .then(response => {
+        // iterating over the array to find the log that has changed
+        for (let i = 0; i < this.currentQuestion.logs.list.length; i++) {
+          if (this.currentQuestion.logs.list[i].id === eventData.logId) {
+            // setting the new log using Vue.set so that the component notices the change
+            this.currentQuestion.logs.list[i] = new Log(response.data.data)
+            Vue.set(this.currentQuestion, 'logs', new LogList(this.currentQuestion.logs))
+          }
+        }
+      })
+    },
     navBarAction_create(statusId) {
       // set status_id
       if (!statusId) {
@@ -251,7 +264,6 @@ export default {
     },
 
     navBarAction_cancel() {
-      console.log('navBarAction_cancel')
       this.$router.push({name: 'question.show', params: {question_id: this.$route.params.question_id}})
     },
 

@@ -69,6 +69,9 @@ const API_ADDRESS = {
   },
   log: {
     base: lumenServer + '/activity-log',
+    addComment (id) {
+      return lumenServer + '/activity-log/' + id + '/comment'
+    }
   },
   question: {
     indexMonta: lumenServer + '/question/search-monta',
