@@ -28,6 +28,11 @@
         </v-card-actions>
       </v-card>
     </v-dialog>
+    <v-dialog v-model="dialogUpload" max-width="400px">
+      <v-sheet>
+        <upload-answers :exam_id="selectedExam"></upload-answers>
+      </v-sheet>
+    </v-dialog>
     <v-progress-linear
       color="#ffc107"
       absolute
@@ -207,7 +212,7 @@
               fab
               dark
               x-small
-              color="orange"
+              color="purple"
               v-bind="attrs"
               @click="selectExam(item)"
               v-on="on"
@@ -229,7 +234,7 @@
               fab
               dark
               x-small
-              color="primary"
+              color="indigo"
               :to="{ name: 'onlineQuiz.exams.lessons', params: { quizId: item.id}}"
               v-bind="attrs"
               v-on="on"
@@ -250,7 +255,7 @@
               fab
               dark
               x-small
-              color="light-blue"
+              color="indigo"
               :to="{ name: 'onlineQuiz.exams.lessons', params: { quizId: item.id}}"
               v-bind="attrs"
               v-on="on"
@@ -271,7 +276,7 @@
               fab
               dark
               x-small
-              color="cyan"
+              color="blue"
               :to="{name: 'exam.results', params: {examId: item.id}}"
               v-bind="attrs"
               v-on="on"
@@ -292,7 +297,7 @@
               fab
               dark
               x-small
-              color="orange"
+              color="green"
               v-bind="attrs"
               @click="generateJsonFile(item, false)"
               v-on="on"
@@ -313,7 +318,7 @@
               fab
               dark
               x-small
-              color="orange darken-4"
+              color="yellow"
               v-bind="attrs"
               @click="generateJsonFile(item, true)"
               v-on="on"
@@ -334,13 +339,34 @@
               fab
               dark
               x-small
-              color="pink"
+              color="orange"
               v-bind="attrs"
-              @click="deleteItem(item)"
+              @click="openUploadDialog(item.id)"
               v-on="on"
             >
               <v-icon
                 small
+              >
+                mdi-cloud-upload
+              </v-icon>
+            </v-btn>
+          </template>
+          <span>آپلود فایل سوالات و جواب ها</span>
+        </v-tooltip>
+        <v-tooltip top>
+          <template v-slot:activator="{ on, attrs }">
+            <v-btn
+                class="mx-2"
+                fab
+                dark
+                x-small
+                color="red"
+                v-bind="attrs"
+                @click="deleteItem(item)"
+                v-on="on"
+            >
+              <v-icon
+                  small
               >
                 mdi-delete
               </v-icon>
@@ -368,12 +394,15 @@
     import API_ADDRESS from "@/api/Addresses";
     Vue.use(Toasted)
     import Axios from "axios";
+    import UploadAnswers from "@/components/OnlineQuiz/Quiz/uploadAnswers";
 
     export default {
         name: 'ExamList',
-        data: () => ({
+      components: {UploadAnswers},
+      data: () => ({
             dialog: false,
             dialogDelete: false,
+            selectedExam: null,
             examList: new ExamList(),
             examItem: new Exam(),
             headers: [
@@ -389,7 +418,7 @@
                 page: 1
             },
             totalRows: 0,
-
+          dialogUpload: false
         }),
         watch: {
           options: {
@@ -402,6 +431,10 @@
             // this.getExams()
         },
         methods:{
+            openUploadDialog (exam_id) {
+              this.dialogUpload = true
+              this.selectedExam = exam_id
+            },
             generateJsonFile (exam, withAnswer) {
                 this.examList.loading = true
                 const that = this
@@ -409,9 +442,11 @@
                     .then(() => {
                         that.$notify({
                             group: 'notifs',
-                            text: 'ساخت فایل با موفقیت انجام شد',
-                            type: 'success'
+                            text: 'ساخت فایل ' + exam.title + ' با موفقیت انجام شد',
+                            type: 'success',
+                            duration: -1
                         })
+                        this.examList.loading = false
                     })
                     .catch( () => {
                         this.examList.loading = false

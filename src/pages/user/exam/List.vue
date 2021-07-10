@@ -159,6 +159,7 @@
     import ProgressLinear from "@/components/ProgressLinear";
     import VueConfirmDialog from 'vue-confirm-dialog'
     import Vue from 'vue'
+    import axios from "axios";
 
     Vue.use(VueConfirmDialog)
     Vue.component('vue-confirm-dialog', VueConfirmDialog.default)
@@ -212,17 +213,21 @@
                     })
             },
             registerExam (exam) {
-                window.location.href = exam.alaa_product_link
-                // this.user.registerExam(exam.id())
-                //     .then( () => {
-                //         this.$notify({
-                //             group: 'notifs',
-                //             title: 'توجه!',
-                //             text: 'ثبت نام در آزمون با موفقیت انجام شد',
-                //             type: 'success'
-                //         })
-                //         this.getExams()
-                //     })
+                // window.location.href = exam.alcaa_product_link
+                this.user.registerExam(exam.id)
+                    .then( (response) => {
+                      if (response.data.data.redirect_url) {
+                        window.location.href = response.data.data.redirect_url
+                      } else {
+                        this.$notify({
+                          group: 'notifs',
+                          title: 'توجه!',
+                          text: 'ثبت نام در آزمون با موفقیت انجام شد',
+                          type: 'success'
+                        })
+                        this.getExams()
+                      }
+                    })
             },
             sendAnswersAndFinishExam (examId, examUserId) {
                 if (!this.hasExamDataOnThisDeviseStorage(examId)) {

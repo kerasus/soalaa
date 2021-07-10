@@ -65,6 +65,9 @@ const API_ADDRESS = {
       getReport (userExamId) {
         return lumenServer + '/exam-report/show?user_exam_id=' + userExamId
       }
+    },
+    examBookletUpload (exam_id) {
+      return lumenServer + '/exam-question/booklet-file/' + exam_id
     }
   },
   log: {
@@ -128,7 +131,16 @@ const API_ADDRESS = {
     }
   },
   questionSubcategory: {
-    base: lumenServer + '/sub-category'
+    base: lumenServer + '/sub-category',
+    update (id) {
+      return lumenServer + '/sub-category/' + id
+    }
+  },
+  questionCategory: {
+    base: lumenServer + '/category',
+    update (id) {
+      return lumenServer + '/category/' + id
+    }
   }
 }
 export default API_ADDRESS

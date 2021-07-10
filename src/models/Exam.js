@@ -61,7 +61,19 @@ class Exam extends Model {
             { key: 'created_at' },
             { key: 'finished_at' },
             { key: 'is_registered' },
-            { key: 'exam_id' }
+            { key: 'exam_id' },
+            {
+                key: 'enable',
+                default: false
+            },
+            {
+                key: 'is_free',
+                default: false
+            },
+            {
+                key: 'generate_automatic_report',
+                default: false
+            }
         ])
 
         this.exam_id = this.id
