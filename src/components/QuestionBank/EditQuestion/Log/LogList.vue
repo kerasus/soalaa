@@ -1,10 +1,22 @@
 <template>
-  <div class="logList">
-    <log-item
-      v-for="(item, index) in logs.list"
-      :key="index"
-      :log="item"
-    />
+  <div>
+    <p class="mt-2 font-weight-medium">
+      سابقه
+    </p>
+    <v-card
+      flat
+      class="rounded-card"
+      max-height="1600"
+    >
+      <div class="logList">
+        <log-item
+          v-for="(item, index) in logs.list"
+          :key="index"
+          :log="item"
+          @addComment="addComment"
+        />
+      </div>
+    </v-card>
   </div>
 </template>
 
@@ -183,6 +195,11 @@ export default {
   },
   data() {
     return {}
+  },
+  methods: {
+    addComment (eventData) {
+      this.$emit('addComment', eventData)
+    }
   }
 }
 
@@ -191,5 +208,9 @@ export default {
 <style scoped>
 .logList {
   width: 100%;
+}
+.rounded-card{
+  border-radius: 10px;
+  overflow-y: auto;
 }
 </style>

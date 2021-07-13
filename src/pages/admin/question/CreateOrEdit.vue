@@ -790,7 +790,6 @@
                 return this.totalExams.find(item => item.id == quizId);
             },
             deleteItem (item) {
-                console.log('item', item)
                 this.editedIndex = this.selectedQuizzes.indexOf(item)
                 this.editedItem = Object.assign({}, item)
                 this.dialogDelete = true
@@ -825,7 +824,6 @@
                 })
                 .then( response => {
                     this.updateAttachList(response.data.data.exams)
-                    console.log('response', response)
                     this.attachLoading = false
                     this.dialog = false
                 })
@@ -861,7 +859,6 @@
                   }]
                 })
                     .then((response) => {
-                        console.log('response', response)
                         this.selectedQuizzes = []
                         response.data.data.exams.forEach(item => {
                             this.selectedQuizzes.push({

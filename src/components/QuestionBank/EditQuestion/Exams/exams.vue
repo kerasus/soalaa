@@ -1,10 +1,15 @@
 <template>
-  <div class="exam">
-    <p class="font-weight-medium">
+  <div class="exam mb-10">
+    <p
+      v-if="status"
+      class="font-weight-medium"
+    >
       آزمون ها
     </p>
-
-    <v-row class="exam-section  mb-1">
+    <v-row
+      v-if="status"
+      class="exam-section"
+    >
       <v-col
         class="choose-exam"
         cols="5"
@@ -17,6 +22,7 @@
           label="انتخاب آزمون"
           dense
           solo
+          flat
         />
       </v-col>
       <v-col
@@ -31,8 +37,10 @@
           label="انتخاب درس"
           dense
           solo
+          flat
         />
       </v-col>
+
       <v-col
         class="exam-order"
         cols="2"
@@ -44,31 +52,54 @@
           label="ترتیب"
           solo
           dense
+          flat
         />
       </v-col>
       <v-col
         class="attach-or-dettach"
         cols="1"
       >
+        <v-btn
+          height="36"
+          width="100%"
+          class="text-center white"
+          text
+          :loading="loading"
+          :disabled="loading"
+          @click="attach"
+        >
+          <v-icon>mdi-plus</v-icon>
+        </v-btn>
+      </v-col>
+    </v-row>
+    <v-row v-if="!status && attaches.length>0">
+      <v-col cols="5">
         <v-card
           flat
-          height="36"
+          class="transparent px-4 font-weight-medium"
         >
-          <v-card-text class="text-center">
-            <v-btn
-              small
-              text
-              @click="attach"
-            >
-              <v-icon>mdi-plus</v-icon>
-            </v-btn>
-          </v-card-text>
+          آزمون
+        </v-card>
+      </v-col>
+      <v-col cols="4 px-4 font-weight-medium">
+        <v-card
+          flat
+          class="transparent"
+        >
+          درس
+        </v-card>
+      </v-col>
+      <v-col cols="2 px-4 font-weight-medium">
+        <v-card
+          flat
+          class="transparent"
+        >
+          ترتیب
         </v-card>
       </v-col>
     </v-row>
-
     <v-row
-      v-for="(item, index) in exams"
+      v-for="(item, index) in attaches"
       :key="index"
       class="exam-section"
     >
@@ -112,23 +143,21 @@
         </v-card>
       </v-col>
       <v-col
+        v-if="status"
         class="attach-or-detach"
-        cols="1"
       >
-        <v-card
-          flat
+        <v-btn
+          small
           height="36"
+          width="100%"
+          text
+          class="text-center white"
+          :loading="loading"
+          :disabled="loading"
+          @click="detach(item)"
         >
-          <v-card-text class="text-center">
-            <v-btn
-              small
-              text
-              @click="detach(item)"
-            >
-              <v-icon>mdi-trash-can-outline</v-icon>
-            </v-btn>
-          </v-card-text>
-        </v-card>
+          <v-icon>mdi-trash-can-outline</v-icon>
+        </v-btn>
       </v-col>
     </v-row>
   </div>
@@ -141,7 +170,7 @@ import API_ADDRESS from '@/api/Addresses'
 export default {
   name: 'Exams',
   props: {
-    exams: {
+    attaches: {
       default: () => {
         return []
       },
@@ -151,15 +180,24 @@ export default {
       default: () => {
         return []
       },
-      type: Array
+      type: Object
     },
     subCategories: {
       default: () => {
         return []
       },
-      type: Array
+      type: Object
+    },
+    loading: {
+      default: () => {
+        return false
+      },
+      type: Boolean
+    },
+    status: {
+      type: Boolean,
+      default: false
     }
-
   },
   data() {
     return {
@@ -209,9 +247,21 @@ export default {
 }
 </script>
 
+<style>
+.exam .exam-order .v-input__control .v-text-field__details {
+  position: relative;
+  top: -62px;
+  left: 9px;
+}
+
+.exam .exam-order .v-text-field fieldset, .v-text-field .v-input__control, .v-text-field .v-input__slot {
+  border-radius: 10px;
+}
+</style>
 <style scoped>
 .v-text-field.v-text-field--enclosed {
   height: 40px;
+
 }
 
 .row + .row {
@@ -227,4 +277,5 @@ export default {
   min-width: 0px;
   padding: 0 0px;
 }
+
 </style>

@@ -153,10 +153,12 @@
                 no-gutters
                 cols="3"
               >
-                <span
-
-                  v-html="item.rendered_statement"
-                />
+                <div class="column-statement">
+                  <p
+                    class="column-statement-text"
+                    v-html="item.rendered_statement"
+                  />
+                </div>
               </v-col>
               <!--  -------------------- column created_at ------------------------------------------------------------ -->
               <v-col
@@ -285,5 +287,19 @@ export default {
 .table-content-card{
   display: flex;
   align-items: center;
+}
+.column-statement{
+  display: flex;
+  align-items: center;
+}
+.column-statement-text{
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 2; /* number of lines to show */
+  -webkit-box-orient: vertical;
+}
+.column-statement :first-child{
+  margin: 0;
 }
 </style>

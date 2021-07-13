@@ -1,72 +1,103 @@
 <template>
   <div id="app">
-    <v-container class="pa-6">
+    <v-container :fluid="true" class="pa-6">
       <v-row>
+        <v-dialog
+          v-model="dialog"
+          persistent
+          max-width="290"
+        >
+          <v-card>
+            <v-card-title class="dialog-title">
+              سوال را به کدام صورت درج می کنید؟
+            </v-card-title>
+            <v-card-text> لطفا انتخاب کنید که سوال را به کدام روش ثبت می کنید.</v-card-text>
+            <v-card-actions>
+              <v-spacer />
+              <v-btn
+                color="amber lighten-1"
+                text
+                @click="setQuestionTypeText"
+              >
+                تایپ سوال
+              </v-btn>
+              <v-spacer class="mx-10" />
+              <v-btn
+                color="amber lighten-1"
+                text
+                @click="setQuestionTypeImage"
+              >
+                آپلود فایل
+              </v-btn>
+            </v-card-actions>
+          </v-card>
+        </v-dialog>
         <v-col :cols="questionColsNumber">
-          <navBar
+          <nav-bar
+            v-if="this.checkNavbarVisibility()"
             :question="currentQuestion"
             :edit-status="edit_status"
+            :page-name="this.getPageStatus()"
+            @create="navBarAction_create"
+            @saveDraft="navBarAction_saveDraft"
+            @save="navBarAction_save"
+            @cancel="navBarAction_cancel"
+            @edit="navBarAction_edit"
+            @remove="navBarAction_remove"
           />
-          <question-layout
-            v-if="!loading"
-            v-model="currentQuestion"
-            :status="edit_status"
-            @input="updateQuestion"
-          />
-          <div>
-            <v-row>
-              <!-- -------------------------- show exams  ---------------------->
-              <v-col cols="12">
-                <Exams
-                  :exams="currentQuestion.exams"
-                  :exam-list="examList"
-                  :sub-categories="subCategoriesList"
-                  @detach="detachQuestion"
-                  @attach="attachQuestion"
-                />
-              </v-col>
-              <!-- -------------------------- upload file ---------------------->
-              <v-col cols="12">
-                <UploadImg
-                  v-model="currentQuestion"
-                  :edit-status="edit_status"
-                  @imgClicked="openShowImgPanel"
-                />
-              </v-col>
-            </v-row>
+          <div v-if="this.showQuestionComponentStatus()">
+            <question-layout
+              v-if="!loading"
+              v-model="currentQuestion"
+              :status="edit_status"
+              @input="updateQuestion"
+            />
+            <!-- -------------------------- show exams  ---------------------->
+            <attach_list
+              :status="edit_status"
+              :attaches="selectedQuizzes"
+              :exam-list="examList"
+              :sub-categories="subCategoriesList"
+              :loading="attachLoading"
+              @detach="detachQuestion"
+              @attach="attachQuestion"
+            />
           </div>
+          <!-- -------------------------- upload file ---------------------->
+          <UploadImg
+            v-if="this.showImgComponentStatus()"
+            v-model="currentQuestion"
+            :edit-status="upload_img_status"
+            @imgClicked="makeShowImgPanelVisible($event)"
+          />
           <!-- -------------------------- status --------------------------->
           <div
-            v-if="urlPathName === 'question.edit' || urlPathName === 'question.show' "
+            v-if="this.getPageStatus() === 'edit'"
             class="my-10"
           >
             <StatusComponent
               :statuses="questionStatuses"
+              :loading="changeStatusLoading"
               @update="changeStatus"
             />
           </div>
         </v-col>
         <!-- -------------------------- show img---------------------------->
         <v-col
-          :cols="uploadImgColsNumber"
-          :class="displayEditQuestion ? '' : 'd-none'"
+          v-if="uploadImgColsNumber.show"
+          :cols="5"
         >
           <ShowImg
             :test="imgSrc"
-            @closePanel="closeShowImgPanel"
+            @closePanel="makeShowImgPanelInvisible"
           />
         </v-col>
         <!-- -------------------------- log --------------------------->
-        <v-col :cols="log_component_number">
-          <div v-if="urlPathName === 'question.edit' || urlPathName === 'question.show'">
-            <v-card
-              flat
-              height="1856"
-              class="rounded-card"
-            >
-              <LogListComponent :logs="currentQuestion.logs" />
-            </v-card>
-          </div>
+        <v-col
+          v-if="currentQuestion.logs.list.length > 0 && !uploadImgColsNumber.show"
+          :cols="3"
+        >
+          <LogListComponent @addComment="addComment" :logs="currentQuestion.logs" />
         </v-col>
       </v-row>
     </v-container>
@@ -74,15 +105,17 @@
 </template>
 
 <script>
+import Vue from 'vue'
 import navBar from '@/components/QuestionBank/EditQuestion/NavBar/navBar.vue';
 import QuestionLayout from '@/components/QuestionBank/EditQuestion/question-layout/question_layout';
 import UploadImg from '@/components/QuestionBank/EditQuestion/UploadImgs/uploadImg';
-import Exams from '@/components/QuestionBank/EditQuestion/Exams/exams';
+import attach_list from '@/components/QuestionBank/EditQuestion/Exams/exams';
 import StatusComponent from '@/components/QuestionBank/EditQuestion/StatusComponent/status';
 import ShowImg from '@/components/QuestionBank/EditQuestion/ShowImg/showImg';
 import LogListComponent from '@/components/QuestionBank/EditQuestion/Log/LogList';
-import { Question } from '@/models/Question'
-import { LogList } from '@/models/Log'
+import {mixinMarkdownAndKatex} from "@/mixin/Mixins"
+import {Question} from '@/models/Question'
+import {Log, LogList} from '@/models/Log'
 import {ExamList} from "@/models/Exam";
 import {QuestSubcategoryList} from "@/models/QuestSubcategory";
 import API_ADDRESS from "@/api/Addresses";
@@ -91,25 +124,46 @@ import {QuestionStatusList} from "@/models/QuestionStatus";
 import axios from 'axios'
 
 export default {
-  name: "NewPage",
+  name: 'NewPage',
   components: {
     navBar,
     QuestionLayout,
     UploadImg,
-    Exams,
+    attach_list,
     ShowImg,
     StatusComponent,
     LogListComponent
   },
+  mixins: [mixinMarkdownAndKatex],
   data() {
     return {
+      temp: null,
+      pageStatuses: [
+        {
+          title: 'show',
+          state: false
+        },
+        {
+          title: 'create',
+          state: false
+        },
+        {
+          title: 'edit',
+          state: false
+        }
+      ],
       selectedQuizzes: [],
-      imgSrc:'',
-      urlPathName:'',
-      edit_status:true,
+      imgSrc: '',
+      urlPathName: '',
+      edit_status: true,
+      upload_img_status: true,
+      NavbarVisibilityOnCreatPage:false,
+      selectedField: 0,
       questionColsNumber: 12,
-      uploadImgColsNumber: 0,
-      log_component_number:0,
+      uploadImgColsNumber: {
+        show: false
+      },
+      choiceRendered: ['', '', '', ''],
       displayEditQuestion: false,
       currentQuestion: new Question(),
       examList: new ExamList(),
@@ -147,26 +201,185 @@ export default {
       questionStatuses: new QuestionStatusList(),
       loading: true,
       attachLoading: false,
+      changeStatusLoading: false,
+      questionStatusId_draft: null,
+      questionStatusId_pending_to_type: null,
+      dialog: false,
+      questionType: ''
     }
   },
   created() {
-    this.getUrl()
+    this.setPageStatus()
     this.checkUrl()
-    this.getStatus()
+    this.getQuestionStatus()
+    if (this.getPageStatus() === 'create') {
+      this.showPageDialog() //یاس
+    } else {
+      this.setMainChoicesInOtherModes()
+    }
+    this.setUploadImgStatus()
   },
   methods: {
-    changeStatus (newStatus) {
+    addComment (eventData) {
+      axios.post(API_ADDRESS.log.addComment(eventData.logId), { comment: eventData.text })
+      .then(response => {
+        // iterating over the array to find the log that has changed
+        for (let i = 0; i < this.currentQuestion.logs.list.length; i++) {
+          if (this.currentQuestion.logs.list[i].id === eventData.logId) {
+            // setting the new log using Vue.set so that the component notices the change
+            this.currentQuestion.logs.list[i] = new Log(response.data.data)
+            Vue.set(this.currentQuestion, 'logs', new LogList(this.currentQuestion.logs))
+          }
+        }
+      })
+    },
+    navBarAction_create(statusId) {
+      // set status_id
+      if (!statusId) {
+        statusId = this.questionStatusId_draft
+      }
+      this.currentQuestion.status_id = statusId
+
+      // set choices
+      this.setMainChoicesInCreateMode(statusId)   //یاس
+    },
+
+    navBarAction_saveDraft() {
+      var IdPendingToType = this.questionStatusId_pending_to_type
+      this.navBarAction_create(IdPendingToType)
+    },
+
+    navBarAction_save() {
+      var currentQuestion = this.currentQuestion
+      currentQuestion.update(API_ADDRESS.question.updateQuestion(currentQuestion.id))
+          .then(() => {
+            this.$notify({
+              group: 'notifs',
+              title: 'توجه',
+              text: 'ویرایش با موفقیت انجام شد',
+              type: 'success'
+            })
+            this.$router.push({name: 'question.show', params: {question_id: this.$route.params.question_id}})
+          })
+    },
+
+    navBarAction_cancel() {
+      this.$router.push({name: 'question.show', params: {question_id: this.$route.params.question_id}})
+    },
+
+    navBarAction_edit() {
+      this.$router.push({name: 'question.edit', params: {question_id: this.$route.params.question_id}})
+    },
+
+    navBarAction_remove() {
+      let that = this
+      this.$store.commit('AppLayout/showConfirmDialog', {
+        message: 'از حذف کامل سوال از پایگاه داده و حذف از تمامی آزمون ها اطمینان دارید؟',
+        button: {
+          no: 'خیر',
+          yes: 'بله'
+        },
+        callback: (confirm) => {
+          if (!confirm) {
+            return
+          }
+          axios.delete(API_ADDRESS.question.delete(this.$route.params.question_id))
+              .then(() => {
+                that.$router.push({name: 'question.list'})
+              })
+        }
+      })
+    },
+
+    setQuestionPhotos(statusId) {  //یاس
+      this.$store.commit('AppLayout/updateOverlay', {show: true, loading: true, text: 'کمی صبر کنید...'})
+      let formData = new FormData();
+      formData.append('status_id', statusId);
+      formData.append('statement_photo', this.currentQuestion.statement_photo);
+      this.currentQuestion.answer_photos.forEach((item, key) => {
+        formData.append('answer_photos[' + key + ']', item);
+      })
+      axios.post(API_ADDRESS.question.create, formData)
+          .then((response) => {
+            const questionId = response.data.data.id
+            this.$router.push({name: 'question.show', params: {question_id: questionId}})
+            this.$store.commit('AppLayout/updateOverlay', {show: false, loading: false, text: ''})
+          }).catch(() => {
+        this.$store.commit('AppLayout/updateOverlay', {show: false, loading: false, text: ''})
+      });
+    },
+
+    setPageStatus() {
+      const title = this.$route.name.replace('question.', '')
+      this.pageStatuses.forEach(item => {
+        if (item.title === title) {
+          item.state = true
+        } else {
+          item.state = false
+        }
+      })
+    },
+
+    getPageStatus() {
+      const target = this.pageStatuses.find(item => item.state)
+      return (target) ? target.title : false
+    },
+
+    getQuestionStatus() {
+      let that = this
+      var list = this.questionStatuses.list
+      return that.questionStatuses.fetch()
+          .then((response) => {
+            that.questionStatuses = new QuestionStatusList(response.data.data)
+            that.questionStatusId_draft = list.find(item => item.title === 'draft').id
+            that.questionStatusId_pending_to_type = list.find(item => item.title === 'pending_to_type').id
+
+          })
+          .catch(() => {
+          })
+    },
+
+    checkUrl() {
+      this.edit_status = (this.getPageStatus() === 'create' || this.getPageStatus() === 'edit');
+      let that = this
+      const loadExamListPromise = this.loadExamList()
+      const loadSubcategoriesPromise = this.loadSubcategories()
+      Promise.all([loadExamListPromise, loadSubcategoriesPromise])
+          .then(() => {
+            if (that.getPageStatus() !== 'create') {
+              that.loadCurrentQuestionData()
+            } else {
+              if (that.currentQuestion.choices === null) {
+                // that.currentQuestion.choices
+              }
+              that.currentQuestion = new Question(that.questionData)
+            }
+            that.setNullKeys()
+            that.loading = false
+          })
+    },
+
+    changeStatus(newStatus) {
       let that = this
       axios.post(API_ADDRESS.question.status.changeStatus(this.$route.params.question_id), {
         status_id: newStatus.changeState,
         comment: newStatus.commentAdded
       })
-      .then((response) => {
-        that.currentQuestion.status = response.data.data.status
-        that.getLogs()
-      })
+          .then((response) => {
+            that.currentQuestion.status = response.data.data.status
+            that.getLogs()
+          })
     },
-    attachQuestionOnEditMode (item) {
+
+    attachQuestion(item) {
+      if (this.getPageStatus() === 'create') {
+        this.attachQuestionOnCreateMode(item)
+      } else {
+        this.attachQuestionOnEditMode(item)
+      }
+    },
+
+    attachQuestionOnEditMode(item) {
       this.attachLoading = true
       axios.post(API_ADDRESS.question.attach, {
         order: item.order,
@@ -174,36 +387,28 @@ export default {
         question_id: this.$route.params.question_id,
         sub_category_id: item.sub_category.id
       })
-      .then( response => {
-        // this.updateAttachList(response.data.data.exams)
-        console.log('response', response)
-        this.currentQuestion.exams = response.data.data.exams
-        this.attachLoading = false
-        this.dialog = false
-      })
-      .catch( () => {
-        this.attachLoading = false
-        this.dialog = false
-      })
+          .then(response => {
+            this.selectedQuizzes = response.data.data.exams
+            this.attachLoading = false
+            this.dialog = false
+          })
+          .catch(() => {
+            this.attachLoading = false
+            this.dialog = false
+          })
     },
-    attachQuestionOnCreateMode () {
-      const targetExamIndex = this.totalExams.findIndex(examItem => Assistant.getId(examItem.id) === Assistant.getId(this.attachExamID))
-      const targetSubCategoryIndex = this.subCategoriesList.list.findIndex(subCategoryItem => Assistant.getId(subCategoryItem.id) === Assistant.getId(this.attachSubcategoryID))
-      this.totalExams[targetExamIndex].order = this.attachOrder
-      this.totalExams[targetExamIndex].sub_category_id = this.attachSubcategoryID
-      this.totalExams[targetExamIndex].sub_category_title = this.subCategoriesList.list[targetSubCategoryIndex].title
-      this.selectedQuizzes.push(JSON.parse(JSON.stringify(this.totalExams[targetExamIndex])))
+
+    attachQuestionOnCreateMode(item) {
+      const targetExamIndex = this.totalExams.findIndex(examItem => Assistant.getId(examItem.id) === Assistant.getId(item.exam.id))
+      let selectedQuizzes = this.selectedQuizzes
+      this.totalExams[targetExamIndex] = item
+      selectedQuizzes.push(JSON.parse(JSON.stringify(this.totalExams[targetExamIndex])))
+
+      Vue.set(this, 'selectedQuizzes', selectedQuizzes)
       this.dialog = false
       this.updateSelectedQuizzes()
     },
-    attachQuestion (item) {
-      console.log('statejdfklsjd;aslfkjdas;flk', this.urlPathName === 'question.edit' || this.urlPathName === 'question.show', item)
-      if (this.urlPathName === 'question.edit' || this.urlPathName === 'question.show') {
-        this.attachQuestionOnEditMode(item)
-      } else {
-        this.attachQuestionOnCreateMode(item)
-      }
-    },
+
     detachQuestion(item) {
       let that = this
       this.$store.commit('AppLayout/showConfirmDialog', {
@@ -216,17 +421,17 @@ export default {
           if (!confirm) {
             return
           }
-          if (that.urlPathName === 'question.edit' || that.urlPathName === 'question.show') {
-            that.detachQuestionOnEditMode(item)
-          } else {
+          if (this.getPageStatus() === 'create') {
             that.detachQuestionOnCreateMode(item)
+          } else {
+            that.detachQuestionOnEditMode(item)
           }
         }
       })
     },
+
     detachQuestionOnEditMode(item) {
       this.attachLoading = true
-      console.log('item', item)
       axios.post(API_ADDRESS.question.detach(this.$route.params.question_id), {
         detaches: [{
           exam_id: item.exam.id,
@@ -234,266 +439,252 @@ export default {
           sub_category_id: item.sub_category.id
         }]
       })
-      .then((response) => {
-        console.log('response', response)
-        this.selectedQuizzes = []
-        // response.data.data.exams.forEach(item => {
-          // this.selectedQuizzes.push({
-          //   id: item.exam.id,
-          //   order: item.order,
-          //   sub_category_id: item.sub_category.id,
-          //   sub_category_title: item.sub_category.title,
-          //   title: item.exam.title
-          // })
-          this.currentQuestion.exams = []
-        response.data.data.exams.forEach(item => {
-          this.currentQuestion.exams.push(item)
-        })
-        this.updateSelectedQuizzes()
-        // this.currentQuestion = new question-layout(responseData)
-        // this.trueChoiceIndex = this.currentQuestion.choices.list.findIndex((item) => item.answer )
-        // this.updateAttachList(response.data.data)
-        this.attachLoading = false
-        this.dialog = false
-      })
-      .catch( () => {
-        this.attachLoading = false
-        this.dialog = false
-      })
+          .then((response) => {
+            this.selectedQuizzes = []
+            this.currentQuestion.exams = []
+            response.data.data.exams.forEach(item => {
+              this.currentQuestion.exams.push(item)
+            })
+            this.updateSelectedQuizzes()
+            this.attachLoading = false
+            this.dialog = false
+          })
+          .catch(() => {
+            this.attachLoading = false
+            this.dialog = false
+          })
     },
+
     detachQuestionOnCreateMode(item) {
       const detachedExamIndex = this.selectedQuizzes.indexOf(item)
       this.selectedQuizzes.splice(detachedExamIndex, 1)
       this.dialog = false
       this.updateSelectedQuizzes()
     },
-    updateQuestion (eventData) {
-      this.currentQuestion = new Question(eventData)
-    },
-    getStatus () {
-      this.questionStatuses.fetch()
-      .then((response) => {
-        this.questionStatuses = new QuestionStatusList(response.data.data)
-      })
-      .catch((error) => {
-        console.log('error', error)
-      })
-    },
-    getUrl () {
-      this.urlPathName = this.$route.name
-    },
-    doesQuestionAlreadyExist () {
-      return this.urlPathName === 'question.show' || this.urlPathName === 'question.edit'
-    },
-    checkUrl () {
-      this.edit_status = this.urlPathName === 'question.create' || this.urlPathName === 'question.edit';
-      if(this.urlPathName === 'question.show' || this.urlPathName === 'question.edit'){
-        this.questionColsNumber = 9
-        this.log_component_number = 3
-      }
 
-      if (this.doesQuestionAlreadyExist()) {
-        console.log('in too')
-        const loanExamListPromise = this.loanExamList()
-        const loadSubcategoriesPromise = this.loadSubcategories()
-        Promise.all([loanExamListPromise, loadSubcategoriesPromise])
-        .then(() => {
-          this.loadCurrentQuestionData()
-          this.setNullKeys()
-          this.loading = false
-        })
-      } else {
-        this.currentQuestion = new Question(this.questionData)
-        console.log('currentQuestion', this.questionData, new Question(this.questionData))
-        this.setNullKeys()
-        this.loading = false
+    showImgComponentStatus() {
+
+      if (this.getPageStatus() === 'create') {
+        return this.questionType === 'typeImage';
+
       }
+      return  this.doesPhotosExist()
     },
-    setNullKeys () {
-      console.log('test', this.currentQuestion.statement)
-      if (!this.currentQuestion.statement) {
-        this.currentQuestion.statement = ''
+
+    showQuestionComponentStatus() {
+      if (this.getPageStatus() === 'create') {
+        return this.questionType === 'typeText';
+
+      } else if (this.getPageStatus() === 'show') {
+        return this.checkTextCondition()
       }
-      this.currentQuestion.choices.list.forEach((item) => {
+      // in edit page
+      return true
+    },
+
+    loadCurrentQuestionData() {
+      let that = this
+      this.currentQuestion.show(null, API_ADDRESS.question.updateQuestion(this.$route.params.question_id))
+          .then((response) => {
+            that.currentQuestion = new Question(response.data.data)
+            that.temp = that.currentQuestion
+            that.checkTextCondition()
+            that.getLogs()
+            that.trueChoiceIndex = that.currentQuestion.choices.list.findIndex((item) => item.answer)
+            that.updateAttachList(response.data.data.exams)
+          })
+    },
+
+    getLogs() {
+      this.currentQuestion.logs.fetch(null, API_ADDRESS.question.log.base(this.$route.params.question_id))
+          .then((response) => {
+            // this.currentQuestion.logs = new LogList(response.data.data)
+            Vue.set(this.currentQuestion, 'logs', new LogList(response.data.data))
+            this.setQuestionLayoutCols()
+          })
+    },
+
+    updateQuestion(eventData) {
+      // this.currentQuestion = new Question(eventData)
+      Vue.set(this, 'currentQuestion', new Question(eventData))
+    },
+
+    updateAttachList(exams) {
+      this.selectedQuizzes = exams
+      this.updateSelectedQuizzes()
+    },
+
+    updateSelectedQuizzes() {
+      let selectedQuizzes = JSON.parse(JSON.stringify(this.selectedQuizzes))
+      selectedQuizzes.forEach((item, i) => {
+        selectedQuizzes[i].subId = i + 1;
+      })
+
+      this.selectedQuizzes = selectedQuizzes
+    },
+
+    setNullKeys() {
+      var currentQuestion = this.currentQuestion
+      if (!currentQuestion.statement) {
+        currentQuestion.statement = ''
+      }
+      currentQuestion.choices.list.forEach((item) => {
         if (!item.title) {
           item.title = ''
         }
       })
-      if (!this.currentQuestion.descriptive_answer) {
-        this.currentQuestion.descriptive_answer = ''
+      if (!currentQuestion.descriptive_answer) {
+        currentQuestion.descriptive_answer = ''
       }
     },
-    loanExamList () {
+
+    loadExamList() {
       let that = this
-      return new Promise(function(resolve, reject) {
-        new ExamList().fetch()
-        .then((response) => {
-          console.log('responseExam', response)
-          that.examList = new ExamList(response.data.data)
-          that.totalExams = []
-          that.examList.list.forEach(item => {
-            that.totalExams.push({
-              order: 0,
-              sub_category_id: null,
-              sub_category_title: '',
-              title: item.title,
-              id: item.id
-            })
-          })
-          resolve()
-        })
-        .catch( () => {
-          reject()
-        })
-      })
-    },
-    loadSubcategories () {
-      let that = this
-      return new Promise(function(resolve, reject) {
-        that.subCategoriesList.fetch()
-        .then((response) => {
-          console.log('responseSub', response)
-          that.subCategoriesList = new QuestSubcategoryList(response.data.data)
-          resolve()
-        })
-        .catch( () => {
-          console.log('error')
-          reject()
-        })
-      })
-    },
-    getLogs () {
-      this.currentQuestion.logs.fetch(null, API_ADDRESS.question.log.base(this.$route.params.question_id))
-        .then((response) => {
-          this.currentQuestion.logs = new LogList(response.data.data)
-        })
-    },
-    loadCurrentQuestionData () {
-      let that = this
-      console.log(this.currentQuestion)
-      this.currentQuestion.show(null, API_ADDRESS.question.updateQuestion(this.$route.params.question_id))
+      return new ExamList().fetch()
           .then((response) => {
-            console.log('response', response)
-            that.currentQuestion = new Question(response.data.data)
-            that.getLogs()
-            that.trueChoiceIndex = that.currentQuestion.choices.list.findIndex((item) => item.answer )
-            that.updateAttachList(response.data.data.exams)
-            that.updateRendered()
+            that.examList = new ExamList(response.data.data)
+          })
+          .catch(() => {
           })
     },
-    updateRendered () {
-      this.replaceNimFasele()
-      this.replaceExtraSpaceAroundDollarSign()
-      this.questRendered = this.markdown.render(this.currentQuestion.statement.toString());
-      for (let i = 0; i < 4; i++) {
-        const title = (typeof this.currentQuestion.choices.list[i] !== 'undefined') ? this.currentQuestion.choices.list[i].title : null
-        if (title) {
-          this.choiceRendered[i] = this.markdown.render(title.toString())
-        }
-      }
-      this.replaceNimFasele()
+
+    loadSubcategories() {
+      return this.subCategoriesList.fetch()
+          .then((response) => {
+            this.subCategoriesList = new QuestSubcategoryList(response.data.data)
+          })
+          .catch(() => {
+          })
     },
-    replaceExtraSpaceAroundDollarSign () {
-      if (this.selectedField === 0) {
-        if (!this.currentQuestion.statement) {
-          this.currentQuestion.statement = ''
-        }
-        while (this.currentQuestion.statement.indexOf('$$') !== -1) {
-          this.currentQuestion.statement = this.currentQuestion.statement.replace('$$', '$')
-        }
-        let dollarSignCounter = 0
-        for (let i = 0; i < this.currentQuestion.statement.length; i++) {
-          if (this.currentQuestion.statement[i] === '$') {
-            dollarSignCounter++
-            if (dollarSignCounter % 2 === 1 && this.currentQuestion.statement[i + 1] === ' ') {
-              this.currentQuestion.statement = this.currentQuestion.statement.slice(0, i + 1) + this.currentQuestion.statement.slice(i + 2)
-              if (this.currentQuestion.statement[i + 1] === ' ') {
-                i--
-                dollarSignCounter--
-              }
-            }
-            else if (dollarSignCounter % 2 === 0 && this.currentQuestion.statement[i - 1] === ' ') {
-              this.currentQuestion.statement = this.currentQuestion.statement.slice(0, i - 1) + this.currentQuestion.statement.slice(i)
-              if (this.currentQuestion.statement[i - 2] === ' ') {
-                i = i - 2
-                dollarSignCounter--
-              }
-            }
-          }
-        }
+
+    makeShowImgPanelVisible(src) {
+      this.imgSrc = src
+      this.questionColsNumber = 7
+      this.uploadImgColsNumber.show = true
+      this.$store.commit('AppLayout/updateDrawer', false)
+    },
+
+    makeShowImgPanelInvisible() {
+      this.uploadImgColsNumber.show = false
+      this.$store.commit('AppLayout/updateDrawer', true)
+      if (this.currentQuestion.logs.list.length > 0) {
+        this.questionColsNumber = 9
       } else {
-        if (!this.currentQuestion.choices.list[this.selectedField - 1].title) {
-          this.currentQuestion.choices.list[this.selectedField - 1].title = ''
-        }
-        while (this.currentQuestion.choices.list[this.selectedField - 1].title.indexOf('$$') !== -1) {
-          this.currentQuestion.choices.list[this.selectedField - 1].title = this.currentQuestion.choices.list[this.selectedField - 1].title.replace('$$', '$')
-        }
-        let dollarSignCounter = 0
-        for (let i = 0; i < this.currentQuestion.choices.list[this.selectedField - 1].title.length; i++) {
-          if (this.currentQuestion.choices.list[this.selectedField - 1].title[i] === '$') {
-            dollarSignCounter++
-            if (dollarSignCounter % 2 === 1 && this.currentQuestion.choices.list[this.selectedField - 1].title[i + 1] === ' ') {
-              this.currentQuestion.choices.list[this.selectedField - 1].title = this.currentQuestion.choices.list[this.selectedField - 1].title.slice(0, i + 1) + this.currentQuestion.choices.list[this.selectedField - 1].title.slice(i + 2)
-              if (this.currentQuestion.choices.list[this.selectedField - 1].title[i + 1] === ' ') {
-                i--
-                dollarSignCounter--
-              }
-            }
-            else if (dollarSignCounter % 2 === 0 && this.currentQuestion.choices.list[this.selectedField - 1].title[i - 1] === ' ') {
-              this.currentQuestion.choices.list[this.selectedField - 1].title = this.currentQuestion.choices.list[this.selectedField - 1].title.slice(0, i - 1) + this.currentQuestion.choices.list[this.selectedField - 1].title.slice(i)
-              if (this.currentQuestion.choices.list[this.selectedField - 1].title[i - 2] === ' ') {
-                i = i - 2
-                dollarSignCounter--
-              }
-            }
-          }
-        }
+        this.questionColsNumber = 12
       }
     },
-    replaceNimFasele () {
-      if (!this.currentQuestion.statement) {
-        this.currentQuestion.statement = ''
-      }
-      this.currentQuestion.statement = this.currentQuestion.statement.replace('¬', '‌')
-    },
-    updateAttachList(exams) {
-      let that = this
-      this.selectedQuizzes = []
-      exams.forEach( item => {
-        const targetExamIndex = that.totalExams.findIndex(examItem => Assistant.getId(examItem.id) === Assistant.getId(item.exam_id))
-        that.totalExams[targetExamIndex].order = item.order
-        that.totalExams[targetExamIndex].sub_category_id = item.sub_category.id
-        that.totalExams[targetExamIndex].sub_category_title = item.sub_category.title
-        that.selectedQuizzes.push(JSON.parse(JSON.stringify(that.totalExams[targetExamIndex])))
-      })
-      this.updateSelectedQuizzes()
-    },
-    openShowImgPanel (src) {
-       this.imgSrc = src
-       this.displayEditQuestion = true
-       this.questionColsNumber = 7
-       this.log_component_number= 0
-       this.uploadImgColsNumber = 5
-       this.$store.commit('AppLayout/updateDrawer', false)
+
+    setQuestionLayoutCols(){
+     if(this.currentQuestion.logs.list.length >0 ){
+        this.questionColsNumber=9
+
+     }
 
     },
-    closeShowImgPanel() {
-      this.displayEditQuestion = false
-      this.$store.commit('AppLayout/updateDrawer', true)
-      if(this.urlPathName === 'question.show' || this.urlPathName === 'question.edit'){
-        this.questionColsNumber = 9
-        this.log_component_number= 3
-      }else {
-        this.questionColsNumber = 12
-        this.uploadImgColsNumber = 0
+
+    showPageDialog() {  //یاس
+      this.dialog = true
+    },
+
+    setQuestionTypeText() {
+      this.questionType = 'typeText'
+      this.dialog = false
+      this.checkNavbarVisibilityOnCreatPage()
+    },
+
+    setQuestionTypeImage() {
+      this.questionType = 'typeImage'
+      this.dialog = false
+      this.checkNavbarVisibilityOnCreatPage()
+    },
+
+    setInsertedQuestions() {  //یاس
+      var currentQuestion = this.currentQuestion
+      // set exams
+      currentQuestion.exams = this.selectedQuizzes.map(item => {
+        return {
+          id: item.exam.id,
+          sub_category_id: item.sub_category.id,
+          order: item.order
+        }
+      })
+      currentQuestion
+          .create()
+          .then((response) => {
+            this.$store.commit('AppLayout/updateOverlay', {show: false, loading: false, text: ''})
+            const questionId = response.data.data.id
+            this.$router.push({name: 'question.show', params: {question_id: questionId}})
+            this.questionType = 'typeText'
+            this.currentQuestion.statement = ''
+            this.currentQuestion.choices.list.forEach((item) => {
+              item.title = ''
+            })
+            this.$notify({
+              group: 'notifs',
+              title: 'توجه',
+              text: 'ثبت با موفقیت انجام شد',
+              type: 'success'
+            })
+          })
+    },
+
+    doesPhotosExist() {
+      if(this.currentQuestion.answer_photos){
+       if (this.currentQuestion.answer_photos.length>0) {
+         return true
+       }
+      }
+      if(this.currentQuestion.statement_photo ){
+        if (this.currentQuestion.statement_photo.length>0){
+          return true
+        }
+      }
+      return false
+    },
+
+    setUploadImgStatus() {
+      this.upload_img_status = (this.getPageStatus() === 'create');
+    },
+
+    setMainChoicesInCreateMode(statusId) {
+      if (this.questionType === 'typeText') {
+        this.setInsertedQuestions()
+      } else if (this.questionType === 'typeImage') {
+        if (this.doesPhotosExist()) {
+          this.setQuestionPhotos(statusId)
+        }
       }
     },
-  }
+
+    setMainChoicesInOtherModes() {
+      if (this.doesPhotosExist()) {
+        this.setQuestionTypeImage()
+      } else {
+        this.setQuestionTypeText()
+      }
+    },
+
+    checkTextCondition() {
+      return !!this.currentQuestion.statement;
+    },
+
+    checkNavbarVisibility(){
+      if (this.getPageStatus() === 'create'){
+        return this.NavbarVisibilityOnCreatPage
+      }
+      return true
+    },
+
+    checkNavbarVisibilityOnCreatPage(){
+      this.NavbarVisibilityOnCreatPage = true
+    }
+  },
 }
 </script>
 
 <style scoped>
-.rounded-card{
-  border-radius: 10px;
+.v-dialog .v-card .v-card__title {
+  font-family: 'IRANSans';
+  font-size: 16px;
 }
 </style>

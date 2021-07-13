@@ -48,15 +48,26 @@
       </v-row>
       <v-row>
         <v-text-field
-          v-model="exam.price"
-          label="قیمت"
-        />
-      </v-row>
-      <v-row>
-        <v-text-field
           v-model="exam.delay_time"
           label="زمان تاخیر (دقیقه)"
         />
+      </v-row>
+      <v-row no-gutters>
+        <v-col :cols="6">
+          <v-checkbox label="فعال" v-model="exam.enable" />
+        </v-col>
+        <v-col :cols="6">
+          <v-checkbox label="رایگان" v-model="exam.is_free" />
+        </v-col>
+        <v-col :cols="12">
+          <v-checkbox label="ثبت نام باز است" v-model="exam.is_register_open" />
+        </v-col>
+        <v-col :cols="12">
+          <v-checkbox label="شرکت در آزمون باز است" v-model="exam.is_open" />
+        </v-col>
+        <v-col :cols="12">
+          <v-checkbox label="تولید اتوماتیک کارنامه" v-model="exam.generate_automatic_report" />
+        </v-col>
       </v-row>
       <v-row>
         <v-col>
@@ -100,7 +111,6 @@
             create () {
                 this.examItem = this.exam
                 this.examItem.loading = true
-                this.examItem.holding_status = "1"
                 this.examItem.photo = 'https://cdn.alaatv.com/upload/images/slideShow/home-slide-yalda-festival_20201219075413.jpg?w=1843&h=719'
                 if (this.examItem.id) {
                     this.examItem.update()

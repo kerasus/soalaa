@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-row>
+    <v-row justify="space-between">
       <v-col cols="3">
         <span v-if="question.id">
           سوال #
@@ -9,7 +9,7 @@
       </v-col>
       <v-col cols="3">
         <p v-if="question.id">
-          <span> سازنده سوال:</span> <span> فیلان دبیر</span>
+          <span> سازنده سوال :</span> <span> فیلان دبیر</span>
         </p>
       </v-col>
       <v-col
@@ -18,7 +18,9 @@
       >
         <v-row>
           <v-col>
-            <v-row>
+            <v-row
+              justify="end"
+            >
               <v-col>
                 <v-btn
                   depressed
@@ -26,7 +28,7 @@
                   color="green"
                   class="ml-2"
                   dark
-                  width="120"
+                  width="100"
                   @click="btn_clicked('create')"
                 >
                   <span color="green">
@@ -40,7 +42,7 @@
                   rounded
                   color="white"
                   width="130"
-                  @click="btn_clicked('save')"
+                  @click="btn_clicked('saveDraft')"
                 >
                   <v-icon color="#666666">
                     mdi-square-edit-outline
@@ -52,10 +54,11 @@
           </v-col>
         </v-row>
       </v-col>
-      <v-col v-if="question.id !== null">
+      <!--    --------------------------------------------------------------  edit page-->
+      <v-col v-if="question.id && editStatus">
         <v-row>
           <v-col>
-            <span> وضعیت:</span>
+            <span> وضعیت : </span>
             <v-chip
               color="#44a3ff"
               dark
@@ -95,54 +98,48 @@
           </v-col>
         </v-row>
       </v-col>
-      <v-col v-if="!editStatus">
-        <v-row>
-          <v-col>
-            <span> وضعیت:</span>
-            <v-chip
-              color="#44a3ff"
-              dark
+      <!--    --------------------------------------------------------------  show page-->
+
+      <v-col
+        v-if="!editStatus"
+        data-text-align="left"
+      >
+        <v-row justify="end">
+          <v-col cols="3">
+            <v-btn
+              depressed
+              rounded
+              color="white"
+              class="ml-2"
+              width="110"
+              @click="btn_clicked('edit')"
             >
-              بررسی نهایی
-            </v-chip>
+              <v-icon color="#666666">
+                mdi-square-edit-outline
+              </v-icon>
+              <span color="#666666">
+                ویرایش
+              </span>
+            </v-btn>
           </v-col>
-          <v-col>
-            <v-row>
-              <v-col>
-                <v-btn
-                  depressed
-                  rounded
-                  color="white"
-                  class="ml-2"
-                  width="110"
-                  @click="btn_clicked('edit')"
-                >
-                  <v-icon color="#666666">
-                    mdi-square-edit-outline
-                  </v-icon>
-                  <span color="#666666">
-                    ویرایش
-                  </span>
-                </v-btn>
-              </v-col>
-              <v-col>
-                <v-btn
-                  depressed
-                  rounded
-                  color="white"
-                  width="100"
-                  @click="btn_clicked('remove')"
-                >
-                  حذف
-                </v-btn>
-              </v-col>
-            </v-row>
+          <v-col cols="3">
+            <v-btn
+              depressed
+              rounded
+              color="white"
+              width="100"
+              @click="btn_clicked('remove')"
+            >
+              حذف
+            </v-btn>
           </v-col>
         </v-row>
       </v-col>
     </v-row>
+    <!--    --------------------------------------------------------------------;-->
   </div>
 </template>
+
 
 <script>
 import {Question} from "@/models/Question";
@@ -158,9 +155,13 @@ export default {
       type: Boolean,
       default: false
     },
+    pageName: {
+      type: String,
+      default: ''
+    }
   },
-  methods:{
-    btn_clicked(name){
+  methods: {
+    btn_clicked(name) {
       this.$emit(name);
     },
   }
