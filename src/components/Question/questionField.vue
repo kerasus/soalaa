@@ -22,42 +22,9 @@
       v-html="html"
     />
     <!--eslint-enable-->
-
-    <!--      <v-col-->
-    <!--        v-if="label.length > 0 && !titleTopPosition"-->
-    <!--        cols="1"-->
-    <!--        class="text-left"-->
-    <!--      >-->
-    <!--        <span-->
-    <!--          flat-->
-    <!--          class="font-weight-medium mb-4 transparent"-->
-    <!--          v-text="label"-->
-    <!--        />-->
-    <!--      </v-col>-->
-    <!--      <v-col>-->
-    <!--        <v-card-->
-    <!--          v-if="label.length > 0 && titleTopPosition"-->
-    <!--          flat-->
-    <!--          class="font-weight-medium mb-4 transparent"-->
-    <!--          v-text="label"-->
-    <!--        />-->
-    <!--                &#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45; data &#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;-->
-    <!--                <v-textarea-->
-    <!--                  v-if="editStatus"-->
-    <!--                  flat-->
-    <!--                  solo-->
-    <!--                  :label="data.label"-->
-    <!--                  :rows="data.line"-->
-    <!--                />-->
-    <!--        <v-card-->
-    <!--          flat-->
-    <!--          class="transparent"-->
-    <!--          :color="color"-->
-    <!--          v-html="data.value"-->
-    <!--        />-->
-    <!--      </v-col>-->
   </v-row>
 </template>
+
 <script>
   import VueTiptapKatex from 'vue-tiptap-katex'
   import {mixinMarkdownAndKatex} from '@/mixin/Mixins'
@@ -101,15 +68,14 @@ export default {
   created () {
     this.loading = true
     this.getHtmlValueFromValueProp()
-
   },
   methods: {
     getHtmlValueFromValueProp () {
-      this.html = this.value
-      if (this.html === null || typeof this.html === 'undefined') {
-        this.html = ''
+      let html = this.value
+      if (html === null || typeof html === 'undefined') {
+        html = ''
       }
-      this.html = this.convertToTiptap(this.html)
+      this.html = this.convertToTiptap(html)
       this.loading = false
     },
     updateValue() {
@@ -303,7 +269,7 @@ export default {
       return this.convertMarkdownImageToHtml(markdownString, endIndex)
     },
     convertToTiptap (string = '') {
-      string = this.htmlToMarkdown(string)
+      // string = this.htmlToMarkdown(string)
       string = this.convertMarkdownImageToHtml(string)
       string = this.convertMarkdownKatexToHtml(string)
       return string
