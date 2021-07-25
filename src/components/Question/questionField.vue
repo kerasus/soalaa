@@ -62,6 +62,7 @@
   import VueTiptapKatex from 'vue-tiptap-katex'
   import {mixinMarkdownAndKatex} from '@/mixin/Mixins'
   import TurndownService from 'turndown/lib/turndown.browser.umd'
+  import md from '@/plugins/Markdown'
 
 export default {
   name: 'QuestionField',
@@ -101,7 +102,6 @@ export default {
   created () {
     this.loading = true
     this.getHtmlValueFromValueProp()
-
   },
   methods: {
     getHtmlValueFromValueProp () {
@@ -303,9 +303,11 @@ export default {
       return this.convertMarkdownImageToHtml(markdownString, endIndex)
     },
     convertToTiptap (string = '') {
+      string = md.render(string)
       string = this.htmlToMarkdown(string)
       string = this.convertMarkdownImageToHtml(string)
       string = this.convertMarkdownKatexToHtml(string)
+      string = md.render(string)
       return string
     },
     convertToMarkdownKatex(string) {
