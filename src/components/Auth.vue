@@ -158,7 +158,6 @@
                 this.$router.push({ name: redirect_to })
             },
             login () {
-                console.log('called')
                 let that = this
                 this.loadingList = true
                 axios.post(API_ADDRESS.auth.login, {

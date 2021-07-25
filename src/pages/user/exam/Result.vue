@@ -320,10 +320,10 @@
 	  this.$store.commit('AppLayout/updateOverlay', {show: true, loading: true, text: ''})
 
 	  let examData = new ExamData()
-	  examData.getExamDataWithAnswers(user_exam_id, exam_id)
+	  examData.getUserExamWithCorrectAnswers(user_exam_id, exam_id)
 			  .loadQuestionsFromFile()
 			  .getUserExamData(user_exam_id)
-			  .getExamReportForStudent(user_exam_id)
+			  .getUserExamDataReport(user_exam_id)
 			  .run()
 			  .then(() => {
 				// save questions in localStorage

@@ -124,7 +124,7 @@
             selectedId: [],
             leaves : null,
             allSelections: [],
-            selectedNode: {id: null, name: ''},
+          selectedNode: {id: null, name: ''},
             render: true,
             items: [{
                 name: 'درخت دانش',
@@ -327,7 +327,7 @@
             },
 
             onClick() {
-                // console.log(params)
+                // console.Log(params)
             },
         }
     }
