@@ -59,9 +59,10 @@
   </v-row>
 </template>
 <script>
-  import VueTiptapKatex from 'vue-tiptap-katex'
-  import {mixinMarkdownAndKatex} from '@/mixin/Mixins'
-  import TurndownService from 'turndown/lib/turndown.browser.umd'
+import VueTiptapKatex from 'vue-tiptap-katex'
+import {mixinMarkdownAndKatex} from '@/mixin/Mixins'
+import TurndownService from 'turndown/lib/turndown.browser.umd'
+import md from '@/plugins/Markdown'
 
 export default {
   name: 'QuestionField',
@@ -101,15 +102,14 @@ export default {
   created () {
     this.loading = true
     this.getHtmlValueFromValueProp()
-
   },
   methods: {
     getHtmlValueFromValueProp () {
-      this.html = this.value
-      if (this.html === null || typeof this.html === 'undefined') {
-        this.html = ''
+      let html = this.value
+      if (html === null || typeof html === 'undefined') {
+        html = ''
       }
-      this.html = this.convertToTiptap(this.html)
+      this.html = this.convertToTiptap(html)
       this.loading = false
     },
     updateValue() {
@@ -261,7 +261,7 @@ export default {
         const secondThird = markdownString.slice(startIndex + 2, endIndex)
         const remaining = markdownString.slice(endIndex + 2)
         markdownString = firstThird + '<tiptap-interactive-katex katex="' +
-                secondThird + '"></tiptap-interactive-katex>' + remaining
+            secondThird + '"></tiptap-interactive-katex>' + remaining
         return this.convertMarkdownKatexToHtml(markdownString, endIndex + 1)
       } else {
         const endIndex = markdownString.indexOf('$', startIndex + 1)
@@ -275,7 +275,7 @@ export default {
         const secondThird = markdownString.slice(startIndex + 1, endIndex)
         const remaining = markdownString.slice(endIndex + 1)
         markdownString = firstThird + '<tiptap-interactive-katex-inline katex="' +
-                secondThird + '"></tiptap-interactive-katex-inline>' + remaining
+            secondThird + '"></tiptap-interactive-katex-inline>' + remaining
         return this.convertMarkdownKatexToHtml(markdownString, endIndex)
       }
     },
@@ -294,18 +294,20 @@ export default {
         width = parseInt(markdownString.slice(widthIndex + 3, markdownString.indexOf('&h', widthIndex)))
         height = parseInt(markdownString.slice(markdownString.indexOf('&h=', widthIndex) + 3, markdownString.indexOf(')', widthIndex)))
         markdownString = firstThird + '<tiptap-interactive-image-upload url="'
-                + secondThird.slice(0, secondThird.indexOf('?w=')) + '" width="' + width + '" height="' + height + '"></tiptap-interactive-image-upload>'+ remaining
+            + secondThird.slice(0, secondThird.indexOf('?w=')) + '" width="' + width + '" height="' + height + '"></tiptap-interactive-image-upload>'+ remaining
       } else {
         // this need to be completed, what if width and height of the image is not equal
         markdownString = firstThird + '<tiptap-interactive-image-upload url="'
-                + secondThird + '" width="100" height="100"></tiptap-interactive-image-upload>' + remaining
+            + secondThird + '" width="100" height="100"></tiptap-interactive-image-upload>' + remaining
       }
       return this.convertMarkdownImageToHtml(markdownString, endIndex)
     },
     convertToTiptap (string = '') {
+      string = md.render(string)
       string = this.htmlToMarkdown(string)
       string = this.convertMarkdownImageToHtml(string)
       string = this.convertMarkdownKatexToHtml(string)
+      string = md.render(string)
       return string
     },
     convertToMarkdownKatex(string) {
@@ -385,7 +387,7 @@ export default {
           if (options.headingStyle === 'setext' && hLevel < 3) {
             var underline = repeat((hLevel === 1 ? '=' : '-'), content.length);
             return (
-                    '\n\n' + content + '\n' + underline + '\n\n'
+                '\n\n' + content + '\n' + underline + '\n\n'
             )
           } else {
             return '\n\n' + repeat('#', hLevel) + ' ' + content + '\n\n'
@@ -421,9 +423,9 @@ export default {
 
         replacement: function (content, node, options) {
           content = content
-                  .replace(/^\n+/, '') // remove leading newlines
-                  .replace(/\n+$/, '\n') // replace trailing newlines with just a single one
-                  .replace(/\n/gm, '\n    '); // indent
+              .replace(/^\n+/, '') // remove leading newlines
+              .replace(/\n+$/, '\n') // replace trailing newlines with just a single one
+              .replace(/\n/gm, '\n    '); // indent
           var prefix = options.bulletListMarker + '   ';
           var parent = node.parentNode;
           if (parent.nodeName === 'OL') {
@@ -432,7 +434,7 @@ export default {
             prefix = (start ? Number(start) + index : index + 1) + '.  ';
           }
           return (
-                  prefix + content + (node.nextSibling && !/\n$/.test(content) ? '\n' : '')
+              prefix + content + (node.nextSibling && !/\n$/.test(content) ? '\n' : '')
           )
         }
       };
@@ -440,18 +442,18 @@ export default {
       rules.indentedCodeBlock = {
         filter: function (node, options) {
           return (
-                  options.codeBlockStyle === 'indented' &&
-                  node.nodeName === 'PRE' &&
-                  node.firstChild &&
-                  node.firstChild.nodeName === 'CODE'
+              options.codeBlockStyle === 'indented' &&
+              node.nodeName === 'PRE' &&
+              node.firstChild &&
+              node.firstChild.nodeName === 'CODE'
           )
         },
 
         replacement: function (content, node) {
           return (
-                  '\n\n    ' +
-                  node.firstChild.textContent.replace(/\n/g, '\n    ') +
-                  '\n\n'
+              '\n\n    ' +
+              node.firstChild.textContent.replace(/\n/g, '\n    ') +
+              '\n\n'
           )
         }
       };
@@ -459,10 +461,10 @@ export default {
       rules.fencedCodeBlock = {
         filter: function (node, options) {
           return (
-                  options.codeBlockStyle === 'fenced' &&
-                  node.nodeName === 'PRE' &&
-                  node.firstChild &&
-                  node.firstChild.nodeName === 'CODE'
+              options.codeBlockStyle === 'fenced' &&
+              node.nodeName === 'PRE' &&
+              node.firstChild &&
+              node.firstChild.nodeName === 'CODE'
           )
         },
 
@@ -485,9 +487,9 @@ export default {
           var fence = repeat(fenceChar, fenceSize);
 
           return (
-                  '\n\n' + fence + language + '\n' +
-                  code.replace(/\n$/, '') +
-                  '\n' + fence + '\n\n'
+              '\n\n' + fence + language + '\n' +
+              code.replace(/\n$/, '') +
+              '\n' + fence + '\n\n'
           )
         }
       };
@@ -503,9 +505,9 @@ export default {
       rules.inlineLink = {
         filter: function (node, options) {
           return (
-                  options.linkStyle === 'inlined' &&
-                  node.nodeName === 'A' &&
-                  node.getAttribute('href')
+              options.linkStyle === 'inlined' &&
+              node.nodeName === 'A' &&
+              node.getAttribute('href')
           )
         },
 
@@ -520,9 +522,9 @@ export default {
       rules.referenceLink = {
         filter: function (node, options) {
           return (
-                  options.linkStyle === 'referenced' &&
-                  node.nodeName === 'A' &&
-                  node.getAttribute('href')
+              options.linkStyle === 'referenced' &&
+              node.nodeName === 'A' &&
+              node.getAttribute('href')
           )
         },
 

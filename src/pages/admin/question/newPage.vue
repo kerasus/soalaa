@@ -353,9 +353,9 @@ export default {
                 // that.currentQuestion.choices
               }
               that.currentQuestion = new Question(that.questionData)
+              that.loading = false
             }
             that.setNullKeys()
-            that.loading = false
           })
     },
 
@@ -484,6 +484,7 @@ export default {
 
     loadCurrentQuestionData() {
       let that = this
+      this.loading = true
       this.currentQuestion.show(null, API_ADDRESS.question.updateQuestion(this.$route.params.question_id))
           .then((response) => {
             that.currentQuestion = new Question(response.data.data)
@@ -492,6 +493,7 @@ export default {
             that.getLogs()
             that.trueChoiceIndex = that.currentQuestion.choices.list.findIndex((item) => item.answer)
             that.updateAttachList(response.data.data.exams)
+            this.loading = false
           })
     },
 
