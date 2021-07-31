@@ -1,6 +1,9 @@
 <template>
   <div id="app">
-    <v-container :fluid="true" class="pa-6">
+    <v-container
+      :fluid="true"
+      class="pa-6"
+    >
       <v-row>
         <v-dialog
           v-model="dialog"
@@ -97,7 +100,10 @@
           v-if="currentQuestion.logs.list.length > 0 && !uploadImgColsNumber.show"
           :cols="3"
         >
-          <LogListComponent @addComment="addComment" :logs="currentQuestion.logs" />
+          <LogListComponent
+            :logs="currentQuestion.logs"
+            @addComment="addComment"
+          />
         </v-col>
       </v-row>
     </v-container>
@@ -220,6 +226,84 @@ export default {
     this.setUploadImgStatus()
   },
   methods: {
+    convertToPureHTML (string) { //call this function when you want to convert tiptap output to pure html
+      string = this.convertInteractiveImagesToHTML(string)
+      string = this.convertInteractiveIKatexToHTML(string)
+      return string
+    },
+    convertInteractiveImagesToHTML (string) { //this function converts interactiveImage from tiptap to html image
+      var wrapper = document.createElement('div')
+      wrapper.innerHTML = string
+      let images = wrapper.querySelectorAll('tiptap-interactive-image-upload')
+      images.forEach(item => {
+        let interactiveImage = item.attributes[0].nodeValue
+        if (interactiveImage) {
+          //create img tag and set its attrs
+          interactiveImage =
+              '<img src="' + item.attributes['url'].nodeValue + '" style="width: ' + item.attributes['width'].nodeValue + 'px; height: ' + item.attributes['height'].nodeValue + 'px" />'
+          //create img parent and set the display settings and justify the image
+          var imageWrapper = document.createElement('div')
+          imageWrapper.innerHTML = interactiveImage
+          imageWrapper.style.display = 'flex'
+          if (item.attributes['justify'].nodeValue === 'right') {
+            imageWrapper.style.justifyContent = "flex-start"
+          } else if (item.attributes['justify'].nodeValue === 'center') {
+            imageWrapper.style.justifyContent = "center"
+          } else if (item.attributes['justify'].nodeValue === 'left') {
+            imageWrapper.style.justifyContent = "flex-end"
+          }
+          item.replaceWith(imageWrapper)
+        }
+      })
+      return wrapper.innerHTML
+    },
+    convertInteractiveIKatexToHTML (string) { //this function converts interactiveKatex from tiptap to html image
+      var wrapper = document.createElement('div')
+      wrapper.innerHTML = string
+      let images = wrapper.querySelectorAll('tiptap-interactive-katex-inline')
+      images.forEach(item => {
+        let interactiveKatex = item.attributes[0].nodeValue
+        if (interactiveKatex) {
+          interactiveKatex = '$' + item.attributes['katex'].nodeValue + '$'
+          var katexWrapper = document.createElement('div')
+          katexWrapper.setAttribute('katex', true)
+          katexWrapper.innerHTML = interactiveKatex
+          item.replaceWith(katexWrapper.innerHTML)
+        }
+      })
+      return wrapper.innerHTML
+    },
+    convertToTiptap (string) { //call this function when you want to convert pure HTML to tiptap format
+      string = this.convertHTMLImageToInteractive(string)
+      return string
+    },
+    convertHTMLImageToInteractive (string) {
+      var wrapper = document.createElement('div')
+      wrapper.innerHTML = string
+      let imagesParent = wrapper.querySelectorAll('img')
+      console.log("imagesParent", imagesParent)
+      imagesParent.forEach(item => {
+        console.log(item.parentElement)
+        let imageHTML = item.attributes[0].nodeValue
+        if (imageHTML) {
+          let justify
+          if (item.parentElement.style.justifyContent === 'flex-start') {
+            justify = "right"
+          } else if (item.parentElement.style.justifyContent === 'center') {
+            justify = "center"
+          } else if (item.parentElement.style.justifyContent === 'flex-end') {
+            justify = "left"
+          }
+          imageHTML =
+              '<tiptap-interactive-image-upload url="' + item.attributes['src'].nodeValue + '" width="' + item.style.width.slice(0, -2) + '" height="' + item.style.height.slice(0, -2) + '" justify="' + justify + '"></tiptap-interactive-image-upload>'
+          var imageWrapper = document.createElement('div')
+          imageWrapper.innerHTML = imageHTML
+          item.parentElement.replaceWith(imageWrapper)
+          console.log('final', imageWrapper)
+        }
+      })
+      return wrapper.innerHTML
+    },
     addComment (eventData) {
       axios.post(API_ADDRESS.log.addComment(eventData.logId), { comment: eventData.text })
       .then(response => {
@@ -251,16 +335,18 @@ export default {
 
     navBarAction_save() {
       var currentQuestion = this.currentQuestion
+      currentQuestion.statement = this.convertToPureHTML(currentQuestion.statement)
+      currentQuestion.choices.list.forEach(item => item.title = this.convertToPureHTML(item.title))
       currentQuestion.update(API_ADDRESS.question.updateQuestion(currentQuestion.id))
-          .then(() => {
-            this.$notify({
-              group: 'notifs',
-              title: 'توجه',
-              text: 'ویرایش با موفقیت انجام شد',
-              type: 'success'
-            })
-            this.$router.push({name: 'question.show', params: {question_id: this.$route.params.question_id}})
+        .then(() => {
+          this.$notify({
+            group: 'notifs',
+            title: 'توجه',
+            text: 'ویرایش با موفقیت انجام شد',
+            type: 'success'
           })
+          this.$router.push({name: 'question.show', params: {question_id: this.$route.params.question_id}})
+        })
     },
 
     navBarAction_cancel() {
@@ -488,6 +574,8 @@ export default {
       this.currentQuestion.show(null, API_ADDRESS.question.updateQuestion(this.$route.params.question_id))
           .then((response) => {
             that.currentQuestion = new Question(response.data.data)
+            that.currentQuestion.statement = that.convertToTiptap(that.currentQuestion.statement)
+            that.currentQuestion.choices.list.forEach(item => item.title = that.convertToTiptap(item.title))
             that.temp = that.currentQuestion
             that.checkTextCondition()
             that.getLogs()
