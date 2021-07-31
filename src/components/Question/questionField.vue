@@ -12,6 +12,7 @@
     <!-- eslint-disable vue/no-v-html -->
     <v-col
       v-else
+      v-katex:auto
       v-html="html"
     />
     <v-btn @click="print">
@@ -23,10 +24,24 @@
   </v-row>
 </template>
 <script>
+import Vue from 'vue'
+import VueKatex from 'vue-katex'
+import 'katex/dist/katex.min.css'
 import VueTiptapKatex from 'vue-tiptap-katex'
 import {mixinMarkdownAndKatex} from '@/mixin/Mixins'
 // import TurndownService from 'turndown/lib/turndown.browser.umd'
 // import md from '@/plugins/Markdown'
+
+Vue.use(VueKatex, {
+  globalOptions: {
+    delimiters: [
+      {left: "$$", right: "$$", display: true},
+      {left: "\\[", right: "\\]", display: true},
+      {left: "$", right: "$", display: false},
+      {left: "\\(", right: "\\)", display: false}
+    ]
+  }
+});
 
 export default {
   name: 'QuestionField',

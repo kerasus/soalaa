@@ -441,6 +441,7 @@ function htmlToMarkdown(htmlString) {
   return turndownService.turndown(htmlString)
 }
 function convertToMarkdownKatex (string) {
+	return string
   if (!string) {
 	return string
   }
