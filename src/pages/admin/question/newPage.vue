@@ -281,7 +281,6 @@ export default {
       var wrapper = document.createElement('div')
       wrapper.innerHTML = string
       let imagesParent = wrapper.querySelectorAll('img')
-      console.log("imagesParent", imagesParent)
       imagesParent.forEach(item => {
         console.log(item.parentElement)
         let imageHTML = item.attributes[0].nodeValue

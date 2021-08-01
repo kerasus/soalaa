@@ -441,12 +441,11 @@ function htmlToMarkdown(htmlString) {
   return turndownService.turndown(htmlString)
 }
 function convertToMarkdownKatex (string) {
-	return string
   if (!string) {
 	return string
   }
-  // string = convertTables(string)
-  // string = string.replace(/\n/g,'<br>')
+  string = convertTables(string)
+  string = string.replace(/\n/g,'<br>')
   // const markdown = htmlToMarkdown(string)
   const markdown = string
 

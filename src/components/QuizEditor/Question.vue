@@ -90,6 +90,7 @@
       }"
       class="question-body renderedPanel"
       :class="{ ltr: isLtr }"
+      v-katex:auto
       v-html="(getQuestionNumberFromId(source.id)) + '(' + getSubCategoryName + ')' + ' (' + source.order + ') - ' + source.rendered_statement"
     />
     <v-row class="choices">
@@ -98,6 +99,7 @@
         :key="choice.id"
         :cols="choiceClass"
         :class="{ choice: true, renderedPanel: true, active: choice.answer, ltr: isLtr }"
+        v-katex:auto
         v-html="(choiceNumber[index]) + choice.rendered_title"
       />
     </v-row>
@@ -105,8 +107,23 @@
 </template>
 
 <script>
-    import Vue from 'vue'
-    import {mixinQuiz, mixinWindowSize, mixinMarkdownAndKatex} from '@/mixin/Mixins'
+
+import Vue from 'vue'
+import VueKatex from 'vue-katex'
+import 'katex/dist/katex.min.css'
+Vue.use(VueKatex, {
+  globalOptions: {
+    delimiters: [
+      {left: "$$", right: "$$", display: true},
+      {left: "\\[", right: "\\]", display: true},
+      {left: "$", right: "$", display: false},
+      {left: "\\(", right: "\\)", display: false}
+    ]
+  }
+});
+
+    // import Vue from 'vue'
+    import {mixinQuiz, mixinWindowSize} from '@/mixin/Mixins'
     import $ from "jquery";
     import API_ADDRESS from "@/api/Addresses"
     import VueConfirmDialog from 'vue-confirm-dialog'
@@ -118,7 +135,7 @@
 
     export default {
         name: 'Item',
-        mixins: [mixinQuiz, mixinWindowSize, mixinMarkdownAndKatex],
+        mixins: [mixinQuiz, mixinWindowSize],
         props: {
             subCategory: {
                 default() {

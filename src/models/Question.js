@@ -6,9 +6,10 @@ import Time from "@/plugins/time";
 import axios from "axios";
 import API_ADDRESS from "@/api/Addresses"
 import TurndownService from 'turndown/lib/turndown.browser.umd'
-import convertToMarkdownKatex from "@/plugins/ConvertToMarkdownKatex"
+// import convertToMarkdownKatex from "@/plugins/ConvertToMarkdownKatex"
 import { QuestionStatus } from "@/models/QuestionStatus";
 import {LogList} from "@/models/Log";
+import convert from "@/plugins/convert";
 
 class Question extends Model {
     constructor (data) {
@@ -136,11 +137,13 @@ class Question extends Model {
         }
 
         if (typeof this.statement === 'string') {
-            this.rendered_statement = convertToMarkdownKatex(this.statement)
+            this.rendered_statement = (this.statement)
+            // this.rendered_statement = convert(this.statement)
             // this.rendered_statement = md.render(this.statement)
         }
         if (typeof this.descriptive_answer === 'string') {
-            this.rendered_descriptive_answer = convertToMarkdownKatex(this.descriptive_answer)
+            this.rendered_descriptive_answer = (this.descriptive_answer)
+            // this.rendered_descriptive_answer = convert(this.descriptive_answer)
             // this.rendered_statement = md.render(this.statement)
         }
         if (this.choices.list.length === 0){

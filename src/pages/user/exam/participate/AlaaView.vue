@@ -101,6 +101,7 @@
               </v-row>
               <v-row class="question-body">
                 <v-col :class="{ ltr: isLtrString(currentQuestion.rendered_statement) }">
+                  <!-- eslint-disable vue/no-v-html -->
                   <div
                     v-if="currentQuestion.in_active_category || true"
                     class="renderedPanel"
