@@ -37,10 +37,10 @@
         </v-dialog>
         <v-col :cols="questionColsNumber">
           <nav-bar
-            v-if="this.checkNavbarVisibility()"
+            v-if="checkNavbarVisibility()"
             :question="currentQuestion"
             :edit-status="edit_status"
-            :page-name="this.getPageStatus()"
+            :page-name="getPageStatus()"
             @create="navBarAction_create"
             @saveDraft="navBarAction_saveDraft"
             @save="navBarAction_save"
@@ -48,7 +48,7 @@
             @edit="navBarAction_edit"
             @remove="navBarAction_remove"
           />
-          <div v-if="this.showQuestionComponentStatus()">
+          <div v-if="showQuestionComponentStatus()">
             <question-layout
               v-if="!loading"
               v-model="currentQuestion"
@@ -68,14 +68,14 @@
           </div>
           <!-- -------------------------- upload file ---------------------->
           <UploadImg
-            v-if="this.showImgComponentStatus()"
+            v-if="showImgComponentStatus()"
             v-model="currentQuestion"
             :edit-status="upload_img_status"
             @imgClicked="makeShowImgPanelVisible($event)"
           />
           <!-- -------------------------- status --------------------------->
           <div
-            v-if="this.getPageStatus() === 'edit'"
+            v-if="getPageStatus() === 'edit'"
             class="my-10"
           >
             <StatusComponent

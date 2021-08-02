@@ -3,6 +3,19 @@
 @import "~github-markdown-css/github-markdown.css";
 
 
+.katex {
+  direction: ltr;
+  display: inline-block;
+
+  .katex-html {
+    .accent {
+      background-color: unset !important;
+      border-color: unset !important;
+    }
+  }
+}
+
+
 .renderedPanel {
   direction: rtl;
 

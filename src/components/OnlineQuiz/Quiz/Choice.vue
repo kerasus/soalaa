@@ -8,8 +8,9 @@
     <v-sheet :class="{ 'answer-sheet': true, active: isSelected, ltr: isRtl }">
       <div
         class="answer-text renderedPanel"
-        v-html="choice.rendered_title"
-      />
+      >
+        <vue-katex :input="choice.title" />
+      </div>
       <div class="answer-checkbox">
         <v-checkbox
           v-model="isSelected"
@@ -23,12 +24,16 @@
 <script>
     import { mixinQuiz } from '@/mixin/Mixins'
     import '@/assets/scss/markdownKatex.scss'
+    import VueKatex from "@/components/VueKatex";
 
 
     export default {
         name: 'Choice',
         mixins: [mixinQuiz],
         props: ['choice', 'questionId', 'isRtl'],
+      components: [
+        VueKatex
+      ],
         computed: {
             isSelected () {
                 return this.getUserQuestionData(this.quiz.id, this.questionId) && this.choice.id === this.getUserQuestionData(this.quiz.id, this.questionId).answered_choice_id
