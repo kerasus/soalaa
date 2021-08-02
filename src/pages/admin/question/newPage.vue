@@ -51,6 +51,7 @@
           <div v-if="showQuestionComponentStatus()">
             <question-layout
               v-if="!loading"
+              ref="qlayout"
               v-model="currentQuestion"
               :status="edit_status"
               @input="updateQuestion"
@@ -226,7 +227,6 @@ export default {
     this.setUploadImgStatus()
   },
   methods: {
-
     addComment (eventData) {
       axios.post(API_ADDRESS.log.addComment(eventData.logId), { comment: eventData.text })
       .then(response => {
@@ -257,9 +257,8 @@ export default {
     },
 
     navBarAction_save() {
+      this.$refs.qlayout.getContent()
       var currentQuestion = this.currentQuestion
-      currentQuestion.statement = this.convertToPureHTML(currentQuestion.statement)
-      currentQuestion.choices.list.forEach(item => item.title = this.convertToPureHTML(item.title))
       currentQuestion.update(API_ADDRESS.question.updateQuestion(currentQuestion.id))
         .then(() => {
           this.$notify({
@@ -475,7 +474,6 @@ export default {
 
       if (this.getPageStatus() === 'create') {
         return this.questionType === 'typeImage';
-
       }
       return  this.doesPhotosExist()
     },
@@ -497,10 +495,6 @@ export default {
       this.currentQuestion.show(null, API_ADDRESS.question.updateQuestion(this.$route.params.question_id))
           .then((response) => {
             that.currentQuestion = new Question(response.data.data)
-            if (this.getPageStatus() !== 'create') {
-              that.currentQuestion.statement = that.convertToTiptap(that.currentQuestion.statement)
-              that.currentQuestion.choices.list.forEach(item => item.title = that.convertToTiptap(item.title))
-            }
             that.temp = that.currentQuestion
             that.checkTextCondition()
             that.getLogs()
