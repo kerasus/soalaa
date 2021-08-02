@@ -100,14 +100,14 @@
                 </div>
               </v-row>
               <v-row class="question-body">
-                <v-col :class="{ ltr: isLtrString(currentQuestion.rendered_statement) }">
-                  <!-- eslint-disable vue/no-v-html -->
+                <v-col :class="{ ltr: isLtrString(currentQuestion.statement) }">
                   <div
                     v-if="currentQuestion.in_active_category || true"
                     class="renderedPanel"
                     :class="{ ltr: isRtl }"
-                    v-html="currentQuestion.rendered_statement"
-                  />
+                  >
+                    <vue-katex :input="currentQuestion.statement" />
+                  </div>
                   <v-sheet
                     v-if="!currentQuestion.in_active_category && false"
                     color="warning"
@@ -186,11 +186,13 @@
     import Timer from '@/components/OnlineQuiz/Quiz/Timer/Timer'
     import { mixinAuth, mixinQuiz, mixinUserActionOnQuestion, mixinDrawer, mixinWindowSize } from '@/mixin/Mixins'
     import Assistant from "@/plugins/assistant";
+    import VueKatex from "@/components/VueKatex";
 
     export default {
         name: 'AlaaView',
         components: {
             Choice,
+          VueKatex,
             Timer
         },
         mixins: [mixinAuth, mixinQuiz, mixinUserActionOnQuestion, mixinDrawer, mixinWindowSize],
@@ -205,7 +207,7 @@
             this.updateDrawerBasedOnWindowSize()
             this.startExam(this.$route.params.quizId, 'onlineQuiz.alaaView')
                 .then(() => {
-                    that.isRtl = that.isLtrString(that.currentQuestion.rendered_statement)
+                    that.isRtl = that.isLtrString(that.currentQuestion.statement)
                     that.$store.commit('AppLayout/updateOverlay', {show: false, loading: false, text: ''})
                 })
                 .catch( (error) => {

@@ -10,11 +10,9 @@
       />
     </v-col>
     <!-- eslint-disable vue/no-v-html -->
-    <v-col
-      v-else
-      v-katex:auto
-      v-html="html"
-    />
+    <v-col v-else >
+      <vue-katex :input="html" />
+    </v-col>
     <v-btn @click="print">
       click
     </v-btn>
@@ -25,26 +23,14 @@
 </template>
 
 <script>
-import Vue from 'vue'
-import VueKatex from 'vue-katex'
-import 'katex/dist/katex.min.css'
+import VueKatex from '@/components/VueKatex'
 import VueTiptapKatex from 'vue-tiptap-katex'
-
-Vue.use(VueKatex, {
-  globalOptions: {
-    delimiters: [
-      {left: "$$", right: "$$", display: true},
-      {left: "\\[", right: "\\]", display: true},
-      {left: "$", right: "$", display: false},
-      {left: "\\(", right: "\\)", display: false}
-    ]
-  }
-});
 
 export default {
   name: 'QuestionField',
   components: {
     VueTiptapKatex,
+    VueKatex
   },
   props: {
     value: {

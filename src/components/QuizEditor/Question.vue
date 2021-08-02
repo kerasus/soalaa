@@ -80,6 +80,7 @@
         @change="confirmQuestion"
       />
     </div>
+    <!--ToDo: remove span-->
     <span
       :id="'question' + source.id"
       v-intersect="{
@@ -90,39 +91,24 @@
       }"
       class="question-body renderedPanel"
       :class="{ ltr: isLtr }"
-      v-katex:auto
-      v-html="(getQuestionNumberFromId(source.id)) + '(' + getSubCategoryName + ')' + ' (' + source.order + ') - ' + source.rendered_statement"
-    />
+    >
+        <vue-katex :input="(getQuestionNumberFromId(source.id)) + '(' + getSubCategoryName + ')' + ' (' + source.order + ') - ' + source.statement" />
+    </span>
     <v-row class="choices">
       <v-col
         v-for="(choice, index) in source.choices.list"
         :key="choice.id"
         :cols="choiceClass"
         :class="{ choice: true, renderedPanel: true, active: choice.answer, ltr: isLtr }"
-        v-katex:auto
-        v-html="(choiceNumber[index]) + choice.rendered_title"
-      />
+      >
+        <vue-katex :input="(choiceNumber[index]) + choice.title" />
+      </v-col>
     </v-row>
   </div>
 </template>
 
 <script>
-
-import Vue from 'vue'
-import VueKatex from 'vue-katex'
-import 'katex/dist/katex.min.css'
-Vue.use(VueKatex, {
-  globalOptions: {
-    delimiters: [
-      {left: "$$", right: "$$", display: true},
-      {left: "\\[", right: "\\]", display: true},
-      {left: "$", right: "$", display: false},
-      {left: "\\(", right: "\\)", display: false}
-    ]
-  }
-});
-
-    // import Vue from 'vue'
+    import Vue from 'vue'
     import {mixinQuiz, mixinWindowSize} from '@/mixin/Mixins'
     import $ from "jquery";
     import API_ADDRESS from "@/api/Addresses"
@@ -162,6 +148,9 @@ Vue.use(VueKatex, {
                 }
             }
         },
+      components: {
+        VueKatex
+      },
         data() {
             return {
                 confirmLoading: false,
@@ -228,7 +217,7 @@ Vue.use(VueKatex, {
             },
         },
         created() {
-            this.isLtr = this.isLtrString(this.source.rendered_statement)
+            this.isLtr = this.isLtrString(this.source.statement)
             // setTimeout(() => {console.Log(this.quiz)}, 2000)
         },
         methods: {
