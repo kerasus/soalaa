@@ -205,12 +205,12 @@
                               color="primary"
                             >
                               <v-list-item
-                                v-for="(item, i) in currentVideo.timepoints"
+                                v-for="(currentVideoItem, i) in currentVideo.timepoints"
                                 :key="i"
                               >
                                 <v-list-item-content>
                                   <v-list-item-title
-                                    v-text="item.title"
+                                    v-text="currentVideoItem.title"
                                   />
                                 </v-list-item-content>
                               </v-list-item>
@@ -234,14 +234,14 @@
                       dir="ltr"
                     >
                       <v-btn
-                        v-for="(video, index) in alaaVideos"
-                        :key="index"
+                        v-for="(video, alaaVideoIndex) in alaaVideos"
+                        :key="alaaVideoIndex"
                         outlined
                         icon
                         :style="{ margin: '0 5px' }"
                         @click="getContent(video.id)"
                       >
-                        {{ index + 1 }}
+                        {{ alaaVideoIndex + 1 }}
                       </v-btn>
                     </div>
                   </v-col>

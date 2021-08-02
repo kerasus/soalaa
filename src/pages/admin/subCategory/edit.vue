@@ -171,7 +171,7 @@
 <script>
 import { QuestSubcategory, QuestSubcategoryList} from "@/models/QuestSubcategory";
 import axios from "axios";
-import {QuestCategory, QuestCategoryList} from "@/models/QuestCategory";
+import {QuestCategoryList} from "@/models/QuestCategory";
 import API_ADDRESS from "@/api/Addresses";
 
 export default {

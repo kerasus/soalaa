@@ -92,7 +92,7 @@
       class="question-body renderedPanel"
       :class="{ ltr: isLtr }"
     >
-        <vue-katex :input="(getQuestionNumberFromId(source.id)) + '(' + getSubCategoryName + ')' + ' (' + source.order + ') - ' + source.statement" />
+      <vue-katex :input="(getQuestionNumberFromId(source.id)) + '(' + getSubCategoryName + ')' + ' (' + source.order + ') - ' + source.statement" />
     </span>
     <v-row class="choices">
       <v-col
@@ -115,12 +115,16 @@
     import VueConfirmDialog from 'vue-confirm-dialog'
     import axios from 'axios'
     import {QuestSubcategoryList} from "@/models/QuestSubcategory";
+    import VueKatex from '@/components/VueKatex'
 
     Vue.use(VueConfirmDialog)
     Vue.component('vue-confirm-dialog', VueConfirmDialog.default)
 
     export default {
         name: 'Item',
+      components: {
+        VueKatex
+      },
         mixins: [mixinQuiz, mixinWindowSize],
         props: {
             subCategory: {
@@ -148,9 +152,6 @@
                 }
             }
         },
-      components: {
-        VueKatex
-      },
         data() {
             return {
                 confirmLoading: false,
