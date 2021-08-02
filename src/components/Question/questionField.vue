@@ -166,3 +166,10 @@ export default {
   border: solid 1px #dedede;
 }
 </style>
+
+<!--remove this later ToDo-->
+<style>
+th, td {
+  border: 1px solid;
+}
+</style>
