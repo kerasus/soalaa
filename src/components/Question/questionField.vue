@@ -12,12 +12,6 @@
     <v-col v-else>
       <vue-katex :input="html" />
     </v-col>
-    <v-btn @click="print">
-      click
-    </v-btn>
-    <v-col md="12">
-      <div v-html="test" />
-    </v-col>
   </v-row>
 </template>
 
@@ -51,7 +45,6 @@ export default {
   },
   data() {
     return {
-      test: '',
       html: '',
       loading: false
     }
@@ -95,9 +88,3 @@ export default {
 }
 </style>
 
-<!--remove this later ToDo-->
-<style>
-th, td {
-  border: 1px solid;
-}
-</style>
