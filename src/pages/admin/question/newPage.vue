@@ -1,6 +1,9 @@
 <template>
   <div id="app">
-    <v-container :fluid="true" class="pa-6">
+    <v-container
+      :fluid="true"
+      class="pa-6"
+    >
       <v-row>
         <v-dialog
           v-model="dialog"
@@ -34,10 +37,10 @@
         </v-dialog>
         <v-col :cols="questionColsNumber">
           <nav-bar
-            v-if="this.checkNavbarVisibility()"
+            v-if="checkNavbarVisibility()"
             :question="currentQuestion"
             :edit-status="edit_status"
-            :page-name="this.getPageStatus()"
+            :page-name="getPageStatus()"
             @create="navBarAction_create"
             @saveDraft="navBarAction_saveDraft"
             @save="navBarAction_save"
@@ -45,9 +48,10 @@
             @edit="navBarAction_edit"
             @remove="navBarAction_remove"
           />
-          <div v-if="this.showQuestionComponentStatus()">
+          <div v-if="showQuestionComponentStatus()">
             <question-layout
               v-if="!loading"
+              ref="qlayout"
               v-model="currentQuestion"
               :status="edit_status"
               @input="updateQuestion"
@@ -65,14 +69,14 @@
           </div>
           <!-- -------------------------- upload file ---------------------->
           <UploadImg
-            v-if="this.showImgComponentStatus()"
+            v-if="showImgComponentStatus()"
             v-model="currentQuestion"
             :edit-status="upload_img_status"
             @imgClicked="makeShowImgPanelVisible($event)"
           />
           <!-- -------------------------- status --------------------------->
           <div
-            v-if="this.getPageStatus() === 'edit'"
+            v-if="getPageStatus() === 'edit'"
             class="my-10"
           >
             <StatusComponent
@@ -97,7 +101,10 @@
           v-if="currentQuestion.logs.list.length > 0 && !uploadImgColsNumber.show"
           :cols="3"
         >
-          <LogListComponent @addComment="addComment" :logs="currentQuestion.logs" />
+          <LogListComponent
+            :logs="currentQuestion.logs"
+            @addComment="addComment"
+          />
         </v-col>
       </v-row>
     </v-container>
@@ -250,17 +257,18 @@ export default {
     },
 
     navBarAction_save() {
+      this.$refs.qlayout.getContent()
       var currentQuestion = this.currentQuestion
       currentQuestion.update(API_ADDRESS.question.updateQuestion(currentQuestion.id))
-          .then(() => {
-            this.$notify({
-              group: 'notifs',
-              title: 'توجه',
-              text: 'ویرایش با موفقیت انجام شد',
-              type: 'success'
-            })
-            this.$router.push({name: 'question.show', params: {question_id: this.$route.params.question_id}})
+        .then(() => {
+          this.$notify({
+            group: 'notifs',
+            title: 'توجه',
+            text: 'ویرایش با موفقیت انجام شد',
+            type: 'success'
           })
+          this.$router.push({name: 'question.show', params: {question_id: this.$route.params.question_id}})
+        })
     },
 
     navBarAction_cancel() {
@@ -466,7 +474,6 @@ export default {
 
       if (this.getPageStatus() === 'create') {
         return this.questionType === 'typeImage';
-
       }
       return  this.doesPhotosExist()
     },

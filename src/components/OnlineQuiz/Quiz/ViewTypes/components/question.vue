@@ -74,12 +74,13 @@
       </v-btn>
     </div>
     <!--        <span v-if="(considerActiveCategory && source.in_active_category) || !considerActiveCategory || true"-->
+    <!--ToDo: remove span-->
     <span
       :id="'question' + source.id"
       class="question-body renderedPanel"
       :class="{ ltr: isRtl }"
-      v-html="(getQuestionNumberFromId(source.id)) + '- ' + source.rendered_statement"
-    />
+    >
+    </span>
     <!--        <v-row v-if="(considerActiveCategory && source.in_active_category) || !considerActiveCategory || true" class="choices">-->
     <v-row class="choices">
       <v-col
@@ -90,8 +91,9 @@
         class="choice renderedPanel"
         :class="{ active: getAnsweredChoiceId() === choice.id, ltr: isRtl }"
         @click="answerClickedd({ questionId: source.id, choiceId: choice.id})"
-        v-html="(choiceNumber[index]) + choice.rendered_title"
-      />
+      >
+        <vue-katex :input="(choiceNumber[index]) + choice.title" />
+      </v-col>
     </v-row>
   </div>
 </template>
@@ -99,6 +101,7 @@
 <script>
     import '@/assets/scss/markdownKatex.scss'
     import {mixinQuiz, mixinUserActionOnQuestion} from '@/mixin/Mixins'
+    import VueKatex from "@/components/VueKatex";
 
     export default {
         mixins: [mixinQuiz, mixinUserActionOnQuestion],
@@ -134,10 +137,13 @@
                 }
             }
         },
+      components: {
+        VueKatex
+      },
         mounted() {
             this.observer = new IntersectionObserver(this.intersectionObserver, {threshold: [0.7, 0.75, 0.8]})
             this.observer.observe(this.$el)
-            this.isRtl = this.isLtrString(this.source.rendered_statement)
+            this.isRtl = this.isLtrString(this.source.statement)
         },
         destroyed() {
             this.observer.disconnect();

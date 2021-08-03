@@ -87,53 +87,61 @@
               <p class="tab-title pt-5 pr-5">
                 دانلود پاسخنامه تشریحی
               </p>
-              <v-row
-                v-if="report"
-                class="download-row"
-                v-for="(item, index) in report.exams_booklet" :key="index"
-              >
-                <v-col md="6">
-                  <div class="download-box" v-if="item.descriptive_answers_url">
-                    <p class="download-title">
-                      دانلود پاسخنامه تشریحی {{
-                        item.title }}
-                    </p>
-                    <v-btn
-                      outlined
-                      color="--primary-2"
-                      height="75px"
-                      width="250px"
-                      :href="item.descriptive_answers_url"
-                      target="_blank"
+              <div v-if="report">
+                <v-row
+                  v-for="(item, index) in report.exams_booklet"
+                  :key="index"
+                  class="download-row"
+                >
+                  <v-col md="6">
+                    <div
+                      v-if="item.descriptive_answers_url"
+                      class="download-box"
                     >
-                      دانلود فایل PDF
-                      <v-icon class="donwload-icon">
-                        mdi-download
-                      </v-icon>
-                    </v-btn>
-                  </div>
-                </v-col>
-                <v-col md="6">
-                  <div class="download-box" v-if="item.questions_url">
-                    <p class="download-title">
-                      دانلود سوالات {{ item.title }}
-                    </p>
-                    <v-btn
-                      outlined
-                      color="--primary-2"
-                      height="75px"
-                      width="250px"
-                      :href="item.questions_url"
-                      target="_blank"
+                      <p class="download-title">
+                        دانلود پاسخنامه تشریحی {{
+                          item.title }}
+                      </p>
+                      <v-btn
+                        outlined
+                        color="--primary-2"
+                        height="75px"
+                        width="250px"
+                        :href="item.descriptive_answers_url"
+                        target="_blank"
+                      >
+                        دانلود فایل PDF
+                        <v-icon class="donwload-icon">
+                          mdi-download
+                        </v-icon>
+                      </v-btn>
+                    </div>
+                  </v-col>
+                  <v-col md="6">
+                    <div
+                      v-if="item.questions_url"
+                      class="download-box"
                     >
-                      دانلود فایل PDF
-                      <v-icon class="donwload-icon">
-                        mdi-download
-                      </v-icon>
-                    </v-btn>
-                  </div>
-                </v-col>
-              </v-row>
+                      <p class="download-title">
+                        دانلود سوالات {{ item.title }}
+                      </p>
+                      <v-btn
+                        outlined
+                        color="--primary-2"
+                        height="75px"
+                        width="250px"
+                        :href="item.questions_url"
+                        target="_blank"
+                      >
+                        دانلود فایل PDF
+                        <v-icon class="donwload-icon">
+                          mdi-download
+                        </v-icon>
+                      </v-btn>
+                    </div>
+                  </v-col>
+                </v-row>
+              </div>
             </v-card>
           </v-tab-item>
           <v-tab-item class="video-tab">
@@ -197,12 +205,12 @@
                               color="primary"
                             >
                               <v-list-item
-                                v-for="(item, i) in currentVideo.timepoints"
+                                v-for="(currentVideoItem, i) in currentVideo.timepoints"
                                 :key="i"
                               >
                                 <v-list-item-content>
                                   <v-list-item-title
-                                    v-text="item.title"
+                                    v-text="currentVideoItem.title"
                                   />
                                 </v-list-item-content>
                               </v-list-item>
@@ -226,14 +234,14 @@
                       dir="ltr"
                     >
                       <v-btn
-                        v-for="(video, index) in alaaVideos"
-                        :key="index"
+                        v-for="(video, alaaVideoIndex) in alaaVideos"
+                        :key="alaaVideoIndex"
                         outlined
                         icon
                         :style="{ margin: '0 5px' }"
                         @click="getContent(video.id)"
                       >
-                        {{ index + 1 }}
+                        {{ alaaVideoIndex + 1 }}
                       </v-btn>
                     </div>
                   </v-col>

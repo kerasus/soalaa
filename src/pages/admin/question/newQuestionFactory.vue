@@ -154,10 +154,12 @@
                 cols="3"
               >
                 <div class="column-statement">
+                  <!--ToDo: remove p-->
                   <p
                     class="column-statement-text"
-                    v-html="item.rendered_statement"
-                  />
+                  >
+                    <vue-katex :input="item.statement" />
+                  </p>
                 </div>
               </v-col>
               <!--  -------------------- column created_at ------------------------------------------------------------ -->
@@ -236,9 +238,13 @@ import axios from 'axios'
 import API_ADDRESS from "@/api/Addresses";
 import {QuestionStatusList} from "@/models/QuestionStatus";
 import {QuestionList} from "@/models/Question";
+import VueKatex from "@/components/VueKatex";
 
 export default {
   name: "NewQuestionFactory",
+  components: {
+    VueKatex
+  },
   data () {
     return {
       questionStatusList: new QuestionStatusList(),

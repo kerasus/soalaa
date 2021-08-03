@@ -166,7 +166,8 @@
         mixins: [mixinAuth],
         props: {
             requiredItems: {
-                type: Array
+                type: Array,
+                default: () => []
             },
         },
         data() {
