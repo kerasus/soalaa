@@ -9,6 +9,7 @@ class Choice extends Model {
             { key: 'id' },
             { key: 'title' },
             { key: 'rendered_title' },
+            { key: 'value' },
             {
                 key: 'active',
                 default: false

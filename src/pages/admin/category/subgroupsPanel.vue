@@ -12,19 +12,9 @@
           dark
       >
 
-        <v-toolbar-title>لیست دفترچه ها</v-toolbar-title>
+        <v-toolbar-title>لیست زیرگروه ها</v-toolbar-title>
 
         <v-spacer></v-spacer>
-
-        <v-text-field
-            class="search mx-3"
-            v-model="searchValue"
-            prepend-inner-icon="mdi-magnify"
-            rounded
-            outlined
-            dense
-            :style="{ 'max-width': '200px' }"
-        />
 
         <v-btn icon @click="addCategory">
           <v-icon>mdi-plus</v-icon>
@@ -75,9 +65,9 @@
               <v-btn icon @click="editMode(item)">
                 <v-icon color="blue">mdi-pencil-circle-outline</v-icon>
               </v-btn>
-              <!--              <v-btn icon>-->
-              <!--                <v-icon color="red">mdi-delete-circle-outline</v-icon>-->
-              <!--              </v-btn>-->
+              <v-btn icon @click="alert =!alert">
+                <v-icon color="red">mdi-delete-circle-outline</v-icon>
+              </v-btn>
             </div>
             <div v-else-if="item.editable && !item.editMode">
               <v-btn icon @click="create(item)">
@@ -99,11 +89,29 @@
         </v-list-item>
       </v-list>
     </v-card>
+    <v-card max-width="300px"
+            class="mx-auto"
+            transparent>
+      <v-alert
+          :value="alert"
+          color="pink"
+          dark
+          border="top"
+          transition="scale-transition"
+      >
+        <v-col cols="12" justify="center">
+          آیا از این کار مطمئن هستید؟
+        </v-col>
+        <v-col cols="12" justify="center">
+          <v-btn class="success mx-10" @click="[remove() , alert = !alert]">بله</v-btn>
+          <v-btn class="primary" @click="alert = !alert">خیر</v-btn>
+        </v-col>
+      </v-alert>
+    </v-card>
     <v-btn @click="getmydata">
       click me
     </v-btn>
   </v-container>
-
 </template>
 
 <script>
@@ -112,19 +120,16 @@ import {QuestCategory, QuestCategoryList} from "@/models/QuestCategory";
 import API_ADDRESS from "@/api/Addresses";
 
 export default {
-  name: "edit",
-  data () {
+  name: "subgroupsPanel",
+  data() {
     return {
-      categoryList: new QuestCategoryList(),
+      subGroups: [],
       loading: false,
-      searchValue: '',
+      alert: false,
     }
   },
   computed: {
-    filteredItems () {
-      return this.categoryList.list.filter(item => !item.title || item.title.includes(this.searchValue))
-    },
-    iconPicker () {
+    iconPicker() {
       return (title) => {
         return {
           icon: 'mdi-card-text',
@@ -134,69 +139,70 @@ export default {
     }
   },
   methods: {
-    getmydata(){
-      axios.get(API_ADDRESS.questionCategory.base)
-          .then(response => {
-            console.log(response)
-          })
-          .catch(error => {
-            console.log(error)
-          })
+    remove() {
+      console.log('done')
+    },
+    getmydata() {
+      let that = this
+      axios.get('/api/v1/exam-question/zirgorooh/60ad57f4c1fac57c95049633')
+        .then(response => {
+          that.subGroups = response.data.data
+        })
 
     },
-    update (item) {
-      item.editMode = false
-      item.title = item.title.trim()
-      item.apply()
-      axios.put(API_ADDRESS.questionCategory.update(item.id), item)
-        .then(response => {
-          item = new QuestCategory(response.data.data)
-        })
-    },
-    create (item) {
+    // update (item) {
+    //   item.editMode = false
+    //   item.title = item.title.trim()
+    //   item.apply()
+    //   axios.put('/api/v1/exam-question/zirgorooh/60ad57f4c1fac57c95049633', item)
+    //       .then(response => {
+    //         item = new QuestCategory(response.data.data)
+    //       })
+    // },
+    create(item) {
       item.editable = false
       item.title = item.title.trim()
-      axios.post(API_ADDRESS.questionCategory.base, item)
-        .then(response => {
-          this.deleteItem(item)
-          this.categoryList.list.unshift(new QuestCategory(response.data.data))
-        })
-        .catch(() => {
-          this.deleteItem(item)
-        })
+      axios.post('/api/v1/exam-question/zirgorooh/60ad57f4c1fac57c95049633', item)
+          .then(response => {
+            this.deleteItem(item)
+            this.categoryList.list.unshift(new QuestCategory(response.data.data))
+          })
+          .catch(() => {
+            this.deleteItem(item)
+          })
     },
-    cancelEdit (item) {
+    cancelEdit(item) {
       item.editMode = false
       item.buffer()
     },
-    editMode (item) {
+    editMode(item) {
       item.editMode = true
       item.buffer()
     },
-    deleteItem (category) {
+    deleteItem(category) {
       this.categoryList.list.forEach((item, index) => {
         if (item === category) {
           this.categoryList.list.splice(index, 1)
         }
       })
     },
-    addCategory () {
+    addCategory() {
       this.categoryList.list.unshift(new QuestCategory({
         editable: true,
         title: ''
       }))
     },
-    loadCategories () {
+    loadCategories() {
       let that = this
-      return new Promise(function(resolve, reject) {
-        axios.get(API_ADDRESS.questionCategory.base)
-          .then((response) => {
-            that.categoryList = new QuestCategoryList(response.data.data)
-            resolve()
-          })
-          .catch( (error) => {
-            reject()
-          })
+      return new Promise(function (resolve, reject) {
+        axios.get('/api/v1/exam-question/zirgorooh/60ad57f4c1fac57c95049633')
+            .then((response) => {
+              that.categoryList = new QuestCategoryList(response.data.data)
+              resolve()
+            })
+            .catch((error) => {
+              reject()
+            })
       })
     },
 
