@@ -17,6 +17,7 @@
           />
           <div v-if="this.showQuestionComponentStatus()">
             <mbti-question-layout
+                ref="qlayout"
                 v-if="!loading"
                 v-model="currentQuestion"
                 :status="edit_status"
@@ -99,7 +100,8 @@ export default {
     navBar,
     MbtiQuestionLayout,
     StatusComponent,
-    LogListComponent
+    LogListComponent,
+    attach_list
   },
   mixins: [mixinMarkdownAndKatex],
   data() {
@@ -214,6 +216,7 @@ export default {
 
     navBarAction_save() {
       var currentQuestion = this.currentQuestion
+      this.$refs.qlayout.getContent()
       currentQuestion.update(API_ADDRESS.question.updateQuestion(currentQuestion.id))
           .then(() => {
             this.$notify({

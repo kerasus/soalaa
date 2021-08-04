@@ -9,6 +9,7 @@
         تایپ سوال
       </div>
       <question_field
+          ref="questionStatement"
           :key="'statement' + domKey"
           v-model="question.statement"
           class="mb-10"
@@ -30,6 +31,7 @@
             @click="clicked(item.order)"
         >
           <v-select
+              v-model="item.value"
               :items="mbti_value"
               label="انتخاب کزینه"
               dense
@@ -43,6 +45,7 @@
       <div class="answer-editor">
         <div>
           <question_field
+              :ref="'choice' + (index + 1)"
               :key="'choices' + (index + 1) + domKey"
               v-model="item.title"
               :edit-status="status"
@@ -53,22 +56,6 @@
       </div>
     </div>
     <!-- ------------------------- answer -------------------------------  -->
-    <div class="mb-5 question-answer ">
-      <div class="mb-5">
-        پاسخ تشریحی
-      </div>
-      <div>
-        <question_field
-            :key="'descriptive_answer' + domKey"
-            v-model="question.descriptive_answer"
-            :question-id="value.id ? value.id : 'null'"
-            :edit-status="status"
-            placeholder="پاسخ تشریحی"
-            class="mb-16"
-            @input="updateQuestion"
-        />
-      </div>
-    </div>
   </div>
 </template>
 <script>
@@ -110,6 +97,16 @@ export default {
     }, 100)
   },
   methods:{
+    getContent () {
+      console.log(this.$refs)
+      this.$refs.questionStatement.getContent()
+      this.$refs.descriptive.getContent()
+      this.$refs.choice1[0].getContent()
+      this.$refs.choice2[0].getContent()
+      this.$refs.choice3[0].getContent()
+      this.$refs.choice4[0].getContent()
+      this.updateQuestion()
+    },
     updateQuestion () {
       this.$emit('input', this.question)
     },
