@@ -159,7 +159,6 @@
     import ProgressLinear from "@/components/ProgressLinear";
     import VueConfirmDialog from 'vue-confirm-dialog'
     import Vue from 'vue'
-    import axios from "axios";
 
     Vue.use(VueConfirmDialog)
     Vue.component('vue-confirm-dialog', VueConfirmDialog.default)

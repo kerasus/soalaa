@@ -9,13 +9,13 @@
         تایپ سوال
       </div>
       <question_field
+        ref="questionStatement"
         :key="'statement' + domKey"
         v-model="question.statement"
         class="mb-10"
         :edit-status="status"
         placeholder="صورت سوال"
         :question-id="value.id ? value.id : 'null'"
-        @input="updateQuestion"
       />
     </div>
     <div
@@ -54,11 +54,11 @@
       <div class="answer-editor">
         <div>
           <question_field
+            :ref="'choice' + (index + 1)"
             :key="'choices' + (index + 1) + domKey"
             v-model="item.title"
             :edit-status="status"
             :question-id="value.id ? value.id : 'null'"
-            @input="updateQuestion"
           />
         </div>
       </div>
@@ -70,13 +70,13 @@
       </div>
       <div>
         <question_field
+          ref="descriptive"
           :key="'descriptive_answer' + domKey"
           v-model="question.descriptive_answer"
           :question-id="value.id ? value.id : 'null'"
           :edit-status="status"
           placeholder="پاسخ تشریحی"
           class="mb-16"
-          @input="updateQuestion"
         />
       </div>
     </div>
@@ -119,7 +119,17 @@ export default {
       that.domKey = Date.now()
     }, 100)
   },
-  methods:{
+  methods: {
+    getContent () {
+      console.log(this.$refs)
+      this.$refs.questionStatement.getContent()
+      this.$refs.descriptive.getContent()
+      this.$refs.choice1[0].getContent()
+      this.$refs.choice2[0].getContent()
+      this.$refs.choice3[0].getContent()
+      this.$refs.choice4[0].getContent()
+      this.updateQuestion()
+    },
     updateQuestion () {
       this.$emit('input', this.question)
     },
