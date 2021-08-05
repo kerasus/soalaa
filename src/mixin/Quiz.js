@@ -554,7 +554,7 @@ const mixinQuiz = {
                 currentExamQuestions: this.getCurrentExamQuestions()
             })
             if (parseInt(this.$route.params.questNumber) !== parseInt(questNumber) && this.$route.name !== 'onlineQuiz.konkoorView' && this.$route.name !== 'onlineQuiz.bubblesheet-view') {
-                this.loadExamPageByViewType(this.quiz.id, questNumber, viewType)
+                this.loadExamPageByViewType(this.quiz.id, this.$route.params.questNumber, viewType)
             }
         },
         loadExamPageByViewType(examId, questNumber, viewType) {
