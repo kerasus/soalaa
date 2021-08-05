@@ -63,6 +63,16 @@ class Exam extends Model {
             { key: 'is_registered' },
             { key: 'exam_id' },
             {
+              key: 'config',
+              default: {
+                  has_konkur_view: false,
+                  has_exam_progress_bar: true,
+                  has_category_navigation: false,
+                  can_skip_question: false,
+                  randomize_questions: true
+              }
+            },
+            {
                 key: 'enable',
                 default: false
             },
