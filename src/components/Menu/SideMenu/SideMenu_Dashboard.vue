@@ -216,6 +216,10 @@ export default {
         displayName: 'لیست دفترچه ها',
         to: { name: 'category.edit' }
       },
+      {
+        displayName: 'لیست زیرگروه ها',
+        to: { name: 'subGroup.edit' }
+      },
     ],
     educationList: [
       // {
