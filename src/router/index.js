@@ -135,6 +135,24 @@ const router = new VueRouter({
             component: () => lazyLoadView(import('@/pages/admin/category/edit')),
             meta: {middleware: [auth, completeInfo]}
         },
+        {
+            path: '/sub-group/edit',
+            name: 'subGroup.edit',
+            component: () => lazyLoadView(import('@/pages/admin/subGroup/edit')),
+            meta: {middleware: [auth, completeInfo]}
+        },
+        {
+            path: '/coefficient/edit/:exam_id',
+            name: 'coefficient.edit',
+            component: () => lazyLoadView(import('@/pages/admin/subGroup/editCoefficients')),
+            meta: {middleware: [auth, completeInfo]}
+        },
+        {
+            path: '/results/mbti_bartle/:exam_id',
+            name: 'mbtiBartle.result',
+            component: () => lazyLoadView(import('@/pages/user/exam/Result/MBTI_Bartle')),
+            meta: {middleware: [auth, completeInfo]}
+        },
         // dev pages
         // {
         //     path: '/quiz/edit-all',
