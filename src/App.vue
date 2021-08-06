@@ -122,9 +122,10 @@
 
 <script>
     import Vue from 'vue'
+    import './assets/Fonts/Flaticons/css/uicons-regular-rounded.css'
     import Time from '@/plugins/time'
     import VueConfirmDialog from 'vue-confirm-dialog'
-    import {mixinAuth, mixinQuiz, mixinDrawer, mixinWindowSize} from '@/mixin/Mixins'
+    import { mixinAuth, mixinQuiz, mixinDrawer, mixinWindowSize } from '@/mixin/Mixins'
     import '@/assets/scss/app.scss'
     import '@/assets/scss/font.scss'
     import '@mdi/font/css/materialdesignicons.css'
