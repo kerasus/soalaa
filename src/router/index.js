@@ -50,6 +50,12 @@ const router = new VueRouter({
             meta: {middleware: [auth, completeInfo]}
         },
         {
+            path: '/onlineQuiz/mbti_bartle/:quizId/:questNumber',
+            name: 'onlineQuiz.mbtiBartle',
+            component: () => lazyLoadView(import('@/pages/user/exam/participate/MBTI_Bartle')),
+            meta: {middleware: [auth, completeInfo]}
+        },
+        {
             path: '/onlineQuiz/konkoorView/:quizId',
             name: 'onlineQuiz.konkoorView',
             component: () => lazyLoadView(import('@/pages/user/exam/participate/KonkoorView')),
