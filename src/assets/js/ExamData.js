@@ -19,12 +19,13 @@ class ShuffleQuestions {
 			}
 			questionsBySubcategory[item.sub_category.id].push(item)
 		})
-		Object.keys(questionsBySubcategory).forEach(item => {
-			item = this.shuffle(item)
+		// console.log(Object.keys(questionsBySubcategory))
+		Object.keys(questionsBySubcategory).forEach((item) => {
+			questionsBySubcategory[item] = this.shuffle(questionsBySubcategory[item])
 		})
 		let newArr = []
 		Object.keys(questionsBySubcategory).forEach(item => {
-			item.forEach(arrItem => {
+			questionsBySubcategory[item].forEach(arrItem => {
 				newArr.push(arrItem)
 			})
 		})
@@ -95,12 +96,13 @@ class ExamData {
 				})
 					 .then(response => {
 						let questions = response.data
+						 console.log('before', that.exam.questions)
 						 if (that.exam.config.randomize_questions) {
-						 	console.log('before', questions)
 							questions = new ShuffleQuestions(questions).run()
-						 	console.log('after', questions)
 						 }
+						 console.log('after', that.exam.questions)
 						 that.exam.questions = new QuestionList(questions)
+						 console.log('final', questions)
 						 resolve(response.data)
 					 })
 					 .catch(error => {
