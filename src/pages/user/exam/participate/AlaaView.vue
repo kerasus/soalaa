@@ -27,7 +27,7 @@
                 class="px-0"
                 :height="400"
                 :elevation="0"
-                @click="goToPrevQuestion"
+                @click="goToPrevQuestion('onlineQuiz.alaaView')"
               >
                 <v-icon :size="40">
                   mdi-chevron-right
@@ -145,7 +145,7 @@
                 class="px-0"
                 :height="400"
                 :elevation="0"
-                @click="goToNextQuestion"
+                @click="goToNextQuestion('onlineQuiz.alaaView')"
               >
                 <v-icon :size="40">
                   mdi-chevron-left

@@ -19,7 +19,6 @@ class ShuffleQuestions {
 			}
 			questionsBySubcategory[item.sub_category.id].push(item)
 		})
-		// console.log(Object.keys(questionsBySubcategory))
 		Object.keys(questionsBySubcategory).forEach((item) => {
 			questionsBySubcategory[item] = this.shuffle(questionsBySubcategory[item])
 		})
@@ -29,7 +28,7 @@ class ShuffleQuestions {
 				newArr.push(arrItem)
 			})
 		})
-		newArr.forEach((item, index) => item.order = index)
+		newArr.forEach((item, index) => item.order = index + 1)
 		return newArr
 	}
 
