@@ -112,7 +112,7 @@
               color="white"
               class="ml-2"
               width="110"
-              @click="[btn_clicked('edit') , sendQuestion()]"
+              @click="btn_clicked('edit')"
             >
               <v-icon color="#666666">
                 mdi-square-edit-outline
