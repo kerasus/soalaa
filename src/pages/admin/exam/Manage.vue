@@ -3,20 +3,20 @@
     <v-row>
       <v-col cols="12">
         <exam-list
-          ref="examList"
-          @update-exam-id="updateExamId"
+            ref="examList"
+            @update-exam-id="updateExamId"
         />
       </v-col>
       <v-dialog
-        v-model="dialog"
-        max-width="600px"
+          v-model="dialog"
+          max-width="600px"
       >
         <v-sheet>
           <v-row>
             <v-btn
-              icon
-              :style="{ margin: '20px' }"
-              @click="dialog = false"
+                icon
+                :style="{ margin: '20px' }"
+                @click="dialog = false"
             >
               <v-icon>mdi-close</v-icon>
             </v-btn>
@@ -24,10 +24,10 @@
           <v-row>
             <v-col>
               <exam-info
-                col-lg="5"
-                cols="12"
-                :exam="exam"
-                @refresh-exam-list="rereshExamList"
+                  col-lg="5"
+                  cols="12"
+                  :exam="exam"
+                  @refresh-exam-list="rereshExamList"
               />
             </v-col>
           </v-row>
@@ -38,27 +38,28 @@
 </template>
 
 <script>
-    import ExamInfo from "@/components/OnlineQuiz/Quiz/examInfo";
-    import ExamList from "@/components/OnlineQuiz/Quiz/examList";
-    import {Exam} from "@/models/Exam";
+import ExamInfo from "@/components/OnlineQuiz/Quiz/examInfo";
+import ExamList from "@/components/OnlineQuiz/Quiz/examList";
+import {Exam} from "@/models/Exam";
+import axios from "axios";
 
-    export default {
-        name: 'Manage',
-        components: {ExamList, ExamInfo},
-        data: () => ({
-            exam: new Exam(),
-            dialog: false,
-        }),
-        methods: {
-            rereshExamList () {
-                this.$refs.examList.getExams()
-            },
-            updateExamId(e){
-                this.exam = new Exam(e)
-                this.dialog = true
-            }
-        }
+export default {
+  name: 'Manage',
+  components: {ExamList, ExamInfo},
+  data: () => ({
+    exam: new Exam(),
+    dialog: false,
+  }),
+  methods: {
+    rereshExamList() {
+      this.$refs.examList.getExams()
+    },
+    updateExamId(e) {
+      this.exam = new Exam(e)
+      this.dialog = true
     }
+  }
+}
 </script>
 
 <style scoped>
