@@ -592,8 +592,9 @@ export default {
           order: item.order
         }
       })
+      currentQuestion.type = this.optionQuestionId
       currentQuestion
-          .create(null, API_ADDRESS.question.createAndAttach(this.optionQuestionId))
+          .create(null, API_ADDRESS.question.createAndAttach())
           .then((response) => {
             this.$store.commit('AppLayout/updateOverlay', {show: false, loading: false, text: ''})
             const questionId = response.data.data.id
