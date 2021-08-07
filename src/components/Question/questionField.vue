@@ -57,7 +57,9 @@ export default {
     this.getHtmlValueFromValueProp()
   },
   mounted () {
-    this.$refs.tiptap.setContent(this.html)
+    if (this.$refs.tiptap) {
+      this.$refs.tiptap.setContent(this.html)
+    }
   },
   methods: {
     getContent () {

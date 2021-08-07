@@ -5,42 +5,12 @@
       class="pa-6"
     >
       <v-row>
-        <v-dialog
-          v-model="dialog"
-          persistent
-          max-width="290"
-        >
-          <v-card>
-            <v-card-title class="dialog-title">
-              سوال را به کدام صورت درج می کنید؟
-            </v-card-title>
-            <v-card-text> لطفا انتخاب کنید که سوال را به کدام روش ثبت می کنید.</v-card-text>
-            <v-card-actions>
-              <v-spacer />
-              <v-btn
-                color="amber lighten-1"
-                text
-                @click="setQuestionTypeText"
-              >
-                تایپ سوال
-              </v-btn>
-              <v-spacer class="mx-10" />
-              <v-btn
-                color="amber lighten-1"
-                text
-                @click="setQuestionTypeImage"
-              >
-                آپلود فایل
-              </v-btn>
-            </v-card-actions>
-          </v-card>
-        </v-dialog>
         <v-col :cols="questionColsNumber">
           <nav-bar
-            v-if="checkNavbarVisibility()"
+            v-if="this.checkNavbarVisibility()"
             :question="currentQuestion"
             :edit-status="edit_status"
-            :page-name="getPageStatus()"
+            :page-name="this.getPageStatus()"
             @create="navBarAction_create"
             @saveDraft="navBarAction_saveDraft"
             @save="navBarAction_save"
@@ -48,10 +18,10 @@
             @edit="navBarAction_edit"
             @remove="navBarAction_remove"
           />
-          <div v-if="showQuestionComponentStatus()">
-            <question-layout
+          <div v-if="this.showQuestionComponentStatus()">
+            <mbti-question-layout
               v-if="!loading"
-              ref="qlayout"
+              ref="mtbiQlayout"
               v-model="currentQuestion"
               :status="edit_status"
               @input="updateQuestion"
@@ -69,14 +39,14 @@
           </div>
           <!-- -------------------------- upload file ---------------------->
           <UploadImg
-            v-if="showImgComponentStatus()"
+            v-if="this.showImgComponentStatus()"
             v-model="currentQuestion"
             :edit-status="upload_img_status"
             @imgClicked="makeShowImgPanelVisible($event)"
           />
           <!-- -------------------------- status --------------------------->
           <div
-            v-if="getPageStatus() === 'edit'"
+            v-if="this.getPageStatus() === 'edit'"
             class="my-10"
           >
             <StatusComponent
@@ -108,17 +78,23 @@
         </v-col>
       </v-row>
     </v-container>
+    <v-overlay :value="loading">
+      <v-progress-circular
+        :size="70"
+        :width="7"
+        indeterminate
+        color="white"
+      />
+    </v-overlay>
   </div>
 </template>
 
 <script>
 import Vue from 'vue'
-import navBar from '@/components/QuestionBank/EditQuestion/NavBar/navBar.vue';
-import QuestionLayout from '@/components/QuestionBank/EditQuestion/question-layout/question_layout';
-import UploadImg from '@/components/QuestionBank/EditQuestion/UploadImgs/uploadImg';
+import navBar from '@/components/QuestionBank/EditQuestion/NavBar/navBar';
+import MbtiQuestionLayout from '@/components/QuestionBank/EditQuestion/question-layout/mbti_question_layout';
 import attach_list from '@/components/QuestionBank/EditQuestion/Exams/exams';
 import StatusComponent from '@/components/QuestionBank/EditQuestion/StatusComponent/status';
-import ShowImg from '@/components/QuestionBank/EditQuestion/ShowImg/showImg';
 import LogListComponent from '@/components/QuestionBank/EditQuestion/Log/LogList';
 import {mixinMarkdownAndKatex} from "@/mixin/Mixins"
 import {Question} from '@/models/Question'
@@ -131,19 +107,18 @@ import {QuestionStatusList} from "@/models/QuestionStatus";
 import axios from 'axios'
 
 export default {
-  name: 'NewPage',
+  name: 'NewMBTIPage',
   components: {
     navBar,
-    QuestionLayout,
-    UploadImg,
-    attach_list,
-    ShowImg,
+    MbtiQuestionLayout,
     StatusComponent,
-    LogListComponent
+    LogListComponent,
+    attach_list
   },
   mixins: [mixinMarkdownAndKatex],
   data() {
     return {
+      optionQuestionId: null,
       temp: null,
       pageStatuses: [
         {
@@ -152,7 +127,7 @@ export default {
         },
         {
           title: 'create',
-          state: false
+          state: true
         },
         {
           title: 'edit',
@@ -170,7 +145,7 @@ export default {
       uploadImgColsNumber: {
         show: false
       },
-      choiceRendered: ['', '', '', ''],
+      choiceRendered: ['', ''],
       displayEditQuestion: false,
       currentQuestion: new Question(),
       examList: new ExamList(),
@@ -191,16 +166,6 @@ export default {
             order: 2,
             answer: false
           },
-          {
-            title: '',
-            order: 3,
-            answer: false
-          },
-          {
-            title: '',
-            order: 4,
-            answer: false
-          }
         ]
       },
       totalExams: [],
@@ -216,29 +181,55 @@ export default {
     }
   },
   created() {
+
+    let that = this
+    axios.get('/api/v1/option')
+        .then(function (response) {
+          const optionQuestion = response.data.data.find(item => (item.value==='psychometric' && item.type==='question_type'))
+          if (!optionQuestion) {
+            // beterek
+            return this.$notify({
+              group: 'notifs',
+              text: ' API با مشکل مواجه شد!',
+              type: 'error'
+            })
+          }
+
+          that.optionQuestionId = optionQuestion.id
+          that.loading = false
+        })
+        .catch(function (error) {
+          console.log(error);
+        })
     this.setPageStatus()
     this.checkUrl()
     this.getQuestionStatus()
     if (this.getPageStatus() === 'create') {
-      this.showPageDialog() //یاس
+      // this.showPageDialog() //یاس
+      this.setQuestionTypeText()
     } else {
       this.setMainChoicesInOtherModes()
     }
     this.setUploadImgStatus()
   },
   methods: {
+    setQuestionTypeText() {
+      this.questionType = 'typeText'
+      this.dialog = false
+      this.checkNavbarVisibilityOnCreatPage()
+    },
     addComment (eventData) {
       axios.post(API_ADDRESS.log.addComment(eventData.logId), { comment: eventData.text })
-      .then(response => {
-        // iterating over the array to find the log that has changed
-        for (let i = 0; i < this.currentQuestion.logs.list.length; i++) {
-          if (this.currentQuestion.logs.list[i].id === eventData.logId) {
-            // setting the new log using Vue.set so that the component notices the change
-            this.currentQuestion.logs.list[i] = new Log(response.data.data)
-            Vue.set(this.currentQuestion, 'logs', new LogList(this.currentQuestion.logs))
-          }
-        }
-      })
+          .then(response => {
+            // iterating over the array to find the log that has changed
+            for (let i = 0; i < this.currentQuestion.logs.list.length; i++) {
+              if (this.currentQuestion.logs.list[i].id === eventData.logId) {
+                // setting the new log using Vue.set so that the component notices the change
+                this.currentQuestion.logs.list[i] = new Log(response.data.data)
+                Vue.set(this.currentQuestion, 'logs', new LogList(this.currentQuestion.logs))
+              }
+            }
+          })
     },
     navBarAction_create(statusId) {
       // set status_id
@@ -257,18 +248,18 @@ export default {
     },
 
     navBarAction_save() {
-      this.$refs.qlayout.getContent()
       var currentQuestion = this.currentQuestion
+      this.$refs.mtbiQlayout.getContent()
       currentQuestion.update(API_ADDRESS.question.updateQuestion(currentQuestion.id))
-        .then(() => {
-          this.$notify({
-            group: 'notifs',
-            title: 'توجه',
-            text: 'ویرایش با موفقیت انجام شد',
-            type: 'success'
+          .then(() => {
+            this.$notify({
+              group: 'notifs',
+              title: 'توجه',
+              text: 'ویرایش با موفقیت انجام شد',
+              type: 'success'
+            })
+            this.$router.push({name: 'question.show', params: {question_id: this.$route.params.question_id}})
           })
-          this.$router.push({name: 'question.show', params: {question_id: this.$route.params.question_id}})
-        })
     },
 
     navBarAction_cancel() {
@@ -276,7 +267,7 @@ export default {
     },
 
     navBarAction_edit() {
-      this.$router.push({name: 'question.edit', params: {question_id: this.$route.params.question_id}})
+      this.$router.push({name: 'question.mbti.edit', params: {question_id: this.$route.params.question_id}})
     },
 
     navBarAction_remove() {
@@ -318,7 +309,7 @@ export default {
     },
 
     setPageStatus() {
-      const title = this.$route.name.replace('question.', '')
+      const title = this.$route.name.replace('question.mbti.', '')
       this.pageStatuses.forEach(item => {
         if (item.title === title) {
           item.state = true
@@ -474,6 +465,7 @@ export default {
 
       if (this.getPageStatus() === 'create') {
         return this.questionType === 'typeImage';
+
       }
       return  this.doesPhotosExist()
     },
@@ -495,13 +487,6 @@ export default {
       this.currentQuestion.show(null, API_ADDRESS.question.updateQuestion(this.$route.params.question_id))
           .then((response) => {
             that.currentQuestion = new Question(response.data.data)
-            if (that.currentQuestion.type.value === 'psychometric') {
-              if (that.getPageStatus() === 'edit') {
-                that.$router.push({name: 'question.mbti.edit', params: {question_id: that.$route.params.question_id}})
-              } else if (that.getPageStatus() === 'show') {
-                that.$router.push({name: 'question.mbti.show', params: {question_id: that.$route.params.question_id}})
-              }
-            }
             that.temp = that.currentQuestion
             that.checkTextCondition()
             that.getLogs()
@@ -591,32 +576,19 @@ export default {
     },
 
     setQuestionLayoutCols(){
-     if(this.currentQuestion.logs.list.length >0 ){
+      if(this.currentQuestion.logs.list.length >0 ){
         this.questionColsNumber=9
 
-     }
+      }
 
-    },
-
-    showPageDialog() {  //یاس
-      this.dialog = true
-    },
-
-    setQuestionTypeText() {
-      this.questionType = 'typeText'
-      this.dialog = false
-      this.checkNavbarVisibilityOnCreatPage()
-    },
-
-    setQuestionTypeImage() {
-      this.questionType = 'typeImage'
-      this.dialog = false
-      this.checkNavbarVisibilityOnCreatPage()
     },
 
     setInsertedQuestions() {  //یاس
       var currentQuestion = this.currentQuestion
       // set exams
+      this.$refs.mtbiQlayout.getContent()
+      // currentQuestion.descriptive_answer = ""
+
       currentQuestion.exams = this.selectedQuizzes.map(item => {
         return {
           id: item.exam.id,
@@ -625,11 +597,11 @@ export default {
         }
       })
       currentQuestion
-          .create()
+          .create(null, API_ADDRESS.question.createAndAttach(this.optionQuestionId))
           .then((response) => {
             this.$store.commit('AppLayout/updateOverlay', {show: false, loading: false, text: ''})
             const questionId = response.data.data.id
-            this.$router.push({name: 'question.show', params: {question_id: questionId}})
+            this.$router.push({name: 'question.mbti.show', params: {question_id: questionId}})
             this.questionType = 'typeText'
             this.currentQuestion.statement = ''
             this.currentQuestion.choices.list.forEach((item) => {
@@ -646,9 +618,9 @@ export default {
 
     doesPhotosExist() {
       if(this.currentQuestion.answer_photos){
-       if (this.currentQuestion.answer_photos.length>0) {
-         return true
-       }
+        if (this.currentQuestion.answer_photos.length>0) {
+          return true
+        }
       }
       if(this.currentQuestion.statement_photo ){
         if (this.currentQuestion.statement_photo.length>0){
@@ -669,14 +641,6 @@ export default {
         if (this.doesPhotosExist()) {
           this.setQuestionPhotos(statusId)
         }
-      }
-    },
-
-    setMainChoicesInOtherModes() {
-      if (this.doesPhotosExist()) {
-        this.setQuestionTypeImage()
-      } else {
-        this.setQuestionTypeText()
       }
     },
 
