@@ -81,16 +81,20 @@ export default {
       domKey: Date.now(),
       mbti_value: [
         {
-          text: 'bartle-s',
+          text: 'bartle-S',
           value: 'socializer'
         },
         {
-          text: 'bartle-e',
+          text: 'bartle-E',
           value: 'explorer'
         },
         {
-          text: 'bartle-a',
+          text: 'bartle-A',
           value: 'achiever'
+        },
+        {
+          text: 'bartle-K',
+          value: 'killer'
         },
         {
           text: 'mbti-I',
@@ -123,10 +127,6 @@ export default {
         {
           text: 'mbti-P',
           value: 'perceiving'
-        },
-        {
-          text: 'bartle-k',
-          value: 'killer'
         }
       ]
     }
