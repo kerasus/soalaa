@@ -250,6 +250,7 @@ export default {
     navBarAction_save() {
       var currentQuestion = this.currentQuestion
       this.$refs.mtbiQlayout.getContent()
+      currentQuestion.type_id = this.optionQuestionId
       currentQuestion.update(API_ADDRESS.question.updateQuestion(currentQuestion.id))
           .then(() => {
             this.$notify({
@@ -596,7 +597,7 @@ export default {
           order: item.order
         }
       })
-      currentQuestion.type = this.optionQuestionId
+      currentQuestion.type_id = this.optionQuestionId
       currentQuestion
           .create(null, API_ADDRESS.question.createAndAttach())
           .then((response) => {
