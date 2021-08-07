@@ -17,7 +17,7 @@
           />
           <div v-if="this.showQuestionComponentStatus()">
             <mbti-question-layout
-                ref="qlayout"
+                ref="mtbiQlayout"
                 v-if="!loading"
                 v-model="currentQuestion"
                 :status="edit_status"
@@ -72,17 +72,24 @@
         </v-col>
       </v-row>
     </v-container>
+    <v-overlay :value="loading">
+      <v-progress-circular
+          :size="70"
+          :width="7"
+          indeterminate
+          color="white"
+      ></v-progress-circular>
+    </v-overlay>
+
   </div>
 </template>
 
 <script>
 import Vue from 'vue'
-import navBar from '@/components/QuestionBank/EditQuestion/NavBar/navBar.vue';
+import navBar from '@/components/QuestionBank/EditQuestion/NavBar/navBar';
 import MbtiQuestionLayout from '@/components/QuestionBank/EditQuestion/question-layout/mbti_question_layout';
-import UploadImg from '@/components/QuestionBank/EditQuestion/UploadImgs/uploadImg';
 import attach_list from '@/components/QuestionBank/EditQuestion/Exams/exams';
 import StatusComponent from '@/components/QuestionBank/EditQuestion/StatusComponent/status';
-import ShowImg from '@/components/QuestionBank/EditQuestion/ShowImg/showImg';
 import LogListComponent from '@/components/QuestionBank/EditQuestion/Log/LogList';
 import {mixinMarkdownAndKatex} from "@/mixin/Mixins"
 import {Question} from '@/models/Question'
@@ -106,6 +113,7 @@ export default {
   mixins: [mixinMarkdownAndKatex],
   data() {
     return {
+      optionQuestionId: null,
       temp: null,
       pageStatuses: [
         {
@@ -168,6 +176,26 @@ export default {
     }
   },
   created() {
+
+    let that = this
+    axios.get('/api/v1/option')
+        .then(function (response) {
+          const optionQuestion = response.data.data.find(item => (item.value==='psychometric' && item.type==='question_type'))
+          if (!optionQuestion) {
+            // beterek
+            return this.$notify({
+              group: 'notifs',
+              text: ' API با مشکل مواجه شد!',
+              type: 'error'
+            })
+          }
+
+          that.optionQuestionId = optionQuestion.id
+          that.loading = false
+        })
+        .catch(function (error) {
+          console.log(error);
+        })
     this.setPageStatus()
     this.checkUrl()
     this.getQuestionStatus()
@@ -216,7 +244,8 @@ export default {
 
     navBarAction_save() {
       var currentQuestion = this.currentQuestion
-      this.$refs.qlayout.getContent()
+      currentQuestion.descriptive_answer = ""
+      this.$refs.mtbiQlayout.getContent()
       currentQuestion.update(API_ADDRESS.question.updateQuestion(currentQuestion.id))
           .then(() => {
             this.$notify({
@@ -553,6 +582,9 @@ export default {
     setInsertedQuestions() {  //یاس
       var currentQuestion = this.currentQuestion
       // set exams
+      this.$refs.mtbiQlayout.getContent()
+      currentQuestion.descriptive_answer = ""
+
       currentQuestion.exams = this.selectedQuizzes.map(item => {
         return {
           id: item.exam.id,
@@ -561,7 +593,7 @@ export default {
         }
       })
       currentQuestion
-          .create()
+          .create(null, API_ADDRESS.question.createAndAttach(this.optionQuestionId))
           .then((response) => {
             this.$store.commit('AppLayout/updateOverlay', {show: false, loading: false, text: ''})
             const questionId = response.data.data.id

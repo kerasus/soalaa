@@ -23,7 +23,8 @@
         v-for="(item, index) in question.choices.list"
         :key="index"
         class="question-layout-options"
-        :class="status ? 'mb-6   question-options white': '  question-options'"
+        :class="status ? 'mb-6   question-options white': '  question-o' +
+         'ptions'"
     >
       <div :class="status ?'px-4' :'px-2'">
         <div
@@ -33,7 +34,7 @@
           <v-select
               v-model="item.value"
               :items="mbti_value"
-              label="انتخاب کزینه"
+              label="انتخاب مقدار"
               dense
               outlined
           ></v-select>
@@ -98,16 +99,14 @@ export default {
   },
   methods:{
     getContent () {
-      console.log(this.$refs)
+      console.log('test', this.$refs)
       this.$refs.questionStatement.getContent()
-      this.$refs.descriptive.getContent()
       this.$refs.choice1[0].getContent()
       this.$refs.choice2[0].getContent()
-      this.$refs.choice3[0].getContent()
-      this.$refs.choice4[0].getContent()
       this.updateQuestion()
     },
     updateQuestion () {
+      console.log('this.question', this.question)
       this.$emit('input', this.question)
     },
     clicked(order){
