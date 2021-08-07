@@ -216,6 +216,14 @@ export default {
         displayName: 'لیست دفترچه ها',
         to: { name: 'category.edit' }
       },
+      {
+        displayName: 'لیست زیرگروه ها',
+        to: { name: 'category.subgroupsPanel' }
+      },
+      {
+        displayName: 'اضافه کردن سوالات MBTI',
+        to: { name: 'question.mbti' }
+      }
     ],
     educationList: [
       // {

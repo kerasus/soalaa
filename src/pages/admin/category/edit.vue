@@ -135,7 +135,11 @@
         </v-list-item>
       </v-list>
     </v-card>
+    <v-btn @click="getmydata">
+      click me
+    </v-btn>
   </v-container>
+
 </template>
 
 <script>
@@ -176,6 +180,16 @@ export default {
         })
   },
   methods: {
+    getmydata(){
+      axios.get(API_ADDRESS.questionCategory.base)
+          .then(response => {
+            console.log(response)
+          })
+          .catch(error => {
+            console.log(error)
+          })
+
+    },
     update (item) {
       item.editMode = false
       item.title = item.title.trim()
