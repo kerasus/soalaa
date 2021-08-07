@@ -15,7 +15,7 @@
           class="choose-exam"
           cols="5"
       >
-        <v-select
+        <v-autocomplete
             v-model="chooseExam"
             :items="examList.list"
             :rules="selectRules"
@@ -25,13 +25,14 @@
             dense
             solo
             flat
+            rounded
         />
       </v-col>
       <v-col
           class="choose-lesson"
           cols="4"
       >
-        <v-select
+        <v-autocomplete
             v-model="chooseLesson"
             :items="subCategories.list"
             :rules="selectRules"
@@ -41,6 +42,7 @@
             dense
             solo
             flat
+            rounded
         />
       </v-col>
 

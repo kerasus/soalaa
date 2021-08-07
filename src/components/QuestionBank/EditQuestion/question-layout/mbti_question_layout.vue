@@ -3,39 +3,43 @@
   <div class=" ma-4 question-layout">
     <div class="question ">
       <div
-        v-if="status"
-        class="mb-5 "
+          v-if="status"
+          class="mb-5 "
       >
         تایپ سوال
       </div>
       <question_field
-        ref="questionStatement"
-        :key="'statement' + domKey"
-        v-model="question.statement"
-        class="mb-10"
-        :edit-status="status"
-        placeholder="صورت سوال"
-        :question-id="value.id ? value.id : 'null'"
-        @input="updateQuestion"
+          ref="questionStatement"
+          :key="'statement' + domKey"
+          v-model="question.statement"
+          class="mb-10"
+          :edit-status="status"
+          placeholder="صورت سوال"
+          :question-id="value.id ? value.id : 'null'"
+          @input="updateQuestion"
       />
     </div>
     <div
-      v-for="(item, index) in question.choices.list"
-      :key="index"
-      class="question-layout-options"
-      :class="status ? 'mb-6   question-options white': '  question-o' +
-        'ptions'"
+        v-for="(item, index) in question.choices.list"
+        :key="index"
+        class="question-layout-options"
+        :class="status ? 'mb-6   question-options white': '  question-o' +
+         'ptions'"
     >
       <div :class="status ?'px-4' :'px-2'">
-        <v-select
-          v-model="item.answer"
-          :items="mbti_value"
-          label="انتخاب مقدار"
-          dense
-          outlined
-          :disabled="!status"
-          @change="updateQuestion"
-        />
+        <div
+            v-if="status"
+            @click="clicked(item.order)"
+        >
+          <v-autocomplete
+              v-model="item.value"
+              :items="mbti_value"
+              label="انتخاب مقدار"
+              dense
+              outlined
+              rounded
+          ></v-autocomplete>
+        </div>
       </div>
       <div class="ml-2">
         {{ (index + 1) + ') ' }}
@@ -43,12 +47,12 @@
       <div class="answer-editor">
         <div>
           <question_field
-            :ref="'choice' + (index + 1)"
-            :key="'choices' + (index + 1) + domKey"
-            v-model="item.title"
-            :edit-status="status"
-            :question-id="value.id ? value.id : 'null'"
-            @input="updateQuestion"
+              :ref="'choice' + (index + 1)"
+              :key="'choices' + (index + 1) + domKey"
+              v-model="item.title"
+              :edit-status="status"
+              :question-id="value.id ? value.id : 'null'"
+              @input="updateQuestion"
           />
         </div>
       </div>
@@ -79,56 +83,7 @@ export default {
     return {
       question: new Question(),
       domKey: Date.now(),
-      mbti_value: [
-        {
-          text: 'bartle-s',
-          value: 'socializer'
-        },
-        {
-          text: 'bartle-e',
-          value: 'explorer'
-        },
-        {
-          text: 'bartle-a',
-          value: 'achiever'
-        },
-        {
-          text: 'mbti-I',
-          value: 'introversion'
-        },
-        {
-          text: 'mbti-E',
-          value: 'extroversion'
-        },
-        {
-          text: 'mbti-N',
-          value: 'intuition'
-        },
-        {
-          text: 'mbti-S',
-          value: 'sensing'
-        },
-        {
-          text: 'mbti-T',
-          value: 'thinking'
-        },
-        {
-          text: 'mbti-F',
-          value: 'feeling'
-        },
-        {
-          text: 'mbti-J',
-          value: 'judging'
-        },
-        {
-          text: 'mbti-P',
-          value: 'perceiving'
-        },
-        {
-          text: 'bartle-k',
-          value: 'killer'
-        }
-      ]
+      mbti_value: ['string1','string2','string3']
     }
   },
   watch: {

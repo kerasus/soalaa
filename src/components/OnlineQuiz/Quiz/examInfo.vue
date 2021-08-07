@@ -177,7 +177,7 @@ export default {
               this.refreshExamList()
             })
       } else {
-        this.examItem.create('', 'api/v1/exam/' + this.examItem.type)
+        this.examItem.create()
             .then(() => {
               this.examItem.loading = false
               this.$toasted.show('ثبت با موفقیت انجام شد', {
