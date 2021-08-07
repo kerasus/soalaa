@@ -123,6 +123,7 @@
 <script>
     import Vue from 'vue'
     import './assets/Fonts/Flaticons/css/uicons-regular-rounded.css'
+    import './assets/Fonts/Flaticons/css/uicons-bold-rounded.css'
     import Time from '@/plugins/time'
     import VueConfirmDialog from 'vue-confirm-dialog'
     import { mixinAuth, mixinQuiz, mixinDrawer, mixinWindowSize } from '@/mixin/Mixins'

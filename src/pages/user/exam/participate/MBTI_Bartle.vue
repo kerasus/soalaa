@@ -62,13 +62,7 @@
                 <i class="fi-br-angle-right" />
               </v-btn>
             </div>
-            <!--            <div-->
-            <!--              v-if="$route.params.questNumber === '90' && isCurrentQuestionAnswered"-->
-            <!--              class="finished"-->
-            <!--            />-->
-            <div
-              class="question"
-            >
+            <div class="question">
               <p class="question-number">
                 سوال {{ $route.params.questNumber }}
               </p>
@@ -76,7 +70,7 @@
                 class="statement"
                 v-html="currentQuestion.statement"
               />
-              <div :class="{ choices: true, agree: currentQuestion.choices.list[0].title === 'موافقم', disagree: currentQuestion.choices.list[0].title === 'مخالفم' }">
+              <div :class="{ choices: true, agree: choices[0].title === 'موافقم', disagree: choices[0].title === 'مخالفم' }">
                 <div
                   v-for="(choice, index) in currentQuestion.choices.list"
                   :key="index"
@@ -138,7 +132,6 @@
 import {mixinDrawer} from "@/mixin/Mixins";
 import { Question } from "@/models/Question";
 import { mixinQuiz, mixinUserActionOnQuestion } from '@/mixin/Mixins'
-import mbtiData from '@/assets/js/MBTI_Bartle_Data'
 
 // import Assistant from "@/plugins/assistant";
 
@@ -175,8 +168,7 @@ export default {
             value: 'E'
           }
         ]
-      }),
-      finished: false
+      })
     }
   },
   computed: {
@@ -221,76 +213,12 @@ export default {
   methods: {
     choiceClick (id) {
       let needRedirect = !this.currentQuestion.choices.list.find(choice => choice.active)
-      let isFinished = this.$route.params.questNumber === '90' // ToDo need to cahnge to something not hard coded
       this.answerClicked({ choiceId: id, questionId: this.currentQuestion.id })
-      if (needRedirect && !isFinished) {
+      if (needRedirect) {
         setTimeout(() => {
           this.goToNextQuestion()
         }, 500)
       }
-    },
-    generateAnswer () {
-      let answer = this.calculateExam()
-      let finalAnswer = {}
-      finalAnswer.type = this.getMbtiTypeFromAnswers(answer)
-      finalAnswer.details = this.getMbtiDetailsFromAnswers(answer)
-      finalAnswer.charBg = this.getMbtiBg(finalAnswer.type)
-      this.$store.commit('setPsychometricAnswer', finalAnswer)
-    },
-    getMbtiBg (type) {
-      return mbtiData.mbtiType[type].backgroundColor
-    },
-    getMbtiDetailsFromAnswers (answer) {
-      let details = []
-      for (let i = 0; i < 4; i++) {
-        let title = mbtiData.mbtiGroups[i].title
-        let text = mbtiData.mbtiGroups[i].text
-        let values = []
-        values.push({
-          title: answer[Object.keys(answer)[0]][mbtiData.mbtiGroups[i].value[0]].label,
-          percent: answer[Object.keys(answer)[0]][mbtiData.mbtiGroups[i].value[0]].ratio,
-          label: mbtiData.mbtiKeys[2 * i].value,
-        })
-        values.push({
-          title: answer[Object.keys(answer)[0]][mbtiData.mbtiGroups[i].value[1]].label,
-          percent: answer[Object.keys(answer)[0]][mbtiData.mbtiGroups[i].value[1]].ratio,
-          label: mbtiData.mbtiKeys[2 * i + 1].value,
-        })
-        details.push({
-          title,
-          text,
-          values
-        })
-      }
-      return details
-    },
-    getMbtiTypeFromAnswers (answer) {
-      let type = ''
-      if (answer[Object.keys(answer)[0]][mbtiData.mbtiKeys[0].text.ratio] > 50) {
-        type += mbtiData.mbtiKeys[0].value
-      } else {
-        type += mbtiData.mbtiKeys[1].value
-      }
-
-      if (answer[Object.keys(answer)[0]][mbtiData.mbtiKeys[2].text.ratio] > 50) {
-        type += mbtiData.mbtiKeys[2].value
-      } else {
-        type += mbtiData.mbtiKeys[3].value
-      }
-
-      if (answer[Object.keys(answer)[0]][mbtiData.mbtiKeys[4].text.ratio] > 50) {
-        type += mbtiData.mbtiKeys[4].value
-      } else {
-        type += mbtiData.mbtiKeys[5].value
-      }
-
-      if (answer[Object.keys(answer)[0]][mbtiData.mbtiKeys[6].text.ratio] > 50) {
-        type += mbtiData.mbtiKeys[6].value
-      } else {
-        type += mbtiData.mbtiKeys[7].value
-      }
-
-      return type
     },
     calculateExam () {
       let questions = [{}]
@@ -301,8 +229,8 @@ export default {
         }
 
         question.choices.list.forEach(choice => { // set the values in the answer obj
-          if (!answer[question.sub_category.id][choice.answer]) {
-            answer[question.sub_category.id][choice.answer] = {
+          if (!answer[question.sub_category.id][choice.value]) {
+            answer[question.sub_category.id][choice.value] = {
               repeat: 0,
               possible: 0,
               ratio: 0
@@ -313,9 +241,9 @@ export default {
 
       questions.forEach(question => {
         question.choices.list.forEach(choice => {
-          answer[question.sub_category.id][choice.answer].possible++
+          answer[question.sub_category.id][choice.value].possible++
           if (choice.active) {
-            answer[question.sub_category.id][choice.answer].repeat++
+            answer[question.sub_category.id][choice.value].repeat++
           }
         })
       })
