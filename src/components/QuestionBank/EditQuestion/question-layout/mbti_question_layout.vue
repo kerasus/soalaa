@@ -3,28 +3,28 @@
   <div class=" ma-4 question-layout">
     <div class="question ">
       <div
-          v-if="status"
-          class="mb-5 "
+        v-if="status"
+        class="mb-5 "
       >
         تایپ سوال
       </div>
       <question_field
-          ref="questionStatement"
-          :key="'statement' + domKey"
-          v-model="question.statement"
-          class="mb-10"
-          :edit-status="status"
-          placeholder="صورت سوال"
-          :question-id="value.id ? value.id : 'null'"
-          @input="updateQuestion"
+        ref="questionStatement"
+        :key="'statement' + domKey"
+        v-model="question.statement"
+        class="mb-10"
+        :edit-status="status"
+        placeholder="صورت سوال"
+        :question-id="value.id ? value.id : 'null'"
+        @input="updateQuestion"
       />
     </div>
     <div
-        v-for="(item, index) in question.choices.list"
-        :key="index"
-        class="question-layout-options"
-        :class="status ? 'mb-6   question-options white': '  question-o' +
-         'ptions'"
+      v-for="(item, index) in question.choices.list"
+      :key="index"
+      class="question-layout-options"
+      :class="status ? 'mb-6   question-options white': '  question-o' +
+        'ptions'"
     >
       <div :class="status ?'px-4' :'px-2'">
         <v-autocomplete
@@ -44,12 +44,12 @@
       <div class="answer-editor">
         <div>
           <question_field
-              :ref="'choice' + (index + 1)"
-              :key="'choices' + (index + 1) + domKey"
-              v-model="item.title"
-              :edit-status="status"
-              :question-id="value.id ? value.id : 'null'"
-              @input="updateQuestion"
+            :ref="'choice' + (index + 1)"
+            :key="'choices' + (index + 1) + domKey"
+            v-model="item.title"
+            :edit-status="status"
+            :question-id="value.id ? value.id : 'null'"
+            @input="updateQuestion"
           />
         </div>
       </div>
@@ -94,6 +94,10 @@ export default {
           value: 'achiever'
         },
         {
+          text: 'bartle-k',
+          value: 'killer'
+        },
+        {
           text: 'mbti-I',
           value: 'introversion'
         },
@@ -124,10 +128,6 @@ export default {
         {
           text: 'mbti-P',
           value: 'perceiving'
-        },
-        {
-          text: 'bartle-k',
-          value: 'killer'
         }
       ]
     }
