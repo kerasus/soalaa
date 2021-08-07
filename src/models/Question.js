@@ -27,6 +27,7 @@ class Question extends Model {
             { key: 'photo' },
             { key: 'order' },
             { key: 'exams' },
+            { key: 'type_id' },
             {
                 key: 'type',
                 default: {
@@ -121,6 +122,7 @@ class Question extends Model {
                 {key: 'descriptive_answer'},
                 {key: 'sub_category_id'},
                 {key: 'exams'},
+                {key: 'type_id'},
                 {
                     key: 'choices',
                     value: function () {

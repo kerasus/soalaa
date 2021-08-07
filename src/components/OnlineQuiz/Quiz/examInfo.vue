@@ -1,31 +1,31 @@
 <template>
   <div class="d-flex justify-center">
     <v-progress-linear
-        color="deep-purple accent-4"
-        absolute
-        top
-        :active="exam.loading"
-        indeterminate
-        rounded
-        height="6"
+      color="deep-purple accent-4"
+      absolute
+      top
+      :active="exam.loading"
+      indeterminate
+      rounded
+      height="6"
     />
     <v-col cols="8">
       <v-row>
         <v-text-field
-            v-model="exam.title"
-            label="عنوان"
+          v-model="exam.title"
+          label="عنوان"
         >
           {{ exam.title }}
         </v-text-field>
       </v-row>
       <v-row>
         <v-select
-            v-model="exam.type"
-            :items="items"
-            item-value="id"
-            item-text="value"
-            label="انتخاب نوع آزمون"
-        ></v-select>
+          v-model="exam.type_id"
+          :items="items"
+          item-value="id"
+          item-text="value"
+          label="انتخاب نوع آزمون"
+        />
       </v-row>
       <v-row>
         <v-col cols="12">
@@ -33,11 +33,11 @@
         </v-col>
         <v-col cols="12">
           <date-picker
-              v-model="exam.start_at"
-              type="datetime"
-              :editable="true"
-              format="YYYY-MM-DD HH:mm:ss"
-              display-format="dddd jDD jMMMM jYYYY ساعت HH:mm"
+            v-model="exam.start_at"
+            type="datetime"
+            :editable="true"
+            format="YYYY-MM-DD HH:mm:ss"
+            display-format="dddd jDD jMMMM jYYYY ساعت HH:mm"
           />
         </v-col>
       </v-row>
@@ -47,52 +47,67 @@
         </v-col>
         <v-col cols="12">
           <date-picker
-              v-model="exam.finish_at"
-              type="datetime"
-              :editable="true"
-              format="YYYY-MM-DD HH:mm:ss"
-              display-format="dddd jDD jMMMM jYYYY ساعت HH:mm"
+            v-model="exam.finish_at"
+            type="datetime"
+            :editable="true"
+            format="YYYY-MM-DD HH:mm:ss"
+            display-format="dddd jDD jMMMM jYYYY ساعت HH:mm"
           />
         </v-col>
       </v-row>
       <v-row>
         <v-text-field
-            v-model="exam.delay_time"
-            label="زمان تاخیر (دقیقه)"
+          v-model="exam.delay_time"
+          label="زمان تاخیر (دقیقه)"
         />
       </v-row>
       <v-row no-gutters>
         <v-col :cols="6">
-          <v-checkbox label="فعال" v-model="exam.enable"/>
+          <v-checkbox
+            v-model="exam.enable"
+            label="فعال"
+          />
         </v-col>
         <v-col :cols="6">
-          <v-checkbox label="رایگان" v-model="exam.is_free"/>
+          <v-checkbox
+            v-model="exam.is_free"
+            label="رایگان"
+          />
         </v-col>
         <v-col :cols="12">
-          <v-checkbox label="ثبت نام باز است" v-model="exam.is_register_open"/>
+          <v-checkbox
+            v-model="exam.is_register_open"
+            label="ثبت نام باز است"
+          />
         </v-col>
         <v-col :cols="12">
-          <v-checkbox label="شرکت در آزمون باز است" v-model="exam.is_open"/>
+          <v-checkbox
+            v-model="exam.is_open"
+            label="شرکت در آزمون باز است"
+          />
         </v-col>
         <v-col :cols="12">
-          <v-checkbox label="تولید اتوماتیک کارنامه" v-model="exam.generate_automatic_report"/>
+          <v-checkbox
+            v-model="exam.generate_automatic_report"
+            label="تولید اتوماتیک کارنامه"
+          />
         </v-col>
       </v-row>
       <v-row>
         <v-col>
           <div class="text-center">
             <v-btn
-                :disabled="exam.loading"
-                :loading="exam.loading"
-                elevation="2"
-                @click="create"
+              :disabled="exam.loading"
+              :loading="exam.loading"
+              elevation="2"
+              @click="create"
             >
               ثبت
             </v-btn>
             <v-btn
-                :disabled="exam.loading"
-                :loading="exam.loading"
-                elevation="2"
+              :disabled="exam.loading"
+              :loading="exam.loading"
+              elevation="2"
             >
               حذف
             </v-btn>
@@ -102,11 +117,11 @@
     </v-col>
     <v-overlay :value="loading">
       <v-progress-circular
-          :size="70"
-          :width="7"
-          color="white"
-          indeterminate
-      ></v-progress-circular>
+        :size="70"
+        :width="7"
+        color="white"
+        indeterminate
+      />
     </v-overlay>
   </div>
 </template>

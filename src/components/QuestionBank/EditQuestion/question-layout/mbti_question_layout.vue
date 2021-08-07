@@ -27,19 +27,16 @@
          'ptions'"
     >
       <div :class="status ?'px-4' :'px-2'">
-        <div
-            v-if="status"
-            @click="clicked(item.order)"
-        >
-          <v-autocomplete
-              v-model="item.value"
-              :items="mbti_value"
-              label="انتخاب مقدار"
-              dense
-              outlined
-              rounded
-          ></v-autocomplete>
-        </div>
+        <v-autocomplete
+          v-model="item.answer"
+          :items="mbti_value"
+          label="انتخاب مقدار"
+          dense
+          outlined
+          rounded
+          :disabled="!status"
+          @change="updateQuestion"
+        />
       </div>
       <div class="ml-2">
         {{ (index + 1) + ') ' }}
@@ -83,7 +80,56 @@ export default {
     return {
       question: new Question(),
       domKey: Date.now(),
-      mbti_value: ['string1','string2','string3']
+      mbti_value: [
+        {
+          text: 'bartle-s',
+          value: 'socializer'
+        },
+        {
+          text: 'bartle-e',
+          value: 'explorer'
+        },
+        {
+          text: 'bartle-a',
+          value: 'achiever'
+        },
+        {
+          text: 'mbti-I',
+          value: 'introversion'
+        },
+        {
+          text: 'mbti-E',
+          value: 'extroversion'
+        },
+        {
+          text: 'mbti-N',
+          value: 'intuition'
+        },
+        {
+          text: 'mbti-S',
+          value: 'sensing'
+        },
+        {
+          text: 'mbti-T',
+          value: 'thinking'
+        },
+        {
+          text: 'mbti-F',
+          value: 'feeling'
+        },
+        {
+          text: 'mbti-J',
+          value: 'judging'
+        },
+        {
+          text: 'mbti-P',
+          value: 'perceiving'
+        },
+        {
+          text: 'bartle-k',
+          value: 'killer'
+        }
+      ]
     }
   },
   watch: {
