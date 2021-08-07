@@ -27,18 +27,15 @@
         'ptions'"
     >
       <div :class="status ?'px-4' :'px-2'">
-        <div
-          v-if="status"
-          @click="clicked(item.order)"
-        >
-          <v-select
-            v-model="item.value"
-            :items="mbti_value"
-            label="انتخاب مقدار"
-            dense
-            outlined
-          />
-        </div>
+        <v-select
+          v-model="item.answer"
+          :items="mbti_value"
+          label="انتخاب مقدار"
+          dense
+          outlined
+          :disabled="!status"
+          @change="updateQuestion"
+        />
       </div>
       <div class="ml-2">
         {{ (index + 1) + ') ' }}

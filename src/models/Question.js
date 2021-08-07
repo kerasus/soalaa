@@ -6,10 +6,8 @@ import Time from "@/plugins/time";
 import axios from "axios";
 import API_ADDRESS from "@/api/Addresses"
 import TurndownService from 'turndown/lib/turndown.browser.umd'
-// import convertToMarkdownKatex from "@/plugins/ConvertToMarkdownKatex"
 import { QuestionStatus } from "@/models/QuestionStatus";
 import {LogList} from "@/models/Log";
-import convert from "@/plugins/convert";
 
 class Question extends Model {
     constructor (data) {
@@ -29,6 +27,14 @@ class Question extends Model {
             { key: 'photo' },
             { key: 'order' },
             { key: 'exams' },
+            {
+                key: 'type',
+                default: {
+                    id: null,
+                    type: null, // question_type
+                    value: null, // psychometric
+                }
+            },
             {
                 key: 'isInView',
                 default: false

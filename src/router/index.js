@@ -185,6 +185,18 @@ const router = new VueRouter({
             meta: {middleware: [auth, completeInfo]}
         },
         {
+            path: '/question/mbti/:question_id/show',
+            name: 'question.mbti.show',
+            component: () => lazyLoadView(import('@/pages/admin/question/newMBTIpage')),
+            meta: {middleware: [auth, completeInfo]}
+        },
+        {
+            path: '/question/mbti/:question_id/edit',
+            name: 'question.mbti.edit',
+            component: () => lazyLoadView(import('@/pages/admin/question/newMBTIpage')),
+            meta: {middleware: [auth, completeInfo]}
+        },
+        {
             path: '/question/:question_id/show',
             name: 'question.show',
             component: () => lazyLoadView(import('@/pages/admin/question/newPage')),
