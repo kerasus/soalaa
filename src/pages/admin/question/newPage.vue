@@ -495,6 +495,13 @@ export default {
       this.currentQuestion.show(null, API_ADDRESS.question.updateQuestion(this.$route.params.question_id))
           .then((response) => {
             that.currentQuestion = new Question(response.data.data)
+            if (that.currentQuestion.type.value === 'psychometric') {
+              if (that.getPageStatus() === 'edit') {
+                that.$router.push({name: 'question.mbti.edit', params: {question_id: that.$route.params.question_id}})
+              } else if (that.getPageStatus() === 'show') {
+                that.$router.push({name: 'question.mbti.show', params: {question_id: that.$route.params.question_id}})
+              }
+            }
             that.temp = that.currentQuestion
             that.checkTextCondition()
             that.getLogs()
