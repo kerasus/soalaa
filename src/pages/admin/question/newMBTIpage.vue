@@ -1,86 +1,91 @@
 <template>
   <div id="app">
-    <v-container :fluid="true" class="pa-6">
+    <v-container
+      :fluid="true"
+      class="pa-6"
+    >
       <v-row>
         <v-col :cols="questionColsNumber">
           <nav-bar
-              v-if="this.checkNavbarVisibility()"
-              :question="currentQuestion"
-              :edit-status="edit_status"
-              :page-name="this.getPageStatus()"
-              @create="navBarAction_create"
-              @saveDraft="navBarAction_saveDraft"
-              @save="navBarAction_save"
-              @cancel="navBarAction_cancel"
-              @edit="navBarAction_edit"
-              @remove="navBarAction_remove"
+            v-if="this.checkNavbarVisibility()"
+            :question="currentQuestion"
+            :edit-status="edit_status"
+            :page-name="this.getPageStatus()"
+            @create="navBarAction_create"
+            @saveDraft="navBarAction_saveDraft"
+            @save="navBarAction_save"
+            @cancel="navBarAction_cancel"
+            @edit="navBarAction_edit"
+            @remove="navBarAction_remove"
           />
           <div v-if="this.showQuestionComponentStatus()">
             <mbti-question-layout
-                ref="mtbiQlayout"
-                v-if="!loading"
-                v-model="currentQuestion"
-                :status="edit_status"
-                @input="updateQuestion"
+              v-if="!loading"
+              ref="mtbiQlayout"
+              v-model="currentQuestion"
+              :status="edit_status"
+              @input="updateQuestion"
             />
             <!-- -------------------------- show exams  ---------------------->
             <attach_list
-                :status="edit_status"
-                :attaches="selectedQuizzes"
-                :exam-list="examList"
-                :sub-categories="subCategoriesList"
-                :loading="attachLoading"
-                @detach="detachQuestion"
-                @attach="attachQuestion"
+              :status="edit_status"
+              :attaches="selectedQuizzes"
+              :exam-list="examList"
+              :sub-categories="subCategoriesList"
+              :loading="attachLoading"
+              @detach="detachQuestion"
+              @attach="attachQuestion"
             />
           </div>
           <!-- -------------------------- upload file ---------------------->
           <UploadImg
-              v-if="this.showImgComponentStatus()"
-              v-model="currentQuestion"
-              :edit-status="upload_img_status"
-              @imgClicked="makeShowImgPanelVisible($event)"
+            v-if="this.showImgComponentStatus()"
+            v-model="currentQuestion"
+            :edit-status="upload_img_status"
+            @imgClicked="makeShowImgPanelVisible($event)"
           />
           <!-- -------------------------- status --------------------------->
           <div
-              v-if="this.getPageStatus() === 'edit'"
-              class="my-10"
+            v-if="this.getPageStatus() === 'edit'"
+            class="my-10"
           >
             <StatusComponent
-                :statuses="questionStatuses"
-                :loading="changeStatusLoading"
-                @update="changeStatus"
+              :statuses="questionStatuses"
+              :loading="changeStatusLoading"
+              @update="changeStatus"
             />
           </div>
         </v-col>
         <!-- -------------------------- show img---------------------------->
         <v-col
-            v-if="uploadImgColsNumber.show"
-            :cols="5"
+          v-if="uploadImgColsNumber.show"
+          :cols="5"
         >
           <ShowImg
-              :test="imgSrc"
-              @closePanel="makeShowImgPanelInvisible"
+            :test="imgSrc"
+            @closePanel="makeShowImgPanelInvisible"
           />
         </v-col>
         <!-- -------------------------- log --------------------------->
         <v-col
-            v-if="currentQuestion.logs.list.length > 0 && !uploadImgColsNumber.show"
-            :cols="3"
+          v-if="currentQuestion.logs.list.length > 0 && !uploadImgColsNumber.show"
+          :cols="3"
         >
-          <LogListComponent @addComment="addComment" :logs="currentQuestion.logs" />
+          <LogListComponent
+            :logs="currentQuestion.logs"
+            @addComment="addComment"
+          />
         </v-col>
       </v-row>
     </v-container>
     <v-overlay :value="loading">
       <v-progress-circular
-          :size="70"
-          :width="7"
-          indeterminate
-          color="white"
-      ></v-progress-circular>
+        :size="70"
+        :width="7"
+        indeterminate
+        color="white"
+      />
     </v-overlay>
-
   </div>
 </template>
 
@@ -244,7 +249,6 @@ export default {
 
     navBarAction_save() {
       var currentQuestion = this.currentQuestion
-      currentQuestion.descriptive_answer = ""
       this.$refs.mtbiQlayout.getContent()
       currentQuestion.update(API_ADDRESS.question.updateQuestion(currentQuestion.id))
           .then(() => {
@@ -263,7 +267,7 @@ export default {
     },
 
     navBarAction_edit() {
-      this.$router.push({name: 'question.edit', params: {question_id: this.$route.params.question_id}})
+      this.$router.push({name: 'question.mbti.edit', params: {question_id: this.$route.params.question_id}})
     },
 
     navBarAction_remove() {
@@ -305,14 +309,14 @@ export default {
     },
 
     setPageStatus() {
-      // const title = this.$route.name.replace('question.', '')
-      // this.pageStatuses.forEach(item => {
-      //   if (item.title === title) {
-      //     item.state = true
-      //   } else {
-      //     item.state = false
-      //   }
-      // })
+      const title = this.$route.name.replace('question.mbti.', '')
+      this.pageStatuses.forEach(item => {
+        if (item.title === title) {
+          item.state = true
+        } else {
+          item.state = false
+        }
+      })
     },
 
     getPageStatus() {
@@ -583,7 +587,7 @@ export default {
       var currentQuestion = this.currentQuestion
       // set exams
       this.$refs.mtbiQlayout.getContent()
-      currentQuestion.descriptive_answer = ""
+      // currentQuestion.descriptive_answer = ""
 
       currentQuestion.exams = this.selectedQuizzes.map(item => {
         return {
@@ -598,7 +602,7 @@ export default {
           .then((response) => {
             this.$store.commit('AppLayout/updateOverlay', {show: false, loading: false, text: ''})
             const questionId = response.data.data.id
-            this.$router.push({name: 'question.show', params: {question_id: questionId}})
+            this.$router.push({name: 'question.mbti.show', params: {question_id: questionId}})
             this.questionType = 'typeText'
             this.currentQuestion.statement = ''
             this.currentQuestion.choices.list.forEach((item) => {

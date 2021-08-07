@@ -179,8 +179,26 @@ const router = new VueRouter({
             meta: {middleware: [auth, completeInfo]}
         },
         {
-            path: '/question/mbti_edit',
-            name: 'question.mbti',
+            path: '/question/mbti/create',
+            name: 'question.mbti.create',
+            component: () => lazyLoadView(import('@/pages/admin/question/newMBTIpage')),
+            meta: {middleware: [auth, completeInfo]}
+        },
+        // {
+        //     path: '/question/mbti_edit',
+        //     name: 'question.mbti.create',
+        //     component: () => lazyLoadView(import('@/pages/admin/question/newMBTIpage')),
+        //     meta: {middleware: [auth, completeInfo]}
+        // },
+        {
+            path: '/question/mbti/:question_id/show',
+            name: 'question.mbti.show',
+            component: () => lazyLoadView(import('@/pages/admin/question/newMBTIpage')),
+            meta: {middleware: [auth, completeInfo]}
+        },
+        {
+            path: '/question/mbti/:question_id/edit',
+            name: 'question.mbti.edit',
             component: () => lazyLoadView(import('@/pages/admin/question/newMBTIpage')),
             meta: {middleware: [auth, completeInfo]}
         },

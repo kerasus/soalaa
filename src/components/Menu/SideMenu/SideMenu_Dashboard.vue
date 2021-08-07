@@ -222,7 +222,7 @@ export default {
       },
       {
         displayName: 'اضافه کردن سوالات MBTI',
-        to: { name: 'question.mbti' }
+        to: { name: 'question.mbti.create' }
       }
     ],
     educationList: [
