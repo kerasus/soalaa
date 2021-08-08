@@ -325,25 +325,24 @@ export default {
     },
     getMbtiTypeFromAnswers (answer) {
       let type = ''
-      if (answer[Object.keys(answer)[0]][mbtiData.mbtiKeys[0].text.ratio] > 50) {
+      if (answer[Object.keys(answer)[0]][mbtiData.mbtiKeys[0].text].ratio > 50) {
         type += mbtiData.mbtiKeys[0].value
       } else {
         type += mbtiData.mbtiKeys[1].value
       }
-
-      if (answer[Object.keys(answer)[0]][mbtiData.mbtiKeys[2].text.ratio] > 50) {
+      if (answer[Object.keys(answer)[0]][mbtiData.mbtiKeys[2].text] > 50) {
         type += mbtiData.mbtiKeys[2].value
       } else {
         type += mbtiData.mbtiKeys[3].value
       }
 
-      if (answer[Object.keys(answer)[0]][mbtiData.mbtiKeys[4].text.ratio] > 50) {
+      if (answer[Object.keys(answer)[0]][mbtiData.mbtiKeys[4].text].ratio > 50) {
         type += mbtiData.mbtiKeys[4].value
       } else {
         type += mbtiData.mbtiKeys[5].value
       }
 
-      if (answer[Object.keys(answer)[0]][mbtiData.mbtiKeys[6].text.ratio] > 50) {
+      if (answer[Object.keys(answer)[0]][mbtiData.mbtiKeys[6].text].ratio > 50) {
         type += mbtiData.mbtiKeys[6].value
       } else {
         type += mbtiData.mbtiKeys[7].value
