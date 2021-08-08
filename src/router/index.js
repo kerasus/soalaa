@@ -159,12 +159,6 @@ const router = new VueRouter({
             component: () => lazyLoadView(import('@/pages/user/exam/Result/MBTI_Bartle')),
             meta: {middleware: [auth, completeInfo]}
         },
-        {
-            path: '/category/subgroupsPanel',
-            name: 'category.subgroupsPanel',
-            component: () => lazyLoadView(import('@/pages/admin/category/subgroupsPanel')),
-            meta: {middleware: [auth, completeInfo]}
-        },
         // dev pages
         // {
         //     path: '/quiz/edit-all',
@@ -200,30 +194,6 @@ const router = new VueRouter({
             path: '/question/:question_id/edit',
             name: 'question.edit',
             component: () => lazyLoadView(import('@/pages/admin/question/newPage')),
-            meta: {middleware: [auth, completeInfo]}
-        },
-        {
-            path: '/question/mbti/create',
-            name: 'question.mbti.create',
-            component: () => lazyLoadView(import('@/pages/admin/question/newMBTIpage')),
-            meta: {middleware: [auth, completeInfo]}
-        },
-        // {
-        //     path: '/question/mbti_edit',
-        //     name: 'question.mbti.create',
-        //     component: () => lazyLoadView(import('@/pages/admin/question/newMBTIpage')),
-        //     meta: {middleware: [auth, completeInfo]}
-        // },
-        {
-            path: '/question/mbti/:question_id/show',
-            name: 'question.mbti.show',
-            component: () => lazyLoadView(import('@/pages/admin/question/newMBTIpage')),
-            meta: {middleware: [auth, completeInfo]}
-        },
-        {
-            path: '/question/mbti/:question_id/edit',
-            name: 'question.mbti.edit',
-            component: () => lazyLoadView(import('@/pages/admin/question/newMBTIpage')),
             meta: {middleware: [auth, completeInfo]}
         },
         {
