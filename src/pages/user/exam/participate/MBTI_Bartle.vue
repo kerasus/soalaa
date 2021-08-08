@@ -16,7 +16,6 @@
           </a>
           <a href="https://alaatv.com">
             <v-img
-              v-col
               src="https://nodes.alaatv.com/upload/mbti-bartle-alaa-text.png"
               width="134"
               height="40"
@@ -250,21 +249,29 @@ export default {
       }
     },
     isFinished () {
+      let that = this
       const countOfQuestions = Object.keys(this.currentExamQuestions).length
       if (
           this.userQuizListData &&
           this.userQuizListData[this.quiz.id]
       ) {
         let answeredQuestionsCount = 0
+        const tstArr = []
         const checkedQuestionIds = Object.keys(this.userQuizListData[this.quiz.id])
         checkedQuestionIds.forEach( item => {
           if (
-              this.userQuizListData[this.quiz.id][item].answered_choice_id &&
-              this.userQuizListData[this.quiz.id][item].answered_choice_id.toString()
+              that.userQuizListData &&
+              that.userQuizListData[that.quiz.id] &&
+              that.userQuizListData[that.quiz.id][item] &&
+              that.userQuizListData[that.quiz.id][item].answered_choice_id &&
+              that.userQuizListData[that.quiz.id][item].answered_choice_id.toString()
           ) {
             answeredQuestionsCount++
+          } else {
+            tstArr.push(that.userQuizListData[that.quiz.id][item])
           }
         })
+
         return (answeredQuestionsCount === countOfQuestions)
       } else {
         return false
@@ -280,15 +287,25 @@ export default {
         const currentExamQuestions = this.currentExamQuestions
         const currentQuestionNumber = this.$route.params.questNumber
         let unansweredQuestion = null
-        Object.keys(currentExamQuestionIndexes).forEach( questNumber => {
-          if (currentQuestionNumber >= questNumber) {
-            const questionId = currentExamQuestionIndexes[questNumber]
+        const tstArr = []
+        Object.keys(currentExamQuestionIndexes).forEach( questIndex => {
+          const questNumber = parseInt(questIndex) + 1
+          if (parseInt(currentQuestionNumber) >= parseInt(questNumber)) {
+            const questionId = currentExamQuestionIndexes[questIndex]
             if (
+                !that.userQuizListData ||
+                !that.userQuizListData[that.quiz.id] ||
+                !that.userQuizListData[that.quiz.id][questionId] ||
+                !that.userQuizListData[that.quiz.id][questionId].answered_choice_id ||
+                !that.userQuizListData[that.quiz.id][questionId].answered_choice_id.toString() ||
                 typeof that.userQuizListData[that.quiz.id][questionId].answered_choice_id === 'undefined' ||
                 that.userQuizListData[that.quiz.id][questionId].answered_choice_id === null
             ) {
               unansweredQuestion = currentExamQuestions[questionId]
+            } else {
+              tstArr.push(that.userQuizListData[that.quiz.id][questionId])
             }
+            console.log('gg', tstArr)
           }
         })
 
@@ -356,18 +373,6 @@ export default {
           })
     },
     generateAnswer() {
-      let answer = null
-      try {
-        answer = this.calculateExam()
-        let finalAnswer = {}
-        finalAnswer.type = this.getMbtiTypeFromAnswers(answer)
-        finalAnswer.details = this.getMbtiDetailsFromAnswers(answer)
-        finalAnswer.charBg = this.getMbtiBg(finalAnswer.type)
-        this.$store.commit('setPsychometricAnswer', finalAnswer)
-      } catch (e) {
-        console.log('e', e)
-      }
-
       this.$router.push({name: 'mbtiBartle.result', params: {exam_id: this.quiz.id.toString()}})
     },
     getMbtiBg(type) {
