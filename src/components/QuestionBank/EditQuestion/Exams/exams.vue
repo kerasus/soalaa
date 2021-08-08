@@ -6,9 +6,10 @@
     >
       آزمون ها
     </p>
+    <v-form ref="form">
     <v-row
       v-if="status"
-      class="exam-section"
+      class="exam-section mt-2"
     >
       <v-col
         class="choose-exam"
@@ -17,6 +18,7 @@
         <v-autocomplete
           v-model="chooseExam"
           :items="examList.list"
+          :rules="selectorRules"
           item-text="title"
           item-value="id"
           label="انتخاب آزمون"
@@ -32,6 +34,7 @@
       >
         <v-autocomplete
           v-model="chooseLesson"
+          :rules="selectorRules"
           :items="subCategories.list"
           item-text="title"
           item-value="id"
@@ -162,6 +165,7 @@
         </v-btn>
       </v-col>
     </v-row>
+    </v-form>
   </div>
 </template>
 
@@ -209,6 +213,9 @@ export default {
       numberRules: [
         v => v.length > 0 || 'پر کردن این فیلد الزامی است.',
         v => Number.isInteger(Number(v)) || 'یک عدد وارد کنید.'
+      ],
+      selectorRules:[
+        v => v.length > 0 || 'پر کردن این فیلد الزامی است.',
       ]
     }
   },
@@ -233,23 +240,31 @@ export default {
           })
     },
     detach(item) {
-      this.$emit('detach', item)
+        this.$emit('detach', item)
     },
     attach() {
-      const exam = this.examList.list.find(examItem => examItem.id === this.chooseExam)
-      const sub_category = this.subCategories.list.find(subCategoryItem => subCategoryItem.id === this.chooseLesson)
-      const emitData = {
-        exam,
-        sub_category,
-        order: this.examOrder
+      if (this.$refs.form.validate()){
+        const exam = this.examList.list.find(examItem => examItem.id === this.chooseExam)
+        const sub_category = this.subCategories.list.find(subCategoryItem => subCategoryItem.id === this.chooseLesson)
+        const emitData = {
+          exam,
+          sub_category,
+          order: this.examOrder
+        }
+        this.$emit('attach', emitData)
       }
-      this.$emit('attach', emitData)
     }
   }
 }
 </script>
 
 <style>
+.v-input__control .v-text-field__details {
+  top: -62px;
+  position: relative;
+  left: 9px;
+}
+
 .exam .exam-order .v-input__control .v-text-field__details {
   position: relative;
   top: -62px;
