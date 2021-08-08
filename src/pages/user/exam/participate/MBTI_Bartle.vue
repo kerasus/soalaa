@@ -28,12 +28,11 @@
       </v-row>
       <v-row>
         <v-col class="d-flex flex-row justify-space-between">
-          <div>
-            تست شخصیت شناسی آلا
-          </div>
-          <div>
-            {{ counter.string }}
-          </div>
+          <div
+            v-if="quiz"
+            v-text="quiz.title"
+          />
+          <div v-text="counter.string" />
         </v-col>
       </v-row>
     </v-container>
@@ -56,7 +55,7 @@
                 width="50"
                 color="#ffe082"
                 elevation="0"
-                :disabled="$route.params.questNumber === '1'"
+                :disabled="$route.params.questNumber.toString() === '1'"
                 @click="goToPrevQuestion('onlineQuiz.mbtiBartle')"
               >
                 <i class="fi-br-angle-right" />
@@ -66,30 +65,40 @@
             <!--              v-if="$route.params.questNumber === '90' && isCurrentQuestionAnswered"-->
             <!--              class="finished"-->
             <!--            />-->
-            <div
-              class="question"
-            >
+            <div class="question">
               <p class="question-number">
-                سوال {{ $route.params.questNumber }}
+                سوال
+                {{ $route.params.questNumber }}
               </p>
               <p
                 class="statement"
                 v-html="currentQuestion.statement"
               />
-              <div :class="{ choices: true, agree: currentQuestion.choices.list[0].title === 'موافقم', disagree: currentQuestion.choices.list[0].title === 'مخالفم' }">
+              <div
+                class="choices"
+                :class="{
+                  agree: stringMeanThumbUpOrDown(currentQuestion.choices.list[0].title) === 'ThumbUp',
+                  disagree: stringMeanThumbUpOrDown(currentQuestion.choices.list[0].title) === 'ThumbDown'
+                }"
+              >
                 <div
                   v-for="(choice, index) in currentQuestion.choices.list"
-                  :key="index"
-                  :class="{ choice: true, agree: choice.title === 'موافقم', disagree: choice.title === 'مخالفم', active: choice.active }"
+                  :key="index+choiceKey"
+                  class="choice"
+                  :class="{
+                    agree: stringMeanThumbUpOrDown(choice.title) === 'ThumbUp',
+                    disagree: stringMeanThumbUpOrDown(choice.title) === 'ThumbDown',
+                    active: choice.active
+                  }"
                 >
                   <div
-                    v-if="choice.title === 'موافقم' || choice.title === 'مخالفم'"
+                    v-if="stringMeanThumbUpOrDown(choice.title) === 'ThumbUp' || stringMeanThumbUpOrDown(choice.title) === 'ThumbDown'"
                     class="choice-circle"
-                    @click="choiceClick"
+                    @click="choiceClick(choice.id)"
                   >
                     <div class="choice-inner-circle">
                       <i
-                        v-if="choice.title === 'موافقم'"
+                        v-if="stringMeanThumbUpOrDown(choice.title) === 'ThumbUp'"
                         class="fi-rr-thumbs-up"
                       />
                       <i
@@ -99,13 +108,13 @@
                     </div>
                   </div>
                   <p
-                    v-if="choice.title === 'موافقم' || choice.title === 'مخالفم'"
+                    v-if="stringMeanThumbUpOrDown(choice.title) === 'ThumbUp' || stringMeanThumbUpOrDown(choice.title) === 'ThumbDown'"
                     v-html="choice.title"
                   />
                   <div
                     v-else
                     class="choice-rect"
-                    @click="choiceClick"
+                    @click="choiceClick(choice.id)"
                   >
                     <div
                       class="choice-inner-rect"
@@ -135,58 +144,59 @@
 </template>
 
 <script>
+import Vue from 'vue'
 import {mixinDrawer} from "@/mixin/Mixins";
-import { Question } from "@/models/Question";
-import { mixinQuiz, mixinUserActionOnQuestion } from '@/mixin/Mixins'
+import {mixinQuiz, mixinUserActionOnQuestion} from '@/mixin/Mixins'
 import mbtiData from '@/assets/js/MBTI_Bartle_Data'
 
-// import Assistant from "@/plugins/assistant";
+import Assistant from "@/plugins/assistant";
 
 
 export default {
   name: "MBTIBartle",
   mixins: [mixinDrawer, mixinQuiz, mixinUserActionOnQuestion],
-  data () {
+  data() {
     return {
+      choiceKey: Date.now(),
       // should be commented later ToDo
-      currentQuestion: new Question({
-        id: 1,
-        statement: '<p>«از دیروز بیاموز، برای امروز زندگی کن، به فردا امیدوار باش. مسئله مهم این است که دست از سؤال پرسیدن بر ندارید»</p>',
-        choices: [
-          // {
-          //   id: 1,
-          //   active: true,
-          //   title: 'موافقم',
-          //   value: 'I',
-          // },
-          // {
-          //   id: 2,
-          //   title: 'مخالفم',
-          //   value: 'E'
-          // }
-          {
-            id: 1,
-            title: 'موافقم',
-            value: 'I',
-          },
-          {
-            id: 2,
-            title: 'مخالفم',
-            value: 'E'
-          }
-        ]
-      }),
+      // currentQuestion: new Question({
+      //   id: 1,
+      //   statement: '<p>«از دیروز بیاموز، برای امروز زندگی کن، به فردا امیدوار باش. مسئله مهم این است که دست از سؤال پرسیدن بر ندارید»</p>',
+      //   choices: [
+      //     // {
+      //     //   id: 1,
+      //     //   active: true,
+      //     //   title: 'موافقم',
+      //     //   value: 'I',
+      //     // },
+      //     // {
+      //     //   id: 2,
+      //     //   title: 'مخالفم',
+      //     //   value: 'E'
+      //     // }
+      //     {
+      //       id: 1,
+      //       title: 'موافقم',
+      //       value: 'I',
+      //     },
+      //     {
+      //       id: 2,
+      //       title: 'مخالفم',
+      //       value: 'E'
+      //     }
+      //   ]
+      // }),
       finished: false
     }
   },
   computed: {
-    counter () {
+    counter() {
       return {
         string: this.$route.params.questNumber + '/' + 90,
         value: (this.$route.params.questNumber - 1) / 90 * 100
       }
     },
-    isCurrentQuestionAnswered () {
+    isCurrentQuestionAnswered() {
       let isAnswered = false
       this.currentQuestion.choices.list.forEach(choice => {
         if (choice.active) {
@@ -196,40 +206,224 @@ export default {
       return isAnswered
     }
   },
-  created () {
+  created() {
     this.drawer = false
     this.appBar = false
     this.$store.commit('AppLayout/updateAppBarAndDrawer', false)
   },
-  mounted () {
-    // let that = this
-    // this.startExam(this.$route.params.quizId, 'onlineQuiz.mbtiBartle')
-    //     .then(() => {
-    //       that.$store.commit('AppLayout/updateOverlay', {show: false, loading: false, text: ''})
-    //     })
-    //     .catch( (error) => {
-    //       Assistant.reportErrors(error)
-    //       that.$notify({
-    //         group: 'notifs',
-    //         title: 'توجه!',
-    //         text: 'مشکلی در دریافت اطلاعات آژمون رخ داده است. لطفا دوباره امتحان کنید.',
-    //         type: 'error'
-    //       })
-    //       that.$router.push({ name: 'user.exam.list'})
-    //     })
+  mounted() {
+    let that = this
+    this.startExam(this.$route.params.quizId, 'onlineQuiz.mbtiBartle')
+        .then(() => {
+          that.$store.commit('AppLayout/updateOverlay', {show: false, loading: false, text: ''})
+          const isFinished = this.isFinished()
+          if (isFinished) {
+            that.generateAnswer()
+          }
+        })
+        .catch((error) => {
+          Assistant.reportErrors(error)
+          that.$notify({
+            group: 'notifs',
+            title: 'توجه!',
+            text: 'مشکلی در دریافت اطلاعات آژمون رخ داده است. لطفا دوباره امتحان کنید.',
+            type: 'error'
+          })
+          that.$router.push({name: 'user.exam.list'})
+        })
   },
   methods: {
-    choiceClick (id) {
-      let needRedirect = !this.currentQuestion.choices.list.find(choice => choice.active)
-      let isFinished = this.$route.params.questNumber === '90' // ToDo need to cahnge to something not hard coded
-      this.answerClicked({ choiceId: id, questionId: this.currentQuestion.id })
-      if (needRedirect && !isFinished) {
-        setTimeout(() => {
-          this.goToNextQuestion()
-        }, 500)
+    stringMeanThumbUpOrDown(string) {
+      if (string === null || (this.currentQuestion.sub_category && this.currentQuestion.sub_category.title !== 'MBTI')) {
+        return false
+      }
+
+      if (string.includes("موافقم")) {
+        return 'ThumbUp'
+      } else if (string.includes("مخالفم")) {
+        return 'ThumbDown'
       }
     },
+    isFinished () {
+      const countOfQuestions = Object.keys(this.currentExamQuestions).length
+      if (
+          this.userQuizListData &&
+          this.userQuizListData[this.quiz.id]
+      ) {
+        let answeredQuestionsCount = 0
+        const checkedQuestionIds = Object.keys(this.userQuizListData[this.quiz.id])
+        checkedQuestionIds.forEach( item => {
+          if (
+              this.userQuizListData[this.quiz.id][item].answered_choice_id &&
+              this.userQuizListData[this.quiz.id][item].answered_choice_id.toString()
+          ) {
+            answeredQuestionsCount++
+          }
+        })
+        return (answeredQuestionsCount === countOfQuestions)
+      } else {
+        return false
+      }
+    },
+    hasUnansweredQuestionBehind () {
 
+    },
+    choiceClick(id) {
+      let that = this
+      // const countOfQuestions = Object.keys(this.currentExamQuestions).length
+      // const activeChoice = this.currentQuestion.choices.list.find(choice => choice.active)
+      // const isAnswered = !!activeChoice
+      // const isFinished = this.$route.params.questNumber.toString() === countOfQuestions.toString()
+      const isFinished = this.isFinished()
+      const answerClickedPromise = this.answerClicked({choiceId: id, questionId: this.currentQuestion.id})
+      answerClickedPromise
+          .then((response) => {
+            const targetQuestion = response.data.data.find(item => item.question_id.toString() === this.currentQuestion.id.toString())
+            if (
+                targetQuestion &&
+                targetQuestion.choice_id &&
+                targetQuestion.choice_id.toString()
+            ) {
+              if (!isFinished) {
+                that.currentQuestion.choices.list.forEach((item, index) => {
+                  if (targetQuestion.choice_id.toString() === that.currentQuestion.choices.list[index].id.toString()) {
+                    Vue.set(that.currentQuestion.choices.list[index], 'active', true)
+                    that.choiceKey = Date.now()
+                  } else {
+                    Vue.set(that.currentQuestion.choices.list[index], 'active', false)
+                    that.choiceKey = Date.now()
+                  }
+                })
+                that.goToNextQuestion('onlineQuiz.mbtiBartle')
+              } else {
+                that.currentQuestion.choices.list.forEach((item, index) => {
+                  if (targetQuestion.choice_id.toString() === that.currentQuestion.choices.list[index].id.toString()) {
+                    Vue.set(that.currentQuestion.choices.list[index], 'active', true)
+                    that.choiceKey = Date.now()
+                  } else {
+                    Vue.set(that.currentQuestion.choices.list[index], 'active', false)
+                    that.choiceKey = Date.now()
+                  }
+                })
+              }
+            } else {
+              that.currentQuestion.choices.list.forEach((item, index) => {
+                Vue.set(that.currentQuestion.choices.list[index], 'active', false)
+                that.choiceKey = Date.now()
+              })
+            }
+
+            if (isFinished) {
+              that.generateAnswer()
+            }
+          })
+    },
+    generateAnswer() {
+      let answer = null
+      try {
+        answer = this.calculateExam()
+        let finalAnswer = {}
+        finalAnswer.type = this.getMbtiTypeFromAnswers(answer)
+        finalAnswer.details = this.getMbtiDetailsFromAnswers(answer)
+        finalAnswer.charBg = this.getMbtiBg(finalAnswer.type)
+        this.$store.commit('setPsychometricAnswer', finalAnswer)
+      } catch (e) {
+        console.log('e', e)
+      }
+
+      this.$router.push({name: 'mbtiBartle.result', params: {exam_id: this.quiz.id.toString()}})
+    },
+    getMbtiBg(type) {
+      return mbtiData.mbtiType[type].backgroundColor
+    },
+    getMbtiDetailsFromAnswers(answer) {
+      let details = []
+      for (let i = 0; i < 4; i++) {
+        let title = mbtiData.mbtiGroups[i].title
+        let text = mbtiData.mbtiGroups[i].text
+        let values = []
+        values.push({
+          title: answer[Object.keys(answer)[0]][mbtiData.mbtiGroups[i].value[0]].label,
+          percent: answer[Object.keys(answer)[0]][mbtiData.mbtiGroups[i].value[0]].ratio,
+          label: mbtiData.mbtiKeys[2 * i].value,
+        })
+        values.push({
+          title: answer[Object.keys(answer)[0]][mbtiData.mbtiGroups[i].value[1]].label,
+          percent: answer[Object.keys(answer)[0]][mbtiData.mbtiGroups[i].value[1]].ratio,
+          label: mbtiData.mbtiKeys[2 * i + 1].value,
+        })
+        details.push({
+          title,
+          text,
+          values
+        })
+      }
+      return details
+    },
+    getMbtiTypeFromAnswers(answer) {
+      let type = ''
+      if (answer[Object.keys(answer)[0]][mbtiData.mbtiKeys[0].text.ratio] > 50) {
+        type += mbtiData.mbtiKeys[0].value
+      } else {
+        type += mbtiData.mbtiKeys[1].value
+      }
+
+      if (answer[Object.keys(answer)[0]][mbtiData.mbtiKeys[2].text.ratio] > 50) {
+        type += mbtiData.mbtiKeys[2].value
+      } else {
+        type += mbtiData.mbtiKeys[3].value
+      }
+
+      if (answer[Object.keys(answer)[0]][mbtiData.mbtiKeys[4].text.ratio] > 50) {
+        type += mbtiData.mbtiKeys[4].value
+      } else {
+        type += mbtiData.mbtiKeys[5].value
+      }
+
+      if (answer[Object.keys(answer)[0]][mbtiData.mbtiKeys[6].text.ratio] > 50) {
+        type += mbtiData.mbtiKeys[6].value
+      } else {
+        type += mbtiData.mbtiKeys[7].value
+      }
+
+      return type
+    },
+    calculateExam() {
+      let questions = [{}]
+      let answer = {}
+      questions.forEach(question => { // set the sub categories in the answer obj
+        if (!answer[question.sub_category.id]) {
+          answer[question.sub_category.id] = {}
+        }
+
+        question.choices.list.forEach(choice => { // set the values in the answer obj
+          if (!answer[question.sub_category.id][choice.answer]) {
+            answer[question.sub_category.id][choice.answer] = {
+              repeat: 0,
+              possible: 0,
+              ratio: 0
+            }
+          }
+        })
+      })
+
+      questions.forEach(question => {
+        question.choices.list.forEach(choice => {
+          answer[question.sub_category.id][choice.answer].possible++
+          if (choice.active) {
+            answer[question.sub_category.id][choice.answer].repeat++
+          }
+        })
+      })
+
+      Object.keys(answer).forEach((subCategory) => {
+        Object.keys(answer[subCategory]).forEach((value) => {
+          answer[subCategory][value].ratio = Math.round(answer[subCategory][value].repeat / answer[subCategory][value].possible * 100)
+        })
+      })
+
+      return answer
+    }
   }
 }
 </script>

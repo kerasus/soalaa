@@ -6,10 +6,8 @@ import Time from "@/plugins/time";
 import axios from "axios";
 import API_ADDRESS from "@/api/Addresses"
 import TurndownService from 'turndown/lib/turndown.browser.umd'
-// import convertToMarkdownKatex from "@/plugins/ConvertToMarkdownKatex"
 import { QuestionStatus } from "@/models/QuestionStatus";
 import {LogList} from "@/models/Log";
-import convert from "@/plugins/convert";
 
 class Question extends Model {
     constructor (data) {
@@ -29,6 +27,15 @@ class Question extends Model {
             { key: 'photo' },
             { key: 'order' },
             { key: 'exams' },
+            { key: 'type_id' },
+            {
+                key: 'type',
+                default: {
+                    id: null,
+                    type: null, // question_type
+                    value: null, // psychometric
+                }
+            },
             {
                 key: 'isInView',
                 default: false
@@ -115,6 +122,7 @@ class Question extends Model {
                 {key: 'descriptive_answer'},
                 {key: 'sub_category_id'},
                 {key: 'exams'},
+                {key: 'type_id'},
                 {
                     key: 'choices',
                     value: function () {
@@ -327,19 +335,19 @@ class Question extends Model {
     }
 
     sendAnswer (exam_user_id, {question_id, choice_id, selected_at }) {
-        axios.post(API_ADDRESS.exam.sendAnswers, {exam_user_id, questions: [{question_id, choice_id, selected_at}] })
+        return axios.post(API_ADDRESS.exam.sendAnswers, {exam_user_id, questions: [{question_id, choice_id, selected_at}] })
     }
 
     sendStatus (exam_user_id, {question_id, status }) {
-        axios.post(API_ADDRESS.exam.sendStatus, {exam_user_id, question_id, status})
+        return axios.post(API_ADDRESS.exam.sendStatus, {exam_user_id, question_id, status})
     }
 
     sendBookmark (exam_user_id, question_id) {
-        axios.post(API_ADDRESS.exam.sendBookmark, {exam_user_id, question_id})
+        return axios.post(API_ADDRESS.exam.sendBookmark, {exam_user_id, question_id})
     }
 
     sendUnBookmark (exam_user_id, question_id) {
-        axios.post(API_ADDRESS.exam.sendUnBookmark, {exam_user_id, question_id})
+        return axios.post(API_ADDRESS.exam.sendUnBookmark, {exam_user_id, question_id})
     }
 }
 

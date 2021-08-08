@@ -243,7 +243,7 @@ const store = new Vuex.Store({
                 return
             }
             const currentExamQuestions = newInfo.currentExamQuestions
-            const currentQuestion = currentExamQuestions[newQuestionId]
+            const currentQuestion = new Question(currentExamQuestions[newQuestionId])
             if (newQuestionId) {
                 this.commit('enterQuestion', newQuestionId)
             }
@@ -256,6 +256,20 @@ const store = new Vuex.Store({
                     }
                 }
                 this.commit('leaveQuestion', oldQuestionId)
+            }
+
+            if (
+                state.userQuizListData &&
+                state.userQuizListData[state.quiz.id] &&
+                state.userQuizListData[state.quiz.id][currentQuestion.id] &&
+                typeof state.userQuizListData[state.quiz.id][currentQuestion.id].answered_choice_id !== 'undefined' &&
+                state.userQuizListData[state.quiz.id][currentQuestion.id].answered_choice_id !== null
+            ) {
+                currentQuestion.choices.list.forEach( (item, index) => {
+                    if (item.id.toString() === state.userQuizListData[state.quiz.id][currentQuestion.id].answered_choice_id.toString()) {
+                        currentQuestion.choices.list[index].active = true
+                    }
+                })
             }
 
             state.currentQuestion = new Question(currentQuestion)

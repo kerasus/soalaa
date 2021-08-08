@@ -276,6 +276,7 @@ export default {
     }
   },
   created () {
+    // this.$store.getters('setPsychometricAnswer')
     this.drawer = false
   },
   methods: {

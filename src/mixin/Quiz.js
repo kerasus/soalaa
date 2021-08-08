@@ -216,14 +216,13 @@ const mixinQuiz = {
             if (!Assistant.getId(examId)) {
                 return
             }
-            window.currentExamQuestions = null
-            window.currentExamQuestionIndexes = null
             let that = this
             return new Promise(function (resolve, reject) {
-
                 let userExamId = undefined
                 let examData = new ExamData()
                 if (that.needToLoadQuizData()) {
+                    window.currentExamQuestions = null
+                    window.currentExamQuestionIndexes = null
                     that.$store.commit('AppLayout/updateOverlay', {show: true, loading: true, text: ''})
                     examData.getExamDataAndParticipate(examId)
                     examData.loadQuestionsFromFile()
@@ -433,13 +432,13 @@ const mixinQuiz = {
         },
         answerClicked(data) {
             let questionId = data.questionId
-            this.userActionOnQuestion(questionId, 'answer', {choiceId: data.choiceId})
+            return this.userActionOnQuestion(questionId, 'answer', {choiceId: data.choiceId})
         },
         changeBookmark(questionId) {
-            this.userActionOnQuestion(questionId, 'bookmark')
+            return this.userActionOnQuestion(questionId, 'bookmark')
         },
         changeStatus(questionId, newStatus) {
-            this.userActionOnQuestion(questionId, 'status', {newStatus})
+            return this.userActionOnQuestion(questionId, 'status', {newStatus})
         },
         getQuestionNumberFromIndex(index) {
             index = parseInt(index)
