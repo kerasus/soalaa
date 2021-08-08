@@ -18,7 +18,7 @@ const store = new Vuex.Store({
     plugins: [
         createPersistedState({
             storage: window.localStorage,
-            paths: ['userQuizListData', 'Auth.accessToken', 'Auth.user']
+            paths: ['userQuizListData', 'Auth.accessToken', 'Auth.user', 'psychometricAnswer']
         })
         // createMutationsSharer({
         //     predicate: [
@@ -38,9 +38,13 @@ const store = new Vuex.Store({
         quiz: null,
         userQuizListData: {},
         currentQuestion: null,
-        currentExamFrozenQuestions: null
+        currentExamFrozenQuestions: null,
+        psychometricAnswer: {}
     },
     mutations: {
+        setPsychometricAnswer (state, newInfo) {
+            this.psychometricAnswer = newInfo
+        },
         resetState (state) {
             // Merge rather than replace so we don't lose observers
             // https://github.com/vuejs/vuex/issues/1118
@@ -239,7 +243,7 @@ const store = new Vuex.Store({
                 return
             }
             const currentExamQuestions = newInfo.currentExamQuestions
-            const currentQuestion = currentExamQuestions[newQuestionId]
+            const currentQuestion = new Question(currentExamQuestions[newQuestionId])
             if (newQuestionId) {
                 this.commit('enterQuestion', newQuestionId)
             }
@@ -252,6 +256,20 @@ const store = new Vuex.Store({
                     }
                 }
                 this.commit('leaveQuestion', oldQuestionId)
+            }
+
+            if (
+                state.userQuizListData &&
+                state.userQuizListData[state.quiz.id] &&
+                state.userQuizListData[state.quiz.id][currentQuestion.id] &&
+                typeof state.userQuizListData[state.quiz.id][currentQuestion.id].answered_choice_id !== 'undefined' &&
+                state.userQuizListData[state.quiz.id][currentQuestion.id].answered_choice_id !== null
+            ) {
+                currentQuestion.choices.list.forEach( (item, index) => {
+                    if (item.id.toString() === state.userQuizListData[state.quiz.id][currentQuestion.id].answered_choice_id.toString()) {
+                        currentQuestion.choices.list[index].active = true
+                    }
+                })
             }
 
             state.currentQuestion = new Question(currentQuestion)
@@ -272,7 +290,9 @@ const store = new Vuex.Store({
     },
     getters: {
 
-
+        psychometricAnswer (state) {
+            return state.psychometricAnswer
+        },
         quiz (state) {
             return new Exam(state.quiz)
         },

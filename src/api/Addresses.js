@@ -142,6 +142,11 @@ const API_ADDRESS = {
     update (id) {
       return lumenServer + '/category/' + id
     }
+  },
+  subGroups : {
+    base (exam_id) {
+      return lumenServer + '/exam-question/zirgorooh/' + exam_id
+    },
   }
 }
 export default API_ADDRESS
