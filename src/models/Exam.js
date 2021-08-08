@@ -23,7 +23,7 @@ class Exam extends Model {
             { key: 'order' },
             { key: 'delay_time' },
             { key: 'exam_actions' },
-            { key: 'type_id' },
+            { key: 'type' },
             { key: 'holding_status' }, // not_started - holding - in_extra_time - finished
             { key: 'user_exam_id' },
             { key: 'user_exam_status' },

@@ -95,13 +95,10 @@ class ExamData {
 				})
 					 .then(response => {
 						let questions = response.data
-						 console.log('before', that.exam.questions)
 						 if (that.exam.config.randomize_questions) {
 							questions = new ShuffleQuestions(questions).run()
 						 }
-						 console.log('after', that.exam.questions)
 						 that.exam.questions = new QuestionList(questions)
-						 console.log('final', questions)
 						 resolve(response.data)
 					 })
 					 .catch(error => {
@@ -213,6 +210,7 @@ class ExamData {
 					 that.exam = new Exam()
 					 // ToDo: attention on user_exam_id and exam_id
 					 that.exam.id = Assistant.getId(response.data.data.exam_id)
+					 that.exam.title = Assistant.getId(response.data.data.exam_title)
 					 that.exam.user_exam_id = Assistant.getId(response.data.data.id)
 					 that.exam.created_at = response.data.data.created_at
 					 that.exam.questions_file_url = response.data.data.questions_file_url

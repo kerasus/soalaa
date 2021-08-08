@@ -335,19 +335,19 @@ class Question extends Model {
     }
 
     sendAnswer (exam_user_id, {question_id, choice_id, selected_at }) {
-        axios.post(API_ADDRESS.exam.sendAnswers, {exam_user_id, questions: [{question_id, choice_id, selected_at}] })
+        return axios.post(API_ADDRESS.exam.sendAnswers, {exam_user_id, questions: [{question_id, choice_id, selected_at}] })
     }
 
     sendStatus (exam_user_id, {question_id, status }) {
-        axios.post(API_ADDRESS.exam.sendStatus, {exam_user_id, question_id, status})
+        return axios.post(API_ADDRESS.exam.sendStatus, {exam_user_id, question_id, status})
     }
 
     sendBookmark (exam_user_id, question_id) {
-        axios.post(API_ADDRESS.exam.sendBookmark, {exam_user_id, question_id})
+        return axios.post(API_ADDRESS.exam.sendBookmark, {exam_user_id, question_id})
     }
 
     sendUnBookmark (exam_user_id, question_id) {
-        axios.post(API_ADDRESS.exam.sendUnBookmark, {exam_user_id, question_id})
+        return axios.post(API_ADDRESS.exam.sendUnBookmark, {exam_user_id, question_id})
     }
 }
 
