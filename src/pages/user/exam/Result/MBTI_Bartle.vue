@@ -21,6 +21,8 @@
           no-gutters
         >
           <v-col
+            lg="5"
+            sm="6"
             class="d-flex flex-row"
             order="2"
             order-sm="1"
@@ -40,6 +42,8 @@
           </v-col>
           <v-col
             order="1"
+            lg="7"
+            sm="6"
             order-sm="2"
           >
             <v-img :src="mbtiBartleData.mbtiType[result.type].image1" />
@@ -148,7 +152,7 @@
               :value="bartleResult[0].value"
               color="#ef5350"
             >
-              <div class="inside-bartle-result-circle">
+              <div class="inside-bartle-result-circle  pa-10">
                 <v-img :src="bartleResult[0].image" />
               </div>
             </v-progress-circular>
@@ -172,8 +176,10 @@
                 :value="bartleResult[item].value"
                 color="#ef5350"
               >
-                <div class="inside-bartle-result-circle">
-                  <v-img :src="bartleResult[item].image" />
+                <div class="inside-bartle-result-circle pa-6">
+                  <v-img
+                    :src="bartleResult[item].image"
+                  />
                 </div>
               </v-progress-circular>
               <p class="other-type-bartle mr-6 mr-sm-0">
@@ -457,7 +463,7 @@ export default {
       height: 300px;
     }
     @media only screen and (max-width: 599px) {
-      height: 520px;
+      height: auto;
     }
 
     .container {

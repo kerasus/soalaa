@@ -45,22 +45,26 @@ export default {
         {
             text: 'killer',
             value: 'K',
-            label: 'قاتل'
+            label: 'قاتل',
+            image: 'https://nodes.alaatv.com/upload/bartle_kil.png',
         },
         {
             text: 'socializer',
             value: 'S',
-            label: 'معاشرتی'
+            label: 'معاشرتی',
+            image: 'https://nodes.alaatv.com/upload/bartle_soc.png',
         },
         {
             text: 'explorer',
             value: 'E',
-            label: 'جستجوگر'
+            label: 'جستجوگر',
+            image: 'https://nodes.alaatv.com/upload/bartle_exp.png',
         },
         {
             text: 'achiever',
             value: 'A',
-            label: 'جاه طلب'
+            label: 'جاه طلب',
+            image: 'https://nodes.alaatv.com/upload/bartle_ach.png',
         },
     ],
     mbtiType: {
@@ -70,10 +74,8 @@ export default {
             backgroundColor: '#fff3cb',
             image1: 'https://nodes.alaatv.com/upload/3a_mbti_conceptualists_isfp1.png',
             image2: 'https://nodes.alaatv.com/upload/3a_mbti_conceptualists_isfp2.png',
-            shortText: '    <p dir="auto">مشرب تجربه گراها (SP) – تیپ شخصیتی ISFP</p>\n',
+            shortText: '    <p dir="auto">منعطف، غیرمتعارف و آماده کشف تجربه های جدید</p>\n',
             text: '<div>\n' +
-                '    <p dir="auto">منعطف، غیرمتعارف و آماده کشف تجربه های جدید</p>\n' +
-                '    <p dir="auto"><br><br><br></p>\n' +
                 '    <p dir="auto"><strong>افراد با تیپ شخصیتی ISFP خلاق، همدل و غیرمتعارف هستند. آنها درک بسیار خوبی از حواس خود دارند و\n' +
                 '            معمولا خاطرات بسیار زنده ای دارند. از بودن با گروه های کوچک لذت میبرند و به کمک به دیگران علاقه\n' +
                 '            دارند.</strong></p>\n' +
@@ -134,10 +136,8 @@ export default {
             backgroundColor: '#fff3cb',
             image1: 'https://nodes.alaatv.com/upload/3a_mbti_conceptualists_istp1.png',
             image2: 'https://nodes.alaatv.com/upload/3a_mbti_conceptualists_istp2.png',
-            shortText: '    <p dir="auto">مشرب تجربه گراها (SP) – تیپ شخصیتی ISTP</p>\n',
+            shortText: '    <p dir="auto">کنجکاو، عملگرا، آزمایش کننده و ماهر در استفاده از ابزار</p>\n',
             text: '<div>\n' +
-                '    <p dir="auto">کنجکاو، عملگرا، آزمایش کننده و ماهر در استفاده از ابزار</p>\n' +
-                '    <p dir="auto"><br><br><br></p>\n' +
                 '    <p dir="auto"><strong>افراد با تیپ شخصیتی ISTP کنجکاو، عملگرا و با اعتماد به نفس هستند. آنها غیر قابل پیشبینی و و\n' +
                 '            خودجوش، اما اغلب ساکت هستند و ترجیح میدهند به تنهایی به اطلاعات فکر کنند و آنها را پردازش کنند.</strong></p>\n' +
                 '    <p dir="auto"><br><br><br></p>\n' +
@@ -189,10 +189,8 @@ export default {
             backgroundColor: '#fff3cb',
             image1: 'https://nodes.alaatv.com/upload/3a_mbti_conceptualists_esfp1.png',
             image2: 'https://nodes.alaatv.com/upload/3a_mbti_conceptualists_esfp2.png',
-            shortText: '    <p dir="auto">مشرب تجربه گراها (SP) – تیپ شخصیتی ESFP</p>\n',
+            shortText: '    <p dir="auto">دوستانه، با انرژی و پر اشتیاق، که زندگی براشون خسته کننده نمیشه</p>\n',
             text: '<div>\n' +
-                '    <p dir="auto">دوستانه، با انرژی و پر اشتیاق، که زندگی براشون خسته کننده نمیشه</p>\n' +
-                '    <p dir="auto"><br><br><br></p>\n' +
                 '    <p dir="auto"><strong>افراد با تیپ شخصیتی ESFP دوستانه و حمایتگر هستند و معمولا با جریان کار پیش میروند. به مهمانی\n' +
                 '            ها علاقه مندند و معمولا در مرکز توجه اند.</strong></p>\n' +
                 '    <p dir="auto"><br><br><br></p>\n' +
@@ -312,10 +310,8 @@ export default {
             backgroundColor: '#fff3cb',
             image1: 'https://nodes.alaatv.com/upload/3a_mbti_conceptualists_estp1.png',
             image2: 'https://nodes.alaatv.com/upload/3a_mbti_conceptualists_estp2.png',
-            shortText: '    <p dir="auto">مشرب تجربه گراها (SP) – تیپ شخصیتی ESTP</p>\n',
+            shortText: '    <p dir="auto">با انرژی و جسور که زندگی با هیجان رو دوست دارن</p>\n',
             text: '<div>\n' +
-                '    <p dir="auto">با انرژی و جسور که زندگی با هیجان رو دوست دارن</p>\n' +
-                '    <p dir="auto"><br><br><br></p>\n' +
                 '    <p dir="auto"><strong>افراد با تیپ شخصیتی ESTP رفتاری هیجان انگیز، پرانرژی و جسور دارند. اجتماعی هستند و از جمعیت و\n' +
                 '            شلوغی و همینطور ماجراجویی لذت میبرند.</strong></p>\n' +
                 '    <p dir="auto"><br><br><br></p>\n' +
@@ -374,10 +370,8 @@ export default {
             backgroundColor: '#deffe0',
             image1: 'https://nodes.alaatv.com/upload/3a_mbti_conceptualists_infj1.png',
             image2: 'https://nodes.alaatv.com/upload/3a_mbti_conceptualists_infj2.png',
-            shortText: '    <p dir="auto">مشرب آرمان گراها (NF) – تیپ شخصیتی INFJ</p>\n',
+            shortText: '    <p dir="auto">رویاپرداز و ایده آل گراهایی خستگی ناپذیر، الهام بخش و همدل</p>\n',
             text: '<div>\n' +
-                '    <p dir="auto">رویاپرداز و ایده آل گراهایی خستگی ناپذیر، الهام بخش و همدل</p>\n' +
-                '    <p dir="auto"><br><br><br></p>\n' +
                 '    <p dir="auto"><strong>افراد با تیپ شخصیتی INFJ مصصم و قاطع، محافظه کار و همدل هستند. آنها ایده آل گرا هستند و علاقه\n' +
                 '            دارند دنیا را به جای بهتری تبدیل کنند. به روابط نزدیک با عده ای محدود علاقه مندند اما به تنهایی کار کردن را\n' +
                 '            ترجیح میدهند.</strong></p>\n' +
@@ -450,10 +444,8 @@ export default {
             backgroundColor: '#deffe0',
             image1: 'https://nodes.alaatv.com/upload/3a_mbti_conceptualists_infp1.png',
             image2: 'https://nodes.alaatv.com/upload/3a_mbti_conceptualists_infp2.png',
-            shortText: '    <p dir="auto">مشرب آرمان گراها (NF) – تیپ شخصیتی INFP</p>\n',
+            shortText: '    <p dir="auto">مهربان، نوع دوست و سازگار</p>\n',
             text: '<div>\n' +
-                '    <p dir="auto">مهربان، نوع دوست و سازگار</p>\n' +
-                '    <p dir="auto"><br><br><br></p>\n' +
                 '    <p dir="auto"><strong>افراد با تیپ شخصیتی INFP محافظه کار، ایده آل گرا و سازگار هستند. آنها افراد کنجکاوی هستند که\n' +
                 '            معمولا در افکار خود غرق میشوند. از تنهایی یا بودن با گروه های کوچک لذت میبرند و ترجیح میدهند به تفکرات\n' +
                 '            دیگران گوش دهند و آنها را بررسی کنند.</strong></p>\n' +
@@ -517,10 +509,8 @@ export default {
             backgroundColor: '#deffe0',
             image1: 'https://nodes.alaatv.com/upload/3a_mbti_conceptualists_enfj1.png',
             image2: 'https://nodes.alaatv.com/upload/3a_mbti_conceptualists_enfj2.png',
-            shortText: '    <p dir="auto">مشرب آرمان گراها (NF) – تیپ شخصیتی ENFJ</p>\n',
+            shortText: '    <p dir="auto">رهبرانی پرانگیزه و الهام بخش</p>\n',
             text: '<div>\n' +
-                '    <p dir="auto">رهبرانی پرانگیزه و الهام بخش</p>\n' +
-                '    <p dir="auto"><br><br><br></p>\n' +
                 '    <p dir="auto"><strong>افراد با تیپ شخصیتی ENFJ رفتاری صادقانه، گرم و همدلانه دارند. آنها متقاعدکنندگان خوبی هستند و\n' +
                 '            اغلب اوقات از این استعداد برای هدایت مردم به سمت زندگی ای بهتر استفاده میکنند. آنها در گروه ها رشد میکنند و\n' +
                 '            به ارتباط با دیگران و ساختن روابط علاقه مندند.</strong></p>\n' +
@@ -584,10 +574,8 @@ export default {
             backgroundColor: '#deffe0',
             image1: 'https://nodes.alaatv.com/upload/3a_mbti_conceptualists_enfp1.png',
             image2: 'https://nodes.alaatv.com/upload/3a_mbti_conceptualists_enfp2.png',
-            shortText: '    <p dir="auto">مشرب آرمان گراها (NF) – تیپ شخصیتی ENFP</p>\n',
+            shortText: '    <p dir="auto">آزاد، با انرژی و پرشور، سازگار و خلاق</p>\n',
             text: '<div>\n' +
-                '    <p dir="auto">آزاد، با انرژی و پرشور، سازگار و خلاق</p>\n' +
-                '    <p dir="auto"><br><br><br></p>\n' +
                 '    <p dir="auto"><strong>افراد با تیپ شخصیتی ENFP پرانرژی، سازگار و مبتکر هستند. آنها علاقه دارند به افکار و ایده های\n' +
                 '            جدید و خلاقانه فکر کنند و آنها را با افراد دیگر به اشتراک بگذارند. آنها در محیط های گروهی پیشرفت میکنند و از\n' +
                 '            ملاقات با افراد جدید لذت میبرند.</strong></p>\n' +
@@ -654,10 +642,8 @@ export default {
             backgroundColor: '#ddefff',
             image1: 'https://nodes.alaatv.com/upload/3a_mbti_conceptualists_isfj1.png',
             image2: 'https://nodes.alaatv.com/upload/3a_mbti_conceptualists_isfj2.png',
-            shortText: '    <p dir="auto">مشرب سنت گراها (SJ) – تیپ شخصیتی ISFJ</p>\n',
+            shortText: '    <p dir="auto">فروتن، فداکار و سختکوش</p>\n',
             text: '<div>\n' +
-                '    <p dir="auto">فروتن، فداکار و سختکوش</p>\n' +
-                '    <p dir="auto"><br><br><br></p>\n' +
                 '    <p dir="auto"><strong>افراد با تیپ شخصیتی ISFJ فروتن، سخت کوش و مشتاقانه رفتار میکنند. آنها معمولا روی انجام بی نقص\n' +
                 '            کارها تمرکز میکنند و دوست دارند از یک روش و رویکرد مشخص پیروی کنند. اگرچه معمولا ساکت و آرام هستند اما از\n' +
                 '            بودن در کنار گروه های کوچکی از آشنایان لذت میبرند.</strong></p>\n' +
@@ -724,10 +710,8 @@ export default {
             backgroundColor: '#ddefff',
             image1: 'https://nodes.alaatv.com/upload/3a_mbti_conceptualists_istj1.png',
             image2: 'https://nodes.alaatv.com/upload/3a_mbti_conceptualists_istj2.png',
-            shortText: '    <p dir="auto">مشرب سنت گراها (SJ) – تیپ شخصیتی ISTJ</p>\n',
+            shortText: '    <p dir="auto">عملگرا، واقع بین و قابل اعتماد</p>\n',
             text: '<div>\n' +
-                '    <p dir="auto">عملگرا، واقع بین و قابل اعتماد</p>\n' +
-                '    <p dir="auto"><br><br><br></p>\n' +
                 '    <p dir="auto"><strong>افراد با تیپ شخصیتی ISTJ رفتار محافظه کارانه و منظم دارند. آنها خودکفا هستند و برای رسیدن به\n' +
                 '            تعهدات خود سخت کار میکنند. آنها ترجیح میدهند تنها یا در گروه های کوچکی از دوستان صمیمی خود باشند و ممکن است\n' +
                 '            در گروه های بزرگ ساکت و آرام باشند.</strong></p>\n' +
@@ -789,10 +773,8 @@ export default {
             backgroundColor: '#ddefff',
             image1: 'https://nodes.alaatv.com/upload/3a_mbti_conceptualists_esfj1.png',
             image2: 'https://nodes.alaatv.com/upload/3a_mbti_conceptualists_esfj2.png',
-            shortText: '    <p dir="auto">مشرب سنت گراها (SJ) – تیپ شخصیتی ESFJ</p>\n',
+            shortText: '    <p dir="auto">مهربان، محبوب و پشتیبان که مشتاق کمک کردن به دیگرانن</p>\n',
             text: '<div>\n' +
-                '    <p dir="auto">مهربان، محبوب و پشتیبان که مشتاق کمک کردن به دیگرانن</p>\n' +
-                '    <p dir="auto"><br><br><br></p>\n' +
                 '    <p dir="auto"><strong>افراد با تیپ شخصیتی ESFJ همدل، خونگرم و حمایت کننده هستند. آنها اغلب اجتماعی هستند و تمایل\n' +
                 '            آنها برای برقراری ارتباط با مردم باعث محبوبیت آنها میشود. به نیازهای دیگران بسیار آگاه هستند و ممکن است به\n' +
                 '            دنبال کمک های پیاپی و خالصانه به افراد باشند.</strong></p>\n' +
@@ -859,10 +841,8 @@ export default {
             backgroundColor: '#ddefff',
             image1: 'https://nodes.alaatv.com/upload/3a_mbti_conceptualists_estj1.png',
             image2: 'https://nodes.alaatv.com/upload/3a_mbti_conceptualists_estj2.png',
-            shortText: '    <p dir="auto">مشرب سنت گراها (SJ) – تیپ شخصیتی ESTJ</p>\n',
+            shortText: '    <p dir="auto">دقیق، وفادار، سختکوش و مدیران عالی</p>\n',
             text: '<div>\n' +
-                '    <p dir="auto">دقیق، وفادار، سختکوش و مدیران عالی</p>\n' +
-                '    <p dir="auto"><br><br><br></p>\n' +
                 '    <p dir="auto"><strong>افراد با تیپ شخصیتی ESTJ منظم، وفادار و سخت کوش هستند. آنها افراد اصولی، خوب و قانونمندی هستند\n' +
                 '            که تمایل به رهبری دارند و با ترغیب و کمک به دیگران برای پیروی از مجموعه ای از باورها و ارزش ها، رشد\n' +
                 '            میکنند.</strong></p>\n' +
@@ -922,13 +902,11 @@ export default {
         INTJ: {
             title: 'Conceptualizer',
             farsiTitle: 'مفهوم گراها',
-            backgroundColor: '#eae6fff',
+            backgroundColor: '#eae6ff',
             image1: 'https://nodes.alaatv.com/upload/3a_mbti_conceptualists_intj1.png',
             image2: 'https://nodes.alaatv.com/upload/3a_mbti_conceptualists_intj2.png',
-            shortText: '    <p dir="auto">مشرب مفهوم گراها (NT) – تیپ شخصیتی INTJ</p>\n',
+            shortText: '    <p dir="auto">متفکر، بلند پرواز و با اعتماد به نفس که برای هر چیزی برنامه دارن</p>\n',
             text: '<div>\n' +
-                '    <p dir="auto">متفکر، بلند پرواز و با اعتماد به نفس که برای هر چیزی برنامه دارن</p>\n' +
-                '    <p dir="auto"><br><br><br></p>\n' +
                 '    <p dir="auto"><strong>افراد با تیپ شخصیتی INTJ با اعتماد به نفس، تحلیلی و بلندپرواز هستند. برای علم و دانش اهمیت\n' +
                 '            زیادی قائلند و تمایل دارند که بسیار منطقی فکر کنند. به حل مسائل بزرگ علاقه دارند و از خودشون و دیگران انتظار\n' +
                 '            پیشرفت، شایستگی و کارایی لازم در مواقع مورد نیاز را دارند.</strong></p>\n' +
@@ -990,7 +968,7 @@ export default {
         INTP: {
             title: 'Conceptualizer',
             farsiTitle: 'مفهوم گراها',
-            backgroundColor: '#eae6fff',
+            backgroundColor: '#eae6ff',
             image1: 'https://nodes.alaatv.com/upload/3a_mbti_conceptualists_intp1.png',
             image2: 'https://nodes.alaatv.com/upload/3a_mbti_conceptualists_intp2.png',
             shortText: '    <p dir="auto">مشرب مفهوم گراها (NT) – تیپ شخصیتی INTP</p>\n',
@@ -1044,13 +1022,11 @@ export default {
         ENTJ: {
             title: 'Conceptualizer',
             farsiTitle: 'مفهوم گراها',
-            backgroundColor: '#eae6fff',
+            backgroundColor: '#eae6ff',
             image1: 'https://nodes.alaatv.com/upload/3a_mbti_conceptualists_entj1.png',
             image2: 'https://nodes.alaatv.com/upload/3a_mbti_conceptualists_entj2.png',
-            shortText: '    <p dir="auto">مشرب مفهوم گراها (NT) – تیپ شخصیتی ENTJ</p>\n',
+            shortText: '    <p dir="auto">رهبرانی شجاع، با تخیل و اراده قوی اما منطقی</p>\n',
             text: '<div>\n' +
-                '    <p dir="auto">رهبرانی شجاع، با تخیل و اراده قوی اما منطقی</p>\n' +
-                '    <p dir="auto"><br><br><br></p>\n' +
                 '    <p dir="auto"><strong>افراد با تیپ شخصیتی ENTJ رفتاری کاریزماتیک، صریح و منطقی دارند. علاقه ای به بروز احساسات خود\n' +
                 '            ندارند و حتی در بعضی مواقع رفتارشان سرد تلقی میشود. از برعهده گرفتن مسئولیت، تلاش برای رسیدن به اهداف و\n' +
                 '            تشویق توسط اطرافیان بخاطر پیشرفت لذت میبرند.</strong></p>\n' +
@@ -1107,13 +1083,11 @@ export default {
         ENTP: {
             title: 'Conceptualizer',
             farsiTitle: 'مفهوم گراها',
-            backgroundColor: '#eae6fff',
+            backgroundColor: '#eae6ff',
             image1: 'https://nodes.alaatv.com/upload/3a_mbti_conceptualists_entp1.png',
             image2: 'https://nodes.alaatv.com/upload/3a_mbti_conceptualists_entp2.png',
-            shortText: '    <p dir="auto">مشرب مفهوم گراها (NT) – تیپ شخصیتی ENTP</p>\n',
+            shortText: '    <p dir="auto">پرسشگر و صریح، هدف گرا، خلاق و نظریه پرداز</p>\n',
             text: '<div>\n' +
-                '    <p dir="auto">پرسشگر و صریح، هدف گرا، خلاق و نظریه پرداز</p>\n' +
-                '    <p dir="auto"><br><br><br></p>\n' +
                 '    <p dir="auto"><strong>افراد با تیپ شخصیتی ENTP صریح و کنجکاو هستند. آنها از بحث، مناظره و دیدگاه های مختلف لذت\n' +
                 '            میبرند. آنها در ارتباط با افراد رشد میکنند و تقریبا همیشه با اطرافیان خود در تعامل هستند.</strong></p>\n' +
                 '    <p dir="auto"><br><br><br></p>\n' +
