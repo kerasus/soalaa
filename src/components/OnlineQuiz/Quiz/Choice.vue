@@ -29,11 +29,11 @@
 
     export default {
         name: 'Choice',
+        components: {
+          VueKatex
+        },
         mixins: [mixinQuiz],
         props: ['choice', 'questionId', 'isRtl'],
-      components: [
-        VueKatex
-      ],
         computed: {
             isSelected () {
                 return this.getUserQuestionData(this.quiz.id, this.questionId) && this.choice.id === this.getUserQuestionData(this.quiz.id, this.questionId).answered_choice_id

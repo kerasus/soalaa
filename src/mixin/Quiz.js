@@ -11,6 +11,7 @@ import $ from "jquery";
 import {QuestionList} from "@/models/Question";
 import ExamData from "@/assets/js/ExamData";
 
+
 const mixinQuiz = {
     computed: {
         isQuizPage() {
@@ -379,9 +380,11 @@ const mixinQuiz = {
             else if (!questNumber) {
                 questNumber = 1
             }
+
             this.loadQuestionByNumber(questNumber, viewType)
         },
         loadFirstQuestion() {
+
             this.loadQuestionByNumber(1)
         },
         loadQuestionByNumber(number, viewType) {
@@ -436,7 +439,6 @@ const mixinQuiz = {
             this.userActionOnQuestion(questionId, 'bookmark')
         },
         changeStatus(questionId, newStatus) {
-            console.log('changeStatus', newStatus)
             this.userActionOnQuestion(questionId, 'status', {newStatus})
         },
         getQuestionNumberFromIndex(index) {
@@ -505,21 +507,22 @@ const mixinQuiz = {
                 this.changeQuestion(nextCategoryQuestion.id)
             }
         },
-        goToNextQuestion() {
+        goToNextQuestion(viewType) {
             // this.$store.commit('loadUserQuizListData')
             let question = this.getNextQuestion(this.currentQuestion.id)
             if (!question) {
                 return
             }
-            this.changeQuestion(question.id)
+            this.changeQuestion(question.id, viewType)
         },
-        goToPrevQuestion() {
+        goToPrevQuestion(viewType) {
             // this.$store.commit('loadUserQuizListData')
             let question = this.getPrevQuestion(this.currentQuestion.id)
             if (!question) {
                 return
             }
-            this.changeQuestion(question.id)
+
+            this.changeQuestion(question.id, viewType)
         },
         changeQuestion(id, viewType) {
             if (Assistant.getId(this.currentQuestion.id) === Assistant.getId(id)) {
@@ -565,7 +568,6 @@ const mixinQuiz = {
         },
         // ToDo: change argument (type, questNumber)
         changeView(type) {
-            console.log('changeView', this.currentQuestion.id)
             if (type === 'alaa') {
                 const questionNumber = this.getQuestionNumberFromId(this.currentQuestion.id)
                 this.$router.push({

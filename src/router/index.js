@@ -50,6 +50,12 @@ const router = new VueRouter({
             meta: {middleware: [auth, completeInfo]}
         },
         {
+            path: '/onlineQuiz/mbti_bartle/:quizId/:questNumber',
+            name: 'onlineQuiz.mbtiBartle',
+            component: () => lazyLoadView(import('@/pages/user/exam/participate/MBTI_Bartle')),
+            meta: {middleware: [auth, completeInfo]}
+        },
+        {
             path: '/onlineQuiz/konkoorView/:quizId',
             name: 'onlineQuiz.konkoorView',
             component: () => lazyLoadView(import('@/pages/user/exam/participate/KonkoorView')),
@@ -133,6 +139,24 @@ const router = new VueRouter({
             path: '/category/edit',
             name: 'category.edit',
             component: () => lazyLoadView(import('@/pages/admin/category/edit')),
+            meta: {middleware: [auth, completeInfo]}
+        },
+        {
+            path: '/sub-group/edit',
+            name: 'subGroup.edit',
+            component: () => lazyLoadView(import('@/pages/admin/subGroup/edit')),
+            meta: {middleware: [auth, completeInfo]}
+        },
+        {
+            path: '/coefficient/edit/:exam_id',
+            name: 'coefficient.edit',
+            component: () => lazyLoadView(import('@/pages/admin/subGroup/editCoefficients')),
+            meta: {middleware: [auth, completeInfo]}
+        },
+        {
+            path: '/results/mbti_bartle/:exam_id',
+            name: 'mbtiBartle.result',
+            component: () => lazyLoadView(import('@/pages/user/exam/Result/MBTI_Bartle')),
             meta: {middleware: [auth, completeInfo]}
         },
         {
