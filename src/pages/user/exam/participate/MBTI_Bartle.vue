@@ -16,6 +16,7 @@
           </a>
           <a href="https://alaatv.com">
             <v-img
+              v-col
               src="https://nodes.alaatv.com/upload/mbti-bartle-alaa-text.png"
               width="134"
               height="40"
