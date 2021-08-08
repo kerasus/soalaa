@@ -67,7 +67,8 @@ export default {
         ISFP: {
             title: 'Experiencer',
             farsiTitle: 'تجربه گراها',
-            backgroundColor: '#fff3cb'
+            backgroundColor: '#fff3cb',
+            image1: 'https://nodes.alaatv.com/upload/3a_mbti_conceptualists_enfj1.png'
         },
         ISTP: {
             title: 'Experiencer',
@@ -127,7 +128,7 @@ export default {
         INTJ: {
             title: 'Conceptualizer',
             farsiTitle: 'مفهوم گراها',
-            backgroundColor: '#eae6fff'
+            backgroundColor: '#eae6ff'
         },
         INTP: {
             title: 'Conceptualizer',

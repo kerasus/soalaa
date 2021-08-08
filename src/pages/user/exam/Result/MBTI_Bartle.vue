@@ -11,7 +11,7 @@
         <v-row no-gutters>
           <v-col>
             <p class="char-type-title-mobile d-block d-sm-none">
-              گروه تحلیل گراها
+              {{ mbtiGroup }}
               <span>{{ 'تیپ شخصیتی ' + result.type }}</span>
             </p>
           </v-col>
@@ -33,8 +33,8 @@
               <div class="char-details">
                 <p>
                   <span>افراد {{ result.type }}</span>
-                  «از دیروز بیاموز، برای امروز زندگی کن، به فردا امیدوار باش. مسئله مهم این است که دست از سؤال پرسیدن بر ندارید»
                 </p>
+                <p v-html="mbtiBartleData.mbtiType[result.type].shortText" />
               </div>
             </div>
           </v-col>
@@ -42,7 +42,7 @@
             order="1"
             order-sm="2"
           >
-            test
+            <v-img :src="mbtiBartleData.mbtiType[result.type].image1" />
           </v-col>
         </v-row>
       </v-container>
@@ -121,11 +121,12 @@
             ویژگی های شخصیت {{ result.type }}
           </p>
           <div :style="{ height: '450px' }">
-            image
+            <v-img :src="mbtiBartleData.mbtiType[result.type].image2" />
           </div>
-          <p class="full">
-            طراح گرافیک از این متن به عنوان عنصری از ترکیب بندی برای پر کردن صفحه و ارایه اولیه شکل ظاهری و کلی طرح سفارش گرفته شده استفاده می نماید، تا از نظر گرافیکی نشانگر چگونگی نوع و اندازه فونت و ظاهر متن باشد. معمولا طراحان گرافیک برای صفحه‌آرایی، نخست از متن‌های آزمایشی و بی‌معنی استفاده می‌کنند تا صرفا به مشتری یا صاحب کار خود نشان دهند که صفحه طراحی یا صفحه بندی شده بعد از اینکه متن در آن قرار گیرد چگونه به نظر می‌رسد و قلم‌ها و اندازه‌بندی‌ها چگونه در نظر گرفته شده‌است. از آنجایی که طراحان عموما نویسنده متن نیستند و وظیفه رعایت حق تکثیر متون را ندارند و در همان حال کار آنها به نوعی وابسته به متن می‌باشد آنها با استفاده از محتویات ساختگی، صفحه گرافیکی خود را صفحه‌آرایی می‌کنند تا مرحله طراحی و صفحه‌بندی را به پایان برند.
-          </p>
+          <p
+            class="full"
+            v-html="mbtiBartleData.mbtiType[result.type].text"
+          />
         </v-col>
       </v-row>
     </v-container>
@@ -144,13 +145,15 @@
               :rotate="-90"
               :size="240"
               :width="10"
-              :value="75"
+              :value="bartleResult[0].value"
               color="#ef5350"
             >
-              <div class="inside-bartle-result-circle" />
+              <div class="inside-bartle-result-circle">
+                <v-img :src="bartleResult[0].image" />
+              </div>
             </v-progress-circular>
             <p class="your-type-bartle">
-              جاه طلب ۷۵٪
+              {{ bartleResult[0].text }}
             </p>
           </v-col>
         </v-row>
@@ -166,13 +169,15 @@
                 :rotate="-90"
                 :size="125"
                 :width="6"
-                :value="75"
+                :value="bartleResult[item].value"
                 color="#ef5350"
               >
-                <div class="inside-bartle-result-circle" />
+                <div class="inside-bartle-result-circle">
+                  <v-img :src="bartleResult[item].image" />
+                </div>
               </v-progress-circular>
               <p class="other-type-bartle mr-6 mr-sm-0">
-                جاه طلب ۷۵٪
+                {{ bartleResult[item].text }}
               </p>
             </div>
           </v-col>
@@ -183,11 +188,12 @@
       <v-row>
         <v-col class="type-explanation">
           <p class="type-header">
-            ویژگی های شخصیت {{ 'جاه طلب' }}
+            ویژگی های شخصیت {{ bartleResult[0].text }}
           </p>
-          <p class="full">
-            طراح گرافیک از این متن به عنوان عنصری از ترکیب بندی برای پر کردن صفحه و ارایه اولیه شکل ظاهری و کلی طرح سفارش گرفته شده استفاده می نماید، تا از نظر گرافیکی نشانگر چگونگی نوع و اندازه فونت و ظاهر متن باشد. معمولا طراحان گرافیک برای صفحه‌آرایی، نخست از متن‌های آزمایشی و بی‌معنی استفاده می‌کنند تا صرفا به مشتری یا صاحب کار خود نشان دهند که صفحه طراحی یا صفحه بندی شده بعد از اینکه متن در آن قرار گیرد چگونه به نظر می‌رسد و قلم‌ها و اندازه‌بندی‌ها چگونه در نظر گرفته شده‌است. از آنجایی که طراحان عموما نویسنده متن نیستند و وظیفه رعایت حق تکثیر متون را ندارند و در همان حال کار آنها به نوعی وابسته به متن می‌باشد آنها با استفاده از محتویات ساختگی، صفحه گرافیکی خود را صفحه‌آرایی می‌کنند تا مرحله طراحی و صفحه‌بندی را به پایان برند.
-          </p>
+          <p
+            class="full"
+            v-html="bartleResult[0].fullText"
+          />
         </v-col>
       </v-row>
     </v-container>
@@ -197,9 +203,10 @@
 <script>
 import {mixinDrawer} from "@/mixin/Mixins";
 import mbtiData from "@/assets/js/MBTI_Bartle_Data";
+import {mixinQuiz} from "@/mixin/Mixins"
 export default {
   name: "MBTIBartle",
-  mixins: [mixinDrawer],
+  mixins: [mixinDrawer, mixinQuiz],
   data () {
     return {
       result: {
@@ -275,18 +282,53 @@ export default {
       },
     }
   },
+  computed: {
+    mbtiGroup () {
+      return mbtiData.mbtiType[this.result.type].farsiTitle
+    },
+    mbtiBartleData () {
+      return mbtiData
+    },
+    bartleResult () {
+      let results = []
+      Object.keys(this.result.bartle).forEach(key => {
+        results.push({ key, value: this.result.bartle[key] })
+      })
+      results.forEach(item => {
+        item.text = mbtiData.bartleKeys.find(bartle => bartle.value === item.key).label
+        item.fullText = mbtiData.bartleKeys.find(bartle => bartle.value === item.key).fullText
+        item.image = mbtiData.bartleKeys.find(bartle => bartle.value === item.key).image
+      })
+      return results.sort((first, second) => first.value < second.value)
+    }
+  },
   created () {
     // this.$store.getters('setPsychometricAnswer')
     this.drawer = false
+    const quizId = this.$route.params.exam_id
+    const questions = []
+    Object.keys(this.currentExamQuestions).forEach(questionId => {
+      this.currentExamQuestions[questionId].choices.list.forEach(item => {
+        if (item.id === this.userQuizListData[quizId][questionId].answered_choice_id) {
+          item.active = true
+        }
+      })
+      questions.push(this.currentExamQuestions[questionId])
+    })
+    console.log(questions)
+    console.log(this.userQuizListData)
+    this.generateAnswer(questions)
   },
   methods: {
-    generateAnswer () {
-      let answer = this.calculateExam()
+    generateAnswer (questions) {
+      let answer = this.calculateExam(questions)
       let finalAnswer = {}
       finalAnswer.type = this.getMbtiTypeFromAnswers(answer)
       finalAnswer.details = this.getMbtiDetailsFromAnswers(answer)
       finalAnswer.charBg = this.getMbtiBg(finalAnswer.type)
       finalAnswer.bartle = this.getBartleResults(answer)
+      console.log("finalAnswer", finalAnswer)
+      this.result = finalAnswer
       this.$store.commit('setPsychometricAnswer', finalAnswer)
     },
     getMbtiBg (type) {
@@ -305,13 +347,16 @@ export default {
         let title = mbtiData.mbtiGroups[i].title
         let text = mbtiData.mbtiGroups[i].text
         let values = []
+        console.log('test1', answer[Object.keys(answer)[0]])
+        console.log('test2', answer[Object.keys(answer)[0]][mbtiData.mbtiGroups[i].value[0]])
+        console.log('test3', mbtiData.mbtiGroups[i].value[0])
         values.push({
-          title: answer[Object.keys(answer)[0]][mbtiData.mbtiGroups[i].value[0]].label,
+          title: mbtiData.mbtiKeys[2 * i].label,
           percent: answer[Object.keys(answer)[0]][mbtiData.mbtiGroups[i].value[0]].ratio,
           label: mbtiData.mbtiKeys[2 * i].value,
         })
         values.push({
-          title: answer[Object.keys(answer)[0]][mbtiData.mbtiGroups[i].value[1]].label,
+          title: mbtiData.mbtiKeys[2 * i + 1].label,
           percent: answer[Object.keys(answer)[0]][mbtiData.mbtiGroups[i].value[1]].ratio,
           label: mbtiData.mbtiKeys[2 * i + 1].value,
         })
@@ -330,7 +375,9 @@ export default {
       } else {
         type += mbtiData.mbtiKeys[1].value
       }
-      if (answer[Object.keys(answer)[0]][mbtiData.mbtiKeys[2].text] > 50) {
+
+      console.log()
+      if (answer[Object.keys(answer)[0]][mbtiData.mbtiKeys[2].text].ratio > 50) {
         type += mbtiData.mbtiKeys[2].value
       } else {
         type += mbtiData.mbtiKeys[3].value
@@ -350,8 +397,7 @@ export default {
 
       return type
     },
-    calculateExam () {
-      let questions = [{}]
+    calculateExam (questions) {
       let answer = {}
       questions.forEach(question => { // set the sub categories in the answer obj
         if (!answer[question.sub_category.id]) {
@@ -662,6 +708,9 @@ export default {
       width: 240px;
       height: 240px;
       border-radius: 50%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
       @media only screen and (max-width: 767px) {
         width: 200px;
         height: 200px;
@@ -684,6 +733,9 @@ export default {
       width: 125px;
       height: 125px;
       border-radius: 50%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
       @media only screen and (max-width: 767px) {
         width: 100px;
         height: 100px;
