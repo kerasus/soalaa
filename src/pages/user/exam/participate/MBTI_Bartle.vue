@@ -213,14 +213,14 @@ export default {
   },
   mounted() {
     let that = this
-    this.startExam(this.$route.params.quizId, 'onlineQuiz.mbtiBartle')
+    this.startExam(that.$route.params.quizId, 'onlineQuiz.mbtiBartle')
         .then(() => {
           that.$store.commit('AppLayout/updateOverlay', {show: false, loading: false, text: ''})
           const unansweredQuestion = that.getUnansweredQuestionBehind()
           if (unansweredQuestion) {
             that.changeQuestion(unansweredQuestion.id, 'onlineQuiz.mbtiBartle')
           } else {
-            const isFinished = this.isFinished()
+            const isFinished = that.isFinished()
             if (isFinished) {
               that.generateAnswer()
             }
@@ -334,7 +334,19 @@ export default {
                 that.setCurrentQuestionChoice (targetQuestion.choice_id, true)
                 if (isFinished) {
                   setTimeout( () => {
-                    that.generateAnswer()
+                    that.startExam(that.$route.params.quizId, 'onlineQuiz.mbtiBartle')
+                        .then(() => {
+                          that.$store.commit('AppLayout/updateOverlay', {show: false, loading: false, text: ''})
+                          const unansweredQuestion = that.getUnansweredQuestionBehind()
+                          if (unansweredQuestion) {
+                            that.changeQuestion(unansweredQuestion.id, 'onlineQuiz.mbtiBartle')
+                          } else {
+                            const isFinished = that.isFinished()
+                            if (isFinished) {
+                              that.generateAnswer()
+                            }
+                          }
+                        })
                   },500)
                 }
               }
