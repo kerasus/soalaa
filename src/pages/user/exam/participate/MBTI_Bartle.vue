@@ -235,10 +235,18 @@ export default {
       finalAnswer.type = this.getMbtiTypeFromAnswers(answer)
       finalAnswer.details = this.getMbtiDetailsFromAnswers(answer)
       finalAnswer.charBg = this.getMbtiBg(finalAnswer.type)
+      finalAnswer.bartle = this.getBartleResults(answer)
       this.$store.commit('setPsychometricAnswer', finalAnswer)
     },
     getMbtiBg (type) {
       return mbtiData.mbtiType[type].backgroundColor
+    },
+    getBartleResults (answer) {
+      let bartleResults = {}
+      mbtiData.bartleKeys.forEach(item => {
+        bartleResults[item.value] = answer[Object.keys(answer)[1]][item.text].ratio
+      })
+      return bartleResults
     },
     getMbtiDetailsFromAnswers (answer) {
       let details = []
