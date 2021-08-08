@@ -309,9 +309,12 @@ export default {
     }
   },
   created () {
-    // this.$store.getters('setPsychometricAnswer')
-    this.drawer = false
     const quizId = this.$route.params.exam_id
+    if (!this.userQuizListData || !this.userQuizListData[quizId] || !this.currentExamQuestions) {
+      this.$router.push({name: 'user.exam.list'})
+      return
+    }
+    this.drawer = false
     const questions = []
     Object.keys(this.currentExamQuestions).forEach(questionId => {
       this.currentExamQuestions[questionId].choices.list.forEach(item => {
@@ -321,8 +324,6 @@ export default {
       })
       questions.push(this.currentExamQuestions[questionId])
     })
-    console.log(questions)
-    console.log(this.userQuizListData)
     this.generateAnswer(questions)
   },
   methods: {
@@ -333,7 +334,6 @@ export default {
       finalAnswer.details = this.getMbtiDetailsFromAnswers(answer)
       finalAnswer.charBg = this.getMbtiBg(finalAnswer.type)
       finalAnswer.bartle = this.getBartleResults(answer)
-      console.log("finalAnswer", finalAnswer)
       this.result = finalAnswer
       this.$store.commit('setPsychometricAnswer', finalAnswer)
     },
@@ -353,9 +353,6 @@ export default {
         let title = mbtiData.mbtiGroups[i].title
         let text = mbtiData.mbtiGroups[i].text
         let values = []
-        console.log('test1', answer[Object.keys(answer)[0]])
-        console.log('test2', answer[Object.keys(answer)[0]][mbtiData.mbtiGroups[i].value[0]])
-        console.log('test3', mbtiData.mbtiGroups[i].value[0])
         values.push({
           title: mbtiData.mbtiKeys[2 * i].label,
           percent: answer[Object.keys(answer)[0]][mbtiData.mbtiGroups[i].value[0]].ratio,
@@ -382,7 +379,6 @@ export default {
         type += mbtiData.mbtiKeys[1].value
       }
 
-      console.log()
       if (answer[Object.keys(answer)[0]][mbtiData.mbtiKeys[2].text].ratio > 50) {
         type += mbtiData.mbtiKeys[2].value
       } else {
@@ -815,5 +811,10 @@ export default {
   right: 0 !important;
 }
 
+@media (min-width: 1904px) {
+  .container {
+    max-width: 1185px;
+  }
+}
 
 </style>
