@@ -143,7 +143,6 @@
 
 <script>
 import {Question} from "@/models/Question";
-
 export default {
   name: "NavBar",
   props: {

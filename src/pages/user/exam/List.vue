@@ -103,9 +103,9 @@
                       </v-btn>
                       <v-btn
                         v-if="item.exam_actions.can_start"
-                        :to="{ name: 'onlineQuiz.alaaView', params: { quizId: item.id, questNumber: 1 } }"
                         color="#ffc107"
                         text
+                        @click="goToParticipateExamPage(item)"
                       >
                         شروع آزمون
                       </v-btn>
@@ -113,7 +113,7 @@
                         v-if="item.exam_actions.can_continue"
                         color="purple"
                         text
-                        @click="continueExam(item.id)"
+                        @click="continueExam(item)"
                       >
                         ادامه آزمون
                       </v-btn>
@@ -180,7 +180,14 @@
             this.$store.commit('AppLayout/updateAppBarAndDrawer', true)
         },
         methods: {
-            getConfirmation(examId, examUserId){
+          goToParticipateExamPage(exam) {
+            let routeName = 'onlineQuiz.alaaView'
+            if (exam.type && exam.type.value && exam.type.value === 'psychometric') {
+              routeName = 'onlineQuiz.mbtiBartle'
+            }
+            this.$router.push({ name: routeName, params: { quizId: exam.id, questNumber: 1 } })
+          },
+          getConfirmation(examId, examUserId){
                 let that = this
                 this.$store.commit('AppLayout/showConfirmDialog', {
                     message: `مطمئنی؟ نتیجه شما پس از تایید، ثبت و رتبه شما محاسبه خواهد شد و به اندازه میانگین درصدهای شما، کد تخفیف همه محصولات آلاء برای شما ارسال خواهد شد. مثلا اگر میانگین درصدهای شما 60% باشد یک کد تخفیف 60% دریافت خواهید کرد`,
@@ -196,8 +203,12 @@
                     }
                 })
             },
-            continueExam (examId) {
-                this.$router.push({name: 'onlineQuiz.alaaView', params: {quizId: examId, questNumber: 1}})
+            continueExam (exam) {
+              let routeName = 'onlineQuiz.alaaView'
+              if (exam.type && exam.type.value && exam.type.value === 'psychometric') {
+                routeName = 'onlineQuiz.mbtiBartle'
+              }
+                this.$router.push({name: routeName, params: {quizId: exam.id, questNumber: 1}})
             },
             getExams () {
                 let that = this
