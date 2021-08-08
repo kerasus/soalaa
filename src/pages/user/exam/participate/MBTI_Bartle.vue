@@ -216,9 +216,14 @@ export default {
     this.startExam(this.$route.params.quizId, 'onlineQuiz.mbtiBartle')
         .then(() => {
           that.$store.commit('AppLayout/updateOverlay', {show: false, loading: false, text: ''})
-          const isFinished = this.isFinished()
-          if (isFinished) {
-            that.generateAnswer()
+          const unansweredQuestion = that.getUnansweredQuestionBehind()
+          if (unansweredQuestion) {
+            that.changeQuestion(unansweredQuestion.id, 'onlineQuiz.mbtiBartle')
+          } else {
+            const isFinished = this.isFinished()
+            if (isFinished) {
+              that.generateAnswer()
+            }
           }
         })
         .catch((error) => {
@@ -265,17 +270,53 @@ export default {
         return false
       }
     },
-    hasUnansweredQuestionBehind () {
+    getUnansweredQuestionBehind () {
+      if (
+          this.userQuizListData &&
+          this.userQuizListData[this.quiz.id]
+      ) {
+        let that = this
+        const currentExamQuestionIndexes = this.getCurrentExamQuestionIndexes()
+        const currentExamQuestions = this.currentExamQuestions
+        const currentQuestionNumber = this.$route.params.questNumber
+        let unansweredQuestion = null
+        Object.keys(currentExamQuestionIndexes).forEach( questNumber => {
+          if (currentQuestionNumber >= questNumber) {
+            const questionId = currentExamQuestionIndexes[questNumber]
+            if (
+                typeof that.userQuizListData[that.quiz.id][questionId].answered_choice_id === 'undefined' ||
+                that.userQuizListData[that.quiz.id][questionId].answered_choice_id === null
+            ) {
+              unansweredQuestion = currentExamQuestions[questionId]
+            }
+          }
+        })
 
+        return unansweredQuestion
+      } else {
+        return null
+      }
+    },
+    setCurrentQuestionChoice (choice_id, active) {
+      let that = this
+      if (typeof active === 'undefined') {
+        active = true
+      }
+      this.currentQuestion.choices.list.forEach((item, index) => {
+        if (choice_id.toString() === that.currentQuestion.choices.list[index].id.toString()) {
+          Vue.set(that.currentQuestion.choices.list[index], 'active', active)
+          that.choiceKey = Date.now()
+        } else {
+          Vue.set(that.currentQuestion.choices.list[index], 'active', false)
+          that.choiceKey = Date.now()
+        }
+      })
     },
     choiceClick(id) {
       let that = this
-      // const countOfQuestions = Object.keys(this.currentExamQuestions).length
-      // const activeChoice = this.currentQuestion.choices.list.find(choice => choice.active)
-      // const isAnswered = !!activeChoice
-      // const isFinished = this.$route.params.questNumber.toString() === countOfQuestions.toString()
       const isFinished = this.isFinished()
       const answerClickedPromise = this.answerClicked({choiceId: id, questionId: this.currentQuestion.id})
+
       answerClickedPromise
           .then((response) => {
             const targetQuestion = response.data.data.find(item => item.question_id.toString() === this.currentQuestion.id.toString())
@@ -285,36 +326,20 @@ export default {
                 targetQuestion.choice_id.toString()
             ) {
               if (!isFinished) {
-                that.currentQuestion.choices.list.forEach((item, index) => {
-                  if (targetQuestion.choice_id.toString() === that.currentQuestion.choices.list[index].id.toString()) {
-                    Vue.set(that.currentQuestion.choices.list[index], 'active', true)
-                    that.choiceKey = Date.now()
-                  } else {
-                    Vue.set(that.currentQuestion.choices.list[index], 'active', false)
-                    that.choiceKey = Date.now()
-                  }
-                })
-                that.goToNextQuestion('onlineQuiz.mbtiBartle')
+                that.setCurrentQuestionChoice (targetQuestion.choice_id, true)
+                setTimeout( () => {
+                  that.goToNextQuestion('onlineQuiz.mbtiBartle')
+                },500)
               } else {
-                that.currentQuestion.choices.list.forEach((item, index) => {
-                  if (targetQuestion.choice_id.toString() === that.currentQuestion.choices.list[index].id.toString()) {
-                    Vue.set(that.currentQuestion.choices.list[index], 'active', true)
-                    that.choiceKey = Date.now()
-                  } else {
-                    Vue.set(that.currentQuestion.choices.list[index], 'active', false)
-                    that.choiceKey = Date.now()
-                  }
-                })
+                that.setCurrentQuestionChoice (targetQuestion.choice_id, true)
+                if (isFinished) {
+                  setTimeout( () => {
+                    that.generateAnswer()
+                  },500)
+                }
               }
             } else {
-              that.currentQuestion.choices.list.forEach((item, index) => {
-                Vue.set(that.currentQuestion.choices.list[index], 'active', false)
-                that.choiceKey = Date.now()
-              })
-            }
-
-            if (isFinished) {
-              that.generateAnswer()
+              that.setCurrentQuestionChoice (null, false)
             }
           })
     },
