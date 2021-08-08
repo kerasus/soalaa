@@ -18,7 +18,7 @@ const store = new Vuex.Store({
     plugins: [
         createPersistedState({
             storage: window.localStorage,
-            paths: ['userQuizListData', 'Auth.accessToken', 'Auth.user']
+            paths: ['userQuizListData', 'Auth.accessToken', 'Auth.user', 'psychometricAnswer']
         })
         // createMutationsSharer({
         //     predicate: [
@@ -38,9 +38,13 @@ const store = new Vuex.Store({
         quiz: null,
         userQuizListData: {},
         currentQuestion: null,
-        currentExamFrozenQuestions: null
+        currentExamFrozenQuestions: null,
+        psychometricAnswer: {}
     },
     mutations: {
+        setPsychometricAnswer (state, newInfo) {
+            this.psychometricAnswer = newInfo
+        },
         resetState (state) {
             // Merge rather than replace so we don't lose observers
             // https://github.com/vuejs/vuex/issues/1118
@@ -272,7 +276,9 @@ const store = new Vuex.Store({
     },
     getters: {
 
-
+        psychometricAnswer (state) {
+            return state.psychometricAnswer
+        },
         quiz (state) {
             return new Exam(state.quiz)
         },

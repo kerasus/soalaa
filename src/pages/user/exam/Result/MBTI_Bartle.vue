@@ -5,7 +5,7 @@
     </p>
     <div
       class="char-info"
-      :style="{ background: charBg }"
+      :style="{ background: result.charBg }"
     >
       <v-container class="full-height">
         <v-row no-gutters>
@@ -203,7 +203,8 @@ export default {
     return {
       result: {
         type: 'INTP',
-        details: [
+        details:
+            [
           {
             title: 'انرژی',
             text: 'از کجا انرژی میگیرید و کجا مصرفش میکنید؟',
@@ -268,9 +269,9 @@ export default {
               },
             ]
           },
-        ]
+        ],
+        charBg: '#eae6ff'
       },
-      charBg: '#eae6ff'
     }
   },
   created () {
