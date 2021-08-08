@@ -196,6 +196,7 @@
 
 <script>
 import {mixinDrawer} from "@/mixin/Mixins";
+import mbtiData from "@/assets/js/MBTI_Bartle_Data";
 export default {
   name: "MBTIBartle",
   mixins: [mixinDrawer],
@@ -277,6 +278,114 @@ export default {
   created () {
     // this.$store.getters('setPsychometricAnswer')
     this.drawer = false
+  },
+  methods: {
+    generateAnswer () {
+      let answer = this.calculateExam()
+      let finalAnswer = {}
+      finalAnswer.type = this.getMbtiTypeFromAnswers(answer)
+      finalAnswer.details = this.getMbtiDetailsFromAnswers(answer)
+      finalAnswer.charBg = this.getMbtiBg(finalAnswer.type)
+      finalAnswer.bartle = this.getBartleResults(answer)
+      this.$store.commit('setPsychometricAnswer', finalAnswer)
+    },
+    getMbtiBg (type) {
+      return mbtiData.mbtiType[type].backgroundColor
+    },
+    getBartleResults (answer) {
+      let bartleResults = {}
+      mbtiData.bartleKeys.forEach(item => {
+        bartleResults[item.value] = answer[Object.keys(answer)[1]][item.text].ratio
+      })
+      return bartleResults
+    },
+    getMbtiDetailsFromAnswers (answer) {
+      let details = []
+      for (let i = 0; i < 4; i++) {
+        let title = mbtiData.mbtiGroups[i].title
+        let text = mbtiData.mbtiGroups[i].text
+        let values = []
+        values.push({
+          title: answer[Object.keys(answer)[0]][mbtiData.mbtiGroups[i].value[0]].label,
+          percent: answer[Object.keys(answer)[0]][mbtiData.mbtiGroups[i].value[0]].ratio,
+          label: mbtiData.mbtiKeys[2 * i].value,
+        })
+        values.push({
+          title: answer[Object.keys(answer)[0]][mbtiData.mbtiGroups[i].value[1]].label,
+          percent: answer[Object.keys(answer)[0]][mbtiData.mbtiGroups[i].value[1]].ratio,
+          label: mbtiData.mbtiKeys[2 * i + 1].value,
+        })
+        details.push({
+          title,
+          text,
+          values
+        })
+      }
+      return details
+    },
+    getMbtiTypeFromAnswers (answer) {
+      let type = ''
+      if (answer[Object.keys(answer)[0]][mbtiData.mbtiKeys[0].text].ratio > 50) {
+        type += mbtiData.mbtiKeys[0].value
+      } else {
+        type += mbtiData.mbtiKeys[1].value
+      }
+      if (answer[Object.keys(answer)[0]][mbtiData.mbtiKeys[2].text] > 50) {
+        type += mbtiData.mbtiKeys[2].value
+      } else {
+        type += mbtiData.mbtiKeys[3].value
+      }
+
+      if (answer[Object.keys(answer)[0]][mbtiData.mbtiKeys[4].text].ratio > 50) {
+        type += mbtiData.mbtiKeys[4].value
+      } else {
+        type += mbtiData.mbtiKeys[5].value
+      }
+
+      if (answer[Object.keys(answer)[0]][mbtiData.mbtiKeys[6].text].ratio > 50) {
+        type += mbtiData.mbtiKeys[6].value
+      } else {
+        type += mbtiData.mbtiKeys[7].value
+      }
+
+      return type
+    },
+    calculateExam () {
+      let questions = [{}]
+      let answer = {}
+      questions.forEach(question => { // set the sub categories in the answer obj
+        if (!answer[question.sub_category.id]) {
+          answer[question.sub_category.id] = {}
+        }
+
+        question.choices.list.forEach(choice => { // set the values in the answer obj
+          if (!answer[question.sub_category.id][choice.answer]) {
+            answer[question.sub_category.id][choice.answer] = {
+              repeat: 0,
+              possible: 0,
+              ratio: 0
+            }
+          }
+        })
+      })
+
+      questions.forEach(question => {
+        question.choices.list.forEach(choice => {
+          answer[question.sub_category.id][choice.answer].possible++
+          if (choice.active) {
+            answer[question.sub_category.id][choice.answer].repeat++
+          }
+        })
+      })
+
+      Object.keys(answer).forEach((subCategory) => {
+        Object.keys(answer[subCategory]).forEach((value) => {
+          answer[subCategory][value].ratio = Math.round(answer[subCategory][value].repeat / answer[subCategory][value].possible * 100)
+        })
+      })
+
+      return answer
+    }
   }
 }
 </script>

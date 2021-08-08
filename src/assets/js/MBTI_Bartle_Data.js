@@ -43,22 +43,22 @@ export default {
     ],
     bartleKeys: [
         {
-            text: 'bartle-K',
+            text: 'killer',
             value: 'K',
             label: 'قاتل'
         },
         {
-            text: 'bartle-S',
+            text: 'socializer',
             value: 'S',
             label: 'معاشرتی'
         },
         {
-            text: 'bartle-E',
+            text: 'explorer',
             value: 'E',
             label: 'جستجوگر'
         },
         {
-            text: 'bartle-A',
+            text: 'achiever',
             value: 'A',
             label: 'جاه طلب'
         },
