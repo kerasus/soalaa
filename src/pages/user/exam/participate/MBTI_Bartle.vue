@@ -305,7 +305,6 @@ export default {
             } else {
               tstArr.push(that.userQuizListData[that.quiz.id][questionId])
             }
-            console.log('gg', tstArr)
           }
         })
 
@@ -336,7 +335,7 @@ export default {
 
       answerClickedPromise
           .then((response) => {
-            const targetQuestion = response.data.data.find(item => item.question_id.toString() === this.currentQuestion.id.toString())
+            const targetQuestion = response.data.data.find(item => (this.currentQuestion.id !== null && item.question_id !== null && item.question_id.toString() === this.currentQuestion.id.toString()))
             if (
                 targetQuestion &&
                 targetQuestion.choice_id &&
