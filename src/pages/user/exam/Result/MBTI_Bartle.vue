@@ -137,7 +137,10 @@
     <p class="exam-title">
       نتیجه تست Bartle
     </p>
-    <div class="char-results-bartle">
+    <div
+      v-if="bartleResult[0]"
+      class="char-results-bartle"
+    >
       <v-container>
         <v-row class="main-result">
           <v-col class="d-flex flex-column align-center">
@@ -190,7 +193,7 @@
         </v-row>
       </v-container>
     </div>
-    <v-container>
+    <v-container v-if="bartleResult[0]">
       <v-row>
         <v-col class="type-explanation">
           <p class="type-header">
@@ -297,6 +300,9 @@ export default {
     },
     bartleResult () {
       let results = []
+      if (!this.result.bartle) {
+        return results
+      }
       Object.keys(this.result.bartle).forEach(key => {
         results.push({ key, value: this.result.bartle[key] })
       })
@@ -338,6 +344,9 @@ export default {
       this.$store.commit('setPsychometricAnswer', finalAnswer)
     },
     getMbtiBg (type) {
+      if (!mbtiData.mbtiType[type]) {
+        return ''
+      }
       return mbtiData.mbtiType[type].backgroundColor
     },
     getBartleResults (answer) {
@@ -353,11 +362,17 @@ export default {
         let title = mbtiData.mbtiGroups[i].title
         let text = mbtiData.mbtiGroups[i].text
         let values = []
+        if (!answer[Object.keys(answer)[0]][mbtiData.mbtiGroups[i].value[0]]) {
+          return
+        }
         values.push({
           title: mbtiData.mbtiKeys[2 * i].label,
           percent: answer[Object.keys(answer)[0]][mbtiData.mbtiGroups[i].value[0]].ratio,
           label: mbtiData.mbtiKeys[2 * i].value,
         })
+        if (!answer[Object.keys(answer)[0]][mbtiData.mbtiGroups[i].value[1]]) {
+          return
+        }
         values.push({
           title: mbtiData.mbtiKeys[2 * i + 1].label,
           percent: answer[Object.keys(answer)[0]][mbtiData.mbtiGroups[i].value[1]].ratio,
@@ -373,6 +388,11 @@ export default {
     },
     getMbtiTypeFromAnswers (answer) {
       let type = ''
+
+      if (!answer[Object.keys(answer)[0]][mbtiData.mbtiKeys[0].text]) {
+        return type
+      }
+
       if (answer[Object.keys(answer)[0]][mbtiData.mbtiKeys[0].text].ratio > 50) {
         type += mbtiData.mbtiKeys[0].value
       } else {
