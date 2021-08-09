@@ -1,6 +1,7 @@
 <template>
   <div>
     <vue-tiptap-katex v-model="html" />
+    <!--eslint-disable-next-line-->
     <div v-html="convertToMarkdownKatex(html)" />
   </div>
 </template>

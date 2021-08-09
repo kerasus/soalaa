@@ -111,6 +111,7 @@ const API_ADDRESS = {
 
     },
     base: lumenServer + '/exam-question/attach',
+    createAndAttach: () => lumenServer + '/exam-question/attach/' ,
     create: lumenServer + '/question',
     attachSubCategoryToQuestion: lumenServer + '/exam-question/attach/sub-category',
     updateQuestion (questionId) {
@@ -141,6 +142,11 @@ const API_ADDRESS = {
     update (id) {
       return lumenServer + '/category/' + id
     }
+  },
+  subGroups : {
+    base (exam_id) {
+      return lumenServer + '/exam-question/zirgorooh/' + exam_id
+    },
   }
 }
 export default API_ADDRESS

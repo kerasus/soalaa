@@ -14,19 +14,9 @@
         color="light-blue px-2"
         dark
       >
-        <v-toolbar-title>لیست دفترچه ها</v-toolbar-title>
+        <v-toolbar-title>لیست زیرگروه ها</v-toolbar-title>
 
         <v-spacer />
-
-        <v-text-field
-          v-model="searchValue"
-          class="search mx-3"
-          prepend-inner-icon="mdi-magnify"
-          rounded
-          outlined
-          dense
-          :style="{ 'max-width': '200px' }"
-        />
 
         <v-btn
           icon
@@ -43,7 +33,7 @@
         <!--        <v-subheader inset>Folders</v-subheader>-->
 
         <v-list-item
-          v-for="(item, index) in filteredItems"
+          v-for="(item, index) in subGroups"
           :key="index"
         >
           <v-list-item-avatar
@@ -140,22 +130,17 @@
 
 <script>
 import axios from "axios";
-import {QuestCategory, QuestCategoryList} from "@/models/QuestCategory";
 import API_ADDRESS from "@/api/Addresses";
 
 export default {
   name: "Edit",
   data () {
     return {
-      categoryList: new QuestCategoryList(),
+      subGroups: [],
       loading: false,
-      searchValue: '',
     }
   },
   computed: {
-    filteredItems () {
-      return this.categoryList.list.filter(item => !item.title || item.title.includes(this.searchValue))
-    },
     iconPicker () {
       return () => {
         return {
@@ -168,33 +153,30 @@ export default {
 
   created() {
     this.loading = true
-    const loadCategoriesPromise = this.loadCategories()
+    const loadSubGroupsPromise = this.loadSubGroups()
 
-    Promise.all([loadCategoriesPromise])
+    Promise.all([loadSubGroupsPromise])
         .then(() => {
           this.loading = false
         })
   },
   methods: {
-    update (item) {
-      item.editMode = false
-      item.title = item.title.trim()
-      item.apply()
-      axios.put(API_ADDRESS.questionCategory.update(item.id), item)
-        .then(response => {
-          item = new QuestCategory(response.data.data)
-        })
-    },
+    // update (item) {
+    //   item.editMode = false
+    //   item.title = item.title.trim()
+    //   item.apply()
+    //   axios.put(API_ADDRESS.questionCategory.update(item.id), item)
+    //     .then(response => {
+    //       item = new QuestCategory(response.data.data)
+    //     })
+    // },
     create (item) {
       item.editable = false
       item.title = item.title.trim()
-      axios.post(API_ADDRESS.questionCategory.base, item)
+      axios.post(API_ADDRESS.subGroups.base('60ad57ee79654e34990ee423'), item)
         .then(response => {
           this.deleteItem(item)
-          this.categoryList.list.unshift(new QuestCategory(response.data.data))
-        })
-        .catch(() => {
-          this.deleteItem(item)
+          this.subGroups.unshift(response.data.data)
         })
     },
     cancelEdit (item) {
@@ -205,25 +187,26 @@ export default {
       item.editMode = true
       item.buffer()
     },
-    deleteItem (category) {
-      this.categoryList.list.forEach((item, index) => {
-        if (item === category) {
-          this.categoryList.list.splice(index, 1)
+    deleteItem (subGroup) {
+      this.subGroups.forEach((item, index) => {
+        if (item === subGroup) {
+          this.subGroups.splice(index, 1)
         }
       })
     },
     addCategory () {
-      this.categoryList.list.unshift(new QuestCategory({
+      this.subGroups.unshift(({
         editable: true,
-        title: ''
+        title: '',
+        sub_category: []
       }))
     },
-    loadCategories () {
+    loadSubGroups () {
       let that = this
       return new Promise(function(resolve, reject) {
-        axios.get(API_ADDRESS.questionCategory.base)
+        axios.get(API_ADDRESS.subGroups.base('60ad57ee79654e34990ee423'))
           .then((response) => {
-            that.categoryList = new QuestCategoryList(response.data.data)
+            that.subGroups = response.data.data
             resolve()
           })
           .catch( () => {

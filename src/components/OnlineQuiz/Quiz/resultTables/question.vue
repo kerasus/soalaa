@@ -21,6 +21,7 @@
         </v-icon>
       </v-btn>
     </div>
+    <!--ToDo: remove span-->
     <span
       :id="'question' + source.id"
       v-intersect="{
@@ -30,16 +31,18 @@
         }
       }"
       class="question-body renderedPanel"
-      v-html="(getQuestionNumberFromId(source.id)) + '- ' + source.rendered_statement"
-    />
+    >
+      <vue-katex :input="(getQuestionNumberFromId(source.id)) + '- ' + source.statement" />
+    </span>
     <v-row class="choices">
       <v-col
         v-for="(choice, index) in source.choices.list"
         :key="choice.id"
         :md="choiceClass(source)"
         :class="{ choice: true, renderedPanel: true, active: choice.active, answer: choice.answer }"
-        v-html="(choiceNumber[index]) + choice.rendered_title"
-      />
+      >
+        <vue-katex :input="(choiceNumber[index]) + choice.title" />
+      </v-col>
     </v-row>
   </div>
 </template>
@@ -48,10 +51,14 @@
     import '@/assets/scss/markdownKatex.scss'
     import { mixinQuiz, mixinWindowSize } from '@/mixin/Mixins'
     import $ from "jquery";
+    import VueKatex from "@/components/VueKatex";
 
     export default {
         name: 'Item',
         mixins: [ mixinQuiz, mixinWindowSize ],
+      components: {
+        VueKatex
+      },
         props: {
             index: { // index of current source
                 type: Number

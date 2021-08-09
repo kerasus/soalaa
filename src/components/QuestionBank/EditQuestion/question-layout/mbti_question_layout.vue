@@ -16,37 +16,27 @@
         :edit-status="status"
         placeholder="صورت سوال"
         :question-id="value.id ? value.id : 'null'"
+        @input="updateQuestion"
       />
     </div>
     <div
       v-for="(item, index) in question.choices.list"
       :key="index"
       class="question-layout-options"
-      :class="status ? 'mb-6   question-options white': '  question-options'"
+      :class="status ? 'mb-6   question-options white': '  question-o' +
+        'ptions'"
     >
       <div :class="status ?'px-4' :'px-2'">
-        <div
-          v-if="item.answer"
-          @click="clicked(item.order)"
-        >
-          <v-icon
-            color="green"
-            :size="!status? 28 : 36"
-          >
-            mdi-checkbox-marked-circle
-          </v-icon>
-        </div>
-        <div
-          v-else-if="status"
-          @click="clicked(item.order)"
-        >
-          <v-btn
-            fab
-            depressed
-            width="36"
-            height="36"
-          />
-        </div>
+        <v-autocomplete
+          v-model="item.answer"
+          :items="mbti_value"
+          label="انتخاب مقدار"
+          dense
+          outlined
+          rounded
+          :disabled="!status"
+          @change="updateQuestion"
+        />
       </div>
       <div class="ml-2">
         {{ (index + 1) + ') ' }}
@@ -59,27 +49,12 @@
             v-model="item.title"
             :edit-status="status"
             :question-id="value.id ? value.id : 'null'"
+            @input="updateQuestion"
           />
         </div>
       </div>
     </div>
     <!-- ------------------------- answer -------------------------------  -->
-    <div class="mb-5 question-answer ">
-      <div class="mb-5">
-        پاسخ تشریحی
-      </div>
-      <div>
-        <question_field
-          ref="descriptive"
-          :key="'descriptive_answer' + domKey"
-          v-model="question.descriptive_answer"
-          :question-id="value.id ? value.id : 'null'"
-          :edit-status="status"
-          placeholder="پاسخ تشریحی"
-          class="mb-16"
-        />
-      </div>
-    </div>
   </div>
 </template>
 <script>
@@ -87,7 +62,7 @@ import { Question } from '@/models/Question'
 import question_field from '@/components/Question/questionField'
 
 export default {
-  name: 'QuestionLayout',
+  name: 'MbtiQuestionLayout',
   components: {
     question_field,
   },
@@ -104,7 +79,57 @@ export default {
   data() {
     return {
       question: new Question(),
-      domKey: Date.now()
+      domKey: Date.now(),
+      mbti_value: [
+        {
+          text: 'bartle-s',
+          value: 'socializer'
+        },
+        {
+          text: 'bartle-e',
+          value: 'explorer'
+        },
+        {
+          text: 'bartle-a',
+          value: 'achiever'
+        },
+        {
+          text: 'bartle-k',
+          value: 'killer'
+        },
+        {
+          text: 'mbti-I',
+          value: 'introversion'
+        },
+        {
+          text: 'mbti-E',
+          value: 'extroversion'
+        },
+        {
+          text: 'mbti-N',
+          value: 'intuition'
+        },
+        {
+          text: 'mbti-S',
+          value: 'sensing'
+        },
+        {
+          text: 'mbti-T',
+          value: 'thinking'
+        },
+        {
+          text: 'mbti-F',
+          value: 'feeling'
+        },
+        {
+          text: 'mbti-J',
+          value: 'judging'
+        },
+        {
+          text: 'mbti-P',
+          value: 'perceiving'
+        }
+      ]
     }
   },
   watch: {
@@ -119,24 +144,22 @@ export default {
       that.domKey = Date.now()
     }, 100)
   },
-  methods: {
+  methods:{
     getContent () {
-      console.log(this.$refs)
+      console.log('test', this.$refs)
       this.$refs.questionStatement.getContent()
-      this.$refs.descriptive.getContent()
       this.$refs.choice1[0].getContent()
       this.$refs.choice2[0].getContent()
-      this.$refs.choice3[0].getContent()
-      this.$refs.choice4[0].getContent()
       this.updateQuestion()
     },
     updateQuestion () {
+      console.log('this.question', this.question)
       this.$emit('input', this.question)
     },
     clicked(order){
       this.question.choices.list.forEach(item => {
-          item.answer = item.order === order;
-        })
+        item.answer = item.order === order;
+      })
       this.updateQuestion()
     }
   },
@@ -164,7 +187,7 @@ export default {
 }
 
 .question-options .answer-editor{
-width: 100%;
+  width: 100%;
 }
 
 </style>

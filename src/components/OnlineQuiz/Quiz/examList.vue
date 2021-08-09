@@ -28,9 +28,12 @@
         </v-card-actions>
       </v-card>
     </v-dialog>
-    <v-dialog v-model="dialogUpload" max-width="400px">
+    <v-dialog
+      v-model="dialogUpload"
+      max-width="400px"
+    >
       <v-sheet>
-        <upload-answers :exam_id="selectedExam"></upload-answers>
+        <upload-answers :exam_id="selectedExam" />
       </v-sheet>
     </v-dialog>
     <v-progress-linear
@@ -356,17 +359,38 @@
         <v-tooltip top>
           <template v-slot:activator="{ on, attrs }">
             <v-btn
-                class="mx-2"
-                fab
-                dark
-                x-small
-                color="red"
-                v-bind="attrs"
-                @click="deleteItem(item)"
-                v-on="on"
+              class="mx-2"
+              fab
+              dark
+              x-small
+              color="orange"
+              v-bind="attrs"
+              :to="{ name: 'coefficient.edit', params: { exam_id: item.id } }"
+              v-on="on"
             >
               <v-icon
-                  small
+                small
+              >
+                mdi-pencil
+              </v-icon>
+            </v-btn>
+          </template>
+          <span>اصلاح ضرایب</span>
+        </v-tooltip>
+        <v-tooltip top>
+          <template v-slot:activator="{ on, attrs }">
+            <v-btn
+              class="mx-2"
+              fab
+              dark
+              x-small
+              color="red"
+              v-bind="attrs"
+              @click="deleteItem(item)"
+              v-on="on"
+            >
+              <v-icon
+                small
               >
                 mdi-delete
               </v-icon>
