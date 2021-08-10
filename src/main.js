@@ -7,7 +7,7 @@ import Axios from '@/plugins/axios'
 import VueNotification from 'vue-notification'
 import VueGtag from 'vue-gtag'
 Vue.use(VueGtag, {
-  config: { id: 'G-TWJSQ9KGSR' }
+  config: { id: 'UA-43695756-1' }
 })
 
 Vue.use(VueNotification)
