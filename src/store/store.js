@@ -7,6 +7,7 @@ import Auth from '@/store/modules/Auth'
 import { Exam } from '@/models/Exam'
 import { Question, QuestionList } from '@/models/Question'
 import createPersistedState from 'vuex-persistedstate'
+import completeInfo from "@/middleware/completeInfo";
 // import createMutationsSharer from 'vuex-shared-mutations'
 
 Vue.use(Vuex)
@@ -36,6 +37,7 @@ const store = new Vuex.Store({
     strict: debug,
     state: {
         quiz: null,
+        redirectAfterCompleteInfoPage: null,
         userQuizListData: {},
         currentQuestion: null,
         currentExamFrozenQuestions: null,
@@ -58,6 +60,9 @@ const store = new Vuex.Store({
             state.userQuizListData = {}
         },
 
+        updateRedirectAfterCompleteInfoPage (state, newInfo) {
+            state.redirectAfterCompleteInfoPage = newInfo
+        },
         updateUserQuizListDataExam (state, newInfo) {
             state.userQuizListData = newInfo
         },
@@ -290,6 +295,9 @@ const store = new Vuex.Store({
     },
     getters: {
 
+        redirectAfterCompleteInfoPage (state) {
+            return state.redirectAfterCompleteInfoPage
+        },
         psychometricAnswer (state) {
             return state.psychometricAnswer
         },
