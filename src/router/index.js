@@ -45,6 +45,12 @@ const router = new VueRouter({
             meta: {middleware: [auth, completeInfo]}
         },
         {
+            path: '/onlineQuiz/start_automatically/:examId',
+            name: 'onlineQuiz.StartExamAutomatically',
+            component: () => lazyLoadView(import('@/pages/user/exam/participate/StartExamAutomatically')),
+            meta: {middleware: [auth]}
+        },
+        {
             path: '/onlineQuiz/alaaView/:quizId/:questNumber',
             name: 'onlineQuiz.alaaView',
             component: () => lazyLoadView(import('@/pages/user/exam/participate/AlaaView')),

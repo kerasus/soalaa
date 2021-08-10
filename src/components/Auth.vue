@@ -105,7 +105,6 @@
             if (this.getToken()) {
                 this.getUserData( () => { this.redirectTo() })
             }
-
         },
         methods: {
             checkAnimationUserName(e) {
@@ -124,38 +123,28 @@
                 //     document.getElementById('username').focus()
                 // }
             },
-            checkAnimationPass(e) {
-                if(e.animationName == "onAutoFillStart")
-                {
-                    this.autofilledPass = true;
-                }
-                else if(e.animationName == "onAutoFillCancel")
-                {
-                    this.autofilledPass = false;
-                }
-
-                if (this.autofilledPass) {
-                    document.getElementById('password').focus()
-                }
-            },
-
             getToken () {
                 return this.$store.getters['Auth/accessToken']
             },
             setUserData (userData) {
                 this.$store.commit('Auth/updateUser', new User(userData))
-                // this.redirectTo()
             },
             setAccessToken (access_token) {
                 axios.defaults.headers.common['Authorization'] = 'Bearer ' + access_token
                 this.$store.commit('Auth/updateAccessToken', access_token)
             },
             redirectTo () {
+              if (this.$route.query.redirect_to_exam) {
+                this.$router.push({ name: 'onlineQuiz.StartExamAutomatically', params: { examId: this.$route.query.redirect_to_exam } })
+                return
+              }
+
                 let redirect_to = window.localStorage.getItem('redirect_to')
                 if (!redirect_to) {
                     redirect_to = 'dashboard'
                 }
                 this.$router.push({ name: redirect_to })
+
             },
             login () {
                 let that = this
