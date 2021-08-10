@@ -77,7 +77,7 @@ const router = new VueRouter({
         {
             path: '/results/mbti_bartle/:exam_id',
             name: 'mbtiBartle.result',
-            component: () => lazyLoadView(import('@/pages/user/exam/Result/MBTI_Bartle')),
+            component: () => lazyLoadView(import('@/pages/user/exam/Result/MBTI_Bartle_result')),
             meta: {middleware: [auth, completeInfo]}
         },
 
