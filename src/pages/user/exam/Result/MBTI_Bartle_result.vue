@@ -148,7 +148,7 @@
               تیپ شخصیتی شما
             </p>
             <v-progress-circular
-              class="mt-4"
+              class="mt-4 bartle-item-circle"
               :rotate="-90"
               :size="240"
               :width="10"
@@ -173,7 +173,7 @@
               class="d-flex flex-sm-column flex-row align-center justify-center"
             >
               <v-progress-circular
-                class="mt-4"
+                class="mt-4 bartle-item-circle"
                 :rotate="-90"
                 :size="125"
                 :width="6"
@@ -243,7 +243,7 @@ export default {
           },
           {
             title: 'جمع آوری اطلاعات',
-            text: 'ترجیح شما در جمع آوری اطلاعات چکونه است؟',
+            text: 'ترجیح شما در جمع آوری اطلاعات چگونه است؟',
             values: [
               {
                 title: 'شهودی',
@@ -259,7 +259,7 @@ export default {
           },
           {
             title: 'تصمیم گیری',
-            text: 'ترجیح شما در تصمیم گیری چکونه است؟',
+            text: 'ترجیح شما در تصمیم گیری چگونه است؟',
             values: [
               {
                 title: 'احساسی',
@@ -481,6 +481,10 @@ export default {
 </script>
 
 <style scoped lang="scss">
+.bartle-item-circle {
+  cursor: pointer;
+}
+
 .full-height {
   height: 100%;
 }
