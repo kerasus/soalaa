@@ -45,7 +45,7 @@ const router = new VueRouter({
             meta: {middleware: [auth, completeInfo]}
         },
         {
-            path: '/onlineQuiz/start_automatically/:examId',
+            path: '/onlineQuiz/start_automatically/:examId/:autoStart',
             name: 'onlineQuiz.StartExamAutomatically',
             component: () => lazyLoadView(import('@/pages/user/exam/participate/StartExamAutomatically')),
             meta: {middleware: [auth]}

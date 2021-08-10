@@ -135,7 +135,13 @@
             },
             redirectTo () {
               if (this.$route.query.redirect_to_exam) {
-                this.$router.push({ name: 'onlineQuiz.StartExamAutomatically', params: { examId: this.$route.query.redirect_to_exam } })
+                this.$router.push({
+                  name: 'onlineQuiz.StartExamAutomatically',
+                  params: {
+                    examId: this.$route.query.redirect_to_exam,
+                    autoStart: this.$route.query.exam_auto_start
+                  }
+                })
                 return
               }
 

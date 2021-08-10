@@ -52,16 +52,18 @@ export default {
   },
   mounted() {
     this.exam.id = this.$route.params.examId
-    this.getExamInfo()
+    this.registerExam(this.exam.id)
   },
   methods: {
     registerExam (examId) {
+      this.exam.loading = true
       // window.location.href = exam.alcaa_product_link
       this.user.registerExam(examId)
           .then( (response) => {
             if (response.data.data.redirect_url) {
               window.location.href = response.data.data.redirect_url
             } else {
+              this.getExamInfo()
               this.$notify({
                 group: 'notifs',
                 title: 'توجه!',
@@ -70,6 +72,9 @@ export default {
               })
             }
           })
+      .catch( () => {
+        this.getExamInfo()
+      })
     },
     getExamInfo () {
       this.exam.loading = true
@@ -77,6 +82,9 @@ export default {
       .then( response => {
         this.exam = new Exam(response.data.data)
         this.exam.loading = false
+        if (this.$route.params.autoStart.toString() === '1') {
+          this.goToParticipateExamPage()
+        }
       })
     },
     goToParticipateExamPage() {
