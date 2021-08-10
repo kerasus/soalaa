@@ -142,6 +142,7 @@
       <v-col cols="1">
         <v-btn
           rounded
+          color="primary"
           width="100%"
           @click="submit"
         >
@@ -375,7 +376,7 @@
                             text: 'شماره موبایل با موفقیت ثبت شد.',
                             type: 'success'
                         })
-                        this.getUserData()
+                        // this.getUserData()
                     })
                     .catch(()=> {
                         that.user.loading = false
