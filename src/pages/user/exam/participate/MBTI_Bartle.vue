@@ -121,6 +121,13 @@
                     />
                   </div>
                 </div>
+                <v-overlay :value="loading">
+                  <v-progress-circular
+                    :size="50"
+                    color="amber"
+                    indeterminate
+                  />
+                </v-overlay>
               </div>
             </div>
             <div class="next arrow-box">
@@ -156,6 +163,7 @@ export default {
   mixins: [mixinDrawer, mixinQuiz, mixinUserActionOnQuestion],
   data() {
     return {
+      loading: false,
       choiceKey: Date.now(),
       // should be commented later ToDo
       // currentQuestion: new Question({
@@ -277,6 +285,10 @@ export default {
         return false
       }
     },
+    isLastQuestion () {
+      const countOfQuestions = Object.keys(this.currentExamQuestions).length
+      return countOfQuestions.toString() === this.$route.params.questNumber.toString()
+    },
     getUnansweredQuestionBehind () {
       if (
           this.userQuizListData &&
@@ -319,7 +331,7 @@ export default {
         active = true
       }
       this.currentQuestion.choices.list.forEach((item, index) => {
-        if (choice_id.toString() === that.currentQuestion.choices.list[index].id.toString()) {
+        if (choice_id !== null && choice_id.toString() === that.currentQuestion.choices.list[index].id.toString()) {
           Vue.set(that.currentQuestion.choices.list[index], 'active', active)
           that.choiceKey = Date.now()
         } else {
@@ -329,45 +341,48 @@ export default {
       })
     },
     choiceClick(id) {
+      this.loading = true
       let that = this
-      const isFinished = this.isFinished()
+      const isLastQuestion = this.isLastQuestion()
       const answerClickedPromise = this.answerClicked({choiceId: id, questionId: this.currentQuestion.id})
-
       answerClickedPromise
           .then((response) => {
-            const targetQuestion = response.data.data.find(item => (this.currentQuestion.id !== null && item.question_id !== null && item.question_id.toString() === this.currentQuestion.id.toString()))
+            const targetQuestion = response.data.data.find(item => (
+                this.currentQuestion.id !== null &&
+                item.question_id !== null &&
+                item.question_id.toString() === this.currentQuestion.id.toString())
+            )
             if (
                 targetQuestion &&
                 targetQuestion.choice_id &&
                 targetQuestion.choice_id.toString()
             ) {
-              if (!isFinished) {
+              if (!isLastQuestion) {
                 that.setCurrentQuestionChoice (targetQuestion.choice_id, true)
                 setTimeout( () => {
                   that.goToNextQuestion('onlineQuiz.mbtiBartle')
                 },500)
               } else {
                 that.setCurrentQuestionChoice (targetQuestion.choice_id, true)
-                if (isFinished) {
-                  setTimeout( () => {
-                    that.startExam(that.$route.params.quizId, 'onlineQuiz.mbtiBartle')
-                        .then(() => {
-                          that.$store.commit('AppLayout/updateOverlay', {show: false, loading: false, text: ''})
-                          const unansweredQuestion = that.getUnansweredQuestionBehind()
-                          if (unansweredQuestion) {
-                            that.changeQuestion(unansweredQuestion.id, 'onlineQuiz.mbtiBartle')
-                          } else {
-                            const isFinished = that.isFinished()
-                            if (isFinished) {
-                              that.generateAnswer()
-                            }
+                setTimeout( () => {
+                  that.startExam(that.$route.params.quizId, 'onlineQuiz.mbtiBartle')
+                      .then(() => {
+                        that.$store.commit('AppLayout/updateOverlay', {show: false, loading: false, text: ''})
+                        const unansweredQuestion = that.getUnansweredQuestionBehind()
+                        if (unansweredQuestion) {
+                          that.changeQuestion(unansweredQuestion.id, 'onlineQuiz.mbtiBartle')
+                        } else {
+                          const isFinished = that.isFinished()
+                          if (isFinished) {
+                            that.generateAnswer()
                           }
-                        })
-                  },500)
-                }
+                        }
+                      })
+                },500)
               }
             } else {
               that.setCurrentQuestionChoice (null, false)
+              that.loading = false
             }
           })
     },

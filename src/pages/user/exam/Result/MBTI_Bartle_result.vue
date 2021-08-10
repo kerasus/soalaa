@@ -29,7 +29,7 @@
           >
             <div class="char-info-text">
               <p class="char-type-title d-none d-sm-block">
-                گروه تحلیل گراها
+                {{ mbtiGroup }}
                 <span>{{ 'تیپ شخصیتی ' + result.type }}</span>
               </p>
               <div class="char-details">
@@ -85,7 +85,7 @@
               <div class="progress-bar">
                 <v-progress-linear
                   v-if="item.values[0].percent > 50"
-                  v-model="item.values[0].percent"
+                  :value="item.values[0].percent"
                   elevation="3"
                   color="white"
                   rounded
@@ -94,7 +94,7 @@
                 />
                 <v-progress-linear
                   v-else
-                  v-model="item.values[1].percent"
+                  :value="item.values[1].percent"
                   elevation="3"
                   color="white"
                   rounded
@@ -137,7 +137,10 @@
     <p class="exam-title">
       نتیجه تست Bartle
     </p>
-    <div class="char-results-bartle">
+    <div
+      v-if="bartleResult[0]"
+      class="char-results-bartle"
+    >
       <v-container>
         <v-row class="main-result">
           <v-col class="d-flex flex-column align-center">
@@ -151,6 +154,7 @@
               :width="10"
               :value="bartleResult[0].value"
               color="#ef5350"
+              @click="changeSelectedBartleItem(bartleResult[0])"
             >
               <div class="inside-bartle-result-circle  pa-10">
                 <v-img :src="bartleResult[0].image" />
@@ -175,6 +179,7 @@
                 :width="6"
                 :value="bartleResult[item].value"
                 color="#ef5350"
+                @click="changeSelectedBartleItem(bartleResult[item])"
               >
                 <div class="inside-bartle-result-circle pa-6">
                   <v-img
@@ -190,15 +195,15 @@
         </v-row>
       </v-container>
     </div>
-    <v-container>
+    <v-container v-if="selectedBartleItem">
       <v-row>
         <v-col class="type-explanation">
           <p class="type-header">
-            ویژگی های شخصیت {{ bartleResult[0].text }}
+            ویژگی های شخصیت {{ selectedBartleItem.text }}
           </p>
           <p
             class="full"
-            v-html="bartleResult[0].fullText"
+            v-html="selectedBartleItem.fullText"
           />
         </v-col>
       </v-row>
@@ -215,6 +220,7 @@ export default {
   mixins: [mixinDrawer, mixinQuiz],
   data () {
     return {
+      selectedBartleItem: null,
       result: {
         type: 'INTP',
         details:
@@ -297,6 +303,9 @@ export default {
     },
     bartleResult () {
       let results = []
+      if (!this.result.bartle) {
+        return results
+      }
       Object.keys(this.result.bartle).forEach(key => {
         results.push({ key, value: this.result.bartle[key] })
       })
@@ -305,7 +314,21 @@ export default {
         item.fullText = mbtiData.bartleKeys.find(bartle => bartle.value === item.key).fullText
         item.image = mbtiData.bartleKeys.find(bartle => bartle.value === item.key).image
       })
-      return results.sort((first, second) => first.value < second.value)
+
+      const sortedResult = results.sort((first, second) => {
+        if (first.value < second.value) {
+          return 1
+        } else {
+          return -1
+        }
+      })
+
+      return sortedResult
+    }
+  },
+  watch: {
+    bartleResult (newValue) {
+      this.selectedBartleItem = newValue[0]
     }
   },
   created () {
@@ -316,17 +339,21 @@ export default {
     }
     this.drawer = false
     const questions = []
+    let that = this
     Object.keys(this.currentExamQuestions).forEach(questionId => {
-      this.currentExamQuestions[questionId].choices.list.forEach(item => {
-        if (item.id === this.userQuizListData[quizId][questionId].answered_choice_id) {
+      that.currentExamQuestions[questionId].choices.list.forEach(item => {
+        if (item.id === that.userQuizListData[quizId][questionId].answered_choice_id) {
           item.active = true
         }
       })
-      questions.push(this.currentExamQuestions[questionId])
+      questions.push(that.currentExamQuestions[questionId])
     })
     this.generateAnswer(questions)
   },
   methods: {
+    changeSelectedBartleItem (bartle) {
+      this.selectedBartleItem = bartle
+    },
     generateAnswer (questions) {
       let answer = this.calculateExam(questions)
       let finalAnswer = {}
@@ -338,12 +365,16 @@ export default {
       this.$store.commit('setPsychometricAnswer', finalAnswer)
     },
     getMbtiBg (type) {
+      if (!mbtiData.mbtiType[type]) {
+        return ''
+      }
       return mbtiData.mbtiType[type].backgroundColor
     },
     getBartleResults (answer) {
       let bartleResults = {}
       mbtiData.bartleKeys.forEach(item => {
-        bartleResults[item.value] = answer[Object.keys(answer)[1]][item.text].ratio
+        const bartleItrem = answer[Object.keys(answer)[1]]
+        bartleResults[item.value] = bartleItrem[item.text].ratio
       })
       return bartleResults
     },
@@ -353,11 +384,17 @@ export default {
         let title = mbtiData.mbtiGroups[i].title
         let text = mbtiData.mbtiGroups[i].text
         let values = []
+        if (!answer[Object.keys(answer)[0]][mbtiData.mbtiGroups[i].value[0]]) {
+          return
+        }
         values.push({
           title: mbtiData.mbtiKeys[2 * i].label,
           percent: answer[Object.keys(answer)[0]][mbtiData.mbtiGroups[i].value[0]].ratio,
           label: mbtiData.mbtiKeys[2 * i].value,
         })
+        if (!answer[Object.keys(answer)[0]][mbtiData.mbtiGroups[i].value[1]]) {
+          return
+        }
         values.push({
           title: mbtiData.mbtiKeys[2 * i + 1].label,
           percent: answer[Object.keys(answer)[0]][mbtiData.mbtiGroups[i].value[1]].ratio,
@@ -373,6 +410,11 @@ export default {
     },
     getMbtiTypeFromAnswers (answer) {
       let type = ''
+
+      if (!answer[Object.keys(answer)[0]][mbtiData.mbtiKeys[0].text]) {
+        return type
+      }
+
       if (answer[Object.keys(answer)[0]][mbtiData.mbtiKeys[0].text].ratio > 50) {
         type += mbtiData.mbtiKeys[0].value
       } else {

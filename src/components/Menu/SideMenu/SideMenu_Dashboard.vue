@@ -220,6 +220,10 @@ export default {
         displayName: 'لیست زیرگروه ها',
         to: { name: 'subGroup.edit' }
       },
+      {
+        displayName: 'اضافه کردن سوالات MBTI',
+        to: { name: 'question.mbti.create' }
+      }
     ],
     educationList: [
       // {
