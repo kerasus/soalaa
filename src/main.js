@@ -5,6 +5,10 @@ import router from '@/router/index'
 import store from '@/store/store'
 import Axios from '@/plugins/axios'
 import VueNotification from 'vue-notification'
+import VueGtag from 'vue-gtag'
+Vue.use(VueGtag, {
+  config: { id: 'G-TWJSQ9KGSR' }
+})
 
 Vue.use(VueNotification)
 
