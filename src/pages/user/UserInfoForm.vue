@@ -198,6 +198,9 @@
             }
         },
         computed: {
+            redirectAfterCompleteInfoPage () {
+              return this.$store.getters.redirectAfterCompleteInfoPage
+            },
             percentageOfInformationCompletion () {
                 return this.user.percentageOfInformationCompletion()
             },
@@ -263,7 +266,12 @@
                         that.getUserFormData()
                         that.$store.commit('Auth/updateUser', user)
                         if (!that.user.needToCompleteInfo()) {
+                          if (!this.redirectAfterCompleteInfoPage) {
                             that.$router.push({ name: 'dashboard'})
+                          } else {
+                            that.$router.push({ name: this.redirectAfterCompleteInfoPage.name, params: this.redirectAfterCompleteInfoPage.params})
+                          }
+
                         } else {
                             that.$notify({
                                 group: 'notifs',
