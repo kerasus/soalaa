@@ -4,7 +4,7 @@
       v-model="drawer"
       app
       right
-      width="316"
+      :width="drawerWidth"
       disable-resize-watcher
       :class="{
         'mapOfQuestions': $route.name === 'onlineQuiz.alaaView' || $route.name === 'onlineQuiz.konkoorView',
@@ -154,6 +154,13 @@
         computed: {
             appBar() {
                 return this.$store.getters['AppLayout/appBar']
+            },
+            drawerWidth () {
+              if (this.windowSize.x > 450) {
+                return 316
+              } else {
+                return 230
+              }
             },
             overlay() {
                 return this.$store.getters['AppLayout/overlay']
