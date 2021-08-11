@@ -1,5 +1,3 @@
-import 'github-markdown-css/github-markdown.css';
-import '@/assets/scss/markdownKatex.scss';
 import Assistant from "@/plugins/assistant";
 import Time from "@/plugins/time";
 import {QuestSubcategory, QuestSubcategoryList} from "@/models/QuestSubcategory";

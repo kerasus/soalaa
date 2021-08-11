@@ -96,7 +96,6 @@ import MbtiQuestionLayout from '@/components/QuestionBank/EditQuestion/question-
 import attach_list from '@/components/QuestionBank/EditQuestion/Exams/exams';
 import StatusComponent from '@/components/QuestionBank/EditQuestion/StatusComponent/status';
 import LogListComponent from '@/components/QuestionBank/EditQuestion/Log/LogList';
-import {mixinMarkdownAndKatex} from "@/mixin/Mixins"
 import {Question} from '@/models/Question'
 import {Log, LogList} from '@/models/Log'
 import {ExamList} from "@/models/Exam";
@@ -115,7 +114,6 @@ export default {
     LogListComponent,
     attach_list
   },
-  mixins: [mixinMarkdownAndKatex],
   data() {
     return {
       optionQuestionId: null,
