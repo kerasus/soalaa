@@ -120,7 +120,6 @@ import attach_list from '@/components/QuestionBank/EditQuestion/Exams/exams';
 import StatusComponent from '@/components/QuestionBank/EditQuestion/StatusComponent/status';
 import ShowImg from '@/components/QuestionBank/EditQuestion/ShowImg/showImg';
 import LogListComponent from '@/components/QuestionBank/EditQuestion/Log/LogList';
-import {mixinMarkdownAndKatex} from "@/mixin/Mixins"
 import {Question} from '@/models/Question'
 import {Log, LogList} from '@/models/Log'
 import {ExamList} from "@/models/Exam";
@@ -141,7 +140,6 @@ export default {
     StatusComponent,
     LogListComponent
   },
-  mixins: [mixinMarkdownAndKatex],
   data() {
     return {
       temp: null,
