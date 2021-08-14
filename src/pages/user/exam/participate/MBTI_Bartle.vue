@@ -146,6 +146,28 @@
         </v-col>
       </v-row>
     </v-container>
+    <v-dialog
+      v-model="tryAgainDialog"
+      persistent
+      max-width="290"
+    >
+      <v-card>
+        <v-card-title class="text-h5">
+          توجه!
+        </v-card-title>
+        <v-card-text>مشکلی در ایجاد کارنامه رخ داده است. لطفا مجددا تلاش کنید.</v-card-text>
+        <v-card-actions>
+          <v-spacer />
+          <v-btn
+            color="green darken-1"
+            text
+            @click="sendAnswersAndFinishExam"
+          >
+            تلاش مجدد
+          </v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
   </div>
 </template>
 
@@ -165,6 +187,7 @@ export default {
     return {
       loading: false,
       choiceKey: Date.now(),
+      tryAgainDialog: false,
       // should be commented later ToDo
       // currentQuestion: new Question({
       //   id: 1,
@@ -229,7 +252,7 @@ export default {
           } else {
             const isFinished = that.isFinished()
             if (isFinished) {
-              that.generateAnswer()
+              that.sendAnswersAndFinishExam()
             }
           }
         })
@@ -386,8 +409,29 @@ export default {
             }
           })
     },
-    generateAnswer() {
-      this.$router.push({name: 'mbtiBartle.result', params: {exam_id: this.quiz.id.toString()}})
+    sendAnswersAndFinishExam() {
+      let that = this
+      this.sendUserQuestionsDataToServerAndFinishExam(this.quiz.id, this.quiz.user_exam_id)
+        .then( () => {
+          that.$notify({
+            group: 'notifs',
+            text: 'اطلاعات آزمون شما ثبت شد.',
+            type: 'success'
+          })
+          that.$store.commit('clearExamData', that.quiz.id)
+          that.tryAgainDialog = false
+          that.$router.push({name: 'mbtiBartle.result', params: {exam_id: this.quiz.id.toString(), user_exam_id: this.quiz.user_exam_id.toString()}})
+        })
+        .catch( () => {
+          that.$notify({
+            group: 'notifs',
+            title: 'توجه!',
+            text: 'مشکلی در ثبت اطلاعات آزمون شما رخ داده است.',
+            type: 'error',
+            duration: 6000,
+          })
+          that.tryAgainDialog = true
+        })
     },
     getMbtiBg(type) {
       return mbtiData.mbtiType[type].backgroundColor
