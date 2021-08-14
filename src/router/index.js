@@ -45,6 +45,12 @@ const router = new VueRouter({
             meta: {middleware: [auth, completeInfo]}
         },
         {
+            path: '/onlineQuiz/start_automatically/:examId/:autoStart',
+            name: 'onlineQuiz.StartExamAutomatically',
+            component: () => lazyLoadView(import('@/pages/user/exam/participate/StartExamAutomatically')),
+            meta: {middleware: [auth]}
+        },
+        {
             path: '/onlineQuiz/alaaView/:quizId/:questNumber',
             name: 'onlineQuiz.alaaView',
             component: () => lazyLoadView(import('@/pages/user/exam/participate/AlaaView')),
@@ -77,7 +83,7 @@ const router = new VueRouter({
         {
             path: '/results/mbti_bartle/:exam_id',
             name: 'mbtiBartle.result',
-            component: () => lazyLoadView(import('@/pages/user/exam/Result/MBTI_Bartle')),
+            component: () => lazyLoadView(import('@/pages/user/exam/Result/MBTI_Bartle_result')),
             meta: {middleware: [auth, completeInfo]}
         },
 

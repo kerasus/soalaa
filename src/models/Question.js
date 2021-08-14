@@ -243,10 +243,6 @@ class Question extends Model {
         // convert HTML to Markdown
         return turndownService.turndown(string)
         // return string
-        // return markdown
-
-        // return this.markdown.render(string.replace('<div class="question" dir="rtl">', ''))
-        // return md.render(markdown)
     }
 
     getAnsweredChoice () {
