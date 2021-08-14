@@ -1,18 +1,17 @@
 <template>
   <div>
     <vue-tiptap-katex v-model="html" />
+    <!--eslint-disable-next-line-->
     <div v-html="convertToMarkdownKatex(html)" />
   </div>
 </template>
 
 <script>
   import VueTiptapKatex from 'vue-tiptap-katex'
-  import {mixinMarkdownAndKatex} from '@/mixin/Mixins'
   import TurndownService from 'turndown/lib/turndown.browser.umd'
 
   export default {
     components: {VueTiptapKatex},
-    mixins: [mixinMarkdownAndKatex],
     data() {
       return {
         html: '<p>I’m running tiptap with Vue.js. 🎉</p>',

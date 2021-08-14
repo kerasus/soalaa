@@ -142,6 +142,7 @@
       <v-col cols="1">
         <v-btn
           rounded
+          color="primary"
           width="100%"
           @click="submit"
         >
@@ -166,7 +167,8 @@
         mixins: [mixinAuth],
         props: {
             requiredItems: {
-                type: Array
+                type: Array,
+                default: () => []
             },
         },
         data() {
@@ -196,6 +198,9 @@
             }
         },
         computed: {
+            redirectAfterCompleteInfoPage () {
+              return this.$store.getters.redirectAfterCompleteInfoPage
+            },
             percentageOfInformationCompletion () {
                 return this.user.percentageOfInformationCompletion()
             },
@@ -261,7 +266,12 @@
                         that.getUserFormData()
                         that.$store.commit('Auth/updateUser', user)
                         if (!that.user.needToCompleteInfo()) {
+                          if (!this.redirectAfterCompleteInfoPage) {
                             that.$router.push({ name: 'dashboard'})
+                          } else {
+                            that.$router.push({ name: this.redirectAfterCompleteInfoPage.name, params: this.redirectAfterCompleteInfoPage.params})
+                          }
+
                         } else {
                             that.$notify({
                                 group: 'notifs',
@@ -374,7 +384,7 @@
                             text: 'شماره موبایل با موفقیت ثبت شد.',
                             type: 'success'
                         })
-                        this.getUserData()
+                        // this.getUserData()
                     })
                     .catch(()=> {
                         that.user.loading = false

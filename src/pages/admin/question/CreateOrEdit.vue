@@ -302,7 +302,6 @@
             <!--                    </v-col>-->
             <!--                    <v-col :md="2">-->
             <!--                        <v-radio :value="index - 1" />-->
-            <!--                        <markdown-btn :elem="currentQuestion.choices.list[index - 1]" :elem-key="'title'" :rendered-matrix-katex="renderedMatrixKatex" :url="url" @add="markdownBtnAddString" />-->
 
             <!--                    </v-col>-->
             <v-radio
@@ -583,7 +582,6 @@
     import UploadFiles from '@/components/UploadFiles';
     // import UploadImage from '@/components/UploadImage';
     import API_ADDRESS from '@/api/Addresses'
-    import {mixinMarkdownAndKatex} from "@/mixin/Mixins"
     import 'mathlive/dist/mathlive-fonts.css'
     import 'mathlive/dist/mathlive-static.css'
     import MathLive from 'mathlive'
@@ -594,7 +592,6 @@
     export default {
         name: 'CreateOrEdit',
         components: {MarkdownBtn, UploadFiles},
-        mixins: [mixinMarkdownAndKatex],
         data: () => {
             return {
                 dialog: false,
@@ -758,9 +755,6 @@
             }
         },
         mounted() {
-            // this.rendered = this.markdown.render();
-            // this.updateRendered();
-
             let that = this
             const mf = MathLive.makeMathField(
                 document.getElementById('mathfield'),
