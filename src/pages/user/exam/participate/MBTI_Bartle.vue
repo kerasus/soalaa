@@ -397,7 +397,7 @@ export default {
                         } else {
                           const isFinished = that.isFinished()
                           if (isFinished) {
-                            that.generateAnswer()
+                            that.sendAnswersAndFinishExam()
                           }
                         }
                       })
