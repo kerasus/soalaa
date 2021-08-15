@@ -3,62 +3,66 @@
   <div class=" ma-4 question-layout">
     <div class="question ">
       <div
-        v-if="status"
-        class="mb-5 "
+          v-if="status"
+          class="mb-5 "
       >
         تایپ سوال
       </div>
       <question_field
-        ref="questionStatement"
-        :key="'statement' + domKey"
-        v-model="question.statement"
-        class="mb-10"
-        :edit-status="status"
-        placeholder="صورت سوال"
-        :question-id="value.id ? value.id : 'null'"
-        @input="updateQuestion"
+          ref="questionStatement"
+          :key="'statement' + domKey"
+          v-model="question.statement"
+          class="mb-10"
+          :edit-status="status"
+          placeholder="صورت سوال"
+          :question-id="value.id ? value.id : 'null'"
+          @input="updateQuestion"
       />
     </div>
-    <div
-      v-for="(item, index) in question.choices.list"
-      :key="index"
-      class="question-layout-options"
-      :class="status ? 'mb-6   question-options white': '  question-o' +
+    <v-row
+        v-for="(item, index) in question.choices.list"
+        :key="index"
+        class="question-layout-options"
+        :class="status ? 'mb-6   question-options white': '  question-o' +
         'ptions'"
     >
-      <div :class="status ?'px-4' :'px-2'">
-        <v-autocomplete
-          v-model="item.answer"
-          :items="mbti_value"
-          label="انتخاب مقدار"
-          dense
-          outlined
-          rounded
-          :disabled="!status"
-          @change="updateQuestion"
-        />
-      </div>
-      <div class="ml-2">
-        {{ (index + 1) + ') ' }}
-      </div>
-      <div class="answer-editor">
+      <v-col class="col-2">
+      <v-row>
+      <v-col :class="status ?'col-10' :'col-10'">
+            <v-autocomplete
+                v-model="item.answer"
+                :items="mbti_value"
+                label="انتخاب مقدار"
+                dense
+                outlined
+                rounded
+                :disabled="!status"
+                @change="updateQuestion"
+            />
+      </v-col>
+        <v-col class="col-1">
+          {{ (index + 1) + ') ' }}
+        </v-col>
+      </v-row>
+      </v-col>
+      <v-col class="answer-editor col-10">
         <div>
           <question_field
-            :ref="'choice' + (index + 1)"
-            :key="'choices' + (index + 1) + domKey"
-            v-model="item.title"
-            :edit-status="status"
-            :question-id="value.id ? value.id : 'null'"
-            @input="updateQuestion"
+              :ref="'choice' + (index + 1)"
+              :key="'choices' + (index + 1) + domKey"
+              v-model="item.title"
+              :edit-status="status"
+              :question-id="value.id ? value.id : 'null'"
+              @input="updateQuestion"
           />
         </div>
-      </div>
-    </div>
-    <!-- ------------------------- answer -------------------------------  -->
+      </v-col>
+    </v-row>
   </div>
+  <!-- ------------------------- answer -------------------------------  -->
 </template>
 <script>
-import { Question } from '@/models/Question'
+import {Question} from '@/models/Question'
 import question_field from '@/components/Question/questionField'
 
 export default {
@@ -144,19 +148,19 @@ export default {
       that.domKey = Date.now()
     }, 100)
   },
-  methods:{
-    getContent () {
+  methods: {
+    getContent() {
       console.log('test', this.$refs)
       this.$refs.questionStatement.getContent()
       this.$refs.choice1[0].getContent()
       this.$refs.choice2[0].getContent()
       this.updateQuestion()
     },
-    updateQuestion () {
+    updateQuestion() {
       console.log('this.question', this.question)
       this.$emit('input', this.question)
     },
-    clicked(order){
+    clicked(order) {
       this.question.choices.list.forEach(item => {
         item.answer = item.order === order;
       })
@@ -167,26 +171,29 @@ export default {
 </script>
 
 <style scoped>
-.question-layout-options{
+.question-layout-options {
   display: flex;
   align-items: center;
   margin-bottom: 10px;
 
 }
-.question-options{
+
+.question-options {
   display: flex;
   align-items: center;
   border-radius: 10px;
 }
-.background-color-test{
+
+.background-color-test {
   background-color: white;
 
 }
-.question-answer{
+
+.question-answer {
   padding: 10px;
 }
 
-.question-options .answer-editor{
+.question-options .answer-editor {
   width: 100%;
 }
 
@@ -196,4 +203,10 @@ export default {
   box-shadow: none !important;
 }
 
+/*@media (max-width: 1077px) {*/
+/*  .question-layout-options.mb-6.question-options.white {*/
+/*    width: auto;*/
+/*    position: relative;*/
+/*  }*/
+/*}*/
 </style>
