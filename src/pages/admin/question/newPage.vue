@@ -210,10 +210,31 @@ export default {
       questionStatusId_draft: null,
       questionStatusId_pending_to_type: null,
       dialog: false,
-      questionType: ''
+      questionType: '',
+      optionQuestionId: null
     }
   },
   created() {
+    let that = this
+    axios.get('/api/v1/option')
+        .then(function (response) {
+          const optionQuestion = response.data.data.find(item => (item.value==='konkur' && item.type==='question_type'))
+          if (!optionQuestion) {
+            // beterek
+            return this.$notify({
+              group: 'notifs',
+              text: ' API با مشکل مواجه شد!',
+              type: 'error'
+            })
+          }
+
+          that.optionQuestionId = optionQuestion.id
+          that.loading = false
+        })
+        .catch(function (error) {
+          console.log(error);
+        })
+
     this.setPageStatus()
     this.checkUrl()
     this.getQuestionStatus()
@@ -257,6 +278,7 @@ export default {
     navBarAction_save() {
       this.$refs.qlayout.getContent()
       var currentQuestion = this.currentQuestion
+      currentQuestion.type_id = this.optionQuestionId
       currentQuestion.update(API_ADDRESS.question.updateQuestion(currentQuestion.id))
         .then(() => {
           this.$notify({
@@ -622,6 +644,7 @@ export default {
           order: item.order
         }
       })
+      currentQuestion.type_id = this.optionQuestionId
       currentQuestion
           .create()
           .then((response) => {
