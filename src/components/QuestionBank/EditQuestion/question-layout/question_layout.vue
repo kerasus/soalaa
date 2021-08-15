@@ -18,13 +18,15 @@
         :question-id="value.id ? value.id : 'null'"
       />
     </div>
-    <div
+    <v-row
       v-for="(item, index) in question.choices.list"
       :key="index"
       class="question-layout-options"
       :class="status ? 'mb-6   question-options white': '  question-options'"
     >
-      <div :class="status ?'px-4' :'px-2'">
+      <v-col class="col-1">
+        <v-row>
+      <v-col :class="status ?'px-6 pb-2 col-8' :'px-5 pb-2 col-8'">
         <div
           v-if="item.answer"
           @click="clicked(item.order)"
@@ -47,11 +49,13 @@
             height="36"
           />
         </div>
-      </div>
-      <div class="ml-2">
+      </v-col>
+      <v-col class="col-1">
         {{ (index + 1) + ') ' }}
-      </div>
-      <div class="answer-editor">
+      </v-col>
+        </v-row>
+      </v-col>
+      <v-col class="answer-editor col-11">
         <div>
           <question_field
             :ref="'choice' + (index + 1)"
@@ -61,8 +65,8 @@
             :question-id="value.id ? value.id : 'null'"
           />
         </div>
-      </div>
-    </div>
+      </v-col>
+    </v-row>
     <!-- ------------------------- answer -------------------------------  -->
     <div class="mb-5 question-answer ">
       <div class="mb-5">
