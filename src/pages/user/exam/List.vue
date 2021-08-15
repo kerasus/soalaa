@@ -129,7 +129,7 @@
                         v-if="item.exam_actions.can_see_report"
                         color="#00b5e6"
                         text
-                        @click="goToResults(item)"
+                        @click="goToResult(item)"
                       >
                         مشاهده نتایج
                       </v-btn>
