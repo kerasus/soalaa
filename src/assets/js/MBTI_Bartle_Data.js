@@ -535,6 +535,7 @@ export default {
         ENFP: {
             title: 'Idealist',
             farsiTitle: 'آرمان گراها',
+            // headerTitle: ' ',
             backgroundColor: '#deffe0',
             image1: 'https://nodes.alaatv.com/upload/3a_mbti_conceptualists_enfp1.png',
             image2: 'https://nodes.alaatv.com/upload/3a_mbti_conceptualists_enfp2.png',

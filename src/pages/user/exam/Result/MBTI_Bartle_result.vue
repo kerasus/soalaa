@@ -215,6 +215,7 @@
 import {mixinDrawer} from "@/mixin/Mixins";
 import mbtiData from "@/assets/js/MBTI_Bartle_Data";
 import {mixinQuiz} from "@/mixin/Mixins"
+import ExamData from "@/assets/js/ExamData";
 export default {
   name: "MBTIBartle",
   mixins: [mixinDrawer, mixinQuiz],
@@ -292,6 +293,7 @@ export default {
         ],
         charBg: '#eae6ff'
       },
+      examData: null,
     }
   },
   computed: {
@@ -332,23 +334,63 @@ export default {
     }
   },
   created () {
-    const quizId = this.$route.params.exam_id
-    if (!this.userQuizListData || !this.userQuizListData[quizId] || !this.currentExamQuestions) {
-      this.$router.push({name: 'user.exam.list'})
-      return
-    }
+    window.currentExamQuestions = null
+    window.currentExamQuestionIndexes = null
+    this.$store.commit('AppLayout/updateOverlay', {show: true, loading: true, text: ''})
+
+    // const quizId = this.$route.params.exam_id
+    // if (!this.userQuizListData || !this.userQuizListData[quizId] || !this.currentExamQuestions) {
+    //   this.$router.push({name: 'user.exam.list'})
+    //   return
+    // }
     this.drawer = false
-    const questions = []
+  },
+  mounted () {
+    const exam_id = this.$route.params.exam_id
+    const user_exam_id = this.$route.params.user_exam_id
+    let questions = []
     let that = this
-    Object.keys(this.currentExamQuestions).forEach(questionId => {
-      that.currentExamQuestions[questionId].choices.list.forEach(item => {
-        if (item.id === that.userQuizListData[quizId][questionId].answered_choice_id) {
-          item.active = true
-        }
-      })
-      questions.push(that.currentExamQuestions[questionId])
-    })
-    this.generateAnswer(questions)
+
+    let examData = new ExamData()
+    examData.getUserExamWithCorrectAnswers(user_exam_id, exam_id)
+        .loadQuestionsFromFile()
+        .getUserExamData(user_exam_id)
+        .run()
+        .then(() => {
+          // save questions in localStorage
+          questions = examData.exam.questions.list
+          that.saveCurrentExamQuestions(examData.exam.questions.list)
+          // save exam info in vuex store (remove questions of exam then save in store)
+          that.$store.commit('updateQuiz', examData.exam)
+          that.$store.commit('mergeDbAnswersIntoLocalstorage', {
+            dbAnswers: examData.userExamData,
+            exam_id: examData.exam.id
+          })
+
+          this.examData = examData
+
+          examData.userExamData.choices.forEach(choice => {
+            questions.forEach(question => {
+              if (question.id === choice.question_id)
+              question.choices.list.forEach(questionChoice => {
+                if (questionChoice.id === choice.choice_id) {
+                  questionChoice.active = true
+                }
+              })
+            })
+          })
+          this.generateAnswer(questions)
+        })
+        .catch(() => {
+          that.$store.commit('AppLayout/updateOverlay', {show: false, loading: false, text: ''})
+          that.goToExamList()
+          that.$notify({
+            group: 'notifs',
+            title: 'توجه!',
+            text: 'مشکلی در دریافت اطلاعات کارنامه رخ داده است.',
+            type: 'error'
+          })
+        })
   },
   methods: {
     changeSelectedBartleItem (bartle) {
@@ -362,6 +404,8 @@ export default {
       finalAnswer.charBg = this.getMbtiBg(finalAnswer.type)
       finalAnswer.bartle = this.getBartleResults(answer)
       this.result = finalAnswer
+      this.$store.commit('AppLayout/updateOverlay', {show: false, loading: true, text: ''})
+
       this.$store.commit('setPsychometricAnswer', finalAnswer)
     },
     getMbtiBg (type) {

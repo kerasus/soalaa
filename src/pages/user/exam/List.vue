@@ -129,7 +129,7 @@
                         v-if="item.exam_actions.can_see_report"
                         color="#00b5e6"
                         text
-                        :to="{ name: 'user.exam.results', params: { user_exam_id: item.user_exam_id, exam_id: item.id } }"
+                        @click="goToResult(item)"
                       >
                         مشاهده نتایج
                       </v-btn>
@@ -180,6 +180,13 @@
             this.$store.commit('AppLayout/updateAppBarAndDrawer', true)
         },
         methods: {
+          goToResult (exam) {
+            let routeName = 'user.exam.results'
+            if (exam.type && exam.type.value && exam.type.value === 'psychometric') {
+              routeName = 'mbtiBartle.result'
+            }
+            this.$router.push({ name: routeName, params: { user_exam_id: exam.user_exam_id, exam_id: exam.id } })
+          },
           goToParticipateExamPage(exam) {
             let routeName = 'onlineQuiz.alaaView'
             if (exam.type && exam.type.value && exam.type.value === 'psychometric') {
