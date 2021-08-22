@@ -92,7 +92,7 @@ export default {
     mbtiType: {
         ISFP: {
             title: 'Experiencer',
-            farsiTitle: 'تجربه گراها',
+            farsiTitle: 'مشرب تجربه گراها (SP)',
             backgroundColor: '#fff3cb',
             image1: 'https://nodes.alaatv.com/upload/3a_mbti_conceptualists_isfp1.png',
             image2: 'https://nodes.alaatv.com/upload/3a_mbti_conceptualists_isfp2.png',
@@ -154,7 +154,7 @@ export default {
         },
         ISTP: {
             title: 'Experiencer',
-            farsiTitle: 'تجربه گراها',
+            farsiTitle: 'مشرب تجربه گراها (SP)',
             backgroundColor: '#fff3cb',
             image1: 'https://nodes.alaatv.com/upload/3a_mbti_conceptualists_istp1.png',
             image2: 'https://nodes.alaatv.com/upload/3a_mbti_conceptualists_istp2.png',
@@ -207,7 +207,7 @@ export default {
         },
         ESFP: {
             title: 'Experiencer',
-            farsiTitle: 'تجربه گراها',
+            farsiTitle: 'مشرب تجربه گراها (SP)',
             backgroundColor: '#fff3cb',
             image1: 'https://nodes.alaatv.com/upload/3a_mbti_conceptualists_esfp1.png',
             image2: 'https://nodes.alaatv.com/upload/3a_mbti_conceptualists_esfp2.png',
@@ -270,7 +270,7 @@ export default {
         },
         ESTP: {
             title: 'Experiencer',
-            farsiTitle: 'تجربه گراها',
+            farsiTitle: 'مشرب تجربه گراها (SP)',
             backgroundColor: '#fff3cb',
             image1: 'https://nodes.alaatv.com/upload/3a_mbti_conceptualists_estp1.png',
             image2: 'https://nodes.alaatv.com/upload/3a_mbti_conceptualists_estp2.png',
@@ -330,7 +330,7 @@ export default {
         },
         INFJ: {
             title: 'Idealist',
-            farsiTitle: 'آرمان گراها',
+            farsiTitle: 'مشرب آرمان گراها (NF)',
             backgroundColor: '#deffe0',
             image1: 'https://nodes.alaatv.com/upload/3a_mbti_conceptualists_infj1.png',
             image2: 'https://nodes.alaatv.com/upload/3a_mbti_conceptualists_infj2.png',
@@ -404,7 +404,7 @@ export default {
         },
         INFP: {
             title: 'Idealist',
-            farsiTitle: 'آرمان گراها',
+            farsiTitle: 'مشرب آرمان گراها (NF)',
             backgroundColor: '#deffe0',
             image1: 'https://nodes.alaatv.com/upload/3a_mbti_conceptualists_infp1.png',
             image2: 'https://nodes.alaatv.com/upload/3a_mbti_conceptualists_infp2.png',
@@ -469,7 +469,7 @@ export default {
         },
         ENFJ: {
             title: 'Idealist',
-            farsiTitle: 'آرمان گراها',
+            farsiTitle: 'مشرب آرمان گراها (NF)',
             backgroundColor: '#deffe0',
             image1: 'https://nodes.alaatv.com/upload/3a_mbti_conceptualists_enfj1.png',
             image2: 'https://nodes.alaatv.com/upload/3a_mbti_conceptualists_enfj2.png',
@@ -534,7 +534,7 @@ export default {
         },
         ENFP: {
             title: 'Idealist',
-            farsiTitle: 'آرمان گراها',
+            farsiTitle: 'مشرب آرمان گراها (NF)',
             // headerTitle: ' ',
             backgroundColor: '#deffe0',
             image1: 'https://nodes.alaatv.com/upload/3a_mbti_conceptualists_enfp1.png',
@@ -603,7 +603,7 @@ export default {
         },
         ISFJ: {
             title: 'Traditionalist',
-            farsiTitle: 'سنت گراها',
+            farsiTitle: 'مشرب سنت گراها (SJ)',
             backgroundColor: '#ddefff',
             image1: 'https://nodes.alaatv.com/upload/3a_mbti_conceptualists_isfj1.png',
             image2: 'https://nodes.alaatv.com/upload/3a_mbti_conceptualists_isfj2.png',
@@ -671,7 +671,7 @@ export default {
         },
         ISTJ: {
             title: 'Traditionalist',
-            farsiTitle: 'سنت گراها',
+            farsiTitle: 'مشرب سنت گراها (SJ)',
             backgroundColor: '#ddefff',
             image1: 'https://nodes.alaatv.com/upload/3a_mbti_conceptualists_istj1.png',
             image2: 'https://nodes.alaatv.com/upload/3a_mbti_conceptualists_istj2.png',
@@ -734,7 +734,7 @@ export default {
         },
         ESFJ: {
             title: 'Traditionalist',
-            farsiTitle: 'سنت گراها',
+            farsiTitle: 'مشرب سنت گراها (SJ)',
             backgroundColor: '#ddefff',
             image1: 'https://nodes.alaatv.com/upload/3a_mbti_conceptualists_esfj1.png',
             image2: 'https://nodes.alaatv.com/upload/3a_mbti_conceptualists_esfj2.png',
@@ -802,7 +802,7 @@ export default {
         },
         ESTJ: {
             title: 'Traditionalist',
-            farsiTitle: 'سنت گراها',
+            farsiTitle: 'مشرب سنت گراها (SJ)',
             backgroundColor: '#ddefff',
             image1: 'https://nodes.alaatv.com/upload/3a_mbti_conceptualists_estj1.png',
             image2: 'https://nodes.alaatv.com/upload/3a_mbti_conceptualists_estj2.png',
@@ -866,7 +866,7 @@ export default {
         },
         INTJ: {
             title: 'Conceptualizer',
-            farsiTitle: 'مفهوم گراها',
+            farsiTitle: 'مشرب مفهوم گراها (NT)',
             backgroundColor: '#eae6ff',
             image1: 'https://nodes.alaatv.com/upload/3a_mbti_conceptualists_intj1.png',
             image2: 'https://nodes.alaatv.com/upload/3a_mbti_conceptualists_intj2.png',
@@ -932,7 +932,7 @@ export default {
         },
         INTP: {
             title: 'Conceptualizer',
-            farsiTitle: 'مفهوم گراها',
+            farsiTitle: 'مشرب مفهوم گراها (NT)',
             backgroundColor: '#eae6ff',
             image1: 'https://nodes.alaatv.com/upload/3a_mbti_conceptualists_intp1.png',
             image2: 'https://nodes.alaatv.com/upload/3a_mbti_conceptualists_intp2.png',
@@ -986,7 +986,7 @@ export default {
         },
         ENTJ: {
             title: 'Conceptualizer',
-            farsiTitle: 'مفهوم گراها',
+            farsiTitle: 'مشرب مفهوم گراها (NT)',
             backgroundColor: '#eae6ff',
             image1: 'https://nodes.alaatv.com/upload/3a_mbti_conceptualists_entj1.png',
             image2: 'https://nodes.alaatv.com/upload/3a_mbti_conceptualists_entj2.png',
@@ -1047,7 +1047,7 @@ export default {
         },
         ENTP: {
             title: 'Conceptualizer',
-            farsiTitle: 'مفهوم گراها',
+            farsiTitle: 'مشرب مفهوم گراها (NT)',
             backgroundColor: '#eae6ff',
             image1: 'https://nodes.alaatv.com/upload/3a_mbti_conceptualists_entp1.png',
             image2: 'https://nodes.alaatv.com/upload/3a_mbti_conceptualists_entp2.png',

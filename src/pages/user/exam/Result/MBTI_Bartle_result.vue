@@ -161,7 +161,7 @@
               </div>
             </v-progress-circular>
             <p class="your-type-bartle">
-              {{ bartleResult[0].text }}
+              {{ bartleResult[0].text }} {{ bartleResult[0].value }}%
             </p>
           </v-col>
         </v-row>
@@ -188,7 +188,7 @@
                 </div>
               </v-progress-circular>
               <p class="other-type-bartle mr-6 mr-sm-0">
-                {{ bartleResult[item].text }}
+                {{ bartleResult[item].text }}  {{ bartleResult[item].value }}%
               </p>
             </div>
           </v-col>
