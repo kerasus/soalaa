@@ -5,6 +5,16 @@ import router from '@/router/index'
 import store from '@/store/store'
 import Axios from '@/plugins/axios'
 import VueNotification from 'vue-notification'
+import VueGtag from 'vue-gtag'
+
+Vue.use(VueGtag, {
+  config: {
+    id: 'UA-43695756-1'
+  },
+  appName: '3a',
+  pageTrackerScreenviewEnabled: true
+}, router)
+
 
 Vue.use(VueNotification)
 

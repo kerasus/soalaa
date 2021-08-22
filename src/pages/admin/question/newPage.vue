@@ -1,6 +1,9 @@
 <template>
   <div id="app">
-    <v-container :fluid="true" class="pa-6">
+    <v-container
+      :fluid="true"
+      class="pa-6"
+    >
       <v-row>
         <v-dialog
           v-model="dialog"
@@ -34,10 +37,10 @@
         </v-dialog>
         <v-col :cols="questionColsNumber">
           <nav-bar
-            v-if="this.checkNavbarVisibility()"
+            v-if="checkNavbarVisibility()"
             :question="currentQuestion"
             :edit-status="edit_status"
-            :page-name="this.getPageStatus()"
+            :page-name="getPageStatus()"
             @create="navBarAction_create"
             @saveDraft="navBarAction_saveDraft"
             @save="navBarAction_save"
@@ -45,9 +48,10 @@
             @edit="navBarAction_edit"
             @remove="navBarAction_remove"
           />
-          <div v-if="this.showQuestionComponentStatus()">
+          <div v-if="showQuestionComponentStatus()">
             <question-layout
               v-if="!loading"
+              ref="qlayout"
               v-model="currentQuestion"
               :status="edit_status"
               @input="updateQuestion"
@@ -65,14 +69,14 @@
           </div>
           <!-- -------------------------- upload file ---------------------->
           <UploadImg
-            v-if="this.showImgComponentStatus()"
+            v-if="showImgComponentStatus()"
             v-model="currentQuestion"
             :edit-status="upload_img_status"
             @imgClicked="makeShowImgPanelVisible($event)"
           />
           <!-- -------------------------- status --------------------------->
           <div
-            v-if="this.getPageStatus() === 'edit'"
+            v-if="getPageStatus() === 'edit'"
             class="my-10"
           >
             <StatusComponent
@@ -97,7 +101,10 @@
           v-if="currentQuestion.logs.list.length > 0 && !uploadImgColsNumber.show"
           :cols="3"
         >
-          <LogListComponent @addComment="addComment" :logs="currentQuestion.logs" />
+          <LogListComponent
+            :logs="currentQuestion.logs"
+            @addComment="addComment"
+          />
         </v-col>
       </v-row>
     </v-container>
@@ -113,7 +120,6 @@ import attach_list from '@/components/QuestionBank/EditQuestion/Exams/exams';
 import StatusComponent from '@/components/QuestionBank/EditQuestion/StatusComponent/status';
 import ShowImg from '@/components/QuestionBank/EditQuestion/ShowImg/showImg';
 import LogListComponent from '@/components/QuestionBank/EditQuestion/Log/LogList';
-import {mixinMarkdownAndKatex} from "@/mixin/Mixins"
 import {Question} from '@/models/Question'
 import {Log, LogList} from '@/models/Log'
 import {ExamList} from "@/models/Exam";
@@ -134,7 +140,6 @@ export default {
     StatusComponent,
     LogListComponent
   },
-  mixins: [mixinMarkdownAndKatex],
   data() {
     return {
       temp: null,
@@ -205,10 +210,31 @@ export default {
       questionStatusId_draft: null,
       questionStatusId_pending_to_type: null,
       dialog: false,
-      questionType: ''
+      questionType: '',
+      optionQuestionId: null
     }
   },
   created() {
+    let that = this
+    axios.get('/api/v1/option')
+        .then(function (response) {
+          const optionQuestion = response.data.data.find(item => (item.value==='konkur' && item.type==='question_type'))
+          if (!optionQuestion) {
+            // beterek
+            return this.$notify({
+              group: 'notifs',
+              text: ' API با مشکل مواجه شد!',
+              type: 'error'
+            })
+          }
+
+          that.optionQuestionId = optionQuestion.id
+          that.loading = false
+        })
+        .catch(function (error) {
+          console.log(error);
+        })
+
     this.setPageStatus()
     this.checkUrl()
     this.getQuestionStatus()
@@ -250,17 +276,19 @@ export default {
     },
 
     navBarAction_save() {
+      this.$refs.qlayout.getContent()
       var currentQuestion = this.currentQuestion
+      currentQuestion.type_id = this.optionQuestionId
       currentQuestion.update(API_ADDRESS.question.updateQuestion(currentQuestion.id))
-          .then(() => {
-            this.$notify({
-              group: 'notifs',
-              title: 'توجه',
-              text: 'ویرایش با موفقیت انجام شد',
-              type: 'success'
-            })
-            this.$router.push({name: 'question.show', params: {question_id: this.$route.params.question_id}})
+        .then(() => {
+          this.$notify({
+            group: 'notifs',
+            title: 'توجه',
+            text: 'ویرایش با موفقیت انجام شد',
+            type: 'success'
           })
+          this.$router.push({name: 'question.show', params: {question_id: this.$route.params.question_id}})
+        })
     },
 
     navBarAction_cancel() {
@@ -353,9 +381,9 @@ export default {
                 // that.currentQuestion.choices
               }
               that.currentQuestion = new Question(that.questionData)
+              that.loading = false
             }
             that.setNullKeys()
-            that.loading = false
           })
     },
 
@@ -466,7 +494,6 @@ export default {
 
       if (this.getPageStatus() === 'create') {
         return this.questionType === 'typeImage';
-
       }
       return  this.doesPhotosExist()
     },
@@ -484,14 +511,23 @@ export default {
 
     loadCurrentQuestionData() {
       let that = this
+      this.loading = true
       this.currentQuestion.show(null, API_ADDRESS.question.updateQuestion(this.$route.params.question_id))
           .then((response) => {
             that.currentQuestion = new Question(response.data.data)
+            if (that.currentQuestion.type.value === 'psychometric') {
+              if (that.getPageStatus() === 'edit') {
+                that.$router.push({name: 'question.mbti.edit', params: {question_id: that.$route.params.question_id}})
+              } else if (that.getPageStatus() === 'show') {
+                that.$router.push({name: 'question.mbti.show', params: {question_id: that.$route.params.question_id}})
+              }
+            }
             that.temp = that.currentQuestion
             that.checkTextCondition()
             that.getLogs()
             that.trueChoiceIndex = that.currentQuestion.choices.list.findIndex((item) => item.answer)
             that.updateAttachList(response.data.data.exams)
+            this.loading = false
           })
     },
 
@@ -608,6 +644,7 @@ export default {
           order: item.order
         }
       })
+      currentQuestion.type_id = this.optionQuestionId
       currentQuestion
           .create()
           .then((response) => {

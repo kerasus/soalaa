@@ -131,8 +131,6 @@
 </template>
 
 <script>
-    // import FakeQuizData from "@/plugins/fakeQuizData";
-    import 'github-markdown-css/github-markdown.css'
     import $ from 'jquery'
     import '@/assets/scss/markdownKatex.scss'
     import Vue from 'vue'

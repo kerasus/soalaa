@@ -1,5 +1,3 @@
-import 'github-markdown-css/github-markdown.css';
-import '@/assets/scss/markdownKatex.scss';
 import Assistant from "@/plugins/assistant";
 import Time from "@/plugins/time";
 import {QuestSubcategory, QuestSubcategoryList} from "@/models/QuestSubcategory";
@@ -10,6 +8,7 @@ import {QuestCategoryList} from "@/models/QuestCategory";
 import $ from "jquery";
 import {QuestionList} from "@/models/Question";
 import ExamData from "@/assets/js/ExamData";
+
 
 const mixinQuiz = {
     computed: {
@@ -215,14 +214,13 @@ const mixinQuiz = {
             if (!Assistant.getId(examId)) {
                 return
             }
-            window.currentExamQuestions = null
-            window.currentExamQuestionIndexes = null
             let that = this
             return new Promise(function (resolve, reject) {
-
                 let userExamId = undefined
                 let examData = new ExamData()
                 if (that.needToLoadQuizData()) {
+                    window.currentExamQuestions = null
+                    window.currentExamQuestionIndexes = null
                     that.$store.commit('AppLayout/updateOverlay', {show: true, loading: true, text: ''})
                     examData.getExamDataAndParticipate(examId)
                     examData.loadQuestionsFromFile()
@@ -379,9 +377,11 @@ const mixinQuiz = {
             else if (!questNumber) {
                 questNumber = 1
             }
+
             this.loadQuestionByNumber(questNumber, viewType)
         },
         loadFirstQuestion() {
+
             this.loadQuestionByNumber(1)
         },
         loadQuestionByNumber(number, viewType) {
@@ -430,14 +430,13 @@ const mixinQuiz = {
         },
         answerClicked(data) {
             let questionId = data.questionId
-            this.userActionOnQuestion(questionId, 'answer', {choiceId: data.choiceId})
+            return this.userActionOnQuestion(questionId, 'answer', {choiceId: data.choiceId})
         },
         changeBookmark(questionId) {
-            this.userActionOnQuestion(questionId, 'bookmark')
+            return this.userActionOnQuestion(questionId, 'bookmark')
         },
         changeStatus(questionId, newStatus) {
-            console.log('changeStatus', newStatus)
-            this.userActionOnQuestion(questionId, 'status', {newStatus})
+            return this.userActionOnQuestion(questionId, 'status', {newStatus})
         },
         getQuestionNumberFromIndex(index) {
             index = parseInt(index)
@@ -505,21 +504,22 @@ const mixinQuiz = {
                 this.changeQuestion(nextCategoryQuestion.id)
             }
         },
-        goToNextQuestion() {
+        goToNextQuestion(viewType) {
             // this.$store.commit('loadUserQuizListData')
             let question = this.getNextQuestion(this.currentQuestion.id)
             if (!question) {
                 return
             }
-            this.changeQuestion(question.id)
+            this.changeQuestion(question.id, viewType)
         },
-        goToPrevQuestion() {
+        goToPrevQuestion(viewType) {
             // this.$store.commit('loadUserQuizListData')
             let question = this.getPrevQuestion(this.currentQuestion.id)
             if (!question) {
                 return
             }
-            this.changeQuestion(question.id)
+
+            this.changeQuestion(question.id, viewType)
         },
         changeQuestion(id, viewType) {
             if (Assistant.getId(this.currentQuestion.id) === Assistant.getId(id)) {
@@ -565,7 +565,6 @@ const mixinQuiz = {
         },
         // ToDo: change argument (type, questNumber)
         changeView(type) {
-            console.log('changeView', this.currentQuestion.id)
             if (type === 'alaa') {
                 const questionNumber = this.getQuestionNumberFromId(this.currentQuestion.id)
                 this.$router.push({

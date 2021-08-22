@@ -1,6 +1,16 @@
 @import "~katex/dist/katex.css";
-//https://github.com/sindresorhus/github-markdown-css
-@import "~github-markdown-css/github-markdown.css";
+
+.katex {
+  direction: ltr;
+  display: inline-block;
+
+  .katex-html {
+    .accent {
+      background-color: unset !important;
+      border-color: unset !important;
+    }
+  }
+}
 
 
 .renderedPanel {

@@ -9,22 +9,24 @@
         تایپ سوال
       </div>
       <question_field
+        ref="questionStatement"
         :key="'statement' + domKey"
         v-model="question.statement"
         class="mb-10"
         :edit-status="status"
         placeholder="صورت سوال"
         :question-id="value.id ? value.id : 'null'"
-        @input="updateQuestion"
       />
     </div>
-    <div
+    <v-row
       v-for="(item, index) in question.choices.list"
       :key="index"
       class="question-layout-options"
       :class="status ? 'mb-6   question-options white': '  question-options'"
     >
-      <div :class="status ?'px-4' :'px-2'">
+      <v-col class="col-1">
+        <v-row>
+      <v-col :class="status ?'px-6 pb-2 col-8' :'px-5 pb-2 col-8'">
         <div
           v-if="item.answer"
           @click="clicked(item.order)"
@@ -47,22 +49,24 @@
             height="36"
           />
         </div>
-      </div>
-      <div class="ml-2">
+      </v-col>
+      <v-col class="col-1">
         {{ (index + 1) + ') ' }}
-      </div>
-      <div class="answer-editor">
+      </v-col>
+        </v-row>
+      </v-col>
+      <v-col class="answer-editor col-11">
         <div>
           <question_field
+            :ref="'choice' + (index + 1)"
             :key="'choices' + (index + 1) + domKey"
             v-model="item.title"
             :edit-status="status"
             :question-id="value.id ? value.id : 'null'"
-            @input="updateQuestion"
           />
         </div>
-      </div>
-    </div>
+      </v-col>
+    </v-row>
     <!-- ------------------------- answer -------------------------------  -->
     <div class="mb-5 question-answer ">
       <div class="mb-5">
@@ -70,13 +74,13 @@
       </div>
       <div>
         <question_field
+          ref="descriptive"
           :key="'descriptive_answer' + domKey"
           v-model="question.descriptive_answer"
           :question-id="value.id ? value.id : 'null'"
           :edit-status="status"
           placeholder="پاسخ تشریحی"
           class="mb-16"
-          @input="updateQuestion"
         />
       </div>
     </div>
@@ -119,7 +123,17 @@ export default {
       that.domKey = Date.now()
     }, 100)
   },
-  methods:{
+  methods: {
+    getContent () {
+      console.log(this.$refs)
+      this.$refs.questionStatement.getContent()
+      this.$refs.descriptive.getContent()
+      this.$refs.choice1[0].getContent()
+      this.$refs.choice2[0].getContent()
+      this.$refs.choice3[0].getContent()
+      this.$refs.choice4[0].getContent()
+      this.updateQuestion()
+    },
     updateQuestion () {
       this.$emit('input', this.question)
     },

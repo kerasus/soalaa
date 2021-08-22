@@ -80,6 +80,7 @@
         @change="confirmQuestion"
       />
     </div>
+    <!--ToDo: remove span-->
     <span
       :id="'question' + source.id"
       v-intersect="{
@@ -90,35 +91,41 @@
       }"
       class="question-body renderedPanel"
       :class="{ ltr: isLtr }"
-      v-html="(getQuestionNumberFromId(source.id)) + '(' + getSubCategoryName + ')' + ' (' + source.order + ') - ' + source.rendered_statement"
-    />
+    >
+      <vue-katex :input="(getQuestionNumberFromId(source.id)) + '(' + getSubCategoryName + ')' + ' (' + source.order + ') - ' + source.statement" />
+    </span>
     <v-row class="choices">
       <v-col
         v-for="(choice, index) in source.choices.list"
         :key="choice.id"
         :cols="choiceClass"
         :class="{ choice: true, renderedPanel: true, active: choice.answer, ltr: isLtr }"
-        v-html="(choiceNumber[index]) + choice.rendered_title"
-      />
+      >
+        <vue-katex :input="(choiceNumber[index]) + choice.title" />
+      </v-col>
     </v-row>
   </div>
 </template>
 
 <script>
     import Vue from 'vue'
-    import {mixinQuiz, mixinWindowSize, mixinMarkdownAndKatex} from '@/mixin/Mixins'
+    import {mixinQuiz, mixinWindowSize} from '@/mixin/Mixins'
     import $ from "jquery";
     import API_ADDRESS from "@/api/Addresses"
     import VueConfirmDialog from 'vue-confirm-dialog'
     import axios from 'axios'
     import {QuestSubcategoryList} from "@/models/QuestSubcategory";
+    import VueKatex from '@/components/VueKatex'
 
     Vue.use(VueConfirmDialog)
     Vue.component('vue-confirm-dialog', VueConfirmDialog.default)
 
     export default {
         name: 'Item',
-        mixins: [mixinQuiz, mixinWindowSize, mixinMarkdownAndKatex],
+      components: {
+        VueKatex
+      },
+        mixins: [mixinQuiz, mixinWindowSize],
         props: {
             subCategory: {
                 default() {
@@ -151,10 +158,10 @@
                 isLtr: false,
                 confirm: false,
                 choiceNumber: {
-                    0: '1) ',
-                    1: '2) ',
-                    2: '3) ',
-                    3: '4) '
+                    0: ' 1) ',
+                    1: ' 2) ',
+                    2: ' 3) ',
+                    3: ' 4) '
                 }
             }
         },
@@ -211,7 +218,7 @@
             },
         },
         created() {
-            this.isLtr = this.isLtrString(this.source.rendered_statement)
+            this.isLtr = this.isLtrString(this.source.statement)
             // setTimeout(() => {console.Log(this.quiz)}, 2000)
         },
         methods: {
