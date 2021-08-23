@@ -4,8 +4,8 @@
       نتیجه تست شخصیت شناسی MBTI
     </p>
     <div
-      class="char-info"
-      :style="{ background: result.charBg }"
+        class="char-info"
+        :style="{ background: result.charBg }"
     >
       <v-container class="full-height">
         <v-row no-gutters>
@@ -17,15 +17,15 @@
           </v-col>
         </v-row>
         <v-row
-          class="full-height flex-column flex-sm-row"
-          no-gutters
+            class="full-height flex-column flex-sm-row"
+            no-gutters
         >
           <v-col
-            lg="5"
-            sm="6"
-            class="d-flex flex-row"
-            order="2"
-            order-sm="1"
+              lg="5"
+              sm="6"
+              class="d-flex flex-row"
+              order="2"
+              order-sm="1"
           >
             <div class="char-info-text">
               <p class="char-type-title d-none d-sm-block">
@@ -36,17 +36,17 @@
                 <p>
                   <span>افراد {{ result.type }}</span>
                 </p>
-                <p v-html="mbtiBartleData.mbtiType[result.type].shortText" />
+                <p v-html="mbtiBartleData.mbtiType[result.type].shortText"/>
               </div>
             </div>
           </v-col>
           <v-col
-            order="1"
-            lg="7"
-            sm="6"
-            order-sm="2"
+              order="1"
+              lg="7"
+              sm="6"
+              order-sm="2"
           >
-            <v-img :src="mbtiBartleData.mbtiType[result.type].image1" />
+            <v-img :src="mbtiBartleData.mbtiType[result.type].image1"/>
           </v-col>
         </v-row>
       </v-container>
@@ -54,15 +54,15 @@
     <v-container>
       <v-row class="d-flex mbti-detail-box-parent">
         <v-col
-          v-for="(item, index) in result.details"
-          :key="index"
-          md="6"
-          cols="12"
-          dir="ltr"
+             v-for="(item, index) in result.details"
+            :key="index"
+            md="6"
+            cols="12"
+            dir="ltr"
         >
           <div
-            class="mbti-detail-box"
-            dir="rtl"
+              class="mbti-detail-box"
+              dir="rtl"
           >
             <div :class="{ 'variable-box': true, active: item.values[0].percent > 50 }">
               <div class="variable-label">
@@ -84,22 +84,22 @@
               </p>
               <div class="progress-bar">
                 <v-progress-linear
-                  v-if="item.values[0].percent > 50"
-                  :value="item.values[0].percent"
-                  elevation="3"
-                  color="white"
-                  rounded
-                  height="12"
-                  class="progress-left"
+                    v-if="item.values[0].percent > 50"
+                    :value="item.values[0].percent"
+                    elevation="3"
+                    color="white"
+                    rounded
+                    height="12"
+                    class="progress-left"
                 />
                 <v-progress-linear
-                  v-else
-                  :value="item.values[1].percent"
-                  elevation="3"
-                  color="white"
-                  rounded
-                  height="12"
-                  class="progress-right"
+                    v-else
+                    :value="item.values[1].percent"
+                    elevation="3"
+                    color="white"
+                    rounded
+                    height="12"
+                    class="progress-right"
                 />
               </div>
             </div>
@@ -124,12 +124,12 @@
           <p class="type-header">
             ویژگی های شخصیت {{ result.type }}
           </p>
-          <div :style="{ height: '450px' }">
-            <v-img :src="mbtiBartleData.mbtiType[result.type].image2" />
+          <div class="banner">
+            <v-img :src="mbtiBartleData.mbtiType[result.type].image2"/>
           </div>
           <p
-            class="full"
-            v-html="mbtiBartleData.mbtiType[result.type].text"
+              class="full"
+              v-html="mbtiBartleData.mbtiType[result.type].text"
           />
         </v-col>
       </v-row>
@@ -138,8 +138,8 @@
       نتیجه تست Bartle
     </p>
     <div
-      v-if="bartleResult[0]"
-      class="char-results-bartle"
+        v-if="bartleResult[0]"
+        class="char-results-bartle"
     >
       <v-container>
         <v-row class="main-result">
@@ -148,16 +148,16 @@
               تیپ شخصیتی شما
             </p>
             <v-progress-circular
-              class="mt-4 bartle-item-circle"
-              :rotate="-90"
-              :size="240"
-              :width="10"
-              :value="bartleResult[0].value"
-              color="#ef5350"
-              @click="changeSelectedBartleItem(bartleResult[0])"
+                class="mt-4 bartle-item-circle"
+                :rotate="-90"
+                :size="240"
+                :width="10"
+                :value="bartleResult[0].value"
+                color="#ef5350"
+                @click="changeSelectedBartleItem(bartleResult[0])"
             >
               <div class="inside-bartle-result-circle  pa-10">
-                <v-img :src="bartleResult[0].image" />
+                <v-img :src="bartleResult[0].image"/>
               </div>
             </v-progress-circular>
             <p class="your-type-bartle">
@@ -168,27 +168,27 @@
         <v-row class="other-result">
           <v-col class="d-flex flex-sm-row flex-column justify-space-around">
             <div
-              v-for="item in 3"
-              :key="item"
-              class="d-flex flex-sm-column flex-row align-center justify-center"
+                v-for="item in 3"
+                :key="item"
+                class="d-flex flex-sm-column flex-row align-center justify-center"
             >
               <v-progress-circular
-                class="mt-4 bartle-item-circle"
-                :rotate="-90"
-                :size="125"
-                :width="6"
-                :value="bartleResult[item].value"
-                color="#ef5350"
-                @click="changeSelectedBartleItem(bartleResult[item])"
+                  class="mt-4 bartle-item-circle"
+                  :rotate="-90"
+                  :size="125"
+                  :width="6"
+                  :value="bartleResult[item].value"
+                  color="#ef5350"
+                  @click="changeSelectedBartleItem(bartleResult[item])"
               >
                 <div class="inside-bartle-result-circle pa-6">
                   <v-img
-                    :src="bartleResult[item].image"
+                      :src="bartleResult[item].image"
                   />
                 </div>
               </v-progress-circular>
               <p class="other-type-bartle mr-6 mr-sm-0">
-                {{ bartleResult[item].text }}  {{ bartleResult[item].value }}%
+                {{ bartleResult[item].text }} {{ bartleResult[item].value }}%
               </p>
             </div>
           </v-col>
@@ -202,8 +202,8 @@
             ویژگی های شخصیت {{ selectedBartleItem.text }}
           </p>
           <p
-            class="full"
-            v-html="selectedBartleItem.fullText"
+              class="full"
+              v-html="selectedBartleItem.fullText"
           />
         </v-col>
       </v-row>
@@ -216,100 +216,101 @@ import {mixinDrawer} from "@/mixin/Mixins";
 import mbtiData from "@/assets/js/MBTI_Bartle_Data";
 import {mixinQuiz} from "@/mixin/Mixins"
 import ExamData from "@/assets/js/ExamData";
+
 export default {
   name: "MBTIBartle",
   mixins: [mixinDrawer, mixinQuiz],
-  data () {
+  data() {
     return {
       selectedBartleItem: null,
       result: {
         type: 'INTP',
         details:
             [
-          {
-            title: 'انرژی',
-            text: 'از کجا انرژی میگیرید و کجا مصرفش میکنید؟',
-            values: [
               {
-                title: 'برونگرایی',
-                percent: 24,
-                label: 'E'
+                title: 'انرژی',
+                text: 'از کجا انرژی میگیرید و کجا مصرفش میکنید؟',
+                values: [
+                  {
+                    title: 'برونگرایی',
+                    percent: 24,
+                    label: 'E'
+                  },
+                  {
+                    title: 'درونگرایی',
+                    percent: 76,
+                    label: 'I'
+                  },
+                ]
               },
               {
-                title: 'درونگرایی',
-                percent: 76,
-                label: 'I'
-              },
-            ]
-          },
-          {
-            title: 'جمع آوری اطلاعات',
-            text: 'ترجیح شما در جمع آوری اطلاعات چگونه است؟',
-            values: [
-              {
-                title: 'شهودی',
-                percent: 72,
-                label: 'N'
-              },
-              {
-                title: 'حسی',
-                percent: 28,
-                label: 'S'
-              },
-            ]
-          },
-          {
-            title: 'تصمیم گیری',
-            text: 'ترجیح شما در تصمیم گیری چگونه است؟',
-            values: [
-              {
-                title: 'احساسی',
-                percent: 33,
-                label: 'F'
+                title: 'جمع آوری اطلاعات',
+                text: 'ترجیح شما در جمع آوری اطلاعات چگونه است؟',
+                values: [
+                  {
+                    title: 'شهودی',
+                    percent: 72,
+                    label: 'N'
+                  },
+                  {
+                    title: 'حسی',
+                    percent: 28,
+                    label: 'S'
+                  },
+                ]
               },
               {
-                title: 'منطقی',
-                percent: 67,
-                label: 'T'
+                title: 'تصمیم گیری',
+                text: 'ترجیح شما در تصمیم گیری چگونه است؟',
+                values: [
+                  {
+                    title: 'احساسی',
+                    percent: 33,
+                    label: 'F'
+                  },
+                  {
+                    title: 'منطقی',
+                    percent: 67,
+                    label: 'T'
+                  },
+                ]
               },
-            ]
-          },
-          {
-            title: 'اجرا',
-            text: 'ترجیح شما در سازماندهی و اجرای تصمیمات چگونه است؟',
-            values: [
               {
-                title: 'منعطف',
-                percent: 44,
-                label: 'P'
+                title: 'اجرا',
+                text: 'ترجیح شما در سازماندهی و اجرای تصمیمات چگونه است؟',
+                values: [
+                  {
+                    title: 'منعطف',
+                    percent: 44,
+                    label: 'P'
+                  },
+                  {
+                    title: 'ساختارمند',
+                    percent: 56,
+                    label: 'J'
+                  },
+                ]
               },
-              {
-                title: 'ساختارمند',
-                percent: 56,
-                label: 'J'
-              },
-            ]
-          },
-        ],
+            ],
         charBg: '#eae6ff'
       },
       examData: null,
     }
   },
   computed: {
-    mbtiGroup () {
+    mbtiGroup() {
       return mbtiData.mbtiType[this.result.type].farsiTitle
     },
-    mbtiBartleData () {
+    mbtiBartleData() {
       return mbtiData
     },
-    bartleResult () {
+    bartleResult() {
       let results = []
       if (!this.result.bartle) {
         return results
       }
       Object.keys(this.result.bartle).forEach(key => {
-        results.push({ key, value: this.result.bartle[key] })
+        results.push({key, value: this.result.bartle[key]})
       })
       results.forEach(item => {
         item.text = mbtiData.bartleKeys.find(bartle => bartle.value === item.key).label
@@ -329,11 +330,11 @@ export default {
     }
   },
   watch: {
-    bartleResult (newValue) {
+    bartleResult(newValue) {
       this.selectedBartleItem = newValue[0]
     }
   },
-  created () {
+  created() {
     window.currentExamQuestions = null
     window.currentExamQuestionIndexes = null
     this.$store.commit('AppLayout/updateOverlay', {show: true, loading: true, text: ''})
@@ -345,7 +346,7 @@ export default {
     // }
     this.drawer = false
   },
-  mounted () {
+  mounted() {
     const exam_id = this.$route.params.exam_id
     const user_exam_id = this.$route.params.user_exam_id
     let questions = []
@@ -372,11 +373,11 @@ export default {
           examData.userExamData.choices.forEach(choice => {
             questions.forEach(question => {
               if (question.id === choice.question_id)
-              question.choices.list.forEach(questionChoice => {
-                if (questionChoice.id === choice.choice_id) {
-                  questionChoice.active = true
-                }
-              })
+                question.choices.list.forEach(questionChoice => {
+                  if (questionChoice.id === choice.choice_id) {
+                    questionChoice.active = true
+                  }
+                })
             })
           })
           this.generateAnswer(questions)
@@ -393,10 +394,10 @@ export default {
         })
   },
   methods: {
-    changeSelectedBartleItem (bartle) {
+    changeSelectedBartleItem(bartle) {
       this.selectedBartleItem = bartle
     },
-    generateAnswer (questions) {
+    generateAnswer(questions) {
       let answer = this.calculateExam(questions)
       let finalAnswer = {}
       finalAnswer.type = this.getMbtiTypeFromAnswers(answer)
@@ -408,13 +409,13 @@ export default {
 
       this.$store.commit('setPsychometricAnswer', finalAnswer)
     },
-    getMbtiBg (type) {
+    getMbtiBg(type) {
       if (!mbtiData.mbtiType[type]) {
         return ''
       }
       return mbtiData.mbtiType[type].backgroundColor
     },
-    getBartleResults (answer) {
+    getBartleResults(answer) {
       let bartleResults = {}
       mbtiData.bartleKeys.forEach(item => {
         const bartleItrem = answer[Object.keys(answer)[1]]
@@ -422,7 +423,7 @@ export default {
       })
       return bartleResults
     },
-    getMbtiDetailsFromAnswers (answer) {
+    getMbtiDetailsFromAnswers(answer) {
       let details = []
       for (let i = 0; i < 4; i++) {
         let title = mbtiData.mbtiGroups[i].title
@@ -452,7 +453,7 @@ export default {
       }
       return details
     },
-    getMbtiTypeFromAnswers (answer) {
+    getMbtiTypeFromAnswers(answer) {
       let type = ''
 
       if (!answer[Object.keys(answer)[0]][mbtiData.mbtiKeys[0].text]) {
@@ -485,7 +486,7 @@ export default {
 
       return type
     },
-    calculateExam (questions) {
+    calculateExam(questions) {
       let answer = {}
       questions.forEach(question => { // set the sub categories in the answer obj
         if (!answer[question.sub_category.id]) {
@@ -525,12 +526,20 @@ export default {
 </script>
 
 <style scoped lang="scss">
+
 .bartle-item-circle {
   cursor: pointer;
 }
 
 .full-height {
   height: 100%;
+}
+
+.banner {
+  margin-bottom: 50px;
+  @media only screen and (max-width: 990px) {
+    margin-bottom: 30px;
+  }
 }
 
 .char-results {
@@ -643,6 +652,7 @@ export default {
         color: #fff;
       }
     }
+
     :nth-child(2) .mbti-detail-box {
       background-image: linear-gradient(100deg, rgba(244, 243, 255, 0.4) 2%, rgba(203, 194, 255, 0.4) 90%);
       color: #7e57c2;
@@ -657,6 +667,7 @@ export default {
         opacity: 1 !important;
       }
     }
+
     :nth-child(3) .mbti-detail-box {
       background-image: linear-gradient(100deg, rgba(255, 227, 190, 0.4) 2%, rgba(255, 248, 238, 0.4) 90%);
       color: #ff9100;
@@ -671,6 +682,7 @@ export default {
         opacity: 1 !important;
       }
     }
+
     :nth-child(4) .mbti-detail-box {
       background-image: linear-gradient(100deg, rgba(243, 250, 255, 0.4) 2%, rgba(172, 217, 255, 0.4) 90%);
       color: #1e88e5;
@@ -769,9 +781,9 @@ export default {
   }
 
   .type-explanation {
-
     .full {
       text-align: justify;
+
     }
 
     .type-header {
@@ -860,6 +872,8 @@ export default {
   }
 
   .other-type-bartle {
+    min-width: 117px;
+    text-align: center;
     font-size: 20px;
     font-weight: 500;
     margin: 20px 0;
@@ -867,7 +881,7 @@ export default {
 }
 </style>
 
-<style>
+<style lang="scss">
 .char-results .mbti-detail-box-parent .mbti-detail-box .variable-details .progress-bar .v-progress-linear__background {
   opacity: 1 !important;
 }
@@ -905,6 +919,12 @@ export default {
   .container {
     max-width: 1185px;
   }
+}
+.space {
+@media only screen and (max-width: 990px) {
+  max-height: 20px !important;
+  overflow: hidden;
+}
 }
 
 </style>
