@@ -107,6 +107,12 @@ const router = new VueRouter({
             meta: {middleware: [auth, completeInfo]}
         },
         {
+            path: '/psychology/results/:examId',
+            name: 'psychology.results',
+            component: () => lazyLoadView(import('@/pages/admin/exam/PsychologyResult')),
+            meta: {middleware: [auth, completeInfo]}
+        },
+        {
             path: '/onlineQuiz/exams',
             name: 'onlineQuiz.exams',
             component: () => lazyLoadView(import('@/pages/admin/exam/Manage')),
@@ -197,7 +203,7 @@ const router = new VueRouter({
             meta: {middleware: [auth, completeInfo]}
         },
         {
-            path: '/sub-group/edit',
+            path: '/sub-group/edit/:exam_id',
             name: 'subGroup.edit',
             component: () => lazyLoadView(import('@/pages/admin/subGroup/edit')),
             meta: {middleware: [auth, completeInfo]}
