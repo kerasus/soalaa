@@ -147,6 +147,9 @@ const API_ADDRESS = {
     base (exam_id) {
       return lumenServer + '/exam-question/zirgorooh/' + exam_id
     },
+    all () {
+      return lumenServer + '/option?with_pagination=0&type=zirgorooh_type'
+    }
   }
 }
 export default API_ADDRESS
