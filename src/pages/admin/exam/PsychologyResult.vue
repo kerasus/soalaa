@@ -499,69 +499,73 @@
                 )
         },
         methods: {
+          getParams () {
+            let params = {}
+            if (this.dateRange[0]) {
+              params.exam_user_started_at = this.dateRange[0] + ' 00:00:00'
+            }
+            if (this.dateRange[1]) {
+              params.exam_user_finished_at = this.dateRange[1] + ' 00:00:00'
+            }
+            if (this.selectedCities.length > 0) {
+              params.city = this.selectedCities
+            }
+            if (this.selectedProvinces.length > 0) {
+              params.province = this.selectedProvinces
+            }
+            if (this.selectedMajor.length > 0) {
+              params.major = this.selectedMajor
+            }
+            if (this.selectedMajor.length > 0) {
+              params.major = this.selectedMajor
+            }
+            if (this.selectedGrades.length > 0) {
+              params.grade = this.selectedGrades
+            }
+            if (this.selectedGender.length > 0) {
+              params.gender = this.selectedGender
+            }
+            if (this.mbti.i) {
+              params.mind_function = "I"
+            }
+            if (this.mbti.e) {
+              params.mind_function = "E"
+            }
+            if (this.mbti.s) {
+              params.energy_function = "S"
+            }
+            if (this.mbti.n) {
+              params.energy_function = "N"
+            }
+            if (this.mbti.t) {
+              params.nature_function = "T"
+            }
+            if (this.mbti.f) {
+              params.nature_function = "F"
+            }
+            if (this.mbti.p) {
+              params.tactics_function = "P"
+            }
+            if (this.mbti.j) {
+              params.tactics_function = "J"
+            }
+            if (this.bartle.a || this.bartle.e || this.bartle.k || this.bartle.s) {
+              params.bartle = []
+              Object.keys(this.bartle).forEach(key => {
+                if (this.bartle[key]) {
+                  params.bartle.push(key.toString().toUpperCase())
+                }
+              })
+            }
+            params.exam_id = this.$route.params.examId
+            return params
+          },
             getData ($state) {
                 if (this.sendRequest) {
 
                     this.showLoading()
                     let that = this
-                    let params = {}
-                    if (this.dateRange[0]) {
-                      params.exam_user_started_at = this.dateRange[0] + ' 00:00:00'
-                    }
-                    if (this.dateRange[1]) {
-                      params.exam_user_finished_at = this.dateRange[1] + ' 00:00:00'
-                    }
-                    if (this.selectedCities.length > 0) {
-                      params.city = this.selectedCities
-                    }
-                    if (this.selectedProvinces.length > 0) {
-                      params.province = this.selectedProvinces
-                    }
-                    if (this.selectedMajor.length > 0) {
-                      params.major = this.selectedMajor
-                    }
-                    if (this.selectedMajor.length > 0) {
-                      params.major = this.selectedMajor
-                    }
-                    if (this.selectedGrades.length > 0) {
-                      params.grade = this.selectedGrades
-                    }
-                    if (this.selectedGender.length > 0) {
-                      params.gender = this.selectedGender
-                    }
-                    if (this.mbti.i) {
-                      params.mind_function = "I"
-                    }
-                    if (this.mbti.e) {
-                      params.mind_function = "E"
-                    }
-                    if (this.mbti.s) {
-                      params.energy_function = "S"
-                    }
-                    if (this.mbti.n) {
-                      params.energy_function = "N"
-                    }
-                    if (this.mbti.t) {
-                      params.nature_function = "T"
-                    }
-                    if (this.mbti.f) {
-                      params.nature_function = "F"
-                    }
-                    if (this.mbti.p) {
-                      params.tactics_function = "P"
-                    }
-                    if (this.mbti.j) {
-                      params.tactics_function = "J"
-                    }
-                    if (this.bartle.a || this.bartle.e || this.bartle.k || this.bartle.s) {
-                      params.bartle = []
-                      Object.keys(this.bartle).forEach(key => {
-                        if (this.bartle[key]) {
-                          params.bartle.push(key.toString().toUpperCase())
-                        }
-                      })
-                    }
-                    params.exam_id = this.$route.params.examId
+                    let params = this.getParams()
 
                     axios.get(API_ADDRESS.exam.examReportIndex('participants' + that.nextPage), {
                         params: params
@@ -589,64 +593,7 @@
             },
             getExcel () {
               // let that = this
-              let params = {}
-              if (this.dateRange[0]) {
-                params.exam_user_started_at = this.dateRange[0] + ' 00:00:00'
-              }
-              if (this.dateRange[1]) {
-                params.exam_user_finished_at = this.dateRange[1] + ' 00:00:00'
-              }
-              if (this.selectedCities.length > 0) {
-                params.city = this.selectedCities
-              }
-              if (this.selectedProvinces.length > 0) {
-                params.province = this.selectedProvinces
-              }
-              if (this.selectedMajor.length > 0) {
-                params.major = this.selectedMajor
-              }
-              if (this.selectedMajor.length > 0) {
-                params.major = this.selectedMajor
-              }
-              if (this.selectedGrades.length > 0) {
-                params.grade = this.selectedGrades
-              }
-              if (this.selectedGender.length > 0) {
-                params.gender = this.selectedGender
-              }
-              if (this.mbti.i) {
-                params.mind_function = "I"
-              }
-              if (this.mbti.e) {
-                params.mind_function = "E"
-              }
-              if (this.mbti.s) {
-                params.energy_function = "S"
-              }
-              if (this.mbti.n) {
-                params.energy_function = "N"
-              }
-              if (this.mbti.t) {
-                params.nature_function = "T"
-              }
-              if (this.mbti.f) {
-                params.nature_function = "F"
-              }
-              if (this.mbti.p) {
-                params.tactics_function = "P"
-              }
-              if (this.mbti.j) {
-                params.tactics_function = "J"
-              }
-              if (this.bartle.a || this.bartle.e || this.bartle.k || this.bartle.s) {
-                params.bartle = []
-                Object.keys(this.bartle).forEach(key => {
-                  if (this.bartle[key]) {
-                    params.bartle.push(key.toString().toUpperCase())
-                  }
-                })
-              }
-              params.exam_id = this.$route.params.examId
+              let params = this.getParams()
               params.excel_export = 1
               this.$notify({
                 group: 'notifs',
