@@ -253,39 +253,53 @@
             </v-expansion-panel-content>
           </v-expansion-panel>
         </v-expansion-panels>
-        <v-btn
-          color="primary"
-          block
-          class="my-5"
-          @click="sendRequests"
-        >
-          فیلتر
-        </v-btn>
-        <v-btn
-          color="orange"
-          dark
-          block
-          class="my-5"
-          :loading="fileLoading"
-          @click="getExcel"
-        >
-          تولید Excel
-        </v-btn>
-        <v-btn
-          color="yellow"
-          block
-          class="my-5"
-          :disabled="!file_url"
-        >
-          <a
-            :href="file_url"
-            :style="{ 'text-decoration': 'none', color: '#000', width: '100%' }"
-            target="_blank"
-            :disabled="!file_url"
-          >
-            دانلود Excel
-          </a>
-        </v-btn>
+        <v-row>
+          <v-col md="4">
+            <v-btn
+              color="primary"
+              block
+              class="my-5"
+              @click="sendRequests"
+            >
+              فیلتر
+            </v-btn>
+          </v-col>
+          <v-col md="4">
+            <v-btn
+              color="orange"
+              dark
+              block
+              class="my-5"
+              :loading="fileLoading"
+              @click="getExcel"
+            >
+              تولید Excel
+            </v-btn>
+          </v-col>
+          <v-col md="4">
+            <v-btn
+              color="yellow"
+              block
+              class="my-5"
+              :disabled="!file_url"
+            >
+              <a
+                :href="file_url"
+                :style="{ 'text-decoration': 'none', color: '#000', width: '100%' }"
+                target="_blank"
+                :disabled="!file_url"
+              >
+                دانلود Excel
+              </a>
+            </v-btn>
+          </v-col>
+        </v-row>
+        <v-row>
+          <v-col>
+            نتایج قابل مشاهده:
+            {{ results.length }} از {{ totalResultsCount }}
+          </v-col>
+        </v-row>
         <v-simple-table
           dense
           fixed-header
@@ -460,7 +474,8 @@
                 sendRequest: false,
                 resetState: false,
                 file_url: '',
-                fileLoading: false
+                fileLoading: false,
+                totalResultsCount: 0
             }
         },
         computed: {
@@ -577,6 +592,7 @@
               return params
             },
             getData ($state) {
+                this.totalResultsCount = 0
                 if (this.resetState) {
                   $state.reset()
                   this.nextPage = ''
@@ -595,6 +611,7 @@
                         .then( response => {
                             that.hideLoading()
                             that.results = that.results.concat(response.data.data)
+                            that.totalResultsCount = response.data.meta.total
                             if(typeof response.data.links === 'undefined' || response.data.links.next === null) {
                                 that.nextPage = ''
                                 $state.complete()
