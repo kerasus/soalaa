@@ -296,8 +296,9 @@
         </v-row>
         <v-row>
           <v-col>
-            نتایج قابل مشاهده:
-            {{ results.length }} از {{ totalResultsCount }}
+            <p>
+              نتایج قابل مشاهده: {{ results.length }} از {{ totalResultsCount }}
+            </p>
           </v-col>
         </v-row>
         <v-simple-table
@@ -308,24 +309,12 @@
           <template v-slot:default>
             <thead v-if="results[0]">
               <tr>
-                <th>
-                  نام و نام خانوادگی
-                </th>
-                <th>
-                  استان
-                </th>
-                <th>
-                  شهر
-                </th>
-                <th>
-                  جنسیت
-                </th>
-                <th>
-                  رشته
-                </th>
-                <th>
-                  پایه
-                </th>
+                <th>نام و نام خانوادگی</th>
+                <th>استان</th>
+                <th>شهر</th>
+                <th>جنسیت</th>
+                <th>رشته</th>
+                <th>پایه</th>
                 <th
                   v-for="(sub, index) in results[0].sub_category"
                   :key="index"
@@ -369,41 +358,6 @@
                 >
                   {{ sub.percent.toFixed(0) }}
                 </th>
-                <!--                <td>-->
-                <!--                  <v-tooltip top>-->
-                <!--                    <template v-slot:activator="{ on, attrs }">-->
-                <!--                      <v-btn-->
-                <!--                        icon-->
-                <!--                        :to="{name: 'user.exam.results', params: {exam_id: item.exam_id, user_exam_id: item.exam_user_id}}"-->
-                <!--                        color="cyan"-->
-                <!--                        v-bind="attrs"-->
-                <!--                        v-on="on"-->
-                <!--                      >-->
-                <!--                        <v-icon>mdi-eye-circle-outline</v-icon>-->
-                <!--                      </v-btn>-->
-                <!--                    </template>-->
-                <!--                    <span>مشاهده کارنامه</span>-->
-                <!--                  </v-tooltip>-->
-                <!--                </td>-->
-                <!--                <template-->
-                <!--                  v-for="(sub_categoryItem, sub_categoryIndex) in item.sub_category"-->
-                <!--                >-->
-                <!--                  <td-->
-                <!--                    :key="'bodyColumns_percent_'+sub_categoryItem.sub_category_order+sub_categoryIndex+'_'+item.exam_user_id"-->
-                <!--                    class="bordered-right"-->
-                <!--                  >-->
-                <!--                    {{ sub_categoryItem.percent }}-->
-                <!--                  </td>-->
-                <!--                  <td :key="'bodyColumns_taraz_'+sub_categoryItem.sub_category_order+sub_categoryIndex+'_'+item.exam_user_id">-->
-                <!--                    {{ sub_categoryItem.taraaz }}-->
-                <!--                  </td>-->
-                <!--                  <td-->
-                <!--                    :key="'bodyColumns_rank_'+sub_categoryItem.sub_category_order+sub_categoryIndex+'_'+item.exam_user_id"-->
-                <!--                    class="bordered-left"-->
-                <!--                  >-->
-                <!--                    {{ sub_categoryItem.rank_country }}-->
-                <!--                  </td>-->
-                <!--                </template>-->
               </tr>
             </tbody>
             <infinite-loading
@@ -479,21 +433,21 @@
             }
         },
         computed: {
-          filteredCities () {
-              if (!this.cities) {
-                  return []
-              }
-              return this.cities.filter(city => {
-                  let returnValue = false
-                  this.selectedProvinces.forEach(province => {
-                      if (province === city.province.title && city.title.includes(this.citySearch)) {
-                          returnValue = true
-                          return
-                      }
-                  })
-                  return returnValue
-              })
-          }
+            filteredCities () {
+                if (!this.cities) {
+                    return []
+                }
+                return this.cities.filter(city => {
+                    let returnValue = false
+                    this.selectedProvinces.forEach(province => {
+                        if (province === city.province.title && city.title.includes(this.citySearch)) {
+                            returnValue = true
+                            return
+                        }
+                    })
+                    return returnValue
+                })
+            }
         },
         watch: {
           selectedCities () {
@@ -504,7 +458,6 @@
         },
         created() {
             this.$store.commit('AppLayout/updateDrawer', false)
-
             axios.get(API_ADDRESS.user.formData)
                 .then((resp) => {
                     this.genders = resp.data.data.genders
@@ -524,7 +477,7 @@
         },
         methods: {
             sendRequests () {
-
+              this.totalResultsCount = 0
               this.sendRequest = true
               this.results = []
               this.lastLoadTime = Date.now()
@@ -592,7 +545,6 @@
               return params
             },
             getData ($state) {
-                this.totalResultsCount = 0
                 if (this.resetState) {
                   $state.reset()
                   this.nextPage = ''
