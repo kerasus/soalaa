@@ -23,14 +23,14 @@
                       <v-checkbox
                         v-model="mbti.i"
                         label="I"
-                        @click="checkMbtiDuplicate('e')"
                         :disabled="sendRequest"
+                        @click="checkMbtiDuplicate('e')"
                       />
                       <v-checkbox
                         v-model="mbti.e"
                         label="E"
-                        @click="checkMbtiDuplicate('i')"
                         :disabled="sendRequest"
+                        @click="checkMbtiDuplicate('i')"
                       />
                     </v-col>
                   </v-row>
@@ -39,14 +39,14 @@
                       <v-checkbox
                         v-model="mbti.n"
                         label="N"
-                        @click="checkMbtiDuplicate('s')"
                         :disabled="sendRequest"
+                        @click="checkMbtiDuplicate('s')"
                       />
                       <v-checkbox
                         v-model="mbti.s"
                         label="S"
-                        @click="checkMbtiDuplicate('n')"
                         :disabled="sendRequest"
+                        @click="checkMbtiDuplicate('n')"
                       />
                     </v-col>
                   </v-row>
@@ -55,14 +55,14 @@
                       <v-checkbox
                         v-model="mbti.t"
                         label="T"
-                        @click="checkMbtiDuplicate('f')"
                         :disabled="sendRequest"
+                        @click="checkMbtiDuplicate('f')"
                       />
                       <v-checkbox
                         v-model="mbti.f"
                         label="F"
-                        @click="checkMbtiDuplicate('t')"
                         :disabled="sendRequest"
+                        @click="checkMbtiDuplicate('t')"
                       />
                     </v-col>
                   </v-row>
@@ -71,14 +71,14 @@
                       <v-checkbox
                         v-model="mbti.j"
                         label="J"
-                        @click="checkMbtiDuplicate('p')"
                         :disabled="sendRequest"
+                        @click="checkMbtiDuplicate('p')"
                       />
                       <v-checkbox
                         v-model="mbti.p"
                         label="P"
-                        @click="checkMbtiDuplicate('j')"
                         :disabled="sendRequest"
+                        @click="checkMbtiDuplicate('j')"
                       />
                     </v-col>
                   </v-row>
@@ -262,7 +262,24 @@
             </v-expansion-panel-content>
           </v-expansion-panel>
         </v-expansion-panels>
-        <v-btn @click="sendRequest = true" color="primary" block class="my-5" v-if="!sendRequest">فیلتر</v-btn>
+        <v-btn
+          v-if="!sendRequest"
+          color="primary"
+          block
+          class="my-5"
+          @click="sendRequest = true"
+        >
+          فیلتر
+        </v-btn>
+        <v-btn
+          color="orange"
+          dark
+          block
+          class="my-5"
+          @click="getExcel"
+        >
+          دانلود Excel
+        </v-btn>
         <v-simple-table
           dense
           fixed-header
@@ -289,10 +306,12 @@
                 <th>
                   پایه
                 </th>
-                <th v-for="(sub, index) in results[0].sub_category" :key="index">
+                <th
+                  v-for="(sub, index) in results[0].sub_category"
+                  :key="index"
+                >
                   {{ sub.sub_category + ' ' + sub.function }}
                 </th>
-
               </tr>
             </thead>
             <tbody>
@@ -324,44 +343,47 @@
                   <span v-if="item.grade">{{ item.grade }}</span>
                   <span v-else>-</span>
                 </td>
-                <th v-for="(sub, index) in item.sub_category" :key="index">
+                <th
+                  v-for="(sub, index) in item.sub_category"
+                  :key="index"
+                >
                   {{ sub.percent.toFixed(0) }}
                 </th>
-<!--                <td>-->
-<!--                  <v-tooltip top>-->
-<!--                    <template v-slot:activator="{ on, attrs }">-->
-<!--                      <v-btn-->
-<!--                        icon-->
-<!--                        :to="{name: 'user.exam.results', params: {exam_id: item.exam_id, user_exam_id: item.exam_user_id}}"-->
-<!--                        color="cyan"-->
-<!--                        v-bind="attrs"-->
-<!--                        v-on="on"-->
-<!--                      >-->
-<!--                        <v-icon>mdi-eye-circle-outline</v-icon>-->
-<!--                      </v-btn>-->
-<!--                    </template>-->
-<!--                    <span>مشاهده کارنامه</span>-->
-<!--                  </v-tooltip>-->
-<!--                </td>-->
-<!--                <template-->
-<!--                  v-for="(sub_categoryItem, sub_categoryIndex) in item.sub_category"-->
-<!--                >-->
-<!--                  <td-->
-<!--                    :key="'bodyColumns_percent_'+sub_categoryItem.sub_category_order+sub_categoryIndex+'_'+item.exam_user_id"-->
-<!--                    class="bordered-right"-->
-<!--                  >-->
-<!--                    {{ sub_categoryItem.percent }}-->
-<!--                  </td>-->
-<!--                  <td :key="'bodyColumns_taraz_'+sub_categoryItem.sub_category_order+sub_categoryIndex+'_'+item.exam_user_id">-->
-<!--                    {{ sub_categoryItem.taraaz }}-->
-<!--                  </td>-->
-<!--                  <td-->
-<!--                    :key="'bodyColumns_rank_'+sub_categoryItem.sub_category_order+sub_categoryIndex+'_'+item.exam_user_id"-->
-<!--                    class="bordered-left"-->
-<!--                  >-->
-<!--                    {{ sub_categoryItem.rank_country }}-->
-<!--                  </td>-->
-<!--                </template>-->
+                <!--                <td>-->
+                <!--                  <v-tooltip top>-->
+                <!--                    <template v-slot:activator="{ on, attrs }">-->
+                <!--                      <v-btn-->
+                <!--                        icon-->
+                <!--                        :to="{name: 'user.exam.results', params: {exam_id: item.exam_id, user_exam_id: item.exam_user_id}}"-->
+                <!--                        color="cyan"-->
+                <!--                        v-bind="attrs"-->
+                <!--                        v-on="on"-->
+                <!--                      >-->
+                <!--                        <v-icon>mdi-eye-circle-outline</v-icon>-->
+                <!--                      </v-btn>-->
+                <!--                    </template>-->
+                <!--                    <span>مشاهده کارنامه</span>-->
+                <!--                  </v-tooltip>-->
+                <!--                </td>-->
+                <!--                <template-->
+                <!--                  v-for="(sub_categoryItem, sub_categoryIndex) in item.sub_category"-->
+                <!--                >-->
+                <!--                  <td-->
+                <!--                    :key="'bodyColumns_percent_'+sub_categoryItem.sub_category_order+sub_categoryIndex+'_'+item.exam_user_id"-->
+                <!--                    class="bordered-right"-->
+                <!--                  >-->
+                <!--                    {{ sub_categoryItem.percent }}-->
+                <!--                  </td>-->
+                <!--                  <td :key="'bodyColumns_taraz_'+sub_categoryItem.sub_category_order+sub_categoryIndex+'_'+item.exam_user_id">-->
+                <!--                    {{ sub_categoryItem.taraaz }}-->
+                <!--                  </td>-->
+                <!--                  <td-->
+                <!--                    :key="'bodyColumns_rank_'+sub_categoryItem.sub_category_order+sub_categoryIndex+'_'+item.exam_user_id"-->
+                <!--                    class="bordered-left"-->
+                <!--                  >-->
+                <!--                    {{ sub_categoryItem.rank_country }}-->
+                <!--                  </td>-->
+                <!--                </template>-->
               </tr>
             </tbody>
             <infinite-loading
@@ -474,13 +496,11 @@
                         text: 'مشکلی در گرفتن اطلاعات رخ داده است. لطفا دوباره امتحان کنید.',
                         type: 'error'
                     })}
-
                 )
         },
         methods: {
             getData ($state) {
                 if (this.sendRequest) {
-                    console.log('test')
 
                     this.showLoading()
                     let that = this
@@ -566,6 +586,80 @@
                             this.sendRequest = false
                         })
                 }
+            },
+            getExcel () {
+              // let that = this
+              let params = {}
+              if (this.dateRange[0]) {
+                params.exam_user_started_at = this.dateRange[0] + ' 00:00:00'
+              }
+              if (this.dateRange[1]) {
+                params.exam_user_finished_at = this.dateRange[1] + ' 00:00:00'
+              }
+              if (this.selectedCities.length > 0) {
+                params.city = this.selectedCities
+              }
+              if (this.selectedProvinces.length > 0) {
+                params.province = this.selectedProvinces
+              }
+              if (this.selectedMajor.length > 0) {
+                params.major = this.selectedMajor
+              }
+              if (this.selectedMajor.length > 0) {
+                params.major = this.selectedMajor
+              }
+              if (this.selectedGrades.length > 0) {
+                params.grade = this.selectedGrades
+              }
+              if (this.selectedGender.length > 0) {
+                params.gender = this.selectedGender
+              }
+              if (this.mbti.i) {
+                params.mind_function = "I"
+              }
+              if (this.mbti.e) {
+                params.mind_function = "E"
+              }
+              if (this.mbti.s) {
+                params.energy_function = "S"
+              }
+              if (this.mbti.n) {
+                params.energy_function = "N"
+              }
+              if (this.mbti.t) {
+                params.nature_function = "T"
+              }
+              if (this.mbti.f) {
+                params.nature_function = "F"
+              }
+              if (this.mbti.p) {
+                params.tactics_function = "P"
+              }
+              if (this.mbti.j) {
+                params.tactics_function = "J"
+              }
+              if (this.bartle.a || this.bartle.e || this.bartle.k || this.bartle.s) {
+                params.bartle = []
+                Object.keys(this.bartle).forEach(key => {
+                  if (this.bartle[key]) {
+                    params.bartle.push(key.toString().toUpperCase())
+                  }
+                })
+              }
+              params.exam_id = this.$route.params.examId
+              params.excel_export = 1
+              this.$notify({
+                group: 'notifs',
+                title: 'توجه!',
+                text: 'فایل Excel در حال تولید است.',
+                type: 'success'
+              })
+              axios.get(API_ADDRESS.exam.examReportIndex('participants'), {
+                params: params
+              })
+                .then( response => {
+                  window.open(response.data.data.export_file_url, '_blank')
+                })
             },
             showLoading () {
                 this.$store.commit('AppLayout/updateOverlay', { show: true, loading: true, text: ''})
