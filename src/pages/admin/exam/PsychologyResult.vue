@@ -253,39 +253,54 @@
             </v-expansion-panel-content>
           </v-expansion-panel>
         </v-expansion-panels>
-        <v-btn
-          color="primary"
-          block
-          class="my-5"
-          @click="sendRequests"
-        >
-          فیلتر
-        </v-btn>
-        <v-btn
-          color="orange"
-          dark
-          block
-          class="my-5"
-          :loading="fileLoading"
-          @click="getExcel"
-        >
-          تولید Excel
-        </v-btn>
-        <v-btn
-          color="yellow"
-          block
-          class="my-5"
-          :disabled="!file_url"
-        >
-          <a
-            :href="file_url"
-            :style="{ 'text-decoration': 'none', color: '#000', width: '100%' }"
-            target="_blank"
-            :disabled="!file_url"
-          >
-            دانلود Excel
-          </a>
-        </v-btn>
+        <v-row>
+          <v-col md="4">
+            <v-btn
+              color="primary"
+              block
+              class="my-5"
+              @click="sendRequests"
+            >
+              فیلتر
+            </v-btn>
+          </v-col>
+          <v-col md="4">
+            <v-btn
+              color="orange"
+              dark
+              block
+              class="my-5"
+              :loading="fileLoading"
+              @click="getExcel"
+            >
+              تولید Excel
+            </v-btn>
+          </v-col>
+          <v-col md="4">
+            <v-btn
+              color="yellow"
+              block
+              class="my-5"
+              :disabled="!file_url"
+            >
+              <a
+                :href="file_url"
+                :style="{ 'text-decoration': 'none', color: '#000', width: '100%' }"
+                target="_blank"
+                :disabled="!file_url"
+              >
+                دانلود Excel
+              </a>
+            </v-btn>
+          </v-col>
+        </v-row>
+        <v-row>
+          <v-col>
+            <p>
+              نتایج قابل مشاهده: {{ results.length }} از {{ totalResultsCount }}
+            </p>
+          </v-col>
+        </v-row>
         <v-simple-table
           dense
           fixed-header
@@ -294,24 +309,12 @@
           <template v-slot:default>
             <thead v-if="results[0]">
               <tr>
-                <th>
-                  نام و نام خانوادگی
-                </th>
-                <th>
-                  استان
-                </th>
-                <th>
-                  شهر
-                </th>
-                <th>
-                  جنسیت
-                </th>
-                <th>
-                  رشته
-                </th>
-                <th>
-                  پایه
-                </th>
+                <th>نام و نام خانوادگی</th>
+                <th>استان</th>
+                <th>شهر</th>
+                <th>جنسیت</th>
+                <th>رشته</th>
+                <th>پایه</th>
                 <th
                   v-for="(sub, index) in results[0].sub_category"
                   :key="index"
@@ -355,41 +358,6 @@
                 >
                   {{ sub.percent.toFixed(0) }}
                 </th>
-                <!--                <td>-->
-                <!--                  <v-tooltip top>-->
-                <!--                    <template v-slot:activator="{ on, attrs }">-->
-                <!--                      <v-btn-->
-                <!--                        icon-->
-                <!--                        :to="{name: 'user.exam.results', params: {exam_id: item.exam_id, user_exam_id: item.exam_user_id}}"-->
-                <!--                        color="cyan"-->
-                <!--                        v-bind="attrs"-->
-                <!--                        v-on="on"-->
-                <!--                      >-->
-                <!--                        <v-icon>mdi-eye-circle-outline</v-icon>-->
-                <!--                      </v-btn>-->
-                <!--                    </template>-->
-                <!--                    <span>مشاهده کارنامه</span>-->
-                <!--                  </v-tooltip>-->
-                <!--                </td>-->
-                <!--                <template-->
-                <!--                  v-for="(sub_categoryItem, sub_categoryIndex) in item.sub_category"-->
-                <!--                >-->
-                <!--                  <td-->
-                <!--                    :key="'bodyColumns_percent_'+sub_categoryItem.sub_category_order+sub_categoryIndex+'_'+item.exam_user_id"-->
-                <!--                    class="bordered-right"-->
-                <!--                  >-->
-                <!--                    {{ sub_categoryItem.percent }}-->
-                <!--                  </td>-->
-                <!--                  <td :key="'bodyColumns_taraz_'+sub_categoryItem.sub_category_order+sub_categoryIndex+'_'+item.exam_user_id">-->
-                <!--                    {{ sub_categoryItem.taraaz }}-->
-                <!--                  </td>-->
-                <!--                  <td-->
-                <!--                    :key="'bodyColumns_rank_'+sub_categoryItem.sub_category_order+sub_categoryIndex+'_'+item.exam_user_id"-->
-                <!--                    class="bordered-left"-->
-                <!--                  >-->
-                <!--                    {{ sub_categoryItem.rank_country }}-->
-                <!--                  </td>-->
-                <!--                </template>-->
               </tr>
             </tbody>
             <infinite-loading
@@ -460,25 +428,26 @@
                 sendRequest: false,
                 resetState: false,
                 file_url: '',
-                fileLoading: false
+                fileLoading: false,
+                totalResultsCount: 0
             }
         },
         computed: {
-          filteredCities () {
-              if (!this.cities) {
-                  return []
-              }
-              return this.cities.filter(city => {
-                  let returnValue = false
-                  this.selectedProvinces.forEach(province => {
-                      if (province === city.province.title && city.title.includes(this.citySearch)) {
-                          returnValue = true
-                          return
-                      }
-                  })
-                  return returnValue
-              })
-          }
+            filteredCities () {
+                if (!this.cities) {
+                    return []
+                }
+                return this.cities.filter(city => {
+                    let returnValue = false
+                    this.selectedProvinces.forEach(province => {
+                        if (province === city.province.title && city.title.includes(this.citySearch)) {
+                            returnValue = true
+                            return
+                        }
+                    })
+                    return returnValue
+                })
+            }
         },
         watch: {
           selectedCities () {
@@ -489,7 +458,6 @@
         },
         created() {
             this.$store.commit('AppLayout/updateDrawer', false)
-
             axios.get(API_ADDRESS.user.formData)
                 .then((resp) => {
                     this.genders = resp.data.data.genders
@@ -509,7 +477,7 @@
         },
         methods: {
             sendRequests () {
-
+              this.totalResultsCount = 0
               this.sendRequest = true
               this.results = []
               this.lastLoadTime = Date.now()
@@ -595,6 +563,7 @@
                         .then( response => {
                             that.hideLoading()
                             that.results = that.results.concat(response.data.data)
+                            that.totalResultsCount = response.data.meta.total
                             if(typeof response.data.links === 'undefined' || response.data.links.next === null) {
                                 that.nextPage = ''
                                 $state.complete()
