@@ -280,7 +280,7 @@
               dark
               x-small
               color="blue"
-              :to="{name: 'exam.results', params: {examId: item.id}}"
+              @click="goToResult(item)"
               v-bind="attrs"
               v-on="on"
             >
@@ -455,6 +455,13 @@
             // this.getExams()
         },
         methods:{
+            goToResult (exam) {
+              if (exam.type.value === 'psychometric') {
+                this.$router.push({name: 'psychology.results', params: {examId: exam.id}})
+                return
+              }
+              this.$router.push({name: 'exam.results', params: {examId: exam.id}})
+            },
             openUploadDialog (exam_id) {
               this.dialogUpload = true
               this.selectedExam = exam_id

@@ -173,7 +173,7 @@ export default {
     create (item) {
       item.editable = false
       item.title = item.title.trim()
-      axios.post(API_ADDRESS.subGroups.base('60ad57ee79654e34990ee423'), item)
+      axios.post(API_ADDRESS.subGroups.base(this.$route.params.exam_id), item)
         .then(response => {
           this.deleteItem(item)
           this.subGroups.unshift(response.data.data)
@@ -204,7 +204,7 @@ export default {
     loadSubGroups () {
       let that = this
       return new Promise(function(resolve, reject) {
-        axios.get(API_ADDRESS.subGroups.base('60ad57ee79654e34990ee423'))
+        axios.get(API_ADDRESS.subGroups.base(that.$route.params.exam_id))
           .then((response) => {
             that.subGroups = response.data.data
             resolve()
