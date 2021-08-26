@@ -216,7 +216,7 @@ export default {
   },
   created() {
     let that = this
-    axios.get('/api/v1/option')
+    axios.get(API_ADDRESS.option.base)
         .then(function (response) {
           const optionQuestion = response.data.data.find(item => (item.value==='konkur' && item.type==='question_type'))
           if (!optionQuestion) {

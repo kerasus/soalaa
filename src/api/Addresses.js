@@ -25,6 +25,9 @@ const API_ADDRESS = {
   content: {
     base: authServer + '/c',
   },
+  option: {
+    base: lumenServer + '/option'
+  },
   exam: {
     sendAnswers: lumenServer + '/temp-exam/answer/choice',
     sendStatus: lumenServer + '/temp-exam/answer/status',
