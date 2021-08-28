@@ -23,13 +23,13 @@
                       <v-checkbox
                         v-model="mbti.i"
                         label="I"
-                        :disabled="sendRequest"
+                        
                         @click="checkMbtiDuplicate('e')"
                       />
                       <v-checkbox
                         v-model="mbti.e"
                         label="E"
-                        :disabled="sendRequest"
+                        
                         @click="checkMbtiDuplicate('i')"
                       />
                     </v-col>
@@ -39,13 +39,13 @@
                       <v-checkbox
                         v-model="mbti.n"
                         label="N"
-                        :disabled="sendRequest"
+                        
                         @click="checkMbtiDuplicate('s')"
                       />
                       <v-checkbox
                         v-model="mbti.s"
                         label="S"
-                        :disabled="sendRequest"
+                        
                         @click="checkMbtiDuplicate('n')"
                       />
                     </v-col>
@@ -55,13 +55,13 @@
                       <v-checkbox
                         v-model="mbti.t"
                         label="T"
-                        :disabled="sendRequest"
+                        
                         @click="checkMbtiDuplicate('f')"
                       />
                       <v-checkbox
                         v-model="mbti.f"
                         label="F"
-                        :disabled="sendRequest"
+                        
                         @click="checkMbtiDuplicate('t')"
                       />
                     </v-col>
@@ -71,13 +71,13 @@
                       <v-checkbox
                         v-model="mbti.j"
                         label="J"
-                        :disabled="sendRequest"
+                        
                         @click="checkMbtiDuplicate('p')"
                       />
                       <v-checkbox
                         v-model="mbti.p"
                         label="P"
-                        :disabled="sendRequest"
+                        
                         @click="checkMbtiDuplicate('j')"
                       />
                     </v-col>
@@ -97,22 +97,18 @@
                       <v-checkbox
                         v-model="bartle.k"
                         label="K"
-                        :disabled="sendRequest"
                       />
                       <v-checkbox
                         v-model="bartle.e"
                         label="E"
-                        :disabled="sendRequest"
                       />
                       <v-checkbox
                         v-model="bartle.a"
                         label="A"
-                        :disabled="sendRequest"
                       />
                       <v-checkbox
                         v-model="bartle.s"
                         label="S"
-                        :disabled="sendRequest"
                       />
                     </v-col>
                   </v-row>
@@ -134,7 +130,6 @@
                         v-model="selectedProvinces"
                         :label="province.title"
                         :value="province.title"
-                        :disabled="sendRequest"
                       />
                     </v-col>
                   </v-row>
@@ -165,7 +160,6 @@
                         v-model="selectedCities"
                         :label="city.title"
                         :value="city.title"
-                        :disabled="sendRequest"
                       />
                     </v-col>
                   </v-row>
@@ -187,7 +181,6 @@
                         v-model="selectedGrades"
                         :label="grade.title"
                         :value="grade.title"
-                        :disabled="sendRequest"
                       />
                     </v-col>
                   </v-row>
@@ -209,7 +202,6 @@
                         v-model="selectedGender"
                         :label="gender.title"
                         :value="gender.title"
-                        :disabled="sendRequest"
                       />
                     </v-col>
                   </v-row>
@@ -231,7 +223,6 @@
                         v-model="selectedMajor"
                         :label="major.title"
                         :value="major.title"
-                        :disabled="sendRequest"
                       />
                     </v-col>
                   </v-row>
@@ -250,7 +241,7 @@
                       <date-picker
                         v-model="dateRange"
                         range
-                        :disabled="sendRequest"
+                        
                         input-format="YYYY-MM-DD"
                         format="YYYY-MM-DD"
                         display-format="jYYYY/jMM/jDD"
@@ -262,50 +253,68 @@
             </v-expansion-panel-content>
           </v-expansion-panel>
         </v-expansion-panels>
-        <v-btn
-          v-if="!sendRequest"
-          color="primary"
-          block
-          class="my-5"
-          @click="sendRequest = true"
-        >
-          فیلتر
-        </v-btn>
-        <v-btn
-          color="orange"
-          dark
-          block
-          class="my-5"
-          @click="getExcel"
-        >
-          دانلود Excel
-        </v-btn>
+        <v-row>
+          <v-col md="4">
+            <v-btn
+              color="primary"
+              block
+              class="my-5"
+              @click="sendRequests"
+            >
+              فیلتر
+            </v-btn>
+          </v-col>
+          <v-col md="4">
+            <v-btn
+              color="orange"
+              dark
+              block
+              class="my-5"
+              :loading="fileLoading"
+              @click="getExcel"
+            >
+              تولید Excel
+            </v-btn>
+          </v-col>
+          <v-col md="4">
+            <v-btn
+              color="yellow"
+              block
+              class="my-5"
+              :disabled="!file_url"
+            >
+              <a
+                :href="file_url"
+                :style="{ 'text-decoration': 'none', color: '#000', width: '100%' }"
+                target="_blank"
+                :disabled="!file_url"
+              >
+                دانلود Excel
+              </a>
+            </v-btn>
+          </v-col>
+        </v-row>
+        <v-row>
+          <v-col>
+            <p>
+              نتایج قابل مشاهده: {{ results.length }} از {{ totalResultsCount }}
+            </p>
+          </v-col>
+        </v-row>
         <v-simple-table
           dense
           fixed-header
-          height="calc( 100vh - 100px )"
+          height="calc( 100vh - 300px )"
         >
           <template v-slot:default>
             <thead v-if="results[0]">
               <tr>
-                <th>
-                  نام و نام خانوادگی
-                </th>
-                <th>
-                  استان
-                </th>
-                <th>
-                  شهر
-                </th>
-                <th>
-                  جنسیت
-                </th>
-                <th>
-                  رشته
-                </th>
-                <th>
-                  پایه
-                </th>
+                <th>نام و نام خانوادگی</th>
+                <th>استان</th>
+                <th>شهر</th>
+                <th>جنسیت</th>
+                <th>رشته</th>
+                <th>پایه</th>
                 <th
                   v-for="(sub, index) in results[0].sub_category"
                   :key="index"
@@ -349,41 +358,6 @@
                 >
                   {{ sub.percent.toFixed(0) }}
                 </th>
-                <!--                <td>-->
-                <!--                  <v-tooltip top>-->
-                <!--                    <template v-slot:activator="{ on, attrs }">-->
-                <!--                      <v-btn-->
-                <!--                        icon-->
-                <!--                        :to="{name: 'user.exam.results', params: {exam_id: item.exam_id, user_exam_id: item.exam_user_id}}"-->
-                <!--                        color="cyan"-->
-                <!--                        v-bind="attrs"-->
-                <!--                        v-on="on"-->
-                <!--                      >-->
-                <!--                        <v-icon>mdi-eye-circle-outline</v-icon>-->
-                <!--                      </v-btn>-->
-                <!--                    </template>-->
-                <!--                    <span>مشاهده کارنامه</span>-->
-                <!--                  </v-tooltip>-->
-                <!--                </td>-->
-                <!--                <template-->
-                <!--                  v-for="(sub_categoryItem, sub_categoryIndex) in item.sub_category"-->
-                <!--                >-->
-                <!--                  <td-->
-                <!--                    :key="'bodyColumns_percent_'+sub_categoryItem.sub_category_order+sub_categoryIndex+'_'+item.exam_user_id"-->
-                <!--                    class="bordered-right"-->
-                <!--                  >-->
-                <!--                    {{ sub_categoryItem.percent }}-->
-                <!--                  </td>-->
-                <!--                  <td :key="'bodyColumns_taraz_'+sub_categoryItem.sub_category_order+sub_categoryIndex+'_'+item.exam_user_id">-->
-                <!--                    {{ sub_categoryItem.taraaz }}-->
-                <!--                  </td>-->
-                <!--                  <td-->
-                <!--                    :key="'bodyColumns_rank_'+sub_categoryItem.sub_category_order+sub_categoryIndex+'_'+item.exam_user_id"-->
-                <!--                    class="bordered-left"-->
-                <!--                  >-->
-                <!--                    {{ sub_categoryItem.rank_country }}-->
-                <!--                  </td>-->
-                <!--                </template>-->
               </tr>
             </tbody>
             <infinite-loading
@@ -451,25 +425,29 @@
                 selectedMajor: [],
                 dateRange: [],
                 citySearch: '',
-                sendRequest: false
+                sendRequest: false,
+                resetState: false,
+                file_url: '',
+                fileLoading: false,
+                totalResultsCount: 0
             }
         },
         computed: {
-          filteredCities () {
-              if (!this.cities) {
-                  return []
-              }
-              return this.cities.filter(city => {
-                  let returnValue = false
-                  this.selectedProvinces.forEach(province => {
-                      if (province === city.province.title && city.title.includes(this.citySearch)) {
-                          returnValue = true
-                          return
-                      }
-                  })
-                  return returnValue
-              })
-          }
+            filteredCities () {
+                if (!this.cities) {
+                    return []
+                }
+                return this.cities.filter(city => {
+                    let returnValue = false
+                    this.selectedProvinces.forEach(province => {
+                        if (province === city.province.title && city.title.includes(this.citySearch)) {
+                            returnValue = true
+                            return
+                        }
+                    })
+                    return returnValue
+                })
+            }
         },
         watch: {
           selectedCities () {
@@ -480,7 +458,6 @@
         },
         created() {
             this.$store.commit('AppLayout/updateDrawer', false)
-
             axios.get(API_ADDRESS.user.formData)
                 .then((resp) => {
                     this.genders = resp.data.data.genders
@@ -499,68 +476,81 @@
                 )
         },
         methods: {
-          getParams () {
-            let params = {}
-            if (this.dateRange[0]) {
-              params.exam_user_started_at = this.dateRange[0] + ' 00:00:00'
-            }
-            if (this.dateRange[1]) {
-              params.exam_user_finished_at = this.dateRange[1] + ' 00:00:00'
-            }
-            if (this.selectedCities.length > 0) {
-              params.city = this.selectedCities
-            }
-            if (this.selectedProvinces.length > 0) {
-              params.province = this.selectedProvinces
-            }
-            if (this.selectedMajor.length > 0) {
-              params.major = this.selectedMajor
-            }
-            if (this.selectedMajor.length > 0) {
-              params.major = this.selectedMajor
-            }
-            if (this.selectedGrades.length > 0) {
-              params.grade = this.selectedGrades
-            }
-            if (this.selectedGender.length > 0) {
-              params.gender = this.selectedGender
-            }
-            if (this.mbti.i) {
-              params.mind_function = "I"
-            }
-            if (this.mbti.e) {
-              params.mind_function = "E"
-            }
-            if (this.mbti.s) {
-              params.energy_function = "S"
-            }
-            if (this.mbti.n) {
-              params.energy_function = "N"
-            }
-            if (this.mbti.t) {
-              params.nature_function = "T"
-            }
-            if (this.mbti.f) {
-              params.nature_function = "F"
-            }
-            if (this.mbti.p) {
-              params.tactics_function = "P"
-            }
-            if (this.mbti.j) {
-              params.tactics_function = "J"
-            }
-            if (this.bartle.a || this.bartle.e || this.bartle.k || this.bartle.s) {
-              params.bartle = []
-              Object.keys(this.bartle).forEach(key => {
-                if (this.bartle[key]) {
-                  params.bartle.push(key.toString().toUpperCase())
-                }
-              })
-            }
-            params.exam_id = this.$route.params.examId
-            return params
-          },
+            sendRequests () {
+              this.totalResultsCount = 0
+              this.sendRequest = true
+              this.results = []
+              this.lastLoadTime = Date.now()
+              this.resetState = true
+            },
+            getParams () {
+              let params = {}
+              if (this.dateRange[0]) {
+                params.exam_user_started_at = this.dateRange[0] + ' 00:00:00'
+              }
+              if (this.dateRange[1]) {
+                params.exam_user_finished_at = this.dateRange[1] + ' 00:00:00'
+              }
+              if (this.selectedCities.length > 0) {
+                params.city = this.selectedCities
+              }
+              if (this.selectedProvinces.length > 0) {
+                params.province = this.selectedProvinces
+              }
+              if (this.selectedMajor.length > 0) {
+                params.major = this.selectedMajor
+              }
+              if (this.selectedMajor.length > 0) {
+                params.major = this.selectedMajor
+              }
+              if (this.selectedGrades.length > 0) {
+                params.grade = this.selectedGrades
+              }
+              if (this.selectedGender.length > 0) {
+                params.gender = this.selectedGender
+              }
+              if (this.mbti.i) {
+                params.mind_function = "I"
+              }
+              if (this.mbti.e) {
+                params.mind_function = "E"
+              }
+              if (this.mbti.s) {
+                params.energy_function = "S"
+              }
+              if (this.mbti.n) {
+                params.energy_function = "N"
+              }
+              if (this.mbti.t) {
+                params.nature_function = "T"
+              }
+              if (this.mbti.f) {
+                params.nature_function = "F"
+              }
+              if (this.mbti.p) {
+                params.tactics_function = "P"
+              }
+              if (this.mbti.j) {
+                params.tactics_function = "J"
+              }
+              if (this.bartle.a || this.bartle.e || this.bartle.k || this.bartle.s) {
+                params.bartle = []
+                Object.keys(this.bartle).forEach(key => {
+                  if (this.bartle[key]) {
+                    params.bartle.push(key.toString().toUpperCase())
+                  }
+                })
+              }
+              params.exam_id = this.$route.params.examId
+              return params
+            },
             getData ($state) {
+                if (this.resetState) {
+                  $state.reset()
+                  this.nextPage = ''
+                  this.resetState = false
+                  return
+                }
                 if (this.sendRequest) {
 
                     this.showLoading()
@@ -573,6 +563,7 @@
                         .then( response => {
                             that.hideLoading()
                             that.results = that.results.concat(response.data.data)
+                            that.totalResultsCount = response.data.meta.total
                             if(typeof response.data.links === 'undefined' || response.data.links.next === null) {
                                 that.nextPage = ''
                                 $state.complete()
@@ -592,7 +583,8 @@
                 }
             },
             getExcel () {
-              // let that = this
+              let that = this
+              this.fileLoading = true
               let params = this.getParams()
               params.excel_export = 1
               this.$notify({
@@ -605,7 +597,8 @@
                 params: params
               })
                 .then( response => {
-                  window.open(response.data.data.export_file_url, '_blank')
+                  that.file_url = response.data.data.export_file_url
+                  that.fileLoading = false
                 })
             },
             showLoading () {
