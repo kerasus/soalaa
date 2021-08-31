@@ -111,7 +111,6 @@ const API_ADDRESS = {
         }
         return lumenServer + '/activity-log?subject_id='+questionId+'&subject=question&title=update&description=update_question_status&with_pagination=0'
       },
-
     },
     base: lumenServer + '/exam-question/attach',
     createAndAttach: () => lumenServer + '/exam-question/attach/' ,
@@ -132,6 +131,9 @@ const API_ADDRESS = {
     },
     confirm (questionId) {
       return lumenServer + '/question/confirm/' + questionId
+    },
+    uploadImage (questionId) {
+      return lumenServer + '/question/upload/' + questionId
     }
   },
   questionSubcategory: {
