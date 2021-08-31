@@ -41,7 +41,7 @@
     "js-abstract-model": "^0.1.30",
     "jspdf": "^2.3.1",
     "katex": "^0.12.0",
-    "mathlive": "^0.59.0",
+    "mathlive": "^0.68.0",
     "mermaid": "^8.9.2",
     "moment": "^2.29.1",
     "moment-jalaali": "^0.9.2",
