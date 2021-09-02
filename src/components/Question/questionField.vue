@@ -6,6 +6,7 @@
         :loading="loading"
         :access-token="$store.getters['Auth/accessToken']"
         :upload-url="imageUrl"
+        :options="{ bubbleMenu: false, floatingMenu: false }"
       />
     </v-col>
     <!-- eslint-disable vue/no-v-html -->
