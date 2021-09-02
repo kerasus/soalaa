@@ -8,13 +8,16 @@ const API_ADDRESS = {
     auth: authServer
   },
   auth: {
-    login: authServer + '/login'
+    login: authServer + '/login',
+    register: authServer +'/register'
   },
   user: {
     base: authServer + '/user',
     mobile: {
       resend: authServer + '/mobile/resend',
-      verify: authServer + '/mobile/verify'
+      verify: authServer + '/mobile/verify',
+      resendGuest: authServer +'/resendToGuest' ,
+      verifyGuest: authServer + '/verifyGuest'
     },
     formData: authServer + '/megaroute/getUserFormData',
     show_user: authServer + '/getUserFor3a'

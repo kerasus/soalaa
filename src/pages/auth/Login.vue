@@ -12,18 +12,29 @@
         sm8
         md4
       >
-        <auth />
+        <handel-modal />
       </v-flex>
     </v-layout>
   </v-container>
 </template>
 
 <script>
-    import Auth from '@/components/Auth'
+//import Auth from '@/components/Auth'
+ import HandelModal from './HandelModal'
 
     export default {
         name: 'Login',
-        components: {Auth},
+      components: {HandelModal},
+      data :() => ({
+        configModalBody:{
+          hasLogin:true,
+          hasSignIn:true,
+          hasVerify:true,
+          hasForgotPass:false,
+          starter:'login'
+        }
+      }),
+
         created() {
             this.$store.commit('AppLayout/updateOverlay', {show: false, loading: false, text: ''})
             this.$store.commit('AppLayout/updateAppBarAndDrawer', false)
