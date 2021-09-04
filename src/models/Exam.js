@@ -84,7 +84,11 @@ class Exam extends Model {
             {
                 key: 'generate_automatic_report',
                 default: false
-            }
+            },
+            {
+                key: 'generate_questions_automatically',
+                default: false
+            },
         ])
 
         this.exam_id = this.id

@@ -92,6 +92,12 @@
             label="تولید اتوماتیک کارنامه"
           />
         </v-col>
+        <v-col :cols="12">
+          <v-checkbox
+            v-model="exam.generate_questions_automatically"
+            label="تولید اتوماتیک سوال"
+          />
+        </v-col>
       </v-row>
       <v-row>
         <v-col>
