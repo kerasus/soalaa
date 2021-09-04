@@ -152,9 +152,9 @@ export default {
   }),
   created() {
     let that = this
-    axios.get(API_ADDRESS.option.base + '?type=exam_type')
+    axios.get(API_ADDRESS.option.base)
         .then(function (response) {
-          const optionQuestion = response.data.data.find(item => (item.value === 'psychometric'))
+          const optionQuestion = response.data.data.find(item => (item.value === 'psychometric' && item.type === 'exam_type'))
           if (!optionQuestion) {
             // beterek
             return this.$notify({
@@ -165,7 +165,7 @@ export default {
           }
 
           that.optionQuestionId = optionQuestion.id
-          const itemstype = response.data.data.filter(data => data.type === 'question_type')
+          const itemstype = response.data.data.filter(data => data.type === 'exam_type')
           that.items = itemstype
           that.loading = false
         })
