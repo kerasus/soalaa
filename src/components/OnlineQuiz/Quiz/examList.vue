@@ -227,6 +227,25 @@
           </template>
           <span>ویرایش</span>
         </v-tooltip>
+        <v-tooltip top>
+          <template v-slot:activator="{ on, attrs }">
+            <v-btn
+              class="mx-2"
+              fab
+              dark
+              x-small
+              color="purple"
+              v-bind="attrs"
+              @click="selectExamReport(item)"
+              v-on="on"
+            >
+              <v-icon dark>
+                mdi-pencil
+              </v-icon>
+            </v-btn>
+          </template>
+          <span>ویرایش کارنامه</span>
+        </v-tooltip>
         <v-tooltip
           v-if="false"
           top
@@ -280,8 +299,8 @@
               dark
               x-small
               color="blue"
-              @click="goToResult(item)"
               v-bind="attrs"
+              @click="goToResult(item)"
               v-on="on"
             >
               <v-icon
@@ -530,6 +549,9 @@
             },
             selectExam(item){
                 this.$emit('update-exam-id', item)
+            },
+            selectExamReport (item) {
+              this.$emit('update-exam-report-id', item)
             }
         }
     }

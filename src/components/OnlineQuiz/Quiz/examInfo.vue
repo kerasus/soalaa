@@ -138,6 +138,7 @@ import VuePersianDatetimePicker from 'vue-persian-datetime-picker'
 import {Exam} from "@/models/Exam";
 import Assistant from "@/plugins/assistant";
 import axios from "axios";
+import API_ADDRESS from "@/api/Addresses";
 
 Vue.component('date-picker', VuePersianDatetimePicker)
 
@@ -151,7 +152,7 @@ export default {
   }),
   created() {
     let that = this
-    axios.get('/api/v1/option')
+    axios.get(API_ADDRESS.option.base)
         .then(function (response) {
           const optionQuestion = response.data.data.find(item => (item.value === 'psychometric' && item.type === 'exam_type'))
           if (!optionQuestion) {
@@ -166,15 +167,9 @@ export default {
           that.optionQuestionId = optionQuestion.id
           const itemstype = response.data.data.filter(data => data.type === 'question_type')
           that.items = itemstype
-          console.log(that.items)
-          console.log(itemstype)
           that.loading = false
         })
-        .catch(function (error) {
-          console.log(error);
-        })
     this.examItem = this.exam
-    console.log(this.examItem)
   },
   methods: {
     create() {
