@@ -102,6 +102,10 @@ class Exam extends Model {
                     "populate_school_ranking" : false
                 }
             },
+            {
+                key: 'type_id',
+                default: null
+            }
 
         ])
 
