@@ -1,162 +1,220 @@
 <template>
-    <v-card>
+  <v-card class="elevation-12">
+    <v-progress-linear
+      color="#ffc107"
+      absolute
+      top
+      :active="loadingList"
+      indeterminate
+      rounded
+      height="6"
+    />
     <slot title="ورود به آلا" />
-        <v-card-text>
-            <v-progress-linear
-                v-if="loading"
-                indeterminate
-                color="yellow darken-2"
-            ></v-progress-linear>
-            <v-container>
-                <v-row>
-                    <v-col cols="12">
-                        <v-text-field
-                            v-model="mobile"
-                            dir="ltr"
-                            label="شماره همراه"
-                            required
-                        ></v-text-field>
-                    </v-col>
-                    <v-col cols="12">
-                        <v-text-field
-                            v-model="password"
-                            dir="ltr"
-                            label="کد ملی"
-                            type="password"
-                            required
-                        ></v-text-field>
-                    </v-col>
-                </v-row>
-            </v-container>
-            <v-alert
-                v-for="message in errorMessages"
-                :key="message"
-                dense
-                outlined
-                text
-                type="error"
-                dismissible
-            >
-                {{ message }}
-            </v-alert>
-        </v-card-text>
-        <v-card-actions class="d-flex flex-column">
-                <v-btn
-                    block
-                    dark
-                    color="#ff8f00"
-                    class="mb-3"
-                    @click="login"
-                >
-                  <span class="btn-text-size">
-                        ورود
-                  </span>
-                </v-btn>
-              <div class="d-flex">
-                  <v-btn
-                      v-if="this.config.hasSignIn"
-                      text
-                      class="mb-3"
-                      color="#3e5480"
-                      @click="goSignIn"
-                  >
-                  <span class="btn-text-size">
-                     هنوز ثبت نام نکرده ام
-                  </span>
-                  </v-btn>
-                  <v-btn
-                      v-if="this.config.hasForgotPass"
-                      text
-                      color="#C62828"
-                      class="mb-3"
-                      @click="recoverPass"
-                  >
-                     <span class="btn-text-size">
-                          فراموشی رمز عبور
-                     </span>
-                  </v-btn>
-              </div>
-        </v-card-actions>
-        </v-card>
+    <v-card-text>
+      <v-text-field
+        id="username"
+        v-model="username"
+        label="شماره همراه"
+        name="login"
+        prepend-icon="mdi-account"
+        type="text"
+      />
+
+      <v-text-field
+        id="password"
+        v-model="password"
+        label="کد ملی"
+        name="password"
+        prepend-icon="mdi-lock"
+        type="password"
+      />
+      <v-alert
+        v-for="message in errorMessages"
+        :key="message"
+        dense
+        outlined
+        text
+        type="error"
+        dismissible
+      >
+        {{ message }}
+      </v-alert>
+    </v-card-text>
+    <v-card-actions>
+      <v-btn
+        color="primary"
+        :loading="loadingList"
+        :disabled="loadingList"
+        @click="login"
+      >
+        ورود
+      </v-btn>
+      <div class="d-flex">
+        <v-btn
+          v-if="config.hasSignIn"
+          text
+          class="mb-3"
+          color="#3e5480"
+          @click="goSignIn"
+        >
+          <span class="btn-text-size">
+            هنوز ثبت نام نکرده ام
+          </span>
+        </v-btn>
+        <v-btn
+          v-if="config.hasForgotPass"
+          text
+          color="#C62828"
+          class="mb-3"
+          @click="recoverPass"
+        >
+          <span class="btn-text-size">
+            فراموشی رمز عبور
+          </span>
+        </v-btn>
+      </div>
+      <v-spacer />
+    </v-card-actions>
+  </v-card>
 </template>
 
 <script>
+import axios from 'axios'
+import API_ADDRESS from "@/api/Addresses";
+import {User} from "@/models/User";
+import { mixinAuth } from '@/mixin/Mixins'
+
 export default {
-    name: 'Login',
-    props:{
-        config:{
-            type:Object,
-            default: () => {
-                return {
-                    hasLogin:true,
-                    hasSignIn:true,
-                    hasVerify:true,
-                    hasForgotPass:true,
-                    starter:'login'
-                }
-            }
-        },
+  name: 'Auth',
+  mixins: [mixinAuth],
+  props: {
+    config: {
+      type: Object,
+      default: () => {
+        return {
+          hasLogin: true,
+          hasSignIn: true,
+          hasVerify: true,
+          hasForgotPass: true,
+          starter: 'login'
+        }
+      }
     },
-    data: () => ({
-        errorMessages: [],
-        mobile: null,
-        password: null,
-        loading: false,
-    }),
-    methods: {
-        login() {
-            this.loading = true
-            axios.post('/login', {mobile: this.mobile, password: this.password})
-                .then(response => {
-                    //console.log('response :',response)
-                    if(response.status === 200 && !response.data.data.user.mobile_verified_at_2){
-                        this.$emit('phoneNumberNeedVerify',{
-                            phone :response.data.data.user.mobile,
-                            source : 'login'
-                        })
-                        return
-                    }
-                   window.document.location.reload()
-                })
-                .catch(error => {
-                    this.loading = false
-                    const messages = []
-                    for (let key in error.response.data.errors) {
-                        error.response.data.errors[key].forEach(message => {
-                            messages.push(message)
-                        })
-                    }
-                    this.errorMessages = messages
-                })
-        },
-
-        goSignIn() {
-            this.$emit('goSignIn')
-        },
-
-        getLoginActionUrl() {
-            return document.querySelector('input[name="js-var-loginActionUrl"]').value
-        },
-
-        recoverPass() {
-            this.$emit('recoverPass')
-        },
-
-        showLoginModal() {
-            setTimeout(function () {
-                AjaxLogin.showLogin(GlobalJsVar.loginActionUrl(), function (response) {
-                    window.location.reload();
-                }, true);
-            }, 1000);
-        },
+  },
+  data () {
+    return {
+      // user: new User(window.localStorage.getItem('user')),
+      loadingList: false,
+      username: null,
+      password: null,
+      errorMessages: [],
     }
+  },
+  created() {
+    console.log('created in auth  :' ,this.getToken() )
+    if (this.getToken()) {
+      console.log('if run ')
+      this.getUserData( () => { this.redirectTo() })
+    }
+  },
+  methods: {
+    goSignIn() {
+      this.$emit('goSignIn')
+    },
+
+    recoverPass() {
+      this.$emit('recoverPass')
+    },
+    getToken () {
+      return this.$store.getters['Auth/accessToken']
+    },
+    setUserData (userData) {
+      this.$store.commit('Auth/updateUser', new User(userData))
+    },
+    setAccessToken (access_token) {
+      axios.defaults.headers.common['Authorization'] = 'Bearer ' + access_token
+      this.$store.commit('Auth/updateAccessToken', access_token)
+    },
+    redirectTo () {
+      if (this.$route.query.redirect_to_exam) {
+        this.$router.push({
+          name: 'onlineQuiz.StartExamAutomatically',
+          params: {
+            examId: this.$route.query.redirect_to_exam,
+            autoStart: this.$route.query.exam_auto_start
+          }
+        })
+        return
+      }
+
+      let redirect_to = window.localStorage.getItem('redirect_to')
+      if (!redirect_to) {
+        redirect_to = 'dashboard'
+      }
+      this.$router.push({ name: redirect_to })
+
+    },
+    login () {
+      let that = this
+      this.loadingList = true
+      axios.post(API_ADDRESS.auth.login, {
+        mobile: this.username,
+        password: this.password
+      })
+          .then((response) => {
+            this.loadingList = false
+            that.user = new User(response.data.data.user)
+            that.$store.commit('Auth/updateUser', that.user)
+            const access_token = response.data.data.access_token
+            this.setAccessToken(access_token)
+            that.setUserData(response.data.data.user)
+            this.getUserData(() => { this.redirectTo() })
+            if (response.status === 200 && !response.data.data.user.mobile_verified_at_2) {
+              this.$emit('phoneNumberNeedVerify', {
+                phone: response.data.data.user.mobile,
+                source: 'login'
+              })
+            }
+          })
+          .catch( (error) => {
+            this.loadingList = false
+            const messages = []
+            for (let key in error.response.data.errors) {
+              error.response.data.errors[key].forEach(message => {
+                messages.push(message)
+              })
+            }
+            this.errorMessages = messages
+          })
+    }
+  }
 }
 </script>
 
-<style scoped lang="scss">
-.btn-text-size{
-    font-size: 14px;
-    letter-spacing: normal;
-    font-weight: 500;
+
+<style>
+.btn-text-size {
+  font-size: 14px;
+  letter-spacing: normal;
+  font-weight: 500;
 }
+:-webkit-autofill {
+  animation-name: onAutoFillStart;
+}
+:not(:-webkit-autofill) {
+  animation-name: onAutoFillCancel;
+}
+@keyframes onAutoFillStart {
+  from {
+  }
+  to {
+  }
+}
+@keyframes onAutoFillCancel {
+  from {
+  }
+  to {
+  }
+}
+
 </style>

@@ -2,31 +2,61 @@
   <div>
     <v-row justify="center">
       <v-dialog
-          v-model="dialog"
-          persistent
-          max-width="600px"
+        v-model="dialog"
+        persistent
+        max-width="600px"
       >
         <component
-            v-slot="{title}"
-            :is = "selectedComponent"
-            :phoneNumber = "userPhoneNumber"
-            :verifyData="verifyData"
-            :config="config"
-            @checkVerify = "verifyPhoneNumber"
-            @verified = "verified"
-            @closeDialog = "closeDialog"
-            @goSignIn = "goSignIn"
-            @phoneNumberNeedVerify = "verifyPhoneNumber"
-            @recoverPass = "recoverUserPassword"
-            @backToLogin = "backToLogin"
+          :is="selectedComponent"
+          v-slot="{title}"
+          :phone-number="userPhoneNumber"
+          :verify-data="verifyData"
+          :config="config"
+          @checkVerify="verifyPhoneNumber"
+          @verified="verified"
+          @closeDialog="closeDialog"
+          @goSignIn="goSignIn"
+          @phoneNumberNeedVerify="verifyPhoneNumber"
+          @recoverPass="recoverUserPassword"
+          @backToLogin="backToLogin"
         >
-          <v-card-title >
-            <v-img src="https://nodes.alaatv.com/upload/footer-alaaLogo.png?w=30&h=40"
-                   max-height="40"
-                   max-width="30"
-            />
-            <span class="text-h5 px-2" slot="title">{{ title }}</span>
-          </v-card-title>
+          <v-toolbar
+            color="primary"
+            dark
+            flat
+          >
+            <v-toolbar-title>
+              <v-row>
+                <v-col>
+                  <v-img
+                    src="/img/logo.png"
+                    width="20"
+                  />
+                </v-col>
+                <v-col>
+                  {{ title }}
+                </v-col>
+              </v-row>
+            </v-toolbar-title>
+            <v-spacer />
+            <v-tooltip bottom>
+              <template v-slot:activator="{ on }">
+                <v-btn
+                  :href="'https://alaatv.com/'"
+                  icon
+                  small
+                  target="_blank"
+                  v-on="on"
+                >
+                  <v-img
+                    src="img/alaa-logo.png"
+                    width="50"
+                  />
+                </v-btn>
+              </template>
+              <span>آموزش مجازی آلاء</span>
+            </v-tooltip>
+          </v-toolbar>
         </component>
       </v-dialog>
     </v-row>
@@ -41,36 +71,36 @@ import SignIn from "@/components/Auth/SignIn";
 
 export default {
   name: "HandleModal",
-  props: {
-    config:{
-      type:Object,
-      default: () => {
-        return {
-          hasLogin:true,
-          hasSignIn:true,
-          hasVerify:true,
-          hasForgotPass:true,
-          starter:'login'
-        }
-      }
-    },
-  },
   components: {
     Verify,
     ForgotPassword,
     Login,
     SignIn,
   },
+  props: {
+    config: {
+      type: Object,
+      default: () => {
+        return {
+          hasLogin: true,
+          hasSignIn: true,
+          hasVerify: true,
+          hasForgotPass: true,
+          starter: 'login'
+        }
+      }
+    },
+  },
   data() {
     return {
       dialog: false,
       selectedComponent: '',
       userPhoneNumber: 0,
-      verifyData:{}
+      verifyData: {}
     }
   },
   created() {
-    this.dialog = !this.isLoggedIn()
+    this.dialog = true
     this.setDialogBody()
   },
   methods: {

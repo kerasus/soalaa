@@ -12,14 +12,14 @@
         sm8
         md4
       >
-        <handel-modal />
+        <handel-modal :config="configModalBody" />
+        <!--        <auth />-->
       </v-flex>
     </v-layout>
   </v-container>
 </template>
 
 <script>
-//import Auth from '@/components/Auth'
  import HandelModal from './HandelModal'
 
     export default {

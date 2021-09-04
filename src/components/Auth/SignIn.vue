@@ -1,58 +1,58 @@
 <template>
   <v-card>
-    <slot title="ثبت نام در آلا "/>
+    <slot title="ثبت نام در آلا " />
     <v-card-text>
       <v-progress-linear
-          v-if="loading"
-          indeterminate
-          color="yellow darken-2"
-      ></v-progress-linear>
+        v-if="loading"
+        indeterminate
+        color="yellow darken-2"
+      />
       <v-container>
         <v-text-field
-            v-if="!showPasswordInput"
-            :disabled="disable"
-            v-model="inputData.mobile"
-            dir="ltr"
-            label="شماره همراه"
-            required
-        ></v-text-field>
+          v-if="!showPasswordInput"
+          v-model="inputData.mobile"
+          :disabled="disable" 
+          dir="ltr"
+          label="شماره همراه"
+          required
+        />
         <div v-if="showPasswordInput">
           <v-text-field
-              v-model="inputData.password"
-              dir="ltr"
-              label="رمز عبور"
-              type="password"
-              required
-          ></v-text-field>
+            v-model="inputData.password"
+            dir="ltr"
+            label="رمز عبور"
+            type="password"
+            required
+          />
           <v-text-field
-              v-model="inputData.password_confirmation"
-              dir="ltr"
-              label="تکرار رمز عبور"
-              type="password"
-              required
-          ></v-text-field>
+            v-model="inputData.password_confirmation"
+            dir="ltr"
+            label="تکرار رمز عبور"
+            type="password"
+            required
+          />
         </div>
       </v-container>
       <div v-if="errorMessages">
         <v-alert
-            v-for="(message , index) in errorMessages"
-            :key="index"
-            dense
-            outlined
-            text
-            type="error"
-            dismissible
+          v-for="(message , index) in errorMessages"
+          :key="index"
+          dense
+          outlined
+          text
+          type="error"
+          dismissible
         >
           {{ message }}
         </v-alert>
       </div>
       <div v-if="successMessage">
         <v-alert
-            dense
-            outlined
-            text
-            type="success"
-            dismissible
+          dense
+          outlined
+          text
+          type="success"
+          dismissible
         >
           {{ successMessage }}
         </v-alert>
@@ -60,35 +60,35 @@
     </v-card-text>
     <v-card-actions class="d-flex flex-column">
       <v-btn
-          v-if="!showPasswordInput"
-          block
-          dark
-          :loading="loading"
-          color="green"
-          class="form-btn mb-3 btn-text-size"
-          @click="sendToVerify"
+        v-if="!showPasswordInput"
+        block
+        dark
+        :loading="loading"
+        color="green"
+        class="form-btn mb-3 btn-text-size"
+        @click="sendToVerify"
       >
         دریافت کد تایید
       </v-btn>
       <v-btn
-          v-if="showPasswordInput"
-          block
-          dark
-          :loading="loading"
-          color="green"
-          class="form-btn mb-3 btn-text-size"
-          @click="signIn"
+        v-if="showPasswordInput"
+        block
+        dark
+        :loading="loading"
+        color="green"
+        class="form-btn mb-3 btn-text-size"
+        @click="signIn"
       >
         ثبت نام
       </v-btn>
     </v-card-actions>
     <v-card-actions class="d-flex flex-column">
       <v-btn
-          v-if="!showPasswordInput"
-          text
-          color="#3e5480"
-          class="mb-3 btn-text-size"
-          @click="backToLogin"
+        v-if="!showPasswordInput"
+        text
+        color="#3e5480"
+        class="mb-3 btn-text-size"
+        @click="backToLogin"
       >
         بازگشت به صفحه ی ورود
       </v-btn>
@@ -97,6 +97,8 @@
 </template>
 
 <script>
+import axios from 'axios'
+import API_ADDRESS from "@/api/Addresses";
 export default {
   name: "SignIn",
   props: {
@@ -218,9 +220,10 @@ export default {
       if (this.validatePassword(this.inputData.password)
           && this.validateMobile(this.inputData.mobile)
           && this.inputData.code) {
-        axios.post('/api/v2/register', this.inputData)
+        axios.post(API_ADDRESS.auth.register, this.inputData)
             .then(response => {
               if (response.status === 200) {
+
                 this.successMessageAlert()
                 setTimeout(() => {
                   this.$emit('closeDialog')
