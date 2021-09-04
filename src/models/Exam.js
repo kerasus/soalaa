@@ -84,7 +84,25 @@ class Exam extends Model {
             {
                 key: 'generate_automatic_report',
                 default: false
-            }
+            },
+            {
+                key: 'generate_questions_automatically',
+                default: false
+            },
+            {
+                key: 'report_config',
+                default: {
+                    "maximum_question_answered" : 5,
+                    "include_abnormal" : false,
+                    "include_unranked" : false,
+                    "make_report_for_before_delay" : false,
+                    "make_report_for_remaining_only" : false,
+                    "temp_exams_in_exam_interval" : false,
+                    "consider_negative_point" : false,
+                    "populate_school_ranking" : false
+                }
+            },
+
         ])
 
         this.exam_id = this.id
