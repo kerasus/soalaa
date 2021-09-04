@@ -181,9 +181,9 @@ export default {
   created() {
 
     let that = this
-    axios.get('/api/v1/option')
+    axios.get(API_ADDRESS.option.base + '?type=question_type')
         .then(function (response) {
-          const optionQuestion = response.data.data.find(item => (item.value==='psychometric' && item.type==='question_type'))
+          const optionQuestion = response.data.data.find(item => (item.value==='psychometric'))
           if (!optionQuestion) {
             // beterek
             return this.$notify({

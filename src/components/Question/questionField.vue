@@ -5,7 +5,8 @@
         ref="tiptap"
         :loading="loading"
         :access-token="$store.getters['Auth/accessToken']"
-        :upload-url="'/api/v1/question/upload/' + questionId"
+        :upload-url="imageUrl"
+        :options="{ bubbleMenu: false, floatingMenu: false }"
       />
     </v-col>
     <!-- eslint-disable vue/no-v-html -->
@@ -18,6 +19,7 @@
 <script>
 import VueKatex from '@/components/VueKatex'
 import VueTiptapKatex from 'vue-tiptap-katex'
+import API_ADDRESS from "@/api/Addresses";
 
 export default {
   name: 'QuestionField',
@@ -47,6 +49,11 @@ export default {
     return {
       html: '',
       loading: false
+    }
+  },
+  computed: {
+    imageUrl () {
+      return API_ADDRESS.question.uploadImage(this.questionId)
     }
   },
   watch: {

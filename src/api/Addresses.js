@@ -25,6 +25,9 @@ const API_ADDRESS = {
   content: {
     base: authServer + '/c',
   },
+  option: {
+    base: lumenServer + '/option'
+  },
   exam: {
     sendAnswers: lumenServer + '/temp-exam/answer/choice',
     sendStatus: lumenServer + '/temp-exam/answer/status',
@@ -64,6 +67,9 @@ const API_ADDRESS = {
     report: {
       getReport (userExamId) {
         return lumenServer + '/exam-report/show?user_exam_id=' + userExamId
+      },
+      updateReportOptions (examId) {
+        return lumenServer + '/exam/config/' + examId
       }
     },
     examBookletUpload (exam_id) {
@@ -108,7 +114,6 @@ const API_ADDRESS = {
         }
         return lumenServer + '/activity-log?subject_id='+questionId+'&subject=question&title=update&description=update_question_status&with_pagination=0'
       },
-
     },
     base: lumenServer + '/exam-question/attach',
     createAndAttach: () => lumenServer + '/exam-question/attach/' ,
@@ -129,6 +134,9 @@ const API_ADDRESS = {
     },
     confirm (questionId) {
       return lumenServer + '/question/confirm/' + questionId
+    },
+    uploadImage (questionId) {
+      return lumenServer + '/question/upload/' + questionId
     }
   },
   questionSubcategory: {
@@ -147,6 +155,9 @@ const API_ADDRESS = {
     base (exam_id) {
       return lumenServer + '/exam-question/zirgorooh/' + exam_id
     },
+    all () {
+      return lumenServer + '/option?with_pagination=0&type=zirgorooh_type'
+    }
   }
 }
 export default API_ADDRESS

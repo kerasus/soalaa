@@ -227,6 +227,25 @@
           </template>
           <span>ویرایش</span>
         </v-tooltip>
+        <v-tooltip top>
+          <template v-slot:activator="{ on, attrs }">
+            <v-btn
+              class="mx-2"
+              fab
+              dark
+              x-small
+              color="purple"
+              v-bind="attrs"
+              @click="selectExamReport(item)"
+              v-on="on"
+            >
+              <v-icon dark>
+                mdi-pencil
+              </v-icon>
+            </v-btn>
+          </template>
+          <span>ویرایش کارنامه</span>
+        </v-tooltip>
         <v-tooltip
           v-if="false"
           top
@@ -280,8 +299,8 @@
               dark
               x-small
               color="blue"
-              :to="{name: 'exam.results', params: {examId: item.id}}"
               v-bind="attrs"
+              @click="goToResult(item)"
               v-on="on"
             >
               <v-icon
@@ -455,6 +474,13 @@
             // this.getExams()
         },
         methods:{
+            goToResult (exam) {
+              if (exam.type.value === 'psychometric') {
+                this.$router.push({name: 'psychology.results', params: {examId: exam.id}})
+                return
+              }
+              this.$router.push({name: 'exam.results', params: {examId: exam.id}})
+            },
             openUploadDialog (exam_id) {
               this.dialogUpload = true
               this.selectedExam = exam_id
@@ -523,6 +549,9 @@
             },
             selectExam(item){
                 this.$emit('update-exam-id', item)
+            },
+            selectExamReport (item) {
+              this.$emit('update-exam-report-id', item)
             }
         }
     }
