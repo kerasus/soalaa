@@ -13,50 +13,50 @@
       <v-row no-gutters>
         <v-col :cols="12">
           <v-text-field
-            v-model="reportOptions.maximum_question_answered"
+            v-model="exam.report_config.maximum_question_answered"
             type="number"
             label="maximum_question_answered"
           />
         </v-col>
         <v-col :cols="12">
           <v-checkbox
-            v-model="reportOptions.include_abnormal"
+            v-model="exam.report_config.include_abnormal"
             label="include_abnormal"
           />
         </v-col>
         <v-col :cols="12">
           <v-checkbox
-            v-model="reportOptions.include_unranked"
+            v-model="exam.report_config.include_unranked"
             label="include_unranked"
           />
         </v-col>
         <v-col :cols="12">
           <v-checkbox
-            v-model="reportOptions.make_report_for_before_delay"
+            v-model="exam.report_config.make_report_for_before_delay"
             label="make_report_for_before_delay"
           />
         </v-col>
         <v-col :cols="12">
           <v-checkbox
-            v-model="reportOptions.make_report_for_remaining_only"
+            v-model="exam.report_config.make_report_for_remaining_only"
             label="make_report_for_remaining_only"
           />
         </v-col>
         <v-col :cols="12">
           <v-checkbox
-            v-model="reportOptions.temp_exams_in_exam_interval"
+            v-model="exam.report_config.temp_exams_in_exam_interval"
             label="temp_exams_in_exam_interval"
           />
         </v-col>
         <v-col :cols="12">
           <v-checkbox
-            v-model="reportOptions.consider_negative_point"
+            v-model="exam.report_config.consider_negative_point"
             label="consider_negative_point"
           />
         </v-col>
         <v-col :cols="12">
           <v-checkbox
-            v-model="reportOptions.populate_school_ranking"
+            v-model="exam.report_config.populate_school_ranking"
             label="populate_school_ranking"
           />
         </v-col>
@@ -100,17 +100,6 @@
           items: [],
           loading:true,
           examItem: new Exam(),
-          reportOptions: {
-            "maximum_question_answered" : 5,
-            "include_abnormal" : false,
-            "include_unranked" : false,
-            "make_report_for_before_delay" : false,
-            "make_report_for_remaining_only" : false,
-            "temp_exams_in_exam_interval" : false,
-            "consider_negative_point" : false,
-            "populate_school_ranking" : false
-          }
-
         }),
         created() {
           let that = this
@@ -135,7 +124,7 @@
         },
         methods: {
           save() {
-            axios.post(API_ADDRESS.exam.report.updateReportOptions(this.exam.id), this.reportOptions)
+            axios.post(API_ADDRESS.exam.report.updateexam.report_config(this.exam.id), this.exam.report_config)
             .then(() => {
               this.refreshExamList()
             })
