@@ -104,6 +104,7 @@
             :items="categoryList.list"
             item-text="title"
             item-value="id"
+            label="category"
           />
         </v-col>
         <v-col :cols="6">
