@@ -98,7 +98,7 @@
             label="تولید اتوماتیک سوال"
           />
         </v-col>
-        <v-col :cols="3">
+        <v-col :cols="6">
           <v-select
             v-model="selectedCategory"
             :items="categoryList.list"
@@ -106,21 +106,21 @@
             item-value="id"
           />
         </v-col>
-        <v-col :cols="3">
+        <v-col :cols="6">
           <v-text-field
             v-model="selectedCategoryTime"
             type="number"
             label="زمان"
           />
         </v-col>
-        <v-col :cols="3">
+        <v-col :cols="6">
           <v-text-field
             v-model="selectedCategoryOrder"
             type="number"
             label="ترتیب"
           />
         </v-col>
-        <v-col :cols="3">
+        <v-col :cols="6">
           <v-btn @click="addCategory">
             اضافه کردن category
           </v-btn>
