@@ -16,6 +16,8 @@ class QuestCategory extends Model {
                 relatedModel: QuestSubcategoryList
             },
             { key: 'order' },
+            { key: 'time' },
+            { key: 'order' },
             {
                 key: 'editable',
                 default: false

@@ -109,6 +109,45 @@ class Exam extends Model {
 
         ])
 
+        let that = this
+
+        this.apiResource = {
+            fields: [
+                {key: 'id'},
+                {key: 'title'},
+                {key: 'photo'},
+                {key: 'price'},
+                {key: 'order'},
+                {key: 'delay_time'},
+                {key: 'exam_actions'},
+                {key: 'type'},
+                {key: 'holding_status'},
+                {key: 'user_exam_id'},
+                {key: 'user_exam_status'},
+                {key: 'questions_file_url'},
+                {key: 'total_question_number'},
+                {key: 'is_open'},
+                {key: 'is_register_open'},
+                {key: 'opening_policy'},
+                {key: 'questions'},
+                {key: 'sub_categories'},
+                {key: 'exam_id'},
+                {key: 'enable'},
+                {key: 'is_free'},
+                {key: 'generate_automatic_report'},
+                {key: 'generate_questions_automatically'},
+                {key: 'type_id'},
+                {key: 'start_at'},
+                {key: 'finish_at'},
+                {
+                    key: 'categories',
+                    value: function () {
+                        return that.categories.list
+                    }
+                },
+            ]
+        }
+
         this.exam_id = this.id
         this.questions.sortByOrder()
         this.categories.sortByKey('end_at', 'asc')

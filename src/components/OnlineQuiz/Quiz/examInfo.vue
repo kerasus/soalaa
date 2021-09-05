@@ -98,6 +98,34 @@
             label="تولید اتوماتیک سوال"
           />
         </v-col>
+        <v-col :cols="6">
+          <v-select
+            v-model="selectedCategory"
+            :items="categoryList.list"
+            item-text="title"
+            item-value="id"
+            label="category"
+          />
+        </v-col>
+        <v-col :cols="6">
+          <v-text-field
+            v-model="selectedCategoryTime"
+            type="number"
+            label="زمان"
+          />
+        </v-col>
+        <v-col :cols="6">
+          <v-text-field
+            v-model="selectedCategoryOrder"
+            type="number"
+            label="ترتیب"
+          />
+        </v-col>
+        <v-col :cols="6">
+          <v-btn @click="addCategory">
+            اضافه کردن category
+          </v-btn>
+        </v-col>
       </v-row>
       <v-row>
         <v-col>
@@ -139,6 +167,7 @@ import {Exam} from "@/models/Exam";
 import Assistant from "@/plugins/assistant";
 import axios from "axios";
 import API_ADDRESS from "@/api/Addresses";
+import {QuestCategory, QuestCategoryList} from "@/models/QuestCategory";
 
 Vue.component('date-picker', VuePersianDatetimePicker)
 
@@ -148,10 +177,20 @@ export default {
   data: () => ({
     items: [],
     loading:true,
-    examItem: new Exam()
+    examItem: new Exam(),
+    categoryList: new QuestCategoryList(),
+    selectedCategory: null,
+    selectedCategoryTime: 0,
+    selectedCategoryOrder: 0
   }),
   created() {
     let that = this
+    const loadCategoriesPromise = this.loadCategories()
+
+    Promise.all([loadCategoriesPromise])
+            .then(() => {
+              this.loading = false
+            })
     axios.get(API_ADDRESS.option.base)
         .then(function (response) {
           const optionQuestion = response.data.data.find(item => (item.value === 'psychometric' && item.type === 'exam_type'))
@@ -172,6 +211,22 @@ export default {
     this.examItem = this.exam
   },
   methods: {
+    addCategory () {
+      this.exam.categories.list.push(new QuestCategory({ id: this.selectedCategory, time: this.selectedCategoryTime, order: this.selectedCategoryOrder }))
+    },
+    loadCategories () {
+      let that = this
+      return new Promise(function(resolve, reject) {
+        axios.get(API_ADDRESS.questionCategory.base)
+                .then((response) => {
+                  that.categoryList = new QuestCategoryList(response.data.data)
+                  resolve()
+                })
+                .catch( () => {
+                  reject()
+                })
+      })
+    },
     create() {
       this.examItem = this.exam
       this.examItem.loading = true
