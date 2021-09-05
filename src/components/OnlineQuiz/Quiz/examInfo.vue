@@ -99,7 +99,7 @@
           />
         </v-col>
         <v-col
-          v-if="exam.id"
+          v-if="!exam.id"
           :cols="6"
         >
           <v-select
@@ -111,7 +111,7 @@
           />
         </v-col>
         <v-col
-          v-if="exam.id"
+          v-if="!exam.id"
           :cols="6"
         >
           <v-text-field
@@ -121,7 +121,7 @@
           />
         </v-col>
         <v-col
-          v-if="exam.id"
+          v-if="!exam.id"
           :cols="6"
         >
           <v-text-field
@@ -131,11 +131,45 @@
           />
         </v-col>
         <v-col
-          v-if="exam.id"
+          v-if="!exam.id"
           :cols="6"
         >
           <v-btn @click="addCategory">
             اضافه کردن category
+          </v-btn>
+        </v-col>
+      </v-row>
+      <v-row
+        v-for="item in exam.categories.list"
+        v-if="!exam.id"
+        :key="item.id"
+      >
+        <v-col cols="3">
+          <v-text-field
+            disabled
+            label="category_id"
+            :value="item.id"
+          />
+        </v-col>
+        <v-col cols="3">
+          <v-text-field
+            label="زمان"
+            :value="item.time"
+          />
+        </v-col>
+        <v-col cols="3">
+          <v-text-field
+            label="ترتیب"
+            :value="item.order"
+          />
+        </v-col>
+        <v-col cols="3">
+          <v-btn
+            dark
+            color="red"
+            @click="deleteCategory(item.id)"
+          >
+            حذف
           </v-btn>
         </v-col>
       </v-row>
@@ -223,6 +257,9 @@ export default {
     this.examItem = this.exam
   },
   methods: {
+    deleteCategory (id) {
+      this.exam.categories.list = this.exam.categories.list.filter(item => item.id !== id)
+    },
     addCategory () {
       this.exam.categories.list.push(new QuestCategory({ id: this.selectedCategory, time: this.selectedCategoryTime, order: this.selectedCategoryOrder }))
     },

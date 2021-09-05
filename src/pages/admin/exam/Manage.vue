@@ -10,7 +10,7 @@
       </v-col>
       <v-dialog
         v-model="dialog"
-        max-width="600px"
+        max-width="800px"
       >
         <v-sheet>
           <v-row>
