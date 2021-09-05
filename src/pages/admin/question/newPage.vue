@@ -635,6 +635,7 @@ export default {
     },
 
     setInsertedQuestions() {  //یاس
+      this.$refs.qlayout.getContent()
       var currentQuestion = this.currentQuestion
       // set exams
       currentQuestion.exams = this.selectedQuizzes.map(item => {
