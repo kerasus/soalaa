@@ -61,7 +61,7 @@
           label="زمان تاخیر (دقیقه)"
         />
       </v-row>
-      <v-row no-gutters>
+      <v-row>
         <v-col :cols="6">
           <v-checkbox
             v-model="exam.enable"
@@ -98,6 +98,9 @@
             label="تولید اتوماتیک سوال"
           />
         </v-col>
+      </v-row>
+      <v-divider />
+      <v-row>
         <v-col
           v-if="!exam.id"
           :cols="6"
@@ -139,6 +142,7 @@
           </v-btn>
         </v-col>
       </v-row>
+      <v-divider />
       <v-row
         v-for="item in exam.categories.list"
         v-if="!exam.id"

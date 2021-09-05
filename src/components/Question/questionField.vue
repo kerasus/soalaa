@@ -1,6 +1,9 @@
 <template>
   <v-row>
-    <v-col v-if="editStatus">
+    <v-col
+      v-if="editStatus"
+      cols="12"
+    >
       <vue-tiptap-katex
         ref="tiptap"
         :loading="loading"
@@ -12,6 +15,17 @@
     <!-- eslint-disable vue/no-v-html -->
     <v-col v-else>
       <vue-katex :input="html" />
+    </v-col>
+    <v-col cols="10">
+      <v-textarea
+        v-model="temp"
+        outlined
+      />
+    </v-col>
+    <v-col cols="2">
+      <v-btn @click="tempFunc">
+        بریزش تو ادیتور
+      </v-btn>
     </v-col>
   </v-row>
 </template>
@@ -48,7 +62,8 @@ export default {
   data() {
     return {
       html: '',
-      loading: false
+      loading: false,
+      temp: ''
     }
   },
   computed: {
@@ -69,6 +84,9 @@ export default {
     }
   },
   methods: {
+    tempFunc () {
+      this.$refs.tiptap.setContent(this.temp)
+    },
     getContent () {
       this.$emit('input', this.$refs.tiptap.getContent())
     },
