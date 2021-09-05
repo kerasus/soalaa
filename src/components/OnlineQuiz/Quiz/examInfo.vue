@@ -98,7 +98,10 @@
             label="تولید اتوماتیک سوال"
           />
         </v-col>
-        <v-col :cols="6">
+        <v-col
+          v-if="!exam.id"
+          :cols="6"
+        >
           <v-select
             v-model="selectedCategory"
             :items="categoryList.list"
@@ -107,23 +110,70 @@
             label="category"
           />
         </v-col>
-        <v-col :cols="6">
+        <v-col
+          v-if="!exam.id"
+          :cols="6"
+        >
           <v-text-field
             v-model="selectedCategoryTime"
             type="number"
             label="زمان"
           />
         </v-col>
-        <v-col :cols="6">
+        <v-col
+          v-if="!exam.id"
+          :cols="6"
+        >
           <v-text-field
             v-model="selectedCategoryOrder"
             type="number"
             label="ترتیب"
           />
         </v-col>
-        <v-col :cols="6">
+        <v-col
+          v-if="!exam.id"
+          :cols="6"
+        >
           <v-btn @click="addCategory">
             اضافه کردن category
+          </v-btn>
+        </v-col>
+      </v-row>
+      <v-row
+        v-for="item in exam.categories.list"
+        v-if="!exam.id"
+        :key="item.id"
+      >
+        <v-col cols="5">
+          <v-select
+            v-model="item.id"
+            :items="categoryList.list"
+            item-value="id"
+            item-text="title"
+          />
+        </v-col>
+        <v-col cols="3">
+          <v-text-field
+            label="زمان"
+            :value="item.time"
+            type="number"
+          />
+        </v-col>
+        <v-col cols="3">
+          <v-text-field
+            label="ترتیب"
+            :value="item.order"
+            type="number"
+          />
+        </v-col>
+        <v-col cols="1">
+          <v-btn
+            dark
+            color="red"
+            icon
+            @click="deleteCategory(item.id)"
+          >
+            <v-icon>mdi-close</v-icon>
           </v-btn>
         </v-col>
       </v-row>
@@ -211,6 +261,12 @@ export default {
     this.examItem = this.exam
   },
   methods: {
+    getCategoryById (id) {
+      return this.categoryList.list.find(item => item.id === id)
+    },
+    deleteCategory (id) {
+      this.exam.categories.list = this.exam.categories.list.filter(item => item.id !== id)
+    },
     addCategory () {
       this.exam.categories.list.push(new QuestCategory({ id: this.selectedCategory, time: this.selectedCategoryTime, order: this.selectedCategoryOrder }))
     },
