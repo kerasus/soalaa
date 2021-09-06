@@ -9,7 +9,7 @@
         :loading="loading"
         :access-token="$store.getters['Auth/accessToken']"
         :upload-url="imageUrl"
-        :options="{ bubbleMenu: false, floatingMenu: false }"
+        :options="{ bubbleMenu: false, floatingMenu: false, poem: true }"
       />
     </v-col>
     <!-- eslint-disable vue/no-v-html -->
