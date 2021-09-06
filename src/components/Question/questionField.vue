@@ -16,17 +16,6 @@
     <v-col v-else>
       <vue-katex :input="html" />
     </v-col>
-    <v-col cols="10">
-      <v-textarea
-        v-model="temp"
-        outlined
-      />
-    </v-col>
-    <v-col cols="2">
-      <v-btn @click="tempFunc">
-        بریزش تو ادیتور
-      </v-btn>
-    </v-col>
   </v-row>
 </template>
 
@@ -63,7 +52,6 @@ export default {
     return {
       html: '',
       loading: false,
-      temp: ''
     }
   },
   computed: {
@@ -84,9 +72,6 @@ export default {
     }
   },
   methods: {
-    tempFunc () {
-      this.$refs.tiptap.setContent(this.temp)
-    },
     getContent () {
       this.$emit('input', this.$refs.tiptap.getContent())
     },
