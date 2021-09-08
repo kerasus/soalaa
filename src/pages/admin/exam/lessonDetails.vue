@@ -464,6 +464,12 @@
     }
 </style>
 
+<style>
+  .konkoor-view .reading-duplicate {
+    display: none;
+  }
+</style>
+
 <style scoped>
     .questions-list {
         margin-bottom: 0;
