@@ -84,6 +84,8 @@ export default {
         this.exam.loading = false
         if (this.$route.params.autoStart.toString() === '1') {
           this.goToParticipateExamPage()
+        } else {
+          this.$router.push({name: 'user.exam.list'})
         }
       })
     },
