@@ -70,7 +70,7 @@ class Exam extends Model {
                   has_exam_progress_bar: true,
                   has_category_navigation: false,
                   can_skip_question: false,
-                  randomize_questions: true
+                  randomize_questions: false
               }
             },
             {
