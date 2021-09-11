@@ -95,7 +95,6 @@ class ExamData {
 				})
 					 .then(response => {
 						let questions = response.data
-						 console.log('randomize: ', that.exam)
 						 if (that.exam.holding_config.randomize_questions) {
 							questions = new ShuffleQuestions(questions).run()
 						 }
