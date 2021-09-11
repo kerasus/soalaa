@@ -41,6 +41,7 @@ export default {
     margin-right: -15px;
     margin-left: -15px;
   }
+
   .beit .mesra {
     position: relative;
     width: 100%;
