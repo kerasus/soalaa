@@ -64,7 +64,7 @@ class Exam extends Model {
             { key: 'is_registered' },
             { key: 'exam_id' },
             {
-              key: 'config',
+              key: 'holding_config',
               default: {
                   has_konkur_view: false,
                   has_exam_progress_bar: true,

@@ -95,7 +95,8 @@ class ExamData {
 				})
 					 .then(response => {
 						let questions = response.data
-						 if (that.exam.config.randomize_questions) {
+						 console.log('randomize: ', that.exam)
+						 if (that.exam.holding_config.randomize_questions) {
 							questions = new ShuffleQuestions(questions).run()
 						 }
 						 that.exam.questions = new QuestionList(questions)
@@ -216,6 +217,7 @@ class ExamData {
 					 that.exam.questions_file_url = response.data.data.questions_file_url
 					 that.exam.categories = new QuestCategoryList(response.data.data.categories)
 					 that.exam.sub_categories = new QuestSubcategoryList(response.data.data.sub_categories)
+					 that.exam.holding_config = response.data.data.holding_config
 					 that.userExamData = response.data
 					 resolve(response)
 				 })
