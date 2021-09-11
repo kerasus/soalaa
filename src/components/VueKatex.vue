@@ -27,11 +27,45 @@ export default {
       type: String,
       default: ''
     }
+  },
+  mounted () {
+    document.querySelectorAll('.katex').forEach(item => {
+      item.setAttribute('dir', 'ltr')
+    })
   }
 }
 </script>
 
-<style>
+<style lang="scss">
+  .html-katex {
+    table {
+      border-collapse: collapse;
+      table-layout: fixed;
+      width: 100%;
+      margin: 0;
+      overflow: hidden;
+
+      td,
+      th {
+        min-width: 1em;
+        border: 2px solid #ced4da;
+        padding: 3px 5px;
+        vertical-align: top;
+        box-sizing: border-box;
+        position: relative;
+
+        > * {
+          margin-bottom: 0;
+        }
+      }
+
+      th {
+        font-weight: bold;
+        text-align: left;
+        background-color: #f1f3f5;
+      }
+    }
+  }
   .beit {
     display: -webkit-box;
     display: -ms-flexbox;
