@@ -513,6 +513,7 @@
 
     .konkoor-view {
         padding: 0;
+        margin-top: 12px;
     }
 
     .test {
