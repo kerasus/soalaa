@@ -449,7 +449,7 @@
     .timer-row {
         width: calc(58% - 150px);
         position: absolute;
-        bottom: 1px;
+        bottom: 12px;
         left: 100px;
     }
 
@@ -513,6 +513,7 @@
 
     .konkoor-view {
         padding: 0;
+        margin-top: 12px;
     }
 
     .test {

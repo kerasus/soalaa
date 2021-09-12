@@ -75,6 +75,7 @@ export default {
     margin-right: -15px;
     margin-left: -15px;
   }
+
   .beit .mesra {
     position: relative;
     width: 100%;
@@ -102,6 +103,7 @@ export default {
 </style>
 
 <style scoped lang="scss">
+
 .html-katex {
   table {
     border-collapse: collapse;
@@ -152,5 +154,11 @@ export default {
       pointer-events: none;
     }
   }
+}
+</style>
+
+<style>
+.html-katex > p {
+  direction: inherit;
 }
 </style>

@@ -124,7 +124,7 @@
         },
         methods: {
           save() {
-            axios.post(API_ADDRESS.exam.report.updateexam.report_config(this.exam.id), this.exam.report_config)
+            axios.post(API_ADDRESS.exam.report.updateReportOptions(this.exam.id), this.exam.report_config)
             .then(() => {
               this.refreshExamList()
             })
