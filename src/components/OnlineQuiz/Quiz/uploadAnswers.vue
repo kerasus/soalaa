@@ -1,38 +1,55 @@
 <template>
   <v-container class="upload-booklet-file">
-    <v-row v-for="(item, index) in questionCategories.list" :key="index">
+    <v-row
+      v-for="(item, index) in questionCategories.list"
+      :key="index"
+    >
       <v-col md="6">
         <VueFileAgent
-            dir="ltr"
-            :ref="item.id + 'questionFile'"
-            v-model="item.questionFile"
-            :multiple="false"
-            deletable
-            accept=".pdf"
-            :maxFiles="1"
-            @select="select($event, item, 'questionFile')"
-            @beforedelete="onBeforeDelete($event, item, 'questionFile')"
-            @delete="fileDeleted($event, item, 'questionFile')"
-            :helpText="'فایل سوالات ' + item.title"
+          :ref="item.id + 'questionFile'"
+          v-model="item.questionFile"
+          dir="ltr"
+          :multiple="false"
+          deletable
+          accept=".pdf"
+          :max-files="1"
+          :help-text="'فایل سوالات ' + item.title"
+          @select="select($event, item, 'questionFile')"
+          @beforedelete="onBeforeDelete($event, item, 'questionFile')"
+          @delete="fileDeleted($event, item, 'questionFile')"
         />
-        <v-btn :elevation="0" class="upload-btn" block color="blue" :disabled="!listLength(item, 'questionFile') " @click="uploadFiles(item, 'questionFile')">
+        <v-btn
+          :elevation="0"
+          class="upload-btn"
+          block
+          color="blue"
+          :disabled="!listLength(item, 'questionFile') "
+          @click="uploadFiles(item, 'questionFile', 'questions_booklet')"
+        >
           آپلود
         </v-btn>
       </v-col>
       <v-col md="6">
         <VueFileAgent
-            :ref="item.id + 'answerFile'"
-            v-model="item.answerFile"
-            :multiple="false"
-            deletable
-            accept=".pdf"
-            :maxFiles="1"
-            @select="select($event, item, 'answerFile')"
-            @beforedelete="onBeforeDelete($event, item, 'answerFile')"
-            @delete="fileDeleted($event, item.answerFile)"
-            :helpText="'فایل پاسخ ' + item.title"
+          :ref="item.id + 'answerFile'"
+          v-model="item.answerFile"
+          :multiple="false"
+          deletable
+          accept=".pdf"
+          :max-files="1"
+          :help-text="'فایل پاسخ ' + item.title"
+          @select="select($event, item, 'answerFile')"
+          @beforedelete="onBeforeDelete($event, item, 'answerFile')"
+          @delete="fileDeleted($event, item.answerFile)"
         />
-        <v-btn :elevation="0" class="upload-btn" block color="blue" :disabled="!listLength(item, 'answerFile') " @click="uploadFiles(item, 'answerFile')">
+        <v-btn
+          :elevation="0"
+          class="upload-btn"
+          block
+          color="blue"
+          :disabled="!listLength(item, 'answerFile') "
+          @click="uploadFiles(item, 'answerFile', 'descriptive_answers_booklet')"
+        >
           آپلود
         </v-btn>
       </v-col>
@@ -51,27 +68,51 @@ import API_ADDRESS from "@/api/Addresses";
 Vue.use(VueFileAgent);
 
 export default {
-  name: "uploadAnswers",
+  name: "UploadAnswers",
+  props: ['exam_id'],
   data () {
     return {
       questionCategories: new QuestCategoryList(),
-      random: 0
+      random: 0,
+      options: []
     }
   },
-  props: ['exam_id'],
+  computed: {
+    listLength () {
+      this.random
+      return (item, key) => {
+        return item[key].length
+      }
+    }
+  },
+  created () {
+    axios.get(API_ADDRESS.questionCategory.base)
+    .then(response => {
+      this.questionCategories = new QuestCategoryList(response.data.data)
+      this.questionCategories.list.forEach(item => {
+        item.questionFile = []
+        item.answerFile = []
+      })
+    })
+    axios.get(API_ADDRESS.option.base + '?type=booklet_type')
+    .then(response => {
+      this.options = response.data.data
+    })
+  },
   methods: {
     select (event, item, key) {
       console.log(event, item, key)
       this.random = Math.random()
       Vue.set(item, key, event)
     },
-    uploadFiles (item, key) {
+    uploadFiles (item, key, booklet_type) {
       let that = this
       item[key].forEach(file => {
         const formData = new FormData()
         formData.append('file', file.file, file.file.name)
         formData.append('category_id', '60b7858d743940688b23c7f4')
-        formData.append('booklet_type', 'questions_booklet')
+        const option = this.options.find(option => option.value === booklet_type)
+        formData.append('booklet_type', option.id)
         axios.post(API_ADDRESS.exam.examBookletUpload(this.exam_id), formData,{
           headers: {
             'Content-Type': 'multipart/form-data'
@@ -94,24 +135,6 @@ export default {
     fileDeleted: function (event, item) {
       item = []
     },
-  },
-  created () {
-    axios.get(API_ADDRESS.questionCategory.base)
-    .then(response => {
-      this.questionCategories = new QuestCategoryList(response.data.data)
-      this.questionCategories.list.forEach(item => {
-        item.questionFile = []
-        item.answerFile = []
-      })
-    })
-  },
-  computed: {
-    listLength () {
-      this.random
-      return (item, key) => {
-        return item[key].length
-      }
-    }
   }
 }
 </script>

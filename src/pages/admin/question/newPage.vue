@@ -56,6 +56,21 @@
               :status="edit_status"
               @input="updateQuestion"
             />
+            <v-col cols="4">
+              <v-select
+                v-if="getPageStatus() === 'create'"
+                v-model="currentQuestion.author"
+                label="طراحان"
+                dense
+                multiple
+                disabled
+                chips
+                :items="currentQuestion.author"
+                item-text="full_name"
+                item-value="id"
+                outlined
+              />
+            </v-col>
             <!-- -------------------------- show exams  ---------------------->
             <attach_list
               :status="edit_status"
@@ -142,6 +157,17 @@ export default {
   },
   data() {
     return {
+      selectedAuthors: [],
+      authors: [
+        {
+          full_name: 'محمد اسماعیلی',
+          id: 123
+        },
+        {
+          full_name: 'مصطفی کاظمی',
+          id: 1222
+        }
+      ],
       temp: null,
       pageStatuses: [
         {
@@ -227,7 +253,6 @@ export default {
               type: 'error'
             })
           }
-
           that.optionQuestionId = optionQuestion.id
           that.loading = false
         })
@@ -265,6 +290,9 @@ export default {
         statusId = this.questionStatusId_draft
       }
       this.currentQuestion.status_id = statusId
+      this.selectedAuthors.forEach(author => {
+        this.currentQuestion.author.push(this.authors.find(item => item.id === author))
+      })
 
       // set choices
       this.setMainChoicesInCreateMode(statusId)   //یاس
@@ -715,6 +743,11 @@ export default {
 
     checkNavbarVisibilityOnCreatPage(){
       this.NavbarVisibilityOnCreatPage = true
+      if (this.$route.name === 'question.create') {
+
+        this.currentQuestion.author.push({full_name: this.$store.getters['Auth/user'].full_name, id: this.$store.getters['Auth/user'].id})
+        console.log(this.currentQuestion.author)
+      }
     }
   },
 }
