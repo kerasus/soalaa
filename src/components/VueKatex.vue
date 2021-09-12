@@ -103,6 +103,7 @@ export default {
 </style>
 
 <style scoped lang="scss">
+
 .html-katex {
   table {
     border-collapse: collapse;
@@ -153,5 +154,11 @@ export default {
       pointer-events: none;
     }
   }
+}
+</style>
+
+<style>
+.html-katex > p {
+  direction: inherit;
 }
 </style>

@@ -59,12 +59,13 @@
             <v-col cols="4">
               <v-select
                 v-if="getPageStatus() === 'create'"
-                v-model="selectedAuthors"
+                v-model="currentQuestion.author"
                 label="طراحان"
                 dense
                 multiple
+                disabled
                 chips
-                :items="authors"
+                :items="currentQuestion.author"
                 item-text="full_name"
                 item-value="id"
                 outlined
@@ -252,7 +253,6 @@ export default {
               type: 'error'
             })
           }
-
           that.optionQuestionId = optionQuestion.id
           that.loading = false
         })
@@ -743,6 +743,11 @@ export default {
 
     checkNavbarVisibilityOnCreatPage(){
       this.NavbarVisibilityOnCreatPage = true
+      if (this.$route.name === 'question.create') {
+
+        this.currentQuestion.author.push({full_name: this.$store.getters['Auth/user'].full_name, id: this.$store.getters['Auth/user'].id})
+        console.log(this.currentQuestion.author)
+      }
     }
   },
 }
