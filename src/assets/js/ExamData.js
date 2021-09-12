@@ -103,7 +103,7 @@ class ExamData {
 					 })
 					 .catch(error => {
 							 reject(error)
-						 })
+					 })
 			}),
 		)
 		return this
