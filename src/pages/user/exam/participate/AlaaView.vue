@@ -283,6 +283,11 @@
         color: var(--text-2);
         flex-direction: row;
         justify-content: space-between;
+        position: sticky;
+        top: 60px;
+        z-index: 1;
+        padding-top: 20px;
+        background: var(--background-2);
     }
 
     .question-body {
