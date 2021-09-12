@@ -152,6 +152,18 @@ class Exam extends Model {
         this.questions.sortByOrder()
         this.categories.sortByKey('end_at', 'asc')
         this.setQuestionsLtr()
+        let temp = {
+            "maximum_question_answered" : 5,
+            "include_abnormal" : false,
+            "include_unranked" : false,
+            "make_report_for_before_delay" : false,
+            "make_report_for_remaining_only" : false,
+            "temp_exams_in_exam_interval" : false,
+            "consider_negative_point" : false,
+            "populate_school_ranking" : false
+        }
+        Object.assign(temp, this.report_config)
+        this.report_config = temp
     }
 
     getFirstActiveCategory () {
