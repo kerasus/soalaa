@@ -56,6 +56,20 @@
               :status="edit_status"
               @input="updateQuestion"
             />
+            <v-col cols="4">
+              <v-select
+                v-if="getPageStatus() === 'create'"
+                v-model="selectedAuthors"
+                label="طراحان"
+                dense
+                multiple
+                chips
+                :items="authors"
+                item-text="full_name"
+                item-value="id"
+                outlined
+              />
+            </v-col>
             <!-- -------------------------- show exams  ---------------------->
             <attach_list
               :status="edit_status"
@@ -142,6 +156,17 @@ export default {
   },
   data() {
     return {
+      selectedAuthors: [],
+      authors: [
+        {
+          full_name: 'محمد اسماعیلی',
+          id: 123
+        },
+        {
+          full_name: 'مصطفی کاظمی',
+          id: 1222
+        }
+      ],
       temp: null,
       pageStatuses: [
         {
@@ -265,6 +290,9 @@ export default {
         statusId = this.questionStatusId_draft
       }
       this.currentQuestion.status_id = statusId
+      this.selectedAuthors.forEach(author => {
+        this.currentQuestion.author.push(this.authors.find(item => item.id === author))
+      })
 
       // set choices
       this.setMainChoicesInCreateMode(statusId)   //یاس
