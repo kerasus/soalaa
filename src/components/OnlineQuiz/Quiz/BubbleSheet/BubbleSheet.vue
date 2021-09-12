@@ -344,7 +344,7 @@
         -webkit-font-smoothing: antialiased;
         -moz-osx-font-smoothing: grayscale;
         color: #ffda6a;
-        left: -5px;
+        left: -14px;
         font-size: 16px;
         top: -5px;
     }
@@ -358,7 +358,7 @@
         -webkit-font-smoothing: antialiased;
         -moz-osx-font-smoothing: grayscale;
         color: red;
-        left: -6px;
+        left: -14px;
         font-size: 16px;
         top: -5px;
     }
@@ -372,7 +372,7 @@
         -webkit-font-smoothing: antialiased;
         -moz-osx-font-smoothing: grayscale;
         color: #2196F3;
-        left: -6px;
+        left: -14px;
         font-size: 16px;
         top: -5px;
     }

@@ -80,6 +80,7 @@
       class="question-body renderedPanel"
       :class="{ ltr: isRtl }"
     >
+      <vue-katex :input="source.order + ') ' + source.statement" />
     </span>
     <!--        <v-row v-if="(considerActiveCategory && source.in_active_category) || !considerActiveCategory || true" class="choices">-->
     <v-row class="choices">
@@ -104,6 +105,9 @@
     import VueKatex from "@/components/VueKatex";
 
     export default {
+      components: {
+        VueKatex
+      },
         mixins: [mixinQuiz, mixinUserActionOnQuestion],
         props: {
             index: { // index of current source
@@ -137,9 +141,6 @@
                 }
             }
         },
-      components: {
-        VueKatex
-      },
         mounted() {
             this.observer = new IntersectionObserver(this.intersectionObserver, {threshold: [0.7, 0.75, 0.8]})
             this.observer.observe(this.$el)
