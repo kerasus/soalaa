@@ -38,6 +38,8 @@ export default {
 
 <style lang="scss">
   .html-katex {
+    width: 100%;
+
     table {
       border-collapse: collapse;
       table-layout: fixed;
