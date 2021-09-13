@@ -257,6 +257,13 @@
             console.log('lofdsafadfasfag', $('.sidebar')[0])
         },
         methods: {
+            updateLtr() {
+              setTimeout(() => {
+                document.querySelectorAll('.katex:not([dir="ltr"])').forEach(item => {
+                  item.setAttribute('dir', 'ltr')
+                })
+              }, 1000)
+            },
             questionListHeight() {
                 // box is a col-7 with 12px padding
                 const boxSize = this.$refs.bubbleSheet.clientWidth - 24
@@ -388,6 +395,7 @@
                 // }
             },
             onScroll(startIndex, endIndex) {
+                this.updateLtr()
                 this.renderedQuestions = {startIndex, endIndex}
                 if (this.scrollState === 'not scrolling') {
                     this.setIntervalCallback = setInterval(() => {
