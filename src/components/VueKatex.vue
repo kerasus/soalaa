@@ -28,6 +28,10 @@ export default {
       type: String,
       default: ''
     },
+    ltr: {
+      type: Boolean,
+      default: null
+    },
   },
   data () {
     return {
@@ -36,6 +40,9 @@ export default {
   },
   computed: {
     isLtrString () {
+      if (this.ltr !== null) {
+        return this.ltr
+      }
       let string = this.input
       if (!string) {
         return false
