@@ -102,13 +102,13 @@
               <v-row class="question-body">
                 <v-col :class="{ ltr: isLtrString(currentQuestion.statement) }">
                   <div
-                    v-if="currentQuestion.in_active_category || true"
+                    v-if="currentQuestion.in_active_category"
                     class="renderedPanel"
                   >
                     <vue-katex :input="currentQuestion.statement" />
                   </div>
                   <v-sheet
-                    v-if="!currentQuestion.in_active_category && false"
+                    v-if="!currentQuestion.in_active_category"
                     color="warning"
                     rounded
                     dark
@@ -121,7 +121,7 @@
                 </v-col>
               </v-row>
               <v-row
-                v-if="currentQuestion.in_active_category || true"
+                v-if="currentQuestion.in_active_category"
                 class="question-answers"
               >
                 <choice
