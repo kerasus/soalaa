@@ -164,7 +164,7 @@
           this.source
           let largestChoice = this.getLargestChoice(this.source.choices)
           let largestChoiceWidth = this.questionsColumn.clientWidth / largestChoice
-          console.log(this.source.order, largestChoice, largestChoiceWidth)
+          // console.log(this.source.order, largestChoice, largestChoiceWidth)
           if (largestChoiceWidth < 12) {
             return 12
           }
