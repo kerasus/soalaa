@@ -1,13 +1,13 @@
 <template>
   <div class="wrapper">
-    <progress-linear :active="user.loading"/>
+    <progress-linear :active="user.loading" />
     <v-progress-linear
-        v-if="percentageOfInformationCompletion > 0"
-        :value="percentageOfInformationCompletion"
-        absolute
-        top
-        color="amber"
-        height="25"
+      v-if="percentageOfInformationCompletion > 0"
+      :value="percentageOfInformationCompletion"
+      absolute
+      top
+      color="amber"
+      height="25"
     >
       <template v-slot:default="{ value }">
         <strong>{{ Math.ceil(value) }} درصد از اطلاعات تکمیل شده</strong>
@@ -16,143 +16,172 @@
     <v-row>
       <v-col
 
-          md="6"
-          sm="6"
-          cols="12"
+        md="6"
+        sm="6"
+        cols="12"
       >
         <div class="form-group m-form__group">
           <v-text-field
-              v-model="user.first_name"
-              label="نام"
+            v-model="user.first_name"
+            label="نام"
           />
         </div>
       </v-col>
       <v-col
 
-          md="6"
-          sm="6"
-          cols="12"
+        md="6"
+        sm="6"
+        cols="12"
       >
         <div class="form-group m-form__group">
           <v-text-field
-              v-model="user.last_name"
-              label=" نام خانوادگی"
+            v-model="user.last_name"
+            label=" نام خانوادگی"
           />
         </div>
       </v-col>
-
     </v-row>
     <div class="form-group m-form__group col-md-3 col-xs-12">
       <v-select
-          v-model="user.gender.id"
-          :items="genders"
-          label="جنسیت"
-          item-text="title"
-          item-value="id"
+        v-model="user.gender.id"
+        :items="genders"
+        label="جنسیت"
+        item-text="title"
+        item-value="id"
       />
     </div>
     <v-row>
       <v-col
-          md="6"
-          sm="6"
-          cols="12">
+        md="6"
+        sm="6"
+        cols="12"
+      >
         <div class="form-group m-form__group ">
           <v-autocomplete
-              v-model="selectedProvince"
-              label="استان"
-              :items="provinces"
-              item-text="title"
-              item-value="id"
-              no-data-text="داده ای یافت نشد"
+            v-model="selectedProvince"
+            label="استان"
+            :items="provinces"
+            item-text="title"
+            item-value="id"
+            no-data-text="داده ای یافت نشد"
           />
         </div>
       </v-col>
       <v-col
-          md="6"
-          sm="6"
-          cols="12">
+        md="6"
+        sm="6"
+        cols="12"
+      >
         <div class="form-group m-form__group">
           <v-autocomplete
-              v-model="selectedCity"
-              label="شهر"
-              :items="citiesForSelectedProvince"
-              item-text="title"
-              item-value="id"
-              no-data-text="داده ای یافت نشد"
+            v-model="selectedCity"
+            label="شهر"
+            :items="citiesForSelectedProvince"
+            item-text="title"
+            item-value="id"
+            no-data-text="داده ای یافت نشد"
           />
         </div>
       </v-col>
     </v-row>
     <v-row>
       <v-col
-          md="6"
-          sm="6"
-          cols="12"
+        md="6"
+        sm="6"
+        cols="12"
       >
         <div class="form-group m-form__group ">
           <v-select
-              v-model="user.major.id"
-              label="رشته"
-              :items="majors"
-              item-text="title"
-              item-value="id"
+            v-model="user.major.id"
+            label="رشته"
+            :items="majors"
+            item-text="title"
+            item-value="id"
           />
         </div>
       </v-col>
       <v-col
-             md="6"
-             sm="6"
-             cols="12">
+        md="6"
+        sm="6"
+        cols="12"
+      >
         <div class="form-group m-form__group ">
           <v-select
-              v-model="user.grade.id"
-              label="مقطع"
-              :items="grades"
-              item-text="title"
-              item-value="id"
+            v-model="user.grade.id"
+            label="مقطع"
+            :items="grades"
+            item-text="title"
+            item-value="id"
           />
         </div>
       </v-col>
     </v-row>
-    <v-row v-if="user.mobile_verified_at === null" justify="center">
+    <v-row
+      v-if="user.mobile_verified_at === null"
+      justify="center"
+    >
       <v-col
-          class="codeBtnPadding"
-          cols="12"
+        class="codeBtnPadding"
+        cols="12"
       >
+        <v-alert
+          v-for="message in errorMessages"
+          :key="message"
+          v-model="alert"
+          dense
+          outlined
+          class="mx-5"
+          text
+          type="error"
+          dismissible
+        >
+          {{ message }}
+        </v-alert>
         <v-btn
-            v-if="!waiting"
-            color="blue"
-            @click="sendCode"
+          v-if="!waiting "
+          color="blue"
+          @click="sendCode"
         >
           دریافت کد فعالسازی
         </v-btn>
-        <div v-if="waiting && showTimer">
+        <div v-if="totalTime">
           <div>
             <span>{{ Math.floor(((totalTime) % 3600) / 60) }}</span>
             <span>:</span>
-            <span>{{ ((totalTime) % 3600) % 60 }}</span>
+            <span
+              :class="totalTime <60 ? 'red-text' : ''"
+            >{{ ((totalTime) % 3600) % 60 }}</span>
           </div>
           کد ارسال شده را وارد نمایید.
         </div>
       </v-col>
       <v-col
-          md="3"
-          cols="6"
+        md="3"
+        cols="6"
       >
         <v-text-field
-            v-model="typedCode"
-            label="کد فعالسازی"
+          v-if="totalTime"
+          v-model="typedCode"
+          label="کد فعالسازی"
+          @keydown="pressedEnter"
         />
       </v-col>
       <v-col
-          class="codeBtnPadding"
-          md="12"
-          sm="12"
+        class="codeBtnPadding"
+        md="12"
+        sm="12"
       >
         <v-btn
-            v-if="waiting"
-            color="blue"
-            @click="verifyCode"
+          v-if="!totalTime && waiting"
+          color="blue"
+          @click="sendCode"
+        >
+          دریافت مجدد کد
+        </v-btn>
+        <v-btn
+          v-if="totalTime"
+          color="blue"
+          @click="verifyCode"
         >
           ثبت شماره موبایل
         </v-btn>
@@ -163,15 +192,14 @@
     <br>
     <div class="d-flex justify-end">
       <v-btn
-          rounded
-          color="primary"
-          width="120px"
-          @click="submit"
+        rounded
+        color="primary"
+        width="120px"
+        @click="submit"
       >
         ذخیره
       </v-btn>
     </div>
-
   </div>
 </template>
 
@@ -195,11 +223,13 @@ export default {
   },
   data() {
     return {
+      alert:false,
+      errorMessages:[],
       isCodeVerified: false,
       showTimer: false,
       mobileVerify: null,
       timer: null,
-      totalTime: (3 * 60),
+      totalTime:0,
       minutes: null,
       seconds: null,
       resetButton: false,
@@ -219,6 +249,7 @@ export default {
       grades: []
     }
   },
+
   computed: {
     redirectAfterCompleteInfoPage() {
       return this.$store.getters.redirectAfterCompleteInfoPage
@@ -259,6 +290,9 @@ export default {
     this.$store.commit('AppLayout/updateDrawer', false)
   },
   methods: {
+    pressedEnter(e){
+      if (e.keyCode === 13) this.verifyCode()
+    },
     getUserProvince() {
       if (!this.user.city && this.user.city.id !== null && typeof this.user.city.id !== 'undefined') {
         return
@@ -307,6 +341,7 @@ export default {
           })
     },
     startTimer() {
+      this.totalTime=180
       this.timer = setInterval(() => this.countdown(), 1000);
     },
     getUserFormData() {
@@ -333,11 +368,12 @@ export default {
               }
           )
     },
+
     countdown: function () {
       if (this.totalTime > 0) {
         this.totalTime--;
       } else {
-        this.waiting = false
+        this.waiting = true
       }
     },
     submit() {
@@ -367,6 +403,39 @@ export default {
             })
           })
     },
+
+    showErrorMessages(error) {
+      this.alert=true
+      console.log('show error massage run')
+      this.user.loading = false
+      const messages = []
+      const err = error.response
+      if(err.status === 429){
+        console.log('in if ')
+        this.startTimer()
+        this.waiting = true
+        this.showTimer = true
+        messages.push('کد برای شما قبلا ارسال شده است')
+      }
+      if(err.status === 400){
+        console.log('in if ')
+        messages.push('کد وارد شده اشتباه است')
+      }
+      for (let key in err.data.errors) {
+        err.data.errors[key].forEach(message => {
+          messages.push(message)
+        })
+      }
+      this.errorMessages = messages
+      this.clearErrorMessages()
+    },
+
+    clearErrorMessages() {
+      let that = this
+      setTimeout(() => {
+        that.errorMessages = []
+      }, 20000)
+    },
     sendCode() {
       let that = this
       this.user.loading = true
@@ -375,6 +444,7 @@ export default {
             that.user.loading = false
             that.code = resp
             that.startTimer()
+
             that.waiting = true
             that.showTimer = true
             that.$notify({
@@ -384,17 +454,19 @@ export default {
               type: 'success'
             })
           })
-          .catch(() => {
-                that.user.loading = false
-                that.$notify({
-                  group: 'notifs',
-                  title: 'توجه!',
-                  text: 'مشکلی در ارسال کد رخ داده است. لطفا دوباره امتحان کنید.',
-                  type: 'error'
-                })
+          .catch((e) => {
+            console.log('error in comp : ', e.response)
+                this.showErrorMessages(e)
+                // that.$notify({
+                //   group: 'notifs',
+                //   title: 'توجه!',
+                //   text: 'مشکلی در ارسال کد رخ داده است. لطفا دوباره امتحان کنید.',
+                //   type: 'error'
+                // })
               }
           )
     },
+
     verifyCode() {
       let that = this
       this.user.loading = true
@@ -403,18 +475,21 @@ export default {
             that.user.loading = false
             this.user.mobile_verified_at = Time.now()
             this.isCodeVerified = true
-            this.$notify({
-              group: 'notifs',
-              title: 'توجه!',
-              text: 'شماره موبایل با موفقیت ثبت شد.',
-              type: 'success'
-            })
+            // this.$notify({
+            //   group: 'notifs',
+            //   title: 'توجه!',
+            //   text: 'شماره موبایل با موفقیت ثبت شد.',
+            //   type: 'success'
+            // })
             // this.getUserData()
           })
-          .catch(() => {
-            that.user.loading = false
+          .catch((error) => {
+
+            this.showErrorMessages(error)
+            console.log('error in check',error)
           })
     },
+
     canSubmit() {
       let status = true;
       if (!this.isValidString(this.user.first_name)) {
@@ -456,10 +531,6 @@ export default {
 </script>
 
 <style scoped>
-.test {
-  background-color: #7e57c2;
-}
-
 .codeBtnPadding {
   padding-top: 30px;
 }
@@ -470,7 +541,9 @@ export default {
   margin-top: 30px;
   text-align: center;
 }
-
+.red-text {
+  color: #ff5050
+}
 .requiredItem {
   color: red;
 }

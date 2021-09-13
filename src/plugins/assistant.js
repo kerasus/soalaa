@@ -11,6 +11,14 @@ let Assistant = function () {
     }
 
     function handleAxiosError(error) {
+        console.log( 'in assis :',error.response )
+        const err = error.response
+        if(error.response.status === 429 && err.config.url === "/alaa/api/v2/mobile/resend"){
+            return
+        }
+        if(error.response.status === 400 && err.config.url === "/alaa/api/v2/mobile/verify"){
+            return
+        }
         let messages = []
         if (error === "can't get exam file") {
             toastMessages(['مشکلی در دریافت اطلاعات آزمون رخ داده است. لطفا مجدد تلاش کنید.'])
