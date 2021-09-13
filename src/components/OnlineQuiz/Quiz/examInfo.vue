@@ -61,7 +61,7 @@
           label="زمان تاخیر (دقیقه)"
         />
       </v-row>
-      <v-row no-gutters>
+      <v-row>
         <v-col :cols="6">
           <v-checkbox
             v-model="exam.enable"
@@ -91,6 +91,94 @@
             v-model="exam.generate_automatic_report"
             label="تولید اتوماتیک کارنامه"
           />
+        </v-col>
+        <v-col :cols="12">
+          <v-checkbox
+            v-model="exam.generate_questions_automatically"
+            label="تولید اتوماتیک سوال"
+          />
+        </v-col>
+      </v-row>
+      <v-divider />
+      <v-row>
+        <v-col
+          v-if="!exam.id"
+          :cols="6"
+        >
+          <v-select
+            v-model="selectedCategory"
+            :items="categoryList.list"
+            item-text="title"
+            item-value="id"
+            label="category"
+          />
+        </v-col>
+        <v-col
+          v-if="!exam.id"
+          :cols="6"
+        >
+          <v-text-field
+            v-model="selectedCategoryTime"
+            type="number"
+            label="زمان"
+          />
+        </v-col>
+        <v-col
+          v-if="!exam.id"
+          :cols="6"
+        >
+          <v-text-field
+            v-model="selectedCategoryOrder"
+            type="number"
+            label="ترتیب"
+          />
+        </v-col>
+        <v-col
+          v-if="!exam.id"
+          :cols="6"
+        >
+          <v-btn @click="addCategory">
+            اضافه کردن category
+          </v-btn>
+        </v-col>
+      </v-row>
+      <v-divider />
+      <v-row
+        v-for="item in exam.categories.list"
+        v-if="!exam.id"
+        :key="item.id"
+      >
+        <v-col cols="5">
+          <v-select
+            v-model="item.id"
+            :items="categoryList.list"
+            item-value="id"
+            item-text="title"
+          />
+        </v-col>
+        <v-col cols="3">
+          <v-text-field
+            label="زمان"
+            :value="item.time"
+            type="number"
+          />
+        </v-col>
+        <v-col cols="3">
+          <v-text-field
+            label="ترتیب"
+            :value="item.order"
+            type="number"
+          />
+        </v-col>
+        <v-col cols="1">
+          <v-btn
+            dark
+            color="red"
+            icon
+            @click="deleteCategory(item.id)"
+          >
+            <v-icon>mdi-close</v-icon>
+          </v-btn>
         </v-col>
       </v-row>
       <v-row>
@@ -132,6 +220,8 @@ import VuePersianDatetimePicker from 'vue-persian-datetime-picker'
 import {Exam} from "@/models/Exam";
 import Assistant from "@/plugins/assistant";
 import axios from "axios";
+import API_ADDRESS from "@/api/Addresses";
+import {QuestCategory, QuestCategoryList} from "@/models/QuestCategory";
 
 Vue.component('date-picker', VuePersianDatetimePicker)
 
@@ -141,11 +231,21 @@ export default {
   data: () => ({
     items: [],
     loading:true,
-    examItem: new Exam()
+    examItem: new Exam(),
+    categoryList: new QuestCategoryList(),
+    selectedCategory: null,
+    selectedCategoryTime: 0,
+    selectedCategoryOrder: 0
   }),
   created() {
     let that = this
-    axios.get('/api/v1/option')
+    const loadCategoriesPromise = this.loadCategories()
+
+    Promise.all([loadCategoriesPromise])
+            .then(() => {
+              this.loading = false
+            })
+    axios.get(API_ADDRESS.option.base)
         .then(function (response) {
           const optionQuestion = response.data.data.find(item => (item.value === 'psychometric' && item.type === 'exam_type'))
           if (!optionQuestion) {
@@ -158,19 +258,35 @@ export default {
           }
 
           that.optionQuestionId = optionQuestion.id
-          const itemstype = response.data.data.filter(data => data.type === 'question_type')
+          const itemstype = response.data.data.filter(data => data.type === 'exam_type')
           that.items = itemstype
-          console.log(that.items)
-          console.log(itemstype)
           that.loading = false
         })
-        .catch(function (error) {
-          console.log(error);
-        })
     this.examItem = this.exam
-    console.log(this.examItem)
   },
   methods: {
+    getCategoryById (id) {
+      return this.categoryList.list.find(item => item.id === id)
+    },
+    deleteCategory (id) {
+      this.exam.categories.list = this.exam.categories.list.filter(item => item.id !== id)
+    },
+    addCategory () {
+      this.exam.categories.list.push(new QuestCategory({ id: this.selectedCategory, time: this.selectedCategoryTime, order: this.selectedCategoryOrder }))
+    },
+    loadCategories () {
+      let that = this
+      return new Promise(function(resolve, reject) {
+        axios.get(API_ADDRESS.questionCategory.base)
+                .then((response) => {
+                  that.categoryList = new QuestCategoryList(response.data.data)
+                  resolve()
+                })
+                .catch( () => {
+                  reject()
+                })
+      })
+    },
     create() {
       this.examItem = this.exam
       this.examItem.loading = true

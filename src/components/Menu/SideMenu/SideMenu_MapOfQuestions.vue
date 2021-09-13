@@ -1,6 +1,6 @@
 <template>
   <v-sheet class="map-of-questions">
-    <div>
+    <div :style="{ 'padding-bottom': '100px' }">
       <div
         v-for="(categoryItem) in quiz.categories.list"
         :key="'category-'+categoryItem.id"
@@ -66,7 +66,7 @@
         </div>
       </div>
     </div>
-    <div>
+    <div class="end-exam">
       <v-btn
         :color="'#4caf50'"
         :style="{ backgroundColor: '#4caf50 !important' }"
@@ -157,6 +157,15 @@
 </script>
 
 <style>
+.end-exam {
+  position: absolute;
+  width: 240px;
+  bottom: -78px;
+  z-index: 5;
+  background: #fff;
+  padding: 20px 0;
+}
+
 .end-exam-btn .v-btn__content {
     display: flex;
     justify-content: center !important;

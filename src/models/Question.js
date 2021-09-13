@@ -29,6 +29,10 @@ class Question extends Model {
             { key: 'exams' },
             { key: 'type_id' },
             {
+                key: 'author',
+                default: []
+            },
+            {
                 key: 'type',
                 default: {
                     id: null,
@@ -123,6 +127,7 @@ class Question extends Model {
                 {key: 'sub_category_id'},
                 {key: 'exams'},
                 {key: 'type_id'},
+                {key: 'author'},
                 {
                     key: 'choices',
                     value: function () {
