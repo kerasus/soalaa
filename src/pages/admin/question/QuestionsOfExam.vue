@@ -236,7 +236,15 @@
             this.changeAppBarAndDrawer(true)
         },
         methods: {
+            updateLtr() {
+              setTimeout(() => {
+                document.querySelectorAll('.katex:not([dir="ltr"])').forEach(item => {
+                  item.setAttribute('dir', 'ltr')
+                })
+              }, 1000)
+            },
             onScroll (startIndex, endIndex) {
+                this.updateLtr()
                 this.renderedQuestions = { startIndex, endIndex }
                 if (this.scrollState === 'not scrolling') {
                     this.setIntervalCallback = setInterval(() => {

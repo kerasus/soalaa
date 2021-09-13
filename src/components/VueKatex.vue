@@ -47,9 +47,11 @@ export default {
     },
   },
   mounted () {
-    document.querySelectorAll('.katex').forEach(item => {
-      item.setAttribute('dir', 'ltr')
-    })
+    setTimeout(() => {
+      document.querySelectorAll('.katex:not([dir="ltr"])').forEach(item => {
+        item.setAttribute('dir', 'ltr')
+      })
+    }, 1000)
   },
   created () {
     // this.rtl = !this.isLtrString(this.input)
@@ -60,6 +62,10 @@ export default {
 <style lang="scss">
   .html-katex {
     width: 100%;
+
+    .katex {
+      direction: ltr;
+    }
 
     table {
       border-collapse: collapse;
