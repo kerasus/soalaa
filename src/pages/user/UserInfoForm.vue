@@ -146,7 +146,9 @@
         </v-btn>
         <div v-if="totalTime">
           <div>
-            <span>{{ Math.floor(((totalTime) % 3600) / 60) }}</span>
+            <span
+              :class="totalTime <60 ? 'red-text' : ''"
+            >{{ Math.floor(((totalTime) % 3600) / 60) }}</span>
             <span>:</span>
             <span
               :class="totalTime <60 ? 'red-text' : ''"
