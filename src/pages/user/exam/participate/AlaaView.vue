@@ -207,7 +207,7 @@
             this.updateDrawerBasedOnWindowSize()
             this.startExam(this.$route.params.quizId, 'onlineQuiz.alaaView')
                 .then(() => {
-                    that.isRtl = that.isLtrString(that.currentQuestion.statement)
+                    // that.isRtl = that.isLtrString(that.currentQuestion.statement)
                     that.$store.commit('AppLayout/updateOverlay', {show: false, loading: false, text: ''})
                 })
                 .catch( (error) => {

@@ -55,10 +55,10 @@
 
     export default {
         name: 'Item',
-        mixins: [ mixinQuiz, mixinWindowSize ],
       components: {
         VueKatex
       },
+        mixins: [ mixinQuiz, mixinWindowSize ],
         props: {
             index: { // index of current source
                 type: Number
@@ -220,7 +220,7 @@
     }
 
     .question {
-        padding: 10px 30px 10px 0;
+        padding: 10px 30px 10px 10px;
     }
 </style>
 

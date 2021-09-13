@@ -479,7 +479,7 @@
     }
 
     .question {
-        padding: 10px 30px 10px 0;
+        padding: 10px 30px 10px 10px;
     }
 
     .choices {
