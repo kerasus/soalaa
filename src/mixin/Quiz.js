@@ -350,7 +350,7 @@ const mixinQuiz = {
             })
         },
         setQuestionsLtr(question) {
-            question.ltr = this.isLtrString(question.statement)
+            // question.ltr = this.isLtrString(question.statement)
             // if (!question.statement) {
             //     return
             // }

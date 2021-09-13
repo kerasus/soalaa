@@ -144,7 +144,7 @@
         mounted() {
             this.observer = new IntersectionObserver(this.intersectionObserver, {threshold: [0.7, 0.75, 0.8]})
             this.observer.observe(this.$el)
-            this.isRtl = this.isLtrString(this.source.statement)
+            // this.isRtl = this.isLtrString(this.source.statement)
         },
         destroyed() {
             this.observer.disconnect();

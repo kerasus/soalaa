@@ -218,7 +218,7 @@
             },
         },
         created() {
-            this.isLtr = this.isLtrString(this.source.statement)
+            // this.isLtr = this.isLtrString(this.source.statement)
             // setTimeout(() => {console.Log(this.quiz)}, 2000)
         },
         methods: {
