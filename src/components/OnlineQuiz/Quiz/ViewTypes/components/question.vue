@@ -1,11 +1,12 @@
 <template>
   <div
     v-intersect="test"
-    :class="{ 'current-question': this.currentQuestion.id === source.id, question: true, ltr: source.ltr}"
+    class="question"
+    :class="{ 'current-question': this.currentQuestion.id === source.id, ltr: isLtrQuestion}"
   >
     <div>
       <v-sheet
-        v-if="considerActiveCategory && !source.in_active_category && false"
+        v-if="considerActiveCategory && !source.in_active_category"
         rounded
         dark
         height="200"
@@ -23,6 +24,7 @@
     </div>
     <!--        <div v-if="(considerActiveCategory && source.in_active_category) || !considerActiveCategory || true"-->
     <div
+      v-if="(considerActiveCategory && source.in_active_category) || !considerActiveCategory"
       class="buttons-group"
       :style="{ float: isRtlString ? 'left' : 'right' }"
     >
@@ -79,6 +81,7 @@
     <!--        <span v-if="(considerActiveCategory && source.in_active_category) || !considerActiveCategory || true"-->
     <!--ToDo: remove span-->
     <p
+      v-if="(considerActiveCategory && source.in_active_category) || !considerActiveCategory"
       :id="'question' + source.id"
       class="question-body renderedPanel"
       :class="{ ltr: isRtl }"
@@ -88,7 +91,10 @@
       />
     </p>
     <!--        <v-row v-if="(considerActiveCategory && source.in_active_category) || !considerActiveCategory || true" class="choices">-->
-    <v-row class="choices">
+    <v-row
+        v-if="(considerActiveCategory && source.in_active_category) || !considerActiveCategory"
+        class="choices"
+    >
       <v-col
         v-for="(choice, index) in source.choices.list"
         :key="choice.id"
