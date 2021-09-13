@@ -218,7 +218,7 @@
             },
         },
         created() {
-            this.isLtr = this.isLtrString(this.source.statement)
+            // this.isLtr = this.isLtrString(this.source.statement)
             // setTimeout(() => {console.Log(this.quiz)}, 2000)
         },
         methods: {
@@ -396,7 +396,7 @@
     }
 
     .question {
-        padding: 10px 30px 10px 0;
+        padding: 10px 30px 10px 10px;
     }
 </style>
 
