@@ -100,6 +100,7 @@
       >
         <vue-katex
           :input="(choiceNumber[index]) + choice.title"
+          :ltr="isLtrQuestion"
         />
       </v-col>
     </v-row>
@@ -149,6 +150,14 @@
             }
         },
       computed: {
+        isLtrQuestion() {
+          let string = this.source.statement
+          if (!string) {
+            return false
+          }
+          const persianRegex = /[\u0600-\u06FF]/
+          return !string.match(persianRegex)
+        },
         isRtlString() {
           this.source
           let string = this.source.statement
