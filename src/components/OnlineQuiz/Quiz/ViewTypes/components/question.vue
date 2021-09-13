@@ -1,7 +1,8 @@
 <template>
   <div
     v-intersect="test"
-    :class="{ 'current-question': this.currentQuestion.id === source.id, question: true, ltr: source.ltr}"
+    class="question"
+    :class="{ 'current-question': this.currentQuestion.id === source.id, ltr: isLtrQuestion}"
   >
     <div>
       <v-sheet
