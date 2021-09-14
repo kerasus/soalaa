@@ -108,6 +108,7 @@
     </v-row>
     <v-row class="timer-row">
       <v-btn
+        v-if="false"
         class="end-exam-btn"
         @click="getConfirmation"
       >
@@ -125,6 +126,7 @@
     </v-row>
   </v-container>
 </template>
+
 <script>
     import '@/assets/scss/markdownKatex.scss'
     import 'vue-virtual-scroller/dist/vue-virtual-scroller.css'
