@@ -93,7 +93,8 @@ let Time = function () {
             } else if (categoryAcceptAtRemainTime > 0) {
                 category.is_active = true
             } else if (categoryAcceptAtPassedTime > 0) {
-                category.is_active = false
+                // category.is_active = false
+                category.is_active = true
             }
 
             return category
