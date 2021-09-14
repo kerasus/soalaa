@@ -102,13 +102,27 @@ let Time = function () {
     }
 
     function getCurrentCategoryAcceptAt(categories) {
-        const currentCat = categories.list.find( (item) => item.is_active)
-        const lastCat = categories[categories.length - 1]
+        const activeCategories = categories.list.filter( (item) => item.is_active)
+        let maxAcceptAt = 0
+        activeCategories.forEach( item => {
+            if ((new Date(item.accept_at)).getTime() > maxAcceptAt) {
+                maxAcceptAt = (new Date(item.accept_at)).getTime()
+            }
+        })
+        let currentCat = null
+        activeCategories.forEach( item => {
+            if ((new Date(item.accept_at)).getTime() === maxAcceptAt) {
+                currentCat = item
+            }
+        })
+        const lastCat = categories.list[categories.list.length - 1]
 
         if (lastCat && getPassedTime(lastCat.accept_at, false) > 0) {
             return false
         } else if (currentCat && getRemainTime(currentCat.accept_at, false) > 0) {
             return currentCat
+        } else {
+            return false
         }
     }
 
@@ -120,9 +134,16 @@ let Time = function () {
             }
             return
         }
-        for (const questionId in questions) {
-            questions[questionId].in_active_category = Assistant.getId(questions[questionId].sub_category.category_id) === Assistant.getId(currentActiveCategory.id);
-        }
+
+        const activeCategories = quiz.categories.list.filter( (item) => item.is_active)
+        activeCategories.forEach( activeCategory => {
+            for (const questionId in questions) {
+                questions[questionId].in_active_category = Assistant.getId(questions[questionId].sub_category.category_id) === Assistant.getId(activeCategory.id);
+            }
+        })
+        // for (const questionId in questions) {
+        //     questions[questionId].in_active_category = Assistant.getId(questions[questionId].sub_category.category_id) === Assistant.getId(currentActiveCategory.id);
+        // }
     }
 
     return {
