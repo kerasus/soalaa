@@ -54,7 +54,7 @@ let Assistant = function () {
                 } else {
                     messages = messages.concat(getMessagesFromArrayWithRecursion(value))
                 }
-                console.log(`${key}: ${value}`);
+                // console.log(`${key}: ${value}`);
             }
         }
 
