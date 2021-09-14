@@ -135,12 +135,30 @@ let Time = function () {
             return
         }
 
+        for (const questionId in questions) {
+            questions[questionId].in_active_category = false
+        }
+
         const activeCategories = quiz.categories.list.filter( (item) => item.is_active)
         activeCategories.forEach( activeCategory => {
             for (const questionId in questions) {
-                questions[questionId].in_active_category = Assistant.getId(questions[questionId].sub_category.category_id) === Assistant.getId(activeCategory.id);
+                const questionCategoryId = questions[questionId].sub_category.category_id
+                const in_active_categoryStatus = Assistant.getId(questionCategoryId) === Assistant.getId(activeCategory.id)
+                if (in_active_categoryStatus) {
+                    questions[questionId].in_active_category = true
+                }
             }
         })
+
+        // console.log('------------------------------------------')
+        //
+        // for (const questionId in questions) {
+        //     if (!questions[questionId].in_active_category) {
+        //         console.log('questions[questionId].in_active_category', questions[questionId].in_active_category)
+        //     }
+        // }
+
+
         // for (const questionId in questions) {
         //     questions[questionId].in_active_category = Assistant.getId(questions[questionId].sub_category.category_id) === Assistant.getId(currentActiveCategory.id);
         // }
