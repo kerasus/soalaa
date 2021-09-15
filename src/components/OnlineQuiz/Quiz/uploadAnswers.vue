@@ -110,7 +110,7 @@ export default {
       item[key].forEach(file => {
         const formData = new FormData()
         formData.append('file', file.file, file.file.name)
-        formData.append('category_id', '60b7858d743940688b23c7f4')
+        formData.append('category_id', item.id)
         const option = this.options.find(option => option.value === booklet_type)
         formData.append('booklet_type', option.id)
         axios.post(API_ADDRESS.exam.examBookletUpload(this.exam_id), formData,{
