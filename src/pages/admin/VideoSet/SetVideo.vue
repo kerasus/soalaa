@@ -103,7 +103,8 @@
                 }
             })
             this.subCategoriesList.fetch().then((response) => {
-                this.subCategoriesList = new QuestSubcategoryList(response.data)
+              console.log(response.data.data)
+                this.subCategoriesList = new QuestSubcategoryList(response.data.data)
             })
             if (this.editMode) {
                 this.currentQuestion.show(null, API_ADDRESS.question.getCurrentQuestion(this.$route.params.id))
