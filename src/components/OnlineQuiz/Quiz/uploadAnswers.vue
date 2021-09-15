@@ -123,6 +123,11 @@ export default {
         })
         .then((res) => {
           console.log(res)
+          that.$notify({
+            group: 'notifs',
+            text: 'اطلاعات آزمون شما ثبت شد.',
+            type: 'success'
+          })
         })
       })
       item[key] = []
