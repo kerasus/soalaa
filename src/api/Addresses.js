@@ -36,6 +36,7 @@ const API_ADDRESS = {
     userExamsList: lumenServer + '/examAndUser',
     takhminRotbe: lumenServer + '/exam-report/rankSimulator',
     examReportIndex (type) { return lumenServer + '/exam-report/index/' + type },
+    pdf (exam_id) { return lumenServer + '/exam-question/booklet-file/' +exam_id },
     base (page_number) {
       if (page_number) {
         return lumenServer + '/exam?page=' + page_number
