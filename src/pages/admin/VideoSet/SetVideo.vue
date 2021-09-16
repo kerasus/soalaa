@@ -142,8 +142,13 @@
                     sub_category_id: that.currentQuestion.sub_category_id,
                     video: that.setLink,
                     exams,
-                }).then((response) => {
-                    console.log(response)
+                }).then(() => {
+                  that.$notify({
+                    group: 'notifs',
+                    title: 'توجه!',
+                    text: 'ویدئو با موفقیت ثبت شد',
+                    type: 'success'
+                  })
                 })
                 // $.ajax({
                 //         type: 'POST',
