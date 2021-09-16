@@ -13,6 +13,9 @@
           deletable
           accept=".pdf"
           :max-files="1"
+          editable
+          meta
+          :linkable="true"
           :help-text="'فایل سوالات ' + item.title"
           @select="select($event, item, 'questionFile')"
           @beforedelete="onBeforeDelete($event, item, 'questionFile')"
@@ -28,6 +31,22 @@
         >
           آپلود
         </v-btn>
+        <!--        {{ item.questions_booklet + 'test' }}-->
+        <a
+          v-if="item.questions_booklet"
+          :href="item.questions_booklet"
+          target="_blank"
+          :style="{ textDecoration: 'none' }"
+        >
+          <v-btn
+            :elevation="0"
+            class="upload-btn"
+            block
+            color="orange"
+          >
+            دانلود
+          </v-btn>
+        </a>
       </v-col>
       <v-col md="6">
         <VueFileAgent
@@ -35,6 +54,9 @@
           v-model="item.answerFile"
           :multiple="false"
           deletable
+          editable
+          linkable
+          meta
           accept=".pdf"
           :max-files="1"
           :help-text="'فایل پاسخ ' + item.title"
@@ -52,6 +74,21 @@
         >
           آپلود
         </v-btn>
+        <a
+          v-if="item.descriptive_answers_booklet"
+          :href="item.descriptive_answers_booklet"
+          target="_blank"
+          :style="{ textDecoration: 'none' }"
+        >
+          <v-btn
+            :elevation="0"
+            class="upload-btn"
+            block
+            color="orange"
+          >
+            دانلود
+          </v-btn>
+        </a>
       </v-col>
     </v-row>
   </v-container>
@@ -85,7 +122,13 @@ export default {
       }
     }
   },
+  watch: {
+    exam_id () {
+      this.getBooklets()
+    }
+  },
   created () {
+    window.test = this
     axios.get(API_ADDRESS.questionCategory.base)
     .then(response => {
       this.questionCategories = new QuestCategoryList(response.data.data)
@@ -98,10 +141,34 @@ export default {
     .then(response => {
       this.options = response.data.data
     })
+    this.getBooklets()
   },
   methods: {
+    getBooklets () {
+      axios.get(API_ADDRESS.exam.pdf(this.exam_id))
+      .then(response => {
+        this.questionCategories.list.forEach(category => {
+          category.descriptive_answers_booklet = ''
+          category.questions_booklet = ''
+          response.data.forEach(r => {
+            if (r.category.id === category.id) {
+              r.booklets.forEach(booklet => {
+                console.log(booklet.value)
+                if (booklet.value === 'descriptive_answers_booklet') {
+                  console.log(booklet.value)
+                  category.descriptive_answers_booklet = booklet.url
+                } else if (booklet.value === 'questions_booklet') {
+                  console.log(booklet.value)
+                  category.questions_booklet = booklet.url
+                }
+              })
+            }
+          })
+        })
+      })
+    },
     select (event, item, key) {
-      console.log(event, item, key)
+      console.log('tt', event, item, key)
       this.random = Math.random()
       Vue.set(item, key, event)
     },
@@ -128,9 +195,10 @@ export default {
             text: 'اطلاعات آزمون شما ثبت شد.',
             type: 'success'
           })
+          this.getBooklets()
+          item[key] = []
         })
       })
-      item[key] = []
     },
     onBeforeDelete: function (event, item, key) {
       Vue.set(item, key, [])
