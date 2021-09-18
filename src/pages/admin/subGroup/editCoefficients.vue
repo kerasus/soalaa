@@ -239,7 +239,9 @@ export default {
     save () {
       let that = this
       this.subGroups.forEach(subGroup => {
-        subGroup.zirgorooh_id = subGroup.id
+        if (!subGroup.zirgorooh_id) {
+          subGroup.zirgorooh_id = subGroup.id
+        }
         subGroup.sub_category.forEach(subCategory => {
           subCategory.subcategory_id = subCategory.sub_category_id
         })

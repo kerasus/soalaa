@@ -148,6 +148,9 @@ class Exam extends Model {
             ]
         }
 
+        if (this.type && this.type.id) {
+            this.type_id = this.type.id
+        }
         this.exam_id = this.id
         this.questions.sortByOrder()
         this.categories.sortByKey('end_at', 'asc')
