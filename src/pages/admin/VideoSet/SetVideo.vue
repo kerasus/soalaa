@@ -123,7 +123,7 @@
               subCategoriesList: new QuestSubcategoryList(),
               loading: false,
               selectedSubCategory: null,
-              videos: ['test.com']
+              videos: []
             }
         },
         watch: {
