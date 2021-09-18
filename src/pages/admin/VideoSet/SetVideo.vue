@@ -156,6 +156,13 @@
               sub_category_id: this.selectedSubCategory.id,
               exams: [{ exam_id: this.$route.params.exam_id }]
             })
+            .then(() => {
+              this.$notify({
+                group: 'notifs',
+                text: 'اطلاعات ثبت شد.',
+                type: 'success'
+              })
+            })
           },
           addVideo() {
             this.videos.push('')
@@ -167,11 +174,6 @@
             this.subCategoriesList.fetch()
               .then((response) => {
                 this.selectedSubCategory = this.subCategoriesList.list.find(item => item.id === this.$route.params.subcategory_id)
-                this.$notify({
-                  group: 'notifs',
-                  text: 'اطلاعات ثبت شد.',
-                  type: 'success'
-                })
                 this.subCategoriesList = new QuestSubcategoryList(response.data.data)
                 this.loading = false
               })
