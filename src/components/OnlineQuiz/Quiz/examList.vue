@@ -289,7 +289,7 @@
               </v-icon>
             </v-btn>
           </template>
-          <span>مشاهده سوالات به تفکیک درس</span>
+          <span>مشاهده دروس</span>
         </v-tooltip>
         <v-tooltip top>
           <template v-slot:activator="{ on, attrs }">

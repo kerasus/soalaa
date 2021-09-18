@@ -209,7 +209,7 @@ const router = new VueRouter({
             meta: {middleware: [auth, completeInfo]}
         },
         {
-            path: '/video/set',
+            path: '/video/set/:exam_id/:subcategory_id',
             name: 'video.set',
             component: () => lazyLoadView(import('@/pages/admin/VideoSet/SetVideo')),
             meta: {middleware: [auth, completeInfo]}
