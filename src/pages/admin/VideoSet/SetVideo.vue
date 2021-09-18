@@ -14,7 +14,7 @@
         color="light-blue px-2"
         dark
       >
-        <v-toolbar-title>
+        <v-toolbar-title v-if="selectedSubCategory">
           {{ $route.params.exam_title + ': ' + selectedSubCategory.title }}
         </v-toolbar-title>
 
@@ -123,7 +123,7 @@
         data: () => {
             return {
               subCategoriesList: new QuestSubcategoryList(),
-              loading: false,
+              loading: true,
               selectedSubCategory: null,
               videos: []
             }
@@ -135,9 +135,21 @@
 
         },
         created() {
+          this.loading = true
+          this.selectedSubCategory = this.subCategoriesList.list.find(item => item.id === this.$route.params.subcategory_id)
           this.loadSubcategories()
+          this.getCurrentVideos()
         },
         methods: {
+          getCurrentVideos() {
+            axios.get(API_ADDRESS.exam.getAnalysisVideo(this.$route.params.exam_id))
+            .then(response => {
+              this.selectedSubCategory = this.subCategoriesList.list.find(item => item.id === this.$route.params.subcategory_id)
+              if (response.data.data.find(item => item.sub_category.id === this.selectedSubCategory.id).videos) {
+                this.videos = response.data.data.find(item => item.sub_category.id === this.selectedSubCategory.id).videos
+              }
+            })
+          },
           saveVideos() {
             axios.post(API_ADDRESS.exam.analysisVideo, {
               video: this.videos,
@@ -152,11 +164,15 @@
             this.videos.splice(index, 1)
           },
           loadSubcategories() {
-            this.loading = true
             this.subCategoriesList.fetch()
               .then((response) => {
-                this.subCategoriesList = new QuestSubcategoryList(response.data.data)
                 this.selectedSubCategory = this.subCategoriesList.list.find(item => item.id === this.$route.params.subcategory_id)
+                this.$notify({
+                  group: 'notifs',
+                  text: 'اطلاعات ثبت شد.',
+                  type: 'success'
+                })
+                this.subCategoriesList = new QuestSubcategoryList(response.data.data)
                 this.loading = false
               })
           }
