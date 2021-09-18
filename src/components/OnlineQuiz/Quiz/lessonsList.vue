@@ -2,6 +2,7 @@
   <v-row>
     <v-col cols="12 ">
       <div class="tableSize">
+        <span>{{ $route.params.quizTitle }}</span>
         <v-btn
           class="mx-2 backBtnPosition"
           fab
@@ -66,7 +67,7 @@
                       dark
                       x-small
                       color="primary"
-                      :to="{ name: 'video.set', params: { exam_id: $route.params.quizId, subcategory_id: item.id}}"
+                      :to="{ name: 'video.set', params: { exam_id: $route.params.quizId, subcategory_id: item.id, exam_title: $route.params.quizTitle}}"
                       v-bind="attrs"
                       v-on="on"
                     >

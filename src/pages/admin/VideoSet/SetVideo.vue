@@ -14,7 +14,9 @@
         color="light-blue px-2"
         dark
       >
-        <v-toolbar-title>لیست ویدئوهای {{ selectedSubCategory.title }}</v-toolbar-title>
+        <v-toolbar-title>
+          {{ $route.params.exam_title + ': ' + selectedSubCategory.title }}
+        </v-toolbar-title>
 
         <v-spacer />
 

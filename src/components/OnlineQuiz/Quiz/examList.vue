@@ -278,7 +278,7 @@
               dark
               x-small
               color="indigo"
-              :to="{ name: 'onlineQuiz.exams.lessons', params: { quizId: item.id}}"
+              :to="{ name: 'onlineQuiz.exams.lessons', params: { quizId: item.id, quizTitle: item.title}}"
               v-bind="attrs"
               v-on="on"
             >
