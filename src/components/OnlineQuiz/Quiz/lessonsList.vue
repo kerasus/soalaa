@@ -35,21 +35,50 @@
             >
               <td>{{ item.title }}</td>
               <td class="actionsColumn">
-                <v-btn
-                  v-if="item.permissions.view"
-                  class="mx-2"
-                  fab
-                  dark
-                  x-small
-                  color="green"
-                  :to="{ name: 'onlineQuiz.exams.lessons.details', params: { quizId: $route.params.quizId, lessonId: item.id}}"
-                >
-                  <v-icon
-                    small
-                  >
-                    mdi-notebook-outline
-                  </v-icon>
-                </v-btn>
+                <v-tooltip top>
+                  <template v-slot:activator="{ on, attrs }">
+                    <v-btn
+                      v-if="item.permissions.view"
+                      class="mx-2"
+                      fab
+                      dark
+                      x-small
+                      color="green"
+                      :to="{ name: 'onlineQuiz.exams.lessons.details', params: { quizId: $route.params.quizId, lessonId: item.id}}"
+                      v-bind="attrs"
+                      v-on="on"
+                    >
+                      <v-icon
+                        small
+                      >
+                        mdi-notebook-outline
+                      </v-icon>
+                    </v-btn>
+                  </template>
+                  <span>مشاهده سوالات درس</span>
+                </v-tooltip>
+                <v-tooltip top>
+                  <template v-slot:activator="{ on, attrs }">
+                    <v-btn
+                      v-if="item.permissions.view"
+                      class="mx-2"
+                      fab
+                      dark
+                      x-small
+                      color="primary"
+                      :to="{ name: 'video.set', params: { exam_id: $route.params.quizId, subcategory_id: item.id}}"
+                      v-bind="attrs"
+                      v-on="on"
+                    >
+                      <v-icon
+                        small
+                      >
+                        mdi-video
+                      </v-icon>
+                    </v-btn>
+                  </template>
+                  <span>ثبت ویدئو تحلیل</span>
+                </v-tooltip>
               </td>
             </tr>
           </tbody>
