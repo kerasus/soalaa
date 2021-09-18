@@ -195,7 +195,7 @@ export default {
             text: 'اطلاعات آزمون شما ثبت شد.',
             type: 'success'
           })
-          this.getBooklets()
+          item[booklet_type] = res.data.data.url
           item[key] = []
         })
       })
