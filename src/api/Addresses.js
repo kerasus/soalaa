@@ -36,7 +36,7 @@ const API_ADDRESS = {
     userExamsList: lumenServer + '/examAndUser',
     takhminRotbe: lumenServer + '/exam-report/rankSimulator',
     analysisVideo: lumenServer + 'exam-question/attach/sub-category',
-    getAnalysisVideo (exam_id) { return lumenServer + 'exam-question/videos/' + exam_id },
+    getAnalysisVideo (exam_id) { return lumenServer + '/exam-question/videos/' + exam_id },
     examReportIndex (type) { return lumenServer + '/exam-report/index/' + type },
     pdf (exam_id) { return lumenServer + '/exam-question/booklet-file/' +exam_id },
     base (page_number) {

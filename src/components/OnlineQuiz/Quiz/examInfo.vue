@@ -88,7 +88,7 @@
         </v-col>
         <v-col :cols="12">
           <v-checkbox
-            v-model="exam.generate_automatic_report"
+            v-model="exam.confirm"
             label="تولید اتوماتیک کارنامه"
           />
         </v-col>
