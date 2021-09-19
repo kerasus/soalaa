@@ -132,13 +132,12 @@
 
         },
         mounted() {
-
-        },
-        created() {
-          this.loading = true
           this.selectedSubCategory = this.subCategoriesList.list.find(item => item.id === this.$route.params.subcategory_id)
           this.loadSubcategories()
           this.getCurrentVideos()
+        },
+        created() {
+          this.loading = true
         },
         methods: {
           getCurrentVideos() {
