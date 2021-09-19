@@ -1,191 +1,191 @@
 <template>
-  <v-container
-    :fluid="true"
-    dir="rtl"
-  >
-    <v-form>
-      <v-sheet color="#f4f4f4">
-        <v-row>
-          <v-col :md="3">
-            <v-select
-              v-model="selectedQuizzes"
-              label="آزمون"
-              :items="quizList.list"
-              item-text="title"
-              item-value="id"
-              multiple
-              dense
-              :disabled="editMode"
-              outlined
-            />
-          </v-col>
-          <v-col :md="2">
+  <v-container class="register-video">
+    <v-card
+      max-width="800px"
+      class="mx-auto"
+    >
+      <v-overlay
+        v-if="loading"
+        absolute
+      >
+        <v-progress-circular indeterminate />
+      </v-overlay>
+      <v-toolbar
+        color="light-blue px-2"
+        dark
+      >
+        <v-toolbar-title v-if="selectedSubCategory">
+          {{ $route.params.exam_title + ': ' + selectedSubCategory.title }}
+        </v-toolbar-title>
+
+        <v-spacer />
+
+        <v-tooltip top>
+          <template v-slot:activator="{ on, attrs }">
             <v-btn
-              color="secondary"
-              @click="selectAllExams"
+              icon
+              v-bind="attrs"
+              @click="addVideo"
+              v-on="on"
             >
-              انتخاب همه آزمون ها
+              <v-icon>mdi-plus</v-icon>
             </v-btn>
-          </v-col>
-          <v-col :md="2">
-            <v-select
-              v-model="currentQuestion.sub_category_id"
-              label="درس"
-              :items="subCategoriesList.list"
-              item-text="title"
-              item-value="id"
-              dense
-              :disabled="editMode"
-              outlined
-            />
-          </v-col>
-          <v-col :md="5">
+          </template>
+          <span>لینک جدید</span>
+        </v-tooltip>
+        <v-tooltip top>
+          <template v-slot:activator="{ on, attrs }">
+            <v-btn
+              icon
+              v-bind="attrs"
+              @click="saveVideos"
+              v-on="on"
+            >
+              <v-icon>mdi-check</v-icon>
+            </v-btn>
+          </template>
+          <span>ثبت</span>
+        </v-tooltip>
+      </v-toolbar>
+      <v-list
+        subheader
+        two-line
+      >
+        <!--        <v-subheader inset>Folders</v-subheader>-->
+
+        <v-list-item
+          v-for="(item, index) in videos"
+          :key="index"
+        >
+          <v-list-item-content>
             <v-text-field
-              v-model="setLink"
-              label="لینک ست"
+              v-model="videos[index]"
+              dir="ltr"
               outlined
               dense
+              :style="{ 'max-width': '650px' }"
             />
-          </v-col>
-          <v-col
-            :md="12"
-            type="submit"
-            @click="submit"
-          >
-            <v-btn
-              color="primary"
-              block
-              height="750"
-              outlined
-            >
-              ثبت
-            </v-btn>
-          </v-col>
-        </v-row>
-      </v-sheet>
-    </v-form>
+          </v-list-item-content>
+
+          <v-list-item-action>
+            <div>
+              <v-tooltip top>
+                <template v-slot:activator="{ on, attrs }">
+                  <v-btn
+                    icon
+                    v-bind="attrs"
+                    v-on="on"
+                  >
+                    <a
+                      :href="item"
+                      target="_blank"
+                    >
+                      <v-icon color="primary">
+                        mdi-play-box-outline
+                      </v-icon>
+                    </a>
+                  </v-btn>
+                </template>
+                <span>مشاهده کانتنت</span>
+              </v-tooltip>
+              <v-tooltip top>
+                <template v-slot:activator="{ on, attrs }">
+                  <v-btn
+                    icon
+                    v-bind="attrs"
+                    @click="removeVideo(index)"
+                    v-on="on"
+                  >
+                    <v-icon color="red">
+                      mdi-close
+                    </v-icon>
+                  </v-btn>
+                </template>
+                <span>حذف لینک</span>
+              </v-tooltip>
+            </div>
+          </v-list-item-action>
+        </v-list-item>
+      </v-list>
+    </v-card>
   </v-container>
 </template>
 
 <script>
-    import {Question} from '@/models/Question'
-    import {ExamList} from '@/models/Exam'
-    import {QuestSubcategoryList} from '@/models/QuestSubcategory'
-    import axios from 'axios'
+
+
+    import {QuestSubcategoryList} from "@/models/QuestSubcategory";
     import API_ADDRESS from "@/api/Addresses";
+    import axios from "axios";
 
     export default {
         name: 'SetVideo',
         data: () => {
             return {
-                setLink: null,
-                quizList: new ExamList(),
-                subCategoriesList: new QuestSubcategoryList(),
-                selectedQuizzes: [],
-                exams: [],
+              subCategoriesList: new QuestSubcategoryList(),
+              loading: true,
+              selectedSubCategory: null,
+              videos: []
             }
         },
         watch: {
-            'selectedQuizzes': function () {
-                this.exams = []
-                this.selectedQuizzes.forEach((item) => { this.exams.push({ id: item, order: null }) })
-            }
-        },
-        mounted() {
 
         },
+        mounted() {
+          this.selectedSubCategory = this.subCategoriesList.list.find(item => item.id === this.$route.params.subcategory_id)
+          this.loadSubcategories()
+          this.getCurrentVideos()
+        },
         created() {
-            this.editMode = this.$route.name === 'quest.edit'
-            new ExamList().fetch().then((response) => {
-                this.quizList = new ExamList(response.data.data)
-                if (!this.editMode) {
-                    this.selectedQuizzes.push(this.quizList.list[0].id)
-                }
-            })
-            this.subCategoriesList.fetch().then((response) => {
-                this.subCategoriesList = new QuestSubcategoryList(response.data)
-            })
-            if (this.editMode) {
-                this.currentQuestion.show(null, API_ADDRESS.question.getCurrentQuestion(this.$route.params.id))
-                    .then((response) => {
-                        this.currentQuestion = new Question(response.data.data)
-                        this.trueChoiceIndex = this.currentQuestion.choices.list.findIndex((item) => item.answer )
-                        this.updateRendered()
-                    })
-            } else {
-                this.currentQuestion = new Question(this.questionData)
-            }
+          this.loading = true
         },
         methods: {
-            getExamById(quizId) {
-                return this.exams.find((quiz) => quiz.id === quizId)
-            },
-            getQuizById(quizId) {
-                return this.quizList.list.find((quiz) => quiz.id === quizId)
-            },
-            selectAllExams() {
-                if (this.selectedQuizzes.length !== this.quizList.list.length) {
-                    this.selectedQuizzes = []
-                    this.quizList.list.forEach((item) => {
-                        this.selectedQuizzes.push(item.id)
-                    })
-                }
-            },
-            submit () {
-                const that = this
-                const exams = []
-                this.selectedQuizzes.forEach((item) => {
-                    exams.push({exam_id: item})
-                })
-                axios.post(API_ADDRESS.question.attachSubCategoryToQuestion, {
-                    sub_category_id: that.currentQuestion.sub_category_id,
-                    video: that.setLink,
-                    exams,
-                }).then((response) => {
-                    console.log(response)
-                })
-                // $.ajax({
-                //         type: 'POST',
-                //         url: 'http://localhost/3a/api/exam-question/attach/sub-category',
-                //         data: {
-                //             sub_category_id: that.currentQuestion.sub_category_id,
-                //             video: that.setLink,
-                //             exams
-                //         },
-                //         success: function (data) {
-                //             console.Log(data)
-                //         },
-                //     }
-                // );
-            }
+          getCurrentVideos() {
+            axios.get(API_ADDRESS.exam.getAnalysisVideo(this.$route.params.exam_id))
+            .then(response => {
+              this.selectedSubCategory = this.subCategoriesList.list.find(item => item.id === this.$route.params.subcategory_id)
+              if (response.data.data.find(item => item.sub_category.id === this.selectedSubCategory.id).videos) {
+                this.videos = response.data.data.find(item => item.sub_category.id === this.selectedSubCategory.id).videos
+              }
+            })
+          },
+          saveVideos() {
+            axios.post(API_ADDRESS.exam.analysisVideo, {
+              video: this.videos,
+              sub_category_id: this.selectedSubCategory.id,
+              exams: [{ exam_id: this.$route.params.exam_id }]
+            })
+            .then(() => {
+              this.$notify({
+                group: 'notifs',
+                text: 'اطلاعات ثبت شد.',
+                type: 'success'
+              })
+            })
+          },
+          addVideo() {
+            this.videos.push('')
+          },
+          removeVideo(index) {
+            this.videos.splice(index, 1)
+          },
+          loadSubcategories() {
+            this.subCategoriesList.fetch()
+              .then((response) => {
+                this.selectedSubCategory = this.subCategoriesList.list.find(item => item.id === this.$route.params.subcategory_id)
+                this.subCategoriesList = new QuestSubcategoryList(response.data.data)
+                this.loading = false
+              })
+          }
+
         }
     }
 </script>
 
 <style>
-    .renderedPanel {
-        direction: rtl;
-    }
-    .renderedPanel .katex {
-        direction: ltr;
-    }
-    .renderedPanel strong>strong>s {
-        text-decoration: underline;
-        text-underline-position: under;
-    }
-
-    .ML__virtual-keyboard-toggle {
-        color: gray !important;
-    }
-
-    #mathfield, .latexData {
-        font-size: 32px;
-        margin: 3em;
-        padding: 8px;
-        border-radius: 8px;
-        border: 1px solid rgba(0, 0, 0, .3);
-        box-shadow: 0 0 8px rgba(0, 0, 0, .2)
-    }
+.register-video .v-text-field__details {
+  display: none;
+}
 </style>
 
 <style scoped>

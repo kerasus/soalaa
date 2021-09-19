@@ -278,7 +278,7 @@
               dark
               x-small
               color="indigo"
-              :to="{ name: 'onlineQuiz.exams.lessons', params: { quizId: item.id}}"
+              :to="{ name: 'onlineQuiz.exams.lessons', params: { quizId: item.id, quizTitle: item.title}}"
               v-bind="attrs"
               v-on="on"
             >
@@ -289,7 +289,7 @@
               </v-icon>
             </v-btn>
           </template>
-          <span>مشاهده سوالات به تفکیک درس</span>
+          <span>مشاهده دروس</span>
         </v-tooltip>
         <v-tooltip top>
           <template v-slot:activator="{ on, attrs }">

@@ -13,6 +13,9 @@
           deletable
           accept=".pdf"
           :max-files="1"
+          editable
+          meta
+          :linkable="true"
           :help-text="'فایل سوالات ' + item.title"
           @select="select($event, item, 'questionFile')"
           @beforedelete="onBeforeDelete($event, item, 'questionFile')"
@@ -28,6 +31,22 @@
         >
           آپلود
         </v-btn>
+        <!--        {{ item.questions_booklet + 'test' }}-->
+        <a
+          v-if="item.questions_booklet"
+          :href="item.questions_booklet"
+          target="_blank"
+          :style="{ textDecoration: 'none' }"
+        >
+          <v-btn
+            :elevation="0"
+            class="upload-btn"
+            block
+            color="orange"
+          >
+            دانلود
+          </v-btn>
+        </a>
       </v-col>
       <v-col md="6">
         <VueFileAgent
@@ -35,6 +54,9 @@
           v-model="item.answerFile"
           :multiple="false"
           deletable
+          editable
+          linkable
+          meta
           accept=".pdf"
           :max-files="1"
           :help-text="'فایل پاسخ ' + item.title"
@@ -52,6 +74,21 @@
         >
           آپلود
         </v-btn>
+        <a
+          v-if="item.descriptive_answers_booklet"
+          :href="item.descriptive_answers_booklet"
+          target="_blank"
+          :style="{ textDecoration: 'none' }"
+        >
+          <v-btn
+            :elevation="0"
+            class="upload-btn"
+            block
+            color="orange"
+          >
+            دانلود
+          </v-btn>
+        </a>
       </v-col>
     </v-row>
   </v-container>
@@ -85,23 +122,53 @@ export default {
       }
     }
   },
-  created () {
+  watch: {
+    exam_id () {
+      this.getBooklets()
+    }
+  },
+  mounted () {
+    window.test = this
     axios.get(API_ADDRESS.questionCategory.base)
-    .then(response => {
-      this.questionCategories = new QuestCategoryList(response.data.data)
-      this.questionCategories.list.forEach(item => {
-        item.questionFile = []
-        item.answerFile = []
-      })
-    })
+        .then(response => {
+          this.questionCategories = new QuestCategoryList(response.data.data)
+          this.questionCategories.list.forEach(item => {
+            item.questionFile = []
+            item.answerFile = []
+          })
+        })
     axios.get(API_ADDRESS.option.base + '?type=booklet_type')
-    .then(response => {
-      this.options = response.data.data
-    })
+        .then(response => {
+          this.options = response.data.data
+        })
+    this.getBooklets()
   },
   methods: {
+    getBooklets () {
+      axios.get(API_ADDRESS.exam.pdf(this.exam_id))
+      .then(response => {
+        this.questionCategories.list.forEach(category => {
+          category.descriptive_answers_booklet = ''
+          category.questions_booklet = ''
+          response.data.forEach(r => {
+            if (r.category.id === category.id) {
+              r.booklets.forEach(booklet => {
+                console.log(booklet.value)
+                if (booklet.value === 'descriptive_answers_booklet') {
+                  console.log(booklet.value)
+                  category.descriptive_answers_booklet = booklet.url
+                } else if (booklet.value === 'questions_booklet') {
+                  console.log(booklet.value)
+                  category.questions_booklet = booklet.url
+                }
+              })
+            }
+          })
+        })
+      })
+    },
     select (event, item, key) {
-      console.log(event, item, key)
+      console.log('tt', event, item, key)
       this.random = Math.random()
       Vue.set(item, key, event)
     },
@@ -110,7 +177,7 @@ export default {
       item[key].forEach(file => {
         const formData = new FormData()
         formData.append('file', file.file, file.file.name)
-        formData.append('category_id', '60b7858d743940688b23c7f4')
+        formData.append('category_id', item.id)
         const option = this.options.find(option => option.value === booklet_type)
         formData.append('booklet_type', option.id)
         axios.post(API_ADDRESS.exam.examBookletUpload(this.exam_id), formData,{
@@ -123,9 +190,15 @@ export default {
         })
         .then((res) => {
           console.log(res)
+          that.$notify({
+            group: 'notifs',
+            text: 'اطلاعات آزمون شما ثبت شد.',
+            type: 'success'
+          })
+          item[booklet_type] = res.data.data.url
+          item[key] = []
         })
       })
-      item[key] = []
     },
     onBeforeDelete: function (event, item, key) {
       Vue.set(item, key, [])

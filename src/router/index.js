@@ -119,7 +119,7 @@ const router = new VueRouter({
             meta: {middleware: [auth, completeInfo]}
         },
         {
-            path: '/onlineQuiz/exams/lessons/:quizId',
+            path: '/onlineQuiz/exams/lessons/:quizId/:quizTitle',
             name: 'onlineQuiz.exams.lessons',
             component: () => lazyLoadView(import('@/pages/admin/exam/lessons')),
             meta: {middleware: [auth, completeInfo]}
@@ -209,7 +209,7 @@ const router = new VueRouter({
             meta: {middleware: [auth, completeInfo]}
         },
         {
-            path: '/video/set',
+            path: '/video/set/:exam_id/:subcategory_id:/:exam_title',
             name: 'video.set',
             component: () => lazyLoadView(import('@/pages/admin/VideoSet/SetVideo')),
             meta: {middleware: [auth, completeInfo]}

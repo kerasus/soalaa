@@ -82,7 +82,7 @@ class Exam extends Model {
                 default: false
             },
             {
-                key: 'generate_automatic_report',
+                key: 'confirm',
                 default: false
             },
             {
@@ -134,7 +134,7 @@ class Exam extends Model {
                 {key: 'exam_id'},
                 {key: 'enable'},
                 {key: 'is_free'},
-                {key: 'generate_automatic_report'},
+                {key: 'confirm'},
                 {key: 'generate_questions_automatically'},
                 {key: 'type_id'},
                 {key: 'start_at'},
@@ -148,6 +148,9 @@ class Exam extends Model {
             ]
         }
 
+        if (this.type && this.type.id) {
+            this.type_id = this.type.id
+        }
         this.exam_id = this.id
         this.questions.sortByOrder()
         this.categories.sortByKey('end_at', 'asc')
