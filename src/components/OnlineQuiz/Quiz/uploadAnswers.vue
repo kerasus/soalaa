@@ -127,20 +127,20 @@ export default {
       this.getBooklets()
     }
   },
-  created () {
+  mounted () {
     window.test = this
     axios.get(API_ADDRESS.questionCategory.base)
-    .then(response => {
-      this.questionCategories = new QuestCategoryList(response.data.data)
-      this.questionCategories.list.forEach(item => {
-        item.questionFile = []
-        item.answerFile = []
-      })
-    })
+        .then(response => {
+          this.questionCategories = new QuestCategoryList(response.data.data)
+          this.questionCategories.list.forEach(item => {
+            item.questionFile = []
+            item.answerFile = []
+          })
+        })
     axios.get(API_ADDRESS.option.base + '?type=booklet_type')
-    .then(response => {
-      this.options = response.data.data
-    })
+        .then(response => {
+          this.options = response.data.data
+        })
     this.getBooklets()
   },
   methods: {
