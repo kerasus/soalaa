@@ -238,6 +238,15 @@
         created() {
             this.loadQuizDataAndSubCategories()
 
+            // document.addEventListener("DOMContentLoaded", function() {
+            //   var scrollpos = localStorage.getItem('scrollpos');
+            //   if (scrollpos) window.scrollTo(0, scrollpos);
+            // });
+            //
+            // window.onbeforeunload = function() {
+            //   localStorage.setItem('scrollpos', window.scrollY);
+            // };
+
             // axios.get(API_ADDRESS.exam.examQuestion(this.$route.params.quizId))
             //     .then((response) => {
             //         this.saveCurrentExamQuestions(new QuestionList(response.data.data).list)
