@@ -68,6 +68,7 @@
     </div>
     <div class="end-exam">
       <v-btn
+        v-if="false"
         :color="'#4caf50'"
         :style="{ backgroundColor: '#4caf50 !important' }"
         dark

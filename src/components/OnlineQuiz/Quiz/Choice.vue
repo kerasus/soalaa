@@ -5,11 +5,11 @@
     class="answer-box"
     @click="answerClicked"
   >
-    <v-sheet :class="{ 'answer-sheet': true, active: isSelected, ltr: isRtl }">
+    <v-sheet :class="{ 'answer-sheet': true, active: isSelected }">
       <div
         class="answer-text renderedPanel"
       >
-        <vue-katex :input="choice.title" />
+        <vue-katex :input="choice.title" :ltr="!isRtl" />
       </div>
       <div class="answer-checkbox">
         <v-checkbox
