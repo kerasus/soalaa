@@ -58,6 +58,10 @@
               من تایید نکردم
             </v-btn>
           </v-btn-toggle>
+          <v-spacer />
+          <v-btn icon @click="reload">
+            <v-icon>mdi-reload</v-icon>
+          </v-btn>
         </v-toolbar>
         <div
           id="questions"
@@ -238,6 +242,15 @@
         created() {
             this.loadQuizDataAndSubCategories()
 
+            // document.addEventListener("DOMContentLoaded", function() {
+            //   var scrollpos = localStorage.getItem('scrollpos');
+            //   if (scrollpos) window.scrollTo(0, scrollpos);
+            // });
+            //
+            // window.onbeforeunload = function() {
+            //   localStorage.setItem('scrollpos', window.scrollY);
+            // };
+
             // axios.get(API_ADDRESS.exam.examQuestion(this.$route.params.quizId))
             //     .then((response) => {
             //         this.saveCurrentExamQuestions(new QuestionList(response.data.data).list)
@@ -257,6 +270,9 @@
             console.log('lofdsafadfasfag', $('.sidebar')[0])
         },
         methods: {
+            reload () {
+              this.loadQuizDataAndSubCategories(true)
+            },
             updateLtr() {
               setTimeout(() => {
                 document.querySelectorAll('.katex:not([dir="ltr"])').forEach(item => {
@@ -414,9 +430,17 @@
 
 
 
-            loadSubCategories (quizResponse) {
+            loadSubCategories (quizResponse, reload) {
                 const that = this
                 this.subCategoriesList.fetch().then((response) => {
+                    if (reload) {
+                      this.$notify({
+                        group: 'notifs',
+                        title: 'توجه!',
+                        text: 'اطلاعات بروزرسانی شد',
+                        type: 'success'
+                      })
+                    }
                     // that.quiz.sub_categories = new QuestSubcategoryList(response.data)
                     that.quizData.sub_categories = new QuestSubcategoryList(response.data.data)
                     let questions = quizResponse.data.data
@@ -426,14 +450,14 @@
                     that.QuIzDaTa = new Exam(that.quizData)
                 })
             },
-            loadQuizDataAndSubCategories () {
+            loadQuizDataAndSubCategories (reload = false) {
                 const that = this
                 axios.post(API_ADDRESS.exam.examQuestion(this.$route.params.quizId), {
                     sub_categories: [this.$route.params.lessonId]
                 })
                 .then((response) => {
                     if (response.data.data.length) {
-                        that.loadSubCategories(response)
+                        that.loadSubCategories(response, reload)
                     } else {
                         this.$router.push({ name: 'onlineQuiz.exams' })
                     }
