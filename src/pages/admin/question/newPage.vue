@@ -679,7 +679,6 @@ export default {
           .then((response) => {
             this.$store.commit('AppLayout/updateOverlay', {show: false, loading: false, text: ''})
             const questionId = response.data.data.id
-            this.$router.push({name: 'question.show', params: {question_id: questionId}})
             this.questionType = 'typeText'
             this.currentQuestion.statement = ''
             this.currentQuestion.choices.list.forEach((item) => {
@@ -691,6 +690,8 @@ export default {
               text: 'ثبت با موفقیت انجام شد',
               type: 'success'
             })
+            window.open('/question/create', '_blank').focus()
+            this.$router.push({name: 'question.show', params: {question_id: questionId}})
           })
     },
 

@@ -81,6 +81,8 @@ export default {
   }),
   methods: {
     rereshExamList() {
+      this.dialog = false
+      this.reportDialog = false
       this.$refs.examList.getExams()
     },
     updateExamId(e) {
