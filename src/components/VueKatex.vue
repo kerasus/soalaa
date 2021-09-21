@@ -67,6 +67,11 @@ export default {
 </script>
 
 <style lang="scss">
+  #mathfield .ML__cmr,
+  .katex .mtight {
+    font-family: IRANSans;
+  }
+
   .html-katex {
     width: 100%;
 
