@@ -240,7 +240,17 @@ export default {
       optionQuestionId: null
     }
   },
+  destroyed() {
+    window.onbeforeunload = null
+  },
+  // beforeRouteLeave (to, from, next) {
+  //   console.log(to, from, next)
+  // },
   created() {
+    window.onbeforeunload = function() {
+      return "Do you really want to leave our brilliant application?";
+    };
+
     let that = this
     axios.get(API_ADDRESS.option.base + '?type=question_type')
         .then(function (response) {
@@ -643,13 +653,10 @@ export default {
         this.questionColsNumber=9
 
      }
-
     },
-
     showPageDialog() {  //یاس
       this.dialog = true
     },
-
     setQuestionTypeText() {
       this.questionType = 'typeText'
       this.dialog = false
