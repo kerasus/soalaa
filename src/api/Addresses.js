@@ -41,7 +41,7 @@ const API_ADDRESS = {
     pdf (exam_id) { return lumenServer + '/exam-question/booklet-file/' +exam_id },
     base (page_number) {
       if (page_number) {
-        return lumenServer + '/exam?with_pagination=0&page=' + page_number
+        return lumenServer + '/exam?with_pagination=1&page=' + page_number
       } else {
         return lumenServer + '/exam?with_pagination=0'
       }
