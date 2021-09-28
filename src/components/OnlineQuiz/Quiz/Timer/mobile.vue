@@ -1,5 +1,5 @@
 <template>
-  <div style="bottom: 0">
+  <div style="bottom: 0; margin-bottom: 25px;">
     <v-row style="padding-left: 0">
       <v-col
         cols="7 "
@@ -10,7 +10,7 @@
             <v-col class="d-flex justify-center">
               <v-icon
                 class="sideBtnIcons "
-                @click="goToPrevQuestion"
+                @click="goToPrevQuestion('onlineQuiz.alaaView')"
               >
                 mdi-chevron-right
               </v-icon>
@@ -32,7 +32,7 @@
             <v-col class="d-flex justify-center">
               <v-icon
                 class="sideBtnIcons  "
-                @click="goToNextQuestion"
+                @click="goToNextQuestion('onlineQuiz.alaaView')"
               >
                 mdi-chevron-left
               </v-icon>

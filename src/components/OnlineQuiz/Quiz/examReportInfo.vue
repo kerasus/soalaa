@@ -124,8 +124,14 @@
         },
         methods: {
           save() {
+            let that = this
             axios.post(API_ADDRESS.exam.report.updateReportOptions(this.exam.id), this.exam.report_config)
             .then(() => {
+              that.$notify({
+                group: 'notifs',
+                text: 'اطلاعات آزمون شما ثبت شد.',
+                type: 'success'
+              })
               this.refreshExamList()
             })
           },

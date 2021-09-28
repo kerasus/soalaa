@@ -91,6 +91,10 @@ export default {
 </style>
 
 <style>
+#mathfield .ML__cmr,
+.katex .mtight {
+  font-family: IRANSans;
+}
 .inline .v-btn.blue--text {
   display: none;
 }

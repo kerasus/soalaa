@@ -2,6 +2,7 @@
   <div
     v-katex:auto
     class="html-katex"
+    :dir="!isLtrString ? 'rtl' : 'ltr'"
     v-html="input"
   />
 </template>
@@ -26,18 +27,58 @@ export default {
     input: {
       type: String,
       default: ''
+    },
+    ltr: {
+      type: Boolean,
+      default: null
+    },
+  },
+  data () {
+    return {
+      rtl: true
     }
   },
+  computed: {
+    isLtrString () {
+      if (this.ltr !== null) {
+        return this.ltr
+      }
+      let string = this.input
+      if (!string) {
+        return false
+      }
+      // const englishRegex = /^[A-Za-z0-9 :"'ʹ.<>%$&@!+()\-/\n,…?;ᵒ*~]*$/
+      // return !!string.match(englishRegex)
+      const persianRegex = /[\u0600-\u06FF]/
+      return !string.match(persianRegex)
+    },
+  },
   mounted () {
-    document.querySelectorAll('.katex').forEach(item => {
-      item.setAttribute('dir', 'ltr')
-    })
+    setTimeout(() => {
+      document.querySelectorAll('.katex:not([dir="ltr"])').forEach(item => {
+        item.setAttribute('dir', 'ltr')
+      })
+    }, 1000)
+  },
+  created () {
+    // this.rtl = !this.isLtrString(this.input)
   }
 }
 </script>
 
 <style lang="scss">
+  #mathfield .ML__cmr,
+  .katex .mtight {
+    font-family: IRANSans;
+  }
+
   .html-katex {
+    width: 100%;
+
+    .katex {
+      direction: ltr;
+    }
+
     table {
       border-collapse: collapse;
       table-layout: fixed;
@@ -160,5 +201,9 @@ export default {
 <style>
 .html-katex > p {
   direction: inherit;
+}
+
+.html-katex > p:first-child {
+  display: inline-block;
 }
 </style>

@@ -7,164 +7,164 @@
       آزمون ها
     </p>
     <v-form ref="form">
-    <v-row
-      v-if="status"
-      class="exam-section mt-2"
-    >
-      <v-col
-        class="choose-exam"
-        cols="5"
-      >
-        <v-autocomplete
-          v-model="chooseExam"
-          :items="examList.list"
-          :rules="selectorRules"
-          item-text="title"
-          item-value="id"
-          label="انتخاب آزمون"
-          dense
-          rounded
-          solo
-          flat
-        />
-      </v-col>
-      <v-col
-        class="choose-lesson"
-        cols="4"
-      >
-        <v-autocomplete
-          v-model="chooseLesson"
-          :rules="selectorRules"
-          :items="subCategories.list"
-          item-text="title"
-          item-value="id"
-          label="انتخاب درس"
-          dense
-          rounded
-          solo
-          flat
-        />
-      </v-col>
-
-      <v-col
-        class="exam-order"
-        cols="2"
-      >
-        <v-text-field
-          v-model="examOrder"
-          height="36"
-          :rules="numberRules"
-          label="ترتیب"
-          solo
-          dense
-          flat
-        />
-      </v-col>
-      <v-col
-        class="attach-or-dettach"
-        cols="1"
-      >
-        <v-btn
-          height="36"
-          width="100%"
-          class="text-center white"
-          text
-          :loading="loading"
-          :disabled="loading"
-          @click="attach"
-        >
-          <v-icon>mdi-plus</v-icon>
-        </v-btn>
-      </v-col>
-    </v-row>
-    <v-row v-if="!status && attaches.length>0">
-      <v-col cols="5">
-        <v-card
-          flat
-          class="transparent px-4 font-weight-medium"
-        >
-          آزمون
-        </v-card>
-      </v-col>
-      <v-col cols="4 px-4 font-weight-medium">
-        <v-card
-          flat
-          class="transparent"
-        >
-          درس
-        </v-card>
-      </v-col>
-      <v-col cols="2 px-4 font-weight-medium">
-        <v-card
-          flat
-          class="transparent"
-        >
-          ترتیب
-        </v-card>
-      </v-col>
-    </v-row>
-    <v-row
-      v-for="(item, index) in attaches"
-      :key="index"
-      class="exam-section"
-    >
-      <v-col
-        class="choose-exam"
-        cols="5"
-      >
-        <v-card
-          flat
-          height="36"
-        >
-          <v-card-text class="text-center">
-            {{ item.exam.title }}
-          </v-card-text>
-        </v-card>
-      </v-col>
-      <v-col
-        class="choose-lesson"
-        cols="4"
-      >
-        <v-card
-          flat
-          height="36"
-        >
-          <v-card-text class="text-center">
-            {{ item.sub_category.title }}
-          </v-card-text>
-        </v-card>
-      </v-col>
-      <v-col
-        class="exam-order"
-        cols="2"
-      >
-        <v-card
-          flat
-          height="36"
-        >
-          <v-card-text class="text-center">
-            {{ item.order }}
-          </v-card-text>
-        </v-card>
-      </v-col>
-      <v-col
+      <v-row
         v-if="status"
-        class="attach-or-detach"
+        class="exam-section mt-2"
       >
-        <v-btn
-          small
-          height="36"
-          width="100%"
-          text
-          class="text-center white"
-          :loading="loading"
-          :disabled="loading"
-          @click="detach(item)"
+        <v-col
+          class="choose-exam"
+          cols="5"
         >
-          <v-icon>mdi-trash-can-outline</v-icon>
-        </v-btn>
-      </v-col>
-    </v-row>
+          <v-autocomplete
+            v-model="chooseExam"
+            :items="examList.list"
+            :rules="selectorRules"
+            item-text="title"
+            item-value="id"
+            label="انتخاب آزمون"
+            dense
+            rounded
+            solo
+            flat
+          />
+        </v-col>
+        <v-col
+          class="choose-lesson"
+          cols="4"
+        >
+          <v-autocomplete
+            v-model="chooseLesson"
+            :rules="selectorRules"
+            :items="subCategories.list"
+            item-text="title"
+            item-value="id"
+            label="انتخاب درس"
+            dense
+            rounded
+            solo
+            flat
+          />
+        </v-col>
+
+        <v-col
+          class="exam-order"
+          cols="2"
+        >
+          <v-text-field
+            v-model="examOrder"
+            height="36"
+            :rules="numberRules"
+            label="ترتیب"
+            solo
+            dense
+            flat
+          />
+        </v-col>
+        <v-col
+          class="attach-or-dettach"
+          cols="1"
+        >
+          <v-btn
+            height="36"
+            width="100%"
+            class="text-center white"
+            text
+            :loading="loading"
+            :disabled="loading"
+            @click="attach"
+          >
+            <v-icon>mdi-plus</v-icon>
+          </v-btn>
+        </v-col>
+      </v-row>
+      <v-row v-if="!status && attaches.length>0">
+        <v-col cols="5">
+          <v-card
+            flat
+            class="transparent px-4 font-weight-medium"
+          >
+            آزمون
+          </v-card>
+        </v-col>
+        <v-col cols="4 px-4 font-weight-medium">
+          <v-card
+            flat
+            class="transparent"
+          >
+            درس
+          </v-card>
+        </v-col>
+        <v-col cols="2 px-4 font-weight-medium">
+          <v-card
+            flat
+            class="transparent"
+          >
+            ترتیب
+          </v-card>
+        </v-col>
+      </v-row>
+      <v-row
+        v-for="(item, index) in attaches"
+        :key="index"
+        class="exam-section"
+      >
+        <v-col
+          class="choose-exam"
+          cols="5"
+        >
+          <v-card
+            flat
+            height="36"
+          >
+            <v-card-text class="text-center">
+              {{ item.exam.title }}
+            </v-card-text>
+          </v-card>
+        </v-col>
+        <v-col
+          class="choose-lesson"
+          cols="4"
+        >
+          <v-card
+            flat
+            height="36"
+          >
+            <v-card-text class="text-center">
+              {{ item.sub_category.title }}
+            </v-card-text>
+          </v-card>
+        </v-col>
+        <v-col
+          class="exam-order"
+          cols="2"
+        >
+          <v-card
+            flat
+            height="36"
+          >
+            <v-card-text class="text-center">
+              {{ item.order }}
+            </v-card-text>
+          </v-card>
+        </v-col>
+        <v-col
+          v-if="status"
+          class="attach-or-detach"
+        >
+          <v-btn
+            small
+            height="36"
+            width="100%"
+            text
+            class="text-center white"
+            :loading="loading"
+            :disabled="loading"
+            @click="detach(item)"
+          >
+            <v-icon>mdi-trash-can-outline</v-icon>
+          </v-btn>
+        </v-col>
+      </v-row>
     </v-form>
   </div>
 </template>
@@ -230,7 +230,7 @@ export default {
       })
           .then(response => {
             this.updateAttachList(response.data.data.exams)
-            console.log('response', response)
+            // console.log('response', response)
             this.attachLoading = false
             this.dialog = false
           })

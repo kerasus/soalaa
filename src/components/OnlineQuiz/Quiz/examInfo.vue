@@ -88,7 +88,7 @@
         </v-col>
         <v-col :cols="12">
           <v-checkbox
-            v-model="exam.generate_automatic_report"
+            v-model="exam.confirm"
             label="تولید اتوماتیک کارنامه"
           />
         </v-col>
@@ -290,6 +290,7 @@ export default {
     create() {
       this.examItem = this.exam
       this.examItem.loading = true
+      let that = this
       this.examItem.photo = 'https://cdn.alaatv.com/upload/images/slideShow/home-slide-yalda-festival_20201219075413.jpg?w=1843&h=719'
       if (this.examItem.id) {
         this.examItem.update()
@@ -304,7 +305,7 @@ export default {
             })
             .catch((error) => {
               Assistant.handleAxiosError(this.$toasted, error)
-              this.examItem.loading = false
+              that.examItem.loading = false
               this.refreshExamList()
             })
       } else {
@@ -319,10 +320,9 @@ export default {
               this.refreshExamList()
             })
             .catch((error) => {
-              Assistant.handleAxiosError(this.$toasted, error)
               this.examItem.loading = false
+              Assistant.handleAxiosError(this.$toasted, error)
               this.examItem = new Exam()
-              this.refreshExamList()
             })
       }
 

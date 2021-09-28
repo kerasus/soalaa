@@ -240,7 +240,17 @@ export default {
       optionQuestionId: null
     }
   },
+  destroyed() {
+    window.onbeforeunload = null
+  },
+  // beforeRouteLeave (to, from, next) {
+  //   console.log(to, from, next)
+  // },
   created() {
+    window.onbeforeunload = function() {
+      return "Do you really want to leave our brilliant application?";
+    };
+
     let that = this
     axios.get(API_ADDRESS.option.base + '?type=question_type')
         .then(function (response) {
@@ -643,13 +653,10 @@ export default {
         this.questionColsNumber=9
 
      }
-
     },
-
     showPageDialog() {  //یاس
       this.dialog = true
     },
-
     setQuestionTypeText() {
       this.questionType = 'typeText'
       this.dialog = false
@@ -679,7 +686,6 @@ export default {
           .then((response) => {
             this.$store.commit('AppLayout/updateOverlay', {show: false, loading: false, text: ''})
             const questionId = response.data.data.id
-            this.$router.push({name: 'question.show', params: {question_id: questionId}})
             this.questionType = 'typeText'
             this.currentQuestion.statement = ''
             this.currentQuestion.choices.list.forEach((item) => {
@@ -691,6 +697,8 @@ export default {
               text: 'ثبت با موفقیت انجام شد',
               type: 'success'
             })
+            window.open('/question/create', '_blank').focus()
+            this.$router.push({name: 'question.show', params: {question_id: questionId}})
           })
     },
 
