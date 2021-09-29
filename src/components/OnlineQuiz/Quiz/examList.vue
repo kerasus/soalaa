@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="exam-list">
     <v-dialog
       v-model="dialogDelete"
       max-width="500px"
@@ -207,69 +207,152 @@
       <template v-slot:item.delay_time="{ item }">
         {{ item.delay_time }} دقیقه
       </template>
-      <template v-slot:item.options="{ item }">
-        <v-tooltip top>
-          <template v-slot:activator="{ on, attrs }">
-            <v-btn
-              class="mx-2"
-              fab
-              dark
-              x-small
-              color="purple"
-              v-bind="attrs"
-              @click="selectExam(item)"
-              v-on="on"
-            >
-              <v-icon dark>
-                mdi-pencil
-              </v-icon>
-            </v-btn>
-          </template>
-          <span>ویرایش</span>
-        </v-tooltip>
-        <v-tooltip top>
-          <template v-slot:activator="{ on, attrs }">
-            <v-btn
-              class="mx-2"
-              fab
-              dark
-              x-small
-              color="purple"
-              v-bind="attrs"
-              @click="selectExamReport(item)"
-              v-on="on"
-            >
-              <v-icon dark>
-                mdi-pencil
-              </v-icon>
-            </v-btn>
-          </template>
-          <span>ویرایش کارنامه</span>
-        </v-tooltip>
-        <v-tooltip
-          v-if="false"
-          top
-        >
-          <template v-slot:activator="{ on, attrs }">
-            <v-btn
-              class="mx-2"
-              fab
-              dark
-              x-small
-              color="indigo"
-              :to="{ name: 'onlineQuiz.exams.lessons', params: { quizId: item.id}}"
-              v-bind="attrs"
-              v-on="on"
-            >
-              <v-icon
-                small
+      <template v-slot:item.options="{ item }" class="table-options">
+        <div>
+          <v-menu
+            open-on-hover
+            right
+            offset-y
+          >
+            <template v-slot:activator="{ on, attrs }">
+              <v-btn
+                class="mx-2"
+                fab
+                dark
+                x-small
+                color="purple"
+                v-bind="attrs"
+                @click="selectExam(item)"
+                v-on="on"
               >
-                mdi-arrow-up-bold-box-outline
-              </v-icon>
-            </v-btn>
-          </template>
-          <span>مشاهده تمام سوالات</span>
-        </v-tooltip>
+                <v-icon dark>
+                  mdi-pencil
+                </v-icon>
+              </v-btn>
+            </template>
+            <v-list>
+              <v-list-item>
+                <v-list-item-title>
+                  <v-btn
+                    class="mx-2"
+                    depressed
+                    :ripple="{ class: 'red--text' }"
+                    retain-focus-on-click
+                    plain
+                    @click="selectExamReport(item)"
+                  >
+                    ویرایش کارنامه
+                    <!--                    <v-icon dark>-->
+                    <!--                      mdi-pencil-->
+                    <!--                    </v-icon>-->
+                  </v-btn>
+                </v-list-item-title>
+                <v-list-item-title>
+                  <v-btn
+                    class="mx-2"
+                    depressed
+                    :ripple="{ class: 'red--text' }"
+                    retain-focus-on-click
+                    plain
+                    :to="{ name: 'onlineQuiz.exams.lessons', params: { quizId: item.id}}"
+                  >
+                    مشاهده تمام سوالات
+                    <!--                    <v-icon-->
+                    <!--                        small-->
+                    <!--                    >-->
+                    <!--                      mdi-arrow-up-bold-box-outline-->
+                    <!--                    </v-icon>-->
+                  </v-btn>
+                </v-list-item-title>
+                <v-list-item-title>
+                  <v-btn
+                    class="mx-2"
+                    depressed
+                    :ripple="{ class: 'red--text' }"
+                    retain-focus-on-click
+                    plain
+                    @click="generateJsonFile(item, false)"
+                  >
+                    ساخت فایل سوالات
+                    <!--                    <v-icon-->
+                    <!--                        small-->
+                    <!--                    >-->
+                    <!--                      mdi-beaker-->
+                    <!--                    </v-icon>-->
+                  </v-btn>
+                </v-list-item-title>
+                <v-list-item-title>
+                  <v-btn
+                    class="mx-2"
+                    depressed
+                    :ripple="{ class: 'red--text' }"
+                    retain-focus-on-click
+                    plain
+                    @click="generateJsonFile(item, true)"
+                  >
+                    ساخت فایل سوالات با جواب
+                    <!--                    <v-icon-->
+                    <!--                        small-->
+                    <!--                    >-->
+                    <!--                      mdi-beaker-check-->
+                    <!--                    </v-icon>-->
+                  </v-btn>
+                </v-list-item-title>
+                <v-list-item-title>
+                  <v-btn
+                    class="mx-2"
+                    depressed
+                    :ripple="{ class: 'red--text' }"
+                    retain-focus-on-click
+                    plain
+                    @click="openUploadDialog(item.id)"
+                  >
+                    آپلود فایل سوالات و جواب ها
+                    <!--                    <v-icon-->
+                    <!--                        small-->
+                    <!--                    >-->
+                    <!--                      mdi-cloud-upload-->
+                    <!--                    </v-icon>-->
+                  </v-btn>
+                </v-list-item-title>
+                <v-list-item-title>
+                  <v-btn
+                    class="mx-2"
+                    depressed
+                    :ripple="{ class: 'red--text' }"
+                    retain-focus-on-click
+                    plain
+                    :to="{ name: 'coefficient.edit', params: { exam_id: item.id } }"
+                  >
+                    اصلاح ضرایب
+                    <!--                    <v-icon-->
+                    <!--                        small-->
+                    <!--                    >-->
+                    <!--                      mdi-pencil-->
+                    <!--                    </v-icon>-->
+                  </v-btn>
+                </v-list-item-title>
+                <v-list-item-title>
+                  <v-btn
+                    class="mx-2"
+                    depressed
+                    :ripple="{ class: 'red--text' }"
+                    retain-focus-on-click
+                    plain
+                    @click="deleteItem(item)"
+                  >
+                    حذف آزمون
+                    <!--                    <v-icon-->
+                    <!--                        small-->
+                    <!--                    >-->
+                    <!--                      mdi-delete-->
+                    <!--                    </v-icon>-->
+                  </v-btn>
+                </v-list-item-title>
+              </v-list-item>
+            </v-list>
+          </v-menu>
+        </div>
         <v-tooltip top>
           <template v-slot:activator="{ on, attrs }">
             <v-btn
@@ -311,111 +394,6 @@
             </v-btn>
           </template>
           <span>مشاهده نتایج تمام شرکت کنندگان</span>
-        </v-tooltip>
-        <v-tooltip top>
-          <template v-slot:activator="{ on, attrs }">
-            <v-btn
-              class="mx-2"
-              fab
-              dark
-              x-small
-              color="green"
-              v-bind="attrs"
-              @click="generateJsonFile(item, false)"
-              v-on="on"
-            >
-              <v-icon
-                small
-              >
-                mdi-beaker
-              </v-icon>
-            </v-btn>
-          </template>
-          <span>ساخت فایل سوالات</span>
-        </v-tooltip>
-        <v-tooltip top>
-          <template v-slot:activator="{ on, attrs }">
-            <v-btn
-              class="mx-2"
-              fab
-              dark
-              x-small
-              color="yellow"
-              v-bind="attrs"
-              @click="generateJsonFile(item, true)"
-              v-on="on"
-            >
-              <v-icon
-                small
-              >
-                mdi-beaker-check
-              </v-icon>
-            </v-btn>
-          </template>
-          <span>ساخت فایل سوالات با جواب</span>
-        </v-tooltip>
-        <v-tooltip top>
-          <template v-slot:activator="{ on, attrs }">
-            <v-btn
-              class="mx-2"
-              fab
-              dark
-              x-small
-              color="orange"
-              v-bind="attrs"
-              @click="openUploadDialog(item.id)"
-              v-on="on"
-            >
-              <v-icon
-                small
-              >
-                mdi-cloud-upload
-              </v-icon>
-            </v-btn>
-          </template>
-          <span>آپلود فایل سوالات و جواب ها</span>
-        </v-tooltip>
-        <v-tooltip top>
-          <template v-slot:activator="{ on, attrs }">
-            <v-btn
-              class="mx-2"
-              fab
-              dark
-              x-small
-              color="orange"
-              v-bind="attrs"
-              :to="{ name: 'coefficient.edit', params: { exam_id: item.id } }"
-              v-on="on"
-            >
-              <v-icon
-                small
-              >
-                mdi-pencil
-              </v-icon>
-            </v-btn>
-          </template>
-          <span>اصلاح ضرایب</span>
-        </v-tooltip>
-        <v-tooltip top>
-          <template v-slot:activator="{ on, attrs }">
-            <v-btn
-              class="mx-2"
-              fab
-              dark
-              x-small
-              color="red"
-              v-bind="attrs"
-              @click="deleteItem(item)"
-              v-on="on"
-            >
-              <v-icon
-                small
-              >
-                mdi-delete
-              </v-icon>
-            </v-btn>
-          </template>
-          <span>حذف آزمون</span>
         </v-tooltip>
       </template>
     </v-data-table>
@@ -557,6 +535,18 @@
     }
 </script>
 
-<style scoped>
+<style lang="scss">
+.exam-list {
+  .theme--light.v-data-table > .v-data-table__wrapper > table > tbody > tr:not(:last-child) > td:last-child{
+    display: flex !important;
+    align-items: center !important;
+  }
+}
 
+</style>
+<style scoped>
+.theme--light.v-list-item:not(.v-list-item--active):not(.v-list-item--disabled) {
+  display: flex;
+  flex-direction: column;
+}
 </style>
