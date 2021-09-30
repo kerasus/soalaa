@@ -207,7 +207,10 @@
       <template v-slot:item.delay_time="{ item }">
         {{ item.delay_time }} دقیقه
       </template>
-      <template v-slot:item.options="{ item }" class="table-options">
+      <template
+        v-slot:item.options="{ item }"
+        class="table-options"
+      >
         <v-tooltip top>
           <template v-slot:activator="{ on, attrs }">
             <v-btn
@@ -242,12 +245,27 @@
                   <v-list-item>
                     <v-list-item-title>
                       <v-btn
-                          class="mx-2"
-                          depressed
-                          :ripple="{ class: 'red--text' }"
-                          retain-focus-on-click
-                          plain
-                          @click="selectExamReport(item)"
+                        class="mx-2"
+                        depressed
+                        :ripple="{ class: 'yellow--text' }"
+                        retain-focus-on-click
+                        plain
+                        @click="selectExam(item)"
+                      >
+                        ویرایش
+                        <!--                    <v-icon dark>-->
+                        <!--                      mdi-pencil-->
+                        <!--                    </v-icon>-->
+                      </v-btn>
+                    </v-list-item-title>
+                    <v-list-item-title>
+                      <v-btn
+                        class="mx-2"
+                        depressed
+                        :ripple="{ class: 'yellow--text' }"
+                        retain-focus-on-click
+                        plain
+                        @click="selectExamReport(item)"
                       >
                         ویرایش کارنامه
                         <!--                    <v-icon dark>-->
@@ -257,12 +275,13 @@
                     </v-list-item-title>
                     <v-list-item-title>
                       <v-btn
-                          class="mx-2"
-                          depressed
-                          :ripple="{ class: 'red--text' }"
-                          retain-focus-on-click
-                          plain
-                          :to="{ name: 'onlineQuiz.exams.lessons', params: { quizId: item.id}}"
+                        class="mx-2"
+                        depressed
+                        :ripple="{ class: 'yellow--text' }"
+                        retain-focus-on-click
+                        plain
+                        exact
+                        :to="{ name: 'onlineQuiz.exams.lessons', params: { quizId: item.id}}"
                       >
                         مشاهده تمام سوالات
                         <!--                    <v-icon-->
@@ -274,12 +293,12 @@
                     </v-list-item-title>
                     <v-list-item-title>
                       <v-btn
-                          class="mx-2"
-                          depressed
-                          :ripple="{ class: 'red--text' }"
-                          retain-focus-on-click
-                          plain
-                          @click="generateJsonFile(item, false)"
+                        class="mx-2"
+                        depressed
+                        :ripple="{ class: 'yellow--text' }"
+                        retain-focus-on-click
+                        plain
+                        @click="generateJsonFile(item, false)"
                       >
                         ساخت فایل سوالات
                         <!--                    <v-icon-->
@@ -291,12 +310,12 @@
                     </v-list-item-title>
                     <v-list-item-title>
                       <v-btn
-                          class="mx-2"
-                          depressed
-                          :ripple="{ class: 'red--text' }"
-                          retain-focus-on-click
-                          plain
-                          @click="generateJsonFile(item, true)"
+                        class="mx-2"
+                        depressed
+                        :ripple="{ class: 'yellow--text' }"
+                        retain-focus-on-click
+                        plain
+                        @click="generateJsonFile(item, true)"
                       >
                         ساخت فایل سوالات با جواب
                         <!--                    <v-icon-->
@@ -308,12 +327,12 @@
                     </v-list-item-title>
                     <v-list-item-title>
                       <v-btn
-                          class="mx-2"
-                          depressed
-                          :ripple="{ class: 'red--text' }"
-                          retain-focus-on-click
-                          plain
-                          @click="openUploadDialog(item.id)"
+                        class="mx-2"
+                        depressed
+                        :ripple="{ class: 'yellow--text' }"
+                        retain-focus-on-click
+                        plain
+                        @click="openUploadDialog(item.id)"
                       >
                         آپلود فایل سوالات و جواب ها
                         <!--                    <v-icon-->
@@ -325,12 +344,12 @@
                     </v-list-item-title>
                     <v-list-item-title>
                       <v-btn
-                          class="mx-2"
-                          depressed
-                          :ripple="{ class: 'red--text' }"
-                          retain-focus-on-click
-                          plain
-                          :to="{ name: 'coefficient.edit', params: { exam_id: item.id } }"
+                        class="mx-2"
+                        depressed
+                        :ripple="{ class: 'yellow--text' }"
+                        retain-focus-on-click
+                        plain
+                        :to="{ name: 'coefficient.edit', params: { exam_id: item.id } }"
                       >
                         اصلاح ضرایب
                         <!--                    <v-icon-->
@@ -342,12 +361,12 @@
                     </v-list-item-title>
                     <v-list-item-title>
                       <v-btn
-                          class="mx-2"
-                          depressed
-                          :ripple="{ class: 'red--text' }"
-                          retain-focus-on-click
-                          plain
-                          @click="deleteItem(item)"
+                        class="mx-2"
+                        depressed
+                        :ripple="{ class: 'yellow--text' }"
+                        retain-focus-on-click
+                        plain
+                        @click="deleteItem(item)"
                       >
                         حذف آزمون
                         <!--                    <v-icon-->
@@ -406,7 +425,7 @@
                     fab
                     dark
                     x-small
-                    color="purple"
+                    color="blue"
                     v-bind="attrs"
                     v-on="on"
                   >
@@ -421,17 +440,17 @@
                       <v-btn
                         class="mx-2"
                         depressed
-                        :ripple="{ class: 'red--text' }"
+                        :ripple="{ class: 'yellow--text' }"
                         retain-focus-on-click
                         plain
                         @click="goToResult(item)"
                       >
                         نتایج تمام شرکت کنندگان
-<!--                        <v-icon-->
-<!--                            small-->
-<!--                        >-->
-<!--                          mdi-clipboard-list-outline-->
-<!--                        </v-icon>-->
+                        <!--                        <v-icon-->
+                        <!--                            small-->
+                        <!--                        >-->
+                        <!--                          mdi-clipboard-list-outline-->
+                        <!--                        </v-icon>-->
                       </v-btn>
                     </v-list-item-title>
                   </v-list-item>
@@ -596,6 +615,10 @@
   flex-direction: column;
 }
 .v-list-item__title .v-btn:not(.v-btn--round).v-size--default{
-  margin: 10px 0;
+  margin: 10px 0 !important;
+  width: 100% !important;
+}
+.v-list-item .v-list-item__title {
+  width: 100% !important;
 }
 </style>
