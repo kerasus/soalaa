@@ -11,6 +11,7 @@
 import Vue from 'vue'
 import VueKatex from 'vue-katex'
 import 'katex/dist/katex.min.css'
+
 Vue.use(VueKatex, {
   globalOptions: {
     delimiters: [
@@ -67,6 +68,10 @@ export default {
 </script>
 
 <style lang="scss">
+  .mord {
+    font-family: IRANSans;
+  }
+
   #mathfield .ML__cmr,
   .katex .mtight {
     font-family: IRANSans;

@@ -767,3 +767,9 @@ export default {
   font-size: 16px;
 }
 </style>
+
+<style>
+.mord {
+  font-family: IRANSans;
+}
+</style>
