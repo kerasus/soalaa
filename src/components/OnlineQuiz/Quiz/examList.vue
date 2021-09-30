@@ -453,6 +453,17 @@
                         <!--                        </v-icon>-->
                       </v-btn>
                     </v-list-item-title>
+                    <v-list-item-title>
+                      <v-btn
+                        class="mx-2"
+                        depressed
+                        :ripple="{ class: 'yellow--text' }"
+                        retain-focus-on-click
+                        plain
+                      >
+                        کارنامه سرگروه
+                      </v-btn>
+                    </v-list-item-title>
                   </v-list-item>
                 </v-list>
               </v-menu>
