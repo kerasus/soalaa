@@ -410,8 +410,8 @@
                     v-bind="attrs"
                     v-on="on"
                   >
-                    <v-icon dark>
-                      mdi-pencil
+                    <v-icon small>
+                      mdi-clipboard-list-outline
                     </v-icon>
                   </v-btn>
                 </template>
@@ -427,9 +427,11 @@
                         @click="goToResult(item)"
                       >
                         نتایج تمام شرکت کنندگان
-                        <!--                    <v-icon dark>-->
-                        <!--                      mdi-pencil-->
-                        <!--                    </v-icon>-->
+<!--                        <v-icon-->
+<!--                            small-->
+<!--                        >-->
+<!--                          mdi-clipboard-list-outline-->
+<!--                        </v-icon>-->
                       </v-btn>
                     </v-list-item-title>
                   </v-list-item>
