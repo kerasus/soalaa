@@ -137,7 +137,7 @@
                 <v-data-table
                   :headers="lessonsResultsHeaders"
                   :items="lessonsResults"
-                  items-per-page="9999"
+                  :items-per-page="9999"
                   hide-default-footer
                 />
               </v-tab-item>
