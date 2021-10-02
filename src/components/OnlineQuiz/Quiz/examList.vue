@@ -625,6 +625,9 @@
   display: flex;
   flex-direction: column;
 }
+.v-list-item{
+  min-height: 0 !important;
+}
 .v-list-item__title .v-btn:not(.v-btn--round).v-size--default{
   margin: 10px 0 !important;
   width: 100% !important;
