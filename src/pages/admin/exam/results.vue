@@ -27,7 +27,7 @@
                     <template v-slot:default>
                       <thead v-if="results[0]">
                         <tr>
-                          <th colspan="4" />
+                          <th colspan="5" />
                           <th
                             v-for="(item, index) in results[0].sub_category"
                             :key="'headTitle_'+item.sub_category_order+'_'+index"
@@ -50,7 +50,9 @@
                           <th>
                             شهر
                           </th>
-                          <th />
+                          <th>
+                            مشاهده کارنامه
+                          </th>
                           <template
                             v-for="item in results[0].sub_category"
                           >
