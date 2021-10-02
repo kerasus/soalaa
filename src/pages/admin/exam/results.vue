@@ -1,6 +1,70 @@
 <template>
   <v-container>
     <v-row>
+      <v-col
+        md="3"
+        sm="3"
+        cols="12"
+      >
+        <div class="form-group m-form__group ">
+          <v-select
+            v-model="selectedGender"
+            :items="genders"
+            label="جنسیت"
+            item-text="title"
+            item-value="title"
+          />
+        </div>
+      </v-col>
+      <v-col
+        md="3"
+        sm="3"
+        cols="12"
+      >
+        <div class="form-group m-form__group ">
+          <v-autocomplete
+            v-model="selectedProvince"
+            label="استان"
+            :items="provinces"
+            item-text="title"
+            item-value="title"
+            no-data-text="داده ای یافت نشد"
+          />
+        </div>
+      </v-col>
+      <v-col
+        md="3"
+        sm="3"
+        cols="12"
+      >
+        <div class="form-group m-form__group">
+          <v-autocomplete
+            v-model="selectedCity"
+            label="شهر"
+            :items="citiesForSelectedProvince"
+            item-text="title"
+            item-value="title"
+            no-data-text="داده ای یافت نشد"
+          />
+        </div>
+      </v-col>
+      <v-col
+        md="3"
+        sm="3"
+        cols="12"
+        class="filter-btn"
+      >
+        <v-btn
+            rounded
+            color="primary"
+            width="120px"
+            @click="getData"
+        >
+          اعمال فیلتر
+        </v-btn>
+      </v-col>
+    </v-row>
+    <v-row>
       <v-col>
         <v-card>
           <v-tabs
@@ -123,10 +187,10 @@
                           </template>
                         </tr>
                       </tbody>
-                      <infinite-loading
-                        :key="lastLoadTime"
-                        @infinite="getData"
-                      />
+<!--                      <infinite-loading-->
+<!--                        :key="lastLoadTime"-->
+<!--                        @infinite="getData"-->
+<!--                      />-->
                     </template>
                   </v-simple-table>
                 </v-col>
@@ -149,18 +213,24 @@
 <script>
   import axios from 'axios'
   import API_ADDRESS from '@/api/Addresses'
-  import InfiniteLoading from 'vue-infinite-loading'
+  // import InfiniteLoading from 'vue-infinite-loading'
 
   export default {
     name: 'Results',
-    components: {
-      InfiniteLoading,
-    },
+    // components: {
+    //   InfiniteLoading,
+    // },
     data: () => {
       return {
+        selectedProvince: null,
+        selectedCity: null,
+        selectedGender :null,
+        provinces: [],
+        genders: [],
+        cities: [],
         results: [],
-          lessonsResults: [],
-          lessonsResultsHeaders: [
+        lessonsResults: [],
+        lessonsResultsHeaders: [
               { text: 'نام درس', value: 'sub_category'},
               { text: 'میانگین درصد', value: 'mean'},
               { text: 'میانگین درصد نفرات برتر', value: 'top_sub_category_participants_mean'},
@@ -170,52 +240,84 @@
           ],
         lastLoadTime: Date.now(),
         nextPage: '',
-          tabs: 'tab-1'
+        tabs: 'tab-1'
       }
     },
+    computed:{
+      citiesForSelectedProvince() {
+        if (this.selectedProvince) {
+          return this.cities.filter(item => item.province.title === this.selectedProvince)
+        }
+        return []
+      }
+    },
+    mounted: function () {
+      this.getData()
+    },
     methods: {
-      getData ($state) {
+      getFilterData() {
+        this.showLoading()
+        axios.get(API_ADDRESS.user.formData)
+            .then((resp) => {
+              this.genders = resp.data.data.genders
+              this.provinces = resp.data.data.provinces
+              this.cities = resp.data.data.cities
+              this.hideLoading()
+            })
+            .catch(() => {
+                  this.$notify({
+                    group: 'notifs',
+                    title: 'توجه!',
+                    text: 'مشکلی در گرفتن اطلاعات رخ داده است. لطفا دوباره امتحان کنید.',
+                    type: 'error'
+                  })
+                  this.hideLoading()
+                }
+            )
+      },
+      getData () {
+        this.getFilterData()
         this.showLoading()
         let that = this
-        axios.get(API_ADDRESS.exam.examReportIndex('participants') + that.nextPage, {
-          params: {
-            exam_id: that.$route.params.examId
-          }
+        axios.get('/exam-report/index/participants' ,{
+            "city": [this.selectedCity],
+            "province": [this.selectedProvince],
+            "gender": [this.selectedGender],
         })
         .then( response => {
           that.hideLoading()
+          console.log('get',response)
           that.results = that.results.concat(response.data.data)
           if(typeof response.data.links === 'undefined' || response.data.links.next === null) {
             that.nextPage = ''
-            $state.complete()
             return
           }
           that.nextPage = response.data.links.next.replace(response.data.meta.path, '')
-          $state.loaded()
           that.lastLoadTime = Date.now()
         })
         .catch( error => {
-            // that.$state.complete()
           that.lastLoadTime = Date.now()
           this.hideLoading()
           console.log('error', error)
         })
           if (!this.lessonsResults.length) {
-              axios.get(API_ADDRESS.exam.examReportIndex('lessons'), {
-                  params: {
-                      exam_id: that.$route.params.examId
-                  }
-              })
-                  .then((response) => {
-                      that.lessonsResults = response.data.data
+            axios.get('exam-report/index/participants' ,{
+                "city": [this.selectedCity],
+                "province": [this.selectedProvince],
+                "gender": [this.selectedGender],
+            })
+                .then((response) => {
+                  that.lessonsResults = response.data.data
                   })
           }
       },
       showLoading () {
         this.$store.commit('AppLayout/updateOverlay', { show: true, loading: true, text: ''})
+        console.log('true')
       },
       hideLoading () {
         this.$store.commit('AppLayout/updateOverlay', { show: false, loading: false, text: ''})
+        console.log('false')
       }
     }
   }
@@ -227,5 +329,8 @@
 }
 .bordered-left {
     border-left: solid 1px #d7d7d7;
+}
+.filter-btn{
+  margin: auto;
 }
 </style>
