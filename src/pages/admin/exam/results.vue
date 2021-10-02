@@ -279,7 +279,7 @@
         this.getFilterData()
         this.showLoading()
         let that = this
-        axios.get('/exam-report/index/participants' ,{
+        axios.get(API_ADDRESS.exam.examReportIndex('participants'),{
             "city": [this.selectedCity],
             "province": [this.selectedProvince],
             "gender": [this.selectedGender],
@@ -300,16 +300,16 @@
           this.hideLoading()
           console.log('error', error)
         })
-          if (!this.lessonsResults.length) {
-            axios.get('exam-report/index/participants' ,{
-                "city": [this.selectedCity],
-                "province": [this.selectedProvince],
-                "gender": [this.selectedGender],
-            })
-                .then((response) => {
-                  that.lessonsResults = response.data.data
-                  })
-          }
+          // if (!this.lessonsResults.length) {
+          //   axios.get('exam-report/index/participants' ,{
+          //       "city": [this.selectedCity],
+          //       "province": [this.selectedProvince],
+          //       "gender": [this.selectedGender],
+          //   })
+          //       .then((response) => {
+          //         that.lessonsResults = response.data.data
+          //         })
+          // }
       },
       showLoading () {
         this.$store.commit('AppLayout/updateOverlay', { show: true, loading: true, text: ''})
