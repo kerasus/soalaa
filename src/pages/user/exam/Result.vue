@@ -2,56 +2,56 @@
   <v-container fluid>
     <v-row class="d-flex justify-center">
       <v-col>
-        <info />
+        <info/>
       </v-col>
     </v-row>
     <v-row class="d-flex justify-center">
       <v-col>
         <v-card
-          elevation="0"
-          class="infoCard align-content-center"
+            elevation="0"
+            class="infoCard align-content-center"
         >
           <v-row style="height: 50% ;margin: inherit;">
             <v-col
-              xl="3"
-              sm="6"
-              cols="12"
-              class="exam-title"
+                xl="3"
+                sm="6"
+                cols="12"
+                class="exam-title"
             >
               نتیجه
               {{ quiz.title }}
               سه آ
             </v-col>
             <v-col
-              v-if="report"
-              xl="1"
-              sm="3"
-              cols="6"
+                v-if="report"
+                xl="1"
+                sm="3"
+                cols="6"
             >
               شهر:
               {{ report.location.city }}
             </v-col>
             <v-col
-              v-if="report"
-              xl="1"
-              sm="3"
-              cols="6"
+                v-if="report"
+                xl="1"
+                sm="3"
+                cols="6"
             >
               استان:
               {{ report.location.province }}
             </v-col>
             <v-col
-              xl="7"
-              cols="12"
-              :style="{ padding: '0 12px' }"
+                xl="7"
+                cols="12"
+                :style="{ padding: '0 12px' }"
             >
               <v-tabs
-                v-model="tab"
-                color="#ffc107"
-                center-active
-                show-arrows
+                  v-model="tab"
+                  color="#ffc107"
+                  center-active
+                  show-arrows
               >
-                <v-tabs-slider color="yellow" />
+                <v-tabs-slider color="yellow"/>
                 <v-tab>کارنامه</v-tab>
                 <v-tab>تخمین رتبه</v-tab>
                 <v-tab>ریزدرس ها</v-tab>
@@ -68,18 +68,18 @@
       <v-col>
         <v-tabs-items v-model="tab">
           <v-tab-item>
-            <PersonalResult :report="report" />
+            <PersonalResult :report="report"/>
           </v-tab-item>
           <v-tab-item>
-            <takhmin-rotbe :report="report" />
+            <takhmin-rotbe :report="report"/>
           </v-tab-item>
           <v-tab-item>
-            <StatisticResult :report="report" />
+            <StatisticResult :report="report"/>
           </v-tab-item>
           <v-tab-item>
             <BubbleSheet
-              :info="{ type: 'pasokh-nameh' }"
-              delay-time="0"
+                :info="{ type: 'pasokh-nameh' }"
+                delay-time="0"
             />
           </v-tab-item>
           <v-tab-item>
@@ -89,14 +89,14 @@
               </p>
               <div v-if="report">
                 <v-row
-                  v-for="(item, index) in report.exams_booklet"
-                  :key="index"
-                  class="download-row"
+                    v-for="(item, index) in report.exams_booklet"
+                    :key="index"
+                    class="download-row"
                 >
                   <v-col md="6">
                     <div
-                      v-if="item.descriptive_answers_url"
-                      class="download-box"
+                        v-if="item.descriptive_answers_url"
+                        class="download-box"
                     >
                       <p class="download-title">
                         دانلود پاسخنامه تشریحی {{
@@ -104,12 +104,12 @@
                         }}
                       </p>
                       <v-btn
-                        outlined
-                        color="--primary-2"
-                        height="75px"
-                        width="250px"
-                        :href="item.descriptive_answers_url"
-                        target="_blank"
+                          outlined
+                          color="--primary-2"
+                          height="75px"
+                          width="250px"
+                          :href="item.descriptive_answers_url"
+                          target="_blank"
                       >
                         دانلود فایل PDF
                         <v-icon class="donwload-icon">
@@ -120,19 +120,19 @@
                   </v-col>
                   <v-col md="6">
                     <div
-                      v-if="item.questions_url"
-                      class="download-box"
+                        v-if="item.questions_url"
+                        class="download-box"
                     >
                       <p class="download-title">
                         دانلود سوالات {{ item.title }}
                       </p>
                       <v-btn
-                        outlined
-                        color="--primary-2"
-                        height="75px"
-                        width="250px"
-                        :href="item.questions_url"
-                        target="_blank"
+                          outlined
+                          color="--primary-2"
+                          height="75px"
+                          width="250px"
+                          :href="item.questions_url"
+                          target="_blank"
                       >
                         دانلود فایل PDF
                         <v-icon class="donwload-icon">
@@ -147,38 +147,38 @@
           </v-tab-item>
           <v-tab-item class="video-tab">
             <v-tabs
-              v-if="report"
-              color="#ffc107"
-              :vertical="windowSize.x > 960"
-              center-active
-              show-arrows
-              grow
-              @change="onVideoTabChange"
+                v-if="report"
+                color="#ffc107"
+                :vertical="windowSize.x > 960"
+                center-active
+                show-arrows
+                grow
+                @change="onVideoTabChange"
             >
-              <v-tabs-slider :color="windowSize.x > 960 ? 'transparent' : 'yellow'" />
+              <v-tabs-slider :color="windowSize.x > 960 ? 'transparent' : 'yellow'"/>
               <v-tab
-                v-for="(item, index) in report.sub_category"
-                :key="index"
+                  v-for="(item, index) in report.sub_category"
+                  :key="index"
               >
                 {{ item.sub_category }}
               </v-tab>
               <v-tab-item
-                v-for="(item, index) in report.sub_category"
-                :key="item.sub_category"
-                class="pt-5"
+                  v-for="(item, index) in report.sub_category"
+                  :key="item.sub_category"
+                  class="pt-5"
               >
                 <v-alert
-                  v-if="!currentVideo"
-                  dense
-                  outlined
-                  text
-                  type="info"
+                    v-if="!currentVideo"
+                    dense
+                    outlined
+                    text
+                    type="info"
                 >
                   منتشر نشده
                 </v-alert>
                 <v-alert
-                  v-if="currentVideo"
-                  class="text-center"
+                    v-if="currentVideo"
+                    class="text-center"
                 >
                   {{ currentVideo.title }}
                 </v-alert>
@@ -188,30 +188,30 @@
                   <v-col>
                     <v-row no-gutters>
                       <v-col
-                        md="3"
-                        class="vjs-playlist"
-                        :style="{ height: timepointsHeights+'px'}"
+                          md="3"
+                          class="vjs-playlist"
+                          :style="{ height: timepointsHeights+'px'}"
                       >
                         <v-card
-                          class="mx-auto"
-                          tile
+                            class="mx-auto"
+                            tile
                         >
                           <v-list
-                            dense
-                            shaped
+                              dense
+                              shaped
                           >
                             <v-subheader>زمان کوب ها</v-subheader>
                             <v-list-item-group
-                              v-model="selectedTimepoint"
-                              color="primary"
+                                v-model="selectedTimepoint"
+                                color="primary"
                             >
                               <v-list-item
-                                v-for="(currentVideoItem, i) in currentVideo.timepoints"
-                                :key="i"
+                                  v-for="(currentVideoItem, i) in currentVideo.timepoints"
+                                  :key="i"
                               >
                                 <v-list-item-content>
                                   <v-list-item-title
-                                    v-text="currentVideoItem.title"
+                                      v-text="currentVideoItem.title"
                                   />
                                 </v-list-item-content>
                               </v-list-item>
@@ -221,8 +221,8 @@
                       </v-col>
                       <v-col md="9">
                         <video
-                          :ref="'videoPlayer'+index"
-                          class="video-js vjs-default-skin vjs-16-9 vjs-fluid"
+                            :ref="'videoPlayer'+index"
+                            class="video-js vjs-default-skin vjs-16-9 vjs-fluid"
                         />
                       </v-col>
                     </v-row>
@@ -231,16 +231,16 @@
                 <v-row v-if="currentVideo">
                   <v-col>
                     <div
-                      class="d-flex flex-row justify-center"
-                      dir="ltr"
+                        class="d-flex flex-row justify-center"
+                        dir="ltr"
                     >
                       <v-btn
-                        v-for="(video, alaaVideoIndex) in alaaVideos"
-                        :key="alaaVideoIndex"
-                        outlined
-                        icon
-                        :style="{ margin: '0 5px' }"
-                        @click="getContent(video.id)"
+                          v-for="(video, alaaVideoIndex) in alaaVideos"
+                          :key="alaaVideoIndex"
+                          outlined
+                          icon
+                          :style="{ margin: '0 5px' }"
+                          @click="getContent(video.id)"
                       >
                         {{ alaaVideoIndex + 1 }}
                       </v-btn>
