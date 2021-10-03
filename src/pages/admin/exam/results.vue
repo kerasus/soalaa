@@ -279,17 +279,19 @@
         this.getFilterData()
         this.showLoading()
         let that = this
-        axios.get(API_ADDRESS.exam.examReportIndex('participants'), {
+        axios.get(API_ADDRESS.exam.examReportIndex('participants') + that.nextPage, {
           params:{
             "city": [this.selectedCity],
             "province": [this.selectedProvince],
             "gender": [this.selectedGender],
-            exam_id: that.$route.params.examId
+            // exam_id: that.$route.params.examId
           }
         })
         .then( response => {
           that.hideLoading()
-          that.results = that.results.concat(response.data.data)
+          if (response.data.data){
+            that.results = that.results.concat(response.data.data)
+          }
           if(typeof response.data.links === 'undefined' || response.data.links.next === null) {
             that.nextPage = ''
             return
