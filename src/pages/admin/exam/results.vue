@@ -27,7 +27,7 @@
                     <template v-slot:default>
                       <thead v-if="results[0]">
                         <tr>
-                          <th colspan="4" />
+                          <th colspan="5" />
                           <th
                             v-for="(item, index) in results[0].sub_category"
                             :key="'headTitle_'+item.sub_category_order+'_'+index"
@@ -50,21 +50,23 @@
                           <th>
                             شهر
                           </th>
-                          <th />
+                          <th>
+                            مشاهده کارنامه
+                          </th>
                           <template
-                            v-for="item in results[0].sub_category"
+                            v-for="(item, index) in results[0].sub_category"
                           >
                             <th
-                              :key="'headColumns_percent_'+item.sub_category_order"
+                              :key="'headColumns_percent_'+item.sub_category_order + '-' + index"
                               class="bordered-right"
                             >
                               درصد
                             </th>
-                            <th :key="'headColumns_taraz_'+item.sub_category_order">
+                            <th :key="'headColumns_taraz_'+item.sub_category_order + '-' + index">
                               تراز
                             </th>
                             <th
-                              :key="'headColumns_rank_'+item.sub_category_order"
+                              :key="'headColumns_rank_'+item.sub_category_order + '-' + index"
                               class="bordered-left"
                             >
                               رتبه
@@ -135,6 +137,7 @@
                 <v-data-table
                   :headers="lessonsResultsHeaders"
                   :items="lessonsResults"
+                  :items-per-page="9999"
                   hide-default-footer
                 />
               </v-tab-item>
