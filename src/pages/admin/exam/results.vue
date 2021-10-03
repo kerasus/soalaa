@@ -55,10 +55,10 @@
         class="filter-btn"
       >
         <v-btn
-            rounded
-            color="primary"
-            width="120px"
-            @click="getData"
+          rounded
+          color="primary"
+          width="120px"
+          @click="getData"
         >
           اعمال فیلتر
         </v-btn>
@@ -187,10 +187,10 @@
                           </template>
                         </tr>
                       </tbody>
-<!--                      <infinite-loading-->
-<!--                        :key="lastLoadTime"-->
-<!--                        @infinite="getData"-->
-<!--                      />-->
+                      <infinite-loading
+                        :key="lastLoadTime"
+                        @infinite="getData"
+                      />
                     </template>
                   </v-simple-table>
                 </v-col>
@@ -213,13 +213,13 @@
 <script>
   import axios from 'axios'
   import API_ADDRESS from '@/api/Addresses'
-  // import InfiniteLoading from 'vue-infinite-loading'
+  import InfiniteLoading from 'vue-infinite-loading'
 
   export default {
     name: 'Results',
-    // components: {
-    //   InfiniteLoading,
-    // },
+    components: {
+      InfiniteLoading,
+    },
     data: () => {
       return {
         selectedProvince: null,
@@ -280,15 +280,15 @@
         this.showLoading()
         let that = this
         axios.get(API_ADDRESS.exam.examReportIndex('participants'), {
-          params: {
+          params:{
             "city": [this.selectedCity],
             "province": [this.selectedProvince],
             "gender": [this.selectedGender],
+            exam_id: that.$route.params.examId
           }
         })
         .then( response => {
           that.hideLoading()
-          console.log('get',response)
           that.results = that.results.concat(response.data.data)
           if(typeof response.data.links === 'undefined' || response.data.links.next === null) {
             that.nextPage = ''
@@ -297,8 +297,7 @@
           that.nextPage = response.data.links.next.replace(response.data.meta.path, '')
           that.lastLoadTime = Date.now()
         })
-        .catch(
-            error => {
+        .catch(error => {
           that.lastLoadTime = Date.now()
           this.hideLoading()
           console.log('error', error)
@@ -310,7 +309,9 @@
             }
           })
               .then((response) => {
-                that.lessonsResults = response.data.data
+                if (response.data.data){
+                  that.lessonsResults = response.data.data
+                }
               })
         }
       },
@@ -323,6 +324,7 @@
     }
   }
 </script>
+
 
 <style scoped>
 .bordered-right {
