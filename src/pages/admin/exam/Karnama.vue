@@ -6,16 +6,18 @@
     <div class="text-center">
       <v-dialog
         v-model="dialog"
-        width="500"
+        class="chart-dialog "
+        width="1200"
       >
         <v-card-title class="text-h5 grey lighten-2">
-          Privacy Policy
           <v-btn
             color="red"
-            text
+            icon
             @click="dialog = false"
           >
-            close
+            <v-icon :size="24">
+              mdi-close
+            </v-icon>
           </v-btn>
         </v-card-title>
         <v-divider />
@@ -84,8 +86,25 @@
             :exam-id="$route.params.quizId"
             :sub-category="quizData.sub_categories"
             @inView="test"
-          />
+          >
+            <template
+              v-slot:chartDetail
+            >
+              <div class="answer-detail">
+                <div class="d-flex ml-3">
+                  <p>تعداد پاسخ صحیح :</p> 15   (40%)
+                </div>
+                <div class="d-flex">
+                  <p>تعداد پاسخ غلط :</p> 7 (28%)
+                </div>
+                <div class="d-flex">
+                  <p>پاسخ داده نشده :</p> 3 (12%)
+                </div>
+              </div>
+            </template>
+          </Item>
         </template>
+        <v-divider />
       </DynamicScroller>
     </div>
   </v-container>
@@ -114,65 +133,50 @@ export default {
   mixins: [mixinAuth, mixinQuiz, mixinWindowSize],
   data: () => ({
 
-    chartOptions:  {
-
-      title: {
-        text: 'نتایج '
+    chartOptions: {
+      chart: {
+        type: 'column'
       },
-
+      title: {
+        text: 'سؤالات'
+      },
+      xAxis: {
+        categories: [],
+        crosshair: true
+      },
       yAxis: {
+        min: 0,
         title: {
           text:'نتایج بر حسب درصد هستند'
         }
       },
-
-      xAxis: {
-        accessibility: {
-          rangeDescription: 'سؤالات'
-        }
+      tooltip: {
+        headerFormat: '<span style="font-size:12px">{point.key} سؤال</span><table>',
+        pointFormat: '<tr><td style="color:{series.color};padding:0">{series.name}: </td>' +
+            '<td style="padding:0"><b>{point.y:.1f} % </b></td></tr>',
+        footerFormat: '</table>',
+        shared: true,
+        useHTML: true
       },
-
-      legend: {
-        layout: 'vertical',
-        align: 'right',
-        verticalAlign: 'middle'
-      },
-
       plotOptions: {
-        series: {
-          label: {
-            connectorAllowed: true
-          },
-          pointStart: 2010
+        column: {
+          pointPadding: 0.2,
+          borderWidth: 0
         }
       },
-
       series: [{
         name: 'پاسخ صحیح',
-        data: [43934, 52503, 57177, 69658, 97031, 119931, 137133, 154175]
+        color: '#0ec975',
+        data: []
       }, {
         name: 'پاسخ غلط',
-        data: [24916, 24064, 29742, 29851, 32490, 30282, 38121, 40434]
+        color: '#ff4952',
+        data: []
       }, {
-        name: ' نزده',
-        data: [11744, 17722, 16005, 19771, 20185, 24377, 32147, 39387]
-      }],
-
-      responsive: {
-        rules: [{
-          condition: {
-            maxWidth: 500
-          },
-          chartOptions: {
-            legend: {
-              layout: 'horizontal',
-              align: 'center',
-              verticalAlign: 'bottom'
-            }
-          }
-        }]
-      }
-
+        name: 'نزده',
+        color: '#6aaeee',
+        data: []
+      }]
     },
 
 
@@ -205,6 +209,8 @@ export default {
   }),
   computed: {
     filteredQuestions () {
+     // console.log('this.questionFilterMethod in computed--------------- :',this.questionFilterMethod)
+     // console.log(' this.quizData.questions.list in computed--------------- :',this.quizData.questions.list)
       if (this.questionFilterMethod === 'not-confirmed-at-all') {
         return this.quizData.questions.list.filter(item => item.confirmers.length === 0)
       } else if (this.questionFilterMethod === 'not-confirmed-by-me') {
@@ -284,8 +290,11 @@ export default {
       console.log(value)
     },
     loadSubCategories (quizResponse, reload) {
+     // console.log('quizResponse in loadSubCategories:',quizResponse)
       const that = this
+    //  console.log(' this.subCategoriesList :', this.subCategoriesList)
       this.subCategoriesList.fetch().then((response) => {
+       // console.log('response after fetch :',response)
         if (reload) {
           this.$notify({
             group: 'notifs',
@@ -301,6 +310,17 @@ export default {
         that.quizData.questions = new QuestionList(questions)
         // that.quiz = new Exam(that.quizData)
         that.QuIzDaTa = new Exam(that.quizData)
+        this.cartData()
+      })
+    },
+    cartData() {
+     let list = this.quizData.questions.list
+      list.forEach((item , index)=>{
+        this.chartOptions.xAxis.categories.push(index+1)
+        this.chartOptions.series[0].data.push( Math.trunc(Math.random()*100))
+        this.chartOptions.series[1].data.push( Math.trunc(Math.random()*100))
+        this.chartOptions.series[2].data.push( Math.trunc(Math.random()*100))
+
       })
     },
     loadQuizDataAndSubCategories (reload = false) {
@@ -309,6 +329,7 @@ export default {
         sub_categories: [this.$route.params.lessonId]
       })
           .then((response) => {
+           // console.log('response in loadQuizDataAndSubCategories :',response)
             if (response.data.data.length) {
               that.loadSubCategories(response, reload)
             } else {
@@ -323,8 +344,8 @@ export default {
 </script>
 
 <style>
-.test{
-  background-color: red;
+.chart-dialog{
+  width:800px;
 }
 .konkoor-view strong em strong {
   display: none;
@@ -359,6 +380,9 @@ export default {
 </style>
 
 <style scoped>
+.answer-detail{
+  float: left;
+}
 .questions-list {
   margin-bottom: 0;
 }

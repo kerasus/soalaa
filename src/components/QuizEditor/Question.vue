@@ -22,7 +22,8 @@
         </v-chip>
       </v-col>
     </v-row>
-    <div class="buttons-group">
+
+    <div class="d-flex buttons-group">
       <v-select
         v-if="false"
         :items="quizList.list"
@@ -40,7 +41,7 @@
         @click="deleteQuestion()"
       >
         <v-icon :size="24">
-          mdi-close 
+          mdi-close
         </v-icon>
       </v-btn>
       <v-btn
@@ -80,6 +81,9 @@
         @change="confirmQuestion"
       />
     </div>
+    <slot
+      name="chartDetail"
+    />
     <!--ToDo: remove span-->
     <span
       :id="'question' + source.id"
@@ -93,7 +97,7 @@
       :class="{ ltr: isLtr }"
     >
       <vue-katex
-        :input="(getQuestionNumberFromId(source.id)) + '(' + getSubCategoryName + ')' + ' (' + source.order + ') - ' + source.statement"
+        :input="'(' + getSubCategoryName + ')' + ' (' + source.order + ') - ' + source.statement"
       />
     </span>
     <v-row class="choices">
@@ -359,7 +363,6 @@ export default {
 .current-question {
   background-color: #fffaee;
 }
-
 .choices {
   display: flex;
   flex-direction: row;
@@ -372,9 +375,9 @@ export default {
 
 .buttons-group {
   float: left;
-  display: flex;
-  flex-direction: row;
-  justify-content: space-around;
+  /*display: flex;*/
+  /*flex-direction: row;*/
+  /*justify-content: space-around;*/
 }
 
 .choice.active::before {
