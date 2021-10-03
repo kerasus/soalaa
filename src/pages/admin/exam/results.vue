@@ -279,10 +279,12 @@
         this.getFilterData()
         this.showLoading()
         let that = this
-        axios.get(API_ADDRESS.exam.examReportIndex('participants'),{
+        axios.get(API_ADDRESS.exam.examReportIndex('participants'), {
+          params: {
             "city": [this.selectedCity],
             "province": [this.selectedProvince],
             "gender": [this.selectedGender],
+          }
         })
         .then( response => {
           that.hideLoading()
@@ -295,29 +297,28 @@
           that.nextPage = response.data.links.next.replace(response.data.meta.path, '')
           that.lastLoadTime = Date.now()
         })
-        .catch( error => {
+        .catch(
+            error => {
           that.lastLoadTime = Date.now()
           this.hideLoading()
           console.log('error', error)
         })
-          // if (!this.lessonsResults.length) {
-          //   axios.get('exam-report/index/participants' ,{
-          //       "city": [this.selectedCity],
-          //       "province": [this.selectedProvince],
-          //       "gender": [this.selectedGender],
-          //   })
-          //       .then((response) => {
-          //         that.lessonsResults = response.data.data
-          //         })
-          // }
+        if (!this.lessonsResults.length) {
+          axios.get(API_ADDRESS.exam.examReportIndex('lessons'), {
+            params: {
+              exam_id: that.$route.params.examId
+            }
+          })
+              .then((response) => {
+                that.lessonsResults = response.data.data
+              })
+        }
       },
       showLoading () {
         this.$store.commit('AppLayout/updateOverlay', { show: true, loading: true, text: ''})
-        console.log('true')
       },
       hideLoading () {
         this.$store.commit('AppLayout/updateOverlay', { show: false, loading: false, text: ''})
-        console.log('false')
       }
     }
   }
