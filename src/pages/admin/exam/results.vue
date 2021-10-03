@@ -281,10 +281,10 @@
         let that = this
         axios.get(API_ADDRESS.exam.examReportIndex('participants') + that.nextPage, {
           params:{
-            "city": [this.selectedCity],
-            "province": [this.selectedProvince],
-            "gender": [this.selectedGender],
-            // exam_id: that.$route.params.examId
+            ...(this.selectedCity && {"city": [this.selectedCity]}),
+            ...(this.selectedProvince&& {"province": [this.selectedProvince]}),
+            ...(this.selectedGender && {"gender": [this.selectedGender]}),
+            exam_id: that.$route.params.examId
           }
         })
         .then( response => {
