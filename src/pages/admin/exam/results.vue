@@ -279,7 +279,7 @@
                 }
             )
       },
-      getData () {
+      getData ($state) {
         this.showLoading()
         let that = this
         axios.get(API_ADDRESS.exam.examReportIndex('participants') + that.nextPage, {
@@ -298,6 +298,7 @@
 
           if(typeof response.data.links === 'undefined' || response.data.links.next === null) {
             that.nextPage = ''
+            $state.complete()
             return
           }
           that.nextPage = response.data.links.next.replace(response.data.meta.path, '')
