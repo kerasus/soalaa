@@ -58,7 +58,7 @@
           rounded
           color="primary"
           width="120px"
-          @click="getData"
+          @click="DoFilter"
         >
           اعمال فیلتر
         </v-btn>
@@ -255,10 +255,11 @@
       }
     },
     mounted: function () {
+      this.getFiltersData()
       this.getData()
     },
     methods: {
-      getFilterData() {
+      getFiltersData() {
         this.showLoading()
         axios.get(API_ADDRESS.user.formData)
             .then((resp) => {
@@ -279,14 +280,13 @@
             )
       },
       getData () {
-        this.getFilterData()
         this.showLoading()
         let that = this
         axios.get(API_ADDRESS.exam.examReportIndex('participants') + that.nextPage, {
           params:{
-            ...(this.selectedCity && {"city": [this.selectedCity]}),
-            ...(this.selectedProvince&& {"province": [this.selectedProvince]}),
-            ...(this.selectedGender && {"gender": [this.selectedGender]}),
+            ...(that.selectedCity && {"city": [that.selectedCity]}),
+            ...(that.selectedProvince&& {"province": [that.selectedProvince]}),
+            ...(this.selectedGender && {"gender": [that.selectedGender]}),
             exam_id: that.$route.params.examId
           }
         })
@@ -295,34 +295,47 @@
           if (response.data.data){
             that.results = that.results.concat(response.data.data)
           }
+
           if(typeof response.data.links === 'undefined' || response.data.links.next === null) {
             that.nextPage = ''
             return
           }
           that.nextPage = response.data.links.next.replace(response.data.meta.path, '')
           that.lastLoadTime = Date.now()
+
         })
         .catch(error => {
           that.lastLoadTime = Date.now()
-          this.hideLoading()
+          that.hideLoading()
           console.log('error', error)
         })
+        that.getLessonResultData ()
+      },
+
+      getLessonResultData (){
         if (!this.lessonsResults.length) {
           axios.get(API_ADDRESS.exam.examReportIndex('lessons'), {
             params: {
-              exam_id: that.$route.params.examId
+              exam_id: this.$route.params.examId
             }
           })
-              .then((response) => {
-                if (response.data.data){
-                  that.lessonsResults = response.data.data
-                }
-              })
+            .then((response) => {
+              if (response.data.data){
+              this.lessonsResults = response.data.data
+              }
+            })
         }
       },
+
+      DoFilter (){
+        this.results = []
+        this.getData()
+      },
+
       showLoading () {
         this.$store.commit('AppLayout/updateOverlay', { show: true, loading: true, text: ''})
       },
+
       hideLoading () {
         this.$store.commit('AppLayout/updateOverlay', { show: false, loading: false, text: ''})
       }
