@@ -1,6 +1,5 @@
 <template>
   <v-row>
-    <!--    <h1> exam chartttttttttttt list</h1>-->
     <v-col cols="12 ">
       <div class="tableSize">
         <span>{{ $route.params.quizTitle }}</span>
@@ -58,28 +57,6 @@
                     </v-btn>
                   </template>
                   <span>مشاهده سوالات درس</span>
-                </v-tooltip>
-                <v-tooltip top>
-                  <template v-slot:activator="{ on, attrs }">
-                    <v-btn
-                      v-if="item.permissions.view"
-                      class="mx-2"
-                      fab
-                      dark
-                      x-small
-                      color="primary"
-                      :to="{ name: 'video.set', params: { exam_id: $route.params.quizId, subcategory_id: item.id, exam_title: $route.params.quizTitle}}"
-                      v-bind="attrs"
-                      v-on="on"
-                    >
-                      <v-icon
-                        small
-                      >
-                        mdi-video
-                      </v-icon>
-                    </v-btn>
-                  </template>
-                  <span>ثبت ویدئو تحلیل</span>
                 </v-tooltip>
               </td>
             </tr>
