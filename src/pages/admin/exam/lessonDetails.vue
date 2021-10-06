@@ -5,6 +5,7 @@
     :fluid="true"
     :style="{ height: '100%', background: 'rgb(244, 244, 244)' }"
   >
+    <!--    <h1>page lesson detaile</h1>-->
     <div
       @mousemove="resizing"
       @mouseup="endResize"
@@ -59,7 +60,10 @@
             </v-btn>
           </v-btn-toggle>
           <v-spacer />
-          <v-btn icon @click="reload">
+          <v-btn
+            icon
+            @click="reload"
+          >
             <v-icon>mdi-reload</v-icon>
           </v-btn>
         </v-toolbar>
