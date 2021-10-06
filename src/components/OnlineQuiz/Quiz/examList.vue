@@ -457,6 +457,7 @@
                       <v-btn
                         class="mx-2"
                         depressed
+                        :to="{ name: 'onlineQuiz.exams.lessons.lists', params: { quizId: item.id, quizTitle: item.title}}"
                         :ripple="{ class: 'yellow--text' }"
                         retain-focus-on-click
                         plain
@@ -624,6 +625,9 @@
 .theme--light.v-list-item:not(.v-list-item--active):not(.v-list-item--disabled) {
   display: flex;
   flex-direction: column;
+}
+.v-list-item{
+  min-height: 0 !important;
 }
 .v-list-item__title .v-btn:not(.v-btn--round).v-size--default{
   margin: 10px 0 !important;

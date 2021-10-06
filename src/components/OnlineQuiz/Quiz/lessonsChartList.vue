@@ -1,6 +1,6 @@
 <template>
   <v-row>
-    <!--    <h1> exam list</h1>-->
+    <!--    <h1> exam chartttttttttttt list</h1>-->
     <v-col cols="12 ">
       <div class="tableSize">
         <span>{{ $route.params.quizTitle }}</span>
@@ -46,7 +46,7 @@
                       dark
                       x-small
                       color="green"
-                      :to="{ name: 'onlineQuiz.exams.lessons.details', params: { quizId: $route.params.quizId, lessonId: item.id}}"
+                      :to="{ name: 'onlineQuiz.exams.lessons.Karnama', params: { quizId: $route.params.quizId, lessonId: item.id}}"
                       v-bind="attrs"
                       v-on="on"
                     >
@@ -91,55 +91,55 @@
 </template>
 
 <script>
-    import axios from "axios";
-    import API_ADDRESS from "@/api/Addresses";
-    import {QuestSubcategoryList} from "@/models/QuestSubcategory";
+import axios from "axios";
+import API_ADDRESS from "@/api/Addresses";
+import {QuestSubcategoryList} from "@/models/QuestSubcategory";
 
-    export default {
-        name: 'LessonsList',
-        data: () => ({
-            lessonsList: new QuestSubcategoryList()
-        }),
-        created() {
-            this.$store.commit('AppLayout/updateDrawer', true)
-        },
-        mounted() {
-            this.getLessons()
-        },
-        methods: {
-            goBack() {
-                this.$router.push('/onlineQuiz/exams')
-            },
-            getLessons() {
-                this.lessonsList.loading = true
-                axios.get(API_ADDRESS.exam.getSubCategoriesWithPermissions(this.$route.params.quizId))
-                    .then((response) => {
-                        this.lessonsList.loading = false
-                        this.lessonsList = new QuestSubcategoryList(response.data.data, {
-                            meta: response.data.meta,
-                            links: response.data.links
-                        })
-                    })
-                    .catch(() => {
-                        this.lessonsList.loading = false
-                        this.lessonsList = new QuestSubcategoryList()
-                    })
-            }
-        }
+export default {
+  name: 'LessonsChartList',
+  data: () => ({
+    lessonsList: new QuestSubcategoryList()
+  }),
+  created() {
+    this.$store.commit('AppLayout/updateDrawer', true)
+  },
+  mounted() {
+    this.getLessons()
+  },
+  methods: {
+    goBack() {
+      this.$router.push('/onlineQuiz/exams')
+    },
+    getLessons() {
+      this.lessonsList.loading = true
+      axios.get(API_ADDRESS.exam.getSubCategoriesWithPermissions(this.$route.params.quizId))
+          .then((response) => {
+            this.lessonsList.loading = false
+            this.lessonsList = new QuestSubcategoryList(response.data.data, {
+              meta: response.data.meta,
+              links: response.data.links
+            })
+          })
+          .catch(() => {
+            this.lessonsList.loading = false
+            this.lessonsList = new QuestSubcategoryList()
+          })
     }
+  }
+}
 </script>
 
 <style scoped>
-    .actionsColumn {
-        width: 50%;
-    }
+.actionsColumn {
+  width: 50%;
+}
 
-    .tableSize {
-        width: 40%;
-        margin: auto
-    }
+.tableSize {
+  width: 40%;
+  margin: auto
+}
 
-    .backBtnPosition {
-        float: left
-    }
+.backBtnPosition {
+  float: left
+}
 </style>
