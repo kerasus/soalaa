@@ -5,7 +5,6 @@
     :fluid="true"
     :style="{ height: '100%', background: 'rgb(244, 244, 244)' }"
   >
-    <!--    <h1>page lesson detaile</h1>-->
     <div
       @mousemove="resizing"
       @mouseup="endResize"

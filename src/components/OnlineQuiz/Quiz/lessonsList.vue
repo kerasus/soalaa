@@ -1,6 +1,5 @@
 <template>
   <v-row>
-    <!--    <h1> exam list</h1>-->
     <v-col cols="12 ">
       <div class="tableSize">
         <span>{{ $route.params.quizTitle }}</span>

@@ -1,6 +1,5 @@
 <template>
   <div>
-    <h1> lessonnnnnnnnnnnnnnnnnnn karnama</h1>
     <lessons-chart-list />
   </div>
 </template>
