@@ -71,8 +71,8 @@ module.exports = configure(function (ctx) {
       // "chain" is a webpack-chain object https://github.com/neutrinojs/webpack-chain
       chainWebpack (chain) {
         const hashh = '[id].[name].[chunkhash]'
-        chain.output.filename('js/[name]/'+hashh+'.bundle.js')
-        chain.output.chunkFilename('js/[name]/'+hashh+'.chunk.js')
+        chain.output.filename('js/[name]/' + hashh + '.bundle.js')
+        chain.output.chunkFilename('js/[name]/' + hashh + '.chunk.js')
         chain.plugin('eslint-webpack-plugin')
           .use(ESLintPlugin, [{ extensions: ['js', 'vue'] }])
       }
@@ -99,7 +99,7 @@ module.exports = configure(function (ctx) {
           pathRewrite: {
             '^/alaa/api/v2': ''
           }
-        },
+        }
       }
     },
 
@@ -118,7 +118,9 @@ module.exports = configure(function (ctx) {
       // directives: [],
 
       // Quasar plugins
-      plugins: []
+      plugins: [
+        'Notify'
+      ]
     },
 
     // animations: 'all', // --- includes all animations
