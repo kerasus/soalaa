@@ -47,7 +47,7 @@ module.exports = configure(function (ctx) {
 
     // Full list of options: https://v2.quasar.dev/quasar-cli/quasar-conf-js#Property%3A-build
     build: {
-      vueRouterMode: 'hash', // available values: 'hash', 'history'
+      vueRouterMode: 'history', // available values: 'hash', 'history'
 
       // transpile: false,
 
@@ -56,10 +56,10 @@ module.exports = configure(function (ctx) {
       // Applies only if "transpile" is set to true.
       // transpileDependencies: [],
 
-      // rtl: true, // https://v2.quasar.dev/options/rtl-support
-      // preloadChunks: true,
-      // showProgress: false,
-      // gzip: true,
+      rtl: true, // https://v2.quasar.dev/options/rtl-support
+      preloadChunks: true,
+      showProgress: true,
+      gzip: true,
       // analyze: true,
 
       // Options below are automatically set depending on the env, set them if you want to override
@@ -70,6 +70,9 @@ module.exports = configure(function (ctx) {
       // https://v2.quasar.dev/quasar-cli/handling-webpack
       // "chain" is a webpack-chain object https://github.com/neutrinojs/webpack-chain
       chainWebpack (chain) {
+        const hashh = '[id].[name].[chunkhash]'
+        chain.output.filename('js/[name]/'+hashh+'.bundle.js')
+        chain.output.chunkFilename('js/[name]/'+hashh+'.chunk.js')
         chain.plugin('eslint-webpack-plugin')
           .use(ESLintPlugin, [{ extensions: ['js', 'vue'] }])
       }
@@ -104,8 +107,8 @@ module.exports = configure(function (ctx) {
     framework: {
       config: {},
 
-      // iconSet: 'material-icons', // Quasar icon set
-      // lang: 'en-US', // Quasar language pack
+      iconSet: 'material-icons', // Quasar icon set
+      lang: 'fa', // Quasar language pack (en-US)
 
       // For special cases outside of where the auto-import strategy can have an impact
       // (like functional components as one of the examples),
