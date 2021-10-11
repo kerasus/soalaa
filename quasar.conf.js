@@ -65,6 +65,8 @@ module.exports = configure(function (ctx) {
       // Options below are automatically set depending on the env, set them if you want to override
       // extractCSS: false,
 
+      env: require('dotenv').config().parsed,
+
       // https://v2.quasar.dev/quasar-cli/handling-webpack
       // "chain" is a webpack-chain object https://github.com/neutrinojs/webpack-chain
       chainWebpack (chain) {
@@ -77,7 +79,25 @@ module.exports = configure(function (ctx) {
     devServer: {
       https: false,
       port: 8080,
-      open: true // opens browser window automatically
+      open: true, // opens browser window automatically
+      proxy: {
+        '/alaa/api/v2': {
+          target: process.env.AUTH_API_SERVER,
+          changeOrigin: true,
+          secure: false,
+          pathRewrite: {
+            '^/alaa/api/v2': ''
+          }
+        },
+        '/3a/api/v1': {
+          target: process.env.AAA_API_SERVER,
+          changeOrigin: true,
+          secure: false,
+          pathRewrite: {
+            '^/alaa/api/v2': ''
+          }
+        },
+      }
     },
 
     // https://v2.quasar.dev/quasar-cli/quasar-conf-js#Property%3A-framework
