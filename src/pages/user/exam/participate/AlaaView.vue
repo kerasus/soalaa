@@ -102,14 +102,13 @@
               <v-row class="question-body">
                 <v-col :class="{ ltr: isLtrString(currentQuestion.statement) }">
                   <div
-                    v-if="currentQuestion.in_active_category || true"
+                    v-if="currentQuestion.in_active_category"
                     class="renderedPanel"
-                    :class="{ ltr: isRtl }"
                   >
                     <vue-katex :input="currentQuestion.statement" />
                   </div>
                   <v-sheet
-                    v-if="!currentQuestion.in_active_category && false"
+                    v-if="!currentQuestion.in_active_category"
                     color="warning"
                     rounded
                     dark
@@ -122,7 +121,7 @@
                 </v-col>
               </v-row>
               <v-row
-                v-if="currentQuestion.in_active_category || true"
+                v-if="currentQuestion.in_active_category"
                 class="question-answers"
               >
                 <choice
@@ -207,7 +206,7 @@
             this.updateDrawerBasedOnWindowSize()
             this.startExam(this.$route.params.quizId, 'onlineQuiz.alaaView')
                 .then(() => {
-                    that.isRtl = that.isLtrString(that.currentQuestion.statement)
+                    that.isRtl = !that.isLtrString(that.currentQuestion.statement)
                     that.$store.commit('AppLayout/updateOverlay', {show: false, loading: false, text: ''})
                 })
                 .catch( (error) => {
@@ -283,6 +282,11 @@
         color: var(--text-2);
         flex-direction: row;
         justify-content: space-between;
+        position: sticky;
+        top: 60px;
+        z-index: 1;
+        padding-top: 20px;
+        background: var(--background-2);
     }
 
     .question-body {

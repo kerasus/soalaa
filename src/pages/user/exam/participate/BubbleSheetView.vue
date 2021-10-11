@@ -67,7 +67,7 @@
     .timer-row {
         width: 100%;
         position: absolute;
-        bottom: 1px;
+        bottom: 12px;
     }
 
     .timer-row .col {

@@ -10,7 +10,7 @@
       </v-col>
       <v-dialog
         v-model="dialog"
-        max-width="600px"
+        max-width="800px"
       >
         <v-sheet>
           <v-row>
@@ -81,6 +81,8 @@ export default {
   }),
   methods: {
     rereshExamList() {
+      this.dialog = false
+      this.reportDialog = false
       this.$refs.examList.getExams()
     },
     updateExamId(e) {

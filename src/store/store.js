@@ -233,7 +233,7 @@ const store = new Vuex.Store({
         leaveQuestion (state, questionId) {
             this.commit('checkIfQuestionExistInUserQuizListData', questionId)
             let check_in_times = state.userQuizListData[state.quiz.id][questionId].check_in_times
-            if (!check_in_times) {
+            if (!check_in_times || check_in_times.length === 0) {
                 return
             }
             state.userQuizListData[state.quiz.id][questionId].check_in_times[state.userQuizListData[state.quiz.id][questionId].check_in_times.length - 1].end = Time.now()

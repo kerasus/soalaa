@@ -93,7 +93,8 @@ let Time = function () {
             } else if (categoryAcceptAtRemainTime > 0) {
                 category.is_active = true
             } else if (categoryAcceptAtPassedTime > 0) {
-                category.is_active = false
+                // category.is_active = false
+                category.is_active = true
             }
 
             return category
@@ -101,13 +102,27 @@ let Time = function () {
     }
 
     function getCurrentCategoryAcceptAt(categories) {
-        const currentCat = categories.list.find( (item) => item.is_active)
-        const lastCat = categories[categories.length - 1]
+        const activeCategories = categories.list.filter( (item) => item.is_active)
+        let maxAcceptAt = 0
+        activeCategories.forEach( item => {
+            if ((new Date(item.accept_at)).getTime() > maxAcceptAt) {
+                maxAcceptAt = (new Date(item.accept_at)).getTime()
+            }
+        })
+        let currentCat = null
+        activeCategories.forEach( item => {
+            if ((new Date(item.accept_at)).getTime() === maxAcceptAt) {
+                currentCat = item
+            }
+        })
+        const lastCat = categories.list[categories.list.length - 1]
 
         if (lastCat && getPassedTime(lastCat.accept_at, false) > 0) {
             return false
         } else if (currentCat && getRemainTime(currentCat.accept_at, false) > 0) {
             return currentCat
+        } else {
+            return false
         }
     }
 
@@ -119,9 +134,34 @@ let Time = function () {
             }
             return
         }
+
         for (const questionId in questions) {
-            questions[questionId].in_active_category = Assistant.getId(questions[questionId].sub_category.category_id) === Assistant.getId(currentActiveCategory.id);
+            questions[questionId].in_active_category = false
         }
+
+        const activeCategories = quiz.categories.list.filter( (item) => item.is_active)
+        activeCategories.forEach( activeCategory => {
+            for (const questionId in questions) {
+                const questionCategoryId = questions[questionId].sub_category.category_id
+                const in_active_categoryStatus = Assistant.getId(questionCategoryId) === Assistant.getId(activeCategory.id)
+                if (in_active_categoryStatus) {
+                    questions[questionId].in_active_category = true
+                }
+            }
+        })
+
+        // console.log('------------------------------------------')
+        //
+        // for (const questionId in questions) {
+        //     if (!questions[questionId].in_active_category) {
+        //         console.log('questions[questionId].in_active_category', questions[questionId].in_active_category)
+        //     }
+        // }
+
+
+        // for (const questionId in questions) {
+        //     questions[questionId].in_active_category = Assistant.getId(questions[questionId].sub_category.category_id) === Assistant.getId(currentActiveCategory.id);
+        // }
     }
 
     return {

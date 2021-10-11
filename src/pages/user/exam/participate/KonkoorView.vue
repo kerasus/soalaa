@@ -108,6 +108,7 @@
     </v-row>
     <v-row class="timer-row">
       <v-btn
+        v-if="false"
         class="end-exam-btn"
         @click="getConfirmation"
       >
@@ -125,6 +126,7 @@
     </v-row>
   </v-container>
 </template>
+
 <script>
     import '@/assets/scss/markdownKatex.scss'
     import 'vue-virtual-scroller/dist/vue-virtual-scroller.css'
@@ -321,7 +323,15 @@
                 }
                 this.timePassedSinceLastScroll += 250
             },
+            updateLtr() {
+              setTimeout(() => {
+                document.querySelectorAll('.katex:not([dir="ltr"])').forEach(item => {
+                  item.setAttribute('dir', 'ltr')
+                })
+              }, 1000)
+            },
             onScroll(startIndex, endIndex) {
+                this.updateLtr()
                 this.renderedQuestions = {startIndex, endIndex}
                 if (this.scrollState === 'not scrolling') {
                     this.setIntervalCallback = setInterval(() => {
@@ -449,7 +459,7 @@
     .timer-row {
         width: calc(58% - 150px);
         position: absolute;
-        bottom: 1px;
+        bottom: 12px;
         left: 100px;
     }
 
@@ -479,7 +489,7 @@
     }
 
     .question {
-        padding: 10px 30px 10px 0;
+        padding: 10px 30px 10px 10px;
     }
 
     .choices {
@@ -513,6 +523,7 @@
 
     .konkoor-view {
         padding: 0;
+        margin-top: 12px;
     }
 
     .test {

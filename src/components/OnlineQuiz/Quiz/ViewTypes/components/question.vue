@@ -1,11 +1,12 @@
 <template>
   <div
     v-intersect="test"
-    :class="{ 'current-question': this.currentQuestion.id === source.id, question: true, ltr: source.ltr}"
+    class="question"
+    :class="{ 'current-question': this.currentQuestion.id === source.id, ltr: isLtrQuestion}"
   >
     <div>
       <v-sheet
-        v-if="considerActiveCategory && !source.in_active_category && false"
+        v-if="considerActiveCategory && !source.in_active_category"
         rounded
         dark
         height="200"
@@ -22,7 +23,11 @@
       </v-sheet>
     </div>
     <!--        <div v-if="(considerActiveCategory && source.in_active_category) || !considerActiveCategory || true"-->
-    <div class="buttons-group">
+    <div
+      v-if="(considerActiveCategory && source.in_active_category) || !considerActiveCategory"
+      class="buttons-group"
+      :style="{ float: isRtlString ? 'left' : 'right' }"
+    >
       <v-btn
         icon
         @click="changeStatus(source.id, 'o')"
@@ -75,24 +80,34 @@
     </div>
     <!--        <span v-if="(considerActiveCategory && source.in_active_category) || !considerActiveCategory || true"-->
     <!--ToDo: remove span-->
-    <span
+    <p
+      v-if="(considerActiveCategory && source.in_active_category) || !considerActiveCategory"
       :id="'question' + source.id"
       class="question-body renderedPanel"
       :class="{ ltr: isRtl }"
     >
-    </span>
+      <vue-katex
+        :input="source.order + ') ' + source.statement"
+      />
+    </p>
     <!--        <v-row v-if="(considerActiveCategory && source.in_active_category) || !considerActiveCategory || true" class="choices">-->
-    <v-row class="choices">
+    <v-row
+        v-if="(considerActiveCategory && source.in_active_category) || !considerActiveCategory"
+        class="choices"
+    >
       <v-col
         v-for="(choice, index) in source.choices.list"
         :key="choice.id"
         ref="choices"
-        :md="choiceClass(source)"
+        :md="choiceClass"
         class="choice renderedPanel"
         :class="{ active: getAnsweredChoiceId() === choice.id, ltr: isRtl }"
         @click="answerClickedd({ questionId: source.id, choiceId: choice.id})"
       >
-        <vue-katex :input="(choiceNumber[index]) + choice.title" />
+        <vue-katex
+          :input="(choiceNumber[index]) + choice.title"
+          :ltr="isLtrQuestion"
+        />
       </v-col>
     </v-row>
   </div>
@@ -104,6 +119,9 @@
     import VueKatex from "@/components/VueKatex";
 
     export default {
+      components: {
+        VueKatex
+      },
         mixins: [mixinQuiz, mixinUserActionOnQuestion],
         props: {
             index: { // index of current source
@@ -137,13 +155,47 @@
                 }
             }
         },
-      components: {
-        VueKatex
+      computed: {
+        isLtrQuestion() {
+          let string = this.source.statement
+          if (!string) {
+            return false
+          }
+          const persianRegex = /[\u0600-\u06FF]/
+          return !string.match(persianRegex)
+        },
+        isRtlString() {
+          this.source
+          let string = this.source.statement
+          if (!string) {
+            return false
+          }
+          // const englishRegex = /^[A-Za-z0-9 :"'ʹ.<>%$&@!+()\-/\n,…?;ᵒ*~]*$/
+          // return !!string.match(englishRegex)
+          const persianRegex = /[\u0600-\u06FF]/
+          return string.match(persianRegex)
+        },
+        choiceClass() {
+          this.source
+          let largestChoice = this.getLargestChoice(this.source.choices)
+          let largestChoiceWidth = this.questionsColumn.clientWidth / largestChoice
+          // console.log(this.source.order, largestChoice, largestChoiceWidth)
+          if (largestChoiceWidth < 12) {
+            return 12
+          }
+          if (largestChoiceWidth < 24) {
+            return 6
+          }
+          if (largestChoiceWidth < 48) {
+            return 3
+          }
+          return 3
+        },
       },
         mounted() {
             this.observer = new IntersectionObserver(this.intersectionObserver, {threshold: [0.7, 0.75, 0.8]})
             this.observer.observe(this.$el)
-            this.isRtl = this.isLtrString(this.source.statement)
+            // this.isRtl = this.isLtrString(this.source.statement)
         },
         destroyed() {
             this.observer.disconnect();
@@ -198,20 +250,7 @@
                 this.changeQuestion(questionId)
                 this.answerClicked({questionId, choiceId})
             },
-            choiceClass(question) {
-                let largestChoice = this.getLargestChoice(question.choices)
-                let largestChoiceWidth = this.questionsColumn.clientWidth / largestChoice
-                if (largestChoiceWidth > 48) {
-                    return 3
-                }
-                if (largestChoiceWidth > 24) {
-                    return 6
-                }
-                if (largestChoiceWidth > 12) {
-                    return 12
-                }
-                return 12
-            },
+
             removeErab(string) {
                 if (!string || string.length === 0) {
                     return ''
@@ -236,6 +275,20 @@
                 })
                 return largestChoice
             },
+          // choiceClass(source) {
+          //   let largestChoice = this.getLargestChoice(source.choices)
+          //   let largestChoiceWidth = this.questionsColumn.clientWidth / largestChoice
+          //   if (largestChoiceWidth > 48) {
+          //     return 3
+          //   }
+          //   if (largestChoiceWidth > 24) {
+          //     return 6
+          //   }
+          //   if (largestChoiceWidth > 12) {
+          //     return 12
+          //   }
+          //   return 12
+          // },
         }
     }
 </script>
@@ -273,7 +326,6 @@
     }
 
     .buttons-group {
-        float: left;
         display: flex;
         flex-direction: row;
         justify-content: space-around;
@@ -311,7 +363,7 @@
     }
 
     .question {
-        padding: 10px 30px 10px 0;
+        padding: 10px 30px 10px 10px;
     }
 </style>
 

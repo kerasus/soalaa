@@ -1,12 +1,15 @@
 <template>
   <v-row>
-    <v-col v-if="editStatus">
+    <v-col
+      v-if="editStatus"
+      cols="12"
+    >
       <vue-tiptap-katex
         ref="tiptap"
         :loading="loading"
         :access-token="$store.getters['Auth/accessToken']"
         :upload-url="imageUrl"
-        :options="{ bubbleMenu: false, floatingMenu: false }"
+        :options="{ bubbleMenu: false, floatingMenu: false, poem: true, reading: true }"
       />
     </v-col>
     <!-- eslint-disable vue/no-v-html -->
@@ -48,7 +51,7 @@ export default {
   data() {
     return {
       html: '',
-      loading: false
+      loading: false,
     }
   },
   computed: {
@@ -88,6 +91,10 @@ export default {
 </style>
 
 <style>
+#mathfield .ML__cmr,
+.katex .mtight {
+  font-family: IRANSans;
+}
 .inline .v-btn.blue--text {
   display: none;
 }

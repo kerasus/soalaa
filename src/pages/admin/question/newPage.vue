@@ -56,6 +56,21 @@
               :status="edit_status"
               @input="updateQuestion"
             />
+            <v-col cols="4">
+              <v-select
+                v-if="getPageStatus() === 'create'"
+                v-model="currentQuestion.author"
+                label="طراحان"
+                dense
+                multiple
+                disabled
+                chips
+                :items="currentQuestion.author"
+                item-text="full_name"
+                item-value="id"
+                outlined
+              />
+            </v-col>
             <!-- -------------------------- show exams  ---------------------->
             <attach_list
               :status="edit_status"
@@ -142,6 +157,17 @@ export default {
   },
   data() {
     return {
+      selectedAuthors: [],
+      authors: [
+        {
+          full_name: 'محمد اسماعیلی',
+          id: 123
+        },
+        {
+          full_name: 'مصطفی کاظمی',
+          id: 1222
+        }
+      ],
       temp: null,
       pageStatuses: [
         {
@@ -214,7 +240,17 @@ export default {
       optionQuestionId: null
     }
   },
+  destroyed() {
+    window.onbeforeunload = null
+  },
+  // beforeRouteLeave (to, from, next) {
+  //   console.log(to, from, next)
+  // },
   created() {
+    window.onbeforeunload = function() {
+      return "Do you really want to leave our brilliant application?";
+    };
+
     let that = this
     axios.get(API_ADDRESS.option.base + '?type=question_type')
         .then(function (response) {
@@ -227,7 +263,6 @@ export default {
               type: 'error'
             })
           }
-
           that.optionQuestionId = optionQuestion.id
           that.loading = false
         })
@@ -265,6 +300,9 @@ export default {
         statusId = this.questionStatusId_draft
       }
       this.currentQuestion.status_id = statusId
+      this.selectedAuthors.forEach(author => {
+        this.currentQuestion.author.push(this.authors.find(item => item.id === author))
+      })
 
       // set choices
       this.setMainChoicesInCreateMode(statusId)   //یاس
@@ -615,13 +653,10 @@ export default {
         this.questionColsNumber=9
 
      }
-
     },
-
     showPageDialog() {  //یاس
       this.dialog = true
     },
-
     setQuestionTypeText() {
       this.questionType = 'typeText'
       this.dialog = false
@@ -635,6 +670,7 @@ export default {
     },
 
     setInsertedQuestions() {  //یاس
+      this.$refs.qlayout.getContent()
       var currentQuestion = this.currentQuestion
       // set exams
       currentQuestion.exams = this.selectedQuizzes.map(item => {
@@ -650,7 +686,6 @@ export default {
           .then((response) => {
             this.$store.commit('AppLayout/updateOverlay', {show: false, loading: false, text: ''})
             const questionId = response.data.data.id
-            this.$router.push({name: 'question.show', params: {question_id: questionId}})
             this.questionType = 'typeText'
             this.currentQuestion.statement = ''
             this.currentQuestion.choices.list.forEach((item) => {
@@ -662,6 +697,8 @@ export default {
               text: 'ثبت با موفقیت انجام شد',
               type: 'success'
             })
+            window.open('/question/create', '_blank').focus()
+            this.$router.push({name: 'question.show', params: {question_id: questionId}})
           })
     },
 
@@ -714,6 +751,11 @@ export default {
 
     checkNavbarVisibilityOnCreatPage(){
       this.NavbarVisibilityOnCreatPage = true
+      if (this.$route.name === 'question.create') {
+
+        this.currentQuestion.author.push({full_name: this.$store.getters['Auth/user'].full_name, id: this.$store.getters['Auth/user'].id})
+        console.log(this.currentQuestion.author)
+      }
     }
   },
 }
