@@ -6,6 +6,12 @@
           <q-btn dense flat round icon="menu" @click="toggleLeftDrawer" />
         </div>
       </q-toolbar>
+      <q-linear-progress
+        v-if="loading"
+        color="purple"
+        track-color="orange"
+        class="q-mt-sm"
+      />
     </q-header>
       <q-drawer
         class="bg-amber-13 side-bar"
@@ -46,6 +52,11 @@ import SideMenuDashboard from 'components/Menu/SideMenu/SideMenu-dashboard'
 
 export default {
   components: { SideMenuDashboard },
+  data () {
+    return {
+      loading: true
+    }
+  },
   setup () {
     const leftDrawerOpen = ref(false)
 
