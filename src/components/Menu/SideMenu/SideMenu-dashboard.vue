@@ -12,12 +12,17 @@
     >
       <q-item
         clickable
-        v-ripple
+        v-ripple:deep-purple
         v-model="userGroup"
+        :active="true"
+        active-class="text-white"
       >
         <q-item-section class="side-list-item">
           <span class="list-title">{{userItem.displayName}}</span>
-          <span class="indicator" />
+          <span
+            v-if="true"
+            class="indicator"
+          />
         </q-item-section>
       </q-item>
     </router-link>
@@ -37,14 +42,15 @@
         clickable
         v-ripple
         v-model="adminGroup"
-        :active="isActive"
-        active-class="text-orange"
       >
         <q-item-section class="side-list-item">
         <span class="list-title">
           {{adminItem.displayName}}
         </span>
-          <span class="indicator"/>
+          <span
+            v-if="true"
+            class="indicator"
+          />
         </q-item-section>
       </q-item>
     </router-link>
@@ -60,14 +66,19 @@ export default {
     return {
       userGroup: null,
       adminGroup: null,
+      activeRoute: null,
       userList: [
         {
           displayName: 'آزمون های سه آ',
-          to: 'user-exam'
+          to: 'user-exam',
+          name: 'user.exam'
         },
         {
           displayName: 'سوالات متداول',
-          to: 'faq'
+          to: {
+            path: 'user-exam',
+            name: 'user.exam.list'
+          }
         }
       ],
       adminList: [
@@ -106,8 +117,7 @@ export default {
       ]
     }
   },
-  methods: {
-  }
+  methods: {}
 }
 </script>
 

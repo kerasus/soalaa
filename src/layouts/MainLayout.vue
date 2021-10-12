@@ -8,7 +8,7 @@
       </q-toolbar>
       <q-linear-progress
         v-if="loading"
-        color="purple"
+        color="amber-13"
         track-color="orange"
         class="q-mt-sm"
       />
