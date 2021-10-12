@@ -94,4 +94,7 @@ export default {
   max-width: 1158px;
   margin: auto !important;
 }
+.q-drawer--left .q-layout__shadow{
+  opacity: 0.5 !important;
+}
 </style>

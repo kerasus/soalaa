@@ -75,44 +75,50 @@ export default {
         },
         {
           displayName: 'سوالات متداول',
-          to: {
-            path: 'user-exam',
-            name: 'user.exam.list'
-          }
+          to: 'user-exam',
+          name: 'user.exam.list'
         }
       ],
       adminList: [
         {
           displayName: 'ویرایش درخت دانش',
-          to: 'tree.edit'
+          to: 'tree.edit',
+          name: 'tree.edit'
         },
         {
           displayName: 'ساخت سوال',
-          to: 'quest.create'
+          to: 'quest.create',
+          name: 'quest.create'
         },
         {
           displayName: 'لیست آزمون ها',
-          to: 'onlineQuiz.exams'
+          to: 'onlineQuiz.exams',
+          name: 'onlineQuiz.exams'
         },
         {
           displayName: 'بانک سوال',
-          to: 'quest.index'
+          to: 'quest.index',
+          name: 'quest.index'
         },
         {
           displayName: 'لیست دروس',
-          to: 'subCategory.edit'
+          to: 'subCategory.edit',
+          name: 'subCategory.edit'
         },
         {
           displayName: 'لیست دفترچه ها',
-          to: 'category.edit'
+          to: 'category.edit',
+          name: 'category.edit'
         },
         {
           displayName: 'لیست زیرگروه ها',
-          to: 'subGroup.edit'
+          to: 'subGroup.edit',
+          name: 'subGroup.edit'
         },
         {
           displayName: 'اضافه کردن سوالات MBTI',
-          to: 'question.mbti.create'
+          to: 'question.mbti.create',
+          name: 'question.mbti.create'
         }
       ]
     }
