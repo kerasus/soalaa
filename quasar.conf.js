@@ -97,7 +97,7 @@ module.exports = configure(function (ctx) {
           changeOrigin: true,
           secure: false,
           pathRewrite: {
-            '^/alaa/api/v2': ''
+            '^/3a/api/v1': ''
           }
         }
       }
