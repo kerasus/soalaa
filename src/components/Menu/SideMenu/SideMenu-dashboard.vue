@@ -92,7 +92,7 @@ export default {
         },
         {
           displayName: 'لیست آزمون ها',
-          to: 'onlineQuiz.exams',
+          to: 'exams',
           name: 'onlineQuiz.exams'
         },
         {
