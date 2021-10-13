@@ -1,3 +1,4 @@
+import { auth } from './middleware/middleware'
 
 const routes = [
   {
@@ -6,7 +7,10 @@ const routes = [
     children: [
       {
         path: '',
-        component: () => import('pages/Index.vue')
+        component: () => import('pages/Index.vue'),
+        meta: {
+          middlewares: [auth]
+        }
       },
       // user list
       // admin list
