@@ -3,7 +3,6 @@
   <q-list
     class="side-menu-list"
     padding
-    dark
   >
     <router-link
       v-for="(userItem , index) in userList"
@@ -14,7 +13,7 @@
         clickable
         v-ripple:deep-purple
         v-model="userGroup"
-        :active="true"
+        :active="false"
         active-class=""
       >
         <q-item-section class="side-list-item">
