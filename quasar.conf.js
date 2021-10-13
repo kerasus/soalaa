@@ -29,6 +29,8 @@ module.exports = configure(function (ctx) {
     // https://v2.quasar.dev/quasar-cli/quasar-conf-js#Property%3A-css
     css: [
       'app.scss'
+      // 'src/assets/scss/app.scss',
+      // 'src/assets/scss/font.scss'
     ],
 
     // https://github.com/quasarframework/quasar/tree/dev/extras
@@ -97,7 +99,7 @@ module.exports = configure(function (ctx) {
           changeOrigin: true,
           secure: false,
           pathRewrite: {
-            '^/alaa/api/v2': ''
+            '^/3a/api/v1': ''
           }
         }
       }
@@ -169,8 +171,8 @@ module.exports = configure(function (ctx) {
         description: '3A with Quasar framework',
         display: 'standalone',
         orientation: 'portrait',
-        background_color: '#ffffff',
-        theme_color: '#027be3',
+        background_color: '#f1f1f1',
+        theme_color: '#ffc107',
         icons: [
           {
             src: 'icons/icon-128x128.png',

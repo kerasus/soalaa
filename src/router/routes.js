@@ -17,6 +17,11 @@ const routes = [
       }
     ]
   },
+  {
+    path: '/login',
+    name: 'login',
+    component: () => import('pages/Auth/Login.vue')
+  },
 
   // Always leave this as last one,
   // but you can also remove it
