@@ -1,9 +1,9 @@
 <template>
-<div class="side-menu-list">
+<div>
   <q-list
-    dense
+    class="side-menu-list"
     padding
-    class="rounded-borders"
+    dark
   >
     <router-link
       v-for="(userItem , index) in userList"
@@ -15,7 +15,7 @@
         v-ripple:deep-purple
         v-model="userGroup"
         :active="true"
-        active-class="text-white"
+        active-class=""
       >
         <q-item-section class="side-list-item">
           <span class="list-title">{{userItem.displayName}}</span>
@@ -31,7 +31,7 @@
   <q-list
     dense
     padding
-    class="rounded-borders"
+    class="side-menu-list"
   >
     <router-link
       v-for="(adminItem , index) in adminList"
@@ -56,6 +56,55 @@
     </router-link>
   </q-list>
   <q-separator class="bg-white" size="px" />
+  <q-list
+    class="side-menu-list"
+    padding
+    dark
+  >
+    <q-expansion-item
+      style="font-size:16px ; "
+      icon="account_balance"
+      label="بانک سوال"
+    >
+      <q-list
+        class="bg-primary"
+        style="text-align: right !important;"
+      >
+        <router-link to="">
+          <q-item
+            clickable
+            v-close-popup
+          >
+            <q-item-section class="side-list-item">
+              <span class="list-title">
+              سوال جدید
+              </span>
+              <span
+                v-if="true"
+                class="indicator"
+              />
+            </q-item-section>
+          </q-item>
+        </router-link>
+        <router-link to="">
+          <q-item
+            clickable
+            v-close-popup
+          >
+            <q-item-section class="side-list-item">
+              <span class="list-title">
+              کارخانه ی سوال
+              </span>
+              <span
+                v-if="true"
+                class="indicator"
+              />
+            </q-item-section>
+          </q-item>
+        </router-link>
+      </q-list>
+    </q-expansion-item>
+  </q-list>
 </div>
 </template>
 
@@ -128,31 +177,35 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.side-menu-list{
+.q-list{
+  &.side-menu-list{
+    .side-list-item{
+      justify-content: space-between;
+      .list-title{
+        justify-content: start;
+      }
+      .indicator{
+        height: 50%;
+        width: 3px;
+        background-color: white;
+        justify-content: end;
+      }
+    }
+  }
+  .q-item{
+    padding-right: 0 !important;
+  }
+  .q-item__section--main{
+    flex-direction: row;
+    font-size: 16px !important;
+    font-weight: normal !important;
+  }
+  .q-item__section--avatar{
+    min-width: 0 !important;
+  }
   a{
     text-decoration: none;
     color: white;
   }
-  .side-list-item{
-    justify-content: space-between;
-    align-items: center;
-    .list-title{
-      justify-content: start;
-    }
-    .indicator{
-      height: 50%;
-      width: 3px;
-      background-color: white;
-      justify-content: end;
-    }
-  }
-}
-.q-item{
-  padding-right: 0 !important;
-}
-.q-item__section--main{
-  flex-direction: row;
-  font-size: 16px !important;
-  font-weight: normal !important;
 }
 </style>
