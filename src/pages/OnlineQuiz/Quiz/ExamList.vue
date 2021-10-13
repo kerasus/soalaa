@@ -1,6 +1,6 @@
 <template>
   <div class="admin-exam-list q-pa-md">
-    <div>{{rowsList.title}}</div>
+    <div>{{ rowsList.title }}</div>
     <q-table
       :columns="headers"
       :rows="rowsList"
@@ -8,7 +8,7 @@
       rows-per-page-label="تعداد ردیف در هر صفحه"
     >
       <template v-slot:header="props">
-        <q-tr :props="props" >
+        <q-tr :props="props">
           <q-th
             v-for="col in props.cols"
             :key="col.name"
@@ -18,6 +18,136 @@
             {{ col.label }}
           </q-th>
         </q-tr>
+      </template>
+      <template #body-cell-options="props">
+        <q-td
+          :props="props"
+        >
+          <q-btn
+            class="options-btn"
+            round
+            dark
+            color="purple"
+            icon="pencil"
+            size="11px"
+          >
+            <q-menu
+              class="options-menu"
+              transition-show="jump-down"
+              transition-hide="jump-up"
+              :offset="[170,5]"
+            >
+              <q-list style="min-width: 100px">
+                <q-item
+                  v-ripple:yellow
+                  clickable
+                  manual-focus
+                >
+                  <q-item-section> ویرایش</q-item-section>
+                </q-item>
+                <q-item
+                  v-ripple:yellow
+                  clickable
+                  manual-focus
+                >
+                  <q-item-section>ویرایش کارنامه</q-item-section>
+                </q-item>
+                <q-item
+                  v-ripple:yellow
+                  clickable
+                  manual-focus
+                >
+                  <q-item-section>مشاهده تمام سوالات</q-item-section>
+                </q-item>
+                <q-item
+                  v-ripple:yellow
+                  clickable
+                  manual-focus
+                >
+                  <q-item-section>ساخت فایل سوالات</q-item-section>
+                </q-item>
+                <q-item
+                  v-ripple:yellow
+                  clickable
+                  manual-focus
+                >
+                  <q-item-section>ساخت فایل سوالات با جواب</q-item-section>
+                </q-item>
+                <q-item
+                  v-ripple:yellow
+                  clickable
+                  manual-focus
+                >
+                  <q-item-section>آپلود فایل سوالات و جواب ها</q-item-section>
+                </q-item>
+                <q-item
+                  v-ripple:yellow
+                  clickable
+                  manual-focus
+                >
+                  <q-item-section>اصلاح ضرایب</q-item-section>
+                </q-item>
+                <q-item
+                  v-ripple:yellow
+                  clickable
+                  manual-focus
+                >
+                  <q-item-section>حذف آزمون</q-item-section>
+                </q-item>
+              </q-list>
+            </q-menu>
+            <q-tooltip anchor="top middle" self="bottom middle">
+              ویرایش
+            </q-tooltip>
+          </q-btn>
+          <q-btn
+            class="options-btn"
+            round
+            dark
+            color="indigo"
+            icon=""
+            size="11px"
+          >
+            <q-tooltip anchor="top middle" self="bottom middle">
+              مشاهده دروس
+            </q-tooltip>
+          </q-btn>
+          <q-btn
+            class="options-btn"
+            round
+            dark
+            color="blue"
+            icon=""
+            size="11px"
+          >
+            <q-menu
+              class="options-menu"
+              transition-show="jump-down"
+              transition-hide="jump-up"
+              :offset="[150,5]"
+            >
+              <q-list style="min-width: 100px">
+                <q-item
+                  v-ripple:yellow
+                  clickable
+                  manual-focus
+                >
+                  <q-item-section>نتایج تمام شرکت کنندگان</q-item-section>
+                </q-item>
+                <q-item
+                  v-ripple:yellow
+                  clickable
+                  manual-focus
+                >
+                  <q-item-section>کارنامه سرگروه</q-item-section>
+                </q-item>
+              </q-list>
+            </q-menu>
+            <q-tooltip anchor="top middle" self="bottom middle">
+              مشاهده نتایج
+            </q-tooltip>
+          </q-btn>
+        </q-td>
       </template>
       <template v-slot:pagination="scope">
         <q-btn
@@ -446,11 +576,24 @@ export default {
   }
 }
 </script>
-
-<style lang="scss">
+<style lang="scss" scoped>
 .admin-exam-list{
+  .options-btn{
+    margin-right: 10px;
+  }
+}
+</style>
+<style lang="scss">
+.admin-exam-list {
   .q-table--horizontal-separator thead th, .q-table--horizontal-separator tbody td, .q-table--cell-separator thead th, .q-table--cell-separator tbody td {
     text-align: left !important;
+  }
+}
+.q-menu{
+  &.options-menu{
+    border-radius: 24px 0 24px 24px !important;
+    text-align: center;
+    padding: 10px;
   }
 }
 </style>
