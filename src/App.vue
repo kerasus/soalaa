@@ -36,4 +36,10 @@ export default defineComponent({
   * {
     font-family: 'IRANSans', 'Arial', '-apple-system', 'Helvetica Neue', Helvetica, sans-serif ;
   }
+  body.body--light {
+    background: #f1f1f1
+  }
+  /*body.body--dark {*/
+  /*  background: #000*/
+  /*}*/
 </style>
