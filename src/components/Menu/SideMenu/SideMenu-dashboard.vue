@@ -180,6 +180,7 @@ export default {
   &.side-menu-list{
     .side-list-item{
       justify-content: space-between;
+      align-items: center;
       .list-title{
         justify-content: start;
       }
@@ -205,6 +206,15 @@ export default {
   a{
     text-decoration: none;
     color: white;
+  }
+}
+</style>
+<style lang="scss">
+.q-list {
+  &.side-menu-list {
+    .q-item__section--avatar {
+      min-width: 0 !important;
+    }
   }
 }
 </style>
