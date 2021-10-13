@@ -457,6 +457,7 @@
                       <v-btn
                         class="mx-2"
                         depressed
+                        :to="{ name: 'onlineQuiz.exams.lessons.lists', params: { quizId: item.id, quizTitle: item.title}}"
                         :ripple="{ class: 'yellow--text' }"
                         retain-focus-on-click
                         plain

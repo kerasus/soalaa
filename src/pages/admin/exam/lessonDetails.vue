@@ -59,7 +59,10 @@
             </v-btn>
           </v-btn-toggle>
           <v-spacer />
-          <v-btn icon @click="reload">
+          <v-btn
+            icon
+            @click="reload"
+          >
             <v-icon>mdi-reload</v-icon>
           </v-btn>
         </v-toolbar>

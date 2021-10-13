@@ -1,5 +1,7 @@
 <template>
-  <lessons-list />
+  <div>
+    <lessons-list />
+  </div>
 </template>
 
 <script>
