@@ -6,10 +6,7 @@ import { defineComponent } from 'vue'
 import '../src/assets/scss/font.scss'
 // import 'material-icons/material-icons.css'
 export default defineComponent({
-  name: 'App',
-  created () {
-    console.log('this.$axios', this.$axios)
-  }
+  name: 'App'
 })
 </script>
 <style>
