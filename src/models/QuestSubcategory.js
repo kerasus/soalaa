@@ -1,6 +1,6 @@
 import { Model, Collection } from 'js-abstract-model'
-import { QuestionList } from '@/models/Question'
-import API_ADDRESS from '@/api/Addresses'
+import { QuestionList } from '../models/Question'
+import API_ADDRESS from '../api/Addresses'
 
 class QuestSubcategory extends Model {
   constructor (data) {

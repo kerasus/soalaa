@@ -2,7 +2,6 @@ import { Model, Collection } from 'js-abstract-model'
 import { QuestionList } from '../models/Question'
 import { QuestCategoryList } from '../models/QuestCategory'
 import { QuestSubcategoryList } from '../models/QuestSubcategory'
-import $ from 'jquery'
 import { CheckingTimeList } from '../models/CheckingTime'
 import Assistant from '../plugins/assistant'
 import Vue from 'vue'
@@ -71,36 +70,6 @@ class Exam extends Model {
 
   getFirstActiveCategory () {
     return this.categories.list.find((item) => !!(item.is_active))
-  }
-
-  loadQuestionsFromFile () {
-    const that = this
-    return new Promise(function (resolve, reject) {
-      if (!that.questions_file_url) {
-        Assistant.handleAxiosError('exam file url is not set')
-        reject(null)
-        return
-      }
-
-      $.ajax({
-        type: 'GET',
-        url: that.questions_file_url,
-        accept: 'application/json; charset=utf-8',
-        dataType: 'json',
-        success: function (data) {
-          that.questions = new QuestionList(data)
-
-          resolve(data)
-        },
-        error: function (jqXHR, textStatus, errorThrown) {
-          Assistant.reportErrors({ location: 'exam.js -> loadQuestionsFromFile() -> $.ajax.error', message: "can't get exam file", data: { jqXHR, textStatus, errorThrown } })
-          Assistant.handleAxiosError("can't get exam file")
-          reject({ jqXHR, textStatus, errorThrown })
-        }
-      }
-      )
-    })
-    // https://cdn.alaatv.com/upload/3a_ensani_202101131630.json
   }
 
   setQuestionsLtr () {

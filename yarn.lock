@@ -4026,20 +4026,6 @@ js-abstract-model@^0.1.30:
     moment "^2.29.1"
     persian-date "^1.1.0"
 
-jquery@^3.6.0:
-  version "3.6.0"
-  resolved "https://registry.yarnpkg.com/jquery/-/jquery-3.6.0.tgz#c72a09f15c1bdce142f49dbf1170bdf8adac2470"
-  integrity sha512-JVzAR/AjBvVt2BmYhxRCSYysDsPcssdmTFnzyLEts9qNwmjmu4JTAMYubEfwVOSwpQ1I1sKKFcxhZCI2buerfw==
-
-js-abstract-model@^0.1.30:
-  version "0.1.30"
-  resolved "https://registry.yarnpkg.com/js-abstract-model/-/js-abstract-model-0.1.30.tgz#992031fee49f7b70e648f20812ec5e7ce6b5d81f"
-  integrity sha512-QNmjH5two36K+q++3xakSUQBuMqhD06ktzOAVkmPUmXsNcpJLLpJSs1fL2mv5F4AMWerCmhGgeBAgltYlwZg4Q==
-  dependencies:
-    axios "^0.21.1"
-    moment "^2.29.1"
-    persian-date "^1.1.0"
-
 js-tokens@^4.0.0:
   version "4.0.0"
   resolved "https://registry.yarnpkg.com/js-tokens/-/js-tokens-4.0.0.tgz#19203fb59991df98e3a287050d4647cdeaf32499"
