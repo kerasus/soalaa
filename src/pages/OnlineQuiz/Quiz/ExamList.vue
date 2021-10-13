@@ -19,6 +19,13 @@
           </q-th>
         </q-tr>
       </template>
+<!--      <template #body-cell-delay_time="props">-->
+<!--        <q-td-->
+<!--          :props="props"-->
+<!--        >-->
+<!--           {{  + 'دقیقه'}}-->
+<!--        </q-td>-->
+<!--      </template>-->
       <template #body-cell-options="props">
         <q-td
           :props="props"
@@ -28,7 +35,7 @@
             round
             dark
             color="purple"
-            icon="pencil"
+            icon="edit"
             size="11px"
           >
             <q-menu
@@ -105,7 +112,7 @@
             round
             dark
             color="indigo"
-            icon=""
+            icon="auto_stories"
             size="11px"
           >
             <q-tooltip anchor="top middle" self="bottom middle">
@@ -117,7 +124,7 @@
             round
             dark
             color="blue"
-            icon=""
+            icon="assignment"
             size="11px"
           >
             <q-menu
@@ -566,7 +573,8 @@ export default {
           is_register_open: false,
           is_open: false
         }
-      ]
+      ],
+      delay: null
     }
   },
   methods: {
