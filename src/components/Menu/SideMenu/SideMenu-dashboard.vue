@@ -61,7 +61,7 @@
     dark
   >
     <q-expansion-item
-      style="font-size:16px ; "
+      style="font-size:16px; "
       icon="account_balance"
       label="بانک سوال"
     >
