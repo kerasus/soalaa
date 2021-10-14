@@ -11,7 +11,6 @@ const mixinAuth = {
   },
   methods: {
     getUserData (callbasck) {
-      console.log('get user data')
       const that = this
       this.user.getUserData()
         .then((user) => {

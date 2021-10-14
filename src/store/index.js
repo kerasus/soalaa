@@ -12,7 +12,7 @@ import Auth from 'src/store/module-example/Auth'
  * async/await or return a Promise which resolves
  * with the Store instance.
  */
-
+const debug = false
 export default store(function (/* { ssrContext } */) {
   const Store = createStore({
     modules: {
@@ -26,7 +26,7 @@ export default store(function (/* { ssrContext } */) {
     ],
     // enable strict mode (adds overhead!)
     // for dev mode and --debug builds only
-    strict: process.env.DEBUGGING
+    strict: debug
   })
 
   return Store
