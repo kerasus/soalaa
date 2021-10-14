@@ -127,7 +127,6 @@ class User extends Model {
         .then((response) => {
           that = new User(response.data.data)
           resolve(that)
-          console.log('user data :', response.data.data)
         })
         .catch((error) => {
           // Assistant.reportErrors({ location: 'models/User.js -> getUserData()' })

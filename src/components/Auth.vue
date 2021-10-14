@@ -53,10 +53,10 @@ export default {
     autofilledPass: false
   }),
   created () {
-    // if (this.getToken()) {
-    //   console.log('run')
-    //   this.getUserData(() => { this.redirectTo() })
-    // }
+    if (this.getToken()) {
+      this.setAccessToken(this.getToken())
+      this.getUserData(() => { this.redirectTo() })
+    }
   },
   methods: {
     checkAnimationUserName (e) {
@@ -80,7 +80,7 @@ export default {
     },
     setAccessToken (accessToken) {
       this.$axios.defaults.headers.common.Authorization = 'Bearer ' + accessToken
-      // this.$store.commit('Auth/updateAccessToken', accessToken)
+      this.$store.commit('Auth/updateAccessToken', accessToken)
     },
     redirectTo () {
       if (this.$route.query.redirectTo_exam) {
@@ -96,7 +96,7 @@ export default {
 
       let redirectTo = window.localStorage.getItem('redirectTo')
       if (!redirectTo) {
-        redirectTo = 'dashboard'
+        redirectTo = 'home'
       }
       this.$router.push({ name: redirectTo })
     },
@@ -127,16 +127,17 @@ export default {
       const that = this
       this.loadingList = true
       this.$axios.post(API_ADDRESS.auth.login, {
-        mobile: this.username,
-        password: this.password
+        mobile: '09388131193',
+        password: '4900443050'
       })
         .then((response) => {
           this.loadingList = false
-          // that.user = new User(response.data.data.user)
-          // that.$store.commit('Auth/updateUser', that.user)
+          that.user = new User(response.data.data.user)
+          that.$store.commit('Auth/updateUser', that.user)
           const accessToken = response.data.data.access_token
           that.setAccessToken(accessToken)
           this.userLogin = true
+
           this.$q.notify({
             type: 'info',
             message: 'برای درخواست‌های axios لطفا صفحه را reload نفرمایید.',
@@ -148,12 +149,10 @@ export default {
             position: 'center'
           })
 
-          // that.setUserData(response.data.data.user)
-          // this.getUserData(() => { this.redirectTo() })
+          that.setUserData(response.data.data.user)
+          that.getUserData(() => { this.redirectTo() })
         })
-        .catch((err) => {
-          this.handleErr(err.response)
-        })
+        .catch((err) => this.handleErr(err.response))
     }
   }
 }
