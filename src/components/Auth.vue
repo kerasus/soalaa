@@ -127,8 +127,8 @@ export default {
       const that = this
       this.loadingList = true
       this.$axios.post(API_ADDRESS.auth.login, {
-        mobile: '09388131193',
-        password: '4900443050'
+        mobile: this.username,
+        password: this.password
       })
         .then((response) => {
           this.loadingList = false
@@ -137,7 +137,6 @@ export default {
           const accessToken = response.data.data.access_token
           that.setAccessToken(accessToken)
           this.userLogin = true
-
           this.$q.notify({
             type: 'positive',
             message: 'ورود با موفقیت انجام شد',
