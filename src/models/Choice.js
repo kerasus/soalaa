@@ -1,5 +1,5 @@
 import { Model, Collection } from 'js-abstract-model'
-import md from '../plugins/Markdown'
+// import md from '../plugins/Markdown'
 import TurndownService from 'turndown/lib/turndown.browser.umd'
 import convertToMarkdownKatex from '../plugins/ConvertToMarkdownKatex'
 

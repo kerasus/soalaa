@@ -1,10 +1,11 @@
+/* eslint-disable array-callback-return,camelcase */
 import { Model, Collection } from 'js-abstract-model'
 import { QuestionList } from '../models/Question'
 import { QuestCategoryList } from '../models/QuestCategory'
 import { QuestSubcategoryList } from '../models/QuestSubcategory'
 import { CheckingTimeList } from '../models/CheckingTime'
 import Assistant from '../plugins/assistant'
-// import Vue from 'vue'
+// import Vue from 'vue' ToDo : import vue
 import axios from 'axios'
 import API_ADDRESS from '../api/Addresses'
 
@@ -185,9 +186,9 @@ class Exam extends Model {
     userQuestionData.bookmarked = question.bookmarked
     userQuestionData.state = question.state
 
-    Vue.set(userQuestionData, 'answered_at', (answeredChoice) ? answeredChoice.answered_at : null)
-    Vue.set(userQuestionData, 'bookmarked', question.bookmarked)
-    Vue.set(userQuestionData, 'state', question.state)
+    // Vue.set(userQuestionData, 'answered_at', (answeredChoice) ? answeredChoice.answered_at : null) ToDo : import vue
+    // Vue.set(userQuestionData, 'bookmarked', question.bookmarked)
+    // Vue.set(userQuestionData, 'state', question.state)
   }
 
   addUserQuestionData (question, userQuizData) {
