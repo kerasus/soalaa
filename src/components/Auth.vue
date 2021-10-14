@@ -133,7 +133,7 @@ export default {
         .then((response) => {
           this.loadingList = false
           that.user = new User(response.data.data.user)
-          that.$store.commit('Auth/updateUser', that.user)
+          // that.$store.commit('Auth/updateUser', that.user)
           const accessToken = response.data.data.access_token
           that.setAccessToken(accessToken)
           this.userLogin = true
