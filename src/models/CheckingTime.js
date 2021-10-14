@@ -1,5 +1,5 @@
 import { Collection, Model } from 'js-abstract-model'
-import Vue from 'vue'
+// import Vue from 'vue'
 import Time from '../plugins/time'
 
 class CheckingTime extends Model {
@@ -31,11 +31,12 @@ class CheckingTimeList extends Collection {
   }
 
   addEnd () {
-    const lastItem = this.getLastItem()
-    if (!lastItem) {
-      return
-    }
-    Vue.set(lastItem, 'end', Time.now())
+    // const lastItem = this.getLastItem()
+    // if (!lastItem) {
+    //
+    // }
+    // Vue.set(lastItem, 'end', Time.now())
+    // ToDo : import vue
   }
 }
 
