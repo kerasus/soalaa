@@ -4,7 +4,7 @@ import { QuestCategoryList } from '../models/QuestCategory'
 import { QuestSubcategoryList } from '../models/QuestSubcategory'
 import { CheckingTimeList } from '../models/CheckingTime'
 import Assistant from '../plugins/assistant'
-import Vue from 'vue'
+// import Vue from 'vue'
 import axios from 'axios'
 import API_ADDRESS from '../api/Addresses'
 
