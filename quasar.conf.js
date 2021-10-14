@@ -37,8 +37,10 @@ module.exports = configure(function (ctx) {
     // https://github.com/quasarframework/quasar/tree/dev/extras
     extras: [
       // 'ionicons-v4',
-      // 'mdi-v5',
+      'mdi-v6',
+      'mdi-v5',
       // 'fontawesome-v5',
+      // 'ionicons-v4',
       // 'eva-icons',
       // 'themify',
       // 'line-awesome',
@@ -128,7 +130,7 @@ module.exports = configure(function (ctx) {
 
     // animations: 'all', // --- includes all animations
     // https://v2.quasar.dev/options/animations
-    animations: [],
+    animations: 'all',
 
     // https://v2.quasar.dev/quasar-cli/developing-ssr/configuring-ssr
     ssr: {

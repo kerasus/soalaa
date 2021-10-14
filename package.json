@@ -13,12 +13,16 @@
     "build:pwa": "quasar build -m pwa"
   },
   "dependencies": {
+    "@nodeguy/server-date": "^4.0.3",
     "@quasar/extras": "^1.0.0",
     "axios": "^0.21.1",
     "core-js": "^3.6.5",
     "dotenv": "^10.0.0",
     "js-abstract-model": "^0.1.30",
+    "markdown-it-new-katex": "^2.0.3",
+    "moment": "^2.29.1",
     "quasar": "^2.0.0",
+    "turndown": "^7.1.1",
     "vue-i18n": "^9.0.0",
     "vuex": "^4.0.1",
     "vuex-persistedstate": "^4.1.0"

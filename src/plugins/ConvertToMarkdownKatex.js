@@ -1,5 +1,5 @@
 import TurndownService from 'turndown/lib/turndown.browser.umd'
-import md from '@/plugins/Markdown'
+import md from '../plugins/Markdown'
 
 function convertPoem (htmlString) {
   const wrapper = document.createElement('div')
