@@ -11,6 +11,13 @@ const routes = [
         meta: {
           middlewares: [auth]
         }
+      },
+      // user list
+      // admin list
+      {
+        path: 'exams',
+        name: 'onlineQuiz.exams',
+        component: () => import('pages/OnlineQuiz/Quiz/ExamList')
       }
     ]
   },
