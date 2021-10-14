@@ -2,6 +2,7 @@ import { boot } from 'quasar/wrappers'
 import axios from 'axios'
 import { Notify } from 'quasar'
 
+// this.$store.getters['Auth/accessToken']
 const AxiosError = (function () {
   function handle (error) {
     let messages = []

@@ -3,6 +3,7 @@ import { auth } from './middleware/middleware'
 const routes = [
   {
     path: '/',
+    name: 'home',
     component: () => import('layouts/MainLayout.vue'),
     children: [
       {
@@ -11,6 +12,13 @@ const routes = [
         meta: {
           middlewares: [auth]
         }
+      },
+      // user list
+      // admin list
+      {
+        path: 'exams',
+        name: 'onlineQuiz.exams',
+        component: () => import('pages/OnlineQuiz/Quiz/ExamList')
       }
     ]
   },

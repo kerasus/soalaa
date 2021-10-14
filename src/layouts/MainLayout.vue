@@ -1,14 +1,23 @@
 <template>
   <q-layout view="lHr lpR fFf">
-    <q-header class="bg-grey-2 text-black">
+    <q-header
+      class="text-black"
+      style="background-color: #f1f1f1"
+    >
       <q-toolbar>
         <div class="header-body full-width">
           <q-btn dense flat round icon="menu" @click="toggleLeftDrawer" />
         </div>
       </q-toolbar>
+      <q-linear-progress
+        v-if="loading"
+        color="amber-13"
+        track-color="orange"
+        class="q-mt-sm"
+      />
     </q-header>
       <q-drawer
-        class="bg-amber-13 side-bar"
+        class="bg-primary side-bar"
         show-if-above
         v-model="leftDrawerOpen"
         side="left"
@@ -32,8 +41,8 @@
           <side-menu-dashboard/>
         </div>
       </q-drawer>
-    <q-page-container class="bg-grey-2">
-      <div class="bg-grey-2 page-body">
+    <q-page-container>
+      <div class="page-body">
         <router-view />
       </div>
     </q-page-container>
@@ -46,6 +55,11 @@ import SideMenuDashboard from 'components/Menu/SideMenu/SideMenu-dashboard'
 
 export default {
   components: { SideMenuDashboard },
+  data () {
+    return {
+      loading: true
+    }
+  },
   setup () {
     const leftDrawerOpen = ref(false)
 
@@ -82,5 +96,8 @@ export default {
 .page-body{
   max-width: 1158px;
   margin: auto !important;
+}
+.q-drawer--left .q-layout__shadow{
+  opacity: 0.5 !important;
 }
 </style>
