@@ -27,6 +27,16 @@ const routes = [
     name: 'login',
     component: () => import('pages/Auth/Login.vue')
   },
+  {
+    path: '/editCoefficients',
+    name: 'coefficient.edit',
+    component: () => import('src/pages/Admin/subGroup/editCoefficients.vue')
+  },
+  {
+    path: '/lessonsList',
+    name: 'onlineQuiz.exams.lessons',
+    component: () => import('src/pages/Admin/exam/lessons.vue')
+  },
 
   // Always leave this as last one,
   // but you can also remove it
