@@ -1,6 +1,7 @@
 import { store } from 'quasar/wrappers'
 import { createStore } from 'vuex'
-
+import createPersistedState from 'vuex-persistedstate'
+import Auth from 'src/store/module-example/Auth'
 // import example from './module-example'
 
 /*
@@ -11,16 +12,21 @@ import { createStore } from 'vuex'
  * async/await or return a Promise which resolves
  * with the Store instance.
  */
-
+const debug = false
 export default store(function (/* { ssrContext } */) {
   const Store = createStore({
     modules: {
-      // example
+      Auth
     },
-
+    plugins: [
+      createPersistedState({
+        storage: window.localStorage,
+        paths: ['userQuizListData', 'Auth.accessToken', 'Auth.user', 'psychometricAnswer']
+      })
+    ],
     // enable strict mode (adds overhead!)
     // for dev mode and --debug builds only
-    strict: process.env.DEBUGGING
+    strict: debug
   })
 
   return Store

@@ -6,10 +6,7 @@ import { defineComponent } from 'vue'
 import '../src/assets/scss/font.scss'
 // import 'material-icons/material-icons.css'
 export default defineComponent({
-  name: 'App',
-  created () {
-    console.log('this.$axios', this.$axios)
-  }
+  name: 'App'
 })
 </script>
 <style>
@@ -39,4 +36,10 @@ export default defineComponent({
   * {
     font-family: 'IRANSans', 'Arial', '-apple-system', 'Helvetica Neue', Helvetica, sans-serif ;
   }
+  body.body--light {
+    background: #f1f1f1
+  }
+  /*body.body--dark {*/
+  /*  background: #000*/
+  /*}*/
 </style>

@@ -23,7 +23,8 @@ module.exports = configure(function (ctx) {
     // https://v2.quasar.dev/quasar-cli/boot-files
     boot: [
       'i18n',
-      'axios'
+      'axios',
+      'middleware'
     ],
 
     // https://v2.quasar.dev/quasar-cli/quasar-conf-js#Property%3A-css
@@ -99,7 +100,7 @@ module.exports = configure(function (ctx) {
           changeOrigin: true,
           secure: false,
           pathRewrite: {
-            '^/alaa/api/v2': ''
+            '^/3a/api/v1': ''
           }
         }
       }
@@ -172,7 +173,7 @@ module.exports = configure(function (ctx) {
         display: 'standalone',
         orientation: 'portrait',
         background_color: '#f1f1f1',
-        theme_color: '#027be3',
+        theme_color: '#ffc107',
         icons: [
           {
             src: 'icons/icon-128x128.png',
