@@ -1,10 +1,9 @@
 <template>
   <upload-answers/>
   <div class="admin-exam-list q-pa-md">
-    <div>{{ rowsList.title }}</div>
     <q-table
       :columns="headers"
-      :rows="rowsList"
+      :rows="examList.list"
       row-key="name"
       rows-per-page-label="تعداد ردیف در هر صفحه"
     >
@@ -20,13 +19,6 @@
           </q-th>
         </q-tr>
       </template>
-      <!--      <template #body-cell-delay_time="props">-->
-      <!--        <q-td-->
-      <!--          :props="props"-->
-      <!--        >-->
-      <!--           {{  + 'دقیقه'}}-->
-      <!--        </q-td>-->
-      <!--      </template>-->
       <template #body-cell-options="props">
         <q-td
           :props="props"
@@ -71,6 +63,7 @@
                   v-ripple:yellow
                   clickable
                   manual-focus
+                  @click="generateJsonFile( examList.list.id, false)"
                 >
                   <q-item-section>ساخت فایل سوالات</q-item-section>
                 </q-item>
@@ -190,12 +183,10 @@
 </template>
 
 <script>
-// import Vue from 'vue'
 import { Exam, ExamList } from 'src/models/Exam'
-// import Toasted from 'vue-toasted'
 import API_ADDRESS from 'src/api/Addresses'
-// Vue.use(Toasted)
-import Axios from 'axios'
+import { useQuasar } from 'quasar'
+const $q = useQuasar()
 import UploadAnswers from 'src/components/OnlineQuiz/Quiz/uploadAnswers'
 
 export default {
@@ -206,16 +197,6 @@ export default {
       dialog: false,
       dialogDelete: false,
       selectedExam: null,
-      examList: new ExamList(),
-      examItem: new Exam(),
-      rows: [],
-      options: {
-        itemsPerPage: 15,
-        page: 1
-      },
-      totalRows: 0,
-      dialogUpload: false,
-      // ------------------------------------------------
       headers: [
         { name: 'title', field: 'title', label: 'عنوان' },
         { name: 'start_at', field: 'start_at', label: 'شروع' },
@@ -223,462 +204,59 @@ export default {
         { name: 'delay_time', field: 'delay_time', label: 'میزان تاخیر' },
         { name: 'options', field: 'options', label: 'عملیات' }
       ],
-      rowsList: [
-        {
-          id: '614c71a148377222e808ce3b',
-          title: 'فرسنگ اول زیست شناسی | کنکورچه سوم',
-          holding_status: null,
-          start_at: '2021-10-04 15:50:00',
-          finish_at: '2021-10-18 15:50:00',
-          photo: 'https://cdn.alaatv.com/upload/images/slideShow/home-slide-yalda-festival_20201219075413.jpg?w=1843&h=719',
-          delay_time: 30,
-          n_questions: 0,
-          enable: false,
-          updated_at: '2021-09-23 15:52:57',
-          created_at: '2021-09-23 15:52:57',
-          generate_questions_automatically: null,
-          confirm: false,
-          report_config: [],
-          holding_config: {
-            randomize_questions: false
-          },
-          alaa_product_link: null,
-          type: {
-            id: '6141a799f044ab21205450b2',
-            type: 'exam_type',
-            value: 'konkur',
-            updated_at: '2021-09-15 12:28:17',
-            created_at: '2021-09-15 12:28:17'
-          },
-          user_exam_id: null,
-          is_free: null,
-          is_register_open: false,
-          is_open: false
-        },
-        {
-          id: '614c71a148377222e808ce3b',
-          title: 'فرسنگ اول زیست شناسی | کنکورچه سوم',
-          holding_status: null,
-          start_at: '2021-10-04 15:50:00',
-          finish_at: '2021-10-18 15:50:00',
-          photo: 'https://cdn.alaatv.com/upload/images/slideShow/home-slide-yalda-festival_20201219075413.jpg?w=1843&h=719',
-          delay_time: 30,
-          n_questions: 0,
-          enable: false,
-          updated_at: '2021-09-23 15:52:57',
-          created_at: '2021-09-23 15:52:57',
-          generate_questions_automatically: null,
-          confirm: false,
-          report_config: [],
-          holding_config: {
-            randomize_questions: false
-          },
-          alaa_product_link: null,
-          type: {
-            id: '6141a799f044ab21205450b2',
-            type: 'exam_type',
-            value: 'konkur',
-            updated_at: '2021-09-15 12:28:17',
-            created_at: '2021-09-15 12:28:17'
-          },
-          user_exam_id: null,
-          is_free: null,
-          is_register_open: false,
-          is_open: false
-        },
-        {
-          id: '614c71a148377222e808ce3b',
-          title: 'فرسنگ اول زیست شناسی | کنکورچه سوم',
-          holding_status: null,
-          start_at: '2021-10-04 15:50:00',
-          finish_at: '2021-10-18 15:50:00',
-          photo: 'https://cdn.alaatv.com/upload/images/slideShow/home-slide-yalda-festival_20201219075413.jpg?w=1843&h=719',
-          delay_time: 30,
-          n_questions: 0,
-          enable: false,
-          updated_at: '2021-09-23 15:52:57',
-          created_at: '2021-09-23 15:52:57',
-          generate_questions_automatically: null,
-          confirm: false,
-          report_config: [],
-          holding_config: {
-            randomize_questions: false
-          },
-          alaa_product_link: null,
-          type: {
-            id: '6141a799f044ab21205450b2',
-            type: 'exam_type',
-            value: 'konkur',
-            updated_at: '2021-09-15 12:28:17',
-            created_at: '2021-09-15 12:28:17'
-          },
-          user_exam_id: null,
-          is_free: null,
-          is_register_open: false,
-          is_open: false
-        },
-        {
-          id: '614c71a148377222e808ce3b',
-          title: 'فرسنگ اول زیست شناسی | کنکورچه سوم',
-          holding_status: null,
-          start_at: '2021-10-04 15:50:00',
-          finish_at: '2021-10-18 15:50:00',
-          photo: 'https://cdn.alaatv.com/upload/images/slideShow/home-slide-yalda-festival_20201219075413.jpg?w=1843&h=719',
-          delay_time: 30,
-          n_questions: 0,
-          enable: false,
-          updated_at: '2021-09-23 15:52:57',
-          created_at: '2021-09-23 15:52:57',
-          generate_questions_automatically: null,
-          confirm: false,
-          report_config: [],
-          holding_config: {
-            randomize_questions: false
-          },
-          alaa_product_link: null,
-          type: {
-            id: '6141a799f044ab21205450b2',
-            type: 'exam_type',
-            value: 'konkur',
-            updated_at: '2021-09-15 12:28:17',
-            created_at: '2021-09-15 12:28:17'
-          },
-          user_exam_id: null,
-          is_free: null,
-          is_register_open: false,
-          is_open: false
-        },
-        {
-          id: '614c71a148377222e808ce3b',
-          title: 'فرسنگ اول زیست شناسی | کنکورچه سوم',
-          holding_status: null,
-          start_at: '2021-10-04 15:50:00',
-          finish_at: '2021-10-18 15:50:00',
-          photo: 'https://cdn.alaatv.com/upload/images/slideShow/home-slide-yalda-festival_20201219075413.jpg?w=1843&h=719',
-          delay_time: 30,
-          n_questions: 0,
-          enable: false,
-          updated_at: '2021-09-23 15:52:57',
-          created_at: '2021-09-23 15:52:57',
-          generate_questions_automatically: null,
-          confirm: false,
-          report_config: [],
-          holding_config: {
-            randomize_questions: false
-          },
-          alaa_product_link: null,
-          type: {
-            id: '6141a799f044ab21205450b2',
-            type: 'exam_type',
-            value: 'konkur',
-            updated_at: '2021-09-15 12:28:17',
-            created_at: '2021-09-15 12:28:17'
-          },
-          user_exam_id: null,
-          is_free: null,
-          is_register_open: false,
-          is_open: false
-        },
-        {
-          id: '614c71a148377222e808ce3b',
-          title: 'فرسنگ اول زیست شناسی | کنکورچه سوم',
-          holding_status: null,
-          start_at: '2021-10-04 15:50:00',
-          finish_at: '2021-10-18 15:50:00',
-          photo: 'https://cdn.alaatv.com/upload/images/slideShow/home-slide-yalda-festival_20201219075413.jpg?w=1843&h=719',
-          delay_time: 30,
-          n_questions: 0,
-          enable: false,
-          updated_at: '2021-09-23 15:52:57',
-          created_at: '2021-09-23 15:52:57',
-          generate_questions_automatically: null,
-          confirm: false,
-          report_config: [],
-          holding_config: {
-            randomize_questions: false
-          },
-          alaa_product_link: null,
-          type: {
-            id: '6141a799f044ab21205450b2',
-            type: 'exam_type',
-            value: 'konkur',
-            updated_at: '2021-09-15 12:28:17',
-            created_at: '2021-09-15 12:28:17'
-          },
-          user_exam_id: null,
-          is_free: null,
-          is_register_open: false,
-          is_open: false
-        },
-        {
-          id: '614c71a148377222e808ce3b',
-          title: 'فرسنگ اول زیست شناسی | کنکورچه سوم',
-          holding_status: null,
-          start_at: '2021-10-04 15:50:00',
-          finish_at: '2021-10-18 15:50:00',
-          photo: 'https://cdn.alaatv.com/upload/images/slideShow/home-slide-yalda-festival_20201219075413.jpg?w=1843&h=719',
-          delay_time: 30,
-          n_questions: 0,
-          enable: false,
-          updated_at: '2021-09-23 15:52:57',
-          created_at: '2021-09-23 15:52:57',
-          generate_questions_automatically: null,
-          confirm: false,
-          report_config: [],
-          holding_config: {
-            randomize_questions: false
-          },
-          alaa_product_link: null,
-          type: {
-            id: '6141a799f044ab21205450b2',
-            type: 'exam_type',
-            value: 'konkur',
-            updated_at: '2021-09-15 12:28:17',
-            created_at: '2021-09-15 12:28:17'
-          },
-          user_exam_id: null,
-          is_free: null,
-          is_register_open: false,
-          is_open: false
-        },
-        {
-          id: '614c71a148377222e808ce3b',
-          title: 'فرسنگ اول زیست شناسی | کنکورچه سوم',
-          holding_status: null,
-          start_at: '2021-10-04 15:50:00',
-          finish_at: '2021-10-18 15:50:00',
-          photo: 'https://cdn.alaatv.com/upload/images/slideShow/home-slide-yalda-festival_20201219075413.jpg?w=1843&h=719',
-          delay_time: 30,
-          n_questions: 0,
-          enable: false,
-          updated_at: '2021-09-23 15:52:57',
-          created_at: '2021-09-23 15:52:57',
-          generate_questions_automatically: null,
-          confirm: false,
-          report_config: [],
-          holding_config: {
-            randomize_questions: false
-          },
-          alaa_product_link: null,
-          type: {
-            id: '6141a799f044ab21205450b2',
-            type: 'exam_type',
-            value: 'konkur',
-            updated_at: '2021-09-15 12:28:17',
-            created_at: '2021-09-15 12:28:17'
-          },
-          user_exam_id: null,
-          is_free: null,
-          is_register_open: false,
-          is_open: false
-        },
-        {
-          id: '614c71a148377222e808ce3b',
-          title: 'فرسنگ اول زیست شناسی | کنکورچه سوم',
-          holding_status: null,
-          start_at: '2021-10-04 15:50:00',
-          finish_at: '2021-10-18 15:50:00',
-          photo: 'https://cdn.alaatv.com/upload/images/slideShow/home-slide-yalda-festival_20201219075413.jpg?w=1843&h=719',
-          delay_time: 30,
-          n_questions: 0,
-          enable: false,
-          updated_at: '2021-09-23 15:52:57',
-          created_at: '2021-09-23 15:52:57',
-          generate_questions_automatically: null,
-          confirm: false,
-          report_config: [],
-          holding_config: {
-            randomize_questions: false
-          },
-          alaa_product_link: null,
-          type: {
-            id: '6141a799f044ab21205450b2',
-            type: 'exam_type',
-            value: 'konkur',
-            updated_at: '2021-09-15 12:28:17',
-            created_at: '2021-09-15 12:28:17'
-          },
-          user_exam_id: null,
-          is_free: null,
-          is_register_open: false,
-          is_open: false
-        },
-        {
-          id: '614c71a148377222e808ce3b',
-          title: 'فرسنگ اول زیست شناسی | کنکورچه سوم',
-          holding_status: null,
-          start_at: '2021-10-04 15:50:00',
-          finish_at: '2021-10-18 15:50:00',
-          photo: 'https://cdn.alaatv.com/upload/images/slideShow/home-slide-yalda-festival_20201219075413.jpg?w=1843&h=719',
-          delay_time: 30,
-          n_questions: 0,
-          enable: false,
-          updated_at: '2021-09-23 15:52:57',
-          created_at: '2021-09-23 15:52:57',
-          generate_questions_automatically: null,
-          confirm: false,
-          report_config: [],
-          holding_config: {
-            randomize_questions: false
-          },
-          alaa_product_link: null,
-          type: {
-            id: '6141a799f044ab21205450b2',
-            type: 'exam_type',
-            value: 'konkur',
-            updated_at: '2021-09-15 12:28:17',
-            created_at: '2021-09-15 12:28:17'
-          },
-          user_exam_id: null,
-          is_free: null,
-          is_register_open: false,
-          is_open: false
-        },
-        {
-          id: '614c71a148377222e808ce3b',
-          title: 'فرسنگ اول زیست شناسی | کنکورچه سوم',
-          holding_status: null,
-          start_at: '2021-10-04 15:50:00',
-          finish_at: '2021-10-18 15:50:00',
-          photo: 'https://cdn.alaatv.com/upload/images/slideShow/home-slide-yalda-festival_20201219075413.jpg?w=1843&h=719',
-          delay_time: 30,
-          n_questions: 0,
-          enable: false,
-          updated_at: '2021-09-23 15:52:57',
-          created_at: '2021-09-23 15:52:57',
-          generate_questions_automatically: null,
-          confirm: false,
-          report_config: [],
-          holding_config: {
-            randomize_questions: false
-          },
-          alaa_product_link: null,
-          type: {
-            id: '6141a799f044ab21205450b2',
-            type: 'exam_type',
-            value: 'konkur',
-            updated_at: '2021-09-15 12:28:17',
-            created_at: '2021-09-15 12:28:17'
-          },
-          user_exam_id: null,
-          is_free: null,
-          is_register_open: false,
-          is_open: false
-        },
-        {
-          id: '614c71a148377222e808ce3b',
-          title: 'فرسنگ اول زیست شناسی | کنکورچه سوم',
-          holding_status: null,
-          start_at: '2021-10-04 15:50:00',
-          finish_at: '2021-10-18 15:50:00',
-          photo: 'https://cdn.alaatv.com/upload/images/slideShow/home-slide-yalda-festival_20201219075413.jpg?w=1843&h=719',
-          delay_time: 30,
-          n_questions: 0,
-          enable: false,
-          updated_at: '2021-09-23 15:52:57',
-          created_at: '2021-09-23 15:52:57',
-          generate_questions_automatically: null,
-          confirm: false,
-          report_config: [],
-          holding_config: {
-            randomize_questions: false
-          },
-          alaa_product_link: null,
-          type: {
-            id: '6141a799f044ab21205450b2',
-            type: 'exam_type',
-            value: 'konkur',
-            updated_at: '2021-09-15 12:28:17',
-            created_at: '2021-09-15 12:28:17'
-          },
-          user_exam_id: null,
-          is_free: null,
-          is_register_open: false,
-          is_open: false
-        }
-      ],
+      examList: new ExamList(),
+      examItem: new Exam(),
+      options: {
+        itemsPerPage: 15,
+        page: 1
+      },
+      totalRows: 0,
       delay: null
     }
   },
+  // watch: {
+  //   options: {
+  //     handler () {
+  //       this.getExams()
+  //     }
+  //   }
+  // },
+  created () {
+    this.getExams()
+  },
   methods: {
-    goToResult (exam) {
-      if (exam.type.value === 'psychometric') {
-        this.$router.push({ name: 'psychology.results', params: { examId: exam.id } })
-        return
-      }
-      this.$router.push({ name: 'exam.results', params: { examId: exam.id } })
-    },
-    openUploadDialog (examId) {
-      this.dialogUpload = true
-      this.selectedExam = examId
-    },
-    generateJsonFile (exam, withAnswer) {
-      this.examList.loading = true
-      const that = this
-      Axios.post(API_ADDRESS.exam.generateExamFile(exam.id, withAnswer))
-        .then(() => {
-          that.$notify({
-            group: 'notifs',
-            text: 'ساخت فایل ' + exam.title + ' با موفقیت انجام شد',
-            type: 'success',
-            duration: -1
-          })
-          this.examList.loading = false
-        })
-        .catch(() => {
-          this.examList.loading = false
-        })
-    },
-    editItem () {
-      // this.editedIndex = this.desserts.indexOf(item)
-      // this.editedItem = Object.assign({}, item)
-      this.dialog = true
-    },
-    deleteItem () {
-      // this.editedIndex = this.desserts.indexOf(item)
-      // this.editedItem = Object.assign({}, item)
-      this.dialogDelete = true
-    },
-    deleteItemConfirm () {
-      // this.desserts.splice(this.editedIndex, 1)
-      this.closeDelete()
-    },
-    save () {
-      this.close()
-    },
-    close () {
-      this.dialog = false
-      this.$nextTick(() => {
-        // this.editedItem = Object.assign({}, this.defaultItem)
-        // this.editedIndex = -1
-      })
-    },
-    closeDelete () {
-      this.dialogDelete = false
-      this.$nextTick(() => {
-        // this.editedItem = Object.assign({}, this.defaultItem)
-        // this.editedIndex = -1
-      })
-    },
     getExams () {
       this.examList.loading = true
-      this.examList.fetch(null, API_ADDRESS.exam.base(this.options.page))
+      this.$axios(API_ADDRESS.exam.base(this.options.page))
         .then((response) => {
+          console.log('respons: ', response)
           this.examList.loading = false
           this.totalRows = response.data.meta.total
-          this.rows = new ExamList(response.data.data, { meta: response.data.meta, links: response.data.links })
           this.examList = new ExamList(response.data.data, { meta: response.data.meta, links: response.data.links })
+          console.log('list:', this.examList)
+          console.log('id:', this.examList.id)
         })
         .catch(() => {
           this.examList.loading = false
           this.examList = new ExamList()
         })
     },
-    selectExam (item) {
-      this.$emit('update-exam-id', item)
-    },
-    selectExamReport (item) {
-      this.$emit('update-exam-report-id', item)
+    generateJsonFile (exam, withAnswer) {
+      this.examList.loading = true
+      console.log('exam list:', exam)
+      console.log('id: ', exam.id)
+      this.$axios.post(API_ADDRESS.exam.generateExamFile(exam.id, withAnswer))
+        .then((res) => {
+          console.log('res: ', res)
+          $q.notify({
+            massage: 'ساخت فایل ' + exam.title + ' با موفقیت انجام شد',
+            color: 'success'
+          })
+          this.examList.loading = false
+        })
+        .catch(() => {
+          this.examList.loading = false
+        })
     }
   }
 }
