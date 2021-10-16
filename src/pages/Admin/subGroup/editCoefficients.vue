@@ -43,6 +43,7 @@
                     item-value="title"
                   />
                 </div>
+
                 <div class="col-md-4">
                   <q-select
                     v-model="selectedSubcategory"
