@@ -89,19 +89,19 @@
 </template>
 
 <script>
-import {Log} from "@/models/Log";
+import { Log } from 'src/models/Log'
 
 export default {
-  name: "LogItem",
+  name: 'LogItem',
   props: {
     log: {
-      default() {
+      default () {
         return new Log()
       },
       type: Log
     }
   },
-  data() {
+  data () {
     return {
       canComment: false,
       commentText: ''

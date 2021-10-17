@@ -6440,6 +6440,13 @@ vue-i18n@^9.0.0:
     "@intlify/vue-devtools" "9.1.9"
     "@vue/devtools-api" "^6.0.0-beta.7"
 
+vue-katex@^0.5.0:
+  version "0.5.0"
+  resolved "https://registry.yarnpkg.com/vue-katex/-/vue-katex-0.5.0.tgz#af178cc50932847ce2be28e2a35c30246e890e32"
+  integrity sha512-KsjSK4ftpw9q8SP1OJbigPOozdthOS46+6GmqkToXZVmmPejBHGGmDUxJ/2UtkyAuHf5dHL+2RvOXi/RV77YOA==
+  dependencies:
+    deepmerge "^4.2.2"
+
 vue-loader@16.5.0:
   version "16.5.0"
   resolved "https://registry.yarnpkg.com/vue-loader/-/vue-loader-16.5.0.tgz#09c4e0712466899e34b99a686524f19165fb2892"

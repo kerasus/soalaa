@@ -63,6 +63,7 @@
 </template>
 <script>
 import { Question } from 'src/models/Question'
+// eslint-disable-next-line camelcase
 import question_field from 'components/Question/questionField'
 
 export default {

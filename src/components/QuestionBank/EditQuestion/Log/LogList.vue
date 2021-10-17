@@ -21,18 +21,18 @@
 </template>
 
 <script>
-import LogItem from "@/components/QuestionBank/EditQuestion/Log/LogItem/LogItem";
-import {LogList} from "@/models/Log";
+import LogItem from 'src/components/QuestionBank/EditQuestion/Log/LogItem/LogItem'
+import { LogList } from 'src/models/Log'
 
 export default {
-  name: "LogList",
+  name: 'LogList',
   components: {
     LogItem
   },
   props: {
     logs: {
       type: LogList,
-      default() {
+      default () {
         return new LogList([
           {
             causer: {
@@ -190,10 +190,10 @@ export default {
             created_at: '32131538546'
           }
         ])
-      },
+      }
     }
   },
-  data() {
+  data () {
     return {}
   },
   methods: {
