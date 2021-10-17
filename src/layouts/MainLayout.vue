@@ -16,7 +16,7 @@
           />
           <q-btn-dropdown
             icon="account_circle"
-            label="مریم رزمجوی"
+            :label="user.first_name "
             color="grey-14"
             dropdown-icon="false"
             dir="ltr"
@@ -41,6 +41,7 @@
                 </a>
                 <a
                   class="profile-link bg-negative"
+                  @click="logOut"
                 >
                   <span >خروج</span>
                 </a>
@@ -56,7 +57,7 @@
         class="q-mt-sm"
       />
     </q-header>
-      <q-drawer
+    <q-drawer
         class="bg-primary side-bar"
         show-if-above
         v-model="leftDrawerOpen"
@@ -82,32 +83,38 @@
         </div>
       </q-drawer>
     <q-page-container>
-      <div class="page-body">
-        <router-view />
-      </div>
+      <router-view />
     </q-page-container>
   </q-layout>
 </template>
 
 <script>
-import { ref } from 'vue'
 import SideMenuDashboard from 'components/Menu/SideMenu/SideMenu-dashboard'
+import { User } from 'src/models/User'
 
 export default {
   components: { SideMenuDashboard },
-  data () {
-    return {
-      loading: true
+  props: {
+    user: {
+      default: new User(),
+      type: Object
     }
   },
-  setup () {
-    const leftDrawerOpen = ref(false)
-
+  created () {
+    console.log(this.user)
+  },
+  data () {
     return {
-      leftDrawerOpen,
-      toggleLeftDrawer () {
-        leftDrawerOpen.value = !leftDrawerOpen.value
-      }
+      loading: true,
+      leftDrawerOpen: false
+    }
+  },
+  methods: {
+    toggleLeftDrawer () {
+      this.leftDrawerOpen = !this.leftDrawerOpen
+    },
+    logOut () {
+      return this.$store.dispatch('Auth/logOut')
     }
   }
 }
@@ -124,6 +131,8 @@ export default {
       height: 44px;
       color: white;
       text-align: center;
+      padding: 12px;
+      box-sizing: border-box;
     }
   }
 }
