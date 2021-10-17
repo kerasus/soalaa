@@ -1,5 +1,5 @@
 <template>
-<div></div>
+<div>ExamReportInfo</div>
 </template>
 
 <script>

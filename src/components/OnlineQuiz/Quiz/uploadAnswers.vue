@@ -1,15 +1,16 @@
 <template>
 <div>
-  <div
-    class="row"
-    v-for="(item, index) in questionCategories.list"
-    :key="index"
-  >
-    <div class="col">
-    </div>
-    <div class="col">
-    </div>
-  </div>
+  uploadAnswers
+<!--  <div-->
+<!--    class="row"-->
+<!--    v-for="(item, index) in questionCategories.list"-->
+<!--    :key="index"-->
+<!--  >-->
+<!--    <div class="col">-->
+<!--    </div>-->
+<!--    <div class="col">-->
+<!--    </div>-->
+<!--  </div>-->
 </div>
 </template>
 

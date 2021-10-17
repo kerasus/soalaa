@@ -213,7 +213,7 @@
 </template>
 
 <script>
-import { Exam, ExamList } from 'src/models/Exam'
+import { ExamList } from 'src/models/Exam'
 import API_ADDRESS from 'src/api/Addresses'
 
 export default {
@@ -229,7 +229,6 @@ export default {
         { name: 'options', field: 'options', label: 'عملیات' }
       ],
       examList: new ExamList(),
-      examItem: new Exam(),
       rows: [],
       options: {
         itemsPerPage: 15,
@@ -265,10 +264,10 @@ export default {
         })
     },
     edit (examId) {
-      this.$emit('update-exam-id', examId)
+      this.$emit('update-exam', examId)
     },
     editExamReport (examId) {
-      this.$emit('update-exam-report-id', examId)
+      this.$emit('update-exam-report', examId)
     },
     generateJsonFile (exam, withAnswer) {
       this.examList.loading = true
