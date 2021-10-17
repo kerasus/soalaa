@@ -309,6 +309,7 @@ export default {
               this.refreshExamList()
             })
       } else {
+
         this.examItem.create()
             .then(() => {
               this.examItem.loading = false
