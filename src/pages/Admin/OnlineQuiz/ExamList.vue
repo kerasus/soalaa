@@ -3,7 +3,7 @@
   <div class="admin-exam-list q-pa-md">
     <q-table
       :columns="headers"
-      :rows="examList.list"
+      :rows="rows"
       row-key="name"
       rows-per-page-label="تعداد ردیف در هر صفحه"
     >
@@ -63,7 +63,7 @@
                   v-ripple:yellow
                   clickable
                   manual-focus
-                  @click="generateJsonFile( examList.list.id, false)"
+                  @click="generateJsonFile(rows[0], false)"
                 >
                   <q-item-section>ساخت فایل سوالات</q-item-section>
                 </q-item>
@@ -71,6 +71,7 @@
                   v-ripple:yellow
                   clickable
                   manual-focus
+                  @click="generateJsonFile(rows[0], true)"
                 >
                   <q-item-section>ساخت فایل سوالات با جواب</q-item-section>
                 </q-item>
@@ -206,6 +207,7 @@ export default {
       ],
       examList: new ExamList(),
       examItem: new Exam(),
+      rows: [],
       options: {
         itemsPerPage: 15,
         page: 1
@@ -227,30 +229,31 @@ export default {
   methods: {
     getExams () {
       this.examList.loading = true
-      this.$axios(API_ADDRESS.exam.base(this.options.page))
+      console.log('list:', this.examList)
+      this.$axios.get(API_ADDRESS.exam.base(this.options.page))
         .then((response) => {
-          console.log('respons: ', response)
+          console.log('response: ', response)
           this.examList.loading = false
-          this.totalRows = response.data.meta.total
+          // this.totalRows = response.data.meta.total
           this.examList = new ExamList(response.data.data, { meta: response.data.meta, links: response.data.links })
-          console.log('list:', this.examList)
-          console.log('id:', this.examList.id)
+          this.rows = this.examList.list
         })
-        .catch(() => {
+        .catch((err) => {
+          console.log(err)
           this.examList.loading = false
           this.examList = new ExamList()
+          console.log('catch list:', this.examList)
         })
     },
     generateJsonFile (exam, withAnswer) {
       this.examList.loading = true
-      console.log('exam list:', exam)
-      console.log('id: ', exam.id)
       this.$axios.post(API_ADDRESS.exam.generateExamFile(exam.id, withAnswer))
         .then((res) => {
           console.log('res: ', res)
           $q.notify({
             massage: 'ساخت فایل ' + exam.title + ' با موفقیت انجام شد',
-            color: 'success'
+            color: 'positive',
+            position: 'top'
           })
           this.examList.loading = false
         })
