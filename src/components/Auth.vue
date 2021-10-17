@@ -38,8 +38,6 @@
 </template>
 
 <script>
-import API_ADDRESS from 'src/api/Addresses'
-import { User } from 'src/models/User'
 import { mixinAuth } from 'src/mixin/Mixins'
 export default {
   name: 'Auth',
@@ -48,39 +46,21 @@ export default {
     userLogin: false,
     loadingList: false,
     username: null,
-    password: null,
-    autofilledUsername: false,
-    autofilledPass: false
+    password: null
   }),
   created () {
     if (this.getToken()) {
+      console.log('if run ', this.getToken())
       this.setAccessToken(this.getToken())
       this.getUserData(() => { this.redirectTo() })
     }
   },
   methods: {
-    checkAnimationUserName (e) {
-      if (e.animationName === 'onAutoFillStart') {
-        this.autofilledUsername = true
-      } else if (e.animationName === 'onAutoFillCancel') {
-        this.autofilledUsername = false
-      }
-
-      // if (this.autofilledUsername) {
-      //     document.getElementById('username').focus()
-      //     document.getElementById('password').focus()
-      //     document.getElementById('username').focus()
-      // }
-    },
     getToken () {
       return this.$store.getters['Auth/accessToken']
     },
-    setUserData (userData) {
-      this.$store.commit('Auth/updateUser', new User(userData))
-    },
     setAccessToken (accessToken) {
       this.$axios.defaults.headers.common.Authorization = 'Bearer ' + accessToken
-      this.$store.commit('Auth/updateAccessToken', accessToken)
     },
     redirectTo () {
       if (this.$route.query.redirectTo_exam) {
@@ -93,7 +73,6 @@ export default {
         })
         return
       }
-
       let redirectTo = window.localStorage.getItem('redirectTo')
       if (!redirectTo) {
         redirectTo = 'home'
@@ -123,30 +102,20 @@ export default {
         })
       }
     },
+
     login () {
-      const that = this
       this.loadingList = true
-      this.$axios.post(API_ADDRESS.auth.login, {
+      const that = this
+      this.$store.dispatch('Auth/login', {
         mobile: this.username,
         password: this.password
       })
-        .then((response) => {
+        .then(() => {
           this.loadingList = false
-          that.user = new User(response.data.data.user)
-          that.$store.commit('Auth/updateUser', that.user)
-          const accessToken = response.data.data.access_token
-          that.setAccessToken(accessToken)
-          this.userLogin = true
-          this.$q.notify({
-            type: 'positive',
-            message: 'ورود با موفقیت انجام شد',
-            position: 'center'
-          })
-
-          that.setUserData(response.data.data.user)
+          this.$axios.defaults.headers.common.Authorization = 'Bearer ' + this.$store.getters['Auth/accessToken']
           that.getUserData(() => { this.redirectTo() })
         })
-        .catch((err) => this.handleErr(err.response))
+        .catch(err => this.handleErr(err.response))
     }
   }
 }
