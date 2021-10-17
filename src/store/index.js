@@ -1,8 +1,8 @@
 import { store } from 'quasar/wrappers'
 import { createStore } from 'vuex'
 import createPersistedState from 'vuex-persistedstate'
-import Auth from 'src/store/module-example/Auth'
-// import example from './module-example'
+// import Auth from 'src/store/module-example/Auth'
+import Auth from 'src/store/Auth'
 
 /*
  * If not building with SSR mode, you can
