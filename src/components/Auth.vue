@@ -49,9 +49,8 @@ export default {
     password: null
   }),
   created () {
+    console.log('axios :', this.$axios.defaults.headers.common.Authorization)
     if (this.getToken()) {
-      console.log('if run ', this.getToken())
-      this.setAccessToken(this.getToken())
       this.getUserData(() => { this.redirectTo() })
     }
   },
@@ -59,9 +58,7 @@ export default {
     getToken () {
       return this.$store.getters['Auth/accessToken']
     },
-    setAccessToken (accessToken) {
-      this.$axios.defaults.headers.common.Authorization = 'Bearer ' + accessToken
-    },
+
     redirectTo () {
       if (this.$route.query.redirectTo_exam) {
         this.$router.push({
@@ -110,12 +107,19 @@ export default {
         mobile: this.username,
         password: this.password
       })
+      // this.$store.dispatch('Auth/login', {
+      //   mobile: '09388131193',
+      //   password: '4900443050'
+      // })
         .then(() => {
           this.loadingList = false
           this.$axios.defaults.headers.common.Authorization = 'Bearer ' + this.$store.getters['Auth/accessToken']
           that.getUserData(() => { this.redirectTo() })
         })
-        .catch(err => this.handleErr(err.response))
+        .catch(err => {
+          console.log('in auth :', err)
+          this.handleErr(err.response)
+        })
     }
   }
 }

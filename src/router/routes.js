@@ -37,6 +37,14 @@ const routes = [
     name: 'onlineQuiz.exams.lessons',
     component: () => import('src/pages/Admin/exam/lessons.vue')
   },
+  {
+    path: '/test',
+    name: 'test',
+    component: () => import('pages/Auth/test.vue'),
+    meta: {
+      middlewares: [auth]
+    }
+  },
 
   // Always leave this as last one,
   // but you can also remove it

@@ -2,7 +2,6 @@ import { boot } from 'quasar/wrappers'
 import axios from 'axios'
 import { Notify } from 'quasar'
 
-// this.$store.getters['Auth/accessToken']
 const AxiosError = (function () {
   function handle (error) {
     let messages = []
@@ -71,6 +70,10 @@ const AxiosError = (function () {
 const api = axios.create({ baseURL: 'https://api.example.com' })
 
 export default boot(({ app, store, router }) => {
+  const accessToken = store.getters['Auth/accessToken']
+  if (accessToken) {
+    axios.defaults.headers.common.Authorization = 'Bearer ' + accessToken
+  }
   // for use inside Vue files (Options API) through this.$axios and this.$api
   const instance = axios.create(/* ... */)
 
