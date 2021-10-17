@@ -9,3 +9,9 @@ export function login (context, data) {
       context.commit('setAccessToken', accessToken)
     })
 }
+export function logOut (context) {
+  context.commit('updateAccessToken', null)
+  context.commit('updateUser', null)
+  context.commit('updateRedirectTo', null)
+  this.$router.push({ name: 'login' })
+}

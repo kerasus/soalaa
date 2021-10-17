@@ -15,8 +15,8 @@ const AxiosError = (function () {
       messages.push('موردی یافت نشد.')
     } else if (statusCode === 401) {
       messages.push('ابتدا وارد سامانه شوید.')
-      // axios.defaults.headers.common.Authorization = ''
-      // that.$router.push({ name: 'login'})
+      axios.defaults.headers.common.Authorization = ''
+      this.$router.push({ name: 'login' })
     } else if (error.response.data) {
       for (const [key, value] of Object.entries(error.response.data)) {
         if (typeof value === 'string') {

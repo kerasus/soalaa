@@ -49,7 +49,6 @@ export default {
     password: null
   }),
   created () {
-    console.log('axios :', this.$axios.defaults.headers.common.Authorization)
     if (this.getToken()) {
       this.getUserData(() => { this.redirectTo() })
     }
@@ -103,14 +102,14 @@ export default {
     login () {
       this.loadingList = true
       const that = this
-      this.$store.dispatch('Auth/login', {
-        mobile: this.username,
-        password: this.password
-      })
       // this.$store.dispatch('Auth/login', {
-      //   mobile: '09388131193',
-      //   password: '4900443050'
+      //   mobile: this.username,
+      //   password: this.password
       // })
+      this.$store.dispatch('Auth/login', {
+        mobile: '09388131193',
+        password: '4900443050'
+      })
         .then(() => {
           this.loadingList = false
           this.$axios.defaults.headers.common.Authorization = 'Bearer ' + this.$store.getters['Auth/accessToken']
