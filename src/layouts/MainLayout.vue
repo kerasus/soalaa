@@ -128,6 +128,7 @@ export default {
     padding: 0 !important;
     a{
       text-decoration: none;
+      cursor: pointer;
       height: 44px;
       color: white;
       text-align: center;
