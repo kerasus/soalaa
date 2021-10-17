@@ -293,7 +293,7 @@ export default {
       let that = this
       this.examItem.photo = 'https://cdn.alaatv.com/upload/images/slideShow/home-slide-yalda-festival_20201219075413.jpg?w=1843&h=719'
       if (this.examItem.id) {
-        this.examItem.update()
+        this.examItem.update(API_ADDRESS.exam.editExam + '/' +this.examItem.id)
             .then(() => {
               this.examItem.loading = false
               this.$toasted.show('ثبت با موفقیت انجام شد', {
