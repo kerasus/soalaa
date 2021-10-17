@@ -1,11 +1,37 @@
 <template>
-  <upload-answers/>
-  <div class="admin-exam-list q-pa-md">
+  <div class="admin-exam-list full-width q-pa-md">
+    <q-dialog
+      v-model="dialogDelete"
+      persistent
+    >
+      <q-card>
+        <q-card-section class="row items-center">
+          <q-avatar icon="delete" color="primary" text-color="white" />
+          <span class="q-ml-sm">از حذف آزمون اطمینان دارید؟</span>
+        </q-card-section>
+
+        <q-card-actions align="right">
+          <q-btn
+            flat
+            label="خیر"
+            color="primary"
+            @click="dontDelete"
+          />
+          <q-btn
+            flat
+            label="بله"
+            color="primary"
+            @click="confirmDelete"
+          />
+        </q-card-actions>
+      </q-card>
+    </q-dialog>
     <q-table
       :columns="headers"
       :rows="rows"
       row-key="name"
       rows-per-page-label="تعداد ردیف در هر صفحه"
+      :rows-per-page-options="[15 ,20,30]"
     >
       <template v-slot:header="props">
         <q-tr :props="props">
@@ -42,13 +68,15 @@
                   v-ripple:yellow
                   clickable
                   manual-focus
+                  @click="edit(rows)"
                 >
-                  <q-item-section> ویرایش</q-item-section>
+                  <q-item-section> ویرایش آزمون</q-item-section>
                 </q-item>
                 <q-item
                   v-ripple:yellow
                   clickable
                   manual-focus
+                  @click="editExamReport(rows)"
                 >
                   <q-item-section>ویرایش کارنامه</q-item-section>
                 </q-item>
@@ -79,6 +107,7 @@
                   v-ripple:yellow
                   clickable
                   manual-focus
+                  @click="upload(rows)"
                 >
                   <q-item-section>آپلود فایل سوالات و جواب ها</q-item-section>
                 </q-item>
@@ -93,6 +122,7 @@
                   v-ripple:yellow
                   clickable
                   manual-focus
+                  @click="deleteItem"
                 >
                   <q-item-section>حذف آزمون</q-item-section>
                 </q-item>
@@ -175,7 +205,6 @@
     <div class="text-center">
       <q-btn
         elevation="2"
-        @click="selectExam(null)"
       >
         ثبت آزمون جدید
       </q-btn>
@@ -186,18 +215,12 @@
 <script>
 import { Exam, ExamList } from 'src/models/Exam'
 import API_ADDRESS from 'src/api/Addresses'
-import { useQuasar } from 'quasar'
-const $q = useQuasar()
-import UploadAnswers from 'src/components/OnlineQuiz/Quiz/uploadAnswers'
 
 export default {
   name: 'ExamList',
-  components: { UploadAnswers },
   data () {
     return {
-      dialog: false,
       dialogDelete: false,
-      selectedExam: null,
       headers: [
         { name: 'title', field: 'title', label: 'عنوان' },
         { name: 'start_at', field: 'start_at', label: 'شروع' },
@@ -229,30 +252,31 @@ export default {
   methods: {
     getExams () {
       this.examList.loading = true
-      console.log('list:', this.examList)
       this.$axios.get(API_ADDRESS.exam.base(this.options.page))
         .then((response) => {
-          console.log('response: ', response)
           this.examList.loading = false
           // this.totalRows = response.data.meta.total
           this.examList = new ExamList(response.data.data, { meta: response.data.meta, links: response.data.links })
           this.rows = this.examList.list
         })
-        .catch((err) => {
-          console.log(err)
+        .catch(() => {
           this.examList.loading = false
           this.examList = new ExamList()
-          console.log('catch list:', this.examList)
         })
+    },
+    edit (examId) {
+      this.$emit('update-exam-id', examId)
+    },
+    editExamReport (examId) {
+      this.$emit('update-exam-report-id', examId)
     },
     generateJsonFile (exam, withAnswer) {
       this.examList.loading = true
       this.$axios.post(API_ADDRESS.exam.generateExamFile(exam.id, withAnswer))
         .then((res) => {
-          console.log('res: ', res)
-          $q.notify({
-            massage: 'ساخت فایل ' + exam.title + ' با موفقیت انجام شد',
-            color: 'positive',
+          this.$q.notify({
+            type: 'positive',
+            message: 'ساخت فایل ' + exam.title + ' با موفقیت انجام شد',
             position: 'top'
           })
           this.examList.loading = false
@@ -260,12 +284,26 @@ export default {
         .catch(() => {
           this.examList.loading = false
         })
+    },
+    upload (examId) {
+      this.$emit('upload', examId)
+    },
+    deleteItem () {
+      this.dialogDelete = true
+    },
+    dontDelete () {
+      this.dialogDelete = false
+    },
+    confirmDelete () {
+      this.dontDelete()
     }
   }
 }
 </script>
 <style lang="scss" scoped>
 .admin-exam-list{
+  max-width: 1158px;
+  margin: auto !important;
   .options-btn{
     margin-right: 10px;
   }
