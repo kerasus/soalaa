@@ -18,10 +18,28 @@ const routes = [
       {
         path: 'exams',
         name: 'onlineQuiz.exams',
-        component: () => import('pages/Admin/exam/Manage'),
+        component: () => import('pages/Admin/exam/list'),
         meta: {
           middlewares: [auth]
-        }
+        },
+        children: [
+          {
+            path: 'edit-exam',
+            name: 'edit-exam',
+            component: () => import('pages/Admin/exam/edit/editExam'),
+            meta: {
+              middlewares: [auth]
+            }
+          },
+          {
+            path: 'edit-exam-report',
+            name: 'edit-exam-report',
+            component: () => import('pages/Admin/exam/edit/editExamReport'),
+            meta: {
+              middlewares: [auth]
+            }
+          }
+        ]
       }
     ]
   },
