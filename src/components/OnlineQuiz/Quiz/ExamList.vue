@@ -251,16 +251,16 @@ export default {
   },
   methods: {
     getExams () {
-      this.examList.loading = true
+      this.$store.dispatch('loading/linearLoading', true)
       this.$axios.get(API_ADDRESS.exam.base(this.options.page))
         .then((response) => {
-          this.examList.loading = false
-          this.totalRows = response.data.meta.total
+          this.$store.dispatch('loading/linearLoading', false)
+          // this.totalRows = response.data.meta.total
           this.examList = new ExamList(response.data.data, { meta: response.data.meta, links: response.data.links })
           this.rows = this.examList.list
         })
         .catch(() => {
-          this.examList.loading = false
+          this.$store.dispatch('loading/linearLoading', false)
           this.examList = new ExamList()
         })
     },
@@ -271,7 +271,7 @@ export default {
       this.$emit('update-exam-report', examId)
     },
     generateJsonFile (exam, withAnswer) {
-      this.examList.loading = true
+      this.$store.dispatch('loading/linearLoading', true)
       this.$axios.post(API_ADDRESS.exam.generateExamFile(exam.id, withAnswer))
         .then((res) => {
           this.$q.notify({
@@ -279,10 +279,10 @@ export default {
             message: 'ساخت فایل ' + exam.title + ' با موفقیت انجام شد',
             position: 'top'
           })
-          this.examList.loading = false
+          this.$store.dispatch('loading/linearLoading', false)
         })
         .catch(() => {
-          this.examList.loading = false
+          this.$store.dispatch('loading/linearLoading', false)
         })
     },
     upload (examId) {
