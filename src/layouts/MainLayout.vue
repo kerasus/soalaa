@@ -51,10 +51,10 @@
         </div>
       </q-toolbar>
       <q-linear-progress
-        v-if="loading"
+        v-if="examList.loading"
         color="amber-13"
-        track-color="orange"
         class="q-mt-sm"
+        indeterminate
       />
     </q-header>
     <q-drawer
@@ -91,10 +91,15 @@
 <script>
 import SideMenuDashboard from 'components/Menu/SideMenu/SideMenu-dashboard'
 import { User } from 'src/models/User'
+import { ExamList } from 'src/models/Exam'
 
 export default {
   components: { SideMenuDashboard },
   props: {
+    examList: {
+      default: new ExamList(),
+      type: Object
+    },
     user: {
       default: new User(),
       type: Object
