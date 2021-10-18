@@ -15,9 +15,6 @@
       </q-card-section>
     </q-card>
   </q-dialog>
-  <exam-info/>
-  <exam-report-info/>
-  <upload-answers/>
 </div>
 </template>
 
