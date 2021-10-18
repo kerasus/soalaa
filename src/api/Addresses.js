@@ -20,72 +20,78 @@ const API_ADDRESS = {
     formData: authServer + '/megaroute/getUserFormData',
     show_user: authServer + '/getUserFor3a'
   },
-  // set: {
-  //   base: authServer + '/set'
-  // },
-  //   content: {
-  //     base: authServer + '/c'
-  //   },
-  //   option: {
-  //     base: lumenServer + '/option'
-  //   },
-  //   log: {
-  //     base: lumenServer + '/activity-log',
-  //     addComment (id) {
-  //       return lumenServer + '/activity-log/' + id + '/comment'
-  //     }
-  //   }
-  // exam: {
-  //   sendAnswers: lumenServer + '/temp-exam/answer/choice',
-  //   sendStatus: lumenServer + '/temp-exam/answer/status',
-  //   sendBookmark: lumenServer + '/temp-exam/answer/bookmark',
-  //   sendUnBookmark: lumenServer + '/temp-exam/answer/unbookmark',
-  //   userExamsList: lumenServer + '/examAndUser',
-  //   takhminRotbe: lumenServer + '/exam-report/rankSimulator',
-  //   analysisVideo: lumenServer + '/exam-question/attach/sub-category',
-  //   getAnalysisVideo (exam_id) { return lumenServer + '/exam-question/videos/' + exam_id },
-  //   examReportIndex (type) { return lumenServer + '/exam-report/index/' + type },
-  //   pdf (exam_id) { return lumenServer + '/exam-question/booklet-file/' +exam_id },
-  //   base (page_number) {
-  //     if (page_number) {
-  //       return lumenServer + '/exam?with_pagination=1&page=' + page_number
-  //     } else {
-  //       return lumenServer + '/exam?with_pagination=0'
-  //     }
-  //   },
-  //   generateExamFile (exam_id, with_answer) {
-  //     const baseFileRoute = lumenServer + '/exam-question/file/' + exam_id
-  //     return with_answer ? (baseFileRoute + '/with_answer') : baseFileRoute
-  //   },
-  //   getAnswerOfUser (user_exam_id) {
-  //     return lumenServer + '/temp-exam/answer/'+user_exam_id
-  //   },
-  //   getAllAnswerOfUser (user_exam_id) {
-  //     return lumenServer + '/temp-exam/allAnswer/'+user_exam_id
-  //   },
-  //   getSubCategoriesWithPermissions (exam_id) {
-  //     return lumenServer + '/exam-question/show/sub-categories/'+ exam_id
-  //   },
-  //   getAnswerOfUserWithCorrect (user_exam_id) {
-  //     return lumenServer + '/temp-exam/answer/'+user_exam_id+'/withCorrect'
-  //   },
-  //   registerExam: lumenServer + '/user/registerExam',
-  //   examUser: lumenServer + '/exam-user',
-  //   examQuestion (quizId) {
-  //     return lumenServer + '/exam-question/attach/show/' + quizId
-  //   },
-  //   report: {
-  //     getReport (userExamId) {
-  //       return lumenServer + '/exam-report/show?user_exam_id=' + userExamId
-  //     },
-  //     updateReportOptions (examId) {
-  //       return lumenServer + '/exam/config/' + examId
-  //     }
-  //   },
-  //   examBookletUpload (exam_id) {
-  //     return lumenServer + '/exam-question/booklet-file/' + exam_id
-  //   }
-  // },
+  set: {
+    base: authServer + '/set'
+  },
+  content: {
+    base: authServer + '/c'
+  },
+  option: {
+    base: lumenServer + '/option'
+  },
+  log: {
+    base: lumenServer + '/activity-log',
+    addComment (id) {
+      return lumenServer + '/activity-log/' + id + '/comment'
+    }
+  },
+  exam: {
+    sendAnswers: lumenServer + '/temp-exam/answer/choice',
+    sendStatus: lumenServer + '/temp-exam/answer/status',
+    sendBookmark: lumenServer + '/temp-exam/answer/bookmark',
+    sendUnBookmark: lumenServer + '/temp-exam/answer/unbookmark',
+    userExamsList: lumenServer + '/examAndUser',
+    takhminRotbe: lumenServer + '/exam-report/rankSimulator',
+    analysisVideo: lumenServer + '/exam-question/attach/sub-category',
+    getAnalysisVideo (examId) {
+      return lumenServer + '/exam-question/videos/' + examId
+    },
+    examReportIndex (type) {
+      return lumenServer + '/exam-report/index/' + type
+    },
+    pdf (examId) {
+      return lumenServer + '/exam-question/booklet-file/' + examId
+    },
+    base (pageNumber) {
+      if (pageNumber) {
+        return lumenServer + '/exam?with_pagination=1&page=' + pageNumber
+      } else {
+        return lumenServer + '/exam?with_pagination=0'
+      }
+    },
+    generateExamFile (examId, withAnswer) {
+      const baseFileRoute = lumenServer + '/exam-question/file/' + examId
+      return withAnswer ? (baseFileRoute + '/with_answer') : baseFileRoute
+    },
+    getAnswerOfUser (userExamId) {
+      return lumenServer + '/temp-exam/answer/' + userExamId
+    },
+    getAllAnswerOfUser (userExamId) {
+      return lumenServer + '/temp-exam/allAnswer/' + userExamId
+    },
+    getSubCategoriesWithPermissions (examId) {
+      return lumenServer + '/exam-question/show/sub-categories/' + examId
+    },
+    getAnswerOfUserWithCorrect (userExamId) {
+      return lumenServer + '/temp-exam/answer/' + userExamId + '/withCorrect'
+    },
+    registerExam: lumenServer + '/user/registerExam',
+    examUser: lumenServer + '/exam-user',
+    examQuestion (quizId) {
+      return lumenServer + '/exam-question/attach/show/' + quizId
+    },
+    report: {
+      getReport (userExamId) {
+        return lumenServer + '/exam-report/show?user_exam_id=' + userExamId
+      },
+      updateReportOptions (examId) {
+        return lumenServer + '/exam/config/' + examId
+      }
+    },
+    examBookletUpload (examId) {
+      return lumenServer + '/exam-question/booklet-file/' + examId
+    }
+  },
   question: {
     indexMonta: lumenServer + '/question/search-monta',
     index (statuses, page) {
@@ -154,14 +160,14 @@ const API_ADDRESS = {
     update (id) {
       return lumenServer + '/category/' + id
     }
+  },
+  subGroups: {
+    base (examId) {
+      return lumenServer + '/exam-question/zirgorooh/' + examId
+    },
+    all () {
+      return lumenServer + '/option?with_pagination=0&type=zirgorooh_type'
+    }
   }
-// subGroups: {
-//   base (exam_id) {
-//     return lumenServer + '/exam-question/zirgorooh/' + exam_id
-//   },
-//   all () {
-//     return lumenServer + '/option?with_pagination=0&type=zirgorooh_type'
-//   }
-// }
 }
 export default API_ADDRESS
