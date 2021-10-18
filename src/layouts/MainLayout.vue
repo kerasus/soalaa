@@ -16,7 +16,7 @@
           />
           <q-btn-dropdown
             icon="account_circle"
-            :label="user.first_name "
+            :label="user.full_name "
             color="grey-14"
             dropdown-icon="false"
             dir="ltr"
@@ -51,8 +51,8 @@
         </div>
       </q-toolbar>
       <q-linear-progress
-        v-if="examList.loading"
-        color="amber-13"
+        v-if="$store.getters['loading/loading']"
+        color="primary"
         class="q-mt-sm"
         indeterminate
       />
@@ -91,35 +91,36 @@
 <script>
 import SideMenuDashboard from 'components/Menu/SideMenu/SideMenu-dashboard'
 import { User } from 'src/models/User'
-import { ExamList } from 'src/models/Exam'
 
 export default {
   components: { SideMenuDashboard },
-  props: {
-    examList: {
-      default: new ExamList(),
-      type: Object
-    },
-    user: {
-      default: new User(),
-      type: Object
+  data () {
+    return {
+      leftDrawerOpen: false,
+      user: new User()
     }
   },
   created () {
-    console.log(this.user)
-  },
-  data () {
-    return {
-      loading: true,
-      leftDrawerOpen: false
-    }
+    this.getUser()
   },
   methods: {
     toggleLeftDrawer () {
       this.leftDrawerOpen = !this.leftDrawerOpen
     },
+    getUser () {
+      this.user = this.$store.getters['Auth/user']
+      return this.user
+    },
     logOut () {
       return this.$store.dispatch('Auth/logOut')
+    },
+    overlay () {
+      if (this.$store.state['loading/overlay']) {
+        console.log(this.$store.getters['loading/overlay'])
+        return this.$q.loading.show()
+      } else {
+        return this.$q.loading.hide()
+      }
     }
   }
 }
