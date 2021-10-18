@@ -19,6 +19,16 @@ const routes = [
         path: 'exams',
         name: 'onlineQuiz.exams',
         component: () => import('pages/OnlineQuiz/Quiz/ExamList')
+      },
+      {
+        path: '/editCoefficients',
+        name: 'coefficient.edit',
+        component: () => import('src/pages/Admin/subGroup/editCoefficients.vue')
+      },
+      {
+        path: '/lessonsList',
+        name: 'onlineQuiz.exams.lessons',
+        component: () => import('src/pages/Admin/exam/lessons.vue')
       }
     ]
   },
@@ -26,16 +36,6 @@ const routes = [
     path: '/login',
     name: 'login',
     component: () => import('pages/Auth/Login.vue')
-  },
-  {
-    path: '/editCoefficients',
-    name: 'coefficient.edit',
-    component: () => import('src/pages/Admin/subGroup/editCoefficients.vue')
-  },
-  {
-    path: '/lessonsList',
-    name: 'onlineQuiz.exams.lessons',
-    component: () => import('src/pages/Admin/exam/lessons.vue')
   },
 
   // Always leave this as last one,
