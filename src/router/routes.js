@@ -18,7 +18,7 @@ const routes = [
       {
         path: 'exams',
         name: 'onlineQuiz.exams',
-        component: () => import('pages/Admin/OnlineQuiz/ExamList'),
+        component: () => import('pages/Admin/exam/Manage'),
         meta: {
           middlewares: [auth]
         }
