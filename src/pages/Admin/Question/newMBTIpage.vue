@@ -3,7 +3,19 @@
     <div class="fit q-pa-sm">
       <div class="row">
         <div class="col">
-          <nav-bar/>
+          <nav-bar
+            v-if="this.checkNavbarVisibility()"
+            :question="currentQuestion"
+            :edit-status="edit_status"
+            :page-name="this.getPageStatus()"
+            @create="navBarAction_create"
+            @saveDraft="navBarAction_saveDraft"
+            @save="navBarAction_save"
+            @cancel="navBarAction_cancel"
+            @edit="navBarAction_edit"
+            @remove="navBarAction_remove"
+          />
+
         </div>
       </div>
     </div>
@@ -11,15 +23,20 @@
 </template>
 
 <script>
+// ToDo
+// eslint-disable-next-line import/default
 // import Vue from 'vue'
 import navBar from 'components/QuestionBank/EditQuestion/NavBar/navBar'
-import MbtiQuestionLayout from 'components/QuestionBank/EditQuestion/question-layout/mbti_question_layout'
-import attachList from 'components/QuestionBank/EditQuestion/Exams/exams'
-import StatusComponent from 'components/QuestionBank/EditQuestion/StatusComponent/status'
-import LogListComponent from 'components/QuestionBank/EditQuestion/Log/LogList'
+// import MbtiQuestionLayout from 'components/QuestionBank/EditQuestion/question-layout/mbti_question_layout'
+// import attachList from 'components/QuestionBank/EditQuestion/Exams/exams'
+// import StatusComponent from 'components/QuestionBank/EditQuestion/StatusComponent/status'
+// import LogListComponent from 'components/QuestionBank/EditQuestion/Log/LogList'
 import { Question } from 'src/models/Question'
-import { Log, LogList } from 'src/models/Log'
-import { ExamList } from 'src/models/Exam'
+// ToDo : LogList needed
+// import { Log, LogList } from 'src/models/Log'
+import { Log } from 'src/models/Log'
+// ToDo : ExamList needed
+// import { ExamList } from 'src/models/Exam'
 import { QuestSubcategoryList } from 'src/models/QuestSubcategory'
 import API_ADDRESS from 'src/api/Addresses'
 import Assistant from 'src/plugins/assistant'
@@ -29,11 +46,11 @@ import axios from 'axios'
 export default {
   name: 'NewMBTIPage',
   components: {
-    navBar,
-    MbtiQuestionLayout,
-    StatusComponent,
-    LogListComponent,
-    attachList
+    navBar
+    // MbtiQuestionLayout,
+    // StatusComponent,
+    // LogListComponent,
+    // attachList
   },
   data () {
     return {
@@ -67,7 +84,8 @@ export default {
       choiceRendered: ['', ''],
       displayEditQuestion: false,
       currentQuestion: new Question(),
-      examList: new ExamList(),
+      // ToDo : ExamList needed
+      // examList: new ExamList(),
       subCategoriesList: new QuestSubcategoryList(),
       questionData: {
         statement: '',
@@ -100,25 +118,26 @@ export default {
     }
   },
   created () {
-    const that = this
-    axios.get(API_ADDRESS.option.base + '?type=question_type')
-      .then(function (response) {
-        const optionQuestion = response.data.data.find(item => (item.value === 'psychometric'))
-        if (!optionQuestion) {
-          // beterek
-          return this.$notify({
-            group: 'notifs',
-            text: ' API با مشکل مواجه شد!',
-            type: 'error'
-          })
-        }
-
-        that.optionQuestionId = optionQuestion.id
-        that.loading = false
-      })
-      .catch(function (error) {
-        console.log(error)
-      })
+    // const that = this
+    // ToDo : API_ADDRESS.option.base not found
+    // axios.get(API_ADDRESS.option.base + '?type=question_type')
+    //   .then(function (response) {
+    //     const optionQuestion = response.data.data.find(item => (item.value === 'psychometric'))
+    //     if (!optionQuestion) {
+    //       // beterek
+    //       return this.$notify({
+    //         group: 'notifs',
+    //         text: ' API با مشکل مواجه شد!',
+    //         type: 'error'
+    //       })
+    //     }
+    //
+    //     that.optionQuestionId = optionQuestion.id
+    //     that.loading = false
+    //   })
+    //   .catch(function (error) {
+    //     console.log(error)
+    //   })
     this.setPageStatus()
     this.checkUrl()
     this.getQuestionStatus()
@@ -144,7 +163,8 @@ export default {
             if (this.currentQuestion.logs.list[i].id === eventData.logId) {
               // setting the new log using Vue.set so that the component notices the change
               this.currentQuestion.logs.list[i] = new Log(response.data.data)
-              Vue.set(this.currentQuestion, 'logs', new LogList(this.currentQuestion.logs))
+              // ToDo : import vue
+              // Vue.set(this.currentQuestion, 'logs', new LogList(this.currentQuestion.logs))
             }
           }
         })
@@ -259,7 +279,9 @@ export default {
     checkUrl () {
       this.edit_status = (this.getPageStatus() === 'create' || this.getPageStatus() === 'edit')
       const that = this
-      const loadExamListPromise = this.loadExamList()
+      // ToDo
+      // const loadExamListPromise = this.loadExamList()
+      const loadExamListPromise = 'this.loadExamList()'
       const loadSubcategoriesPromise = this.loadSubcategories()
       Promise.all([loadExamListPromise, loadSubcategoriesPromise])
         .then(() => {
@@ -320,8 +342,8 @@ export default {
       const selectedQuizzes = this.selectedQuizzes
       this.totalExams[targetExamIndex] = item
       selectedQuizzes.push(JSON.parse(JSON.stringify(this.totalExams[targetExamIndex])))
-
-      Vue.set(this, 'selectedQuizzes', selectedQuizzes)
+      // ToDo : import vue
+      // Vue.set(this, 'selectedQuizzes', selectedQuizzes)
       this.dialog = false
       this.updateSelectedQuizzes()
     },
@@ -415,14 +437,16 @@ export default {
       this.currentQuestion.logs.fetch(null, API_ADDRESS.question.log.base(this.$route.params.question_id))
         .then((response) => {
           // this.currentQuestion.logs = new LogList(response.data.data)
-          Vue.set(this.currentQuestion, 'logs', new LogList(response.data.data))
+          // ToDo : import vue
+          // Vue.set(this.currentQuestion, 'logs', new LogList(response.data.data))
           this.setQuestionLayoutCols()
         })
     },
 
     updateQuestion (eventData) {
       // this.currentQuestion = new Question(eventData)
-      Vue.set(this, 'currentQuestion', new Question(eventData))
+      // ToDo : import vue
+      // Vue.set(this, 'currentQuestion', new Question(eventData))
     },
 
     updateAttachList (exams) {
@@ -453,16 +477,16 @@ export default {
         currentQuestion.descriptive_answer = ''
       }
     },
-
-    loadExamList () {
-      const that = this
-      return new ExamList().fetch()
-        .then((response) => {
-          that.examList = new ExamList(response.data.data)
-        })
-        .catch(() => {
-        })
-    },
+    // ToDo : ExamList needed
+    // loadExamList () {
+    //   const that = this
+    //   return new ExamList().fetch()
+    //     .then((response) => {
+    //       that.examList = new ExamList(response.data.data)
+    //     })
+    //     .catch(() => {
+    //     })
+    // },
 
     loadSubcategories () {
       return this.subCategoriesList.fetch()

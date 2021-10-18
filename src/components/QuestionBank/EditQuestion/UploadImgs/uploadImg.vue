@@ -1,231 +1,230 @@
 <template>
   <div class="SelectImageBox">
-    <p class="font-weight-medium mb-5 mt-5">
-      فایل های آپلود شده:
-    </p>
-    <v-row>
-      <v-col md="4">
-        <v-card>
-          <v-card-title class="body-1">
-            صورت سوال
-          </v-card-title>
-          <v-card-text>
-            <v-row>
-              <v-col
-                v-if="editStatus"
-                v-show="questionFile.length === 0"
-                class="test"
-              >
-                <file-upload
-                  ref="questionFile"
-                  v-model="questionFile"
-                  input-id="questionFile"
-                  :extensions="extensions"
-                  :accept="accept"
-                  :multiple="false"
-                  :directory="directory"
-                  :create-directory="createDirectory"
-                  :size="size || 0"
-                  :thread="thread < 1 ? 1 : (thread > 5 ? 5 : thread)"
-                  :data="data"
-                  :drop="drop"
-                  :drop-directory="dropDirectory"
-                  :add-index="addIndex"
-                  @input-filter="inputFilter"
-                  @input-file="inputFile"
-                >
-                  <v-btn
-                    large
-                    text
-                    class="btnAddImage"
-                  >
-                    <v-icon>mdi-plus</v-icon>
-                  </v-btn>
-                </file-upload>
-              </v-col>
-              <v-col
-                v-for="(file, index) in questionFile"
-                :key="index"
-                class="test2"
-              >
-                <v-card>
-                  <v-img
-                    v-if="(editStatus && file.thumb) || (!editStatus && file)"
-                    :src="(editStatus) ? file.thumb : file"
-                    width="100%"
-                    height="60"
-                    class="mt-3"
-                    @click="showImgPanel(((editStatus) ? file.thumb : file))"
-                  />
-                  <span v-else>No Image</span>
-                  <v-card-title
-                    v-if="editStatus"
-                    class="caption"
-                    v-text="formatSize(file.size)"
-                  />
-                  <!-- delete img ----------------------------------------------------------->
-                  <v-btn
-                    v-if="editStatus"
-                    fab
-                    dark
-                    x-small
-                    color="error"
-                    class="btnRemoveFile"
-                    @click.prevent="$refs.questionFile.remove(file)"
-                  >
-                    <v-icon dark>
-                      mdi-close
-                    </v-icon>
-                  </v-btn>
-                </v-card>
-              </v-col>
-              <v-col
-                v-if="!editStatus && questionFile.length === 0"
-              >
-                <v-card>
-                  <v-img
-                    width="100%"
-                    height="60"
-                  >
-                    <template v-slot:placeholder>
-                      <v-row
-                        no-gutters
-                        class="fill-height"
-                      >
-                        <v-col class="d-flex justify-center align-center">
-                          <v-icon size="50px">
-                            mdi-image-off
-                          </v-icon>
-                        </v-col>
-                      </v-row>
-                    </template>
-                  </v-img>
-                </v-card>
-              </v-col>
-            </v-row>
-          </v-card-text>
-        </v-card>
-      </v-col>
-      <v-col md="8">
-        <v-card>
-          <v-card-title class="body-1">
-            جواب سوال
-          </v-card-title>
-          <v-card-text>
-            <v-row>
-              <v-col
-                v-for="(file, index) in answerFiles"
-                :key="index"
-                cols="3"
-              >
-                <v-card>
-                  <v-img
-                    v-if="(editStatus && file.thumb) || (!editStatus && file)"
-                    :src="(editStatus) ? file.thumb : file"
-                    width="100%"
-                    height="60"
-                    class="mt-3"
-                    @click="showImgPanel(((editStatus) ? file.thumb : file))"
-                  />
+<!--    <p class="font-weight-medium mb-5 mt-5">-->
+<!--      فایل های آپلود شده:-->
+<!--    </p>-->
+<!--    <v-row>-->
+<!--      <v-col md="4">-->
+<!--        <v-card>-->
+<!--          <v-card-title class="body-1">-->
+<!--            صورت سوال-->
+<!--          </v-card-title>-->
+<!--          <v-card-text>-->
+<!--            <v-row>-->
+<!--              <v-col-->
+<!--                v-if="editStatus"-->
+<!--                v-show="questionFile.length === 0"-->
+<!--                class="test"-->
+<!--              >-->
+<!--                <file-upload-->
+<!--                  ref="questionFile"-->
+<!--                  v-model="questionFile"-->
+<!--                  input-id="questionFile"-->
+<!--                  :extensions="extensions"-->
+<!--                  :accept="accept"-->
+<!--                  :multiple="false"-->
+<!--                  :directory="directory"-->
+<!--                  :create-directory="createDirectory"-->
+<!--                  :size="size || 0"-->
+<!--                  :thread="thread < 1 ? 1 : (thread > 5 ? 5 : thread)"-->
+<!--                  :data="data"-->
+<!--                  :drop="drop"-->
+<!--                  :drop-directory="dropDirectory"-->
+<!--                  :add-index="addIndex"-->
+<!--                  @input-filter="inputFilter"-->
+<!--                  @input-file="inputFile"-->
+<!--                >-->
+<!--                  <v-btn-->
+<!--                    large-->
+<!--                    text-->
+<!--                    class="btnAddImage"-->
+<!--                  >-->
+<!--                    <v-icon>mdi-plus</v-icon>-->
+<!--                  </v-btn>-->
+<!--                </file-upload>-->
+<!--              </v-col>-->
+<!--              <v-col-->
+<!--                v-for="(file, index) in questionFile"-->
+<!--                :key="index"-->
+<!--                class="test2"-->
+<!--              >-->
+<!--                <v-card>-->
+<!--                  <v-img-->
+<!--                    v-if="(editStatus && file.thumb) || (!editStatus && file)"-->
+<!--                    :src="(editStatus) ? file.thumb : file"-->
+<!--                    width="100%"-->
+<!--                    height="60"-->
+<!--                    class="mt-3"-->
+<!--                    @click="showImgPanel(((editStatus) ? file.thumb : file))"-->
+<!--                  />-->
+<!--                  <span v-else>No Image</span>-->
+<!--                  <v-card-title-->
+<!--                    v-if="editStatus"-->
+<!--                    class="caption"-->
+<!--                    v-text="formatSize(file.size)"-->
+<!--                  />-->
+<!--                  &lt;!&ndash; delete img -&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&ndash;&gt;-->
+<!--                  <v-btn-->
+<!--                    v-if="editStatus"-->
+<!--                    fab-->
+<!--                    dark-->
+<!--                    x-small-->
+<!--                    color="error"-->
+<!--                    class="btnRemoveFile"-->
+<!--                    @click.prevent="$refs.questionFile.remove(file)"-->
+<!--                  >-->
+<!--                    <v-icon dark>-->
+<!--                      mdi-close-->
+<!--                    </v-icon>-->
+<!--                  </v-btn>-->
+<!--                </v-card>-->
+<!--              </v-col>-->
+<!--              <v-col-->
+<!--                v-if="!editStatus && questionFile.length === 0"-->
+<!--              >-->
+<!--                <v-card>-->
+<!--                  <v-img-->
+<!--                    width="100%"-->
+<!--                    height="60"-->
+<!--                  >-->
+<!--                    <template v-slot:placeholder>-->
+<!--                      <v-row-->
+<!--                        no-gutters-->
+<!--                        class="fill-height"-->
+<!--                      >-->
+<!--                        <v-col class="d-flex justify-center align-center">-->
+<!--                          <v-icon size="50px">-->
+<!--                            mdi-image-off-->
+<!--                          </v-icon>-->
+<!--                        </v-col>-->
+<!--                      </v-row>-->
+<!--                    </template>-->
+<!--                  </v-img>-->
+<!--                </v-card>-->
+<!--              </v-col>-->
+<!--            </v-row>-->
+<!--          </v-card-text>-->
+<!--        </v-card>-->
+<!--      </v-col>-->
+<!--      <v-col md="8">-->
+<!--        <v-card>-->
+<!--          <v-card-title class="body-1">-->
+<!--            جواب سوال-->
+<!--          </v-card-title>-->
+<!--          <v-card-text>-->
+<!--            <v-row>-->
+<!--              <v-col-->
+<!--                v-for="(file, index) in answerFiles"-->
+<!--                :key="index"-->
+<!--                cols="3"-->
+<!--              >-->
+<!--                <v-card>-->
+<!--                  <v-img-->
+<!--                    v-if="(editStatus && file.thumb) || (!editStatus && file)"-->
+<!--                    :src="(editStatus) ? file.thumb : file"-->
+<!--                    width="100%"-->
+<!--                    height="60"-->
+<!--                    class="mt-3"-->
+<!--                    @click="showImgPanel(((editStatus) ? file.thumb : file))"-->
+<!--                  />-->
 
-                  <span v-else>No Image</span>
+<!--                  <span v-else>No Image</span>-->
 
+<!--                  <v-card-title-->
+<!--                    v-if="editStatus"-->
+<!--                    class="caption"-->
+<!--                    v-text="formatSize(file.size)"-->
+<!--                  />-->
 
-                  <v-card-title
-                    v-if="editStatus"
-                    class="caption"
-                    v-text="formatSize(file.size)"
-                  />
-
-                  <v-btn
-                    v-if="editStatus"
-                    fab
-                    dark
-                    x-small
-                    color="error"
-                    class="btnRemoveFile"
-                    @click.prevent="$refs.answerImages.remove(file)"
-                  >
-                    <v-icon dark>
-                      mdi-close
-                    </v-icon>
-                  </v-btn>
-                </v-card>
-              </v-col>
-              <v-col
-                v-if="editStatus"
-                cols="3"
-              >
-                <div>
-                  <file-upload
-                    ref="answerImages"
-                    v-model="answerFiles"
-                    input-id="answerImages"
-                    :extensions="extensions"
-                    :accept="accept"
-                    :multiple="true"
-                    :directory="directory"
-                    :create-directory="createDirectory"
-                    :size="size || 0"
-                    :thread="thread < 1 ? 1 : (thread > 5 ? 5 : thread)"
-                    :data="data"
-                    :drop="drop"
-                    :drop-directory="dropDirectory"
-                    :add-index="addIndex"
-                    @input-filter="inputFilter"
-                    @input-file="inputFile"
-                  >
-                    <v-btn
-                      large
-                      text
-                      class="btnAddImage"
-                    >
-                      <v-icon>mdi-plus</v-icon>
-                    </v-btn>
-                  </file-upload>
-                </div>
-              </v-col>
-              <v-col
-                v-if="!editStatus && answerFiles.length === 0"
-              >
-                <v-card>
-                  <v-img
-                    width="100%"
-                    height="60"
-                  >
-                    <template v-slot:placeholder>
-                      <v-row
-                        no-gutters
-                        class="fill-height"
-                      >
-                        <v-col class="d-flex justify-center align-center">
-                          <v-icon size="50px">
-                            mdi-image-off
-                          </v-icon>
-                        </v-col>
-                      </v-row>
-                    </template>
-                  </v-img>
-                </v-card>
-              </v-col>
-            </v-row>
-          </v-card-text>
-        </v-card>
-      </v-col>
-    </v-row>
+<!--                  <v-btn-->
+<!--                    v-if="editStatus"-->
+<!--                    fab-->
+<!--                    dark-->
+<!--                    x-small-->
+<!--                    color="error"-->
+<!--                    class="btnRemoveFile"-->
+<!--                    @click.prevent="$refs.answerImages.remove(file)"-->
+<!--                  >-->
+<!--                    <v-icon dark>-->
+<!--                      mdi-close-->
+<!--                    </v-icon>-->
+<!--                  </v-btn>-->
+<!--                </v-card>-->
+<!--              </v-col>-->
+<!--              <v-col-->
+<!--                v-if="editStatus"-->
+<!--                cols="3"-->
+<!--              >-->
+<!--                <div>-->
+<!--                  <file-upload-->
+<!--                    ref="answerImages"-->
+<!--                    v-model="answerFiles"-->
+<!--                    input-id="answerImages"-->
+<!--                    :extensions="extensions"-->
+<!--                    :accept="accept"-->
+<!--                    :multiple="true"-->
+<!--                    :directory="directory"-->
+<!--                    :create-directory="createDirectory"-->
+<!--                    :size="size || 0"-->
+<!--                    :thread="thread < 1 ? 1 : (thread > 5 ? 5 : thread)"-->
+<!--                    :data="data"-->
+<!--                    :drop="drop"-->
+<!--                    :drop-directory="dropDirectory"-->
+<!--                    :add-index="addIndex"-->
+<!--                    @input-filter="inputFilter"-->
+<!--                    @input-file="inputFile"-->
+<!--                  >-->
+<!--                    <v-btn-->
+<!--                      large-->
+<!--                      text-->
+<!--                      class="btnAddImage"-->
+<!--                    >-->
+<!--                      <v-icon>mdi-plus</v-icon>-->
+<!--                    </v-btn>-->
+<!--                  </file-upload>-->
+<!--                </div>-->
+<!--              </v-col>-->
+<!--              <v-col-->
+<!--                v-if="!editStatus && answerFiles.length === 0"-->
+<!--              >-->
+<!--                <v-card>-->
+<!--                  <v-img-->
+<!--                    width="100%"-->
+<!--                    height="60"-->
+<!--                  >-->
+<!--                    <template v-slot:placeholder>-->
+<!--                      <v-row-->
+<!--                        no-gutters-->
+<!--                        class="fill-height"-->
+<!--                      >-->
+<!--                        <v-col class="d-flex justify-center align-center">-->
+<!--                          <v-icon size="50px">-->
+<!--                            mdi-image-off-->
+<!--                          </v-icon>-->
+<!--                        </v-col>-->
+<!--                      </v-row>-->
+<!--                    </template>-->
+<!--                  </v-img>-->
+<!--                </v-card>-->
+<!--              </v-col>-->
+<!--            </v-row>-->
+<!--          </v-card-text>-->
+<!--        </v-card>-->
+<!--      </v-col>-->
+<!--    </v-row>-->
   </div>
 </template>
 <script>
 
 import Cropper from 'cropperjs'
 import ImageCompressor from '@xkeshi/image-compressor'
-import FileUpload from 'vue-upload-component'
-import {Question} from "@/models/Question";
+// import FileUpload from 'vue-upload-component'
+import { Question } from 'src/models/Question'
 
 export default {
-  name: "UploadImg",
+  name: 'UploadImg',
   components: {
-    FileUpload,
+    // FileUpload
   },
   props: {
     value: {
@@ -237,7 +236,7 @@ export default {
       default: false
     }
   },
-  data(){
+  data () {
     return {
       question: new Question(),
       files: [],
@@ -264,27 +263,27 @@ export default {
         show: false,
         name: '',
         type: '',
-        content: '',
+        content: ''
       },
       editFile: {
         show: false,
-        name: '',
-      },
+        name: ''
+      }
     }
   },
   watch: {
-    'editFile.show'(newValue, oldValue) {
+    'editFile.show' (newValue, oldValue) {
       // 关闭了 自动删除 error
       if (!newValue && oldValue) {
         this.$refs.answerImages.update(this.editFile.id, { error: this.editFile.error || '' })
       }
       if (newValue) {
-        this.$nextTick( () => {
+        this.$nextTick(() => {
           if (!this.$refs.editImage) {
             return
           }
-          let cropper = new Cropper(this.$refs.editImage, {
-            autoCrop: false,
+          const cropper = new Cropper(this.$refs.editImage, {
+            autoCrop: false
           })
           this.editFile = {
             ...this.editFile,
@@ -293,7 +292,7 @@ export default {
         })
       }
     },
-    'addData.show'(show) {
+    'addData.show' (show) {
       if (show) {
         this.addData.name = ''
         this.addData.type = ''
@@ -301,7 +300,7 @@ export default {
       }
     },
     value: {
-      handler: function(newValue) {
+      handler: function (newValue) {
         this.question = newValue
         if (!this.editStatus) {
           this.questionFile = (this.question.statement_photo) ? [this.question.statement_photo] : []
@@ -311,17 +310,17 @@ export default {
       deep: true
     }
   },
-  created() {
+  created () {
     this.question = this.value
     if (!this.editStatus) {
       this.questionFile = (this.question.statement_photo) ? [this.question.statement_photo] : []
       this.answerFiles = this.question.answer_photos
     }
   },
-  methods :{
-    showImgPanel(src){
-      console.log("src -----------", src)
-      this.$emit("imgClicked", src);
+  methods: {
+    showImgPanel (src) {
+      console.log('src -----------', src)
+      this.$emit('imgClicked', src)
     },
     fileUpdated () {
       const files = {
@@ -330,7 +329,7 @@ export default {
       }
 
       this.question.statement_photo = this.questionFile[0].file
-      this.question.answer_photos = this.answerFiles.map( item => item.file)
+      this.question.answer_photos = this.answerFiles.map(item => item.file)
       console.log('files', files)
       console.log('this.question', this.question)
       this.$emit('input', this.question)
@@ -361,7 +360,7 @@ export default {
       }
       return size.toString() + ' B'
     },
-    inputFilter(newFile, oldFile, prevent) {
+    inputFilter (newFile, oldFile, prevent) {
       if (newFile && !oldFile) {
         // Before adding a file
         // 添加文件前
@@ -377,27 +376,27 @@ export default {
         }
         // Automatic compression
         // 自动压缩
-        if (newFile.file && newFile.error === "" && newFile.type.substr(0, 6) === 'image/' && this.autoCompress > 0 && this.autoCompress < newFile.size) {
+        if (newFile.file && newFile.error === '' && newFile.type.substr(0, 6) === 'image/' && this.autoCompress > 0 && this.autoCompress < newFile.size) {
           newFile.error = 'compressing'
           const imageCompressor = new ImageCompressor(null, {
             convertSize: 1024 * 1024,
             maxWidth: 512,
-            maxHeight: 512,
+            maxHeight: 512
           })
           imageCompressor.compress(newFile.file)
-                         .then((file) => {
-                           this.$refs.answerImages.update(newFile, { error: '', file, size: file.size, type: file.type })
-                         })
-                         .catch((err) => {
-                           this.$refs.answerImages.update(newFile, { error: err.message || 'compress' })
-                         })
+            .then((file) => {
+              this.$refs.answerImages.update(newFile, { error: '', file, size: file.size, type: file.type })
+            })
+            .catch((err) => {
+              this.$refs.answerImages.update(newFile, { error: err.message || 'compress' })
+            })
         }
       }
-      if (newFile && newFile.error === "" && newFile.file && (!oldFile || newFile.file !== oldFile.file)) {
+      if (newFile && newFile.error === '' && newFile.file && (!oldFile || newFile.file !== oldFile.file)) {
         // Create a blob field
         // 创建 blob 字段
         newFile.blob = ''
-        let URL = (window.URL || window.webkitURL)
+        const URL = (window.URL || window.webkitURL)
         if (URL) {
           newFile.blob = URL.createObjectURL(newFile.file)
         }
@@ -410,21 +409,21 @@ export default {
       }
       // image size
       // image 尺寸
-      if (newFile && newFile.error === '' && newFile.type.substr(0, 6) === "image/" && newFile.blob && (!oldFile || newFile.blob !== oldFile.blob)) {
+      if (newFile && newFile.error === '' && newFile.type.substr(0, 6) === 'image/' && newFile.blob && (!oldFile || newFile.blob !== oldFile.blob)) {
         newFile.error = 'image parsing'
-        let img = new Image();
+        const img = new Image()
         img.onload = () => {
-          this.$refs.answerImages.update(newFile, {error: '', height: img.height, width: img.width})
+          this.$refs.answerImages.update(newFile, { error: '', height: img.height, width: img.width })
         }
         img.οnerrοr = (e) => {
           console.log('e', e)
-          this.$refs.answerImages.update(newFile, { error: 'parsing image size'})
+          this.$refs.answerImages.update(newFile, { error: 'parsing image size' })
         }
         img.src = newFile.blob
       }
     },
     // add, update, remove File Event
-    inputFile(newFile, oldFile) {
+    inputFile (newFile, oldFile) {
       this.fileUpdated()
 
       if (newFile && oldFile) {
@@ -464,26 +463,26 @@ export default {
         }
       }
     },
-    alert(message) {
+    alert (message) {
       alert(message)
     },
-    onEditFileShow(file) {
+    onEditFileShow (file) {
       this.editFile = { ...file, show: true }
       this.$refs.answerImages.update(file, { error: 'edit' })
     },
-    onEditorFile() {
+    onEditorFile () {
       if (!this.$refs.answerImages.features.html5) {
         this.alert('Your browser does not support')
         this.editFile.show = false
         return
       }
-      let data = {
+      const data = {
         name: this.editFile.name,
-        error: '',
+        error: ''
       }
       if (this.editFile.cropper) {
-        let binStr = atob(this.editFile.cropper.getCroppedCanvas().toDataURL(this.editFile.type).split(',')[1])
-        let arr = new Uint8Array(binStr.length)
+        const binStr = atob(this.editFile.cropper.getCroppedCanvas().toDataURL(this.editFile.type).split(',')[1])
+        const arr = new Uint8Array(binStr.length)
         for (let i = 0; i < binStr.length; i++) {
           arr[i] = binStr.charCodeAt(i)
         }
@@ -495,39 +494,38 @@ export default {
       this.editFile.show = false
     },
     // add folder
-    onAddFolder() {
+    onAddFolder () {
       if (!this.$refs.answerImages.features.directory) {
         this.alert('Your browser does not support')
         return
       }
-      let input = document.createElement('input')
-      input.style = "background: rgba(255, 255, 255, 0);overflow: hidden;position: fixed;width: 1px;height: 1px;z-index: -1;opacity: 0;"
+      const input = document.createElement('input')
+      input.style = 'background: rgba(255, 255, 255, 0);overflow: hidden;position: fixed;width: 1px;height: 1px;z-index: -1;opacity: 0;'
       input.type = 'file'
       input.setAttribute('allowdirs', true)
       input.setAttribute('directory', true)
       input.setAttribute('webkitdirectory', true)
       input.multiple = true
-      document.querySelector("body").appendChild(input)
+      document.querySelector('body').appendChild(input)
       input.click()
       input.onchange = (e) => {
         console.log('e', e)
-        this.$refs.answerImages.addInputFile(input).then(function() {
-          document.querySelector("body").removeChild(input)
+        this.$refs.answerImages.addInputFile(input).then(function () {
+          document.querySelector('body').removeChild(input)
         })
       }
     },
-    onAddData() {
+    onAddData () {
       this.addData.show = false
       if (!this.$refs.answerImages.features.html5) {
         this.alert('Your browser does not support')
         return
       }
-      let file = new window.File([this.addData.content], this.addData.name, {
-        type: this.addData.type,
+      const file = new window.File([this.addData.content], this.addData.name, {
+        type: this.addData.type
       })
       this.$refs.answerImages.add(file)
     }
-
 
   }
 }

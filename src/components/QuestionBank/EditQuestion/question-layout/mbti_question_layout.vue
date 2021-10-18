@@ -8,68 +8,68 @@
       >
         تایپ سوال
       </div>
-      <question_field
-          ref="questionStatement"
-          :key="'statement' + domKey"
-          v-model="question.statement"
-          class="mb-10"
-          :edit-status="status"
-          placeholder="صورت سوال"
-          :question-id="value.id ? value.id : 'null'"
-          @input="updateQuestion"
-      />
+<!--      <question_field-->
+<!--          ref="questionStatement"-->
+<!--          :key="'statement' + domKey"-->
+<!--          v-model="question.statement"-->
+<!--          class="mb-10"-->
+<!--          :edit-status="status"-->
+<!--          placeholder="صورت سوال"-->
+<!--          :question-id="value.id ? value.id : 'null'"-->
+<!--          @input="updateQuestion"-->
+<!--      />-->
     </div>
-    <v-row
-        v-for="(item, index) in question.choices.list"
-        :key="index"
-        class="question-layout-options"
-        :class="status ? 'mb-6   question-options white': '  question-o' +
-        'ptions'"
-    >
-      <v-col class="col-2">
-      <v-row>
-      <v-col :class="status ?'col-10' :'col-10'">
-            <v-autocomplete
-                v-model="item.answer"
-                :items="mbti_value"
-                label="انتخاب مقدار"
-                dense
-                outlined
-                rounded
-                :disabled="!status"
-                @change="updateQuestion"
-            />
-      </v-col>
-        <v-col class="col-1">
-          {{ (index + 1) + ') ' }}
-        </v-col>
-      </v-row>
-      </v-col>
-      <v-col class="answer-editor col-10">
-        <div>
-          <question_field
-              :ref="'choice' + (index + 1)"
-              :key="'choices' + (index + 1) + domKey"
-              v-model="item.title"
-              :edit-status="status"
-              :question-id="value.id ? value.id : 'null'"
-              @input="updateQuestion"
-          />
-        </div>
-      </v-col>
-    </v-row>
+<!--    <v-row-->
+<!--        v-for="(item, index) in question.choices.list"-->
+<!--        :key="index"-->
+<!--        class="question-layout-options"-->
+<!--        :class="status ? 'mb-6   question-options white': '  question-o' +-->
+<!--        'ptions'"-->
+<!--    >-->
+<!--      <v-col class="col-2">-->
+<!--      <v-row>-->
+<!--      <v-col :class="status ?'col-10' :'col-10'">-->
+<!--            <v-autocomplete-->
+<!--                v-model="item.answer"-->
+<!--                :items="mbti_value"-->
+<!--                label="انتخاب مقدار"-->
+<!--                dense-->
+<!--                outlined-->
+<!--                rounded-->
+<!--                :disabled="!status"-->
+<!--                @change="updateQuestion"-->
+<!--            />-->
+<!--      </v-col>-->
+<!--        <v-col class="col-1">-->
+<!--          {{ (index + 1) + ') ' }}-->
+<!--        </v-col>-->
+<!--      </v-row>-->
+<!--      </v-col>-->
+<!--      <v-col class="answer-editor col-10">-->
+<!--        <div>-->
+<!--&lt;!&ndash;          <question_field&ndash;&gt;-->
+<!--&lt;!&ndash;              :ref="'choice' + (index + 1)"&ndash;&gt;-->
+<!--&lt;!&ndash;              :key="'choices' + (index + 1) + domKey"&ndash;&gt;-->
+<!--&lt;!&ndash;              v-model="item.title"&ndash;&gt;-->
+<!--&lt;!&ndash;              :edit-status="status"&ndash;&gt;-->
+<!--&lt;!&ndash;              :question-id="value.id ? value.id : 'null'"&ndash;&gt;-->
+<!--&lt;!&ndash;              @input="updateQuestion"&ndash;&gt;-->
+<!--&lt;!&ndash;          />&ndash;&gt;-->
+<!--        </div>-->
+<!--      </v-col>-->
+<!--    </v-row>-->
   </div>
   <!-- ------------------------- answer -------------------------------  -->
 </template>
 <script>
 import { Question } from 'src/models/Question'
 // eslint-disable-next-line camelcase
-import question_field from 'components/Question/questionField'
+// import question_field from 'components/Question/questionField'
 
 export default {
   name: 'MbtiQuestionLayout',
   components: {
-    question_field
+    // question_field
   },
   props: {
     value: {
