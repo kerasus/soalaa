@@ -2,7 +2,7 @@
   <div class="admin-exam-list full-width q-pa-md">
     <q-dialog
       v-model="dialogDelete"
-      persistent
+      persisten
     >
       <q-card>
         <q-card-section class="row items-center">
@@ -32,6 +32,7 @@
       row-key="name"
       rows-per-page-label="تعداد ردیف در هر صفحه"
       :rows-per-page-options="[15 ,20,30]"
+      :pagination-label="paginationLabel"
     >
       <template v-slot:header="props">
         <q-tr :props="props">
@@ -91,7 +92,7 @@
                   v-ripple:yellow
                   clickable
                   manual-focus
-                  @click="generateJsonFile(rows[0], false)"
+                  @click="generateJsonFile(rows.value.id, false)"
                 >
                   <q-item-section>ساخت فایل سوالات</q-item-section>
                 </q-item>
@@ -254,7 +255,7 @@ export default {
       this.$axios.get(API_ADDRESS.exam.base(this.options.page))
         .then((response) => {
           this.examList.loading = false
-          // this.totalRows = response.data.meta.total
+          this.totalRows = response.data.meta.total
           this.examList = new ExamList(response.data.data, { meta: response.data.meta, links: response.data.links })
           this.rows = this.examList.list
         })
@@ -295,6 +296,13 @@ export default {
     },
     confirmDelete () {
       this.dontDelete()
+    },
+    paginationLabel (currentPage, itemsPerPage, totalRowsNumber) {
+      currentPage = this.options.page
+      totalRowsNumber = this.totalRows
+      const totalPage = Math.ceil(totalRowsNumber / totalRowsNumber)
+      const label = 'صفحه ' + currentPage + ' از ' + totalPage
+      return label
     }
   }
 }
