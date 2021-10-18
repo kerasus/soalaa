@@ -73,6 +73,7 @@
           <q-item
             clickable
             v-close-popup
+            to="/question/create"
           >
             <q-item-section class="side-list-item">
               <span class="list-title">
@@ -155,7 +156,7 @@ export default {
         },
         {
           displayName: 'اضافه کردن سوالات MBTI',
-          to: 'question.mbti.create',
+          to: '/question/mbti/create',
           name: 'question.mbti.create'
         }
       ]
