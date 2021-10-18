@@ -129,16 +129,6 @@ export default {
       ],
       adminList: [
         {
-          displayName: 'ویرایش درخت دانش',
-          to: 'tree.edit',
-          name: 'tree.edit'
-        },
-        {
-          displayName: 'ساخت سوال',
-          to: 'quest.create',
-          name: 'quest.create'
-        },
-        {
           displayName: 'لیست آزمون ها',
           to: 'exams',
           name: 'onlineQuiz.exams'
