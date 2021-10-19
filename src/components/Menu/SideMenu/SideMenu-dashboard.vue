@@ -131,8 +131,8 @@ export default {
       adminList: [
         {
           displayName: 'لیست آزمون ها',
-          to: 'exams',
-          name: 'onlineQuiz.exams'
+          to: 'exam-list',
+          name: 'exam-list'
         },
         {
           displayName: 'بانک سوال',

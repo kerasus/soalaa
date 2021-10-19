@@ -73,7 +73,7 @@
                   v-ripple:yellow
                   clickable
                   manual-focus
-                  @click="edit(rows)"
+                  :to="{ name: 'edit-exam', params: { quizId: row.id, quizTitle: row.title}}"
                 >
                   <q-item-section> ویرایش آزمون</q-item-section>
                 </q-item>
@@ -81,7 +81,7 @@
                   v-ripple:yellow
                   clickable
                   manual-focus
-                  @click="editExamReport(rows)"
+                  :to="{ name: 'edit-exam-report', params: { quizId: row.id, quizTitle: row.title}}"
                 >
                   <q-item-section>ویرایش کارنامه</q-item-section>
                 </q-item>
@@ -96,7 +96,7 @@
                   v-ripple:yellow
                   clickable
                   manual-focus
-                  @click="generateJsonFile(rows[index], false)"
+                  @click="generateJsonFile(row, false)"
                 >
                   <q-item-section>ساخت فایل سوالات</q-item-section>
                 </q-item>
@@ -104,7 +104,7 @@
                   v-ripple:yellow
                   clickable
                   manual-focus
-                  @click="generateJsonFile(rows[index], true)"
+                  @click="generateJsonFile(row, true)"
                 >
                   <q-item-section>ساخت فایل سوالات با جواب</q-item-section>
                 </q-item>
@@ -112,7 +112,7 @@
                   v-ripple:yellow
                   clickable
                   manual-focus
-                  @click="upload(rows)"
+                  @click="upload(row)"
                 >
                   <q-item-section>آپلود فایل سوالات و جواب ها</q-item-section>
                 </q-item>
@@ -186,14 +186,6 @@
           </q-btn>
         </q-td>
       </template>
-<!--      <template #body-delay_time="props">-->
-<!--        <q-td-->
-<!--          :props="props"-->
-<!--          label="hi"-->
-<!--        >-->
-<!--          {{rows[index].delay_time + ' دقیقه'}}-->
-<!--        </q-td>-->
-<!--      </template>-->
       <template v-slot:pagination="scope">
         <q-btn
           icon="chevron_right"
@@ -244,6 +236,7 @@ export default {
       examList: new ExamList(),
       rows: [],
       index: null,
+      row: [],
       options: {
         itemsPerPage: 15,
         page: 1
@@ -282,17 +275,12 @@ export default {
     },
     rowClick (evt, row, index) {
       this.index = index
-    },
-    edit (examId) {
-      this.$emit('update-exam', examId)
-    },
-    editExamReport (examId) {
-      this.$emit('update-exam-report', examId)
+      this.row = row
     },
     generateJsonFile (exams, withAnswer) {
       this.$store.dispatch('loading/linearLoading', true)
       this.$axios.post(API_ADDRESS.exam.generateExamFile(exams.id, withAnswer))
-        .then((res) => {
+        .then(() => {
           this.$q.notify({
             type: 'positive',
             message: 'ساخت فایل ' + exams.title + ' با موفقیت انجام شد',

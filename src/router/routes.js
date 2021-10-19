@@ -16,13 +16,21 @@ const routes = [
       // user list
       // admin list
       {
-        path: 'exams',
-        name: 'onlineQuiz.exams',
-        component: () => import('pages/Admin/exam/list'),
+        path: 'exam-list',
+        name: 'exam-list',
+        component: () => import('pages/Admin/exam/index'),
         meta: {
           middlewares: [auth]
         },
         children: [
+          {
+            path: '',
+            name: 'list',
+            component: () => import('pages/Admin/exam/list'),
+            meta: {
+              middlewares: [auth]
+            }
+          },
           {
             path: 'edit-exam',
             name: 'edit-exam',
