@@ -18,33 +18,46 @@ const routes = [
       {
         path: 'exams',
         name: 'onlineQuiz.exams',
-        component: () => import('pages/Admin/exam/Manage'),
+        component: () => import('pages/Admin/OnlineQuiz/ExamList')
+      },
+      {
+        path: '/question/mbti/create',
+        name: 'question.mbti.create',
+        component: () => (import('pages/Admin/Question/newMBTIpage'))
         meta: {
           middlewares: [auth]
         }
-      }
-    ]
+      },
+      {
+        path: '/question/create',
+        name: 'question.create',
+        component: () => (import('pages/Admin/Question/CreateNewQuestion'))
+        meta: {
+          middlewares: [auth]
+        }
+      },
+      {
+        path: '/editCoefficients',
+        name: 'coefficient.edit',
+        component: () => import('src/pages/Admin/subGroup/editCoefficients.vue'),
+        meta: {
+          middlewares: [auth]
+        }
+      },
+      {
+        path: '/lessonsList',
+        name: 'onlineQuiz.exams.lessons',
+        component: () => import('src/pages/Admin/exam/lessons.vue'),
+        meta: {
+          middlewares: [auth]
+        }
+       },
+      ]
   },
   {
     path: '/login',
     name: 'login',
     component: () => import('pages/Auth/Login.vue')
-  },
-  {
-    path: '/editCoefficients',
-    name: 'coefficient.edit',
-    component: () => import('src/pages/Admin/subGroup/editCoefficients.vue'),
-    meta: {
-      middlewares: [auth]
-    }
-  },
-  {
-    path: '/lessonsList',
-    name: 'onlineQuiz.exams.lessons',
-    component: () => import('src/pages/Admin/exam/lessons.vue'),
-    meta: {
-      middlewares: [auth]
-    }
   },
   {
     path: '/test',

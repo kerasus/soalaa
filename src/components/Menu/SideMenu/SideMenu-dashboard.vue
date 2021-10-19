@@ -69,7 +69,7 @@
         class="bg-primary"
         style="text-align: right !important;"
       >
-        <router-link to="">
+        <router-link to="/question/create">
           <q-item
             clickable
             v-close-popup
@@ -165,7 +165,7 @@ export default {
         },
         {
           displayName: 'اضافه کردن سوالات MBTI',
-          to: 'question.mbti.create',
+          to: '/question/mbti/create',
           name: 'question.mbti.create'
         }
       ]
