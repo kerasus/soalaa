@@ -2,7 +2,6 @@ import { boot } from 'quasar/wrappers'
 import axios from 'axios'
 import { Notify } from 'quasar'
 
-// this.$store.getters['Auth/accessToken']
 const AxiosError = (function () {
   function handle (error) {
     let messages = []
@@ -16,8 +15,8 @@ const AxiosError = (function () {
       messages.push('موردی یافت نشد.')
     } else if (statusCode === 401) {
       messages.push('ابتدا وارد سامانه شوید.')
-      // axios.defaults.headers.common.Authorization = ''
-      // that.$router.push({ name: 'login'})
+      axios.defaults.headers.common.Authorization = ''
+      this.$router.push({ name: 'login' })
     } else if (error.response.data) {
       for (const [key, value] of Object.entries(error.response.data)) {
         if (typeof value === 'string') {
@@ -71,6 +70,10 @@ const AxiosError = (function () {
 const api = axios.create({ baseURL: 'https://api.example.com' })
 
 export default boot(({ app, store, router }) => {
+  const accessToken = store.getters['Auth/accessToken']
+  if (accessToken) {
+    axios.defaults.headers.common.Authorization = 'Bearer ' + accessToken
+  }
   // for use inside Vue files (Options API) through this.$axios and this.$api
   const instance = axios.create(/* ... */)
 
