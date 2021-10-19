@@ -26,10 +26,6 @@
         </q-card-actions>
       </q-card>
     </q-dialog>
-    <q-uploader
-      url="http://localhost:4444/upload"
-      style="max-width: 300px"
-    />
     <q-table
       :columns="headers"
       :rows="rows"
@@ -214,6 +210,7 @@
     <div class="text-center">
       <q-btn
         elevation="2"
+        :to="{ name: 'edit-exam', params: { quizId: row.id, quizTitle: row.title}}"
       >
         ثبت آزمون جدید
       </q-btn>
