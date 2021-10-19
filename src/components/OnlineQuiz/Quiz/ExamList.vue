@@ -285,7 +285,7 @@ export default {
             this.rows[index].delay_time += ' دقیقه'
             console.log('b', this.rows[index].start_at)
             this.rows[index].start_at = this.rows[index].shamsiDate('start_at').dateTime
-            this.rows[index].start_at = this.rows[index].shamsiDate('finish_at').dateTime
+            this.rows[index].finish_at = this.rows[index].shamsiDate('finish_at').dateTime
           }
         })
         .catch(() => {
