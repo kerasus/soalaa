@@ -22,29 +22,29 @@ const routes = [
         meta: {
           middlewares: [auth]
         }
-      }
-    ]
+      },
+      {
+        path: '/editCoefficients',
+        name: 'coefficient.edit',
+        component: () => import('src/pages/Admin/subGroup/editCoefficients.vue'),
+        meta: {
+          middlewares: [auth]
+        }
+      },
+      {
+        path: '/lessonsList',
+        name: 'onlineQuiz.exams.lessons',
+        component: () => import('src/pages/Admin/exam/lessons.vue'),
+        meta: {
+          middlewares: [auth]
+        }
+       },
+      ]
   },
   {
     path: '/login',
     name: 'login',
     component: () => import('pages/Auth/Login.vue')
-  },
-  {
-    path: '/editCoefficients',
-    name: 'coefficient.edit',
-    component: () => import('src/pages/Admin/subGroup/editCoefficients.vue'),
-    meta: {
-      middlewares: [auth]
-    }
-  },
-  {
-    path: '/lessonsList',
-    name: 'onlineQuiz.exams.lessons',
-    component: () => import('src/pages/Admin/exam/lessons.vue'),
-    meta: {
-      middlewares: [auth]
-    }
   },
   {
     path: '/test',
