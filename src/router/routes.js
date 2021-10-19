@@ -18,7 +18,20 @@ const routes = [
       {
         path: 'exams',
         name: 'onlineQuiz.exams',
-        component: () => import('pages/Admin/exam/Manage'),
+        component: () => import('pages/Admin/OnlineQuiz/ExamList')
+      },
+      {
+        path: '/question/mbti/create',
+        name: 'question.mbti.create',
+        component: () => (import('pages/Admin/Question/newMBTIpage'))
+        meta: {
+          middlewares: [auth]
+        }
+      },
+      {
+        path: '/question/create',
+        name: 'question.create',
+        component: () => (import('pages/Admin/Question/CreateNewQuestion'))
         meta: {
           middlewares: [auth]
         }
