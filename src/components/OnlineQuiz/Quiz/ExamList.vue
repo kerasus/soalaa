@@ -283,6 +283,9 @@ export default {
           this.rows = this.examList.list
           for (const index in this.rows) {
             this.rows[index].delay_time += ' دقیقه'
+            console.log('b', this.rows[index].start_at)
+            this.rows[index].start_at = this.rows[index].shamsiDate('start_at').dateTime
+            this.rows[index].start_at = this.rows[index].shamsiDate('finish_at').dateTime
           }
         })
         .catch(() => {
@@ -327,6 +330,7 @@ export default {
     }
   }
 }
+// shamsiDate('start_at').dateTime
 </script>
 <style lang="scss" scoped>
 .admin-exam-list{
