@@ -69,7 +69,7 @@
         class="bg-primary"
         style="text-align: right !important;"
       >
-        <router-link to="">
+        <router-link to="/question/create">
           <q-item
             clickable
             v-close-popup
