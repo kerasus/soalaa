@@ -30,6 +30,7 @@
       :columns="headers"
       :rows="rows"
       row-key="name"
+      @row-click="rowClick"
       rows-per-page-label="تعداد ردیف در هر صفحه"
       :rows-per-page-options="[15 ,20,30]"
       :pagination-label="paginationLabel"
@@ -95,7 +96,7 @@
                   v-ripple:yellow
                   clickable
                   manual-focus
-                  @click="generateJsonFile(rows.value.id, false)"
+                  @click="generateJsonFile(rows[index], false)"
                 >
                   <q-item-section>ساخت فایل سوالات</q-item-section>
                 </q-item>
@@ -103,7 +104,7 @@
                   v-ripple:yellow
                   clickable
                   manual-focus
-                  @click="generateJsonFile(rows[0], true)"
+                  @click="generateJsonFile(rows[index], true)"
                 >
                   <q-item-section>ساخت فایل سوالات با جواب</q-item-section>
                 </q-item>
@@ -185,6 +186,14 @@
           </q-btn>
         </q-td>
       </template>
+<!--      <template #body-delay_time="props">-->
+<!--        <q-td-->
+<!--          :props="props"-->
+<!--          label="hi"-->
+<!--        >-->
+<!--          {{rows[index].delay_time + ' دقیقه'}}-->
+<!--        </q-td>-->
+<!--      </template>-->
       <template v-slot:pagination="scope">
         <q-btn
           icon="chevron_right"
@@ -234,6 +243,7 @@ export default {
       ],
       examList: new ExamList(),
       rows: [],
+      index: null,
       options: {
         itemsPerPage: 15,
         page: 1
@@ -261,11 +271,17 @@ export default {
           this.totalRows = response.data.meta.total
           this.examList = new ExamList(response.data.data, { meta: response.data.meta, links: response.data.links })
           this.rows = this.examList.list
+          for (const index in this.rows) {
+            this.rows[index].delay_time += ' دقیقه'
+          }
         })
         .catch(() => {
           this.$store.dispatch('loading/linearLoading', false)
           this.examList = new ExamList()
         })
+    },
+    rowClick (evt, row, index) {
+      this.index = index
     },
     edit (examId) {
       this.$emit('update-exam', examId)
@@ -273,18 +289,19 @@ export default {
     editExamReport (examId) {
       this.$emit('update-exam-report', examId)
     },
-    generateJsonFile (exam, withAnswer) {
+    generateJsonFile (exams, withAnswer) {
       this.$store.dispatch('loading/linearLoading', true)
-      this.$axios.post(API_ADDRESS.exam.generateExamFile(exam.id, withAnswer))
+      this.$axios.post(API_ADDRESS.exam.generateExamFile(exams.id, withAnswer))
         .then((res) => {
           this.$q.notify({
             type: 'positive',
-            message: 'ساخت فایل ' + exam.title + ' با موفقیت انجام شد',
+            message: 'ساخت فایل ' + exams.title + ' با موفقیت انجام شد',
             position: 'top'
           })
           this.$store.dispatch('loading/linearLoading', false)
         })
-        .catch(() => {
+        .catch((err) => {
+          console.log(err)
           this.$store.dispatch('loading/linearLoading', false)
         })
     },
@@ -300,12 +317,9 @@ export default {
     confirmDelete () {
       this.dontDelete()
     },
-    paginationLabel (currentPage, itemsPerPage, totalRowsNumber) {
-      currentPage = this.options.page
-      totalRowsNumber = this.totalRows
-      const totalPage = Math.ceil(totalRowsNumber / totalRowsNumber)
-      const label = 'صفحه ' + currentPage + ' از ' + totalPage
-      return label
+    paginationLabel (firstRowIndex, endRowIndex, totalRowsNumber) {
+      firstRowIndex = this.options.page
+      totalRowsNumber = Math.ceil(this.totalRows / this.options.itemsPerPage)
     }
   }
 }
@@ -321,15 +335,32 @@ export default {
 </style>
 <style lang="scss">
 .admin-exam-list {
+  .q-table {
+    thead {
+      tr {
+        opacity: 0.6;
+      }
+    }
+  }
   .q-table--horizontal-separator thead th, .q-table--horizontal-separator tbody td, .q-table--cell-separator thead th, .q-table--cell-separator tbody td {
     text-align: left !important;
   }
 }
-.q-menu{
-  &.options-menu{
+
+.q-menu {
+  &.options-menu {
     border-radius: 24px 0 24px 24px !important;
     text-align: center;
     padding: 10px;
+
+    .q-item {
+      .q-item__section--main {
+        opacity: 0.6;
+        &:hover {
+          opacity: 1;
+        }
+      }
+    }
   }
 }
 </style>
