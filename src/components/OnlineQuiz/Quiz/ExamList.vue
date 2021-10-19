@@ -26,6 +26,10 @@
         </q-card-actions>
       </q-card>
     </q-dialog>
+    <q-uploader
+      url="http://localhost:4444/upload"
+      style="max-width: 300px"
+    />
     <q-table
       :columns="headers"
       :rows="rows"
@@ -112,7 +116,7 @@
                   v-ripple:yellow
                   clickable
                   manual-focus
-                  @click="upload(row)"
+                  @click="upload(row.id)"
                 >
                   <q-item-section>آپلود فایل سوالات و جواب ها</q-item-section>
                 </q-item>
@@ -225,6 +229,8 @@ export default {
   name: 'ExamList',
   data () {
     return {
+      filesMaxSize: null,
+      filesPng: null,
       dialogDelete: false,
       headers: [
         { name: 'title', field: 'title', label: 'عنوان' },
@@ -256,6 +262,20 @@ export default {
     this.getExams()
   },
   methods: {
+    checkFileSize (files) {
+      return files.filter(file => file.size < 2048)
+    },
+
+    checkFileType (files) {
+      return files.filter(file => file.type === 'image/png')
+    },
+
+    onRejected (rejectedEntries) {
+      this.$q.notify({
+        type: 'negative',
+        message: `${rejectedEntries.length} file(s) did not pass validation constraints`
+      })
+    },
     getExams () {
       this.$store.dispatch('loading/linearLoading', true)
       this.$axios.get(API_ADDRESS.exam.base(this.options.page))
@@ -288,13 +308,12 @@ export default {
           })
           this.$store.dispatch('loading/linearLoading', false)
         })
-        .catch((err) => {
-          console.log(err)
+        .catch(() => {
           this.$store.dispatch('loading/linearLoading', false)
         })
     },
-    upload (examId) {
-      this.$emit('upload', examId)
+    upload (Id) {
+      this.$emit('upload', Id)
     },
     deleteItem () {
       this.dialogDelete = true

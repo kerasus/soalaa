@@ -9,7 +9,7 @@
           <q-btn icon="close" flat round dense @click="closeDialog" />
         </q-card-section>
         <q-card-section>
-          <upload-answers/>
+          <upload-answers examId="id"/>
         </q-card-section>
       </q-card>
     </q-dialog>
@@ -31,8 +31,8 @@ export default {
     }
   },
   methods: {
-    selectUploadAnswers (event) {
-      this.exam = new Exam(event)
+    selectUploadAnswers (id) {
+      this.exam = new Exam(id)
       this.dialog = true
     },
     closeDialog () {

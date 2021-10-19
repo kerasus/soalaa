@@ -141,7 +141,7 @@ export default {
         },
         {
           displayName: 'لیست دروس',
-          to: 'subCategory.edit',
+          to: '/sub_category/edit',
           name: 'subCategory.edit'
         },
         {
