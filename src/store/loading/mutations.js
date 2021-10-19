@@ -1,6 +1,6 @@
-export function linear (state, value) {
+export function loading (state, value) {
   state.loading = value
 }
-export function spinner (state, value) {
+export function overlay (state, value) {
   state.overlay = value
 }

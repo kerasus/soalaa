@@ -33,6 +33,9 @@
       rows-per-page-label="تعداد ردیف در هر صفحه"
       :rows-per-page-options="[15 ,20,30]"
       :pagination-label="paginationLabel"
+      :loading="$store.getters['loading/loading']"
+      loading-label="لطفا منتظر بمانید..."
+      :no-data-label="$store.getters['loading/loading'] ? '' : 'متاسفم:( موردی وجود نداره...'"
     >
       <template v-slot:header="props">
         <q-tr :props="props">
@@ -254,11 +257,9 @@ export default {
       this.$store.dispatch('loading/linearLoading', true)
       this.$axios.get(API_ADDRESS.exam.base(this.options.page))
         .then((response) => {
-          console.log(response)
           this.$store.dispatch('loading/linearLoading', false)
-          // this.totalRows = response.data.meta.total
+          this.totalRows = response.data.meta.total
           this.examList = new ExamList(response.data.data, { meta: response.data.meta, links: response.data.links })
-          console.log(response.data.data)
           this.rows = this.examList.list
         })
         .catch(() => {

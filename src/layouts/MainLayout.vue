@@ -113,14 +113,6 @@ export default {
     },
     logOut () {
       return this.$store.dispatch('Auth/logOut')
-    },
-    overlay () {
-      if (this.$store.state['loading/overlay']) {
-        console.log(this.$store.getters['loading/overlay'])
-        return this.$q.loading.show()
-      } else {
-        return this.$q.loading.hide()
-      }
     }
   }
 }
