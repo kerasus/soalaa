@@ -1,227 +1,145 @@
 <template>
-  <v-container class="subcategory-editor">
+<q-page>
+  <div class="q-mx-auto q-ma-xl" style="width: 900px">
     <q-card
-     width="800px"
-      class="mx-auto"
     >
       <q-card-section class="bg-light-blue-6 text-white row justify-between">
-        <div> لیست دروس</div>
-        <div style="max-width: 200px" class="row">
+        <div class="text-h5"> لیست دروس</div>
+        <div  class="row">
           <q-input rounded outlined dark dense type="search" :model-value="searchValue" color="white">
             <template v-slot:append>
               <q-icon name="search" color="white"/>
             </template>
           </q-input>
-          <q-btn flat color="white" round icon="add"/>
+          <q-btn flat color="white" round icon="add" class="q-ml-md"  @click="addSubcategory"/>
         </div>
       </q-card-section>
       <q-separator/>
-      <q-list class="q-mb-lg">
-        <q-item
-          v-for="(item, index) in filteredItems"
-          :key="index">
-          <q-item-section side>
-            <q-avatar
-              round
-              text-color="white"
-              :color="iconPicker(item.title).color"
-              :icon="iconPicker(item.title).icon"
-            />
-          </q-item-section>
-          <q-item-section class="row">
-
-            <q-item-label
-              v-if="!item.editable && !item.editMode"
-            >
-              {{item.title}}
-            </q-item-label>
-            <q-input
-              v-else-if="!item.editable && item.editMode"
-              v-model="item.title_buffer"
-              rounded
-              style="max-width: 300px"
-              outlined  :model-value="item.title_buffer"/>
-          </q-item-section>
-          <q-item-section side>
-            <q-card>
-              {{ categoryList.list }}
-            </q-card>
-            <q-chip
-              color="blue-9"
-              dark
-              v-if="!item.editMode && !item.editable"
-            >
-              {{ getCategoryById(item.category_id).title }}
-
-            </q-chip>
-            <q-select
-              v-else-if="!item.editMode && item.editable"
-              rounded
-              outlined
-              v-model="item.category_id"
-              option-value="title"
-              option-label="title"
-              :options="categoryList.list"
-              label="Rounded outlined"  model-value=""/>
-            <q-select
-              v-else-if="item.editMode && !item.editable"
-              v-model="item.category_id_buffer"
-              rounded
-              outlined
-              :options="categoryList.list"
-              label="Rounded outlined"  model-value=""/>
-          </q-item-section>
-          <q-item-section side>
-            <q-btn
-              v-if="!item.editable && !item.editMode"
-              round
-              color="blue-9"
-              size="xs"
-              outline
-              icon="edit"
-              @click="editMode(item)"
-            />
-           <div
-             v-else-if="!item.editable && item.editMode"
-             class="row">
-             <q-btn
+       <q-list class="q-mb-lg">
+         <q-item
+           v-for="(item, index) in filteredItems"
+           class="q-mt-md"
+           :key="index">
+           <q-item-section side>
+             <q-avatar
                round
-               color="green"
-               size="xs"
-               dark
-               icon="check"
-               @click="create(item)"
+               text-color="white"
+               :color="iconPicker(item.title).color"
+               :icon="iconPicker(item.title).icon"
              />
+           </q-item-section>
+           <q-item-section >
+             <q-item-label
+               v-if="!item.editable && !item.editMode"
+               class="text-subtitle1"
+             >
+               {{item.title}}
+             </q-item-label>
+             <q-input
+               v-else-if="!item.editable && item.editMode"
+               v-model="item.title_buffer"
+               rounded
+               dense
+               style="max-width: 200px"
+               outlined  :model-value="item.title_buffer"/>
+             <q-input
+               v-else-if="item.editable && !item.editMode"
+               v-model="item.title"
+               rounded
+               dense
+               style="max-width: 200px"
+               outlined />
+           </q-item-section>
+           <q-item-section>
+             <div  v-if="!item.editMode && !item.editable" class="row justify-end">
+               <q-chip
+                 color="blue-9"
+                 dark
+                 class="text-subtitle1"
+               >
+                 {{ (getCategoryById(item.category_id))? getCategoryById(item.category_id).title : getCategoryById(item.category_id.id).title}}
+               </q-chip>
+             </div>
+             <q-select
+               v-else-if="!item.editMode && item.editable"
+               rounded
+               outlined
+               label="انتخاب کنید"
+               dense
+               v-model="item.category_id"
+               option-label="title"
+               option-value="id"
+               :options="categoryList.list"
+             />
+             <q-select
+               v-else-if="item.editMode && !item.editable"
+               v-model="item.category_id_buffer"
+               rounded
+               dense
+               option-label="title"
+               option-value="id"
+               outlined
+               @new-value="testMitra"
+               :options="categoryList.list"
+               model-value=""/>
+           </q-item-section>
+           <q-item-section side >
              <q-btn
+               v-if="!item.editable && !item.editMode"
                round
-               class="q-mx-md"
-               color="red"
+               color="blue-9"
                size="xs"
-               icon="close"
-               @click="deleteItem(item)"
+               outline
+               icon="edit"
+               @click="editMode(item)"
              />
-           </div>
-          </q-item-section>
-        </q-item>
-      </q-list>
-      <v-list
-        subheader
-        two-line
-      >
-                <v-subheader inset>Folders</v-subheader>
-
-        <v-list-item
-          v-for="(item, index) in filteredItems"
-          :key="index"
-        >
-
-          <v-list-item-content>
-            <v-list-item-title
-              v-if="!item.editable && !item.editMode"
-              v-text="item.title"
-            />
-            <v-text-field
-              v-else-if="item.editable && !item.editMode"
-              v-model="item.title"
-              outlined
-              rounded
-              :style="{ 'max-width': '250px' }"
-            />
-            <v-text-field
-              v-else-if="!item.editable && item.editMode"
-              v-model="item.title_buffer"
-              outlined
-              rounded
-              :style="{ 'max-width': '250px' }"
-            />
-
-            <!--            <v-list-item-subtitle v-text="item.subtitle"></v-list-item-subtitle>-->
-          </v-list-item-content>
-
-          <v-chip
-            v-if="!item.editMode && !item.editable"
-            class="ma-2 mx-5"
-            color="primary"
-          >
-            {{ getCategoryById(item.category_id).title }}
-          </v-chip>
-
-          <v-select
-            v-else-if="!item.editMode && item.editable"
-            v-model="item.category_id"
-            outlined
-            rounded
-            :items="categoryList.list"
-            item-value="id"
-            item-text="title"
-            :style="{ 'max-width': '270px' }"
-          />
-          <v-select
-            v-else-if="item.editMode && !item.editable"
-            v-model="item.category_id_buffer"
-            outlined
-            rounded
-            :items="categoryList.list"
-            item-value="id"
-            item-text="title"
-            :style="{ 'max-width': '270px' }"
-          />
-
-          <v-list-item-action>
-            <div v-if="!item.editable && !item.editMode">
-              <v-btn
-                icon
-                @click="editMode(item)"
-              >
-                <v-icon color="blue">
-                  mdi-pencil-circle-outline
-                </v-icon>
-              </v-btn>
-              <!--              <v-btn icon>-->
-              <!--                <v-icon color="red">mdi-delete-circle-outline</v-icon>-->
-              <!--              </v-btn>-->
-            </div>
-            <div v-else-if="item.editable && !item.editMode">
-              <v-btn
-                icon
-                @click="create(item)"
-              >
-                <v-icon color="green">
-                  mdi-check-circle-outline
-                </v-icon>
-              </v-btn>
-              <v-btn
-                icon
-                @click="deleteItem(item)"
-              >
-                <v-icon color="red">
-                  mdi-close-circle-outline
-                </v-icon>
-              </v-btn>
-            </div>
-            <div v-else-if="!item.editable && item.editMode">
-              <v-btn
-                icon
-                @click="update(item)"
-              >
-                <v-icon color="green">
-                  mdi-check-circle-outline
-                </v-icon>
-              </v-btn>
-              <v-btn
-                icon
-                @click="cancelEdit(item)"
-              >
-                <v-icon color="red">
-                  mdi-close-circle-outline
-                </v-icon>
-              </v-btn>
-            </div>
-          </v-list-item-action>
-        </v-list-item>
-      </v-list>
+             <div
+               v-else-if="!item.editable && item.editMode"
+               class="row">
+               <q-btn
+                 round
+                 color="green"
+                 size="xs"
+                 dark
+                 icon="check"
+                 @click="update(item)"
+               />
+               <q-btn
+                 round
+                 class="q-ml-md"
+                 color="red"
+                 size="xs"
+                 icon="close"
+                 @click="cancelEdit(item)"
+               />
+             </div>
+             <div
+               v-else-if="item.editable && !item.editMode"
+               class="row">
+               <q-btn
+                 round
+                 color="green"
+                 size="xs"
+                 dark
+                 icon="check"
+                 @click="create(item)"
+               />
+               <q-btn
+                 round
+                 class="q-ml-md"
+                 color="red"
+                 size="xs"
+                 icon="close"
+                 @click="deleteItem(item)"
+               />
+             </div>
+           </q-item-section>
+         </q-item>
+       </q-list>
     </q-card>
-  </v-container>
+  </div>
+</q-page>
+
 </template>
 
 <script>
@@ -240,9 +158,6 @@ export default {
   computed: {
     filteredItems () {
       const that = this
-      console.log('computed :', this.subCategoriesList.list.filter(item => item.title.includes(this.searchValue) || (!item.editable && that.getCategoryById(item.category_id).title.includes(this.searchValue))))
-      console.log('searchValue: ', this.searchValue)
-
       return this.subCategoriesList.list.filter(item => item.title.includes(this.searchValue) || (!item.editable && that.getCategoryById(item.category_id).title.includes(this.searchValue)))
     },
     iconPicker () {
@@ -336,6 +251,7 @@ export default {
       })
   },
   methods: {
+
     update (item) {
       item.editMode = false
       item.title = item.title.trim()
@@ -348,6 +264,7 @@ export default {
     create (item) {
       item.editable = false
       item.title = item.title.trim()
+      item.category_id = item.category_id.id
       this.$axios.post(API_ADDRESS.questionSubcategory.base, item)
         .then(response => {
           item = new QuestSubcategory(response.data.data)
@@ -361,7 +278,6 @@ export default {
       item.buffer()
     },
     editMode (item) {
-      console.log('edit mode run', item)
       item.editMode = true
       item.buffer()
     },
@@ -387,9 +303,6 @@ export default {
         that.subCategoriesList.fetch()
           .then((response) => {
             that.subCategoriesList = new QuestSubcategoryList(response.data.data)
-            console.log('loadCategories :', response)
-            console.log('model :', new QuestSubcategoryList())
-            console.log('loadSubcategories :', that.subCategoriesList)
             resolve()
           })
           .catch(() => {
@@ -402,9 +315,7 @@ export default {
       return new Promise(function (resolve, reject) {
         that.$axios.get(API_ADDRESS.questionCategory.base)
           .then((response) => {
-            console.log('loadCategories res:', response.data.data)
             that.categoryList = new QuestCategoryList(response.data.data)
-            console.log('loadCategories :', that.categoryList)
             resolve()
           })
           .catch(() => {
