@@ -317,7 +317,6 @@ export default {
     }
   }
 }
-// shamsiDate('start_at').dateTime
 </script>
 <style lang="scss" scoped>
 .admin-exam-list{
