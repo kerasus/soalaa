@@ -6,7 +6,15 @@
       <q-card-section class="bg-light-blue-6 text-white row justify-between">
         <div class="text-h5"> لیست دروس</div>
         <div  class="row">
-          <q-input rounded outlined dark dense type="search" :model-value="searchValue" color="white">
+          <q-input
+            rounded
+            outlined
+            dark
+            dense
+            type="search"
+            v-model="searchValue"
+            :model-value="searchValue"
+            color="white">
             <template v-slot:append>
               <q-icon name="search" color="white"/>
             </template>
@@ -14,6 +22,7 @@
           <q-btn flat color="white" round icon="add" class="q-ml-md"  @click="addSubcategory"/>
         </div>
       </q-card-section>
+      <q-linear-progress v-if="loading" indeterminate color="warning" class="q-mt-sm" />
       <q-separator/>
        <q-list class="q-mb-lg">
          <q-item
@@ -40,13 +49,17 @@
                v-model="item.title_buffer"
                rounded
                dense
+               color="light-blue-6"
                style="max-width: 200px"
-               outlined  :model-value="item.title_buffer"/>
+               outlined
+               :model-value="item.title_buffer"/>
              <q-input
                v-else-if="item.editable && !item.editMode"
                v-model="item.title"
                rounded
+               color="light-blue-6"
                dense
+               label="عنوان درس"
                style="max-width: 200px"
                outlined />
            </q-item-section>
@@ -57,31 +70,36 @@
                  dark
                  class="text-subtitle1"
                >
-                 {{ (getCategoryById(item.category_id))? getCategoryById(item.category_id).title : getCategoryById(item.category_id.id).title}}
+                 {{ (getCategoryById(item.category_id)) ? getCategoryById(item.category_id).title : ''}}
                </q-chip>
              </div>
              <q-select
                v-else-if="!item.editMode && item.editable"
-               rounded
-               outlined
-               label="انتخاب کنید"
-               dense
                v-model="item.category_id"
+               :options="categoryList.list"
                option-label="title"
                option-value="id"
-               :options="categoryList.list"
-             />
+               map-options
+               rounded
+               outlined
+               emit-value
+               color="light-blue-6"
+               label="انتخاب کنید"
+               dense
+              />
              <q-select
                v-else-if="item.editMode && !item.editable"
                v-model="item.category_id_buffer"
-               rounded
-               dense
+               :options="categoryList.list"
                option-label="title"
                option-value="id"
+               map-options
+               rounded
+               dense
+               emit-value
+               color="light-blue-6"
                outlined
-               @new-value="testMitra"
-               :options="categoryList.list"
-               model-value=""/>
+               />
            </q-item-section>
            <q-item-section side >
              <q-btn
@@ -251,7 +269,6 @@ export default {
       })
   },
   methods: {
-
     update (item) {
       item.editMode = false
       item.title = item.title.trim()
@@ -264,7 +281,6 @@ export default {
     create (item) {
       item.editable = false
       item.title = item.title.trim()
-      item.category_id = item.category_id.id
       this.$axios.post(API_ADDRESS.questionSubcategory.base, item)
         .then(response => {
           item = new QuestSubcategory(response.data.data)
@@ -273,10 +289,12 @@ export default {
           this.deleteItem(item)
         })
     },
+
     cancelEdit (item) {
       item.editMode = false
       item.buffer()
     },
+
     editMode (item) {
       item.editMode = true
       item.buffer()
