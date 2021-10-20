@@ -120,6 +120,7 @@
                   v-ripple:yellow
                   clickable
                   manual-focus
+                  :to="{ name: 'coefficient.edit', params: { exam_id: row.id } }"
                 >
                   <q-item-section>اصلاح ضرایب</q-item-section>
                 </q-item>
@@ -144,6 +145,7 @@
             color="indigo"
             icon="auto_stories"
             size="11px"
+            :to="{ name: 'onlineQuiz.exams.lessons', params: { quizId: row.id , quizTitle: row.title}}"
           >
             <q-tooltip anchor="top middle" self="bottom middle">
               مشاهده دروس
