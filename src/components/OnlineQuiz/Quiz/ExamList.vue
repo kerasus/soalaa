@@ -73,7 +73,7 @@
                   v-ripple:yellow
                   clickable
                   manual-focus
-                  :to="{ name: 'edit-exam', params: { quizId: row.id, quizTitle: row.title}}"
+                  :to="{ name: 'edit-exam', params: { quiz: row}}"
                 >
                   <q-item-section> ویرایش آزمون</q-item-section>
                 </q-item>
@@ -210,7 +210,7 @@
     <div class="text-center">
       <q-btn
         elevation="2"
-        :to="{ name: 'edit-exam', params: { quizId: row.id, quizTitle: row.title}}"
+        :to="{ name: 'edit-exam', params: { quiz: null }}"
       >
         ثبت آزمون جدید
       </q-btn>
