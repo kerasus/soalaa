@@ -1,3 +1,4 @@
+/* eslint-disable */
 import { Model } from 'js-abstract-model'
 // import { Exam, ExamList } from '@/models/Exam'
 // import Time from '@/plugins/time'
