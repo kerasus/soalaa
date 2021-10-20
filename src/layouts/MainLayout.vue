@@ -16,7 +16,7 @@
           />
           <q-btn-dropdown
             icon="account_circle"
-            :label="user.first_name "
+            :label="user.full_name "
             color="grey-14"
             dropdown-icon="false"
             dir="ltr"
@@ -51,10 +51,10 @@
         </div>
       </q-toolbar>
       <q-linear-progress
-        v-if="loading"
-        color="amber-13"
-        track-color="orange"
+        v-if="$store.getters['loading/loading']"
+        color="primary"
         class="q-mt-sm"
+        indeterminate
       />
     </q-header>
     <q-drawer
@@ -94,24 +94,22 @@ import { User } from 'src/models/User'
 
 export default {
   components: { SideMenuDashboard },
-  props: {
-    user: {
-      default: new User(),
-      type: Object
+  data () {
+    return {
+      leftDrawerOpen: false,
+      user: new User()
     }
   },
   created () {
-    console.log(this.user)
-  },
-  data () {
-    return {
-      loading: true,
-      leftDrawerOpen: false
-    }
+    this.getUser()
   },
   methods: {
     toggleLeftDrawer () {
       this.leftDrawerOpen = !this.leftDrawerOpen
+    },
+    getUser () {
+      this.user = this.$store.getters['Auth/user']
+      return this.user
     },
     logOut () {
       return this.$store.dispatch('Auth/logOut')
