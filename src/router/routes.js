@@ -24,7 +24,7 @@ const routes = [
         }
       },
       {
-        path: '/editCoefficients',
+        path: '/coefficient/edit/:exam_id',
         name: 'coefficient.edit',
         component: () => import('src/pages/Admin/subGroup/editCoefficients.vue'),
         meta: {
@@ -32,7 +32,7 @@ const routes = [
         }
       },
       {
-        path: '/lessonsList',
+        path: '/onlineQuiz/exams/lessons/:quizId/:quizTitle',
         name: 'onlineQuiz.exams.lessons',
         component: () => import('src/pages/Admin/exam/lessons.vue'),
         meta: {
