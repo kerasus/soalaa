@@ -13,6 +13,12 @@ const routes = [
           middlewares: [auth]
         }
       },
+      {
+        path: '/sub_category/edit',
+        name: 'subCategory.edit',
+        component: () => import('pages/Admin/subCategory/LessonsList'),
+        meta: { middlewares: [auth] }
+      },
       // user list
       // admin list
       {
