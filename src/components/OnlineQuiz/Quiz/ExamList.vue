@@ -261,20 +261,6 @@ export default {
     this.getExams()
   },
   methods: {
-    checkFileSize (files) {
-      return files.filter(file => file.size < 2048)
-    },
-
-    checkFileType (files) {
-      return files.filter(file => file.type === 'image/png')
-    },
-
-    onRejected (rejectedEntries) {
-      this.$q.notify({
-        type: 'negative',
-        message: `${rejectedEntries.length} file(s) did not pass validation constraints`
-      })
-    },
     getExams () {
       this.$store.dispatch('loading/linearLoading', true)
       this.$axios.get(API_ADDRESS.exam.base(this.options.page))
