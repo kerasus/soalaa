@@ -3,7 +3,10 @@
     <exam-list
       @upload="selectUploadAnswers"
     />
-    <q-dialog v-model="dialog" persistent>
+    <q-dialog
+      v-model="dialog"
+      persistent
+    >
       <q-card>
         <q-card-section>
           <q-btn icon="close" flat round dense @click="closeDialog" />
@@ -43,5 +46,8 @@ export default {
 </script>
 
 <style scoped>
-
+.q-dialog__inner--minimized > div {
+  max-width: 800px
+;
+}
 </style>
