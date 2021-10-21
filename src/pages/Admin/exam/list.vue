@@ -47,7 +47,6 @@ export default {
 
 <style scoped>
 .q-dialog__inner--minimized > div {
-  max-width: 800px
-;
+  max-width: 800px;
 }
 </style>
