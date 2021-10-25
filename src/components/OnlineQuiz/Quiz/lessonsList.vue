@@ -104,7 +104,7 @@ export default {
 }
 
 .tableSize {
-  width: 40%;
+  width: 60%;
   margin: auto;
 }
 

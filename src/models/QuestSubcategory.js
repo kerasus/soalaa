@@ -1,6 +1,7 @@
+/* eslint-disable */
 import { Model, Collection } from 'js-abstract-model'
-import { QuestionList } from '../models/Question'
-import API_ADDRESS from '../api/Addresses'
+import { QuestionList } from 'src/models/Question'
+import API_ADDRESS from 'src/api/Addresses'
 
 class QuestSubcategory extends Model {
   constructor (data) {
@@ -23,8 +24,16 @@ class QuestSubcategory extends Model {
       {
         key: 'questions',
         relatedModel: QuestionList
+      },
+      {
+        key: 'editable',
+        default: false
       }
     ])
+
+    if (this.title === null) {
+      this.title = ''
+    }
   }
 }
 

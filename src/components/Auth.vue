@@ -102,13 +102,9 @@ export default {
     login () {
       this.loadingList = true
       const that = this
-      // this.$store.dispatch('Auth/login', {
-      //   mobile: this.username,
-      //   password: this.password
-      // })
       this.$store.dispatch('Auth/login', {
-        mobile: '09388131193',
-        password: '4900443050'
+        mobile: this.username,
+        password: this.password
       })
         .then(() => {
           this.loadingList = false
