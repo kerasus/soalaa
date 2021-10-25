@@ -22,24 +22,18 @@
   </div>
 </template>
 <script>
-// ToDo
-// eslint-disable-next-line import/default
-// import Vue from 'vue'
 import navBar from 'components/QuestionBank/EditQuestion/NavBar/navBar.vue'
 import QuestionLayout from 'components/QuestionBank/EditQuestion/question-layout/question_layout'
 import UploadImg from 'components/QuestionBank/EditQuestion/UploadImgs/uploadImg'
-// ToDo
+// ToDo eslint
 // eslint-disable-next-line camelcase
 import attach_list from 'components/QuestionBank/EditQuestion/Exams/exams'
 import StatusComponent from 'components/QuestionBank/EditQuestion/StatusComponent/status'
 import ShowImg from 'components/QuestionBank/EditQuestion/ShowImg/showImg'
 import LogListComponent from 'components/QuestionBank/EditQuestion/Log/LogList'
 import { Question } from 'src/models/Question'
-// ToDo : LogList needed
-// import { Log, LogList } from 'src/models/Log'
-import { Log } from 'src/models/Log'
-// ToDo : ExamList needed
-// import { ExamList } from 'src/models/Exam'
+import { Log, LogList } from 'src/models/Log'
+import { ExamList } from 'src/models/Exam'
 import { QuestSubcategoryList } from 'src/models/QuestSubcategory'
 import API_ADDRESS from 'src/api/Addresses'
 import Assistant from 'src/plugins/assistant'
@@ -99,8 +93,7 @@ export default {
       choiceRendered: ['', '', '', ''],
       displayEditQuestion: false,
       currentQuestion: new Question(),
-      // ToDo : ExamList needed
-      // examList: new ExamList(),
+      examList: new ExamList(),
       subCategoriesList: new QuestSubcategoryList(),
       questionData: {
         statement: '',
@@ -152,31 +145,30 @@ export default {
   //   console.log(to, from, next)
   // },
   created () {
-    // test
+    // Todo : test we need to delete later
     this.showPageDialog()
     window.onbeforeunload = function () {
       return 'Do you really want to leave our brilliant application?'
     }
 
-    // const that = this
-    // ToDo : API_ADDRESS.option.base not found
-    // axios.get(API_ADDRESS.option.base + '?type=question_type')
-    //   .then(function (response) {
-    //     const optionQuestion = response.data.data.find(item => (item.value === 'konkur'))
-    //     if (!optionQuestion) {
-    //       // beterek
-    //       return this.$notify({
-    //         group: 'notifs',
-    //         text: ' API با مشکل مواجه شد!',
-    //         type: 'error'
-    //       })
-    //     }
-    //     that.optionQuestionId = optionQuestion.id
-    //     that.loading = false
-    //   })
-    //   .catch(function (error) {
-    //     console.log(error)
-    //   })
+    const that = this
+    axios.get(API_ADDRESS.option.base + '?type=question_type')
+      .then(function (response) {
+        const optionQuestion = response.data.data.find(item => (item.value === 'konkur'))
+        if (!optionQuestion) {
+          // beterek
+          return this.$notify({
+            group: 'notifs',
+            text: ' API با مشکل مواجه شد!',
+            type: 'error'
+          })
+        }
+        that.optionQuestionId = optionQuestion.id
+        that.loading = false
+      })
+      .catch(function (error) {
+        console.log(error)
+      })
 
     this.setPageStatus()
     this.checkUrl()
@@ -197,8 +189,7 @@ export default {
             if (this.currentQuestion.logs.list[i].id === eventData.logId) {
               // setting the new log using Vue.set so that the component notices the change
               this.currentQuestion.logs.list[i] = new Log(response.data.data)
-              // ToDo : import vue
-              // Vue.set(this.currentQuestion, 'logs', new LogList(this.currentQuestion.logs))
+              window.app.set(this.currentQuestion, 'logs', new LogList(this.currentQuestion.logs))
             }
           }
         })
@@ -377,8 +368,7 @@ export default {
       const selectedQuizzes = this.selectedQuizzes
       this.totalExams[targetExamIndex] = item
       selectedQuizzes.push(JSON.parse(JSON.stringify(this.totalExams[targetExamIndex])))
-      // ToDo : import vue
-      // Vue.set(this, 'selectedQuizzes', selectedQuizzes)
+      window.app.set(this, 'selectedQuizzes', selectedQuizzes)
       this.dialog = false
       this.updateSelectedQuizzes()
     },
@@ -478,17 +468,15 @@ export default {
     getLogs () {
       this.currentQuestion.logs.fetch(null, API_ADDRESS.question.log.base(this.$route.params.question_id))
         .then((response) => {
-          // this.currentQuestion.logs = new LogList(response.data.data)
-          // ToDo : import vue
-          // Vue.set(this.currentQuestion, 'logs', new LogList(response.data.data))
+          this.currentQuestion.logs = new LogList(response.data.data)
+          window.app.set(this.currentQuestion, 'logs', new LogList(response.data.data))
           this.setQuestionLayoutCols()
         })
     },
 
     updateQuestion (eventData) {
-      // this.currentQuestion = new Question(eventData)
-      // ToDo : import vue
-      // Vue.set(this, 'currentQuestion', new Question(eventData))
+      this.currentQuestion = new Question(eventData)
+      window.app.set(this, 'currentQuestion', new Question(eventData))
     },
 
     updateAttachList (exams) {
@@ -521,14 +509,13 @@ export default {
     },
 
     loadExamList () {
-      // ToDo : ExamList needed
-      // const that = this
-      // return new ExamList().fetch()
-      //   .then((response) => {
-      //     that.examList = new ExamList(response.data.data)
-      //   })
-      //   .catch(() => {
-      //   })
+      const that = this
+      return new ExamList().fetch()
+        .then((response) => {
+          that.examList = new ExamList(response.data.data)
+        })
+        .catch(() => {
+        })
     },
 
     loadSubcategories () {

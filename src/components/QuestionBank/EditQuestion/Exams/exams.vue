@@ -247,7 +247,7 @@ export default {
     attach () {
       if (this.$refs.form.validate()) {
         const exam = this.examList.list.find(examItem => examItem.id === this.chooseExam)
-        // ToDo
+        // ToDo eslint
         // eslint-disable-next-line camelcase
         const sub_category = this.subCategories.list.find(subCategoryItem => subCategoryItem.id === this.chooseLesson)
         const emitData = {

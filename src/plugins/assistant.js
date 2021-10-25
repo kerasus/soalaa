@@ -1,6 +1,7 @@
 // import Toasted from 'vue-toasted';
 // import Vue from 'vue'
 // Vue.use(Toasted)
+// ToDo : toasted is not working
 const Assistant = (function () {
   function getId (id) {
     if (typeof id === 'undefined' || id === null || id === '') {
