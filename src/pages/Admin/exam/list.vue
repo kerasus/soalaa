@@ -12,7 +12,7 @@
           <q-btn icon="close" flat round dense @click="closeDialog" />
         </q-card-section>
         <q-card-section>
-          <upload-answers :examId="id"/>
+          <upload-file :examId="id"/>
         </q-card-section>
       </q-card>
     </q-dialog>
@@ -21,11 +21,11 @@
 
 <script>
 import ExamList from 'src/components/OnlineQuiz/Quiz/ExamList'
-import UploadAnswers from 'src/components/OnlineQuiz/Quiz/uploadAnswers'
+import uploadFile from 'src/components/OnlineQuiz/Quiz/uploadFile'
 
 export default {
   name: 'list',
-  components: { ExamList, UploadAnswers },
+  components: { ExamList, uploadFile },
   data () {
     return {
       dialog: false,
