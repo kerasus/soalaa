@@ -2,7 +2,7 @@
   <div class="admin-exam-list full-width q-pa-md">
     <q-dialog
       v-model="dialogDelete"
-      persistent
+      persisten
     >
       <q-card>
         <q-card-section class="row items-center">
@@ -30,8 +30,13 @@
       :columns="headers"
       :rows="rows"
       row-key="name"
+      @row-click="rowClick"
       rows-per-page-label="تعداد ردیف در هر صفحه"
       :rows-per-page-options="[15 ,20,30]"
+      :pagination-label="paginationLabel"
+      :loading="$store.getters['loading/loading']"
+      loading-label="لطفا منتظر بمانید..."
+      :no-data-label="$store.getters['loading/loading'] ? '' : 'متاسفم:( موردی وجود نداره...'"
     >
       <template v-slot:header="props">
         <q-tr :props="props">
@@ -68,7 +73,7 @@
                   v-ripple:yellow
                   clickable
                   manual-focus
-                  @click="edit(rows)"
+                  :to="{ name: 'edit-exam', params: { quizId: row.id, quizTitle: row.title}}"
                 >
                   <q-item-section> ویرایش آزمون</q-item-section>
                 </q-item>
@@ -76,7 +81,7 @@
                   v-ripple:yellow
                   clickable
                   manual-focus
-                  @click="editExamReport(rows)"
+                  :to="{ name: 'edit-exam-report', params: { quizId: row.id, quizTitle: row.title}}"
                 >
                   <q-item-section>ویرایش کارنامه</q-item-section>
                 </q-item>
@@ -91,7 +96,7 @@
                   v-ripple:yellow
                   clickable
                   manual-focus
-                  @click="generateJsonFile(rows[0], false)"
+                  @click="generateJsonFile(row, false)"
                 >
                   <q-item-section>ساخت فایل سوالات</q-item-section>
                 </q-item>
@@ -99,7 +104,7 @@
                   v-ripple:yellow
                   clickable
                   manual-focus
-                  @click="generateJsonFile(rows[0], true)"
+                  @click="generateJsonFile(row, true)"
                 >
                   <q-item-section>ساخت فایل سوالات با جواب</q-item-section>
                 </q-item>
@@ -107,7 +112,7 @@
                   v-ripple:yellow
                   clickable
                   manual-focus
-                  @click="upload(rows)"
+                  @click="upload(row.id)"
                 >
                   <q-item-section>آپلود فایل سوالات و جواب ها</q-item-section>
                 </q-item>
@@ -205,6 +210,7 @@
     <div class="text-center">
       <q-btn
         elevation="2"
+        :to="{ name: 'edit-exam', params: { quizId: row.id, quizTitle: row.title}}"
       >
         ثبت آزمون جدید
       </q-btn>
@@ -220,6 +226,8 @@ export default {
   name: 'ExamList',
   data () {
     return {
+      filesMaxSize: null,
+      filesPng: null,
       dialogDelete: false,
       headers: [
         { name: 'title', field: 'title', label: 'عنوان' },
@@ -230,6 +238,8 @@ export default {
       ],
       examList: new ExamList(),
       rows: [],
+      index: null,
+      row: [],
       options: {
         itemsPerPage: 15,
         page: 1
@@ -249,43 +259,60 @@ export default {
     this.getExams()
   },
   methods: {
+    checkFileSize (files) {
+      return files.filter(file => file.size < 2048)
+    },
+
+    checkFileType (files) {
+      return files.filter(file => file.type === 'image/png')
+    },
+
+    onRejected (rejectedEntries) {
+      this.$q.notify({
+        type: 'negative',
+        message: `${rejectedEntries.length} file(s) did not pass validation constraints`
+      })
+    },
     getExams () {
-      this.examList.loading = true
+      this.$store.dispatch('loading/linearLoading', true)
       this.$axios.get(API_ADDRESS.exam.base(this.options.page))
         .then((response) => {
-          this.examList.loading = false
-          // this.totalRows = response.data.meta.total
+          this.$store.dispatch('loading/linearLoading', false)
+          this.totalRows = response.data.meta.total
           this.examList = new ExamList(response.data.data, { meta: response.data.meta, links: response.data.links })
           this.rows = this.examList.list
+          for (const index in this.rows) {
+            this.rows[index].delay_time += ' دقیقه'
+            this.rows[index].start_at = this.rows[index].shamsiDate('start_at').dateTime
+            this.rows[index].finish_at = this.rows[index].shamsiDate('finish_at').dateTime
+          }
         })
         .catch(() => {
-          this.examList.loading = false
+          this.$store.dispatch('loading/linearLoading', false)
           this.examList = new ExamList()
         })
     },
-    edit (examId) {
-      this.$emit('update-exam', examId)
+    rowClick (evt, row, index) {
+      this.index = index
+      this.row = row
     },
-    editExamReport (examId) {
-      this.$emit('update-exam-report', examId)
-    },
-    generateJsonFile (exam, withAnswer) {
-      this.examList.loading = true
-      this.$axios.post(API_ADDRESS.exam.generateExamFile(exam.id, withAnswer))
-        .then((res) => {
+    generateJsonFile (exams, withAnswer) {
+      this.$store.dispatch('loading/linearLoading', true)
+      this.$axios.post(API_ADDRESS.exam.generateExamFile(exams.id, withAnswer))
+        .then(() => {
           this.$q.notify({
             type: 'positive',
-            message: 'ساخت فایل ' + exam.title + ' با موفقیت انجام شد',
+            message: 'ساخت فایل ' + exams.title + ' با موفقیت انجام شد',
             position: 'top'
           })
-          this.examList.loading = false
+          this.$store.dispatch('loading/linearLoading', false)
         })
         .catch(() => {
-          this.examList.loading = false
+          this.$store.dispatch('loading/linearLoading', false)
         })
     },
-    upload (examId) {
-      this.$emit('upload', examId)
+    upload (Id) {
+      this.$emit('upload', Id)
     },
     deleteItem () {
       this.dialogDelete = true
@@ -295,9 +322,14 @@ export default {
     },
     confirmDelete () {
       this.dontDelete()
+    },
+    paginationLabel (firstRowIndex, endRowIndex, totalRowsNumber) {
+      firstRowIndex = this.options.page
+      totalRowsNumber = Math.ceil(this.totalRows / this.options.itemsPerPage)
     }
   }
 }
+// shamsiDate('start_at').dateTime
 </script>
 <style lang="scss" scoped>
 .admin-exam-list{
@@ -310,15 +342,32 @@ export default {
 </style>
 <style lang="scss">
 .admin-exam-list {
+  .q-table {
+    thead {
+      tr {
+        opacity: 0.6;
+      }
+    }
+  }
   .q-table--horizontal-separator thead th, .q-table--horizontal-separator tbody td, .q-table--cell-separator thead th, .q-table--cell-separator tbody td {
     text-align: left !important;
   }
 }
-.q-menu{
-  &.options-menu{
+
+.q-menu {
+  &.options-menu {
     border-radius: 24px 0 24px 24px !important;
     text-align: center;
     padding: 10px;
+
+    .q-item {
+      .q-item__section--main {
+        opacity: 0.6;
+        &:hover {
+          opacity: 1;
+        }
+      }
+    }
   }
 }
 </style>
