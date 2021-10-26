@@ -72,7 +72,7 @@
                   v-ripple:yellow
                   clickable
                   manual-focus
-                  :to="{ name: 'edit-exam', params: { quiz: row}}"
+                  :to="{ name: 'edit-exam', params: { exam: tableRow}}"
                 >
                   <q-item-section> ویرایش آزمون</q-item-section>
                 </q-item>
@@ -80,7 +80,7 @@
                   v-ripple:yellow
                   clickable
                   manual-focus
-                  :to="{ name: 'edit-exam-report', params: { quizId: row.id, quizTitle: row.title}}"
+                  :to="{ name: 'edit-exam-report', params: { quizId: tableRow.id, quizTitle: tableRow.title}}"
                 >
                   <q-item-section>ویرایش کارنامه</q-item-section>
                 </q-item>
@@ -95,7 +95,7 @@
                   v-ripple:yellow
                   clickable
                   manual-focus
-                  @click="generateJsonFile(row, false)"
+                  @click="generateJsonFile(tableRow, false)"
                 >
                   <q-item-section>ساخت فایل سوالات</q-item-section>
                 </q-item>
@@ -103,7 +103,7 @@
                   v-ripple:yellow
                   clickable
                   manual-focus
-                  @click="generateJsonFile(row, true)"
+                  @click="generateJsonFile(tableRow, true)"
                 >
                   <q-item-section>ساخت فایل سوالات با جواب</q-item-section>
                 </q-item>
@@ -111,7 +111,7 @@
                   v-ripple:yellow
                   clickable
                   manual-focus
-                  @click="upload(row.id)"
+                  @click="upload(tableRow.id)"
                 >
                   <q-item-section>آپلود فایل سوالات و جواب ها</q-item-section>
                 </q-item>
@@ -119,7 +119,7 @@
                   v-ripple:yellow
                   clickable
                   manual-focus
-                  :to="{ name: 'coefficient.edit', params: { exam_id: row.id } }"
+                  :to="{ name: 'coefficient.edit', params: { exam_id: tableRow.id } }"
                 >
                   <q-item-section>اصلاح ضرایب</q-item-section>
                 </q-item>
@@ -144,7 +144,7 @@
             color="indigo"
             icon="auto_stories"
             size="11px"
-            :to="{ name: 'onlineQuiz.exams.lessons', params: { quizId: row.id , quizTitle: row.title}}"
+            :to="{ name: 'onlineQuiz.exams.lessons', params: { quizId: tableRow.id , quizTitle: tableRow.title}}"
           >
             <q-tooltip anchor="top middle" self="bottom middle">
               مشاهده دروس
@@ -221,7 +221,7 @@
 </template>
 
 <script>
-import { ExamList } from 'src/models/Exam'
+import { Exam, ExamList } from 'src/models/Exam'
 import API_ADDRESS from 'src/api/Addresses'
 
 export default {
@@ -241,7 +241,7 @@ export default {
       examList: new ExamList(),
       rows: [],
       index: null,
-      row: [],
+      tableRow: new Exam(),
       pagination: {
         page: 1,
         rowsPerPage: 15,
@@ -289,7 +289,8 @@ export default {
     },
     rowClick (evt, row, index) {
       this.index = index
-      this.row = row
+      this.tableRow = row
+      console.log(this.tableRow)
     },
     generateJsonFile (exams, withAnswer) {
       this.$store.dispatch('loading/linearLoading', true)
