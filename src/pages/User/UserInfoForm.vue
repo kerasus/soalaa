@@ -1,19 +1,21 @@
 <template>
   <div id="q-app" class="q-ma-lg row justify-center" style="min-height: 100vh">
-    <q-linear-progress size="30px" :value="percentageOfInformationCompletion" color="primary" class="q-mt-sm">
+    <q-linear-progress v-if="percentageOfInformationCompletion" size="30px" :value="percentageOfInformationCompletion" color="primary" class="q-mt-sm">
       <div class="absolute-full flex flex-center">
-        <q-badge text-color="black" class="text-subtitle1 text-weight-bold" align="middle"
-                 :label="percentageOfInformationCompletionLabel"></q-badge>
+        <q-badge text-color="black" color="transparent" class="text-subtitle1 text-weight-bold" align="middle"
+                 :label="percentageOfInformationCompletionLabel">
+
+        </q-badge>
       </div>
     </q-linear-progress>
     <div class="col-9 form-box">
       <div class="q-pa-md">
         <div class="row justify-between  q-col-gutter-xl">
           <div class="col-md-6 col-12">
-            <q-input v-model="user.first_name" label="نام" :model-value="user.first_name"></q-input>
+            <q-input v-model="testmitra" label="نام" ></q-input>
           </div>
           <div class="col-md-6 col-12">
-            <q-input v-model="user.last_name" label=" نام خانوادگی" :model-value="user.last_name"></q-input>
+            <q-input v-model="user.last_name" label=" نام خانوادگی" ></q-input>
           </div>
         </div>
       </div>
@@ -131,6 +133,7 @@
         <div class="q-px-lg">
           <q-input
             v-if="totalTime"
+            dir="ltr"
             v-model="typedCode"
             label="کد فعالسازی"
             @keydown="pressedEnter"
@@ -138,7 +141,7 @@
         </div>
         <div class="row justify-center q-px-lg">
           <q-btn
-            dir="ltr"
+            rounded
             v-if="!totalTime && waiting"
             color="blue"
             @click="sendCode"
@@ -148,6 +151,7 @@
         </div>
         <div class="row justify-center q-mt-lg">
           <q-btn
+            rounded
             v-if="totalTime"
             color="blue"
             @click="verifyCode"
@@ -190,6 +194,7 @@ export default {
   },
   data () {
     return {
+      testmitra: '',
       alert: false,
       errorMessages: [],
       isCodeVerified: false,
