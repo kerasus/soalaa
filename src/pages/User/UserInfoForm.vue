@@ -1,264 +1,110 @@
 <template>
-  <div id="q-app" style="min-height: 100vh">
+  <div id="q-app q-ma-lg" style="min-height: 100vh">
     <div class="q-pa-md">
       <div class="row justify-between  q-col-gutter-xl">
         <div class="col-md-6">
-          <q-input v-model="user.first_name" label="نام" model-value=""></q-input>
+          <q-input v-model="user.first_name" label="نام" :model-value="user.first_name"></q-input>
         </div>
         <div class="col-md-6">
-          <q-input v-model="user.last_name" label=" نام خانوادگی" model-value=""></q-input>
+          <q-input v-model="user.last_name" label=" نام خانوادگی" :model-value="user.last_name"></q-input>
         </div>
       </div>
     </div>
+    <q-select
+      filled
+      v-model="user.gender.id"
+      use-input
+      label="جنسیت"
+      color="light-blue-6"
+      :options="genders"
+      option-label="title"
+      option-value="id"
+      map-options
+      emit-value
+    />
 
     <div class="q-pa-md">
       <div class="row justify-between  q-col-gutter-xl">
         <div class="col-md-6">
           <q-select
-            filled
             v-model="selectedProvince"
             use-input
-            fill-input
+            color="light-blue-6"
             input-debounce="0"
-            label="Lazy filter"
+            label="استان"
             :options="provinces"
             option-label="title"
-            @filter="filterFn"
-            @filter-abort="abortFilterFn"
-            style="width: 250px"
-           model-value="">
+            option-value="id"
+            @filter="filterProvinces"
+            map-options
+            emit-value
+           >
             <template v-slot:no-option>
               <q-item>
                 <q-item-section class="text-grey">
-                  No results
+                   داده ای یافت نشد
                 </q-item-section>
               </q-item>
             </template>
           </q-select>
-          <q-input  v-model="selectedProvince" label="استان" model-value=""></q-input>
         </div>
         <div class="col-md-6">
-          <q-input v-model="user.last_name" label=" نام خانوادگی" model-value=""></q-input>
+          <q-select
+            v-model="selectedCity"
+            use-input
+            input-debounce="0"
+            option-value="id"
+            map-options
+            color="light-blue-6"
+            emit-value
+            label="شهر"
+            @filter="filterCity"
+            :options="citiesForSelectedProvince"
+            option-label="title">
+            <template v-slot:no-option>
+              <q-item>
+                <q-item-section class="text-grey">
+                  داده ای یافت نشد
+                </q-item-section>
+              </q-item>
+            </template>
+          </q-select>
         </div>
       </div>
     </div>
-
     <div class="q-pa-md">
       <div class="row justify-between  q-col-gutter-xl">
         <div class="col-md-6">
-          <q-input v-model="user.first_name" label="نام" model-value=""></q-input>
+          <q-select
+            v-model="user.major.id"
+            color="light-blue-6"
+            label="رشته"
+            :options="majors"
+            option-label="title"
+            emit-value
+            option-value="id"
+            map-options
+            :model-value="user.major.id">
+          </q-select>
         </div>
         <div class="col-md-6">
-          <q-input v-model="user.last_name" label=" نام خانوادگی" model-value=""></q-input>
+          <q-select
+            v-model="user.grade.id"
+            label="مقطع"
+            color="light-blue-6"
+            :options="grades"
+            option-label="title"
+            option-value="id"
+            map-options
+            emit-value
+           />
         </div>
       </div>
     </div>
+    <q-btn color="blue" dark @click="submit">
+      submit
+    </q-btn>
 
-  </div>
-
-  <div class="wrapper">
-    <!--    <progress-linear :active="user.loading" />-->
-    <!--    <v-progress-linear-->
-    <!--      v-if="percentageOfInformationCompletion > 0"-->
-    <!--      :value="percentageOfInformationCompletion"-->
-    <!--      absolute-->
-    <!--      top-->
-    <!--      color="amber"-->
-    <!--      height="25"-->
-    <!--    >-->
-    <!--      <template v-slot:default="{ value }">-->
-    <!--        <strong>{{ Math.ceil(value) }} درصد از اطلاعات تکمیل شده</strong>-->
-    <!--      </template>-->
-    <!--    </v-progress-linear>-->
-    <v-row>
-      <v-col
-
-        md="6"
-        sm="6"
-        cols="12"
-      >
-        <div class="form-group m-form__group">
-          <v-text-field
-            v-model="user.first_name"
-            label="نام"
-          />
-        </div>
-      </v-col>
-      <v-col
-
-        md="6"
-        sm="6"
-        cols="12"
-      >
-        <div class="form-group m-form__group">
-          <v-text-field
-            v-model="user.last_name"
-            label=" نام خانوادگی"
-          />
-        </div>
-      </v-col>
-    </v-row>
-    <div class="form-group m-form__group col-md-3 col-xs-12">
-      <v-select
-        v-model="user.gender.id"
-        :items="genders"
-        label="جنسیت"
-        item-text="title"
-        item-value="id"
-      />
-    </div>
-    <v-row>
-      <v-col
-        md="6"
-        sm="6"
-        cols="12"
-      >
-        <div class="form-group m-form__group ">
-          <v-autocomplete
-            v-model="selectedProvince"
-            label="استان"
-            :items="provinces"
-            item-text="title"
-            item-value="id"
-            no-data-text="داده ای یافت نشد"
-          />
-        </div>
-      </v-col>
-      <v-col
-        md="6"
-        sm="6"
-        cols="12"
-      >
-        <div class="form-group m-form__group">
-          <v-autocomplete
-            v-model="selectedCity"
-            label="شهر"
-            :items="citiesForSelectedProvince"
-            item-text="title"
-            item-value="id"
-            no-data-text="داده ای یافت نشد"
-          />
-        </div>
-      </v-col>
-    </v-row>
-    <v-row>
-      <v-col
-        md="6"
-        sm="6"
-        cols="12"
-      >
-        <div class="form-group m-form__group ">
-          <v-select
-            v-model="user.major.id"
-            label="رشته"
-            :items="majors"
-            item-text="title"
-            item-value="id"
-          />
-        </div>
-      </v-col>
-      <v-col
-        md="6"
-        sm="6"
-        cols="12"
-      >
-        <div class="form-group m-form__group ">
-          <v-select
-            v-model="user.grade.id"
-            label="مقطع"
-            :items="grades"
-            item-text="title"
-            item-value="id"
-          />
-        </div>
-      </v-col>
-    </v-row>
-    <v-row
-      v-if="user.mobile_verified_at === null"
-      justify="center"
-    >
-      <v-col
-        class="codeBtnPadding"
-        cols="12"
-      >
-        <v-alert
-          v-for="message in errorMessages"
-          :key="message"
-          v-model="alert"
-          dense
-          outlined
-          class="mx-5"
-          text
-          type="error"
-          dismissible
-        >
-          {{ message }}
-        </v-alert>
-        <v-btn
-          v-if="!waiting "
-          color="blue"
-          @click="sendCode"
-        >
-          دریافت کد فعالسازی
-        </v-btn>
-        <div v-if="totalTime">
-          <div>
-            <span
-              :class="totalTime <60 ? 'red-text' : ''"
-            >{{ Math.floor(((totalTime) % 3600) / 60) }}</span>
-            <span>:</span>
-            <span
-              :class="totalTime <60 ? 'red-text' : ''"
-            >{{ ((totalTime) % 3600) % 60 }}</span>
-          </div>
-          کد ارسال شده را وارد نمایید.
-        </div>
-      </v-col>
-      <v-col
-        md="3"
-        cols="6"
-      >
-        <v-text-field
-          v-if="totalTime"
-          v-model="typedCode"
-          label="کد فعالسازی"
-          @keydown="pressedEnter"
-        />
-      </v-col>
-      <v-col
-        class="codeBtnPadding"
-        md="12"
-        sm="12"
-      >
-        <v-btn
-          v-if="!totalTime && waiting"
-          color="blue"
-          @click="sendCode"
-        >
-          دریافت مجدد کد
-        </v-btn>
-        <v-btn
-          v-if="totalTime"
-          color="blue"
-          @click="verifyCode"
-        >
-          ثبت شماره موبایل
-        </v-btn>
-      </v-col>
-    </v-row>
-    <br>
-    <br>
-    <br>
-    <div class="d-flex justify-end">
-      <v-btn
-        rounded
-        color="primary"
-        width="120px"
-        @click="submit"
-      >
-        ذخیره
-      </v-btn>
-    </div>
   </div>
 </template>
 
@@ -323,6 +169,7 @@ export default {
   },
   watch: {
     selectedProvince (newVal) {
+      console.log('selectedProvince', newVal)
       if (newVal) {
         const selectedProvince = this.provinces.find(item => newVal === item.id)
         if (selectedProvince) {
@@ -343,11 +190,28 @@ export default {
   },
 
   mounted: function () {
+    console.log('user :', this.user)
     this.getUserData()
     // this.$store.commit('AppLayout/updateDrawer', false)
     this.$store.dispatch('AppLayout/updateDrawer', false)
   },
   methods: {
+    filterProvinces (val, update) {
+      // ToDo 'search problem'
+      update(() => {
+        this.provinces = this.provinces.filter(item => {
+          return item.title.includes(val)
+        })
+      })
+    },
+
+    filterCity (val, update) {
+      update(() => {
+        this.citiesForSelectedProvince = this.citiesForSelectedProvince.filter(item => {
+          return item.title.includes(val)
+        })
+      })
+    },
     pressedEnter (e) {
       if (e.keyCode === 13) this.verifyCode()
     },
@@ -383,7 +247,7 @@ export default {
           that.$store.commit('Auth/updateUser', user)
           if (!that.user.needToCompleteInfo()) {
             if (!this.redirectAfterCompleteInfoPage) {
-              that.$router.push({ name: 'dashboard' })
+              // that.$router.push({ name: 'test' })
             } else {
               that.$router.push({
                 name: this.redirectAfterCompleteInfoPage.name,
@@ -391,8 +255,11 @@ export default {
               })
             }
           } else {
-            console.log('notif')
+            console.log('نیاز به تکمیل اطلاعات هست.')
           }
+        })
+        .catch(err => {
+          console.log('err in get data :', err)
         })
     },
     startTimer () {
@@ -413,12 +280,12 @@ export default {
           this.loadUserCity()
         })
         .catch(() => {
-          this.$notify({
-            group: 'notifs',
-            title: 'توجه!',
-            text: 'مشکلی در گرفتن اطلاعات رخ داده است. لطفا دوباره امتحان کنید.',
-            type: 'error'
-          })
+          // this.$notify({
+          //   group: 'notifs',
+          //   title: 'توجه!',
+          //   text: 'مشکلی در گرفتن اطلاعات رخ داده است. لطفا دوباره امتحان کنید.',
+          //   type: 'error'
+          // })
           this.user.loading = false
         }
         )
@@ -440,22 +307,19 @@ export default {
       this.user.update()
         .then((response) => {
           that.user.loading = false
-          that.$notify({
-            group: 'notifs',
-            text: 'ویرایش با موفقیت انجام شد',
-            type: 'success'
-          })
+          console.log('submit done')
           that.$store.commit('Auth/updateUser', response.data.data)
           that.getUserData()
         })
         .catch(() => {
           that.user.loading = false
-          that.$notify({
-            group: 'notifs',
-            title: 'توجه!',
-            text: 'مشکلی در ویرایش اطلاعات رخ داده است. لطفا دوباره امتحان کنید.',
-            type: 'error'
-          })
+          console.log('submit fucked up :)')
+          // that.$notify({
+          //   group: 'notifs',
+          //   title: 'توجه!',
+          //   text: 'مشکلی در ویرایش اطلاعات رخ داده است. لطفا دوباره امتحان کنید.',
+          //   type: 'error'
+          // })
         })
     },
 
@@ -502,12 +366,12 @@ export default {
 
           that.waiting = true
           that.showTimer = true
-          that.$notify({
-            group: 'notifs',
-            title: 'توجه!',
-            text: 'کد فعالسازی با موفقیت ارسال شد.',
-            type: 'success'
-          })
+          // that.$notify({
+          //   group: 'notifs',
+          //   title: 'توجه!',
+          //   text: 'کد فعالسازی با موفقیت ارسال شد.',
+          //   type: 'success'
+          // })
         })
         .catch((e) => {
           console.log('error in comp : ', e.response)
