@@ -30,7 +30,7 @@
           hasLogin:true,
           hasSignIn:true,
           hasVerify:true,
-          hasForgotPass:false,
+          hasForgotPass:true,
           starter:'login'
         }
       }),

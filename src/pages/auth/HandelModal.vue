@@ -9,7 +9,7 @@
         <component
           :is="selectedComponent"
           v-slot="{title}"
-          :phone-number="userPhoneNumber"
+          :user-data="userPhoneNumber"
           :verify-data="verifyData"
           :config="config"
           @checkVerify="verifyPhoneNumber"

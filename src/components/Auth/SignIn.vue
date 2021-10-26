@@ -11,32 +11,38 @@
         <v-text-field
           v-if="!showPasswordInput"
           v-model="inputData.mobile"
-          :disabled="disable" 
-          dir="ltr"
+          name="sendToVerify"
+          :disabled="disable"
           label="شماره همراه"
+          dir="ltr"
           required
+          @keydown="verifyEnterKey"
         />
         <div v-if="showPasswordInput">
           <v-text-field
             v-model="inputData.password"
-            dir="ltr"
+            name="signIn"
             label="رمز عبور"
             type="password"
+            dir="ltr"
             required
+            @keydown="signInEnterKey"
           />
           <v-text-field
             v-model="inputData.password_confirmation"
-            dir="ltr"
+            name="signIn"
             label="تکرار رمز عبور"
             type="password"
+            dir="ltr"
             required
+            @keydown="signInEnterKey"
           />
         </div>
       </v-container>
       <div v-if="errorMessages">
         <v-alert
           v-for="(message , index) in errorMessages"
-          :key="index"
+          key="index"
           dense
           outlined
           text
@@ -97,8 +103,9 @@
 </template>
 
 <script>
-import axios from 'axios'
-import API_ADDRESS from "@/api/Addresses";
+import axios from 'axios';
+// import API_ADDRESS from "@/api/Addresses";
+
 export default {
   name: "SignIn",
   props: {
@@ -136,13 +143,14 @@ export default {
       disable: false,
       showPasswordInput: false,
       errorMessages: [],
-      successMessage: null
+      successMessage: null,
     }
   },
   watch: {},
   created() {
     if (this.verifyData.phone) {
-      this.showPasswordInput = true
+      this.showPasswordInput = true;
+      this.loading = false;
       this.isVerified();
     }
   },
@@ -158,28 +166,6 @@ export default {
       } else if (!regexMobile.test(mobile)) {
         status = false;
         message = 'شماره همراه خود را به درستی وارد نکرده اید.';
-      }
-      this.errorMessages.push(message);
-      this.handleErrorMessages(this.errorMessages);
-      return status
-    },
-    validatePassword(password) {
-      password = this.inputData.password;
-      let passwordConfirmation = this.inputData.password_confirmation;
-      let status = true;
-      let message;
-      if (password.length == 0) {
-        status = false;
-        message = 'رمز عبور را وارد کنید.';
-      } else if (password.length < 6) {
-        status = false;
-        message = 'رمز عبور باید حداقل 6 کاراکتر باشد.';
-      } else if (passwordConfirmation.length == 0) {
-        status = false;
-        message = 'تکرار رمز عبور را وارد کنید.';
-      } else if (password !== passwordConfirmation) {
-        status = false;
-        message = 'رمز عبور و تکرار آن یکسان نیستند';
       }
       this.errorMessages.push(message);
       this.handleErrorMessages(this.errorMessages);
@@ -203,6 +189,7 @@ export default {
       }
     },
     sendToVerify() {
+      this.errorMessages = [];
       let data = {
         phone: this.inputData.mobile,
         source: 'signeIn'
@@ -211,29 +198,42 @@ export default {
         if (this.config.hasVerify) {
           this.loading = true;
           this.$emit('checkVerify', data)
+        } else {
+          this.showPasswordInput = true;
         }
-        this.showPasswordInput = true;
       }
     },
     signIn() {
-      this.handleErrorMessages(this.errorMessages)
-      if (this.validatePassword(this.inputData.password)
-          && this.validateMobile(this.inputData.mobile)
-          && this.inputData.code) {
-        axios.post(API_ADDRESS.auth.register, this.inputData)
-            .then(response => {
-              if (response.status === 200) {
+      this.errorMessages = [];
+      this.loading = true;
+      axios.post('/register', this.inputData)
+          .then(response => {
+            this.loading = false;
+            if (response.status === 200) {
+              this.successMessageAlert()
+              setTimeout(() => {
+                this.$emit('closeDialog')
+              }, 2000)
+            }
+          })
+          .catch(err => {
+            this.loading = false;
+            for (let key in err.response.data.errors) {
+              err.response.data.errors[key].forEach(message => {
+                this.errorMessages.push(message)
+              })
+            }
+          })
 
-                this.successMessageAlert()
-                setTimeout(() => {
-                  this.$emit('closeDialog')
-                }, 2000)
-
-              }
-            })
-            .catch(err => {
-              console.log('err' + err)
-            })
+    },
+    verifyEnterKey(e) {
+      if (e.keyCode === 13) {
+        return this.sendToVerify()
+      }
+    },
+    signInEnterKey(e) {
+      if (e.keyCode === 13) {
+        return this.signIn()
       }
     },
     backToLogin() {
