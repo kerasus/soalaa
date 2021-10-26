@@ -1,11 +1,12 @@
 <template>
   <div class="exam mb-10">
-<!--    <p-->
-<!--      v-if="status"-->
-<!--      class="font-weight-medium"-->
-<!--    >-->
-<!--      آزمون ها-->
-<!--    </p>-->
+    <p
+      v-if="status"
+      class="font-weight-medium"
+    >
+      آزمون ها
+    </p>
+<!--    todo : v-form-->
 <!--    <v-form ref="form">-->
 <!--      <v-row-->
 <!--        v-if="status"-->

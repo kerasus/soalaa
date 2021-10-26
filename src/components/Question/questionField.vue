@@ -7,6 +7,7 @@
 <!--      v-if="editStatus"-->
 <!--      class="col-12"-->
 <!--    >-->
+  <!--      Todo : vue-tiptap-katex-->
 <!--      <vue-tiptap-katex-->
 <!--        ref="tiptap"-->
 <!--        :loading="loading"-->

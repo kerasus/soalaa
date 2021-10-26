@@ -1,30 +1,110 @@
 <template>
-  <div>
+  <div class="row q-pa-md">
     <q-dialog persistent v-model="dialog" class="new-question-dialog">
-      <q-card class="my-card bg-grey-1">
+      <q-card class=" bg-grey-1">
         <q-card-section>
           <div class="text-grey-10" style="font-size: 16px;"> سوال را به کدام صورت درج می کنید؟ </div>
           <div class="text-grey-7" style="padding-top: 10px;">لطفا انتخاب کنید که سوال را به کدام روش ثبت می کنید.</div>
         </q-card-section>
         <q-card-actions align="between">
-          <q-btn color="amber-4" flat @click="setMode('write')">تایپ سوال</q-btn>
-          <q-btn color="amber-4" flat @click="setMode('uploadImage')">آپلود فایل</q-btn>
+<!--          <q-btn color="amber-4" flat @click="setMode('write')">تایپ سوال</q-btn>-->
+<!--          <q-btn color="amber-4" flat @click="setMode('uploadImage')">آپلود فایل</q-btn>-->
+          <q-btn color="amber-4" flat @click="setQuestionTypeText">تایپ سوال</q-btn>
+          <q-btn color="amber-4" flat @click="setQuestionTypeImage">آپلود فایل</q-btn>
         </q-card-actions>
       </q-card>
     </q-dialog>
-    <nav-bar></nav-bar>
-    <question-layout></question-layout>
-    <attach_list></attach_list>
-    <upload-img></upload-img>
-    <show-img></show-img>
-    <status-component></status-component>
-    <log-list-component></log-list-component>
+    <div class="col"
+         :class="calcQuestionColsNumber"
+    >
+      <nav-bar
+        v-if="checkNavbarVisibility()"
+        :question="currentQuestion"
+        :edit-status="edit_status"
+        :page-name="getPageStatus()"
+        @create="navBarAction_create"
+        @saveDraft="navBarAction_saveDraft"
+        @save="navBarAction_save"
+        @cancel="navBarAction_cancel"
+        @edit="navBarAction_edit"
+        @remove="navBarAction_remove"
+      />
+      <div v-if="showQuestionComponentStatus()">
+        <question-layout
+          v-if="!loading"
+          ref="qlayout"
+          v-model="currentQuestion"
+          :status="edit_status"
+          @input="updateQuestion"
+        />
+        <div class="col-4">
+          <!--     todo q-select-->
+<!--          <q-select-->
+<!--            v-if="getPageStatus() === 'create'"-->
+<!--            v-model="currentQuestion.author"-->
+<!--            label="طراحان"-->
+<!--            dense-->
+<!--            multiple-->
+<!--            disabled-->
+<!--            use-chips-->
+<!--            :options="currentQuestion.author"-->
+<!--            item-text="full_name"-->
+<!--            item-value="id"-->
+<!--            outlined>-->
+<!--          </q-select>-->
+        </div>
+        <attach_list
+          :status="edit_status"
+          :attaches="selectedQuizzes"
+          :exam-list="examList"
+          :sub-categories="subCategoriesList"
+          :loading="attachLoading"
+          @detach="detachQuestion"
+          @attach="attachQuestion"
+        />
+      </div>
+      <!-- -------------------------- upload file ---------------------->
+      <!--          ToDo : UploadImg -->
+      <!--    <upload-img></upload-img>-->
+      <!-- -------------------------- status --------------------------->
+      <div
+        v-if="getPageStatus() === 'edit'"
+        class="my-10"
+      >
+        <StatusComponent
+          :statuses="questionStatuses"
+          :loading="changeStatusLoading"
+          @update="changeStatus"
+        />
+      </div>
+    </div>
+    <!-- -------------------------- show img---------------------------->
+    <div
+      v-if="uploadImgColsNumber.show"
+      class="col-5"
+    >
+      <ShowImg
+        :test="imgSrc"
+        @closePanel="makeShowImgPanelInvisible"
+      />
+    </div>
+    <!-- -------------------------- log --------------------------->
+    <div
+      v-if="currentQuestion.logs.list.length > 0 && !uploadImgColsNumber.show"
+      class="col-3"
+    >
+      <LogListComponent
+        :logs="currentQuestion.logs"
+        @addComment="addComment"
+      />
+    </div>
   </div>
 </template>
 <script>
 import navBar from 'components/QuestionBank/EditQuestion/NavBar/navBar.vue'
 import QuestionLayout from 'components/QuestionBank/EditQuestion/question-layout/question_layout'
-import UploadImg from 'components/QuestionBank/EditQuestion/UploadImgs/uploadImg'
+//      ToDo : UploadImg
+// import UploadImg from 'components/QuestionBank/EditQuestion/UploadImgs/uploadImg'
 // ToDo eslint
 // eslint-disable-next-line camelcase
 import attach_list from 'components/QuestionBank/EditQuestion/Exams/exams'
@@ -45,7 +125,7 @@ export default {
   components: {
     navBar,
     QuestionLayout,
-    UploadImg,
+    // UploadImg,
     attach_list,
     ShowImg,
     StatusComponent,
@@ -655,6 +735,11 @@ export default {
     setMode (mode) {
       this.mode = mode
       this.dialog = false
+    }
+  },
+  computed: {
+    calcQuestionColsNumber () {
+      return 'col-' + this.questionColsNumber
     }
   }
 }

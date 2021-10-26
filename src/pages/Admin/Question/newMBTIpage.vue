@@ -15,20 +15,87 @@
             @edit="navBarAction_edit"
             @remove="navBarAction_remove"
           />
-
+          <div v-if="this.showQuestionComponentStatus()">
+            <mbti-question-layout
+              v-if="!loading"
+              ref="mtbiQlayout"
+              v-model="currentQuestion"
+              :status="edit_status"
+              @input="updateQuestion"
+            />
+            <!-- -------------------------- show exams  ---------------------->
+            <attach_list
+              :status="edit_status"
+              :attaches="selectedQuizzes"
+              :exam-list="examList"
+              :sub-categories="subCategoriesList"
+              :loading="attachLoading"
+              @detach="detachQuestion"
+              @attach="attachQuestion"
+            />
+          </div>
+          <!-- -------------------------- upload file ---------------------->
+<!--          ToDo : UploadImg -->
+<!--          <UploadImg-->
+<!--            v-if="this.showImgComponentStatus()"-->
+<!--            v-model="currentQuestion"-->
+<!--            :edit-status="upload_img_status"-->
+<!--            @imgClicked="makeShowImgPanelVisible($event)"-->
+<!--          />-->
+          <!-- -------------------------- status --------------------------->
+          <div
+            v-if="this.getPageStatus() === 'edit'"
+            class="my-10"
+          >
+            <StatusComponent
+              :statuses="questionStatuses"
+              :loading="changeStatusLoading"
+              @update="changeStatus"
+            />
+          </div>
         </div>
+        <!-- -------------------------- show img---------------------------->
+        <div
+          v-if="uploadImgColsNumber.show"
+          class="col-5"
+        >
+          <ShowImg
+            :test="imgSrc"
+            @closePanel="makeShowImgPanelInvisible"
+          />
+        </div>
+        <!-- -------------------------- log --------------------------->
+        <div
+          v-if="currentQuestion.logs.list.length > 0 && !uploadImgColsNumber.show"
+          class="col-3"
+        >
+          <LogListComponent
+            :logs="currentQuestion.logs"
+            @addComment="addComment"
+          />
+        </div>
+<!--        todo : v-overlay -->
+<!--        <v-overlay :value="loading">-->
+<!--          <v-progress-circular-->
+<!--            :size="70"-->
+<!--            :width="7"-->
+<!--            indeterminate-->
+<!--            color="white"-->
+<!--          />-->
+<!--        </v-overlay>-->
+      </div>
       </div>
     </div>
-  </div>
 </template>
 
 <script>
 // ToDo eslint
 import navBar from 'components/QuestionBank/EditQuestion/NavBar/navBar'
-// import MbtiQuestionLayout from 'components/QuestionBank/EditQuestion/question-layout/mbti_question_layout'
-// import attachList from 'components/QuestionBank/EditQuestion/Exams/exams'
-// import StatusComponent from 'components/QuestionBank/EditQuestion/StatusComponent/status'
-// import LogListComponent from 'components/QuestionBank/EditQuestion/Log/LogList'
+import MbtiQuestionLayout from 'components/QuestionBank/EditQuestion/question-layout/mbti_question_layout'
+// eslint-disable-next-line camelcase
+import attach_list from 'components/QuestionBank/EditQuestion/Exams/exams'
+import StatusComponent from 'components/QuestionBank/EditQuestion/StatusComponent/status'
+import LogListComponent from 'components/QuestionBank/EditQuestion/Log/LogList'
 import { Question } from 'src/models/Question'
 import { Log, LogList } from 'src/models/Log'
 import { ExamList } from 'src/models/Exam'
@@ -41,11 +108,11 @@ import axios from 'axios'
 export default {
   name: 'NewMBTIPage',
   components: {
-    navBar
-    // MbtiQuestionLayout,
-    // StatusComponent,
-    // LogListComponent,
-    // attachList
+    navBar,
+    MbtiQuestionLayout,
+    StatusComponent,
+    LogListComponent,
+    attach_list
   },
   data () {
     return {

@@ -29,16 +29,17 @@
       <div class="col-2">
       <div class="row">
       <div :class="status ?'col-10' :'col-10'">
-            <v-autocomplete
-                v-model="item.answer"
-                :items="mbti_value"
-                label="انتخاب مقدار"
-                dense
-                outlined
-                rounded
-                :disabled="!status"
-                @change="updateQuestion"
-            />
+<!--        Todo : v-autocomplete -->
+<!--            <v-autocomplete-->
+<!--                v-model="item.answer"-->
+<!--                :items="mbti_value"-->
+<!--                label="انتخاب مقدار"-->
+<!--                dense-->
+<!--                outlined-->
+<!--                rounded-->
+<!--                :disabled="!status"-->
+<!--                @change="updateQuestion"-->
+<!--            />-->
       </div>
         <div class="col-1">
           {{ (index + 1) + ') ' }}
