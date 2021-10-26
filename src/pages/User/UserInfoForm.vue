@@ -1,110 +1,174 @@
 <template>
-  <div id="q-app q-ma-lg" style="min-height: 100vh">
-    <div class="q-pa-md">
-      <div class="row justify-between  q-col-gutter-xl">
-        <div class="col-md-6">
-          <q-input v-model="user.first_name" label="نام" :model-value="user.first_name"></q-input>
-        </div>
-        <div class="col-md-6">
-          <q-input v-model="user.last_name" label=" نام خانوادگی" :model-value="user.last_name"></q-input>
+  <div id="q-app" class="q-ma-lg row justify-center" style="min-height: 100vh">
+    <q-linear-progress size="30px" :value="percentageOfInformationCompletion" color="primary" class="q-mt-sm">
+      <div class="absolute-full flex flex-center">
+        <q-badge text-color="black" class="text-subtitle1 text-weight-bold" align="middle"
+                 :label="percentageOfInformationCompletionLabel"></q-badge>
+      </div>
+    </q-linear-progress>
+    <div class="col-9 form-box">
+      <div class="q-pa-md">
+        <div class="row justify-between  q-col-gutter-xl">
+          <div class="col-md-6 col-12">
+            <q-input v-model="user.first_name" label="نام" :model-value="user.first_name"></q-input>
+          </div>
+          <div class="col-md-6 col-12">
+            <q-input v-model="user.last_name" label=" نام خانوادگی" :model-value="user.last_name"></q-input>
+          </div>
         </div>
       </div>
-    </div>
-    <q-select
-      filled
-      v-model="user.gender.id"
-      use-input
-      label="جنسیت"
-      color="light-blue-6"
-      :options="genders"
-      option-label="title"
-      option-value="id"
-      map-options
-      emit-value
-    />
-
-    <div class="q-pa-md">
-      <div class="row justify-between  q-col-gutter-xl">
-        <div class="col-md-6">
-          <q-select
-            v-model="selectedProvince"
-            use-input
-            color="light-blue-6"
-            input-debounce="0"
-            label="استان"
-            :options="provinces"
-            option-label="title"
-            option-value="id"
-            @filter="filterProvinces"
-            map-options
-            emit-value
-           >
-            <template v-slot:no-option>
-              <q-item>
-                <q-item-section class="text-grey">
-                   داده ای یافت نشد
-                </q-item-section>
-              </q-item>
-            </template>
-          </q-select>
-        </div>
-        <div class="col-md-6">
-          <q-select
-            v-model="selectedCity"
-            use-input
-            input-debounce="0"
-            option-value="id"
-            map-options
-            color="light-blue-6"
-            emit-value
-            label="شهر"
-            @filter="filterCity"
-            :options="citiesForSelectedProvince"
-            option-label="title">
-            <template v-slot:no-option>
-              <q-item>
-                <q-item-section class="text-grey">
-                  داده ای یافت نشد
-                </q-item-section>
-              </q-item>
-            </template>
-          </q-select>
+      <div class="q-pa-md">
+        <q-select
+          v-model="user.gender.id"
+          use-input
+          label="جنسیت"
+          color="light-blue-6"
+          :options="genders"
+          option-label="title"
+          option-value="id"
+          map-options
+          emit-value
+        />
+      </div>
+      <div class="q-pa-md">
+        <div class="row justify-between  q-col-gutter-xl">
+          <div class="col-md-6 col-12">
+            <q-select
+              v-model="selectedProvince"
+              use-input
+              color="light-blue-6"
+              input-debounce="0"
+              label="استان"
+              :options="provinces"
+              option-label="title"
+              option-value="id"
+              @filter="filterProvinces"
+              map-options
+              emit-value
+            >
+              <template v-slot:no-option>
+                <q-item>
+                  <q-item-section class="text-grey">
+                    داده ای یافت نشد
+                  </q-item-section>
+                </q-item>
+              </template>
+            </q-select>
+          </div>
+          <div class="col-md-6 col-12">
+            <q-select
+              v-model="selectedCity"
+              use-input
+              input-debounce="0"
+              option-value="id"
+              map-options
+              color="light-blue-6"
+              emit-value
+              label="شهر"
+              @filter="filterCity"
+              :options="citiesForSelectedProvince"
+              option-label="title">
+              <template v-slot:no-option>
+                <q-item>
+                  <q-item-section class="text-grey">
+                    داده ای یافت نشد
+                  </q-item-section>
+                </q-item>
+              </template>
+            </q-select>
+          </div>
         </div>
       </div>
-    </div>
-    <div class="q-pa-md">
-      <div class="row justify-between  q-col-gutter-xl">
-        <div class="col-md-6">
-          <q-select
-            v-model="user.major.id"
-            color="light-blue-6"
-            label="رشته"
-            :options="majors"
-            option-label="title"
-            emit-value
-            option-value="id"
-            map-options
-            :model-value="user.major.id">
-          </q-select>
-        </div>
-        <div class="col-md-6">
-          <q-select
-            v-model="user.grade.id"
-            label="مقطع"
-            color="light-blue-6"
-            :options="grades"
-            option-label="title"
-            option-value="id"
-            map-options
-            emit-value
-           />
+      <div class="q-pa-md">
+        <div class="row justify-between  q-col-gutter-xl">
+          <div class="col-md-6 col-12">
+            <q-select
+              v-model="user.major.id"
+              color="light-blue-6"
+              label="رشته"
+              :options="majors"
+              option-label="title"
+              emit-value
+              option-value="id"
+              map-options
+              :model-value="user.major.id">
+            </q-select>
+          </div>
+          <div class="col-md-6 col-12">
+            <q-select
+              v-model="user.grade.id"
+              label="مقطع"
+              color="light-blue-6"
+              :options="grades"
+              option-label="title"
+              option-value="id"
+              map-options
+              emit-value
+            />
+          </div>
         </div>
       </div>
+      <div>
+        <q-btn
+          v-if="!waiting && !this.user.mobile_verified_at"
+          color="blue"
+          @click="sendCode"
+        >
+          دریافت کد فعالسازی
+        </q-btn>
+        <div v-if="totalTime" class="row justify-center q-ma-lg">
+          <div class="col-12 row justify-center mit">
+               <span
+                 :class="totalTime <60 ? 'red-text' : ''"
+               >{{ ((totalTime) % 3600) % 60 }}</span>
+            <span>:</span>
+            <span
+              :class="totalTime <60 ? 'red-text' : ''"
+            >{{ Math.floor(((totalTime) % 3600) / 60) }}</span>
+          </div>
+          کد ارسال شده را وارد نمایید.
+        </div>
+        <div class="q-px-lg">
+          <q-input
+            v-if="totalTime"
+            v-model="typedCode"
+            label="کد فعالسازی"
+            @keydown="pressedEnter"
+          />
+        </div>
+        <div class="row justify-center q-px-lg">
+          <q-btn
+            dir="ltr"
+            v-if="!totalTime && waiting"
+            color="blue"
+            @click="sendCode"
+          >
+            دریافت مجدد کد
+          </q-btn>
+        </div>
+        <div class="row justify-center q-mt-lg">
+          <q-btn
+            v-if="totalTime"
+            color="blue"
+            @click="verifyCode"
+          >
+            ثبت شماره موبایل
+          </q-btn>
+        </div>
+      </div>
+      <div class="row justify-end q-mt-lg">
+        <q-btn
+          :disabl="!this.user.mobile_verified_at"
+          color="blue"
+          class="q-px-xl"
+          rounded
+          dark
+          size="16px"
+          @click="submit">
+          ثبت
+        </q-btn>
+      </div>
     </div>
-    <q-btn color="blue" dark @click="submit">
-      submit
-    </q-btn>
-
   </div>
 </template>
 
@@ -158,7 +222,10 @@ export default {
       return this.$store.getters.redirectAfterCompleteInfoPage
     },
     percentageOfInformationCompletion () {
-      return this.user.percentageOfInformationCompletion()
+      return (this.user.percentageOfInformationCompletion() / 100)
+    },
+    percentageOfInformationCompletionLabel () {
+      return Math.ceil(this.percentageOfInformationCompletion * 100) + 'درصد از اطلاعات تکمیل شده'
     },
     citiesForSelectedProvince () {
       if (this.selectedProvince) {
@@ -169,7 +236,6 @@ export default {
   },
   watch: {
     selectedProvince (newVal) {
-      console.log('selectedProvince', newVal)
       if (newVal) {
         const selectedProvince = this.provinces.find(item => newVal === item.id)
         if (selectedProvince) {
@@ -192,7 +258,6 @@ export default {
   mounted: function () {
     console.log('user :', this.user)
     this.getUserData()
-    // this.$store.commit('AppLayout/updateDrawer', false)
     this.$store.dispatch('AppLayout/updateDrawer', false)
   },
   methods: {
@@ -280,12 +345,11 @@ export default {
           this.loadUserCity()
         })
         .catch(() => {
-          // this.$notify({
-          //   group: 'notifs',
-          //   title: 'توجه!',
-          //   text: 'مشکلی در گرفتن اطلاعات رخ داده است. لطفا دوباره امتحان کنید.',
-          //   type: 'error'
-          // })
+          this.$q.notify({
+            type: 'negative',
+            message: 'مشکلی در گرفتن اطلاعات رخ داده است. لطفا دوباره امتحان کنید',
+            position: 'top'
+          })
           this.user.loading = false
         }
         )
@@ -313,40 +377,37 @@ export default {
         })
         .catch(() => {
           that.user.loading = false
-          console.log('submit fucked up :)')
-          // that.$notify({
-          //   group: 'notifs',
-          //   title: 'توجه!',
-          //   text: 'مشکلی در ویرایش اطلاعات رخ داده است. لطفا دوباره امتحان کنید.',
-          //   type: 'error'
-          // })
+          this.$q.notify({
+            type: 'negative',
+            message: 'مشکلی در گرفتن اطلاعات رخ داده است. لطفا دوباره امتحان کنید',
+            position: 'top'
+          })
         })
     },
 
     showErrorMessages (error) {
-      this.alert = true
-      console.log('show error massage run')
-      this.user.loading = false
-      const messages = []
+      console.log('error in show error message :', error.response)
       const err = error.response
-      if (err.status === 429) {
-        console.log('in if ')
-        this.startTimer()
-        this.waiting = true
-        this.showTimer = true
-        messages.push('کد برای شما قبلا ارسال شده است')
-      }
-      if (err.status === 400) {
-        console.log('in if ')
-        messages.push('کد وارد شده اشتباه است')
-      }
-      for (const key in err.data.errors) {
-        err.data.errors[key].forEach(message => {
-          messages.push(message)
+      const messages = []
+      if (err.data.errors) {
+        for (const key in err.data.errors) {
+          err.data.errors[key].forEach(message => {
+            this.$q.notify({
+              type: 'negative',
+              message: message,
+              position: 'top'
+            })
+          })
+        }
+      } else {
+        if (err.data.message) messages.push(err.data.message)
+        else messages.push(err.statusText)
+        this.$q.notify({
+          type: 'negative',
+          message: messages,
+          position: 'top'
         })
       }
-      this.errorMessages = messages
-      this.clearErrorMessages()
     },
 
     clearErrorMessages () {
@@ -355,6 +416,7 @@ export default {
         that.errorMessages = []
       }, 20000)
     },
+
     sendCode () {
       const that = this
       this.user.loading = true
@@ -363,25 +425,21 @@ export default {
           that.user.loading = false
           that.code = resp
           that.startTimer()
-
           that.waiting = true
           that.showTimer = true
-          // that.$notify({
-          //   group: 'notifs',
-          //   title: 'توجه!',
-          //   text: 'کد فعالسازی با موفقیت ارسال شد.',
-          //   type: 'success'
-          // })
+          this.$q.notify({
+            type: 'positive',
+            message: 'کد فعالسازی با موفقیت ارسال شد.',
+            position: 'top'
+          })
         })
         .catch((e) => {
-          console.log('error in comp : ', e.response)
-          this.showErrorMessages(e)
-          // that.$notify({
-          //   group: 'notifs',
-          //   title: 'توجه!',
-          //   text: 'مشکلی در ارسال کد رخ داده است. لطفا دوباره امتحان کنید.',
-          //   type: 'error'
-          // })
+          console.log(e)
+          this.$q.notify({
+            type: 'negative',
+            message: 'مشکلی در ارسال کد رخ داده است. لطفا دوباره امتحان کنید',
+            position: 'center'
+          })
         }
         )
     },
@@ -394,12 +452,11 @@ export default {
           that.user.loading = false
           this.user.mobile_verified_at = Time.now()
           this.isCodeVerified = true
-          // this.$notify({
-          //   group: 'notifs',
-          //   title: 'توجه!',
-          //   text: 'شماره موبایل با موفقیت ثبت شد.',
-          //   type: 'success'
-          // })
+          this.$q.notify({
+            type: 'positive',
+            message: 'شماره موبایل با موفقیت ثبت شد.',
+            position: 'center'
+          })
           // this.getUserData()
         })
         .catch((error) => {
@@ -448,15 +505,24 @@ export default {
 }
 </script>
 
-<style scoped>
+<style scoped lang="scss">
+.mit span {
+  font-size: 16px;
+  padding: 10px;
+}
+
+.form-box {
+  //height: fit-content;
+  //border: 1px solid red;
+}
+
 .codeBtnPadding {
   padding-top: 30px;
 }
 
 .wrapper {
   width: 80%;
-  margin: auto;
-  margin-top: 30px;
+  margin: 30px auto auto;
   text-align: center;
 }
 
@@ -466,5 +532,21 @@ export default {
 
 .requiredItem {
   color: red;
+}
+
+.text-size {
+  color: #151515;
+  margin-bottom: 20px;
+  font-size: 16px;
+  font-weight: 500;
+}
+
+.time-text {
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.timer-box {
+  justify-content: center;
 }
 </style>
