@@ -48,15 +48,6 @@
     </v-toolbar>
     <v-card-text>
       <v-text-field
-        id="username"
-        v-model="username"
-        label="شماره همراه"
-        name="login"
-        prepend-icon="mdi-account"
-        type="text"
-      />
-
-      <v-text-field
         id="password"
         v-model="password"
         label="کد ملی"
@@ -200,7 +191,7 @@
                     password: this.password
                 })
                 .then((response) => {
-                   this.loadingList = false
+                  this.loadingList = false
                   console.log('response in auth login :',response)
                   that.user = new User(response.data.data.user)
                   that.$store.commit('Auth/updateUser', that.user)

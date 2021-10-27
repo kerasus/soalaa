@@ -140,7 +140,6 @@
         </v-row>
       </v-container>
     </v-card-text>
-
     <v-card-actions class="d-flex flex-column">
       <v-progress-circular
         v-if="loading"
@@ -199,6 +198,8 @@
 
 <script>
 import axios from 'axios';
+import API_ADDRESS from "@/api/Addresses";
+
 export default {
   name: "Verify",
   props: {
@@ -333,17 +334,18 @@ export default {
 
     checkApiUrl() {
       if (this.userData.source === 'login') {
-        this.resendApi = '/mobile/resend'
-        this.verifyApi = '/mobile/verify'
+        this.resendApi = API_ADDRESS.user.mobile.resend
+        this.verifyApi = API_ADDRESS.user.mobile.verify
         this.oldUser = true
         return
       }
-      this.resendApi = '/api/v2/mobile/resendToGuest'
-      this.verifyApi = '/api/v2/mobile/verifyGuest'
+      this.resendApi = API_ADDRESS.user.mobile.resendGuest
+      this.verifyApi = API_ADDRESS.user.mobile.verifyGuest
     },
 
     sendVerifyCodeToUser() {
       this.loading = true
+      console.log('this.resendApi  in send verify code :',this.resendApi)
       axios.get(this.resendApi, this.oldUser ? null : {params: {'mobile': this.userData.phone,}})
           .then(response => {
             if (response.data['code(just_for_development)']) {
@@ -418,6 +420,7 @@ export default {
       delete this.inputData.mobile;
       axios.post(this.verifyApi,this.inputData)
           .then(response => {
+            console.log(response)
             this.loading = false
             this.reloadPage()
           }).catch(error => {
@@ -428,11 +431,12 @@ export default {
     signIn() {
       this.loading = true;
       this.inputData.mobile=this.userData.phone;
-      axios.post('/register', this.inputData)
+      axios.post(API_ADDRESS.auth.register, this.inputData)
           .then(response => {
             this.loading = false;
             if (response.status === 200) {
               this.successMessageAlert()
+
               this.registered =true
               setTimeout(() => {
                 this.reloadPage()

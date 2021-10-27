@@ -62,12 +62,13 @@
     </v-row>
   </div>
 </template>
-
 <script>
 import Verify from '@/components/Auth/Verify';
 import ForgotPassword from "@/components/Auth/ForgotPassword";
 import Login from "@/components/Auth/Login";
 import SignIn from "@/components/Auth/SignIn";
+import { mixinAuth } from '@/mixin/Mixins';
+import axios from "axios";
 
 export default {
   name: "HandleModal",
@@ -77,6 +78,7 @@ export default {
     Login,
     SignIn,
   },
+  mixins: [mixinAuth],
   props: {
     config: {
       type: Object,
@@ -100,15 +102,50 @@ export default {
     }
   },
   created() {
-    this.dialog = true
-    this.setDialogBody()
+    if (this.getToken()) {
+      this.setAccessToken(this.getToken())
+      this.getUserData(() => {
+        this.redirectTo()
+      })
+    }
+     else this.setDialogBody()
   },
   methods: {
+    setAccessToken (access_token) {
+      axios.defaults.headers.common['Authorization'] = 'Bearer ' + access_token
+      this.$store.commit('Auth/updateAccessToken', access_token)
+    },
+    redirectTo () {
+      console.log('redirect in handele modal ')
+      if (this.$route.query.redirect_to_exam) {
+        this.$router.push({
+          name: 'onlineQuiz.StartExamAutomatically',
+          params: {
+            examId: this.$route.query.redirect_to_exam,
+            autoStart: this.$route.query.exam_auto_start
+          }
+        })
+        return
+      }
+      let redirect_to = window.localStorage.getItem('redirect_to')
+      console.log('redirect_to :' , redirect_to)
+      if (!redirect_to) {
+        redirect_to = 'dashboard'
+      }
+      this.$router.push({ name: redirect_to })
+    },
+
+    getToken () {
+      return this.$store.getters['Auth/accessToken']
+
+    },
+
     closeDialog() {
       this.dialog = false
     },
 
     setDialogBody() {
+      this.dialog = true
       this.selectedComponent = this.config.starter
     },
 
