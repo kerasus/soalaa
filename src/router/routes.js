@@ -19,6 +19,22 @@ const routes = [
         component: () => import('pages/Admin/subCategory/LessonsList'),
         meta: { middlewares: [auth] }
       },
+      {
+        path: '/coefficient/edit/:exam_id',
+        name: 'coefficient.edit',
+        component: () => import('src/pages/Admin/subGroup/editCoefficients.vue'),
+        meta: {
+          middlewares: [auth]
+        }
+      },
+      {
+        path: '/onlineQuiz/exams/lessons/:quizId/:quizTitle',
+        name: 'onlineQuiz.exams.lessons',
+        component: () => import('src/pages/Admin/exam/lessons.vue'),
+        meta: {
+          middlewares: [auth]
+        }
+      },
       // user list
       // admin list
       {
@@ -63,22 +79,6 @@ const routes = [
     component: () => import('pages/Auth/Login.vue')
   },
   {
-    path: '/editCoefficients',
-    name: 'coefficient.edit',
-    component: () => import('src/pages/Admin/subGroup/editCoefficients.vue'),
-    meta: {
-      middlewares: [auth]
-    }
-  },
-  {
-    path: '/lessonsList',
-    name: 'onlineQuiz.exams.lessons',
-    component: () => import('src/pages/Admin/exam/lessons.vue'),
-    meta: {
-      middlewares: [auth]
-    }
-  },
-  {
     path: '/login',
     name: 'login',
     component: () => import('pages/Auth/Login.vue')
@@ -91,8 +91,6 @@ const routes = [
       middlewares: [auth]
     }
   },
-=========
->>>>>>>>> Temporary merge branch 2
 
   // Always leave this as last one,
   // but you can also remove it

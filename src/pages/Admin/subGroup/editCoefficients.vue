@@ -10,6 +10,8 @@
         option-label="value"
         option-value="id"
         label="زیرگروه"
+        emit-value
+        map-options
       />
     </div>
     <div class="col-md-6 q-pa-sm">
@@ -41,6 +43,8 @@
                   :options="categoryList.list"
                   option-label="title"
                   option-value="title"
+                  emit-value
+                  map-options
                 />
               </div>
               <div class="col-md-4 q-pa-sm">
@@ -52,6 +56,8 @@
                   :options="notExistingSubcategories(subGroup)"
                   option-label="title"
                   option-value="id"
+                  emit-value
+                  map-options
                 />
               </div>
               <div class="col-md-4 q-pa-sm">
@@ -78,36 +84,32 @@
                         v-for="(subCategory,sIindex) in subGroup.sub_category"
                         :key="sIindex"
                       >
-                        <q-tooltip
-                          anchor="top middle" self="bottom middle" :offset="[10, 10]"
-                        >
-                          <template v-slot:activator="{ on, attrs }">
-                            <p
-                              v-bind="attrs"
-                              class="d-inline-block"
-                              v-on="on"
+                        <div class="th-inline-style">
+                          <div class="category-title-size">
+                            <q-tooltip
+                              anchor="top middle" self="top middle" :offset="[10, 35]"
                             >
+                              <span>{{ subCategory.category_title }}</span>
+                            </q-tooltip>
+                            <p class="small-fontsize">
                               {{ subCategory.sub_category_title }}
                             </p>
-                          </template>
-                          <span>{{ subCategory.category_title }}</span>
-                        </q-tooltip>
-                        <q-tooltip
-                          anchor="top middle" self="bottom middle" :offset="[10, 10]"
-                        >
-                          <template v-slot:activator="{ on, attrs }">
-                            <q-btn
-                              icon
-                              color="red"
-                              v-bind="attrs"
-                              v-on="on"
-                              @click="deleteSubcategory(subGroup, subCategory.sub_category_title)"
+                          </div>
+                          <q-btn
+                            size="12px"
+                            flat
+                            round
+                            icon="mdi-close"
+                            color="red"
+                            @click="deleteSubcategory(subGroup, subCategory.sub_category_title)"
+                          >
+                            <q-tooltip
+                              anchor="top middle" self="bottom middle" :offset="[10, 10]"
                             >
-                              <q-icon>mdi-close</q-icon>
-                            </q-btn>
-                          </template>
-                          <span>حذف درس</span>
-                        </q-tooltip>
+                              <span>حذف درس</span>
+                            </q-tooltip>
+                          </q-btn>
+                        </div>
                       </th>
                     </tr>
                     </thead>
@@ -224,8 +226,13 @@ export default {
   methods: {
     addSubgroup () {
       console.log(this.allSubGroups)
+      console.log(this.selectedSubGroup)
       const selectedSubGroup = this.allSubGroups.find(item => item.id === this.selectedSubgroup)
-      this.subGroups.push({ title: selectedSubGroup.value, sub_category: [], id: selectedSubGroup.id })
+      this.subGroups.push({
+        title: selectedSubGroup.value,
+        sub_category: [],
+        id: selectedSubGroup.id
+      })
     },
     addSubcategory (subGroup) {
       const that = this
@@ -238,7 +245,7 @@ export default {
         sub_category_zarib: 0
       })
     },
-    deconsteSubcategory (subGroup, subcategoryTitle) {
+    deleteSubcategory (subGroup, subcategoryTitle) {
       subGroup.sub_category = subGroup.sub_category.filter(item => item.sub_category_title !== subcategoryTitle)
     },
     save () {
@@ -264,5 +271,17 @@ export default {
 </script>
 
 <style scoped>
+.small-fontsize {
+  font-size: 14px;
+}
 
+.th-inline-style {
+  display: inline flex;
+}
+
+.category-title-size {
+  margin-right: 10px;
+  position: relative;
+  top: 8px;
+}
 </style>
