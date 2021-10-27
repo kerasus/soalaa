@@ -2,12 +2,11 @@
   <router-view />
 </template>
 <script>
-import { defineComponent } from 'vue'
 import '../src/assets/scss/font.scss'
 // import 'material-icons/material-icons.css'
-export default defineComponent({
+export default {
   name: 'App'
-})
+}
 </script>
 <style>
   :root {
