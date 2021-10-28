@@ -1,6 +1,7 @@
 <template>
   <div id="q-app" class="q-ma-lg row justify-center" style="min-height: 100vh">
-    <q-linear-progress v-if="percentageOfInformationCompletion" size="30px" :value="percentageOfInformationCompletion" color="primary" class="q-mt-sm">
+    <q-linear-progress v-if="percentageOfInformationCompletion" size="30px" :value="percentageOfInformationCompletion"
+                       color="primary" class="q-mt-sm">
       <div class="absolute-full flex flex-center">
         <q-badge text-color="black" color="transparent" class="text-subtitle1 text-weight-bold" align="middle"
                  :label="percentageOfInformationCompletionLabel">
@@ -12,16 +13,26 @@
       <div class="q-pa-md">
         <div class="row justify-between  q-col-gutter-xl">
           <div class="col-md-6 col-12">
-            <q-input v-model="testmitra" label="نام" ></q-input>
+            <q-input
+              v-model="userData.first_name"
+              label="نام"
+              :rules="[
+                val => val !== null && val !== '' || 'پر کردن این فیلد اجباری است' ]"
+            ></q-input>
           </div>
           <div class="col-md-6 col-12">
-            <q-input v-model="user.last_name" label=" نام خانوادگی" ></q-input>
+            <q-input
+              v-model="userData.last_name"
+              label=" نام خانوادگی"
+              :rules="[
+                val => val !== null && val !== '' || 'پر کردن این فیلد اجباری است' ]"
+            ></q-input>
           </div>
         </div>
       </div>
       <div class="q-pa-md">
         <q-select
-          v-model="user.gender.id"
+          v-model="userData.gender.id"
           use-input
           label="جنسیت"
           color="light-blue-6"
@@ -30,6 +41,8 @@
           option-value="id"
           map-options
           emit-value
+          :rules="[
+                val => val !== null && val !== '' || 'انتخاب این فیلد اجباری است' ]"
         />
       </div>
       <div class="q-pa-md">
@@ -47,6 +60,8 @@
               @filter="filterProvinces"
               map-options
               emit-value
+              :rules="[
+                val => val !== null && val !== '' || 'انتخاب این فیلد اجباری است' ]"
             >
               <template v-slot:no-option>
                 <q-item>
@@ -58,18 +73,22 @@
             </q-select>
           </div>
           <div class="col-md-6 col-12">
+            selectedCity :  {{selectedCity }}
             <q-select
               v-model="selectedCity"
               use-input
               input-debounce="0"
-              option-value="id"
               map-options
               color="light-blue-6"
               emit-value
               label="شهر"
               @filter="filterCity"
               :options="citiesForSelectedProvince"
-              option-label="title">
+              option-label="title"
+              option-value="id"
+              :rules="[
+                val => val !== null && val !== '' || 'انتخاب این فیلد اجباری است' ]"
+            >
               <template v-slot:no-option>
                 <q-item>
                   <q-item-section class="text-grey">
@@ -85,7 +104,7 @@
         <div class="row justify-between  q-col-gutter-xl">
           <div class="col-md-6 col-12">
             <q-select
-              v-model="user.major.id"
+              v-model="userData.major.id"
               color="light-blue-6"
               label="رشته"
               :options="majors"
@@ -93,12 +112,15 @@
               emit-value
               option-value="id"
               map-options
-              :model-value="user.major.id">
+              :model-value="userData.major.id"
+              :rules="[
+                val => val !== null && val !== '' || 'انتخاب این فیلد اجباری است' ]"
+            >
             </q-select>
           </div>
           <div class="col-md-6 col-12">
             <q-select
-              v-model="user.grade.id"
+              v-model="userData.grade.id"
               label="مقطع"
               color="light-blue-6"
               :options="grades"
@@ -106,18 +128,23 @@
               option-value="id"
               map-options
               emit-value
+              :rules="[
+                val => val !== null && val !== '' || 'انتخاب این فیلد اجباری است' ]"
             />
           </div>
         </div>
       </div>
       <div>
-        <q-btn
-          v-if="!waiting && !this.user.mobile_verified_at"
-          color="blue"
-          @click="sendCode"
-        >
-          دریافت کد فعالسازی
-        </q-btn>
+        <div class="row justify-center q-ma-lg">
+          <q-btn
+            v-if="!waiting && !this.user.mobile_verified_at"
+            color="blue"
+            rounded
+            @click="sendCode"
+          >
+            دریافت کد فعالسازی
+          </q-btn>
+        </div>
         <div v-if="totalTime" class="row justify-center q-ma-lg">
           <div class="col-12 row justify-center mit">
                <span
@@ -167,8 +194,9 @@
           class="q-px-xl"
           rounded
           dark
+          type="submit"
           size="16px"
-          @click="submit">
+          @click="checkForSubmit">
           ثبت
         </q-btn>
       </div>
@@ -194,7 +222,8 @@ export default {
   },
   data () {
     return {
-      testmitra: '',
+      userData: new User(),
+      needVerify: true,
       alert: false,
       errorMessages: [],
       isCodeVerified: false,
@@ -241,27 +270,34 @@ export default {
   },
   watch: {
     selectedProvince (newVal) {
+      // console.log('select province :', newVal)
       if (newVal) {
         const selectedProvince = this.provinces.find(item => newVal === item.id)
+        // console.log('this.provinces :', this.provinces)
+        // console.log('selectedProvince :', selectedProvince)
+        // console.log('this.user data :', this.userData)
         if (selectedProvince) {
-          this.user.province = selectedProvince.title
-          this.$store.commit('Auth/updateUser', new User(this.user))
+          this.userData.province = selectedProvince
+          this.$store.commit('Auth/updateUser', new User(this.userData))
         }
       }
     },
+
     selectedCity (newVal) {
       if (newVal) {
         const selectedCity = this.cities.find(item => newVal === item.id)
         if (selectedCity) {
-          this.user.city = selectedCity.title
-          this.$store.commit('Auth/updateUser', new User(this.user))
+          this.userData.city = selectedCity.title
+          this.$store.commit('Auth/updateUser', new User(this.userData))
         }
       }
     }
   },
 
   mounted: function () {
-    console.log('user :', this.user)
+    // console.log('this.user :', this.user)
+    this.user.mobile_verified_at ? this.needVerify = false : this.needVerify = true
+    this.userData = this.user
     this.getUserData()
     this.$store.dispatch('AppLayout/updateDrawer', false)
   },
@@ -287,59 +323,88 @@ export default {
     },
 
     getUserProvince () {
-      if (!this.user.city && this.user.city.id !== null && typeof this.user.city.id !== 'undefined') {
+      // console.log('this.userData.city.id', this.userData.city.id)
+      if (!this.userData.city && this.userData.city.id !== null && typeof this.userData.city.id !== 'undefined') {
         return
       }
-      const userCity = this.cities.find(item => item.id === this.user.city.id)
+      // console.log('this.userData.city :', this.userData.city)
+      // console.log(' this.userData.city.id :', this.userData.city.id)
+      const userCity = this.cities.find(item => item.id === this.userData.city.id)
+      // console.log('get pro :', userCity)
       let userProvince = null
       if (userCity) {
         userProvince = userCity.province
       }
+      // console.log('list :', userProvince)
 
       return userProvince
     },
+
     loadUserCity () {
-      if (!this.user.city) {
+      // console.log('loadUserCity :', !this.userData.city, 'user data :', this.userData)
+      if (!this.userData.city) {
         return
       }
+
       const userProvince = this.getUserProvince()
+      // console.log('userProvince eroooooor :', userProvince)
       this.selectedProvince = userProvince.id
-      this.selectedCity = this.user.city.id
+      this.selectedCity = this.userData.city.id
     },
+
     getUserData () {
-      console.log('get user data')
       const that = this
       this.user.loading = true
       this.user.getUserData()
         .then((user) => {
+          // console.log('user in get user data :', user)
           this.user.loading = false
           that.getUserFormData()
           that.$store.commit('Auth/updateUser', user)
-          if (!that.user.needToCompleteInfo()) {
-            if (!this.redirectAfterCompleteInfoPage) {
-              // that.$router.push({ name: 'test' })
-            } else {
-              that.$router.push({
-                name: this.redirectAfterCompleteInfoPage.name,
-                params: this.redirectAfterCompleteInfoPage.params
-              })
-            }
-          } else {
-            console.log('نیاز به تکمیل اطلاعات هست.')
-          }
+          this.canRedirect()
         })
-        .catch(err => {
-          console.log('err in get data :', err)
+        // .catch(e => {
+        //   // console.log('err in get data :', err)
+        // })
+    },
+
+    canRedirect () {
+      // console.log('canRedirect')
+      if (!this.needVerify) {
+        // console.log('hey verify your numb')
+        this.redirectUser()
+      }
+    },
+
+    redirectUser () {
+      // console.log('redirect user call')
+      if (!this.user.needToCompleteInfo()) {
+        if (!this.redirectAfterCompleteInfoPage) {
+        //  this.$router.push({ name: 'test' })
+        } else {
+          this.$router.push({
+            name: this.redirectAfterCompleteInfoPage.name,
+            params: this.redirectAfterCompleteInfoPage.params
+          })
+        }
+      } else {
+        this.$q.notify({
+          type: 'warning',
+          message: 'نیاز به تکمیل اطلاعات هست.',
+          position: 'center'
         })
+      }
     },
     startTimer () {
       this.totalTime = 180
       this.timer = setInterval(() => this.countdown(), 1000)
     },
     getUserFormData () {
+      // console.log('get user form data run ')
       this.user.loading = true
       this.$axios.get(API_ADDRESS.user.formData)
         .then((resp) => {
+          // console.log('getUserFormData reeeeeeeesult :', resp)
           this.genders = resp.data.data.genders
           this.grades = resp.data.data.grades
           this.majors = resp.data.data.majors
@@ -347,12 +412,15 @@ export default {
           this.cities = resp.data.data.cities
           this.user.loading = false
           // this.loadSomeData()
+          // console.log(this.user)
+          this.userData = this.user
           this.loadUserCity()
         })
-        .catch(() => {
+        .catch((e) => {
+          // console.log('get user form data in catch', e)
           this.$q.notify({
             type: 'negative',
-            message: 'مشکلی در گرفتن اطلاعات رخ داده است. لطفا دوباره امتحان کنید',
+            message: 'مشکلی در گرفتن اطلاعات رخ داده است. لطفا دوباره امتحان کنید get user form data !!!!!!!!!!!!!!',
             position: 'top'
           })
           this.user.loading = false
@@ -367,16 +435,32 @@ export default {
         this.waiting = true
       }
     },
+
+    checkForSubmit () {
+      this.canSubmit() ? this.submit() : this.showSubmitError()
+    },
+
+    showSubmitError () {
+      this.submitMessage.forEach(msg => {
+        this.$q.notify({
+          type: 'negative',
+          message: msg,
+          position: 'top'
+        })
+      })
+    },
     submit () {
       const that = this
       delete this.user.photo
       this.user.loading = true
       this.user.ostan_id = this.selectedProvince
+      // console.log('in submit this.user.ostan_id :', this.user.ostan_id, this.selectedProvince)
       this.user.shahr_id = this.selectedCity
+      // console.log(' this.user.shahr_id :', this.user.shahr_id, this.selectedCity)
+      // console.log(this.user)
       this.user.update()
         .then((response) => {
           that.user.loading = false
-          console.log('submit done')
           that.$store.commit('Auth/updateUser', response.data.data)
           that.getUserData()
         })
@@ -391,7 +475,6 @@ export default {
     },
 
     showErrorMessages (error) {
-      console.log('error in show error message :', error.response)
       const err = error.response
       const messages = []
       if (err.data.errors) {
@@ -439,7 +522,6 @@ export default {
           })
         })
         .catch((e) => {
-          console.log(e)
           this.$q.notify({
             type: 'negative',
             message: 'مشکلی در ارسال کد رخ داده است. لطفا دوباره امتحان کنید',
@@ -457,6 +539,7 @@ export default {
           that.user.loading = false
           this.user.mobile_verified_at = Time.now()
           this.isCodeVerified = true
+          this.needVerify = false
           this.$q.notify({
             type: 'positive',
             message: 'شماره موبایل با موفقیت ثبت شد.',
@@ -464,39 +547,35 @@ export default {
           })
           // this.getUserData()
         })
-        .catch((error) => {
-          this.showErrorMessages(error)
-          console.log('error in check', error)
-        })
     },
 
     canSubmit () {
       let status = true
-      if (!this.isValidString(this.user.first_name)) {
+      if (!this.isValidString(this.userData.first_name)) {
         status = false
         this.submitMessage.push('نام خود را مشخص کنید.')
       }
-      if (!this.isValidString(this.user.last_name)) {
+      if (!this.isValidString(this.userData.last_name)) {
         status = false
         this.submitMessage.push('نام خانوادگی خود را مشخص کنید.')
       }
-      if (!this.isValidString(this.user.province)) {
+      if (!this.isValidString(this.userData.province)) {
         status = false
         this.submitMessage.push('استان خود را مشخص کنید.')
       }
-      if (!this.isValidString(this.user.city)) {
+      if (!this.isValidString(this.userData.city)) {
         status = false
         this.submitMessage.push('شهر خود را مشخص کنید.')
       }
-      if (!this.isValidString(this.user.gender.id)) {
+      if (!this.isValidString(this.userData.gender.id)) {
         status = false
         this.submitMessage.push('جنسیت خود را مشخص کنید.')
       }
-      if (!this.isValidString(this.user.major.id)) {
+      if (!this.isValidString(this.userData.major.id)) {
         status = false
         this.submitMessage.push('رشته خود را مشخص کنید.')
       }
-      if (!this.isValidString(this.user.grade.id)) {
+      if (!this.isValidString(this.userData.grade.id)) {
         status = false
         this.submitMessage.push('مقطع خود را مشخص کنید.')
       }
