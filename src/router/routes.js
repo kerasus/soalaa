@@ -89,6 +89,14 @@ const routes = [
       middlewares: [auth]
     }
   },
+  {
+    path: '/user-info',
+    name: 'user-info',
+    component: () => import('pages/User/UserInfoForm'),
+    meta: {
+      middlewares: [auth]
+    }
+  },
 
   // Always leave this as last one,
   // but you can also remove it
