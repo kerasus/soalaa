@@ -32,11 +32,10 @@
       row-key="name"
       @row-click="rowClick"
       rows-per-page-label="تعداد ردیف در هر صفحه"
-      :rows-per-page-options="[15 ,20,30]"
-      :pagination-label="paginationLabel"
+      :rows-per-page-options="[15,15]"
       :loading="$store.getters['loading/loading']"
       loading-label="لطفا منتظر بمانید..."
-      :no-data-label="$store.getters['loading/loading'] ? '' : 'متاسفم:( موردی وجود نداره...'"
+      :no-data-label="$store.getters['loading/loading'] ? '' : 'متاسفم:( موردی وجود ندارد...'"
     >
       <template v-slot:header="props">
         <q-tr :props="props">
@@ -73,7 +72,7 @@
                   v-ripple:yellow
                   clickable
                   manual-focus
-                  :to="{ name: 'edit-exam', params: { quizId: row.id, quizTitle: row.title}}"
+                  :to="{ name: 'edit-exam', params: { quiz: row}}"
                 >
                   <q-item-section> ویرایش آزمون</q-item-section>
                 </q-item>
@@ -120,6 +119,7 @@
                   v-ripple:yellow
                   clickable
                   manual-focus
+                  :to="{ name: 'coefficient.edit', params: { exam_id: row.id } }"
                 >
                   <q-item-section>اصلاح ضرایب</q-item-section>
                 </q-item>
@@ -144,6 +144,7 @@
             color="indigo"
             icon="auto_stories"
             size="11px"
+            :to="{ name: 'onlineQuiz.exams.lessons', params: { quizId: row.id , quizTitle: row.title}}"
           >
             <q-tooltip anchor="top middle" self="bottom middle">
               مشاهده دروس
@@ -186,15 +187,16 @@
           </q-btn>
         </q-td>
       </template>
-      <template v-slot:pagination="scope">
+      <template v-slot:pagination>
+        <div>{{'صفحه ' + pagination.page + ' از ' + this.lastPage }}</div>
         <q-btn
           icon="chevron_right"
           color="grey-8"
           round
           dense
           flat
-          :disable="scope.isFirstPage"
-          @click="scope.prevPage"
+          :disable="pagination.page === 1 "
+          @click="prevPage"
         />
         <q-btn
           icon="chevron_left"
@@ -202,15 +204,15 @@
           round
           dense
           flat
-          :disable="scope.isLastPage"
-          @click="scope.nextPage"
+          :disable="pagination.page === lastPage "
+          @click="nextPage"
         />
       </template>
     </q-table>
     <div class="text-center">
       <q-btn
         elevation="2"
-        :to="{ name: 'edit-exam', params: { quizId: row.id, quizTitle: row.title}}"
+        :to="{ name: 'edit-exam', params: { quiz: null }}"
       >
         ثبت آزمون جدید
       </q-btn>
@@ -240,45 +242,26 @@ export default {
       rows: [],
       index: null,
       row: [],
-      options: {
-        itemsPerPage: 15,
-        page: 1
+      pagination: {
+        page: 1,
+        rowsPerPage: 15,
+        rowsNumber: 0
       },
-      totalRows: 0,
+      lastPage: 0,
       delay: null
     }
   },
-  // watch: {
-  //   options: {
-  //     handler () {
-  //       this.getExams()
-  //     }
-  //   }
-  // },
   created () {
     this.getExams()
   },
   methods: {
-    checkFileSize (files) {
-      return files.filter(file => file.size < 2048)
-    },
-
-    checkFileType (files) {
-      return files.filter(file => file.type === 'image/png')
-    },
-
-    onRejected (rejectedEntries) {
-      this.$q.notify({
-        type: 'negative',
-        message: `${rejectedEntries.length} file(s) did not pass validation constraints`
-      })
-    },
     getExams () {
       this.$store.dispatch('loading/linearLoading', true)
-      this.$axios.get(API_ADDRESS.exam.base(this.options.page))
+      this.$axios.get(API_ADDRESS.exam.base(this.pagination.page))
         .then((response) => {
           this.$store.dispatch('loading/linearLoading', false)
-          this.totalRows = response.data.meta.total
+          this.pagination.rowsNumber = response.data.meta.total
+          this.lastPage = Math.ceil(this.pagination.rowsNumber / this.pagination.rowsPerPage)
           this.examList = new ExamList(response.data.data, { meta: response.data.meta, links: response.data.links })
           this.rows = this.examList.list
           for (const index in this.rows) {
@@ -291,6 +274,18 @@ export default {
           this.$store.dispatch('loading/linearLoading', false)
           this.examList = new ExamList()
         })
+    },
+    nextPage () {
+      if (this.pagination.page !== this.lastPage && this.pagination.page < this.lastPage) {
+        this.pagination.page++
+        this.getExams()
+      }
+    },
+    prevPage () {
+      if (this.pagination.page !== 1 && this.pagination.page <= this.lastPage) {
+        this.pagination.page--
+        this.getExams()
+      }
     },
     rowClick (evt, row, index) {
       this.index = index
@@ -322,14 +317,9 @@ export default {
     },
     confirmDelete () {
       this.dontDelete()
-    },
-    paginationLabel (firstRowIndex, endRowIndex, totalRowsNumber) {
-      firstRowIndex = this.options.page
-      totalRowsNumber = Math.ceil(this.totalRows / this.options.itemsPerPage)
     }
   }
 }
-// shamsiDate('start_at').dateTime
 </script>
 <style lang="scss" scoped>
 .admin-exam-list{

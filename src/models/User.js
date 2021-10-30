@@ -122,6 +122,7 @@ class User extends Model {
   }
 
   getUserData () {
+    console.log('get user data in model')
     let that = this
     return new Promise(function (resolve, reject) {
       that.show(null, API_ADDRESS.user.show_user)

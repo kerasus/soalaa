@@ -35,11 +35,8 @@ const routes = [
           middlewares: [auth]
         }
       },
-      // user list
-      // admin list
-      {
-        path: 'exam-list',
-        name: 'exam-list',
+        path: '/dashboard',
+        name: 'dashboard',
         component: () => import('pages/Admin/exam/index'),
         meta: {
           middlewares: [auth]
@@ -47,7 +44,7 @@ const routes = [
         children: [
           {
             path: '',
-            name: 'list',
+            name: 'exam-list',
             component: () => import('pages/Admin/exam/list'),
             meta: {
               middlewares: [auth]
@@ -68,8 +65,30 @@ const routes = [
             meta: {
               middlewares: [auth]
             }
+          },
+          {
+            path: '/question/mbti/create',
+            name: 'question.mbti.create',
+            component: () => (import('pages/Admin/Question/newMBTIpage')),
+            meta: {
+              middlewares: [auth]
+            }
+          },
+          {
+            path: '/question/create',
+            name: 'question.create',
+            component: () => (import('pages/Admin/Question/CreateNewQuestion')),
+            meta: {
+              middlewares: [auth]
+            }
           }
         ]
+      },
+      {
+        path: '/sub_category/edit',
+        name: 'subCategory.edit',
+        component: () => import('pages/Admin/subCategory/LessonsList'),
+        meta: { middlewares: [auth] }
       }
     ]
   },
@@ -87,6 +106,14 @@ const routes = [
     path: '/test',
     name: 'test',
     component: () => import('pages/Auth/test.vue'),
+    meta: {
+      middlewares: [auth]
+    }
+  },
+  {
+    path: '/user-info',
+    name: 'user-info',
+    component: () => import('pages/User/UserInfoForm'),
     meta: {
       middlewares: [auth]
     }
