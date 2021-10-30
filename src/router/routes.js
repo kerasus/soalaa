@@ -14,16 +14,8 @@ const routes = [
         }
       },
       {
-        path: '/sub_category/edit',
-        name: 'subCategory.edit',
-        component: () => import('pages/Admin/subCategory/LessonsList'),
-        meta: { middlewares: [auth] }
-      },
-      // user list
-      // admin list
-      {
-        path: 'exam-list',
-        name: 'exam-list',
+        path: '/dashboard',
+        name: 'dashboard',
         component: () => import('pages/Admin/exam/index'),
         meta: {
           middlewares: [auth]
@@ -31,7 +23,7 @@ const routes = [
         children: [
           {
             path: '',
-            name: 'list',
+            name: 'exam-list',
             component: () => import('pages/Admin/exam/list'),
             meta: {
               middlewares: [auth]
@@ -54,6 +46,12 @@ const routes = [
             }
           }
         ]
+      },
+      {
+        path: '/sub_category/edit',
+        name: 'subCategory.edit',
+        component: () => import('pages/Admin/subCategory/LessonsList'),
+        meta: { middlewares: [auth] }
       }
     ]
   },
