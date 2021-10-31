@@ -1,10 +1,12 @@
 <template>
   <div class="SelectImageBox">
-<!--    <p class="font-weight-medium mb-5 mt-5">-->
-<!--      فایل های آپلود شده:-->
-<!--    </p>-->
-<!--    <v-row>-->
-<!--      <v-col md="4">-->
+<!-- Todo : fix this font weight-->
+    <p class="font-weight-medium mb-5 mt-5">
+      فایل های آپلود شده:
+    </p>
+<!--    todo file-upload-->
+<!--    <div class="row">-->
+<!--      <div class="col col-md-4">-->
 <!--        <v-card>-->
 <!--          <v-card-title class="body-1">-->
 <!--            صورت سوال-->
@@ -156,32 +158,31 @@
 <!--                cols="3"-->
 <!--              >-->
 <!--                <div>-->
-<!--                  <file-upload-->
-<!--                    ref="answerImages"-->
-<!--                    v-model="answerFiles"-->
-<!--                    input-id="answerImages"-->
-<!--                    :extensions="extensions"-->
-<!--                    :accept="accept"-->
-<!--                    :multiple="true"-->
-<!--                    :directory="directory"-->
-<!--                    :create-directory="createDirectory"-->
-<!--                    :size="size || 0"-->
-<!--                    :thread="thread < 1 ? 1 : (thread > 5 ? 5 : thread)"-->
-<!--                    :data="data"-->
-<!--                    :drop="drop"-->
-<!--                    :drop-directory="dropDirectory"-->
-<!--                    :add-index="addIndex"-->
-<!--                    @input-filter="inputFilter"-->
-<!--                    @input-file="inputFile"-->
-<!--                  >-->
-<!--                    <v-btn-->
-<!--                      large-->
-<!--                      text-->
-<!--                      class="btnAddImage"-->
-<!--                    >-->
-<!--                      <v-icon>mdi-plus</v-icon>-->
-<!--                    </v-btn>-->
-<!--                  </file-upload>-->
+                  <file-upload
+                    ref="answerImages"
+                    v-model="answerFiles"
+                    input-id="answerImages"
+                    :extensions="extensions"
+                    :accept="accept"
+                    :multiple="true"
+                    :directory="directory"
+                    :create-directory="createDirectory"
+                    :size="size || 0"
+                    :thread="thread < 1 ? 1 : (thread > 5 ? 5 : thread)"
+                    :data="data"
+                    :drop="drop"
+                    :drop-directory="dropDirectory"
+                    :add-index="addIndex"
+                    @input-filter="inputFilter"
+                    @input-file="inputFile"
+                  >
+                    <q-btn
+                      flat
+                      class="btnAddImage"
+                      icon="mdi-plus"
+                    >
+                    </q-btn>
+                  </file-upload>
 <!--                </div>-->
 <!--              </v-col>-->
 <!--              <v-col-->
@@ -218,13 +219,13 @@
 
 import Cropper from 'cropperjs'
 import ImageCompressor from '@xkeshi/image-compressor'
-// import FileUpload from 'vue-upload-component'
+import FileUpload from 'vue-upload-component'
 import { Question } from 'src/models/Question'
 
 export default {
   name: 'UploadImg',
   components: {
-    // FileUpload
+    FileUpload
   },
   props: {
     value: {

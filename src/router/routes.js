@@ -44,6 +44,22 @@ const routes = [
             meta: {
               middlewares: [auth]
             }
+          },
+          {
+            path: '/question/mbti/create',
+            name: 'question.mbti.create',
+            component: () => (import('pages/Admin/Question/newMBTIpage')),
+            meta: {
+              middlewares: [auth]
+            }
+          },
+          {
+            path: '/question/create',
+            name: 'question.create',
+            component: () => (import('pages/Admin/Question/CreateNewQuestion')),
+            meta: {
+              middlewares: [auth]
+            }
           }
         ]
       },
@@ -85,6 +101,14 @@ const routes = [
     path: '/test',
     name: 'test',
     component: () => import('pages/Auth/test.vue'),
+    meta: {
+      middlewares: [auth]
+    }
+  },
+  {
+    path: '/user-info',
+    name: 'user-info',
+    component: () => import('pages/User/UserInfoForm'),
     meta: {
       middlewares: [auth]
     }
