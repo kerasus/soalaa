@@ -30,7 +30,7 @@ const routes = [
             }
           },
           {
-            path: 'edit-exam',
+            path: ':examId/edit-exam',
             name: 'edit-exam',
             component: () => import('pages/Admin/exam/edit/editExam'),
             meta: {
