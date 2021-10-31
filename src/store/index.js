@@ -4,6 +4,7 @@ import createPersistedState from 'vuex-persistedstate'
 // import Auth from 'src/store/module-example/Auth'
 import Auth from 'src/store/Auth'
 import loading from 'src/store/loading'
+import AppLayout from 'src/store/AppLayout'
 
 /*
  * If not building with SSR mode, you can
@@ -18,7 +19,8 @@ export default store(function (/* { ssrContext } */) {
   const Store = createStore({
     modules: {
       Auth,
-      loading
+      loading,
+      AppLayout
     },
     plugins: [
       createPersistedState({

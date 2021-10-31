@@ -3,13 +3,16 @@
     <exam-list
       @upload="selectUploadAnswers"
     />
-    <q-dialog v-model="dialog" persistent>
+    <q-dialog
+      v-model="dialog"
+      persistent
+    >
       <q-card>
         <q-card-section>
           <q-btn icon="close" flat round dense @click="closeDialog" />
         </q-card-section>
         <q-card-section>
-          <upload-answers examId="id"/>
+          <upload-file :examId="id"/>
         </q-card-section>
       </q-card>
     </q-dialog>
@@ -18,21 +21,20 @@
 
 <script>
 import ExamList from 'src/components/OnlineQuiz/Quiz/ExamList'
-import UploadAnswers from 'src/components/OnlineQuiz/Quiz/uploadAnswers'
-import { Exam } from 'src/models/Exam'
+import uploadFile from 'src/components/OnlineQuiz/Quiz/uploadFile'
 
 export default {
-  name: 'Manage',
-  components: { ExamList, UploadAnswers },
+  name: 'list',
+  components: { ExamList, uploadFile },
   data () {
     return {
       dialog: false,
-      exam: new Exam()
+      id: null
     }
   },
   methods: {
     selectUploadAnswers (id) {
-      this.exam = new Exam(id)
+      this.id = id
       this.dialog = true
     },
     closeDialog () {
@@ -44,5 +46,7 @@ export default {
 </script>
 
 <style scoped>
-
+.q-dialog__inner--minimized > div {
+  max-width: 800px;
+}
 </style>
