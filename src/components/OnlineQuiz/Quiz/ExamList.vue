@@ -72,7 +72,7 @@
                   v-ripple:yellow
                   clickable
                   manual-focus
-                  :to="{ name: 'edit-exam', params: { exam: tableRow}}"
+                  @click="sendExamInfo(tableRow.id)"
                 >
                   <q-item-section> ویرایش آزمون</q-item-section>
                 </q-item>
@@ -80,7 +80,7 @@
                   v-ripple:yellow
                   clickable
                   manual-focus
-                  :to="{ name: 'edit-exam-report', params: { quizId: tableRow.id, quizTitle: tableRow.title}}"
+                  @click="sendExamReportInfo"
                 >
                   <q-item-section>ویرایش کارنامه</q-item-section>
                 </q-item>
@@ -212,7 +212,7 @@
     <div class="text-center">
       <q-btn
         elevation="2"
-        :to="{ name: 'edit-exam', params: { quiz: null }}"
+        @click="sendExamInfo(null)"
       >
         ثبت آزمون جدید
       </q-btn>
@@ -290,7 +290,23 @@ export default {
     rowClick (evt, row, index) {
       this.index = index
       this.tableRow = row
-      console.log(this.tableRow)
+      console.log('row:', this.tableRow)
+    },
+    sendExamInfo (id) {
+      this.$router.push({
+        name: 'edit-exam',
+        params: {
+          examId: id
+        }
+      })
+    },
+    sendExamReportInfo () {
+      this.$router.push({
+        name: 'edit-exam',
+        params: {
+          examId: this.tableRow.id
+        }
+      })
     },
     generateJsonFile (exams, withAnswer) {
       this.$store.dispatch('loading/linearLoading', true)
