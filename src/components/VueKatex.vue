@@ -8,11 +8,11 @@
 </template>
 
 <script>
-// eslint-disable-next-line import/default
-import Vue from 'vue'
+import { createApp } from 'vue'
+const app = createApp({})
 import VueKatex from 'vue-katex'
 import 'katex/dist/katex.min.css'
-Vue.use(VueKatex, {
+app.use(VueKatex, {
   globalOptions: {
     delimiters: [
       { left: '$$', right: '$$', display: true },
