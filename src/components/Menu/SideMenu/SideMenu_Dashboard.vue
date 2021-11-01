@@ -44,24 +44,33 @@
       </router-link>
 
       <v-list-group
-          class="question_bank"
-          color="white"
+        class="question_bank"
+        color="white"
       >
         <template v-slot:activator>
           <v-list-item-title>
             برنامه آزمون ها
           </v-list-item-title>
         </template>
-        <a v-for="(examPlan, index) in examsPlan"
-           :key="index"
-           :href="examPlan.link"
-           target="_blank"
-            class="text-decoration-none"
+        <template
+          v-for="(examPlan, index) in examsPlan"
         >
-          <v-list-item>
-            <v-list-item-title v-text="examPlan.name" />
-          </v-list-item>
-        </a>
+          <a
+            v-if="!examPlan.divider"
+            :key="index"
+            :href="examPlan.link"
+            target="_blank"
+            class="text-decoration-none"
+          >
+            <v-list-item>
+              <v-list-item-title v-text="examPlan.name" />
+            </v-list-item>
+          </a>
+          <v-divider
+            v-else
+            :key="index"
+          />
+        </template>
       </v-list-group>
 
       <router-link
@@ -251,6 +260,9 @@ export default {
     ],
     examsPlan: [
       {
+        divider: true
+      },
+      {
         name: 'دهم تجربی',
         link: 'https://nodes.alaatv.com/aaa/pdf/1401_plan_tajrobi_dahom.pdf'
       },
@@ -261,6 +273,9 @@ export default {
       {
         name: 'دهم انسانی',
         link: 'https://nodes.alaatv.com/aaa/pdf/1401_plan_ensani_dahom.pdf'
+      },
+      {
+        divider: true
       },
       {
         name: 'یازدهم تجربی',
@@ -275,6 +290,9 @@ export default {
         link: 'https://nodes.alaatv.com/aaa/pdf/1401_plan_ensani_yazdahom.pdf'
       },
       {
+        divider: true
+      },
+      {
         name: 'دوازدهم تجربی',
         link: 'https://nodes.alaatv.com/aaa/pdf/1401_plan_tajrobi_davazdahom.pdf'
       },
@@ -285,6 +303,9 @@ export default {
       {
         name: 'دوازدهم انسانی',
         link: 'https://nodes.alaatv.com/aaa/pdf/1401_plan_ensani_davazdahom.pdf'
+      },
+      {
+        divider: true
       }
     ]
   }),
