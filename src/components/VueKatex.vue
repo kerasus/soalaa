@@ -82,7 +82,7 @@ export default {
     table {
       border-collapse: collapse;
       table-layout: fixed;
-      width: 100%;
+      width: auto;
       margin: 0;
       overflow: hidden;
 
