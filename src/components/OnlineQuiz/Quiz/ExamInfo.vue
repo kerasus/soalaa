@@ -7,7 +7,7 @@
     />
     <br>
     <q-select
-      v-model="examType"
+      v-model="type"
       :options="examTypes"
       emit-value
       map-options
@@ -20,10 +20,35 @@
       <q-input
         filled
         v-model="examInfo.start_at"
-        mask="date"
-        :rules="['date']"
+        mask="datetime"
       >
         <template v-slot:append>
+          <q-icon
+            name="access_time"
+            class="cursor-pointer"
+          >
+            <q-popup-proxy
+              transition-show="scale"
+              transition-hide="scale"
+            >
+              <q-time
+                v-model="examInfo.start_at"
+                format24h
+                mask="YYYY-MM-DD HH:mm"
+              >
+                <div class="row items-center justify-end">
+                  <q-btn
+                    v-close-popup
+                    label="Close"
+                    color="primary"
+                    flat
+                  />
+                </div>
+              </q-time>
+            </q-popup-proxy>
+          </q-icon>
+        </template>
+        <template v-slot:prepend>
           <q-icon
             name="event"
             class="cursor-pointer"
@@ -33,7 +58,13 @@
               transition-show="scale"
               transition-hide="scale"
             >
-              <q-date v-model="examInfo.start_at">
+              <q-date
+                v-model="examInfo.start_at"
+                calendar="persian"
+                mask="YYYY-MM-DD HH:mm"
+                today-btn
+                @update:model-value="test"
+              >
                 <div class="row items-center justify-end">
                   <q-btn
                     v-close-popup
@@ -54,10 +85,34 @@
       <q-input
         filled
         v-model="examInfo.finish_at"
-        mask="date"
-        :rules="['date']"
+        mask="datetime"
       >
         <template v-slot:append>
+          <q-icon
+            name="access_time"
+            class="cursor-pointer"
+          >
+            <q-popup-proxy
+              transition-show="scale"
+              transition-hide="scale">
+              <q-time
+                v-model="examInfo.finish_at"
+                mask="YYYY-MM-DD HH:mm"
+                format24h
+              >
+                <div class="row items-center justify-end">
+                  <q-btn
+                    v-close-popup
+                    label="Close"
+                    color="primary"
+                    flat
+                  />
+                </div>
+              </q-time>
+            </q-popup-proxy>
+          </q-icon>
+        </template>
+        <template v-slot:prepend>
           <q-icon
             name="event"
             class="cursor-pointer"
@@ -67,7 +122,12 @@
               transition-show="scale"
               transition-hide="scale"
             >
-              <q-date v-model="examInfo.finish_at">
+              <q-date
+                v-model="examInfo.finish_at"
+                calendar="persian"
+                mask="YYYY-MM-DD HH:mm"
+                @update:model-value="test"
+              >
                 <div class="row items-center justify-end">
                   <q-btn
                     v-close-popup
@@ -126,8 +186,7 @@
       />
     </div>
     <br>
-<!--    <div v-if="!examInfo.id">-->
-    <div>
+    <div  v-if="examInfo.id === null">
       <q-separator inset />
       <br>
       <div class="row">
@@ -183,8 +242,9 @@
         <div class="col-5">
           <q-select
             class="create-mode-category"
-            v-model="item.id"
+            v-model="item.title"
             :options="categoryTitles"
+            label-color="grey-8"
             label="category"
           />
         </div>
@@ -239,88 +299,141 @@ export default {
   data () {
     return {
       examId: null,
+      startDate: null,
+      finishDate: null,
       examList: new ExamList(),
       examInfo: new Exam(),
       examTypes: [],
       selectedCategory: null,
-      categoryList: new QuestCategoryList(),
+      categoryList: [],
       categoryTitles: [],
       selectedCategoryTime: 0,
       selectedCategoryOrder: 0
     }
   },
   created () {
+    this.examId = this.$route.params.examId
     this.getData()
     this.getOptions()
     this.getCategories()
   },
   computed: {
-    examType () {
+    type () {
       if (this.examInfo.type) {
         return this.examInfo.type.value
-      } else return ''
+      } else {
+        return ''
+      }
     }
   },
   methods: {
+    test (value, reason, details) {
+      console.log(value, '.....', reason, '....', details)
+      console.log(this.examInfo.start_at)
+      console.log(this.examInfo.finish_at)
+    },
     getData () {
-      this.examId = this.$route.params.examId
+      this.$store.dispatch('loading/linearLoading', true)
       this.$axios.get(API_ADDRESS.exam.base())
         .then((response) => {
-          console.log(' getData res:', response)
-          this.examList = response.data.data
-          console.log('getData examList:', this.examList)
-          console.log(this.examInfo)
-          this.examInfo = new Exam(this.examList.find(exam => exam.id === this.examId))
-          // this.examInfo.start_at = this.examInfo.shamsiDate('start_at').dateTime
-          // this.examInfo.finish_at = this.examInfo.shamsiDate('finish_at').dateTime
-          console.log('getData: examInfo', this.examInfo)
+          this.$store.dispatch('loading/linearLoading', false)
+          this.examList = new ExamList(response.data.data)
+          this.examInfo = new Exam(this.examList.list.find(exam => exam.id === this.examId))
+          console.log(this.examInfo.start_at)
+          console.log(this.examInfo.finish_at)
+          this.examInfo.start_at = this.examInfo.shamsiDate('start_at').dateTime
+          this.examInfo.start_at = this.convertToEnglish(this.examInfo.start_at)
+          this.examInfo.finish_at = this.examInfo.shamsiDate('finish_at').dateTime
+          this.examInfo.finish_at = this.convertToEnglish(this.examInfo.finish_at)
+          console.log(this.examInfo.start_at)
+          console.log(this.examInfo.finish_at)
+        })
+        .catch(() => {
+          this.$store.dispatch('loading/linearLoading', false)
         })
     },
+    convertToEnglish (digit) {
+      const p2e = s => s.replace(/[۰-۹]/g, d => '۰۱۲۳۴۵۶۷۸۹'.indexOf(d))
+      digit = p2e(digit)
+      return digit
+    },
     getOptions () {
+      this.$store.dispatch('loading/linearLoading', true)
       this.$axios.get(API_ADDRESS.option.base)
         .then((response) => {
+          this.$store.dispatch('loading/linearLoading', false)
           const options = response.data.data.filter(data => data.type === 'exam_type')
           options.forEach(option => {
             this.examTypes.push(option.value)
           })
         })
+        .catch(() => {
+          this.$store.dispatch('loading/linearLoading', false)
+        })
     },
     getCategories () {
+      this.$store.dispatch('loading/linearLoading', true)
       this.$axios.get(API_ADDRESS.questionCategory.base)
         .then((response) => {
+          this.$store.dispatch('loading/linearLoading', false)
           this.categoryList = new QuestCategoryList(response.data.data)
           this.categoryList.list.forEach(category => {
             this.categoryTitles.push(category.title)
           })
         })
-        .catch(() => {})
+        .catch(() => {
+          this.$store.dispatch('loading/linearLoading', false)
+        })
     },
     addCategory () {
+      const category = this.categoryList.list.find(item => item.title === this.selectedCategory)
       this.examInfo.categories.list.push(new QuestCategory({
-        id: this.selectedCategory,
+        id: category.id,
         time: this.selectedCategoryTime,
-        order: this.selectedCategoryOrder
+        order: this.selectedCategoryOrder,
+        title: this.selectedCategory
       }))
     },
     deleteCategory (id) {
-      this.examInfo.categories.list = this.exam.categories.list.filter(item => item.id !== id)
+      if (this.examInfo.categories.list) {
+        this.examInfo.categories.list = this.examInfo.categories.list.filter(item => item.id !== id)
+        // Added to Memories :)
+        // this.examInfo.categories.list = this.exam.categories.list.filter(item => item.id !== id)
+      }
     },
     createExam () {
+      this.$store.dispatch('loading/overlayLoading', true)
       this.examInfo.photo = 'https://cdn.alaatv.com/upload/images/slideShow/home-slide-yalda-festival_20201219075413.jpg?w=1843&h=719'
       if (this.examInfo.id) {
         this.examInfo.update(API_ADDRESS.exam.editExam + '/' + this.examInfo.id)
           .then((res) => {
+            this.$store.dispatch('loading/overlayLoading', false)
             console.log('update res:', res)
+            this.$q.notify({
+              type: 'positive',
+              message: 'تغییرات با موفقیت اعمال شد',
+              position: 'top'
+            })
           })
           .catch((err) => {
+            this.$store.dispatch('loading/overlayLoading', false)
             console.log('update err:', err)
           })
       } else {
         this.examInfo.create()
           .then((res) => {
             console.log('create res:', res)
+            this.$q.notify({
+              type: 'positive',
+              message: 'آزمون با موفقیت ایجاد شد',
+              position: 'top'
+            })
+          })
+          .catch((err) => {
+            console.log('err', err)
           })
       }
+      console.log('sabt', this.examInfo)
     }
   }
 }

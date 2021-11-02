@@ -212,7 +212,7 @@
     <div class="text-center">
       <q-btn
         elevation="2"
-        @click="sendExamInfo(null)"
+        :to="{ name: 'create'}"
       >
         ثبت آزمون جدید
       </q-btn>
@@ -267,13 +267,20 @@ export default {
           for (const index in this.rows) {
             this.rows[index].delay_time += ' دقیقه'
             this.rows[index].start_at = this.rows[index].shamsiDate('start_at').dateTime
+            this.rows[index].start_at = this.convertToEnglish(this.rows[index].start_at)
             this.rows[index].finish_at = this.rows[index].shamsiDate('finish_at').dateTime
+            this.rows[index].finish_at = this.convertToEnglish(this.rows[index].finish_at)
           }
         })
         .catch(() => {
           this.$store.dispatch('loading/linearLoading', false)
           this.examList = new ExamList()
         })
+    },
+    convertToEnglish (digit) {
+      const p2e = s => s.replace(/[۰-۹]/g, d => '۰۱۲۳۴۵۶۷۸۹'.indexOf(d))
+      digit = p2e(digit)
+      return digit
     },
     nextPage () {
       if (this.pagination.page !== this.lastPage && this.pagination.page < this.lastPage) {
@@ -294,7 +301,7 @@ export default {
     },
     sendExamInfo (id) {
       this.$router.push({
-        name: 'edit-exam',
+        name: 'edit',
         params: {
           examId: id
         }
@@ -302,7 +309,7 @@ export default {
     },
     sendExamReportInfo () {
       this.$router.push({
-        name: 'edit-exam',
+        name: 'edit-exam-report',
         params: {
           examId: this.tableRow.id
         }
