@@ -3,108 +3,113 @@
     <v-row>
       <v-col>
         <div
-            v-if="source.confirmers.length"
-            class="d-inline"
+          v-if="source.confirmers.length"
+          class="d-inline"
         >
           تایید شده توسط:
         </div>
         <v-chip
-            v-for="(item, index) in source.confirmers"
-            :key="index"
-            color="#C8E6C9"
-            class="ml-3"
-            pill
+          v-for="(item, index) in source.confirmers"
+          :key="index"
+          color="#C8E6C9"
+          class="ml-3"
+          pill
         >
           <v-avatar left>
-            <v-img :src="item.photo"/>
+            <v-img :src="item.photo" />
           </v-avatar>
           {{ item.first_name + ' ' + item.last_name }}
         </v-chip>
       </v-col>
     </v-row>
-    <div class="buttons-group">
+
+    <div class="d-flex buttons-group">
       <v-select
-          v-if="false"
-          :items="quizList.list"
-          item-text="title"
-          chips
-          multiple
-          attach
-          outlined
-          dense
-          full-width
+        v-if="false"
+        :items="quizList.list"
+        item-text="title"
+        chips
+        multiple
+        attach
+        outlined
+        dense
+        full-width
       />
       <v-btn
-          icon
-          color="red"
-          @click="deleteQuestion()"
+        icon
+        color="red"
+        @click="deleteQuestion()"
       >
         <v-icon :size="24">
           mdi-close
         </v-icon>
       </v-btn>
       <v-btn
-          icon
-          @click="detachQuestion()"
+        icon
+        @click="detachQuestion()"
       >
         <v-icon :size="24">
           mdi-close
         </v-icon>
       </v-btn>
       <v-btn
-          icon
-          :to="{ name: 'question.edit', params: { question_id: source.id } }"
+        icon
+        :to="{ name: 'question.edit', params: { question_id: source.id } }"
       >
         <v-icon :size="24">
           mdi-pencil
         </v-icon>
       </v-btn>
       <input
-          :id="'question-id' + source.id"
-          :ref="'question-id-' + source.id"
-          :value="source.id"
-          type="text"
-          class="not-visible"
+        :id="'question-id' + source.id"
+        :ref="'question-id-' + source.id"
+        :value="source.id"
+        type="text"
+        class="not-visible"
       >
       <v-btn
-          icon
-          @click="copyIdToClipboard(source.id)"
+        icon
+        @click="copyIdToClipboard(source.id)"
       >
         <v-icon>mdi-content-copy</v-icon>
       </v-btn>
       <v-switch
-          v-model="source.confirmed"
-          color="success"
-          :loading="confirmLoading"
-          hide-details
-          @change="confirmQuestion"
+        v-model="source.confirmed"
+        color="success"
+        :loading="confirmLoading"
+        hide-details
+        @change="confirmQuestion"
       />
     </div>
+    <slot
+      name="chartDetail"
+    />
     <!--ToDo: remove span-->
     <span
-        :id="'question' + source.id"
-        v-intersect="{
+      :id="'question' + source.id"
+      v-intersect="{
         handler: onIntersect,
         options: {
           threshold: [0, 0.2, 0.4, 0.6, 0.8, 1.0]
         }
       }"
-        class="question-body renderedPanel"
-        :class="{ ltr: isLtr }"
+      class="question-body renderedPanel"
+      :class="{ ltr: isLtr }"
     >
       <vue-katex
-          :input="(getQuestionNumberFromId(source.id)) + '(' + getSubCategoryName + ')' + ' (' + source.order + ') - ' + source.statement"/>
+        :input="'(' + getSubCategoryName + ')' + ' (' + source.order + ') - ' + source.statement"
+      />
     </span>
     <v-row class="choices">
       <v-col
-          v-for="(choice, index) in source.choices.list"
-          :key="choice.id"
-          :cols="choiceClass"
-          :class="{ choice: true, renderedPanel: true, active: choice.answer, ltr: isLtr }"
+        v-for="(choice, index) in source.choices.list"
+        :key="choice.id"
+        :cols="choiceClass"
+        :class="{ choice: true, renderedPanel: true, active: choice.answer, ltr: isLtr }"
       >
         <vue-katex
-            :input="(choiceNumber[index]) + choice.title"
-            :ltr="isLtrQuestion"
+          :input="(choiceNumber[index]) + choice.title"
+          :ltr="isLtrQuestion"
         />
       </v-col>
     </v-row>
@@ -358,7 +363,6 @@ export default {
 .current-question {
   background-color: #fffaee;
 }
-
 .choices {
   display: flex;
   flex-direction: row;
@@ -371,9 +375,9 @@ export default {
 
 .buttons-group {
   float: left;
-  display: flex;
-  flex-direction: row;
-  justify-content: space-around;
+  /*display: flex;*/
+  /*flex-direction: row;*/
+  /*justify-content: space-around;*/
 }
 
 .choice.active::before {
