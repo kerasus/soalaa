@@ -8,7 +8,7 @@
     <br>
     <q-select
       v-model="type"
-      :options="examTypes"
+      :options="types"
       emit-value
       map-options
       label-color="grey-8"
@@ -35,7 +35,7 @@
                 v-model="examInfo.start_at"
                 mask="YYYY-MM-DD HH:mm"
                 format24h
-                @update:model-value="test2"
+                @update:model-value=" changeDate"
               >
                 <div class="row items-center justify-end">
                   <q-btn
@@ -64,7 +64,7 @@
                 mask="YYYY-MM-DD HH:mm"
                 calendar="persian"
                 today-btn
-                @update:model-value="test"
+                @update:model-value=" changeDate"
               >
                 <div class="row items-center justify-end">
                   <q-btn
@@ -127,7 +127,7 @@
                 v-model="examInfo.finish_at"
                 calendar="persian"
                 mask="YYYY-MM-DD HH:mm"
-                @update:model-value="test"
+                @update:model-value="changeDate"
               >
                 <div class="row items-center justify-end">
                   <q-btn
@@ -303,7 +303,7 @@ export default {
       examId: null,
       examList: new ExamList(),
       examInfo: new Exam(),
-      examTypes: [],
+      types: [],
       selectedCategory: null,
       categoryList: [],
       categoryTitles: [],
@@ -327,14 +327,17 @@ export default {
     }
   },
   methods: {
-    test (value, reason, details) {
+    changeDate (value, reason, details) {
       console.log('change:', this.examInfo.start_at)
-      this.examInfo.start_at = date.formatDate(this.examInfo.start_at, 'YYYY-MM-DD HH:mm:ss')
-      // console.log(value, '.....', reason, '....', details)
+      this.dateFormat(this.examInfo.start_at, 'start_at')
       console.log('change:', this.examInfo.start_at)
       console.log(this.examInfo.finish_at)
     },
-    test2 (value, details) {
+    dateFormat (item, key) {
+      item = this.examInfo.shamsiDate(key).dateTime
+      item = this.convertToEnglish(item)
+      item = date.formatDate(item, 'YYYY-MM-DD HH:mm:ss')
+      console.log('hi', item)
     },
     getData () {
       this.$store.dispatch('loading/linearLoading', true)
@@ -345,12 +348,13 @@ export default {
           this.examInfo = new Exam(this.examList.list.find(exam => exam.id === this.examId))
           console.log('before', this.examInfo.start_at)
           console.log(this.examInfo.finish_at)
-          this.examInfo.start_at = this.examInfo.shamsiDate('start_at').dateTime
-          this.examInfo.start_at = this.convertToEnglish(this.examInfo.start_at)
-          this.examInfo.start_at = date.formatDate(this.examInfo.start_at, 'YYYY-MM-DD HH:mm:ss')
-          this.examInfo.finish_at = this.examInfo.shamsiDate('finish_at').dateTime
-          this.examInfo.finish_at = this.convertToEnglish(this.examInfo.finish_at)
-          this.examInfo.finish_at = date.formatDate(this.examInfo.finish_at, 'YYYY-MM-DD HH:mm:ss')
+          // this.examInfo.start_at = this.examInfo.shamsiDate('start_at').dateTime
+          // this.examInfo.start_at = this.convertToEnglish(this.examInfo.start_at)
+          // this.examInfo.start_at = date.formatDate(this.examInfo.start_at, 'YYYY-MM-DD HH:mm:ss')
+          // this.examInfo.finish_at = this.examInfo.shamsiDate('finish_at').dateTime
+          // this.examInfo.finish_at = this.convertToEnglish(this.examInfo.finish_at)
+          // this.examInfo.finish_at = date.formatDate(this.examInfo.finish_at, 'YYYY-MM-DD HH:mm:ss')
+          this.dateFormat(this.examInfo.start_at, 'start_at')
           console.log('after', this.examInfo.start_at)
           console.log(this.examInfo.finish_at)
         })
@@ -370,7 +374,7 @@ export default {
           this.$store.dispatch('loading/linearLoading', false)
           const options = response.data.data.filter(data => data.type === 'exam_type')
           options.forEach(option => {
-            this.examTypes.push(option.value)
+            this.types.push(option.value)
           })
         })
         .catch(() => {
