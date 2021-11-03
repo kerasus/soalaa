@@ -79,6 +79,7 @@ export default {
 
   .html-katex {
     width: 100%;
+    display: grid;
 
     .katex {
       direction: ltr;

@@ -102,5 +102,9 @@ export default {
 .tiptap-plus-container.focused {
   border: solid 1px #dedede;
 }
+
+.mord {
+  font-family: IRANSans;
+}
 </style>
 
