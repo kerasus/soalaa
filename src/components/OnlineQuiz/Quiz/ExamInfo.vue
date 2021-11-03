@@ -33,8 +33,9 @@
             >
               <q-time
                 v-model="examInfo.start_at"
-                format24h
                 mask="YYYY-MM-DD HH:mm"
+                format24h
+                @update:model-value="test2"
               >
                 <div class="row items-center justify-end">
                   <q-btn
@@ -60,8 +61,8 @@
             >
               <q-date
                 v-model="examInfo.start_at"
-                calendar="persian"
                 mask="YYYY-MM-DD HH:mm"
+                calendar="persian"
                 today-btn
                 @update:model-value="test"
               >
@@ -294,13 +295,12 @@
 import { Exam, ExamList } from 'src/models/Exam'
 import { QuestCategory, QuestCategoryList } from 'src/models/QuestCategory'
 import API_ADDRESS from 'src/api/Addresses'
+import { date } from 'quasar'
 export default {
   name: 'ExamInfo',
   data () {
     return {
       examId: null,
-      startDate: null,
-      finishDate: null,
       examList: new ExamList(),
       examInfo: new Exam(),
       examTypes: [],
@@ -328,9 +328,13 @@ export default {
   },
   methods: {
     test (value, reason, details) {
-      console.log(value, '.....', reason, '....', details)
-      console.log(this.examInfo.start_at)
+      console.log('change:', this.examInfo.start_at)
+      this.examInfo.start_at = date.formatDate(this.examInfo.start_at, 'YYYY-MM-DD HH:mm:ss')
+      // console.log(value, '.....', reason, '....', details)
+      console.log('change:', this.examInfo.start_at)
       console.log(this.examInfo.finish_at)
+    },
+    test2 (value, details) {
     },
     getData () {
       this.$store.dispatch('loading/linearLoading', true)
@@ -339,13 +343,15 @@ export default {
           this.$store.dispatch('loading/linearLoading', false)
           this.examList = new ExamList(response.data.data)
           this.examInfo = new Exam(this.examList.list.find(exam => exam.id === this.examId))
-          console.log(this.examInfo.start_at)
+          console.log('before', this.examInfo.start_at)
           console.log(this.examInfo.finish_at)
           this.examInfo.start_at = this.examInfo.shamsiDate('start_at').dateTime
           this.examInfo.start_at = this.convertToEnglish(this.examInfo.start_at)
+          this.examInfo.start_at = date.formatDate(this.examInfo.start_at, 'YYYY-MM-DD HH:mm:ss')
           this.examInfo.finish_at = this.examInfo.shamsiDate('finish_at').dateTime
           this.examInfo.finish_at = this.convertToEnglish(this.examInfo.finish_at)
-          console.log(this.examInfo.start_at)
+          this.examInfo.finish_at = date.formatDate(this.examInfo.finish_at, 'YYYY-MM-DD HH:mm:ss')
+          console.log('after', this.examInfo.start_at)
           console.log(this.examInfo.finish_at)
         })
         .catch(() => {
