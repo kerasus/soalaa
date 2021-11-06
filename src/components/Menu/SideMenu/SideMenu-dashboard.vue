@@ -1,111 +1,103 @@
 <template>
-<div>
-  <q-list
-    class="side-menu-list"
-    padding
-  >
-    <router-link
-      v-for="(userItem , index) in userList"
-      :key="index"
-      :to="userItem.to"
+  <div>
+    <q-list
+      class="side-menu-list"
+      padding
     >
-      <q-item
-        clickable
-        v-ripple:deep-purple
-        v-model="userGroup"
-        :active="false"
-        active-class=""
+      <router-link
+        v-for="(userItem , index) in userList"
+        :key="index"
+        :to="userItem.to"
       >
-        <q-item-section class="side-list-item">
-          <span class="list-title">{{userItem.displayName}}</span>
-          <span
-            v-if="true"
-            class="indicator"
-          />
-        </q-item-section>
-      </q-item>
-    </router-link>
-  </q-list>
-  <q-separator class="bg-white" size="px" />
-  <q-list
-    dense
-    padding
-    class="side-menu-list"
-  >
-    <router-link
-      v-for="(adminItem , index) in adminList"
-      :key="index"
-      :to="adminItem.to"
+        <q-item
+          clickable
+          v-ripple:deep-purple
+          v-model="userGroup"
+          :active="$route.name === userItem .name"
+          active-class="active-route"
+        >
+          <q-item-section class="side-list-item">
+            <span class="list-title">{{userItem.displayName}}</span>
+            <span
+              v-if="true"
+              class="indicator"
+            />
+          </q-item-section>
+        </q-item>
+      </router-link>
+    </q-list>
+    <q-separator class="bg-white" size="px" />
+    <q-list
+      dense
+      padding
+      class="side-menu-list"
     >
-      <q-item
-        clickable
-        v-ripple
-        v-model="adminGroup"
+      <router-link
+        v-for="(adminItem , index) in adminList"
+        :key="index"
+        :to="adminItem.to"
       >
-        <q-item-section class="side-list-item">
+        <q-item
+          clickable
+          v-ripple:deep-purple-5
+          v-model="adminGroup"
+          :active="$route.name === adminItem.name"
+          active-class="active-route"
+        >
+          <q-item-section class="side-list-item">
         <span class="list-title">
           {{adminItem.displayName}}
         </span>
-          <span
-            v-if="true"
-            class="indicator"
-          />
-        </q-item-section>
-      </q-item>
-    </router-link>
-  </q-list>
-  <q-separator class="bg-white" size="px" />
-  <q-list
-    class="side-menu-list"
-    padding
-    dark
-  >
-    <q-expansion-item
-      style="font-size:16px; "
-      icon="account_balance"
-      label="بانک سوال"
+            <span
+              v-if="true"
+              class="indicator"
+            />
+          </q-item-section>
+        </q-item>
+      </router-link>
+    </q-list>
+    <q-separator class="bg-white" size="px" />
+    <q-list
+      class="side-menu-list"
+      padding
+      dark
     >
-      <q-list
-        class="bg-primary"
-        style="text-align: right !important;"
+      <q-expansion-item
+        style="font-size:16px; "
+        icon="account_balance"
+        label="بانک سوال"
       >
-        <router-link to="/question/create">
-          <q-item
-            clickable
-            v-close-popup
-            to="/question/create"
+        <q-list
+          class="side-menu-list"
+          padding
+        >
+          <router-link
+            v-for="(questionBankItem , index) in questionBankList"
+            :key="index"
+            :to="questionBankItem.to"
           >
-            <q-item-section class="side-list-item">
+            <q-item
+              clickable
+              v-ripple:deep-purple
+              v-model="questionGroup"
+              :active="$route.name === questionBankItem .name"
+              active-class="active-route"
+            >
+              <q-item-section class="side-list-item">
               <span class="list-title">
-              سوال جدید
+                {{questionBankItem.displayName}}
               </span>
-              <span
-                v-if="true"
-                class="indicator"
-              />
-            </q-item-section>
-          </q-item>
-        </router-link>
-        <router-link to="">
-          <q-item
-            clickable
-            v-close-popup
-          >
-            <q-item-section class="side-list-item">
-              <span class="list-title">
-              کارخانه ی سوال
-              </span>
-              <span
-                v-if="true"
-                class="indicator"
-              />
-            </q-item-section>
-          </q-item>
-        </router-link>
-      </q-list>
-    </q-expansion-item>
-  </q-list>
-</div>
+                <span
+                  v-if="true"
+                  class="indicator"
+                />
+              </q-item-section>
+            </q-item>
+          </router-link>
+        </q-list>
+      </q-expansion-item>
+    </q-list>
+  </div>
 </template>
 
 <script>
@@ -115,6 +107,7 @@ export default {
     return {
       userGroup: null,
       adminGroup: null,
+      questionGroup: null,
       activeRoute: null,
       userList: [
         {
@@ -131,7 +124,7 @@ export default {
       adminList: [
         {
           displayName: 'لیست آزمون ها',
-          to: 'exam-list',
+          to: '/dashboard',
           name: 'exam-list'
         },
         {
@@ -159,27 +152,42 @@ export default {
           to: '/question/mbti/create',
           name: 'question.mbti.create'
         }
+      ],
+      questionBankList: [
+        {
+          displayName: 'سوال جدید',
+          to: '/question/create',
+          name: 'user.exam'
+        },
+        {
+          displayName: ' کارخانه ی سوال',
+          to: 'user-exam',
+          name: 'user.exam'
+        }
       ]
     }
-  },
-  methods: {}
+  }
 }
 </script>
 
 <style lang="scss" scoped>
 .q-list{
   &.side-menu-list{
-    .side-list-item{
-      justify-content: space-between;
-      align-items: center;
-      .list-title{
-        justify-content: start;
-      }
+    .active-route{
+      background-color: rgba(98,0,234,0.12);
+      color: rgb(255,255,255,0.6) !important;
       .indicator{
         height: 50%;
         width: 3px;
         background-color: white;
         justify-content: end;
+      }
+    }
+    .side-list-item{
+      justify-content: space-between;
+      align-items: center;
+      .list-title{
+        justify-content: start;
       }
     }
   }

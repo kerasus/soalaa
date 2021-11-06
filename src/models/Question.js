@@ -1,5 +1,5 @@
 /* eslint-disable camelcase,array-callback-return */
-// import Vue from 'vue'
+import Time from 'src/plugins/time'
 import { Model, Collection } from 'js-abstract-model'
 import { ChoiceList } from './Choice'
 import { CheckingTimeList } from '../models/CheckingTime'
@@ -207,11 +207,11 @@ class Question extends Model {
     if (newState === 'x') {
       this.uncheckChoices()
     }
-    // if (newState === this.state) {
-    //   // Vue.set(this, 'state', '') ToDo : import vue
-    //   return
-    // }
-    // Vue.set(this, 'state', newState) ToDo : import vue
+    if (newState === this.state) {
+      window.app.set(this, 'state', '')
+      return
+    }
+    window.app.set(this, 'state', newState)
   }
 
   bookmark () {
@@ -230,10 +230,10 @@ class Question extends Model {
     this.choices.list.map((item) => {
       if (item.id === choiceId) {
         item.answer = true
-        // Vue.set(item, 'answer', true) ToDo : import vue
+        window.app.set(item, 'answer', true)
       } else {
         item.answer = false
-        // Vue.set(item, 'answer', false) ToDo : import vue
+        window.app.set(item, 'answer', false)
       }
 
       return item
@@ -241,26 +241,26 @@ class Question extends Model {
   }
 
   selectChoice (choiceId, selected_at) {
-    // let answeredAt = Time.now()
-    // if (selected_at) {
-    //   answeredAt = selected_at
-    // }
+    let answeredAt = Time.now()
+    if (selected_at) {
+      answeredAt = selected_at
+    }
     const that = this
     this.choices.list.map((item) => {
-      // Vue.set(item, 'answered_at', answeredAt)  ToDo : import vue
+      window.app.set(item, 'answered_at', answeredAt)
       if (that.state === 'x') {
         that.state = ''
-        // Vue.set(that, 'state', '') ToDo : import vue
+        window.app.set(that, 'state', '')
       }
       if (item.id !== choiceId) {
         item.active = false
-        // Vue.set(item, 'active', false) ToDo : import vue
+        window.app.set(item, 'active', false)
       } else if (choiceId === null || typeof choiceId === 'undefined' || item.active) {
-        // Vue.set(item, 'active', false) ToDo : import vue
-        // item.active = false
+        window.app.set(item, 'active', false)
+        item.active = false
       } else {
-        // Vue.set(item, 'active', true) ToDo : import vue
-        // item.active = true
+        window.app.set(item, 'active', true)
+        item.active = true
       }
     })
   }
@@ -268,7 +268,7 @@ class Question extends Model {
   uncheckChoices () {
     this.choices.list.map((item) => {
       item.active = false
-      // Vue.set(item, 'active', false) ToDo : import vue
+      window.app.set(item, 'active', false)
     })
   }
 

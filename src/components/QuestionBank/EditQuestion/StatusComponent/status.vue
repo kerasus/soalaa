@@ -1,56 +1,56 @@
 <template>
   <div>
-<!--  <v-row align="center" class="status">-->
-<!--    <v-col class="status-details">-->
-<!--      <p class="font-weight-medium">-->
-<!--        تغییر وضعیت-->
-<!--      </p>-->
-<!--      <v-card-->
-<!--        flat-->
-<!--        height="36"-->
-<!--        class="my-4"-->
-<!--      >-->
-<!--        <v-select-->
-<!--          v-model="newStatus.changeState"-->
-<!--          :items="statuses.list"-->
-<!--          item-text="display_title"-->
-<!--          item-value="id"-->
-<!--          dense-->
-<!--          solo-->
-<!--          flat-->
-<!--        />-->
-<!--      </v-card>-->
-<!--    </v-col>-->
-<!--    <v-col class="status-details">-->
-<!--      <p class="font-weight-medium">-->
-<!--        افزودن کامنت-->
-<!--      </p>-->
-<!--      <v-card-->
-<!--        flat-->
-<!--        height="36"-->
-<!--        class="my-4"-->
-<!--      >-->
-<!--        <v-text-field-->
-<!--          v-model="newStatus.commentAdded"-->
-<!--          height="36"-->
-<!--          solo-->
-<!--          dense-->
-<!--          flat-->
-<!--        />-->
-<!--      </v-card>-->
-<!--    </v-col>-->
-<!--    <v-col class="mt-7" flat>-->
-<!--      <v-btn-->
-<!--        color="success"-->
-<!--        :loading="loading"-->
-<!--        :disabled="loading"-->
-<!--        @click="sendStatus"-->
-<!--        class="status-button"-->
-<!--      >-->
-<!--        ذخیره-->
-<!--      </v-btn>-->
-<!--    </v-col>-->
-<!--  </v-row>-->
+    <div class="status row items-center">
+      <div class="status-details">
+        <p class="font-weight-medium">
+          تغییر وضعیت
+        </p>
+        <q-card
+          flat
+          class="status-card q-my-md"
+        >
+          <!--    todo v-select-->
+          <!--        <v-select-->
+          <!--          v-model="newStatus.changeState"-->
+          <!--          :items="statuses.list"-->
+          <!--          item-text="display_title"-->
+          <!--          item-value="id"-->
+          <!--          dense-->
+          <!--          solo-->
+          <!--          flat-->
+          <!--        />-->
+        </q-card>
+      </div>
+      <div class="col status-details">
+        <p class="font-weight-medium">
+          افزودن کامنت
+        </p>
+        <q-card
+          flat
+          class="q-my-md status-card"
+        >
+          <!--    todo v-text-field-->
+          <!--        <v-text-field-->
+          <!--          v-model="newStatus.commentAdded"-->
+          <!--          height="36"-->
+          <!--          solo-->
+          <!--          dense-->
+          <!--          flat-->
+          <!--        />-->
+        </q-card>
+      </div>
+      <div class="col q-mt-lg">
+        <q-btn
+          color="success"
+          :loading="loading"
+          :disabled="loading"
+          @click="sendStatus"
+          class="status-button"
+        >
+          ذخیره
+        </q-btn>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -91,8 +91,13 @@ export default {
 .status-details .v-sheet.v-card {
   border-radius: 10px;
 }
+
 .status .v-btn {
   box-shadow: none;
   border-radius: 10px;
+}
+
+.status .status-card {
+  height: 36px;
 }
 </style>
