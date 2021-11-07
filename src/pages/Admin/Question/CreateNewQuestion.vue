@@ -38,20 +38,20 @@
           @input="updateQuestion"
         />
         <div class="col-4">
-          <!--     todo q-select-->
-<!--          <q-select-->
-<!--            v-if="getPageStatus() === 'create'"-->
-<!--            v-model="currentQuestion.author"-->
-<!--            label="طراحان"-->
-<!--            dense-->
-<!--            multiple-->
-<!--            disabled-->
-<!--            use-chips-->
-<!--            :options="currentQuestion.author"-->
-<!--            item-text="full_name"-->
-<!--            item-value="id"-->
-<!--            outlined>-->
-<!--          </q-select>-->
+<!--          :options="currentQuestion.author"-->
+          <q-select
+            v-if="getPageStatus() === 'create'"
+            v-model="currentQuestion.author"
+            label="طراحان"
+            dense
+            outlined
+            rounded
+            multiple
+            disabled
+            use-chips
+            model-value=""
+          >
+          </q-select>
         </div>
         <attach_list
           :status="edit_status"
@@ -225,22 +225,21 @@ export default {
   //   console.log(to, from, next)
   // },
   created () {
-    // Todo : test we need to delete later
-    this.showPageDialog()
+    console.log(this.currentQuestion)
     window.onbeforeunload = function () {
       return 'Do you really want to leave our brilliant application?'
     }
 
     const that = this
+    console.log(API_ADDRESS.option.base)
     axios.get(API_ADDRESS.option.base + '?type=question_type')
       .then(function (response) {
         const optionQuestion = response.data.data.find(item => (item.value === 'konkur'))
         if (!optionQuestion) {
           // beterek
-          return this.$notify({
-            group: 'notifs',
-            text: ' API با مشکل مواجه شد!',
-            type: 'error'
+          return this.$q.notify({
+            message: ' API با مشکل مواجه شد!',
+            color: 'negative'
           })
         }
         that.optionQuestionId = optionQuestion.id
@@ -299,11 +298,10 @@ export default {
       currentQuestion.type_id = this.optionQuestionId
       currentQuestion.update(API_ADDRESS.question.updateQuestion(currentQuestion.id))
         .then(() => {
-          this.$notify({
-            group: 'notifs',
-            title: 'توجه',
-            text: 'ویرایش با موفقیت انجام شد',
-            type: 'success'
+          this.$q.notify({
+            message: 'ویرایش با موفقیت انجام شد',
+            color: 'green',
+            icon: 'thumb_up'
           })
           this.$router.push({ name: 'question.show', params: { question_id: this.$route.params.question_id } })
         })
@@ -666,11 +664,10 @@ export default {
           this.currentQuestion.choices.list.forEach((item) => {
             item.title = ''
           })
-          this.$notify({
-            group: 'notifs',
-            title: 'توجه',
-            text: 'ثبت با موفقیت انجام شد',
-            type: 'success'
+          this.$q.notify({
+            message: 'ثبت با موفقیت انجام شد',
+            color: 'green',
+            icon: 'thumb_up'
           })
           window.open('/question/create', '_blank').focus()
           this.$router.push({ name: 'question.show', params: { question_id: questionId } })

@@ -788,11 +788,10 @@ export default {
       el.select()
       document.execCommand('copy')
       document.body.removeChild(el)
-      this.$notify({
-        group: 'notifs',
-        title: 'توجه',
-        text: 'آدرس فایل به کلیپبورد منتقل شد',
-        type: 'success'
+      this.$q.notify({
+          message: 'آدرس فایل به کلیپبورد منتقل شد',
+          color: 'green',
+          icon: 'thumb_up'
       })
     },
     formatSize (size) {
