@@ -1,34 +1,35 @@
 <template>
   <!-- ------------------------- question -------------------------------  -->
-  <div class=" ma-4 question-layout">
+  <div class="q-ma-sm question-layout">
     <div class="question ">
       <div
           v-if="status"
-          class="mb-5 "
+          class="q-mb-md "
       >
         تایپ سوال
       </div>
-<!--      <question_field-->
-<!--          ref="questionStatement"-->
-<!--          :key="'statement' + domKey"-->
-<!--          v-model="question.statement"-->
-<!--          class="mb-10"-->
-<!--          :edit-status="status"-->
-<!--          placeholder="صورت سوال"-->
-<!--          :question-id="value.id ? value.id : 'null'"-->
-<!--          @input="updateQuestion"-->
-<!--      />-->
+      <question_field
+          ref="questionStatement"
+          :key="'statement' + domKey"
+          v-model="question.statement"
+          class="q-mb-lg"
+          :edit-status="status"
+          placeholder="صورت سوال"
+          :question-id="value.id ? value.id : 'null'"
+          @input="updateQuestion"
+      />
     </div>
-<!--    <v-row-->
-<!--        v-for="(item, index) in question.choices.list"-->
-<!--        :key="index"-->
-<!--        class="question-layout-options"-->
-<!--        :class="status ? 'mb-6   question-options white': '  question-o' +-->
-<!--        'ptions'"-->
-<!--    >-->
-<!--      <v-col class="col-2">-->
-<!--      <v-row>-->
-<!--      <v-col :class="status ?'col-10' :'col-10'">-->
+    <div
+        v-for="(item, index) in question.choices.list"
+        :key="index"
+        class="row question-layout-options"
+        :class="status ? 'q-mb-md  question-options white': '  question-o' +
+        'ptions'"
+    >
+      <div class="col-2">
+      <div class="row">
+      <div :class="status ?'col-10' :'col-10'">
+<!--        Todo : v-autocomplete -->
 <!--            <v-autocomplete-->
 <!--                v-model="item.answer"-->
 <!--                :items="mbti_value"-->
@@ -39,37 +40,38 @@
 <!--                :disabled="!status"-->
 <!--                @change="updateQuestion"-->
 <!--            />-->
-<!--      </v-col>-->
-<!--        <v-col class="col-1">-->
-<!--          {{ (index + 1) + ') ' }}-->
-<!--        </v-col>-->
-<!--      </v-row>-->
-<!--      </v-col>-->
-<!--      <v-col class="answer-editor col-10">-->
-<!--        <div>-->
-<!--&lt;!&ndash;          <question_field&ndash;&gt;-->
-<!--&lt;!&ndash;              :ref="'choice' + (index + 1)"&ndash;&gt;-->
-<!--&lt;!&ndash;              :key="'choices' + (index + 1) + domKey"&ndash;&gt;-->
-<!--&lt;!&ndash;              v-model="item.title"&ndash;&gt;-->
-<!--&lt;!&ndash;              :edit-status="status"&ndash;&gt;-->
-<!--&lt;!&ndash;              :question-id="value.id ? value.id : 'null'"&ndash;&gt;-->
-<!--&lt;!&ndash;              @input="updateQuestion"&ndash;&gt;-->
-<!--&lt;!&ndash;          />&ndash;&gt;-->
-<!--        </div>-->
-<!--      </v-col>-->
-<!--    </v-row>-->
+      </div>
+        <div class="col-1">
+          {{ (index + 1) + ') ' }}
+        </div>
+      </div>
+      </div>
+      <div class="answer-editor col-10">
+        <div>
+          <question_field
+              :ref="'choice' + (index + 1)"
+              :key="'choices' + (index + 1) + domKey"
+              v-model="item.title"
+              :edit-status="status"
+              :question-id="value.id ? value.id : 'null'"
+              @input="updateQuestion"
+          />
+        </div>
+      </div>
+    </div>
   </div>
   <!-- ------------------------- answer -------------------------------  -->
 </template>
 <script>
 import { Question } from 'src/models/Question'
+// ToDo eslint
 // eslint-disable-next-line camelcase
-// import question_field from 'components/Question/questionField'
+import question_field from 'components/Question/questionField'
 
 export default {
   name: 'MbtiQuestionLayout',
   components: {
-    // question_field
+    question_field
   },
   props: {
     value: {

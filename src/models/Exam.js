@@ -5,7 +5,6 @@ import { QuestCategoryList } from '../models/QuestCategory'
 import { QuestSubcategoryList } from '../models/QuestSubcategory'
 import { CheckingTimeList } from '../models/CheckingTime'
 import Assistant from '../plugins/assistant'
-// import Vue from 'vue' ToDo : import vue
 import axios from 'axios'
 import API_ADDRESS from '../api/Addresses'
 
@@ -284,9 +283,9 @@ class Exam extends Model {
     userQuestionData.bookmarked = question.bookmarked
     userQuestionData.state = question.state
 
-    // Vue.set(userQuestionData, 'answered_at', (answeredChoice) ? answeredChoice.answered_at : null) ToDo : import vue
-    // Vue.set(userQuestionData, 'bookmarked', question.bookmarked)
-    // Vue.set(userQuestionData, 'state', question.state)
+    window.app.set(userQuestionData, 'answered_at', (answeredChoice) ? answeredChoice.answered_at : null)
+    window.app.set(userQuestionData, 'bookmarked', question.bookmarked)
+    window.app.set(userQuestionData, 'state', question.state)
   }
 
   addUserQuestionData (question, userQuizData) {

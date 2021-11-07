@@ -21,7 +21,7 @@
                 <q-icon name="person"></q-icon>
               </template>
             </q-input>
-            <q-input bottom-slots   v-model="password" label="رمز "   model-value="">
+            <q-input bottom-slots   v-model="password" label="رمز" type="password"  model-value="">
               <template v-slot:before>
                 <q-icon name="lock"></q-icon>
               </template>
