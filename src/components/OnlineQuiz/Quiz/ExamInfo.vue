@@ -2,6 +2,7 @@
   <div class="exam-info-body">
     <q-input
       v-model="examInfo.title"
+      :disable="show"
       label-color="grey-8"
       label="عنوان"
     />
@@ -11,6 +12,7 @@
       :options="types"
       emit-value
       map-options
+      :disable="show"
       label-color="grey-8"
       label="انتخاب نوع آزمون"
     />
@@ -21,6 +23,7 @@
         filled
         v-model="dateTime.startDate"
         mask="date"
+        :disable="show"
       >
         <template v-slot:prepend>
           <q-icon
@@ -55,6 +58,7 @@
         filled
         v-model="dateTime.startTime"
         mask="fulltime"
+        :disable="show"
       >
         <template v-slot:append>
           <q-icon
@@ -91,6 +95,7 @@
         filled
         v-model="dateTime.finishDate"
         mask="date"
+        :disable="show"
       >
         <template v-slot:prepend>
           <q-icon
@@ -124,6 +129,7 @@
         filled
         v-model="dateTime.finishTime"
         mask="fulltime"
+        :disable="show"
       >
         <template v-slot:append>
           <q-icon
@@ -156,6 +162,7 @@
     <q-input
       v-model="examInfo.delay_time"
       type="number"
+      :disable="show"
       label-color="grey-8"
       label="زمان تاخیر (دقیقه)"
     />
@@ -165,35 +172,41 @@
         class="options-check-box"
         v-model="examInfo.enable"
         label="فعال"
+        :disable="show"
       />
       <q-checkbox
         class="options-check-box"
         v-model="examInfo.is_free"
         label="رایگان"
+        :disable="show"
       />
       <br>
       <q-checkbox
         class="options-check-box"
         v-model="examInfo.is_register_open"
         label="ثبت نام باز است."
+        :disable="show"
       />
       <br>
       <q-checkbox
         class="options-check-box"
         v-model="examInfo.is_open"
         label="شرکت در آزمون باز است."
+        :disable="show"
       />
       <br>
       <q-checkbox
         class="options-check-box"
         v-model="examInfo.confirm"
         label="تولید خودکار کارنامه"
+        :disable="show"
       />
       <br>
       <q-checkbox
         class="options-check-box"
         v-model="examInfo.generate_questions_automatically"
         label="تولید خودکار سوال"
+        :disable="show"
       />
     </div>
     <br>
@@ -209,6 +222,7 @@
             emit-value
             map-options
             label="category"
+            :disable="show"
           />
         </div>
         <div class="col-6">
@@ -218,6 +232,7 @@
             type="number"
             label-color="grey-8"
             label="زمان"
+            :disable="show"
           />
         </div>
       </div>
@@ -230,12 +245,14 @@
             type="number"
             label-color="grey-8"
             label="ترتیب"
+            :disable="show"
           />
         </div>
         <div class="col-6 category-btn-parent">
           <q-btn
             class="category-btn"
             label="اضافه کردن category"
+            :disable="show"
             @click="addCategory"
           />
         </div>
@@ -257,6 +274,7 @@
             :options="categoryTitles"
             label-color="grey-8"
             label="category"
+            :disable="show"
           />
         </div>
         <div class="col-3">
@@ -266,6 +284,7 @@
             type="number"
             label-color="grey-8"
             label="زمان"
+            :disable="show"
           />
         </div>
         <div class="col">
@@ -275,6 +294,7 @@
             type="number"
             label-color="grey-8"
             label="ترتیب"
+            :disable="show"
           />
         </div>
         <div class="col">
@@ -282,6 +302,7 @@
             flat
             color="red"
             icon="close"
+            :disable="show"
             @click="deleteCategory(item.id)"/>
         </div>
       </div>
@@ -290,10 +311,12 @@
     <div class="bottom-btn">
       <q-btn
         label="حذف"
+        :disable="show"
         @click="createExam"
       />
       <q-btn
         label="ثبت"
+        :disable="show"
         @click="createExam"
       />
     </div>
@@ -327,14 +350,19 @@ export default {
       categoryList: [],
       categoryTitles: [],
       selectedCategoryTime: 0,
-      selectedCategoryOrder: 0
+      selectedCategoryOrder: 0,
+      show: false
     }
+  },
+  mounted () {
+    this.showMode()
   },
   created () {
     this.examId = this.$route.params.examId
     this.getData()
     this.getOptions()
     this.getCategories()
+    console.log(this.show)
   },
   watch: {
     typeValue () {
@@ -458,6 +486,11 @@ export default {
           .catch(() => {
             this.$store.dispatch('loading/overlayLoading', false)
           })
+      }
+    },
+    showMode () {
+      while (this.$route.name === 'show') {
+        this.show = true
       }
     }
   }
