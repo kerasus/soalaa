@@ -7,7 +7,7 @@
     />
     <br>
     <q-select
-      v-model="type"
+      v-model="typeValue"
       :options="types"
       emit-value
       map-options
@@ -15,40 +15,13 @@
       label="انتخاب نوع آزمون"
     />
     <br>
-    <div>
-      <p>زمان شروع</p>
+    <div class="date-part">
+      <p class="date-label">زمان شروع:</p>
       <q-input
         filled
-        v-model="examInfo.start_at"
-        mask="datetime"
+        v-model="dateTime.startDate"
+        mask="date"
       >
-        <template v-slot:append>
-          <q-icon
-            name="access_time"
-            class="cursor-pointer"
-          >
-            <q-popup-proxy
-              transition-show="scale"
-              transition-hide="scale"
-            >
-              <q-time
-                v-model="examInfo.start_at"
-                mask="YYYY-MM-DD HH:mm"
-                format24h
-                @update:model-value=" changeDate"
-              >
-                <div class="row items-center justify-end">
-                  <q-btn
-                    v-close-popup
-                    label="Close"
-                    color="primary"
-                    flat
-                  />
-                </div>
-              </q-time>
-            </q-popup-proxy>
-          </q-icon>
-        </template>
         <template v-slot:prepend>
           <q-icon
             name="event"
@@ -60,73 +33,10 @@
               transition-hide="scale"
             >
               <q-date
-                v-model="examInfo.start_at"
-                mask="YYYY-MM-DD HH:mm"
+                v-model="dateTime.startTime"
+                mask="YYYY-MM-DD"
                 calendar="persian"
                 today-btn
-                @update:model-value=" changeDate"
-              >
-                <div class="row items-center justify-end">
-                  <q-btn
-                    v-close-popup
-                    label="Close"
-                    color="primary"
-                    flat
-                  />
-                </div>
-              </q-date>
-            </q-popup-proxy>
-          </q-icon>
-        </template>
-      </q-input>
-    </div>
-    <br>
-    <div>
-      <p>زمان پایان</p>
-      <q-input
-        filled
-        v-model="examInfo.finish_at"
-        mask="datetime"
-      >
-        <template v-slot:append>
-          <q-icon
-            name="access_time"
-            class="cursor-pointer"
-          >
-            <q-popup-proxy
-              transition-show="scale"
-              transition-hide="scale">
-              <q-time
-                v-model="examInfo.finish_at"
-                mask="YYYY-MM-DD HH:mm"
-                format24h
-              >
-                <div class="row items-center justify-end">
-                  <q-btn
-                    v-close-popup
-                    label="Close"
-                    color="primary"
-                    flat
-                  />
-                </div>
-              </q-time>
-            </q-popup-proxy>
-          </q-icon>
-        </template>
-        <template v-slot:prepend>
-          <q-icon
-            name="event"
-            class="cursor-pointer"
-          >
-            <q-popup-proxy
-              ref="qDateProxy"
-              transition-show="scale"
-              transition-hide="scale"
-            >
-              <q-date
-                v-model="examInfo.finish_at"
-                calendar="persian"
-                mask="YYYY-MM-DD HH:mm"
                 @update:model-value="changeDate"
               >
                 <div class="row items-center justify-end">
@@ -142,10 +52,114 @@
           </q-icon>
         </template>
       </q-input>
+      <q-input
+        filled
+        v-model="dateTime.startTime"
+        mask="time"
+      >
+        <template v-slot:append>
+          <q-icon
+            name="access_time"
+            class="cursor-pointer"
+          >
+            <q-popup-proxy
+              transition-show="scale"
+              transition-hide="scale"
+            >
+              <q-time
+                v-model="dateTime.startTime"
+                mask="HH:mm:ss"
+                format24h
+                @update:model-value="changeTime"
+              >
+                <div class="row items-center justify-end">
+                  <q-btn
+                    v-close-popup
+                    label="Close"
+                    color="primary"
+                    flat
+                  />
+                </div>
+              </q-time>
+            </q-popup-proxy>
+          </q-icon>
+        </template>
+      </q-input>
+    </div>
+    <br>
+    <div class="date-part">
+      <p class="date-label">زمان پایان:</p>
+      <q-input
+        filled
+        v-model="dateTime.finishDate"
+        mask="date"
+      >
+        <template v-slot:prepend>
+          <q-icon
+            name="event"
+            class="cursor-pointer"
+          >
+            <q-popup-proxy
+              ref="qDateProxy"
+              transition-show="scale"
+              transition-hide="scale"
+            >
+              <q-date
+                v-model="dateTime.finishDate"
+                calendar="persian"
+                mask="YYYY-MM-DD"
+                @update:model-value="changeDate"
+              >
+                <div class="row items-center justify-end">
+                  <q-btn
+                    v-close-popup
+                    label="Close"
+                    color="primary"
+                    flat
+                  />
+                </div>
+              </q-date>
+            </q-popup-proxy>
+          </q-icon>
+        </template>
+      </q-input>
+      <q-input
+        filled
+        v-model="dateTime.finishTime"
+        mask="time"
+      >
+        <template v-slot:append>
+          <q-icon
+            name="access_time"
+            class="cursor-pointer"
+          >
+            <q-popup-proxy
+              transition-show="scale"
+              transition-hide="scale">
+              <q-time
+                v-model="dateTime.finishTime"
+                mask="HH:mm:ss"
+                format24h
+                @update:model-value="changeTime"
+              >
+                <div class="row items-center justify-end">
+                  <q-btn
+                    v-close-popup
+                    label="Close"
+                    color="primary"
+                    flat
+                  />
+                </div>
+              </q-time>
+            </q-popup-proxy>
+          </q-icon>
+        </template>
+      </q-input>
     </div>
     <br>
     <q-input
       v-model="examInfo.delay_time"
+      type="number"
       label-color="grey-8"
       label="زمان تاخیر (دقیقه)"
     />
@@ -303,7 +317,15 @@ export default {
       examId: null,
       examList: new ExamList(),
       examInfo: new Exam(),
+      typeValue: '',
+      options: [],
       types: [],
+      dateTime: {
+        startDate: '',
+        startTime: '',
+        finishDate: '',
+        finishTime: ''
+      },
       selectedCategory: null,
       categoryList: [],
       categoryTitles: [],
@@ -317,28 +339,15 @@ export default {
     this.getOptions()
     this.getCategories()
   },
-  computed: {
-    type () {
-      if (this.examInfo.type) {
-        return this.examInfo.type.value
-      } else {
-        return ''
-      }
+  watch: {
+    typeValue () {
+      const selectedType = this.options.find(option => option.value === this.typeValue)
+      // eslint-disable-next-line vue/no-side-effects-in-computed-properties
+      this.examInfo.type_id = selectedType.id
+      return this.examInfo.type_id
     }
   },
   methods: {
-    changeDate (value, reason, details) {
-      console.log('change:', this.examInfo.start_at)
-      this.dateFormat(this.examInfo.start_at, 'start_at')
-      console.log('change:', this.examInfo.start_at)
-      console.log(this.examInfo.finish_at)
-    },
-    dateFormat (item, key) {
-      item = this.examInfo.shamsiDate(key).dateTime
-      item = this.convertToEnglish(item)
-      item = date.formatDate(item, 'YYYY-MM-DD HH:mm:ss')
-      console.log('hi', item)
-    },
     getData () {
       this.$store.dispatch('loading/linearLoading', true)
       this.$axios.get(API_ADDRESS.exam.base())
@@ -346,34 +355,63 @@ export default {
           this.$store.dispatch('loading/linearLoading', false)
           this.examList = new ExamList(response.data.data)
           this.examInfo = new Exam(this.examList.list.find(exam => exam.id === this.examId))
-          console.log('before', this.examInfo.start_at)
+          console.log(this.examInfo)
+          this.typeValue = this.examInfo.type.value
+          console.log(this.examInfo.start_at)
           console.log(this.examInfo.finish_at)
-          // this.examInfo.start_at = this.examInfo.shamsiDate('start_at').dateTime
-          // this.examInfo.start_at = this.convertToEnglish(this.examInfo.start_at)
-          // this.examInfo.start_at = date.formatDate(this.examInfo.start_at, 'YYYY-MM-DD HH:mm:ss')
-          // this.examInfo.finish_at = this.examInfo.shamsiDate('finish_at').dateTime
-          // this.examInfo.finish_at = this.convertToEnglish(this.examInfo.finish_at)
-          // this.examInfo.finish_at = date.formatDate(this.examInfo.finish_at, 'YYYY-MM-DD HH:mm:ss')
-          this.dateFormat(this.examInfo.start_at, 'start_at')
-          console.log('after', this.examInfo.start_at)
-          console.log(this.examInfo.finish_at)
+          this.dateTime.startDate = this.dateFormat(this.examInfo.start_at, 'start_at')
+          this.dateTime.startTime = this.timeFormat(this.examInfo.start_at, 'start_at')
+          this.dateTime.finishDate = this.dateFormat(this.examInfo.start_at, 'finish_at')
+          this.dateTime.finishTime = this.timeFormat(this.examInfo.start_at, 'finish_at')
+          console.log(this.dateTime.startDate)
+          console.log(this.dateTime.startTime)
+          console.log(this.dateTime.finishDate)
+          console.log(this.dateTime.finishTime)
         })
         .catch(() => {
           this.$store.dispatch('loading/linearLoading', false)
         })
+    },
+    changeTime (value, details) {
+      console.log('time: ', value, '....', details)
+    },
+    changeDate (value, reason, details) {
+      console.log('date ', value, '....', reason, '....', details)
+      // this.examInfo.finish_at = this.dateFormat(this.examInfo.start_at, 'finish_at')
+      // console.log(this.examInfo.finish_at)
     },
     convertToEnglish (digit) {
       const p2e = s => s.replace(/[۰-۹]/g, d => '۰۱۲۳۴۵۶۷۸۹'.indexOf(d))
       digit = p2e(digit)
       return digit
     },
+    dateFormat (item, key) {
+      item = this.examInfo.shamsiDate(key).date
+      item = this.convertToEnglish(item)
+      item = date.formatDate(item, 'YYYY-MM-DD')
+      return item
+    },
+    timeFormat (item, key) {
+      item = this.examInfo.shamsiDate(key).time
+      item = this.convertToEnglish(item)
+      return item
+    },
+    makeCompleteDate (shamsiDate, time) {
+      console.log(shamsiDate)
+      console.log(time)
+      const moment = require('moment-jalaali')
+      moment().format('jYYYY/jM/jD')
+      const georgianDate = moment(shamsiDate, 'jYYYY/jMM/jDD').format('YYYY-MM-DD')
+      const completeDate = georgianDate + ' ' + time
+      console.log('convert', completeDate)
+    },
     getOptions () {
       this.$store.dispatch('loading/linearLoading', true)
       this.$axios.get(API_ADDRESS.option.base)
         .then((response) => {
           this.$store.dispatch('loading/linearLoading', false)
-          const options = response.data.data.filter(data => data.type === 'exam_type')
-          options.forEach(option => {
+          this.options = response.data.data.filter(data => data.type === 'exam_type')
+          this.options.forEach(option => {
             this.types.push(option.value)
           })
         })
@@ -412,6 +450,9 @@ export default {
       }
     },
     createExam () {
+      this.examInfo.start_at = this.dateFormat(this.examInfo.start_at, 'start_at')
+      this.examInfo.finish_at = this.dateFormat(this.examInfo.start_at, 'finish_at')
+      this.makeCompleteDate(this.dateTime.startDate, this.dateTime.startTime)
       this.$store.dispatch('loading/overlayLoading', true)
       this.examInfo.photo = 'https://cdn.alaatv.com/upload/images/slideShow/home-slide-yalda-festival_20201219075413.jpg?w=1843&h=719'
       if (this.examInfo.id) {
@@ -455,6 +496,14 @@ export default {
   max-width: 600px;
   margin: auto !important;
   padding: 50px 0 200px 0;
+  .date-part{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    .date-label{
+      text-align: center;
+    }
+  }
   .options-check-box{
     margin-right: 150px;
   }
