@@ -33,11 +33,10 @@
               transition-hide="scale"
             >
               <q-date
-                v-model="dateTime.startTime"
+                v-model="dateTime.startDate"
                 mask="YYYY-MM-DD"
                 calendar="persian"
                 today-btn
-                @update:model-value="changeDate"
               >
                 <div class="row items-center justify-end">
                   <q-btn
@@ -55,7 +54,7 @@
       <q-input
         filled
         v-model="dateTime.startTime"
-        mask="time"
+        mask="fulltime"
       >
         <template v-slot:append>
           <q-icon
@@ -70,7 +69,6 @@
                 v-model="dateTime.startTime"
                 mask="HH:mm:ss"
                 format24h
-                @update:model-value="changeTime"
               >
                 <div class="row items-center justify-end">
                   <q-btn
@@ -108,7 +106,6 @@
                 v-model="dateTime.finishDate"
                 calendar="persian"
                 mask="YYYY-MM-DD"
-                @update:model-value="changeDate"
               >
                 <div class="row items-center justify-end">
                   <q-btn
@@ -126,7 +123,7 @@
       <q-input
         filled
         v-model="dateTime.finishTime"
-        mask="time"
+        mask="fulltime"
       >
         <template v-slot:append>
           <q-icon
@@ -140,7 +137,6 @@
                 v-model="dateTime.finishTime"
                 mask="HH:mm:ss"
                 format24h
-                @update:model-value="changeTime"
               >
                 <div class="row items-center justify-end">
                   <q-btn
@@ -201,8 +197,8 @@
       />
     </div>
     <br>
-    <div  v-if="examInfo.id === null">
-      <q-separator inset />
+    <div v-if="examInfo.id === null">
+      <q-separator inset/>
       <br>
       <div class="row">
         <div class="col-6">
@@ -247,7 +243,7 @@
       <br>
       <br>
       <br>
-      <q-separator inset />
+      <q-separator inset/>
       <br>
       <div
         v-for="item in examInfo.categories.list"
@@ -310,6 +306,7 @@ import { Exam, ExamList } from 'src/models/Exam'
 import { QuestCategory, QuestCategoryList } from 'src/models/QuestCategory'
 import API_ADDRESS from 'src/api/Addresses'
 import { date } from 'quasar'
+
 export default {
   name: 'ExamInfo',
   data () {
@@ -342,7 +339,6 @@ export default {
   watch: {
     typeValue () {
       const selectedType = this.options.find(option => option.value === this.typeValue)
-      // eslint-disable-next-line vue/no-side-effects-in-computed-properties
       this.examInfo.type_id = selectedType.id
       return this.examInfo.type_id
     }
@@ -352,33 +348,18 @@ export default {
       this.$store.dispatch('loading/linearLoading', true)
       this.$axios.get(API_ADDRESS.exam.base())
         .then((response) => {
-          this.$store.dispatch('loading/linearLoading', false)
           this.examList = new ExamList(response.data.data)
           this.examInfo = new Exam(this.examList.list.find(exam => exam.id === this.examId))
-          console.log(this.examInfo)
           this.typeValue = this.examInfo.type.value
-          console.log(this.examInfo.start_at)
-          console.log(this.examInfo.finish_at)
           this.dateTime.startDate = this.dateFormat(this.examInfo.start_at, 'start_at')
           this.dateTime.startTime = this.timeFormat(this.examInfo.start_at, 'start_at')
           this.dateTime.finishDate = this.dateFormat(this.examInfo.start_at, 'finish_at')
           this.dateTime.finishTime = this.timeFormat(this.examInfo.start_at, 'finish_at')
-          console.log(this.dateTime.startDate)
-          console.log(this.dateTime.startTime)
-          console.log(this.dateTime.finishDate)
-          console.log(this.dateTime.finishTime)
+          this.$store.dispatch('loading/linearLoading', false)
         })
         .catch(() => {
           this.$store.dispatch('loading/linearLoading', false)
         })
-    },
-    changeTime (value, details) {
-      console.log('time: ', value, '....', details)
-    },
-    changeDate (value, reason, details) {
-      console.log('date ', value, '....', reason, '....', details)
-      // this.examInfo.finish_at = this.dateFormat(this.examInfo.start_at, 'finish_at')
-      // console.log(this.examInfo.finish_at)
     },
     convertToEnglish (digit) {
       const p2e = s => s.replace(/[۰-۹]/g, d => '۰۱۲۳۴۵۶۷۸۹'.indexOf(d))
@@ -397,13 +378,10 @@ export default {
       return item
     },
     makeCompleteDate (shamsiDate, time) {
-      console.log(shamsiDate)
-      console.log(time)
       const moment = require('moment-jalaali')
-      moment().format('jYYYY/jM/jD')
       const georgianDate = moment(shamsiDate, 'jYYYY/jMM/jDD').format('YYYY-MM-DD')
       const completeDate = georgianDate + ' ' + time
-      console.log('convert', completeDate)
+      return completeDate
     },
     getOptions () {
       this.$store.dispatch('loading/linearLoading', true)
@@ -450,76 +428,79 @@ export default {
       }
     },
     createExam () {
-      this.examInfo.start_at = this.dateFormat(this.examInfo.start_at, 'start_at')
-      this.examInfo.finish_at = this.dateFormat(this.examInfo.start_at, 'finish_at')
-      this.makeCompleteDate(this.dateTime.startDate, this.dateTime.startTime)
       this.$store.dispatch('loading/overlayLoading', true)
+      this.examInfo.start_at = this.makeCompleteDate(this.dateTime.startDate, this.dateTime.startTime)
+      this.examInfo.finish_at = this.makeCompleteDate(this.dateTime.finishDate, this.dateTime.finishTime)
       this.examInfo.photo = 'https://cdn.alaatv.com/upload/images/slideShow/home-slide-yalda-festival_20201219075413.jpg?w=1843&h=719'
       if (this.examInfo.id) {
         this.examInfo.update(API_ADDRESS.exam.editExam + '/' + this.examInfo.id)
-          .then((res) => {
+          .then(() => {
             this.$store.dispatch('loading/overlayLoading', false)
-            console.log('update res:', res)
             this.$q.notify({
               type: 'positive',
               message: 'تغییرات با موفقیت اعمال شد',
               position: 'top'
             })
           })
-          .catch((err) => {
+          .catch(() => {
             this.$store.dispatch('loading/overlayLoading', false)
-            console.log('update err:', err)
           })
       } else {
         this.examInfo.create()
-          .then((res) => {
-            console.log('create res:', res)
+          .then(() => {
+            this.$store.dispatch('loading/overlayLoading', false)
             this.$q.notify({
               type: 'positive',
               message: 'آزمون با موفقیت ایجاد شد',
               position: 'top'
             })
           })
-          .catch((err) => {
-            console.log('err', err)
+          .catch(() => {
+            this.$store.dispatch('loading/overlayLoading', false)
           })
       }
-      console.log('sabt', this.examInfo)
     }
   }
 }
 </script>
 
 <style lang="scss" scoped>
-.exam-info-body{
+.exam-info-body {
   width: 100%;
   max-width: 600px;
   margin: auto !important;
   padding: 50px 0 200px 0;
-  .date-part{
+
+  .date-part {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
-    .date-label{
+
+    .date-label {
       text-align: center;
     }
   }
-  .options-check-box{
+
+  .options-check-box {
     margin-right: 150px;
   }
-  .category-btn-parent{
+
+  .category-btn-parent {
     justify-content: center;
     align-items: center;
     display: flex;
-    .category-btn{
-      height: 40px ;
+
+    .category-btn {
+      height: 40px;
     }
   }
-  .bottom-btn{
+
+  .bottom-btn {
     justify-content: center;
     display: flex;
   }
-  .create-mode-category{
+
+  .create-mode-category {
     margin-right: 20px;
   }
 }
