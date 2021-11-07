@@ -1,7 +1,7 @@
 <template>
   <div class="SelectImageBox">
 <!-- Todo : fix this font weight-->
-    <p class="font-weight-medium mb-5 mt-5">
+    <p class="text-weight-medium q-mb-md q-mt-md">
       فایل های آپلود شده:
     </p>
 <!--    todo file-upload-->
@@ -342,11 +342,10 @@ export default {
       el.select()
       document.execCommand('copy')
       document.body.removeChild(el)
-      this.$notify({
-        group: 'notifs',
-        title: 'توجه',
-        text: 'آدرس فایل به کلیپبورد منتقل شد',
-        type: 'success'
+      this.$q.notify({
+        message: 'آدرس فایل به کلیپبورد منتقل شد',
+        color: 'green',
+        icon: 'thumb_up'
       })
     },
     formatSize (size) {
