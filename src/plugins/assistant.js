@@ -1,6 +1,5 @@
-// import Toasted from 'vue-toasted';
-// import Vue from 'vue'
-// Vue.use(Toasted)
+import { Notify } from 'quasar'
+
 const Assistant = (function () {
   function getId (id) {
     if (typeof id === 'undefined' || id === null || id === '') {
@@ -52,16 +51,16 @@ const Assistant = (function () {
 
     toastMessages(messages)
   }
-  // ToDo : import vue
+
   function toastMessages (messages) {
-    // messages.forEach((item) => {
-    //   Vue.prototype.$notify({
-    //     group: 'notifs',
-    //     title: 'توجه!',
-    //     text: item,
-    //     type: 'error'
-    //   })
-    // })
+    messages.forEach((item) => {
+      Notify.create({
+        group: false,
+        color: 'negative',
+        message: item,
+        icon: 'report_problem'
+      })
+    })
   }
 
   function getMessagesFromArrayWithRecursion (array) {

@@ -156,8 +156,12 @@ export default {
   max-width: 1158px;
   margin: auto !important;
 }
-.q-drawer--left .q-layout__shadow{
-  opacity: 0.5 !important;
+.q-drawer--left {
+  .q-layout__shadow{
+    &:after {
+      box-shadow: 0 0 10px 0px rgb(0 0 0 / 10%), 0 0px 10px rgb(0 0 0 / 12%) !important;
+    }
+  }
 }
 </style>
 <style lang="scss">
