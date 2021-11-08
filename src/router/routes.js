@@ -84,6 +84,11 @@ const routes = [
         name: 'subCategory.edit',
         component: () => import('pages/Admin/subCategory/LessonsList'),
         meta: { middlewares: [auth] }
+      },
+      {
+        path: 'category',
+        name: 'categoryList',
+        component: () => import('pages/Admin/category/list')
       }
     ]
   },

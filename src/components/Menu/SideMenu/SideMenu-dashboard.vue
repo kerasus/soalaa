@@ -139,8 +139,8 @@ export default {
         },
         {
           displayName: 'لیست دفترچه ها',
-          to: 'category.edit',
-          name: 'category.edit'
+          to: '/category',
+          name: 'categoryList'
         },
         {
           displayName: 'لیست زیرگروه ها',
