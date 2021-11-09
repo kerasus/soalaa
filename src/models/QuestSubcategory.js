@@ -44,3 +44,4 @@ class QuestSubcategoryList extends Collection {
 }
 
 export { QuestSubcategory, QuestSubcategoryList }
+

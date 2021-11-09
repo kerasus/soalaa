@@ -66,9 +66,6 @@ export default {
       return API_ADDRESS.question.uploadImage(this.questionId)
     }
   },
-  watch: {
-
-  },
   created () {
     this.loading = true
     this.getHtmlValueFromValueProp()

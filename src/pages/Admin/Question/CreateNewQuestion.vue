@@ -450,7 +450,8 @@ export default {
       const selectedQuizzes = this.selectedQuizzes
       this.totalExams[targetExamIndex] = item
       selectedQuizzes.push(JSON.parse(JSON.stringify(this.totalExams[targetExamIndex])))
-      window.app.set(this, 'selectedQuizzes', selectedQuizzes)
+      // ToDo : app.set
+      // window.app.set(this, 'selectedQuizzes', selectedQuizzes)
       this.dialog = false
       this.updateSelectedQuizzes()
     },

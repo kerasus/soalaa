@@ -222,7 +222,8 @@ export default {
             if (this.currentQuestion.logs.list[i].id === eventData.logId) {
               // setting the new log using Vue.set so that the component notices the change
               this.currentQuestion.logs.list[i] = new Log(response.data.data)
-              window.app.set(this.currentQuestion, 'logs', new LogList(this.currentQuestion.logs))
+              // ToDo : app.set
+              // window.app.set(this.currentQuestion, 'logs', new LogList(this.currentQuestion.logs))
             }
           }
         })
