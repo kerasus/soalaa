@@ -11,6 +11,7 @@
           color="grey-3"
           outlined
           rounded
+          :input-style="{outlineColor: '#111'}"
         >
           <template v-slot:prepend>
             <q-icon
@@ -20,6 +21,7 @@
           </template>
         </q-input>
         <q-btn
+          class="add-button"
           flat
           round
           dense
@@ -40,7 +42,10 @@
             />
           </q-item-section>
           <q-item-section>
-            <q-item-label v-if="!item.editable && !item.editMode">
+            <q-item-label
+              v-if="!item.editable && !item.editMode"
+              class="category-input"
+            >
               {{item.title}}
             </q-item-label>
             <q-input
@@ -138,15 +143,8 @@ export default {
   },
   computed: {
     filteredItems () {
+      console.log(this.categoryList.list.filter(item => !item.title || item.title.includes(this.searchValue)))
       return this.categoryList.list.filter(item => !item.title || item.title.includes(this.searchValue))
-    },
-    iconPicker () {
-      return () => {
-        return {
-          icon: 'mdi-card-text',
-          color: 'grey'
-        }
-      }
     }
   },
   watch: {
@@ -228,16 +226,27 @@ export default {
 
   .category-toolbar {
     height: 65px;
-
     .search-input {
       max-width: 200px;
+    }
+    .add-button{
+      height: 48px;
+      width: 48px;
+      margin-left: 12px;
     }
   }
   .category-input {
     max-width: 250px;
+    font-size: 16px;
+  }
+  .q-card{
+    padding-bottom: 8px;
   }
   .q-card > div:first-child {
     box-shadow: 0px 2px 4px -1px rgba(0, 0, 0, 0.2), 0px 4px 5px 0px rgba(0, 0, 0, 0.14), 0px 1px 10px 0px rgba(0, 0, 0, 0.12) !important;
+  }
+  .q-item{
+    height: 72px;
   }
 }
 </style>
@@ -247,6 +256,11 @@ export default {
     .q-field__control {
       height: 40px !important;
       box-sizing: border-box;
+      .q-field__prepend{
+        &.q-field__marginal{
+          height: 40px !important;
+        }
+      }
     }
   }
 }
