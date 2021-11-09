@@ -9,15 +9,15 @@
         تایپ سوال
       </div>
 <!--      Todo : question_field-->
-<!--      <question_field-->
-<!--        ref="questionStatement"-->
-<!--        :key="'statement' + domKey"-->
-<!--        v-model="question.statement"-->
-<!--        class="mb-10"-->
-<!--        :edit-status="status"-->
-<!--        placeholder="صورت سوال"-->
-<!--        :question-id="value.id ? value.id : 'null'"-->
-<!--      />-->
+      <question_field
+        ref="questionStatement"
+        :key="'statement' + domKey"
+        v-model="question.statement"
+        class="mb-10"
+        :edit-status="status"
+        placeholder="صورت سوال"
+        :question-id="value.id ? value.id : 'null'"
+      />
     </div>
     <div
       v-for="(item, index) in question.choices.list"
@@ -56,13 +56,13 @@
       <div class="col answer-editor col-11">
         <div>
           <!--      Todo : question_field-->
-<!--          <question_field-->
-<!--            :ref="'choice' + (index + 1)"-->
-<!--            :key="'choices' + (index + 1) + domKey"-->
-<!--            v-model="item.title"-->
-<!--            :edit-status="status"-->
-<!--            :question-id="value.id ? value.id : 'null'"-->
-<!--          />-->
+          <question_field
+            :ref="'choice' + (index + 1)"
+            :key="'choices' + (index + 1) + domKey"
+            v-model="item.title"
+            :edit-status="status"
+            :question-id="value.id ? value.id : 'null'"
+          />
         </div>
       </div>
     </div>
@@ -73,15 +73,15 @@
       </div>
       <div>
         <!--      Todo : question_field-->
-<!--        <question_field-->
-<!--          ref="descriptive"-->
-<!--          :key="'descriptive_answer' + domKey"-->
-<!--          v-model="question.descriptive_answer"-->
-<!--          :question-id="value.id ? value.id : 'null'"-->
-<!--          :edit-status="status"-->
-<!--          placeholder="پاسخ تشریحی"-->
-<!--          class="mb-16"-->
-<!--        />-->
+        <question_field
+          ref="descriptive"
+          :key="'descriptive_answer' + domKey"
+          v-model="question.descriptive_answer"
+          :question-id="value.id ? value.id : 'null'"
+          :edit-status="status"
+          placeholder="پاسخ تشریحی"
+          class="mb-16"
+        />
       </div>
     </div>
   </div>
@@ -89,12 +89,13 @@
 <script>
 import { Question } from 'src/models/Question'
 // ToDo import
-// import question_field from 'components/Question/questionField'
+// eslint-disable-next-line camelcase
+import question_field from 'components/Question/questionField'
 
 export default {
   name: 'QuestionLayout',
   components: {
-    // question_field
+    question_field
   },
   props: {
     value: {

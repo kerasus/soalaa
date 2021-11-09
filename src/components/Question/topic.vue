@@ -14,34 +14,34 @@
 </template>
 
 <script>
-  import topic from '@/components/Question/topic'
+import topic from 'src/components/Question/topic'
 
-  export default {
-    name: 'Topic',
-    components: {
-      topic
-    },
-    props: ['topic'],
-    computed: {
-      majorName () {
-        if (this.topic.module && this.topic.module.major) {
-          return this.topic.module.major.name
-        }
-        return ''
-      },
-      gradeName () {
-        if (this.topic.module && this.topic.module.grade) {
-          return this.topic.module.grade.name
-        }
-        return ''
+export default {
+  name: 'Topic',
+  components: {
+    topic
+  },
+  props: ['topic'],
+  computed: {
+    majorName () {
+      if (this.topic.module && this.topic.module.major) {
+        return this.topic.module.major.name
       }
+      return ''
     },
-    methods: {
-      isLastParent () {
-        return !!topic.parentTopic
+    gradeName () {
+      if (this.topic.module && this.topic.module.grade) {
+        return this.topic.module.grade.name
       }
+      return ''
+    }
+  },
+  methods: {
+    isLastParent () {
+      return !!topic.parentTopic
     }
   }
+}
 </script>
 
 <style scoped>
