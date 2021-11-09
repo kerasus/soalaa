@@ -1,3 +1,4 @@
+<!--Todo : log item-->
 <template>
   <div class="log-item">
     <v-container class="log-container">
