@@ -15,7 +15,15 @@ class QuestCategory extends Model {
         key: 'sub_categories',
         relatedModel: QuestSubcategoryList
       },
-      { key: 'order' }
+      { key: 'order' },
+      { key: 'time' },
+      { key: 'order' },
+      { key: 'questions_booklet' },
+      { key: 'descriptive_answers_booklet' },
+      {
+        key: 'editable',
+        default: false
+      }
     ])
   }
 

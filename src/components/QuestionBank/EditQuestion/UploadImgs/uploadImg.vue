@@ -5,159 +5,159 @@
       فایل های آپلود شده:
     </p>
 <!--    todo file-upload-->
-<!--    <div class="row">-->
-<!--      <div class="col col-md-4">-->
-<!--        <v-card>-->
-<!--          <v-card-title class="body-1">-->
-<!--            صورت سوال-->
-<!--          </v-card-title>-->
-<!--          <v-card-text>-->
-<!--            <v-row>-->
-<!--              <v-col-->
-<!--                v-if="editStatus"-->
-<!--                v-show="questionFile.length === 0"-->
-<!--                class="test"-->
-<!--              >-->
-<!--                <file-upload-->
-<!--                  ref="questionFile"-->
-<!--                  v-model="questionFile"-->
-<!--                  input-id="questionFile"-->
-<!--                  :extensions="extensions"-->
-<!--                  :accept="accept"-->
-<!--                  :multiple="false"-->
-<!--                  :directory="directory"-->
-<!--                  :create-directory="createDirectory"-->
-<!--                  :size="size || 0"-->
-<!--                  :thread="thread < 1 ? 1 : (thread > 5 ? 5 : thread)"-->
-<!--                  :data="data"-->
-<!--                  :drop="drop"-->
-<!--                  :drop-directory="dropDirectory"-->
-<!--                  :add-index="addIndex"-->
-<!--                  @input-filter="inputFilter"-->
-<!--                  @input-file="inputFile"-->
-<!--                >-->
-<!--                  <v-btn-->
-<!--                    large-->
-<!--                    text-->
-<!--                    class="btnAddImage"-->
-<!--                  >-->
-<!--                    <v-icon>mdi-plus</v-icon>-->
-<!--                  </v-btn>-->
-<!--                </file-upload>-->
-<!--              </v-col>-->
-<!--              <v-col-->
-<!--                v-for="(file, index) in questionFile"-->
-<!--                :key="index"-->
-<!--                class="test2"-->
-<!--              >-->
-<!--                <v-card>-->
-<!--                  <v-img-->
-<!--                    v-if="(editStatus && file.thumb) || (!editStatus && file)"-->
-<!--                    :src="(editStatus) ? file.thumb : file"-->
-<!--                    width="100%"-->
-<!--                    height="60"-->
-<!--                    class="mt-3"-->
-<!--                    @click="showImgPanel(((editStatus) ? file.thumb : file))"-->
-<!--                  />-->
-<!--                  <span v-else>No Image</span>-->
-<!--                  <v-card-title-->
-<!--                    v-if="editStatus"-->
-<!--                    class="caption"-->
-<!--                    v-text="formatSize(file.size)"-->
-<!--                  />-->
-<!--                  &lt;!&ndash; delete img -&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&ndash;&gt;-->
-<!--                  <v-btn-->
-<!--                    v-if="editStatus"-->
-<!--                    fab-->
-<!--                    dark-->
-<!--                    x-small-->
-<!--                    color="error"-->
-<!--                    class="btnRemoveFile"-->
-<!--                    @click.prevent="$refs.questionFile.remove(file)"-->
-<!--                  >-->
-<!--                    <v-icon dark>-->
-<!--                      mdi-close-->
-<!--                    </v-icon>-->
-<!--                  </v-btn>-->
-<!--                </v-card>-->
-<!--              </v-col>-->
-<!--              <v-col-->
-<!--                v-if="!editStatus && questionFile.length === 0"-->
-<!--              >-->
-<!--                <v-card>-->
-<!--                  <v-img-->
-<!--                    width="100%"-->
-<!--                    height="60"-->
-<!--                  >-->
-<!--                    <template v-slot:placeholder>-->
-<!--                      <v-row-->
-<!--                        no-gutters-->
-<!--                        class="fill-height"-->
-<!--                      >-->
-<!--                        <v-col class="d-flex justify-center align-center">-->
-<!--                          <v-icon size="50px">-->
-<!--                            mdi-image-off-->
-<!--                          </v-icon>-->
-<!--                        </v-col>-->
-<!--                      </v-row>-->
-<!--                    </template>-->
-<!--                  </v-img>-->
-<!--                </v-card>-->
-<!--              </v-col>-->
-<!--            </v-row>-->
-<!--          </v-card-text>-->
-<!--        </v-card>-->
-<!--      </v-col>-->
-<!--      <v-col md="8">-->
-<!--        <v-card>-->
-<!--          <v-card-title class="body-1">-->
-<!--            جواب سوال-->
-<!--          </v-card-title>-->
-<!--          <v-card-text>-->
-<!--            <v-row>-->
-<!--              <v-col-->
-<!--                v-for="(file, index) in answerFiles"-->
-<!--                :key="index"-->
-<!--                cols="3"-->
-<!--              >-->
-<!--                <v-card>-->
-<!--                  <v-img-->
-<!--                    v-if="(editStatus && file.thumb) || (!editStatus && file)"-->
-<!--                    :src="(editStatus) ? file.thumb : file"-->
-<!--                    width="100%"-->
-<!--                    height="60"-->
-<!--                    class="mt-3"-->
-<!--                    @click="showImgPanel(((editStatus) ? file.thumb : file))"-->
-<!--                  />-->
+    <v-row>
+      <v-col md="4">
+        <v-card>
+          <v-card-title class="body-1">
+            صورت سوال
+          </v-card-title>
+          <v-card-text>
+            <v-row>
+              <v-col
+                v-if="editStatus"
+                v-show="questionFile.length === 0"
+                class="test"
+              >
+                <file-upload
+                  ref="questionFile"
+                  v-model="questionFile"
+                  input-id="questionFile"
+                  :extensions="extensions"
+                  :accept="accept"
+                  :multiple="false"
+                  :directory="directory"
+                  :create-directory="createDirectory"
+                  :size="size || 0"
+                  :thread="thread < 1 ? 1 : (thread > 5 ? 5 : thread)"
+                  :data="data"
+                  :drop="drop"
+                  :drop-directory="dropDirectory"
+                  :add-index="addIndex"
+                  @input-filter="inputFilter"
+                  @input-file="inputFile"
+                >
+                  <v-btn
+                    large
+                    text
+                    class="btnAddImage"
+                  >
+                    <v-icon>mdi-plus</v-icon>
+                  </v-btn>
+                </file-upload>
+              </v-col>
+              <v-col
+                v-for="(file, index) in questionFile"
+                :key="index"
+                class="test2"
+              >
+                <v-card>
+                  <v-img
+                    v-if="(editStatus && file.thumb) || (!editStatus && file)"
+                    :src="(editStatus) ? file.thumb : file"
+                    width="100%"
+                    height="60"
+                    class="mt-3"
+                    @click="showImgPanel(((editStatus) ? file.thumb : file))"
+                  />
+                  <span v-else>No Image</span>
+                  <v-card-title
+                    v-if="editStatus"
+                    class="caption"
+                    v-text="formatSize(file.size)"
+                  />
+                  <!-- delete img ----------------------------------------------------------->
+                  <v-btn
+                    v-if="editStatus"
+                    fab
+                    dark
+                    x-small
+                    color="error"
+                    class="btnRemoveFile"
+                    @click.prevent="$refs.questionFile.remove(file)"
+                  >
+                    <v-icon dark>
+                      mdi-close
+                    </v-icon>
+                  </v-btn>
+                </v-card>
+              </v-col>
+              <v-col
+                v-if="!editStatus && questionFile.length === 0"
+              >
+                <v-card>
+                  <v-img
+                    width="100%"
+                    height="60"
+                  >
+                    <template v-slot:placeholder>
+                      <v-row
+                        no-gutters
+                        class="fill-height"
+                      >
+                        <v-col class="d-flex justify-center align-center">
+                          <v-icon size="50px">
+                            mdi-image-off
+                          </v-icon>
+                        </v-col>
+                      </v-row>
+                    </template>
+                  </v-img>
+                </v-card>
+              </v-col>
+            </v-row>
+          </v-card-text>
+        </v-card>
+      </v-col>
+      <v-col md="8">
+        <v-card>
+          <v-card-title class="body-1">
+            جواب سوال
+          </v-card-title>
+          <v-card-text>
+            <v-row>
+              <v-col
+                v-for="(file, index) in answerFiles"
+                :key="index"
+                cols="3"
+              >
+                <v-card>
+                  <v-img
+                    v-if="(editStatus && file.thumb) || (!editStatus && file)"
+                    :src="(editStatus) ? file.thumb : file"
+                    width="100%"
+                    height="60"
+                    class="mt-3"
+                    @click="showImgPanel(((editStatus) ? file.thumb : file))"
+                  />
 
-<!--                  <span v-else>No Image</span>-->
+                  <span v-else>No Image</span>
 
-<!--                  <v-card-title-->
-<!--                    v-if="editStatus"-->
-<!--                    class="caption"-->
-<!--                    v-text="formatSize(file.size)"-->
-<!--                  />-->
+                  <v-card-title
+                    v-if="editStatus"
+                    class="caption"
+                    v-text="formatSize(file.size)"
+                  />
 
-<!--                  <v-btn-->
-<!--                    v-if="editStatus"-->
-<!--                    fab-->
-<!--                    dark-->
-<!--                    x-small-->
-<!--                    color="error"-->
-<!--                    class="btnRemoveFile"-->
-<!--                    @click.prevent="$refs.answerImages.remove(file)"-->
-<!--                  >-->
-<!--                    <v-icon dark>-->
-<!--                      mdi-close-->
-<!--                    </v-icon>-->
-<!--                  </v-btn>-->
-<!--                </v-card>-->
-<!--              </v-col>-->
-<!--              <v-col-->
-<!--                v-if="editStatus"-->
-<!--                cols="3"-->
-<!--              >-->
-<!--                <div>-->
+                  <v-btn
+                    v-if="editStatus"
+                    fab
+                    dark
+                    x-small
+                    color="error"
+                    class="btnRemoveFile"
+                    @click.prevent="$refs.answerImages.remove(file)"
+                  >
+                    <v-icon dark>
+                      mdi-close
+                    </v-icon>
+                  </v-btn>
+                </v-card>
+              </v-col>
+              <v-col
+                v-if="editStatus"
+                cols="3"
+              >
+                <div>
                   <file-upload
                     ref="answerImages"
                     v-model="answerFiles"
@@ -176,43 +176,44 @@
                     @input-filter="inputFilter"
                     @input-file="inputFile"
                   >
-                    <q-btn
-                      flat
+                    <v-btn
+                      large
+                      text
                       class="btnAddImage"
-                      icon="mdi-plus"
                     >
-                    </q-btn>
+                      <v-icon>mdi-plus</v-icon>
+                    </v-btn>
                   </file-upload>
-<!--                </div>-->
-<!--              </v-col>-->
-<!--              <v-col-->
-<!--                v-if="!editStatus && answerFiles.length === 0"-->
-<!--              >-->
-<!--                <v-card>-->
-<!--                  <v-img-->
-<!--                    width="100%"-->
-<!--                    height="60"-->
-<!--                  >-->
-<!--                    <template v-slot:placeholder>-->
-<!--                      <v-row-->
-<!--                        no-gutters-->
-<!--                        class="fill-height"-->
-<!--                      >-->
-<!--                        <v-col class="d-flex justify-center align-center">-->
-<!--                          <v-icon size="50px">-->
-<!--                            mdi-image-off-->
-<!--                          </v-icon>-->
-<!--                        </v-col>-->
-<!--                      </v-row>-->
-<!--                    </template>-->
-<!--                  </v-img>-->
-<!--                </v-card>-->
-<!--              </v-col>-->
-<!--            </v-row>-->
-<!--          </v-card-text>-->
-<!--        </v-card>-->
-<!--      </v-col>-->
-<!--    </v-row>-->
+                </div>
+              </v-col>
+              <v-col
+                v-if="!editStatus && answerFiles.length === 0"
+              >
+                <v-card>
+                  <v-img
+                    width="100%"
+                    height="60"
+                  >
+                    <template v-slot:placeholder>
+                      <v-row
+                        no-gutters
+                        class="fill-height"
+                      >
+                        <v-col class="d-flex justify-center align-center">
+                          <v-icon size="50px">
+                            mdi-image-off
+                          </v-icon>
+                        </v-col>
+                      </v-row>
+                    </template>
+                  </v-img>
+                </v-card>
+              </v-col>
+            </v-row>
+          </v-card-text>
+        </v-card>
+      </v-col>
+    </v-row>
   </div>
 </template>
 <script>
@@ -342,10 +343,11 @@ export default {
       el.select()
       document.execCommand('copy')
       document.body.removeChild(el)
-      this.$q.notify({
-        message: 'آدرس فایل به کلیپبورد منتقل شد',
-        color: 'green',
-        icon: 'thumb_up'
+      this.$notify({
+        group: 'notifs',
+        title: 'توجه',
+        text: 'آدرس فایل به کلیپبورد منتقل شد',
+        type: 'success'
       })
     },
     formatSize (size) {
