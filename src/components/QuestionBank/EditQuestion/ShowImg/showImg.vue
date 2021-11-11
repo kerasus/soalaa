@@ -2,18 +2,22 @@
   <q-card
     flat
     class="showImg-card"
+    style="min-height: 100vh;"
   >
     <div class="q-pt-md">
-      <div class="justify-center">
-        <div class="col">
+      <div class="row justify-between items-center ">
+        <div class="col box-titles">
           <span> فایل های بارگزاری شده</span>
         </div>
-        <div class="col text-left">
-          <q-icon
-            class="q-ml-sm"
-            name="mdi-close"
+        <div class="col text-right" style="margin-left: 16px;">
+          <q-btn
+            flat
+            round
+            color="grey-8"
+            icon="mdi-close"
             @click="closeImgPanel"
-          />
+          >
+          </q-btn>
         </div>
       </div>
     </div>
@@ -51,5 +55,11 @@ export default {
 }
 </script>
 
-<style scoped>
+<style scoped lang="scss">
+.showImg-card{
+  .box-titles {
+    font-size: 1rem ;
+    padding-left: 20px;
+  }
+}
 </style>

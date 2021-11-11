@@ -64,8 +64,12 @@
         />
       </div>
       <!-- -------------------------- upload file ---------------------->
-      <!--          ToDo : UploadImg -->
-      <!--    <upload-img></upload-img>-->
+      <UploadImg
+        v-if="showImgComponentStatus()"
+        v-model="currentQuestion"
+        :edit-status="upload_img_status"
+        @imgClicked="makeShowImgPanelVisible($event)"
+      />
       <!-- -------------------------- status --------------------------->
       <div
         v-if="getPageStatus() === 'edit'"
@@ -104,7 +108,7 @@
 import navBar from 'components/QuestionBank/EditQuestion/NavBar/navBar.vue'
 import QuestionLayout from 'components/QuestionBank/EditQuestion/question-layout/question_layout'
 // ToDo : UploadImg
-// import UploadImg from 'components/QuestionBank/EditQuestion/UploadImgs/uploadImg'
+import UploadImg from 'components/QuestionBank/EditQuestion/UploadImgs/uploadImg'
 // ToDo eslint
 // eslint-disable-next-line camelcase
 import attach_list from 'components/QuestionBank/EditQuestion/Exams/exams'
@@ -126,7 +130,7 @@ export default {
   components: {
     navBar,
     QuestionLayout,
-    // UploadImg,
+    UploadImg,
     attach_list,
     ShowImg,
     StatusComponent,
