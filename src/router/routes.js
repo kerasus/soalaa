@@ -88,7 +88,8 @@ const routes = [
       {
         path: 'questions',
         name: 'question-bank',
-        component: () => import('pages/Admin/Question/QuestionBank/list')
+        component: () => import('pages/Admin/Question/QuestionBank/list'),
+        meta: { middlewares: [auth] }
       },
       {
         path: 'category',

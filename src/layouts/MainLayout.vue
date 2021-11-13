@@ -166,6 +166,6 @@ export default {
 </style>
 <style lang="scss">
 .q-menu{
-  border-radius: 20px !important;
+  border-radius: 20px;
 }
 </style>
