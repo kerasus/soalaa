@@ -1,7 +1,7 @@
 import { Model, Collection } from 'js-abstract-model'
 // import md from '../plugins/Markdown'
 import TurndownService from 'turndown/lib/turndown.browser.umd'
-import convertToMarkdownKatex from '../plugins/ConvertToMarkdownKatex'
+// import convertToMarkdownKatex from '../plugins/ConvertToMarkdownKatex'
 
 class Choice extends Model {
   constructor (data) {
@@ -22,7 +22,8 @@ class Choice extends Model {
     ])
 
     if (typeof this.title === 'string') {
-      this.rendered_title = convertToMarkdownKatex(this.title)
+      this.rendered_title = (this.title)
+      // this.rendered_title = convertToMarkdownKatex(this.title)
       // this.rendered_title = md.render(this.title)
     }
   }
@@ -84,10 +85,6 @@ class Choice extends Model {
     // convert HTML to Markdown
     return turndownService.turndown(string)
     // return string
-    // return markdown
-
-    // return this.markdown.render(string.replace('<div class="question" dir="rtl">', ''))
-    // return md.render(markdown)
   }
 }
 

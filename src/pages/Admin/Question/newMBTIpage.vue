@@ -185,10 +185,9 @@ export default {
         const optionQuestion = response.data.data.find(item => (item.value === 'psychometric'))
         if (!optionQuestion) {
           // beterek
-          return this.$notify({
-            group: 'notifs',
-            text: ' API با مشکل مواجه شد!',
-            type: 'error'
+          return this.$q.notify({
+            message: ' API با مشکل مواجه شد!',
+            color: 'negative'
           })
         }
 
@@ -223,7 +222,8 @@ export default {
             if (this.currentQuestion.logs.list[i].id === eventData.logId) {
               // setting the new log using Vue.set so that the component notices the change
               this.currentQuestion.logs.list[i] = new Log(response.data.data)
-              window.app.set(this.currentQuestion, 'logs', new LogList(this.currentQuestion.logs))
+              // ToDo : app.set
+              // window.app.set(this.currentQuestion, 'logs', new LogList(this.currentQuestion.logs))
             }
           }
         })
@@ -250,11 +250,10 @@ export default {
       currentQuestion.type_id = this.optionQuestionId
       currentQuestion.update(API_ADDRESS.question.updateQuestion(currentQuestion.id))
         .then(() => {
-          this.$notify({
-            group: 'notifs',
-            title: 'توجه',
-            text: 'ویرایش با موفقیت انجام شد',
-            type: 'success'
+          this.$q.notify({
+            message: 'ویرایش با موفقیت انجام شد',
+            color: 'green',
+            icon: 'thumb_up'
           })
           this.$router.push({ name: 'question.show', params: { question_id: this.$route.params.question_id } })
         })
@@ -598,11 +597,10 @@ export default {
           this.currentQuestion.choices.list.forEach((item) => {
             item.title = ''
           })
-          this.$notify({
-            group: 'notifs',
-            title: 'توجه',
-            text: 'ثبت با موفقیت انجام شد',
-            type: 'success'
+          this.$q.notify({
+            message: 'ثبت با موفقیت انجام شد',
+            color: 'green',
+            icon: 'thumb_up'
           })
         })
     },
