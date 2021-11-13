@@ -1,5 +1,5 @@
 import { Model, Collection } from 'js-abstract-model'
-import { QuestSubcategoryList } from '../models/QuestSubcategory'
+import { QuestSubcategoryList } from 'src/models/QuestSubcategory'
 
 class QuestCategory extends Model {
   constructor (data) {

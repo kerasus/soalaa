@@ -134,7 +134,6 @@
                   />
 
                   <span v-else>No Image</span>
-
                   <q-card-section
                     v-if="editStatus"
                     class="caption"
@@ -177,8 +176,9 @@
                     @input-filter="inputFilter"
                     @input-file="inputFile"
                   >
-                    <q-btn
-                      flat
+                    <v-btn
+                      large
+                      text
                       class="btnAddImage"
                       icon="mdi-plus"
                     ></q-btn>

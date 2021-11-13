@@ -54,7 +54,6 @@ export default {
   }
 }
 </script>
-
 <style scoped lang="scss">
 .showImg-card{
   .box-titles {
