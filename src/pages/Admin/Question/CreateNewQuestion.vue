@@ -7,8 +7,6 @@
           <div class="text-grey-7" style="padding-top: 10px;">لطفا انتخاب کنید که سوال را به کدام روش ثبت می کنید.</div>
         </q-card-section>
         <q-card-actions align="between">
-<!--          <q-btn color="amber-4" flat @click="setMode('write')">تایپ سوال</q-btn>-->
-<!--          <q-btn color="amber-4" flat @click="setMode('uploadImage')">آپلود فایل</q-btn>-->
           <q-btn color="amber-4" flat @click="setQuestionTypeText">تایپ سوال</q-btn>
           <q-btn color="amber-4" flat @click="setQuestionTypeImage">آپلود فایل</q-btn>
         </q-card-actions>
