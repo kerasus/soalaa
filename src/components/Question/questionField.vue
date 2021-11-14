@@ -21,7 +21,7 @@
 
 <script>
 import VueKatex from 'src/components/VueKatex'
-import VueTiptapKatex from 'vue-tiptap-katex'
+import VueTiptapKatex from 'vue3-tiptap-katex'
 import API_ADDRESS from 'src/api/Addresses'
 
 export default {

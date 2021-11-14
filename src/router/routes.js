@@ -79,9 +79,9 @@ const routes = [
     }
   },
   {
-    path: '/login',
-    name: 'login',
-    component: () => import('pages/Auth/Login.vue')
+    path: '/debug',
+    name: 'debug',
+    component: () => import('pages/debug')
   },
   {
     path: '/test',
