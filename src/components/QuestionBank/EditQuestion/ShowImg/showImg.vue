@@ -1,35 +1,31 @@
 <template>
-  <div></div>
-<!--  <v-card-->
-<!--    flat-->
-<!--    height="1856"-->
-<!--    class="rounded-card"-->
-<!--  >-->
-<!--    <div class="pa-6">-->
-<!--      <v-row justify="space-between">-->
-<!--        <v-col>-->
-<!--          <span> فایل های بارگزاری شده</span>-->
-<!--        </v-col>-->
-<!--        <v-col class="text-left">-->
-<!--          <v-icon-->
-<!--            class="ml-4"-->
-<!--            @click="closeImgPanel"-->
-<!--          >-->
-<!--            mdi-close-->
-<!--          </v-icon>-->
-<!--        </v-col>-->
-<!--      </v-row>-->
-<!--    </div>-->
-<!--    <v-card-->
-<!--      color="#f5f5f5"-->
-<!--      flat-->
-<!--      class="ma-7 rounded-card"-->
-<!--    >-->
-<!--      <v-img-->
-<!--        :src="test"-->
-<!--      />-->
-<!--    </v-card>-->
-<!--  </v-card>-->
+  <q-card
+    flat
+    class="showImg-card"
+  >
+    <div class="q-pt-md">
+      <div class="justify-center">
+        <div class="col">
+          <span> فایل های بارگزاری شده</span>
+        </div>
+        <div class="col text-left">
+          <q-icon
+            class="q-ml-sm"
+            name="mdi-close"
+            @click="closeImgPanel"
+          />
+        </div>
+      </div>
+    </div>
+    <q-card
+      flat
+      class="q-ma-lg second-card"
+    >
+      <q-img
+        :src="test"
+      />
+    </q-card>
+  </q-card>
 </template>
 
 <script>
@@ -56,5 +52,4 @@ export default {
 </script>
 
 <style scoped>
-
 </style>

@@ -1,49 +1,124 @@
 <template>
-  <div>
+  <div class="row q-pa-md">
     <q-dialog persistent v-model="dialog" class="new-question-dialog">
-      <q-card class="my-card bg-grey-1">
+      <q-card class=" bg-grey-1">
         <q-card-section>
           <div class="text-grey-10" style="font-size: 16px;"> سوال را به کدام صورت درج می کنید؟ </div>
           <div class="text-grey-7" style="padding-top: 10px;">لطفا انتخاب کنید که سوال را به کدام روش ثبت می کنید.</div>
         </q-card-section>
         <q-card-actions align="between">
-          <q-btn color="amber-4" flat @click="setMode('write')">تایپ سوال</q-btn>
-          <q-btn color="amber-4" flat @click="setMode('uploadImage')">آپلود فایل</q-btn>
+<!--          <q-btn color="amber-4" flat @click="setMode('write')">تایپ سوال</q-btn>-->
+<!--          <q-btn color="amber-4" flat @click="setMode('uploadImage')">آپلود فایل</q-btn>-->
+          <q-btn color="amber-4" flat @click="setQuestionTypeText">تایپ سوال</q-btn>
+          <q-btn color="amber-4" flat @click="setQuestionTypeImage">آپلود فایل</q-btn>
         </q-card-actions>
       </q-card>
     </q-dialog>
-    <nav-bar></nav-bar>
-    <question-layout></question-layout>
-    <attach_list></attach_list>
-    <upload-img></upload-img>
-    <show-img></show-img>
-    <status-component></status-component>
-    <log-list-component></log-list-component>
+    <div class="col"
+         :class="calcQuestionColsNumber"
+    >
+      <nav-bar
+        v-if="checkNavbarVisibility()"
+        :question="currentQuestion"
+        :edit-status="edit_status"
+        :page-name="getPageStatus()"
+        @create="navBarAction_create"
+        @saveDraft="navBarAction_saveDraft"
+        @save="navBarAction_save"
+        @cancel="navBarAction_cancel"
+        @edit="navBarAction_edit"
+        @remove="navBarAction_remove"
+      />
+      <div v-if="showQuestionComponentStatus()">
+        <question-layout
+          v-if="!loading"
+          ref="qlayout"
+          v-model="currentQuestion"
+          :status="edit_status"
+          @input="updateQuestion"
+        />
+        <div class="col-4">
+<!--          :options="currentQuestion.author"-->
+          <q-select
+            v-if="getPageStatus() === 'create'"
+            v-model="currentQuestion.author"
+            label="طراحان"
+            dense
+            outlined
+            rounded
+            multiple
+            disabled
+            use-chips
+            model-value=""
+          >
+          </q-select>
+        </div>
+        <attach_list
+          :status="edit_status"
+          :attaches="selectedQuizzes"
+          :exam-list="examList"
+          :sub-categories="subCategoriesList"
+          :loading="attachLoading"
+          @detach="detachQuestion"
+          @attach="attachQuestion"
+        />
+      </div>
+      <!-- -------------------------- upload file ---------------------->
+      <!--          ToDo : UploadImg -->
+      <!--    <upload-img></upload-img>-->
+      <!-- -------------------------- status --------------------------->
+      <div
+        v-if="getPageStatus() === 'edit'"
+        class="my-10"
+      >
+        <StatusComponent
+          :statuses="questionStatuses"
+          :loading="changeStatusLoading"
+          @update="changeStatus"
+        />
+      </div>
+    </div>
+    <!-- -------------------------- show img---------------------------->
+    <div
+      v-if="uploadImgColsNumber.show"
+      class="col-5"
+    >
+      <ShowImg
+        :test="imgSrc"
+        @closePanel="makeShowImgPanelInvisible"
+      />
+    </div>
+    <!-- -------------------------- log --------------------------->
+    <div
+      v-if="currentQuestion.logs && currentQuestion.logs.list && currentQuestion.logs.list.length > 0 && !uploadImgColsNumber.show"
+      class="col-3"
+    >
+      <LogListComponent
+        :logs="currentQuestion.logs"
+        @addComment="addComment"
+      />
+    </div>
   </div>
 </template>
 <script>
-// ToDo
-// eslint-disable-next-line import/default
-// import Vue from 'vue'
 import navBar from 'components/QuestionBank/EditQuestion/NavBar/navBar.vue'
 import QuestionLayout from 'components/QuestionBank/EditQuestion/question-layout/question_layout'
-import UploadImg from 'components/QuestionBank/EditQuestion/UploadImgs/uploadImg'
-// ToDo
+// ToDo : UploadImg
+// import UploadImg from 'components/QuestionBank/EditQuestion/UploadImgs/uploadImg'
+// ToDo eslint
 // eslint-disable-next-line camelcase
 import attach_list from 'components/QuestionBank/EditQuestion/Exams/exams'
 import StatusComponent from 'components/QuestionBank/EditQuestion/StatusComponent/status'
 import ShowImg from 'components/QuestionBank/EditQuestion/ShowImg/showImg'
 import LogListComponent from 'components/QuestionBank/EditQuestion/Log/LogList'
 import { Question } from 'src/models/Question'
-// ToDo : LogList needed
-// import { Log, LogList } from 'src/models/Log'
-import { Log } from 'src/models/Log'
-// ToDo : ExamList needed
-// import { ExamList } from 'src/models/Exam'
+import { Log, LogList } from 'src/models/Log'
+import { ExamList } from 'src/models/Exam'
 import { QuestSubcategoryList } from 'src/models/QuestSubcategory'
 import API_ADDRESS from 'src/api/Addresses'
 import Assistant from 'src/plugins/assistant'
 import { QuestionStatusList } from 'src/models/QuestionStatus'
+//   ToDo : axios
 import axios from 'axios'
 
 export default {
@@ -51,7 +126,7 @@ export default {
   components: {
     navBar,
     QuestionLayout,
-    UploadImg,
+    // UploadImg,
     attach_list,
     ShowImg,
     StatusComponent,
@@ -99,8 +174,7 @@ export default {
       choiceRendered: ['', '', '', ''],
       displayEditQuestion: false,
       currentQuestion: new Question(),
-      // ToDo : ExamList needed
-      // examList: new ExamList(),
+      examList: new ExamList(),
       subCategoriesList: new QuestSubcategoryList(),
       questionData: {
         statement: '',
@@ -152,32 +226,11 @@ export default {
   //   console.log(to, from, next)
   // },
   created () {
-    // test
-    this.showPageDialog()
+    console.log('currentQuestion :', this.currentQuestion)
     window.onbeforeunload = function () {
       return 'Do you really want to leave our brilliant application?'
     }
-
-    // const that = this
-    // ToDo : API_ADDRESS.option.base not found
-    // axios.get(API_ADDRESS.option.base + '?type=question_type')
-    //   .then(function (response) {
-    //     const optionQuestion = response.data.data.find(item => (item.value === 'konkur'))
-    //     if (!optionQuestion) {
-    //       // beterek
-    //       return this.$notify({
-    //         group: 'notifs',
-    //         text: ' API با مشکل مواجه شد!',
-    //         type: 'error'
-    //       })
-    //     }
-    //     that.optionQuestionId = optionQuestion.id
-    //     that.loading = false
-    //   })
-    //   .catch(function (error) {
-    //     console.log(error)
-    //   })
-
+    this.getQuestionType()
     this.setPageStatus()
     this.checkUrl()
     this.getQuestionStatus()
@@ -189,16 +242,38 @@ export default {
     this.setUploadImgStatus()
   },
   methods: {
+    getQuestionType () {
+      const that = this
+      console.log(API_ADDRESS.option.base)
+      axios.get(API_ADDRESS.option.base + '?type=question_type')
+        .then(function (response) {
+          const optionQuestion = response.data.data.find(item => (item.value === 'konkur'))
+          if (!optionQuestion) {
+            // beterek
+            return this.$q.notify({
+              message: ' API با مشکل مواجه شد!',
+              color: 'negative'
+            })
+          }
+          that.optionQuestionId = optionQuestion.id
+          that.loading = false
+        })
+        .catch(function (error) {
+          console.log(error)
+        })
+    },
     addComment (eventData) {
       axios.post(API_ADDRESS.log.addComment(eventData.logId), { comment: eventData.text })
         .then(response => {
           // iterating over the array to find the log that has changed
-          for (let i = 0; i < this.currentQuestion.logs.list.length; i++) {
-            if (this.currentQuestion.logs.list[i].id === eventData.logId) {
-              // setting the new log using Vue.set so that the component notices the change
-              this.currentQuestion.logs.list[i] = new Log(response.data.data)
-              // ToDo : import vue
-              // Vue.set(this.currentQuestion, 'logs', new LogList(this.currentQuestion.logs))
+          if (this.currentQuestion.logs && this.currentQuestion.logs.list) {
+            for (let i = 0; i < this.currentQuestion.logs.list.length; i++) {
+              if (this.currentQuestion.logs.list[i].id === eventData.logId) {
+                // setting the new log using Vue.set so that the component notices the change
+                this.currentQuestion.logs.list[i] = new Log(response.data.data)
+                // ToDo : app.set
+                // window.app.set(this.currentQuestion, 'logs', new LogList(this.currentQuestion.logs))
+              }
             }
           }
         })
@@ -228,11 +303,10 @@ export default {
       currentQuestion.type_id = this.optionQuestionId
       currentQuestion.update(API_ADDRESS.question.updateQuestion(currentQuestion.id))
         .then(() => {
-          this.$notify({
-            group: 'notifs',
-            title: 'توجه',
-            text: 'ویرایش با موفقیت انجام شد',
-            type: 'success'
+          this.$q.notify({
+            message: 'ویرایش با موفقیت انجام شد',
+            color: 'green',
+            icon: 'thumb_up'
           })
           this.$router.push({ name: 'question.show', params: { question_id: this.$route.params.question_id } })
         })
@@ -286,12 +360,9 @@ export default {
 
     setPageStatus () {
       const title = this.$route.name.replace('question.', '')
+      console.log('setPageStatus :', title)
       this.pageStatuses.forEach(item => {
-        if (item.title === title) {
-          item.state = true
-        } else {
-          item.state = false
-        }
+        item.state = item.title === title
       })
     },
 
@@ -320,14 +391,16 @@ export default {
       const loadSubcategoriesPromise = this.loadSubcategories()
       Promise.all([loadExamListPromise, loadSubcategoriesPromise])
         .then(() => {
-          if (that.getPageStatus() !== 'create') {
-            that.loadCurrentQuestionData()
-          } else {
-            if (that.currentQuestion.choices === null) {
-              // that.currentQuestion.choices
-            }
+          if (that.getPageStatus() === 'create') {
+            console.log('questionData :', that.questionData)
             that.currentQuestion = new Question(that.questionData)
+            console.log('Question :', that.currentQuestion)
             that.loading = false
+            // if (that.currentQuestion.choices === null) {
+            //   // that.currentQuestion.choices
+            // }
+          } else {
+            that.loadCurrentQuestionData()
           }
           that.setNullKeys()
         })
@@ -377,8 +450,8 @@ export default {
       const selectedQuizzes = this.selectedQuizzes
       this.totalExams[targetExamIndex] = item
       selectedQuizzes.push(JSON.parse(JSON.stringify(this.totalExams[targetExamIndex])))
-      // ToDo : import vue
-      // Vue.set(this, 'selectedQuizzes', selectedQuizzes)
+      // ToDo : app.set
+      // window.app.set(this, 'selectedQuizzes', selectedQuizzes)
       this.dialog = false
       this.updateSelectedQuizzes()
     },
@@ -454,6 +527,7 @@ export default {
     },
 
     loadCurrentQuestionData () {
+      console.log('loadCurrentQuestionData ')
       const that = this
       this.loading = true
       this.currentQuestion.show(null, API_ADDRESS.question.updateQuestion(this.$route.params.question_id))
@@ -476,19 +550,19 @@ export default {
     },
 
     getLogs () {
+      console.log('getLogs this.currentQuestion :', this.currentQuestion)
+      console.log('getLogs logs :', this.currentQuestion.logs)
       this.currentQuestion.logs.fetch(null, API_ADDRESS.question.log.base(this.$route.params.question_id))
         .then((response) => {
-          // this.currentQuestion.logs = new LogList(response.data.data)
-          // ToDo : import vue
-          // Vue.set(this.currentQuestion, 'logs', new LogList(response.data.data))
+          this.currentQuestion.logs = new LogList(response.data.data)
+          window.app.set(this.currentQuestion, 'logs', new LogList(response.data.data))
           this.setQuestionLayoutCols()
         })
     },
 
     updateQuestion (eventData) {
-      // this.currentQuestion = new Question(eventData)
-      // ToDo : import vue
-      // Vue.set(this, 'currentQuestion', new Question(eventData))
+      this.currentQuestion = new Question(eventData)
+      window.app.set(this, 'currentQuestion', new Question(eventData))
     },
 
     updateAttachList (exams) {
@@ -521,14 +595,13 @@ export default {
     },
 
     loadExamList () {
-      // ToDo : ExamList needed
-      // const that = this
-      // return new ExamList().fetch()
-      //   .then((response) => {
-      //     that.examList = new ExamList(response.data.data)
-      //   })
-      //   .catch(() => {
-      //   })
+      const that = this
+      return new ExamList().fetch()
+        .then((response) => {
+          that.examList = new ExamList(response.data.data)
+        })
+        .catch(() => {
+        })
     },
 
     loadSubcategories () {
@@ -550,7 +623,7 @@ export default {
     makeShowImgPanelInvisible () {
       this.uploadImgColsNumber.show = false
       this.$store.commit('AppLayout/updateDrawer', true)
-      if (this.currentQuestion.logs.list.length > 0) {
+      if (this.currentQuestion.logs.list && this.currentQuestion.logs.list.length > 0) {
         this.questionColsNumber = 9
       } else {
         this.questionColsNumber = 12
@@ -558,13 +631,15 @@ export default {
     },
 
     setQuestionLayoutCols () {
-      if (this.currentQuestion.logs.list.length > 0) {
+      if (this.currentQuestion.logs.list && this.currentQuestion.logs.list.length > 0) {
         this.questionColsNumber = 9
       }
     },
+
     showPageDialog () {
       this.dialog = true
     },
+
     setQuestionTypeText () {
       this.questionType = 'typeText'
       this.dialog = false
@@ -599,11 +674,10 @@ export default {
           this.currentQuestion.choices.list.forEach((item) => {
             item.title = ''
           })
-          this.$notify({
-            group: 'notifs',
-            title: 'توجه',
-            text: 'ثبت با موفقیت انجام شد',
-            type: 'success'
+          this.$q.notify({
+            message: 'ثبت با موفقیت انجام شد',
+            color: 'green',
+            icon: 'thumb_up'
           })
           window.open('/question/create', '_blank').focus()
           this.$router.push({ name: 'question.show', params: { question_id: questionId } })
@@ -668,6 +742,11 @@ export default {
     setMode (mode) {
       this.mode = mode
       this.dialog = false
+    }
+  },
+  computed: {
+    calcQuestionColsNumber () {
+      return 'col-' + this.questionColsNumber
     }
   }
 }

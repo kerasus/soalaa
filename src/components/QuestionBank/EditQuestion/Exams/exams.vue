@@ -1,11 +1,12 @@
 <template>
   <div class="exam mb-10">
-<!--    <p-->
-<!--      v-if="status"-->
-<!--      class="font-weight-medium"-->
-<!--    >-->
-<!--      آزمون ها-->
-<!--    </p>-->
+    <p
+      v-if="status"
+      class="font-weight-medium"
+    >
+      آزمون ها
+    </p>
+<!--    todo : v-form-->
 <!--    <v-form ref="form">-->
 <!--      <v-row-->
 <!--        v-if="status"-->
@@ -247,7 +248,6 @@ export default {
     attach () {
       if (this.$refs.form.validate()) {
         const exam = this.examList.list.find(examItem => examItem.id === this.chooseExam)
-        // ToDo
         // eslint-disable-next-line camelcase
         const sub_category = this.subCategories.list.find(subCategoryItem => subCategoryItem.id === this.chooseLesson)
         const emitData = {

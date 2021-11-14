@@ -50,10 +50,12 @@ const AxiosError = (function () {
   }
 
   function getMessagesFromArrayWithRecursion (array) {
-    if (Array.isArray(array)) {
-      return array.flat(Math.min())
+    if (array) {
+      if (Array.isArray(array)) {
+        return array.flat(Math.min())
+      }
+      return array[0]
     }
-    return array[0]
   }
 
   return {

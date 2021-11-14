@@ -1,15 +1,18 @@
 /* eslint-disable camelcase,array-callback-return */
-// import Vue from 'vue'
+import Time from 'src/plugins/time'
 import { Model, Collection } from 'js-abstract-model'
 import { ChoiceList } from './Choice'
 import { CheckingTimeList } from '../models/CheckingTime'
-// import Time from '../plugins/time'
 import axios from 'axios'
 import API_ADDRESS from '../api/Addresses'
-// import md from '../plugins/Markdown'
 import TurndownService from 'turndown/lib/turndown.browser.umd'
-import convertToMarkdownKatex from '../plugins/ConvertToMarkdownKatex'
-
+import { QuestionStatus } from '../models/QuestionStatus'
+import { LogList } from '../models/Log'
+import { createApp } from 'vue'
+if (!window.app) {
+// window.app
+  window.app = createApp({})
+}
 class Question extends Model {
   constructor (data) {
     super(data, [
@@ -22,11 +25,25 @@ class Question extends Model {
       { key: 'title' },
       { key: 'index' },
       { key: 'statement' },
+      { key: 'statement_photo' },
       { key: 'rendered_statement' },
       { key: 'in_active_category' },
       { key: 'photo' },
       { key: 'order' },
       { key: 'exams' },
+      { key: 'type_id' },
+      {
+        key: 'author',
+        default: []
+      },
+      {
+        key: 'type',
+        default: {
+          id: null,
+          type: null, // question_type
+          value: null // psychometric
+        }
+      },
       {
         key: 'isInView',
         default: false
@@ -37,11 +54,25 @@ class Question extends Model {
         key: 'checking_times',
         relatedModel: CheckingTimeList
       },
+      {
+        key: 'logs',
+        relatedModel: LogList
+      },
       { key: 'answer' },
+      {
+        key: 'answer_photos',
+        default: []
+      },
+      { key: 'descriptive_answer' },
+      { key: 'rendered_descriptive_answer' },
       { key: 'selected_at' },
       {
         key: 'choices',
         relatedModel: ChoiceList
+      },
+      {
+        key: 'status',
+        relatedModel: QuestionStatus
       },
       {
         key: 'state',
@@ -79,7 +110,9 @@ class Question extends Model {
       {
         key: 'confirmers',
         default: []
-      }
+      },
+      { key: 'created_at' },
+      { key: 'updated_at' }
     ])
 
     if (this.id) {
@@ -94,8 +127,11 @@ class Question extends Model {
     this.apiResource = {
       fields: [
         { key: 'statement' },
+        { key: 'descriptive_answer' },
         { key: 'sub_category_id' },
         { key: 'exams' },
+        { key: 'type_id' },
+        { key: 'author' },
         {
           key: 'choices',
           value: function () {
@@ -118,8 +154,43 @@ class Question extends Model {
     }
 
     if (typeof this.statement === 'string') {
-      this.rendered_statement = convertToMarkdownKatex(this.statement)
+      this.rendered_statement = (this.statement)
+      // this.rendered_statement = convert(this.statement)
       // this.rendered_statement = md.render(this.statement)
+    }
+    if (typeof this.descriptive_answer === 'string') {
+      this.rendered_descriptive_answer = (this.descriptive_answer)
+      // this.rendered_descriptive_answer = convert(this.descriptive_answer)
+      // this.rendered_statement = md.render(this.statement)
+    }
+    if (this.choices.list.length === 0) {
+      const choices = [
+        {
+          id: 1,
+          title: '',
+          order: 1,
+          answer: false
+        },
+        {
+          id: 2,
+          title: '',
+          order: 2,
+          answer: false
+        },
+        {
+          id: 3,
+          title: '',
+          order: 3,
+          answer: false
+        },
+        {
+          id: 4,
+          title: '',
+          order: 4,
+          answer: false
+        }
+      ]
+      this.choices = new ChoiceList(choices)
     }
   }
 
@@ -181,10 +252,6 @@ class Question extends Model {
     // convert HTML to Markdown
     return turndownService.turndown(string)
     // return string
-    // return markdown
-
-    // return this.markdown.render(string.replace('<div class="question" dir="rtl">', ''))
-    // return md.render(markdown)
   }
 
   getAnsweredChoice () {
@@ -207,11 +274,11 @@ class Question extends Model {
     if (newState === 'x') {
       this.uncheckChoices()
     }
-    // if (newState === this.state) {
-    //   // Vue.set(this, 'state', '') ToDo : import vue
-    //   return
-    // }
-    // Vue.set(this, 'state', newState) ToDo : import vue
+    if (newState === this.state) {
+      window.app.set(this, 'state', '')
+      return
+    }
+    window.app.set(this, 'state', newState)
   }
 
   bookmark () {
@@ -230,10 +297,10 @@ class Question extends Model {
     this.choices.list.map((item) => {
       if (item.id === choiceId) {
         item.answer = true
-        // Vue.set(item, 'answer', true) ToDo : import vue
+        window.app.set(item, 'answer', true)
       } else {
         item.answer = false
-        // Vue.set(item, 'answer', false) ToDo : import vue
+        window.app.set(item, 'answer', false)
       }
 
       return item
@@ -241,25 +308,25 @@ class Question extends Model {
   }
 
   selectChoice (choiceId, selected_at) {
-    // let answeredAt = Time.now()
-    // if (selected_at) {
-    //   answeredAt = selected_at
-    // }
+    let answeredAt = Time.now()
+    if (selected_at) {
+      answeredAt = selected_at
+    }
     const that = this
     this.choices.list.map((item) => {
-      // Vue.set(item, 'answered_at', answeredAt)  ToDo : import vue
+      window.app.set(item, 'answered_at', answeredAt)
       if (that.state === 'x') {
         that.state = ''
-        // Vue.set(that, 'state', '') ToDo : import vue
+        window.app.set(that, 'state', '')
       }
       if (item.id !== choiceId) {
         item.active = false
-        // Vue.set(item, 'active', false) ToDo : import vue
+        window.app.set(item, 'active', false)
       } else if (choiceId === null || typeof choiceId === 'undefined' || item.active) {
-        // Vue.set(item, 'active', false) ToDo : import vue
+        window.app.set(item, 'active', false)
         // item.active = false
       } else {
-        // Vue.set(item, 'active', true) ToDo : import vue
+        window.app.set(item, 'active', true)
         // item.active = true
       }
     })
@@ -268,24 +335,24 @@ class Question extends Model {
   uncheckChoices () {
     this.choices.list.map((item) => {
       item.active = false
-      // Vue.set(item, 'active', false) ToDo : import vue
+      window.app.set(item, 'active', false)
     })
   }
 
   sendAnswer (exam_user_id, { question_id, choice_id, selected_at }) {
-    axios.post(API_ADDRESS.exam.sendAnswers, { exam_user_id, questions: [{ question_id, choice_id, selected_at }] })
+    return axios.post(API_ADDRESS.exam.sendAnswers, { exam_user_id, questions: [{ question_id, choice_id, selected_at }] })
   }
 
   sendStatus (exam_user_id, { question_id, status }) {
-    axios.post(API_ADDRESS.exam.sendStatus, { exam_user_id, question_id, status })
+    return axios.post(API_ADDRESS.exam.sendStatus, { exam_user_id, question_id, status })
   }
 
   sendBookmark (exam_user_id, question_id) {
-    axios.post(API_ADDRESS.exam.sendBookmark, { exam_user_id, question_id })
+    return axios.post(API_ADDRESS.exam.sendBookmark, { exam_user_id, question_id })
   }
 
   sendUnBookmark (exam_user_id, question_id) {
-    axios.post(API_ADDRESS.exam.sendUnBookmark, { exam_user_id, question_id })
+    return axios.post(API_ADDRESS.exam.sendUnBookmark, { exam_user_id, question_id })
   }
 }
 
