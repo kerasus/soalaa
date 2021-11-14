@@ -161,8 +161,8 @@ export default {
         },
         {
           displayName: ' کارخانه ی سوال',
-          to: 'user-exam',
-          name: 'user.exam'
+          to: '/question/list',
+          name: 'question.list'
         }
       ]
     }

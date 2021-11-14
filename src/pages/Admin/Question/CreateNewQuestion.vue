@@ -38,7 +38,6 @@
           @input="updateQuestion"
         />
         <div class="col-4">
-<!--          :options="currentQuestion.author"-->
           <q-select
             v-if="getPageStatus() === 'create'"
             v-model="currentQuestion.author"
@@ -46,10 +45,12 @@
             dense
             outlined
             rounded
+            :options="currentQuestion.author"
+            option-label="full_name"
+            item-value="id"
             multiple
             disabled
             use-chips
-            model-value=""
           >
           </q-select>
         </div>
@@ -69,7 +70,7 @@
       <!-- -------------------------- status --------------------------->
       <div
         v-if="getPageStatus() === 'edit'"
-        class="my-10"
+        class="q-my-10"
       >
         <StatusComponent
           :statuses="questionStatuses"
@@ -101,6 +102,8 @@
   </div>
 </template>
 <script>
+import API_ADDRESS from 'src/api/Addresses'
+import Assistant from 'src/plugins/assistant'
 import navBar from 'components/QuestionBank/EditQuestion/NavBar/navBar.vue'
 import QuestionLayout from 'components/QuestionBank/EditQuestion/question-layout/question_layout'
 // ToDo : UploadImg
@@ -115,8 +118,6 @@ import { Question } from 'src/models/Question'
 import { Log, LogList } from 'src/models/Log'
 import { ExamList } from 'src/models/Exam'
 import { QuestSubcategoryList } from 'src/models/QuestSubcategory'
-import API_ADDRESS from 'src/api/Addresses'
-import Assistant from 'src/plugins/assistant'
 import { QuestionStatusList } from 'src/models/QuestionStatus'
 //   ToDo : axios
 import axios from 'axios'
