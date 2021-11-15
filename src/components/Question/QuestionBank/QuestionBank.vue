@@ -1,11 +1,14 @@
 <template>
-  <div class="question-bank">
+  <div
+    v-if="initialData"
+    class="question-bank"
+  >
     <q-toolbar class="text-white question-bank-toolbar">
-      <div class="row">
+      <div class="row toolbar-selections">
         <div class="col">
           <q-select
             filled
-            v-model="model"
+            v-model="filterQuestions.majorId"
             clearable
             use-input
             hide-selected
@@ -14,9 +17,11 @@
             label="رشته"
             bg-color="white"
             rounded
-            :options="options"
-            @filter="filterFnAutoselect"
-            @filter-abort="abortFilterFn"
+            :options="initialData.major"
+            :option-label="(item) => item === null ? 'Null value' : item.name"
+            :option-value="(item) => item === null ? null : item.id"
+            emit-value
+            map-options
           >
             <template v-slot:no-option>
               <q-item>
@@ -30,7 +35,7 @@
         <div class="col">
           <q-select
             filled
-            v-model="model"
+            v-model="filterQuestions.levelId"
             clearable
             use-input
             hide-selected
@@ -39,9 +44,7 @@
             label="مقطع"
             bg-color="white"
             rounded
-            :options="options"
-            @filter="filterFnAutoselect"
-            @filter-abort="abortFilterFn"
+            :options="initialData.level"
           >
             <template v-slot:no-option>
               <q-item>
@@ -55,7 +58,7 @@
         <div class="col">
           <q-select
             filled
-            v-model="model"
+            v-model="filterQuestions.gradeId"
             clearable
             use-input
             hide-selected
@@ -64,9 +67,7 @@
             label="پایه"
             bg-color="white"
             rounded
-            :options="options"
-            @filter="filterFnAutoselect"
-            @filter-abort="abortFilterFn"
+            :options="initialData.grade"
           >
             <template v-slot:no-option>
               <q-item>
@@ -80,7 +81,7 @@
         <div class="col">
           <q-select
             filled
-            v-model="model"
+            v-model="filterQuestions.majorGroupId"
             clearable
             use-input
             hide-selected
@@ -89,9 +90,7 @@
             label="گروه آموزشی"
             bg-color="white"
             rounded
-            :options="options"
-            @filter="filterFnAutoselect"
-            @filter-abort="abortFilterFn"
+            :options="initialData.major"
           >
             <template v-slot:no-option>
               <q-item>
@@ -105,7 +104,7 @@
         <div class="col">
           <q-select
             filled
-            v-model="model"
+            v-model="filterQuestions.moduleGroupId"
             clearable
             use-input
             hide-selected
@@ -114,9 +113,7 @@
             label="گروه درسی"
             bg-color="white"
             rounded
-            :options="options"
-            @filter="filterFnAutoselect"
-            @filter-abort="abortFilterFn"
+            :options="initialData.moduleGroup"
           >
             <template v-slot:no-option>
               <q-item>
@@ -130,7 +127,7 @@
         <div class="col">
           <q-select
             filled
-            v-model="model"
+            v-model="filterQuestions.moduleId"
             clearable
             use-input
             hide-selected
@@ -139,9 +136,7 @@
             label="درس"
             bg-color="white"
             rounded
-            :options="options"
-            @filter="filterFnAutoselect"
-            @filter-abort="abortFilterFn"
+            :options="initialData.module"
           >
             <template v-slot:no-option>
               <q-item>
@@ -155,7 +150,7 @@
         <div class="col">
           <q-select
             filled
-            v-model="model"
+            v-model="filterQuestions.difficultyLevelId"
             clearable
             use-input
             hide-selected
@@ -164,9 +159,7 @@
             label="سختی"
             bg-color="white"
             rounded
-            :options="options"
-            @filter="filterFnAutoselect"
-            @filter-abort="abortFilterFn"
+            :options="initialData.difficultyLevels"
           >
             <template v-slot:no-option>
               <q-item>
@@ -180,7 +173,7 @@
         <div class="col">
           <q-select
             filled
-            v-model="model"
+            v-model="filterQuestions.originId"
             clearable
             use-input
             hide-selected
@@ -189,9 +182,7 @@
             label="منبع"
             bg-color="white"
             rounded
-            :options="options"
-            @filter="filterFnAutoselect"
-            @filter-abort="abortFilterFn"
+            :options="initialData.origins"
           >
             <template v-slot:no-option>
               <q-item>
@@ -205,7 +196,7 @@
         <div class="col">
           <q-select
             filled
-            v-model="model"
+            v-model="filterQuestions.publishYearId"
             clearable
             use-input
             hide-selected
@@ -214,9 +205,7 @@
             label="سال انتشار"
             bg-color="white"
             rounded
-            :options="options"
-            @filter="filterFnAutoselect"
-            @filter-abort="abortFilterFn"
+            :options="initialData.publishYears"
           >
             <template v-slot:no-option>
               <q-item>
@@ -228,14 +217,14 @@
           </q-select>
         </div>
       </div>
-      <div class="row">
+      <div class="row toolbar-card-parent">
         <q-card class="toolbar-card">
-          <div class="row" no-gutters>
+          <div class="row toolbar-card-child" no-gutters>
             <div class="col">
               <q-chip
                 dark
                 class="ma-2"
-                color="deep-purple accent-4 toolbar-button"
+                color="deep-purple-14 toolbar-button"
               >
                 {{ totalFilteredQuestions }}
               </q-chip>
@@ -244,35 +233,45 @@
               <q-btn
                 class="toolbar-button"
                 color="light-blue"
-                fab
+                fab-mini
                 icon="mdi-sort-ascending"
-                @click="sortQuestions"
               />
             </div>
             <div class="col">
               <q-btn
                 class="toolbar-button"
                 color="light-blue"
-                fab
+                fab-mini
                 icon="mdi-database-search"
                 @click="getQuestions(true)"
-             />
+              />
             </div>
           </div>
         </q-card>
       </div>
     </q-toolbar>
-    <div>
-      <question-card/>
-    </div>
+    <q-infinite-scroll @load="getQuestions (false)" :offset="250">
+      <div
+        v-for="item in filteredQuestions"
+        :key="item.id"
+      >
+        <question-card :questionData="item"/>
+      </div>
+      <template v-slot:loading>
+        <div class="row justify-center q-my-md">
+          <q-spinner-dots color="primary" size="40px"/>
+        </div>
+      </template>
+    </q-infinite-scroll>
   </div>
 </template>
 
 <script>
 // import topic from 'src/components/Question/topic'
 import QuestionCard from 'src/components/Question/QuestionBank/QuestionCard'
-import Assistant from 'src/plugins/assistant'
 import API_ADDRESS from 'src/api/Addresses'
+import $ from 'jquery'
+
 export default {
   name: 'QuestionBank',
   components: {
@@ -281,9 +280,7 @@ export default {
   },
   data () {
     return {
-      option: '',
-      montaTree: null,
-      disableLoadingList: false,
+      initialData: {},
       totalFilteredQuestions: '...',
       lastLoadTime: Date.now(),
       nextPage: '',
@@ -301,135 +298,147 @@ export default {
         publishYearId: null,
         difficultyLevelId: null
       },
-      expanModel: 0
+      expanModel: 0,
+      fillMonta: false,
+      loading: false
     }
   },
-  computed: {
-
-  },
   created () {
-    this.getData()
   },
   methods: {
     getData () {
-      this.$axios.get('https://cdn.alaatv.com/upload/knowledgeTree.json', {
-        // headers: {
-        //   Accept: 'application/json;'
-        // }
-      })
-        .then((res) => {
-          console.log(res)
-        })
-        .catch((err) => {
-          console.log('error', err)
-        })
-    },
-    sortQuestions () {
-      function hasQuestionOrder (question, index) {
-        if (typeof index === 'undefined') {
-          index = 0
-        }
-        return (
-          question.source_data.origins &&
-          question.source_data.origins.questionOriginList &&
-          question.source_data.origins.questionOriginList[index] &&
-          question.source_data.origins.questionOriginList[index].questionOrder
-        )
-      }
-      function getQuestionOrder (question, index) {
-        if (typeof index === 'undefined') {
-          index = 0
-        }
-        if (hasQuestionOrder(question, index)) {
-          return question.source_data.origins.questionOriginList[index].questionOrder
-        } else {
-          return null
-        }
-      }
-      const sortList = Array.prototype.sort.bind(this.filteredQuestions)
-      sortList(function (a, b) {
-        if (hasQuestionOrder(a) && hasQuestionOrder(b) && getQuestionOrder(a) < getQuestionOrder(b)) {
-          return -1
-        } else if (hasQuestionOrder(a) && hasQuestionOrder(b) && getQuestionOrder(a) > getQuestionOrder(b)) {
-          return 1
-        } else if (hasQuestionOrder(a, 1) && hasQuestionOrder(b, 1) && getQuestionOrder(a, 1) < getQuestionOrder(b, 1)) {
-          return -1
-        } else if (hasQuestionOrder(a, 1) && hasQuestionOrder(b, 1) && getQuestionOrder(a, 1) > getQuestionOrder(b, 1)) {
-          return 1
-        } else if (hasQuestionOrder(a, 2) && hasQuestionOrder(b, 2) && getQuestionOrder(a, 2) < getQuestionOrder(b, 2)) {
-          return -1
-        } else if (hasQuestionOrder(a, 2) && hasQuestionOrder(b, 2) && getQuestionOrder(a, 2) > getQuestionOrder(b, 2)) {
-          return 1
-        } else if (hasQuestionOrder(a, 3) && hasQuestionOrder(b, 3) && getQuestionOrder(a, 3) < getQuestionOrder(b, 3)) {
-          return -1
-        } else if (hasQuestionOrder(a, 3) && hasQuestionOrder(b, 3) && getQuestionOrder(a, 3) > getQuestionOrder(b, 3)) {
-          return 1
-        } else {
-          return 1
+      $.ajax({
+        type: 'GET',
+        url: 'https://cdn.alaatv.com/upload/knowledgeTree.json',
+        accept: 'application/json; charset=utf-8',
+        dataType: 'json',
+        success (response) {
+          console.log('response', response)
+          this.initialData = response
+          console.log(this.initialData)
+        },
+        error (err) {
+          console.log(err)
         }
       })
-      this.lastLoadTime = Date.now()
-    },
-    showLoading () {
-      this.$store.commit('AppLayout/updateOverlay', { show: true, loading: true, text: 'کمی صبر کنید...' })
-    },
-    hideLoading () {
-      this.$store.commit('AppLayout/updateOverlay', { show: false, loading: false, text: '' })
+      // this.$axios.get('https://cdn.alaatv.com/upload/knowledgeTree.json', {
+      // })
+      //   .then((res) => {
+      //     console.log(res)
+      //   })
+      //   .catch((err) => {
+      //     console.log('error', err)
+      //   })
     },
     getQuestions (clear) {
-      const that = this
-      if (clear === true) {
-        that.disableLoadingList = false
-        that.nextPage = ''
-        that.totalFilteredQuestions = '...'
+      if (clear) {
+        this.nextPage = ''
+        this.totalFilteredQuestions = '...'
       }
-      that.showLoading()
-      this.$axios.get(API_ADDRESS.question.indexMonta + that.nextPage, {
+      this.$axios.get(API_ADDRESS.question.indexMonta + this.nextPage, {
         params: this.filterQuestions
       })
         .then(response => {
-          if (clear === true) {
-            that.filteredQuestions = response.data.data
+          console.log('res', response)
+          console.log('filter', this.filteredQuestions)
+          if (clear) {
+            this.filteredQuestions = response.data.data
+            console.log('fil true:', this.filteredQuestions)
           } else {
-            that.filteredQuestions = that.filteredQuestions.concat(response.data.data)
+            this.filteredQuestions = this.filteredQuestions.concat(response.data.data)
+            console.log('fil false:', this.filteredQuestions)
           }
 
-          that.totalFilteredQuestions = response.data.meta.total
-          that.hideLoading()
-          that.lastLoadTime = Date.now()
+          this.totalFilteredQuestions = response.data.meta.total
+          this.lastLoadTime = Date.now()
           if (typeof response.data.links === 'undefined' || response.data.links.next === null) {
-            that.nextPage = ''
-            that.disableLoadingList = true
+            this.nextPage = ''
+            this.disableLoadingList = true
             return
           }
-          that.nextPage = response.data.links.next.replace(response.data.meta.path, '')
+          this.nextPage = response.data.links.next.replace(response.data.meta.path, '')
         })
         .catch((error) => {
-          Assistant.handleAxiosError(this.$toasted, error)
-          that.hideLoading()
-          that.lastLoadTime = Date.now()
+          console.log(error)
+          this.lastLoadTime = Date.now()
         })
     }
+    //   sortQuestions () {
+    //     function hasQuestionOrder (question, index) {
+    //       if (typeof index === 'undefined') {
+    //         index = 0
+    //       }
+    //       return (
+    //         question.source_data.origins &&
+    //         question.source_data.origins.questionOriginList &&
+    //         question.source_data.origins.questionOriginList[index] &&
+    //         question.source_data.origins.questionOriginList[index].questionOrder
+    //       )
+    //     }
+    //     function getQuestionOrder (question, index) {
+    //       if (typeof index === 'undefined') {
+    //         index = 0
+    //       }
+    //       if (hasQuestionOrder(question, index)) {
+    //         return question.source_data.origins.questionOriginList[index].questionOrder
+    //       } else {
+    //         return null
+    //       }
+    //     }
+    //     const sortList = Array.prototype.sort.bind(this.filteredQuestions)
+    //     sortList(function (a, b) {
+    //       if (hasQuestionOrder(a) && hasQuestionOrder(b) && getQuestionOrder(a) < getQuestionOrder(b)) {
+    //         return -1
+    //       } else if (hasQuestionOrder(a) && hasQuestionOrder(b) && getQuestionOrder(a) > getQuestionOrder(b)) {
+    //         return 1
+    //       } else if (hasQuestionOrder(a, 1) && hasQuestionOrder(b, 1) && getQuestionOrder(a, 1) < getQuestionOrder(b, 1)) {
+    //         return -1
+    //       } else if (hasQuestionOrder(a, 1) && hasQuestionOrder(b, 1) && getQuestionOrder(a, 1) > getQuestionOrder(b, 1)) {
+    //         return 1
+    //       } else if (hasQuestionOrder(a, 2) && hasQuestionOrder(b, 2) && getQuestionOrder(a, 2) < getQuestionOrder(b, 2)) {
+    //         return -1
+    //       } else if (hasQuestionOrder(a, 2) && hasQuestionOrder(b, 2) && getQuestionOrder(a, 2) > getQuestionOrder(b, 2)) {
+    //         return 1
+    //       } else if (hasQuestionOrder(a, 3) && hasQuestionOrder(b, 3) && getQuestionOrder(a, 3) < getQuestionOrder(b, 3)) {
+    //         return -1
+    //       } else if (hasQuestionOrder(a, 3) && hasQuestionOrder(b, 3) && getQuestionOrder(a, 3) > getQuestionOrder(b, 3)) {
+    //         return 1
+    //       } else {
+    //         return 1
+    //       }
+    //     })
+    //     this.lastLoadTime = Date.now()
+    //   }
   }
 }
 </script>
 
 <style lang="scss" scoped>
-.question-bank{
-  .question-bank-toolbar{
+.question-bank {
+  .question-bank-toolbar {
     background-image: url("https://picsum.photos/1920/1080?random") !important;
     background-color: #ffeb3b;
     height: 110px;
     display: flex;
     flex-direction: column;
     padding: 8px;
-    .toolbar-card{
-      margin-top: 8px;
-      max-height: 48px;
-      max-width: 378px;
-      .toolbar-button{
-        min-height: 40px !important;
-        min-width: 40px;
+
+    .toolbar-selections {
+      margin-bottom: 4px;
+    }
+
+    .toolbar-card-parent {
+      width: 378px !important;
+
+      .toolbar-card {
+        height: 48px;
+        width: 100%;
+
+        .toolbar-card-child {
+          align-items: center;
+          align-content: center;
+          height: 100%;
+        }
       }
     }
   }
@@ -438,15 +447,21 @@ export default {
 <style lang="scss">
 .question-bank {
   .question-bank-toolbar {
-    .q-field--filled{
+    .q-field--filled {
       &.q-field--rounded {
-        .q-field__control{
+        .q-field__control {
           border-radius: 28px;
+          padding: 0 24px;
+        }
+
+        .q-field__marginal {
+          height: 40px;
         }
       }
     }
-    .q-select--with-input .q-field__control{
-      max-height: 40px!important;
+
+    .q-select--with-input .q-field__control {
+      max-height: 40px !important;
       min-height: 0;
     }
   }

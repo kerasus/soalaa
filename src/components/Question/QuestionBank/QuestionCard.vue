@@ -1,13 +1,11 @@
 <template>
 <div class="question-card">
   <q-card>
-    <q-card-section>
-      <q-card
-        v-if="false"
-        class="title-card"
-      >
-        <q-card-section>
-        </q-card-section>
+    <q-card-section v-if="questionData.source_data.question">
+      <q-card class="title-card">
+        <q-card-section
+          v-html="questionData.source_data.question"
+        />
       </q-card>
     </q-card-section>
     <q-card-section>
@@ -21,44 +19,49 @@
             <q-item
               clickable
               v-ripple
+              v-if="questionData.source_data.choiceDescription1"
+
             >
               <q-item-section>
                 <div
                   class="renderedText"
-                  v-html="'<span>1)</span>'"
+                  v-html="'<span>1)</span>'+ questionData.source_data.choiceDescription1"
                 />
               </q-item-section>
             </q-item>
             <q-item
               clickable
               v-ripple
+              v-if="questionData.source_data.choiceDescription2"
             >
               <q-item-section>
                 <div
                   class="renderedText"
-                  v-html="'<span>2)</span>'"
+                  v-html="'<span>2)</span>'+ questionData.source_data.choiceDescription2"
                 />
               </q-item-section>
             </q-item>
             <q-item
               clickable
               v-ripple
+              v-if="questionData.source_data.choiceDescription3"
             >
               <q-item-section>
                 <div
                   class="renderedText"
-                  v-html="'<span>3)</span>'"
+                  v-html="'<span>3)</span>'+ questionData.source_data.choiceDescription3"
                 />
               </q-item-section>
             </q-item>
             <q-item
               clickable
               v-ripple
+              v-if="questionData.source_data.choiceDescription4"
             >
               <q-item-section>
                 <div
                   class="renderedText"
-                  v-html="'<span>4)</span>'"
+                  v-html="'<span>4)</span>'+ questionData.source_data.choiceDescription4"
                 />
               </q-item-section>
             </q-item>
@@ -71,51 +74,68 @@
             class="rounded-borders"
           >
             <q-item
+              v-for="(originItem, originIndex) in questionData.source_data.origins.questionOriginList"
+              :key="'originIndex_'+originIndex"
               clickable
               v-ripple
+              class="profile-part"
             >
               <q-item-section side>
-               <div  class="question-avatar">
+               <div
+                 v-if="originItem.origin"
+                 class="question-avatar"
+               >
                  <q-avatar>
-                   <img src="https://cdn.quasar.dev/img/avatar.png">
+                   <img
+                     :src="originItem.origin.pic"
+                     alt="origin.pic"
+                   >
                  </q-avatar>
-                 <span>
-                  فلان فلانیان
+                 <span class="avatar-name">
+                  {{ originItem.origin.name }}
                 </span>
                </div>
                 <q-item-label
+                  v-if="originItem.publishYear"
+                  v-html="originItem.publishYear.title"
+                  caption
+                />
+
+                <q-item-label
+                  v-if="originItem.questionOrder"
                   caption
                 >
-                  Caption
-                </q-item-label>
-                <q-item-label caption>
                   شماره:
+                  {{ originItem.questionOrder }}
                 </q-item-label>
               </q-item-section>
             </q-item>
             <q-item
+              v-if="questionData.source_data.difficultyLevel"
               clickable
               v-ripple
+              class="question-rate"
             >
               <q-item-section>
                 <q-rating
-                    v-model="ratingValue"
+                    :model-value="questionData.source_data.difficultyLevel.value"
                     size="25px"
                     color="green"
                     icon="star_border"
                     icon-selected="star"
                     readonly
                   >
-                  <q-badge label="آسان"/>
+                  <q-badge :label="questionData.source_data.difficultyLevel.name"/>
                 </q-rating>
               </q-item-section>
             </q-item>
             <q-item
               clickable
               v-ripple
+              class="view-part"
             >
               <q-item-section>
-                <q-btn>
+                <q-btn class="view-btn">
                   مشاهده
                 </q-btn>
               </q-item-section>
@@ -149,8 +169,10 @@ export default {
   },
   data () {
     return {
-      ratingValue: 3
     }
+  },
+  mounted () {
+    console.log(this.questionData)
   },
   methods: {}
 }
@@ -159,134 +181,25 @@ export default {
 <style lang="scss" scoped>
 .question-card{
   padding: 8px;
-  .question-avatar{
-    display: flex;
-    flex-direction: row;
+  .profile-part{
+    .question-avatar{
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      .avatar-name{
+        margin-left: 4px;
+      }
+    }
+  }
+  .question-rate{
+    height: 75px;
+  }
+  .view-part{
+    height: 60px;
+    .view-btn{
+      width:85px;
+      height: 36px
+    }
   }
 }
 </style>
-// {
-//   "resultText"
-//   "correctCounts"
-//   "choiceId3"
-//   "discriminationIndex
-//   "choiceId2"
-//   "choiceId1"
-//   "overallQuestionCount"
-//   "choiceId4"
-//   "choiceDescription2"
-//   "createdAt"
-//   "choiceDescription1"
-//   "choice3selectedCounts"
-//   "id": "608429",
-//   "choiceDescription4"
-//   "choiceDescription3"
-//   "like"
-//   "entryDate"
-//   "authorInfo"
-//   "hasNote"
-//   "bookmark"
-//   "choicesColumnNo"
-//   "numberOfChildren"
-//   "countQuestionTypeId"
-//   "difficultyLevelId"
-//   "choice2selectedCounts"
-//   "totalUsageCount"
-//   "answerId"
-//   "rowNo"
-//   "choice1selectedCounts"
-//   "hasHint"
-//   "resultCode"
-//   "questionTypeId"
-//   "noAnswerCounts"
-//   "incorrectCounts"
-//   "unVerifiedCommentNo"
-//   "popularity"
-//   "origins": {
-  //   "questionOriginList": [
-//        {
-//          "originId"
-//          "examNo"
-//          "majorId"
-//          "pageNo"
-//          "publisherBookId"
-//          "imageExtension"
-//          "publisherBookImage"
-//          "publisherBookName"
-//          "questionOrder"
-//          "origin": {
-//            "id"
-//            "name"
-//            "pic"
-//       }
-//     }
-//   ]
-// },
-//    "mediaRequestCount"
-//    "answerAuthorInfo"
-//    "commentNo"
-//    "question"
-//    "mediaHasRequested"
-//    "topics"
-//   "cnt"
-//   "authorId"
-//   "choice4selectedCounts"
-//   "answer"
-//   "disable"
-//   "bookmarkCount"
-//   "topicList": [
-//   {
-//     "id"
-//     "name"
-//     "deph"
-//     "moduleId"
-//     "parentTopicId"
-//     "order"
-//     "isDisabled"
-//     "parentTopic"
-//       "id"
-//       "name"
-//       "deph"
-//       "moduleId"
-//       "order"
-//       "isDisabled"
-//     },
-//     "module": {
-//       "id"
-//       "name"
-//       "moduleGroupId"
-//       "isCommon"
-//       "isDisabled"
-//       "hasOnlineContents"
-//       "moduleGroup": {
-//         "id"
-//         "name"
-//       },
-//       "majors": [
-//         {
-//           "id"
-//           "name"
-//         },
-//         {
-//           "id"
-//           "name"
-//         }
-//       ],
-//       "grade": {
-//         "id"
-//         "name"
-//         "levelId"
-//         "level"
-//           "id"
-//           "name"
-//         }
-//       }
-//     }
-//   }
-// ],
-//   "difficultyLevel": {
-//   "id"
-//     "value"
-//     "name"
-// }
-// }
