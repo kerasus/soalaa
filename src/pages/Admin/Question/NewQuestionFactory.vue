@@ -1,413 +1,170 @@
-<!--<template>-->
-<!--<div>-->
-<!--  test question factory-->
-<!--</div>-->
-<!--</template>-->
-<!--<script>-->
-<!--export default {-->
-<!--  name: 'test'-->
-<!--}-->
-<!--</script>-->
-
 <template>
   <div class="row">
     <div class="col">
       <p
-        class="font-weight-medium"
+        class="page-title q-mx-xl"
       >
         کارخانه سوال
       </p>
       <!--  -------------------- nav bar ----------------------------------------------------------------- -->
-      <div class="row">
+      <div class="row justify-center q-mx-xl" style="margin-bottom: 50px">
         <div class="col">
           <q-btn
-            flat
+            unelevated
+            icon-right="expand_more"
+            color="white"
+            padding="10px 20px"
+            text-color="black"
+            class="custom-btn-radius"
           >
             جدید ترین
           </q-btn>
         </div>
-        <div class="col-6">
-          <div class="q-gutter-y-md" style="max-width:400px">
+        <div class="col-6 text-center">
+          <div class="q-gutter-y-md tabs-style text-center">
             <q-tabs
+              dir="ltr"
               v-model="tab"
               inline-label
+              indicator-color="transparent"
+              active-color="primary"
             >
               <q-tab
                 v-for="(item, index) in questionStatusList.list"
                 :key="index"
-
+                :label="item.display_title"
                 @click="filter(item.id)"
-              >
-                {{ item.display_title }}
-              </q-tab>
+              />
             </q-tabs>
           </div>
-
         </div>
-        <div class="col">
+        <div class="col text-right">
           <q-btn
-            flat
+            unelevated
+            color="white"
+            padding="10px 20px"
+            text-color="black"
+            class="custom-btn-radius"
+            icon="add"
           >
             سوال جدید
           </q-btn>
         </div>
       </div>
       <!--  -------------------- pagination ------------------------------------------------------------ -->
-      <div class="row justify-center">
+      <div class="row justify-center q-mb-lg q-mx-xl">
         <q-pagination
           v-model="page"
           :max="pageCount"
-          :max-pages="10"
+          color="blue"
+          :max-pages="8"
+          size="16px"
           direction-links
-          @update="filter(selectedStatusId, page)"
+          @click="filter(selectedStatusId, page)"
         />
       </div>
       <!--  -------------------- table title ------------------------------------------------------------ -->
-      <div class="row">
+      <div class="row q-mx-xl q-mb-lg">
         <div class="col-2">
-           <span class="q-pa-1 q-mr-4">
+           <span class=" q-ml-lg table-title-style">
               #
             </span>
         </div>
         <div class="col-3">
-           <span class="q-pa-2">
+           <span class="table-title-style">
               سوال
             </span>
         </div>
         <div class="col-2">
-           <span class="q-pa-2">
+           <span class="table-title-style">
               تاریخ ایجاد
             </span>
         </div>
         <div class="col-3">
-           <span class="q-pa-2">
+           <span class=" table-title-style">
               وضعیت
             </span>
         </div>
         <div class="col-2">
-             <span class="q-pa-2">
+             <span class=" table-title-style">
               عملیات
             </span>
         </div>
       </div>
       <!--  -------------------- table content ------------------------------------------------------------ -->
-      <div class="row q-mx-7">
+      <div class="row q-mx-xl">
         <q-card
           v-for="(item, index) in questions.list"
           :key="index"
           flat
-          class="col-12 card-style"
+          class="col-12 card-style items-center"
         >
-          <div class="row items-center">
+          <div class="row items-center card-content">
             <div class="col-2">
-              <div>
+              <div class="q-mx-lg table-title-style column-statement-text">
                 {{ item.id }}
               </div>
             </div>
             <div class="col-3">
-              <p class="column-statement-text">
-                {{ item.statement }}
-              </p>
+              <span class="column-statement-text table-title-style">
+                <span
+                  v-html="item.statement"
+                />
+              </span>
             </div>
             <div class="col-2">
-          <span>
+          <span class="table-title-style column-statement-text">
             {{ item.shamsiDate('created_at').dateTime }}
           </span>
             </div>
             <div class="col-3">
               <q-btn
-                dark
+                color="red-6"
+                unelevated
+                rounded
               >
                 {{ item.status.display_title }}
               </q-btn>
             </div>
             <div class="col-2">
               <q-btn
+                color="grey-8"
+                flat
                 :to="{ name:'question.show', params: { question_id: item.id }}"
-              >
-                show
-              </q-btn>
+                icon="mdi-eye-outline"
+                class="btn-style"
+              />
               <q-btn
+                color="grey-8"
+                flat
                 :to="{ name:'question.edit', params: { question_id: item.id }}"
-              >
-                edit
-              </q-btn>
+                icon="mdi-pencil-outline"
+                class="btn-style"
+              />
               <q-btn
-              >
-                ...
-              </q-btn>
-              <!--               <span>-->
-              <!--                  <router-link-->
-              <!--                    :to="{ name:'question.show', params: { question_id: item.id }}"-->
-              <!--                    class="link-text-decoration"-->
-              <!--                  >-->
-              <!--                    show-->
-              <!--                    &lt;!&ndash;                    <v-icon class="ml-4">&ndash;&gt;-->
-              <!--                    &lt;!&ndash;                      mdi-eye-outline&ndash;&gt;-->
-              <!--                    &lt;!&ndash;                    </v-icon>&ndash;&gt;-->
-              <!--                  </router-link>-->
-              <!--                  <router-link-->
-              <!--                    :to="{ name:'question.edit', params: { question_id: item.id }}"-->
-              <!--                    class="link-text-decoration"-->
-              <!--                  >-->
-              <!--                    edit-->
-              <!--                    &lt;!&ndash;                    <v-icon class="ml-4">&ndash;&gt;-->
-              <!--                    &lt;!&ndash;                      mdi-pencil-outline&ndash;&gt;-->
-              <!--                    &lt;!&ndash;                    </v-icon>&ndash;&gt;-->
-              <!--                  </router-link>-->
-              <!--                 ...-->
-              <!--                 &lt;!&ndash;                  <v-icon class="ml-4">&ndash;&gt;-->
-              <!--                 &lt;!&ndash;                    mdi-dots-horizontal&ndash;&gt;-->
-              <!--                 &lt;!&ndash;                  </v-icon>&ndash;&gt;-->
-              <!--                </span>-->
+                color="grey-8"
+                flat
+                icon="mdi-dots-horizontal"
+                class="btn-style"
+              />
             </div>
           </div>
         </q-card>
       </div>
       <!--  -------------------- pagination ------------------------------------------------------------ -->
-      <div class="row justify-center">
+      <div class="row justify-center q-mb-lg q-mx-xl">
         <q-pagination
           v-model="page"
           :max="pageCount"
-          :max-pages="10"
+          color="blue"
+          :max-pages="8"
+          size="16px"
           direction-links
-          @update="filter(selectedStatusId, page)"
+          @click="filter(selectedStatusId, page)"
         />
       </div>
     </div>
   </div>
-<!--  <v-row class="mx-4">-->
-<!--    <v-col>-->
-<!--      <p-->
-<!--        class="font-weight-medium"-->
-<!--      >-->
-<!--        کارخانه سوال-->
-<!--      </p>-->
-<!--      &lt;!&ndash;  &#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45; nav bar -&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45; &ndash;&gt;-->
-<!--      <v-row-->
-<!--        justify="space-between"-->
-<!--        class=""-->
-<!--        align="center"-->
-<!--      >-->
-<!--        <v-col-->
-<!--          cols="2"-->
-<!--          data-text-align="left"-->
-<!--        >-->
-<!--          <v-btn-->
-<!--            elevation="0"-->
-<!--            class="white py-5 custom-border-radius"-->
-<!--          >-->
-<!--            جدید ترین-->
-<!--            <v-icon class="mr-4">-->
-<!--              mdi-chevron-down-->
-<!--            </v-icon>-->
-<!--          </v-btn>-->
-<!--        </v-col>-->
-<!--        <v-col cols="6">-->
-<!--          <v-sheet-->
-<!--            class="custom-border-radius"-->
-<!--            flat-->
-<!--          >-->
-<!--            <v-chip-group class="transparent">-->
-<!--              <v-row justify="space-between">-->
-<!--                <v-col-->
-<!--                  v-for="(item, index) in questionStatusList.list"-->
-<!--                  :key="index"-->
-<!--                >-->
-<!--                  <v-chip-->
-<!--                    :class="{'amber lighten-3': (selectedStatusId === item.id), 'transparent': (selectedStatusId !== item.id), }"-->
-<!--                    @click="filter(item.id)"-->
-<!--                    v-text="item.display_title"-->
-<!--                  />-->
-<!--                </v-col>-->
-<!--              </v-row>-->
-<!--            </v-chip-group>-->
-<!--          </v-sheet>-->
-<!--        </v-col>-->
-<!--        <v-col-->
-<!--          cols="2"-->
-<!--          class="text-left"-->
-<!--        >-->
-<!--          <v-btn-->
-<!--            rounded-->
-<!--            elevation="0"-->
-<!--            class="white py-5 custom-border-radius"-->
-<!--            :to="{name: 'question.create'}"-->
-<!--          >-->
-<!--            <v-icon class="ml-4">-->
-<!--              mdi-plus-->
-<!--            </v-icon>-->
-<!--            سوال جدید-->
-<!--          </v-btn>-->
-<!--        </v-col>-->
-<!--      </v-row>-->
-
-<!--      &lt;!&ndash;  &#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45; pagination &#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45; &ndash;&gt;-->
-<!--      <v-row>-->
-<!--        <v-col>-->
-<!--          <v-pagination-->
-<!--            v-model="page"-->
-<!--            class="my-4"-->
-<!--            :length="pageCount"-->
-<!--            :total-visible="7"-->
-<!--            @input="filter(selectedStatusId, page)"-->
-<!--          />-->
-<!--        </v-col>-->
-<!--      </v-row>-->
-<!--      &lt;!&ndash;  &#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45; table title &#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45; &ndash;&gt;-->
-<!--      <v-card-->
-<!--        class="py-2 transparent mb-5"-->
-<!--        flat-->
-<!--      >-->
-<!--        <v-row class="">-->
-<!--          <v-col-->
-<!--            no-gutters-->
-<!--            cols="2"-->
-<!--          >-->
-<!--            <span class="pa-1 mr-4">-->
-<!--              #-->
-<!--            </span>-->
-<!--          </v-col>-->
-<!--          <v-col-->
-<!--            no-gutters-->
-<!--            cols="3"-->
-<!--          >-->
-<!--            <span class="pa-2">-->
-<!--              سوال-->
-<!--            </span>-->
-<!--          </v-col>-->
-<!--          <v-col-->
-<!--            no-gutters-->
-<!--            cols="2"-->
-<!--          >-->
-<!--            <span class="pa-2">-->
-<!--              تاریخ ایجاد-->
-<!--            </span>-->
-<!--          </v-col>-->
-<!--          <v-col-->
-<!--            no-gutters-->
-<!--            cols="3"-->
-<!--          >-->
-<!--            <span class="pa-2">-->
-<!--              وضعیت-->
-<!--            </span>-->
-<!--          </v-col>-->
-<!--          <v-col-->
-<!--            no-gutters-->
-<!--            cols="2"-->
-<!--          >-->
-<!--            <span class="pa-2">-->
-<!--              عملیات-->
-<!--            </span>-->
-<!--          </v-col>-->
-<!--        </v-row>-->
-<!--      </v-card>-->
-<!--      &lt;!&ndash;  &#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45; table content &#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45; &ndash;&gt;-->
-<!--      <v-row align="center">-->
-<!--        <v-col>-->
-<!--          <v-card-->
-<!--            v-for="(item, index) in questions.list"-->
-<!--            :key="index"-->
-<!--            class="mb-7 custom-border-radius table-content-card"-->
-<!--            flat-->
-<!--            height="80"-->
-<!--          >-->
-<!--            <v-row-->
-<!--              align="center"-->
-<!--            >-->
-<!--              &lt;!&ndash;  &#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45; column id &#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45; &ndash;&gt;-->
-<!--              <v-col-->
-<!--                no-gutters-->
-<!--                cols="2"-->
-<!--              >-->
-<!--                <div-->
-<!--                  class="mr-4"-->
-<!--                  v-text="item.id"-->
-<!--                />-->
-<!--              </v-col>-->
-<!--              &lt;!&ndash;  &#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45; column statement &#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45; &ndash;&gt;-->
-<!--              <v-col-->
-<!--                no-gutters-->
-<!--                cols="3"-->
-<!--              >-->
-<!--                <div class="column-statement">-->
-<!--                  &lt;!&ndash;ToDo: remove p&ndash;&gt;-->
-<!--                  <p-->
-<!--                    class="column-statement-text"-->
-<!--                  >-->
-<!--                    <vue-katex :input="item.statement"/>-->
-<!--                  </p>-->
-<!--                </div>-->
-<!--              </v-col>-->
-<!--              &lt;!&ndash;  &#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45; column created_at &#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45; &ndash;&gt;-->
-<!--              <v-col-->
-<!--                no-gutters-->
-<!--                cols="2"-->
-<!--              >-->
-<!--                <span-->
-
-<!--                  v-text="item.shamsiDate('created_at').dateTime"-->
-<!--                />-->
-<!--              </v-col>-->
-<!--              &lt;!&ndash;  &#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45; column status &#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45; &ndash;&gt;-->
-<!--              <v-col-->
-<!--                no-gutters-->
-<!--                cols="3"-->
-<!--              >-->
-<!--                <span>-->
-<!--                  <v-chip-->
-<!--                    class="red darken-1 px-4 ml-4"-->
-<!--                    dark-->
-<!--                    v-text="item.status.display_title"-->
-<!--                  />-->
-<!--                </span>-->
-<!--              </v-col>-->
-<!--              &lt;!&ndash;  &#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45; column actions &#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45; &ndash;&gt;-->
-<!--              <v-col-->
-<!--                no-gutters-->
-<!--                cols="2"-->
-<!--              >-->
-<!--                <span>-->
-<!--                  <router-link-->
-<!--                    :to="{ name:'question.show', params: { question_id: item.id }}"-->
-<!--                    class="link-text-decoration"-->
-<!--                  >-->
-<!--                    <v-icon class="ml-4">-->
-<!--                      mdi-eye-outline-->
-<!--                    </v-icon>-->
-<!--                  </router-link>-->
-<!--                  <router-link-->
-<!--                    :to="{ name:'question.edit', params: { question_id: item.id }}"-->
-<!--                    class="link-text-decoration"-->
-<!--                  >-->
-<!--                    <v-icon class="ml-4">-->
-<!--                      mdi-pencil-outline-->
-<!--                    </v-icon>-->
-<!--                  </router-link>-->
-<!--                  <v-icon class="ml-4">-->
-<!--                    mdi-dots-horizontal-->
-<!--                  </v-icon>-->
-<!--                </span>-->
-<!--              </v-col>-->
-<!--            </v-row>-->
-<!--          </v-card>-->
-<!--        </v-col>-->
-<!--      </v-row>-->
-
-<!--      &lt;!&ndash;  &#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45; pagination &#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45; &ndash;&gt;-->
-<!--      <v-row>-->
-<!--        <v-col>-->
-<!--          <v-pagination-->
-<!--            v-model="page"-->
-<!--            class="my-2"-->
-<!--            :length="pageCount"-->
-<!--            :total-visible="7"-->
-<!--            @input="filter(selectedStatusId, page)"-->
-<!--          />-->
-<!--        </v-col>-->
-<!--      </v-row>-->
-<!--    </v-col>-->
-<!--  </v-row>-->
 </template>
 
 <script>
@@ -445,12 +202,12 @@ export default {
         })
     },
     filter (itemId, page) {
-      console.log('in filter :itemId :', itemId, 'page :', page)
       if (itemId) {
         this.selectedStatusId = itemId
       }
       const that = this
-      that.$store.commit('AppLayout/updateOverlay', { show: true, loading: true, text: 'کمی صبر کنید...' })
+      // that.$store.commit('AppLayout/updateOverlay', { show: true, loading: true, text: 'کمی صبر کنید...' })
+      that.$store.dispatch('loading/overlayLoading', true)
       const statusesId = (!itemId) ? [] : [itemId]
       axios.get(API_ADDRESS.question.index(statusesId, page))
         .then(response => {
@@ -458,7 +215,8 @@ export default {
           that.questions = new QuestionList(response.data.data)
           that.page = response.data.meta.current_page
           that.pageCount = Math.ceil(response.data.meta.total / response.data.meta.per_page)
-          that.$store.commit('AppLayout/updateOverlay', { show: false, loading: false, text: '' })
+          that.$store.dispatch('loading/overlayLoading', false)
+          // that.$store.commit('AppLayout/updateOverlay', { show: false, loading: false, text: '' })
         }).catch(e => {
           console.log('err in fiter catch :', e)
         })
@@ -473,26 +231,55 @@ export default {
   margin-bottom: 15px;
 }
 
+.card-style .card-content {
+  height: 80px;
+}
+
 .link-text-decoration {
   text-decoration: none;
 }
 
+.tabs-style {
+  /*width: 600px;*/
+  background-color: white;
+  border-radius: 10px;
+}
 .table-content-card {
   display: flex;
   align-items: center;
 }
-
+.page-title{
+  margin-bottom: 20px;
+  font-size: 16px;
+}
 .column-statement {
   display: flex;
   align-items: center;
+}
+.table-title-style {
+  font-size: 16px;
+  color: rgba(0, 0, 0, 0.87);
+}
+.custom-btn-radius {
+  border-radius: 10px;
 }
 
 .column-statement-text {
   overflow: hidden;
   text-overflow: ellipsis;
   display: -webkit-box;
-  -webkit-line-clamp: 2; /* number of lines to show */
+  -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
+  word-wrap: break-word
+}
+
+p {
+  margin-bottom: 0;
+}
+
+.btn-style {
+  width: 15px;
+  margin-right: 10px;
 }
 
 .column-statement :first-child {
