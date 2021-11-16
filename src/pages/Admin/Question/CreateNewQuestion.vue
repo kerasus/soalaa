@@ -7,8 +7,6 @@
           <div class="text-grey-7" style="padding-top: 10px;">لطفا انتخاب کنید که سوال را به کدام روش ثبت می کنید.</div>
         </q-card-section>
         <q-card-actions align="between">
-<!--          <q-btn color="amber-4" flat @click="setMode('write')">تایپ سوال</q-btn>-->
-<!--          <q-btn color="amber-4" flat @click="setMode('uploadImage')">آپلود فایل</q-btn>-->
           <q-btn color="amber-4" flat @click="setQuestionTypeText">تایپ سوال</q-btn>
           <q-btn color="amber-4" flat @click="setQuestionTypeImage">آپلود فایل</q-btn>
         </q-card-actions>
@@ -65,8 +63,12 @@
         />
       </div>
       <!-- -------------------------- upload file ---------------------->
-      <!--          ToDo : UploadImg -->
-      <!--    <upload-img></upload-img>-->
+      <UploadImg
+        v-if="showImgComponentStatus()"
+        v-model="currentQuestion"
+        :edit-status="upload_img_status"
+        @imgClicked="makeShowImgPanelVisible($event)"
+      />
       <!-- -------------------------- status --------------------------->
       <div
         v-if="getPageStatus() === 'edit'"
@@ -106,8 +108,7 @@ import API_ADDRESS from 'src/api/Addresses'
 import Assistant from 'src/plugins/assistant'
 import navBar from 'components/QuestionBank/EditQuestion/NavBar/navBar.vue'
 import QuestionLayout from 'components/QuestionBank/EditQuestion/question-layout/question_layout'
-// ToDo : UploadImg
-// import UploadImg from 'components/QuestionBank/EditQuestion/UploadImgs/uploadImg'
+import UploadImg from 'components/QuestionBank/EditQuestion/UploadImgs/uploadImg'
 // ToDo eslint
 // eslint-disable-next-line camelcase
 import attach_list from 'components/QuestionBank/EditQuestion/Exams/exams'
@@ -127,7 +128,7 @@ export default {
   components: {
     navBar,
     QuestionLayout,
-    // UploadImg,
+    UploadImg,
     attach_list,
     ShowImg,
     StatusComponent,

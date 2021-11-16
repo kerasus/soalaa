@@ -14,8 +14,8 @@ const routes = [
         }
       },
       {
-        path: '/dashboard',
-        name: 'dashboard',
+        path: '/exam',
+        name: 'exam',
         component: () => import('pages/Admin/exam/index'),
         meta: {
           middlewares: [auth]
@@ -23,15 +23,31 @@ const routes = [
         children: [
           {
             path: '',
-            name: 'exam-list',
+            name: 'list',
             component: () => import('pages/Admin/exam/list'),
             meta: {
               middlewares: [auth]
             }
           },
           {
-            path: 'edit-exam',
-            name: 'edit-exam',
+            path: 'create',
+            name: 'create',
+            component: () => import('pages/Admin/exam/edit/editExam'),
+            meta: {
+              middlewares: [auth]
+            }
+          },
+          {
+            path: ':examId/edit',
+            name: 'edit',
+            component: () => import('pages/Admin/exam/edit/editExam'),
+            meta: {
+              middlewares: [auth]
+            }
+          },
+          {
+            path: ':examId',
+            name: 'show',
             component: () => import('pages/Admin/exam/edit/editExam'),
             meta: {
               middlewares: [auth]
@@ -92,6 +108,11 @@ const routes = [
         name: 'subCategory.edit',
         component: () => import('pages/Admin/subCategory/LessonsList'),
         meta: { middlewares: [auth] }
+      },
+      {
+        path: 'category',
+        name: 'categoryList',
+        component: () => import('pages/Admin/category/list')
       }
     ]
   },

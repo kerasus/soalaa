@@ -1,10 +1,10 @@
 <template>
   <!-- ------------------------- question -------------------------------  -->
-  <div class="q-ma-sm question-layout">
+  <div class="question-layout">
     <div class="question ">
       <div
           v-if="status"
-          class="q-mb-md "
+          style="margin-bottom: 20px"
       >
         تایپ سوال
       </div>

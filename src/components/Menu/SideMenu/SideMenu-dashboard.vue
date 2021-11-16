@@ -124,8 +124,8 @@ export default {
       adminList: [
         {
           displayName: 'لیست آزمون ها',
-          to: '/dashboard',
-          name: 'exam-list'
+          to: '/exam',
+          name: 'list'
         },
         {
           displayName: 'بانک سوال',
@@ -139,8 +139,8 @@ export default {
         },
         {
           displayName: 'لیست دفترچه ها',
-          to: 'category.edit',
-          name: 'category.edit'
+          to: '/category',
+          name: 'categoryList'
         },
         {
           displayName: 'لیست زیرگروه ها',
