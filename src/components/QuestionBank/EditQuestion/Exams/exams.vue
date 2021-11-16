@@ -7,6 +7,105 @@
       آزمون ها
     </p>
 <!--    todo : v-form-->
+    <q-form>
+      <div class="row q-col-gutter-lg">
+        <div class="col-5">
+        <q-select
+          :model-value="chooseExam"
+          :rules="selectorRules"
+          rounded
+          borderless
+          dense
+          bg-color="white"
+          label="انتخاب آزمون"
+          option-value="id"
+          :options="examList.list"
+          option-label="title" />
+        </div>
+        <div class="col-4">
+          <q-select
+            v-model="chooseLesson"
+            :rules="selectorRules"
+            :options="subCategories.list"
+            rounded
+            borderless
+            dense
+            bg-color="white"
+            option-label="title"
+            option-value="id"
+            label="انتخاب درس"/>
+        </div>
+        <div class="col-2">
+          <q-input
+            v-model="examOrder"
+            height="36"
+            :rules="numberRules"
+            rounded
+            borderless
+            dense
+            bg-color="white"
+            label="ترتیب"/>
+        </div>
+        <div class="col-1">
+          <q-btn
+            @click="attach"
+          > +</q-btn>
+        </div>
+
+      </div>
+      <div class="row"
+        v-if="!status && attaches.length>0"
+      >
+        <div class="col-5">
+          <q-card>
+            آزمون
+          </q-card>
+        </div>
+        <div class="col-4">
+          <q-card>
+            درس
+          </q-card>
+        </div>
+        <div class="col-2">
+          <q-card>
+            ترتیب
+          </q-card>
+        </div>
+      </div>
+      <div
+        v-for="(item, index) in attaches"
+        :key="index"
+        class="exam-section row"
+      >
+        <div class="col-5">
+          <q-card>
+            {{ item.exam.title }}
+          </q-card>
+        </div>
+        <div class="col-4">
+          <q-card>
+            {{ item.sub_category.title }}
+          </q-card>
+        </div>
+        <div class="col-2">
+          <q-card>
+            {{ item.order }}
+          </q-card>
+        </div>
+        <div
+             v-if="status"
+             class="attach-or-detach col"
+        >
+          <q-btn
+            color="white"
+            flat
+            :loading="loading"
+            :disabled="loading"
+            @click="detach(item)"
+          />
+        </div>
+      </div>
+    </q-form>
 <!--    <v-form ref="form">-->
 <!--      <v-row-->
 <!--        v-if="status"-->
@@ -78,6 +177,7 @@
 <!--          </v-btn>-->
 <!--        </v-col>-->
 <!--      </v-row>-->
+
 <!--      <v-row v-if="!status && attaches.length>0">-->
 <!--        <v-col cols="5">-->
 <!--          <v-card-->
@@ -222,14 +322,18 @@ export default {
       ]
     }
   },
+  created () {
+    console.log('examList :', this.examList)
+    console.log('status : ', this.status)
+  },
   methods: {
     attachQuestionOnEditMode () {
       this.attachLoading = true
       axios.post(API_ADDRESS.question.attach, {
-        order: this.attachOrder,
-        exam_id: this.attachExamID,
-        question_id: this.$route.params.id,
-        sub_category_id: this.attachSubcategoryID
+        // order: this.attachOrder,
+        // exam_id: this.attachExamID,
+        question_id: this.$route.params.id
+        // sub_category_id: this.attachSubcategoryID
       })
         .then(response => {
           this.updateAttachList(response.data.data.exams)
@@ -284,7 +388,9 @@ export default {
   height: 40px;
 
 }
-
+.q-field .q-field__inner .q-field__control{
+  border-radius: 10px !important;
+}
 .row + .row {
   margin-top: 0px;
 }
