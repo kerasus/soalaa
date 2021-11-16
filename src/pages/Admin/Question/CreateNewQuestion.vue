@@ -557,7 +557,7 @@ export default {
       this.currentQuestion.logs.fetch(null, API_ADDRESS.question.log.base(this.$route.params.question_id))
         .then((response) => {
           this.currentQuestion.logs = new LogList(response.data.data)
-          window.app.set(this.currentQuestion, 'logs', new LogList(response.data.data))
+          // window.app.set(this.currentQuestion, 'logs', new LogList(response.data.data))
           this.setQuestionLayoutCols()
         })
     },
