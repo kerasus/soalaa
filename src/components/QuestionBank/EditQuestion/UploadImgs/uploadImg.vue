@@ -1,22 +1,26 @@
 <template>
   <div class="SelectImageBox">
 <!-- Todo : fix this font weight-->
-    <p class="text-weight-medium q-mb-md q-mt-md">
+    <p class="box-titles q-mb-md q-mt-md">
       فایل های آپلود شده:
     </p>
 <!--    todo file-upload-->
-    <v-row>
-      <v-col md="4">
-        <v-card>
-          <v-card-title class="body-1">
+    <div class="row">
+      <div class="col-md-4">
+        <q-card class="question-box">
+          <q-card-section class="box-titles">
             صورت سوال
-          </v-card-title>
-          <v-card-text>
-            <v-row>
-              <v-col
+          </q-card-section>
+<!--          <v-card-title class="body-1">-->
+<!--            -->
+<!--          </v-card-title>-->
+          <q-card-actions vertical class="question-box-card-action">
+            <div class="row">
+              <div
                 v-if="editStatus"
                 v-show="questionFile.length === 0"
-                class="test"
+                class="col test"
+                style="padding-top: 16px;"
               >
                 <file-upload
                   ref="questionFile"
@@ -36,126 +40,122 @@
                   @input-filter="inputFilter"
                   @input-file="inputFile"
                 >
-                  <v-btn
-                    large
-                    text
+                  <q-btn
+                    flat
                     class="btnAddImage"
-                  >
-                    <v-icon>mdi-plus</v-icon>
-                  </v-btn>
+                    icon="mdi-plus"
+                  ></q-btn>
+<!--                  <v-btn-->
+<!--                    large-->
+<!--                    text-->
+<!--                    class="btnAddImage"-->
+<!--                  >-->
+<!--                    <v-icon>mdi-plus</v-icon>-->
+<!--                  </v-btn>-->
                 </file-upload>
-              </v-col>
-              <v-col
+              </div>
+              <div
                 v-for="(file, index) in questionFile"
                 :key="index"
-                class="test2"
+                class="col test2"
               >
-                <v-card>
-                  <v-img
+                <q-card>
+                  <q-img
                     v-if="(editStatus && file.thumb) || (!editStatus && file)"
                     :src="(editStatus) ? file.thumb : file"
-                    width="100%"
-                    height="60"
-                    class="mt-3"
+                    class="q-mt-3"
                     @click="showImgPanel(((editStatus) ? file.thumb : file))"
+                    style="height: 60px; max-width: 100%"
                   />
-                  <span v-else>No Image</span>
-                  <v-card-title
+                  <span v-else>No Images</span>
+                  <q-card-section
                     v-if="editStatus"
                     class="caption"
-                    v-text="formatSize(file.size)"
-                  />
+                  >
+                    {{ formatSize(file.size) }}
+                  </q-card-section>
                   <!-- delete img ----------------------------------------------------------->
-                  <v-btn
+                  <q-btn
                     v-if="editStatus"
-                    fab
-                    dark
-                    x-small
-                    color="error"
+                    round
+                    color="red"
+                    size="12px"
                     class="btnRemoveFile"
+                    icon="mdi-close"
                     @click.prevent="$refs.questionFile.remove(file)"
-                  >
-                    <v-icon dark>
-                      mdi-close
-                    </v-icon>
-                  </v-btn>
-                </v-card>
-              </v-col>
-              <v-col
+                  ></q-btn>
+                </q-card>
+              </div>
+              <div
                 v-if="!editStatus && questionFile.length === 0"
+                class="col"
               >
-                <v-card>
-                  <v-img
-                    width="100%"
-                    height="60"
+                <q-card>
+                  <q-img
+                    style="height: 60px; max-width: 100%"
                   >
-                    <template v-slot:placeholder>
-                      <v-row
-                        no-gutters
-                        class="fill-height"
+                      <div
+                        class="row fit wrap justify-center items-center"
                       >
-                        <v-col class="d-flex justify-center align-center">
-                          <v-icon size="50px">
-                            mdi-image-off
-                          </v-icon>
-                        </v-col>
-                      </v-row>
-                    </template>
-                  </v-img>
-                </v-card>
-              </v-col>
-            </v-row>
-          </v-card-text>
-        </v-card>
-      </v-col>
-      <v-col md="8">
-        <v-card>
-          <v-card-title class="body-1">
+                        <div>
+                          <q-icon name="mdi-image-off" size="md" ></q-icon>
+                        </div>
+                      </div>
+                  </q-img>
+                </q-card>
+              </div>
+            </div>
+          </q-card-actions>
+        </q-card>
+      </div>
+      <div class="col-md-8">
+        <q-card class="upload-question-container">
+          <q-card-section class="box-titles">
             جواب سوال
-          </v-card-title>
-          <v-card-text>
-            <v-row>
-              <v-col
+          </q-card-section>
+          <!--          <v-card-title class="body-1">-->
+          <!--            -->
+          <!--          </v-card-title>-->
+          <q-card-section class="answer-box">
+            <div class="row">
+              <div
                 v-for="(file, index) in answerFiles"
                 :key="index"
-                cols="3"
+                class="col col-3"
+                style="padding-left: 16px;"
               >
-                <v-card>
-                  <v-img
+                <q-card>
+                  <q-img
                     v-if="(editStatus && file.thumb) || (!editStatus && file)"
                     :src="(editStatus) ? file.thumb : file"
-                    width="100%"
-                    height="60"
-                    class="mt-3"
+                    style="height: 60px; max-width: 100%"
+                    class="q-mt-3"
                     @click="showImgPanel(((editStatus) ? file.thumb : file))"
                   />
 
                   <span v-else>No Image</span>
-
-                  <v-card-title
+                  <q-card-section
                     v-if="editStatus"
                     class="caption"
-                    v-text="formatSize(file.size)"
-                  />
-
-                  <v-btn
-                    v-if="editStatus"
-                    fab
-                    dark
-                    x-small
-                    color="error"
-                    class="btnRemoveFile"
-                    @click.prevent="$refs.answerImages.remove(file)"
                   >
-                    <v-icon dark>
-                      mdi-close
-                    </v-icon>
-                  </v-btn>
-                </v-card>
-              </v-col>
-              <v-col
+                    {{ formatSize(file.size) }}
+                  </q-card-section>
+
+                  <q-btn
+                    v-if="editStatus"
+                    round
+                    color="red"
+                    size="12px"
+                    class="btnRemoveFile"
+                    icon="mdi-close"
+                    @click.prevent="$refs.answerImages.remove(file)"
+                  ></q-btn>
+                </q-card>
+              </div>
+              <div
                 v-if="editStatus"
-                cols="3"
+                class="col col-3"
+                style="padding-top: 16px;"
               >
                 <div>
                   <file-upload
@@ -180,53 +180,47 @@
                       large
                       text
                       class="btnAddImage"
-                    >
-                      <v-icon>mdi-plus</v-icon>
-                    </v-btn>
+                      icon="mdi-plus"
+                    ></q-btn>
                   </file-upload>
                 </div>
-              </v-col>
-              <v-col
+              </div>
+              <div
+                class="col"
                 v-if="!editStatus && answerFiles.length === 0"
               >
-                <v-card>
-                  <v-img
-                    width="100%"
-                    height="60"
+                <q-card>
+                  <q-img
+                    style="height: 60px; max-width: 100%"
                   >
-                    <template v-slot:placeholder>
-                      <v-row
-                        no-gutters
-                        class="fill-height"
-                      >
-                        <v-col class="d-flex justify-center align-center">
-                          <v-icon size="50px">
-                            mdi-image-off
-                          </v-icon>
-                        </v-col>
-                      </v-row>
-                    </template>
-                  </v-img>
-                </v-card>
-              </v-col>
-            </v-row>
-          </v-card-text>
-        </v-card>
-      </v-col>
-    </v-row>
+                    <div
+                      class="row fit wrap justify-center items-center"
+                    >
+                      <div>
+                        <q-icon name="mdi-image-off" size="md" ></q-icon>
+                      </div>
+                    </div>
+                  </q-img>
+                </q-card>
+              </div>
+            </div>
+          </q-card-section>
+        </q-card>
+      </div>
+    </div>
   </div>
 </template>
 <script>
 
 import Cropper from 'cropperjs'
 import ImageCompressor from '@xkeshi/image-compressor'
-import FileUpload from 'vue-upload-component'
+import VueUploadComponent from 'vue-upload-component'
 import { Question } from 'src/models/Question'
 
 export default {
   name: 'UploadImg',
   components: {
-    FileUpload
+    'file-upload': VueUploadComponent
   },
   props: {
     value: {
@@ -329,8 +323,9 @@ export default {
         questionFile: this.questionFile,
         answerFiles: this.answerFiles
       }
-
-      this.question.statement_photo = this.questionFile[0].file
+      if (this.questionFile[0]) {
+        this.question.statement_photo = this.questionFile[0].file
+      }
       this.question.answer_photos = this.answerFiles.map(item => item.file)
       console.log('files', files)
       console.log('this.question', this.question)
@@ -534,6 +529,10 @@ export default {
 </script>
 
 <style>
+.SelectImageBox {
+  margin-right: 15px;
+  margin-left: 15px;
+}
 .SelectImageBox .file-uploads.file-uploads-html4 input, .file-uploads.file-uploads-html5 label:hover {
   opacity: 0.08;
   background-color: currentColor;
@@ -548,5 +547,21 @@ export default {
   display: flex;
   align-items: center;
   justify-content: center;
+}
+.SelectImageBox .upload-question-container {
+  margin-left: 15px;
+
+}
+.SelectImageBox .question-box-card-action {
+  padding-right: 16px;
+  padding-left: 16px;
+  padding-bottom: 16px;
+}
+.SelectImageBox .answer-box {
+  padding-bottom: 16px;
+  padding-top: 8px;
+}
+.SelectImageBox .box-titles {
+  font-size: 1rem ;
 }
 </style>

@@ -6523,10 +6523,10 @@ vue-style-loader@4.1.3:
     hash-sum "^1.0.2"
     loader-utils "^1.0.2"
 
-vue-upload-component@^2.8.22:
-  version "2.8.22"
-  resolved "https://registry.yarnpkg.com/vue-upload-component/-/vue-upload-component-2.8.22.tgz#7a1573149a4afa5ca6e8c7e0bc70533925fe26b7"
-  integrity sha512-AJpETqiZrgqs8bwJQpWTFrRg3i6s7cUodRRZVnb1f94Jvpd0YYfzGY4zluBqPmssNSkUaYu7EteXaK8aW17Osw==
+vue-upload-component@^3.0.50:
+  version "3.0.50"
+  resolved "https://registry.yarnpkg.com/vue-upload-component/-/vue-upload-component-3.0.50.tgz#2e1acd9ae9f9b9cc53a4e8978050879ca0d6275c"
+  integrity sha512-p5xh2kvHcjGE+OObKfO59nYM5+nvpt5J2s/Efop/EQ+ec7PEoPZA7Ph+KUNTOSk2s5FqBTQkIrrQ/QSssHIzcA==
 
 vue@3.2.20:
   version "3.2.20"
