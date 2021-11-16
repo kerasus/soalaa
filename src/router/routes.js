@@ -70,6 +70,30 @@ const routes = [
             }
           },
           {
+            path: '/question/list',
+            name: 'question.list',
+            component: () => (import('pages/Admin/Question/NewQuestionFactory')),
+            meta: {
+              middlewares: [auth]
+            }
+          },
+          {
+            path: '/question/:question_id/show',
+            name: 'question.show',
+            component: () => (import('pages/Admin/Question/CreateNewQuestion')),
+            meta: {
+              middlewares: [auth]
+            }
+          },
+          {
+            path: '/question/:question_id/edit',
+            name: 'question.edit',
+            component: () => (import('pages/Admin/Question/CreateNewQuestion')),
+            meta: {
+              middlewares: [auth]
+            }
+          },
+          {
             path: '/question/create',
             name: 'question.create',
             component: () => (import('pages/Admin/Question/CreateNewQuestion')),
