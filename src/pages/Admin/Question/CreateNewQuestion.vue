@@ -18,7 +18,7 @@
       <nav-bar
         v-if="checkNavbarVisibility()"
         :question="currentQuestion"
-        :edit-status="edit_status"
+        :editStatus="edit_status"
         :page-name="getPageStatus()"
         @create="navBarAction_create"
         @saveDraft="navBarAction_saveDraft"
@@ -529,25 +529,27 @@ export default {
     },
 
     loadCurrentQuestionData () {
-      console.log('loadCurrentQuestionData ')
       const that = this
       this.loading = true
       this.currentQuestion.show(null, API_ADDRESS.question.updateQuestion(this.$route.params.question_id))
         .then((response) => {
-          that.currentQuestion = new Question(response.data.data)
-          if (that.currentQuestion.type.value === 'psychometric') {
-            if (that.getPageStatus() === 'edit') {
-              that.$router.push({ name: 'question.mbti.edit', params: { question_id: that.$route.params.question_id } })
-            } else if (that.getPageStatus() === 'show') {
-              that.$router.push({ name: 'question.mbti.show', params: { question_id: that.$route.params.question_id } })
+          console.log('current question : ', response)
+          if (response.data.data) {
+            that.currentQuestion = new Question(response.data.data)
+            if (that.currentQuestion.type.value === 'psychometric') {
+              if (that.getPageStatus() === 'edit') {
+                that.$router.push({ name: 'question.mbti.edit', params: { question_id: that.$route.params.question_id } })
+              } else if (that.getPageStatus() === 'show') {
+                that.$router.push({ name: 'question.mbti.show', params: { question_id: that.$route.params.question_id } })
+              }
             }
+            that.temp = that.currentQuestion
+            that.checkTextCondition()
+            that.getLogs()
+            that.trueChoiceIndex = that.currentQuestion.choices.list.findIndex((item) => item.answer)
+            that.updateAttachList(response.data.data.exams)
+            this.loading = false
           }
-          that.temp = that.currentQuestion
-          that.checkTextCondition()
-          that.getLogs()
-          that.trueChoiceIndex = that.currentQuestion.choices.list.findIndex((item) => item.answer)
-          that.updateAttachList(response.data.data.exams)
-          this.loading = false
         })
     },
 
@@ -557,6 +559,7 @@ export default {
       this.currentQuestion.logs.fetch(null, API_ADDRESS.question.log.base(this.$route.params.question_id))
         .then((response) => {
           this.currentQuestion.logs = new LogList(response.data.data)
+          console.log('cur que log in response :', response.data.data)
           // window.app.set(this.currentQuestion, 'logs', new LogList(response.data.data))
           this.setQuestionLayoutCols()
         })

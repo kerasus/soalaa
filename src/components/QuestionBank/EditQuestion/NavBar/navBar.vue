@@ -1,5 +1,6 @@
 <template>
   <div class="full-width new-question-navbar">
+    edit status {{editStatus}}
     <div class="fit row wrap justify-center">
       <div class="col-3">
         <span v-if="question.id">
@@ -19,7 +20,6 @@
             <div class="col">
               <div class="row justify-end">
                 <div class="col">
-<!--                  color="#4caf50"  size="lg" width="100"-->
                   <q-btn
                     rounded
                     unelevated
@@ -44,9 +44,7 @@
                     @click="btn_clicked('create')"
                   >
                   <q-icon class="draft-icon" name="mdi-square-edit-outline" />
-<!--                    <span class="draft-btn-text-default" >-->
                       پیش نویس
-<!--                    </span>-->
                   </q-btn>
                 </div>
               </div>
@@ -60,7 +58,10 @@
         <div class="row">
           <div class="col">
             <span> وضعیت : </span>
-            <q-chip color="#44a3ff" text-color="white">
+            <q-chip
+              color="chip-color"
+              text-color="white"
+            >
               {{ question.status.display_title }}
             </q-chip>
           </div>
@@ -69,22 +70,25 @@
               <div class="col">
                 <q-btn
                   rounded
-                  color="#4caf50"
-                  size="lg"
-                  width="100"
+                  unelevated
+                  color="green"
+                  padding="2px 25px"
+                  text-color="white"
                   @click="btn_clicked('save')"
+
                 >
-                      <span>
-                        ذخیره
-                      </span>
+                <span>
+                  ذخیره
+                </span>
                 </q-btn>
               </div>
               <div class="col">
                 <q-btn
                   rounded
                   color="white"
-                  size="lg"
-                  width="100"
+                  text-color="grey-10"
+                  padding="2px 30px"
+                  unelevated
                   @click="btn_clicked('cancel')"
                 >
                   لغو
@@ -95,8 +99,6 @@
         </div>
       </div>
       <!-------------------------------show page--------------------------------->
-      <!--        data-text-align="left"
-      -->
       <div class="col"
            v-if="!editStatus"
       >
@@ -143,6 +145,63 @@ export default {
       type: Question,
       default: new Question()
     },
+    // for test
+    // question: {
+    //   type: Question,
+    //   default: new Question({
+    //     id: '5ffdd0d35590063ba07fad39',
+    //     statement: '<p>«إذا أرَدتَ أن تفوز في عملک فَقُم به وحیداً و لا تـتوکّل علی النّاس!»</p>\n',
+    //     choices: [
+    //       {
+    //         title: '<p>هرگاه خواستی که در کارَت موفق شوی به تنهایی به آن بپرداز و بر مردم تکیه نکن!</p>\n',
+    //         order: 1,
+    //         answer: true,
+    //         id: 1
+    //       },
+    //       {
+    //         title: '<p>اگر اراده‌ات بر موفق شدن در کارهایت است به تنهایی آنها را انجام بده و به مردم اعتماد نکن!</p>\n',
+    //         order: 2,
+    //         answer: false,
+    //         id: 2
+    //       },
+    //       {
+    //         title: '<p>چنانچه قصد داری که در کار خویش به نتیجه برسی به تنهایی به پاخیز و به مردم توکّل نکن!</p>\n',
+    //         order: 3,
+    //         answer: false,
+    //         id: 3
+    //       },
+    //       {
+    //         title: '<p>هر زمان که خواستی در کار خود موفق باشی باید به تنهایی انجامش دهی و به مردم تکیه نکنی!</p>\n',
+    //         order: 4,
+    //         answer: false,
+    //         id: 4
+    //       }
+    //     ],
+    //     exams: [],
+    //     level: 1,
+    //     photos: [
+    //       'https://nodes.alaatv.com/aaa/questionPhotos/Screenshot%20from%202021-06-24%2016-21-18-3532494.png'
+    //     ],
+    //     author: [],
+    //     confirmers: [],
+    //     confirmed: false,
+    //     descriptive_answer: null,
+    //     statement_photo: null,
+    //     answer_photos: [],
+    //     status: {
+    //       id: '60c7102418e65826bc7da378',
+    //       title: 'typed',
+    //       display_title: 'تایپ شده',
+    //       updated_at: '2021-06-14 12:45:32',
+    //       created_at: '2021-06-14 12:45:32'
+    //     },
+    //     type: {
+    //       value: 'konkur'
+    //     },
+    //     updated_at: '2021-11-17 11:17:36',
+    //     created_at: '2021-01-12 20:09:47'
+    //   })
+    // },
     editStatus: {
       type: Boolean,
       default: false
@@ -190,6 +249,8 @@ export default {
     font-size: 24px;
     color: #666666;
   }
-
+.bg-chip-color{
+  background : #44a3ff !important;
+}
 }
 </style>
