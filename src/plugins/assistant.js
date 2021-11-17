@@ -10,46 +10,57 @@ const Assistant = (function () {
   }
 
   function handleAxiosError (error) {
-    let messages = []
-    if (error === "can't get exam file") {
-      toastMessages(['مشکلی در دریافت اطلاعات آزمون رخ داده است. لطفا مجدد تلاش کنید.'])
-      return
-    }
-    if (error === 'exam file url is not set') {
-      toastMessages(['فایل آزمون ساخته نشده است.'])
-      return
-    }
-    if (!error || !error.response) {
-      return
-    }
-    const statusCode = parseInt(error.response.status)
-    if (statusCode >= 500 && statusCode <= 599) {
-      messages.push('مشکلی رخ داده است. مجدد تلاش کنید.')
-    } else if (statusCode === 404) {
-      messages.push('موردی یافت نشد.')
-    } else if (statusCode === 401) {
-      messages.push('ابتدا وارد سامانه شوید.')
-    } else if (error.response.data.errors) {
-      for (const [key, value] of Object.entries(error.response.data.errors)) {
-        messages.push(value)
-        console.log(`${key}: ${value}`)
+    if (error.response) {
+      console.log('in assis :', error.response)
+      const err = error.response
+      if (err.status === 429 && err.config.url === '/alaa/api/v2/mobile/resend') {
+        return
       }
-    } else if (error.response.data.error && !AjaxResponseMessages.isCustomMessage(error.response.data.error.code)) {
-      messages.push(error.response.data.error.message)
-    } else if (error.response.data.error && AjaxResponseMessages.isCustomMessage(error.response.data.error.code)) {
-      messages.push(AjaxResponseMessages.getMessage(error.response.data.error.code))
-    } else if (error.response.data) {
-      for (const [key, value] of Object.entries(error.response.data)) {
-        if (typeof value === 'string') {
+      if (err.status === 400 && err.config.url === '/alaa/api/v2/mobile/verify') {
+        return
+      }
+      let messages = []
+      if (error === "can't get exam file") {
+        toastMessages(['مشکلی در دریافت اطلاعات آزمون رخ داده است. لطفا مجدد تلاش کنید.'])
+        return
+      }
+      if (error === 'exam file url is not set') {
+        toastMessages(['فایل آزمون ساخته نشده است.'])
+        return
+      }
+      if (!error || !err) {
+        return
+      }
+      const statusCode = parseInt(err.status)
+      if (statusCode >= 500 && statusCode <= 599) {
+        messages.push('مشکلی رخ داده است. مجدد تلاش کنید.')
+      } else if (statusCode === 404) {
+        messages.push('موردی یافت نشد.')
+      } else if (statusCode === 401) {
+        messages.push('ابتدا وارد سامانه شوید.')
+      } else if (err.data.errors) {
+        for (const [key, value] of Object.entries(err.data.errors)) {
           messages.push(value)
-        } else {
-          messages = messages.concat(getMessagesFromArrayWithRecursion(value))
+          console.log(`${key}: ${value}`)
         }
-        console.log(`${key}: ${value}`)
+      } else if (err.data.error && !AjaxResponseMessages.isCustomMessage(err.data.error.code)) {
+        messages.push(err.data.error.message)
+      } else if (err.data.error && AjaxResponseMessages.isCustomMessage(err.data.error.code)) {
+        messages.push(AjaxResponseMessages.getMessage(err.data.error.code))
+      } else if (err.data) {
+        // eslint-disable-next-line no-unused-vars
+        for (const [key, value] of Object.entries(err.data)) {
+          if (typeof value === 'string') {
+            messages.push(value)
+          } else {
+            messages = messages.concat(getMessagesFromArrayWithRecursion(value))
+          }
+          // console.log(`${key}: ${value}`);
+        }
       }
-    }
 
-    toastMessages(messages)
+      toastMessages(messages)
+    }
   }
 
   function toastMessages (messages) {
@@ -77,9 +88,9 @@ const Assistant = (function () {
   }
 
   function reportErrors (error) {
-    const location = error.location,
-      message = error.message,
-      data = error.data
+    const location = (error && error.location) ? error.location : 'undefined error',
+      message = (error && error.message) ? error.message : 'undefined error',
+      data = (error && error.data) ? error.data : 'undefined error'
     // console.group();
     console.groupCollapsed()
     // console.table(data);
@@ -116,6 +127,7 @@ const AjaxResponseMessages = (function () {
   const messageMap = {
     0: 'مشکلی پیش آمده است. مجدد تلاش کنید.',
     400: 'ابتدا وارد سامانه شوید.',
+    401: 'ابتدا وارد سامانه شوید.',
     1: 'پیش از این در این آزمون ثبت نام انجام شده است.',
     2: 'زمان آزمون فرا نرسیده است',
     3: 'ثبت نام در این آزمون انجام نشده است.',
@@ -124,7 +136,8 @@ const AjaxResponseMessages = (function () {
     6: 'پاسخنامه داوطلب پیش از این ارسال شده است.',
     7: 'زمان پاسخگویی قبل از شروع آزمون است.',
     8: 'آزمون متعلق به کاربر نیست.',
-    14: 'آزمون بسته شده است.'
+    14: 'آزمون بسته شده است.',
+    17: 'ثبت درس تکراری در یک دفترچه امکان پذیر نیست.'
   }
 
   function isCustomMessage (statusCode) {
