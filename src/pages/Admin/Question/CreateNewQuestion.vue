@@ -38,20 +38,20 @@
           @input="updateQuestion"
         />
         <div class="col-4">
-          <!--     todo q-select-->
-<!--          <q-select-->
-<!--            v-if="getPageStatus() === 'create'"-->
-<!--            v-model="currentQuestion.author"-->
-<!--            label="طراحان"-->
-<!--            dense-->
-<!--            multiple-->
-<!--            disabled-->
-<!--            use-chips-->
-<!--            :options="currentQuestion.author"-->
-<!--            item-text="full_name"-->
-<!--            item-value="id"-->
-<!--            outlined>-->
-<!--          </q-select>-->
+<!--          :options="currentQuestion.author"-->
+          <q-select
+            v-if="getPageStatus() === 'create'"
+            v-model="currentQuestion.author"
+            label="طراحان"
+            dense
+            outlined
+            rounded
+            multiple
+            disabled
+            use-chips
+            model-value=""
+          >
+          </q-select>
         </div>
         <attach_list
           :status="edit_status"
@@ -90,7 +90,7 @@
     </div>
     <!-- -------------------------- log --------------------------->
     <div
-      v-if="currentQuestion.logs.list.length > 0 && !uploadImgColsNumber.show"
+      v-if="currentQuestion.logs && currentQuestion.logs.list && currentQuestion.logs.list.length > 0 && !uploadImgColsNumber.show"
       class="col-3"
     >
       <LogListComponent
@@ -103,7 +103,7 @@
 <script>
 import navBar from 'components/QuestionBank/EditQuestion/NavBar/navBar.vue'
 import QuestionLayout from 'components/QuestionBank/EditQuestion/question-layout/question_layout'
-//      ToDo : UploadImg
+// ToDo : UploadImg
 // import UploadImg from 'components/QuestionBank/EditQuestion/UploadImgs/uploadImg'
 // ToDo eslint
 // eslint-disable-next-line camelcase
@@ -118,6 +118,7 @@ import { QuestSubcategoryList } from 'src/models/QuestSubcategory'
 import API_ADDRESS from 'src/api/Addresses'
 import Assistant from 'src/plugins/assistant'
 import { QuestionStatusList } from 'src/models/QuestionStatus'
+//   ToDo : axios
 import axios from 'axios'
 
 export default {
@@ -225,31 +226,11 @@ export default {
   //   console.log(to, from, next)
   // },
   created () {
-    // Todo : test we need to delete later
-    this.showPageDialog()
+    console.log('currentQuestion :', this.currentQuestion)
     window.onbeforeunload = function () {
       return 'Do you really want to leave our brilliant application?'
     }
-
-    const that = this
-    axios.get(API_ADDRESS.option.base + '?type=question_type')
-      .then(function (response) {
-        const optionQuestion = response.data.data.find(item => (item.value === 'konkur'))
-        if (!optionQuestion) {
-          // beterek
-          return this.$notify({
-            group: 'notifs',
-            text: ' API با مشکل مواجه شد!',
-            type: 'error'
-          })
-        }
-        that.optionQuestionId = optionQuestion.id
-        that.loading = false
-      })
-      .catch(function (error) {
-        console.log(error)
-      })
-
+    this.getQuestionType()
     this.setPageStatus()
     this.checkUrl()
     this.getQuestionStatus()
@@ -261,15 +242,38 @@ export default {
     this.setUploadImgStatus()
   },
   methods: {
+    getQuestionType () {
+      const that = this
+      console.log(API_ADDRESS.option.base)
+      axios.get(API_ADDRESS.option.base + '?type=question_type')
+        .then(function (response) {
+          const optionQuestion = response.data.data.find(item => (item.value === 'konkur'))
+          if (!optionQuestion) {
+            // beterek
+            return this.$q.notify({
+              message: ' API با مشکل مواجه شد!',
+              color: 'negative'
+            })
+          }
+          that.optionQuestionId = optionQuestion.id
+          that.loading = false
+        })
+        .catch(function (error) {
+          console.log(error)
+        })
+    },
     addComment (eventData) {
       axios.post(API_ADDRESS.log.addComment(eventData.logId), { comment: eventData.text })
         .then(response => {
           // iterating over the array to find the log that has changed
-          for (let i = 0; i < this.currentQuestion.logs.list.length; i++) {
-            if (this.currentQuestion.logs.list[i].id === eventData.logId) {
-              // setting the new log using Vue.set so that the component notices the change
-              this.currentQuestion.logs.list[i] = new Log(response.data.data)
-              window.app.set(this.currentQuestion, 'logs', new LogList(this.currentQuestion.logs))
+          if (this.currentQuestion.logs && this.currentQuestion.logs.list) {
+            for (let i = 0; i < this.currentQuestion.logs.list.length; i++) {
+              if (this.currentQuestion.logs.list[i].id === eventData.logId) {
+                // setting the new log using Vue.set so that the component notices the change
+                this.currentQuestion.logs.list[i] = new Log(response.data.data)
+                // ToDo : app.set
+                // window.app.set(this.currentQuestion, 'logs', new LogList(this.currentQuestion.logs))
+              }
             }
           }
         })
@@ -299,11 +303,10 @@ export default {
       currentQuestion.type_id = this.optionQuestionId
       currentQuestion.update(API_ADDRESS.question.updateQuestion(currentQuestion.id))
         .then(() => {
-          this.$notify({
-            group: 'notifs',
-            title: 'توجه',
-            text: 'ویرایش با موفقیت انجام شد',
-            type: 'success'
+          this.$q.notify({
+            message: 'ویرایش با موفقیت انجام شد',
+            color: 'green',
+            icon: 'thumb_up'
           })
           this.$router.push({ name: 'question.show', params: { question_id: this.$route.params.question_id } })
         })
@@ -357,12 +360,9 @@ export default {
 
     setPageStatus () {
       const title = this.$route.name.replace('question.', '')
+      console.log('setPageStatus :', title)
       this.pageStatuses.forEach(item => {
-        if (item.title === title) {
-          item.state = true
-        } else {
-          item.state = false
-        }
+        item.state = item.title === title
       })
     },
 
@@ -391,14 +391,16 @@ export default {
       const loadSubcategoriesPromise = this.loadSubcategories()
       Promise.all([loadExamListPromise, loadSubcategoriesPromise])
         .then(() => {
-          if (that.getPageStatus() !== 'create') {
-            that.loadCurrentQuestionData()
-          } else {
-            if (that.currentQuestion.choices === null) {
-              // that.currentQuestion.choices
-            }
+          if (that.getPageStatus() === 'create') {
+            console.log('questionData :', that.questionData)
             that.currentQuestion = new Question(that.questionData)
+            console.log('Question :', that.currentQuestion)
             that.loading = false
+            // if (that.currentQuestion.choices === null) {
+            //   // that.currentQuestion.choices
+            // }
+          } else {
+            that.loadCurrentQuestionData()
           }
           that.setNullKeys()
         })
@@ -448,7 +450,8 @@ export default {
       const selectedQuizzes = this.selectedQuizzes
       this.totalExams[targetExamIndex] = item
       selectedQuizzes.push(JSON.parse(JSON.stringify(this.totalExams[targetExamIndex])))
-      window.app.set(this, 'selectedQuizzes', selectedQuizzes)
+      // ToDo : app.set
+      // window.app.set(this, 'selectedQuizzes', selectedQuizzes)
       this.dialog = false
       this.updateSelectedQuizzes()
     },
@@ -524,6 +527,7 @@ export default {
     },
 
     loadCurrentQuestionData () {
+      console.log('loadCurrentQuestionData ')
       const that = this
       this.loading = true
       this.currentQuestion.show(null, API_ADDRESS.question.updateQuestion(this.$route.params.question_id))
@@ -546,6 +550,8 @@ export default {
     },
 
     getLogs () {
+      console.log('getLogs this.currentQuestion :', this.currentQuestion)
+      console.log('getLogs logs :', this.currentQuestion.logs)
       this.currentQuestion.logs.fetch(null, API_ADDRESS.question.log.base(this.$route.params.question_id))
         .then((response) => {
           this.currentQuestion.logs = new LogList(response.data.data)
@@ -617,7 +623,7 @@ export default {
     makeShowImgPanelInvisible () {
       this.uploadImgColsNumber.show = false
       this.$store.commit('AppLayout/updateDrawer', true)
-      if (this.currentQuestion.logs.list.length > 0) {
+      if (this.currentQuestion.logs.list && this.currentQuestion.logs.list.length > 0) {
         this.questionColsNumber = 9
       } else {
         this.questionColsNumber = 12
@@ -625,13 +631,15 @@ export default {
     },
 
     setQuestionLayoutCols () {
-      if (this.currentQuestion.logs.list.length > 0) {
+      if (this.currentQuestion.logs.list && this.currentQuestion.logs.list.length > 0) {
         this.questionColsNumber = 9
       }
     },
+
     showPageDialog () {
       this.dialog = true
     },
+
     setQuestionTypeText () {
       this.questionType = 'typeText'
       this.dialog = false
@@ -666,11 +674,10 @@ export default {
           this.currentQuestion.choices.list.forEach((item) => {
             item.title = ''
           })
-          this.$notify({
-            group: 'notifs',
-            title: 'توجه',
-            text: 'ثبت با موفقیت انجام شد',
-            type: 'success'
+          this.$q.notify({
+            message: 'ثبت با موفقیت انجام شد',
+            color: 'green',
+            icon: 'thumb_up'
           })
           window.open('/question/create', '_blank').focus()
           this.$router.push({ name: 'question.show', params: { question_id: questionId } })

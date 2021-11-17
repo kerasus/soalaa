@@ -52,12 +52,4 @@ export default {
 </script>
 
 <style scoped>
-.showImg-card {
-  height: 1856px;
-  border-radius: 15px;
-}
-.second-card{
-  color: #f5f5f5 ;
-  border-radius: 15px;
-}
 </style>
