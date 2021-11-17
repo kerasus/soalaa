@@ -218,7 +218,6 @@ export default {
           that.$store.dispatch('loading/overlayLoading', false)
           // that.$store.commit('AppLayout/updateOverlay', { show: false, loading: false, text: '' })
         }).catch(e => {
-          console.log('err in fiter catch :', e)
         })
     }
   }
