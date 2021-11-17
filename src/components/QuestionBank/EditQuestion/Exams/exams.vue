@@ -55,7 +55,6 @@
             class="custom-btn-radius"
             icon="add"
             @click="attach"
-
           />
         </div>
 
@@ -184,10 +183,6 @@ export default {
         v => v.length > 0 || 'پر کردن این فیلد الزامی است.'
       ]
     }
-  },
-  created () {
-    console.log('examList :', this.examList)
-    console.log('status : ', this.status)
   },
   methods: {
     attachQuestionOnEditMode () {
