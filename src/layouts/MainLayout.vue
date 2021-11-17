@@ -1,7 +1,7 @@
 <template>
   <q-layout view="lHr lpR fFf">
     <q-header
-      class="text-black"
+      class="text-black layout-header"
       style="background-color: #f1f1f1"
     >
       <q-toolbar>
@@ -118,6 +118,11 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
+.layout-header{
+  .q-toolbar{
+    min-height: 48px !important;
+  }
+}
 .profile-card{
   width: 100%;
   max-width: 324px;
@@ -135,12 +140,16 @@ export default {
     }
   }
 }
-.header-body{
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  max-width: 1158px;
-  margin: auto !important;
+.layout-header{
+  padding: 12px 0;
+  .header-body{
+    height: 48px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    max-width: 1158px;
+    margin: auto !important;
+  }
 }
 .side-bar{
   display: flex;
