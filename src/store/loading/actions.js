@@ -3,7 +3,6 @@ export function linearLoading (context, value) {
   context.commit('loading', value)
 }
 export function overlayLoading (context, value) {
-  console.log(!!value)
   if (value) {
     context.commit('overlay', value)
     return Loading.show()
