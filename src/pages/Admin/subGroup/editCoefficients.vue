@@ -6,10 +6,12 @@
         v-model="selectedSubgroup"
         outlined
         dense
-        :options="allSubGroups"
-        item-text="value"
-        item-value="id"
+        :options="notExistingSubGroups"
+        option-label="value"
+        option-value="id"
         label="زیرگروه"
+        emit-value
+        map-options
       />
     </div>
     <div class="col-md-6 q-pa-sm">
@@ -27,7 +29,7 @@
         class="bg-white rounded-borders q-mb-md"
         v-for="(subGroup, index) in subGroups"
         :key="index"
-        :label='subGroups'
+        :label='subGroup.title'
       >
         <q-card>
           <q-card-section>
@@ -38,9 +40,11 @@
                   label="دفترچه"
                   outlined
                   dense
-                  :options="categoryList"
-                  item-text="title"
-                  item-value="title"
+                  :options="categoryList.list"
+                  option-label="title"
+                  option-value="title"
+                  emit-value
+                  map-options
                 />
               </div>
               <div class="col-md-4 q-pa-sm">
@@ -49,9 +53,11 @@
                   label="درس"
                   outlined
                   dense
-                  :options="subCategoriesList"
-                  item-text="title"
-                  item-value="id"
+                  :options="notExistingSubcategories(subGroup)"
+                  option-label="title"
+                  option-value="id"
+                  emit-value
+                  map-options
                 />
               </div>
               <div class="col-md-4 q-pa-sm">
@@ -78,36 +84,32 @@
                         v-for="(subCategory,sIindex) in subGroup.sub_category"
                         :key="sIindex"
                       >
-                        <q-tooltip
-                          anchor="top middle" self="bottom middle" :offset="[10, 10]"
-                        >
-                          <template v-slot:activator="{ on, attrs }">
-                            <p
-                              v-bind="attrs"
-                              class="d-inline-block"
-                              v-on="on"
+                        <div class="th-inline-style">
+                          <div class="category-title-size">
+                            <q-tooltip
+                              anchor="top middle" self="top middle" :offset="[10, 35]"
                             >
+                              <span>{{ subCategory.category_title }}</span>
+                            </q-tooltip>
+                            <p class="small-fontsize">
                               {{ subCategory.sub_category_title }}
                             </p>
-                          </template>
-                          <span>{{ subCategory.category_title }}</span>
-                        </q-tooltip>
-                        <q-tooltip
-                          anchor="top middle" self="bottom middle" :offset="[10, 10]"
-                        >
-                          <template v-slot:activator="{ on, attrs }">
-                            <q-btn
-                              icon
-                              color="red"
-                              v-bind="attrs"
-                              v-on="on"
-                              @click="deleteSubcategory(subGroup, subCategory.sub_category_title)"
+                          </div>
+                          <q-btn
+                            size="12px"
+                            flat
+                            round
+                            icon="mdi-close"
+                            color="red"
+                            @click="deleteSubcategory(subGroup, subCategory.sub_category_title)"
+                          >
+                            <q-tooltip
+                              anchor="top middle" self="bottom middle" :offset="[10, 10]"
                             >
-                              <q-icon>mdi-close</q-icon>
-                            </q-btn>
-                          </template>
-                          <span>حذف درس</span>
-                        </q-tooltip>
+                              <span>حذف درس</span>
+                            </q-tooltip>
+                          </q-btn>
+                        </div>
                       </th>
                     </tr>
                     </thead>
@@ -170,21 +172,61 @@
 
 <script>
 
+import axios from 'axios'
+import API_ADDRESS from 'src/api/Addresses'
+import { QuestCategoryList } from 'src/models/QuestCategory'
+import { QuestSubcategoryList } from 'src/models/QuestSubcategory'
+
 export default {
   name: 'EditCoefficients',
   data () {
     return {
-      categoryList: ['دفترچه سوالات اختصاصی', 'دفترچه سوالات عمومی'],
-      subCategoriesList: ['ریاضی', 'شیمی'],
-      subGroups: ['زیرگروه 1'],
+      categoryList: new QuestCategoryList(),
+      subCategoriesList: new QuestSubcategoryList(),
+      subGroups: [],
       selectedSubgroup: null,
       selectedCategory: null,
       selectedSubcategory: null,
-      allSubGroups: ['زیرگروه ۱', 'زیرگروه ۲', 'زیرگروه ۳', 'زیرگروه ۴']
+      allSubGroups: []
     }
+  },
+  computed: {
+    notExistingSubGroups () {
+      const that = this
+      // ToDo change to using id
+      return this.allSubGroups.filter(item => !that.subGroups.find(subGroup => subGroup.title === item.value))
+    },
+    notExistingSubcategories () {
+      return (subGroup) => {
+        const that = this
+        return that.subCategoriesList.list.filter(subCategory => !subGroup.sub_category.find(item => item.sub_category_title === subCategory.title))
+      }
+    }
+  },
+  created () {
+    const that = this
+    axios.get(API_ADDRESS.questionCategory.base)
+      .then((response) => {
+        that.categoryList = new QuestCategoryList(response.data.data)
+        console.log(response)
+      })
+    this.subCategoriesList.fetch()
+      .then((response) => {
+        that.subCategoriesList = new QuestSubcategoryList(response.data.data)
+      })
+    axios.get(API_ADDRESS.subGroups.base(that.$route.params.exam_id))
+      .then((response) => {
+        that.subGroups = response.data.data
+      })
+    axios.get(API_ADDRESS.subGroups.all())
+      .then((response) => {
+        that.allSubGroups = response.data.data
+      })
   },
   methods: {
     addSubgroup () {
+      console.log(this.allSubGroups)
+      console.log(this.selectedSubGroup)
       const selectedSubGroup = this.allSubGroups.find(item => item.id === this.selectedSubgroup)
       this.subGroups.push({
         title: selectedSubGroup.value,
@@ -207,6 +249,7 @@ export default {
       subGroup.sub_category = subGroup.sub_category.filter(item => item.sub_category_title !== subcategoryTitle)
     },
     save () {
+      const that = this
       this.subGroups.forEach(subGroup => {
         if (!subGroup.zirgorooh_id) {
           subGroup.zirgorooh_id = subGroup.id
@@ -215,11 +258,30 @@ export default {
           subCategory.subcategory_id = subCategory.sub_category_id
         })
       })
+      axios.post(API_ADDRESS.subGroups.base(that.$route.params.exam_id), {
+        zirgorooh: this.subGroups
+      })
+        .then((response) => {
+          that.subGroups = response.data.data
+        })
     }
   }
 }
+
 </script>
 
 <style scoped>
+.small-fontsize {
+  font-size: 14px;
+}
 
+.th-inline-style {
+  display: inline flex;
+}
+
+.category-title-size {
+  margin-right: 10px;
+  position: relative;
+  top: 8px;
+}
 </style>
