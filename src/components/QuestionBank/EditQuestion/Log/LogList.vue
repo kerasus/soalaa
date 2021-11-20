@@ -1,13 +1,11 @@
-<!-- ToDo : logList-->
 <template>
   <div>
-    <p class="mt-2 font-weight-medium">
+    <p class="logList-title" >
       سابقه
     </p>
-    <v-card
+    <q-card
       flat
       class="rounded-card"
-      max-height="1600"
     >
       <div class="logList">
         <log-item
@@ -17,7 +15,7 @@
           @addComment="addComment"
         />
       </div>
-    </v-card>
+    </q-card>
   </div>
 </template>
 
@@ -207,11 +205,16 @@ export default {
 </script>
 
 <style scoped>
+.logList-title {
+  font-size: 16px;
+  margin-top: 20px;
+}
 .logList {
   width: 100%;
 }
 .rounded-card{
   border-radius: 10px;
   overflow-y: auto;
+  max-height: 1600px;
 }
 </style>
