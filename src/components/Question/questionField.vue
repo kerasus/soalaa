@@ -7,7 +7,7 @@
       <q-editor
         v-model="value"
         min-height="5rem"
-      ></q-editor>
+      />
   <!--      Todo : vue-tiptap-katex-->
 <!--      <vue-tiptap-katex-->
 <!--        ref="tiptap"-->
@@ -16,6 +16,11 @@
 <!--        :upload-url="imageUrl"-->
 <!--        :options="{ bubbleMenu: false, floatingMenu: false, poem: true, reading: true }"-->
 <!--      />-->
+    </div>
+    <div
+    v-else
+    >
+      <q-card-section v-html="value" />
     </div>
 <!--    <div class="col" v-else>-->
 <!--      <vue-katex :input="html" />-->

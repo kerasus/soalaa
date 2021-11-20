@@ -22,7 +22,7 @@
       v-for="(item, index) in question.choices.list"
       :key="index"
       class="row question-layout-options"
-      :class="status ? 'q-mb-md   question-options white': '  question-options'"
+      :class="status ? 'q-mb-md   question-options bg-white': '  question-options'"
     >
       <div class="col-1">
         <div class="row">
@@ -40,7 +40,7 @@
               @click="clicked(item.order)"
             />
             <div
-              v-else-if="status"
+              v-else
               @click="clicked(item.order)"
             >
               <q-btn
@@ -49,7 +49,7 @@
                 icon="circle"
                 padding="none"
                 size="20px"
-                text-color="grey-4"
+                :text-color="status ? 'grey-4' : 'transparent'"
               />
             </div>
           </div>
@@ -177,7 +177,6 @@ export default {
 .question-options {
   align-items: center;
   border-radius: 10px;
-  background-color: #fff;
 }
 
 .background-color-test {
