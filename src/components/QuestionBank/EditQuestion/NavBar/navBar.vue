@@ -1,6 +1,5 @@
 <template>
   <div class="full-width new-question-navbar">
-    edit status {{editStatus}}
     <div class="fit row wrap justify-center">
       <div class="col-3">
         <span v-if="question.id">

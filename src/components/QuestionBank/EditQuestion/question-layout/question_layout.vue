@@ -11,10 +11,10 @@
       <question_field
         ref="questionStatement"
         :key="'statement' + domKey"
-        v-model="question.statement"
+        :editorValue="question.statement"
         :edit-status="status"
         placeholder="صورت سوال"
-        :question-id="value.id ? value.id : 'null'"
+        :question-id="question.id ? question.id : 'null'"
         style="margin-bottom: 40px"
       />
     </div>
@@ -24,46 +24,50 @@
       class="row question-layout-options"
       :class="status ? 'q-mb-md   question-options white': '  question-options'"
     >
-      <div class="col col-1">
+      <div class="col-1">
         <div class="row">
           <div
-            class="col col-8 question-layout-spacing-1"
-            :class="status ?'question-layout-spacing-1' :'question-layout-spacing-2'"
+            class="question-layout-spacing"
           >
-              <q-btn
-                v-if="item.answer"
-                round
-                icon="mdi-checkbox-marked-circle"
-                class="checkbox-marked"
-                :class="!status? 'checkbox-marked-size-1': 'checkbox-marked-size-2'"
-                @click="clicked(item.order)"
-              />
-<!--              <q-icon-->
-<!--                color="positive"-->
-<!--                name="mdi-checkbox-marked-circle"-->
-<!--                :size="50"-->
-<!--                -->
-<!--              />-->
+            <q-btn
+              v-if="item.answer"
+              round
+              unelevated
+              icon="mdi-checkbox-marked-circle"
+              class="checkbox-marked"
+              padding="none"
+              size="20px"
+              @click="clicked(item.order)"
+            />
             <div
               v-else-if="status"
               @click="clicked(item.order)"
             >
-              <q-btn flat round class="question-btn-size" />
+              <q-btn
+                round
+                unelevated
+                icon="circle"
+                padding="none"
+                size="20px"
+                text-color="grey-4"
+              />
             </div>
           </div>
-          <div class="col col-1">
+          <div class="row items-center">
+          <div>
             {{ (index + 1) + ') ' }}
+          </div>
           </div>
         </div>
       </div>
-      <div class="col answer-editor col-11">
+      <div class="answer-editor col-10">
         <div>
           <question_field
             :ref="'choice' + (index + 1)"
             :key="'choices' + (index + 1) + domKey"
-            v-model="item.title"
+            :editorValue="item.title"
             :edit-status="status"
-            :question-id="value.id ? value.id : 'null'"
+            :question-id="question.id ? question.id : 'null'"
           />
         </div>
       </div>
@@ -77,11 +81,11 @@
         <question_field
           ref="descriptive"
           :key="'descriptive_answer' + domKey"
-          v-model="question.descriptive_answer"
-          :question-id="value.id ? value.id : 'null'"
+          :editorValue="question.descriptive_answer"
+          :question-id="question.id ? question.id : 'null'"
           :edit-status="status"
           placeholder="پاسخ تشریحی"
-          class="mb-16"
+          class="q-mb-lg"
         />
       </div>
     </div>
@@ -98,13 +102,13 @@ export default {
     question_field
   },
   props: {
-    value: {
+    currentQuestion: {
       type: Question,
-      default: new Question()
+      default: () => new Question()
     },
     status: {
       type: Boolean,
-      default: false
+      default: () => false
     }
   },
   data () {
@@ -114,12 +118,15 @@ export default {
     }
   },
   watch: {
-    value: function () {
-      this.question = this.value
-    }
+    // editorValue: function () {
+    //   this.question = this.currentQuestion
+    // }
   },
   created () {
-    this.question = this.value
+    this.question = this.currentQuestion
+    // console.log('question lay out question:', this.question)
+    // console.log('question lay out currentQuestion:', this.currentQuestion)
+    // console.log('question lay out status:', this.status)
     const that = this
     setTimeout(() => {
       that.domKey = Date.now()
@@ -140,6 +147,7 @@ export default {
       this.$emit('input', this.question)
     },
     clicked (order) {
+      console.log('order :', order)
       this.question.choices.list.forEach(item => {
         item.answer = item.order === order
       })
@@ -150,45 +158,23 @@ export default {
 </script>
 
 <style scoped lang="scss">
-
 .question-layout {
   margin: 16px;
   font-size: 16px;
-  .question-layout-spacing-1 {
-      padding-left: 24px;
+
+  .question-layout-spacing{
       padding-right: 24px;
-      padding-bottom: 8px;
-  }
-  .question-layout-spacing-2{
-    padding-left: 20px;
-    padding-right: 20px;
-    padding-bottom: 8px;
   }
   .checkbox-marked{
     color: #4caf50;
   }
-  .checkbox-marked-size-1{
-    width: 28px;
-    height: 28px;
-  }
-  .checkbox-marked-size-2{
-    width: 36px;
-    height: 36px;
-  }
-  .question-btn-size {
-    width: 36px;
-    height: 36px;
-    background-color: rgba(15, 15, 0, 0.17);
-  }
 }
 .question-layout-options {
-  display: flex;
   align-items: center;
   margin-bottom: 10px;
 }
 
 .question-options {
-  display: flex;
   align-items: center;
   border-radius: 10px;
   background-color: #fff;

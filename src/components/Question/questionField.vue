@@ -4,7 +4,10 @@
       v-if="editStatus"
       class="col-12"
     >
-      <q-editor v-model="editor" min-height="5rem" model-value=""></q-editor>
+      <q-editor
+        v-model="value"
+        min-height="5rem"
+      ></q-editor>
   <!--      Todo : vue-tiptap-katex-->
 <!--      <vue-tiptap-katex-->
 <!--        ref="tiptap"-->
@@ -37,7 +40,7 @@ export default {
     // VueKatex
   },
   props: {
-    value: {
+    editorValue: {
       default: '',
       type: String
     },
@@ -56,6 +59,7 @@ export default {
   },
   data () {
     return {
+      value: '',
       html: '',
       loading: false,
       editor: ref('What you see is <b>what</b> you get.')
@@ -67,8 +71,22 @@ export default {
     }
   },
   created () {
+    this.value = this.editorValue
     this.loading = true
     this.getHtmlValueFromValueProp()
+    // console.log('_________________________________________________________________________')
+    // console.log('question field value:', this.value)
+    // console.log('question field :', this.label)
+    // console.log('question field editStatus:', this.editStatus)
+    // console.log('question field questionId:', this.questionId)
+    // console.log('_________________________________________________________________________')
+  },
+  watch: {
+    value: {
+      handler () {
+        console.log('changed ******************************************************')
+      }
+    }
   },
   mounted () {
     if (this.$refs.tiptap) {
