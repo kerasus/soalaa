@@ -55,9 +55,9 @@
           <q-btn
             v-if="!canComment"
             color="blue"
-            class="full-width"
+            class="full-width log-comment-btn"
             label="افزودن کامنت"
-            style="height: 20px;"
+            size="sm"
             @click="canComment = true"
           />
           <q-input
@@ -65,14 +65,14 @@
             v-model="commentText"
             filled
             type="textarea"
-           model-value=""
+            class="q-mt-md"
           />
           <q-btn
             v-if="canComment"
             color="blue"
-            class="full-width"
+            class="full-width log-comment-btn"
             label="ارسال کامنت"
-            style="height: 20px;"
+            size="sm"
             @click="addComment"
           />
         </div>
@@ -128,6 +128,11 @@ export default {
 
 .log-date {
   text-decoration: underline;
+}
+
+.log-comment-btn{
+  height: 20px;
+  margin-top: 20px;
 }
 
 .eye-icon {
