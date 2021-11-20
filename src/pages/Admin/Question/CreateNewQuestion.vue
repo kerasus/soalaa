@@ -31,7 +31,7 @@
         <question-layout
           v-if="!loading"
           ref="qlayout"
-          v-model="currentQuestion"
+          :currentQuestion = "currentQuestion"
           :status="edit_status"
           @input="updateQuestion"
         />
@@ -136,6 +136,7 @@ export default {
   },
   data () {
     return {
+      testMitra: '',
       selectedAuthors: [],
       authors: [
         {
@@ -243,6 +244,11 @@ export default {
     }
     this.setUploadImgStatus()
   },
+  computed: {
+    calcQuestionColsNumber () {
+      return 'col-' + this.questionColsNumber
+    }
+  },
   methods: {
     getQuestionType () {
       const that = this
@@ -264,6 +270,7 @@ export default {
           console.log(error)
         })
     },
+
     addComment (eventData) {
       axios.post(API_ADDRESS.log.addComment(eventData.logId), { comment: eventData.text })
         .then(response => {
@@ -280,6 +287,7 @@ export default {
           }
         })
     },
+
     navBarAction_create (statusId) {
       // set status_id
       if (!statusId) {
@@ -447,6 +455,62 @@ export default {
         })
     },
 
+    fakeQuestion () {
+      return {
+        id: '5ffdd0d35590063ba07fad39',
+        statement: '<p>«إذا أرَدتَ أن تفوز في عملک فَقُم به وحیداً و لا تـتوکّل علی النّاس!»</p>\n',
+        choices: [
+          {
+            title: '<p>هرگاه خواستی که در کارَت موفق شوی به تنهایی به آن بپرداز و بر مردم تکیه نکن!</p>\n',
+            order: 1,
+            answer: true,
+            id: 1
+          },
+          {
+            title: '<p>اگر اراده‌ات بر موفق شدن در کارهایت است به تنهایی آنها را انجام بده و به مردم اعتماد نکن!</p>\n',
+            order: 2,
+            answer: false,
+            id: 2
+          },
+          {
+            title: '<p>چنانچه قصد داری که در کار خویش به نتیجه برسی به تنهایی به پاخیز و به مردم توکّل نکن!</p>\n',
+            order: 3,
+            answer: false,
+            id: 3
+          },
+          {
+            title: '<p>هر زمان که خواستی در کار خود موفق باشی باید به تنهایی انجامش دهی و به مردم تکیه نکنی!</p>\n',
+            order: 4,
+            answer: false,
+            id: 4
+          }
+        ],
+        exams: [],
+        level: 1,
+        photos: [
+          'https://nodes.alaatv.com/aaa/questionPhotos/Screenshot%20from%202021-06-24%2016-21-18-3532494.png'
+        ],
+        author: [],
+        confirmers: [],
+        confirmed: false,
+        descriptive_answer: null,
+        statement_photo: null,
+        answer_photos: [],
+        status: {
+          id: '60c7102418e65826bc7da378',
+          title: 'typed',
+          display_title: 'تایپ شده',
+          updated_at: '2021-06-14 12:45:32',
+          created_at: '2021-06-14 12:45:32'
+        },
+        type: {
+          value: 'konkur'
+        },
+        updated_at: '2021-11-17 11:17:36',
+        created_at: '2021-01-12 20:09:47'
+      }
+    },
+
     attachQuestionOnCreateMode (item) {
       const targetExamIndex = this.totalExams.findIndex(examItem => Assistant.getId(examItem.id) === Assistant.getId(item.exam.id))
       const selectedQuizzes = this.selectedQuizzes
@@ -533,7 +597,7 @@ export default {
       this.loading = true
       this.currentQuestion.show(null, API_ADDRESS.question.updateQuestion(this.$route.params.question_id))
         .then((response) => {
-          console.log('current question : ', response)
+          console.log('load current question ************ : ', response.data.data)
           if (response.data.data) {
             that.currentQuestion = new Question(response.data.data)
             if (that.currentQuestion.type.value === 'psychometric') {
@@ -544,6 +608,7 @@ export default {
               }
             }
             that.temp = that.currentQuestion
+            that.testMitra = 'hi babe'
             that.checkTextCondition()
             that.getLogs()
             that.trueChoiceIndex = that.currentQuestion.choices.list.findIndex((item) => item.answer)
@@ -567,7 +632,8 @@ export default {
 
     updateQuestion (eventData) {
       this.currentQuestion = new Question(eventData)
-      window.app.set(this, 'currentQuestion', new Question(eventData))
+      console.log('new info in new page :', this.currentQuestion)
+    //  window.app.set(this, 'currentQuestion', new Question(eventData))
     },
 
     updateAttachList (exams) {
@@ -747,11 +813,6 @@ export default {
     setMode (mode) {
       this.mode = mode
       this.dialog = false
-    }
-  },
-  computed: {
-    calcQuestionColsNumber () {
-      return 'col-' + this.questionColsNumber
     }
   }
 }
