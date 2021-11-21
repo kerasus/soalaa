@@ -122,7 +122,8 @@ import { QuestSubcategoryList } from 'src/models/QuestSubcategory'
 import { QuestionStatusList } from 'src/models/QuestionStatus'
 //   ToDo : axios
 import axios from 'axios'
-
+// ToDo : remember import ref for set up mode
+// import { ref } from 'vue'
 export default {
   name: 'NewPage',
   components: {
@@ -228,6 +229,29 @@ export default {
   // beforeRouteLeave (to, from, next) {
   //   console.log(to, from, next)
   // },
+
+  // ToDo : set up mode as an example
+  // ---------------------------------------------- USING SET UP MODE (TEMPORARY RIGHT NOW)-----------------------------------------
+  // setup () {
+  //   const currentQuestion = ref(new Question())
+  //   function addComment (eventData) {
+  //     axios.post(API_ADDRESS.log.addComment(eventData.logId), { comment: eventData.text })
+  //       .then(response => {
+  //         // iterating over the array to find the log that has changed
+  //         if (currentQuestion.value.logs && currentQuestion.value.logs.list) {
+  //           for (let i = 0; i < currentQuestion.value.logs.list.length; i++) {
+  //             if (currentQuestion.value.logs.list[i].id === eventData.logId) {
+  //               currentQuestion.value.logs.list[i] = new Log(response.data.data)
+  //             }
+  //           }
+  //         }
+  //       })
+  //   }
+  //   return {
+  //     currentQuestion,
+  //     addComment
+  //   }
+  // },
   created () {
     console.log('currentQuestion :', this.currentQuestion)
     window.onbeforeunload = function () {
@@ -279,9 +303,10 @@ export default {
             for (let i = 0; i < this.currentQuestion.logs.list.length; i++) {
               if (this.currentQuestion.logs.list[i].id === eventData.logId) {
                 // setting the new log using Vue.set so that the component notices the change
-                this.currentQuestion.logs.list[i] = new Log(response.data.data)
-                // ToDo : app.set
+                // this.currentQuestion.logs.list[i] = new Log(response.data.data)
+                // ToDo : app.set sth used instead
                 // window.app.set(this.currentQuestion, 'logs', new LogList(this.currentQuestion.logs))
+                this.currentQuestion.logs.list[i].push(new Log(response.data.data))
               }
             }
           }
