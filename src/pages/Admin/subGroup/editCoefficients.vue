@@ -1,7 +1,27 @@
 <template>
   <div class="row ">
+    <div class="col-md-12 q-pa-sm">
+      <p class="coefficient-title">
+        {{examTitle}}
+      </p>
+      <p class="exam-date-part">
+        <span class="date-title">
+        شروع آزمون:
+        </span>
+        <span class="exam-date">
+        {{startDate}}
+        </span>
+      </p>
+      <p class="exam-date-part">
+        <span class="date-title">
+        پایان آزمون:
+        </span>
+        <span class="exam-date">
+        {{finishDate}}
+        </span>
+      </p>
+    </div>
     <div class="col-md-6 q-pa-sm">
-      <!--        ToDo change to using id-->
       <q-select
         v-model="selectedSubgroup"
         outlined
@@ -12,7 +32,13 @@
         label="زیرگروه"
         emit-value
         map-options
-      />
+      >
+        <template v-slot:no-option>
+          <p class="no-data">
+             متاسفانه گزینه ای برای انتخاب وجود ندارد!
+          </p>
+        </template>
+      </q-select>
     </div>
     <div class="col-md-6 q-pa-sm">
       <q-btn
@@ -171,11 +197,10 @@
 </template>
 
 <script>
-
-import axios from 'axios'
 import API_ADDRESS from 'src/api/Addresses'
 import { QuestCategoryList } from 'src/models/QuestCategory'
 import { QuestSubcategoryList } from 'src/models/QuestSubcategory'
+import { Exam, ExamList } from 'src/models/Exam'
 
 export default {
   name: 'EditCoefficients',
@@ -187,14 +212,21 @@ export default {
       selectedSubgroup: null,
       selectedCategory: null,
       selectedSubcategory: null,
-      allSubGroups: []
+      allSubGroups: [],
+      examTitle: '',
+      startDate: '',
+      finishDate: '',
+      examId: null,
+      loading: false
     }
   },
   computed: {
     notExistingSubGroups () {
-      const that = this
-      // ToDo change to using id
-      return this.allSubGroups.filter(item => !that.subGroups.find(subGroup => subGroup.title === item.value))
+      let options = []
+      if (this.allSubGroups) {
+        options = this.allSubGroups.filter(item => !this.subGroups.find(subGroup => subGroup.title === item.value))
+      }
+      return options
     },
     notExistingSubcategories () {
       return (subGroup) => {
@@ -204,44 +236,79 @@ export default {
     }
   },
   created () {
-    const that = this
-    axios.get(API_ADDRESS.questionCategory.base)
-      .then((response) => {
-        that.categoryList = new QuestCategoryList(response.data.data)
-        console.log(response)
-      })
-    this.subCategoriesList.fetch()
-      .then((response) => {
-        that.subCategoriesList = new QuestSubcategoryList(response.data.data)
-      })
-    axios.get(API_ADDRESS.subGroups.base(that.$route.params.exam_id))
-      .then((response) => {
-        that.subGroups = response.data.data
-      })
-    axios.get(API_ADDRESS.subGroups.all())
-      .then((response) => {
-        that.allSubGroups = response.data.data
-      })
+    this.examId = this.$route.params.exam_id
+    this.getData()
+  },
+  watch: {
+    loading () {
+      const that = this
+      if (that.loading) {
+        that.$store.dispatch('loading/linearLoading', true)
+      } else {
+        that.$store.dispatch('loading/linearLoading', false)
+      }
+    }
   },
   methods: {
+    getData () {
+      this.getExamInfo()
+      this.getCategories()
+      this.getSubCategoryList()
+      this.existedSubGroup()
+      this.getAllSubGroup()
+    },
+    getExamInfo () {
+      this.loading = true
+      this.$axios.get(API_ADDRESS.exam.base())
+        .then((response) => {
+          const examList = new ExamList(response.data.data)
+          const examInfo = new Exam(examList.list.find(exam => exam.id === this.examId))
+          this.examTitle = examInfo.title
+          this.startDate = examInfo.shamsiDate('start_at').dateTime
+          this.finishDate = examInfo.shamsiDate('finish_at').dateTime
+        })
+    },
+    getCategories () {
+      this.$axios.get(API_ADDRESS.questionCategory.base)
+        .then((response) => {
+          this.categoryList = new QuestCategoryList(response.data.data)
+        })
+    },
+    getSubCategoryList () {
+      this.subCategoriesList.fetch()
+        .then((response) => {
+          this.subCategoriesList = new QuestSubcategoryList(response.data.data)
+        })
+    },
+    existedSubGroup () {
+      this.$axios.get(API_ADDRESS.subGroups.base(this.examId))
+        .then((response) => {
+          this.subGroups = response.data.data
+        })
+    },
+    getAllSubGroup () {
+      this.$axios.get(API_ADDRESS.subGroups.all())
+        .then((response) => {
+          this.allSubGroups = response.data.data
+          this.loading = false
+        })
+    },
     addSubgroup () {
-      console.log(this.allSubGroups)
-      console.log(this.selectedSubGroup)
-      const selectedSubGroup = this.allSubGroups.find(item => item.id === this.selectedSubgroup)
+      this.selectedSubGroup = this.allSubGroups.find(item => item.id === this.selectedSubgroup)
       this.subGroups.push({
-        title: selectedSubGroup.value,
+        title: this.selectedSubGroup.value,
         sub_category: [],
-        id: selectedSubGroup.id
+        id: this.selectedSubGroup.id
       })
     },
     addSubcategory (subGroup) {
       const that = this
-      const selectedSubCategory = this.subCategoriesList.list.find(item => item.id === this.selectedSubcategory)
+      this.selectedSubCategory = this.subCategoriesList.list.find(item => item.id === this.selectedSubcategory)
       subGroup.sub_category.push({
         category_title: that.selectedCategory,
         category_zarib: 0,
-        sub_category_id: selectedSubCategory.id,
-        sub_category_title: selectedSubCategory.title,
+        sub_category_id: this.selectedSubCategory.id,
+        sub_category_title: this.selectedSubCategory.title,
         sub_category_zarib: 0
       })
     },
@@ -258,7 +325,7 @@ export default {
           subCategory.subcategory_id = subCategory.sub_category_id
         })
       })
-      axios.post(API_ADDRESS.subGroups.base(that.$route.params.exam_id), {
+      this.$axios.post(API_ADDRESS.subGroups.base(that.examId), {
         zirgorooh: this.subGroups
       })
         .then((response) => {
@@ -271,6 +338,25 @@ export default {
 </script>
 
 <style scoped>
+.no-data{
+  text-align: center;
+  margin: 20px;
+}
+
+.date-title{
+  margin: 5px;
+  font-weight: 500;
+}
+.exam-date-part{
+  margin: 30px;
+}
+
+.coefficient-title{
+  margin: 20px;
+  font-weight: 500;
+  font-size: 16px;
+}
+
 .small-fontsize {
   font-size: 14px;
 }

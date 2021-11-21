@@ -1,10 +1,13 @@
 <template>
-<div></div>
+  <QuestionBank/>
 </template>
 
 <script>
+import QuestionBank from 'components/Question/QuestionBank/QuestionBank'
+
 export default {
-  name: 'list'
+  name: 'list',
+  components: { QuestionBank }
 }
 </script>
 

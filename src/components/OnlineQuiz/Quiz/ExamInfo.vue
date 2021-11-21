@@ -310,11 +310,6 @@
     <br>
     <div class="bottom-btn">
       <q-btn
-        label="حذف"
-        :disable="show"
-        @click="createExam"
-      />
-      <q-btn
         label="ثبت"
         :disable="show"
         @click="createExam"
@@ -362,7 +357,6 @@ export default {
     this.getData()
     this.getOptions()
     this.getCategories()
-    console.log(this.show)
   },
   watch: {
     typeValue () {
@@ -426,7 +420,6 @@ export default {
         })
     },
     getCategories () {
-      this.$store.dispatch('loading/linearLoading', true)
       this.$axios.get(API_ADDRESS.questionCategory.base)
         .then((response) => {
           this.$store.dispatch('loading/linearLoading', false)
