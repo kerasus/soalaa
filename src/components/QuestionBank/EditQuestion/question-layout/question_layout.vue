@@ -22,9 +22,9 @@
       v-for="(item, index) in question.choices.list"
       :key="index"
       class="row question-layout-options"
-      :class="status ? 'q-mb-md   question-options white': '  question-options'"
+      :class="status ? 'q-mb-md   question-options bg-white': '  question-options'"
     >
-      <div class="col-1">
+      <div class="col-1 test">
         <div class="row">
           <div
             class="question-layout-spacing"
@@ -40,7 +40,7 @@
               @click="clicked(item.order)"
             />
             <div
-              v-else-if="status"
+              v-else
               @click="clicked(item.order)"
             >
               <q-btn
@@ -49,7 +49,7 @@
                 icon="circle"
                 padding="none"
                 size="20px"
-                text-color="grey-4"
+                :text-color="status ? 'grey-4' : 'transparent'"
               />
             </div>
           </div>
@@ -60,8 +60,8 @@
           </div>
         </div>
       </div>
-      <div class="answer-editor col-10">
-        <div>
+      <div class="col-lg-10 answer-editor test">
+        <div class="test2">
           <question_field
             :ref="'choice' + (index + 1)"
             :key="'choices' + (index + 1) + domKey"
@@ -118,9 +118,9 @@ export default {
     }
   },
   watch: {
-    // editorValue: function () {
-    //   this.question = this.currentQuestion
-    // }
+    editorValue: function () {
+      this.question = this.currentQuestion
+    }
   },
   created () {
     this.question = this.currentQuestion
@@ -134,13 +134,14 @@ export default {
   },
   methods: {
     getContent () {
-      console.log(this.$refs)
+      console.log('refs in lay out', this.$refs)
       this.$refs.questionStatement.getContent()
       this.$refs.descriptive.getContent()
       this.$refs.choice1[0].getContent()
       this.$refs.choice2[0].getContent()
       this.$refs.choice3[0].getContent()
       this.$refs.choice4[0].getContent()
+
       this.updateQuestion()
     },
     updateQuestion () {
@@ -158,6 +159,12 @@ export default {
 </script>
 
 <style scoped lang="scss">
+.test{
+  //border:1px solid red;
+}
+.test2{
+  //border:2px solid #0066ff;
+}
 .question-layout {
   margin: 16px;
   font-size: 16px;
@@ -170,14 +177,12 @@ export default {
   }
 }
 .question-layout-options {
-  align-items: center;
   margin-bottom: 10px;
 }
 
 .question-options {
   align-items: center;
   border-radius: 10px;
-  background-color: #fff;
 }
 
 .background-color-test {
@@ -191,7 +196,7 @@ export default {
 }
 
 .question-options .answer-editor {
-  width: 100%;
+  width: 90%;
 }
 
 </style>
