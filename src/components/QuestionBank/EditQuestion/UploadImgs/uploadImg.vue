@@ -1,10 +1,8 @@
 <template>
   <div class="SelectImageBox">
-<!-- Todo : fix this font weight-->
     <p class="box-titles q-mb-md q-mt-md">
       فایل های آپلود شده:
     </p>
-<!--    todo file-upload-->
     <div class="row">
       <div class="col-md-4">
         <q-card class="question-box">
