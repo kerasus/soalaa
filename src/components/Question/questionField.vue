@@ -87,11 +87,6 @@ export default {
     // console.log('_________________________________________________________________________')
   },
   watch: {
-    value: {
-      handler () {
-        console.log('changed ******************************************************')
-      }
-    }
   },
   mounted () {
     if (this.$refs.tiptap) {
