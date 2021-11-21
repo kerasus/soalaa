@@ -119,7 +119,7 @@
                   v-ripple:yellow
                   clickable
                   manual-focus
-                  :to="{ name: 'coefficient.edit', params: { exam_id: tableRow.id } }"
+                  @click="sendCoefficientInfo"
                 >
                   <q-item-section>اصلاح ضرایب</q-item-section>
                 </q-item>
@@ -290,7 +290,6 @@ export default {
     rowClick (evt, row, index) {
       this.index = index
       this.tableRow = row
-      console.log('row:', this.tableRow)
     },
     sendExamInfo (id) {
       this.$router.push({
@@ -305,6 +304,14 @@ export default {
         name: 'edit-exam-report',
         params: {
           examId: this.tableRow.id
+        }
+      })
+    },
+    sendCoefficientInfo () {
+      this.$router.push({
+        name: 'coefficient.edit',
+        params: {
+          exam_id: this.tableRow.id
         }
       })
     },

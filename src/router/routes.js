@@ -62,6 +62,14 @@ const routes = [
             }
           },
           {
+            path: ':exam_id/coefficient/edit',
+            name: 'coefficient.edit',
+            component: () => import('src/pages/Admin/subGroup/editCoefficients.vue'),
+            meta: {
+              middlewares: [auth]
+            }
+          },
+          {
             path: '/question/mbti/create',
             name: 'question.mbti.create',
             component: () => (import('pages/Admin/Question/newMBTIpage')),
@@ -85,18 +93,10 @@ const routes = [
             meta: { middlewares: [auth] }
           },
           {
-            path: 'questions',
+            path: '/questions',
             name: 'question-bank',
             component: () => import('pages/Admin/Question/QuestionBank/list'),
             meta: { middlewares: [auth] }
-          },
-          {
-            path: '/coefficient/edit/:exam_id',
-            name: 'coefficient.edit',
-            component: () => import('src/pages/Admin/subGroup/editCoefficients.vue'),
-            meta: {
-              middlewares: [auth]
-            }
           },
           {
             path: '/lessonsList',
@@ -109,7 +109,7 @@ const routes = [
         ]
       },
       {
-        path: 'category',
+        path: '/category',
         name: 'categoryList',
         component: () => import('pages/Admin/category/list')
       }
