@@ -10,7 +10,7 @@
       <div v-if="status" class="row q-col-gutter-md attach-exams-box">
         <div class="col-5">
         <q-select
-          :model-value="chooseExam"
+          v-model="chooseExam"
           :rules="selectorRules"
           borderless
           dense
@@ -186,6 +186,7 @@ export default {
   },
   methods: {
     attachQuestionOnEditMode () {
+      console.log('attachQuestionOnEditMode :')
       this.attachLoading = true
       axios.post(API_ADDRESS.question.attach, {
         // order: this.attachOrder,
@@ -195,7 +196,7 @@ export default {
       })
         .then(response => {
           this.updateAttachList(response.data.data.exams)
-          // console.log('response', response)
+          console.log('response for attach :', response)
           this.attachLoading = false
           this.dialog = false
         })

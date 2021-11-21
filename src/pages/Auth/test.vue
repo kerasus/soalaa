@@ -6,10 +6,14 @@
 // import API_ADDRESS from 'src/api/Addresses'
 export default {
   created () {
-    this.$axios.get('https://cdn.alaatv.com/upload/knowledgeTree.json', {
+    this.$axios.get('/cdn/upload/knowledgeTree.json', {
       headers: {
         Accept: 'application/json; charset=utf-8',
         dataType: 'json'
+      },
+      transformRequest: (data, headers) => {
+        delete headers.common.Authorization
+        return data
       }
     })
       .then((res) => {
