@@ -129,7 +129,7 @@ export default {
         },
         {
           displayName: 'بانک سوال',
-          to: 'questions',
+          to: '/questions',
           name: 'question-bank'
         },
         {
