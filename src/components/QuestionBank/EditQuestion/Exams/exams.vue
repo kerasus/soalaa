@@ -34,7 +34,7 @@
             option-value="id"
             label="انتخاب درس"/>
         </div>
-        <div class="col-2">
+        <div class="col-2 number-input">
           <q-input
             v-model="examOrder"
             height="36"
@@ -172,15 +172,15 @@ export default {
   },
   data () {
     return {
-      chooseExam: '',
-      chooseLesson: '',
+      chooseExam: null,
+      chooseLesson: null,
       examOrder: '',
       numberRules: [
-        v => v.length > 0 || 'پر کردن این فیلد الزامی است.',
-        v => Number.isInteger(Number(v)) || 'یک عدد وارد کنید.'
+        v => v !== null || 'پر کردن این فیلد الزامی است.',
+        v => Number.isInteger(parseInt(v)) || 'یک عدد وارد کنید.'
       ],
       selectorRules: [
-        v => v.length > 0 || 'پر کردن این فیلد الزامی است.'
+        v => v !== null || 'پر کردن این فیلد الزامی است.'
       ]
     }
   },
@@ -209,16 +209,22 @@ export default {
       this.$emit('detach', item)
     },
     attach () {
-      if (this.$refs.form.validate()) {
-        const exam = this.examList.list.find(examItem => examItem.id === this.chooseExam)
+      if (this.chooseExam && this.chooseLesson && this.examOrder) {
+        const exam = this.examList.list.find(examItem => examItem.id === this.chooseExam.id)
         // eslint-disable-next-line camelcase
-        const sub_category = this.subCategories.list.find(subCategoryItem => subCategoryItem.id === this.chooseLesson)
+        const sub_category = this.subCategories.list.find(subCategoryItem => subCategoryItem.id === this.chooseLesson.id)
         const emitData = {
           exam,
           sub_category,
           order: this.examOrder
         }
         this.$emit('attach', emitData)
+      } else {
+        this.$q.notify({
+          type: 'negative',
+          message: 'لطفا تمام قسمت ها را کامل کنید',
+          position: 'top'
+        })
       }
     }
   }
@@ -251,6 +257,11 @@ export default {
     }
   }
 }
+.exam {
+  .q-field--labeled.q-field--dense .q-field__native, .q-field--labeled.q-field--dense .q-field__prefix, .q-field--labeled.q-field--dense .q-field__suffix {
+    padding-right: 15px #{"/* rtl:ignore */"};
+  }
+}
 </style>
 <style scoped lang="scss">
 .attached-exams-title{
@@ -260,4 +271,5 @@ export default {
 }
 .custom-card-style{
 }
+
 </style>
