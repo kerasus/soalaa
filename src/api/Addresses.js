@@ -29,6 +29,7 @@ const API_ADDRESS = {
     base: lumenServer + '/option'
   },
   exam: {
+    editExam: lumenServer + '/exam',
     sendAnswers: lumenServer + '/temp-exam/answer/choice',
     sendStatus: lumenServer + '/temp-exam/answer/status',
     sendBookmark: lumenServer + '/temp-exam/answer/bookmark',
@@ -43,7 +44,7 @@ const API_ADDRESS = {
       if (page_number) {
         return lumenServer + '/exam?with_pagination=1&page=' + page_number
       } else {
-        return lumenServer + '/exam?with_pagination=0'
+        return lumenServer + '/exam'
       }
     },
     generateExamFile (exam_id, with_answer) {
