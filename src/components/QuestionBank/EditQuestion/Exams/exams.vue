@@ -34,7 +34,7 @@
             option-value="id"
             label="انتخاب درس"/>
         </div>
-        <div class="col-2">
+        <div class="col-2 number-input">
           <q-input
             v-model="examOrder"
             height="36"
@@ -172,15 +172,15 @@ export default {
   },
   data () {
     return {
-      chooseExam: '',
-      chooseLesson: '',
+      chooseExam: null,
+      chooseLesson: null,
       examOrder: '',
       numberRules: [
-        v => v.length > 0 || 'پر کردن این فیلد الزامی است.',
-        v => Number.isInteger(Number(v)) || 'یک عدد وارد کنید.'
+        v => v !== null || 'پر کردن این فیلد الزامی است.',
+        v => Number.isInteger(parseInt(v)) || 'یک عدد وارد کنید.'
       ],
       selectorRules: [
-        v => v.length > 0 || 'پر کردن این فیلد الزامی است.'
+        v => v !== null || 'پر کردن این فیلد الزامی است.'
       ]
     }
   },
@@ -259,5 +259,16 @@ export default {
   font-size: 16px;
 }
 .custom-card-style{
+}
+.exam {
+  .q-field--auto-height.q-field--dense.q-field--labeled .q-field__native {
+    min-height: 24px;
+    padding-right: 14px;
+  }
+  .q-field--labeled.q-field--dense .q-field__native, .q-field--labeled.q-field--dense .q-field__prefix, .q-field--labeled.q-field--dense .q-field__suffix {
+    padding-top: 14px;
+    padding-bottom: 2px;
+    padding-right: 15px;
+  }
 }
 </style>
