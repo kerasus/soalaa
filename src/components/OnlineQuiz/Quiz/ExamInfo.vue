@@ -1,5 +1,8 @@
 <template>
-  <div class="exam-info-body">
+  <div
+    v-if="examInfo"
+    class="exam-info-body"
+  >
     <q-input
       v-model="examInfo.title"
       :disable="show"
@@ -210,7 +213,7 @@
       />
     </div>
     <br>
-    <div v-if="examInfo.id === null">
+    <div v-if="!examInfo.id">
       <q-separator inset/>
       <br>
       <div class="row">
@@ -331,7 +334,7 @@ export default {
     return {
       examId: null,
       examList: new ExamList(),
-      examInfo: new Exam(),
+      examInfo: null,
       typeValue: '',
       options: [],
       types: [],
