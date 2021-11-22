@@ -209,16 +209,22 @@ export default {
       this.$emit('detach', item)
     },
     attach () {
-      if (this.$refs.form.validate()) {
-        const exam = this.examList.list.find(examItem => examItem.id === this.chooseExam)
+      if (this.chooseExam && this.chooseLesson && this.examOrder) {
+        const exam = this.examList.list.find(examItem => examItem.id === this.chooseExam.id)
         // eslint-disable-next-line camelcase
-        const sub_category = this.subCategories.list.find(subCategoryItem => subCategoryItem.id === this.chooseLesson)
+        const sub_category = this.subCategories.list.find(subCategoryItem => subCategoryItem.id === this.chooseLesson.id)
         const emitData = {
           exam,
           sub_category,
           order: this.examOrder
         }
         this.$emit('attach', emitData)
+      } else {
+        this.$q.notify({
+          type: 'negative',
+          message: 'لطفا تمام قسمت ها را کامل کنید',
+          position: 'top'
+        })
       }
     }
   }
@@ -251,6 +257,11 @@ export default {
     }
   }
 }
+.exam {
+  .q-field--labeled.q-field--dense .q-field__native, .q-field--labeled.q-field--dense .q-field__prefix, .q-field--labeled.q-field--dense .q-field__suffix {
+    padding-right: 15px #{"/* rtl:ignore */"};
+  }
+}
 </style>
 <style scoped lang="scss">
 .attached-exams-title{
@@ -260,15 +271,5 @@ export default {
 }
 .custom-card-style{
 }
-.exam {
-  .q-field--auto-height.q-field--dense.q-field--labeled .q-field__native {
-    min-height: 24px;
-    padding-right: 14px;
-  }
-  .q-field--labeled.q-field--dense .q-field__native, .q-field--labeled.q-field--dense .q-field__prefix, .q-field--labeled.q-field--dense .q-field__suffix {
-    padding-top: 14px;
-    padding-bottom: 2px;
-    padding-right: 15px;
-  }
-}
+
 </style>
