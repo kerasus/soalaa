@@ -1,5 +1,8 @@
 <template>
-  <div class="exam-info-body">
+  <div
+    v-if="examInfo"
+    class="exam-info-body"
+  >
     <q-input
       v-model="examInfo.title"
       :disable="show"
@@ -210,7 +213,7 @@
       />
     </div>
     <br>
-    <div v-if="examInfo.id === null">
+    <div v-if="!examInfo.id">
       <q-separator inset/>
       <br>
       <div class="row">
@@ -310,11 +313,6 @@
     <br>
     <div class="bottom-btn">
       <q-btn
-        label="حذف"
-        :disable="show"
-        @click="createExam"
-      />
-      <q-btn
         label="ثبت"
         :disable="show"
         @click="createExam"
@@ -336,7 +334,7 @@ export default {
     return {
       examId: null,
       examList: new ExamList(),
-      examInfo: new Exam(),
+      examInfo: null,
       typeValue: '',
       options: [],
       types: [],
@@ -362,7 +360,6 @@ export default {
     this.getData()
     this.getOptions()
     this.getCategories()
-    console.log(this.show)
   },
   watch: {
     typeValue () {
@@ -426,7 +423,6 @@ export default {
         })
     },
     getCategories () {
-      this.$store.dispatch('loading/linearLoading', true)
       this.$axios.get(API_ADDRESS.questionCategory.base)
         .then((response) => {
           this.$store.dispatch('loading/linearLoading', false)
