@@ -8,6 +8,7 @@
         v-model="value"
         min-height="5rem"
       />
+      <vue-tiptap-katext />
   <!--      Todo : vue-tiptap-katex-->
 <!--      <vue-tiptap-katex-->
 <!--        ref="tiptap"-->
@@ -34,6 +35,7 @@
 // ToDo : vue-tiptap-katex in incompatible with vue 3 (right now)
 // import VueTiptapKatex from 'vue-tiptap-katex'
 import API_ADDRESS from 'src/api/Addresses'
+import VueTiptapKatext from 'vue3-tiptap-katex'
 
 // replacement
 import { ref } from 'vue'
@@ -42,7 +44,8 @@ export default {
   name: 'QuestionField',
   components: {
     // VueTiptapKatex,
-    // VueKatex
+    // VueKatex,
+    VueTiptapKatext
   },
   props: {
     editorValue: {
