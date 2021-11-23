@@ -36,12 +36,12 @@
           </div>
           <!-- -------------------------- upload file ---------------------->
 <!--          ToDo : UploadImg -->
-<!--          <UploadImg-->
-<!--            v-if="this.showImgComponentStatus()"-->
-<!--            v-model="currentQuestion"-->
-<!--            :edit-status="upload_img_status"-->
-<!--            @imgClicked="makeShowImgPanelVisible($event)"-->
-<!--          />-->
+          <UploadImg
+            v-if="this.showImgComponentStatus()"
+            v-model="currentQuestion"
+            :edit-status="upload_img_status"
+            @imgClicked="makeShowImgPanelVisible($event)"
+          />
           <!-- -------------------------- status --------------------------->
           <div
             v-if="this.getPageStatus() === 'edit'"

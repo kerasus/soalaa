@@ -172,15 +172,15 @@ export default {
   },
   data () {
     return {
-      chooseExam: '',
-      chooseLesson: '',
+      chooseExam: null,
+      chooseLesson: null,
       examOrder: '',
       numberRules: [
-        v => v.length > 0 || 'پر کردن این فیلد الزامی است.',
+        v => v !== null || 'پر کردن این فیلد الزامی است.',
         v => Number.isInteger(Number(v)) || 'یک عدد وارد کنید.'
       ],
       selectorRules: [
-        v => v.length > 0 || 'پر کردن این فیلد الزامی است.'
+        v => v !== null || 'پر کردن این فیلد الزامی است.'
       ]
     }
   },

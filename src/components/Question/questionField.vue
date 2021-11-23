@@ -69,8 +69,8 @@ export default {
     return {
       value: '',
       html: '',
-      loading: false,
-      editor: ref('What you see is <b>what</b> you get.')
+      test: 'test data',
+      loading: false
     }
   },
   computed: {
@@ -100,9 +100,8 @@ export default {
   },
   methods: {
     getContent () {
-      // ToDo : vue-tiptap-katex in incompatible with vue 3 (right now)
-      // this.$emit('input', this.$refs.tiptap.getContent())
-      console.log(' this.$emit(\'input\', this.$refs.tiptap.getContent())')
+      console.log('this.editorValue :', this.value)
+      this.$emit('questionData', this.value)
     },
     getHtmlValueFromValueProp () {
       let html = this.value
