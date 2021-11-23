@@ -151,9 +151,10 @@ const routes = [
     component: () => import('pages/Auth/Login.vue')
   },
   {
-    path: '/test',
-    name: 'test',
-    component: () => import('pages/Auth/test.vue'),
+    path: '/konkoorView',
+    name: 'konkoorView',
+    // component: () => import('src/pages/User/exam/participate/konkoorView'),
+    component: () => import('src/components/OnlineQuiz/Quiz/timer/timer'),
     meta: {
       middlewares: [auth]
     }

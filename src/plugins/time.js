@@ -30,6 +30,7 @@ const Time = (function () {
   }
 
   function now () {
+    window.serverDate = {}
     if (!window.serverDate.offset) {
       window.serverDate.offset = 0
     }

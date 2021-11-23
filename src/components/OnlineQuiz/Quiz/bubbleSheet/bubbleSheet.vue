@@ -255,5 +255,120 @@ export default {
 </script>
 
 <style scoped>
+.v-overlay {
+  align-items: flex-start;
+  padding-top: 100px;
+}
 
+.pasokh-nameh .choice-in-list {
+  position: relative;
+  cursor: auto;
+}
+
+.pasokh-nameh .choice-in-list.answer {
+  border: solid 1px #00c753;
+}
+
+.pasokh-nameh .choice-in-list.active {
+  border: solid 1px #ff4243;
+  background-color: #ff4243;
+}
+
+.pasokh-nameh .choice-in-list.active.answer {
+  border: solid 1px #00c753;
+  background-color: #00c753;
+}
+
+.question-group {
+  background: #fff;
+  border-radius: 10px;
+  margin: 5px;
+  padding: 5px 10px;
+  width: 130px;
+  font-size: 11px;
+  max-height: 175px;
+
+}
+
+.question-in-list {
+  margin: 2px 0;
+  display: flex;
+  flex-direction: row;
+  height: 14px;
+}
+
+.choice-in-list {
+  width: 19%;
+  margin: 2px;
+  border-radius: 6px;
+  border: 1px solid #ffda6a;
+  cursor: pointer;
+}
+
+.choice-in-list.active {
+  background: #888;
+}
+
+.question-number-in-list {
+  position: relative;
+}
+
+.question-number-in-list.circle::after {
+  content: "\F0130";
+  position: absolute;
+  font: normal normal normal 24px/1 "Material Design Icons";
+  text-rendering: auto;
+  line-height: inherit;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  color: #ffda6a;
+  left: -13px;
+  font-size: 14px;
+  top: -5px;
+}
+
+.question-number-in-list.cross::after {
+  content: "\F0156";
+  position: absolute;
+  font: normal normal normal 24px/1 "Material Design Icons";
+  text-rendering: auto;
+  line-height: inherit;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  color: red;
+  left: -13px;
+  font-size: 14px;
+  top: -5px;
+}
+
+.pasokh-nameh .question-number-in-list.bookmark::after {
+  content: "\F00C3";
+  position: absolute;
+  font: normal normal normal 24px/1 "Material Design Icons";
+  text-rendering: auto;
+  line-height: inherit;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  color: #2196F3;
+  left: -13px;
+  font-size: 14px;
+  top: -5px;
+}
+
+.questions-list {
+  direction: ltr;
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  align-items: center;
+  margin-bottom: 80px;
+}
+</style>
+
+<style>
+.pasokh-nameh .v-icon.mdi-check,
+.pasokh-nameh .v-icon.mdi-close {
+  top: -2px;
+  left: 2px;
+}
 </style>
