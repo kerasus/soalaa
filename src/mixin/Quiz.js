@@ -16,7 +16,7 @@ const mixinQuiz = {
     },
     quiz: {
       get () {
-        return this.$store.getters.quiz
+        return this.$store.getters['quiz/quiz']
       },
       set (newInfo) {
         this.$store.commit('updateQuiz', newInfo)
