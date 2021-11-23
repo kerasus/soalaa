@@ -33,7 +33,7 @@
           ref="qlayout"
           :currentQuestion = "currentQuestion"
           :status="edit_status"
-          @input="updateQuestion"
+          @updateQuestion="updateQuestion"
         />
         <div class="col-4">
           <q-select
@@ -223,6 +223,9 @@ export default {
       mode: ''
     }
   },
+  updated () {
+
+  },
   unmounted () {
     window.onbeforeunload = null
   },
@@ -333,18 +336,21 @@ export default {
     },
 
     navBarAction_save () {
+      console.log('navBarAction_save is run', this.$refs.qlayout.getContent())
       this.$refs.qlayout.getContent()
       const currentQuestion = this.currentQuestion
       currentQuestion.type_id = this.optionQuestionId
-      currentQuestion.update(API_ADDRESS.question.updateQuestion(currentQuestion.id))
-        .then(() => {
-          this.$q.notify({
-            message: 'ویرایش با موفقیت انجام شد',
-            color: 'green',
-            icon: 'thumb_up'
-          })
-          this.$router.push({ name: 'question.show', params: { question_id: this.$route.params.question_id } })
-        })
+      console.log('currentQuestion :', currentQuestion)
+      // currentQuestion.update(API_ADDRESS.question.updateQuestion(currentQuestion.id))
+      //   .then((res) => {
+      //     console.log('res in navbar save action ', res)
+      //     this.$q.notify({
+      //       message: 'ویرایش با موفقیت انجام شد',
+      //       color: 'green',
+      //       icon: 'thumb_up'
+      //     })
+      //     this.$router.push({ name: 'question.show', params: { question_id: this.$route.params.question_id } })
+      //   })
     },
 
     navBarAction_cancel () {
@@ -353,6 +359,7 @@ export default {
 
     navBarAction_edit () {
       this.$router.push({ name: 'question.edit', params: { question_id: this.$route.params.question_id } })
+      this.setPageStatus()
     },
 
     navBarAction_remove () {
@@ -618,6 +625,7 @@ export default {
     },
 
     loadCurrentQuestionData () {
+      console.log('loadCurrentQuestionData is run')
       const that = this
       this.loading = true
       this.currentQuestion.show(null, API_ADDRESS.question.updateQuestion(this.$route.params.question_id))
@@ -644,12 +652,12 @@ export default {
     },
 
     getLogs () {
-      console.log('getLogs this.currentQuestion :', this.currentQuestion)
-      console.log('getLogs logs :', this.currentQuestion.logs)
+    //  console.log('getLogs this.currentQuestion :', this.currentQuestion)
+      /// console.log('getLogs logs :', this.currentQuestion.logs)
       this.currentQuestion.logs.fetch(null, API_ADDRESS.question.log.base(this.$route.params.question_id))
         .then((response) => {
           this.currentQuestion.logs = new LogList(response.data.data)
-          console.log('cur que log in response :', response.data.data)
+          // console.log('cur que log in response :', response.data.data)
           // window.app.set(this.currentQuestion, 'logs', new LogList(response.data.data))
           this.setQuestionLayoutCols()
         })
@@ -657,7 +665,7 @@ export default {
 
     updateQuestion (eventData) {
       this.currentQuestion = new Question(eventData)
-      console.log('new info in new page :', this.currentQuestion)
+      console.log('updateQuestion new info in new page *************************** :', this.currentQuestion)
     //  window.app.set(this, 'currentQuestion', new Question(eventData))
     },
 
