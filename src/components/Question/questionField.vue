@@ -5,10 +5,10 @@
       class="col-12"
     >
       <q-editor
-        v-model="value"
+        v-model="html"
         min-height="5rem"
       />
-      <vue-tiptap-katext />
+<!--      <vue-tiptap-katext />-->
   <!--      Todo : vue-tiptap-katex-->
 <!--      <vue-tiptap-katex-->
 <!--        ref="tiptap"-->
@@ -21,7 +21,7 @@
     <div
     v-else
     >
-      <q-card-section v-html="value" />
+      <q-card-section v-html="html" />
     </div>
 <!--    <div class="col" v-else>-->
 <!--      <vue-katex :input="html" />-->
@@ -35,20 +35,20 @@
 // ToDo : vue-tiptap-katex in incompatible with vue 3 (right now)
 // import VueTiptapKatex from 'vue-tiptap-katex'
 import API_ADDRESS from 'src/api/Addresses'
-import VueTiptapKatext from 'vue3-tiptap-katex'
+// import VueTiptapKatext from 'vue3-tiptap-katex'
 
 // replacement
-import { ref } from 'vue'
+// import { ref } from 'vue'
 
 export default {
   name: 'QuestionField',
   components: {
     // VueTiptapKatex,
     // VueKatex,
-    VueTiptapKatext
+    // VueTiptapKatext
   },
   props: {
-    editorValue: {
+    modelValue: {
       default: '',
       type: String
     },
@@ -67,7 +67,6 @@ export default {
   },
   data () {
     return {
-      value: '',
       html: '',
       test: 'test data',
       loading: false
@@ -79,15 +78,12 @@ export default {
     }
   },
   created () {
-    this.value = this.editorValue
     this.loading = true
     this.getHtmlValueFromValueProp()
-    // console.log('_________________________________________________________________________')
-    // console.log('question field value:', this.value)
-    // console.log('question field :', this.label)
-    // console.log('question field editStatus:', this.editStatus)
-    // console.log('question field questionId:', this.questionId)
-    // console.log('_________________________________________________________________________')
+    console.log('_________________________________________________________________________')
+    console.log('question field value:', this.modelValue)
+    console.log('question field questionId:', this.questionId)
+    console.log('_________________________________________________________________________')
   },
   watch: {
   },
@@ -104,7 +100,7 @@ export default {
       this.$emit('questionData', this.value)
     },
     getHtmlValueFromValueProp () {
-      let html = this.value
+      let html = this.modelValue
       if (html === null || typeof html === 'undefined') {
         html = ''
       }
