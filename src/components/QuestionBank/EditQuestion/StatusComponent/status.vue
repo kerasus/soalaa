@@ -16,8 +16,7 @@
             v-model="newStatus.changeState"
             :options="statuses.list"
             option-label="display_title"
-            item-value="id"
-            model-value=""
+            option-value="id"
           ></q-select>
         </q-card>
       </div>
