@@ -14,6 +14,12 @@ const routes = [
         }
       },
       {
+        path: '/user_exam_list',
+        name: 'user.exam.list',
+        component: () => import('pages/User/exam/List'),
+        middleware: [auth]
+      },
+      {
         path: '/exam',
         name: 'exam',
         component: () => import('pages/Admin/exam/index'),
@@ -163,7 +169,8 @@ const routes = [
   // but you can also remove it
   {
     path: '/:catchAll(.*)*',
-    component: () => import('pages/Error404.vue')
+    component:
+  () => import('pages/Error404.vue')
   }
 ]
 
