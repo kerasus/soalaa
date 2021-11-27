@@ -4,7 +4,11 @@
 <!--    <vue-confirm-dialog />-->
     <div class="row">
       <div class="col">
-        <progress-linear :active="loadingList" />
+        <q-linear-progress
+          v-if="loadingList"
+          indeterminate />
+<!--        ToDo : ProgressLinear-->
+<!--        <progress-linear :active="loadingList" />-->
         <q-banner
           v-if="exams.list.length === 0 && !loadingList"
           inline-actions rounded class="bg-blue text-white">
@@ -144,7 +148,7 @@
 <script>
 import { Exam, ExamList } from 'src/models/Exam'
 import { mixinAuth, mixinQuiz } from 'src/mixin/Mixins'
-import ProgressLinear from 'src/components/ProgressLinear'
+// import ProgressLinear from 'src/components/ProgressLinear'
 // import VueConfirmDialog from 'vue-confirm-dialog'
 // import { createApp } from 'vue'
 // const app = createApp({})
@@ -153,7 +157,8 @@ import ProgressLinear from 'src/components/ProgressLinear'
 
 export default {
   name: 'List',
-  components: { ProgressLinear },
+  //       ToDo : ProgressLinear
+  // components: { ProgressLinear },
   mixins: [mixinAuth, mixinQuiz],
   data: () => ({
     preventStartExam: false,
