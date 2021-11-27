@@ -1,11 +1,18 @@
 <template>
   <div id="q-app" class="q-ma-lg row justify-center" style="min-height: 100vh">
-    <q-linear-progress v-if="percentageOfInformationCompletion" size="30px" :value="percentageOfInformationCompletion"
-                       color="primary" class="q-mt-sm">
+    <q-linear-progress
+      v-if="percentageOfInformationCompletion"
+      size="30px"
+      :value="percentageOfInformationCompletion"
+      color="primary"
+      class="q-mt-sm">
       <div class="absolute-full flex flex-center">
-        <q-badge text-color="black" color="transparent" class="text-subtitle1 text-weight-bold" align="middle"
-                 :label="percentageOfInformationCompletionLabel">
-
+        <q-badge
+          text-color="black"
+          color="transparent"
+          class="text-subtitle1 text-weight-bold"
+          align="middle"
+          :label="percentageOfInformationCompletionLabel">
         </q-badge>
       </div>
     </q-linear-progress>
@@ -73,7 +80,6 @@
             </q-select>
           </div>
           <div class="col-md-6 col-12">
-            selectedCity :  {{selectedCity }}
             <q-select
               v-model="selectedCity"
               use-input
@@ -126,68 +132,21 @@
               :options="grades"
               option-label="title"
               option-value="id"
-              map-options
               emit-value
+              map-options
               :rules="[
                 val => val !== null && val !== '' || 'انتخاب این فیلد اجباری است' ]"
             />
           </div>
         </div>
       </div>
-      <div>
-        <div class="row justify-center q-ma-lg">
-          <q-btn
-            v-if="!waiting && !this.user.mobile_verified_at"
-            color="blue"
-            rounded
-            @click="sendCode"
-          >
-            دریافت کد فعالسازی
-          </q-btn>
-        </div>
-        <div v-if="totalTime" class="row justify-center q-ma-lg">
-          <div class="col-12 row justify-center mit">
-               <span
-                 :class="totalTime <60 ? 'red-text' : ''"
-               >{{ ((totalTime) % 3600) % 60 }}</span>
-            <span>:</span>
-            <span
-              :class="totalTime <60 ? 'red-text' : ''"
-            >{{ Math.floor(((totalTime) % 3600) / 60) }}</span>
-          </div>
-          کد ارسال شده را وارد نمایید.
-        </div>
-        <div class="q-px-lg">
-          <q-input
-            v-if="totalTime"
-            dir="ltr"
-            v-model="typedCode"
-            label="کد فعالسازی"
-            @keydown="pressedEnter"
-          />
-        </div>
-        <div class="row justify-center q-px-lg">
-          <q-btn
-            rounded
-            v-if="!totalTime && waiting"
-            color="blue"
-            @click="sendCode"
-          >
-            دریافت مجدد کد
-          </q-btn>
-        </div>
-        <div class="row justify-center q-mt-lg">
-          <q-btn
-            rounded
-            v-if="totalTime"
-            color="blue"
-            @click="verifyCode"
-          >
-            ثبت شماره موبایل
-          </q-btn>
-        </div>
-      </div>
+      <!--      verify ------------------------------------------------------------------------------------------------------------>
+      <verify
+        v-if="needVerify"
+        @verified="verified"
+      />
       <div class="row justify-end q-mt-lg">
+        <!--        submit form ---------------------------------------------------------------------------------->
         <q-btn
           :disabl="!this.user.mobile_verified_at"
           color="blue"
@@ -210,10 +169,12 @@ import Time from 'src/plugins/time'
 import { mixinAuth } from 'src/mixin/Mixins'
 import API_ADDRESS from 'src/api/Addresses'
 import { User } from 'src/models/User'
+import Verify from 'pages/Auth/Verify'
 
 export default {
   name: 'UserInfoForm',
   mixins: [mixinAuth],
+  components: { Verify },
   props: {
     requiredItems: {
       type: Array,
@@ -250,7 +211,6 @@ export default {
       grades: []
     }
   },
-
   computed: {
     redirectAfterCompleteInfoPage () {
       return this.$store.getters.redirectAfterCompleteInfoPage
@@ -293,15 +253,29 @@ export default {
       }
     }
   },
-
-  mounted: function () {
-    // console.log('this.user :', this.user)
-    this.user.mobile_verified_at ? this.needVerify = false : this.needVerify = true
-    this.userData = this.user
-    this.getUserData()
-    this.$store.dispatch('AppLayout/updateDrawer', false)
+  mounted () {
+    console.log('in mounted this.user :', this.user)
+    this.getUserInfo()
+    this.checkVerify()
   },
+
   methods: {
+    verified () {
+      this.user.mobile_verified_at = Time.now()
+      this.needVerify = false
+      this.canRedirect()
+    },
+
+    getUserInfo () {
+      this.userData = this.user
+      this.getUserData()
+      this.$store.dispatch('AppLayout/updateDrawer', false)
+    },
+
+    checkVerify () {
+      this.user.mobile_verified_at ? this.needVerify = false : this.needVerify = true
+    },
+
     filterProvinces (val, update) {
       // ToDo 'search problem'
       update(() => {
@@ -317,9 +291,6 @@ export default {
           return item.title.includes(val)
         })
       })
-    },
-    pressedEnter (e) {
-      if (e.keyCode === 13) this.verifyCode()
     },
 
     getUserProvince () {
@@ -363,24 +334,27 @@ export default {
           that.$store.commit('Auth/updateUser', user)
           this.canRedirect()
         })
-        // .catch(e => {
-        //   // console.log('err in get data :', err)
-        // })
+      // .catch(e => {
+      //   // console.log('err in get data :', err)
+      // })
     },
 
     canRedirect () {
-      // console.log('canRedirect')
-      if (!this.needVerify) {
-        // console.log('hey verify your numb')
+      if (this.needVerify) {
+        this.$q.notify({
+          type: 'warning',
+          message: 'نیاز به ثبت شماره موبایل هست.',
+          position: 'center'
+        })
+      } else {
         this.redirectUser()
       }
     },
 
     redirectUser () {
-      // console.log('redirect user call')
       if (!this.user.needToCompleteInfo()) {
         if (!this.redirectAfterCompleteInfoPage) {
-        //  this.$router.push({ name: 'test' })
+          this.$router.push({ name: 'home' })
         } else {
           this.$router.push({
             name: this.redirectAfterCompleteInfoPage.name,
@@ -395,10 +369,7 @@ export default {
         })
       }
     },
-    startTimer () {
-      this.totalTime = 180
-      this.timer = setInterval(() => this.countdown(), 1000)
-    },
+
     getUserFormData () {
       // console.log('get user form data run ')
       this.user.loading = true
@@ -420,20 +391,12 @@ export default {
           // console.log('get user form data in catch', e)
           this.$q.notify({
             type: 'negative',
-            message: 'مشکلی در گرفتن اطلاعات رخ داده است. لطفا دوباره امتحان کنید get user form data !!!!!!!!!!!!!!',
+            message: 'مشکلی در گرفتن اطلاعات رخ داده است. لطفا دوباره امتحان کنید ',
             position: 'top'
           })
           this.user.loading = false
         }
         )
-    },
-
-    countdown: function () {
-      if (this.totalTime > 0) {
-        this.totalTime--
-      } else {
-        this.waiting = true
-      }
     },
 
     checkForSubmit () {
@@ -449,6 +412,7 @@ export default {
         })
       })
     },
+
     submit () {
       const that = this
       delete this.user.photo
@@ -461,6 +425,11 @@ export default {
       this.user.update()
         .then((response) => {
           that.user.loading = false
+          this.$q.notify({
+            type: 'positive',
+            message: 'ویرایش با موفقیت انجام شد.',
+            position: 'center'
+          })
           that.$store.commit('Auth/updateUser', response.data.data)
           that.getUserData()
         })
@@ -505,50 +474,6 @@ export default {
       }, 20000)
     },
 
-    sendCode () {
-      const that = this
-      this.user.loading = true
-      this.$axios.get(API_ADDRESS.user.mobile.resend)
-        .then((resp) => {
-          that.user.loading = false
-          that.code = resp
-          that.startTimer()
-          that.waiting = true
-          that.showTimer = true
-          this.$q.notify({
-            type: 'positive',
-            message: 'کد فعالسازی با موفقیت ارسال شد.',
-            position: 'top'
-          })
-        })
-        .catch((e) => {
-          this.$q.notify({
-            type: 'negative',
-            message: 'مشکلی در ارسال کد رخ داده است. لطفا دوباره امتحان کنید',
-            position: 'center'
-          })
-        }
-        )
-    },
-
-    verifyCode () {
-      const that = this
-      this.user.loading = true
-      this.$axios.post(API_ADDRESS.user.mobile.verify, { code: this.typedCode })
-        .then(() => {
-          that.user.loading = false
-          this.user.mobile_verified_at = Time.now()
-          this.isCodeVerified = true
-          this.needVerify = false
-          this.$q.notify({
-            type: 'positive',
-            message: 'شماره موبایل با موفقیت ثبت شد.',
-            position: 'center'
-          })
-          // this.getUserData()
-        })
-    },
-
     canSubmit () {
       let status = true
       if (!this.isValidString(this.userData.first_name)) {
@@ -582,6 +507,7 @@ export default {
 
       return status
     },
+
     isValidString (string) {
       return (typeof string !== 'undefined' && string !== null && string.toString().trim().length > 0)
     }
@@ -608,10 +534,6 @@ export default {
   width: 80%;
   margin: 30px auto auto;
   text-align: center;
-}
-
-.red-text {
-  color: #ff5050
 }
 
 .requiredItem {
