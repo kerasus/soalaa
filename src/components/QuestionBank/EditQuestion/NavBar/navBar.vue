@@ -154,6 +154,7 @@ export default {
   },
   methods: {
     btn_clicked (name) {
+      console.log('btn_clicked', name)
       this.$emit(name)
     }
   }

@@ -7,7 +7,11 @@ import { CheckingTimeList } from '../models/CheckingTime'
 import Assistant from '../plugins/assistant'
 import axios from 'axios'
 import API_ADDRESS from '../api/Addresses'
-
+import { createApp } from 'vue'
+if (!window.app) {
+// window.app
+  window.app = createApp({})
+}
 class Exam extends Model {
   constructor (data) {
     super(data, [
@@ -22,6 +26,7 @@ class Exam extends Model {
       { key: 'order' },
       { key: 'delay_time' },
       { key: 'exam_actions' },
+      { key: 'type' },
       { key: 'holding_status' }, // not_started - holding - in_extra_time - finished
       { key: 'user_exam_id' },
       { key: 'user_exam_status' },
@@ -53,6 +58,7 @@ class Exam extends Model {
         key: 'sub_categories',
         relatedModel: QuestSubcategoryList
       },
+
       { key: 'start_at' },
       { key: 'finish_at' },
       { key: 'accept_at' },
@@ -99,13 +105,11 @@ class Exam extends Model {
           populate_school_ranking: false
         }
       },
-
-      { key: 'type' },
-
       {
         key: 'type_id',
         default: null
       }
+
     ])
 
     const that = this
@@ -172,6 +176,36 @@ class Exam extends Model {
     return this.categories.list.find((item) => !!(item.is_active))
   }
 
+  loadQuestionsFromFile () {
+    const that = this
+    return new Promise(function (resolve, reject) {
+      if (!that.questions_file_url) {
+        Assistant.handleAxiosError('exam file url is not set')
+        reject(null)
+        // ToDo : bring after removing ajax
+        // return
+      }
+      // ToDo : remove ajax
+      // $.ajax({
+      //   type: 'GET',
+      //   url: that.questions_file_url,
+      //   accept: 'application/json; charset=utf-8',
+      //   dataType: 'json',
+      //   success: function (data) {
+      //     that.questions = new QuestionList(data)
+      //
+      //     resolve(data)
+      //   },
+      //   error: function (jqXHR, textStatus, errorThrown) {
+      //     Assistant.reportErrors({ location: 'exam.js -> loadQuestionsFromFile() -> $.ajax.error', message: "can't get exam file", data: { jqXHR, textStatus, errorThrown } })
+      //     Assistant.handleAxiosError("can't get exam file")
+      //     reject({ jqXHR, textStatus, errorThrown })
+      //   }
+      // })
+    })
+    // https://cdn.alaatv.com/upload/3a_ensani_202101131630.json
+  }
+
   setQuestionsLtr () {
     // const englishRegex = /^[A-Za-z0-9 :"'ʹ.<>%$&@!+()\-/\n,…?ᵒ*~]*$/
     const englishRegex = /^[A-Za-z0-9 :"'ʹ.<>%$&@!+()\-/\n,…?ᵒ*~]*$/
@@ -196,7 +230,8 @@ class Exam extends Model {
         const checkingTimesLength = item.checking_times.list.length
 
         return (selected || bookmarked || state || checkingTimesLength)
-      })
+      }
+    )
   }
 
   setUserQuizData (userData) {
@@ -284,10 +319,10 @@ class Exam extends Model {
     userQuestionData.answered_at = (answeredChoice) ? answeredChoice.answered_at : null
     userQuestionData.bookmarked = question.bookmarked
     userQuestionData.state = question.state
-
-    window.app.set(userQuestionData, 'answered_at', (answeredChoice) ? answeredChoice.answered_at : null)
-    window.app.set(userQuestionData, 'bookmarked', question.bookmarked)
-    window.app.set(userQuestionData, 'state', question.state)
+    // ToDo : app.set
+    // window.app.set(userQuestionData, 'answered_at', (answeredChoice) ? answeredChoice.answered_at : null)
+    // window.app.set(userQuestionData, 'bookmarked', question.bookmarked)
+    // window.app.set(userQuestionData, 'state', question.state)
   }
 
   addUserQuestionData (question, userQuizData) {
@@ -339,7 +374,6 @@ class Exam extends Model {
         item.selectChoice(dbAnswer.choice_id, dbAnswer.selected_at)
         item.state = dbAnswer.status
         item.bookmarked = dbAnswer.bookmark
-        console.log(item.order)
       }
     })
   }
@@ -362,7 +396,6 @@ class Exam extends Model {
           that.loadQuestionsFromFile()
             .then(() => {
               that.mergeDbAnswerToLocalstorage(answers)
-              console.log(answers)
               resolve()
             })
             .catch(({

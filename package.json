@@ -30,7 +30,7 @@
     "turndown": "^7.1.1",
     "vue-i18n": "^9.0.0",
     "vue-katex": "^0.5.0",
-    "vue-upload-component": "^2.8.22",
+    "vue-upload-component": "^3.0.50",
     "vuex": "^4.0.1",
     "vuex-persistedstate": "^4.1.0"
   },
