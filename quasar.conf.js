@@ -104,6 +104,14 @@ module.exports = configure(function (ctx) {
           pathRewrite: {
             '^/3a/api/v1': ''
           }
+        },
+        '/cdn': {
+          target: 'https://cdn.alaatv.com',
+          changeOrigin: true,
+          secure: false,
+          pathRewrite: {
+            '^/cdn': ''
+          }
         }
       }
     },

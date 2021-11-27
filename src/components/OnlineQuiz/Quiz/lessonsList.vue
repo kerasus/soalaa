@@ -2,7 +2,7 @@
   <div class="row">
     <div class="col-12">
       <div class="tableSize">
-        <span>فرسنگ اول دین و زندگی | کنکورچه سوم</span>
+        <span>{{ $route.params.quizTitle }}</span>
         <q-btn
           class="q-mx-sm float-right"
           size="10px"
@@ -33,9 +33,10 @@
             v-for="item in lessonsList"
             :key="item.id"
           >
-            <td>{{title}}</td>
+            <td>{{item.title}}</td>
             <td class="actionsColumn">
                   <q-btn
+                    v-if="item.permissions.view"
                     class="q-mx-sm"
                     size="12px"
                     round
@@ -51,6 +52,7 @@
                     </q-tooltip>
                   </q-btn>
                   <q-btn
+                    v-if="item.permissions.view"
                     class="q-mx-sm"
                     size="12px"
                     round
@@ -75,27 +77,43 @@
 </template>
 
 <script>
-// import axios from "axios";
-// import API_ADDRESS from "@/api/Addresses";
-// import {QuestSubcategoryList} from "@/models/QuestSubcategory";
+import axios from 'axios'
+import API_ADDRESS from 'src/api/Addresses'
+import { QuestSubcategoryList } from 'src/models/QuestSubcategory'
 
 export default {
   name: 'LessonsList',
   data: () => ({
-    lessonsList: {
-      id: 1
-    },
-    title: 'درس الکترومغناطیس',
-    item: {
-      id: 1
-    }
+    lessonsList: new QuestSubcategoryList()
   }),
   created () {
+    this.$store.commit('AppLayout/updateDrawer', true)
   },
   mounted () {
+    this.getLessons()
   },
-  methods: {}
+  methods: {
+    goBack () {
+      this.$router.push('/onlineQuiz/exams')
+    },
+    getLessons () {
+      this.lessonsList.loading = true
+      axios.get(API_ADDRESS.exam.getSubCategoriesWithPermissions(this.$route.params.quizId))
+        .then((response) => {
+          this.lessonsList.loading = false
+          this.lessonsList = new QuestSubcategoryList(response.data.data, {
+            meta: response.data.meta,
+            links: response.data.links
+          })
+        })
+        .catch(() => {
+          this.lessonsList.loading = false
+          this.lessonsList = new QuestSubcategoryList()
+        })
+    }
+  }
 }
+
 </script>
 
 <style scoped>

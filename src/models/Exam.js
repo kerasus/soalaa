@@ -239,7 +239,7 @@ class Exam extends Model {
       return
     }
     this.questions.list.map((question) => {
-      // let userQuestionData = userData.find((questionData)=> questionData.questionId === )
+      // const userQuestionData = userData.find((questionData)=> questionData.questionId === )
       const userQuestionData = userData[question.id]
 
       if (userQuestionData) {
@@ -327,10 +327,12 @@ class Exam extends Model {
 
   addUserQuestionData (question, userQuizData) {
     const answeredChoice = question.getAnsweredChoice()
-    let answeredChoiceId = null
-    let answered_at = null
+    const answeredChoiceId = null
+    const answered_at = null
     if (answeredChoice) {
+      // eslint-disable-next-line
       answeredChoiceId = answeredChoice.id
+      // eslint-disable-next-line
       answered_at = answeredChoice.answered_at
     }
     const checkingTimes = []
@@ -358,7 +360,11 @@ class Exam extends Model {
         })
       }
     })
-    return axios.post(API_ADDRESS.exam.sendAnswers, { exam_user_id: this.user_exam_id, finish: true, questions: answers })
+    return axios.post(API_ADDRESS.exam.sendAnswers, {
+      exam_user_id: this.user_exam_id,
+      finish: true,
+      questions: answers
+    })
   }
 
   mergeDbAnswerToLocalstorage (dbAnswers) {
@@ -392,8 +398,16 @@ class Exam extends Model {
               that.mergeDbAnswerToLocalstorage(answers)
               resolve()
             })
-            .catch(({ jqXHR, textStatus, errorThrown }) => {
-              reject({ jqXHR, textStatus, errorThrown })
+            .catch(({
+              jqXHR,
+              textStatus,
+              errorThrown
+            }) => {
+              reject({
+                jqXHR,
+                textStatus,
+                errorThrown
+              })
             })
         })
         .catch(() => {
