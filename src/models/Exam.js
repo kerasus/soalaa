@@ -292,12 +292,10 @@ class Exam extends Model {
 
   addUserQuestionData (question, userQuizData) {
     const answeredChoice = question.getAnsweredChoice()
-    const answeredChoiceId = null
-    const answered_at = null
+    let answeredChoiceId = null
+    let answered_at = null
     if (answeredChoice) {
-      // eslint-disable-next-line
       answeredChoiceId = answeredChoice.id
-      // eslint-disable-next-line
       answered_at = answeredChoice.answered_at
     }
     const checkingTimes = []

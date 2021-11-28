@@ -332,7 +332,7 @@ const mixinQuiz = {
             }
             that.$store.commit('mergeDbAnswersIntoLocalstorage', {
               dbAnswers: response.data,
-              examId: that.quiz.id
+              exam_id: that.quiz.id
             })
             resolve()
           })
@@ -350,7 +350,7 @@ const mixinQuiz = {
       // if (!question.statement) {
       //     return
       // }
-      // const englishRegex = /^[A-Za-z0-9 :''ʹ.<>%$&@!+()\-_/\n,…?ᵒ*~]*$/
+      // const englishRegex = /^[A-Za-z0-9 :"'ʹ.<>%$&@!+()\-_/\n,…?ᵒ*~]*$/
       // question.ltr = !!question.statement.match(englishRegex);
     },
     loadExamExtraData (quiz, viewType) {
@@ -397,7 +397,7 @@ const mixinQuiz = {
       for (const questionId in userExamData) {
         if (userExamData[questionId].answered_at) {
           answers.push({
-            questionId: questionId,
+            question_id: questionId,
             choice_id: userExamData[questionId].answered_choice_id,
             selected_at: (!userExamData[questionId].answered_at) ? null : userExamData[questionId].answered_at,
             bookmarked: userExamData[questionId].bookmarked,
@@ -414,7 +414,7 @@ const mixinQuiz = {
       if (!string) {
         return false
       }
-      // const englishRegex = /^[A-Za-z0-9 :''ʹ.<>%$&@!+()\-/\n,…?;ᵒ*~]*$/
+      // const englishRegex = /^[A-Za-z0-9 :"'ʹ.<>%$&@!+()\-/\n,…?;ᵒ*~]*$/
       // return !!string.match(englishRegex)
       const persianRegex = /[\u0600-\u06FF]/
       return !string.match(persianRegex)

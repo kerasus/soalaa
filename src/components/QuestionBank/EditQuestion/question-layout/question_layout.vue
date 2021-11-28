@@ -1,86 +1,94 @@
 <template>
   <!-- ------------------------- question -------------------------------  -->
-  <div class=" ma-4 question-layout">
-    <div class="question ">
+  <div class="question-layout">
+    <div class="question">
       <div
         v-if="status"
-        class="mb-5 "
+        style="margin-bottom: 20px"
       >
         تایپ سوال
       </div>
-<!--      Todo : question_field-->
       <question_field
         ref="questionStatement"
         :key="'statement' + domKey"
-        v-model="question.statement"
-        class="mb-10"
+        :editorValue="question.statement"
         :edit-status="status"
         placeholder="صورت سوال"
-        :question-id="value.id ? value.id : 'null'"
+        :question-id="question.id ? question.id : 'null'"
+        style="margin-bottom: 40px"
+        @questionData="getData"
       />
     </div>
     <div
       v-for="(item, index) in question.choices.list"
       :key="index"
       class="row question-layout-options"
-      :class="status ? 'q-mb-md  question-options white': '  question-options'"
+      :class="status ? 'q-mb-md   question-options bg-white': '  question-options'"
     >
-      <div class="col-1">
+      <div class="col-1 test">
         <div class="row">
-      <div :class="status ?'28px' :'36px'">
-        <div
-          v-if="item.answer"
-          @click="clicked(item.order)"
-        >
-          <q-icon
-            name="mdi-checkbox-marked-circle"
-            class="checkbox-marked-circle"
-            :size ="!status ?'checkbox-marked-circle-1' :'checkbox-marked-circle-2'"
-          />
-        </div>
-        <div
-          v-else-if="status"
-          @click="clicked(item.order)"
-        >
-          <q-btn
-            round
-            size="36px"
-          />
+          <div
+            class="question-layout-spacing"
+          >
+            <q-btn
+              v-if="item.answer"
+              round
+              unelevated
+              icon="mdi-checkbox-marked-circle"
+              class="checkbox-marked"
+              padding="none"
+              size="20px"
+              @click="clicked(item.order)"
+            />
+            <div
+              v-else
+              @click="clicked(item.order)"
+            >
+              <q-btn
+                round
+                unelevated
+                icon="circle"
+                padding="none"
+                size="20px"
+                :text-color="status ? 'grey-4' : 'transparent'"
+              />
+            </div>
+          </div>
+          <div class="row items-center">
+          <div>
+            {{ (index + 1) + ') ' }}
+          </div>
+          </div>
         </div>
       </div>
-      <div class="col col-1">
-        {{ (index + 1) + ') ' }}
-      </div>
-        </div>
-      </div>
-      <div class="col answer-editor col-11">
-        <div>
-          <!--      Todo : question_field-->
+      <div class="col-lg-10 answer-editor test">
+        <div class="test2">
           <question_field
             :ref="'choice' + (index + 1)"
             :key="'choices' + (index + 1) + domKey"
-            v-model="item.title"
+            :editorValue="item.title"
             :edit-status="status"
-            :question-id="value.id ? value.id : 'null'"
+            :question-id="question.id ? question.id : 'null'"
+            @questionData="getData"
           />
         </div>
       </div>
     </div>
     <!-- ------------------------- answer -------------------------------  -->
-    <div class="mb-5 question-answer ">
-      <div class="mb-5">
+    <div class="question-answer">
+      <div style="margin-bottom: 25px;">
         پاسخ تشریحی
       </div>
       <div>
-        <!--      Todo : question_field-->
         <question_field
           ref="descriptive"
           :key="'descriptive_answer' + domKey"
-          v-model="question.descriptive_answer"
-          :question-id="value.id ? value.id : 'null'"
+          :editorValue="question.descriptive_answer"
+          :question-id="question.id ? question.id : 'null'"
           :edit-status="status"
           placeholder="پاسخ تشریحی"
-          class="mb-16"
+          class="q-mb-lg"
+          @questionData="getData"
         />
       </div>
     </div>
@@ -88,9 +96,8 @@
 </template>
 <script>
 import { Question } from 'src/models/Question'
-// ToDo import
 // eslint-disable-next-line camelcase
-import question_field from 'components/Question/questionField'
+import question_field from 'src/components/Question/questionField'
 
 export default {
   name: 'QuestionLayout',
@@ -98,13 +105,13 @@ export default {
     question_field
   },
   props: {
-    value: {
+    currentQuestion: {
       type: Question,
-      default: new Question()
+      default: () => new Question()
     },
     status: {
       type: Boolean,
-      default: false
+      default: () => false
     }
   },
   data () {
@@ -114,12 +121,17 @@ export default {
     }
   },
   watch: {
-    value: function () {
-      this.question = this.value
+    editorValue: function () {
+      console.log('watch in lay out run ')
+      this.question = this.currentQuestion
     }
   },
   created () {
-    this.question = this.value
+    console.log('created in layout is run')
+    this.question = this.currentQuestion
+    // console.log('question lay out question:', this.question)
+    // console.log('question lay out currentQuestion:', this.currentQuestion)
+    // console.log('question lay out status:', this.status)
     const that = this
     setTimeout(() => {
       that.domKey = Date.now()
@@ -127,19 +139,25 @@ export default {
   },
   methods: {
     getContent () {
-      console.log(this.$refs)
+      console.log('getContent in lay out')
       this.$refs.questionStatement.getContent()
       this.$refs.descriptive.getContent()
-      this.$refs.choice1[0].getContent()
-      this.$refs.choice2[0].getContent()
-      this.$refs.choice3[0].getContent()
-      this.$refs.choice4[0].getContent()
+      this.$refs.choice1.getContent()
+      this.$refs.choice2.getContent()
+      this.$refs.choice3.getContent()
+      this.$refs.choice4.getContent()
       this.updateQuestion()
     },
+    getData (val) {
+      console.log('new data from field in lay out ------------------------------------------------------:', val)
+      this.editorValue = val
+    },
     updateQuestion () {
-      this.$emit('input', this.question)
+      console.log('emit update question is run in the question layout, this.question', this.question)
+      this.$emit('updateQuestion', this.question)
     },
     clicked (order) {
+      console.log('order :', order)
       this.question.choices.list.forEach(item => {
         item.answer = item.order === order
       })
@@ -149,36 +167,54 @@ export default {
 }
 </script>
 
-<style scoped>
-.question-layout-options{
-  display: flex;
-  align-items: center;
-  margin-bottom: 10px;
-
+<style scoped lang="scss">
+.test{
+  //border:1px solid red;
 }
-.question-options{
-  display: flex;
+.test2{
+  //border:2px solid #0066ff;
+}
+.question-layout {
+  margin: 16px;
+  font-size: 16px;
+
+  .question-layout-spacing{
+      padding-right: 24px;
+  }
+  .checkbox-marked{
+    color: #4caf50;
+  }
+}
+.question-layout-options {
+  margin-bottom: 10px;
+}
+
+.question-options {
   align-items: center;
   border-radius: 10px;
 }
-.background-color-test{
+
+.background-color-test {
   background-color: white;
 
 }
-.question-answer{
+
+.question-answer {
   padding: 10px;
+  margin-bottom: 20px;
 }
 
-.question-options .answer-editor{
-width: 100%;
+.question-options .answer-editor {
+  width: 90%;
 }
-.checkbox-marked-circle {
-  color: green;
-}
+
 </style>
 <style>
 .question-layout .tiptap-plus.v-card {
   box-shadow: none !important;
 }
-
+.question-layout-spacing-1 .q-btn .q-icon,.question-layout-spacing-1 .q-btn .q-spinner {
+  font-size: 3.715em !important;
+  position: absolute;
+}
 </style>

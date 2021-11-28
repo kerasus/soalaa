@@ -36,11 +36,12 @@ class CheckingTimeList extends Collection {
 
   addEnd () {
     const lastItem = this.getLastItem()
+    console.log('lastItem', lastItem)
     if (!lastItem) {
-      // ToDo
-      // return
+      return
     }
-    // ToDo : app.set
+    // ToDo : app.set sth used instead
+    lastItem.end.push(Time.now())
     // window.app.set(lastItem, 'end', Time.now())
   }
 }
