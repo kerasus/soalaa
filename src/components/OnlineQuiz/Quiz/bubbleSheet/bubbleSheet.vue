@@ -9,6 +9,7 @@
 
     }"
   >
+    متناناالابلبزیبی
     <div
       v-for="(group, index) in questionsInGroups"
       :key="index"
@@ -29,34 +30,25 @@
           :style="{ width: '24%', cursor: 'pointer' }"
           @click="ClickQuestionNumber(question.id)"
         >
-          <v-tooltip
-            v-if="getUserQuestionData(question.id)"
-            bottom
-          >
-            <template v-slot:activator="{ on, attrs }">
-              <span
-                v-bind="attrs"
-                v-on="on"
-              >
-                {{ getQuestionNumberFromId(question.id) }}
-              </span>
-            </template>
-            <span>
-              <v-icon
+          <span v-if="getUserQuestionData(question.id)">
+            {{ getQuestionNumberFromId(question.id) }}
+            <q-tooltip
+              v-if="getUserQuestionData(question.id)"
+              anchor="bottom middle"
+            >
+              <span>
+              <q-icon
                 v-if="showDateOfAnsweredAt"
-                dark
-              >
-                mdi-calendar-check-outline
-              </v-icon>
-              <v-icon
+                icon="mdi-calendar-check-outline"
+              />
+              <q-icon
                 v-else
-                dark
-              >
-                mdi-clock-check-outline
-              </v-icon>
+                icon="mdi-clock-check-outline"
+              />
               {{ showAnsweredAt(getUserQuestionData(question.id).answered_at) }}
             </span>
-          </v-tooltip>
+            </q-tooltip>
+          </span>
           <span v-else>
             {{ getQuestionNumberFromId(question.id) }}
           </span>
@@ -71,20 +63,16 @@
           }"
           @click="AnswerClicked({ questionId: question.id, choiceId: choice.id})"
         >
-          <v-icon
-            v-if="info.type === 'pasokh-nameh' && choice.answer"
+          <q-icon
             size="12"
+            icon="mdi-check"
             :color="getUserQuestionData(question.id) && choice.id === getUserQuestionData(question.id).answered_choice_id ? '#fff' : '#00c753'"
-          >
-            mdi-check
-          </v-icon>
-          <v-icon
-            v-if="info.type === 'pasokh-nameh' && getUserQuestionData(question.id) && choice.id === getUserQuestionData(question.id).answered_choice_id && !choice.answer"
+          />
+          <q-icon
             size="12"
+            icon="mdi-close"
             color="#fff"
-          >
-            mdi-close
-          </v-icon>
+          />
         </div>
       </div>
     </div>
@@ -127,19 +115,14 @@ export default {
     bubbleSize () {
       return this.$store.getters['AppLayout/bubbleSize']
     },
-    boxHeight () {
-      const boxSize = this.bubbleSheetWidth - 24
-      // each group width is 140px
-      const horizontalGroupAmounts = Math.floor(boxSize / 140)
-      const verticalGroupAmount = Math.ceil(this.questionsInGroups.length / horizontalGroupAmounts)
-      return verticalGroupAmount * 182 + 20
-    },
     questionsInGroups () {
-      const groups = [],
-        chunk = 10
+      const groups = []
+      const chunk = 10
       let array
+      console.log('questions', this.questions)
       if (this.questions === null) {
         array = this.getCurrentExamQuestionsInArray()
+        console.log('array', array)
         for (let i = 0, j = array.length; i < j; i += chunk) {
           groups.push(array.slice(i, i + chunk))
         }
@@ -149,6 +132,7 @@ export default {
           groups.push(array.slice(i, i + chunk))
         }
       }
+      console.log('groups', groups)
       return groups
     }
   },

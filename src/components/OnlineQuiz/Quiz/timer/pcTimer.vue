@@ -2,8 +2,14 @@
   <div>
     <div
       id="timerCard"
-      class="timeCArdDefault elevation-3 "
+      class="timeCArdDefault shadow-3"
     >
+      <q-icon
+        v-if="show"
+        class="closeIcon"
+        icon="mdi-close"
+        @click="timerClose"
+      />
       <div
         v-if="!show"
         class="timerDefaultWrapper"
@@ -19,12 +25,6 @@
           />
         </svg>
       </div>
-      <q-icon
-        v-if="show"
-        class="closeIcon"
-        icon="mdi-close"
-        @click="timerClose"
-      />
       <div class="row">
         <div class="col-2">
           <svg
@@ -130,7 +130,7 @@ export default {
   background-color: white;
   justify-self: end;
   margin-left: 0;
-  float: left;
+  float: right;
 }
 
 .timeCArdOpened {
@@ -141,12 +141,11 @@ export default {
   background-color: white;
   justify-self: end;
   margin-left: 0;
-  float: left;
+  float: right;
   display: flex;
   flex-direction: row-reverse;
   align-items: center;
 }
-
 .timeCArdDefault:hover {
   cursor: pointer;
 }
@@ -155,7 +154,7 @@ export default {
   width: 28.632px;
   height: 33.403px;
   margin-top: 38px;
-  margin-right: 50px;
+  margin-left: 50px;
   transform: matrix(1, 0, 0, 1, 0, 0);
   fill: rgba(136, 136, 136, 1);
 }

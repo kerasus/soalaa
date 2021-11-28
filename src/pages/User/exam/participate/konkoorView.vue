@@ -1,120 +1,41 @@
 <template>
-  <v-container
-    v-resize="updateWindowSize"
-    class="konkoor-view"
-    :fluid="true"
-    :style="{ height: '100%', background: 'rgb(244,244,244)' }"
-  >
-    <v-row :style="{ 'min-height': '100%' }">
-      <v-col
-        id="questions"
-        ref="questionsColumn"
-        :md="5"
-        class="questions"
-        :style="{ height: windowSize.y }"
-      >
-        <!--                <div class="lesson">{{ currentLesson.title }}</div>-->
-        <DynamicScroller
-          ref="scroller"
-          :items="questions"
-          :min-item-size="70"
-          class="scroller questionss"
-          :emit-update="true"
-          @update="onScroll"
-        >
-          <template v-slot="{ item, index, active }">
-            <DynamicScrollerItem
-              :item="item"
-              :active="active"
-              :data-index="index"
-            >
-              <Item
-                :source="item"
-                :questions-column="$refs.questionsColumn"
-                @inView="test"
-              />
-            </DynamicScrollerItem>
-          </template>
-        </DynamicScroller>
-      </v-col>
-      <v-col
-        ref="leftSideList"
-        :md="7"
-        class="left-side-list"
-      >
-        <v-row>
-          <v-col
-            class="px-10 py-0 d-flex justify-space-between"
-            dir="ltr"
-          >
-            <div class="rounded-b-xl rounded-r-xl">
-              <v-menu
-                bottom
-                :offset-y="true"
-                class="rounded-b-xl rounded-r-xl"
-              >
-                <template v-slot:activator="{ on, attrs }">
-                  <v-btn
-                    large
-                    tile
-                    v-bind="attrs"
-                    elevation="0"
-                    class="pl-3"
-                    v-on="on"
-                  >
-                    <v-icon
-                      class="mr-2"
-                      :size="30"
-                      color="#666"
-                    >
-                      mdi-account-circle
-                    </v-icon>
-                    <span v-if="user.last_name">
-                      {{ user.last_name }}
-                    </span>
-                    <span v-if="user.first_name">
-                      {{ user.first_name }}
-                    </span>
-                  </v-btn>
-                </template>
-                <v-card
-                  max-width="375"
-                  class="mx-auto"
-                  rounded="b-xl r-xl"
-                >
-                  <TopMenu/>
-                </v-card>
-              </v-menu>
-            </div>
-            <v-btn
-              icon
+  <div class="konkoor-view ">
+    <div class="row">
+      <div class="col-md-5">
+      </div>
+      <div class="col-md-7">
+        <div class="row left-side">
+          <div class="col bubbleSheet-top">
+            <q-btn
+              icon="mdi-table-split-cell"
               @click="changeView('alaa')"
+            />
+            <q-btn-dropdown
+              icon="account_circle"
+              :label="user.full_name "
+              color="grey-14"
+              dropdown-icon="false"
+              flat
             >
-              <v-icon>mdi-table-split-cell</v-icon>
-            </v-btn>
-          </v-col>
-        </v-row>
-        <v-row>
-          <v-col>
+              <top-menu/>
+            </q-btn-dropdown>
+          </div>
+          <div class="col">
             <BubbleSheet
-              :info="{ type: 'pasokh-barg' }"
+              :info="{ type: 'pasokh-barg'}"
               :delay-time="0"
               @clickChoice="choiceClicked"
               @scrollTo="scrollTo"
             />
-          </v-col>
-        </v-row>
-      </v-col>
-    </v-row>
-    <v-row class="timer-row">
-      <v-btn
-        v-if="false"
-        class="end-exam-btn"
-        @click="getConfirmation"
-      >
-        ارسال پاسخنامه
-      </v-btn>
-      <v-col :class="{ 'high-z-index': timerIsOpen }">
+          </div>
+        </div>
+      </div>
+    </div>
+    <div
+      class="row timer-row"
+    >
+      <div class="col"></div>
+      <div class="col">
         <Timer
           :daftarche="'عمومی'"
           :quiz-started-at="1607963897"
@@ -122,17 +43,17 @@
           :height="100"
           @timerOpen="timerOpen"
         />
-      </v-col>
-    </v-row>
-  </v-container>
+      </div>
+    </div>
+  </div>
 </template>
 
 <script>
-import 'src/assets/scss/markdownKatex.scss'
+// import 'src/assets/scss/markdownKatex.scss'
 import Item from 'src/components/OnlineQuiz/Quiz/question/questionField'
 import { mixinAuth, mixinQuiz, mixinUserActionOnQuestion, mixinWindowSize } from 'src/mixin/Mixins'
-import Timer from 'src/components/OnlineQuiz/Quiz/Timer/Timer'
-import BubbleSheet from 'src/components/OnlineQuiz/Quiz/BubbleSheet/BubbleSheet'
+import Timer from 'src/components/OnlineQuiz/Quiz/timer/timer'
+import BubbleSheet from 'src/components/OnlineQuiz/Quiz/bubbleSheet/bubbleSheet'
 import { Exam } from 'src/models/Exam'
 import Assistant from 'src/plugins/assistant'
 import TopMenu from 'src/components/Menu/topMenu/onlineQuizTopMenu'
@@ -141,12 +62,13 @@ export default {
   components: {
     Timer,
     TopMenu,
-    BubbleSheet,
-    Item
+    BubbleSheet
+  //   Item
   },
   mixins: [mixinAuth, mixinQuiz, mixinUserActionOnQuestion, mixinWindowSize],
   data () {
     return {
+      user: null,
       quizData: new Exam(),
       item: Item,
       lastTimeScrollRange: { start: 0, end: 29 },
@@ -159,56 +81,49 @@ export default {
       timerIsOpen: false
     }
   },
-  watch: {
-    'windowSize.y': function () {
-      this.setHeights()
-    },
-    'windowSize.x': function () {
-      this.$store.commit('AppLayout/updateDrawer', false)
-    }
-  },
+  // watch: {
+  //   'windowSize.y': function () {
+  //     this.setHeights()
+  //   },
+  //   'windowSize.x': function () {
+  //     this.$store.commit('AppLayout/updateDrawer', false)
+  //   }
+  // },
   created () {
-    const that = this
-    this.startExam(this.$route.params.quizId, 'onlineQuiz.KonkoorView')
+    this.getUser()
+    this.startExam('6135be32e0db6947171ef9a0', 'KonkoorView')
       .then(() => {
         // that.loadFirstActiveQuestionIfNeed()
-        that.$store.commit('AppLayout/updateOverlay', { show: false, loading: false, text: '' })
-      })
-      .catch((error) => {
-        Assistant.reportErrors(error)
-        that.$notify({
-          group: 'notifs',
-          title: 'توجه!',
-          text: 'مشکلی در دریافت اطلاعات آژمون رخ داده است. لطفا دوباره امتحان کنید.',
-          type: 'error'
-        })
-        // ToDo: uncomment
-        // that.$router.push({ name: 'user.exam.list'})
       })
     if (this.windowSize.x > 959) {
       this.changeAppBarAndDrawer(false)
-    } else {
-      this.$router.push({
-        name: 'onlineQuiz.alaaView',
-        params: { quizId: 313, questNumber: this.$route.params.quizId }
-      })
     }
+    // else {
+    //   this.$router.push({
+    //     name: 'onlineQuiz.alaaView',
+    //     params: { quizId: 313, questNumber: this.$route.params.quizId }
+    //   })
+    // }
     if (!this.questions.length) {
       this.questions = this.getCurrentExamQuestionsInArray()
     }
   },
   mounted () {
-    this.setHeights()
-    if (this.currentQuestion.id === null) {
-      this.loadFirstQuestion()
-    }
-    this.scrollTo(this.currentQuestion.id)
-    this.changeAppBarAndDrawer(false)
+    // this.setHeights()
+    // if (this.currentQuestion.id === null) {
+    //   this.loadFirstQuestion()
+    // }
+    // this.scrollTo(this.currentQuestion.id)
+    // this.changeAppBarAndDrawer(false)
   },
   unmounted () {
     this.changeAppBarAndDrawer(true)
   },
   methods: {
+    getUser () {
+      this.user = this.$store.getters['Auth/user']
+      return this.user
+    },
     loadFirstActiveQuestionIfNeed () {
       const activeCcategory = this.quiz.getFirstActiveCategory()
       if (!activeCcategory) {
@@ -395,23 +310,44 @@ export default {
     choiceClicked (questionId) {
       this.scrollTo(questionId)
       this.changeQuestion(questionId)
-    },
+    }
     // changeCurrentQuestion (question) {
     //     if (question.id !== this.currentQuestion.id) {
     //         this.currentQuestion = question
     //     }
     // }
-    setHeights () {
-      this.$refs.questionsColumn.style.height = this.windowSize.y + 'px'
-      if (this.$refs.scroller.$el) {
-        this.$refs.scroller.$el.style.height = this.windowSize.y + 'px'
-      }
-      this.$refs.leftSideList.style.height = (this.windowSize.y - 24) + 'px'
-    }
+    // setHeights () {
+    //   this.$refs.questionsColumn.style.height = this.windowSize.y + 'px'
+    //   if (this.$refs.scroller.$el) {
+    //     this.$refs.scroller.$el.style.height = this.windowSize.y + 'px'
+    //   }
+    //   this.$refs.leftSideList.style.height = (this.windowSize.y - 24) + 'px'
+    // }
   }
 }
 </script>
 
-<style scoped>
-
+<style lang="scss" scoped>
+.konkoor-view{
+  height: 100%;
+  min-height: 100vh;
+  background-color: rgb(244,244,244);
+  .left-side{
+    display: flex;
+    flex-direction: column;
+    min-height: 100%;
+    overflow-y: auto;
+    .bubbleSheet-top{
+      width: 56vw;
+      display: flex;
+      justify-content: space-between;
+    }
+  }
+  .timer-row {
+    width: calc(58% - 150px);
+    position: absolute;
+    bottom: 12px;
+    right: 100px;
+  }
+}
 </style>
