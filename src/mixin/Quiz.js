@@ -5,6 +5,7 @@ import axios from 'axios'
 import API_ADDRESS from 'src/api/Addresses'
 import { Exam } from '../models/Exam'
 import { QuestCategoryList } from '../models/QuestCategory'
+// todo : jquery
 import $ from 'jquery'
 import { QuestionList } from '../models/Question'
 import ExamData from 'src/assets/js/ExamData'
