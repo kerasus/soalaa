@@ -8,7 +8,7 @@
         v-model="value"
         min-height="5rem"
       />
-      <vue-tiptap-katext />
+<!--      <vue-tiptap-katext />-->
   <!--      Todo : vue-tiptap-katex-->
 <!--      <vue-tiptap-katex-->
 <!--        ref="tiptap"-->
@@ -35,7 +35,7 @@
 // ToDo : vue-tiptap-katex in incompatible with vue 3 (right now)
 // import VueTiptapKatex from 'vue-tiptap-katex'
 import API_ADDRESS from 'src/api/Addresses'
-import VueTiptapKatext from 'vue3-tiptap-katex'
+// import VueTiptapKatext from 'vue3-tiptap-katex'
 
 // replacement
 import { ref } from 'vue'
@@ -45,7 +45,7 @@ export default {
   components: {
     // VueTiptapKatex,
     // VueKatex,
-    VueTiptapKatext
+    // VueTiptapKatext
   },
   props: {
     editorValue: {
@@ -67,7 +67,7 @@ export default {
   },
   data () {
     return {
-      value: '',
+      value: ref('What you see is <b>what</b> you get.'),
       html: '',
       test: 'test data',
       loading: false
