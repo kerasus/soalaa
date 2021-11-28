@@ -80,10 +80,12 @@ export default {
   created () {
     this.loading = true
     this.getHtmlValueFromValueProp()
-    console.log('_________________________________________________________________________')
-    console.log('question field value:', this.modelValue)
-    console.log('question field questionId:', this.questionId)
-    console.log('_________________________________________________________________________')
+    // console.log('_________________________________________________________________________')
+    // console.log('question field value:', this.value)
+    // console.log('question field :', this.label)
+    // console.log('question field editStatus:', this.editStatus)
+    // console.log('question field questionId:', this.questionId)
+    // console.log('_________________________________________________________________________')
   },
   watch: {
   },

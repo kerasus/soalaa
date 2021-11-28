@@ -4,10 +4,11 @@ import Time from 'src/plugins/time'
 import { QuestSubcategory, QuestSubcategoryList } from 'src/models/QuestSubcategory'
 import axios from 'axios'
 import API_ADDRESS from 'src/api/Addresses'
-import { Exam } from 'src/models/Exam'
-import { QuestCategoryList } from 'src/models/QuestCategory'
-// import $ from "jquery";
-// import { QuestionList } from 'src/models/Question'
+import { Exam } from '../models/Exam'
+import { QuestCategoryList } from '../models/QuestCategory'
+// todo : jquery
+import $ from 'jquery'
+import { QuestionList } from '../models/Question'
 import ExamData from 'src/assets/js/ExamData'
 // import mixinAuth from 'src/mixin/Auth'
 
