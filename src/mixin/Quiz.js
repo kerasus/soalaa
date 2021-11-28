@@ -23,7 +23,7 @@ const mixinQuiz = {
       }
     },
     userQuizListData () {
-      return this.$store.getters.userQuizListData
+      return this.$store.getters['userQuizListData/quiz']
     },
     userQuestionData () {
       return (questionId) => {
@@ -96,13 +96,16 @@ const mixinQuiz = {
     },
 
     getCurrentExam () {
-      return this.$store.getters.quiz
+      return this.$store.getters['quiz/quiz']
     },
     getCurrentExamQuestionIndexes () {
+      console.log('window.currentExamQuestionIndexes', window.currentExamQuestionIndexes)
       if (window.currentExamQuestionIndexes) {
         return window.currentExamQuestionIndexes
       }
       window.currentExamQuestionIndexes = JSON.parse(window.localStorage.getItem('currentExamQuestionIndexes'))
+      console.log('window', JSON.parse(window.localStorage.getItem('currentExamQuestionIndexes')))
+      console.log('window.currentExamQuestionIndexes', window.currentExamQuestionIndexes)
       return JSON.parse(window.localStorage.getItem('currentExamQuestionIndexes'))
     },
     setCurrentExamQuestions (currentExamQuestions) {
@@ -156,20 +159,27 @@ const mixinQuiz = {
     },
     getCurrentExamQuestionsInArray () {
       let currentExamQuestionsArray = []
+      console.log('1')
       if (this.quiZ !== {}) {
         const currentExamQuestionIndexes = this.getCurrentExamQuestionIndexes()
         const currentExamQuestions = this.getCurrentExamQuestions()
+        console.log('2')
         if (!currentExamQuestionIndexes) {
+          console.log('3')
           return currentExamQuestionsArray
         }
+        console.log('33')
         const currentExamQuestionIndexesArray = Object.keys(currentExamQuestionIndexes)
         currentExamQuestionIndexesArray.forEach((item) => {
+          console.log('4')
           const questionId = currentExamQuestionIndexes[item]
           currentExamQuestionsArray.push(currentExamQuestions[questionId])
         })
       } else {
+        console.log('5')
         currentExamQuestionsArray = this.quiZ
       }
+      console.log('currentExamQuestionsArray', currentExamQuestionsArray)
       return currentExamQuestionsArray
     },
     getCurrentExamQuestions () {
@@ -218,7 +228,7 @@ const mixinQuiz = {
         if (that.needToLoadQuizData()) {
           window.currentExamQuestions = null
           window.currentExamQuestionIndexes = null
-          that.$store.commit('AppLayout/updateOverlay', { show: true, loading: true, text: '' })
+          // that.$store.commit('AppLayout/updateOverlay', { show: true, loading: true, text: '' })
           examData.getExamDataAndParticipate(examId)
           examData.loadQuestionsFromFile()
         } else {
@@ -259,7 +269,7 @@ const mixinQuiz = {
             that.$router.push({ name: 'user.exam.list' })
           })
           .finally(() => {
-            that.$store.commit('AppLayout/updateOverlay', { show: false, loading: false, text: '' })
+            // that.$store.commit('AppLayout/updateOverlay', { show: false, loading: false, text: '' })
           })
 
         // if (that.needToLoadQuizData() && examId) {

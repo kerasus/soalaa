@@ -121,10 +121,10 @@ const routes = [
     component: () => import('pages/Auth/Login.vue')
   },
   {
-    path: '/konkoorView',
+    path: '/konkoorView/:examId',
     name: 'konkoorView',
-    // component: () => import('src/pages/User/exam/participate/konkoorView'),
-    component: () => import('src/components/OnlineQuiz/Quiz/timer/timer'),
+    component: () => import('src/pages/User/exam/participate/konkoorView'),
+    // component: () => import('src/components/Menu/topMenu/onlineQuizTopMenu'),
     meta: {
       middlewares: [auth]
     }
@@ -133,6 +133,15 @@ const routes = [
     path: '/user-info',
     name: 'user-info',
     component: () => import('pages/User/UserInfoForm'),
+    meta: {
+      middlewares: [auth]
+    }
+  },
+  // TODO following routes should be remove
+  {
+    path: '/user_exam_list',
+    name: 'user.exam.list',
+    component: () => import('pages/Auth/test'),
     meta: {
       middlewares: [auth]
     }

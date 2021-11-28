@@ -1,5 +1,8 @@
 export default function () {
   return {
-    quiz: null
+    quiz: null,
+    userQuizListData: {},
+    currentQuestion: null,
+    currentExamFrozenQuestions: null
   }
 }
