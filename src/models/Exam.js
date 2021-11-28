@@ -316,10 +316,10 @@ class Exam extends Model {
 
     this.addUserQuestionDataCheckingTimes(question, userQuestionData.checking_times)
 
-    userQuestionData.answered_at = (answeredChoice) ? answeredChoice.answered_at : null
-    userQuestionData.bookmarked = question.bookmarked
-    userQuestionData.state = question.state
-    // ToDo : app.set
+    userQuestionData.answered_at.push((answeredChoice) ? answeredChoice.answered_at : null)
+    userQuestionData.bookmarked.push(question.bookmarked)
+    userQuestionData.state.push(question.state)
+    // ToDo : app.set sth used instead
     // window.app.set(userQuestionData, 'answered_at', (answeredChoice) ? answeredChoice.answered_at : null)
     // window.app.set(userQuestionData, 'bookmarked', question.bookmarked)
     // window.app.set(userQuestionData, 'state', question.state)

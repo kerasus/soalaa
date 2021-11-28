@@ -1,47 +1,40 @@
 <template>
-  <div>
+  <div class="q-my-xl ">
     <div class="status row items-center">
-      <div class="status-details">
-        <p class="font-weight-medium">
+      <div class="col status-details">
+        <p class="status-title-text-style">
           تغییر وضعیت
         </p>
         <q-card
           flat
-          class="status-card q-my-md"
+          class="status-card"
         >
-          <!--    todo v-select-->
-          <!--        <v-select-->
-          <!--          v-model="newStatus.changeState"-->
-          <!--          :items="statuses.list"-->
-          <!--          item-text="display_title"-->
-          <!--          item-value="id"-->
-          <!--          dense-->
-          <!--          solo-->
-          <!--          flat-->
-          <!--        />-->
+          <q-select
+            rounded
+            borderless
+            dense
+            v-model="newStatus.changeState"
+            :options="statuses.list"
+            option-label="display_title"
+            option-value="id"
+          ></q-select>
         </q-card>
       </div>
       <div class="col status-details">
-        <p class="font-weight-medium">
+        <p class="status-title-text-style">
           افزودن کامنت
         </p>
         <q-card
           flat
-          class="q-my-md status-card"
+          class=" status-card"
         >
-          <!--    todo v-text-field-->
-          <!--        <v-text-field-->
-          <!--          v-model="newStatus.commentAdded"-->
-          <!--          height="36"-->
-          <!--          solo-->
-          <!--          dense-->
-          <!--          flat-->
-          <!--        />-->
+          <q-input borderless v-model="text" dense model-value=""></q-input>
         </q-card>
       </div>
-      <div class="col q-mt-lg">
+      <div class="col status-card-btn">
         <q-btn
-          color="success"
+          unelevated
+          color="green"
           :loading="loading"
           :disabled="loading"
           @click="sendStatus"
@@ -87,17 +80,37 @@ export default {
 }
 </script>
 
-<style>
-.status-details .v-sheet.v-card {
-  border-radius: 10px;
-}
-
-.status .v-btn {
-  box-shadow: none;
-  border-radius: 10px;
-}
-
-.status .status-card {
-  height: 36px;
+<style lang="scss">
+.status {
+  .status-details .v-sheet.v-card {
+    border-radius: 10px;
+  }
+  .status-card {
+    height: 36px;
+    margin-left: 20px;
+    border-radius: 10px;
+  }
+  .status-button {
+    height: 36px;
+    min-width: 71px;
+    padding: 0 16px;
+    box-shadow: none;
+    border-radius: 10px;
+  }
+  .status-title-text-style {
+      font-size: 16px;
+    margin-left: 20px;
+  }
+  .status-card-btn{
+    margin-left: 20px;
+    margin-top: 40px;
+  }
+  .q-field--auto-height .q-field__native, .q-field--auto-height .q-field__prefix, .q-field--auto-height .q-field__suffix {
+    margin-right: 20px;
+  }
+  .q-field--dense .q-field__control, .q-field--dense .q-field__marginal {
+    margin-right: 6px;
+    margin-left: 20px;
+  }
 }
 </style>

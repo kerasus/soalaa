@@ -112,13 +112,13 @@ export default {
       userList: [
         {
           displayName: 'آزمون های سه آ',
-          to: 'user-exam',
-          name: 'user.exam'
+          to: '/user_exam_list',
+          name: 'user.exam.list'
         },
         {
           displayName: 'سوالات متداول',
           to: 'user-exam',
-          name: 'user.exam.list'
+          name: 'user.exam'
         }
       ],
       adminList: [
@@ -161,8 +161,8 @@ export default {
         },
         {
           displayName: ' کارخانه ی سوال',
-          to: 'user-exam',
-          name: 'user.exam'
+          to: '/question/list',
+          name: 'question.list'
         }
       ]
     }
