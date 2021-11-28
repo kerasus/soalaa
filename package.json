@@ -20,6 +20,7 @@
     "core-js": "^3.6.5",
     "cropperjs": "^1.5.12",
     "dotenv": "^10.0.0",
+    "jquery": "^3.6.0",
     "js-abstract-model": "^0.1.30",
     "markdown-it": "^12.2.0",
     "markdown-it-new-katex": "^2.0.3",
