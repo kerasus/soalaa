@@ -12,13 +12,19 @@
         get content
       </v-btn>
     </div>
-    <div
-      dir="ltr"
-      v-html="html"
-    />
-    <div
-      id="mathjaxdiv"
-    />
+    <hr>
+    <vue-katex :input="html" />
+    <hr>
+    <div v-if="false">
+      <div
+        dir="ltr"
+        v-html="html"
+      />
+      <hr>
+      <div
+        id="mathjaxdiv"
+      />
+    </div>
   </div>
 </template>
 
@@ -27,14 +33,19 @@
 
 import VueTiptapKatex from 'vue-tiptap-katex'
 import TurndownService from 'turndown/lib/turndown.browser.umd'
+import VueKatex from '@/components/VueKatex'
 
 export default {
-  components: {VueTiptapKatex},
+  components: {
+    VueTiptapKatex,
+    VueKatex
+  },
   data() {
     return {
       loading: false,
       post: {body: ""},
-      html: '<p>I’m running tiptap with Vue.js. 🎉</p>',
+      html1: '<p>I’m running tiptap with Vue.js. 🎉</p>',
+      html: '<p dir="auto">دو بار الکتریکی${q_1}$و${q_2} =  - 16\\,\\mu C$به ترتیب در مختصات$A\\, \\left|\\begin{array}{l}0 \\\\ 3\\, cm\\end{array}\\right.$$B\\, \\left|\\begin{array}{l}0 \\\\ 6\\, cm\\end{array}\\right.$واقع شده‌اند.${q_1}$چند میکروکولن باشد تا اگر بار${q_3}$را در مبدأ مختصات قرار دهیم، برایند نیروهای وارد بر آن صفر باشد؟</p>',
       innerHTML: 'hi',
     }
   },
@@ -44,7 +55,8 @@ export default {
   //   }
   // },
   mounted() {
-    this.initMathJax()
+    // this.initMathJax()
+    this.setContent()
   },
   created() {
     // this.html = this.convertToTiptap(this.html)
@@ -251,7 +263,10 @@ export default {
     },
     getContent () {
       this.html = this.$refs.tiptap.getContent()
-      this.renderSvgByMathjax()
+      // this.renderSvgByMathjax()
+    },
+    setContent () {
+      this.$refs.tiptap.setContent(this.html)
     },
     convertTables(htmlString) {
       var wrapper = document.createElement('div');
