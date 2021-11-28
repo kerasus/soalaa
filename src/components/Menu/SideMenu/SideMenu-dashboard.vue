@@ -129,8 +129,8 @@ export default {
         },
         {
           displayName: 'بانک سوال',
-          to: 'quest.index',
-          name: 'quest.index'
+          to: '/questions',
+          name: 'question-bank'
         },
         {
           displayName: 'لیست دروس',

@@ -16,6 +16,7 @@
         placeholder="صورت سوال"
         :question-id="question.id ? question.id : 'null'"
         style="margin-bottom: 40px"
+        @questionData="getData"
       />
     </div>
     <div
@@ -68,6 +69,7 @@
             :editorValue="item.title"
             :edit-status="status"
             :question-id="question.id ? question.id : 'null'"
+            @questionData="getData"
           />
         </div>
       </div>
@@ -86,6 +88,7 @@
           :edit-status="status"
           placeholder="پاسخ تشریحی"
           class="q-mb-lg"
+          @questionData="getData"
         />
       </div>
     </div>
@@ -119,10 +122,12 @@ export default {
   },
   watch: {
     editorValue: function () {
+      console.log('watch in lay out run ')
       this.question = this.currentQuestion
     }
   },
   created () {
+    console.log('created in layout is run')
     this.question = this.currentQuestion
     // console.log('question lay out question:', this.question)
     // console.log('question lay out currentQuestion:', this.currentQuestion)
@@ -134,18 +139,22 @@ export default {
   },
   methods: {
     getContent () {
-      console.log('refs in lay out', this.$refs)
+      console.log('getContent in lay out')
       this.$refs.questionStatement.getContent()
       this.$refs.descriptive.getContent()
-      this.$refs.choice1[0].getContent()
-      this.$refs.choice2[0].getContent()
-      this.$refs.choice3[0].getContent()
-      this.$refs.choice4[0].getContent()
-
+      this.$refs.choice1.getContent()
+      this.$refs.choice2.getContent()
+      this.$refs.choice3.getContent()
+      this.$refs.choice4.getContent()
       this.updateQuestion()
     },
+    getData (val) {
+      console.log('new data from field in lay out ------------------------------------------------------:', val)
+      this.editorValue = val
+    },
     updateQuestion () {
-      this.$emit('input', this.question)
+      console.log('emit update question is run in the question layout, this.question', this.question)
+      this.$emit('updateQuestion', this.question)
     },
     clicked (order) {
       console.log('order :', order)

@@ -60,9 +60,17 @@ const routes = [
             }
           },
           {
-            path: 'edit-exam-report',
+            path: ':examId/edit-exam-report',
             name: 'edit-exam-report',
             component: () => import('pages/Admin/exam/edit/editExamReport'),
+            meta: {
+              middlewares: [auth]
+            }
+          },
+          {
+            path: ':exam_id/coefficient/edit',
+            name: 'coefficient.edit',
+            component: () => import('src/pages/Admin/subGroup/editCoefficients.vue'),
             meta: {
               middlewares: [auth]
             }
@@ -106,17 +114,32 @@ const routes = [
             meta: {
               middlewares: [auth]
             }
+          },
+          {
+
+            path: '/sub_category/edit',
+            name: 'subCategory.edit',
+            component: () => import('pages/Admin/subCategory/LessonsList'),
+            meta: { middlewares: [auth] }
+          },
+          {
+            path: '/questions',
+            name: 'question-bank',
+            component: () => import('pages/Admin/Question/QuestionBank/list'),
+            meta: { middlewares: [auth] }
+          },
+          {
+            path: '/lessonsList',
+            name: 'onlineQuiz.exams.lessons',
+            component: () => import('src/pages/Admin/exam/lessons.vue'),
+            meta: {
+              middlewares: [auth]
+            }
           }
         ]
       },
       {
-        path: '/sub_category/edit',
-        name: 'subCategory.edit',
-        component: () => import('pages/Admin/subCategory/LessonsList'),
-        meta: { middlewares: [auth] }
-      },
-      {
-        path: 'category',
+        path: '/category',
         name: 'categoryList',
         component: () => import('pages/Admin/category/list')
       }
@@ -128,30 +151,10 @@ const routes = [
     component: () => import('pages/Auth/Login.vue')
   },
   {
-    path: '/editCoefficients',
-    name: 'coefficient.edit',
-    component: () => import('src/pages/Admin/subGroup/editCoefficients.vue'),
-    meta: {
-      middlewares: [auth]
-    }
-  },
-  {
-    path: '/lessonsList',
-    name: 'onlineQuiz.exams.lessons',
-    component: () => import('src/pages/Admin/exam/lessons.vue'),
-    meta: {
-      middlewares: [auth]
-    }
-  },
-  {
-    path: '/login',
-    name: 'login',
-    component: () => import('pages/Auth/Login.vue')
-  },
-  {
-    path: '/test',
-    name: 'test',
-    component: () => import('pages/Auth/test.vue'),
+    path: '/konkoorView',
+    name: 'konkoorView',
+    // component: () => import('src/pages/User/exam/participate/konkoorView'),
+    component: () => import('src/components/OnlineQuiz/Quiz/timer/timer'),
     meta: {
       middlewares: [auth]
     }
