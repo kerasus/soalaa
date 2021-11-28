@@ -115,7 +115,7 @@ export default {
       // this.user.loading = true
       this.$axios.get(API_ADDRESS.user.mobile.resend)
         .then((resp) => {
-          //  that.user.loading = false
+        //  that.user.loading = false
           that.code = resp
           that.startTimer()
           that.waiting = true

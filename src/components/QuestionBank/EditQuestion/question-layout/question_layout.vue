@@ -11,7 +11,7 @@
       <question_field
         ref="questionStatement"
         :key="'statement' + domKey"
-        :editorValue="question.statement"
+        v-model="question.statement"
         :edit-status="status"
         placeholder="صورت سوال"
         :question-id="question.id ? question.id : 'null'"
@@ -66,7 +66,7 @@
           <question_field
             :ref="'choice' + (index + 1)"
             :key="'choices' + (index + 1) + domKey"
-            :editorValue="item.title"
+            v-model="item.title"
             :edit-status="status"
             :question-id="question.id ? question.id : 'null'"
             @questionData="getData"
@@ -83,7 +83,7 @@
         <question_field
           ref="descriptive"
           :key="'descriptive_answer' + domKey"
-          :editorValue="question.descriptive_answer"
+          v-model="question.descriptive_answer"
           :question-id="question.id ? question.id : 'null'"
           :edit-status="status"
           placeholder="پاسخ تشریحی"
@@ -105,7 +105,11 @@ export default {
     question_field
   },
   props: {
-    currentQuestion: {
+    cq: {
+      type: Question,
+      default: () => new Question()
+    },
+    modelValue: {
       type: Question,
       default: () => new Question()
     },
@@ -123,12 +127,12 @@ export default {
   watch: {
     editorValue: function () {
       console.log('watch in lay out run ')
-      this.question = this.currentQuestion
+      this.question = this.modelValue
     }
   },
   created () {
-    console.log('created in layout is run')
-    this.question = this.currentQuestion
+    console.log('************************88 layout is run this.value :', this.modelValue)
+
     // console.log('question lay out question:', this.question)
     // console.log('question lay out currentQuestion:', this.currentQuestion)
     // console.log('question lay out status:', this.status)
@@ -136,6 +140,11 @@ export default {
     setTimeout(() => {
       that.domKey = Date.now()
     }, 100)
+  },
+  updated () {
+    this.question = this.modelValue
+    console.log('FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF', this.modelValue)
+    console.log('MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMmm', this.cq)
   },
   methods: {
     getContent () {
