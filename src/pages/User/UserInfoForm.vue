@@ -334,9 +334,9 @@ export default {
           that.$store.commit('Auth/updateUser', user)
           this.canRedirect()
         })
-        // .catch(e => {
-        //   // console.log('err in get data :', err)
-        // })
+      // .catch(e => {
+      //   // console.log('err in get data :', err)
+      // })
     },
 
     canRedirect () {

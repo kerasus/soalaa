@@ -112,13 +112,13 @@ export default {
       userList: [
         {
           displayName: 'آزمون های سه آ',
-          to: 'user-exam',
-          name: 'user.exam'
+          to: '/user_exam_list',
+          name: 'user.exam.list'
         },
         {
           displayName: 'سوالات متداول',
           to: 'user-exam',
-          name: 'user.exam.list'
+          name: 'user.exam'
         }
       ],
       adminList: [
@@ -129,8 +129,8 @@ export default {
         },
         {
           displayName: 'بانک سوال',
-          to: 'quest.index',
-          name: 'quest.index'
+          to: '/questions',
+          name: 'question-bank'
         },
         {
           displayName: 'لیست دروس',
