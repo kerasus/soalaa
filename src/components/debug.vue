@@ -1,45 +1,36 @@
 <template>
   <div>
-    <vue-tiptap-katex
-      ref="tiptap"
-      :loading="loading"
-      :access-token="$store.getters['Auth/accessToken']"
-      :upload-url="'imageUrl'"
-      :options="{ bubbleMenu: false, floatingMenu: false, poem: true, reading: true }"
-    />
-    <div>
-      <v-btn @click="getContent">
-        get content
-      </v-btn>
-    </div>
-    <hr>
-    <vue-katex :input="html" />
-    <hr>
-    <div v-if="false">
-      <div
-        dir="ltr"
-        v-html="html"
-      />
-      <hr>
-      <div
-        id="mathjaxdiv"
-      />
-    </div>
+    <p v-if="isConnected">
+      We're connected to the server!
+    </p>
+    <p>Message from server: "{{ socketMessage }}"</p>
+    <v-btn
+      block
+      @click="pingServer()"
+    >
+      Ping Server
+    </v-btn>
   </div>
 </template>
 
 <script>
+import Vue from 'vue'
 // import MathJax from 'mathjax'
-
-import VueTiptapKatex from 'vue-tiptap-katex'
 import TurndownService from 'turndown/lib/turndown.browser.umd'
-import VueKatex from '@/components/VueKatex'
+
+import VueSocketIO from 'vue-socket.io'
+Vue.use(new VueSocketIO({
+  debug: true,
+  connection: '/3a/socket',
+  // vuex: {
+  //   store,
+  //   actionPrefix: 'SOCKET_',
+  //   mutationPrefix: 'SOCKET_'
+  // },
+  // options: { path: "/my-app/" } //Optional options
+}))
 
 export default {
-  components: {
-    VueTiptapKatex,
-    VueKatex
-  },
   data() {
     return {
       loading: false,
@@ -47,6 +38,30 @@ export default {
       html1: '<p>I’m running tiptap with Vue.js. 🎉</p>',
       html: '<p dir="auto">دو بار الکتریکی${q_1}$و${q_2} =  - 16\\,\\mu C$به ترتیب در مختصات$A\\, \\left|\\begin{array}{l}0 \\\\ 3\\, cm\\end{array}\\right.$$B\\, \\left|\\begin{array}{l}0 \\\\ 6\\, cm\\end{array}\\right.$واقع شده‌اند.${q_1}$چند میکروکولن باشد تا اگر بار${q_3}$را در مبدأ مختصات قرار دهیم، برایند نیروهای وارد بر آن صفر باشد؟</p>',
       innerHTML: 'hi',
+      isConnected: false,
+      socketMessage: ''
+    }
+  },
+  sockets: {
+    connecting() {
+      console.log("on connection");
+    },
+    disconnect() {
+      console.log("Socket to break off");
+      this.isConnected = false;
+    },
+    connect_failed() {
+      console.log("connection failed");
+    },
+    connect() {
+      // Fired when the socket connects.
+      this.isConnected = true
+      console.log("socket connected");
+    },
+
+    // Fired when the server sends something on the "messageChannel" channel.
+    messageChannel(data) {
+      this.socketMessage = data
     }
   },
   // watch:{
@@ -56,12 +71,18 @@ export default {
   // },
   mounted() {
     // this.initMathJax()
-    this.setContent()
+    // this.setContent()
   },
   created() {
     // this.html = this.convertToTiptap(this.html)
   },
   methods: {
+    pingServer() {
+      console.log('Send the "pingServer" event to the server.')
+      // Send the "pingServer" event to the server.
+      this.$socket.emit('pingServer', 'PING!')
+      console.log('$socket emited')
+    },
     injectMathJax() {
       if (!window.MathJax) {
         const script = document.createElement('script')

@@ -15,7 +15,6 @@ Vue.use(VueGtag, {
   pageTrackerScreenviewEnabled: true
 }, router)
 
-
 Vue.use(VueNotification)
 
 Vue.config.productionTip = false
