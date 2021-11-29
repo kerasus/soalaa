@@ -97,6 +97,20 @@ export default {
 
     .katex {
       direction: ltr;
+      .katex-html {
+        .accent {
+          background-color: transparent !important;
+          border-color: transparent !important;
+        }
+        .overline {
+          font-size: inherit !important;
+          font-weight: inherit !important;
+          letter-spacing: inherit !important;
+          line-height: inherit !important;
+          text-transform: inherit !important;
+          font-family: inherit !important;
+        }
+      }
     }
 
     table {
