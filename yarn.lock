@@ -4072,6 +4072,11 @@ jest-worker@^27.0.2, jest-worker@^27.0.6:
     merge-stream "^2.0.0"
     supports-color "^8.0.0"
 
+jquery@^3.6.0:
+  version "3.6.0"
+  resolved "https://registry.yarnpkg.com/jquery/-/jquery-3.6.0.tgz#c72a09f15c1bdce142f49dbf1170bdf8adac2470"
+  integrity sha512-JVzAR/AjBvVt2BmYhxRCSYysDsPcssdmTFnzyLEts9qNwmjmu4JTAMYubEfwVOSwpQ1I1sKKFcxhZCI2buerfw==
+
 js-abstract-model@^0.1.30:
   version "0.1.30"
   resolved "https://registry.yarnpkg.com/js-abstract-model/-/js-abstract-model-0.1.30.tgz#992031fee49f7b70e648f20812ec5e7ce6b5d81f"
@@ -6523,10 +6528,10 @@ vue-style-loader@4.1.3:
     hash-sum "^1.0.2"
     loader-utils "^1.0.2"
 
-vue-upload-component@^2.8.22:
-  version "2.8.22"
-  resolved "https://registry.yarnpkg.com/vue-upload-component/-/vue-upload-component-2.8.22.tgz#7a1573149a4afa5ca6e8c7e0bc70533925fe26b7"
-  integrity sha512-AJpETqiZrgqs8bwJQpWTFrRg3i6s7cUodRRZVnb1f94Jvpd0YYfzGY4zluBqPmssNSkUaYu7EteXaK8aW17Osw==
+vue-upload-component@^3.0.50:
+  version "3.0.50"
+  resolved "https://registry.yarnpkg.com/vue-upload-component/-/vue-upload-component-3.0.50.tgz#2e1acd9ae9f9b9cc53a4e8978050879ca0d6275c"
+  integrity sha512-p5xh2kvHcjGE+OObKfO59nYM5+nvpt5J2s/Efop/EQ+ec7PEoPZA7Ph+KUNTOSk2s5FqBTQkIrrQ/QSssHIzcA==
 
 vue@3.2.20:
   version "3.2.20"

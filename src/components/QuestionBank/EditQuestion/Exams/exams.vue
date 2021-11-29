@@ -6,234 +6,197 @@
     >
       آزمون ها
     </p>
-<!--    todo : v-form-->
-<!--    <v-form ref="form">-->
-<!--      <v-row-->
-<!--        v-if="status"-->
-<!--        class="exam-section mt-2"-->
-<!--      >-->
-<!--        <v-col-->
-<!--          class="choose-exam"-->
-<!--          cols="5"-->
-<!--        >-->
-<!--          <v-autocomplete-->
-<!--            v-model="chooseExam"-->
-<!--            :items="examList.list"-->
-<!--            :rules="selectorRules"-->
-<!--            item-text="title"-->
-<!--            item-value="id"-->
-<!--            label="انتخاب آزمون"-->
-<!--            dense-->
-<!--            rounded-->
-<!--            solo-->
-<!--            flat-->
-<!--          />-->
-<!--        </v-col>-->
-<!--        <v-col-->
-<!--          class="choose-lesson"-->
-<!--          cols="4"-->
-<!--        >-->
-<!--          <v-autocomplete-->
-<!--            v-model="chooseLesson"-->
-<!--            :rules="selectorRules"-->
-<!--            :items="subCategories.list"-->
-<!--            item-text="title"-->
-<!--            item-value="id"-->
-<!--            label="انتخاب درس"-->
-<!--            dense-->
-<!--            rounded-->
-<!--            solo-->
-<!--            flat-->
-<!--          />-->
-<!--        </v-col>-->
+    <q-form>
+      <div v-if="status" class="row q-col-gutter-md attach-exams-box">
+        <div class="col-5">
+        <q-select
+          v-model="chooseExam"
+          :rules="selectorRules"
+          borderless
+          dense
+          bg-color="white"
+          class="select-style"
+          label="انتخاب آزمون "
+          option-value="id"
+          :options="examList.list"
+          option-label="title" />
+        </div>
+        <div class="col-4">
+          <q-select
+            v-model="chooseLesson"
+            :rules="selectorRules"
+            :options="subCategories.list"
+            borderless
+            dense
+            class="select-style"
+            bg-color="white"
+            option-label="title"
+            option-value="id"
+            label="انتخاب درس"/>
+        </div>
+        <div class="col-2 number-input">
+          <q-input
+            v-model="examOrder"
+            height="36"
+            :rules="numberRules"
+            class="select-style"
+            rounded
+            borderless
+            dense
+            bg-color="white"
+            label="ترتیب"/>
+        </div>
+        <div class="col-1">
+          <q-btn
+            unelevated
+            color="white"
+            padding="5px 20px"
+            text-color="black"
+            class="custom-btn-radius"
+            icon="add"
+            @click="attach"
+          />
+        </div>
 
-<!--        <v-col-->
-<!--          class="exam-order"-->
-<!--          cols="2"-->
-<!--        >-->
-<!--          <v-text-field-->
-<!--            v-model="examOrder"-->
-<!--            height="36"-->
-<!--            :rules="numberRules"-->
-<!--            label="ترتیب"-->
-<!--            solo-->
-<!--            dense-->
-<!--            flat-->
-<!--          />-->
-<!--        </v-col>-->
-<!--        <v-col-->
-<!--          class="attach-or-dettach"-->
-<!--          cols="1"-->
-<!--        >-->
-<!--          <v-btn-->
-<!--            height="36"-->
-<!--            width="100%"-->
-<!--            class="text-center white"-->
-<!--            text-->
-<!--            :loading="loading"-->
-<!--            :disabled="loading"-->
-<!--            @click="attach"-->
-<!--          >-->
-<!--            <v-icon>mdi-plus</v-icon>-->
-<!--          </v-btn>-->
-<!--        </v-col>-->
-<!--      </v-row>-->
-<!--      <v-row v-if="!status && attaches.length>0">-->
-<!--        <v-col cols="5">-->
-<!--          <v-card-->
-<!--            flat-->
-<!--            class="transparent px-4 font-weight-medium"-->
-<!--          >-->
-<!--            آزمون-->
-<!--          </v-card>-->
-<!--        </v-col>-->
-<!--        <v-col cols="4 px-4 font-weight-medium">-->
-<!--          <v-card-->
-<!--            flat-->
-<!--            class="transparent"-->
-<!--          >-->
-<!--            درس-->
-<!--          </v-card>-->
-<!--        </v-col>-->
-<!--        <v-col cols="2 px-4 font-weight-medium">-->
-<!--          <v-card-->
-<!--            flat-->
-<!--            class="transparent"-->
-<!--          >-->
-<!--            ترتیب-->
-<!--          </v-card>-->
-<!--        </v-col>-->
-<!--      </v-row>-->
-<!--      <v-row-->
-<!--        v-for="(item, index) in attaches"-->
-<!--        :key="index"-->
-<!--        class="exam-section"-->
-<!--      >-->
-<!--        <v-col-->
-<!--          class="choose-exam"-->
-<!--          cols="5"-->
-<!--        >-->
-<!--          <v-card-->
-<!--            flat-->
-<!--            height="36"-->
-<!--          >-->
-<!--            <v-card-text class="text-center">-->
-<!--              {{ item.exam.title }}-->
-<!--            </v-card-text>-->
-<!--          </v-card>-->
-<!--        </v-col>-->
-<!--        <v-col-->
-<!--          class="choose-lesson"-->
-<!--          cols="4"-->
-<!--        >-->
-<!--          <v-card-->
-<!--            flat-->
-<!--            height="36"-->
-<!--          >-->
-<!--            <v-card-text class="text-center">-->
-<!--              {{ item.sub_category.title }}-->
-<!--            </v-card-text>-->
-<!--          </v-card>-->
-<!--        </v-col>-->
-<!--        <v-col-->
-<!--          class="exam-order"-->
-<!--          cols="2"-->
-<!--        >-->
-<!--          <v-card-->
-<!--            flat-->
-<!--            height="36"-->
-<!--          >-->
-<!--            <v-card-text class="text-center">-->
-<!--              {{ item.order }}-->
-<!--            </v-card-text>-->
-<!--          </v-card>-->
-<!--        </v-col>-->
-<!--        <v-col-->
-<!--          v-if="status"-->
-<!--          class="attach-or-detach"-->
-<!--        >-->
-<!--          <v-btn-->
-<!--            small-->
-<!--            height="36"-->
-<!--            width="100%"-->
-<!--            text-->
-<!--            class="text-center white"-->
-<!--            :loading="loading"-->
-<!--            :disabled="loading"-->
-<!--            @click="detach(item)"-->
-<!--          >-->
-<!--            <v-icon>mdi-trash-can-outline</v-icon>-->
-<!--          </v-btn>-->
-<!--        </v-col>-->
-<!--      </v-row>-->
-<!--    </v-form>-->
+      </div>
+      <div class="row q-mb-md q-col-gutter-md"
+        v-if="!status && attaches.length>0"
+      >
+        <div class="col-5">
+          <span class="attached-exams-title">
+            آزمون
+          </span>
+        </div>
+        <div class="col-4">
+          <span class="attached-exams-title">
+            درس
+          </span>
+        </div>
+        <div class="col-2">
+          <span class="attached-exams-title">
+            ترتیب
+          </span>
+        </div>
+      </div>
+      <div
+        v-for="(item, index) in attaches"
+        :key="index"
+        class="exam-section row q-col-gutter-md"
+      >
+        <div class="col-5">
+          <q-card
+          flat
+          class="custom-card-style"
+          >
+           <q-card-section
+           class="text-center"
+           >
+             {{ item.exam.title }}
+           </q-card-section>
+          </q-card>
+        </div>
+        <div class="col-4">
+          <q-card
+            flat
+            class="custom-card-style"
+          >
+            <q-card-section
+              class="text-center"
+            >
+              {{ item.sub_category.title }}
+            </q-card-section>
+
+          </q-card>
+        </div>
+        <div class="col-2">
+          <q-card
+            flat
+            class="custom-card-style"
+          >
+            <q-card-section
+              class="text-center"
+            >
+              {{ item.order }}
+            </q-card-section>
+          </q-card>
+        </div>
+        <div
+           v-if="status"
+        >
+          <q-btn
+            unelevated
+            color="white"
+            padding="5px 20px"
+            text-color="black"
+            class="custom-btn-radius"
+            :loading="loading"
+            :disabled="loading"
+            @click="detach(item)"
+            icon="mdi-trash-can-outline"
+          />
+        </div>
+      </div>
+    </q-form>
   </div>
 </template>
 
 <script>
 import axios from 'axios'
 import API_ADDRESS from 'src/api/Addresses'
+import { ExamList } from 'src/models/Exam'
+import { QuestSubcategoryList } from 'src/models/QuestSubcategory'
 
 export default {
   name: 'Exams',
   props: {
     attaches: {
-      default: () => {
-        return []
-      },
+      default: () => [],
       type: Array
     },
     examList: {
-      default: () => {
-        // return [] ToDo
-        return {}
-      },
-      type: Object
+      type: Object,
+      default: () => new ExamList()
     },
     subCategories: {
-      default: () => {
-        // return [] ToDo
-        return {}
-      },
+      default: () => new QuestSubcategoryList(),
       type: Object
     },
     loading: {
-      default: () => {
-        return false
-      },
+      default: () => false,
       type: Boolean
     },
     status: {
       type: Boolean,
-      default: false
+      default: () => false
     }
   },
   data () {
     return {
-      chooseExam: '',
-      chooseLesson: '',
+      chooseExam: null,
+      chooseLesson: null,
       examOrder: '',
       numberRules: [
-        v => v.length > 0 || 'پر کردن این فیلد الزامی است.',
-        v => Number.isInteger(Number(v)) || 'یک عدد وارد کنید.'
+        v => v !== null || 'پر کردن این فیلد الزامی است.',
+        v => Number.isInteger(parseInt(v)) || 'یک عدد وارد کنید.'
       ],
       selectorRules: [
-        v => v.length > 0 || 'پر کردن این فیلد الزامی است.'
+        v => v !== null || 'پر کردن این فیلد الزامی است.'
       ]
     }
   },
   methods: {
     attachQuestionOnEditMode () {
+      console.log('attachQuestionOnEditMode :')
       this.attachLoading = true
       axios.post(API_ADDRESS.question.attach, {
-        order: this.attachOrder,
-        exam_id: this.attachExamID,
-        question_id: this.$route.params.id,
-        sub_category_id: this.attachSubcategoryID
+        // order: this.attachOrder,
+        // exam_id: this.attachExamID,
+        question_id: this.$route.params.id
+        // sub_category_id: this.attachSubcategoryID
       })
         .then(response => {
           this.updateAttachList(response.data.data.exams)
-          // console.log('response', response)
+          console.log('response for attach :', response)
           this.attachLoading = false
           this.dialog = false
         })
@@ -246,57 +209,67 @@ export default {
       this.$emit('detach', item)
     },
     attach () {
-      if (this.$refs.form.validate()) {
-        const exam = this.examList.list.find(examItem => examItem.id === this.chooseExam)
+      if (this.chooseExam && this.chooseLesson && this.examOrder) {
+        const exam = this.examList.list.find(examItem => examItem.id === this.chooseExam.id)
         // eslint-disable-next-line camelcase
-        const sub_category = this.subCategories.list.find(subCategoryItem => subCategoryItem.id === this.chooseLesson)
+        const sub_category = this.subCategories.list.find(subCategoryItem => subCategoryItem.id === this.chooseLesson.id)
         const emitData = {
           exam,
           sub_category,
           order: this.examOrder
         }
         this.$emit('attach', emitData)
+      } else {
+        this.$q.notify({
+          type: 'negative',
+          message: 'لطفا تمام قسمت ها را کامل کنید',
+          position: 'top'
+        })
       }
     }
   }
 }
 </script>
 
-<style>
-.v-input__control .v-text-field__details {
-  top: -62px;
-  position: relative;
-  left: 9px;
+<style lang="scss">
+.custom-btn-radius{
+  border-radius: 5px;
 }
-
-.exam .exam-order .v-input__control .v-text-field__details {
-  position: relative;
-  top: -62px;
-  left: 9px;
+.exam-section{
+  .q-card{
+    .q-card__section{
+      padding: 8px;
+      color: rgba(0, 0, 0, 0.6);
+    }
+  }
 }
-
-.exam .exam-order .v-text-field fieldset, .v-text-field .v-input__control, .v-text-field .v-input__slot {
-  border-radius: 10px;
+.attach-exams-box {
+  .select-style{
+    .q-field__inner{
+      .q-field__control{
+        border-radius: 10px;
+        .q-field__control-container {
+          .q-field__label{
+            margin-left: 15px;
+          }
+        }
+      }
+    }
+  }
+}
+.exam {
+  .q-field--labeled.q-field--dense .q-field__native, .q-field--labeled.q-field--dense .q-field__prefix, .q-field--labeled.q-field--dense .q-field__suffix {
+    padding-right: 15px #{"/* rtl:ignore */"};
+  }
 }
 </style>
-<style scoped>
-.v-text-field.v-text-field--enclosed {
-  height: 40px;
-
+<style scoped lang="scss">
+.attached-exams-title{
+  color: rgba(0, 0, 0, 0.87);
+  font-weight: 500;
+  font-size: 16px;
 }
-
-.row + .row {
-  margin-top: 0px;
-}
-
-.v-card__subtitle, .v-card__text, .v-card__title {
-  padding: 7px;
-}
-
-.v-btn:not(.v-btn--round).v-size--small {
-  height: 24px;
-  min-width: 0px;
-  padding: 0 0px;
+.custom-card-style{
 }
 
 </style>
