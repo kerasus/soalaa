@@ -78,8 +78,10 @@ export default {
   },
   methods: {
     pingServer() {
+      console.log('Send the "pingServer" event to the server.')
       // Send the "pingServer" event to the server.
       this.$socket.emit('pingServer', 'PING!')
+      console.log('$socket emited')
     },
     injectMathJax() {
       if (!window.MathJax) {
