@@ -46,6 +46,12 @@ const routes = [
             }
           },
           {
+            path: '/exam/results/:examId',
+            name: 'exam.results',
+            component: () => import('pages/Admin/exam/results'),
+            meta: { middleware: [auth] }
+          },
+          {
             path: ':examId',
             name: 'show',
             component: () => import('pages/Admin/exam/edit/editExam'),

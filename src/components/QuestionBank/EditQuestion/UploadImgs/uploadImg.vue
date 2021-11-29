@@ -176,7 +176,7 @@
                     @input-filter="inputFilter"
                     @input-file="inputFile"
                   >
-                    <v-btn
+                    <q-btn
                       large
                       text
                       class="btnAddImage"
