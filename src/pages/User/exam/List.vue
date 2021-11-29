@@ -1,9 +1,12 @@
 <template>
-  <div>
+  <div
+      style="font-size: 16px;"
+  >
 <!--    ToDo : add confirm-dialog-->
 <!--    <vue-confirm-dialog />-->
-    <div class="row">
-      <div class="col">
+    <div class="fit row wrap justify-center items-start content-start"
+    >
+      <div class="col col-9">
         <q-linear-progress
           v-if="loadingList"
           indeterminate />
@@ -19,16 +22,22 @@
         </q-banner>
         <div class="row" v-if="exams.list.length > 0 && !loadingList">
           <div class="col">
-            <div class="row table-header">
-              <div class="col col-3 pr-7"
+            <div class="row table-header"
+                 style="padding-bottom: 12px;"
+            >
+              <div class="col col-3"
+                   style="padding-right: 24px;"
               >
                 عنوان
               </div>
-              <div class="col col-2" >
+              <div class="col col-2"
+                   style="padding-right: 24px;"
+              >
                 زمان شروع آزمون
               </div>
               <div class="col col-2"
                 v-if="false"
+                style="padding-right: 24px;"
               >
                 زمان پایان آزمون
               </div>
@@ -37,7 +46,9 @@
               >
                 میزان تاخیر مجاز
               </div>
-              <div class="col col-7">
+              <div class="col col-7"
+                   style="padding-right: 40px;"
+              >
                 عملیات
               </div>
             </div>
