@@ -1,15 +1,26 @@
 <template>
-  <div>
-    <p v-if="isConnected">
-      We're connected to the server!
-    </p>
-    <p>Message from server: "{{ socketMessage }}"</p>
-    <v-btn
-      block
-      @click="pingServer()"
-    >
-      Ping Server
-    </v-btn>
+  <div dir="ltr">
+    <v-card class="ma-5">
+      <v-card-text>
+        <div v-text="socketStatus" />
+        <p v-if="isConnected">
+          We're connected to the server!
+        </p>
+        <p>Message from server: "{{ socketMessage }}"</p>
+        <v-btn
+          block
+          @click="pingServer()"
+        >
+          Ping Server
+        </v-btn>
+        <v-btn
+          block
+          @click="connect()"
+        >
+          Make a connection
+        </v-btn>
+      </v-card-text>
+    </v-card>
   </div>
 </template>
 
@@ -21,7 +32,9 @@ import TurndownService from 'turndown/lib/turndown.browser.umd'
 import VueSocketIO from 'vue-socket.io'
 Vue.use(new VueSocketIO({
   debug: true,
-  connection: '/3a/socket',
+  // connection: '/3a/socket',
+  // connection: 'https://benpaodehenji.com/socketioserve',
+  connection: 'https://office.alaatv.com:501',
   // vuex: {
   //   store,
   //   actionPrefix: 'SOCKET_',
@@ -33,6 +46,7 @@ Vue.use(new VueSocketIO({
 export default {
   data() {
     return {
+      socketStatus: 'socket is not connected',
       loading: false,
       post: {body: ""},
       html1: '<p>I’m running tiptap with Vue.js. 🎉</p>',
@@ -44,19 +58,19 @@ export default {
   },
   sockets: {
     connecting() {
-      console.log("on connection");
+      this.onSocketStatusChange('on connection')
     },
     disconnect() {
-      console.log("Socket to break off");
+      this.onSocketStatusChange('Socket to break off')
       this.isConnected = false;
     },
     connect_failed() {
-      console.log("connection failed");
+      this.onSocketStatusChange('connection failed')
     },
     connect() {
+      this.onSocketStatusChange('socket connected')
       // Fired when the socket connects.
       this.isConnected = true
-      console.log("socket connected");
     },
 
     // Fired when the server sends something on the "messageChannel" channel.
@@ -77,6 +91,14 @@ export default {
     // this.html = this.convertToTiptap(this.html)
   },
   methods: {
+    // Connect socket
+    connect() {
+      this.$socket.open(); // Start connecting to socket
+    },
+    onSocketStatusChange (status) {
+      this.socketStatus = status
+      console.log(status)
+    },
     pingServer() {
       console.log('Send the "pingServer" event to the server.')
       // Send the "pingServer" event to the server.
