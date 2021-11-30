@@ -171,10 +171,17 @@ module.exports = configure(function (ctx) {
           pathRewrite: {
             '^/3a/api/v1': ''
           }
+        },
+        '/cdn': {
+          target: 'https://cdn.alaatv.com',
+          changeOrigin: true,
+          secure: false,
+          pathRewrite: {
+            '^/cdn': ''
+          }
         }
       }
     },
-
     // https://v2.quasar.dev/quasar-cli/quasar-conf-js#Property%3A-framework
     framework: {
       config: {},

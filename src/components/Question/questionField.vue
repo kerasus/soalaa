@@ -4,7 +4,11 @@
       v-if="editStatus"
       class="col-12"
     >
-      <q-editor v-model="editor" min-height="5rem" model-value=""></q-editor>
+      <q-editor
+        v-model="html"
+        min-height="5rem"
+      />
+<!--      <vue-tiptap-katext />-->
   <!--      Todo : vue-tiptap-katex-->
 <!--      <vue-tiptap-katex-->
 <!--        ref="tiptap"-->
@@ -13,6 +17,11 @@
 <!--        :upload-url="imageUrl"-->
 <!--        :options="{ bubbleMenu: false, floatingMenu: false, poem: true, reading: true }"-->
 <!--      />-->
+    </div>
+    <div
+    v-else
+    >
+      <q-card-section v-html="html" />
     </div>
 <!--    <div class="col" v-else>-->
 <!--      <vue-katex :input="html" />-->
@@ -26,18 +35,20 @@
 // ToDo : vue-tiptap-katex in incompatible with vue 3 (right now)
 // import VueTiptapKatex from 'vue-tiptap-katex'
 import API_ADDRESS from 'src/api/Addresses'
+// import VueTiptapKatext from 'vue3-tiptap-katex'
 
 // replacement
-import { ref } from 'vue'
+// import { ref } from 'vue'
 
 export default {
   name: 'QuestionField',
   components: {
     // VueTiptapKatex,
-    // VueKatex
+    // VueKatex,
+    // VueTiptapKatext
   },
   props: {
-    value: {
+    modelValue: {
       default: '',
       type: String
     },
@@ -57,8 +68,8 @@ export default {
   data () {
     return {
       html: '',
-      loading: false,
-      editor: ref('What you see is <b>what</b> you get.')
+      test: 'test data',
+      loading: false
     }
   },
   computed: {
@@ -69,6 +80,12 @@ export default {
   created () {
     this.loading = true
     this.getHtmlValueFromValueProp()
+    console.log('_________________________________________________________________________')
+    console.log('question field value:', this.modelValue)
+    console.log('question field questionId:', this.questionId)
+    console.log('_________________________________________________________________________')
+  },
+  watch: {
   },
   mounted () {
     if (this.$refs.tiptap) {
@@ -79,12 +96,11 @@ export default {
   },
   methods: {
     getContent () {
-      // ToDo : vue-tiptap-katex in incompatible with vue 3 (right now)
-      // this.$emit('input', this.$refs.tiptap.getContent())
-      console.log(' this.$emit(\'input\', this.$refs.tiptap.getContent())')
+      console.log('this.editorValue :', this.value)
+      this.$emit('questionData', this.value)
     },
     getHtmlValueFromValueProp () {
-      let html = this.value
+      let html = this.modelValue
       if (html === null || typeof html === 'undefined') {
         html = ''
       }

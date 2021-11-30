@@ -143,7 +143,6 @@ export default {
   },
   computed: {
     filteredItems () {
-      console.log(this.categoryList.list.filter(item => !item.title || item.title.includes(this.searchValue)))
       return this.categoryList.list.filter(item => !item.title || item.title.includes(this.searchValue))
     }
   },

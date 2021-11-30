@@ -36,12 +36,12 @@
           </div>
           <!-- -------------------------- upload file ---------------------->
 <!--          ToDo : UploadImg -->
-<!--          <UploadImg-->
-<!--            v-if="this.showImgComponentStatus()"-->
-<!--            v-model="currentQuestion"-->
-<!--            :edit-status="upload_img_status"-->
-<!--            @imgClicked="makeShowImgPanelVisible($event)"-->
-<!--          />-->
+          <UploadImg
+            v-if="this.showImgComponentStatus()"
+            v-model="currentQuestion"
+            :edit-status="upload_img_status"
+            @imgClicked="makeShowImgPanelVisible($event)"
+          />
           <!-- -------------------------- status --------------------------->
           <div
             v-if="this.getPageStatus() === 'edit'"
@@ -222,8 +222,9 @@ export default {
             if (this.currentQuestion.logs.list[i].id === eventData.logId) {
               // setting the new log using Vue.set so that the component notices the change
               this.currentQuestion.logs.list[i] = new Log(response.data.data)
-              // ToDo : app.set
+              // ToDo : app.set sth used instead
               // window.app.set(this.currentQuestion, 'logs', new LogList(this.currentQuestion.logs))
+              this.currentQuestion.logs.list[i].push(new Log(response.data.data))
             }
           }
         })
