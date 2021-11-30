@@ -37,6 +37,7 @@
               :title="title"
               :loading="loading"
               :change-page="changePage"
+              @search="search"
             >
               <template #entity-index-table-cell="{inputData}">
                 <slot name="table-cell" :inputData="inputData" :showConfirmRemoveDialog="showConfirmRemoveDialog">
