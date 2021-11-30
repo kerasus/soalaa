@@ -1,5 +1,5 @@
 <template>
-  <div class="SelectImageBox">
+  <div class="SelectImageBox mb-5" >
     <p class="font-weight-medium mb-5 mt-5">
       فایل های آپلود شده:
     </p>

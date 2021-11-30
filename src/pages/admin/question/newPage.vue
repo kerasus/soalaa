@@ -48,9 +48,17 @@
             @edit="navBarAction_edit"
             @remove="navBarAction_remove"
           />
+          <!-- -------------------------- upload file ---------------------->
+          <UploadImg
+              v-if="showImgComponentStatus()"
+              v-model="currentQuestion"
+              :edit-status="upload_img_status"
+              @imgClicked="makeShowImgPanelVisible($event)"
+          />
+
           <div v-if="showQuestionComponentStatus()">
             <question-layout
-              v-if="!loading"
+              v-if="!loading && this.questionType === 'typeText'"
               ref="qlayout"
               v-model="currentQuestion"
               :status="edit_status"
@@ -82,13 +90,6 @@
               @attach="attachQuestion"
             />
           </div>
-          <!-- -------------------------- upload file ---------------------->
-          <UploadImg
-            v-if="showImgComponentStatus()"
-            v-model="currentQuestion"
-            :edit-status="upload_img_status"
-            @imgClicked="makeShowImgPanelVisible($event)"
-          />
           <!-- -------------------------- status --------------------------->
           <div
             v-if="getPageStatus() === 'edit'"
@@ -295,10 +296,12 @@ export default {
       })
     },
     navBarAction_create(statusId) {
+      console.log('navBarAction_create statusId:',statusId)
       // set status_id
       if (!statusId) {
         statusId = this.questionStatusId_draft
       }
+      console.log('this.currentQuestion in navbar action: ',this.currentQuestion)
       this.currentQuestion.status_id = statusId
       this.selectedAuthors.forEach(author => {
         this.currentQuestion.author.push(this.authors.find(item => item.id === author))
@@ -358,6 +361,8 @@ export default {
     },
 
     setQuestionPhotos(statusId) {  //یاس
+      console.log('setQuestionPhotos is run')
+
       this.$store.commit('AppLayout/updateOverlay', {show: true, loading: true, text: 'کمی صبر کنید...'})
       let formData = new FormData();
       formData.append('status_id', statusId);
@@ -438,6 +443,7 @@ export default {
     },
 
     attachQuestion(item) {
+      console.log('attachQuestion item :', item)
       if (this.getPageStatus() === 'create') {
         this.attachQuestionOnCreateMode(item)
       } else {
@@ -465,6 +471,7 @@ export default {
     },
 
     attachQuestionOnCreateMode(item) {
+      console.log('attachQuestionOnCreateMode', item)
       const targetExamIndex = this.totalExams.findIndex(examItem => Assistant.getId(examItem.id) === Assistant.getId(item.exam.id))
       let selectedQuizzes = this.selectedQuizzes
       this.totalExams[targetExamIndex] = item
@@ -537,8 +544,9 @@ export default {
     },
 
     showQuestionComponentStatus() {
+      console.log('showQuestionComponentStatus run')
       if (this.getPageStatus() === 'create') {
-        return this.questionType === 'typeText';
+        return this.questionType === 'typeText' || this.questionType === 'typeImage';
 
       } else if (this.getPageStatus() === 'show') {
         return this.checkTextCondition()
@@ -579,11 +587,13 @@ export default {
     },
 
     updateQuestion(eventData) {
+      console.log('updateQuestion event data :', eventData)
       // this.currentQuestion = new Question(eventData)
       Vue.set(this, 'currentQuestion', new Question(eventData))
     },
 
     updateAttachList(exams) {
+      console.log('updateAttachList ', exams)
       this.selectedQuizzes = exams
       this.updateSelectedQuizzes()
     },
@@ -670,9 +680,11 @@ export default {
     },
 
     setInsertedQuestions() {  //یاس
+      console.log('setInsertedQuestions run')
       this.$refs.qlayout.getContent()
       var currentQuestion = this.currentQuestion
       // set exams
+      console.log('setInsertedQuestions this.selectedQuizzes ', this.selectedQuizzes)
       currentQuestion.exams = this.selectedQuizzes.map(item => {
         return {
           id: item.exam.id,
@@ -684,6 +696,7 @@ export default {
       currentQuestion
           .create()
           .then((response) => {
+            console.log('response in setInsertedQuestions',response)
             this.$store.commit('AppLayout/updateOverlay', {show: false, loading: false, text: ''})
             const questionId = response.data.data.id
             this.questionType = 'typeText'
@@ -697,7 +710,7 @@ export default {
               text: 'ثبت با موفقیت انجام شد',
               type: 'success'
             })
-            window.open('/question/create', '_blank').focus()
+            if(window.open('/question/create', '_blank')) window.open('/question/create', '_blank').focus()
             this.$router.push({name: 'question.show', params: {question_id: questionId}})
           })
     },
@@ -721,6 +734,7 @@ export default {
     },
 
     setMainChoicesInCreateMode(statusId) {
+      console.log('setMainChoicesInCreateMode statusId :',statusId)
       if (this.questionType === 'typeText') {
         this.setInsertedQuestions()
       } else if (this.questionType === 'typeImage') {
@@ -748,13 +762,11 @@ export default {
       }
       return true
     },
-
     checkNavbarVisibilityOnCreatPage(){
       this.NavbarVisibilityOnCreatPage = true
       if (this.$route.name === 'question.create') {
-
         this.currentQuestion.author.push({full_name: this.$store.getters['Auth/user'].full_name, id: this.$store.getters['Auth/user'].id})
-        console.log(this.currentQuestion.author)
+        console.log('this.currentQuestion.author :',this.currentQuestion.author)
       }
     }
   },
