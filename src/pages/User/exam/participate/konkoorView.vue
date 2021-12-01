@@ -1,10 +1,40 @@
 <template>
   <div class="konkoor-view ">
     <div class="row">
-      <div class="col-md-5">
+      <div
+        id="questions"
+        ref="questionsColumn"
+        :md="5"
+        class="col-md-5 right-side"
+        :style="{ height: windowSize.y }"
+      >
+        <q-virtual-scroll
+          ref="scroller"
+          :items="questions"
+          virtual-scroll-slice-size="70"
+        >
+          <template v-slot="{ item, index }">
+            <q-item
+              class="question-field"
+              :key="index"
+              dense
+            >
+              <q-item-section>
+                <Item
+                  :source="item"
+                  :questions-column="$refs.questionsColumn"
+                  @inView="test"
+                />
+              </q-item-section>
+            </q-item>
+          </template>
+        </q-virtual-scroll>
       </div>
       <div class="col-md-7">
-        <div class="row left-side">
+        <div
+          ref="leftSideList"
+          class="row left-side"
+        >
           <div class="col bubbleSheet-top">
             <q-btn
               icon="mdi-table-split-cell"
@@ -49,7 +79,7 @@
 </template>
 
 <script>
-// import 'src/assets/scss/markdownKatex.scss'
+import 'src/assets/scss/markdownKatex.scss'
 import Item from 'src/components/OnlineQuiz/Quiz/question/questionField'
 import { mixinAuth, mixinQuiz, mixinUserActionOnQuestion, mixinWindowSize } from 'src/mixin/Mixins'
 import Timer from 'src/components/OnlineQuiz/Quiz/timer/timer'
@@ -62,8 +92,8 @@ export default {
   components: {
     Timer,
     TopMenu,
-    BubbleSheet
-  //   Item
+    BubbleSheet,
+    Item
   },
   mixins: [mixinAuth, mixinQuiz, mixinUserActionOnQuestion, mixinWindowSize],
   data () {
@@ -81,32 +111,31 @@ export default {
       timerIsOpen: false
     }
   },
-  // watch: {
-  //   'windowSize.y': function () {
-  //     this.setHeights()
-  //   },
-  //   'windowSize.x': function () {
-  //     this.$store.commit('AppLayout/updateDrawer', false)
-  //   }
-  // },
+  watch: {
+    // 'windowSize.y': function () {
+    //   this.setHeights()
+    // },
+    // 'windowSize.x': function () {
+    //   this.$store.commit('AppLayout/updateDrawer', false)
+    // }
+  },
   created () {
     this.getUser()
-    this.startExam('6135be32e0db6947171ef9a0', 'KonkoorView')
-      .then(() => {
-        // that.loadFirstActiveQuestionIfNeed()
-      })
-    if (this.windowSize.x > 959) {
-      this.changeAppBarAndDrawer(false)
-    }
-    // else {
+    // this.startExam('6135be32e0db6947171ef9a0', 'KonkoorView')
+    //   .then(() => {
+    //     // that.loadFirstActiveQuestionIfNeed()
+    //   })
+    // if (this.windowSize.x > 959) {
+    //   this.changeAppBarAndDrawer(false)
+    // } else {
     //   this.$router.push({
     //     name: 'onlineQuiz.alaaView',
     //     params: { quizId: 313, questNumber: this.$route.params.quizId }
     //   })
     // }
-    if (!this.questions.length) {
-      this.questions = this.getCurrentExamQuestionsInArray()
-    }
+    // if (!this.questions.length) {
+    //   this.questions = this.getCurrentExamQuestionsInArray()
+    // }
   },
   mounted () {
     // this.setHeights()
@@ -253,37 +282,19 @@ export default {
       }
       this.changeQuestion(firstInViewQuestion.id, 'onlineQuiz.konkoorView')
     },
-    // scrollTo (questionId) {
-    //     if (this.quiz.questions.getQuestionById(questionId).isInView === false) {
-    //         const questionIndex = this.quiz.questions.getQuestionIndexById(questionId)
-    //         this.$refs.scroller.scrollToIndex(questionIndex)
-    //         for (let i = 1; i < 4; i++) {
-    //             setTimeout(() => {
-    //                 this.$refs.scroller.scrollToIndex(questionIndex)
-    //             },
-    //             500 / Math.ceil(this.quiz.questions.list.length / 100) * i)
-    //         }
-    //     }
-    // },
     scrollTo (questionId) {
       const questionIndex = this.getQuestionIndexById(questionId)
-      this.$refs.scroller.scrollToItem(questionIndex)
+      this.$refs.scroller.scrollTo(questionIndex)
       for (let i = 1; i < 4; i++) {
         setTimeout(() => {
-          this.$refs.scroller.scrollToItem(questionIndex)
+          this.$refs.scroller.scrollTo(questionIndex)
         },
         333 * i)
       }
     },
-    // onIntersect (entries) {
-    //     this.quiz.questions.getQuestionById(entries[0].target.id).isInView = (entries[0].intersectionRatio >= 0.5)
-    // },
-    // ToDo: check for removal
     getFirstInViewQuestionNumber () {
-      // console.Log(this.renderedQuestions.startIndex, this.renderedQuestions.endIndex, 'haha2')
       let firstQuestionInView
       for (let i = this.renderedQuestions.startIndex; i <= this.renderedQuestions.endIndex; i++) {
-        // console.Log(i, ': ', this.questions[i].isInView)
         if (this.questions[i].isInView === true) {
           firstQuestionInView = this.questions[i]
           break
@@ -295,27 +306,10 @@ export default {
         return false
       }
     },
-    // isThisFirstQuestionInView (questionId) {
-    //     if (this.getFirstInViewQuestionNumber().id === questionId) {
-    //         return true
-    //     }
-    //     return false
-    // },
-    // getQuestionNumber (question) {
-    //     if (question.isInView === false) {
-    //         return '.question:nth-child('+(this.quiz.questions.getQuestionIndexById(question.id) + 2)+')'
-    //     }
-    //     return ''
-    // },
     choiceClicked (questionId) {
       this.scrollTo(questionId)
       this.changeQuestion(questionId)
     }
-    // changeCurrentQuestion (question) {
-    //     if (question.id !== this.currentQuestion.id) {
-    //         this.currentQuestion = question
-    //     }
-    // }
     // setHeights () {
     //   this.$refs.questionsColumn.style.height = this.windowSize.y + 'px'
     //   if (this.$refs.scroller.$el) {
@@ -332,10 +326,24 @@ export default {
   height: 100%;
   min-height: 100vh;
   background-color: rgb(244,244,244);
+  .right-side{
+    height: 100%;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    overflow-y: hidden;
+    overflow-x: hidden;
+    position: relative;
+    padding: 0;
+    .question-field{
+      &.q-item{
+        padding: 0;
+      }
+    }
+  }
   .left-side{
     display: flex;
     flex-direction: column;
-    min-height: 100%;
     overflow-y: auto;
     .bubbleSheet-top{
       width: 56vw;

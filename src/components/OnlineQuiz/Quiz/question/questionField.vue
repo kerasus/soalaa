@@ -1,6 +1,10 @@
 <template>
-  <q-markup-table separator="none">
-    <thead>
+  <div>
+    <q-markup-table
+      separator="none"
+      class="question-table"
+    >
+      <thead>
       <tr>
         <th class="table-head text-left">
           <p
@@ -9,58 +13,75 @@
             class="question-body renderedPanel"
             :class="{ ltr: isRtl }"
           >
-<!--            <vue-katex-->
-<!--              :input="source.order + ') ' + source.statement"-->
-<!--            />-->
+            که بود و چه کرد؟
+            <!--            <vue-katex-->
+            <!--              :input="source.order + ') ' + source.statement"-->
+            <!--            />-->
           </p>
-          <div class="question-icons">
-            <q-btn
-              text-color="grey"
-              icon="mdi-checkbox-blank-circle-outline"
-              :size="24"
-              flat
-              @click="changeStatus(source.id, 'o')"
-            />
-            <q-btn
-              icon="mdi-checkbox-blank-circle"
-              text-color="yellow"
-              :size="24"
-              flat
-              @click="changeStatus(source.id, 'o')"
-            />
-            <q-btn
-              text-color="grey"
-              icon="mdi-close"
-              :size="24"
-              flat
-              @click="changeStatus(source.id ,'x')"
-            />
-            <q-btn
-              text-color="red"
-              icon="mdi-close"
-              :size="24"
-              flat
-              @click="changeStatus(source.id ,'x')"
-            />
-            <q-btn
-              text-color="blue"
-              icon="mdi-bookmark"
-              :size="24"
-              flat
-              @click="changeBookmark(source.id)"
-            />
-            <q-btn
-              text-color="grey"
-              icon="mdi-bookmark-outline"
-              :size="24"
-              flat
-              @click="changeBookmark(source.id)"
-            />
+          <div
+            v-if="(considerActiveCategory && source.in_active_category) || !considerActiveCategory"
+            class="question-icons"
+            :style="{ float: isRtlString ? 'left' : 'right' }"
+          >
+            <span>
+              <q-btn
+                v-if="getChoiceStatus() !== 'o'"
+                text-color="grey"
+                icon="mdi-checkbox-blank-circle-outline"
+                :size="24"
+                flat
+                @click="changeStatus(source.id, 'o')"
+              />
+              <q-btn
+                v-else
+                icon="mdi-checkbox-blank-circle"
+                text-color="yellow"
+                :size="24"
+                flat
+                @click="changeStatus(source.id, 'o')"
+              />
+            </span>
+            <span>
+              <q-btn
+                v-if="getChoiceStatus() === 'x'"
+                text-color="red"
+                icon="mdi-close"
+                :size="24"
+                flat
+                @click="changeStatus(source.id ,'x')"
+              />
+              <q-btn
+                v-else
+                text-color="grey"
+                icon="mdi-close"
+                :size="24"
+                flat
+                @click="changeStatus(source.id ,'x')"
+              />
+            </span>
+            <span>
+              <q-btn
+                v-if="getChoiceStatus() === 'x'"
+                text-color="blue"
+                icon="mdi-bookmark"
+                :size="24"
+                flat
+                @click="changeBookmark(source.id)"
+              />
+              <q-btn
+                v-else
+                text-color="grey"
+                icon="mdi-bookmark-outline"
+                :size="24"
+                flat
+                @click="changeBookmark(source.id)"
+              />
+           </span>
           </div>
         </th>
       </tr>
-    </thead>
-    <tbody>
+      </thead>
+      <tbody class="table-body">
       <tr
         class="choices"
       >
@@ -73,15 +94,19 @@
           :class="{ active: getAnsweredChoiceId() === choice.id, ltr: isRtl }"
           @click="answerClickedd({ questionId: source.id, choiceId: choice.id})"
         >
-          <div>{{ index }}</div>
-<!--          <vue-katex-->
-<!--            :input="(choiceNumber[index]) + choice.title"-->
-<!--            :ltr="isLtrQuestion"-->
-<!--          />-->
+          <div
+            dir="rtl"
+            v-html="choiceNumber[index] + choice.title"
+          />
+          <!--          <vue-katex-->
+          <!--            :input="(choiceNumber[index]) + choice.title"-->
+          <!--            :ltr="isLtrQuestion"-->
+          <!--          />-->
         </td>
       </tr>
-    </tbody>
-  </q-markup-table>
+      </tbody>
+    </q-markup-table>
+  </div>
 </template>
 
 <script>
@@ -224,7 +249,6 @@ export default {
       this.changeQuestion(questionId)
       this.answerClicked({ questionId, choiceId })
     },
-
     removeErab (string) {
       if (!string || string.length === 0) {
         return ''
@@ -267,9 +291,88 @@ export default {
 }
 </script>
 
-<style scoped>
-.table-head{
+<style lang="scss" scoped>
+.question-table {
+  .table-head{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+  }
+  .table-body{
+    .choices {
+      display: flex;
+      flex-direction: column;
+    }
+  }
+  &.q-table__card {
+    box-shadow: none;
+    border-radius: 0;
+  }
+}
+
+.ltr.question {
+  padding: 10px 20px 10px 20px;
+}
+
+.ltr {
+  direction: ltr;
+}
+
+.ltr .choice {
+  direction: ltr;
+  text-align: left;
+}
+
+.ltr .buttons-group {
+  float: right;
+}
+
+.current-question {
+  background-color: #fffaee;
+}
+
+.choice {
+  cursor: pointer;
+  transition: all ease-in-out 0.3s;
+}
+
+.buttons-group {
   display: flex;
   flex-direction: row;
+  justify-content: space-around;
+}
+
+.choice.active::before {
+  content: "\F012C";
+  display: inline-block;
+  font: normal normal normal 24px/1 "Material Design Icons";
+  text-rendering: auto;
+  line-height: inherit;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  margin-left: 10px;
+  color: #4caf50;
+  font-size: 20px;
+}
+
+.choice:hover {
+  background: #e1e1e1;
+}
+
+.question-body {
+  margin-bottom: 20px;
+  line-height: 40px;
+}
+
+.questions {
+  background: #fff;
+  overflow-y: auto;
+  position: relative;
+  /*padding-right: 25px;*/
+  padding: 0;
+}
+
+.question {
+  padding: 10px 30px 10px 10px;
 }
 </style>

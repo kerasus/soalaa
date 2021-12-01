@@ -9,7 +9,6 @@
 
     }"
   >
-    متناناالابلبزیبی
     <div
       v-for="(group, index) in questionsInGroups"
       :key="index"
