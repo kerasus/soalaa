@@ -267,26 +267,27 @@
 </template>
 
 <script>
+/* eslint-disable camelcase */
 
 import videojs from 'video.js'
 import 'video.js/dist/video-js.css'
 import '@silvermine/videojs-quality-selector/dist/css/quality-selector.css'
 // The following registers the plugin with `videojs`
 require('@silvermine/videojs-quality-selector')(videojs)
-import Info from '@/components/OnlineQuiz/Quiz/resultTables/info'
-import PersonalResult from '@/components/OnlineQuiz/Quiz/resultTables/personalResult'
-import BubbleSheet from '@/components/OnlineQuiz/Quiz/BubbleSheet/BubbleSheet'
-import Assistant from '@/plugins/assistant'
-import {AlaaSet} from '@/models/AlaaSet'
-import {mixinAuth, mixinQuiz, mixinWindowSize} from '@/mixin/Mixins'
-import {AlaaContent} from '@/models/AlaaContent'
-import StatisticResult from '@/components/OnlineQuiz/Quiz/resultTables/statisticResult'
-import TakhminRotbe from "@/components/OnlineQuiz/Quiz/TakhminRotbe";
-import ExamData from "@/assets/js/ExamData";
+import Info from 'src/components/OnlineQuiz/Quiz/resultTables/info'
+import PersonalResult from 'src/components/OnlineQuiz/Quiz/resultTables/personalResult'
+import BubbleSheet from 'src/components/OnlineQuiz/Quiz/bubbleSheet/BubbleSheet'
+import Assistant from 'src/plugins/assistant'
+import { AlaaSet } from 'src/models/AlaaSet'
+import { mixinAuth, mixinQuiz, mixinWindowSize } from 'src/mixin/Mixins'
+import { AlaaContent } from 'src/models/AlaaContent'
+import StatisticResult from 'src/components/OnlineQuiz/Quiz/resultTables/statisticResult'
+import TakhminRotbe from 'src/components/OnlineQuiz/Quiz/TakhminRotbe'
+import ExamData from 'src/assets/js/ExamData'
 
 export default {
   name: 'Result',
-  components: {TakhminRotbe, StatisticResult, BubbleSheet, Info, PersonalResult},
+  components: { TakhminRotbe, StatisticResult, BubbleSheet, Info, PersonalResult },
   mixins: [
     mixinAuth,
     mixinQuiz,
@@ -305,94 +306,94 @@ export default {
     player: null
   }),
   watch: {
-    selectedTimepoint() {
+    selectedTimepoint () {
       this.playTimePoint()
     },
-    tab() {
+    tab () {
       if (!this.player) {
         return
       }
       this.player.pause()
     }
   },
-  created() {
+  created () {
     this.getUserData()
     window.currentExamQuestions = null
     window.currentExamQuestionIndexes = null
   },
-  mounted() {
-    let that = this
-    let user_exam_id = this.$route.params.user_exam_id
-    let exam_id = this.$route.params.exam_id
+  mounted () {
+    const that = this
+    const user_exam_id = this.$route.params.user_exam_id
+    const exam_id = this.$route.params.exam_id
 
-    this.$store.commit('AppLayout/updateOverlay', {show: true, loading: true, text: ''})
+    this.$store.commit('AppLayout/updateOverlay', { show: true, loading: true, text: '' })
 
-    let examData = new ExamData()
+    const examData = new ExamData()
     examData.getUserExamWithCorrectAnswers(user_exam_id, exam_id)
-        .loadQuestionsFromFile()
-        .getUserExamData(user_exam_id)
-        .getUserExamDataReport(user_exam_id)
-        .run()
-        .then(() => {
-          // save questions in localStorage
-          that.saveCurrentExamQuestions(examData.exam.questions.list)
-          // save exam info in vuex store (remove questions of exam then save in store)
-          that.$store.commit('updateQuiz', examData.exam)
-          that.$store.commit('mergeDbAnswersIntoLocalstorage', {
-            dbAnswers: examData.userExamData,
-            exam_id: examData.exam.id
-          })
-          that.report = examData.studentReport
-          that.loadKarname(examData.studentReport)
-
-          that.$store.commit('AppLayout/updateOverlay', {show: false, loading: false, text: ''})
+      .loadQuestionsFromFile()
+      .getUserExamData(user_exam_id)
+      .getUserExamDataReport(user_exam_id)
+      .run()
+      .then(() => {
+        // save questions in localStorage
+        that.saveCurrentExamQuestions(examData.exam.questions.list)
+        // save exam info in vuex store (remove questions of exam then save in store)
+        that.$store.commit('updateQuiz', examData.exam)
+        that.$store.commit('mergeDbAnswersIntoLocalstorage', {
+          dbAnswers: examData.userExamData,
+          exam_id: examData.exam.id
         })
-        .catch((error) => {
-          that.$store.commit('AppLayout/updateOverlay', {show: false, loading: false, text: ''})
-          that.goToExamList()
-          console.log(error)
+        that.report = examData.studentReport
+        that.loadKarname(examData.studentReport)
 
-          that.$notify({
-            group: 'notifs',
-            title: 'توجه!',
-            text: 'مشکلی در دریافت اطلاعات کارنامه رخ داده است.',
-            type: 'error'
-          })
+        that.$store.commit('AppLayout/updateOverlay', { show: false, loading: false, text: '' })
+      })
+      .catch((error) => {
+        that.$store.commit('AppLayout/updateOverlay', { show: false, loading: false, text: '' })
+        that.goToExamList()
+        console.log(error)
+
+        that.$notify({
+          group: 'notifs',
+          title: 'توجه!',
+          text: 'مشکلی در دریافت اطلاعات کارنامه رخ داده است.',
+          type: 'error'
         })
+      })
   },
   methods: {
-    initVideoJs(srcs, sub_categoryIndex) {
+    initVideoJs (srcs, sub_categoryIndex) {
       if (!this.$refs['videoPlayer' + sub_categoryIndex]) {
         return
       }
-      let that = this
+      const that = this
       this.player = videojs(that.$refs['videoPlayer' + sub_categoryIndex][0], {
-            language: 'fa',
-            controls: true
-          },
-          function onPlayerReady() {
-            console.log('onPlayerReady', this)
-          })
+        language: 'fa',
+        controls: true
+      },
+      function onPlayerReady () {
+        console.log('onPlayerReady', this)
+      })
       this.player.controlBar.addChild('QualitySelector')
       this.updateTimepointsHeights(sub_categoryIndex)
       this.updateVideoSrc(srcs)
     },
-    updateVideoSrc(srcs) {
-      let updatedSrcs = this.getVideoSrcs(srcs)
+    updateVideoSrc (srcs) {
+      const updatedSrcs = this.getVideoSrcs(srcs)
       this.player.pause()
       this.player.src(updatedSrcs)
       this.player.load()
     },
-    updateTimepointsHeights(sub_categoryIndex) {
+    updateTimepointsHeights (sub_categoryIndex) {
       this.timepointsHeights = this.$refs['videoPlayer' + sub_categoryIndex][0].clientHeight
     },
-    playTimePoint() {
+    playTimePoint () {
       this.player.pause()
       this.player.currentTime(this.currentVideo.timepoints[this.selectedTimepoint].time)
       this.player.play()
     },
-    getVideoSrcs(srcs) {
-      let updatedSrcs = []
+    getVideoSrcs (srcs) {
+      const updatedSrcs = []
       srcs.forEach(video => {
         updatedSrcs.push({
           src: video.link,
@@ -404,19 +405,19 @@ export default {
       })
       return updatedSrcs
     },
-    goToExamList() {
+    goToExamList () {
       if (this.$route.name !== 'user.exam.list') {
-        this.$router.push({name: 'user.exam.list'})
+        this.$router.push({ name: 'user.exam.list' })
       }
     },
-    loadKarname(report) {
+    loadKarname (report) {
       this.loadSubCategory(report)
       this.loadZirGrooh(report.zirgorooh)
       this.loadBest(report.best)
       this.loadFirstVideoTab()
       report.main.taraaz = parseFloat(report.main.taraaz).toFixed(0)
     },
-    loadBest(best) {
+    loadBest (best) {
       best.sub_category.forEach((item, index) => {
         item.top_ranks_taraaz_mean = parseFloat(item.top_ranks_taraaz_mean).toFixed(0)
         item.mean = parseFloat(item.mean).toFixed(1)
@@ -424,9 +425,9 @@ export default {
         item.index = index + 1
       })
     },
-    loadSubCategory(report) {
+    loadSubCategory (report) {
       report.sub_category.forEach((item, index) => {
-        let targetBest = report.best.sub_category.find(sub_categoryItem => sub_categoryItem.sub_category === item.sub_category)
+        const targetBest = report.best.sub_category.find(sub_categoryItem => sub_categoryItem.sub_category === item.sub_category)
         item.percent = parseFloat(item.percent).toFixed(1)
         item.taraaz = parseFloat(item.taraaz).toFixed(0)
         item.empty = item.total_answer - item.right_answer - item.wrong_answer
@@ -439,7 +440,7 @@ export default {
         }
       })
     },
-    loadZirGrooh(zirgorooh) {
+    loadZirGrooh (zirgorooh) {
       zirgorooh.sort((first, second) => {
         return first.title.localeCompare(second.title)
       })
@@ -448,37 +449,37 @@ export default {
         item.taraaz = parseFloat(item.taraaz).toFixed(0)
       })
     },
-    getContent(contentId, sub_categoryIndex) {
-      let that = this
+    getContent (contentId, sub_categoryIndex) {
+      const that = this
       this.alaaContent.show(contentId)
-          .then((response) => {
-            console.log(response.data.data)
-            that.currentVideo = response.data.data
-            that.initVideoJs(that.currentVideo.file.video, sub_categoryIndex)
-          })
-          .catch((error) => {
-            Assistant.reportErrors(error)
-            that.currentVideo = null
-          })
+        .then((response) => {
+          console.log(response.data.data)
+          that.currentVideo = response.data.data
+          that.initVideoJs(that.currentVideo.file.video, sub_categoryIndex)
+        })
+        .catch((error) => {
+          Assistant.reportErrors(error)
+          that.currentVideo = null
+        })
     },
-    getAlaaSet(setId, sub_categoryIndex) {
-      let that = this
+    getAlaaSet (setId, sub_categoryIndex) {
+      const that = this
       this.alaaSet.loading = true
       this.alaaSet.show(setId)
-          .then((response) => {
-            that.alaaSet.loading = false
-            that.alaaSet = new AlaaSet(response.data.data)
-            that.alaaVideos = that.alaaSet.contents.getVideos()
-            that.getContent(that.alaaVideos[0].id, sub_categoryIndex)
-          })
-          .catch(() => {
-            that.alaaSet.loading = false
-          })
+        .then((response) => {
+          that.alaaSet.loading = false
+          that.alaaSet = new AlaaSet(response.data.data)
+          that.alaaVideos = that.alaaSet.contents.getVideos()
+          that.getContent(that.alaaVideos[0].id, sub_categoryIndex)
+        })
+        .catch(() => {
+          that.alaaSet.loading = false
+        })
     },
-    loadFirstVideoTab() {
+    loadFirstVideoTab () {
       this.onVideoTabChange(0)
     },
-    onVideoTabChange(tabIndex) {
+    onVideoTabChange (tabIndex) {
       if (this.player) {
         this.player.pause()
       }
@@ -596,7 +597,6 @@ export default {
 .download-row {
   margin: 0 10%;
 }
-
 
 .video-title {
   margin-top: 20px;

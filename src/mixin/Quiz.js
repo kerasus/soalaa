@@ -597,7 +597,7 @@ const mixinQuiz = {
           reject(null)
           return
         }
-
+        // ToDo : jQuery needed
         $.ajax({
           type: 'GET',
           url: questionsFileUrl,
