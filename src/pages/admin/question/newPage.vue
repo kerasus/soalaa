@@ -1,14 +1,14 @@
 <template>
   <div id="app">
     <v-container
-      :fluid="true"
-      class="pa-6"
+        :fluid="true"
+        class="pa-6"
     >
       <v-row>
         <v-dialog
-          v-model="dialog"
-          persistent
-          max-width="290"
+            v-model="dialog"
+            persistent
+            max-width="290"
         >
           <v-card>
             <v-card-title class="dialog-title">
@@ -18,17 +18,17 @@
             <v-card-actions>
               <v-spacer />
               <v-btn
-                color="amber lighten-1"
-                text
-                @click="setQuestionTypeText"
+                  color="amber lighten-1"
+                  text
+                  @click="setQuestionTypeText"
               >
                 تایپ سوال
               </v-btn>
               <v-spacer class="mx-10" />
               <v-btn
-                color="amber lighten-1"
-                text
-                @click="setQuestionTypeImage"
+                  color="amber lighten-1"
+                  text
+                  @click="setQuestionTypeImage"
               >
                 آپلود فایل
               </v-btn>
@@ -37,16 +37,16 @@
         </v-dialog>
         <v-col :cols="questionColsNumber">
           <nav-bar
-            v-if="checkNavbarVisibility()"
-            :question="currentQuestion"
-            :edit-status="edit_status"
-            :page-name="getPageStatus()"
-            @create="navBarAction_create"
-            @saveDraft="navBarAction_saveDraft"
-            @save="navBarAction_save"
-            @cancel="navBarAction_cancel"
-            @edit="navBarAction_edit"
-            @remove="navBarAction_remove"
+              v-if="checkNavbarVisibility()"
+              :question="currentQuestion"
+              :edit-status="edit_status"
+              :page-name="getPageStatus()"
+              @create="navBarAction_create"
+              @saveDraft="navBarAction_saveDraft"
+              @save="navBarAction_save"
+              @cancel="navBarAction_cancel"
+              @edit="navBarAction_edit"
+              @remove="navBarAction_remove"
           />
           <!-- -------------------------- upload file ---------------------->
           <UploadImg
@@ -58,31 +58,31 @@
 
           <div v-if="showQuestionComponentStatus()">
             <question-layout
-              v-if="!loading && this.questionType === 'typeText'"
-              ref="qlayout"
-              v-model="currentQuestion"
-              :status="edit_status"
-              @input="updateQuestion"
+                v-if="!loading && this.questionType === 'typeText'"
+                ref="qlayout"
+                v-model="currentQuestion"
+                :status="edit_status"
+                @input="updateQuestion"
             />
             <v-col cols="4">
               <v-select
-                v-if="getPageStatus() === 'create'"
-                v-model="currentQuestion.author"
-                label="طراحان"
-                dense
-                multiple
-                disabled
-                chips
-                :items="currentQuestion.author"
-                item-text="full_name"
-                item-value="id"
-                outlined
+                  v-if="getPageStatus() === 'create'"
+                  v-model="currentQuestion.author"
+                  label="طراحان"
+                  dense
+                  multiple
+                  disabled
+                  chips
+                  :items="currentQuestion.author"
+                  item-text="full_name"
+                  item-value="id"
+                  outlined
               />
             </v-col>
           </div>
-            <!-- -------------------------- show exams  ---------------------->
+          <!-- -------------------------- show exams  ---------------------->
           <attach_list
-              v-if="showExamsListComponent"
+              v-if="showExamsListComponent()"
               :status="edit_status"
               :attaches="selectedQuizzes"
               :exam-list="examList"
@@ -93,34 +93,34 @@
           />
           <!-- -------------------------- status --------------------------->
           <div
-            v-if="getPageStatus() === 'edit'"
-            class="my-10"
+              v-if="getPageStatus() === 'edit'"
+              class="my-10"
           >
             <StatusComponent
-              :statuses="questionStatuses"
-              :loading="changeStatusLoading"
-              @update="changeStatus"
+                :statuses="questionStatuses"
+                :loading="changeStatusLoading"
+                @update="changeStatus"
             />
           </div>
         </v-col>
         <!-- -------------------------- show img---------------------------->
         <v-col
-          v-if="uploadImgColsNumber.show"
-          :cols="5"
+            v-if="uploadImgColsNumber.show"
+            :cols="5"
         >
           <ShowImg
-            :test="imgSrc"
-            @closePanel="makeShowImgPanelInvisible"
+              :test="imgSrc"
+              @closePanel="makeShowImgPanelInvisible"
           />
         </v-col>
         <!-- -------------------------- log --------------------------->
         <v-col
-          v-if="currentQuestion.logs.list.length > 0 && !uploadImgColsNumber.show"
-          :cols="3"
+            v-if="currentQuestion.logs.list.length > 0 && !uploadImgColsNumber.show"
+            :cols="3"
         >
           <LogListComponent
-            :logs="currentQuestion.logs"
-            @addComment="addComment"
+              :logs="currentQuestion.logs"
+              @addComment="addComment"
           />
         </v-col>
       </v-row>
@@ -285,16 +285,16 @@ export default {
   methods: {
     addComment (eventData) {
       axios.post(API_ADDRESS.log.addComment(eventData.logId), { comment: eventData.text })
-      .then(response => {
-        // iterating over the array to find the log that has changed
-        for (let i = 0; i < this.currentQuestion.logs.list.length; i++) {
-          if (this.currentQuestion.logs.list[i].id === eventData.logId) {
-            // setting the new log using Vue.set so that the component notices the change
-            this.currentQuestion.logs.list[i] = new Log(response.data.data)
-            Vue.set(this.currentQuestion, 'logs', new LogList(this.currentQuestion.logs))
-          }
-        }
-      })
+          .then(response => {
+            // iterating over the array to find the log that has changed
+            for (let i = 0; i < this.currentQuestion.logs.list.length; i++) {
+              if (this.currentQuestion.logs.list[i].id === eventData.logId) {
+                // setting the new log using Vue.set so that the component notices the change
+                this.currentQuestion.logs.list[i] = new Log(response.data.data)
+                Vue.set(this.currentQuestion, 'logs', new LogList(this.currentQuestion.logs))
+              }
+            }
+          })
     },
     navBarAction_create(statusId) {
       // set status_id
@@ -320,15 +320,15 @@ export default {
       var currentQuestion = this.currentQuestion
       currentQuestion.type_id = this.optionQuestionId
       currentQuestion.update(API_ADDRESS.question.updateQuestion(currentQuestion.id))
-        .then(() => {
-          this.$notify({
-            group: 'notifs',
-            title: 'توجه',
-            text: 'ویرایش با موفقیت انجام شد',
-            type: 'success'
+          .then(() => {
+            this.$notify({
+              group: 'notifs',
+              title: 'توجه',
+              text: 'ویرایش با موفقیت انجام شد',
+              type: 'success'
+            })
+            this.$router.push({name: 'question.show', params: {question_id: this.$route.params.question_id}})
           })
-          this.$router.push({name: 'question.show', params: {question_id: this.$route.params.question_id}})
-        })
     },
 
     navBarAction_cancel() {
@@ -368,7 +368,7 @@ export default {
           order: item.order
         }
       })
-     this.$store.commit('AppLayout/updateOverlay', {show: true, loading: true, text: 'کمی صبر کنید...'})
+      this.$store.commit('AppLayout/updateOverlay', {show: true, loading: true, text: 'کمی صبر کنید...'})
       let formData = new FormData();
       formData.append('status_id', statusId);
       formData.append('statement_photo', this.currentQuestion.statement_photo);
@@ -382,7 +382,7 @@ export default {
       // })
       axios.post(API_ADDRESS.question.create, formData)
           .then((response) => {
-           const questionId = response.data.data.id
+            const questionId = response.data.data.id
             this.$router.push({name: 'question.show', params: {question_id: questionId}})
             this.$store.commit('AppLayout/updateOverlay', {show: false, loading: false, text: ''})
           }).catch(() => {
@@ -544,7 +544,6 @@ export default {
     },
 
     showImgComponentStatus() {
-
       if (this.getPageStatus() === 'create') {
         return this.questionType === 'typeImage';
       }
@@ -554,7 +553,6 @@ export default {
     showQuestionComponentStatus() {
       if (this.getPageStatus() === 'create') {
         return this.questionType === 'typeText' || this.questionType === 'typeImage';
-
       }
       else if (this.getPageStatus() === 'show') {
         return this.checkTextCondition()
@@ -565,7 +563,6 @@ export default {
     showExamsListComponent(){
       if (this.getPageStatus() === 'create') {
         return this.questionType === 'typeText' || this.questionType === 'typeImage';
-
       }
       return true
     },
@@ -671,10 +668,10 @@ export default {
     },
 
     setQuestionLayoutCols(){
-     if(this.currentQuestion.logs.list.length >0 ){
+      if(this.currentQuestion.logs.list.length >0 ){
         this.questionColsNumber=9
 
-     }
+      }
     },
     showPageDialog() {  //یاس
       this.dialog = true
@@ -726,9 +723,9 @@ export default {
 
     doesPhotosExist() {
       if(this.currentQuestion.answer_photos){
-       if (this.currentQuestion.answer_photos.length>0) {
-         return true
-       }
+        if (this.currentQuestion.answer_photos.length>0) {
+          return true
+        }
       }
       if(this.currentQuestion.statement_photo ){
         if (this.currentQuestion.statement_photo.length>0){
