@@ -213,15 +213,6 @@ const routes = [
       middlewares: [auth]
     }
   },
-  // TODO following routes should be remove
-  {
-    path: '/test',
-    name: 'onlineQuiz.alaaView',
-    component: () => import('pages/Auth/test'),
-    meta: {
-      middlewares: [auth]
-    }
-  },
 
   // Always leave this as last one,
   // but you can also remove it
