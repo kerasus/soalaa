@@ -142,6 +142,14 @@ const routes = [
         path: '/category',
         name: 'categoryList',
         component: () => import('pages/Admin/category/list')
+      },
+      {
+        path: '/onlineQuiz/alaaView/:quizId/:questNumber',
+        name: 'onlineQuiz.alaaView',
+        component: () => import('pages/user/exam/participate/AlaaView'),
+        meta: {
+          middlewares: [auth]
+        }
       }
     ]
   },
@@ -166,7 +174,6 @@ const routes = [
       middlewares: [auth]
     }
   },
-
   // Always leave this as last one,
   // but you can also remove it
   {
