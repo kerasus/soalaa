@@ -1,7 +1,6 @@
-/* eslint-disable camelcase */
-import Assistant from 'src/plugins/assistant'
-import Time from 'src/plugins/time'
-import { QuestSubcategory, QuestSubcategoryList } from 'src/models/QuestSubcategory'
+import Assistant from '../plugins/assistant'
+import Time from '../plugins/time'
+import { QuestSubcategory, QuestSubcategoryList } from '../models/QuestSubcategory'
 import axios from 'axios'
 import API_ADDRESS from 'src/api/Addresses'
 import { Exam } from '../models/Exam'
@@ -10,7 +9,6 @@ import { QuestCategoryList } from '../models/QuestCategory'
 import $ from 'jquery'
 import { QuestionList } from '../models/Question'
 import ExamData from 'src/assets/js/ExamData'
-// import mixinAuth from 'src/mixin/Auth'
 
 const mixinQuiz = {
   computed: {
@@ -80,22 +78,22 @@ const mixinQuiz = {
     }
   },
   methods: {
-    getUserQuestionData (quizId, question_id) {
-      if (typeof question_id === 'undefined') {
-        question_id = this.currentQuestion.id
+    getUserQuestionData (quizId, questionId) {
+      if (typeof questionId === 'undefined') {
+        questionId = this.currentQuestion.id
       }
       if (typeof quizId === 'undefined') {
         quizId = this.quiz.id
       }
       if (
         !quizId ||
-                !question_id ||
-                !this.userQuizListData ||
-                !this.userQuizListData[quizId]
+        !questionId ||
+        !this.userQuizListData ||
+        !this.userQuizListData[quizId]
       ) {
         return false
       }
-      return this.userQuizListData[quizId][question_id]
+      return this.userQuizListData[quizId][questionId]
     },
 
     getCurrentExam () {
@@ -306,15 +304,15 @@ const mixinQuiz = {
           })
       })
     },
-    loadExam (examDataWithQuestions, viewType, exam_id) {
+    loadExam (examDataWithQuestions, viewType, examId) {
       const that = this
       return new Promise(function (resolve, reject) {
         if (examDataWithQuestions) {
           // save questions in localStorage
           that.saveCurrentExamQuestions(examDataWithQuestions.questions.list)
           // save exam info in vuex store (remove questions of exam then save in store)
-          if (exam_id) {
-            examDataWithQuestions.id = exam_id
+          if (examId) {
+            examDataWithQuestions.id = examId
           }
 
           that.$store.commit('updateQuiz', examDataWithQuestions)
@@ -483,15 +481,13 @@ const mixinQuiz = {
       }
     },
     getNextQuestion (questionId) {
-      let currentIndex = this.getQuestionIndexById(questionId),
-        // eslint-disable-next-line prefer-const
-        nextIndex = ++currentIndex
+      let currentIndex = this.getQuestionIndexById(questionId)
+      const nextIndex = ++currentIndex
       return this.getQuestionByIndex(nextIndex)
     },
     getPrevQuestion (questionId) {
-      let currentIndex = this.getQuestionIndexById(questionId),
-        // eslint-disable-next-line prefer-const
-        prevIndex = --currentIndex
+      let currentIndex = this.getQuestionIndexById(questionId)
+      const prevIndex = --currentIndex
       return this.getQuestionByIndex(prevIndex)
     },
     goToCategory (categoryId) {
@@ -575,9 +571,9 @@ const mixinQuiz = {
       }
     },
 
-    getExamUserData (exam_id) {
+    getExamUserData (examId) {
       return new Promise(function (resolve, reject) {
-        axios.post(API_ADDRESS.exam.examUser, { exam_id })
+        axios.post(API_ADDRESS.exam.examUser, { examId })
           .then((response) => {
             const userExamForParticipate = new Exam()
             userExamForParticipate.id = Assistant.getId(response.data.data.exam_id)
@@ -594,28 +590,29 @@ const mixinQuiz = {
           })
       })
     },
-    getQuestionsOfExam (questions_file_url) {
+    getQuestionsOfExam (questionsFileUrl) {
       return new Promise(function (resolve, reject) {
-        if (!questions_file_url) {
+        if (!questionsFileUrl) {
           Assistant.handleAxiosError('exam file url is not set')
           reject(null)
-          // return
+          return
         }
-        // ToDo : jQuery needed
-        // $.ajax({
-        //   type: 'GET',
-        //   url: questions_file_url,
-        //   accept: 'application/json; charset=utf-8',
-        //   dataType: 'json',
-        //   success: function (data) {
-        //     resolve(new QuestionList(data))
-        //   },
-        //   error: function (jqXHR, textStatus, errorThrown) {
-        //     Assistant.reportErrors({ location: 'GetQuestionsOfExam', message: "can't get exam file", data: { jqXHR, textStatus, errorThrown } })
-        //     Assistant.handleAxiosError("can't get exam file")
-        //     reject({ jqXHR, textStatus, errorThrown })
-        //   }
-        // })
+
+        $.ajax({
+          type: 'GET',
+          url: questionsFileUrl,
+          accept: 'application/json; charset=utf-8',
+          dataType: 'json',
+          success: function (data) {
+            resolve(new QuestionList(data))
+          },
+          error: function (jqXHR, textStatus, errorThrown) {
+            Assistant.reportErrors({ location: 'GetQuestionsOfExam', message: "can't get exam file", data: { jqXHR, textStatus, errorThrown } })
+            Assistant.handleAxiosError("can't get exam file")
+            reject({ jqXHR, textStatus, errorThrown })
+          }
+        }
+        )
       })
     }
   }
