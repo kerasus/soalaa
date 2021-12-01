@@ -20,6 +20,12 @@ const routes = [
         middleware: [auth]
       },
       {
+        path: '/onlineQuiz/results/:exam_id/:user_exam_id',
+        name: 'user.exam.results',
+        component: () => import('pages/User/exam/Result'),
+        middleware: [auth]
+      },
+      {
         path: '/exam',
         name: 'exam',
         component: () => import('pages/Admin/exam/index'),

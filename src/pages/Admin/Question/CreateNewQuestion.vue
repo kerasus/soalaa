@@ -31,7 +31,8 @@
         <question-layout
           v-if="!loading"
           ref="qlayout"
-          :currentQuestion = "currentQuestion"
+          v-model="currentQuestion"
+          :cq="currentQuestion"
           :status="edit_status"
           @updateQuestion="updateQuestion"
         />
@@ -137,7 +138,7 @@ export default {
   },
   data () {
     return {
-      testMitra: '',
+      fucking: '',
       selectedAuthors: [],
       authors: [
         {
@@ -633,6 +634,8 @@ export default {
           console.log('load current question ************ : ', response.data.data)
           if (response.data.data) {
             that.currentQuestion = new Question(response.data.data)
+            that.fucking = 'new text'
+            console.log('fucking currentQuestion question &&&&&&&&&&&&&&&&&&&&&&&&&&&&& :', that.currentQuestion)
             if (that.currentQuestion.type.value === 'psychometric') {
               if (that.getPageStatus() === 'edit') {
                 that.$router.push({ name: 'question.mbti.edit', params: { question_id: that.$route.params.question_id } })
