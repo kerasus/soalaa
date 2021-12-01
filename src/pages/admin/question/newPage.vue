@@ -79,8 +79,10 @@
                 outlined
               />
             </v-col>
+          </div>
             <!-- -------------------------- show exams  ---------------------->
-            <attach_list
+          <attach_list
+              v-if="showExamsListComponent"
               :status="edit_status"
               :attaches="selectedQuizzes"
               :exam-list="examList"
@@ -88,8 +90,7 @@
               :loading="attachLoading"
               @detach="detachQuestion"
               @attach="attachQuestion"
-            />
-          </div>
+          />
           <!-- -------------------------- status --------------------------->
           <div
             v-if="getPageStatus() === 'edit'"
@@ -296,12 +297,10 @@ export default {
       })
     },
     navBarAction_create(statusId) {
-      console.log('navBarAction_create statusId:',statusId)
       // set status_id
       if (!statusId) {
         statusId = this.questionStatusId_draft
       }
-      console.log('this.currentQuestion in navbar action: ',this.currentQuestion)
       this.currentQuestion.status_id = statusId
       this.selectedAuthors.forEach(author => {
         this.currentQuestion.author.push(this.authors.find(item => item.id === author))
@@ -360,19 +359,30 @@ export default {
       })
     },
 
-    setQuestionPhotos(statusId) {  //یاس
-      console.log('setQuestionPhotos is run')
-
-      this.$store.commit('AppLayout/updateOverlay', {show: true, loading: true, text: 'کمی صبر کنید...'})
+    setQuestionPhotos(statusId) {
+      // let question = this.currentQuestion
+      this.currentQuestion.exams = this.selectedQuizzes.map(item => {
+        return {
+          id: item.exam.id,
+          sub_category_id: item.sub_category.id,
+          order: item.order
+        }
+      })
+     this.$store.commit('AppLayout/updateOverlay', {show: true, loading: true, text: 'کمی صبر کنید...'})
       let formData = new FormData();
       formData.append('status_id', statusId);
       formData.append('statement_photo', this.currentQuestion.statement_photo);
       this.currentQuestion.answer_photos.forEach((item, key) => {
-        formData.append('answer_photos[' + key + ']', item);
+        formData.append('answer_photos[' + key + ']', item)
       })
+      formData.append('type_id', this.optionQuestionId)
+      formData.append('exams', JSON.stringify(this.currentQuestion.exams))
+      // this.currentQuestion.exams.forEach((item ,key) => {
+      //   formData.append('exams[' + key + ']', item);
+      // })
       axios.post(API_ADDRESS.question.create, formData)
           .then((response) => {
-            const questionId = response.data.data.id
+           const questionId = response.data.data.id
             this.$router.push({name: 'question.show', params: {question_id: questionId}})
             this.$store.commit('AppLayout/updateOverlay', {show: false, loading: false, text: ''})
           }).catch(() => {
@@ -443,7 +453,6 @@ export default {
     },
 
     attachQuestion(item) {
-      console.log('attachQuestion item :', item)
       if (this.getPageStatus() === 'create') {
         this.attachQuestionOnCreateMode(item)
       } else {
@@ -471,7 +480,6 @@ export default {
     },
 
     attachQuestionOnCreateMode(item) {
-      console.log('attachQuestionOnCreateMode', item)
       const targetExamIndex = this.totalExams.findIndex(examItem => Assistant.getId(examItem.id) === Assistant.getId(item.exam.id))
       let selectedQuizzes = this.selectedQuizzes
       this.totalExams[targetExamIndex] = item
@@ -544,17 +552,23 @@ export default {
     },
 
     showQuestionComponentStatus() {
-      console.log('showQuestionComponentStatus run')
       if (this.getPageStatus() === 'create') {
         return this.questionType === 'typeText' || this.questionType === 'typeImage';
 
-      } else if (this.getPageStatus() === 'show') {
+      }
+      else if (this.getPageStatus() === 'show') {
         return this.checkTextCondition()
       }
       // in edit page
       return true
     },
+    showExamsListComponent(){
+      if (this.getPageStatus() === 'create') {
+        return this.questionType === 'typeText' || this.questionType === 'typeImage';
 
+      }
+      return true
+    },
     loadCurrentQuestionData() {
       let that = this
       this.loading = true
@@ -587,13 +601,11 @@ export default {
     },
 
     updateQuestion(eventData) {
-      console.log('updateQuestion event data :', eventData)
       // this.currentQuestion = new Question(eventData)
       Vue.set(this, 'currentQuestion', new Question(eventData))
     },
 
     updateAttachList(exams) {
-      console.log('updateAttachList ', exams)
       this.selectedQuizzes = exams
       this.updateSelectedQuizzes()
     },
@@ -680,11 +692,9 @@ export default {
     },
 
     setInsertedQuestions() {  //یاس
-      console.log('setInsertedQuestions run')
       this.$refs.qlayout.getContent()
       var currentQuestion = this.currentQuestion
       // set exams
-      console.log('setInsertedQuestions this.selectedQuizzes ', this.selectedQuizzes)
       currentQuestion.exams = this.selectedQuizzes.map(item => {
         return {
           id: item.exam.id,
@@ -696,7 +706,6 @@ export default {
       currentQuestion
           .create()
           .then((response) => {
-            console.log('response in setInsertedQuestions',response)
             this.$store.commit('AppLayout/updateOverlay', {show: false, loading: false, text: ''})
             const questionId = response.data.data.id
             this.questionType = 'typeText'
@@ -734,7 +743,6 @@ export default {
     },
 
     setMainChoicesInCreateMode(statusId) {
-      console.log('setMainChoicesInCreateMode statusId :',statusId)
       if (this.questionType === 'typeText') {
         this.setInsertedQuestions()
       } else if (this.questionType === 'typeImage') {
@@ -766,7 +774,6 @@ export default {
       this.NavbarVisibilityOnCreatPage = true
       if (this.$route.name === 'question.create') {
         this.currentQuestion.author.push({full_name: this.$store.getters['Auth/user'].full_name, id: this.$store.getters['Auth/user'].id})
-        console.log('this.currentQuestion.author :',this.currentQuestion.author)
       }
     }
   },

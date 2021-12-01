@@ -1,6 +1,5 @@
 <template>
   <div class="exam mb-10">
-    status in : {{status}}
     <p
       v-if="status"
       class="font-weight-medium"
