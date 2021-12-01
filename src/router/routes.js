@@ -154,6 +154,14 @@ const routes = [
         path: '/category',
         name: 'categoryList',
         component: () => import('pages/Admin/category/list')
+      },
+      {
+        path: '/onlineQuiz/alaaView/:quizId/:questNumber',
+        name: 'onlineQuiz.alaaView',
+        component: () => import('pages/user/exam/participate/AlaaView'),
+        meta: {
+          middlewares: [auth]
+        }
       }
     ]
   },
