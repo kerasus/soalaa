@@ -20,11 +20,11 @@ const mixinQuiz = {
         return this.$store.getters['quiz/quiz']
       },
       set (newInfo) {
-        this.$store.commit('updateQuiz', newInfo)
+        this.$store.commit('quiz/updateQuiz', newInfo)
       }
     },
     userQuizListData () {
-      return this.$store.getters['userQuizListData/quiz']
+      return this.$store.getters['quiz/userQuizListData']
     },
     userQuestionData () {
       return (questionId) => {
@@ -36,14 +36,14 @@ const mixinQuiz = {
       }
     },
     currentExamFrozenQuestions () {
-      return this.$store.getters.currentExamFrozenQuestions
+      return this.$store.getters('quiz/currentExamFrozenQuestions')
     },
     currentQuestion: {
       get () {
-        return this.$store.getters.currentQuestion
+        return this.$store.getters('quiz/currentQuestion')
       },
       set (newInfo) {
-        this.$store.commit('updateCurrentQuestion', {
+        this.$store.commit('quiz/updateCurrentQuestion', {
           newQuestionId: newInfo.id,
           currentExamQuestions: this.getCurrentExamQuestions()
         })
@@ -100,13 +100,10 @@ const mixinQuiz = {
       return this.$store.getters['quiz/quiz']
     },
     getCurrentExamQuestionIndexes () {
-      console.log('window.currentExamQuestionIndexes', window.currentExamQuestionIndexes)
       if (window.currentExamQuestionIndexes) {
         return window.currentExamQuestionIndexes
       }
       window.currentExamQuestionIndexes = JSON.parse(window.localStorage.getItem('currentExamQuestionIndexes'))
-      console.log('window', JSON.parse(window.localStorage.getItem('currentExamQuestionIndexes')))
-      console.log('window.currentExamQuestionIndexes', window.currentExamQuestionIndexes)
       return JSON.parse(window.localStorage.getItem('currentExamQuestionIndexes'))
     },
     setCurrentExamQuestions (currentExamQuestions) {
@@ -248,13 +245,13 @@ const mixinQuiz = {
                 Time.setStateOfExamCategories(examData.exam.categories)
                 const currentExamQuestions = that.getCurrentExamQuestions()
                 Time.setStateOfQuestionsBasedOnActiveCategory(examData.exam, currentExamQuestions)
-                that.$store.commit('updateQuiz', examData.exam)
+                that.$store.commit('quiz/updateQuiz', examData.exam)
                 that.setCurrentExamQuestions(currentExamQuestions)
                 that.loadCurrentQuestion(viewType)
               } else {
                 examData.exam = that.quiz
               }
-              that.$store.commit('mergeDbAnswersIntoLocalstorage', {
+              that.$store.commit('quiz/mergeDbAnswersIntoLocalstorage', {
                 dbAnswers: examData.userExamData,
                 exam_id: examData.exam.id
               })
@@ -325,7 +322,7 @@ const mixinQuiz = {
             examDataWithQuestions.id = examId
           }
 
-          that.$store.commit('updateQuiz', examDataWithQuestions)
+          that.$store.commit('quiz/updateQuiz', examDataWithQuestions)
         }
         that.loadExamExtraData(that.quiz, viewType)
         if (viewType !== 'results') {
@@ -341,7 +338,7 @@ const mixinQuiz = {
               })
               reject()
             }
-            that.$store.commit('mergeDbAnswersIntoLocalstorage', {
+            that.$store.commit('quiz/mergeDbAnswersIntoLocalstorage', {
               dbAnswers: response.data,
               exam_id: that.quiz.id
             })
@@ -374,7 +371,7 @@ const mixinQuiz = {
         this.setCurrentExamQuestions(currentExamQuestions)
       }
 
-      this.$store.commit('updateQuiz', quiz)
+      this.$store.commit('quiz/updateQuiz', quiz)
     },
     loadCurrentQuestion (viewType) {
       let questNumber = this.$route.params.questNumber
@@ -551,11 +548,11 @@ const mixinQuiz = {
         }
       }
 
-      this.$store.commit('updateCurrentQuestion', {
+      this.$store.commit('quiz/updateCurrentQuestion', {
         newQuestionId: currentQuestion.id,
         currentExamQuestions: this.getCurrentExamQuestions()
       })
-      if (parseInt(this.$route.params.questNumber) !== parseInt(questNumber) && this.$route.name !== 'onlineQuiz.konkoorView' && this.$route.name !== 'onlineQuiz.bubblesheet-view') {
+      if (parseInt(this.$route.params.questNumber) !== parseInt(questNumber) && this.$route.name !== 'konkoorView' && this.$route.name !== 'onlineQuiz.bubblesheet-view') {
         this.loadExamPageByViewType(this.quiz.id, questNumber, viewType)
       }
     },
@@ -576,7 +573,7 @@ const mixinQuiz = {
       } else if (type === 'konkoor') {
         this.$store.commit('AppLayout/updateDrawer', false)
         setTimeout(() => {
-          this.$router.push({ name: 'onlineQuiz.konkoorView', params: { quizId: this.quiz.id } })
+          this.$router.push({ name: 'konkoorView', params: { quizId: this.quiz.id } })
         }, 200)
       }
     },

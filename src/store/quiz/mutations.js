@@ -132,7 +132,7 @@ export function changeQuestionBookmark (state, payload) {
   if (!examId || !questionId) {
     return
   }
-  this.commit('changeQuestion_RefreshQuestionObject', payload)
+  this.commit('changeQuestionRefreshQuestionObject', payload)
   // TODO --> 'vue.set'
   // Vue.set(state.userQuizListData[examId][questionId], 'bookmarked', payload.bookmarked)
 }
@@ -143,7 +143,7 @@ export function changeQuestionSelectChoice (state, payload) {
   if (!examId || !questionId) {
     return
   }
-  this.commit('changeQuestion_RefreshQuestionObject', payload)
+  this.commit('changeQuestionRefreshQuestionObject', payload)
   let answeredAt = Time.now()
   if (payload.selected_at) {
     answeredAt = payload.selected_at
@@ -160,7 +160,7 @@ export function changeQuestionStatus (state, payload) {
   if (!examId || !questionId) {
     return
   }
-  this.commit('changeQuestion_RefreshQuestionObject', payload)
+  this.commit('changeQuestionRefreshQuestionObject', payload)
   // TODO --> 'vue.set'
   // Vue.set(state.userQuizListData[examId][questionId], 'status', payload.status)
 }
@@ -171,7 +171,7 @@ export function setUserQuizListData (state, payload) {
   if (!examId || !questionId) {
     return
   }
-  this.commit('changeQuestion_RefreshQuestionObject', payload)
+  this.commit('changeQuestionRefreshQuestionObject', payload)
   // TODO --> 'vue.set'
   // Vue.set(state.userQuizListData[examId], questionId, {
   //   answered_at: payload.answered_at,

@@ -25,17 +25,17 @@ const mixinUserActionOnQuestion = {
       return this.sendUserQuestionsDataToServer(examUserId, userExamData, questionId, actionType)
     },
     beforeUserActionOnQuestion (examId, questionId) {
-      this.$store.commit('updateCurrentQuestion', {
+      this.$store.commit('quiz/updateCurrentQuestion', {
         newQuestionId: questionId,
         currentExamQuestions: this.getCurrentExamQuestions()
       })
-      this.$store.commit('changeQuestion_RefreshQuestionObject', {
+      this.$store.commit('quiz/changeQuestionRefreshQuestionObject', {
         exam_id: examId,
         question_id: questionId
       })
     },
     afterUserActionOnQuestion () {
-      this.$store.commit('updateUserQuizListDataExam', this.userQuizListData)
+      this.$store.commit('quiz/updateUserQuizListDataExam', this.userQuizListData)
     },
     getUserQuestionDataFromLocalstorage (userExamData, questionId) {
       // find question
@@ -84,26 +84,26 @@ const mixinUserActionOnQuestion = {
         newAnsweredChoiceId = null
       } else if (oldStatus === 'x') {
         const newState = ''
-        this.$store.commit('changeQuestion_Status', {
+        this.$store.commit('quiz/changeQuestion_Status', {
           exam_id: examId,
           question_id: questionId,
           status: newState
         })
       }
-      this.$store.commit('changeQuestion_SelectChoice', {
+      this.$store.commit('quiz/changeQuestionSelectChoice', {
         exam_id: examId,
         question_id: questionId,
         answered_choice_id: newAnsweredChoiceId
       })
     },
     userActionOnQuestion_bookmark (examId, questionId, userQuestionData) {
-      this.$store.commit('changeQuestion_RefreshQuestionObject', {
+      this.$store.commit('quiz/changeQuestionRefreshQuestionObject', {
         exam_id: examId,
         question_id: questionId
       })
       const oldBookmarked = userQuestionData.bookmarked
       const newBookmark = !(oldBookmarked)
-      this.$store.commit('changeQuestion_Bookmark', {
+      this.$store.commit('quiz/changeQuestionBookmark', {
         exam_id: examId,
         question_id: questionId,
         bookmarked: newBookmark
@@ -116,13 +116,13 @@ const mixinUserActionOnQuestion = {
       if (oldQuestion && newStatus === oldStatus) {
         newStatus = ''
       } else if (newStatus === 'x') {
-        this.$store.commit('changeQuestion_SelectChoice', {
+        this.$store.commit('quiz/changeQuestionSelectChoice', {
           exam_id: examId,
           question_id: questionId,
           answered_choice_id: null
         })
       }
-      this.$store.commit('changeQuestion_Status', {
+      this.$store.commit('quiz/changeQuestionStatus', {
         exam_id: examId,
         question_id: questionId,
         status: newStatus
