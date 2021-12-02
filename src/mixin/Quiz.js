@@ -7,8 +7,8 @@ import API_ADDRESS from 'src/api/Addresses'
 import { Exam } from '../models/Exam'
 import { QuestCategoryList } from '../models/QuestCategory'
 // todo : jquery
-import $ from 'jquery'
-import { QuestionList } from '../models/Question'
+// import $ from 'jquery'
+// import { QuestionList } from '../models/Question'
 import ExamData from 'src/assets/js/ExamData'
 // import mixinAuth from 'src/mixin/Auth'
 
@@ -211,6 +211,7 @@ const mixinQuiz = {
     },
 
     startExam (examId, viewType) {
+      console.log('----------examId----------', examId)
       if (!Assistant.getId(examId)) {
         return
       }

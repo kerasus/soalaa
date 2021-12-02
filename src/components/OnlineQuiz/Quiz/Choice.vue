@@ -9,7 +9,7 @@
       <div
         class="answer-text renderedPanel"
       >
-        <vue-katex :input="choice.title" :ltr="!isRtl" />
+<!--        <vue-katex :input="choice.title" :ltr="!isRtl" />-->
       </div>
       <div class="answer-checkbox">
         <v-checkbox
@@ -24,12 +24,12 @@
 <script>
 import { mixinQuiz } from 'src/mixin/Mixins'
 import 'src/assets/scss/markdownKatex.scss'
-import VueKatex from 'src/components/VueKatex'
+// import VueKatex from 'src/components/VueKatex'
 
 export default {
   name: 'Choice',
   components: {
-    VueKatex
+    // VueKatex
   },
   mixins: [mixinQuiz],
   props: ['choice', 'questionId', 'isRtl'],

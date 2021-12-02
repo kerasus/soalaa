@@ -104,7 +104,7 @@
                     v-if="currentQuestion.in_active_category"
                     class="renderedPanel"
                   >
-                    <vue-katex :input="currentQuestion.statement" />
+<!--                    <vue-katex :input="currentQuestion.statement" />-->
                   </div>
                   <v-sheet
                     v-if="!currentQuestion.in_active_category"
@@ -185,13 +185,13 @@ import Choice from 'src/components/OnlineQuiz/Quiz/Choice'
 import Timer from 'src/components/OnlineQuiz/Quiz/Timer/Timer'
 import { mixinAuth, mixinQuiz, mixinUserActionOnQuestion, mixinDrawer, mixinWindowSize } from 'src/mixin/Mixins'
 import Assistant from 'src/plugins/assistant'
-import VueKatex from 'src/components/VueKatex'
+// import VueKatex from 'src/components/VueKatex'
 
 export default {
   name: 'AlaaView',
   components: {
     Choice,
-    VueKatex,
+    // VueKatex,
     Timer
   },
   mixins: [mixinAuth, mixinQuiz, mixinUserActionOnQuestion, mixinDrawer, mixinWindowSize],
