@@ -146,7 +146,7 @@ const routes = [
       {
         path: '/onlineQuiz/alaaView/:quizId/:questNumber',
         name: 'onlineQuiz.alaaView',
-        component: () => import('pages/user/exam/participate/AlaaView'),
+        component: () => import('pages/User/exam/participate/AlaaView'),
         meta: {
           middlewares: [auth]
         }
