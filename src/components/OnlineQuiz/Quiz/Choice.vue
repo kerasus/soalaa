@@ -1,29 +1,32 @@
 <template>
-  <v-col
-    :md="6"
-    :cols="12"
-    class="answer-box"
-    @click="answerClicked"
-  >
-    <v-sheet :class="{ 'answer-sheet': true, active: isSelected }">
-      <div
-        class="answer-text renderedPanel"
-      >
-<!--        <vue-katex :input="choice.title" :ltr="!isRtl" />-->
-      </div>
-      <div class="answer-checkbox">
-        <v-checkbox
-          v-model="isSelected"
-          disabled
-        />
-      </div>
-    </v-sheet>
-  </v-col>
+  نیتدرنسیترذتبرپبتدرزذیتن
+<!--  <v-col-->
+<!--    :md="6"-->
+<!--    :cols="12"-->
+<!--    class="answer-box"-->
+<!--    @click="answerClicked"-->
+<!--  >-->
+<!--&lt;!&ndash;    :class="{ 'answer-sheet': true, active: isSelected }"&ndash;&gt;-->
+<!--    <v-sheet >-->
+<!--      <div-->
+<!--        class="answer-text renderedPanel"-->
+<!--      >-->
+<!--&lt;!&ndash;        <vue-katex :input="choice.title" :ltr="!isRtl" />&ndash;&gt;-->
+<!--      </div>-->
+<!--      <div class="answer-checkbox">-->
+<!--        <v-checkbox-->
+
+<!--          disabled-->
+<!--        />-->
+<!--&lt;!&ndash;        v-model="isSelected"&ndash;&gt;-->
+<!--      </div>-->
+<!--    </v-sheet>-->
+<!--  </v-col>-->
 </template>
 
 <script>
 import { mixinQuiz } from 'src/mixin/Mixins'
-import 'src/assets/scss/markdownKatex.scss'
+// import 'src/assets/scss/markdownKatex.scss'
 // import VueKatex from 'src/components/VueKatex'
 
 export default {
