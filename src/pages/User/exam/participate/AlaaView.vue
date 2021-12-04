@@ -9,82 +9,87 @@
       <div class="column" :style="{ 'min-width': '100%' }"
       >
         <q-page
-          class="d-flex align-stretch"
+          class="q-flex align-stretch"
           width="100%"
           color="--background-2"
             :style="{ 'min-height': '100%' }"
         >
           <div class="row">
             <!--&lt;!&ndash;              v-if= "getQuestionNumberFromId(currentQuestion.id) !== 1"&ndash;&gt;-->
-            <div class="column btnpre col-1 justify-center "
+            <div class="column btnpre col-md-1 justify-center "
             >
               <q-btn
-                :min-width="64"
-                class="px-4"
-                :height="700"
-                :elevation="0"
+                flat
+                class="q-px-none"
+                :style="{ 'width':'60px','height': '400px' }"
+                no-shadow
                 @click="goToPrevQuestion('onlineQuiz.alaaView')"
               >
-                <q-icon :size="40"
-                        name="mdi-chevron-right"/>
+                <q-icon
+                  size="40px"
+                  name="mdi-chevron-right"
+                />
               </q-btn>
             </div>
-            <div class="column col-10 q-py-sm q-mx-none">
+            <div class="column col-md-10 q-py-sm q-mx-none">
               <div class="row question-header">
                 <div class="question-number">
                   <!--                    v-if="currentLesson"-->
                   <!--                    getQuestionNumberFromId(currentQuestion.id)-->
                   <p>
-                    {{ "salam" }}
-                    - // currentLesson.title
+                    {{ currentLesson.title}}
+                    -
                     سوال شماره
-
                     {{  "2" }}
                   </p>
                 </div>
-                <div class="question-buttons">
+                <div class="question-buttons ">
                   <q-btn
-                    icon
-
+                    round
+                    flat
                   >
 <!--                    @click="changeStatus(currentQuestion.id, 'o')"-->
 <!--                    v-if="!getUserQuestionData(quiz.id, currentQuestion.id) || getUserQuestionData(quiz.id, currentQuestion.id).status !== 'o'"-->
                     <q-icon
-                      color="#888"
-                      size="30"
+                      color="grey-7"
+                      size="30px"
                       name="mdi-checkbox-blank-circle-outline"
                     />
 <!--                    v-if="getUserQuestionData(quiz.id, currentQuestion.id) && getUserQuestionData(quiz.id, currentQuestion.id).status === 'o'"-->
                     <q-icon
-                      color="--primary-2"
-                      :size="80"
+                      v-if="false "
+                      color="amber"
+                      size="30px"
                       name="mdi-checkbox-blank-circle"
                     />
                   </q-btn>
                   <q-btn
-                    icon
+                    round
+                    flat
                   >
 <!--                    @click="changeStatus(currentQuestion.id, 'x')"-->
                     <!-- :color="getUserQuestionData(quiz.id, currentQuestion.id) && getUserQuestionData(quiz.id, currentQuestion.id).status === 'x' ? 'red' : '#888'"-->
                     <q-icon
-                      :size="30"
+                      size="30px"
+                      color="grey-7"
                       name="mdi-close"
                     />
                   </q-btn>
 <!--&lt;!&ndash;                  @click="changeBookmark(currentQuestion.id)"&ndash;&gt;-->
                   <q-btn
-                    icon
                   >
 <!--      v-if="!getUserQuestionData(quiz.id, currentQuestion.id) || !getUserQuestionData(quiz.id, currentQuestion.id).bookmarked"-->
                     <q-icon
-                      :size="30"
-                      color="#888"
+                      v-if="false"
+                      size="30px"
+                      color="grey-7"
                       name="mdi-bookmark-outline"
                     />
 <!--                    v-if="getUserQuestionData(quiz.id, currentQuestion.id) && getUserQuestionData(quiz.id, currentQuestion.id).bookmarked"-->
                     <q-icon
-                      color="--accent-1"
-                      :size="30"
+                      flat
+                      color="blue-6"
+                      size="30px"
                       name="mdi-bookmark"
                      />
                   </q-btn>
@@ -98,6 +103,7 @@
                   <div
                     class="renderedPanel"
                   >
+                    75 درصد دانش‌آموزان مدرسه‌ای عضو حداقل یکی از دو تیم فوتبال و بسکتبال هستند و 50 درصد آن‌ها عضو حداکثر یکی از این دو تیم هستند. چند درصد از آن‌ها عضو فقط یک تیم هستند؟
                     <!--                    <vue-katex :input="currentQuestion.statement" />-->
                   </div>
 <!--                  v-if="!currentQuestion.in_active_category"-->
@@ -130,19 +136,18 @@
 
               </div>
             </div>
-            <div class="column btnpre col-1 justify-center d-none"
-              :md="1"
-
+            <div class="column btnpre col-md-1 justify-center d-none"
             >
 <!--              v-if="getQuestionNumberFromId(currentQuestion.id) !== getCurrentExamQuestionsInArray().length"-->
               <q-btn
-                :min-width="64"
-                class="px-0"
-                :height="400"
-                :elevation="0"
+                flat
+                class="q-px-none"
+                :style="{ 'width':'60px','height': '400px' }"
+                no-shadow
                 @click="goToNextQuestion('onlineQuiz.alaaView')"
               >
-                <q-icon :size="40"
+                <q-icon
+                  size="40px"
                   name="mdi-chevron-left"
                 />
               </q-btn>
@@ -269,12 +274,13 @@ img {
 
 <style scoped>
 .question-buttons button {
-  margin-right: 2px;
+  margin-left: 15px;
 }
 
 .question-number p {
   margin-bottom: 0;
   line-height: 40px;
+  font-size: 16px;
 }
 
 .question-header {
@@ -285,13 +291,18 @@ img {
   position: sticky;
   top: 60px;
   z-index: 1;
-  padding-top: 20px;
+  margin: -12px -12px -12px -12px;
   background: #f1f1f1;
 }
 
 .question-body {
   margin-top: 50px;
+  font-size: 16px;
+  text-rendering: optimizeLegibility;
   line-height: 35px;
+  display: inline-block;
+  direction: inherit;
+  box-sizing: inherit;
   color: var(--text-2);
 }
 
@@ -325,12 +336,14 @@ img {
 
 .quiz-page {
   background: #f1f1f1;
+  width: 100%;
   height: 100%;
   padding: 12px 12px 12px 12px;
 }
 .btnpre {
   padding: 12px 12px 12px 12px;
   flex-direction: column;
+
 }
 
 .user-name {
