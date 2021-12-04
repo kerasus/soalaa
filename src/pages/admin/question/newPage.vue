@@ -379,13 +379,14 @@ export default {
          formData.append('answer_photos[' + key + ']', item)
        })
        formData.append('type_id', this.optionQuestionId)
-       formData.append('exams', JSON.stringify(this.currentQuestion.exams))
-       console.log( 'type of :',typeof (this.currentQuestion.exams))
-       console.log(formData.get('exams'))
-       // formData.append('exams', this.currentQuestion.exams)
-       // this.currentQuestion.exams.forEach((item ,key) => {
-       //   formData.append('exams[' + key + ']', item);
-       // })
+      // formData.append('exams', JSON.stringify(this.currentQuestion.exams))
+       formData.append('exams', this.currentQuestion.exams)
+       this.currentQuestion.exams.forEach((item ,key) => {
+         formData.append('exams[' + key + '][id]', item.id);
+         formData.append('exams[' + key + '][order]',item.order);
+         formData.append('exams[' + key + '][sub_category_id]', item.sub_category_id);
+       })
+      console.log('result  : ',formData.get('exams'))
        axios.post(API_ADDRESS.question.create, formData)
            .then((response) => {
              const questionId = response.data.data.id
