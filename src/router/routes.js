@@ -151,7 +151,8 @@ const routes = [
     component: () => import('pages/Auth/Login.vue')
   },
   {
-    path: '/konkoorView/:examId',
+    // path: '/konkoorView/:quizId',
+    path: '/konkoorView',
     name: 'konkoorView',
     component: () => import('src/pages/User/exam/participate/konkoorView'),
     // component: () => import('src/components/Menu/topMenu/onlineQuizTopMenu'),
@@ -169,8 +170,8 @@ const routes = [
   },
   // TODO following routes should be remove
   {
-    path: '/user_exam_list',
-    name: 'user.exam.list',
+    path: '/test',
+    name: 'onlineQuiz.alaaView',
     component: () => import('pages/Auth/test'),
     meta: {
       middlewares: [auth]

@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div v-intersect="test">
     <q-markup-table
       separator="none"
       class="question-table"
@@ -61,7 +61,7 @@
             </span>
             <span>
               <q-btn
-                v-if="getChoiceStatus() === 'x'"
+                v-if="getChoiceBookmark()"
                 text-color="blue"
                 icon="mdi-bookmark"
                 :size="24"
@@ -92,7 +92,7 @@
           :md="choiceClass"
           class="choice renderedPanel"
           :class="{ active: getAnsweredChoiceId() === choice.id, ltr: isRtl }"
-          @click="answerClickedd({ questionId: source.id, choiceId: choice.id})"
+          @click="clickOnAnswer({ questionId: source.id, choiceId: choice.id})"
         >
           <div
             dir="rtl"
@@ -192,7 +192,6 @@ export default {
   mounted () {
     this.observer = new IntersectionObserver(this.intersectionObserver, { threshold: [0.7, 0.75, 0.8] })
     this.observer.observe(this.$el)
-    // this.isRtl = this.isLtrString(this.source.statement)
   },
   unmounted () {
     this.observer.disconnect()
@@ -234,20 +233,12 @@ export default {
         number: this.getQuestionNumberFromId(this.source.id)
       })
     },
-    answerClickedd (payload) {
+    clickOnAnswer (payload) {
       this.answerClicked(payload)
     },
     intersectionObserver (entries) {
       // eslint-disable-next-line vue/no-mutating-props
       this.source.isInView = entries[0].intersectionRatio >= 0.75
-    },
-    onIntersect (entries) {
-      // eslint-disable-next-line vue/no-mutating-props
-      this.source.isInView = entries[0].intersectionRatio >= 0.75
-    },
-    choiceClicked (questionId, choiceId) {
-      this.changeQuestion(questionId)
-      this.answerClicked({ questionId, choiceId })
     },
     removeErab (string) {
       if (!string || string.length === 0) {
@@ -273,20 +264,6 @@ export default {
       })
       return largestChoice
     }
-    // choiceClass(source) {
-    //   let largestChoice = this.getLargestChoice(source.choices)
-    //   let largestChoiceWidth = this.questionsColumn.clientWidth / largestChoice
-    //   if (largestChoiceWidth > 48) {
-    //     return 3
-    //   }
-    //   if (largestChoiceWidth > 24) {
-    //     return 6
-    //   }
-    //   if (largestChoiceWidth > 12) {
-    //     return 12
-    //   }
-    //   return 12
-    // },
   }
 }
 </script>

@@ -64,8 +64,17 @@
     <div
       class="row timer-row"
     >
-      <div class="col"></div>
-      <div class="col">
+      <q-btn
+        v-if="false"
+        class="end-exam-btn"
+        @click="getConfirmation"
+      >
+        ارسال پاسخنامه
+      </q-btn>
+      <div
+        class="col"
+        :class="{ 'high-z-index': timerIsOpen}"
+      >
         <Timer
           :daftarche="'عمومی'"
           :quiz-started-at="1607963897"
@@ -85,7 +94,7 @@ import { mixinAuth, mixinQuiz, mixinUserActionOnQuestion, mixinWindowSize } from
 import Timer from 'src/components/OnlineQuiz/Quiz/timer/timer'
 import BubbleSheet from 'src/components/OnlineQuiz/Quiz/bubbleSheet/bubbleSheet'
 import { Exam } from 'src/models/Exam'
-import Assistant from 'src/plugins/assistant'
+// import Assistant from 'src/plugins/assistant'
 import TopMenu from 'src/components/Menu/topMenu/onlineQuizTopMenu'
 export default {
   name: 'konkoorView',
@@ -121,21 +130,31 @@ export default {
   },
   created () {
     this.getUser()
-    // this.startExam('6135be32e0db6947171ef9a0', 'KonkoorView')
+    // const that = this
+    // this.startExam(this.$route.params.quizId, 'KonkoorView')
     //   .then(() => {
-    //     // that.loadFirstActiveQuestionIfNeed()
+    //     that.$store.dispatch('loading/overlayLoading', false)
+    //   })
+    //   .catch((error) => {
+    //     Assistant.reportErrors(error)
+    //     that.$q.notify({
+    //       message: 'مشکلی در دریافت اطلاعات آژمون رخ داده است. لطفا دوباره امتحان کنید.',
+    //       type: 'negative'
+    //     })
     //   })
     // if (this.windowSize.x > 959) {
     //   this.changeAppBarAndDrawer(false)
     // } else {
     //   this.$router.push({
     //     name: 'onlineQuiz.alaaView',
+    //     // TODO --> why 313 ?
     //     params: { quizId: 313, questNumber: this.$route.params.quizId }
     //   })
     // }
     // if (!this.questions.length) {
     //   this.questions = this.getCurrentExamQuestionsInArray()
     // }
+    // console.log('qqqqq', this.questions)
   },
   mounted () {
     // this.setHeights()
@@ -153,39 +172,12 @@ export default {
       this.user = this.$store.getters['Auth/user']
       return this.user
     },
-    loadFirstActiveQuestionIfNeed () {
-      const activeCcategory = this.quiz.getFirstActiveCategory()
-      if (!activeCcategory) {
-        this.loadFirstQuestion()
-      } else {
-        if (
-          Assistant.getId(this.currentQuestion.sub_category.category_id) !== Assistant.getId(activeCcategory.id) &&
-          activeCcategory.sub_categories.list.length > 0
-        ) {
-          const questionsOfSubcategory = this.getQuestionsOfSubcategory(activeCcategory.sub_categories.list[0].id)
-          if (questionsOfSubcategory.length > 0) {
-            this.currentQuestion = questionsOfSubcategory[0]
-          }
-        }
-      }
-
-      this.scrollTo(this.currentQuestion.id)
-
-      // if (!this.currentQuestion.in_active_category) {//category_id
-      //     let firstActiveQuestion = this.quiz.questions.getFirstActiveQuestion()
-      //     if (!firstActiveQuestion) {
-      //         this.loadFirstQuestion()
-      //     } else {
-      //         this.changeQuestion(firstActiveQuestion.id)
-      //     }
-      //     this.scrollTo(this.currentQuestion.id)
-      // }
-    },
     timerOpen (value) {
       this.timerIsOpen = value
     },
     getConfirmation () {
       const that = this
+      // TODO --> conrim in store should be fix
       this.$store.commit('AppLayout/showConfirmDialog', {
         message: 'از ارسال پاسخ ها اطمینان دارید؟',
         button: {
@@ -204,20 +196,18 @@ export default {
       const that = this
       this.quiz.sendAnswersAndFinishExam()
         .then(() => {
-          that.$store.commit('clearExamData', that.quiz.id)
-          that.$notify({
-            group: 'notifs',
-            text: 'اطلاعات آزمون شما ثبت شد.',
-            type: 'success'
+          that.$store.commit('quiz/clearExamData', that.quiz.id)
+          that.$q.notify({
+            message: 'اطلاعات آزمون شما ثبت شد.',
+            type: 'positive'
           })
           that.$router.push({ name: 'user.exam.list' })
         })
         .catch(() => {
-          that.$notify({
-            group: 'notifs',
+          that.$q.notify({
             title: 'توجه!',
-            text: 'مشکلی در ثبت اطلاعات آزمون شما رخ داده است. لطفا تا قبل از ساعت 24 اقدام به ارسال مجدد پاسخنامه نمایید.',
-            type: 'warn',
+            message: 'مشکلی در ثبت اطلاعات آزمون شما رخ داده است. لطفا تا قبل از ساعت 24 اقدام به ارسال مجدد پاسخنامه نمایید.',
+            type: 'warning',
             duration: 30000
           })
           that.$router.push({ name: 'user.exam.list' })
@@ -243,11 +233,6 @@ export default {
       this.$store.commit('AppLayout/updateAppBarAndDrawer', state)
     },
     changeCurrentQuestionIfScrollingIsDone () {
-      // console.Log('time since last: ', this.timePassedSinceLastScroll)
-      // if (startIndex !== this.lastTimeScrollRange.start || endIndex !== this.lastTimeScrollRange.end) {
-      //     this.lastTimeScrollRange.start = startIndex
-      //     this.lastTimeScrollRange.end = endIndex
-      // }
       if (this.timePassedSinceLastScroll >= 1000) {
         this.changeCurrentQuestionToFirstQuestionInView()
         this.timePassedSinceLastScroll = 0
@@ -295,7 +280,7 @@ export default {
     getFirstInViewQuestionNumber () {
       let firstQuestionInView
       for (let i = this.renderedQuestions.startIndex; i <= this.renderedQuestions.endIndex; i++) {
-        if (this.questions[i].isInView === true) {
+        if (this.questions[i].isInView) {
           firstQuestionInView = this.questions[i]
           break
         }
@@ -356,6 +341,21 @@ export default {
     position: absolute;
     bottom: 12px;
     right: 100px;
+    .end-exam-btn {
+      position: absolute;
+      bottom: 0;
+      background: rgb(76, 175, 80) !important;
+      color: #fff;
+      font-weight: bold;
+      font-size: 16px;
+      height: 103px !important;
+      box-shadow: 0px 3px 3px -2px rgb(0 0 0 / 20%), 0px 3px 4px 0px rgb(0 0 0 / 14%), 0px 1px 8px 0px rgb(0 0 0 / 12%);
+      width: 200px;
+      border-radius: 20px 20px 0 0;
+    }
+    .high-z-index {
+      z-index: 3;
+    }
   }
 }
 </style>

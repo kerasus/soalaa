@@ -157,24 +157,18 @@ const mixinQuiz = {
     },
     getCurrentExamQuestionsInArray () {
       let currentExamQuestionsArray = []
-      console.log('1')
       if (this.quiZ !== {}) {
         const currentExamQuestionIndexes = this.getCurrentExamQuestionIndexes()
         const currentExamQuestions = this.getCurrentExamQuestions()
-        console.log('2')
         if (!currentExamQuestionIndexes) {
-          console.log('3')
           return currentExamQuestionsArray
         }
-        console.log('33')
         const currentExamQuestionIndexesArray = Object.keys(currentExamQuestionIndexes)
         currentExamQuestionIndexesArray.forEach((item) => {
-          console.log('4')
           const questionId = currentExamQuestionIndexes[item]
           currentExamQuestionsArray.push(currentExamQuestions[questionId])
         })
       } else {
-        console.log('5')
         currentExamQuestionsArray = this.quiZ
       }
       console.log('currentExamQuestionsArray', currentExamQuestionsArray)
@@ -226,7 +220,7 @@ const mixinQuiz = {
         if (that.needToLoadQuizData()) {
           window.currentExamQuestions = null
           window.currentExamQuestionIndexes = null
-          // that.$store.commit('AppLayout/updateOverlay', { show: true, loading: true, text: '' })
+          // that.$store.dispatch('loading/overlay', true)
           examData.getExamDataAndParticipate(examId)
           examData.loadQuestionsFromFile()
         } else {

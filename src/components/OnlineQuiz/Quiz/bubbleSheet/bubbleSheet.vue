@@ -118,10 +118,8 @@ export default {
       const groups = []
       const chunk = 10
       let array
-      console.log('questions', this.questions)
-      if (this.questions === null) {
+      if (!this.questions) {
         array = this.getCurrentExamQuestionsInArray()
-        console.log('array', array)
         for (let i = 0, j = array.length; i < j; i += chunk) {
           groups.push(array.slice(i, i + chunk))
         }
@@ -131,7 +129,6 @@ export default {
           groups.push(array.slice(i, i + chunk))
         }
       }
-      console.log('groups', groups)
       return groups
     }
   },
@@ -158,7 +155,6 @@ export default {
       if (this.showDateOfAnsweredAt) {
         formatString = 'HH:mm:ss jYYYY/jMM/jDD'
       }
-
       return moment(new Date(answeredAt)).format(formatString)
     },
     checkForShowDateOfAnsweredAt () {
@@ -230,9 +226,7 @@ export default {
     }
   },
   'windowSize.x': function () {
-    // this.$refs.bubbleSheet.offsetHeight()
     this.$refs.bubbleSheet.style.height = this.questionListHeight() - 24 + 'px'
-    // $('.questions-list').height(this.questionListHeight())
   }
 }
 </script>
