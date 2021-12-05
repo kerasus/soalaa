@@ -200,6 +200,51 @@
                 isRtl: false
             }
         },
+      sockets: {
+        // connecting() {
+        //   this.onSocketStatusChange('on connection')
+        // },
+        // disconnect() {
+        //   this.onSocketStatusChange('Socket to break off')
+        //   // this.isConnected = false;
+        // },
+        // connect_failed() {
+        //   this.onSocketStatusChange('connection failed')
+        // },
+        // connect() {
+        //   this.onSocketStatusChange('socket connected')
+        //   // Fired when the socket connects.
+        //   // this.isConnected = true
+        // },
+
+
+        // Fired when the server sends something on the "messageChannel" channel.
+        messageChannel() {
+          // console.log('messageChannel: ', data)
+        },
+        'question.file-link:update': function (data) {
+          console.log('question.file-link:update: ', data)
+        },
+        questionFileLinkUpdate (data) {
+          console.log('questionFileLinkUpdate: ', data)
+          // let that = this
+          // this.reloadQuestionFile ('questionsFileUrl', 'onlineQuiz.alaaView', this.$route.params.quizId)
+          //     .then(() => {
+          //       that.isRtl = !that.isLtrString(that.currentQuestion.statement)
+          //       that.$store.commit('AppLayout/updateOverlay', {show: false, loading: false, text: ''})
+          //     })
+          //     .catch( (error) => {
+          //       Assistant.reportErrors(error)
+          //       that.$notify({
+          //         group: 'notifs',
+          //         title: 'توجه!',
+          //         text: 'مشکلی در دریافت اطلاعات آژمون رخ داده است. لطفا دوباره امتحان کنید.',
+          //         type: 'error'
+          //       })
+          //       that.$router.push({ name: 'user.exam.list'})
+          //     })
+        }
+      },
         mounted() {
             let that = this
             this.showAppBar()
