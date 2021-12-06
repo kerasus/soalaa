@@ -1,214 +1,198 @@
 <template>
-  <div class="row">
-      <div class="col-12 col-md-3 col-sm-3">
-      <div class="form-group m-form__group ">
-        <q-select
-          v-model="selectedGender"
-          :options="genders"
-          label="جنسیت"
-          option-label="title"
-          option-value="title"
-        />
-      </div>
-      </div>
-      <div class="col-12 col-md-3 col-sm-3">
-        <q-select
-          v-model="selectedProvince"
-          label="استان"
-          :options="provinces"
-          option-label="title"
-          option-value="title"
-          no-data-text="داده ای یافت نشد"
-        />
+  <div class="row justify-center">
+    <div class="col-9 ">
+      <div class="row q-mb-xl justify-center ">
+        <div class="col-12 col-md-3 col-sm-3  q-pr-md">
+          <div class="form-group m-form__group ">
+            <q-select
+              v-model="selectedGender"
+              :options="genders"
+              label="جنسیت"
+              color="blue-8"
+              option-label="title"
+              option-value="title"
+            />
+          </div>
         </div>
-      <div class="col-12 col-md-3 col-sm-3">
-        <q-select
-          v-model="selectedCity"
-          label="شهر"
-          :options="citiesForSelectedProvince"
-          option-label="title"
-          option-value="title"
-          no-data-text="داده ای یافت نشد"
-        />
+        <div class="col-12 col-md-3 col-sm-3  q-px-md">
+          <q-select
+            v-model="selectedProvince"
+            label="استان"
+            color="blue-8"
+            :options="provinces"
+            option-label="title"
+            option-value="title"
+            no-data-text="داده ای یافت نشد"
+          />
+        </div>
+        <div class="col-12 col-md-3 col-sm-3  q-px-md">
+          <q-select
+            v-model="selectedCity"
+            label="شهر"
+            color="blue-8"
+            :options="citiesForSelectedProvince"
+            option-label="title"
+            option-value="title"
+            no-data-text="داده ای یافت نشد"
+          >
+            <template v-slot:no-option>
+              <q-item>
+                <q-item-section class="text-grey">
+                  داده ای یافت نشد
+                </q-item-section>
+              </q-item>
+            </template>
+          </q-select>
+        </div>
+        <div class="col-12 col-md-3 col-sm-3 filter-btn  q-px-md">
+          <q-btn
+            rounded
+            color="blue-8"
+            padding="7px 20px"
+            @click="DoFilter"
+          >
+            اعمال فیلتر
+          </q-btn>
+        </div>
       </div>
-    <div class="col-12 col-md-3 col-sm-3 filter-btn">
-      <q-btn
-        rounded
-        color="primary"
-        width="120px"
-        @click="DoFilter"
-      >
-        اعمال فیلتر
-      </q-btn>
     </div>
- </div>
-<!--   -------------------------------------- -------------------------------------------------------------->
-  <div class="row">
-    <div class="col">
-      <q-card>
-      <q-tabs
-        v-model="tabs"
-        align="justify"
+  </div>
+  <!--   -------------------------------------- -------------------------------------------------------------->
+  <div class="row justify-center">
+    <div class="col-9">
+      <q-card
+        flat
       >
-        <q-tab name="rank">
-          کارنامه رتبه محور
-        </q-tab>
-        <q-tab name="lesson">
-          کارنامه درس محور
-        </q-tab>
-      </q-tabs>
+        <q-tabs
+          v-model="tabs"
+          class="bg-deep-purple-14 text-white shadow-2"
+          content-class="tabs-content"
+        >
+          <q-tab name="rank">
+            کارنامه رتبه محور
+          </q-tab>
+          <q-tab name="lesson">
+            کارنامه درس محور
+          </q-tab>
+        </q-tabs>
         <q-separator></q-separator>
         <q-tab-panels v-model="tabs">
           <q-tab-panel name="rank">
-<!--           <q-table-->
-<!--             separator="cell"-->
-<!--           >-->
-<!--             <template v-slot:header="props">-->
-<!--               <q-tr :props="props">-->
-<!--                 <q-th-->
-<!--                   v-for="(item, index) in results[0].sub_category"-->
-<!--                   :key="'headTitle_'+item.sub_category_order+'_'+index"-->
-<!--                   colspan="3"-->
-<!--                   class="text-center"-->
-<!--                 >-->
-<!--                   {{ item.sub_category }}-->
-<!--                 </q-th>-->
-<!--               </q-tr>-->
-<!--               <q-tr >-->
-<!--                 <q-th> رتبه کشوری</q-th>-->
-<!--                 <q-th> نام و نام خانوادگی</q-th>-->
-<!--                 <q-th>  استان</q-th>-->
-<!--                 <q-th>-->
-<!--                   شهر-->
-<!--                 </q-th>-->
-<!--                 <q-th>-->
-<!--                   مشاهده کارنامه-->
-<!--                 </q-th>-->
-<!--                 <template-->
-<!--                   v-for="(item, index) in results[0].sub_category"-->
-<!--                 >-->
-<!--                   <q-th-->
-<!--                     :key="'headColumns_percent_'+item.sub_category_order + '-' + index"-->
-<!--                     class="bordered-right"-->
-<!--                   >-->
-<!--                     درصد-->
-<!--                   </q-th>-->
-<!--                   <q-th :key="'headColumns_taraz_'+item.sub_category_order + '-' + index">-->
-<!--                     تراز-->
-<!--                   </q-th>-->
-<!--                   <q-th-->
-<!--                     :key="'headColumns_rank_'+item.sub_category_order + '-' + index"-->
-<!--                     class="bordered-left"-->
-<!--                   >-->
-<!--                     رتبه-->
-<!--                   </q-th>-->
-<!--                 </template>-->
-<!--               </q-tr>-->
-<!--             </template>-->
-<!--             <template v-slot:body="props">-->
-
-<!--             </template>-->
-<!--           </q-table>-->
-            <q-markup-table>
-              <thead>
-                <tr>
-                  <th>
-                  </th>
-                  <th
-                    v-for="(item, index) in results[0].sub_category"
-                    :key="'headTitle_'+item.sub_category_order+'_'+index"
+            <div
+              class=""
+            >
+              <q-markup-table
+                class="my-sticky-header tabs-content"
+                id="scroll-observer scroll-target-id"
+              >
+                <q-infinite-scroll
+                  @load="getTableData"
+                  :offset="250"
+                  scroll-target="#scroll-target-id"
+                >
+                  <thead
+                    v-if="results[0]"
+                  >
+                  <tr>
+                    <th colspan="5">
+                    </th>
+                    <th
+                      v-for="(item, index) in results[0].sub_category"
+                      :key="'headTitle_'+item.sub_category_order+'_'+index"
+                      colspan="3"
+                    >
+                      {{ item.sub_category }}
+                    </th>
+                  </tr>
+                  <tr>
+                    <th>
+                      رتبه کشوری
+                    </th>
+                    <th>
+                      نام و نام خانوادگی
+                    </th>
+                    <th>
+                      استان
+                    </th>
+                    <th>
+                      شهر
+                    </th>
+                    <th>
+                      مشاهده کارنامه
+                    </th>
+                    <template
+                      v-for="(item, index) in results[0].sub_category"
+                      :key="'headColumns_percent_'+item.sub_category_order + '-' + index"
+                    >
+                      <th
+                        class="bordered-left"
+                      >
+                        درصد
+                      </th>
+                      <th>
+                        تراز
+                      </th>
+                      <th
+                      >
+                        رتبه
+                      </th>
+                    </template>
+                  </tr>
+                  </thead>
+                  <tbody>
+                  <tr
+                    v-for="item in results"
+                    :key="item.name"
                     class="text-center"
                   >
-                    {{ item.sub_category }}
-                  </th>
-                </tr>
-                <tr>
-                  <th>
-                    رتبه کشوری
-                  </th>
-                  <th>
-                    نام و نام خانوادگی
-                  </th>
-                  <th>
-                    استان
-                  </th>
-                  <th>
-                    شهر
-                  </th>
-                  <th>
-                    مشاهده کارنامه
-                  </th>
-                  <template
-                    v-for="(item, index) in results[0].sub_category"
-                    :key="'headColumns_percent_'+item.sub_category_order + '-' + index"
-                  >
-                    <th
-                      class="bordered-right"
-                    >
-                      درصد
-                    </th>
-                    <th class="bordered-left">
-                      تراز
-                    </th>
-                    <th
-                      class="bordered-left"
-                    >
-                      رتبه
-                    </th>
-                  </template>
-                </tr>
-              </thead>
-              <tbody>
-              <tr
-                v-for="item in results"
-                :key="item.name"
-              >
-                <td>{{ item.main.rank_country }}</td>
-                <td>
+                    <td>{{ item.main.rank_country }}</td>
+                    <td>
                   <span v-if="item.user">
                     {{ item.user.first_name }} {{ item.user.last_name }}
                   </span>
-                  <span v-else> - </span>
-                </td>
-                <td>{{ item.location.province }}</td>
-                <td>{{ item.location.city }}</td>
-                <td>
-                  <q-tooltip top>
-                    <template v-slot:activator="{ on, attrs }">
+                      <span v-else> - </span>
+                    </td>
+                    <td>{{ item.location.province }}</td>
+                    <td>{{ item.location.city }}</td>
+                    <td>
                       <q-btn
                         icon="mdi-eye-circle-outline"
-                        :to="{name: 'user.exam.results', params: {exam_id: item.exam_id, user_exam_id: item.exam_user_id}}"
                         color="cyan"
-                        v-bind="attrs"
-                        v-on="on"
-                      >
-                      </q-btn>
-                    </template>
-                    <span>مشاهده کارنامه</span>
-                  </q-tooltip>
-                </td>
-                <template
-                  v-for="(sub_categoryItem, sub_categoryIndex) in item.sub_category"
-                  :key="'bodyColumns_percent_'+sub_categoryItem.sub_category_order+sub_categoryIndex+'_'+item.exam_user_id"
-                >
-                  <td
+                        flat
+                        round
+                      />
+                      <q-tooltip top>
 
-                    class="bordered-right"
-                  >
-                    {{ sub_categoryItem.percent }}
-                  </td>
-                  <td >
-                    {{ sub_categoryItem.taraaz }}
-                  </td>
-                  <td
-                    class="bordered-left"
-                  >
-                    {{ sub_categoryItem.rank_country }}
-                  </td>
-                </template>
-              </tr>
-              </tbody>
-            </q-markup-table>
+                        <span>مشاهده کارنامه</span>
+                      </q-tooltip>
+                    </td>
+                    <template
+                      v-for="(sub_categoryItem, sub_categoryIndex) in item.sub_category"
+                      :key="'bodyColumns_percent_'+sub_categoryItem.sub_category_order+sub_categoryIndex+'_'+item.exam_user_id"
+                    >
+                      <td
+                        class="bordered-left"
+                      >
+                        {{ sub_categoryItem.percent }}
+                      </td>
+                      <td>
+                        {{ sub_categoryItem.taraaz }}
+                      </td>
+                      <td
+                      >
+                        {{ sub_categoryItem.rank_country }}
+                      </td>
+                    </template>
+                  </tr>
+                  </tbody>
+                  <template v-slot:loading>
+                    <div class="row justify-center q-my-md">
+                      <q-spinner-dots color="primary" size="40px"></q-spinner-dots>
+                    </div>
+                  </template>
+                </q-infinite-scroll>
+              </q-markup-table>
+            </div>
           </q-tab-panel>
           <q-tab-panel name="lesson">
             <q-table
@@ -218,237 +202,23 @@
               hide-bottom
               :rows-per-page-options="[0]"
             >
-
             </q-table>
           </q-tab-panel>
         </q-tab-panels>
-
       </q-card>
     </div>
   </div>
-<!--  <v-container>-->
-<!--    <v-row>-->
-<!--      <v-col-->
-<!--        md="3"-->
-<!--        sm="3"-->
-<!--        cols="12"-->
-<!--      >-->
-<!--        <div class="form-group m-form__group ">-->
-<!--          <v-select-->
-<!--            v-model="selectedGender"-->
-<!--            :items="genders"-->
-<!--            label="جنسیت"-->
-<!--            item-text="title"-->
-<!--            item-value="title"-->
-<!--          />-->
-<!--        </div>-->
-<!--      </v-col>-->
-<!--      <v-col-->
-<!--        md="3"-->
-<!--        sm="3"-->
-<!--        cols="12"-->
-<!--      >-->
-<!--        <div class="form-group m-form__group ">-->
-<!--          <v-autocomplete-->
-<!--            v-model="selectedProvince"-->
-<!--            label="استان"-->
-<!--            :items="provinces"-->
-<!--            item-text="title"-->
-<!--            item-value="title"-->
-<!--            no-data-text="داده ای یافت نشد"-->
-<!--          />-->
-<!--        </div>-->
-<!--      </v-col>-->
-<!--      <v-col-->
-<!--        md="3"-->
-<!--        sm="3"-->
-<!--        cols="12"-->
-<!--      >-->
-<!--        <div class="form-group m-form__group">-->
-<!--          <v-autocomplete-->
-<!--            v-model="selectedCity"-->
-<!--            label="شهر"-->
-<!--            :items="citiesForSelectedProvince"-->
-<!--            item-text="title"-->
-<!--            item-value="title"-->
-<!--            no-data-text="داده ای یافت نشد"-->
-<!--          />-->
-<!--        </div>-->
-<!--      </v-col>-->
-<!--      <v-col-->
-<!--        md="3"-->
-<!--        sm="3"-->
-<!--        cols="12"-->
-<!--        class="filter-btn"-->
-<!--      >-->
-<!--        <v-btn-->
-<!--          rounded-->
-<!--          color="primary"-->
-<!--          width="120px"-->
-<!--          @click="DoFilter"-->
-<!--        >-->
-<!--          اعمال فیلتر-->
-<!--        </v-btn>-->
-<!--      </v-col>-->
-<!--    </v-row>-->
-<!--    <v-row>-->
-<!--      <v-col>-->
-<!--        <v-card>-->
-<!--          <v-tabs-->
-<!--            v-model="tabs"-->
-<!--            background-color="deep-purple accent-4"-->
-<!--            centered-->
-<!--            dark-->
-<!--          >-->
-<!--            <v-tabs-slider />-->
-<!--            <v-tab href="#tab-1">-->
-<!--              کارنامه رتبه محور-->
-<!--            </v-tab>-->
-<!--            <v-tab href="#tab-2">-->
-<!--              کارنامه درس محور-->
-<!--            </v-tab>-->
-<!--            <v-tabs-items v-model="tabs">-->
-<!--              <v-tab-item value="tab-1">-->
-<!--                <v-col>-->
-<!--                  <v-simple-table-->
-<!--                    dense-->
-<!--                    fixed-header-->
-<!--                    height="calc( 100vh - 100px )"-->
-<!--                  >-->
-<!--                    <template v-slot:default>-->
-<!--                      <thead v-if="results[0]">-->
-<!--                      <tr>-->
-<!--                        <th colspan="5" />-->
-<!--                        <th-->
-<!--                          v-for="(item, index) in results[0].sub_category"-->
-<!--                          :key="'headTitle_'+item.sub_category_order+'_'+index"-->
-<!--                          colspan="3"-->
-<!--                          class="text-center"-->
-<!--                        >-->
-<!--                          {{ item.sub_category }}-->
-<!--                        </th>-->
-<!--                      </tr>-->
-<!--                      <tr>-->
-<!--                        <th>-->
-<!--                          رتبه کشوری-->
-<!--                        </th>-->
-<!--                        <th>-->
-<!--                          نام و نام خانوادگی-->
-<!--                        </th>-->
-<!--                        <th>-->
-<!--                          استان-->
-<!--                        </th>-->
-<!--                        <th>-->
-<!--                          شهر-->
-<!--                        </th>-->
-<!--                        <th>-->
-<!--                          مشاهده کارنامه-->
-<!--                        </th>-->
-<!--                        <template-->
-<!--                          v-for="(item, index) in results[0].sub_category"-->
-<!--                        >-->
-<!--                          <th-->
-<!--                            :key="'headColumns_percent_'+item.sub_category_order + '-' + index"-->
-<!--                            class="bordered-right"-->
-<!--                          >-->
-<!--                            درصد-->
-<!--                          </th>-->
-<!--                          <th :key="'headColumns_taraz_'+item.sub_category_order + '-' + index">-->
-<!--                            تراز-->
-<!--                          </th>-->
-<!--                          <th-->
-<!--                            :key="'headColumns_rank_'+item.sub_category_order + '-' + index"-->
-<!--                            class="bordered-left"-->
-<!--                          >-->
-<!--                            رتبه-->
-<!--                          </th>-->
-<!--                        </template>-->
-<!--                      </tr>-->
-<!--                      </thead>-->
-<!--                      <tbody>-->
-<!--                      <tr-->
-<!--                        v-for="item in results"-->
-<!--                        :key="item.name"-->
-<!--                      >-->
-<!--                        <td>{{ item.main.rank_country }}</td>-->
-<!--                        <td>-->
-<!--                            <span v-if="item.user">-->
-<!--                              {{ item.user.first_name }} {{ item.user.last_name }}-->
-<!--                            </span>-->
-<!--                          <span v-else> - </span>-->
-<!--                        </td>-->
-<!--                        <td>{{ item.location.province }}</td>-->
-<!--                        <td>{{ item.location.city }}</td>-->
-<!--                        <td>-->
-<!--                          <v-tooltip top>-->
-<!--                            <h1>tooltip</h1>-->
-<!--                            <template v-slot:activator="{ on, attrs }">-->
-<!--                              <v-btn-->
-<!--                                icon-->
-<!--                                :to="{name: 'user.exam.results', params: {exam_id: item.exam_id, user_exam_id: item.exam_user_id}}"-->
-<!--                                color="cyan"-->
-<!--                                v-bind="attrs"-->
-<!--                                v-on="on"-->
-<!--                              >-->
-<!--                                <v-icon>mdi-eye-circle-outline</v-icon>-->
-<!--                              </v-btn>-->
-<!--                            </template>-->
-<!--                            <span>مشاهده کارنامه</span>-->
-<!--                          </v-tooltip>-->
-<!--                        </td>-->
-<!--                        <template-->
-<!--                          v-for="(sub_categoryItem, sub_categoryIndex) in item.sub_category"-->
-<!--                        >-->
-<!--                          <td-->
-<!--                            :key="'bodyColumns_percent_'+sub_categoryItem.sub_category_order+sub_categoryIndex+'_'+item.exam_user_id"-->
-<!--                            class="bordered-right"-->
-<!--                          >-->
-<!--                            {{ sub_categoryItem.percent }}-->
-<!--                          </td>-->
-<!--                          <td :key="'bodyColumns_taraz_'+sub_categoryItem.sub_category_order+sub_categoryIndex+'_'+item.exam_user_id">-->
-<!--                            {{ sub_categoryItem.taraaz }}-->
-<!--                          </td>-->
-<!--                          <td-->
-<!--                            :key="'bodyColumns_rank_'+sub_categoryItem.sub_category_order+sub_categoryIndex+'_'+item.exam_user_id"-->
-<!--                            class="bordered-left"-->
-<!--                          >-->
-<!--                            {{ sub_categoryItem.rank_country }}-->
-<!--                          </td>-->
-<!--                        </template>-->
-<!--                      </tr>-->
-<!--                      </tbody>-->
-<!--&lt;!&ndash;                      <infinite-loading&ndash;&gt;-->
-<!--&lt;!&ndash;                        :key="lastLoadTime"&ndash;&gt;-->
-<!--&lt;!&ndash;                        @infinite="getData"&ndash;&gt;-->
-<!--&lt;!&ndash;                      />&ndash;&gt;-->
-<!--                    </template>-->
-<!--                  </v-simple-table>-->
-<!--                </v-col>-->
-<!--              </v-tab-item>-->
-<!--              <v-tab-item value="tab-2">-->
-<!--                <v-data-table-->
-<!--                  :headers="lessonsResultsHeaders"-->
-<!--                  :items="lessonsResults"-->
-<!--                  :items-per-page="9999"-->
-<!--                  hide-default-footer-->
-<!--                />-->
-<!--              </v-tab-item>-->
-<!--            </v-tabs-items>-->
-<!--          </v-tabs>-->
-<!--        </v-card>-->
-<!--      </v-col>-->
-<!--    </v-row>-->
-<!--  </v-container>-->
+
 </template>
 
 <script>
 import API_ADDRESS from 'src/api/Addresses'
-// import InfiniteLoading from 'vue-infinite-loading'
+// import InfiniteScroll from 'infinite-loading-vue3'
 
 export default {
   name: 'results',
   components: {
-    // InfiniteLoading
+    // InfiniteScroll
   },
   data: () => {
     return {
@@ -470,7 +240,8 @@ export default {
       ],
       lastLoadTime: Date.now(),
       nextPage: '',
-      tabs: 'tab-1'
+      tabs: 'rank',
+      items: [{}, {}, {}, {}, {}]
     }
   },
   computed: {
@@ -482,15 +253,25 @@ export default {
     }
   },
   mounted () {
-    this.getFiltersData()
-    this.getData()
+    this.getUserFormData()
+    // this.getTableData()
+    this.getLessonResultData()
   },
-  methods: {
 
-    getFiltersData () {
+  methods: {
+    onLoad (index, done) {
+      console.log('on load is run ')
+      setTimeout(() => {
+        this.items.push({}, {}, {}, {}, {}, {}, {})
+        done()
+      }, 2000)
+    },
+    getUserFormData () {
+      // console.log('getUserFormData :')
       this.showLoading()
       this.$axios.get(API_ADDRESS.user.formData)
         .then((resp) => {
+          // console.log('getUserFormData res :', resp)
           this.genders = resp.data.data.genders
           this.provinces = resp.data.data.provinces
           this.cities = resp.data.data.cities
@@ -508,7 +289,19 @@ export default {
         )
     },
 
-    getData ($state) {
+    testMitra (index, done) {
+      setTimeout(() => {
+        this.items.push({}, {}, {}, {}, {}, {}, {})
+        console.log('test mitra call')
+        done()
+        if (this.items.length > 20) {
+          console.log('stop run ')
+          stop()
+        }
+      }, 2000)
+    },
+    getTableData (index, done) {
+      console.log('get table data called')
       this.showLoading()
       const that = this
       this.$axios.get(API_ADDRESS.exam.examReportIndex('participants') + that.nextPage, {
@@ -520,26 +313,27 @@ export default {
         }
       })
         .then(response => {
-          console.log('response :', response)
+          console.log('getTableData response :', response)
           that.hideLoading()
           if (response.data.data) {
             that.results = that.results.concat(response.data.data)
           }
-
           if (typeof response.data.links === 'undefined' || response.data.links.next === null) {
+            console.log('next page is null ')
             that.nextPage = ''
-            $state.complete()
+            done(true)
             return
           }
           that.nextPage = response.data.links.next.replace(response.data.meta.path, '')
+          console.log('next page :', that.nextPage)
           that.lastLoadTime = Date.now()
+          done()
         })
         .catch(error => {
           that.lastLoadTime = Date.now()
           that.hideLoading()
           console.log('error', error)
         })
-      that.getLessonResultData()
     },
 
     getLessonResultData () {
@@ -552,7 +346,7 @@ export default {
           .then((response) => {
             if (response.data.data) {
               this.lessonsResults = response.data.data
-              console.log('response fill : ', this.lessonsResults)
+              // console.log('getLessonResultData this.lessonsResults for lesson  : ', this.lessonsResults)
             }
           })
       }
@@ -560,15 +354,15 @@ export default {
 
     DoFilter () {
       this.results = []
-      this.getData()
+      this.getTableData()
     },
 
     showLoading () {
-      // this.$store.commit('AppLayout/updateOverlay', { show: true, loading: true, text: '' })
+      this.$store.dispatch('loading/overlayLoading', true)
     },
 
     hideLoading () {
-      // this.$store.commit('AppLayout/updateOverlay', { show: false, loading: false, text: '' })
+      this.$store.dispatch('loading/overlayLoading', false)
     }
   }
 }
@@ -583,5 +377,21 @@ export default {
 }
 .filter-btn{
   margin: auto;
+}
+.my-sticky-header-table{
+  height: 310px;
+  position: sticky;
+}
+.tabs-content{
+  height: calc(100vh - 200px);
+  overflow:auto;
+}
+.test{
+  height: 200px;
+  background-color: #4a94dc;
+  margin-bottom: 50px;
+}
+.mitra{
+  border: 1px red solid;
 }
 </style>
