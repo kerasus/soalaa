@@ -359,8 +359,7 @@ export default {
       })
     },
 
-    setQuestionPhotos(statusId) {
-      // let question = this.currentQuestion
+    setCurrentQuestionExams(){
       this.currentQuestion.exams = this.selectedQuizzes.map(item => {
         return {
           id: item.exam.id,
@@ -368,26 +367,34 @@ export default {
           order: item.order
         }
       })
-      this.$store.commit('AppLayout/updateOverlay', {show: true, loading: true, text: 'کمی صبر کنید...'})
-      let formData = new FormData();
-      formData.append('status_id', statusId);
-      formData.append('statement_photo', this.currentQuestion.statement_photo);
-      this.currentQuestion.answer_photos.forEach((item, key) => {
-        formData.append('answer_photos[' + key + ']', item)
-      })
-      formData.append('type_id', this.optionQuestionId)
-      formData.append('exams', JSON.stringify(this.currentQuestion.exams))
-      // this.currentQuestion.exams.forEach((item ,key) => {
-      //   formData.append('exams[' + key + ']', item);
-      // })
-      axios.post(API_ADDRESS.question.create, formData)
-          .then((response) => {
-            const questionId = response.data.data.id
-            this.$router.push({name: 'question.show', params: {question_id: questionId}})
-            this.$store.commit('AppLayout/updateOverlay', {show: false, loading: false, text: ''})
-          }).catch(() => {
-        this.$store.commit('AppLayout/updateOverlay', {show: false, loading: false, text: ''})
-      });
+    },
+
+    setQuestionPhotos(statusId) {
+      this.setCurrentQuestionExams()
+       this.$store.commit('AppLayout/updateOverlay', {show: true, loading: true, text: 'کمی صبر کنید...'})
+       let formData = new FormData();
+       formData.append('status_id', statusId);
+       formData.append('statement_photo', this.currentQuestion.statement_photo);
+       this.currentQuestion.answer_photos.forEach((item, key) => {
+         formData.append('answer_photos[' + key + ']', item)
+       })
+       formData.append('type_id', this.optionQuestionId)
+      // formData.append('exams', JSON.stringify(this.currentQuestion.exams))
+       formData.append('exams', this.currentQuestion.exams)
+       this.currentQuestion.exams.forEach((item ,key) => {
+         formData.append('exams[' + key + '][id]', item.id);
+         formData.append('exams[' + key + '][order]',item.order);
+         formData.append('exams[' + key + '][sub_category_id]', item.sub_category_id);
+       })
+      console.log('result  : ',formData.get('exams'))
+       axios.post(API_ADDRESS.question.create, formData)
+           .then((response) => {
+             const questionId = response.data.data.id
+             this.$router.push({name: 'question.show', params: {question_id: questionId}})
+             this.$store.commit('AppLayout/updateOverlay', {show: false, loading: false, text: ''})
+           }).catch(() => {
+         this.$store.commit('AppLayout/updateOverlay', {show: false, loading: false, text: ''})
+       });
     },
 
     setPageStatus() {
@@ -690,17 +697,10 @@ export default {
 
     setInsertedQuestions() {  //یاس
       this.$refs.qlayout.getContent()
-      var currentQuestion = this.currentQuestion
-      // set exams
-      currentQuestion.exams = this.selectedQuizzes.map(item => {
-        return {
-          id: item.exam.id,
-          sub_category_id: item.sub_category.id,
-          order: item.order
-        }
-      })
-      currentQuestion.type_id = this.optionQuestionId
-      currentQuestion
+      this.setCurrentQuestionExams()
+      // console.log('currentQuestion.exam :',currentQuestion.exams)
+      this.currentQuestion.type_id = this.optionQuestionId
+      this.currentQuestion
           .create()
           .then((response) => {
             this.$store.commit('AppLayout/updateOverlay', {show: false, loading: false, text: ''})
@@ -744,7 +744,16 @@ export default {
         this.setInsertedQuestions()
       } else if (this.questionType === 'typeImage') {
         if (this.doesPhotosExist()) {
-          this.setQuestionPhotos(statusId)
+          if(this.selectedQuizzes.length) this.setQuestionPhotos(statusId)
+          else {
+            this.$notify({
+              group: 'notifs',
+              title: 'توجه',
+              text: 'فیلد انتخاب آزمون اجباری است',
+              type: 'error'
+            })
+          }
+
         }
       }
     },
