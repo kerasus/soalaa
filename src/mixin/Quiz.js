@@ -78,7 +78,7 @@ const mixinQuiz = {
         }
     },
     methods: {
-        getUserQuestionData (quizId, question_id) {
+        getUserQuestionData(quizId, question_id) {
             if (typeof question_id === 'undefined') {
                 question_id = this.currentQuestion.id
             }
@@ -113,7 +113,7 @@ const mixinQuiz = {
         setCurrentExamQuestionIndexes(currentExamQuestionIndexes) {
             window.localStorage.setItem('currentExamQuestionIndexes', JSON.stringify(currentExamQuestionIndexes))
         },
-        sortQuestions (questions) {
+        sortQuestions(questions) {
             let sortList = Array.prototype.sort.bind(questions);
             sortList(function (a, b) {
                 let sorta = parseInt(a.order),
@@ -131,7 +131,7 @@ const mixinQuiz = {
             let currentExamQuestions = {}
             let currentExamQuestionIndexes = {}
 
-            this.sortQuestions (questionsList)
+            this.sortQuestions(questionsList)
             // let sortList = Array.prototype.sort.bind(questionsList);
             // sortList(function (a, b) {
             //     let sorta = parseInt(a.order),
@@ -168,8 +168,7 @@ const mixinQuiz = {
                     let questionId = currentExamQuestionIndexes[item]
                     currentExamQuestionsArray.push(currentExamQuestions[questionId])
                 })
-            }
-            else {
+            } else {
                 currentExamQuestionsArray = this.quiZ
             }
             return currentExamQuestionsArray
@@ -209,7 +208,7 @@ const mixinQuiz = {
             return currentExamQuestionsArray
         },
 
-        reloadQuestionFile (questionsFileUrl, viewType, examId) {
+        reloadQuestionFile(questionsFileUrl, viewType, examId) {
             if (!Assistant.getId(examId)) {
                 return
             }
@@ -225,8 +224,7 @@ const mixinQuiz = {
                 examData.getUserExamData(userExamId)
                     .run()
                     .then((result) => {
-                        try
-                        {
+                        try {
                             // save questions in localStorage
                             that.saveCurrentExamQuestions(examData.exam.questions.list)
                             // save exam info in vuex store (remove questions of exam then save in store)
@@ -244,15 +242,15 @@ const mixinQuiz = {
                                 exam_id: examData.exam.id
                             })
                             resolve(result)
-                        } catch(error) {
+                        } catch (error) {
                             console.error(error)
-                            that.$router.push({ name: 'user.exam.list'})
+                            that.$router.push({name: 'user.exam.list'})
                             reject(error)
                         }
                     })
                     .catch((error) => {
                         reject(error)
-                        that.$router.push({ name: 'user.exam.list'})
+                        that.$router.push({name: 'user.exam.list'})
                     })
                     .finally(() => {
                         that.$store.commit('AppLayout/updateOverlay', {show: false, loading: false, text: ''})
@@ -280,42 +278,41 @@ const mixinQuiz = {
                     that.loadCurrentQuestion(viewType)
                 }
                 examData.getUserExamData(userExamId)
-                        .run()
-                        .then((result) => {
-                            try
-                            {
-                                if (that.needToLoadQuizData()) {
-                                    // save questions in localStorage
-                                    that.saveCurrentExamQuestions(examData.exam.questions.list)
-                                    // save exam info in vuex store (remove questions of exam then save in store)
-                                    examData.exam.loadSubcategoriesOfCategories()
-                                    Time.setStateOfExamCategories(examData.exam.categories)
-                                    let currentExamQuestions = that.getCurrentExamQuestions()
-                                    Time.setStateOfQuestionsBasedOnActiveCategory(examData.exam, currentExamQuestions)
-                                    that.$store.commit('updateQuiz', examData.exam)
-                                    that.setCurrentExamQuestions(currentExamQuestions)
-                                    that.loadCurrentQuestion(viewType)
-                                } else {
-                                    examData.exam = that.quiz
-                                }
-                                that.$store.commit('mergeDbAnswersIntoLocalstorage', {
-                                    dbAnswers: examData.userExamData,
-                                    exam_id: examData.exam.id
-                                })
-                                resolve(result)
-                            } catch(error) {
-                                console.error(error)
-                                that.$router.push({ name: 'user.exam.list'})
-                                reject(error)
+                    .run()
+                    .then((result) => {
+                        try {
+                            if (that.needToLoadQuizData()) {
+                                // save questions in localStorage
+                                that.saveCurrentExamQuestions(examData.exam.questions.list)
+                                // save exam info in vuex store (remove questions of exam then save in store)
+                                examData.exam.loadSubcategoriesOfCategories()
+                                Time.setStateOfExamCategories(examData.exam.categories)
+                                let currentExamQuestions = that.getCurrentExamQuestions()
+                                Time.setStateOfQuestionsBasedOnActiveCategory(examData.exam, currentExamQuestions)
+                                that.$store.commit('updateQuiz', examData.exam)
+                                that.setCurrentExamQuestions(currentExamQuestions)
+                                that.loadCurrentQuestion(viewType)
+                            } else {
+                                examData.exam = that.quiz
                             }
-                        })
-                        .catch((error) => {
+                            that.$store.commit('mergeDbAnswersIntoLocalstorage', {
+                                dbAnswers: examData.userExamData,
+                                exam_id: examData.exam.id
+                            })
+                            resolve(result)
+                        } catch (error) {
+                            console.error(error)
+                            that.$router.push({name: 'user.exam.list'})
                             reject(error)
-                            that.$router.push({ name: 'user.exam.list'})
-                        })
-                  .finally(() => {
-                      that.$store.commit('AppLayout/updateOverlay', {show: false, loading: false, text: ''})
-                  })
+                        }
+                    })
+                    .catch((error) => {
+                        reject(error)
+                        that.$router.push({name: 'user.exam.list'})
+                    })
+                    .finally(() => {
+                        that.$store.commit('AppLayout/updateOverlay', {show: false, loading: false, text: ''})
+                    })
 
                 // if (that.needToLoadQuizData() && examId) {
                 //     that.participateExam(examId, viewType)
@@ -376,25 +373,25 @@ const mixinQuiz = {
                     that.loadCurrentQuestion(viewType)
                 }
                 // if (examDataWithQuestions) {
-                    that.quiz.getAnswerOfUserInExam()
-                        .then((response) => {
-                            if (!Assistant.getId(that.quiz.id)) {
-                                Assistant.reportErrors({
-                                    location: 'mixin/Quiz.js -> loadExam() -> quiz.getAnswerOfUserInExam()',
-                                    message: 'quiz.id not set'
-                                })
-                                reject()
-                            }
-                            that.$store.commit('mergeDbAnswersIntoLocalstorage', {
-                                dbAnswers: response.data,
-                                exam_id: that.quiz.id
+                that.quiz.getAnswerOfUserInExam()
+                    .then((response) => {
+                        if (!Assistant.getId(that.quiz.id)) {
+                            Assistant.reportErrors({
+                                location: 'mixin/Quiz.js -> loadExam() -> quiz.getAnswerOfUserInExam()',
+                                message: 'quiz.id not set'
                             })
-                            resolve()
+                            reject()
+                        }
+                        that.$store.commit('mergeDbAnswersIntoLocalstorage', {
+                            dbAnswers: response.data,
+                            exam_id: that.quiz.id
                         })
-                        .catch((error) => {
-                            Assistant.reportErrors({location: 'mixin/Quiz.js -> loadExam()'})
-                            reject(error)
-                        })
+                        resolve()
+                    })
+                    .catch((error) => {
+                        Assistant.reportErrors({location: 'mixin/Quiz.js -> loadExam()'})
+                        reject(error)
+                    })
                 // } else {
                 //     resolve()
                 // }
@@ -424,8 +421,7 @@ const mixinQuiz = {
             let questNumber = this.$route.params.questNumber
             if (this.currentQuestion.order) {
                 questNumber = this.currentQuestion.order
-            }
-            else if (!questNumber) {
+            } else if (!questNumber) {
                 questNumber = 1
             }
 
@@ -445,7 +441,7 @@ const mixinQuiz = {
         },
 
 
-        hasExamDataOnThisDeviseStorage (examId) {
+        hasExamDataOnThisDeviseStorage(examId) {
             return !!this.userQuizListData[examId]
         },
         sendUserQuestionsDataToServerAndFinishExam(examId, examUserId) {
@@ -457,7 +453,7 @@ const mixinQuiz = {
                     answers.push({
                         question_id: questionId,
                         choice_id: userExamData[questionId].answered_choice_id,
-                        selected_at : (!userExamData[questionId].answered_at) ? null: userExamData[questionId].answered_at,
+                        selected_at: (!userExamData[questionId].answered_at) ? null : userExamData[questionId].answered_at,
                         bookmarked: userExamData[questionId].bookmarked,
                         status: userExamData[questionId].status,
                         check_in_times: userExamData[questionId].check_in_times,
@@ -465,12 +461,15 @@ const mixinQuiz = {
                 }
             }
 
-            return axios.post(API_ADDRESS.exam.sendAnswers, {exam_user_id: examUserId, finish: true, questions: answers })
+            return axios.post(API_ADDRESS.exam.sendAnswers, {
+                exam_user_id: examUserId,
+                finish: true,
+                questions: answers
+            })
         },
 
 
-
-        isLtrString (string) {
+        isLtrString(string) {
             if (!string) {
                 return false
             }
@@ -631,13 +630,12 @@ const mixinQuiz = {
         },
 
 
-
-        getExamUserData (exam_id) {
+        getExamUserData(exam_id) {
             return new Promise(function (resolve, reject) {
                 axios.post(API_ADDRESS.exam.examUser, {exam_id})
                     .then((response) => {
                         let userExamForParticipate = new Exam()
-                        userExamForParticipate.id =  Assistant.getId(response.data.data.exam_id)
+                        userExamForParticipate.id = Assistant.getId(response.data.data.exam_id)
                         userExamForParticipate.user_exam_id = Assistant.getId(response.data.data.id)
                         userExamForParticipate.created_at = response.data.data.created_at
                         userExamForParticipate.questions_file_url = response.data.data.questions_file_url
@@ -651,8 +649,8 @@ const mixinQuiz = {
                     })
             })
         },
-        getQuestionsOfExam (questions_file_url) {
-            return new Promise(function(resolve, reject) {
+        getQuestionsOfExam(questions_file_url) {
+            return new Promise(function (resolve, reject) {
                 if (!questions_file_url) {
                     Assistant.handleAxiosError("exam file url is not set")
                     reject(null)
@@ -668,7 +666,11 @@ const mixinQuiz = {
                             resolve(new QuestionList(data))
                         },
                         error: function (jqXHR, textStatus, errorThrown) {
-                            Assistant.reportErrors({location: 'GetQuestionsOfExam', message: "can't get exam file", data: {jqXHR, textStatus, errorThrown}})
+                            Assistant.reportErrors({
+                                location: 'GetQuestionsOfExam',
+                                message: "can't get exam file",
+                                data: {jqXHR, textStatus, errorThrown}
+                            })
                             Assistant.handleAxiosError("can't get exam file")
                             reject({jqXHR, textStatus, errorThrown})
                         }
