@@ -1,5 +1,5 @@
 <template>
-  <div class="SelectImageBox">
+  <div class="SelectImageBox mb-5" >
     <p class="font-weight-medium mb-5 mt-5">
       فایل های آپلود شده:
     </p>
@@ -12,66 +12,66 @@
           <v-card-text>
             <v-row>
               <v-col
-                v-if="editStatus"
-                v-show="questionFile.length === 0"
-                class="test"
+                  v-if="editStatus"
+                  v-show="questionFile.length === 0"
+                  class="test"
               >
                 <file-upload
-                  ref="questionFile"
-                  v-model="questionFile"
-                  input-id="questionFile"
-                  :extensions="extensions"
-                  :accept="accept"
-                  :multiple="false"
-                  :directory="directory"
-                  :create-directory="createDirectory"
-                  :size="size || 0"
-                  :thread="thread < 1 ? 1 : (thread > 5 ? 5 : thread)"
-                  :data="data"
-                  :drop="drop"
-                  :drop-directory="dropDirectory"
-                  :add-index="addIndex"
-                  @input-filter="inputFilter"
-                  @input-file="inputFile"
+                    ref="questionFile"
+                    v-model="questionFile"
+                    input-id="questionFile"
+                    :extensions="extensions"
+                    :accept="accept"
+                    :multiple="false"
+                    :directory="directory"
+                    :create-directory="createDirectory"
+                    :size="size || 0"
+                    :thread="thread < 1 ? 1 : (thread > 5 ? 5 : thread)"
+                    :data="data"
+                    :drop="drop"
+                    :drop-directory="dropDirectory"
+                    :add-index="addIndex"
+                    @input-filter="inputFilter"
+                    @input-file="inputFile"
                 >
                   <v-btn
-                    large
-                    text
-                    class="btnAddImage"
+                      large
+                      text
+                      class="btnAddImage"
                   >
                     <v-icon>mdi-plus</v-icon>
                   </v-btn>
                 </file-upload>
               </v-col>
               <v-col
-                v-for="(file, index) in questionFile"
-                :key="index"
-                class="test2"
+                  v-for="(file, index) in questionFile"
+                  :key="index"
+                  class="test2"
               >
                 <v-card>
                   <v-img
-                    v-if="(editStatus && file.thumb) || (!editStatus && file)"
-                    :src="(editStatus) ? file.thumb : file"
-                    width="100%"
-                    height="60"
-                    class="mt-3"
-                    @click="showImgPanel(((editStatus) ? file.thumb : file))"
+                      v-if="(editStatus && file.thumb) || (!editStatus && file)"
+                      :src="(editStatus) ? file.thumb : file"
+                      width="100%"
+                      height="60"
+                      class="mt-3"
+                      @click="showImgPanel(((editStatus) ? file.thumb : file))"
                   />
                   <span v-else>No Image</span>
                   <v-card-title
-                    v-if="editStatus"
-                    class="caption"
-                    v-text="formatSize(file.size)"
+                      v-if="editStatus"
+                      class="caption"
+                      v-text="formatSize(file.size)"
                   />
                   <!-- delete img ----------------------------------------------------------->
                   <v-btn
-                    v-if="editStatus"
-                    fab
-                    dark
-                    x-small
-                    color="error"
-                    class="btnRemoveFile"
-                    @click.prevent="$refs.questionFile.remove(file)"
+                      v-if="editStatus"
+                      fab
+                      dark
+                      x-small
+                      color="error"
+                      class="btnRemoveFile"
+                      @click.prevent="$refs.questionFile.remove(file)"
                   >
                     <v-icon dark>
                       mdi-close
@@ -80,17 +80,17 @@
                 </v-card>
               </v-col>
               <v-col
-                v-if="!editStatus && questionFile.length === 0"
+                  v-if="!editStatus && questionFile.length === 0"
               >
                 <v-card>
                   <v-img
-                    width="100%"
-                    height="60"
+                      width="100%"
+                      height="60"
                   >
                     <template v-slot:placeholder>
                       <v-row
-                        no-gutters
-                        class="fill-height"
+                          no-gutters
+                          class="fill-height"
                       >
                         <v-col class="d-flex justify-center align-center">
                           <v-icon size="50px">
@@ -114,37 +114,37 @@
           <v-card-text>
             <v-row>
               <v-col
-                v-for="(file, index) in answerFiles"
-                :key="index"
-                cols="3"
+                  v-for="(file, index) in answerFiles"
+                  :key="index"
+                  cols="3"
               >
                 <v-card>
                   <v-img
-                    v-if="(editStatus && file.thumb) || (!editStatus && file)"
-                    :src="(editStatus) ? file.thumb : file"
-                    width="100%"
-                    height="60"
-                    class="mt-3"
-                    @click="showImgPanel(((editStatus) ? file.thumb : file))"
+                      v-if="(editStatus && file.thumb) || (!editStatus && file)"
+                      :src="(editStatus) ? file.thumb : file"
+                      width="100%"
+                      height="60"
+                      class="mt-3"
+                      @click="showImgPanel(((editStatus) ? file.thumb : file))"
                   />
 
                   <span v-else>No Image</span>
 
 
                   <v-card-title
-                    v-if="editStatus"
-                    class="caption"
-                    v-text="formatSize(file.size)"
+                      v-if="editStatus"
+                      class="caption"
+                      v-text="formatSize(file.size)"
                   />
 
                   <v-btn
-                    v-if="editStatus"
-                    fab
-                    dark
-                    x-small
-                    color="error"
-                    class="btnRemoveFile"
-                    @click.prevent="$refs.answerImages.remove(file)"
+                      v-if="editStatus"
+                      fab
+                      dark
+                      x-small
+                      color="error"
+                      class="btnRemoveFile"
+                      @click.prevent="$refs.answerImages.remove(file)"
                   >
                     <v-icon dark>
                       mdi-close
@@ -153,32 +153,32 @@
                 </v-card>
               </v-col>
               <v-col
-                v-if="editStatus"
-                cols="3"
+                  v-if="editStatus"
+                  cols="3"
               >
                 <div>
                   <file-upload
-                    ref="answerImages"
-                    v-model="answerFiles"
-                    input-id="answerImages"
-                    :extensions="extensions"
-                    :accept="accept"
-                    :multiple="true"
-                    :directory="directory"
-                    :create-directory="createDirectory"
-                    :size="size || 0"
-                    :thread="thread < 1 ? 1 : (thread > 5 ? 5 : thread)"
-                    :data="data"
-                    :drop="drop"
-                    :drop-directory="dropDirectory"
-                    :add-index="addIndex"
-                    @input-filter="inputFilter"
-                    @input-file="inputFile"
+                      ref="answerImages"
+                      v-model="answerFiles"
+                      input-id="answerImages"
+                      :extensions="extensions"
+                      :accept="accept"
+                      :multiple="true"
+                      :directory="directory"
+                      :create-directory="createDirectory"
+                      :size="size || 0"
+                      :thread="thread < 1 ? 1 : (thread > 5 ? 5 : thread)"
+                      :data="data"
+                      :drop="drop"
+                      :drop-directory="dropDirectory"
+                      :add-index="addIndex"
+                      @input-filter="inputFilter"
+                      @input-file="inputFile"
                   >
                     <v-btn
-                      large
-                      text
-                      class="btnAddImage"
+                        large
+                        text
+                        class="btnAddImage"
                     >
                       <v-icon>mdi-plus</v-icon>
                     </v-btn>
@@ -186,17 +186,17 @@
                 </div>
               </v-col>
               <v-col
-                v-if="!editStatus && answerFiles.length === 0"
+                  v-if="!editStatus && answerFiles.length === 0"
               >
                 <v-card>
                   <v-img
-                    width="100%"
-                    height="60"
+                      width="100%"
+                      height="60"
                   >
                     <template v-slot:placeholder>
                       <v-row
-                        no-gutters
-                        class="fill-height"
+                          no-gutters
+                          class="fill-height"
                       >
                         <v-col class="d-flex justify-center align-center">
                           <v-icon size="50px">
@@ -385,12 +385,12 @@ export default {
             maxHeight: 512,
           })
           imageCompressor.compress(newFile.file)
-                         .then((file) => {
-                           this.$refs.answerImages.update(newFile, { error: '', file, size: file.size, type: file.type })
-                         })
-                         .catch((err) => {
-                           this.$refs.answerImages.update(newFile, { error: err.message || 'compress' })
-                         })
+              .then((file) => {
+                this.$refs.answerImages.update(newFile, { error: '', file, size: file.size, type: file.type })
+              })
+              .catch((err) => {
+                this.$refs.answerImages.update(newFile, { error: err.message || 'compress' })
+              })
         }
       }
       if (newFile && newFile.error === "" && newFile.file && (!oldFile || newFile.file !== oldFile.file)) {
