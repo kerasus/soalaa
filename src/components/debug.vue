@@ -25,29 +25,9 @@
 </template>
 
 <script>
-import Vue from 'vue'
 // import MathJax from 'mathjax'
 import TurndownService from 'turndown/lib/turndown.browser.umd'
 
-import VueSocketIO from 'vue-socket.io'
-Vue.use(new VueSocketIO({
-  debug: true,
-  // connection: '/3a/socket',
-  // connection: 'https://benpaodehenji.com/socketioserve',
-  connection: 'https://office.alaatv.com:501',
-  // vuex: {
-  //   store,
-  //   actionPrefix: 'SOCKET_',
-  //   mutationPrefix: 'SOCKET_'
-  // },
-  options: {
-    // path: "/my-app/",
-    transports: [
-      "websocket",
-      // "polling"
-    ] // use WebSocket first, if available
-  } //Optional options
-}))
 
 export default {
   data() {
@@ -81,6 +61,7 @@ export default {
 
     // Fired when the server sends something on the "messageChannel" channel.
     messageChannel(data) {
+      console.log('question.file-link:update: ', data)
       this.socketMessage = data
     }
   },
