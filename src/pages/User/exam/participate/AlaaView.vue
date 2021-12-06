@@ -6,7 +6,7 @@
     :style="{ height: '100%' }"
   >
     <div class="row " :style="{ 'min-height': '100%' }">
-      <div class="column" :style="{ 'min-width': '100%' }"
+      <div class="col" :style="{ 'min-width': '100%' }"
       >
         <q-page
           class="q-flex align-stretch"
@@ -16,7 +16,7 @@
         >
           <div class="row">
             <!--&lt;!&ndash;              v-if= "getQuestionNumberFromId(currentQuestion.id) !== 1"&ndash;&gt;-->
-            <div class="column btnpre col-md-1 justify-center "
+            <div class="col btnpre col-md-1 justify-center d-none"
             >
               <q-btn
                 flat
@@ -31,16 +31,16 @@
                 />
               </q-btn>
             </div>
-            <div class="column col-md-10 q-py-sm q-mx-none">
+            <div class="col col-md-10 q-py-sm ">
               <div class="row question-header">
                 <div class="question-number">
                   <!--                    v-if="currentLesson"-->
                   <!--                    getQuestionNumberFromId(currentQuestion.id)-->
                   <p>
-                    {{ currentLesson.title}}
+                    {{ "عربی عمومی" }}
                     -
                     سوال شماره
-                    {{  "2" }}
+                    {{  "35" }}
                   </p>
                 </div>
                 <div class="question-buttons ">
@@ -77,6 +77,8 @@
                   </q-btn>
 <!--&lt;!&ndash;                  @click="changeBookmark(currentQuestion.id)"&ndash;&gt;-->
                   <q-btn
+                    flat
+                    round
                   >
 <!--      v-if="!getUserQuestionData(quiz.id, currentQuestion.id) || !getUserQuestionData(quiz.id, currentQuestion.id).bookmarked"-->
                     <q-icon
@@ -97,17 +99,19 @@
               </div>
 
               <div class="row question-body">
-                <div class="column" >
+                <div class="col" >
 <!--                :class="{ ltr: isLtrString(currentQuestion.statement)}"-->
 <!--                  v-if="currentQuestion.in_active_category"-->
                   <div
                     class="renderedPanel"
                   >
-                    75 درصد دانش‌آموزان مدرسه‌ای عضو حداقل یکی از دو تیم فوتبال و بسکتبال هستند و 50 درصد آن‌ها عضو حداکثر یکی از این دو تیم هستند. چند درصد از آن‌ها عضو فقط یک تیم هستند؟
+                    «ذَهَبَ عَامِلٌ اِلَی الصَّیدَلِیَّةِ وَ قَالَ لِلصَّیدَلِيّ:« هَل لَدَیکَ مَرهَمٌ لِلاسمنت (سیمان)؟» فَضَحکَ الصَّیدَلِيُّ مِنهُ سَاخِراً وَ قَالَ لَهُ: «نَعَم، لَدَینَا. هَل تُرِیدُ نَوعِیَّةً مُمتَازَةً أم نَوعِیَّةً عَادِیَّةً؟» فَقَالَ العَامِلُ: «أعطِنِي النَّوعِیَّةَ المُمتَازَةَ» رَدَّ عَلَیه الصَّیدَلِيُّ مُستَهزِءاً: «إِنَّهَا غَالِیةٌ. أَقُولُ لَکَ ذَلِکَ مُقَدَّماً. ثُمَّ ذَهَبَ ضاحِکاً. رَفَعَ العَامِلُ یَدَیهِ أَمامَ الصَّیدَلِيّ وَ قَالَ لَهُ: «إِنّي عَامِلٌ أشتَغِلُ في الاسمنت وَ قَد عَلَّقَ الاسمنت في یَدَيَّ وَ لا أستَطیعُ أن أَلمسَ وَجهَ ابنَتِيَ الصَّغِیرَةِ لِکَي أداعِبَهَا. إِذَا کَانَتِ النَّوعِیَّةُ المُمتَازَةُ الَّتِي لَدَیکَ تُزِیلُ هذا الاسمنت، فَأعطِنِي إِیَّاهَا و سَأَتَدَبَّرُ ثَمَنَها.
+
+                    تَجَمَّدَتِ الضَّحکاتُ السَّاخِرَةُ لِلصَّیدَلِيّ عَلَی شَفَتَیهِ وَ رَأَی نَفسَهُ حَقیراً صَغیراً کَمَا لَم یَرَهَا مِن قَبلُ.»
                     <!--                    <vue-katex :input="currentQuestion.statement" />-->
                   </div>
 <!--                  v-if="!currentQuestion.in_active_category"-->
-                  <q-page
+                  <q-feild
                     color="warning"
                     rounded
                     dark
@@ -116,13 +120,12 @@
                     class="d-flex align-center justify-center"
                   >
                     در حال حاضر امکان مشاهده سوالات این دفترچه امکان پذیر نمی باشد
-                  </q-page>
+                  </q-feild>
                 </div>
               </div>
 
 <!--&lt;!&ndash;              v-if="currentQuestion.in_active_category"&ndash;&gt;-->
               <div
-
                 class="row question-answers"
               >
                 <!--                  v-for="item in currentQuestion.choices.list"-->
@@ -130,18 +133,21 @@
                 <!--                  :question-id="currentQuestion.id"-->
                 <!--                  :choice="item"-->
                 <!--                  :is-rtl="isRtl"-->
-                <choice/>
+                <choice
+                  v-for="key in linksList"
+                  :key="key"
+                />
 
 <!--                  @answerClicked="answerClicked"-->
 
               </div>
             </div>
-            <div class="column btnpre col-md-1 justify-center d-none"
+            <div class="col btnpre col-md-1 justify-center d-none"
             >
 <!--              v-if="getQuestionNumberFromId(currentQuestion.id) !== getCurrentExamQuestionsInArray().length"-->
               <q-btn
                 flat
-                class="q-px-none"
+                class="q-px-none q-ml-md"
                 :style="{ 'width':'60px','height': '400px' }"
                 no-shadow
                 @click="goToNextQuestion('onlineQuiz.alaaView')"
@@ -157,7 +163,7 @@
       </div>
     </div>
     <q-footer
-      class="justify-center pl-0"
+      class="justify-center q-pl-none"
       color="transparent"
       elevation="0"
       padless
@@ -166,12 +172,13 @@
     >
       <q-page-sticky
         fluid
-        class="py-0"
+        class="q-py-none"
       >
+        "
         <div class="row timer-row justify-center">
           <div
             :md="10"
-            class="column d-flex justify-center timer-container py-0"
+            class="col d-flex justify-center timer-container py-0"
           >
 <!--            <Timer/>-->
           </div>
@@ -199,6 +206,28 @@ export default {
   mixins: [mixinAuth, mixinQuiz, mixinUserActionOnQuestion, mixinDrawer, mixinWindowSize],
   data () {
     return {
+      linksList: [
+        {
+          title: 'Profile',
+          caption: '',
+          icon: 'account_circle'
+        },
+        {
+          title: 'hasan',
+          caption: '',
+          icon: 'login'
+        },
+        {
+          title: 'Profile',
+          caption: '',
+          icon: 'account_circle'
+        },
+        {
+          title: 'hasan',
+          caption: '',
+          icon: 'login'
+        }
+      ],
       isRtl: false
     }
   },
@@ -274,12 +303,15 @@ img {
 
 <style scoped>
 .question-buttons button {
-  margin-right: 2px;
+  margin-left: 15px;
+  height: 24px;
+  width: 24px;
 }
 
 .question-number p {
   margin-bottom: 0;
   line-height: 40px;
+  font-size: 16px;
 }
 
 .question-header {
@@ -290,18 +322,27 @@ img {
   position: sticky;
   top: 60px;
   z-index: 1;
-  padding-top: 20px;
+  margin: -12px -12px -12px -12px;
   background: #f1f1f1;
 }
 
 .question-body {
   margin-top: 50px;
+  margin-left: -12px;
+  margin-right: -12px;
+  font-size: 16px;
+  text-rendering: optimizeLegibility;
   line-height: 35px;
+  display: inline-block;
+  direction: inherit;
+  box-sizing: inherit;
   color: var(--text-2);
 }
 
 .question-answers {
   margin-top: 90px;
+  margin-left: -12px;
+  margin-right: -12px;
 }
 
 .answer-sheet {
@@ -330,12 +371,14 @@ img {
 
 .quiz-page {
   background: #f1f1f1;
+  width: 100%;
   height: 100%;
   padding: 12px 12px 12px 12px;
 }
 .btnpre {
   padding: 12px 12px 12px 12px;
   flex-direction: column;
+
 }
 
 .user-name {
