@@ -135,7 +135,7 @@ const routes = [
             meta: { middlewares: [auth] }
           },
           {
-            path: '/lessonsList',
+            path: '/onlineQuiz/exams/lessons/:quizId/:quizTitle',
             name: 'onlineQuiz.exams.lessons',
             component: () => import('src/pages/Admin/exam/lessons.vue'),
             meta: {
