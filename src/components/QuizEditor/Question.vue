@@ -86,6 +86,7 @@
     />
     <!--ToDo: remove span-->
     <span
+       v-if="source.statement"
       :id="'question' + source.id"
       v-intersect="{
         handler: onIntersect,
@@ -93,14 +94,27 @@
           threshold: [0, 0.2, 0.4, 0.6, 0.8, 1.0]
         }
       }"
-      class="question-body renderedPanel"
+      class="question-body renderedPanel testmitra"
       :class="{ ltr: isLtr }"
     >
       <vue-katex
         :input="'(' + getSubCategoryName + ')' + ' (' + source.order + ') - ' + source.statement"
       />
     </span>
-    <v-row class="choices">
+    <v-row
+    v-if="source.statement_photo"
+    >
+      <v-col>
+        <p v-if="!source.statement"> ({{getSubCategoryName}}) ({{source.order}}) -  صورت سوال :</p>
+        <v-img
+            :src="source.statement_photo"
+        />
+      </v-col>
+    </v-row>
+    <v-row
+        v-if="checkChoices()"
+        class="choices"
+    >
       <v-col
         v-for="(choice, index) in source.choices.list"
         :key="choice.id"
@@ -111,6 +125,26 @@
           :input="(choiceNumber[index]) + choice.title"
           :ltr="isLtrQuestion"
         />
+      </v-col>
+    </v-row>
+    <v-row
+    v-if="source.answer_photos.length > 0"
+    >
+      <v-col>
+        <div>
+          <p>
+            پاسخ :
+          </p>
+          <div
+          v-for="src in source.answer_photos"
+          >
+            <v-img
+             class="img-size"
+            :src="src"
+            />
+
+          </div>
+        </div>
       </v-col>
     </v-row>
   </div>
@@ -125,6 +159,7 @@ import VueConfirmDialog from 'vue-confirm-dialog'
 import axios from 'axios'
 import {QuestSubcategoryList} from "@/models/QuestSubcategory";
 import VueKatex from '@/components/VueKatex'
+import {Question} from "@/models/Question";
 
 Vue.use(VueConfirmDialog)
 Vue.component('vue-confirm-dialog', VueConfirmDialog.default)
@@ -174,6 +209,7 @@ export default {
       }
     }
   },
+
   computed: {
     isLtrQuestion() {
       let string = this.source.statement
@@ -239,6 +275,11 @@ export default {
     // setTimeout(() => {console.Log(this.quiz)}, 2000)
   },
   methods: {
+    checkChoices(){
+     const hasText = this.source.choices.list.find(item => item.title)
+    return !!hasText;
+    },
+
     confirmQuestion() {
       this.confirmLoading = true
       axios.get(API_ADDRESS.question.confirm(this.source.id))
@@ -341,11 +382,13 @@ export default {
 .ltr.question {
   padding: 10px 20px 10px 20px;
 }
-
 .ltr {
   direction: ltr;
 }
-
+.img-size{
+  width: 100%;
+  margin-top: 10px;
+}
 .ltr .choice {
   direction: ltr;
   text-align: left;
