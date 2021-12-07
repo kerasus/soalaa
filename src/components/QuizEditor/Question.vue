@@ -94,7 +94,7 @@
           threshold: [0, 0.2, 0.4, 0.6, 0.8, 1.0]
         }
       }"
-      class="question-body renderedPanel testmitra"
+      class="question-body renderedPanel"
       :class="{ ltr: isLtr }"
     >
       <vue-katex
@@ -161,7 +161,6 @@ import VueConfirmDialog from 'vue-confirm-dialog'
 import axios from 'axios'
 import {QuestSubcategoryList} from "@/models/QuestSubcategory";
 import VueKatex from '@/components/VueKatex'
-import {Question} from "@/models/Question";
 
 Vue.use(VueConfirmDialog)
 Vue.component('vue-confirm-dialog', VueConfirmDialog.default)
