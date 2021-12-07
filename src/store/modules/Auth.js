@@ -25,6 +25,12 @@ const mutations = {
     updateUser (state, newInfo) {
         state.user = newInfo
     },
+    updateUserFirstName (state, newInfo) {
+        state.user.first_name = newInfo
+    },
+    updateUserLastName (state, newInfo) {
+        state.user.last_name = newInfo
+    },
     updateAccessToken (state, newInfo) {
         state.accessToken = newInfo
     },

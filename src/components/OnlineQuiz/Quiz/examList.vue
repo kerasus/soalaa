@@ -281,7 +281,7 @@
                         retain-focus-on-click
                         plain
                         exact
-                        :to="{ name: 'onlineQuiz.exams.lessons', params: { quizId: item.id}}"
+                        :to="{ name: 'onlineQuiz.exams.lessons', params: { quizId: item.id, quizTitle: item.title}}"
                       >
                         مشاهده تمام سوالات
                         <!--                    <v-icon-->
