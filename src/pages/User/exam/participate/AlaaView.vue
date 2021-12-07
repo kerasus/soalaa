@@ -45,12 +45,14 @@
                 </div>
                 <div class="question-buttons ">
                   <q-btn
+                    size="12px"
                     round
                     flat
                   >
 <!--                    @click="changeStatus(currentQuestion.id, 'o')"-->
 <!--                    v-if="!getUserQuestionData(quiz.id, currentQuestion.id) || getUserQuestionData(quiz.id, currentQuestion.id).status !== 'o'"-->
                     <q-icon
+                      :style="{ 'width':'24px','height': '24px' }"
                       color="grey-7"
                       size="30px"
                       name="mdi-checkbox-blank-circle-outline"
@@ -64,6 +66,7 @@
                     />
                   </q-btn>
                   <q-btn
+                    size="12px"
                     round
                     flat
                   >
@@ -77,6 +80,7 @@
                   </q-btn>
 <!--&lt;!&ndash;                  @click="changeBookmark(currentQuestion.id)"&ndash;&gt;-->
                   <q-btn
+                    size="12px"
                     flat
                     round
                   >
@@ -209,23 +213,19 @@ export default {
       linksList: [
         {
           title: 'Profile',
-          caption: '',
-          icon: 'account_circle'
+          caption: ''
         },
         {
           title: 'hasan',
-          caption: '',
-          icon: 'login'
+          caption: ''
         },
         {
           title: 'Profile',
-          caption: '',
-          icon: 'account_circle'
+          caption: ''
         },
         {
           title: 'hasan',
-          caption: '',
-          icon: 'login'
+          caption: ''
         }
       ],
       isRtl: false
@@ -303,9 +303,10 @@ img {
 
 <style scoped>
 .question-buttons button {
-  margin-left: 15px;
+  margin-left: 20px;
   height: 24px;
   width: 24px;
+  size: 12px;
 }
 
 .question-number p {
