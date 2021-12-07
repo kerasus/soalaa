@@ -102,10 +102,12 @@
       />
     </span>
     <v-row
-    v-if="source.statement_photo"
+    v-if="source.statement_photo && !source.statement"
     >
       <v-col>
-        <p v-if="!source.statement"> ({{getSubCategoryName}}) ({{source.order}}) -  صورت سوال :</p>
+        <p>
+          ({{getSubCategoryName}}) ({{source.order}}) -  صورت سوال :
+        </p>
         <v-img
             :src="source.statement_photo"
         />
@@ -128,7 +130,7 @@
       </v-col>
     </v-row>
     <v-row
-    v-if="source.answer_photos.length > 0"
+    v-if="source.answer_photos.length > 0 && !checkChoices()"
     >
       <v-col>
         <div>
