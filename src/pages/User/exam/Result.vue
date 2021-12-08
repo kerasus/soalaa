@@ -317,51 +317,58 @@ export default {
     }
   },
   created () {
+    console.log('coooooome oooooooooooooonnnnnnnnnnnn')
     this.getUserData()
     window.currentExamQuestions = null
     window.currentExamQuestionIndexes = null
+    this.getExamData() // moved from mounted to created after migration
   },
   mounted () {
-    const that = this
-    const user_exam_id = this.$route.params.user_exam_id
-    const exam_id = this.$route.params.exam_id
-
-    this.$store.commit('AppLayout/updateOverlay', { show: true, loading: true, text: '' })
-
-    const examData = new ExamData()
-    examData.getUserExamWithCorrectAnswers(user_exam_id, exam_id)
-      .loadQuestionsFromFile()
-      .getUserExamData(user_exam_id)
-      .getUserExamDataReport(user_exam_id)
-      .run()
-      .then(() => {
-        // save questions in localStorage
-        that.saveCurrentExamQuestions(examData.exam.questions.list)
-        // save exam info in vuex store (remove questions of exam then save in store)
-        that.$store.commit('updateQuiz', examData.exam)
-        that.$store.commit('mergeDbAnswersIntoLocalstorage', {
-          dbAnswers: examData.userExamData,
-          exam_id: examData.exam.id
-        })
-        that.report = examData.studentReport
-        that.loadKarname(examData.studentReport)
-
-        that.$store.commit('AppLayout/updateOverlay', { show: false, loading: false, text: '' })
-      })
-      .catch((error) => {
-        that.$store.commit('AppLayout/updateOverlay', { show: false, loading: false, text: '' })
-        that.goToExamList()
-        console.log(error)
-
-        that.$notify({
-          group: 'notifs',
-          title: 'توجه!',
-          text: 'مشکلی در دریافت اطلاعات کارنامه رخ داده است.',
-          type: 'error'
-        })
-      })
+    // this.getExamData() ----------- was used here before migration
   },
   methods: {
+    getExamData () {
+      // TODO : refactor NEEDED , used in created which probably not the best place to use
+      const that = this
+      const user_exam_id = this.$route.params.user_exam_id
+      const exam_id = this.$route.params.exam_id
+
+      this.$store.commit('AppLayout/updateOverlay', { show: true, loading: true, text: '' })
+
+      const examData = new ExamData()
+      console.log('examData---------', examData)
+      examData.getUserExamWithCorrectAnswers(user_exam_id, exam_id)
+        .loadQuestionsFromFile()
+        .getUserExamData(user_exam_id)
+        .getUserExamDataReport(user_exam_id)
+        .run()
+        .then(() => {
+          // save questions in localStorage
+          that.saveCurrentExamQuestions(examData.exam.questions.list)
+          // save exam info in vuex store (remove questions of exam then save in store)
+          that.$store.commit('updateQuiz', examData.exam)
+          that.$store.commit('mergeDbAnswersIntoLocalstorage', {
+            dbAnswers: examData.userExamData,
+            exam_id: examData.exam.id
+          })
+          that.report = examData.studentReport
+          that.loadKarname(examData.studentReport)
+
+          that.$store.commit('AppLayout/updateOverlay', { show: false, loading: false, text: '' })
+        })
+        .catch((error) => {
+          that.$store.commit('AppLayout/updateOverlay', { show: false, loading: false, text: '' })
+          that.goToExamList()
+          console.log(error)
+
+          that.$notify({
+            group: 'notifs',
+            title: 'توجه!',
+            text: 'مشکلی در دریافت اطلاعات کارنامه رخ داده است.',
+            type: 'error'
+          })
+        })
+    },
     initVideoJs (srcs, sub_categoryIndex) {
       if (!this.$refs['videoPlayer' + sub_categoryIndex]) {
         return
