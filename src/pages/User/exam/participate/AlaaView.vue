@@ -21,7 +21,7 @@
               <q-btn
                 flat
                 class="q-px-none"
-                :style="{ 'width':'60px','height': '400px' }"
+                :style="{ 'width':'64px','height': '400px' }"
                 no-shadow
                 @click="goToPrevQuestion('onlineQuiz.alaaView')"
               >
@@ -377,7 +377,7 @@ img {
   padding: 12px 12px 12px 12px;
 }
 .btnpre {
-  padding: 12px 12px 12px 12px;
+  padding: 12px 12px 12px 24px;
   flex-direction: column;
 
 }
