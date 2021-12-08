@@ -1,27 +1,24 @@
 <template>
-  نیتدرنسیترذتبرپبتدرزذیتن
-<!--  <v-col-->
-<!--    :md="6"-->
-<!--    :cols="12"-->
-<!--    class="answer-box"-->
-<!--    @click="answerClicked"-->
-<!--  >-->
+  <div
+    class="answer-box col-md-6 col-12"
+    @click="answerClicked"
+  >
 <!--&lt;!&ndash;    :class="{ 'answer-sheet': true, active: isSelected }"&ndash;&gt;-->
-<!--    <v-sheet >-->
-<!--      <div-->
-<!--        class="answer-text renderedPanel"-->
-<!--      >-->
+<!--   reminder: too class q-feild active is selected on she -->
+    <q-feild   :class="{ 'answer-sheet': true}">
+      <div
+        class="answer-text renderedPanel"
+      >
+        یاریگر – مردان کامل – هم‌ردیف
 <!--&lt;!&ndash;        <vue-katex :input="choice.title" :ltr="!isRtl" />&ndash;&gt;-->
-<!--      </div>-->
-<!--      <div class="answer-checkbox">-->
-<!--        <v-checkbox-->
-
-<!--          disabled-->
-<!--        />-->
+      </div>
+      <div class="answer-checkbox">
+        <q-checkbox
+        />
 <!--&lt;!&ndash;        v-model="isSelected"&ndash;&gt;-->
-<!--      </div>-->
-<!--    </v-sheet>-->
-<!--  </v-col>-->
+      </div>
+    </q-feild>
+  </div>
 </template>
 
 <script>
@@ -72,8 +69,9 @@ export default {
     .answer-box {
         display: flex;
         justify-content: center;
-        min-height: 135px;
+        min-height: 100px;
         align-items: center;
+        padding: 12px 12px 12px 12px;
     }
 
     .answer-sheet {
@@ -109,8 +107,8 @@ export default {
     }
 
     .answer-checkbox {
-        height: 74px;
-        width: 85px;
+        height: 70px;
+        width: 70px;
         display: flex;
         justify-content: center;
         align-items: center;
