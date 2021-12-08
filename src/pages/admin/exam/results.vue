@@ -2,8 +2,8 @@
   <v-container>
     <v-row>
       <v-col
-        md="3"
-        sm="3"
+        md="4"
+        sm="4"
         cols="12"
       >
         <div class="form-group m-form__group ">
@@ -17,8 +17,8 @@
         </div>
       </v-col>
       <v-col
-        md="3"
-        sm="3"
+        md="4"
+        sm="4"
         cols="12"
       >
         <div class="form-group m-form__group ">
@@ -33,8 +33,8 @@
         </div>
       </v-col>
       <v-col
-        md="3"
-        sm="3"
+        md="4"
+        sm="4"
         cols="12"
       >
         <div class="form-group m-form__group">
@@ -48,19 +48,60 @@
           />
         </div>
       </v-col>
+    </v-row>
+    <v-row>
       <v-col
-        md="3"
-        sm="3"
+        md="4"
+        sm="4"
         cols="12"
         class="filter-btn"
       >
         <v-btn
-          rounded
           color="primary"
-          width="120px"
+          block
+          class="my-5"
           @click="DoFilter"
         >
-          اعمال فیلتر
+          فیلتر
+        </v-btn>
+      </v-col>
+      <v-col
+        md="4"
+        sm="4"
+        cols="12"
+        class="filter-btn"
+      >
+        <v-btn
+          color="orange"
+          dark
+          block
+          class="my-5"
+          :loading="fileLoading"
+          @click="getExcel"
+        >
+          تولید Excel
+        </v-btn>
+      </v-col>
+      <v-col
+        md="4"
+        sm="4"
+        cols="12"
+        class="filter-btn"
+      >
+        <v-btn
+          color="yellow"
+          block
+          class="my-5"
+          :disabled="!file_url"
+        >
+          <a
+            :href="file_url"
+            :style="{ 'text-decoration': 'none', color: '#000', width: '100%' }"
+            target="_blank"
+            :disabled="!file_url"
+          >
+            دانلود Excel
+          </a>
         </v-btn>
       </v-col>
     </v-row>
@@ -109,6 +150,9 @@
                             نام و نام خانوادگی
                           </th>
                           <th>
+                            شماره همراه
+                          </th>
+                          <th>
                             استان
                           </th>
                           <th>
@@ -150,6 +194,7 @@
                             </span>
                             <span v-else> - </span>
                           </td>
+                          <td>{{ item.user.mobile }}</td>
                           <td>{{ item.location.province }}</td>
                           <td>{{ item.location.city }}</td>
                           <td>
@@ -243,7 +288,9 @@
           ],
         lastLoadTime: Date.now(),
         nextPage: '',
-        tabs: 'tab-1'
+        tabs: 'tab-1',
+        file_url: '',
+        fileLoading: false,
       }
     },
     computed:{
@@ -259,6 +306,35 @@
       this.getData()
     },
     methods: {
+      getParams () {
+        let params = {
+          ...(this.selectedCity && {"city": [this.selectedCity]}),
+          ...(this.selectedProvince&& {"province": [this.selectedProvince]}),
+          ...(this.selectedGender && {"gender": [this.selectedGender]}),
+          exam_id: this.$route.params.examId
+        }
+
+        return params
+      },
+      getExcel () {
+        let that = this
+        this.fileLoading = true
+        let params = this.getParams()
+        params.excel_export = 1
+        this.$notify({
+          group: 'notifs',
+          title: 'توجه!',
+          text: 'فایل Excel در حال تولید است.',
+          type: 'success'
+        })
+        axios.get(API_ADDRESS.exam.examReportIndex('participants'), {
+          params: params
+        })
+            .then( response => {
+              that.file_url = response.data.data.export_file_url
+              that.fileLoading = false
+            })
+      },
       getFiltersData() {
         this.showLoading()
         axios.get(API_ADDRESS.user.formData)

@@ -42,6 +42,37 @@
           <v-list-item-title>{{ item.displayName }}</v-list-item-title>
         </v-list-item>
       </router-link>
+
+      <v-list-group
+        class="question_bank"
+        color="white"
+      >
+        <template v-slot:activator>
+          <v-list-item-title>
+            برنامه آزمون ها
+          </v-list-item-title>
+        </template>
+        <template
+          v-for="(examPlan, index) in examsPlan"
+        >
+          <a
+            v-if="!examPlan.divider"
+            :key="index"
+            :href="examPlan.link"
+            target="_blank"
+            class="text-decoration-none"
+          >
+            <v-list-item>
+              <v-list-item-title v-text="examPlan.name" />
+            </v-list-item>
+          </a>
+          <v-divider
+            v-else
+            :key="index"
+          />
+        </template>
+      </v-list-group>
+
       <router-link
         v-if="false"
         class="text-decoration-none"
@@ -212,10 +243,10 @@ export default {
         displayName: 'لیست دفترچه ها',
         to: { name: 'category.edit' }
       },
-      {
-        displayName: 'لیست زیرگروه ها',
-        to: { name: 'subGroup.edit' }
-      },
+      // {
+      //   displayName: 'لیست زیرگروه ها',
+      //   to: { name: 'subGroup.edit' }
+      // },
       {
         displayName: 'اضافه کردن سوالات MBTI',
         to: { name: 'question.mbti.create' }
@@ -226,6 +257,56 @@ export default {
       //   displayName: 'لیست آزمون ها',
       //   to: { name: 'onlineQuiz.exams' }
       // },
+    ],
+    examsPlan: [
+      {
+        divider: true
+      },
+      {
+        name: 'دهم تجربی',
+        link: 'https://nodes.alaatv.com/aaa/pdf/1401_plan_tajrobi_dahom.pdf'
+      },
+      {
+        name: 'دهم ریاضی',
+        link: 'https://nodes.alaatv.com/aaa/pdf/1401_plan_riyazi_dahom.pdf'
+      },
+      {
+        name: 'دهم انسانی',
+        link: 'https://nodes.alaatv.com/aaa/pdf/1401_plan_ensani_dahom.pdf'
+      },
+      {
+        divider: true
+      },
+      {
+        name: 'یازدهم تجربی',
+        link: 'https://nodes.alaatv.com/aaa/pdf/1401_plan_tajrobi_yazdahom.pdf'
+      },
+      {
+        name: 'یازدهم ریاضی',
+        link: 'https://nodes.alaatv.com/aaa/pdf/1401_plan_riyazi_yazdahom.pdf'
+      },
+      {
+        name: 'یازدهم انسانی',
+        link: 'https://nodes.alaatv.com/aaa/pdf/1401_plan_ensani_yazdahom.pdf'
+      },
+      {
+        divider: true
+      },
+      {
+        name: 'دوازدهم تجربی',
+        link: 'https://nodes.alaatv.com/aaa/pdf/1401_plan_tajrobi_davazdahom.pdf'
+      },
+      {
+        name: 'دوازدهم ریاضی',
+        link: 'https://nodes.alaatv.com/aaa/pdf/1401_plan_riyazi_davazdahom.pdf'
+      },
+      {
+        name: 'دوازدهم انسانی',
+        link: 'https://nodes.alaatv.com/aaa/pdf/1401_plan_ensani_davazdahom.pdf'
+      },
+      {
+        divider: true
+      }
     ]
   }),
   created () {
@@ -243,6 +324,7 @@ export default {
   }
 }
 </script>
+
 <style scoped>
 .v-list__group__header__prepend-icon .v-icon {
   color: red;

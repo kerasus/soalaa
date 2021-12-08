@@ -209,6 +209,57 @@ const mixinQuiz = {
             return currentExamQuestionsArray
         },
 
+        reloadQuestionFile (questionsFileUrl, viewType, examId) {
+            if (!Assistant.getId(examId)) {
+                return
+            }
+            let that = this
+            return new Promise(function (resolve, reject) {
+                let userExamId = undefined
+                let examData = new ExamData()
+                window.currentExamQuestions = null
+                window.currentExamQuestionIndexes = null
+                that.$store.commit('AppLayout/updateOverlay', {show: true, loading: true, text: ''})
+                examData.getExamDataAndParticipate(examId)
+                examData.loadQuestionsFromFile()
+                examData.getUserExamData(userExamId)
+                    .run()
+                    .then((result) => {
+                        try
+                        {
+                            // save questions in localStorage
+                            that.saveCurrentExamQuestions(examData.exam.questions.list)
+                            // save exam info in vuex store (remove questions of exam then save in store)
+                            examData.exam.loadSubcategoriesOfCategories()
+                            Time.setStateOfExamCategories(examData.exam.categories)
+                            let currentExamQuestions = that.getCurrentExamQuestions()
+                            Time.setStateOfQuestionsBasedOnActiveCategory(examData.exam, currentExamQuestions)
+                            that.$store.commit('updateQuiz', examData.exam)
+                            that.setCurrentExamQuestions(currentExamQuestions)
+                            that.loadCurrentQuestion(viewType)
+                            // examData.exam = that.quiz
+
+                            that.$store.commit('mergeDbAnswersIntoLocalstorage', {
+                                dbAnswers: examData.userExamData,
+                                exam_id: examData.exam.id
+                            })
+                            resolve(result)
+                        } catch(error) {
+                            console.error(error)
+                            that.$router.push({ name: 'user.exam.list'})
+                            reject(error)
+                        }
+                    })
+                    .catch((error) => {
+                        reject(error)
+                        that.$router.push({ name: 'user.exam.list'})
+                    })
+                    .finally(() => {
+                        that.$store.commit('AppLayout/updateOverlay', {show: false, loading: false, text: ''})
+                    })
+            })
+        },
+
         startExam(examId, viewType) {
 
             if (!Assistant.getId(examId)) {
