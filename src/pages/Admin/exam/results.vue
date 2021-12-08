@@ -78,12 +78,10 @@
         <q-separator></q-separator>
         <q-tab-panels v-model="tabs">
           <q-tab-panel name="rank">
-            <div
-              class=""
-            >
               <q-markup-table
-                class="my-sticky-header tabs-content"
-                id="scroll-observer scroll-target-id"
+                class="my-sticky-header-table tabs-content"
+                id="scroll-target-id"
+                dense
               >
                 <q-infinite-scroll
                   @load="getTableData"
@@ -92,6 +90,7 @@
                 >
                   <thead
                     v-if="results[0]"
+                    class="mitra"
                   >
                   <tr>
                     <th colspan="5">
@@ -162,7 +161,6 @@
                         round
                       />
                       <q-tooltip top>
-
                         <span>مشاهده کارنامه</span>
                       </q-tooltip>
                     </td>
@@ -192,15 +190,15 @@
                   </template>
                 </q-infinite-scroll>
               </q-markup-table>
-            </div>
           </q-tab-panel>
           <q-tab-panel name="lesson">
             <q-table
               :rows="lessonsResults"
               :columns="lessonsResultsHeaders"
               row-key="value"
+              class="lesson-table"
               hide-bottom
-              :rows-per-page-options="[0]"
+             :rows-per-page-options="[0]"
             >
             </q-table>
           </q-tab-panel>
@@ -213,12 +211,10 @@
 
 <script>
 import API_ADDRESS from 'src/api/Addresses'
-// import InfiniteScroll from 'infinite-loading-vue3'
 
 export default {
   name: 'results',
   components: {
-    // InfiniteScroll
   },
   data: () => {
     return {
@@ -231,16 +227,15 @@ export default {
       results: [],
       lessonsResults: [],
       lessonsResultsHeaders: [
-        { label: 'نام درس', field: row => row.sub_category },
-        { label: 'میانگین درصد', field: 'mean' },
-        { label: 'میانگین درصد نفرات برتر', field: 'top_sub_category_participants_mean' },
-        { label: 'بالاترین درصد', field: 'best_percent' },
-        { label: 'کمترین درصد در میان نفرات برتر', field: 'worst_percent' }
+        { label: 'نام درس', field: row => row.sub_category, align: 'left', sortable: true },
+        { label: 'میانگین درصد', field: 'mean', align: 'left', sortable: true },
+        { label: 'میانگین درصد نفرات برتر', field: 'top_sub_category_participants_mean', align: 'left', sortable: true },
+        { label: 'بالاترین درصد', field: 'best_percent', align: 'left', sortable: true },
+        { label: 'کمترین درصد در میان نفرات برتر', field: 'worst_percent', align: 'left', sortable: true }
         // { text: 'میانگین تراز', value: ''},
       ],
-      lastLoadTime: Date.now(),
       nextPage: '',
-      tabs: 'rank',
+      tabs: 'lesson',
       items: [{}, {}, {}, {}, {}]
     }
   },
@@ -254,20 +249,12 @@ export default {
   },
   mounted () {
     this.getUserFormData()
-    // this.getTableData()
     this.getLessonResultData()
   },
 
   methods: {
-    onLoad (index, done) {
-      console.log('on load is run ')
-      setTimeout(() => {
-        this.items.push({}, {}, {}, {}, {}, {}, {})
-        done()
-      }, 2000)
-    },
+
     getUserFormData () {
-      // console.log('getUserFormData :')
       this.showLoading()
       this.$axios.get(API_ADDRESS.user.formData)
         .then((resp) => {
@@ -278,11 +265,10 @@ export default {
           this.hideLoading()
         })
         .catch(() => {
-          this.$notify({
-            group: 'notifs',
-            title: 'توجه!',
-            text: 'مشکلی در گرفتن اطلاعات رخ داده است. لطفا دوباره امتحان کنید.',
-            type: 'error'
+          this.$q.notify({
+            type: 'negative',
+            message: 'مشکلی در گرفتن اطلاعات رخ داده است. لطفا دوباره امتحان کنید.',
+            position: 'center'
           })
           this.hideLoading()
         }
@@ -326,11 +312,9 @@ export default {
           }
           that.nextPage = response.data.links.next.replace(response.data.meta.path, '')
           console.log('next page :', that.nextPage)
-          that.lastLoadTime = Date.now()
           done()
         })
         .catch(error => {
-          that.lastLoadTime = Date.now()
           that.hideLoading()
           console.log('error', error)
         })
@@ -368,7 +352,10 @@ export default {
 }
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
+.test{
+  border: 1px solid red;
+}
 .bordered-right {
   border-right: solid 1px #d7d7d7;
 }
@@ -383,15 +370,33 @@ export default {
   position: sticky;
 }
 .tabs-content{
-  height: calc(100vh - 200px);
+  width: 100%;
+  height: calc(100vh - 300px);
   overflow:auto;
 }
-.test{
-  height: 200px;
-  background-color: #4a94dc;
-  margin-bottom: 50px;
+</style>
+<style lang="scss">
+.lesson-table{
+  .q-table{
+    tbody tr td{
+     //background-color: #9C27B0;
+    }
+  }
 }
-.mitra{
-  border: 1px red solid;
+.my-sticky-header-table {
+  thead tr th {
+     background-color: #fdfdfd;
+     position: sticky;
+     z-index: 1;
+   }
+  thead tr:first-child th {
+    top: 0;
+  }
+  thead tr:nth-child(2) th {
+    top: 28px;
+  }
+  &.q-table--loading thead tr:last-child th {
+    top: 48px;
+  }
 }
 </style>
