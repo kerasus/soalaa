@@ -154,7 +154,7 @@ const routes = [
     // path: '/konkoorView/:quizId',
     path: '/konkoorView',
     name: 'konkoorView',
-    component: () => import('src/pages/User/exam/participate/konkoorView'),
+    component: () => import('pages/User/exam/participate/konkoorView1'),
     // component: () => import('src/components/Menu/topMenu/onlineQuizTopMenu'),
     meta: {
       middlewares: [auth]

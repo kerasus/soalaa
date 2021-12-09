@@ -109,7 +109,7 @@
 
 <script>
 import 'src/assets/scss/markdownKatex.scss'
-import { mixinQuiz, mixinUserActionOnQuestion } from 'src/mixin/Mixins'
+import { mixinQuiz, mixinUserActionOnQuestion } from 'src/mixin1/Mixins'
 // import VueKatex from 'src/components/VueKatex'
 
 export default {

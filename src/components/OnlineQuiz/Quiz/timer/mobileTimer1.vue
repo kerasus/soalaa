@@ -86,7 +86,7 @@
 </template>
 
 <script>
-import { mixinQuiz } from 'src/mixin/Mixins'
+import { mixinQuiz } from 'src/mixin1/Mixins'
 
 export default {
   name: 'mobileTimer',

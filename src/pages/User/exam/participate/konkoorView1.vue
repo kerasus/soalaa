@@ -93,13 +93,13 @@
 
 <script>
 import 'src/assets/scss/markdownKatex.scss'
-import Item from 'src/components/OnlineQuiz/Quiz/question/questionField'
-import { mixinAuth, mixinQuiz, mixinUserActionOnQuestion, mixinWindowSize } from 'src/mixin/Mixins'
-import Timer from 'src/components/OnlineQuiz/Quiz/timer/timer'
-import BubbleSheet from 'src/components/OnlineQuiz/Quiz/bubbleSheet/bubbleSheet'
+import Item from 'components/OnlineQuiz/Quiz/question/questionField1'
+import { mixinAuth, mixinQuiz, mixinUserActionOnQuestion, mixinWindowSize } from 'src/mixin1/Mixins'
+import Timer from 'components/OnlineQuiz/Quiz/timer/timer1'
+import BubbleSheet from 'components/OnlineQuiz/Quiz/bubbleSheet/bubbleSheet1'
 import { Exam } from 'src/models/Exam'
 // import Assistant from 'src/plugins/assistant'
-import TopMenu from 'src/components/Menu/topMenu/onlineQuizTopMenu'
+import TopMenu from 'components/Menu/topMenu/onlineQuizTopMenu1'
 export default {
   name: 'konkoorView',
   components: {

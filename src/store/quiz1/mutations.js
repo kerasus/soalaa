@@ -189,11 +189,11 @@ export function clearExamData (state, examId) {
 export function checkIfQuestionExistInUserQuizListData (state, questionId) {
   if (!state.userQuizListData[state.quiz.id]) {
     // TODO --> 'vue.set'
-    // Vue.set(state.userQuizListData, state.quiz.id, {})
+    // Vue.set(state.userQuizListData, state.quiz1.id, {})
   }
   if (!state.userQuizListData[state.quiz.id][questionId]) {
     // TODO --> 'vue.set'
-    // Vue.set(state.userQuizListData[state.quiz.id], questionId, {})
+    // Vue.set(state.userQuizListData[state.quiz1.id], questionId, {})
   }
 }
 
@@ -201,12 +201,12 @@ export function enterQuestion (state, questionId) {
   this.commit('checkIfQuestionExistInUserQuizListData', questionId)
   if (!state.userQuizListData[state.quiz.id][questionId].check_in_times) {
     // TODO --> 'vue.set'
-    // Vue.set(state.userQuizListData[state.quiz.id][questionId], 'check_in_times', [])
+    // Vue.set(state.userQuizListData[state.quiz1.id][questionId], 'check_in_times', [])
   }
   const checkInTimes = state.userQuizListData[state.quiz.id][questionId].check_in_times
   checkInTimes.push({ start: Time.now(), end: null })
   // TODO --> 'vue.set'
-  // Vue.set(state.userQuizListData[state.quiz.id][questionId], 'check_in_times', check_in_times)
+  // Vue.set(state.userQuizListData[state.quiz1.id][questionId], 'check_in_times', check_in_times)
 }
 
 export function leaveQuestion (state, questionId) {

@@ -80,7 +80,7 @@
 
 <script>
 import moment from 'moment-jalaali'
-import { mixinQuiz, mixinUserActionOnQuestion } from 'src/mixin/Mixins'
+import { mixinQuiz, mixinUserActionOnQuestion } from 'src/mixin1/Mixins'
 
 export default {
   name: 'BubbleSheet',
