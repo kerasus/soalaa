@@ -3,7 +3,7 @@ import Time from '../plugins/time'
 import { QuestSubcategory, QuestSubcategoryList } from '../models/QuestSubcategory'
 import axios from 'axios'
 import API_ADDRESS from 'src/api/Addresses'
-import { Exam } from '../models/Exam'
+import { Exam } from 'src/models/Exam'
 import { QuestCategoryList } from '../models/QuestCategory'
 // todo : jquery
 // import $ from 'jquery'
