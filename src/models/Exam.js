@@ -105,6 +105,12 @@ class Exam extends Model {
           populate_school_ranking: false
         }
       },
+<<<<<<<<< Temporary merge branch 1
+
+      { key: 'type' },
+
+=========
+>>>>>>>>> Temporary merge branch 2
       {
         key: 'type_id',
         default: null
