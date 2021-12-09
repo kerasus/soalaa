@@ -3,13 +3,14 @@
     <div class="col-9 ">
       <div class="row q-mb-xl justify-center ">
         <div class="col-12 col-md-3 col-sm-3  q-pr-md">
-          <div class="form-group m-form__group ">
+          <div class=" ">
             <q-select
               v-model="selectedGender"
               :options="genders"
               label="جنسیت"
               color="blue-8"
               option-label="title"
+              emit-value
               option-value="title"
             />
           </div>
@@ -21,6 +22,7 @@
             color="blue-8"
             :options="provinces"
             option-label="title"
+            emit-value
             option-value="title"
             no-data-text="داده ای یافت نشد"
           />
@@ -32,6 +34,7 @@
             color="blue-8"
             :options="citiesForSelectedProvince"
             option-label="title"
+            emit-value
             option-value="title"
             no-data-text="داده ای یافت نشد"
           >
@@ -44,14 +47,40 @@
             </template>
           </q-select>
         </div>
+      </div>
+      <div class="row q-mb-lg">
         <div class="col-12 col-md-3 col-sm-3 filter-btn  q-px-md">
           <q-btn
             rounded
             color="blue-8"
-            padding="7px 20px"
             @click="DoFilter"
+            style="width: 150px"
           >
             اعمال فیلتر
+          </q-btn>
+        </div>
+        <div class="col-12 col-md-3 col-sm-3 filter-btn  q-px-md">
+          <q-btn
+            rounded
+            color="amber-8"
+            :loading="fileLoading"
+            @click="getExcel"
+            style="width: 150px"
+          >
+            تولید Excel
+          </q-btn>
+        </div>
+        <div class="col-12 col-md-3 col-sm-3 filter-btn q-px-md">
+          <q-btn
+            rounded
+            :color="file_url ? 'yellow-6':'grey'"
+            :text-color="file_url ? 'grey-14':'white'"
+            type="a"
+            :href="file_url"
+            :disable="!file_url"
+             style="width: 150px"
+          >
+            دانلود Excel
           </q-btn>
         </div>
       </div>
@@ -84,7 +113,7 @@
                 dense
               >
                 <q-infinite-scroll
-                  @load="getTableData"
+                  @load="loadRankData"
                   :offset="250"
                   scroll-target="#scroll-target-id"
                 >
@@ -183,11 +212,11 @@
                     </template>
                   </tr>
                   </tbody>
-                  <template v-slot:loading>
-                    <div class="row justify-center q-my-md">
-                      <q-spinner-dots color="primary" size="40px"></q-spinner-dots>
-                    </div>
-                  </template>
+                  <div v-if="noData"
+                  class="text-subtitle1 text-weight-medium text-center full-width"
+                  >
+                    no more data
+                  </div>
                 </q-infinite-scroll>
               </q-markup-table>
           </q-tab-panel>
@@ -235,8 +264,10 @@ export default {
         // { text: 'میانگین تراز', value: ''},
       ],
       nextPage: '',
-      tabs: 'lesson',
-      items: [{}, {}, {}, {}, {}]
+      tabs: 'rank',
+      fileLoading: false,
+      file_url: '',
+      noData: false
     }
   },
   computed: {
@@ -253,7 +284,6 @@ export default {
   },
 
   methods: {
-
     getUserFormData () {
       this.showLoading()
       this.$axios.get(API_ADDRESS.user.formData)
@@ -274,50 +304,31 @@ export default {
         }
         )
     },
-
-    testMitra (index, done) {
-      setTimeout(() => {
-        this.items.push({}, {}, {}, {}, {}, {}, {})
-        console.log('test mitra call')
-        done()
-        if (this.items.length > 20) {
-          console.log('stop run ')
-          stop()
-        }
-      }, 2000)
-    },
-    getTableData (index, done) {
-      console.log('get table data called')
+    async loadRankData (index, done) {
       this.showLoading()
-      const that = this
-      this.$axios.get(API_ADDRESS.exam.examReportIndex('participants') + that.nextPage, {
-        params: {
-          ...(that.selectedCity && { city: [that.selectedCity] }),
-          ...(that.selectedProvince && { province: [that.selectedProvince] }),
-          ...(this.selectedGender && { gender: [that.selectedGender] }),
-          exam_id: that.$route.params.examId
+      try {
+        const response = await this.getRankData()
+        // console.log('response :', response)
+        this.hideLoading()
+        if (response.data.data) {
+          this.results = this.results.concat(response.data.data)
         }
-      })
-        .then(response => {
-          console.log('getTableData response :', response)
-          that.hideLoading()
-          if (response.data.data) {
-            that.results = that.results.concat(response.data.data)
-          }
-          if (typeof response.data.links === 'undefined' || response.data.links.next === null) {
-            console.log('next page is null ')
-            that.nextPage = ''
-            done(true)
-            return
-          }
-          that.nextPage = response.data.links.next.replace(response.data.meta.path, '')
-          console.log('next page :', that.nextPage)
-          done()
-        })
-        .catch(error => {
-          that.hideLoading()
-          console.log('error', error)
-        })
+        if (typeof response.data.links === 'undefined' || response.data.links.next === null) {
+          this.nextPage = ''
+          done(true)
+          this.noData = true
+          return
+        }
+        this.nextPage = response.data.links.next.replace(response.data.meta.path, '')
+        done()
+      } catch (error) {
+        this.hideLoading()
+      }
+    },
+
+    getRankData () {
+      const params = this.getParams()
+      return this.$axios.get(API_ADDRESS.exam.examReportIndex('participants') + this.nextPage, { params })
     },
 
     getLessonResultData () {
@@ -330,7 +341,6 @@ export default {
           .then((response) => {
             if (response.data.data) {
               this.lessonsResults = response.data.data
-              // console.log('getLessonResultData this.lessonsResults for lesson  : ', this.lessonsResults)
             }
           })
       }
@@ -338,7 +348,9 @@ export default {
 
     DoFilter () {
       this.results = []
-      this.getTableData()
+      this.nextPage = ''
+      this.noData = false
+      this.loadRankData()
     },
 
     showLoading () {
@@ -347,6 +359,34 @@ export default {
 
     hideLoading () {
       this.$store.dispatch('loading/overlayLoading', false)
+    },
+    getExcel () {
+      const that = this
+      this.fileLoading = true
+      const params = this.getParams()
+      params.excel_export = 1
+      this.$q.notify({
+        type: 'positive',
+        message: 'فایل Excel در حال تولید است.',
+        position: 'center'
+      })
+      this.$axios.get(API_ADDRESS.exam.examReportIndex('participants'), {
+        params: params
+      })
+        .then(response => {
+          that.file_url = response.data.data.export_file_url
+          that.fileLoading = false
+        })
+    },
+
+    getParams () {
+      const params = {
+        ...(this.selectedCity && { city: [this.selectedCity] }),
+        ...(this.selectedProvince && { province: [this.selectedProvince] }),
+        ...(this.selectedGender && { gender: [this.selectedGender] }),
+        exam_id: this.$route.params.examId
+      }
+      return params
     }
   }
 }
