@@ -1,16 +1,16 @@
 <template>
-  <div v-intersect="test">
+  <div class="question-field">
     <q-markup-table
       separator="none"
       class="question-table"
     >
       <thead>
       <tr>
-        <th class="table-head text-left">
+        <th class="table-head">
           <p
             v-if="(considerActiveCategory && source.in_active_category) || !considerActiveCategory"
             :id="'question' + source.id"
-            class="question-body renderedPanel"
+            class="question-body"
             :class="{ ltr: isRtl }"
           >
             که بود و چه کرد؟
@@ -23,13 +23,13 @@
             class="question-icons"
             :style="{ float: isRtlString ? 'left' : 'right' }"
           >
-            <span>
               <q-btn
                 v-if="getChoiceStatus() !== 'o'"
                 text-color="grey"
                 icon="mdi-checkbox-blank-circle-outline"
                 :size="24"
                 flat
+                fab-mini
                 @click="changeStatus(source.id, 'o')"
               />
               <q-btn
@@ -38,16 +38,16 @@
                 text-color="yellow"
                 :size="24"
                 flat
+                fab-mini
                 @click="changeStatus(source.id, 'o')"
               />
-            </span>
-            <span>
               <q-btn
                 v-if="getChoiceStatus() === 'x'"
                 text-color="red"
                 icon="mdi-close"
                 :size="24"
                 flat
+                fab-mini
                 @click="changeStatus(source.id ,'x')"
               />
               <q-btn
@@ -56,16 +56,16 @@
                 icon="mdi-close"
                 :size="24"
                 flat
+                fab-mini
                 @click="changeStatus(source.id ,'x')"
               />
-            </span>
-            <span>
               <q-btn
                 v-if="getChoiceBookmark()"
                 text-color="blue"
                 icon="mdi-bookmark"
                 :size="24"
                 flat
+                fab-mini
                 @click="changeBookmark(source.id)"
               />
               <q-btn
@@ -74,9 +74,9 @@
                 icon="mdi-bookmark-outline"
                 :size="24"
                 flat
+                fab-mini
                 @click="changeBookmark(source.id)"
               />
-           </span>
           </div>
         </th>
       </tr>
@@ -89,13 +89,11 @@
           v-for="(choice, index) in source.choices.list"
           :key="choice.id"
           ref="choices"
-          :md="choiceClass"
-          class="choice renderedPanel"
-          :class="{ active: getAnsweredChoiceId() === choice.id, ltr: isRtl }"
+          class="choice"
+          :class="{active: getAnsweredChoiceId() === choice.id, ltr: isRtl}"
           @click="clickOnAnswer({ questionId: source.id, choiceId: choice.id})"
         >
           <div
-            dir="rtl"
             v-html="choiceNumber[index] + choice.title"
           />
           <!--          <vue-katex-->
@@ -142,7 +140,6 @@ export default {
   data () {
     return {
       isRtl: false,
-      widestChoiceWidth: 0,
       observer: null,
       choiceNumber: {
         0: '1) ',
@@ -167,8 +164,6 @@ export default {
       if (!string) {
         return false
       }
-      // const englishRegex = /^[A-Za-z0-9 :"'ʹ.<>%$&@!+()\-/\n,…?;ᵒ*~]*$/
-      // return !!string.match(englishRegex)
       const persianRegex = /[\u0600-\u06FF]/
       return string.match(persianRegex)
     },
@@ -176,7 +171,6 @@ export default {
       const source = this.source
       const largestChoice = this.getLargestChoice(source.choices)
       const largestChoiceWidth = this.questionsColumn.clientWidth / largestChoice
-      // console.log(this.source.order, largestChoice, largestChoiceWidth)
       if (largestChoiceWidth < 12) {
         return 12
       }
@@ -202,7 +196,6 @@ export default {
       if (!userQuestionData) {
         return false
       }
-
       return userQuestionData.status
     },
     getChoiceBookmark () {
@@ -269,87 +262,89 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.question-table {
-  .table-head{
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-  }
-  .table-body{
-    .choices {
+.question-field{
+  .question-table {
+    padding: 10px 10px 10px 30px;
+    &.current-question {
+      background-color: #fffaee;
+    }
+    .table-head{
       display: flex;
-      flex-direction: column;
+      flex-direction: row;
+      justify-content: space-between;
+      padding: 0;
+      .question-body {
+        margin-bottom: 20px;
+        line-height: 40px;
+      }
+      .question-icons {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-around;
+      }
+    }
+    .table-body{
+      .choices {
+        display: flex;
+        flex-direction: column;
+        .choice{
+         height: auto;
+          cursor: pointer;
+          transition: all ease-in-out 0.3s;
+          padding: 0;
+          &:hover {
+            background: #e1e1e1;
+          }
+          &.active{
+            &:before {
+              content: "\F012C";
+              display: inline-block;
+              font: normal normal normal 24px/1 "Material Design Icons";
+              text-rendering: auto;
+              line-height: inherit;
+              -webkit-font-smoothing: antialiased;
+              -moz-osx-font-smoothing: grayscale;
+              margin-left: 10px;
+              color: #4caf50;
+              font-size: 20px;
+            }
+          }
+        }
+      }
+    }
+    &.q-table__card {
+      box-shadow: none;
+      border-radius: 0;
     }
   }
-  &.q-table__card {
-    box-shadow: none;
-    border-radius: 0;
+  .ltr {
+    direction: rtl;
+    &.question-table{
+      padding: 10px 20px;
+    }
+    &.choice{
+      direction: rtl;
+      text-align: right;
+    }
+    &.question-icons{
+      float: left;
+    }
   }
 }
+</style>
 
-.ltr.question {
-  padding: 10px 20px 10px 20px;
-}
-
-.ltr {
-  direction: ltr;
-}
-
-.ltr .choice {
-  direction: ltr;
-  text-align: left;
-}
-
-.ltr .buttons-group {
-  float: right;
-}
-
-.current-question {
-  background-color: #fffaee;
-}
-
-.choice {
-  cursor: pointer;
-  transition: all ease-in-out 0.3s;
-}
-
-.buttons-group {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-around;
-}
-
-.choice.active::before {
-  content: "\F012C";
-  display: inline-block;
-  font: normal normal normal 24px/1 "Material Design Icons";
-  text-rendering: auto;
-  line-height: inherit;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  margin-left: 10px;
-  color: #4caf50;
-  font-size: 20px;
-}
-
-.choice:hover {
-  background: #e1e1e1;
-}
-
-.question-body {
-  margin-bottom: 20px;
-  line-height: 40px;
-}
-
-.questions {
-  background: #fff;
-  overflow-y: auto;
-  position: relative;
-  /*padding-right: 25px;*/
-  padding: 0;
-}
-
-.question {
-  padding: 10px 30px 10px 10px;
+<style lang="scss">
+.question-field{
+  .question-table{
+    .table-head{
+      .question-icons{
+        .q-btn--fab-mini {
+          padding: 0;
+          height: 36px;
+          width: 36px;
+        }
+      }
+    }
+  }
 }
 </style>

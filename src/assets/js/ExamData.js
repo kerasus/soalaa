@@ -193,8 +193,10 @@ class ExamData {
       if (!examId) {
         examId = that.exam.id
       }
-      axios.post(API_ADDRESS.exam.examUser, { examId })
+      // eslint-disable-next-line no-undef
+      axios.post(API_ADDRESS.exam.examUser, { exam_id })
         .then(response => {
+          console.log('res', response)
           that.exam = new Exam()
           // ToDo: attention on user_exam_id and exam_id
           that.exam.id = Assistant.getId(response.data.data.exam_id)
@@ -209,6 +211,7 @@ class ExamData {
           resolve(response)
         })
         .catch(error => {
+          console.log('err', error)
           reject(error)
         })
     })

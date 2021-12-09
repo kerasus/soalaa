@@ -220,11 +220,11 @@ const mixinQuiz = {
         if (that.needToLoadQuizData()) {
           window.currentExamQuestions = null
           window.currentExamQuestionIndexes = null
-          // that.$store.dispatch('loading/overlay', true)
+          that.$store.commit('loading/overlay', true)
           examData.getExamDataAndParticipate(examId)
           examData.loadQuestionsFromFile()
         } else {
-          userExamId = that.quiz.user_exam_id
+          userExamId = '6135bddbe0db6947171ef98a'
           that.loadCurrentQuestion(viewType)
         }
         examData.getUserExamData(userExamId)
@@ -251,7 +251,6 @@ const mixinQuiz = {
               })
               resolve(result)
             } catch (error) {
-              console.error(error)
               that.$router.push({ name: 'user.exam.list' })
               reject(error)
             }
@@ -261,7 +260,7 @@ const mixinQuiz = {
             that.$router.push({ name: 'user.exam.list' })
           })
           .finally(() => {
-            // that.$store.commit('AppLayout/updateOverlay', { show: false, loading: false, text: '' })
+            that.$store.commit('loading/overlay', false)
           })
 
         // if (that.needToLoadQuizData() && examId) {
@@ -270,13 +269,13 @@ const mixinQuiz = {
         //             resolve()
         //         })
         //         .catch((error) => {
-        //             that.$store.commit('AppLayout/updateOverlay', {show: false, loading: false, text: ''})
+        //             that.$store.commit('loading/overlay', false)
         //             Assistant.reportErrors({location: 'mixin/Quiz.js -> startExam()'})
         //             reject(error)
         //         })
         // } else {
         //     that.loadExam()
-        //     that.$store.commit('AppLayout/updateOverlay', {show: false, loading: false, text: ''})
+        //     that.$store.commit('loading/overlay', false)
         //     resolve()
         // }
       })
@@ -567,7 +566,7 @@ const mixinQuiz = {
       } else if (type === 'konkoor') {
         this.$store.commit('AppLayout/updateDrawer', false)
         setTimeout(() => {
-          this.$router.push({ name: 'konkoorView', params: { quizId: this.quiz.id } })
+          this.$router.push({ name: 'konkoorView', params: { quizId: '6135bddbe0db6947171ef98a' } })
         }, 200)
       }
     },
