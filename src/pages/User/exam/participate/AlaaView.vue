@@ -16,7 +16,7 @@
         >
           <div class="row">
             <!--&lt;!&ndash;              v-if= "getQuestionNumberFromId(currentQuestion.id) !== 1"&ndash;&gt;-->
-            <div class="col btnpre col-md-1 justify-start d-none"
+            <div class="col btnpre col-md-1 justify-start sm-hide xs-hide"
             >
               <q-btn
                 flat
@@ -31,7 +31,7 @@
                 />
               </q-btn>
             </div>
-            <div class="col col-md-10 q-py-sm ">
+            <div class="col col-md-10 q-px-sm ">
               <div class="row question-header">
                 <div class="question-number">
                   <!--                    v-if="currentLesson"-->
@@ -151,13 +151,13 @@
 
               </div>
             </div>
-            <div class="col btnpre col-md-1 justify-start d-none"
+            <div class="col btnpre col-md-1 justify-start sm-hide xs-hide"
             >
 <!--              v-if="getQuestionNumberFromId(currentQuestion.id) !== getCurrentExamQuestionsInArray().length"-->
               <q-btn
                 flat
-                class="q-px-none q-ml-md"
-                :style="{ 'width':'60px','height': '400px' }"
+                class="q-px-none"
+                :style="{ 'width':'64px','height': '400px' }"
                 no-shadow
                 @click="goToNextQuestion('onlineQuiz.alaaView')"
               >
@@ -383,7 +383,7 @@ img {
 }
 .btnpre {
   display: flex;
-  padding : 12px 20px 12px 12px;
+  padding : 12px 12px 12px 12px;
 
 }
 
@@ -400,9 +400,9 @@ img {
   }
 }
 
-@media only screen and (max-width: 450px) {
+@media only screen and (max-width: 600px) {
   .question-buttons button {
-    margin-right: 0;
+    margin-left: 0;
   }
 }
 
