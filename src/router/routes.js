@@ -14,6 +14,18 @@ const routes = [
         }
       },
       {
+        path: '/user_exam_list',
+        name: 'user.exam.list',
+        component: () => import('pages/User/exam/List'),
+        middleware: [auth]
+      },
+      {
+        path: '/onlineQuiz/results/:exam_id/:user_exam_id',
+        name: 'user.exam.results',
+        component: () => import('pages/User/exam/Result'),
+        middleware: [auth]
+      },
+      {
         path: '/exam',
         name: 'exam',
         component: () => import('pages/Admin/exam/index'),
@@ -46,6 +58,12 @@ const routes = [
             }
           },
           {
+            path: '/exam/results/:examId',
+            name: 'exam.results',
+            component: () => import('pages/Admin/exam/results'),
+            meta: { middleware: [auth] }
+          },
+          {
             path: ':examId',
             name: 'show',
             component: () => import('pages/Admin/exam/edit/editExam'),
@@ -73,6 +91,30 @@ const routes = [
             path: '/question/mbti/create',
             name: 'question.mbti.create',
             component: () => (import('pages/Admin/Question/newMBTIpage')),
+            meta: {
+              middlewares: [auth]
+            }
+          },
+          {
+            path: '/question/list',
+            name: 'question.list',
+            component: () => (import('pages/Admin/Question/NewQuestionFactory')),
+            meta: {
+              middlewares: [auth]
+            }
+          },
+          {
+            path: '/question/:question_id/show',
+            name: 'question.show',
+            component: () => (import('pages/Admin/Question/CreateNewQuestion')),
+            meta: {
+              middlewares: [auth]
+            }
+          },
+          {
+            path: '/question/:question_id/edit',
+            name: 'question.edit',
+            component: () => (import('pages/Admin/Question/CreateNewQuestion')),
             meta: {
               middlewares: [auth]
             }
@@ -121,9 +163,10 @@ const routes = [
     component: () => import('pages/Auth/Login.vue')
   },
   {
-    path: '/test',
-    name: 'test',
-    component: () => import('pages/Auth/test.vue'),
+    path: '/konkoorView',
+    name: 'konkoorView',
+    // component: () => import('src/pages/User/exam/participate/konkoorView'),
+    component: () => import('src/components/OnlineQuiz/Quiz/timer/timer'),
     meta: {
       middlewares: [auth]
     }
@@ -141,7 +184,8 @@ const routes = [
   // but you can also remove it
   {
     path: '/:catchAll(.*)*',
-    component: () => import('pages/Error404.vue')
+    component:
+  () => import('pages/Error404.vue')
   }
 ]
 

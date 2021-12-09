@@ -30,6 +30,12 @@
       <div class="row">
       <div :class="status ?'col-10' :'col-10'">
 <!--        Todo : v-autocomplete -->
+        <q-select
+        :options="mbtiValue"
+        option-label="text"
+        option-value="value"
+        v-model="item.answer"
+        />
 <!--            <v-autocomplete-->
 <!--                v-model="item.answer"-->
 <!--                :items="mbti_value"-->
@@ -87,7 +93,7 @@ export default {
     return {
       question: new Question(),
       domKey: Date.now(),
-      mbti_value: [
+      mbtiValue: [
         {
           text: 'bartle-s',
           value: 'socializer'
