@@ -4,11 +4,11 @@ const routes = [
   {
     path: '/',
     name: 'home',
-    component: () => import('pages/User/exam/List'),
+    component: () => import('layouts/MainLayout.vue'),
     children: [
       {
         path: '',
-        component: () => import('pages/Index.vue'),
+        component: () => import('pages/User/exam/List'),
         meta: {
           middlewares: [auth]
         }
