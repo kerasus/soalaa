@@ -117,10 +117,8 @@ class ExamData {
       if (!userExamId) {
         userExamId = that.exam.user_exam_id
       }
-      console.log('API_ADDRESS.exam.getAnswerOfUserWithCorrect(userExamId)', API_ADDRESS.exam.getAnswerOfUserWithCorrect(userExamId))
       axios.get(API_ADDRESS.exam.getAnswerOfUserWithCorrect(userExamId))
         .then(response => {
-          console.log('response', response)
           that.exam = new Exam()
           if (examId) {
             that.exam.id = examId
@@ -132,7 +130,6 @@ class ExamData {
           resolve(response)
         })
         .catch(error => {
-          console.log('error', error)
           reject(error)
         })
     })

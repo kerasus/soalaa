@@ -8,10 +8,14 @@
           size="10px"
           round
           dark-percentage
-          icon="mdi-chevron-right"
           color="white"
           @click="goBack"
         >
+          <q-icon
+            name="mdi-chevron-left"
+            color="black"
+            size="sm"
+          />
         </q-btn>
       </div>
     </div>
@@ -30,43 +34,43 @@
           </thead>
           <tbody>
           <tr
-            v-for="item in lessonsList"
+            v-for="item in lessonsList.list"
             :key="item.id"
           >
-            <td>{{item.title}}</td>
+            <td>{{ item.title }}</td>
             <td class="actionsColumn">
-                  <q-btn
-                    v-if="item.permissions.view"
-                    class="q-mx-sm"
-                    size="12px"
-                    round
-                    dark-percentage
-                    color="green"
-                  >
-                    <q-icon
-                      name="mdi-notebook-outline"
-                      size="sm"
-                    />
-                    <q-tooltip anchor="top middle" self="bottom middle" :offset="[10, 10]">
-                      <span class="smallFontSize">مشاهده سوالات دروس</span>
-                    </q-tooltip>
-                  </q-btn>
-                  <q-btn
-                    v-if="item.permissions.view"
-                    class="q-mx-sm"
-                    size="12px"
-                    round
-                    dark-percentage
-                    color="blue"
-                  >
-                    <q-icon
-                      name="mdi-video"
-                      size="sm"
-                    />
-                    <q-tooltip anchor="top middle" self="bottom middle" :offset="[10, 10]">
-                      <span class="smallFontSize">ثبت ویدئو تحلیل</span>
-                    </q-tooltip>
-                  </q-btn>
+              <q-btn
+                v-if="item.permissions.view"
+                class="q-mx-sm"
+                size="12px"
+                round
+                dark-percentage
+                color="green">
+<!--                :to="{ name: 'onlineQuiz.exams.lessons.details', params: { quizId: $route.params.quizId, lessonId: item.id}}"-->
+                <q-icon
+                  name="mdi-notebook-outline"
+                  size="sm"
+                />
+                <q-tooltip anchor="top middle" self="bottom middle" :offset="[10, 10]">
+                  <span class="smallFontSize">مشاهده سوالات دروس</span>
+                </q-tooltip>
+              </q-btn>
+              <q-btn
+                v-if="item.permissions.view"
+                class="q-mx-sm"
+                size="12px"
+                round
+                dark-percentage
+                color="blue"
+                :to="{ name: 'video.set', params: { exam_id: $route.params.quizId, subcategory_id: item.id, exam_title: $route.params.quizTitle}}">
+                <q-icon
+                  name="mdi-video"
+                  size="sm"
+                />
+                <q-tooltip anchor="top middle" self="bottom middle" :offset="[10, 10]">
+                  <span class="smallFontSize">ثبت ویدئو تحلیل</span>
+                </q-tooltip>
+              </q-btn>
             </td>
           </tr>
           </tbody>
@@ -94,7 +98,7 @@ export default {
   },
   methods: {
     goBack () {
-      this.$router.push('/onlineQuiz/exams')
+      this.$router.push('/exam')
     },
     getLessons () {
       this.lessonsList.loading = true
@@ -117,6 +121,7 @@ export default {
 </script>
 
 <style scoped>
+
 .actionsColumn {
   width: 50%;
 }
