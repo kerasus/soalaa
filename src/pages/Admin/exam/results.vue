@@ -187,6 +187,7 @@
                         icon="mdi-eye-circle-outline"
                         color="cyan"
                         flat
+                        :to="{name: 'user.exam.results', params: {exam_id: item.exam_id, user_exam_id: item.exam_user_id}}"
                         round
                       />
                       <q-tooltip top>
