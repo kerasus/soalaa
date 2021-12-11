@@ -8,12 +8,12 @@ import { QuestCategoryList } from '../models/QuestCategory'
 // todo : jquery
 import $ from 'jquery'
 import { QuestionList } from '../models/Question'
-import ExamData from 'src/assets/js/ExamData'
+import ExamData1 from 'assets/js/ExamData1'
 
 const mixinQuiz = {
   computed: {
     isQuizPage () {
-      return this.$route.name === 'onlineQuiz.quiz'
+      return this.$route.name === 'onlineQuiz.quiz1'
     },
     quiz: {
       get () {
@@ -36,11 +36,11 @@ const mixinQuiz = {
       }
     },
     currentExamFrozenQuestions () {
-      return this.$store.getters('quiz/currentExamFrozenQuestions')
+      return this.$store.getters('quiz1/currentExamFrozenQuestions')
     },
     currentQuestion: {
       get () {
-        return this.$store.getters('quiz/currentQuestion')
+        return this.$store.getters('quiz1/currentQuestion')
       },
       set (newInfo) {
         this.$store.commit('quiz/updateCurrentQuestion', {
@@ -216,7 +216,7 @@ const mixinQuiz = {
       const that = this
       return new Promise(function (resolve, reject) {
         let userExamId
-        const examData = new ExamData()
+        const examData = new ExamData1()
         if (that.needToLoadQuizData()) {
           window.currentExamQuestions = null
           window.currentExamQuestionIndexes = null
@@ -326,8 +326,8 @@ const mixinQuiz = {
           .then((response) => {
             if (!Assistant.getId(that.quiz.id)) {
               Assistant.reportErrors({
-                location: 'mixin/Quiz.js -> loadExam() -> quiz.getAnswerOfUserInExam()',
-                message: 'quiz.id not set'
+                location: 'mixin/Quiz.js -> loadExam() -> quiz1.getAnswerOfUserInExam()',
+                message: 'quiz1.id not set'
               })
               reject()
             }
@@ -597,7 +597,7 @@ const mixinQuiz = {
           reject(null)
           return
         }
-        // ToDo : jQuery needed
+
         $.ajax({
           type: 'GET',
           url: questionsFileUrl,
