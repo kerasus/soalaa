@@ -162,6 +162,31 @@ const routes = [
     name: 'login',
     component: () => import('pages/Auth/Login.vue')
   },
+  // are u mr Esmaeili ? '' : dont touch this route
+  {
+    path: '/debug',
+    name: 'debug',
+    component: () => import('pages/Auth/test.vue'),
+    meta: {
+      middlewares: [auth]
+    }
+  },
+  {
+    path: '/results/mbti_bartle/:exam_id/:user_exam_id',
+    name: 'mbtiBartle.result',
+    component: () => import('pages/User/exam/Result/MBTI_Bartle_result'),
+    meta: {
+      middlewares: [auth]
+    }
+  },
+  {
+    path: '/onlineQuiz/mbti_bartle/:quizId/:questNumber',
+    name: 'onlineQuiz.mbtiBartle',
+    component: () => import('pages/User/exam/participate/MBTI_Bartle'),
+    meta: {
+      middlewares: [auth]
+    }
+  },
   {
     // path: '/konkoorView/:quizId',
     path: '/konkoorView',
