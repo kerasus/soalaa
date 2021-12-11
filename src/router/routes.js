@@ -4,11 +4,11 @@ const routes = [
   {
     path: '/',
     name: 'home',
-    component: () => import('pages/User/exam/List'),
+    component: () => import('layouts/MainLayout.vue'),
     children: [
       {
         path: '',
-        component: () => import('pages/Index.vue'),
+        component: () => import('pages/User/exam/List'),
         meta: {
           middlewares: [auth]
         }
@@ -141,7 +141,7 @@ const routes = [
             meta: { middlewares: [auth] }
           },
           {
-            path: '/lessonsList',
+            path: '/onlineQuiz/exams/lessons/:quizId/:quizTitle',
             name: 'onlineQuiz.exams.lessons',
             component: () => import('src/pages/Admin/exam/lessons.vue'),
             meta: {
