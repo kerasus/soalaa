@@ -335,8 +335,8 @@ class Question extends Model {
         })
     }
 
-    sendAnswer (exam_user_id, {question_id, choice_id, selected_at }) {
-        return axios.post(API_ADDRESS.exam.sendAnswers, {exam_user_id, questions: [{question_id, choice_id, selected_at}] })
+        sendAnswer (exam_user_id, {question_id, choice_id, selected_at } , log) {
+        return axios.post(API_ADDRESS.exam.sendAnswers, {exam_user_id, questions: [{question_id, choice_id, selected_at}] , log: log})
     }
 
     sendStatus (exam_user_id, {question_id, status }) {

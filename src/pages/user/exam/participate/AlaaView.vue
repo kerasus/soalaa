@@ -246,17 +246,11 @@
         }
       },
       mounted() {
-        //this function should be removed
-        function userHasNetwork(online) {
-          console.log(online)
-        }
         let that = this
         this.showAppBar()
         this.updateDrawerBasedOnWindowSize()
         this.startExam(this.$route.params.quizId, 'onlineQuiz.alaaView')
             .then(() => {
-              //remove userHasNetwork function
-              userHasNetwork(navigator.onLine)
               that.isRtl = !that.isLtrString(that.currentQuestion.statement)
               that.$store.commit('AppLayout/updateOverlay', {show: false, loading: false, text: ''})
             })
