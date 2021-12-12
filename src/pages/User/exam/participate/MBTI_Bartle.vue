@@ -216,7 +216,7 @@ export default {
         //   text: 'مشکلی در دریافت اطلاعات آژمون رخ داده است. لطفا دوباره امتحان کنید.',
         //   type: 'error'
         // })
-        // console.log('err in startExam vue comp :', error)
+        console.log('err in startExam vue comp :', error)
         // that.$router.push({ name: 'user.exam.list' })
       })
   },
