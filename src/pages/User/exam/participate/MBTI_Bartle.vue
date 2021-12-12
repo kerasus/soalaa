@@ -1,28 +1,36 @@
 <template>
   <div class="participate-mbti-bartle">
     <div>
-      <div  class="row">
-        <a href="https://alaatv.com">
-          <q-img
-            src="https://nodes.alaatv.com/upload/mbti-bartle-alaa-logo.png"
-            width="27px"
-            height="40ox"
-          />
-        </a>
-        <a href="https://alaatv.com">
-          <q-img
-            src="https://nodes.alaatv.com/upload/mbti-bartle-alaa-text.png"
-            width="134px"
-            height="40px"
-          />
-        </a>
+      <div  class="row q-pt-lg q-mb-md">
+        <div class="col-5 q-mx-xl">
+          <a href="https://alaatv.com">
+            <q-img
+              src="https://nodes.alaatv.com/upload/mbti-bartle-alaa-logo.png"
+              width="27px"
+              height="40ox"
+            />
+          </a>
+        </div>
+        <div class="col-6">
+          <a href="https://alaatv.com">
+            <q-img
+              src="https://nodes.alaatv.com/upload/mbti-bartle-alaa-text.png"
+              width="134px"
+              height="40px"
+            />
+          </a>
+        </div>
       </div>
-      <div class="row">
+      <div class="row justify-between">
         <div
+          class="q-mx-xl text-h6 text-grey-10"
           v-if="quiz"
           v-text="quiz.title"
         />
-        <div v-text="counter.string" />
+        <div
+          class="q-mx-xl text-h6 text-grey-10"
+          v-text="counter.string"
+        />
       </div>
     </div>
     <q-linear-progress
@@ -34,17 +42,18 @@
     <div
       class="question-box-parent"
     >
-      <div class="row">
+      <div class="row justify-center">
         <div class="question-box">
           <div class="arrow-box prev">
             <q-btn
-              icon="fi-br-angle-right"
-              color="red"
+              icon="arrow_forward_ios"
+              color="grey-4"
+              rounded
+              unelevated
+              padding="50px 10px"
               :disabled="$route.params.questNumber.toString() === '1'"
               @click="goToPrevQuestion('onlineQuiz.mbtiBartle')"
-            >
-              >
-            </q-btn>
+           />
           </div>
           <div class="question">
             <p class="question-number">
@@ -80,14 +89,24 @@
                   @click="choiceClick(choice.id)"
                 >
                   <div class="choice-inner-circle">
-                    <i
+<!--                    <i-->
+<!--                      v-if="stringMeanThumbUpOrDown(choice.title) === 'ThumbUp'"-->
+<!--                      class="fi-rr-thumbs-up"-->
+<!--                    />-->
+                    <q-icon
                       v-if="stringMeanThumbUpOrDown(choice.title) === 'ThumbUp'"
-                      class="fi-rr-thumbs-up"
+                      name="thumb_up_off_alt"
+                      size="xl"
                     />
-                    <i
+                    <q-icon
                       v-else
-                      class="fi-rr-thumbs-down"
+                      name="thumb_down_off_alt"
+                      size="xl"
                     />
+<!--                    <i-->
+<!--                      v-else-->
+<!--                      class="fi-rr-thumbs-down"-->
+<!--                    />-->
                   </div>
                 </div>
                 <p
@@ -105,23 +124,25 @@
                   />
                 </div>
               </div>
-              <v-overlay :value="loading">
-                <v-progress-circular
-                  :size="50"
-                  color="amber"
-                  indeterminate
-                />
-              </v-overlay>
+<!--              <v-overlay :value="loading">-->
+<!--                <v-progress-circular-->
+<!--                  :size="50"-->
+<!--                  color="amber"-->
+<!--                  indeterminate-->
+<!--                />-->
+<!--              </v-overlay>-->
             </div>
           </div>
           <div class="next arrow-box">
             <q-btn
-              color="red"
+              icon="arrow_back_ios"
+              color="grey-4"
+              unelevated
+              rounded
+              padding="50px 10px"
               :disabled="!isCurrentQuestionAnswered || getQuestionNumberFromId(currentQuestion.id) === getCurrentExamQuestionsInArray().length"
               @click="goToNextQuestion('onlineQuiz.mbtiBartle')"
-            >
-              ghg
-            </q-btn>
+            />
           </div>
         </div>
       </div>
@@ -134,7 +155,7 @@
 
 <script>
 import { mixinDrawer, mixinQuiz, mixinUserActionOnQuestion } from 'src/mixin/Mixins'
-// import mbtiData from 'src/assets/js/MBTI_Bartle_Data'
+import mbtiData from 'src/assets/js/MBTI_Bartle_Data'
 //  import Assistant from '/plugins/assistant'
 export default {
   name: 'MBTIBartle',
@@ -169,297 +190,300 @@ export default {
   created () {
     this.drawer = false
     this.appBar = false
-    // this.$store.commit('AppLayout/updateAppBarAndDrawer', false)
+    this.$store.commit('AppLayout/updateAppBarAndDrawer', false)
+  },
+  mounted () {
+    const that = this
+    this.startExam(that.$route.params.quizId, 'onlineQuiz.mbtiBartle')
+      .then((res) => {
+        console.log('res in vue file :', res)
+        // that.$store.commit('AppLayout/updateOverlay', { show: false, loading: false, text: '' })
+        const unansweredQuestion = that.getUnansweredQuestionBehind()
+        if (unansweredQuestion) {
+          that.changeQuestion(unansweredQuestion.id, 'onlineQuiz.mbtiBartle')
+        } else {
+          const isFinished = that.isFinished()
+          if (isFinished) {
+            that.sendAnswersAndFinishExam()
+          }
+        }
+      })
+      .catch((error) => {
+        // Assistant.reportErrors(error)
+        // that.$notify({
+        //   group: 'notifs',
+        //   title: 'توجه!',
+        //   text: 'مشکلی در دریافت اطلاعات آژمون رخ داده است. لطفا دوباره امتحان کنید.',
+        //   type: 'error'
+        // })
+        // console.log('err in startExam vue comp :', error)
+        // that.$router.push({ name: 'user.exam.list' })
+      })
+  },
+  methods: {
+    stringMeanThumbUpOrDown (string) {
+      if (string === null || (this.currentQuestion.sub_category && this.currentQuestion.sub_category.title !== 'MBTI')) {
+        return false
+      }
+
+      if (string.includes('موافقم')) {
+        return 'ThumbUp'
+      } else if (string.includes('مخالفم')) {
+        return 'ThumbDown'
+      }
+    },
+    isFinished () {
+      // console.log('isFinished')
+      const that = this
+      const countOfQuestions = Object.keys(this.currentExamQuestions).length
+      if (
+        this.userQuizListData &&
+          this.userQuizListData[this.quiz.id]
+      ) {
+        let answeredQuestionsCount = 0
+        const tstArr = []
+        const checkedQuestionIds = Object.keys(this.userQuizListData[this.quiz.id])
+        checkedQuestionIds.forEach(item => {
+          if (
+            that.userQuizListData &&
+              that.userQuizListData[that.quiz.id] &&
+              that.userQuizListData[that.quiz.id][item] &&
+              that.userQuizListData[that.quiz.id][item].answered_choice_id &&
+              that.userQuizListData[that.quiz.id][item].answered_choice_id.toString()
+          ) {
+            answeredQuestionsCount++
+          } else {
+            tstArr.push(that.userQuizListData[that.quiz.id][item])
+          }
+        })
+
+        return (answeredQuestionsCount === countOfQuestions)
+      } else {
+        return false
+      }
+    },
+    isLastQuestion () {
+      const countOfQuestions = Object.keys(this.currentExamQuestions).length
+      return countOfQuestions.toString() === this.$route.params.questNumber.toString()
+    },
+    getUnansweredQuestionBehind () {
+      // console.log('getUnansweredQuestionBehind ')
+      if (
+        this.userQuizListData &&
+          this.userQuizListData[this.quiz.id]
+      ) {
+        const that = this
+        const currentExamQuestionIndexes = this.getCurrentExamQuestionIndexes()
+        const currentExamQuestions = this.currentExamQuestions
+        const currentQuestionNumber = this.$route.params.questNumber
+        let unansweredQuestion = null
+        const tstArr = []
+        Object.keys(currentExamQuestionIndexes).forEach(questIndex => {
+          const questNumber = parseInt(questIndex) + 1
+          if (parseInt(currentQuestionNumber) >= parseInt(questNumber)) {
+            const questionId = currentExamQuestionIndexes[questIndex]
+            if (
+              !that.userQuizListData ||
+                !that.userQuizListData[that.quiz.id] ||
+                !that.userQuizListData[that.quiz.id][questionId] ||
+                !that.userQuizListData[that.quiz.id][questionId].answered_choice_id ||
+                !that.userQuizListData[that.quiz.id][questionId].answered_choice_id.toString() ||
+                typeof that.userQuizListData[that.quiz.id][questionId].answered_choice_id === 'undefined' ||
+                that.userQuizListData[that.quiz.id][questionId].answered_choice_id === null
+            ) {
+              unansweredQuestion = currentExamQuestions[questionId]
+            } else {
+              tstArr.push(that.userQuizListData[that.quiz.id][questionId])
+            }
+          }
+        })
+
+        return unansweredQuestion
+      } else {
+        return null
+      }
+    },
+    // eslint-disable-next-line camelcase
+    setCurrentQuestionChoice (choice_id, active) {
+      const that = this
+      if (typeof active === 'undefined') {
+        active = true
+      }
+      this.currentQuestion.choices.list.forEach((item, index) => {
+        // eslint-disable-next-line camelcase
+        if (choice_id !== null && choice_id.toString() === that.currentQuestion.choices.list[index].id.toString()) {
+          // Vue.set(that.currentQuestion.choices.list[index], 'active', active)
+          that.choiceKey = Date.now()
+        } else {
+          // Vue.set(that.currentQuestion.choices.list[index], 'active', false)
+          that.choiceKey = Date.now()
+        }
+      })
+    },
+    choiceClick (id) {
+      this.loading = true
+      const that = this
+      const isLastQuestion = this.isLastQuestion()
+      const answerClickedPromise = this.answerClicked({ choiceId: id, questionId: this.currentQuestion.id })
+      answerClickedPromise
+        .then((response) => {
+          const targetQuestion = response.data.data.find(item => (
+            this.currentQuestion.id !== null &&
+                item.question_id !== null &&
+                item.question_id.toString() === this.currentQuestion.id.toString())
+          )
+          if (
+            targetQuestion &&
+                targetQuestion.choice_id &&
+                targetQuestion.choice_id.toString()
+          ) {
+            if (!isLastQuestion) {
+              that.setCurrentQuestionChoice(targetQuestion.choice_id, true)
+              setTimeout(() => {
+                that.goToNextQuestion('onlineQuiz.mbtiBartle')
+              }, 500)
+            } else {
+              that.setCurrentQuestionChoice(targetQuestion.choice_id, true)
+              setTimeout(() => {
+                that.startExam(that.$route.params.quizId, 'onlineQuiz.mbtiBartle')
+                  .then(() => {
+                    that.$store.commit('AppLayout/updateOverlay', { show: false, loading: false, text: '' })
+                    const unansweredQuestion = that.getUnansweredQuestionBehind()
+                    if (unansweredQuestion) {
+                      that.changeQuestion(unansweredQuestion.id, 'onlineQuiz.mbtiBartle')
+                    } else {
+                      const isFinished = that.isFinished()
+                      if (isFinished) {
+                        that.sendAnswersAndFinishExam()
+                      }
+                    }
+                  })
+              }, 500)
+            }
+          } else {
+            that.setCurrentQuestionChoice(null, false)
+            that.loading = false
+          }
+        })
+    },
+    sendAnswersAndFinishExam () {
+      // console.log('sendAnswersAndFinishExam')
+      const that = this
+      this.sendUserQuestionsDataToServerAndFinishExam(this.quiz.id, this.quiz.user_exam_id)
+        .then(() => {
+          // that.$notify({
+          //   group: 'notifs',
+          //   text: 'اطلاعات آزمون شما ثبت شد.',
+          //   type: 'success'
+          // })
+          that.$store.commit('quiz/clearExamData', that.quiz.id)
+          that.tryAgainDialog = false
+          // console.log('need to see result')
+          //    that.$router.push({ name: 'mbtiBartle.result', params: { exam_id: this.quiz.id.toString(), user_exam_id: this.quiz.user_exam_id.toString() } })
+        })
+        .catch(() => {
+          that.$notify({
+            group: 'notifs',
+            title: 'توجه!',
+            text: 'مشکلی در ثبت اطلاعات آزمون شما رخ داده است.',
+            type: 'error',
+            duration: 6000
+          })
+          that.tryAgainDialog = true
+        })
+    },
+    getMbtiBg (type) {
+      return mbtiData.mbtiType[type].backgroundColor
+    },
+    getMbtiDetailsFromAnswers (answer) {
+      const details = []
+      for (let i = 0; i < 4; i++) {
+        const title = mbtiData.mbtiGroups[i].title
+        const text = mbtiData.mbtiGroups[i].text
+        const values = []
+        values.push({
+          title: answer[Object.keys(answer)[0]][mbtiData.mbtiGroups[i].value[0]].label,
+          percent: answer[Object.keys(answer)[0]][mbtiData.mbtiGroups[i].value[0]].ratio,
+          label: mbtiData.mbtiKeys[2 * i].value
+        })
+        values.push({
+          title: answer[Object.keys(answer)[0]][mbtiData.mbtiGroups[i].value[1]].label,
+          percent: answer[Object.keys(answer)[0]][mbtiData.mbtiGroups[i].value[1]].ratio,
+          label: mbtiData.mbtiKeys[2 * i + 1].value
+        })
+        details.push({
+          title,
+          text,
+          values
+        })
+      }
+      return details
+    },
+    getMbtiTypeFromAnswers (answer) {
+      let type = ''
+      if (answer[Object.keys(answer)[0]][mbtiData.mbtiKeys[0].text.ratio] > 50) {
+        type += mbtiData.mbtiKeys[0].value
+      } else {
+        type += mbtiData.mbtiKeys[1].value
+      }
+
+      if (answer[Object.keys(answer)[0]][mbtiData.mbtiKeys[2].text.ratio] > 50) {
+        type += mbtiData.mbtiKeys[2].value
+      } else {
+        type += mbtiData.mbtiKeys[3].value
+      }
+
+      if (answer[Object.keys(answer)[0]][mbtiData.mbtiKeys[4].text.ratio] > 50) {
+        type += mbtiData.mbtiKeys[4].value
+      } else {
+        type += mbtiData.mbtiKeys[5].value
+      }
+
+      if (answer[Object.keys(answer)[0]][mbtiData.mbtiKeys[6].text.ratio] > 50) {
+        type += mbtiData.mbtiKeys[6].value
+      } else {
+        type += mbtiData.mbtiKeys[7].value
+      }
+
+      return type
+    },
+    calculateExam () {
+      const questions = [{}]
+      const answer = {}
+      questions.forEach(question => { // set the sub categories in the answer obj
+        if (!answer[question.sub_category.id]) {
+          answer[question.sub_category.id] = {}
+        }
+
+        question.choices.list.forEach(choice => { // set the values in the answer obj
+          if (!answer[question.sub_category.id][choice.answer]) {
+            answer[question.sub_category.id][choice.answer] = {
+              repeat: 0,
+              possible: 0,
+              ratio: 0
+            }
+          }
+        })
+      })
+
+      questions.forEach(question => {
+        question.choices.list.forEach(choice => {
+          answer[question.sub_category.id][choice.answer].possible++
+          if (choice.active) {
+            answer[question.sub_category.id][choice.answer].repeat++
+          }
+        })
+      })
+
+      Object.keys(answer).forEach((subCategory) => {
+        Object.keys(answer[subCategory]).forEach((value) => {
+          answer[subCategory][value].ratio = Math.round(answer[subCategory][value].repeat / answer[subCategory][value].possible * 100)
+        })
+      })
+
+      return answer
+    }
   }
-  // mounted () {
-  //   const that = this
-  //   console.log('mounted :', this.$route.params.quizId)
-  //   this.startExam(that.$route.params.quizId, 'onlineQuiz.mbtiBartle')
-  //     .then((res) => {
-  //       console.log('res :', res)
-  //       that.$store.commit('AppLayout/updateOverlay', { show: false, loading: false, text: '' })
-  //       const unansweredQuestion = that.getUnansweredQuestionBehind()
-  //       if (unansweredQuestion) {
-  //         that.changeQuestion(unansweredQuestion.id, 'onlineQuiz.mbtiBartle')
-  //       } else {
-  //         const isFinished = that.isFinished()
-  //         if (isFinished) {
-  //           that.sendAnswersAndFinishExam()
-  //         }
-  //       }
-  //     })
-  //     .catch((error) => {
-  //       // Assistant.reportErrors(error)
-  //       // that.$notify({
-  //       //   group: 'notifs',
-  //       //   title: 'توجه!',
-  //       //   text: 'مشکلی در دریافت اطلاعات آژمون رخ داده است. لطفا دوباره امتحان کنید.',
-  //       //   type: 'error'
-  //       // })
-  //       console.log('e :', error)
-  //       // that.$router.push({ name: 'user.exam.list' })
-  //     })
-  // },
-  // methods: {
-  //   stringMeanThumbUpOrDown (string) {
-  //     if (string === null || (this.currentQuestion.sub_category && this.currentQuestion.sub_category.title !== 'MBTI')) {
-  //       return false
-  //     }
-  //
-  //     if (string.includes('موافقم')) {
-  //       return 'ThumbUp'
-  //     } else if (string.includes('مخالفم')) {
-  //       return 'ThumbDown'
-  //     }
-  //   },
-  //   isFinished () {
-  //     const that = this
-  //     const countOfQuestions = Object.keys(this.currentExamQuestions).length
-  //     if (
-  //       this.userQuizListData &&
-  //         this.userQuizListData[this.quiz.id]
-  //     ) {
-  //       let answeredQuestionsCount = 0
-  //       const tstArr = []
-  //       const checkedQuestionIds = Object.keys(this.userQuizListData[this.quiz.id])
-  //       checkedQuestionIds.forEach(item => {
-  //         if (
-  //           that.userQuizListData &&
-  //             that.userQuizListData[that.quiz.id] &&
-  //             that.userQuizListData[that.quiz.id][item] &&
-  //             that.userQuizListData[that.quiz.id][item].answered_choice_id &&
-  //             that.userQuizListData[that.quiz.id][item].answered_choice_id.toString()
-  //         ) {
-  //           answeredQuestionsCount++
-  //         } else {
-  //           tstArr.push(that.userQuizListData[that.quiz.id][item])
-  //         }
-  //       })
-  //
-  //       return (answeredQuestionsCount === countOfQuestions)
-  //     } else {
-  //       return false
-  //     }
-  //   },
-  //   isLastQuestion () {
-  //     const countOfQuestions = Object.keys(this.currentExamQuestions).length
-  //     return countOfQuestions.toString() === this.$route.params.questNumber.toString()
-  //   },
-  //   getUnansweredQuestionBehind () {
-  //     if (
-  //       this.userQuizListData &&
-  //         this.userQuizListData[this.quiz.id]
-  //     ) {
-  //       const that = this
-  //       const currentExamQuestionIndexes = this.getCurrentExamQuestionIndexes()
-  //       const currentExamQuestions = this.currentExamQuestions
-  //       const currentQuestionNumber = this.$route.params.questNumber
-  //       let unansweredQuestion = null
-  //       const tstArr = []
-  //       Object.keys(currentExamQuestionIndexes).forEach(questIndex => {
-  //         const questNumber = parseInt(questIndex) + 1
-  //         if (parseInt(currentQuestionNumber) >= parseInt(questNumber)) {
-  //           const questionId = currentExamQuestionIndexes[questIndex]
-  //           if (
-  //             !that.userQuizListData ||
-  //               !that.userQuizListData[that.quiz.id] ||
-  //               !that.userQuizListData[that.quiz.id][questionId] ||
-  //               !that.userQuizListData[that.quiz.id][questionId].answered_choice_id ||
-  //               !that.userQuizListData[that.quiz.id][questionId].answered_choice_id.toString() ||
-  //               typeof that.userQuizListData[that.quiz.id][questionId].answered_choice_id === 'undefined' ||
-  //               that.userQuizListData[that.quiz.id][questionId].answered_choice_id === null
-  //           ) {
-  //             unansweredQuestion = currentExamQuestions[questionId]
-  //           } else {
-  //             tstArr.push(that.userQuizListData[that.quiz.id][questionId])
-  //           }
-  //         }
-  //       })
-  //
-  //       return unansweredQuestion
-  //     } else {
-  //       return null
-  //     }
-  //   },
-  //   // eslint-disable-next-line camelcase
-  //   setCurrentQuestionChoice (choice_id, active) {
-  //     const that = this
-  //     if (typeof active === 'undefined') {
-  //       active = true
-  //     }
-  //     this.currentQuestion.choices.list.forEach((item, index) => {
-  //       // eslint-disable-next-line camelcase
-  //       if (choice_id !== null && choice_id.toString() === that.currentQuestion.choices.list[index].id.toString()) {
-  //         // Vue.set(that.currentQuestion.choices.list[index], 'active', active)
-  //         that.choiceKey = Date.now()
-  //       } else {
-  //         // Vue.set(that.currentQuestion.choices.list[index], 'active', false)
-  //         that.choiceKey = Date.now()
-  //       }
-  //     })
-  //   },
-  //   choiceClick (id) {
-  //     this.loading = true
-  //     const that = this
-  //     const isLastQuestion = this.isLastQuestion()
-  //     const answerClickedPromise = this.answerClicked({ choiceId: id, questionId: this.currentQuestion.id })
-  //     answerClickedPromise
-  //       .then((response) => {
-  //         const targetQuestion = response.data.data.find(item => (
-  //           this.currentQuestion.id !== null &&
-  //               item.question_id !== null &&
-  //               item.question_id.toString() === this.currentQuestion.id.toString())
-  //         )
-  //         if (
-  //           targetQuestion &&
-  //               targetQuestion.choice_id &&
-  //               targetQuestion.choice_id.toString()
-  //         ) {
-  //           if (!isLastQuestion) {
-  //             that.setCurrentQuestionChoice(targetQuestion.choice_id, true)
-  //             setTimeout(() => {
-  //               that.goToNextQuestion('onlineQuiz.mbtiBartle')
-  //             }, 500)
-  //           } else {
-  //             that.setCurrentQuestionChoice(targetQuestion.choice_id, true)
-  //             setTimeout(() => {
-  //               that.startExam(that.$route.params.quizId, 'onlineQuiz.mbtiBartle')
-  //                 .then(() => {
-  //                   that.$store.commit('AppLayout/updateOverlay', { show: false, loading: false, text: '' })
-  //                   const unansweredQuestion = that.getUnansweredQuestionBehind()
-  //                   if (unansweredQuestion) {
-  //                     that.changeQuestion(unansweredQuestion.id, 'onlineQuiz.mbtiBartle')
-  //                   } else {
-  //                     const isFinished = that.isFinished()
-  //                     if (isFinished) {
-  //                       that.sendAnswersAndFinishExam()
-  //                     }
-  //                   }
-  //                 })
-  //             }, 500)
-  //           }
-  //         } else {
-  //           that.setCurrentQuestionChoice(null, false)
-  //           that.loading = false
-  //         }
-  //       })
-  //   },
-  //   sendAnswersAndFinishExam () {
-  //     const that = this
-  //     this.sendUserQuestionsDataToServerAndFinishExam(this.quiz.id, this.quiz.user_exam_id)
-  //       .then(() => {
-  //         that.$notify({
-  //           group: 'notifs',
-  //           text: 'اطلاعات آزمون شما ثبت شد.',
-  //           type: 'success'
-  //         })
-  //         that.$store.commit('clearExamData', that.quiz.id)
-  //         that.tryAgainDialog = false
-  //         that.$router.push({ name: 'mbtiBartle.result', params: { exam_id: this.quiz.id.toString(), user_exam_id: this.quiz.user_exam_id.toString() } })
-  //       })
-  //       .catch(() => {
-  //         that.$notify({
-  //           group: 'notifs',
-  //           title: 'توجه!',
-  //           text: 'مشکلی در ثبت اطلاعات آزمون شما رخ داده است.',
-  //           type: 'error',
-  //           duration: 6000
-  //         })
-  //         that.tryAgainDialog = true
-  //       })
-  //   },
-  //   getMbtiBg (type) {
-  //     return mbtiData.mbtiType[type].backgroundColor
-  //   },
-  //   getMbtiDetailsFromAnswers (answer) {
-  //     const details = []
-  //     for (let i = 0; i < 4; i++) {
-  //       const title = mbtiData.mbtiGroups[i].title
-  //       const text = mbtiData.mbtiGroups[i].text
-  //       const values = []
-  //       values.push({
-  //         title: answer[Object.keys(answer)[0]][mbtiData.mbtiGroups[i].value[0]].label,
-  //         percent: answer[Object.keys(answer)[0]][mbtiData.mbtiGroups[i].value[0]].ratio,
-  //         label: mbtiData.mbtiKeys[2 * i].value
-  //       })
-  //       values.push({
-  //         title: answer[Object.keys(answer)[0]][mbtiData.mbtiGroups[i].value[1]].label,
-  //         percent: answer[Object.keys(answer)[0]][mbtiData.mbtiGroups[i].value[1]].ratio,
-  //         label: mbtiData.mbtiKeys[2 * i + 1].value
-  //       })
-  //       details.push({
-  //         title,
-  //         text,
-  //         values
-  //       })
-  //     }
-  //     return details
-  //   },
-  //   getMbtiTypeFromAnswers (answer) {
-  //     let type = ''
-  //     if (answer[Object.keys(answer)[0]][mbtiData.mbtiKeys[0].text.ratio] > 50) {
-  //       type += mbtiData.mbtiKeys[0].value
-  //     } else {
-  //       type += mbtiData.mbtiKeys[1].value
-  //     }
-  //
-  //     if (answer[Object.keys(answer)[0]][mbtiData.mbtiKeys[2].text.ratio] > 50) {
-  //       type += mbtiData.mbtiKeys[2].value
-  //     } else {
-  //       type += mbtiData.mbtiKeys[3].value
-  //     }
-  //
-  //     if (answer[Object.keys(answer)[0]][mbtiData.mbtiKeys[4].text.ratio] > 50) {
-  //       type += mbtiData.mbtiKeys[4].value
-  //     } else {
-  //       type += mbtiData.mbtiKeys[5].value
-  //     }
-  //
-  //     if (answer[Object.keys(answer)[0]][mbtiData.mbtiKeys[6].text.ratio] > 50) {
-  //       type += mbtiData.mbtiKeys[6].value
-  //     } else {
-  //       type += mbtiData.mbtiKeys[7].value
-  //     }
-  //
-  //     return type
-  //   },
-  //   calculateExam () {
-  //     const questions = [{}]
-  //     const answer = {}
-  //     questions.forEach(question => { // set the sub categories in the answer obj
-  //       if (!answer[question.sub_category.id]) {
-  //         answer[question.sub_category.id] = {}
-  //       }
-  //
-  //       question.choices.list.forEach(choice => { // set the values in the answer obj
-  //         if (!answer[question.sub_category.id][choice.answer]) {
-  //           answer[question.sub_category.id][choice.answer] = {
-  //             repeat: 0,
-  //             possible: 0,
-  //             ratio: 0
-  //           }
-  //         }
-  //       })
-  //     })
-  //
-  //     questions.forEach(question => {
-  //       question.choices.list.forEach(choice => {
-  //         answer[question.sub_category.id][choice.answer].possible++
-  //         if (choice.active) {
-  //           answer[question.sub_category.id][choice.answer].repeat++
-  //         }
-  //       })
-  //     })
-  //
-  //     Object.keys(answer).forEach((subCategory) => {
-  //       Object.keys(answer[subCategory]).forEach((value) => {
-  //         answer[subCategory][value].ratio = Math.round(answer[subCategory][value].repeat / answer[subCategory][value].possible * 100)
-  //       })
-  //     })
-  //
-  //     return answer
-  //   }
-  // }
 }
 </script>
 
