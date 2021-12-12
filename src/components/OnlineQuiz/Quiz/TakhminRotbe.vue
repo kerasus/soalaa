@@ -140,7 +140,15 @@ import API_ADDRESS from 'src/api/Addresses'
 // import Assistant from "@/plugins/assistant";
 export default {
   name: 'TakhminRotbe',
-  props: ['report'],
+  props: {
+    report: {
+      // type : Array,
+      default () {
+        return null
+      }
+    }
+  },
+  // props: ['report'],
   data () {
     return {
       numberRule: v => {
@@ -190,6 +198,7 @@ export default {
     }
   },
   created () {
+    console.log('TakhminRotbe----------')
     this.prepareTakhmineRotbeReport(true)
   },
   methods: {
@@ -277,6 +286,7 @@ export default {
       this.prepareTakhmineRotbeReport()
     },
     prepareTakhmineRotbeReport (resetPercents) {
+      console.log('this.report', this.report)
       const that = this,
         takhminReport = JSON.parse(JSON.stringify(this.report))
       takhminReport.main.percent = 0

@@ -8,13 +8,12 @@ import { QuestCategoryList } from '../models/QuestCategory'
 // todo : jquery
 import $ from 'jquery'
 import { QuestionList } from '../models/Question'
-import ExamData from 'src/assets/js/ExamData'
-// import { User } from 'src/models/User'
+import ExamData1 from 'assets/js/ExamData1'
 
 const mixinQuiz = {
   computed: {
     isQuizPage () {
-      return this.$route.name === 'onlineQuiz.quiz'
+      return this.$route.name === 'onlineQuiz.quiz1'
     },
     quiz: {
       get () {
@@ -37,12 +36,11 @@ const mixinQuiz = {
       }
     },
     currentExamFrozenQuestions () {
-      return this.$store.getters('quiz/currentExamFrozenQuestions')
+      return this.$store.getters('quiz1/currentExamFrozenQuestions')
     },
     currentQuestion: {
       get () {
-        // this.$store.commit('Auth/updateUser', new User(this.userData))
-        return this.$store.getters['quiz/currentQuestion']
+        return this.$store.getters('quiz1/currentQuestion')
       },
       set (newInfo) {
         this.$store.commit('quiz/updateCurrentQuestion', {
@@ -110,7 +108,6 @@ const mixinQuiz = {
     },
     setCurrentExamQuestions (currentExamQuestions) {
       window.localStorage.setItem('currentExamQuestions', JSON.stringify(currentExamQuestions))
-      this.currentExamQuestions = Object.freeze(currentExamQuestions)
       // Vue.set(this, 'currentExamQuestions', Object.freeze(currentExamQuestions))
     },
     setCurrentExamQuestionIndexes (currentExamQuestionIndexes) {
@@ -119,8 +116,8 @@ const mixinQuiz = {
     sortQuestions (questions) {
       const sortList = Array.prototype.sort.bind(questions)
       sortList(function (a, b) {
-        const sorta = parseInt(a.order), sortb = parseInt(b.order)
-
+        const sorta = parseInt(a.order),
+          sortb = parseInt(b.order)
         if (sorta < sortb) {
           return -1
         }
@@ -131,10 +128,23 @@ const mixinQuiz = {
       })
     },
     saveCurrentExamQuestions (questionsList) {
-      console.log('saveCurrentExamQuestions questionsList ', questionsList)
       const currentExamQuestions = {}
       const currentExamQuestionIndexes = {}
+
       this.sortQuestions(questionsList)
+      // let sortList = Array.prototype.sort.bind(questionsList);
+      // sortList(function (a, b) {
+      //     let sorta = parseInt(a.order),
+      //         sortb = parseInt(b.order)
+      //     if (sorta < sortb) {
+      //         return -1
+      //     }
+      //     if (sorta > sortb) {
+      //         return 1
+      //     }
+      //     return 0
+      // });
+
       questionsList.forEach((item, index) => {
         item.index = index
         this.setQuestionsLtr(item)
@@ -170,7 +180,6 @@ const mixinQuiz = {
       }
       window.currentExamQuestions = JSON.parse(window.localStorage.getItem('currentExamQuestions'))
       this.modifyCurrentExamQuestions(window.currentExamQuestions)
-      this.currentExamQuestions = Object.freeze(window.currentExamQuestions)
       // Vue.set(this, 'currentExamQuestions', Object.freeze(window.currentExamQuestions))
 
       return window.currentExamQuestions
@@ -207,12 +216,11 @@ const mixinQuiz = {
       const that = this
       return new Promise(function (resolve, reject) {
         let userExamId
-        const examData = new ExamData()
-        console.log('that.needToLoadQuizData() :', that.needToLoadQuizData())
+        const examData = new ExamData1()
         if (that.needToLoadQuizData()) {
           window.currentExamQuestions = null
           window.currentExamQuestionIndexes = null
-          // that.$store.commit('loading/overlay', true)
+          that.$store.commit('loading/overlay', true)
           examData.getExamDataAndParticipate(examId)
           examData.loadQuestionsFromFile()
         } else {
@@ -223,8 +231,6 @@ const mixinQuiz = {
           .run()
           .then((result) => {
             try {
-              console.log('startExam in assets:', result)
-              console.log('that.needToLoadQuizData() after req :', that.needToLoadQuizData())
               if (that.needToLoadQuizData()) {
                 // save questions in localStorage
                 that.saveCurrentExamQuestions(examData.exam.questions.list)
@@ -320,8 +326,8 @@ const mixinQuiz = {
           .then((response) => {
             if (!Assistant.getId(that.quiz.id)) {
               Assistant.reportErrors({
-                location: 'mixin/Quiz.js -> loadExam() -> quiz.getAnswerOfUserInExam()',
-                message: 'quiz.id not set'
+                location: 'mixin/Quiz.js -> loadExam() -> quiz1.getAnswerOfUserInExam()',
+                message: 'quiz1.id not set'
               })
               reject()
             }
@@ -361,7 +367,6 @@ const mixinQuiz = {
       this.$store.commit('quiz/updateQuiz', quiz)
     },
     loadCurrentQuestion (viewType) {
-      console.log('loadCurrentQuestion')
       let questNumber = this.$route.params.questNumber
       if (this.currentQuestion.order) {
         questNumber = this.currentQuestion.order
@@ -592,7 +597,7 @@ const mixinQuiz = {
           reject(null)
           return
         }
-        // ToDo : jQuery needed
+
         $.ajax({
           type: 'GET',
           url: questionsFileUrl,
