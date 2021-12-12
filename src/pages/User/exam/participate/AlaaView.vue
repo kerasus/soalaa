@@ -16,7 +16,7 @@
         >
           <div class="row">
             <!--&lt;!&ndash;              v-if= "getQuestionNumberFromId(currentQuestion.id) !== 1"&ndash;&gt;-->
-            <div class="col btnpre col-md-1 justify-center d-none"
+            <div class="col btnpre col-md-1 justify-start sm-hide xs-hide"
             >
               <q-btn
                 flat
@@ -31,7 +31,7 @@
                 />
               </q-btn>
             </div>
-            <div class="col col-md-10 q-py-sm ">
+            <div class="col col-md-10 q-px-sm ">
               <div class="row question-header">
                 <div class="question-number">
                   <!--                    v-if="currentLesson"-->
@@ -70,11 +70,17 @@
                     round
                     flat
                   >
+                    <q-icon
+                      v-if="false"
+                      size="30px"
+                      color="grey-7"
+                      name="mdi-close"
+                    />
 <!--                    @click="changeStatus(currentQuestion.id, 'x')"-->
                     <!-- :color="getUserQuestionData(quiz.id, currentQuestion.id) && getUserQuestionData(quiz.id, currentQuestion.id).status === 'x' ? 'red' : '#888'"-->
                     <q-icon
                       size="30px"
-                      color="grey-7"
+                      color="red"
                       name="mdi-close"
                     />
                   </q-btn>
@@ -129,8 +135,7 @@
               </div>
 
 <!--&lt;!&ndash;              v-if="currentQuestion.in_active_category"&ndash;&gt;-->
-              <div
-                class="row question-answers"
+              <div class="row question-answers"
               >
                 <!--                  v-for="item in currentQuestion.choices.list"-->
                 <!--                  :key="item.id"-->
@@ -146,13 +151,13 @@
 
               </div>
             </div>
-            <div class="col btnpre col-md-1 justify-center d-none"
+            <div class="col btnpre col-md-1 justify-start sm-hide xs-hide"
             >
 <!--              v-if="getQuestionNumberFromId(currentQuestion.id) !== getCurrentExamQuestionsInArray().length"-->
               <q-btn
                 flat
-                class="q-px-none q-ml-md"
-                :style="{ 'width':'60px','height': '400px' }"
+                class="q-px-none"
+                :style="{ 'width':'64px','height': '400px' }"
                 no-shadow
                 @click="goToNextQuestion('onlineQuiz.alaaView')"
               >
@@ -321,7 +326,7 @@ img {
   flex-direction: row;
   justify-content: space-between;
   position: sticky;
-  top: 60px;
+  padding-top: 20px;
   z-index: 1;
   margin: -12px -12px -12px -12px;
   background: #f1f1f1;
@@ -377,8 +382,8 @@ img {
   padding: 12px 12px 12px 12px;
 }
 .btnpre {
-  padding: 12px 12px 12px 24px;
-  flex-direction: column;
+  display: flex;
+  padding : 12px 12px 12px 12px;
 
 }
 
@@ -389,15 +394,15 @@ img {
   color: var(--text-2);
 }
 
-@media only screen and (max-width: 960px) {
+@media only screen and (max-width: 1024px) {
   .question-body {
     margin-top: 20px;
   }
 }
 
-@media only screen and (max-width: 450px) {
+@media only screen and (max-width: 600px) {
   .question-buttons button {
-    margin-right: 0;
+    margin-left: 0;
   }
 }
 
