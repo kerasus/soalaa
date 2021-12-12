@@ -5,7 +5,7 @@
       class="col-12"
     >
       <q-editor
-        v-model="html"
+        v-model="value"
         min-height="5rem"
       />
 <!--      <vue-tiptap-katext />-->
@@ -21,7 +21,7 @@
     <div
     v-else
     >
-      <q-card-section v-html="html" />
+      <q-card-section v-html="value" />
     </div>
 <!--    <div class="col" v-else>-->
 <!--      <vue-katex :input="html" />-->
@@ -38,7 +38,7 @@ import API_ADDRESS from 'src/api/Addresses'
 // import VueTiptapKatext from 'vue3-tiptap-katex'
 
 // replacement
-// import { ref } from 'vue'
+import { ref } from 'vue'
 
 export default {
   name: 'QuestionField',
@@ -48,7 +48,7 @@ export default {
     // VueTiptapKatext
   },
   props: {
-    modelValue: {
+    editorValue: {
       default: '',
       type: String
     },
@@ -67,6 +67,7 @@ export default {
   },
   data () {
     return {
+      value: ref('What you see is <b>what</b> you get.'),
       html: '',
       test: 'test data',
       loading: false
@@ -78,6 +79,7 @@ export default {
     }
   },
   created () {
+    this.value = this.editorValue
     this.loading = true
     this.getHtmlValueFromValueProp()
     // console.log('_________________________________________________________________________')
@@ -102,7 +104,7 @@ export default {
       this.$emit('questionData', this.value)
     },
     getHtmlValueFromValueProp () {
-      let html = this.modelValue
+      let html = this.value
       if (html === null || typeof html === 'undefined') {
         html = ''
       }

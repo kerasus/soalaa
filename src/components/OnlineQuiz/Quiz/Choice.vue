@@ -5,7 +5,7 @@
   >
 <!--&lt;!&ndash;    :class="{ 'answer-sheet': true, active: isSelected }"&ndash;&gt;-->
 <!--   reminder: too class q-feild active is selected on she -->
-    <q-feild   :class="{ 'answer-sheet': true}">
+    <q-feild   :class="{ 'answer-sheet': true ,active:true}">
       <div
         class="answer-text renderedPanel"
       >
@@ -14,6 +14,8 @@
       </div>
       <div class="answer-checkbox">
         <q-checkbox
+          v-model="selected"
+          size="xl"
         />
 <!--&lt;!&ndash;        v-model="isSelected"&ndash;&gt;-->
       </div>
@@ -33,6 +35,11 @@ export default {
   },
   mixins: [mixinQuiz],
   props: ['choice', 'questionId', 'isRtl'],
+  data: function () {
+    return {
+      selected: false
+    }
+  },
   computed: {
     isSelected () {
       return this.getUserQuestionData(this.quiz.id, this.questionId) && this.choice.id === this.getUserQuestionData(this.quiz.id, this.questionId).answered_choice_id
@@ -52,7 +59,7 @@ export default {
         size: 40px;
         font-size: 40px;
     }
-    .answer-sheet.active .theme--light.v-input--selection-controls.v-input--is-disabled:not(.v-input--indeterminate) .v-icon {
+    .answer-sheet.active .theme--light.q-input--selection-controls.q-input--is-disabled:not(.q-input--indeterminate) .q-icon {
         color: #fbc10c !important;
     }
     .answer-sheet.active {
@@ -77,7 +84,7 @@ export default {
     .answer-sheet {
         background: #fff;
         width: 100%;
-        min-height: 100px;
+        min-height: 130px;
         height: max-content;
         padding: 2% 3%;
         border-radius: 20px;
@@ -93,7 +100,7 @@ export default {
         height: max-content;
         width: 100%;
         color: #777;
-        padding-right: 30px;
+        padding-left: 30px;
         display: block;
     }
 
@@ -108,7 +115,7 @@ export default {
 
     .answer-checkbox {
         height: 70px;
-        width: 70px;
+        width: 85px;
         display: flex;
         justify-content: center;
         align-items: center;

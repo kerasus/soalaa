@@ -104,12 +104,7 @@ class Exam extends Model {
           consider_negative_point: false,
           populate_school_ranking: false
         }
-      },
-      {
-        key: 'type_id',
-        default: null
       }
-
     ])
 
     const that = this
@@ -327,8 +322,8 @@ class Exam extends Model {
 
   addUserQuestionData (question, userQuizData) {
     const answeredChoice = question.getAnsweredChoice()
-    const answeredChoiceId = null
-    const answered_at = null
+    let answeredChoiceId = null
+    let answered_at = null
     if (answeredChoice) {
       // eslint-disable-next-line
       answeredChoiceId = answeredChoice.id
