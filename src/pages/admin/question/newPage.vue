@@ -1,14 +1,14 @@
 <template>
   <div id="app">
     <v-container
-        :fluid="true"
-        class="pa-6"
+      :fluid="true"
+      class="pa-6"
     >
       <v-row>
         <v-dialog
-            v-model="dialog"
-            persistent
-            max-width="290"
+          v-model="dialog"
+          persistent
+          max-width="290"
         >
           <v-card>
             <v-card-title class="dialog-title">
@@ -18,17 +18,17 @@
             <v-card-actions>
               <v-spacer />
               <v-btn
-                  color="amber lighten-1"
-                  text
-                  @click="setQuestionTypeText"
+                color="amber lighten-1"
+                text
+                @click="setQuestionTypeText"
               >
                 تایپ سوال
               </v-btn>
               <v-spacer class="mx-10" />
               <v-btn
-                  color="amber lighten-1"
-                  text
-                  @click="setQuestionTypeImage"
+                color="amber lighten-1"
+                text
+                @click="setQuestionTypeImage"
               >
                 آپلود فایل
               </v-btn>
@@ -37,94 +37,101 @@
         </v-dialog>
         <v-col :cols="questionColsNumber">
           <nav-bar
-              v-if="checkNavbarVisibility()"
-              :question="currentQuestion"
-              :edit-status="edit_status"
-              :page-name="getPageStatus()"
-              @create="navBarAction_create"
-              @saveDraft="navBarAction_saveDraft"
-              @save="navBarAction_save"
-              @cancel="navBarAction_cancel"
-              @edit="navBarAction_edit"
-              @remove="navBarAction_remove"
+            v-if="checkNavbarVisibility()"
+            :question="currentQuestion"
+            :edit-status="edit_status"
+            :page-name="getPageStatus()"
+            @create="navBarAction_create"
+            @saveDraft="navBarAction_saveDraft"
+            @save="navBarAction_save"
+            @cancel="navBarAction_cancel"
+            @edit="navBarAction_edit"
+            @remove="navBarAction_remove"
           />
           <!-- -------------------------- upload file ---------------------->
           <UploadImg
-              v-if="showImgComponentStatus()"
-              v-model="currentQuestion"
-              :edit-status="upload_img_status"
-              @imgClicked="makeShowImgPanelVisible($event)"
+            v-if="showImgComponentStatus()"
+            v-model="currentQuestion"
+            :edit-status="upload_img_status"
+            @imgClicked="makeShowImgPanelVisible($event)"
           />
 
           <div v-if="showQuestionComponentStatus()">
             <question-layout
-                v-if="!loading && this.questionType === 'typeText'"
-                ref="qlayout"
-                v-model="currentQuestion"
-                :status="edit_status"
-                @input="updateQuestion"
+              v-if="!loading && this.questionType === 'typeText'"
+              ref="qlayout"
+              v-model="currentQuestion"
+              :status="edit_status"
+              @input="updateQuestion"
             />
             <v-col cols="4">
               <v-select
-                  v-if="getPageStatus() === 'create'"
-                  v-model="currentQuestion.author"
-                  label="طراحان"
-                  dense
-                  multiple
-                  disabled
-                  chips
-                  :items="currentQuestion.author"
-                  item-text="full_name"
-                  item-value="id"
-                  outlined
+                v-if="getPageStatus() === 'create'"
+                v-model="currentQuestion.author"
+                label="طراحان"
+                dense
+                multiple
+                disabled
+                chips
+                :items="currentQuestion.author"
+                item-text="full_name"
+                item-value="id"
+                outlined
               />
             </v-col>
           </div>
           <!-- -------------------------- show exams  ---------------------->
           <attach_list
-              v-if="showExamsListComponent()"
-              :status="edit_status"
-              :attaches="selectedQuizzes"
-              :exam-list="examList"
-              :sub-categories="subCategoriesList"
-              :loading="attachLoading"
-              @detach="detachQuestion"
-              @attach="attachQuestion"
+            v-if="showExamsListComponent()"
+            :status="edit_status"
+            :attaches="selectedQuizzes"
+            :exam-list="examList"
+            :sub-categories="subCategoriesList"
+            :loading="attachLoading"
+            @detach="detachQuestion"
+            @attach="attachQuestion"
           />
           <!-- -------------------------- status --------------------------->
           <div
-              v-if="getPageStatus() === 'edit'"
-              class="my-10"
+            v-if="getPageStatus() === 'edit'"
+            class="my-10"
           >
             <StatusComponent
-                :statuses="questionStatuses"
-                :loading="changeStatusLoading"
-                @update="changeStatus"
+              :statuses="questionStatuses"
+              :loading="changeStatusLoading"
+              @update="changeStatus"
             />
           </div>
         </v-col>
         <!-- -------------------------- show img---------------------------->
         <v-col
-            v-if="uploadImgColsNumber.show"
-            :cols="5"
+          v-if="uploadImgColsNumber.show"
+          :cols="5"
         >
           <ShowImg
-              :test="imgSrc"
-              @closePanel="makeShowImgPanelInvisible"
+            :test="imgSrc"
+            @closePanel="makeShowImgPanelInvisible"
+            @bottomMode="makeShowImgBottomModeVisible"
           />
         </v-col>
         <!-- -------------------------- log --------------------------->
         <v-col
-            v-if="currentQuestion.logs.list.length > 0 && !uploadImgColsNumber.show"
-            :cols="3"
+          v-if="currentQuestion.logs.list.length > 0 && !uploadImgColsNumber.show"
+          :cols="3"
         >
           <LogListComponent
-              :logs="currentQuestion.logs"
-              @addComment="addComment"
+            :logs="currentQuestion.logs"
+            @addComment="addComment"
           />
         </v-col>
       </v-row>
     </v-container>
+    <!-- -------------------------- show img bottom mode---------------------------->
+    <ShowImgBottomMode
+      v-if="showImgBottomMode"
+      :img-src="imgSrc"
+      @sideMode="makeShowImgBottomModeInVisible"
+    />
   </div>
 </template>
 
@@ -145,10 +152,13 @@ import API_ADDRESS from "@/api/Addresses";
 import Assistant from "@/plugins/assistant";
 import {QuestionStatusList} from "@/models/QuestionStatus";
 import axios from 'axios'
+import ShowImgBottomMode from "@/components/QuestionBank/EditQuestion/ShowImg/ShowImgBottomMode";
+
 
 export default {
   name: 'NewPage',
   components: {
+    ShowImgBottomMode,
     navBar,
     QuestionLayout,
     UploadImg,
@@ -239,7 +249,8 @@ export default {
       questionStatusId_pending_to_type: null,
       dialog: false,
       questionType: '',
-      optionQuestionId: null
+      optionQuestionId: null,
+      showImgBottomMode : false
     }
   },
   destroyed() {
@@ -664,23 +675,32 @@ export default {
       this.$store.commit('AppLayout/updateDrawer', false)
     },
 
-    makeShowImgPanelInvisible() {
+    makeShowImgPanelInvisible(sideMode) {
       this.uploadImgColsNumber.show = false
-      this.$store.commit('AppLayout/updateDrawer', true)
+      if (!sideMode){
+        this.$store.commit('AppLayout/updateDrawer', true)
+      }
       if (this.currentQuestion.logs.list.length > 0) {
         this.questionColsNumber = 9
       } else {
         this.questionColsNumber = 12
       }
     },
-
+    makeShowImgBottomModeVisible(){
+      this.makeShowImgPanelInvisible()
+      this.showImgBottomMode = true
+    },
+    makeShowImgBottomModeInVisible(){
+      this.showImgBottomMode = false
+      this.makeShowImgPanelInvisible(true)
+    },
     setQuestionLayoutCols(){
       if(this.currentQuestion.logs.list.length >0 ){
         this.questionColsNumber=9
 
       }
     },
-    showPageDialog() {  //یاس
+    showPageDialog() {
       this.dialog = true
     },
     setQuestionTypeText() {
