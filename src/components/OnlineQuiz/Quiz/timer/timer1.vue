@@ -17,14 +17,16 @@
 </template>
 
 <script>
-import pcTimer from 'components/OnlineQuiz/Quiz/timer/pcTimer'
-import { mixinWindowSize, mixinQuiz } from 'src/mixin/Mixins'
+import pcTimer from 'components/OnlineQuiz/Quiz/timer/pcTimer1'
+import mobileTimer from 'components/OnlineQuiz/Quiz/timer/mobileTimer1'
+import { mixinWindowSize, mixinQuiz } from 'src/mixin1/Mixins'
 import Time from 'src/plugins/time'
 import Assistant from 'src/plugins/assistant'
 export default {
   name: 'timer',
   components: {
-    pcTimer
+    pcTimer,
+    mobileTimer
   },
   mixins: [mixinWindowSize, mixinQuiz],
   data: () => ({
@@ -63,12 +65,10 @@ export default {
     doActionsOnChangeCategory (newCat) {
       if (!newCat || !this.currentCat || Assistant.getId(newCat.id) !== Assistant.getId(this.currentCat.id)) {
         this.currentCat = newCat
-        // this.$store.commit('setActiveStateOfExamCategories', !this.considerActiveCategoryAndSubcategory)
         this.$store.commit('quiz/setActiveStateOfExamCategories')
         if (this.currentCat) {
           this.goToCategory(this.currentCat.id)
           Time.setStateOfQuestionsBasedOnActiveCategory(this.quiz, this.getCurrentExamQuestions())
-          // this.$store.commit('setActiveStateOfQuestionsBasedOnActiveCategory')
         }
         this.setExamAcceptAtIsPassedWhenAllCategoryIsPassed()
       }
@@ -76,7 +76,7 @@ export default {
     setExamAcceptAtIsPassedWhenAllCategoryIsPassed () {
       const newCat = Time.getCurrentCategoryAcceptAt(this.quiz.categories)
       if (!newCat && this.quiz.categories.length > 0) {
-        this.$store.commit('setExamAcceptAtIsPassed')
+        this.$store.commit('quiz/setExamAcceptAtIsPassed')
       }
     }
   }
