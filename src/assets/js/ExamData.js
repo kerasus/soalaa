@@ -91,6 +91,7 @@ class ExamData {
         }
       })
         .then(response => {
+          console.log('res in loadQuestionsFromFile :', response)
           let questions = response.data
           if (that.exam.holding_config.randomize_questions) {
             questions = new ShuffleQuestions(questions).run()
@@ -117,6 +118,7 @@ class ExamData {
       if (!userExamId) {
         userExamId = that.exam.user_exam_id
       }
+      console.log('API_ADDRESS.exam.getAnswerOfUserWithCorrect(userExamId)', API_ADDRESS.exam.getAnswerOfUserWithCorrect(userExamId))
       axios.get(API_ADDRESS.exam.getAnswerOfUserWithCorrect(userExamId))
         .then(response => {
           that.exam = new Exam()
@@ -194,11 +196,11 @@ class ExamData {
         examId = that.exam.id
       }
       // eslint-disable-next-line no-undef
-      axios.post(API_ADDRESS.exam.examUser, { exam_id })
+      axios.post(API_ADDRESS.exam.examUser, { exam_id: examId })
         .then(response => {
-          console.log('res', response)
           that.exam = new Exam()
           // ToDo: attention on user_exam_id and exam_id
+          console.log('response in getExamDataAndParticipate', response)
           that.exam.id = Assistant.getId(response.data.data.exam_id)
           that.exam.title = Assistant.getId(response.data.data.exam_title)
           that.exam.user_exam_id = Assistant.getId(response.data.data.id)
@@ -211,7 +213,6 @@ class ExamData {
           resolve(response)
         })
         .catch(error => {
-          console.log('err', error)
           reject(error)
         })
     })

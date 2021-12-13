@@ -6,7 +6,9 @@ export function updateDrawer (state, newInfo) {
 export function updateAppBar (state, newInfo) {
   state.appBar = newInfo
 }
-
+export function updateOverlay (state, newInfo) {
+  state.overlay = newInfo
+}
 export function updateAppBarAndDrawer (state, newInfo) {
   this.commit('AppLayout/updateAppBar', newInfo)
   this.commit('AppLayout/updateDrawer', newInfo)
