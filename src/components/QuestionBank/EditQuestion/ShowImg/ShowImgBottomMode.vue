@@ -3,7 +3,6 @@
     v-if="true"
     class="showImg-bottomMode"
   >
-    <!--    siduhfkfjvbxdklfgjhkjfvc,cvmknlkxvb Lorem ipsum dolor sit amet, consectetur adipisicing elit. Deserunt fugiat itaque numquam placeat vero? Ad debitis deserunt, earum enim iusto maxime modi molestias obcaecati optio quia quidem quisquam, repellat reprehenderit.-->
     <v-bottom-navigation
       color="indigo"
       fixed
@@ -14,11 +13,21 @@
           <v-btn
             depressed
             rounded
-            color="primary"
+            color="#44a3ff"
             @click="switchToSideMode"
           >
             تغییر حالت
           </v-btn>
+          <div
+            class="switch-button-close"
+            style="right: 50px;"
+          >
+            <v-icon
+              @click="closeImgNavigation"
+            >
+              mdi-close
+            </v-icon>
+          </div>
         </div>
         <div>
           <v-card
@@ -26,40 +35,10 @@
             flat
             class="mb-6 rounded-card"
           >
-            <!--            <v-img-->
-            <!--              lazy-src="https://picsum.photos/id/11/10/6"-->
-            <!--              max-height="150"-->
-            <!--              max-width="250"-->
-            <!--              src="https://picsum.photos/id/11/500/300"-->
-            <!--            />-->
             <v-img
               :src="imgSrc"
             />
           </v-card>
-        </div>
-        <div>
-          <v-img
-            lazy-src="https://picsum.photos/id/11/10/6"
-            max-height="150"
-            max-width="250"
-            src="https://picsum.photos/id/11/500/300"
-          />
-        </div>
-        <div>
-          <v-img
-            lazy-src="https://picsum.photos/id/11/10/6"
-            max-height="150"
-            max-width="250"
-            src="https://picsum.photos/id/11/500/300"
-          />
-        </div>
-        <div>
-          <v-img
-            lazy-src="https://picsum.photos/id/11/10/6"
-            max-height="150"
-            max-width="250"
-            src="https://picsum.photos/id/11/500/300"
-          />
         </div>
       </div>
     </v-bottom-navigation>
@@ -84,7 +63,10 @@ export default {
   methods : {
     switchToSideMode(){
       this.$emit('sideMode');
-    }
+    },
+    closeImgNavigation (){
+      this.$emit('closeBottomNav');
+    },
   }
 }
 </script>
@@ -104,6 +86,12 @@ export default {
       margin-bottom: 10px;
       position: relative;
       right: 40%;
+      display: flex;
+      align-items: center;
+      .switch-button-close{
+        position: relative;
+        right: 50px;
+      }
     }
   }
 }

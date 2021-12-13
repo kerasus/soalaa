@@ -12,9 +12,10 @@
         </v-col>
         <v-col class="text-left">
           <v-btn
+            dark
             depressed
             rounded
-            color="primary"
+            color="#44a3ff"
             style="margin-left: 40px;"
             @click="switchToBottomMode"
           >
@@ -38,14 +39,6 @@
       <v-img
         :src="test"
       />
-      <!--      FOR TEST -->
-      <!--      <br>-->
-      <!--      <v-img-->
-      <!--          :src="test"-->
-      <!--      />-->
-      <!--      <v-img-->
-      <!--          :src="test"-->
-      <!--      />-->
     </v-card>
   </v-card>
 </template>

@@ -41,12 +41,14 @@
             :question="currentQuestion"
             :edit-status="edit_status"
             :page-name="getPageStatus()"
+            :is-log-list-visible="isLogListVisible"
             @create="navBarAction_create"
             @saveDraft="navBarAction_saveDraft"
             @save="navBarAction_save"
             @cancel="navBarAction_cancel"
             @edit="navBarAction_edit"
             @remove="navBarAction_remove"
+            @logListOpened="showLogList"
           />
           <!-- -------------------------- upload file ---------------------->
           <UploadImg
@@ -116,12 +118,13 @@
         </v-col>
         <!-- -------------------------- log --------------------------->
         <v-col
-          v-if="currentQuestion.logs.list.length > 0 && !uploadImgColsNumber.show"
+          v-if="isLogListVisible && currentQuestion.logs.list.length > 0 && !uploadImgColsNumber.show"
           :cols="3"
         >
           <LogListComponent
             :logs="currentQuestion.logs"
             @addComment="addComment"
+            @logPanelClosed="hideLogList"
           />
         </v-col>
       </v-row>
@@ -131,6 +134,7 @@
       v-if="showImgBottomMode"
       :img-src="imgSrc"
       @sideMode="makeShowImgBottomModeInVisible"
+      @closeBottomNav="makeShowImgBottomModeInVisible(true)"
     />
   </div>
 </template>
@@ -250,7 +254,9 @@ export default {
       dialog: false,
       questionType: '',
       optionQuestionId: null,
-      showImgBottomMode : false
+      showImgBottomMode : false,
+      isImgPanelSideModeVisible : false,
+      isLogListVisible : true
     }
   },
   destroyed() {
@@ -669,30 +675,50 @@ export default {
     },
 
     makeShowImgPanelVisible(src) {
+      this.isImgPanelSideModeVisible = true
       this.imgSrc = src
-      this.questionColsNumber = 7
-      this.uploadImgColsNumber.show = true
-      this.$store.commit('AppLayout/updateDrawer', false)
+      if (!this.showImgBottomMode){
+        this.questionColsNumber = 7
+        this.uploadImgColsNumber.show = true
+        this.$store.commit('AppLayout/updateDrawer', false)
+      }
     },
 
-    makeShowImgPanelInvisible(sideMode) {
+    makeShowImgPanelInvisible(showLayout) {
       this.uploadImgColsNumber.show = false
-      if (!sideMode){
+      if (showLayout){
         this.$store.commit('AppLayout/updateDrawer', true)
       }
-      if (this.currentQuestion.logs.list.length > 0) {
+      if (this.isLogListVisible && this.currentQuestion.logs.list.length > 0) {
         this.questionColsNumber = 9
       } else {
         this.questionColsNumber = 12
       }
+      this.isImgPanelSideModeVisible = false
     },
     makeShowImgBottomModeVisible(){
-      this.makeShowImgPanelInvisible()
+      this.makeShowImgPanelInvisible(false)
       this.showImgBottomMode = true
     },
-    makeShowImgBottomModeInVisible(){
+    makeShowImgBottomModeInVisible(isPanelClosed){
       this.showImgBottomMode = false
-      this.makeShowImgPanelInvisible(true)
+      if (!isPanelClosed){
+        this.makeShowImgPanelVisible(this.imgSrc)
+      }
+      else {
+        this.$store.commit('AppLayout/updateDrawer', true)
+      }
+    },
+    showLogList(){
+      if (this.isImgPanelSideModeVisible){
+        this.makeShowImgPanelInvisible(false)
+      }
+      this.isLogListVisible = true
+      this.questionColsNumber = 9
+    },
+    hideLogList(){
+      this.isLogListVisible = false
+      this.questionColsNumber = 12
     },
     setQuestionLayoutCols(){
       if(this.currentQuestion.logs.list.length >0 ){
@@ -802,7 +828,7 @@ export default {
         this.currentQuestion.author.push({full_name: this.$store.getters['Auth/user'].full_name, id: this.$store.getters['Auth/user'].id})
       }
     }
-  },
+  }
 }
 </script>
 
