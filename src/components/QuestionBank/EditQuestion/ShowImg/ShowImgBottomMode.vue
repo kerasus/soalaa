@@ -9,7 +9,9 @@
       min-height="450"
     >
       <div class="showImg-bottom-navigation-container">
-        <div class="switch-button">
+        <div
+          class="switch-button"
+        >
           <v-btn
             depressed
             rounded
@@ -20,7 +22,6 @@
           </v-btn>
           <div
             class="switch-button-close"
-            style="right: 50px;"
           >
             <v-icon
               @click="closeImgNavigation"
@@ -77,20 +78,28 @@ export default {
     overflow: scroll;
   }
   .showImg-bottom-navigation-container {
-    padding-top: 10px;
+    margin-top: 10px;
     width: inherit;
     display: flex;
     flex-direction: column;
     align-items: center;
     .switch-button {
+      width: 99%;
       margin-bottom: 10px;
-      position: relative;
-      right: 40%;
+      //position: relative;
+      //right: 40%;
       display: flex;
       align-items: center;
+      position: fixed;
+      z-index: 1;
+      padding: 10px 20px;
+      background-color: #ffffff;
+      bottom: 384px;
+      justify-content: end;
       .switch-button-close{
         position: relative;
-        right: 50px;
+        right: 15px;
+        margin-left: 10px;
       }
     }
   }
@@ -104,6 +113,7 @@ export default {
   min-width: 64px;
   padding: 0 16px;
   border-radius: 28px;
+  margin-left: 30px;
 }
 .v-item-group.v-bottom-navigation .v-btn.v-btn--active {
   color: rgb(255, 255, 255) !important;
@@ -112,5 +122,6 @@ export default {
   min-width: 64px;
   padding: 0 16px;
   border-radius: 28px;
+  margin-left: 30px;
 }
 </style>

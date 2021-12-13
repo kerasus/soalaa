@@ -5,10 +5,10 @@
     height="700"
     style="overflow: scroll;"
   >
-    <div class="pa-6">
-      <v-row justify="space-between">
+    <div class="pa-6 showImg-navbar">
+      <v-row justify="space-between align-center">
         <v-col>
-          <span> فایل های بارگزاری شده</span>
+          <div> فایل های بارگزاری شده</div>
         </v-col>
         <v-col class="text-left">
           <v-btn
@@ -70,5 +70,10 @@ methods:{
 </script>
 
 <style scoped>
-
+.showImg-navbar {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  background-color: #ffffff;
+}
 </style>
