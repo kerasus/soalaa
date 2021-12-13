@@ -209,7 +209,10 @@ class Exam extends Model {
         // const englishRegex = /^[A-Za-z0-9 :"'ʹ.<>%$&@!+()\-/\n,…?ᵒ*~]*$/
         const englishRegex = /^[A-Za-z0-9 :"'ʹ.<>%$&@!+()\-/\n,…?ᵒ*~]*$/
         this.questions.list.forEach((question) => {
-            question.ltr = !!question.statement.match(englishRegex);
+            if(question.statement){
+                console.log('exam model run')
+                question.ltr = !!question.statement.match(englishRegex);
+            }
         })
     }
 
