@@ -6,7 +6,7 @@
     <v-bottom-navigation
       color="indigo"
       fixed
-      min-height="450"
+      height="450"
     >
       <div class="showImg-bottom-navigation-container">
         <div
