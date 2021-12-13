@@ -218,31 +218,28 @@
         // },
 
 
-        // Fired when the server sends something on the "messageChannel" channel.
-        messageChannel() {
-          // console.log('messageChannel: ', data)
-        },
+        // // Fired when the server sends something on the "messageChannel" channel.
+        // messageChannel() {
+        //   // console.log('messageChannel: ', data)
+        // },
         'question.file-link:update': function (data) {
-          console.log('question.file-link:update: ', data)
-        },
-        questionFileLinkUpdate (data) {
-          console.log('questionFileLinkUpdate: ', data)
-          // let that = this
-          // this.reloadQuestionFile ('questionsFileUrl', 'onlineQuiz.alaaView', this.$route.params.quizId)
-          //     .then(() => {
-          //       that.isRtl = !that.isLtrString(that.currentQuestion.statement)
-          //       that.$store.commit('AppLayout/updateOverlay', {show: false, loading: false, text: ''})
-          //     })
-          //     .catch( (error) => {
-          //       Assistant.reportErrors(error)
-          //       that.$notify({
-          //         group: 'notifs',
-          //         title: 'توجه!',
-          //         text: 'مشکلی در دریافت اطلاعات آژمون رخ داده است. لطفا دوباره امتحان کنید.',
-          //         type: 'error'
-          //       })
-          //       that.$router.push({ name: 'user.exam.list'})
-          //     })
+          const questionsFileUrl = data.questionFileLink
+          let that = this
+          this.reloadQuestionFile (questionsFileUrl, 'onlineQuiz.alaaView', this.$route.params.quizId)
+              .then(() => {
+                that.isRtl = !that.isLtrString(that.currentQuestion.statement)
+                that.$store.commit('AppLayout/updateOverlay', {show: false, loading: false, text: ''})
+              })
+              .catch( (error) => {
+                Assistant.reportErrors(error)
+                that.$notify({
+                  group: 'notifs',
+                  title: 'توجه!',
+                  text: 'مشکلی در دریافت اطلاعات آژمون رخ داده است. لطفا دوباره امتحان کنید.',
+                  type: 'error'
+                })
+                that.$router.push({ name: 'user.exam.list'})
+              })
         }
       },
         mounted() {
