@@ -8,7 +8,7 @@ const routes = [
     children: [
       {
         path: '',
-        component: () => import('pages/Index.vue'),
+        component: () => import('pages/User/exam/List'),
         meta: {
           middlewares: [auth]
         }
@@ -17,6 +17,12 @@ const routes = [
         path: '/user_exam_list',
         name: 'user.exam.list',
         component: () => import('pages/User/exam/List'),
+        middleware: [auth]
+      },
+      {
+        path: '/onlineQuiz/results/:exam_id/:user_exam_id',
+        name: 'user.exam.results',
+        component: () => import('pages/User/exam/Result'),
         middleware: [auth]
       },
       {
@@ -50,6 +56,12 @@ const routes = [
             meta: {
               middlewares: [auth]
             }
+          },
+          {
+            path: '/exam/results/:examId',
+            name: 'exam.results',
+            component: () => import('pages/Admin/exam/results'),
+            meta: { middleware: [auth] }
           },
           {
             path: ':examId',
@@ -129,7 +141,7 @@ const routes = [
             meta: { middlewares: [auth] }
           },
           {
-            path: '/lessonsList',
+            path: '/onlineQuiz/exams/lessons/:quizId/:quizTitle',
             name: 'onlineQuiz.exams.lessons',
             component: () => import('src/pages/Admin/exam/lessons.vue'),
             meta: {
@@ -150,11 +162,37 @@ const routes = [
     name: 'login',
     component: () => import('pages/Auth/Login.vue')
   },
+  // are u mr Esmaeili ? '' : dont touch this route
   {
+    path: '/debug',
+    name: 'debug',
+    component: () => import('pages/Auth/test.vue'),
+    meta: {
+      middlewares: [auth]
+    }
+  },
+  {
+    path: '/results/mbti_bartle/:exam_id/:user_exam_id',
+    name: 'mbtiBartle.result',
+    component: () => import('pages/User/exam/Result/MBTI_Bartle_result'),
+    meta: {
+      middlewares: [auth]
+    }
+  },
+  {
+    path: '/onlineQuiz/mbti_bartle/:quizId/:questNumber',
+    name: 'onlineQuiz.mbtiBartle',
+    component: () => import('pages/User/exam/participate/MBTI_Bartle'),
+    meta: {
+      middlewares: [auth]
+    }
+  },
+  {
+    // path: '/konkoorView/:quizId',
     path: '/konkoorView',
     name: 'konkoorView',
-    // component: () => import('src/pages/User/exam/participate/konkoorView'),
-    component: () => import('src/components/OnlineQuiz/Quiz/timer/timer'),
+    component: () => import('pages/User/exam/participate/konkoorView1'),
+    // component: () => import('src/components/Menu/topMenu/onlineQuizTopMenu'),
     meta: {
       middlewares: [auth]
     }
@@ -163,6 +201,15 @@ const routes = [
     path: '/user-info',
     name: 'user-info',
     component: () => import('pages/User/UserInfoForm'),
+    meta: {
+      middlewares: [auth]
+    }
+  },
+  // TODO following routes should be remove
+  {
+    path: '/test',
+    name: 'onlineQuiz.alaaView',
+    component: () => import('pages/Auth/test'),
     meta: {
       middlewares: [auth]
     }
