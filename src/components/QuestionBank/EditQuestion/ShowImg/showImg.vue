@@ -1,15 +1,27 @@
 <template>
   <v-card
     flat
-    height="1856"
     class="rounded-card"
+    height="700"
+    style="overflow: scroll;"
   >
-    <div class="pa-6">
-      <v-row justify="space-between">
+    <div class="pa-6 showImg-navbar">
+      <v-row justify="space-between align-center">
         <v-col>
-          <span> فایل های بارگزاری شده</span>
+          <div> فایل های بارگزاری شده</div>
         </v-col>
         <v-col class="text-left">
+          <v-btn
+            dark
+            depressed
+            rounded
+            color="#44a3ff"
+            style="margin-left: 40px;"
+            @click="switchToBottomMode"
+          >
+            تغییر حالت
+          </v-btn>
+
           <v-icon
             class="ml-4"
             @click="closeImgPanel"
@@ -49,11 +61,19 @@ export default {
 methods:{
   closeImgPanel (){
     this.$emit("closePanel");
+  },
+  switchToBottomMode(){
+    this.$emit('bottomMode');
   }
 }
 }
 </script>
 
 <style scoped>
-
+.showImg-navbar {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  background-color: #ffffff;
+}
 </style>
