@@ -112,7 +112,7 @@
         >
           <ShowImg
             :test="imgSrc"
-            @closePanel="makeShowImgPanelInvisible"
+            @closePanel="makeShowImgPanelInvisible(true)"
             @bottomMode="makeShowImgBottomModeVisible"
           />
         </v-col>
