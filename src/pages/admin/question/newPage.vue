@@ -41,16 +41,26 @@
             :question="currentQuestion"
             :edit-status="edit_status"
             :page-name="getPageStatus()"
+            :is-log-list-visible="isLogListVisible"
             @create="navBarAction_create"
             @saveDraft="navBarAction_saveDraft"
             @save="navBarAction_save"
             @cancel="navBarAction_cancel"
             @edit="navBarAction_edit"
             @remove="navBarAction_remove"
+            @logListOpened="showLogList"
           />
+          <!-- -------------------------- upload file ---------------------->
+          <UploadImg
+            v-if="showImgComponentStatus()"
+            v-model="currentQuestion"
+            :edit-status="upload_img_status"
+            @imgClicked="makeShowImgPanelVisible($event)"
+          />
+
           <div v-if="showQuestionComponentStatus()">
             <question-layout
-              v-if="!loading"
+              v-if="!loading && this.questionType === 'typeText'"
               ref="qlayout"
               v-model="currentQuestion"
               :status="edit_status"
@@ -71,23 +81,17 @@
                 outlined
               />
             </v-col>
-            <!-- -------------------------- show exams  ---------------------->
-            <attach_list
-              :status="edit_status"
-              :attaches="selectedQuizzes"
-              :exam-list="examList"
-              :sub-categories="subCategoriesList"
-              :loading="attachLoading"
-              @detach="detachQuestion"
-              @attach="attachQuestion"
-            />
           </div>
-          <!-- -------------------------- upload file ---------------------->
-          <UploadImg
-            v-if="showImgComponentStatus()"
-            v-model="currentQuestion"
-            :edit-status="upload_img_status"
-            @imgClicked="makeShowImgPanelVisible($event)"
+          <!-- -------------------------- show exams  ---------------------->
+          <attach_list
+            v-if="showExamsListComponent()"
+            :status="edit_status"
+            :attaches="selectedQuizzes"
+            :exam-list="examList"
+            :sub-categories="subCategoriesList"
+            :loading="attachLoading"
+            @detach="detachQuestion"
+            @attach="attachQuestion"
           />
           <!-- -------------------------- status --------------------------->
           <div
@@ -108,21 +112,30 @@
         >
           <ShowImg
             :test="imgSrc"
-            @closePanel="makeShowImgPanelInvisible"
+            @closePanel="makeShowImgPanelInvisible(true)"
+            @bottomMode="makeShowImgBottomModeVisible"
           />
         </v-col>
         <!-- -------------------------- log --------------------------->
         <v-col
-          v-if="currentQuestion.logs.list.length > 0 && !uploadImgColsNumber.show"
+          v-if="isLogListVisible && currentQuestion.logs.list.length > 0 && !uploadImgColsNumber.show"
           :cols="3"
         >
           <LogListComponent
             :logs="currentQuestion.logs"
             @addComment="addComment"
+            @logPanelClosed="hideLogList"
           />
         </v-col>
       </v-row>
     </v-container>
+    <!-- -------------------------- show img bottom mode---------------------------->
+    <ShowImgBottomMode
+      v-if="showImgBottomMode"
+      :img-src="imgSrc"
+      @sideMode="makeShowImgBottomModeInVisible"
+      @closeBottomNav="makeShowImgBottomModeInVisible(true)"
+    />
   </div>
 </template>
 
@@ -143,10 +156,13 @@ import API_ADDRESS from "@/api/Addresses";
 import Assistant from "@/plugins/assistant";
 import {QuestionStatusList} from "@/models/QuestionStatus";
 import axios from 'axios'
+import ShowImgBottomMode from "@/components/QuestionBank/EditQuestion/ShowImg/ShowImgBottomMode";
+
 
 export default {
   name: 'NewPage',
   components: {
+    ShowImgBottomMode,
     navBar,
     QuestionLayout,
     UploadImg,
@@ -237,7 +253,10 @@ export default {
       questionStatusId_pending_to_type: null,
       dialog: false,
       questionType: '',
-      optionQuestionId: null
+      optionQuestionId: null,
+      showImgBottomMode : false,
+      isImgPanelSideModeVisible : false,
+      isLogListVisible : true
     }
   },
   destroyed() {
@@ -283,16 +302,16 @@ export default {
   methods: {
     addComment (eventData) {
       axios.post(API_ADDRESS.log.addComment(eventData.logId), { comment: eventData.text })
-      .then(response => {
-        // iterating over the array to find the log that has changed
-        for (let i = 0; i < this.currentQuestion.logs.list.length; i++) {
-          if (this.currentQuestion.logs.list[i].id === eventData.logId) {
-            // setting the new log using Vue.set so that the component notices the change
-            this.currentQuestion.logs.list[i] = new Log(response.data.data)
-            Vue.set(this.currentQuestion, 'logs', new LogList(this.currentQuestion.logs))
-          }
-        }
-      })
+          .then(response => {
+            // iterating over the array to find the log that has changed
+            for (let i = 0; i < this.currentQuestion.logs.list.length; i++) {
+              if (this.currentQuestion.logs.list[i].id === eventData.logId) {
+                // setting the new log using Vue.set so that the component notices the change
+                this.currentQuestion.logs.list[i] = new Log(response.data.data)
+                Vue.set(this.currentQuestion, 'logs', new LogList(this.currentQuestion.logs))
+              }
+            }
+          })
     },
     navBarAction_create(statusId) {
       // set status_id
@@ -318,15 +337,15 @@ export default {
       var currentQuestion = this.currentQuestion
       currentQuestion.type_id = this.optionQuestionId
       currentQuestion.update(API_ADDRESS.question.updateQuestion(currentQuestion.id))
-        .then(() => {
-          this.$notify({
-            group: 'notifs',
-            title: 'توجه',
-            text: 'ویرایش با موفقیت انجام شد',
-            type: 'success'
+          .then(() => {
+            this.$notify({
+              group: 'notifs',
+              title: 'توجه',
+              text: 'ویرایش با موفقیت انجام شد',
+              type: 'success'
+            })
+            this.$router.push({name: 'question.show', params: {question_id: this.$route.params.question_id}})
           })
-          this.$router.push({name: 'question.show', params: {question_id: this.$route.params.question_id}})
-        })
     },
 
     navBarAction_cancel() {
@@ -357,22 +376,42 @@ export default {
       })
     },
 
-    setQuestionPhotos(statusId) {  //یاس
-      this.$store.commit('AppLayout/updateOverlay', {show: true, loading: true, text: 'کمی صبر کنید...'})
-      let formData = new FormData();
-      formData.append('status_id', statusId);
-      formData.append('statement_photo', this.currentQuestion.statement_photo);
-      this.currentQuestion.answer_photos.forEach((item, key) => {
-        formData.append('answer_photos[' + key + ']', item);
+    setCurrentQuestionExams(){
+      this.currentQuestion.exams = this.selectedQuizzes.map(item => {
+        return {
+          id: item.exam.id,
+          sub_category_id: item.sub_category.id,
+          order: item.order
+        }
       })
-      axios.post(API_ADDRESS.question.create, formData)
-          .then((response) => {
-            const questionId = response.data.data.id
-            this.$router.push({name: 'question.show', params: {question_id: questionId}})
-            this.$store.commit('AppLayout/updateOverlay', {show: false, loading: false, text: ''})
-          }).catch(() => {
-        this.$store.commit('AppLayout/updateOverlay', {show: false, loading: false, text: ''})
-      });
+    },
+
+    setQuestionPhotos(statusId) {
+      this.setCurrentQuestionExams()
+       this.$store.commit('AppLayout/updateOverlay', {show: true, loading: true, text: 'کمی صبر کنید...'})
+       let formData = new FormData();
+       formData.append('status_id', statusId);
+       formData.append('statement_photo', this.currentQuestion.statement_photo);
+       this.currentQuestion.answer_photos.forEach((item, key) => {
+         formData.append('answer_photos[' + key + ']', item)
+       })
+       formData.append('type_id', this.optionQuestionId)
+      // formData.append('exams', JSON.stringify(this.currentQuestion.exams))
+       formData.append('exams', this.currentQuestion.exams)
+       this.currentQuestion.exams.forEach((item ,key) => {
+         formData.append('exams[' + key + '][id]', item.id);
+         formData.append('exams[' + key + '][order]',item.order);
+         formData.append('exams[' + key + '][sub_category_id]', item.sub_category_id);
+       })
+      console.log('result  : ',formData.get('exams'))
+       axios.post(API_ADDRESS.question.create, formData)
+           .then((response) => {
+             const questionId = response.data.data.id
+             this.$router.push({name: 'question.show', params: {question_id: questionId}})
+             this.$store.commit('AppLayout/updateOverlay', {show: false, loading: false, text: ''})
+           }).catch(() => {
+         this.$store.commit('AppLayout/updateOverlay', {show: false, loading: false, text: ''})
+       });
     },
 
     setPageStatus() {
@@ -529,7 +568,6 @@ export default {
     },
 
     showImgComponentStatus() {
-
       if (this.getPageStatus() === 'create') {
         return this.questionType === 'typeImage';
       }
@@ -538,15 +576,20 @@ export default {
 
     showQuestionComponentStatus() {
       if (this.getPageStatus() === 'create') {
-        return this.questionType === 'typeText';
-
-      } else if (this.getPageStatus() === 'show') {
+        return this.questionType === 'typeText' || this.questionType === 'typeImage';
+      }
+      else if (this.getPageStatus() === 'show') {
         return this.checkTextCondition()
       }
       // in edit page
       return true
     },
-
+    showExamsListComponent(){
+      if (this.getPageStatus() === 'create') {
+        return this.questionType === 'typeText' || this.questionType === 'typeImage';
+      }
+      return true
+    },
     loadCurrentQuestionData() {
       let that = this
       this.loading = true
@@ -632,29 +675,58 @@ export default {
     },
 
     makeShowImgPanelVisible(src) {
+      this.isImgPanelSideModeVisible = true
       this.imgSrc = src
-      this.questionColsNumber = 7
-      this.uploadImgColsNumber.show = true
-      this.$store.commit('AppLayout/updateDrawer', false)
+      if (!this.showImgBottomMode){
+        this.questionColsNumber = 7
+        this.uploadImgColsNumber.show = true
+        this.$store.commit('AppLayout/updateDrawer', false)
+      }
     },
 
-    makeShowImgPanelInvisible() {
+    makeShowImgPanelInvisible(showLayout) {
       this.uploadImgColsNumber.show = false
-      this.$store.commit('AppLayout/updateDrawer', true)
-      if (this.currentQuestion.logs.list.length > 0) {
+      if (showLayout){
+        this.$store.commit('AppLayout/updateDrawer', true)
+      }
+      if (this.isLogListVisible && this.currentQuestion.logs.list.length > 0) {
         this.questionColsNumber = 9
       } else {
         this.questionColsNumber = 12
       }
+      this.isImgPanelSideModeVisible = false
     },
-
+    makeShowImgBottomModeVisible(){
+      this.makeShowImgPanelInvisible(false)
+      this.showImgBottomMode = true
+    },
+    makeShowImgBottomModeInVisible(isPanelClosed){
+      this.showImgBottomMode = false
+      if (!isPanelClosed){
+        this.makeShowImgPanelVisible(this.imgSrc)
+      }
+      else {
+        this.$store.commit('AppLayout/updateDrawer', true)
+      }
+    },
+    showLogList(){
+      if (this.isImgPanelSideModeVisible){
+        this.makeShowImgPanelInvisible(false)
+      }
+      this.isLogListVisible = true
+      this.questionColsNumber = 9
+    },
+    hideLogList(){
+      this.isLogListVisible = false
+      this.questionColsNumber = 12
+    },
     setQuestionLayoutCols(){
-     if(this.currentQuestion.logs.list.length >0 ){
+      if(this.currentQuestion.logs.list.length >0 ){
         this.questionColsNumber=9
 
-     }
+      }
     },
-    showPageDialog() {  //یاس
+    showPageDialog() {
       this.dialog = true
     },
     setQuestionTypeText() {
@@ -671,17 +743,10 @@ export default {
 
     setInsertedQuestions() {  //یاس
       this.$refs.qlayout.getContent()
-      var currentQuestion = this.currentQuestion
-      // set exams
-      currentQuestion.exams = this.selectedQuizzes.map(item => {
-        return {
-          id: item.exam.id,
-          sub_category_id: item.sub_category.id,
-          order: item.order
-        }
-      })
-      currentQuestion.type_id = this.optionQuestionId
-      currentQuestion
+      this.setCurrentQuestionExams()
+      // console.log('currentQuestion.exam :',currentQuestion.exams)
+      this.currentQuestion.type_id = this.optionQuestionId
+      this.currentQuestion
           .create()
           .then((response) => {
             this.$store.commit('AppLayout/updateOverlay', {show: false, loading: false, text: ''})
@@ -697,16 +762,16 @@ export default {
               text: 'ثبت با موفقیت انجام شد',
               type: 'success'
             })
-            window.open('/question/create', '_blank').focus()
+            if(window.open('/question/create', '_blank')) window.open('/question/create', '_blank').focus()
             this.$router.push({name: 'question.show', params: {question_id: questionId}})
           })
     },
 
     doesPhotosExist() {
       if(this.currentQuestion.answer_photos){
-       if (this.currentQuestion.answer_photos.length>0) {
-         return true
-       }
+        if (this.currentQuestion.answer_photos.length>0) {
+          return true
+        }
       }
       if(this.currentQuestion.statement_photo ){
         if (this.currentQuestion.statement_photo.length>0){
@@ -725,7 +790,16 @@ export default {
         this.setInsertedQuestions()
       } else if (this.questionType === 'typeImage') {
         if (this.doesPhotosExist()) {
-          this.setQuestionPhotos(statusId)
+          if(this.selectedQuizzes.length) this.setQuestionPhotos(statusId)
+          else {
+            this.$notify({
+              group: 'notifs',
+              title: 'توجه',
+              text: 'فیلد انتخاب آزمون اجباری است',
+              type: 'error'
+            })
+          }
+
         }
       }
     },
@@ -748,16 +822,13 @@ export default {
       }
       return true
     },
-
     checkNavbarVisibilityOnCreatPage(){
       this.NavbarVisibilityOnCreatPage = true
       if (this.$route.name === 'question.create') {
-
         this.currentQuestion.author.push({full_name: this.$store.getters['Auth/user'].full_name, id: this.$store.getters['Auth/user'].id})
-        console.log(this.currentQuestion.author)
       }
     }
-  },
+  }
 }
 </script>
 

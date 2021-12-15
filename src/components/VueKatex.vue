@@ -3,7 +3,7 @@
     v-katex:auto
     class="html-katex"
     :dir="!isLtrString ? 'rtl' : 'ltr'"
-    v-html="input"
+    v-html="localInput"
   />
 </template>
 
@@ -15,13 +15,14 @@ import 'katex/dist/katex.min.css'
 Vue.use(VueKatex, {
   globalOptions: {
     delimiters: [
-      {left: "$$", right: "$$", display: true},
-      {left: "\\[", right: "\\]", display: true},
-      {left: "$", right: "$", display: false},
-      {left: "\\(", right: "\\)", display: false}
+      {left: '$$', right: '$$', display: true},
+      {left: '\\[', right: '\\]', display: true},
+      {left: '$', right: '$', display: false},
+      {left: '\\(', right: '\\)', display: false}
     ]
   }
-});
+})
+
 export default {
   name: "VueKatex",
   props: {
@@ -36,7 +37,8 @@ export default {
   },
   data () {
     return {
-      rtl: true
+      rtl: true,
+      localInput: ''
     }
   },
   computed: {
@@ -44,7 +46,7 @@ export default {
       if (this.ltr !== null) {
         return this.ltr
       }
-      let string = this.input
+      let string = this.localInput
       if (!string) {
         return false
       }
@@ -53,6 +55,11 @@ export default {
       const persianRegex = /[\u0600-\u06FF]/
       return !string.match(persianRegex)
     },
+  },
+  watch: {
+    input (newVal) {
+      this.loadLocalInput(newVal)
+    }
   },
   mounted () {
     setTimeout(() => {
@@ -63,6 +70,19 @@ export default {
   },
   created () {
     // this.rtl = !this.isLtrString(this.input)
+    this.loadLocalInput(this.input)
+  },
+  methods: {
+    loadLocalInput (newVal) {
+      this.localInput = newVal
+      this.prepareForKatex()
+    },
+    prepareForKatex () {
+      let regex = /((\\\[((?! ).){1}((?!\$).)*?((?! ).){1}\\\])|(\$((?! ).){1}((?!\$).)*?((?! ).){1}\$))/gms;
+      this.localInput = this.localInput.replace(regex, (match) => {
+        return ' ' + match + ' '
+      })
+    }
   }
 }
 </script>
@@ -83,6 +103,20 @@ export default {
 
     .katex {
       direction: ltr;
+      .katex-html {
+        .accent {
+          background-color: transparent !important;
+          border-color: transparent !important;
+        }
+        .overline {
+          font-size: inherit !important;
+          font-weight: inherit !important;
+          letter-spacing: inherit !important;
+          line-height: inherit !important;
+          text-transform: inherit !important;
+          font-family: inherit !important;
+        }
+      }
     }
 
     table {

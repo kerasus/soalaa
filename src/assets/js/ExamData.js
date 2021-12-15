@@ -75,7 +75,7 @@ class ExamData {
 
 
 
-	loadQuestionsFromFile() {
+	loadQuestionsFromFile(questionsFileUrl) {
 		let that = this
 		this.commands.push(() => new Promise((resolve, reject) => {
 				if (!that.questionsFileUrl && !that.exam)
@@ -83,10 +83,13 @@ class ExamData {
 					Assistant.handleAxiosError('questionsFileUrl in loadQuestionsFromFile() is not set')
 					reject('questionsFileUrl in loadQuestionsFromFile() is not set')
 				}
-				if (!that.questionsFileUrl)
-				{
+
+				if (!that.questionsFileUrl && questionsFileUrl) {
+					that.questionsFileUrl = questionsFileUrl
+				} else if (!that.questionsFileUrl && !questionsFileUrl) {
 					that.questionsFileUrl = that.exam.questions_file_url
 				}
+
 				axios.get(that.questionsFileUrl, {
 					transformRequest: (data, headers) => {
 						delete headers.common['Authorization'];
