@@ -23,7 +23,7 @@
       </div>
       <div class="row justify-between">
         <div
-          class="q-mx-xl text-h6 text-grey-10"
+          class="q-mx-xl text-subtitle1 text-grey-10"
           v-if="quiz"
           v-text="quiz.title"
         />
@@ -34,9 +34,11 @@
       </div>
     </div>
     <q-linear-progress
-      rounded size="20px"
-      :value="counter.value"
-      color="warning"
+       size="15px"
+      :value="((counter.value)+1)/100"
+       color="warning"
+       track-color="grey-3"
+      reverse
       class="q-mt-sm"
     />
     <div
@@ -46,14 +48,15 @@
         <div class="question-box">
           <div class="arrow-box prev">
             <q-btn
-              icon="arrow_forward_ios"
-              color="grey-4"
-              rounded
+              text-color="white"
+              class="answer-btn"
+              :style=" ($route.params.questNumber.toString() === '1') ?'background: #eaeaea' : 'background: #ffe082'"
               unelevated
-              padding="50px 10px"
               :disabled="$route.params.questNumber.toString() === '1'"
               @click="goToPrevQuestion('onlineQuiz.mbtiBartle')"
-           />
+            >
+              <i class="fi-rr-angle-right" />
+            </q-btn>
           </div>
           <div class="question">
             <p class="question-number">
@@ -88,25 +91,16 @@
                   class="choice-circle"
                   @click="choiceClick(choice.id)"
                 >
-                  <div class="choice-inner-circle">
-<!--                    <i-->
-<!--                      v-if="stringMeanThumbUpOrDown(choice.title) === 'ThumbUp'"-->
-<!--                      class="fi-rr-thumbs-up"-->
-<!--                    />-->
-                    <q-icon
+                  <div class="row items-center choice-inner-circle">
+                    <i
                       v-if="stringMeanThumbUpOrDown(choice.title) === 'ThumbUp'"
-                      name="thumb_up_off_alt"
-                      size="xl"
+                      class="fi-rr-thumbs-up"
                     />
-                    <q-icon
+                    <i
                       v-else
-                      name="thumb_down_off_alt"
-                      size="xl"
+                      class="fi-rr-thumbs-down"
                     />
-<!--                    <i-->
-<!--                      v-else-->
-<!--                      class="fi-rr-thumbs-down"-->
-<!--                    />-->
+                    <i class="fi fi-rr-Angle-left"></i>
                   </div>
                 </div>
                 <p
@@ -134,15 +128,17 @@
             </div>
           </div>
           <div class="next arrow-box">
+<!--            -->
             <q-btn
-              icon="arrow_back_ios"
-              color="grey-4"
+              text-color="white"
+              class="answer-btn"
+              :style=" (!isCurrentQuestionAnswered || getQuestionNumberFromId(currentQuestion.id) === getCurrentExamQuestionsInArray().length) ?'background: #eaeaea' : 'background: #ffe082'"
               unelevated
-              rounded
-              padding="50px 10px"
               :disabled="!isCurrentQuestionAnswered || getQuestionNumberFromId(currentQuestion.id) === getCurrentExamQuestionsInArray().length"
               @click="goToNextQuestion('onlineQuiz.mbtiBartle')"
-            />
+            >
+              <i class="fi-rr-angle-left" />
+            </q-btn>
           </div>
         </div>
       </div>
@@ -197,7 +193,7 @@ export default {
     this.startExam(that.$route.params.quizId, 'onlineQuiz.mbtiBartle')
       .then((res) => {
         console.log('res in vue file :', res)
-        // that.$store.commit('AppLayout/updateOverlay', { show: false, loading: false, text: '' })
+        that.$store.commit('AppLayout/updateOverlay', { show: false, loading: false, text: '' })
         const unansweredQuestion = that.getUnansweredQuestionBehind()
         if (unansweredQuestion) {
           that.changeQuestion(unansweredQuestion.id, 'onlineQuiz.mbtiBartle')
@@ -217,7 +213,7 @@ export default {
         //   type: 'error'
         // })
         console.log('err in startExam vue comp :', error)
-        // that.$router.push({ name: 'user.exam.list' })
+        that.$router.push({ name: 'user.exam.list' })
       })
   },
   methods: {
@@ -379,7 +375,7 @@ export default {
           that.$store.commit('quiz/clearExamData', that.quiz.id)
           that.tryAgainDialog = false
           // console.log('need to see result')
-          //    that.$router.push({ name: 'mbtiBartle.result', params: { exam_id: this.quiz.id.toString(), user_exam_id: this.quiz.user_exam_id.toString() } })
+          that.$router.push({ name: 'mbtiBartle.result', params: { exam_id: this.quiz.id.toString(), user_exam_id: this.quiz.user_exam_id.toString() } })
         })
         .catch(() => {
           that.$notify({
@@ -549,7 +545,10 @@ export default {
         display: flex;
         flex-direction: column;
         justify-content: center;
-        button {
+        .answer-btn {
+          width: 50px;
+          height: 100px;
+          border-radius: 10px;
           @media only screen and (max-width: 989px) {
             position: absolute;
             background-color: #fff !important;
@@ -563,15 +562,16 @@ export default {
             width: 25px !important;
             height: 80px !important;
           }
-        }
-        i {
-          color: #fff;
-          font-weight: bold;
-          font-size: 24px;
-          margin-top: 12px;
-          @media only screen and (max-width: 989px) {
-            color: #ffc107;
+          .q-btn__content{
+            i {
+              font-size: 24px;
+              font-weight: bolder;
+              @media only screen and (max-width: 989px) {
+                color: #ffc107 !important;
+              }
           }
+        }
+
         }
         &.prev {
           button {
