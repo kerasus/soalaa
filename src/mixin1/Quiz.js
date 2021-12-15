@@ -171,7 +171,6 @@ const mixinQuiz = {
       } else {
         currentExamQuestionsArray = this.quiZ
       }
-      console.log('currentExamQuestionsArray', currentExamQuestionsArray)
       return currentExamQuestionsArray
     },
     getCurrentExamQuestions () {
@@ -210,7 +209,6 @@ const mixinQuiz = {
     },
 
     startExam (examId, viewType) {
-      console.log('assistant', Assistant.getId(examId))
       if (!Assistant.getId(examId)) {
         return
       }
@@ -218,7 +216,6 @@ const mixinQuiz = {
       return new Promise(function (resolve, reject) {
         let userExamId
         const examData = new ExamData1()
-        console.log()
         if (that.needToLoadQuizData()) {
           window.currentExamQuestions = null
           window.currentExamQuestionIndexes = null
@@ -226,7 +223,7 @@ const mixinQuiz = {
           examData.getExamDataAndParticipate(examId)
           examData.loadQuestionsFromFile()
         } else {
-          userExamId = '617f759b5acc124a286ca9e3'
+          userExamId = that.quiz.user_exam_id
           that.loadCurrentQuestion(viewType)
         }
         examData.getUserExamData(userExamId)

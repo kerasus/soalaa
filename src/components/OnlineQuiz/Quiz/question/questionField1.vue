@@ -12,8 +12,8 @@
             :id="'question' + source.id"
             class="question-body"
             :class="{ ltr: isRtl }"
+            :v-html="source.order + ') ' + source.statement"
           >
-            {{ source.order + ') ' + source.statement }}
             <!--            <vue-katex-->
             <!--              :input="source.order + ') ' + source.statement"-->
             <!--            />-->

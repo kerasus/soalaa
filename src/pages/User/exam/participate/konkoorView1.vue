@@ -149,7 +149,6 @@ export default {
     if (this.windowSize.x > 959) {
       this.changeAppBarAndDrawer(false)
     } else {
-      console.log('done!', this.windowSize.x > 959)
       // this.$router.push({
       //   name: 'onlineQuiz.alaaView',
       //   // TODO --> why 313 ?

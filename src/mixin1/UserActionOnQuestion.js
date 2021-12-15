@@ -77,6 +77,7 @@ const mixinUserActionOnQuestion = {
       // send data
       const question = new Question()
       if (actionType === 'answer') {
+        console.log('answer')
         return question.sendAnswer(examUserId, userQuestionDataFromLocalstorage.dataToSendAnswer)
       }
       if (actionType === 'bookmark') {
