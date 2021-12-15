@@ -42,7 +42,7 @@ const store = new Vuex.Store({
         currentQuestion: null,
         currentExamFrozenQuestions: null,
         psychometricAnswer: {},
-        errorQuestionData: [],
+        failedListAnswerData: [],
         oldQuestionId: null
     },
     mutations: {
@@ -145,24 +145,11 @@ const store = new Vuex.Store({
             }
             this.commit('changeQuestion_RefreshQuestionObject', payload)
             Vue.set(state.userQuizListData[examId][questionId], 'bookmarked', payload.bookmarked)
+
         },
-        // ---------------------------> if things got weird you have the backup code! right below (delete this after finishing your task Nima!)
-        // changeQuestion_SelectChoice(state, payload) {
-        //     let examId = payload.exam_id
-        //     let questionId = payload.question_id
-        //     if (!examId || !questionId) {
-        //         return
-        //     }
-        //     this.commit('changeQuestion_RefreshQuestionObject', payload)
-        //     let answeredAt = Time.now()
-        //     if (payload.selected_at) {
-        //         answeredAt = payload.selected_at
-        //     }
-        //     Vue.set(state.userQuizListData[examId][questionId], 'answered_at', answeredAt)
-        //     Vue.set(state.userQuizListData[examId][questionId], 'answered_choice_id', payload.answered_choice_id)
-        // },
         changeQuestion_SelectChoice(state, payload) {
-            let errorReceived = true
+            let errorReceived = !navigator.onLine
+            // let errorReceived = true
             let examId = payload.exam_id
             let questionId = payload.question_id
             let choiceId = payload.answered_choice_id
@@ -176,15 +163,13 @@ const store = new Vuex.Store({
             }
             Vue.set(state.userQuizListData[examId][questionId], 'answered_at', answeredAt)
             Vue.set(state.userQuizListData[examId][questionId], 'answered_choice_id', payload.answered_choice_id)
+
             if (errorReceived) {
-                let errorData = {choice_id: choiceId, question_id: questionId, selected_at: answeredAt}
-                if (state.oldQuestionId === questionId) {
-                    state.errorQuestionData.pop()
-                } else {
-                    state.oldQuestionId = questionId
-                }
-                state.errorQuestionData.push(errorData)
+                let failedListAnswerDataObject = {choice_id: choiceId, question_id: questionId, selected_at: answeredAt}
+                state.failedListAnswerData.push(failedListAnswerDataObject)
+                state.failedListAnswerData = [...new Map(state.failedListAnswerData.map(v => [v.question_id, v])).values()]
             }
+
         },
         changeQuestion_Status(state, payload) {
             let examId = payload.exam_id

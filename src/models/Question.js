@@ -335,8 +335,14 @@ class Question extends Model {
         })
     }
 
-        sendAnswer (exam_user_id, {question_id, choice_id, selected_at } , log) {
-        return axios.post(API_ADDRESS.exam.sendAnswers, {exam_user_id, questions: [{question_id, choice_id, selected_at}] , log: log})
+        sendAnswer (exam_user_id, answerArray, failedAnswersArray) {
+        return axios.post(API_ADDRESS.exam.sendAnswers, {exam_user_id, questions: answerArray })
+                .then(function (response) {
+                    if(failedAnswersArray.length > 0 && response.status === 200){
+                        axios.post(API_ADDRESS.exam.sendAnswers, {exam_user_id , questions: failedAnswersArray})
+                        failedAnswersArray.length = 0
+                    }
+                })
     }
 
     sendStatus (exam_user_id, {question_id, status }) {

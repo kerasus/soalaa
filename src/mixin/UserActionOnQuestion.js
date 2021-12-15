@@ -40,14 +40,14 @@ const mixinUserActionOnQuestion = {
         getUserQuestionDataFromLocalstorage(userExamData, questionId) {
             // find question
             let userQuestionData = userExamData[questionId]
-            let dataToSendErrorAnswers = this.$store.state.errorQuestionData
+            let dataToSendFailedAnswers = this.$store.state.failedListAnswerData
 
             // set data from localstorage of user
-            let dataToSendAnswer = {
+            let dataToSendAnswer = [{
                 question_id: questionId,
                 choice_id: userQuestionData.answered_choice_id,
                 selected_at: userQuestionData.answered_at
-            }
+            }]
 
             let dataToSendStatus = {question_id: questionId, status: userQuestionData.status}
             let dataToSendBookmark = questionId
@@ -55,21 +55,22 @@ const mixinUserActionOnQuestion = {
             return {
                 userQuestionData,
                 dataToSendAnswer,
-                dataToSendErrorAnswers,
+                dataToSendFailedAnswers,
                 dataToSendStatus,
                 dataToSendBookmark
             }
         },
         sendUserQuestionsDataToServer(examUserId, userExamData, questionId, actionType) {
-
             let userQuestionDataFromLocalstorage = this.getUserQuestionDataFromLocalstorage(userExamData, questionId)
-
+            let online = navigator.onLine
             // send data
             let question = new Question()
-
-            if (actionType === 'answer') {
-                return question.sendAnswer(examUserId, userQuestionDataFromLocalstorage.dataToSendAnswer, userQuestionDataFromLocalstorage.dataToSendErrorAnswers)
+            if (online){
+                if (actionType === 'answer') {
+                    return question.sendAnswer(examUserId, userQuestionDataFromLocalstorage.dataToSendAnswer , userQuestionDataFromLocalstorage.dataToSendFailedAnswers)
+                }
             }
+
             if (actionType === 'bookmark') {
                 if (userQuestionDataFromLocalstorage.userQuestionData.bookmarked) {
                     return question.sendBookmark(examUserId, userQuestionDataFromLocalstorage.dataToSendBookmark)
