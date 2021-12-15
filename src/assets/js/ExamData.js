@@ -163,6 +163,7 @@ class ExamData {
   }
 
   getUserExamData (userExamId) {
+    console.log('getUserExamData in examData userExamId', userExamId)
     const that = this
     this.commands.push(() => new Promise((resolve, reject) => {
       if (!userExamId && !that.exam) {
@@ -172,8 +173,10 @@ class ExamData {
       if (!userExamId) {
         userExamId = that.exam.user_exam_id
       }
+      console.log('API_ADDRESS.exam.getAllAnswerOfUser(user_exam_id) :', API_ADDRESS.exam.getAllAnswerOfUser(userExamId))
       axios.get(API_ADDRESS.exam.getAllAnswerOfUser(userExamId))
         .then(response => {
+          console.log('res for getUserExamData req ', response)
           that.userExamData = response.data
           resolve(response)
         })
@@ -210,6 +213,7 @@ class ExamData {
           that.exam.sub_categories = new QuestSubcategoryList(response.data.data.sub_categories)
           that.exam.holding_config = response.data.data.holding_config
           that.userExamData = response.data
+          console.log('that.exam :', that.exam)
           resolve(response)
         })
         .catch(error => {
