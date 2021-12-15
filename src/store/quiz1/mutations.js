@@ -124,11 +124,11 @@ export function changeQuestionRefreshQuestionObject (state, payload) {
   const questionId = payload.question_id
   if (!state.userQuizListData[examId]) {
     // TODO --> 'vue.set'
-    // Vue.set(state.userQuizListData, examId, {})
+    state.userQuizListData[examId] = {}
   }
   if (!state.userQuizListData[examId][questionId]) {
     // TODO --> 'vue.set'
-    // Vue.set(state.userQuizListData[examId], questionId, {})
+    state.userQuizListData[examId][questionId] = {}
   }
 }
 
@@ -158,6 +158,10 @@ export function changeQuestionSelectChoice (state, payload) {
   // TODO --> 'vue.set'
   // Vue.set(state.userQuizListData[examId][questionId], 'answered_at', answeredAt)
   // Vue.set(state.userQuizListData[examId][questionId], 'answered_choice_id', payload.answered_choice_id)
+  state.userQuizListData[examId][questionId].answered_at = answeredAt
+  state.userQuizListData[examId][questionId].answered_choice_id = payload.answered_choice_id
+  console.log('answeredAt', answeredAt)
+  console.log('payload.answered_choice_id', payload.answered_choice_id)
 }
 
 export function changeQuestionStatus (state, payload) {

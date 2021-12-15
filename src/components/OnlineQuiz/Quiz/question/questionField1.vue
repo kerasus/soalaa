@@ -13,7 +13,7 @@
             class="question-body"
             :class="{ ltr: isRtl }"
           >
-            که بود و چه کرد؟
+            {{ source.order + ') ' + source.statement }}
             <!--            <vue-katex-->
             <!--              :input="source.order + ') ' + source.statement"-->
             <!--            />-->
@@ -27,7 +27,6 @@
                 v-if="getChoiceStatus() !== 'o'"
                 text-color="grey"
                 icon="mdi-checkbox-blank-circle-outline"
-                :size="24"
                 flat
                 fab-mini
                 @click="changeStatus(source.id, 'o')"
@@ -36,7 +35,6 @@
                 v-else
                 icon="mdi-checkbox-blank-circle"
                 text-color="yellow"
-                :size="24"
                 flat
                 fab-mini
                 @click="changeStatus(source.id, 'o')"
@@ -45,7 +43,6 @@
                 v-if="getChoiceStatus() === 'x'"
                 text-color="red"
                 icon="mdi-close"
-                :size="24"
                 flat
                 fab-mini
                 @click="changeStatus(source.id ,'x')"
@@ -54,7 +51,6 @@
                 v-else
                 text-color="grey"
                 icon="mdi-close"
-                :size="24"
                 flat
                 fab-mini
                 @click="changeStatus(source.id ,'x')"
@@ -63,7 +59,6 @@
                 v-if="getChoiceBookmark()"
                 text-color="blue"
                 icon="mdi-bookmark"
-                :size="24"
                 flat
                 fab-mini
                 @click="changeBookmark(source.id)"
@@ -72,7 +67,6 @@
                 v-else
                 text-color="grey"
                 icon="mdi-bookmark-outline"
-                :size="24"
                 flat
                 fab-mini
                 @click="changeBookmark(source.id)"
@@ -227,6 +221,7 @@ export default {
       })
     },
     clickOnAnswer (payload) {
+      console.log('payload 1:', payload)
       this.answerClicked(payload)
     },
     intersectionObserver (entries) {
