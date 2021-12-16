@@ -181,217 +181,179 @@
 </template>
 
 <script>
-    import Choice from '@/components/OnlineQuiz/Quiz/Choice'
-    import Timer from '@/components/OnlineQuiz/Quiz/Timer/Timer'
-    import { mixinAuth, mixinQuiz, mixinUserActionOnQuestion, mixinDrawer, mixinWindowSize } from '@/mixin/Mixins'
-    import Assistant from "@/plugins/assistant";
-    import VueKatex from "@/components/VueKatex";
+import Choice from '@/components/OnlineQuiz/Quiz/Choice'
+import Timer from '@/components/OnlineQuiz/Quiz/Timer/Timer'
+import {mixinAuth, mixinQuiz, mixinUserActionOnQuestion, mixinDrawer, mixinWindowSize} from '@/mixin/Mixins'
+import Assistant from "@/plugins/assistant";
+import VueKatex from "@/components/VueKatex";
 
-    export default {
-        name: 'AlaaView',
-        components: {
-            Choice,
-          VueKatex,
-            Timer
-        },
-        mixins: [mixinAuth, mixinQuiz, mixinUserActionOnQuestion, mixinDrawer, mixinWindowSize],
-        data () {
-            return {
-                isRtl: false
-            }
-        },
-      sockets: {
-        // connecting() {
-        //   this.onSocketStatusChange('on connection')
-        // },
-        // disconnect() {
-        //   this.onSocketStatusChange('Socket to break off')
-        //   // this.isConnected = false;
-        // },
-        // connect_failed() {
-        //   this.onSocketStatusChange('connection failed')
-        // },
-        // connect() {
-        //   this.onSocketStatusChange('socket connected')
-        //   // Fired when the socket connects.
-        //   // this.isConnected = true
-        // },
-
-
-        // // Fired when the server sends something on the "messageChannel" channel.
-        // messageChannel() {
-        //   // console.log('messageChannel: ', data)
-        // },
-        'question.file-link:update': function (data) {
-          const questionsFileUrl = data.questionFileLink
-          let that = this
-          this.reloadQuestionFile (questionsFileUrl, 'onlineQuiz.alaaView', this.$route.params.quizId)
-              .then(() => {
-                that.isRtl = !that.isLtrString(that.currentQuestion.statement)
-                that.$store.commit('AppLayout/updateOverlay', {show: false, loading: false, text: ''})
-              })
-              .catch( (error) => {
-                Assistant.reportErrors(error)
-                that.$notify({
-                  group: 'notifs',
-                  title: 'توجه!',
-                  text: 'مشکلی در دریافت اطلاعات آژمون رخ داده است. لطفا دوباره امتحان کنید.',
-                  type: 'error'
-                })
-                that.$router.push({ name: 'user.exam.list'})
-              })
-        }
-      },
-        mounted() {
-            let that = this
-            this.showAppBar()
-            this.updateDrawerBasedOnWindowSize()
-            this.startExam(this.$route.params.quizId, 'onlineQuiz.alaaView')
-                .then(() => {
-                    that.isRtl = !that.isLtrString(that.currentQuestion.statement)
-                    that.$store.commit('AppLayout/updateOverlay', {show: false, loading: false, text: ''})
-                })
-                .catch( (error) => {
-                    Assistant.reportErrors(error)
-                    that.$notify({
-                        group: 'notifs',
-                        title: 'توجه!',
-                        text: 'مشکلی در دریافت اطلاعات آژمون رخ داده است. لطفا دوباره امتحان کنید.',
-                        type: 'error'
-                    })
-                    that.$router.push({ name: 'user.exam.list'})
-                })
-        },
-        destroyed() {
-            this.changeAppBarAndDrawer(false)
-        },
-        methods: {
-            changeAppBarAndDrawer (state) {
-                this.$store.commit('AppLayout/updateAppBarAndDrawer', state)
-            },
-            showAppBar () {
-                this.$store.commit('AppLayout/updateAppBar', true)
-            },
-            updateDrawerBasedOnWindowSize () {
-                if (this.windowSize.x > 1263) {
-                    this.$store.commit('AppLayout/updateDrawer', true)
-                }
-            }
-        }
+export default {
+  name: 'AlaaView',
+  components: {
+    Choice,
+    VueKatex,
+    Timer
+  },
+  mixins: [mixinAuth, mixinQuiz, mixinUserActionOnQuestion, mixinDrawer, mixinWindowSize],
+  data() {
+    return {
+      isRtl: false,
+      socket: null
     }
+  },
+  mounted() {
+    let that = this
+    this.showAppBar()
+    this.updateDrawerBasedOnWindowSize()
+    this.startExam(this.$route.params.quizId, 'onlineQuiz.alaaView')
+        .then(() => {
+          that.isRtl = !that.isLtrString(that.currentQuestion.statement)
+          that.$store.commit('AppLayout/updateOverlay', {show: false, loading: false, text: ''})
+          that.setSocket(that.$store.getters['Auth/accessToken'], that.quiz.user_exam_id)
+        })
+        .catch((error) => {
+          Assistant.reportErrors(error)
+          that.$notify({
+            group: 'notifs',
+            title: 'توجه!',
+            text: 'مشکلی در دریافت اطلاعات آژمون رخ داده است. لطفا دوباره امتحان کنید.',
+            type: 'error'
+          })
+          that.$router.push({name: 'user.exam.list'})
+        })
+  },
+  destroyed() {
+    this.changeAppBarAndDrawer(false)
+  },
+  methods: {
+    changeAppBarAndDrawer(state) {
+      this.$store.commit('AppLayout/updateAppBarAndDrawer', state)
+    },
+    showAppBar() {
+      this.$store.commit('AppLayout/updateAppBar', true)
+    },
+    updateDrawerBasedOnWindowSize() {
+      if (this.windowSize.x > 1263) {
+        this.$store.commit('AppLayout/updateDrawer', true)
+      }
+    }
+  }
+}
 </script>
 
 <style>
-    .quiz-page strong em strong {
-        font-weight: normal;
-        font-style: normal;
-        text-decoration: none !important;
-    }
+.quiz-page strong em strong {
+  font-weight: normal;
+  font-style: normal;
+  text-decoration: none !important;
+}
 
-    .ltr .renderedPanel {
-        direction: ltr !important;
-    }
+.ltr .renderedPanel {
+  direction: ltr !important;
+}
 
-    .v-navigation-drawer.mapOfQuestions .v-navigation-drawer__content {
-        overflow-y: scroll;
-    }
-    .quiz-page .katex-display {
-        display: inline-block;
-        direction: ltr;
-    }
+.v-navigation-drawer.mapOfQuestions .v-navigation-drawer__content {
+  overflow-y: scroll;
+}
 
-    .base.textstyle.uncramped {
-        display: flex;
-        flex-wrap: wrap;
-    }
+.quiz-page .katex-display {
+  display: inline-block;
+  direction: ltr;
+}
 
-    img {
-        max-width: 100%;
-    }
+.base.textstyle.uncramped {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+img {
+  max-width: 100%;
+}
 </style>
 
 <style scoped>
-    .question-buttons button {
-        margin-right: 20px;
-    }
+.question-buttons button {
+  margin-right: 20px;
+}
 
-    .question-number p {
-        margin-bottom: 0;
-        line-height: 40px;
-    }
-    .question-header {
-        display: flex;
-        color: var(--text-2);
-        flex-direction: row;
-        justify-content: space-between;
-        position: sticky;
-        top: 60px;
-        z-index: 1;
-        padding-top: 20px;
-        background: var(--background-2);
-    }
+.question-number p {
+  margin-bottom: 0;
+  line-height: 40px;
+}
 
-    .question-body {
-        margin-top: 50px;
-        line-height: 35px;
-        color: var(--text-2);
-    }
+.question-header {
+  display: flex;
+  color: var(--text-2);
+  flex-direction: row;
+  justify-content: space-between;
+  position: sticky;
+  top: 60px;
+  z-index: 1;
+  padding-top: 20px;
+  background: var(--background-2);
+}
 
-    .question-answers {
-        margin-top: 90px;
-    }
+.question-body {
+  margin-top: 50px;
+  line-height: 35px;
+  color: var(--text-2);
+}
 
-    .answer-sheet {
-        background: var(--surface-1);
-        width: 90%;
-        height: 100px;
-        padding: 2% 3%;
-        border-radius: 10px;
-        cursor: pointer;
-        transition: all ease-in-out 0.3s;
-        display: flex;
-        flex-direction: row;
-        justify-content: space-between;
-    }
+.question-answers {
+  margin-top: 90px;
+}
 
-    .answer-text {
-        height: 100%;
-        width: 100%;
-        display: block !important;
-    }
+.answer-sheet {
+  background: var(--surface-1);
+  width: 90%;
+  height: 100px;
+  padding: 2% 3%;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all ease-in-out 0.3s;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
 
-    .answer-checkbox {
-        height: 100px;
-        width: 100px;
-    }
+.answer-text {
+  height: 100%;
+  width: 100%;
+  display: block !important;
+}
 
-    .quiz-page {
-        background: var(--background-2);
-        height: 100%;
-    }
+.answer-checkbox {
+  height: 100px;
+  width: 100px;
+}
 
-    .user-name {
-        margin-bottom: 0;
-        align-self: center;
-        margin-left: 10px;
-        color: var(--text-2);
-    }
+.quiz-page {
+  background: var(--background-2);
+  height: 100%;
+}
 
-    @media only screen and (max-width: 960px) {
-        .question-body {
-            margin-top: 20px;
-        }
-    }
+.user-name {
+  margin-bottom: 0;
+  align-self: center;
+  margin-left: 10px;
+  color: var(--text-2);
+}
 
-    @media only screen and (max-width: 450px) {
-        .question-buttons button {
-            margin-right: 0;
-        }
-    }
+@media only screen and (max-width: 960px) {
+  .question-body {
+    margin-top: 20px;
+  }
+}
 
-    @media only screen and (max-width: 320px) {
-        .question-header {
-            justify-content: center;
-        }
-    }
+@media only screen and (max-width: 450px) {
+  .question-buttons button {
+    margin-right: 0;
+  }
+}
+
+@media only screen and (max-width: 320px) {
+  .question-header {
+    justify-content: center;
+  }
+}
 </style>
