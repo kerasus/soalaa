@@ -3,11 +3,11 @@ import Time from '../plugins/time'
 import { QuestSubcategory, QuestSubcategoryList } from '../models/QuestSubcategory'
 import axios from 'axios'
 import API_ADDRESS from 'src/api/Addresses'
-import { Exam } from '../models/Exam'
+import { Exam } from 'src/models/Exam'
 import { QuestCategoryList } from '../models/QuestCategory'
 // todo : jquery
-import $ from 'jquery'
-import { QuestionList } from '../models/Question'
+// import $ from 'jquery'
+// import { QuestionList } from '../models/Question'
 import ExamData from 'src/assets/js/ExamData'
 // import { User } from 'src/models/User'
 
@@ -198,6 +198,7 @@ const mixinQuiz = {
     },
 
     startExam (examId, viewType) {
+      console.log('----------examId----------', examId)
       if (!Assistant.getId(examId)) {
         return
       }
