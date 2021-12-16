@@ -93,6 +93,7 @@
                   :exam-id="$route.params.quizId"
                   :sub-category="quizData.sub_categories"
                   @inView="test"
+                  @reloadPage="reload"
                 />
               </DynamicScrollerItem>
             </template>

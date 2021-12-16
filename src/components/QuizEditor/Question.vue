@@ -347,7 +347,7 @@ export default {
             exams: [this.examId]
           })
               .then(() => {
-                window.location.reload()
+                this.$emit('reloadPage')
               })
         }
       })
@@ -367,7 +367,7 @@ export default {
             exams: [this.examId]
           })
               .then(() => {
-                window.location.reload()
+                this.$emit('reloadPage')
               })
         }
       })
