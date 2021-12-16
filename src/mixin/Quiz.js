@@ -6,8 +6,8 @@ import API_ADDRESS from 'src/api/Addresses'
 import { Exam } from 'src/models/Exam'
 import { QuestCategoryList } from '../models/QuestCategory'
 // todo : jquery
-// import $ from 'jquery'
-// import { QuestionList } from '../models/Question'
+import $ from 'jquery'
+import { QuestionList } from '../models/Question'
 import ExamData from 'src/assets/js/ExamData'
 // import { User } from 'src/models/User'
 
