@@ -3,38 +3,28 @@ import { Question } from 'src/models/Question'
 const mixinUserActionOnQuestion = {
   methods: {
     userActionOnQuestion (questionId, actionType, data) {
-      console.log('userActionOnQuestion 4:', this.quiz)
-      console.log('userActionOnQuestion 5:', questionId)
-      console.log('userActionOnQuestion 6:', data)
       const examId = this.quiz.id
       const examUserId = this.quiz.user_exam_id
-      console.log('userActionOnQuestion 7:', examUserId)
       this.beforeUserActionOnQuestion(examId, questionId)
       const userExamData = this.userQuizListData[examId]
-      console.log('userActionOnQuestion 8 :', userExamData)
       if (!userExamData) {
         return
       }
       const userQuestionData = userExamData[questionId]
-      console.log('userActionOnQuestion 9 :', userQuestionData)
       if (!userQuestionData) {
         return
       }
       if (actionType === 'answer') {
-        console.log('answer')
         this.userActionOnQuestion_answer(data, examId, questionId, userQuestionData)
       } else if (actionType === 'bookmark') {
-        console.log('bookmark')
         this.userActionOnQuestion_bookmark(examId, questionId, userQuestionData)
       } else if (actionType === 'status') {
-        console.log('status')
         this.userActionOnQuestion_status(data, examId, questionId, userQuestionData)
       }
       this.afterUserActionOnQuestion()
       return this.sendUserQuestionsDataToServer(examUserId, userExamData, questionId, actionType)
     },
     beforeUserActionOnQuestion (examId, questionId) {
-      console.log('beforeUserActionOnQuestion')
       this.$store.commit('quiz/updateCurrentQuestion', {
         newQuestionId: questionId,
         currentExamQuestions: this.getCurrentExamQuestions()
@@ -45,10 +35,7 @@ const mixinUserActionOnQuestion = {
       })
     },
     afterUserActionOnQuestion () {
-      console.log('afterUserActionOnQuestion')
-      console.log('afterUserActionOnQuestion 10:', this.userQuizListData)
       this.$store.commit('quiz/updateUserQuizListDataExam', this.userQuizListData)
-      console.log('afterUserActionOnQuestion 11:', this.userQuizListData)
     },
     getUserQuestionDataFromLocalstorage (userExamData, questionId) {
       // find question
@@ -71,13 +58,11 @@ const mixinUserActionOnQuestion = {
       }
     },
     sendUserQuestionsDataToServer (examUserId, userExamData, questionId, actionType) {
-      console.log('sendUserQuestionsDataToServer')
       const userQuestionDataFromLocalstorage = this.getUserQuestionDataFromLocalstorage(userExamData, questionId)
 
       // send data
       const question = new Question()
       if (actionType === 'answer') {
-        console.log('answer')
         return question.sendAnswer(examUserId, userQuestionDataFromLocalstorage.dataToSendAnswer)
       }
       if (actionType === 'bookmark') {
@@ -144,7 +129,6 @@ const mixinUserActionOnQuestion = {
       })
     },
     sendAnswersAndFinishExam () {
-
     }
   }
 }
