@@ -213,7 +213,6 @@ const routes = [
       middlewares: [auth]
     }
   },
-
   // Always leave this as last one,
   // but you can also remove it
   {
