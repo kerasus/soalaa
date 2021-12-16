@@ -1,13 +1,13 @@
-import Assistant from '../plugins/assistant'
-import Time from '../plugins/time'
+import Assistant from 'src/plugins/assistant'
+import Time from 'src/plugins/time'
 import { QuestSubcategory, QuestSubcategoryList } from '../models/QuestSubcategory'
 import axios from 'axios'
 import API_ADDRESS from 'src/api/Addresses'
-import { Exam } from '../models/Exam'
-import { QuestCategoryList } from '../models/QuestCategory'
+import { Exam } from 'src/models/Exam'
+import { QuestCategoryList } from 'src/models/QuestCategory'
 // todo : jquery
 import $ from 'jquery'
-import { QuestionList } from '../models/Question'
+import { QuestionList } from 'src/models/Question'
 import ExamData1 from 'assets/js/ExamData1'
 
 const mixinQuiz = {
@@ -171,7 +171,6 @@ const mixinQuiz = {
       } else {
         currentExamQuestionsArray = this.quiZ
       }
-      console.log('currentExamQuestionsArray', currentExamQuestionsArray)
       return currentExamQuestionsArray
     },
     getCurrentExamQuestions () {
@@ -224,7 +223,7 @@ const mixinQuiz = {
           examData.getExamDataAndParticipate(examId)
           examData.loadQuestionsFromFile()
         } else {
-          userExamId = '6135bddbe0db6947171ef98a'
+          userExamId = that.quiz.user_exam_id
           that.loadCurrentQuestion(viewType)
         }
         examData.getUserExamData(userExamId)
@@ -262,22 +261,6 @@ const mixinQuiz = {
           .finally(() => {
             that.$store.commit('loading/overlay', false)
           })
-
-        // if (that.needToLoadQuizData() && examId) {
-        //     that.participateExam(examId, viewType)
-        //         .then(() => {
-        //             resolve()
-        //         })
-        //         .catch((error) => {
-        //             that.$store.commit('loading/overlay', false)
-        //             Assistant.reportErrors({location: 'mixin/Quiz.js -> startExam()'})
-        //             reject(error)
-        //         })
-        // } else {
-        //     that.loadExam()
-        //     that.$store.commit('loading/overlay', false)
-        //     resolve()
-        // }
       })
     },
     needToLoadQuizData () {
@@ -394,7 +377,6 @@ const mixinQuiz = {
     sendUserQuestionsDataToServerAndFinishExam (examId, examUserId) {
       const userExamData = this.userQuizListData[examId]
       const answers = []
-
       for (const questionId in userExamData) {
         if (userExamData[questionId].answered_at) {
           answers.push({
@@ -407,7 +389,6 @@ const mixinQuiz = {
           })
         }
       }
-
       return axios.post(API_ADDRESS.exam.sendAnswers, { exam_user_id: examUserId, finish: true, questions: answers })
     },
 
@@ -421,7 +402,9 @@ const mixinQuiz = {
       return !string.match(persianRegex)
     },
     answerClicked (data) {
+      console.log('answerClicked 2:', data)
       const questionId = data.questionId
+      console.log('answerClicked 3:', data.questionId)
       return this.userActionOnQuestion(questionId, 'answer', { choiceId: data.choiceId })
     },
     changeBookmark (questionId) {
