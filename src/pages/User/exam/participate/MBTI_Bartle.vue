@@ -317,6 +317,7 @@ export default {
       })
     },
     choiceClick (id) {
+      console.log('choiceClick ')
       this.loading = true
       const that = this
       const isLastQuestion = this.isLastQuestion()
@@ -363,7 +364,7 @@ export default {
         })
     },
     sendAnswersAndFinishExam () {
-      // console.log('sendAnswersAndFinishExam')
+      console.log('sendAnswersAndFinishExam')
       const that = this
       this.sendUserQuestionsDataToServerAndFinishExam(this.quiz.id, this.quiz.user_exam_id)
         .then(() => {
@@ -374,7 +375,7 @@ export default {
           // })
           that.$store.commit('quiz/clearExamData', that.quiz.id)
           that.tryAgainDialog = false
-          // console.log('need to see result')
+          console.log('need to see result')
           that.$router.push({ name: 'mbtiBartle.result', params: { exam_id: this.quiz.id.toString(), user_exam_id: this.quiz.user_exam_id.toString() } })
         })
         .catch(() => {
