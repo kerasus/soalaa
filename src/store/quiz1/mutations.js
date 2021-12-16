@@ -8,6 +8,9 @@ export function resetState (state) {
   state.currentQuestion = null
   state.userQuizListData = {}
 }
+export function setPsychometricAnswer (state, newInfo) {
+  state.psychometricAnswer = newInfo
+}
 
 export function setQuiz (state, newInfo) {
   state.quiz = newInfo
