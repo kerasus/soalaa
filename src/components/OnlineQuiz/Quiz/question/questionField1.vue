@@ -221,7 +221,6 @@ export default {
       })
     },
     clickOnAnswer (payload) {
-      console.log('payload 1:', payload)
       this.answerClicked(payload)
     },
     intersectionObserver (entries) {

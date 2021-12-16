@@ -14,7 +14,6 @@ export function setQuiz (state, newInfo) {
 }
 
 export function updateQuiz (state, newInfo) {
-  console.log('updateQuiz in store')
   if (!newInfo) {
     return
   }
@@ -64,7 +63,6 @@ export function mergeDbAnswersIntoLocalstorage (state, payload) {
   }
 
   function merge (collection1, collection2) {
-    // console.log('merge in store')
     collection1.map(item1 => {
       const targetCollect2Index = collection2.findIndex(item2 => item1.question_id === item2.question_id)
       if (targetCollect2Index < 0) {
@@ -160,8 +158,6 @@ export function changeQuestionSelectChoice (state, payload) {
   // Vue.set(state.userQuizListData[examId][questionId], 'answered_choice_id', payload.answered_choice_id)
   state.userQuizListData[examId][questionId].answered_at = answeredAt
   state.userQuizListData[examId][questionId].answered_choice_id = payload.answered_choice_id
-  console.log('answeredAt', answeredAt)
-  console.log('payload.answered_choice_id', payload.answered_choice_id)
 }
 
 export function changeQuestionStatus (state, payload) {
@@ -177,7 +173,6 @@ export function changeQuestionStatus (state, payload) {
 }
 
 export function setUserQuizListData (state, payload) {
-  // console.log('setUserQuizListData is run :', payload)
   const examId = Assistant.getId(payload.exam_id)
   const questionId = Assistant.getId(payload.question_id)
   if (!examId || !questionId) {
@@ -195,16 +190,10 @@ export function setUserQuizListData (state, payload) {
 }
 
 export function clearExamData (state, examId) {
-  // console.log('clearExamData in store')
   delete state.userQuizListData[examId]
 }
-// state.userQuizListData['610e88c167a9312bc560e722']
+
 export function checkIfQuestionExistInUserQuizListData (state, questionId) {
-  // console.log('is empty ? :', Object.keys(state.userQuizListData).length === 0 && state.userQuizListData.constructor === Object)
-  // console.log('checkIfQuestionExistInUserQuizListData  store ', state)
-  // console.log('checkIfQuestionExistInUserQuizListData state.userQuizListData ', state.userQuizListData)
-  // console.log('questionId :', questionId)
-  // console.log('state.quiz.id :', state.quiz.id)
   if (!state.userQuizListData[state.quiz.id]) {
     state.userQuizListData[state.quiz.id] = {}
   }
@@ -237,19 +226,14 @@ export function leaveQuestion (state, questionId) {
 }
 
 export function updateCurrentQuestion (state, newInfo) {
-  // console.log('updateCurrentQuestion :', state.userQuizListData)
   const oldQuestionId = (!state.currentQuestion) ? false : Assistant.getId(state.currentQuestion.id)
   const newQuestionId = Assistant.getId(newInfo.newQuestionId)
   if (!state.quiz || newQuestionId === oldQuestionId || !Assistant.getId(state.quiz.id)) {
     return
   }
   const currentExamQuestions = newInfo.currentExamQuestions
-  // console.log('currentExamQuestions :', currentExamQuestions)
   const currentQuestion = new Question(currentExamQuestions[newQuestionId])
-  // console.log('currentQuestion :', currentQuestion)
   if (newQuestionId) {
-    // console.log('state before commit :', state)
-    // console.log('checkIfQuestionExistInUserQuizListData in store GGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGGG', state.userQuizListData['610e88c167a9312bc560e722'])
     this.commit('quiz/enterQuestion', newQuestionId)
   }
   if (oldQuestionId) {
