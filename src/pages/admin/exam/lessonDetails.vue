@@ -268,7 +268,6 @@
             //     this.loadFirstQuestion()
             // }
             this.scrollTo(this.currentQuestion.id)
-            this.changeAppBarAndDrawer(false)
             $('.sidebar').height(this.windowSize.y)
             console.log('lofdsafadfasfag', $('.sidebar'))
             console.log('lofdsafadfasfag', $('.sidebar')[0])
