@@ -79,12 +79,12 @@ const mixinQuiz = {
         }
     },
     methods: {
-        setSocket(token, userExamId, callbacks) {
+        setSocket(token, examId, callbacks) {
             this.socket = io(API_ADDRESS.socket, {
                 withCredentials: true,
                 auth: {
                     token,
-                    examId: userExamId
+                    examId
                 }
             })
             this.setSocketEvents(callbacks)
