@@ -12,8 +12,8 @@
             :id="'question' + source.id"
             class="question-body"
             :class="{ ltr: isRtl }"
-            :v-html="source.order + ') ' + source.statement"
           >
+            {{source.order + ') ' + source.statement}}
             <!--            <vue-katex-->
             <!--              :input="source.order + ') ' + source.statement"-->
             <!--            />-->
@@ -76,14 +76,12 @@
       </tr>
       </thead>
       <tbody class="table-body">
-      <tr
-        class="choices"
-      >
+      <tr class="choices q-tr--no-hover">
         <td
           v-for="(choice, index) in source.choices.list"
           :key="choice.id"
           ref="choices"
-          class="choice"
+          class="choice col-md-3"
           :class="{active: getAnsweredChoiceId() === choice.id, ltr: isRtl}"
           @click="clickOnAnswer({ questionId: source.id, choiceId: choice.id})"
         >

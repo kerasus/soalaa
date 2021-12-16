@@ -40,10 +40,10 @@ const mixinQuiz = {
     },
     currentQuestion: {
       get () {
-        return this.$store.getters('quiz1/currentQuestion')
+        return this.$store.getters['quiz1/currentQuestion']
       },
       set (newInfo) {
-        this.$store.commit('quiz/updateCurrentQuestion', {
+        this.$store.commit('quiz1/updateCurrentQuestion', {
           newQuestionId: newInfo.id,
           currentExamQuestions: this.getCurrentExamQuestions()
         })
@@ -95,7 +95,6 @@ const mixinQuiz = {
       }
       return this.userQuizListData[quizId][questionId]
     },
-
     getCurrentExam () {
       return this.$store.getters['quiz/quiz']
     },
@@ -174,13 +173,12 @@ const mixinQuiz = {
       return currentExamQuestionsArray
     },
     getCurrentExamQuestions () {
+      console.log('window.currentExamQuestions', window.currentExamQuestions)
       if (window.currentExamQuestions) {
         return window.currentExamQuestions
       }
       window.currentExamQuestions = JSON.parse(window.localStorage.getItem('currentExamQuestions'))
       this.modifyCurrentExamQuestions(window.currentExamQuestions)
-      // Vue.set(this, 'currentExamQuestions', Object.freeze(window.currentExamQuestions))
-
       return window.currentExamQuestions
     },
     modifyCurrentExamQuestions (currentExamQuestions) {
@@ -207,7 +205,6 @@ const mixinQuiz = {
 
       return currentExamQuestionsArray
     },
-
     startExam (examId, viewType) {
       if (!Assistant.getId(examId)) {
         return
@@ -370,7 +367,6 @@ const mixinQuiz = {
       }
       this.changeQuestion(questionId, viewType)
     },
-
     hasExamDataOnThisDeviseStorage (examId) {
       return !!this.userQuizListData[examId]
     },
@@ -391,7 +387,6 @@ const mixinQuiz = {
       }
       return axios.post(API_ADDRESS.exam.sendAnswers, { exam_user_id: examUserId, finish: true, questions: answers })
     },
-
     isLtrString (string) {
       if (!string) {
         return false
@@ -402,9 +397,8 @@ const mixinQuiz = {
       return !string.match(persianRegex)
     },
     answerClicked (data) {
-      console.log('answerClicked 2:', data)
       const questionId = data.questionId
-      console.log('answerClicked 3:', data.questionId)
+      console.log('answer')
       return this.userActionOnQuestion(questionId, 'answer', { choiceId: data.choiceId })
     },
     changeBookmark (questionId) {
@@ -497,6 +491,7 @@ const mixinQuiz = {
       this.changeQuestion(question.id, viewType)
     },
     changeQuestion (id, viewType) {
+      console.log(this.currentQuestion)
       if (Assistant.getId(this.currentQuestion.id) === Assistant.getId(id)) {
         return
       }
@@ -524,7 +519,7 @@ const mixinQuiz = {
         }
       }
 
-      this.$store.commit('quiz/updateCurrentQuestion', {
+      this.$store.commit('quiz1/updateCurrentQuestion', {
         newQuestionId: currentQuestion.id,
         currentExamQuestions: this.getCurrentExamQuestions()
       })

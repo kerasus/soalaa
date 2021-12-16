@@ -4,7 +4,6 @@
       <div
         id="questions"
         ref="questionsColumn"
-        :md="5"
         class="col-md-5 right-side"
         :style="{ height: windowSize.y }"
       >
