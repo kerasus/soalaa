@@ -1,8 +1,20 @@
 <template>
   <div>
-    <p class="mt-2 font-weight-medium">
-      سابقه
-    </p>
+    <v-row>
+      <v-col>
+        <p class="mt-2 font-weight-medium">
+          سابقه
+        </p>
+      </v-col>
+      <v-col class="text-left align-center">
+        <v-icon
+          class="ml-4"
+          @click="closeLogPanel"
+        >
+          mdi-close
+        </v-icon>
+      </v-col>
+    </v-row>
     <v-card
       flat
       class="rounded-card"
@@ -199,6 +211,11 @@ export default {
   methods: {
     addComment (eventData) {
       this.$emit('addComment', eventData)
+    },
+    closeLogPanel(){
+      this.saveBtnCols = 6
+      this.cancelBtnCols = 6
+      this.$emit('logPanelClosed');
     }
   }
 }
