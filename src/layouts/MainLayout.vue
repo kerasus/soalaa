@@ -7,9 +7,9 @@
       <q-toolbar>
         <div class="header-body full-width">
           <q-btn
+            round
             dense
             flat
-            round
             icon="menu"
             color="grey-14"
             @click="toggleLeftDrawer"
