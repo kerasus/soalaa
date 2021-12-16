@@ -1,16 +1,16 @@
 <template>
-  <div>
+  <div class="exam-results">
 <!--    <v-row class="d-flex justify-center">-->
     <div class="row wrap justify-center">
-      <div class="col">
+      <div class="col results-info-col">
         <info/>
       </div>
     </div>
     <div class="row wrap justify-center">
-      <div class="col">
+      <div class="col default-col-padding">
         <q-card
             flat
-            class="flex infoCard content-center"
+            class="infoCard content-center"
         >
           <div
             class="row"
@@ -47,6 +47,7 @@
                 active-color="primary"
                 indicator-color="primary"
                 align="justify"
+                class="result-tabs"
               >
                 <q-tab name="result" label="کارنامه"></q-tab>
                 <q-tab name="rank" label="تخمین رتبه"></q-tab>
@@ -541,7 +542,20 @@ export default {
 }
 </script>
 
-<style>
+<style lang="scss">
+.exam-results {
+  margin-top: 16px;
+  padding: 12px;
+  .default-col-padding{
+    padding: 12px 0px;
+  }
+  .results-info-col {
+    padding: 12px 0px;
+  }
+  .result-tabs{
+    width: 50%;
+  }
+}
 .vjs-menu-button-popup .vjs-menu {
   left: auto;
   right: 0;
