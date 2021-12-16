@@ -190,7 +190,7 @@
                         }
                       }
                     }
-                    that.setSocket(that.$store.getters['Auth/accessToken'], that.quiz.user_exam_id, callbacks)
+                    that.setSocket(that.$store.getters['Auth/accessToken'], that.quiz.id, callbacks)
                 })
                 .catch((error) => {
                     Assistant.reportErrors(error)

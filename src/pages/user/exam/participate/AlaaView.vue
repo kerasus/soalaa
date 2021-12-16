@@ -209,7 +209,7 @@ export default {
         .then(() => {
           that.isRtl = !that.isLtrString(that.currentQuestion.statement)
           that.$store.commit('AppLayout/updateOverlay', {show: false, loading: false, text: ''})
-          that.setSocket(that.$store.getters['Auth/accessToken'], that.quiz.user_exam_id)
+          that.setSocket(that.$store.getters['Auth/accessToken'], that.quiz.id)
         })
         .catch((error) => {
           Assistant.reportErrors(error)
