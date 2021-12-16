@@ -1,59 +1,41 @@
 <template>
-  <q-btn @click="changeView('konkoor')">click me </q-btn>
+  <div class="text-center q-mb-lg">
+    debug page
+    <br />
+    don't forget rollback your code
+    <br />
+   name : {{getStore}}
+<q-btn @click="getStore">
+  get from store
+</q-btn>
+    <q-btn @click="change">
+change
+</q-btn>
+  </div>
 </template>
 
 <script>
 // import API_ADDRESS from 'src/api/Addresses'
-import { mixinQuiz } from 'src/mixin/Mixins'
+
 export default {
-  mixins: [mixinQuiz],
+  data: () => ({
+    name: ''
+  }),
   created () {
-    // this.$axios.get('/cdn/upload/knowledgeTree.json', {
-    //   headers: {
-    //     Accept: 'application/json; charset=utf-8',
-    //     dataType: 'json'
-    //   },
-    //   transformRequest: (data, headers) => {
-    //     delete headers.common.Authorization
-    //     return data
-    //   }
-    // })
-    //   .then((res) => {
-    //     console.log('res', res)
-    //   })
-    //   .catch((err) => {
-    //     console.log('error', err)
-    //   })
+  },
+  computed: {
+    getStore () {
+      return this.$store.state.vuexTest.name
+    }
   },
   methods: {
-    testMitra () {
-      this.$router.push({
-        name: 'konkoorView',
-        params: {
-          quizId: this.quiz.id
-        }
-      })
-    },
-    changeView (type) {
-      console.log('hi')
-      if (type === 'alaa') {
-        const questionNumber = this.getQuestionNumberFromId(this.currentQuestion.id)
-        this.$router.push({
-          name: 'onlineQuiz.alaaView',
-          params: { quizId: this.quiz.id, questNumber: questionNumber }
-        })
-      } else if (type === 'konkoor') {
-        this.$store.commit('AppLayout/updateDrawer', false)
-        setTimeout(() => {
-          this.$router.push({ name: 'konkoorView', params: { quizId: '6134aa6d567a60794c3c3d17' } })
-        }, 200)
-      }
+    change () {
+      this.$store.commit('vuexTest/callOther', 'mitra')
     }
-  }
 
+  }
 }
 </script>
-// lumenServer + '/exam?with_pagination=1&page=' + page_number
 <style scoped>
 
 </style>
