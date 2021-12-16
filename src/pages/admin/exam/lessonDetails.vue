@@ -219,6 +219,9 @@
         }),
         computed: {
             filteredQuestions () {
+                this.quizData.questions.list.forEach((item, index) => {
+                  item.questNumber = index + 1
+                })
                 if (this.questionFilterMethod === 'not-confirmed-at-all') {
                     return this.quizData.questions.list.filter(item => item.confirmers.length === 0)
                 } else if (this.questionFilterMethod === 'not-confirmed-by-me') {
