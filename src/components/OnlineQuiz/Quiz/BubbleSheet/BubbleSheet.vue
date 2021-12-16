@@ -252,7 +252,7 @@
       questionListHeight() {
         // box is a col-7 with 12px padding
         this.boxSize = this.$refs.bubbleSheet.clientWidth - 24
-        console.log('box', this.boxSize)
+        // console.log('box', this.boxSize)
         // each group width is 140px
         const horizontalGroupAmounts = Math.floor(this.boxSize / 140)
         const verticalGroupAmount = Math.ceil(this.questionsInGroups.length / horizontalGroupAmounts)
@@ -344,8 +344,8 @@
         -webkit-font-smoothing: antialiased;
         -moz-osx-font-smoothing: grayscale;
         color: #ffda6a;
-        left: -5px;
-        font-size: 16px;
+        left: -13px;
+        font-size: 14px;
         top: -5px;
     }
 
@@ -358,8 +358,8 @@
         -webkit-font-smoothing: antialiased;
         -moz-osx-font-smoothing: grayscale;
         color: red;
-        left: -6px;
-        font-size: 16px;
+        left: -13px;
+        font-size: 14px;
         top: -5px;
     }
 
@@ -372,8 +372,8 @@
         -webkit-font-smoothing: antialiased;
         -moz-osx-font-smoothing: grayscale;
         color: #2196F3;
-        left: -6px;
-        font-size: 16px;
+        left: -13px;
+        font-size: 14px;
         top: -5px;
     }
 

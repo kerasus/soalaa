@@ -4,7 +4,7 @@
       v-model="drawer"
       app
       right
-      width="316"
+      :width="drawerWidth"
       disable-resize-watcher
       :class="{
         'mapOfQuestions': $route.name === 'onlineQuiz.alaaView' || $route.name === 'onlineQuiz.konkoorView',
@@ -122,9 +122,11 @@
 
 <script>
     import Vue from 'vue'
+    import './assets/Fonts/Flaticons/css/uicons-regular-rounded.css'
+    import './assets/Fonts/Flaticons/css/uicons-bold-rounded.css'
     import Time from '@/plugins/time'
     import VueConfirmDialog from 'vue-confirm-dialog'
-    import {mixinAuth, mixinQuiz, mixinDrawer, mixinWindowSize} from '@/mixin/Mixins'
+    import { mixinAuth, mixinQuiz, mixinDrawer, mixinWindowSize } from '@/mixin/Mixins'
     import '@/assets/scss/app.scss'
     import '@/assets/scss/font.scss'
     import '@mdi/font/css/materialdesignicons.css'
@@ -152,6 +154,13 @@
         computed: {
             appBar() {
                 return this.$store.getters['AppLayout/appBar']
+            },
+            drawerWidth () {
+              if (this.windowSize.x > 450) {
+                return 316
+              } else {
+                return 230
+              }
             },
             overlay() {
                 return this.$store.getters['AppLayout/overlay']

@@ -1,98 +1,134 @@
 <template>
   <v-container class="category-editor">
     <v-card
-        max-width="800px"
-        class="mx-auto"
+      max-width="800px"
+      class="mx-auto"
     >
-      <v-overlay v-if="loading" absolute>
-        <v-progress-circular indeterminate></v-progress-circular>
+      <v-overlay
+        v-if="loading"
+        absolute
+      >
+        <v-progress-circular indeterminate />
       </v-overlay>
       <v-toolbar
-          color="light-blue px-2"
-          dark
+        color="light-blue px-2"
+        dark
       >
-
         <v-toolbar-title>لیست دفترچه ها</v-toolbar-title>
 
-        <v-spacer></v-spacer>
+        <v-spacer />
 
         <v-text-field
-            class="search mx-3"
-            v-model="searchValue"
-            prepend-inner-icon="mdi-magnify"
-            rounded
-            outlined
-            dense
-            :style="{ 'max-width': '200px' }"
+          v-model="searchValue"
+          class="search mx-3"
+          prepend-inner-icon="mdi-magnify"
+          rounded
+          outlined
+          dense
+          :style="{ 'max-width': '200px' }"
         />
 
-        <v-btn icon @click="addCategory">
+        <v-btn
+          icon
+          @click="addCategory"
+        >
           <v-icon>mdi-plus</v-icon>
         </v-btn>
       </v-toolbar>
 
       <v-list
-          subheader
-          two-line
+        subheader
+        two-line
       >
         <!--        <v-subheader inset>Folders</v-subheader>-->
 
         <v-list-item
-            v-for="(item, index) in filteredItems"
-            :key="index"
+          v-for="(item, index) in filteredItems"
+          :key="index"
         >
-          <v-list-item-avatar size="40" :color="iconPicker(item.title).color">
+          <v-list-item-avatar
+            size="40"
+            :color="iconPicker(item.title).color"
+          >
             <v-icon
-                size="30"
-                class="lighten-1"
-                dark
+              size="30"
+              class="lighten-1"
+              dark
             >
               {{ iconPicker(item.title).icon }}
             </v-icon>
           </v-list-item-avatar>
 
           <v-list-item-content>
-            <v-list-item-title v-if="!item.editable && !item.editMode" v-text="item.title"></v-list-item-title>
-            <v-text-field
-                v-else-if="item.editable && !item.editMode"
-                outlined
-                rounded
-                v-model="item.title"
-                :style="{ 'max-width': '250px' }"
+            <v-list-item-title
+              v-if="!item.editable && !item.editMode"
+              v-text="item.title"
             />
             <v-text-field
-                v-else-if="!item.editable && item.editMode"
-                outlined
-                rounded
-                v-model="item.title_buffer"
-                :style="{ 'max-width': '250px' }"
+              v-else-if="item.editable && !item.editMode"
+              v-model="item.title"
+              outlined
+              rounded
+              :style="{ 'max-width': '250px' }"
+            />
+            <v-text-field
+              v-else-if="!item.editable && item.editMode"
+              v-model="item.title_buffer"
+              outlined
+              rounded
+              :style="{ 'max-width': '250px' }"
             />
 
             <!--            <v-list-item-subtitle v-text="item.subtitle"></v-list-item-subtitle>-->
           </v-list-item-content>
           <v-list-item-action>
             <div v-if="!item.editable && !item.editMode">
-              <v-btn icon @click="editMode(item)">
-                <v-icon color="blue">mdi-pencil-circle-outline</v-icon>
+              <v-btn
+                icon
+                @click="editMode(item)"
+              >
+                <v-icon color="blue">
+                  mdi-pencil-circle-outline
+                </v-icon>
               </v-btn>
               <!--              <v-btn icon>-->
               <!--                <v-icon color="red">mdi-delete-circle-outline</v-icon>-->
               <!--              </v-btn>-->
             </div>
             <div v-else-if="item.editable && !item.editMode">
-              <v-btn icon @click="create(item)">
-                <v-icon color="green">mdi-check-circle-outline</v-icon>
+              <v-btn
+                icon
+                @click="create(item)"
+              >
+                <v-icon color="green">
+                  mdi-check-circle-outline
+                </v-icon>
               </v-btn>
-              <v-btn icon @click="deleteItem(item)">
-                <v-icon color="red">mdi-close-circle-outline</v-icon>
+              <v-btn
+                icon
+                @click="deleteItem(item)"
+              >
+                <v-icon color="red">
+                  mdi-close-circle-outline
+                </v-icon>
               </v-btn>
             </div>
             <div v-else-if="!item.editable && item.editMode">
-              <v-btn icon @click="update(item)">
-                <v-icon color="green">mdi-check-circle-outline</v-icon>
+              <v-btn
+                icon
+                @click="update(item)"
+              >
+                <v-icon color="green">
+                  mdi-check-circle-outline
+                </v-icon>
               </v-btn>
-              <v-btn icon @click="cancelEdit(item)">
-                <v-icon color="red">mdi-close-circle-outline</v-icon>
+              <v-btn
+                icon
+                @click="cancelEdit(item)"
+              >
+                <v-icon color="red">
+                  mdi-close-circle-outline
+                </v-icon>
               </v-btn>
             </div>
           </v-list-item-action>
@@ -108,7 +144,7 @@ import {QuestCategory, QuestCategoryList} from "@/models/QuestCategory";
 import API_ADDRESS from "@/api/Addresses";
 
 export default {
-  name: "edit",
+  name: "Edit",
   data () {
     return {
       categoryList: new QuestCategoryList(),
@@ -121,13 +157,23 @@ export default {
       return this.categoryList.list.filter(item => !item.title || item.title.includes(this.searchValue))
     },
     iconPicker () {
-      return (title) => {
+      return () => {
         return {
           icon: 'mdi-card-text',
           color: 'grey'
         }
       }
     }
+  },
+
+  created() {
+    this.loading = true
+    const loadCategoriesPromise = this.loadCategories()
+
+    Promise.all([loadCategoriesPromise])
+        .then(() => {
+          this.loading = false
+        })
   },
   methods: {
     update (item) {
@@ -180,21 +226,12 @@ export default {
             that.categoryList = new QuestCategoryList(response.data.data)
             resolve()
           })
-          .catch( (error) => {
+          .catch( () => {
             reject()
           })
       })
     },
 
-  },
-  created() {
-    this.loading = true
-    const loadCategoriesPromise = this.loadCategories()
-
-    Promise.all([loadCategoriesPromise])
-        .then(() => {
-          this.loading = false
-        })
   }
 }
 </script>

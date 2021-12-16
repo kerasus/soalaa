@@ -1,6 +1,9 @@
 <template>
   <div id="app">
-    <v-container :fluid="true" class="pa-6">
+    <v-container
+      :fluid="true"
+      class="pa-6"
+    >
       <v-row>
         <v-dialog
           v-model="dialog"
@@ -34,45 +37,65 @@
         </v-dialog>
         <v-col :cols="questionColsNumber">
           <nav-bar
-            v-if="this.checkNavbarVisibility()"
+            v-if="checkNavbarVisibility()"
             :question="currentQuestion"
             :edit-status="edit_status"
-            :page-name="this.getPageStatus()"
+            :page-name="getPageStatus()"
+            :is-log-list-visible="isLogListVisible"
             @create="navBarAction_create"
             @saveDraft="navBarAction_saveDraft"
             @save="navBarAction_save"
             @cancel="navBarAction_cancel"
             @edit="navBarAction_edit"
             @remove="navBarAction_remove"
+            @logListOpened="showLogList"
           />
-          <div v-if="this.showQuestionComponentStatus()">
-            <question-layout
-              v-if="!loading"
-              v-model="currentQuestion"
-              :status="edit_status"
-              @input="updateQuestion"
-            />
-            <!-- -------------------------- show exams  ---------------------->
-            <attach_list
-              :status="edit_status"
-              :attaches="selectedQuizzes"
-              :exam-list="examList"
-              :sub-categories="subCategoriesList"
-              :loading="attachLoading"
-              @detach="detachQuestion"
-              @attach="attachQuestion"
-            />
-          </div>
           <!-- -------------------------- upload file ---------------------->
           <UploadImg
-            v-if="this.showImgComponentStatus()"
+            v-if="showImgComponentStatus()"
             v-model="currentQuestion"
             :edit-status="upload_img_status"
             @imgClicked="makeShowImgPanelVisible($event)"
           />
+
+          <div v-if="showQuestionComponentStatus()">
+            <question-layout
+              v-if="!loading && this.questionType === 'typeText'"
+              ref="qlayout"
+              v-model="currentQuestion"
+              :status="edit_status"
+              @input="updateQuestion"
+            />
+            <v-col cols="4">
+              <v-select
+                v-if="getPageStatus() === 'create'"
+                v-model="currentQuestion.author"
+                label="طراحان"
+                dense
+                multiple
+                disabled
+                chips
+                :items="currentQuestion.author"
+                item-text="full_name"
+                item-value="id"
+                outlined
+              />
+            </v-col>
+          </div>
+          <!-- -------------------------- show exams  ---------------------->
+          <attach_list
+            v-if="showExamsListComponent()"
+            :status="edit_status"
+            :attaches="selectedQuizzes"
+            :exam-list="examList"
+            :sub-categories="subCategoriesList"
+            :loading="attachLoading"
+            @detach="detachQuestion"
+            @attach="attachQuestion"
+          />
           <!-- -------------------------- status --------------------------->
           <div
-            v-if="this.getPageStatus() === 'edit'"
+            v-if="getPageStatus() === 'edit'"
             class="my-10"
           >
             <StatusComponent
@@ -89,18 +112,30 @@
         >
           <ShowImg
             :test="imgSrc"
-            @closePanel="makeShowImgPanelInvisible"
+            @closePanel="makeShowImgPanelInvisible(true)"
+            @bottomMode="makeShowImgBottomModeVisible"
           />
         </v-col>
         <!-- -------------------------- log --------------------------->
         <v-col
-          v-if="currentQuestion.logs.list.length > 0 && !uploadImgColsNumber.show"
+          v-if="isLogListVisible && currentQuestion.logs.list.length > 0 && !uploadImgColsNumber.show"
           :cols="3"
         >
-          <LogListComponent @addComment="addComment" :logs="currentQuestion.logs" />
+          <LogListComponent
+            :logs="currentQuestion.logs"
+            @addComment="addComment"
+            @logPanelClosed="hideLogList"
+          />
         </v-col>
       </v-row>
     </v-container>
+    <!-- -------------------------- show img bottom mode---------------------------->
+    <ShowImgBottomMode
+      v-if="showImgBottomMode"
+      :img-src="imgSrc"
+      @sideMode="makeShowImgBottomModeInVisible"
+      @closeBottomNav="makeShowImgBottomModeInVisible(true)"
+    />
   </div>
 </template>
 
@@ -113,7 +148,6 @@ import attach_list from '@/components/QuestionBank/EditQuestion/Exams/exams';
 import StatusComponent from '@/components/QuestionBank/EditQuestion/StatusComponent/status';
 import ShowImg from '@/components/QuestionBank/EditQuestion/ShowImg/showImg';
 import LogListComponent from '@/components/QuestionBank/EditQuestion/Log/LogList';
-import {mixinMarkdownAndKatex} from "@/mixin/Mixins"
 import {Question} from '@/models/Question'
 import {Log, LogList} from '@/models/Log'
 import {ExamList} from "@/models/Exam";
@@ -122,10 +156,13 @@ import API_ADDRESS from "@/api/Addresses";
 import Assistant from "@/plugins/assistant";
 import {QuestionStatusList} from "@/models/QuestionStatus";
 import axios from 'axios'
+import ShowImgBottomMode from "@/components/QuestionBank/EditQuestion/ShowImg/ShowImgBottomMode";
+
 
 export default {
   name: 'NewPage',
   components: {
+    ShowImgBottomMode,
     navBar,
     QuestionLayout,
     UploadImg,
@@ -134,9 +171,19 @@ export default {
     StatusComponent,
     LogListComponent
   },
-  mixins: [mixinMarkdownAndKatex],
   data() {
     return {
+      selectedAuthors: [],
+      authors: [
+        {
+          full_name: 'محمد اسماعیلی',
+          id: 123
+        },
+        {
+          full_name: 'مصطفی کاظمی',
+          id: 1222
+        }
+      ],
       temp: null,
       pageStatuses: [
         {
@@ -205,10 +252,43 @@ export default {
       questionStatusId_draft: null,
       questionStatusId_pending_to_type: null,
       dialog: false,
-      questionType: ''
+      questionType: '',
+      optionQuestionId: null,
+      showImgBottomMode : false,
+      isImgPanelSideModeVisible : false,
+      isLogListVisible : true
     }
   },
+  destroyed() {
+    window.onbeforeunload = null
+  },
+  // beforeRouteLeave (to, from, next) {
+  //   console.log(to, from, next)
+  // },
   created() {
+    window.onbeforeunload = function() {
+      return "Do you really want to leave our brilliant application?";
+    };
+
+    let that = this
+    axios.get(API_ADDRESS.option.base + '?type=question_type')
+        .then(function (response) {
+          const optionQuestion = response.data.data.find(item => (item.value==='konkur'))
+          if (!optionQuestion) {
+            // beterek
+            return this.$notify({
+              group: 'notifs',
+              text: ' API با مشکل مواجه شد!',
+              type: 'error'
+            })
+          }
+          that.optionQuestionId = optionQuestion.id
+          that.loading = false
+        })
+        .catch(function (error) {
+          console.log(error);
+        })
+
     this.setPageStatus()
     this.checkUrl()
     this.getQuestionStatus()
@@ -222,16 +302,16 @@ export default {
   methods: {
     addComment (eventData) {
       axios.post(API_ADDRESS.log.addComment(eventData.logId), { comment: eventData.text })
-      .then(response => {
-        // iterating over the array to find the log that has changed
-        for (let i = 0; i < this.currentQuestion.logs.list.length; i++) {
-          if (this.currentQuestion.logs.list[i].id === eventData.logId) {
-            // setting the new log using Vue.set so that the component notices the change
-            this.currentQuestion.logs.list[i] = new Log(response.data.data)
-            Vue.set(this.currentQuestion, 'logs', new LogList(this.currentQuestion.logs))
-          }
-        }
-      })
+          .then(response => {
+            // iterating over the array to find the log that has changed
+            for (let i = 0; i < this.currentQuestion.logs.list.length; i++) {
+              if (this.currentQuestion.logs.list[i].id === eventData.logId) {
+                // setting the new log using Vue.set so that the component notices the change
+                this.currentQuestion.logs.list[i] = new Log(response.data.data)
+                Vue.set(this.currentQuestion, 'logs', new LogList(this.currentQuestion.logs))
+              }
+            }
+          })
     },
     navBarAction_create(statusId) {
       // set status_id
@@ -239,6 +319,9 @@ export default {
         statusId = this.questionStatusId_draft
       }
       this.currentQuestion.status_id = statusId
+      this.selectedAuthors.forEach(author => {
+        this.currentQuestion.author.push(this.authors.find(item => item.id === author))
+      })
 
       // set choices
       this.setMainChoicesInCreateMode(statusId)   //یاس
@@ -250,7 +333,9 @@ export default {
     },
 
     navBarAction_save() {
+      this.$refs.qlayout.getContent()
       var currentQuestion = this.currentQuestion
+      currentQuestion.type_id = this.optionQuestionId
       currentQuestion.update(API_ADDRESS.question.updateQuestion(currentQuestion.id))
           .then(() => {
             this.$notify({
@@ -291,22 +376,42 @@ export default {
       })
     },
 
-    setQuestionPhotos(statusId) {  //یاس
-      this.$store.commit('AppLayout/updateOverlay', {show: true, loading: true, text: 'کمی صبر کنید...'})
-      let formData = new FormData();
-      formData.append('status_id', statusId);
-      formData.append('statement_photo', this.currentQuestion.statement_photo);
-      this.currentQuestion.answer_photos.forEach((item, key) => {
-        formData.append('answer_photos[' + key + ']', item);
+    setCurrentQuestionExams(){
+      this.currentQuestion.exams = this.selectedQuizzes.map(item => {
+        return {
+          id: item.exam.id,
+          sub_category_id: item.sub_category.id,
+          order: item.order
+        }
       })
-      axios.post(API_ADDRESS.question.create, formData)
-          .then((response) => {
-            const questionId = response.data.data.id
-            this.$router.push({name: 'question.show', params: {question_id: questionId}})
-            this.$store.commit('AppLayout/updateOverlay', {show: false, loading: false, text: ''})
-          }).catch(() => {
-        this.$store.commit('AppLayout/updateOverlay', {show: false, loading: false, text: ''})
-      });
+    },
+
+    setQuestionPhotos(statusId) {
+      this.setCurrentQuestionExams()
+       this.$store.commit('AppLayout/updateOverlay', {show: true, loading: true, text: 'کمی صبر کنید...'})
+       let formData = new FormData();
+       formData.append('status_id', statusId);
+       formData.append('statement_photo', this.currentQuestion.statement_photo);
+       this.currentQuestion.answer_photos.forEach((item, key) => {
+         formData.append('answer_photos[' + key + ']', item)
+       })
+       formData.append('type_id', this.optionQuestionId)
+      // formData.append('exams', JSON.stringify(this.currentQuestion.exams))
+       formData.append('exams', this.currentQuestion.exams)
+       this.currentQuestion.exams.forEach((item ,key) => {
+         formData.append('exams[' + key + '][id]', item.id);
+         formData.append('exams[' + key + '][order]',item.order);
+         formData.append('exams[' + key + '][sub_category_id]', item.sub_category_id);
+       })
+      console.log('result  : ',formData.get('exams'))
+       axios.post(API_ADDRESS.question.create, formData)
+           .then((response) => {
+             const questionId = response.data.data.id
+             this.$router.push({name: 'question.show', params: {question_id: questionId}})
+             this.$store.commit('AppLayout/updateOverlay', {show: false, loading: false, text: ''})
+           }).catch(() => {
+         this.$store.commit('AppLayout/updateOverlay', {show: false, loading: false, text: ''})
+       });
     },
 
     setPageStatus() {
@@ -463,31 +568,41 @@ export default {
     },
 
     showImgComponentStatus() {
-
       if (this.getPageStatus() === 'create') {
         return this.questionType === 'typeImage';
-
       }
       return  this.doesPhotosExist()
     },
 
     showQuestionComponentStatus() {
       if (this.getPageStatus() === 'create') {
-        return this.questionType === 'typeText';
-
-      } else if (this.getPageStatus() === 'show') {
+        return this.questionType === 'typeText' || this.questionType === 'typeImage';
+      }
+      else if (this.getPageStatus() === 'show') {
         return this.checkTextCondition()
       }
       // in edit page
       return true
     },
-
+    showExamsListComponent(){
+      if (this.getPageStatus() === 'create') {
+        return this.questionType === 'typeText' || this.questionType === 'typeImage';
+      }
+      return true
+    },
     loadCurrentQuestionData() {
       let that = this
       this.loading = true
       this.currentQuestion.show(null, API_ADDRESS.question.updateQuestion(this.$route.params.question_id))
           .then((response) => {
             that.currentQuestion = new Question(response.data.data)
+            if (that.currentQuestion.type.value === 'psychometric') {
+              if (that.getPageStatus() === 'edit') {
+                that.$router.push({name: 'question.mbti.edit', params: {question_id: that.$route.params.question_id}})
+              } else if (that.getPageStatus() === 'show') {
+                that.$router.push({name: 'question.mbti.show', params: {question_id: that.$route.params.question_id}})
+              }
+            }
             that.temp = that.currentQuestion
             that.checkTextCondition()
             that.getLogs()
@@ -560,34 +675,60 @@ export default {
     },
 
     makeShowImgPanelVisible(src) {
+      this.isImgPanelSideModeVisible = true
       this.imgSrc = src
-      this.questionColsNumber = 7
-      this.uploadImgColsNumber.show = true
-      this.$store.commit('AppLayout/updateDrawer', false)
+      if (!this.showImgBottomMode){
+        this.questionColsNumber = 7
+        this.uploadImgColsNumber.show = true
+        this.$store.commit('AppLayout/updateDrawer', false)
+      }
     },
 
-    makeShowImgPanelInvisible() {
+    makeShowImgPanelInvisible(showLayout) {
       this.uploadImgColsNumber.show = false
-      this.$store.commit('AppLayout/updateDrawer', true)
-      if (this.currentQuestion.logs.list.length > 0) {
+      if (showLayout){
+        this.$store.commit('AppLayout/updateDrawer', true)
+      }
+      if (this.isLogListVisible && this.currentQuestion.logs.list.length > 0) {
         this.questionColsNumber = 9
       } else {
         this.questionColsNumber = 12
       }
+      this.isImgPanelSideModeVisible = false
     },
-
+    makeShowImgBottomModeVisible(){
+      this.makeShowImgPanelInvisible(false)
+      this.showImgBottomMode = true
+    },
+    makeShowImgBottomModeInVisible(isPanelClosed){
+      this.showImgBottomMode = false
+      if (!isPanelClosed){
+        this.makeShowImgPanelVisible(this.imgSrc)
+      }
+      else {
+        this.$store.commit('AppLayout/updateDrawer', true)
+      }
+    },
+    showLogList(){
+      if (this.isImgPanelSideModeVisible){
+        this.makeShowImgPanelInvisible(false)
+      }
+      this.isLogListVisible = true
+      this.questionColsNumber = 9
+    },
+    hideLogList(){
+      this.isLogListVisible = false
+      this.questionColsNumber = 12
+    },
     setQuestionLayoutCols(){
-     if(this.currentQuestion.logs.list.length >0 ){
+      if(this.currentQuestion.logs.list.length >0 ){
         this.questionColsNumber=9
 
-     }
-
+      }
     },
-
-    showPageDialog() {  //یاس
+    showPageDialog() {
       this.dialog = true
     },
-
     setQuestionTypeText() {
       this.questionType = 'typeText'
       this.dialog = false
@@ -601,21 +742,15 @@ export default {
     },
 
     setInsertedQuestions() {  //یاس
-      var currentQuestion = this.currentQuestion
-      // set exams
-      currentQuestion.exams = this.selectedQuizzes.map(item => {
-        return {
-          id: item.exam.id,
-          sub_category_id: item.sub_category.id,
-          order: item.order
-        }
-      })
-      currentQuestion
+      this.$refs.qlayout.getContent()
+      this.setCurrentQuestionExams()
+      // console.log('currentQuestion.exam :',currentQuestion.exams)
+      this.currentQuestion.type_id = this.optionQuestionId
+      this.currentQuestion
           .create()
           .then((response) => {
             this.$store.commit('AppLayout/updateOverlay', {show: false, loading: false, text: ''})
             const questionId = response.data.data.id
-            this.$router.push({name: 'question.show', params: {question_id: questionId}})
             this.questionType = 'typeText'
             this.currentQuestion.statement = ''
             this.currentQuestion.choices.list.forEach((item) => {
@@ -627,14 +762,16 @@ export default {
               text: 'ثبت با موفقیت انجام شد',
               type: 'success'
             })
+            if(window.open('/question/create', '_blank')) window.open('/question/create', '_blank').focus()
+            this.$router.push({name: 'question.show', params: {question_id: questionId}})
           })
     },
 
     doesPhotosExist() {
       if(this.currentQuestion.answer_photos){
-       if (this.currentQuestion.answer_photos.length>0) {
-         return true
-       }
+        if (this.currentQuestion.answer_photos.length>0) {
+          return true
+        }
       }
       if(this.currentQuestion.statement_photo ){
         if (this.currentQuestion.statement_photo.length>0){
@@ -653,7 +790,16 @@ export default {
         this.setInsertedQuestions()
       } else if (this.questionType === 'typeImage') {
         if (this.doesPhotosExist()) {
-          this.setQuestionPhotos(statusId)
+          if(this.selectedQuizzes.length) this.setQuestionPhotos(statusId)
+          else {
+            this.$notify({
+              group: 'notifs',
+              title: 'توجه',
+              text: 'فیلد انتخاب آزمون اجباری است',
+              type: 'error'
+            })
+          }
+
         }
       }
     },
@@ -676,11 +822,13 @@ export default {
       }
       return true
     },
-
     checkNavbarVisibilityOnCreatPage(){
       this.NavbarVisibilityOnCreatPage = true
+      if (this.$route.name === 'question.create') {
+        this.currentQuestion.author.push({full_name: this.$store.getters['Auth/user'].full_name, id: this.$store.getters['Auth/user'].id})
+      }
     }
-  },
+  }
 }
 </script>
 

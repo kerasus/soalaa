@@ -57,7 +57,9 @@
       <!--    --------------------------------------------------------------  edit page-->
       <v-col v-if="question.id && editStatus">
         <v-row>
-          <v-col>
+          <v-col
+            cols="4"
+          >
             <span> وضعیت : </span>
             <v-chip
               color="#44a3ff"
@@ -74,7 +76,6 @@
                   rounded
                   color="green"
                   dark
-                  class="ml-2"
                   width="100"
                   @click="btn_clicked('save')"
                 >
@@ -92,6 +93,20 @@
                   @click="btn_clicked('cancel')"
                 >
                   لغو
+                </v-btn>
+              </v-col>
+              <v-col v-if="!isLogListVisible">
+                <v-btn
+                  depressed
+                  rounded
+                  color="#ffc107"
+                  dark
+                  width="80"
+                  @click="btn_clicked('logListOpened')"
+                >
+                  <span>
+                    سابقه
+                  </span>
                 </v-btn>
               </v-col>
             </v-row>
@@ -133,6 +148,20 @@
               حذف
             </v-btn>
           </v-col>
+          <v-col v-if="!isLogListVisible">
+            <v-btn
+              depressed
+              rounded
+              color="#ffc107"
+              dark
+              width="80"
+              @click="btn_clicked('logListOpened')"
+            >
+              <span>
+                سابقه
+              </span>
+            </v-btn>
+          </v-col>
         </v-row>
       </v-col>
     </v-row>
@@ -143,7 +172,6 @@
 
 <script>
 import {Question} from "@/models/Question";
-
 export default {
   name: "NavBar",
   props: {
@@ -158,6 +186,16 @@ export default {
     pageName: {
       type: String,
       default: ''
+    },
+    isLogListVisible : {
+      type: Boolean,
+      default: true
+    }
+  },
+  data(){
+    return {
+      saveBtnCols : 4 ,
+      cancelBtnCols : 4
     }
   },
   methods: {

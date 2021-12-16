@@ -3,6 +3,7 @@ const lumenServer = process.env.VUE_APP_LUMEN_INTERNAL_API_SERVER
 const authServer = process.env.VUE_APP_AUTH_INTERNAL_API_SERVER
 
 const API_ADDRESS = {
+  socket: process.env.VUE_APP_SOCKET_TARGET_API_SERVER,
   server: {
     lumen: lumenServer,
     auth: authServer
@@ -25,17 +26,24 @@ const API_ADDRESS = {
   content: {
     base: authServer + '/c',
   },
+  option: {
+    base: lumenServer + '/option'
+  },
   exam: {
+    editExam: lumenServer + '/exam',
     sendAnswers: lumenServer + '/temp-exam/answer/choice',
     sendStatus: lumenServer + '/temp-exam/answer/status',
     sendBookmark: lumenServer + '/temp-exam/answer/bookmark',
     sendUnBookmark: lumenServer + '/temp-exam/answer/unbookmark',
     userExamsList: lumenServer + '/examAndUser',
     takhminRotbe: lumenServer + '/exam-report/rankSimulator',
+    analysisVideo: lumenServer + '/exam-question/attach/sub-category',
+    getAnalysisVideo (exam_id) { return lumenServer + '/exam-question/videos/' + exam_id },
     examReportIndex (type) { return lumenServer + '/exam-report/index/' + type },
+    pdf (exam_id) { return lumenServer + '/exam-question/booklet-file/' +exam_id },
     base (page_number) {
       if (page_number) {
-        return lumenServer + '/exam?page=' + page_number
+        return lumenServer + '/exam?with_pagination=1&page=' + page_number
       } else {
         return lumenServer + '/exam'
       }
@@ -64,6 +72,9 @@ const API_ADDRESS = {
     report: {
       getReport (userExamId) {
         return lumenServer + '/exam-report/show?user_exam_id=' + userExamId
+      },
+      updateReportOptions (examId) {
+        return lumenServer + '/exam/config/' + examId
       }
     },
     examBookletUpload (exam_id) {
@@ -108,9 +119,9 @@ const API_ADDRESS = {
         }
         return lumenServer + '/activity-log?subject_id='+questionId+'&subject=question&title=update&description=update_question_status&with_pagination=0'
       },
-
     },
     base: lumenServer + '/exam-question/attach',
+    createAndAttach: () => lumenServer + '/exam-question/attach/' ,
     create: lumenServer + '/question',
     attachSubCategoryToQuestion: lumenServer + '/exam-question/attach/sub-category',
     updateQuestion (questionId) {
@@ -128,6 +139,9 @@ const API_ADDRESS = {
     },
     confirm (questionId) {
       return lumenServer + '/question/confirm/' + questionId
+    },
+    uploadImage (questionId) {
+      return lumenServer + '/question/upload/' + questionId
     }
   },
   questionSubcategory: {
@@ -140,6 +154,14 @@ const API_ADDRESS = {
     base: lumenServer + '/category',
     update (id) {
       return lumenServer + '/category/' + id
+    }
+  },
+  subGroups : {
+    base (exam_id) {
+      return lumenServer + '/exam-question/zirgorooh/' + exam_id
+    },
+    all () {
+      return lumenServer + '/option?with_pagination=0&type=zirgorooh_type'
     }
   }
 }

@@ -16,6 +16,7 @@ const router = new VueRouter({
             name: 'login',
             component: () => lazyLoadView(import('@/pages/auth/Login'))
         },
+
         // dashboard page
         {
             path: '/',
@@ -44,9 +45,21 @@ const router = new VueRouter({
             meta: {middleware: [auth, completeInfo]}
         },
         {
+            path: '/onlineQuiz/start_automatically/:examId/:autoStart',
+            name: 'onlineQuiz.StartExamAutomatically',
+            component: () => lazyLoadView(import('@/pages/user/exam/participate/StartExamAutomatically')),
+            meta: {middleware: [auth]}
+        },
+        {
             path: '/onlineQuiz/alaaView/:quizId/:questNumber',
             name: 'onlineQuiz.alaaView',
             component: () => lazyLoadView(import('@/pages/user/exam/participate/AlaaView')),
+            meta: {middleware: [auth, completeInfo]}
+        },
+        {
+            path: '/onlineQuiz/mbti_bartle/:quizId/:questNumber',
+            name: 'onlineQuiz.mbtiBartle',
+            component: () => lazyLoadView(import('@/pages/user/exam/participate/MBTI_Bartle')),
             meta: {middleware: [auth, completeInfo]}
         },
         {
@@ -67,8 +80,68 @@ const router = new VueRouter({
             component: () => lazyLoadView(import('@/pages/user/exam/Result')),
             meta: {middleware: [auth, completeInfo]}
         },
+        {
+            path: '/results/mbti_bartle/:exam_id/:user_exam_id',
+            name: 'mbtiBartle.result',
+            component: () => lazyLoadView(import('@/pages/user/exam/Result/MBTI_Bartle_result')),
+            meta: {middleware: [auth, completeInfo]}
+        },
 
         // admin pages
+        {
+            path: '/category/edit',
+            name: 'category.edit',
+            component: () => lazyLoadView(import('@/pages/admin/category/edit')),
+            meta: {middleware: [auth, completeInfo]}
+        },
+        {
+            path: '/coefficient/edit/:exam_id',
+            name: 'coefficient.edit',
+            component: () => lazyLoadView(import('@/pages/admin/subGroup/editCoefficients')),
+            meta: {middleware: [auth, completeInfo]}
+        },
+        {
+            path: '/exam/results/:examId',
+            name: 'exam.results',
+            component: () => lazyLoadView(import('@/pages/admin/exam/results')),
+            meta: {middleware: [auth, completeInfo]}
+        },
+        {
+            path: '/psychology/results/:examId',
+            name: 'psychology.results',
+            component: () => lazyLoadView(import('@/pages/admin/exam/PsychologyResult')),
+            meta: {middleware: [auth, completeInfo]}
+        },
+        {
+            path: '/onlineQuiz/exams',
+            name: 'onlineQuiz.exams',
+            component: () => lazyLoadView(import('@/pages/admin/exam/Manage')),
+            meta: {middleware: [auth, completeInfo]}
+        },
+        {
+            path: '/onlineQuiz/exams/lessons/:quizId/:quizTitle',
+            name: 'onlineQuiz.exams.lessons',
+            component: () => lazyLoadView(import('@/pages/admin/exam/lessons')),
+            meta: {middleware: [auth, completeInfo]}
+        },
+        {
+            path: '/onlineQuiz/exams/lesson/:quizId/:lessonId',
+            name: 'onlineQuiz.exams.lessons.details',
+            component: () => lazyLoadView(import('@/pages/admin/exam/lessonDetails')),
+            meta: {middleware: [auth, completeInfo]}
+        },
+        {
+            path: '/onlineQuiz/exams/lesson/karnama/:quizId/:lessonId',
+            name: 'onlineQuiz.exams.lessons.Karnama',
+            component: () => lazyLoadView(import('@/pages/admin/exam/Karnama')),
+            meta: {middleware: [auth, completeInfo]}
+        },
+        {
+            path: '/onlineQuiz/exams/lesson/list',
+            name: 'onlineQuiz.exams.lessons.lists',
+            component: () => lazyLoadView(import('@/pages/admin/exam/lessonsList')),
+            meta: {middleware: [auth, completeInfo]}
+        },
         {
             path: '/quest/index',
             name: 'quest.index',
@@ -88,21 +161,45 @@ const router = new VueRouter({
             meta: {middleware: [auth, completeInfo]}
         },
         {
-            path: '/onlineQuiz/exams',
-            name: 'onlineQuiz.exams',
-            component: () => lazyLoadView(import('@/pages/admin/exam/Manage')),
+            path: '/question/list',
+            name: 'question.list',
+            component: () => lazyLoadView(import('@/pages/admin/question/newQuestionFactory')),
             meta: {middleware: [auth, completeInfo]}
         },
         {
-            path: '/onlineQuiz/exams/lessons/:quizId',
-            name: 'onlineQuiz.exams.lessons',
-            component: () => lazyLoadView(import('@/pages/admin/exam/lessons')),
+            path: '/question/create',
+            name: 'question.create',
+            component: () => lazyLoadView(import('@/pages/admin/question/newPage')),
             meta: {middleware: [auth, completeInfo]}
         },
         {
-            path: '/onlineQuiz/exams/lessons/:quizId/:lessonId',
-            name: 'onlineQuiz.exams.lessons.details',
-            component: () => lazyLoadView(import('@/pages/admin/exam/lessonDetails')),
+            path: '/question/:question_id/show',
+            name: 'question.show',
+            component: () => lazyLoadView(import('@/pages/admin/question/newPage')),
+            meta: {middleware: [auth, completeInfo]}
+        },
+        {
+            path: '/question/:question_id/edit',
+            name: 'question.edit',
+            component: () => lazyLoadView(import('@/pages/admin/question/newPage')),
+            meta: {middleware: [auth, completeInfo]}
+        },
+        {
+            path: '/question/mbti/create',
+            name: 'question.mbti.create',
+            component: () => lazyLoadView(import('@/pages/admin/question/newMBTIpage')),
+            meta: {middleware: [auth, completeInfo]}
+        },
+        {
+            path: '/question/mbti/:question_id/show',
+            name: 'question.mbti.show',
+            component: () => lazyLoadView(import('@/pages/admin/question/newMBTIpage')),
+            meta: {middleware: [auth, completeInfo]}
+        },
+        {
+            path: '/question/mbti/:question_id/edit',
+            name: 'question.mbti.edit',
+            component: () => lazyLoadView(import('@/pages/admin/question/newMBTIpage')),
             meta: {middleware: [auth, completeInfo]}
         },
         {
@@ -112,29 +209,25 @@ const router = new VueRouter({
             meta: {middleware: [auth, completeInfo]}
         },
         {
-            path: '/exam/results/:examId',
-            name: 'exam.results',
-            component: () => lazyLoadView(import('@/pages/admin/exam/results')),
-            meta: {middleware: [auth, completeInfo]}
-        },
-        {
-            path: '/video/set',
-            name: 'video.set',
-            component: () => lazyLoadView(import('@/pages/admin/VideoSet/SetVideo')),
-            meta: {middleware: [auth, completeInfo]}
-        },
-        {
             path: '/sub_category/edit',
             name: 'subCategory.edit',
             component: () => lazyLoadView(import('@/pages/admin/subCategory/edit')),
             meta: {middleware: [auth, completeInfo]}
         },
         {
-            path: '/category/edit',
-            name: 'category.edit',
-            component: () => lazyLoadView(import('@/pages/admin/category/edit')),
+            path: '/sub-group/edit/:exam_id',
+            name: 'subGroup.edit',
+            component: () => lazyLoadView(import('@/pages/admin/subGroup/edit')),
             meta: {middleware: [auth, completeInfo]}
         },
+        {
+            path: '/video/set/:exam_id/:subcategory_id/:exam_title',
+            name: 'video.set',
+            component: () => lazyLoadView(import('@/pages/admin/VideoSet/SetVideo')),
+            meta: {middleware: [auth, completeInfo]}
+        },
+
+
         // dev pages
         // {
         //     path: '/quiz/edit-all',
@@ -154,30 +247,7 @@ const router = new VueRouter({
             component: () => lazyLoadView(import('@/components/debug')),
             meta: {middleware: [auth, completeInfo]}
         },
-        {
-            path: '/question/create',
-            name: 'question.create',
-            component: () => lazyLoadView(import('@/pages/admin/question/newPage')),
-            meta: {middleware: [auth, completeInfo]}
-        },
-        {
-            path: '/question/list',
-            name: 'question.list',
-            component: () => lazyLoadView(import('@/pages/admin/question/newQuestionFactory')),
-            meta: {middleware: [auth, completeInfo]}
-        },
-        {
-            path: '/question/:question_id/edit',
-            name: 'question.edit',
-            component: () => lazyLoadView(import('@/pages/admin/question/newPage')),
-            meta: {middleware: [auth, completeInfo]}
-        },
-        {
-            path: '/question/:question_id/show',
-            name: 'question.show',
-            component: () => lazyLoadView(import('@/pages/admin/question/newPage')),
-            meta: {middleware: [auth, completeInfo]}
-        },
+
         // NotFound page
         {
             path: '*',

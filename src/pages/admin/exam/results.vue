@@ -1,6 +1,111 @@
 <template>
   <v-container>
     <v-row>
+      <v-col
+        md="4"
+        sm="4"
+        cols="12"
+      >
+        <div class="form-group m-form__group ">
+          <v-select
+            v-model="selectedGender"
+            :items="genders"
+            label="جنسیت"
+            item-text="title"
+            item-value="title"
+          />
+        </div>
+      </v-col>
+      <v-col
+        md="4"
+        sm="4"
+        cols="12"
+      >
+        <div class="form-group m-form__group ">
+          <v-autocomplete
+            v-model="selectedProvince"
+            label="استان"
+            :items="provinces"
+            item-text="title"
+            item-value="title"
+            no-data-text="داده ای یافت نشد"
+          />
+        </div>
+      </v-col>
+      <v-col
+        md="4"
+        sm="4"
+        cols="12"
+      >
+        <div class="form-group m-form__group">
+          <v-autocomplete
+            v-model="selectedCity"
+            label="شهر"
+            :items="citiesForSelectedProvince"
+            item-text="title"
+            item-value="title"
+            no-data-text="داده ای یافت نشد"
+          />
+        </div>
+      </v-col>
+    </v-row>
+    <v-row>
+      <v-col
+        md="4"
+        sm="4"
+        cols="12"
+        class="filter-btn"
+      >
+        <v-btn
+          color="primary"
+          block
+          class="my-5"
+          @click="DoFilter"
+        >
+          فیلتر
+        </v-btn>
+      </v-col>
+      <v-col
+        md="4"
+        sm="4"
+        cols="12"
+        class="filter-btn"
+      >
+        <v-btn
+          color="orange"
+          dark
+          block
+          class="my-5"
+          :loading="fileLoading"
+          @click="getExcel"
+        >
+          تولید Excel
+        </v-btn>
+      </v-col>
+      <v-col
+        md="4"
+        sm="4"
+        cols="12"
+        class="filter-btn"
+      >
+        <v-btn
+          color="yellow"
+          block
+          class="my-5"
+          :disabled="!file_url"
+        >
+          <a
+            :href="file_url"
+            :style="{ 'text-decoration': 'none', color: '#000', width: '100%' }"
+            target="_blank"
+            :disabled="!file_url"
+          >
+            دانلود Excel
+          </a>
+        </v-btn>
+      </v-col>
+    </v-row>
+    <v-row>
       <v-col>
         <v-card>
           <v-tabs
@@ -27,7 +132,7 @@
                     <template v-slot:default>
                       <thead v-if="results[0]">
                         <tr>
-                          <th colspan="4" />
+                          <th colspan="5" />
                           <th
                             v-for="(item, index) in results[0].sub_category"
                             :key="'headTitle_'+item.sub_category_order+'_'+index"
@@ -45,26 +150,31 @@
                             نام و نام خانوادگی
                           </th>
                           <th>
+                            شماره همراه
+                          </th>
+                          <th>
                             استان
                           </th>
                           <th>
                             شهر
                           </th>
-                          <th />
+                          <th>
+                            مشاهده کارنامه
+                          </th>
                           <template
-                            v-for="item in results[0].sub_category"
+                            v-for="(item, index) in results[0].sub_category"
                           >
                             <th
-                              :key="'headColumns_percent_'+item.sub_category_order"
+                              :key="'headColumns_percent_'+item.sub_category_order + '-' + index"
                               class="bordered-right"
                             >
                               درصد
                             </th>
-                            <th :key="'headColumns_taraz_'+item.sub_category_order">
+                            <th :key="'headColumns_taraz_'+item.sub_category_order + '-' + index">
                               تراز
                             </th>
                             <th
-                              :key="'headColumns_rank_'+item.sub_category_order"
+                              :key="'headColumns_rank_'+item.sub_category_order + '-' + index"
                               class="bordered-left"
                             >
                               رتبه
@@ -84,6 +194,7 @@
                             </span>
                             <span v-else> - </span>
                           </td>
+                          <td>{{ item.user.mobile }}</td>
                           <td>{{ item.location.province }}</td>
                           <td>{{ item.location.city }}</td>
                           <td>
@@ -135,6 +246,7 @@
                 <v-data-table
                   :headers="lessonsResultsHeaders"
                   :items="lessonsResults"
+                  :items-per-page="9999"
                   hide-default-footer
                 />
               </v-tab-item>
@@ -158,9 +270,15 @@
     },
     data: () => {
       return {
+        selectedProvince: null,
+        selectedCity: null,
+        selectedGender :null,
+        provinces: [],
+        genders: [],
+        cities: [],
         results: [],
-          lessonsResults: [],
-          lessonsResultsHeaders: [
+        lessonsResults: [],
+        lessonsResultsHeaders: [
               { text: 'نام درس', value: 'sub_category'},
               { text: 'میانگین درصد', value: 'mean'},
               { text: 'میانگین درصد نفرات برتر', value: 'top_sub_category_participants_mean'},
@@ -170,50 +288,132 @@
           ],
         lastLoadTime: Date.now(),
         nextPage: '',
-          tabs: 'tab-1'
+        tabs: 'tab-1',
+        file_url: '',
+        fileLoading: false,
       }
     },
+    computed:{
+      citiesForSelectedProvince() {
+        if (this.selectedProvince) {
+          return this.cities.filter(item => item.province.title === this.selectedProvince)
+        }
+        return []
+      }
+    },
+    mounted: function () {
+      this.getFiltersData()
+      // this.getData()
+    },
     methods: {
+      getParams () {
+        let params = {
+          ...(this.selectedCity && {"city": [this.selectedCity]}),
+          ...(this.selectedProvince&& {"province": [this.selectedProvince]}),
+          ...(this.selectedGender && {"gender": [this.selectedGender]}),
+          exam_id: this.$route.params.examId
+        }
+
+        return params
+      },
+      getExcel () {
+        let that = this
+        this.fileLoading = true
+        let params = this.getParams()
+        params.excel_export = 1
+        this.$notify({
+          group: 'notifs',
+          title: 'توجه!',
+          text: 'فایل Excel در حال تولید است.',
+          type: 'success'
+        })
+        axios.get(API_ADDRESS.exam.examReportIndex('participants'), {
+          params: params
+        })
+            .then( response => {
+              that.file_url = response.data.data.export_file_url
+              that.fileLoading = false
+            })
+      },
+      getFiltersData() {
+        this.showLoading()
+        axios.get(API_ADDRESS.user.formData)
+            .then((resp) => {
+              this.genders = resp.data.data.genders
+              this.provinces = resp.data.data.provinces
+              this.cities = resp.data.data.cities
+              this.hideLoading()
+            })
+            .catch(() => {
+                  this.$notify({
+                    group: 'notifs',
+                    title: 'توجه!',
+                    text: 'مشکلی در گرفتن اطلاعات رخ داده است. لطفا دوباره امتحان کنید.',
+                    type: 'error'
+                  })
+                  this.hideLoading()
+                }
+            )
+      },
       getData ($state) {
         this.showLoading()
         let that = this
         axios.get(API_ADDRESS.exam.examReportIndex('participants') + that.nextPage, {
-          params: {
+          params:{
+            ...(that.selectedCity && {"city": [that.selectedCity]}),
+            ...(that.selectedProvince&& {"province": [that.selectedProvince]}),
+            ...(this.selectedGender && {"gender": [that.selectedGender]}),
             exam_id: that.$route.params.examId
           }
         })
         .then( response => {
           that.hideLoading()
-          that.results = that.results.concat(response.data.data)
+          if (response.data.data){
+            that.results = that.results.concat(response.data.data)
+          }
+
           if(typeof response.data.links === 'undefined' || response.data.links.next === null) {
             that.nextPage = ''
-            $state.complete()
+           if($state) $state.complete()
             return
           }
           that.nextPage = response.data.links.next.replace(response.data.meta.path, '')
-          $state.loaded()
           that.lastLoadTime = Date.now()
+
         })
-        .catch( error => {
-            // that.$state.complete()
+        .catch(error => {
           that.lastLoadTime = Date.now()
-          this.hideLoading()
+          that.hideLoading()
           console.log('error', error)
         })
-          if (!this.lessonsResults.length) {
-              axios.get(API_ADDRESS.exam.examReportIndex('lessons'), {
-                  params: {
-                      exam_id: that.$route.params.examId
-                  }
-              })
-                  .then((response) => {
-                      that.lessonsResults = response.data.data
-                  })
-          }
+        that.getLessonResultData ()
       },
+
+      getLessonResultData (){
+        if (!this.lessonsResults.length) {
+          axios.get(API_ADDRESS.exam.examReportIndex('lessons'), {
+            params: {
+              exam_id: this.$route.params.examId
+            }
+          })
+            .then((response) => {
+              if (response.data.data){
+              this.lessonsResults = response.data.data
+              }
+            })
+        }
+      },
+
+      DoFilter (){
+        this.results = []
+        this.nextPage =''
+        this.getData()
+      },
+
       showLoading () {
         this.$store.commit('AppLayout/updateOverlay', { show: true, loading: true, text: ''})
       },
+
       hideLoading () {
         this.$store.commit('AppLayout/updateOverlay', { show: false, loading: false, text: ''})
       }
@@ -221,11 +421,15 @@
   }
 </script>
 
+
 <style scoped>
 .bordered-right {
     border-right: solid 1px #d7d7d7;
 }
 .bordered-left {
     border-left: solid 1px #d7d7d7;
+}
+.filter-btn{
+  margin: auto;
 }
 </style>

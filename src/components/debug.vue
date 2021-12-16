@@ -1,597 +1,864 @@
 <template>
-  <div>
-    <vue-tiptap-katex v-model="html" />
-    <div v-html="convertToMarkdownKatex(html)" />
+  <div dir="ltr">
+    <v-card class="ma-5">
+      <v-card-text>
+        <div v-text="socketStatus" />
+        <p v-if="isConnected">
+          We're connected to the server!
+        </p>
+        <p>Message from server: "{{ socketMessage }}"</p>
+        <v-btn
+          block
+          @click="pingServer()"
+        >
+          Ping Server
+        </v-btn>
+        <v-btn
+          block
+          @click="connect()"
+        >
+          Make a connection
+        </v-btn>
+      </v-card-text>
+    </v-card>
   </div>
 </template>
 
 <script>
-  import VueTiptapKatex from 'vue-tiptap-katex'
-  import {mixinMarkdownAndKatex} from '@/mixin/Mixins'
-  import TurndownService from 'turndown/lib/turndown.browser.umd'
+// import MathJax from 'mathjax'
+import TurndownService from 'turndown/lib/turndown.browser.umd'
+import { io } from 'socket.io-client'
+import API_ADDRESS from '@/api/Addresses'
 
-  export default {
-    components: {VueTiptapKatex},
-    mixins: [mixinMarkdownAndKatex],
-    data() {
-      return {
-        html: '<p>I’m running tiptap with Vue.js. 🎉</p>',
-        innerHTML: 'hi',
+export default {
+  data() {
+    return {
+      socketStatus: 'socket is not connected',
+      socket: null,
+      loading: false,
+      post: {body: ""},
+      html1: '<p>I’m running tiptap with Vue.js. 🎉</p>',
+      html: '<p dir="auto">دو بار الکتریکی${q_1}$و${q_2} =  - 16\\,\\mu C$به ترتیب در مختصات$A\\, \\left|\\begin{array}{l}0 \\\\ 3\\, cm\\end{array}\\right.$$B\\, \\left|\\begin{array}{l}0 \\\\ 6\\, cm\\end{array}\\right.$واقع شده‌اند.${q_1}$چند میکروکولن باشد تا اگر بار${q_3}$را در مبدأ مختصات قرار دهیم، برایند نیروهای وارد بر آن صفر باشد؟</p>',
+      innerHTML: 'hi',
+      isConnected: false,
+      socketMessage: ''
+    }
+  },
+  mounted() {
+    // this.initMathJax()
+    // this.setContent()
+  },
+  created() {
+    // this.html = this.convertToTiptap(this.html)
+    this.setSocket()
+  },
+  methods: {
+    setSocket () {
+      this.socket = io(API_ADDRESS.socket, {
+        reconnectionDelayMax: 10000
+      })
+      this.setSocketEvents()
+      this.socket.connect()
+    },
+    setSocketEvents () {
+      this.socket.on('connecting', () => {
+        this.onSocketStatusChange('on connection')
+      })
+      this.socket.on('disconnect', () => {
+        this.onSocketStatusChange('Socket to break off')
+        this.isConnected = false
+      })
+      this.socket.on('connect_failed', () => {
+        this.onSocketStatusChange('connection failed')
+      })
+      this.socket.on('connect', () => {
+        // console.log(this.socket.connected) // true
+        this.onSocketStatusChange('socket connected')
+        this.isConnected = true
+      })
+      this.socket.on('messageChannel', (data) => {
+        this.socketMessage = data
+      })
+    },
+    connect() {
+      this.socket.connect()
+    },
+    onSocketStatusChange (status) {
+      this.socketStatus = status
+      console.log(status)
+    },
+    pingServer() {
+      console.log('Send the "pingServer" event to the server.')
+      // Send the "pingServer" event to the server.
+      this.socket.emit('pingServer', 'PING!')
+      console.log('$socket emited')
+    },
+    injectMathJax() {
+      if (!window.MathJax) {
+        const script = document.createElement('script')
+        script.src =
+            'https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js'
+            // 'https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.0.0/es5/latest?tex-mml-chtml.js'
+            // 'https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js'
+            // 'https://cdn.bootcdn.net/ajax/libs/mathjax/3.2.0/es5/tex-chtml.js'
+        script.async = true
+        document.head.appendChild(script)
       }
     },
-    mounted() {
+    initMathJax(options = {}, callback) {
+      // a*b/(5+9)-6+8/9+9+\\text{سرمایه}/895+9
+      this.injectMathJax()
+      // The default global configuration
+      const defaultConfig = {
+        // tex: {
+        //   inlineMath: [['$', '$']],
+        //   displayMath: [['$$', '$$']],
+        //   processEnvironments: true,
+        //   processRefs: true
+        // },
+        tex: {
+          inlineMath: [ ["$","$"] ],
+          displayMath: [ ["$$","$$"] ],
+          processEscapes: true,
+          // packages: {'[+]': ['autoload']},
+          // packages: {'[+]': ['html']},
+          packages: {'[+]': ['unicode']},
+          // digits: /^(?:[\d۰-۹]+(?:[,٬'][\d۰-۹]{3})*(?:[\.\/٫][\d۰-۹]*)?|[\.\/٫][\d۰-۹]+)/,    // introduce numbers
+          // tagSide: "right",
+          // tagIndent: ".8em",
+          // multlineWidth: "85%",
+          // tags: "all",
+          // tagFormat: {
+          //   number: function(n){
+          //     return String(n)
+          //         .replace(/0/g,"۰")
+          //         .replace(/1/g,"۱")
+          //         .replace(/2/g,"۲")
+          //         .replace(/3/g,"۳")
+          //         .replace(/4/g,"۴")
+          //         .replace(/5/g,"۵")
+          //         .replace(/6/g,"۶")
+          //         .replace(/7/g,"۷")
+          //         .replace(/8/g,"۸")
+          //         .replace(/9/g,"۹");
+          //   }
+          // }
+        },
+        "HTML-CSS": { mtextFontInherit: true },
+        loader: {
+          // load: ['[tex]/autoload']
+          // load: ['[tex]/html']
+          load: ['[tex]/unicode']
+        },
+        options: {
+          renderActions: {
+            addMenu: []
+          },
+          skipHtmlTags: ["script", "style", "textarea", "pre", "code"],   //their contents won't be scanned for math
+          includeHtmlTags: {br: '\n', wbr: '', '#comment': ''},   //  HTML tags that can appear within math
+        },
+        // options: {
+        //   skipHtmlTags: ['noscript', 'style', 'textarea', 'pre', 'code'],
+        //   ignoreHtmlClass: 'tex2jax_ignore',
+        // },
+        startup: {
+          pageReady: () => {
+            callback && callback()
+          },
+        },
+        svg: {
+          fontCache: 'global',        // or 'local' or 'none'
+          mtextInheritFont: true,     // required to correctly render RTL Persian text inside a formula
+          scale: 0.97,                // global scaling factor for all expressions
+          minScale: 0.6               // smallest scaling factor to use
+        }
+      }
+      // Merge configuration
+      const mergeConfig = Object.assign({}, defaultConfig, options)
+      window.MathJax = mergeConfig
     },
-      created() {
-        this.html = this.convertToTiptap(this.html)
-      },
-    methods: {
-      convertTables(htmlString) {
-        var wrapper = document.createElement('div');
-        wrapper.innerHTML = htmlString;
-        // var doc = new DOMParser().parseFromString(htmlString, "text/xml");
-        // this.innerHTML = doc.innerHTML
-        // let tables = doc.querySelectorAll('table')
-        let tables = wrapper.querySelectorAll('table')
-        // let tables = this.$refs.table.querySelectorAll('table')
-        tables.forEach(item => {
-          let markdownTable = ''
-          let headRows = []
-          if (item.tHead)
-          {
-            headRows = item.tHead.rows
-            // headRows = item.querySelectorAll('thead tr')
-          } else if (item.querySelectorAll('tr th').length > 0)
-          {
-            let rows = item.querySelectorAll('tr')
-            rows.forEach(row => {
-              if (row.querySelectorAll('th').length > 0)
-              {
-                headRows.push(row)
-              }
-            })
-            // headRows = item.querySelectorAll('tr th')[0].parentNode.cells
-          }
-          let bodyRows = []
-          // if (item.tBodies && item.tBodies[0]) {
-          //   bodyRows = item.tBodies[0].rows
-          //   // bodyRows = item.querySelectorAll('tbody tr')
-          // } else
-          if (item.querySelectorAll('tr td').length > 0)
-          {
-            let rows = item.querySelectorAll('tr')
-            rows.forEach(row => {
-              if (row.querySelectorAll('td').length > 0)
-              {
-                bodyRows.push(row)
-              }
-            })
-            // headRows = item.querySelectorAll('tr th')[0].parentNode.cells
-          }
+    renderSvgByMathjax() {
+      if (!window.MathJax) {
+        return
+      }
 
-          // table head
-          let maxTheadCellCount = 0
-          headRows.forEach(row => {
-            let theadCellCount = 0
-            let cells = row.querySelectorAll('th')
-            cells.forEach(cell => {
-              markdownTable += '|' + this.htmlToMarkdown(cell.innerHTML)
-              theadCellCount++
-            })
-            if (theadCellCount > maxTheadCellCount)
-            {
-              maxTheadCellCount = theadCellCount
-            }
-            markdownTable += '|' + '<br>'
+      //
+      //  Get the input (it is HTML containing delimited TeX math
+      //    and/or MathML tags
+      //
+      var input = this.html
+      // var input = 'a*b/(5+9)-6+8/9+9+\\\\text{سرمایه}/895+9'
+      //
+      //  Disable the render button until MathJax is done
+      //
+      // var button = document.getElementById("render");
+      // button.disabled = true;
+      //
+      //  Clear the old output
+      //
+      var output = document.getElementById('mathjaxdiv');
+      output.innerHTML = input;
+      //
+      //  Reset the tex labels (and automatic equation numbers, though there aren't any here).
+      //  Reset the typesetting system (font caches, etc.)
+      //  Typeset the page, using a promise to let us know when that is complete
+      //
+      window.MathJax.texReset();
+      window.MathJax.typesetClear();
+      window.MathJax.typesetPromise()
+          .catch(function (err) {
+            //
+            //  If there was an internal error, put the message into the output instead
+            //
+            output.innerHTML = '';
+            output.appendChild(document.createElement('pre')).appendChild(document.createTextNode(err.message));
           })
-          for (let i = 0; i < maxTheadCellCount; i++)
-          {
-            markdownTable += '|:-------------:'
+          .then(function() {
+            //
+            //  Error or not, re-enable the render button
+            //
+            // button.disabled = false;
+          });
+    },
+    renderSvgByMathjax1() {
+      if (!window.MathJax) {
+        return
+      }
+
+
+      //
+      //  Get the TeX input
+      //
+      var input = this.html
+      //
+      //  Disable the display and render buttons until MathJax is done
+      //
+      // var display = document.getElementById("display");
+      // var button = document.getElementById("render");
+      // button.disabled = display.disabled = true;
+      //
+      //  Clear the old output
+      //
+      var output = document.getElementById('mathjaxdiv');
+      output.innerHTML = '';
+      //
+      //  Reset the tex labels (and automatic equation numbers, though there aren't any here).
+      //  Get the conversion options (metrics and display settings)
+      //  Convert the input to SVG output and use a promise to wait for it to be ready
+      //    (in case an extension needs to be loaded dynamically).
+      //
+      window.MathJax.texReset();
+      var options = window.MathJax.getMetricsFor(output);
+      // options.display = display.checked;
+      window.MathJax.tex2svgPromise(input, options).then(function (node) {
+        //
+        //  The promise returns the typeset node, which we add to the output
+        //  Then update the document to include the adjusted CSS for the
+        //    content of the new equation.
+        //
+        output.appendChild(node);
+        window.MathJax.startup.document.clear();
+        window.MathJax.startup.document.updateDocument();
+      }).catch(function (err) {
+        //
+        //  If there was an error, put the message into the output instead
+        //
+        output.appendChild(document.createElement('pre')).appendChild(document.createTextNode(err.message));
+      }).then(function () {
+        //
+        //  Error or not, re-enable the display and render buttons
+        //
+        // button.disabled = display.disabled = false;
+      });
+
+      // const svg = window.MathJax.tex2svg(this.html, {display: true});
+      // let mathjaxdiv = document.getElementById("mathjaxdiv")
+      // mathjaxdiv.innerHTML = window.MathJax.startup.adaptor.outerHTML(svg)
+
+
+      // mathjaxdiv.innerHTML = this.html
+      // window.MathJax.Hub.Queue(["Typeset",window.MathJax.Hub,mathjaxdiv]);
+
+
+      // if (el && !Array.isArray(el)) {
+      //   el = [el]
+      // }
+      //
+      // return new Promise((resolve, reject) => {
+      //   window.MathJax.typesetPromise(el)
+      //       .then(() => {
+      //         resolve(void 0)
+      //       })
+      //       .catch((err) => reject(err))
+      // })
+    },
+    getContent () {
+      this.html = this.$refs.tiptap.getContent()
+      // this.renderSvgByMathjax()
+    },
+    setContent () {
+      this.$refs.tiptap.setContent(this.html)
+    },
+    convertTables(htmlString) {
+      var wrapper = document.createElement('div');
+      wrapper.innerHTML = htmlString;
+      // var doc = new DOMParser().parseFromString(htmlString, "text/xml");
+      // this.innerHTML = doc.innerHTML
+      // let tables = doc.querySelectorAll('table')
+      let tables = wrapper.querySelectorAll('table')
+      // let tables = this.$refs.table.querySelectorAll('table')
+      tables.forEach(item => {
+        let markdownTable = ''
+        let headRows = []
+        if (item.tHead) {
+          headRows = item.tHead.rows
+          // headRows = item.querySelectorAll('thead tr')
+        } else if (item.querySelectorAll('tr th').length > 0) {
+          let rows = item.querySelectorAll('tr')
+          rows.forEach(row => {
+            if (row.querySelectorAll('th').length > 0) {
+              headRows.push(row)
+            }
+          })
+          // headRows = item.querySelectorAll('tr th')[0].parentNode.cells
+        }
+        let bodyRows = []
+        // if (item.tBodies && item.tBodies[0]) {
+        //   bodyRows = item.tBodies[0].rows
+        //   // bodyRows = item.querySelectorAll('tbody tr')
+        // } else
+        if (item.querySelectorAll('tr td').length > 0) {
+          let rows = item.querySelectorAll('tr')
+          rows.forEach(row => {
+            if (row.querySelectorAll('td').length > 0) {
+              bodyRows.push(row)
+            }
+          })
+          // headRows = item.querySelectorAll('tr th')[0].parentNode.cells
+        }
+
+        // table head
+        let maxTheadCellCount = 0
+        headRows.forEach(row => {
+          let theadCellCount = 0
+          let cells = row.querySelectorAll('th')
+          cells.forEach(cell => {
+            markdownTable += '|' + this.htmlToMarkdown(cell.innerHTML)
+            theadCellCount++
+          })
+          if (theadCellCount > maxTheadCellCount) {
+            maxTheadCellCount = theadCellCount
           }
           markdownTable += '|' + '<br>'
-          // table body
-          bodyRows.forEach(row => {
-            let cells = row.cells
-            cells.forEach(cell => {
-              markdownTable += '|' + this.htmlToMarkdown(cell.innerHTML)
-            })
-            markdownTable += '|' + '<br>'
+        })
+        for (let i = 0; i < maxTheadCellCount; i++) {
+          markdownTable += '|:-------------:'
+        }
+        markdownTable += '|' + '<br>'
+        // table body
+        bodyRows.forEach(row => {
+          let cells = row.cells
+          cells.forEach(cell => {
+            markdownTable += '|' + this.htmlToMarkdown(cell.innerHTML)
           })
-
-          var tableWrapper = document.createElement('div');
-          tableWrapper.innerHTML = markdownTable;
-
-          item.replaceChild(tableWrapper, item.childNodes[0]);
-
+          markdownTable += '|' + '<br>'
         })
 
-        return wrapper.innerHTML
-      },
-        convertImage(htmlString) {
-            var wrapper = document.createElement('div');
-            wrapper.innerHTML = htmlString;
-            let images = wrapper.querySelectorAll('tiptap-interactive-image-upload')
-            images.forEach(item => {
-                let markdownImage = item.attributes[0].nodeValue
-                if (markdownImage) {
-                    markdownImage = '![](' + item.attributes[0].nodeValue + '?w=' + item.attributes[1].nodeValue + '&h=' + item.attributes[2].nodeValue + ')'
+        var tableWrapper = document.createElement('div');
+        tableWrapper.innerHTML = markdownTable;
 
-                    var imageWrapper = document.createElement('div');
-                    imageWrapper.innerHTML = markdownImage;
-                    item.replaceWith(imageWrapper);
-                }
-            })
+        item.replaceChild(tableWrapper, item.childNodes[0]);
 
-            return wrapper.innerHTML
-        },
-        convertKatex(htmlString) {
-            var wrapper = document.createElement('div');
-            wrapper.innerHTML = htmlString;
-            let katexes = wrapper.querySelectorAll('tiptap-interactive-katex')
-            katexes.forEach(item => {
-                let markdownKatex = item.attributes[0].nodeValue
-                if (markdownKatex) {
-                    markdownKatex = '$' + markdownKatex + '$'
+      })
 
-                    var katexWrapper = document.createElement('div');
-                    katexWrapper.innerHTML = markdownKatex;
-                    item.replaceWith(markdownKatex);
-                }
-            })
-            katexes = wrapper.querySelectorAll('tiptap-interactive-katex-inline')
-            katexes.forEach(item => {
-                let markdownKatex = item.attributes[0].nodeValue
-                if (markdownKatex) {
-                    markdownKatex = '$' + markdownKatex + '$'
+      return wrapper.innerHTML
+    },
+    convertImage(htmlString) {
+      var wrapper = document.createElement('div');
+      wrapper.innerHTML = htmlString;
+      let images = wrapper.querySelectorAll('tiptap-interactive-image-upload')
+      images.forEach(item => {
+        let markdownImage = item.attributes[0].nodeValue
+        if (markdownImage) {
+          markdownImage = '![](' + item.attributes[0].nodeValue + '?w=' + item.attributes[1].nodeValue + '&h=' + item.attributes[2].nodeValue + ')'
 
-                    var katexWrapper = document.createElement('div');
-                    katexWrapper.innerHTML = markdownKatex;
-                    item.replaceWith(markdownKatex);
-                }
-            })
-
-            return wrapper.innerHTML
-        },
-        convertMarkdownKatexToHtml (markdownString, index = 0) {
-          const startIndex = markdownString.indexOf('$', index)
-            if (startIndex === -1) {
-                return markdownString
-            }
-            if (markdownString[startIndex -1] === '\\') {
-                return this.convertMarkdownKatexToHtml(markdownString, startIndex + 1)
-            }
-            const endIndex = markdownString.indexOf('$', index + 1)
-            if (endIndex === -1) {
-                return markdownString
-            }
-            if (markdownString[endIndex -1] === '\\') {
-                return this.convertMarkdownKatexToHtml(markdownString, endIndex + 1)
-            }
-            const firstThird = markdownString.slice(0, startIndex)
-            const secondThird = markdownString.slice(startIndex + 1, endIndex)
-            const remaining = markdownString.slice(endIndex + 1)
-            markdownString = firstThird + '<tiptap-interactive-katex katex="' +
-                    secondThird + '"></tiptap-interactive-katex>' + remaining
-            return this.convertMarkdownKatexToHtml(markdownString, endIndex)
-        },
-        convertMarkdownImageToHtml (markdownString, index = 0) {
-            const startIndex = markdownString.indexOf('![](', index)
-            if (startIndex === -1) {
-                return markdownString
-            }
-            const endIndex = markdownString.indexOf(')', startIndex)
-            const firstThird = markdownString.slice(0, startIndex)
-            const secondThird = markdownString.slice(startIndex + 4, endIndex)
-            const remaining = markdownString.slice(endIndex + 1)
-            const widthIndex = markdownString.indexOf('?w=', startIndex)
-            if (widthIndex !== -1 && widthIndex < endIndex) {
-                let width, height
-                width = parseInt(markdownString.slice(widthIndex + 3, markdownString.indexOf('&h', widthIndex)))
-                height = parseInt(markdownString.slice(markdownString.indexOf('&h=', widthIndex) + 3, markdownString.indexOf(')', widthIndex)))
-                markdownString = firstThird + '<tiptap-interactive-image-upload url="'
-                    + secondThird.slice(0, secondThird.indexOf('?w=')) + '" width="' + width + '" height="' + height + '"></tiptap-interactive-image-upload>'+ remaining
-            } else {
-                // this need to be completed, what if width and height of the image is not equal
-                markdownString = firstThird + '<tiptap-interactive-image-upload url="'
-                    + secondThird + '" width="100" height="100"></tiptap-interactive-image-upload>' + remaining
-            }
-            return this.convertMarkdownImageToHtml(markdownString, endIndex)
-        },
-        convertToTiptap (string = '') {
-            string = this.convertMarkdownImageToHtml(string)
-            string = this.convertMarkdownKatexToHtml(string)
-            return string
-        },
-      convertToMarkdownKatex(string) {
-          string = this.convertTables(string)
-          string = this.convertKatex(string)
-          string = this.convertImage(string)
-        const markdown = this.htmlToMarkdown(string)
-          console.log(markdown)
-        // return this.markdown.render(string.replace('<div class="question" dir="rtl">', ''))
-        return this.markdown.render(markdown)
-      },
-      htmlToMarkdown(htmlString) {
-        TurndownService.prototype.escape = function (string) {
-          let escapes = [
-            [
-              /\s\$/g,
-              '$'
-            ],
-            [
-              /\$\s/g,
-              '$'
-            ],
-            [
-              /\{align\*\}/g,
-              '{cases}'
-            ],
-            // [/\\/g, '\\\\'],
-            // [/\*/g, '\\*'],
-            // [/^-/g, '\\-'],
-            // [/^\+ /g, '\\+ '],
-            // [/^(=+)/g, '\\$1'],
-            // [/^(#{1,6}) /g, '\\$1 '],
-            // [/`/g, '\\`'],
-            // [/^~~~/g, '\\~~~'],
-            // [/\[/g, '\\['],
-            // [/\]/g, '\\]'],
-            // [/^>/g, '\\>'],
-            // [/_/g, '\\_'],
-            // [/^(\d+)\. /g, '$1\\. ']
-          ];
-          return escapes.reduce(function (accumulator, escape) {
-            return accumulator.replace(escape[0], escape[1])
-          }, string)
+          var imageWrapper = document.createElement('div');
+          imageWrapper.innerHTML = markdownImage;
+          item.replaceWith(imageWrapper);
         }
+      })
 
-        function repeat (character, count) {
-          return Array(count + 1).join(character)
+      return wrapper.innerHTML
+    },
+    convertKatex(htmlString) {
+      var wrapper = document.createElement('div');
+      wrapper.innerHTML = htmlString;
+      let katexes = wrapper.querySelectorAll('tiptap-interactive-katex')
+      katexes.forEach(item => {
+        let markdownKatex = item.attributes[0].nodeValue
+        if (markdownKatex) {
+          markdownKatex = '$' + markdownKatex + '$'
+
+          var katexWrapper = document.createElement('div');
+          katexWrapper.innerHTML = markdownKatex;
+          item.replaceWith(markdownKatex);
         }
+      })
+      katexes = wrapper.querySelectorAll('tiptap-interactive-katex-inline')
+      katexes.forEach(item => {
+        let markdownKatex = item.attributes[0].nodeValue
+        if (markdownKatex) {
+          markdownKatex = '$' + markdownKatex + '$'
 
-        function cleanAttribute (attribute) {
-          return attribute ? attribute.replace(/(\n+\s*)+/g, '\n') : ''
+          var katexWrapper = document.createElement('div');
+          katexWrapper.innerHTML = markdownKatex;
+          item.replaceWith(markdownKatex);
         }
+      })
 
-        var rules = {};
-
-        rules.paragraph = {
-          filter: 'p',
-
-          replacement: function (content) {
-            return '\n\n' + content + '\n\n'
-          }
-        };
-
-        rules.lineBreak = {
-          filter: 'br',
-
-          replacement: function (content, node, options) {
-            return options.br + '\n'
-          }
-        };
-
-        rules.heading = {
-          filter: ['h1', 'h2', 'h3', 'h4', 'h5', 'h6'],
-
-          replacement: function (content, node, options) {
-            var hLevel = Number(node.nodeName.charAt(1));
-
-            if (options.headingStyle === 'setext' && hLevel < 3) {
-              var underline = repeat((hLevel === 1 ? '=' : '-'), content.length);
-              return (
-                      '\n\n' + content + '\n' + underline + '\n\n'
-              )
-            } else {
-              return '\n\n' + repeat('#', hLevel) + ' ' + content + '\n\n'
-            }
-          }
-        };
-
-        rules.blockquote = {
-          filter: 'blockquote',
-
-          replacement: function (content) {
-            content = content.replace(/^\n+|\n+$/g, '');
-            content = content.replace(/^/gm, '> ');
-            return '\n\n' + content + '\n\n'
-          }
-        };
-
-        rules.list = {
-          filter: ['ul', 'ol'],
-
-          replacement: function (content, node) {
-            var parent = node.parentNode;
-            if (parent.nodeName === 'LI' && parent.lastElementChild === node) {
-              return '\n' + content
-            } else {
-              return '\n\n' + content + '\n\n'
-            }
-          }
-        };
-
-        rules.listItem = {
-          filter: 'li',
-
-          replacement: function (content, node, options) {
-            content = content
-                    .replace(/^\n+/, '') // remove leading newlines
-                    .replace(/\n+$/, '\n') // replace trailing newlines with just a single one
-                    .replace(/\n/gm, '\n    '); // indent
-            var prefix = options.bulletListMarker + '   ';
-            var parent = node.parentNode;
-            if (parent.nodeName === 'OL') {
-              var start = parent.getAttribute('start');
-              var index = Array.prototype.indexOf.call(parent.children, node);
-              prefix = (start ? Number(start) + index : index + 1) + '.  ';
-            }
-            return (
-                    prefix + content + (node.nextSibling && !/\n$/.test(content) ? '\n' : '')
-            )
-          }
-        };
-
-        rules.indentedCodeBlock = {
-          filter: function (node, options) {
-            return (
-                    options.codeBlockStyle === 'indented' &&
-                    node.nodeName === 'PRE' &&
-                    node.firstChild &&
-                    node.firstChild.nodeName === 'CODE'
-            )
-          },
-
-          replacement: function (content, node) {
-            return (
-                    '\n\n    ' +
-                    node.firstChild.textContent.replace(/\n/g, '\n    ') +
-                    '\n\n'
-            )
-          }
-        };
-
-        rules.fencedCodeBlock = {
-          filter: function (node, options) {
-            return (
-                    options.codeBlockStyle === 'fenced' &&
-                    node.nodeName === 'PRE' &&
-                    node.firstChild &&
-                    node.firstChild.nodeName === 'CODE'
-            )
-          },
-
-          replacement: function (content, node, options) {
-            var className = node.firstChild.getAttribute('class') || '';
-            var language = (className.match(/language-(\S+)/) || [null, ''])[1];
-            var code = node.firstChild.textContent;
-
-            var fenceChar = options.fence.charAt(0);
-            var fenceSize = 3;
-            var fenceInCodeRegex = new RegExp('^' + fenceChar + '{3,}', 'gm');
-
-            var match;
-            while ((match = fenceInCodeRegex.exec(code))) {
-              if (match[0].length >= fenceSize) {
-                fenceSize = match[0].length + 1;
-              }
-            }
-
-            var fence = repeat(fenceChar, fenceSize);
-
-            return (
-                    '\n\n' + fence + language + '\n' +
-                    code.replace(/\n$/, '') +
-                    '\n' + fence + '\n\n'
-            )
-          }
-        };
-
-        rules.horizontalRule = {
-          filter: 'hr',
-
-          replacement: function (content, node, options) {
-            return '\n\n' + options.hr + '\n\n'
-          }
-        };
-
-        rules.inlineLink = {
-          filter: function (node, options) {
-            return (
-                    options.linkStyle === 'inlined' &&
-                    node.nodeName === 'A' &&
-                    node.getAttribute('href')
-            )
-          },
-
-          replacement: function (content, node) {
-            var href = node.getAttribute('href');
-            var title = cleanAttribute(node.getAttribute('title'));
-            if (title) title = ' "' + title + '"';
-            return '[' + content + '](' + href + title + ')'
-          }
-        };
-
-        rules.referenceLink = {
-          filter: function (node, options) {
-            return (
-                    options.linkStyle === 'referenced' &&
-                    node.nodeName === 'A' &&
-                    node.getAttribute('href')
-            )
-          },
-
-          replacement: function (content, node, options) {
-            var href = node.getAttribute('href');
-            var title = cleanAttribute(node.getAttribute('title'));
-            if (title) title = ' "' + title + '"';
-            var replacement;
-            var reference;
-
-            switch (options.linkReferenceStyle) {
-              case 'collapsed':
-                replacement = '[' + content + '][]';
-                reference = '[' + content + ']: ' + href + title;
-                break
-              case 'shortcut':
-                replacement = '[' + content + ']';
-                reference = '[' + content + ']: ' + href + title;
-                break
-              default:
-                var id = this.references.length + 1;
-                replacement = '[' + content + '][' + id + ']';
-                reference = '[' + id + ']: ' + href + title;
-            }
-
-            this.references.push(reference);
-            return replacement
-          },
-
-          references: [],
-
-          append: function () {
-            var references = '';
-            if (this.references.length) {
-              references = '\n\n' + this.references.join('\n') + '\n\n';
-              this.references = []; // Reset references
-            }
-            return references
-          }
-        };
-
-        rules.emphasis = {
-          filter: ['em', 'i'],
-
-          replacement: function (content, node, options) {
-            if (!content.trim()) return ''
-            return options.emDelimiter + content + options.emDelimiter
-          }
-        };
-
-        rules.strong = {
-          filter: ['strong', 'b'],
-
-          replacement: function (content, node, options) {
-            if (!content.trim()) return ''
-            return options.strongDelimiter + content + options.strongDelimiter
-          }
-        };
-
-        rules.code = {
-          filter: function (node) {
-            var hasSiblings = node.previousSibling || node.nextSibling;
-            var isCodeBlock = node.parentNode.nodeName === 'PRE' && !hasSiblings;
-
-            return node.nodeName === 'CODE' && !isCodeBlock
-          },
-
-          replacement: function (content) {
-            if (!content.trim()) return ''
-
-            var delimiter = '`';
-            var leadingSpace = '';
-            var trailingSpace = '';
-            var matches = content.match(/`+/gm);
-            if (matches) {
-              if (/^`/.test(content)) leadingSpace = ' ';
-              if (/`$/.test(content)) trailingSpace = ' ';
-              while (matches.indexOf(delimiter) !== -1) delimiter = delimiter + '`';
-            }
-
-            return delimiter + leadingSpace + content + trailingSpace + delimiter
-          }
-        };
-
-        rules.image = {
-          filter: 'img',
-
-          replacement: function (content, node) {
-            var alt = cleanAttribute(node.getAttribute('alt'));
-            var src = node.getAttribute('src') || '';
-            var title = cleanAttribute(node.getAttribute('title'));
-            var titlePart = title ? ' "' + title + '"' : '';
-            return src ? '![' + alt + ']' + '(' + src + titlePart + ')' : ''
-          }
-        };
-
-        // create an instance of Turndown service
-        const turndownService = new TurndownService({
-          rules: rules,
-          headingStyle: 'setext',
-          hr: '* * *',
-          bulletListMarker: '*',
-          codeBlockStyle: 'indented',
-          fence: '```',
-          emDelimiter: '_',
-          strongDelimiter: '**',
-          linkStyle: 'inlined',
-          linkReferenceStyle: 'full',
-          br: '',
-          blankReplacement: function (content, node) {
-            return node.isBlock ? '\n\n' : ''
-          },
-          keepReplacement: function (content, node) {
-            return node.isBlock ? '\n\n' + node.outerHTML + '\n\n' : node.outerHTML
-          },
-          defaultReplacement: function (content, node) {
-            return node.isBlock ? '\n\n' + content + '\n\n' : content
-          }
-        })
-        // turndownService.keep(['$'])
-        // convert HTML to Markdown
-        return turndownService.turndown(htmlString)
+      return wrapper.innerHTML
+    },
+    convertMarkdownKatexToHtml(markdownString, index = 0) {
+      const startIndex = markdownString.indexOf('$', index)
+      if (startIndex === -1) {
+        return markdownString
       }
+      if (markdownString[startIndex - 1] === '\\') {
+        return this.convertMarkdownKatexToHtml(markdownString, startIndex + 1)
+      }
+      const endIndex = markdownString.indexOf('$', index + 1)
+      if (endIndex === -1) {
+        return markdownString
+      }
+      if (markdownString[endIndex - 1] === '\\') {
+        return this.convertMarkdownKatexToHtml(markdownString, endIndex + 1)
+      }
+      const firstThird = markdownString.slice(0, startIndex)
+      const secondThird = markdownString.slice(startIndex + 1, endIndex)
+      const remaining = markdownString.slice(endIndex + 1)
+      markdownString = firstThird + '<tiptap-interactive-katex katex="' +
+          secondThird + '"></tiptap-interactive-katex>' + remaining
+      return this.convertMarkdownKatexToHtml(markdownString, endIndex)
+    },
+    convertMarkdownImageToHtml(markdownString, index = 0) {
+      const startIndex = markdownString.indexOf('![](', index)
+      if (startIndex === -1) {
+        return markdownString
+      }
+      const endIndex = markdownString.indexOf(')', startIndex)
+      const firstThird = markdownString.slice(0, startIndex)
+      const secondThird = markdownString.slice(startIndex + 4, endIndex)
+      const remaining = markdownString.slice(endIndex + 1)
+      const widthIndex = markdownString.indexOf('?w=', startIndex)
+      if (widthIndex !== -1 && widthIndex < endIndex) {
+        let width, height
+        width = parseInt(markdownString.slice(widthIndex + 3, markdownString.indexOf('&h', widthIndex)))
+        height = parseInt(markdownString.slice(markdownString.indexOf('&h=', widthIndex) + 3, markdownString.indexOf(')', widthIndex)))
+        markdownString = firstThird + '<tiptap-interactive-image-upload url="'
+            + secondThird.slice(0, secondThird.indexOf('?w=')) + '" width="' + width + '" height="' + height + '"></tiptap-interactive-image-upload>' + remaining
+      } else {
+        // this need to be completed, what if width and height of the image is not equal
+        markdownString = firstThird + '<tiptap-interactive-image-upload url="'
+            + secondThird + '" width="100" height="100"></tiptap-interactive-image-upload>' + remaining
+      }
+      return this.convertMarkdownImageToHtml(markdownString, endIndex)
+    },
+    convertToTiptap(string = '') {
+      string = this.convertMarkdownImageToHtml(string)
+      string = this.convertMarkdownKatexToHtml(string)
+      return string
+    },
+    convertToMarkdownKatex(string) {
+      string = this.convertTables(string)
+      string = this.convertKatex(string)
+      string = this.convertImage(string)
+      const markdown = this.htmlToMarkdown(string)
+      console.log(markdown)
+      // return this.markdown.render(string.replace('<div class="question" dir="rtl">', ''))
+      return this.markdown.render(markdown)
+    },
+    htmlToMarkdown(htmlString) {
+      TurndownService.prototype.escape = function (string) {
+        let escapes = [
+          [
+            /\s\$/g,
+            '$'
+          ],
+          [
+            /\$\s/g,
+            '$'
+          ],
+          [
+            /\{align\*\}/g,
+            '{cases}'
+          ],
+          // [/\\/g, '\\\\'],
+          // [/\*/g, '\\*'],
+          // [/^-/g, '\\-'],
+          // [/^\+ /g, '\\+ '],
+          // [/^(=+)/g, '\\$1'],
+          // [/^(#{1,6}) /g, '\\$1 '],
+          // [/`/g, '\\`'],
+          // [/^~~~/g, '\\~~~'],
+          // [/\[/g, '\\['],
+          // [/\]/g, '\\]'],
+          // [/^>/g, '\\>'],
+          // [/_/g, '\\_'],
+          // [/^(\d+)\. /g, '$1\\. ']
+        ];
+        return escapes.reduce(function (accumulator, escape) {
+          return accumulator.replace(escape[0], escape[1])
+        }, string)
+      }
+
+      function repeat(character, count) {
+        return Array(count + 1).join(character)
+      }
+
+      function cleanAttribute(attribute) {
+        return attribute ? attribute.replace(/(\n+\s*)+/g, '\n') : ''
+      }
+
+      var rules = {};
+
+      rules.paragraph = {
+        filter: 'p',
+
+        replacement: function (content) {
+          return '\n\n' + content + '\n\n'
+        }
+      };
+
+      rules.lineBreak = {
+        filter: 'br',
+
+        replacement: function (content, node, options) {
+          return options.br + '\n'
+        }
+      };
+
+      rules.heading = {
+        filter: ['h1', 'h2', 'h3', 'h4', 'h5', 'h6'],
+
+        replacement: function (content, node, options) {
+          var hLevel = Number(node.nodeName.charAt(1));
+
+          if (options.headingStyle === 'setext' && hLevel < 3) {
+            var underline = repeat((hLevel === 1 ? '=' : '-'), content.length);
+            return (
+                '\n\n' + content + '\n' + underline + '\n\n'
+            )
+          } else {
+            return '\n\n' + repeat('#', hLevel) + ' ' + content + '\n\n'
+          }
+        }
+      };
+
+      rules.blockquote = {
+        filter: 'blockquote',
+
+        replacement: function (content) {
+          content = content.replace(/^\n+|\n+$/g, '');
+          content = content.replace(/^/gm, '> ');
+          return '\n\n' + content + '\n\n'
+        }
+      };
+
+      rules.list = {
+        filter: ['ul', 'ol'],
+
+        replacement: function (content, node) {
+          var parent = node.parentNode;
+          if (parent.nodeName === 'LI' && parent.lastElementChild === node) {
+            return '\n' + content
+          } else {
+            return '\n\n' + content + '\n\n'
+          }
+        }
+      };
+
+      rules.listItem = {
+        filter: 'li',
+
+        replacement: function (content, node, options) {
+          content = content
+              .replace(/^\n+/, '') // remove leading newlines
+              .replace(/\n+$/, '\n') // replace trailing newlines with just a single one
+              .replace(/\n/gm, '\n    '); // indent
+          var prefix = options.bulletListMarker + '   ';
+          var parent = node.parentNode;
+          if (parent.nodeName === 'OL') {
+            var start = parent.getAttribute('start');
+            var index = Array.prototype.indexOf.call(parent.children, node);
+            prefix = (start ? Number(start) + index : index + 1) + '.  ';
+          }
+          return (
+              prefix + content + (node.nextSibling && !/\n$/.test(content) ? '\n' : '')
+          )
+        }
+      };
+
+      rules.indentedCodeBlock = {
+        filter: function (node, options) {
+          return (
+              options.codeBlockStyle === 'indented' &&
+              node.nodeName === 'PRE' &&
+              node.firstChild &&
+              node.firstChild.nodeName === 'CODE'
+          )
+        },
+
+        replacement: function (content, node) {
+          return (
+              '\n\n    ' +
+              node.firstChild.textContent.replace(/\n/g, '\n    ') +
+              '\n\n'
+          )
+        }
+      };
+
+      rules.fencedCodeBlock = {
+        filter: function (node, options) {
+          return (
+              options.codeBlockStyle === 'fenced' &&
+              node.nodeName === 'PRE' &&
+              node.firstChild &&
+              node.firstChild.nodeName === 'CODE'
+          )
+        },
+
+        replacement: function (content, node, options) {
+          var className = node.firstChild.getAttribute('class') || '';
+          var language = (className.match(/language-(\S+)/) || [null, ''])[1];
+          var code = node.firstChild.textContent;
+
+          var fenceChar = options.fence.charAt(0);
+          var fenceSize = 3;
+          var fenceInCodeRegex = new RegExp('^' + fenceChar + '{3,}', 'gm');
+
+          var match;
+          while ((match = fenceInCodeRegex.exec(code))) {
+            if (match[0].length >= fenceSize) {
+              fenceSize = match[0].length + 1;
+            }
+          }
+
+          var fence = repeat(fenceChar, fenceSize);
+
+          return (
+              '\n\n' + fence + language + '\n' +
+              code.replace(/\n$/, '') +
+              '\n' + fence + '\n\n'
+          )
+        }
+      };
+
+      rules.horizontalRule = {
+        filter: 'hr',
+
+        replacement: function (content, node, options) {
+          return '\n\n' + options.hr + '\n\n'
+        }
+      };
+
+      rules.inlineLink = {
+        filter: function (node, options) {
+          return (
+              options.linkStyle === 'inlined' &&
+              node.nodeName === 'A' &&
+              node.getAttribute('href')
+          )
+        },
+
+        replacement: function (content, node) {
+          var href = node.getAttribute('href');
+          var title = cleanAttribute(node.getAttribute('title'));
+          if (title) title = ' "' + title + '"';
+          return '[' + content + '](' + href + title + ')'
+        }
+      };
+
+      rules.referenceLink = {
+        filter: function (node, options) {
+          return (
+              options.linkStyle === 'referenced' &&
+              node.nodeName === 'A' &&
+              node.getAttribute('href')
+          )
+        },
+
+        replacement: function (content, node, options) {
+          var href = node.getAttribute('href');
+          var title = cleanAttribute(node.getAttribute('title'));
+          if (title) title = ' "' + title + '"';
+          var replacement;
+          var reference;
+
+          switch (options.linkReferenceStyle) {
+            case 'collapsed':
+              replacement = '[' + content + '][]';
+              reference = '[' + content + ']: ' + href + title;
+              break
+            case 'shortcut':
+              replacement = '[' + content + ']';
+              reference = '[' + content + ']: ' + href + title;
+              break
+            default:
+              var id = this.references.length + 1;
+              replacement = '[' + content + '][' + id + ']';
+              reference = '[' + id + ']: ' + href + title;
+          }
+
+          this.references.push(reference);
+          return replacement
+        },
+
+        references: [],
+
+        append: function () {
+          var references = '';
+          if (this.references.length) {
+            references = '\n\n' + this.references.join('\n') + '\n\n';
+            this.references = []; // Reset references
+          }
+          return references
+        }
+      };
+
+      rules.emphasis = {
+        filter: ['em', 'i'],
+
+        replacement: function (content, node, options) {
+          if (!content.trim()) return ''
+          return options.emDelimiter + content + options.emDelimiter
+        }
+      };
+
+      rules.strong = {
+        filter: ['strong', 'b'],
+
+        replacement: function (content, node, options) {
+          if (!content.trim()) return ''
+          return options.strongDelimiter + content + options.strongDelimiter
+        }
+      };
+
+      rules.code = {
+        filter: function (node) {
+          var hasSiblings = node.previousSibling || node.nextSibling;
+          var isCodeBlock = node.parentNode.nodeName === 'PRE' && !hasSiblings;
+
+          return node.nodeName === 'CODE' && !isCodeBlock
+        },
+
+        replacement: function (content) {
+          if (!content.trim()) return ''
+
+          var delimiter = '`';
+          var leadingSpace = '';
+          var trailingSpace = '';
+          var matches = content.match(/`+/gm);
+          if (matches) {
+            if (/^`/.test(content)) leadingSpace = ' ';
+            if (/`$/.test(content)) trailingSpace = ' ';
+            while (matches.indexOf(delimiter) !== -1) delimiter = delimiter + '`';
+          }
+
+          return delimiter + leadingSpace + content + trailingSpace + delimiter
+        }
+      };
+
+      rules.image = {
+        filter: 'img',
+
+        replacement: function (content, node) {
+          var alt = cleanAttribute(node.getAttribute('alt'));
+          var src = node.getAttribute('src') || '';
+          var title = cleanAttribute(node.getAttribute('title'));
+          var titlePart = title ? ' "' + title + '"' : '';
+          return src ? '![' + alt + ']' + '(' + src + titlePart + ')' : ''
+        }
+      };
+
+      // create an instance of Turndown service
+      const turndownService = new TurndownService({
+        rules: rules,
+        headingStyle: 'setext',
+        hr: '* * *',
+        bulletListMarker: '*',
+        codeBlockStyle: 'indented',
+        fence: '```',
+        emDelimiter: '_',
+        strongDelimiter: '**',
+        linkStyle: 'inlined',
+        linkReferenceStyle: 'full',
+        br: '',
+        blankReplacement: function (content, node) {
+          return node.isBlock ? '\n\n' : ''
+        },
+        keepReplacement: function (content, node) {
+          return node.isBlock ? '\n\n' + node.outerHTML + '\n\n' : node.outerHTML
+        },
+        defaultReplacement: function (content, node) {
+          return node.isBlock ? '\n\n' + content + '\n\n' : content
+        }
+      })
+      // turndownService.keep(['$'])
+      // convert HTML to Markdown
+      return turndownService.turndown(htmlString)
     }
   }
+}
 </script>
 
 <style lang="scss">
-    table {
-        border-collapse: collapse;
-        table-layout: fixed;
-        width: 100%;
-        margin: 0;
-        overflow: hidden;
+table {
+  border-collapse: collapse;
+  table-layout: fixed;
+  width: 100%;
+  margin: 0;
+  overflow: hidden;
 
-        td,
-        th {
-            min-width: 1em;
-            border: 2px solid #ced4da;
-            padding: 3px 5px;
-            vertical-align: top;
-            box-sizing: border-box;
-            position: relative;
+  td,
+  th {
+    min-width: 1em;
+    border: 2px solid #ced4da;
+    padding: 3px 5px;
+    vertical-align: top;
+    box-sizing: border-box;
+    position: relative;
 
-            > * {
-                margin-bottom: 0;
-            }
-        }
-
-        th {
-            font-weight: bold;
-            text-align: left;
-            background-color: #f1f3f5;
-        }
-
-        .selectedCell:after {
-            z-index: 2;
-            position: absolute;
-            content: "";
-            left: 0;
-            right: 0;
-            top: 0;
-            bottom: 0;
-            background: rgba(200, 200, 255, 0.4);
-            pointer-events: none;
-        }
-
-        .column-resize-handle {
-            position: absolute;
-            right: -2px;
-            top: 0;
-            bottom: -2px;
-            width: 4px;
-            background-color: #adf;
-            pointer-events: none;
-        }
+    > * {
+      margin-bottom: 0;
     }
+  }
+
+  th {
+    font-weight: bold;
+    text-align: left;
+    background-color: #f1f3f5;
+  }
+
+  .selectedCell:after {
+    z-index: 2;
+    position: absolute;
+    content: "";
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    background: rgba(200, 200, 255, 0.4);
+    pointer-events: none;
+  }
+
+  .column-resize-handle {
+    position: absolute;
+    right: -2px;
+    top: 0;
+    bottom: -2px;
+    width: 4px;
+    background-color: #adf;
+    pointer-events: none;
+  }
+}
 </style>

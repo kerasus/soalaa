@@ -6,6 +6,51 @@ import {QuestionList} from "@/models/Question";
 import {QuestCategoryList} from "@/models/QuestCategory";
 import {QuestSubcategoryList} from "@/models/QuestSubcategory";
 
+class ShuffleQuestions {
+	constructor(questionList) {
+		this.questionList = questionList
+	}
+
+	run () {
+		let questionsBySubcategory = {}
+		this.questionList.forEach(item => {
+			if (!questionsBySubcategory[item.sub_category.id]) {
+				questionsBySubcategory[item.sub_category.id] = []
+			}
+			questionsBySubcategory[item.sub_category.id].push(item)
+		})
+		Object.keys(questionsBySubcategory).forEach((item) => {
+			questionsBySubcategory[item] = this.shuffle(questionsBySubcategory[item])
+		})
+		let newArr = []
+		Object.keys(questionsBySubcategory).forEach(item => {
+			questionsBySubcategory[item].forEach(arrItem => {
+				newArr.push(arrItem)
+			})
+		})
+		newArr.forEach((item, index) => item.order = index + 1)
+		return newArr
+	}
+
+	shuffle(array) {
+		var currentIndex = array.length,  randomIndex;
+
+		// While there remain elements to shuffle...
+		while (0 !== currentIndex) {
+
+			// Pick a remaining element...
+			randomIndex = Math.floor(Math.random() * currentIndex);
+			currentIndex--;
+
+			// And swap it with the current element.
+			[array[currentIndex], array[randomIndex]] = [
+				array[randomIndex], array[currentIndex]];
+		}
+
+		return array;
+	}
+}
+
 class ExamData {
 	constructor() {
 		this.commands = []
@@ -28,7 +73,9 @@ class ExamData {
 		});
 	}
 
-	loadQuestionsFromFile() {
+
+
+	loadQuestionsFromFile(questionsFileUrl) {
 		let that = this
 		this.commands.push(() => new Promise((resolve, reject) => {
 				if (!that.questionsFileUrl && !that.exam)
@@ -36,23 +83,30 @@ class ExamData {
 					Assistant.handleAxiosError('questionsFileUrl in loadQuestionsFromFile() is not set')
 					reject('questionsFileUrl in loadQuestionsFromFile() is not set')
 				}
-				if (!that.questionsFileUrl)
-				{
+
+				if (!that.questionsFileUrl && questionsFileUrl) {
+					that.questionsFileUrl = questionsFileUrl
+				} else if (!that.questionsFileUrl && !questionsFileUrl) {
 					that.questionsFileUrl = that.exam.questions_file_url
 				}
+
 				axios.get(that.questionsFileUrl, {
 					transformRequest: (data, headers) => {
 						delete headers.common['Authorization'];
 						return data;
 					}
 				})
-						 .then(response => {
-							 that.exam.questions = new QuestionList(response.data)
-							 resolve(response.data)
-						 })
-						 .catch(error => {
+					 .then(response => {
+						let questions = response.data
+						 if (that.exam.holding_config.randomize_questions) {
+							questions = new ShuffleQuestions(questions).run()
+						 }
+						 that.exam.questions = new QuestionList(questions)
+						 resolve(response.data)
+					 })
+					 .catch(error => {
 							 reject(error)
-						 })
+					 })
 			}),
 		)
 		return this
@@ -155,19 +209,21 @@ class ExamData {
 					exam_id = that.exam.id
 				}
 				axios.post(API_ADDRESS.exam.examUser, {exam_id})
-						 .then(response => {
-							 that.exam = new Exam()
-							 // ToDo: attention on user_exam_id and exam_id
-							 that.exam.id = Assistant.getId(response.data.data.exam_id)
-							 that.exam.user_exam_id = Assistant.getId(response.data.data.id)
-							 that.exam.created_at = response.data.data.created_at
-							 that.exam.questions_file_url = response.data.data.questions_file_url
-							 that.exam.categories = new QuestCategoryList(response.data.data.categories)
-							 that.exam.sub_categories = new QuestSubcategoryList(response.data.data.sub_categories)
-							 that.userExamData = response.data
-							 resolve(response)
-						 })
-						 .catch(error => {
+				 .then(response => {
+					 that.exam = new Exam()
+					 // ToDo: attention on user_exam_id and exam_id
+					 that.exam.id = Assistant.getId(response.data.data.exam_id)
+					 that.exam.title = Assistant.getId(response.data.data.exam_title)
+					 that.exam.user_exam_id = Assistant.getId(response.data.data.id)
+					 that.exam.created_at = response.data.data.created_at
+					 that.exam.questions_file_url = response.data.data.questions_file_url
+					 that.exam.categories = new QuestCategoryList(response.data.data.categories)
+					 that.exam.sub_categories = new QuestSubcategoryList(response.data.data.sub_categories)
+					 that.exam.holding_config = response.data.data.holding_config
+					 that.userExamData = response.data
+					 resolve(response)
+				 })
+				 .catch(error => {
 							 reject(error)
 						 })
 			}),

@@ -7,6 +7,7 @@ import Auth from '@/store/modules/Auth'
 import { Exam } from '@/models/Exam'
 import { Question, QuestionList } from '@/models/Question'
 import createPersistedState from 'vuex-persistedstate'
+import completeInfo from "@/middleware/completeInfo";
 // import createMutationsSharer from 'vuex-shared-mutations'
 
 Vue.use(Vuex)
@@ -18,7 +19,7 @@ const store = new Vuex.Store({
     plugins: [
         createPersistedState({
             storage: window.localStorage,
-            paths: ['userQuizListData', 'Auth.accessToken', 'Auth.user']
+            paths: ['userQuizListData', 'Auth.accessToken', 'Auth.user', 'psychometricAnswer']
         })
         // createMutationsSharer({
         //     predicate: [
@@ -36,11 +37,16 @@ const store = new Vuex.Store({
     strict: debug,
     state: {
         quiz: null,
+        redirectAfterCompleteInfoPage: null,
         userQuizListData: {},
         currentQuestion: null,
-        currentExamFrozenQuestions: null
+        currentExamFrozenQuestions: null,
+        psychometricAnswer: {}
     },
     mutations: {
+        setPsychometricAnswer (state, newInfo) {
+            this.psychometricAnswer = newInfo
+        },
         resetState (state) {
             // Merge rather than replace so we don't lose observers
             // https://github.com/vuejs/vuex/issues/1118
@@ -54,6 +60,9 @@ const store = new Vuex.Store({
             state.userQuizListData = {}
         },
 
+        updateRedirectAfterCompleteInfoPage (state, newInfo) {
+            state.redirectAfterCompleteInfoPage = newInfo
+        },
         updateUserQuizListDataExam (state, newInfo) {
             state.userQuizListData = newInfo
         },
@@ -224,7 +233,7 @@ const store = new Vuex.Store({
         leaveQuestion (state, questionId) {
             this.commit('checkIfQuestionExistInUserQuizListData', questionId)
             let check_in_times = state.userQuizListData[state.quiz.id][questionId].check_in_times
-            if (!check_in_times) {
+            if (!check_in_times || check_in_times.length === 0) {
                 return
             }
             state.userQuizListData[state.quiz.id][questionId].check_in_times[state.userQuizListData[state.quiz.id][questionId].check_in_times.length - 1].end = Time.now()
@@ -235,11 +244,11 @@ const store = new Vuex.Store({
         updateCurrentQuestion (state, newInfo) {
             const oldQuestionId = (!state.currentQuestion) ? false : Assistant.getId(state.currentQuestion.id)
             const newQuestionId = Assistant.getId(newInfo.newQuestionId)
-            if (!state.quiz || newQuestionId === oldQuestionId || !Assistant.getId(state.quiz.id)) {
+            if (!state.quiz || (newQuestionId === oldQuestionId && !newInfo.mandatory) || !Assistant.getId(state.quiz.id)) {
                 return
             }
             const currentExamQuestions = newInfo.currentExamQuestions
-            const currentQuestion = currentExamQuestions[newQuestionId]
+            const currentQuestion = new Question(currentExamQuestions[newQuestionId])
             if (newQuestionId) {
                 this.commit('enterQuestion', newQuestionId)
             }
@@ -252,6 +261,20 @@ const store = new Vuex.Store({
                     }
                 }
                 this.commit('leaveQuestion', oldQuestionId)
+            }
+
+            if (
+                state.userQuizListData &&
+                state.userQuizListData[state.quiz.id] &&
+                state.userQuizListData[state.quiz.id][currentQuestion.id] &&
+                typeof state.userQuizListData[state.quiz.id][currentQuestion.id].answered_choice_id !== 'undefined' &&
+                state.userQuizListData[state.quiz.id][currentQuestion.id].answered_choice_id !== null
+            ) {
+                currentQuestion.choices.list.forEach( (item, index) => {
+                    if (item.id.toString() === state.userQuizListData[state.quiz.id][currentQuestion.id].answered_choice_id.toString()) {
+                        currentQuestion.choices.list[index].active = true
+                    }
+                })
             }
 
             state.currentQuestion = new Question(currentQuestion)
@@ -272,7 +295,12 @@ const store = new Vuex.Store({
     },
     getters: {
 
-
+        redirectAfterCompleteInfoPage (state) {
+            return state.redirectAfterCompleteInfoPage
+        },
+        psychometricAnswer (state) {
+            return state.psychometricAnswer
+        },
         quiz (state) {
             return new Exam(state.quiz)
         },

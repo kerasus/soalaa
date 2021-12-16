@@ -264,7 +264,7 @@
     .timer-row {
         width: calc(58% - 150px);
         position: absolute;
-        bottom: 1px;
+        bottom: 12px;
         left: 100px;
     }
 
@@ -294,7 +294,7 @@
     }
 
     .question {
-        padding: 10px 30px 10px 0;
+        padding: 10px 30px 10px 10px;
     }
 
     .choices {

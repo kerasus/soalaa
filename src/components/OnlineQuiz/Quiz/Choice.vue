@@ -5,11 +5,12 @@
     class="answer-box"
     @click="answerClicked"
   >
-    <v-sheet :class="{ 'answer-sheet': true, active: isSelected, ltr: isRtl }">
+    <v-sheet :class="{ 'answer-sheet': true, active: isSelected }">
       <div
         class="answer-text renderedPanel"
-        v-html="choice.rendered_title"
-      />
+      >
+        <vue-katex :input="choice.title" :ltr="!isRtl" />
+      </div>
       <div class="answer-checkbox">
         <v-checkbox
           v-model="isSelected"
@@ -23,10 +24,14 @@
 <script>
     import { mixinQuiz } from '@/mixin/Mixins'
     import '@/assets/scss/markdownKatex.scss'
+    import VueKatex from "@/components/VueKatex";
 
 
     export default {
         name: 'Choice',
+        components: {
+          VueKatex
+        },
         mixins: [mixinQuiz],
         props: ['choice', 'questionId', 'isRtl'],
         computed: {

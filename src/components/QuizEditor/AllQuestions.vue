@@ -131,8 +131,6 @@
 </template>
 
 <script>
-    // import FakeQuizData from "@/plugins/fakeQuizData";
-    import 'github-markdown-css/github-markdown.css'
     import $ from 'jquery'
     import '@/assets/scss/markdownKatex.scss'
     import Vue from 'vue'
@@ -248,7 +246,7 @@
     }
 
     .question {
-        padding: 10px 30px 10px 0;
+        padding: 10px 30px 10px 10px;
     }
 
     .choices {

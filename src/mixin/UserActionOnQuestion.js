@@ -22,7 +22,7 @@ const mixinUserActionOnQuestion = {
         this.userActionOnQuestion_status(data, examId, questionId, userQuestionData)
       }
       this.afterUserActionOnQuestion()
-      this.sendUserQuestionsDataToServer(exam_user_id, userExamData, questionId, actionType)
+      return this.sendUserQuestionsDataToServer(exam_user_id, userExamData, questionId, actionType)
     },
     beforeUserActionOnQuestion(examId, questionId) {
       this.$store.commit('updateCurrentQuestion', {
@@ -64,17 +64,17 @@ const mixinUserActionOnQuestion = {
       // send data
       let question = new Question()
       if (actionType === 'answer') {
-        question.sendAnswer(examUserId, userQuestionDataFromLocalstorage.dataToSendAnswer)
+        return question.sendAnswer(examUserId, userQuestionDataFromLocalstorage.dataToSendAnswer)
       }
       if (actionType === 'bookmark') {
         if (userQuestionDataFromLocalstorage.userQuestionData.bookmarked) {
-          question.sendBookmark(examUserId, userQuestionDataFromLocalstorage.dataToSendBookmark)
+          return question.sendBookmark(examUserId, userQuestionDataFromLocalstorage.dataToSendBookmark)
         } else {
-          question.sendUnBookmark(examUserId, userQuestionDataFromLocalstorage.dataToSendBookmark)
+          return question.sendUnBookmark(examUserId, userQuestionDataFromLocalstorage.dataToSendBookmark)
         }
       }
       if (actionType === 'status') {
-        question.sendStatus(examUserId, userQuestionDataFromLocalstorage.dataToSendStatus)
+        return question.sendStatus(examUserId, userQuestionDataFromLocalstorage.dataToSendStatus)
       }
     },
     userActionOnQuestion_answer(data, examId, questionId, userQuestionData) {

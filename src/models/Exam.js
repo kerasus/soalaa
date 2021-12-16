@@ -23,6 +23,7 @@ class Exam extends Model {
             { key: 'order' },
             { key: 'delay_time' },
             { key: 'exam_actions' },
+            { key: 'type' },
             { key: 'holding_status' }, // not_started - holding - in_extra_time - finished
             { key: 'user_exam_id' },
             { key: 'user_exam_status' },
@@ -63,6 +64,16 @@ class Exam extends Model {
             { key: 'is_registered' },
             { key: 'exam_id' },
             {
+              key: 'holding_config',
+              default: {
+                  has_konkur_view: false,
+                  has_exam_progress_bar: true,
+                  has_category_navigation: false,
+                  can_skip_question: false,
+                  randomize_questions: false
+              }
+            },
+            {
                 key: 'enable',
                 default: false
             },
@@ -71,15 +82,91 @@ class Exam extends Model {
                 default: false
             },
             {
-                key: 'generate_automatic_report',
+                key: 'confirm',
                 default: false
+            },
+            {
+                key: 'generate_questions_automatically',
+                default: false
+            },
+            {
+                key: 'report_config',
+                default: {
+                    "maximum_question_answered" : 5,
+                    "include_abnormal" : false,
+                    "include_unranked" : false,
+                    "make_report_for_before_delay" : false,
+                    "make_report_for_remaining_only" : false,
+                    "temp_exams_in_exam_interval" : false,
+                    "consider_negative_point" : false,
+                    "populate_school_ranking" : false
+                }
+            },
+            {
+                key: 'type_id',
+                default: null
             }
+
         ])
 
+        let that = this
+
+        this.apiResource = {
+            fields: [
+                {key: 'id'},
+                {key: 'title'},
+                {key: 'photo'},
+                {key: 'price'},
+                {key: 'order'},
+                {key: 'delay_time'},
+                {key: 'exam_actions'},
+                {key: 'type'},
+                {key: 'holding_status'},
+                {key: 'user_exam_id'},
+                {key: 'user_exam_status'},
+                {key: 'questions_file_url'},
+                {key: 'total_question_number'},
+                {key: 'is_open'},
+                {key: 'is_register_open'},
+                {key: 'opening_policy'},
+                {key: 'questions'},
+                {key: 'sub_categories'},
+                {key: 'exam_id'},
+                {key: 'enable'},
+                {key: 'is_free'},
+                {key: 'confirm'},
+                {key: 'generate_questions_automatically'},
+                {key: 'type_id'},
+                {key: 'start_at'},
+                {key: 'finish_at'},
+                {
+                    key: 'categories',
+                    value: function () {
+                        return that.categories.list
+                    }
+                },
+            ]
+        }
+
+        if (this.type && this.type.id) {
+            this.type_id = this.type.id
+        }
         this.exam_id = this.id
         this.questions.sortByOrder()
         this.categories.sortByKey('end_at', 'asc')
         this.setQuestionsLtr()
+        let temp = {
+            "maximum_question_answered" : 5,
+            "include_abnormal" : false,
+            "include_unranked" : false,
+            "make_report_for_before_delay" : false,
+            "make_report_for_remaining_only" : false,
+            "temp_exams_in_exam_interval" : false,
+            "consider_negative_point" : false,
+            "populate_school_ranking" : false
+        }
+        Object.assign(temp, this.report_config)
+        this.report_config = temp
     }
 
     getFirstActiveCategory () {
@@ -122,7 +209,10 @@ class Exam extends Model {
         // const englishRegex = /^[A-Za-z0-9 :"'ʹ.<>%$&@!+()\-/\n,…?ᵒ*~]*$/
         const englishRegex = /^[A-Za-z0-9 :"'ʹ.<>%$&@!+()\-/\n,…?ᵒ*~]*$/
         this.questions.list.forEach((question) => {
-            question.ltr = !!question.statement.match(englishRegex);
+            if(question.statement){
+                console.log('exam model run')
+                question.ltr = !!question.statement.match(englishRegex);
+            }
         })
     }
 
@@ -280,7 +370,6 @@ class Exam extends Model {
                 item.selectChoice(dbAnswer.choice_id, dbAnswer.selected_at)
                 item.state = dbAnswer.status
                 item.bookmarked = dbAnswer.bookmark
-                console.log(item.order)
             }
         })
     }
@@ -303,7 +392,6 @@ class Exam extends Model {
                     that.loadQuestionsFromFile()
                         .then( () => {
                             that.mergeDbAnswerToLocalstorage(answers)
-                            console.log(answers)
                             resolve()
                         })
                         .catch( ({jqXHR, textStatus, errorThrown}) => {
