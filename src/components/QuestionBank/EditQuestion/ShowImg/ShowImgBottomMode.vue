@@ -6,7 +6,8 @@
     <v-bottom-navigation
       color="indigo"
       fixed
-      height="450"
+      app
+      height="300"
     >
       <div class="showImg-bottom-navigation-container">
         <div
@@ -76,6 +77,8 @@ export default {
   .v-item-group.v-bottom-navigation--fixed {
     position: fixed;
     overflow: scroll;
+    top: 0px;
+    z-index: 5;
   }
   .showImg-bottom-navigation-container {
     margin-top: 10px;
@@ -84,23 +87,28 @@ export default {
     flex-direction: column;
     align-items: center;
     .switch-button {
-      width: 99%;
+      width: 99.6%;
       margin-bottom: 10px;
       //position: relative;
       //right: 40%;
       display: flex;
       align-items: center;
       position: fixed;
-      z-index: 1;
+      z-index: 6;
       padding: 10px 20px;
       background-color: #ffffff;
-      bottom: 384px;
+      top: 0px;
       justify-content: end;
       .switch-button-close{
         position: relative;
         right: 15px;
         margin-left: 10px;
       }
+    }
+    .rounded-card {
+      position: relative;
+      top: 64px;
+      right: 50px;
     }
   }
 }
