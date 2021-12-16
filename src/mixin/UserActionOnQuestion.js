@@ -1,10 +1,11 @@
-import { Question } from '../models/Question'
+import { Question } from 'src/models/Question'
 
 const mixinUserActionOnQuestion = {
   methods: {
     userActionOnQuestion (questionId, actionType, data) {
       const examId = this.quiz.id
-      const examUserId = this.quiz.user_exam_id
+      // eslint-disable-next-line camelcase
+      const exam_user_id = this.quiz.user_exam_id
       this.beforeUserActionOnQuestion(examId, questionId)
       const userExamData = this.userQuizListData[examId]
       if (!userExamData) {
@@ -22,7 +23,7 @@ const mixinUserActionOnQuestion = {
         this.userActionOnQuestion_status(data, examId, questionId, userQuestionData)
       }
       this.afterUserActionOnQuestion()
-      return this.sendUserQuestionsDataToServer(examUserId, userExamData, questionId, actionType)
+      return this.sendUserQuestionsDataToServer(exam_user_id, userExamData, questionId, actionType)
     },
     beforeUserActionOnQuestion (examId, questionId) {
       this.$store.commit('quiz/updateCurrentQuestion', {
@@ -78,10 +79,14 @@ const mixinUserActionOnQuestion = {
     },
     userActionOnQuestion_answer (data, examId, questionId, userQuestionData) {
       const oldStatus = userQuestionData.status
-      const oldAnsweredChoiceId = userQuestionData.answered_choice_id
-      let newAnsweredChoiceId = data.choiceId
-      if (oldAnsweredChoiceId === newAnsweredChoiceId) {
-        newAnsweredChoiceId = null
+      // eslint-disable-next-line camelcase
+      const oldAnswered_choice_id = userQuestionData.answered_choice_id
+      // eslint-disable-next-line camelcase
+      let newAnswered_choice_id = data.choiceId
+      // eslint-disable-next-line camelcase
+      if (oldAnswered_choice_id === newAnswered_choice_id) {
+        // eslint-disable-next-line camelcase
+        newAnswered_choice_id = null
       } else if (oldStatus === 'x') {
         const newState = ''
         this.$store.commit('quiz/changeQuestion_Status', {
@@ -93,7 +98,7 @@ const mixinUserActionOnQuestion = {
       this.$store.commit('quiz/changeQuestionSelectChoice', {
         exam_id: examId,
         question_id: questionId,
-        answered_choice_id: newAnsweredChoiceId
+        answered_choice_id: newAnswered_choice_id
       })
     },
     userActionOnQuestion_bookmark (examId, questionId, userQuestionData) {
