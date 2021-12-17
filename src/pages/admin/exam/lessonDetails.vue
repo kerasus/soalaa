@@ -539,13 +539,13 @@
         position: absolute;
         height: 200px;
         right: 0;
-        left: 800px;
+        left: 100px;
         margin-top: 10px;
 
     }
 
     .sidebar {
-        width: 800px;
+        width: 100px;
         float: left;
         display: flex;
     }
