@@ -75,6 +75,7 @@ class ExamData {
   }
 
   loadQuestionsFromFile () {
+    console.log('loadQuestionsFromFile')
     const that = this
     this.commands.push(() => new Promise((resolve, reject) => {
       if (!that.questionsFileUrl && !that.exam) {
@@ -91,7 +92,7 @@ class ExamData {
         }
       })
         .then(response => {
-          console.log('res in loadQuestionsFromFile :', response)
+          console.log('loadQuestionsFromFile response:', response)
           let questions = response.data
           if (that.exam.holding_config.randomize_questions) {
             questions = new ShuffleQuestions(questions).run()
@@ -100,6 +101,7 @@ class ExamData {
           resolve(response.data)
         })
         .catch(error => {
+          console.log('error', error)
           reject(error)
         })
     })
@@ -118,7 +120,6 @@ class ExamData {
       if (!userExamId) {
         userExamId = that.exam.user_exam_id
       }
-      console.log('API_ADDRESS.exam.getAnswerOfUserWithCorrect(userExamId)', API_ADDRESS.exam.getAnswerOfUserWithCorrect(userExamId))
       axios.get(API_ADDRESS.exam.getAnswerOfUserWithCorrect(userExamId))
         .then(response => {
           that.exam = new Exam()
@@ -163,24 +164,27 @@ class ExamData {
   }
 
   getUserExamData (userExamId) {
-    console.log('getUserExamData in examData userExamId', userExamId)
+    console.log('user exam id: 12 ', userExamId)
     const that = this
     this.commands.push(() => new Promise((resolve, reject) => {
       if (!userExamId && !that.exam) {
+        console.log('18')
         Assistant.handleAxiosError('userExamId in getUserExamData() is not set')
         reject('userExamId in getUserExamData() is not set')
       }
       if (!userExamId) {
+        console.log('19')
+        console.log(that.exam)
         userExamId = that.exam.user_exam_id
       }
-      console.log('API_ADDRESS.exam.getAllAnswerOfUser(user_exam_id) :', API_ADDRESS.exam.getAllAnswerOfUser(userExamId))
       axios.get(API_ADDRESS.exam.getAllAnswerOfUser(userExamId))
         .then(response => {
-          console.log('res for getUserExamData req ', response)
+          console.log('3')
           that.userExamData = response.data
           resolve(response)
         })
         .catch(error => {
+          console.log('4')
           reject(error)
         })
     })
@@ -190,20 +194,27 @@ class ExamData {
 
   getExamDataAndParticipate (examId) {
     const that = this
+    console.log('getExamDataAndParticipate (examId)10', examId)
+    console.log('that.exam11', this.exam)
     this.commands.push(() => new Promise((resolve, reject) => {
-      if (!examId && !that.exam) {
-        Assistant.handleAxiosError('examId in getExamDataAndParticipate() is not set')
-        reject('examId in getExamDataAndParticipate() is not set')
+      console.log('command 16', this.commands)
+      // eslint-disable-next-line
+        if (!examId && !that.exam) {
+        console.log('18888888')
+        Assistant.handleAxiosError('exam_id in getExamDataAndParticipate() is not set')
+        reject('exam_id in getExamDataAndParticipate() is not set')
       }
       if (!examId) {
+        console.log('9999999')
         examId = that.exam.id
       }
-      // eslint-disable-next-line no-undef
+      console.log('getExamDataAndParticipate (examId) 17', examId)
       axios.post(API_ADDRESS.exam.examUser, { exam_id: examId })
         .then(response => {
+          console.log('done??')
+          console.log('res', response)
           that.exam = new Exam()
           // ToDo: attention on user_exam_id and exam_id
-          console.log('response in getExamDataAndParticipate', response)
           that.exam.id = Assistant.getId(response.data.data.exam_id)
           that.exam.title = Assistant.getId(response.data.data.exam_title)
           that.exam.user_exam_id = Assistant.getId(response.data.data.id)
@@ -213,11 +224,12 @@ class ExamData {
           that.exam.sub_categories = new QuestSubcategoryList(response.data.data.sub_categories)
           that.exam.holding_config = response.data.data.holding_config
           that.userExamData = response.data
-          console.log('that.exam :', that.exam)
           resolve(response)
         })
         .catch(error => {
-          reject(error)
+          console.log('errrrrrrrrrrrrrrrrrrrr')
+          console.log('err', error)
+          // reject(error)
         })
     })
     )
