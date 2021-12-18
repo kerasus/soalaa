@@ -161,6 +161,7 @@ class ExamData {
   }
 
   getUserExamData (userExamId) {
+    console.log('user exam id: ', userExamId)
     const that = this
     this.commands.push(() => new Promise((resolve, reject) => {
       if (!userExamId && !that.exam) {
@@ -182,20 +183,28 @@ class ExamData {
     )
     return this
   }
-
-  getExamDataAndParticipate (examId) {
+  // eslint-disable-next-line
+  getExamDataAndParticipate (exam_id) {
     const that = this
+    // eslint-disable-next-line
+    console.log('getExamDataAndParticipate (examId)', exam_id)
+    console.log('that.exam', this.exam)
     this.commands.push(() => new Promise((resolve, reject) => {
-      if (!examId && !that.exam) {
-        Assistant.handleAxiosError('examId in getExamDataAndParticipate() is not set')
-        reject('examId in getExamDataAndParticipate() is not set')
+      // eslint-disable-next-line
+      if (!exam_id && !that.exam) {
+        Assistant.handleAxiosError('exam_id in getExamDataAndParticipate() is not set')
+        reject('exam_id in getExamDataAndParticipate() is not set')
       }
-      if (!examId) {
-        examId = that.exam.id
+      // eslint-disable-next-line
+      if (!exam_id) {
+        // eslint-disable-next-line
+        exam_id = that.exam.id
       }
       // eslint-disable-next-line no-undef
+      // eslint-disable-next-line
       axios.post(API_ADDRESS.exam.examUser, { exam_id })
         .then(response => {
+          console.log('done??')
           console.log('res', response)
           that.exam = new Exam()
           // ToDo: attention on user_exam_id and exam_id
@@ -211,6 +220,7 @@ class ExamData {
           resolve(response)
         })
         .catch(error => {
+          console.log('errrrrrrrrrrrrrrrrrrrr')
           console.log('err', error)
           reject(error)
         })

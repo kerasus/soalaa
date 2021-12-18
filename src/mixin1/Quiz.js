@@ -99,6 +99,7 @@ const mixinQuiz = {
       return this.$store.getters['quiz/quiz']
     },
     getCurrentExamQuestionIndexes () {
+      console.log('currentExamQuestionIndexes:', window.currentExamQuestionIndexes)
       if (window.currentExamQuestionIndexes) {
         return window.currentExamQuestionIndexes
       }
@@ -206,14 +207,20 @@ const mixinQuiz = {
       return currentExamQuestionsArray
     },
     startExam (examId, viewType) {
+      console.log('examId :', examId)
+      console.log('viewType :', viewType)
       if (!Assistant.getId(examId)) {
+        console.log('if :')
         return
       }
       const that = this
       return new Promise(function (resolve, reject) {
         let userExamId
         const examData = new ExamData1()
+        console.log('examData: ', examData)
+        console.log('examData  quiz: ', that.quiz)
         if (that.needToLoadQuizData()) {
+          console.log('load')
           window.currentExamQuestions = null
           window.currentExamQuestionIndexes = null
           that.$store.commit('loading/overlay', true)
@@ -221,6 +228,7 @@ const mixinQuiz = {
           examData.loadQuestionsFromFile()
         } else {
           userExamId = that.quiz.user_exam_id
+          console.log('userExamId:', userExamId)
           that.loadCurrentQuestion(viewType)
         }
         examData.getUserExamData(userExamId)
@@ -261,6 +269,10 @@ const mixinQuiz = {
       })
     },
     needToLoadQuizData () {
+      console.log('Assistant.getId(this.quiz.id):', Assistant.getId(this.quiz.id))
+      console.log('Assistant.getId(this.quiz.user_exam_id)', Assistant.getId(this.quiz.user_exam_id))
+      console.log('Assistant.getId(this.$route.params.quizId)', Assistant.getId(this.$route.params.quizId))
+      console.log('Assistant.getId(this.quiz.id)', Assistant.getId(this.quiz.id))
       return (!Assistant.getId(this.quiz.id) || !Assistant.getId(this.quiz.user_exam_id) || Assistant.getId(this.$route.params.quizId) !== Assistant.getId(this.quiz.id))
     },
     participateExam (examId, viewType) {
