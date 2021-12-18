@@ -15,7 +15,7 @@
 </template>
 
 <script>
-import { mixinAuth, mixinQuiz } from 'src/mixin/Mixins'
+import { mixinAuth, mixinQuiz } from 'src/mixin1/Mixins'
 
 export default {
   name: 'onlineQuizTopMenu',

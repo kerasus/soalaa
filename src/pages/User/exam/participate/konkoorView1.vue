@@ -97,7 +97,7 @@ import { mixinAuth, mixinQuiz, mixinUserActionOnQuestion, mixinWindowSize } from
 import Timer from 'components/OnlineQuiz/Quiz/timer/timer1'
 import BubbleSheet from 'components/OnlineQuiz/Quiz/bubbleSheet/bubbleSheet1'
 import { Exam } from 'src/models/Exam'
-import Assistant from 'src/plugins/assistant'
+// import Assistant from 'src/plugins/assistant'
 import TopMenu from 'components/Menu/topMenu/onlineQuizTopMenu1'
 export default {
   name: 'konkoorView',
@@ -133,32 +133,32 @@ export default {
   },
   created () {
     this.getUser()
-    const that = this
+    // const that = this
     this.startExam(this.$route.params.quizId, 'KonkoorView')
-      .then(() => {
-        that.$store.dispatch('loading/overlayLoading', false)
-      })
-      .catch((error) => {
-        Assistant.reportErrors(error)
-        that.$q.notify({
-          message: 'مشکلی در دریافت اطلاعات آزمون رخ داده است. لطفا دوباره امتحان کنید.',
-          type: 'negative',
-          position: 'top'
-        })
-      })
-    if (this.windowSize.x > 959) {
-      this.changeAppBarAndDrawer(false)
-    } else {
-      this.$router.push({
-        name: 'onlineQuiz.alaaView',
-        // TODO --> why 313 ?
-        params: { quizId: 313, questNumber: this.$route.params.quizId }
-      })
-    }
+    // .then(() => {
+    //   that.$store.dispatch('loading/overlayLoading', false)
+    // })
+    // .catch((error) => {
+    //   Assistant.reportErrors(error)
+    //   that.$q.notify({
+    //     message: 'مشکلی در دریافت اطلاعات آزمون رخ داده است. لطفا دوباره امتحان کنید.',
+    //     type: 'negative',
+    //     position: 'top'
+    //   })
+    // })
+    // if (this.windowSize.x > 959) {
+    //   this.changeAppBarAndDrawer(false)
+    // } else {
+    //   this.$router.push({
+    //     name: 'onlineQuiz.alaaView',
+    //     // TODO --> why 313 ?
+    //     params: { quizId: 313, questNumber: this.$route.params.quizId }
+    //   })
+    // }
     if (!this.questions.length) {
       this.questions = this.getCurrentExamQuestionsInArray()
     }
-    console.log('question: ', this.questions)
+    console.log('question: 15', this.questions)
   },
   mounted () {
     // this.setHeights()

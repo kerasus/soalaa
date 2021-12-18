@@ -3,6 +3,7 @@
     <q-markup-table
       separator="none"
       class="question-table"
+      :class="{ 'current-question': this.currentQuestion.id === source.id, ltr: isLtrQuestion}"
     >
       <thead>
       <tr>
@@ -255,6 +256,7 @@ export default {
 
 <style lang="scss" scoped>
 .question-field{
+  width: 100% !important;
   .question-table {
     padding: 10px 10px 10px 30px;
     &.current-question {

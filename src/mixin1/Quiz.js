@@ -36,14 +36,14 @@ const mixinQuiz = {
       }
     },
     currentExamFrozenQuestions () {
-      return this.$store.getters('quiz1/currentExamFrozenQuestions')
+      return this.$store.getters('quiz/currentExamFrozenQuestions')
     },
     currentQuestion: {
       get () {
-        return this.$store.getters['quiz1/currentQuestion']
+        return this.$store.getters['quiz/currentQuestion']
       },
       set (newInfo) {
-        this.$store.commit('quiz1/updateCurrentQuestion', {
+        this.$store.commit('quiz/updateCurrentQuestion', {
           newQuestionId: newInfo.id,
           currentExamQuestions: this.getCurrentExamQuestions()
         })
@@ -99,7 +99,7 @@ const mixinQuiz = {
       return this.$store.getters['quiz/quiz']
     },
     getCurrentExamQuestionIndexes () {
-      console.log('currentExamQuestionIndexes:', window.currentExamQuestionIndexes)
+      console.log('currentExamQuestionIndexes:13', window.currentExamQuestionIndexes)
       if (window.currentExamQuestionIndexes) {
         return window.currentExamQuestionIndexes
       }
@@ -156,8 +156,10 @@ const mixinQuiz = {
       this.setCurrentExamQuestions(currentExamQuestions)
     },
     getCurrentExamQuestionsInArray () {
+      console.log('getCurrentExamQuestionsInArray')
       let currentExamQuestionsArray = []
       if (this.quiZ !== {}) {
+        console.log('1111')
         const currentExamQuestionIndexes = this.getCurrentExamQuestionIndexes()
         const currentExamQuestions = this.getCurrentExamQuestions()
         if (!currentExamQuestionIndexes) {
@@ -169,12 +171,13 @@ const mixinQuiz = {
           currentExamQuestionsArray.push(currentExamQuestions[questionId])
         })
       } else {
+        console.log(currentExamQuestionsArray)
         currentExamQuestionsArray = this.quiZ
       }
       return currentExamQuestionsArray
     },
     getCurrentExamQuestions () {
-      console.log('window.currentExamQuestions', window.currentExamQuestions)
+      console.log('window.currentExamQuestions 14', window.currentExamQuestions)
       if (window.currentExamQuestions) {
         return window.currentExamQuestions
       }
@@ -183,6 +186,7 @@ const mixinQuiz = {
       return window.currentExamQuestions
     },
     modifyCurrentExamQuestions (currentExamQuestions) {
+      console.log('modifyCurrentExamQuestions')
       const currentExamQuestionsArray = []
       const currentExamQuestionIndexes = this.getCurrentExamQuestionIndexes()
       if (!currentExamQuestionIndexes) {
@@ -207,8 +211,8 @@ const mixinQuiz = {
       return currentExamQuestionsArray
     },
     startExam (examId, viewType) {
-      console.log('examId :', examId)
-      console.log('viewType :', viewType)
+      console.log('examId 1:', examId)
+      console.log('viewType 2:', viewType)
       if (!Assistant.getId(examId)) {
         console.log('if :')
         return
@@ -217,10 +221,10 @@ const mixinQuiz = {
       return new Promise(function (resolve, reject) {
         let userExamId
         const examData = new ExamData1()
-        console.log('examData: ', examData)
-        console.log('examData  quiz: ', that.quiz)
+        console.log('examData: 3', examData)
+        console.log('examData  quiz 4: ', that.quiz)
         if (that.needToLoadQuizData()) {
-          console.log('load')
+          console.log('load9')
           window.currentExamQuestions = null
           window.currentExamQuestionIndexes = null
           that.$store.commit('loading/overlay', true)
@@ -235,6 +239,7 @@ const mixinQuiz = {
           .run()
           .then((result) => {
             try {
+              console.log('try')
               if (that.needToLoadQuizData()) {
                 // save questions in localStorage
                 that.saveCurrentExamQuestions(examData.exam.questions.list)
@@ -269,10 +274,10 @@ const mixinQuiz = {
       })
     },
     needToLoadQuizData () {
-      console.log('Assistant.getId(this.quiz.id):', Assistant.getId(this.quiz.id))
-      console.log('Assistant.getId(this.quiz.user_exam_id)', Assistant.getId(this.quiz.user_exam_id))
-      console.log('Assistant.getId(this.$route.params.quizId)', Assistant.getId(this.$route.params.quizId))
-      console.log('Assistant.getId(this.quiz.id)', Assistant.getId(this.quiz.id))
+      console.log('Assistant.getId(this.quiz.id):5', Assistant.getId(this.quiz.id))
+      console.log('Assistant.getId(this.quiz.user_exam_id)6', Assistant.getId(this.quiz.user_exam_id))
+      console.log('Assistant.getId(this.$route.params.quizId)7', Assistant.getId(this.$route.params.quizId))
+      console.log('Assistant.getId(this.quiz.id)8', Assistant.getId(this.quiz.id))
       return (!Assistant.getId(this.quiz.id) || !Assistant.getId(this.quiz.user_exam_id) || Assistant.getId(this.$route.params.quizId) !== Assistant.getId(this.quiz.id))
     },
     participateExam (examId, viewType) {
@@ -410,7 +415,7 @@ const mixinQuiz = {
     },
     answerClicked (data) {
       const questionId = data.questionId
-      console.log('answer')
+      console.log('answerClicked 2')
       return this.userActionOnQuestion(questionId, 'answer', { choiceId: data.choiceId })
     },
     changeBookmark (questionId) {
@@ -503,7 +508,7 @@ const mixinQuiz = {
       this.changeQuestion(question.id, viewType)
     },
     changeQuestion (id, viewType) {
-      console.log(this.currentQuestion)
+      console.log('changeQuestion', this.currentQuestion)
       if (Assistant.getId(this.currentQuestion.id) === Assistant.getId(id)) {
         return
       }
@@ -531,7 +536,7 @@ const mixinQuiz = {
         }
       }
 
-      this.$store.commit('quiz1/updateCurrentQuestion', {
+      this.$store.commit('quiz/updateCurrentQuestion', {
         newQuestionId: currentQuestion.id,
         currentExamQuestions: this.getCurrentExamQuestions()
       })
@@ -556,7 +561,7 @@ const mixinQuiz = {
       } else if (type === 'konkoor') {
         this.$store.commit('AppLayout/updateDrawer', false)
         setTimeout(() => {
-          this.$router.push({ name: 'konkoorView', params: { quizId: '6135bddbe0db6947171ef98a' } })
+          this.$router.push({ name: 'konkoorView', params: { quizId: this.quiz.id } })
         }, 200)
       }
     },

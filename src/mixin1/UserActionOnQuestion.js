@@ -3,7 +3,8 @@ import { Question } from 'src/models/Question'
 const mixinUserActionOnQuestion = {
   methods: {
     userActionOnQuestion (questionId, actionType, data) {
-      console.log('userActionOnQuestion')
+      console.log('userActionOnQuestion 3')
+      console.log('userActionOnQuestion quiz 4', this.quiz)
       const examId = this.quiz.id
       const examUserId = this.quiz.user_exam_id
       this.beforeUserActionOnQuestion(examId, questionId)

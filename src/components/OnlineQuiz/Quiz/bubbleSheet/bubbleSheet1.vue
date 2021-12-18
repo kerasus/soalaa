@@ -187,6 +187,7 @@ export default {
       return this.userQuizListData[this.quiz.id][questionId]
     },
     AnswerClicked (payload) {
+      console.log('bubble AnswerClicked 1:', payload)
       if (this.info.type !== 'pasokh-nameh') {
         this.answerClicked(payload)
         this.clickChoice(payload.questionId)

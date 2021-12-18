@@ -5,12 +5,6 @@
     class="quiz-page"
     :style="{ height: '100%' }"
   >
-    <q-btn
-      v-if="$route.name === 'onlineQuiz.alaaView'"
-      class="switch-view-button"
-      icon="mdi-dots-grid"
-      @click="changeView('konkoor')"
-    />
     <div class="row " :style="{ 'min-height': '100%' }">
       <div class="col" :style="{ 'min-width': '100%' }"
       >
