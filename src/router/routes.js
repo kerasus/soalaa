@@ -197,9 +197,9 @@ const routes = [
   },
   {
     // path: '/konkoorView/:quizId',
-    path: '/konkoorView',
+    path: '/onlineQuiz/konkoorView/:quizId',
     name: 'konkoorView',
-    component: () => import('pages/User/exam/participate/konkoorView1'),
+    component: () => import('pages/User/exam/participate/konkoorView'),
     // component: () => import('src/components/Menu/topMenu/onlineQuizTopMenu'),
     meta: {
       middlewares: [auth]

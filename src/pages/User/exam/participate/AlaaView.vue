@@ -199,7 +199,7 @@
 
 <script>
 import Choice from 'src/components/OnlineQuiz/Quiz/Choice'
-// import Timer from 'src/components/OnlineQuiz/Quiz/Timer/Timer'
+// import Timer from 'src/components/OnlineQuiz/Quiz/timer/timer'
 import { mixinAuth, mixinQuiz, mixinUserActionOnQuestion, mixinDrawer, mixinWindowSize } from 'src/mixin/Mixins'
 // import Assistant from 'src/plugins/assistant'
 // import VueKatex from 'src/components/VueKatex'
