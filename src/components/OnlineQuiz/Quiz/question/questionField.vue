@@ -3,6 +3,7 @@
     <q-markup-table
       separator="none"
       class="question-table"
+      :class="{ 'current-question': this.currentQuestion.id === source.id, ltr: isLtrQuestion}"
     >
       <thead>
       <tr>
@@ -13,7 +14,7 @@
             class="question-body"
             :class="{ ltr: isRtl }"
           >
-            که بود و چه کرد؟
+            {{source.order + ') ' + source.statement}}
             <!--            <vue-katex-->
             <!--              :input="source.order + ') ' + source.statement"-->
             <!--            />-->
@@ -27,7 +28,6 @@
                 v-if="getChoiceStatus() !== 'o'"
                 text-color="grey"
                 icon="mdi-checkbox-blank-circle-outline"
-                :size="24"
                 flat
                 fab-mini
                 @click="changeStatus(source.id, 'o')"
@@ -36,7 +36,6 @@
                 v-else
                 icon="mdi-checkbox-blank-circle"
                 text-color="yellow"
-                :size="24"
                 flat
                 fab-mini
                 @click="changeStatus(source.id, 'o')"
@@ -45,7 +44,6 @@
                 v-if="getChoiceStatus() === 'x'"
                 text-color="red"
                 icon="mdi-close"
-                :size="24"
                 flat
                 fab-mini
                 @click="changeStatus(source.id ,'x')"
@@ -54,7 +52,6 @@
                 v-else
                 text-color="grey"
                 icon="mdi-close"
-                :size="24"
                 flat
                 fab-mini
                 @click="changeStatus(source.id ,'x')"
@@ -63,7 +60,6 @@
                 v-if="getChoiceBookmark()"
                 text-color="blue"
                 icon="mdi-bookmark"
-                :size="24"
                 flat
                 fab-mini
                 @click="changeBookmark(source.id)"
@@ -72,7 +68,6 @@
                 v-else
                 text-color="grey"
                 icon="mdi-bookmark-outline"
-                :size="24"
                 flat
                 fab-mini
                 @click="changeBookmark(source.id)"
@@ -82,14 +77,12 @@
       </tr>
       </thead>
       <tbody class="table-body">
-      <tr
-        class="choices"
-      >
+      <tr class="choices q-tr--no-hover">
         <td
           v-for="(choice, index) in source.choices.list"
           :key="choice.id"
           ref="choices"
-          class="choice"
+          class="choice col-md-3"
           :class="{active: getAnsweredChoiceId() === choice.id, ltr: isRtl}"
           @click="clickOnAnswer({ questionId: source.id, choiceId: choice.id})"
         >
@@ -109,7 +102,7 @@
 
 <script>
 import 'src/assets/scss/markdownKatex.scss'
-import { mixinQuiz, mixinUserActionOnQuestion } from 'src/mixin1/Mixins'
+import { mixinQuiz, mixinUserActionOnQuestion } from 'src/mixin/Mixins'
 // import VueKatex from 'src/components/VueKatex'
 
 export default {
@@ -263,6 +256,7 @@ export default {
 
 <style lang="scss" scoped>
 .question-field{
+  width: 100% !important;
   .question-table {
     padding: 10px 10px 10px 30px;
     &.current-question {

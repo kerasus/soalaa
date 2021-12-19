@@ -80,7 +80,7 @@
 
 <script>
 import moment from 'moment-jalaali'
-import { mixinQuiz, mixinUserActionOnQuestion } from 'src/mixin1/Mixins'
+import { mixinQuiz, mixinUserActionOnQuestion } from 'src/mixin/Mixins'
 
 export default {
   name: 'BubbleSheet',
@@ -187,6 +187,7 @@ export default {
       return this.userQuizListData[this.quiz.id][questionId]
     },
     AnswerClicked (payload) {
+      console.log('bubble AnswerClicked 1:', payload)
       if (this.info.type !== 'pasokh-nameh') {
         this.answerClicked(payload)
         this.clickChoice(payload.questionId)
