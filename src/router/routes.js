@@ -147,6 +147,14 @@ const routes = [
             meta: {
               middlewares: [auth]
             }
+          },
+          {
+            path: '/results/mbti_bartle/:exam_id/:user_exam_id',
+            name: 'mbtiBartle.result',
+            component: () => import('pages/User/exam/Result/MBTI_Bartle_result'),
+            meta: {
+              middlewares: [auth]
+            }
           }
         ]
       },
@@ -175,14 +183,6 @@ const routes = [
     path: '/debug',
     name: 'debug',
     component: () => import('pages/Auth/test.vue'),
-    meta: {
-      middlewares: [auth]
-    }
-  },
-  {
-    path: '/results/mbti_bartle/:exam_id/:user_exam_id',
-    name: 'mbtiBartle.result',
-    component: () => import('pages/User/exam/Result/MBTI_Bartle_result'),
     meta: {
       middlewares: [auth]
     }
