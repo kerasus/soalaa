@@ -183,6 +183,14 @@
                 .then(() => {
                     // that.loadFirstActiveQuestionIfNeed()
                     that.$store.commit('AppLayout/updateOverlay', {show: false, loading: false, text: ''})
+                    const callbacks = {
+                      'question.file-link:update': {
+                        afterReload () {
+                          that.questions = that.getCurrentExamQuestionsInArray()
+                        }
+                      }
+                    }
+                    that.setSocket(that.$store.getters['Auth/accessToken'], that.quiz.id, callbacks)
                 })
                 .catch((error) => {
                     Assistant.reportErrors(error)

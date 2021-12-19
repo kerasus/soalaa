@@ -3,6 +3,7 @@ const lumenServer = process.env.VUE_APP_LUMEN_INTERNAL_API_SERVER
 const authServer = process.env.VUE_APP_AUTH_INTERNAL_API_SERVER
 
 const API_ADDRESS = {
+  socket: process.env.VUE_APP_SOCKET_TARGET_API_SERVER,
   server: {
     lumen: lumenServer,
     auth: authServer

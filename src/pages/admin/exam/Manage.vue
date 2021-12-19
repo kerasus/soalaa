@@ -69,7 +69,6 @@ import ExamInfo from "@/components/OnlineQuiz/Quiz/examInfo";
 import ExamReportInfo from "@/components/OnlineQuiz/Quiz/examReportInfo";
 import ExamList from "@/components/OnlineQuiz/Quiz/examList";
 import {Exam} from "@/models/Exam";
-import axios from "axios";
 
 export default {
   name: 'Manage',
@@ -80,6 +79,10 @@ export default {
     reportDialog: false,
   }),
   methods: {
+    onSocketStatusChange (status) {
+      // this.socketStatus = status
+      console.log(status)
+    },
     rereshExamList() {
       this.dialog = false
       this.reportDialog = false

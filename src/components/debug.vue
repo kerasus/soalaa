@@ -25,34 +25,16 @@
 </template>
 
 <script>
-import Vue from 'vue'
 // import MathJax from 'mathjax'
 import TurndownService from 'turndown/lib/turndown.browser.umd'
-
-import VueSocketIO from 'vue-socket.io'
-Vue.use(new VueSocketIO({
-  debug: true,
-  // connection: '/3a/socket',
-  // connection: 'https://benpaodehenji.com/socketioserve',
-  connection: 'https://office.alaatv.com:501',
-  // vuex: {
-  //   store,
-  //   actionPrefix: 'SOCKET_',
-  //   mutationPrefix: 'SOCKET_'
-  // },
-  options: {
-    // path: "/my-app/",
-    transports: [
-      "websocket",
-      // "polling"
-    ] // use WebSocket first, if available
-  } //Optional options
-}))
+import { io } from 'socket.io-client'
+import API_ADDRESS from '@/api/Addresses'
 
 export default {
   data() {
     return {
       socketStatus: 'socket is not connected',
+      socket: null,
       loading: false,
       post: {body: ""},
       html1: '<p>I’m running tiptap with Vue.js. 🎉</p>',
@@ -62,44 +44,44 @@ export default {
       socketMessage: ''
     }
   },
-  sockets: {
-    connecting() {
-      this.onSocketStatusChange('on connection')
-    },
-    disconnect() {
-      this.onSocketStatusChange('Socket to break off')
-      this.isConnected = false;
-    },
-    connect_failed() {
-      this.onSocketStatusChange('connection failed')
-    },
-    connect() {
-      this.onSocketStatusChange('socket connected')
-      // Fired when the socket connects.
-      this.isConnected = true
-    },
-
-    // Fired when the server sends something on the "messageChannel" channel.
-    messageChannel(data) {
-      this.socketMessage = data
-    }
-  },
-  // watch:{
-  //   MathJax (){
-  //     this.renderMathJax()
-  //   }
-  // },
   mounted() {
     // this.initMathJax()
     // this.setContent()
   },
   created() {
     // this.html = this.convertToTiptap(this.html)
+    this.setSocket()
   },
   methods: {
-    // Connect socket
+    setSocket () {
+      this.socket = io(API_ADDRESS.socket, {
+        reconnectionDelayMax: 10000
+      })
+      this.setSocketEvents()
+      this.socket.connect()
+    },
+    setSocketEvents () {
+      this.socket.on('connecting', () => {
+        this.onSocketStatusChange('on connection')
+      })
+      this.socket.on('disconnect', () => {
+        this.onSocketStatusChange('Socket to break off')
+        this.isConnected = false
+      })
+      this.socket.on('connect_failed', () => {
+        this.onSocketStatusChange('connection failed')
+      })
+      this.socket.on('connect', () => {
+        // console.log(this.socket.connected) // true
+        this.onSocketStatusChange('socket connected')
+        this.isConnected = true
+      })
+      this.socket.on('messageChannel', (data) => {
+        this.socketMessage = data
+      })
+    },
     connect() {
-      this.$socket.open(); // Start connecting to socket
+      this.socket.connect()
     },
     onSocketStatusChange (status) {
       this.socketStatus = status
@@ -108,7 +90,7 @@ export default {
     pingServer() {
       console.log('Send the "pingServer" event to the server.')
       // Send the "pingServer" event to the server.
-      this.$socket.emit('pingServer', 'PING!')
+      this.socket.emit('pingServer', 'PING!')
       console.log('$socket emited')
     },
     injectMathJax() {
