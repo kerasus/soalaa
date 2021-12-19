@@ -303,7 +303,7 @@ import '@silvermine/videojs-quality-selector/dist/css/quality-selector.css'
 require('@silvermine/videojs-quality-selector')(videojs)
 import Info from 'src/components/OnlineQuiz/Quiz/resultTables/info'
 import PersonalResult from 'src/components/OnlineQuiz/Quiz/resultTables/personalResult'
-import BubbleSheet from 'src/components/OnlineQuiz/Quiz/bubbleSheet/BubbleSheet'
+import BubbleSheet from 'src/components/OnlineQuiz/Quiz/bubbleSheet/bubbleSheet'
 import Assistant from 'src/plugins/assistant'
 import { AlaaSet } from 'src/models/AlaaSet'
 import { mixinAuth, mixinQuiz, mixinWindowSize } from 'src/mixin/Mixins'

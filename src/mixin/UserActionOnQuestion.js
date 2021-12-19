@@ -3,9 +3,10 @@ import { Question } from 'src/models/Question'
 const mixinUserActionOnQuestion = {
   methods: {
     userActionOnQuestion (questionId, actionType, data) {
+      console.log('userActionOnQuestion 3')
+      console.log('userActionOnQuestion quiz 4', this.quiz)
       const examId = this.quiz.id
-      // eslint-disable-next-line camelcase
-      const exam_user_id = this.quiz.user_exam_id
+      const examUserId = this.quiz.user_exam_id
       this.beforeUserActionOnQuestion(examId, questionId)
       const userExamData = this.userQuizListData[examId]
       if (!userExamData) {
@@ -23,13 +24,17 @@ const mixinUserActionOnQuestion = {
         this.userActionOnQuestion_status(data, examId, questionId, userQuestionData)
       }
       this.afterUserActionOnQuestion()
-      return this.sendUserQuestionsDataToServer(exam_user_id, userExamData, questionId, actionType)
+      return this.sendUserQuestionsDataToServer(examUserId, userExamData, questionId, actionType)
     },
     beforeUserActionOnQuestion (examId, questionId) {
+      console.log('beforeUserActionOnQuestion')
+      console.log(this.$store.state.quiz.currentQuestion)
+      console.log(!!this.$store.state.quiz.currentQuestion)
       this.$store.commit('quiz/updateCurrentQuestion', {
         newQuestionId: questionId,
         currentExamQuestions: this.getCurrentExamQuestions()
       })
+      console.log('cur:', this.$store.state.quiz.currentQuestion)
       this.$store.commit('quiz/changeQuestionRefreshQuestionObject', {
         exam_id: examId,
         question_id: questionId
@@ -79,17 +84,13 @@ const mixinUserActionOnQuestion = {
     },
     userActionOnQuestion_answer (data, examId, questionId, userQuestionData) {
       const oldStatus = userQuestionData.status
-      // eslint-disable-next-line camelcase
-      const oldAnswered_choice_id = userQuestionData.answered_choice_id
-      // eslint-disable-next-line camelcase
-      let newAnswered_choice_id = data.choiceId
-      // eslint-disable-next-line camelcase
-      if (oldAnswered_choice_id === newAnswered_choice_id) {
-        // eslint-disable-next-line camelcase
-        newAnswered_choice_id = null
+      const oldAnsweredChoiceId = userQuestionData.answered_choice_id
+      let newAnsweredChoiceId = data.choiceId
+      if (oldAnsweredChoiceId === newAnsweredChoiceId) {
+        newAnsweredChoiceId = null
       } else if (oldStatus === 'x') {
         const newState = ''
-        this.$store.commit('quiz/changeQuestion_Status', {
+        this.$store.commit('quiz/changeQuestionStatus', {
           exam_id: examId,
           question_id: questionId,
           status: newState
@@ -98,7 +99,7 @@ const mixinUserActionOnQuestion = {
       this.$store.commit('quiz/changeQuestionSelectChoice', {
         exam_id: examId,
         question_id: questionId,
-        answered_choice_id: newAnswered_choice_id
+        answered_choice_id: newAnsweredChoiceId
       })
     },
     userActionOnQuestion_bookmark (examId, questionId, userQuestionData) {
