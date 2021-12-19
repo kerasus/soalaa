@@ -1,6 +1,5 @@
 <template>
   <div class="participate-mbti-bartle">
-    <div>
       <div  class="row q-pt-lg q-mb-md">
         <div class="col-5 q-mx-xl">
           <a href="https://alaatv.com">
@@ -32,7 +31,6 @@
           v-text="counter.string"
         />
       </div>
-    </div>
     <q-linear-progress
        size="15px"
       :value="((counter.value)+1)/100"
@@ -121,7 +119,6 @@
             </div>
           </div>
           <div class="next arrow-box">
-<!--            -->
             <q-btn
               text-color="white"
               class="answer-btn"
@@ -180,11 +177,13 @@ export default {
     this.appBar = false
     this.$store.commit('AppLayout/updateAppBarAndDrawer', false)
   },
+  updated () {
+    this.$store.dispatch('loading/overlayLoading', false)
+  },
   mounted () {
     const that = this
     this.startExam(that.$route.params.quizId, 'onlineQuiz.mbtiBartle')
       .then((res) => {
-        console.log('res in vue file !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! :', res)
         that.$store.commit('AppLayout/updateOverlay', { show: false, loading: false, text: '' })
         const unansweredQuestion = that.getUnansweredQuestionBehind()
         if (unansweredQuestion) {
@@ -202,8 +201,8 @@ export default {
           message: 'مشکلی در دریافت اطلاعات آژمون رخ داده است. لطفا دوباره امتحان کنید.',
           color: 'negative'
         })
-        console.log('err in startExam vue comp !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! :', error)
         that.$router.push({ name: 'user.exam.list' })
+        console.log('error', error)
       })
   },
   methods: {
@@ -250,7 +249,6 @@ export default {
     },
     isLastQuestion () {
       const countOfQuestions = Object.keys(this.currentExamQuestions).length
-      console.log('isLastQuestion ', countOfQuestions.toString() === this.$route.params.questNumber.toString())
       return countOfQuestions.toString() === this.$route.params.questNumber.toString()
     },
     getUnansweredQuestionBehind () {
@@ -308,7 +306,6 @@ export default {
       })
     },
     choiceClick (id) {
-      console.log('choiceClick ')
       this.$store.dispatch('loading/overlayLoading', true)
       const that = this
       const isLastQuestion = this.isLastQuestion()
@@ -358,7 +355,6 @@ export default {
         })
     },
     sendAnswersAndFinishExam () {
-      console.log('sendAnswersAndFinishExam')
       const that = this
       this.sendUserQuestionsDataToServerAndFinishExam(this.quiz.id, this.quiz.user_exam_id)
         .then(() => {
@@ -369,7 +365,6 @@ export default {
           // })
           that.$store.commit('quiz/clearExamData', that.quiz.id)
           that.tryAgainDialog = false
-          console.log('need to see result')
           that.$router.push({ name: 'mbtiBartle.result', params: { exam_id: this.quiz.id.toString(), user_exam_id: this.quiz.user_exam_id.toString() } })
         })
         .catch(() => {

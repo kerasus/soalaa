@@ -146,8 +146,7 @@ const mixinQuiz = {
     getCurrentExamQuestionsInArray () {
     //  console.log('getCurrentExamQuestionsInArray')
       let currentExamQuestionsArray = []
-      if (this.quiZ !== {}) {
-        console.log('1111')
+      if (this.quiz !== {}) {
         const currentExamQuestionIndexes = this.getCurrentExamQuestionIndexes()
         const currentExamQuestions = this.getCurrentExamQuestions()
         if (!currentExamQuestionIndexes) {
@@ -165,7 +164,6 @@ const mixinQuiz = {
       return currentExamQuestionsArray
     },
     getCurrentExamQuestions () {
-      console.log('getCurrentExamQuestions :', window.currentExamQuestions)
       if (window.currentExamQuestions) {
         return window.currentExamQuestions
       }
@@ -262,10 +260,6 @@ const mixinQuiz = {
       })
     },
     needToLoadQuizData () {
-      // console.log('Assistant.getId(this.quiz.id):5', Assistant.getId(this.quiz.id))
-      // console.log('Assistant.getId(this.quiz.user_exam_id)6', Assistant.getId(this.quiz.user_exam_id))
-      // console.log('Assistant.getId(this.$route.params.quizId)7', Assistant.getId(this.$route.params.quizId))
-      // console.log('Assistant.getId(this.quiz.id)8', Assistant.getId(this.quiz.id))
       return (!Assistant.getId(this.quiz.id) || !Assistant.getId(this.quiz.user_exam_id) || Assistant.getId(this.$route.params.quizId) !== Assistant.getId(this.quiz.id))
     },
     participateExam (examId, viewType) {
@@ -403,7 +397,6 @@ const mixinQuiz = {
     },
     answerClicked (data) {
       const questionId = data.questionId
-      console.log('answerClicked +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++', this.userActionOnQuestion(questionId, 'answer', { choiceId: data.choiceId }))
       return this.userActionOnQuestion(questionId, 'answer', { choiceId: data.choiceId })
     },
     changeBookmark (questionId) {
