@@ -3,8 +3,6 @@ import { Question } from 'src/models/Question'
 const mixinUserActionOnQuestion = {
   methods: {
     userActionOnQuestion (questionId, actionType, data) {
-      console.log('userActionOnQuestion 3')
-      console.log('userActionOnQuestion quiz 4', this.quiz)
       const examId = this.quiz.id
       const examUserId = this.quiz.user_exam_id
       this.beforeUserActionOnQuestion(examId, questionId)
@@ -23,18 +21,15 @@ const mixinUserActionOnQuestion = {
       } else if (actionType === 'status') {
         this.userActionOnQuestion_status(data, examId, questionId, userQuestionData)
       }
+
       this.afterUserActionOnQuestion()
       return this.sendUserQuestionsDataToServer(examUserId, userExamData, questionId, actionType)
     },
     beforeUserActionOnQuestion (examId, questionId) {
-      console.log('beforeUserActionOnQuestion')
-      console.log(this.$store.state.quiz.currentQuestion)
-      console.log(!!this.$store.state.quiz.currentQuestion)
       this.$store.commit('quiz/updateCurrentQuestion', {
         newQuestionId: questionId,
         currentExamQuestions: this.getCurrentExamQuestions()
       })
-      console.log('cur:', this.$store.state.quiz.currentQuestion)
       this.$store.commit('quiz/changeQuestionRefreshQuestionObject', {
         exam_id: examId,
         question_id: questionId
