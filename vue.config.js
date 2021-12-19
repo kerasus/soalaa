@@ -14,6 +14,19 @@ let config = {
             openAnalyzer: process.env.VUE_APP_NODE_ENV === 'development'
         }
     },
+
+    pwa: {
+        name: 'آزمون آنلاین 3آ',
+        short_name: 'سه آ',
+        background_color: '#ffc107',
+        display: 'standalone',
+        theme_color: '#ffc107',
+        workboxPluginMode: 'InjectManifest',
+        workboxOptions: {
+            swSrc: './src/service-worker.js',
+        },
+        navigateFallback: './public/index.html'
+    },
     outputDir: 'dist'
 }
 
