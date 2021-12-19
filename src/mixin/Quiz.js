@@ -143,7 +143,6 @@ const mixinQuiz = {
       this.setCurrentExamQuestions(currentExamQuestions)
     },
     getCurrentExamQuestionsInArray () {
-
       let currentExamQuestionsArray = []
       if (this.quiZ !== {}) {
         const currentExamQuestionIndexes = this.getCurrentExamQuestionIndexes()
