@@ -1,6 +1,7 @@
 <template>
   <div class="question-field">
     <q-markup-table
+      wrap-cells
       separator="none"
       class="question-table"
       :class="{ 'current-question': this.currentQuestion.id === source.id, ltr: isLtrQuestion}"

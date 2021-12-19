@@ -203,7 +203,7 @@ const mixinQuiz = {
         if (that.needToLoadQuizData()) {
           window.currentExamQuestions = null
           window.currentExamQuestionIndexes = null
-          // that.$store.commit('loading/overlay', true)
+          that.$store.commit('loading/overlay', true)
           examData.getExamDataAndParticipate(examId)
           examData.loadQuestionsFromFile()
         } else {
@@ -234,15 +234,14 @@ const mixinQuiz = {
               })
               resolve(result)
             } catch (error) {
-              console.log(error)
               // that.$router.push({ name: 'user.exam.list' })
               // reject(error)
             }
           })
-          // .catch((error) => {
-          //   reject(error)
-          //   that.$router.push({ name: 'user.exam.list' })
-          // })
+          .catch((error) => {
+            reject(error)
+            that.$router.push({ name: 'user.exam.list' })
+          })
           .finally(() => {
             that.$store.commit('loading/overlay', false)
           })

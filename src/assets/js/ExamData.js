@@ -100,7 +100,7 @@ class ExamData {
         })
         .catch(error => {
           console.log('error', error)
-          // reject(error)
+          reject(error)
         })
     })
     )
@@ -176,9 +176,9 @@ class ExamData {
           that.userExamData = response.data
           resolve(response)
         })
-        // .catch(error => {
-        //   // reject(error)
-        // })
+        .catch(error => {
+          reject(error)
+        })
     })
     )
     return this
@@ -212,7 +212,7 @@ class ExamData {
         })
         .catch(error => {
           console.log('err', error)
-          // reject(error)
+          reject(error)
         })
     })
     )
