@@ -1,15 +1,14 @@
-import Assistant from '../plugins/assistant'
-import Time from '../plugins/time'
+import Assistant from 'src/plugins/assistant'
+import Time from 'src/plugins/time'
 import { QuestSubcategory, QuestSubcategoryList } from '../models/QuestSubcategory'
 import axios from 'axios'
 import API_ADDRESS from 'src/api/Addresses'
-import { Exam } from '../models/Exam'
-import { QuestCategoryList } from '../models/QuestCategory'
+import { Exam } from 'src/models/Exam'
+import { QuestCategoryList } from 'src/models/QuestCategory'
 // todo : jquery
 import $ from 'jquery'
-import { QuestionList } from '../models/Question'
+import { QuestionList } from 'src/models/Question'
 import ExamData from 'src/assets/js/ExamData'
-// import { User } from 'src/models/User'
 
 const mixinQuiz = {
   computed: {
@@ -41,7 +40,6 @@ const mixinQuiz = {
     },
     currentQuestion: {
       get () {
-        // this.$store.commit('Auth/updateUser', new User(this.userData))
         return this.$store.getters['quiz/currentQuestion']
       },
       set (newInfo) {
@@ -97,7 +95,6 @@ const mixinQuiz = {
       }
       return this.userQuizListData[quizId][questionId]
     },
-
     getCurrentExam () {
       return this.$store.getters['quiz/quiz']
     },
@@ -131,9 +128,9 @@ const mixinQuiz = {
       })
     },
     saveCurrentExamQuestions (questionsList) {
-      console.log('saveCurrentExamQuestions questionsList ', questionsList)
       const currentExamQuestions = {}
       const currentExamQuestionIndexes = {}
+
       this.sortQuestions(questionsList)
       questionsList.forEach((item, index) => {
         item.index = index
@@ -146,6 +143,7 @@ const mixinQuiz = {
       this.setCurrentExamQuestions(currentExamQuestions)
     },
     getCurrentExamQuestionsInArray () {
+
       let currentExamQuestionsArray = []
       if (this.quiZ !== {}) {
         const currentExamQuestionIndexes = this.getCurrentExamQuestionIndexes()
@@ -161,7 +159,6 @@ const mixinQuiz = {
       } else {
         currentExamQuestionsArray = this.quiZ
       }
-      console.log('currentExamQuestionsArray', currentExamQuestionsArray)
       return currentExamQuestionsArray
     },
     getCurrentExamQuestions () {
@@ -170,9 +167,6 @@ const mixinQuiz = {
       }
       window.currentExamQuestions = JSON.parse(window.localStorage.getItem('currentExamQuestions'))
       this.modifyCurrentExamQuestions(window.currentExamQuestions)
-      this.currentExamQuestions = Object.freeze(window.currentExamQuestions)
-      // Vue.set(this, 'currentExamQuestions', Object.freeze(window.currentExamQuestions))
-
       return window.currentExamQuestions
     },
     modifyCurrentExamQuestions (currentExamQuestions) {
@@ -199,7 +193,6 @@ const mixinQuiz = {
 
       return currentExamQuestionsArray
     },
-
     startExam (examId, viewType) {
       if (!Assistant.getId(examId)) {
         return
@@ -208,7 +201,6 @@ const mixinQuiz = {
       return new Promise(function (resolve, reject) {
         let userExamId
         const examData = new ExamData()
-        console.log('that.needToLoadQuizData() :', that.needToLoadQuizData())
         if (that.needToLoadQuizData()) {
           window.currentExamQuestions = null
           window.currentExamQuestionIndexes = null
@@ -216,15 +208,13 @@ const mixinQuiz = {
           examData.getExamDataAndParticipate(examId)
           examData.loadQuestionsFromFile()
         } else {
-          userExamId = '6135bddbe0db6947171ef98a'
+          userExamId = that.quiz.user_exam_id
           that.loadCurrentQuestion(viewType)
         }
         examData.getUserExamData(userExamId)
           .run()
           .then((result) => {
             try {
-              console.log('startExam in assets:', result)
-              console.log('that.needToLoadQuizData() after req :', that.needToLoadQuizData())
               if (that.needToLoadQuizData()) {
                 // save questions in localStorage
                 that.saveCurrentExamQuestions(examData.exam.questions.list)
@@ -245,33 +235,18 @@ const mixinQuiz = {
               })
               resolve(result)
             } catch (error) {
-              that.$router.push({ name: 'user.exam.list' })
-              reject(error)
+              console.log(error)
+              // that.$router.push({ name: 'user.exam.list' })
+              // reject(error)
             }
           })
-          .catch((error) => {
-            reject(error)
-            that.$router.push({ name: 'user.exam.list' })
-          })
+          // .catch((error) => {
+          //   reject(error)
+          //   that.$router.push({ name: 'user.exam.list' })
+          // })
           .finally(() => {
             that.$store.commit('loading/overlay', false)
           })
-
-        // if (that.needToLoadQuizData() && examId) {
-        //     that.participateExam(examId, viewType)
-        //         .then(() => {
-        //             resolve()
-        //         })
-        //         .catch((error) => {
-        //             that.$store.commit('loading/overlay', false)
-        //             Assistant.reportErrors({location: 'mixin/Quiz.js -> startExam()'})
-        //             reject(error)
-        //         })
-        // } else {
-        //     that.loadExam()
-        //     that.$store.commit('loading/overlay', false)
-        //     resolve()
-        // }
       })
     },
     needToLoadQuizData () {
@@ -361,7 +336,6 @@ const mixinQuiz = {
       this.$store.commit('quiz/updateQuiz', quiz)
     },
     loadCurrentQuestion (viewType) {
-      console.log('loadCurrentQuestion')
       let questNumber = this.$route.params.questNumber
       if (this.currentQuestion.order) {
         questNumber = this.currentQuestion.order
@@ -382,14 +356,12 @@ const mixinQuiz = {
       }
       this.changeQuestion(questionId, viewType)
     },
-
     hasExamDataOnThisDeviseStorage (examId) {
       return !!this.userQuizListData[examId]
     },
     sendUserQuestionsDataToServerAndFinishExam (examId, examUserId) {
       const userExamData = this.userQuizListData[examId]
       const answers = []
-
       for (const questionId in userExamData) {
         if (userExamData[questionId].answered_at) {
           answers.push({
@@ -402,10 +374,8 @@ const mixinQuiz = {
           })
         }
       }
-
       return axios.post(API_ADDRESS.exam.sendAnswers, { exam_user_id: examUserId, finish: true, questions: answers })
     },
-
     isLtrString (string) {
       if (!string) {
         return false
@@ -492,7 +462,6 @@ const mixinQuiz = {
       }
     },
     goToNextQuestion (viewType) {
-      // this.$store.commit('loadUserQuizListData')
       const question = this.getNextQuestion(this.currentQuestion.id)
       if (!question) {
         return
@@ -500,7 +469,6 @@ const mixinQuiz = {
       this.changeQuestion(question.id, viewType)
     },
     goToPrevQuestion (viewType) {
-      // this.$store.commit('loadUserQuizListData')
       const question = this.getPrevQuestion(this.currentQuestion.id)
       if (!question) {
         return
@@ -561,7 +529,7 @@ const mixinQuiz = {
       } else if (type === 'konkoor') {
         this.$store.commit('AppLayout/updateDrawer', false)
         setTimeout(() => {
-          this.$router.push({ name: 'konkoorView', params: { quizId: '6135bddbe0db6947171ef98a' } })
+          this.$router.push({ name: 'konkoorView', params: { quizId: this.quiz.id } })
         }, 200)
       }
     },
@@ -592,7 +560,7 @@ const mixinQuiz = {
           reject(null)
           return
         }
-        // ToDo : jQuery needed
+
         $.ajax({
           type: 'GET',
           url: questionsFileUrl,

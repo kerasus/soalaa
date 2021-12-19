@@ -8,13 +8,15 @@ export function resetState (state) {
   state.currentQuestion = null
   state.userQuizListData = {}
 }
+export function setPsychometricAnswer (state, newInfo) {
+  state.psychometricAnswer = newInfo
+}
 
 export function setQuiz (state, newInfo) {
   state.quiz = newInfo
 }
 
 export function updateQuiz (state, newInfo) {
-  console.log('updateQuiz in store')
   if (!newInfo) {
     return
   }
@@ -60,12 +62,10 @@ export function mergeDbAnswersIntoLocalstorage (state, payload) {
   if (!state.userQuizListData[examId]) {
     state.userQuizListData[examId] = {}
     // TODO --> 'vue.set'
-    state.userQuizListData[examId] = {}
     // Vue.set(state.userQuizListData, examId, {})
   }
 
   function merge (collection1, collection2) {
-    // console.log('merge in store')
     collection1.map(item1 => {
       const targetCollect2Index = collection2.findIndex(item2 => item1.question_id === item2.question_id)
       if (targetCollect2Index < 0) {
@@ -124,11 +124,11 @@ export function changeQuestionRefreshQuestionObject (state, payload) {
   const questionId = payload.question_id
   if (!state.userQuizListData[examId]) {
     // TODO --> 'vue.set'
-    // Vue.set(state.userQuizListData, examId, {})
+    state.userQuizListData[examId] = {}
   }
   if (!state.userQuizListData[examId][questionId]) {
     // TODO --> 'vue.set'
-    // Vue.set(state.userQuizListData[examId], questionId, {})
+    state.userQuizListData[examId][questionId] = {}
   }
 }
 
@@ -138,9 +138,9 @@ export function changeQuestionBookmark (state, payload) {
   if (!examId || !questionId) {
     return
   }
-  this.commit('changeQuestionRefreshQuestionObject', payload)
+  this.commit('quiz/changeQuestionRefreshQuestionObject', payload)
   // TODO --> 'vue.set'
-  // Vue.set(state.userQuizListData[examId][questionId], 'bookmarked', payload.bookmarked)
+  state.userQuizListData[examId][questionId].bookmarked = payload.bookmarked
 }
 
 export function changeQuestionSelectChoice (state, payload) {
@@ -149,15 +149,18 @@ export function changeQuestionSelectChoice (state, payload) {
   if (!examId || !questionId) {
     return
   }
-  this.commit('changeQuestionRefreshQuestionObject', payload)
+  this.commit('quiz/changeQuestionRefreshQuestionObject', payload)
   let answeredAt = Time.now()
   if (payload.selected_at) {
     answeredAt = payload.selected_at
     return answeredAt
   }
+
   // TODO --> 'vue.set'
   // Vue.set(state.userQuizListData[examId][questionId], 'answered_at', answeredAt)
   // Vue.set(state.userQuizListData[examId][questionId], 'answered_choice_id', payload.answered_choice_id)
+  state.userQuizListData[examId][questionId].answered_at = answeredAt
+  state.userQuizListData[examId][questionId].answered_choice_id = payload.answered_choice_id
 }
 
 export function changeQuestionStatus (state, payload) {
@@ -166,7 +169,7 @@ export function changeQuestionStatus (state, payload) {
   if (!examId || !questionId) {
     return
   }
-  this.commit('changeQuestionRefreshQuestionObject', payload)
+  this.commit('quiz/changeQuestionRefreshQuestionObject', payload)
   // TODO --> 'vue.set'
   state.userQuizListData[examId][questionId].status = payload.status
   // Vue.set(state.userQuizListData[examId][questionId], 'status', payload.status)
@@ -178,7 +181,7 @@ export function setUserQuizListData (state, payload) {
   if (!examId || !questionId) {
     return
   }
-  this.commit('changeQuestionRefreshQuestionObject', payload)
+  this.commit('quiz/changeQuestionRefreshQuestionObject', payload)
   // TODO --> 'vue.set'
   state.userQuizListData[examId][questionId] = {
     answered_at: payload.answered_at,
@@ -187,48 +190,30 @@ export function setUserQuizListData (state, payload) {
     bookmarked: payload.bookmarked,
     status: payload.status
   }
-  // Vue.set(state.userQuizListData[examId], questionId, {
-  //   answered_at: payload.answered_at,
-  //   answered_choice_id: payload.answered_choice_id,
-  //   check_in_times: payload.check_in_times,
-  //   bookmarked: payload.bookmarked,
-  //   status: payload.status
-  // })
 }
 
 export function clearExamData (state, examId) {
-  // console.log('clearExamData in store')
   delete state.userQuizListData[examId]
 }
 
 export function checkIfQuestionExistInUserQuizListData (state, questionId) {
-  // console.log('checkIfQuestionExistInUserQuizListData in store', state)
   if (!state.userQuizListData[state.quiz.id]) {
-    // console.log('checkIfQuestionExistInUserQuizListData state', state.userQuizListData)
-    // TODO --> 'vue.set'
     state.userQuizListData[state.quiz.id] = {}
-    // Vue.set(state.userQuizListData, state.quiz1.id, {})
   }
   if (!state.userQuizListData[state.quiz.id][questionId]) {
-    // TODO --> 'vue.set'
-    state.userQuizListData[state.quiz.id][state.quiz.id] = {}
-    // Vue.set(state.userQuizListData[state.quiz1.id], questionId, {})
+    state.userQuizListData[state.quiz.id][questionId] = {}
   }
 }
 
 export function enterQuestion (state, questionId) {
-  // console.log('enterQuestion in store state :', state, questionId)
   this.commit('quiz/checkIfQuestionExistInUserQuizListData', questionId)
-  if (!state.userQuizListData[state.quiz.id][questionId].check_in_times) {
-    // TODO --> 'vue.set'
-    state.userQuizListData[state.quiz.id][questionId].check_in_times = []
-    // Vue.set(state.userQuizListData[state.quiz1.id][questionId], 'check_in_times', [])
-  }
-  const checkInTimes = state.userQuizListData[state.quiz.id][questionId].check_in_times
-  checkInTimes.push({ start: Time.now(), end: null })
-  // TODO --> 'vue.set'
-  state.userQuizListData[state.quiz.id][questionId].check_in_times = checkInTimes
-  // Vue.set(state.userQuizListData[state.quiz1.id][questionId], 'check_in_times', check_in_times)
+  // if (!state.userQuizListData[state.quiz.id].questionId) {
+  //   console.log('state.userQuizListData[state.quiz.id].questionId ***********************************:', !state.userQuizListData[m])
+  //   // state.userQuizListData[state.quiz.id][questionId].check_in_times = []
+  // }
+  // const checkInTimes = state.userQuizListData[m].questionId.check_in_times
+  // checkInTimes.push({ start: Time.now(), end: null })
+  // state.userQuizListData[m].questionId.check_in_times = checkInTimes
 }
 
 export function leaveQuestion (state, questionId) {
@@ -244,7 +229,6 @@ export function leaveQuestion (state, questionId) {
 }
 
 export function updateCurrentQuestion (state, newInfo) {
-  // console.log('quiz/updateCurrentQuestion in store', newInfo)
   const oldQuestionId = (!state.currentQuestion) ? false : Assistant.getId(state.currentQuestion.id)
   const newQuestionId = Assistant.getId(newInfo.newQuestionId)
   if (!state.quiz || newQuestionId === oldQuestionId || !Assistant.getId(state.quiz.id)) {
@@ -252,10 +236,8 @@ export function updateCurrentQuestion (state, newInfo) {
   }
   const currentExamQuestions = newInfo.currentExamQuestions
   const currentQuestion = new Question(currentExamQuestions[newQuestionId])
-  // console.log('newQuestionId :', newQuestionId)
   if (newQuestionId) {
     this.commit('quiz/enterQuestion', newQuestionId)
-    // this.$store.dispatch('quiz/enterQuestion', newQuestionId)
   }
   if (oldQuestionId) {
     let currentQuizData = state.userQuizListData[state.quiz.id]
@@ -265,7 +247,7 @@ export function updateCurrentQuestion (state, newInfo) {
         examData: []
       }
     }
-    this.commit('leaveQuestion', oldQuestionId)
+    this.commit('quiz/leaveQuestion', oldQuestionId)
   }
 
   if (
