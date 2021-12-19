@@ -17,8 +17,8 @@
 </template>
 
 <script>
-import pcTimer from 'components/OnlineQuiz/Quiz/timer/pcTimer'
-import mobileTimer from 'components/OnlineQuiz/Quiz/timer/mobileTimer'
+import pcTimer from 'src/components/OnlineQuiz/Quiz/timer/pcTimer'
+import mobileTimer from 'src/components/OnlineQuiz/Quiz/timer/mobileTimer'
 import { mixinWindowSize, mixinQuiz } from 'src/mixin/Mixins'
 import Time from 'src/plugins/time'
 import Assistant from 'src/plugins/assistant'
