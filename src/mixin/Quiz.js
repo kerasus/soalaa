@@ -145,7 +145,7 @@ const mixinQuiz = {
     getCurrentExamQuestionsInArray () {
 
       let currentExamQuestionsArray = []
-      if (this.quiZ !== {}) {
+      if (this.quiz !== {}) {
         const currentExamQuestionIndexes = this.getCurrentExamQuestionIndexes()
         const currentExamQuestions = this.getCurrentExamQuestions()
         if (!currentExamQuestionIndexes) {
@@ -157,7 +157,8 @@ const mixinQuiz = {
           currentExamQuestionsArray.push(currentExamQuestions[questionId])
         })
       } else {
-        currentExamQuestionsArray = this.quiZ
+        // console.log(currentExamQuestionsArray)
+        currentExamQuestionsArray = this.quiz
       }
       return currentExamQuestionsArray
     },
@@ -204,7 +205,7 @@ const mixinQuiz = {
         if (that.needToLoadQuizData()) {
           window.currentExamQuestions = null
           window.currentExamQuestionIndexes = null
-          // that.$store.commit('loading/overlay', true)
+          that.$store.commit('loading/overlay', true)
           examData.getExamDataAndParticipate(examId)
           examData.loadQuestionsFromFile()
         } else {
@@ -235,15 +236,14 @@ const mixinQuiz = {
               })
               resolve(result)
             } catch (error) {
-              console.log(error)
-              // that.$router.push({ name: 'user.exam.list' })
-              // reject(error)
+              that.$router.push({ name: 'user.exam.list' })
+              reject(error)
             }
           })
-          // .catch((error) => {
-          //   reject(error)
-          //   that.$router.push({ name: 'user.exam.list' })
-          // })
+          .catch((error) => {
+            reject(error)
+            that.$router.push({ name: 'user.exam.list' })
+          })
           .finally(() => {
             that.$store.commit('loading/overlay', false)
           })
