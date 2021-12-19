@@ -92,13 +92,13 @@
 
 <script>
 import 'src/assets/scss/markdownKatex.scss'
-import Item from 'components/OnlineQuiz/Quiz/question/questionField'
+import Item from 'src/components/OnlineQuiz/Quiz/question/questionField'
 import { mixinAuth, mixinQuiz, mixinUserActionOnQuestion, mixinWindowSize } from 'src/mixin/Mixins'
-import Timer from 'components/OnlineQuiz/Quiz/timer/timer'
-import BubbleSheet from 'components/OnlineQuiz/Quiz/bubbleSheet/bubbleSheet'
+import Timer from 'src/components/OnlineQuiz/Quiz/timer/timer'
+import BubbleSheet from 'src/components/OnlineQuiz/Quiz/bubbleSheet/bubbleSheet'
 import { Exam } from 'src/models/Exam'
 // import Assistant from 'src/plugins/assistant'
-import TopMenu from 'components/Menu/topMenu/onlineQuizTopMenu'
+import TopMenu from 'src/components/Menu/topMenu/onlineQuizTopMenu'
 export default {
   name: 'konkoorView',
   components: {
@@ -135,17 +135,17 @@ export default {
     this.getUser()
     // const that = this
     this.startExam(this.$route.params.quizId, 'KonkoorView')
-    // .then(() => {
-    //   that.$store.dispatch('loading/overlayLoading', false)
-    // })
-    // .catch((error) => {
-    //   Assistant.reportErrors(error)
-    //   that.$q.notify({
-    //     message: 'مشکلی در دریافت اطلاعات آزمون رخ داده است. لطفا دوباره امتحان کنید.',
-    //     type: 'negative',
-    //     position: 'top'
+    //   .then(() => {
+    //     that.$store.dispatch('loading/overlayLoading', false)
     //   })
-    // })
+    //   .catch((error) => {
+    //     Assistant.reportErrors(error)
+    //     that.$q.notify({
+    //       message: 'مشکلی در دریافت اطلاعات آزمون رخ داده است. لطفا دوباره امتحان کنید.',
+    //       type: 'negative',
+    //       position: 'top'
+    //     })
+    //   })
     // if (this.windowSize.x > 959) {
     //   this.changeAppBarAndDrawer(false)
     // } else {
@@ -158,7 +158,6 @@ export default {
     if (!this.questions.length) {
       this.questions = this.getCurrentExamQuestionsInArray()
     }
-    console.log('question: 15', this.questions)
   },
   mounted () {
     // this.setHeights()

@@ -8,7 +8,7 @@ import { QuestCategoryList } from 'src/models/QuestCategory'
 // todo : jquery
 import $ from 'jquery'
 import { QuestionList } from 'src/models/Question'
-import ExamData from 'assets/js/ExamData'
+import ExamData from 'src/assets/js/ExamData'
 
 const mixinQuiz = {
   computed: {
@@ -99,7 +99,6 @@ const mixinQuiz = {
       return this.$store.getters['quiz/quiz']
     },
     getCurrentExamQuestionIndexes () {
-      console.log('currentExamQuestionIndexes:13', window.currentExamQuestionIndexes)
       if (window.currentExamQuestionIndexes) {
         return window.currentExamQuestionIndexes
       }
@@ -144,10 +143,8 @@ const mixinQuiz = {
       this.setCurrentExamQuestions(currentExamQuestions)
     },
     getCurrentExamQuestionsInArray () {
-      console.log('getCurrentExamQuestionsInArray')
       let currentExamQuestionsArray = []
       if (this.quiZ !== {}) {
-        console.log('1111')
         const currentExamQuestionIndexes = this.getCurrentExamQuestionIndexes()
         const currentExamQuestions = this.getCurrentExamQuestions()
         if (!currentExamQuestionIndexes) {
@@ -159,13 +156,11 @@ const mixinQuiz = {
           currentExamQuestionsArray.push(currentExamQuestions[questionId])
         })
       } else {
-        console.log(currentExamQuestionsArray)
         currentExamQuestionsArray = this.quiZ
       }
       return currentExamQuestionsArray
     },
     getCurrentExamQuestions () {
-      console.log('window.currentExamQuestions 14', window.currentExamQuestions)
       if (window.currentExamQuestions) {
         return window.currentExamQuestions
       }
@@ -174,7 +169,6 @@ const mixinQuiz = {
       return window.currentExamQuestions
     },
     modifyCurrentExamQuestions (currentExamQuestions) {
-      console.log('modifyCurrentExamQuestions')
       const currentExamQuestionsArray = []
       const currentExamQuestionIndexes = this.getCurrentExamQuestionIndexes()
       if (!currentExamQuestionIndexes) {
@@ -199,35 +193,27 @@ const mixinQuiz = {
       return currentExamQuestionsArray
     },
     startExam (examId, viewType) {
-      console.log('examId 1:', examId)
-      console.log('viewType 2:', viewType)
       if (!Assistant.getId(examId)) {
-        console.log('if :')
         return
       }
       const that = this
       return new Promise(function (resolve, reject) {
         let userExamId
         const examData = new ExamData()
-        console.log('examData: 3', examData)
-        console.log('examData  quiz 4: ', that.quiz)
         if (that.needToLoadQuizData()) {
-          console.log('load9')
           window.currentExamQuestions = null
           window.currentExamQuestionIndexes = null
-          that.$store.commit('loading/overlay', true)
+          // that.$store.commit('loading/overlay', true)
           examData.getExamDataAndParticipate(examId)
           examData.loadQuestionsFromFile()
         } else {
           userExamId = that.quiz.user_exam_id
-          console.log('userExamId:', userExamId)
           that.loadCurrentQuestion(viewType)
         }
         examData.getUserExamData(userExamId)
           .run()
           .then((result) => {
             try {
-              console.log('try')
               if (that.needToLoadQuizData()) {
                 // save questions in localStorage
                 that.saveCurrentExamQuestions(examData.exam.questions.list)
@@ -248,24 +234,21 @@ const mixinQuiz = {
               })
               resolve(result)
             } catch (error) {
-              that.$router.push({ name: 'user.exam.list' })
-              reject(error)
+              console.log(error)
+              // that.$router.push({ name: 'user.exam.list' })
+              // reject(error)
             }
           })
-          .catch((error) => {
-            reject(error)
-            that.$router.push({ name: 'user.exam.list' })
-          })
+          // .catch((error) => {
+          //   reject(error)
+          //   that.$router.push({ name: 'user.exam.list' })
+          // })
           .finally(() => {
             that.$store.commit('loading/overlay', false)
           })
       })
     },
     needToLoadQuizData () {
-      console.log('Assistant.getId(this.quiz.id):5', Assistant.getId(this.quiz.id))
-      console.log('Assistant.getId(this.quiz.user_exam_id)6', Assistant.getId(this.quiz.user_exam_id))
-      console.log('Assistant.getId(this.$route.params.quizId)7', Assistant.getId(this.$route.params.quizId))
-      console.log('Assistant.getId(this.quiz.id)8', Assistant.getId(this.quiz.id))
       return (!Assistant.getId(this.quiz.id) || !Assistant.getId(this.quiz.user_exam_id) || Assistant.getId(this.$route.params.quizId) !== Assistant.getId(this.quiz.id))
     },
     participateExam (examId, viewType) {
@@ -403,7 +386,6 @@ const mixinQuiz = {
     },
     answerClicked (data) {
       const questionId = data.questionId
-      console.log('answerClicked 2')
       return this.userActionOnQuestion(questionId, 'answer', { choiceId: data.choiceId })
     },
     changeBookmark (questionId) {
@@ -494,7 +476,6 @@ const mixinQuiz = {
       this.changeQuestion(question.id, viewType)
     },
     changeQuestion (id, viewType) {
-      console.log('changeQuestion', this.currentQuestion)
       if (Assistant.getId(this.currentQuestion.id) === Assistant.getId(id)) {
         return
       }
