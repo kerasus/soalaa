@@ -8,6 +8,9 @@ export function resetState (state) {
   state.currentQuestion = null
   state.userQuizListData = {}
 }
+export function setPsychometricAnswer (state, newInfo) {
+  state.psychometricAnswer = newInfo
+}
 
 export function setQuiz (state, newInfo) {
   state.quiz = newInfo
@@ -138,7 +141,6 @@ export function changeQuestionBookmark (state, payload) {
   this.commit('quiz/changeQuestionRefreshQuestionObject', payload)
   // TODO --> 'vue.set'
   state.userQuizListData[examId][questionId].bookmarked = payload.bookmarked
-  // Vue.set(state.userQuizListData[examId][questionId], 'bookmarked', payload.bookmarked)
 }
 
 export function changeQuestionSelectChoice (state, payload) {
@@ -153,6 +155,7 @@ export function changeQuestionSelectChoice (state, payload) {
     answeredAt = payload.selected_at
     return answeredAt
   }
+
   // TODO --> 'vue.set'
   // Vue.set(state.userQuizListData[examId][questionId], 'answered_at', answeredAt)
   // Vue.set(state.userQuizListData[examId][questionId], 'answered_choice_id', payload.answered_choice_id)

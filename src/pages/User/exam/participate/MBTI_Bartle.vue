@@ -118,13 +118,6 @@
                   />
                 </div>
               </div>
-<!--              <v-overlay :value="loading">-->
-<!--                <v-progress-circular-->
-<!--                  :size="50"-->
-<!--                  color="amber"-->
-<!--                  indeterminate-->
-<!--                />-->
-<!--              </v-overlay>-->
             </div>
           </div>
           <div class="next arrow-box">
@@ -158,7 +151,6 @@ export default {
   mixins: [mixinDrawer, mixinQuiz, mixinUserActionOnQuestion],
   data () {
     return {
-      loading: false,
       choiceKey: Date.now(),
       tryAgainDialog: false,
       finished: false
@@ -192,7 +184,7 @@ export default {
     const that = this
     this.startExam(that.$route.params.quizId, 'onlineQuiz.mbtiBartle')
       .then((res) => {
-        console.log('res in vue file :', res)
+        console.log('res in vue file !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! :', res)
         that.$store.commit('AppLayout/updateOverlay', { show: false, loading: false, text: '' })
         const unansweredQuestion = that.getUnansweredQuestionBehind()
         if (unansweredQuestion) {
@@ -206,13 +198,11 @@ export default {
       })
       .catch((error) => {
         // Assistant.reportErrors(error)
-        // that.$notify({
-        //   group: 'notifs',
-        //   title: 'توجه!',
-        //   text: 'مشکلی در دریافت اطلاعات آژمون رخ داده است. لطفا دوباره امتحان کنید.',
-        //   type: 'error'
-        // })
-        console.log('err in startExam vue comp :', error)
+        that.$q.notify({
+          message: 'مشکلی در دریافت اطلاعات آژمون رخ داده است. لطفا دوباره امتحان کنید.',
+          color: 'negative'
+        })
+        console.log('err in startExam vue comp !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! :', error)
         that.$router.push({ name: 'user.exam.list' })
       })
   },
@@ -260,6 +250,7 @@ export default {
     },
     isLastQuestion () {
       const countOfQuestions = Object.keys(this.currentExamQuestions).length
+      console.log('isLastQuestion ', countOfQuestions.toString() === this.$route.params.questNumber.toString())
       return countOfQuestions.toString() === this.$route.params.questNumber.toString()
     },
     getUnansweredQuestionBehind () {
@@ -317,53 +308,57 @@ export default {
       })
     },
     choiceClick (id) {
-      this.loading = true
+      console.log('choiceClick ')
+      this.$store.dispatch('loading/overlayLoading', true)
       const that = this
       const isLastQuestion = this.isLastQuestion()
       const answerClickedPromise = this.answerClicked({ choiceId: id, questionId: this.currentQuestion.id })
-      answerClickedPromise
-        .then((response) => {
-          const targetQuestion = response.data.data.find(item => (
-            this.currentQuestion.id !== null &&
+      answerClickedPromise.then((response) => {
+        const targetQuestion = response.data.data.find(item => (
+          this.currentQuestion.id !== null &&
                 item.question_id !== null &&
                 item.question_id.toString() === this.currentQuestion.id.toString())
-          )
-          if (
-            targetQuestion &&
+        )
+        if (
+          targetQuestion &&
                 targetQuestion.choice_id &&
                 targetQuestion.choice_id.toString()
-          ) {
-            if (!isLastQuestion) {
-              that.setCurrentQuestionChoice(targetQuestion.choice_id, true)
-              setTimeout(() => {
-                that.goToNextQuestion('onlineQuiz.mbtiBartle')
-              }, 500)
-            } else {
-              that.setCurrentQuestionChoice(targetQuestion.choice_id, true)
-              setTimeout(() => {
-                that.startExam(that.$route.params.quizId, 'onlineQuiz.mbtiBartle')
-                  .then(() => {
-                    that.$store.commit('AppLayout/updateOverlay', { show: false, loading: false, text: '' })
-                    const unansweredQuestion = that.getUnansweredQuestionBehind()
-                    if (unansweredQuestion) {
-                      that.changeQuestion(unansweredQuestion.id, 'onlineQuiz.mbtiBartle')
-                    } else {
-                      const isFinished = that.isFinished()
-                      if (isFinished) {
-                        that.sendAnswersAndFinishExam()
-                      }
-                    }
-                  })
-              }, 500)
-            }
+        ) {
+          if (!isLastQuestion) {
+            that.setCurrentQuestionChoice(targetQuestion.choice_id, true)
+            setTimeout(() => {
+              that.goToNextQuestion('onlineQuiz.mbtiBartle')
+            }, 500)
           } else {
-            that.setCurrentQuestionChoice(null, false)
-            that.loading = false
+            that.setCurrentQuestionChoice(targetQuestion.choice_id, true)
+            setTimeout(() => {
+              that.startExam(that.$route.params.quizId, 'onlineQuiz.mbtiBartle')
+                .then(() => {
+                  that.$store.commit('AppLayout/updateOverlay', { show: false, loading: false, text: '' })
+                  const unansweredQuestion = that.getUnansweredQuestionBehind()
+                  if (unansweredQuestion) {
+                    that.changeQuestion(unansweredQuestion.id, 'onlineQuiz.mbtiBartle')
+                  } else {
+                    const isFinished = that.isFinished()
+                    if (isFinished) {
+                      that.sendAnswersAndFinishExam()
+                    }
+                  }
+                })
+            }, 500)
           }
+        } else {
+          that.setCurrentQuestionChoice(null, false)
+          this.$store.dispatch('loading/overlayLoading', false)
+        }
+      })
+        .catch((e) => {
+          console.log(e)
+          this.$store.dispatch('loading/overlayLoading', false)
         })
     },
     sendAnswersAndFinishExam () {
-      // console.log('sendAnswersAndFinishExam')
+      console.log('sendAnswersAndFinishExam')
       const that = this
       this.sendUserQuestionsDataToServerAndFinishExam(this.quiz.id, this.quiz.user_exam_id)
         .then(() => {
@@ -374,7 +369,7 @@ export default {
           // })
           that.$store.commit('quiz/clearExamData', that.quiz.id)
           that.tryAgainDialog = false
-          // console.log('need to see result')
+          console.log('need to see result')
           that.$router.push({ name: 'mbtiBartle.result', params: { exam_id: this.quiz.id.toString(), user_exam_id: this.quiz.user_exam_id.toString() } })
         })
         .catch(() => {
