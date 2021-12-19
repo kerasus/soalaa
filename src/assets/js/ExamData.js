@@ -99,8 +99,8 @@ class ExamData {
           resolve(response.data)
         })
         .catch(error => {
-          console.log('error', error)
-          // reject(error)
+           console.log('error', error)
+          reject(error)
         })
     })
     )
@@ -162,6 +162,7 @@ class ExamData {
   }
 
   getUserExamData (userExamId) {
+
     const that = this
     this.commands.push(() => new Promise((resolve, reject) => {
       if (!userExamId && !that.exam) {
@@ -176,9 +177,10 @@ class ExamData {
           that.userExamData = response.data
           resolve(response)
         })
-        // .catch(error => {
-        //   // reject(error)
-        // })
+        .catch(error => {
+          reject(error)
+        })
+
     })
     )
     return this
@@ -212,7 +214,7 @@ class ExamData {
         })
         .catch(error => {
           console.log('err', error)
-          // reject(error)
+          reject(error)
         })
     })
     )

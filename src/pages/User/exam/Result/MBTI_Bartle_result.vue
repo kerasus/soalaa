@@ -1,190 +1,192 @@
 <template>
-  <div class="char-results">
-    <p class="exam-title">
-      نتیجه تست شخصیت شناسی MBTI
-    </p>
-    <div
-      class="char-info"
-      :style="{ background: result.charBg }"
-    >
-      <div class="row">
-        <p class="char-type-title-mobile d-block sm-hidden">
-          {{ mbtiGroup }}
-          <span>{{ 'تیپ شخصیتی ' + result.type }}</span>
+  <q-layout>
+    <q-page-container>
+      <div class="char-results">
+        <p class="exam-title">
+          نتیجه تست شخصیت شناسی MBTI
         </p>
-      </div>
-      <div class="row">
-        <div class="col-lg-5 col-sm-6"
-        >
-          <div class="char-info-text">
-            <p class="char-type-title d-none d-sm-block">
-              {{ mbtiGroup }}
-              <span>{{ 'تیپ شخصیتی ' + result.type }}</span>
-            </p>
-            <div class="char-details">
-              <p>
-                <span>افراد {{ result.type }}</span>
-              </p>
-              <p v-html="mbtiBartleData.mbtiType[result.type].shortText"/>
-            </div>
-          </div>
-        </div>
-        <div class="col-lg-7 col-sm-6">
-          <q-img :src="mbtiBartleData.mbtiType[result.type].image1"/>
-        </div>
-      </div>
-    </div>
-      <div class="row mbti-detail-box-parent">
         <div
-          class="col-md-6 col-12"
-          dir="ltr"
-          v-for="(item, index) in result.details"
-          :key="index"
+          class="char-info"
+          :style="{ background: result.charBg }"
         >
-          <div
-            class="mbti-detail-box"
-            dir="rtl"
-          >
-            <div :class="{ 'variable-box': true, active: item.values[0].percent > 50 }">
-              <div class="variable-label">
-                {{ item.values[0].label }}
+            <div class="container full-height">
+              <div class="row">
+                <p class="char-type-title-mobile">
+                 {{ mbtiGroup }}
+                  <span>{{ 'تیپ شخصیتی ' + result.type }}</span>
+                </p>
               </div>
-              <span>
+              <div class="full-height row safari-flex">
+                <div class="col-lg-5 col-sm-6 col-12 text-box-order"
+                >
+                  <div class="char-info-text full-height">
+                    <p class="char-type-title">
+                        {{ mbtiGroup }}
+                      <span>{{ 'تیپ شخصیتی ' + result.type }}</span>
+                    </p>
+                    <div class="char-details">
+                      <p>
+                        <span>افراد {{ result.type }}</span>
+                      </p>
+                      <p v-html="mbtiBartleData.mbtiType[result.type].shortText"/>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-lg-7 col-sm-6 col-12 img-box-order" >
+                  <q-img :src="mbtiBartleData.mbtiType[result.type].image1"/>
+                </div>
+              </div>
+            </div>
+
+        </div>
+        <div class="container">
+          <div class="row justify-center mbti-detail-box-parent"
+          dir="ltr"
+          >
+            <div
+              class="col-md-6 col-12 mitra"
+              v-for="(item, index) in result.details"
+              :key="index"
+              dir="rtl"
+            >
+              <div
+                class="mbti-detail-box"
+              >
+                <div :class="{ 'variable-box': true, active: item.values[0].percent > 50 }">
+                  <div class="variable-label">
+                    {{ item.values[0].label }}
+                  </div>
+                  <span>
                     {{ item.values[0].title }}
                   </span>
-              <span>
+                  <span>
                     {{ item.values[0].percent }}٪
                   </span>
-            </div>
-            <div class="variable-details">
-              <p class="variable-title">
-                {{ item.title }}
-              </p>
-              <p class="variable-description">
-                {{ item.text }}
-              </p>
-              <div class="progress-bar">
-                <q-linear-progress
-                  v-if="item.values[0].percent > 50"
-                  :value="item.values[0].percent/100"
-                  rounded
-                  track-color="white"
-                  size="12px"
-                  class="progress-left shadow-3"
-                />
-                <q-linear-progress
-                  v-else
-                  :value="item.values[1].percent/100"
-                  rounded
-                  track-color="white"
-                  reverse
-                  size="12px"
-                  class="progress-right shadow-3"
-                />
-              </div>
-            </div>
-            <div :class="{ 'variable-box': true, active: item.values[1].percent > 50 }">
-              <div class="variable-label">
-                {{ item.values[1].label }}
-              </div>
-              <span>
+                </div>
+                <div class="variable-details">
+                  <p class="variable-title">
+                    {{ item.title }}
+                  </p>
+                  <p class="variable-description">
+                    {{ item.text }}
+                  </p>
+                  <div class="progress-bar">
+                    <q-linear-progress
+                      :value="item.values[0].percent > 50 ? item.values[0].percent/100 :item.values[1].percent/100"
+                      rounded
+                      :reverse="item.values[1].percent > 50"
+                      track-color="white"
+                      size="12px"
+                    />
+                  </div>
+                </div>
+                <div :class="{ 'variable-box': true, active: item.values[1].percent > 50 }">
+                  <div class="variable-label">
+                    {{ item.values[1].label }}
+                  </div>
+                  <span>
                     {{ item.values[1].title }}
                   </span>
-              <span>
+                  <span>
                     {{ item.values[1].percent }}٪
                   </span>
+                </div>
+              </div>
             </div>
           </div>
-        </div>
-      </div>
-      <div class="row type-explanation ">
-        <p class="type-header">
-          ویژگی های شخصیت {{ result.type }}
-        </p>
-        <div class="banner">
-          <q-img :src="mbtiBartleData.mbtiType[result.type].image2"/>
-        </div>
-        <p
-          class="full"
-          v-html="mbtiBartleData.mbtiType[result.type].text"
-        />
-      </div>
-      <p class="exam-title">
-        نتیجه تست Bartle
-      </p>
-      <div
-        v-if="bartleResult[0]"
-        class="char-results-bartle"
-      >
-        <div class="row main-result">
-          <div class="col d-flex flex-column align-center">
-            <p class="your-type">
-              تیپ شخصیتی شما
-            </p>
 
-            <q-circular-progress
-              show-value
-              reverse
-              class="mt-4 bartle-item-circle"
-              :value="bartleResult[0].value"
-              color="red"
-              size="80px"
-              track-color="grey-4"
-            >
-              <q-avatar class="bg-white" >
-                <q-img :src="bartleResult[0].image"/>
-              </q-avatar>
-            </q-circular-progress>
-            <p
-              class="your-type-bartle"
-            >
-              {{ bartleResult[0].text }} {{ bartleResult[0].value }}%
-            </p>
+        <div class="row type-explanation justify-center">
+          <p class="type-header">
+            ویژگی های شخصیت {{ result.type }}
+          </p>
+          <div class="banner">
+            <q-img :src="mbtiBartleData.mbtiType[result.type].image2"/>
           </div>
+          <p
+            class="full"
+            v-html="mbtiBartleData.mbtiType[result.type].text"
+          />
         </div>
-        <div class="row other-result">
-          <div class=" d-flex flex-sm-row flex-column justify-space-around">
-            <div
-              v-for="item in 3"
-              :key="item"
-              class="d-flex flex-sm-column flex-row align-center justify-center"
-            >
+        </div>
+        <p class="exam-title">
+          نتیجه تست Bartle
+        </p>
+        <div
+          v-if="bartleResult[0]"
+          class="char-results-bartle"
+        >
+        <div class="container q-mb-lg">
+          <div class="row main-result justify-center">
+            <div class="column items-center">
+              <p class="your-type">
+                تیپ شخصیتی شما
+              </p>
               <q-circular-progress
                 show-value
                 reverse
-                :value="bartleResult[item].value"
+                class="mt-4 bartle-item-circle"
+                :value="bartleResult[0].value"
                 color="red"
-                 size="50px"
-                 track-color="grey-4"
-                @click="changeSelectedBartleItem(bartleResult[item])"
+                size="240px"
+                :thickness="0.1"
+                track-color="grey-4"
               >
-                  <q-avatar>
-
-                  <q-img
-                    :src="bartleResult[item].image"
-                  />
-
-                    </q-avatar>
+                <div class="inside-bartle-result-circle  q-pa-lg">
+                  <q-img :src="bartleResult[0].image"/>
+                </div>
               </q-circular-progress>
-              <p class="other-type-bartle mr-6 mr-sm-0">
-                {{ bartleResult[item].text }} {{ bartleResult[item].value }}%
+              <p
+                class="your-type-bartle"
+              >
+                {{ bartleResult[0].text }} {{ bartleResult[0].value }}%
               </p>
             </div>
           </div>
+          <div class="row other-result q-mt-lg ">
+            <div class="other-result-circular-progress-box">
+              <div
+                v-for="item in 3"
+                :key="item"
+                class="circular-progress-box"
+              >
+                <q-circular-progress
+                  show-value
+                  reverse
+                  :value="bartleResult[item].value"
+                  color="red"
+                  size="125px"
+                  :thickness="0.1"
+                  track-color="grey-4"
+                  @click="changeSelectedBartleItem(bartleResult[item])"
+                >
+                  <div class="inside-bartle-result-circle q-pa-md q-pa-xs-none">
+                    <q-img
+                      :src="bartleResult[item].image"
+                    />
+                  </div>
+                </q-circular-progress>
+                <p class="other-type-bartle">
+               {{ bartleResult[item].text }} {{ bartleResult[item].value }}%
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+        </div>
+        <div v-if="selectedBartleItem">
+          <div class="row type-explanation container" >
+            <p class="type-header">
+              ویژگی های شخصیت {{ selectedBartleItem.text }}
+            </p>
+            <p
+              class="full"
+              v-html="selectedBartleItem.fullText"
+            />
+          </div>
         </div>
       </div>
-      <div v-if="selectedBartleItem">
-        <div class=" row type-explanation">
-          <p class="type-header">
-            ویژگی های شخصیت {{ selectedBartleItem.text }}
-          </p>
-          <p
-            class="full"
-            v-html="selectedBartleItem.fullText"
-          />
-        </div>
-      </div>
-  </div>
+    </q-page-container>
+  </q-layout>
 </template>
 
 <script>
@@ -310,6 +312,7 @@ export default {
     }
   },
   created () {
+    this.$store.commit('AppLayout/updateDrawer', true)
     window.currentExamQuestions = null
     window.currentExamQuestionIndexes = null
     this.$store.commit('AppLayout/updateOverlay', { show: true, loading: true, text: '' })
@@ -505,7 +508,17 @@ export default {
 .bartle-item-circle {
   cursor: pointer;
 }
-
+.test{
+  border: 2px solid mediumvioletred;
+}
+.test2{
+  border: 2px solid #5486f1;
+}
+.container {
+  max-width: 1185px;
+  margin: 0 auto;
+  padding: 15px;
+}
 .full-height {
   height: 100%;
 }
@@ -535,7 +548,27 @@ export default {
     @media only screen and (max-width: 599px) {
       height: auto;
     }
+    .safari-flex{
+      display: -webkit-flex;
+    }
+    .text-box-order{
+      /* Safari 6.1+ */
+      -webkit-order: 1;
+      order: 1;
+      @media only screen and (max-width: 599px) {
+        -webkit-order: 3;
+        order: 3;
 
+      }
+    }
+    .img-box-order{
+      -webkit-order: 1;
+      order: 1;
+      @media only screen and (max-width: 599px) {
+        -webkit-order: 2;
+        order: 2;
+      }
+    }
     .container {
       @media only screen and (max-width: 959px) {
         padding: 20px;
@@ -546,6 +579,10 @@ export default {
       text-align: center;
       font-size: 18px;
       font-weight: 500;
+      display: none;
+      @media only screen and (max-width: 600px) {
+        display: block;
+      }
     }
 
     .char-info-text {
@@ -556,7 +593,9 @@ export default {
       .char-type-title {
         font-size: 20px;
         font-weight: 500;
-
+        @media only screen and (max-width: 600px) {
+          display: none;
+        }
         span {
           margin-right: 15px;
           @media only screen and (max-width: 959px) {
@@ -603,8 +642,6 @@ export default {
   }
 
   .mbti-detail-box-parent {
-
-    direction: ltr;
     margin: 38px 0;
     @media only screen and (max-width: 767px) {
       font-size: 14px;
@@ -613,10 +650,11 @@ export default {
       margin: 16px 0;
     }
     .mbti-detail-box{
-      border: solid 2px red;
+      margin: 12px;
     }
+
     :nth-child(1) .mbti-detail-box {
-      background-image: linear-gradient(100deg, rgba(212, 255, 213, 0.4) 2%, rgba(242, 255, 242, 0.4) 90%);
+      background-image: linear-gradient(100deg,rgba(242, 255, 242, 0.4) 2%, rgba(212, 255, 213, 0.4) 90%);
       color: #4caf50;
 
       .variable-box:nth-child(1) * {
@@ -631,7 +669,7 @@ export default {
     }
 
     :nth-child(2) .mbti-detail-box {
-      background-image: linear-gradient(100deg, rgba(244, 243, 255, 0.4) 2%, rgba(203, 194, 255, 0.4) 90%);
+      background-image: linear-gradient(100deg, rgba(203, 194, 255, 0.4) 2%, rgba(244, 243, 255, 0.4) 90%);
       color: #7e57c2;
 
       .variable-box:nth-child(3) * {
@@ -646,7 +684,7 @@ export default {
     }
 
     :nth-child(3) .mbti-detail-box {
-      background-image: linear-gradient(100deg, rgba(255, 227, 190, 0.4) 2%, rgba(255, 248, 238, 0.4) 90%);
+      background-image: linear-gradient(100deg, rgba(255, 248, 238, 0.4) 2%, rgba(255, 227, 190, 0.4) 90%);
       color: #ff9100;
 
       .variable-box:nth-child(1) * {
@@ -661,7 +699,7 @@ export default {
     }
 
     :nth-child(4) .mbti-detail-box {
-      background-image: linear-gradient(100deg, rgba(243, 250, 255, 0.4) 2%, rgba(172, 217, 255, 0.4) 90%);
+      background-image: linear-gradient(100deg, rgba(172, 217, 255, 0.4) 2%, rgba(243, 250, 255, 0.4) 90%);
       color: #1e88e5;
 
       .variable-box:nth-child(3) * {
@@ -676,7 +714,6 @@ export default {
     }
 
     .mbti-detail-box {
-      direction: rtl;
       display: flex;
       flex-direction: row;
       justify-content: space-between;
@@ -749,23 +786,25 @@ export default {
             width: 100%;
           }
 
-          .v-progress-linear {
-            box-shadow: 0 5px 10px 0 rgba(126, 87, 194, 0.2);
-          }
         }
       }
     }
   }
 
   .type-explanation {
+    .banner{
+      width: 100%;
+    }
     .full {
+      font-size: 16px;
       text-align: justify;
+      color: rgba(0, 0, 0, 0.87);
     }
 
     .type-header {
       font-size: 20px;
       font-weight: 500;
-      text-align: center;
+      color: rgba(0, 0, 0, 0.87);
     }
   }
 }
@@ -785,15 +824,16 @@ export default {
   .main-result {
     .inside-bartle-result-circle {
       background: #fff;
-      width: 240px;
-      height: 240px;
+      width: 220px;
+      z-index: 0;
+      height: 220px;
       border-radius: 50%;
       display: flex;
       justify-content: center;
       align-items: center;
       @media only screen and (max-width: 767px) {
-        width: 200px;
-        height: 200px;
+        width: 180px;
+        height: 180px;
       }
     }
 
@@ -803,32 +843,63 @@ export default {
         height: 200px !important;
       }
     }
+    .your-type-bartle {
+      font-size: 40px;
+      font-weight: bold;
+      margin: 20px 0;
+      color: rgba(0, 0, 0, 0.87);
+    }
   }
 
   .other-result {
     justify-content: center;
-
+    max-width: 700px !important;
+    margin: 50px auto;
+    .other-result-circular-progress-box{
+      display: flex;
+      width: 100%;
+      justify-content: space-around;
+      @media only screen and (max-width: 600px) {
+        flex-direction: column;
+      }
+    }
+    .circular-progress-box{
+      margin: 0 15px;
+      display: flex;
+      flex-direction: column;
+      @media only screen and (max-width: 600px) {
+        margin: 10px 0;
+       flex-direction: row;
+        justify-content: center;
+      }
+    }
     .inside-bartle-result-circle {
       background: #fff;
-      width: 125px;
-      height: 125px;
+      width: 115px;
+      height: 115px;
       border-radius: 50%;
       display: flex;
       justify-content: center;
       align-items: center;
       @media only screen and (max-width: 767px) {
-        width: 100px;
-        height: 100px;
+        width: 90px;
+        height:90px;
       }
     }
-
-    .v-progress-circular {
-      @media only screen and (max-width: 767px) {
-        width: 100px !important;
-        height: 100px !important;
+    .other-type-bartle {
+      min-width: 117px;
+      text-align: center;
+      font-size: 20px;
+      font-weight: 500;
+      margin: 20px 0;
+      color: rgba(0, 0, 0, 0.87);
+      @media only screen and (max-width: 600px) {
+        margin: 0 20px;
+        display: flex;
+        align-items: center;
       }
-    }
 
+    }
     .col {
       max-width: 700px !important;
     }
@@ -841,30 +912,33 @@ export default {
     margin-top: 18px;
   }
 
-  .your-type-bartle {
-    font-size: 40px;
-    font-weight: bold;
-    margin: 20px 0;
-  }
-
-  .other-type-bartle {
-    min-width: 117px;
-    text-align: center;
-    font-size: 20px;
-    font-weight: 500;
-    margin: 20px 0;
-  }
 }
 </style>
 
 <style lang="scss">
+
+.main-result{
+  .q-circular-progress{
+    @media only screen and (max-width: 767px) {
+      font-size: 200px !important;
+    }
+  }
+}
+.other-result{
+  .q-circular-progress{
+    @media only screen and (max-width: 767px) {
+      font-size: 100px !important;
+    }
+  }
+}
 .char-results{
   .mbti-detail-box-parent {
     .mbti-detail-box{
       .variable-details{
         .progress-bar{
           .q-linear-progress{
-            border-radius: 6px !important;
+            border-radius: 6px ;
+            box-shadow: 0 5px 10px 0 rgba(126, 87, 194, 0.2);
           }
         }
       }
@@ -904,6 +978,7 @@ export default {
         .variable-details{
           .progress-bar{
             .q-linear-progress{
+
               .q-linear-progress__model{
                 color: #ff9100 ;
               }
