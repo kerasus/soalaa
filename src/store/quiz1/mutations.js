@@ -155,6 +155,7 @@ export function changeQuestionSelectChoice (state, payload) {
     answeredAt = payload.selected_at
     return answeredAt
   }
+
   // TODO --> 'vue.set'
   // Vue.set(state.userQuizListData[examId][questionId], 'answered_at', answeredAt)
   // Vue.set(state.userQuizListData[examId][questionId], 'answered_choice_id', payload.answered_choice_id)
@@ -229,10 +230,7 @@ export function leaveQuestion (state, questionId) {
 
 export function updateCurrentQuestion (state, newInfo) {
   const oldQuestionId = (!state.currentQuestion) ? false : Assistant.getId(state.currentQuestion.id)
-  console.log('oldQuestionId', oldQuestionId)
   const newQuestionId = Assistant.getId(newInfo.newQuestionId)
-  console.log('newQuestionId', newQuestionId)
-
   if (!state.quiz || newQuestionId === oldQuestionId || !Assistant.getId(state.quiz.id)) {
     return
   }
