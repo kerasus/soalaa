@@ -340,6 +340,7 @@ class Question extends Model {
     }
 
     sendUserActionToServer(type, exam_user_id , dataToSendObject) {
+        this.actionsWhileSendingData();
         if (type === 'answer') {
             let answerArray = dataToSendObject.answerArray
             let failedAnswersArray = dataToSendObject.failedAnswersArray
@@ -364,7 +365,6 @@ class Question extends Model {
             let status = dataToSendObject.status
             return axios.post(API_ADDRESS.exam.sendStatus, {exam_user_id, question_id, status})
         }
-        this.actionsWhileSendingData();
     }
 }
 
