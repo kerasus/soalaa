@@ -335,7 +335,7 @@ class Question extends Model {
         })
     }
 
-    userActionWhileSending(){
+    actionsWhileSendingData(){
         //things happen
     }
 
@@ -364,7 +364,7 @@ class Question extends Model {
             let status = dataToSendObject.status
             return axios.post(API_ADDRESS.exam.sendStatus, {exam_user_id, question_id, status})
         }
-        this.userActionWhileSending();
+        this.actionsWhileSendingData();
     }
 }
 
