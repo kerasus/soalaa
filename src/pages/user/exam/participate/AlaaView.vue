@@ -248,9 +248,9 @@ export default {
   text-decoration: none !important;
 }
 
-.ltr .renderedPanel {
-  direction: ltr !important;
-}
+    .ltr .renderedPanel {
+        direction: ltr !important;
+    }
 
 .v-navigation-drawer.mapOfQuestions .v-navigation-drawer__content {
   overflow-y: scroll;
