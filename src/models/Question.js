@@ -352,11 +352,11 @@ class Question extends Model {
                 })
         }
         if (type === 'bookmark') {
-            let question_id = dataToSendObject
+            let question_id = dataToSendObject.question_id
             return axios.post(API_ADDRESS.exam.sendBookmark, {exam_user_id, question_id})
         }
         if (type === 'unBookmark') {
-            let question_id = dataToSendObject
+            let question_id = dataToSendObject.question_id
             return axios.post(API_ADDRESS.exam.sendUnBookmark, {exam_user_id, question_id})
         }
         if (type === 'status') {
