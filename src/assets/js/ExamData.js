@@ -177,7 +177,8 @@ class ExamData {
           resolve(response)
         })
         .catch(error => {
-          reject(error)
+          console.log(error)
+          // reject(error)
         })
     })
     )
@@ -197,6 +198,7 @@ class ExamData {
       }
       axios.post(API_ADDRESS.exam.examUser, { exam_id: examId })
         .then(response => {
+          console.log('axios')
           that.exam = new Exam()
           // ToDo: attention on user_exam_id and exam_id
           that.exam.id = Assistant.getId(response.data.data.exam_id)

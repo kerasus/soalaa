@@ -1,5 +1,24 @@
 <template>
-  <div class="question-field">
+  <div
+    v-intersection="inView"
+    class="question-field"
+  >
+    <q-card
+      v-if="considerActiveCategory && !source.in_active_category"
+      class="alert-sheet shadow-2"
+      :class="currentQuestion.id === source.id ? 'red-sheet' : 'orange-sheet'"
+      rounded
+      dark
+    >
+      <q-card-section class="alert-sheet-text">
+        (
+        سوال شماره
+        {{ getQuestionNumberFromId(source.id) }}
+        )
+        <br>
+        در حال حاضر امکان مشاهده سوالات این دفترچه امکان پذیر نمی باشد
+      </q-card-section>
+    </q-card>
     <q-markup-table
       wrap-cells
       separator="none"
@@ -214,7 +233,7 @@ export default {
 
       return this.userQuizListData[this.quiz.id][this.source.id].answered_choice_id
     },
-    test (payload) {
+    inView (payload) {
       this.$emit('inView', {
         isInView: payload.isIntersecting,
         number: this.getQuestionNumberFromId(this.source.id)
@@ -258,6 +277,20 @@ export default {
 <style lang="scss" scoped>
 .question-field{
   width: 100% !important;
+  .alert-sheet{
+    margin: 10px;
+    display: flex;
+    height: 200px;
+    .alert-sheet-text{
+      margin: auto;
+    }
+    &.red-sheet{
+      background-color: #F44336;
+    }
+    &.orange-sheet{
+      background-color: #fb8c00;
+    }
+  }
   .question-table {
     padding: 10px 10px 10px 30px;
     &.current-question {
