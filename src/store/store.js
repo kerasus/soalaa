@@ -148,7 +148,7 @@ const store = new Vuex.Store({
 
         },
         changeQuestion_SelectChoice(state, payload) {
-            let errorReceived = !navigator.onLine
+            let offline = !navigator.onLine
             // let errorReceived = true
             let examId = payload.exam_id
             let questionId = payload.question_id
@@ -164,7 +164,7 @@ const store = new Vuex.Store({
             Vue.set(state.userQuizListData[examId][questionId], 'answered_at', answeredAt)
             Vue.set(state.userQuizListData[examId][questionId], 'answered_choice_id', payload.answered_choice_id)
 
-            if (errorReceived) {
+            if (offline) {
                 let failedListAnswerDataObject = {choice_id: choiceId, question_id: questionId, selected_at: answeredAt}
                 state.failedListAnswerData.push(failedListAnswerDataObject)
                 state.failedListAnswerData = [...new Map(state.failedListAnswerData.map(v => [v.question_id, v])).values()]
