@@ -67,19 +67,19 @@ const mixinUserActionOnQuestion = {
             let question = new Question()
             if (online){
                 if (actionType === 'answer') {
-                    return question.sendAnswer(examUserId, userQuestionDataFromLocalstorage.dataToSendAnswer , userQuestionDataFromLocalstorage.dataToSendFailedAnswers)
+                    return question.sendUserActionToServer('answer' ,examUserId, {answerArray: userQuestionDataFromLocalstorage.dataToSendAnswer , failedAnswersArray: userQuestionDataFromLocalstorage.dataToSendFailedAnswers})
                 }
             }
 
             if (actionType === 'bookmark') {
                 if (userQuestionDataFromLocalstorage.userQuestionData.bookmarked) {
-                    return question.sendBookmark(examUserId, userQuestionDataFromLocalstorage.dataToSendBookmark)
+                    return question.sendUserActionToServer('bookmark' ,examUserId, {question_id: userQuestionDataFromLocalstorage.dataToSendBookmark})
                 } else {
-                    return question.sendUnBookmark(examUserId, userQuestionDataFromLocalstorage.dataToSendBookmark)
+                    return question.sendUserActionToServer('unBookmark' ,examUserId, {question_id: userQuestionDataFromLocalstorage.dataToSendBookmark})
                 }
             }
             if (actionType === 'status') {
-                return question.sendStatus(examUserId, userQuestionDataFromLocalstorage.dataToSendStatus)
+                return question.sendUserActionToServer('status' ,examUserId, userQuestionDataFromLocalstorage.dataToSendStatus)
             }
         },
         userActionOnQuestion_answer(data, examId, questionId, userQuestionData) {

@@ -1,33 +1,33 @@
 import Vue from 'vue'
-import { Model, Collection } from 'js-abstract-model'
-import { ChoiceList } from './Choice'
-import { CheckingTimeList } from "@/models/CheckingTime";
+import {Model, Collection} from 'js-abstract-model'
+import {ChoiceList} from './Choice'
+import {CheckingTimeList} from "@/models/CheckingTime";
 import Time from "@/plugins/time";
 import axios from "axios";
 import API_ADDRESS from "@/api/Addresses"
 import TurndownService from 'turndown/lib/turndown.browser.umd'
-import { QuestionStatus } from "@/models/QuestionStatus";
+import {QuestionStatus} from "@/models/QuestionStatus";
 import {LogList} from "@/models/Log";
 
 class Question extends Model {
-    constructor (data) {
+    constructor(data) {
         super(data, [
             {
                 key: 'baseRoute',
                 default: API_ADDRESS.question.base
             },
-            { key: 'id' },
-            { key: '_id' },
-            { key: 'title' },
-            { key: 'index' },
-            { key: 'statement' },
-            { key: 'statement_photo' },
-            { key: 'rendered_statement' },
-            { key: 'in_active_category' },
-            { key: 'photo' },
-            { key: 'order' },
-            { key: 'exams' },
-            { key: 'type_id' },
+            {key: 'id'},
+            {key: '_id'},
+            {key: 'title'},
+            {key: 'index'},
+            {key: 'statement'},
+            {key: 'statement_photo'},
+            {key: 'rendered_statement'},
+            {key: 'in_active_category'},
+            {key: 'photo'},
+            {key: 'order'},
+            {key: 'exams'},
+            {key: 'type_id'},
             {
                 key: 'author',
                 default: []
@@ -44,8 +44,8 @@ class Question extends Model {
                 key: 'isInView',
                 default: false
             },
-            { key: 'sub_category' },
-            { key: 'sub_category_id' },
+            {key: 'sub_category'},
+            {key: 'sub_category_id'},
             {
                 key: 'checking_times',
                 relatedModel: CheckingTimeList
@@ -60,7 +60,7 @@ class Question extends Model {
                 default: []
             },
             {key: 'descriptive_answer'},
-            { key: 'rendered_descriptive_answer' },
+            {key: 'rendered_descriptive_answer'},
             {key: 'selected_at'},
             {
                 key: 'choices',
@@ -82,7 +82,7 @@ class Question extends Model {
                 key: 'bookmarked',
                 default: false
             },
-            { key: 'lesson' },
+            {key: 'lesson'},
             {
                 key: 'seen',
                 default: false
@@ -107,8 +107,8 @@ class Question extends Model {
                 key: 'confirmers',
                 default: []
             },
-            { key: 'created_at' },
-            { key: 'updated_at' }
+            {key: 'created_at'},
+            {key: 'updated_at'}
         ])
 
         if (this.id) {
@@ -159,7 +159,7 @@ class Question extends Model {
             // this.rendered_descriptive_answer = convert(this.descriptive_answer)
             // this.rendered_statement = md.render(this.statement)
         }
-        if (this.choices.list.length === 0){
+        if (this.choices.list.length === 0) {
             const choices = [
                 {
                     id: 1,
@@ -190,12 +190,12 @@ class Question extends Model {
         }
     }
 
-    convertToMarkdownKatex1 (string) {
+    convertToMarkdownKatex1(string) {
         if (!string) {
             return string
         }
 
-        string = string.replace(/\n/g,'<br>')
+        string = string.replace(/\n/g, '<br>')
 
         TurndownService.prototype.escape = function (string) {
             let escapes = [
@@ -250,13 +250,13 @@ class Question extends Model {
         // return string
     }
 
-    getAnsweredChoice () {
+    getAnsweredChoice() {
         return this.choices.list.find((item) => {
             return (item.active === true)
         })
     }
 
-    isAnswered () {
+    isAnswered() {
         let answeredChoice = this.getAnsweredChoice()
 
         if (answeredChoice) {
@@ -266,7 +266,7 @@ class Question extends Model {
         }
     }
 
-    changeState (newState) {
+    changeState(newState) {
         if (newState === 'x') {
             this.uncheckChoices()
         }
@@ -277,20 +277,20 @@ class Question extends Model {
         Vue.set(this, 'state', newState)
     }
 
-    bookmark () {
+    bookmark() {
         this.bookmarked = !this.bookmarked
     }
 
-    enterQuestion () {
+    enterQuestion() {
         this.checking_times.addStart()
     }
 
-    leaveQuestion () {
+    leaveQuestion() {
         this.checking_times.addEnd()
     }
 
-    setTrueChoice (choiceId) {
-        this.choices.list.map((item)=> {
+    setTrueChoice(choiceId) {
+        this.choices.list.map((item) => {
             if (item.id === choiceId) {
                 item.answer = true
                 Vue.set(item, 'answer', true)
@@ -303,13 +303,13 @@ class Question extends Model {
         })
     }
 
-    selectChoice (choiceId, selected_at) {
+    selectChoice(choiceId, selected_at) {
         let answeredAt = Time.now()
         if (selected_at) {
             answeredAt = selected_at
         }
         let that = this
-        this.choices.list.map((item)=> {
+        this.choices.list.map((item) => {
             Vue.set(item, 'answered_at', answeredAt)
             if (that.state === 'x') {
                 that.state = ''
@@ -328,45 +328,55 @@ class Question extends Model {
         })
     }
 
-    uncheckChoices () {
-        this.choices.list.map((item)=> {
+    uncheckChoices() {
+        this.choices.list.map((item) => {
             item.active = false
             Vue.set(item, 'active', false)
         })
     }
 
-        sendAnswer (exam_user_id, answerArray, failedAnswersArray) {
-        return axios.post(API_ADDRESS.exam.sendAnswers, {exam_user_id, questions: answerArray })
+    userActionWhileSending(){
+        //things happen
+    }
+
+    sendUserActionToServer(type, exam_user_id , dataToSendObject) {
+        if (type === 'answer') {
+            let answerArray = dataToSendObject.answerArray
+            let failedAnswersArray = dataToSendObject.failedAnswersArray
+            return axios.post(API_ADDRESS.exam.sendAnswers, {exam_user_id, questions: answerArray})
                 .then(function (response) {
-                    if(failedAnswersArray.length > 0 && response.status === 200){
-                        axios.post(API_ADDRESS.exam.sendAnswers, {exam_user_id , questions: failedAnswersArray})
+                    if (failedAnswersArray.length > 0 && response.status === 200) {
+                        axios.post(API_ADDRESS.exam.sendAnswers, {exam_user_id, questions: failedAnswersArray})
                         failedAnswersArray.length = 0
                     }
                 })
-    }
-
-    sendStatus (exam_user_id, {question_id, status }) {
-        return axios.post(API_ADDRESS.exam.sendStatus, {exam_user_id, question_id, status})
-    }
-
-    sendBookmark (exam_user_id, question_id) {
-        return axios.post(API_ADDRESS.exam.sendBookmark, {exam_user_id, question_id})
-    }
-
-    sendUnBookmark (exam_user_id, question_id) {
-        return axios.post(API_ADDRESS.exam.sendUnBookmark, {exam_user_id, question_id})
+        }
+        if (type === 'bookmark') {
+            let question_id = dataToSendObject
+            return axios.post(API_ADDRESS.exam.sendBookmark, {exam_user_id, question_id})
+        }
+        if (type === 'unBookmark') {
+            let question_id = dataToSendObject
+            return axios.post(API_ADDRESS.exam.sendUnBookmark, {exam_user_id, question_id})
+        }
+        if (type === 'status') {
+            let question_id = dataToSendObject.question_id
+            let status = dataToSendObject.status
+            return axios.post(API_ADDRESS.exam.sendStatus, {exam_user_id, question_id, status})
+        }
+        this.userActionWhileSending();
     }
 }
 
 class QuestionList extends Collection {
-    model () {
+    model() {
         return Question
     }
 
-    changeOrderToInt () {
-        this.list.forEach( (item, index, questions) => {
+    changeOrderToInt() {
+        this.list.forEach((item, index, questions) => {
             questions[index].order = parseInt(questions[index].order)
-        } )
+        })
     }
 
     sortByOrder() {
@@ -375,16 +385,16 @@ class QuestionList extends Collection {
     }
 
 
-    getQuestionById (questionId) {
+    getQuestionById(questionId) {
         return this.list.find(
-            (item)=>
+            (item) =>
                 questionId !== null && (item.id).toString() === (questionId).toString()
         )
     }
 
-    getFirstActiveQuestion () {
-        return this.list.find( (item) => !!(item.in_active_category))
+    getFirstActiveQuestion() {
+        return this.list.find((item) => !!(item.in_active_category))
     }
 }
 
-export { Question, QuestionList }
+export {Question, QuestionList}
