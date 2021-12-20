@@ -303,7 +303,7 @@
     },
     mounted: function () {
       this.getFiltersData()
-      this.getData()
+      // this.getData()
     },
     methods: {
       getParams () {
@@ -374,7 +374,7 @@
 
           if(typeof response.data.links === 'undefined' || response.data.links.next === null) {
             that.nextPage = ''
-            $state.complete()
+           if($state) $state.complete()
             return
           }
           that.nextPage = response.data.links.next.replace(response.data.meta.path, '')
@@ -406,6 +406,7 @@
 
       DoFilter (){
         this.results = []
+        this.nextPage =''
         this.getData()
       },
 
