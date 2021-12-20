@@ -168,7 +168,7 @@ const mixinQuiz = {
         setCurrentExamQuestionIndexes(currentExamQuestionIndexes) {
             window.localStorage.setItem('currentExamQuestionIndexes', JSON.stringify(currentExamQuestionIndexes))
         },
-        sortQuestions (questions) {
+        sortQuestions(questions) {
             let sortList = Array.prototype.sort.bind(questions);
             sortList(function (a, b) {
                 let sorta = parseInt(a.order),
@@ -280,8 +280,7 @@ const mixinQuiz = {
                 examData.getUserExamData(userExamId)
                     .run()
                     .then((result) => {
-                        try
-                        {
+                        try {
                             // save questions in localStorage
                             that.saveCurrentExamQuestions(examData.exam.questions.list)
                             // save exam info in vuex store (remove questions of exam then save in store)
@@ -300,15 +299,15 @@ const mixinQuiz = {
                                 exam_id: examData.exam.id
                             })
                             resolve(result)
-                        } catch(error) {
+                        } catch (error) {
                             console.error(error)
-                            that.$router.push({ name: 'user.exam.list'})
+                            that.$router.push({name: 'user.exam.list'})
                             reject(error)
                         }
                     })
                     .catch((error) => {
                         reject(error)
-                        that.$router.push({ name: 'user.exam.list'})
+                        that.$router.push({name: 'user.exam.list'})
                     })
                     .finally(() => {
                         that.$store.commit('AppLayout/updateOverlay', {show: false, loading: false, text: ''})
@@ -336,42 +335,41 @@ const mixinQuiz = {
                     that.loadCurrentQuestion(viewType)
                 }
                 examData.getUserExamData(userExamId)
-                        .run()
-                        .then((result) => {
-                            try
-                            {
-                                if (that.needToLoadQuizData()) {
-                                    // save questions in localStorage
-                                    that.saveCurrentExamQuestions(examData.exam.questions.list)
-                                    // save exam info in vuex store (remove questions of exam then save in store)
-                                    examData.exam.loadSubcategoriesOfCategories()
-                                    Time.setStateOfExamCategories(examData.exam.categories)
-                                    let currentExamQuestions = that.getCurrentExamQuestions()
-                                    Time.setStateOfQuestionsBasedOnActiveCategory(examData.exam, currentExamQuestions)
-                                    that.$store.commit('updateQuiz', examData.exam)
-                                    that.setCurrentExamQuestions(currentExamQuestions)
-                                    that.loadCurrentQuestion(viewType)
-                                } else {
-                                    examData.exam = that.quiz
-                                }
-                                that.$store.commit('mergeDbAnswersIntoLocalstorage', {
-                                    dbAnswers: examData.userExamData,
-                                    exam_id: examData.exam.id
-                                })
-                                resolve(result)
-                            } catch(error) {
-                                console.error(error)
-                                that.$router.push({ name: 'user.exam.list'})
-                                reject(error)
+                    .run()
+                    .then((result) => {
+                        try {
+                            if (that.needToLoadQuizData()) {
+                                // save questions in localStorage
+                                that.saveCurrentExamQuestions(examData.exam.questions.list)
+                                // save exam info in vuex store (remove questions of exam then save in store)
+                                examData.exam.loadSubcategoriesOfCategories()
+                                Time.setStateOfExamCategories(examData.exam.categories)
+                                let currentExamQuestions = that.getCurrentExamQuestions()
+                                Time.setStateOfQuestionsBasedOnActiveCategory(examData.exam, currentExamQuestions)
+                                that.$store.commit('updateQuiz', examData.exam)
+                                that.setCurrentExamQuestions(currentExamQuestions)
+                                that.loadCurrentQuestion(viewType)
+                            } else {
+                                examData.exam = that.quiz
                             }
-                        })
-                        .catch((error) => {
+                            that.$store.commit('mergeDbAnswersIntoLocalstorage', {
+                                dbAnswers: examData.userExamData,
+                                exam_id: examData.exam.id
+                            })
+                            resolve(result)
+                        } catch (error) {
+                            console.error(error)
+                            that.$router.push({name: 'user.exam.list'})
                             reject(error)
-                            that.$router.push({ name: 'user.exam.list'})
-                        })
-                  .finally(() => {
-                      that.$store.commit('AppLayout/updateOverlay', {show: false, loading: false, text: ''})
-                  })
+                        }
+                    })
+                    .catch((error) => {
+                        reject(error)
+                        that.$router.push({name: 'user.exam.list'})
+                    })
+                    .finally(() => {
+                        that.$store.commit('AppLayout/updateOverlay', {show: false, loading: false, text: ''})
+                    })
 
                 // if (that.needToLoadQuizData() && examId) {
                 //     that.participateExam(examId, viewType)
@@ -521,7 +519,7 @@ const mixinQuiz = {
                     answers.push({
                         question_id: questionId,
                         choice_id: userExamData[questionId].answered_choice_id,
-                        selected_at : (!userExamData[questionId].answered_at) ? null: userExamData[questionId].answered_at,
+                        selected_at: (!userExamData[questionId].answered_at) ? null : userExamData[questionId].answered_at,
                         bookmarked: userExamData[questionId].bookmarked,
                         status: userExamData[questionId].status,
                         check_in_times: userExamData[questionId].check_in_times,
@@ -531,7 +529,6 @@ const mixinQuiz = {
 
             return axios.post(API_ADDRESS.exam.sendAnswers, {exam_user_id: examUserId, finish: true, questions: answers })
         },
-
 
 
         isLtrString (string) {
