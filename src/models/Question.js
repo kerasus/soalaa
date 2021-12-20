@@ -340,11 +340,11 @@ class Question extends Model {
     }
 
     sendUserActionToServer(type, exam_user_id , dataToSendObject) {
-        this.actionsWhileSendingData();
+        let data = null
         if (type === 'answer') {
             let answerArray = dataToSendObject.answerArray
             let failedAnswersArray = dataToSendObject.failedAnswersArray
-            return axios.post(API_ADDRESS.exam.sendAnswers, {exam_user_id, questions: answerArray})
+            data = axios.post(API_ADDRESS.exam.sendAnswers, {exam_user_id, questions: answerArray})
                 .then(function (response) {
                     if (failedAnswersArray.length > 0 && response.status === 200) {
                         axios.post(API_ADDRESS.exam.sendAnswers, {exam_user_id, questions: failedAnswersArray})
@@ -354,17 +354,19 @@ class Question extends Model {
         }
         if (type === 'bookmark') {
             let question_id = dataToSendObject.question_id
-            return axios.post(API_ADDRESS.exam.sendBookmark, {exam_user_id, question_id})
+            data = axios.post(API_ADDRESS.exam.sendBookmark, {exam_user_id, question_id})
         }
         if (type === 'unBookmark') {
             let question_id = dataToSendObject.question_id
-            return axios.post(API_ADDRESS.exam.sendUnBookmark, {exam_user_id, question_id})
+            data = axios.post(API_ADDRESS.exam.sendUnBookmark, {exam_user_id, question_id})
         }
         if (type === 'status') {
             let question_id = dataToSendObject.question_id
             let status = dataToSendObject.status
-            return axios.post(API_ADDRESS.exam.sendStatus, {exam_user_id, question_id, status})
+            data = axios.post(API_ADDRESS.exam.sendStatus, {exam_user_id, question_id, status})
         }
+        this.actionsWhileSendingData()
+        return data
     }
 }
 
