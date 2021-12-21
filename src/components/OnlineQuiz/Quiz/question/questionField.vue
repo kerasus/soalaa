@@ -20,6 +20,7 @@
       </q-card-section>
     </q-card>
     <q-markup-table
+      v-if="(considerActiveCategory && source.in_active_category) || !considerActiveCategory"
       wrap-cells
       separator="none"
       class="question-table"
@@ -29,7 +30,6 @@
       <tr>
         <th class="table-head">
           <p
-            v-if="(considerActiveCategory && source.in_active_category) || !considerActiveCategory"
             :id="'question' + source.id"
             class="question-body"
             :class="{ ltr: isRtl }"
@@ -40,7 +40,6 @@
             <!--            />-->
           </p>
           <div
-            v-if="(considerActiveCategory && source.in_active_category) || !considerActiveCategory"
             class="question-icons"
             :style="{ float: isRtlString ? 'left' : 'right' }"
           >

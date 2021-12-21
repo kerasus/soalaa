@@ -99,7 +99,6 @@ const mixinQuiz = {
       return this.$store.getters['quiz/quiz']
     },
     getCurrentExamQuestionIndexes () {
-      console.log('window.currentExamQuestionIndexes:', window.currentExamQuestionIndexes)
       if (window.currentExamQuestionIndexes) {
         return window.currentExamQuestionIndexes
       }
@@ -145,9 +144,7 @@ const mixinQuiz = {
     },
     getCurrentExamQuestionsInArray () {
       let currentExamQuestionsArray = []
-      console.log('this.quiz: ', this.quiz)
       if (this.quiz !== {}) {
-        console.log('if')
         const currentExamQuestionIndexes = this.getCurrentExamQuestionIndexes()
         const currentExamQuestions = this.getCurrentExamQuestions()
         if (!currentExamQuestionIndexes) {
@@ -196,7 +193,6 @@ const mixinQuiz = {
       return currentExamQuestionsArray
     },
     startExam (examId, viewType) {
-      console.log('1')
       if (!Assistant.getId(examId)) {
         return
       }
@@ -204,8 +200,6 @@ const mixinQuiz = {
       return new Promise(function (resolve, reject) {
         let userExamId
         const examData = new ExamData()
-        // console.log('quiz', this.quiz)
-        console.log('that.needToLoadQuizData', !!that.needToLoadQuizData())
         if (that.needToLoadQuizData()) {
           window.currentExamQuestions = null
           window.currentExamQuestionIndexes = null
@@ -214,7 +208,6 @@ const mixinQuiz = {
           examData.loadQuestionsFromFile()
         } else {
           userExamId = that.quiz.user_exam_id
-          console.log('userExamId: ', userExamId)
           that.loadCurrentQuestion(viewType)
         }
         examData.getUserExamData(userExamId)
@@ -258,10 +251,8 @@ const mixinQuiz = {
       return (!Assistant.getId(this.quiz.id) || !Assistant.getId(this.quiz.user_exam_id) || Assistant.getId(this.$route.params.quizId) !== Assistant.getId(this.quiz.id))
     },
     participateExam (examId, viewType) {
-      console.log('participateExam')
       const that = this
       return new Promise(function (resolve, reject) {
-        console.log('hi')
         that.user.loadExamDataFroParticipate(examId)
           .then(({ userExamForParticipate }) => {
             that.loadExam(userExamForParticipate, viewType)
@@ -291,7 +282,7 @@ const mixinQuiz = {
             examDataWithQuestions.id = examId
           }
 
-          that.$store.commit('quiz/updateQuiz', examDataWithQuestions)
+          // that.$store.commit('quiz/updateQuiz', examDataWithQuestions)
         }
         that.loadExamExtraData(that.quiz, viewType)
         if (viewType !== 'results') {
@@ -344,7 +335,6 @@ const mixinQuiz = {
     },
     loadCurrentQuestion (viewType) {
       let questNumber = this.$route.params.questNumber
-      console.log('this.currentQuestion: ', this.currentQuestion)
       if (this.currentQuestion.order) {
         questNumber = this.currentQuestion.order
       } else if (!questNumber) {

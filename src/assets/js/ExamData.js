@@ -178,7 +178,7 @@ class ExamData {
         })
         .catch(error => {
           console.log(error)
-          // reject(error)
+          reject(error)
         })
     })
     )
@@ -188,8 +188,7 @@ class ExamData {
   getExamDataAndParticipate (examId) {
     const that = this
     this.commands.push(() => new Promise((resolve, reject) => {
-      // eslint-disable-next-line
-        if (!examId && !that.exam) {
+      if (!examId && !that.exam) {
         Assistant.handleAxiosError('exam_id in getExamDataAndParticipate() is not set')
         reject('exam_id in getExamDataAndParticipate() is not set')
       }
@@ -198,7 +197,6 @@ class ExamData {
       }
       axios.post(API_ADDRESS.exam.examUser, { exam_id: examId })
         .then(response => {
-          console.log('axios')
           that.exam = new Exam()
           // ToDo: attention on user_exam_id and exam_id
           that.exam.id = Assistant.getId(response.data.data.exam_id)

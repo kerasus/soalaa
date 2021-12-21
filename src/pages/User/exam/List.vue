@@ -192,11 +192,11 @@ export default {
       this.$router.push({ name: routeName, params: { user_exam_id: exam.user_exam_id, exam_id: exam.id } })
     },
     goToParticipateExamPage (exam) {
-      let routeName = 'onlineQuiz.alaaView'
+      // const routeName = 'onlineQuiz.alaaView'
       if (exam.type && exam.type.value && exam.type.value === 'psychometric') {
-        routeName = 'onlineQuiz.mbtiBartle'
+        // routeName = 'onlineQuiz.mbtiBartle'
       }
-      this.$router.push({ name: routeName, params: { quizId: exam.id, questNumber: 1 } })
+      this.$router.push({ name: 'konkoorView', params: { quizId: exam.id } })
     },
     getConfirmation (examId, examUserId) {
       const that = this

@@ -59,6 +59,7 @@
             <BubbleSheet
               :info="{ type: 'pasokh-barg'}"
               :delay-time="0"
+              :questions="questions"
               @clickChoice="choiceClicked"
               @scrollTo="scrollTo"
             />
@@ -99,7 +100,7 @@ import { mixinAuth, mixinQuiz, mixinUserActionOnQuestion, mixinWindowSize } from
 import Timer from 'src/components/OnlineQuiz/Quiz/timer/timer'
 import BubbleSheet from 'src/components/OnlineQuiz/Quiz/bubbleSheet/bubbleSheet'
 import { Exam } from 'src/models/Exam'
-// import Assistant from 'src/plugins/assistant'
+import Assistant from 'src/plugins/assistant'
 import TopMenu from 'src/components/Menu/topMenu/onlineQuizTopMenu'
 export default {
   name: 'konkoorView',
@@ -139,31 +140,29 @@ export default {
     this.startExam(this.$route.params.quizId, 'KonkoorView')
       .then(() => {
         that.$store.dispatch('loading/overlayLoading', false)
+        if (!this.questions.length) {
+          this.questions = this.getCurrentExamQuestionsInArray()
+        }
       })
-    // .catch((error) => {
-    //   Assistant.reportErrors(error)
-    //   that.$q.notify({
-    //     message: 'مشکلی در دریافت اطلاعات آزمون رخ داده است. لطفا دوباره امتحان کنید.',
-    //     type: 'negative',
-    //     position: 'top'
-    //   })
-    // })
+      .catch((error) => {
+        Assistant.reportErrors(error)
+        that.$q.notify({
+          message: 'مشکلی در دریافت اطلاعات آزمون رخ داده است. لطفا دوباره امتحان کنید.',
+          type: 'negative',
+          position: 'top'
+        })
+      })
+    console.log(this.windowSize.x)
     // if (this.windowSize.x > 959) {
     //   this.changeAppBarAndDrawer(false)
     // } else {
+    //   console.log('else')
     //   this.$router.push({
     //     name: 'onlineQuiz.alaaView',
     //     // TODO --> why 313 ?
     //     params: { quizId: 313, questNumber: this.$route.params.quizId }
     //   })
     // }
-
-    if (!this.questions.length) {
-      console.log(!this.questions.length)
-      console.log('param: ', this.$route.params.quizId)
-      this.questions = this.getCurrentExamQuestionsInArray()
-    }
-    console.log('question: ', this.questions)
   },
   mounted () {
     // this.setHeights()
