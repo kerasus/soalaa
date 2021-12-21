@@ -234,8 +234,8 @@ const mixinQuiz = {
               })
               resolve(result)
             } catch (error) {
-              // that.$router.push({ name: 'user.exam.list' })
-              // reject(error)
+              that.$router.push({ name: 'user.exam.list' })
+              reject(error)
             }
           })
           .catch((error) => {
