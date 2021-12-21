@@ -8,9 +8,11 @@
         :style="{ height: windowSize.y }"
       >
         <q-virtual-scroll
+          class="konkoor-view-scroll"
           ref="scroller"
           :items="questions"
           virtual-scroll-slice-size="70"
+          @virtual-scroll="onScroll"
         >
           <template v-slot="{ item, index }">
             <q-item
@@ -22,7 +24,7 @@
                 <Item
                   :source="item"
                   :questions-column="$refs.questionsColumn"
-                  @inView="test"
+                  @inView="isInView"
                 />
               </q-item-section>
             </q-item>
@@ -57,6 +59,7 @@
             <BubbleSheet
               :info="{ type: 'pasokh-barg'}"
               :delay-time="0"
+              :questions="questions"
               @clickChoice="choiceClicked"
               @scrollTo="scrollTo"
             />
@@ -97,7 +100,7 @@ import { mixinAuth, mixinQuiz, mixinUserActionOnQuestion, mixinWindowSize } from
 import Timer from 'src/components/OnlineQuiz/Quiz/timer/timer'
 import BubbleSheet from 'src/components/OnlineQuiz/Quiz/bubbleSheet/bubbleSheet'
 import { Exam } from 'src/models/Exam'
-// import Assistant from 'src/plugins/assistant'
+import Assistant from 'src/plugins/assistant'
 import TopMenu from 'src/components/Menu/topMenu/onlineQuizTopMenu'
 export default {
   name: 'konkoorView',
@@ -127,25 +130,28 @@ export default {
     // 'windowSize.y': function () {
     //   this.setHeights()
     // },
-    'windowSize.x': function () {
-      this.$store.commit('AppLayout/updateDrawer', false)
-    }
+    // 'windowSize.x': function () {
+    //   this.$store.commit('AppLayout/updateDrawer', false)
+    // }
   },
   created () {
     this.getUser()
-    // const that = this
+    const that = this
     this.startExam(this.$route.params.quizId, 'KonkoorView')
-    //   .then(() => {
-    //     that.$store.dispatch('loading/overlayLoading', false)
-    //   })
-    //   .catch((error) => {
-    //     Assistant.reportErrors(error)
-    //     that.$q.notify({
-    //       message: 'مشکلی در دریافت اطلاعات آزمون رخ داده است. لطفا دوباره امتحان کنید.',
-    //       type: 'negative',
-    //       position: 'top'
-    //     })
-    //   })
+      .then(() => {
+        that.$store.dispatch('loading/overlayLoading', false)
+        if (!this.questions.length) {
+          this.questions = this.getCurrentExamQuestionsInArray()
+        }
+      })
+      .catch((error) => {
+        Assistant.reportErrors(error)
+        that.$q.notify({
+          message: 'مشکلی در دریافت اطلاعات آزمون رخ داده است. لطفا دوباره امتحان کنید.',
+          type: 'negative',
+          position: 'top'
+        })
+      })
     // if (this.windowSize.x > 959) {
     //   this.changeAppBarAndDrawer(false)
     // } else {
@@ -155,9 +161,6 @@ export default {
     //     params: { quizId: 313, questNumber: this.$route.params.quizId }
     //   })
     // }
-    if (!this.questions.length) {
-      this.questions = this.getCurrentExamQuestionsInArray()
-    }
   },
   mounted () {
     // this.setHeights()
@@ -168,7 +171,7 @@ export default {
     // this.changeAppBarAndDrawer(false)
   },
   unmounted () {
-    this.changeAppBarAndDrawer(true)
+    // this.changeAppBarAndDrawer(true)
   },
   methods: {
     getUser () {
@@ -216,7 +219,7 @@ export default {
           that.$router.push({ name: 'user.exam.list' })
         })
     },
-    test (payload) {
+    isInView (payload) {
       if (payload.isInView) {
         for (let i = 0; i < this.inView.length; i++) {
           if (this.inView[i] === payload.number) {
@@ -297,14 +300,14 @@ export default {
     choiceClicked (questionId) {
       this.scrollTo(questionId)
       this.changeQuestion(questionId)
+    },
+    setHeights () {
+      this.$refs.questionsColumn.style.height = this.windowSize.y + 'px'
+      if (this.$refs.scroller.$el) {
+        this.$refs.scroller.$el.style.height = this.windowSize.y + 'px'
+      }
+      this.$refs.leftSideList.style.height = (this.windowSize.y - 24) + 'px'
     }
-    // setHeights () {
-    //   this.$refs.questionsColumn.style.height = this.windowSize.y + 'px'
-    //   if (this.$refs.scroller.$el) {
-    //     this.$refs.scroller.$el.style.height = this.windowSize.y + 'px'
-    //   }
-    //   this.$refs.leftSideList.style.height = (this.windowSize.y - 24) + 'px'
-    // }
   }
 }
 </script>
@@ -319,12 +322,15 @@ export default {
     min-height: 100vh;
     display: flex;
     flex-direction: column;
-    overflow-x: hidden;
     position: relative;
     padding: 0;
-    .question-field{
-      &.q-item{
-        padding: 0;
+    .konkoor-view-scroll{
+      height: 100vh;
+      max-height: 100%;
+      .question-field{
+        &.q-item{
+          padding: 0;
+        }
       }
     }
   }

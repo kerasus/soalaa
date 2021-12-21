@@ -196,7 +196,7 @@ export default {
       if (exam.type && exam.type.value && exam.type.value === 'psychometric') {
         routeName = 'onlineQuiz.mbtiBartle'
       }
-      this.$router.push({ name: routeName, params: { quizId: exam.id, questNumber: 1 } })
+      this.$router.push({ name: routeName, params: { quizId: exam.id } })
     },
     getConfirmation (examId, examUserId) {
       const that = this

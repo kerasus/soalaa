@@ -103,7 +103,7 @@ const mixinQuiz = {
         return window.currentExamQuestionIndexes
       }
       window.currentExamQuestionIndexes = JSON.parse(window.localStorage.getItem('currentExamQuestionIndexes'))
-      return JSON.parse(window.localStorage.getItem('currentExamQuestionIndexes'))
+      return window.currentExamQuestionIndexes
     },
     setCurrentExamQuestions (currentExamQuestions) {
       window.localStorage.setItem('currentExamQuestions', JSON.stringify(currentExamQuestions))
@@ -143,7 +143,6 @@ const mixinQuiz = {
       this.setCurrentExamQuestions(currentExamQuestions)
     },
     getCurrentExamQuestionsInArray () {
-
       let currentExamQuestionsArray = []
       if (this.quiz !== {}) {
         const currentExamQuestionIndexes = this.getCurrentExamQuestionIndexes()
@@ -157,7 +156,6 @@ const mixinQuiz = {
           currentExamQuestionsArray.push(currentExamQuestions[questionId])
         })
       } else {
-        // console.log(currentExamQuestionsArray)
         currentExamQuestionsArray = this.quiz
       }
       return currentExamQuestionsArray
@@ -284,7 +282,7 @@ const mixinQuiz = {
             examDataWithQuestions.id = examId
           }
 
-          that.$store.commit('quiz/updateQuiz', examDataWithQuestions)
+          // that.$store.commit('quiz/updateQuiz', examDataWithQuestions)
         }
         that.loadExamExtraData(that.quiz, viewType)
         if (viewType !== 'results') {
