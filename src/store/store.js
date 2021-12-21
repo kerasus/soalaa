@@ -7,7 +7,7 @@ import Auth from '@/store/modules/Auth'
 import {Exam} from '@/models/Exam'
 import {Question, QuestionList} from '@/models/Question'
 import createPersistedState from 'vuex-persistedstate'
-import completeInfo from "@/middleware/completeInfo";
+//  import completeInfo from "@/middleware/completeInfo";
 // import createMutationsSharer from 'vuex-shared-mutations'
 
 Vue.use(Vuex)
