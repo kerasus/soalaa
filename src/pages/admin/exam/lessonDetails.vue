@@ -93,6 +93,7 @@
                   :exam-id="$route.params.quizId"
                   :sub-category="quizData.sub_categories"
                   @inView="test"
+                  @reloadPage="reload"
                 />
               </DynamicScrollerItem>
             </template>
@@ -218,6 +219,9 @@
         }),
         computed: {
             filteredQuestions () {
+                this.quizData.questions.list.forEach((item, index) => {
+                  item.questNumber = index + 1
+                })
                 if (this.questionFilterMethod === 'not-confirmed-at-all') {
                     return this.quizData.questions.list.filter(item => item.confirmers.length === 0)
                 } else if (this.questionFilterMethod === 'not-confirmed-by-me') {
@@ -267,7 +271,6 @@
             //     this.loadFirstQuestion()
             // }
             this.scrollTo(this.currentQuestion.id)
-            this.changeAppBarAndDrawer(false)
             $('.sidebar').height(this.windowSize.y)
             console.log('lofdsafadfasfag', $('.sidebar'))
             console.log('lofdsafadfasfag', $('.sidebar')[0])
@@ -536,13 +539,13 @@
         position: absolute;
         height: 200px;
         right: 0;
-        left: 800px;
+        left: 100px;
         margin-top: 10px;
 
     }
 
     .sidebar {
-        width: 800px;
+        width: 100px;
         float: left;
         display: flex;
     }
