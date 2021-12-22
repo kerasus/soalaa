@@ -105,7 +105,10 @@
     v-if="source.statement_photo && !source.statement"
     >
       <v-col>
-        <p>
+        <p  v-if="$route.name === 'onlineQuiz.exams.lessons.details'">
+          ({{getSubCategoryName}}) (ترتیب: {{source.order}})(شماره: {{source.questNumber}})  -  صورت سوال :
+        </p>
+        <p  v-else>
           ({{getSubCategoryName}}) ({{source.order}}) -  صورت سوال :
         </p>
         <v-img
@@ -347,7 +350,7 @@ export default {
             exams: [this.examId]
           })
               .then(() => {
-                window.location.reload()
+                this.$emit('reloadPage')
               })
         }
       })
@@ -367,7 +370,7 @@ export default {
             exams: [this.examId]
           })
               .then(() => {
-                window.location.reload()
+                this.$emit('reloadPage')
               })
         }
       })

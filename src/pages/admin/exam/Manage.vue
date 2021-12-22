@@ -78,35 +78,6 @@ export default {
     dialog: false,
     reportDialog: false,
   }),
-  sockets: {
-    connecting() {
-      this.onSocketStatusChange('on connection')
-    },
-    disconnect() {
-      this.onSocketStatusChange('Socket to break off')
-      // this.isConnected = false;
-    },
-    connect_failed() {
-      this.onSocketStatusChange('connection failed')
-    },
-    connect() {
-      this.onSocketStatusChange('socket connected')
-      // Fired when the socket connects.
-      // this.isConnected = true
-    },
-
-
-    // Fired when the server sends something on the "messageChannel" channel.
-    messageChannel() {
-      // console.log('messageChannel: ', data)
-    },
-    'question.file-link:update': function (data) {
-      console.log('question.file-link:update: ', data)
-    },
-    questionFileLinkUpdate (data) {
-      console.log('questionFileLinkUpdate: ', data)
-    }
-  },
   methods: {
     onSocketStatusChange (status) {
       // this.socketStatus = status
