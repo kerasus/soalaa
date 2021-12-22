@@ -144,7 +144,7 @@
             color="indigo"
             icon="auto_stories"
             size="11px"
-            :to="{ name: 'onlineQuiz.exams.lessons', params: { quizId: tableRow.id , quizTitle: tableRow.title}}"
+            @click="sendLessonsListInfo"
           >
             <q-tooltip anchor="top middle" self="bottom middle">
               مشاهده دروس
@@ -321,6 +321,15 @@ export default {
         name: 'coefficient.edit',
         params: {
           exam_id: this.tableRow.id
+        }
+      })
+    },
+    sendLessonsListInfo () {
+      this.$router.push({
+        name: 'onlineQuiz.exams.lessons',
+        params: {
+          quizId: this.tableRow.id,
+          quizTitle: this.tableRow.title
         }
       })
     },

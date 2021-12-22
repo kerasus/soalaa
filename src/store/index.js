@@ -5,7 +5,7 @@ import createPersistedState from 'vuex-persistedstate'
 import Auth from 'src/store/Auth'
 import loading from 'src/store/loading'
 import AppLayout from 'src/store/AppLayout'
-import quiz from 'src/store/quiz'
+import quiz from 'src/store/quiz1'
 
 /*
  * If not building with SSR mode, you can

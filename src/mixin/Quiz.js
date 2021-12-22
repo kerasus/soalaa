@@ -1,13 +1,13 @@
-import Assistant from '../plugins/assistant'
-import Time from '../plugins/time'
+import Assistant from 'src/plugins/assistant'
+import Time from 'src/plugins/time'
 import { QuestSubcategory, QuestSubcategoryList } from '../models/QuestSubcategory'
 import axios from 'axios'
 import API_ADDRESS from 'src/api/Addresses'
-import { Exam } from '../models/Exam'
-import { QuestCategoryList } from '../models/QuestCategory'
+import { Exam } from 'src/models/Exam'
+import { QuestCategoryList } from 'src/models/QuestCategory'
 // todo : jquery
 import $ from 'jquery'
-import { QuestionList } from '../models/Question'
+import { QuestionList } from 'src/models/Question'
 import ExamData from 'src/assets/js/ExamData'
 
 const mixinQuiz = {
@@ -20,11 +20,11 @@ const mixinQuiz = {
         return this.$store.getters['quiz/quiz']
       },
       set (newInfo) {
-        this.$store.commit('updateQuiz', newInfo)
+        this.$store.commit('quiz/updateQuiz', newInfo)
       }
     },
     userQuizListData () {
-      return this.$store.getters.userQuizListData
+      return this.$store.getters['quiz/userQuizListData']
     },
     userQuestionData () {
       return (questionId) => {
@@ -36,14 +36,14 @@ const mixinQuiz = {
       }
     },
     currentExamFrozenQuestions () {
-      return this.$store.getters.currentExamFrozenQuestions
+      return this.$store.getters('quiz/currentExamFrozenQuestions')
     },
     currentQuestion: {
       get () {
-        return this.$store.getters.currentQuestion
+        return this.$store.getters['quiz/currentQuestion']
       },
       set (newInfo) {
-        this.$store.commit('updateCurrentQuestion', {
+        this.$store.commit('quiz/updateCurrentQuestion', {
           newQuestionId: newInfo.id,
           currentExamQuestions: this.getCurrentExamQuestions()
         })
@@ -95,19 +95,19 @@ const mixinQuiz = {
       }
       return this.userQuizListData[quizId][questionId]
     },
-
     getCurrentExam () {
-      return this.$store.getters.quiz
+      return this.$store.getters['quiz/quiz']
     },
     getCurrentExamQuestionIndexes () {
       if (window.currentExamQuestionIndexes) {
         return window.currentExamQuestionIndexes
       }
       window.currentExamQuestionIndexes = JSON.parse(window.localStorage.getItem('currentExamQuestionIndexes'))
-      return JSON.parse(window.localStorage.getItem('currentExamQuestionIndexes'))
+      return window.currentExamQuestionIndexes
     },
     setCurrentExamQuestions (currentExamQuestions) {
       window.localStorage.setItem('currentExamQuestions', JSON.stringify(currentExamQuestions))
+      this.currentExamQuestions = Object.freeze(currentExamQuestions)
       // Vue.set(this, 'currentExamQuestions', Object.freeze(currentExamQuestions))
     },
     setCurrentExamQuestionIndexes (currentExamQuestionIndexes) {
@@ -116,8 +116,8 @@ const mixinQuiz = {
     sortQuestions (questions) {
       const sortList = Array.prototype.sort.bind(questions)
       sortList(function (a, b) {
-        const sorta = parseInt(a.order),
-          sortb = parseInt(b.order)
+        const sorta = parseInt(a.order), sortb = parseInt(b.order)
+
         if (sorta < sortb) {
           return -1
         }
@@ -132,19 +132,6 @@ const mixinQuiz = {
       const currentExamQuestionIndexes = {}
 
       this.sortQuestions(questionsList)
-      // let sortList = Array.prototype.sort.bind(questionsList);
-      // sortList(function (a, b) {
-      //     let sorta = parseInt(a.order),
-      //         sortb = parseInt(b.order)
-      //     if (sorta < sortb) {
-      //         return -1
-      //     }
-      //     if (sorta > sortb) {
-      //         return 1
-      //     }
-      //     return 0
-      // });
-
       questionsList.forEach((item, index) => {
         item.index = index
         this.setQuestionsLtr(item)
@@ -157,7 +144,7 @@ const mixinQuiz = {
     },
     getCurrentExamQuestionsInArray () {
       let currentExamQuestionsArray = []
-      if (this.quiZ !== {}) {
+      if (this.quiz !== {}) {
         const currentExamQuestionIndexes = this.getCurrentExamQuestionIndexes()
         const currentExamQuestions = this.getCurrentExamQuestions()
         if (!currentExamQuestionIndexes) {
@@ -169,7 +156,7 @@ const mixinQuiz = {
           currentExamQuestionsArray.push(currentExamQuestions[questionId])
         })
       } else {
-        currentExamQuestionsArray = this.quiZ
+        currentExamQuestionsArray = this.quiz
       }
       return currentExamQuestionsArray
     },
@@ -179,8 +166,6 @@ const mixinQuiz = {
       }
       window.currentExamQuestions = JSON.parse(window.localStorage.getItem('currentExamQuestions'))
       this.modifyCurrentExamQuestions(window.currentExamQuestions)
-      // Vue.set(this, 'currentExamQuestions', Object.freeze(window.currentExamQuestions))
-
       return window.currentExamQuestions
     },
     modifyCurrentExamQuestions (currentExamQuestions) {
@@ -207,7 +192,6 @@ const mixinQuiz = {
 
       return currentExamQuestionsArray
     },
-
     startExam (examId, viewType) {
       if (!Assistant.getId(examId)) {
         return
@@ -219,7 +203,7 @@ const mixinQuiz = {
         if (that.needToLoadQuizData()) {
           window.currentExamQuestions = null
           window.currentExamQuestionIndexes = null
-          that.$store.commit('AppLayout/updateOverlay', { show: true, loading: true, text: '' })
+          that.$store.commit('loading/overlay', true)
           examData.getExamDataAndParticipate(examId)
           examData.loadQuestionsFromFile()
         } else {
@@ -238,19 +222,18 @@ const mixinQuiz = {
                 Time.setStateOfExamCategories(examData.exam.categories)
                 const currentExamQuestions = that.getCurrentExamQuestions()
                 Time.setStateOfQuestionsBasedOnActiveCategory(examData.exam, currentExamQuestions)
-                that.$store.commit('updateQuiz', examData.exam)
+                that.$store.commit('quiz/updateQuiz', examData.exam)
                 that.setCurrentExamQuestions(currentExamQuestions)
                 that.loadCurrentQuestion(viewType)
               } else {
                 examData.exam = that.quiz
               }
-              that.$store.commit('mergeDbAnswersIntoLocalstorage', {
+              that.$store.commit('quiz/mergeDbAnswersIntoLocalstorage', {
                 dbAnswers: examData.userExamData,
                 exam_id: examData.exam.id
               })
               resolve(result)
             } catch (error) {
-              console.error(error)
               that.$router.push({ name: 'user.exam.list' })
               reject(error)
             }
@@ -260,24 +243,8 @@ const mixinQuiz = {
             that.$router.push({ name: 'user.exam.list' })
           })
           .finally(() => {
-            that.$store.commit('AppLayout/updateOverlay', { show: false, loading: false, text: '' })
+            that.$store.commit('loading/overlay', false)
           })
-
-        // if (that.needToLoadQuizData() && examId) {
-        //     that.participateExam(examId, viewType)
-        //         .then(() => {
-        //             resolve()
-        //         })
-        //         .catch((error) => {
-        //             that.$store.commit('AppLayout/updateOverlay', {show: false, loading: false, text: ''})
-        //             Assistant.reportErrors({location: 'mixin/Quiz.js -> startExam()'})
-        //             reject(error)
-        //         })
-        // } else {
-        //     that.loadExam()
-        //     that.$store.commit('AppLayout/updateOverlay', {show: false, loading: false, text: ''})
-        //     resolve()
-        // }
       })
     },
     needToLoadQuizData () {
@@ -315,7 +282,7 @@ const mixinQuiz = {
             examDataWithQuestions.id = examId
           }
 
-          that.$store.commit('updateQuiz', examDataWithQuestions)
+          // that.$store.commit('quiz/updateQuiz', examDataWithQuestions)
         }
         that.loadExamExtraData(that.quiz, viewType)
         if (viewType !== 'results') {
@@ -331,7 +298,7 @@ const mixinQuiz = {
               })
               reject()
             }
-            that.$store.commit('mergeDbAnswersIntoLocalstorage', {
+            that.$store.commit('quiz/mergeDbAnswersIntoLocalstorage', {
               dbAnswers: response.data,
               exam_id: that.quiz.id
             })
@@ -364,7 +331,7 @@ const mixinQuiz = {
         this.setCurrentExamQuestions(currentExamQuestions)
       }
 
-      this.$store.commit('updateQuiz', quiz)
+      this.$store.commit('quiz/updateQuiz', quiz)
     },
     loadCurrentQuestion (viewType) {
       let questNumber = this.$route.params.questNumber
@@ -387,14 +354,12 @@ const mixinQuiz = {
       }
       this.changeQuestion(questionId, viewType)
     },
-
     hasExamDataOnThisDeviseStorage (examId) {
       return !!this.userQuizListData[examId]
     },
     sendUserQuestionsDataToServerAndFinishExam (examId, examUserId) {
       const userExamData = this.userQuizListData[examId]
       const answers = []
-
       for (const questionId in userExamData) {
         if (userExamData[questionId].answered_at) {
           answers.push({
@@ -407,10 +372,8 @@ const mixinQuiz = {
           })
         }
       }
-
       return axios.post(API_ADDRESS.exam.sendAnswers, { exam_user_id: examUserId, finish: true, questions: answers })
     },
-
     isLtrString (string) {
       if (!string) {
         return false
@@ -497,7 +460,6 @@ const mixinQuiz = {
       }
     },
     goToNextQuestion (viewType) {
-      // this.$store.commit('loadUserQuizListData')
       const question = this.getNextQuestion(this.currentQuestion.id)
       if (!question) {
         return
@@ -505,7 +467,6 @@ const mixinQuiz = {
       this.changeQuestion(question.id, viewType)
     },
     goToPrevQuestion (viewType) {
-      // this.$store.commit('loadUserQuizListData')
       const question = this.getPrevQuestion(this.currentQuestion.id)
       if (!question) {
         return
@@ -541,11 +502,11 @@ const mixinQuiz = {
         }
       }
 
-      this.$store.commit('updateCurrentQuestion', {
+      this.$store.commit('quiz/updateCurrentQuestion', {
         newQuestionId: currentQuestion.id,
         currentExamQuestions: this.getCurrentExamQuestions()
       })
-      if (parseInt(this.$route.params.questNumber) !== parseInt(questNumber) && this.$route.name !== 'onlineQuiz.konkoorView' && this.$route.name !== 'onlineQuiz.bubblesheet-view') {
+      if (parseInt(this.$route.params.questNumber) !== parseInt(questNumber) && this.$route.name !== 'konkoorView' && this.$route.name !== 'onlineQuiz.bubblesheet-view') {
         this.loadExamPageByViewType(this.quiz.id, questNumber, viewType)
       }
     },
@@ -566,7 +527,7 @@ const mixinQuiz = {
       } else if (type === 'konkoor') {
         this.$store.commit('AppLayout/updateDrawer', false)
         setTimeout(() => {
-          this.$router.push({ name: 'onlineQuiz.konkoorView', params: { quizId: this.quiz.id } })
+          this.$router.push({ name: 'konkoorView', params: { quizId: this.quiz.id } })
         }, 200)
       }
     },
@@ -597,7 +558,7 @@ const mixinQuiz = {
           reject(null)
           return
         }
-        // ToDo : jQuery needed
+
         $.ajax({
           type: 'GET',
           url: questionsFileUrl,

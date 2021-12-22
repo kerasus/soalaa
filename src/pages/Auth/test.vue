@@ -1,40 +1,41 @@
 <template>
-  <q-btn @click="testMitra">click me </q-btn>
+  <div class="text-center q-mb-lg">
+    debug page
+    <br />
+    don't forget rollback your code
+    <br />
+   name : {{getStore}}
+<q-btn @click="getStore">
+  get from store
+</q-btn>
+    <q-btn @click="change">
+change
+</q-btn>
+  </div>
 </template>
 
 <script>
 // import API_ADDRESS from 'src/api/Addresses'
+
 export default {
+  data: () => ({
+    name: ''
+  }),
   created () {
-    this.$axios.get('/cdn/upload/knowledgeTree.json', {
-      headers: {
-        Accept: 'application/json; charset=utf-8',
-        dataType: 'json'
-      },
-      transformRequest: (data, headers) => {
-        delete headers.common.Authorization
-        return data
-      }
-    })
-      .then((res) => {
-        console.log('res', res)
-      })
-      .catch((err) => {
-        console.log('error', err)
-      })
+  },
+  computed: {
+    getStore () {
+      return this.$store.state.vuexTest.name
+    }
   },
   methods: {
-    testMitra () {
-      this.$axios.get('/3a/api/v1/exam?with_pagination=1&page=' + '1')
-        .then(res => {
-          console.log(res)
-        })
+    change () {
+      this.$store.commit('vuexTest/callOther', 'mitra')
     }
-  }
 
+  }
 }
 </script>
-// lumenServer + '/exam?with_pagination=1&page=' + page_number
 <style scoped>
 
 </style>
