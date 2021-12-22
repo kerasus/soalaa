@@ -147,13 +147,31 @@ const routes = [
             meta: {
               middlewares: [auth]
             }
+          },
+          {
+            path: '/results/mbti_bartle/:exam_id/:user_exam_id',
+            name: 'mbtiBartle.result',
+            component: () => import('pages/User/exam/Result/MBTI_Bartle_result'),
+            meta: {
+              middlewares: [auth]
+            }
           }
         ]
       },
-
+      {
+        path: '/onlineQuiz/alaaView/:quizId/:questNumber',
+        name: 'onlineQuiz.alaaView',
+        component: () => import('pages/User/exam/participate/AlaaView'),
+        meta: {
+          middlewares: [auth]
+        }
+      },
       {
         path: 'category',
         component: () => import('layouts/AdminLayout.vue'),
+        meta: {
+          middlewares: [auth]
+        },
         children: [
           { name: 'Admin.Category.Index', path: '', component: () => import('pages/Admin/category/Index') },
           { name: 'Admin.Category.Show', path: 'show/:id', component: () => import('pages/Admin/category/Show') },
@@ -168,11 +186,28 @@ const routes = [
     name: 'login',
     component: () => import('pages/Auth/Login.vue')
   },
+  // are u mr Esmaeili ? '' : dont touch this route
+  {
+    path: '/debug',
+    name: 'debug',
+    component: () => import('pages/Auth/test.vue'),
+    meta: {
+      middlewares: [auth]
+    }
+  },
+  {
+    path: '/onlineQuiz/mbti_bartle/:quizId/:questNumber',
+    name: 'onlineQuiz.mbtiBartle',
+    component: () => import('pages/User/exam/participate/MBTI_Bartle'),
+    meta: {
+      middlewares: [auth]
+    }
+  },
   {
     // path: '/konkoorView/:quizId',
-    path: '/konkoorView',
+    path: '/onlineQuiz/konkoorView/:quizId',
     name: 'konkoorView',
-    component: () => import('pages/User/exam/participate/konkoorView1'),
+    component: () => import('pages/User/exam/participate/konkoorView'),
     // component: () => import('src/components/Menu/topMenu/onlineQuizTopMenu'),
     meta: {
       middlewares: [auth]
@@ -186,16 +221,6 @@ const routes = [
       middlewares: [auth]
     }
   },
-  // TODO following routes should be remove
-  {
-    path: '/test',
-    name: 'onlineQuiz.alaaView',
-    component: () => import('pages/Auth/test'),
-    meta: {
-      middlewares: [auth]
-    }
-  },
-
   // Always leave this as last one,
   // but you can also remove it
   {

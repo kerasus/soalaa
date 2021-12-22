@@ -1,4 +1,4 @@
-import { Question } from '../models/Question'
+import { Question } from 'src/models/Question'
 
 const mixinUserActionOnQuestion = {
   methods: {
@@ -21,6 +21,7 @@ const mixinUserActionOnQuestion = {
       } else if (actionType === 'status') {
         this.userActionOnQuestion_status(data, examId, questionId, userQuestionData)
       }
+
       this.afterUserActionOnQuestion()
       return this.sendUserQuestionsDataToServer(examUserId, userExamData, questionId, actionType)
     },
@@ -84,7 +85,7 @@ const mixinUserActionOnQuestion = {
         newAnsweredChoiceId = null
       } else if (oldStatus === 'x') {
         const newState = ''
-        this.$store.commit('quiz/changeQuestion_Status', {
+        this.$store.commit('quiz/changeQuestionStatus', {
           exam_id: examId,
           question_id: questionId,
           status: newState

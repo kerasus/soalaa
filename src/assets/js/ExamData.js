@@ -99,6 +99,7 @@ class ExamData {
           resolve(response.data)
         })
         .catch(error => {
+          console.log('error', error)
           reject(error)
         })
     })
@@ -117,10 +118,8 @@ class ExamData {
       if (!userExamId) {
         userExamId = that.exam.user_exam_id
       }
-      console.log('API_ADDRESS.exam.getAnswerOfUserWithCorrect(userExamId)', API_ADDRESS.exam.getAnswerOfUserWithCorrect(userExamId))
       axios.get(API_ADDRESS.exam.getAnswerOfUserWithCorrect(userExamId))
         .then(response => {
-          console.log('response', response)
           that.exam = new Exam()
           if (examId) {
             that.exam.id = examId
@@ -132,7 +131,6 @@ class ExamData {
           resolve(response)
         })
         .catch(error => {
-          console.log('error', error)
           reject(error)
         })
     })
@@ -179,6 +177,7 @@ class ExamData {
           resolve(response)
         })
         .catch(error => {
+          console.log(error)
           reject(error)
         })
     })
@@ -190,16 +189,14 @@ class ExamData {
     const that = this
     this.commands.push(() => new Promise((resolve, reject) => {
       if (!examId && !that.exam) {
-        Assistant.handleAxiosError('examId in getExamDataAndParticipate() is not set')
-        reject('examId in getExamDataAndParticipate() is not set')
+        Assistant.handleAxiosError('exam_id in getExamDataAndParticipate() is not set')
+        reject('exam_id in getExamDataAndParticipate() is not set')
       }
       if (!examId) {
         examId = that.exam.id
       }
-      // eslint-disable-next-line no-undef
-      axios.post(API_ADDRESS.exam.examUser, { exam_id })
+      axios.post(API_ADDRESS.exam.examUser, { exam_id: examId })
         .then(response => {
-          console.log('res', response)
           that.exam = new Exam()
           // ToDo: attention on user_exam_id and exam_id
           that.exam.id = Assistant.getId(response.data.data.exam_id)

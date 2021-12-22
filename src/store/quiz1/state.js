@@ -1,8 +1,10 @@
+import { ref } from 'vue'
+
 export default function () {
   return {
-    quiz: null,
-    userQuizListData: {},
-    currentQuestion: null,
-    currentExamFrozenQuestions: null
+    quiz: ref(null),
+    userQuizListData: ref({}),
+    currentQuestion: ref(null),
+    currentExamFrozenQuestions: ref(null)
   }
 }

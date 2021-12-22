@@ -1,120 +1,86 @@
 <template>
-  <v-container
-    v-resize="updateWindowSize"
-    class="konkoor-view"
-    :fluid="true"
-    :style="{ height: '100%', background: 'rgb(244,244,244)' }"
-  >
-    <v-row :style="{ 'min-height': '100%' }">
-      <v-col
+  <div class="konkoor-view ">
+    <div class="row">
+      <div
         id="questions"
         ref="questionsColumn"
-        :md="5"
-        class="questions"
+        class="col-md-5 right-side"
         :style="{ height: windowSize.y }"
       >
-        <!--                <div class="lesson">{{ currentLesson.title }}</div>-->
-        <DynamicScroller
+        <q-virtual-scroll
+          class="konkoor-view-scroll"
           ref="scroller"
           :items="questions"
-          :min-item-size="70"
-          class="scroller questionss"
-          :emit-update="true"
-          @update="onScroll"
+          virtual-scroll-slice-size="70"
+          @virtual-scroll="onScroll"
         >
-          <template v-slot="{ item, index, active }">
-            <DynamicScrollerItem
-              :item="item"
-              :active="active"
-              :data-index="index"
+          <template v-slot="{ item, index }">
+            <q-item
+              class="question-field"
+              :key="index"
+              dense
             >
-              <Item
-                :source="item"
-                :questions-column="$refs.questionsColumn"
-                @inView="test"
-              />
-            </DynamicScrollerItem>
+              <q-item-section>
+                <Item
+                  :source="item"
+                  :questions-column="$refs.questionsColumn"
+                  @inView="isInView"
+                />
+              </q-item-section>
+            </q-item>
           </template>
-        </DynamicScroller>
-      </v-col>
-      <v-col
-        ref="leftSideList"
-        :md="7"
-        class="left-side-list"
-      >
-        <v-row>
-          <v-col
-            class="px-10 py-0 d-flex justify-space-between"
-            dir="ltr"
-          >
-            <div class="rounded-b-xl rounded-r-xl">
-              <v-menu
-                bottom
-                :offset-y="true"
-                class="rounded-b-xl rounded-r-xl"
-              >
-                <template v-slot:activator="{ on, attrs }">
-                  <v-btn
-                    large
-                    tile
-                    v-bind="attrs"
-                    elevation="0"
-                    class="pl-3"
-                    v-on="on"
-                  >
-                    <v-icon
-                      class="mr-2"
-                      :size="30"
-                      color="#666"
-                    >
-                      mdi-account-circle
-                    </v-icon>
-                    <span v-if="user.last_name">
-                      {{ user.last_name }}
-                    </span>
-                    <span v-if="user.first_name">
-                      {{ user.first_name }}
-                    </span>
-                  </v-btn>
-                </template>
-                <v-card
-                  max-width="375"
-                  class="mx-auto"
-                  rounded="b-xl r-xl"
-                >
-                  <TopMenu/>
-                </v-card>
-              </v-menu>
-            </div>
-            <v-btn
-              icon
+        </q-virtual-scroll>
+      </div>
+      <div class="col-md-7">
+        <div
+          ref="leftSideList"
+          class="row left-side"
+        >
+          <div class="col bubbleSheet-top">
+            <q-btn
+              icon="mdi-table-split-cell"
+              color="grey"
+              flat
+              fab-mini
               @click="changeView('alaa')"
+            />
+            <q-btn-dropdown
+              class="dropdown-button"
+              icon="account_circle"
+              :label="user.full_name "
+              color="grey-14"
+              dropdown-icon="false"
+              flat
             >
-              <v-icon>mdi-table-split-cell</v-icon>
-            </v-btn>
-          </v-col>
-        </v-row>
-        <v-row>
-          <v-col>
+              <top-menu/>
+            </q-btn-dropdown>
+          </div>
+          <div class="col bubbleSheet-bottom">
             <BubbleSheet
-              :info="{ type: 'pasokh-barg' }"
+              :info="{ type: 'pasokh-barg'}"
               :delay-time="0"
+              :questions="questions"
               @clickChoice="choiceClicked"
               @scrollTo="scrollTo"
             />
-          </v-col>
-        </v-row>
-      </v-col>
-    </v-row>
-    <v-row class="timer-row">
-      <v-btn
+          </div>
+        </div>
+      </div>
+    </div>
+    <div
+      class="row timer-row"
+    >
+      <q-btn
         v-if="false"
         class="end-exam-btn"
         @click="getConfirmation"
       >
         ارسال پاسخنامه
-      </v-btn>
-      <v-col :class="{ 'high-z-index': timerIsOpen }">
+      </q-btn>
+      <div
+        class="col"
+        :class="{ 'high-z-index': timerIsOpen}"
+      >
         <Timer
           :daftarche="'عمومی'"
           :quiz-started-at="1607963897"
@@ -122,17 +88,17 @@
           :height="100"
           @timerOpen="timerOpen"
         />
-      </v-col>
-    </v-row>
-  </v-container>
+      </div>
+    </div>
+  </div>
 </template>
 
 <script>
 import 'src/assets/scss/markdownKatex.scss'
 import Item from 'src/components/OnlineQuiz/Quiz/question/questionField'
 import { mixinAuth, mixinQuiz, mixinUserActionOnQuestion, mixinWindowSize } from 'src/mixin/Mixins'
-import Timer from 'src/components/OnlineQuiz/Quiz/Timer/Timer'
-import BubbleSheet from 'components/OnlineQuiz/Quiz/bubbleSheet/BubbleSheet'
+import Timer from 'src/components/OnlineQuiz/Quiz/timer/timer'
+import BubbleSheet from 'src/components/OnlineQuiz/Quiz/bubbleSheet/bubbleSheet'
 import { Exam } from 'src/models/Exam'
 import Assistant from 'src/plugins/assistant'
 import TopMenu from 'src/components/Menu/topMenu/onlineQuizTopMenu'
@@ -147,6 +113,7 @@ export default {
   mixins: [mixinAuth, mixinQuiz, mixinUserActionOnQuestion, mixinWindowSize],
   data () {
     return {
+      user: null,
       quizData: new Exam(),
       item: Item,
       lastTimeScrollRange: { start: 0, end: 29 },
@@ -160,88 +127,62 @@ export default {
     }
   },
   watch: {
-    'windowSize.y': function () {
-      this.setHeights()
-    },
-    'windowSize.x': function () {
-      this.$store.commit('AppLayout/updateDrawer', false)
-    }
+    // 'windowSize.y': function () {
+    //   this.setHeights()
+    // },
+    // 'windowSize.x': function () {
+    //   this.$store.commit('AppLayout/updateDrawer', false)
+    // }
   },
   created () {
+    this.getUser()
     const that = this
-    this.startExam(this.$route.params.quizId, 'onlineQuiz.KonkoorView')
+    this.startExam(this.$route.params.quizId, 'KonkoorView')
       .then(() => {
-        // that.loadFirstActiveQuestionIfNeed()
-        that.$store.commit('AppLayout/updateOverlay', { show: false, loading: false, text: '' })
+        that.$store.dispatch('loading/overlayLoading', false)
+        if (!this.questions.length) {
+          this.questions = this.getCurrentExamQuestionsInArray()
+        }
       })
       .catch((error) => {
         Assistant.reportErrors(error)
-        that.$notify({
-          group: 'notifs',
-          title: 'توجه!',
-          text: 'مشکلی در دریافت اطلاعات آژمون رخ داده است. لطفا دوباره امتحان کنید.',
-          type: 'error'
+        that.$q.notify({
+          message: 'مشکلی در دریافت اطلاعات آزمون رخ داده است. لطفا دوباره امتحان کنید.',
+          type: 'negative',
+          position: 'top'
         })
-        // ToDo: uncomment
-        // that.$router.push({ name: 'user.exam.list'})
       })
-    if (this.windowSize.x > 959) {
-      this.changeAppBarAndDrawer(false)
-    } else {
-      this.$router.push({
-        name: 'onlineQuiz.alaaView',
-        params: { quizId: 313, questNumber: this.$route.params.quizId }
-      })
-    }
-    if (!this.questions.length) {
-      this.questions = this.getCurrentExamQuestionsInArray()
-    }
+    // if (this.windowSize.x > 959) {
+    //   this.changeAppBarAndDrawer(false)
+    // } else {
+    //   this.$router.push({
+    //     name: 'onlineQuiz.alaaView',
+    //     params: { quizId: this.$route.params.quizId, questNumber: 1 }
+    //   })
+    // }
   },
   mounted () {
-    this.setHeights()
-    if (this.currentQuestion.id === null) {
-      this.loadFirstQuestion()
-    }
-    this.scrollTo(this.currentQuestion.id)
-    this.changeAppBarAndDrawer(false)
+    // this.setHeights()
+    // if (this.currentQuestion.id === null) {
+    //   this.loadFirstQuestion()
+    // }
+    // this.scrollTo(this.currentQuestion.id)
+    // this.changeAppBarAndDrawer(false)
   },
   unmounted () {
-    this.changeAppBarAndDrawer(true)
+    // this.changeAppBarAndDrawer(true)
   },
   methods: {
-    loadFirstActiveQuestionIfNeed () {
-      const activeCcategory = this.quiz.getFirstActiveCategory()
-      if (!activeCcategory) {
-        this.loadFirstQuestion()
-      } else {
-        if (
-          Assistant.getId(this.currentQuestion.sub_category.category_id) !== Assistant.getId(activeCcategory.id) &&
-          activeCcategory.sub_categories.list.length > 0
-        ) {
-          const questionsOfSubcategory = this.getQuestionsOfSubcategory(activeCcategory.sub_categories.list[0].id)
-          if (questionsOfSubcategory.length > 0) {
-            this.currentQuestion = questionsOfSubcategory[0]
-          }
-        }
-      }
-
-      this.scrollTo(this.currentQuestion.id)
-
-      // if (!this.currentQuestion.in_active_category) {//category_id
-      //     let firstActiveQuestion = this.quiz.questions.getFirstActiveQuestion()
-      //     if (!firstActiveQuestion) {
-      //         this.loadFirstQuestion()
-      //     } else {
-      //         this.changeQuestion(firstActiveQuestion.id)
-      //     }
-      //     this.scrollTo(this.currentQuestion.id)
-      // }
+    getUser () {
+      this.user = this.$store.getters['Auth/user']
+      return this.user
     },
     timerOpen (value) {
       this.timerIsOpen = value
     },
     getConfirmation () {
       const that = this
+      // TODO --> conrim in store should be fix
       this.$store.commit('AppLayout/showConfirmDialog', {
         message: 'از ارسال پاسخ ها اطمینان دارید؟',
         button: {
@@ -260,26 +201,24 @@ export default {
       const that = this
       this.quiz.sendAnswersAndFinishExam()
         .then(() => {
-          that.$store.commit('clearExamData', that.quiz.id)
-          that.$notify({
-            group: 'notifs',
-            text: 'اطلاعات آزمون شما ثبت شد.',
-            type: 'success'
+          that.$store.commit('quiz/clearExamData', that.quiz.id)
+          that.$q.notify({
+            message: 'اطلاعات آزمون شما ثبت شد.',
+            type: 'positive'
           })
           that.$router.push({ name: 'user.exam.list' })
         })
         .catch(() => {
-          that.$notify({
-            group: 'notifs',
+          that.$q.notify({
             title: 'توجه!',
-            text: 'مشکلی در ثبت اطلاعات آزمون شما رخ داده است. لطفا تا قبل از ساعت 24 اقدام به ارسال مجدد پاسخنامه نمایید.',
-            type: 'warn',
+            message: 'مشکلی در ثبت اطلاعات آزمون شما رخ داده است. لطفا تا قبل از ساعت 24 اقدام به ارسال مجدد پاسخنامه نمایید.',
+            type: 'warning',
             duration: 30000
           })
           that.$router.push({ name: 'user.exam.list' })
         })
     },
-    test (payload) {
+    isInView (payload) {
       if (payload.isInView) {
         for (let i = 0; i < this.inView.length; i++) {
           if (this.inView[i] === payload.number) {
@@ -299,11 +238,6 @@ export default {
       this.$store.commit('AppLayout/updateAppBarAndDrawer', state)
     },
     changeCurrentQuestionIfScrollingIsDone () {
-      // console.Log('time since last: ', this.timePassedSinceLastScroll)
-      // if (startIndex !== this.lastTimeScrollRange.start || endIndex !== this.lastTimeScrollRange.end) {
-      //     this.lastTimeScrollRange.start = startIndex
-      //     this.lastTimeScrollRange.end = endIndex
-      // }
       if (this.timePassedSinceLastScroll >= 1000) {
         this.changeCurrentQuestionToFirstQuestionInView()
         this.timePassedSinceLastScroll = 0
@@ -338,38 +272,20 @@ export default {
       }
       this.changeQuestion(firstInViewQuestion.id, 'onlineQuiz.konkoorView')
     },
-    // scrollTo (questionId) {
-    //     if (this.quiz.questions.getQuestionById(questionId).isInView === false) {
-    //         const questionIndex = this.quiz.questions.getQuestionIndexById(questionId)
-    //         this.$refs.scroller.scrollToIndex(questionIndex)
-    //         for (let i = 1; i < 4; i++) {
-    //             setTimeout(() => {
-    //                 this.$refs.scroller.scrollToIndex(questionIndex)
-    //             },
-    //             500 / Math.ceil(this.quiz.questions.list.length / 100) * i)
-    //         }
-    //     }
-    // },
     scrollTo (questionId) {
       const questionIndex = this.getQuestionIndexById(questionId)
-      this.$refs.scroller.scrollToItem(questionIndex)
+      this.$refs.scroller.scrollTo(questionIndex)
       for (let i = 1; i < 4; i++) {
         setTimeout(() => {
-          this.$refs.scroller.scrollToItem(questionIndex)
+          this.$refs.scroller.scrollTo(questionIndex)
         },
         333 * i)
       }
     },
-    // onIntersect (entries) {
-    //     this.quiz.questions.getQuestionById(entries[0].target.id).isInView = (entries[0].intersectionRatio >= 0.5)
-    // },
-    // ToDo: check for removal
     getFirstInViewQuestionNumber () {
-      // console.Log(this.renderedQuestions.startIndex, this.renderedQuestions.endIndex, 'haha2')
       let firstQuestionInView
       for (let i = this.renderedQuestions.startIndex; i <= this.renderedQuestions.endIndex; i++) {
-        // console.Log(i, ': ', this.questions[i].isInView)
-        if (this.questions[i].isInView === true) {
+        if (this.questions[i].isInView) {
           firstQuestionInView = this.questions[i]
           break
         }
@@ -380,27 +296,10 @@ export default {
         return false
       }
     },
-    // isThisFirstQuestionInView (questionId) {
-    //     if (this.getFirstInViewQuestionNumber().id === questionId) {
-    //         return true
-    //     }
-    //     return false
-    // },
-    // getQuestionNumber (question) {
-    //     if (question.isInView === false) {
-    //         return '.question:nth-child('+(this.quiz.questions.getQuestionIndexById(question.id) + 2)+')'
-    //     }
-    //     return ''
-    // },
     choiceClicked (questionId) {
       this.scrollTo(questionId)
       this.changeQuestion(questionId)
     },
-    // changeCurrentQuestion (question) {
-    //     if (question.id !== this.currentQuestion.id) {
-    //         this.currentQuestion = question
-    //     }
-    // }
     setHeights () {
       this.$refs.questionsColumn.style.height = this.windowSize.y + 'px'
       if (this.$refs.scroller.$el) {
@@ -412,6 +311,86 @@ export default {
 }
 </script>
 
-<style scoped>
-
+<style lang="scss" scoped>
+.konkoor-view{
+  height: 100%;
+  min-height: 100vh;
+  background-color: rgb(244,244,244);
+  .right-side{
+    height: 100%;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    padding: 0;
+    .konkoor-view-scroll{
+      height: 100vh;
+      max-height: 100%;
+      .question-field{
+        &.q-item{
+          padding: 0;
+        }
+      }
+    }
+  }
+  .left-side{
+    display: flex;
+    flex-direction: column;
+    overflow-y: auto;
+    .bubbleSheet-top{
+      display: flex;
+      justify-content: space-between;
+      padding: 0 40px;
+      .dropdown-button{
+        padding: 0;
+        direction: rtl;
+      }
+    }
+    .bubbleSheet-bottom{
+      padding: 12px;
+    }
+  }
+  .timer-row {
+    width: calc(58% - 150px);
+    position: absolute;
+    bottom: 0;
+    right: 100px;
+    .end-exam-btn {
+      position: absolute;
+      bottom: 0;
+      background: rgb(76, 175, 80) !important;
+      color: #fff;
+      font-weight: bold;
+      font-size: 16px;
+      height: 103px !important;
+      box-shadow: 0px 3px 3px -2px rgb(0 0 0 / 20%), 0px 3px 4px 0px rgb(0 0 0 / 14%), 0px 1px 8px 0px rgb(0 0 0 / 12%);
+      width: 200px;
+      border-radius: 20px 20px 0 0;
+    }
+    .high-z-index {
+      z-index: 3;
+    }
+  }
+}
+</style>
+<style lang="scss">
+.konkoor-view{
+  .left-side{
+    .bubbleSheet-top{
+      .dropdown-button{
+          .q-icon{
+            font-size: 30px;
+            &.on-left{
+              margin: 0 0 0 8px;
+            }
+          }
+      }
+      .q-btn--fab-mini {
+        padding: 0;
+        height: 36px;
+        width: 36px;
+      }
+    }
+  }
+}
 </style>

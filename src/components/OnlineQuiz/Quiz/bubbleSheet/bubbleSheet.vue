@@ -26,13 +26,12 @@
             cross: getUserQuestionData(question.id) && getUserQuestionData(question.id).status === 'x',
             bookmark: getUserQuestionData(question.id) && getUserQuestionData(question.id).bookmarked
           }"
-          :style="{ width: '24%', cursor: 'pointer' }"
           @click="ClickQuestionNumber(question.id)"
         >
           <span v-if="getUserQuestionData(question.id)">
             {{ getQuestionNumberFromId(question.id) }}
             <q-tooltip
-              v-if="getUserQuestionData(question.id)"
+              v-if="getUserQuestionData(question.id)=== true"
               anchor="bottom middle"
             >
               <span>
@@ -41,7 +40,6 @@
                 icon="mdi-calendar-check-outline"
               />
               <q-icon
-                v-else
                 icon="mdi-clock-check-outline"
               />
               {{ showAnsweredAt(getUserQuestionData(question.id).answered_at) }}
@@ -63,11 +61,13 @@
           @click="AnswerClicked({ questionId: question.id, choiceId: choice.id})"
         >
           <q-icon
+            v-if="info.type === 'pasokh-nameh' && choice.answer"
             size="12"
             icon="mdi-check"
             :color="getUserQuestionData(question.id) && choice.id === getUserQuestionData(question.id).answered_choice_id ? '#fff' : '#00c753'"
           />
           <q-icon
+            v-if="info.type === 'pasokh-nameh' && getUserQuestionData(question.id) && choice.id === getUserQuestionData(question.id).answered_choice_id && !choice.answer"
             size="12"
             icon="mdi-close"
             color="#fff"
@@ -80,7 +80,7 @@
 
 <script>
 import moment from 'moment-jalaali'
-import { mixinQuiz, mixinUserActionOnQuestion } from 'src/mixin1/Mixins'
+import { mixinQuiz, mixinUserActionOnQuestion } from 'src/mixin/Mixins'
 
 export default {
   name: 'BubbleSheet',
@@ -268,10 +268,10 @@ export default {
           background: #888;
         }
       }
-
       .question-number-in-list {
         position: relative;
-
+        width: 24%;
+        cursor: pointer;
         &.circle {
           &:after {
             content: "\F0130";
