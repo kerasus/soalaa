@@ -147,13 +147,16 @@ const routes = [
             meta: {
               middlewares: [auth]
             }
+          },
+          {
+            path: '/results/mbti_bartle/:exam_id/:user_exam_id',
+            name: 'mbtiBartle.result',
+            component: () => import('pages/User/exam/Result/MBTI_Bartle_result'),
+            meta: {
+              middlewares: [auth]
+            }
           }
         ]
-      },
-      {
-        path: '/category',
-        name: 'categoryList',
-        component: () => import('pages/Admin/category/list')
       },
       {
         path: '/onlineQuiz/alaaView/:quizId/:questNumber',
@@ -162,6 +165,19 @@ const routes = [
         meta: {
           middlewares: [auth]
         }
+      },
+      {
+        path: 'category',
+        component: () => import('layouts/AdminLayout.vue'),
+        meta: {
+          middlewares: [auth]
+        },
+        children: [
+          { name: 'Admin.Category.Index', path: '', component: () => import('pages/Admin/category/Index') },
+          { name: 'Admin.Category.Show', path: 'show/:id', component: () => import('pages/Admin/category/Show') },
+          { name: 'Admin.Category.Edit', path: ':id/edit', component: () => import('pages/Admin/category/Edit') },
+          { name: 'Admin.Category.Create', path: 'create', component: () => import('pages/Admin/category/Create') }
+        ]
       }
     ]
   },
@@ -175,14 +191,6 @@ const routes = [
     path: '/debug',
     name: 'debug',
     component: () => import('pages/Auth/test.vue'),
-    meta: {
-      middlewares: [auth]
-    }
-  },
-  {
-    path: '/results/mbti_bartle/:exam_id/:user_exam_id',
-    name: 'mbtiBartle.result',
-    component: () => import('pages/User/exam/Result/MBTI_Bartle_result'),
     meta: {
       middlewares: [auth]
     }
