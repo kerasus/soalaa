@@ -28,7 +28,7 @@
     </template>
     <template #content>
       <q-expansion-item v-model="expanded">
-        <form-builder v-model:value="inputData" />
+        <form-builder v-model:value="inputData"/>
         <div class="row">
           <div class="col">
             <EntityIndexTable
@@ -37,6 +37,7 @@
               :title="title"
               :loading="loading"
               :change-page="changePage"
+              @search="search"
             >
               <template #entity-index-table-cell="{inputData}">
                 <slot name="table-cell" :inputData="inputData" :showConfirmRemoveDialog="showConfirmRemoveDialog">
@@ -56,8 +57,8 @@
             <span class="q-ml-sm">{{ confirmRemoveMessage }}</span>
           </q-card-section>
           <q-card-actions align="right">
-            <q-btn v-close-popup flat label="انصراف" color="primary" />
-            <q-btn v-close-popup flat label="تایید" color="primary" @click="removeItem" />
+            <q-btn v-close-popup flat label="انصراف" color="primary"/>
+            <q-btn v-close-popup flat label="تایید" color="primary" @click="removeItem"/>
           </q-card-actions>
         </q-card>
       </q-dialog>
@@ -113,7 +114,7 @@ export default {
       type: Object
     }
   },
-emits: ['onPageChanged', 'catchError'],
+  emits: ['onPageChanged', 'catchError'],
   data () {
     return {
       removeIdKey: 'id',
