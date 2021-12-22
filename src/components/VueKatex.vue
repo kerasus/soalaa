@@ -1,27 +1,15 @@
 <template>
   <div
-    v-katex:auto
     class="html-katex"
     :dir="!isLtrString ? 'rtl' : 'ltr'"
-    v-html="input"
+    v-html="computedKatex"
   />
 </template>
 
 <script>
-import { createApp } from 'vue'
-const app = createApp({})
-import VueKatex from 'vue-katex'
+import katex from 'katex'
 import 'katex/dist/katex.min.css'
-app.use(VueKatex, {
-  globalOptions: {
-    delimiters: [
-      { left: '$$', right: '$$', display: true },
-      { left: '\\[', right: '\\]', display: true },
-      { left: '$', right: '$', display: false },
-      { left: '\\(', right: '\\)', display: false }
-    ]
-  }
-})
+
 export default {
   name: 'VueKatex',
   props: {
@@ -52,6 +40,11 @@ export default {
       // return !!string.match(englishRegex)
       const persianRegex = /[\u0600-\u06FF]/
       return !string.match(persianRegex)
+    },
+    computedKatex () {
+      return katex.renderToString(this.input, {
+        throwOnError: false
+      })
     }
   },
   mounted () {
