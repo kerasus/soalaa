@@ -157,8 +157,7 @@ export default {
     // } else {
     //   this.$router.push({
     //     name: 'onlineQuiz.alaaView',
-    //     // TODO --> why 313 ?
-    //     params: { quizId: 313, questNumber: this.$route.params.quizId }
+    //     params: { quizId: this.$route.params.quizId, questNumber: 1 }
     //   })
     // }
   },
