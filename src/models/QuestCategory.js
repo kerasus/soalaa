@@ -17,7 +17,6 @@ class QuestCategory extends Model {
       },
       { key: 'order' },
       { key: 'time' },
-      { key: 'order' },
       { key: 'questions_booklet' },
       { key: 'descriptive_answers_booklet' },
       {
