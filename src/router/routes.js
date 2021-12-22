@@ -164,6 +164,12 @@ const routes = [
         component: () => import('pages/Admin/category/list')
       },
       {
+        path: '/faq',
+        name: 'faq',
+        component: () => import('src/pages/CommonQuestions/list')
+        // meta: {middleware: [auth, completeInfo]}
+      },
+      {
         path: '/onlineQuiz/alaaView/:quizId/:questNumber',
         name: 'onlineQuiz.alaaView',
         component: () => import('pages/User/exam/participate/AlaaView'),
