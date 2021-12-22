@@ -26,6 +26,14 @@ const routes = [
         middleware: [auth]
       },
       {
+        path: '/faq',
+        name: 'faq',
+        component: () => import('src/pages/CommonQuestions/list'),
+        meta: {
+          middleware: [auth]
+        }
+      },
+      {
         path: '/exam',
         name: 'exam',
         component: () => import('pages/Admin/exam/index'),
