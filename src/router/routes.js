@@ -41,14 +41,7 @@ const routes = [
           middlewares: [auth]
         },
         children: [
-          {
-            path: '',
-            name: 'list',
-            component: () => import('pages/Admin/exam/list'),
-            meta: {
-              middlewares: [auth]
-            }
-          },
+          { name: 'list', path: '', component: () => import('pages/Admin/exam/list') },
           {
             path: 'create',
             name: 'create',
