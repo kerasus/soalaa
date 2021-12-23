@@ -34,14 +34,17 @@ const routes = [
         }
       },
       {
-        path: '/exam',
+        path: 'exam',
         name: 'exam',
-        component: () => import('pages/Admin/exam/index'),
+        component: () => import('layouts/AdminLayout.vue'),
         meta: {
           middlewares: [auth]
         },
         children: [
-          { name: 'list', path: '', component: () => import('pages/Admin/exam/list') },
+          { name: 'Admin.Exam.Index', path: '', component: () => import('pages/Admin/exam/index') },
+          { name: 'Admin.Exam.Show', path: 'show/:examId', component: () => import('pages/Admin/exam/Show') },
+          { name: 'Admin.Exam.Edit', path: ':examId/edit', component: () => import('pages/Admin/exam/Edit') },
+          { name: 'Admin.Exam.Create', path: 'create', component: () => import('pages/Admin/exam/Create') },
           {
             path: 'create',
             name: 'create',
@@ -63,14 +66,6 @@ const routes = [
             name: 'exam.results',
             component: () => import('pages/Admin/exam/results'),
             meta: { middleware: [auth] }
-          },
-          {
-            path: ':examId',
-            name: 'show',
-            component: () => import('pages/Admin/exam/edit/editExam'),
-            meta: {
-              middlewares: [auth]
-            }
           },
           {
             path: ':examId/edit-exam-report',
@@ -169,6 +164,7 @@ const routes = [
       },
       {
         path: 'category',
+        name: 'category',
         component: () => import('layouts/AdminLayout.vue'),
         meta: {
           middlewares: [auth]
