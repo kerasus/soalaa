@@ -4,7 +4,6 @@
     class="main-layout"
   >
     <q-header
-      elevated
       class="text-black layout-header"
       style="background-color: #f1f1f1"
     >
