@@ -81,6 +81,12 @@ module.exports = configure(function (ctx) {
         chain.output.chunkFilename('js/[name]/' + hashh + '.chunk.js')
         chain.plugin('eslint-webpack-plugin')
           .use(ESLintPlugin, [{ extensions: ['js', 'vue'] }])
+        chain.module.rule('fonts')
+          .use('url-loader')
+          .tap((options) => {
+            options.name = 'fonts/[path][name].[ext]'
+            return options
+          })
       }
     },
 
