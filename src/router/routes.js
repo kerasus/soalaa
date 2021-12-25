@@ -26,6 +26,14 @@ const routes = [
         middleware: [auth]
       },
       {
+        path: '/faq',
+        name: 'faq',
+        component: () => import('src/pages/CommonQuestions/list'),
+        meta: {
+          middleware: [auth]
+        }
+      },
+      {
         path: '/exam',
         name: 'exam',
         component: () => import('pages/Admin/exam/index'),
@@ -159,17 +167,25 @@ const routes = [
         ]
       },
       {
-        path: '/category',
-        name: 'categoryList',
-        component: () => import('pages/Admin/category/list')
-      },
-      {
         path: '/onlineQuiz/alaaView/:quizId/:questNumber',
         name: 'onlineQuiz.alaaView',
         component: () => import('pages/User/exam/participate/AlaaView'),
         meta: {
           middlewares: [auth]
         }
+      },
+      {
+        path: 'category',
+        component: () => import('layouts/AdminLayout.vue'),
+        meta: {
+          middlewares: [auth]
+        },
+        children: [
+          { name: 'Admin.Category.Index', path: '', component: () => import('pages/Admin/category/Index') },
+          { name: 'Admin.Category.Show', path: 'show/:id', component: () => import('pages/Admin/category/Show') },
+          { name: 'Admin.Category.Edit', path: ':id/edit', component: () => import('pages/Admin/category/Edit') },
+          { name: 'Admin.Category.Create', path: 'create', component: () => import('pages/Admin/category/Create') }
+        ]
       }
     ]
   },
