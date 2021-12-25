@@ -18,9 +18,7 @@
 <!--        :options="{ bubbleMenu: false, floatingMenu: false, poem: true, reading: true }"-->
 <!--      />-->
     </div>
-    <div
-    v-else
-    >
+    <div v-else>
       <q-card-section v-html="value" />
     </div>
 <!--    <div class="col" v-else>-->
