@@ -1,17 +1,17 @@
 <template>
   <div
-      style="font-size: 16px;"
+    style="font-size: 16px;"
   >
-<!--    ToDo : add confirm-dialog-->
-<!--    <vue-confirm-dialog />-->
+    <!--    ToDo : add confirm-dialog-->
+    <!--    <vue-confirm-dialog />-->
     <div class="fit row wrap justify-center items-start content-start"
     >
       <div class="col col-9">
         <q-linear-progress
           v-if="loadingList"
           indeterminate />
-<!--        ToDo : ProgressLinear-->
-<!--        <progress-linear :active="loadingList" />-->
+        <!--        ToDo : ProgressLinear-->
+        <!--        <progress-linear :active="loadingList" />-->
         <q-banner
           v-if="exams.list.length === 0 && !loadingList"
           inline-actions rounded class="bg-blue text-white">
@@ -36,13 +36,13 @@
                 زمان شروع آزمون
               </div>
               <div class="col col-2"
-                v-if="false"
-                style="padding-right: 24px;"
+                   v-if="false"
+                   style="padding-right: 24px;"
               >
                 زمان پایان آزمون
               </div>
               <div class="col col-1"
-                v-if="false"
+                   v-if="false"
               >
                 میزان تاخیر مجاز
               </div>
@@ -53,14 +53,14 @@
               </div>
             </div>
             <div class="row exam-info-bar"
-              v-for="item in exams.list"
-              :key="item.id"
+                 v-for="item in exams.list"
+                 :key="item.id"
             >
               <div class="col">
-<!--                elevation="0"
-                  outlined
-                  rounded
-                  shaped-->
+                <!--                elevation="0"
+                                  outlined
+                                  rounded
+                                  shaped-->
                 <div
                   class="d-flex exam-list-sheet"
                 >
@@ -77,7 +77,7 @@
                       {{ item.shamsiDate('start_at').dateTime }}
                     </div>
                     <div class="col col-12 col-md-2"
-                      v-if="false"
+                         v-if="false"
                     >
                       <span class="d-inline-block-md d-none">
                         زمان پایان آزمون:
@@ -85,7 +85,7 @@
                       {{ item.shamsiDate('finish_at').dateTime }}
                     </div>
                     <div class="col col-12 col-md-1"
-                      v-if="false"
+                         v-if="false"
                     >
                       <span class="d-inline-block-md d-none">
                         میزان تاخیر مجاز:
@@ -283,36 +283,36 @@ export default {
 </script>
 
 <style scoped>
-    .exam-list-sheet {
-        background: var(--surface-1);;
-        min-height: 50px;
-    }
+.exam-list-sheet {
+  background: var(--surface-1);;
+  min-height: 50px;
+}
 
-    .appDarkMode .exam-list-sheet {
-        background: #1c1c21;
-    }
+.appDarkMode .exam-list-sheet {
+  background: #1c1c21;
+}
 
-    @media only screen and (max-width: 960px) {
-        .table-header {
-            display: none;
-        }
-        .table-row {
-            padding-right: 10px;
-        }
-    }
+@media only screen and (max-width: 960px) {
+  .table-header {
+    display: none;
+  }
+  .table-row {
+    padding-right: 10px;
+  }
+}
 </style>
 
 <style>
-    .appDarkMode .exam-list-sheet .q-btn--disabled span {
-        color: #bfbfbf !important;
-        opacity: 0.6;
-    }
+.appDarkMode .exam-list-sheet .q-btn--disabled span {
+  color: #bfbfbf !important;
+  opacity: 0.6;
+}
 
-    .exam-info-bar .col {
-        padding: 6px 12px;
-    }
+.exam-info-bar .col {
+  padding: 6px 12px;
+}
 
-    .table-row {
-        align-items: center;
-    }
+.table-row {
+  align-items: center;
+}
 </style>

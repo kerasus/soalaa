@@ -181,7 +181,6 @@ class Exam extends Model {
   }
 
   loadSubcategoriesOfCategories () {
-    console.log('loadSubcategoriesOfCategories')
     const subcategoryList = this.sub_categories
     this.categories.list.map((item) => {
       item.getSubcategories(subcategoryList)
