@@ -266,9 +266,9 @@ export default {
       return true
     },
     calcPercent (subcategoryId) {
-      const correct = parseInt(this.answerCounts[subcategoryId].correct),
-        incorrect = parseInt(this.answerCounts[subcategoryId].incorrect),
-        totalQuestions = parseInt(this.answerCounts[subcategoryId].totalQuestions)
+      const correct = parseInt(this.answerCounts[subcategoryId].correct)
+      const incorrect = parseInt(this.answerCounts[subcategoryId].incorrect)
+      const totalQuestions = parseInt(this.answerCounts[subcategoryId].totalQuestions)
 
       if (!this.calcValidate(subcategoryId, correct, incorrect, totalQuestions)) {
         this.prepareTakhmineRotbeReport()
@@ -287,8 +287,8 @@ export default {
     },
     prepareTakhmineRotbeReport (resetPercents) {
       console.log('this.report', this.report)
-      const that = this,
-        takhminReport = JSON.parse(JSON.stringify(this.report))
+      const that = this
+      const takhminReport = JSON.parse(JSON.stringify(this.report))
       takhminReport.main.percent = 0
       takhminReport.main.rank_city = 0
       takhminReport.main.rank_province = 0

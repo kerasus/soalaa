@@ -177,6 +177,7 @@ class Exam extends Model {
     return new Promise(function (resolve, reject) {
       if (!that.questions_file_url) {
         Assistant.handleAxiosError('exam file url is not set')
+        // eslint-disable-next-line prefer-promise-reject-errors
         reject(null)
         // ToDo : bring after removing ajax
         // return
@@ -400,6 +401,7 @@ class Exam extends Model {
               textStatus,
               errorThrown
             }) => {
+              // eslint-disable-next-line prefer-promise-reject-errors
               reject({
                 jqXHR,
                 textStatus,
@@ -409,6 +411,7 @@ class Exam extends Model {
         })
         .catch(() => {
           Assistant.reportErrors('exam.js -> getAnswerOfUserInResultPage() -> axios.get.catch')
+          // eslint-disable-next-line prefer-promise-reject-errors
           reject(null)
         })
     })
