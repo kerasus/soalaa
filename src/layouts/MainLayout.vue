@@ -15,6 +15,18 @@
             @click="toggleLeftDrawer"
           />
           <q-btn-dropdown
+            v-if="$route.name === 'onlineQuiz.alaaView'"
+            icon="account_circle"
+            :label="user.full_name "
+            color="grey-14"
+            dropdown-icon="false"
+            dir="ltr"
+            flat
+            >
+            <online-quiz-top-menu/>
+          </q-btn-dropdown>
+          <q-btn-dropdown
+            v-else
             icon="account_circle"
             :label="user.full_name "
             color="grey-14"
@@ -58,7 +70,10 @@
       />
     </q-header>
     <q-drawer
-        class="bg-primary side-bar"
+      :class="{
+        'mapOfQuestions side-bar': $route.name === 'onlineQuiz.alaaView',
+        'bg-primary side-bar': $route.name !== 'onlineQuiz.alaaView',
+       }"
         show-if-above
         v-model="leftDrawerOpen"
         side="left"
@@ -67,20 +82,29 @@
       >
         <div class="side-logo">
           <div class="side-logo-img">
-<!--            <q-img-->
-<!--              v-if="false"-->
-<!--              src="https://3a.alaatv.com/img/logo-2.png"-->
-<!--              width="150"-->
-<!--            />-->
             <q-img
+              v-if="$route.name === 'onlineQuiz.alaaView'"
+              src="https://3a.alaatv.com/img/logo-1.png"
+              width="150px"
+            />
+            <q-img
+              v-else
               src="https://3a.alaatv.com/img/logo-2.png"
               width="150px"
             />
           </div>
         </div>
-        <div class="side-list">
-          <side-menu-dashboard/>
+        <div
+          v-if="$route.name === 'onlineQuiz.alaaView'"
+          >
+          <side-menu-map-of-questions/>
         </div>
+      <div
+        v-else
+        class="side-list"
+      >
+        <side-menu-dashboard/>
+      </div>
       </q-drawer>
     <q-page-container>
       <router-view />
@@ -91,9 +115,11 @@
 <script>
 import SideMenuDashboard from 'components/Menu/SideMenu/SideMenu-dashboard'
 import { User } from 'src/models/User'
+import OnlineQuizTopMenu from 'components/Menu/topMenu/onlineQuizTopMenu'
+import SideMenuMapOfQuestions from 'components/Menu/SideMenu/SideMenu_MapOfQuestions'
 
 export default {
-  components: { SideMenuDashboard },
+  components: { SideMenuMapOfQuestions, OnlineQuizTopMenu, SideMenuDashboard },
   data () {
     return {
       leftDrawerOpen: false,
@@ -139,6 +165,9 @@ export default {
       box-sizing: border-box;
     }
   }
+}
+.map-of-questions {
+  background: var(--surface-1) !important;
 }
 .layout-header{
   padding: 12px 0;
