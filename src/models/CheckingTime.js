@@ -1,4 +1,5 @@
 import { Collection, Model } from 'js-abstract-model'
+// eslint-disable-next-line import/named
 import { createApp } from 'vue'
 import Time from '../plugins/time'
 if (!window.app) {
