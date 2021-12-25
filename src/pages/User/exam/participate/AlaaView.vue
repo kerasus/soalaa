@@ -69,7 +69,6 @@
                     @click="changeStatus(currentQuestion.id, 'x')"
                   >
                     <q-icon
-                      v-if="false"
                       size="30px"
                       :color="getUserQuestionData(quiz.id, currentQuestion.id) && getUserQuestionData(quiz.id, currentQuestion.id).status === 'x' ? 'red' : 'grey-7'"
                       name="mdi-close"
@@ -106,12 +105,11 @@
                     v-if="currentQuestion.in_active_category"
                     class="renderedPanel"
                   >
-<!--                    Todo : katex-->
-                    <!--                    <vue-katex :input="currentQuestion.statement" />-->
+                    <vue-katex :input="currentQuestion.statement" />
                   </div>
-                  <q-field
+                  <q-card-section
                     v-if="!currentQuestion.in_active_category"
-                    color="warning"
+                    color="red"
                     rounded
                     dark
                     height="400"
@@ -119,7 +117,7 @@
                     class="d-flex align-center justify-center"
                   >
                     در حال حاضر امکان مشاهده سوالات این دفترچه امکان پذیر نمی باشد
-                  </q-field>
+                  </q-card-section>
                 </div>
               </div>
               <div class="row question-answers"
@@ -184,36 +182,18 @@ import Choice from 'src/components/OnlineQuiz/Quiz/Choice'
 import Timer from 'src/components/OnlineQuiz/Quiz/timer/timer'
 import { mixinAuth, mixinQuiz, mixinUserActionOnQuestion, mixinDrawer, mixinWindowSize } from 'src/mixin/Mixins'
 import Assistant from 'src/plugins/assistant'
-// import VueKatex from 'src/components/VueKatex'
+import VueKatex from 'components/VueKatex'
 
 export default {
   name: 'AlaaView',
   components: {
     Choice,
-    // VueKatex,
+    VueKatex,
     Timer
   },
   mixins: [mixinAuth, mixinQuiz, mixinUserActionOnQuestion, mixinDrawer, mixinWindowSize],
   data () {
     return {
-      linksList: [
-        {
-          title: 'Profile',
-          caption: ''
-        },
-        {
-          title: 'hasan',
-          caption: ''
-        },
-        {
-          title: 'Profile',
-          caption: ''
-        },
-        {
-          title: 'hasan',
-          caption: ''
-        }
-      ],
       isRtl: false
     }
   },

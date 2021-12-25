@@ -3,41 +3,35 @@
     class="answer-box col-md-6 col-12"
     @click="answerClicked"
   >
-<!--   reminder: too class q-feild active is selected on she -->
-    <q-field  :class="{ 'answer-sheet': true, active: isSelected }">
+    <q-card-section :class="{ 'answer-sheet': true, active: isSelected }">
       <div
         class="answer-text renderedPanel"
       >
-        یاریگر – مردان کامل – هم‌ردیف
-<!--&lt;!&ndash;        <vue-katex :input="choice.title" :ltr="!isRtl" />&ndash;&gt;-->
+        <vue-katex :input="choice.title" :ltr="!isRtl" />
       </div>
       <div class="answer-checkbox">
         <q-checkbox
-          size="xl"
-         model-value="isSelected"/>
-<!--&lt;!&ndash;        v-model="isSelected"&ndash;&gt;-->
+          @click="answerClicked"
+          size="60px"
+          v-model="isSelected"
+         />
       </div>
-    </q-field>
+    </q-card-section>
   </div>
 </template>
 
 <script>
 import { mixinQuiz } from 'src/mixin/Mixins'
-// import 'src/assets/scss/markdownKatex.scss'
-// import VueKatex from 'src/components/VueKatex'
+import 'src/assets/scss/markdownKatex.scss'
+import VueKatex from 'src/components/VueKatex'
 
 export default {
   name: 'Choice',
   components: {
-    // VueKatex
+    VueKatex
   },
   mixins: [mixinQuiz],
   props: ['choice', 'questionId', 'isRtl'],
-  data: function () {
-    return {
-      selected: false
-    }
-  },
   computed: {
     isSelected () {
       return this.getUserQuestionData(this.quiz.id, this.questionId) && this.choice.id === this.getUserQuestionData(this.quiz.id, this.questionId).answered_choice_id

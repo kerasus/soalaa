@@ -1,7 +1,7 @@
 <template>
 <div>
   <mobile-timer
-    v-if="windowSize.x < 960"
+    v-if="windowSize.x < 1024"
     :passed-time="passedTime"
     :remaining-time="remainTime"
     :current-cat="currentCat"

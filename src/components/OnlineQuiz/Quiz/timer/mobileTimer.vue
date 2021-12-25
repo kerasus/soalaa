@@ -10,7 +10,7 @@
           <div class="sideBtns  elevation-3">
             <div class="row">
               <div class="col d-flex justify-center">
-                <q-icon
+                <q-btn
                   class="sideBtnIcons "
                   icon="mdi-chevron-right"
                   @click="goToPrevQuestion('onlineQuiz.alaaView')"
@@ -28,7 +28,7 @@
                 </svg>
               </div>
               <div class="col d-flex justify-center">
-                <q-icon
+                <q-btn
                   class="sideBtnIcons"
                   icon="mdi-chevron-left"
                   @click="goToNextQuestion('onlineQuiz.alaaView')"
