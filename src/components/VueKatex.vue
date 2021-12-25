@@ -42,9 +42,22 @@ export default {
       return !string.match(persianRegex)
     },
     computedKatex () {
-      return katex.renderToString(this.input, {
-        throwOnError: false
+      let string = this.input
+      const regex = /((\\\[((?! ).){1}((?!\$).)*?((?! ).){1}\\\])|(\$((?! ).){1}((?!\$).)*?((?! ).){1}\$))/gms
+      string = string.replace(regex, (match) => {
+        let finalMatch
+        if (match.includes('$$')) {
+          finalMatch = match.slice(2, -2)
+        } else if (match.includes('$')) {
+          finalMatch = match.slice(1, -1)
+        } else {
+          finalMatch = match.slice(2, -2)
+        }
+        return katex.renderToString(finalMatch, {
+          throwOnError: false
+        })
       })
+      return string
     }
   },
   mounted () {
