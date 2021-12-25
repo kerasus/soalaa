@@ -160,8 +160,8 @@ export default {
         },
         {
           displayName: 'سوالات متداول',
-          to: 'user-exam',
-          name: 'user.exam'
+          to: '/faq',
+          name: 'faq'
         }
       ],
       examsPlan: [
