@@ -56,20 +56,6 @@
                 <q-tab name="descriptiveAnswers" label="پاسخ نامه تشریحی"></q-tab>
                 <q-tab name="videos" label="تحلیل ویدیویی"></q-tab>
               </q-tabs>
-<!--              <v-tabs-->
-<!--                  v-model="tab"-->
-<!--                  color="#ffc107"-->
-<!--                  center-active-->
-<!--                  show-arrows-->
-<!--              >-->
-<!--                <v-tabs-slider color="yellow"/>-->
-<!--                <v-tab>کارنامه</v-tab>-->
-<!--                <v-tab>تخمین رتبه</v-tab>-->
-<!--                <v-tab>ریزدرس ها</v-tab>-->
-<!--                <v-tab>پاسخبرگ کلیدی</v-tab>-->
-<!--                <v-tab>پاسخ نامه تشریحی</v-tab>-->
-<!--                <v-tab>تحلیل ویدیویی</v-tab>-->
-<!--              </v-tabs>-->
             </div>
           </div>
         </q-card>
@@ -77,23 +63,23 @@
     </div>
     <div class="row wrap justify-center">
       <div class="col">
-        <v-tabs-items v-model="tab">
-          <v-tab-item>
+        <q-tab-panels v-model="tab" animated>
+          <q-tab-panel name="result">
             <PersonalResult :report="report"/>
-          </v-tab-item>
-          <v-tab-item>
+          </q-tab-panel>
+          <q-tab-panel name="rank">
             <takhmin-rotbe :report="report"/>
-          </v-tab-item>
-          <v-tab-item>
+          </q-tab-panel>
+          <q-tab-panel name="lessons">
             <StatisticResult :report="report"/>
-          </v-tab-item>
-          <v-tab-item>
+          </q-tab-panel>
+          <q-tab-panel name="KeyAnswers">
             <BubbleSheet
                 :info="{ type: 'pasokh-nameh' }"
                 delay-time="0"
             />
-          </v-tab-item>
-          <v-tab-item>
+          </q-tab-panel>
+          <q-tab-panel name="descriptiveAnswers">
             <v-card flat>
               <p class="tab-title pt-5 pr-5">
                 دانلود پاسخنامه تشریحی
@@ -159,8 +145,8 @@
                 </div>
               </div>
             </v-card>
-          </v-tab-item>
-          <v-tab-item class="video-tab">
+          </q-tab-panel>
+          <q-tab-panel name="videos" class="video-tab">
             <v-tabs
                 v-if="report"
                 color="#ffc107"
@@ -177,7 +163,7 @@
               >
                 {{ item.sub_category }}
               </v-tab>
-              <v-tab-item
+              <q-tab-panel
                   v-for="(item, index) in report.sub_category"
                   :key="item.sub_category"
                   class="pt-5"
@@ -285,10 +271,10 @@
                 <!--                                       class="video-player"-->
                 <!--                                       :title="currentVideo.title"-->
                 <!--                                />-->
-              </v-tab-item>
+              </q-tab-panel>
             </v-tabs>
-          </v-tab-item>
-        </v-tabs-items>
+          </q-tab-panel>
+        </q-tab-panels>
       </div>
     </div>
   </div>
