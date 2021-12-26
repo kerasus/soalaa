@@ -138,51 +138,44 @@ export default {
   props: ['report'],
   data () {
     return {
-
-      columns1: [
+      headers1: [
         {
-          name: 'index',
-          align: 'center',
-          label: 'ردیف',
-          field: row => row.index,
-          sortable: true
-        },
-        { name: 'sub_category', label: 'درس', field: row => row.sub_category, align: 'center', sortable: false },
-        { name: 'total_answer', label: ' تعداد کل', field: row => row.total_answer, align: 'center', sortable: false },
-        { name: 'right_answer', label: ' تعداد درست', field: row => row.right_answer, align: 'center', sortable: false },
-        { name: 'wrong_answer', label: ' تعداد غلط', field: row => row.wrong_answer, align: 'center', sortable: false },
-        { name: 'empty', label: ' تعداد نزده', field: row => row.empty, align: 'center', sortable: false },
-        { name: 'percent', label: ' درصد', field: row => row.percent, align: 'center', sortable: true },
-        { name: 'taraaz', label: ' تراز', field: row => row.taraaz, align: 'center', sortable: true }
-      ],
-      columns2: [
-        {
-          name: 'title',
-          label: 'زیر گروه',
+          text: 'ردیف',
           align: 'center',
           sortable: true,
-          field: row => row.title
+          value: 'index'
         },
-        { name: 'percent', label: 'درصد خام', field: row => row.percent, align: 'center', sortable: true },
-        { name: 'taraaz', label: 'تراز', field: row => row.taraaz, align: 'center', sortable: true },
-        { name: 'rank_city', label: ' رتبه شهر', field: row => row.rank_city, align: 'center', sortable: true },
-        { name: 'rank_province', label: ' رتبه استان', field: row => row.rank_province, align: 'center', sortable: true },
-        { name: 'rank_country', label: ' رتبه کشور', field: row => row.rank_country, align: 'center', sortable: true }
+        { text: 'درس', value: 'sub_category', align: 'center', sortable: false },
+        { text: ' تعداد کل', value: 'total_answer', align: 'center', sortable: false },
+        { text: ' تعداد درست', value: 'right_answer', align: 'center', sortable: false },
+        { text: ' تعداد غلط', value: 'wrong_answer', align: 'center', sortable: false },
+        { text: ' تعداد نزده', value: 'empty', align: 'center', sortable: false },
+        { text: ' درصد', value: 'percent', align: 'center', sortable: true },
+        { text: ' تراز', value: 'taraaz', align: 'center', sortable: true }
       ],
-      columns3: [
+      headers2: [
         {
-          name: 'created_at',
+          text: 'زیر گروه',
           align: 'center',
-          label: 'زمان شروع آزمون',
-          field: row => row.created_at,
-          sortable: false
+          sortable: true,
+          value: 'title'
         },
-        { name: 'accept_at', label: 'زمان مجاز آزمون', field: row => row.accept_at, align: 'center', sortable: false }
+        { text: 'درصد خام', value: 'percent', align: 'center', sortable: true },
+        { text: 'تراز', value: 'taraaz', align: 'center', sortable: true },
+        { text: ' رتبه شهر', value: 'rank_city', align: 'center', sortable: true },
+        { text: ' رتبه استان', value: 'rank_province', align: 'center', sortable: true },
+        { text: ' رتبه کشور', value: 'rank_country', align: 'center', sortable: true }
+      ],
+      headers3: [
+        {
+          text: 'زمان شروع آزمون',
+          align: 'center',
+          sortable: false,
+          value: 'created_at'
+        },
+        { text: 'زمان مجاز آزمون', value: 'accept_at', align: 'center', sortable: false }
       ]
     }
-  },
-  created () {
-    console.log('dksjfhdsujfv;kjfvn;ks', this.report.zirgorooh)
   },
   computed: {
     shamsiDate () {
@@ -194,28 +187,7 @@ export default {
 }
 </script>
 
-<style lang="scss">
-    .personal-results {
-      .proceeds-table ,  .default-result-table{
-        .q-table__container {
-          border-radius: 20px;
-        }
-        .q-table {
-          border: 1px solid #ececec;
-          thead tr {
-            background-color: #ffecb4;
-            border-radius: 20px;
-            color: rgba(62, 57, 43, 0.96);
-          }
-          tbody tr:nth-of-type(2n) {
-            background-color: rgba(0, 0, 0, 0.02);
-          }
-          tbody td {
-            font-size: 0.875rem;
-          }
-        }
-      }
-    }
+<style>
     .personal-results .v-data-table tbody tr:nth-of-type(2n) {
         background-color: rgba(0,0,0,.04);
     }
