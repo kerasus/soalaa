@@ -194,7 +194,7 @@
             if (this.windowSize.x > 959) {
                 this.changeAppBarAndDrawer(false)
             } else {
-                this.$router.push({ name: 'onlineQuiz.alaaView', params: { quizId: 313, questNumber: this.$route.params.quizId } })
+                this.$router.push({ name: 'onlineQuiz.alaaView', params: { quizId: this.$route.params.quizId, questNumber: 1 } })
             }
             this.questions = this.getCurrentExamQuestionsInArray()
         },

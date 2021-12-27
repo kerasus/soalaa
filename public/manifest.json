@@ -3,12 +3,17 @@
   "name": "آزمون آنلاین آلاء",
   "icons": [
     {
-      "src": "img/logo-1.png",
+      "src": "/img/logo-1-1.png",
       "type": "image/png",
-      "sizes": "165x109"
+      "sizes": "192x192"
+    },
+    {
+      "src": "/img/logo-1-2.png",
+      "type": "image/png",
+      "sizes": "512x512"
     }
   ],
-  "start_url": "",
+  "start_url": ".",
   "background_color": "#ffc107",
   "display": "standalone",
   "scope": "/",
