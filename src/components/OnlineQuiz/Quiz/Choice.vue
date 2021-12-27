@@ -3,9 +3,8 @@
     class="answer-box col-md-6 col-12"
     @click="answerClicked"
   >
-<!--&lt;!&ndash;    :class="{ 'answer-sheet': true, active: isSelected }"&ndash;&gt;-->
 <!--   reminder: too class q-feild active is selected on she -->
-    <q-feild   :class="{ 'answer-sheet': true ,active:true}">
+    <q-field  :class="{ 'answer-sheet': true, active: isSelected }">
       <div
         class="answer-text renderedPanel"
       >
@@ -14,12 +13,11 @@
       </div>
       <div class="answer-checkbox">
         <q-checkbox
-          v-model="selected"
           size="xl"
-        />
+         model-value="isSelected"/>
 <!--&lt;!&ndash;        v-model="isSelected"&ndash;&gt;-->
       </div>
-    </q-feild>
+    </q-field>
   </div>
 </template>
 
