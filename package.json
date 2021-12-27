@@ -77,7 +77,7 @@
     "vue-scrollto": "^2.20.0",
     "vue-simple-drawer": "^1.0.6",
     "vue-socket.io": "^3.0.10",
-    "vue-tiptap-katex": "^2.2.32",
+    "vue-tiptap-katex": "^2.2.33",
     "vue-toasted": "^1.1.28",
     "vue-tree-list": "^1.5.0",
     "vue-upload-component": "^2.8.22",
