@@ -240,7 +240,7 @@ export default {
       this.$router.push({
         name: 'coefficient.edit',
         params: {
-          exam_id: id
+          id: id
         }
       })
     },
