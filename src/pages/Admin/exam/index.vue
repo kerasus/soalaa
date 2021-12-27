@@ -5,12 +5,12 @@
       :api="api"
       :table="table"
       :table-keys="tableKeys"
-      :create-route-name="'Admin.Category.Create'"
+      :create-route-name="'Admin.Exam.Create'"
     >
       <template #table-cell="{inputData, showConfirmRemoveDialog}">
         <q-td :props="inputData.props">
           <template v-if="inputData.props.col.name === 'actions'">
-            <q-btn round flat dense size="md" color="info" icon="info" :to="{name:'Admin.Exam.Show', params: {examId: inputData.props.row.id}}">
+            <q-btn round flat dense size="md" color="info" icon="info" @click="showExam(inputData.props.row.id)">
               <q-tooltip anchor="top middle" self="bottom middle">
                 مشاهده
               </q-tooltip>
@@ -27,7 +27,7 @@
                     v-ripple:yellow
                     clickable
                     manual-focus
-                    :to="{name:'Admin.Exam.Edit', params: {examId: inputData.props.row.id}}"
+                    @click="editExam(inputData.props.row.id)"
                   >
                     <q-item-section> ویرایش آزمون</q-item-section>
                   </q-item>
@@ -35,7 +35,7 @@
                     v-ripple:yellow
                     clickable
                     manual-focus
-                    :to="{name:'edit-exam-report', params: {examId: inputData.props.row.id}}"
+                    @click="editExamReport(inputData.props.row.id)"
                   >
                     <q-item-section>ویرایش کارنامه</q-item-section>
                   </q-item>
@@ -50,7 +50,7 @@
                     v-ripple:yellow
                     clickable
                     manual-focus
-                    @click="generateJsonFile(inputData.props.row.id, false)"
+                    @click="generateJsonFile(inputData.props.row, false)"
                   >
                     <q-item-section>ساخت فایل سوالات</q-item-section>
                   </q-item>
@@ -58,7 +58,7 @@
                     v-ripple:yellow
                     clickable
                     manual-focus
-                    @click="generateJsonFile(inputData.props.row.id, true)"
+                    @click="generateJsonFile(inputData.props.row, true)"
                   >
                     <q-item-section>ساخت فایل سوالات با جواب</q-item-section>
                   </q-item>
@@ -66,7 +66,7 @@
                     v-ripple:yellow
                     clickable
                     manual-focus
-                    @click="upload(tableRow.id)"
+                    @click="uploadFile(inputData.props.row.id)"
                   >
                     <q-item-section>آپلود فایل سوالات و جواب ها</q-item-section>
                   </q-item>
@@ -74,7 +74,7 @@
                     v-ripple:yellow
                     clickable
                     manual-focus
-                    :to="{name:'coefficient.edit', params: {examId: inputData.props.row.id}}"
+                    @click="editCoefficient(inputData.props.row.id)"
                   >
                     <q-item-section>اصلاح ضرایب</q-item-section>
                   </q-item>
@@ -92,7 +92,7 @@
                 ویرایش
               </q-tooltip>
             </q-btn>
-            <q-btn round flat dense size="md" color="indigo" icon="auto_stories" :to="{name:'Admin.Exam.Show', params: {quizId: inputData.props.row.id, quizTitle: inputData.props.row.title}}">
+            <q-btn round flat dense size="md" color="indigo" icon="auto_stories"  @click="showLessonsList(inputData.props.row.id, inputData.props.row.title)">
               <q-tooltip anchor="top middle" self="bottom middle">
                 مشاهده دروس
               </q-tooltip>
@@ -109,7 +109,7 @@
                     v-ripple:yellow
                     clickable
                     manual-focus
-                    :to=" { name:'exam.results', params: {examId: inputData.props.row.id}}"
+                    @click="goExamResult(inputData.props.row.id)"
                   >
                     <q-item-section>نتایج تمام شرکت کنندگان</q-item-section>
                   </q-item>
@@ -197,6 +197,30 @@ export default {
     }
   },
   methods: {
+    showExam (id) {
+      this.$router.push({
+        name: 'Admin.Exam.Show',
+        params: {
+          id: id
+        }
+      })
+    },
+    editExam (id) {
+      this.$router.push({
+        name: 'Admin.Exam.Edit',
+        params: {
+          id: id
+        }
+      })
+    },
+    editExamReport (id) {
+      this.$router.push({
+        name: 'edit-exam-report',
+        params: {
+          id: id
+        }
+      })
+    },
     generateJsonFile (exams, withAnswer) {
       this.$store.dispatch('loading/linearLoading', true)
       this.$axios.post(API_ADDRESS.exam.generateExamFile(exams.id, withAnswer))
@@ -212,9 +236,42 @@ export default {
           this.$store.dispatch('loading/linearLoading', false)
         })
     },
+    editCoefficient (id) {
+      this.$router.push({
+        name: 'coefficient.edit',
+        params: {
+          exam_id: id
+        }
+      })
+    },
+    uploadFile (id) {
+      this.$router.push({
+        name: 'Admin.Exam.Upload',
+        params: {
+          id: id
+        }
+      })
+    },
     getRemoveMessage (row) {
       const title = row.title
       return 'آیا از حذف ' + title + ' اطمینان دارید؟'
+    },
+    showLessonsList (id, title) {
+      this.$router.push({
+        name: 'onlineQuiz.exams.lessons',
+        params: {
+          quizId: id,
+          quizTitle: title
+        }
+      })
+    },
+    goExamResult (id) {
+      this.$router.push({
+        name: 'exam.results',
+        params: {
+          id: id
+        }
+      })
     }
   }
 
