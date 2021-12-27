@@ -208,7 +208,7 @@
             } else {
                 this.$router.push({
                     name: 'onlineQuiz.alaaView',
-                    params: {quizId: 313, questNumber: this.$route.params.quizId}
+                    params: {quizId: this.$route.params.quizId, questNumber: 1}
                 })
             }
             if (!this.questions.length) {
