@@ -9,7 +9,7 @@
         :loading="loading"
         :access-token="$store.getters['Auth/accessToken']"
         :upload-url="imageUrl"
-        :options="{ bubbleMenu: false, floatingMenu: false, poem: true, reading: true }"
+        :options="{ bubbleMenu: false, floatingMenu: false, poem: true, reading: true, persianKeyboard: true }"
       />
     </v-col>
     <!-- eslint-disable vue/no-v-html -->
@@ -98,6 +98,10 @@ export default {
 
 .tiptap-plus-container.focused {
   border: solid 1px #dedede;
+}
+
+.mord {
+  font-family: IRANSans;
 }
 </style>
 
