@@ -95,7 +95,13 @@ const mixinQuiz = {
                 // this.onSocketStatusChange('on connection')
             })
             this.socket.on('reconnect', () => {
-                this.socket.emit('socket.event.reconnect:log', 'socket.event.reconnect:log')
+                this.socket.emit('socket.event.reconnect:log', 'socket.event.reconnect:log', function(err, success) {
+                    console.log('err: ', err)
+                    console.log('success: ', success)
+                })
+                // // client
+                // this.socket.emit("test", dataToSend, function(err, success) {
+                // });
             })
             this.socket.on('disconnect', () => {
                 // this.onSocketStatusChange('Socket to break off')
@@ -512,7 +518,7 @@ const mixinQuiz = {
         hasExamDataOnThisDeviseStorage (examId) {
             return !!this.userQuizListData[examId]
         },
-        sendUserQuestionsDataToServerAndFinishExam(examId, examUserId) {
+        getUserAnswers (examId) {
             const userExamData = this.userQuizListData[examId]
             let answers = []
 
@@ -529,7 +535,17 @@ const mixinQuiz = {
                 }
             }
 
+            return answers
+        },
+        sendUserQuestionsDataToServerAndFinishExam(examId, examUserId) {
+            let answers = this.getUserAnswers(examId)
+
             return axios.post(API_ADDRESS.exam.sendAnswers, {exam_user_id: examUserId, finish: true, questions: answers })
+        },
+        sendUserQuestionsDataToServer(examId, examUserId, finishExam) {
+            let answers = this.getUserAnswers(examId)
+
+            return axios.post(API_ADDRESS.exam.sendAnswers, {exam_user_id: examUserId, finish: finishExam, questions: answers })
         },
 
 
