@@ -6,6 +6,7 @@ import store from '@/store/store'
 import Axios from '@/plugins/axios'
 import VueNotification from 'vue-notification'
 import VueGtag from 'vue-gtag'
+import './registerServiceWorker'
 
 Vue.use(VueGtag, {
   config: {
