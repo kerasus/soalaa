@@ -16,7 +16,7 @@ let config = {
     },
 
     pwa: {
-        name: 'آزمون آنلاین 3آ',
+        name: 'آزمون آنلاین آلاء',
         short_name: 'سه آ',
         background_color: '#ffc107',
         display: 'standalone',
