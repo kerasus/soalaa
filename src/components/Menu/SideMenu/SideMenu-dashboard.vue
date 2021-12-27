@@ -218,7 +218,7 @@ export default {
         {
           displayName: 'لیست آزمون ها',
           to: '/exam',
-          name: 'list'
+          name: 'Admin.Exam.Index'
         },
         {
           displayName: 'بانک سوال',
@@ -233,7 +233,7 @@ export default {
         {
           displayName: 'لیست دفترچه ها',
           to: '/category',
-          name: 'categoryList'
+          name: 'Admin.Category.Index'
         },
         {
           displayName: 'لیست زیرگروه ها',

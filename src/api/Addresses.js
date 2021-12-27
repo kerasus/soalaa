@@ -57,7 +57,7 @@ const API_ADDRESS = {
       if (pageNumber) {
         return lumenServer + '/exam?with_pagination=1&page=' + pageNumber
       } else {
-        return lumenServer + '/exam?with_pagination=0'
+        return lumenServer + '/exam'
       }
     },
     generateExamFile (examId, withAnswer) {
