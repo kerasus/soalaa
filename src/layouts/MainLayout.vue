@@ -171,8 +171,8 @@ export default {
       justify-content: center;
     }
   }
-  .page-body{
-    //margin-bottom: 40px;
+  .layout-page{
+   padding-bottom: 72px;
   }
   .q-drawer--left {
     .q-layout__shadow{
