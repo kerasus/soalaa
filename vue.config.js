@@ -19,7 +19,7 @@ let config = {
         manifestOptions: {
             name: 'آزمون آنلاین آلاء',
             short_name: 'سه آ',
-            background_color: '#ffc107',
+            background_color: '#FFFFFF',
             display: 'standalone',
             theme_color: '#ffc107',
             start_url: ".",
