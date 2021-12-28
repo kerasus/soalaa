@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="side-menu-main-layout">
     <q-list
       class="side-menu-list"
       padding
@@ -27,7 +27,8 @@
       </router-link>
     </q-list>
     <q-expansion-item
-      style="font-size:16px; "
+      group="menu-expansion"
+      style="font-size:16px;"
       label="برنامه ی آزمون ها"
       dark
     >
@@ -104,6 +105,7 @@
       dark
     >
       <q-expansion-item
+        group="menu-expansion"
         style="font-size:16px; "
         icon="account_balance"
         label="بانک سوال"
@@ -307,6 +309,13 @@ export default {
 }
 </style>
 <style lang="scss">
+.side-menu-main-layout{
+  .q-expansion-item__container {
+    .q-item{
+      display: flex!important;
+    }
+  }
+}
 .q-list {
   &.side-menu-list {
     .q-item__section--avatar {
