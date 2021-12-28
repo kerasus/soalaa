@@ -16,11 +16,15 @@ let config = {
     },
 
     pwa: {
-        name: 'آزمون آنلاین آلاء',
-        short_name: 'سه آ',
-        background_color: '#ffc107',
-        display: 'standalone',
-        theme_color: '#ffc107',
+        manifestOptions: {
+            name: 'آزمون آنلاین آلاء',
+            short_name: 'سه آ',
+            background_color: '#ffc107',
+            display: 'standalone',
+            theme_color: '#ffc107',
+            start_url: ".",
+            scope: "/",
+        },
         workboxPluginMode: 'InjectManifest',
         workboxOptions: {
             swSrc: './src/service-worker.js',
