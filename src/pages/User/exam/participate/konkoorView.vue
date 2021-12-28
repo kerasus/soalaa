@@ -352,7 +352,7 @@ export default {
   }
   .timer-row {
     width: calc(58% - 150px);
-    position: absolute;
+    position: fixed;
     bottom: 0;
     right: 100px;
     .end-exam-btn {
