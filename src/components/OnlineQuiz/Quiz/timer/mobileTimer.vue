@@ -1,22 +1,24 @@
 <template>
   <div>
-    <div style="bottom: 0; margin-bottom: 25px;">
+    <div style="bottom: 0; margin-top: 25px;">
       <div
         class="row"
-        style="padding-left: 0">
+        style="padding-right: 0">
         <div
-          class="col-7 col-sm-6 btnCol"
+          class="col-12 col-sm-5 flex btnCol"
         >
-          <div class="sideBtns  elevation-3">
-            <div class="row">
-              <div class="col d-flex justify-center">
+          <div class="sideBtns elevation-3">
+            <div  class="row">
+              <div class="col flex justify-center">
                 <q-btn
-                  class="sideBtnIcons "
-                  icon="mdi-chevron-right"
+                  :style="{ 'width':'150px','height': '20px' }"
+                  flat
+                  class="sideBtnIcons"
                   @click="goToPrevQuestion('onlineQuiz.alaaView')"
-                />
+                  icon="mdi-chevron-right"
+                  />
               </div>
-              <div class="col-1 d-flex justify-center align-center">
+              <div class="col-3  xs-hide flex justify-center align-center">
                 <svg
                   class="spacer"
                   viewBox="2228.5 627.403 0.20000000298023224 20"
@@ -27,8 +29,10 @@
                   />
                 </svg>
               </div>
-              <div class="col d-flex justify-center">
+              <div class="col flex justify-center">
                 <q-btn
+                  :style="{ 'width':'150px','height': '20px' }"
+                  flat
                   class="sideBtnIcons"
                   icon="mdi-chevron-left"
                   @click="goToNextQuestion('onlineQuiz.alaaView')"
@@ -41,7 +45,7 @@
         <div class="col-sm-3 col-3 timerCol">
           <div
             id="clockBtn"
-            class="timeCArdMob d-flex justify-center elevation-3"
+            class="timeCArdMob flex justify-center elevation-3"
             style="float:left;"
             @click="drawerUp"
           >
@@ -58,10 +62,10 @@
         </div>
       </div>
       <div
-        class="drawer elevation-3 d-flex justify-center "
+        class="drawer elevation-3 flex justify-center "
         :style="{height: drawerVisible ? '80px' : '0'}"
       >
-        <div class="timerInfo">
+        <div>
           <p class="passedTimeText">
             زمان گذشته
             {{ passedTime }}
@@ -75,11 +79,16 @@
             {{ remainingTime }}
           </p>
         </div>
-        <q-icon
+        <q-btn
+          flat
+          size="10px"
           class="closeIcon"
-          icon="mdi-close"
           @click="drawerVisible = false"
-        />
+        >
+          <q-icon
+            size="50px"
+            name="mdi-close"/>
+        </q-btn>
       </div>
     </div>
   </div>
@@ -115,93 +124,22 @@ export default {
 
 .timerCol {
   position: absolute;
-  left: 3%;
+  right: 3%;
 }
 
 .btnCol {
-  padding-right: 0;
-  right: 5%;
+  padding-right: 5px;
+  left: 5%;
   position: relative;
 }
 
-@media only screen and (max-width: 500px) {
-  .timeCArdMob {
-    margin-left: 0%;
-    width: 100%;
-  }
-
-  .space {
-    width: 0px;
-  }
-
-  .drawer {
-    width: 90%;
-    left: 5%;
-  }
-
-  .passedTimeText {
-    font-size: 2.2vw;
-  }
-
-  .remainingTimeText {
-    font-size: 2.2vw;
-  }
-}
-
-@media only screen and (min-width: 500px)and (max-width: 601px) {
-  .timeCArdMob {
-    margin-left: 0%;
-    width: 100%;
-
-  }
-
-  .space {
-    width: 10%;
-  }
-
-  .drawer {
-    width: 90%;
-    left: 5%;
-  }
-
-  .passedTimeText {
-    font-size: 2.2vw;
-  }
-
-  .remainingTimeText {
-    font-size: 2.2vw;
-  }
-}
-
-@media only screen and (min-width: 601px)and (max-width: 700px) {
-  .timeCArdMob {
-    margin-left: 6%;
-    width: 80%;
-  }
-
-  .space {
-    width: 0px;
-  }
-
-  .drawer {
-    width: 90%;
-    left: 5%;
-  }
-
-  .passedTimeText {
-    font-size: 2vw;
-  }
-
-  .remainingTimeText {
-    font-size: 2vw;
-  }
-}
-
 .remainingTimeText {
-  margin-right: 10px
+  margin-left: 10px
 }
 
 .passedTimeText {
+  font-size: 1.8vw;
+  margin-top: 25px;
   margin-right: 10px;
   margin-left: 10px
 }
@@ -221,18 +159,20 @@ export default {
 .closeIcon {
   float: left;
   background-color: rgba(255, 255, 255, 1);
-  margin-left: 0px;
-  margin-top: 10px;
+  margin-right: 0px;
+  margin-bottom: 10px;
   font-size: 5vw;
   margin-right: 0;
   color: rgba(112, 112, 112, 1);
 }
 
 .sideBtnIcons {
-  margin: auto;
+  display: flex;
+  margin: 5%;
 }
 
 .sideBtns {
+  justify-content: center;
   width: 100%;
   height: 50px;
   float: left;
@@ -252,7 +192,7 @@ export default {
 .drawer {
   position: absolute;
   bottom: 0;
-
+  justify-content: space-between;
   overflow: hidden;
   height: 0;
   padding-bottom: 0;
@@ -276,8 +216,78 @@ export default {
 .spacer {
   overflow: visible;
   position: absolute;
-  width: 0.2px;
+  width: 1px;
   height: 20px;
   transform: matrix(1, 0, 0, 1, 0, 0);
+}
+@media only screen and (max-width: 500px) {
+  .timeCArdMob {
+    margin-right: 0%;
+    width: 20%;
+  }
+  .sideBtns{
+    justify-items: center;
+    float: left;
+    max-width: 50%;
+  }
+  .sideBtnIcons{
+    max-width: 60%;
+  }
+
+  .spacer {
+    width: 0px;
+  }
+
+  .drawer {
+    width: 95%;
+  }
+
+  .passedTimeText {
+    font-size: 4.2vw;
+  }
+
+  .remainingTimeText {
+    font-size: 2.2vw;
+  }
+}
+@media only screen and (min-width: 500px)and (max-width: 601px) {
+  .timeCArdMob {
+    margin-right: 6%;
+    width: 60%;
+  }
+  .sideBtns{
+    float: left;
+    max-width: 50%;
+  }
+  .drawer {
+    width: 90%;
+    right: 5%;
+  }
+
+  .passedTimeText {
+    font-size: 2.6vw;
+  }
+
+  .remainingTimeText {
+    font-size: 2vw;
+  }
+}
+@media only screen and (min-width: 601px)and (max-width: 700px) {
+  .timeCArdMob {
+    margin-right: 6%;
+    width: 80%;
+  }
+  .drawer {
+    width: 90%;
+    right: 5%;
+  }
+
+  .passedTimeText {
+    font-size: 2vw;
+  }
+
+  .remainingTimeText {
+    font-size: 2vw;
+  }
 }
 </style>

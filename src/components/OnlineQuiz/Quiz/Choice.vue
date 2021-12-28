@@ -3,7 +3,8 @@
     class="answer-box col-md-6 col-12"
     @click="answerClicked"
   >
-    <q-card-section :class="{ 'answer-sheet': true, active: isSelected }">
+    <q-card-section
+      :class="{ 'answer-sheet': true, active: isSelected }">
       <div
         class="answer-text renderedPanel"
       >
@@ -95,7 +96,9 @@ export default {
         padding-left: 30px;
         display: block;
     }
-
+    .answer-text .mesra {
+      max-width: 100%;
+    }
     .answer-sheet.active {
         background: #fffaee;
     }

@@ -1,6 +1,6 @@
 <template>
 
-  <q-page
+  <div
     :fluid="true"
     class="quiz-page"
     :style="{ height: '100%' }"
@@ -32,7 +32,7 @@
               </q-btn>
             </div>
             <div class="col col-md-10 q-px-sm ">
-              <div class="row question-header">
+              <div class="row flex question-header">
                 <div class="question-number">
                   <p v-if="currentLesson">
                     {{ currentLesson.title }}
@@ -153,28 +153,13 @@
         </q-page>
       </div>
     </div>
-    <q-footer
-      class="justify-center q-pl-none"
-      color="transparent"
-      elevation="0"
-      padless
-      inset
-      app
+    <div class="footer flex row">
+    <div class="d-flex col"
     >
-      <q-page-sticky
-        fluid
-        class="q-py-none"
-      >
-        <div class="row timer-row justify-center">
-          <div
-            class="col col-md-10 d-flex justify-center timer-container py-0"
-          >
-            <Timer/>
-          </div>
-        </div>
-      </q-page-sticky>
-    </q-footer>
-  </q-page>
+      <Timer/>
+    </div>
+    </div>
+  </div>
 </template>
 
 <script>
@@ -262,9 +247,6 @@ export default {
   flex-wrap: wrap;
 }
 
- img {
-  max-width: 100%;
-}
 </style>
 
 <style scoped>
@@ -312,28 +294,14 @@ export default {
   margin-right: -12px;
 }
 
-.answer-sheet {
-  background: #f1f1f1;
-  width: 90%;
-  height: 100px;
-  padding: 2% 3%;
-  border-radius: 10px;
-  cursor: pointer;
-  transition: all ease-in-out 0.3s;
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
+.high-z-index {
+  z-index: 3;
 }
-
-.answer-text {
-  height: 100%;
+.footer {
+  position: absolute;
+  bottom: 0;
+  max-width: 75%;
   width: 100%;
-  display: block !important;
-}
-
-.answer-checkbox {
-  height: 100px;
-  width: 100px;
 }
 
 .quiz-page {
@@ -345,7 +313,6 @@ export default {
 .btnpre {
   display: flex;
   padding : 12px 12px 12px 24px;
-
 }
 
 .user-name {
