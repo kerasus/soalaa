@@ -152,23 +152,6 @@ export default {
       },
       percents: {},
       answerCounts: {},
-      columns1: [
-        {
-          name: 'index',
-          align: 'center',
-          label: 'ردیف',
-          field: row => row.index,
-          sortable: true
-        },
-        { name: 'sub_category', label: 'درس', field: row => row.sub_category, align: 'center', sortable: false },
-        { name: 'right_answer', label: ' تعداد درست', field: row => row.right_answer, align: 'center', sortable: true },
-        { name: 'wrong_answer', label: ' تعداد غلط', field: row => row.wrong_answer, align: 'center', sortable: true },
-        { name: 'percent', label: ' درصد', field: row => row.percent, align: 'center', sortable: true },
-        { name: 'rank_city', label: 'رتبه در شهر', field: row => row.rank_city, align: 'center', sortable: false },
-        { name: 'rank_province', label: 'رتبه در استان', field: row => row.rank_province, align: 'center', sortable: false },
-        { name: 'rank_country', label: 'رتبه در کشور', field: row => row.rank_country, align: 'center', sortable: false },
-        { name: 'taraaz', label: ' تراز', field: row => row.taraaz, align: 'center', sortable: true }
-      ],
       headers1: [
         { text: 'درس', value: 'sub_category', align: 'center', sortable: false },
         { text: 'تعداد درست', value: 'right_answer', align: 'center', sortable: true },
@@ -195,7 +178,7 @@ export default {
     }
   },
   created () {
-    console.log('TakhminRotbe----------', this.takhminReport.sub_category)
+    console.log('TakhminRotbe----------')
     this.prepareTakhmineRotbeReport(true)
   },
   methods: {
@@ -263,9 +246,9 @@ export default {
       return true
     },
     calcPercent (subcategoryId) {
-      const correct = parseInt(this.answerCounts[subcategoryId].correct)
-      const incorrect = parseInt(this.answerCounts[subcategoryId].incorrect)
-      const totalQuestions = parseInt(this.answerCounts[subcategoryId].totalQuestions)
+      const correct = parseInt(this.answerCounts[subcategoryId].correct),
+        incorrect = parseInt(this.answerCounts[subcategoryId].incorrect),
+        totalQuestions = parseInt(this.answerCounts[subcategoryId].totalQuestions)
 
       if (!this.calcValidate(subcategoryId, correct, incorrect, totalQuestions)) {
         this.prepareTakhmineRotbeReport()
@@ -284,8 +267,8 @@ export default {
     },
     prepareTakhmineRotbeReport (resetPercents) {
       console.log('this.report', this.report)
-      const that = this
-      const takhminReport = JSON.parse(JSON.stringify(this.report))
+      const that = this,
+        takhminReport = JSON.parse(JSON.stringify(this.report))
       takhminReport.main.percent = 0
       takhminReport.main.rank_city = 0
       takhminReport.main.rank_province = 0
@@ -341,7 +324,6 @@ export default {
       return status
     },
     sendData () {
-      console.log('TakhminRotbe----------', this.takhminReport.sub_category)
       if (!this.validateSendData()) {
         return
       }
@@ -369,28 +351,7 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped >
-    .takhmin-rotbe {
-      .proceeds-table , .default-result-table{
-        .q-table__container {
-          border-radius: 20px;
-        }
-        .q-table {
-          border: 1px solid #ececec;
-          thead tr {
-            background-color: #ffecb4;
-            border-radius: 20px;
-            color: rgba(62, 57, 43, 0.96);
-          }
-          tbody tr:nth-of-type(2n) {
-            background-color: rgba(0, 0, 0, 0.02);
-          }
-          tbody td {
-            font-size: 0.875rem;
-          }
-        }
-      }
-    }
+<style scoped>
     .subColsPaddingRight {
         padding-right: 5px;
     }
