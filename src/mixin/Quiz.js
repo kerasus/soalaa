@@ -156,13 +156,13 @@ const mixinQuiz = {
               Time.setStateOfExamCategories(examData.exam.categories)
               const currentExamQuestions = that.getCurrentExamQuestions()
               Time.setStateOfQuestionsBasedOnActiveCategory(examData.exam, currentExamQuestions)
-              that.$store.commit('updateQuiz', examData.exam)
+              that.$store.commit('quiz/updateQuiz', examData.exam)
               that.setCurrentExamQuestions(currentExamQuestions)
               that.loadCurrentQuestion(viewType)
               // examData.exam = that.quiz
               that.reloadCurrentQuestion(viewType)
 
-              that.$store.commit('mergeDbAnswersIntoLocalstorage', {
+              that.$store.commit('quiz/mergeDbAnswersIntoLocalstorage', {
                 dbAnswers: examData.userExamData,
                 exam_id: examData.exam.id
               })
