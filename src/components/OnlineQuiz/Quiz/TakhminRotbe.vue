@@ -1,35 +1,32 @@
 <template>
   <div>
-<!--    <div style="background-color: rgb(244, 244, 244)">-->
-<!--      <div class="d-flex justify-center wrapper">-->
-<!--        <v-row v-if="report">-->
-<!--          <v-col cols="12">-->
-<!--            <v-btn-->
-<!--              block-->
-<!--              dark-->
-<!--              color="cyan"-->
-<!--              @click="sendData"-->
-<!--            >-->
-<!--              تخمین رتبه-->
-<!--            </v-btn>-->
-<!--          </v-col>-->
-<!--          <v-col-->
-<!--            md="7"-->
-<!--            cols="12"-->
-<!--          >-->
-<!--            <v-data-table-->
-<!--              hide-default-footer-->
-<!--              :headers="headers1"-->
-<!--              :header-props="{sortByText: 'ترتیب'}"-->
-<!--              :items="takhminReport.sub_category"-->
-<!--              :items-per-page="99"-->
-<!--              class="elevation-1 dataTable dataTableHeight1"-->
-<!--            >-->
-<!--              <template v-slot:top>-->
-<!--                <span class="tableTitle">-->
-<!--                  جدول عملکرد دروس-->
-<!--                </span>-->
-<!--              </template>-->
+    <div style="background-color: rgb(244, 244, 244)">
+      <div class="d-flex justify-center wrapper">
+        <div class="row" v-if="report">
+          <div class="col col-12">
+            <v-btn
+              block
+              dark
+              color="cyan"
+              @click="sendData"
+            >
+              تخمین رتبه
+            </v-btn>
+          </div>
+          <div class="col col-md-7 col-12">
+            <v-data-table
+              hide-default-footer
+              :headers="headers1"
+              :header-props="{sortByText: 'ترتیب'}"
+              :items="takhminReport.sub_category"
+              :items-per-page="99"
+              class="elevation-1 dataTable dataTableHeight1"
+            >
+              <template v-slot:top>
+                <span class="tableTitle">
+                  جدول عملکرد دروس
+                </span>
+              </template>
 <!--              <template v-slot:item.percent="props">-->
 <!--                <v-text-field-->
 <!--                  v-model="percents[props.item.sub_category_id]"-->
@@ -51,83 +48,75 @@
 <!--                  @input.native="calcPercent(props.item.sub_category_id, $event.target)"-->
 <!--                />-->
 <!--              </template>-->
-<!--            </v-data-table>-->
-<!--          </v-col>-->
-<!--          <v-col-->
-<!--            md="5"-->
-<!--            cols="12"-->
-<!--            class="firstColPadding"-->
-<!--          >-->
-<!--            <v-data-table-->
-<!--              hide-default-footer-->
-<!--              :headers="headers2"-->
-<!--              :header-props="{sortByText: 'ترتیب'}"-->
-<!--              :items="takhminReport.zirgorooh"-->
-<!--              :items-per-page="5"-->
-<!--              class="elevation-1 dataTable dataTableHeight2"-->
-<!--            >-->
-<!--              <template v-slot:top>-->
-<!--                <span class="tableTitle ">-->
-<!--                  نتیجه در زیر گروه ها-->
-<!--                </span>-->
-<!--              </template>-->
-<!--            </v-data-table>-->
-<!--            <v-row class="subRowHeight final-report-scoreboard">-->
-<!--              <v-col-->
-<!--                class="subColsPaddingBottom"-->
-<!--                cols="12"-->
-<!--              >-->
-<!--                <v-card class="subCards">-->
-<!--                  <v-card-title class="cardTitle">-->
-<!--                    <v-row>-->
-<!--                      <v-col>-->
-<!--                        ماکزمیم تراز کل زیر گروه-->
-<!--                      </v-col>-->
-<!--                    </v-row>-->
-<!--                  </v-card-title>-->
+            </v-data-table>
+          </div>
+          <div
+            class="col col-md-5 col-12 firstColPadding"
+          >
+            <v-data-table
+              hide-default-footer
+              :headers="headers2"
+              :header-props="{sortByText: 'ترتیب'}"
+              :items="takhminReport.zirgorooh"
+              :items-per-page="5"
+              class="elevation-1 dataTable dataTableHeight2"
+            >
+              <template v-slot:top>
+                <span class="tableTitle ">
+                  نتیجه در زیر گروه ها
+                </span>
+              </template>
+            </v-data-table>
+            <div class="row subRowHeight final-report-scoreboard">
+              <div class="col col-12 subColsPaddingBottom" >
+                <v-card class="subCards">
+                  <v-card-title class="cardTitle">
+                    <div class="row">
+                      <div class="col">
+                        ماکزمیم تراز کل زیر گروه
+                      </div>
+                    </div>
+                  </v-card-title>
 
-<!--                  <span class="cardContent">-->
-<!--                    <v-row>-->
-<!--                      <v-col>-->
-<!--                        {{ takhminReport.main.taraaz }}-->
-<!--                      </v-col>-->
-<!--                    </v-row>-->
-<!--                  </span>-->
-<!--                </v-card>-->
-<!--              </v-col>-->
-<!--              <v-col-->
-<!--                class="subColsPaddingBottom subColsPaddingRight"-->
-<!--                cols="12"-->
-<!--              >-->
-<!--                <v-card class="subCards">-->
-<!--                  <v-card-title class="cardTitle">-->
-<!--                    <v-row>-->
-<!--                      <v-col cols="4">-->
-<!--                        رتبه کل کشوری-->
-<!--                      </v-col>-->
-<!--                      <v-col cols="4">-->
-<!--                        رتبه در استان-->
-<!--                      </v-col>-->
-<!--                      <v-col cols="4">-->
-<!--                        رتبه در شهر-->
-<!--                      </v-col>-->
-<!--                    </v-row>-->
-<!--                  </v-card-title>-->
+                  <span class="cardContent">
+                    <div class="row">
+                      <div class="col">
+                        {{ takhminReport.main.taraaz }}
+                      </div>
+                    </div>
+                  </span>
+                </v-card>
+              </div>
+              <div class="col col-12 subColsPaddingBottom subColsPaddingRight">
+                <v-card class="subCards">
+                  <v-card-title class="cardTitle">
+                    <div class="row">
+                      <div class="col col-4">
+                        رتبه کل کشوری
+                      </div>
+                      <div class="col col-4">
+                        رتبه در استان
+                      </div>
+                      <div class="col col-4">
+                        رتبه در شهر
+                      </div>
+                    </div>
+                  </v-card-title>
 
-<!--                  <span class="cardContent">-->
-<!--                    <v-row>-->
-<!--                      <v-col cols="4">{{ takhminReport.main.rank_country }}</v-col>-->
-<!--                      <v-col cols="4">{{ takhminReport.main.rank_province }}</v-col>-->
-<!--                      <v-col cols="4">{{ takhminReport.main.rank_city }}</v-col>-->
-<!--                    </v-row>-->
-<!--                  </span>-->
-<!--                </v-card>-->
-<!--              </v-col>-->
-<!--            </v-row>-->
-<!--          </v-col>-->
-<!--        </v-row>-->
-<!--      </div>-->
-<!--    </div>-->
+                  <span class="cardContent">
+                    <div class="row">
+                      <div class="col col-4">{{ takhminReport.main.rank_country }}</div>
+                      <div class="col col-4" >{{ takhminReport.main.rank_province }}</div>
+                      <div class="col col-4">{{ takhminReport.main.rank_city }}</div>
+                    </div>
+                  </span>
+                </v-card>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
