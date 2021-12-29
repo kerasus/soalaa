@@ -29,18 +29,34 @@
           style="min-width: 150px"
         />
         <q-btn
-          color="primary"
-          icon-right="archive"
-          label="دانلود خروجی اکسل"
+          flat round dense
+          icon="search"
+          no-caps
+          @click="searchEvent"
+        >
+          <q-tooltip>
+            جستجو
+          </q-tooltip>
+        </q-btn>
+        <q-btn
+          flat round dense
+          icon="archive"
           no-caps
           @click="exportTable"
-        />
+        >
+          <q-tooltip>
+            خروجی اکسل
+          </q-tooltip>
+        </q-btn>
         <q-btn
           flat round dense
           :icon="props.inFullscreen ? 'fullscreen_exit' : 'fullscreen'"
-          class="q-ml-md"
           @click="props.toggleFullscreen"
-        />
+        >
+          <q-tooltip>
+            تمام صفحه
+          </q-tooltip>
+        </q-btn>
       </template>
 
       <template #body-cell="props">
@@ -127,6 +143,7 @@ export default {
       type: Function
     }
   },
+  emits: ['search'],
   data () {
     return {
       visibleColumns: [],
@@ -154,6 +171,9 @@ export default {
     // })
   },
   methods: {
+    searchEvent () {
+      this.$emit('search')
+    },
     exportTable () {
       // naive encoding to csv format
       const content = [this.columns.map(col => wrapCsvValue(col.label))].concat(

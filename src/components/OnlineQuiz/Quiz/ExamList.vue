@@ -169,6 +169,7 @@
                   v-ripple:yellow
                   clickable
                   manual-focus
+                  :to="{ name: 'exam.results', params: { examId: tableRow.id}}"
                 >
                   <q-item-section>نتایج تمام شرکت کنندگان</q-item-section>
                 </q-item>

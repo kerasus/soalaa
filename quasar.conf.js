@@ -62,9 +62,9 @@ module.exports = configure(function (ctx) {
       // transpileDependencies: [],
 
       rtl: true, // https://v2.quasar.dev/options/rtl-support
-      preloadChunks: true,
+      preloadChunks: false,
       showProgress: true,
-      gzip: true,
+      gzip: false,
       // analyze: true,
 
       // Options below are automatically set depending on the env, set them if you want to override
@@ -75,11 +75,78 @@ module.exports = configure(function (ctx) {
       // https://v2.quasar.dev/quasar-cli/handling-webpack
       // "chain" is a webpack-chain object https://github.com/neutrinojs/webpack-chain
       chainWebpack (chain) {
-        const hashh = '[id].[name].[chunkhash]'
-        chain.output.filename('js/[name]/' + hashh + '.bundle.js')
-        chain.output.chunkFilename('js/[name]/' + hashh + '.chunk.js')
+        const fileName = '[id]-[name]-[chunkhash]-[contenthash]-[fullhash:8]'
+        const path = '[id]/[name]/[chunkhash]/[contenthash]'
+        chain.output.publicPath('/assets/')
+        chain.output.filename('js/bundle/' + path + '/' + fileName + '.bundle.js')
+        chain.output.chunkFilename('js/chunk/' + path + '/' + fileName + '.chunk.js')
+
+        // chain.module.rule.use('eslint-loader')
+        //   .loader('eslint-loader')
+        //   .options(cssLoaderOptions)
+
+        chain.module
+          .rule('fonts')
+          .test(/\.(ttf|otf|eot|woff|woff2)$/)
+          .use('file-loader')
+          .loader('file-loader')
+          .tap(options => {
+            options = {
+              // limit: 10000,
+              name: '/assets/fonts/' + fileName + '.[ext]'
+            }
+            return options
+          })
+
+        // chain
+        //   .plugin('mini-css-extract')
+        //   // .use('mini-css-extract')
+        //   .tap(args => [{ filename: 'css/chunk/'+path+'/'+fileName+'.css' }, ...args]);
+
+        // const hashh = '[id].[name].[chunkhash]'
+        // chain.output.filename('js/[name]/' + hashh + '.bundle.js')
+        // chain.output.chunkFilename('js/[name]/' + hashh + '.chunk.js')
         chain.plugin('eslint-webpack-plugin')
           .use(ESLintPlugin, [{ extensions: ['js', 'vue'] }])
+      },
+
+      extendWebpack (cfg) {
+        // cfg.module.rules.push({
+        //   // test: /\.woff(2)?(\?v=[0-9]\.[0-9]\.[0-9])?$/,
+        //   loader: 'file?name=./fonts/[hash].[ext]'
+        // })
+
+        // /// //////////////////////////////////////////
+        // cfg.module.rules.push({
+        //   test: /\.woff(2)?(\?v=[0-9]\.[0-9]\.[0-9])?$/,
+        //   loader: 'url-loader?limit=10000&minetype=application/font-woff&name=./[hash].[ext]'
+        // })
+        // /// //////////////////////////////////////////
+
+        // cfg.module.rules.push({
+        //   test: /\.css$/,
+        //   loader: 'style!css?sourceMap'
+        // })
+        // cfg.module.rules.push({
+        //   test: /\.woff(\?v=\d+\.\d+\.\d+)?$/,
+        //   loader: 'url?limit=10000&mimetype=application/font-woff&name=./[hash].[ext]'
+        // })
+        // cfg.module.rules.push({
+        //   test: /\.woff2(\?v=\d+\.\d+\.\d+)?$/,
+        //   loader: 'url?limit=10000&mimetype=application/font-woff'
+        // })
+        // cfg.module.rules.push({
+        //   test: /\.ttf(\?v=\d+\.\d+\.\d+)?$/,
+        //   loader: 'url?limit=10000&mimetype=application/octet-stream'
+        // })
+        // cfg.module.rules.push({
+        //   test: /\.eot(\?v=\d+\.\d+\.\d+)?$/,
+        //   loader: 'file'
+        // })
+        // cfg.module.rules.push({
+        //   test: /\.svg(\?v=\d+\.\d+\.\d+)?$/,
+        //   loader: 'url?limit=10000&mimetype=image/svg+xml'
+        // })
       }
     },
 
