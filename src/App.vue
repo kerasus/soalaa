@@ -1,7 +1,5 @@
 <template>
   <router-view />
-<!--  <div>hello</div>-->
-<!--  <router-view />-->
 </template>
 <script>
 import '../src/assets/scss/font.scss'
