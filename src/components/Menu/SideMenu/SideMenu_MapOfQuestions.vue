@@ -18,16 +18,11 @@
             flat
             :label="subcategoryItem.title"
             expand-separator
-            default-opened
           >
             <div
               v-for="(question) in getQuestionsOfSubcategory(subcategoryItem.id)"
               :key="'question-'+question.id"
             >
-<!--            v-for="(subcategoryItem) in categoryItem.sub_categories.list"-->
-<!--            :key="'subcategory-'+subcategoryItem.id"-->
-<!--                v-for="(question) in getQuestionsOfSubcategory(subcategoryItem.id)"-->
-<!--                :key="'question-'+question.id"-->
                   <q-btn
                     :elevation="0"
                     block
