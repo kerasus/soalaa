@@ -111,15 +111,20 @@
                <div class="col question-answers"
                     v-if="currentQuestion.in_active_category"
                >
-                 <div>
-                 <choice
+                 <div
+                 class="row">
+                 <div
+                   class="choice-parent col-md-6"
                    v-for="item in currentQuestion.choices.list"
                    :key="item.id"
+                 >
+                 <choice
                    :question-id="currentQuestion.id"
                    :choice="item"
                    :is-rtl="isRtl"
                    @answerClicked="answerClicked"
                  />
+                 </div>
                  </div>
                </div>
              </div>
@@ -245,7 +250,6 @@ export default {
   flex-direction: column;
   width: 100%;
   height: 100%;
-  padding: 12px 12px 12px 12px;
   .footer {
     position: sticky;
     position: -webkit-sticky;
@@ -317,6 +321,9 @@ export default {
             margin-top: 90px;
             margin-left: -12px;
             margin-right: -12px;
+        .choice-parent{
+          padding: 12px;
+        }
       }
     }
   }
