@@ -17,6 +17,7 @@
         :max="input.max"
         :range="isRange(input)"
         :time="isTime(input)"
+        :date="isDate(input)"
         :src="input.value"
         :size="input.size"
         :font-size="input.fontSize"
@@ -109,7 +110,10 @@ export default {
       return input.type === 'dateMultipleRange' || input.type === 'dateRange'
     },
     isTime (input) {
-      return input.type === 'time'
+      return input.type === 'time' || input.type === 'dateTime'
+    },
+    isDate (input) {
+      return input.type === 'date' || input.type === 'dateTime'
     },
     change (event, inputIndex) {
       if (typeof event.target !== 'undefined' && typeof event.target.files !== 'undefined' && event.target.files[0]) {
