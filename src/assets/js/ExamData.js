@@ -177,6 +177,7 @@ class ExamData {
           resolve(response)
         })
         .catch(error => {
+          console.log(error)
           reject(error)
         })
     })
@@ -187,8 +188,7 @@ class ExamData {
   getExamDataAndParticipate (examId) {
     const that = this
     this.commands.push(() => new Promise((resolve, reject) => {
-      // eslint-disable-next-line
-        if (!examId && !that.exam) {
+      if (!examId && !that.exam) {
         Assistant.handleAxiosError('exam_id in getExamDataAndParticipate() is not set')
         reject('exam_id in getExamDataAndParticipate() is not set')
       }

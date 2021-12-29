@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="side-menu-main-layout">
     <q-list
       class="side-menu-list"
       padding
@@ -26,6 +26,48 @@
         </q-item>
       </router-link>
     </q-list>
+    <q-expansion-item
+      group="menu-expansion"
+      style="font-size:16px;"
+      label="برنامه ی آزمون ها"
+      dark
+    >
+      <q-list
+        class="side-menu-list"
+        padding
+      >
+        <div
+          v-for="(examPlan, index) in examsPlan"
+          :key="index"
+        >
+          <a
+            v-if="!examPlan.divider"
+            :href="examPlan.link"
+            target="_blank"
+            class="text-decoration-none"
+          >
+            <q-item
+              clickable
+              v-ripple:deep-purple
+              v-model="selectedExam"
+              :active="clickedOn === examPlan.name"
+              active-class="active-route"
+              @click="onClick(examPlan.name)"
+            >
+              <q-item-section class="side-list-item">
+              <span class="list-title">
+                {{examPlan.name}}
+              </span>
+              </q-item-section>
+            </q-item>
+          </a>
+          <q-separator
+            v-else
+            class="expansion-separator"
+          />
+        </div>
+      </q-list>
+    </q-expansion-item>
     <q-separator class="bg-white" size="px" />
     <q-list
       dense
@@ -63,6 +105,7 @@
       dark
     >
       <q-expansion-item
+        group="menu-expansion"
         style="font-size:16px; "
         icon="account_balance"
         label="بانک سوال"
@@ -108,7 +151,9 @@ export default {
       userGroup: null,
       adminGroup: null,
       questionGroup: null,
+      selectedExam: null,
       activeRoute: null,
+      clickedOn: false,
       userList: [
         {
           displayName: 'آزمون های سه آ',
@@ -117,15 +162,65 @@ export default {
         },
         {
           displayName: 'سوالات متداول',
-          to: 'user-exam',
-          name: 'user.exam'
+          to: '/faq',
+          name: 'faq'
+        }
+      ],
+      examsPlan: [
+        {
+          divider: true
+        },
+        {
+          name: 'دهم تجربی',
+          link: 'https://nodes.alaatv.com/aaa/pdf/1401_plan_tajrobi_dahom.pdf'
+        },
+        {
+          name: 'دهم ریاضی',
+          link: 'https://nodes.alaatv.com/aaa/pdf/1401_plan_riyazi_dahom.pdf'
+        },
+        {
+          name: 'دهم انسانی',
+          link: 'https://nodes.alaatv.com/aaa/pdf/1401_plan_ensani_dahom.pdf'
+        },
+        {
+          divider: true
+        },
+        {
+          name: 'یازدهم تجربی',
+          link: 'https://nodes.alaatv.com/aaa/pdf/1401_plan_tajrobi_yazdahom.pdf'
+        },
+        {
+          name: 'یازدهم ریاضی',
+          link: 'https://nodes.alaatv.com/aaa/pdf/1401_plan_riyazi_yazdahom.pdf'
+        },
+        {
+          name: 'یازدهم انسانی',
+          link: 'https://nodes.alaatv.com/aaa/pdf/1401_plan_ensani_yazdahom.pdf'
+        },
+        {
+          divider: true
+        },
+        {
+          name: 'دوازدهم تجربی',
+          link: 'https://nodes.alaatv.com/aaa/pdf/1401_plan_tajrobi_davazdahom.pdf'
+        },
+        {
+          name: 'دوازدهم ریاضی',
+          link: 'https://nodes.alaatv.com/aaa/pdf/1401_plan_riyazi_davazdahom.pdf'
+        },
+        {
+          name: 'دوازدهم انسانی',
+          link: 'https://nodes.alaatv.com/aaa/pdf/1401_plan_ensani_davazdahom.pdf'
+        },
+        {
+          divider: true
         }
       ],
       adminList: [
         {
           displayName: 'لیست آزمون ها',
           to: '/exam',
-          name: 'list'
+          name: 'Admin.Exam.Index'
         },
         {
           displayName: 'بانک سوال',
@@ -140,7 +235,7 @@ export default {
         {
           displayName: 'لیست دفترچه ها',
           to: '/category',
-          name: 'categoryList'
+          name: 'Admin.Category.Index'
         },
         {
           displayName: 'لیست زیرگروه ها',
@@ -166,6 +261,12 @@ export default {
         }
       ]
     }
+  },
+  methods: {
+    onClick (name) {
+      this.clickedOn = name
+      console.log(this.clickedOn)
+    }
   }
 }
 </script>
@@ -179,7 +280,6 @@ export default {
       .indicator{
         height: 50%;
         width: 3px;
-        background-color: white;
         justify-content: end;
       }
     }
@@ -209,6 +309,13 @@ export default {
 }
 </style>
 <style lang="scss">
+.side-menu-main-layout{
+  .q-expansion-item__container {
+    .q-item{
+      display: flex!important;
+    }
+  }
+}
 .q-list {
   &.side-menu-list {
     .q-item__section--avatar {
