@@ -1,12 +1,9 @@
 <template>
-  <div
-    class="answer-box col-md-6 col-12"
+  <div class="answer-box col-12 col-md-6"
     @click="answerClicked"
   >
-    <q-card-section
-      :class="{ 'answer-sheet': true, active: isSelected }">
-      <div
-        class="answer-text renderedPanel"
+    <div :class="{ 'answer-sheet': true, active: isSelected }">
+      <div class="answer-text renderedPanel"
       >
         <vue-katex :input="choice.title" :ltr="!isRtl" />
       </div>
@@ -17,7 +14,7 @@
           v-model="isSelected"
          />
       </div>
-    </q-card-section>
+    </div>
   </div>
 </template>
 
