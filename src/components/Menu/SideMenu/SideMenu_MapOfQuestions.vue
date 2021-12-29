@@ -45,27 +45,15 @@
               </q-expansion-item>
       </q-list>
     <div class="end-exam">
-      <q-btn
-        v-if="false"
-        :color="'#4caf50'"
-        :style="{ backgroundColor: '#4caf50 !important' }"
-        dark
-        block
-        class="end-exam-btn"
-        @click="getConfirmation"
-      >
-        ارسال پاسخنامه
-      </q-btn>
-      <br>
-      <br>
-      <br>
-      <br>
+      <SendAnswers />
+
     </div>
   </div>
 </template>
 <script>
 import ExamData from 'src/assets/js/ExamData'
 import mixinQuiz from 'src/mixin/Quiz'
+import SendAnswers from 'components/Menu/SideMenu/SendAnswers'
 import Time from 'src/plugins/time'
 // import Vue from 'vue'
 // import VueConfirmDialog from 'vue-confirm-dialog'
@@ -75,6 +63,7 @@ import Time from 'src/plugins/time'
 
 export default {
   name: 'SideMenuMapOfQuestions',
+  components: { SendAnswers },
   js: [ExamData],
   mixins: [mixinQuiz],
   data: () => ({
