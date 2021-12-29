@@ -96,7 +96,7 @@ export default {
     examId: null
   }),
   created () {
-    this.examId = this.$route.params.examId
+    this.examId = this.$route.params.idd
     const that = this
     axios.get(API_ADDRESS.option.base + '?type=exam_type')
       .then(function (response) {
