@@ -665,6 +665,7 @@ const mixinQuiz = {
     },
 
     getExamUserData (examId) {
+      console.log('getExamUserData')
       return new Promise(function (resolve, reject) {
         axios.post(API_ADDRESS.exam.examUser, { examId })
           .then((response) => {
