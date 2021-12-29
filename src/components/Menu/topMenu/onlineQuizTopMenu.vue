@@ -2,7 +2,12 @@
   <q-card
     class="profile-card"
   >
-    <img src="https://nodes.alaatv.com/upload/images/profile/default_avatar.jpg">
+    <q-img
+      src="https://nodes.alaatv.com/upload/images/profile/default_avatar.jpg"
+      width="300px"
+      height="300px"
+      dark
+    />
     <q-card-actions vertical>
       <a
         class="profile-link bg-green"
@@ -22,7 +27,7 @@ export default {
   mixins: [mixinAuth, mixinQuiz],
   methods: {
     goHome () {
-      this.$router.push({ name: 'dashboard' })
+      this.$router.push({ name: 'user.exam.list' })
     },
     sendAnswersAndFinishExam () {
       const that = this
