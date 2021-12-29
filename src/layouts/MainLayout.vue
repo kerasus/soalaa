@@ -172,7 +172,7 @@ export default {
     }
   }
   .layout-page{
-    margin-bottom: 40px;
+   padding-bottom: 72px;
   }
   .q-drawer--left {
     .q-layout__shadow{

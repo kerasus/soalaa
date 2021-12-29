@@ -43,13 +43,6 @@
                     v-ripple:yellow
                     clickable
                     manual-focus
-                  >
-                    <q-item-section>مشاهده تمام سوالات</q-item-section>
-                  </q-item>
-                  <q-item
-                    v-ripple:yellow
-                    clickable
-                    manual-focus
                     @click="generateJsonFile(inputData.props.row, false)"
                   >
                     <q-item-section>ساخت فایل سوالات</q-item-section>

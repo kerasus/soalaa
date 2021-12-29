@@ -1,6 +1,5 @@
 <template>
   <div
-    v-katex:auto
     class="html-katex"
     :dir="!isLtrString ? 'rtl' : 'ltr'"
     v-html="input"
@@ -8,20 +7,20 @@
 </template>
 
 <script>
-import { createApp } from 'vue'
-const app = createApp({})
-import VueKatex from 'vue-katex'
-import 'katex/dist/katex.min.css'
-app.use(VueKatex, {
-  globalOptions: {
-    delimiters: [
-      { left: '$$', right: '$$', display: true },
-      { left: '\\[', right: '\\]', display: true },
-      { left: '$', right: '$', display: false },
-      { left: '\\(', right: '\\)', display: false }
-    ]
-  }
-})
+// import { createApp } from 'vue'
+// const app = createApp({})
+// import VueKatex from 'vue-katex'
+// import 'katex/dist/katex.min.css'
+// app.use(VueKatex, {
+//   globalOptions: {
+//     delimiters: [
+//       { left: '$$', right: '$$', display: true },
+//       { left: '\\[', right: '\\]', display: true },
+//       { left: '$', right: '$', display: false },
+//       { left: '\\(', right: '\\)', display: false }
+//     ]
+//   }
+// })
 export default {
   name: 'VueKatex',
   props: {
