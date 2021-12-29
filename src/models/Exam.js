@@ -172,6 +172,7 @@ class Exam extends Model {
     return this.categories.list.find((item) => !!(item.is_active))
   }
 
+
   loadQuestionsFromFile () {
     const that = this
     return new Promise(function (resolve, reject) {
@@ -312,13 +313,13 @@ class Exam extends Model {
 
     this.addUserQuestionDataCheckingTimes(question, userQuestionData.checking_times)
 
-    userQuestionData.answered_at.push((answeredChoice) ? answeredChoice.answered_at : null)
-    userQuestionData.bookmarked.push(question.bookmarked)
-    userQuestionData.state.push(question.state)
-    // ToDo : app.set sth used instead
-    // window.app.set(userQuestionData, 'answered_at', (answeredChoice) ? answeredChoice.answered_at : null)
-    // window.app.set(userQuestionData, 'bookmarked', question.bookmarked)
-    // window.app.set(userQuestionData, 'state', question.state)
+    userQuestionData.answered_at = (answeredChoice) ? answeredChoice.answered_at : null
+    userQuestionData.bookmarked = question.bookmarked
+    userQuestionData.state = question.state
+
+    window.app.set(userQuestionData, 'answered_at', (answeredChoice) ? answeredChoice.answered_at : null)
+    window.app.set(userQuestionData, 'bookmarked', question.bookmarked)
+    window.app.set(userQuestionData, 'state', question.state)
   }
 
   addUserQuestionData (question, userQuizData) {
@@ -326,9 +327,7 @@ class Exam extends Model {
     let answeredChoiceId = null
     let answered_at = null
     if (answeredChoice) {
-      // eslint-disable-next-line
       answeredChoiceId = answeredChoice.id
-      // eslint-disable-next-line
       answered_at = answeredChoice.answered_at
     }
     const checkingTimes = []
