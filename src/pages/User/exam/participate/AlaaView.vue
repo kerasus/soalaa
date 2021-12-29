@@ -3,6 +3,13 @@
   <div class="row quiz-page"
     :style="{ height: '100%' }"
   >
+    <div class="q-mb-lg">
+      <q-btn
+        @click="redirect">
+        redirect
+      </q-btn>
+    </div>
+
     <div class="col " :style="{ 'min-height': '100%' }">
       <div class="row main-page" :style="{ 'min-width': '100%' }"
       >
@@ -196,6 +203,14 @@ export default {
     this.changeAppBarAndDrawer(false)
   },
   methods: {
+    redirect () {
+      this.$router.push({
+        name: 'konkoorView',
+        params: {
+          quizId: this.$route.params.quizId
+        }
+      })
+    },
     changeAppBarAndDrawer (state) {
       this.$store.commit('AppLayout/updateAppBarAndDrawer', state)
     },

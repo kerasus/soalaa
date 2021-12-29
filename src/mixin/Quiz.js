@@ -237,7 +237,7 @@ const mixinQuiz = {
     sortQuestions (questions) {
       const sortList = Array.prototype.sort.bind(questions)
       sortList(function (a, b) {
-        const sorta = parseInt(a.order), sortb = parseInt(b.order)
+        const sorta = parseInt(a.order); const sortb = parseInt(b.order)
 
         if (sorta < sortb) {
           return -1
@@ -417,6 +417,7 @@ const mixinQuiz = {
                 location: 'mixin/Quiz.js -> loadExam() -> quiz.getAnswerOfUserInExam()',
                 message: 'quiz.id not set'
               })
+              // eslint-disable-next-line prefer-promise-reject-errors
               reject()
             }
             that.$store.commit('quiz/mergeDbAnswersIntoLocalstorage', {
@@ -610,8 +611,8 @@ const mixinQuiz = {
         return
       }
 
-      let questIndex = this.getQuestionIndexById(id),
-        questNumber = this.getQuestionNumberFromIndex(questIndex)
+      let questIndex = this.getQuestionIndexById(id)
+      let questNumber = this.getQuestionNumberFromIndex(questIndex)
 
       if (typeof questIndex === 'undefined') {
         return
@@ -688,6 +689,7 @@ const mixinQuiz = {
       return new Promise(function (resolve, reject) {
         if (!questionsFileUrl) {
           Assistant.handleAxiosError('exam file url is not set')
+          // eslint-disable-next-line prefer-promise-reject-errors
           reject(null)
           return
         }
@@ -703,6 +705,7 @@ const mixinQuiz = {
           error: function (jqXHR, textStatus, errorThrown) {
             Assistant.reportErrors({ location: 'GetQuestionsOfExam', message: "can't get exam file", data: { jqXHR, textStatus, errorThrown } })
             Assistant.handleAxiosError("can't get exam file")
+            // eslint-disable-next-line prefer-promise-reject-errors
             reject({ jqXHR, textStatus, errorThrown })
           }
         }

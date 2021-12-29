@@ -88,6 +88,7 @@ const Assistant = (function () {
   }
 
   function reportErrors (error) {
+
     if (error) {
       console.log('error :', error)
       const location = (error && error.location) ? error.location : 'undefined error',
@@ -97,6 +98,7 @@ const Assistant = (function () {
       console.groupCollapsed()
       // console.table(data);
       // console.count();
+
 
       // console.group();
       // console.time();

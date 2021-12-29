@@ -121,11 +121,11 @@ export default {
       if (!filePath || typeof filePath !== 'string') {
         return false
       }
-      const photoExtensions = /\.(jpeg|jpg|gif|png)$/,
-        audioExtensions = /\.(mp3|ogg)$/,
-        officeWordExtensions = /\.(doc|docx)$/,
-        officeExcelExtensions = /\.(xls|xlsx)$/,
-        pdfExtensions = /\.(pdf)$/
+      const photoExtensions = /\.(jpeg|jpg|gif|png)$/
+      const audioExtensions = /\.(mp3|ogg)$/
+      const officeWordExtensions = /\.(doc|docx)$/
+      const officeExcelExtensions = /\.(xls|xlsx)$/
+      const pdfExtensions = /\.(pdf)$/
 
       if (filePath.match(photoExtensions) != null) {
         return 'photo'
