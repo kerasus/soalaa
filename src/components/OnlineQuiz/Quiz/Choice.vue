@@ -62,7 +62,7 @@ export default {
     }
 </style>
 
-<style lang="scss" scoped>
+<style scoped>
 
     .answer-box {
         display: flex;
@@ -111,8 +111,5 @@ export default {
         justify-content: center;
         align-items: center;
         transition: all ease-in-out 0.3s;
-    .q-checkbox__inner{
-      color: #e0e0e0!important;
-    }
     }
 </style>

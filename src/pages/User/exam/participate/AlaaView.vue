@@ -147,12 +147,9 @@
             </div>
           </div>
     </div>
-    <div class="footer flex col">
-      <div class="d-flex high-z-index col"
-      >
+    <div class="footer  col">
         <Timer/>
       </div>
-    </div>
   </div>
 </template>
 
@@ -233,7 +230,7 @@ export default {
 
 .quiz-page .katex-display {
     display: inline-block;
-    direction: ltr;
+    direction: rtl;
 }
 
 .base.textstyle.uncramped {
@@ -250,7 +247,7 @@ export default {
   flex-direction: column;
   width: 100%;
   height: 100%;
-  padding: 12px;
+  padding: 0px 0px 0px 12px;
   .footer {
     position: sticky;
     position: -webkit-sticky;
@@ -292,7 +289,8 @@ export default {
         }
       }
       .question-body {
-        margin-top: 20px;
+        padding: 0px 0px 0px 12px;
+        margin-top: 50px;
         margin-left: -12px;
         margin-right: -12px;
         font-size: 16px;
