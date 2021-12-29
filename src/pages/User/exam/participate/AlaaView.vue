@@ -114,7 +114,7 @@
                  <div
                  class="row">
                  <div
-                   class="choice-parent col-md-6"
+                   class="choice-parent col-12 col-md-6"
                    v-for="item in currentQuestion.choices.list"
                    :key="item.id"
                  >
@@ -250,6 +250,7 @@ export default {
   flex-direction: column;
   width: 100%;
   height: 100%;
+  padding: 12px;
   .footer {
     position: sticky;
     position: -webkit-sticky;
@@ -289,19 +290,9 @@ export default {
           width: 24px;
           size: 12px;
         }
-        @media only screen and (max-width: 600px) {
-          .question-buttons button {
-            margin-left: 0;
-          }
-        }
-      }
-      @media only screen and (max-width: 335px) {
-        .question-header {
-          justify-content: center;
-        }
       }
       .question-body {
-        margin-top: 50px;
+        margin-top: 20px;
         margin-left: -12px;
         margin-right: -12px;
         font-size: 16px;
@@ -312,11 +303,6 @@ export default {
         box-sizing: inherit;
         color: var(--text-2);
       }
-      @media only screen and (max-width: 1024px) {
-        .question-body {
-          margin-top: 20px;
-        }
-      }
       .question-answers {
             margin-top: 90px;
             margin-left: -12px;
@@ -326,6 +312,21 @@ export default {
         }
       }
     }
+  }
+}
+@media only screen and (max-width: 335px) {
+  .question-header {
+    justify-content: center;
+  }
+}
+@media only screen and (max-width: 600px) {
+  .question-buttons button {
+    margin-left: 0;
+  }
+}
+@media only screen and (max-width: 1024px) {
+  .question-body {
+    margin-top: 20px;
   }
 }
 </style>
