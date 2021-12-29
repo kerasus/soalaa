@@ -4,13 +4,13 @@
       v-if="editStatus"
       class="col-12"
     >
-      <vue-tiptap-katex
-        ref="tiptap"
-        :loading="loading"
-        :access-token="$store.getters['Auth/accessToken']"
-        :upload-utl="imageUrl"
-        :options="{ bubbleMenu: false, floatingMenu: false, poem: true, reading: true, persianKeyboard: true }"
-      />
+<!--      <vue-tiptap-katex-->
+<!--        ref="tiptap"-->
+<!--        :loading="loading"-->
+<!--        :access-token="$store.getters['Auth/accessToken']"-->
+<!--        :upload-utl="imageUrl"-->
+<!--        :options="{ bubbleMenu: false, floatingMenu: false, poem: true, reading: true, persianKeyboard: true }"-->
+<!--      />-->
     </div>
     <div v-else>
       <vue-katex :input="html" />
@@ -22,7 +22,7 @@
 <script>
 
 import API_ADDRESS from 'src/api/Addresses'
-import VueTiptapKatex from 'vue3-tiptap-katex'
+// import VueTiptapKatex from 'vue3-tiptap-katex'
 import VueKatex from 'components/VueKatex'
 
 // replacement
@@ -32,7 +32,7 @@ import { ref } from 'vue'
 export default {
   name: 'QuestionField',
   components: {
-    VueTiptapKatex,
+    // VueTiptapKatex,
     VueKatex
   },
   props: {

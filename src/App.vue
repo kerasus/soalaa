@@ -1,12 +1,15 @@
 <template>
   <router-view />
+<!--  <div>hello</div>-->
+<!--  <router-view />-->
 </template>
 <script>
 import '../src/assets/scss/font.scss'
 // import 'material-icons/material-icons.css'
-export default {
+import { defineComponent } from 'vue'
+export default defineComponent({
   name: 'App'
-}
+})
 </script>
 <style>
   :root {
