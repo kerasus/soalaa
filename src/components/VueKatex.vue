@@ -10,7 +10,6 @@
 import katex from 'katex'
 import 'katex/dist/katex.min.css'
 
-
 // import { createApp } from 'vue'
 // const app = createApp({})
 // import VueKatex from 'vue-katex'
