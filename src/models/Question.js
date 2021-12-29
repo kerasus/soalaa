@@ -8,6 +8,7 @@ import API_ADDRESS from '../api/Addresses'
 import TurndownService from 'turndown/lib/turndown.browser.umd'
 import { QuestionStatus } from '../models/QuestionStatus'
 import { LogList } from '../models/Log'
+// eslint-disable-next-line import/named
 import { createApp } from 'vue'
 if (!window.app) {
 // window.app
