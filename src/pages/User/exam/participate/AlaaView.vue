@@ -147,9 +147,9 @@
             </div>
           </div>
     </div>
-    <div class="footer  col">
+    <div class="timer-row col">
         <Timer/>
-      </div>
+    </div>
   </div>
 </template>
 
@@ -248,11 +248,11 @@ export default {
   width: 100%;
   height: 100%;
   padding: 0px 0px 0px 12px;
-  .footer {
-    position: sticky;
-    position: -webkit-sticky;
+  .timer-row {
+    width: calc(85% - 150px);
+    position: absolute;
     bottom: 0;
-    max-width: 95%;
+    right: 100px;
   }
   .main-page{
     display: flex;
@@ -274,7 +274,6 @@ export default {
         z-index: 1;
         margin: -12px -12px -12px -12px;
         background: #f1f1f1;
-
         .question-number p {
           margin-bottom: 0;
           line-height: 40px;
@@ -286,6 +285,16 @@ export default {
           height: 24px;
           width: 24px;
           size: 12px;
+        }
+        @media only screen and (max-width: 600px) {
+          .question-buttons button {
+            margin-left: 0;
+          }
+        }
+      }
+      @media only screen and (max-width: 335px) {
+        .question-header {
+          justify-content: center;
         }
       }
       .question-body {
@@ -301,6 +310,11 @@ export default {
         box-sizing: inherit;
         color: var(--text-2);
       }
+      @media only screen and (max-width: 1024px) {
+        .question-body {
+          margin-top: 20px;
+        }
+      }
       .question-answers {
             margin-top: 90px;
             margin-left: -12px;
@@ -310,21 +324,6 @@ export default {
         }
       }
     }
-  }
-}
-@media only screen and (max-width: 335px) {
-  .question-header {
-    justify-content: center;
-  }
-}
-@media only screen and (max-width: 600px) {
-  .question-buttons button {
-    margin-left: 0;
-  }
-}
-@media only screen and (max-width: 1024px) {
-  .question-body {
-    margin-top: 20px;
   }
 }
 </style>

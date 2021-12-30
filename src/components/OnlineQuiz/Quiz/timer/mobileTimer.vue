@@ -5,9 +5,9 @@
         class="row"
         style="padding-right: 0">
         <div
-          class="col-12 col-sm-5 flex btnCol"
+          class="col-12 col-sm-9 flex btnCol"
         >
-          <div class="sideBtns elevation-3">
+          <div class="sideBtns shadow-3">
             <div  class="row">
               <div class="col flex justify-center">
                 <q-btn
@@ -45,7 +45,7 @@
         <div class="col-sm-3 col-3 timerCol">
           <div
             id="clockBtn"
-            class="timeCArdMob flex justify-center elevation-3"
+            class="timeCArdMob flex justify-center shadow-3"
             style="float:left;"
             @click="drawerUp"
           >
@@ -62,8 +62,8 @@
         </div>
       </div>
       <div
-        class="drawer elevation-3 flex justify-center "
-        :style="{height: drawerVisible ? '80px' : '0'}"
+        class="drawer shadow-13 flex justify-center "
+        :style="{height: drawerVisible ? '85px' : '0'}"
       >
         <div>
           <p class="passedTimeText">
@@ -86,7 +86,7 @@
           @click="drawerVisible = false"
         >
           <q-icon
-            size="50px"
+            size="40px"
             name="mdi-close"/>
         </q-btn>
       </div>
@@ -128,9 +128,11 @@ export default {
 }
 
 .btnCol {
+  justify-content: space-between;
   padding-right: 5px;
-  left: 5%;
+  right: 15%;
   position: relative;
+  color: rgba(112, 112, 112, 1);
 }
 
 .remainingTimeText {
@@ -152,6 +154,7 @@ export default {
 
 .timeCArdMob {
   background-color: white;
+  width: 60%;
   height: 50px;
   border-radius: 15px 15px 0 0;
 }
@@ -176,6 +179,7 @@ export default {
   width: 100%;
   height: 50px;
   float: left;
+  flex-direction: column;
   display: flex;
   background-color: white;
   border-radius: 15px 15px 0 0;
@@ -221,17 +225,21 @@ export default {
   transform: matrix(1, 0, 0, 1, 0, 0);
 }
 @media only screen and (max-width: 500px) {
+  .closeIcon{
+    width: 5%;
+  }
   .timeCArdMob {
     margin-right: 0%;
-    width: 20%;
+    width: 100%;
   }
   .sideBtns{
     justify-items: center;
     float: left;
     max-width: 50%;
+    width: 120%;
   }
   .sideBtnIcons{
-    max-width: 60%;
+    max-width: 80%;
   }
 
   .spacer {
@@ -239,11 +247,13 @@ export default {
   }
 
   .drawer {
-    width: 95%;
+    justify-content: center;
+    width: 160%;
+    left: 5%;
   }
 
   .passedTimeText {
-    font-size: 4.2vw;
+    font-size: 2.7vw;
   }
 
   .remainingTimeText {
