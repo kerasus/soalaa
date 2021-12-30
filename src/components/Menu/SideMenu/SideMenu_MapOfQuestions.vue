@@ -81,7 +81,7 @@ export default {
     currentCat: null
   }),
   created () {
-    this.getExamUserData()
+    // this.getExamUserData()
     console.log(this.quiz.categories.list)
     const that = this
     this.interval = setInterval(() => {
