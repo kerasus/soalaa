@@ -40,7 +40,7 @@
             <q-card
               class="profile-card"
             >
-              <img src="https://nodes.alaatv.com/upload/images/profile/default_avatar.jpg">
+              <q-img src="https://nodes.alaatv.com/upload/images/profile/default_avatar.jpg"/>
               <q-card-actions vertical>
                 <a
                   class="profile-link bg-primary"
@@ -85,11 +85,6 @@
       >
         <div class="side-logo">
           <div class="side-logo-img">
-<!--            <q-img-->
-<!--              v-if="false"-->
-<!--              src="https://3a.alaatv.com/img/logo-2.png"-->
-<!--              width="150"-->
-<!--            />-->
             <q-img
               v-if="$route.name === 'onlineQuiz.alaaView'"
               src="https://3a.alaatv.com/img/logo-1.png"

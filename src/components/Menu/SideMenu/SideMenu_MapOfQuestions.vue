@@ -1,49 +1,58 @@
 <template>
-  <div>
-      <q-list
+      <div
         class="map-of-questions"
         :style="{ 'padding-bottom': '100px' }"
       >
+        <div
+          v-for="(categoryItem) in quiz.categories.list"
+          :key="'category-'+categoryItem.id"
+        >
           <q-btn
             flat
             :elevation="0"
-            block
-            label="دفترچه سوالات عمومی"
-          />
-          <q-expansion-item
-            flat
-            label="adabiat"
-            expand-separator
-            default-opened
           >
-<!--            v-for="(subcategoryItem) in categoryItem.sub_categories.list"-->
-<!--            :key="'subcategory-'+subcategoryItem.id"-->
-<!--                v-for="(question) in getQuestionsOfSubcategory(subcategoryItem.id)"-->
-<!--                :key="'question-'+question.id"-->
-                  <q-btn
-                    :elevation="0"
-                    block
-                    @click="changeQuestion(question.id)"
-                  >
-<!--                    :class="{ active: currentQuestion.id === question.id }"-->
-                    تست شماره
-                    {{ 1}}
-                    <q-icon
-                      color="red"
-                      name="mdi-close"
-                    />
-<!--                    v-if="getUserQuestionData(question.id) && getUserQuestionData(question.id).status === 'x'"&ndash;&gt;-->
-                    <q-icon
-                      color="red"
-                      name="mdi-checkbox-blank-circle"
-                    />
-                    <q-icon
-                      color="red"
-                      name="mdi-check"
-                    />
-                  </q-btn>
+            {{ categoryItem.title }}
+          </q-btn>
+          <q-expansion-item
+            v-for="(subcategoryItem) in categoryItem.sub_categories.list"
+            :key="'subcategory-'+subcategoryItem.id"
+            flat
+            dense
+            :label="subcategoryItem.title"
+          >
+            <div
+              v-for="(question) in getQuestionsOfSubcategory(subcategoryItem.id)"
+              :key="'question-'+question.id"
+            >
+              <q-btn
+                flat
+                :class="{ active: currentQuestion.id === question.id }"
+                :elevation="0"
+                block
+                @click="changeQuestion(question.id)"
+              >
+                تست شماره
+                {{ getQuestionNumberFromIndex(question.index) }}
+                <q-icon
+                  v-if="getUserQuestionData(question.id) && getUserQuestionData(question.id).status === 'x'"
+                  color="red"
+                  name="mdi-close"
+                />
+                <q-icon
+                  v-if="getUserQuestionData(question.id) && getUserQuestionData(question.id).status === 'o'"
+                  color="yellow"
+                  size="15"
+                  name="mdi-checkbox-blank-circle"
+                />
+                <q-icon
+                  v-if="getUserQuestionData(question.id) && getUserQuestionData(question.id).answered_choice_id"
+                  color="--success-1"
+                  name="mdi-check"
+                />
+              </q-btn>
+            </div>
               </q-expansion-item>
-      </q-list>
+      </div>
     <div class="end-exam">
       <q-btn
         v-if="false"
@@ -61,7 +70,7 @@
       <br>
       <br>
     </div>
-  </div>
+      </div>
 </template>
 <script>
 import ExamData from 'src/assets/js/ExamData'
@@ -138,14 +147,20 @@ export default {
 }
 </script>
 
-<style>
-.map-of-questions {
-  min-height: 42px !important;
-  width: 80%;
-  height: calc(100% - 200px);
-  margin: 0 10%;
+<style scoped>
+.header {
   display: flex;
-  flex-direction: column;
+  width: 100%;
+  flex-direction: row;
   justify-content: space-between;
+  direction: ltr;
+}
+
+.right-drawer {
+  background: var(--primary-1) !important;
+}
+
+.map-of-questions {
+  background: var(--surface-1) !important;
 }
 </style>

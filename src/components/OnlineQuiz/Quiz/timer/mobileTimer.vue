@@ -248,8 +248,8 @@ export default {
 
   .drawer {
     justify-content: center;
-    width: 160%;
-    left: 5%;
+    width: 140%;
+    right: 10%;
   }
 
   .passedTimeText {

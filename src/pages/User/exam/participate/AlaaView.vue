@@ -249,7 +249,7 @@ export default {
   height: 100%;
   padding: 0px 0px 0px 12px;
   .timer-row {
-    width: calc(85% - 150px);
+    width: calc(75% - 150px);
     position: absolute;
     bottom: 0;
     right: 100px;
