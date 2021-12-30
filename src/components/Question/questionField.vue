@@ -4,48 +4,36 @@
       v-if="editStatus"
       class="col-12"
     >
-      <q-editor
-        v-model="value"
-        min-height="5rem"
-      />
-<!--      <vue-tiptap-katext />-->
-  <!--      Todo : vue-tiptap-katex-->
 <!--      <vue-tiptap-katex-->
 <!--        ref="tiptap"-->
 <!--        :loading="loading"-->
 <!--        :access-token="$store.getters['Auth/accessToken']"-->
-<!--        :upload-url="imageUrl"-->
-<!--        :options="{ bubbleMenu: false, floatingMenu: false, poem: true, reading: true }"-->
+<!--        :upload-utl="imageUrl"-->
+<!--        :options="{ bubbleMenu: false, floatingMenu: false, poem: true, reading: true, persianKeyboard: true }"-->
 <!--      />-->
     </div>
-    <div
-    v-else
-    >
-      <q-card-section v-html="value" />
+    <div v-else>
+      <vue-katex :input="html" />
     </div>
-<!--    <div class="col" v-else>-->
-<!--      <vue-katex :input="html" />-->
-<!--    </div>-->
+
   </div>
 </template>
 
 <script>
-// ToDo : vue-tiptap-katex in incompatible with vue 3 (right now)
-// import VueKatex from 'src/components/VueKatex'
-// ToDo : vue-tiptap-katex in incompatible with vue 3 (right now)
-// import VueTiptapKatex from 'vue-tiptap-katex'
+
 import API_ADDRESS from 'src/api/Addresses'
-// import VueTiptapKatext from 'vue3-tiptap-katex'
+// import VueTiptapKatex from 'vue3-tiptap-katex'
+import VueKatex from 'components/VueKatex'
 
 // replacement
+// eslint-disable-next-line import/named
 import { ref } from 'vue'
 
 export default {
   name: 'QuestionField',
   components: {
     // VueTiptapKatex,
-    // VueKatex,
-    // VueTiptapKatext
+    VueKatex
   },
   props: {
     editorValue: {

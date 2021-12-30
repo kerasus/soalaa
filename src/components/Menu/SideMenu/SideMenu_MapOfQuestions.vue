@@ -1,6 +1,8 @@
 <template>
   <div>
       <q-list
+        v-for="(categoryItem) in quiz.categories.list"
+        :key="'category-'+categoryItem.id"
         class="map-of-questions"
         :style="{ 'padding-bottom': '100px' }"
       >
@@ -8,64 +10,56 @@
             flat
             :elevation="0"
             block
-            label="دفترچه سوالات عمومی"
+            :label="categoryItem.title"
           />
           <q-expansion-item
+            v-for="(subcategoryItem) in categoryItem.sub_categories.list"
+            :key="'subcategory-'+subcategoryItem.id"
             flat
-            label="adabiat"
+            :label="subcategoryItem.title"
             expand-separator
-            default-opened
           >
-<!--            v-for="(subcategoryItem) in categoryItem.sub_categories.list"-->
-<!--            :key="'subcategory-'+subcategoryItem.id"-->
-<!--                v-for="(question) in getQuestionsOfSubcategory(subcategoryItem.id)"-->
-<!--                :key="'question-'+question.id"-->
+            <div
+              v-for="(question) in getQuestionsOfSubcategory(subcategoryItem.id)"
+              :key="'question-'+question.id"
+            >
                   <q-btn
                     :elevation="0"
                     block
                     @click="changeQuestion(question.id)"
+                    :class="{ active: currentQuestion.id === question.id }"
                   >
-<!--                    :class="{ active: currentQuestion.id === question.id }"-->
                     تست شماره
-                    {{ 1}}
+                    {{ getQuestionNumberFromIndex(question.index) }}
                     <q-icon
+                      v-if="getUserQuestionData(question.id) && getUserQuestionData(question.id).status === 'x'"
                       color="red"
                       name="mdi-close"
                     />
-<!--                    v-if="getUserQuestionData(question.id) && getUserQuestionData(question.id).status === 'x'"&ndash;&gt;-->
                     <q-icon
-                      color="red"
+                      v-if="getUserQuestionData(question.id) && getUserQuestionData(question.id).status === 'o'"
+                      color="yellow"
                       name="mdi-checkbox-blank-circle"
                     />
                     <q-icon
-                      color="red"
+                      v-if="getUserQuestionData(question.id) && getUserQuestionData(question.id).answered_choice_id"
+                      color="green-6"
                       name="mdi-check"
                     />
                   </q-btn>
+            </div>
               </q-expansion-item>
       </q-list>
     <div class="end-exam">
-      <q-btn
-        v-if="false"
-        :color="'#4caf50'"
-        :style="{ backgroundColor: '#4caf50 !important' }"
-        dark
-        block
-        class="end-exam-btn"
-        @click="getConfirmation"
-      >
-        ارسال پاسخنامه
-      </q-btn>
-      <br>
-      <br>
-      <br>
-      <br>
+      <SendAnswers />
+
     </div>
   </div>
 </template>
 <script>
 import ExamData from 'src/assets/js/ExamData'
 import mixinQuiz from 'src/mixin/Quiz'
+import SendAnswers from 'components/Menu/SideMenu/SendAnswers'
 import Time from 'src/plugins/time'
 // import Vue from 'vue'
 // import VueConfirmDialog from 'vue-confirm-dialog'
@@ -75,6 +69,7 @@ import Time from 'src/plugins/time'
 
 export default {
   name: 'SideMenuMapOfQuestions',
+  components: { SendAnswers },
   js: [ExamData],
   mixins: [mixinQuiz],
   data: () => ({

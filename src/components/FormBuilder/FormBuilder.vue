@@ -32,6 +32,7 @@
 </template>
 
 <script>
+// eslint-disable-next-line import/named
 import { defineAsyncComponent } from 'vue'
 import inputMixin from 'components/FormBuilder/inputMixin'
 

@@ -2,7 +2,6 @@
   <div class="row">
     <div class="col-12">
       <div class="tableSize">
-        <h1>gdfgerd</h1>
         <span>{{ $route.params.quizTitle }}</span>
         <q-btn
           class="q-mx-sm float-right"
