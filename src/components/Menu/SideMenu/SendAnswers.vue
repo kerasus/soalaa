@@ -1,26 +1,26 @@
 <template>
-<div>
-  <q-btn
-    v-if="true"
-    :color="'#4caf50'"
-    :style="{ backgroundColor: '#4caf50 !important' }"
-    dark
-    block
-    class="end-exam-btn"
-    @click="getConfirmation"
-  >
-    ارسال پاسخنامه
-  </q-btn>
-  <bubble-sheet
-    v-if="false"
-    :info="{ type: 'pasokh-nameh' }"
-    delay-time="0"
-  />
-  <br>
-  <br>
-  <br>
-  <br>
-</div>
+  <div>
+    <q-btn
+      v-if="true"
+      :color="'#4caf50'"
+      :style="{ backgroundColor: '#4caf50 !important' }"
+      dark
+      block
+      class="end-exam-btn"
+      @click="getConfirmation"
+    >
+      ارسال پاسخنامه
+    </q-btn>
+    <bubble-sheet
+      v-if="false"
+      :info="{ type: 'pasokh-nameh' }"
+      delay-time="0"
+    />
+    <br>
+    <br>
+    <br>
+    <br>
+  </div>
 </template>
 
 <script>
