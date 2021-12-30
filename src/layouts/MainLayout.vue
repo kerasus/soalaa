@@ -1,5 +1,8 @@
 <template>
-  <q-layout view="lHr lpR fFf">
+  <q-layout
+    view="lHr lpR fFf"
+    class="main-layout"
+  >
     <q-header
       class="text-black layout-header"
       style="background-color: #f1f1f1"
@@ -106,8 +109,10 @@
         <side-menu-dashboard/>
       </div>
       </q-drawer>
-    <q-page-container>
-      <router-view />
+    <q-page-container class="layout-page">
+      <div class="page-body">
+        <router-view />
+      </div>
     </q-page-container>
   </q-layout>
 </template>
@@ -144,27 +149,48 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
-.layout-header{
-  .q-toolbar{
-    min-height: 48px !important;
-  }
-}
-.profile-card{
-  width: 100%;
-  max-width: 324px;
-  border-radius: 20px;
-  .q-card__actions{
-    padding: 0 !important;
-    a{
-      text-decoration: none;
-      cursor: pointer;
-      height: 44px;
-      color: white;
-      text-align: center;
-      padding: 12px;
-      box-sizing: border-box;
+.main-layout{
+  .profile-card{
+    width: 100%;
+    max-width: 324px;
+    border-radius: 20px;
+    .q-card__actions{
+      padding: 0 !important;
+      a{
+        text-decoration: none;
+        cursor: pointer;
+        height: 44px;
+        color: white;
+        text-align: center;
+        padding: 12px;
+        box-sizing: border-box;
+      }
     }
   }
+  .layout-header{
+    padding: 12px 0;
+    .q-toolbar{
+      min-height: 48px !important;
+      .header-body{
+        height: 48px;
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        max-width: 1158px;
+        margin: auto !important;
+        .q-btn--dense{
+          &.q-btn--round{
+            height: 48px;
+            width: 48px;
+          }
+        }
+      }
+    }
+  }
+
+}
+.map-of-questions {
+  background: var(--surface-1) !important;
 }
 .map-of-questions {
   background: var(--surface-1) !important;
@@ -173,31 +199,25 @@ export default {
   padding: 12px 0;
   .header-body{
     height: 48px;
+
+  .side-bar{
     display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    max-width: 1158px;
-    margin: auto !important;
+    flex-direction: column;
+    .side-logo{
+      display: flex;
+      height: 150px;
+      align-items: center;
+      justify-content: center;
+    }
   }
-}
-.side-bar{
-  display: flex;
-  flex-direction: column;
-  .side-logo{
-    display: flex;
-    height: 150px;
-    align-items: center;
-    justify-content: center;
+  .layout-page{
+   padding-bottom: 72px;
   }
-}
-.page-body{
-  max-width: 1158px;
-  margin: auto !important;
-}
-.q-drawer--left {
-  .q-layout__shadow{
-    &:after {
-      box-shadow: 0 0 10px 0px rgb(0 0 0 / 10%), 0 0px 10px rgb(0 0 0 / 12%) !important;
+  .q-drawer--left {
+    .q-layout__shadow{
+      &:after {
+        box-shadow: 0 0 10px 0px rgb(0 0 0 / 10%), 0 0px 10px rgb(0 0 0 / 12%) !important;
+      }
     }
   }
 }

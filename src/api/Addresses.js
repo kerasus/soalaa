@@ -4,6 +4,8 @@ const lumenServer = '/3a/api/v1'
 const authServer = '/alaa/api/v2'
 // const authServer = process.env.VUE_APP_AUTH_INTERNAL_API_SERVER
 const API_ADDRESS = {
+  // socket: process.env.VUE_APP_SOCKET_TARGET_API_SERVER,
+  socket: 'https://office.alaatv.com:501',
   server: {
     lumen: lumenServer,
     auth: authServer
@@ -57,7 +59,7 @@ const API_ADDRESS = {
       if (pageNumber) {
         return lumenServer + '/exam?with_pagination=1&page=' + pageNumber
       } else {
-        return lumenServer + '/exam?with_pagination=0'
+        return lumenServer + '/exam'
       }
     },
     generateExamFile (examId, withAnswer) {

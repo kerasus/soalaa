@@ -239,7 +239,6 @@ export default {
     flex-direction: column;
     flex-wrap: wrap;
     align-items: center;
-    margin-bottom: 80px;
   }
 
   .question-group {
