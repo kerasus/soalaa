@@ -192,23 +192,40 @@ export default {
       }
     }
   }
-  .side-bar{
-    display: flex;
-    flex-direction: column;
-    .side-logo{
+
+}
+.map-of-questions {
+  background: var(--surface-1) !important;
+}
+.map-of-questions {
+  background: var(--surface-1) !important;
+}
+.layout-header{
+  padding: 12px 0;
+  .header-body {
+    height: 48px;
+
+    .side-bar {
       display: flex;
-      height: 150px;
-      align-items: center;
-      justify-content: center;
+      flex-direction: column;
+
+      .side-logo {
+        display: flex;
+        height: 150px;
+        align-items: center;
+        justify-content: center;
+      }
     }
-  }
-  .layout-page{
-   padding-bottom: 72px;
-  }
-  .q-drawer--left {
-    .q-layout__shadow{
-      &:after {
-        box-shadow: 0 0 10px 0px rgb(0 0 0 / 10%), 0 0px 10px rgb(0 0 0 / 12%) !important;
+
+    .layout-page {
+      padding-bottom: 72px;
+    }
+
+    .q-drawer--left {
+      .q-layout__shadow {
+        &:after {
+          box-shadow: 0 0 10px 0px rgb(0 0 0 / 10%), 0 0px 10px rgb(0 0 0 / 12%) !important;
+        }
       }
     }
   }
