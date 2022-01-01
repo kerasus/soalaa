@@ -78,6 +78,7 @@ const EntityMixin = {
           input.value = this.getValidChainedObject(responseData, input.responseKey.split('.'))
         }
       })
+      console.log('loadInputData: ', this.inputData)
       this.change(this.inputData)
     },
     getValidChainedObject (object, keys) {
