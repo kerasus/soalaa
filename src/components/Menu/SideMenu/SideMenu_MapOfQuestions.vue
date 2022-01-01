@@ -9,7 +9,7 @@
         >
           <q-btn
             flat
-            :elevation="0"
+            class="categoryItem"
           >
             {{ categoryItem.title }}
           </q-btn>
@@ -27,7 +27,6 @@
               <q-btn
                 flat
                 :class="{ active: currentQuestion.id === question.id }"
-                :elevation="0"
                 block
                 @click="changeQuestion(question.id)"
               >
@@ -53,23 +52,6 @@
             </div>
               </q-expansion-item>
       </div>
-    <div class="end-exam">
-      <q-btn
-        v-if="false"
-        :color="'#4caf50'"
-        :style="{ backgroundColor: '#4caf50 !important' }"
-        dark
-        block
-        class="end-exam-btn"
-        @click="getConfirmation"
-      >
-        ارسال پاسخنامه
-      </q-btn>
-      <br>
-      <br>
-      <br>
-      <br>
-    </div>
       </div>
 </template>
 <script>
@@ -148,19 +130,80 @@ export default {
 </script>
 
 <style scoped>
-.header {
-  display: flex;
-  width: 100%;
-  flex-direction: row;
-  justify-content: space-between;
-  direction: ltr;
+.end-exam {
+  position: absolute;
+  width: 240px;
+  bottom: -78px;
+  z-index: 5;
+  background: #fff;
+  padding: 20px 0;
 }
 
-.right-drawer {
-  background: var(--primary-1) !important;
+.end-exam-btn .q-btn__content {
+  display: flex;
+  justify-content: center !important;
 }
 
 .map-of-questions {
+  min-height: 42px !important;
+  width: 80%;
+  height: calc(100% - 200px);
+  margin: 0 10%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.map-of-questions .q-expansion-item {
+  transition: all ease-in-out 0.3s;
+  min-height: 52px;
+  padding: 11px 24px;
+
+}
+
+.map-of-questions .theme--light.q-expansion-item .q-expansion-item-active .q-btn {
+  color: var(--text-3);
+}
+
+.map-of-questions .q-expansion-item-active {
+  background: var(--primary-1);
+  border-radius: 40px;
+  min-height: 42px !important;
+  max-height: 42px !important;
+  padding: 5px 24px;
+  color: white;
+}
+
+.map-of-questions .q-expansion-item-wrap {
+  padding: 16px 24px;
+}
+
+.map-of-questions .q-btn {
+  font-size: 1.8ch;
+  padding: 0 24px;
+  color: #666;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.map-of-questions .q-btn {
   background: var(--surface-1) !important;
+}
+
+.v-navigation-drawer .q-navigation-drawer__content .map-of-questions .theme--light.q-btn__content {
+  color: var(--accent-1);
+}
+
+.question-container .question-answers .answer-box,
+.map-of-questions .q-expansion-item .q-btn.-size--default {
+  font-size: 0.87rem;
+}
+.map-of-questions .categoryItem.q-btn {
+  font-size: 1.2rem;
+  margin-top: 50px;
+}
+.map-of-questions .q-expansion-item{
+  font-size: 1.2rem;
 }
 </style>
