@@ -177,6 +177,7 @@ class Exam extends Model {
     return new Promise(function (resolve, reject) {
       if (!that.questions_file_url) {
         Assistant.handleAxiosError('exam file url is not set')
+        // eslint-disable-next-line prefer-promise-reject-errors
         reject(null)
         // ToDo : bring after removing ajax
         // return
@@ -311,13 +312,13 @@ class Exam extends Model {
 
     this.addUserQuestionDataCheckingTimes(question, userQuestionData.checking_times)
 
-    userQuestionData.answered_at.push((answeredChoice) ? answeredChoice.answered_at : null)
-    userQuestionData.bookmarked.push(question.bookmarked)
-    userQuestionData.state.push(question.state)
-    // ToDo : app.set sth used instead
-    // window.app.set(userQuestionData, 'answered_at', (answeredChoice) ? answeredChoice.answered_at : null)
-    // window.app.set(userQuestionData, 'bookmarked', question.bookmarked)
-    // window.app.set(userQuestionData, 'state', question.state)
+    userQuestionData.answered_at = (answeredChoice) ? answeredChoice.answered_at : null
+    userQuestionData.bookmarked = question.bookmarked
+    userQuestionData.state = question.state
+
+    window.app.set(userQuestionData, 'answered_at', (answeredChoice) ? answeredChoice.answered_at : null)
+    window.app.set(userQuestionData, 'bookmarked', question.bookmarked)
+    window.app.set(userQuestionData, 'state', question.state)
   }
 
   addUserQuestionData (question, userQuizData) {
@@ -325,9 +326,7 @@ class Exam extends Model {
     let answeredChoiceId = null
     let answered_at = null
     if (answeredChoice) {
-      // eslint-disable-next-line
       answeredChoiceId = answeredChoice.id
-      // eslint-disable-next-line
       answered_at = answeredChoice.answered_at
     }
     const checkingTimes = []
@@ -400,6 +399,7 @@ class Exam extends Model {
               textStatus,
               errorThrown
             }) => {
+              // eslint-disable-next-line prefer-promise-reject-errors
               reject({
                 jqXHR,
                 textStatus,
@@ -409,6 +409,7 @@ class Exam extends Model {
         })
         .catch(() => {
           Assistant.reportErrors('exam.js -> getAnswerOfUserInResultPage() -> axios.get.catch')
+          // eslint-disable-next-line prefer-promise-reject-errors
           reject(null)
         })
     })

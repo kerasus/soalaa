@@ -29,15 +29,14 @@
 </template>
 
 <script>
-import EntityCreate from 'components/Entity/Create/EntityCreate'
-import portlet from 'src/components/Portlet'
+import { EntityCreate, Portlet } from 'quasar-crud'
 import API_ADDRESS from 'src/api/Addresses'
 // import { QuestCategory, QuestCategoryList } from 'src/models/QuestCategory'
-import FormBuilder from 'components/FormBuilder/FormBuilder'
+import { FormBuilder } from 'quasar-form-builder'
 
 export default {
   name: 'Create',
-  components: { EntityCreate, FormBuilder, portlet },
+  components: { EntityCreate, FormBuilder, Portlet },
   data () {
     return {
       expanded: true,

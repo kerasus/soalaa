@@ -43,7 +43,7 @@
 </template>
 
 <script>
-import EntityIndex from 'components/Entity/Index/EntityIndex'
+import { EntityIndex } from 'quasar-crud'
 import API_ADDRESS from 'src/api/Addresses'
 
 export default {
@@ -75,13 +75,6 @@ export default {
             label: 'عنوان',
             align: 'left',
             field: row => row.title
-          },
-          {
-            name: 'time',
-            required: true,
-            label: 'زمان',
-            align: 'left',
-            field: row => row.time
           },
           {
             name: 'actions',

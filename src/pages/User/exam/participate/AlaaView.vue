@@ -1,24 +1,22 @@
 <template>
 
-  <q-page
-    :fluid="true"
-    class="quiz-page"
+  <div class="row quiz-page"
     :style="{ height: '100%' }"
   >
-    <div class="row " :style="{ 'min-height': '100%' }">
-      <div class="col" :style="{ 'min-width': '100%' }"
+    <div class="q-mb-lg">
+      <q-btn
+        @click="redirect">
+        redirect
+      </q-btn>
+    </div>
+
+    <div class="col " :style="{ 'min-height': '100%' }">
+      <div class="row main-page" :style="{ 'min-width': '100%' }"
       >
-        <q-page
-          class="q-flex align-stretch"
-          width="100%"
-          color="--background-2"
-            :style="{ 'min-height': '100%' }"
-        >
-          <div class="row">
             <div class="col btnpre col-md-1 justify-start sm-hide xs-hide"
             >
               <q-btn
-                v-if= "getQuestionNumberFromId(currentQuestion.id) !== 1"
+                v-if="getQuestionNumberFromId(currentQuestion.id) !== 1"
                 flat
                 class="q-px-none"
                 :style="{ 'width':'64px','height': '400px' }"
@@ -32,108 +30,106 @@
               </q-btn>
             </div>
             <div class="col col-md-10 q-px-sm ">
-              <div class="row question-header">
-                <div class="question-number">
-                  <p v-if="currentLesson">
-                    {{ currentLesson.title }}
-                    -
-                    سوال شماره
-                    {{ getQuestionNumberFromId(currentQuestion.id) }}
-                  </p>
-                </div>
-                <div class="question-buttons ">
-                  <q-btn
-                    size="12px"
-                    round
-                    flat
-                    @click="changeStatus(currentQuestion.id, 'o')"
-                  >
-                    <q-icon
-                      v-if="!getUserQuestionData(quiz.id, currentQuestion.id) || getUserQuestionData(quiz.id, currentQuestion.id).status !== 'o'"
-                      :style="{ 'width':'24px','height': '24px' }"
-                      color="grey-7"
-                      size="30px"
-                      name="mdi-checkbox-blank-circle-outline"
-                    />
-                    <q-icon
-                      v-if="getUserQuestionData(quiz.id, currentQuestion.id) && getUserQuestionData(quiz.id, currentQuestion.id).status === 'o'"
-                      color="amber"
-                      size="30px"
-                      name="mdi-checkbox-blank-circle"
-                    />
-                  </q-btn>
-                  <q-btn
-                    size="12px"
-                    round
-                    flat
-                    @click="changeStatus(currentQuestion.id, 'x')"
-                  >
-                    <q-icon
-                      v-if="false"
-                      size="30px"
-                      :color="getUserQuestionData(quiz.id, currentQuestion.id) && getUserQuestionData(quiz.id, currentQuestion.id).status === 'x' ? 'red' : 'grey-7'"
-                      name="mdi-close"
-                    />
-                  </q-btn>
-                  <q-btn
-                    size="12px"
-                    flat
-                    round
-                    @click="changeBookmark(currentQuestion.id)"
-                  >
-                    <q-icon
-                      v-if="!getUserQuestionData(quiz.id, currentQuestion.id) || !getUserQuestionData(quiz.id, currentQuestion.id).bookmarked"
-                      size="30px"
-                      color="grey-7"
-                      name="mdi-bookmark-outline"
-                    />
-                    <q-icon
-                      v-if="getUserQuestionData(quiz.id, currentQuestion.id) && getUserQuestionData(quiz.id, currentQuestion.id).bookmarked"
-                      flat
-                      color="blue-6"
-                      size="30px"
-                      name="mdi-bookmark"
+             <div class="middle-page row">
+               <div class="col flex question-header">
+                 <div class="question-number">
+                   <p v-if="currentLesson">
+                     {{ currentLesson.title }}
+                     -
+                     سوال شماره
+                     {{ getQuestionNumberFromId(currentQuestion.id) }}
+                   </p>
+                 </div>
+                 <div class="question-buttons ">
+                   <q-btn
+                     size="12px"
+                     round
+                     flat
+                     @click="changeStatus(currentQuestion.id, 'o')"
+                   >
+                     <q-icon
+                       v-if="!getUserQuestionData(quiz.id, currentQuestion.id) || getUserQuestionData(quiz.id, currentQuestion.id).status !== 'o'"
+                       :style="{ 'width':'24px','height': '24px' }"
+                       color="grey-7"
+                       size="30px"
+                       name="mdi-checkbox-blank-circle-outline"
                      />
-                  </q-btn>
-                </div>
-              </div>
-
-              <div class="row question-body">
-                <div class="col"
+                     <q-icon
+                       v-if="getUserQuestionData(quiz.id, currentQuestion.id) && getUserQuestionData(quiz.id, currentQuestion.id).status === 'o'"
+                       color="amber"
+                       size="30px"
+                       name="mdi-checkbox-blank-circle"
+                     />
+                   </q-btn>
+                   <q-btn
+                     size="12px"
+                     round
+                     flat
+                     @click="changeStatus(currentQuestion.id, 'x')"
+                   >
+                     <q-icon
+                       size="30px"
+                       :color="getUserQuestionData(quiz.id, currentQuestion.id) && getUserQuestionData(quiz.id, currentQuestion.id).status === 'x' ? 'red' : 'grey-7'"
+                       name="mdi-close"
+                     />
+                   </q-btn>
+                   <q-btn
+                     size="12px"
+                     flat
+                     round
+                     @click="changeBookmark(currentQuestion.id)"
+                   >
+                     <q-icon
+                       v-if="!getUserQuestionData(quiz.id, currentQuestion.id) || !getUserQuestionData(quiz.id, currentQuestion.id).bookmarked"
+                       size="30px"
+                       color="grey-7"
+                       name="mdi-bookmark-outline"
+                     />
+                     <q-icon
+                       v-if="getUserQuestionData(quiz.id, currentQuestion.id) && getUserQuestionData(quiz.id, currentQuestion.id).bookmarked"
+                       flat
+                       color="blue-6"
+                       size="30px"
+                       name="mdi-bookmark"
+                     />
+                   </q-btn>
+                 </div>
+               </div>
+               <div class="col question-body">
+                   <div
                      :class="{ ltr: isLtrString(currentQuestion.statement)}"
-                >
-                  <div
+                     v-if="currentQuestion.in_active_category"
+                     class="renderedPanel"
+                   >
+                     <vue-katex :input="currentQuestion.statement"/>
+                   </div>
+                   <div
+                     v-if="!currentQuestion.in_active_category"
+                     color="red"
+                     rounded
+                     dark
+                     height="400"
+                     elevation="1"
+                     class="d-flex align-center justify-center"
+                   >
+                     در حال حاضر امکان مشاهده سوالات این دفترچه امکان پذیر نمی باشد
+                   </div>
+               </div>
+               <div class="col question-answers"
                     v-if="currentQuestion.in_active_category"
-                    class="renderedPanel"
-                  >
-<!--                    Todo : katex-->
-                    <!--                    <vue-katex :input="currentQuestion.statement" />-->
-                  </div>
-                  <q-field
-                    v-if="!currentQuestion.in_active_category"
-                    color="warning"
-                    rounded
-                    dark
-                    height="400"
-                    elevation="1"
-                    class="d-flex align-center justify-center"
-                  >
-                    در حال حاضر امکان مشاهده سوالات این دفترچه امکان پذیر نمی باشد
-                  </q-field>
-                </div>
-              </div>
-              <div class="row question-answers"
-                   v-if="currentQuestion.in_active_category"
-              >
-                <choice
-                  v-for="item in currentQuestion.choices.list"
-                  :key="item.id"
-                  :question-id="currentQuestion.id"
-                  :choice="item"
-                  :is-rtl="isRtl"
-                  @answerClicked="answerClicked"
-                />
-              </div>
+               >
+                 <div>
+                 <choice
+                   v-for="item in currentQuestion.choices.list"
+                   :key="item.id"
+                   :question-id="currentQuestion.id"
+                   :choice="item"
+                   :is-rtl="isRtl"
+                   @answerClicked="answerClicked"
+                 />
+                 </div>
+               </div>
+             </div>
             </div>
             <div class="col btnpre col-md-1 justify-start sm-hide xs-hide"
             >
@@ -152,31 +148,14 @@
               </q-btn>
             </div>
           </div>
-        </q-page>
+    </div>
+    <div class="footer flex col">
+      <div class="d-flex high-z-index col"
+      >
+        <Timer/>
       </div>
     </div>
-    <q-footer
-      class="justify-center q-pl-none"
-      color="transparent"
-      elevation="0"
-      padless
-      inset
-      app
-    >
-      <q-page-sticky
-        fluid
-        class="q-py-none"
-      >
-        <div class="row timer-row justify-center">
-          <div
-            class="col col-md-10 d-flex justify-center timer-container py-0"
-          >
-            <Timer/>
-          </div>
-        </div>
-      </q-page-sticky>
-    </q-footer>
-  </q-page>
+  </div>
 </template>
 
 <script>
@@ -184,36 +163,18 @@ import Choice from 'src/components/OnlineQuiz/Quiz/Choice'
 import Timer from 'src/components/OnlineQuiz/Quiz/timer/timer'
 import { mixinAuth, mixinQuiz, mixinUserActionOnQuestion, mixinDrawer, mixinWindowSize } from 'src/mixin/Mixins'
 import Assistant from 'src/plugins/assistant'
-// import VueKatex from 'src/components/VueKatex'
+import VueKatex from 'components/VueKatex'
 
 export default {
   name: 'AlaaView',
   components: {
     Choice,
-    // VueKatex,
+    VueKatex,
     Timer
   },
   mixins: [mixinAuth, mixinQuiz, mixinUserActionOnQuestion, mixinDrawer, mixinWindowSize],
   data () {
     return {
-      linksList: [
-        {
-          title: 'Profile',
-          caption: ''
-        },
-        {
-          title: 'hasan',
-          caption: ''
-        },
-        {
-          title: 'Profile',
-          caption: ''
-        },
-        {
-          title: 'hasan',
-          caption: ''
-        }
-      ],
       isRtl: false
     }
   },
@@ -242,6 +203,14 @@ export default {
     this.changeAppBarAndDrawer(false)
   },
   methods: {
+    redirect () {
+      this.$router.push({
+        name: 'konkoorView',
+        params: {
+          quizId: this.$route.params.quizId
+        }
+      })
+    },
     changeAppBarAndDrawer (state) {
       this.$store.commit('AppLayout/updateAppBarAndDrawer', state)
     },
@@ -268,128 +237,103 @@ export default {
   direction: ltr !important;
 }
 
-.v-navigation-drawer.mapOfQuestions .v-navigation-drawer__content {
+.q-navigation-drawer.mapOfQuestions .q-navigation-drawer__content {
   overflow-y: scroll;
 }
 
-/*.quiz-page .katex-display {*/
-/*    display: inline-block;*/
-/*    direction: ltr;*/
-/*}*/
+.quiz-page .katex-display {
+    display: inline-block;
+    direction: ltr;
+}
 
 .base.textstyle.uncramped {
   display: flex;
   flex-wrap: wrap;
 }
 
- img {
-  max-width: 100%;
-}
 </style>
 
-<style scoped>
-.question-buttons button {
-  margin-left: 20px;
-  height: 24px;
-  width: 24px;
-  size: 12px;
-}
-
-.question-number p {
-  margin-bottom: 0;
-  line-height: 40px;
-  font-size: 16px;
-}
-
-.question-header {
-  display: flex;
-  color: var(--text-2);
-  flex-direction: row;
-  justify-content: space-between;
-  position: sticky;
-  padding-top: 20px;
-  z-index: 1;
-  margin: -12px -12px -12px -12px;
-  background: #f1f1f1;
-}
-
-.question-body {
-  margin-top: 50px;
-  margin-left: -12px;
-  margin-right: -12px;
-  font-size: 16px;
-  text-rendering: optimizeLegibility;
-  line-height: 35px;
-  display: inline-block;
-  direction: inherit;
-  box-sizing: inherit;
-  color: var(--text-2);
-}
-
-.question-answers {
-  margin-top: 90px;
-  margin-left: -12px;
-  margin-right: -12px;
-}
-
-.answer-sheet {
-  background: #f1f1f1;
-  width: 90%;
-  height: 100px;
-  padding: 2% 3%;
-  border-radius: 10px;
-  cursor: pointer;
-  transition: all ease-in-out 0.3s;
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-}
-
-.answer-text {
-  height: 100%;
-  width: 100%;
-  display: block !important;
-}
-
-.answer-checkbox {
-  height: 100px;
-  width: 100px;
-}
-
+<style lang="scss" scoped>
 .quiz-page {
   background: #f1f1f1;
+  display: flex;
+  flex-direction: column;
   width: 100%;
   height: 100%;
   padding: 12px 12px 12px 12px;
-}
-.btnpre {
-  display: flex;
-  padding : 12px 12px 12px 24px;
-
-}
-
-.user-name {
-  margin-bottom: 0;
-  align-self: center;
-  margin-left: 10px;
-  color: var(--text-2);
-}
-
-@media only screen and (max-width: 1024px) {
-  .question-body {
-    margin-top: 20px;
+  .footer {
+    position: sticky;
+    position: -webkit-sticky;
+    bottom: 0;
+    max-width: 95%;
   }
-}
+  .main-page{
+    display: flex;
+    flex-direction: row;
+    .btnpre {
+      display: flex;
+      padding: 12px 12px 12px 24px;
+    }
+    .middle-page{
+      display: flex;
+      flex-direction: column;
+      .question-header {
+        display: flex;
+        color: var(--text-2);
+        flex-direction: row;
+        justify-content: space-between;
+        position: sticky;
+        padding-top: 20px;
+        z-index: 1;
+        margin: -12px -12px -12px -12px;
+        background: #f1f1f1;
 
-@media only screen and (max-width: 600px) {
-  .question-buttons button {
-    margin-left: 0;
-  }
-}
+        .question-number p {
+          margin-bottom: 0;
+          line-height: 40px;
+          font-size: 16px;
+        }
 
-@media only screen and (max-width: 320px) {
-  .question-header {
-    justify-content: center;
+        .question-buttons button {
+          margin-left: 20px;
+          height: 24px;
+          width: 24px;
+          size: 12px;
+        }
+        @media only screen and (max-width: 600px) {
+          .question-buttons button {
+            margin-left: 0;
+          }
+        }
+      }
+      @media only screen and (max-width: 335px) {
+        .question-header {
+          justify-content: center;
+        }
+      }
+      .question-body {
+        margin-top: 50px;
+        margin-left: -12px;
+        margin-right: -12px;
+        font-size: 16px;
+        text-rendering: optimizeLegibility;
+        line-height: 35px;
+        display: inline-block;
+        direction: inherit;
+        box-sizing: inherit;
+        color: var(--text-2);
+      }
+      @media only screen and (max-width: 1024px) {
+        .question-body {
+          margin-top: 20px;
+        }
+      }
+      .question-answers {
+            margin-top: 90px;
+            margin-left: -12px;
+            margin-right: -12px;
+      }
+    }
   }
 }
 </style>

@@ -299,8 +299,6 @@
 import videojs from 'video.js'
 import 'video.js/dist/video-js.css'
 import '@silvermine/videojs-quality-selector/dist/css/quality-selector.css'
-// The following registers the plugin with `videojs`
-require('@silvermine/videojs-quality-selector')(videojs)
 import Info from 'src/components/OnlineQuiz/Quiz/resultTables/info'
 import PersonalResult from 'src/components/OnlineQuiz/Quiz/resultTables/personalResult'
 import BubbleSheet from 'src/components/OnlineQuiz/Quiz/bubbleSheet/bubbleSheet'
@@ -311,6 +309,8 @@ import { AlaaContent } from 'src/models/AlaaContent'
 import StatisticResult from 'src/components/OnlineQuiz/Quiz/resultTables/statisticResult'
 import TakhminRotbe from 'src/components/OnlineQuiz/Quiz/TakhminRotbe'
 import ExamData from 'src/assets/js/ExamData'
+// The following registers the plugin with `videojs`
+require('@silvermine/videojs-quality-selector')(videojs)
 
 export default {
   name: 'Result',

@@ -11,7 +11,8 @@
 </template>
 
 <script>
-import EntityCreate from 'components/Entity/Create/EntityCreate'
+import { EntityCreate } from 'quasar-crud'
+// import EntityCreate from 'components/Entity/Create/EntityCreate'
 import API_ADDRESS from 'src/api/Addresses'
 
 export default {
