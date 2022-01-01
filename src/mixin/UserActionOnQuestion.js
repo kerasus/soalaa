@@ -59,6 +59,7 @@ const mixinUserActionOnQuestion = {
       }
     },
     sendUserQuestionsDataToServer (examUserId, userExamData, questionId, actionType) {
+      console.log('sendUserQuestionsDataToServer')
       const userQuestionDataFromLocalstorage = this.getUserQuestionDataFromLocalstorage(userExamData, questionId)
 
       // send data

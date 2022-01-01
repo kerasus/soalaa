@@ -1,5 +1,6 @@
 <template>
   <div
+    class="userExamList"
     style="font-size: 16px;"
   >
     <!--    ToDo : add confirm-dialog-->
@@ -302,7 +303,12 @@ export default {
 }
 </style>
 
-<style>
+<style lang="scss">
+.userExamList {
+.disabled, .disabled *, [disabled], [disabled] * {
+  color: rgba(0, 0, 0, 0.54) !important;
+}
+}
 .appDarkMode .exam-list-sheet .q-btn--disabled span {
   color: #bfbfbf !important;
   opacity: 0.6;

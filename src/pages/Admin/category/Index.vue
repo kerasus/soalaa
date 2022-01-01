@@ -77,13 +77,6 @@ export default {
             field: row => row.title
           },
           {
-            name: 'time',
-            required: true,
-            label: 'زمان',
-            align: 'left',
-            field: row => row.time
-          },
-          {
             name: 'actions',
             required: true,
             label: '',

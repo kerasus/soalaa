@@ -45,8 +45,8 @@
                 size="12px"
                 round
                 dark-percentage
+                @click="redirect(item)"
                 color="green">
-<!--                :to="{ name: 'onlineQuiz.exams.lessons.details', params: { quizId: $route.params.quizId, lessonId: item.id}}"-->
                 <q-icon
                   name="mdi-notebook-outline"
                   size="sm"
@@ -62,7 +62,8 @@
                 round
                 dark-percentage
                 color="blue"
-                :to="{ name: 'video.set', params: { exam_id: $route.params.quizId, subcategory_id: item.id, exam_title: $route.params.quizTitle}}">
+                @click="redirect(item)"
+              >
                 <q-icon
                   name="mdi-video"
                   size="sm"
@@ -94,26 +95,32 @@ export default {
     this.$store.commit('AppLayout/updateDrawer', true)
   },
   mounted () {
-    this.getLessons()
+    this.loadLessons()
   },
   methods: {
     goBack () {
       this.$router.push('/exam')
     },
-    getLessons () {
+    async loadLessons () {
       this.lessonsList.loading = true
-      axios.get(API_ADDRESS.exam.getSubCategoriesWithPermissions(this.$route.params.quizId))
-        .then((response) => {
-          this.lessonsList.loading = false
-          this.lessonsList = new QuestSubcategoryList(response.data.data, {
-            meta: response.data.meta,
-            links: response.data.links
-          })
+      try {
+        const response = await this.getLessons()
+        this.lessonsList.loading = false
+        console.log(response)
+        this.lessonsList = new QuestSubcategoryList(response.data.data, {
+          meta: response.data.meta,
+          links: response.data.links
         })
-        .catch(() => {
-          this.lessonsList.loading = false
-          this.lessonsList = new QuestSubcategoryList()
-        })
+      } catch (e) {
+        this.lessonsList.loading = false
+        this.lessonsList = new QuestSubcategoryList()
+      }
+    },
+    getLessons () {
+      return axios.get(API_ADDRESS.exam.getSubCategoriesWithPermissions(this.$route.params.quizId))
+    },
+    redirect (link) {
+      console.log(link)
     }
   }
 }

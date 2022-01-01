@@ -3,7 +3,7 @@ import axios from 'axios'
 import { Notify } from 'quasar'
 
 const AxiosError = (function () {
-  function handle (error) {
+  function handle (error, router) {
     let messages = []
     if (!error || !error.response) {
       return
@@ -15,8 +15,7 @@ const AxiosError = (function () {
       messages.push('موردی یافت نشد.')
     } else if (statusCode === 401) {
       messages.push('ابتدا وارد سامانه شوید.')
-      axios.defaults.headers.common.Authorization = ''
-      this.$router.push({ name: 'login' })
+      redirectToLogin(router)
     } else if (error.response.data) {
       for (const [key, value] of Object.entries(error.response.data)) {
         if (typeof value === 'string') {
@@ -29,13 +28,11 @@ const AxiosError = (function () {
     }
 
     toastMessages(messages)
-
-    // if (statusCode === 401) {
-    //   axios.defaults.headers.common.Authorization = ''
-    //   that.$router.push({ name: 'login'})
-    // }
   }
-
+  function redirectToLogin (router) {
+    axios.defaults.headers.common.Authorization = ''
+    router.push({ name: 'login' })
+  }
   function toastMessages (messages) {
     messages.forEach((item) => {
       Notify.create({
@@ -88,7 +85,7 @@ export default boot(({ app, store, router }) => {
   //       so you can easily perform requests against your app's API
 
   axios.interceptors.response.use(undefined, function (error) {
-    AxiosError.handle(error)
+    AxiosError.handle(error, router)
     return Promise.reject(error)
   })
 
