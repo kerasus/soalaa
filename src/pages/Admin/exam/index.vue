@@ -130,12 +130,12 @@
 </template>
 
 <script>
-import entityIndex from 'src/components/Entity/Index/EntityIndex'
+import { EntityIndex } from 'quasar-crud'
 import API_ADDRESS from 'src/api/Addresses'
 import moment from 'moment-jalaali'
 export default {
   name: 'index',
-  components: { entityIndex },
+  components: { EntityIndex },
   data () {
     return {
       expanded: true,

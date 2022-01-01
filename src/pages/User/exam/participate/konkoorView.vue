@@ -135,31 +135,46 @@ export default {
     // }
   },
   created () {
+    this.updateWindowSize()
     this.getUser()
+
     const that = this
-    this.startExam(this.$route.params.quizId, 'KonkoorView')
+    this.startExam(this.$route.params.quizId, 'onlineQuiz.KonkoorView')
       .then(() => {
-        that.$store.dispatch('loading/overlayLoading', false)
         if (!this.questions.length) {
           this.questions = this.getCurrentExamQuestionsInArray()
         }
+        // that.loadFirstActiveQuestionIfNeed()
+        that.$store.commit('AppLayout/updateOverlay', { show: false, loading: false, text: '' })
+        const callbacks = {
+          'question.file-link:update': {
+            afterReload () {
+              that.questions = that.getCurrentExamQuestionsInArray()
+            }
+          }
+        }
+        that.setSocket(that.$store.getters['Auth/accessToken'], that.quiz.id, callbacks)
       })
       .catch((error) => {
         Assistant.reportErrors(error)
+        console.log('error :', error)
         that.$q.notify({
           message: 'مشکلی در دریافت اطلاعات آزمون رخ داده است. لطفا دوباره امتحان کنید.',
           type: 'negative',
           position: 'top'
         })
+        // ToDo: uncomment
+        // that.$router.push({ name: 'user.exam.list'})
       })
-    // if (this.windowSize.x > 959) {
-    //   this.changeAppBarAndDrawer(false)
-    // } else {
-    //   this.$router.push({
-    //     name: 'onlineQuiz.alaaView',
-    //     params: { quizId: this.$route.params.quizId, questNumber: 1 }
-    //   })
-    // }
+
+    if (this.windowSize.x > 959) {
+      this.changeAppBarAndDrawer(false)
+    } else {
+      this.$router.push({
+        name: 'onlineQuiz.alaaView',
+        params: { quizId: this.$route.params.quizId, questNumber: 1 }
+      })
+    }
   },
   mounted () {
     // this.setHeights()
