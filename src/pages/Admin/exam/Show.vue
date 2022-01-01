@@ -1,7 +1,7 @@
 <template>
   <entity-show
     v-model:value="inputs"
-    title="اطلاعات خبر"
+    title="اطلاعات آزمون"
     :api="api"
     :entity-id-key="entityIdKey"
     :entity-param-key="entityParamKey"
@@ -12,7 +12,6 @@
 
 <script>
 import { EntityShow } from 'quasar-crud'
-// import EntityShow from 'components/Entity/Show/EntityShow'
 import API_ADDRESS from 'src/api/Addresses'
 
 export default {
@@ -20,26 +19,19 @@ export default {
   components: { EntityShow },
   data () {
     return {
-      api: API_ADDRESS.questionCategory.base,
+      api: API_ADDRESS.exam.base(),
       entityIdKey: 'id',
       entityParamKey: 'id',
-      editRouteName: 'Admin.Category.Edit',
-      indexRouteName: 'Admin.Category.Index',
+      editRouteName: 'Admin.Exam.Edit',
+      indexRouteName: 'Admin.Exam.index',
       inputs: [
         { type: 'input', name: 'id', responseKey: 'data.id', label: 'شناسه', col: 'col-md-6' },
         { type: 'input', name: 'title', responseKey: 'data.title', label: 'عنوان', col: 'col-md-6' }
       ]
     }
   },
-  computed: {
-
-  },
-  watch: {
-  },
   created () {
     this.api += '/' + this.$route.params.id
-  },
-  mounted () {
   }
 }
 </script>

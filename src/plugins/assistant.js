@@ -88,32 +88,35 @@ const Assistant = (function () {
   }
 
   function reportErrors (error) {
-    const location = (error && error.location) ? error.location : 'undefined error',
-      message = (error && error.message) ? error.message : 'undefined error',
-      data = (error && error.data) ? error.data : 'undefined error'
-    // console.group();
-    console.groupCollapsed()
-    // console.table(data);
-    // console.count();
+    if (error) {
+      console.log('error :', error)
+      const location = (error && error.location) ? error.location : 'undefined error',
+        message = (error && error.message) ? error.message : 'undefined error',
+        data = (error && error.data) ? error.data : 'undefined error'
+      // console.group();
+      console.groupCollapsed()
+      // console.table(data);
+      // console.count();
 
-    // console.group();
-    // console.time();
-    // ...
-    // console.timeEnd();
-    // console.groupEnd();
+      // console.group();
+      // console.time();
+      // ...
+      // console.timeEnd();
+      // console.groupEnd();
 
-    if (location) {
-      console.error('locationCode', location)
-    }
-    if (message) {
-      console.error('message', message)
-    }
-    if (data) {
-      console.error('data', data)
-    }
+      if (location) {
+        console.error('locationCode', location)
+      }
+      if (message) {
+        console.error('message', message)
+      }
+      if (data) {
+        console.error('data', data)
+      }
 
-    console.trace()
-    console.groupEnd()
+      console.trace()
+      console.groupEnd()
+    }
   }
 
   return {

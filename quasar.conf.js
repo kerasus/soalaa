@@ -9,6 +9,7 @@
 /* eslint-env node */
 const ESLintPlugin = require('eslint-webpack-plugin')
 const { configure } = require('quasar/wrappers')
+const path = require('path')
 
 module.exports = configure(function (ctx) {
   return {
@@ -81,6 +82,20 @@ module.exports = configure(function (ctx) {
         chain.output.chunkFilename('js/[name]/' + hashh + '.chunk.js')
         chain.plugin('eslint-webpack-plugin')
           .use(ESLintPlugin, [{ extensions: ['js', 'vue'] }])
+        chain.module.rule('fonts')
+          .use('url-loader')
+          .tap((options) => {
+            options.name = 'fonts/[path][name].[ext]'
+            return options
+          })
+      },
+      extendWebpack (cfg, { isServer, isClient }) {
+        cfg.resolve.alias = {
+          ...cfg.resolve.alias, // This adds the existing alias
+
+          // This will make sure that the hosting test app is pointing to only one instance of vue.
+          vue: path.resolve('./node_modules/vue')
+        }
       }
     },
 

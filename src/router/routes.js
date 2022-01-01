@@ -34,67 +34,22 @@ const routes = [
         }
       },
       {
-        path: '/exam',
-        name: 'exam',
-        component: () => import('pages/Admin/exam/index'),
+        path: 'exam',
+        component: () => import('layouts/AdminLayout.vue'),
         meta: {
           middlewares: [auth]
         },
         children: [
-          {
-            path: '',
-            name: 'list',
-            component: () => import('pages/Admin/exam/list'),
-            meta: {
-              middlewares: [auth]
-            }
-          },
-          {
-            path: 'create',
-            name: 'create',
-            component: () => import('pages/Admin/exam/edit/editExam'),
-            meta: {
-              middlewares: [auth]
-            }
-          },
-          {
-            path: ':examId/edit',
-            name: 'edit',
-            component: () => import('pages/Admin/exam/edit/editExam'),
-            meta: {
-              middlewares: [auth]
-            }
-          },
-          {
-            path: '/exam/results/:examId',
-            name: 'exam.results',
-            component: () => import('pages/Admin/exam/results'),
-            meta: { middleware: [auth] }
-          },
-          {
-            path: ':examId',
-            name: 'show',
-            component: () => import('pages/Admin/exam/edit/editExam'),
-            meta: {
-              middlewares: [auth]
-            }
-          },
-          {
-            path: ':examId/edit-exam-report',
-            name: 'edit-exam-report',
-            component: () => import('pages/Admin/exam/edit/editExamReport'),
-            meta: {
-              middlewares: [auth]
-            }
-          },
-          {
-            path: ':exam_id/coefficient/edit',
-            name: 'coefficient.edit',
-            component: () => import('src/pages/Admin/subGroup/editCoefficients.vue'),
-            meta: {
-              middlewares: [auth]
-            }
-          },
+          { name: 'Admin.Exam.Index', path: '', component: () => import('pages/Admin/exam/index') },
+          { name: 'Admin.Exam.Show', path: 'show/:id', component: () => import('pages/Admin/exam/Show') },
+          { name: 'Admin.Exam.Edit', path: ':id/edit', component: () => import('pages/Admin/exam/Edit') },
+          { name: 'Admin.Exam.Create', path: 'create', component: () => import('pages/Admin/exam/Create') },
+          { name: 'Admin.Exam.Upload', path: 'upload/:id', component: () => import('pages/Admin/exam/Upload') },
+          { name: 'exam.results', path: 'results/:id', component: () => import('pages/Admin/exam/results') },
+          { name: 'edit-exam-report', path: ':id/edit-exam-report', component: () => import('pages/Admin/exam/edit/editExamReport') },
+          { name: 'coefficient.edit', path: ':id/coefficient/edit', component: () => import('src/pages/Admin/subGroup/editCoefficients.vue') },
+          { name: 'onlineQuiz.exams.lessons', path: 'lessons/:quizId/:quizTitle', component: () => import('src/pages/Admin/exam/lessons.vue') },
+          // TODO => why here??!!
           {
             path: '/question/mbti/create',
             name: 'question.mbti.create',
@@ -147,14 +102,6 @@ const routes = [
             name: 'question-bank',
             component: () => import('pages/Admin/Question/QuestionBank/list'),
             meta: { middlewares: [auth] }
-          },
-          {
-            path: '/onlineQuiz/exams/lessons/:quizId/:quizTitle',
-            name: 'onlineQuiz.exams.lessons',
-            component: () => import('src/pages/Admin/exam/lessons.vue'),
-            meta: {
-              middlewares: [auth]
-            }
           },
           {
             path: '/results/mbti_bartle/:exam_id/:user_exam_id',
