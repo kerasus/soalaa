@@ -86,9 +86,9 @@ class User extends Model {
   }
 
   percentageOfInformationCompletion () {
-    let percentage = 0,
-      completionInfoKeys = this.getCompletionInfoKeys(),
-      percentageStep = (100 / completionInfoKeys.length)
+    let percentage = 0
+    let completionInfoKeys = this.getCompletionInfoKeys()
+    let percentageStep = (100 / completionInfoKeys.length)
 
     completionInfoKeys.forEach(item => {
       if (this.checkInformationCompletionKey(item)) {

@@ -11,7 +11,7 @@
 </template>
 
 <script>
-import EntityShow from 'components/Entity/Show/EntityShow'
+import { EntityShow } from 'quasar-crud'
 import API_ADDRESS from 'src/api/Addresses'
 
 export default {
