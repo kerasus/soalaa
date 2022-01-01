@@ -14,11 +14,11 @@
 </template>
 
 <script>
-import entityEdit from 'src/components/Entity/Edit/EntityEdit'
+import { EntityEdit } from 'quasar-crud'
 import API_ADDRESS from 'src/api/Addresses'
 export default {
   name: 'Edit',
-  components: { entityEdit },
+  components: { EntityEdit },
   data () {
     return {
       examId: null,
