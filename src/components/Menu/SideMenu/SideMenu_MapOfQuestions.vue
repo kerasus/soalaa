@@ -1,8 +1,9 @@
 <template>
       <div
         class="map-of-questions"
-        :style="{ 'padding-bottom': '100px' }"
       >
+        <div
+          :style="{ 'padding-bottom': '100px' }" >
         <div
           v-for="(categoryItem) in quiz.categories.list"
           :key="'category-'+categoryItem.id"
@@ -53,9 +54,10 @@
             </div>
               </q-expansion-item>
       </div>
+        </div>
         <div class="end-exam">
           <q-btn
-            v-if="true"
+            v-if="false"
             :color="'#4caf50'"
             :style="{ backgroundColor: '#4caf50 !important' }"
             dark
@@ -166,9 +168,10 @@ export default {
   padding: 20px 0;
 }
 
-.map-of-questions .q-expansion-item{
-  transition: all ease-in-out 0.01s;
-  min-height: 42px;
+.map-of-questions .q-expansion-item .q-expansion-item__content{
+  color: #666;
+  height: 36px;
+  transition: all ease-in-out 0.3ms;
   padding: 11px 24px;
 
 }
@@ -196,19 +199,25 @@ export default {
   background: var(--surface-1) !important;
 }
 
-.q-navigation-drawer .q-navigation-drawer__content .map-of-questions .q-expansion-item--expanded  .q-btn-item--active{
-  color: var(--accent-1);
+.map-of-questions .q-expansion-item__container .q-expansion-item__content .active {
+  color: var(--accent-1)!important;
 }
 
 .question-container .question-answers .answer-box,
-.map-of-questions .q-expansion-item .q-expansion-item__content  .q-btn.v-size--default {
+.map-of-questions .q-expansion-item .q-expansion-item__content  .q-btn {
+  width: 100%;
   font-size: 0.87rem;
 }
 .map-of-questions .categoryItem.q-btn {
+  display: flex;
+  color: #666;
+  height: 36px;
+  width: 100%;
+  padding: 0px 24px;
   font-size: 1.2rem;
   margin-top: 50px;
 }
 .map-of-questions .q-expansion-item .q-item {
-  font-size: 1.2rem;
+  font-size: 1.1rem;
 }
 </style>
