@@ -57,9 +57,9 @@
         </div>
         <div class="end-exam">
           <q-btn
-            v-if="false"
+            v-if="true"
             :color="'#4caf50'"
-            :style="{ backgroundColor: '#4caf50 !important' }"
+            :style="{ backgroundColor: '#4caf50 !important','width':'240px','height': '36px' }"
             dark
             @click="getConfirmation"
           >
