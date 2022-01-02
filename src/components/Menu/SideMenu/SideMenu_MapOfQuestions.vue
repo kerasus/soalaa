@@ -167,14 +167,10 @@ export default {
 }
 
 .map-of-questions .q-expansion-item{
-  transition: all ease-in-out 0.3s;
+  transition: all ease-in-out 0.01s;
   min-height: 42px;
   padding: 11px 24px;
 
-}
-
-.map-of-questions .theme--light.q-expansion-item .q-expansion-item---active .q-expansion-item__icon .q-icon {
-  color: var(--text-3);
 }
 
 .map-of-questions .q-expansion-item--expanded .q-item {
@@ -200,7 +196,7 @@ export default {
   background: var(--surface-1) !important;
 }
 
-.q-navigation-drawer .q-navigation-drawer__content .map-of-questions .theme--light.q-btn.active {
+.q-navigation-drawer .q-navigation-drawer__content .map-of-questions .q-expansion-item--expanded  .q-btn-item--active{
   color: var(--accent-1);
 }
 
