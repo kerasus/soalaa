@@ -25,7 +25,7 @@
             ></q-table>
           </div>
         </div>
-        <div class="row exam-time">
+        <div class="row default-result-table">
           <div class="col">
             <q-table
               :rows="[report.exam_user]"
@@ -42,7 +42,7 @@
       <div
         class="col col-md-5 col-12"
       >
-        <div class="row result-subgroup">
+        <div class="row default-result-table">
           <div class="col">
             <span class="tableTitle ">
                   نتیجه در زیر گروه ها
@@ -196,7 +196,7 @@ export default {
 
 <style lang="scss">
     .personal-results {
-      .proceeds-table , .exam-time , .result-subgroup {
+      .proceeds-table ,  .default-result-table{
         .q-table__container {
           border-radius: 20px;
         }
