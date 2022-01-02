@@ -152,6 +152,23 @@ export default {
       },
       percents: {},
       answerCounts: {},
+      columns1: [
+        {
+          name: 'index',
+          align: 'center',
+          label: 'ردیف',
+          field: row => row.index,
+          sortable: true
+        },
+        { name: 'sub_category', label: 'درس', field: row => row.sub_category, align: 'center', sortable: false },
+        { name: 'right_answer', label: ' تعداد درست', field: row => row.right_answer, align: 'center', sortable: true },
+        { name: 'wrong_answer', label: ' تعداد غلط', field: row => row.wrong_answer, align: 'center', sortable: true },
+        { name: 'percent', label: ' درصد', field: row => row.percent, align: 'center', sortable: true },
+        { name: 'rank_city', label: 'رتبه در شهر', field: row => row.rank_city, align: 'center', sortable: false },
+        { name: 'rank_province', label: 'رتبه در استان', field: row => row.rank_province, align: 'center', sortable: false },
+        { name: 'rank_country', label: 'رتبه در کشور', field: row => row.rank_country, align: 'center', sortable: false },
+        { name: 'taraaz', label: ' تراز', field: row => row.taraaz, align: 'center', sortable: true }
+      ],
       headers1: [
         { text: 'درس', value: 'sub_category', align: 'center', sortable: false },
         { text: 'تعداد درست', value: 'right_answer', align: 'center', sortable: true },
