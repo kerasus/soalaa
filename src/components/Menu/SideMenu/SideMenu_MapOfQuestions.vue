@@ -168,11 +168,9 @@ export default {
   padding: 20px 0;
 }
 
-.map-of-questions .q-expansion-item .q-expansion-item__content{
-  color: #666;
-  height: 36px;
+.map-of-questions .q-expansion-item .q-expansion-item__container{
   transition: all ease-in-out 0.3ms;
-  padding: 11px 24px;
+  padding: 5px 24px;
 
 }
 
@@ -186,6 +184,7 @@ export default {
 }
 
 .map-of-questions .q-expansion-item__content {
+  color: #666;
   padding: 16px 24px;
 }
 
@@ -218,6 +217,6 @@ export default {
   margin-top: 50px;
 }
 .map-of-questions .q-expansion-item .q-item {
-  font-size: 1.1rem;
+  font-size: 1.2rem;
 }
 </style>
