@@ -181,9 +181,6 @@ export default {
       ]
     }
   },
-  created () {
-    console.log('dksjfhdsujfv;kjfvn;ks', this.report.zirgorooh)
-  },
   computed: {
     shamsiDate () {
       return (date) => {
