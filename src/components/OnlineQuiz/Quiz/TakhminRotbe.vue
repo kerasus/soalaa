@@ -195,7 +195,7 @@ export default {
     }
   },
   created () {
-    console.log('TakhminRotbe----------')
+    console.log('TakhminRotbe----------', this.takhminReport.sub_category)
     this.prepareTakhmineRotbeReport(true)
   },
   methods: {
@@ -341,6 +341,7 @@ export default {
       return status
     },
     sendData () {
+      console.log('TakhminRotbe----------', this.takhminReport.sub_category)
       if (!this.validateSendData()) {
         return
       }
@@ -368,7 +369,28 @@ export default {
 }
 </script>
 
-<style scoped>
+<style lang="scss" scoped >
+    .takhmin-rotbe {
+      .proceeds-table , .default-result-table{
+        .q-table__container {
+          border-radius: 20px;
+        }
+        .q-table {
+          border: 1px solid #ececec;
+          thead tr {
+            background-color: #ffecb4;
+            border-radius: 20px;
+            color: rgba(62, 57, 43, 0.96);
+          }
+          tbody tr:nth-of-type(2n) {
+            background-color: rgba(0, 0, 0, 0.02);
+          }
+          tbody td {
+            font-size: 0.875rem;
+          }
+        }
+      }
+    }
     .subColsPaddingRight {
         padding-right: 5px;
     }
