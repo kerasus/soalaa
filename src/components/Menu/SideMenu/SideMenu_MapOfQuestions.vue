@@ -17,6 +17,7 @@
             v-for="(subcategoryItem) in categoryItem.sub_categories.list"
             :key="'subcategory-'+subcategoryItem.id"
             flat
+            group
             dense
             :label="subcategoryItem.title"
           >
@@ -45,13 +46,28 @@
                 />
                 <q-icon
                   v-if="getUserQuestionData(question.id) && getUserQuestionData(question.id).answered_choice_id"
-                  color="--success-1"
+                  color="green"
                   name="mdi-check"
                 />
               </q-btn>
             </div>
               </q-expansion-item>
       </div>
+        <div class="end-exam">
+          <q-btn
+            v-if="true"
+            :color="'#4caf50'"
+            :style="{ backgroundColor: '#4caf50 !important' }"
+            dark
+            @click="getConfirmation"
+          >
+            ارسال پاسخنامه
+          </q-btn>
+          <br>
+          <br>
+          <br>
+          <br>
+        </div>
       </div>
 </template>
 <script>
@@ -129,21 +145,7 @@ export default {
 }
 </script>
 
-<style scoped>
-.end-exam {
-  position: absolute;
-  width: 240px;
-  bottom: -78px;
-  z-index: 5;
-  background: #fff;
-  padding: 20px 0;
-}
-
-.end-exam-btn .q-btn__content {
-  display: flex;
-  justify-content: center !important;
-}
-
+<style>
 .map-of-questions {
   min-height: 42px !important;
   width: 80%;
@@ -153,19 +155,29 @@ export default {
   flex-direction: column;
   justify-content: space-between;
 }
+.end-exam {
+  position: absolute;
+  display: flex;
+  justify-content: center;
+  bottom: 0;
+  width: 240px;
+  z-index: 5;
+  background: #fff;
+  padding: 20px 0;
+}
 
-.map-of-questions .q-expansion-item {
+.map-of-questions .q-expansion-item{
   transition: all ease-in-out 0.3s;
-  min-height: 52px;
+  min-height: 42px;
   padding: 11px 24px;
 
 }
 
-.map-of-questions .theme--light.q-expansion-item .q-expansion-item-active .q-btn {
+.map-of-questions .theme--light.q-expansion-item .q-expansion-item---active .q-expansion-item__icon .q-icon {
   color: var(--text-3);
 }
 
-.map-of-questions .q-expansion-item-active {
+.map-of-questions .q-expansion-item--expanded .q-item {
   background: var(--primary-1);
   border-radius: 40px;
   min-height: 42px !important;
@@ -174,14 +186,11 @@ export default {
   color: white;
 }
 
-.map-of-questions .q-expansion-item-wrap {
+.map-of-questions .q-expansion-item__content {
   padding: 16px 24px;
 }
 
-.map-of-questions .q-btn {
-  font-size: 1.8ch;
-  padding: 0 24px;
-  color: #666;
+.map-of-questions .q-btn__content {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
@@ -191,19 +200,19 @@ export default {
   background: var(--surface-1) !important;
 }
 
-.v-navigation-drawer .q-navigation-drawer__content .map-of-questions .theme--light.q-btn__content {
+.q-navigation-drawer .q-navigation-drawer__content .map-of-questions .theme--light.q-btn.active {
   color: var(--accent-1);
 }
 
 .question-container .question-answers .answer-box,
-.map-of-questions .q-expansion-item .q-btn.-size--default {
+.map-of-questions .q-expansion-item .q-expansion-item__content  .q-btn.v-size--default {
   font-size: 0.87rem;
 }
 .map-of-questions .categoryItem.q-btn {
   font-size: 1.2rem;
   margin-top: 50px;
 }
-.map-of-questions .q-expansion-item{
+.map-of-questions .q-expansion-item .q-item {
   font-size: 1.2rem;
 }
 </style>
