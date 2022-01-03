@@ -1,56 +1,58 @@
 <template>
-  <div>
-
-      <q-list
-        v-for="(categoryItem) in quiz.categories.list"
-        :key="'category-'+categoryItem.id"
+      <div
         class="map-of-questions"
-        :style="{ 'padding-bottom': '100px' }"
       >
+        <div
+          :style="{ 'padding-bottom': '100px' }" >
+        <div
+          v-for="(categoryItem) in quiz.categories.list"
+          :key="'category-'+categoryItem.id"
+        >
           <q-btn
             flat
-            :elevation="0"
-            block
-            :label="categoryItem.title"
-          />
+            class="categoryItem"
+          >
+            {{ categoryItem.title }}
+          </q-btn>
           <q-expansion-item
             v-for="(subcategoryItem) in categoryItem.sub_categories.list"
             :key="'subcategory-'+subcategoryItem.id"
             flat
+            group
+            dense
             :label="subcategoryItem.title"
-            expand-separator
           >
             <div
               v-for="(question) in getQuestionsOfSubcategory(subcategoryItem.id)"
               :key="'question-'+question.id"
             >
-                  <q-btn
-                    :elevation="0"
-                    block
-                    @click="changeQuestion(question.id)"
-                    :class="{ active: currentQuestion.id === question.id }"
-                  >
-                    تست شماره
-                    {{ getQuestionNumberFromIndex(question.index) }}
-                    <q-icon
-                      v-if="getUserQuestionData(question.id) && getUserQuestionData(question.id).status === 'x'"
-                      color="red"
-                      name="mdi-close"
-                    />
-                    <q-icon
-                      v-if="getUserQuestionData(question.id) && getUserQuestionData(question.id).status === 'o'"
-                      color="yellow"
-                      name="mdi-checkbox-blank-circle"
-                    />
-                    <q-icon
-                      v-if="getUserQuestionData(question.id) && getUserQuestionData(question.id).answered_choice_id"
-                      color="green-6"
-                      name="mdi-check"
-                    />
-                  </q-btn>
+              <q-btn
+                flat
+                :class="{ active: currentQuestion.id === question.id }"
+                block
+                @click="changeQuestion(question.id)"
+              >
+                تست شماره
+                {{ getQuestionNumberFromIndex(question.index) }}
+                <q-icon
+                  v-if="getUserQuestionData(question.id) && getUserQuestionData(question.id).status === 'x'"
+                  color="red"
+                  name="mdi-close"
+                />
+                <q-icon
+                  v-if="getUserQuestionData(question.id) && getUserQuestionData(question.id).status === 'o'"
+                  color="yellow"
+                  size="15"
+                  name="mdi-checkbox-blank-circle"
+                />
+                <q-icon
+                  v-if="getUserQuestionData(question.id) && getUserQuestionData(question.id).answered_choice_id"
+                  color="green"
+                  name="mdi-check"
+                />
+              </q-btn>
             </div>
               </q-expansion-item>
-      </q-list>
     <div class="end-exam">
       <SendAnswers />
 
@@ -141,5 +143,71 @@ export default {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+}
+.end-exam {
+  position: absolute;
+  display: flex;
+  justify-content: center;
+  bottom: 0;
+  width: 240px;
+  z-index: 5;
+  background: #fff;
+  padding: 20px 0;
+}
+
+.map-of-questions .q-expansion-item .q-expansion-item__container{
+  transition: all ease-in-out 0.3ms;
+  padding: 5px 24px;
+
+}
+
+.map-of-questions .q-expansion-item--expanded .q-item {
+  background: var(--primary-1);
+  border-radius: 40px;
+  min-height: 42px !important;
+  max-height: 42px !important;
+  padding: 5px 24px;
+  color: white;
+}
+
+.map-of-questions .q-expansion-item__content {
+  color: #666;
+  padding: 16px 16px;
+}
+
+.map-of-questions .q-expansion-item  .q-btn__content {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.map-of-questions .q-btn {
+  background: var(--surface-1) !important;
+}
+
+.map-of-questions .q-expansion-item__container .q-expansion-item__content .active {
+  color: var(--accent-1)!important;
+}
+
+.question-container .question-answers .answer-box,
+.map-of-questions .q-expansion-item .q-expansion-item__content  .q-btn {
+  padding: 0px 8px;
+  width: 100%;
+  font-size: 0.87rem;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+.map-of-questions .categoryItem.q-btn {
+  display: flex;
+  color: #666;
+  height: 36px;
+  width: 100%;
+  padding: 0px 24px;
+  font-size: 1.2rem;
+  margin-top: 50px;
+}
+.map-of-questions .q-expansion-item .q-item {
+  font-size: 1.2rem;
 }
 </style>

@@ -1,5 +1,5 @@
 <template>
-  <div class="answer-box col-12 col-md-6"
+  <div class="answer-box"
     @click="answerClicked"
   >
     <div :class="{ 'answer-sheet': true, active: isSelected }">
@@ -9,12 +9,13 @@
       </div>
       <div class="answer-checkbox">
         <q-checkbox
+          dense
           @click="answerClicked"
           size="60px"
           v-model="isSelected"
          />
       </div>
-    </div>
+  </div>
   </div>
 </template>
 
@@ -43,7 +44,7 @@ export default {
 }
 </script>
 
-<style>
+<style lang="scss">
     .answer-box .mdi-checkbox-marked::before,
     .answer-box .mdi-checkbox-blank-outline {
         size: 40px;
@@ -68,7 +69,6 @@ export default {
         justify-content: center;
         min-height: 100px;
         align-items: center;
-        padding: 12px 12px 12px 12px;
     }
 
     .answer-sheet {
@@ -76,7 +76,6 @@ export default {
         width: 100%;
         min-height: 130px;
         height: max-content;
-        padding: 2% 3%;
         border-radius: 20px;
         cursor: pointer;
         transition: all ease 0.3s;
