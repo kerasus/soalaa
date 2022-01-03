@@ -1,52 +1,43 @@
-<template>
+ <template>
 
   <div class="row quiz-page"
-    :style="{ height: '100%' }"
-  >
-    <div class="q-mb-lg">
-      <q-btn
-        @click="redirect">
-        redirect
-      </q-btn>
-    </div>
-
+     :style="{ height: '100%' }"
+   >
     <div class="col " :style="{ 'min-height': '100%' }">
-      <div class="row main-page" :style="{ 'min-width': '100%' }"
-      >
-            <div class="col btnpre col-md-1 justify-start sm-hide xs-hide"
-            >
-              <q-btn
-                v-if="getQuestionNumberFromId(currentQuestion.id) !== 1"
-                flat
-                class="q-px-none"
-                :style="{ 'width':'64px','height': '400px' }"
-                no-shadow
-                @click="goToPrevQuestion('onlineQuiz.alaaView')"
-              >
+      <div class="row main-page" :style="{ 'min-width': '100%' }">
+            <div class="col btnpre col-md-1 justify-start sm-hide xs-hide">
+               <q-btn
+                 v-if="getQuestionNumberFromId(currentQuestion.id) !== 1"
+                 flat
+                 class="q-px-none"
+                 :style="{ 'width':'64px','height': '400px' }"
+                 no-shadow
+                 @click="goToPrevQuestion('onlineQuiz.alaaView')"
+                >
                 <q-icon
                   size="40px"
                   name="mdi-chevron-right"
                 />
-              </q-btn>
-            </div>
+               </q-btn>
+             </div>
             <div class="col col-md-10 q-px-sm ">
              <div class="middle-page row">
                <div class="col flex question-header">
-                 <div class="question-number">
-                   <p v-if="currentLesson">
-                     {{ currentLesson.title }}
-                     -
-                     سوال شماره
-                     {{ getQuestionNumberFromId(currentQuestion.id) }}
-                   </p>
-                 </div>
-                 <div class="question-buttons ">
+                  <div class="question-number">
+                    <p v-if="currentLesson">
+                      {{ currentLesson.title }}
+                      -
+                      سوال شماره
+                      {{ getQuestionNumberFromId(currentQuestion.id) }}
+                    </p>
+                  </div>
+                  <div class="question-buttons ">
                    <q-btn
-                     size="12px"
-                     round
-                     flat
-                     @click="changeStatus(currentQuestion.id, 'o')"
-                   >
+                      size="12px"
+                      round
+                      flat
+                      @click="changeStatus(currentQuestion.id, 'o')"
+                    >
                      <q-icon
                        v-if="!getUserQuestionData(quiz.id, currentQuestion.id) || getUserQuestionData(quiz.id, currentQuestion.id).status !== 'o'"
                        :style="{ 'width':'24px','height': '24px' }"
@@ -98,10 +89,10 @@
                <div class="col question-body">
                    <div
                      :class="{ ltr: isLtrString(currentQuestion.statement)}"
-                     v-if="currentQuestion.in_active_category"
-                     class="renderedPanel"
-                   >
-                     <vue-katex :input="currentQuestion.statement"/>
+                      v-if="currentQuestion.in_active_category"
+                      class="renderedPanel"
+                    >
+                      <vue-katex :input="currentQuestion.statement"/>
                    </div>
                  <q-card
                    v-if="!currentQuestion.in_active_category"
@@ -110,8 +101,8 @@
                    <q-card-section
                      class="WarningSheet flex"
                      :style="{ 'width':'1300px','height': '400px' }"
-                   >
-                     در حال حاضر امکان مشاهده سوالات این دفترچه امکان پذیر نمی باشد
+                    >
+                      در حال حاضر امکان مشاهده سوالات این دفترچه امکان پذیر نمی باشد
                    </q-card-section>
                  </q-card>
                </div>
@@ -121,16 +112,16 @@
                  <div
                  class="row">
                  <div
-                   class="choice-parent col-12 col-md-6"
-                   v-for="item in currentQuestion.choices.list"
-                   :key="item.id"
+                    class="choice-parent col-12 col-md-6"
+                    v-for="item in currentQuestion.choices.list"
+                    :key="item.id"
                  >
                  <choice
-                   :question-id="currentQuestion.id"
-                   :choice="item"
-                   :is-rtl="isRtl"
-                   @answerClicked="answerClicked"
-                 />
+                    :question-id="currentQuestion.id"
+                    :choice="item"
+                    :is-rtl="isRtl"
+                    @answerClicked="answerClicked"
+                  />
                  </div>
                  </div>
                </div>
@@ -205,14 +196,6 @@ export default {
     this.changeAppBarAndDrawer(false)
   },
   methods: {
-    redirect () {
-      this.$router.push({
-        name: 'konkoorView',
-        params: {
-          quizId: this.$route.params.quizId
-        }
-      })
-    },
     changeAppBarAndDrawer (state) {
       this.$store.commit('AppLayout/updateAppBarAndDrawer', state)
     },
