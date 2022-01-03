@@ -1,24 +1,15 @@
 <template>
 
-  <q-page
-    :fluid="true"
-    class="quiz-page"
+  <div class="row quiz-page"
     :style="{ height: '100%' }"
   >
-    <div class="row " :style="{ 'min-height': '100%' }">
-      <div class="col" :style="{ 'min-width': '100%' }"
+    <div class="col " :style="{ 'min-height': '100%' }">
+      <div class="row main-page" :style="{ 'min-width': '100%' }"
       >
-        <q-page
-          class="q-flex align-stretch"
-          width="100%"
-          color="--background-2"
-            :style="{ 'min-height': '100%' }"
-        >
-          <div class="row">
-            <!--&lt;!&ndash;              v-if= "getQuestionNumberFromId(currentQuestion.id) !== 1"&ndash;&gt;-->
             <div class="col btnpre col-md-1 justify-start sm-hide xs-hide"
             >
               <q-btn
+                v-if="getQuestionNumberFromId(currentQuestion.id) !== 1"
                 flat
                 class="q-px-none"
                 :style="{ 'width':'64px','height': '400px' }"
@@ -32,129 +23,116 @@
               </q-btn>
             </div>
             <div class="col col-md-10 q-px-sm ">
-              <div class="row question-header">
-                <div class="question-number">
-                  <!--                    v-if="currentLesson"-->
-                  <!--                    getQuestionNumberFromId(currentQuestion.id)-->
-                  <p>
-                    {{ "عربی عمومی" }}
-                    -
-                    سوال شماره
-                    {{  "35" }}
-                  </p>
-                </div>
-                <div class="question-buttons ">
-                  <q-btn
-                    size="12px"
-                    round
-                    flat
-                  >
-<!--                    @click="changeStatus(currentQuestion.id, 'o')"-->
-<!--                    v-if="!getUserQuestionData(quiz.id, currentQuestion.id) || getUserQuestionData(quiz.id, currentQuestion.id).status !== 'o'"-->
-                    <q-icon
-                      :style="{ 'width':'24px','height': '24px' }"
-                      color="grey-7"
-                      size="30px"
-                      name="mdi-checkbox-blank-circle-outline"
-                    />
-<!--                    v-if="getUserQuestionData(quiz.id, currentQuestion.id) && getUserQuestionData(quiz.id, currentQuestion.id).status === 'o'"-->
-                    <q-icon
-                      v-if="false "
-                      color="amber"
-                      size="30px"
-                      name="mdi-checkbox-blank-circle"
-                    />
-                  </q-btn>
-                  <q-btn
-                    size="12px"
-                    round
-                    flat
-                  >
-                    <q-icon
-                      v-if="false"
-                      size="30px"
-                      color="grey-7"
-                      name="mdi-close"
-                    />
-<!--                    @click="changeStatus(currentQuestion.id, 'x')"-->
-                    <!-- :color="getUserQuestionData(quiz.id, currentQuestion.id) && getUserQuestionData(quiz.id, currentQuestion.id).status === 'x' ? 'red' : '#888'"-->
-                    <q-icon
-                      size="30px"
-                      color="red"
-                      name="mdi-close"
-                    />
-                  </q-btn>
-<!--&lt;!&ndash;                  @click="changeBookmark(currentQuestion.id)"&ndash;&gt;-->
-                  <q-btn
-                    size="12px"
-                    flat
-                    round
-                  >
-<!--      v-if="!getUserQuestionData(quiz.id, currentQuestion.id) || !getUserQuestionData(quiz.id, currentQuestion.id).bookmarked"-->
-                    <q-icon
-                      v-if="false"
-                      size="30px"
-                      color="grey-7"
-                      name="mdi-bookmark-outline"
-                    />
-<!--                    v-if="getUserQuestionData(quiz.id, currentQuestion.id) && getUserQuestionData(quiz.id, currentQuestion.id).bookmarked"-->
-                    <q-icon
-                      flat
-                      color="blue-6"
-                      size="30px"
-                      name="mdi-bookmark"
+             <div class="middle-page row">
+               <div class="col flex question-header">
+                 <div class="question-number">
+                   <p v-if="currentLesson">
+                     {{ currentLesson.title }}
+                     -
+                     سوال شماره
+                     {{ getQuestionNumberFromId(currentQuestion.id) }}
+                   </p>
+                 </div>
+                 <div class="question-buttons ">
+                   <q-btn
+                     size="12px"
+                     round
+                     flat
+                     @click="changeStatus(currentQuestion.id, 'o')"
+                   >
+                     <q-icon
+                       v-if="!getUserQuestionData(quiz.id, currentQuestion.id) || getUserQuestionData(quiz.id, currentQuestion.id).status !== 'o'"
+                       :style="{ 'width':'24px','height': '24px' }"
+                       color="grey-7"
+                       size="30px"
+                       name="mdi-checkbox-blank-circle-outline"
                      />
-                  </q-btn>
-                </div>
-              </div>
-
-              <div class="row question-body">
-                <div class="col" >
-<!--                :class="{ ltr: isLtrString(currentQuestion.statement)}"-->
-<!--                  v-if="currentQuestion.in_active_category"-->
-                  <div
-                    class="renderedPanel"
-                  >
-                    «ذَهَبَ عَامِلٌ اِلَی الصَّیدَلِیَّةِ وَ قَالَ لِلصَّیدَلِيّ:« هَل لَدَیکَ مَرهَمٌ لِلاسمنت (سیمان)؟» فَضَحکَ الصَّیدَلِيُّ مِنهُ سَاخِراً وَ قَالَ لَهُ: «نَعَم، لَدَینَا. هَل تُرِیدُ نَوعِیَّةً مُمتَازَةً أم نَوعِیَّةً عَادِیَّةً؟» فَقَالَ العَامِلُ: «أعطِنِي النَّوعِیَّةَ المُمتَازَةَ» رَدَّ عَلَیه الصَّیدَلِيُّ مُستَهزِءاً: «إِنَّهَا غَالِیةٌ. أَقُولُ لَکَ ذَلِکَ مُقَدَّماً. ثُمَّ ذَهَبَ ضاحِکاً. رَفَعَ العَامِلُ یَدَیهِ أَمامَ الصَّیدَلِيّ وَ قَالَ لَهُ: «إِنّي عَامِلٌ أشتَغِلُ في الاسمنت وَ قَد عَلَّقَ الاسمنت في یَدَيَّ وَ لا أستَطیعُ أن أَلمسَ وَجهَ ابنَتِيَ الصَّغِیرَةِ لِکَي أداعِبَهَا. إِذَا کَانَتِ النَّوعِیَّةُ المُمتَازَةُ الَّتِي لَدَیکَ تُزِیلُ هذا الاسمنت، فَأعطِنِي إِیَّاهَا و سَأَتَدَبَّرُ ثَمَنَها.
-
-                    تَجَمَّدَتِ الضَّحکاتُ السَّاخِرَةُ لِلصَّیدَلِيّ عَلَی شَفَتَیهِ وَ رَأَی نَفسَهُ حَقیراً صَغیراً کَمَا لَم یَرَهَا مِن قَبلُ.»
-                    <!--                    <vue-katex :input="currentQuestion.statement" />-->
-                  </div>
-<!--                  v-if="!currentQuestion.in_active_category"-->
-                  <q-feild
-                    color="warning"
-                    rounded
-                    dark
-                    height="400"
-                    elevation="1"
-                    class="d-flex align-center justify-center"
-                  >
-                    در حال حاضر امکان مشاهده سوالات این دفترچه امکان پذیر نمی باشد
-                  </q-feild>
-                </div>
-              </div>
-
-<!--&lt;!&ndash;              v-if="currentQuestion.in_active_category"&ndash;&gt;-->
-              <div class="row question-answers"
-              >
-                <!--                  v-for="item in currentQuestion.choices.list"-->
-                <!--                  :key="item.id"-->
-                <!--                  :question-id="currentQuestion.id"-->
-                <!--                  :choice="item"-->
-                <!--                  :is-rtl="isRtl"-->
-                <choice
-                  v-for="key in linksList"
-                  :key="key"
-                />
-
-<!--                  @answerClicked="answerClicked"-->
-
-              </div>
+                     <q-icon
+                       v-if="getUserQuestionData(quiz.id, currentQuestion.id) && getUserQuestionData(quiz.id, currentQuestion.id).status === 'o'"
+                       color="amber"
+                       size="30px"
+                       name="mdi-checkbox-blank-circle"
+                     />
+                   </q-btn>
+                   <q-btn
+                     size="12px"
+                     round
+                     flat
+                     @click="changeStatus(currentQuestion.id, 'x')"
+                   >
+                     <q-icon
+                       size="30px"
+                       :color="getUserQuestionData(quiz.id, currentQuestion.id) && getUserQuestionData(quiz.id, currentQuestion.id).status === 'x' ? 'red' : 'grey-7'"
+                       name="mdi-close"
+                     />
+                   </q-btn>
+                   <q-btn
+                     size="12px"
+                     flat
+                     round
+                     @click="changeBookmark(currentQuestion.id)"
+                   >
+                     <q-icon
+                       v-if="!getUserQuestionData(quiz.id, currentQuestion.id) || !getUserQuestionData(quiz.id, currentQuestion.id).bookmarked"
+                       size="30px"
+                       color="grey-7"
+                       name="mdi-bookmark-outline"
+                     />
+                     <q-icon
+                       v-if="getUserQuestionData(quiz.id, currentQuestion.id) && getUserQuestionData(quiz.id, currentQuestion.id).bookmarked"
+                       flat
+                       color="blue-6"
+                       size="30px"
+                       name="mdi-bookmark"
+                     />
+                   </q-btn>
+                 </div>
+               </div>
+               <div class="col question-body">
+                   <div
+                     :class="{ ltr: isLtrString(currentQuestion.statement)}"
+                     v-if="currentQuestion.in_active_category"
+                     class="renderedPanel"
+                   >
+                     <vue-katex :input="currentQuestion.statement"/>
+                   </div>
+                   <div
+                     v-if="!currentQuestion.in_active_category"
+                     color="red"
+                     rounded
+                     dark
+                     height="400"
+                     elevation="1"
+                     class="d-flex align-center justify-center"
+                   >
+                     در حال حاضر امکان مشاهده سوالات این دفترچه امکان پذیر نمی باشد
+                   </div>
+               </div>
+               <div class="col question-answers"
+                    v-if="currentQuestion.in_active_category"
+               >
+                 <div
+                 class="row">
+                 <div
+                   class="choice-parent col-12 col-md-6"
+                   v-for="item in currentQuestion.choices.list"
+                   :key="item.id"
+                 >
+                 <choice
+                   :question-id="currentQuestion.id"
+                   :choice="item"
+                   :is-rtl="isRtl"
+                   @answerClicked="answerClicked"
+                 />
+                 </div>
+                 </div>
+               </div>
+             </div>
             </div>
             <div class="col btnpre col-md-1 justify-start sm-hide xs-hide"
             >
-<!--              v-if="getQuestionNumberFromId(currentQuestion.id) !== getCurrentExamQuestionsInArray().length"-->
               <q-btn
+                v-if="getQuestionNumberFromId(currentQuestion.id) !== getCurrentExamQuestionsInArray().length"
                 flat
                 class="q-px-none"
                 :style="{ 'width':'64px','height': '400px' }"
@@ -168,98 +146,57 @@
               </q-btn>
             </div>
           </div>
-        </q-page>
-      </div>
     </div>
-    <q-footer
-      class="justify-center q-pl-none"
-      color="transparent"
-      elevation="0"
-      padless
-      inset
-      app
-    >
-      <q-page-sticky
-        fluid
-        class="q-py-none"
-      >
-        "
-        <div class="row timer-row justify-center">
-          <div
-            :md="10"
-            class="col d-flex justify-center timer-container py-0"
-          >
-<!--            <Timer/>-->
-          </div>
-        </div>
-      </q-page-sticky>
-    </q-footer>
-  </q-page>
+    <div class="timer-row col">
+        <Timer/>
+    </div>
+  </div>
 </template>
 
 <script>
 import Choice from 'src/components/OnlineQuiz/Quiz/Choice'
-// import Timer from 'src/components/OnlineQuiz/Quiz/Timer/Timer'
+import Timer from 'src/components/OnlineQuiz/Quiz/timer/timer'
 import { mixinAuth, mixinQuiz, mixinUserActionOnQuestion, mixinDrawer, mixinWindowSize } from 'src/mixin/Mixins'
-// import Assistant from 'src/plugins/assistant'
-// import VueKatex from 'src/components/VueKatex'
+import Assistant from 'src/plugins/assistant'
+import VueKatex from 'components/VueKatex'
 
 export default {
   name: 'AlaaView',
   components: {
-    Choice
-    // ,
-    // VueKatex,
-    // Timer
+    Choice,
+    VueKatex,
+    Timer
   },
   mixins: [mixinAuth, mixinQuiz, mixinUserActionOnQuestion, mixinDrawer, mixinWindowSize],
   data () {
     return {
-      linksList: [
-        {
-          title: 'Profile',
-          caption: ''
-        },
-        {
-          title: 'hasan',
-          caption: ''
-        },
-        {
-          title: 'Profile',
-          caption: ''
-        },
-        {
-          title: 'hasan',
-          caption: ''
-        }
-      ],
       isRtl: false
     }
   },
   mounted () {
-    // const that = this
-    // that.$store.commit('AppLayout/updateOverlay', { show: false, loading: false, text: '' })
-    // this.showAppBar()
-    // this.updateDrawerBasedOnWindowSize()
-    // console.log('this.$route.params.quizId', this.$route.params.quizId)
-    // this.startExam(this.$route.params.quizId, 'onlineQuiz.alaaView')
-    //   .then(() => {
-    //     that.isRtl = !that.isLtrString(that.currentQuestion.statement)
-    //     that.$store.commit('AppLayout/updateOverlay', { show: false, loading: false, text: '' })
-    //   })
-    //   .catch((error) => {
-    //     Assistant.reportErrors(error)
-    //     this.$q.notify({
-    //       type: 'negative',
-    //       message: 'مشکلی در دریافت اطلاعات آزمون رخ داده است. لطفا دوباره امتحان کنید.',
-    //       position: 'top'
-    //     })
-    //     that.$router.push({ name: 'user.exam.list' })
-    //   })
+    const that = this
+    that.$store.commit('AppLayout/updateOverlay', { show: false, loading: false, text: '' })
+    this.showAppBar()
+    this.updateDrawerBasedOnWindowSize()
+    console.log('this.$route.params.quizId', this.$route.params.quizId)
+    this.startExam(this.$route.params.quizId, 'onlineQuiz.alaaView')
+      .then(() => {
+        that.isRtl = !that.isLtrString(that.currentQuestion.statement)
+        that.$store.commit('AppLayout/updateOverlay', { show: false, loading: false, text: '' })
+      })
+      .catch((error) => {
+        Assistant.reportErrors(error)
+        this.$q.notify({
+          type: 'negative',
+          message: 'مشکلی در دریافت اطلاعات آزمون رخ داده است. لطفا دوباره امتحان کنید.',
+          position: 'top'
+        })
+        that.$router.push({ name: 'user.exam.list' })
+      })
   },
-  // unmounted () {
-  //   this.changeAppBarAndDrawer(false)
-  // },
+  unmounted () {
+    this.changeAppBarAndDrawer(false)
+  },
   methods: {
     changeAppBarAndDrawer (state) {
       this.$store.commit('AppLayout/updateAppBarAndDrawer', state)
@@ -287,128 +224,106 @@ export default {
   direction: ltr !important;
 }
 
-.v-navigation-drawer.mapOfQuestions .v-navigation-drawer__content {
+.q-navigation-drawer.mapOfQuestions .q-navigation-drawer__content {
   overflow-y: scroll;
 }
 
-/*.quiz-page .katex-display {*/
-/*    display: inline-block;*/
-/*    direction: ltr;*/
-/*}*/
+.quiz-page .katex-display {
+    display: inline-block;
+    direction: rtl;
+}
 
 .base.textstyle.uncramped {
   display: flex;
   flex-wrap: wrap;
 }
 
-img {
-  max-width: 100%;
-}
 </style>
 
-<style scoped>
-.question-buttons button {
-  margin-left: 20px;
-  height: 24px;
-  width: 24px;
-  size: 12px;
-}
-
-.question-number p {
-  margin-bottom: 0;
-  line-height: 40px;
-  font-size: 16px;
-}
-
-.question-header {
-  display: flex;
-  color: var(--text-2);
-  flex-direction: row;
-  justify-content: space-between;
-  position: sticky;
-  padding-top: 20px;
-  z-index: 1;
-  margin: -12px -12px -12px -12px;
-  background: #f1f1f1;
-}
-
-.question-body {
-  margin-top: 50px;
-  margin-left: -12px;
-  margin-right: -12px;
-  font-size: 16px;
-  text-rendering: optimizeLegibility;
-  line-height: 35px;
-  display: inline-block;
-  direction: inherit;
-  box-sizing: inherit;
-  color: var(--text-2);
-}
-
-.question-answers {
-  margin-top: 90px;
-  margin-left: -12px;
-  margin-right: -12px;
-}
-
-.answer-sheet {
-  background: #f1f1f1;
-  width: 90%;
-  height: 100px;
-  padding: 2% 3%;
-  border-radius: 10px;
-  cursor: pointer;
-  transition: all ease-in-out 0.3s;
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-}
-
-.answer-text {
-  height: 100%;
-  width: 100%;
-  display: block !important;
-}
-
-.answer-checkbox {
-  height: 100px;
-  width: 100px;
-}
-
+<style lang="scss" scoped>
 .quiz-page {
   background: #f1f1f1;
+  display: flex;
+  flex-direction: column;
   width: 100%;
   height: 100%;
-  padding: 12px 12px 12px 12px;
-}
-.btnpre {
-  display: flex;
-  padding : 12px 12px 12px 24px;
-
-}
-
-.user-name {
-  margin-bottom: 0;
-  align-self: center;
-  margin-left: 10px;
-  color: var(--text-2);
-}
-
-@media only screen and (max-width: 1024px) {
-  .question-body {
-    margin-top: 20px;
+  padding: 0px 0px 0px 12px;
+  .timer-row {
+    width: calc(75% - 150px);
+    position: absolute;
+    bottom: 0;
+    right: 100px;
   }
-}
+  .main-page{
+    display: flex;
+    flex-direction: row;
+    .btnpre {
+      display: flex;
+      padding: 12px 12px 12px 24px;
+    }
+    .middle-page{
+      display: flex;
+      flex-direction: column;
+      .question-header {
+        display: flex;
+        color: var(--text-2);
+        flex-direction: row;
+        justify-content: space-between;
+        position: sticky;
+        padding-top: 20px;
+        z-index: 1;
+        margin: -12px -12px -12px -12px;
+        background: #f1f1f1;
+        .question-number p {
+          margin-bottom: 0;
+          line-height: 40px;
+          font-size: 16px;
+        }
 
-@media only screen and (max-width: 600px) {
-  .question-buttons button {
-    margin-left: 0;
-  }
-}
-
-@media only screen and (max-width: 320px) {
-  .question-header {
-    justify-content: center;
+        .question-buttons button {
+          margin-left: 20px;
+          height: 24px;
+          width: 24px;
+          size: 12px;
+        }
+        @media only screen and (max-width: 600px) {
+          .question-buttons button {
+            margin-left: 0;
+          }
+        }
+      }
+      @media only screen and (max-width: 335px) {
+        .question-header {
+          justify-content: center;
+        }
+      }
+      .question-body {
+        padding: 0px 0px 0px 12px;
+        margin-top: 50px;
+        margin-left: -12px;
+        margin-right: -12px;
+        font-size: 16px;
+        text-rendering: optimizeLegibility;
+        line-height: 35px;
+        display: inline-block;
+        direction: inherit;
+        box-sizing: inherit;
+        color: var(--text-2);
+      }
+      @media only screen and (max-width: 1024px) {
+        .question-body {
+          margin-top: 20px;
+        }
+      }
+      .question-answers {
+            margin-top: 90px;
+            margin-left: -12px;
+            margin-right: -12px;
+        .choice-parent{
+          padding: 12px;
+        }
+      }
+    }
   }
 }
 </style>

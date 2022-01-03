@@ -4,7 +4,7 @@
     :class="{'time-card-opened':openMode, 'time-card-default': !openMode }"
   >
     <div
-      v-if="!show"
+      v-if="!openMode"
       class="timer-default-wrapper"
       @click="timerOpen"
     >

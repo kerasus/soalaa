@@ -1,25 +1,45 @@
 <template>
-  <div class="question-field">
+  <div
+    v-intersection="inView"
+    class="question-field"
+  >
+    <q-card
+      v-if="considerActiveCategory && !source.in_active_category"
+      class="alert-sheet shadow-2"
+      :class="currentQuestion.id === source.id ? 'red-sheet' : 'orange-sheet'"
+      rounded
+      dark
+    >
+      <q-card-section class="alert-sheet-text">
+        (
+        سوال شماره
+        {{ getQuestionNumberFromId(source.id) }}
+        )
+        <br>
+        در حال حاضر امکان مشاهده سوالات این دفترچه امکان پذیر نمی باشد
+      </q-card-section>
+    </q-card>
     <q-markup-table
+      v-if="(considerActiveCategory && source.in_active_category) || !considerActiveCategory"
+      wrap-cells
       separator="none"
       class="question-table"
+      :class="{ 'current-question': this.currentQuestion.id === source.id, ltr: isLtrQuestion}"
     >
       <thead>
       <tr>
         <th class="table-head">
           <p
-            v-if="(considerActiveCategory && source.in_active_category) || !considerActiveCategory"
             :id="'question' + source.id"
             class="question-body"
             :class="{ ltr: isRtl }"
-            :v-html="source.order + ') ' + source.statement"
           >
+            {{source.order + ') ' + source.statement}}
             <!--            <vue-katex-->
             <!--              :input="source.order + ') ' + source.statement"-->
             <!--            />-->
           </p>
           <div
-            v-if="(considerActiveCategory && source.in_active_category) || !considerActiveCategory"
             class="question-icons"
             :style="{ float: isRtlString ? 'left' : 'right' }"
           >
@@ -76,14 +96,12 @@
       </tr>
       </thead>
       <tbody class="table-body">
-      <tr
-        class="choices"
-      >
+      <tr class="choices q-tr--no-hover">
         <td
           v-for="(choice, index) in source.choices.list"
           :key="choice.id"
           ref="choices"
-          class="choice"
+          class="choice col-md-3"
           :class="{active: getAnsweredChoiceId() === choice.id, ltr: isRtl}"
           @click="clickOnAnswer({ questionId: source.id, choiceId: choice.id})"
         >
@@ -103,7 +121,7 @@
 
 <script>
 import 'src/assets/scss/markdownKatex.scss'
-import { mixinQuiz, mixinUserActionOnQuestion } from 'src/mixin1/Mixins'
+import { mixinQuiz, mixinUserActionOnQuestion } from 'src/mixin/Mixins'
 // import VueKatex from 'src/components/VueKatex'
 
 export default {
@@ -214,7 +232,7 @@ export default {
 
       return this.userQuizListData[this.quiz.id][this.source.id].answered_choice_id
     },
-    test (payload) {
+    inView (payload) {
       this.$emit('inView', {
         isInView: payload.isIntersecting,
         number: this.getQuestionNumberFromId(this.source.id)
@@ -257,6 +275,21 @@ export default {
 
 <style lang="scss" scoped>
 .question-field{
+  width: 100% !important;
+  .alert-sheet{
+    margin: 10px;
+    display: flex;
+    height: 200px;
+    .alert-sheet-text{
+      margin: auto;
+    }
+    &.red-sheet{
+      background-color: #F44336;
+    }
+    &.orange-sheet{
+      background-color: #fb8c00;
+    }
+  }
   .question-table {
     padding: 10px 10px 10px 30px;
     &.current-question {

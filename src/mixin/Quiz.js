@@ -1,15 +1,15 @@
-import Assistant from '../plugins/assistant'
-import Time from '../plugins/time'
+import Assistant from 'src/plugins/assistant'
+import Time from 'src/plugins/time'
 import { QuestSubcategory, QuestSubcategoryList } from '../models/QuestSubcategory'
 import axios from 'axios'
 import API_ADDRESS from 'src/api/Addresses'
 import { Exam } from 'src/models/Exam'
-import { QuestCategoryList } from '../models/QuestCategory'
+import { QuestCategoryList } from 'src/models/QuestCategory'
 // todo : jquery
 import $ from 'jquery'
-import { QuestionList } from '../models/Question'
+import { QuestionList } from 'src/models/Question'
 import ExamData from 'src/assets/js/ExamData'
-// import { User } from 'src/models/User'
+import { io } from 'socket.io-client'
 
 const mixinQuiz = {
   computed: {
@@ -41,7 +41,6 @@ const mixinQuiz = {
     },
     currentQuestion: {
       get () {
-        // this.$store.commit('Auth/updateUser', new User(this.userData))
         return this.$store.getters['quiz/currentQuestion']
       },
       set (newInfo) {
@@ -80,6 +79,125 @@ const mixinQuiz = {
     }
   },
   methods: {
+    setSocket (token, examId, callbacks) {
+      this.socket = io(API_ADDRESS.socket, {
+        withCredentials: true,
+        auth: {
+          token,
+          examId
+        }
+      })
+      this.setSocketEvents(callbacks)
+      this.socket.connect()
+    },
+    setSocketEvents (callbacks) {
+      this.socket.on('connecting', () => {
+        // this.onSocketStatusChange('on connection')
+      })
+      this.socket.on('reconnect', () => {
+        this.socket.emit('socket.event.reconnect:log', 'socket.event.reconnect:log')
+      })
+      this.socket.on('disconnect', () => {
+        // this.onSocketStatusChange('Socket to break off')
+        // this.isConnected = false
+      })
+      this.socket.on('connect_failed', () => {
+        // this.onSocketStatusChange('connection failed')
+      })
+      this.socket.on('connect', () => {
+        // console.log(this.socket.connected) // true
+        // this.onSocketStatusChange('socket connected')
+        // this.isConnected = true
+      })
+      this.socket.on('question.file-link:update', (data) => {
+        const questionsFileUrl = data.questionFileLink
+        const that = this
+        this.reloadQuestionFile(questionsFileUrl, 'onlineQuiz.alaaView', this.$route.params.quizId)
+          .then(() => {
+            that.isRtl = !that.isLtrString(that.currentQuestion.statement)
+            that.$store.commit('AppLayout/updateOverlay', { show: false, loading: false, text: '' })
+            if (callbacks && callbacks['question.file-link:update'] && callbacks['question.file-link:update'].afterReload) {
+              callbacks['question.file-link:update'].afterReload()
+            }
+          })
+          .catch((error) => {
+            Assistant.reportErrors(error)
+            this.$q.notify({
+              type: 'negative',
+              message: 'مشکلی در دریافت اطلاعات آژمون رخ داده است. لطفا دوباره امتحان کنید.',
+              position: 'center'
+            })
+            that.$router.push({ name: 'user.exam.list' })
+          })
+      })
+    },
+
+    reloadQuestionFile (questionsFileUrl, viewType, examId) {
+      if (!Assistant.getId(examId)) {
+        return
+      }
+      const that = this
+      return new Promise(function (resolve, reject) {
+        const userExamId = undefined
+        const examData = new ExamData()
+        window.currentExamQuestions = null
+        window.currentExamQuestionIndexes = null
+        // that.$store.commit('AppLayout/updateOverlay', {show: true, loading: true, text: ''})
+        examData.getExamDataAndParticipate(examId)
+        examData.loadQuestionsFromFile()
+        examData.getUserExamData(userExamId)
+          .run()
+          .then((result) => {
+            try {
+              // save questions in localStorage
+              that.saveCurrentExamQuestions(examData.exam.questions.list)
+              // save exam info in vuex store (remove questions of exam then save in store)
+              examData.exam.loadSubcategoriesOfCategories()
+              Time.setStateOfExamCategories(examData.exam.categories)
+              const currentExamQuestions = that.getCurrentExamQuestions()
+              Time.setStateOfQuestionsBasedOnActiveCategory(examData.exam, currentExamQuestions)
+              that.$store.commit('quiz/updateQuiz', examData.exam)
+              that.setCurrentExamQuestions(currentExamQuestions)
+              that.loadCurrentQuestion(viewType)
+              // examData.exam = that.quiz
+              that.reloadCurrentQuestion(viewType)
+
+              that.$store.commit('quiz/mergeDbAnswersIntoLocalstorage', {
+                dbAnswers: examData.userExamData,
+                exam_id: examData.exam.id
+              })
+              resolve(result)
+            } catch (error) {
+              console.error(error)
+              that.$router.push({ name: 'user.exam.list' })
+              reject(error)
+            }
+          })
+          .catch((error) => {
+            reject(error)
+            that.$router.push({ name: 'user.exam.list' })
+          })
+          .finally(() => {
+            that.$store.commit('AppLayout/updateOverlay', { show: false, loading: false, text: '' })
+          })
+      })
+    },
+    reloadCurrentQuestion (viewType) {
+      const questNumber = this.getQuestNumber()
+      const questionId = this.getQuestionIdFromNumber(questNumber)
+      if (!questionId) {
+        return
+      }
+      this.changeQuestion(questionId, viewType, true)
+    },
+    getQuestionIdFromNumber (number) {
+      const questionIndex = this.getQuestionIndexFromNumber(number)
+      const questionId = this.getCurrentExamQuestionIndexes()[questionIndex]
+      if (questionIndex < 0 || !questionId) {
+        return false
+      }
+      return questionId
+    },
     getUserQuestionData (quizId, questionId) {
       if (typeof questionId === 'undefined') {
         questionId = this.currentQuestion.id
@@ -97,7 +215,6 @@ const mixinQuiz = {
       }
       return this.userQuizListData[quizId][questionId]
     },
-
     getCurrentExam () {
       return this.$store.getters['quiz/quiz']
     },
@@ -106,11 +223,12 @@ const mixinQuiz = {
         return window.currentExamQuestionIndexes
       }
       window.currentExamQuestionIndexes = JSON.parse(window.localStorage.getItem('currentExamQuestionIndexes'))
+      // return window.currentExamQuestionIndexes
       return JSON.parse(window.localStorage.getItem('currentExamQuestionIndexes'))
     },
     setCurrentExamQuestions (currentExamQuestions) {
       window.localStorage.setItem('currentExamQuestions', JSON.stringify(currentExamQuestions))
-      this.currentExamQuestions = Object.freeze(currentExamQuestions)
+      // this.currentExamQuestions = Object.freeze(currentExamQuestions)
       // Vue.set(this, 'currentExamQuestions', Object.freeze(currentExamQuestions))
     },
     setCurrentExamQuestionIndexes (currentExamQuestionIndexes) {
@@ -133,7 +251,7 @@ const mixinQuiz = {
     saveCurrentExamQuestions (questionsList) {
       const currentExamQuestions = {}
       const currentExamQuestionIndexes = {}
-      // console.log('saveCurrentExamQuestions questionsList ', questionsList)
+
       this.sortQuestions(questionsList)
       questionsList.forEach((item, index) => {
         item.index = index
@@ -147,7 +265,7 @@ const mixinQuiz = {
     },
     getCurrentExamQuestionsInArray () {
       let currentExamQuestionsArray = []
-      if (this.quiZ !== {}) {
+      if (this.quiz !== {}) {
         const currentExamQuestionIndexes = this.getCurrentExamQuestionIndexes()
         const currentExamQuestions = this.getCurrentExamQuestions()
         if (!currentExamQuestionIndexes) {
@@ -159,9 +277,8 @@ const mixinQuiz = {
           currentExamQuestionsArray.push(currentExamQuestions[questionId])
         })
       } else {
-        currentExamQuestionsArray = this.quiZ
+        currentExamQuestionsArray = this.quiz
       }
-      // console.log('currentExamQuestionsArray', currentExamQuestionsArray)
       return currentExamQuestionsArray
     },
     getCurrentExamQuestions () {
@@ -196,9 +313,7 @@ const mixinQuiz = {
 
       return currentExamQuestionsArray
     },
-
     startExam (examId, viewType) {
-      console.log('----------examId----------', examId)
       if (!Assistant.getId(examId)) {
         return
       }
@@ -206,23 +321,20 @@ const mixinQuiz = {
       return new Promise(function (resolve, reject) {
         let userExamId
         const examData = new ExamData()
-        // console.log('that.needToLoadQuizData() :', that.needToLoadQuizData())
         if (that.needToLoadQuizData()) {
           window.currentExamQuestions = null
           window.currentExamQuestionIndexes = null
-          // that.$store.commit('loading/overlay', true)
+          that.$store.commit('loading/overlay', true)
           examData.getExamDataAndParticipate(examId)
           examData.loadQuestionsFromFile()
         } else {
-          userExamId = '6135bddbe0db6947171ef98a'
+          userExamId = that.quiz.user_exam_id
           that.loadCurrentQuestion(viewType)
         }
         examData.getUserExamData(userExamId)
           .run()
           .then((result) => {
             try {
-              // console.log('startExam :', result)
-              // console.log('that.needToLoadQuizData() after req :', that.needToLoadQuizData())
               if (that.needToLoadQuizData()) {
                 // save questions in localStorage
                 that.saveCurrentExamQuestions(examData.exam.questions.list)
@@ -243,7 +355,6 @@ const mixinQuiz = {
               })
               resolve(result)
             } catch (error) {
-              // console.log('error in start exam then', error)
               that.$router.push({ name: 'user.exam.list' })
               reject(error)
             }
@@ -253,7 +364,7 @@ const mixinQuiz = {
             that.$router.push({ name: 'user.exam.list' })
           })
           .finally(() => {
-            // that.$store.commit('loading/overlay', false)
+            that.$store.commit('loading/overlay', false)
           })
       })
     },
@@ -292,7 +403,7 @@ const mixinQuiz = {
             examDataWithQuestions.id = examId
           }
 
-          that.$store.commit('quiz/updateQuiz', examDataWithQuestions)
+          // that.$store.commit('quiz/updateQuiz', examDataWithQuestions)
         }
         that.loadExamExtraData(that.quiz, viewType)
         if (viewType !== 'results') {
@@ -343,8 +454,7 @@ const mixinQuiz = {
 
       this.$store.commit('quiz/updateQuiz', quiz)
     },
-    loadCurrentQuestion (viewType) {
-      // console.log('loadCurrentQuestion')
+    getQuestNumber () {
       let questNumber = this.$route.params.questNumber
       if (this.currentQuestion.order) {
         questNumber = this.currentQuestion.order
@@ -352,27 +462,35 @@ const mixinQuiz = {
         questNumber = 1
       }
 
+      return questNumber
+    },
+    loadCurrentQuestion (viewType) {
+      const questNumber = this.$route.params.questNumber
+      this.loadQuestionByNumber(questNumber, viewType)
+      // if (this.currentQuestion.order) {
+      //   questNumber = this.currentQuestion.order
+      // } else if (!questNumber) {
+      //   questNumber = 1
+      // }
+
       this.loadQuestionByNumber(questNumber, viewType)
     },
     loadFirstQuestion () {
       this.loadQuestionByNumber(1)
     },
     loadQuestionByNumber (number, viewType) {
-      const questionIndex = this.getQuestionIndexFromNumber(number)
-      const questionId = this.getCurrentExamQuestionIndexes()[questionIndex]
-      if (questionIndex < 0 || !questionId) {
+      const questionId = this.getQuestionIdFromNumber(number)
+      if (!questionId) {
         return
       }
       this.changeQuestion(questionId, viewType)
     },
-
     hasExamDataOnThisDeviseStorage (examId) {
       return !!this.userQuizListData[examId]
     },
     sendUserQuestionsDataToServerAndFinishExam (examId, examUserId) {
       const userExamData = this.userQuizListData[examId]
       const answers = []
-
       for (const questionId in userExamData) {
         if (userExamData[questionId].answered_at) {
           answers.push({
@@ -385,10 +503,8 @@ const mixinQuiz = {
           })
         }
       }
-
       return axios.post(API_ADDRESS.exam.sendAnswers, { exam_user_id: examUserId, finish: true, questions: answers })
     },
-
     isLtrString (string) {
       if (!string) {
         return false
@@ -489,7 +605,7 @@ const mixinQuiz = {
 
       this.changeQuestion(question.id, viewType)
     },
-    changeQuestion (id, viewType) {
+    changeQuestion (id, viewType, mandatory) {
       if (Assistant.getId(this.currentQuestion.id) === Assistant.getId(id)) {
         return
       }
@@ -516,9 +632,11 @@ const mixinQuiz = {
           questNumber = this.getQuestionNumberFromIndex(questIndex)
         }
       }
+
       this.$store.commit('quiz/updateCurrentQuestion', {
         newQuestionId: currentQuestion.id,
-        currentExamQuestions: this.getCurrentExamQuestions()
+        currentExamQuestions: this.getCurrentExamQuestions(),
+        mandatory
       })
       if (parseInt(this.$route.params.questNumber) !== parseInt(questNumber) && this.$route.name !== 'konkoorView' && this.$route.name !== 'onlineQuiz.bubblesheet-view') {
         this.loadExamPageByViewType(this.quiz.id, questNumber, viewType)
@@ -541,12 +659,13 @@ const mixinQuiz = {
       } else if (type === 'konkoor') {
         this.$store.commit('AppLayout/updateDrawer', false)
         setTimeout(() => {
-          this.$router.push({ name: 'konkoorView', params: { quizId: '6135bddbe0db6947171ef98a' } })
+          this.$router.push({ name: 'konkoorView', params: { quizId: this.quiz.id } })
         }, 200)
       }
     },
 
     getExamUserData (examId) {
+      console.log('getExamUserData')
       return new Promise(function (resolve, reject) {
         axios.post(API_ADDRESS.exam.examUser, { examId })
           .then((response) => {
@@ -572,7 +691,7 @@ const mixinQuiz = {
           reject(null)
           return
         }
-        // ToDo : jQuery needed
+
         $.ajax({
           type: 'GET',
           url: questionsFileUrl,

@@ -1,45 +1,36 @@
 <template>
-  <div
-    class="answer-box col-md-6 col-12"
+  <div class="answer-box"
     @click="answerClicked"
   >
-<!--&lt;!&ndash;    :class="{ 'answer-sheet': true, active: isSelected }"&ndash;&gt;-->
-<!--   reminder: too class q-feild active is selected on she -->
-    <q-feild   :class="{ 'answer-sheet': true ,active:true}">
-      <div
-        class="answer-text renderedPanel"
+    <div :class="{ 'answer-sheet': true, active: isSelected }">
+      <div class="answer-text renderedPanel"
       >
-        یاریگر – مردان کامل – هم‌ردیف
-<!--&lt;!&ndash;        <vue-katex :input="choice.title" :ltr="!isRtl" />&ndash;&gt;-->
+        <vue-katex :input="choice.title" :ltr="!isRtl" />
       </div>
       <div class="answer-checkbox">
         <q-checkbox
-          v-model="selected"
-          size="xl"
-        />
-<!--&lt;!&ndash;        v-model="isSelected"&ndash;&gt;-->
+          dense
+          @click="answerClicked"
+          size="60px"
+          v-model="isSelected"
+         />
       </div>
-    </q-feild>
+  </div>
   </div>
 </template>
 
 <script>
 import { mixinQuiz } from 'src/mixin/Mixins'
-// import 'src/assets/scss/markdownKatex.scss'
-// import VueKatex from 'src/components/VueKatex'
+import 'src/assets/scss/markdownKatex.scss'
+import VueKatex from 'src/components/VueKatex'
 
 export default {
   name: 'Choice',
   components: {
-    // VueKatex
+    VueKatex
   },
   mixins: [mixinQuiz],
   props: ['choice', 'questionId', 'isRtl'],
-  data: function () {
-    return {
-      selected: false
-    }
-  },
   computed: {
     isSelected () {
       return this.getUserQuestionData(this.quiz.id, this.questionId) && this.choice.id === this.getUserQuestionData(this.quiz.id, this.questionId).answered_choice_id
@@ -53,7 +44,7 @@ export default {
 }
 </script>
 
-<style>
+<style lang="scss">
     .answer-box .mdi-checkbox-marked::before,
     .answer-box .mdi-checkbox-blank-outline {
         size: 40px;
@@ -78,7 +69,6 @@ export default {
         justify-content: center;
         min-height: 100px;
         align-items: center;
-        padding: 12px 12px 12px 12px;
     }
 
     .answer-sheet {
@@ -86,7 +76,6 @@ export default {
         width: 100%;
         min-height: 130px;
         height: max-content;
-        padding: 2% 3%;
         border-radius: 20px;
         cursor: pointer;
         transition: all ease 0.3s;
@@ -103,7 +92,9 @@ export default {
         padding-left: 30px;
         display: block;
     }
-
+    .answer-text .mesra {
+      max-width: 100%;
+    }
     .answer-sheet.active {
         background: #fffaee;
     }

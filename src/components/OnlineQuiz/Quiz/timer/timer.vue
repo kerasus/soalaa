@@ -1,12 +1,14 @@
 <template>
 <div>
   <mobile-timer
-    v-if="windowSize.x < 960"
+    class="Mobiletimer"
+    v-if="windowSize.x < 1024"
     :passed-time="passedTime"
     :remaining-time="remainTime"
     :current-cat="currentCat"
   />
   <pc-timer
+    class="Pctimer"
     v-else
     :passed-time="passedTime"
     :remaining-time="remainTime"
@@ -17,9 +19,9 @@
 </template>
 
 <script>
-import pcTimer from 'components/OnlineQuiz/Quiz/timer/pcTimer1'
-import mobileTimer from 'components/OnlineQuiz/Quiz/timer/mobileTimer1'
-import { mixinWindowSize, mixinQuiz } from 'src/mixin1/Mixins'
+import pcTimer from 'src/components/OnlineQuiz/Quiz/timer/pcTimer'
+import mobileTimer from 'src/components/OnlineQuiz/Quiz/timer/mobileTimer'
+import { mixinWindowSize, mixinQuiz } from 'src/mixin/Mixins'
 import Time from 'src/plugins/time'
 import Assistant from 'src/plugins/assistant'
 export default {
@@ -35,6 +37,9 @@ export default {
     passedTime: '00:00:00',
     remainTime: false
   }),
+  created () {
+    this.updateWindowSize()
+  },
   mounted () {
     const that = this
     this.interval = setInterval(() => {
@@ -84,10 +89,14 @@ export default {
 </script>
 
 <style scoped>
-.wrapper {
-  margin-bottom: 0px;
-  padding-bottom: 0;
-  width: 100%;
+.Pctimer {
+  position: sticky;
+  position: -webkit-sticky;
+  bottom: 0px;
+}
+.Mobiletimer {
+  position: static;
   bottom: 0;
+  min-width: 100%;
 }
 </style>
