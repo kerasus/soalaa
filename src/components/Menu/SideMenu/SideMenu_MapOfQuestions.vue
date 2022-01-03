@@ -91,7 +91,6 @@ export default {
   }),
   created () {
     // this.getExamUserData()
-    console.log(this.quiz.categories.list)
     const that = this
     this.interval = setInterval(() => {
       that.currentCat = Time.getCurrentCategoryAcceptAt(that.quiz.categories)
@@ -185,10 +184,10 @@ export default {
 
 .map-of-questions .q-expansion-item__content {
   color: #666;
-  padding: 16px 24px;
+  padding: 16px 16px;
 }
 
-.map-of-questions .q-btn__content {
+.map-of-questions .q-expansion-item  .q-btn__content {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
@@ -204,8 +203,12 @@ export default {
 
 .question-container .question-answers .answer-box,
 .map-of-questions .q-expansion-item .q-expansion-item__content  .q-btn {
+  padding: 0px 8px;
   width: 100%;
   font-size: 0.87rem;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
 }
 .map-of-questions .categoryItem.q-btn {
   display: flex;
