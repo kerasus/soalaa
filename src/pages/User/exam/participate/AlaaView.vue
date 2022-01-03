@@ -118,15 +118,20 @@
                <div class="col question-answers"
                     v-if="currentQuestion.in_active_category"
                >
-                 <div>
-                 <choice
+                 <div
+                 class="row">
+                 <div
+                   class="choice-parent col-12 col-md-6"
                    v-for="item in currentQuestion.choices.list"
                    :key="item.id"
+                 >
+                 <choice
                    :question-id="currentQuestion.id"
                    :choice="item"
                    :is-rtl="isRtl"
                    @answerClicked="answerClicked"
                  />
+                 </div>
                  </div>
                </div>
              </div>
@@ -149,11 +154,8 @@
             </div>
           </div>
     </div>
-    <div class="footer flex col">
-      <div class="d-flex high-z-index col"
-      >
+    <div class="timer-row col">
         <Timer/>
-      </div>
     </div>
   </div>
 </template>
@@ -243,7 +245,7 @@ export default {
 
 .quiz-page .katex-display {
     display: inline-block;
-    direction: ltr;
+    direction: rtl;
 }
 
 .base.textstyle.uncramped {
@@ -260,12 +262,12 @@ export default {
   flex-direction: column;
   width: 100%;
   height: 100%;
-  padding: 12px 12px 12px 12px;
-  .footer {
-    position: sticky;
-    position: -webkit-sticky;
+  padding: 0px 0px 0px 12px;
+  .timer-row {
+    width: calc(75% - 150px);
+    position: absolute;
     bottom: 0;
-    max-width: 95%;
+    right: 100px;
   }
   .main-page{
     display: flex;
@@ -287,7 +289,6 @@ export default {
         z-index: 1;
         margin: -12px -12px -12px -12px;
         background: #f1f1f1;
-
         .question-number p {
           margin-bottom: 0;
           line-height: 40px;
@@ -312,6 +313,7 @@ export default {
         }
       }
       .question-body {
+        padding: 0px 0px 0px 12px;
         margin-top: 50px;
         margin-left: -12px;
         margin-right: -12px;
@@ -332,6 +334,9 @@ export default {
             margin-top: 90px;
             margin-left: -12px;
             margin-right: -12px;
+        .choice-parent{
+          padding: 12px;
+        }
       }
     }
   }
