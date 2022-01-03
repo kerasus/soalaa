@@ -103,17 +103,17 @@
                    >
                      <vue-katex :input="currentQuestion.statement"/>
                    </div>
-                   <div
-                     v-if="!currentQuestion.in_active_category"
-                     color="red"
-                     rounded
-                     dark
-                     height="400"
-                     elevation="1"
-                     class="d-flex align-center justify-center"
+                 <q-card
+                   v-if="!currentQuestion.in_active_category"
+                   class="col flex align-center justify-center"
+                 >
+                   <q-card-section
+                     class="WarningSheet flex"
+                     :style="{ 'width':'1300px','height': '400px' }"
                    >
                      در حال حاضر امکان مشاهده سوالات این دفترچه امکان پذیر نمی باشد
-                   </div>
+                   </q-card-section>
+                 </q-card>
                </div>
                <div class="col question-answers"
                     v-if="currentQuestion.in_active_category"
@@ -234,7 +234,12 @@ export default {
   font-style: normal;
   text-decoration: none !important;
 }
-
+.WarningSheet{
+  color: white;
+  justify-content: center;
+  align-content: center;
+  background: darkorange;
+}
 .ltr .renderedPanel {
   direction: ltr !important;
 }
