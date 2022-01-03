@@ -155,7 +155,7 @@ export default {
   width: 240px;
   z-index: 5;
   background: #fff;
-  padding: 20px 0;
+  padding: 40px 0;
 }
 
 .map-of-questions .q-expansion-item .q-expansion-item__container {
