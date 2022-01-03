@@ -43,7 +43,7 @@
 </template>
 
 <script>
-import EntityIndex from 'components/Entity/Index/EntityIndex'
+import { EntityIndex } from 'quasar-crud'
 import API_ADDRESS from 'src/api/Addresses'
 
 export default {

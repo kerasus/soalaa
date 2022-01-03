@@ -90,6 +90,7 @@ const mixinQuiz = {
       this.setSocketEvents(callbacks)
       this.socket.connect()
     },
+
     setSocketEvents (callbacks) {
       this.socket.on('connecting', () => {
         // this.onSocketStatusChange('on connection')
@@ -131,7 +132,11 @@ const mixinQuiz = {
           })
       })
     },
+    sendUserQuestionsDataToServer (examId, examUserId, finishExam) {
+      const answers = this.getUserAnswers(examId)
 
+      return axios.post(API_ADDRESS.exam.sendAnswers, { exam_user_id: examUserId, finish: finishExam, questions: answers })
+    },
     reloadQuestionFile (questionsFileUrl, viewType, examId) {
       if (!Assistant.getId(examId)) {
         return
@@ -263,6 +268,26 @@ const mixinQuiz = {
       this.modifyCurrentExamQuestions(currentExamQuestions)
       this.setCurrentExamQuestions(currentExamQuestions)
     },
+    getUserAnswers (examId) {
+      const userExamData = this.userQuizListData[examId]
+      const answers = []
+
+      for (const questionId in userExamData) {
+        if (userExamData[questionId].answered_at) {
+          answers.push({
+            question_id: questionId,
+            choice_id: userExamData[questionId].answered_choice_id,
+            selected_at: (!userExamData[questionId].answered_at) ? null : userExamData[questionId].answered_at,
+            bookmarked: userExamData[questionId].bookmarked,
+            status: userExamData[questionId].status,
+            check_in_times: userExamData[questionId].check_in_times
+          })
+        }
+      }
+
+      return answers
+    },
+
     getCurrentExamQuestionsInArray () {
       let currentExamQuestionsArray = []
       if (this.quiz !== {}) {
@@ -666,7 +691,6 @@ const mixinQuiz = {
     },
 
     getExamUserData (examId) {
-      console.log('getExamUserData')
       return new Promise(function (resolve, reject) {
         axios.post(API_ADDRESS.exam.examUser, { examId })
           .then((response) => {

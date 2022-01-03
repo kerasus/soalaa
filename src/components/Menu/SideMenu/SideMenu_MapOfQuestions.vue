@@ -1,5 +1,6 @@
 <template>
   <div>
+
       <q-list
         v-for="(categoryItem) in quiz.categories.list"
         :key="'category-'+categoryItem.id"
@@ -18,16 +19,11 @@
             flat
             :label="subcategoryItem.title"
             expand-separator
-            default-opened
           >
             <div
               v-for="(question) in getQuestionsOfSubcategory(subcategoryItem.id)"
               :key="'question-'+question.id"
             >
-<!--            v-for="(subcategoryItem) in categoryItem.sub_categories.list"-->
-<!--            :key="'subcategory-'+subcategoryItem.id"-->
-<!--                v-for="(question) in getQuestionsOfSubcategory(subcategoryItem.id)"-->
-<!--                :key="'question-'+question.id"-->
                   <q-btn
                     :elevation="0"
                     block
@@ -81,8 +77,6 @@ export default {
     currentCat: null
   }),
   created () {
-    this.getExamUserData()
-    console.log(this.quiz.categories.list)
     const that = this
     this.interval = setInterval(() => {
       that.currentCat = Time.getCurrentCategoryAcceptAt(that.quiz.categories)
@@ -115,22 +109,22 @@ export default {
       const that = this
       this.sendUserQuestionsDataToServerAndFinishExam(this.quiz.id, this.quiz.user_exam_id)
         .then(() => {
-          that.$notify({
-            group: 'notifs',
-            text: 'اطلاعات آزمون شما ثبت شد.',
-            type: 'success'
-          })
+          // that.$notify({
+          //   group: 'notifs',
+          //   text: 'اطلاعات آزمون شما ثبت شد.',
+          //   type: 'success'
+          // })
           that.$store.commit('clearExamData', that.quiz.id)
           that.$router.push({ name: 'user.exam.list' })
         })
         .catch(() => {
-          that.$notify({
-            group: 'notifs',
-            title: 'توجه!',
-            text: 'مشکلی در ثبت اطلاعات آزمون شما رخ داده است. لطفا تا قبل از ساعت 24 اقدام به ارسال مجدد پاسخنامه نمایید.',
-            type: 'error',
-            duration: 30000
-          })
+          // that.$notify({
+          //   group: 'notifs',
+          //   title: 'توجه!',
+          //   text: 'مشکلی در ثبت اطلاعات آزمون شما رخ داده است. لطفا تا قبل از ساعت 24 اقدام به ارسال مجدد پاسخنامه نمایید.',
+          //   type: 'error',
+          //   duration: 30000
+          // })
           that.$router.push({ name: 'user.exam.list' })
         })
     }
