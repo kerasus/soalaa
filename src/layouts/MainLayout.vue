@@ -9,14 +9,26 @@
     >
       <q-toolbar>
         <div class="header-body full-width">
-          <q-btn
-            round
-            dense
-            flat
-            icon="menu"
-            color="grey-14"
-            @click="toggleLeftDrawer"
-          />
+          <div>
+            <q-btn
+              v-if="$route.name !== 'onlineQuiz.konkoorView'"
+             round
+             dense
+             flat
+             icon="menu"
+             color="grey-14"
+             @click="toggleLeftDrawer"
+           />
+            <q-btn
+              v-if="$route.name === 'onlineQuiz.alaaView'"
+              round
+              dense
+              color="grey-14"
+              flat
+              icon="mdi-dots-grid"
+              @click="changeView"
+            />
+            </div>
           <q-btn-dropdown
             v-if="$route.name === 'onlineQuiz.alaaView'"
             icon="account_circle"
@@ -135,6 +147,14 @@ export default {
     this.getUser()
   },
   methods: {
+    changeView () {
+      this.$router.push({
+        name: 'konkoorView',
+        params: {
+          quizId: this.$route.params.quizId
+        }
+      })
+    },
     toggleLeftDrawer () {
       this.leftDrawerOpen = !this.leftDrawerOpen
     },
