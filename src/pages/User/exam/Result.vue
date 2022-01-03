@@ -80,7 +80,7 @@
             />
           </q-tab-panel>
           <q-tab-panel name="descriptiveAnswers">
-            <v-card flat>
+            <q-card flat>
               <p class="tab-title pt-5 pr-5">
                 دانلود پاسخنامه تشریحی
               </p>
@@ -102,19 +102,14 @@
                           item.title
                         }}
                       </p>
-                      <v-btn
-                          outlined
-                          color="--primary-2"
-                          height="75px"
-                          width="250px"
-                          :href="item.descriptive_answers_url"
-                          target="_blank"
+                      <q-btn
+                        outline
+                        :href="item.descriptive_answers_url"
+                        target="_blank"
                       >
                         دانلود فایل PDF
-                        <v-icon class="donwload-icon">
-                          mdi-download
-                        </v-icon>
-                      </v-btn>
+                        <q-icon name="mdi-download" />
+                      </q-btn>
                     </div>
                   </div>
                   <div
@@ -127,24 +122,19 @@
                       <p class="download-title">
                         دانلود سوالات {{ item.title }}
                       </p>
-                      <v-btn
-                          outlined
-                          color="--primary-2"
-                          height="75px"
-                          width="250px"
-                          :href="item.questions_url"
-                          target="_blank"
+                      <q-btn
+                        outline
+                        :href="item.questions_url"
+                        target="_blank"
                       >
                         دانلود فایل PDF
-                        <v-icon class="donwload-icon">
-                          mdi-download
-                        </v-icon>
-                      </v-btn>
+                        <q-icon name="mdi-download" />
+                      </q-btn>
                     </div>
                   </div>
                 </div>
               </div>
-            </v-card>
+            </q-card>
           </q-tab-panel>
           <q-tab-panel name="videos" class="video-tab">
             <v-tabs
@@ -331,7 +321,7 @@ export default {
     }
   },
   created () {
-    console.log('coooooome oooooooooooooonnnnnnnnnnnn')
+    // console.log('report.exams_booklet', this.report.exams_booklet)
     this.getUserData()
     window.currentExamQuestions = null
     window.currentExamQuestionIndexes = null
@@ -540,6 +530,23 @@ export default {
   }
   .result-tabs{
     width: 50%;
+  }
+  .download-box {
+    .download-title {
+      font-size: 16px;
+    }
+    .q-btn--outline {
+      border: 5px solid currentColor;
+      border-radius: 40px;
+      color: #fbcf4b;
+      height: 75px;
+      width: 250px;
+      .q-btn__content {
+        color: #666;
+        padding-top: 10px;
+        padding-bottom: 10px;
+      }
+    }
   }
 }
 .vjs-menu-button-popup .vjs-menu {
