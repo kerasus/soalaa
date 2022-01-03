@@ -4,8 +4,6 @@
     v-if="quiz.id"
     :color="'#4caf50'"
     :style="{ backgroundColor: '#4caf50 !important' }"
-    dark
-    block
     class=" end-exam-btn full-width"
     @click="getConfirmation"
   >
@@ -74,56 +72,69 @@ export default {
     BubbleSheet
   },
   data: () => ({
-
     confirmationBubbleSheet: false,
     confirmationBtnLoading: false
   }),
   methods: {
-    // async getConfirmation () {
-    //   await this.sendAnswer()
-    //   await this.getBackEndRes()
-    //   this.confirmationBubbleSheet = true
-    //   this.confirmationBtnLoading = false
-    // },
-    // sendAnswer () {
-    //   return this.sendUserQuestionsDataToServer(this.quiz.id, this.quiz.user_exam_id, false)
-    // },
-    // async getBackEndRes () {
-    //   const that = this
-    //   const examData = new ExamData()
-    //   await examData.getUserExamData(this.quiz.user_exam_id).run()
-    //   that.$store.commit('mergeDbAnswersIntoLocalstorage', {
-    //     dbAnswers: examData.userExamData,
-    //     exam_id: examData.exam.id
-    //   })
-    // },
-    getConfirmation () {
-      this.confirmationBubbleSheet = true
-      const that = this
-      this.confirmationBtnLoading = true
-      this.sendUserQuestionsDataToServer(this.quiz.id, this.quiz.user_exam_id, false)
-        .then(() => {
-          const examData = new ExamData()
-          examData.getUserExamData(this.quiz.user_exam_id)
-            .run()
-            .then(() => {
-              that.$store.commit('mergeDbAnswersIntoLocalstorage', {
-                dbAnswers: examData.userExamData,
-                exam_id: examData.exam.id
-              })
-              that.confirmationBubbleSheet = true
-              that.confirmationBtnLoading = false
-            })
-            .catch(() => {
-              that.confirmationBubbleSheet = true
-              that.confirmationBtnLoading = false
-            })
-        })
-        .catch(() => {
-          that.confirmationBubbleSheet = true
-          that.confirmationBtnLoading = false
-        })
+    async getConfirmation () {
+      try {
+        this.confirmationBubbleSheet = true
+        this.confirmationBtnLoading = true
+        await this.sendAnswer()
+        await this.getBackEndRes()
+      } catch (err) {
+        this.confirmationBtnLoading = false
+      }
     },
+    sendAnswer () {
+      return this.sendUserQuestionsDataToServer(this.quiz.id, this.quiz.user_exam_id, false)
+    },
+    async getBackEndRes () {
+      try {
+        const that = this
+        const examData = new ExamData()
+        console.log('this.quiz :', this.quiz)
+        await examData.getExamDataAndParticipate(this.quiz.id)
+        await examData.getUserExamData(this.quiz.user_exam_id).run()
+        if (examData.exam) {
+          that.$store.commit('quiz/mergeDbAnswersIntoLocalstorage', {
+            dbAnswers: examData.userExamData,
+            exam_id: examData.exam.id
+          })
+        }
+        this.confirmationBtnLoading = false
+      } catch (err) {
+        this.confirmationBtnLoading = false
+      }
+    },
+    // getConfirmation () {
+    //   this.confirmationBubbleSheet = true
+    //   const that = this
+    //   this.confirmationBtnLoading = true
+    //   console.log('this.quiz.id :', this.quiz.id)
+    //   this.sendUserQuestionsDataToServer(this.quiz.id, this.quiz.user_exam_id, false)
+    //     .then(() => {
+    //       const examData = new ExamData()
+    //       examData.getUserExamData(this.quiz.user_exam_id)
+    //         .run()
+    //         .then(() => {
+    //           that.$store.commit('mergeDbAnswersIntoLocalstorage', {
+    //             dbAnswers: examData.userExamData,
+    //             exam_id: examData.exam.id
+    //           })
+    //           that.confirmationBubbleSheet = true
+    //           that.confirmationBtnLoading = false
+    //         })
+    //         .catch(() => {
+    //           that.confirmationBubbleSheet = true
+    //           that.confirmationBtnLoading = false
+    //         })
+    //     })
+    //     .catch(() => {
+    //       that.confirmationBubbleSheet = true
+    //       that.confirmationBtnLoading = false
+    //     })
+    // },
     confirmSendingAllAnswers () {
       this.sendUserQuestionsDataToServer(this.quiz.id, this.quiz.user_exam_id, false)
         .then(response => {

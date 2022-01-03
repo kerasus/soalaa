@@ -3,12 +3,12 @@
   <div class="row quiz-page"
     :style="{ height: '100%' }"
   >
-    <div class="q-mb-lg">
-      <q-btn
-        @click="redirect">
-        redirect
-      </q-btn>
-    </div>
+<!--    <div class="q-mb-lg">-->
+<!--      <q-btn-->
+<!--        @click="redirect">-->
+<!--        redirect-->
+<!--      </q-btn>-->
+<!--    </div>-->
 
     <div class="col " :style="{ 'min-height': '100%' }">
       <div class="row main-page" :style="{ 'min-width': '100%' }"
@@ -181,30 +181,34 @@ export default {
     }
   },
   mounted () {
-    const that = this
-    that.$store.commit('AppLayout/updateOverlay', { show: false, loading: false, text: '' })
+    this.updateOverlay()
     this.showAppBar()
     this.updateDrawerBasedOnWindowSize()
-    console.log('this.$route.params.quizId', this.$route.params.quizId)
-    this.startExam(this.$route.params.quizId, 'onlineQuiz.alaaView')
-      .then(() => {
-        that.isRtl = !that.isLtrString(that.currentQuestion.statement)
-        that.$store.commit('AppLayout/updateOverlay', { show: false, loading: false, text: '' })
-      })
-      .catch((error) => {
-        Assistant.reportErrors(error)
-        this.$q.notify({
-          type: 'negative',
-          message: 'مشکلی در دریافت اطلاعات آزمون رخ داده است. لطفا دوباره امتحان کنید.',
-          position: 'top'
-        })
-        that.$router.push({ name: 'user.exam.list' })
-      })
+    this.startExamProcess()
   },
   unmounted () {
     this.changeAppBarAndDrawer(false)
   },
   methods: {
+    async startExamProcess () {
+      try {
+        await this.startExam(this.$route.params.quizId, 'onlineQuiz.alaaView')
+        this.isRtl = !this.isLtrString(this.currentQuestion.statement)
+        this.updateOverlay()
+        this.setSocket(this.$store.getters['Auth/accessToken'], this.quiz.id)
+      } catch (err) {
+        Assistant.reportErrors(err)
+        this.$q.notify({
+          type: 'negative',
+          message: 'مشکلی در دریافت اطلاعات آزمون رخ داده است. لطفا دوباره امتحان کنید.',
+          position: 'top'
+        })
+        await this.$router.push({ name: 'user.exam.list' })
+      }
+    },
+    updateOverlay () {
+      this.$store.commit('AppLayout/updateOverlay', { show: false, loading: false, text: '' })
+    },
     redirect () {
       this.$router.push({
         name: 'konkoorView',
