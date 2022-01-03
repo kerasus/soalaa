@@ -1,61 +1,63 @@
 <template>
+  <div
+    class="map-of-questions"
+  >
+    <div
+      :style="{ 'padding-bottom': '100px' }"
+    >
       <div
-        class="map-of-questions"
+        v-for="(categoryItem) in quiz.categories.list"
+        :key="'category-'+categoryItem.id"
       >
-        <div
-          :style="{ 'padding-bottom': '100px' }" >
-        <div
-          v-for="(categoryItem) in quiz.categories.list"
-          :key="'category-'+categoryItem.id"
+        <q-btn
+          flat
+          class="categoryItem"
         >
-          <q-btn
-            flat
-            class="categoryItem"
+          {{ categoryItem.title }}
+        </q-btn>
+        <q-expansion-item
+          v-for="(subcategoryItem) in categoryItem.sub_categories.list"
+          :key="'subcategory-'+subcategoryItem.id"
+          flat
+          group
+          dense
+          :label="subcategoryItem.title"
+        >
+          <div
+            v-for="(question) in getQuestionsOfSubcategory(subcategoryItem.id)"
+            :key="'question-'+question.id"
           >
-            {{ categoryItem.title }}
-          </q-btn>
-          <q-expansion-item
-            v-for="(subcategoryItem) in categoryItem.sub_categories.list"
-            :key="'subcategory-'+subcategoryItem.id"
-            flat
-            group
-            dense
-            :label="subcategoryItem.title"
-          >
-            <div
-              v-for="(question) in getQuestionsOfSubcategory(subcategoryItem.id)"
-              :key="'question-'+question.id"
+            <q-btn
+              flat
+              :class="{ active: currentQuestion.id === question.id }"
+              block
+              @click="changeQuestion(question.id)"
             >
-              <q-btn
-                flat
-                :class="{ active: currentQuestion.id === question.id }"
-                block
-                @click="changeQuestion(question.id)"
-              >
-                تست شماره
-                {{ getQuestionNumberFromIndex(question.index) }}
-                <q-icon
-                  v-if="getUserQuestionData(question.id) && getUserQuestionData(question.id).status === 'x'"
-                  color="red"
-                  name="mdi-close"
-                />
-                <q-icon
-                  v-if="getUserQuestionData(question.id) && getUserQuestionData(question.id).status === 'o'"
-                  color="yellow"
-                  size="15"
-                  name="mdi-checkbox-blank-circle"
-                />
-                <q-icon
-                  v-if="getUserQuestionData(question.id) && getUserQuestionData(question.id).answered_choice_id"
-                  color="green"
-                  name="mdi-check"
-                />
-              </q-btn>
-            </div>
-              </q-expansion-item>
-    <div class="end-exam">
-      <SendAnswers />
-
+              تست شماره
+              {{ getQuestionNumberFromIndex(question.index) }}
+              <q-icon
+                v-if="getUserQuestionData(question.id) && getUserQuestionData(question.id).status === 'x'"
+                color="red"
+                name="mdi-close"
+              />
+              <q-icon
+                v-if="getUserQuestionData(question.id) && getUserQuestionData(question.id).status === 'o'"
+                color="yellow"
+                size="15"
+                name="mdi-checkbox-blank-circle"
+              />
+              <q-icon
+                v-if="getUserQuestionData(question.id) && getUserQuestionData(question.id).answered_choice_id"
+                color="green"
+                name="mdi-check"
+              />
+            </q-btn>
+          </div>
+        </q-expansion-item>
+        <div class="end-exam">
+          <SendAnswers/>
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -144,6 +146,7 @@ export default {
   flex-direction: column;
   justify-content: space-between;
 }
+
 .end-exam {
   position: absolute;
   display: flex;
@@ -155,7 +158,7 @@ export default {
   padding: 20px 0;
 }
 
-.map-of-questions .q-expansion-item .q-expansion-item__container{
+.map-of-questions .q-expansion-item .q-expansion-item__container {
   transition: all ease-in-out 0.3ms;
   padding: 5px 24px;
 
@@ -175,7 +178,7 @@ export default {
   padding: 16px 16px;
 }
 
-.map-of-questions .q-expansion-item  .q-btn__content {
+.map-of-questions .q-expansion-item .q-btn__content {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
@@ -186,11 +189,11 @@ export default {
 }
 
 .map-of-questions .q-expansion-item__container .q-expansion-item__content .active {
-  color: var(--accent-1)!important;
+  color: var(--accent-1) !important;
 }
 
 .question-container .question-answers .answer-box,
-.map-of-questions .q-expansion-item .q-expansion-item__content  .q-btn {
+.map-of-questions .q-expansion-item .q-expansion-item__content .q-btn {
   padding: 0px 8px;
   width: 100%;
   font-size: 0.87rem;
@@ -198,6 +201,7 @@ export default {
   flex-direction: row;
   justify-content: space-between;
 }
+
 .map-of-questions .categoryItem.q-btn {
   display: flex;
   color: #666;
@@ -207,6 +211,7 @@ export default {
   font-size: 1.2rem;
   margin-top: 50px;
 }
+
 .map-of-questions .q-expansion-item .q-item {
   font-size: 1.2rem;
 }
