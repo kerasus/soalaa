@@ -1,5 +1,6 @@
 <template>
-<div class="q-mx-lg">
+<div
+  :style="{'width':'240px','height': '36px' }">
   <q-btn
     v-if="quiz.id"
     :color="'#4caf50'"
@@ -107,34 +108,6 @@ export default {
         this.confirmationBtnLoading = false
       }
     },
-    // getConfirmation () {
-    //   this.confirmationBubbleSheet = true
-    //   const that = this
-    //   this.confirmationBtnLoading = true
-    //   console.log('this.quiz.id :', this.quiz.id)
-    //   this.sendUserQuestionsDataToServer(this.quiz.id, this.quiz.user_exam_id, false)
-    //     .then(() => {
-    //       const examData = new ExamData()
-    //       examData.getUserExamData(this.quiz.user_exam_id)
-    //         .run()
-    //         .then(() => {
-    //           that.$store.commit('mergeDbAnswersIntoLocalstorage', {
-    //             dbAnswers: examData.userExamData,
-    //             exam_id: examData.exam.id
-    //           })
-    //           that.confirmationBubbleSheet = true
-    //           that.confirmationBtnLoading = false
-    //         })
-    //         .catch(() => {
-    //           that.confirmationBubbleSheet = true
-    //           that.confirmationBtnLoading = false
-    //         })
-    //     })
-    //     .catch(() => {
-    //       that.confirmationBubbleSheet = true
-    //       that.confirmationBtnLoading = false
-    //     })
-    // },
     confirmSendingAllAnswers () {
       this.sendUserQuestionsDataToServer(this.quiz.id, this.quiz.user_exam_id, false)
         .then(response => {
