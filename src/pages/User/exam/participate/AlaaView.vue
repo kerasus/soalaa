@@ -2,7 +2,6 @@
 
   <div class="row quiz-page"
        :style="{ height: '100%'}"
-  >
     <div class="col " :style="{ 'min-height': '100%' }">
       <div class="row main-page" :style="{ 'min-width': '100%' }">
         <div class="col btnpre col-md-1 justify-start sm-hide xs-hide">
