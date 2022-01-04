@@ -1,12 +1,15 @@
 <template>
-  <q-page>
-    <q-tree
-      :nodes="simple"
-      node-key="uid"
-      label-key="name"
-      @lazy-load="onLazyLoadTree"
-    />
-  </q-page>
+  <q-layout>
+    <q-page>
+      <q-tree
+        :nodes="simple"
+        node-key="uid"
+        label-key="name"
+        @lazy-load="onLazyLoadTree"
+      />
+    </q-page>
+  </q-layout>
+
 </template>
 
 <script>
