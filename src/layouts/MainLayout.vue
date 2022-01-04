@@ -9,14 +9,26 @@
     >
       <q-toolbar>
         <div class="header-body full-width">
-          <q-btn
-            round
-            dense
-            flat
-            icon="menu"
-            color="grey-14"
-            @click="toggleLeftDrawer"
-          />
+          <div>
+            <q-btn
+              v-if="$route.name !== 'onlineQuiz.konkoorView'"
+             round
+             dense
+             flat
+             icon="menu"
+             color="grey-14"
+             @click="toggleLeftDrawer"
+           />
+            <q-btn
+              v-if="$route.name === 'onlineQuiz.alaaView'"
+              round
+              dense
+              color="grey-14"
+              flat
+              icon="mdi-dots-grid"
+              @click="changeView"
+            />
+            </div>
           <q-btn-dropdown
             v-if="$route.name === 'onlineQuiz.alaaView'"
             icon="account_circle"
@@ -33,35 +45,37 @@
             icon="account_circle"
             :label="user.full_name "
             color="grey-14"
+            v-scroll
             dropdown-icon="false"
             dir="ltr"
             flat
           >
-            <q-card
-              class="profile-card"
-            >
-              <img src="https://nodes.alaatv.com/upload/images/profile/default_avatar.jpg">
-              <q-card-actions vertical>
-                <a
-                  class="profile-link bg-primary"
-                  href="https://alaatv.com/"
-                >
-                  <span  >آلاء</span>
-                </a>
-                <a
-                  class="profile-link bg-amber-8"
-                  href="https://alaatv.com/"
-                >
-                  <span >سه آ</span>
-                </a>
-                <a
-                  class="profile-link bg-negative"
-                  @click="logOut"
-                >
-                  <span >خروج</span>
-                </a>
-              </q-card-actions>
-            </q-card>
+            <DashboardTopMenu/>
+<!--            <q-card-->
+<!--              class="profile-card"-->
+<!--            >-->
+<!--              <q-img src="https://nodes.alaatv.com/upload/images/profile/default_avatar.jpg"/>-->
+<!--              <q-card-actions vertical>-->
+<!--                <a-->
+<!--                  class="profile-link bg-primary"-->
+<!--                  href="https://alaatv.com/"-->
+<!--                >-->
+<!--                  <span  >آلاء</span>-->
+<!--                </a>-->
+<!--                <a-->
+<!--                  class="profile-link bg-amber-8"-->
+<!--                  href="https://alaatv.com/"-->
+<!--                >-->
+<!--                  <span >سه آ</span>-->
+<!--                </a>-->
+<!--                <a-->
+<!--                  class="profile-link bg-negative"-->
+<!--                  @click="logOut"-->
+<!--                >-->
+<!--                  <span >خروج</span>-->
+<!--                </a>-->
+<!--              </q-card-actions>-->
+<!--            </q-card>-->
           </q-btn-dropdown>
         </div>
       </q-toolbar>
@@ -84,7 +98,7 @@
         elevated
       >
         <div class="side-logo">
-          <div class="side-logo-img">
+          <div>
             <q-img
               v-if="$route.name === 'onlineQuiz.alaaView'"
               src="https://3a.alaatv.com/img/logo-1.png"
@@ -122,9 +136,10 @@ import SideMenuDashboard from 'components/Menu/SideMenu/SideMenu-dashboard'
 import { User } from 'src/models/User'
 import OnlineQuizTopMenu from 'components/Menu/topMenu/onlineQuizTopMenu'
 import SideMenuMapOfQuestions from 'components/Menu/SideMenu/SideMenu_MapOfQuestions'
+import DashboardTopMenu from 'components/Menu/topMenu/DashboardTopMenu'
 
 export default {
-  components: { SideMenuMapOfQuestions, OnlineQuizTopMenu, SideMenuDashboard },
+  components: { DashboardTopMenu, SideMenuMapOfQuestions, OnlineQuizTopMenu, SideMenuDashboard },
   data () {
     return {
       leftDrawerOpen: false,
@@ -135,6 +150,14 @@ export default {
     this.getUser()
   },
   methods: {
+    changeView () {
+      this.$router.push({
+        name: 'konkoorView',
+        params: {
+          quizId: this.$route.params.quizId
+        }
+      })
+    },
     toggleLeftDrawer () {
       this.leftDrawerOpen = !this.leftDrawerOpen
     },
@@ -192,33 +215,40 @@ export default {
 .map-of-questions {
   background: var(--surface-1) !important;
 }
+.map-of-questions {
+  background: var(--surface-1) !important;
+}
 .layout-header{
   padding: 12px 0;
-  .header-body{
+  .header-body {
     height: 48px;
 
-  .side-bar{
-    display: flex;
-    flex-direction: column;
-    .side-logo{
+    .side-bar {
       display: flex;
-      height: 150px;
-      align-items: center;
-      justify-content: center;
+      flex-direction: column;
+
+      .side-logo {
+        display: flex;
+        height: 150px;
+        width: 150px;
+        align-items: center;
+        justify-content: center;
+      }
     }
-  }
-  .layout-page{
-   padding-bottom: 72px;
-  }
-  .q-drawer--left {
-    .q-layout__shadow{
-      &:after {
-        box-shadow: 0 0 10px 0px rgb(0 0 0 / 10%), 0 0px 10px rgb(0 0 0 / 12%) !important;
+
+    .layout-page {
+      padding-bottom: 72px;
+    }
+
+    .q-drawer--left {
+      .q-layout__shadow {
+        &:after {
+          box-shadow: 0 0 10px 0px rgb(0 0 0 / 10%), 0 0px 10px rgb(0 0 0 / 12%) !important;
+        }
       }
     }
   }
   }
-}
 </style>
 <style lang="scss">
 .q-menu{

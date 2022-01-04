@@ -1,9 +1,10 @@
 <template>
-<div class="q-mx-lg">
+<div
+  :style="{'width':'240px','height': '36px' }">
   <q-btn
     v-if="quiz.id"
     :color="'#4caf50'"
-    :style="{ backgroundColor: '#4caf50 !important' }"
+    :style="{ backgroundColor: '#4caf50 !important'}"
     dark
     block
     class=" end-exam-btn full-width"
