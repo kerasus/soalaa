@@ -40,7 +40,7 @@
             <q-card
               class="profile-card"
             >
-              <img src="https://nodes.alaatv.com/upload/images/profile/default_avatar.jpg">
+              <q-img src="https://nodes.alaatv.com/upload/images/profile/default_avatar.jpg"/>
               <q-card-actions vertical>
                 <a
                   class="profile-link bg-primary"
@@ -84,7 +84,7 @@
         elevated
       >
         <div class="side-logo">
-          <div class="side-logo-img">
+          <div>
             <q-img
               v-if="$route.name === 'onlineQuiz.alaaView'"
               src="https://3a.alaatv.com/img/logo-1.png"
@@ -192,33 +192,40 @@ export default {
 .map-of-questions {
   background: var(--surface-1) !important;
 }
+.map-of-questions {
+  background: var(--surface-1) !important;
+}
 .layout-header{
   padding: 12px 0;
-  .header-body{
+  .header-body {
     height: 48px;
 
-  .side-bar{
-    display: flex;
-    flex-direction: column;
-    .side-logo{
+    .side-bar {
       display: flex;
-      height: 150px;
-      align-items: center;
-      justify-content: center;
+      flex-direction: column;
+
+      .side-logo {
+        display: flex;
+        height: 150px;
+        width: 150px;
+        align-items: center;
+        justify-content: center;
+      }
     }
-  }
-  .layout-page{
-   padding-bottom: 72px;
-  }
-  .q-drawer--left {
-    .q-layout__shadow{
-      &:after {
-        box-shadow: 0 0 10px 0px rgb(0 0 0 / 10%), 0 0px 10px rgb(0 0 0 / 12%) !important;
+
+    .layout-page {
+      padding-bottom: 72px;
+    }
+
+    .q-drawer--left {
+      .q-layout__shadow {
+        &:after {
+          box-shadow: 0 0 10px 0px rgb(0 0 0 / 10%), 0 0px 10px rgb(0 0 0 / 12%) !important;
+        }
       }
     }
   }
   }
-}
 </style>
 <style lang="scss">
 .q-menu{
