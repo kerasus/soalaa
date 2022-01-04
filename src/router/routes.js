@@ -151,6 +151,14 @@ const routes = [
     }
   },
   {
+    path: '/knowledgeTree',
+    name: 'knowledgeTree',
+    component: () => import('pages/KnowledgeTree/index.vue'),
+    meta: {
+      middlewares: [auth]
+    }
+  },
+  {
     path: '/onlineQuiz/mbti_bartle/:quizId/:questNumber',
     name: 'onlineQuiz.mbtiBartle',
     component: () => import('pages/User/exam/participate/MBTI_Bartle'),
