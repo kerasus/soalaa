@@ -228,6 +228,11 @@ export default {
   }
 </style>
 <style lang="scss">
+.main-layout{
+  .q-drawer{
+    z-index: 2001;
+  }
+}
 .q-menu{
   border-radius: 20px;
 }
