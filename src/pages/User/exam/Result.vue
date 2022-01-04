@@ -137,132 +137,133 @@
             </q-card>
           </q-tab-panel>
           <q-tab-panel name="videos" class="video-tab">
-            <v-tabs
-                v-if="report"
-                color="#ffc107"
-                :vertical="windowSize.x > 960"
-                center-active
-                show-arrows
-                grow
-                @change="onVideoTabChange"
-            >
-              <v-tabs-slider :color="windowSize.x > 960 ? 'transparent' : 'yellow'"/>
-              <v-tab
-                  v-for="(item, index) in report.sub_category"
-                  :key="index"
-              >
-                {{ item.sub_category }}
-              </v-tab>
-              <q-tab-panel
-                  v-for="(item, index) in report.sub_category"
-                  :key="item.sub_category"
-                  class="pt-5"
-              >
-                <v-alert
-                    v-if="!currentVideo"
-                    dense
-                    outlined
-                    text
-                    type="info"
-                >
-                  منتشر نشده
-                </v-alert>
-                <v-alert
-                    v-if="currentVideo"
-                    class="text-center"
-                >
-                  {{ currentVideo.title }}
-                </v-alert>
-                <!--                                <p v-if="!currentVideo" class="coming-soon" :style="{ 'margin-top': '50px'}">منتشر نشده</p>-->
-                <!--                                <p v-if="currentVideo" class="video-title">{{ currentVideo.title }}</p>-->
-                <div
-                  class="row"
-                  v-if="currentVideo"
-                >
-                  <div
-                    class="col"
-                  >
-                    <div
-                      class="row q-gutter-none"
-                    >
-                      <div
-                          class="col col-md-3 vjs-playlist"
-                          :style="{ height: timepointsHeights+'px'}"
-                      >
-                        <v-card
-                            class="mx-auto"
-                            tile
-                        >
-                          <v-list
-                              dense
-                              shaped
-                          >
-                            <v-subheader>زمان کوب ها</v-subheader>
-                            <v-list-item-group
-                                v-model="selectedTimepoint"
-                                color="primary"
-                            >
-                              <v-list-item
-                                  v-for="(currentVideoItem, i) in currentVideo.timepoints"
-                                  :key="i"
-                              >
-                                <v-list-item-content>
-                                  <v-list-item-title
-                                      v-text="currentVideoItem.title"
-                                  />
-                                </v-list-item-content>
-                              </v-list-item>
-                            </v-list-item-group>
-                          </v-list>
-                        </v-card>
-                      </div>
-                      <div
-                        class="col col-md-9"
-                      >
-                        <video
-                            :ref="'videoPlayer'+index"
-                            class="video-js vjs-default-skin vjs-16-9 vjs-fluid"
-                        />
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div
-                  class="row"
-                  v-if="currentVideo"
-                >
-                  <div
-                    class="col"
-                  >
-                    <div
-                        class="d-flex flex-row justify-center"
-                        dir="ltr"
-                    >
-                      <v-btn
-                          v-for="(video, alaaVideoIndex) in alaaVideos"
-                          :key="alaaVideoIndex"
-                          outlined
-                          icon
-                          :style="{ margin: '0 5px' }"
-                          @click="getContent(video.id)"
-                      >
-                        {{ alaaVideoIndex + 1 }}
-                      </v-btn>
-                    </div>
-                  </div>
-                </div>
+            <tabs-of-lessons :report="report" />
+<!--            <v-tabs-->
+<!--                v-if="report"-->
+<!--                color="#ffc107"-->
+<!--                :vertical="windowSize.x > 960"-->
+<!--                center-active-->
+<!--                show-arrows-->
+<!--                grow-->
+<!--                @change="onVideoTabChange"-->
+<!--            >-->
+<!--              <v-tabs-slider :color="windowSize.x > 960 ? 'transparent' : 'yellow'"/>-->
+<!--              <v-tab-->
+<!--                  v-for="(item, index) in report.sub_category"-->
+<!--                  :key="index"-->
+<!--              >-->
+<!--                {{ item.sub_category }}-->
+<!--              </v-tab>-->
+<!--              <q-tab-panel-->
+<!--                  v-for="(item, index) in report.sub_category"-->
+<!--                  :key="item.sub_category"-->
+<!--                  class="pt-5"-->
+<!--              >-->
+<!--                <v-alert-->
+<!--                    v-if="!currentVideo"-->
+<!--                    dense-->
+<!--                    outlined-->
+<!--                    text-->
+<!--                    type="info"-->
+<!--                >-->
+<!--                  منتشر نشده-->
+<!--                </v-alert>-->
+<!--                <v-alert-->
+<!--                    v-if="currentVideo"-->
+<!--                    class="text-center"-->
+<!--                >-->
+<!--                  {{ currentVideo.title }}-->
+<!--                </v-alert>-->
+<!--                &lt;!&ndash;                                <p v-if="!currentVideo" class="coming-soon" :style="{ 'margin-top': '50px'}">منتشر نشده</p>&ndash;&gt;-->
+<!--                &lt;!&ndash;                                <p v-if="currentVideo" class="video-title">{{ currentVideo.title }}</p>&ndash;&gt;-->
+<!--                <div-->
+<!--                  class="row"-->
+<!--                  v-if="currentVideo"-->
+<!--                >-->
+<!--                  <div-->
+<!--                    class="col"-->
+<!--                  >-->
+<!--                    <div-->
+<!--                      class="row q-gutter-none"-->
+<!--                    >-->
+<!--                      <div-->
+<!--                          class="col col-md-3 vjs-playlist"-->
+<!--                          :style="{ height: timepointsHeights+'px'}"-->
+<!--                      >-->
+<!--                        <v-card-->
+<!--                            class="mx-auto"-->
+<!--                            tile-->
+<!--                        >-->
+<!--                          <v-list-->
+<!--                              dense-->
+<!--                              shaped-->
+<!--                          >-->
+<!--                            <v-subheader>زمان کوب ها</v-subheader>-->
+<!--                            <v-list-item-group-->
+<!--                                v-model="selectedTimepoint"-->
+<!--                                color="primary"-->
+<!--                            >-->
+<!--                              <v-list-item-->
+<!--                                  v-for="(currentVideoItem, i) in currentVideo.timepoints"-->
+<!--                                  :key="i"-->
+<!--                              >-->
+<!--                                <v-list-item-content>-->
+<!--                                  <v-list-item-title-->
+<!--                                      v-text="currentVideoItem.title"-->
+<!--                                  />-->
+<!--                                </v-list-item-content>-->
+<!--                              </v-list-item>-->
+<!--                            </v-list-item-group>-->
+<!--                          </v-list>-->
+<!--                        </v-card>-->
+<!--                      </div>-->
+<!--                      <div-->
+<!--                        class="col col-md-9"-->
+<!--                      >-->
+<!--                        <video-->
+<!--                            :ref="'videoPlayer'+index"-->
+<!--                            class="video-js vjs-default-skin vjs-16-9 vjs-fluid"-->
+<!--                        />-->
+<!--                      </div>-->
+<!--                    </div>-->
+<!--                  </div>-->
+<!--                </div>-->
+<!--                <div-->
+<!--                  class="row"-->
+<!--                  v-if="currentVideo"-->
+<!--                >-->
+<!--                  <div-->
+<!--                    class="col"-->
+<!--                  >-->
+<!--                    <div-->
+<!--                        class="d-flex flex-row justify-center"-->
+<!--                        dir="ltr"-->
+<!--                    >-->
+<!--                      <v-btn-->
+<!--                          v-for="(video, alaaVideoIndex) in alaaVideos"-->
+<!--                          :key="alaaVideoIndex"-->
+<!--                          outlined-->
+<!--                          icon-->
+<!--                          :style="{ margin: '0 5px' }"-->
+<!--                          @click="getContent(video.id)"-->
+<!--                      >-->
+<!--                        {{ alaaVideoIndex + 1 }}-->
+<!--                      </v-btn>-->
+<!--                    </div>-->
+<!--                  </div>-->
+<!--                </div>-->
 
-                <!--                                <video v-if="currentVideo"-->
-                <!--                                       :src="currentVideo.file.video[1].link"-->
-                <!--                                       type="video/mp4"-->
-                <!--                                       controls-->
-                <!--                                       :poster="currentVideo.photo"-->
-                <!--                                       :width="'60%'"-->
-                <!--                                       class="video-player"-->
-                <!--                                       :title="currentVideo.title"-->
-                <!--                                />-->
-              </q-tab-panel>
-            </v-tabs>
+<!--                &lt;!&ndash;                                <video v-if="currentVideo"&ndash;&gt;-->
+<!--                &lt;!&ndash;                                       :src="currentVideo.file.video[1].link"&ndash;&gt;-->
+<!--                &lt;!&ndash;                                       type="video/mp4"&ndash;&gt;-->
+<!--                &lt;!&ndash;                                       controls&ndash;&gt;-->
+<!--                &lt;!&ndash;                                       :poster="currentVideo.photo"&ndash;&gt;-->
+<!--                &lt;!&ndash;                                       :width="'60%'"&ndash;&gt;-->
+<!--                &lt;!&ndash;                                       class="video-player"&ndash;&gt;-->
+<!--                &lt;!&ndash;                                       :title="currentVideo.title"&ndash;&gt;-->
+<!--                &lt;!&ndash;                                />&ndash;&gt;-->
+<!--              </q-tab-panel>-->
+<!--            </v-tabs>-->
           </q-tab-panel>
         </q-tab-panels>
       </div>
@@ -286,12 +287,13 @@ import { AlaaContent } from 'src/models/AlaaContent'
 import StatisticResult from 'src/components/OnlineQuiz/Quiz/resultTables/statisticResult'
 import TakhminRotbe from 'src/components/OnlineQuiz/Quiz/TakhminRotbe'
 import ExamData from 'src/assets/js/ExamData'
+import TabsOfLessons from 'components/OnlineQuiz/Quiz/videoPlayerSection/tabsOfLessons'
 // The following registers the plugin with `videojs`
 require('@silvermine/videojs-quality-selector')(videojs)
 
 export default {
   name: 'Result',
-  components: { TakhminRotbe, StatisticResult, BubbleSheet, Info, PersonalResult },
+  components: { TabsOfLessons, TakhminRotbe, StatisticResult, BubbleSheet, Info, PersonalResult },
   mixins: [
     mixinAuth,
     mixinQuiz,
@@ -307,7 +309,10 @@ export default {
     alaaVideos: null,
     currentVideo: null,
     report: null,
-    player: null
+    player: null,
+    tab2: null,
+    innerTab: 'innerMails',
+    splitterModel: 20
   }),
   watch: {
     selectedTimepoint () {
