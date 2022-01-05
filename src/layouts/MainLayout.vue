@@ -57,6 +57,7 @@
       <q-linear-progress
         v-if="$store.getters['loading/loading']"
         color="primary"
+        reverse
         class="q-mt-sm"
         indeterminate
       />

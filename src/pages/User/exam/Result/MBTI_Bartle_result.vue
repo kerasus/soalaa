@@ -315,7 +315,7 @@ export default {
     this.$store.commit('AppLayout/updateDrawer', true)
     window.currentExamQuestions = null
     window.currentExamQuestionIndexes = null
-    this.$store.commit('AppLayout/updateOverlay', { show: true, loading: true, text: '' })
+    this.$store.commit('loading/overlay', { loading: true, message: '' })
 
     // const quizId = this.$route.params.exam_id
     // if (!this.userQuizListData || !this.userQuizListData[quizId] || !this.currentExamQuestions) {
@@ -362,7 +362,7 @@ export default {
         this.generateAnswer(questions)
       })
       .catch(() => {
-        that.$store.commit('AppLayout/updateOverlay', { show: false, loading: false, text: '' })
+        that.$store.commit('loading/overlay', { loading: false, message: '' })
         that.goToExamList()
         // that.$notify({
         //   group: 'notifs',
@@ -384,7 +384,7 @@ export default {
       finalAnswer.charBg = this.getMbtiBg(finalAnswer.type)
       finalAnswer.bartle = this.getBartleResults(answer)
       this.result = finalAnswer
-      this.$store.commit('AppLayout/updateOverlay', { show: false, loading: true, text: '' })
+      this.$store.commit('loading/overlay', { loading: false, message: '' })
 
       this.$store.commit('quiz/setPsychometricAnswer', finalAnswer)
     },

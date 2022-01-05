@@ -1,7 +1,7 @@
 <template>
 
   <div class="row quiz-page"
-       :style="{ height: '100%'}"
+       :style="{ height: '100%'}">
     <div class="col " :style="{ 'min-height': '100%' }">
       <div class="row main-page" :style="{ 'min-width': '100%' }">
         <div class="col btnpre col-md-1 justify-start sm-hide xs-hide">
@@ -174,6 +174,8 @@ export default {
     this.$store.dispatch('loading/overlayLoading', true)
   },
   mounted () {
+    const that = this
+    that.$store.commit('loading/overlay', { loading: false, message: '' })
     this.showAppBar()
     this.updateDrawerBasedOnWindowSize()
     this.startExamProcess()
