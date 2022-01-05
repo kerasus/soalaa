@@ -5,7 +5,7 @@ export function linearLoading (context, value) {
 export function overlayLoading (context, value) {
   if (value) {
     context.commit('overlay', value)
-    return Loading.show()
+    return Loading.show({ message: value.message })
   } else {
     context.commit('overlay', value)
     return Loading.hide()

@@ -182,14 +182,14 @@ export default {
   },
   mounted () {
     const that = this
-    that.$store.commit('AppLayout/updateOverlay', { show: false, loading: false, text: '' })
+    that.$store.commit('loading/overlay', { loading: false, message: '' })
     this.showAppBar()
     this.updateDrawerBasedOnWindowSize()
     console.log('this.$route.params.quizId', this.$route.params.quizId)
     this.startExam(this.$route.params.quizId, 'onlineQuiz.alaaView')
       .then(() => {
         that.isRtl = !that.isLtrString(that.currentQuestion.statement)
-        that.$store.commit('AppLayout/updateOverlay', { show: false, loading: false, text: '' })
+        that.$store.commit('loading/overlay', { loading: false, message: '' })
       })
       .catch((error) => {
         Assistant.reportErrors(error)

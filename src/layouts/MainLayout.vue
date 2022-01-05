@@ -68,6 +68,7 @@
       <q-linear-progress
         v-if="$store.getters['loading/loading']"
         color="primary"
+        reverse
         class="q-mt-sm"
         indeterminate
       />
@@ -132,6 +133,7 @@ export default {
     }
   },
   created () {
+    this.$store.commit('loading/overlayLoading', true)
     this.getUser()
   },
   methods: {

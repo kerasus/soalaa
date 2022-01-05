@@ -360,7 +360,7 @@ export default {
       const user_exam_id = this.$route.params.user_exam_id
       const exam_id = this.$route.params.exam_id
 
-      this.$store.commit('AppLayout/updateOverlay', { show: true, loading: true, text: '' })
+      this.$store.commit('loading/overlay', { loading: true, message: '' })
 
       const examData = new ExamData()
       console.log('examData---------', examData)
@@ -380,11 +380,10 @@ export default {
           })
           that.report = examData.studentReport
           that.loadKarname(examData.studentReport)
-
-          that.$store.commit('AppLayout/updateOverlay', { show: false, loading: false, text: '' })
+          that.$store.commit('loading/overlay', { loading: false, message: '' })
         })
         .catch((error) => {
-          that.$store.commit('AppLayout/updateOverlay', { show: false, loading: false, text: '' })
+          that.$store.commit('loading/overlay', { loading: false, message: '' })
           that.goToExamList()
           console.log(error)
 
