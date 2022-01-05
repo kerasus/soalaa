@@ -88,6 +88,10 @@ export default {
 </style>
 
 <style>
+.katex * {
+  font-family: KaTeX_Main;
+}
+
 #mathfield .ML__cmr,
 .katex .mtight {
   font-family: IRANSans;
