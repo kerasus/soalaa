@@ -124,7 +124,6 @@ export default {
     }
   },
   created () {
-    this.$store.commit('loading/overlayLoading', true)
     this.getUser()
   },
   methods: {
