@@ -88,8 +88,12 @@ export default {
 </script>
 
 <style lang="scss">
+  .katex * {
+    font-family: KaTeX_Main;
+  }
+
   .mord {
-    font-family: IRANSans;
+    font-family: IRANSans !important;
   }
 
   #mathfield .ML__cmr,
