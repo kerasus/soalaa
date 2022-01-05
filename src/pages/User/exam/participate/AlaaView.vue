@@ -174,6 +174,8 @@ export default {
     this.$store.dispatch('loading/overlayLoading', true)
   },
   mounted () {
+    const that = this
+    that.$store.commit('loading/overlay', { loading: false, message: '' })
     this.showAppBar()
     this.updateDrawerBasedOnWindowSize()
     this.startExamProcess()

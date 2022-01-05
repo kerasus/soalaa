@@ -15,11 +15,6 @@ export default function () {
     },
     bubbleSize: 600,
     appBar: true,
-    overlay: {
-      show: false,
-      loading: false,
-      text: ''
-    },
     ColumnsWidth: {
       left: 0,
       right: 0
