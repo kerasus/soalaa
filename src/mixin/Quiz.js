@@ -75,12 +75,15 @@ const mixinQuiz = {
     },
     data() {
         return {
+            useSocket: true,
             considerActiveCategoryAndSubcategory: false
         }
     },
     methods: {
         setSocket(token, examId, callbacks) {
-            return
+            if (!this.useSocket) {
+                return
+            }
             this.socket = io(API_ADDRESS.socket, {
                 withCredentials: true,
                 auth: {
@@ -559,13 +562,17 @@ const mixinQuiz = {
         },
         answerClicked(data) {
             let questionId = data.questionId
-            return this.userActionOnQuestion(questionId, 'answer', {choiceId: data.choiceId})
+
+            const socket = (this.useSocket) ? this.socket : false
+            return this.userActionOnQuestion(questionId, 'answer', {choiceId: data.choiceId}, socket)
         },
         changeBookmark(questionId) {
-            return this.userActionOnQuestion(questionId, 'bookmark')
+            const socket = (this.useSocket) ? this.socket : false
+            return this.userActionOnQuestion(questionId, 'bookmark', null, socket)
         },
         changeStatus(questionId, newStatus) {
-            return this.userActionOnQuestion(questionId, 'status', {newStatus})
+            const socket = (this.useSocket) ? this.socket : false
+            return this.userActionOnQuestion(questionId, 'status', {newStatus}, socket)
         },
         getQuestionNumberFromIndex(index) {
             index = parseInt(index)
