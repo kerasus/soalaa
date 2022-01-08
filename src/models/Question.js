@@ -340,6 +340,7 @@ class Question extends Model {
     }
 
     sendUserActionToServer(type, exam_user_id , dataToSendObject, socket) {
+        // ToDo: returned data
         let data = null
         if (type === 'answer') {
             let answerArray = dataToSendObject.answerArray
