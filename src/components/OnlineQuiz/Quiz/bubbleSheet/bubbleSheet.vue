@@ -304,7 +304,7 @@ export default {
         }
 
         &.bookmark {
-          &:after {
+          &::before {
             content: "\F00C3";
             position: absolute;
             font: normal normal normal 24px/1 "Material Design Icons";

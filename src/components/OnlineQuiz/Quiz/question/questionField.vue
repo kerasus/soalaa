@@ -34,10 +34,10 @@
             class="question-body"
             :class="{ ltr: isRtl }"
           >
-            {{source.order + ') ' + source.statement}}
-            <!--            <vue-katex-->
-            <!--              :input="source.order + ') ' + source.statement"-->
-            <!--            />-->
+<!--            {{source.order + ') ' + source.statement}}-->
+                        <vue-katex
+                          :input="source.order + ') ' + source.statement"
+                        />
           </p>
           <div
             class="question-icons"
@@ -105,13 +105,13 @@
           :class="{active: getAnsweredChoiceId() === choice.id, ltr: isRtl}"
           @click="clickOnAnswer({ questionId: source.id, choiceId: choice.id})"
         >
-          <div
-            v-html="choiceNumber[index] + choice.title"
-          />
-          <!--          <vue-katex-->
-          <!--            :input="(choiceNumber[index]) + choice.title"-->
-          <!--            :ltr="isLtrQuestion"-->
-          <!--          />-->
+<!--          <div-->
+<!--            v-html="choiceNumber[index] + choice.title"-->
+<!--          />-->
+                    <vue-katex
+                      :input="(choiceNumber[index]) + choice.title"
+                      :ltr="isLtrQuestion"
+                    />
         </td>
       </tr>
       </tbody>
@@ -122,12 +122,12 @@
 <script>
 import 'src/assets/scss/markdownKatex.scss'
 import { mixinQuiz, mixinUserActionOnQuestion } from 'src/mixin/Mixins'
-// import VueKatex from 'src/components/VueKatex'
+import VueKatex from 'src/components/VueKatex'
 
 export default {
   name: 'questionField',
   components: {
-    // VueKatex
+    VueKatex
   },
   mixins: [mixinQuiz, mixinUserActionOnQuestion],
   props: {
