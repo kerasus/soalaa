@@ -339,7 +339,7 @@ class Question extends Model {
         Time.synchronizeTime()
     }
 
-    sendUserActionToServer(type, exam_user_id , dataToSendObject) {
+    sendUserActionToServer(type, exam_user_id , dataToSendObject, socket) {
         let data = null
         if (type === 'answer') {
             let answerArray = dataToSendObject.answerArray
@@ -354,16 +354,40 @@ class Question extends Model {
         }
         if (type === 'bookmark') {
             let question_id = dataToSendObject.question_id
-            data = axios.post(API_ADDRESS.exam.sendBookmark, {exam_user_id, question_id})
+            if (!socket) {
+                data = axios.post(API_ADDRESS.exam.sendBookmark, {exam_user_id, question_id})
+            } else {
+                socket.timeout(10000).emit('question.bookmark:save', {exam_user_id, question_id, status}, (response, err) => {
+                    if (err.error) {
+                        data = axios.post(API_ADDRESS.exam.sendBookmark, {exam_user_id, question_id})
+                    }
+                });
+            }
         }
         if (type === 'unBookmark') {
             let question_id = dataToSendObject.question_id
-            data = axios.post(API_ADDRESS.exam.sendUnBookmark, {exam_user_id, question_id})
+            if (!socket) {
+                data = axios.post(API_ADDRESS.exam.sendUnBookmark, {exam_user_id, question_id})
+            } else {
+                socket.timeout(10000).emit('question.bookmark:remove', {exam_user_id, question_id, status}, (response, err) => {
+                    if (err.error) {
+                        data = axios.post(API_ADDRESS.exam.sendUnBookmark, {exam_user_id, question_id})
+                    }
+                });
+            }
         }
         if (type === 'status') {
             let question_id = dataToSendObject.question_id
             let status = dataToSendObject.status
-            data = axios.post(API_ADDRESS.exam.sendStatus, {exam_user_id, question_id, status})
+            if (!socket) {
+                data = axios.post(API_ADDRESS.exam.sendStatus, {exam_user_id, question_id, status})
+            } else {
+                socket.timeout(10000).emit('question.status:save', {exam_user_id, question_id, status}, (response, err) => {
+                    if (err.error) {
+                        data = axios.post(API_ADDRESS.exam.sendStatus, {exam_user_id, question_id, status})
+                    }
+                });
+            }
         }
         this.actionsWhileSendingData()
         return data
