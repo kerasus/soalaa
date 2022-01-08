@@ -1,0 +1,43 @@
+<template>
+  <div>
+    <entity-edit
+      ref="entityEdit"
+      v-model:value="inputs"
+      title="ویرایش اطلاعات لیست دروس"
+      :api="api"
+      :entity-id-key="entityIdKey"
+      :entity-param-key="entityParamKey"
+      :show-route-name="showRouteName"
+    />
+  </div>
+</template>
+
+<script>
+import { EntityEdit } from 'quasar-crud'
+// import EntityEdit from 'components/Entity/Edit/EntityEdit'
+import API_ADDRESS from 'src/api/Addresses'
+
+export default {
+  name: 'Edit',
+  components: { EntityEdit },
+  data () {
+    return {
+      api: API_ADDRESS.questionSubcategory.base,
+      entityIdKey: 'id',
+      entityParamKey: 'id',
+      showRouteName: 'Admin.Category.Show',
+      inputs: [
+        { type: 'input', name: 'title', responseKey: 'data.title', label: 'عنوان', col: 'col-md-6' },
+        { type: 'input', name: 'category_id', responseKey: 'data.category_id', label: 'دفترچه', col: 'col-md-6' }
+      ]
+    }
+  },
+  created () {
+    this.api += '/' + this.$route.params.id
+  }
+}
+</script>
+
+<style scoped>
+
+</style>
