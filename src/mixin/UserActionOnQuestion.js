@@ -90,11 +90,14 @@ const mixinUserActionOnQuestion = {
                 newAnswered_choice_id = null
             } else if (oldStatus === 'x') {
                 let newState = ''
-                this.$store.commit('changeQuestion_Status', {
-                    exam_id: examId,
-                    question_id: questionId,
-                    status: newState
-                })
+                data.newStatus = newState
+                userQuestionData.status = oldStatus
+                this.userActionOnQuestion_status(data, examId, questionId, userQuestionData)
+                // this.$store.commit('changeQuestion_Status', {
+                //     exam_id: examId,
+                //     question_id: questionId,
+                //     status: newState
+                // })
             }
             this.$store.commit('changeQuestion_SelectChoice', {
                 exam_id: examId,
@@ -122,11 +125,14 @@ const mixinUserActionOnQuestion = {
             if (oldQuestion && newStatus === oldStatus) {
                 newStatus = ''
             } else if (newStatus === 'x') {
-                this.$store.commit('changeQuestion_SelectChoice', {
-                    exam_id: examId,
-                    question_id: questionId,
-                    answered_choice_id: null
-                })
+                userQuestionData.status = newStatus
+                data.choiceId = null
+                this.userActionOnQuestion_answer(data, examId, questionId, userQuestionData)
+                // this.$store.commit('changeQuestion_SelectChoice', {
+                //     exam_id: examId,
+                //     question_id: questionId,
+                //     answered_choice_id: null
+                // })
             }
             this.$store.commit('changeQuestion_Status', {
                 exam_id: examId,
