@@ -8,9 +8,6 @@
     <div class="fit row wrap justify-center items-start content-start"
     >
       <div class="col col-9">
-        <q-linear-progress
-          v-if="loadingList"
-          indeterminate />
         <!--        ToDo : ProgressLinear-->
         <!--        <progress-linear :active="loadingList" />-->
         <q-banner
@@ -180,6 +177,15 @@ export default {
   }),
   created () {
     this.getExams()
+  },
+  watch: {
+    loadingList () {
+      if (this.loadingList) {
+        this.$store.commit('loading/loading', true)
+      } else {
+        this.$store.commit('loading/loading', false)
+      }
+    }
   },
   mounted () {
     this.$store.commit('AppLayout/updateAppBarAndDrawer', true)
