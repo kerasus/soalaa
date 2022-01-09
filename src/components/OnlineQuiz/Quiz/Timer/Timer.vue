@@ -67,7 +67,8 @@
                 if (!newCat || !this.currentCat || Assistant.getId(newCat.id) !== Assistant.getId(this.currentCat.id)) {
                     this.currentCat = newCat
                     // this.$store.commit('setActiveStateOfExamCategories', !this.considerActiveCategoryAndSubcategory)
-                    this.$store.commit('setActiveStateOfExamCategories')
+                  const VUE_APP_ACTIVE_ALL_CATEGORIES_IN_EXAM = process.env.VUE_APP_ACTIVE_ALL_CATEGORIES_IN_EXAM === 'true'
+                    this.$store.commit('setActiveStateOfExamCategories', VUE_APP_ACTIVE_ALL_CATEGORIES_IN_EXAM)
                     if (this.currentCat) {
                         this.goToCategory(this.currentCat.id)
                         Time.setStateOfQuestionsBasedOnActiveCategory(this.quiz, this.getCurrentExamQuestions())

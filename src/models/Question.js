@@ -437,9 +437,9 @@ class Question extends Model {
         }
         if (type === 'status') {
             let failedStatusArray = dataToSendObject.failedStatusArray
-            let question_id = dataToSendObject.question_id
-            let status = dataToSendObject.status
-            let selected_at = dataToSendObject.selected_at
+            let question_id = dataToSendObject.status.question_id
+            let status = dataToSendObject.status.status
+            let selected_at = dataToSendObject.status.selected_at
             if (!socket) {
                 data = axios.post(API_ADDRESS.exam.sendStatus, {exam_user_id, question_id, status, selected_at})
                     .then(function (response) {
