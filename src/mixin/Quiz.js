@@ -315,7 +315,8 @@ const mixinQuiz = {
                             that.saveCurrentExamQuestions(examData.exam.questions.list)
                             // save exam info in vuex store (remove questions of exam then save in store)
                             examData.exam.loadSubcategoriesOfCategories()
-                            Time.setStateOfExamCategories(examData.exam.categories)
+                            const VUE_APP_ACTIVE_ALL_CATEGORIES_IN_EXAM = process.env.VUE_APP_ACTIVE_ALL_CATEGORIES_IN_EXAM === 'true'
+                            Time.setStateOfExamCategories(examData.exam.categories, VUE_APP_ACTIVE_ALL_CATEGORIES_IN_EXAM)
                             let currentExamQuestions = that.getCurrentExamQuestions()
                             Time.setStateOfQuestionsBasedOnActiveCategory(examData.exam, currentExamQuestions)
                             that.$store.commit('updateQuiz', examData.exam)
@@ -373,7 +374,8 @@ const mixinQuiz = {
                                 that.saveCurrentExamQuestions(examData.exam.questions.list)
                                 // save exam info in vuex store (remove questions of exam then save in store)
                                 examData.exam.loadSubcategoriesOfCategories()
-                                Time.setStateOfExamCategories(examData.exam.categories)
+                                const VUE_APP_ACTIVE_ALL_CATEGORIES_IN_EXAM = process.env.VUE_APP_ACTIVE_ALL_CATEGORIES_IN_EXAM === 'true'
+                                Time.setStateOfExamCategories(examData.exam.categories, VUE_APP_ACTIVE_ALL_CATEGORIES_IN_EXAM)
                                 let currentExamQuestions = that.getCurrentExamQuestions()
                                 Time.setStateOfQuestionsBasedOnActiveCategory(examData.exam, currentExamQuestions)
                                 that.$store.commit('updateQuiz', examData.exam)
@@ -497,7 +499,8 @@ const mixinQuiz = {
 
             if (viewType !== 'results') {
                 let currentExamQuestions = this.getCurrentExamQuestions()
-                Time.setStateOfExamCategories(quiz.categories)
+                const VUE_APP_ACTIVE_ALL_CATEGORIES_IN_EXAM = process.env.VUE_APP_ACTIVE_ALL_CATEGORIES_IN_EXAM === 'true'
+                Time.setStateOfExamCategories(quiz.categories, VUE_APP_ACTIVE_ALL_CATEGORIES_IN_EXAM)
                 Time.setStateOfQuestionsBasedOnActiveCategory(quiz, currentExamQuestions)
                 this.setCurrentExamQuestions(currentExamQuestions)
             }
