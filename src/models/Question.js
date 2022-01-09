@@ -359,7 +359,7 @@ class Question extends Model {
                 data = axios.post(API_ADDRESS.exam.sendBookmark, {exam_user_id, question_id})
             } else {
                 socket.timeout(10000).emit('question.bookmark:save', {exam_user_id, question_id, status}, (response, err) => {
-                    if (err.error) {
+                    if (!err || err.error) {
                         data = axios.post(API_ADDRESS.exam.sendBookmark, {exam_user_id, question_id})
                     }
                 });
@@ -371,7 +371,7 @@ class Question extends Model {
                 data = axios.post(API_ADDRESS.exam.sendUnBookmark, {exam_user_id, question_id})
             } else {
                 socket.timeout(10000).emit('question.bookmark:remove', {exam_user_id, question_id, status}, (response, err) => {
-                    if (err.error) {
+                    if (!err || err.error) {
                         data = axios.post(API_ADDRESS.exam.sendUnBookmark, {exam_user_id, question_id})
                     }
                 });
@@ -384,7 +384,7 @@ class Question extends Model {
                 data = axios.post(API_ADDRESS.exam.sendStatus, {exam_user_id, question_id, status})
             } else {
                 socket.timeout(10000).emit('question.status:save', {exam_user_id, question_id, status}, (response, err) => {
-                    if (err.error) {
+                    if (!err || err.error) {
                         data = axios.post(API_ADDRESS.exam.sendStatus, {exam_user_id, question_id, status})
                     }
                 });
