@@ -14,6 +14,23 @@ let config = {
             openAnalyzer: process.env.VUE_APP_NODE_ENV === 'development'
         }
     },
+
+    pwa: {
+        manifestOptions: {
+            name: 'آزمون آنلاین آلاء',
+            short_name: 'سه آ',
+            background_color: '#FFFFFF',
+            display: 'standalone',
+            theme_color: '#ffc107',
+            start_url: ".",
+            scope: "/",
+        },
+        workboxPluginMode: 'InjectManifest',
+        workboxOptions: {
+            swSrc: './src/service-worker.js',
+        },
+        navigateFallback: './public/index.html'
+    },
     outputDir: 'dist'
 }
 

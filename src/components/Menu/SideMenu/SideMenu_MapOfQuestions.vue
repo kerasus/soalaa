@@ -68,12 +68,14 @@
     </div>
     <div class="end-exam">
       <v-btn
-        v-if="false"
+        v-if="true"
         :color="'#4caf50'"
         :style="{ backgroundColor: '#4caf50 !important' }"
         dark
         block
         class="end-exam-btn"
+        :loading="confirmationBtnLoading"
+        :disabled="confirmationBtnLoading"
         @click="getConfirmation"
       >
         ارسال پاسخنامه
@@ -83,6 +85,67 @@
       <br>
       <br>
     </div>
+
+    <v-dialog
+      v-model="confirmationBubbleSheet"
+      fullscreen
+      hide-overlay
+      transition="dialog-bottom-transition"
+    >
+      <v-card>
+        <v-toolbar
+          dark
+          color="primary"
+        >
+          <v-btn
+            icon
+            dark
+            @click="confirmationBubbleSheet = false"
+          >
+            <v-icon>mdi-close</v-icon>
+          </v-btn>
+          <v-toolbar-title>پاسخنامه کاربر</v-toolbar-title>
+          <v-spacer />
+          <v-toolbar-items v-if="false">
+            <v-btn
+              dark
+              text
+              @click="confirmSendingAllAnswers"
+            >
+              Save
+            </v-btn>
+          </v-toolbar-items>
+        </v-toolbar>
+        <v-card>
+          <v-card-text>
+            از ارسال پاسخ ها اطمینان دارید؟
+          </v-card-text>
+          <v-card-actions>
+            <v-btn
+              class="ma-1"
+              color="grey"
+              plain
+              @click="confirmationBubbleSheet = false"
+            >
+              ادامه میدم
+            </v-btn>
+
+            <v-btn
+              class="ma-1"
+              color="success"
+              plain
+              @click="confirmSendingAllAnswers"
+            >
+              ثبت میکنم
+            </v-btn>
+          </v-card-actions>
+        </v-card>
+        <BubbleSheet
+          :info="{ type: 'pasokh-nameh' }"
+          delay-time="0"
+        />
+      </v-card>
+    </v-dialog>
   </v-sheet>
 </template>
 
@@ -91,14 +154,19 @@
     import Time from "@/plugins/time";
     import Vue from 'vue'
     import VueConfirmDialog from 'vue-confirm-dialog'
+    import BubbleSheet from '@/components/OnlineQuiz/Quiz/BubbleSheet/BubbleSheet'
+    import ExamData from "@/assets/js/ExamData";
 
     Vue.use(VueConfirmDialog)
     Vue.component('vue-confirm-dialog', VueConfirmDialog.default)
 
     export default {
         name: 'SideMenuMapOfQuestions',
+        components: {BubbleSheet},
         mixins: [mixinQuiz],
         data: () => ({
+            confirmationBubbleSheet: false,
+            confirmationBtnLoading: false,
             currentCat: null,
         }),
         created() {
@@ -114,21 +182,54 @@
                 }
                 return this.userQuizListData[this.quiz.id][questionId]
             },
+            confirmSendingAllAnswers () {
+              this.sendUserQuestionsDataToServer(this.quiz.id, this.quiz.user_exam_id, false)
+                  .then( response => {
+                    console.log('response : ', response.data)
+                    this.confirmationBubbleSheet = true
+                  })
+                  .catch( erroe => {
+                    console.log('erroe : ', erroe)
+                  })
+            },
             getConfirmation(){
-                let that = this
-                this.$store.commit('AppLayout/showConfirmDialog', {
-                    message: 'از ارسال پاسخ ها اطمینان دارید؟',
-                    button: {
-                        no: 'ادامه میدم',
-                        yes: 'ثبت میکنم'
-                    },
-                    callback: (confirm) => {
-                        if (!confirm) {
-                            return
-                        }
-                        that.sendAnswersAndFinishExam()
-                    }
-                })
+              let that = this
+              this.confirmationBtnLoading = true
+              this.sendUserQuestionsDataToServer(this.quiz.id, this.quiz.user_exam_id, false)
+              .then( () => {
+                let examData = new ExamData()
+                examData.getUserExamData(this.quiz.user_exam_id)
+                    .run()
+                    .then(() => {
+                      that.$store.commit('mergeDbAnswersIntoLocalstorage', {
+                        dbAnswers: examData.userExamData,
+                        exam_id: examData.exam.id
+                      })
+                      that.confirmationBubbleSheet = true
+                      that.confirmationBtnLoading = false
+                    })
+                    .catch(() => {
+                      that.confirmationBubbleSheet = true
+                      that.confirmationBtnLoading = false
+                    })
+              })
+              .catch( () => {
+                that.confirmationBubbleSheet = true
+                that.confirmationBtnLoading = false
+              })
+              // this.$store.commit('AppLayout/showConfirmDialog', {
+              //   message: 'از ارسال پاسخ ها اطمینان دارید؟',
+              //   button: {
+              //     no: 'ادامه میدم',
+              //     yes: 'ثبت میکنم'
+              //   },
+              //   callback: (confirm) => {
+              //     if (!confirm) {
+              //       return
+              //     }
+              //     that.sendAnswersAndFinishExam()
+              //   }
+              // })
             },
             sendAnswersAndFinishExam() {
                 let that = this
