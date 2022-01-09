@@ -30,6 +30,7 @@ class Exam extends Model {
             { key: 'alaa_product_link' },
             { key: 'questions_file_url' },
             { key: 'accept_at_is_passed' },
+            { key: 'booklet_url' },
             { key: 'total_question_number' },
             {
                 key: 'is_open',
