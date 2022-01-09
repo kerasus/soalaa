@@ -75,7 +75,7 @@ const mixinQuiz = {
     },
     data() {
         return {
-            useSocket: true,
+            useSocket: false,
             socket: null,
             socketInstance: true,
             considerActiveCategoryAndSubcategory: false
@@ -87,6 +87,7 @@ const mixinQuiz = {
     methods: {
         setSocket(token, examId, callbacks) {
             if (!this.useSocket) {
+                this.socket = false
                 return
             }
 
