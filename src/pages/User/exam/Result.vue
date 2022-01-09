@@ -1,16 +1,16 @@
 <template>
-  <div>
+  <div class="exam-results">
 <!--    <v-row class="d-flex justify-center">-->
     <div class="row wrap justify-center">
-      <div class="col">
+      <div class="col results-info-col">
         <info/>
       </div>
     </div>
     <div class="row wrap justify-center">
-      <div class="col">
+      <div class="col default-col-padding">
         <q-card
             flat
-            class="flex infoCard content-center"
+            class="infoCard content-center"
         >
           <div
             class="row"
@@ -47,6 +47,7 @@
                 active-color="primary"
                 indicator-color="primary"
                 align="justify"
+                class="result-tabs"
               >
                 <q-tab name="result" label="کارنامه"></q-tab>
                 <q-tab name="rank" label="تخمین رتبه"></q-tab>
@@ -55,20 +56,6 @@
                 <q-tab name="descriptiveAnswers" label="پاسخ نامه تشریحی"></q-tab>
                 <q-tab name="videos" label="تحلیل ویدیویی"></q-tab>
               </q-tabs>
-<!--              <v-tabs-->
-<!--                  v-model="tab"-->
-<!--                  color="#ffc107"-->
-<!--                  center-active-->
-<!--                  show-arrows-->
-<!--              >-->
-<!--                <v-tabs-slider color="yellow"/>-->
-<!--                <v-tab>کارنامه</v-tab>-->
-<!--                <v-tab>تخمین رتبه</v-tab>-->
-<!--                <v-tab>ریزدرس ها</v-tab>-->
-<!--                <v-tab>پاسخبرگ کلیدی</v-tab>-->
-<!--                <v-tab>پاسخ نامه تشریحی</v-tab>-->
-<!--                <v-tab>تحلیل ویدیویی</v-tab>-->
-<!--              </v-tabs>-->
             </div>
           </div>
         </q-card>
@@ -76,24 +63,24 @@
     </div>
     <div class="row wrap justify-center">
       <div class="col">
-        <v-tabs-items v-model="tab">
-          <v-tab-item>
+        <q-tab-panels v-model="tab" animated>
+          <q-tab-panel name="result">
             <PersonalResult :report="report"/>
-          </v-tab-item>
-          <v-tab-item>
+          </q-tab-panel>
+          <q-tab-panel name="rank">
             <takhmin-rotbe :report="report"/>
-          </v-tab-item>
-          <v-tab-item>
+          </q-tab-panel>
+          <q-tab-panel name="lessons">
             <StatisticResult :report="report"/>
-          </v-tab-item>
-          <v-tab-item>
+          </q-tab-panel>
+          <q-tab-panel name="KeyAnswers">
             <BubbleSheet
                 :info="{ type: 'pasokh-nameh' }"
                 delay-time="0"
             />
-          </v-tab-item>
-          <v-tab-item>
-            <v-card flat>
+          </q-tab-panel>
+          <q-tab-panel name="descriptiveAnswers">
+            <q-card flat>
               <p class="tab-title pt-5 pr-5">
                 دانلود پاسخنامه تشریحی
               </p>
@@ -115,19 +102,14 @@
                           item.title
                         }}
                       </p>
-                      <v-btn
-                          outlined
-                          color="--primary-2"
-                          height="75px"
-                          width="250px"
-                          :href="item.descriptive_answers_url"
-                          target="_blank"
+                      <q-btn
+                        outline
+                        :href="item.descriptive_answers_url"
+                        target="_blank"
                       >
                         دانلود فایل PDF
-                        <v-icon class="donwload-icon">
-                          mdi-download
-                        </v-icon>
-                      </v-btn>
+                        <q-icon name="mdi-download" />
+                      </q-btn>
                     </div>
                   </div>
                   <div
@@ -140,154 +122,150 @@
                       <p class="download-title">
                         دانلود سوالات {{ item.title }}
                       </p>
-                      <v-btn
-                          outlined
-                          color="--primary-2"
-                          height="75px"
-                          width="250px"
-                          :href="item.questions_url"
-                          target="_blank"
+                      <q-btn
+                        outline
+                        :href="item.questions_url"
+                        target="_blank"
                       >
                         دانلود فایل PDF
-                        <v-icon class="donwload-icon">
-                          mdi-download
-                        </v-icon>
-                      </v-btn>
+                        <q-icon name="mdi-download" />
+                      </q-btn>
                     </div>
                   </div>
                 </div>
               </div>
-            </v-card>
-          </v-tab-item>
-          <v-tab-item class="video-tab">
-            <v-tabs
-                v-if="report"
-                color="#ffc107"
-                :vertical="windowSize.x > 960"
-                center-active
-                show-arrows
-                grow
-                @change="onVideoTabChange"
-            >
-              <v-tabs-slider :color="windowSize.x > 960 ? 'transparent' : 'yellow'"/>
-              <v-tab
-                  v-for="(item, index) in report.sub_category"
-                  :key="index"
-              >
-                {{ item.sub_category }}
-              </v-tab>
-              <v-tab-item
-                  v-for="(item, index) in report.sub_category"
-                  :key="item.sub_category"
-                  class="pt-5"
-              >
-                <v-alert
-                    v-if="!currentVideo"
-                    dense
-                    outlined
-                    text
-                    type="info"
-                >
-                  منتشر نشده
-                </v-alert>
-                <v-alert
-                    v-if="currentVideo"
-                    class="text-center"
-                >
-                  {{ currentVideo.title }}
-                </v-alert>
-                <!--                                <p v-if="!currentVideo" class="coming-soon" :style="{ 'margin-top': '50px'}">منتشر نشده</p>-->
-                <!--                                <p v-if="currentVideo" class="video-title">{{ currentVideo.title }}</p>-->
-                <div
-                  class="row"
-                  v-if="currentVideo"
-                >
-                  <div
-                    class="col"
-                  >
-                    <div
-                      class="row q-gutter-none"
-                    >
-                      <div
-                          class="col col-md-3 vjs-playlist"
-                          :style="{ height: timepointsHeights+'px'}"
-                      >
-                        <v-card
-                            class="mx-auto"
-                            tile
-                        >
-                          <v-list
-                              dense
-                              shaped
-                          >
-                            <v-subheader>زمان کوب ها</v-subheader>
-                            <v-list-item-group
-                                v-model="selectedTimepoint"
-                                color="primary"
-                            >
-                              <v-list-item
-                                  v-for="(currentVideoItem, i) in currentVideo.timepoints"
-                                  :key="i"
-                              >
-                                <v-list-item-content>
-                                  <v-list-item-title
-                                      v-text="currentVideoItem.title"
-                                  />
-                                </v-list-item-content>
-                              </v-list-item>
-                            </v-list-item-group>
-                          </v-list>
-                        </v-card>
-                      </div>
-                      <div
-                        class="col col-md-9"
-                      >
-                        <video
-                            :ref="'videoPlayer'+index"
-                            class="video-js vjs-default-skin vjs-16-9 vjs-fluid"
-                        />
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div
-                  class="row"
-                  v-if="currentVideo"
-                >
-                  <div
-                    class="col"
-                  >
-                    <div
-                        class="d-flex flex-row justify-center"
-                        dir="ltr"
-                    >
-                      <v-btn
-                          v-for="(video, alaaVideoIndex) in alaaVideos"
-                          :key="alaaVideoIndex"
-                          outlined
-                          icon
-                          :style="{ margin: '0 5px' }"
-                          @click="getContent(video.id)"
-                      >
-                        {{ alaaVideoIndex + 1 }}
-                      </v-btn>
-                    </div>
-                  </div>
-                </div>
+            </q-card>
+          </q-tab-panel>
+          <q-tab-panel name="videos" class="video-tab">
+            <tabs-of-lessons :report="report" />
+<!--            <v-tabs-->
+<!--                v-if="report"-->
+<!--                color="#ffc107"-->
+<!--                :vertical="windowSize.x > 960"-->
+<!--                center-active-->
+<!--                show-arrows-->
+<!--                grow-->
+<!--                @change="onVideoTabChange"-->
+<!--            >-->
+<!--              <v-tabs-slider :color="windowSize.x > 960 ? 'transparent' : 'yellow'"/>-->
+<!--              <v-tab-->
+<!--                  v-for="(item, index) in report.sub_category"-->
+<!--                  :key="index"-->
+<!--              >-->
+<!--                {{ item.sub_category }}-->
+<!--              </v-tab>-->
+<!--              <q-tab-panel-->
+<!--                  v-for="(item, index) in report.sub_category"-->
+<!--                  :key="item.sub_category"-->
+<!--                  class="pt-5"-->
+<!--              >-->
+<!--                <v-alert-->
+<!--                    v-if="!currentVideo"-->
+<!--                    dense-->
+<!--                    outlined-->
+<!--                    text-->
+<!--                    type="info"-->
+<!--                >-->
+<!--                  منتشر نشده-->
+<!--                </v-alert>-->
+<!--                <v-alert-->
+<!--                    v-if="currentVideo"-->
+<!--                    class="text-center"-->
+<!--                >-->
+<!--                  {{ currentVideo.title }}-->
+<!--                </v-alert>-->
+<!--                &lt;!&ndash;                                <p v-if="!currentVideo" class="coming-soon" :style="{ 'margin-top': '50px'}">منتشر نشده</p>&ndash;&gt;-->
+<!--                &lt;!&ndash;                                <p v-if="currentVideo" class="video-title">{{ currentVideo.title }}</p>&ndash;&gt;-->
+<!--                <div-->
+<!--                  class="row"-->
+<!--                  v-if="currentVideo"-->
+<!--                >-->
+<!--                  <div-->
+<!--                    class="col"-->
+<!--                  >-->
+<!--                    <div-->
+<!--                      class="row q-gutter-none"-->
+<!--                    >-->
+<!--                      <div-->
+<!--                          class="col col-md-3 vjs-playlist"-->
+<!--                          :style="{ height: timepointsHeights+'px'}"-->
+<!--                      >-->
+<!--                        <v-card-->
+<!--                            class="mx-auto"-->
+<!--                            tile-->
+<!--                        >-->
+<!--                          <v-list-->
+<!--                              dense-->
+<!--                              shaped-->
+<!--                          >-->
+<!--                            <v-subheader>زمان کوب ها</v-subheader>-->
+<!--                            <v-list-item-group-->
+<!--                                v-model="selectedTimepoint"-->
+<!--                                color="primary"-->
+<!--                            >-->
+<!--                              <v-list-item-->
+<!--                                  v-for="(currentVideoItem, i) in currentVideo.timepoints"-->
+<!--                                  :key="i"-->
+<!--                              >-->
+<!--                                <v-list-item-content>-->
+<!--                                  <v-list-item-title-->
+<!--                                      v-text="currentVideoItem.title"-->
+<!--                                  />-->
+<!--                                </v-list-item-content>-->
+<!--                              </v-list-item>-->
+<!--                            </v-list-item-group>-->
+<!--                          </v-list>-->
+<!--                        </v-card>-->
+<!--                      </div>-->
+<!--                      <div-->
+<!--                        class="col col-md-9"-->
+<!--                      >-->
+<!--                        <video-->
+<!--                            :ref="'videoPlayer'+index"-->
+<!--                            class="video-js vjs-default-skin vjs-16-9 vjs-fluid"-->
+<!--                        />-->
+<!--                      </div>-->
+<!--                    </div>-->
+<!--                  </div>-->
+<!--                </div>-->
+<!--                <div-->
+<!--                  class="row"-->
+<!--                  v-if="currentVideo"-->
+<!--                >-->
+<!--                  <div-->
+<!--                    class="col"-->
+<!--                  >-->
+<!--                    <div-->
+<!--                        class="d-flex flex-row justify-center"-->
+<!--                        dir="ltr"-->
+<!--                    >-->
+<!--                      <v-btn-->
+<!--                          v-for="(video, alaaVideoIndex) in alaaVideos"-->
+<!--                          :key="alaaVideoIndex"-->
+<!--                          outlined-->
+<!--                          icon-->
+<!--                          :style="{ margin: '0 5px' }"-->
+<!--                          @click="getContent(video.id)"-->
+<!--                      >-->
+<!--                        {{ alaaVideoIndex + 1 }}-->
+<!--                      </v-btn>-->
+<!--                    </div>-->
+<!--                  </div>-->
+<!--                </div>-->
 
-                <!--                                <video v-if="currentVideo"-->
-                <!--                                       :src="currentVideo.file.video[1].link"-->
-                <!--                                       type="video/mp4"-->
-                <!--                                       controls-->
-                <!--                                       :poster="currentVideo.photo"-->
-                <!--                                       :width="'60%'"-->
-                <!--                                       class="video-player"-->
-                <!--                                       :title="currentVideo.title"-->
-                <!--                                />-->
-              </v-tab-item>
-            </v-tabs>
-          </v-tab-item>
-        </v-tabs-items>
+<!--                &lt;!&ndash;                                <video v-if="currentVideo"&ndash;&gt;-->
+<!--                &lt;!&ndash;                                       :src="currentVideo.file.video[1].link"&ndash;&gt;-->
+<!--                &lt;!&ndash;                                       type="video/mp4"&ndash;&gt;-->
+<!--                &lt;!&ndash;                                       controls&ndash;&gt;-->
+<!--                &lt;!&ndash;                                       :poster="currentVideo.photo"&ndash;&gt;-->
+<!--                &lt;!&ndash;                                       :width="'60%'"&ndash;&gt;-->
+<!--                &lt;!&ndash;                                       class="video-player"&ndash;&gt;-->
+<!--                &lt;!&ndash;                                       :title="currentVideo.title"&ndash;&gt;-->
+<!--                &lt;!&ndash;                                />&ndash;&gt;-->
+<!--              </q-tab-panel>-->
+<!--            </v-tabs>-->
+          </q-tab-panel>
+        </q-tab-panels>
       </div>
     </div>
   </div>
@@ -309,12 +287,13 @@ import { AlaaContent } from 'src/models/AlaaContent'
 import StatisticResult from 'src/components/OnlineQuiz/Quiz/resultTables/statisticResult'
 import TakhminRotbe from 'src/components/OnlineQuiz/Quiz/TakhminRotbe'
 import ExamData from 'src/assets/js/ExamData'
+import TabsOfLessons from 'components/OnlineQuiz/Quiz/videoPlayerSection/tabsOfLessons'
 // The following registers the plugin with `videojs`
 require('@silvermine/videojs-quality-selector')(videojs)
 
 export default {
   name: 'Result',
-  components: { TakhminRotbe, StatisticResult, BubbleSheet, Info, PersonalResult },
+  components: { TabsOfLessons, TakhminRotbe, StatisticResult, BubbleSheet, Info, PersonalResult },
   mixins: [
     mixinAuth,
     mixinQuiz,
@@ -330,7 +309,10 @@ export default {
     alaaVideos: null,
     currentVideo: null,
     report: null,
-    player: null
+    player: null,
+    tab2: null,
+    innerTab: 'innerMails',
+    splitterModel: 20
   }),
   watch: {
     selectedTimepoint () {
@@ -344,7 +326,7 @@ export default {
     }
   },
   created () {
-    console.log('coooooome oooooooooooooonnnnnnnnnnnn')
+    // console.log('report.exams_booklet', this.report.exams_booklet)
     this.getUserData()
     window.currentExamQuestions = null
     window.currentExamQuestionIndexes = null
@@ -360,7 +342,7 @@ export default {
       const user_exam_id = this.$route.params.user_exam_id
       const exam_id = this.$route.params.exam_id
 
-      this.$store.commit('AppLayout/updateOverlay', { show: true, loading: true, text: '' })
+      this.$store.commit('loading/overlay', { loading: true, message: '' })
 
       const examData = new ExamData()
       console.log('examData---------', examData)
@@ -380,11 +362,10 @@ export default {
           })
           that.report = examData.studentReport
           that.loadKarname(examData.studentReport)
-
-          that.$store.commit('AppLayout/updateOverlay', { show: false, loading: false, text: '' })
+          that.$store.commit('loading/overlay', { loading: false, message: '' })
         })
         .catch((error) => {
-          that.$store.commit('AppLayout/updateOverlay', { show: false, loading: false, text: '' })
+          that.$store.commit('loading/overlay', { loading: false, message: '' })
           that.goToExamList()
           console.log(error)
 
@@ -541,7 +522,37 @@ export default {
 }
 </script>
 
-<style>
+<style lang="scss">
+.exam-results {
+  margin-top: 16px;
+  padding: 12px;
+  .default-col-padding{
+    padding: 12px 0px;
+  }
+  .results-info-col {
+    padding: 12px 0px;
+  }
+  .result-tabs{
+    width: 50%;
+  }
+  .download-box {
+    .download-title {
+      font-size: 16px;
+    }
+    .q-btn--outline {
+      border: 5px solid currentColor;
+      border-radius: 40px;
+      color: #fbcf4b;
+      height: 75px;
+      width: 250px;
+      .q-btn__content {
+        color: #666;
+        padding-top: 10px;
+        padding-bottom: 10px;
+      }
+    }
+  }
+}
 .vjs-menu-button-popup .vjs-menu {
   left: auto;
   right: 0;
