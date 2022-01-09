@@ -83,7 +83,7 @@ const mixinUserActionOnQuestion = {
                 if (userQuestionDataFromLocalstorage.userQuestionData.bookmarked) {
                     return question.sendUserActionToServer('bookmark' ,examUserId, {bookmark: userQuestionDataFromLocalstorage.dataToSendBookmark , failedBookmarksArray: userQuestionDataFromLocalstorage.dataToSendFailedBookmark}, socket)
                 } else {
-                    return question.sendUserActionToServer('unBookmark' ,examUserId, {bookmark: userQuestionDataFromLocalstorage.dataToSendBookmark , failedBookmarksArray: userQuestionDataFromLocalstorage.dataToSendFailedBookmark}, userQuestionDataFromLocalstorage.dataToSendBookmark, socket)
+                    return question.sendUserActionToServer('unBookmark' ,examUserId, {bookmark: userQuestionDataFromLocalstorage.dataToSendBookmark , failedBookmarksArray: userQuestionDataFromLocalstorage.dataToSendFailedBookmark}, socket)
                 }
             }
             if (actionType === 'status') {
