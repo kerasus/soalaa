@@ -7,8 +7,8 @@ import {QuestCategoryList} from "@/models/QuestCategory";
 import $ from "jquery";
 import {QuestionList} from "@/models/Question";
 import ExamData from "@/assets/js/ExamData";
-import {io} from 'socket.io-client'
 import API_ADDRESS from '@/api/Addresses'
+import SocketConnection, { socketInstance } from '@/plugins/socket'
 
 
 const mixinQuiz = {
@@ -75,63 +75,98 @@ const mixinQuiz = {
     },
     data() {
         return {
+            useSocket: true,
+            socket: null,
+            socketInstance: true,
             considerActiveCategoryAndSubcategory: false
         }
     },
+    created() {
+        this.socketInstance = socketInstance
+    },
     methods: {
         setSocket(token, examId, callbacks) {
-            this.socket = io(API_ADDRESS.socket, {
-                withCredentials: true,
-                auth: {
-                    token,
-                    examId
-                }
-            })
+            if (!this.useSocket) {
+                return
+            }
+
+            this.socket = SocketConnection.getInstance(token, examId)
             this.setSocketEvents(callbacks)
-            this.socket.connect()
+            if (!this.socket.connected) {
+                this.socket.connect()
+            }
         },
         setSocketEvents (callbacks) {
-            this.socket.on('connecting', () => {
-                // this.onSocketStatusChange('on connection')
-            })
-            this.socket.on('reconnect', () => {
-                this.socket.emit('socket.event.reconnect:log', 'socket.event.reconnect:log')
-            })
-            this.socket.on('disconnect', () => {
-                // this.onSocketStatusChange('Socket to break off')
-                // this.isConnected = false
-            })
-            this.socket.on('connect_failed', () => {
-                // this.onSocketStatusChange('connection failed')
-            })
             this.socket.on('connect', () => {
+                const engine = this.socket.io.engine;
+                // console.log('engine.transport.name', engine.transport.name); // in most cases, prints "polling"
+
                 // console.log(this.socket.connected) // true
                 // this.onSocketStatusChange('socket connected')
                 // this.isConnected = true
-            })
-            this.socket.on('question.file-link:update', (data) => {
-                console.log('data: ', data)
-                const questionsFileUrl = data.questionFileLink
-                let that = this
-                this.reloadQuestionFile(questionsFileUrl, 'onlineQuiz.alaaView', this.$route.params.quizId)
-                    .then(() => {
-                        that.isRtl = !that.isLtrString(that.currentQuestion.statement)
-                        that.$store.commit('AppLayout/updateOverlay', {show: false, loading: false, text: ''})
-                        if (callbacks && callbacks['question.file-link:update'] && callbacks['question.file-link:update']['afterReload']) {
-                            callbacks['question.file-link:update']['afterReload']()
-                        }
-                    })
-                    .catch((error) => {
-                        Assistant.reportErrors(error)
-                        that.$notify({
-                            group: 'notifs',
-                            title: 'توجه!',
-                            text: 'مشکلی در دریافت اطلاعات آژمون رخ داده است. لطفا دوباره امتحان کنید.',
-                            type: 'error'
+
+                engine.on('connecting', () => {
+                    // this.onSocketStatusChange('on connection')
+                })
+                engine.on('reconnect', () => {
+                    this.socket.emit('socket.event.reconnect:log', 'socket.event.reconnect:log')
+                    // // client
+                    // this.socket.emit("test", dataToSend, function(err, success) {
+                    // });
+                })
+                engine.on('disconnect', () => {
+                    // this.onSocketStatusChange('Socket to break off')
+                    // this.isConnected = false
+                })
+                engine.on('connect_failed', () => {
+                    // this.onSocketStatusChange('connection failed')
+                })
+                engine.on('question.file-link:update', (data) => {
+                    const questionsFileUrl = data.questionFileLink
+                    let that = this
+                    this.reloadQuestionFile(questionsFileUrl, 'onlineQuiz.alaaView', this.$route.params.quizId)
+                        .then(() => {
+                            that.isRtl = !that.isLtrString(that.currentQuestion.statement)
+                            that.$store.commit('AppLayout/updateOverlay', {show: false, loading: false, text: ''})
+                            if (callbacks && callbacks['question.file-link:update'] && callbacks['question.file-link:update']['afterReload']) {
+                                callbacks['question.file-link:update']['afterReload']()
+                            }
                         })
-                        that.$router.push({name: 'user.exam.list'})
-                    })
-            })
+                        .catch((error) => {
+                            Assistant.reportErrors(error)
+                            that.$notify({
+                                group: 'notifs',
+                                title: 'توجه!',
+                                text: 'مشکلی در دریافت اطلاعات آژمون رخ داده است. لطفا دوباره امتحان کنید.',
+                                type: 'error'
+                            })
+                            that.$router.push({name: 'user.exam.list'})
+                        })
+                })
+
+                engine.once("upgrade", () => {
+                    // called when the transport is upgraded (i.e. from HTTP long-polling to WebSocket)
+                    // console.log(engine.transport.name); // in most cases, prints "websocket"
+                });
+
+                //
+                // engine.on("packet", ({ type, data }) => {
+                //     // called for each packet received
+                // });
+                //
+                // engine.on("packetCreate", ({ type, data }) => {
+                //     // called for each packet sent
+                // });
+                //
+                // engine.on("drain", () => {
+                //     // called when the write buffer is drained
+                // });
+                //
+                // engine.on("close", (reason) => {
+                //     // called when the underlying connection is closed
+                // });
+            });
+
         },
         getUserQuestionData (quizId, question_id) {
             if (typeof question_id === 'undefined') {
@@ -168,7 +203,7 @@ const mixinQuiz = {
         setCurrentExamQuestionIndexes(currentExamQuestionIndexes) {
             window.localStorage.setItem('currentExamQuestionIndexes', JSON.stringify(currentExamQuestionIndexes))
         },
-        sortQuestions (questions) {
+        sortQuestions(questions) {
             let sortList = Array.prototype.sort.bind(questions);
             sortList(function (a, b) {
                 let sorta = parseInt(a.order),
@@ -280,8 +315,7 @@ const mixinQuiz = {
                 examData.getUserExamData(userExamId)
                     .run()
                     .then((result) => {
-                        try
-                        {
+                        try {
                             // save questions in localStorage
                             that.saveCurrentExamQuestions(examData.exam.questions.list)
                             // save exam info in vuex store (remove questions of exam then save in store)
@@ -300,15 +334,15 @@ const mixinQuiz = {
                                 exam_id: examData.exam.id
                             })
                             resolve(result)
-                        } catch(error) {
+                        } catch (error) {
                             console.error(error)
-                            that.$router.push({ name: 'user.exam.list'})
+                            that.$router.push({name: 'user.exam.list'})
                             reject(error)
                         }
                     })
                     .catch((error) => {
                         reject(error)
-                        that.$router.push({ name: 'user.exam.list'})
+                        that.$router.push({name: 'user.exam.list'})
                     })
                     .finally(() => {
                         that.$store.commit('AppLayout/updateOverlay', {show: false, loading: false, text: ''})
@@ -336,42 +370,41 @@ const mixinQuiz = {
                     that.loadCurrentQuestion(viewType)
                 }
                 examData.getUserExamData(userExamId)
-                        .run()
-                        .then((result) => {
-                            try
-                            {
-                                if (that.needToLoadQuizData()) {
-                                    // save questions in localStorage
-                                    that.saveCurrentExamQuestions(examData.exam.questions.list)
-                                    // save exam info in vuex store (remove questions of exam then save in store)
-                                    examData.exam.loadSubcategoriesOfCategories()
-                                    Time.setStateOfExamCategories(examData.exam.categories)
-                                    let currentExamQuestions = that.getCurrentExamQuestions()
-                                    Time.setStateOfQuestionsBasedOnActiveCategory(examData.exam, currentExamQuestions)
-                                    that.$store.commit('updateQuiz', examData.exam)
-                                    that.setCurrentExamQuestions(currentExamQuestions)
-                                    that.loadCurrentQuestion(viewType)
-                                } else {
-                                    examData.exam = that.quiz
-                                }
-                                that.$store.commit('mergeDbAnswersIntoLocalstorage', {
-                                    dbAnswers: examData.userExamData,
-                                    exam_id: examData.exam.id
-                                })
-                                resolve(result)
-                            } catch(error) {
-                                console.error(error)
-                                that.$router.push({ name: 'user.exam.list'})
-                                reject(error)
+                    .run()
+                    .then((result) => {
+                        try {
+                            if (that.needToLoadQuizData()) {
+                                // save questions in localStorage
+                                that.saveCurrentExamQuestions(examData.exam.questions.list)
+                                // save exam info in vuex store (remove questions of exam then save in store)
+                                examData.exam.loadSubcategoriesOfCategories()
+                                Time.setStateOfExamCategories(examData.exam.categories)
+                                let currentExamQuestions = that.getCurrentExamQuestions()
+                                Time.setStateOfQuestionsBasedOnActiveCategory(examData.exam, currentExamQuestions)
+                                that.$store.commit('updateQuiz', examData.exam)
+                                that.setCurrentExamQuestions(currentExamQuestions)
+                                that.loadCurrentQuestion(viewType)
+                            } else {
+                                examData.exam = that.quiz
                             }
-                        })
-                        .catch((error) => {
+                            that.$store.commit('mergeDbAnswersIntoLocalstorage', {
+                                dbAnswers: examData.userExamData,
+                                exam_id: examData.exam.id
+                            })
+                            resolve(result)
+                        } catch (error) {
+                            console.error(error)
+                            that.$router.push({name: 'user.exam.list'})
                             reject(error)
-                            that.$router.push({ name: 'user.exam.list'})
-                        })
-                  .finally(() => {
-                      that.$store.commit('AppLayout/updateOverlay', {show: false, loading: false, text: ''})
-                  })
+                        }
+                    })
+                    .catch((error) => {
+                        reject(error)
+                        that.$router.push({name: 'user.exam.list'})
+                    })
+                    .finally(() => {
+                        that.$store.commit('AppLayout/updateOverlay', {show: false, loading: false, text: ''})
+                    })
 
                 // if (that.needToLoadQuizData() && examId) {
                 //     that.participateExam(examId, viewType)
@@ -512,7 +545,7 @@ const mixinQuiz = {
         hasExamDataOnThisDeviseStorage (examId) {
             return !!this.userQuizListData[examId]
         },
-        sendUserQuestionsDataToServerAndFinishExam(examId, examUserId) {
+        getUserAnswers (examId) {
             const userExamData = this.userQuizListData[examId]
             let answers = []
 
@@ -521,7 +554,7 @@ const mixinQuiz = {
                     answers.push({
                         question_id: questionId,
                         choice_id: userExamData[questionId].answered_choice_id,
-                        selected_at : (!userExamData[questionId].answered_at) ? null: userExamData[questionId].answered_at,
+                        selected_at: (!userExamData[questionId].answered_at) ? null : userExamData[questionId].answered_at,
                         bookmarked: userExamData[questionId].bookmarked,
                         status: userExamData[questionId].status,
                         check_in_times: userExamData[questionId].check_in_times,
@@ -529,9 +562,18 @@ const mixinQuiz = {
                 }
             }
 
+            return answers
+        },
+        sendUserQuestionsDataToServerAndFinishExam(examId, examUserId) {
+            let answers = this.getUserAnswers(examId)
+
             return axios.post(API_ADDRESS.exam.sendAnswers, {exam_user_id: examUserId, finish: true, questions: answers })
         },
+        sendUserQuestionsDataToServer(examId, examUserId, finishExam) {
+            let answers = this.getUserAnswers(examId)
 
+            return axios.post(API_ADDRESS.exam.sendAnswers, {exam_user_id: examUserId, finish: finishExam, questions: answers })
+        },
 
 
         isLtrString (string) {
@@ -545,13 +587,17 @@ const mixinQuiz = {
         },
         answerClicked(data) {
             let questionId = data.questionId
-            return this.userActionOnQuestion(questionId, 'answer', {choiceId: data.choiceId})
+
+            const socket = (this.useSocket) ? this.socket : false
+            return this.userActionOnQuestion(questionId, 'answer', {choiceId: data.choiceId}, socket)
         },
         changeBookmark(questionId) {
-            return this.userActionOnQuestion(questionId, 'bookmark')
+            const socket = (this.useSocket) ? this.socket : false
+            return this.userActionOnQuestion(questionId, 'bookmark', null, socket)
         },
         changeStatus(questionId, newStatus) {
-            return this.userActionOnQuestion(questionId, 'status', {newStatus})
+            const socket = (this.useSocket) ? this.socket : false
+            return this.userActionOnQuestion(questionId, 'status', {newStatus}, socket)
         },
         getQuestionNumberFromIndex(index) {
             index = parseInt(index)

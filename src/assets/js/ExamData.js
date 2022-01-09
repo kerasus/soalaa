@@ -183,14 +183,16 @@ class ExamData {
 				{
 					user_exam_id = that.exam.user_exam_id
 				}
-				axios.get(API_ADDRESS.exam.getAllAnswerOfUser(user_exam_id))
-						 .then(response => {
-							 that.userExamData = response.data
-							 resolve(response)
-						 })
-						 .catch(error => {
-							 reject(error)
-						 })
+				if(navigator.onLine){
+					axios.get(API_ADDRESS.exam.getAllAnswerOfUser(user_exam_id))
+						.then(response => {
+							that.userExamData = response.data
+							resolve(response)
+						})
+						.catch(error => {
+							reject(error)
+						})
+				}
 			}),
 		)
 		return this
