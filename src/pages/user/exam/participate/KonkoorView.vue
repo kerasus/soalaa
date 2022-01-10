@@ -109,6 +109,8 @@
     <v-row class="timer-row">
       <v-btn
         class="end-exam-btn"
+        :loading="confirmationBtnLoading"
+        :disabled="confirmationBtnLoading"
         @click="getConfirmation"
       >
         ارسال پاسخنامه
