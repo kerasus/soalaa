@@ -226,6 +226,7 @@ export default {
       if (exam.type && exam.type.value && exam.type.value === 'psychometric') {
         routeName = 'onlineQuiz.mbtiBartle'
       }
+      this.$store.commit('setQuiz', new Exam())
       this.$router.push({name: routeName, params: {quizId: exam.id, questNumber: 1}})
     },
     getExams() {
