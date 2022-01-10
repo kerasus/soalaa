@@ -424,12 +424,12 @@ const mixinQuiz = {
                                 that.$store.commit('updateQuiz', examData.exam)
                                 that.setCurrentExamQuestions(currentExamQuestions)
                                 that.loadCurrentQuestion(viewType)
-                                // that.reloadCurrentQuestion(viewType)
-                                //
-                                // that.$store.commit('mergeDbAnswersIntoLocalstorage', {
-                                //     dbAnswers: examData.userExamData,
-                                //     exam_id: examData.exam.id
-                                // })
+                                that.reloadCurrentQuestion(viewType)
+
+                                that.$store.commit('mergeDbAnswersIntoLocalstorage', {
+                                    dbAnswers: examData.userExamData,
+                                    exam_id: examData.exam.id
+                                })
                             } else {
                                 examData.exam = that.quiz
                             }
