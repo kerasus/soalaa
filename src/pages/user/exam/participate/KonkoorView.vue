@@ -124,7 +124,7 @@
         />
       </v-col>
     </v-row>
-    <booklets-dialog :dialog="bookletsDialog" />
+    <booklets-dialog v-model="bookletsDialog" />
   </v-container>
 </template>
 
