@@ -62,14 +62,17 @@ class ExamData {
 
 	run() {
 		let result = Promise.resolve();
+		// let rejectResult = Promise.reject();
 		// let reject = Promise.reject(new Error('fail'))
 		this.commands.forEach(function (promiseLike) {
 			result = result.then(promiseLike);
-			result = result.catch(promiseLike);
+			// rejectResult = rejectResult.catch(promiseLike);
+			// result = result.then(promiseLike);
+			// result = result.catch(promiseLike);
 		});
 		return new Promise((resolve, reject) => {
-			result.then(resolve)
-			result.catch(reject)
+			result.then(resolve).catch(reject);
+			// rejectResult.catch(reject);
 		});
 	}
 

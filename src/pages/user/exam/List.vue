@@ -190,6 +190,7 @@ export default {
   mounted() {
     this.disconnectSocket()
     this.$store.commit('AppLayout/updateAppBarAndDrawer', true)
+    this.$store.commit('AppLayout/updateOverlay', {show: false, loading: false, text: ''})
   },
   methods: {
     goToResult(exam) {
