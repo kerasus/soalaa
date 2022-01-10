@@ -308,6 +308,9 @@ const store = new Vuex.Store({
                 return item.end
             })
         },
+        cleanCurrentQuestion(state) {
+            state.currentQuestion = new Question()
+        },
         updateCurrentQuestion(state, newInfo) {
             const oldQuestionId = (!state.currentQuestion) ? false : Assistant.getId(state.currentQuestion.id)
             const newQuestionId = Assistant.getId(newInfo.newQuestionId)
