@@ -40,12 +40,25 @@
 export default {
   name: 'BookletsDialog',
   props: {
-    dialog: {
+    value: {
       type: Boolean,
       default: false
     }
   },
+  data () {
+    return {
+      dialog: false
+    }
+  },
+  watch: {
+    value (newValue) {
+      this.dialog = newValue
+    }
+  },
   methods: {
+    closeDialog () {
+      this.$emit('update', false)
+    },
     goToExamList() {
       this.$router.push({name: 'user.exam.list'})
     }
