@@ -233,11 +233,12 @@ const mixinQuiz = {
             return JSON.parse(window.localStorage.getItem('currentExamQuestionIndexes'))
         },
         setCurrentExamQuestions(currentExamQuestions) {
-            window.currentExamQuestions = null
+            window.currentExamQuestions = currentExamQuestions
             window.localStorage.setItem('currentExamQuestions', JSON.stringify(currentExamQuestions))
             // Vue.set(this, 'currentExamQuestions', Object.freeze(currentExamQuestions))
         },
         setCurrentExamQuestionIndexes(currentExamQuestionIndexes) {
+            window.currentExamQuestionIndexes = currentExamQuestionIndexes
             window.localStorage.setItem('currentExamQuestionIndexes', JSON.stringify(currentExamQuestionIndexes))
         },
         sortQuestions(questions) {
@@ -398,8 +399,9 @@ const mixinQuiz = {
                 let userExamId = undefined
                 let examData = new ExamData()
                 if (that.needToLoadQuizData()) {
-                    window.currentExamQuestions = null
-                    window.currentExamQuestionIndexes = null
+                    that.saveCurrentExamQuestions([])
+                    // window.currentExamQuestions = null
+                    // window.currentExamQuestionIndexes = null
                     that.bookletsDialog = true
                     that.$store.commit('AppLayout/updateOverlay', {show: true, loading: true, text: ''})
                     examData.getExamDataAndParticipate(examId)
