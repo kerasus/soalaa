@@ -400,7 +400,7 @@ const mixinQuiz = {
                 let examData = new ExamData()
                 if (that.needToLoadQuizData()) {
                     that.saveCurrentExamQuestions([])
-                    that.$store.commit('updateCurrentQuestion', {})
+                    that.$store.commit('cleanCurrentQuestion')
                     // window.currentExamQuestions = null
                     // window.currentExamQuestionIndexes = null
                     that.bookletsDialog = true
