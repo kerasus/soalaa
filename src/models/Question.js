@@ -396,8 +396,8 @@ class Question extends Model {
         }
         if (type === 'unBookmark') {
             let failedBookmarksArray = dataToSendObject.failedBookmarksArray.filter( item => !item.bookmarked)
-            let question_id = dataToSendObject.questionId
-            let selected_at = dataToSendObject.selected_at
+            let question_id = dataToSendObject.bookmark.questionId
+            let selected_at = dataToSendObject.bookmark.selected_at
             if (!socket) {
                 data = axios.post(API_ADDRESS.exam.sendUnBookmark, {exam_user_id, question_id, selected_at})
                     .then(function (response) {
