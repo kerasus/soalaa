@@ -101,6 +101,39 @@ const mixinQuiz = {
             this.socket.disconnect();
         },
         setSocketEvents (callbacks) {
+
+
+            this.socket.on('reconnect', () => {
+                this.socket.emit('socket.event.reconnect:log', 'socket.event.reconnect:log')
+                // // client
+                // this.socket.emit("test", dataToSend, function(err, success) {
+                // })
+            })
+            this.socket.on('question.file-link:update', (data) => {
+                const questionsFileUrl = data.questionFileLink
+                let that = this
+                this.reloadQuestionFile(questionsFileUrl, 'onlineQuiz.alaaView', this.$route.params.quizId)
+                    .then(() => {
+                        that.isRtl = !that.isLtrString(that.currentQuestion.statement)
+                        that.$store.commit('AppLayout/updateOverlay', {show: false, loading: false, text: ''})
+                        if (callbacks && callbacks['question.file-link:update'] && callbacks['question.file-link:update']['afterReload']) {
+                            callbacks['question.file-link:update']['afterReload']()
+                        }
+                    })
+                    .catch((error) => {
+                        Assistant.reportErrors(error)
+                        that.$notify({
+                            group: 'notifs',
+                            title: 'توجه!',
+                            text: 'مشکلی در دریافت اطلاعات آژمون رخ داده است. لطفا دوباره امتحان کنید.',
+                            type: 'error'
+                        })
+                        that.$router.push({name: 'user.exam.list'})
+                    })
+            })
+
+            return
+
             this.socket.on('connect', () => {
                 const engine = this.socket.io.engine
                 // console.log('engine.transport.name', engine.transport.name) // in most cases, prints "polling"
@@ -170,7 +203,6 @@ const mixinQuiz = {
                 //     // called when the underlying connection is closed
                 // })
             })
-
         },
         getUserQuestionData (quizId, question_id) {
             if (typeof question_id === 'undefined') {
@@ -201,6 +233,7 @@ const mixinQuiz = {
             return JSON.parse(window.localStorage.getItem('currentExamQuestionIndexes'))
         },
         setCurrentExamQuestions(currentExamQuestions) {
+            window.currentExamQuestions = null
             window.localStorage.setItem('currentExamQuestions', JSON.stringify(currentExamQuestions))
             // Vue.set(this, 'currentExamQuestions', Object.freeze(currentExamQuestions))
         },
@@ -391,6 +424,12 @@ const mixinQuiz = {
                                 that.$store.commit('updateQuiz', examData.exam)
                                 that.setCurrentExamQuestions(currentExamQuestions)
                                 that.loadCurrentQuestion(viewType)
+                                // that.reloadCurrentQuestion(viewType)
+                                //
+                                // that.$store.commit('mergeDbAnswersIntoLocalstorage', {
+                                //     dbAnswers: examData.userExamData,
+                                //     exam_id: examData.exam.id
+                                // })
                             } else {
                                 examData.exam = that.quiz
                             }
