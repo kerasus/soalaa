@@ -343,11 +343,9 @@
               this.sendTotalUserQuestionsDataToServer(this.quiz.id, this.quiz.user_exam_id, false)
                   .then( () => {
                     let examData = new ExamData()
-                    console.log('hi2')
                     examData.getUserExamData(this.quiz.user_exam_id)
                         .run()
                         .then(() => {
-                          console.log('hi3')
                           that.$store.commit('mergeDbAnswersIntoLocalstorage', {
                             dbAnswers: examData.userExamData,
                             exam_id: examData.exam.id
