@@ -91,6 +91,14 @@ const mixinQuiz = {
                 this.socket.connect()
             }
         },
+        disconnectSocket() {
+            if (!this.useSocket) {
+                this.socket = false
+                return
+            }
+
+            this.socket.disconnect();
+        },
         setSocketEvents (callbacks) {
             this.socket.on('connect', () => {
                 const engine = this.socket.io.engine
