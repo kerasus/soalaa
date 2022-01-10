@@ -73,6 +73,7 @@ const mixinQuiz = {
     },
     data() {
         return {
+            bookletsDialog: false,
             useSocket: true,
             socket: null,
             considerActiveCategoryAndSubcategory: false
@@ -92,7 +93,7 @@ const mixinQuiz = {
             }
         },
         disconnectSocket() {
-            if (!this.useSocket) {
+            if (!this.useSocket || !this.socket) {
                 this.socket = false
                 return
             }
@@ -366,6 +367,7 @@ const mixinQuiz = {
                 if (that.needToLoadQuizData()) {
                     window.currentExamQuestions = null
                     window.currentExamQuestionIndexes = null
+                    that.bookletsDialog = true
                     that.$store.commit('AppLayout/updateOverlay', {show: true, loading: true, text: ''})
                     examData.getExamDataAndParticipate(examId)
                     examData.loadQuestionsFromFile()

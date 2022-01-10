@@ -124,22 +124,25 @@
         />
       </v-col>
     </v-row>
+    <booklets-dialog :dialog="bookletsDialog" />
   </v-container>
 </template>
 
 <script>
-    import '@/assets/scss/markdownKatex.scss'
-    import 'vue-virtual-scroller/dist/vue-virtual-scroller.css'
-    import {DynamicScroller, DynamicScrollerItem} from 'vue-virtual-scroller'
-    import Item from '@/components/OnlineQuiz/Quiz/ViewTypes/components/question'
-    import {mixinAuth, mixinQuiz, mixinUserActionOnQuestion, mixinWindowSize} from '@/mixin/Mixins'
-    import Timer from '@/components/OnlineQuiz/Quiz/Timer/Timer'
-    import BubbleSheet from "@/components/OnlineQuiz/Quiz/BubbleSheet/BubbleSheet";
-    import {Exam} from "@/models/Exam";
-    import Assistant from "@/plugins/assistant";
-    import {TopMenu_OnlineQuiz} from '@/components/Menu/Menus';
     import Vue from 'vue'
     import VueConfirmDialog from 'vue-confirm-dialog'
+    import {Exam} from '@/models/Exam'
+    import Assistant from '@/plugins/assistant'
+    import {DynamicScroller, DynamicScrollerItem} from 'vue-virtual-scroller'
+    import Item from '@/components/OnlineQuiz/Quiz/ViewTypes/components/question'
+    import Timer from '@/components/OnlineQuiz/Quiz/Timer/Timer'
+    import BubbleSheet from '@/components/OnlineQuiz/Quiz/BubbleSheet/BubbleSheet'
+    import {TopMenu_OnlineQuiz} from '@/components/Menu/Menus'
+    import BookletsDialog from '@/components/OnlineQuiz/Quiz/BookletsDialog'
+    import {mixinAuth, mixinQuiz, mixinUserActionOnQuestion, mixinWindowSize} from '@/mixin/Mixins'
+
+    import '@/assets/scss/markdownKatex.scss'
+    import 'vue-virtual-scroller/dist/vue-virtual-scroller.css'
 
     Vue.use(VueConfirmDialog)
     Vue.component('vue-confirm-dialog', VueConfirmDialog.default)
@@ -152,6 +155,7 @@
             BubbleSheet,
             DynamicScroller,
             DynamicScrollerItem,
+            BookletsDialog,
             Item
         },
         mixins: [mixinAuth, mixinQuiz, mixinUserActionOnQuestion, mixinWindowSize],
