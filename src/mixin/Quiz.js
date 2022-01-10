@@ -577,7 +577,7 @@ const mixinQuiz = {
 
             return axios.post(API_ADDRESS.exam.sendAnswers, {exam_user_id: examUserId, finish: true, questions: answers })
         },
-        sendUserQuestionsDataToServer(examId, examUserId, finishExam) {
+        sendTotalUserQuestionsDataToServer(examId, examUserId, finishExam) {
             let answers = this.getUserAnswers(examId)
 
             return axios.post(API_ADDRESS.exam.sendAnswers, {exam_user_id: examUserId, finish: finishExam, questions: answers })

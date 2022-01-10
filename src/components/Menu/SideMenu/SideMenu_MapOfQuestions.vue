@@ -183,9 +183,9 @@
                 return this.userQuizListData[this.quiz.id][questionId]
             },
             confirmSendingAllAnswers () {
-              this.sendUserQuestionsDataToServer(this.quiz.id, this.quiz.user_exam_id, false)
-                  .then( response => {
-                    console.log('response : ', response.data)
+              this.sendTotalUserQuestionsDataToServer(this.quiz.id, this.quiz.user_exam_id, false)
+                  .then( () => {
+                    this.$router.push({name: 'user.exam.list'})
                     this.confirmationBubbleSheet = true
                   })
                   .catch( erroe => {
@@ -195,7 +195,7 @@
             getConfirmation(){
               let that = this
               this.confirmationBtnLoading = true
-              this.sendUserQuestionsDataToServer(this.quiz.id, this.quiz.user_exam_id, false)
+              this.sendTotalUserQuestionsDataToServer(this.quiz.id, this.quiz.user_exam_id, false)
               .then( () => {
                 let examData = new ExamData()
                 examData.getUserExamData(this.quiz.user_exam_id)
@@ -233,7 +233,7 @@
             },
             sendAnswersAndFinishExam() {
                 let that = this
-                this.sendUserQuestionsDataToServerAndFinishExam(this.quiz.id, this.quiz.user_exam_id)
+                this.sendTotalUserQuestionsDataToServer(this.quiz.id, this.quiz.user_exam_id)
                     .then( () => {
                         that.$notify({
                             group: 'notifs',

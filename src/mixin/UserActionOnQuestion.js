@@ -68,6 +68,7 @@ const mixinUserActionOnQuestion = {
             }
         },
         sendUserQuestionsDataToServer(examUserId, userExamData, questionId, actionType, socket) {
+
             let userQuestionDataFromLocalstorage = this.getUserQuestionDataFromLocalstorage(userExamData, questionId)
             let online = navigator.onLine
             // send data
