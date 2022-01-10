@@ -224,6 +224,7 @@ export default {
   },
   destroyed() {
     this.changeAppBarAndDrawer(false)
+    this.disconnectSocket()
   },
   methods: {
     changeAppBarAndDrawer(state) {
