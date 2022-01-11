@@ -122,7 +122,7 @@ export default {
 // }
   created() {
     // this.html = this.convertToTiptap(this.html)
-    this.setSocket()
+    // this.setSocket()
   },
   methods: {
     add () {
