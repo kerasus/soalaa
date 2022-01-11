@@ -221,6 +221,7 @@ class ExamData {
 					 that.exam.title = Assistant.getId(response.data.data.exam_title)
 					 that.exam.user_exam_id = Assistant.getId(response.data.data.id)
 					 that.exam.created_at = response.data.data.created_at
+					 that.exam.accept_at = response.data.data.accept_at
 					 that.exam.questions_file_url = response.data.data.questions_file_url
 					 that.exam.categories = new QuestCategoryList(response.data.data.categories)
 					 that.exam.sub_categories = new QuestSubcategoryList(response.data.data.sub_categories)

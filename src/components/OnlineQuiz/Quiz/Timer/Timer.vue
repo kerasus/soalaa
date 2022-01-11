@@ -42,6 +42,7 @@
                 const newCat = Time.getCurrentCategoryAcceptAt(that.quiz.categories)
                 that.calcRemainAndPassedTime(newCat)
                 that.doActionsOnChangeCategory(newCat)
+                that.checkExamAcceptAt()
             }, 1000)
             // requestAnimationFrame(this.timer.updateTimer) // webpack-internal:///./src/models/Timer.js:58 Uncaught TypeError: Cannot read property 'updateDiffs' of undefined
         },
@@ -77,10 +78,29 @@
                     this.setExamAcceptAtIsPassedWhenAllCategoryIsPassed()
                 }
             },
+            checkExamAcceptAt () {
+              const remainTime = Time.getRemainTime(this.quiz.accept_at, false)
+              if (remainTime < 0) {
+                this.exitFromExamPageWhenExamIsFinished()
+              }
+            },
+            exitFromExamPageWhenExamIsFinished () {
+              if (process.env.VUE_APP_CLOSE_EXAM_AFTER_FINISH !== 'true') {
+                return
+              }
+              this.$notify({
+                group: 'notifs',
+                title: 'توجه!',
+                text: 'زمان آزمون شما به اتمام رسیده است.',
+                type: 'error'
+              })
+              this.$router.push({name: 'user.exam.list'})
+            },
             setExamAcceptAtIsPassedWhenAllCategoryIsPassed () {
                 const newCat = Time.getCurrentCategoryAcceptAt(this.quiz.categories)
                 if (!newCat && this.quiz.categories.length > 0) {
                     this.$store.commit('setExamAcceptAtIsPassed')
+                    this.exitFromExamPageWhenExamIsFinished()
                 }
             }
         }
