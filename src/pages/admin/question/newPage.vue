@@ -333,7 +333,9 @@ export default {
     },
 
     navBarAction_save() {
-      this.$refs.qlayout.getContent()
+      if (!this.$refs.qlayout.getContent()) {
+        return
+      }
       var currentQuestion = this.currentQuestion
       currentQuestion.type_id = this.optionQuestionId
       currentQuestion.update(API_ADDRESS.question.updateQuestion(currentQuestion.id))
@@ -742,7 +744,9 @@ export default {
     },
 
     setInsertedQuestions() {  //یاس
-      this.$refs.qlayout.getContent()
+      if (!this.$refs.qlayout.getContent()) {
+        return
+      }
       this.setCurrentQuestionExams()
       // console.log('currentQuestion.exam :',currentQuestion.exams)
       this.currentQuestion.type_id = this.optionQuestionId
