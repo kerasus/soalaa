@@ -86,12 +86,6 @@
                 </v-card>
               </v-menu>
             </div>
-            <v-btn
-              icon
-              @click="changeView('alaa')"
-            >
-              <v-icon>mdi-table-split-cell</v-icon>
-            </v-btn>
           </v-col>
         </v-row>
         <v-row>
@@ -114,15 +108,6 @@
       >
         ارسال پاسخنامه
       </v-btn>
-      <v-col :class="{ 'high-z-index': timerIsOpen }">
-        <Timer
-          :daftarche="'عمومی'"
-          :quiz-started-at="1607963897"
-          :daftarche-end-time="1607999897"
-          :height="100"
-          @timerOpen="timerOpen"
-        />
-      </v-col>
     </v-row>
   </v-container>
 </template>
@@ -133,7 +118,6 @@
     import {DynamicScroller, DynamicScrollerItem} from 'vue-virtual-scroller'
     import Item from '@/components/OnlineQuiz/Quiz/ViewTypes/components/question'
     import {mixinAuth, mixinQuiz, mixinUserActionOnQuestion, mixinWindowSize} from '@/mixin/Mixins'
-    import Timer from '@/components/OnlineQuiz/Quiz/Timer/Timer'
     import BubbleSheet from "@/components/OnlineQuiz/Quiz/BubbleSheet/BubbleSheet";
     import {Exam} from "@/models/Exam";
     import Assistant from "@/plugins/assistant";
@@ -147,7 +131,6 @@
     export default {
         name: 'KonkoorView2',
         components: {
-            Timer,
             TopMenu_OnlineQuiz,
             BubbleSheet,
             DynamicScroller,
@@ -181,7 +164,8 @@
             let that = this
             this.startExam(this.$route.params.quizId, 'onlineQuiz.KonkoorView')
                 .then(() => {
-                    // that.loadFirstActiveQuestionIfNeed()
+                  this.$store.commit('setActiveStateOfExamCategories', true)
+                  // that.loadFirstActiveQuestionIfNeed()
                     that.$store.commit('AppLayout/updateOverlay', {show: false, loading: false, text: ''})
                     const callbacks = {
                       'question.file-link:update': {

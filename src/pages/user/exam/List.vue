@@ -110,6 +110,14 @@
                         شروع آزمون
                       </v-btn>
                       <v-btn
+                          v-if="item.exam_actions.can_submit_answers"
+                          color="#ffc107"
+                          text
+                          @click="goToSendResults(item)"
+                      >
+                        ثبت گزینه ها
+                      </v-btn>
+                      <v-btn
                         v-if="item.exam_actions.can_continue"
                         color="purple"
                         text
@@ -202,6 +210,13 @@ export default {
     },
     goToParticipateExamPage(exam) {
       let routeName = 'onlineQuiz.alaaView'
+      if (exam.type && exam.type.value && exam.type.value === 'psychometric') {
+        routeName = 'onlineQuiz.mbtiBartle'
+      }
+      this.$router.push({name: routeName, params: {quizId: exam.id, questNumber: 1}})
+    },
+    goToSendResults(exam) {
+      let routeName = 'onlineQuiz.konkoorView2'
       if (exam.type && exam.type.value && exam.type.value === 'psychometric') {
         routeName = 'onlineQuiz.mbtiBartle'
       }
