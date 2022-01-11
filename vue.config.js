@@ -55,6 +55,8 @@ setProxy(config.devServer.proxy, process.env.VUE_APP_LUMEN_INTERNAL_RABBIT_MQ_SE
 setProxy(config.devServer.proxy, process.env.VUE_APP_SOCKET_INTERNAL_API_SERVER, process.env.VUE_APP_SOCKET_TARGET_API_SERVER)
 // cdn
 setProxy(config.devServer.proxy, process.env.VUE_APP_CDN_INTERNAL_API_SERVER, process.env.VUE_APP_CDN_TARGET_API_SERVER)
+// getTime
+setProxy(config.devServer.proxy, process.env.VUE_APP_LUMEN_INTERNAL_GET_TIME_SERVER, process.env.VUE_APP_LUMEN_TARGET_GET_TIME_SERVER)
 
 if (process.env.VUE_APP_NODE_ENV === 'development') {
     console.log('config.devServer.proxy', config.devServer.proxy)

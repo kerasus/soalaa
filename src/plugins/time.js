@@ -8,7 +8,9 @@ let Time = function () {
         const { date, offset, uncertainty } = await getServerDate( {fetchSample: async () => {
                 const requestDate = new Date();
 
-                const { headers, ok, statusText } = await fetch(window.location.origin, {
+                // const url = window.location.origin
+                const url = '/3a/time'
+                const { headers, ok, statusText } = await fetch(url, {
                     cache: `no-store`,
                     method: `HEAD`,
                 });
