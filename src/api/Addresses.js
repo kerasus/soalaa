@@ -41,11 +41,15 @@ const API_ADDRESS = {
     getAnalysisVideo (exam_id) { return lumenServer + '/exam-question/videos/' + exam_id },
     examReportIndex (type) { return lumenServer + '/exam-report/index/' + type },
     pdf (exam_id) { return lumenServer + '/exam-question/booklet-file/' +exam_id },
-    base (page_number) {
-      if (page_number) {
-        return lumenServer + '/exam?with_pagination=1&page=' + page_number
+    base (page_number, pagination = true) {
+      if (pagination) {
+        if (page_number) {
+          return lumenServer + '/exam?with_pagination=1&page=' + page_number
+        } else {
+          return lumenServer + '/exam'
+        }
       } else {
-        return lumenServer + '/exam'
+        return lumenServer + 'exam?with_pagination=0'
       }
     },
     generateExamFile (exam_id, with_answer) {
