@@ -43,6 +43,8 @@ const store = new Vuex.Store({
         currentExamFrozenQuestions: null,
         psychometricAnswer: {},
         failedListAnswerData: [],
+        failedListStatusData: [],
+        failedListBookmarkData: [],
         oldQuestionId: null
     },
     mutations: {
@@ -78,38 +80,38 @@ const store = new Vuex.Store({
             if (!state.userQuizListData[examId]) {
                 Vue.set(state.userQuizListData, examId, {})
             }
+            //
+            // function merge(collection1, collection2) {
+            //     collection1.map(item1 => {
+            //         const targetCollect2Index = collection2.findIndex(item2 => item1.question_id === item2.question_id)
+            //         if (targetCollect2Index < 0) {
+            //             return
+            //         }
+            //         item1.status = (!collection2[targetCollect2Index].status) ? null : collection2[targetCollect2Index].status
+            //         item1.bookmarked = (!collection2[targetCollect2Index].bookmark) ? false : collection2[targetCollect2Index].bookmark
+            //         collection2.splice(targetCollect2Index, 1)
+            //
+            //         return item1
+            //     })
+            //
+            //     collection2.forEach(item2 => {
+            //         collection1.push({
+            //             question_id: item2.question_id,
+            //             answered_at: item2.selected_at,
+            //             answered_choice_id: item2.choice_id,
+            //             bookmarked: item2.bookmark,
+            //             status: item2.status,
+            //             check_in_times: []
+            //         })
+            //     })
+            // }
 
-            function merge(collection1, collection2) {
-                collection1.map(item1 => {
-                    const targetCollect2Index = collection2.findIndex(item2 => item1.question_id === item2.question_id)
-                    if (targetCollect2Index < 0) {
-                        return
-                    }
-                    item1.status = (!collection2[targetCollect2Index].status) ? null : collection2[targetCollect2Index].status
-                    item1.bookmarked = (!collection2[targetCollect2Index].bookmark) ? false : collection2[targetCollect2Index].bookmark
-                    collection2.splice(targetCollect2Index, 1)
+            // merge(dbAnswers.choices, dbAnswers.statuses)
+            // merge(dbAnswers.choices, dbAnswers.bookmarks)
 
-                    return item1
-                })
-
-                collection2.forEach(item2 => {
-                    collection1.push({
-                        question_id: item2.question_id,
-                        answered_at: item2.selected_at,
-                        answered_choice_id: item2.choice_id,
-                        bookmarked: item2.bookmark,
-                        status: item2.status,
-                        check_in_times: []
-                    })
-                })
-            }
-
-            merge(dbAnswers.choices, dbAnswers.statuses)
-            merge(dbAnswers.choices, dbAnswers.bookmarks)
-
-            let userData = dbAnswers.choices
-
-            userData.forEach((item) => {
+            // merge choices
+            let userDataChoices = dbAnswers.choices
+            userDataChoices.forEach((item) => {
                 let questionId = Assistant.getId(item.question_id)
                 if (!questionId) {
                     return
@@ -121,10 +123,40 @@ const store = new Vuex.Store({
                 Vue.set(state.userQuizListData[examId], questionId, {
                     answered_at: item.selected_at,
                     answered_choice_id: item.choice_id,
-                    bookmarked: item.bookmarked,
-                    status: item.status,
+                    bookmarked: false,
+                    status: null,
                     check_in_times
                 })
+            })
+
+            // merge bookmarks
+            let userDataBookmarks = dbAnswers.bookmarks
+            userDataBookmarks.forEach((item) => {
+                let questionId = Assistant.getId(item.question_id)
+                if (!questionId) {
+                    return
+                }
+                if (!state.userQuizListData[examId][questionId]) {
+                    Vue.set(state.userQuizListData[examId], questionId, {})
+                }
+
+                Vue.set(state.userQuizListData[examId][questionId], 'bookmarked', item.bookmark)
+                Vue.set(state.userQuizListData[examId][questionId], 'change_bookmarked_at', item.selected_at)
+            })
+
+            // merge statuses
+            let userDataStatuses = dbAnswers.statuses
+            userDataStatuses.forEach((item) => {
+                let questionId = Assistant.getId(item.question_id)
+                if (!questionId) {
+                    return
+                }
+                if (!state.userQuizListData[examId][questionId]) {
+                    Vue.set(state.userQuizListData[examId], questionId, {})
+                }
+
+                Vue.set(state.userQuizListData[examId][questionId], 'status', item.status)
+                Vue.set(state.userQuizListData[examId][questionId], 'change_status_at', item.selected_at)
             })
         },
         changeQuestion_RefreshQuestionObject(state, payload) {
@@ -138,14 +170,25 @@ const store = new Vuex.Store({
             }
         },
         changeQuestion_Bookmark(state, payload) {
+            let offline = !navigator.onLine
             let examId = payload.exam_id
             let questionId = payload.question_id
             if (!examId || !questionId) {
                 return
             }
             this.commit('changeQuestion_RefreshQuestionObject', payload)
+            let changeBookmarkedAt = Time.now()
+            if (payload.change_bookmarked_at) {
+                changeBookmarkedAt = payload.change_bookmarked_at
+            }
+            Vue.set(state.userQuizListData[examId][questionId], 'change_bookmarked_at', changeBookmarkedAt)
             Vue.set(state.userQuizListData[examId][questionId], 'bookmarked', payload.bookmarked)
 
+            if (offline) {
+                let failedListBookmarkDataObject = {question_id: questionId, bookmarked: payload.bookmarked, selected_at: changeBookmarkedAt}
+                state.failedListBookmarkData.push(failedListBookmarkDataObject)
+                state.failedListBookmarkData = [...new Map(state.failedListBookmarkData.map(v => [v.question_id, v])).values()]
+            }
         },
         changeQuestion_SelectChoice(state, payload) {
             let offline = !navigator.onLine
@@ -169,16 +212,27 @@ const store = new Vuex.Store({
                 state.failedListAnswerData.push(failedListAnswerDataObject)
                 state.failedListAnswerData = [...new Map(state.failedListAnswerData.map(v => [v.question_id, v])).values()]
             }
-
         },
         changeQuestion_Status(state, payload) {
+            let offline = !navigator.onLine
             let examId = payload.exam_id
             let questionId = payload.question_id
             if (!examId || !questionId) {
                 return
             }
             this.commit('changeQuestion_RefreshQuestionObject', payload)
+            let changeStatusAt = Time.now()
+            if (payload.change_status_at) {
+                changeStatusAt = payload.change_status_at
+            }
+            Vue.set(state.userQuizListData[examId][questionId], 'change_status_at', changeStatusAt)
             Vue.set(state.userQuizListData[examId][questionId], 'status', payload.status)
+
+            if (offline) {
+                let failedListStatusDataObject = {question_id: questionId, status: payload.status, selected_at: changeStatusAt}
+                state.failedListStatusData.push(failedListStatusDataObject)
+                state.failedListStatusData = [...new Map(state.failedListStatusData.map(v => [v.question_id, v])).values()]
+            }
         },
         setUserQuizListData(state, payload) {
             let examId = Assistant.getId(payload.exam_id)
@@ -253,6 +307,9 @@ const store = new Vuex.Store({
             state.userQuizListData[state.quiz.id][questionId].check_in_times = state.userQuizListData[state.quiz.id][questionId].check_in_times.filter((item) => {
                 return item.end
             })
+        },
+        cleanCurrentQuestion(state) {
+            state.currentQuestion = new Question()
         },
         updateCurrentQuestion(state, newInfo) {
             const oldQuestionId = (!state.currentQuestion) ? false : Assistant.getId(state.currentQuestion.id)

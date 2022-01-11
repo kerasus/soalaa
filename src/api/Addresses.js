@@ -1,5 +1,4 @@
 const lumenServer = process.env.VUE_APP_LUMEN_INTERNAL_API_SERVER
-// const lumenRabbitMQ = process.env.VUE_APP_LUMEN_RABBIT_MQ_API_SERVER
 const authServer = process.env.VUE_APP_AUTH_INTERNAL_API_SERVER
 
 const API_ADDRESS = {

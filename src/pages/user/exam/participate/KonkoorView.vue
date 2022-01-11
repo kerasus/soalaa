@@ -108,8 +108,9 @@
     </v-row>
     <v-row class="timer-row">
       <v-btn
-        v-if="false"
         class="end-exam-btn"
+        :loading="confirmationBtnLoading"
+        :disabled="confirmationBtnLoading"
         @click="getConfirmation"
       >
         ارسال پاسخنامه
@@ -124,22 +125,87 @@
         />
       </v-col>
     </v-row>
+    <booklets-dialog v-model="bookletsDialog" />
+
+    <v-dialog
+      v-model="confirmationBubbleSheet"
+      fullscreen
+      hide-overlay
+      transition="dialog-bottom-transition"
+    >
+      <v-card>
+        <v-toolbar
+          dark
+          color="primary"
+        >
+          <v-btn
+            icon
+            dark
+            @click="confirmationBubbleSheet = false"
+          >
+            <v-icon>mdi-close</v-icon>
+          </v-btn>
+          <v-toolbar-title>پاسخنامه کاربر</v-toolbar-title>
+          <v-spacer />
+          <v-toolbar-items v-if="false">
+            <v-btn
+              dark
+              text
+              @click="confirmSendingAllAnswers"
+            >
+              Save
+            </v-btn>
+          </v-toolbar-items>
+        </v-toolbar>
+        <v-card>
+          <v-card-text>
+            از ارسال پاسخ ها اطمینان دارید؟
+          </v-card-text>
+          <v-card-actions>
+            <v-btn
+              class="ma-1"
+              color="grey"
+              plain
+              @click="confirmationBubbleSheet = false"
+            >
+              ادامه میدم
+            </v-btn>
+
+            <v-btn
+              class="ma-1"
+              color="success"
+              plain
+              @click="confirmSendingAllAnswers"
+            >
+              ثبت میکنم
+            </v-btn>
+          </v-card-actions>
+        </v-card>
+        <BubbleSheet
+          :info="{ type: 'pasokh-nameh' }"
+          delay-time="0"
+        />
+      </v-card>
+    </v-dialog>
   </v-container>
 </template>
 
 <script>
-    import '@/assets/scss/markdownKatex.scss'
-    import 'vue-virtual-scroller/dist/vue-virtual-scroller.css'
-    import {DynamicScroller, DynamicScrollerItem} from 'vue-virtual-scroller'
-    import Item from '@/components/OnlineQuiz/Quiz/ViewTypes/components/question'
-    import {mixinAuth, mixinQuiz, mixinUserActionOnQuestion, mixinWindowSize} from '@/mixin/Mixins'
-    import Timer from '@/components/OnlineQuiz/Quiz/Timer/Timer'
-    import BubbleSheet from "@/components/OnlineQuiz/Quiz/BubbleSheet/BubbleSheet";
-    import {Exam} from "@/models/Exam";
-    import Assistant from "@/plugins/assistant";
-    import {TopMenu_OnlineQuiz} from '@/components/Menu/Menus';
     import Vue from 'vue'
     import VueConfirmDialog from 'vue-confirm-dialog'
+    import {Exam} from '@/models/Exam'
+    import Assistant from '@/plugins/assistant'
+    import {DynamicScroller, DynamicScrollerItem} from 'vue-virtual-scroller'
+    import Item from '@/components/OnlineQuiz/Quiz/ViewTypes/components/question'
+    import Timer from '@/components/OnlineQuiz/Quiz/Timer/Timer'
+    import BubbleSheet from '@/components/OnlineQuiz/Quiz/BubbleSheet/BubbleSheet'
+    import {TopMenu_OnlineQuiz} from '@/components/Menu/Menus'
+    import BookletsDialog from '@/components/OnlineQuiz/Quiz/BookletsDialog'
+    import {mixinAuth, mixinQuiz, mixinUserActionOnQuestion, mixinWindowSize} from '@/mixin/Mixins'
+
+    import '@/assets/scss/markdownKatex.scss'
+    import 'vue-virtual-scroller/dist/vue-virtual-scroller.css'
+    import ExamData from "@/assets/js/ExamData";
 
     Vue.use(VueConfirmDialog)
     Vue.component('vue-confirm-dialog', VueConfirmDialog.default)
@@ -152,6 +218,7 @@
             BubbleSheet,
             DynamicScroller,
             DynamicScrollerItem,
+            BookletsDialog,
             Item
         },
         mixins: [mixinAuth, mixinQuiz, mixinUserActionOnQuestion, mixinWindowSize],
@@ -166,6 +233,8 @@
                 renderedQuestions: {startIndex: 0, endIndex: 0},
                 questions: [],
                 inView: [],
+                confirmationBubbleSheet: false,
+                confirmationBtnLoading: false,
                 timerIsOpen: false
             }
         },
@@ -178,31 +247,6 @@
             }
         },
         created() {
-            let that = this
-            this.startExam(this.$route.params.quizId, 'onlineQuiz.KonkoorView')
-                .then(() => {
-                    // that.loadFirstActiveQuestionIfNeed()
-                    that.$store.commit('AppLayout/updateOverlay', {show: false, loading: false, text: ''})
-                    const callbacks = {
-                      'question.file-link:update': {
-                        afterReload () {
-                          that.questions = that.getCurrentExamQuestionsInArray()
-                        }
-                      }
-                    }
-                    that.setSocket(that.$store.getters['Auth/accessToken'], that.quiz.id, callbacks)
-                })
-                .catch((error) => {
-                    Assistant.reportErrors(error)
-                    that.$notify({
-                        group: 'notifs',
-                        title: 'توجه!',
-                        text: 'مشکلی در دریافت اطلاعات آژمون رخ داده است. لطفا دوباره امتحان کنید.',
-                        type: 'error'
-                    })
-                    // ToDo: uncomment
-                    // that.$router.push({ name: 'user.exam.list'})
-                })
             if (this.windowSize.x > 959) {
                 this.changeAppBarAndDrawer(false)
             } else {
@@ -211,11 +255,37 @@
                     params: {quizId: this.$route.params.quizId, questNumber: 1}
                 })
             }
-            if (!this.questions.length) {
-                this.questions = this.getCurrentExamQuestionsInArray()
-            }
+            // if (!this.questions.length) {
+            //     this.questions = this.getCurrentExamQuestionsInArray()
+            // }
         },
         mounted() {
+          let that = this
+          this.startExam(this.$route.params.quizId, 'onlineQuiz.KonkoorView')
+              .then(() => {
+                // that.loadFirstActiveQuestionIfNeed()
+                that.$store.commit('AppLayout/updateOverlay', {show: false, loading: false, text: ''})
+                that.questions = that.getCurrentExamQuestionsInArray()
+                const callbacks = {
+                  'question.file-link:update': {
+                    afterReload () {
+                      that.questions = that.getCurrentExamQuestionsInArray()
+                    }
+                  }
+                }
+                that.setSocket(that.$store.getters['Auth/accessToken'], that.quiz.id, callbacks)
+              })
+              .catch((error) => {
+                Assistant.reportErrors(error)
+                that.$notify({
+                  group: 'notifs',
+                  title: 'توجه!',
+                  text: 'مشکلی در دریافت اطلاعات آژمون رخ داده است. لطفا دوباره امتحان کنید.',
+                  type: 'error'
+                })
+                // ToDo: uncomment
+                // that.$router.push({ name: 'user.exam.list'})
+              })
             this.setHeights()
             if (this.currentQuestion.id === null) {
                 this.loadFirstQuestion()
@@ -258,21 +328,55 @@
             timerOpen(value) {
                 this.timerIsOpen = value
             },
+            confirmSendingAllAnswers () {
+              this.sendTotalUserQuestionsDataToServer(this.quiz.id, this.quiz.user_exam_id, false)
+                  .then( () => {
+                    this.$router.push({name: 'user.exam.list'})
+                    this.confirmationBubbleSheet = true
+                  })
+                  .catch( erroe => {
+                    console.log('erroe : ', erroe)
+                  })
+            },
             getConfirmation() {
-                let that = this
-                this.$store.commit('AppLayout/showConfirmDialog', {
-                    message: 'از ارسال پاسخ ها اطمینان دارید؟',
-                    button: {
-                        no: 'ادامه میدم',
-                        yes: 'ثبت میکنم'
-                    },
-                    callback: (confirm) => {
-                        if (!confirm) {
-                            return
-                        }
-                        that.sendAnswersAndFinishExam()
-                    }
-                })
+              let that = this
+              this.confirmationBtnLoading = true
+              this.sendTotalUserQuestionsDataToServer(this.quiz.id, this.quiz.user_exam_id, false)
+                  .then( () => {
+                    let examData = new ExamData()
+                    examData.getUserExamData(this.quiz.user_exam_id)
+                        .run()
+                        .then(() => {
+                          that.$store.commit('mergeDbAnswersIntoLocalstorage', {
+                            dbAnswers: examData.userExamData,
+                            exam_id: examData.exam.id
+                          })
+                          that.confirmationBubbleSheet = true
+                          that.confirmationBtnLoading = false
+                        })
+                        .catch(() => {
+                          that.confirmationBubbleSheet = true
+                          that.confirmationBtnLoading = false
+                        })
+                  })
+                  .catch( () => {
+                    that.confirmationBubbleSheet = true
+                    that.confirmationBtnLoading = false
+                  })
+                //
+                // this.$store.commit('AppLayout/showConfirmDialog', {
+                //     message: 'از ارسال پاسخ ها اطمینان دارید؟',
+                //     button: {
+                //         no: 'ادامه میدم',
+                //         yes: 'ثبت میکنم'
+                //     },
+                //     callback: (confirm) => {
+                //         if (!confirm) {
+                //             return
+                //         }
+                //         that.sendAnswersAndFinishExam()
+                //     }
+                // })
             },
             sendAnswersAndFinishExam() {
                 let that = this
@@ -387,7 +491,7 @@
                 let firstQuestionInView
                 for (let i = this.renderedQuestions.startIndex; i <= this.renderedQuestions.endIndex; i++) {
                     // console.Log(i, ': ', this.questions[i].isInView)
-                    if (this.questions[i].isInView === true) {
+                    if (this.questions[i] && this.questions[i].isInView === true) {
                         firstQuestionInView = this.questions[i]
                         break
                     }
