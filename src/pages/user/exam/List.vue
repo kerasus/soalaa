@@ -110,7 +110,7 @@
                         شروع آزمون
                       </v-btn>
                       <v-btn
-                          v-if="item.exam_actions.can_submit_answers"
+                          v-if="item.exam_actions.can_submit_answers !== false"
                           color="#ffc107"
                           text
                           @click="goToSendResults(item)"
