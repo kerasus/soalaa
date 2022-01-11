@@ -247,31 +247,6 @@
             }
         },
         created() {
-            let that = this
-            this.startExam(this.$route.params.quizId, 'onlineQuiz.KonkoorView')
-                .then(() => {
-                    // that.loadFirstActiveQuestionIfNeed()
-                    that.$store.commit('AppLayout/updateOverlay', {show: false, loading: false, text: ''})
-                    const callbacks = {
-                      'question.file-link:update': {
-                        afterReload () {
-                          that.questions = that.getCurrentExamQuestionsInArray()
-                        }
-                      }
-                    }
-                    that.setSocket(that.$store.getters['Auth/accessToken'], that.quiz.id, callbacks)
-                })
-                .catch((error) => {
-                    Assistant.reportErrors(error)
-                    that.$notify({
-                        group: 'notifs',
-                        title: 'توجه!',
-                        text: 'مشکلی در دریافت اطلاعات آژمون رخ داده است. لطفا دوباره امتحان کنید.',
-                        type: 'error'
-                    })
-                    // ToDo: uncomment
-                    // that.$router.push({ name: 'user.exam.list'})
-                })
             if (this.windowSize.x > 959) {
                 this.changeAppBarAndDrawer(false)
             } else {
@@ -280,11 +255,37 @@
                     params: {quizId: this.$route.params.quizId, questNumber: 1}
                 })
             }
-            if (!this.questions.length) {
-                this.questions = this.getCurrentExamQuestionsInArray()
-            }
+            // if (!this.questions.length) {
+            //     this.questions = this.getCurrentExamQuestionsInArray()
+            // }
         },
         mounted() {
+          let that = this
+          this.startExam(this.$route.params.quizId, 'onlineQuiz.KonkoorView')
+              .then(() => {
+                // that.loadFirstActiveQuestionIfNeed()
+                that.$store.commit('AppLayout/updateOverlay', {show: false, loading: false, text: ''})
+                that.questions = that.getCurrentExamQuestionsInArray()
+                const callbacks = {
+                  'question.file-link:update': {
+                    afterReload () {
+                      that.questions = that.getCurrentExamQuestionsInArray()
+                    }
+                  }
+                }
+                that.setSocket(that.$store.getters['Auth/accessToken'], that.quiz.id, callbacks)
+              })
+              .catch((error) => {
+                Assistant.reportErrors(error)
+                that.$notify({
+                  group: 'notifs',
+                  title: 'توجه!',
+                  text: 'مشکلی در دریافت اطلاعات آژمون رخ داده است. لطفا دوباره امتحان کنید.',
+                  type: 'error'
+                })
+                // ToDo: uncomment
+                // that.$router.push({ name: 'user.exam.list'})
+              })
             this.setHeights()
             if (this.currentQuestion.id === null) {
                 this.loadFirstQuestion()
@@ -490,7 +491,7 @@
                 let firstQuestionInView
                 for (let i = this.renderedQuestions.startIndex; i <= this.renderedQuestions.endIndex; i++) {
                     // console.Log(i, ': ', this.questions[i].isInView)
-                    if (this.questions[i].isInView === true) {
+                    if (this.questions[i] && this.questions[i].isInView === true) {
                         firstQuestionInView = this.questions[i]
                         break
                     }
