@@ -660,7 +660,7 @@ const mixinQuiz = {
         syncUserAnswersWithDBAndSendAnswersToServerAfterExamTime(examId, examUserId, finishExam) {
             let answers = this.getUserAnswers(examId)
 
-            return axios.post(API_ADDRESS.exam.sendAnswers, {exam_user_id: examUserId, finish: finishExam, questions: answers })
+            return axios.post(API_ADDRESS.exam.sendAnswersAfterExam, {exam_user_id: examUserId, finish: finishExam, questions: answers })
         },
 
 
@@ -673,11 +673,11 @@ const mixinQuiz = {
             const persianRegex = /[\u0600-\u06FF]/
             return !string.match(persianRegex)
         },
-        answerClicked(data) {
+        answerClicked(data, sendData = true) {
             let questionId = data.questionId
 
             const socket = (this.useSocket) ? this.socket : false
-            return this.userActionOnQuestion(questionId, 'answer', {choiceId: data.choiceId}, socket)
+            return this.userActionOnQuestion(questionId, 'answer', {choiceId: data.choiceId}, socket, sendData)
         },
         changeBookmark(questionId) {
             const socket = (this.useSocket) ? this.socket : false

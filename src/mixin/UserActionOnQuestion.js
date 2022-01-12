@@ -2,7 +2,7 @@ import {Question} from "@/models/Question";
 
 const mixinUserActionOnQuestion = {
     methods: {
-        userActionOnQuestion(questionId, actionType, data, socket) {
+        userActionOnQuestion(questionId, actionType, data, socket, sendData) {
             let examId = this.quiz.id
             let exam_user_id = this.quiz.user_exam_id
             this.beforeUserActionOnQuestion(examId, questionId)
@@ -22,7 +22,10 @@ const mixinUserActionOnQuestion = {
                 this.userActionOnQuestion_status(data, examId, questionId, userQuestionData)
             }
             this.afterUserActionOnQuestion()
-            return this.sendUserQuestionsDataToServer(exam_user_id, userExamData, questionId, actionType, socket)
+            if (sendData) {
+                return this.sendUserQuestionsDataToServer(exam_user_id, userExamData, questionId, actionType, socket)
+            }
+            return false
         },
         beforeUserActionOnQuestion(examId, questionId) {
             this.$store.commit('updateCurrentQuestion', {
