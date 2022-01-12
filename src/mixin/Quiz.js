@@ -660,7 +660,7 @@ const mixinQuiz = {
         syncUserAnswersWithDBAndSendAnswersToServerAfterExamTime(examId, examUserId, finishExam) {
             let answers = this.getUserAnswers(examId)
 
-            return axios.post(API_ADDRESS.exam.sendAnswers, {exam_user_id: examUserId, finish: finishExam, questions: answers })
+            return axios.post(API_ADDRESS.exam.sendAnswersAfterExam, {exam_user_id: examUserId, finish: finishExam, questions: answers })
         },
 
 

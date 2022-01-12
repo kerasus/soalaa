@@ -249,7 +249,7 @@ class ExamData {
 				{
 					exam_id = that.exam.id
 				}
-				axios.post(API_ADDRESS.exam.examUser, {exam_id})
+				axios.get(API_ADDRESS.exam.examUserAfterExam + '?exam_id=' + exam_id)
 				 .then(response => {
 					 that.exam = new Exam()
 					 // ToDo: attention on user_exam_id and exam_id

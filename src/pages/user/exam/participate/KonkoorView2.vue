@@ -246,7 +246,7 @@ export default {
   },
   mounted() {
     let that = this
-    this.startExam(this.$route.params.quizId, 'onlineQuiz.KonkoorView')
+    this.showExamAfterExamTime(this.$route.params.quizId, 'onlineQuiz.KonkoorView2')
         .then(() => {
           this.$store.commit('setActiveStateOfExamCategories', true)
           // that.loadFirstActiveQuestionIfNeed()
@@ -315,7 +315,7 @@ export default {
       this.timerIsOpen = value
     },
     confirmSendingAllAnswers () {
-      this.sendTotalUserQuestionsDataToServer(this.quiz.id, this.quiz.user_exam_id, false)
+      this.syncUserAnswersWithDBAndSendAnswersToServerAfterExamTime(this.quiz.id, this.quiz.user_exam_id, false)
           .then( () => {
             this.$router.push({name: 'user.exam.list'})
             this.confirmationBubbleSheet = true
@@ -327,7 +327,7 @@ export default {
     getConfirmation() {
       let that = this
       this.confirmationBtnLoading = true
-      this.sendTotalUserQuestionsDataToServer(this.quiz.id, this.quiz.user_exam_id, false)
+      this.syncUserAnswersWithDBAndSendAnswersToServerAfterExamTime(this.quiz.id, this.quiz.user_exam_id, false)
           .then( () => {
             let examData = new ExamData()
             examData.getUserExamData(this.quiz.user_exam_id)

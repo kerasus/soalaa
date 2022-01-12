@@ -31,6 +31,7 @@ const API_ADDRESS = {
   exam: {
     editExam: lumenServer + '/exam',
     sendAnswers: lumenServer + '/temp-exam/answer/choice',
+    sendAnswersAfterExam: lumenServer + '/temp-exam/answer/choice/v2',
     sendStatus: lumenServer + '/temp-exam/answer/status',
     sendBookmark: lumenServer + '/temp-exam/answer/bookmark',
     sendUnBookmark: lumenServer + '/temp-exam/answer/unbookmark',
@@ -69,6 +70,7 @@ const API_ADDRESS = {
     },
     registerExam: lumenServer + '/user/registerExam',
     examUser: lumenServer + '/exam-user',
+    examUserAfterExam: lumenServer + '/exam-user/show',
     examQuestion (quizId) {
       return lumenServer + '/exam-question/attach/show/' + quizId
     },
