@@ -21,19 +21,33 @@ export default {
   data () {
     return {
       expanded: true,
-      api: API_ADDRESS.questionCategory.base,
+      api: API_ADDRESS.questionSubcategory.base,
       entityIdKeyInResponse: 'id',
       showRouteParamKey: 'id',
-      showRouteName: 'Admin.Category.Show',
-      indexRouteName: 'Admin.Category.Index',
+      showRouteName: 'Admin.subCategory.Show',
+      indexRouteName: 'Admin.subCategory.Index',
       inputs: [
-        { type: 'input', name: 'title', responseKey: 'title', label: 'عنوان', col: 'col-md-12' }
-      ]
+        { type: 'input', name: 'title', responseKey: 'data.title', label: 'عنوان', col: 'col-md-6' },
+        { type: 'select', options: [], optionLabel: 'title', optionValue: 'id', name: 'category_id', responseKey: 'data.category_id', label: 'دفترچه', col: 'col-md-6' }
+      ],
+      categories: []
     }
   },
   created () {
+    this.loadCategories()
   },
   methods: {
+    loadCategories () {
+      const that = this
+      that.$axios.get(API_ADDRESS.questionCategory.base)
+        .then(function (response) {
+          that.categories = response.data.data
+          that.inputs[1].options = that.categories
+        })
+        .catch(function (error) {
+          console.log(error)
+        })
+    }
   }
 }
 </script>

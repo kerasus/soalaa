@@ -1,12 +1,12 @@
 <template>
   <div>
+<!--    v-model:value="inputs"-->
     <entity-index
-      v-model:value="inputs"
       title="لیست دروس"
       :api="api"
       :table="table"
       :table-keys="tableKeys"
-      :create-route-name="'Admin.lesson.Create'"
+      :create-route-name="'Admin.subCategory.Create'"
     >
       <template #table-cell="{inputData, showConfirmRemoveDialog}">
         <q-td :props="inputData.props">
