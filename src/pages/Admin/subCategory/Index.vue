@@ -10,17 +10,16 @@
     >
       <template #table-cell="{inputData, showConfirmRemoveDialog}">
         <q-td :props="inputData.props">
-          <template v-if="inputData.props.col.name === 'thumbnail'">
-            <q-avatar>
-              <q-img
-                :src="inputData.props.value"
-                placeholder-src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAJYAAACWBAMAAADOL2zRAAAAG1BMVEXMzMyWlpaqqqq3t7fFxcW+vr6xsbGjo6OcnJyLKnDGAAAACXBIWXMAAA7EAAAOxAGVKw4bAAABAElEQVRoge3SMW+DMBiE4YsxJqMJtHOTITPeOsLQnaodGImEUMZEkZhRUqn92f0MaTubtfeMh/QGHANEREREREREREREtIJJ0xbH299kp8l8FaGtLdTQ19HjofxZlJ0m1+eBKZcikd9PWtXC5DoDotRO04B9YOvFIXmXLy2jEbiqE6Df7DTleA5socLqvEFVxtJyrpZFWz/pHM2CVte0lS8g2eDe6prOyqPglhzROL+Xye4tmT4WvRcQ2/m81p+/rdguOi8Hc5L/8Qk4vhZzy08DduGt9eVQyP2qoTM1zi0/uf4hvBWf5c77e69Gf798y08L7j0RERERERERERH9P99ZpSVRivB/rgAAAABJRU5ErkJggg=="
-                spinner-color="white"
-                style="height: 50px; max-width: 50px"
-              />
-            </q-avatar>
+          <template v-if="inputData.props.col.name === 'icon'">
+            <q-avatar
+              size="40px"
+              round
+              text-color="white"
+              :color="iconPicker(inputData.props.row.title).color"
+              :icon="iconPicker(inputData.props.row.title).icon"
+            />
           </template>
-          <template v-else-if="inputData.props.col.name === 'actions'">
+          <template v-if="inputData.props.col.name === 'actions'">
             <q-btn round flat dense size="md" color="info" icon="info" :to="{name:'Admin.subCategory.Show', params: {id: inputData.props.row.id}}">
               <q-tooltip>
                 مشاهده
@@ -69,6 +68,13 @@ export default {
       table: {
         columns: [
           {
+            name: 'icon',
+            required: true,
+            label: '',
+            align: 'left',
+            field: ''
+          },
+          {
             name: 'title',
             required: true,
             label: 'عنوان',
@@ -104,6 +110,88 @@ export default {
   created () {
     this.loadCategories()
   },
+  computed: {
+    iconPicker () {
+      return (title) => {
+        if (title.includes('ریاضی') || title.includes('ریاضیات')) {
+          return {
+            icon: 'mdi-sigma',
+            color: 'deep-orange darken-3'
+          }
+        } else if (title.includes('هندسه')) {
+          return {
+            icon: 'mdi-math-compass',
+            color: 'red'
+          }
+        } else if (title.includes('زمین')) {
+          return {
+            icon: 'mdi-earth',
+            color: 'green'
+          }
+        } else if (title.includes('زبان') || title.includes('عربی') || title.includes('انگلیسی') || title.includes('فارسی') || title.includes('فارسی') || title.includes('ادبیات')) {
+          return {
+            icon: 'mdi-translate',
+            color: 'purple lighten-2'
+          }
+        } else if (title.includes('فیزیک')) {
+          return {
+            icon: 'mdi-atom',
+            color: 'blue-grey darken-1'
+          }
+        } else if (title.includes('شیمی')) {
+          return {
+            icon: 'mdi-bottle-tonic-skull',
+            color: 'red darken-2'
+          }
+        } else if (title.includes('حساب') || title.includes('گسسته')) {
+          return {
+            icon: 'mdi-math-integral',
+            color: 'orange accent-4'
+          }
+        } else if (title.includes('تاریخ')) {
+          return {
+            icon: 'mdi-history',
+            color: 'light-blue accent-3'
+          }
+        } else if (title.includes('جغرافی')) {
+          return {
+            icon: 'mdi-map-marker',
+            color: 'cyan lighten-1'
+          }
+        } else if (title.includes('نظرسنجی')) {
+          return {
+            icon: 'mdi-poll',
+            color: 'black'
+          }
+        } else if (title.includes('زیست')) {
+          return {
+            icon: 'mdi-human',
+            color: 'brown'
+          }
+        } else if (title.includes('روان')) {
+          return {
+            icon: 'mdi-head-snowflake',
+            color: 'amber accent-4'
+          }
+        } else if (title.includes('اقتصاد')) {
+          return {
+            icon: 'mdi-finance',
+            color: 'green accent-4'
+          }
+        } else if (title.includes('دین') || title.includes('آسمانی') || title.includes('عقاید') || title.includes('قرآن')) {
+          return {
+            icon: 'mdi-book-open-variant',
+            color: 'indigo darken-3'
+          }
+        } else {
+          return {
+            icon: 'mdi-card-text',
+            color: 'grey'
+          }
+        }
+      }
+    }
+  },
   methods: {
     getRemoveMessage (row) {
       const title = row.title
@@ -134,5 +222,4 @@ export default {
 </script>
 
 <style scoped>
-
 </style>
