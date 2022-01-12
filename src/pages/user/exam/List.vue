@@ -126,7 +126,7 @@
                         ادامه آزمون
                       </v-btn>
                       <v-btn
-                        v-if="item.exam_actions.can_submit_offline_answer"
+                        v-if="item.exam_actions.can_submit_offline_answers"
                         color="#ffc107"
                         text
                         @click="getConfirmation(item.id, item.user_exam_id)"
