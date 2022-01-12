@@ -95,6 +95,7 @@
                 :delay-time="0"
                 @clickChoice="choiceClicked"
                 @scrollTo="scrollTo"
+                :submitAnswers="false"
             />
           </v-col>
         </v-row>
@@ -114,63 +115,84 @@
 
     <v-dialog
         v-model="confirmationBubbleSheet"
-        fullscreen
-        hide-overlay
-        transition="dialog-bottom-transition"
+        max-width="290"
     >
       <v-card>
-        <v-toolbar
-            dark
-            color="primary"
-        >
+        <v-card-title class="text-h5">
+          توجه
+        </v-card-title>
+        <v-card-text>از ارسال پاسخ ها مطمئن هستید؟</v-card-text>
+        <v-card-actions>
+          <v-spacer></v-spacer>
           <v-btn
-              icon
-              dark
+              color="green darken-1"
+              text
+              @click="confirmSendingAllAnswers"
+          >
+            ارسال میکنم
+          </v-btn>
+          <v-btn
+              color="green darken-1"
+              text
               @click="confirmationBubbleSheet = false"
           >
-            <v-icon>mdi-close</v-icon>
+            ادامه میدم
           </v-btn>
-          <v-toolbar-title>پاسخنامه کاربر</v-toolbar-title>
-          <v-spacer />
-          <v-toolbar-items v-if="false">
-            <v-btn
-                dark
-                text
-                @click="confirmSendingAllAnswers"
-            >
-              Save
-            </v-btn>
-          </v-toolbar-items>
-        </v-toolbar>
-        <v-card>
-          <v-card-text>
-            از ارسال پاسخ ها اطمینان دارید؟
-          </v-card-text>
-          <v-card-actions>
-            <v-btn
-                class="ma-1"
-                color="grey"
-                plain
-                @click="confirmationBubbleSheet = false"
-            >
-              ادامه میدم
-            </v-btn>
-
-            <v-btn
-                class="ma-1"
-                color="success"
-                plain
-                @click="confirmSendingAllAnswers"
-            >
-              ثبت میکنم
-            </v-btn>
-          </v-card-actions>
-        </v-card>
-        <BubbleSheet
-            :info="{ type: 'pasokh-nameh' }"
-            delay-time="0"
-        />
+        </v-card-actions>
       </v-card>
+<!--      <v-card>-->
+<!--        <v-toolbar-->
+<!--            dark-->
+<!--            color="primary"-->
+<!--        >-->
+<!--          <v-btn-->
+<!--              icon-->
+<!--              dark-->
+<!--              @click="confirmationBubbleSheet = false"-->
+<!--          >-->
+<!--            <v-icon>mdi-close</v-icon>-->
+<!--          </v-btn>-->
+<!--          <v-toolbar-title>پاسخنامه کاربر</v-toolbar-title>-->
+<!--          <v-spacer />-->
+<!--          <v-toolbar-items v-if="false">-->
+<!--            <v-btn-->
+<!--                dark-->
+<!--                text-->
+<!--                @click="confirmSendingAllAnswers"-->
+<!--            >-->
+<!--              Save-->
+<!--            </v-btn>-->
+<!--          </v-toolbar-items>-->
+<!--        </v-toolbar>-->
+<!--        <v-card>-->
+<!--          <v-card-text>-->
+<!--            از ارسال پاسخ ها اطمینان دارید؟-->
+<!--          </v-card-text>-->
+<!--          <v-card-actions>-->
+<!--            <v-btn-->
+<!--                class="ma-1"-->
+<!--                color="grey"-->
+<!--                plain-->
+<!--                @click="confirmationBubbleSheet = false"-->
+<!--            >-->
+<!--              ادامه میدم-->
+<!--            </v-btn>-->
+
+<!--            <v-btn-->
+<!--                class="ma-1"-->
+<!--                color="success"-->
+<!--                plain-->
+<!--                @click="confirmSendingAllAnswers"-->
+<!--            >-->
+<!--              ثبت میکنم-->
+<!--            </v-btn>-->
+<!--          </v-card-actions>-->
+<!--        </v-card>-->
+<!--        <BubbleSheet-->
+<!--            :info="{ type: 'pasokh-nameh' }"-->
+<!--            delay-time="0"-->
+<!--        />-->
+<!--      </v-card>-->
     </v-dialog>
   </v-container>
 </template>
@@ -182,15 +204,15 @@ import {Exam} from '@/models/Exam'
 import Assistant from '@/plugins/assistant'
 import {DynamicScroller, DynamicScrollerItem} from 'vue-virtual-scroller'
 import Item from '@/components/OnlineQuiz/Quiz/ViewTypes/components/question'
-import Timer from '@/components/OnlineQuiz/Quiz/Timer/Timer'
+// import Timer from '@/components/OnlineQuiz/Quiz/Timer/Timer'
 import BubbleSheet from '@/components/OnlineQuiz/Quiz/BubbleSheet/BubbleSheet'
 import {TopMenu_OnlineQuiz} from '@/components/Menu/Menus'
-import BookletsDialog from '@/components/OnlineQuiz/Quiz/BookletsDialog'
+// import BookletsDialog from '@/components/OnlineQuiz/Quiz/BookletsDialog'
 import {mixinAuth, mixinQuiz, mixinUserActionOnQuestion, mixinWindowSize} from '@/mixin/Mixins'
 
 import '@/assets/scss/markdownKatex.scss'
 import 'vue-virtual-scroller/dist/vue-virtual-scroller.css'
-import ExamData from "@/assets/js/ExamData";
+// import ExamData from "@/assets/js/ExamData";
 
 Vue.use(VueConfirmDialog)
 Vue.component('vue-confirm-dialog', VueConfirmDialog.default)
@@ -198,12 +220,12 @@ Vue.component('vue-confirm-dialog', VueConfirmDialog.default)
 export default {
   name: 'KonkoorView',
   components: {
-    Timer,
+    // Timer,
     TopMenu_OnlineQuiz,
     BubbleSheet,
     DynamicScroller,
     DynamicScrollerItem,
-    BookletsDialog,
+    // BookletsDialog,
     Item
   },
   mixins: [mixinAuth, mixinQuiz, mixinUserActionOnQuestion, mixinWindowSize],
@@ -259,7 +281,6 @@ export default {
               }
             }
           }
-          that.setSocket(that.$store.getters['Auth/accessToken'], that.quiz.id, callbacks)
         })
         .catch((error) => {
           Assistant.reportErrors(error)
@@ -327,28 +348,30 @@ export default {
     getConfirmation() {
       let that = this
       this.confirmationBtnLoading = true
-      this.syncUserAnswersWithDBAndSendAnswersToServerAfterExamTime(this.quiz.id, this.quiz.user_exam_id, false)
-          .then( () => {
-            let examData = new ExamData()
-            examData.getUserExamData(this.quiz.user_exam_id)
-                .run()
-                .then(() => {
-                  that.$store.commit('mergeDbAnswersIntoLocalstorage', {
-                    dbAnswers: examData.userExamData,
-                    exam_id: examData.exam.id
-                  })
-                  that.confirmationBubbleSheet = true
-                  that.confirmationBtnLoading = false
-                })
-                .catch(() => {
-                  that.confirmationBubbleSheet = true
-                  that.confirmationBtnLoading = false
-                })
-          })
-          .catch( () => {
-            that.confirmationBubbleSheet = true
-            that.confirmationBtnLoading = false
-          })
+      that.confirmationBubbleSheet = true
+      that.confirmationBtnLoading = false
+      // this.syncUserAnswersWithDBAndSendAnswersToServerAfterExamTime(this.quiz.id, this.quiz.user_exam_id, false)
+      //     .then( () => {
+      //       let examData = new ExamData()
+      //       examData.getUserExamData(this.quiz.user_exam_id)
+      //           .run()
+      //           .then(() => {
+      //             that.$store.commit('mergeDbAnswersIntoLocalstorage', {
+      //               dbAnswers: examData.userExamData,
+      //               exam_id: examData.exam.id
+      //             })
+      //             that.confirmationBubbleSheet = true
+      //             that.confirmationBtnLoading = false
+      //           })
+      //           .catch(() => {
+      //             that.confirmationBubbleSheet = true
+      //             that.confirmationBtnLoading = false
+      //           })
+      //     })
+      //     .catch( () => {
+      //       that.confirmationBubbleSheet = true
+      //       that.confirmationBtnLoading = false
+      //     })
       //
       // this.$store.commit('AppLayout/showConfirmDialog', {
       //     message: 'از ارسال پاسخ ها اطمینان دارید؟',
@@ -458,7 +481,7 @@ export default {
     //         }
     //     }
     // },
-    scrollTo(questionId) {
+    scrollTo() {
       // const questionIndex = this.getQuestionIndexById(questionId)
       // this.$refs.scroller.scrollToItem(questionIndex)
       // for (let i = 1; i < 4; i++) {
