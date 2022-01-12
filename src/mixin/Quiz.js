@@ -429,10 +429,6 @@ const mixinQuiz = {
                                 that.loadCurrentQuestion(viewType)
                                 that.reloadCurrentQuestion(viewType)
 
-                                that.$store.commit('mergeDbAnswersIntoLocalstorage', {
-                                    dbAnswers: examData.userExamData,
-                                    exam_id: examData.exam.id
-                                })
                             } else {
                                 examData.exam = that.quiz
                             }
@@ -454,22 +450,6 @@ const mixinQuiz = {
                     .finally(() => {
                         that.$store.commit('AppLayout/updateOverlay', {show: false, loading: false, text: ''})
                     })
-
-                // if (that.needToLoadQuizData() && examId) {
-                //     that.participateExam(examId, viewType)
-                //         .then(() => {
-                //             resolve()
-                //         })
-                //         .catch((error) => {
-                //             that.$store.commit('AppLayout/updateOverlay', {show: false, loading: false, text: ''})
-                //             Assistant.reportErrors({location: 'mixin/Quiz.js -> startExam()'})
-                //             reject(error)
-                //         })
-                // } else {
-                //     that.loadExam()
-                //     that.$store.commit('AppLayout/updateOverlay', {show: false, loading: false, text: ''})
-                //     resolve()
-                // }
             })
         },
         needToLoadQuizData() {
@@ -619,10 +599,68 @@ const mixinQuiz = {
 
             return axios.post(API_ADDRESS.exam.sendAnswers, {exam_user_id: examUserId, finish: true, questions: answers })
         },
-        sendTotalUserQuestionsDataToServer(examId, examUserId, finishExam) {
+        syncUserAnswersWithDBAndSendAnswersToServerInExamTime(examId, examUserId, finishExam) {
             let answers = this.getUserAnswers(examId)
 
             return axios.post(API_ADDRESS.exam.sendAnswers, {exam_user_id: examUserId, finish: finishExam, questions: answers })
+        },
+
+        showExamAfterExamTime(examId, viewType) {
+
+            if (!Assistant.getId(examId)) {
+                return
+            }
+            let that = this
+            return new Promise(function (resolve, reject) {
+                let examData = new ExamData()
+                that.saveCurrentExamQuestions([])
+                that.$store.commit('cleanCurrentQuestion')
+                // window.currentExamQuestions = null
+                // window.currentExamQuestionIndexes = null
+                that.bookletsDialog = true
+                that.$store.commit('AppLayout/updateOverlay', {show: true, loading: true, text: ''})
+                examData.getExamData(examId)
+                examData.loadQuestionsFromFile()
+                examData.getUserExamData()
+                    .run()
+                    .then((result) => {
+                        try {
+                            // save questions in localStorage
+                            that.saveCurrentExamQuestions(examData.exam.questions.list)
+                            // save exam info in vuex store (remove questions of exam then save in store)
+                            examData.exam.loadSubcategoriesOfCategories()
+                            Time.setStateOfExamCategories(examData.exam.categories, true)
+                            let currentExamQuestions = that.getCurrentExamQuestions()
+                            Time.setStateOfQuestionsBasedOnActiveCategory(examData.exam, currentExamQuestions)
+                            that.$store.commit('updateQuiz', examData.exam)
+                            that.setCurrentExamQuestions(currentExamQuestions)
+                            that.loadCurrentQuestion(viewType)
+                            that.reloadCurrentQuestion(viewType)
+
+                            that.$store.commit('mergeDbAnswersIntoLocalstorage', {
+                                dbAnswers: examData.userExamData,
+                                exam_id: examData.exam.id
+                            })
+                            resolve(result)
+                        } catch (error) {
+                            console.error(error)
+                            that.$router.push({name: 'user.exam.list'})
+                            reject(error)
+                        }
+                    })
+                    .catch((error) => {
+                        reject(error)
+                        that.$router.push({name: 'user.exam.list'})
+                    })
+                    .finally(() => {
+                        that.$store.commit('AppLayout/updateOverlay', {show: false, loading: false, text: ''})
+                    })
+            })
+        },
+        syncUserAnswersWithDBAndSendAnswersToServerAfterExamTime(examId, examUserId, finishExam) {
+            let answers = this.getUserAnswers(examId)
+
+            return axios.post(API_ADDRESS.exam.sendAnswersAfterExam, {exam_user_id: examUserId, finish: finishExam, questions: answers })
         },
 
 

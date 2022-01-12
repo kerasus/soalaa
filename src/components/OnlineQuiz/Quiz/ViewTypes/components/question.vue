@@ -29,6 +29,7 @@
       :style="{ float: isRtlString ? 'left' : 'right' }"
     >
       <v-btn
+        v-if="showOptions"
         icon
         @click="changeStatus(source.id, 'o')"
       >
@@ -48,6 +49,7 @@
         </v-icon>
       </v-btn>
       <v-btn
+          v-if="showOptions"
         icon
         @click="changeStatus(source.id ,'x')"
       >
@@ -60,6 +62,7 @@
       </v-btn>
       <v-btn
         icon
+        v-if="showOptions"
         @click="changeBookmark(source.id)"
       >
         <v-icon
@@ -140,6 +143,9 @@
                 default() {
                     return {}
                 }
+            },
+            showOptions: {
+              default: true
             }
         },
         data() {

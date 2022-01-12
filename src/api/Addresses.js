@@ -31,6 +31,7 @@ const API_ADDRESS = {
   exam: {
     editExam: lumenServer + '/exam',
     sendAnswers: lumenServer + '/temp-exam/answer/choice',
+    sendAnswersAfterExam: lumenServer + '/temp-exam/answer/choice/v2',
     sendStatus: lumenServer + '/temp-exam/answer/status',
     sendBookmark: lumenServer + '/temp-exam/answer/bookmark',
     sendUnBookmark: lumenServer + '/temp-exam/answer/unbookmark',
@@ -40,11 +41,15 @@ const API_ADDRESS = {
     getAnalysisVideo (exam_id) { return lumenServer + '/exam-question/videos/' + exam_id },
     examReportIndex (type) { return lumenServer + '/exam-report/index/' + type },
     pdf (exam_id) { return lumenServer + '/exam-question/booklet-file/' +exam_id },
-    base (page_number) {
-      if (page_number) {
-        return lumenServer + '/exam?with_pagination=1&page=' + page_number
+    base (page_number, pagination = true) {
+      if (pagination) {
+        if (page_number) {
+          return lumenServer + '/exam?with_pagination=1&page=' + page_number
+        } else {
+          return lumenServer + '/exam'
+        }
       } else {
-        return lumenServer + '/exam'
+        return lumenServer + 'exam?with_pagination=0'
       }
     },
     generateExamFile (exam_id, with_answer) {
@@ -65,6 +70,7 @@ const API_ADDRESS = {
     },
     registerExam: lumenServer + '/user/registerExam',
     examUser: lumenServer + '/exam-user',
+    examUserAfterExam: lumenServer + '/exam-user/show',
     examQuestion (quizId) {
       return lumenServer + '/exam-question/attach/show/' + quizId
     },

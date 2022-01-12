@@ -69,6 +69,12 @@ const router = new VueRouter({
             meta: {middleware: [auth, completeInfo]}
         },
         {
+            path: '/onlineQuiz/konkoorViewSendAnswer/:quizId',
+            name: 'onlineQuiz.konkoorView2',
+            component: () => lazyLoadView(import('@/pages/user/exam/participate/KonkoorView2')),
+            meta: {middleware: [auth, completeInfo]}
+        },
+        {
             path: '/onlineQuiz/bubblesheetView/:quizId',
             name: 'onlineQuiz.bubblesheet-view',
             component: () => lazyLoadView(import('@/pages/user/exam/participate/BubbleSheetView')),
