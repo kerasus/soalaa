@@ -459,14 +459,14 @@ export default {
     //     }
     // },
     scrollTo(questionId) {
-      const questionIndex = this.getQuestionIndexById(questionId)
-      this.$refs.scroller.scrollToItem(questionIndex)
-      for (let i = 1; i < 4; i++) {
-        setTimeout(() => {
-              this.$refs.scroller.scrollToItem(questionIndex)
-            },
-            333 * i)
-      }
+      // const questionIndex = this.getQuestionIndexById(questionId)
+      // this.$refs.scroller.scrollToItem(questionIndex)
+      // for (let i = 1; i < 4; i++) {
+      //   setTimeout(() => {
+      //         this.$refs.scroller.scrollToItem(questionIndex)
+      //       },
+      //       333 * i)
+      // }
     },
     // onIntersect (entries) {
     //     this.quiz.questions.getQuestionById(entries[0].target.id).isInView = (entries[0].intersectionRatio >= 0.5)
