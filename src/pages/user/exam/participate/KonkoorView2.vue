@@ -91,6 +91,7 @@
         <v-row>
           <v-col>
             <BubbleSheet
+                :key="bubbleSheetKey"
                 :info="{ type: 'pasokh-barg' }"
                 :delay-time="0"
                 @clickChoice="choiceClicked"
@@ -242,7 +243,8 @@ export default {
       inView: [],
       confirmationBubbleSheet: false,
       confirmationBtnLoading: false,
-      timerIsOpen: false
+      timerIsOpen: false,
+      bubbleSheetKey: 'test'
     }
   },
   watch: {
@@ -281,6 +283,7 @@ export default {
               }
             }
           }
+          that.bubbleSheetKey = Date.now()
         })
         .catch((error) => {
           Assistant.reportErrors(error)
