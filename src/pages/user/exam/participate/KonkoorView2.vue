@@ -10,6 +10,8 @@
         id="questions"
         ref="questionsColumn"
         :md="5"
+        :sm="0"
+        :cols="0"
         class="questions"
         :style="{ height: windowSize.y }"
       >
@@ -40,6 +42,8 @@
       <v-col
         ref="leftSideList"
         :md="7"
+        :sm="12"
+        :cols="12"
         class="left-side-list"
       >
         <v-row>
@@ -255,15 +259,7 @@ export default {
   created() {
     if (this.windowSize.x > 959) {
       this.changeAppBarAndDrawer(false)
-    } else {
-      this.$router.push({
-        name: 'onlineQuiz.alaaView',
-        params: {quizId: this.$route.params.quizId, questNumber: 1}
-      })
     }
-    // if (!this.questions.length) {
-    //     this.questions = this.getCurrentExamQuestionsInArray()
-    // }
   },
   mounted() {
     let that = this
