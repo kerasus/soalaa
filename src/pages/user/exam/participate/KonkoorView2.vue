@@ -95,11 +95,12 @@
         <v-row>
           <v-col>
             <BubbleSheet
-              :info="{ type: 'pasokh-barg' }"
-              :delay-time="0"
-              :submit-answers="false"
-              @clickChoice="choiceClicked"
-              @scrollTo="scrollTo"
+                :key="bubbleSheetKey"
+                :info="{ type: 'pasokh-barg' }"
+                :delay-time="0"
+                @clickChoice="choiceClicked"
+                @scrollTo="scrollTo"
+                :submitAnswers="false"
             />
           </v-col>
         </v-row>
@@ -245,7 +246,8 @@ export default {
       inView: [],
       confirmationBubbleSheet: false,
       confirmationBtnLoading: false,
-      timerIsOpen: false
+      timerIsOpen: false,
+      bubbleSheetKey: 'test'
     }
   },
   watch: {
@@ -274,6 +276,8 @@ export default {
           if (this.currentQuestion.id === null) {
             this.loadFirstQuestion()
           }
+          that.bubbleSheetKey = Date.now()
+
           this.scrollTo(this.currentQuestion.id)
 
         })
