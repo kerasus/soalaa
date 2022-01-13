@@ -244,7 +244,7 @@
                 })
             },
             answerClickedd(payload) {
-                this.answerClicked(payload)
+                this.answerClicked(payload, this.showOptions)
             },
             intersectionObserver(entries) {
                 this.source.isInView = entries[0].intersectionRatio >= 0.75
