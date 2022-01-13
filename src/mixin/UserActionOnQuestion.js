@@ -22,7 +22,7 @@ const mixinUserActionOnQuestion = {
                 this.userActionOnQuestion_status(data, examId, questionId, userQuestionData)
             }
             this.afterUserActionOnQuestion()
-            if (sendData) {
+            if (typeof sendData === 'undefined' || sendData === true) {
                 return this.sendUserQuestionsDataToServer(exam_user_id, userExamData, questionId, actionType, socket)
             }
             return false
