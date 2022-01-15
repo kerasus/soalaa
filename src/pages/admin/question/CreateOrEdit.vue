@@ -582,9 +582,9 @@
     import UploadFiles from '@/components/UploadFiles';
     // import UploadImage from '@/components/UploadImage';
     import API_ADDRESS from '@/api/Addresses'
-    import 'mathlive/dist/mathlive-fonts.css'
-    import 'mathlive/dist/mathlive-static.css'
-    import MathLive from 'mathlive'
+    // import 'mathlive/dist/mathlive-fonts.css'
+    // import 'mathlive/dist/mathlive-static.css'
+    // import MathLive from 'mathlive'
     import Assistant from "@/plugins/assistant";
     import TurndownService from "turndown/lib/turndown.browser.umd";
     // import Assistant from "@/plugins/assistant";
@@ -755,20 +755,19 @@
             }
         },
         mounted() {
-            let that = this
-            const mf = MathLive.makeMathField(
-                document.getElementById('mathfield'),
-                {
-                    virtualKeyboardMode: 'manual',
-                    onContentDidChange: (mf) => {
-                        that.latexData = mf.getValue()
-                    },
-                });
+            // let that = this
+            // const mf = MathLive.makeMathField(
+            //     document.getElementById('mathfield'),
+            //     {
+            //         virtualKeyboardMode: 'manual',
+            //         onContentDidChange: (mf) => {
+            //             that.latexData = mf.getValue()
+            //         },
+            //     });
             // mf.$setConfig(
             //     //{ macros: { ...mf.getConfig('macros'), smallfrac: '{}^{#1}\\!\\!/\\!{}_{#2}', }, }
             // );
-            that.latexData = mf.getValue()
-
+            // that.latexData = mf.getValue()
         },
         methods: {
 
