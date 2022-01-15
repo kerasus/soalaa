@@ -1,0 +1,9 @@
+version: "3.3"
+services:
+  production-build:
+    build: .
+    restart: unless-stopped
+    volumes:
+      - /etc/localtime:/etc/localtime:ro
+    ports:
+      - "${NGINX_PORT}:80"
