@@ -91,11 +91,17 @@ const routes = [
             }
           },
           {
-
-            path: '/sub_category/edit',
-            name: 'subCategory.edit',
-            component: () => import('pages/Admin/subCategory/LessonsList'),
-            meta: { middlewares: [auth] }
+            path: '/subCategory',
+            component: () => import('layouts/AdminLayout.vue'),
+            meta: {
+              middlewares: [auth]
+            },
+            children: [
+              { name: 'Admin.subCategory.Index', path: '', component: () => import('pages/Admin/subCategory/Index') },
+              { name: 'Admin.subCategory.Show', path: 'show/:id', component: () => import('pages/Admin/subCategory/Show') },
+              { name: 'Admin.subCategory.Edit', path: ':id/edit', component: () => import('pages/Admin/subCategory/Edit') },
+              { name: 'Admin.subCategory.Create', path: 'create', component: () => import('pages/Admin/subCategory/Create') }
+            ]
           },
           {
             path: '/questions',

@@ -116,7 +116,7 @@ const mixinQuiz = {
         this.reloadQuestionFile(questionsFileUrl, 'onlineQuiz.alaaView', this.$route.params.quizId)
           .then(() => {
             that.isRtl = !that.isLtrString(that.currentQuestion.statement)
-            that.$store.commit('AppLayout/updateOverlay', { show: false, loading: false, text: '' })
+            that.$store.commit('loading/overlay', { loading: false, text: '' })
             if (callbacks && callbacks['question.file-link:update'] && callbacks['question.file-link:update'].afterReload) {
               callbacks['question.file-link:update'].afterReload()
             }
@@ -147,7 +147,7 @@ const mixinQuiz = {
         const examData = new ExamData()
         window.currentExamQuestions = null
         window.currentExamQuestionIndexes = null
-        // that.$store.commit('AppLayout/updateOverlay', {show: true, loading: true, text: ''})
+        // that.$store.commit('loading/overlay', { loading: true, message: '' })
         examData.getExamDataAndParticipate(examId)
         examData.loadQuestionsFromFile()
         examData.getUserExamData(userExamId)
@@ -183,7 +183,7 @@ const mixinQuiz = {
             that.$router.push({ name: 'user.exam.list' })
           })
           .finally(() => {
-            that.$store.commit('AppLayout/updateOverlay', { show: false, loading: false, text: '' })
+            that.$store.commit('loading/overlay', { loading: false, message: '' })
           })
       })
     },

@@ -229,8 +229,8 @@ export default {
         },
         {
           displayName: 'لیست دروس',
-          to: '/sub_category/edit',
-          name: 'subCategory.edit'
+          to: '/subCategory',
+          name: 'Admin.subCategory.Index'
         },
         {
           displayName: 'لیست دفترچه ها',

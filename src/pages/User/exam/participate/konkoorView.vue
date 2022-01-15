@@ -145,7 +145,7 @@ export default {
           this.questions = this.getCurrentExamQuestionsInArray()
         }
         // that.loadFirstActiveQuestionIfNeed()
-        that.$store.commit('AppLayout/updateOverlay', { show: false, loading: false, text: '' })
+        that.$store.commit('loading/overlay', { loading: false, message: '' })
         const callbacks = {
           'question.file-link:update': {
             afterReload () {
