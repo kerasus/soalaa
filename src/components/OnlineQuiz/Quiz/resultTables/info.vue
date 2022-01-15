@@ -1,45 +1,45 @@
 <template>
-  <v-card
+  <q-card
     class="infoCard infoText align-content-center"
-    :elevation="0"
+    flat
   >
-    <v-row class="infoHeight">
-      <v-col class="infoCols">
+    <div class="row infoHeight">
+      <div class="col infoCols">
         نام و نام خانوادگی :
         {{ user.first_name }}
         {{ user.last_name }}
-      </v-col>
-      <v-col class="infoCols">
+      </div>
+      <div class="col infoCols">
         رشته :
         {{ user.major.title }}
-      </v-col>
-      <v-col class="infoCols">
+      </div>
+      <div class="col infoCols">
         مقطع :
         {{ user.grade.title }}
-      </v-col>
-      <v-col
+      </div>
+      <div
         v-if="user.province"
-        class="infoCols"
+        class="col infoCols"
       >
         استان :
         {{ user.province.title }}
-      </v-col>
-      <v-col
+      </div>
+      <div
         v-if="user.city"
-        class="infoCols"
+        class="col infoCols"
       >
         شهر :
         {{ user.city.title }}
-      </v-col>
-      <v-col
+      </div>
+      <div
         v-if="user.school"
-        class="infoCols"
+        class="col infoCols"
       >
         مدرسه :
         {{ user.school }}
-      </v-col>
-    </v-row>
-  </v-card>
+      </div>
+    </div>
+  </q-card>
 </template>
 
 <script>
@@ -51,13 +51,13 @@ export default {
 }
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
     .infoCard {
         border-radius: 15px;
     }
     .infoCols {
-        text-align: center;
-
+        text-align: center ;
+        padding: 12px;
     }
     .infoHeight{
         height: 50%;
@@ -67,8 +67,8 @@ export default {
         white-space: nowrap;
         line-height: 34px;
         margin-top: -9px;
-        text-align: right;
-        font-family: IRANSans;
+        text-align: right #{"/* rtl:ignore */"};
+        font-family: IRANSans,sans-serif;
         font-style: normal;
         font-weight: normal;
         font-size: 16px;

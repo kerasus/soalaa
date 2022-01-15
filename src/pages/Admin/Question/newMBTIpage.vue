@@ -289,7 +289,7 @@ export default {
     },
 
     setQuestionPhotos (statusId) { // یاس
-      this.$store.commit('AppLayout/updateOverlay', { show: true, loading: true, text: 'کمی صبر کنید...' })
+      this.$store.commit('loading/overlay', { loading: true, message: 'کمی صبر کنید...' })
       const formData = new FormData()
       formData.append('status_id', statusId)
       formData.append('statement_photo', this.currentQuestion.statement_photo)
@@ -300,9 +300,9 @@ export default {
         .then((response) => {
           const questionId = response.data.data.id
           this.$router.push({ name: 'question.show', params: { question_id: questionId } })
-          this.$store.commit('AppLayout/updateOverlay', { show: false, loading: false, text: '' })
+          this.$store.commit('loading/overlay', { loading: false, message: '' })
         }).catch(() => {
-          this.$store.commit('AppLayout/updateOverlay', { show: false, loading: false, text: '' })
+          this.$store.commit('loading/overlay', { loading: false, message: '' })
         })
     },
 
@@ -590,7 +590,7 @@ export default {
       currentQuestion
         .create(null, API_ADDRESS.question.createAndAttach())
         .then((response) => {
-          this.$store.commit('AppLayout/updateOverlay', { show: false, loading: false, text: '' })
+          this.$store.commit('loading/overlay', { loading: false, message: '' })
           const questionId = response.data.data.id
           this.$router.push({ name: 'question.mbti.show', params: { question_id: questionId } })
           this.questionType = 'typeText'
