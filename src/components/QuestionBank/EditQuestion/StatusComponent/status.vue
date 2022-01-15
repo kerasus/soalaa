@@ -1,62 +1,57 @@
 <template>
-  <v-row align="center" class="status">
-    <v-col class="status-details">
-      <p class="font-weight-medium">
-        تغییر وضعیت
-      </p>
-      <v-card
-        flat
-        height="36"
-        class="my-4"
-      >
-        <v-select
-          v-model="newStatus.changeState"
-          :items="statuses.list"
-          item-text="display_title"
-          item-value="id"
-          dense
-          solo
+  <div class="q-my-xl ">
+    <div class="status row items-center">
+      <div class="col status-details">
+        <p class="status-title-text-style">
+          تغییر وضعیت
+        </p>
+        <q-card
           flat
-        />
-      </v-card>
-    </v-col>
-    <v-col class="status-details">
-      <p class="font-weight-medium">
-        افزودن کامنت
-      </p>
-      <v-card
-        flat
-        height="36"
-        class="my-4"
-      >
-        <v-text-field
-          v-model="newStatus.commentAdded"
-          height="36"
-          solo
-          dense
+          class="status-card"
+        >
+          <q-select
+            rounded
+            borderless
+            dense
+            v-model="newStatus.changeState"
+            :options="statuses.list"
+            option-label="display_title"
+            option-value="id"
+          ></q-select>
+        </q-card>
+      </div>
+      <div class="col status-details">
+        <p class="status-title-text-style">
+          افزودن کامنت
+        </p>
+        <q-card
           flat
-        />
-      </v-card>
-    </v-col>
-    <v-col class="mt-7" flat>
-      <v-btn
-        color="success"
-        :loading="loading"
-        :disabled="loading"
-        @click="sendStatus"
-        class="status-button"
-      >
-        ذخیره
-      </v-btn>
-    </v-col>
-  </v-row>
+          class=" status-card"
+        >
+          <q-input borderless v-model="text" dense model-value=""></q-input>
+        </q-card>
+      </div>
+      <div class="col status-card-btn">
+        <q-btn
+          unelevated
+          color="green"
+          :loading="loading"
+          :disabled="loading"
+          @click="sendStatus"
+          class="status-button"
+        >
+          ذخیره
+        </q-btn>
+      </div>
+    </div>
+  </div>
 </template>
 
 <script>
-import {QuestionStatusList} from "@/models/QuestionStatus";
+import { QuestionStatusList } from 'src/models/QuestionStatus'
 
 export default {
-  name: "Status",
+  name: 'Status',
   props: {
     statuses: {
       type: QuestionStatusList,
@@ -72,11 +67,11 @@ export default {
   data: () => ({
     newStatus: {
       changeState: null,
-      commentAdded: null,
+      commentAdded: null
     }
   }),
   methods: {
-    sendStatus() {
+    sendStatus () {
       this.$emit('update', this.newStatus)
       this.newStatus.changeState = null
       this.newStatus.commentAdded = null
@@ -85,12 +80,37 @@ export default {
 }
 </script>
 
-<style>
-.status-details .v-sheet.v-card {
-  border-radius: 10px;
-}
-.status .v-btn {
-  box-shadow: none;
-  border-radius: 10px;
+<style lang="scss">
+.status {
+  .status-details .v-sheet.v-card {
+    border-radius: 10px;
+  }
+  .status-card {
+    height: 36px;
+    margin-left: 20px;
+    border-radius: 10px;
+  }
+  .status-button {
+    height: 36px;
+    min-width: 71px;
+    padding: 0 16px;
+    box-shadow: none;
+    border-radius: 10px;
+  }
+  .status-title-text-style {
+      font-size: 16px;
+    margin-left: 20px;
+  }
+  .status-card-btn{
+    margin-left: 20px;
+    margin-top: 40px;
+  }
+  .q-field--auto-height .q-field__native, .q-field--auto-height .q-field__prefix, .q-field--auto-height .q-field__suffix {
+    margin-right: 20px;
+  }
+  .q-field--dense .q-field__control, .q-field--dense .q-field__marginal {
+    margin-right: 6px;
+    margin-left: 20px;
+  }
 }
 </style>

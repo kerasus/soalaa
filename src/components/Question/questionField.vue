@@ -1,37 +1,54 @@
 <template>
-  <v-row>
-    <v-col
+  <div class="row">
+    <div
       v-if="editStatus"
-      cols="12"
+      class="col-12"
     >
-      <vue-tiptap-katex
-        ref="tiptap"
-        :loading="loading"
-        :access-token="$store.getters['Auth/accessToken']"
-        :upload-url="imageUrl"
-        :options="{ bubbleMenu: false, floatingMenu: false, poem: true, reading: true, persianKeyboard: true }"
+      <q-editor
+        v-model="html"
+        min-height="5rem"
       />
-    </v-col>
-    <!-- eslint-disable vue/no-v-html -->
-    <v-col v-else>
-      <vue-katex :input="html" />
-    </v-col>
-  </v-row>
+<!--      <vue-tiptap-katext />-->
+  <!--      Todo : vue-tiptap-katex-->
+<!--      <vue-tiptap-katex-->
+<!--        ref="tiptap"-->
+<!--        :loading="loading"-->
+<!--        :access-token="$store.getters['Auth/accessToken']"-->
+<!--        :upload-url="imageUrl"-->
+<!--        :options="{ bubbleMenu: false, floatingMenu: false, poem: true, reading: true }"-->
+<!--      />-->
+    </div>
+    <div
+    v-else
+    >
+      <q-card-section v-html="html" />
+    </div>
+<!--    <div class="col" v-else>-->
+<!--      <vue-katex :input="html" />-->
+<!--    </div>-->
+  </div>
 </template>
 
 <script>
-import VueKatex from '@/components/VueKatex'
-import VueTiptapKatex from 'vue-tiptap-katex'
-import API_ADDRESS from "@/api/Addresses";
+// ToDo : vue-tiptap-katex in incompatible with vue 3 (right now)
+// import VueKatex from 'src/components/VueKatex'
+// ToDo : vue-tiptap-katex in incompatible with vue 3 (right now)
+// import VueTiptapKatex from 'vue-tiptap-katex'
+import API_ADDRESS from 'src/api/Addresses'
+// import VueTiptapKatext from 'vue3-tiptap-katex'
+
+// replacement
+// import { ref } from 'vue'
 
 export default {
   name: 'QuestionField',
   components: {
-    VueTiptapKatex,
-    VueKatex
+    // VueTiptapKatex,
+    // VueKatex,
+    // VueTiptapKatext
   },
   props: {
-    value: {
+    modelValue: {
       default: '',
       type: String
     },
@@ -48,10 +65,11 @@ export default {
       type: String
     }
   },
-  data() {
+  data () {
     return {
       html: '',
-      loading: false,
+      test: 'test data',
+      loading: false
     }
   },
   computed: {
@@ -62,24 +80,33 @@ export default {
   created () {
     this.loading = true
     this.getHtmlValueFromValueProp()
+    console.log('_________________________________________________________________________')
+    console.log('question field value:', this.modelValue)
+    console.log('question field questionId:', this.questionId)
+    console.log('_________________________________________________________________________')
+  },
+  watch: {
   },
   mounted () {
     if (this.$refs.tiptap) {
-      this.$refs.tiptap.setContent(this.html)
+      // ToDo : vue-tiptap-katex in incompatible with vue 3 (right now)
+      // this.$refs.tiptap.setContent(this.html)
+      console.log('this.$refs.tiptap.setContent(this.html)')
     }
   },
   methods: {
     getContent () {
-      this.$emit('input', this.$refs.tiptap.getContent())
+      console.log('this.editorValue :', this.value)
+      this.$emit('questionData', this.value)
     },
     getHtmlValueFromValueProp () {
-      let html = this.value
+      let html = this.modelValue
       if (html === null || typeof html === 'undefined') {
         html = ''
       }
       this.html = html
       this.loading = false
-    },
+    }
   }
 }
 </script>
@@ -88,10 +115,6 @@ export default {
 </style>
 
 <style>
-.katex * {
-  font-family: KaTeX_Main;
-}
-
 #mathfield .ML__cmr,
 .katex .mtight {
   font-family: IRANSans;
@@ -103,9 +126,4 @@ export default {
 .tiptap-plus-container.focused {
   border: solid 1px #dedede;
 }
-
-.mord {
-  font-family: IRANSans;
-}
 </style>
-

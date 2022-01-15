@@ -3,28 +3,27 @@
     v-katex:auto
     class="html-katex"
     :dir="!isLtrString ? 'rtl' : 'ltr'"
-    v-html="localInput"
+    v-html="input"
   />
 </template>
 
 <script>
-import Vue from 'vue'
+import { createApp } from 'vue'
+const app = createApp({})
 import VueKatex from 'vue-katex'
 import 'katex/dist/katex.min.css'
-
-Vue.use(VueKatex, {
+app.use(VueKatex, {
   globalOptions: {
     delimiters: [
-      {left: '$$', right: '$$', display: true},
-      {left: '\\[', right: '\\]', display: true},
-      {left: '$', right: '$', display: false},
-      {left: '\\(', right: '\\)', display: false}
+      { left: '$$', right: '$$', display: true },
+      { left: '\\[', right: '\\]', display: true },
+      { left: '$', right: '$', display: false },
+      { left: '\\(', right: '\\)', display: false }
     ]
   }
 })
-
 export default {
-  name: "VueKatex",
+  name: 'VueKatex',
   props: {
     input: {
       type: String,
@@ -33,12 +32,11 @@ export default {
     ltr: {
       type: Boolean,
       default: null
-    },
+    }
   },
   data () {
     return {
-      rtl: true,
-      localInput: ''
+      rtl: true
     }
   },
   computed: {
@@ -46,7 +44,7 @@ export default {
       if (this.ltr !== null) {
         return this.ltr
       }
-      let string = this.localInput
+      const string = this.input
       if (!string) {
         return false
       }
@@ -54,11 +52,6 @@ export default {
       // return !!string.match(englishRegex)
       const persianRegex = /[\u0600-\u06FF]/
       return !string.match(persianRegex)
-    },
-  },
-  watch: {
-    input (newVal) {
-      this.loadLocalInput(newVal)
     }
   },
   mounted () {
@@ -70,32 +63,11 @@ export default {
   },
   created () {
     // this.rtl = !this.isLtrString(this.input)
-    this.loadLocalInput(this.input)
-  },
-  methods: {
-    loadLocalInput (newVal) {
-      this.localInput = newVal
-      this.prepareForKatex()
-    },
-    prepareForKatex () {
-      let regex = /((\\\[((?! ).){1}((?!\$).)*?((?! ).){1}\\\])|(\$((?! ).){1}((?!\$).)*?((?! ).){1}\$))/gms;
-      this.localInput = this.localInput.replace(regex, (match) => {
-        return ' ' + match + ' '
-      })
-    }
   }
 }
 </script>
 
 <style lang="scss">
-  .katex * {
-    font-family: KaTeX_Main;
-  }
-
-  .mord {
-    font-family: IRANSans !important;
-  }
-
   #mathfield .ML__cmr,
   .katex .mtight {
     font-family: IRANSans;
@@ -103,30 +75,15 @@ export default {
 
   .html-katex {
     width: 100%;
-    display: grid;
 
     .katex {
       direction: ltr;
-      .katex-html {
-        .accent {
-          background-color: transparent !important;
-          border-color: transparent !important;
-        }
-        .overline {
-          font-size: inherit !important;
-          font-weight: inherit !important;
-          letter-spacing: inherit !important;
-          line-height: inherit !important;
-          text-transform: inherit !important;
-          font-family: inherit !important;
-        }
-      }
     }
 
     table {
       border-collapse: collapse;
       table-layout: fixed;
-      width: auto;
+      width: 100%;
       margin: 0;
       overflow: hidden;
 
