@@ -236,7 +236,7 @@ export default {
     }
   },
   created () {
-    this.examId = this.$route.params.exam_id
+    this.examId = this.$route.params.id
     this.getData()
   },
   watch: {

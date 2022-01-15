@@ -144,7 +144,7 @@
             color="indigo"
             icon="auto_stories"
             size="11px"
-            :to="{ name: 'onlineQuiz.exams.lessons', params: { quizId: tableRow.id , quizTitle: tableRow.title}}"
+            @click="sendLessonsListInfo"
           >
             <q-tooltip anchor="top middle" self="bottom middle">
               مشاهده دروس
@@ -169,7 +169,7 @@
                   v-ripple:yellow
                   clickable
                   manual-focus
-                  :to="{ name: 'exam.results', params: { examId: tableRow.id}}"
+                  @click="goExamResult(tableRow.id)"
                 >
                   <q-item-section>نتایج تمام شرکت کنندگان</q-item-section>
                 </q-item>
@@ -256,6 +256,14 @@ export default {
     this.getExams()
   },
   methods: {
+    goExamResult (id) {
+      this.$router.push({
+        name: 'exam.results',
+        params: {
+          examId: id
+        }
+      })
+    },
     getExams () {
       this.$store.dispatch('loading/linearLoading', true)
       this.$axios.get(API_ADDRESS.exam.base(this.pagination.page))
@@ -313,6 +321,15 @@ export default {
         name: 'coefficient.edit',
         params: {
           exam_id: this.tableRow.id
+        }
+      })
+    },
+    sendLessonsListInfo () {
+      this.$router.push({
+        name: 'onlineQuiz.exams.lessons',
+        params: {
+          quizId: this.tableRow.id,
+          quizTitle: this.tableRow.title
         }
       })
     },

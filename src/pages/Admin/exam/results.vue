@@ -187,6 +187,7 @@
                         icon="mdi-eye-circle-outline"
                         color="cyan"
                         flat
+                        :to="{name: 'user.exam.results', params: {exam_id: item.exam_id, user_exam_id: item.exam_user_id}}"
                         round
                       />
                       <q-tooltip top>
@@ -335,7 +336,7 @@ export default {
       if (!this.lessonsResults.length) {
         this.$axios.get(API_ADDRESS.exam.examReportIndex('lessons'), {
           params: {
-            exam_id: this.$route.params.examId
+            exam_id: this.$route.params.id
           }
         })
           .then((response) => {
@@ -384,7 +385,7 @@ export default {
         ...(this.selectedCity && { city: [this.selectedCity] }),
         ...(this.selectedProvince && { province: [this.selectedProvince] }),
         ...(this.selectedGender && { gender: [this.selectedGender] }),
-        exam_id: this.$route.params.examId
+        exam_id: this.$route.params.id
       }
       return params
     }

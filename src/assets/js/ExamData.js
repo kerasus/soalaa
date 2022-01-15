@@ -1,4 +1,3 @@
-/* eslint-disable camelcase */
 import axios from 'axios'
 import API_ADDRESS from 'src/api/Addresses'
 import Assistant from 'src/plugins/assistant'
@@ -29,13 +28,14 @@ class ShuffleQuestions {
         newArr.push(arrItem)
       })
     })
-    // eslint-disable-next-line no-return-assign
-    newArr.forEach((item, index) => item.order = index + 1)
+    newArr.forEach((item, index) => {
+      item.order = index + 1
+    })
     return newArr
   }
 
   shuffle (array) {
-    let currentIndex = array.length, randomIndex
+    let currentIndex = array.length; let randomIndex
 
     // While there remain elements to shuffle...
     while (currentIndex !== 0) {
@@ -79,6 +79,7 @@ class ExamData {
     this.commands.push(() => new Promise((resolve, reject) => {
       if (!that.questionsFileUrl && !that.exam) {
         Assistant.handleAxiosError('questionsFileUrl in loadQuestionsFromFile() is not set')
+        // eslint-disable-next-line prefer-promise-reject-errors
         reject('questionsFileUrl in loadQuestionsFromFile() is not set')
       }
       if (!that.questionsFileUrl) {
@@ -99,6 +100,7 @@ class ExamData {
           resolve(response.data)
         })
         .catch(error => {
+          console.log('error', error)
           reject(error)
         })
     })
@@ -107,23 +109,24 @@ class ExamData {
     // https://node3.alaatv.com/aaa/questionFiles/3a_1400_ensani_final_202104150852_withAnswer.json
   }
 
-  getUserExamWithCorrectAnswers (user_exam_id, exam_id) {
+  getUserExamWithCorrectAnswers (userExamId, examId) {
     const that = this
     this.commands.push(() => new Promise((resolve, reject) => {
-      if (!user_exam_id && !that.exam) {
-        Assistant.handleAxiosError('user_exam_id in getUserExamWithCorrectAnswers() is not set')
-        reject('user_exam_id in getUserExamWithCorrectAnswers() is not set')
+      if (!userExamId && !that.exam) {
+        Assistant.handleAxiosError('userExamId in getUserExamWithCorrectAnswers() is not set')
+        // eslint-disable-next-line prefer-promise-reject-errors
+        reject('userExamId in getUserExamWithCorrectAnswers() is not set')
       }
-      if (!user_exam_id) {
-        user_exam_id = that.exam.user_exam_id
+      if (!userExamId) {
+        userExamId = that.exam.user_exam_id
       }
-      axios.get(API_ADDRESS.exam.getAnswerOfUserWithCorrect(user_exam_id))
+      axios.get(API_ADDRESS.exam.getAnswerOfUserWithCorrect(userExamId))
         .then(response => {
           that.exam = new Exam()
-          if (exam_id) {
-            that.exam.id = exam_id
+          if (examId) {
+            that.exam.id = examId
           }
-          that.exam.user_exam_id = Assistant.getId(user_exam_id)
+          that.exam.user_exam_id = Assistant.getId(userExamId)
           that.exam.title = response.data.data.exam.title
           that.exam.questions_file_url = response.data.data.exam.questions_file_url
           that.questionsFileUrl = response.data.data.exam.questions_file_url
@@ -137,17 +140,18 @@ class ExamData {
     return this
   }
 
-  getUserExamDataReport (user_exam_id) {
+  getUserExamDataReport (userExamId) {
     const that = this
     this.commands.push(() => new Promise((resolve, reject) => {
-      if (!user_exam_id && !that.exam) {
-        Assistant.handleAxiosError('user_exam_id in getUserExamDataReport() is not set')
-        reject('user_exam_id in getUserExamDataReport() is not set')
+      if (!userExamId && !that.exam) {
+        Assistant.handleAxiosError('userExamId in getUserExamDataReport() is not set')
+        // eslint-disable-next-line prefer-promise-reject-errors
+        reject('userExamId in getUserExamDataReport() is not set')
       }
-      if (!user_exam_id) {
-        user_exam_id = that.exam.user_exam_id
+      if (!userExamId) {
+        userExamId = that.exam.user_exam_id
       }
-      axios.get(API_ADDRESS.exam.report.getReport(user_exam_id))
+      axios.get(API_ADDRESS.exam.report.getReport(userExamId))
         .then(response => {
           that.studentReport = response.data.data
           resolve(response)
@@ -160,22 +164,24 @@ class ExamData {
     return this
   }
 
-  getUserExamData (user_exam_id) {
+  getUserExamData (userExamId) {
     const that = this
     this.commands.push(() => new Promise((resolve, reject) => {
-      if (!user_exam_id && !that.exam) {
-        Assistant.handleAxiosError('user_exam_id in getUserExamData() is not set')
-        reject('user_exam_id in getUserExamData() is not set')
+      if (!userExamId && !that.exam) {
+        Assistant.handleAxiosError('userExamId in getUserExamData() is not set')
+        // eslint-disable-next-line prefer-promise-reject-errors
+        reject('userExamId in getUserExamData() is not set')
       }
-      if (!user_exam_id) {
-        user_exam_id = that.exam.user_exam_id
+      if (!userExamId) {
+        userExamId = that.exam.user_exam_id
       }
-      axios.get(API_ADDRESS.exam.getAllAnswerOfUser(user_exam_id))
+      axios.get(API_ADDRESS.exam.getAllAnswerOfUser(userExamId))
         .then(response => {
           that.userExamData = response.data
           resolve(response)
         })
         .catch(error => {
+          console.log(error)
           reject(error)
         })
     })
@@ -183,17 +189,18 @@ class ExamData {
     return this
   }
 
-  getExamDataAndParticipate (exam_id) {
+  getExamDataAndParticipate (examId) {
     const that = this
     this.commands.push(() => new Promise((resolve, reject) => {
-      if (!exam_id && !that.exam) {
+      if (!examId && !that.exam) {
         Assistant.handleAxiosError('exam_id in getExamDataAndParticipate() is not set')
+        // eslint-disable-next-line prefer-promise-reject-errors
         reject('exam_id in getExamDataAndParticipate() is not set')
       }
-      if (!exam_id) {
-        exam_id = that.exam.id
+      if (!examId) {
+        examId = that.exam.id
       }
-      axios.post(API_ADDRESS.exam.examUser, { exam_id })
+      axios.post(API_ADDRESS.exam.examUser, { exam_id: examId })
         .then(response => {
           that.exam = new Exam()
           // ToDo: attention on user_exam_id and exam_id
@@ -209,6 +216,7 @@ class ExamData {
           resolve(response)
         })
         .catch(error => {
+          console.log('err', error)
           reject(error)
         })
     })
