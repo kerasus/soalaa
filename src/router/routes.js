@@ -8,7 +8,7 @@ const routes = [
     children: [
       {
         path: '',
-        component: () => import('pages/Index.vue'),
+        component: () => import('pages/User/exam/List'),
         meta: {
           middlewares: [auth]
         }
@@ -20,67 +20,36 @@ const routes = [
         middleware: [auth]
       },
       {
-        path: '/exam',
-        name: 'exam',
-        component: () => import('pages/Admin/exam/index'),
+        path: '/onlineQuiz/results/:exam_id/:user_exam_id',
+        name: 'user.exam.results',
+        component: () => import('pages/User/exam/Result'),
+        middleware: [auth]
+      },
+      {
+        path: '/faq',
+        name: 'faq',
+        component: () => import('src/pages/CommonQuestions/list'),
+        meta: {
+          middleware: [auth]
+        }
+      },
+      {
+        path: 'exam',
+        component: () => import('layouts/AdminLayout.vue'),
         meta: {
           middlewares: [auth]
         },
         children: [
-          {
-            path: '',
-            name: 'list',
-            component: () => import('pages/Admin/exam/list'),
-            meta: {
-              middlewares: [auth]
-            }
-          },
-          {
-            path: 'create',
-            name: 'create',
-            component: () => import('pages/Admin/exam/edit/editExam'),
-            meta: {
-              middlewares: [auth]
-            }
-          },
-          {
-            path: ':examId/edit',
-            name: 'edit',
-            component: () => import('pages/Admin/exam/edit/editExam'),
-            meta: {
-              middlewares: [auth]
-            }
-          },
-          {
-            path: '/exam/results/:examId',
-            name: 'exam.results',
-            component: () => import('pages/Admin/exam/results'),
-            meta: { middleware: [auth] }
-          },
-          {
-            path: ':examId',
-            name: 'show',
-            component: () => import('pages/Admin/exam/edit/editExam'),
-            meta: {
-              middlewares: [auth]
-            }
-          },
-          {
-            path: ':examId/edit-exam-report',
-            name: 'edit-exam-report',
-            component: () => import('pages/Admin/exam/edit/editExamReport'),
-            meta: {
-              middlewares: [auth]
-            }
-          },
-          {
-            path: ':exam_id/coefficient/edit',
-            name: 'coefficient.edit',
-            component: () => import('src/pages/Admin/subGroup/editCoefficients.vue'),
-            meta: {
-              middlewares: [auth]
-            }
-          },
+          { name: 'Admin.Exam.Index', path: '', component: () => import('pages/Admin/exam/index') },
+          { name: 'Admin.Exam.Show', path: 'show/:id', component: () => import('pages/Admin/exam/Show') },
+          { name: 'Admin.Exam.Edit', path: ':id/edit', component: () => import('pages/Admin/exam/Edit') },
+          { name: 'Admin.Exam.Create', path: 'create', component: () => import('pages/Admin/exam/Create') },
+          { name: 'Admin.Exam.Upload', path: 'upload/:id', component: () => import('pages/Admin/exam/Upload') },
+          { name: 'exam.results', path: 'results/:id', component: () => import('pages/Admin/exam/results') },
+          { name: 'edit-exam-report', path: ':id/edit-exam-report', component: () => import('pages/Admin/exam/edit/editExamReport') },
+          { name: 'coefficient.edit', path: ':id/coefficient/edit', component: () => import('src/pages/Admin/subGroup/editCoefficients.vue') },
+          { name: 'onlineQuiz.exams.lessons', path: 'lessons/:quizId/:quizTitle', component: () => import('src/pages/Admin/exam/lessons.vue') },
+          // TODO => why here??!!
           {
             path: '/question/mbti/create',
             name: 'question.mbti.create',
@@ -135,9 +104,9 @@ const routes = [
             meta: { middlewares: [auth] }
           },
           {
-            path: '/lessonsList',
-            name: 'onlineQuiz.exams.lessons',
-            component: () => import('src/pages/Admin/exam/lessons.vue'),
+            path: '/results/mbti_bartle/:exam_id/:user_exam_id',
+            name: 'mbtiBartle.result',
+            component: () => import('pages/User/exam/Result/MBTI_Bartle_result'),
             meta: {
               middlewares: [auth]
             }
@@ -145,9 +114,25 @@ const routes = [
         ]
       },
       {
-        path: '/category',
-        name: 'categoryList',
-        component: () => import('pages/Admin/category/list')
+        path: '/onlineQuiz/alaaView/:quizId/:questNumber',
+        name: 'onlineQuiz.alaaView',
+        component: () => import('pages/User/exam/participate/AlaaView'),
+        meta: {
+          middlewares: [auth]
+        }
+      },
+      {
+        path: 'category',
+        component: () => import('layouts/AdminLayout.vue'),
+        meta: {
+          middlewares: [auth]
+        },
+        children: [
+          { name: 'Admin.Category.Index', path: '', component: () => import('pages/Admin/category/Index') },
+          { name: 'Admin.Category.Show', path: 'show/:id', component: () => import('pages/Admin/category/Show') },
+          { name: 'Admin.Category.Edit', path: ':id/edit', component: () => import('pages/Admin/category/Edit') },
+          { name: 'Admin.Category.Create', path: 'create', component: () => import('pages/Admin/category/Create') }
+        ]
       }
     ]
   },
@@ -156,10 +141,37 @@ const routes = [
     name: 'login',
     component: () => import('pages/Auth/Login.vue')
   },
+  // are u mr Esmaeili ? '' : dont touch this route
   {
-    path: '/test',
-    name: 'test',
+    path: '/debug',
+    name: 'debug',
     component: () => import('pages/Auth/test.vue'),
+    meta: {
+      middlewares: [auth]
+    }
+  },
+  {
+    path: '/knowledgeTree',
+    name: 'knowledgeTree',
+    component: () => import('pages/KnowledgeTree/index.vue'),
+    meta: {
+      middlewares: [auth]
+    }
+  },
+  {
+    path: '/onlineQuiz/mbti_bartle/:quizId/:questNumber',
+    name: 'onlineQuiz.mbtiBartle',
+    component: () => import('pages/User/exam/participate/MBTI_Bartle'),
+    meta: {
+      middlewares: [auth]
+    }
+  },
+  {
+    // path: '/konkoorView/:quizId',
+    path: '/onlineQuiz/konkoorView/:quizId',
+    name: 'konkoorView',
+    component: () => import('pages/User/exam/participate/konkoorView'),
+    // component: () => import('src/components/Menu/topMenu/onlineQuizTopMenu'),
     meta: {
       middlewares: [auth]
     }
@@ -172,7 +184,6 @@ const routes = [
       middlewares: [auth]
     }
   },
-
   // Always leave this as last one,
   // but you can also remove it
   {
