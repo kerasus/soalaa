@@ -19,7 +19,9 @@ Vue.use(VueKatex, {
       {left: '\\[', right: '\\]', display: true},
       {left: '$', right: '$', display: false},
       {left: '\\(', right: '\\)', display: false}
-    ]
+    ],
+    safe: true,
+    trust: true
   }
 })
 
