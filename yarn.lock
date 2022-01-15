@@ -8174,11 +8174,6 @@
   "resolved" "https://registry.npmjs.org/mathjax/-/mathjax-3.2.0.tgz"
   "version" "3.2.0"
 
-"mathlive@^0.68.0":
-  "integrity" "sha512-+S87bNCg966wdabSs9pYjG1dLgpmLm2u3JcscYEHga2eLBeXs9cnXRM5fSOH9s72fM1vESJW0Ov5w9snfqu88A=="
-  "resolved" "https://registry.npmjs.org/mathlive/-/mathlive-0.68.0.tgz"
-  "version" "0.68.0"
-
 "md5.js@^1.3.4":
   "integrity" "sha512-xitP+WxNPcTTOgnTJcrhM0xvdPepipPSf3I8EIpGKeFLjt3PlJLIDG3u8EX53ZIubkb+5U2+3rELYpEhHhzdkg=="
   "resolved" "https://registry.npmjs.org/md5.js/-/md5.js-1.3.5.tgz"
@@ -13128,10 +13123,10 @@
   "resolved" "https://registry.npmjs.org/vue-template-es2015-compiler/-/vue-template-es2015-compiler-1.9.1.tgz"
   "version" "1.9.1"
 
-"vue-tiptap-katex@^2.2.39":
-  "integrity" "sha512-BJtFQxtcDgwrBvKqqbovpbUlI4sJBMbPEkmMS/a7fY2kgkJIDMOJbUwzS761THT/u823GfNntWVN6RzrVZ+3Og=="
-  "resolved" "https://registry.npmjs.org/vue-tiptap-katex/-/vue-tiptap-katex-2.2.44.tgz"
-  "version" "2.2.44"
+"vue-tiptap-katex@^2.2.45":
+  "integrity" "sha512-5/ghU108TTfs5rEDJU8E0XdsSDjUzQSl77hYLfOGTi4C+59Mfald6W9ADrH7PQLl1zDe1jHYSjdLhPL2DcJLqw=="
+  "resolved" "https://registry.npmjs.org/vue-tiptap-katex/-/vue-tiptap-katex-2.2.45.tgz"
+  "version" "2.2.45"
   dependencies:
     "@mdi/font" "^5.8.55"
     "@tiptap/core" "^2.0.0-beta.102"
@@ -13164,6 +13159,7 @@
     "vue" "^2.6.11"
     "vue-drag-resize" "^1.5.4"
     "vue-katex" "^0.5.0"
+    "vue-notification" "^1.3.20"
     "vue-upload-component" "^2.8.22"
     "vuetify" "^2.5.3"
     "webpack" "<=4"
