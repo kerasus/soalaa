@@ -49,7 +49,7 @@ const API_ADDRESS = {
           return lumenServer + '/exam'
         }
       } else {
-        return lumenServer + 'exam?with_pagination=0'
+        return lumenServer + '/exam?with_pagination=0'
       }
     },
     generateExamFile (exam_id, with_answer) {
