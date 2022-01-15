@@ -6006,10 +6006,10 @@ qs@6.9.6:
   resolved "https://registry.yarnpkg.com/qs/-/qs-6.9.6.tgz#26ed3c8243a431b2924aca84cc90471f35d5a0ee"
   integrity sha512-TIRk4aqYLNoJUbd+g2lEdz5kLWIuTMRagAXxl78Q0RiVjAOugHmeKNGdd3cwo/ktpf9aL9epCfFqWDEKysUlLQ==
 
-quasar-crud@^0.1.5:
-  version "0.1.5"
-  resolved "https://registry.yarnpkg.com/quasar-crud/-/quasar-crud-0.1.5.tgz#ddff8b57946b0071ad2fe945684f860e8c2287ba"
-  integrity sha512-GL1tqSvgGiz0vTCJFztmcxXddzDQiMYGXULBsmxJbS7gUQx+c0CAIeWB44hOYe8nT/VYwMbHHMBmZG7g6hqMfA==
+quasar-crud@^0.1.6:
+  version "0.1.9"
+  resolved "https://registry.yarnpkg.com/quasar-crud/-/quasar-crud-0.1.9.tgz#d83731fd9487efded08d07fb08e5163f8e8bdc8d"
+  integrity sha512-1OJbl7rFdtDsKCRkK4+sSq6rzqEp0Jwt4dQHcGGdfYnXV7bc+Okk4l9as4c3MZVGpzSD7vl6dMeE9Y2rao6RQg==
   dependencies:
     "@babel/eslint-parser" "^7.16.5"
     "@quasar/extras" "^1.0.0"
@@ -6017,7 +6017,7 @@ quasar-crud@^0.1.5:
     core-js "^3.6.5"
     moment-jalaali "^0.9.4"
     quasar "^2.0.0"
-    quasar-form-builder "^0.1.3"
+    quasar-form-builder "^0.1.6"
     standard "^16.0.4"
     vue "^3.0.0"
     vue-router "4"
@@ -6033,10 +6033,10 @@ quasar-form-builder@^0.1.2:
     quasar "^2.0.0"
     vue "^3.0.0"
 
-quasar-form-builder@^0.1.3:
-  version "0.1.3"
-  resolved "https://registry.yarnpkg.com/quasar-form-builder/-/quasar-form-builder-0.1.3.tgz#17538e83e7ba31dcb5a2393d354daf3302385952"
-  integrity sha512-sSNlguXNT/46MZ7Q3Kh+iI/IetkSJvd58zbfZ9NY5Jtwmpw9y0T9tWbHfaE/Ecq48VrmPIsKqIkBSSj6QV59WA==
+quasar-form-builder@^0.1.6:
+  version "0.1.6"
+  resolved "https://registry.yarnpkg.com/quasar-form-builder/-/quasar-form-builder-0.1.6.tgz#99100487386ba01aaf6df8de8222f00eeedd7ea3"
+  integrity sha512-sq/oWLw62Y/XdZgmu0oNkKDUp2YFLxE6WjN0gKlEPQ53zCahkhim9F5qW0RPPYgLpEwfsI7mK2wWfCCY6iLDAQ==
   dependencies:
     "@quasar/extras" "^1.0.0"
     core-js "^3.6.5"
