@@ -281,7 +281,7 @@ export default {
             -webkit-font-smoothing: antialiased;
             -moz-osx-font-smoothing: grayscale;
             color: #ffda6a;
-            left: -13px;
+            right: -13px;
             font-size: 14px;
             top: -5px;
           }
@@ -297,14 +297,14 @@ export default {
             -webkit-font-smoothing: antialiased;
             -moz-osx-font-smoothing: grayscale;
             color: red;
-            left: -13px;
+            right: -13px;
             font-size: 14px;
             top: -5px;
           }
         }
 
         &.bookmark {
-          &:after {
+          &::before {
             content: "\F00C3";
             position: absolute;
             font: normal normal normal 24px/1 "Material Design Icons";
@@ -313,7 +313,7 @@ export default {
             -webkit-font-smoothing: antialiased;
             -moz-osx-font-smoothing: grayscale;
             color: #2196F3;
-            left: -13px;
+            right: -13px;
             font-size: 14px;
             top: -5px;
           }

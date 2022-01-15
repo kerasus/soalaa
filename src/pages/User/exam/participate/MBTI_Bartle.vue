@@ -184,7 +184,7 @@ export default {
     const that = this
     this.startExam(that.$route.params.quizId, 'onlineQuiz.mbtiBartle')
       .then((res) => {
-        that.$store.commit('AppLayout/updateOverlay', { show: false, loading: false, text: '' })
+        that.$store.commit('loading/overlay', { loading: false, message: '' })
         const unansweredQuestion = that.getUnansweredQuestionBehind()
         if (unansweredQuestion) {
           that.changeQuestion(unansweredQuestion.id, 'onlineQuiz.mbtiBartle')
@@ -331,7 +331,7 @@ export default {
             setTimeout(() => {
               that.startExam(that.$route.params.quizId, 'onlineQuiz.mbtiBartle')
                 .then(() => {
-                  that.$store.commit('AppLayout/updateOverlay', { show: false, loading: false, text: '' })
+                  that.$store.commit('loading/overlay', { loading: false, message: '' })
                   const unansweredQuestion = that.getUnansweredQuestionBehind()
                   if (unansweredQuestion) {
                     that.changeQuestion(unansweredQuestion.id, 'onlineQuiz.mbtiBartle')
