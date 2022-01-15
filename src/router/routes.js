@@ -91,12 +91,6 @@ const routes = [
             }
           },
           {
-            path: '/sub_category/edit',
-            name: 'subCategory.edit',
-            component: () => import('pages/Admin/subCategory/subCategoryEdit'),
-            meta: { middlewares: [auth] }
-          },
-          {
             path: '/subCategory',
             component: () => import('layouts/AdminLayout.vue'),
             meta: {
