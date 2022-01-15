@@ -62,14 +62,17 @@ class ExamData {
 
 	run() {
 		let result = Promise.resolve();
+		// let rejectResult = Promise.reject();
 		// let reject = Promise.reject(new Error('fail'))
 		this.commands.forEach(function (promiseLike) {
 			result = result.then(promiseLike);
-			result = result.catch(promiseLike);
+			// rejectResult = rejectResult.catch(promiseLike);
+			// result = result.then(promiseLike);
+			// result = result.catch(promiseLike);
 		});
 		return new Promise((resolve, reject) => {
-			result.then(resolve)
-			result.catch(reject)
+			result.then(resolve).catch(reject);
+			// rejectResult.catch(reject);
 		});
 	}
 
@@ -218,6 +221,43 @@ class ExamData {
 					 that.exam.title = Assistant.getId(response.data.data.exam_title)
 					 that.exam.user_exam_id = Assistant.getId(response.data.data.id)
 					 that.exam.created_at = response.data.data.created_at
+					 that.exam.accept_at = response.data.data.accept_at
+					 that.exam.questions_file_url = response.data.data.questions_file_url
+					 that.exam.categories = new QuestCategoryList(response.data.data.categories)
+					 that.exam.sub_categories = new QuestSubcategoryList(response.data.data.sub_categories)
+					 that.exam.holding_config = response.data.data.holding_config
+					 that.userExamData = response.data
+					 resolve(response)
+				 })
+				 .catch(error => {
+							 reject(error)
+						 })
+			}),
+		)
+		return this
+	}
+
+	getExamData(exam_id) {
+		let that = this
+		this.commands.push(() => new Promise((resolve, reject) => {
+				if (!exam_id && !that.exam)
+				{
+					Assistant.handleAxiosError('exam_id in getExamData() is not set')
+					reject('exam_id in getExamData() is not set')
+				}
+				if (!exam_id)
+				{
+					exam_id = that.exam.id
+				}
+				axios.get(API_ADDRESS.exam.examUserAfterExam + '?exam_id=' + exam_id)
+				 .then(response => {
+					 that.exam = new Exam()
+					 // ToDo: attention on user_exam_id and exam_id
+					 that.exam.id = Assistant.getId(response.data.data.exam_id)
+					 that.exam.title = Assistant.getId(response.data.data.exam_title)
+					 that.exam.user_exam_id = Assistant.getId(response.data.data.id)
+					 that.exam.created_at = response.data.data.created_at
+					 that.exam.accept_at = response.data.data.accept_at
 					 that.exam.questions_file_url = response.data.data.questions_file_url
 					 that.exam.categories = new QuestCategoryList(response.data.data.categories)
 					 that.exam.sub_categories = new QuestSubcategoryList(response.data.data.sub_categories)

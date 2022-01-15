@@ -657,7 +657,7 @@ export default {
 
     loadExamList() {
       let that = this
-      return new ExamList().fetch()
+      return axios.get(API_ADDRESS.exam.base(0, false))
           .then((response) => {
             that.examList = new ExamList(response.data.data)
           })

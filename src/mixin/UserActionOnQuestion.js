@@ -2,7 +2,7 @@ import {Question} from "@/models/Question";
 
 const mixinUserActionOnQuestion = {
     methods: {
-        userActionOnQuestion(questionId, actionType, data) {
+        userActionOnQuestion(questionId, actionType, data, socket, sendData) {
             let examId = this.quiz.id
             let exam_user_id = this.quiz.user_exam_id
             this.beforeUserActionOnQuestion(examId, questionId)
@@ -22,7 +22,10 @@ const mixinUserActionOnQuestion = {
                 this.userActionOnQuestion_status(data, examId, questionId, userQuestionData)
             }
             this.afterUserActionOnQuestion()
-            return this.sendUserQuestionsDataToServer(exam_user_id, userExamData, questionId, actionType)
+            if (typeof sendData === 'undefined' || sendData === true) {
+                return this.sendUserQuestionsDataToServer(exam_user_id, userExamData, questionId, actionType, socket)
+            }
+            return false
         },
         beforeUserActionOnQuestion(examId, questionId) {
             this.$store.commit('updateCurrentQuestion', {
@@ -41,6 +44,8 @@ const mixinUserActionOnQuestion = {
             // find question
             let userQuestionData = userExamData[questionId]
             let dataToSendFailedAnswers = this.$store.state.failedListAnswerData
+            let dataToSendFailedStatus = this.$store.state.failedListStatusData
+            let dataToSendFailedBookmark = this.$store.state.failedListBookmarkData
 
             // set data from localstorage of user
             let dataToSendAnswer = [{
@@ -49,37 +54,44 @@ const mixinUserActionOnQuestion = {
                 selected_at: userQuestionData.answered_at
             }]
 
-            let dataToSendStatus = {question_id: questionId, status: userQuestionData.status}
-            let dataToSendBookmark = questionId
+            let dataToSendStatus = {question_id: questionId, status: userQuestionData.status, selected_at: userQuestionData.change_status_at}
+            let dataToSendBookmark = {
+                questionId,
+                selected_at: userQuestionData.change_bookmarked_at
+            }
 
             return {
                 userQuestionData,
                 dataToSendAnswer,
                 dataToSendFailedAnswers,
+                dataToSendFailedStatus,
+                dataToSendFailedBookmark,
                 dataToSendStatus,
                 dataToSendBookmark
             }
         },
-        sendUserQuestionsDataToServer(examUserId, userExamData, questionId, actionType) {
+        sendUserQuestionsDataToServer(examUserId, userExamData, questionId, actionType, socket) {
+
             let userQuestionDataFromLocalstorage = this.getUserQuestionDataFromLocalstorage(userExamData, questionId)
             let online = navigator.onLine
             // send data
             let question = new Question()
-            if (online){
-                if (actionType === 'answer') {
-                    return question.sendUserActionToServer('answer' ,examUserId, {answerArray: userQuestionDataFromLocalstorage.dataToSendAnswer , failedAnswersArray: userQuestionDataFromLocalstorage.dataToSendFailedAnswers})
-                }
+            if (!online){
+                return false
             }
 
+            if (actionType === 'answer') {
+                return question.sendUserActionToServer('answer' ,examUserId, {answerArray: userQuestionDataFromLocalstorage.dataToSendAnswer , failedAnswersArray: userQuestionDataFromLocalstorage.dataToSendFailedAnswers}, socket)
+            }
             if (actionType === 'bookmark') {
                 if (userQuestionDataFromLocalstorage.userQuestionData.bookmarked) {
-                    return question.sendUserActionToServer('bookmark' ,examUserId, {question_id: userQuestionDataFromLocalstorage.dataToSendBookmark})
+                    return question.sendUserActionToServer('bookmark' ,examUserId, {bookmark: userQuestionDataFromLocalstorage.dataToSendBookmark , failedBookmarksArray: userQuestionDataFromLocalstorage.dataToSendFailedBookmark}, socket)
                 } else {
-                    return question.sendUserActionToServer('unBookmark' ,examUserId, {question_id: userQuestionDataFromLocalstorage.dataToSendBookmark})
+                    return question.sendUserActionToServer('unBookmark' ,examUserId, {bookmark: userQuestionDataFromLocalstorage.dataToSendBookmark , failedBookmarksArray: userQuestionDataFromLocalstorage.dataToSendFailedBookmark}, socket)
                 }
             }
             if (actionType === 'status') {
-                return question.sendUserActionToServer('status' ,examUserId, userQuestionDataFromLocalstorage.dataToSendStatus)
+                return question.sendUserActionToServer('status' ,examUserId, {status: userQuestionDataFromLocalstorage.dataToSendStatus , failedStatusArray: userQuestionDataFromLocalstorage.dataToSendFailedStatus}, socket)
             }
         },
         userActionOnQuestion_answer(data, examId, questionId, userQuestionData) {
@@ -90,11 +102,10 @@ const mixinUserActionOnQuestion = {
                 newAnswered_choice_id = null
             } else if (oldStatus === 'x') {
                 let newState = ''
-                this.$store.commit('changeQuestion_Status', {
-                    exam_id: examId,
-                    question_id: questionId,
-                    status: newState
-                })
+                data.newStatus = newState
+                const newuserQuestionData = JSON.parse(JSON.stringify(userQuestionData))
+                newuserQuestionData.status = oldStatus
+                this.userActionOnQuestion_status(data, examId, questionId, newuserQuestionData)
             }
             this.$store.commit('changeQuestion_SelectChoice', {
                 exam_id: examId,
@@ -122,11 +133,10 @@ const mixinUserActionOnQuestion = {
             if (oldQuestion && newStatus === oldStatus) {
                 newStatus = ''
             } else if (newStatus === 'x') {
-                this.$store.commit('changeQuestion_SelectChoice', {
-                    exam_id: examId,
-                    question_id: questionId,
-                    answered_choice_id: null
-                })
+                const newuserQuestionData = JSON.parse(JSON.stringify(userQuestionData))
+                newuserQuestionData.status = newStatus
+                data.choiceId = null
+                this.userActionOnQuestion_answer(data, examId, questionId, newuserQuestionData)
             }
             this.$store.commit('changeQuestion_Status', {
                 exam_id: examId,

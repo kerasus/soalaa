@@ -112,6 +112,9 @@
       mixinUserActionOnQuestion
     ],
     props: {
+      submitAnswers: {
+        default: true
+      },
       bubbleSheetWidth: {
         default: null
       },
@@ -233,7 +236,7 @@
       AnswerClicked(payload) {
         if (this.info.type !== 'pasokh-nameh')
         {
-          this.answerClicked(payload)
+          this.answerClicked(payload, false)
           this.clickChoice(payload.questionId)
         }
       },
@@ -244,7 +247,9 @@
         }
       },
       clickChoice(questionId) {
-        this.$emit('clickChoice', questionId)
+        if (this.submitAnswers) {
+          this.$emit('clickChoice', questionId)
+        }
       },
       clickQuestionNumber(questionId) {
         this.$emit('scrollTo', questionId)

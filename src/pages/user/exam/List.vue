@@ -110,6 +110,14 @@
                         شروع آزمون
                       </v-btn>
                       <v-btn
+                          v-if="item.exam_actions.can_submit_new_answers"
+                          color="#ffc107"
+                          text
+                          @click="goToSendResults(item)"
+                      >
+                        ثبت گزینه ها
+                      </v-btn>
+                      <v-btn
                         v-if="item.exam_actions.can_continue"
                         color="purple"
                         text
@@ -118,7 +126,7 @@
                         ادامه آزمون
                       </v-btn>
                       <v-btn
-                        v-if="item.exam_actions.can_submit_answer"
+                        v-if="item.exam_actions.can_submit_offline_answers"
                         color="#ffc107"
                         text
                         @click="getConfirmation(item.id, item.user_exam_id)"
@@ -141,6 +149,17 @@
                       >
                         {{ item.holding_status }}
                       </v-btn>
+                      <template v-if="item.booklet_url">
+                        <v-btn
+                          v-for="(booklet, bookletIndex) in item.booklet_url.filter( bookletItem => !!bookletItem.questions_booklet_url)"
+                          :key="bookletIndex"
+                          color="#ffc107"
+                          text
+                          @click="downloadBooklet(booklet.questions_booklet_url)"
+                        >
+                          {{ booklet.category_title }}
+                        </v-btn>
+                      </template>
                     </v-col>
                   </v-row>
                 </v-sheet>
@@ -154,166 +173,180 @@
 </template>
 
 <script>
-    import {Exam, ExamList} from "@/models/Exam";
-    import { mixinAuth, mixinQuiz } from '@/mixin/Mixins'
-    import ProgressLinear from "@/components/ProgressLinear";
-    import VueConfirmDialog from 'vue-confirm-dialog'
-    import Vue from 'vue'
+import {Exam, ExamList} from "@/models/Exam";
+import {mixinAuth, mixinQuiz} from '@/mixin/Mixins'
+import ProgressLinear from "@/components/ProgressLinear";
+import VueConfirmDialog from 'vue-confirm-dialog'
+import Vue from 'vue'
 
-    Vue.use(VueConfirmDialog)
-    Vue.component('vue-confirm-dialog', VueConfirmDialog.default)
+Vue.use(VueConfirmDialog)
+Vue.component('vue-confirm-dialog', VueConfirmDialog.default)
 
-    export default {
-        name: 'List',
-        components: {ProgressLinear},
-        mixins: [mixinAuth, mixinQuiz],
-        data: () => ({
-            preventStartExam: false,
-            examItem: new Exam(),
-            exams: new ExamList(),
-            loadingList: false
-        }),
-        created() {
-            this.getExams()
+export default {
+  name: 'List',
+  components: {ProgressLinear},
+  mixins: [mixinAuth, mixinQuiz],
+  data: () => ({
+    preventStartExam: false,
+    examItem: new Exam(),
+    exams: new ExamList(),
+    loadingList: false
+  }),
+  created() {
+    this.getExams()
+  },
+  mounted() {
+    this.disconnectSocket()
+    this.$store.commit('AppLayout/updateAppBarAndDrawer', true)
+    this.$store.commit('AppLayout/updateOverlay', {show: false, loading: false, text: ''})
+  },
+  methods: {
+    goToResult(exam) {
+      let routeName = 'user.exam.results'
+      if (exam.type && exam.type.value && exam.type.value === 'psychometric') {
+        routeName = 'mbtiBartle.result'
+      }
+      this.$router.push({name: routeName, params: {user_exam_id: exam.user_exam_id, exam_id: exam.id}})
+    },
+    goToParticipateExamPage(exam) {
+      let routeName = 'onlineQuiz.alaaView'
+      if (exam.type && exam.type.value && exam.type.value === 'psychometric') {
+        routeName = 'onlineQuiz.mbtiBartle'
+      }
+      this.$router.push({name: routeName, params: {quizId: exam.id, questNumber: 1}})
+    },
+    goToSendResults(exam) {
+      let routeName = 'onlineQuiz.konkoorView2'
+      if (exam.type && exam.type.value && exam.type.value === 'psychometric') {
+        routeName = 'onlineQuiz.mbtiBartle'
+      }
+      this.$router.push({name: routeName, params: {quizId: exam.id, questNumber: 1}})
+    },
+    getConfirmation(examId, examUserId) {
+      let that = this
+      this.$store.commit('AppLayout/showConfirmDialog', {
+        message: `مطمئنی؟ نتیجه شما پس از تایید، ثبت و رتبه شما محاسبه خواهد شد و به اندازه میانگین درصدهای شما، کد تخفیف همه محصولات آلاء برای شما ارسال خواهد شد. مثلا اگر میانگین درصدهای شما 60% باشد یک کد تخفیف 60% دریافت خواهید کرد`,
+        button: {
+          no: 'ادامه میدم',
+          yes: 'ثبت میکنم'
         },
-        mounted() {
-            this.$store.commit('AppLayout/updateAppBarAndDrawer', true)
-        },
-        methods: {
-          goToResult (exam) {
-            let routeName = 'user.exam.results'
-            if (exam.type && exam.type.value && exam.type.value === 'psychometric') {
-              routeName = 'mbtiBartle.result'
-            }
-            this.$router.push({ name: routeName, params: { user_exam_id: exam.user_exam_id, exam_id: exam.id } })
-          },
-          goToParticipateExamPage(exam) {
-            let routeName = 'onlineQuiz.alaaView'
-            if (exam.type && exam.type.value && exam.type.value === 'psychometric') {
-              routeName = 'onlineQuiz.mbtiBartle'
-            }
-            this.$router.push({ name: routeName, params: { quizId: exam.id, questNumber: 1 } })
-          },
-          getConfirmation(examId, examUserId){
-                let that = this
-                this.$store.commit('AppLayout/showConfirmDialog', {
-                    message: `مطمئنی؟ نتیجه شما پس از تایید، ثبت و رتبه شما محاسبه خواهد شد و به اندازه میانگین درصدهای شما، کد تخفیف همه محصولات آلاء برای شما ارسال خواهد شد. مثلا اگر میانگین درصدهای شما 60% باشد یک کد تخفیف 60% دریافت خواهید کرد`,
-                    button: {
-                        no: 'ادامه میدم',
-                        yes: 'ثبت میکنم'
-                    },
-                    callback: (confirm) => {
-                        if (!confirm) {
-                            return
-                        }
-                        that.sendAnswersAndFinishExam(examId, examUserId)
-                    }
-                })
-            },
-            continueExam (exam) {
-              let routeName = 'onlineQuiz.alaaView'
-              if (exam.type && exam.type.value && exam.type.value === 'psychometric') {
-                routeName = 'onlineQuiz.mbtiBartle'
-              }
-                this.$router.push({name: routeName, params: {quizId: exam.id, questNumber: 1}})
-            },
-            getExams () {
-                let that = this
-                this.loadingList = true
-                this.user.getUserExams()
-                    .then((exams) => {
-                        that.exams = exams
-                        that.loadingList = false
-                    })
-                    .catch(() => {
-                        that.loadingList = false
-                    })
-            },
-            registerExam (exam) {
-                // window.location.href = exam.alcaa_product_link
-                this.user.registerExam(exam.id)
-                    .then( (response) => {
-                      if (response.data.data.redirect_url) {
-                        window.location.href = response.data.data.redirect_url
-                      } else {
-                        this.$notify({
-                          group: 'notifs',
-                          title: 'توجه!',
-                          text: 'ثبت نام در آزمون با موفقیت انجام شد',
-                          type: 'success'
-                        })
-                        this.getExams()
-                      }
-                    })
-            },
-            sendAnswersAndFinishExam (examId, examUserId) {
-                if (!this.hasExamDataOnThisDeviseStorage(examId)) {
-                    this.$notify({
-                        group: 'notifs',
-                        title: 'توجه!',
-                        text: 'در این سیستم پاسخنامه شما ثبت نشده است. لطفا از سیستمی که با آن در آزمون شرکت کرده اید استفاده کنید و این دکمه را بزنید.',
-                        type: 'error',
-                        duration: 30000,
-                    })
-                    return
-                }
-                let that = this
-                this.sendUserQuestionsDataToServerAndFinishExam(examId, examUserId)
-                    .then( () => {
-                        that.$notify({
-                            group: 'notifs',
-                            text: 'اطلاعات آزمون شما ثبت شد.',
-                            type: 'success'
-                        })
-                        that.$store.commit('clearExamData', examId)
-                        that.$router.push({ name: 'user.exam.list'})
-                    })
-                    .catch( () => {
-                        that.$notify({
-                            group: 'notifs',
-                            title: 'توجه!',
-                            text: 'مشکلی در ثبت اطلاعات آزمون شما رخ داده است. لطفا تا قبل از ساعت 24 اقدام به ارسال مجدد پاسخنامه نمایید.',
-                            type: 'error',
-                            duration: 30000,
-                        })
-                        this.getExams()
-                    })
-            }
+        callback: (confirm) => {
+          if (!confirm) {
+            return
+          }
+          that.sendAnswersAndFinishExam(examId, examUserId)
         }
+      })
+    },
+    continueExam(exam) {
+      let routeName = 'onlineQuiz.alaaView'
+      if (exam.type && exam.type.value && exam.type.value === 'psychometric') {
+        routeName = 'onlineQuiz.mbtiBartle'
+      }
+      this.$store.commit('setQuiz', new Exam())
+      this.$router.push({name: routeName, params: {quizId: exam.id, questNumber: 1}})
+    },
+    getExams() {
+      let that = this
+      this.loadingList = true
+      this.user.getUserExams()
+          .then((exams) => {
+            that.exams = exams
+            that.loadingList = false
+          })
+          .catch(() => {
+            that.loadingList = false
+          })
+    },
+    registerExam(exam) {
+      // window.location.href = exam.alcaa_product_link
+      this.user.registerExam(exam.id)
+          .then((response) => {
+            if (response.data.data.redirect_url) {
+              window.location.href = response.data.data.redirect_url
+            } else {
+              this.$notify({
+                group: 'notifs',
+                title: 'توجه!',
+                text: 'ثبت نام در آزمون با موفقیت انجام شد',
+                type: 'success'
+              })
+              this.getExams()
+            }
+          })
+    },
+    sendAnswersAndFinishExam(examId, examUserId) {
+      if (!this.hasExamDataOnThisDeviseStorage(examId)) {
+        this.$notify({
+          group: 'notifs',
+          title: 'توجه!',
+          text: 'در این سیستم پاسخنامه شما ثبت نشده است. لطفا از سیستمی که با آن در آزمون شرکت کرده اید استفاده کنید و این دکمه را بزنید.',
+          type: 'error',
+          duration: 30000,
+        })
+        return
+      }
+      let that = this
+      this.sendUserQuestionsDataToServerAndFinishExam(examId, examUserId)
+          .then(() => {
+            that.$notify({
+              group: 'notifs',
+              text: 'اطلاعات آزمون شما ثبت شد.',
+              type: 'success'
+            })
+            that.$store.commit('clearExamData', examId)
+            that.$router.push({name: 'user.exam.list'})
+          })
+          .catch(() => {
+            that.$notify({
+              group: 'notifs',
+              title: 'توجه!',
+              text: 'مشکلی در ثبت اطلاعات آزمون شما رخ داده است. لطفا تا قبل از ساعت 24 اقدام به ارسال مجدد پاسخنامه نمایید.',
+              type: 'error',
+              duration: 30000,
+            })
+            this.getExams()
+          })
+    },
+    downloadBooklet (bookletUrl) {
+      window.open(bookletUrl, '_blank').focus();
     }
+  }
+}
 </script>
 
 <style scoped>
-    .exam-list-sheet {
-        background: var(--surface-1);;
-        min-height: 50px;
-    }
+.exam-list-sheet {
+  background: var(--surface-1);;
+  min-height: 50px;
+}
 
-    .appDarkMode .exam-list-sheet {
-        background: #1c1c21;
-    }
+.appDarkMode .exam-list-sheet {
+  background: #1c1c21;
+}
 
-    @media only screen and (max-width: 960px) {
-        .table-header {
-            display: none;
-        }
-        .table-row {
-            padding-right: 10px;
-        }
-    }
+@media only screen and (max-width: 960px) {
+  .table-header {
+    display: none;
+  }
+
+  .table-row {
+    padding-right: 10px;
+  }
+}
 </style>
 
 <style>
-    .appDarkMode .exam-list-sheet .v-btn--disabled span {
-        color: #bfbfbf !important;
-        opacity: 0.6;
-    }
+.appDarkMode .exam-list-sheet .v-btn--disabled span {
+  color: #bfbfbf !important;
+  opacity: 0.6;
+}
 
-    .exam-info-bar .col {
-        padding: 6px 12px;
-    }
+.exam-info-bar .col {
+  padding: 6px 12px;
+}
 
-    .table-row {
-        align-items: center;
-    }
+.table-row {
+  align-items: center;
+}
 </style>
