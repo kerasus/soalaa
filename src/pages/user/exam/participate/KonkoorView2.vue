@@ -1,71 +1,75 @@
 <template>
   <v-container
-      v-resize="updateWindowSize"
-      class="konkoor-view"
-      :fluid="true"
-      :style="{ height: '100%', background: 'rgb(244,244,244)' }"
+    v-resize="updateWindowSize"
+    class="konkoor-view"
+    :fluid="true"
+    :style="{ height: '100%', background: 'rgb(244,244,244)' }"
   >
     <v-row :style="{ 'min-height': '100%' }">
       <v-col
-          id="questions"
-          ref="questionsColumn"
-          :md="5"
-          class="questions"
-          :style="{ height: windowSize.y }"
+        id="questions"
+        ref="questionsColumn"
+        :md="5"
+        :sm="0"
+        :cols="0"
+        class="questions"
+        :style="{ height: windowSize.y }"
       >
         <!--                <div class="lesson">{{ currentLesson.title }}</div>-->
         <DynamicScroller
-            ref="scroller"
-            :items="questions"
-            :min-item-size="70"
-            class="scroller questionss"
-            :emit-update="true"
+          ref="scroller"
+          :items="questions"
+          :min-item-size="70"
+          class="scroller questionss"
+          :emit-update="true"
         >
           <template v-slot="{ item, index, active }">
             <DynamicScrollerItem
-                :item="item"
-                :active="active"
-                :data-index="index"
+              :item="item"
+              :active="active"
+              :data-index="index"
             >
               <Item
-                  :source="item"
-                  :show-options="false"
-                  :questions-column="$refs.questionsColumn"
-                  @inView="test"
+                :source="item"
+                :show-options="false"
+                :questions-column="$refs.questionsColumn"
+                @inView="test"
               />
             </DynamicScrollerItem>
           </template>
         </DynamicScroller>
       </v-col>
       <v-col
-          ref="leftSideList"
-          :md="7"
-          class="left-side-list"
+        ref="leftSideList"
+        :md="7"
+        :sm="12"
+        :cols="12"
+        class="left-side-list"
       >
         <v-row>
           <v-col
-              class="px-10 py-0 d-flex justify-space-between"
-              dir="ltr"
+            class="px-10 py-0 d-flex justify-space-between"
+            dir="ltr"
           >
             <div class="rounded-b-xl rounded-r-xl">
               <v-menu
-                  bottom
-                  :offset-y="true"
-                  class="rounded-b-xl rounded-r-xl"
+                bottom
+                :offset-y="true"
+                class="rounded-b-xl rounded-r-xl"
               >
                 <template v-slot:activator="{ on, attrs }">
                   <v-btn
-                      large
-                      tile
-                      v-bind="attrs"
-                      elevation="0"
-                      class="pl-3"
-                      v-on="on"
+                    large
+                    tile
+                    v-bind="attrs"
+                    elevation="0"
+                    class="pl-3"
+                    v-on="on"
                   >
                     <v-icon
-                        class="mr-2"
-                        :size="30"
-                        color="#666"
+                      class="mr-2"
+                      :size="30"
+                      color="#666"
                     >
                       mdi-account-circle
                     </v-icon>
@@ -78,9 +82,9 @@
                   </v-btn>
                 </template>
                 <v-card
-                    max-width="375"
-                    class="mx-auto"
-                    rounded="b-xl r-xl"
+                  max-width="375"
+                  class="mx-auto"
+                  rounded="b-xl r-xl"
                 >
                   <TopMenu_OnlineQuiz />
                 </v-card>
@@ -104,19 +108,18 @@
     </v-row>
     <v-row class="timer-row">
       <v-btn
-          class="end-exam-btn"
-          :loading="confirmationBtnLoading"
-          :disabled="confirmationBtnLoading"
-          @click="getConfirmation"
+        class="end-exam-btn"
+        :loading="confirmationBtnLoading"
+        :disabled="confirmationBtnLoading"
+        @click="getConfirmation"
       >
         ارسال پاسخنامه
       </v-btn>
-
     </v-row>
 
     <v-dialog
-        v-model="confirmationBubbleSheet"
-        max-width="290"
+      v-model="confirmationBubbleSheet"
+      max-width="290"
     >
       <v-card>
         <v-card-title class="text-h5">
@@ -124,76 +127,76 @@
         </v-card-title>
         <v-card-text>از ارسال پاسخ ها مطمئن هستید؟</v-card-text>
         <v-card-actions>
-          <v-spacer></v-spacer>
+          <v-spacer />
           <v-btn
-              color="green darken-1"
-              text
-              @click="confirmSendingAllAnswers"
+            color="green darken-1"
+            text
+            @click="confirmSendingAllAnswers"
           >
             ارسال میکنم
           </v-btn>
           <v-btn
-              color="green darken-1"
-              text
-              @click="confirmationBubbleSheet = false"
+            color="green darken-1"
+            text
+            @click="confirmationBubbleSheet = false"
           >
             ادامه میدم
           </v-btn>
         </v-card-actions>
       </v-card>
-<!--      <v-card>-->
-<!--        <v-toolbar-->
-<!--            dark-->
-<!--            color="primary"-->
-<!--        >-->
-<!--          <v-btn-->
-<!--              icon-->
-<!--              dark-->
-<!--              @click="confirmationBubbleSheet = false"-->
-<!--          >-->
-<!--            <v-icon>mdi-close</v-icon>-->
-<!--          </v-btn>-->
-<!--          <v-toolbar-title>پاسخنامه کاربر</v-toolbar-title>-->
-<!--          <v-spacer />-->
-<!--          <v-toolbar-items v-if="false">-->
-<!--            <v-btn-->
-<!--                dark-->
-<!--                text-->
-<!--                @click="confirmSendingAllAnswers"-->
-<!--            >-->
-<!--              Save-->
-<!--            </v-btn>-->
-<!--          </v-toolbar-items>-->
-<!--        </v-toolbar>-->
-<!--        <v-card>-->
-<!--          <v-card-text>-->
-<!--            از ارسال پاسخ ها اطمینان دارید؟-->
-<!--          </v-card-text>-->
-<!--          <v-card-actions>-->
-<!--            <v-btn-->
-<!--                class="ma-1"-->
-<!--                color="grey"-->
-<!--                plain-->
-<!--                @click="confirmationBubbleSheet = false"-->
-<!--            >-->
-<!--              ادامه میدم-->
-<!--            </v-btn>-->
+      <!--      <v-card>-->
+      <!--        <v-toolbar-->
+      <!--            dark-->
+      <!--            color="primary"-->
+      <!--        >-->
+      <!--          <v-btn-->
+      <!--              icon-->
+      <!--              dark-->
+      <!--              @click="confirmationBubbleSheet = false"-->
+      <!--          >-->
+      <!--            <v-icon>mdi-close</v-icon>-->
+      <!--          </v-btn>-->
+      <!--          <v-toolbar-title>پاسخنامه کاربر</v-toolbar-title>-->
+      <!--          <v-spacer />-->
+      <!--          <v-toolbar-items v-if="false">-->
+      <!--            <v-btn-->
+      <!--                dark-->
+      <!--                text-->
+      <!--                @click="confirmSendingAllAnswers"-->
+      <!--            >-->
+      <!--              Save-->
+      <!--            </v-btn>-->
+      <!--          </v-toolbar-items>-->
+      <!--        </v-toolbar>-->
+      <!--        <v-card>-->
+      <!--          <v-card-text>-->
+      <!--            از ارسال پاسخ ها اطمینان دارید؟-->
+      <!--          </v-card-text>-->
+      <!--          <v-card-actions>-->
+      <!--            <v-btn-->
+      <!--                class="ma-1"-->
+      <!--                color="grey"-->
+      <!--                plain-->
+      <!--                @click="confirmationBubbleSheet = false"-->
+      <!--            >-->
+      <!--              ادامه میدم-->
+      <!--            </v-btn>-->
 
-<!--            <v-btn-->
-<!--                class="ma-1"-->
-<!--                color="success"-->
-<!--                plain-->
-<!--                @click="confirmSendingAllAnswers"-->
-<!--            >-->
-<!--              ثبت میکنم-->
-<!--            </v-btn>-->
-<!--          </v-card-actions>-->
-<!--        </v-card>-->
-<!--        <BubbleSheet-->
-<!--            :info="{ type: 'pasokh-nameh' }"-->
-<!--            delay-time="0"-->
-<!--        />-->
-<!--      </v-card>-->
+      <!--            <v-btn-->
+      <!--                class="ma-1"-->
+      <!--                color="success"-->
+      <!--                plain-->
+      <!--                @click="confirmSendingAllAnswers"-->
+      <!--            >-->
+      <!--              ثبت میکنم-->
+      <!--            </v-btn>-->
+      <!--          </v-card-actions>-->
+      <!--        </v-card>-->
+      <!--        <BubbleSheet-->
+      <!--            :info="{ type: 'pasokh-nameh' }"-->
+      <!--            delay-time="0"-->
+      <!--        />-->
+      <!--      </v-card>-->
     </v-dialog>
   </v-container>
 </template>
@@ -258,15 +261,7 @@ export default {
   created() {
     if (this.windowSize.x > 959) {
       this.changeAppBarAndDrawer(false)
-    } else {
-      this.$router.push({
-        name: 'onlineQuiz.alaaView',
-        params: {quizId: this.$route.params.quizId, questNumber: 1}
-      })
     }
-    // if (!this.questions.length) {
-    //     this.questions = this.getCurrentExamQuestionsInArray()
-    // }
   },
   mounted() {
     let that = this
@@ -276,14 +271,15 @@ export default {
           // that.loadFirstActiveQuestionIfNeed()
           that.$store.commit('AppLayout/updateOverlay', {show: false, loading: false, text: ''})
           that.questions = that.getCurrentExamQuestionsInArray()
-          const callbacks = {
-            'question.file-link:update': {
-              afterReload () {
-                that.questions = that.getCurrentExamQuestionsInArray()
-              }
-            }
+
+          this.setHeights()
+          if (this.currentQuestion.id === null) {
+            this.loadFirstQuestion()
           }
           that.bubbleSheetKey = Date.now()
+
+          this.scrollTo(this.currentQuestion.id)
+
         })
         .catch((error) => {
           Assistant.reportErrors(error)
@@ -293,14 +289,8 @@ export default {
             text: 'مشکلی در دریافت اطلاعات آژمون رخ داده است. لطفا دوباره امتحان کنید.',
             type: 'error'
           })
-          // ToDo: uncomment
-          // that.$router.push({ name: 'user.exam.list'})
+          that.$router.push({ name: 'user.exam.list'})
         })
-    this.setHeights()
-    if (this.currentQuestion.id === null) {
-      this.loadFirstQuestion()
-    }
-    this.scrollTo(this.currentQuestion.id)
     this.changeAppBarAndDrawer(false)
   },
   destroyed() {
@@ -484,15 +474,15 @@ export default {
     //         }
     //     }
     // },
-    scrollTo() {
-      // const questionIndex = this.getQuestionIndexById(questionId)
-      // this.$refs.scroller.scrollToItem(questionIndex)
-      // for (let i = 1; i < 4; i++) {
-      //   setTimeout(() => {
-      //         this.$refs.scroller.scrollToItem(questionIndex)
-      //       },
-      //       333 * i)
-      // }
+    scrollTo(questionId) {
+      const questionIndex = this.getQuestionIndexById(questionId)
+      this.$refs.scroller.scrollToItem(questionIndex)
+      for (let i = 1; i < 4; i++) {
+        setTimeout(() => {
+              this.$refs.scroller.scrollToItem(questionIndex)
+            },
+            333 * i)
+      }
     },
     // onIntersect (entries) {
     //     this.quiz.questions.getQuestionById(entries[0].target.id).isInView = (entries[0].intersectionRatio >= 0.5)
