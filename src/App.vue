@@ -209,13 +209,15 @@ export default {
     // Listen for our custom event from the SW registration
     document.addEventListener('swUpdated', this.updateAvailable, { once: true })
 
-    // Prevent multiple refreshes
-    navigator.serviceWorker.addEventListener('controllerchange', () => {
-      if (this.refreshing) return
-      this.refreshing = true
-      // Here the actual reload of the page occurs
-      // window.location.reload()
-    })
+    if (navigator && navigator.serviceWorker) {
+      // Prevent multiple refreshes
+      navigator.serviceWorker.addEventListener('controllerchange', () => {
+        if (this.refreshing) return
+        this.refreshing = true
+        // Here the actual reload of the page occurs
+        // window.location.reload()
+      })
+    }
 
     Time.synchronizeTime()
     this.$store.commit('AppLayout/updateAppBarAndDrawer', true)
