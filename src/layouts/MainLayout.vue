@@ -1,23 +1,28 @@
 <template>
   <q-layout
-    view="lHr lpR fFf"
+    :view="layoutView"
     class="main-layout"
   >
     <q-header
       class="text-black layout-header"
+      v-if="layoutHeader"
+      v-model="layoutHeaderVisible"
+      :reveal="layoutHeaderReveal"
+      :elevated="layoutHeaderElevated"
+      :bordered="layoutHeaderBordered"
       style="background-color: #f1f1f1"
     >
       <q-toolbar>
         <div class="header-body full-width">
           <div>
             <q-btn
-              v-if="$route.name !== 'onlineQuiz.konkoorView'"
+              v-if="layoutLeftDrawer || $route.name !== 'onlineQuiz.konkoorView'"
               round
               dense
               flat
               icon="menu"
               color="grey-14"
-              @click="toggleLeftDrawer"
+              @click="updateLayoutLeftDrawerVisible(!layoutLeftDrawerVisible)"
             />
             <q-btn
               v-if="$route.name === 'onlineQuiz.alaaView'"
@@ -52,42 +57,37 @@
           >
             <DashboardTopMenu/>
           </q-btn-dropdown>
+          <q-btn
+            v-if="layoutRightDrawer"
+            dense
+            flat
+            round
+            icon="menu"
+            @click="updateLayoutRightDrawerVisible(!layoutRightDrawerVisible)"/>
         </div>
       </q-toolbar>
       <q-linear-progress
         v-if="$store.getters['loading/loading']"
-        color="primary"
+        color="secondary"
         reverse
         class="q-mt-sm"
         indeterminate
       />
     </q-header>
     <q-drawer
-      class="side-bar"
-      :class="{
-        'mapOfQuestions': $route.name === 'onlineQuiz.alaaView',
-        'bg-primary': $route.name !== 'onlineQuiz.alaaView',
-       }"
+      v-if="layoutLeftDrawerVisible"
+      v-model="layoutLeftDrawerVisible"
       show-if-above
-      v-model="leftDrawerOpen"
+      :behavior="layoutLeftDrawerBehavior"
+      :overlay="layoutLeftDrawerOverlay"
+      :elevated="layoutLeftDrawerElevated"
+      :bordered="layoutLeftDrawerBordered"
+      content-class="bg-grey-1"
       side="left"
-      :width="316"
-      elevated
+      style="background-color: #f1f1f1"
+      :width="350"
+      class="side-bar"
     >
-      <div class="side-logo">
-        <div>
-          <q-img
-            v-if="$route.name === 'onlineQuiz.alaaView'"
-            src="https://3a.alaatv.com/img/logo-1.png"
-            width="150px"
-          />
-          <q-img
-            v-else
-            src="https://3a.alaatv.com/img/logo-2.png"
-            width="150px"
-          />
-        </div>
-      </div>
       <div
         v-if="$route.name === 'onlineQuiz.alaaView'"
       >
@@ -102,13 +102,46 @@
     </q-drawer>
     <q-page-container class="layout-page">
       <div class="page-body">
-        <router-view />
+        <router-view :key="$route.name" />
       </div>
     </q-page-container>
+    <q-drawer
+      class="side-bar"
+      :class="{
+        'mapOfQuestions': $route.name === 'onlineQuiz.alaaView',
+        'bg-secondary': $route.name !== 'onlineQuiz.alaaView',
+       }"
+      v-if="layoutRightDrawerVisible"
+      v-model="layoutRightDrawerVisible"
+      show-if-above
+      :behavior="layoutRightDrawerBehavior"
+      :overlay="layoutRightDrawerOverlay"
+      :elevated="layoutRightDrawerElevated"
+      :bordered="layoutRightDrawerBordered"
+      side="right"
+    >
+    </q-drawer>
+    <q-footer
+      v-if="layoutFooter"
+      v-model="layoutFooterVisible"
+      class="bg-grey-8"
+      :reveal="layoutFooterReveal"
+      :elevated="layoutFooterElevated"
+      :bordered="layoutFooterBordered"
+    >
+      <q-toolbar>
+        <q-btn v-if="layoutLeftDrawer" dense flat round :icon="'menu'" @click="updateLayoutLeftDrawerVisible(!layoutLeftDrawerVisible)" />
+
+        <q-toolbar-title>Quasar</q-toolbar-title>
+
+        <q-btn v-if="layoutRightDrawer" dense flat round :icon="'menu'" @click="updateLayoutRightDrawerVisible(!layoutRightDrawerVisible)" />
+      </q-toolbar>
+    </q-footer>
   </q-layout>
 </template>
 
 <script>
+import { mapGetters, mapMutations, mapState } from 'vuex'
 import SideMenuDashboard from 'components/Menu/SideMenu/SideMenu-dashboard'
 import { User } from 'src/models/User'
 import OnlineQuizTopMenu from 'components/Menu/topMenu/onlineQuizTopMenu'
@@ -117,16 +150,53 @@ import DashboardTopMenu from 'components/Menu/topMenu/DashboardTopMenu'
 
 export default {
   components: { DashboardTopMenu, SideMenuMapOfQuestions, OnlineQuizTopMenu, SideMenuDashboard },
+  computed: {
+    ...mapGetters('AppLayout', [
+      'layoutView',
+      'layoutHeaderReveal',
+      'layoutHeaderElevated',
+      'layoutHeaderBordered',
+      'layoutLeftDrawer',
+      'layoutLeftDrawerVisible',
+      'layoutLeftDrawerBehavior',
+      'layoutLeftDrawerOverlay',
+      'layoutLeftDrawerElevated',
+      'layoutLeftDrawerBordered',
+      'layoutRightDrawer',
+      'layoutRightDrawerVisible',
+      'layoutRightDrawerBehavior',
+      'layoutRightDrawerOverlay',
+      'layoutRightDrawerElevated',
+      'layoutRightDrawerBordered',
+      'layoutFooterReveal',
+      'layoutFooterElevated',
+      'layoutFooterBordered',
+      'layoutFooter'
+    ]),
+    ...mapState('AppLayout', [
+      'layoutHeader',
+      'layoutHeaderVisible',
+      'layoutFooterVisible'
+    ]),
+    headerWithBackground () {
+      return this.$store.getters['AppLayout/headerWithBackground']
+    }
+  },
   data () {
     return {
-      leftDrawerOpen: false,
-      user: new User()
+      user: new User(),
+      tab: 'home',
+      leftDrawerOpen: false
     }
   },
   created () {
     this.getUser()
   },
   methods: {
+    ...mapMutations('AppLayout', [
+      'updateLayoutRightDrawerVisible',
+      'updateLayoutLeftDrawerVisible'
+    ]),
     changeView () {
       this.$router.push({
         name: 'konkoorView',
@@ -148,6 +218,7 @@ export default {
   }
 }
 </script>
+
 <style lang="scss" scoped>
 .main-layout{
   .layout-header {
@@ -185,25 +256,10 @@ export default {
       justify-content: center;
     }
   }
-  .layout-page {
-    padding-bottom: 72px;
-  }
-  .q-drawer--left {
-    .q-layout__shadow {
-      &:after {
-        box-shadow: 0 0 10px 0px rgb(0 0 0 / 10%), 0 0px 10px rgb(0 0 0 / 12%) !important;
-      }
-    }
-  }
 }
 
 </style>
 <style lang="scss">
-.main-layout{
-  .q-drawer{
-    z-index: 2001;
-  }
-}
 .q-menu{
   border-radius: 20px;
 }
