@@ -272,7 +272,7 @@ export default {
       },
       {
         name: 'دهم انسانی',
-        link: 'https://nodes.alaatv.com/aaa/pdf/1401_plan_ensani_dahom.pdf'
+        link: 'https://nodes.alaatv.com/aaa/pdf/1401_plan_ensani_dahom2.pdf'
       },
       {
         divider: true
@@ -298,7 +298,7 @@ export default {
       },
       {
         name: 'دوازدهم ریاضی',
-        link: 'https://nodes.alaatv.com/aaa/pdf/1401_plan_riyazi_davazdahom.pdf'
+        link: 'https://nodes.alaatv.com/aaa/pdf/1401_plan_riyazi_davazdahom2.pdf'
       },
       {
         name: 'دوازدهم انسانی',

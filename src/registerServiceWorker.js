@@ -4,29 +4,41 @@ import { register } from 'register-service-worker'
 
 // if (process.env.NODE_ENV === 'development') {
   register(`${process.env.BASE_URL}service-worker.js`, {
+    registrationOptions: { scope: './' },
     ready () {
-      console.log(
+      console.log('##### \n' +
         'App is being served from cache by a service worker.\n' +
         'For more details, visit https://goo.gl/AFskqB'
       )
     },
     registered () {
-      console.log('Service worker has been registered.')
+      console.log('##### Service worker has been registered.')
     },
     cached () {
-      console.log('Content has been cached for offline use.')
+      console.log('##### Content has been cached for offline use.')
     },
     updatefound () {
-      console.log('New content is downloading.')
+      console.log('##### New content is downloading.')
     },
-    updated () {
-      console.log('New content is available; please refresh.')
+    // When the SW is updated we will dispatch an event we can listen to in our .vue file
+    updated (registration) {
+      console.log('##### New content is available; please refresh.')
+      document.dispatchEvent(
+          new CustomEvent('swUpdated', { detail: registration })
+      )
+
+      // caches.keys()
+      //     .then(function(names) {
+      //       for (let name of names) {
+      //         caches.delete(name)
+      //       }
+      //     })
     },
     offline () {
-      console.log('No internet connection found. App is running in offline mode.')
+      console.log('##### No internet connection found. App is running in offline mode.')
     },
     error (error) {
-      console.error('Error during service worker registration:', error)
+      console.error('##### Error during service worker registration:', error)
     }
   })
 // }
