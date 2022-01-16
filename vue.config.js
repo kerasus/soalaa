@@ -25,10 +25,10 @@ let config = {
             start_url: ".",
             scope: "/",
         },
-        workboxPluginMode: 'InjectManifest',
-        workboxOptions: {
-            swSrc: './src/service-worker.js',
-        },
+        workboxPluginMode: 'GenerateSW',
+        // workboxOptions: {
+        //     swSrc: './src/service-worker.js',
+        // },
         navigateFallback: './public/index.html'
     },
     outputDir: 'dist'
