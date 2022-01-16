@@ -26,13 +26,12 @@ import { register } from 'register-service-worker'
       document.dispatchEvent(
           new CustomEvent('swUpdated', { detail: registration })
       )
-
-      // caches.keys()
-      //     .then(function(names) {
-      //       for (let name of names) {
-      //         caches.delete(name)
-      //       }
-      //     })
+      caches.keys()
+          .then(function(names) {
+            for (let name of names) {
+              caches.delete(name)
+            }
+          })
     },
     offline () {
       console.log('##### No internet connection found. App is running in offline mode.')
