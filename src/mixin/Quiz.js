@@ -839,6 +839,55 @@ const mixinQuiz = {
         },
 
 
+        convertBubbleSheetResponseToUserAnswerResponse (exam_user_id) {
+            const userAnswerResponse = {
+                choices: [
+                    // {
+                    //     "id": "61dd404df28c746e5a0aaf53",
+                    //     "exam_user_id": "61dd2e0bf07492290b57097a",
+                    //     "question_id": "61d95bfe3e17411c7775770c",
+                    //     "choice_id": 1,
+                    //     "type": "online",
+                    //     "selected_at": "2022-01-11 12:01:08.951",
+                    //     "status": null,
+                    //     "bookmark": null
+                    // }
+                ],
+                statuses: [],
+                bookmarks: []
+            }
+
+            const bubbleSheetResponse = [
+                    // {
+                    //     "q_n": 1,
+                    //     "c_n": [
+                    //         1
+                    //     ]
+                    // },
+                    // {
+                    //     "q_n": 2,
+                    //     "c_n": [
+                    //         2
+                    //     ]
+                    // }
+                ]
+
+            userAnswerResponse.choices = bubbleSheetResponse.map( item => {
+                    const choiceNumber = (typeof item.c_n[0] === 'undefined') ? null : item.c_n[0]
+                    return {
+                        id: item.q_n,
+                        exam_user_id,
+                        question_id: item.q_n,
+                        choice_id: choiceNumber,
+                        has_warning: (typeof item.c_n[1] !== 'undefined'),
+                        selected_at: Time.now()
+                    }
+                }
+            )
+
+            return userAnswerResponse
+        },
+
 
         getExamUserData (exam_id) {
             return new Promise(function (resolve, reject) {
