@@ -182,11 +182,16 @@ export default {
       api: API_ADDRESS.exam.base(),
       tableKeys: {
         data: 'data',
-        total: 'count',
-        currentPage: 'current',
-        perPage: 'per_page',
-        pageKey: 'page'
+        total: 'meta.total',
+        currentPage: 'meta.current_page',
+        perPage: 'meta.per_page',
+        pageKey: 'meta.current_page'
       }
+    }
+  },
+  created () {
+    if (this.tableKeys.currentPage) {
+      this.api = API_ADDRESS.exam.base(this.tableKeys.currentPage)
     }
   },
   methods: {

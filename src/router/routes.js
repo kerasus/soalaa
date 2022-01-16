@@ -6,6 +6,7 @@ const routes = [
     name: 'home',
     component: () => import('layouts/MainLayout.vue'),
     children: [
+      { name: 'Admin.Settings', path: 'settings', component: () => import('pages/Admin/Settings') },
       {
         path: '',
         component: () => import('pages/User/exam/List'),
