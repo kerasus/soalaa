@@ -673,11 +673,11 @@ const mixinQuiz = {
             const persianRegex = /[\u0600-\u06FF]/
             return !string.match(persianRegex)
         },
-        answerClicked(data, sendData = true) {
+        answerClicked(data, sendData = true, callback) {
             let questionId = data.questionId
 
             const socket = (this.useSocket) ? this.socket : false
-            return this.userActionOnQuestion(questionId, 'answer', {choiceId: data.choiceId}, socket, sendData)
+            return this.userActionOnQuestion(questionId, 'answer', {choiceId: data.choiceId}, socket, sendData, callback)
         },
         changeBookmark(questionId) {
             const socket = (this.useSocket) ? this.socket : false
