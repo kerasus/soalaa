@@ -70,8 +70,12 @@
         <v-btn @click="sendAnswerImg">
           send to backend
         </v-btn>
+        <v-btn @click="confirmSendAllAnswerOfUser">
+          گرفتن جواب ها
+        </v-btn>
         <BubbleSheet
-          :info="{ type: 'pasokh-barg' }"
+          :questions="questions"
+          :info="{ type: 'scanned-pasokh-barg' }"
           :delay-time="0"
           @clickChoice="choiceClicked"
         />
@@ -85,6 +89,8 @@ import FileUpload from 'vue-upload-component'
 import ImageCompressor from "@xkeshi/image-compressor";
 import BubbleSheet from '@/components/OnlineQuiz/Quiz/BubbleSheet/BubbleSheet'
 import { mixinQuiz} from "@/mixin/Mixins";
+import { Question } from '@/models/Question'
+import {Exam} from "@/models/Exam";
 // import ExamData from "@/assets/js/ExamData";
 // import API_ADDRESS from "@/api/Addresses";
 // import axios from "axios";
@@ -97,13 +103,20 @@ export default {
   },
   mixins: [mixinQuiz],
   props:{
+    questions:{
+      type: Array,
+      default:() => []
+    },
     examData:{
-      type:Object,
-      default:() => {}
+      type: Exam,
+      default:() => new Exam()
+    },
+    dialogStatus:{
+      type: Boolean,
+      default: false
     },
   },
   data:()=>({
-    dialogStatus: false,
     answerFiles: [],
     extensions: 'gif,jpg,jpeg,png,webp',
     accept: 'image/jpg',
@@ -117,19 +130,15 @@ export default {
     data: {},
     imgTest:{}
   }),
-  watch:{
-    examData:{
-      deep:true,
-      handler: function (){
-          this.dialogStatus = this.examData.dialog
-      }
-    }
-  },
   created() {
-    this.dialogStatus = this.examData.dialog
-    console.log('created ',this.examData.dialog )
+  },
+  mounted() {
+    this.loadQuestions()
   },
   methods:{
+    loadQuestions () {
+
+    },
    choiceClicked(){
       console.log('choiceClicked clicked')
    },
@@ -204,7 +213,18 @@ export default {
         }
       }
     },
-   async sendAnswerImg(){
+    confirmSendAllAnswerOfUser() {
+      let answers = this.getUserAnswers(this.examData.id)
+      console.log('answers before', answers)
+      answers = answers.map( answer => {
+        return {
+          q_n: answer.question_id,
+          c_n: answer.choice_id
+        }
+      })
+      console.log('answers after', answers)
+    },
+    async sendAnswerImg(){
       // let formData = new FormData();
       // console.log('this.answerFiles :',this.answerFiles[0].file)
      // formData.append('image', this.answerFiles[0].file);
