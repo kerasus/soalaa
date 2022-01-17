@@ -27,7 +27,8 @@
       <div
         v-for="question in group"
         :key="question.id"
-        class="question-in-list"
+        class="question-in-list test"
+        :class="question.has_warning ? 'has-warning' : '' "
       >
         <div
           :class="{
@@ -277,6 +278,9 @@
 </script>
 
 <style scoped>
+.has-warning{
+  background-color: rgba(255, 48, 48, 0.3);
+}
     .v-overlay {
         align-items: flex-start;
         padding-top: 100px;
