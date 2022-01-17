@@ -177,8 +177,10 @@
       </v-col>
     </v-row>
     <send-answer-photo
-      :exam-data="data"
-      @closeDialog="data.dialog = false"
+      :questions="questions"
+      :exam-data="bubbleSheetDialogExam"
+      :dialog-status="bubbleSheetDialog"
+      @closeDialog="bubbleSheetDialog = false"
     />
   </v-container>
 </template>
@@ -190,6 +192,7 @@ import ProgressLinear from "@/components/ProgressLinear";
 import VueConfirmDialog from 'vue-confirm-dialog'
 import SendAnswerPhoto from "@/pages/user/exam/SendAnswerPhoto";
 import Vue from 'vue'
+import {Question} from "@/models/Question";
 
 Vue.use(VueConfirmDialog)
 Vue.component('vue-confirm-dialog', VueConfirmDialog.default)
@@ -203,7 +206,9 @@ export default {
     examItem: new Exam(),
     exams: new ExamList(),
     loadingList: false,
-    data:{dialog :false}
+    bubbleSheetDialog: false,
+    bubbleSheetDialogExam: new Exam(),
+    questions: []
   }),
   created() {
     this.getExams()
@@ -215,11 +220,38 @@ export default {
   },
   methods: {
     setDialogStatus(exam){
-      this.data = {
-        exam,
-        dialog: true
+      this.bubbleSheetDialog = true
+      this.bubbleSheetDialogExam = new Exam(exam)
+      this.$store.commit('updateQuiz', this.bubbleSheetDialogExam)
+
+      const bubbleSheetResponse = [
+        {
+          "q_n": 1,
+          "c_n": [
+            4
+          ]
+        },
+        {
+          "q_n": 2,
+          "c_n": [
+            3
+          ]
+        }
+      ]
+
+
+      for (let i = 0; i < bubbleSheetResponse.length; i++) {
+        this.questions.push(new Question({id: bubbleSheetResponse[i].q_n}))
       }
-      console.log('exam :',exam)
+
+      const userAnswerResponse = this.convertBubbleSheetResponseToUserAnswerResponse(this.bubbleSheetDialogExam.user_exam_id, bubbleSheetResponse)
+
+      console.log('userAnswerResponse', userAnswerResponse)
+      this.$store.commit('clearExamData', this.bubbleSheetDialogExam.id)
+      this.$store.commit('mergeDbAnswersIntoLocalstorage', {
+        dbAnswers: userAnswerResponse,
+        exam_id: this.bubbleSheetDialogExam.id
+      })
     },
     goToResult(exam) {
       let routeName = 'user.exam.results'
