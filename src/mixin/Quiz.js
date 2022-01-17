@@ -296,8 +296,7 @@ const mixinQuiz = {
                     let questionId = currentExamQuestionIndexes[item]
                     currentExamQuestionsArray.push(currentExamQuestions[questionId])
                 })
-            }
-            else {
+            } else {
                 currentExamQuestionsArray = this.quiZ
             }
             return currentExamQuestionsArray
