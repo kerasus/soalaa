@@ -67,6 +67,9 @@
               {{ showAnsweredAt(getUserQuestionData(question.id).answered_at) }}
             </span>
           </v-tooltip>
+          <span v-else-if="info.type === 'scanned-pasokh-barg'">
+            {{ question.id }}
+          </span>
           <span v-else>
             {{ getQuestionNumberFromId(question.id) }}
           </span>
@@ -151,18 +154,14 @@
         let groups = [],
             chunk  = 10
         let array
-        if (this.questions === null)
-        {
+        if (this.questions === null) {
           array = this.getCurrentExamQuestionsInArray()
-          for (let i = 0, j = array.length; i < j; i += chunk)
-          {
+          for (let i = 0, j = array.length; i < j; i += chunk) {
             groups.push(array.slice(i, i + chunk))
           }
-        } else
-        {
+        } else {
           array = this.questions
-          for (let i = 0, j = 200; i < j; i += chunk)
-          {
+          for (let i = 0, j = 200; i < j; i += chunk) {
             groups.push(array.slice(i, i + chunk))
           }
         }
@@ -170,27 +169,26 @@
       }
     },
     created() {
-      if (this.delayTime === 0)
-      {
+      if (this.delayTime === 0) {
         this.overlay = true
       }
       // console.Log(this.questions)
       // console.Log(this.getCurrentExamQuestionsInArray())
     },
     mounted() {
-      let that = this
-      setTimeout(() => {
-        if (that.$refs.bubbleSheet)
-        {
-          that.$refs.bubbleSheet.style.height = that.questionListHeight() - 24 + 'px'
-        }
-        // $('.questions-list').height(this.questionListHeight())
-        that.overlay = false
-      }, this.delayTime)
-
+      this.setBubbleSheetHeight()
       this.checkForShowDateOfAnsweredAt()
     },
     methods: {
+      setBubbleSheetHeight () {
+        let that = this
+        setTimeout(() => {
+          if (that.$refs.bubbleSheet) {
+            that.$refs.bubbleSheet.style.height = that.questionListHeight() - 24 + 'px'
+          }
+          that.overlay = false
+        }, this.delayTime)
+      },
       showAnsweredAt (answeredAt) {
         let formatString = 'HH:mm:ss'
         if (this.showDateOfAnsweredAt) {
@@ -219,12 +217,10 @@
         })
       },
       getUserQuestionData(question_id) {
-        if (typeof question_id === 'undefined')
-        {
+        if (typeof question_id === 'undefined') {
           question_id = this.currentQuestion.id
         }
-        if (!this.quiz.id || !question_id || !this.userQuizListData[this.quiz.id])
-        {
+        if (!this.quiz.id || !question_id || !this.userQuizListData[this.quiz.id]) {
           return false
         }
         return this.userQuizListData[this.quiz.id][question_id]
