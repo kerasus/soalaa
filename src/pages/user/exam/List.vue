@@ -110,10 +110,10 @@
                         شروع آزمون
                       </v-btn>
                       <v-btn
-                          v-if="item.exam_actions.can_submit_new_answers"
-                          color="#ffc107"
-                          text
-                          @click="goToSendResults(item)"
+                        v-if="item.exam_actions.can_submit_new_answers"
+                        color="#ffc107"
+                        text
+                        @click="goToSendResults(item)"
                       >
                         ثبت گزینه ها
                       </v-btn>
@@ -160,6 +160,13 @@
                           {{ booklet.category_title }}
                         </v-btn>
                       </template>
+                      <v-btn
+                        color="green"
+                        text
+                        @click="setDialogStatus(item)"
+                      >
+                        ارسال پاسخنامه
+                      </v-btn>
                     </v-col>
                   </v-row>
                 </v-sheet>
@@ -169,6 +176,10 @@
         </v-row>
       </v-col>
     </v-row>
+    <send-answer-photo
+      :exam-data="data"
+      @closeDialog="data.dialog = false"
+    />
   </v-container>
 </template>
 
@@ -177,6 +188,7 @@ import {Exam, ExamList} from "@/models/Exam";
 import {mixinAuth, mixinQuiz} from '@/mixin/Mixins'
 import ProgressLinear from "@/components/ProgressLinear";
 import VueConfirmDialog from 'vue-confirm-dialog'
+import SendAnswerPhoto from "@/pages/user/exam/SendAnswerPhoto";
 import Vue from 'vue'
 
 Vue.use(VueConfirmDialog)
@@ -184,13 +196,14 @@ Vue.component('vue-confirm-dialog', VueConfirmDialog.default)
 
 export default {
   name: 'List',
-  components: {ProgressLinear},
+  components: {SendAnswerPhoto, ProgressLinear},
   mixins: [mixinAuth, mixinQuiz],
   data: () => ({
     preventStartExam: false,
     examItem: new Exam(),
     exams: new ExamList(),
-    loadingList: false
+    loadingList: false,
+    data:{dialog :false}
   }),
   created() {
     this.getExams()
@@ -201,6 +214,13 @@ export default {
     this.$store.commit('AppLayout/updateOverlay', {show: false, loading: false, text: ''})
   },
   methods: {
+    setDialogStatus(exam){
+      this.data = {
+        exam,
+        dialog: true
+      }
+      console.log('exam :',exam)
+    },
     goToResult(exam) {
       let routeName = 'user.exam.results'
       if (exam.type && exam.type.value && exam.type.value === 'psychometric') {
