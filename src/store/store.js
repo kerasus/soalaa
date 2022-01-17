@@ -318,6 +318,9 @@ const store = new Vuex.Store({
                 return
             }
             const currentExamQuestions = newInfo.currentExamQuestions
+            if (!currentExamQuestions) {
+                return
+            }
             const currentQuestion = new Question(currentExamQuestions[newQuestionId])
             if (newQuestionId) {
                 this.commit('enterQuestion', newQuestionId)

@@ -39,8 +39,11 @@
           :style="{ width: '24%', cursor: 'pointer' }"
           @click="ClickQuestionNumber(question.id)"
         >
+          <span v-if="info.type === 'scanned-pasokh-barg'">
+            {{ question.id }}
+          </span>
           <v-tooltip
-            v-if="getUserQuestionData(question.id)"
+            v-else-if="getUserQuestionData(question.id)"
             bottom
           >
             <template v-slot:activator="{ on, attrs }">
@@ -67,9 +70,6 @@
               {{ showAnsweredAt(getUserQuestionData(question.id).answered_at) }}
             </span>
           </v-tooltip>
-          <span v-else-if="info.type === 'scanned-pasokh-barg'">
-            {{ question.id }}
-          </span>
           <span v-else>
             {{ getQuestionNumberFromId(question.id) }}
           </span>
@@ -230,8 +230,7 @@
         this.$refs.bubbleSheet.style.height = this.questionListHeight() - 24 + 'px'
       },
       AnswerClicked(payload) {
-        if (this.info.type !== 'pasokh-nameh')
-        {
+        if (this.info.type !== 'pasokh-nameh') {
           this.answerClicked(payload, false)
           this.clickChoice(payload.questionId)
         }
