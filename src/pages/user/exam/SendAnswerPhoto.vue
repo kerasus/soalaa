@@ -25,43 +25,44 @@
           <v-card
             class="mt-10 text-center"
           >
-            <v-row>
-              <file-upload
-                ref="answerImages"
-                v-model="answerFiles"
-                class="ma-5 col-6 text-right"
-                input-id="answerImages"
-                :extensions="extensions"
-                :accept="accept"
-                :multiple="false"
-                :directory="directory"
-                :create-directory="createDirectory"
-                :size="size || 0"
-                :thread="thread < 1 ? 1 : (thread > 5 ? 5 : thread)"
-                :data="data"
-                :drop="drop"
-                :drop-directory="dropDirectory"
-                :add-index="addIndex"
-                @input-filter="inputFilter"
-                @input-file="inputFile"
+            <v-row class="align-end ">
+              <v-col
+                class="ma-5 col-4 text-right"
               >
-                <v-btn
-                  large
-                  dark
-                  color="#FF8F00"
+                <file-upload
+                  ref="answerImages"
+                  v-model="answerFiles"
+                  input-id="answerImages"
+                  :extensions="extensions"
+                  :accept="accept"
+                  :multiple="false"
+                  :directory="directory"
+                  :create-directory="createDirectory"
+                  :size="size || 0"
+                  :thread="thread < 1 ? 1 : (thread > 5 ? 5 : thread)"
+                  :data="data"
+                  :drop="drop"
+                  :drop-directory="dropDirectory"
+                  :add-index="addIndex"
+                  @input-filter="inputFilter"
+                  @input-file="inputFile"
                 >
-                  انتخاب عکس
-                </v-btn>
-              </file-upload>
-            </v-row>
-            <v-row>
+                  <v-btn
+                    large
+                    dark
+                    color="#FF8F00"
+                  >
+                    {{ answerFiles.length > 0 ? 'تغییر عکس' : 'انتخاب عکس ' }}
+                  </v-btn>
+                </file-upload>
+              </v-col>
               <v-col
                 v-for="(file, index) in answerFiles"
                 :key="index"
                 class="mx-5 col-6 text-right"
               >
                 <v-badge
-                    class="uploaded-image"
+                  class="uploaded-image"
                   color="transparent"
                   overlap
                 >
@@ -85,6 +86,8 @@
                   />
                 </v-badge>
               </v-col>
+            </v-row>
+            <v-row>
               <!--              <v-col class="text-right">-->
               <!--                <v-alert-->
               <!--                  v-if="showUserAnswers"-->
@@ -102,13 +105,16 @@
                   dark
                   color="#1E88E5"
                   class="mx-5"
+                  outlined
                   @click="sendAnswerImg"
                 >
                   ارسال تصویر
                 </v-btn>
                 <v-btn
+                  v-if="showUserAnswers"
                   dark
                   color="#43A047"
+                  outlined
                   @click="confirmSendAllAnswerOfUser"
                 >
                   تأیید نهایی
@@ -271,8 +277,9 @@ export default {
           c_n: answer.choice_id
         }
       })
-      this.sendAnswers(answers)
+  //   this.sendAnswers(answers)
       console.log('answers after', answers)
+      console.log(answers ,this.exam.user_exam_id)
     },
     sendAnswers(answers){
       //TODO invalid data
@@ -336,6 +343,6 @@ export default {
 
 <style scoped>
 .uploaded-image {
-  width: 100%;
+  width: 300px;
 }
 </style>
