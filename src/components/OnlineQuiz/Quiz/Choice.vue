@@ -1,59 +1,56 @@
 <template>
-  <v-col
-    :md="6"
-    :cols="12"
-    class="answer-box"
+  <div class="answer-box"
     @click="answerClicked"
   >
-    <v-sheet :class="{ 'answer-sheet': true, active: isSelected }">
-      <div
-        class="answer-text renderedPanel"
+    <div :class="{ 'answer-sheet': true, active: isSelected }">
+      <div class="answer-text renderedPanel"
       >
         <vue-katex :input="choice.title" :ltr="!isRtl" />
       </div>
       <div class="answer-checkbox">
-        <v-checkbox
+        <q-checkbox
+          dense
+          @click="answerClicked"
+          size="60px"
           v-model="isSelected"
-          disabled
-        />
+         />
       </div>
-    </v-sheet>
-  </v-col>
+  </div>
+  </div>
 </template>
 
 <script>
-    import { mixinQuiz } from '@/mixin/Mixins'
-    import '@/assets/scss/markdownKatex.scss'
-    import VueKatex from "@/components/VueKatex";
+import { mixinQuiz } from 'src/mixin/Mixins'
+import 'src/assets/scss/markdownKatex.scss'
+import VueKatex from 'src/components/VueKatex'
 
-
-    export default {
-        name: 'Choice',
-        components: {
-          VueKatex
-        },
-        mixins: [mixinQuiz],
-        props: ['choice', 'questionId', 'isRtl'],
-        computed: {
-            isSelected () {
-                return this.getUserQuestionData(this.quiz.id, this.questionId) && this.choice.id === this.getUserQuestionData(this.quiz.id, this.questionId).answered_choice_id
-            }
-        },
-        methods: {
-            answerClicked () {
-                this.$emit('answerClicked', { questionId: this.questionId, choiceId: this.choice.id })
-            },
-        }
+export default {
+  name: 'Choice',
+  components: {
+    VueKatex
+  },
+  mixins: [mixinQuiz],
+  props: ['choice', 'questionId', 'isRtl'],
+  computed: {
+    isSelected () {
+      return this.getUserQuestionData(this.quiz.id, this.questionId) && this.choice.id === this.getUserQuestionData(this.quiz.id, this.questionId).answered_choice_id
     }
+  },
+  methods: {
+    answerClicked () {
+      this.$emit('answerClicked', { questionId: this.questionId, choiceId: this.choice.id })
+    }
+  }
+}
 </script>
 
-<style>
+<style lang="scss">
     .answer-box .mdi-checkbox-marked::before,
     .answer-box .mdi-checkbox-blank-outline {
         size: 40px;
         font-size: 40px;
     }
-    .answer-sheet.active .theme--light.v-input--selection-controls.v-input--is-disabled:not(.v-input--indeterminate) .v-icon {
+    .answer-sheet.active .theme--light.q-input--selection-controls.q-input--is-disabled:not(.q-input--indeterminate) .q-icon {
         color: #fbc10c !important;
     }
     .answer-sheet.active {
@@ -67,20 +64,18 @@
 
 <style scoped>
 
-
     .answer-box {
         display: flex;
         justify-content: center;
-        min-height: 135px;
+        min-height: 100px;
         align-items: center;
     }
 
     .answer-sheet {
         background: #fff;
         width: 100%;
-        min-height: 100px;
+        min-height: 130px;
         height: max-content;
-        padding: 2% 3%;
         border-radius: 20px;
         cursor: pointer;
         transition: all ease 0.3s;
@@ -90,16 +85,16 @@
         align-items: center;
     }
 
-
-
     .answer-text {
         height: max-content;
         width: 100%;
         color: #777;
-        padding-right: 30px;
+        padding-left: 30px;
         display: block;
     }
-
+    .answer-text .mesra {
+      max-width: 100%;
+    }
     .answer-sheet.active {
         background: #fffaee;
     }
@@ -110,7 +105,7 @@
     }
 
     .answer-checkbox {
-        height: 74px;
+        height: 70px;
         width: 85px;
         display: flex;
         justify-content: center;

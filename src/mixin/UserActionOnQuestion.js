@@ -1,16 +1,16 @@
-import {Question} from "@/models/Question";
+import { Question } from 'src/models/Question'
 
 const mixinUserActionOnQuestion = {
   methods: {
-    userActionOnQuestion(questionId, actionType, data) {
-      let examId = this.quiz.id
-      let exam_user_id = this.quiz.user_exam_id
+    userActionOnQuestion (questionId, actionType, data) {
+      const examId = this.quiz.id
+      const examUserId = this.quiz.user_exam_id
       this.beforeUserActionOnQuestion(examId, questionId)
-      let userExamData = this.userQuizListData[examId]
+      const userExamData = this.userQuizListData[examId]
       if (!userExamData) {
         return
       }
-      let userQuestionData = userExamData[questionId]
+      const userQuestionData = userExamData[questionId]
       if (!userQuestionData) {
         return
       }
@@ -21,34 +21,35 @@ const mixinUserActionOnQuestion = {
       } else if (actionType === 'status') {
         this.userActionOnQuestion_status(data, examId, questionId, userQuestionData)
       }
+
       this.afterUserActionOnQuestion()
-      return this.sendUserQuestionsDataToServer(exam_user_id, userExamData, questionId, actionType)
+      return this.sendUserQuestionsDataToServer(examUserId, userExamData, questionId, actionType)
     },
-    beforeUserActionOnQuestion(examId, questionId) {
-      this.$store.commit('updateCurrentQuestion', {
+    beforeUserActionOnQuestion (examId, questionId) {
+      this.$store.commit('quiz/updateCurrentQuestion', {
         newQuestionId: questionId,
         currentExamQuestions: this.getCurrentExamQuestions()
       })
-      this.$store.commit('changeQuestion_RefreshQuestionObject', {
+      this.$store.commit('quiz/changeQuestionRefreshQuestionObject', {
         exam_id: examId,
         question_id: questionId
       })
     },
-    afterUserActionOnQuestion() {
-        this.$store.commit('updateUserQuizListDataExam', this.userQuizListData)
+    afterUserActionOnQuestion () {
+      this.$store.commit('quiz/updateUserQuizListDataExam', this.userQuizListData)
     },
     getUserQuestionDataFromLocalstorage (userExamData, questionId) {
       // find question
-      let userQuestionData = userExamData[questionId]
+      const userQuestionData = userExamData[questionId]
 
       // set data from localstorage of user
-      let dataToSendAnswer = {
+      const dataToSendAnswer = {
         question_id: questionId,
         choice_id: userQuestionData.answered_choice_id,
         selected_at: userQuestionData.answered_at
       }
-      let dataToSendStatus = {question_id: questionId, status: userQuestionData.status}
-      let dataToSendBookmark = questionId
+      const dataToSendStatus = { question_id: questionId, status: userQuestionData.status }
+      const dataToSendBookmark = questionId
 
       return {
         userQuestionData,
@@ -57,12 +58,12 @@ const mixinUserActionOnQuestion = {
         dataToSendBookmark
       }
     },
-    sendUserQuestionsDataToServer(examUserId, userExamData, questionId, actionType) {
-
-      let userQuestionDataFromLocalstorage = this.getUserQuestionDataFromLocalstorage(userExamData, questionId)
+    sendUserQuestionsDataToServer (examUserId, userExamData, questionId, actionType) {
+      console.log('sendUserQuestionsDataToServer')
+      const userQuestionDataFromLocalstorage = this.getUserQuestionDataFromLocalstorage(userExamData, questionId)
 
       // send data
-      let question = new Question()
+      const question = new Question()
       if (actionType === 'answer') {
         return question.sendAnswer(examUserId, userQuestionDataFromLocalstorage.dataToSendAnswer)
       }
@@ -77,53 +78,53 @@ const mixinUserActionOnQuestion = {
         return question.sendStatus(examUserId, userQuestionDataFromLocalstorage.dataToSendStatus)
       }
     },
-    userActionOnQuestion_answer(data, examId, questionId, userQuestionData) {
-      let oldStatus = userQuestionData.status
-      let oldAnswered_choice_id = userQuestionData.answered_choice_id
-      let newAnswered_choice_id = data.choiceId
-      if (oldAnswered_choice_id === newAnswered_choice_id) {
-        newAnswered_choice_id = null
+    userActionOnQuestion_answer (data, examId, questionId, userQuestionData) {
+      const oldStatus = userQuestionData.status
+      const oldAnsweredChoiceId = userQuestionData.answered_choice_id
+      let newAnsweredChoiceId = data.choiceId
+      if (oldAnsweredChoiceId === newAnsweredChoiceId) {
+        newAnsweredChoiceId = null
       } else if (oldStatus === 'x') {
-        let newState = ''
-        this.$store.commit('changeQuestion_Status', {
+        const newState = ''
+        this.$store.commit('quiz/changeQuestionStatus', {
           exam_id: examId,
           question_id: questionId,
           status: newState
         })
       }
-      this.$store.commit('changeQuestion_SelectChoice', {
+      this.$store.commit('quiz/changeQuestionSelectChoice', {
         exam_id: examId,
         question_id: questionId,
-        answered_choice_id: newAnswered_choice_id
+        answered_choice_id: newAnsweredChoiceId
       })
     },
-    userActionOnQuestion_bookmark(examId, questionId, userQuestionData) {
-      this.$store.commit('changeQuestion_RefreshQuestionObject', {
+    userActionOnQuestion_bookmark (examId, questionId, userQuestionData) {
+      this.$store.commit('quiz/changeQuestionRefreshQuestionObject', {
         exam_id: examId,
         question_id: questionId
       })
-      let oldBookmarked = userQuestionData.bookmarked
-      let newBookmark = !(oldBookmarked)
-      this.$store.commit('changeQuestion_Bookmark', {
+      const oldBookmarked = userQuestionData.bookmarked
+      const newBookmark = !(oldBookmarked)
+      this.$store.commit('quiz/changeQuestionBookmark', {
         exam_id: examId,
         question_id: questionId,
         bookmarked: newBookmark
       })
     },
-    userActionOnQuestion_status(data, examId, questionId, userQuestionData) {
+    userActionOnQuestion_status (data, examId, questionId, userQuestionData) {
       let newStatus = data.newStatus
-      let oldQuestion = userQuestionData
-      let oldStatus = (!oldQuestion) ? false : oldQuestion.status
+      const oldQuestion = userQuestionData
+      const oldStatus = (!oldQuestion) ? false : oldQuestion.status
       if (oldQuestion && newStatus === oldStatus) {
         newStatus = ''
       } else if (newStatus === 'x') {
-        this.$store.commit('changeQuestion_SelectChoice', {
+        this.$store.commit('quiz/changeQuestionSelectChoice', {
           exam_id: examId,
           question_id: questionId,
           answered_choice_id: null
         })
       }
-      this.$store.commit('changeQuestion_Status', {
+      this.$store.commit('quiz/changeQuestionStatus', {
         exam_id: examId,
         question_id: questionId,
         status: newStatus

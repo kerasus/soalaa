@@ -575,10 +575,10 @@
 </template>
 <script>
 export default {
-  name: "QuestionFactory",
-  data() {
+  name: 'QuestionFactory',
+  data () {
     return {}
-  },
+  }
 }
 </script>
 

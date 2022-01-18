@@ -1,0 +1,367 @@
+<template>
+  <div class="bg-secondary side-menu-main-layout">
+    <div class="side-logo">
+      <div class="logo-image">
+        <q-img
+          v-if="$route.name === 'onlineQuiz.alaaView'"
+          src="https://3a.alaatv.com/img/logo-1.png"
+          width="140px"
+        />
+        <q-img
+          v-else
+          src="https://3a.alaatv.com/img/logo-2.png"
+          width="140px"
+        />
+      </div>
+    </div>
+    <q-separator class="top-separator" dark/>
+    <q-list
+      class="side-menu-list"
+      padding
+      dark
+    >
+      <q-item
+          v-for="(item , index) in titlesList"
+          :key="index"
+          :to="item.path"
+          class="list-item"
+          v-model="userGroup"
+        >
+        <div class="section-title">
+          <q-item-section class="list-section title-icon" avatar>
+            <q-avatar :icon="item.icon" size="30"/>
+          </q-item-section>
+          <q-item-section class="list-section">
+            {{ item.title }}
+          </q-item-section>
+        </div>
+        <q-item-section
+          v-if="item.children.length"
+          class="list-section list-children-section"
+        >
+          <q-list>
+            <q-item
+              v-for="(subItem , i) in item.children"
+              :key="i"
+              :to="subItem.to"
+              class="list-child-item"
+              :active="$route.name === subItem.name"
+              active-class="active-route"
+            >
+              <q-item-section
+                class="list-child-section"
+              >
+                {{ subItem.displayName }}
+              </q-item-section>
+              <span class="indicator"/>
+            </q-item>
+          </q-list>
+        </q-item-section>
+      </q-item>
+    </q-list>
+  </div>
+</template>
+
+<script>
+export default {
+  name: 'SideMenu-dashboard',
+  data () {
+    return {
+      userGroup: null,
+      adminGroup: null,
+      questionGroup: null,
+      selectedExam: null,
+      activeRoute: null,
+      clickedOn: false,
+      titlesList: [
+        {
+          title: 'داشبورد',
+          icon: 'home',
+          path: '',
+          name: '',
+          children: []
+        },
+        {
+          title: 'سوال',
+          icon: 'home',
+          path: '',
+          name: '',
+          children: [
+            { displayName: 'ثبت سوال', to: '/question/create', name: 'user.exam' },
+            { displayName: 'کارخانه سوال', to: '/question/list', name: 'question.list' },
+            { displayName: 'بانک سوال', to: '/questions', name: 'question-bank' }
+          ]
+        },
+        {
+          title: 'آزمون',
+          icon: 'home',
+          path: '',
+          name: '',
+          children: [
+            { displayName: 'ساخت آزمون', to: '/exam/create', name: 'Admin.Exam.Creat' },
+            { displayName: 'لیست آزمون ها', to: '/exam', name: 'Admin.Exam.Index' }
+          ]
+        },
+        {
+          title: 'درخت دانش',
+          icon: 'home',
+          path: '',
+          name: '',
+          children: []
+        },
+        {
+          title: 'لیست دروس',
+          icon: 'home',
+          path: '/subCategory',
+          name: 'Admin.subCategory.Index',
+          children: []
+        },
+        {
+          title: 'گزارشات',
+          icon: 'home',
+          path: '',
+          name: '',
+          children: []
+        },
+        {
+          title: 'تنظیمات',
+          icon: 'home',
+          path: '',
+          name: '',
+          children: []
+        },
+        {
+          title: 'سوالات متداول',
+          icon: 'home',
+          path: '',
+          name: '',
+          children: []
+        }
+      ],
+      userList: [
+        {
+          displayName: 'آزمون های سه آ',
+          to: '/user_exam_list',
+          name: 'user.exam.list'
+        },
+        {
+          displayName: 'سوالات متداول',
+          to: '/faq',
+          name: 'faq'
+        }
+      ],
+      examsPlan: [
+        {
+          divider: true
+        },
+        {
+          name: 'دهم تجربی',
+          link: 'https://nodes.alaatv.com/aaa/pdf/1401_plan_tajrobi_dahom.pdf'
+        },
+        {
+          name: 'دهم ریاضی',
+          link: 'https://nodes.alaatv.com/aaa/pdf/1401_plan_riyazi_dahom.pdf'
+        },
+        {
+          name: 'دهم انسانی',
+          link: 'https://nodes.alaatv.com/aaa/pdf/1401_plan_ensani_dahom.pdf'
+        },
+        {
+          divider: true
+        },
+        {
+          name: 'یازدهم تجربی',
+          link: 'https://nodes.alaatv.com/aaa/pdf/1401_plan_tajrobi_yazdahom.pdf'
+        },
+        {
+          name: 'یازدهم ریاضی',
+          link: 'https://nodes.alaatv.com/aaa/pdf/1401_plan_riyazi_yazdahom.pdf'
+        },
+        {
+          name: 'یازدهم انسانی',
+          link: 'https://nodes.alaatv.com/aaa/pdf/1401_plan_ensani_yazdahom.pdf'
+        },
+        {
+          divider: true
+        },
+        {
+          name: 'دوازدهم تجربی',
+          link: 'https://nodes.alaatv.com/aaa/pdf/1401_plan_tajrobi_davazdahom.pdf'
+        },
+        {
+          name: 'دوازدهم ریاضی',
+          link: 'https://nodes.alaatv.com/aaa/pdf/1401_plan_riyazi_davazdahom.pdf'
+        },
+        {
+          name: 'دوازدهم انسانی',
+          link: 'https://nodes.alaatv.com/aaa/pdf/1401_plan_ensani_davazdahom.pdf'
+        },
+        {
+          divider: true
+        }
+      ],
+      adminList: [
+        {
+          displayName: 'لیست آزمون ها',
+          to: '/exam',
+          name: 'Admin.Exam.Index'
+        },
+        {
+          displayName: 'بانک سوال',
+          to: '/questions',
+          name: 'question-bank'
+        },
+        {
+          displayName: 'لیست دروس',
+          to: '/subCategory',
+          name: 'Admin.subCategory.Index'
+        },
+        {
+          displayName: 'لیست دفترچه ها',
+          to: '/category',
+          name: 'Admin.Category.Index'
+        },
+        {
+          displayName: 'لیست زیرگروه ها',
+          to: 'subGroup.edit',
+          name: 'subGroup.edit'
+        },
+        {
+          displayName: 'اضافه کردن سوالات MBTI',
+          to: '/question/mbti/create',
+          name: 'question.mbti.create'
+        }
+      ],
+      questionBankList: [
+        {
+          displayName: 'سوال جدید',
+          to: '/question/create',
+          name: 'user.exam'
+        },
+        {
+          displayName: ' کارخانه ی سوال',
+          to: '/question/list',
+          name: 'question.list'
+        }
+      ]
+    }
+  },
+  methods: {
+    onClick (name) {
+      this.clickedOn = name
+      console.log(this.clickedOn)
+    }
+  }
+}
+</script>
+
+<style lang="scss" scoped>
+.side-menu-main-layout{
+  display: flex;
+  flex-direction: column;
+  width: 280px;
+  height: 840px;
+  border-radius: 30px;
+  margin: 40px 24px;
+  .side-logo {
+    display: flex;
+    height: 167px;
+    align-items: center;
+    justify-content: center;
+    .logo-image{
+      .q-img__container{
+        width: 140px;
+        height: 95px;
+      }
+    }
+  }
+  .top-separator{
+    margin: 0 40px 35px 40px;
+  }
+  .q-list {
+    &.side-menu-list {
+      margin: 0 40px;
+      .q-item{
+        padding: 0;
+        min-height: 0;
+      }
+      .list-item{
+        display: flex;
+        flex-direction: column;
+        justify-content: right;
+        font-size: 16px;
+        font-weight: 500;
+        cursor: pointer;
+        .section-title{
+          height: 30px;
+          margin-bottom: 12px;
+          display: flex;
+          flex-direction: row;
+          align-items: center;
+          .title-icon{
+            margin-right: 10px;
+          }
+          .q-item__section--side{
+            padding: 0;
+          }
+        }
+        .list-section{
+          display: flex;
+          flex-direction: row;
+          justify-content: right;
+          .q-avatar{
+            height: 22px;
+            width: 22px;
+          }
+          &.list-children-section{
+            .q-list{
+              width: 100%;
+              margin-left: 20px;
+              .list-child-item{
+                height: 30px;
+                justify-content: right;
+                margin-bottom: 8px;
+                width: 157px;
+                &.active-route{
+                  background-color: #ADA8EA;
+                  border-radius: 10px;
+                  .indicator {
+                    height: 6px;
+                    width: 6px;
+                    color: white;
+                    border-radius: 50%;
+                  }
+                }
+                .list-child-section{
+                  font-size: 14px !important;
+                  padding: 14px;
+                  justify-content: center;
+                }
+              }
+            }
+          }
+        }
+      }
+      .side-list-item {
+        justify-content: space-between;
+        align-items: center;
+
+        .list-title {
+          justify-content: start;
+        }
+      }
+    }
+    .q-item__section--avatar {
+      min-width: 0 !important;
+    }
+
+    a {
+      text-decoration: none;
+      color: white;
+      padding: 0;
+    }
+  }
+}
+</style>
+<style lang="scss">
+</style>

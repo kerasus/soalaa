@@ -1,203 +1,148 @@
 <template>
-  <v-card class="elevation-12">
-    <v-progress-linear
-      color="#ffc107"
-      absolute
-      top
-      :active="loadingList"
-      indeterminate
-      rounded
-      height="6"
-    />
-    <v-toolbar
-      color="primary"
-      dark
-      flat
-    >
-      <v-toolbar-title>
-        <v-row>
-          <v-col>
-            <v-img
-              src="/img/logo.png"
-              width="20"
-            />
-          </v-col>
-          <v-col>
-            ورود / ثبت نام
-          </v-col>
-        </v-row>
-      </v-toolbar-title>
-      <v-spacer />
-      <v-tooltip bottom>
-        <template v-slot:activator="{ on }">
-          <v-btn
-            :href="'https://alaatv.com/'"
-            icon
-            small
-            target="_blank"
-            v-on="on"
-          >
-            <v-img
-              src="img/alaa-logo.png"
-              width="50"
-            />
-          </v-btn>
-        </template>
-        <span>آموزش مجازی آلاء</span>
-      </v-tooltip>
-    </v-toolbar>
-    <v-form @submit.prevent="login">
-      <v-card-text>
-        <v-text-field
-          id="username"
-          v-model="username"
-          label="شماره همراه"
-          name="login"
-          prepend-icon="mdi-account"
-          type="text"
-          @animationstart="checkAnimationUserName"
-        />
+  <div id="q-app ">
+    <div class="row justify-center items-center fullscreen q-px-lg">
+      <div class="col-5" >
+        <q-card v-if="!userLogin" class="my-card q-mt-auto shadow-6">
+          <q-card-section class="row bg-blue-8 text-white justify-between">
+            <div class="row justify-center items-center text-h6">
+              <q-img src="img/3a-logo.png" alt="3a-logo" width="20px" />
+              <p class="q-ml-md q-mb-none">ورود</p>
+            </div>
+            <q-avatar>
+              <img src="img/alaa-logo.png" alt="logo">
+            </q-avatar>
+          </q-card-section>
+          <q-linear-progress v-if="loadingList" color="warning" class="q-mt-sm" />
+          <q-separator></q-separator>
+          <div class="q-pa-lg">
+            <q-input
+              bottom-slots
+              color="blue-8"
+              ref="userName"
+              name="userName"
+              v-model="username"
+               label="شماره همراه"
+              @keydown="getEnter"
+               >
+              <template v-slot:before>
+                <q-icon name="person"></q-icon>
+              </template>
+            </q-input>
+            <q-input
+              color="blue-8"
+              bottom-slots
+              ref="pass"
+              name="pass"
+              v-model="password"
+              label="رمز"
+              @keydown="getEnter"
+              type="password">
+              <template v-slot:before>
+                <q-icon name="lock"></q-icon>
+              </template>
+            </q-input>
+            <q-card-actions align="left">
+              <q-btn  style="width: 80px" color="blue-8" label="ورود" @click="login"/>
+            </q-card-actions>
+          </div>
+        </q-card>
+      </div>
+    </div>
+  </div>
 
-        <v-text-field
-          id="password"
-          v-model="password"
-          label="کد ملی"
-          name="password"
-          prepend-icon="mdi-lock"
-          type="password"
-        />
-      </v-card-text>
-      <v-card-actions>
-        <v-btn
-          color="primary"
-          :loading="loadingList"
-          :disabled="loadingList"
-          type="submit"
-        >
-          ورود
-        </v-btn>
-        <v-spacer />
-      </v-card-actions>
-    </v-form>
-  </v-card>
 </template>
 
 <script>
-    import axios from 'axios'
-    import API_ADDRESS from "@/api/Addresses";
-    import {User} from "@/models/User";
-    import { mixinAuth } from '@/mixin/Mixins'
-
-    export default {
-        name: 'Auth',
-        mixins: [mixinAuth],
-        data () {
-            return {
-                // user: new User(window.localStorage.getItem('user')),
-                loadingList: false,
-                username: null,
-                password: null,
-                autofilledUsername:false,
-                autofilledPass:false
-            }
-        },
-        created() {
-            if (this.getToken()) {
-                this.getUserData( () => { this.redirectTo() })
-            }
-        },
-        methods: {
-            checkAnimationUserName(e) {
-                if(e.animationName == "onAutoFillStart")
-                {
-                    this.autofilledUsername = true;
-                }
-                else if(e.animationName == "onAutoFillCancel")
-                {
-                    this.autofilledUsername = false;
-                }
-
-                // if (this.autofilledUsername) {
-                //     document.getElementById('username').focus()
-                //     document.getElementById('password').focus()
-                //     document.getElementById('username').focus()
-                // }
-            },
-            getToken () {
-                return this.$store.getters['Auth/accessToken']
-            },
-            setUserData (userData) {
-                this.$store.commit('Auth/updateUser', new User(userData))
-            },
-            setAccessToken (access_token) {
-                axios.defaults.headers.common['Authorization'] = 'Bearer ' + access_token
-                this.$store.commit('Auth/updateAccessToken', access_token)
-            },
-            redirectTo () {
-              if (this.$route.query.redirect_to_exam) {
-                this.$router.push({
-                  name: 'onlineQuiz.StartExamAutomatically',
-                  params: {
-                    examId: this.$route.query.redirect_to_exam,
-                    autoStart: this.$route.query.exam_auto_start
-                  }
-                })
-                return
-              }
-
-                let redirect_to = window.localStorage.getItem('redirect_to')
-                if (!redirect_to) {
-                    redirect_to = 'dashboard'
-                }
-                this.$router.push({ name: redirect_to })
-
-            },
-            login () {
-                let that = this
-                this.loadingList = true
-                axios.post(API_ADDRESS.auth.login, {
-                    mobile: this.username,
-                    password: this.password
-                })
-                .then((response) => {
-
-                    this.loadingList = false
-
-                    that.user = new User(response.data.data.user)
-                    that.$store.commit('Auth/updateUser', that.user)
-                    const access_token = response.data.data.access_token
-
-                    this.setAccessToken(access_token)
-                    that.setUserData(response.data.data.user)
-                    this.getUserData(() => { this.redirectTo() })
-                })
-                .catch( () => {
-                    this.loadingList = false
-                })
-            }
-        }
+import { mixinAuth } from 'src/mixin/Mixins'
+export default {
+  name: 'Auth',
+  mixins: [mixinAuth],
+  data: () => ({
+    userLogin: false,
+    loadingList: false,
+    username: null,
+    password: null
+  }),
+  created () {
+    if (this.getToken()) {
+      this.getUserData(() => { this.redirectTo() })
     }
+  },
+  methods: {
+    getToken () {
+      return this.$store.getters['Auth/accessToken']
+    },
+
+    getEnter (e) {
+      const actions = {
+        pass: () => this.login(),
+        userName: () => this.$refs.pass.focus()
+      }
+      if (e.keyCode === 13) actions[e.originalTarget.name].call()
+    },
+
+    redirectTo () {
+      if (this.$route.query.redirectTo_exam) {
+        this.$router.push({
+          name: 'onlineQuiz.StartExamAutomatically',
+          params: {
+            examId: this.$route.query.redirectTo_exam,
+            autoStart: this.$route.query.exam_auto_start
+          }
+        })
+        return
+      }
+      let redirectTo = window.localStorage.getItem('redirectTo')
+      if (!redirectTo) {
+        redirectTo = 'home'
+      }
+      this.$router.push({ name: redirectTo })
+    },
+
+    handleErr (err) {
+      this.loadingList = false
+      const messages = []
+      for (const key in err.data.errors) {
+        err.data.errors[key].forEach(message => {
+          this.$q.notify({
+            type: 'negative',
+            message: message,
+            position: 'top'
+          })
+        })
+      }
+      if (!err.data.errors) {
+        if (err.data.message) messages.push(err.data.message)
+        else messages.push(err.statusText)
+        this.$q.notify({
+          type: 'negative',
+          message: messages,
+          position: 'top'
+        })
+      }
+    },
+
+    login () {
+      this.loadingList = true
+      const that = this
+      this.$store.dispatch('Auth/login', {
+        mobile: this.username,
+        password: this.password
+      })
+        .then(() => {
+          this.loadingList = false
+          this.$axios.defaults.headers.common.Authorization = 'Bearer ' + this.$store.getters['Auth/accessToken']
+          that.getUserData(() => { this.redirectTo() })
+        })
+        .catch(err => {
+          console.log('in auth :', err)
+          this.handleErr(err.response)
+        })
+    }
+  }
+}
 </script>
 
-
-<style>
-    :-webkit-autofill {
-        animation-name: onAutoFillStart;
-    }
-    :not(:-webkit-autofill) {
-        animation-name: onAutoFillCancel;
-    }
-    @keyframes onAutoFillStart {
-        from {
-        }
-        to {
-        }
-    }
-    @keyframes onAutoFillCancel {
-        from {
-        }
-        to {
-        }
-    }
+<style scoped>
 
 </style>
