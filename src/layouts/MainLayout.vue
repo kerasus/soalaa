@@ -1,4 +1,7 @@
 <template>
+  <template-builder :value="">
+
+  </template-builder>
   <q-layout
     :view="layoutView"
     class="main-layout"
@@ -164,9 +167,10 @@ import { User } from 'src/models/User'
 import OnlineQuizTopMenu from 'components/Menu/topMenu/onlineQuizTopMenu'
 import SideMenuMapOfQuestions from 'components/Menu/SideMenu/SideMenu_MapOfQuestions'
 import DashboardTopMenu from 'components/Menu/topMenu/DashboardTopMenu'
+import templateBuilder from 'components/Template/TemplateBuilder'
 
 export default {
-  components: { DashboardTopMenu, SideMenuMapOfQuestions, OnlineQuizTopMenu, SideMenuDashboard },
+  components: { DashboardTopMenu, SideMenuMapOfQuestions, OnlineQuizTopMenu, SideMenuDashboard, templateBuilder },
   computed: {
     ...mapGetters('AppLayout', [
       'layoutView',
