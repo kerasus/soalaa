@@ -82,6 +82,10 @@ class Question extends Model {
                 key: 'bookmarked',
                 default: false
             },
+            {
+                key: 'has_warning',
+                default: false
+            },
             {key: 'lesson'},
             {
                 key: 'seen',
