@@ -178,7 +178,7 @@
     </v-row>
     <send-answer-photo
       :questions="questions"
-      :exam-data="bubbleSheetDialogExam"
+      :exam="bubbleSheetDialogExam"
       :dialog-status="bubbleSheetDialog"
       @closeDialog="bubbleSheetDialog = false"
     />
@@ -221,37 +221,40 @@ export default {
   methods: {
     setDialogStatus(exam){
       this.bubbleSheetDialog = true
-      this.bubbleSheetDialogExam = new Exam(exam)
-      this.$store.commit('updateQuiz', this.bubbleSheetDialogExam)
-
-      const bubbleSheetResponse = [
-        {
-          "q_n": 1,
-          "c_n": [
-            4
-          ]
-        },
-        {
-          "q_n": 2,
-          "c_n": [
-            3
-          ]
-        }
-      ]
-
-
-      for (let i = 0; i < bubbleSheetResponse.length; i++) {
-        this.questions.push(new Question({id: bubbleSheetResponse[i].q_n}))
-      }
-
-      const userAnswerResponse = this.convertBubbleSheetResponseToUserAnswerResponse(this.bubbleSheetDialogExam.user_exam_id, bubbleSheetResponse)
-
-      console.log('userAnswerResponse', userAnswerResponse)
-      this.$store.commit('clearExamData', this.bubbleSheetDialogExam.id)
-      this.$store.commit('mergeDbAnswersIntoLocalstorage', {
-        dbAnswers: userAnswerResponse,
-        exam_id: this.bubbleSheetDialogExam.id
-      })
+      this.bubbleSheetDialogExam = exam
+      // this.$store.commit('updateQuiz', this.bubbleSheetDialogExam)
+      //
+      // const bubbleSheetResponse = [
+      //   {
+      //     "q_n": 1,
+      //     "c_n": [
+      //       4
+      //     ]
+      //   },
+      //   {
+      //     "q_n": 2,
+      //     "c_n": [
+      //       3,2
+      //     ]
+      //   }
+      // ]
+      // for (let i = 0; i < bubbleSheetResponse.length; i++) {
+      //
+      //   this.questions.push(new Question({
+      //     id: bubbleSheetResponse[i].q_n,
+      //     has_warning: (typeof bubbleSheetResponse[i].c_n[1] !== 'undefined')
+      //   }))
+      // }
+      // console.log('in list',this.questions)
+      //
+      // const userAnswerResponse = this.convertBubbleSheetResponseToUserAnswerResponse(this.bubbleSheetDialogExam.user_exam_id, bubbleSheetResponse)
+      //
+      // console.log('userAnswerResponse', userAnswerResponse)
+      // this.$store.commit('clearExamData', this.bubbleSheetDialogExam.id)
+      // this.$store.commit('mergeDbAnswersIntoLocalstorage', {
+      //   dbAnswers: userAnswerResponse,
+      //   exam_id: this.bubbleSheetDialogExam.id
+      // })
     },
     goToResult(exam) {
       let routeName = 'user.exam.results'
