@@ -296,8 +296,7 @@ const mixinQuiz = {
                     let questionId = currentExamQuestionIndexes[item]
                     currentExamQuestionsArray.push(currentExamQuestions[questionId])
                 })
-            }
-            else {
+            } else {
                 currentExamQuestionsArray = this.quiZ
             }
             return currentExamQuestionsArray
@@ -839,7 +838,7 @@ const mixinQuiz = {
         },
 
 
-        convertBubbleSheetResponseToUserAnswerResponse (exam_user_id) {
+        convertBubbleSheetResponseToUserAnswerResponse (exam_user_id, bubbleSheetResponse) {
             const userAnswerResponse = {
                 choices: [
                     // {
@@ -857,20 +856,20 @@ const mixinQuiz = {
                 bookmarks: []
             }
 
-            const bubbleSheetResponse = [
-                    // {
-                    //     "q_n": 1,
-                    //     "c_n": [
-                    //         1
-                    //     ]
-                    // },
-                    // {
-                    //     "q_n": 2,
-                    //     "c_n": [
-                    //         2
-                    //     ]
-                    // }
-                ]
+            // const bubbleSheetResponse = [
+            //         {
+            //             "q_n": 1,
+            //             "c_n": [
+            //                 1
+            //             ]
+            //         },
+            //         {
+            //             "q_n": 2,
+            //             "c_n": [
+            //                 2
+            //             ]
+            //         }
+            //     ]
 
             userAnswerResponse.choices = bubbleSheetResponse.map( item => {
                     const choiceNumber = (typeof item.c_n[0] === 'undefined') ? null : item.c_n[0]

@@ -31,6 +31,8 @@ const API_ADDRESS = {
   exam: {
     editExam: lumenServer + '/exam',
     sendAnswers: lumenServer + '/temp-exam/answer/choice',
+    sendAnswerSheetPhoto: lumenServer + '/temp-exam/scan',
+    sendScannedAnswers: lumenServer + '/temp-exam/scan/import',
     sendAnswersAfterExam: lumenServer + '/temp-exam/answer/choice/v2',
     sendStatus: lumenServer + '/temp-exam/answer/status',
     sendBookmark: lumenServer + '/temp-exam/answer/bookmark',
