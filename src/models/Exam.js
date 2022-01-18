@@ -7,11 +7,7 @@ import { CheckingTimeList } from '../models/CheckingTime'
 import Assistant from '../plugins/assistant'
 import axios from 'axios'
 import API_ADDRESS from '../api/Addresses'
-import { createApp } from 'vue'
-if (!window.app) {
-// window.app
-  window.app = createApp({})
-}
+
 class Exam extends Model {
   constructor (data) {
     super(data, [
@@ -26,7 +22,6 @@ class Exam extends Model {
       { key: 'order' },
       { key: 'delay_time' },
       { key: 'exam_actions' },
-      { key: 'type' },
       { key: 'holding_status' }, // not_started - holding - in_extra_time - finished
       { key: 'user_exam_id' },
       { key: 'user_exam_status' },
@@ -58,7 +53,6 @@ class Exam extends Model {
         key: 'sub_categories',
         relatedModel: QuestSubcategoryList
       },
-
       { key: 'start_at' },
       { key: 'finish_at' },
       { key: 'accept_at' },
@@ -105,11 +99,13 @@ class Exam extends Model {
           populate_school_ranking: false
         }
       },
+
+      { key: 'type' },
+
       {
         key: 'type_id',
         default: null
       }
-
     ])
 
     const that = this
@@ -181,6 +177,7 @@ class Exam extends Model {
     return new Promise(function (resolve, reject) {
       if (!that.questions_file_url) {
         Assistant.handleAxiosError('exam file url is not set')
+        // eslint-disable-next-line prefer-promise-reject-errors
         reject(null)
         // ToDo : bring after removing ajax
         // return
@@ -230,8 +227,7 @@ class Exam extends Model {
         const checkingTimesLength = item.checking_times.list.length
 
         return (selected || bookmarked || state || checkingTimesLength)
-      }
-    )
+      })
   }
 
   setUserQuizData (userData) {
@@ -316,23 +312,21 @@ class Exam extends Model {
 
     this.addUserQuestionDataCheckingTimes(question, userQuestionData.checking_times)
 
-    userQuestionData.answered_at.push((answeredChoice) ? answeredChoice.answered_at : null)
-    userQuestionData.bookmarked.push(question.bookmarked)
-    userQuestionData.state.push(question.state)
-    // ToDo : app.set sth used instead
-    // window.app.set(userQuestionData, 'answered_at', (answeredChoice) ? answeredChoice.answered_at : null)
-    // window.app.set(userQuestionData, 'bookmarked', question.bookmarked)
-    // window.app.set(userQuestionData, 'state', question.state)
+    userQuestionData.answered_at = (answeredChoice) ? answeredChoice.answered_at : null
+    userQuestionData.bookmarked = question.bookmarked
+    userQuestionData.state = question.state
+
+    window.app.set(userQuestionData, 'answered_at', (answeredChoice) ? answeredChoice.answered_at : null)
+    window.app.set(userQuestionData, 'bookmarked', question.bookmarked)
+    window.app.set(userQuestionData, 'state', question.state)
   }
 
   addUserQuestionData (question, userQuizData) {
     const answeredChoice = question.getAnsweredChoice()
-    const answeredChoiceId = null
-    const answered_at = null
+    let answeredChoiceId = null
+    let answered_at = null
     if (answeredChoice) {
-      // eslint-disable-next-line
       answeredChoiceId = answeredChoice.id
-      // eslint-disable-next-line
       answered_at = answeredChoice.answered_at
     }
     const checkingTimes = []
@@ -374,6 +368,7 @@ class Exam extends Model {
         item.selectChoice(dbAnswer.choice_id, dbAnswer.selected_at)
         item.state = dbAnswer.status
         item.bookmarked = dbAnswer.bookmark
+        console.log(item.order)
       }
     })
   }
@@ -396,6 +391,7 @@ class Exam extends Model {
           that.loadQuestionsFromFile()
             .then(() => {
               that.mergeDbAnswerToLocalstorage(answers)
+              console.log(answers)
               resolve()
             })
             .catch(({
@@ -403,6 +399,7 @@ class Exam extends Model {
               textStatus,
               errorThrown
             }) => {
+              // eslint-disable-next-line prefer-promise-reject-errors
               reject({
                 jqXHR,
                 textStatus,
@@ -412,6 +409,7 @@ class Exam extends Model {
         })
         .catch(() => {
           Assistant.reportErrors('exam.js -> getAnswerOfUserInResultPage() -> axios.get.catch')
+          // eslint-disable-next-line prefer-promise-reject-errors
           reject(null)
         })
     })

@@ -1,14 +1,15 @@
 <template>
-  <div>
-<!--    ToDo : add confirm-dialog-->
-<!--    <vue-confirm-dialog />-->
-    <div class="row">
-      <div class="col">
-        <q-linear-progress
-          v-if="loadingList"
-          indeterminate />
-<!--        ToDo : ProgressLinear-->
-<!--        <progress-linear :active="loadingList" />-->
+  <div
+    class="userExamList"
+    style="font-size: 16px;"
+  >
+    <!--    ToDo : add confirm-dialog-->
+    <!--    <vue-confirm-dialog />-->
+    <div class="fit row wrap justify-center items-start content-start"
+    >
+      <div class="col col-9">
+        <!--        ToDo : ProgressLinear-->
+        <!--        <progress-linear :active="loadingList" />-->
         <q-banner
           v-if="exams.list.length === 0 && !loadingList"
           inline-actions rounded class="bg-blue text-white">
@@ -19,37 +20,45 @@
         </q-banner>
         <div class="row" v-if="exams.list.length > 0 && !loadingList">
           <div class="col">
-            <div class="row table-header">
-              <div class="col col-3 pr-7"
+            <div class="row table-header"
+                 style="padding-bottom: 12px;"
+            >
+              <div class="col col-3"
+                   style="padding-right: 24px;"
               >
                 عنوان
               </div>
-              <div class="col col-2" >
+              <div class="col col-2"
+                   style="padding-right: 24px;"
+              >
                 زمان شروع آزمون
               </div>
               <div class="col col-2"
-                v-if="false"
+                   v-if="false"
+                   style="padding-right: 24px;"
               >
                 زمان پایان آزمون
               </div>
               <div class="col col-1"
-                v-if="false"
+                   v-if="false"
               >
                 میزان تاخیر مجاز
               </div>
-              <div class="col col-7">
+              <div class="col col-7"
+                   style="padding-right: 40px;"
+              >
                 عملیات
               </div>
             </div>
             <div class="row exam-info-bar"
-              v-for="item in exams.list"
-              :key="item.id"
+                 v-for="item in exams.list"
+                 :key="item.id"
             >
               <div class="col">
-<!--                elevation="0"
-                  outlined
-                  rounded
-                  shaped-->
+                <!--                elevation="0"
+                                  outlined
+                                  rounded
+                                  shaped-->
                 <div
                   class="d-flex exam-list-sheet"
                 >
@@ -66,7 +75,7 @@
                       {{ item.shamsiDate('start_at').dateTime }}
                     </div>
                     <div class="col col-12 col-md-2"
-                      v-if="false"
+                         v-if="false"
                     >
                       <span class="d-inline-block-md d-none">
                         زمان پایان آزمون:
@@ -74,7 +83,7 @@
                       {{ item.shamsiDate('finish_at').dateTime }}
                     </div>
                     <div class="col col-12 col-md-1"
-                      v-if="false"
+                         v-if="false"
                     >
                       <span class="d-inline-block-md d-none">
                         میزان تاخیر مجاز:
@@ -168,6 +177,15 @@ export default {
   }),
   created () {
     this.getExams()
+  },
+  watch: {
+    loadingList () {
+      if (this.loadingList) {
+        this.$store.commit('loading/loading', true)
+      } else {
+        this.$store.commit('loading/loading', false)
+      }
+    }
   },
   mounted () {
     this.$store.commit('AppLayout/updateAppBarAndDrawer', true)
@@ -272,36 +290,41 @@ export default {
 </script>
 
 <style scoped>
-    .exam-list-sheet {
-        background: var(--surface-1);;
-        min-height: 50px;
-    }
+.exam-list-sheet {
+  background: var(--surface-1);;
+  min-height: 50px;
+}
 
-    .appDarkMode .exam-list-sheet {
-        background: #1c1c21;
-    }
+.appDarkMode .exam-list-sheet {
+  background: #1c1c21;
+}
 
-    @media only screen and (max-width: 960px) {
-        .table-header {
-            display: none;
-        }
-        .table-row {
-            padding-right: 10px;
-        }
-    }
+@media only screen and (max-width: 960px) {
+  .table-header {
+    display: none;
+  }
+  .table-row {
+    padding-right: 10px;
+  }
+}
 </style>
 
-<style>
-    .appDarkMode .exam-list-sheet .q-btn--disabled span {
-        color: #bfbfbf !important;
-        opacity: 0.6;
-    }
+<style lang="scss">
+.userExamList {
+.disabled, .disabled *, [disabled], [disabled] * {
+  color: rgba(0, 0, 0, 0.54) !important;
+}
+}
+.appDarkMode .exam-list-sheet .q-btn--disabled span {
+  color: #bfbfbf !important;
+  opacity: 0.6;
+}
 
-    .exam-info-bar .col {
-        padding: 6px 12px;
-    }
+.exam-info-bar .col {
+  padding: 6px 12px;
+}
 
-    .table-row {
-        align-items: center;
-    }
+.table-row {
+  align-items: center;
+}
 </style>

@@ -86,9 +86,9 @@ class User extends Model {
   }
 
   percentageOfInformationCompletion () {
-    let percentage = 0,
-      completionInfoKeys = this.getCompletionInfoKeys(),
-      percentageStep = (100 / completionInfoKeys.length)
+    let percentage = 0
+    let completionInfoKeys = this.getCompletionInfoKeys()
+    let percentageStep = (100 / completionInfoKeys.length)
 
     completionInfoKeys.forEach(item => {
       if (this.checkInformationCompletionKey(item)) {
@@ -203,6 +203,12 @@ class User extends Model {
     const categories = response.data.data.categories
     const sub_categories = response.data.data.sub_categories
     const created_at = response.data.data.created_at
+    console.log('user_exam_id', user_exam_id)
+    console.log('exam_id', exam_id)
+    console.log('questions_file_url', questions_file_url)
+    console.log('categories', categories)
+    console.log('sub_categories', sub_categories)
+    console.log('created_at', created_at)
 
     userExamForParticipate.id = exam_id
     userExamForParticipate.user_exam_id = user_exam_id

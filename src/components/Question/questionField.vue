@@ -4,51 +4,39 @@
       v-if="editStatus"
       class="col-12"
     >
-      <q-editor
-        v-model="html"
-        min-height="5rem"
-      />
-<!--      <vue-tiptap-katext />-->
-  <!--      Todo : vue-tiptap-katex-->
 <!--      <vue-tiptap-katex-->
 <!--        ref="tiptap"-->
 <!--        :loading="loading"-->
 <!--        :access-token="$store.getters['Auth/accessToken']"-->
-<!--        :upload-url="imageUrl"-->
-<!--        :options="{ bubbleMenu: false, floatingMenu: false, poem: true, reading: true }"-->
+<!--        :upload-utl="imageUrl"-->
+<!--        :options="{ bubbleMenu: false, floatingMenu: false, poem: true, reading: true, persianKeyboard: true }"-->
 <!--      />-->
     </div>
-    <div
-    v-else
-    >
-      <q-card-section v-html="html" />
+    <div v-else>
+      <vue-katex :input="html" />
     </div>
-<!--    <div class="col" v-else>-->
-<!--      <vue-katex :input="html" />-->
-<!--    </div>-->
+
   </div>
 </template>
 
 <script>
-// ToDo : vue-tiptap-katex in incompatible with vue 3 (right now)
-// import VueKatex from 'src/components/VueKatex'
-// ToDo : vue-tiptap-katex in incompatible with vue 3 (right now)
-// import VueTiptapKatex from 'vue-tiptap-katex'
+
 import API_ADDRESS from 'src/api/Addresses'
-// import VueTiptapKatext from 'vue3-tiptap-katex'
+// import VueTiptapKatex from 'vue3-tiptap-katex'
+import VueKatex from 'components/VueKatex'
 
 // replacement
-// import { ref } from 'vue'
+// eslint-disable-next-line import/named
+import { ref } from 'vue'
 
 export default {
   name: 'QuestionField',
   components: {
     // VueTiptapKatex,
-    // VueKatex,
-    // VueTiptapKatext
+    VueKatex
   },
   props: {
-    modelValue: {
+    editorValue: {
       default: '',
       type: String
     },
@@ -67,6 +55,7 @@ export default {
   },
   data () {
     return {
+      value: ref('What you see is <b>what</b> you get.'),
       html: '',
       test: 'test data',
       loading: false
@@ -78,12 +67,15 @@ export default {
     }
   },
   created () {
+    this.value = this.editorValue
     this.loading = true
     this.getHtmlValueFromValueProp()
-    console.log('_________________________________________________________________________')
-    console.log('question field value:', this.modelValue)
-    console.log('question field questionId:', this.questionId)
-    console.log('_________________________________________________________________________')
+    // console.log('_________________________________________________________________________')
+    // console.log('question field value:', this.value)
+    // console.log('question field :', this.label)
+    // console.log('question field editStatus:', this.editStatus)
+    // console.log('question field questionId:', this.questionId)
+    // console.log('_________________________________________________________________________')
   },
   watch: {
   },
@@ -100,7 +92,7 @@ export default {
       this.$emit('questionData', this.value)
     },
     getHtmlValueFromValueProp () {
-      let html = this.modelValue
+      let html = this.value
       if (html === null || typeof html === 'undefined') {
         html = ''
       }

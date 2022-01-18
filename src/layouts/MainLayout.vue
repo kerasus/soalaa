@@ -1,20 +1,41 @@
 <template>
-  <q-layout view="lHr lpR fFf">
+  <q-layout
+    :view="layoutView"
+    class="main-layout"
+  >
     <q-header
       class="text-black layout-header"
+      v-if="layoutHeader"
+      v-model="layoutHeaderVisible"
+      :reveal="layoutHeaderReveal"
+      :elevated="layoutHeaderElevated"
+      :bordered="layoutHeaderBordered"
       style="background-color: #f1f1f1"
     >
       <q-toolbar>
         <div class="header-body full-width">
-          <q-btn
-            dense
-            flat
-            round
-            icon="menu"
-            color="grey-14"
-            @click="toggleLeftDrawer"
-          />
+          <div>
+            <q-btn
+              v-if="layoutLeftDrawer || $route.name !== 'onlineQuiz.konkoorView'"
+              round
+              dense
+              flat
+              icon="menu"
+              color="grey-14"
+              @click="updateLayoutLeftDrawerVisible(!layoutLeftDrawerVisible)"
+            />
+            <q-btn
+              v-if="$route.name === 'onlineQuiz.alaaView'"
+              round
+              dense
+              color="grey-14"
+              flat
+              icon="mdi-dots-grid"
+              @click="changeView"
+            />
+          </div>
           <q-btn-dropdown
+            v-if="$route.name === 'onlineQuiz.alaaView'"
             icon="account_circle"
             :label="user.full_name "
             color="grey-14"
@@ -22,88 +43,168 @@
             dir="ltr"
             flat
           >
-            <q-card
-              class="profile-card"
-            >
-              <img src="https://nodes.alaatv.com/upload/images/profile/default_avatar.jpg">
-              <q-card-actions vertical>
-                <a
-                  class="profile-link bg-primary"
-                  href="https://alaatv.com/"
-                >
-                  <span  >آلاء</span>
-                </a>
-                <a
-                  class="profile-link bg-amber-8"
-                  href="https://alaatv.com/"
-                >
-                  <span >سه آ</span>
-                </a>
-                <a
-                  class="profile-link bg-negative"
-                  @click="logOut"
-                >
-                  <span >خروج</span>
-                </a>
-              </q-card-actions>
-            </q-card>
+            <online-quiz-top-menu/>
           </q-btn-dropdown>
+          <q-btn-dropdown
+            v-else
+            icon="account_circle"
+            :label="user.full_name "
+            color="grey-14"
+            v-scroll
+            dropdown-icon="false"
+            dir="ltr"
+            flat
+          >
+            <DashboardTopMenu/>
+          </q-btn-dropdown>
+          <q-btn
+            v-if="layoutRightDrawer"
+            dense
+            flat
+            round
+            icon="menu"
+            @click="updateLayoutRightDrawerVisible(!layoutRightDrawerVisible)"/>
         </div>
       </q-toolbar>
       <q-linear-progress
         v-if="$store.getters['loading/loading']"
-        color="primary"
+        color="secondary"
+        reverse
         class="q-mt-sm"
         indeterminate
       />
     </q-header>
     <q-drawer
-        class="bg-primary side-bar"
-        show-if-above
-        v-model="leftDrawerOpen"
-        side="left"
-        :width="316"
-        elevated
+      v-if="layoutLeftDrawerVisible"
+      v-model="layoutLeftDrawerVisible"
+      show-if-above
+      :behavior="layoutLeftDrawerBehavior"
+      :overlay="layoutLeftDrawerOverlay"
+      :elevated="layoutLeftDrawerElevated"
+      :bordered="layoutLeftDrawerBordered"
+      content-class="bg-grey-1"
+      side="left"
+      style="background-color: #f1f1f1"
+      :width="350"
+      class="side-bar"
+    >
+      <div
+        v-if="$route.name === 'onlineQuiz.alaaView'"
       >
-        <div class="side-logo">
-          <div class="side-logo-img">
-<!--            <q-img-->
-<!--              v-if="false"-->
-<!--              src="https://3a.alaatv.com/img/logo-2.png"-->
-<!--              width="150"-->
-<!--            />-->
-            <q-img
-              src="https://3a.alaatv.com/img/logo-2.png"
-              width="150px"
-            />
-          </div>
-        </div>
-        <div class="side-list">
-          <side-menu-dashboard/>
-        </div>
-      </q-drawer>
-    <q-page-container>
-      <router-view />
+        <side-menu-map-of-questions/>
+      </div>
+      <div
+        v-else
+        class="side-list"
+      >
+        <side-menu-dashboard/>
+      </div>
+    </q-drawer>
+    <q-page-container class="layout-page">
+      <div class="page-body">
+        <router-view :key="$route.name" />
+      </div>
     </q-page-container>
+    <q-drawer
+      class="side-bar"
+      :class="{
+        'mapOfQuestions': $route.name === 'onlineQuiz.alaaView',
+        'bg-secondary': $route.name !== 'onlineQuiz.alaaView',
+       }"
+      v-if="layoutRightDrawerVisible"
+      v-model="layoutRightDrawerVisible"
+      show-if-above
+      :behavior="layoutRightDrawerBehavior"
+      :overlay="layoutRightDrawerOverlay"
+      :elevated="layoutRightDrawerElevated"
+      :bordered="layoutRightDrawerBordered"
+      side="right"
+    >
+    </q-drawer>
+    <q-footer
+      v-if="layoutFooter"
+      v-model="layoutFooterVisible"
+      class="bg-grey-8"
+      :reveal="layoutFooterReveal"
+      :elevated="layoutFooterElevated"
+      :bordered="layoutFooterBordered"
+    >
+      <q-toolbar>
+        <q-btn v-if="layoutLeftDrawer" dense flat round :icon="'menu'" @click="updateLayoutLeftDrawerVisible(!layoutLeftDrawerVisible)" />
+
+        <q-toolbar-title>Quasar</q-toolbar-title>
+
+        <q-btn v-if="layoutRightDrawer" dense flat round :icon="'menu'" @click="updateLayoutRightDrawerVisible(!layoutRightDrawerVisible)" />
+      </q-toolbar>
+    </q-footer>
   </q-layout>
 </template>
 
 <script>
+import { mapGetters, mapMutations, mapState } from 'vuex'
 import SideMenuDashboard from 'components/Menu/SideMenu/SideMenu-dashboard'
 import { User } from 'src/models/User'
+import OnlineQuizTopMenu from 'components/Menu/topMenu/onlineQuizTopMenu'
+import SideMenuMapOfQuestions from 'components/Menu/SideMenu/SideMenu_MapOfQuestions'
+import DashboardTopMenu from 'components/Menu/topMenu/DashboardTopMenu'
 
 export default {
-  components: { SideMenuDashboard },
+  components: { DashboardTopMenu, SideMenuMapOfQuestions, OnlineQuizTopMenu, SideMenuDashboard },
+  computed: {
+    ...mapGetters('AppLayout', [
+      'layoutView',
+      'layoutHeaderReveal',
+      'layoutHeaderElevated',
+      'layoutHeaderBordered',
+      'layoutLeftDrawer',
+      'layoutLeftDrawerVisible',
+      'layoutLeftDrawerBehavior',
+      'layoutLeftDrawerOverlay',
+      'layoutLeftDrawerElevated',
+      'layoutLeftDrawerBordered',
+      'layoutRightDrawer',
+      'layoutRightDrawerVisible',
+      'layoutRightDrawerBehavior',
+      'layoutRightDrawerOverlay',
+      'layoutRightDrawerElevated',
+      'layoutRightDrawerBordered',
+      'layoutFooterReveal',
+      'layoutFooterElevated',
+      'layoutFooterBordered',
+      'layoutFooter'
+    ]),
+    ...mapState('AppLayout', [
+      'layoutHeader',
+      'layoutHeaderVisible',
+      'layoutFooterVisible'
+    ]),
+    headerWithBackground () {
+      return this.$store.getters['AppLayout/headerWithBackground']
+    }
+  },
   data () {
     return {
-      leftDrawerOpen: false,
-      user: new User()
+      user: new User(),
+      tab: 'home',
+      leftDrawerOpen: false
     }
   },
   created () {
     this.getUser()
   },
   methods: {
+    ...mapMutations('AppLayout', [
+      'updateLayoutRightDrawerVisible',
+      'updateLayoutLeftDrawerVisible'
+    ]),
+    changeView () {
+      this.$router.push({
+        name: 'konkoorView',
+        params: {
+          quizId: this.$route.params.quizId
+        }
+      })
+    },
     toggleLeftDrawer () {
       this.leftDrawerOpen = !this.leftDrawerOpen
     },
@@ -117,61 +218,46 @@ export default {
   }
 }
 </script>
+
 <style lang="scss" scoped>
-.layout-header{
-  .q-toolbar{
-    min-height: 48px !important;
+.main-layout{
+  .layout-header {
+    padding: 12px 0;
+    .q-toolbar {
+      min-height: 48px !important;
+      .header-body {
+        height: 48px;
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        max-width: 1158px;
+        margin: auto !important;
+
+        .q-btn--dense {
+          &.q-btn--round {
+            height: 48px;
+            width: 48px;
+          }
+        }
+      }
+    }
   }
-}
-.profile-card{
-  width: 100%;
-  max-width: 324px;
-  border-radius: 20px;
-  .q-card__actions{
-    padding: 0 !important;
-    a{
-      text-decoration: none;
-      cursor: pointer;
-      height: 44px;
-      color: white;
-      text-align: center;
-      padding: 12px;
-      box-sizing: border-box;
+  .side-bar {
+    display: flex;
+    flex-direction: column;
+    &.map-of-questions{
+      background: var(--surface-1) !important;
+    }
+
+    .side-logo {
+      display: flex;
+      height: 150px;
+      align-items: center;
+      justify-content: center;
     }
   }
 }
-.layout-header{
-  padding: 12px 0;
-  .header-body{
-    height: 48px;
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    max-width: 1158px;
-    margin: auto !important;
-  }
-}
-.side-bar{
-  display: flex;
-  flex-direction: column;
-  .side-logo{
-    display: flex;
-    height: 150px;
-    align-items: center;
-    justify-content: center;
-  }
-}
-.page-body{
-  max-width: 1158px;
-  margin: auto !important;
-}
-.q-drawer--left {
-  .q-layout__shadow{
-    &:after {
-      box-shadow: 0 0 10px 0px rgb(0 0 0 / 10%), 0 0px 10px rgb(0 0 0 / 12%) !important;
-    }
-  }
-}
+
 </style>
 <style lang="scss">
 .q-menu{

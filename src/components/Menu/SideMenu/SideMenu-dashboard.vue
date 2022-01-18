@@ -1,101 +1,63 @@
 <template>
-  <div>
-    <q-list
-      class="side-menu-list"
-      padding
-    >
-      <router-link
-        v-for="(userItem , index) in userList"
-        :key="index"
-        :to="userItem.to"
-      >
-        <q-item
-          clickable
-          v-ripple:deep-purple
-          v-model="userGroup"
-          :active="$route.name === userItem .name"
-          active-class="active-route"
-        >
-          <q-item-section class="side-list-item">
-            <span class="list-title">{{userItem.displayName}}</span>
-            <span
-              v-if="true"
-              class="indicator"
-            />
-          </q-item-section>
-        </q-item>
-      </router-link>
-    </q-list>
-    <q-separator class="bg-white" size="px" />
-    <q-list
-      dense
-      padding
-      class="side-menu-list"
-    >
-      <router-link
-        v-for="(adminItem , index) in adminList"
-        :key="index"
-        :to="adminItem.to"
-      >
-        <q-item
-          clickable
-          v-ripple:deep-purple-5
-          v-model="adminGroup"
-          :active="$route.name === adminItem.name"
-          active-class="active-route"
-        >
-          <q-item-section class="side-list-item">
-        <span class="list-title">
-          {{adminItem.displayName}}
-        </span>
-            <span
-              v-if="true"
-              class="indicator"
-            />
-          </q-item-section>
-        </q-item>
-      </router-link>
-    </q-list>
-    <q-separator class="bg-white" size="px" />
+  <div class="bg-secondary side-menu-main-layout">
+    <div class="side-logo">
+      <div class="logo-image">
+        <q-img
+          v-if="$route.name === 'onlineQuiz.alaaView'"
+          src="https://3a.alaatv.com/img/logo-1.png"
+          width="140px"
+        />
+        <q-img
+          v-else
+          src="https://3a.alaatv.com/img/logo-2.png"
+          width="140px"
+        />
+      </div>
+    </div>
+    <q-separator class="top-separator" dark/>
     <q-list
       class="side-menu-list"
       padding
       dark
     >
-      <q-expansion-item
-        style="font-size:16px; "
-        icon="account_balance"
-        label="بانک سوال"
-      >
-        <q-list
-          class="side-menu-list"
-          padding
+      <q-item
+          v-for="(item , index) in titlesList"
+          :key="index"
+          :to="item.path"
+          class="list-item"
+          v-model="userGroup"
         >
-          <router-link
-            v-for="(questionBankItem , index) in questionBankList"
-            :key="index"
-            :to="questionBankItem.to"
-          >
+        <div class="section-title">
+          <q-item-section class="list-section title-icon" avatar>
+            <q-avatar :icon="item.icon" size="30"/>
+          </q-item-section>
+          <q-item-section class="list-section">
+            {{ item.title }}
+          </q-item-section>
+        </div>
+        <q-item-section
+          v-if="item.children.length"
+          class="list-section list-children-section"
+        >
+          <q-list>
             <q-item
-              clickable
-              v-ripple:deep-purple
-              v-model="questionGroup"
-              :active="$route.name === questionBankItem .name"
+              v-for="(subItem , i) in item.children"
+              :key="i"
+              :to="subItem.to"
+              class="list-child-item"
+              :active="$route.name === subItem.name"
               active-class="active-route"
             >
-              <q-item-section class="side-list-item">
-              <span class="list-title">
-                {{questionBankItem.displayName}}
-              </span>
-                <span
-                  v-if="true"
-                  class="indicator"
-                />
+              <q-item-section
+                class="list-child-section"
+              >
+                {{ subItem.displayName }}
               </q-item-section>
+              <span class="indicator"/>
             </q-item>
-          </router-link>
-        </q-list>
-      </q-expansion-item>
+          </q-list>
+        </q-item-section>
+      </q-item>
     </q-list>
   </div>
 </template>
@@ -108,7 +70,74 @@ export default {
       userGroup: null,
       adminGroup: null,
       questionGroup: null,
+      selectedExam: null,
       activeRoute: null,
+      clickedOn: false,
+      titlesList: [
+        {
+          title: 'داشبورد',
+          icon: 'home',
+          path: '',
+          name: '',
+          children: []
+        },
+        {
+          title: 'سوال',
+          icon: 'home',
+          path: '',
+          name: '',
+          children: [
+            { displayName: 'ثبت سوال', to: '/question/create', name: 'user.exam' },
+            { displayName: 'کارخانه سوال', to: '/question/list', name: 'question.list' },
+            { displayName: 'بانک سوال', to: '/questions', name: 'question-bank' }
+          ]
+        },
+        {
+          title: 'آزمون',
+          icon: 'home',
+          path: '',
+          name: '',
+          children: [
+            { displayName: 'ساخت آزمون', to: '/exam/create', name: 'Admin.Exam.Creat' },
+            { displayName: 'لیست آزمون ها', to: '/exam', name: 'Admin.Exam.Index' }
+          ]
+        },
+        {
+          title: 'درخت دانش',
+          icon: 'home',
+          path: '',
+          name: '',
+          children: []
+        },
+        {
+          title: 'لیست دروس',
+          icon: 'home',
+          path: '/subCategory',
+          name: 'Admin.subCategory.Index',
+          children: []
+        },
+        {
+          title: 'گزارشات',
+          icon: 'home',
+          path: '',
+          name: '',
+          children: []
+        },
+        {
+          title: 'تنظیمات',
+          icon: 'home',
+          path: '',
+          name: '',
+          children: []
+        },
+        {
+          title: 'سوالات متداول',
+          icon: 'home',
+          path: '',
+          name: '',
+          children: []
+        }
+      ],
       userList: [
         {
           displayName: 'آزمون های سه آ',
@@ -117,15 +146,65 @@ export default {
         },
         {
           displayName: 'سوالات متداول',
-          to: 'user-exam',
-          name: 'user.exam'
+          to: '/faq',
+          name: 'faq'
+        }
+      ],
+      examsPlan: [
+        {
+          divider: true
+        },
+        {
+          name: 'دهم تجربی',
+          link: 'https://nodes.alaatv.com/aaa/pdf/1401_plan_tajrobi_dahom.pdf'
+        },
+        {
+          name: 'دهم ریاضی',
+          link: 'https://nodes.alaatv.com/aaa/pdf/1401_plan_riyazi_dahom.pdf'
+        },
+        {
+          name: 'دهم انسانی',
+          link: 'https://nodes.alaatv.com/aaa/pdf/1401_plan_ensani_dahom.pdf'
+        },
+        {
+          divider: true
+        },
+        {
+          name: 'یازدهم تجربی',
+          link: 'https://nodes.alaatv.com/aaa/pdf/1401_plan_tajrobi_yazdahom.pdf'
+        },
+        {
+          name: 'یازدهم ریاضی',
+          link: 'https://nodes.alaatv.com/aaa/pdf/1401_plan_riyazi_yazdahom.pdf'
+        },
+        {
+          name: 'یازدهم انسانی',
+          link: 'https://nodes.alaatv.com/aaa/pdf/1401_plan_ensani_yazdahom.pdf'
+        },
+        {
+          divider: true
+        },
+        {
+          name: 'دوازدهم تجربی',
+          link: 'https://nodes.alaatv.com/aaa/pdf/1401_plan_tajrobi_davazdahom.pdf'
+        },
+        {
+          name: 'دوازدهم ریاضی',
+          link: 'https://nodes.alaatv.com/aaa/pdf/1401_plan_riyazi_davazdahom.pdf'
+        },
+        {
+          name: 'دوازدهم انسانی',
+          link: 'https://nodes.alaatv.com/aaa/pdf/1401_plan_ensani_davazdahom.pdf'
+        },
+        {
+          divider: true
         }
       ],
       adminList: [
         {
           displayName: 'لیست آزمون ها',
           to: '/exam',
-          name: 'list'
+          name: 'Admin.Exam.Index'
         },
         {
           displayName: 'بانک سوال',
@@ -134,13 +213,13 @@ export default {
         },
         {
           displayName: 'لیست دروس',
-          to: '/sub_category/edit',
-          name: 'subCategory.edit'
+          to: '/subCategory',
+          name: 'Admin.subCategory.Index'
         },
         {
           displayName: 'لیست دفترچه ها',
           to: '/category',
-          name: 'categoryList'
+          name: 'Admin.Category.Index'
         },
         {
           displayName: 'لیست زیرگروه ها',
@@ -166,54 +245,123 @@ export default {
         }
       ]
     }
+  },
+  methods: {
+    onClick (name) {
+      this.clickedOn = name
+      console.log(this.clickedOn)
+    }
   }
 }
 </script>
 
 <style lang="scss" scoped>
-.q-list{
-  &.side-menu-list{
-    .active-route{
-      background-color: rgba(98,0,234,0.12);
-      color: rgb(255,255,255,0.6) !important;
-      .indicator{
-        height: 50%;
-        width: 3px;
-        background-color: white;
-        justify-content: end;
+.side-menu-main-layout{
+  display: flex;
+  flex-direction: column;
+  width: 280px;
+  height: 840px;
+  border-radius: 30px;
+  margin: 40px 24px;
+  .side-logo {
+    display: flex;
+    height: 167px;
+    align-items: center;
+    justify-content: center;
+    .logo-image{
+      .q-img__container{
+        width: 140px;
+        height: 95px;
       }
     }
-    .side-list-item{
-      justify-content: space-between;
-      align-items: center;
-      .list-title{
-        justify-content: start;
+  }
+  .top-separator{
+    margin: 0 40px 35px 40px;
+  }
+  .q-list {
+    &.side-menu-list {
+      margin: 0 40px;
+      .q-item{
+        padding: 0;
+        min-height: 0;
+      }
+      .list-item{
+        display: flex;
+        flex-direction: column;
+        justify-content: right;
+        font-size: 16px;
+        font-weight: 500;
+        cursor: pointer;
+        .section-title{
+          height: 30px;
+          margin-bottom: 12px;
+          display: flex;
+          flex-direction: row;
+          align-items: center;
+          .title-icon{
+            margin-right: 10px;
+          }
+          .q-item__section--side{
+            padding: 0;
+          }
+        }
+        .list-section{
+          display: flex;
+          flex-direction: row;
+          justify-content: right;
+          .q-avatar{
+            height: 22px;
+            width: 22px;
+          }
+          &.list-children-section{
+            .q-list{
+              width: 100%;
+              margin-left: 20px;
+              .list-child-item{
+                height: 30px;
+                justify-content: right;
+                margin-bottom: 8px;
+                width: 157px;
+                &.active-route{
+                  background-color: #ADA8EA;
+                  border-radius: 10px;
+                  .indicator {
+                    height: 6px;
+                    width: 6px;
+                    color: white;
+                    border-radius: 50%;
+                  }
+                }
+                .list-child-section{
+                  font-size: 14px !important;
+                  padding: 14px;
+                  justify-content: center;
+                }
+              }
+            }
+          }
+        }
+      }
+      .side-list-item {
+        justify-content: space-between;
+        align-items: center;
+
+        .list-title {
+          justify-content: start;
+        }
       }
     }
-  }
-  .q-item{
-    padding-right: 0 !important;
-  }
-  .q-item__section--main{
-    flex-direction: row;
-    font-size: 16px !important;
-    font-weight: normal !important;
-  }
-  .q-item__section--avatar{
-    min-width: 0 !important;
-  }
-  a{
-    text-decoration: none;
-    color: white;
+    .q-item__section--avatar {
+      min-width: 0 !important;
+    }
+
+    a {
+      text-decoration: none;
+      color: white;
+      padding: 0;
+    }
   }
 }
 </style>
 <style lang="scss">
-.q-list {
-  &.side-menu-list {
-    .q-item__section--avatar {
-      min-width: 0 !important;
-    }
-  }
-}
 </style>

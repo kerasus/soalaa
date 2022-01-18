@@ -257,7 +257,6 @@ export default {
   //   }
   // },
   created () {
-    console.log('currentQuestion :', this.currentQuestion)
     window.onbeforeunload = function () {
       return 'Do you really want to leave our brilliant application?'
     }
@@ -337,11 +336,9 @@ export default {
     },
 
     navBarAction_save () {
-      console.log('navBarAction_save is run', this.$refs.qlayout.getContent())
       this.$refs.qlayout.getContent()
       const currentQuestion = this.currentQuestion
       currentQuestion.type_id = this.optionQuestionId
-      console.log('currentQuestion :', currentQuestion)
       // currentQuestion.update(API_ADDRESS.question.updateQuestion(currentQuestion.id))
       //   .then((res) => {
       //     console.log('res in navbar save action ', res)
@@ -384,7 +381,7 @@ export default {
     },
 
     setQuestionPhotos (statusId) { // یاس
-      this.$store.commit('AppLayout/updateOverlay', { show: true, loading: true, text: 'کمی صبر کنید...' })
+      this.$store.commit('loading/overlay', { loading: true, message: 'کمی صبر کنید...' })
       const formData = new FormData()
       formData.append('status_id', statusId)
       formData.append('statement_photo', this.currentQuestion.statement_photo)
@@ -395,15 +392,14 @@ export default {
         .then((response) => {
           const questionId = response.data.data.id
           this.$router.push({ name: 'question.show', params: { question_id: questionId } })
-          this.$store.commit('AppLayout/updateOverlay', { show: false, loading: false, text: '' })
+          this.$store.commit('loading/overlay', { loading: false, message: '' })
         }).catch(() => {
-          this.$store.commit('AppLayout/updateOverlay', { show: false, loading: false, text: '' })
+          this.$store.commit('loading/overlay', { loading: false, message: '' })
         })
     },
 
     setPageStatus () {
       const title = this.$route.name.replace('question.', '')
-      console.log('setPageStatus :', title)
       this.pageStatuses.forEach(item => {
         item.state = item.title === title
       })
@@ -435,9 +431,7 @@ export default {
       Promise.all([loadExamListPromise, loadSubcategoriesPromise])
         .then(() => {
           if (that.getPageStatus() === 'create') {
-            console.log('questionData :', that.questionData)
             that.currentQuestion = new Question(that.questionData)
-            console.log('Question :', that.currentQuestion)
             that.loading = false
             // if (that.currentQuestion.choices === null) {
             //   // that.currentQuestion.choices
@@ -626,16 +620,13 @@ export default {
     },
 
     loadCurrentQuestionData () {
-      console.log('loadCurrentQuestionData is run')
       const that = this
       this.loading = true
       this.currentQuestion.show(null, API_ADDRESS.question.updateQuestion(this.$route.params.question_id))
         .then((response) => {
-          console.log('load current question ************ : ', response.data.data)
           if (response.data.data) {
             that.currentQuestion = new Question(response.data.data)
             that.fucking = 'new text'
-            console.log('fucking currentQuestion question &&&&&&&&&&&&&&&&&&&&&&&&&&&&& :', that.currentQuestion)
             if (that.currentQuestion.type.value === 'psychometric') {
               if (that.getPageStatus() === 'edit') {
                 that.$router.push({ name: 'question.mbti.edit', params: { question_id: that.$route.params.question_id } })
@@ -655,12 +646,9 @@ export default {
     },
 
     getLogs () {
-    //  console.log('getLogs this.currentQuestion :', this.currentQuestion)
-      /// console.log('getLogs logs :', this.currentQuestion.logs)
       this.currentQuestion.logs.fetch(null, API_ADDRESS.question.log.base(this.$route.params.question_id))
         .then((response) => {
           this.currentQuestion.logs = new LogList(response.data.data)
-          // console.log('cur que log in response :', response.data.data)
           // window.app.set(this.currentQuestion, 'logs', new LogList(response.data.data))
           this.setQuestionLayoutCols()
         })
@@ -668,7 +656,6 @@ export default {
 
     updateQuestion (eventData) {
       this.currentQuestion = new Question(eventData)
-      console.log('updateQuestion new info in new page *************************** :', this.currentQuestion)
     //  window.app.set(this, 'currentQuestion', new Question(eventData))
     },
 
@@ -774,7 +761,7 @@ export default {
       currentQuestion
         .create()
         .then((response) => {
-          this.$store.commit('AppLayout/updateOverlay', { show: false, loading: false, text: '' })
+          this.$store.commit('loading/overlay', { loading: false, message: '' })
           const questionId = response.data.data.id
           this.questionType = 'typeText'
           this.currentQuestion.statement = ''
