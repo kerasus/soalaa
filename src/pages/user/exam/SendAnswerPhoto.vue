@@ -61,6 +61,7 @@
                 class="mx-5 col-6 text-right"
               >
                 <v-badge
+                    class="uploaded-image"
                   color="transparent"
                   overlap
                 >
@@ -80,7 +81,7 @@
                   </template>
                   <v-img
                     :src="file.thumb"
-                    width="100%"
+                    :width="'100%'"
                   />
                 </v-badge>
               </v-col>
@@ -170,7 +171,7 @@ export default {
     answerFiles: [],
     showUserAnswers:false,
     extensions: 'gif,jpg,jpeg,png,webp',
-    accept: 'image/jpg',
+    accept: 'image/jpeg',
     size: 1024 * 1024 * 10,
     thread: 3,
     drop: true,
@@ -334,5 +335,7 @@ export default {
 </script>
 
 <style scoped>
-
+.uploaded-image {
+  width: 100%;
+}
 </style>
