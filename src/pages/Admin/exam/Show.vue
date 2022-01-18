@@ -23,7 +23,7 @@ export default {
       entityIdKey: 'id',
       entityParamKey: 'id',
       editRouteName: 'Admin.Exam.Edit',
-      indexRouteName: 'Admin.Exam.index',
+      indexRouteName: 'Admin.Exam.Index',
       inputs: [
         { type: 'input', name: 'id', responseKey: 'data.id', label: 'شناسه', col: 'col-md-6' },
         { type: 'input', name: 'title', responseKey: 'data.title', label: 'عنوان', col: 'col-md-6' }

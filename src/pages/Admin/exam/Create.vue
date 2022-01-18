@@ -13,7 +13,7 @@
       اضافه کردن دفترچه
     </template>
     <template #toolbar>
-      <q-btn flat round icon="add" >
+      <q-btn flat round icon="add" @click="addCategory">
         <q-tooltip>
           اضافه کردن
         </q-tooltip>
@@ -31,7 +31,6 @@
 <script>
 import { EntityCreate, Portlet } from 'quasar-crud'
 import API_ADDRESS from 'src/api/Addresses'
-// import { QuestCategory, QuestCategoryList } from 'src/models/QuestCategory'
 import { FormBuilder } from 'quasar-form-builder'
 
 export default {
@@ -44,78 +43,106 @@ export default {
       entityIdKeyInResponse: 'id',
       showRouteParamKey: 'id',
       showRouteName: 'Admin.Exam.Show',
-      indexRouteName: 'Admin.Exam.index',
+      indexRouteName: 'Admin.Exam.Index',
       inputs: [
         { type: 'input', name: 'title', responseKey: 'data.title', label: 'عنوان', col: 'col-md-6' },
         {
           type: 'Select',
-          name: 'type',
+          name: 'type_id',
           responseKey: 'data.type.value',
           label: ' انتخاب نوع آزمون',
           col: 'col-md-6',
-          options: [{ id: '6141a799f044ab21205450b2', type: 'exam_type', value: 'konkur', updated_at: '2021-09-15 12:28:17', created_at: '2021-09-15 12:28:17' },
-            { id: '6141a799f044ab21205450b3', type: 'exam_type', value: 'psychometric', updated_at: '2021-09-15 12:28:17', created_at: '2021-09-15 12:28:17' }],
+          options: [],
           optionValue: 'value',
           optionLabel: 'value'
         },
-        { type: 'dateTime', name: 'start-at', responseKey: 'data.start_at', label: ' زمان شروع', col: 'col-md-4', range: false, multiple: false, time: false },
-        { type: 'dateTime', name: 'finish-at', responseKey: 'data.finish_at', label: ' زمان پایان', col: 'col-md-4', range: true, multiple: true, time: true },
-        { type: 'input', name: 'delay-time', responseKey: 'data.delay_time', label: 'زمان تاخیر(دقیقه)', col: 'col-md-4', value: 0 },
+        { type: 'dateTime', name: 'start_at', responseKey: 'data.start_at', label: ' زمان شروع', col: 'col-md-4' },
+        { type: 'dateTime', name: 'finish_at', responseKey: 'data.finish_at', label: ' زمان پایان', col: 'col-md-4' },
+        { type: 'input', name: 'delay_time', responseKey: 'data.delay_time', label: 'زمان تاخیر(دقیقه)', col: 'col-md-4', value: 0 },
         { type: 'Checkbox', name: 'enable', responseKey: 'data.enable', label: 'فعال', col: 'col-md-4', value: false },
-        { type: 'Checkbox', name: 'is-free', responseKey: 'data.is_free', label: 'رایگان', col: 'col-md-4', value: false },
-        { type: 'Checkbox', name: 'is-register-open', responseKey: 'data.is_register_open', label: 'ثبت نام باز است.', col: 'col-md-4', value: false },
-        { type: 'Checkbox', name: 'is-open', responseKey: 'data.is_open', label: 'شرکت در آزمون باز است.', col: 'col-md-4', value: false },
+        { type: 'Checkbox', name: 'is_free', responseKey: 'data.is_free', label: 'رایگان', col: 'col-md-4', value: false },
+        { type: 'Checkbox', name: 'is_register_open', responseKey: 'data.is_register_open', label: 'ثبت نام باز است.', col: 'col-md-4', value: false },
+        { type: 'Checkbox', name: 'is_open', responseKey: 'data.is_open', label: 'شرکت در آزمون باز است.', col: 'col-md-4', value: false },
         { type: 'Checkbox', name: 'confirm', responseKey: 'data.confirm', label: 'تولید خودکار کارنامه', col: 'col-md-4', value: false },
-        { type: 'Checkbox', name: 'generate-questions-automatically', responseKey: 'data.generate_questions_automatically', label: 'تولید خودکار سوال', col: 'col-md-4', value: false }
+        { type: 'Checkbox', name: 'generate_questions_automatically', responseKey: 'data.generate_questions_automatically', label: 'تولید خودکار سوال', col: 'col-md-4', value: false }
       ],
       categoryOptions: [
         {
           type: 'Select',
           name: 'category',
-          responseKey: 'data.type',
           label: 'category',
           col: 'col-md-4',
-          options: [
-            { id: '60b7858d743940688b23c7f3', title: 'دفترچه سؤالات عمومی' },
-            { id: '60b7858d743940688b23c7f4', title: 'دفترچه سؤالات اختصاصی' }
-          ],
+          options: [],
           optionValue: 'id',
           optionLabel: 'title'
         },
-        { type: 'input', name: 'time', responseKey: 'data.delay_time', label: 'زمان', col: 'col-md-4' },
-        { type: 'input', name: 'order', responseKey: 'data.order', label: 'ترتیب', col: 'col-md-4', value: 0 }
+        { type: 'input', name: 'time', label: 'زمان', col: 'col-md-4' },
+        { type: 'input', name: 'order', label: 'ترتیب', col: 'col-md-4', value: 0 }
       ],
-      categoryList: []
+      typeOptions: [],
+      categories: [],
+      categoryList: [],
+      dataForSend: []
     }
   },
   created () {
-    // this.getCategories()
+    this.getType()
+    this.getCategories()
   },
   methods: {
-    // getCategories () {
-    //   this.$axios.get(API_ADDRESS.questionCategory.base)
-    //     .then((response) => {
-    //       this.$store.dispatch('loading/linearLoading', false)
-    //       this.categoryList = new QuestCategoryList(response.data.data)
-    //       this.categoryList.list.forEach(category => {
-    //         // this.categoryTitles.push(category.title)
-    //       })
-    //       console.log(this.categoryList)
-    //     })
-    //     .catch(() => {
-    //       this.$store.dispatch('loading/linearLoading', false)
-    //     })
-    // },
-    // addCategory () {
-    //   const category = this.categoryList.list.find(item => item.title === this.categoryOptions.options.title)
-    //   console.log(category)
-    //   this.examInfo.categories.list.push(new QuestCategory({
-    //     id: category.id,
-    //     time: this.selectedCategoryTime,
-    //     order: this.selectedCategoryOrder,
-    //     title: this.selectedCategory
-    //   }))
-    // }
+    getType () {
+      this.$axios.get(API_ADDRESS.option.base)
+        .then((response) => {
+          this.typeOptions = response.data.data.filter(data => data.type === 'exam_type')
+          this.inputs.forEach(input => {
+            if (input.name === 'type_id') {
+              this.typeOptions.forEach(type => {
+                input.options.push(type)
+              })
+            }
+          })
+        })
+        .catch(() => {})
+    },
+    getCategories () {
+      this.$axios.get(API_ADDRESS.questionCategory.base)
+        .then((response) => {
+          this.categories = response.data.data
+          this.categoryOptions.forEach(input => {
+            if (input.name === 'category') {
+              this.categories.forEach(category => {
+                input.options.push(category)
+              })
+            }
+          })
+        })
+        .catch(() => {})
+    },
+    // TODO => next method needs to fix
+    addCategory () {
+      const selectInput = this.categoryOptions.find(element => element.name === 'category')
+      const category = this.categories.find(item => item.id === selectInput.value)
+      const selectedCategoryTime = this.categoryOptions.find(element => element.name === 'time')
+      const selectedCategoryOrder = this.categoryOptions.find(element => element.name === 'order')
+      this.categoryList[0] = selectInput
+      this.categoryList[1] = selectedCategoryTime
+      this.categoryList[2] = selectedCategoryOrder
+      console.log(this.categoryList)
+      this.dataForSend.push({
+        id: category.id,
+        time: selectedCategoryTime.value,
+        order: selectedCategoryOrder.value,
+        title: category.title
+      })
+    },
+    sendData () {
+      this.inputs.forEach(input => {
+        if (input.name === 'type_id') {
+          const type = this.typeOptions.find(element => element.value === input.value)
+          input.value = type.id
+        }
+      })
+    }
   }
 }
 </script>
