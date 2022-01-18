@@ -34,36 +34,53 @@
               @click="changeView"
             />
           </div>
-          <q-btn-dropdown
-            v-if="$route.name === 'onlineQuiz.alaaView'"
-            icon="account_circle"
-            :label="user.full_name "
-            color="grey-14"
-            dropdown-icon="false"
-            dir="ltr"
-            flat
-          >
-            <online-quiz-top-menu/>
-          </q-btn-dropdown>
-          <q-btn-dropdown
-            v-else
-            icon="account_circle"
-            :label="user.full_name "
-            color="grey-14"
-            v-scroll
-            dropdown-icon="false"
-            dir="ltr"
-            flat
-          >
-            <DashboardTopMenu/>
-          </q-btn-dropdown>
+          <div>
+            <q-btn-dropdown
+              class="toolbar-button"
+              content-class="profile-menu"
+              icon="notifications_active"
+              dropdown-icon="false"
+              color="white"
+              text-color="black"
+              dir="ltr"
+              dense
+              unelevated
+            >
+              <DashboardTopMenu/>
+            </q-btn-dropdown>
+            <q-btn-dropdown
+              v-if="$route.name === 'onlineQuiz.alaaView'"
+              icon="account_circle"
+              color="grey-14"
+              dropdown-icon="false"
+              dir="ltr"
+              flat
+            >
+              <online-quiz-top-menu/>
+            </q-btn-dropdown>
+            <q-btn-dropdown
+              v-else
+              class="toolbar-button"
+              content-class="profile-menu"
+              icon="person"
+              dropdown-icon="false"
+              color="white"
+              text-color="black"
+              dir="ltr"
+              dense
+              unelevated
+            >
+              <DashboardTopMenu/>
+            </q-btn-dropdown>
+          </div>
           <q-btn
             v-if="layoutRightDrawer"
             dense
             flat
             round
             icon="menu"
-            @click="updateLayoutRightDrawerVisible(!layoutRightDrawerVisible)"/>
+            @click="updateLayoutRightDrawerVisible(!layoutRightDrawerVisible)"
+          />
         </div>
       </q-toolbar>
       <q-linear-progress
@@ -233,10 +250,25 @@ export default {
         max-width: 1158px;
         margin: auto !important;
 
-        .q-btn--dense {
-          &.q-btn--round {
+        .q-btn{
+          &.toolbar-button{
+            margin-right: 12px;
             height: 48px;
             width: 48px;
+            box-shadow: -2px -4px 10px rgba(255, 255, 255, 0.6), 2px 4px 10px rgba(112, 108, 162, 0.05);
+            border-radius: 16px;
+            .q-btn__content{
+              .q-icon{
+                &.q-btn-dropdown--simple * + .q-btn-dropdown__arrow{
+                  display: none !important;
+                }
+              }
+            }
+          }
+        }
+        .q-menu{
+          &.profile-menu{
+            border-radius: 20px !important;
           }
         }
       }
@@ -260,7 +292,22 @@ export default {
 
 </style>
 <style lang="scss">
+.main-layout{
+  .layout-header {
+    .q-btn{
+      &.toolbar-button{
+        .q-btn__content{
+          .q-btn-dropdown__arrow{
+            display: none !important;
+          }
+        }
+      }
+    }
+  }
+}
 .q-menu{
-  border-radius: 20px;
+  &.profile-menu{
+    border-radius: 20px !important;
+  }
 }
 </style>
