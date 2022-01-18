@@ -14,7 +14,7 @@
         />
       </div>
     </div>
-    <q-separator class="top-separator" dark/>
+    <q-separator class="top-separator" size="2px" dark/>
     <q-list
       class="side-menu-list"
       padding
@@ -25,7 +25,10 @@
           :key="index"
           :to="item.path"
           class="list-item"
+          :class="item-children"
           v-model="userGroup"
+          :active="$route.name === item.name"
+          active-class="active-route"
         >
         <div class="section-title">
           <q-item-section class="list-section title-icon" avatar>
@@ -34,31 +37,39 @@
           <q-item-section class="list-section">
             {{ item.title }}
           </q-item-section>
+          <span class="indicator"/>
         </div>
         <q-item-section
           v-if="item.children.length"
           class="list-section list-children-section"
         >
+          <q-separator dark size="2px" vertical class="vertical-separator"/>
           <q-list>
             <q-item
-              v-for="(subItem , i) in item.children"
-              :key="i"
-              :to="subItem.to"
-              class="list-child-item"
-              :active="$route.name === subItem.name"
-              active-class="active-route"
-            >
-              <q-item-section
-                class="list-child-section"
+                v-for="(subItem , i) in item.children"
+                :key="i"
+                :to="subItem.to"
+                class="list-child-item"
+                :active="$route.name === subItem.name"
+                active-class="active-route"
               >
-                {{ subItem.displayName }}
-              </q-item-section>
-              <span class="indicator"/>
-            </q-item>
+                <q-item-section
+                  class="list-child-section"
+                >
+                  {{ subItem.displayName }}
+                </q-item-section>
+                <span class="indicator"/>
+              </q-item>
           </q-list>
         </q-item-section>
       </q-item>
     </q-list>
+    <div class="log-out">
+      <span>
+        <q-avatar icon="home" size="30"/>
+      </span>
+      <span class="logout-text">خروج </span>
+    </div>
   </div>
 </template>
 
@@ -246,6 +257,9 @@ export default {
       ]
     }
   },
+  created () {
+    console.log(this.$route.name)
+  },
   methods: {
     onClick (name) {
       this.clickedOn = name
@@ -276,11 +290,12 @@ export default {
     }
   }
   .top-separator{
-    margin: 0 40px 35px 40px;
+    margin: 0 40px 32px 40px;
   }
   .q-list {
+    padding: 0;
     &.side-menu-list {
-      margin: 0 40px;
+      margin: 0 40px 109px 40px;
       .q-item{
         padding: 0;
         min-height: 0;
@@ -292,14 +307,19 @@ export default {
         font-size: 16px;
         font-weight: 500;
         cursor: pointer;
+        margin-bottom: 12px;
+        border-radius: 10px;
+        padding-right: 14px;
+        &.item-children{
+          margin-bottom: 0;
+        }
         .section-title{
           height: 30px;
-          margin-bottom: 12px;
           display: flex;
           flex-direction: row;
           align-items: center;
           .title-icon{
-            margin-right: 10px;
+            margin-right: 12px;
           }
           .q-item__section--side{
             padding: 0;
@@ -314,32 +334,37 @@ export default {
             width: 22px;
           }
           &.list-children-section{
+            .vertical-separator{
+              margin: 6px 9px 9px 9px;
+            }
             .q-list{
-              width: 100%;
-              margin-left: 20px;
               .list-child-item{
                 height: 30px;
                 justify-content: right;
                 margin-bottom: 8px;
                 width: 157px;
-                &.active-route{
-                  background-color: #ADA8EA;
-                  border-radius: 10px;
-                  .indicator {
-                    height: 6px;
-                    width: 6px;
-                    color: white;
-                    border-radius: 50%;
-                  }
+                border-radius: 10px;
+                padding: 0 14px;
+                &:last-child{
+                  margin-bottom: 0;
                 }
                 .list-child-section{
                   font-size: 14px !important;
-                  padding: 14px;
                   justify-content: center;
                 }
               }
             }
           }
+        }
+      }
+      .active-route {
+        background-color: #ADA8EA;
+        .indicator{
+          height: 6px;
+          width: 6px;
+          background-color: white;
+          border-radius: 50%;
+          margin: auto;
         }
       }
       .side-list-item {
@@ -359,6 +384,17 @@ export default {
       text-decoration: none;
       color: white;
       padding: 0;
+    }
+  }
+  .log-out{
+    color: white;
+    font-size: 16px;
+    font-weight: 500;
+    margin: 0 40px 36px 40px;
+    .q-avatar{
+      height: 22px;
+      width: 22px;
+      margin-right: 12px;
     }
   }
 }
