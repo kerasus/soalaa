@@ -82,6 +82,10 @@ class Question extends Model {
                 key: 'bookmarked',
                 default: false
             },
+            {
+                key: 'has_warning',
+                default: false
+            },
             {key: 'lesson'},
             {
                 key: 'seen',
@@ -339,7 +343,7 @@ class Question extends Model {
         Time.synchronizeTime()
     }
 
-    sendUserActionToServer(type, exam_user_id , dataToSendObject, socket) {
+    sendUserActionToServer(type, exam_user_id , dataToSendObject, socket, callback) {
         // ToDo: returned data
         let data = null
         if (type === 'answer') {
@@ -350,6 +354,9 @@ class Question extends Model {
                     if (failedAnswersArray.length > 0 && response.status === 200) {
                         axios.post(API_ADDRESS.exam.sendAnswers, {exam_user_id, questions: failedAnswersArray})
                         failedAnswersArray.length = 0
+                    }
+                    if (callback) {
+                        callback(response)
                     }
                 })
         }
@@ -373,13 +380,19 @@ class Question extends Model {
                                     })
                             })
                         }
+                        if (callback) {
+                            callback(response)
+                        }
                     })
             } else {
                 socket.timeout(10000).emit('question.bookmark:save', {exam_user_id, question_id, selected_at}, (response, err) => {
                     if (!err || err.error) {
                         data = axios.post(API_ADDRESS.exam.sendBookmark, {exam_user_id, question_id, selected_at})
                     }
-                });
+                    if (callback) {
+                        callback(response)
+                    }
+                })
                 let failedBookmarksArray = dataToSendObject.failedBookmarksArray.filter( item => item.bookmarked)
                 failedBookmarksArray.forEach( failedBookmark => {
                     let question_id = failedBookmark.question_id
@@ -390,14 +403,17 @@ class Question extends Model {
                                 const target = dataToSendObject.failedBookmarksArray.findIndex( item => item.question_id === question_id)
                                 dataToSendObject.failedBookmarksArray.splice(target, 1)
                             }
+                            if (callback) {
+                                callback(response)
+                            }
                         })
                 })
             }
         }
         if (type === 'unBookmark') {
             let failedBookmarksArray = dataToSendObject.failedBookmarksArray.filter( item => !item.bookmarked)
-            let question_id = dataToSendObject.questionId
-            let selected_at = dataToSendObject.selected_at
+            let question_id = dataToSendObject.bookmark.questionId
+            let selected_at = dataToSendObject.bookmark.selected_at
             if (!socket) {
                 data = axios.post(API_ADDRESS.exam.sendUnBookmark, {exam_user_id, question_id, selected_at})
                     .then(function (response) {
@@ -414,11 +430,17 @@ class Question extends Model {
                                     })
                             })
                         }
+                        if (callback) {
+                            callback(response)
+                        }
                     })
             } else {
                 socket.timeout(10000).emit('question.bookmark:remove', {exam_user_id, question_id, selected_at}, (response, err) => {
                     if (!err || err.error) {
                         data = axios.post(API_ADDRESS.exam.sendUnBookmark, {exam_user_id, question_id, selected_at})
+                    }
+                    if (callback) {
+                        callback(response)
                     }
                 });
                 let failedBookmarksArray = dataToSendObject.failedBookmarksArray.filter( item => !item.bookmarked)
@@ -431,15 +453,18 @@ class Question extends Model {
                                 const target = dataToSendObject.failedBookmarksArray.findIndex( item => item.question_id === question_id)
                                 dataToSendObject.failedBookmarksArray.splice(target, 1)
                             }
+                            if (callback) {
+                                callback(response)
+                            }
                         })
                 })
             }
         }
         if (type === 'status') {
             let failedStatusArray = dataToSendObject.failedStatusArray
-            let question_id = dataToSendObject.question_id
-            let status = dataToSendObject.status
-            let selected_at = dataToSendObject.selected_at
+            let question_id = dataToSendObject.status.question_id
+            let status = dataToSendObject.status.status
+            let selected_at = dataToSendObject.status.selected_at
             if (!socket) {
                 data = axios.post(API_ADDRESS.exam.sendStatus, {exam_user_id, question_id, status, selected_at})
                     .then(function (response) {
@@ -457,11 +482,17 @@ class Question extends Model {
                                     })
                             })
                         }
+                        if (callback) {
+                            callback(response)
+                        }
                     })
             } else {
                 socket.timeout(10000).emit('question.status:save', {exam_user_id, question_id, status, selected_at}, (response, err) => {
                     if (!err || err.error) {
                         data = axios.post(API_ADDRESS.exam.sendStatus, {exam_user_id, question_id, status, selected_at})
+                    }
+                    if (callback) {
+                        callback(response)
                     }
                 });
                 let failedStatusArray = dataToSendObject.failedStatusArray
@@ -474,6 +505,9 @@ class Question extends Model {
                             if (response.status === 200) {
                                 const target = dataToSendObject.failedStatusArray.findIndex( item => item.question_id === question_id)
                                 dataToSendObject.failedStatusArray.splice(target, 1)
+                            }
+                            if (callback) {
+                                callback(response)
                             }
                         })
                 })

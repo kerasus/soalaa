@@ -2,7 +2,7 @@ import {Question} from "@/models/Question";
 
 const mixinUserActionOnQuestion = {
     methods: {
-        userActionOnQuestion(questionId, actionType, data, socket) {
+        userActionOnQuestion(questionId, actionType, data, socket, sendData, callback) {
             let examId = this.quiz.id
             let exam_user_id = this.quiz.user_exam_id
             this.beforeUserActionOnQuestion(examId, questionId)
@@ -22,7 +22,10 @@ const mixinUserActionOnQuestion = {
                 this.userActionOnQuestion_status(data, examId, questionId, userQuestionData)
             }
             this.afterUserActionOnQuestion()
-            return this.sendUserQuestionsDataToServer(exam_user_id, userExamData, questionId, actionType, socket)
+            if (typeof sendData === 'undefined' || sendData === true) {
+                return this.sendUserQuestionsDataToServer(exam_user_id, userExamData, questionId, actionType, socket, callback)
+            }
+            return false
         },
         beforeUserActionOnQuestion(examId, questionId) {
             this.$store.commit('updateCurrentQuestion', {
@@ -67,7 +70,8 @@ const mixinUserActionOnQuestion = {
                 dataToSendBookmark
             }
         },
-        sendUserQuestionsDataToServer(examUserId, userExamData, questionId, actionType, socket) {
+        sendUserQuestionsDataToServer(examUserId, userExamData, questionId, actionType, socket, callback) {
+
             let userQuestionDataFromLocalstorage = this.getUserQuestionDataFromLocalstorage(userExamData, questionId)
             let online = navigator.onLine
             // send data
@@ -77,17 +81,17 @@ const mixinUserActionOnQuestion = {
             }
 
             if (actionType === 'answer') {
-                return question.sendUserActionToServer('answer' ,examUserId, {answerArray: userQuestionDataFromLocalstorage.dataToSendAnswer , failedAnswersArray: userQuestionDataFromLocalstorage.dataToSendFailedAnswers}, socket)
+                return question.sendUserActionToServer('answer' ,examUserId, {answerArray: userQuestionDataFromLocalstorage.dataToSendAnswer , failedAnswersArray: userQuestionDataFromLocalstorage.dataToSendFailedAnswers}, socket, callback)
             }
             if (actionType === 'bookmark') {
                 if (userQuestionDataFromLocalstorage.userQuestionData.bookmarked) {
-                    return question.sendUserActionToServer('bookmark' ,examUserId, {bookmark: userQuestionDataFromLocalstorage.dataToSendBookmark , failedBookmarksArray: userQuestionDataFromLocalstorage.dataToSendFailedBookmark}, socket)
+                    return question.sendUserActionToServer('bookmark' ,examUserId, {bookmark: userQuestionDataFromLocalstorage.dataToSendBookmark , failedBookmarksArray: userQuestionDataFromLocalstorage.dataToSendFailedBookmark}, socket, callback)
                 } else {
-                    return question.sendUserActionToServer('unBookmark' ,examUserId, {bookmark: userQuestionDataFromLocalstorage.dataToSendBookmark , failedBookmarksArray: userQuestionDataFromLocalstorage.dataToSendFailedBookmark}, userQuestionDataFromLocalstorage.dataToSendBookmark, socket)
+                    return question.sendUserActionToServer('unBookmark' ,examUserId, {bookmark: userQuestionDataFromLocalstorage.dataToSendBookmark , failedBookmarksArray: userQuestionDataFromLocalstorage.dataToSendFailedBookmark}, socket, callback)
                 }
             }
             if (actionType === 'status') {
-                return question.sendUserActionToServer('status' ,examUserId, {status: userQuestionDataFromLocalstorage.dataToSendStatus , failedStatusArray: userQuestionDataFromLocalstorage.dataToSendFailedStatus}, socket)
+                return question.sendUserActionToServer('status' ,examUserId, {status: userQuestionDataFromLocalstorage.dataToSendStatus , failedStatusArray: userQuestionDataFromLocalstorage.dataToSendFailedStatus}, socket, callback)
             }
         },
         userActionOnQuestion_answer(data, examId, questionId, userQuestionData) {

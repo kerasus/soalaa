@@ -333,7 +333,9 @@ export default {
     },
 
     navBarAction_save() {
-      this.$refs.qlayout.getContent()
+      if (this.$refs.qlayout.getContent() === false) {
+        return
+      }
       var currentQuestion = this.currentQuestion
       currentQuestion.type_id = this.optionQuestionId
       currentQuestion.update(API_ADDRESS.question.updateQuestion(currentQuestion.id))
@@ -657,7 +659,7 @@ export default {
 
     loadExamList() {
       let that = this
-      return new ExamList().fetch()
+      return axios.get(API_ADDRESS.exam.base(0, false))
           .then((response) => {
             that.examList = new ExamList(response.data.data)
           })
@@ -742,7 +744,9 @@ export default {
     },
 
     setInsertedQuestions() {  //یاس
-      this.$refs.qlayout.getContent()
+      if (this.$refs.qlayout.getContent() === false) {
+        return
+      }
       this.setCurrentQuestionExams()
       // console.log('currentQuestion.exam :',currentQuestion.exams)
       this.currentQuestion.type_id = this.optionQuestionId
@@ -840,7 +844,4 @@ export default {
 </style>
 
 <style>
-.mord {
-  font-family: IRANSans;
-}
 </style>

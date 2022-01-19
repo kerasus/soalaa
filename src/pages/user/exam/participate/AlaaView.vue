@@ -177,21 +177,24 @@
         </v-row>
       </v-container>
     </v-footer>
+    <booklets-dialog v-model="bookletsDialog" />
   </v-container>
 </template>
 
 <script>
+import Assistant from '@/plugins/assistant'
+import VueKatex from '@/components/VueKatex'
 import Choice from '@/components/OnlineQuiz/Quiz/Choice'
 import Timer from '@/components/OnlineQuiz/Quiz/Timer/Timer'
+import BookletsDialog from '@/components/OnlineQuiz/Quiz/BookletsDialog'
 import {mixinAuth, mixinQuiz, mixinUserActionOnQuestion, mixinDrawer, mixinWindowSize} from '@/mixin/Mixins'
-import Assistant from "@/plugins/assistant";
-import VueKatex from "@/components/VueKatex";
 
 export default {
   name: 'AlaaView',
   components: {
     Choice,
     VueKatex,
+    BookletsDialog,
     Timer
   },
   mixins: [mixinAuth, mixinQuiz, mixinUserActionOnQuestion, mixinDrawer, mixinWindowSize],

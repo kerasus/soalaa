@@ -27,7 +27,8 @@
       <div
         v-for="question in group"
         :key="question.id"
-        class="question-in-list"
+        class="question-in-list test"
+        :class="question.has_warning ? 'has-warning' : '' "
       >
         <div
           :class="{
@@ -39,8 +40,11 @@
           :style="{ width: '24%', cursor: 'pointer' }"
           @click="ClickQuestionNumber(question.id)"
         >
+          <span v-if="info.type === 'scanned-pasokh-barg'">
+            {{ question.id }}
+          </span>
           <v-tooltip
-            v-if="getUserQuestionData(question.id)"
+            v-else-if="getUserQuestionData(question.id)"
             bottom
           >
             <template v-slot:activator="{ on, attrs }">
@@ -112,6 +116,9 @@
       mixinUserActionOnQuestion
     ],
     props: {
+      submitAnswers: {
+        default: true
+      },
       bubbleSheetWidth: {
         default: null
       },
@@ -148,18 +155,14 @@
         let groups = [],
             chunk  = 10
         let array
-        if (this.questions === null)
-        {
+        if (this.questions === null) {
           array = this.getCurrentExamQuestionsInArray()
-          for (let i = 0, j = array.length; i < j; i += chunk)
-          {
+          for (let i = 0, j = array.length; i < j; i += chunk) {
             groups.push(array.slice(i, i + chunk))
           }
-        } else
-        {
+        } else {
           array = this.questions
-          for (let i = 0, j = 200; i < j; i += chunk)
-          {
+          for (let i = 0, j = 200; i < j; i += chunk) {
             groups.push(array.slice(i, i + chunk))
           }
         }
@@ -167,27 +170,26 @@
       }
     },
     created() {
-      if (this.delayTime === 0)
-      {
+      if (this.delayTime === 0) {
         this.overlay = true
       }
       // console.Log(this.questions)
       // console.Log(this.getCurrentExamQuestionsInArray())
     },
     mounted() {
-      let that = this
-      setTimeout(() => {
-        if (that.$refs.bubbleSheet)
-        {
-          that.$refs.bubbleSheet.style.height = that.questionListHeight() - 24 + 'px'
-        }
-        // $('.questions-list').height(this.questionListHeight())
-        that.overlay = false
-      }, this.delayTime)
-
+      this.setBubbleSheetHeight()
       this.checkForShowDateOfAnsweredAt()
     },
     methods: {
+      setBubbleSheetHeight () {
+        let that = this
+        setTimeout(() => {
+          if (that.$refs.bubbleSheet) {
+            that.$refs.bubbleSheet.style.height = that.questionListHeight() - 24 + 'px'
+          }
+          that.overlay = false
+        }, this.delayTime)
+      },
       showAnsweredAt (answeredAt) {
         let formatString = 'HH:mm:ss'
         if (this.showDateOfAnsweredAt) {
@@ -216,12 +218,10 @@
         })
       },
       getUserQuestionData(question_id) {
-        if (typeof question_id === 'undefined')
-        {
+        if (typeof question_id === 'undefined') {
           question_id = this.currentQuestion.id
         }
-        if (!this.quiz.id || !question_id || !this.userQuizListData[this.quiz.id])
-        {
+        if (!this.quiz.id || !question_id || !this.userQuizListData[this.quiz.id]) {
           return false
         }
         return this.userQuizListData[this.quiz.id][question_id]
@@ -231,9 +231,8 @@
         this.$refs.bubbleSheet.style.height = this.questionListHeight() - 24 + 'px'
       },
       AnswerClicked(payload) {
-        if (this.info.type !== 'pasokh-nameh')
-        {
-          this.answerClicked(payload)
+        if (this.info.type !== 'pasokh-nameh') {
+          this.answerClicked(payload, false)
           this.clickChoice(payload.questionId)
         }
       },
@@ -244,7 +243,9 @@
         }
       },
       clickChoice(questionId) {
-        this.$emit('clickChoice', questionId)
+        if (this.submitAnswers) {
+          this.$emit('clickChoice', questionId)
+        }
       },
       clickQuestionNumber(questionId) {
         this.$emit('scrollTo', questionId)
@@ -277,6 +278,9 @@
 </script>
 
 <style scoped>
+.has-warning{
+  background-color: rgba(255, 48, 48, 0.3);
+}
     .v-overlay {
         align-items: flex-start;
         padding-top: 100px;

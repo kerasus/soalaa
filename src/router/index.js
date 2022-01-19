@@ -69,6 +69,12 @@ const router = new VueRouter({
             meta: {middleware: [auth, completeInfo]}
         },
         {
+            path: '/onlineQuiz/konkoorViewSendAnswer/:quizId',
+            name: 'onlineQuiz.konkoorView2',
+            component: () => lazyLoadView(import('@/pages/user/exam/participate/KonkoorView2')),
+            meta: {middleware: [auth, completeInfo]}
+        },
+        {
             path: '/onlineQuiz/bubblesheetView/:quizId',
             name: 'onlineQuiz.bubblesheet-view',
             component: () => lazyLoadView(import('@/pages/user/exam/participate/BubbleSheetView')),
@@ -146,18 +152,6 @@ const router = new VueRouter({
             path: '/quest/index',
             name: 'quest.index',
             component: () => lazyLoadView(import('@/pages/admin/question/Index')),
-            meta: {middleware: [auth, completeInfo]}
-        },
-        {
-            path: '/quest/create',
-            name: 'quest.create',
-            component: () => lazyLoadView(import('@/pages/admin/question/CreateOrEdit')),
-            meta: {middleware: [auth, completeInfo]}
-        },
-        {
-            path: '/quest/edit/:id',
-            name: 'quest.edit',
-            component: () => lazyLoadView(import('@/pages/admin/question/CreateOrEdit')),
             meta: {middleware: [auth, completeInfo]}
         },
         {
