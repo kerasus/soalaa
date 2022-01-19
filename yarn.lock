@@ -7781,17 +7781,17 @@
   dependencies:
     "commander" "^2.19.0"
 
-"katex@^0.12", "katex@^0.12.0":
+"katex@^0.12.0":
   "integrity" "sha512-y+8btoc/CK70XqcHqjxiGWBOeIL8upbS0peTPXTvgrh21n1RiWWcIpSWM+4uXq+IAgNh9YYQWdc7LVDPDAEEAg=="
   "resolved" "https://registry.npmjs.org/katex/-/katex-0.12.0.tgz"
   "version" "0.12.0"
   dependencies:
     "commander" "^2.19.0"
 
-"katex@^0.15.1":
-  "integrity" "sha512-KIk+gizli0gl1XaJlCYS8/donGMbzXYTka6BbH3AgvDJTOwyDY4hJ+YmzJ1F0y/3XzX5B9ED8AqB2Hmn2AZ0uA=="
-  "resolved" "https://registry.npmjs.org/katex/-/katex-0.15.1.tgz"
-  "version" "0.15.1"
+"katex@^0.15.2":
+  "integrity" "sha512-FfZ/f6f8bQdLmJ3McXDNTkKenQkoXkItpW0I9bsG2wgb+8JAY5bwpXFtI8ZVrg5hc1wo1X/UIhdkVMpok46tEQ=="
+  "resolved" "https://registry.npmjs.org/katex/-/katex-0.15.2.tgz"
+  "version" "0.15.2"
   dependencies:
     "commander" "^8.0.0"
 
@@ -13009,13 +13009,6 @@
   "resolved" "https://registry.npmjs.org/vue-infinite-loading/-/vue-infinite-loading-2.4.5.tgz"
   "version" "2.4.5"
 
-"vue-katex@^0.5.0":
-  "integrity" "sha512-KsjSK4ftpw9q8SP1OJbigPOozdthOS46+6GmqkToXZVmmPejBHGGmDUxJ/2UtkyAuHf5dHL+2RvOXi/RV77YOA=="
-  "resolved" "https://registry.npmjs.org/vue-katex/-/vue-katex-0.5.0.tgz"
-  "version" "0.5.0"
-  dependencies:
-    "deepmerge" "^4.2.2"
-
 "vue-loader@^15.7.0":
   "integrity" "sha512-qzlsbLV1HKEMf19IqCJqdNvFJRCI58WNbS6XbPqK13MrLz65es75w392MSQ5TsARAfIjUw+ATm3vlCXUJSOH9Q=="
   "resolved" "https://registry.npmjs.org/vue-loader/-/vue-loader-15.9.7.tgz"
@@ -13096,10 +13089,10 @@
   "resolved" "https://registry.npmjs.org/vue-template-es2015-compiler/-/vue-template-es2015-compiler-1.9.1.tgz"
   "version" "1.9.1"
 
-"vue-tiptap-katex@^2.2.49":
-  "integrity" "sha512-zoZmgbLwDiht0pPXxU1I28nvTl/o61Zqlw6vOakhB+nDRub2PNEBgeKzfOG65LnQTw+VIPT1u28cyJBaV6H3HA=="
-  "resolved" "https://registry.npmjs.org/vue-tiptap-katex/-/vue-tiptap-katex-2.2.49.tgz"
-  "version" "2.2.49"
+"vue-tiptap-katex@^2.2.53":
+  "integrity" "sha512-t6MbUPi/kVdc+FmtVeZFfDyZwBLjcI26Y6ynxfxTUlJSm/5IkWGc8fwAZKSd0tg1VzKTK8nWLwjnajD8mq8u1Q=="
+  "resolved" "https://registry.npmjs.org/vue-tiptap-katex/-/vue-tiptap-katex-2.2.53.tgz"
+  "version" "2.2.53"
   dependencies:
     "@mdi/font" "^5.8.55"
     "@tiptap/core" "^2.0.0-beta.102"
@@ -13121,7 +13114,7 @@
     "core-js" "^3.6.5"
     "cropperjs" "^1.5.11"
     "css-loader" "^3.6.0"
-    "katex" "^0.15.1"
+    "katex" "^0.15.2"
     "node-sass" "^6.0.0"
     "persian-katex-plugin" "^1.1.0"
     "postcss-loader" "^4.2.0"
@@ -13131,7 +13124,6 @@
     "turndown" "^7.0.0"
     "vue" "^2.6.11"
     "vue-drag-resize" "^1.5.4"
-    "vue-katex" "^0.5.0"
     "vue-notification" "^1.3.20"
     "vue-upload-component" "^2.8.22"
     "vuetify" "^2.5.3"
