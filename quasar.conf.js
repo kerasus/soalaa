@@ -31,7 +31,8 @@ module.exports = configure(function (ctx) {
     // https://v2.quasar.dev/quasar-cli/quasar-conf-js#Property%3A-css
     css: [
       'app.scss',
-      'flatIcon.css'
+      'flatIcon.css',
+      '../../public/fonts/Iconsax/style.css'
       // 'src/assets/scss/app.scss',
       // 'src/assets/scss/font.scss'
     ],
