@@ -104,8 +104,5 @@ export default {
   border: solid 1px #dedede;
 }
 
-.mord {
-  font-family: IRANSans;
-}
 </style>
 

@@ -483,7 +483,7 @@ export default {
       if (this.player) {
         this.player.pause()
       }
-      if (this.report && this.report.sub_category[tabIndex].video_url[0]) {
+      if (this.report && this.report.sub_category[tabIndex].video_url && this.report.sub_category[tabIndex].video_url[0]) {
         const parsed = this.report.sub_category[tabIndex].video_url[0].split('/')
         let contentId = parsed[parsed.length - 1]
         if (contentId === '') {
