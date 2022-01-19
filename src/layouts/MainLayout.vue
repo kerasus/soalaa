@@ -1,34 +1,7 @@
 <template>
   <template-builder :value="properties">
     <template #header>
-      <div class="layout-header">
-        <q-btn-dropdown
-          class="toolbar-button"
-          content-class="profile-menu"
-          icon="notifications_active"
-          dropdown-icon="false"
-          color="white"
-          text-color="black"
-          dir="ltr"
-          dense
-          unelevated
-        >
-          <DashboardTopMenu/>
-        </q-btn-dropdown>
-        <q-btn-dropdown
-          class="toolbar-button"
-          content-class="profile-menu"
-          icon="person"
-          dropdown-icon="false"
-          color="white"
-          text-color="black"
-          dir="ltr"
-          dense
-          unelevated
-        >
-          <DashboardTopMenu/>
-        </q-btn-dropdown>
-      </div>
+      <main-header/>
     </template>
     <template #left-drawer>
       <side-menu-dashboard/>
@@ -40,18 +13,17 @@
 </template>
 
 <script>
+import mainHeader from 'components/Layout/mainHeader'
 import SideMenuDashboard from 'components/Menu/SideMenu/SideMenu-dashboard'
 import { User } from 'src/models/User'
-import DashboardTopMenu from 'components/Menu/topMenu/DashboardTopMenu'
 import templateBuilder from 'components/Template/TemplateBuilder'
 
 export default {
-  components: { DashboardTopMenu, SideMenuDashboard, templateBuilder },
+  components: { mainHeader, SideMenuDashboard, templateBuilder },
   data () {
     return {
       user: new User(),
       tab: 'home',
-      leftDrawerOpen: false,
       properties: {
         layoutView: 'lHh lpR lFf',
         layoutHeader: true,
@@ -63,7 +35,7 @@ export default {
         layoutLeftDrawerVisible: true,
         layoutLeftDrawerElevated: false,
         layoutLeftDrawerBordered: false,
-        leftDrawerWidth: '350',
+        leftDrawerWidth: '325',
         layoutPageContainer: true,
         layoutRightDrawer: false,
         layoutRightDrawerOverlay: false,
@@ -84,14 +56,6 @@ export default {
     this.getUser()
   },
   methods: {
-    changeView () {
-      this.$router.push({
-        name: 'konkoorView',
-        params: {
-          quizId: this.$route.params.quizId
-        }
-      })
-    },
     getUser () {
       this.user = this.$store.getters['Auth/user']
       return this.user
