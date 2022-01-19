@@ -844,7 +844,4 @@ export default {
 </style>
 
 <style>
-.mord {
-  font-family: IRANSans;
-}
 </style>

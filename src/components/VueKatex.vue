@@ -94,10 +94,6 @@ export default {
     font-family: KaTeX_Main;
   }
 
-  .mord {
-    font-family: IRANSans !important;
-  }
-
   #mathfield .ML__cmr,
   .katex .mtight {
     font-family: IRANSans;
