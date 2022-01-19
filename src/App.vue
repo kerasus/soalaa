@@ -3,10 +3,15 @@
 </template>
 <script>
 import '../src/assets/scss/font.scss'
+import { mixinSetIcons } from './mixin/Mixins.js'
 // import 'material-icons/material-icons.css'
 import { defineComponent } from 'vue'
 export default defineComponent({
-  name: 'App'
+  name: 'App',
+  mixins: [mixinSetIcons],
+  created () {
+    this.setIcons()
+  }
 })
 </script>
 <style>
