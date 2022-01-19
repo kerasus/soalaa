@@ -7,7 +7,6 @@
       :elevated="value.layoutHeaderElevated"
       :bordered="value.layoutHeaderBordered"
       :class="value.layoutHeaderCustomClass"
-      :height-hint="value.heightHint"
     >
       <slot name="header">
       <q-toolbar>
@@ -39,6 +38,8 @@
       :overlay="value.layoutLeftDrawerOverlay"
       :elevated="value.layoutLeftDrawerElevated"
       :bordered="value.layoutLeftDrawerBordered"
+      :class="value.layoutLeftDrawerCustomClass"
+      :width="value.leftDrawerWidth"
       side="left"
     >
       <slot name="left-drawer"></slot>
@@ -50,6 +51,8 @@
       :overlay="value.layoutRightDrawerOverlay"
       :elevated="value.layoutRightDrawerElevated"
       :bordered="value.layoutRightDrawerBordered"
+      :class="value.layoutRightDrawerCustomClass"
+      :width="value.rightDrawerWidth"
       side="right"
     >
       <slot name="right-drawer"></slot>
@@ -107,10 +110,10 @@ export default {
           layoutHeaderCustomClass: '',
           layoutLeftDrawerCustomClass: '',
           layoutRightDrawerCustomClass: '',
+          layoutPageContainerCustomClass: '',
           layoutFooterCustomClass: '',
-          heightHint: '98',
-          dense: true,
-          flat: true,
+          leftDrawerWidth: '300',
+          rightDrawerWidth: '300',
           menuIcon: 'menu'
         }
       },
