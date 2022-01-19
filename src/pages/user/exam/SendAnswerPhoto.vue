@@ -20,132 +20,125 @@
         <v-toolbar-title>ارسال تصویر پاسخنامه</v-toolbar-title>
         <v-spacer/>
       </v-toolbar>
-      <v-row class="justify-center">
-        <v-col cols="8">
-          <v-card
-              flat
-              class="mt-10 pt-5 text-center"
-          >
-
-            <v-alert
-                color="cyan"
-                border="left"
-                elevation="2"
-                colored-border
-                class="mx-5 text-right"
+      <v-container>
+        <v-row class="justify-center">
+          <v-col :md="8" cols="12">
+            <v-card
+                flat
+                class="mt-10 pt-5 text-center"
             >
-              {{ exam.title }}
-            </v-alert>
 
-            <v-row class="align-end ">
-              <v-col
-                  class="ma-5 col-4 text-right"
+              <v-alert
+                  color="cyan"
+                  border="left"
+                  elevation="2"
+                  colored-border
+                  class="text-right"
               >
-                <file-upload
-                    ref="answerImages"
-                    v-model="answerFiles"
-                    input-id="answerImages"
-                    :extensions="extensions"
-                    :accept="accept"
-                    :multiple="false"
-                    :directory="directory"
-                    :create-directory="createDirectory"
-                    :size="size || 0"
-                    :thread="thread < 1 ? 1 : (thread > 5 ? 5 : thread)"
-                    :data="data"
-                    :drop="drop"
-                    :drop-directory="dropDirectory"
-                    :add-index="addIndex"
-                    @input-filter="inputFilter"
-                    @input-file="inputFile"
+                {{ exam.title }}
+              </v-alert>
+
+              <v-row class="align-end ">
+                <v-col
+                    class="col-md-4 col-12 text-right"
+                >
+                  <file-upload
+                      ref="answerImages"
+                      v-model="answerFiles"
+                      input-id="answerImages"
+                      :extensions="extensions"
+                      :accept="accept"
+                      :multiple="false"
+                      :directory="directory"
+                      :create-directory="createDirectory"
+                      :size="size || 0"
+                      :thread="thread < 1 ? 1 : (thread > 5 ? 5 : thread)"
+                      :data="data"
+                      :drop="drop"
+                      :drop-directory="dropDirectory"
+                      :add-index="addIndex"
+                      @input-filter="inputFilter"
+                      @input-file="inputFile"
+                  >
+                    <v-btn
+                        large
+                        dark
+                        color="#FF8F00"
+                    >
+                      {{ answerFiles.length > 0 ? 'تغییر عکس' : 'انتخاب عکس ' }}
+                    </v-btn>
+                  </file-upload>
+                </v-col>
+                <v-col
+                    v-for="(file, index) in answerFiles"
+                    :key="index"
+                    class="col-md-6 col-12 text-right"
+                >
+                  <v-badge
+                      style="max-width: 100%;"
+                      class="uploaded-image"
+                      color="transparent"
+                      overlap
+                  >
+                    <template v-slot:badge>
+                      <v-btn
+                          fab
+                          dark
+                          x-small
+                          color="error"
+                          class="btnRemoveFile"
+                          @click.prevent="removePhoto(file)"
+                      >
+                        <v-icon dark>
+                          mdi-close
+                        </v-icon>
+                      </v-btn>
+                    </template>
+                    <v-img
+                        :src="file.thumb"
+                        :width="'100%'"
+                    />
+                  </v-badge>
+                </v-col>
+              </v-row>
+              <v-row>
+                <v-col
+                    v-if="answerFiles.length>0"
+                    class="col-6 text-right"
                 >
                   <v-btn
-                      large
+                      v-if="!showUserAnswers"
                       dark
-                      color="#FF8F00"
+                      color="#1E88E5"
+                      outlined
+                      @click="sendAnswerImg"
                   >
-                    {{ answerFiles.length > 0 ? 'تغییر عکس' : 'انتخاب عکس ' }}
+                    ارسال تصویر
                   </v-btn>
-                </file-upload>
-              </v-col>
-              <v-col
-                  v-for="(file, index) in answerFiles"
-                  :key="index"
-                  class="mx-5 col-6 text-right"
-              >
-                <v-badge
-                    class="uploaded-image"
-                    color="transparent"
-                    overlap
-                >
-                  <template v-slot:badge>
-                    <v-btn
-                        fab
-                        dark
-                        x-small
-                        color="error"
-                        class="btnRemoveFile"
-                        @click.prevent="removePhoto(file)"
-                    >
-                      <v-icon dark>
-                        mdi-close
-                      </v-icon>
-                    </v-btn>
-                  </template>
-                  <v-img
-                      :src="file.thumb"
-                      :width="'100%'"
-                  />
-                </v-badge>
-              </v-col>
-            </v-row>
-            <v-row>
-              <!--              <v-col class="text-right">-->
-              <!--                <v-alert-->
-              <!--                  v-if="showUserAnswers"-->
-              <!--                  outlined-->
-              <!--                  type="warning"-->
-              <!--                  prominent-->
-              <!--                  border="left"-->
-              <!--                />-->
-              <!--              </v-col>-->
-              <v-col
-                  v-if="answerFiles.length>0"
-                  class="col-6 text-right"
-              >
-                <v-btn
-                    v-if="!showUserAnswers"
-                    dark
-                    color="#1E88E5"
-                    class="mx-5"
-                    outlined
-                    @click="sendAnswerImg"
-                >
-                  ارسال تصویر
-                </v-btn>
-                <v-btn
+                  <v-btn
+                      v-if="showUserAnswers"
+                      dark
+                      color="#43A047"
+                      outlined
+                      @click="confirmSendAllAnswerOfUser"
+                  >
+                    تأیید نهایی
+                  </v-btn>
+                </v-col>
+              </v-row>
+              <v-card-text>
+                <BubbleSheet
                     v-if="showUserAnswers"
-                    dark
-                    color="#43A047"
-                    outlined
-                    @click="confirmSendAllAnswerOfUser"
-                >
-                  تأیید نهایی
-                </v-btn>
-              </v-col>
-            </v-row>
-            <v-card-text>
-              <BubbleSheet
-                  v-if="showUserAnswers"
-                  :questions="questions"
-                  :info="{ type: 'scanned-pasokh-barg' }"
-                  :delay-time="0"
-                  @clickChoice="choiceClicked"
-              />
-            </v-card-text>
-          </v-card>
-        </v-col>
-      </v-row>
+                    :questions="questions"
+                    :info="{ type: 'scanned-pasokh-barg' }"
+                    :delay-time="0"
+                    @clickChoice="choiceClicked"
+                />
+              </v-card-text>
+            </v-card>
+          </v-col>
+        </v-row>
+      </v-container>
     </v-card>
     <v-overlay :value="loading">
       در حال پردازش
@@ -168,7 +161,7 @@ import API_ADDRESS from "@/api/Addresses";
 import axios from "axios";
 
 export default {
-  name: "SendAnswerPhoto",
+  name: 'SendAnswerPhoto',
   components: {
     FileUpload,
     BubbleSheet
