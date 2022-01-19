@@ -161,7 +161,7 @@
                         </v-btn>
                       </template>
                       <v-btn
-                          v-if="true"
+                          v-if="item.exam_actions.can_submit_answers"
                           color="green"
                           text
                           @click="setDialogStatus(item)"
