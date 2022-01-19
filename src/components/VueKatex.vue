@@ -1,6 +1,5 @@
 <template>
   <div
-    v-katex:auto
     class="html-katex"
     :dir="!isLtrString ? 'rtl' : 'ltr'"
     v-html="localInput"
@@ -8,22 +7,8 @@
 </template>
 
 <script>
-import Vue from 'vue'
-import VueKatex from 'vue-katex'
 import 'katex/dist/katex.min.css'
-
-Vue.use(VueKatex, {
-  globalOptions: {
-    delimiters: [
-      {left: '$$', right: '$$', display: true},
-      {left: '\\[', right: '\\]', display: true},
-      {left: '$', right: '$', display: false},
-      {left: '\\(', right: '\\)', display: false}
-    ],
-    safe: true,
-    trust: true
-  }
-})
+import katex from 'katex'
 
 export default {
   name: "VueKatex",
@@ -80,9 +65,24 @@ export default {
       this.prepareForKatex()
     },
     prepareForKatex () {
-      let regex = /((\\\[((?! ).){1}((?!\$).)*?((?! ).){1}\\\])|(\$((?! ).){1}((?!\$).)*?((?! ).){1}\$))/gms;
+      let regex = /(\${1}((?!\$).)+?\${1})|(\${2}((?!\$).)+?\${2})|(\\\[((?! ).){1}((?!\$).)*?((?! ).){1}\\\])/gms;
       this.localInput = this.localInput.replace(regex, (match) => {
         return ' ' + match + ' '
+      })
+      this.localInput = this.localInput.replace(regex, (match) => {
+        let finalMatch
+        if (match.includes('$$')) {
+          finalMatch = match.slice(2, -2)
+        } else if (match.includes('$')) {
+          finalMatch = match.slice(1, -1)
+        } else {
+          finalMatch = match.slice(2, -2)
+        }
+        return katex.renderToString(finalMatch, {
+          throwOnError: false,
+          safe: true,
+          trust: true
+        })
       })
     }
   }
