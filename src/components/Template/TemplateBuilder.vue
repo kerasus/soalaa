@@ -1,33 +1,78 @@
 <template>
-    <q-layout :view="value.layoutView">
+  <q-layout :view="value.layoutView">
 
-      <q-header v-if="value.layoutHeader" :reveal="value.layoutHeaderReveal" :elevated="value.layoutHeaderElevated" :bordered="value.layoutHeaderBordered" :class="value.headerCustomClass" :height-hint="value.heightHint">
-        <q-toolbar>
-          <q-btn v-if="value.layoutLeftDrawer" :dense="value.dense" :flat="value.flat" :round="value.round" :icon="value.menuIcon" side="left" @click="toggleLeftDrawer" />
-          <slot name="header"></slot>
-          <q-btn v-if="value.layoutRightDrawer" :dense="value.dense" :flat="value.flat" :round="value.round" :icon="value.menuIcon" side="right" @click="toggleRightDrawer" />
-        </q-toolbar>
-      </q-header>
+    <q-header
+      v-if="value.layoutHeader"
+      :reveal="value.layoutHeaderReveal"
+      :elevated="value.layoutHeaderElevated"
+      :bordered="value.layoutHeaderBordered"
+      :class="value.layoutHeaderCustomClass"
+      :height-hint="value.heightHint"
+    >
+      <slot name="header">
+      <q-toolbar>
+        <q-btn
+          v-if="value.layoutLeftDrawer && (value.layoutLeftDrawerBtn || !value.layoutLeftDrawerVisible)"
+          :dense="value.dense"
+          :flat="value.flat"
+          :round="value.round"
+          :icon="value.menuIcon"
+          side="left"
+          @click="toggleLeftDrawer"
+        />
+        <q-btn
+          v-if="value.layoutRightDrawer && (value.layoutRightDrawerBtn || !value.layoutRightDrawerVisible)"
+          :dense="value.dense"
+          :flat="value.flat"
+          :round="value.round"
+          :icon="value.menuIcon"
+          side="right"
+          @click="toggleRightDrawer"
+        />
+      </q-toolbar>
+      </slot>
+    </q-header>
 
-      <q-drawer v-if="value.layoutLeftDrawer" :overlay="value.layoutLeftDrawerOverlay" v-model="leftDrawerOpen" :elevated="value.layoutLeftDrawerElevated" :bordered="value.layoutLeftDrawerBordered" side="left" >
-        <slot name="left-drawer"></slot>
-      </q-drawer>
+    <q-drawer
+      v-if="value.layoutLeftDrawer && value.layoutLeftDrawerVisible"
+      show-if-above v-model="leftDrawerOpen"
+      :overlay="value.layoutLeftDrawerOverlay"
+      :elevated="value.layoutLeftDrawerElevated"
+      :bordered="value.layoutLeftDrawerBordered"
+      side="left"
+    >
+      <slot name="left-drawer"></slot>
+    </q-drawer>
 
-      <q-drawer v-if="value.layoutRightDrawer" v-model="rightDrawerOpen" side="right" :overlay="value.layoutRightDrawerOverlay" :elevated="value.layoutRightDrawerElevated" :bordered="value.layoutRightDrawerBordered">
-        <slot name="right-drawer"></slot>
-      </q-drawer>
+    <q-drawer
+      v-if="value.layoutRightDrawer && value.layoutRightDrawerVisible"
+      show-if-above v-model="rightDrawerOpen"
+      :overlay="value.layoutRightDrawerOverlay"
+      :elevated="value.layoutRightDrawerElevated"
+      :bordered="value.layoutRightDrawerBordered"
+      side="right"
+    >
+      <slot name="right-drawer"></slot>
+    </q-drawer>
 
-      <q-page-container v-if="value.pageContainer">
-        <slot name="content"></slot>
-      </q-page-container>
+    <q-page-container v-if="value.layoutPageContainer">
+      <slot name="content"></slot>
+    </q-page-container>
 
-      <q-footer v-if="value.layoutFooter" :reveal="value.layoutFooterReveal" :elevated="value.layoutFooterElevated" :bordered="value.layoutFooterBordered" :class="value.footerCustomClass">
-        <q-toolbar>
-          <slot name="footer"></slot>
-        </q-toolbar>
-      </q-footer>
+    <q-footer
+      v-if="value.layoutFooter"
+      :reveal="value.layoutFooterReveal"
+      :elevated="value.layoutFooterElevated"
+      :bordered="value.layoutFooterBordered"
+      :class="value.layoutFooterCustomClass"
+    >
+      <slot name="footer">
+      <q-toolbar>
+      </q-toolbar>
+      </slot>
+    </q-footer>
 
-    </q-layout>
+  </q-layout>
 </template>
 
 <script>
@@ -43,44 +88,26 @@ export default {
           layoutHeaderElevated: false,
           layoutHeaderBordered: false,
           layoutLeftDrawer: false,
+          layoutLeftDrawerVisible: false,
+          layoutLeftDrawerBtn: false,
           layoutLeftDrawerOverlay: false,
           layoutLeftDrawerElevated: false,
           layoutLeftDrawerBordered: false,
-
           layoutRightDrawer: false,
           layoutRightDrawerVisible: false,
-          layoutRightDrawerBehavior: 'default',
+          layoutRightDrawerBtn: false,
           layoutRightDrawerOverlay: false,
           layoutRightDrawerElevated: false,
           layoutRightDrawerBordered: false,
-
+          layoutPageContainer: true,
           layoutFooter: false,
-          layoutFooterVisible: true,
           layoutFooterReveal: false,
           layoutFooterElevated: false,
           layoutFooterBordered: false,
-
-          appName: 'app',
-          headerTitle: 'app',
-          headerWithBackground: false,
-          headerTitleCentered: false,
-          headerShowTitle: true,
-          headerShowBtnSearch: true,
-          headerShowBtnBack: false,
-          headerShowBtnShare: false,
-          lang: 'fa',
-          langOptions: {},
-          header: true,
-          leftDrawer: true,
-          leftDrawerOpen: true,
-          rightDrawer: true,
-          rightDrawerOpen: true,
-          pageContainer: true,
-          footer: true,
-          headerElevated: true,
-          footerElevated: false,
-          headerCustomClass: 'bg-primary text-white',
-          footerCustomClass: 'bg-grey-8 text-white',
+          layoutHeaderCustomClass: '',
+          layoutLeftDrawerCustomClass: '',
+          layoutRightDrawerCustomClass: '',
+          layoutFooterCustomClass: '',
           heightHint: '98',
           dense: true,
           flat: true,
