@@ -25,7 +25,7 @@
           :key="index"
           :to="item.path"
           class="list-item"
-          :class="item-children"
+          :class="{ 'item-children': item.children.length , 'alone-item': !item.children.length}"
           v-model="userGroup"
           :active="$route.name === item.name"
           active-class="active-route"
@@ -46,13 +46,13 @@
           <q-separator dark size="2px" vertical class="vertical-separator"/>
           <q-list>
             <q-item
-                v-for="(subItem , i) in item.children"
-                :key="i"
-                :to="subItem.to"
-                class="list-child-item"
-                :active="$route.name === subItem.name"
-                active-class="active-route"
-              >
+              v-for="(subItem , i) in item.children"
+              :key="i"
+              :to="subItem.to"
+              class="list-child-item"
+              :active="$route.name === subItem.name"
+              active-class="active-route"
+            >
                 <q-item-section
                   class="list-child-section"
                 >
@@ -66,7 +66,7 @@
     </q-list>
     <div class="log-out">
       <span>
-        <q-avatar icon="home" size="30"/>
+        <q-avatar icon="isax:logout" size="30" dir="rtl"/>
       </span>
       <span class="logout-text">خروج </span>
     </div>
@@ -87,14 +87,14 @@ export default {
       titlesList: [
         {
           title: 'داشبورد',
-          icon: 'home',
-          path: '',
-          name: '',
+          icon: 'isax:home',
+          path: '/',
+          name: 'dashboard',
           children: []
         },
         {
           title: 'سوال',
-          icon: 'home',
+          icon: 'isax:bank',
           path: '',
           name: '',
           children: [
@@ -105,7 +105,7 @@ export default {
         },
         {
           title: 'آزمون',
-          icon: 'home',
+          icon: 'isax:task-square',
           path: '',
           name: '',
           children: [
@@ -115,161 +115,53 @@ export default {
         },
         {
           title: 'درخت دانش',
-          icon: 'home',
+          icon: 'isax:tree',
           path: '',
           name: '',
           children: []
         },
         {
           title: 'لیست دروس',
-          icon: 'home',
+          icon: 'isax:book',
           path: '/subCategory',
           name: 'Admin.subCategory.Index',
           children: []
         },
         {
           title: 'گزارشات',
-          icon: 'home',
+          icon: 'isax:graph',
           path: '',
           name: '',
           children: []
         },
         {
           title: 'تنظیمات',
-          icon: 'home',
+          icon: 'isax:setting-2',
           path: '',
           name: '',
           children: []
         },
         {
           title: 'سوالات متداول',
-          icon: 'home',
+          icon: 'isax:message-question',
           path: '',
           name: '',
           children: []
         }
-      ],
-      userList: [
-        {
-          displayName: 'آزمون های سه آ',
-          to: '/user_exam_list',
-          name: 'user.exam.list'
-        },
-        {
-          displayName: 'سوالات متداول',
-          to: '/faq',
-          name: 'faq'
-        }
-      ],
-      examsPlan: [
-        {
-          divider: true
-        },
-        {
-          name: 'دهم تجربی',
-          link: 'https://nodes.alaatv.com/aaa/pdf/1401_plan_tajrobi_dahom.pdf'
-        },
-        {
-          name: 'دهم ریاضی',
-          link: 'https://nodes.alaatv.com/aaa/pdf/1401_plan_riyazi_dahom.pdf'
-        },
-        {
-          name: 'دهم انسانی',
-          link: 'https://nodes.alaatv.com/aaa/pdf/1401_plan_ensani_dahom.pdf'
-        },
-        {
-          divider: true
-        },
-        {
-          name: 'یازدهم تجربی',
-          link: 'https://nodes.alaatv.com/aaa/pdf/1401_plan_tajrobi_yazdahom.pdf'
-        },
-        {
-          name: 'یازدهم ریاضی',
-          link: 'https://nodes.alaatv.com/aaa/pdf/1401_plan_riyazi_yazdahom.pdf'
-        },
-        {
-          name: 'یازدهم انسانی',
-          link: 'https://nodes.alaatv.com/aaa/pdf/1401_plan_ensani_yazdahom.pdf'
-        },
-        {
-          divider: true
-        },
-        {
-          name: 'دوازدهم تجربی',
-          link: 'https://nodes.alaatv.com/aaa/pdf/1401_plan_tajrobi_davazdahom.pdf'
-        },
-        {
-          name: 'دوازدهم ریاضی',
-          link: 'https://nodes.alaatv.com/aaa/pdf/1401_plan_riyazi_davazdahom.pdf'
-        },
-        {
-          name: 'دوازدهم انسانی',
-          link: 'https://nodes.alaatv.com/aaa/pdf/1401_plan_ensani_davazdahom.pdf'
-        },
-        {
-          divider: true
-        }
-      ],
-      adminList: [
-        {
-          displayName: 'لیست آزمون ها',
-          to: '/exam',
-          name: 'Admin.Exam.Index'
-        },
-        {
-          displayName: 'بانک سوال',
-          to: '/questions',
-          name: 'question-bank'
-        },
-        {
-          displayName: 'لیست دروس',
-          to: '/subCategory',
-          name: 'Admin.subCategory.Index'
-        },
-        {
-          displayName: 'لیست دفترچه ها',
-          to: '/category',
-          name: 'Admin.Category.Index'
-        },
-        {
-          displayName: 'لیست زیرگروه ها',
-          to: 'subGroup.edit',
-          name: 'subGroup.edit'
-        },
-        {
-          displayName: 'اضافه کردن سوالات MBTI',
-          to: '/question/mbti/create',
-          name: 'question.mbti.create'
-        }
-      ],
-      questionBankList: [
-        {
-          displayName: 'سوال جدید',
-          to: '/question/create',
-          name: 'user.exam'
-        },
-        {
-          displayName: ' کارخانه ی سوال',
-          to: '/question/list',
-          name: 'question.list'
-        }
       ]
     }
   },
-  created () {
-    console.log(this.$route.name)
-  },
+  created () {},
   methods: {
-    onClick (name) {
-      this.clickedOn = name
-      console.log(this.clickedOn)
-    }
   }
 }
 </script>
 
 <style lang="scss" scoped>
+//@media screen and (max-width: 1439px){}
+//@media screen and (max-width: 1023px){}
+//@media screen and (max-width: 599px){}
+//@media screen and (max-width: 350px){}
 .side-menu-main-layout{
   display: flex;
   flex-direction: column;
@@ -277,25 +169,42 @@ export default {
   height: 840px;
   border-radius: 30px;
   margin: 40px 24px;
+  @media screen and (max-width: 1439px){
+    width: 260px;
+    height: 740px;
+    margin: 30px 30px 30px 24px ;
+  }
   .side-logo {
     display: flex;
     height: 167px;
     align-items: center;
     justify-content: center;
-    .logo-image{
-      .q-img__container{
+    @media screen and (max-width: 1439px){
+      height: 136px;
+    }
+    .logo-image {
+      .q-img__container {
         width: 140px;
         height: 95px;
+        @media screen and (max-width: 1439px){
+          height: 76px;
+        }
       }
     }
   }
   .top-separator{
     margin: 0 40px 32px 40px;
+    @media screen and (max-width: 1439px){
+      margin: 0 30px 25px 30px;
+    }
   }
   .q-list {
     padding: 0;
     &.side-menu-list {
-      margin: 0 40px 109px 40px;
+      margin: 0 24px 109px 24px;
+      @media screen and (max-width: 1439px){
+        margin: 0 24px 34px 24px;
+      }
       .q-item{
         padding: 0;
         min-height: 0;
@@ -303,15 +212,26 @@ export default {
       .list-item{
         display: flex;
         flex-direction: column;
-        justify-content: right;
+        justify-content: center;
         font-size: 16px;
         font-weight: 500;
         cursor: pointer;
-        margin-bottom: 12px;
-        border-radius: 10px;
-        padding-right: 14px;
-        &.item-children{
+        padding: 0 14px 0 10px;
+        border-radius: 14px;
+        &.item-children {
           margin-bottom: 0;
+        }
+        &.alone-item {
+          height: 40px;
+          &.active-route {
+            .indicator{
+              height: 8px;
+              width: 8px;
+              background-color: white;
+              border-radius: 50%;
+              margin: auto;
+            }
+          }
         }
         .section-title{
           height: 30px;
@@ -345,7 +265,7 @@ export default {
                 width: 157px;
                 border-radius: 10px;
                 padding: 0 14px;
-                &:last-child{
+                &:last-child {
                   margin-bottom: 0;
                 }
                 .list-child-section{
@@ -386,18 +306,24 @@ export default {
       padding: 0;
     }
   }
-  .log-out{
+  .log-out {
     color: white;
     font-size: 16px;
     font-weight: 500;
-    margin: 0 40px 36px 40px;
-    .q-avatar{
+    margin: 0 37px 36px 37px;
+    .q-avatar {
       height: 22px;
       width: 22px;
       margin-right: 12px;
+      transform: matrix(-1, 0, 0, 1, 0, 0);
     }
   }
 }
 </style>
 <style lang="scss">
+.side-menu-main-layout{
+  .q-icon{
+    font-size: 21px;
+  }
+}
 </style>

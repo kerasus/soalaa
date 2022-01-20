@@ -11,7 +11,8 @@
       <slot name="header">
       <q-toolbar>
         <q-btn
-          v-if="value.layoutLeftDrawer && (value.layoutLeftDrawerBtn || !value.layoutLeftDrawerVisible)"
+          v-if="value.layoutLeftDrawer &&
+                (value.layoutLeftDrawerBtn || !value.layoutLeftDrawerVisible || value.layoutLeftDrawerBehavior=='mobile')"
           :dense="value.dense"
           :flat="value.flat"
           :round="value.round"
@@ -34,11 +35,13 @@
 
     <q-drawer
       v-if="value.layoutLeftDrawer && value.layoutLeftDrawerVisible"
-      show-if-above v-model="leftDrawerOpen"
+      show-if-above
+      v-model="leftDrawerOpen"
       :overlay="value.layoutLeftDrawerOverlay"
       :elevated="value.layoutLeftDrawerElevated"
       :bordered="value.layoutLeftDrawerBordered"
       :class="value.layoutLeftDrawerCustomClass"
+      :behavior="value.layoutLeftDrawerBehavior"
       :width="value.leftDrawerWidth"
       side="left"
     >
@@ -52,6 +55,7 @@
       :elevated="value.layoutRightDrawerElevated"
       :bordered="value.layoutRightDrawerBordered"
       :class="value.layoutRightDrawerCustomClass"
+      :behavior="value.layoutRightDrawerBehavior"
       :width="value.rightDrawerWidth"
       side="right"
     >
@@ -90,16 +94,20 @@ export default {
           layoutHeaderReveal: false,
           layoutHeaderElevated: false,
           layoutHeaderBordered: false,
-          layoutLeftDrawer: false,
+          layoutLeftDrawer: true,
+          leftDrawerOpen: false,
           layoutLeftDrawerVisible: false,
+          layoutLeftDrawerBehavior: '',
           layoutLeftDrawerBtn: false,
           layoutLeftDrawerOverlay: false,
           layoutLeftDrawerElevated: false,
           layoutLeftDrawerBordered: false,
           layoutRightDrawer: false,
+          RightDrawerOpen: false,
           layoutRightDrawerVisible: false,
           layoutRightDrawerBtn: false,
           layoutRightDrawerOverlay: false,
+          layoutRightDrawerBehavior: 'Desktop',
           layoutRightDrawerElevated: false,
           layoutRightDrawerBordered: false,
           layoutPageContainer: true,

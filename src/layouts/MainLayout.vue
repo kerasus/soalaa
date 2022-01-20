@@ -1,7 +1,12 @@
 <template>
   <template-builder :value="properties">
     <template #header>
-      <main-header/>
+        <q-btn
+          v-if="screenSize"
+          icon="isax:menu-1"
+          @click="toggleLeftDrawer"
+        />
+        <main-header/>
     </template>
     <template #left-drawer>
       <side-menu-dashboard/>
@@ -22,7 +27,10 @@ export default {
   components: { mainHeader, SideMenuDashboard, templateBuilder },
   data () {
     return {
+      leftDrawerOpen: false,
       user: new User(),
+      windowSize: screen.width,
+      showBtn: false,
       tab: 'home',
       properties: {
         layoutView: 'lHh lpR lFf',
@@ -31,8 +39,10 @@ export default {
         layoutHeaderElevated: false,
         layoutHeaderBordered: false,
         layoutLeftDrawer: true,
+        leftDrawerOpen: true,
         layoutLeftDrawerOverlay: false,
         layoutLeftDrawerVisible: true,
+        layoutLeftDrawerBehavior: '',
         layoutLeftDrawerElevated: false,
         layoutLeftDrawerBordered: false,
         leftDrawerWidth: '325',
@@ -52,10 +62,20 @@ export default {
       }
     }
   },
-  created () {
-    this.getUser()
+  computed: {
+    screenSize () {
+      if (this.windowSize < 1024) {
+        return true
+      } else {
+        return false
+      }
+    }
   },
   methods: {
+    toggleLeftDrawer () {
+      this.properties.leftDrawerOpen = !this.properties.leftDrawerOpen
+      console.log(this.properties.leftDrawerOpen)
+    },
     getUser () {
       this.user = this.$store.getters['Auth/user']
       return this.user
