@@ -5,12 +5,10 @@
         <q-img
           v-if="$route.name === 'onlineQuiz.alaaView'"
           src="https://3a.alaatv.com/img/logo-1.png"
-          width="140px"
         />
         <q-img
           v-else
           src="https://3a.alaatv.com/img/logo-2.png"
-          width="140px"
         />
       </div>
     </div>
@@ -174,6 +172,15 @@ export default {
     height: 740px;
     margin: 30px 30px 30px 24px ;
   }
+  @media screen and (max-width: 1023px){
+    margin: 0 ;
+    border-radius: 0;
+    width: 280px;
+    height: 680px;
+  }
+  @media screen and (max-width: 349px){
+    width: 242px;
+  }
   .side-logo {
     display: flex;
     height: 167px;
@@ -182,20 +189,42 @@ export default {
     @media screen and (max-width: 1439px){
       height: 136px;
     }
+    @media screen and (max-width: 1023px){
+      height: 100px;
+    }
+    @media screen and (max-width: 349px){
+      height: 110px;
+    }
     .logo-image {
+      width: 140px;
+      height: 95px;
+      @media screen and (max-width: 1439px){
+        height: 76px;
+      }
+      @media screen and (max-width: 1023px){
+        width: 100px;
+        height: 50px;
+      }
       .q-img__container {
-        width: 140px;
-        height: 95px;
-        @media screen and (max-width: 1439px){
-          height: 76px;
+          width: 140px;
+          height: 95px;
+          @media screen and (max-width: 1439px){
+            height: 76px;
+          }
+          @media screen and (max-width: 1023px){
+            width: 100px;
+            height: 50px;
+          }
         }
       }
     }
-  }
   .top-separator{
     margin: 0 40px 32px 40px;
     @media screen and (max-width: 1439px){
       margin: 0 30px 25px 30px;
+    }
+    @media screen and (max-width: 349px){
+      margin: 0 45px 22px 45px;
     }
   }
   .q-list {
@@ -204,6 +233,12 @@ export default {
       margin: 0 24px 109px 24px;
       @media screen and (max-width: 1439px){
         margin: 0 24px 34px 24px;
+      }
+      @media screen and (max-width: 1023px){
+        margin: 0 21px 26px 21px;
+      }
+      @media screen and (max-width: 349px){
+        margin: 0 18px 8px 18px;
       }
       .q-item{
         padding: 0;
@@ -256,6 +291,9 @@ export default {
           &.list-children-section{
             .vertical-separator{
               margin: 6px 9px 9px 9px;
+              @media screen and (max-width: 349px){
+                margin: 0 10px 12px 10px;
+              }
             }
             .q-list{
               .list-child-item{
@@ -265,6 +303,14 @@ export default {
                 width: 157px;
                 border-radius: 10px;
                 padding: 0 14px;
+                @media screen and (max-width: 1023px){
+                  width: 148px;
+                }
+                @media screen and (max-width: 349px){
+                  width: 160px;
+                  margin-bottom: 5px;
+                  padding: 0 10px 0 12px;
+                }
                 &:last-child {
                   margin-bottom: 0;
                 }
@@ -278,7 +324,7 @@ export default {
         }
       }
       .active-route {
-        background-color: #ADA8EA;
+        background-color:  #8075DC;
         .indicator{
           height: 6px;
           width: 6px;
@@ -311,6 +357,12 @@ export default {
     font-size: 16px;
     font-weight: 500;
     margin: 0 37px 36px 37px;
+    @media screen and (max-width: 1023px){
+      margin: 0 31px 33px 31px;
+    }
+    @media screen and (max-width: 349px){
+      margin: 0 30px 30px 30px;
+    }
     .q-avatar {
       height: 22px;
       width: 22px;

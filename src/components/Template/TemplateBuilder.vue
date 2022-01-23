@@ -44,6 +44,7 @@
       :behavior="value.layoutLeftDrawerBehavior"
       :width="value.leftDrawerWidth"
       side="left"
+      @hide="onHide"
     >
       <slot name="left-drawer"></slot>
     </q-drawer>
@@ -134,13 +135,41 @@ export default {
       rightDrawerOpen: true
     }
   },
-  created () {
-    this.leftDrawerOpen = this.value.leftDrawerOpen
-    this.rightDrawerOpen = this.value.rightDrawerOpen
+  watch: {
+    value: {
+      immediate: true,
+      deep: true,
+      handler (val, oldVal) {
+        console.log('val', val.leftDrawerOpen)
+        console.log('value', this.value.leftDrawerOpen)
+        console.log('v', this.leftDrawerOpen)
+        this.leftDrawerOpen = val.leftDrawerOpen
+        console.log('v2', this.leftDrawerOpen)
+        // if (val.leftDrawerOpen !== oldval.leftDrawerOpen) {
+        //
+        // }
+      }
+    }
+    // leftDrawerOpen () {
+    //   console.log('value', this.value.leftDrawerOpen)
+    //   this.leftDrawerOpen = this.value.leftDrawerOpen
+    //   console.log('value1', this.leftDrawerOpen)
+    //   this.leftDrawerOpen = !this.leftDrawerOpen
+    //   console.log('value2', this.leftDrawerOpen)
+    // },
+    // rightDrawerOpen () {
+    //   this.rightDrawerOpen = this.value.rightDrawerOpen
+    //   this.rightDrawerOpen = !this.leftDrawerOpen
+    // }
   },
   methods: {
+    onHide () {
+      this.leftDrawerOpen = false
+    },
     toggleLeftDrawer () {
+      console.log(this.leftDrawerOpen)
       this.leftDrawerOpen = !this.leftDrawerOpen
+      console.log(this.leftDrawerOpen)
     },
     toggleRightDrawer () {
       this.rightDrawerOpen = !this.rightDrawerOpen

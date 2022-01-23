@@ -13,6 +13,7 @@ const routes = [
       { name: 'Admin.Settings', path: 'settings', component: () => import('pages/Admin/Settings') },
       {
         path: '',
+        name: 'dashboard',
         component: () => import('pages/User/exam/List'),
         meta: {
           middlewares: [auth]
