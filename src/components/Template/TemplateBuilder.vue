@@ -95,7 +95,7 @@ export default {
           layoutHeaderReveal: false,
           layoutHeaderElevated: false,
           layoutHeaderBordered: false,
-          layoutLeftDrawer: true,
+          layoutLeftDrawer: false,
           leftDrawerOpen: false,
           layoutLeftDrawerVisible: false,
           layoutLeftDrawerBehavior: '',
@@ -131,8 +131,8 @@ export default {
   },
   data () {
     return {
-      leftDrawerOpen: true,
-      rightDrawerOpen: true
+      leftDrawerOpen: false,
+      rightDrawerOpen: false
     }
   },
   watch: {
@@ -140,9 +140,7 @@ export default {
       immediate: true,
       deep: true,
       handler (val, oldVal) {
-        console.log('val', val.leftDrawerOpen)
-        console.log('value', this.value.leftDrawerOpen)
-        console.log('v', this.leftDrawerOpen)
+        console.log('v1', this.leftDrawerOpen)
         this.leftDrawerOpen = val.leftDrawerOpen
         console.log('v2', this.leftDrawerOpen)
         // if (val.leftDrawerOpen !== oldval.leftDrawerOpen) {
@@ -165,6 +163,7 @@ export default {
   methods: {
     onHide () {
       this.leftDrawerOpen = false
+      this.$emit('drawerClosed')
     },
     toggleLeftDrawer () {
       console.log(this.leftDrawerOpen)

@@ -1,7 +1,8 @@
 <template>
-  <template-builder v-model:value="properties">
+  <template-builder v-model:value="properties" @drawerClosed="drawerMode">
     <template #header>
-      <q-btn
+      <div :class="{'col-6': windowSize < 600}">
+        <q-btn
           class="toolbar-button"
           :class="drawer"
           icon="isax:menu-1"
@@ -11,7 +12,11 @@
           unelevated
           @click="toggleLeftDrawer"
         />
-      <div class="right-side">
+      </div>
+      <div
+        class="right-side"
+        :class="{'col-12': windowSize < 600}"
+      >
         <span
         v-for="(address, index) in addresses"
         :key="index"
@@ -20,7 +25,7 @@
         {{ address }}
       </span>
       </div>
-      <div class="left-side">
+      <div class="left-side" :class="{'col-6': windowSize < 600}">
           <q-btn-dropdown
             class="toolbar-button"
             content-class="profile-menu"
@@ -45,7 +50,7 @@
             dense
             unelevated
           >
-            <DashboardTopMenu/>
+            <DashboardTopMenu />
           </q-btn-dropdown>
         </div>
     </template>
@@ -81,7 +86,7 @@ export default {
         layoutHeaderElevated: false,
         layoutHeaderBordered: false,
         layoutLeftDrawer: true,
-        leftDrawerOpen: true,
+        leftDrawerOpen: false,
         layoutLeftDrawerOverlay: false,
         layoutLeftDrawerVisible: true,
         layoutLeftDrawerElevated: false,
@@ -96,7 +101,7 @@ export default {
         layoutFooterReveal: false,
         layoutFooterElevated: false,
         layoutFooterBordered: false,
-        layoutHeaderCustomClass: 'main-layout-header',
+        layoutHeaderCustomClass: 'main-layout-header row',
         layoutLeftDrawerCustomClass: 'main-layout-left-drawer',
         layoutPageContainerCustomClass: 'main-layout-container',
         menuIcon: 'menu'
@@ -120,16 +125,22 @@ export default {
     }
   },
   methods: {
-    getDimensions () {
-      this.windowSize = document.documentElement.clientWidth
+    drawerMode (value) {
+      console.log('m1', this.properties.leftDrawerOpen)
+      this.properties.leftDrawerOpen = false
+      console.log('m2', this.properties.leftDrawerOpen)
     },
     toggleLeftDrawer () {
-      console.log('properties', this.properties.leftDrawerOpen)
+      console.log('p1', this.properties.leftDrawerOpen)
       if (this.properties.leftDrawerOpen) {
         this.properties.leftDrawerOpen = false
       } else {
         this.properties.leftDrawerOpen = true
       }
+      console.log('p2', this.properties.leftDrawerOpen)
+    },
+    getDimensions () {
+      this.windowSize = document.documentElement.clientWidth
     },
     getUser () {
       this.user = this.$store.getters['Auth/user']
@@ -166,25 +177,17 @@ export default {
     }
   }
   .left-side {
-      .q-btn {
-        &.toolbar-button {
-          margin-right: 12px;
-          height: 48px;
-          width: 48px;
-          box-shadow: -2px -4px 10px rgba(255, 255, 255, 0.6), 2px 4px 10px rgba(112, 108, 162, 0.05);
-          border-radius: 16px;
-        }
-      }
     }
   .drawer-closer{
     display: none;
     .be-available{
+      margin-left: 0;
       display: block;
     }
   }
   .q-btn {
     &.toolbar-button {
-      margin-right: 12px;
+      margin-left: 12px;
       height: 48px;
       width: 48px;
       box-shadow: -2px -4px 10px rgba(255, 255, 255, 0.6), 2px 4px 10px rgba(112, 108, 162, 0.05);
@@ -203,12 +206,28 @@ export default {
   background-color: #f1f1f1;
   display: flex;
   flex-direction: row;
-  justify-content: space-between;
-  margin: 30px;
+  padding: 60px 60px 0 76px;
+  margin-bottom: 24px;
+  @media screen and (max-width: 1439px){
+    padding: 30px 30px 0 0;
+  }
   @media screen and (max-width: 1023px){
-    //:nth-child(1) { order: 1; }
-    //:nth-child(2) { order: 3; }
-    //:nth-child(3) { order: 2; }
+    padding: 20px 30px 0 30px;
+    margin-bottom: 18px;
+  }
+  @media screen and (max-width: 599px){
+    padding: 20px 30px 0 20px;
+    margin-bottom: 20px;
+    :nth-child(1) { order: 1; }
+    :nth-child(2) { order: 3; }
+    :nth-child(3) { order: 2; }
+  }
+  @media screen and (max-width: 349px){
+    padding: 24px 16px 0 16px;
+    margin-bottom: 10px;
+    :nth-child(1) { order: 1; }
+    :nth-child(2) { order: 3; }
+    :nth-child(3) { order: 2; }
   }
   .left-side {
     .q-btn {
