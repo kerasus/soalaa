@@ -5,16 +5,14 @@
         <q-img
           v-if="$route.name === 'onlineQuiz.alaaView'"
           src="https://3a.alaatv.com/img/logo-1.png"
-          width="140px"
         />
         <q-img
           v-else
           src="https://3a.alaatv.com/img/logo-2.png"
-          width="140px"
         />
       </div>
     </div>
-    <q-separator class="top-separator" dark/>
+    <q-separator class="top-separator" size="2px" dark/>
     <q-list
       class="side-menu-list"
       padding
@@ -25,7 +23,10 @@
           :key="index"
           :to="item.path"
           class="list-item"
+          :class="{ 'item-children': item.children.length , 'alone-item': !item.children.length}"
           v-model="userGroup"
+          :active="$route.name === item.name"
+          active-class="active-route"
         >
         <div class="section-title">
           <q-item-section class="list-section title-icon" avatar>
@@ -34,11 +35,13 @@
           <q-item-section class="list-section">
             {{ item.title }}
           </q-item-section>
+          <span class="indicator"/>
         </div>
         <q-item-section
           v-if="item.children.length"
           class="list-section list-children-section"
         >
+          <q-separator dark size="2px" vertical class="vertical-separator"/>
           <q-list>
             <q-item
               v-for="(subItem , i) in item.children"
@@ -48,17 +51,23 @@
               :active="$route.name === subItem.name"
               active-class="active-route"
             >
-              <q-item-section
-                class="list-child-section"
-              >
-                {{ subItem.displayName }}
-              </q-item-section>
-              <span class="indicator"/>
-            </q-item>
+                <q-item-section
+                  class="list-child-section"
+                >
+                  {{ subItem.displayName }}
+                </q-item-section>
+                <span class="indicator"/>
+              </q-item>
           </q-list>
         </q-item-section>
       </q-item>
     </q-list>
+    <div class="log-out">
+      <span>
+        <q-avatar icon="isax:logout" size="30" dir="rtl"/>
+      </span>
+      <span class="logout-text">خروج </span>
+    </div>
   </div>
 </template>
 
@@ -76,14 +85,14 @@ export default {
       titlesList: [
         {
           title: 'داشبورد',
-          icon: 'home',
-          path: '',
-          name: '',
+          icon: 'isax:home',
+          path: '/',
+          name: 'dashboard',
           children: []
         },
         {
           title: 'سوال',
-          icon: 'home',
+          icon: 'isax:bank',
           path: '',
           name: '',
           children: [
@@ -94,7 +103,7 @@ export default {
         },
         {
           title: 'آزمون',
-          icon: 'home',
+          icon: 'isax:task-square',
           path: '',
           name: '',
           children: [
@@ -104,158 +113,53 @@ export default {
         },
         {
           title: 'درخت دانش',
-          icon: 'home',
+          icon: 'isax:tree',
           path: '',
           name: '',
           children: []
         },
         {
           title: 'لیست دروس',
-          icon: 'home',
+          icon: 'isax:book',
           path: '/subCategory',
           name: 'Admin.subCategory.Index',
           children: []
         },
         {
           title: 'گزارشات',
-          icon: 'home',
+          icon: 'isax:graph',
           path: '',
           name: '',
           children: []
         },
         {
           title: 'تنظیمات',
-          icon: 'home',
+          icon: 'isax:setting-2',
           path: '',
           name: '',
           children: []
         },
         {
           title: 'سوالات متداول',
-          icon: 'home',
+          icon: 'isax:message-question',
           path: '',
           name: '',
           children: []
         }
-      ],
-      userList: [
-        {
-          displayName: 'آزمون های سه آ',
-          to: '/user_exam_list',
-          name: 'user.exam.list'
-        },
-        {
-          displayName: 'سوالات متداول',
-          to: '/faq',
-          name: 'faq'
-        }
-      ],
-      examsPlan: [
-        {
-          divider: true
-        },
-        {
-          name: 'دهم تجربی',
-          link: 'https://nodes.alaatv.com/aaa/pdf/1401_plan_tajrobi_dahom.pdf'
-        },
-        {
-          name: 'دهم ریاضی',
-          link: 'https://nodes.alaatv.com/aaa/pdf/1401_plan_riyazi_dahom.pdf'
-        },
-        {
-          name: 'دهم انسانی',
-          link: 'https://nodes.alaatv.com/aaa/pdf/1401_plan_ensani_dahom.pdf'
-        },
-        {
-          divider: true
-        },
-        {
-          name: 'یازدهم تجربی',
-          link: 'https://nodes.alaatv.com/aaa/pdf/1401_plan_tajrobi_yazdahom.pdf'
-        },
-        {
-          name: 'یازدهم ریاضی',
-          link: 'https://nodes.alaatv.com/aaa/pdf/1401_plan_riyazi_yazdahom.pdf'
-        },
-        {
-          name: 'یازدهم انسانی',
-          link: 'https://nodes.alaatv.com/aaa/pdf/1401_plan_ensani_yazdahom.pdf'
-        },
-        {
-          divider: true
-        },
-        {
-          name: 'دوازدهم تجربی',
-          link: 'https://nodes.alaatv.com/aaa/pdf/1401_plan_tajrobi_davazdahom.pdf'
-        },
-        {
-          name: 'دوازدهم ریاضی',
-          link: 'https://nodes.alaatv.com/aaa/pdf/1401_plan_riyazi_davazdahom.pdf'
-        },
-        {
-          name: 'دوازدهم انسانی',
-          link: 'https://nodes.alaatv.com/aaa/pdf/1401_plan_ensani_davazdahom.pdf'
-        },
-        {
-          divider: true
-        }
-      ],
-      adminList: [
-        {
-          displayName: 'لیست آزمون ها',
-          to: '/exam',
-          name: 'Admin.Exam.Index'
-        },
-        {
-          displayName: 'بانک سوال',
-          to: '/questions',
-          name: 'question-bank'
-        },
-        {
-          displayName: 'لیست دروس',
-          to: '/subCategory',
-          name: 'Admin.subCategory.Index'
-        },
-        {
-          displayName: 'لیست دفترچه ها',
-          to: '/category',
-          name: 'Admin.Category.Index'
-        },
-        {
-          displayName: 'لیست زیرگروه ها',
-          to: 'subGroup.edit',
-          name: 'subGroup.edit'
-        },
-        {
-          displayName: 'اضافه کردن سوالات MBTI',
-          to: '/question/mbti/create',
-          name: 'question.mbti.create'
-        }
-      ],
-      questionBankList: [
-        {
-          displayName: 'سوال جدید',
-          to: '/question/create',
-          name: 'user.exam'
-        },
-        {
-          displayName: ' کارخانه ی سوال',
-          to: '/question/list',
-          name: 'question.list'
-        }
       ]
     }
   },
+  created () {},
   methods: {
-    onClick (name) {
-      this.clickedOn = name
-      console.log(this.clickedOn)
-    }
   }
 }
 </script>
 
 <style lang="scss" scoped>
+//@media screen and (max-width: 1439px){}
+//@media screen and (max-width: 1023px){}
+//@media screen and (max-width: 599px){}
+//@media screen and (max-width: 350px){}
 .side-menu-main-layout{
   display: flex;
   flex-direction: column;
@@ -263,24 +167,79 @@ export default {
   height: 840px;
   border-radius: 30px;
   margin: 40px 24px;
+  @media screen and (max-width: 1439px){
+    width: 260px;
+    height: 740px;
+    margin: 30px 30px 30px 24px ;
+  }
+  @media screen and (max-width: 1023px){
+    margin: 0 ;
+    border-radius: 0;
+    width: 280px;
+    height: 680px;
+  }
+  @media screen and (max-width: 349px){
+    width: 242px;
+  }
   .side-logo {
     display: flex;
     height: 167px;
     align-items: center;
     justify-content: center;
-    .logo-image{
-      .q-img__container{
-        width: 140px;
-        height: 95px;
+    @media screen and (max-width: 1439px){
+      height: 136px;
+    }
+    @media screen and (max-width: 1023px){
+      height: 100px;
+    }
+    @media screen and (max-width: 349px){
+      height: 110px;
+    }
+    .logo-image {
+      width: 140px;
+      height: 95px;
+      @media screen and (max-width: 1439px){
+        height: 76px;
+      }
+      @media screen and (max-width: 1023px){
+        width: 100px;
+        height: 50px;
+      }
+      .q-img__container {
+          width: 140px;
+          height: 95px;
+          @media screen and (max-width: 1439px){
+            height: 76px;
+          }
+          @media screen and (max-width: 1023px){
+            width: 100px;
+            height: 50px;
+          }
+        }
       }
     }
-  }
   .top-separator{
-    margin: 0 40px 35px 40px;
+    margin: 0 40px 32px 40px;
+    @media screen and (max-width: 1439px){
+      margin: 0 30px 25px 30px;
+    }
+    @media screen and (max-width: 349px){
+      margin: 0 45px 22px 45px;
+    }
   }
   .q-list {
+    padding: 0;
     &.side-menu-list {
-      margin: 0 40px;
+      margin: 0 24px 109px 24px;
+      @media screen and (max-width: 1439px){
+        margin: 0 24px 34px 24px;
+      }
+      @media screen and (max-width: 1023px){
+        margin: 0 21px 26px 21px;
+      }
+      @media screen and (max-width: 349px){
+        margin: 0 18px 8px 18px;
+      }
       .q-item{
         padding: 0;
         min-height: 0;
@@ -288,18 +247,34 @@ export default {
       .list-item{
         display: flex;
         flex-direction: column;
-        justify-content: right;
+        justify-content: center;
         font-size: 16px;
         font-weight: 500;
         cursor: pointer;
+        padding: 0 14px 0 10px;
+        border-radius: 14px;
+        &.item-children {
+          margin-bottom: 0;
+        }
+        &.alone-item {
+          height: 40px;
+          &.active-route {
+            .indicator{
+              height: 8px;
+              width: 8px;
+              background-color: white;
+              border-radius: 50%;
+              margin: auto;
+            }
+          }
+        }
         .section-title{
           height: 30px;
-          margin-bottom: 12px;
           display: flex;
           flex-direction: row;
           align-items: center;
           .title-icon{
-            margin-right: 10px;
+            margin-right: 12px;
           }
           .q-item__section--side{
             padding: 0;
@@ -314,32 +289,48 @@ export default {
             width: 22px;
           }
           &.list-children-section{
+            .vertical-separator{
+              margin: 6px 9px 9px 9px;
+              @media screen and (max-width: 349px){
+                margin: 0 10px 12px 10px;
+              }
+            }
             .q-list{
-              width: 100%;
-              margin-left: 20px;
               .list-child-item{
                 height: 30px;
                 justify-content: right;
                 margin-bottom: 8px;
                 width: 157px;
-                &.active-route{
-                  background-color: #ADA8EA;
-                  border-radius: 10px;
-                  .indicator {
-                    height: 6px;
-                    width: 6px;
-                    color: white;
-                    border-radius: 50%;
-                  }
+                border-radius: 10px;
+                padding: 0 14px;
+                @media screen and (max-width: 1023px){
+                  width: 148px;
+                }
+                @media screen and (max-width: 349px){
+                  width: 160px;
+                  margin-bottom: 5px;
+                  padding: 0 10px 0 12px;
+                }
+                &:last-child {
+                  margin-bottom: 0;
                 }
                 .list-child-section{
                   font-size: 14px !important;
-                  padding: 14px;
                   justify-content: center;
                 }
               }
             }
           }
+        }
+      }
+      .active-route {
+        background-color:  #8075DC;
+        .indicator{
+          height: 6px;
+          width: 6px;
+          background-color: white;
+          border-radius: 50%;
+          margin: auto;
         }
       }
       .side-list-item {
@@ -361,7 +352,30 @@ export default {
       padding: 0;
     }
   }
+  .log-out {
+    color: white;
+    font-size: 16px;
+    font-weight: 500;
+    margin: 0 37px 36px 37px;
+    @media screen and (max-width: 1023px){
+      margin: 0 31px 33px 31px;
+    }
+    @media screen and (max-width: 349px){
+      margin: 0 30px 30px 30px;
+    }
+    .q-avatar {
+      height: 22px;
+      width: 22px;
+      margin-right: 12px;
+      transform: matrix(-1, 0, 0, 1, 0, 0);
+    }
+  }
 }
 </style>
 <style lang="scss">
+.side-menu-main-layout{
+  .q-icon{
+    font-size: 21px;
+  }
+}
 </style>
