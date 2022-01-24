@@ -2,6 +2,7 @@ import axios from 'axios'
 import store from '@/store/store'
 import router from '@/router/index'
 import Assistant from '@/plugins/assistant'
+import Time from "@/plugins/time";
 
 let Axios = function () {
 
@@ -41,7 +42,7 @@ let Axios = function () {
     function synchronizeTimeAfterResponse () {
         axios.interceptors.response.use(function (response) {
             if (response.config.url.indexOf(process.env.VUE_APP_LUMEN_INTERNAL_API_SERVER) === 0) {
-
+                Time.synchronizeTimeWithData(response)
             }
             return Promise.resolve(response);
         })

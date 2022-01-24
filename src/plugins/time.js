@@ -14,6 +14,7 @@ let Time = function () {
                     cache: `no-store`,
                     method: `HEAD`,
                 });
+                console.log('{ headers, ok, statusText }', { headers, ok, statusText })
 
                 if (!ok) {
                     throw new Error(`Bad date sample from server: ${statusText}`);
@@ -29,8 +30,19 @@ let Time = function () {
         console.log(`The server's date is ${date} +/- ${uncertainty} milliseconds. offset:`+offset);
     }
 
-    function synchronizeTimeWithData ({ date, offset, uncertainty }) {
+    async function synchronizeTimeWithData (response) {
         window.serverDate = {}
+        const { date, offset, uncertainty } = await getServerDate( {fetchSample: async () => {
+                if (response.status !== 200) {
+                    throw new Error(`Bad date sample from server: ${response.statusText}`);
+                }
+                const requestDate = new Date();
+                return {
+                    requestDate,
+                    responseDate: new Date(),
+                    serverDate: new Date(response.headers.date),
+                };
+            }});
         window.serverDate = { date, offset, uncertainty }
         console.log(`The server's date is ${date} +/- ${uncertainty} milliseconds. offset:`+offset);
     }

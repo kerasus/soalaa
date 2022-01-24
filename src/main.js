@@ -20,7 +20,7 @@ Vue.use(VueNotification)
 
 Vue.config.productionTip = false
 Axios.handleError()
-// Axios.synchronizeTimeAfterResponse()
+Axios.synchronizeTimeAfterResponse()
 
 window.VueApp = new Vue({
   store,
