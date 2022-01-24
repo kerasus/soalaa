@@ -9,7 +9,7 @@ let Time = function () {
                 const requestDate = new Date();
 
                 // const url = window.location.origin
-                const url = '/3a/time'
+                const url = process.env.VUE_APP_LUMEN_INTERNAL_GET_TIME_SERVER
                 const { headers, ok, statusText } = await fetch(url, {
                     cache: `no-store`,
                     method: `HEAD`,
@@ -25,6 +25,12 @@ let Time = function () {
                     serverDate: new Date(headers.get(`Date`)),
                 };
             }});
+        window.serverDate = { date, offset, uncertainty }
+        console.log(`The server's date is ${date} +/- ${uncertainty} milliseconds. offset:`+offset);
+    }
+
+    function synchronizeTimeWithData ({ date, offset, uncertainty }) {
+        window.serverDate = {}
         window.serverDate = { date, offset, uncertainty }
         console.log(`The server's date is ${date} +/- ${uncertainty} milliseconds. offset:`+offset);
     }
@@ -171,6 +177,7 @@ let Time = function () {
         diff,
         msToTime,
         synchronizeTime,
+        synchronizeTimeWithData,
         getRemainTime,
         getPassedTime,
         setStateOfExamCategories,
