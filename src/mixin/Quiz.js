@@ -540,7 +540,7 @@ const mixinQuiz = {
         },
         getQuestNumber () {
             let questNumber = this.$route.params.questNumber
-            if (this.currentQuestion.order) {
+            if (!questNumber && this.currentQuestion.order) {
                 questNumber = this.currentQuestion.order
             }
             else if (!questNumber) {
