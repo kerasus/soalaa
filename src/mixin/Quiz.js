@@ -75,6 +75,7 @@ const mixinQuiz = {
   },
   data () {
     return {
+      bookletsDialog: false,
       considerActiveCategoryAndSubcategory: false
     }
   },
@@ -90,7 +91,14 @@ const mixinQuiz = {
       this.setSocketEvents(callbacks)
       this.socket.connect()
     },
+    disconnectSocket () {
+      if (!this.useSocket || !this.socket) {
+        this.socket = false
+        return
+      }
 
+      this.socket.disconnect()
+    },
     setSocketEvents (callbacks) {
       this.socket.on('connecting', () => {
         // this.onSocketStatusChange('on connection')
@@ -158,7 +166,8 @@ const mixinQuiz = {
               that.saveCurrentExamQuestions(examData.exam.questions.list)
               // save exam info in vuex store (remove questions of exam then save in store)
               examData.exam.loadSubcategoriesOfCategories()
-              Time.setStateOfExamCategories(examData.exam.categories)
+              const VUE_APP_ACTIVE_ALL_CATEGORIES_IN_EXAM = process.env.VUE_APP_ACTIVE_ALL_CATEGORIES_IN_EXAM === 'true'
+              Time.setStateOfExamCategories(examData.exam.categories, VUE_APP_ACTIVE_ALL_CATEGORIES_IN_EXAM)
               const currentExamQuestions = that.getCurrentExamQuestions()
               Time.setStateOfQuestionsBasedOnActiveCategory(examData.exam, currentExamQuestions)
               that.$store.commit('quiz/updateQuiz', examData.exam)
@@ -232,6 +241,7 @@ const mixinQuiz = {
       return JSON.parse(window.localStorage.getItem('currentExamQuestionIndexes'))
     },
     setCurrentExamQuestions (currentExamQuestions) {
+      window.currentExamQuestions = currentExamQuestions
       window.localStorage.setItem('currentExamQuestions', JSON.stringify(currentExamQuestions))
       // this.currentExamQuestions = Object.freeze(currentExamQuestions)
       // Vue.set(this, 'currentExamQuestions', Object.freeze(currentExamQuestions))
@@ -347,8 +357,11 @@ const mixinQuiz = {
         let userExamId
         const examData = new ExamData()
         if (that.needToLoadQuizData()) {
-          window.currentExamQuestions = null
-          window.currentExamQuestionIndexes = null
+          that.saveCurrentExamQuestions([])
+          that.$store.commit('quiz/cleanCurrentQuestion')
+          // window.currentExamQuestions = null
+          // window.currentExamQuestionIndexes = null
+          that.bookletsDialog = true
           that.$store.commit('loading/overlay', true)
           examData.getExamDataAndParticipate(examId)
           examData.loadQuestionsFromFile()
@@ -365,12 +378,14 @@ const mixinQuiz = {
                 that.saveCurrentExamQuestions(examData.exam.questions.list)
                 // save exam info in vuex store (remove questions of exam then save in store)
                 examData.exam.loadSubcategoriesOfCategories()
-                Time.setStateOfExamCategories(examData.exam.categories)
+                const VUE_APP_ACTIVE_ALL_CATEGORIES_IN_EXAM = process.env.VUE_APP_ACTIVE_ALL_CATEGORIES_IN_EXAM === 'true'
+                Time.setStateOfExamCategories(examData.exam.categories, VUE_APP_ACTIVE_ALL_CATEGORIES_IN_EXAM)
                 const currentExamQuestions = that.getCurrentExamQuestions()
                 Time.setStateOfQuestionsBasedOnActiveCategory(examData.exam, currentExamQuestions)
                 that.$store.commit('quiz/updateQuiz', examData.exam)
                 that.setCurrentExamQuestions(currentExamQuestions)
                 that.loadCurrentQuestion(viewType)
+                that.reloadCurrentQuestion(viewType)
               } else {
                 examData.exam = that.quiz
               }
@@ -473,7 +488,8 @@ const mixinQuiz = {
 
       if (viewType !== 'results') {
         const currentExamQuestions = this.getCurrentExamQuestions()
-        Time.setStateOfExamCategories(quiz.categories)
+        const VUE_APP_ACTIVE_ALL_CATEGORIES_IN_EXAM = process.env.VUE_APP_ACTIVE_ALL_CATEGORIES_IN_EXAM === 'true'
+        Time.setStateOfExamCategories(quiz.categories, VUE_APP_ACTIVE_ALL_CATEGORIES_IN_EXAM)
         Time.setStateOfQuestionsBasedOnActiveCategory(quiz, currentExamQuestions)
         this.setCurrentExamQuestions(currentExamQuestions)
       }
@@ -491,14 +507,7 @@ const mixinQuiz = {
       return questNumber
     },
     loadCurrentQuestion (viewType) {
-      const questNumber = this.$route.params.questNumber
-      this.loadQuestionByNumber(questNumber, viewType)
-      // if (this.currentQuestion.order) {
-      //   questNumber = this.currentQuestion.order
-      // } else if (!questNumber) {
-      //   questNumber = 1
-      // }
-
+      const questNumber = this.getQuestNumber()
       this.loadQuestionByNumber(questNumber, viewType)
     },
     loadFirstQuestion () {
@@ -531,6 +540,68 @@ const mixinQuiz = {
       }
       return axios.post(API_ADDRESS.exam.sendAnswers, { exam_user_id: examUserId, finish: true, questions: answers })
     },
+    syncUserAnswersWithDBAndSendAnswersToServerInExamTime (examId, examUserId, finishExam) {
+      const answers = this.getUserAnswers(examId)
+
+      return axios.post(API_ADDRESS.exam.sendAnswers, { exam_user_id: examUserId, finish: finishExam, questions: answers })
+    },
+    showExamAfterExamTime (examId, viewType) {
+      if (!Assistant.getId(examId)) {
+        return
+      }
+      const that = this
+      return new Promise(function (resolve, reject) {
+        const examData = new ExamData()
+        that.saveCurrentExamQuestions([])
+        that.$store.commit('cleanCurrentQuestion')
+        // window.currentExamQuestions = null
+        // window.currentExamQuestionIndexes = null
+        that.bookletsDialog = true
+        that.$store.commit('AppLayout/updateOverlay', { show: true, loading: true, text: '' })
+        examData.getExamData(examId)
+        examData.loadQuestionsFromFile()
+        examData.getUserExamData()
+          .run()
+          .then((result) => {
+            try {
+              // save questions in localStorage
+              that.saveCurrentExamQuestions(examData.exam.questions.list)
+              // save exam info in vuex store (remove questions of exam then save in store)
+              examData.exam.loadSubcategoriesOfCategories()
+              Time.setStateOfExamCategories(examData.exam.categories, true)
+              const currentExamQuestions = that.getCurrentExamQuestions()
+              Time.setStateOfQuestionsBasedOnActiveCategory(examData.exam, currentExamQuestions)
+              that.$store.commit('updateQuiz', examData.exam)
+              that.setCurrentExamQuestions(currentExamQuestions)
+              that.loadCurrentQuestion(viewType)
+              that.reloadCurrentQuestion(viewType)
+
+              that.$store.commit('mergeDbAnswersIntoLocalstorage', {
+                dbAnswers: examData.userExamData,
+                exam_id: examData.exam.id
+              })
+              resolve(result)
+            } catch (error) {
+              console.error(error)
+              that.$router.push({ name: 'user.exam.list' })
+              reject(error)
+            }
+          })
+          .catch((error) => {
+            reject(error)
+            that.$router.push({ name: 'user.exam.list' })
+          })
+          .finally(() => {
+            that.$store.commit('AppLayout/updateOverlay', { show: false, loading: false, text: '' })
+          })
+      })
+    },
+    syncUserAnswersWithDBAndSendAnswersToServerAfterExamTime (examId, examUserId, finishExam) {
+      const answers = this.getUserAnswers(examId)
+
+      return axios.post(API_ADDRESS.exam.sendAnswersAfterExam, { exam_user_id: examUserId, finish: finishExam, questions: answers })
+    },
+
     isLtrString (string) {
       if (!string) {
         return false
@@ -553,6 +624,54 @@ const mixinQuiz = {
     getQuestionNumberFromIndex (index) {
       index = parseInt(index)
       return index + 1
+    },
+    convertBubbleSheetResponseToUserAnswerResponse (examUserId, bubbleSheetResponse) {
+      const userAnswerResponse = {
+        choices: [
+          // {
+          //     "id": "61dd404df28c746e5a0aaf53",
+          //     "exam_user_id": "61dd2e0bf07492290b57097a",
+          //     "question_id": "61d95bfe3e17411c7775770c",
+          //     "choice_id": 1,
+          //     "type": "online",
+          //     "selected_at": "2022-01-11 12:01:08.951",
+          //     "status": null,
+          //     "bookmark": null
+          // }
+        ],
+        statuses: [],
+        bookmarks: []
+      }
+
+      // const bubbleSheetResponse = [
+      //         {
+      //             "q_n": 1,
+      //             "c_n": [
+      //                 1
+      //             ]
+      //         },
+      //         {
+      //             "q_n": 2,
+      //             "c_n": [
+      //                 2
+      //             ]
+      //         }
+      //     ]
+
+      userAnswerResponse.choices = bubbleSheetResponse.map(item => {
+        const choiceNumber = (typeof item.c_n[0] === 'undefined') ? null : item.c_n[0]
+        return {
+          id: item.q_n,
+          examUserId,
+          question_id: item.q_n,
+          choice_id: choiceNumber,
+          has_warning: (typeof item.c_n[1] !== 'undefined'),
+          selected_at: Time.now()
+        }
+      }
+      )
+
+      return userAnswerResponse
     },
     getQuestionNumberFromId (id) {
       const currentExamQuestions = this.getCurrentExamQuestions()

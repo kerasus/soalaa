@@ -74,15 +74,16 @@ class ExamData {
     })
   }
 
-  loadQuestionsFromFile () {
+  loadQuestionsFromFile (questionsFileUrl) {
     const that = this
     this.commands.push(() => new Promise((resolve, reject) => {
       if (!that.questionsFileUrl && !that.exam) {
         Assistant.handleAxiosError('questionsFileUrl in loadQuestionsFromFile() is not set')
-        // eslint-disable-next-line prefer-promise-reject-errors
         reject('questionsFileUrl in loadQuestionsFromFile() is not set')
       }
-      if (!that.questionsFileUrl) {
+      if (!that.questionsFileUrl && questionsFileUrl) {
+        that.questionsFileUrl = questionsFileUrl
+      } else if (!that.questionsFileUrl && !questionsFileUrl) {
         that.questionsFileUrl = that.exam.questions_file_url
       }
       axios.get(that.questionsFileUrl, {
@@ -100,7 +101,6 @@ class ExamData {
           resolve(response.data)
         })
         .catch(error => {
-          console.log('error', error)
           reject(error)
         })
     })
@@ -114,7 +114,6 @@ class ExamData {
     this.commands.push(() => new Promise((resolve, reject) => {
       if (!userExamId && !that.exam) {
         Assistant.handleAxiosError('userExamId in getUserExamWithCorrectAnswers() is not set')
-        // eslint-disable-next-line prefer-promise-reject-errors
         reject('userExamId in getUserExamWithCorrectAnswers() is not set')
       }
       if (!userExamId) {
@@ -169,21 +168,22 @@ class ExamData {
     this.commands.push(() => new Promise((resolve, reject) => {
       if (!userExamId && !that.exam) {
         Assistant.handleAxiosError('userExamId in getUserExamData() is not set')
-        // eslint-disable-next-line prefer-promise-reject-errors
         reject('userExamId in getUserExamData() is not set')
       }
       if (!userExamId) {
         userExamId = that.exam.user_exam_id
       }
-      axios.get(API_ADDRESS.exam.getAllAnswerOfUser(userExamId))
-        .then(response => {
-          that.userExamData = response.data
-          resolve(response)
-        })
-        .catch(error => {
-          console.log(error)
-          reject(error)
-        })
+      if (navigator.onLine) {
+        axios.get(API_ADDRESS.exam.getAllAnswerOfUser(userExamId))
+          .then(response => {
+            that.userExamData = response.data
+            resolve(response)
+          })
+          .catch(error => {
+            console.log(error)
+            reject(error)
+          })
+      }
     })
     )
     return this
@@ -194,7 +194,6 @@ class ExamData {
     this.commands.push(() => new Promise((resolve, reject) => {
       if (!examId && !that.exam) {
         Assistant.handleAxiosError('exam_id in getExamDataAndParticipate() is not set')
-        // eslint-disable-next-line prefer-promise-reject-errors
         reject('exam_id in getExamDataAndParticipate() is not set')
       }
       if (!examId) {
@@ -208,6 +207,7 @@ class ExamData {
           that.exam.title = Assistant.getId(response.data.data.exam_title)
           that.exam.user_exam_id = Assistant.getId(response.data.data.id)
           that.exam.created_at = response.data.data.created_at
+          that.exam.accept_at = response.data.data.accept_at
           that.exam.questions_file_url = response.data.data.questions_file_url
           that.exam.categories = new QuestCategoryList(response.data.data.categories)
           that.exam.sub_categories = new QuestSubcategoryList(response.data.data.sub_categories)
@@ -216,7 +216,40 @@ class ExamData {
           resolve(response)
         })
         .catch(error => {
-          console.log('err', error)
+          reject(error)
+        })
+    })
+    )
+    return this
+  }
+
+  getExamData (examId) {
+    const that = this
+    this.commands.push(() => new Promise((resolve, reject) => {
+      if (!examId && !that.exam) {
+        Assistant.handleAxiosError('exam_id in getExamData() is not set')
+        reject('exam_id in getExamData() is not set')
+      }
+      if (!examId) {
+        examId = that.exam.id
+      }
+      axios.get(API_ADDRESS.exam.examUserAfterExam + '?exam_id=' + examId)
+        .then(response => {
+          that.exam = new Exam()
+          // ToDo: attention on user_exam_id and exam_id
+          that.exam.id = Assistant.getId(response.data.data.exam_id)
+          that.exam.title = Assistant.getId(response.data.data.exam_title)
+          that.exam.user_exam_id = Assistant.getId(response.data.data.id)
+          that.exam.created_at = response.data.data.created_at
+          that.exam.accept_at = response.data.data.accept_at
+          that.exam.questions_file_url = response.data.data.questions_file_url
+          that.exam.categories = new QuestCategoryList(response.data.data.categories)
+          that.exam.sub_categories = new QuestSubcategoryList(response.data.data.sub_categories)
+          that.exam.holding_config = response.data.data.holding_config
+          that.userExamData = response.data
+          resolve(response)
+        })
+        .catch(error => {
           reject(error)
         })
     })
