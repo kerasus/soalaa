@@ -38,8 +38,18 @@ let Axios = function () {
         })
     }
 
+    function synchronizeTimeAfterResponse () {
+        axios.interceptors.response.use(function (response) {
+            if (response.config.url.indexOf(process.env.VUE_APP_LUMEN_INTERNAL_API_SERVER) === 0) {
+
+            }
+            return Promise.resolve(response);
+        })
+    }
+
     return {
-        handleError
+        handleError,
+        synchronizeTimeAfterResponse
     };
 }();
 
