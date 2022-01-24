@@ -14,7 +14,7 @@
         />
       </div>
       <div
-        class="right-side"
+        class="right-side col-6"
         :class="{'col-12': windowSize < 600}"
       >
         <span
@@ -25,7 +25,9 @@
         {{ address }}
       </span>
       </div>
-      <div class="left-side" :class="{'col-6': windowSize < 600}">
+      <div
+        class="left-side col-"
+        :class="{'col-6': windowSize < 600}">
           <q-btn-dropdown
             class="toolbar-button"
             content-class="profile-menu"
@@ -126,18 +128,14 @@ export default {
   },
   methods: {
     drawerMode (value) {
-      console.log('m1', this.properties.leftDrawerOpen)
       this.properties.leftDrawerOpen = false
-      console.log('m2', this.properties.leftDrawerOpen)
     },
     toggleLeftDrawer () {
-      console.log('p1', this.properties.leftDrawerOpen)
       if (this.properties.leftDrawerOpen) {
         this.properties.leftDrawerOpen = false
       } else {
         this.properties.leftDrawerOpen = true
       }
-      console.log('p2', this.properties.leftDrawerOpen)
     },
     getDimensions () {
       this.windowSize = document.documentElement.clientWidth

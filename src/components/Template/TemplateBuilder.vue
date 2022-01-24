@@ -140,25 +140,9 @@ export default {
       immediate: true,
       deep: true,
       handler (val, oldVal) {
-        console.log('v1', this.leftDrawerOpen)
         this.leftDrawerOpen = val.leftDrawerOpen
-        console.log('v2', this.leftDrawerOpen)
-        // if (val.leftDrawerOpen !== oldval.leftDrawerOpen) {
-        //
-        // }
       }
     }
-    // leftDrawerOpen () {
-    //   console.log('value', this.value.leftDrawerOpen)
-    //   this.leftDrawerOpen = this.value.leftDrawerOpen
-    //   console.log('value1', this.leftDrawerOpen)
-    //   this.leftDrawerOpen = !this.leftDrawerOpen
-    //   console.log('value2', this.leftDrawerOpen)
-    // },
-    // rightDrawerOpen () {
-    //   this.rightDrawerOpen = this.value.rightDrawerOpen
-    //   this.rightDrawerOpen = !this.leftDrawerOpen
-    // }
   },
   methods: {
     onHide () {
@@ -166,9 +150,7 @@ export default {
       this.$emit('drawerClosed')
     },
     toggleLeftDrawer () {
-      console.log(this.leftDrawerOpen)
       this.leftDrawerOpen = !this.leftDrawerOpen
-      console.log(this.leftDrawerOpen)
     },
     toggleRightDrawer () {
       this.rightDrawerOpen = !this.rightDrawerOpen
