@@ -9,7 +9,7 @@ import { QuestCategoryList } from 'src/models/QuestCategory'
 import $ from 'jquery'
 import { QuestionList } from 'src/models/Question'
 import ExamData from 'src/assets/js/ExamData'
-import { io } from 'socket.io-client'
+import SocketConnection from 'src/plugins/socket'
 
 const mixinQuiz = {
   computed: {
@@ -76,20 +76,23 @@ const mixinQuiz = {
   data () {
     return {
       bookletsDialog: false,
+      useSocket: true,
+      socket: null,
       considerActiveCategoryAndSubcategory: false
     }
   },
   methods: {
     setSocket (token, examId, callbacks) {
-      this.socket = io(API_ADDRESS.socket, {
-        withCredentials: true,
-        auth: {
-          token,
-          examId
-        }
-      })
+      if (!this.useSocket) {
+        this.socket = false
+        return
+      }
+
+      this.socket = SocketConnection.getInstance(token, examId)
       this.setSocketEvents(callbacks)
-      this.socket.connect()
+      if (!this.socket.connected) {
+        this.socket.connect()
+      }
     },
     disconnectSocket () {
       if (!this.useSocket || !this.socket) {
@@ -100,23 +103,11 @@ const mixinQuiz = {
       this.socket.disconnect()
     },
     setSocketEvents (callbacks) {
-      this.socket.on('connecting', () => {
-        // this.onSocketStatusChange('on connection')
-      })
       this.socket.on('reconnect', () => {
         this.socket.emit('socket.event.reconnect:log', 'socket.event.reconnect:log')
-      })
-      this.socket.on('disconnect', () => {
-        // this.onSocketStatusChange('Socket to break off')
-        // this.isConnected = false
-      })
-      this.socket.on('connect_failed', () => {
-        // this.onSocketStatusChange('connection failed')
-      })
-      this.socket.on('connect', () => {
-        // console.log(this.socket.connected) // true
-        // this.onSocketStatusChange('socket connected')
-        // this.isConnected = true
+        // // client
+        // this.socket.emit("test", dataToSend, function(err, success) {
+        // })
       })
       this.socket.on('question.file-link:update', (data) => {
         const questionsFileUrl = data.questionFileLink
@@ -124,20 +115,94 @@ const mixinQuiz = {
         this.reloadQuestionFile(questionsFileUrl, 'onlineQuiz.alaaView', this.$route.params.quizId)
           .then(() => {
             that.isRtl = !that.isLtrString(that.currentQuestion.statement)
-            that.$store.commit('loading/overlay', { loading: false, text: '' })
+            that.$store.commit('AppLayout/updateOverlay', { show: false, loading: false, text: '' })
             if (callbacks && callbacks['question.file-link:update'] && callbacks['question.file-link:update'].afterReload) {
               callbacks['question.file-link:update'].afterReload()
             }
           })
           .catch((error) => {
             Assistant.reportErrors(error)
-            this.$q.notify({
-              type: 'negative',
-              message: 'مشکلی در دریافت اطلاعات آژمون رخ داده است. لطفا دوباره امتحان کنید.',
-              position: 'center'
+            that.$notify({
+              group: 'notifs',
+              title: 'توجه!',
+              text: 'مشکلی در دریافت اطلاعات آژمون رخ داده است. لطفا دوباره امتحان کنید.',
+              type: 'error'
             })
             that.$router.push({ name: 'user.exam.list' })
           })
+      })
+
+      return
+
+      // eslint-disable-next-line no-unreachable
+      this.socket.on('connect', () => {
+        const engine = this.socket.io.engine
+        // console.log('engine.transport.name', engine.transport.name) // in most cases, prints "polling"
+
+        // console.log(this.socket.connected) // true
+        // this.onSocketStatusChange('socket connected')
+        // this.isConnected = true
+
+        engine.on('connecting', () => {
+          // this.onSocketStatusChange('on connection')
+        })
+        engine.on('reconnect', () => {
+          this.socket.emit('socket.event.reconnect:log', 'socket.event.reconnect:log')
+          // // client
+          // this.socket.emit("test", dataToSend, function(err, success) {
+          // })
+        })
+        engine.on('disconnect', () => {
+          // this.onSocketStatusChange('Socket to break off')
+          // this.isConnected = false
+        })
+        engine.on('connect_failed', () => {
+          // this.onSocketStatusChange('connection failed')
+        })
+        engine.on('question.file-link:update', (data) => {
+          const questionsFileUrl = data.questionFileLink
+          const that = this
+          this.reloadQuestionFile(questionsFileUrl, 'onlineQuiz.alaaView', this.$route.params.quizId)
+            .then(() => {
+              that.isRtl = !that.isLtrString(that.currentQuestion.statement)
+              that.$store.commit('AppLayout/updateOverlay', { show: false, loading: false, text: '' })
+              if (callbacks && callbacks['question.file-link:update'] && callbacks['question.file-link:update'].afterReload) {
+                callbacks['question.file-link:update'].afterReload()
+              }
+            })
+            .catch((error) => {
+              Assistant.reportErrors(error)
+              that.$notify({
+                group: 'notifs',
+                title: 'توجه!',
+                text: 'مشکلی در دریافت اطلاعات آژمون رخ داده است. لطفا دوباره امتحان کنید.',
+                type: 'error'
+              })
+              that.$router.push({ name: 'user.exam.list' })
+            })
+        })
+
+        engine.once('upgrade', () => {
+          // called when the transport is upgraded (i.e. from HTTP long-polling to WebSocket)
+          // console.log(engine.transport.name) // in most cases, prints "websocket"
+        })
+
+        //
+        // engine.on("packet", ({ type, data }) => {
+        //     // called for each packet received
+        // })
+        //
+        // engine.on("packetCreate", ({ type, data }) => {
+        //     // called for each packet sent
+        // })
+        //
+        // engine.on("drain", () => {
+        //     // called when the write buffer is drained
+        // })
+        //
+        // engine.on("close", (reason) => {
+        //     // called when the underlying connection is closed
+        // })
       })
     },
     sendUserQuestionsDataToServer (examId, examUserId, finishExam) {
@@ -498,7 +563,7 @@ const mixinQuiz = {
     },
     getQuestNumber () {
       let questNumber = this.$route.params.questNumber
-      if (this.currentQuestion.order) {
+      if (!questNumber && this.currentQuestion.order) {
         questNumber = this.currentQuestion.order
       } else if (!questNumber) {
         questNumber = 1
@@ -601,7 +666,6 @@ const mixinQuiz = {
 
       return axios.post(API_ADDRESS.exam.sendAnswersAfterExam, { exam_user_id: examUserId, finish: finishExam, questions: answers })
     },
-
     isLtrString (string) {
       if (!string) {
         return false
