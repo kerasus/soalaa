@@ -68,23 +68,26 @@ const mixinUserActionOnQuestion = {
       }
     },
     sendUserQuestionsDataToServer (examUserId, userExamData, questionId, actionType, socket, callback) {
-      console.log('sendUserQuestionsDataToServer')
       const userQuestionDataFromLocalstorage = this.getUserQuestionDataFromLocalstorage(userExamData, questionId)
-
+      const online = navigator.onLine
       // send data
       const question = new Question()
+      if (!online) {
+        return false
+      }
+
       if (actionType === 'answer') {
-        return question.sendAnswer(examUserId, userQuestionDataFromLocalstorage.dataToSendAnswer)
+        return question.sendUserActionToServer('answer', examUserId, { answerArray: userQuestionDataFromLocalstorage.dataToSendAnswer, failedAnswersArray: userQuestionDataFromLocalstorage.dataToSendFailedAnswers }, socket, callback)
       }
       if (actionType === 'bookmark') {
         if (userQuestionDataFromLocalstorage.userQuestionData.bookmarked) {
-          return question.sendBookmark(examUserId, userQuestionDataFromLocalstorage.dataToSendBookmark)
+          return question.sendUserActionToServer('bookmark', examUserId, { bookmark: userQuestionDataFromLocalstorage.dataToSendBookmark, failedBookmarksArray: userQuestionDataFromLocalstorage.dataToSendFailedBookmark }, socket, callback)
         } else {
-          return question.sendUnBookmark(examUserId, userQuestionDataFromLocalstorage.dataToSendBookmark)
+          return question.sendUserActionToServer('unBookmark', examUserId, { bookmark: userQuestionDataFromLocalstorage.dataToSendBookmark, failedBookmarksArray: userQuestionDataFromLocalstorage.dataToSendFailedBookmark }, socket, callback)
         }
       }
       if (actionType === 'status') {
-        return question.sendStatus(examUserId, userQuestionDataFromLocalstorage.dataToSendStatus)
+        return question.sendUserActionToServer('status', examUserId, { status: userQuestionDataFromLocalstorage.dataToSendStatus, failedStatusArray: userQuestionDataFromLocalstorage.dataToSendFailedStatus }, socket, callback)
       }
     },
     userActionOnQuestion_answer (data, examId, questionId, userQuestionData) {
