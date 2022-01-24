@@ -82,7 +82,7 @@ export default {
         } else {
           finalMatch = match.slice(2, -2)
         }
-        finalMatch = finalMatch.replaceAll(/&lt;/g, '<').replace(/&gt;/g, '>')
+        finalMatch = finalMatch.replaceAll(/&lt;/g, '<').replaceAll(/&gt;/g, '>').replaceAll('&amp;', '&');
         return katex.renderToString(finalMatch, {
           throwOnError: false,
           safe: true,
