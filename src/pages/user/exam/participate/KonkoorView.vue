@@ -649,6 +649,10 @@
     /*    display: block !important;*/
     /*}*/
 
+    .konkoor-view .reading-duplicate {
+      display: none;
+    }
+
     .base.textstyle.uncramped {
         display: flex;
         flex-wrap: wrap;
