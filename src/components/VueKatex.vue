@@ -83,7 +83,6 @@ export default {
           finalMatch = match.slice(2, -2)
         }
         finalMatch = finalMatch.replaceAll(/&lt;/g, '<').replaceAll(/&gt;/g, '>').replaceAll('&amp;', '&');
-        console.log('oone:', finalMatch)
         return katex.renderToString(finalMatch, {
           throwOnError: false,
           safe: true,
