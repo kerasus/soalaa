@@ -69,6 +69,10 @@ export default {
       this.localInput = this.localInput.replace(regex, (match) => {
         return ' ' + match + ' '
       })
+      this.localInput = this.localInput.replaceAll('\\[ ', '\\[')
+      this.localInput = this.localInput.replaceAll(' \\]', ' \\]')
+      this.localInput = this.localInput.replaceAll(' $', '$')
+      this.localInput = this.localInput.replaceAll('$ ', '$')
       this.localInput = this.localInput.replace(regex, (match) => {
         let finalMatch
         if (match.includes('$$')) {
@@ -78,6 +82,7 @@ export default {
         } else {
           finalMatch = match.slice(2, -2)
         }
+        finalMatch = finalMatch.replaceAll(/&lt;/g, '<').replaceAll(/&gt;/g, '>').replaceAll('&amp;', '&');
         return katex.renderToString(finalMatch, {
           throwOnError: false,
           safe: true,
