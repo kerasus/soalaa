@@ -340,7 +340,7 @@ class Question extends Model {
     }
 
     actionsWhileSendingData(){
-        Time.synchronizeTime()
+        // Time.synchronizeTime()
     }
 
     sendUserActionToServer(type, exam_user_id , dataToSendObject, socket, callback) {
