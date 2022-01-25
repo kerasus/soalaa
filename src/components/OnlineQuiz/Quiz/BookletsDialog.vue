@@ -69,9 +69,15 @@ export default {
   watch: {
     value (newValue) {
       if (this.categoriesWithBooklet.length === 0) {
+        this.dialog = false
         return
       }
       this.dialog = newValue
+    }
+  },
+  created() {
+    if (this.categoriesWithBooklet.length > 0) {
+      this.dialog = true
     }
   },
   methods: {
