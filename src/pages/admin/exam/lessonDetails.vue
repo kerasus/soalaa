@@ -59,6 +59,17 @@
             </v-btn>
           </v-btn-toggle>
           <v-spacer />
+          <v-text-field
+            v-model="questionSearchNumber"
+            class="search-question"
+            type="number"
+            label="شماره سوال"
+            outlined
+            :style="{ maxWidth: '150px' }"
+            dense
+            :append-icon="'mdi-magnify'"
+            @click:append="scrollToQuestion"
+          />
           <v-btn
             icon
             @click="reload"
@@ -215,7 +226,8 @@
                 'دارای غلط تایپی'
             ],
             inView: [],
-            windowVisible: true
+            windowVisible: true,
+            questionSearchNumber: 0
         }),
         computed: {
             filteredQuestions () {
@@ -272,10 +284,11 @@
             // }
             this.scrollTo(this.currentQuestion.id)
             $('.sidebar').height(this.windowSize.y)
-            console.log('lofdsafadfasfag', $('.sidebar'))
-            console.log('lofdsafadfasfag', $('.sidebar')[0])
         },
         methods: {
+            scrollToQuestion () {
+              this.scrollTo(null, this.questionSearchNumber)
+            },
             reload () {
               this.loadQuizDataAndSubCategories(true)
             },
@@ -359,8 +372,14 @@
                 // }
                 // this.changeQuestion(firstInViewQuestion.id, 'onlineQuiz.konkoorView')
             },
-            scrollTo (questionId) {
-                const questionIndex = this.getQuestionIndexById(questionId)
+            scrollTo (questionId, questionNumber) {
+                let questionIndex
+                if (questionId) {
+                  questionIndex = this.getQuestionIndexById(questionId)
+                } else {
+                  questionIndex = questionNumber - 1
+                }
+                console.log(questionIndex)
                 this.$refs.scroller.scrollToItem(questionIndex)
                 for (let i = 1; i < 4; i++) {
                     setTimeout(() => {
@@ -476,6 +495,10 @@
 </script>
 
 <style>
+.search-question .v-text-field__details {
+  display: none;
+}
+
     .konkoor-view strong em strong {
         display: none;
         font-weight: normal;
