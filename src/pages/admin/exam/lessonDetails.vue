@@ -379,7 +379,6 @@
                 } else {
                   questionIndex = questionNumber - 1
                 }
-                console.log(questionIndex)
                 this.$refs.scroller.scrollToItem(questionIndex)
                 for (let i = 1; i < 4; i++) {
                     setTimeout(() => {
