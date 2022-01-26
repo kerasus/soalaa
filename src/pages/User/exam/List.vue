@@ -189,6 +189,7 @@ export default {
   },
   mounted () {
     this.$store.commit('AppLayout/updateAppBarAndDrawer', true)
+    this.disconnectSocket()
   },
   methods: {
     goToResult (exam) {

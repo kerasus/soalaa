@@ -460,6 +460,7 @@ const mixinQuiz = {
               })
               resolve(result)
             } catch (error) {
+              console.error(error)
               that.$router.push({ name: 'user.exam.list' })
               reject(error)
             }
