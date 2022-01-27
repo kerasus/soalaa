@@ -29,7 +29,9 @@ const API_ADDRESS = {
     base: lumenServer + '/option'
   },
   exam: {
+    showExam: (examId) => lumenServer + '/exam/' + examId,
     editExam: lumenServer + '/exam',
+    copyCoefficient: lumenServer + '/exam-question/zirgorooh/copy',
     sendAnswers: lumenServer + '/temp-exam/answer/choice',
     sendAnswerSheetPhoto: lumenServer + '/temp-exam/scan',
     sendScannedAnswers: lumenServer + '/temp-exam/scan/import',
