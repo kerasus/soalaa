@@ -162,7 +162,7 @@
                         <v-btn
                             v-for="(booklet, bookletIndex) in item.booklet_url.filter( bookletItem => !!bookletItem.descriptive_answers_booklet_url)"
                             :key="bookletIndex"
-                            color="#ffc107"
+                            color="#00b5e6"
                             text
                             @click="downloadBooklet(booklet.descriptive_answers_booklet_url)"
                         >
