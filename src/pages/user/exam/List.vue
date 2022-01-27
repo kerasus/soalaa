@@ -159,6 +159,16 @@
                         >
                           {{ booklet.category_title }}
                         </v-btn>
+                        <v-btn
+                            v-for="(booklet, bookletIndex) in item.booklet_url.filter( bookletItem => !!bookletItem.descriptive_answers_booklet_url)"
+                            :key="bookletIndex"
+                            color="#00b5e6"
+                            text
+                            @click="downloadBooklet(booklet.descriptive_answers_booklet_url)"
+                        >
+                          پاسخ
+                          {{ booklet.category_title }}
+                        </v-btn>
                       </template>
                       <v-btn
                           v-if="item.exam_actions.can_submit_answers"
