@@ -1,7 +1,10 @@
 <template>
   <template-builder v-model:value="properties" @drawerClosed="drawerMode">
     <template #header>
-      <div :class="{'col-6': windowSize < 600}">
+      <div
+        class="col-1"
+        :class="{'col-6': windowSize < 350}"
+      >
         <q-btn
           class="toolbar-button"
           :class="drawer"
@@ -14,8 +17,8 @@
         />
       </div>
       <div
-        class="right-side col-6"
-        :class="{'col-12': windowSize < 600}"
+        class="right-side col-8"
+        :class="{'col-12': windowSize < 350, 'col-6': windowSize > 1439}"
       >
         <span
         v-for="(address, index) in addresses"
@@ -26,8 +29,8 @@
       </span>
       </div>
       <div
-        class="left-side col-"
-        :class="{'col-6': windowSize < 600}">
+        class="left-side col-3"
+        :class="{'col-6': windowSize < 350, 'col-6': windowSize > 1439}">
           <q-btn-dropdown
             class="toolbar-button"
             content-class="profile-menu"
@@ -80,7 +83,7 @@ export default {
       windowSize: document.documentElement.clientWidth,
       showBtn: false,
       tab: 'home',
-      addresses: ['سوال', 'لیست آزمون ها', 'یکی از آزمونا'],
+      addresses: ['سوال', 'لیست آزمون ها'],
       properties: {
         layoutView: 'lHh lpR lFf',
         layoutHeader: true,
@@ -175,6 +178,8 @@ export default {
     }
   }
   .left-side {
+    display: flex;
+    justify-content: end;
     }
   .drawer-closer{
     display: none;
@@ -210,15 +215,12 @@ export default {
     padding: 30px 30px 0 0;
   }
   @media screen and (max-width: 1023px){
-    padding: 20px 30px 0 30px;
+    padding: 20px 30px 0 30px !important;
     margin-bottom: 18px;
   }
   @media screen and (max-width: 599px){
     padding: 20px 30px 0 20px;
     margin-bottom: 20px;
-    :nth-child(1) { order: 1; }
-    :nth-child(2) { order: 3; }
-    :nth-child(3) { order: 2; }
   }
   @media screen and (max-width: 349px){
     padding: 24px 16px 0 16px;
