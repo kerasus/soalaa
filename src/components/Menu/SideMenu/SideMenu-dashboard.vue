@@ -3,11 +3,6 @@
     <div class="side-logo">
       <div class="logo-image">
         <q-img
-          v-if="$route.name === 'onlineQuiz.alaaView'"
-          src="https://3a.alaatv.com/img/logo-1.png"
-        />
-        <q-img
-          v-else
           src="https://3a.alaatv.com/img/logo-2.png"
         />
       </div>
@@ -156,10 +151,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-//@media screen and (max-width: 1439px){}
-//@media screen and (max-width: 1023px){}
-//@media screen and (max-width: 599px){}
-//@media screen and (max-width: 350px){}
 .side-menu-main-layout{
   display: flex;
   flex-direction: column;
@@ -173,10 +164,11 @@ export default {
     margin: 30px 30px 30px 24px ;
   }
   @media screen and (max-width: 1023px){
-    margin: 0 ;
+    margin: 0 !important;
     border-radius: 0;
     width: 280px;
-    height: 680px;
+    min-height: 680px;
+    height: 100%;
   }
   @media screen and (max-width: 349px){
     width: 242px;

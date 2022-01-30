@@ -2,7 +2,7 @@
   <template-builder v-model:value="properties" @drawerClosed="drawerMode">
     <template #header>
       <div
-        class="col-1"
+        class="drawer-btn"
         :class="{'col-6': windowSize < 350}"
       >
         <q-btn
@@ -17,8 +17,8 @@
         />
       </div>
       <div
-        class="right-side col-8"
-        :class="{'col-12': windowSize < 350, 'col-6': windowSize > 1439}"
+        class="right-side"
+        :class="{'col-6': windowSize > 1023, 'col-12': windowSize < 350}"
       >
         <span
         v-for="(address, index) in addresses"
@@ -29,8 +29,8 @@
       </span>
       </div>
       <div
-        class="left-side col-3"
-        :class="{'col-6': windowSize < 350, 'col-6': windowSize > 1439}">
+        class="left-side"
+        :class="{'col-6': windowSize < 350, 'col-6': windowSize > 1023}">
           <q-btn-dropdown
             class="toolbar-button"
             content-class="profile-menu"
@@ -85,7 +85,7 @@ export default {
       tab: 'home',
       addresses: ['سوال', 'لیست آزمون ها'],
       properties: {
-        layoutView: 'lHh lpR lFf',
+        layoutView: 'lHh Lpr lFf',
         layoutHeader: true,
         layoutHeaderReveal: false,
         layoutHeaderElevated: false,
@@ -122,10 +122,37 @@ export default {
   computed: {
     // eslint-disable-next-line vue/return-in-computed-property
     drawer () {
-      if (this.windowSize < 1024) {
+      if (this.windowSize > 1024) {
         return 'be-available'
-      } else if (this.windowSize >= 1024) {
-        return 'drawer-closer'
+      } else {
+        return ''
+      }
+    },
+    drawerSize () {
+      if (this.windowSize > 1023) {
+        return '325'
+      } else if (this.windowSize < 1024 && this.windowSize > 349) {
+        return '280'
+      } else if (this.windowSize < 350) {
+        return '242'
+      } else {
+        return ''
+      }
+    }
+  },
+  created () {
+    this.properties.leftDrawerWidth = this.drawerSize
+  },
+  watch: {
+    windowSize () {
+      if (this.windowSize > 1023) {
+        this.properties.leftDrawerWidth = '325'
+        this.properties.layoutLeftDrawerBehavior = 'desktop'
+      } else if (this.windowSize < 1024 && this.windowSize > 349) {
+        this.properties.leftDrawerWidth = '280'
+        this.properties.layoutLeftDrawerBehavior = 'mobile'
+      } else if (this.windowSize < 350) {
+        this.properties.leftDrawerWidth = '242'
       }
     }
   },
@@ -134,11 +161,7 @@ export default {
       this.properties.leftDrawerOpen = false
     },
     toggleLeftDrawer () {
-      if (this.properties.leftDrawerOpen) {
-        this.properties.leftDrawerOpen = false
-      } else {
-        this.properties.leftDrawerOpen = true
-      }
+      this.properties.leftDrawerOpen = !this.properties.leftDrawerOpen
     },
     getDimensions () {
       this.windowSize = document.documentElement.clientWidth
@@ -156,10 +179,27 @@ export default {
 
 <style lang="scss" scoped>
 .main-layout-header{
+  .drawer-btn{
+    display: none;
+    @media screen and (max-width: 1023px){
+      display: block;
+    }
+    @media screen and (max-width: 349px){
+      margin-bottom: 10px;
+    }
+  }
   .right-side {
     display: flex;
     align-items: center;
-
+    @media screen and (max-width: 1023px){
+      margin-left: 78px;
+    }
+    @media screen and (max-width: 599px){
+      margin-left: 42px;
+    }
+    @media screen and (max-width: 349px){
+      margin-left: 0;
+    }
     .address-bar {
       font-size: 18px;
       font-weight: 500;
@@ -180,12 +220,13 @@ export default {
   .left-side {
     display: flex;
     justify-content: end;
+    @media screen and (max-width: 1023px){
+      position: absolute;
+      right: 30px;
     }
-  .drawer-closer{
-    display: none;
-    .be-available{
-      margin-left: 0;
-      display: block;
+    @media screen and (max-width: 349px){
+      right: 16px;
+      margin-bottom: 10px;
     }
   }
   .q-btn {
@@ -195,6 +236,10 @@ export default {
       width: 48px;
       box-shadow: -2px -4px 10px rgba(255, 255, 255, 0.6), 2px 4px 10px rgba(112, 108, 162, 0.05);
       border-radius: 16px;
+      &.be-available{
+          margin-left: 0!important;
+          display: block;
+        }
     }
   }
 }
@@ -209,7 +254,7 @@ export default {
   background-color: #f1f1f1;
   display: flex;
   flex-direction: row;
-  padding: 60px 60px 0 76px;
+  padding: 60px 100px 0 76px;
   margin-bottom: 24px;
   @media screen and (max-width: 1439px){
     padding: 30px 30px 0 0;
@@ -223,11 +268,20 @@ export default {
     margin-bottom: 20px;
   }
   @media screen and (max-width: 349px){
-    padding: 24px 16px 0 16px;
-    margin-bottom: 10px;
+    padding: 24px 16px 0 16px !important;
+    margin-bottom: 14px;
     :nth-child(1) { order: 1; }
     :nth-child(2) { order: 3; }
     :nth-child(3) { order: 2; }
+  }
+  .drawer-btn{
+    .q-btn{
+      flex-direction: row !important;
+    }
+  }
+  .right-side{
+    @media screen and (max-width: 1023px){
+    }
   }
   .left-side {
     .q-btn {
