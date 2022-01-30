@@ -1,212 +1,144 @@
 <template>
-  <q-layout
-    :view="layoutView"
-    class="main-layout"
-  >
-    <q-header
-      class="text-black layout-header"
-      v-if="layoutHeader"
-      v-model="layoutHeaderVisible"
-      :reveal="layoutHeaderReveal"
-      :elevated="layoutHeaderElevated"
-      :bordered="layoutHeaderBordered"
-      style="background-color: #f1f1f1"
-    >
-      <q-toolbar>
-        <div class="header-body full-width">
-          <div>
-            <q-btn
-              v-if="layoutLeftDrawer || $route.name !== 'onlineQuiz.konkoorView'"
-              round
-              dense
-              flat
-              icon="menu"
-              color="grey-14"
-              @click="updateLayoutLeftDrawerVisible(!layoutLeftDrawerVisible)"
-            />
-            <q-btn
-              v-if="$route.name === 'onlineQuiz.alaaView'"
-              round
-              dense
-              color="grey-14"
-              flat
-              icon="mdi-dots-grid"
-              @click="changeView"
-            />
-          </div>
+  <template-builder v-model:value="properties" @drawerClosed="drawerMode">
+    <template #header>
+      <div :class="{'col-6': windowSize < 600}">
+        <q-btn
+          class="toolbar-button"
+          :class="drawer"
+          icon="isax:menu-1"
+          color="white"
+          text-color="accent"
+          dense
+          unelevated
+          @click="toggleLeftDrawer"
+        />
+      </div>
+      <div
+        class="right-side col-6"
+        :class="{'col-12': windowSize < 600}"
+      >
+        <span
+        v-for="(address, index) in addresses"
+        :key="index"
+        class="address-bar"
+      >
+        {{ address }}
+      </span>
+      </div>
+      <div
+        class="left-side col-"
+        :class="{'col-6': windowSize < 600}">
           <q-btn-dropdown
-            v-if="$route.name === 'onlineQuiz.alaaView'"
-            icon="account_circle"
-            :label="user.full_name "
-            color="grey-14"
+            class="toolbar-button"
+            content-class="profile-menu"
+            icon="isax:notification"
             dropdown-icon="false"
+            color="white"
+            text-color="accent"
             dir="ltr"
-            flat
-          >
-            <online-quiz-top-menu/>
-          </q-btn-dropdown>
-          <q-btn-dropdown
-            v-else
-            icon="account_circle"
-            :label="user.full_name "
-            color="grey-14"
-            v-scroll
-            dropdown-icon="false"
-            dir="ltr"
-            flat
-          >
-            <DashboardTopMenu/>
-          </q-btn-dropdown>
-          <q-btn
-            v-if="layoutRightDrawer"
             dense
-            flat
-            round
-            icon="menu"
-            @click="updateLayoutRightDrawerVisible(!layoutRightDrawerVisible)"/>
+            unelevated
+          >
+            <q-badge color="red" rounded floating>3</q-badge>
+          </q-btn-dropdown>
+          <q-btn-dropdown
+            class="toolbar-button"
+            content-class="profile-menu"
+            icon="isax:user"
+            dropdown-icon="false"
+            color="white"
+            text-color="accent"
+            dir="ltr"
+            dense
+            unelevated
+          >
+            <DashboardTopMenu />
+          </q-btn-dropdown>
         </div>
-      </q-toolbar>
-      <q-linear-progress
-        v-if="$store.getters['loading/loading']"
-        color="secondary"
-        reverse
-        class="q-mt-sm"
-        indeterminate
-      />
-    </q-header>
-    <q-drawer
-      v-if="layoutLeftDrawerVisible"
-      v-model="layoutLeftDrawerVisible"
-      show-if-above
-      :behavior="layoutLeftDrawerBehavior"
-      :overlay="layoutLeftDrawerOverlay"
-      :elevated="layoutLeftDrawerElevated"
-      :bordered="layoutLeftDrawerBordered"
-      content-class="bg-grey-1"
-      side="left"
-      style="background-color: #f1f1f1"
-      :width="350"
-      class="side-bar"
-    >
-      <div
-        v-if="$route.name === 'onlineQuiz.alaaView'"
-      >
-        <side-menu-map-of-questions/>
-      </div>
-      <div
-        v-else
-        class="side-list"
-      >
-        <side-menu-dashboard/>
-      </div>
-    </q-drawer>
-    <q-page-container class="layout-page">
-      <div class="page-body">
-        <router-view :key="$route.name" />
-      </div>
-    </q-page-container>
-    <q-drawer
-      class="side-bar"
-      :class="{
-        'mapOfQuestions': $route.name === 'onlineQuiz.alaaView',
-        'bg-secondary': $route.name !== 'onlineQuiz.alaaView',
-       }"
-      v-if="layoutRightDrawerVisible"
-      v-model="layoutRightDrawerVisible"
-      show-if-above
-      :behavior="layoutRightDrawerBehavior"
-      :overlay="layoutRightDrawerOverlay"
-      :elevated="layoutRightDrawerElevated"
-      :bordered="layoutRightDrawerBordered"
-      side="right"
-    >
-    </q-drawer>
-    <q-footer
-      v-if="layoutFooter"
-      v-model="layoutFooterVisible"
-      class="bg-grey-8"
-      :reveal="layoutFooterReveal"
-      :elevated="layoutFooterElevated"
-      :bordered="layoutFooterBordered"
-    >
-      <q-toolbar>
-        <q-btn v-if="layoutLeftDrawer" dense flat round :icon="'menu'" @click="updateLayoutLeftDrawerVisible(!layoutLeftDrawerVisible)" />
-
-        <q-toolbar-title>Quasar</q-toolbar-title>
-
-        <q-btn v-if="layoutRightDrawer" dense flat round :icon="'menu'" @click="updateLayoutRightDrawerVisible(!layoutRightDrawerVisible)" />
-      </q-toolbar>
-    </q-footer>
-  </q-layout>
+    </template>
+    <template #left-drawer>
+      <side-menu-dashboard/>
+    </template>
+    <template #content>
+      <router-view :key="$route.name" />
+    </template>
+  </template-builder>
 </template>
 
 <script>
-import { mapGetters, mapMutations, mapState } from 'vuex'
+
 import SideMenuDashboard from 'components/Menu/SideMenu/SideMenu-dashboard'
 import { User } from 'src/models/User'
-import OnlineQuizTopMenu from 'components/Menu/topMenu/onlineQuizTopMenu'
-import SideMenuMapOfQuestions from 'components/Menu/SideMenu/SideMenu_MapOfQuestions'
-import DashboardTopMenu from 'components/Menu/topMenu/DashboardTopMenu'
+import templateBuilder from 'components/Template/TemplateBuilder'
 
 export default {
-  components: { DashboardTopMenu, SideMenuMapOfQuestions, OnlineQuizTopMenu, SideMenuDashboard },
-  computed: {
-    ...mapGetters('AppLayout', [
-      'layoutView',
-      'layoutHeaderReveal',
-      'layoutHeaderElevated',
-      'layoutHeaderBordered',
-      'layoutLeftDrawer',
-      'layoutLeftDrawerVisible',
-      'layoutLeftDrawerBehavior',
-      'layoutLeftDrawerOverlay',
-      'layoutLeftDrawerElevated',
-      'layoutLeftDrawerBordered',
-      'layoutRightDrawer',
-      'layoutRightDrawerVisible',
-      'layoutRightDrawerBehavior',
-      'layoutRightDrawerOverlay',
-      'layoutRightDrawerElevated',
-      'layoutRightDrawerBordered',
-      'layoutFooterReveal',
-      'layoutFooterElevated',
-      'layoutFooterBordered',
-      'layoutFooter'
-    ]),
-    ...mapState('AppLayout', [
-      'layoutHeader',
-      'layoutHeaderVisible',
-      'layoutFooterVisible'
-    ]),
-    headerWithBackground () {
-      return this.$store.getters['AppLayout/headerWithBackground']
-    }
-  },
+  components: { SideMenuDashboard, templateBuilder },
   data () {
     return {
+      leftDrawerOpen: false,
       user: new User(),
+      windowSize: document.documentElement.clientWidth,
+      showBtn: false,
       tab: 'home',
-      leftDrawerOpen: false
+      addresses: ['سوال', 'لیست آزمون ها', 'یکی از آزمونا'],
+      properties: {
+        layoutView: 'lHh lpR lFf',
+        layoutHeader: true,
+        layoutHeaderReveal: false,
+        layoutHeaderElevated: false,
+        layoutHeaderBordered: false,
+        layoutLeftDrawer: true,
+        leftDrawerOpen: false,
+        layoutLeftDrawerOverlay: false,
+        layoutLeftDrawerVisible: true,
+        layoutLeftDrawerElevated: false,
+        layoutLeftDrawerBordered: false,
+        leftDrawerWidth: '325',
+        layoutPageContainer: true,
+        layoutRightDrawer: false,
+        layoutRightDrawerOverlay: false,
+        layoutRightDrawerElevated: false,
+        layoutRightDrawerBordered: false,
+        layoutFooter: false,
+        layoutFooterReveal: false,
+        layoutFooterElevated: false,
+        layoutFooterBordered: false,
+        layoutHeaderCustomClass: 'main-layout-header row',
+        layoutLeftDrawerCustomClass: 'main-layout-left-drawer',
+        layoutPageContainerCustomClass: 'main-layout-container',
+        menuIcon: 'menu'
+      }
     }
   },
-  created () {
-    this.getUser()
+  mounted () {
+    window.addEventListener('resize', this.getDimensions)
+  },
+  unmounted () {
+    window.removeEventListener('resize', this.getDimensions)
+  },
+  computed: {
+    // eslint-disable-next-line vue/return-in-computed-property
+    drawer () {
+      if (this.windowSize < 1024) {
+        return 'be-available'
+      } else if (this.windowSize >= 1024) {
+        return 'drawer-closer'
+      }
+    }
   },
   methods: {
-    ...mapMutations('AppLayout', [
-      'updateLayoutRightDrawerVisible',
-      'updateLayoutLeftDrawerVisible'
-    ]),
-    changeView () {
-      this.$router.push({
-        name: 'konkoorView',
-        params: {
-          quizId: this.$route.params.quizId
-        }
-      })
+    drawerMode (value) {
+      this.properties.leftDrawerOpen = false
     },
     toggleLeftDrawer () {
-      this.leftDrawerOpen = !this.leftDrawerOpen
+      if (this.properties.leftDrawerOpen) {
+        this.properties.leftDrawerOpen = false
+      } else {
+        this.properties.leftDrawerOpen = true
+      }
+    },
+    getDimensions () {
+      this.windowSize = document.documentElement.clientWidth
     },
     getUser () {
       this.user = this.$store.getters['Auth/user']
@@ -220,47 +152,97 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.main-layout{
-  .layout-header {
-    padding: 12px 0;
-    .q-toolbar {
-      min-height: 48px !important;
-      .header-body {
-        height: 48px;
-        display: flex;
-        flex-direction: row;
-        justify-content: space-between;
-        max-width: 1158px;
-        margin: auto !important;
+.main-layout-header{
+  .right-side {
+    display: flex;
+    align-items: center;
 
-        .q-btn--dense {
-          &.q-btn--round {
-            height: 48px;
-            width: 48px;
+    .address-bar {
+      font-size: 18px;
+      font-weight: 500;
+      color: #23263B;
+
+      &::after {
+        content: ">";
+        margin: 0 10px;
+      }
+
+      &:last-child {
+        &::after {
+          content: none;
+        }
+      }
+    }
+  }
+  .left-side {
+    }
+  .drawer-closer{
+    display: none;
+    .be-available{
+      margin-left: 0;
+      display: block;
+    }
+  }
+  .q-btn {
+    &.toolbar-button {
+      margin-left: 12px;
+      height: 48px;
+      width: 48px;
+      box-shadow: -2px -4px 10px rgba(255, 255, 255, 0.6), 2px 4px 10px rgba(112, 108, 162, 0.05);
+      border-radius: 16px;
+    }
+  }
+}
+.main-layout-container {
+}
+.main-layout-left-drawer {
+}
+</style>
+
+<style lang="scss">
+.main-layout-header{
+  background-color: #f1f1f1;
+  display: flex;
+  flex-direction: row;
+  padding: 60px 60px 0 76px;
+  margin-bottom: 24px;
+  @media screen and (max-width: 1439px){
+    padding: 30px 30px 0 0;
+  }
+  @media screen and (max-width: 1023px){
+    padding: 20px 30px 0 30px;
+    margin-bottom: 18px;
+  }
+  @media screen and (max-width: 599px){
+    padding: 20px 30px 0 20px;
+    margin-bottom: 20px;
+    :nth-child(1) { order: 1; }
+    :nth-child(2) { order: 3; }
+    :nth-child(3) { order: 2; }
+  }
+  @media screen and (max-width: 349px){
+    padding: 24px 16px 0 16px;
+    margin-bottom: 10px;
+    :nth-child(1) { order: 1; }
+    :nth-child(2) { order: 3; }
+    :nth-child(3) { order: 2; }
+  }
+  .left-side {
+    .q-btn {
+      &.toolbar-button {
+        .q-btn__content {
+          .q-btn-dropdown__arrow {
+            display: none !important;
           }
         }
       }
     }
   }
-  .side-bar {
-    display: flex;
-    flex-direction: column;
-    &.map-of-questions{
-      background: var(--surface-1) !important;
-    }
-
-    .side-logo {
-      display: flex;
-      height: 150px;
-      align-items: center;
-      justify-content: center;
-    }
-  }
 }
-
-</style>
-<style lang="scss">
-.q-menu{
-  border-radius: 20px;
+.main-layout-container {
+  background-color: #f1f1f1;
+}
+.main-layout-left-drawer {
+  background-color: #f1f1f1;
 }
 </style>
