@@ -209,7 +209,9 @@ export default {
       font-size: 18px;
       font-weight: 500;
       color: #23263B;
-
+      &:nth-child(2) {
+        font-size: 16px;
+      }
       &::after {
         content: ">";
         margin: 0 10px;
