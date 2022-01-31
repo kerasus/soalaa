@@ -7,7 +7,6 @@
       >
         <q-btn
           class="toolbar-button"
-          :class="drawer"
           icon="isax:menu-1"
           color="white"
           text-color="accent"
@@ -114,14 +113,6 @@ export default {
   },
   computed: {
     // eslint-disable-next-line vue/return-in-computed-property
-    drawer () {
-      if (this.windowSize > 1024) {
-        return 'be-available'
-      } else {
-        return ''
-      }
-    },
-    // eslint-disable-next-line vue/return-in-computed-property
     drawerSize () {
       if (this.windowSize > 1023) {
         // eslint-disable-next-line vue/no-side-effects-in-computed-properties
@@ -143,6 +134,7 @@ export default {
     windowSize () {
       if (this.windowSize > 1023) {
         this.properties.leftDrawerWidth = 325
+        this.properties.leftDrawerOpen = true
         this.properties.layoutLeftDrawerBehavior = 'desktop'
       } else if (this.windowSize < 1024 && this.windowSize > 349) {
         this.properties.leftDrawerWidth = 280
@@ -243,10 +235,6 @@ export default {
       width: 48px;
       box-shadow: -2px -4px 10px rgba(255, 255, 255, 0.6), 2px 4px 10px rgba(112, 108, 162, 0.05);
       border-radius: 16px;
-      &.be-available{
-          margin-left: 0!important;
-          display: block;
-        }
     }
   }
 }
