@@ -121,8 +121,8 @@ export default {
           layoutRightDrawerCustomClass: '',
           layoutPageContainerCustomClass: '',
           layoutFooterCustomClass: '',
-          leftDrawerWidth: '300',
-          rightDrawerWidth: '300',
+          leftDrawerWidth: 300,
+          rightDrawerWidth: 300,
           menuIcon: 'menu'
         }
       },

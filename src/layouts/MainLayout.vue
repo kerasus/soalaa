@@ -55,12 +55,11 @@
             dense
             unelevated
           >
-            <DashboardTopMenu />
           </q-btn-dropdown>
         </div>
     </template>
     <template #left-drawer>
-      <side-menu-dashboard/>
+      <side-menu-dashboard @selected-item="selectedItem" @selected-child-item="selectedChildItem"/>
     </template>
     <template #content>
       <router-view :key="$route.name" />
@@ -83,7 +82,7 @@ export default {
       windowSize: document.documentElement.clientWidth,
       showBtn: false,
       tab: 'home',
-      addresses: ['سوال', 'لیست آزمون ها'],
+      addresses: [],
       properties: {
         layoutView: 'lHh Lpr lFf',
         layoutHeader: true,
@@ -96,16 +95,10 @@ export default {
         layoutLeftDrawerVisible: true,
         layoutLeftDrawerElevated: false,
         layoutLeftDrawerBordered: false,
-        leftDrawerWidth: '325',
+        leftDrawerWidth: 325,
         layoutPageContainer: true,
         layoutRightDrawer: false,
-        layoutRightDrawerOverlay: false,
-        layoutRightDrawerElevated: false,
-        layoutRightDrawerBordered: false,
         layoutFooter: false,
-        layoutFooterReveal: false,
-        layoutFooterElevated: false,
-        layoutFooterBordered: false,
         layoutHeaderCustomClass: 'main-layout-header row',
         layoutLeftDrawerCustomClass: 'main-layout-left-drawer',
         layoutPageContainerCustomClass: 'main-layout-container',
@@ -128,15 +121,18 @@ export default {
         return ''
       }
     },
+    // eslint-disable-next-line vue/return-in-computed-property
     drawerSize () {
       if (this.windowSize > 1023) {
-        return '325'
+        // eslint-disable-next-line vue/no-side-effects-in-computed-properties
+        this.properties.layoutLeftDrawerBehavior = 'desktop'
+        return 325
       } else if (this.windowSize < 1024 && this.windowSize > 349) {
-        return '280'
+        // eslint-disable-next-line vue/no-side-effects-in-computed-properties
+        this.properties.layoutLeftDrawerBehavior = 'mobile'
+        return 280
       } else if (this.windowSize < 350) {
-        return '242'
-      } else {
-        return ''
+        return 242
       }
     }
   },
@@ -146,17 +142,26 @@ export default {
   watch: {
     windowSize () {
       if (this.windowSize > 1023) {
-        this.properties.leftDrawerWidth = '325'
+        this.properties.leftDrawerWidth = 325
         this.properties.layoutLeftDrawerBehavior = 'desktop'
       } else if (this.windowSize < 1024 && this.windowSize > 349) {
-        this.properties.leftDrawerWidth = '280'
+        this.properties.leftDrawerWidth = 280
         this.properties.layoutLeftDrawerBehavior = 'mobile'
       } else if (this.windowSize < 350) {
-        this.properties.leftDrawerWidth = '242'
+        this.properties.leftDrawerWidth = 242
       }
     }
   },
   methods: {
+    selectedItem (value) {
+      this.addresses = []
+      this.addresses.push(value)
+    },
+    selectedChildItem (value) {
+      this.addresses = []
+      this.addresses.push(value.item)
+      this.addresses.push(value.child)
+    },
     drawerMode (value) {
       this.properties.leftDrawerOpen = false
     },
