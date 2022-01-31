@@ -13089,10 +13089,10 @@
   "resolved" "https://registry.npmjs.org/vue-template-es2015-compiler/-/vue-template-es2015-compiler-1.9.1.tgz"
   "version" "1.9.1"
 
-"vue-tiptap-katex@^2.2.58":
-  "integrity" "sha512-MQOyG0MhWlY22I+3l2p3gJRX//eXaNI0Hu7Jyi74v22AhHyrYlRXR/H6rWKOSbOzVU9XZE+qjS3JR7ylZzEGyw=="
-  "resolved" "https://registry.npmjs.org/vue-tiptap-katex/-/vue-tiptap-katex-2.2.58.tgz"
-  "version" "2.2.58"
+"vue-tiptap-katex@^2.2.59":
+  "integrity" "sha512-Sf22VApB3Bswa7nM1LC7rarmQC6umR2V7I30qj/nK9cZvRdrEMwnEVO4OTVpu+cQW0VIb0ysOc7upe2DXrZtTg=="
+  "resolved" "https://registry.npmjs.org/vue-tiptap-katex/-/vue-tiptap-katex-2.2.59.tgz"
+  "version" "2.2.59"
   dependencies:
     "@mdi/font" "^5.8.55"
     "@tiptap/core" "^2.0.0-beta.102"
