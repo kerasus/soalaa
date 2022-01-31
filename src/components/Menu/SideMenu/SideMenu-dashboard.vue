@@ -142,6 +142,17 @@ export default {
     }
   },
   created () {
+    this.titlesList.forEach(title => {
+      if (this.$route.name === title.name) {
+        this.selectedItem(title.title)
+      } else if (title.children.length) {
+        title.children.forEach(child => {
+          if (this.$route.name === child.name) {
+            this.clickedChildItem(title.title, child.displayName)
+          }
+        })
+      }
+    })
   },
   methods: {
     selectedItem (item) {
