@@ -19,6 +19,7 @@ class QuestSubcategory extends Model {
                 }
             },
             { key: 'order' },
+            { key: 'time' },
             { key: 'category_id' },
             {
                 key: 'questions',
