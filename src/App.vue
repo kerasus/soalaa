@@ -103,6 +103,30 @@
       </div>
     </v-app-bar>
     <v-main>
+
+      <v-snackbar
+          :timeout="-1"
+          :value="updateExists && false"
+          centered
+          bottom
+          color="deep-purple accent-4"
+          elevation="24"
+      >
+        جهت بروزرسانی لطفا صفحه را
+        رفرش
+        کنید
+        <template v-slot:action="{ attrs }">
+          <v-btn
+              color="white"
+              text
+              v-bind="attrs"
+              @click="refreshApp"
+          >
+            رفرش
+          </v-btn>
+        </template>
+      </v-snackbar>
+
       <notifications group="notifs" />
       <router-view :key="$route.name + ($route.params.quizId || '') + ($route.params.questNumber || '')" />
 
@@ -151,6 +175,11 @@ export default {
   },
   mixins: [mixinAuth, mixinQuiz, mixinDrawer, mixinWindowSize],
   data: () => ({
+
+    refreshing: false,
+    registration: null,
+    updateExists: false,
+
     selectedItem: null
   }),
   computed: {
@@ -177,8 +206,36 @@ export default {
     }
   },
   created() {
-    Time.synchronizeTime()
+    // Listen for our custom event from the SW registration
+    document.addEventListener('swUpdated', this.updateAvailable, { once: true })
+
+    if (navigator && navigator.serviceWorker) {
+      // Prevent multiple refreshes
+      navigator.serviceWorker.addEventListener('controllerchange', () => {
+        if (this.refreshing) return
+        this.refreshing = true
+        // Here the actual reload of the page occurs
+        // window.location.reload()
+      })
+    }
+
+    // Time.synchronizeTime()
     this.$store.commit('AppLayout/updateAppBarAndDrawer', true)
+  },
+  methods: {
+    updateAvailable(event) {
+      this.registration = event.detail
+      this.updateExists = true
+    },
+    // Called when the user accepts the update
+    refreshApp() {
+      // https://dev.to/drbragg/handling-service-worker-updates-in-your-vue-pwa-1pip
+      this.updateExists = false
+      // Make sure we only send a 'skip waiting' message if the SW is waiting
+      if (!this.registration || !this.registration.waiting) return
+      // Send message to SW to skip the waiting and activate the new SW
+      this.registration.waiting.postMessage({ type: 'SKIP_WAITING' })
+    }
   }
 };
 </script>
