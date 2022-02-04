@@ -41,7 +41,13 @@ let Assistant = function () {
                 messages.push('ابتدا وارد سامانه شوید.')
             } else if (err.data.errors) {
                 for (const [key, value] of Object.entries(err.data.errors)) {
-                    messages.push(value)
+                    if (Array.isArray(value)) {
+                        value.forEach( item => {
+                            messages.push(item)
+                        })
+                    } else {
+                        messages.push(value)
+                    }
                     console.log(`${key}: ${value}`);
                 }
             } else if (err.data.error && !AjaxResponseMessages.isCustomMessage(err.data.error.code)) {

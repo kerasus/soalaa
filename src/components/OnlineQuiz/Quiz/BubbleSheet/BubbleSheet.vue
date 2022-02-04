@@ -44,7 +44,7 @@
             {{ question.id }}
           </span>
           <v-tooltip
-            v-else-if="getUserQuestionData(question.id)"
+            v-else-if="getUserQuestionData(question.id) && info.type === 'pasokh-nameh'"
             bottom
           >
             <template v-slot:activator="{ on, attrs }">

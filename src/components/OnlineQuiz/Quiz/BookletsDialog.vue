@@ -13,7 +13,19 @@
       </v-toolbar>
       <v-card-text>
         <div class="py-2">
-          جهت دانلود دفترچه سوالات می توانید به صفحه لیست آزمون ها مراجعه نمایید.
+          جهت دانلود دفترچه سوالات می توانید از لینک زیر استفاده کنید.
+        </div>
+        <div class="py-2">
+          <v-btn
+              v-for="(categoryItem, categoryIndex) in categoriesWithBooklet"
+              :key="categoryIndex"
+              color="#ffc107"
+              text
+              @click="downloadBooklet(categoryItem.questions_booklet)"
+          >
+            دانلود
+            {{ categoryItem.title }}
+          </v-btn>
         </div>
       </v-card-text>
       <v-card-actions class="justify-space-between">
@@ -24,25 +36,29 @@
         >
           بستن
         </v-btn>
-        <v-btn
-          text
-          color="cyan"
-          @click="goToExamList"
-        >
-          مشاهده دفترچه سوالات
-        </v-btn>
       </v-card-actions>
     </v-card>
   </v-dialog>
 </template>
 
 <script>
+import {Exam} from "@/models/Exam";
+
 export default {
   name: 'BookletsDialog',
   props: {
     value: {
       type: Boolean,
       default: false
+    },
+    quiz: {
+      type: Exam,
+      default: new Exam()
+    }
+  },
+  computed: {
+    categoriesWithBooklet () {
+      return this.quiz.categories.list.filter( categoryItem => !!categoryItem.questions_booklet)
     }
   },
   data () {
@@ -52,10 +68,16 @@ export default {
   },
   watch: {
     value (newValue) {
+      if (this.categoriesWithBooklet.length === 0) {
+        return
+      }
       this.dialog = newValue
     }
   },
   methods: {
+    downloadBooklet(bookletUrl) {
+      window.open(bookletUrl, '_blank').focus();
+    },
     closeDialog () {
       this.$emit('update', false)
     },

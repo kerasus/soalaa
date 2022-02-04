@@ -405,7 +405,7 @@ export default {
          formData.append('exams[' + key + '][order]',item.order);
          formData.append('exams[' + key + '][sub_category_id]', item.sub_category_id);
        })
-      console.log('result  : ',formData.get('exams'))
+      // console.log('result  : ',formData.get('exams'))
        axios.post(API_ADDRESS.question.create, formData)
            .then((response) => {
              const questionId = response.data.data.id
