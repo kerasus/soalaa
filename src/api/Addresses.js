@@ -29,8 +29,12 @@ const API_ADDRESS = {
     base: lumenServer + '/option'
   },
   exam: {
+    showExam: (examId) => lumenServer + '/exam/' + examId,
     editExam: lumenServer + '/exam',
+    copyCoefficient: lumenServer + '/exam-question/zirgorooh/copy',
     sendAnswers: lumenServer + '/temp-exam/answer/choice',
+    sendAnswerSheetPhoto: lumenServer + '/temp-exam/scan',
+    sendScannedAnswers: lumenServer + '/temp-exam/scan/import',
     sendAnswersAfterExam: lumenServer + '/temp-exam/answer/choice/v2',
     sendStatus: lumenServer + '/temp-exam/answer/status',
     sendBookmark: lumenServer + '/temp-exam/answer/bookmark',
@@ -122,7 +126,7 @@ const API_ADDRESS = {
         if (!pagination) {
           pagination = 0
         }
-        return lumenServer + '/activity-log?subject_id='+questionId+'&subject=question&title=update&description=update_question_status&with_pagination=0'
+        return lumenServer + '/activity-log?subject_id='+questionId+'&subject=question&with_pagination=0'
       },
     },
     base: lumenServer + '/exam-question/attach',
@@ -156,7 +160,8 @@ const API_ADDRESS = {
     base: lumenServer + '/sub-category',
     update (id) {
       return lumenServer + '/sub-category/' + id
-    }
+    },
+    updateOrder: lumenServer + '/exam-question/update/order/sub-category'
   },
   questionCategory: {
     base: lumenServer + '/category',
