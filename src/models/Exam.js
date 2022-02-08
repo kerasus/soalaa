@@ -368,7 +368,6 @@ class Exam extends Model {
         item.selectChoice(dbAnswer.choice_id, dbAnswer.selected_at)
         item.state = dbAnswer.status
         item.bookmarked = dbAnswer.bookmark
-        console.log(item.order)
       }
     })
   }
@@ -391,7 +390,6 @@ class Exam extends Model {
           that.loadQuestionsFromFile()
             .then(() => {
               that.mergeDbAnswerToLocalstorage(answers)
-              console.log(answers)
               resolve()
             })
             .catch(({
