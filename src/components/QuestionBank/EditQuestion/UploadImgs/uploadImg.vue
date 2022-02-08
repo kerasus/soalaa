@@ -298,8 +298,8 @@ export default {
       handler: function(newValue) {
         this.question = newValue
         if (!this.editStatus) {
-          this.questionFile = this.question.statement_photo
-          this.answerFiles = this.question.answer_photos
+          this.questionFile = this.question.statement_photo ? this.question.statement_photo : []
+          this.answerFiles = this.question.answer_photos ? this.question.answer_photos : []
         }
       },
       deep: true
@@ -307,8 +307,8 @@ export default {
   },
   created() {
     this.question = this.value
-    this.questionFile = this.question.statement_photo
-    this.answerFiles = this.question.answer_photos
+    this.questionFile = this.question.statement_photo ? this.question.statement_photo : []
+    this.answerFiles = this.question.answer_photos ? this.question.answer_photos : []
   },
   methods :{
     deleteStatementPhoto(file) {
