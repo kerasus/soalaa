@@ -62,6 +62,7 @@
                   />
                   <!-- delete img ----------------------------------------------------------->
                   <v-btn
+                    v-if="editStatus"
                     fab
                     dark
                     x-small
@@ -134,6 +135,7 @@
                   />
 
                   <v-btn
+                    v-if="editStatus"
                     fab
                     dark
                     x-small
