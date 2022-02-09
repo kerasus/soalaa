@@ -356,10 +356,13 @@ export default {
       if (this.$refs.qlayout.getContent() === false) {
         return
       }
-      var currentQuestion = this.currentQuestion
-      currentQuestion.type_id = this.optionQuestionId
       this.updateStatementPhotos()
       this.updateAnswersPhotos()
+    },
+
+    save () {
+      var currentQuestion = this.currentQuestion
+      currentQuestion.type_id = this.optionQuestionId
       currentQuestion.update(API_ADDRESS.question.updateQuestion(currentQuestion.id))
           .then(() => {
             this.$notify({
@@ -426,9 +429,12 @@ export default {
             .then((response) => {
               this.currentQuestion = new Question(response.data.data)
               this.$store.commit('AppLayout/updateOverlay', {show: false, loading: false, text: ''})
+              this.updateAnswersPhotos()
             }).catch(() => {
           this.$store.commit('AppLayout/updateOverlay', {show: false, loading: false, text: ''})
         });
+      } else {
+        this.updateAnswersPhotos()
       }
     },
 
@@ -449,9 +455,12 @@ export default {
             .then((response) => {
               this.currentQuestion = new Question(response.data.data)
               this.$store.commit('AppLayout/updateOverlay', {show: false, loading: false, text: ''})
+              this.save()
             }).catch(() => {
           this.$store.commit('AppLayout/updateOverlay', {show: false, loading: false, text: ''})
         });
+      } else {
+        this.save()
       }
     },
 
