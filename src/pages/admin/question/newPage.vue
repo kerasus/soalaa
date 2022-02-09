@@ -357,7 +357,6 @@ export default {
         return
       }
       this.updateStatementPhotos()
-      this.updateAnswersPhotos()
     },
 
     save () {
