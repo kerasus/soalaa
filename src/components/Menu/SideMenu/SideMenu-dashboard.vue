@@ -156,9 +156,11 @@ export default {
   },
   methods: {
     selectedItem (item) {
+      console.log('item', this.$route)
       this.$emit('selectedItem', item)
     },
     clickedChildItem (item, child) {
+      console.log('child', this.$route)
       this.$emit('selectedChildItem', { item, child })
     }
   }
