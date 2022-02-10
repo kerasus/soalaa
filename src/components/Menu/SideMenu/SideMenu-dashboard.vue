@@ -59,7 +59,7 @@
         </q-item-section>
       </q-item>
     </q-list>
-    <div class="log-out">
+    <div class="log-out" @click="logOut">
       <span>
         <q-avatar icon="isax:logout" size="30" dir="rtl"/>
       </span>
@@ -134,8 +134,8 @@ export default {
         {
           title: 'سوالات متداول',
           icon: 'isax:message-question',
-          path: '',
-          name: '',
+          path: '/faq',
+          name: 'faq',
           children: []
         }
       ]
@@ -162,6 +162,9 @@ export default {
     clickedChildItem (item, child) {
       console.log('child', this.$route)
       this.$emit('selectedChildItem', { item, child })
+    },
+    logOut () {
+      return this.$store.dispatch('Auth/logOut')
     }
   }
 }
@@ -390,14 +393,23 @@ export default {
     color: white;
     font-size: 16px;
     font-weight: 500;
-    margin: 0 37px 36px 37px;
+    cursor: pointer;
+    height: 40px !important;
+    width: 232px;
+    border-radius: 14px;
+    display: flex;
+    align-items: center;
+    padding: 0 14px 0 10px;
+    margin: 0 0 36px 27px;
     @media screen and (max-width: 1023px) {
       margin: 0 31px 33px 31px;
     }
     @media screen and (max-width: 349px) {
       margin: 0 30px 30px 30px;
     }
-
+    &:hover{
+      background-color: rgba(255,255,255,0.1);
+    }
     .q-avatar {
       height: 22px;
       width: 22px;
