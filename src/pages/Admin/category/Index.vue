@@ -11,14 +11,13 @@
       <template #table-cell="{inputData, showConfirmRemoveDialog}">
         <q-td :props="inputData.props">
           <template v-if="inputData.props.col.name === 'thumbnail'">
-            <q-avatar>
-              <q-img
-                :src="inputData.props.value"
-                placeholder-src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAJYAAACWBAMAAADOL2zRAAAAG1BMVEXMzMyWlpaqqqq3t7fFxcW+vr6xsbGjo6OcnJyLKnDGAAAACXBIWXMAAA7EAAAOxAGVKw4bAAABAElEQVRoge3SMW+DMBiE4YsxJqMJtHOTITPeOsLQnaodGImEUMZEkZhRUqn92f0MaTubtfeMh/QGHANEREREREREREREtIJJ0xbH299kp8l8FaGtLdTQ19HjofxZlJ0m1+eBKZcikd9PWtXC5DoDotRO04B9YOvFIXmXLy2jEbiqE6Df7DTleA5socLqvEFVxtJyrpZFWz/pHM2CVte0lS8g2eDe6prOyqPglhzROL+Xye4tmT4WvRcQ2/m81p+/rdguOi8Hc5L/8Qk4vhZzy08DduGt9eVQyP2qoTM1zi0/uf4hvBWf5c77e69Gf798y08L7j0RERERERERERH9P99ZpSVRivB/rgAAAABJRU5ErkJggg=="
-                spinner-color="white"
-                style="height: 50px; max-width: 50px"
-              />
-            </q-avatar>
+            <q-avatar
+              round
+              font-size="30px"
+              text-color="white"
+              icon="mdi-card-text"
+              color="grey"
+            />
           </template>
           <template v-else-if="inputData.props.col.name === 'actions'">
             <q-btn round flat dense size="md" color="info" icon="info" :to="{name:'Admin.Category.Show', params: {id: inputData.props.row.id}}">
@@ -63,9 +62,9 @@ export default {
       table: {
         columns: [
           {
-            name: 'id',
+            name: 'thumbnail',
             required: true,
-            label: '#',
+            label: '',
             align: 'left',
             field: row => row.id
           },
