@@ -7,57 +7,109 @@
         />
       </div>
     </div>
-    <q-separator class="top-separator" size="2px" dark/>
     <q-list
       class="side-menu-list"
       padding
       dark
     >
-      <q-item
+      <q-expansion-item
+        class="side-expansion-list"
+        style="font-size:16px;"
+        label="برنامه ی آزمون ها"
+        dark
+      >
+        <q-list
+          class="list-expansion"
+          padding
+        >
+          <div
+            v-for="(examPlan, index) in examsPlan"
+            :key="index"
+          >
+            <a
+              v-if="!examPlan.divider"
+              :href="examPlan.link"
+              target="_blank"
+            >
+              <q-item
+                clickable
+                v-ripple:deep-purple
+                v-model="selectedExam"
+                active="false"
+                active-class="active-route"
+              >
+                <q-item-section class="item-list-expansion">
+                  <span class="item-list-expansion-title">
+                    {{examPlan.name}}
+                  </span>
+                </q-item-section>
+              </q-item>
+            </a>
+            <q-separator
+              v-else
+              class="top-expansion-separator"
+              size="2px"
+              dark
+            />
+          </div>
+        </q-list>
+      </q-expansion-item>
+      <q-separator class="top-separator" size="2px" dark/>
+      <div
         v-for="(item , index) in titlesList"
         :key="index"
-        :to="item.path"
-        class="list-item"
-        :class="{ 'item-children': item.children.length , 'alone-item': !item.children.length}"
-        v-model="clickedItem"
-        :active="$route.name === item.name"
-        active-class="active-route"
-        @click="selectedItem(item.title)"
       >
-        <div class="section-title">
-          <q-item-section class="list-section title-icon" avatar>
-            <q-avatar :icon="item.icon" size="30"/>
-          </q-item-section>
-          <q-item-section class="list-section">
-            {{ item.title }}
-          </q-item-section>
-          <span class="indicator"/>
-        </div>
-        <q-item-section
+        <q-expansion-item
           v-if="item.children.length"
-          class="list-section list-children-section"
+          style="font-size:16px;"
+          :label="item.title"
+          :icon="item.icon"
+          class="side-expansion-list"
+          dark
         >
-          <q-separator dark size="2px" vertical class="vertical-separator"/>
-          <q-list>
-            <q-item
-              v-for="(subItem , i) in item.children"
-              :key="i"
-              :to="subItem.to"
-              class="list-child-item"
-              :active="$route.name === subItem.name"
-              active-class="active-route"
-              @click="clickedChildItem(item.title, subItem.displayName)"
-            >
-              <q-item-section
-                class="list-child-section"
+          <div class="expansion-body">
+            <q-separator dark size="2px" vertical class="vertical-separator"/>
+            <q-list class="list-expansion">
+              <q-item
+                v-for="(subItem , i) in item.children"
+                :key="i"
+                :to="subItem.to"
+                class="list-child-item"
+                :active="subItem.active"
+                active-class="active-route"
+                @click="clickedChildItem(item.title, subItem.displayName)"
               >
-                {{ subItem.displayName }}
-              </q-item-section>
-              <span class="indicator"/>
-            </q-item>
-          </q-list>
-        </q-item-section>
-      </q-item>
+                <q-item-section
+                  class="list-child-section"
+                >
+                  {{ subItem.displayName }}
+                </q-item-section>
+                <span class="indicator"/>
+              </q-item>
+            </q-list>
+          </div>
+        </q-expansion-item>
+        <q-item
+          v-else
+          :to="item.path"
+          class="item-list"
+          :class="{ 'alone-item': !item.children.length}"
+          v-model="clickedItem"
+          :active="item.active"
+          active-class="active-route"
+          @click="selectedItem(item.title)"
+        >
+          <div class="section-title">
+            <q-item-section class="list-section title-icon" avatar>
+              <q-avatar :icon="item.icon" size="30"/>
+            </q-item-section>
+            <q-item-section class="list-section">
+              {{ item.title }}
+            </q-item-section>
+            <span class="indicator"/>
+          </div>
+        </q-item>
+      </div>
     </q-list>
     <div class="log-out" @click="logOut">
       <span>
@@ -80,6 +132,7 @@ export default {
           icon: 'isax:home',
           path: '/',
           name: 'dashboard',
+          active: false,
           children: []
         },
         {
@@ -87,10 +140,11 @@ export default {
           icon: 'isax:bank',
           path: '',
           name: '',
+          active: false,
           children: [
-            { displayName: 'ثبت سوال', to: '/question/create', name: 'user.exam' },
-            { displayName: 'کارخانه سوال', to: '/question/list', name: 'question.list' },
-            { displayName: 'بانک سوال', to: '/questions', name: 'question-bank' }
+            { displayName: 'ثبت سوال', to: '/question/create', name: 'user.exam', active: false },
+            { displayName: 'کارخانه سوال', to: '/question/list', name: 'question.list', active: false },
+            { displayName: 'بانک سوال', to: '/questions', name: 'question-bank', active: false }
           ]
         },
         {
@@ -98,9 +152,10 @@ export default {
           icon: 'isax:task-square',
           path: '',
           name: '',
+          active: false,
           children: [
-            { displayName: 'ساخت آزمون', to: '/exam/create', name: 'Admin.Exam.Creat' },
-            { displayName: 'لیست آزمون ها', to: '/exam', name: 'Admin.Exam.Index' }
+            { displayName: 'ساخت آزمون', to: '/exam/create', name: 'Admin.Exam.Creat', active: false },
+            { displayName: 'لیست آزمون ها', to: '/exam', name: 'Admin.Exam.Index', active: false }
           ]
         },
         {
@@ -108,6 +163,7 @@ export default {
           icon: 'isax:tree',
           path: '',
           name: '',
+          active: false,
           children: []
         },
         {
@@ -115,6 +171,15 @@ export default {
           icon: 'isax:book',
           path: '/subCategory',
           name: 'Admin.subCategory.Index',
+          active: false,
+          children: []
+        },
+        {
+          title: 'لیست دفترچه ها',
+          icon: 'isax:book',
+          path: '/category',
+          name: 'Admin.Category.Index',
+          active: false,
           children: []
         },
         {
@@ -122,6 +187,7 @@ export default {
           icon: 'isax:graph',
           path: '',
           name: '',
+          active: false,
           children: []
         },
         {
@@ -129,6 +195,7 @@ export default {
           icon: 'isax:setting-2',
           path: '',
           name: '',
+          active: false,
           children: []
         },
         {
@@ -136,7 +203,55 @@ export default {
           icon: 'isax:message-question',
           path: '/faq',
           name: 'faq',
+          active: false,
           children: []
+        }
+      ],
+      examsPlan: [
+        {
+          divider: true
+        },
+        {
+          name: 'دهم تجربی',
+          link: 'https://nodes.alaatv.com/aaa/pdf/1401_plan_tajrobi_dahom.pdf'
+        },
+        {
+          name: 'دهم ریاضی',
+          link: 'https://nodes.alaatv.com/aaa/pdf/1401_plan_riyazi_dahom.pdf'
+        },
+        {
+          name: 'دهم انسانی',
+          link: 'https://nodes.alaatv.com/aaa/pdf/1401_plan_ensani_dahom.pdf'
+        },
+        {
+          divider: true
+        },
+        {
+          name: 'یازدهم تجربی',
+          link: 'https://nodes.alaatv.com/aaa/pdf/1401_plan_tajrobi_yazdahom.pdf'
+        },
+        {
+          name: 'یازدهم ریاضی',
+          link: 'https://nodes.alaatv.com/aaa/pdf/1401_plan_riyazi_yazdahom.pdf'
+        },
+        {
+          name: 'یازدهم انسانی',
+          link: 'https://nodes.alaatv.com/aaa/pdf/1401_plan_ensani_yazdahom.pdf'
+        },
+        {
+          divider: true
+        },
+        {
+          name: 'دوازدهم تجربی',
+          link: 'https://nodes.alaatv.com/aaa/pdf/1401_plan_tajrobi_davazdahom.pdf'
+        },
+        {
+          name: 'دوازدهم ریاضی',
+          link: 'https://nodes.alaatv.com/aaa/pdf/1401_plan_riyazi_davazdahom.pdf'
+        },
+        {
+          name: 'دوازدهم انسانی',
+          link: 'https://nodes.alaatv.com/aaa/pdf/1401_plan_ensani_davazdahom.pdf'
         }
       ]
     }
@@ -175,12 +290,12 @@ export default {
   display: flex;
   flex-direction: column;
   width: 280px;
-  height: 840px;
+  min-height: 840px;
   border-radius: 30px;
   margin: 40px 24px;
   @media screen and (max-width: 1439px) {
     width: 260px;
-    height: 740px;
+    min-height: 740px;
     margin: 30px 30px 30px 24px;
   }
   @media screen and (max-width: 1023px) {
@@ -234,16 +349,6 @@ export default {
     }
   }
 
-  .top-separator {
-    margin: 0 40px 32px 40px;
-    @media screen and (max-width: 1439px) {
-      margin: 0 30px 25px 30px;
-    }
-    @media screen and (max-width: 349px) {
-      margin: 0 45px 22px 45px;
-    }
-  }
-
   .q-list {
     padding: 0;
 
@@ -259,103 +364,132 @@ export default {
         margin: 0 18px 8px 18px;
       }
 
+      .top-separator {
+        margin: 0 40px 32px 40px;
+        @media screen and (max-width: 1439px) {
+          margin: 0 30px 25px 30px;
+        }
+        @media screen and (max-width: 349px) {
+          margin: 0 45px 22px 45px;
+        }
+      }
+
       .q-item {
         padding: 0;
         min-height: 0;
+
+        &.item-list {
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+          font-size: 16px;
+          font-weight: 500;
+          cursor: pointer;
+          padding: 0 14px 0 10px;
+          border-radius: 14px;
+
+          &.alone-item {
+            height: 40px;
+
+            &.active-route {
+              .indicator {
+                height: 8px;
+                width: 8px;
+                background-color: white;
+                border-radius: 50%;
+                margin: auto;
+              }
+            }
+          }
+
+          .section-title {
+            height: 30px;
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+
+            .title-icon {
+              margin-right: 12px;
+            }
+
+            .q-item__section--side {
+              padding: 0;
+            }
+          }
+
+          .list-section {
+            display: flex;
+            flex-direction: row;
+            justify-content: right;
+
+            .q-avatar {
+              height: 22px;
+              width: 22px;
+            }
+          }
+        }
       }
+      .side-expansion-list{
+        .expansion-body{
+          display: flex;
+          margin-left: 8px;
+        }
+        .q-expansion-item__content{
+          .vertical-separator {
+            margin: 6px 9px 9px 9px;
+            @media screen and (max-width: 349px) {
+              margin: 0 10px 12px 10px;
+            }
+          }
+        }
 
-      .list-item {
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        font-size: 16px;
-        font-weight: 500;
-        cursor: pointer;
-        padding: 0 14px 0 10px;
-        border-radius: 14px;
-
-        &.item-children {
+        .q-list {
+        &.list-expansion {
           margin-bottom: 0;
-        }
-
-        &.alone-item {
-          height: 40px;
-
-          &.active-route {
-            .indicator {
-              height: 8px;
-              width: 8px;
-              background-color: white;
-              border-radius: 50%;
-              margin: auto;
+          .item-list-expansion {
+            height: 30px;
+            margin: 5px;
+            .item-list-expansion-title {
+              justify-content: start;
             }
           }
-        }
-
-        .section-title {
-          height: 30px;
-          display: flex;
-          flex-direction: row;
-          align-items: center;
-
-          .title-icon {
-            margin-right: 12px;
+          .top-expansion-separator{
+            margin: 0 40px 5px 40px;
+            @media screen and (max-width: 1439px) {
+              margin: 0 30px 5px 30px;
+            }
+            @media screen and (max-width: 349px) {
+              margin: 0 45px 5px 45px;
+            }
           }
-
-          .q-item__section--side {
-            padding: 0;
-          }
-        }
-
-        .list-section {
-          display: flex;
-          flex-direction: row;
-          justify-content: right;
-
-          .q-avatar {
-            height: 22px;
-            width: 22px;
-          }
-
-          &.list-children-section {
-            .vertical-separator {
-              margin: 6px 9px 9px 9px;
-              @media screen and (max-width: 349px) {
-                margin: 0 10px 12px 10px;
+          .list-child-item {
+              height: 30px;
+              justify-content: right;
+              margin-bottom: 8px;
+              width: 157px;
+              border-radius: 10px;
+              padding: 0 14px;
+              @media screen and (max-width: 1023px) {
+                width: 148px;
               }
-            }
+              @media screen and (max-width: 349px) {
+                width: 160px;
+                margin-bottom: 5px;
+                padding: 0 10px 0 12px;
+              }
 
-            .q-list {
-              .list-child-item {
-                height: 30px;
-                justify-content: right;
-                margin-bottom: 8px;
-                width: 157px;
-                border-radius: 10px;
-                padding: 0 14px;
-                @media screen and (max-width: 1023px) {
-                  width: 148px;
-                }
-                @media screen and (max-width: 349px) {
-                  width: 160px;
-                  margin-bottom: 5px;
-                  padding: 0 10px 0 12px;
-                }
+              &:last-child {
+                margin-bottom: 0;
+              }
 
-                &:last-child {
-                  margin-bottom: 0;
-                }
-
-                .list-child-section {
-                  font-size: 14px !important;
-                  justify-content: center;
-                }
+              .list-child-section {
+                font-size: 14px !important;
+                justify-content: center;
               }
             }
           }
         }
       }
-
       .active-route {
         background-color: #8075DC;
 
@@ -368,14 +502,6 @@ export default {
         }
       }
 
-      .side-list-item {
-        justify-content: space-between;
-        align-items: center;
-
-        .list-title {
-          justify-content: start;
-        }
-      }
     }
 
     .q-item__section--avatar {
@@ -421,8 +547,17 @@ export default {
 </style>
 <style lang="scss">
 .side-menu-main-layout {
-  .q-icon {
-    font-size: 21px;
+  .q-expansion-item__container {
+    .q-item {
+      display: flex ;
+      padding: 0 10px ;
+
+    }
+
+    .q-icon {
+      font-size: 21px;
+    }
   }
 }
+
 </style>
