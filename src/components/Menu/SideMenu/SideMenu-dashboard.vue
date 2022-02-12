@@ -13,8 +13,8 @@
       dark
     >
       <q-expansion-item
-        class="side-expansion-list"
-        style="font-size:16px;"
+        class="side-expansion-list top-expansion"
+        :header-style="{fontSize:'16px', height:'40px', borderRadius: '14px'}"
         label="برنامه ی آزمون ها"
         dark
       >
@@ -34,7 +34,6 @@
               <q-item
                 clickable
                 v-ripple:deep-purple
-                v-model="selectedExam"
                 active="false"
                 active-class="active-route"
               >
@@ -61,7 +60,7 @@
       >
         <q-expansion-item
           v-if="item.children.length"
-          style="font-size:16px;"
+          :header-style="{fontSize:'16px', height:'40px', borderRadius: '14px'}"
           :label="item.title"
           :icon="item.icon"
           class="side-expansion-list"
@@ -75,8 +74,7 @@
                 :key="i"
                 :to="subItem.to"
                 class="list-child-item"
-                :active="subItem.active"
-                active-class="active-route"
+                exact-active-class="active-route"
                 @click="clickedChildItem(item.title, subItem.displayName)"
               >
                 <q-item-section
@@ -95,9 +93,8 @@
           class="item-list"
           :class="{ 'alone-item': !item.children.length}"
           v-model="clickedItem"
-          :active="item.active"
-          active-class="active-route"
-          @click="selectedItem(item.title)"
+          exact-active-class="active-route"
+          @click="selectedItem(item)"
         >
           <div class="section-title">
             <q-item-section class="list-section title-icon" avatar>
@@ -259,7 +256,7 @@ export default {
   created () {
     this.titlesList.forEach(title => {
       if (this.$route.name === title.name) {
-        this.selectedItem(title.title)
+        this.selectedItem(title)
       } else if (title.children.length) {
         title.children.forEach(child => {
           if (this.$route.name === child.name) {
@@ -271,11 +268,9 @@ export default {
   },
   methods: {
     selectedItem (item) {
-      console.log('item', this.$route)
-      this.$emit('selectedItem', item)
+      this.$emit('selectedItem', item.title)
     },
     clickedChildItem (item, child) {
-      console.log('child', this.$route)
       this.$emit('selectedChildItem', { item, child })
     },
     logOut () {
@@ -430,6 +425,9 @@ export default {
         }
       }
       .side-expansion-list{
+        &.top-expansion{
+          margin-bottom: 10px;
+        }
         .expansion-body{
           display: flex;
           margin-left: 8px;
@@ -550,7 +548,7 @@ export default {
   .q-expansion-item__container {
     .q-item {
       display: flex ;
-      padding: 0 10px ;
+      padding: 0 10px !important;
 
     }
 
