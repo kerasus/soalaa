@@ -1,12 +1,12 @@
 <template>
   <v-container>
-    <vue-confirm-dialog/>
+    <vue-confirm-dialog />
     <v-row>
       <v-col>
-        <progress-linear :active="loadingList"/>
+        <progress-linear :active="loadingList" />
         <v-alert
-            v-if="exams.list.length === 0 && !loadingList"
-            type="info"
+          v-if="exams.list.length === 0 && !loadingList"
+          type="info"
         >
           آزمونی وجود ندارد
         </v-alert>
@@ -14,8 +14,8 @@
           <v-col>
             <v-row class="table-header">
               <v-col
-                  cols="3"
-                  class="pr-7"
+                cols="3"
+                class="pr-7"
               >
                 عنوان
               </v-col>
@@ -23,14 +23,14 @@
                 زمان شروع آزمون
               </v-col>
               <v-col
-                  v-if="false"
-                  cols="2"
+                v-if="false"
+                cols="2"
               >
                 زمان پایان آزمون
               </v-col>
               <v-col
-                  v-if="false"
-                  cols="1"
+                v-if="false"
+                cols="1"
               >
                 میزان تاخیر مجاز
               </v-col>
@@ -39,29 +39,29 @@
               </v-col>
             </v-row>
             <v-row
-                v-for="item in exams.list"
-                :key="item.id"
-                class="exam-info-bar"
+              v-for="item in exams.list"
+              :key="'exam-'+item.id"
+              class="exam-info-bar"
             >
               <v-col>
                 <v-sheet
-                    class="d-flex exam-list-sheet"
-                    elevation="0"
-                    outlined
-                    rounded
-                    shaped
+                  class="d-flex exam-list-sheet"
+                  elevation="0"
+                  outlined
+                  rounded
+                  shaped
                 >
                   <v-row class="table-row justify-center">
                     <v-col
-                        cols="12"
-                        md="3"
-                        class="pr-7 justify-center"
+                      cols="12"
+                      md="3"
+                      class="pr-7 justify-center"
                     >
                       {{ item.title }}
                     </v-col>
                     <v-col
-                        cols="12"
-                        md="2"
+                      cols="12"
+                      md="2"
                     >
                       <span class="d-inline-block-md d-none">
                         زمان شروع آزمون:
@@ -69,9 +69,9 @@
                       {{ item.shamsiDate('start_at').dateTime }}
                     </v-col>
                     <v-col
-                        v-if="false"
-                        cols="12"
-                        md="2"
+                      v-if="false"
+                      cols="12"
+                      md="2"
                     >
                       <span class="d-inline-block-md d-none">
                         زمان پایان آزمون:
@@ -79,9 +79,9 @@
                       {{ item.shamsiDate('finish_at').dateTime }}
                     </v-col>
                     <v-col
-                        v-if="false"
-                        cols="12"
-                        md="1"
+                      v-if="false"
+                      cols="12"
+                      md="1"
                     >
                       <span class="d-inline-block-md d-none">
                         میزان تاخیر مجاز:
@@ -90,91 +90,91 @@
                       دقیقه
                     </v-col>
                     <v-col
-                        cols="12"
-                        md="7"
+                      cols="12"
+                      md="7"
                     >
                       <v-btn
-                          v-if="item.exam_actions.can_register"
-                          color="#00c753"
-                          text
-                          @click="registerExam(item)"
+                        v-if="item.exam_actions.can_register"
+                        color="#00c753"
+                        text
+                        @click="registerExam(item)"
                       >
                         ثبت نام
                       </v-btn>
                       <v-btn
-                          v-if="item.exam_actions.can_start"
-                          color="#ffc107"
-                          text
-                          @click="goToParticipateExamPage(item)"
+                        v-if="item.exam_actions.can_start"
+                        color="#ffc107"
+                        text
+                        @click="goToParticipateExamPage(item)"
                       >
                         شروع آزمون
                       </v-btn>
                       <v-btn
-                          v-if="item.exam_actions.can_submit_new_answers"
-                          color="#ffc107"
-                          text
-                          @click="goToSendResults(item)"
+                        v-if="item.exam_actions.can_submit_new_answers"
+                        color="#ffc107"
+                        text
+                        @click="goToSendResults(item)"
                       >
                         ثبت گزینه ها
                       </v-btn>
                       <v-btn
-                          v-if="item.exam_actions.can_continue"
-                          color="purple"
-                          text
-                          @click="continueExam(item)"
+                        v-if="item.exam_actions.can_continue"
+                        color="purple"
+                        text
+                        @click="continueExam(item)"
                       >
                         ادامه آزمون
                       </v-btn>
                       <v-btn
-                          v-if="item.exam_actions.can_submit_offline_answers"
-                          color="#ffc107"
-                          text
-                          @click="getConfirmation(item.id, item.user_exam_id)"
+                        v-if="item.exam_actions.can_submit_offline_answers"
+                        color="#ffc107"
+                        text
+                        @click="getConfirmation(item.id, item.user_exam_id)"
                       >
                         ثبت پاسخنامه ذخیره شده در سیستم
                       </v-btn>
                       <v-btn
-                          v-if="item.exam_actions.can_see_report"
-                          color="#00b5e6"
-                          text
-                          @click="goToResult(item)"
+                        v-if="item.exam_actions.can_see_report"
+                        color="#00b5e6"
+                        text
+                        @click="goToResult(item)"
                       >
                         مشاهده نتایج
                       </v-btn>
                       <v-btn
-                          v-if="!!item.holding_status"
-                          color="#ffc107"
-                          text
-                          disabled
+                        v-if="!!item.holding_status"
+                        color="#ffc107"
+                        text
+                        disabled
                       >
                         {{ item.holding_status }}
                       </v-btn>
                       <template v-if="item.booklet_url">
                         <v-btn
-                            v-for="(booklet, bookletIndex) in item.booklet_url.filter( bookletItem => !!bookletItem.questions_booklet_url)"
-                            :key="bookletIndex"
-                            color="#ffc107"
-                            text
-                            @click="downloadBooklet(booklet.questions_booklet_url)"
+                          v-for="(booklet, bookletIndex) in item.booklet_url.filter( bookletItem => !!bookletItem.questions_booklet_url)"
+                          :key="'questions_booklet_url-'+bookletIndex"
+                          color="#ffc107"
+                          text
+                          @click="downloadBooklet(booklet.questions_booklet_url)"
                         >
                           {{ booklet.category_title }}
                         </v-btn>
                         <v-btn
-                            v-for="(booklet, bookletIndex) in item.booklet_url.filter( bookletItem => !!bookletItem.descriptive_answers_booklet_url)"
-                            :key="bookletIndex"
-                            color="#00b5e6"
-                            text
-                            @click="downloadBooklet(booklet.descriptive_answers_booklet_url)"
+                          v-for="(booklet, bookletIndex) in item.booklet_url.filter( bookletItem => !!bookletItem.descriptive_answers_booklet_url)"
+                          :key="'descriptive_answers_booklet_url-'+bookletIndex"
+                          color="#00b5e6"
+                          text
+                          @click="downloadBooklet(booklet.descriptive_answers_booklet_url)"
                         >
                           پاسخ
                           {{ booklet.category_title }}
                         </v-btn>
                       </template>
                       <v-btn
-                          v-if="item.exam_actions.can_submit_answers"
-                          color="green"
-                          text
-                          @click="setDialogStatus(item)"
+                        v-if="item.exam_actions.can_submit_answers"
+                        color="green"
+                        text
+                        @click="setDialogStatus(item)"
                       >
                         ارسال پاسخنامه
                       </v-btn>
@@ -188,10 +188,10 @@
       </v-col>
     </v-row>
     <send-answer-photo
-        :questions="questions"
-        :exam="bubbleSheetDialogExam"
-        :dialog-status="bubbleSheetDialog"
-        @closeDialog="bubbleSheetDialog = false"
+      :questions="questions"
+      :exam="bubbleSheetDialogExam"
+      :dialog-status="bubbleSheetDialog"
+      @closeDialog="bubbleSheetDialog = false"
     />
   </v-container>
 </template>
