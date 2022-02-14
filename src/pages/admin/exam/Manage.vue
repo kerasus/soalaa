@@ -26,9 +26,9 @@
           <v-row>
             <v-col>
               <exam-info
+                v-model="exam"
                 col-lg="5"
                 cols="12"
-                :exam="exam"
                 @refresh-exam-list="rereshExamList"
               />
             </v-col>
