@@ -143,7 +143,9 @@ class Exam extends Model {
                 {
                     key: 'categories',
                     value: function () {
-                        return that.categories.list
+                        return that.categories.list.map( item => {
+                            return item.loadApiResource()
+                        })
                     }
                 },
             ]
