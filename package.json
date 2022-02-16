@@ -14,7 +14,7 @@
   },
   "dependencies": {
     "@nodeguy/server-date": "^4.0.3",
-    "@quasar/extras": "^1.0.0",
+    "@quasar/extras": "^1.12.3",
     "@silvermine/videojs-quality-selector": "^1.2.5",
     "@xkeshi/image-compressor": "^0.5.3",
     "axios": "^0.21.1",

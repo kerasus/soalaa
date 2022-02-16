@@ -2,12 +2,18 @@ import { auth } from './middleware/middleware'
 
 const routes = [
   {
+    path: '/template',
+    component: () => import('components/Template/TemplateBuilder')
+  },
+  {
     path: '/',
     name: 'home',
     component: () => import('layouts/MainLayout.vue'),
     children: [
+      { name: 'Admin.Settings', path: 'settings', component: () => import('pages/Admin/Settings') },
       {
         path: '',
+        name: 'dashboard',
         component: () => import('pages/User/exam/List'),
         meta: {
           middlewares: [auth]

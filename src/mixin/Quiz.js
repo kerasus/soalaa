@@ -116,7 +116,7 @@ const mixinQuiz = {
         this.reloadQuestionFile(questionsFileUrl, 'onlineQuiz.alaaView', this.$route.params.quizId)
           .then(() => {
             that.isRtl = !that.isLtrString(that.currentQuestion.statement)
-            that.$store.commit('loading/overlay', { loading: false, text: '' })
+            that.$store.dispatch('loading/overlayLoading', { loading: false, text: '' })
             if (callbacks && callbacks['question.file-link:update'] && callbacks['question.file-link:update'].afterReload) {
               callbacks['question.file-link:update'].afterReload()
             }
@@ -147,7 +147,7 @@ const mixinQuiz = {
         const examData = new ExamData()
         window.currentExamQuestions = null
         window.currentExamQuestionIndexes = null
-        // that.$store.commit('loading/overlay', { loading: true, message: '' })
+        that.$store.dispatch('loading/overlayLoading', { loading: true, message: '' })
         examData.getExamDataAndParticipate(examId)
         examData.loadQuestionsFromFile()
         examData.getUserExamData(userExamId)
@@ -183,7 +183,7 @@ const mixinQuiz = {
             that.$router.push({ name: 'user.exam.list' })
           })
           .finally(() => {
-            that.$store.commit('loading/overlay', { loading: false, message: '' })
+            that.$store.dispatch('loading/overlayLoading', { loading: false, message: '' })
           })
       })
     },
@@ -349,7 +349,6 @@ const mixinQuiz = {
         if (that.needToLoadQuizData()) {
           window.currentExamQuestions = null
           window.currentExamQuestionIndexes = null
-          that.$store.commit('loading/overlay', true)
           examData.getExamDataAndParticipate(examId)
           examData.loadQuestionsFromFile()
         } else {
@@ -357,6 +356,7 @@ const mixinQuiz = {
           that.loadCurrentQuestion(viewType)
         }
         examData.getUserExamData(userExamId)
+          // TODO => top action return empty value with status 200
           .run()
           .then((result) => {
             try {
@@ -389,7 +389,7 @@ const mixinQuiz = {
             that.$router.push({ name: 'user.exam.list' })
           })
           .finally(() => {
-            that.$store.commit('loading/overlay', false)
+            that.$store.dispatch('loading/overlayLoading', false)
           })
       })
     },
@@ -492,13 +492,6 @@ const mixinQuiz = {
     },
     loadCurrentQuestion (viewType) {
       const questNumber = this.$route.params.questNumber
-      this.loadQuestionByNumber(questNumber, viewType)
-      // if (this.currentQuestion.order) {
-      //   questNumber = this.currentQuestion.order
-      // } else if (!questNumber) {
-      //   questNumber = 1
-      // }
-
       this.loadQuestionByNumber(questNumber, viewType)
     },
     loadFirstQuestion () {
