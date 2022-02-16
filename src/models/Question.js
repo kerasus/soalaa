@@ -340,7 +340,7 @@ class Question extends Model {
     }
 
     actionsWhileSendingData(){
-        Time.synchronizeTime()
+        // Time.synchronizeTime()
     }
 
     sendUserActionToServer(type, exam_user_id , dataToSendObject, socket, callback) {
@@ -349,16 +349,42 @@ class Question extends Model {
         if (type === 'answer') {
             let answerArray = dataToSendObject.answerArray
             let failedAnswersArray = dataToSendObject.failedAnswersArray
-            data = axios.post(API_ADDRESS.exam.sendAnswers, {exam_user_id, questions: answerArray})
-                .then(function (response) {
-                    if (failedAnswersArray.length > 0 && response.status === 200) {
-                        axios.post(API_ADDRESS.exam.sendAnswers, {exam_user_id, questions: failedAnswersArray})
-                        failedAnswersArray.length = 0
+
+            if (!socket) {
+
+                data = axios.post(API_ADDRESS.exam.sendAnswers, {exam_user_id, questions: answerArray})
+                    .then(function (response) {
+                        if (failedAnswersArray.length > 0 && response.status === 200) {
+                            axios.post(API_ADDRESS.exam.sendAnswers, {exam_user_id, questions: failedAnswersArray})
+                            failedAnswersArray.length = 0
+                        }
+                        if (callback) {
+                            callback(response)
+                        }
+                    })
+            } else {
+                socket.timeout(10000).emit('question.answer:save', {exam_user_id, questions: answerArray}, (response, err) => {
+                    if (!err || err.error) {
+                        data = axios.post(API_ADDRESS.exam.sendAnswers, {exam_user_id, questions: answerArray})
+                    } else {
+                        if (failedAnswersArray.length > 0) {
+                            socket.timeout(10000).emit('question.answer:save', {exam_user_id, questions: failedAnswersArray}, (response, err) => {
+                                if (!err || err.error) {
+                                    data = axios.post(API_ADDRESS.exam.sendAnswers, {exam_user_id, questions: failedAnswersArray})
+                                        .then(function () {
+                                            failedAnswersArray.length = 0
+                                        })
+                                } else {
+                                    failedAnswersArray.length = 0
+                                }
+                            })
+                        }
                     }
                     if (callback) {
                         callback(response)
                     }
                 })
+            }
         }
         if (type === 'bookmark') {
             let failedBookmarksArray = dataToSendObject.failedBookmarksArray.filter( item => item.bookmarked)

@@ -219,7 +219,7 @@ export default {
       })
     }
 
-    Time.synchronizeTime()
+    // Time.synchronizeTime()
     this.$store.commit('AppLayout/updateAppBarAndDrawer', true)
   },
   methods: {

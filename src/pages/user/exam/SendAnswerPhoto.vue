@@ -1,138 +1,150 @@
 <template>
   <v-dialog
-    v-model="dialogStatus"
-    fullscreen
-    transition="dialog-bottom-transition"
-    class="text-center"
+      v-model="dialogStatus"
+      fullscreen
+      transition="dialog-bottom-transition"
+      class="text-center"
   >
     <v-card class="text-center">
       <v-toolbar
-        dark
-        color="#ffc107"
+          dark
+          color="#ffc107"
       >
         <v-btn
-          icon
-          dark
-          @click="closeDialog"
+            icon
+            dark
+            @click="closeDialog"
         >
           <v-icon>mdi-close</v-icon>
         </v-btn>
         <v-toolbar-title>ارسال تصویر پاسخنامه</v-toolbar-title>
-        <v-spacer />
+        <v-spacer/>
       </v-toolbar>
-      <v-row class="justify-center">
-        <v-col cols="8">
-          <v-card
-            class="mt-10 text-center"
-          >
-            <v-row>
-              <file-upload
-                ref="answerImages"
-                v-model="answerFiles"
-                class="ma-5 col-6 text-right"
-                input-id="answerImages"
-                :extensions="extensions"
-                :accept="accept"
-                :multiple="false"
-                :directory="directory"
-                :create-directory="createDirectory"
-                :size="size || 0"
-                :thread="thread < 1 ? 1 : (thread > 5 ? 5 : thread)"
-                :data="data"
-                :drop="drop"
-                :drop-directory="dropDirectory"
-                :add-index="addIndex"
-                @input-filter="inputFilter"
-                @input-file="inputFile"
+      <v-container>
+        <v-row class="justify-center">
+          <v-col :md="8" cols="12">
+            <v-card
+                flat
+                class="mt-10 pt-5 text-center"
+            >
+
+              <v-alert
+                  color="cyan"
+                  border="left"
+                  elevation="2"
+                  colored-border
+                  class="text-right"
               >
-                <v-btn
-                  large
-                  dark
-                  color="#FF8F00"
+                {{ exam.title }}
+              </v-alert>
+
+              <v-row class="align-end ">
+                <v-col
+                    class="col-md-4 col-12 text-right"
                 >
-                  انتخاب عکس
-                </v-btn>
-              </file-upload>
-            </v-row>
-            <v-row>
-              <v-col
-                v-for="(file, index) in answerFiles"
-                :key="index"
-                class="mx-5 col-6 text-right"
-              >
-                <v-badge
-                    class="uploaded-image"
-                  color="transparent"
-                  overlap
-                >
-                  <template v-slot:badge>
+                  <file-upload
+                      ref="answerImages"
+                      v-model="answerFiles"
+                      input-id="answerImages"
+                      :extensions="extensions"
+                      :accept="accept"
+                      :multiple="false"
+                      :directory="directory"
+                      :create-directory="createDirectory"
+                      :size="size || 0"
+                      :thread="thread < 1 ? 1 : (thread > 5 ? 5 : thread)"
+                      :data="data"
+                      :drop="drop"
+                      :drop-directory="dropDirectory"
+                      :add-index="addIndex"
+                      @input-filter="inputFilter"
+                      @input-file="inputFile"
+                  >
                     <v-btn
-                      fab
-                      dark
-                      x-small
-                      color="error"
-                      class="btnRemoveFile"
-                      @click.prevent="removePhoto(file)"
+                        large
+                        dark
+                        color="#FF8F00"
                     >
-                      <v-icon dark>
-                        mdi-close
-                      </v-icon>
+                      {{ answerFiles.length > 0 ? 'تغییر عکس' : 'انتخاب عکس ' }}
                     </v-btn>
-                  </template>
-                  <v-img
-                    :src="file.thumb"
-                    :width="'100%'"
-                  />
-                </v-badge>
-              </v-col>
-              <!--              <v-col class="text-right">-->
-              <!--                <v-alert-->
-              <!--                  v-if="showUserAnswers"-->
-              <!--                  outlined-->
-              <!--                  type="warning"-->
-              <!--                  prominent-->
-              <!--                  border="left"-->
-              <!--                />-->
-              <!--              </v-col>-->
-              <v-col
-                v-if="answerFiles.length>0"
-                class="col-6 text-right"
-              >
-                <v-btn
-                  dark
-                  color="#1E88E5"
-                  class="mx-5"
-                  @click="sendAnswerImg"
+                  </file-upload>
+                </v-col>
+                <v-col
+                    v-for="(file, index) in answerFiles"
+                    :key="index"
+                    class="col-md-6 col-12 text-right"
                 >
-                  ارسال تصویر
-                </v-btn>
-                <v-btn
-                  dark
-                  color="#43A047"
-                  @click="confirmSendAllAnswerOfUser"
+                  <v-badge
+                      style="max-width: 100%;"
+                      class="uploaded-image"
+                      color="transparent"
+                      overlap
+                  >
+                    <template v-slot:badge>
+                      <v-btn
+                          fab
+                          dark
+                          x-small
+                          color="error"
+                          class="btnRemoveFile"
+                          @click.prevent="removePhoto(file)"
+                      >
+                        <v-icon dark>
+                          mdi-close
+                        </v-icon>
+                      </v-btn>
+                    </template>
+                    <v-img
+                        :src="file.thumb"
+                        :width="'100%'"
+                    />
+                  </v-badge>
+                </v-col>
+              </v-row>
+              <v-row>
+                <v-col
+                    v-if="answerFiles.length>0"
+                    class="col-6 text-right"
                 >
-                  تأیید نهایی
-                </v-btn>
-              </v-col>
-            </v-row>
-            <v-card-text>
-              <BubbleSheet
-                v-if="showUserAnswers"
-                :questions="questions"
-                :info="{ type: 'scanned-pasokh-barg' }"
-                :delay-time="0"
-                @clickChoice="choiceClicked"
-              />
-            </v-card-text>
-          </v-card>
-        </v-col>
-      </v-row>
+                  <v-btn
+                      v-if="!showUserAnswers"
+                      dark
+                      color="#1E88E5"
+                      outlined
+                      @click="sendAnswerImg"
+                  >
+                    ارسال تصویر
+                  </v-btn>
+                  <v-btn
+                      v-if="showUserAnswers"
+                      dark
+                      color="#43A047"
+                      outlined
+                      @click="confirmSendAllAnswerOfUser"
+                  >
+                    تأیید نهایی
+                  </v-btn>
+                </v-col>
+              </v-row>
+              <v-card-text>
+                <BubbleSheet
+                    v-if="showUserAnswers"
+                    :questions="questions"
+                    :info="{ type: 'scanned-pasokh-barg' }"
+                    :delay-time="0"
+                    @clickChoice="choiceClicked"
+                />
+              </v-card-text>
+            </v-card>
+          </v-col>
+        </v-row>
+      </v-container>
     </v-card>
     <v-overlay :value="loading">
       در حال پردازش
       <v-progress-circular
-        indeterminate
-        color="amber"
+          indeterminate
+          color="amber"
       />
     </v-overlay>
   </v-dialog>
@@ -142,34 +154,41 @@
 import FileUpload from 'vue-upload-component'
 import ImageCompressor from "@xkeshi/image-compressor";
 import BubbleSheet from '@/components/OnlineQuiz/Quiz/BubbleSheet/BubbleSheet'
-import { mixinQuiz} from "@/mixin/Mixins";
-import { Question } from '@/models/Question'
+import {mixinQuiz} from "@/mixin/Mixins";
+import {Question} from '@/models/Question'
 import {Exam} from "@/models/Exam";
- import API_ADDRESS from "@/api/Addresses";
- import axios from "axios";
+import API_ADDRESS from "@/api/Addresses";
+import axios from "axios";
 
 export default {
-  name: "SendAnswerPhoto",
+  name: 'SendAnswerPhoto',
   components: {
     FileUpload,
     BubbleSheet
   },
   mixins: [mixinQuiz],
-  props:{
-    exam:{
+  props: {
+    exam: {
       type: Exam,
-      default:() => new Exam()
+      default: () => new Exam()
     },
-    dialogStatus:{
+    dialogStatus: {
       type: Boolean,
       default: false
     },
   },
-  data:()=>({
+  watch: {
+    dialogStatus (newVal) {
+      if (!newVal) {
+        this.closeDialog()
+      }
+    }
+  },
+  data: () => ({
     hasPhoto: false,
-    loading:false,
+    loading: false,
     answerFiles: [],
-    showUserAnswers:false,
+    showUserAnswers: false,
     extensions: 'gif,jpg,jpeg,png,webp',
     accept: 'image/jpeg',
     size: 1024 * 1024 * 10,
@@ -180,26 +199,25 @@ export default {
     createDirectory: false,
     addIndex: false,
     data: {},
-    imgTest:{},
-    questions:[]
+    imgTest: {},
+    questions: []
 
   }),
   mounted() {
-    this.loadQuestions()
   },
-  methods:{
-    removePhoto(file){
-      this.showUserAnswers=false
-      this.$refs.answerImages.remove(file)
+  methods: {
+    removePhoto() {
+      this.showUserAnswers = false
+      // this.$refs.answerImages.remove(file)
+      this.$refs.answerImages.clear()
     },
-    loadQuestions () {
+    choiceClicked() {
+      console.log('this.$refs.answerImages', this.$refs.answerImages)
     },
-   choiceClicked(){
-
-   },
-    closeDialog(){
-      this.questions= []
-      this.$emit("closeDialog");
+    closeDialog() {
+      this.questions = []
+      this.removePhoto()
+      this.$emit('closeDialog');
     },
     inputFilter(newFile, oldFile, prevent) {
       if (newFile && !oldFile) {
@@ -218,10 +236,10 @@ export default {
           })
           imageCompressor.compress(newFile.file)
               .then((file) => {
-                this.$refs.answerImages.update(newFile, { error: '', file, size: file.size, type: file.type })
+                this.$refs.answerImages.update(newFile, {error: '', file, size: file.size, type: file.type})
               })
               .catch((err) => {
-                this.$refs.answerImages.update(newFile, { error: err.message || 'compress' })
+                this.$refs.answerImages.update(newFile, {error: err.message || 'compress'})
               })
         }
       }
@@ -244,8 +262,7 @@ export default {
           this.$refs.answerImages.update(newFile, {error: '', height: img.height, width: img.width})
         }
         img.οnerrοr = (e) => {
-          console.log('e', e)
-          this.$refs.answerImages.update(newFile, { error: 'parsing image size'})
+          this.$refs.answerImages.update(newFile, {error: 'parsing image size'})
         }
         img.src = newFile.blob
       }
@@ -257,76 +274,82 @@ export default {
           // beforeSend
           // min size
           if (newFile.size >= 0 && this.minSize > 0 && newFile.size < this.minSize) {
-            this.$refs.answerImages.update(newFile, { error: 'size' })
+            this.$refs.answerImages.update(newFile, {error: 'size'})
           }
         }
       }
     },
     confirmSendAllAnswerOfUser() {
       let answers = this.getUserAnswers(this.exam.id)
-      console.log('answers before', answers)
-      answers = answers.map( answer => {
+      answers = answers.map(answer => {
         return {
           q_n: answer.question_id,
           c_n: answer.choice_id
         }
       })
       this.sendAnswers(answers)
-      console.log('answers after', answers)
     },
-    sendAnswers(answers){
-      //TODO invalid data
-      axios.post(API_ADDRESS.exam.sendAnswersAfterExam , {
+    sendAnswers(answers) {
+      this.loading = true
+      axios.post(API_ADDRESS.exam.sendScannedAnswers, {
         exam_user_id: this.exam.user_exam_id,
-        questions:answers
+        questions: answers
       })
+          .then(() => {
+            this.$notify({
+              group: 'notifs',
+              title: 'توجه!',
+              text: 'پاسخنامه شما با موفقیت ثبت شد.',
+              type: 'success'
+            })
+            this.loading = false
+            this.closeDialog()
+          })
+          .catch(() => {
+            this.loading = false
+          })
     },
-    sendPhoto(){
+    sendPhoto() {
       let formData = new FormData()
-      formData.append('image',this.answerFiles[0].file)
+      formData.append('image', this.answerFiles[0].file)
       return axios.post(API_ADDRESS.exam.sendAnswerSheetPhoto, formData)
     },
-    showBubbleSheet(bubbleSheetResponse){
+    showBubbleSheet(bubbleSheetResponse) {
+      this.loadExamData()
+      this.reloadQuestions(bubbleSheetResponse)
+      this.reloadUserExamData(bubbleSheetResponse)
+      this.showUserAnswers = true
+    },
+    loadExamData() {
       this.bubbleSheetDialogExam = new Exam(this.exam)
       this.$store.commit('updateQuiz', this.bubbleSheetDialogExam)
-      for (let i = 0; i < bubbleSheetResponse.length; i++) {
-        this.questions.push(new Question({
-          id: bubbleSheetResponse[i].q_n,
-          has_warning: (typeof bubbleSheetResponse[i].c_n[1] !== 'undefined')
-        }))
-      }
-
+    },
+    reloadUserExamData(bubbleSheetResponse) {
       const userAnswerResponse = this.convertBubbleSheetResponseToUserAnswerResponse(this.bubbleSheetDialogExam.user_exam_id, bubbleSheetResponse)
-
-      console.log('userAnswerResponse', userAnswerResponse)
       this.$store.commit('clearExamData', this.bubbleSheetDialogExam.id)
       this.$store.commit('mergeDbAnswersIntoLocalstorage', {
         dbAnswers: userAnswerResponse,
         exam_id: this.bubbleSheetDialogExam.id
       })
-      this.showUserAnswers = true
     },
-    async sendAnswerImg(){
-      // this.$store.commit('AppLayout/updateOverlay', {show: true, loading: true, text: 'در حال پردازش'})
+    reloadQuestions(bubbleSheetResponse) {
+      this.questions = []
+      const bubbleSheetResponseLength = bubbleSheetResponse.length
+      for (let i = 0; i < bubbleSheetResponseLength; i++) {
+        this.questions.push(new Question({
+          id: bubbleSheetResponse[i].q_n,
+          has_warning: (typeof bubbleSheetResponse[i].c_n[1] !== 'undefined')
+        }))
+      }
+    },
+    async sendAnswerImg() {
       this.loading = true
       try {
-        const response  = await this.sendPhoto()
-        this.showBubbleSheet(response)
+        const response = await this.sendPhoto()
+        this.showBubbleSheet(response.data.data)
         this.loading = false
-      }catch (e) {
+      } catch (e) {
         this.loading = false
-        let counter = 2
-        let fakeData =[{  q_n: 1, c_n:[1,3]}]
-        while (counter <= 100) {
-          fakeData.push(
-              {
-                q_n: counter,
-                c_n:[3]
-              }
-          )
-          counter++
-        }
-        this.showBubbleSheet(fakeData)
       }
     }
   }
@@ -336,6 +359,6 @@ export default {
 
 <style scoped>
 .uploaded-image {
-  width: 100%;
+  width: 300px;
 }
 </style>
