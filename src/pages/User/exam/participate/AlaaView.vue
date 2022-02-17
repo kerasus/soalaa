@@ -171,8 +171,7 @@ export default {
     }
   },
   mounted () {
-    const that = this
-    that.$store.commit('loading/overlay', { loading: false, message: '' })
+    this.updateOverlay(true)
     this.showAppBar()
     this.updateDrawerBasedOnWindowSize()
     this.startExamProcess()
@@ -181,25 +180,23 @@ export default {
     this.changeAppBarAndDrawer(false)
   },
   methods: {
-
-    async startExamProcess () {
-      try {
-        await this.startExam(this.$route.params.quizId, 'onlineQuiz.alaaView')
-        this.isRtl = !this.isLtrString(this.currentQuestion.statement)
-        this.updateOverlay()
-        this.setSocket(this.$store.getters['Auth/accessToken'], this.quiz.id)
-      } catch (err) {
-        Assistant.reportErrors(err)
-        this.$q.notify({
-          type: 'negative',
-          message: 'مشکلی در دریافت اطلاعات آزمون رخ داده است. لطفا دوباره امتحان کنید.',
-          position: 'top'
+    startExamProcess () {
+      this.startExam(this.$route.params.quizId, 'onlineQuiz.alaaView')
+        .then(() => {
+          this.isRtl = !this.isLtrString(this.currentQuestion.statement)
+          this.setSocket(this.$store.getters['Auth/accessToken'], this.quiz.id)
+          if (!this.getCurrentExamQuestionsInArray().length) {
+            this.$router.push({ name: 'user.exam.list' })
+          }
+          this.updateOverlay(false)
+        }).catch((err) => {
+          Assistant.reportErrors(err)
+          this.$router.push({ name: 'user.exam.list' })
+          this.updateOverlay(false)
         })
-        await this.$router.push({ name: 'user.exam.list' })
-      }
     },
-    updateOverlay () {
-      this.$store.dispatch('loading/overlayLoading', false)
+    updateOverlay (value) {
+      this.$store.dispatch('loading/overlayLoading', value)
     },
     redirect () {
       this.$router.push({
