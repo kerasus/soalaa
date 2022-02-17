@@ -249,22 +249,18 @@ export default {
   background-color: #f1f1f1;
   display: flex;
   flex-direction: row;
-  padding: 60px 100px 0 76px;
-  margin-bottom: 24px;
+  padding: 60px 100px 24px 76px;
   @media screen and (max-width: 1439px){
-    padding: 30px 30px 0 0;
+    padding: 30px 30px 24px 0;
   }
   @media screen and (max-width: 1023px){
-    padding: 20px 30px 0 30px !important;
-    margin-bottom: 18px;
+    padding: 20px 30px 18px 30px !important;
   }
   @media screen and (max-width: 599px){
-    padding: 20px 30px 0 20px;
-    margin-bottom: 20px;
+    padding: 20px 30px 20px 20px;
   }
   @media screen and (max-width: 349px){
-    padding: 24px 16px 0 16px !important;
-    margin-bottom: 14px;
+    padding: 24px 16px 14px 16px !important;
     :nth-child(1) { order: 1; }
     :nth-child(2) { order: 3; }
     :nth-child(3) { order: 2; }
