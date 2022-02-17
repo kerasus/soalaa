@@ -17,21 +17,38 @@
             <v-card-text> لطفا انتخاب کنید که سوال را به کدام روش ثبت می کنید.</v-card-text>
             <v-card-actions>
               <v-spacer />
-              <v-btn
-                color="amber lighten-1"
-                text
-                @click="setQuestionTypeText"
-              >
-                تایپ سوال
-              </v-btn>
-              <v-spacer class="mx-10" />
-              <v-btn
-                color="amber lighten-1"
-                text
-                @click="setQuestionTypeImage"
-              >
-                آپلود فایل
-              </v-btn>
+              <v-col cols="12">
+                <v-col cols="12">
+                  <v-btn
+                    color="amber lighten-1"
+                    text
+                    width="100%"
+                    @click="setQuestionTypeText"
+                  >
+                    تایپ سوال
+                  </v-btn>
+                </v-col>
+                <v-col cols="12">
+                  <v-btn
+                    color="amber lighten-1"
+                    text
+                    width="100%"
+                    @click="setMBTIQuestionType"
+                  >
+                    تایپ سوال MBTI
+                  </v-btn>
+                </v-col>
+                <v-col cols="12">
+                  <v-btn
+                    color="amber lighten-1"
+                    text
+                    width="100%"
+                    @click="setQuestionTypeImage"
+                  >
+                    آپلود فایل
+                  </v-btn>
+                </v-col>
+              </v-col>
             </v-card-actions>
           </v-card>
         </v-dialog>
@@ -814,12 +831,19 @@ export default {
       this.checkNavbarVisibilityOnCreatPage()
     },
 
+    setMBTIQuestionType() {
+      this.dialog = false
+      this.goToMBTIPage()
+    },
+
     setQuestionTypeImage() {
       this.questionType = 'typeImage'
       this.dialog = false
       this.checkNavbarVisibilityOnCreatPage()
     },
-
+    goToMBTIPage(){
+      this.$router.push({name: 'question.mbti.create'})
+    },
     setInsertedQuestions() {  //یاس
       if (this.$refs.qlayout.getContent() === false) {
         return
