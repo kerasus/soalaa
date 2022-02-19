@@ -1,35 +1,179 @@
 <template>
   <q-layout>
-    <q-page>
-      <q-tree
-        :nodes="simple"
-        node-key="uid"
-        label-key="name"
-        @lazy-load="onLazyLoadTree"
-      />
-    </q-page>
-  </q-layout>
+  <q-page>
+    <q-tree
+      :nodes="simple"
+      node-key="uid"
+      ref="tree"
+      label-key="name"
+      @lazy-load="onLazyLoadTree"
 
+    >
+      <template v-slot:default-header="prop">
+        <!--        <q-icon :name="prop.node.icon"></q-icon>-->
+        {{ prop.node.name }}
+        <q-icon  @click.stop @keypress.stop class="edit-btn" name="edit" @click="openEditMenu(prop.node)" />
+      </template>
+    </q-tree>
+    <q-dialog v-model="editDialog" persistent>
+      <q-card class="q-pa-md">
+        <q-btn flat icon="close" color="red" v-close-popup @click="editDialog = false"/>
+        <q-tabs
+          v-model="tab"
+          narrow-indicator
+          dense
+          align="justify"
+        >
+          <q-tab class="text-purple" name="edit" icon="edit" label="ویرایش" />
+          <q-tab class="text-orange" name="addNew" icon="add" label="اضافه کردن گره جدید" />
+          <q-tab class="text-red" name="delete" icon="delete" label="حذف" />
+        </q-tabs>
+        <q-tab-panels v-model="tab" animated>
+          <q-tab-panel name="edit">
+            <q-input
+              filled
+              v-model="newName"
+              label="نام جدید"
+              lazy-rules
+              :rules="[ val => val && val.length > 0 || 'Please type something']"
+            />
+            <q-btn
+              text
+              color="green"
+              :loading="loading"
+              @click="saveClicked()"
+            >
+              ثبت
+            </q-btn>
+          </q-tab-panel>
+
+          <q-tab-panel name="addNew">
+            <q-input
+              filled
+              v-model="newName"
+              label="نام جدید"
+              lazy-rules
+              :rules="[ val => val && val.length > 0 || 'Please type something']"
+            />
+            <q-btn
+              text
+              color="green"
+              :loading="loading"
+              @click="addClicked()"
+            >
+              اضافه شود
+            </q-btn>
+          </q-tab-panel>
+          <q-tab-panel name="delete">
+            <div class="text-subtitle1">آیا از حذف گرۀ " {{ selectedNode.name }}" اطمینان دارید؟</div>
+            <q-btn
+              color="red"
+              :loading="loading"
+              @click="deleteNode"
+              class="q-mt-md"
+            >
+              حذف
+            </q-btn>
+          </q-tab-panel>
+        </q-tab-panels>
+      </q-card>
+    </q-dialog>
+  </q-page>
+  </q-layout>
 </template>
 
 <script>
+import { defineComponent } from 'vue'
 import MontaData from 'assets/MontaData'
-export default {
-  name: 'index',
-  data: () => ({
-    simple: []
-  }),
+
+export default defineComponent({
+  name: 'PageIndex',
   created () {
     this.changeTreeDate()
   },
+  data: () => {
+    return {
+      simple: [],
+      tab: 'edit',
+      loading: false,
+      vModelSelected: [],
+      newName: '',
+      selectedNode: {},
+      editDialog: false
+    }
+  },
   methods: {
-    changeTreeDate () {
+    openEditMenu (node) {
+      this.newName = ''
+      this.selectedNode = {
+        uid: node.uid,
+        name: node.name
+      }
+      this.editDialog = true
+    },
+    async deleteNode () {
+      const nodeUid = this.selectedNode.uid
+      const arr = nodeUid.split('-')
+      await arr.pop()
+      if (arr.length > 0) {
+        const parentUid = arr.join('-')
+        const getParentNode = await this.$refs.tree.getNodeByKey(parentUid)
+        console.log('main', this.simple, nodeUid)
+        console.log('parentUid :', parentUid)
+        console.log('nodeUid :', nodeUid)
+        console.log('getParentNode :', getParentNode)
+        if (getParentNode) {
+          getParentNode.children = getParentNode.children.filter(node => node.uid !== nodeUid)
+        }
+        this.editDialog = false
+      } else {
+        console.log(this.simple, nodeUid)
+        this.simple.filter(node => node.uid !== nodeUid)
+      }
+      this.editDialog = false
+    },
+    async addClicked () {
+      const uid = this.selectedNode.uid
+      const getNode = this.$refs.tree.getNodeByKey(uid)
+      // console.log('get node :', getNode)
+      const arr = uid.split(':')
+      await arr.pop()
+      const newId = Date.now()
+      arr.push(newId)
+      const newUid = arr.join(':')
+      await getNode.children.unshift({
+        id: newId,
+        uid: newUid,
+        type: 'level',
+        icon: 'school',
+        name: this.newName,
+        children: []
+      })
+      this.editDialog = false
+    },
+    async saveClicked () {
+      this.loading = true
+      await this.fakeReq()
+      const node = this.$refs.tree.getNodeByKey(this.selectedNode.uid)
+      node.name = this.newName
+      this.loading = false
+      this.editDialog = false
+    },
+    fakeReq () {
+      return new Promise(resolve => {
+        setTimeout(() => {
+          resolve()
+        }, 2000)
+      })
+    },
+    async changeTreeDate () {
       this.simple = []
       // level -> grade -> major -> moduleGroup -> subModuleGroup -> module -> topic
-      this.setLevel(this.simple)
-      this.setGrade()
-      this.setMajor()
-      this.setModule()
+      await this.setLevel(this.simple)
+      await this.setGrade()
+      await this.setMajor()
+      await this.setModule()
+      console.log('finish')
       // this.setAllTopics()
     },
     setLevel (levelLevel) {
@@ -275,11 +419,13 @@ export default {
     getTopicList (moduleId) {
       return MontaData.topic.filter(item => item.moduleId === moduleId)
     },
-    getTreeFromTopicList (topicList) {
+    getTreeFromTopicList (topicList, parentUid) {
       const tree = []
+      // console.log('topicList getTreeFromTopicList:',topicList)
       topicList.forEach((topic, topicIndex) => {
         if (!topic.parentTopicId) {
-          topic.uid = 'topic:' + topic.id
+          // console.log('!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1')
+          topic.uid = parentUid + '-' + 'topic:' + topic.id
           topic.type = 'topic'
           topic.children = []
           tree.push(topic)
@@ -291,12 +437,13 @@ export default {
       return tree
     },
     addTopicToParent (tree, childTopic) {
+      // console.log('addTopicToParent *************************************8', tree)
       tree.forEach(topicNode => {
         if (topicNode.id === childTopic.parentTopicId) {
           if (!topicNode.children) {
             topicNode.children = []
           }
-          childTopic.uid = 'topic:' + childTopic.id
+          childTopic.uid = topicNode.uid + '-' + 'topic:' + childTopic.id
           childTopic.type = 'topic'
           childTopic.children = []
           topicNode.children.push(childTopic)
@@ -313,14 +460,26 @@ export default {
       return false
     },
     onLazyLoadTree ({ node, key, done, fail }) {
+      // console.log('onLazyLoadTree node :', node)
       const topicList = this.getTopicList(node.id)
-      const tree = this.getTreeFromTopicList(topicList)
+      const tree = this.getTreeFromTopicList(topicList, node.uid)
       done(tree)
     }
   }
-}
+})
 </script>
+<style scoped lang="scss">
+.edit-btn{
+  color: transparent;
+  &:hover{
+    color: #f18305;
+  }
+}
+.active {
+  display: block;
+}
 
-<style scoped>
-
+.hide {
+  display: none;
+}
 </style>
