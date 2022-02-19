@@ -102,6 +102,7 @@ import BubbleSheet from 'src/components/OnlineQuiz/Quiz/bubbleSheet/bubbleSheet'
 import { Exam } from 'src/models/Exam'
 import Assistant from 'src/plugins/assistant'
 import TopMenu from 'src/components/Menu/topMenu/onlineQuizTopMenu'
+
 export default {
   name: 'konkoorView',
   components: {
@@ -135,53 +136,20 @@ export default {
     // }
   },
   created () {
-    this.updateWindowSize()
     this.getUser()
-
-    const that = this
-    this.startExam(this.$route.params.quizId, 'onlineQuiz.KonkoorView')
-      .then(() => {
-        if (!this.questions.length) {
-          this.questions = this.getCurrentExamQuestionsInArray()
-        }
-        // that.loadFirstActiveQuestionIfNeed()
-        that.$store.commit('loading/overlay', { loading: false, message: '' })
-        const callbacks = {
-          'question.file-link:update': {
-            afterReload () {
-              that.questions = that.getCurrentExamQuestionsInArray()
-            }
-          }
-        }
-        that.setSocket(that.$store.getters['Auth/accessToken'], that.quiz.id, callbacks)
-      })
-      .catch((error) => {
-        Assistant.reportErrors(error)
-        console.log('error :', error)
-        that.$q.notify({
-          message: 'مشکلی در دریافت اطلاعات آزمون رخ داده است. لطفا دوباره امتحان کنید.',
-          type: 'negative',
-          position: 'top'
-        })
-        // ToDo: uncomment
-        // that.$router.push({ name: 'user.exam.list'})
-      })
-
-    if (this.windowSize.x > 959) {
-      this.changeAppBarAndDrawer(false)
-    } else {
-      this.$router.push({
-        name: 'onlineQuiz.alaaView',
-        params: { quizId: this.$route.params.quizId, questNumber: 1 }
-      })
-    }
+    this.updateWindowSize()
+    this.startExamProcess()
   },
+  // TODO => check store updateAppBarAndDrawer
   mounted () {
-    // this.setHeights()
-    // if (this.currentQuestion.id === null) {
-    //   this.loadFirstQuestion()
-    // }
-    // this.scrollTo(this.currentQuestion.id)
+    this.setHeights()
+    if (this.currentQuestion) {
+      if (this.currentQuestion.id) {
+        this.scrollTo(this.currentQuestion.id)
+      } else {
+        this.loadFirstQuestion()
+      }
+    }
     // this.changeAppBarAndDrawer(false)
   },
   unmounted () {
@@ -191,6 +159,35 @@ export default {
     getUser () {
       this.user = this.$store.getters['Auth/user']
       return this.user
+    },
+    startExamProcess () {
+      const that = this
+      this.startExam(this.$route.params.quizId, 'onlineQuiz.KonkoorView')
+        .then(() => {
+          if (!this.questions.length) {
+            that.$router.push({ name: 'user.exam.list' })
+          }
+          // that.loadFirstActiveQuestionIfNeed()
+          that.$store.dispatch('loading/overlayLoading', { loading: false, message: '' })
+          const callbacks = {
+            'question.file-link:update': {
+              afterReload () {
+                that.questions = that.getCurrentExamQuestionsInArray()
+              }
+            }
+          }
+          that.setSocket(that.$store.getters['Auth/accessToken'], that.quiz.id, callbacks)
+        })
+        .catch((error) => {
+          Assistant.reportErrors(error)
+          console.log('error :', error)
+          that.$q.notify({
+            message: 'مشکلی در دریافت اطلاعات آزمون رخ داده است. لطفا دوباره امتحان کنید.',
+            type: 'negative',
+            position: 'top'
+          })
+          that.$router.push({ name: 'user.exam.list' })
+        })
     },
     timerOpen (value) {
       this.timerIsOpen = value
@@ -315,6 +312,17 @@ export default {
       this.scrollTo(questionId)
       this.changeQuestion(questionId)
     },
+    // TODO => check store updateAppBarAndDrawer
+    view () {
+      if (this.windowSize.x > 959) {
+        this.changeAppBarAndDrawer(false)
+      } else {
+        this.$router.push({
+          name: 'onlineQuiz.alaaView',
+          params: { quizId: this.$route.params.quizId, questNumber: 1 }
+        })
+      }
+    },
     setHeights () {
       this.$refs.questionsColumn.style.height = this.windowSize.y + 'px'
       if (this.$refs.scroller.$el) {
@@ -327,49 +335,58 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.konkoor-view{
+.konkoor-view {
   height: 100%;
   min-height: 100vh;
-  background-color: rgb(244,244,244);
-  .right-side{
+  background-color: rgb(244, 244, 244);
+
+  .right-side {
     height: 100%;
     min-height: 100vh;
     display: flex;
     flex-direction: column;
     position: relative;
     padding: 0;
-    .konkoor-view-scroll{
+
+    .konkoor-view-scroll {
       height: 100vh;
       max-height: 100%;
-      .question-field{
-        &.q-item{
+
+      .question-field {
+        &.q-item {
           padding: 0;
         }
       }
     }
   }
-  .left-side{
+
+  .left-side {
     display: flex;
     flex-direction: column;
     overflow-y: auto;
-    .bubbleSheet-top{
+
+    .bubbleSheet-top {
       display: flex;
       justify-content: space-between;
       padding: 0 40px;
-      .dropdown-button{
+
+      .dropdown-button {
         padding: 0;
         direction: rtl;
       }
     }
-    .bubbleSheet-bottom{
+
+    .bubbleSheet-bottom {
       padding: 12px;
     }
   }
+
   .timer-row {
     width: calc(58% - 150px);
     position: fixed;
     bottom: 0;
     right: 100px;
+
     .end-exam-btn {
       position: absolute;
       bottom: 0;
@@ -382,6 +399,7 @@ export default {
       width: 200px;
       border-radius: 20px 20px 0 0;
     }
+
     .high-z-index {
       z-index: 3;
     }
@@ -389,17 +407,19 @@ export default {
 }
 </style>
 <style lang="scss">
-.konkoor-view{
-  .left-side{
-    .bubbleSheet-top{
-      .dropdown-button{
-          .q-icon{
-            font-size: 30px;
-            &.on-left{
-              margin: 0 0 0 8px;
-            }
+.konkoor-view {
+  .left-side {
+    .bubbleSheet-top {
+      .dropdown-button {
+        .q-icon {
+          font-size: 30px;
+
+          &.on-left {
+            margin: 0 0 0 8px;
           }
+        }
       }
+
       .q-btn--fab-mini {
         padding: 0;
         height: 36px;

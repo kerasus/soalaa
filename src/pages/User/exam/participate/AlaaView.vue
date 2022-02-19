@@ -171,33 +171,32 @@ export default {
     }
   },
   mounted () {
-    const that = this
-    that.$store.dispatch('loading/overlayLoading', true)
+    this.updateOverlay(true)
     this.showAppBar()
     this.updateDrawerBasedOnWindowSize()
-    this.startExam(this.$route.params.quizId, 'onlineQuiz.alaaView')
-      .then(() => {
-        that.isRtl = !that.isLtrString(that.currentQuestion.statement)
-        that.updateOverlay()
-        that.setSocket(that.$store.getters['Auth/accessToken'], that.quiz.id)
-      })
-      .catch((error) => {
-        Assistant.reportErrors(error)
-        that.$q.notify({
-          group: 'notifs',
-          title: 'توجه!',
-          text: 'مشکلی در دریافت اطلاعات آژمون رخ داده است. لطفا دوباره امتحان کنید.',
-          type: 'error'
-        })
-        that.$router.push({ name: 'user.exam.list' })
-      })
+    this.startExamProcess()
   },
   unmounted () {
     this.changeAppBarAndDrawer(false)
   },
   methods: {
-    updateOverlay () {
-      this.$store.dispatch('loading/overlayLoading', false)
+    startExamProcess () {
+      this.startExam(this.$route.params.quizId, 'onlineQuiz.alaaView')
+        .then(() => {
+          this.isRtl = !this.isLtrString(this.currentQuestion.statement)
+          this.setSocket(this.$store.getters['Auth/accessToken'], this.quiz.id)
+          if (!this.getCurrentExamQuestionsInArray().length) {
+            this.$router.push({ name: 'user.exam.list' })
+          }
+          this.updateOverlay(false)
+        }).catch((err) => {
+          Assistant.reportErrors(err)
+          this.$router.push({ name: 'user.exam.list' })
+          this.updateOverlay(false)
+        })
+    },
+    updateOverlay (value) {
+      this.$store.dispatch('loading/overlayLoading', value)
     },
     redirect () {
       this.$router.push({
