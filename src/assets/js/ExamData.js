@@ -5,6 +5,7 @@ import { Exam } from 'src/models/Exam'
 import { QuestionList } from 'src/models/Question'
 import { QuestCategoryList } from 'src/models/QuestCategory'
 import { QuestSubcategoryList } from 'src/models/QuestSubcategory'
+// import Router from 'src/router/index'
 
 class ShuffleQuestions {
   constructor (questionList) {
@@ -101,6 +102,7 @@ class ExamData {
         })
         .catch(error => {
           console.log('error', error)
+          // Router().push({ name: 'user.exam.list' })
           reject(error)
         })
     })
