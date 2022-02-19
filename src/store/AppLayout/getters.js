@@ -90,6 +90,10 @@ export function layoutHeaderNavTabsModel (state) {
   return state.layoutHeaderNavTabsModel
 }
 
+export function layoutHeaderCustomClass (state) {
+  return state.headerCustomClass
+}
+
 export function layoutLeftDrawer (state) {
   return state.layoutLeftDrawer
 }
@@ -112,6 +116,10 @@ export function layoutLeftDrawerElevated (state) {
 
 export function layoutLeftDrawerBordered (state) {
   return state.layoutLeftDrawerBordered
+}
+
+export function layoutLeftDrawerCustomClass (state) {
+  return state.leftDrawerCustomClass
 }
 
 export function layoutRightDrawer (state) {
@@ -138,6 +146,10 @@ export function layoutRightDrawerBordered (state) {
   return state.layoutRightDrawerBordered
 }
 
+export function layoutRightDrawerCustomClass (state) {
+  return state.rightDrawerCustomClass
+}
+
 export function layoutFooter (state) {
   return state.layoutFooter
 }
@@ -156,4 +168,8 @@ export function layoutFooterElevated (state) {
 
 export function layoutFooterBordered (state) {
   return state.layoutFooterBordered
+}
+
+export function layoutFooterCustomClass (state) {
+  return state.footerCustomClass
 }
