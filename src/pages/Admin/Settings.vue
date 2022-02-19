@@ -229,10 +229,10 @@
 
           <q-step name="play" title="Play with Layout" :icon="mdiPlayCircleOutline">
             <div class="column">
-              <q-toggle v-model="play.header" label="Visible Header" />
-              <q-toggle v-model="play.footer" label="Visible Footer" />
-              <q-toggle v-model="play.left" label="Visible left-side Drawer" />
-              <q-toggle v-model="play.right" label="Visible right-side Drawer" />
+              <q-toggle v-model="play.header" :disable="!pick.header" label="Visible Header" />
+              <q-toggle v-model="play.footer" :disable="!pick.footer" label="Visible Footer" />
+              <q-toggle v-model="play.left" :disable="!pick.left" label="Visible left-side Drawer" />
+              <q-toggle v-model="play.right" :disable="!pick.right" label="Visible right-side Drawer" />
               <q-toggle v-model="play.scroll" label="Inject Drawer content for scrolling" />
             </div>
           </q-step>
@@ -310,69 +310,12 @@ function getMeta (title, desc) {
 export default {
   name: 'Settings',
   created () {
-    this.mdiMenu = mdiMenu
-    this.mdiViewDashboard = mdiViewDashboard
-    this.mdiCog = mdiCog
-    this.mdiPlayCircleOutline = mdiPlayCircleOutline
-    this.drawerBehaviorOptions = [
-      { label: 'Behave Normal', value: 'default' },
-      { label: 'Behave Mobile', value: 'mobile' },
-      { label: 'Behave Desktop', value: 'desktop' }
-    ]
-    this.sepOptions = [
-      { label: 'None', value: 'none' },
-      { label: 'Elevated', value: 'elevated' },
-      { label: 'Bordered', value: 'bordered' }
-    ]
-
-    this.pick.header = this.layoutHeader
-    this.play.header = this.layoutHeaderVisible
-    this.cfg.headerReveal = this.layoutHeaderReveal
-    if (this.cfg.headerSep === 'elevated') {
-      this.updateLayoutHeaderElevated(true)
-      this.updateLayoutHeaderBordered(false)
-    } else if (this.cfg.headerSep === 'bordered') {
-      this.updateLayoutHeaderElevated(false)
-      this.updateLayoutHeaderBordered(true)
-    }
-    this.pick.navtabs = this.layoutHeaderNavTabs
-    this.pick.left = this.layoutLeftDrawer
-    this.play.left = this.layoutLeftDrawerVisible
-    this.cfg.leftBehavior = this.layoutLeftDrawerBehavior
-    this.cfg.leftOverlay = this.layoutLeftDrawerOverlay
-    if (this.cfg.leftSep === 'elevated') {
-      this.updateLayoutLeftDrawerElevated(true)
-      this.updateLayoutLeftDrawerBordered(false)
-    } else if (this.cfg.leftSep === 'bordered') {
-      this.updateLayoutLeftDrawerElevated(false)
-      this.updateLayoutLeftDrawerBordered(true)
-    }
-    this.pick.right = this.layoutRightDrawer
-    this.play.right = this.layoutRightDrawerVisible
-    this.cfg.rightBehavior = this.layoutRightDrawerBehavior
-    this.cfg.rightOverlay = this.layoutRightDrawerOverlay
-    if (this.cfg.rightSep === 'elevated') {
-      this.updateLayoutRightDrawerElevated(true)
-      this.updateLayoutRightDrawerBordered(false)
-    } else if (this.cfg.rightSep === 'bordered') {
-      this.updateLayoutRightDrawerElevated(false)
-      this.updateLayoutRightDrawerBordered(true)
-    }
-    this.pick.footer = this.layoutFooter
-    this.play.footer = this.layoutFooterVisible
-    this.cfg.footerReveal = this.layoutFooterReveal
-    this.cfg.footerReveal = this.layoutFooterReveal
-    if (this.cfg.footerSep === 'elevated') {
-      this.updateLayoutFooterElevated(true)
-      this.updateLayoutFooterBordered(false)
-    } else if (this.cfg.footerSep === 'bordered') {
-      this.updateLayoutFooterElevated(false)
-      this.updateLayoutFooterBordered(true)
-    }
+    return this.onCreate
   },
   watch: {
     'pick.header': function (newValue) {
       this.updateLayoutHeader(newValue)
+      console.log('set', this.pick.header)
     },
     'play.header': function (newValue) {
       this.updateLayoutHeaderVisible(newValue)
@@ -451,6 +394,75 @@ export default {
         this.updateLayoutFooterElevated(false)
         this.updateLayoutFooterBordered(true)
       }
+    },
+    layoutView: function () {
+      return this.view
+    },
+    layoutHeader: function (newValue) {
+      this.pick.header = newValue
+    },
+    layoutHeaderVisible: function (newValue) {
+      this.play.header = newValue
+    },
+    layoutHeaderReveal: function (newValue) {
+      this.cfg.headerReveal = newValue
+    },
+    layoutHeaderElevated: function (newValue) {
+      this.cfg.headerSep = newValue
+    },
+    layoutHeaderBordered: function (newValue) {
+      this.cfg.headerSep = newValue
+    },
+    layoutLeftDrawer: function (newValue) {
+      this.pick.left = newValue
+    },
+    layoutLeftDrawerVisible: function (newValue) {
+      this.play.left = newValue
+    },
+    layoutLeftDrawerBehavior: function (newValue) {
+      this.cfg.leftBehavior = newValue
+    },
+    layoutLeftDrawerOverlay: function (newValue) {
+      this.cfg.leftOverlay = newValue
+    },
+    layoutLeftDrawerElevated: function (newValue) {
+      this.cfg.leftSep = newValue
+    },
+    layoutLeftDrawerBordered: function (newValue) {
+      this.cfg.leftSep = newValue
+    },
+    layoutRightDrawer: function (newValue) {
+      this.pick.right = newValue
+    },
+    layoutRightDrawerVisible: function (newValue) {
+      this.play.right = newValue
+    },
+    layoutRightDrawerBehavior: function (newValue) {
+      this.cfg.rightBehavior = newValue
+    },
+    layoutRightDrawerOverlay: function (newValue) {
+      this.cfg.rightOverlay = newValue
+    },
+    layoutRightDrawerElevated: function (newValue) {
+      this.cfg.rightSep = newValue
+    },
+    layoutRightDrawerBordered: function (newValue) {
+      this.cfg.rightSep = newValue
+    },
+    layoutFooter: function (newValue) {
+      this.pick.footer = newValue
+    },
+    layoutFooterVisible: function (newValue) {
+      this.play.footer = newValue
+    },
+    layoutFooterReveal: function (newValue) {
+      this.cfg.footerReveal = newValue
+    },
+    layoutFooterElevated: function (newValue) {
+      this.cfg.footerSep = newValue
+    },
+    layoutFooterBordered: function (newValue) {
+      this.cfg.footerSep = newValue
     }
   },
   methods: {
@@ -479,7 +491,68 @@ export default {
       'updateLayoutFooterReveal',
       'updateLayoutFooterElevated',
       'updateLayoutFooterBordered'
-    ])
+    ]),
+    initialData () {
+      this.mdiMenu = mdiMenu
+      this.mdiViewDashboard = mdiViewDashboard
+      this.mdiCog = mdiCog
+      this.mdiPlayCircleOutline = mdiPlayCircleOutline
+      this.drawerBehaviorOptions = [
+        { label: 'Behave Normal', value: 'default' },
+        { label: 'Behave Mobile', value: 'mobile' },
+        { label: 'Behave Desktop', value: 'desktop' }
+      ]
+      this.sepOptions = [
+        { label: 'None', value: 'none' },
+        { label: 'Elevated', value: 'elevated' },
+        { label: 'Bordered', value: 'bordered' }
+      ]
+
+      this.pick.header = this.layoutHeader
+      this.play.header = this.layoutHeaderVisible
+      this.cfg.headerReveal = this.layoutHeaderReveal
+      if (this.cfg.headerSep === 'elevated') {
+        this.updateLayoutHeaderElevated(true)
+        this.updateLayoutHeaderBordered(false)
+      } else if (this.cfg.headerSep === 'bordered') {
+        this.updateLayoutHeaderElevated(false)
+        this.updateLayoutHeaderBordered(true)
+      }
+      this.pick.navtabs = this.layoutHeaderNavTabs
+      this.pick.left = this.layoutLeftDrawer
+      this.play.left = this.layoutLeftDrawerVisible
+      this.cfg.leftBehavior = this.layoutLeftDrawerBehavior
+      this.cfg.leftOverlay = this.layoutLeftDrawerOverlay
+      if (this.cfg.leftSep === 'elevated') {
+        this.updateLayoutLeftDrawerElevated(true)
+        this.updateLayoutLeftDrawerBordered(false)
+      } else if (this.cfg.leftSep === 'bordered') {
+        this.updateLayoutLeftDrawerElevated(false)
+        this.updateLayoutLeftDrawerBordered(true)
+      }
+      this.pick.right = this.layoutRightDrawer
+      this.play.right = this.layoutRightDrawerVisible
+      this.cfg.rightBehavior = this.layoutRightDrawerBehavior
+      this.cfg.rightOverlay = this.layoutRightDrawerOverlay
+      if (this.cfg.rightSep === 'elevated') {
+        this.updateLayoutRightDrawerElevated(true)
+        this.updateLayoutRightDrawerBordered(false)
+      } else if (this.cfg.rightSep === 'bordered') {
+        this.updateLayoutRightDrawerElevated(false)
+        this.updateLayoutRightDrawerBordered(true)
+      }
+      this.pick.footer = this.layoutFooter
+      this.play.footer = this.layoutFooterVisible
+      this.cfg.footerReveal = this.layoutFooterReveal
+      this.cfg.footerReveal = this.layoutFooterReveal
+      if (this.cfg.footerSep === 'elevated') {
+        this.updateLayoutFooterElevated(true)
+        this.updateLayoutFooterBordered(false)
+      } else if (this.cfg.footerSep === 'bordered') {
+        this.updateLayoutFooterElevated(false)
+        this.updateLayoutFooterBordered(true)
+      }
+    }
   },
   meta: {
     title: 'Layout Builder',
@@ -490,7 +563,7 @@ export default {
   },
   data () {
     return {
-      topL: 'h',
+      topL: 'l',
       topC: 'H',
       topR: 'h',
       middleL: 'l',
@@ -502,7 +575,7 @@ export default {
       step: 'pick',
       exportDialog: false,
       pick: {
-        header: true,
+        header: null,
         footer: true,
         left: true,
         right: true,
@@ -510,15 +583,15 @@ export default {
       },
       cfg: {
         headerReveal: false,
-        headerSep: 'elevated',
+        headerSep: 'none',
         footerReveal: false,
-        footerSep: 'elevated',
+        footerSep: 'none',
         leftBehavior: 'default',
         leftOverlay: false,
-        leftSep: 'bordered',
+        leftSep: 'none',
         rightBehavior: 'default',
         rightOverlay: false,
-        rightSep: 'bordered'
+        rightSep: 'none'
       },
       play: {
         header: true,
@@ -564,18 +637,6 @@ export default {
         this.play.right === true &&
         this.cfg.rightOverlay === false
       )
-    },
-    bgTopL () {
-      return this.topL === 'h' ? 'bg-primary' : 'bg-orange'
-    },
-    bgTopR () {
-      return this.topR === 'h' ? 'bg-primary' : 'bg-orange'
-    },
-    bgBottomL () {
-      return this.bottomL === 'f' ? 'bg-grey-8' : 'bg-orange'
-    },
-    bgBottomR () {
-      return this.bottomR === 'f' ? 'bg-grey-8' : 'bg-orange'
     },
     view () {
       const
@@ -669,6 +730,9 @@ export default {
         }
         </${'script'}>`
       return code
+    },
+    onCreate () {
+      return this.initialData()
     }
   }
 }

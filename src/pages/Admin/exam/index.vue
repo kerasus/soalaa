@@ -184,15 +184,14 @@ export default {
         data: 'data',
         total: 'meta.total',
         currentPage: 'meta.current_page',
-        perPage: 'meta.per_page',
-        pageKey: 'meta.current_page'
+        perPage: 'meta.per_page'
       }
     }
   },
   created () {
-    if (this.tableKeys.currentPage) {
-      this.api = API_ADDRESS.exam.base(this.tableKeys.currentPage)
-    }
+    // if (this.tableKeys.currentPage) {
+    //   this.api = API_ADDRESS.exam.base(this.tableKeys.currentPage)
+    // }
   },
   methods: {
     showExam (id) {
@@ -271,6 +270,7 @@ export default {
         }
       })
     }
+
   }
 
 }

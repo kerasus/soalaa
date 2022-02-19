@@ -15,7 +15,6 @@ class QuestCategory extends Model {
         key: 'sub_categories',
         relatedModel: QuestSubcategoryList
       },
-      { key: 'order' },
       { key: 'time' },
       { key: 'questions_booklet' },
       { key: 'descriptive_answers_booklet' },
@@ -24,6 +23,29 @@ class QuestCategory extends Model {
         default: false
       }
     ])
+
+    const that = this
+    this.apiResource = {
+      fields: [
+        { key: 'id' },
+        { key: 'title' },
+        { key: 'accept_at' },
+        { key: 'is_active' },
+        { key: 'order' },
+        { key: 'time' },
+        { key: 'questions_booklet' },
+        { key: 'descriptive_answers_booklet' },
+        { key: 'editable' },
+        {
+          key: 'sub_categories',
+          value: function () {
+            return that.sub_categories.list.map(item => {
+              return item.loadApiResource()
+            })
+          }
+        }
+      ]
+    }
   }
 
   getSubcategories (subcategoryList) {

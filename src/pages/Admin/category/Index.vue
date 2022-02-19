@@ -85,14 +85,14 @@ export default {
         ],
         data: []
       },
-      inputs: [
-        // { type: 'input', name: 'id', value: null, label: 'شناسه', col: 'col-md-3' },
-        // { type: 'input', name: 'name', value: null, label: 'نام', col: 'col-md-3' },
-        // { type: 'select', name: 'gender', value: null, options: ['Male', 'Female'], label: 'جنسیت', col: 'col-md-3' },
-        // { type: 'select', name: 'status', value: null, options: [{label: 'بررسی اطلاعات', value: 'CHECKING'}, {label: 'هماهنگ شده', value: 'PLANNING'}, {label: 'درحال هماهنگی', value: 'SETTING_UP'}, {label: 'برگزار شده', value: 'HELD'}, {label: 'لغو شده', value: 'CANCELED'}], label: 'وضعیت', col: 'col-md-3' },
-        // { type: 'dateRange', name: 'created_at_range', value: [], label: 'بازه تاریخ عضویت', col: 'col-md-6' }
-      ]
+      inputs: []
     }
+  },
+  created () {
+    this.$axios.get(this.api)
+      .then(res => {
+        console.log(res)
+      })
   },
   methods: {
     getRemoveMessage (row) {

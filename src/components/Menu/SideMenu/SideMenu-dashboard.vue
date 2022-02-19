@@ -158,8 +158,8 @@ export default {
         {
           title: 'درخت دانش',
           icon: 'isax:tree',
-          path: '',
-          name: '',
+          path: '/knowledgeTree',
+          name: 'knowledgeTree',
           active: false,
           children: []
         },
@@ -190,8 +190,8 @@ export default {
         {
           title: 'تنظیمات',
           icon: 'isax:setting-2',
-          path: '',
-          name: '',
+          path: '/settings',
+          name: 'Admin.Settings',
           active: false,
           children: []
         },
