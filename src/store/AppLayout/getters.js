@@ -34,8 +34,12 @@ export function headerWithBackground (state) {
   return state.headerWithBackground
 }
 
-export function headerTitle (state) {
-  return state.headerTitle
+export function headerTitleName (state) {
+  return state.headerTitle.name
+}
+
+export function headerTitlePath (state) {
+  return state.headerTitle.path
 }
 
 export function headerShowTitle (state) {
