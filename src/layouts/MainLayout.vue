@@ -85,13 +85,13 @@ export default {
       properties: {
         layoutView: 'lHh Lpr lFf',
         layoutHeader: true,
+        layoutHeaderVisible: true,
         layoutHeaderReveal: false,
         layoutHeaderElevated: false,
         layoutHeaderBordered: false,
         layoutLeftDrawer: true,
-        leftDrawerOpen: false,
-        layoutLeftDrawerOverlay: false,
         layoutLeftDrawerVisible: true,
+        layoutLeftDrawerOverlay: false,
         layoutLeftDrawerElevated: false,
         layoutLeftDrawerBordered: false,
         leftDrawerWidth: 325,
@@ -115,12 +115,8 @@ export default {
     // eslint-disable-next-line vue/return-in-computed-property
     drawerSize () {
       if (this.windowSize > 1023) {
-        // eslint-disable-next-line vue/no-side-effects-in-computed-properties
-        this.properties.layoutLeftDrawerBehavior = 'desktop'
         return 325
       } else if (this.windowSize < 1024 && this.windowSize > 349) {
-        // eslint-disable-next-line vue/no-side-effects-in-computed-properties
-        this.properties.layoutLeftDrawerBehavior = 'mobile'
         return 280
       } else if (this.windowSize < 350) {
         return 242
@@ -134,7 +130,7 @@ export default {
     windowSize () {
       if (this.windowSize > 1023) {
         this.properties.leftDrawerWidth = 325
-        this.properties.leftDrawerOpen = true
+        this.properties.layoutLeftDrawerVisible = true
         this.properties.layoutLeftDrawerBehavior = 'desktop'
       } else if (this.windowSize < 1024 && this.windowSize > 349) {
         this.properties.leftDrawerWidth = 280
@@ -155,10 +151,10 @@ export default {
       this.addresses.push(value.child)
     },
     drawerMode (value) {
-      this.properties.leftDrawerOpen = false
+      this.properties.layoutLeftDrawerVisible = false
     },
     toggleLeftDrawer () {
-      this.properties.leftDrawerOpen = !this.properties.leftDrawerOpen
+      this.properties.layoutLeftDrawerVisible = !this.properties.layoutLeftDrawerVisible
     },
     getDimensions () {
       this.windowSize = document.documentElement.clientWidth
