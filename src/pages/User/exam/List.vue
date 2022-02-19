@@ -134,6 +134,27 @@
                       >
                         مشاهده نتایج
                       </q-btn>
+                      <template v-if="item.booklet_url">
+                        <q-btn
+                          v-for="(booklet, bookletIndex) in item.booklet_url.filter( bookletItem => !!bookletItem.questions_booklet_url)"
+                          :key="'questions_booklet_url-'+bookletIndex"
+                          style="color: #ffc107"
+                          flat
+                          @click="downloadBooklet(booklet.questions_booklet_url)"
+                        >
+                          {{ booklet.category_title }}
+                        </q-btn>
+                        <q-btn
+                          v-for="(booklet, bookletIndex) in item.booklet_url.filter( bookletItem => !!bookletItem.descriptive_answers_booklet_url)"
+                          :key="'descriptive_answers_booklet_url-'+bookletIndex"
+                          style="color: #00b5e6"
+                          flat
+                          @click="downloadBooklet(booklet.descriptive_answers_booklet_url)"
+                        >
+                          پاسخ
+                          {{ booklet.category_title }}
+                        </q-btn>
+                      </template>
                       <q-btn
                         v-if="!!item.holding_status"
                         style="color: #ffc107"
@@ -284,6 +305,9 @@ export default {
           })
           this.getExams()
         })
+    },
+    downloadBooklet (bookletUrl) {
+      window.open(bookletUrl, '_blank').focus()
     }
   }
 }
