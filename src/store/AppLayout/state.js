@@ -61,8 +61,10 @@ export default function () {
     layoutFooterBordered: false,
     footerCustomClass: '',
 
-    appName: 'app',
-    headerTitle: 'app',
+    headerTitle: {
+      name: 'app',
+      path: []
+    },
     headerWithBackground: false,
     headerTitleCentered: false,
     headerShowTitle: true,
