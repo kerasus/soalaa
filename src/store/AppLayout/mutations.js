@@ -64,12 +64,19 @@ export function updateLang (state, data) {
   state.lang = data
 }
 
-export function updateHeaderTitle (state, data) {
-  let title = state.appName
-  if (data) {
-    title = data
+export function updateHeaderTitleName (state, data) {
+  state.headerTitle.name = data
+}
+
+export function updateHeaderTitlePath (state, data) {
+  if (data.length > 1) {
+    state.headerTitle.path = []
+    for (const i in data) {
+      state.headerTitle.path.push(data[i])
+    }
+  } else {
+    state.headerTitle.path.push(data[0])
   }
-  state.headerTitle = title
 }
 
 export function updateHeaderWithBackground (state, data) {
