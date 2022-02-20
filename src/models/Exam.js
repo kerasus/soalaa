@@ -13,7 +13,7 @@ class Exam extends Model {
     super(data, [
       {
         key: 'baseRoute',
-        default: API_ADDRESS.exam.base()
+        default: API_ADDRESS.exam.base
       },
       { key: 'id' },
       { key: 'title' },
