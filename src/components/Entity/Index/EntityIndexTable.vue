@@ -187,10 +187,9 @@ export default {
 
       const status = exportFile(
         'table-export.csv',
-        "\ufeff"+content,
+        '\ufeff' + content,
         'text/csv'
       )
-
       if (status !== true) {
         this.$q.notify({
           message: 'Browser denied file download...',

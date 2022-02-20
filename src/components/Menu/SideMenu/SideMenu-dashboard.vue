@@ -158,8 +158,8 @@ export default {
         {
           title: 'درخت دانش',
           icon: 'isax:tree',
-          path: '',
-          name: '',
+          path: '/knowledgeTree',
+          name: 'knowledgeTree',
           active: false,
           children: []
         },
@@ -190,8 +190,8 @@ export default {
         {
           title: 'تنظیمات',
           icon: 'isax:setting-2',
-          path: '',
-          name: '',
+          path: '/settings',
+          name: 'Admin.Settings',
           active: false,
           children: []
         },
@@ -268,10 +268,10 @@ export default {
   },
   methods: {
     selectedItem (item) {
-      this.$emit('selectedItem', item.title)
+      this.$store.commit('AppLayout/updateHeaderTitleName', item.title)
     },
     clickedChildItem (item, child) {
-      this.$emit('selectedChildItem', { item, child })
+      this.$store.commit('AppLayout/updateHeaderTitlePath', [item, child])
     },
     logOut () {
       return this.$store.dispatch('Auth/logOut')
