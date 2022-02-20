@@ -63,7 +63,8 @@ export default function () {
 
     headerTitle: {
       name: 'app',
-      path: []
+      path: [],
+      icon: ''
     },
     headerWithBackground: false,
     headerTitleCentered: false,

@@ -96,7 +96,8 @@ export default {
     examId: null
   }),
   created () {
-    this.examId = this.$route.params.idd
+    this.examId = this.$route.params.id
+    this.exam.id = this.$route.params.id
     const that = this
     axios.get(API_ADDRESS.option.base + '?type=exam_type')
       .then(function (response) {
@@ -127,10 +128,10 @@ export default {
     getExam (id) {
       this.$store.dispatch('loading/linearLoading', true)
       const that = this
-      axios.get(API_ADDRESS.exam.base())
+      this.exam.show()
         .then(function (response) {
-          that.examList = new ExamList(response.data.data)
-          that.exam = new Exam(that.examList.list.find(item => item.id === id))
+          console.log('response.data.data', response.data.data)
+          that.exam = new Exam(response.data.data)
           that.$store.dispatch('loading/linearLoading', false)
         })
     },
