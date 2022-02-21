@@ -6006,10 +6006,10 @@ qs@6.9.6:
   resolved "https://registry.npmjs.org/qs/-/qs-6.9.6.tgz"
   integrity sha512-TIRk4aqYLNoJUbd+g2lEdz5kLWIuTMRagAXxl78Q0RiVjAOugHmeKNGdd3cwo/ktpf9aL9epCfFqWDEKysUlLQ==
 
-quasar-crud@^0.1.6:
-  version "0.1.9"
-  resolved "https://registry.npmjs.org/quasar-crud/-/quasar-crud-0.1.9.tgz"
-  integrity sha512-1OJbl7rFdtDsKCRkK4+sSq6rzqEp0Jwt4dQHcGGdfYnXV7bc+Okk4l9as4c3MZVGpzSD7vl6dMeE9Y2rao6RQg==
+quasar-crud@^0.2.1:
+  version "0.2.1"
+  resolved "https://registry.yarnpkg.com/quasar-crud/-/quasar-crud-0.2.1.tgz#080a4365706e91d117f5f9a351bbf02ecc56f48b"
+  integrity sha512-9rTLE9FyCOPbn7UJ/aA1Y5VI/nKvtY0bTcYoaCYreeFHmZUc7wOVO2iilQq3p0nVKFyWywK0FTPcKOG2ycN52Q==
   dependencies:
     "@babel/eslint-parser" "^7.16.5"
     "@quasar/extras" "^1.0.0"
@@ -6043,6 +6043,18 @@ quasar-form-builder@^0.1.6:
     moment-jalaali "^0.9.4"
     quasar "^2.0.0"
     vue "^3.0.0"
+
+quasar-template-builder@^1.0.0:
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/quasar-template-builder/-/quasar-template-builder-1.0.1.tgz#77738fccec9a6695455b786ba89d5ba87821f776"
+  integrity sha512-Pyaas6RbNj9c9ElgjE4ynzmTrqbEbD5S9FIlt4cCkhoyZamZUoM4A7L1P7KUzNiiW7B5IMlqedM8L4lDpiuXGA==
+  dependencies:
+    "@quasar/extras" "^1.12.3"
+    core-js "^3.6.5"
+    quasar "^2.0.0"
+    vue-i18n "^9.0.0"
+    vuex "^4.0.1"
+    vuex-persistedstate "^4.1.0"
 
 quasar@^2.0.0:
   version "2.4.2"
