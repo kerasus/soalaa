@@ -115,7 +115,7 @@
         </v-col>
         <v-col
           v-if="!exam.id"
-          :cols="6"
+          :cols="3"
         >
           <v-text-field
             v-model="selectedCategoryTime"
@@ -125,7 +125,7 @@
         </v-col>
         <v-col
           v-if="!exam.id"
-          :cols="6"
+          :cols="3"
         >
           <v-text-field
             v-model="selectedCategoryOrder"

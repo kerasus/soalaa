@@ -296,8 +296,7 @@ const mixinQuiz = {
                     let questionId = currentExamQuestionIndexes[item]
                     currentExamQuestionsArray.push(currentExamQuestions[questionId])
                 })
-            }
-            else {
+            } else {
                 currentExamQuestionsArray = this.quiZ
             }
             return currentExamQuestionsArray
@@ -541,7 +540,7 @@ const mixinQuiz = {
         },
         getQuestNumber () {
             let questNumber = this.$route.params.questNumber
-            if (this.currentQuestion.order) {
+            if (!questNumber && this.currentQuestion.order) {
                 questNumber = this.currentQuestion.order
             }
             else if (!questNumber) {
@@ -673,11 +672,11 @@ const mixinQuiz = {
             const persianRegex = /[\u0600-\u06FF]/
             return !string.match(persianRegex)
         },
-        answerClicked(data, sendData = true) {
+        answerClicked(data, sendData = true, callback) {
             let questionId = data.questionId
 
             const socket = (this.useSocket) ? this.socket : false
-            return this.userActionOnQuestion(questionId, 'answer', {choiceId: data.choiceId}, socket, sendData)
+            return this.userActionOnQuestion(questionId, 'answer', {choiceId: data.choiceId}, socket, sendData, callback)
         },
         changeBookmark(questionId) {
             const socket = (this.useSocket) ? this.socket : false
@@ -838,6 +837,55 @@ const mixinQuiz = {
             }
         },
 
+
+        convertBubbleSheetResponseToUserAnswerResponse (exam_user_id, bubbleSheetResponse) {
+            const userAnswerResponse = {
+                choices: [
+                    // {
+                    //     "id": "61dd404df28c746e5a0aaf53",
+                    //     "exam_user_id": "61dd2e0bf07492290b57097a",
+                    //     "question_id": "61d95bfe3e17411c7775770c",
+                    //     "choice_id": 1,
+                    //     "type": "online",
+                    //     "selected_at": "2022-01-11 12:01:08.951",
+                    //     "status": null,
+                    //     "bookmark": null
+                    // }
+                ],
+                statuses: [],
+                bookmarks: []
+            }
+
+            // const bubbleSheetResponse = [
+            //         {
+            //             "q_n": 1,
+            //             "c_n": [
+            //                 1
+            //             ]
+            //         },
+            //         {
+            //             "q_n": 2,
+            //             "c_n": [
+            //                 2
+            //             ]
+            //         }
+            //     ]
+
+            userAnswerResponse.choices = bubbleSheetResponse.map( item => {
+                    const choiceNumber = (typeof item.c_n[0] === 'undefined') ? null : item.c_n[0]
+                    return {
+                        id: item.q_n,
+                        exam_user_id,
+                        question_id: item.q_n,
+                        choice_id: choiceNumber,
+                        has_warning: (typeof item.c_n[1] !== 'undefined'),
+                        selected_at: Time.now()
+                    }
+                }
+            )
+
+            return userAnswerResponse
+        },
 
 
         getExamUserData (exam_id) {
