@@ -394,9 +394,11 @@ export default {
        let formData = new FormData();
        formData.append('status_id', statusId);
        formData.append('statement_photo', this.currentQuestion.statement_photo);
-       this.currentQuestion.answer_photos.forEach((item, key) => {
-         formData.append('answer_photos[' + key + ']', item)
-       })
+       if (this.currentQuestion.answer_photos) {
+         this.currentQuestion.answer_photos.forEach((item, key) => {
+           formData.append('answer_photos[' + key + ']', item)
+         })
+       }
        formData.append('type_id', this.optionQuestionId)
       // formData.append('exams', JSON.stringify(this.currentQuestion.exams))
        formData.append('exams', this.currentQuestion.exams)
@@ -777,7 +779,7 @@ export default {
           return true
         }
       }
-      if(this.currentQuestion.statement_photo ){
+      if(this.currentQuestion.statement_photo){
         if (this.currentQuestion.statement_photo.length>0){
           return true
         }
