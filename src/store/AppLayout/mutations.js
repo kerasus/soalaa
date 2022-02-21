@@ -64,19 +64,30 @@ export function updateLang (state, data) {
   state.lang = data
 }
 
-export function updateHeaderTitleName (state, data) {
-  state.headerTitle.name = data
+export function updateHeaderTitleLoading (state, data) {
+  state.headerTitle.loading = data
 }
 
-export function updateHeaderTitlePath (state, data) {
-  if (data.length > 1) {
-    state.headerTitle.path = []
-    for (const i in data) {
-      state.headerTitle.path.push(data[i])
-    }
-  } else {
-    state.headerTitle.path.push(data[0])
-  }
+export function updateHeaderTitleIcon (state, data) {
+  state.headerTitle.icon = data
+}
+
+export function updateHeaderTitle (state, data) {
+  console.log('state.headerTitle', state.headerTitle)
+  console.log('updateHeaderTitle data: ', data)
+  Object.assign(state.headerTitle, data)
+  console.log('after state.headerTitle', state.headerTitle)
+  // state.headerTitle = data
+  // state.headerTitle.path.title = data.title
+  // state.headerTitle.path.route = data.route
+  // if (data.length > 1) {
+  //   state.headerTitle.path = []
+  //   for (const i in data) {
+  //     state.headerTitle.path.push(data[i])
+  //   }
+  // } else {
+  //   state.headerTitle.path.push(data[0])
+  // }
 }
 
 export function updateHeaderWithBackground (state, data) {

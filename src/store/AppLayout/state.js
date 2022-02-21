@@ -62,8 +62,14 @@ export default function () {
     footerCustomClass: '',
 
     headerTitle: {
-      name: 'app',
-      path: []
+      loading: false,
+      path: [
+        {
+          icon: '',
+          title: '',
+          route: ''
+        }
+      ]
     },
     headerWithBackground: false,
     headerTitleCentered: false,

@@ -34,7 +34,7 @@
               <q-item
                 clickable
                 v-ripple:deep-purple
-                active="false"
+                :active="false"
                 active-class="active-route"
               >
                 <q-item-section class="item-list-expansion">
@@ -268,7 +268,8 @@ export default {
   },
   methods: {
     selectedItem (item) {
-      this.$store.commit('AppLayout/updateHeaderTitleName', item.title)
+      console.log('item', item)
+      this.$store.commit('AppLayout/updateHeaderTitlePath', { title: item.title, route: item.path })
     },
     clickedChildItem (item, child) {
       this.$store.commit('AppLayout/updateHeaderTitlePath', [item, child])
