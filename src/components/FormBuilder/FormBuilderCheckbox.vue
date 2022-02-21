@@ -29,7 +29,7 @@ export default {
     falseValue: {
       default: false,
       type: [Object, String, Array, Number, Boolean]
-    },
+    }
   }
 }
 </script>
