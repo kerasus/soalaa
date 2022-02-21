@@ -2,7 +2,7 @@ import { Question } from 'src/models/Question'
 
 const mixinUserActionOnQuestion = {
   methods: {
-    userActionOnQuestion (questionId, actionType, data) {
+    userActionOnQuestion (questionId, actionType, data, socket, sendData, callback) {
       const examId = this.quiz.id
       const examUserId = this.quiz.user_exam_id
       this.beforeUserActionOnQuestion(examId, questionId)
@@ -21,9 +21,11 @@ const mixinUserActionOnQuestion = {
       } else if (actionType === 'status') {
         this.userActionOnQuestion_status(data, examId, questionId, userQuestionData)
       }
-
       this.afterUserActionOnQuestion()
-      return this.sendUserQuestionsDataToServer(examUserId, userExamData, questionId, actionType)
+      if (typeof sendData === 'undefined' || sendData === true) {
+        return this.sendUserQuestionsDataToServer(examUserId, userExamData, questionId, actionType, socket, callback)
+      }
+      return false
     },
     beforeUserActionOnQuestion (examId, questionId) {
       this.$store.commit('quiz/updateCurrentQuestion', {
@@ -41,41 +43,51 @@ const mixinUserActionOnQuestion = {
     getUserQuestionDataFromLocalstorage (userExamData, questionId) {
       // find question
       const userQuestionData = userExamData[questionId]
-
+      const dataToSendFailedAnswers = this.$store.state.failedListAnswerData
+      const dataToSendFailedStatus = this.$store.state.failedListStatusData
+      const dataToSendFailedBookmark = this.$store.state.failedListBookmarkData
       // set data from localstorage of user
       const dataToSendAnswer = {
         question_id: questionId,
         choice_id: userQuestionData.answered_choice_id,
         selected_at: userQuestionData.answered_at
       }
-      const dataToSendStatus = { question_id: questionId, status: userQuestionData.status }
-      const dataToSendBookmark = questionId
-
+      const dataToSendStatus = { question_id: questionId, status: userQuestionData.status, selected_at: userQuestionData.change_status_at }
+      const dataToSendBookmark = {
+        questionId,
+        selected_at: userQuestionData.change_bookmarked_at
+      }
       return {
         userQuestionData,
         dataToSendAnswer,
+        dataToSendFailedAnswers,
+        dataToSendFailedStatus,
+        dataToSendFailedBookmark,
         dataToSendStatus,
         dataToSendBookmark
       }
     },
-    sendUserQuestionsDataToServer (examUserId, userExamData, questionId, actionType) {
-      console.log('sendUserQuestionsDataToServer')
+    sendUserQuestionsDataToServer (examUserId, userExamData, questionId, actionType, socket, callback) {
       const userQuestionDataFromLocalstorage = this.getUserQuestionDataFromLocalstorage(userExamData, questionId)
-
+      const online = navigator.onLine
       // send data
       const question = new Question()
+      if (!online) {
+        return false
+      }
+
       if (actionType === 'answer') {
-        return question.sendAnswer(examUserId, userQuestionDataFromLocalstorage.dataToSendAnswer)
+        return question.sendUserActionToServer('answer', examUserId, { answerArray: userQuestionDataFromLocalstorage.dataToSendAnswer, failedAnswersArray: userQuestionDataFromLocalstorage.dataToSendFailedAnswers }, socket, callback)
       }
       if (actionType === 'bookmark') {
         if (userQuestionDataFromLocalstorage.userQuestionData.bookmarked) {
-          return question.sendBookmark(examUserId, userQuestionDataFromLocalstorage.dataToSendBookmark)
+          return question.sendUserActionToServer('bookmark', examUserId, { bookmark: userQuestionDataFromLocalstorage.dataToSendBookmark, failedBookmarksArray: userQuestionDataFromLocalstorage.dataToSendFailedBookmark }, socket, callback)
         } else {
-          return question.sendUnBookmark(examUserId, userQuestionDataFromLocalstorage.dataToSendBookmark)
+          return question.sendUserActionToServer('unBookmark', examUserId, { bookmark: userQuestionDataFromLocalstorage.dataToSendBookmark, failedBookmarksArray: userQuestionDataFromLocalstorage.dataToSendFailedBookmark }, socket, callback)
         }
       }
       if (actionType === 'status') {
-        return question.sendStatus(examUserId, userQuestionDataFromLocalstorage.dataToSendStatus)
+        return question.sendUserActionToServer('status', examUserId, { status: userQuestionDataFromLocalstorage.dataToSendStatus, failedStatusArray: userQuestionDataFromLocalstorage.dataToSendFailedStatus }, socket, callback)
       }
     },
     userActionOnQuestion_answer (data, examId, questionId, userQuestionData) {
@@ -118,13 +130,12 @@ const mixinUserActionOnQuestion = {
       if (oldQuestion && newStatus === oldStatus) {
         newStatus = ''
       } else if (newStatus === 'x') {
-        this.$store.commit('quiz/changeQuestionSelectChoice', {
-          exam_id: examId,
-          question_id: questionId,
-          answered_choice_id: null
-        })
+        const newuserQuestionData = JSON.parse(JSON.stringify(userQuestionData))
+        newuserQuestionData.status = newStatus
+        data.choiceId = null
+        this.userActionOnQuestion_answer(data, examId, questionId, newuserQuestionData)
       }
-      this.$store.commit('quiz/changeQuestionStatus', {
+      this.$store.commit('changeQuestion_Status', {
         exam_id: examId,
         question_id: questionId,
         status: newStatus

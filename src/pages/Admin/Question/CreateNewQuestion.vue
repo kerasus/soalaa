@@ -6,9 +6,39 @@
           <div class="text-grey-10" style="font-size: 16px;"> سوال را به کدام صورت درج می کنید؟ </div>
           <div class="text-grey-7" style="padding-top: 10px;">لطفا انتخاب کنید که سوال را به کدام روش ثبت می کنید.</div>
         </q-card-section>
-        <q-card-actions align="between">
-          <q-btn color="amber-4" flat @click="setQuestionTypeText">تایپ سوال</q-btn>
-          <q-btn color="amber-4" flat @click="setQuestionTypeImage">آپلود فایل</q-btn>
+        <q-card-actions align="center">
+          <div class="col-12">
+            <div class="col-12">
+              <q-btn
+                color="amber-4"
+                flat
+                style="width: 100%"
+                @click="setQuestionTypeText"
+              >
+                تایپ سوال
+              </q-btn>
+            </div>
+            <div class="col-12">
+              <q-btn
+                color="amber-4"
+                flat
+                style="width: 100%"
+                @click="setMBTIQuestionType"
+              >
+                تایپ سوال MBTI
+              </q-btn>
+            </div>
+            <div class="col-12">
+              <q-btn
+                color="amber-4"
+                flat
+                style="width: 100%"
+                @click="setQuestionTypeImage"
+              >
+                آپلود فایل
+              </q-btn>
+            </div>
+          </div>
         </q-card-actions>
       </q-card>
     </q-dialog>
@@ -381,7 +411,7 @@ export default {
     },
 
     setQuestionPhotos (statusId) { // یاس
-      this.$store.commit('loading/overlay', { loading: true, message: 'کمی صبر کنید...' })
+      this.$store.dispatch('loading/overlayLoading', { loading: true, message: 'کمی صبر کنید...' })
       const formData = new FormData()
       formData.append('status_id', statusId)
       formData.append('statement_photo', this.currentQuestion.statement_photo)
@@ -392,9 +422,9 @@ export default {
         .then((response) => {
           const questionId = response.data.data.id
           this.$router.push({ name: 'question.show', params: { question_id: questionId } })
-          this.$store.commit('loading/overlay', { loading: false, message: '' })
+          this.$store.dispatch('loading/overlayLoading', { loading: false, message: '' })
         }).catch(() => {
-          this.$store.commit('loading/overlay', { loading: false, message: '' })
+          this.$store.dispatch('loading/overlayLoading', { loading: false, message: '' })
         })
     },
 
@@ -739,13 +769,18 @@ export default {
       this.dialog = false
       this.checkNavbarVisibilityOnCreatPage()
     },
-
+    setMBTIQuestionType () {
+      this.dialog = false
+      this.goToMBTIPage()
+    },
     setQuestionTypeImage () {
       this.questionType = 'typeImage'
       this.dialog = false
       this.checkNavbarVisibilityOnCreatPage()
     },
-
+    goToMBTIPage () {
+      this.$router.push({ name: 'question.mbti.create' })
+    },
     setInsertedQuestions () {
       this.$refs.qlayout.getContent()
       const currentQuestion = this.currentQuestion
@@ -761,7 +796,7 @@ export default {
       currentQuestion
         .create()
         .then((response) => {
-          this.$store.commit('loading/overlay', { loading: false, message: '' })
+          this.$store.dispatch('loading/overlayLoading', { loading: false, message: '' })
           const questionId = response.data.data.id
           this.questionType = 'typeText'
           this.currentQuestion.statement = ''
@@ -847,7 +882,7 @@ export default {
   }
   .q-dialog__inner--minimized > div {
     max-width: 290px;
-    max-height: 210px;
+    max-height: 300px;
   }
   .q-card__actions {
     padding: 0 16px 16px;
