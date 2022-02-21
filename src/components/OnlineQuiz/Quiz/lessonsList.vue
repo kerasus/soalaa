@@ -4,11 +4,11 @@
       <div class="tableSize">
         <span>{{ $route.params.quizTitle }}</span>
         <v-btn
-            class="mx-2 backBtnPosition"
-            fab
-            x-small
-            color="white"
-            @click="goBack"
+          class="mx-2 backBtnPosition"
+          fab
+          x-small
+          color="white"
+          @click="goBack"
         >
           <v-icon dark>
             mdi-chevron-left
@@ -20,24 +20,24 @@
       <v-simple-table class="tableSize">
         <template v-slot:default>
           <thead>
-          <tr>
-            <th class="text-right">
-              عنوان
-            </th>
-            <th class="text-right">
-              عملیات
-            </th>
-          </tr>
+            <tr>
+              <th class="text-right">
+                عنوان
+              </th>
+              <th class="text-right">
+                عملیات
+              </th>
+            </tr>
           </thead>
           <tbody>
-          <tr
+            <tr
               v-for="item in lessonsList.list"
               :key="item.id"
-          >
-            <td>{{ item.title }}</td>
-            <td class="actionsColumn">
-              <div>
-                <v-text-field
+            >
+              <td>{{ item.title }}</td>
+              <td class="actionsColumn">
+                <div>
+                  <v-text-field
                     v-if="item.permissions.view"
                     v-model="item.order"
                     type="number"
@@ -46,18 +46,18 @@
                     label="ترتیب درس"
                     hide-details="auto"
                     class="mb-2"
-                >
-                  <v-icon
+                  >
+                    <v-icon
                       slot="append"
                       color="green"
                       @click="updateOrder(item)"
-                  >
-                    mdi-pencil
-                  </v-icon>
-                </v-text-field>
-              </div>
-              <div v-if="false">
-                <v-text-field
+                    >
+                      mdi-pencil
+                    </v-icon>
+                  </v-text-field>
+                </div>
+                <div v-if="false">
+                  <v-text-field
                     v-if="item.permissions.view"
                     v-model="item.time"
                     type="number"
@@ -66,22 +66,22 @@
                     label="زمان درس (دقیقه)"
                     hide-details="auto"
                     class="mb-2"
-                >
-                  <v-icon
+                  >
+                    <v-icon
                       slot="append"
                       color="green"
                       @click="updateTime(item)"
-                  >
-                    mdi-pencil
-                  </v-icon>
-                </v-text-field>
-              </div>
-              <div class="text-center mb-2">
-                <div class="row">
-                  <div class="col">
-                    <v-tooltip top>
-                      <template v-slot:activator="{ on, attrs }">
-                        <v-btn
+                    >
+                      mdi-pencil
+                    </v-icon>
+                  </v-text-field>
+                </div>
+                <div class="text-center mb-2">
+                  <div class="row">
+                    <div class="col">
+                      <v-tooltip top>
+                        <template v-slot:activator="{ on, attrs }">
+                          <v-btn
                             v-if="item.permissions.view"
                             dark
                             x-small
@@ -90,21 +90,21 @@
                             :to="{ name: 'onlineQuiz.exams.lessons.details', params: { quizId: $route.params.quizId, lessonId: item.id}}"
                             v-bind="attrs"
                             v-on="on"
-                        >
-                          <v-icon
-                              small
                           >
-                            mdi-notebook-outline
-                          </v-icon>
-                        </v-btn>
-                      </template>
-                      <span>مشاهده سوالات درس</span>
-                    </v-tooltip>
-                  </div>
-                  <div class="col">
-                    <v-tooltip top>
-                      <template v-slot:activator="{ on, attrs }">
-                        <v-btn
+                            <v-icon
+                              small
+                            >
+                              mdi-notebook-outline
+                            </v-icon>
+                          </v-btn>
+                        </template>
+                        <span>مشاهده سوالات درس</span>
+                      </v-tooltip>
+                    </div>
+                    <div class="col">
+                      <v-tooltip top>
+                        <template v-slot:activator="{ on, attrs }">
+                          <v-btn
                             v-if="item.permissions.view"
                             block
                             dark
@@ -113,21 +113,21 @@
                             :to="{ name: 'video.set', params: { exam_id: $route.params.quizId, subcategory_id: item.id, exam_title: $route.params.quizTitle}}"
                             v-bind="attrs"
                             v-on="on"
-                        >
-                          <v-icon
-                              small
                           >
-                            mdi-video
-                          </v-icon>
-                        </v-btn>
-                      </template>
-                      <span>ثبت ویدئو تحلیل</span>
-                    </v-tooltip>
+                            <v-icon
+                              small
+                            >
+                              mdi-video
+                            </v-icon>
+                          </v-btn>
+                        </template>
+                        <span>ثبت ویدئو تحلیل</span>
+                      </v-tooltip>
+                    </div>
                   </div>
                 </div>
-              </div>
-            </td>
-          </tr>
+              </td>
+            </tr>
           </tbody>
         </template>
       </v-simple-table>

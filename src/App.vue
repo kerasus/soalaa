@@ -103,24 +103,23 @@
       </div>
     </v-app-bar>
     <v-main>
-
       <v-snackbar
-          :timeout="-1"
-          :value="updateExists && false"
-          centered
-          bottom
-          color="deep-purple accent-4"
-          elevation="24"
+        :timeout="-1"
+        :value="updateExists && false"
+        centered
+        bottom
+        color="deep-purple accent-4"
+        elevation="24"
       >
         جهت بروزرسانی لطفا صفحه را
         رفرش
         کنید
         <template v-slot:action="{ attrs }">
           <v-btn
-              color="white"
-              text
-              v-bind="attrs"
-              @click="refreshApp"
+            color="white"
+            text
+            v-bind="attrs"
+            @click="refreshApp"
           >
             رفرش
           </v-btn>

@@ -23,13 +23,16 @@
               </v-icon>
             </v-col>
           </v-row>
-          <div v-if="log.properties.old.status || log.properties.new.status" class="log-status">
+          <div
+            v-if="log.properties.old.status || log.properties.new.status"
+            class="log-status"
+          >
             وضعیت
             <template v-if="log.properties.old.status">
-               از
+              از
               <v-chip
-                  color="orange"
-                  text-color="white"
+                color="orange"
+                text-color="white"
               >
                 {{ log.properties.old.status.display_title }}
               </v-chip>
@@ -37,8 +40,8 @@
             <template v-if="log.properties.new.status">
               به
               <v-chip
-                  color="red"
-                  text-color="white"
+                color="red"
+                text-color="white"
               >
                 {{ log.properties.new.status.display_title }}
               </v-chip>
@@ -73,9 +76,9 @@
           </v-btn>
           <v-textarea
             v-if="canComment"
+            v-model="commentText"
             outlined
             rounded
-            v-model="commentText"
             class="mt-3"
           />
           <v-btn

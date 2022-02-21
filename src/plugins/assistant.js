@@ -55,7 +55,7 @@ let Assistant = function () {
             } else if (err.data.error && AjaxResponseMessages.isCustomMessage(err.data.error.code)) {
                 messages.push(AjaxResponseMessages.getMessage(err.data.error.code))
             } else if (err.data) {
-                for (const [key, value] of Object.entries(err.data)) {
+                for (const value of Object.entries(err.data)) {
                     if (typeof value === 'string') {
                         messages.push(value)
                     } else {

@@ -125,7 +125,10 @@
         />
       </v-col>
     </v-row>
-    <booklets-dialog v-model="bookletsDialog" :quiz="quiz" />
+    <booklets-dialog
+      v-model="bookletsDialog"
+      :quiz="quiz"
+    />
 
     <v-dialog
       v-model="confirmationBubbleSheet"

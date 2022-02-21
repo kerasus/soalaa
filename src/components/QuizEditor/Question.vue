@@ -86,7 +86,7 @@
     />
     <!--ToDo: remove span-->
     <span
-       v-if="source.statement"
+      v-if="source.statement"
       :id="'question' + source.id"
       v-intersect="{
         handler: onIntersect,
@@ -102,23 +102,23 @@
       />
     </span>
     <v-row
-    v-if="source.statement_photo && !source.statement"
+      v-if="source.statement_photo && !source.statement"
     >
       <v-col>
-        <p  v-if="$route.name === 'onlineQuiz.exams.lessons.details'">
-          ({{getSubCategoryName}}) (ترتیب: {{source.order}})(شماره: {{source.questNumber}})  -  صورت سوال :
+        <p v-if="$route.name === 'onlineQuiz.exams.lessons.details'">
+          ({{ getSubCategoryName }}) (ترتیب: {{ source.order }})(شماره: {{ source.questNumber }})  -  صورت سوال :
         </p>
-        <p  v-else>
-          ({{getSubCategoryName}}) ({{source.order}}) -  صورت سوال :
+        <p v-else>
+          ({{ getSubCategoryName }}) ({{ source.order }}) -  صورت سوال :
         </p>
         <v-img
-            :src="source.statement_photo"
+          :src="source.statement_photo"
         />
       </v-col>
     </v-row>
     <v-row
-        v-if="checkChoices()"
-        class="choices"
+      v-if="checkChoices()"
+      class="choices"
     >
       <v-col
         v-for="(choice, index) in source.choices.list"
@@ -133,7 +133,7 @@
       </v-col>
     </v-row>
     <v-row
-    v-if="source.answer_photos.length > 0 && !checkChoices()"
+      v-if="source.answer_photos.length > 0 && !checkChoices()"
     >
       <v-col>
         <div>
@@ -141,13 +141,12 @@
             پاسخ :
           </p>
           <div
-          v-for="src in source.answer_photos"
+            v-for="src in source.answer_photos"
           >
             <v-img
-             class="img-size"
-            :src="src"
+              class="img-size"
+              :src="src"
             />
-
           </div>
         </div>
       </v-col>

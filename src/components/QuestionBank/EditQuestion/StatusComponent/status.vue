@@ -1,5 +1,8 @@
 <template>
-  <v-row align="center" class="status">
+  <v-row
+    align="center"
+    class="status"
+  >
     <v-col class="status-details">
       <p class="font-weight-medium">
         تغییر وضعیت
@@ -38,13 +41,16 @@
         />
       </v-card>
     </v-col>
-    <v-col class="mt-7" flat>
+    <v-col
+      class="mt-7"
+      flat
+    >
       <v-btn
         color="success"
         :loading="loading"
         :disabled="loading"
-        @click="sendStatus"
         class="status-button"
+        @click="sendStatus"
       >
         ذخیره
       </v-btn>

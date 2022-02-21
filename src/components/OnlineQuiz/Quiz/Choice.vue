@@ -9,7 +9,10 @@
       <div
         class="answer-text renderedPanel"
       >
-        <vue-katex :input="choice.title" :ltr="!isRtl" />
+        <vue-katex
+          :input="choice.title"
+          :ltr="!isRtl"
+        />
       </div>
       <div class="answer-checkbox">
         <v-checkbox

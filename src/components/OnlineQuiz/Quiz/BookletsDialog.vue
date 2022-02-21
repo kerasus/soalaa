@@ -17,11 +17,11 @@
         </div>
         <div class="py-2">
           <v-btn
-              v-for="(categoryItem, categoryIndex) in categoriesWithBooklet"
-              :key="categoryIndex"
-              color="#ffc107"
-              text
-              @click="downloadBooklet(categoryItem.questions_booklet)"
+            v-for="(categoryItem, categoryIndex) in categoriesWithBooklet"
+            :key="categoryIndex"
+            color="#ffc107"
+            text
+            @click="downloadBooklet(categoryItem.questions_booklet)"
           >
             دانلود
             {{ categoryItem.title }}
@@ -56,14 +56,14 @@ export default {
       default: new Exam()
     }
   },
-  computed: {
-    categoriesWithBooklet () {
-      return this.quiz.categories.list.filter( categoryItem => !!categoryItem.questions_booklet)
-    }
-  },
   data () {
     return {
       dialog: false
+    }
+  },
+  computed: {
+    categoriesWithBooklet () {
+      return this.quiz.categories.list.filter( categoryItem => !!categoryItem.questions_booklet)
     }
   },
   watch: {
