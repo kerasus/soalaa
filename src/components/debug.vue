@@ -1,10 +1,24 @@
 <template>
   <div>
-    <v-btn @click="print">test</v-btn>
-    <v-btn @click="toggleRecording" :disabled="!isRecording">{{ isRecording ? 'Stop Recording' : 'DONE' }}</v-btn>
-    <v-btn :disabled="isRecording" @click="play">Play</v-btn>
-    <v-btn @click="add">dummy</v-btn>
-    <p>{{clickCounter}}</p>
+    <v-btn @click="print">
+      test
+    </v-btn>
+    <v-btn
+      :disabled="!isRecording"
+      @click="toggleRecording"
+    >
+      {{ isRecording ? 'Stop Recording' : 'DONE' }}
+    </v-btn>
+    <v-btn
+      :disabled="isRecording"
+      @click="play"
+    >
+      Play
+    </v-btn>
+    <v-btn @click="add">
+      dummy
+    </v-btn>
+    <p>{{ clickCounter }}</p>
     <div :style="{ border: '10px red solid', width: '500px', height: '500px' }" />
     <p>test</p>
     <p>test</p>

@@ -72,7 +72,6 @@
           />
         </template>
       </v-list-group>
-
     </v-list-item-group>
     <v-list-item-group
       v-if="user.has_admin_permission"

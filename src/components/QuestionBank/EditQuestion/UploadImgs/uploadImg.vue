@@ -12,8 +12,8 @@
           <v-card-text>
             <v-row>
               <v-col
-                class="test"
                 v-if="editStatus"
+                class="test"
               >
                 <file-upload
                   ref="questionFile"
@@ -129,7 +129,7 @@
 
 
                   <v-card-title
-                      v-if="typeof file !== 'string'"
+                    v-if="typeof file !== 'string'"
                     class="caption"
                     v-text="formatSize(file.size)"
                   />

@@ -4,8 +4,8 @@
       نتیجه تست شخصیت شناسی MBTI
     </p>
     <div
-        class="char-info"
-        :style="{ background: result.charBg }"
+      class="char-info"
+      :style="{ background: result.charBg }"
     >
       <v-container class="full-height">
         <v-row no-gutters>
@@ -17,15 +17,15 @@
           </v-col>
         </v-row>
         <v-row
-            class="full-height flex-column flex-sm-row"
-            no-gutters
+          class="full-height flex-column flex-sm-row"
+          no-gutters
         >
           <v-col
-              lg="5"
-              sm="6"
-              class="d-flex flex-row"
-              order="2"
-              order-sm="1"
+            lg="5"
+            sm="6"
+            class="d-flex flex-row"
+            order="2"
+            order-sm="1"
           >
             <div class="char-info-text">
               <p class="char-type-title d-none d-sm-block">
@@ -36,17 +36,19 @@
                 <p>
                   <span>افراد {{ result.type }}</span>
                 </p>
-                <p v-html="mbtiBartleData.mbtiType[result.type].shortText"/>
+                <!-- eslint-disable -->
+                <p v-html="mbtiBartleData.mbtiType[result.type].shortText" />
+                <!-- eslint-enable -->
               </div>
             </div>
           </v-col>
           <v-col
-              order="1"
-              lg="7"
-              sm="6"
-              order-sm="2"
+            order="1"
+            lg="7"
+            sm="6"
+            order-sm="2"
           >
-            <v-img :src="mbtiBartleData.mbtiType[result.type].image1"/>
+            <v-img :src="mbtiBartleData.mbtiType[result.type].image1" />
           </v-col>
         </v-row>
       </v-container>
@@ -54,15 +56,15 @@
     <v-container>
       <v-row class="d-flex mbti-detail-box-parent">
         <v-col
-             v-for="(item, index) in result.details"
-            :key="index"
-            md="6"
-            cols="12"
-            dir="ltr"
+          v-for="(item, index) in result.details"
+          :key="index"
+          md="6"
+          cols="12"
+          dir="ltr"
         >
           <div
-              class="mbti-detail-box"
-              dir="rtl"
+            class="mbti-detail-box"
+            dir="rtl"
           >
             <div :class="{ 'variable-box': true, active: item.values[0].percent > 50 }">
               <div class="variable-label">
@@ -84,22 +86,22 @@
               </p>
               <div class="progress-bar">
                 <v-progress-linear
-                    v-if="item.values[0].percent > 50"
-                    :value="item.values[0].percent"
-                    elevation="3"
-                    color="white"
-                    rounded
-                    height="12"
-                    class="progress-left"
+                  v-if="item.values[0].percent > 50"
+                  :value="item.values[0].percent"
+                  elevation="3"
+                  color="white"
+                  rounded
+                  height="12"
+                  class="progress-left"
                 />
                 <v-progress-linear
-                    v-else
-                    :value="item.values[1].percent"
-                    elevation="3"
-                    color="white"
-                    rounded
-                    height="12"
-                    class="progress-right"
+                  v-else
+                  :value="item.values[1].percent"
+                  elevation="3"
+                  color="white"
+                  rounded
+                  height="12"
+                  class="progress-right"
                 />
               </div>
             </div>
@@ -125,12 +127,14 @@
             ویژگی های شخصیت {{ result.type }}
           </p>
           <div class="banner">
-            <v-img :src="mbtiBartleData.mbtiType[result.type].image2"/>
+            <v-img :src="mbtiBartleData.mbtiType[result.type].image2" />
           </div>
+          <!-- eslint-disable -->
           <p
-              class="full"
-              v-html="mbtiBartleData.mbtiType[result.type].text"
+            class="full"
+            v-html="mbtiBartleData.mbtiType[result.type].text"
           />
+          <!-- eslint-enable -->
         </v-col>
       </v-row>
     </v-container>
@@ -138,8 +142,8 @@
       نتیجه تست Bartle
     </p>
     <div
-        v-if="bartleResult[0]"
-        class="char-results-bartle"
+      v-if="bartleResult[0]"
+      class="char-results-bartle"
     >
       <v-container>
         <v-row class="main-result">
@@ -148,16 +152,16 @@
               تیپ شخصیتی شما
             </p>
             <v-progress-circular
-                class="mt-4 bartle-item-circle"
-                :rotate="-90"
-                :size="240"
-                :width="10"
-                :value="bartleResult[0].value"
-                color="#ef5350"
-                @click="changeSelectedBartleItem(bartleResult[0])"
+              class="mt-4 bartle-item-circle"
+              :rotate="-90"
+              :size="240"
+              :width="10"
+              :value="bartleResult[0].value"
+              color="#ef5350"
+              @click="changeSelectedBartleItem(bartleResult[0])"
             >
               <div class="inside-bartle-result-circle  pa-10">
-                <v-img :src="bartleResult[0].image"/>
+                <v-img :src="bartleResult[0].image" />
               </div>
             </v-progress-circular>
             <p class="your-type-bartle">
@@ -168,22 +172,22 @@
         <v-row class="other-result">
           <v-col class="d-flex flex-sm-row flex-column justify-space-around">
             <div
-                v-for="item in 3"
-                :key="item"
-                class="d-flex flex-sm-column flex-row align-center justify-center"
+              v-for="item in 3"
+              :key="item"
+              class="d-flex flex-sm-column flex-row align-center justify-center"
             >
               <v-progress-circular
-                  class="mt-4 bartle-item-circle"
-                  :rotate="-90"
-                  :size="125"
-                  :width="6"
-                  :value="bartleResult[item].value"
-                  color="#ef5350"
-                  @click="changeSelectedBartleItem(bartleResult[item])"
+                class="mt-4 bartle-item-circle"
+                :rotate="-90"
+                :size="125"
+                :width="6"
+                :value="bartleResult[item].value"
+                color="#ef5350"
+                @click="changeSelectedBartleItem(bartleResult[item])"
               >
                 <div class="inside-bartle-result-circle pa-6">
                   <v-img
-                      :src="bartleResult[item].image"
+                    :src="bartleResult[item].image"
                   />
                 </div>
               </v-progress-circular>
@@ -201,10 +205,12 @@
           <p class="type-header">
             ویژگی های شخصیت {{ selectedBartleItem.text }}
           </p>
+          <!-- eslint-disable -->
           <p
-              class="full"
-              v-html="selectedBartleItem.fullText"
+            class="full"
+            v-html="selectedBartleItem.fullText"
           />
+          <!-- eslint-enable -->
         </v-col>
       </v-row>
     </v-container>

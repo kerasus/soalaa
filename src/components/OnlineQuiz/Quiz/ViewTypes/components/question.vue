@@ -49,7 +49,7 @@
         </v-icon>
       </v-btn>
       <v-btn
-          v-if="showOptions"
+        v-if="showOptions"
         icon
         @click="changeStatus(source.id ,'x')"
       >
@@ -61,8 +61,8 @@
         </v-icon>
       </v-btn>
       <v-btn
-        icon
         v-if="showOptions"
+        icon
         @click="changeBookmark(source.id)"
       >
         <v-icon
@@ -95,8 +95,8 @@
     </p>
     <!--        <v-row v-if="(considerActiveCategory && source.in_active_category) || !considerActiveCategory || true" class="choices">-->
     <v-row
-        v-if="(considerActiveCategory && source.in_active_category) || !considerActiveCategory"
-        class="choices"
+      v-if="(considerActiveCategory && source.in_active_category) || !considerActiveCategory"
+      class="choices"
     >
       <v-col
         v-for="(choice, index) in source.choices.list"
