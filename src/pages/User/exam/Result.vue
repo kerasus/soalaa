@@ -330,10 +330,11 @@ export default {
     this.getUserData()
     window.currentExamQuestions = null
     window.currentExamQuestionIndexes = null
-    this.getExamData() // moved from mounted to created after migration
+    // this.getExamData() // moved from mounted to created after migration
   },
   mounted () {
-    // this.getExamData() ----------- was used here before migration
+    this.getExamData()
+    // ----------- was used here before migration
   },
   methods: {
     getExamData () {
@@ -342,7 +343,7 @@ export default {
       const user_exam_id = this.$route.params.user_exam_id
       const exam_id = this.$route.params.exam_id
 
-      this.$store.dispatch('loading/overlayLoading', { loading: true, message: '' })
+      // this.$store.dispatch('loading/overlayLoading', { loading: true, message: '' })
 
       const examData = new ExamData()
       console.log('examData---------', examData)
@@ -355,14 +356,14 @@ export default {
           // save questions in localStorage
           that.saveCurrentExamQuestions(examData.exam.questions.list)
           // save exam info in vuex store (remove questions of exam then save in store)
-          that.$store.commit('updateQuiz', examData.exam)
-          that.$store.commit('mergeDbAnswersIntoLocalstorage', {
+          that.$store.commit('quiz/updateQuiz', examData.exam)
+          that.$store.commit('quiz/mergeDbAnswersIntoLocalstorage', {
             dbAnswers: examData.userExamData,
             exam_id: examData.exam.id
           })
           that.report = examData.studentReport
           that.loadKarname(examData.studentReport)
-          that.$store.dispatch('loading/overlayLoading', { loading: false, message: '' })
+          // that.$store.dispatch('loading/overlayLoading', { loading: false, message: '' })
         })
         .catch((error) => {
           that.$store.dispatch('loading/overlayLoading', { loading: false, message: '' })
@@ -645,5 +646,9 @@ export default {
 
 .video-title {
   margin-top: 20px;
+}
+/*TODO : TEMP */
+.q-tab-panel {
+  padding: 0;
 }
 </style>

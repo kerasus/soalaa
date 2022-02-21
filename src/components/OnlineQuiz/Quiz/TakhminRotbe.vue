@@ -195,7 +195,9 @@ export default {
     }
   },
   created () {
-    console.log('TakhminRotbe----------', this.takhminReport.sub_category)
+    setTimeout(
+      console.log('TakhminRotbe----------', this.takhminReport.sub_category)
+      , 5000)
     this.prepareTakhmineRotbeReport(true)
   },
   methods: {

@@ -9,11 +9,14 @@
       <div
         class="col col-12 col-md-7"
       >
-        <div class="row proceeds-table">
-          <div class="col">
+        <div class="row proceeds-table default-resultTable-row">
+          <div class="col lessons-proceeds default-resultTable-col">
+            <br>
             <span class="tableTitle col-12">
                   جدول عملکرد دروس
-                </span>
+            </span>
+            <br>
+            <br>
             <q-table
               :rows="report.sub_category"
               :columns="columns1"
@@ -25,8 +28,8 @@
             ></q-table>
           </div>
         </div>
-        <div class="row default-result-table">
-          <div class="col">
+        <div class="row default-result-table default-resultTable-row">
+          <div class="col default-resultTable-col">
             <q-table
               :rows="[report.exam_user]"
               :columns="columns3"
@@ -42,11 +45,14 @@
       <div
         class="col col-md-5 col-12"
       >
-        <div class="row default-result-table">
-          <div class="col">
+        <div class="row default-result-table default-resultTable-row">
+          <div class="col default-resultTable-col">
+            <br>
             <span class="tableTitle ">
                   نتیجه در زیر گروه ها
             </span>
+            <br>
+            <br>
             <q-table
               :rows="report.zirgorooh"
               :columns="columns2"
@@ -58,26 +64,26 @@
             ></q-table>
           </div>
         </div>
-        <div class="row">
-          <div class="col card-col">
+        <div class="row default-resultTable-row">
+          <div class="col card-col default-resultTable-col">
             <div class="card-parent elevation-1">
-              <q-card >
-                <q-card-section>
+              <q-card class="default-result-card" >
+                <q-card-section class="card-title-section">
                   <div class="row">
-                    <div class="col">
+                    <div class="col text-center">
                       تعداد کل شرکت کنندگان
                     </div>
-                    <div class="col">
+                    <div class="col text-center">
                       ماکزمیم تراز کل زیر گروه
                     </div>
                   </div>
                 </q-card-section>
                 <q-card-section>
                   <div class="row">
-                    <div class="col">
+                    <div class="col text-center">
                       {{ report.n_normal_participants }}
                     </div>
-                    <div class="col">
+                    <div class="col text-center">
                       {{ report.main.taraaz }}
                     </div>
                   </div>
@@ -86,25 +92,25 @@
             </div>
           </div>
         </div>
-        <div class="row">
-          <div class="col card-col">
+        <div class="row default-resultTable-row">
+          <div class="col card-col default-resultTable-col">
             <div class="card-parent elevation-1">
               <q-card
-                class="mb-2"
+                class="mb-2 default-result-card"
               >
-                <q-card-section>
+                <q-card-section class="card-title-section">
                   <div class="row">
-                    <div class="col" :class="[(report.main.rank_school) ? 'col-3' : 'col-4']">
+                    <div class="col text-center" :class="[(report.main.rank_school) ? 'col-3' : 'col-4']">
                       رتبه کل کشوری
                     </div>
-                    <div class="col" :class="[(report.main.rank_school) ? 'col-3' : 'col-4']">
+                    <div class="col text-center" :class="[(report.main.rank_school) ? 'col-3' : 'col-4']">
                       رتبه در استان
                     </div>
-                    <div class="col" :class="[(report.main.rank_school) ? 'col-3' : 'col-4']">
+                    <div class="col text-center" :class="[(report.main.rank_school) ? 'col-3' : 'col-4']">
                       رتبه در شهر
                     </div>
                     <div
-                      class="col col-3"
+                      class="col col-3 text-center"
                       v-if="report.main.rank_school"
                     >
                       رتبه در مدرسه
@@ -113,11 +119,11 @@
                 </q-card-section>
                 <q-card-section>
                   <div class="row">
-                    <div class="col" :class="[(report.main.rank_school) ? 'col-3' : 'col-4']">{{ report.main.rank_country }}</div>
-                    <div class="col" :class="[(report.main.rank_school) ? 'col-3' : 'col-4']">{{ report.main.rank_province }}</div>
-                    <div class="col" :class="[(report.main.rank_school) ? 'col-3' : 'col-4']">{{ report.main.rank_city }}</div>
+                    <div class="col text-center" :class="[(report.main.rank_school) ? 'col-3' : 'col-4']">{{ report.main.rank_country }}</div>
+                    <div class="col text-center" :class="[(report.main.rank_school) ? 'col-3' : 'col-4']">{{ report.main.rank_province }}</div>
+                    <div class="col text-center" :class="[(report.main.rank_school) ? 'col-3' : 'col-4']">{{ report.main.rank_city }}</div>
                     <div
-                      class="col col-3"
+                      class="col col-3 text-center"
                       v-if="report.main.rank_school"
                     >{{ report.main.rank_school }}</div>
                   </div>
@@ -196,6 +202,15 @@ export default {
 
 <style lang="scss">
     .personal-results {
+      background-color: #f1f1f1;
+      .default-resultTable-row {
+        padding: 12px;
+      }
+      .default-resultTable-col {
+        padding: 20px;
+        background-color: #fff;
+        box-shadow: 0 2px 1px -1px rgba(0, 0, 0, 0.2), 0 1px 1px 0 rgba(0, 0, 0, 0.14), 0 1px 3px 0 rgba(0, 0, 0, 0.12) !important;
+      }
       .proceeds-table ,  .default-result-table{
         .q-table__container {
           border-radius: 20px;
@@ -214,6 +229,20 @@ export default {
             font-size: 0.875rem;
           }
         }
+      }
+      .default-result-card {
+        border-radius: 20px;
+        border: 1px solid #ececec;
+        color: rgba(0,0,0,.87);
+        font-size: 16px;
+        box-shadow: none;
+      }
+      .card-title-section {
+        background: rgba(255,193,7,.3);
+        color: rgba(0,0,0,.6);
+        font-size: 14px;
+        font-weight: 700;
+        padding: 8px;
       }
     }
     .personal-results .v-data-table tbody tr:nth-of-type(2n) {
@@ -234,26 +263,8 @@ export default {
     }
 
     .personal-results .tableTitle {
-        margin-right: 15px;
-    }
-
-    .personal-results .card-parent {
-        padding: 20px;
-        background: #fff;
-        border-radius: 4px;
-    }
-
-    .personal-results .v-card {
-        border-radius: 20px;
-        border: 1px solid #ececec;
-    }
-
-    .personal-results .v-card__title {
-        background: rgba(255,193,7,.3);
-        color: #00000099;
-        font-size: 14px;
-        font-weight: bold;
-        padding: 8px;
+        margin-right: 15px #{"/* rtl:ignore */"};
+      font-size: 16px;
     }
 
     .personal-results .v-card .col {
