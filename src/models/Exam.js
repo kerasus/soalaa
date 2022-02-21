@@ -28,6 +28,7 @@ class Exam extends Model {
       { key: 'alaa_product_link' },
       { key: 'questions_file_url' },
       { key: 'accept_at_is_passed' },
+      { key: 'booklet_url' },
       { key: 'total_question_number' },
       {
         key: 'is_open',
@@ -141,7 +142,9 @@ class Exam extends Model {
         {
           key: 'categories',
           value: function () {
-            return that.categories.list
+            return that.categories.list.map(item => {
+              return item.loadApiResource()
+            })
           }
         }
       ]
@@ -207,7 +210,10 @@ class Exam extends Model {
     // const englishRegex = /^[A-Za-z0-9 :"'ʹ.<>%$&@!+()\-/\n,…?ᵒ*~]*$/
     const englishRegex = /^[A-Za-z0-9 :"'ʹ.<>%$&@!+()\-/\n,…?ᵒ*~]*$/
     this.questions.list.forEach((question) => {
-      question.ltr = !!question.statement.match(englishRegex)
+      if (question.statement) {
+        console.log('exam model run')
+        question.ltr = !!question.statement.match(englishRegex)
+      }
     })
   }
 

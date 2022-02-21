@@ -8,11 +8,12 @@ const Time = (function () {
     const { date, offset, uncertainty } = await getServerDate({
       fetchSample: async () => {
         const requestDate = new Date()
-
-        const { headers, ok, statusText } = await fetch(window.location.origin, {
+        const url = process.env.VUE_APP_LUMEN_INTERNAL_GET_TIME_SERVER
+        const { headers, ok, statusText } = await fetch(url, {
           cache: 'no-store',
           method: 'HEAD'
         })
+        console.log('{ headers, ok, statusText }', { headers, ok, statusText })
 
         if (!ok) {
           throw new Error(`Bad date sample from server: ${statusText}`)
@@ -28,7 +29,24 @@ const Time = (function () {
     window.serverDate = { date, offset, uncertainty }
     console.log(`The server's date is ${date} +/- ${uncertainty} milliseconds. offset:` + offset)
   }
-
+  async function synchronizeTimeWithData (response) {
+    window.serverDate = {}
+    const { date, offset, uncertainty } = await getServerDate({
+      fetchSample: async () => {
+        if (response.status !== 200) {
+          throw new Error(`Bad date sample from server: ${response.statusText}`)
+        }
+        const requestDate = new Date()
+        return {
+          requestDate,
+          responseDate: new Date(),
+          serverDate: new Date(response.headers.date)
+        }
+      }
+    })
+    window.serverDate = { date, offset, uncertainty }
+    console.log(`The server's date is ${date} +/- ${uncertainty} milliseconds. offset:` + offset)
+  }
   function now () {
     window.serverDate = {}
     if (!window.serverDate.offset) {
@@ -132,6 +150,7 @@ const Time = (function () {
     diff,
     msToTime,
     synchronizeTime,
+    synchronizeTimeWithData,
     getRemainTime,
     getPassedTime,
     setStateOfExamCategories,

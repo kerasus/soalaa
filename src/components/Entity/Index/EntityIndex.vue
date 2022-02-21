@@ -114,7 +114,7 @@ export default {
       type: Object
     }
   },
-emits: ['onPageChanged', 'catchError'],
+  emits: ['onPageChanged', 'catchError'],
   data () {
     return {
       removeIdKey: 'id',
