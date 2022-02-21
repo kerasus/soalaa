@@ -177,7 +177,10 @@
         </v-row>
       </v-container>
     </v-footer>
-    <booklets-dialog v-model="bookletsDialog" />
+    <booklets-dialog
+      v-model="bookletsDialog"
+      :quiz="quiz"
+    />
   </v-container>
 </template>
 

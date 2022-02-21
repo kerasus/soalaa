@@ -5,6 +5,7 @@
         <exam-list
           ref="examList"
           @update-exam-id="updateExamId"
+          @delete-exam="deleteExam"
           @update-exam-report-id="updateReportExamId"
         />
       </v-col>
@@ -25,9 +26,9 @@
           <v-row>
             <v-col>
               <exam-info
+                v-model="exam"
                 col-lg="5"
                 cols="12"
-                :exam="exam"
                 @refresh-exam-list="rereshExamList"
               />
             </v-col>
@@ -79,14 +80,20 @@ export default {
     reportDialog: false,
   }),
   methods: {
-    onSocketStatusChange (status) {
-      // this.socketStatus = status
-      console.log(status)
-    },
     rereshExamList() {
       this.dialog = false
       this.reportDialog = false
       this.$refs.examList.getExams()
+    },
+    deleteExam(exam) {
+      this.exam = new Exam(exam)
+      this.exam.delete()
+          .then( () => {
+            this.rereshExamList()
+          })
+          .catch( () => {
+            this.rereshExamList()
+          })
     },
     updateExamId(e) {
       this.exam = new Exam(e)

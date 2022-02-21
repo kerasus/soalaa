@@ -72,53 +72,6 @@
           />
         </template>
       </v-list-group>
-
-      <router-link
-        v-if="false"
-        class="text-decoration-none"
-        :to="{ name: 'quest.create' }"
-      >
-        <v-list-item>
-          <v-list-item-title>اطلاعیه و اصلاحیه</v-list-item-title>
-        </v-list-item>
-      </router-link>
-      <router-link
-        v-if="false"
-        class="text-decoration-none"
-        :to="{ name: 'onlineQuiz.result' }"
-      >
-        <v-list-item>
-          <v-list-item-title>کارنامه</v-list-item-title>
-        </v-list-item>
-      </router-link>
-      <router-link
-        v-if="false"
-        class="text-decoration-none"
-        :to="{ name: 'onlineQuiz.result.lessonDetails' }"
-      >
-        <v-list-item>
-          <v-list-item-title>ریزدرس ها</v-list-item-title>
-        </v-list-item>
-      </router-link>
-      <router-link
-        v-if="false"
-        class="text-decoration-none"
-        :to="{ name: 'onlineQuiz.result.topScore' }"
-      >
-        <v-list-item>
-          <v-list-item-title>نتایج نفرات برتر</v-list-item-title>
-        </v-list-item>
-      </router-link>
-
-      <router-link
-        v-if="false"
-        class="text-decoration-none"
-        :to="{ name: 'onlineQuiz.result.pasokhbarg' }"
-      >
-        <v-list-item>
-          <v-list-item-title>پاسخ برگ</v-list-item-title>
-        </v-list-item>
-      </router-link>
     </v-list-item-group>
     <v-list-item-group
       v-if="user.has_admin_permission"
@@ -139,13 +92,7 @@
         </v-list-item>
       </router-link>
     </v-list-item-group>
-    <!--    <v-list-item-group-->
-    <!--      v-if="user.has_educational_permission && !user.has_admin_permission"-->
-    <!--      v-model="adminGroup"-->
-    <!--      class="admin-panel"-->
-    <!--      active-class="deep-purple&#45;&#45;text text&#45;&#45;accent-4"-->
-    <!--      @change="userGroup = null"-->
-    <!--    >-->
+
     <v-list-item-group
       v-model="adminGroup"
       class="admin-panel "
@@ -224,10 +171,6 @@ export default {
         to: { name: 'tree.edit' }
       },
       {
-        displayName: 'ساخت سوال',
-        to: { name: 'quest.create' }
-      },
-      {
         displayName: 'لیست آزمون ها',
         to: { name: 'onlineQuiz.exams' }
       },
@@ -243,14 +186,14 @@ export default {
         displayName: 'لیست دفترچه ها',
         to: { name: 'category.edit' }
       },
-      // {
-      //   displayName: 'لیست زیرگروه ها',
-      //   to: { name: 'subGroup.edit' }
-      // },
       {
         displayName: 'اضافه کردن سوالات MBTI',
         to: { name: 'question.mbti.create' }
       }
+      // {
+      //   displayName: 'لیست زیرگروه ها',
+      //   to: { name: 'subGroup.edit' }
+      // },
     ],
     educationList: [
       // {
@@ -272,7 +215,7 @@ export default {
       },
       {
         name: 'دهم انسانی',
-        link: 'https://nodes.alaatv.com/aaa/pdf/1401_plan_ensani_dahom.pdf'
+        link: 'https://nodes.alaatv.com/aaa/pdf/1401_plan_ensani_dahom2.pdf'
       },
       {
         divider: true
@@ -298,7 +241,7 @@ export default {
       },
       {
         name: 'دوازدهم ریاضی',
-        link: 'https://nodes.alaatv.com/aaa/pdf/1401_plan_riyazi_davazdahom.pdf'
+        link: 'https://nodes.alaatv.com/aaa/pdf/1401_plan_riyazi_davazdahom2.pdf'
       },
       {
         name: 'دوازدهم انسانی',

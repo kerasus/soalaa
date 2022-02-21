@@ -25,7 +25,7 @@ let config = {
             start_url: ".",
             scope: "/",
         },
-        workboxPluginMode: 'InjectManifest',
+        workboxPluginMode: 'InjectManifest', // InjectManifest - GenerateSW
         workboxOptions: {
             swSrc: './src/service-worker.js',
         },

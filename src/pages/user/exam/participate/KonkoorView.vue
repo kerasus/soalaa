@@ -125,7 +125,10 @@
         />
       </v-col>
     </v-row>
-    <booklets-dialog v-model="bookletsDialog" />
+    <booklets-dialog
+      v-model="bookletsDialog"
+      :quiz="quiz"
+    />
 
     <v-dialog
       v-model="confirmationBubbleSheet"
@@ -648,6 +651,10 @@
     /*.choices {*/
     /*    display: block !important;*/
     /*}*/
+
+    .konkoor-view .reading-duplicate {
+      display: none;
+    }
 
     .base.textstyle.uncramped {
         display: flex;

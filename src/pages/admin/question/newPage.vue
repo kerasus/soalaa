@@ -18,17 +18,17 @@
             <v-card-actions>
               <v-spacer />
               <v-btn
-                color="amber lighten-1"
-                text
-                @click="setQuestionTypeText"
+                  color="amber lighten-1"
+                  text
+                  @click="setQuestionTypeText"
               >
                 تایپ سوال
               </v-btn>
               <v-spacer class="mx-10" />
               <v-btn
-                color="amber lighten-1"
-                text
-                @click="setQuestionTypeImage"
+                  color="amber lighten-1"
+                  text
+                  @click="setQuestionTypeImage"
               >
                 آپلود فایل
               </v-btn>
@@ -56,6 +56,8 @@
             v-model="currentQuestion"
             :edit-status="upload_img_status"
             @imgClicked="makeShowImgPanelVisible($event)"
+            @deleteStatementPhoto="deleteStatementPhoto($event)"
+            @deleteAnswerPhoto="deleteAnswerPhoto($event)"
           />
 
           <div v-if="showQuestionComponentStatus()">
@@ -300,6 +302,24 @@ export default {
     this.setUploadImgStatus()
   },
   methods: {
+    deleteStatementPhoto (url) {
+      axios.delete('/3a/api/v1/question/statement_photo/' + this.currentQuestion.id, {
+        data: {
+          url
+        }
+      }).then(res => {
+        this.currentQuestion = new Question(res.data.data)
+      })
+    },
+    deleteAnswerPhoto (url) {
+      axios.delete('/3a/api/v1/question/answer_photo/' + this.currentQuestion.id, {
+        data: {
+          url
+        }
+      }).then(res => {
+        this.currentQuestion = new Question(res.data.data)
+      })
+    },
     addComment (eventData) {
       axios.post(API_ADDRESS.log.addComment(eventData.logId), { comment: eventData.text })
           .then(response => {
@@ -333,7 +353,13 @@ export default {
     },
 
     navBarAction_save() {
-      this.$refs.qlayout.getContent()
+      if (this.$refs.qlayout.getContent() === false) {
+        return
+      }
+      this.updateStatementPhotos()
+    },
+
+    save () {
       var currentQuestion = this.currentQuestion
       currentQuestion.type_id = this.optionQuestionId
       currentQuestion.update(API_ADDRESS.question.updateQuestion(currentQuestion.id))
@@ -386,24 +412,77 @@ export default {
       })
     },
 
+    updateStatementPhotos() {
+      this.setCurrentQuestionExams()
+      this.$store.commit('AppLayout/updateOverlay', {show: true, loading: true, text: 'کمی صبر کنید...'})
+      let formData = new FormData();
+      let needUpdate = false
+      this.currentQuestion.statement_photo.forEach((item, key) => {
+        if (typeof item !== 'string') {
+          formData.append('files[' + key + ']', item)
+          needUpdate = true
+        }
+      })
+      if (needUpdate) {
+        axios.post('/3a/api/v1/question/statement_photo/' + this.currentQuestion.id, formData)
+            .then((response) => {
+              this.currentQuestion = new Question(response.data.data)
+              this.$store.commit('AppLayout/updateOverlay', {show: false, loading: false, text: ''})
+              this.updateAnswersPhotos()
+            }).catch(() => {
+          this.$store.commit('AppLayout/updateOverlay', {show: false, loading: false, text: ''})
+        });
+      } else {
+        this.updateAnswersPhotos()
+      }
+    },
+
+
+    updateAnswersPhotos() {
+      this.setCurrentQuestionExams()
+      this.$store.commit('AppLayout/updateOverlay', {show: true, loading: true, text: 'کمی صبر کنید...'})
+      let formData = new FormData();
+      let needUpdate = false
+      this.currentQuestion.answer_photos.forEach((item, key) => {
+        if (typeof item !== 'string') {
+          needUpdate = true
+          formData.append('files[' + key + ']', item)
+        }
+      })
+      if (needUpdate) {
+        axios.post('/3a/api/v1/question/answer_photo/' + this.currentQuestion.id, formData)
+            .then((response) => {
+              this.currentQuestion = new Question(response.data.data)
+              this.$store.commit('AppLayout/updateOverlay', {show: false, loading: false, text: ''})
+              this.save()
+            }).catch(() => {
+          this.$store.commit('AppLayout/updateOverlay', {show: false, loading: false, text: ''})
+        });
+      } else {
+        this.save()
+      }
+    },
+
     setQuestionPhotos(statusId) {
       this.setCurrentQuestionExams()
        this.$store.commit('AppLayout/updateOverlay', {show: true, loading: true, text: 'کمی صبر کنید...'})
        let formData = new FormData();
        formData.append('status_id', statusId);
-       formData.append('statement_photo', this.currentQuestion.statement_photo);
+        this.currentQuestion.statement_photo.forEach((item, key) => {
+          formData.append('statement_photo[' + key + ']', item)
+        })
        this.currentQuestion.answer_photos.forEach((item, key) => {
          formData.append('answer_photos[' + key + ']', item)
        })
        formData.append('type_id', this.optionQuestionId)
       // formData.append('exams', JSON.stringify(this.currentQuestion.exams))
-       formData.append('exams', this.currentQuestion.exams)
+      //  formData.append('exams', this.currentQuestion.exams)
        this.currentQuestion.exams.forEach((item ,key) => {
          formData.append('exams[' + key + '][id]', item.id);
          formData.append('exams[' + key + '][order]',item.order);
          formData.append('exams[' + key + '][sub_category_id]', item.sub_category_id);
        })
-      console.log('result  : ',formData.get('exams'))
+      // console.log('result  : ',formData.get('exams'))
        axios.post(API_ADDRESS.question.create, formData)
            .then((response) => {
              const questionId = response.data.data.id
@@ -734,15 +813,15 @@ export default {
       this.dialog = false
       this.checkNavbarVisibilityOnCreatPage()
     },
-
     setQuestionTypeImage() {
       this.questionType = 'typeImage'
       this.dialog = false
       this.checkNavbarVisibilityOnCreatPage()
     },
-
     setInsertedQuestions() {  //یاس
-      this.$refs.qlayout.getContent()
+      if (this.$refs.qlayout.getContent() === false) {
+        return
+      }
       this.setCurrentQuestionExams()
       // console.log('currentQuestion.exam :',currentQuestion.exams)
       this.currentQuestion.type_id = this.optionQuestionId
@@ -782,7 +861,7 @@ export default {
     },
 
     setUploadImgStatus() {
-      this.upload_img_status = (this.getPageStatus() === 'create');
+      this.upload_img_status = (this.getPageStatus() === 'create' || this.getPageStatus() === 'edit');
     },
 
     setMainChoicesInCreateMode(statusId) {
@@ -840,7 +919,4 @@ export default {
 </style>
 
 <style>
-.mord {
-  font-family: IRANSans;
-}
 </style>

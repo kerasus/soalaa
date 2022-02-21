@@ -19,6 +19,7 @@ class QuestSubcategory extends Model {
                 }
             },
             { key: 'order' },
+            { key: 'time' },
             { key: 'category_id' },
             {
                 key: 'questions',
@@ -32,6 +33,18 @@ class QuestSubcategory extends Model {
 
         if (this.title === null) {
             this.title = ''
+        }
+
+        this.apiResource = {
+            fields: [
+                {key: 'id'},
+                {key: 'title'},
+                {key: 'permissions'},
+                {key: 'order'},
+                {key: 'time'},
+                {key: 'category_id'},
+                {key: 'editable'}
+            ]
         }
     }
 }

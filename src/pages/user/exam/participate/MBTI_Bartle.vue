@@ -69,10 +69,12 @@
                 سوال
                 {{ $route.params.questNumber }}
               </p>
+              <!-- eslint-disable -->
               <p
                 class="statement"
                 v-html="currentQuestion.statement"
               />
+              <!-- eslint-enable -->
               <div
                 class="choices"
                 :class="{
@@ -106,19 +108,23 @@
                       />
                     </div>
                   </div>
+                  <!-- eslint-disable -->
                   <p
                     v-if="stringMeanThumbUpOrDown(choice.title) === 'ThumbUp' || stringMeanThumbUpOrDown(choice.title) === 'ThumbDown'"
                     v-html="choice.title"
                   />
+                  <!-- eslint-enable -->
                   <div
                     v-else
                     class="choice-rect"
                     @click="choiceClick(choice.id)"
                   >
+                    <!-- eslint-disable -->
                     <div
                       class="choice-inner-rect"
                       v-html="choice.title"
                     />
+                    <!-- eslint-enable -->
                   </div>
                 </div>
                 <v-overlay :value="loading">
@@ -367,47 +373,45 @@ export default {
       this.loading = true
       let that = this
       const isLastQuestion = this.isLastQuestion()
-      const answerClickedPromise = this.answerClicked({choiceId: id, questionId: this.currentQuestion.id})
-      answerClickedPromise
-          .then((response) => {
-            const targetQuestion = response.data.data.find(item => (
-                this.currentQuestion.id !== null &&
-                item.question_id !== null &&
-                item.question_id.toString() === this.currentQuestion.id.toString())
-            )
-            if (
-                targetQuestion &&
-                targetQuestion.choice_id &&
-                targetQuestion.choice_id.toString()
-            ) {
-              if (!isLastQuestion) {
-                that.setCurrentQuestionChoice (targetQuestion.choice_id, true)
-                setTimeout( () => {
-                  that.goToNextQuestion('onlineQuiz.mbtiBartle')
-                },500)
-              } else {
-                that.setCurrentQuestionChoice (targetQuestion.choice_id, true)
-                setTimeout( () => {
-                  that.startExam(that.$route.params.quizId, 'onlineQuiz.mbtiBartle')
-                      .then(() => {
-                        that.$store.commit('AppLayout/updateOverlay', {show: false, loading: false, text: ''})
-                        const unansweredQuestion = that.getUnansweredQuestionBehind()
-                        if (unansweredQuestion) {
-                          that.changeQuestion(unansweredQuestion.id, 'onlineQuiz.mbtiBartle')
-                        } else {
-                          const isFinished = that.isFinished()
-                          if (isFinished) {
-                            that.sendAnswersAndFinishExam()
-                          }
-                        }
-                      })
-                },500)
-              }
-            } else {
-              that.setCurrentQuestionChoice (null, false)
-              that.loading = false
-            }
-          })
+      this.answerClicked({choiceId: id, questionId: this.currentQuestion.id}, true,(response) => {
+        const targetQuestion = response.data.data.find(item => (
+            this.currentQuestion.id !== null &&
+            item.question_id !== null &&
+            item.question_id.toString() === this.currentQuestion.id.toString())
+        )
+        if (
+            targetQuestion &&
+            targetQuestion.choice_id &&
+            targetQuestion.choice_id.toString()
+        ) {
+          if (!isLastQuestion) {
+            that.setCurrentQuestionChoice (targetQuestion.choice_id, true)
+            setTimeout( () => {
+              that.goToNextQuestion('onlineQuiz.mbtiBartle')
+            },500)
+          } else {
+            that.setCurrentQuestionChoice (targetQuestion.choice_id, true)
+            setTimeout( () => {
+              that.startExam(that.$route.params.quizId, 'onlineQuiz.mbtiBartle')
+                  .then(() => {
+                    that.$store.commit('AppLayout/updateOverlay', {show: false, loading: false, text: ''})
+                    const unansweredQuestion = that.getUnansweredQuestionBehind()
+                    if (unansweredQuestion) {
+                      that.changeQuestion(unansweredQuestion.id, 'onlineQuiz.mbtiBartle')
+                    } else {
+                      const isFinished = that.isFinished()
+                      if (isFinished) {
+                        that.sendAnswersAndFinishExam()
+                      }
+                    }
+                  })
+            },500)
+          }
+        } else {
+          that.setCurrentQuestionChoice (null, false)
+          that.loading = false
+        }
+      })
     },
     sendAnswersAndFinishExam() {
       let that = this

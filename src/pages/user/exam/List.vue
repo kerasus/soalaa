@@ -40,7 +40,7 @@
             </v-row>
             <v-row
               v-for="item in exams.list"
-              :key="item.id"
+              :key="'exam-'+item.id"
               class="exam-info-bar"
             >
               <v-col>
@@ -110,10 +110,10 @@
                         شروع آزمون
                       </v-btn>
                       <v-btn
-                          v-if="item.exam_actions.can_submit_new_answers"
-                          color="#ffc107"
-                          text
-                          @click="goToSendResults(item)"
+                        v-if="item.exam_actions.can_submit_new_answers"
+                        color="#ffc107"
+                        text
+                        @click="goToSendResults(item)"
                       >
                         ثبت گزینه ها
                       </v-btn>
@@ -152,14 +152,32 @@
                       <template v-if="item.booklet_url">
                         <v-btn
                           v-for="(booklet, bookletIndex) in item.booklet_url.filter( bookletItem => !!bookletItem.questions_booklet_url)"
-                          :key="bookletIndex"
+                          :key="'questions_booklet_url-'+bookletIndex"
                           color="#ffc107"
                           text
                           @click="downloadBooklet(booklet.questions_booklet_url)"
                         >
                           {{ booklet.category_title }}
                         </v-btn>
+                        <v-btn
+                          v-for="(booklet, bookletIndex) in item.booklet_url.filter( bookletItem => !!bookletItem.descriptive_answers_booklet_url)"
+                          :key="'descriptive_answers_booklet_url-'+bookletIndex"
+                          color="#00b5e6"
+                          text
+                          @click="downloadBooklet(booklet.descriptive_answers_booklet_url)"
+                        >
+                          پاسخ
+                          {{ booklet.category_title }}
+                        </v-btn>
                       </template>
+                      <v-btn
+                        v-if="item.exam_actions.can_submit_answers"
+                        color="green"
+                        text
+                        @click="setDialogStatus(item)"
+                      >
+                        ارسال پاسخنامه
+                      </v-btn>
                     </v-col>
                   </v-row>
                 </v-sheet>
@@ -169,6 +187,12 @@
         </v-row>
       </v-col>
     </v-row>
+    <send-answer-photo
+      :questions="questions"
+      :exam="bubbleSheetDialogExam"
+      :dialog-status="bubbleSheetDialog"
+      @closeDialog="bubbleSheetDialog = false"
+    />
   </v-container>
 </template>
 
@@ -177,20 +201,25 @@ import {Exam, ExamList} from "@/models/Exam";
 import {mixinAuth, mixinQuiz} from '@/mixin/Mixins'
 import ProgressLinear from "@/components/ProgressLinear";
 import VueConfirmDialog from 'vue-confirm-dialog'
+import SendAnswerPhoto from "@/pages/user/exam/SendAnswerPhoto";
 import Vue from 'vue'
+import {Question} from "@/models/Question";
 
 Vue.use(VueConfirmDialog)
 Vue.component('vue-confirm-dialog', VueConfirmDialog.default)
 
 export default {
   name: 'List',
-  components: {ProgressLinear},
+  components: {SendAnswerPhoto, ProgressLinear},
   mixins: [mixinAuth, mixinQuiz],
   data: () => ({
     preventStartExam: false,
     examItem: new Exam(),
     exams: new ExamList(),
-    loadingList: false
+    loadingList: false,
+    bubbleSheetDialog: false,
+    bubbleSheetDialogExam: new Exam(),
+    questions: []
   }),
   created() {
     this.getExams()
@@ -201,6 +230,10 @@ export default {
     this.$store.commit('AppLayout/updateOverlay', {show: false, loading: false, text: ''})
   },
   methods: {
+    setDialogStatus(exam) {
+      this.bubbleSheetDialog = true
+      this.bubbleSheetDialogExam = exam
+    },
     goToResult(exam) {
       let routeName = 'user.exam.results'
       if (exam.type && exam.type.value && exam.type.value === 'psychometric') {
@@ -308,7 +341,7 @@ export default {
             this.getExams()
           })
     },
-    downloadBooklet (bookletUrl) {
+    downloadBooklet(bookletUrl) {
       window.open(bookletUrl, '_blank').focus();
     }
   }

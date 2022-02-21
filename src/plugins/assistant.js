@@ -41,7 +41,13 @@ let Assistant = function () {
                 messages.push('ابتدا وارد سامانه شوید.')
             } else if (err.data.errors) {
                 for (const [key, value] of Object.entries(err.data.errors)) {
-                    messages.push(value)
+                    if (Array.isArray(value)) {
+                        value.forEach( item => {
+                            messages.push(item)
+                        })
+                    } else {
+                        messages.push(value)
+                    }
                     console.log(`${key}: ${value}`);
                 }
             } else if (err.data.error && !AjaxResponseMessages.isCustomMessage(err.data.error.code)) {
@@ -49,7 +55,7 @@ let Assistant = function () {
             } else if (err.data.error && AjaxResponseMessages.isCustomMessage(err.data.error.code)) {
                 messages.push(AjaxResponseMessages.getMessage(err.data.error.code))
             } else if (err.data) {
-                for (const [key, value] of Object.entries(err.data)) {
+                for (const value of Object.entries(err.data)) {
                     if (typeof value === 'string') {
                         messages.push(value)
                     } else {

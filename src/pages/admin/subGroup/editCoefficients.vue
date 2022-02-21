@@ -1,6 +1,39 @@
 <template>
   <v-container fluid>
     <v-row>
+      <v-col>
+        <v-text-field
+          v-model="sourceExamInfoForCopyCoefficient.id"
+          :loading="sourceExamInfoForCopyCoefficient.loading"
+          :disabled="sourceExamInfoForCopyCoefficient.loading"
+          label="شناسه درس جهت کپی کردن ضرایب"
+          hide-details="auto"
+          class="mb-2"
+        >
+          <v-icon
+            slot="append"
+            color="green"
+            @click="getExamInfo"
+          >
+            mdi-eye
+          </v-icon>
+        </v-text-field>
+        <br>
+        <v-btn
+          v-if="sourceExamInfoForCopyCoefficient.title"
+          block
+          color="cyan"
+          dark
+          @click="copyCoefficient"
+        >
+          کپی کردن ضرایب آزمون {
+          {{ sourceExamInfoForCopyCoefficient.title }}
+          }
+          روی این آزمون
+        </v-btn>
+      </v-col>
+    </v-row>
+    <v-row>
       <v-col md="6">
         <!--        ToDo change to using id-->
         <v-select
@@ -171,6 +204,7 @@ import axios from 'axios'
 import API_ADDRESS from "@/api/Addresses";
 import {QuestCategoryList} from "@/models/QuestCategory";
 import {QuestSubcategoryList} from "@/models/QuestSubcategory";
+import {Exam} from "@/models/Exam";
 export default {
   name: "EditCoefficients",
   data () {
@@ -182,6 +216,7 @@ export default {
       selectedCategory: null,
       selectedSubcategory: null,
       allSubGroups: [],
+      sourceExamInfoForCopyCoefficient: new Exam()
     }
   },
   computed: {
@@ -198,26 +233,72 @@ export default {
     }
   },
   created() {
-    let that = this
-    axios.get(API_ADDRESS.questionCategory.base)
-      .then((response) => {
-        that.categoryList = new QuestCategoryList(response.data.data)
-        console.log(response)
-      })
-    this.subCategoriesList.fetch()
-      .then((response) => {
-        that.subCategoriesList = new QuestSubcategoryList(response.data.data)
-      })
-    axios.get(API_ADDRESS.subGroups.base(that.$route.params.exam_id))
-      .then((response) => {
-        that.subGroups = response.data.data
-      })
-    axios.get(API_ADDRESS.subGroups.all())
-      .then((response) => {
-        that.allSubGroups = response.data.data
-      })
+    this.loadPageData()
   },
   methods: {
+    loadPageData () {
+      this.getExamCategoriesAndSubCategories()
+      this.getSubGroupsOfExam()
+      this.getAllSubGroups()
+    },
+    getExamCategoriesAndSubCategories () {
+      let that = this
+      axios.get(API_ADDRESS.questionCategory.base)
+          .then((response) => {
+            that.categoryList = new QuestCategoryList(response.data.data)
+            console.log(response)
+          })
+      this.subCategoriesList.fetch()
+          .then((response) => {
+            that.subCategoriesList = new QuestSubcategoryList(response.data.data)
+          })
+    },
+    getSubGroupsOfExam () {
+      let that = this
+      axios.get(API_ADDRESS.subGroups.base(that.$route.params.exam_id))
+          .then((response) => {
+            that.subGroups = response.data.data
+          })
+    },
+    getAllSubGroups () {
+      let that = this
+      axios.get(API_ADDRESS.subGroups.all())
+          .then((response) => {
+            that.allSubGroups = response.data.data
+          })
+    },
+    getExamInfo () {
+      if (!this.sourceExamInfoForCopyCoefficient.id || this.$route.params.exam_id === this.sourceExamInfoForCopyCoefficient.id) {
+        return
+      }
+      this.sourceExamInfoForCopyCoefficient.loading = true
+      axios.get(API_ADDRESS.exam.showExam(this.sourceExamInfoForCopyCoefficient.id))
+          .then((response) => {
+            this.sourceExamInfoForCopyCoefficient = new Exam(response.data.data)
+            this.sourceExamInfoForCopyCoefficient.loading = false
+          })
+      .catch(()=>{
+        this.sourceExamInfoForCopyCoefficient.loading = false
+      })
+    },
+    copyCoefficient () {
+      if (!this.sourceExamInfoForCopyCoefficient.title) {
+        return
+      }
+      this.sourceExamInfoForCopyCoefficient.loading = true
+      axios.put(API_ADDRESS.exam.copyCoefficient, {
+        source_exam_id: this.sourceExamInfoForCopyCoefficient.id,
+        destination_exam_id: this.$route.params.exam_id
+      })
+          .then(() => {
+            this.sourceExamInfoForCopyCoefficient = new Exam()
+            this.sourceExamInfoForCopyCoefficient.loading = false
+            this.loadPageData()
+          })
+      .catch(()=>{
+        this.sourceExamInfoForCopyCoefficient.loading = false
+      })
+    },
     addSubgroup () {
       let selectedSubGroup = this.allSubGroups.find(item => item.id === this.selectedSubgroup)
       this.subGroups.push({ title: selectedSubGroup.value, sub_category: [], id: selectedSubGroup.id })

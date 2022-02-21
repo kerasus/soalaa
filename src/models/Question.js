@@ -82,6 +82,10 @@ class Question extends Model {
                 key: 'bookmarked',
                 default: false
             },
+            {
+                key: 'has_warning',
+                default: false
+            },
             {key: 'lesson'},
             {
                 key: 'seen',
@@ -336,22 +340,51 @@ class Question extends Model {
     }
 
     actionsWhileSendingData(){
-        Time.synchronizeTime()
+        // Time.synchronizeTime()
     }
 
-    sendUserActionToServer(type, exam_user_id , dataToSendObject, socket) {
+    sendUserActionToServer(type, exam_user_id , dataToSendObject, socket, callback) {
         // ToDo: returned data
         let data = null
         if (type === 'answer') {
             let answerArray = dataToSendObject.answerArray
             let failedAnswersArray = dataToSendObject.failedAnswersArray
-            data = axios.post(API_ADDRESS.exam.sendAnswers, {exam_user_id, questions: answerArray})
-                .then(function (response) {
-                    if (failedAnswersArray.length > 0 && response.status === 200) {
-                        axios.post(API_ADDRESS.exam.sendAnswers, {exam_user_id, questions: failedAnswersArray})
-                        failedAnswersArray.length = 0
+
+            // if (!socket) {
+            if (true) {
+                data = axios.post(API_ADDRESS.exam.sendAnswers, {exam_user_id, questions: answerArray})
+                    .then(function (response) {
+                        if (failedAnswersArray.length > 0 && response.status === 200) {
+                            axios.post(API_ADDRESS.exam.sendAnswers, {exam_user_id, questions: failedAnswersArray})
+                            failedAnswersArray.length = 0
+                        }
+                        if (callback) {
+                            callback(response)
+                        }
+                    })
+            } else {
+                socket.timeout(10000).emit('question.answer:save', {exam_user_id, questions: answerArray}, (response, err) => {
+                    if (!err || err.error) {
+                        data = axios.post(API_ADDRESS.exam.sendAnswers, {exam_user_id, questions: answerArray})
+                    } else {
+                        if (failedAnswersArray.length > 0) {
+                            socket.timeout(10000).emit('question.answer:save', {exam_user_id, questions: failedAnswersArray}, (response, err) => {
+                                if (!err || err.error) {
+                                    data = axios.post(API_ADDRESS.exam.sendAnswers, {exam_user_id, questions: failedAnswersArray})
+                                        .then(function () {
+                                            failedAnswersArray.length = 0
+                                        })
+                                } else {
+                                    failedAnswersArray.length = 0
+                                }
+                            })
+                        }
+                    }
+                    if (callback) {
+                        callback(response)
                     }
                 })
+            }
         }
         if (type === 'bookmark') {
             let failedBookmarksArray = dataToSendObject.failedBookmarksArray.filter( item => item.bookmarked)
@@ -373,13 +406,19 @@ class Question extends Model {
                                     })
                             })
                         }
+                        if (callback) {
+                            callback(response)
+                        }
                     })
             } else {
                 socket.timeout(10000).emit('question.bookmark:save', {exam_user_id, question_id, selected_at}, (response, err) => {
                     if (!err || err.error) {
                         data = axios.post(API_ADDRESS.exam.sendBookmark, {exam_user_id, question_id, selected_at})
                     }
-                });
+                    if (callback) {
+                        callback(response)
+                    }
+                })
                 let failedBookmarksArray = dataToSendObject.failedBookmarksArray.filter( item => item.bookmarked)
                 failedBookmarksArray.forEach( failedBookmark => {
                     let question_id = failedBookmark.question_id
@@ -389,6 +428,9 @@ class Question extends Model {
                             if (response.status === 200) {
                                 const target = dataToSendObject.failedBookmarksArray.findIndex( item => item.question_id === question_id)
                                 dataToSendObject.failedBookmarksArray.splice(target, 1)
+                            }
+                            if (callback) {
+                                callback(response)
                             }
                         })
                 })
@@ -414,11 +456,17 @@ class Question extends Model {
                                     })
                             })
                         }
+                        if (callback) {
+                            callback(response)
+                        }
                     })
             } else {
                 socket.timeout(10000).emit('question.bookmark:remove', {exam_user_id, question_id, selected_at}, (response, err) => {
                     if (!err || err.error) {
                         data = axios.post(API_ADDRESS.exam.sendUnBookmark, {exam_user_id, question_id, selected_at})
+                    }
+                    if (callback) {
+                        callback(response)
                     }
                 });
                 let failedBookmarksArray = dataToSendObject.failedBookmarksArray.filter( item => !item.bookmarked)
@@ -430,6 +478,9 @@ class Question extends Model {
                             if (response.status === 200) {
                                 const target = dataToSendObject.failedBookmarksArray.findIndex( item => item.question_id === question_id)
                                 dataToSendObject.failedBookmarksArray.splice(target, 1)
+                            }
+                            if (callback) {
+                                callback(response)
                             }
                         })
                 })
@@ -457,11 +508,17 @@ class Question extends Model {
                                     })
                             })
                         }
+                        if (callback) {
+                            callback(response)
+                        }
                     })
             } else {
                 socket.timeout(10000).emit('question.status:save', {exam_user_id, question_id, status, selected_at}, (response, err) => {
                     if (!err || err.error) {
                         data = axios.post(API_ADDRESS.exam.sendStatus, {exam_user_id, question_id, status, selected_at})
+                    }
+                    if (callback) {
+                        callback(response)
                     }
                 });
                 let failedStatusArray = dataToSendObject.failedStatusArray
@@ -474,6 +531,9 @@ class Question extends Model {
                             if (response.status === 200) {
                                 const target = dataToSendObject.failedStatusArray.findIndex( item => item.question_id === question_id)
                                 dataToSendObject.failedStatusArray.splice(target, 1)
+                            }
+                            if (callback) {
+                                callback(response)
                             }
                         })
                 })

@@ -9,7 +9,7 @@
         :loading="loading"
         :access-token="$store.getters['Auth/accessToken']"
         :upload-url="imageUrl"
-        :options="{ bubbleMenu: false, floatingMenu: false, poem: true, reading: true, persianKeyboard: true }"
+        :options="{ bubbleMenu: false, floatingMenu: false, poem: true, reading: true, persianKeyboard: true, mathliveOptions: { smartFence: false } }"
       />
     </v-col>
     <!-- eslint-disable vue/no-v-html -->
@@ -104,8 +104,5 @@ export default {
   border: solid 1px #dedede;
 }
 
-.mord {
-  font-family: IRANSans;
-}
 </style>
 
