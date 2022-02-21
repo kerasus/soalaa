@@ -177,6 +177,22 @@ export default {
   }),
   created () {
     this.getExams()
+    this.$store.commit('AppLayout/updateHeaderTitle', {
+      path: [
+        {
+          title: 'داشبورد',
+          route: {
+            path: 'subCategory'
+          }
+        },
+        {
+          title: 'داشبورد2',
+          route: {
+            name: 'user.exam.list'
+          }
+        }
+      ]
+    })
   },
   watch: {
     loadingList () {
