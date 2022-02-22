@@ -216,6 +216,7 @@ export default {
 
 <style lang="scss" scoped>
 .bubbleSheet-body {
+  background-color: #f1f1f1;
   &.pasokh-nameh {
     .choice-in-list {
       position: relative;
