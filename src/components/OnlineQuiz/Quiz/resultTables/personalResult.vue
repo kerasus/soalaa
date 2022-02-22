@@ -201,16 +201,31 @@ export default {
 </script>
 
 <style lang="scss">
+.default-resultTable-row {
+  padding: 12px;
+}
+.default-resultTable-col {
+  padding: 20px;
+  background-color: #fff;
+  box-shadow: 0 2px 1px -1px rgba(0, 0, 0, 0.2), 0 1px 1px 0 rgba(0, 0, 0, 0.14), 0 1px 3px 0 rgba(0, 0, 0, 0.12) !important;
+}
+.default-result-card {
+  border-radius: 20px;
+  border: 1px solid #ececec;
+  color: rgba(0,0,0,.87);
+  font-size: 16px;
+  box-shadow: none;
+}
+.card-title-section {
+  background: rgba(255,193,7,.3);
+  color: rgba(0,0,0,.6);
+  font-size: 14px;
+  font-weight: 700;
+  padding: 8px;
+}
+
     .personal-results {
       background-color: #f1f1f1;
-      .default-resultTable-row {
-        padding: 12px;
-      }
-      .default-resultTable-col {
-        padding: 20px;
-        background-color: #fff;
-        box-shadow: 0 2px 1px -1px rgba(0, 0, 0, 0.2), 0 1px 1px 0 rgba(0, 0, 0, 0.14), 0 1px 3px 0 rgba(0, 0, 0, 0.12) !important;
-      }
       .proceeds-table ,  .default-result-table{
         .q-table__container {
           border-radius: 20px;
@@ -230,54 +245,10 @@ export default {
           }
         }
       }
-      .default-result-card {
-        border-radius: 20px;
-        border: 1px solid #ececec;
-        color: rgba(0,0,0,.87);
-        font-size: 16px;
-        box-shadow: none;
-      }
-      .card-title-section {
-        background: rgba(255,193,7,.3);
-        color: rgba(0,0,0,.6);
-        font-size: 14px;
-        font-weight: 700;
-        padding: 8px;
-      }
-    }
-    .personal-results .v-data-table tbody tr:nth-of-type(2n) {
-        background-color: rgba(0,0,0,.04);
-    }
-
-    .personal-results .v-data-table thead {
-        background-color: rgba(255,193,7,.3);
-    }
-
-    .personal-results .v-data-table .v-data-table__wrapper {
-        border-radius: 20px;
-        border: 1px solid #ececec;
-    }
-
-    .personal-results .v-data-table {
-        padding: 20px 20px;
     }
 
     .personal-results .tableTitle {
         margin-right: 15px #{"/* rtl:ignore */"};
-      font-size: 16px;
-    }
-
-    .personal-results .v-card .col {
-        text-align: center;
-    }
-
-    .personal-results .v-card span .row {
-        height: 64px;
-    }
-
-    .personal-results .v-card span .col {
-        display: flex;
-        justify-content: center;
-        align-items: center;
+        font-size: 16px;
     }
 </style>

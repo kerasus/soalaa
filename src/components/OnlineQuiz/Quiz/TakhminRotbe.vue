@@ -9,7 +9,7 @@
           <div class="col col-md-7 col-12 default-result-table">
             <span class="tableTitle col-12">
                   جدول عملکرد دروس
-                </span>
+            </span>
             <q-table
               :rows="takhminReport.sub_category"
               :columns="columns1"
@@ -58,17 +58,14 @@
 <!--                </span>-->
 <!--              </template>-->
 <!--            </v-data-table>-->
-            <div class="row subRowHeight final-report-scoreboard">
-              <div class="col col-12 subColsPaddingBottom" >
-                <q-card class="subCards">
-<!--                  <v-card-title class="cardTitle">-->
-                    <div class="row">
-                      <div class="col">
-                        ماکزمیم تراز کل زیر گروه
-                      </div>
+            <div class="row final-report-scoreboard">
+              <div class="col col-12 subColsPaddingBottom default-resultTable-row" >
+                <q-card class=" default-result-card">
+                  <div class="row">
+                    <div class="col card-title-section text-center">
+                      ماکزمیم تراز کل زیر گروه
                     </div>
-<!--                  </v-card-title>-->
-
+                  </div>
                   <span class="cardContent">
                     <div class="row">
                       <div class="col">
@@ -79,16 +76,15 @@
                 </q-card>
               </div>
               <div class="col col-12 subColsPaddingBottom subColsPaddingRight">
-                <q-card class="subCards">
-<!--                  <v-card-title class="cardTitle">-->
-                    <div class="row">
-                      <div class="col col-4">
+                <q-card class="default-result-card">
+                    <div class="row card-title-section">
+                      <div class="col col-4 text-center">
                         رتبه کل کشوری
                       </div>
-                      <div class="col col-4">
+                      <div class="col col-4 text-center">
                         رتبه در استان
                       </div>
-                      <div class="col col-4">
+                      <div class="col col-4 text-center">
                         رتبه در شهر
                       </div>
                     </div>
@@ -96,9 +92,9 @@
 
                   <span class="cardContent">
                     <div class="row">
-                      <div class="col col-4">{{ takhminReport.main.rank_country }}</div>
-                      <div class="col col-4" >{{ takhminReport.main.rank_province }}</div>
-                      <div class="col col-4">{{ takhminReport.main.rank_city }}</div>
+                      <div class="col col-4 text-center">{{ takhminReport.main.rank_country }}</div>
+                      <div class="col col-4 text-center" >{{ takhminReport.main.rank_province }}</div>
+                      <div class="col col-4 text-center">{{ takhminReport.main.rank_city }}</div>
                     </div>
                   </span>
                 </q-card>
@@ -195,10 +191,10 @@ export default {
     }
   },
   created () {
-    setTimeout(
-      console.log('TakhminRotbe----------', this.takhminReport.sub_category)
-      , 5000)
     this.prepareTakhmineRotbeReport(true)
+  },
+  mounted () {
+    console.log('TakhminRotbe----------', this.takhminReport)
   },
   methods: {
     resetAnswerCount (subcategoryId) {
@@ -343,7 +339,7 @@ export default {
       return status
     },
     sendData () {
-      console.log('TakhminRotbe----------', this.takhminReport.sub_category)
+      console.log('TakhminRotbe----------', this.takhminReport)
       if (!this.validateSendData()) {
         return
       }
