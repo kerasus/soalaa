@@ -28,7 +28,7 @@
 </template>
 
 <script>
-import moment from "moment-jalaali";
+import moment from 'moment-jalaali'
 import inputMixin from 'components/FormBuilder/inputMixin'
 export default {
   name: 'FormBuilderDateTime',
@@ -43,7 +43,7 @@ export default {
       type: String
     }
   },
-emits: ['update:value'],
+  emits: ['update:value'],
   computed: {
     canShowTime () {
       return (!this.range && !this.multiple) && this.time
@@ -92,7 +92,7 @@ emits: ['update:value'],
       }
       if (!newValue.from && this.calendar === 'persian' && this.canShowDate) {
         this.inputData = this.miladiToShamsiDate(newValue)
-      } else if (newValue.from){
+      } else if (newValue.from) {
         this.inputData.from = this.miladiToShamsiDate(newValue.from)
         this.inputData.to = this.miladiToShamsiDate(newValue.to)
       }
