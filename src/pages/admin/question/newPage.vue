@@ -18,17 +18,17 @@
             <v-card-actions>
               <v-spacer />
               <v-btn
-                color="amber lighten-1"
-                text
-                @click="setQuestionTypeText"
+                  color="amber lighten-1"
+                  text
+                  @click="setQuestionTypeText"
               >
                 تایپ سوال
               </v-btn>
               <v-spacer class="mx-10" />
               <v-btn
-                color="amber lighten-1"
-                text
-                @click="setQuestionTypeImage"
+                  color="amber lighten-1"
+                  text
+                  @click="setQuestionTypeImage"
               >
                 آپلود فایل
               </v-btn>
@@ -816,13 +816,11 @@ export default {
       this.dialog = false
       this.checkNavbarVisibilityOnCreatPage()
     },
-
     setQuestionTypeImage() {
       this.questionType = 'typeImage'
       this.dialog = false
       this.checkNavbarVisibilityOnCreatPage()
     },
-
     setInsertedQuestions() {  //یاس
       if (this.$refs.qlayout.getContent() === false) {
         return

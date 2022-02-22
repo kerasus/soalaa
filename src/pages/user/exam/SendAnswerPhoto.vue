@@ -1,93 +1,95 @@
 <template>
   <v-dialog
-      v-model="dialogStatus"
-      fullscreen
-      transition="dialog-bottom-transition"
-      class="text-center"
+    v-model="dialogStatus"
+    fullscreen
+    transition="dialog-bottom-transition"
+    class="text-center"
   >
     <v-card class="text-center">
       <v-toolbar
-          dark
-          color="#ffc107"
+        dark
+        color="#ffc107"
       >
         <v-btn
-            icon
-            dark
-            @click="closeDialog"
+          icon
+          dark
+          @click="closeDialog"
         >
           <v-icon>mdi-close</v-icon>
         </v-btn>
         <v-toolbar-title>ارسال تصویر پاسخنامه</v-toolbar-title>
-        <v-spacer/>
+        <v-spacer />
       </v-toolbar>
       <v-container>
         <v-row class="justify-center">
-          <v-col :md="8" cols="12">
+          <v-col
+            :md="8"
+            cols="12"
+          >
             <v-card
-                flat
-                class="mt-10 pt-5 text-center"
+              flat
+              class="mt-10 pt-5 text-center"
             >
-
               <v-alert
-                  color="cyan"
-                  border="left"
-                  elevation="2"
-                  colored-border
-                  class="text-right"
+                color="cyan"
+                border="left"
+                elevation="2"
+                colored-border
+                class="text-right"
               >
                 {{ exam.title }}
               </v-alert>
 
               <v-row class="align-end ">
                 <v-col
-                    class="col-md-4 col-12 text-right"
+                  class="col-md-4 col-12 text-right"
                 >
                   <file-upload
-                      ref="answerImages"
-                      v-model="answerFiles"
-                      input-id="answerImages"
-                      :extensions="extensions"
-                      :accept="accept"
-                      :multiple="false"
-                      :directory="directory"
-                      :create-directory="createDirectory"
-                      :size="size || 0"
-                      :thread="thread < 1 ? 1 : (thread > 5 ? 5 : thread)"
-                      :data="data"
-                      :drop="drop"
-                      :drop-directory="dropDirectory"
-                      :add-index="addIndex"
-                      @input-filter="inputFilter"
-                      @input-file="inputFile"
+                    ref="answerImages"
+                    v-model="answerFiles"
+                    input-id="answerImages"
+                    :extensions="extensions"
+                    :accept="accept"
+                    :multiple="false"
+                    :directory="directory"
+                    :create-directory="createDirectory"
+                    :size="size || 0"
+                    :thread="thread < 1 ? 1 : (thread > 5 ? 5 : thread)"
+                    :data="data"
+                    :drop="drop"
+                    :drop-directory="dropDirectory"
+                    :add-index="addIndex"
+                    @input-filter="inputFilter"
+                    @input-file="inputFile"
                   >
                     <v-btn
-                        large
-                        dark
-                        color="#FF8F00"
+                      large
+                      dark
+                      color="#FF8F00"
                     >
                       {{ answerFiles.length > 0 ? 'تغییر عکس' : 'انتخاب عکس ' }}
                     </v-btn>
                   </file-upload>
                 </v-col>
                 <v-col
-                    v-for="(file, index) in answerFiles"
-                    :key="index"
-                    class="col-md-6 col-12 text-right"
+                  v-for="(file, index) in answerFiles"
+                  :key="index"
+                  class="col-md-6 col-12 text-right"
                 >
                   <v-badge
-                      style="max-width: 100%;"
-                      class="uploaded-image"
-                      color="transparent"
-                      overlap
+                    style="max-width: 100%;"
+                    class="uploaded-image"
+                    color="transparent"
+                    overlap
                   >
                     <template v-slot:badge>
                       <v-btn
-                          fab
-                          dark
-                          x-small
-                          color="error"
-                          class="btnRemoveFile"
-                          @click.prevent="removePhoto(file)"
+                        fab
+                        dark
+                        x-small
+                        color="error"
+                        class="btnRemoveFile"
+                        @click.prevent="removePhoto(file)"
                       >
                         <v-icon dark>
                           mdi-close
@@ -95,32 +97,32 @@
                       </v-btn>
                     </template>
                     <v-img
-                        :src="file.thumb"
-                        :width="'100%'"
+                      :src="file.thumb"
+                      :width="'100%'"
                     />
                   </v-badge>
                 </v-col>
               </v-row>
               <v-row>
                 <v-col
-                    v-if="answerFiles.length>0"
-                    class="col-6 text-right"
+                  v-if="answerFiles.length>0"
+                  class="col-6 text-right"
                 >
                   <v-btn
-                      v-if="!showUserAnswers"
-                      dark
-                      color="#1E88E5"
-                      outlined
-                      @click="sendAnswerImg"
+                    v-if="!showUserAnswers"
+                    dark
+                    color="#1E88E5"
+                    outlined
+                    @click="sendAnswerImg"
                   >
                     ارسال تصویر
                   </v-btn>
                   <v-btn
-                      v-if="showUserAnswers"
-                      dark
-                      color="#43A047"
-                      outlined
-                      @click="confirmSendAllAnswerOfUser"
+                    v-if="showUserAnswers"
+                    dark
+                    color="#43A047"
+                    outlined
+                    @click="confirmSendAllAnswerOfUser"
                   >
                     تأیید نهایی
                   </v-btn>
@@ -128,11 +130,11 @@
               </v-row>
               <v-card-text>
                 <BubbleSheet
-                    v-if="showUserAnswers"
-                    :questions="questions"
-                    :info="{ type: 'scanned-pasokh-barg' }"
-                    :delay-time="0"
-                    @clickChoice="choiceClicked"
+                  v-if="showUserAnswers"
+                  :questions="questions"
+                  :info="{ type: 'scanned-pasokh-barg' }"
+                  :delay-time="0"
+                  @clickChoice="choiceClicked"
                 />
               </v-card-text>
             </v-card>
@@ -143,8 +145,8 @@
     <v-overlay :value="loading">
       در حال پردازش
       <v-progress-circular
-          indeterminate
-          color="amber"
+        indeterminate
+        color="amber"
       />
     </v-overlay>
   </v-dialog>
@@ -177,13 +179,6 @@ export default {
       default: false
     },
   },
-  watch: {
-    dialogStatus (newVal) {
-      if (!newVal) {
-        this.closeDialog()
-      }
-    }
-  },
   data: () => ({
     hasPhoto: false,
     loading: false,
@@ -203,6 +198,13 @@ export default {
     questions: []
 
   }),
+  watch: {
+    dialogStatus (newVal) {
+      if (!newVal) {
+        this.closeDialog()
+      }
+    }
+  },
   mounted() {
   },
   methods: {

@@ -4,7 +4,7 @@
       color="deep-purple accent-4"
       absolute
       top
-      :active="exam.loading"
+      :active="examProp.loading"
       indeterminate
       rounded
       height="6"
@@ -12,19 +12,21 @@
     <v-col cols="8">
       <v-row>
         <v-text-field
-          v-model="exam.title"
+          v-model="examProp.title"
           label="عنوان"
+          @change="updateExamProp"
         >
-          {{ exam.title }}
+          {{ examProp.title }}
         </v-text-field>
       </v-row>
       <v-row>
         <v-select
-          v-model="exam.type_id"
+          v-model="examProp.type_id"
           :items="items"
           item-value="id"
           item-text="value"
           label="انتخاب نوع آزمون"
+          @change="updateExamProp"
         />
       </v-row>
       <v-row>
@@ -33,11 +35,12 @@
         </v-col>
         <v-col cols="12">
           <date-picker
-            v-model="exam.start_at"
+            v-model="examProp.start_at"
             type="datetime"
             :editable="true"
             format="YYYY-MM-DD HH:mm:ss"
             display-format="dddd jDD jMMMM jYYYY ساعت HH:mm"
+            @change="updateExamProp"
           />
         </v-col>
       </v-row>
@@ -47,62 +50,69 @@
         </v-col>
         <v-col cols="12">
           <date-picker
-            v-model="exam.finish_at"
+            v-model="examProp.finish_at"
             type="datetime"
             :editable="true"
             format="YYYY-MM-DD HH:mm:ss"
             display-format="dddd jDD jMMMM jYYYY ساعت HH:mm"
+            @change="updateExamProp"
           />
         </v-col>
       </v-row>
       <v-row>
         <v-text-field
-          v-model="exam.delay_time"
+          v-model="examProp.delay_time"
           label="زمان تاخیر (دقیقه)"
         />
       </v-row>
       <v-row>
         <v-col :cols="6">
           <v-checkbox
-            v-model="exam.enable"
+            v-model="examProp.enable"
             label="فعال"
+            @change="updateExamProp"
           />
         </v-col>
         <v-col :cols="6">
           <v-checkbox
-            v-model="exam.is_free"
+            v-model="examProp.is_free"
             label="رایگان"
+            @change="updateExamProp"
           />
         </v-col>
         <v-col :cols="12">
           <v-checkbox
-            v-model="exam.is_register_open"
+            v-model="examProp.is_register_open"
             label="ثبت نام باز است"
+            @change="updateExamProp"
           />
         </v-col>
         <v-col :cols="12">
           <v-checkbox
-            v-model="exam.is_open"
+            v-model="examProp.is_open"
             label="شرکت در آزمون باز است"
+            @change="updateExamProp"
           />
         </v-col>
         <v-col :cols="12">
           <v-checkbox
-            v-model="exam.confirm"
+            v-model="examProp.confirm"
             label="تولید اتوماتیک کارنامه"
+            @change="updateExamProp"
           />
         </v-col>
         <v-col :cols="12">
           <v-checkbox
-            v-model="exam.generate_questions_automatically"
+            v-model="examProp.generate_questions_automatically"
             label="تولید اتوماتیک سوال"
+            @change="updateExamProp"
           />
         </v-col>
       </v-row>
       <v-divider />
       <v-row>
         <v-col
-          v-if="!exam.id"
+          v-if="!examProp.id"
           :cols="6"
         >
           <v-select
@@ -111,30 +121,32 @@
             item-text="title"
             item-value="id"
             label="category"
+            @change="updateExamProp"
           />
         </v-col>
         <v-col
-          v-if="!exam.id"
+          v-if="!examProp.id"
           :cols="3"
         >
           <v-text-field
             v-model="selectedCategoryTime"
             type="number"
             label="زمان"
+            @change="updateExamProp"
           />
         </v-col>
         <v-col
-          v-if="!exam.id"
+          v-if="!examProp.id"
           :cols="3"
         >
           <v-text-field
             v-model="selectedCategoryOrder"
             type="number"
             label="ترتیب"
+            @change="updateExamProp"
           />
         </v-col>
         <v-col
-          v-if="!exam.id"
           :cols="6"
         >
           <v-btn @click="addCategory">
@@ -144,8 +156,7 @@
       </v-row>
       <v-divider />
       <v-row
-        v-for="item in exam.categories.list"
-        v-if="!exam.id"
+        v-for="item in examProp.categories.list"
         :key="item.id"
       >
         <v-col cols="5">
@@ -154,20 +165,23 @@
             :items="categoryList.list"
             item-value="id"
             item-text="title"
+            @change="updateExamProp"
           />
         </v-col>
         <v-col cols="3">
           <v-text-field
+            v-model="item.time"
             label="زمان"
-            :value="item.time"
             type="number"
+            @change="updateExamProp"
           />
         </v-col>
         <v-col cols="3">
           <v-text-field
+            v-model="item.order"
             label="ترتیب"
-            :value="item.order"
             type="number"
+            @change="updateExamProp"
           />
         </v-col>
         <v-col cols="1">
@@ -185,16 +199,16 @@
         <v-col>
           <div class="text-center">
             <v-btn
-              :disabled="exam.loading"
-              :loading="exam.loading"
+              :disabled="examProp.loading"
+              :loading="examProp.loading"
               elevation="2"
               @click="create"
             >
               ثبت
             </v-btn>
             <v-btn
-              :disabled="exam.loading"
-              :loading="exam.loading"
+              :disabled="examProp.loading"
+              :loading="examProp.loading"
               elevation="2"
             >
               حذف
@@ -227,17 +241,24 @@ Vue.component('date-picker', VuePersianDatetimePicker)
 
 export default {
   name: 'ExamInfo',
-  props: ['exam'],
+  props: ['value'],
   data: () => ({
     items: [],
     loading:true,
+    examProp: new Exam(),
     examItem: new Exam(),
     categoryList: new QuestCategoryList(),
     selectedCategory: null,
     selectedCategoryTime: 0,
     selectedCategoryOrder: 0
   }),
+  watch: {
+    value (newValue) {
+      this.examProp = newValue
+    }
+  },
   created() {
+    this.examProp = this.value
     let that = this
     const loadCategoriesPromise = this.loadCategories()
 
@@ -262,17 +283,17 @@ export default {
           that.items = itemstype
           that.loading = false
         })
-    this.examItem = this.exam
+    this.examItem = this.examProp
   },
   methods: {
     getCategoryById (id) {
       return this.categoryList.list.find(item => item.id === id)
     },
     deleteCategory (id) {
-      this.exam.categories.list = this.exam.categories.list.filter(item => item.id !== id)
+      this.examProp.categories.list = this.examProp.categories.list.filter(item => item.id !== id)
     },
     addCategory () {
-      this.exam.categories.list.push(new QuestCategory({ id: this.selectedCategory, time: this.selectedCategoryTime, order: this.selectedCategoryOrder }))
+      this.examProp.categories.list.push(new QuestCategory({ id: this.selectedCategory, time: this.selectedCategoryTime, order: this.selectedCategoryOrder }))
     },
     loadCategories () {
       let that = this
@@ -288,7 +309,7 @@ export default {
       })
     },
     create() {
-      this.examItem = this.exam
+      this.examItem = this.examProp
       this.examItem.loading = true
       let that = this
       this.examItem.photo = 'https://cdn.alaatv.com/upload/images/slideShow/home-slide-yalda-festival_20201219075413.jpg?w=1843&h=719'
@@ -330,6 +351,10 @@ export default {
     },
     refreshExamList() {
       this.$emit('refresh-exam-list')
+    },
+    updateExamProp () {
+      this.$emit('update', this.examProp)
+      console.log('updateExamProp')
     }
   }
 }
