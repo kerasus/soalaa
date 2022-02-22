@@ -370,6 +370,7 @@ export default {
               text: 'ویرایش با موفقیت انجام شد',
               type: 'success'
             })
+            this.$store.commit('AppLayout/updateOverlay', {show: false, loading: false, text: ''})
             this.$router.push({name: 'question.show', params: {question_id: this.$route.params.question_id}})
           })
     },
@@ -434,6 +435,7 @@ export default {
         });
       } else {
         this.updateAnswersPhotos()
+        this.$store.commit('AppLayout/updateOverlay', {show: false, loading: false})
       }
     },
 
@@ -460,6 +462,7 @@ export default {
         });
       } else {
         this.save()
+        this.$store.commit('AppLayout/updateOverlay', {show: false, loading: false, text: ''})
       }
     },
 
