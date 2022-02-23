@@ -309,13 +309,9 @@ function getMeta (title, desc) {
 
 export default {
   name: 'Settings',
-  created () {
-    return this.onCreate
-  },
   watch: {
     'pick.header': function (newValue) {
       this.updateLayoutHeader(newValue)
-      console.log('set', this.pick.header)
     },
     'play.header': function (newValue) {
       this.updateLayoutHeaderVisible(newValue)
@@ -507,7 +503,6 @@ export default {
         { label: 'Elevated', value: 'elevated' },
         { label: 'Bordered', value: 'bordered' }
       ]
-
       this.pick.header = this.layoutHeader
       this.play.header = this.layoutHeaderVisible
       this.cfg.headerReveal = this.layoutHeaderReveal

@@ -17,13 +17,23 @@
     class="right-side"
     :class="{'col-6': windowSize > 1023, 'col-12': windowSize < 350}"
   >
-        <span
-          v-for="(address, index) in addresses"
-          :key="index"
-          class="address-bar"
-        >
-        {{ address }}
+    <template
+      v-for="(address, index) in headerTitle.path"
+      :key="index"
+    >
+      <span v-if="!getRoute(address.route)"
+            class="address-bar"
+      >
+        {{ address.title }}
       </span>
+      <router-link
+        v-else
+        :to="getRoute(address.route)"
+        class="address-bar"
+      >
+        {{ address.title }}
+      </router-link>
+    </template>
   </div>
   <div
     class="left-side"
@@ -51,8 +61,7 @@
       dir="ltr"
       dense
       unelevated
-    >
-    </q-btn-dropdown>
+    />
   </div>
 </template>
 
@@ -75,25 +84,13 @@ export default {
   },
   computed: {
     ...mapGetters('AppLayout', [
-      'headerTitleName',
-      'headerTitlePath',
+      'headerTitle',
       'headerShowTitle',
       'layoutLeftDrawerVisible'
     ])
   },
-  watch: {
-    headerTitleName (newValue) {
-      this.addresses = []
-      this.addresses.push(newValue)
-    },
-    headerTitlePath (newValue) {
-      this.addresses = newValue
-    }
-  },
   methods: {
     ...mapMutations('AppLayout', [
-      'updateHeaderTitleName',
-      'updateHeaderTitlePath',
       'updateHeaderShowTitle',
       'updateHeaderTitleCentered',
       'updateLayoutLeftDrawerVisible'
@@ -102,7 +99,20 @@ export default {
       this.windowSize = document.documentElement.clientWidth
     },
     toggleLeftDrawer () {
-      this.layoutLeftDrawerVisible = !this.layoutLeftDrawerVisible
+      this.updateLayoutLeftDrawerVisible(true)
+    },
+    getRoute (route) {
+      if (!route) {
+        return false
+      }
+
+      if (route.name) {
+        return { name: route.name }
+      } else if (route.path) {
+        return { path: route.path }
+      } else {
+        return false
+      }
     }
   }
 }
@@ -151,7 +161,7 @@ export default {
 }
 .left-side {
   display: flex;
-  justify-content: end;
+  justify-content: flex-end;
   @media screen and (max-width: 1023px){
     position: absolute;
     right: 30px;
