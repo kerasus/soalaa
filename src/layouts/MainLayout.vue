@@ -1,5 +1,5 @@
 <template>
-  <template-builder v-model:value="properties" @drawerClosed="drawerMode">
+  <quasar-template-builder v-model:value="properties" @drawerClosed="drawerMode">
     <template #header>
       <template-header/>
     </template>
@@ -9,18 +9,18 @@
     <template #content>
       <router-view :key="$route.name" />
     </template>
-  </template-builder>
+  </quasar-template-builder>
 </template>
 
 <script>
 
 import SideMenuDashboard from 'components/Menu/SideMenu/SideMenu-dashboard'
 import { User } from 'src/models/User'
-import templateBuilder from 'components/Template/TemplateBuilder'
+import { QuasarTemplateBuilder } from 'quasar-template-builder'
 import templateHeader from 'components/Template/templateHeader'
 
 export default {
-  components: { SideMenuDashboard, templateBuilder, templateHeader },
+  components: { SideMenuDashboard, QuasarTemplateBuilder, templateHeader },
   data () {
     return {
       leftDrawerOpen: false,
@@ -36,7 +36,7 @@ export default {
         layoutHeaderElevated: false,
         layoutHeaderBordered: false,
         layoutLeftDrawer: true,
-        layoutLeftDrawerVisible: true,
+        layoutLeftDrawerVisible: false,
         layoutLeftDrawerOverlay: false,
         layoutLeftDrawerElevated: false,
         layoutLeftDrawerBordered: false,
@@ -70,6 +70,15 @@ export default {
     }
   },
   created () {
+    // const AppLayout = JSON.parse(localStorage.getItem('AppLayout'))
+    // if (AppLayout) {
+    //   console.log(this.properties)
+    //   console.log('if')
+    //   this.properties = AppLayout
+    //   console.log(this.properties)
+    // } else {
+    //   // localStorage.setItem('AppLayout', JSON.stringify(this.properties))
+    // }
     this.properties.leftDrawerWidth = this.drawerSize
   },
   watch: {

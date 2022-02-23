@@ -34,7 +34,7 @@
               <q-item
                 clickable
                 v-ripple:deep-purple
-                active="false"
+                :active="false"
                 active-class="active-route"
               >
                 <q-item-section class="item-list-expansion">
@@ -75,7 +75,6 @@
                 :to="subItem.to"
                 class="list-child-item"
                 exact-active-class="active-route"
-                @click="clickedChildItem(item.title, subItem.displayName)"
               >
                 <q-item-section
                   class="list-child-section"
@@ -94,7 +93,6 @@
           :class="{ 'alone-item': !item.children.length}"
           v-model="clickedItem"
           exact-active-class="active-route"
-          @click="selectedItem(item)"
         >
           <div class="section-title">
             <q-item-section class="list-section title-icon" avatar>
@@ -253,26 +251,7 @@ export default {
       ]
     }
   },
-  created () {
-    this.titlesList.forEach(title => {
-      if (this.$route.name === title.name) {
-        this.selectedItem(title)
-      } else if (title.children.length) {
-        title.children.forEach(child => {
-          if (this.$route.name === child.name) {
-            this.clickedChildItem(title.title, child.displayName)
-          }
-        })
-      }
-    })
-  },
   methods: {
-    selectedItem (item) {
-      this.$store.commit('AppLayout/updateHeaderTitleName', item.title)
-    },
-    clickedChildItem (item, child) {
-      this.$store.commit('AppLayout/updateHeaderTitlePath', [item, child])
-    },
     logOut () {
       return this.$store.dispatch('Auth/logOut')
     }

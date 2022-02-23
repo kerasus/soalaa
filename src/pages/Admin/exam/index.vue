@@ -184,7 +184,8 @@ export default {
         data: 'data',
         total: 'meta.total',
         currentPage: 'meta.current_page',
-        perPage: 'meta.per_page'
+        perPage: 'meta.per_page',
+        pageKey: 'page'
       }
     }
   },
