@@ -61,8 +61,7 @@
       dir="ltr"
       dense
       unelevated
-    >
-    </q-btn-dropdown>
+    />
   </div>
 </template>
 
@@ -162,7 +161,7 @@ export default {
 }
 .left-side {
   display: flex;
-  justify-content: end;
+  justify-content: flex-end;
   @media screen and (max-width: 1023px){
     position: absolute;
     right: 30px;
