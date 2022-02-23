@@ -52,24 +52,18 @@ export default {
     }
   },
   created () {
-    this.$axios.get(API_ADDRESS.exam.base())
-      .then(res => {
-        console.log('response:', res)
-      })
     this.api += '/' + this.$route.params.id
   },
   methods: {
     getOptions () {
       this.$axios.get(API_ADDRESS.option.base)
         .then((response) => {
-          console.log('res:', response)
           const options = response.data.data.filter(data => data.type === 'exam_type')
           this.inputs.forEach(input => {
             if (input.name === 'type_id') {
               options.forEach(type => {
                 input.options.push(type)
                 input.value = type.id
-                console.log('val', input.value)
               })
             }
           })

@@ -345,9 +345,6 @@ export default {
       'layoutFooterElevated',
       'layoutFooterBordered'
     ]),
-    saveOnLocalStorage () {
-      return this.setOnLocalStorage()
-    },
     headerVisibility () {
       return !this.defaultProperties.layoutHeaderVisible
     },
@@ -359,14 +356,6 @@ export default {
     },
     footerVisibility () {
       return !this.defaultProperties.layoutFooterVisible
-    }
-  },
-  created () {
-    const theme = localStorage.getItem('theme')
-    if (theme) {
-      this.defaultProperties = JSON.parse(theme)
-    } else {
-      return this.saveOnLocalStorage
     }
   },
   methods: {
@@ -396,17 +385,12 @@ export default {
       'updateLayoutFooterElevated',
       'updateLayoutFooterBordered'
     ]),
-    setOnLocalStorage () {
-      this.$store.subscribe((mutation, state) => {
-        localStorage.setItem('theme', JSON.stringify(this.defaultProperties))
-      })
-    },
     onHideLeft () {
       this.defaultProperties.layoutLeftDrawerVisible = false
       this.$emit('drawerClosed')
     },
     toggleLeftDrawer () {
-      this.leftDrawerOpen = !this.leftDrawerOpen
+      this.leftDrawerOpen = false
     },
     toggleRightDrawer () {
       this.rightDrawerOpen = !this.rightDrawerOpen
