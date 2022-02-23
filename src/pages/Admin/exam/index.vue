@@ -27,14 +27,6 @@
                     v-ripple:yellow
                     clickable
                     manual-focus
-                    @click="editExam(inputData.props.row.id)"
-                  >
-                    <q-item-section> ویرایش آزمون</q-item-section>
-                  </q-item>
-                  <q-item
-                    v-ripple:yellow
-                    clickable
-                    manual-focus
                     @click="editExamReport(inputData.props.row.id)"
                   >
                     <q-item-section>ویرایش کارنامه</q-item-section>
