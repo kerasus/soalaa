@@ -10,7 +10,8 @@
     "test": "echo \"No test specified\" && exit 0",
     "dev": "quasar dev",
     "build": "quasar build",
-    "build:pwa": "quasar build -m pwa"
+    "build:pwa": "quasar build -m pwa",
+    "build:ssr": "quasar build -m ssr"
   },
   "dependencies": {
     "@nodeguy/server-date": "^4.0.3",
@@ -40,6 +41,7 @@
     "video.js": "^7.17.0",
     "vue-i18n": "^9.0.0",
     "vue-upload-component": "^3.0.50",
+    "vue3-tiptap-katex": "^1.0.4",
     "vuex": "^4.0.1",
     "vuex-persistedstate": "^4.1.0"
   },

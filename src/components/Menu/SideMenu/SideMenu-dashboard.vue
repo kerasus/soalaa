@@ -39,7 +39,7 @@
               >
                 <q-item-section class="item-list-expansion">
                   <span class="item-list-expansion-title">
-                    {{examPlan.name}}
+                    {{ examPlan.name }}
                   </span>
                 </q-item-section>
               </q-item>
@@ -88,7 +88,7 @@
         </q-expansion-item>
         <q-item
           v-else
-          :to="item.path"
+          :to="(item.routeName) ? {name: item.routeName} : null"
           class="item-list"
           :class="{ 'alone-item': !item.children.length}"
           v-model="clickedItem"
@@ -125,16 +125,14 @@ export default {
         {
           title: 'داشبورد',
           icon: 'isax:home',
-          path: '/',
-          name: 'dashboard',
+          routeName: 'dashboard',
           active: false,
           children: []
         },
         {
           title: 'سوال',
           icon: 'isax:bank',
-          path: '',
-          name: '',
+          routeName: null,
           active: false,
           children: [
             { displayName: 'ثبت سوال', to: '/question/create', name: 'user.exam', active: false },
@@ -145,8 +143,7 @@ export default {
         {
           title: 'آزمون',
           icon: 'isax:task-square',
-          path: '',
-          name: '',
+          routeName: null,
           active: false,
           children: [
             { displayName: 'ساخت آزمون', to: '/exam/create', name: 'Admin.Exam.Creat', active: false },
@@ -156,48 +153,42 @@ export default {
         {
           title: 'درخت دانش',
           icon: 'isax:tree',
-          path: '/knowledgeTree',
-          name: 'knowledgeTree',
+          routeName: 'Admin.KnowledgeTree.tree',
           active: false,
           children: []
         },
         {
           title: 'لیست دروس',
           icon: 'isax:book',
-          path: '/subCategory',
-          name: 'Admin.subCategory.Index',
+          routeName: 'Admin.subCategory.Index',
           active: false,
           children: []
         },
         {
           title: 'لیست دفترچه ها',
           icon: 'isax:book',
-          path: '/category',
-          name: 'Admin.Category.Index',
+          routeName: 'Admin.Category.Index',
           active: false,
           children: []
         },
         {
           title: 'گزارشات',
           icon: 'isax:graph',
-          path: '',
-          name: '',
+          routeName: null,
           active: false,
           children: []
         },
         {
           title: 'تنظیمات',
           icon: 'isax:setting-2',
-          path: '/settings',
-          name: 'Admin.Settings',
+          routeName: 'Admin.Settings',
           active: false,
           children: []
         },
         {
           title: 'سوالات متداول',
           icon: 'isax:message-question',
-          path: '/faq',
-          name: 'faq',
+          routeName: 'faq',
           active: false,
           children: []
         }
@@ -403,15 +394,18 @@ export default {
           }
         }
       }
-      .side-expansion-list{
-        &.top-expansion{
+
+      .side-expansion-list {
+        &.top-expansion {
           margin-bottom: 10px;
         }
-        .expansion-body{
+
+        .expansion-body {
           display: flex;
           margin-left: 8px;
         }
-        .q-expansion-item__content{
+
+        .q-expansion-item__content {
           .vertical-separator {
             margin: 6px 9px 9px 9px;
             @media screen and (max-width: 349px) {
@@ -421,25 +415,29 @@ export default {
         }
 
         .q-list {
-        &.list-expansion {
-          margin-bottom: 0;
-          .item-list-expansion {
-            height: 30px;
-            margin: 5px;
-            .item-list-expansion-title {
-              justify-content: start;
+          &.list-expansion {
+            margin-bottom: 0;
+
+            .item-list-expansion {
+              height: 30px;
+              margin: 5px;
+
+              .item-list-expansion-title {
+                justify-content: start;
+              }
             }
-          }
-          .top-expansion-separator{
-            margin: 0 40px 5px 40px;
-            @media screen and (max-width: 1439px) {
-              margin: 0 30px 5px 30px;
+
+            .top-expansion-separator {
+              margin: 0 40px 5px 40px;
+              @media screen and (max-width: 1439px) {
+                margin: 0 30px 5px 30px;
+              }
+              @media screen and (max-width: 349px) {
+                margin: 0 45px 5px 45px;
+              }
             }
-            @media screen and (max-width: 349px) {
-              margin: 0 45px 5px 45px;
-            }
-          }
-          .list-child-item {
+
+            .list-child-item {
               height: 30px;
               justify-content: right;
               margin-bottom: 8px;
@@ -467,6 +465,7 @@ export default {
           }
         }
       }
+
       .active-route {
         background-color: #8075DC;
 
@@ -510,9 +509,11 @@ export default {
     @media screen and (max-width: 349px) {
       margin: 0 30px 30px 30px;
     }
-    &:hover{
-      background-color: rgba(255,255,255,0.1);
+
+    &:hover {
+      background-color: rgba(255, 255, 255, 0.1);
     }
+
     .q-avatar {
       height: 22px;
       width: 22px;
@@ -526,7 +527,7 @@ export default {
 .side-menu-main-layout {
   .q-expansion-item__container {
     .q-item {
-      display: flex ;
+      display: flex;
       padding: 0 10px !important;
 
     }
