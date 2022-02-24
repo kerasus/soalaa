@@ -1,5 +1,4 @@
 import { boot } from 'quasar/wrappers'
-
 /**
  * A stack of different middlewares ran in series
  * Link: https://blog.logrocket.com/vue-middleware-pipelines/
@@ -15,10 +14,54 @@ function middlewarePipeline (context, middlewares, index) {
   }
 }
 
+function getRouteWithParent (routeNode, toName) {
+  const routes = routeNode.children
+  for (const routeIndex in routes) {
+    const route = routes[routeIndex]
+    if (route.name === toName) {
+      return {
+        route,
+        parent: routeNode
+      }
+    } else {
+      if (route.children && route.children.length > 0) {
+        const res = getRouteWithParent(route, toName)
+        if (res) {
+          return {
+            route: res,
+            parent: routeNode
+          }
+        }
+      }
+    }
+  }
+}
+function createBreadcrumbsFromRouteWithParent (routeWithParent) {
+  if (routeWithParent.route) {
+    const array = createBreadcrumbsFromRouteWithParent(routeWithParent.route)
+    if (routeWithParent.parent.breadcrumbs) {
+      array.push(routeWithParent.parent.breadcrumbs)
+    }
+    return array
+  } else {
+    if (routeWithParent.breadcrumbs) {
+      return [routeWithParent.breadcrumbs]
+    } else {
+      return []
+    }
+  }
+}
+
 export default boot(({ router, store }) => {
   router.beforeEach((to, from, next) => {
+    console.log('to.name: ', to.name)
+    console.log('router.options.routes: ', router.options.routes)
+    const routeWithParent = getRouteWithParent({ children: router.options.routes }, to.name)
+    console.log('createBreadcrumbsFromRouteWithParent (routeWithParent)', createBreadcrumbsFromRouteWithParent(routeWithParent))
     // Now you need to add your authentication logic here, like calling an API endpoint
-    if (!to.meta.middlewares) return next()
+    if (!to.meta.middlewares) {
+      return next()
+    }
     const middlewares = to.meta.middlewares
     const context = { to, from, next, store }
     return middlewares[0]({

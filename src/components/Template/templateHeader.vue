@@ -18,20 +18,20 @@
     :class="{'col-6': windowSize > 1023, 'col-12': windowSize < 350}"
   >
     <template
-      v-for="(address, index) in headerTitle.path"
+      v-for="(breadcrumb, index) in headerTitle.path"
       :key="index"
     >
-      <span v-if="!getRoute(address.route)"
+      <span v-if="!getRoute(breadcrumb.route)"
             class="address-bar"
       >
-        {{ address.title }}
+        {{ breadcrumb.title }}
       </span>
       <router-link
         v-else
-        :to="getRoute(address.route)"
+        :to="getRoute(breadcrumb.route)"
         class="address-bar"
       >
-        {{ address.title }}
+        {{ breadcrumb.title }}
       </router-link>
     </template>
   </div>

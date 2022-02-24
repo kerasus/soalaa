@@ -6,7 +6,7 @@ export default function () {
         {
           icon: '',
           title: '',
-          route: ''
+          route: null
         }
       ]
     }
