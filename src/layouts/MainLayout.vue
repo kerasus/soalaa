@@ -1,5 +1,5 @@
 <template>
-  <quasar-template-builder v-model:value="properties" @drawerClosed="drawerMode">
+  <quasar-template-builder v-model:value="properties">
     <template #header>
       <template-header/>
     </template>
@@ -36,18 +36,18 @@ export default {
         layoutHeaderElevated: false,
         layoutHeaderBordered: false,
         layoutLeftDrawer: true,
+        layoutLeftDrawerBehavior: '',
         layoutLeftDrawerVisible: false,
         layoutLeftDrawerOverlay: false,
         layoutLeftDrawerElevated: false,
         layoutLeftDrawerBordered: false,
-        leftDrawerWidth: 325,
+        layoutLeftDrawerWidth: 325,
         layoutPageContainer: true,
         layoutRightDrawer: false,
         layoutFooter: false,
         layoutHeaderCustomClass: 'main-layout-header row',
         layoutLeftDrawerCustomClass: 'main-layout-left-drawer',
-        layoutPageContainerCustomClass: 'main-layout-container',
-        menuIcon: 'menu'
+        layoutPageContainerCustomClass: 'main-layout-container'
       }
     }
   },
@@ -63,9 +63,16 @@ export default {
       if (this.windowSize > 1023) {
         return 325
       } else if (this.windowSize < 1024 && this.windowSize > 349) {
-        return 280
+        return 280 && this.$store.commit('AppLayout/updateLayoutLeftDrawerBehavior', 'mobile')
       } else if (this.windowSize < 350) {
         return 242
+      }
+    },
+    drawerBehavior () {
+      if (this.windowSize > 1023) {
+        return this.$store.commit('AppLayout/updateLayoutLeftDrawerBehavior', 'desktop')
+      } else {
+        return this.$store.commit('AppLayout/updateLayoutLeftDrawerBehavior', 'mobile')
       }
     }
   },
@@ -79,32 +86,25 @@ export default {
     // } else {
     //   // localStorage.setItem('AppLayout', JSON.stringify(this.properties))
     // }
-    this.properties.leftDrawerWidth = this.drawerSize
+    this.properties.layoutLeftDrawerBehavior = this.drawerBehavior
+    this.$store.commit('AppLayout/updateLayoutLeftDrawerWidth', this.drawerSize)
   },
   watch: {
     windowSize () {
+      console.log(this.drawerSize)
       if (this.windowSize > 1023) {
-        this.properties.leftDrawerWidth = 325
-        this.properties.layoutLeftDrawerVisible = true
-        this.properties.layoutLeftDrawerBehavior = 'desktop'
+        this.layoutLeftDrawerWidth = 325
       } else if (this.windowSize < 1024 && this.windowSize > 349) {
-        this.properties.leftDrawerWidth = 280
-        this.properties.layoutLeftDrawerBehavior = 'mobile'
+        this.layoutLeftDrawerWidth = 280
       } else if (this.windowSize < 350) {
-        this.properties.leftDrawerWidth = 242
+        this.layoutLeftDrawerWidth = 242
       }
     }
   },
   methods: {
-    drawerMode (value) {
-      this.properties.layoutLeftDrawerVisible = false
-    },
-    toggleLeftDrawer () {
-      this.properties.layoutLeftDrawerVisible = !this.properties.layoutLeftDrawerVisible
-    },
-    getDimensions () {
-      this.windowSize = document.documentElement.clientWidth
-    },
+    // getDimensions () {
+    //   this.windowSize = document.documentElement.clientWidth
+    // },
     getUser () {
       this.user = this.$store.getters['Auth/user']
       return this.user
