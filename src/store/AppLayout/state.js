@@ -4,9 +4,6 @@ export default function () {
       loading: false,
       path: [
         {
-          icon: '',
-          title: '',
-          route: null
         }
       ]
     }

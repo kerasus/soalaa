@@ -13,7 +13,16 @@ function middlewarePipeline (context, middlewares, index) {
     middleware({ ...context, next: nextMiddleware })
   }
 }
-
+// function getRouteWithParent (routeNode, toName) {
+//   const routes = routeNode.children
+//   const parent = routeWithParent.route
+//   while (true) {
+//     array.unshift(parent.breadcrumbs)
+//     parent= parent.route
+//     if (parent.route != null)break;
+//
+//   }
+// }
 function getRouteWithParent (routeNode, toName) {
   const routes = routeNode.children
   for (const routeIndex in routes) {
@@ -40,7 +49,7 @@ function createBreadcrumbsFromRouteWithParent (routeWithParent) {
   if (routeWithParent.route) {
     const array = createBreadcrumbsFromRouteWithParent(routeWithParent.route)
     if (routeWithParent.parent.breadcrumbs) {
-      array.push(routeWithParent.parent.breadcrumbs)
+      array.unshift(routeWithParent.parent.breadcrumbs)
     }
     return array
   } else {
@@ -58,6 +67,9 @@ export default boot(({ router, store }) => {
     console.log('router.options.routes: ', router.options.routes)
     const routeWithParent = getRouteWithParent({ children: router.options.routes }, to.name)
     console.log('createBreadcrumbsFromRouteWithParent (routeWithParent)', createBreadcrumbsFromRouteWithParent(routeWithParent))
+    store.commit('AppLayout/updateHeaderTitle', {
+      path: createBreadcrumbsFromRouteWithParent(routeWithParent)
+    })
     // Now you need to add your authentication logic here, like calling an API endpoint
     if (!to.meta.middlewares) {
       return next()

@@ -17,23 +17,21 @@
     class="right-side"
     :class="{'col-6': windowSize > 1023, 'col-12': windowSize < 350}"
   >
-    <template
+    <q-breadcrumbs
       v-for="(breadcrumb, index) in headerTitle.path"
       :key="index"
+      separator="--///-"
+      separator-color="red"
+      class="text-orange"
+      active-color="secondary"
     >
-      <span v-if="!getRoute(breadcrumb.route)"
-            class="address-bar"
-      >
-        {{ breadcrumb.title }}
-      </span>
-      <router-link
-        v-else
-        :to="getRoute(breadcrumb.route)"
-        class="address-bar"
-      >
-        {{ breadcrumb.title }}
-      </router-link>
-    </template>
+        <q-breadcrumbs-el
+          :icon=breadcrumb.icon
+          :label=breadcrumb.title
+          :to="getRoute(breadcrumb.route)"
+          class="address-bar"
+        />
+    </q-breadcrumbs>
   </div>
   <div
     class="left-side"
@@ -105,7 +103,6 @@ export default {
       if (!route) {
         return false
       }
-
       if (route.name) {
         return { name: route.name }
       } else if (route.path) {
