@@ -22,8 +22,8 @@ export default {
     return {
       expanded: true,
       api: API_ADDRESS.questionCategory.base,
-      entityIdKeyInResponse: 'id',
-      showRouteParamKey: 'id',
+      entityIdKeyInResponse: 'data.id',
+      showRouteParamKey: 'data.id',
       showRouteName: 'Admin.Category.Show',
       indexRouteName: 'Admin.Category.Index',
       inputs: [
