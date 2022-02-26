@@ -377,16 +377,16 @@ export default {
       //       color: 'green',
       //       icon: 'thumb_up'
       //     })
-      //     this.$router.push({ name: 'question.show', params: { question_id: this.$route.params.question_id } })
+      //     this.$router.push({ name: 'Admin.Question.Show', params: { question_id: this.$route.params.question_id } })
       //   })
     },
 
     navBarAction_cancel () {
-      this.$router.push({ name: 'question.show', params: { question_id: this.$route.params.question_id } })
+      this.$router.push({ name: 'Admin.Question.Show', params: { question_id: this.$route.params.question_id } })
     },
 
     navBarAction_edit () {
-      this.$router.push({ name: 'question.edit', params: { question_id: this.$route.params.question_id } })
+      this.$router.push({ name: 'Admin.Question.Edit', params: { question_id: this.$route.params.question_id } })
       this.setPageStatus()
     },
 
@@ -421,7 +421,7 @@ export default {
       axios.post(API_ADDRESS.question.create, formData)
         .then((response) => {
           const questionId = response.data.data.id
-          this.$router.push({ name: 'question.show', params: { question_id: questionId } })
+          this.$router.push({ name: 'Admin.Question.Show', params: { question_id: questionId } })
           this.$store.dispatch('loading/overlayLoading', { loading: false, message: '' })
         }).catch(() => {
           this.$store.dispatch('loading/overlayLoading', { loading: false, message: '' })
@@ -779,7 +779,7 @@ export default {
       this.checkNavbarVisibilityOnCreatPage()
     },
     goToMBTIPage () {
-      this.$router.push({ name: 'question.mbti.create' })
+      this.$router.push({ name: 'Admin.Question.MBTI.Create' })
     },
     setInsertedQuestions () {
       this.$refs.qlayout.getContent()
@@ -809,7 +809,7 @@ export default {
             icon: 'thumb_up'
           })
           window.open('/question/create', '_blank').focus()
-          this.$router.push({ name: 'question.show', params: { question_id: questionId } })
+          this.$router.push({ name: 'Admin.Question.Show', params: { question_id: questionId } })
         })
     },
 
@@ -862,7 +862,7 @@ export default {
 
     checkNavbarVisibilityOnCreatPage () {
       this.NavbarVisibilityOnCreatPage = true
-      if (this.$route.name === 'question.create') {
+      if (this.$route.name === 'Admin.Question.Create') {
         this.currentQuestion.author.push({ full_name: this.$store.getters['Auth/user'].full_name, id: this.$store.getters['Auth/user'].id })
         console.log(this.currentQuestion.author)
       }

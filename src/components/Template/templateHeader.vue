@@ -22,7 +22,7 @@
       separator-color="red"
       class="text-orange"
       gutter="sm"
-      active-color="secondary"
+      active-color="purple-6"
     >
         <q-breadcrumbs-el
           v-for="(breadcrumb, index) in headerTitle.path"
