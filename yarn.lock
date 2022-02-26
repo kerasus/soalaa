@@ -3661,6 +3661,13 @@ cross-spawn@7.0.3, cross-spawn@^7.0.2, cross-spawn@^7.0.3:
     shebang-command "^2.0.0"
     which "^2.0.1"
 
+crud@^0.0.28:
+  version "0.0.28"
+  resolved "https://registry.yarnpkg.com/crud/-/crud-0.0.28.tgz#a0582312befd3c4d07669daaaa358f212d42e369"
+  integrity sha1-oFgjEr79PE0HZp2qqjWPIS1C42k=
+  dependencies:
+    cycle "1.0.0"
+
 crypto-browserify@^3.11.0:
   version "3.12.0"
   resolved "https://registry.npmjs.org/crypto-browserify/-/crypto-browserify-3.12.0.tgz"
@@ -3826,6 +3833,11 @@ csstype@^2.6.8:
   version "2.6.19"
   resolved "https://registry.npmjs.org/csstype/-/csstype-2.6.19.tgz"
   integrity sha512-ZVxXaNy28/k3kJg0Fou5MiYpp88j7H9hLZp8PDC3jV0WFjfH5E9xHb56L0W59cPbKbcHXeP4qyT8PrHp8t6LcQ==
+
+cycle@1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/cycle/-/cycle-1.0.0.tgz#7d2bfce4be6c81cc76d1fc12bcbaec0b89c1bc55"
+  integrity sha1-fSv85L5sgcx20fwSvLrsC4nBvFU=
 
 cyclist@^1.0.1:
   version "1.0.1"
@@ -8395,10 +8407,10 @@ qs@~6.5.2:
   resolved "https://registry.npmjs.org/qs/-/qs-6.5.3.tgz"
   integrity sha512-qxXIEh4pCGfHICj1mAJQ2/2XVZkjCDTcEgfoSQxc/fYivUZxTkk7L3bDBJSoNrEzXI17oUO5Dp07ktqE5KzczA==
 
-quasar-crud@^0.2.1:
-  version "0.2.1"
-  resolved "https://registry.npmjs.org/quasar-crud/-/quasar-crud-0.2.1.tgz"
-  integrity sha512-9rTLE9FyCOPbn7UJ/aA1Y5VI/nKvtY0bTcYoaCYreeFHmZUc7wOVO2iilQq3p0nVKFyWywK0FTPcKOG2ycN52Q==
+quasar-crud@^0.2.2:
+  version "0.2.2"
+  resolved "https://registry.yarnpkg.com/quasar-crud/-/quasar-crud-0.2.2.tgz#d4939ebe1784f0d1db6ae2e3725e1c30e92bab16"
+  integrity sha512-+x2/qgGPr/r51nD5IhztjcaSIz/XiThCGh7WXtCzfFjI0nkJFg91SfloUjMriXh+l9gbnnvs7cE99ke1D8Xi7Q==
   dependencies:
     "@babel/eslint-parser" "^7.16.5"
     "@quasar/extras" "^1.0.0"
@@ -8435,7 +8447,7 @@ quasar-form-builder@^0.1.6:
 
 quasar-template-builder@^1.0.2:
   version "1.0.2"
-  resolved "https://registry.npmjs.org/quasar-template-builder/-/quasar-template-builder-1.0.2.tgz"
+  resolved "https://registry.yarnpkg.com/quasar-template-builder/-/quasar-template-builder-1.0.2.tgz#6a05be0b44a15d9b82bd3b1bd1c415d0dcdd1625"
   integrity sha512-L5hKz6d/Qn0GTk1cqnUCGZwakXWryL9O2h5LJFzyPFcykc5b/EalGkFtBF+2llGqykPl8SMK3YNPFKpeItOvaQ==
   dependencies:
     "@quasar/extras" "^1.12.3"
@@ -8449,6 +8461,11 @@ quasar@^2.0.0:
   version "2.4.2"
   resolved "https://registry.npmjs.org/quasar/-/quasar-2.4.2.tgz"
   integrity sha512-5fnWKg8yc1cGWE7sTt5FxfOqCtdxcy52pmxvpVGNy4TFNG0pC0FBuGR9toY/P1p7VoI422e89M9Ab/wkXcrRkQ==
+
+quasar@^2.5.5:
+  version "2.5.5"
+  resolved "https://registry.yarnpkg.com/quasar/-/quasar-2.5.5.tgz#942996e10a548c5f8a368b51d3432da21043d25a"
+  integrity sha512-7UntzqIBih+xZLCB/f9pxuvNP3EBgexfQDbf8r9p58DHWAiSQwamLjcRHKqmujjp0uX1QChtp6oUxEkK+sFKtA==
 
 querystring-es3@^0.2.0:
   version "0.2.1"
