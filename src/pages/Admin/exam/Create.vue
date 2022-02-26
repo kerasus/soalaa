@@ -7,91 +7,106 @@
     :show-route-param-key="showRouteParamKey"
     :index-route-name="indexRouteName"
     :show-route-name="showRouteName"
-    :before-send-data="test"
   >
+<!--    <form-builder-separator/>-->
     <template #after-form-builder >
-      <div class="row">
-        <q-select
-          class="q-pa-md col-md-4"
-          v-model="category"
-          :value="category"
-          label="دفترچه"
-          :options="categoryOptions"
-          option-value="categoryOptions"
-          option-label="title"
-          emit-value
-          map-options
-          :disable="totalCategory"
-        />
-        <q-input
-          class="q-pa-md col-md-3"
-          v-model="category.order"
-          label="ترتیب"
-          :disable="totalCategory"
-        />
-        <q-input
-          class="q-pa-md col-md-3"
-          v-model="category.time"
-          label="زمان"
-          :disable="totalCategory"
-        />
-        <div class="q-pa-md col-md-2 flex">
-          <q-btn
-            class="q-ma-md"
-            icon="add"
-            color="green"
-            flat
-            dense
-            fab-mini
-            :disable="totalCategory"
-            @click="addCategory"
-          />
-        </div>
-      </div>
-      <div
-        v-if="inputs[examCategoriesIndex] && inputs[examCategoriesIndex].value"
-        class="row"
-      >
-        <h5 class="q-ma-md">لیست دفترچه ها</h5>
-        <div
-          v-for="(category , index) in inputs[examCategoriesIndex].value"
-          :key="index"
-          class="row col-md-12"
-        >
-          <q-select
-            class="q-pa-md col-md-4"
-            v-model="category.title"
-            :value="category.id"
-            label="دفترچه"
-            :options="inputs[examCategoriesIndex].value"
-            option-value="title"
-            option-label="title"
-            emit-value
-            map-options
-          />
-          <q-input
-            class="q-pa-md col-md-3"
-            v-model="category.order"
-            label="ترتیب"
-          />
-          <q-input
-            class="q-pa-md col-md-3"
-            v-model="category.time"
-            label="زمان"
-          />
-          <div class="q-pa-md col-md-2 flex">
-            <q-btn
-              class="q-ma-md"
-              icon="close"
-              color="red"
-              flat
-              dense
-              fab-mini
-              @click="deleteCategory(category.id)"
+      <q-card class="category-card">
+        <q-card-section>
+          <h6 class="category-header q-ma-md">لیست دفترچه ها</h6>
+        </q-card-section>
+        <q-separator/>
+        <q-card-section class="flex">
+          <div class="row bg-grey-3 add-category-box">
+            <q-select
+              class="q-pa-md col-md-4"
+              v-model="category"
+              :value="category"
+              label="دفترچه"
+              :options="categoryOptions"
+              option-value="categoryOptions"
+              option-label="title"
+              emit-value
+              map-options
+              :disable="totalCategory"
             />
+            <q-input
+              class="q-pa-md col-md-3"
+              v-model="category.order"
+              label="ترتیب"
+              :disable="totalCategory"
+            />
+            <q-input
+              class="q-pa-md col-md-3"
+              v-model="category.time"
+              label="زمان"
+              :disable="totalCategory"
+            />
+            <div class="q-pa-md col-md-2 flex">
+              <q-btn
+                class="q-ma-md"
+                icon="add"
+                color="green"
+                flat
+                dense
+                fab-mini
+                :disable="totalCategory"
+                @click="addCategory"
+              />
+            </div>
           </div>
-        </div>
-      </div>
+        </q-card-section>
+        <q-card-section class="flex">
+          <div
+            class="category-list"
+            v-if="inputs[examCategoriesIndex] && inputs[examCategoriesIndex].value.length === 0">
+            <p class="bg-red-2 alert">در حال حاضر دفترچه ای به آزمون اضافه نشده است !</p>
+          </div>
+          <div
+            v-if="inputs[examCategoriesIndex] && inputs[examCategoriesIndex].value.length > 0"
+            class="row category-list-row"
+          >
+            <div
+              v-for="(category , index) in inputs[examCategoriesIndex].value"
+              :key="index"
+              class="row col-md-12"
+            >
+              <q-select
+                class="q-pa-md col-md-4"
+                v-model="category.title"
+                :value="category.id"
+                label="دفترچه"
+                :options="categoryOptions"
+                option-value="categoryOptions"
+                option-label="title"
+                emit-value
+                map-options
+              />
+              <q-input
+                class="q-pa-md col-md-3"
+                v-model="category.order"
+                label="ترتیب"
+              />
+              <q-input
+                class="q-pa-md col-md-3"
+                v-model="category.time"
+                label="زمان"
+              />
+              <div class="q-pa-md col-md-2 flex">
+                <q-btn
+                  class="q-ma-md"
+                  icon="close"
+                  color="red"
+                  flat
+                  dense
+                  fab-mini
+                  @click="deleteCategory(category.id)"
+                />
+              </div>
+            </div>
+          </div>
+        </q-card-section>
+      </q-card>
+
     </template>
   </entity-create>
 </template>
@@ -163,7 +178,6 @@ export default {
             if (input.name === 'type_id') {
               this.typeOptions.forEach(type => {
                 input.options.push(type)
-                console.log(input.options)
               })
             }
           })
@@ -179,9 +193,6 @@ export default {
         return
       }
       this.inputs[this.examCategoriesIndex].value = this.inputs[this.examCategoriesIndex].value.concat(this.category)
-    },
-    test (inputs) {
-      console.log(inputs)
     }
   }
 }
@@ -189,12 +200,32 @@ export default {
 
 <style lang="scss" scoped>
 .category-card{
-  padding: 16px;
-  margin: 16px;
   display: flex;
   flex-direction: column;
-  .add-btn{
+  .category-header{
+    margin: auto;
+  }
+  .add-btn {
     float: right;
+  }
+  .category-list{
+    display: flex;
+    padding: 20px;
+    width: 60%;
+    margin: auto;
+    .alert{
+      height: 40px;
+      margin: auto;
+      text-align: center;
+      padding: 10px;
+    }
+  }
+  .add-category-box{
+    width: 70%;
+    margin: auto;
+  }
+  .category-list-row{
+    margin: auto;
   }
 }
 </style>
