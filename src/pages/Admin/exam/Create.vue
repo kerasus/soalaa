@@ -108,7 +108,7 @@ export default {
       expanded: true,
       api: API_ADDRESS.exam.base(),
       entityIdKeyInResponse: 'data.id',
-      showRouteParamKey: 'data.id',
+      showRouteParamKey: 'id',
       showRouteName: 'Admin.Exam.Show',
       indexRouteName: 'Admin.Exam.Index',
       inputs: [
