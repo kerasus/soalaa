@@ -21,7 +21,6 @@
               <q-toggle v-model="pick.footer" label="I want a QFooter" />
               <q-toggle v-model="pick.left" label="I want a left-side QDrawer" />
               <q-toggle v-model="pick.right" label="I want a right-side QDrawer" />
-              <q-toggle :disable="!pick.header" v-model="pick.navtabs" label="I want navigation tabs (requires QHeader)" />
             </div>
           </q-step>
 
@@ -277,36 +276,6 @@ import {
   mdiMenu, mdiViewDashboard, mdiCog, mdiPlayCircleOutline
 } from '@quasar/extras/mdi-v5'
 
-function getMeta (title, desc) {
-  return {
-    title: {
-      name: 'title',
-      content: title
-    },
-    ogTitle: {
-      property: 'og:title',
-      content: title
-    },
-    twitterTitle: {
-      name: 'twitter:title',
-      content: title
-    },
-
-    description: {
-      name: 'description',
-      content: desc
-    },
-    ogDesc: {
-      property: 'og:description',
-      content: desc
-    },
-    twitterDesc: {
-      name: 'twitter:description',
-      content: desc
-    }
-  }
-}
-
 export default {
   name: 'Settings',
   created () {
@@ -315,10 +284,12 @@ export default {
   watch: {
     'pick.header': function (newValue) {
       this.updateLayoutHeader(newValue)
-      console.log('set', this.pick.header)
+      this.updateLayoutHeaderVisible(newValue)
     },
     'play.header': function (newValue) {
-      this.updateLayoutHeaderVisible(newValue)
+      if (this.layoutHeader) {
+        this.updateLayoutHeaderVisible(newValue)
+      }
     },
     'cfg.headerReveal': function (newValue) {
       this.updateLayoutHeaderReveal(newValue)
@@ -330,19 +301,27 @@ export default {
       } else if (newValue === 'bordered') {
         this.updateLayoutHeaderElevated(false)
         this.updateLayoutHeaderBordered(true)
+      } else if (newValue === 'none') {
+        this.updateLayoutHeaderElevated(false)
+        this.updateLayoutHeaderBordered(false)
       }
-    },
-    'pick.navtabs': function (newValue) {
-      this.updateLayoutHeaderNavTabs(newValue)
     },
     'pick.left': function (newValue) {
       this.updateLayoutLeftDrawer(newValue)
+      this.updateLayoutLeftDrawerVisible(newValue)
     },
     'play.left': function (newValue) {
-      this.updateLayoutLeftDrawerVisible(newValue)
+      if (this.layoutLeftDrawer) {
+        this.updateLayoutLeftDrawerVisible(newValue)
+      }
     },
     'cfg.leftBehavior': function (newValue) {
       this.updateLayoutLeftDrawerBehavior(newValue)
+      if (newValue === 'mobile') {
+        this.layoutLeftDrawerVisible = false
+      } else if (newValue === 'default' || newValue === 'desktop') {
+        this.layoutLeftDrawerVisible = true
+      }
     },
     'cfg.leftOverlay': function (newValue) {
       this.updateLayoutLeftDrawerOverlay(newValue)
@@ -358,12 +337,20 @@ export default {
     },
     'pick.right': function (newValue) {
       this.updateLayoutRightDrawer(newValue)
+      this.updateLayoutRightDrawerVisible(newValue)
     },
     'play.right': function (newValue) {
-      this.updateLayoutRightDrawerVisible(newValue)
+      if (this.layoutRightDrawer) {
+        this.updateLayoutRightDrawerVisible(newValue)
+      }
     },
     'cfg.rightBehavior': function (newValue) {
       this.updateLayoutRightDrawerBehavior(newValue)
+      if (newValue === 'mobile') {
+        this.layoutRightDrawerVisible = false
+      } else if (newValue === 'default' || newValue === 'desktop') {
+        this.layoutRightDrawerVisible = true
+      }
     },
     'cfg.rightOverlay': function (newValue) {
       this.updateLayoutRightDrawerOverlay(newValue)
@@ -379,9 +366,12 @@ export default {
     },
     'pick.footer': function (newValue) {
       this.updateLayoutFooter(newValue)
+      this.updateLayoutFooterVisible(newValue)
     },
     'play.footer': function (newValue) {
-      this.updateLayoutFooterVisible(newValue)
+      if (this.layoutFooter) {
+        this.updateLayoutFooterVisible(newValue)
+      }
     },
     'cfg.footerReveal': function (newValue) {
       this.updateLayoutFooterReveal(newValue)
@@ -417,7 +407,9 @@ export default {
       this.pick.left = newValue
     },
     layoutLeftDrawerVisible: function (newValue) {
-      this.play.left = newValue
+      if (this.layoutLeftDrawer) {
+        this.play.left = newValue
+      }
     },
     layoutLeftDrawerBehavior: function (newValue) {
       this.cfg.leftBehavior = newValue
@@ -435,7 +427,9 @@ export default {
       this.pick.right = newValue
     },
     layoutRightDrawerVisible: function (newValue) {
-      this.play.right = newValue
+      if (this.layoutRightDrawer) {
+        this.play.right = newValue
+      }
     },
     layoutRightDrawerBehavior: function (newValue) {
       this.cfg.rightBehavior = newValue
@@ -473,7 +467,6 @@ export default {
       'updateLayoutHeaderReveal',
       'updateLayoutHeaderElevated',
       'updateLayoutHeaderBordered',
-      'updateLayoutHeaderNavTabs',
       'updateLayoutLeftDrawer',
       'updateLayoutLeftDrawerVisible',
       'updateLayoutLeftDrawerBehavior',
@@ -518,9 +511,10 @@ export default {
         this.updateLayoutHeaderElevated(false)
         this.updateLayoutHeaderBordered(true)
       }
-      this.pick.navtabs = this.layoutHeaderNavTabs
       this.pick.left = this.layoutLeftDrawer
-      this.play.left = this.layoutLeftDrawerVisible
+      if (this.layoutLeftDrawer) {
+        this.play.left = this.layoutLeftDrawerVisible
+      }
       this.cfg.leftBehavior = this.layoutLeftDrawerBehavior
       this.cfg.leftOverlay = this.layoutLeftDrawerOverlay
       if (this.cfg.leftSep === 'elevated') {
@@ -531,7 +525,9 @@ export default {
         this.updateLayoutLeftDrawerBordered(true)
       }
       this.pick.right = this.layoutRightDrawer
-      this.play.right = this.layoutRightDrawerVisible
+      if (this.layoutRightDrawer) {
+        this.play.right = this.layoutRightDrawerVisible
+      }
       this.cfg.rightBehavior = this.layoutRightDrawerBehavior
       this.cfg.rightOverlay = this.layoutRightDrawerOverlay
       if (this.cfg.rightSep === 'elevated') {
@@ -554,13 +550,6 @@ export default {
       }
     }
   },
-  meta: {
-    title: 'Layout Builder',
-    meta: getMeta(
-      'Layout Builder | Quasar Framework',
-      'Tool to build Quasar layouts. Configure the layout parts then export the code.'
-    )
-  },
   data () {
     return {
       topL: 'l',
@@ -571,15 +560,13 @@ export default {
       bottomL: 'f',
       bottomC: 'F',
       bottomR: 'f',
-      navTabModel: 'tab1',
       step: 'pick',
       exportDialog: false,
       pick: {
         header: null,
         footer: true,
         left: true,
-        right: true,
-        navtabs: true
+        right: true
       },
       cfg: {
         headerReveal: false,
@@ -598,7 +585,7 @@ export default {
         footer: true,
         left: false,
         right: false,
-        scroll: true
+        scroll: false
       }
     }
   },
@@ -610,7 +597,6 @@ export default {
       'layoutHeaderReveal',
       'layoutHeaderElevated',
       'layoutHeaderBordered',
-      'layoutHeaderNavTabs',
       'layoutLeftDrawer',
       'layoutLeftDrawerVisible',
       'layoutLeftDrawerBehavior',
@@ -734,6 +720,7 @@ export default {
     onCreate () {
       return this.initialData()
     }
+
   }
 }
 </script>

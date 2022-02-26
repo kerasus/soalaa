@@ -10,7 +10,17 @@ const routes = [
     name: 'home',
     component: () => import('layouts/MainLayout.vue'),
     children: [
-      { name: 'Admin.Settings', path: 'settings', component: () => import('pages/Admin/Settings') },
+      {
+        path: 'admin',
+        component: () => import('layouts/AdminLayout.vue'),
+        meta: {
+          middlewares: [auth]
+        },
+        children: [
+          { name: 'Admin.KnowledgeTree.tree', path: 'knowledge-tree', component: () => import('pages/Admin/KnowledgeTree/index') },
+          { name: 'Admin.Settings', path: 'settings', component: () => import('pages/Admin/Settings') }
+        ]
+      },
       {
         path: '',
         name: 'dashboard',
@@ -158,14 +168,6 @@ const routes = [
     path: '/debug',
     name: 'debug',
     component: () => import('pages/Auth/test.vue'),
-    meta: {
-      middlewares: [auth]
-    }
-  },
-  {
-    path: '/knowledgeTree',
-    name: 'knowledgeTree',
-    component: () => import('pages/KnowledgeTree/index.vue'),
     meta: {
       middlewares: [auth]
     }

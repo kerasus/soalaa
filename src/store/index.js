@@ -28,6 +28,11 @@ export default store(function (/* { ssrContext } */) {
       createPersistedState({
         storage: window.localStorage,
         paths: ['userQuizListData', 'Auth.accessToken', 'Auth.user', 'psychometricAnswer']
+      }),
+      createPersistedState({
+        key: 'AppLayout',
+        storage: window.localStorage,
+        paths: ['AppLayout']
       })
     ],
     // enable strict mode (adds overhead!)

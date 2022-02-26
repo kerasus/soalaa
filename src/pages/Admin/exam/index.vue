@@ -27,14 +27,6 @@
                     v-ripple:yellow
                     clickable
                     manual-focus
-                    @click="editExam(inputData.props.row.id)"
-                  >
-                    <q-item-section> ویرایش آزمون</q-item-section>
-                  </q-item>
-                  <q-item
-                    v-ripple:yellow
-                    clickable
-                    manual-focus
                     @click="editExamReport(inputData.props.row.id)"
                   >
                     <q-item-section>ویرایش کارنامه</q-item-section>
@@ -184,7 +176,8 @@ export default {
         data: 'data',
         total: 'meta.total',
         currentPage: 'meta.current_page',
-        perPage: 'meta.per_page'
+        perPage: 'meta.per_page',
+        pageKey: 'page'
       }
     }
   },
