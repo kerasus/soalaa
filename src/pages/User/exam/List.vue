@@ -196,6 +196,9 @@ export default {
     exams: new ExamList(),
     loadingList: false
   }),
+  created () {
+    this.getExams()
+  },
   watch: {
     loadingList () {
       if (this.loadingList) {
