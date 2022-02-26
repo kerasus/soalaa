@@ -37,6 +37,7 @@
     "socket.io-client": "^4.4.0",
     "turndown": "^7.1.1",
     "video.js": "^7.17.0",
+    "videojs-hotkeys": "^0.2.27",
     "vue-i18n": "^9.0.0",
     "vue-upload-component": "^3.0.50",
     "vuex": "^4.0.1",

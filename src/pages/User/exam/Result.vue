@@ -13,11 +13,10 @@
             class="infoCard content-center"
         >
           <div
-            class="row"
-            style="height: 50% ;margin: inherit;"
+            class="row main-tabs"
           >
             <div
-              class="col col-12 col-xl-3 col-sm-6 exam-title"
+              class="col col-12 col-xl-3 col-sm-6 exam-title default-result-padding"
             >
               نتیجه
               {{ quiz.title }}
@@ -25,20 +24,20 @@
             </div>
             <div
                 v-if="report"
-                class="col col-6 col-xl-1 col-sm-3"
+                class="col col-6 col-xl-1 col-sm-3 default-result-padding"
             >
               شهر:
               {{ report.location.city }}
             </div>
             <div
                 v-if="report"
-                class="col col-6 col-xl-1 col-sm-3"
+                class="col col-6 col-xl-1 col-sm-3 default-result-padding"
             >
               استان:
               {{ report.location.province }}
             </div>
             <div
-                class="col col-12 col-xl-7"
+                class="col col-12 col-xl-7 default-result-tabs-title"
                 :style="{ padding: '0 12px' }"
             >
               <q-tabs
@@ -338,13 +337,10 @@ export default {
   },
   methods: {
     getExamData () {
-      // TODO : refactor NEEDED , used in created which probably not the best place to use
       const that = this
       const user_exam_id = this.$route.params.user_exam_id
       const exam_id = this.$route.params.exam_id
-
       // this.$store.dispatch('loading/overlayLoading', { loading: true, message: '' })
-
       const examData = new ExamData()
       console.log('examData---------', examData)
       examData.getUserExamWithCorrectAnswers(user_exam_id, exam_id)
@@ -377,22 +373,6 @@ export default {
             type: 'error'
           })
         })
-    },
-    initVideoJs (srcs, sub_categoryIndex) {
-      if (!this.$refs['videoPlayer' + sub_categoryIndex]) {
-        return
-      }
-      const that = this
-      this.player = videojs(that.$refs['videoPlayer' + sub_categoryIndex][0], {
-        language: 'fa',
-        controls: true
-      },
-      function onPlayerReady () {
-        console.log('onPlayerReady', this)
-      })
-      this.player.controlBar.addChild('QualitySelector')
-      this.updateTimepointsHeights(sub_categoryIndex)
-      this.updateVideoSrc(srcs)
     },
     updateVideoSrc (srcs) {
       const updatedSrcs = this.getVideoSrcs(srcs)
@@ -534,7 +514,17 @@ export default {
     padding: 12px 0px;
   }
   .result-tabs{
-    width: 50%;
+    //width: 50%;
+  }
+  .main-tabs {
+    font-size: 16px;
+  }
+  .default-result-padding {
+    padding: 12px;
+  }
+  .default-result-tabs-title {
+    max-width: 700px;
+    color: rgba(0, 0, 0, 0.54);
   }
   .download-box {
     .download-title {
@@ -553,17 +543,6 @@ export default {
       }
     }
   }
-}
-.vjs-menu-button-popup .vjs-menu {
-  left: auto;
-  right: 0;
-}
-
-.vjs-player {
-}
-
-.vjs-playlist {
-  overflow: auto;
 }
 
 @media only screen and (min-width: 960px) {
