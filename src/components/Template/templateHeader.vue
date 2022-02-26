@@ -18,14 +18,15 @@
     :class="{'col-6': windowSize > 1023, 'col-12': windowSize < 350}"
   >
     <q-breadcrumbs
-      v-for="(breadcrumb, index) in headerTitle.path"
-      :key="index"
-      separator="--///-"
+      separator="//"
       separator-color="red"
       class="text-orange"
+      gutter="sm"
       active-color="secondary"
     >
         <q-breadcrumbs-el
+          v-for="(breadcrumb, index) in headerTitle.path"
+          :key="index"
           :icon=breadcrumb.icon
           :label=breadcrumb.title
           :to="getRoute(breadcrumb.route)"

@@ -54,7 +54,7 @@ const routes = [
       {
         path: 'exam',
         component: () => import('layouts/AdminLayout.vue'),
-        breadcrumbs: { title: 'آزمون', icon: '', color: '', route_name: '', route_path: '' },
+        breadcrumbs: { title: 'آزمون', color: '', route_name: '', route_path: '' },
         meta: {
           middlewares: [auth]
         },
@@ -63,10 +63,10 @@ const routes = [
             name: 'Admin.Exam.Index',
             path: '',
             component: () => import('pages/Admin/exam/index'),
-            breadcrumbs: { title: 'لیست آزمون ها', icon: '', color: '', route_name: '', route_path: '' },
+            breadcrumbs: { title: 'لیست آزمون ها', color: '', route_name: '', route_path: '' },
             children: [
               { name: 'Admin.Exam.Show', path: 'show/:id', component: () => import('pages/Admin/exam/Show') },
-              { name: 'Admin.Exam.Edit', path: ':id/edit', component: () => import('pages/Admin/exam/Edit'), breadcrumbs: { title: 'ویرایش آزمون', icon: 'book', color: 'orange', route_name: 'Admin.Exam.Edit', route_path: ':id/edit' } },
+              { name: 'Admin.Exam.Edit', path: ':id/edit', component: () => import('pages/Admin/exam/Edit'), breadcrumbs: { title: 'ویرایش آزمون', icon: 'edit', color: 'orange', route_name: 'Admin.Exam.Edit', route_path: ':id/edit' } },
               { name: 'Admin.Exam.Create', path: 'create', component: () => import('pages/Admin/exam/Create') },
               { name: 'Admin.Exam.Upload', path: 'upload/:id', component: () => import('pages/Admin/exam/Upload') },
               { name: 'exam.results', path: 'results/:id', component: () => import('pages/Admin/exam/results') },
