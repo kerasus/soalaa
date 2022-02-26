@@ -254,7 +254,7 @@
         <q-dialog v-model="exportDialog">
           <q-card>
             <div class="bg-code export-code">
-              <doc-code lang="html">{{ layoutExport }}</doc-code>
+              <code>{{ layoutExport }}</code>
             </div>
 
             <q-separator />
