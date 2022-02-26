@@ -85,14 +85,11 @@ export default {
   computed: {
     ...mapGetters('AppLayout', [
       'headerTitle',
-      'headerShowTitle',
       'layoutLeftDrawerVisible'
     ])
   },
   methods: {
     ...mapMutations('AppLayout', [
-      'updateHeaderShowTitle',
-      'updateHeaderTitleCentered',
       'updateLayoutLeftDrawerVisible'
     ]),
     getDimensions () {
