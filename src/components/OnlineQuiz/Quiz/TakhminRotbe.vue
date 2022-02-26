@@ -483,28 +483,28 @@ export default {
         margin: auto;
     }
 
-    .v-data-table >>> thead {
+    .v-data-table > thead {
         background-color: rgba(255, 193, 7, 0.3) !important;
     }
 
-    .v-data-table >>> thead th:first-child {
+    .v-data-table > thead th:first-child {
         border-radius: 0 20px 0 0 !important;
     }
 
-    .v-data-table >>> thead th:last-child {
+    .v-data-table > thead th:last-child {
         border-radius: 20px 0 0 0 !important;
     }
 
-    .v-data-table >>> tbody tr:nth-of-type(even) {
+    .v-data-table > tbody tr:nth-of-type(even) {
         background-color: rgba(0, 0, 0, 0.04) !important;
     }
 
-    .v-data-table >>> thead tr th {
+    .v-data-table > thead tr th {
         width: 125px !important;
         text-align: center !important;
     }
 
-    .v-data-table >>> .v-data-table__wrapper > table {
+    .v-data-table > .v-data-table__wrapper > table {
         width: 96%;
         border-spacing: 0;
         margin: auto;

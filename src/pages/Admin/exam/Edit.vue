@@ -8,8 +8,48 @@
       :entity-param-key="entityParamKey"
       :show-route-name="showRouteName"
       :after-load-input-data="getOptions"
+      :before-get-data="getCategories"
     >
-
+      <template #after-form-builder >
+        <div
+          v-for="(category , index) in inputs[examCategoriesIndex].value"
+          :key="index"
+          class="row"
+        >
+          <q-select
+            class="q-pa-md col-md-4"
+            v-model="category.title"
+            :value="category.id"
+            label="دفترچه"
+            :options="inputs[examCategoriesIndex].value"
+            option-value="title"
+            option-label="title"
+            emit-value
+            map-options
+          />
+          <q-input
+            class="q-pa-md col-md-3"
+            v-model="category.order"
+            label="ترتیب"
+          />
+          <q-input
+            class="q-pa-md col-md-3"
+            v-model="category.time"
+            label="زمان"
+          />
+          <div class="q-pa-md col-md-2 flex">
+            <q-btn
+              class="q-ma-md"
+              icon="close"
+              color="red"
+              flat
+              dense
+              fab-mini
+              @click="deleteCategory(category.id)"
+            />
+          </div>
+        </div>
+      </template>
     </entity-edit>
   </div>
 </template>
@@ -17,9 +57,15 @@
 <script>
 import { EntityEdit } from 'quasar-crud'
 import API_ADDRESS from 'src/api/Addresses'
+
 export default {
   name: 'Edit',
   components: { EntityEdit },
+  computed: {
+    examCategoriesIndex () {
+      return this.inputs.findIndex(item => item.name === 'categories')
+    }
+  },
   data () {
     return {
       api: API_ADDRESS.exam.base(),
@@ -47,39 +93,46 @@ export default {
         { type: 'Checkbox', name: 'is_register_open', responseKey: 'data.is_register_open', label: 'ثبت نام باز است.', col: 'col-md-4' },
         { type: 'Checkbox', name: 'is_open', responseKey: 'data.is_open', label: 'شرکت در آزمون باز است.', col: 'col-md-4' },
         { type: 'Checkbox', name: 'confirm', responseKey: 'data.confirm', label: 'تولید خودکار کارنامه', col: 'col-md-4' },
-        { type: 'Checkbox', name: 'generate_questions_automatically', responseKey: 'data.generate_questions_automatically', label: 'تولید خودکار سوال', col: 'col-md-4' }
+        { type: 'Checkbox', name: 'generate_questions_automatically', responseKey: 'data.generate_questions_automatically', label: 'تولید خودکار سوال', col: 'col-md-4' },
+        { type: 'hidden', name: 'categories', responseKey: 'data.categories', value: [] }
       ]
     }
   },
   created () {
-    this.$axios.get(API_ADDRESS.exam.base())
-      .then(res => {
-        console.log('response:', res)
-      })
     this.api += '/' + this.$route.params.id
   },
   methods: {
+    getCategories (response, setNewInputData) {
+      if (!response) {
+        return
+      }
+      const responseCategories = response.data.categories
+      const categoriesIndex = this.inputs.findIndex(item => item.name === 'categories')
+      this.inputs[categoriesIndex].value = responseCategories
+    },
     getOptions () {
       this.$axios.get(API_ADDRESS.option.base)
         .then((response) => {
-          console.log('res:', response)
           const options = response.data.data.filter(data => data.type === 'exam_type')
           this.inputs.forEach(input => {
             if (input.name === 'type_id') {
               options.forEach(type => {
                 input.options.push(type)
                 input.value = type.id
-                console.log('val', input.value)
               })
             }
           })
         })
-        .catch(() => {})
+        .catch(() => {
+        })
+    },
+    deleteCategory (id) {
+      const index = this.inputs[this.examCategoriesIndex].value.findIndex(item => item.id === id)
+      this.inputs[this.examCategoriesIndex].value.splice(index, 1)
     }
   }
 }
 </script>
 
-<style scoped>
-
+<style lang="scss" scoped>
 </style>
