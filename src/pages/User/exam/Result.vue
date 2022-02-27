@@ -62,7 +62,7 @@
     </div>
     <div class="row wrap justify-center">
       <div class="col">
-        <q-tab-panels v-model="tab" animated>
+        <q-tab-panels v-model="tab" animated swipeable>
           <q-tab-panel name="result">
             <PersonalResult :report="report"/>
           </q-tab-panel>
@@ -90,7 +90,7 @@
                     class="row download-row"
                 >
                   <div
-                    class="col col-md-6"
+                    class="col col-12 col-sm-6"
                   >
                     <div
                         v-if="item.descriptive_answers_url"
@@ -112,7 +112,7 @@
                     </div>
                   </div>
                   <div
-                    class="col col-md-6"
+                    class="col col-12 col-sm-6"
                   >
                     <div
                         v-if="item.questions_url"
@@ -329,11 +329,10 @@ export default {
     this.getUserData()
     window.currentExamQuestions = null
     window.currentExamQuestionIndexes = null
-    // this.getExamData() // moved from mounted to created after migration
   },
   mounted () {
     this.getExamData()
-    // ----------- was used here before migration
+    setTimeout(() => { this.tab = 'result' }, 2000)
   },
   methods: {
     getExamData () {
@@ -410,7 +409,6 @@ export default {
       this.loadSubCategory(report)
       this.loadZirGrooh(report.zirgorooh)
       this.loadBest(report.best)
-      this.loadFirstVideoTab()
       report.main.taraaz = parseFloat(report.main.taraaz).toFixed(0)
     },
     loadBest (best) {
@@ -471,33 +469,6 @@ export default {
         .catch(() => {
           that.alaaSet.loading = false
         })
-    },
-    loadFirstVideoTab () {
-      this.onVideoTabChange(0)
-    },
-    onVideoTabChange (tabIndex) {
-      if (this.player) {
-        this.player.pause()
-      }
-      if (this.report && this.report.sub_category[tabIndex].video_url[0]) {
-        const parsed = this.report.sub_category[tabIndex].video_url[0].split('/')
-        let contentId = parsed[parsed.length - 1]
-        if (contentId === '') {
-          contentId = parsed[parsed.length - 2]
-        }
-        this.alaaVideos = []
-        this.report.sub_category[tabIndex].video_url.forEach(item => {
-          const parsedd = item.split('/')
-          let contentIdd = parsedd[parsedd.length - 1]
-          if (contentIdd === '') {
-            contentIdd = parsedd[parsedd.length - 2]
-          }
-          this.alaaVideos.push({ id: contentIdd })
-        })
-        this.getContent(contentId, tabIndex)
-      } else {
-        this.currentVideo = null
-      }
     }
   }
 }
@@ -577,13 +548,22 @@ export default {
     padding-right: 0;
   }
 }
+@media only screen and (max-width: 670px) {
+  .exam-results .main-tabs {
+    .q-tabs--horizontal {
+      padding-left: 30px;
+      padding-right: 30px;
+    }
+  }
+}
 
 .text-center {
   direction: ltr;
 }
 
 .tab-title {
-  margin: 16px;
+  margin: 25px;
+  font-size: 16px;
 }
 
 .download-box {

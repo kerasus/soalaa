@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="tabs-of-lessons">
     <div class="q-pa-md">
       <q-card>
       <q-tabs
@@ -11,10 +11,9 @@
         indicator-color="primary"
         align="justify"
       >
-        <q-tab name="Lessons" style="display: none"></q-tab>
       </q-tabs>
 
-      <q-separator></q-separator>
+<!--      <q-separator></q-separator>-->
 
       <q-tab-panels v-model="tab" animated>
         <q-tab-panel name="Lessons" class="q-pa-none">
@@ -26,9 +25,10 @@
             <template v-slot:before>
               <q-tabs
                 v-model="innerTab"
-                vertical
+                :vertical="canBeVertical"
                 class="text-primary"
               >
+<!--        TODO :  window.innerWidth MUST BE REPLACED   -->
                 <q-tab
                   v-for="(item, index) in report.sub_category"
                   :key="index"
@@ -43,6 +43,7 @@
               <q-tab-panels
                 v-model="innerTab"
                 animated
+                :vertical="canBeVertical"
                 transition-prev="slide-down"
                 transition-next="slide-up"
               >
@@ -51,23 +52,29 @@
                   :key="index"
                   :name="item.sub_category_id"
                 >
-                  <div class="text-h4 q-mb-md">{{ currentVideoContent.title }}</div>
-                  <div>زمانکوب ها</div>
-                  <q-list bordered separator>
-                    <q-item
-                      clickable
-                      v-ripple
-                      v-for="(currentVideoItem, i) in currentVideoContent.timepoints"
-                      :key="i"
-                      @click="playTimePoint(i)"
-                    >
-                      <q-item-section>{{ currentVideoItem.title }}</q-item-section>
-                    </q-item>
-                  </q-list>
-                    <video
-                      :ref="'videoPlayer'+index"
-                      class="video-js vjs-default-skin vjs-16-9 vjs-fluid vjs-big-play-centered vjs-show-big-play-button-on-pause"
-                    />
+                  <div class="current-panel-title q-mb-md">{{ currentVideoContent.title }}</div>
+                  <div class="answers-video-group">
+                    <div class="timestamp-box">
+                      <div class="timestamp">زمانکوب ها</div>
+                      <q-list dense>
+                        <q-item
+                          clickable
+                          v-ripple
+                          v-for="(currentVideoItem, i) in currentVideoContent.timepoints"
+                          :key="i"
+                          @click="playTimePoint(i)"
+                        >
+                          <q-item-section>{{ currentVideoItem.title }}</q-item-section>
+                        </q-item>
+                      </q-list>
+                    </div>
+                    <div class="video-box">
+                      <video
+                          :ref="'videoPlayer'+index"
+                          class="video-js vjs-default-skin vjs-16-9 vjs-fluid vjs-big-play-centered vjs-show-big-play-button-on-pause"
+                        />
+                    </div>
+                  </div>
                 </q-tab-panel>
               </q-tab-panels>
             </template>
@@ -92,6 +99,7 @@ import hotkeys from 'videojs-hotkeys'
 import Assistant from 'src/plugins/assistant'
 import { AlaaSet } from 'src/models/AlaaSet'
 import { AlaaContent } from 'src/models/AlaaContent'
+import { mixinWindowSize } from 'src/mixin/Mixins'
 
 export default {
   name: 'tabsOfLessons',
@@ -103,6 +111,9 @@ export default {
       }
     }
   },
+  mixins: [
+    mixinWindowSize
+  ],
   data () {
     return {
       tab: 'Lessons',
@@ -164,9 +175,14 @@ export default {
     this.loadFirstVideoTab()
     // this.report.sub_category[0].video_url: Array
   },
+  mounted () {
+    setTimeout(() => {
+      this.innerTab = this.report.sub_category[0].sub_category_id
+    }, 2000)
+  },
   methods: {
     log (n) {
-      console.log('this.currentVideoContent', this.currentVideoContent)
+      console.log('this.innerTab = this.report.sub_category[0].sub_category', this.innerTab = this.report.sub_category[0].sub_category_id)
       // console.log('logged', n)
     },
     getContent (contentId, sub_categoryIndex) {
@@ -252,6 +268,11 @@ export default {
         this.currentVideoContent = null
       }
     }
+  },
+  computed: {
+    canBeVertical () {
+      return window.innerWidth > 670
+    }
   }
 }
 </script>
@@ -259,11 +280,168 @@ export default {
 .video-js .vjs-current-time, .vjs-no-flex .vjs-current-time {
   display: block;
 }
+.tabs-of-lessons .answers-video-group {
+  display: flex;
+  flex-direction: row;
+}
+.tabs-of-lessons .video-box {
+  width: 70%;
+}
+.tabs-of-lessons .timestamp-box {
+  width: 30%;
+  margin-left: 15px #{"/* rtl:ignore */"};
+  max-height: 435px;
+  overflow-x: scroll;
+}
+
+.tabs-of-lessons {
+  .current-panel-title {
+    font-size: 16px;
+    margin-top: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .timestamp {
+    padding-right: 10px;
+    color: rgba(0, 0, 0, 0.6);
+  }
+}
+@media only screen and (max-width: 1330px) {
+  .tabs-of-lessons .timestamp-box {
+    max-height: 280px;
+  }
+  .tabs-of-lessons {
+    .q-tab {
+      height: 48px;
+    }
+    .q-splitter__after {
+      margin-top: 86px;
+    }
+  }
+}
+
+@media only screen and (max-width: 670px) {
+  .tabs-of-lessons .video-box {
+    width: 100%;
+  }
+  .tabs-of-lessons .timestamp-box {
+    width: 100%;
+    margin-left: 0px #{"/* rtl:ignore */"};
+  }
+  .tabs-of-lessons .answers-video-group {
+    flex-direction: column-reverse;
+    justify-content: center;
+    align-items: center;
+  }
+  .tabs-of-lessons .timestamp-box {
+    margin-top: 10px;
+    max-height: 210px;
+  }
+}
+@media only screen and (max-width: 700px) {
+  .tabs-of-lessons .timestamp-box {
+    max-height: 180px;
+  }
+}
 </style>
 <style lang="scss">
 [dir="rtl"] .video-js .vjs-volume-panel .vjs-volume-control.vjs-volume-vertical {
   right: 0 #{"/* rtl:ignore */"};
   left: -4.5em #{"/* rtl:ignore */"};
   transition: left 0s #{"/* rtl:ignore */"};
+}
+[dir="rtl"] .video-js .vjs-play-progress::before {
+  left: 0;
+  right: -0.5em #{"/* rtl:ignore */"};
+}
+.tabs-of-lessons .timestamp-box {
+  .q-focus-helper, .q-focusable, .q-manual-focusable, .q-hoverable {
+    border-radius: 15px 0px 0px 15px #{"/* rtl:ignore */"};
+  }
+  .q-list--dense > .q-item, .q-item--dense {
+    padding-top: 8px;
+    padding-bottom: 8px;
+  }
+}
+.tabs-of-lessons {
+  .q-splitter--vertical.q-splitter--workable > .q-splitter__separator {
+    color: transparent;
+    background-color: transparent;
+  }
+}
+.tabs-of-lessons {
+  background-color: #f1f1f1;
+    .q-tabs__content {
+      .q-tab--active{
+        background-color: #fff;
+        border-radius: 0 10px 10px 0 #{"/* rtl:ignore */"};
+        color: #ffc107;
+      }
+    }
+  .q-tab-panels {
+    background-color: #f1f1f1;
+  }
+  .q-tabs {
+    background-color: #f1f1f1;
+  }
+  .q-tab {
+    background-color: #ebeaea;
+    color: #6a6969;
+    border-radius: 0 10px 10px 0 #{"/* rtl:ignore */"};
+  }
+  .q-card {
+    box-shadow: none;
+  }
+  .q-splitter__after .q-tab-panels {
+    background-color: #fff;
+    border-radius: 25px;
+  }
+}
+@media only screen and (min-width: 1330px) {
+  .tabs-of-lessons {
+    .q-tab {
+      padding: 0 8px;
+      height: 58px !important;
+    }
+    .q-splitter__after {
+      margin-top: 52px !important;
+    }
+  }
+}
+@media only screen and (min-width: 671px) {
+  .tabs-of-lessons {
+    .q-tab {
+      height: 48px;
+      margin-bottom: 10px;
+      margin-top: 10px;
+    }
+    .q-splitter__after {
+      margin-top: 86px;
+    }
+  }
+}
+@media only screen and (max-width: 670px) {
+  .tabs-of-lessons .q-tab-panel .q-splitter {
+    display: flex;
+    flex-direction: column;
+    .q-splitter__panel {
+      width: 100% !important;
+    }
+  }
+  .tabs-of-lessons {
+    .q-tabs__content {
+      .q-tab--active{
+        border-radius: 0 !important;
+      }
+    }
+    .q-tab {
+      border-radius: 0 !important;
+    }
+    .q-tabs--horizontal {
+      padding-left: 30px;
+      padding-right: 30px;
+    }
+  }
 }
 </style>
