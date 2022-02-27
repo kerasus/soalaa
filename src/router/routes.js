@@ -10,7 +10,7 @@ const routes = [
     path: '/',
     name: 'home',
     component: () => import('layouts/MainLayout.vue'),
-    breadcrumbs: { title: 'خانه' },
+    breadcrumbs: { title: 'خانه', icon: 'home', route: { name: 'dashboard' } },
     children: [
       {
         path: '',
@@ -31,15 +31,15 @@ const routes = [
           {
             path: 'exam',
             component: () => import('layouts/AdminLayout.vue'),
-            breadcrumbs: { title: 'آزمون', icon: 'test', color: '', route_name: 'Admin.Exam.Index', route_path: '' },
+            breadcrumbs: { title: 'آزمون', color: '', route: { name: 'Admin.Exam.Index' } },
             meta: {
               middlewares: [auth]
             },
             children: [
-              { name: 'Admin.Exam.Index', path: '', component: () => import('pages/Admin/exam/index'), breadcrumbs: { title: 'لیست آزمون ها', color: '', route_name: '', route_path: '' } },
+              { name: 'Admin.Exam.Index', path: '', component: () => import('pages/Admin/exam/index'), breadcrumbs: { title: 'لیست آزمون ها' } },
               { name: 'Admin.Exam.Create', path: 'create', component: () => import('pages/Admin/exam/Create') },
-              { name: 'Admin.Exam.Show', path: ':id', component: () => import('pages/Admin/exam/Show') },
-              { name: 'Admin.Exam.Edit', path: ':id/edit', component: () => import('pages/Admin/exam/Edit'), breadcrumbs: { title: 'ویرایش آزمون', icon: 'edit', color: 'orange', route: { name: 'Admin.Exam.Edit', path: ':id/edit' } } },
+              { name: 'Admin.Exam.Show', path: ':id', component: () => import('pages/Admin/exam/Show'), breadcrumbs: { title: 'مشاهده آزمون' } },
+              { name: 'Admin.Exam.Edit', path: ':id/edit', component: () => import('pages/Admin/exam/Edit'), breadcrumbs: { title: 'ویرایش آزمون', icon: 'edit' } },
               { name: 'Admin.Exam.Upload', path: ':id/upload', component: () => import('pages/Admin/exam/Upload') },
               { name: 'Admin.Exam.AllResults', path: 'results/:id', component: () => import('pages/Admin/exam/results') },
               { name: 'Admin.Exam.Coefficient.Edit', path: ':id/coefficient/edit', component: () => import('src/pages/Admin/subGroup/editCoefficients.vue') },
@@ -142,7 +142,7 @@ const routes = [
           },
 
           { name: 'Admin.KnowledgeTree.tree', path: 'knowledge-tree', component: () => import('pages/Admin/KnowledgeTree/index') },
-          { name: 'Admin.Settings', path: 'settings', component: () => import('pages/Admin/Settings') }
+          { name: 'Admin.Settings', path: 'settings', component: () => import('pages/Admin/Settings'), breadcrumbs: { title: 'تنظیمات', icon: 'settings' } }
         ]
       },
       {

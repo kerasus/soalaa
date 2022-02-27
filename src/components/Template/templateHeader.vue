@@ -18,11 +18,10 @@
     :class="{'col-6': windowSize > 1023, 'col-12': windowSize < 350}"
   >
     <q-breadcrumbs
-      separator="//"
-      separator-color="red"
-      class="text-orange"
+      class="breadcrumbs"
+      separator=">"
+      separator-color="dark"
       gutter="sm"
-      active-color="purple-6"
     >
         <q-breadcrumbs-el
           v-for="(breadcrumb, index) in headerTitle.path"
@@ -30,7 +29,7 @@
           :icon=breadcrumb.icon
           :label=breadcrumb.title
           :to="getRoute(breadcrumb.route)"
-          class="address-bar"
+          class="q-breadcrumbs-el"
         />
     </q-breadcrumbs>
   </div>
@@ -113,7 +112,7 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss" scoped >
 .drawer-btn{
   display: none;
   @media screen and (max-width: 1023px){
@@ -135,21 +134,16 @@ export default {
   @media screen and (max-width: 349px){
     margin-left: 0;
   }
-  .address-bar {
-    font-size: 18px;
-    font-weight: 500;
-    color: #23263B;
-    &:nth-child(2) {
+  .breadcrumbs{
+    &:deep(> *) {
+      font-style: normal;
+      font-weight: bold;
       font-size: 16px;
-    }
-    &::after {
-      content: ">";
-      margin: 0 10px;
-    }
-
-    &:last-child {
-      &::after {
-        content: none;
+      line-height: 31px;
+      text-align: right;
+      color: #23263B;
+      div:first-child  {
+        font-size: 18px;
       }
     }
   }
@@ -168,6 +162,10 @@ export default {
 }
 </style>
 <style lang="scss">
+.breadcrumbs{
+  .q-breadcrumbs__separator{
+    font-size: 20px;
+  }}
 .drawer-btn{
   .q-btn{
     flex-direction: row !important;
