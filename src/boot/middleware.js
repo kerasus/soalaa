@@ -67,7 +67,7 @@ export default boot(({ router, store }) => {
     // console.log('router.options.routes: ', router.options.routes)
     const routeWithParent = getRouteWithParent({ children: router.options.routes }, to.name)
     // console.log('createBreadcrumbsFromRouteWithParent (routeWithParent)', createBreadcrumbsFromRouteWithParent(routeWithParent))
-    store.commit('AppLayout/updatebreadcrumbs', {
+    store.commit('AppLayout/updateBreadcrumbs', {
       path: createBreadcrumbsFromRouteWithParent(routeWithParent)
     })
     // Now you need to add your authentication logic here, like calling an API endpoint

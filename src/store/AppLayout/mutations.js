@@ -58,6 +58,6 @@ export function showConfirmDialog (state, newInfo) {
   // }
 }
 
-export function updatebreadcrumbs (state, data) {
+export function updateBreadcrumbs (state, data) {
   Object.assign(state.breadcrumbs, data)
 }
