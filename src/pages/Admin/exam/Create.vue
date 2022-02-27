@@ -193,6 +193,7 @@ export default {
         return
       }
       this.inputs[this.examCategoriesIndex].value = this.inputs[this.examCategoriesIndex].value.concat(this.category)
+      this.category = { title: '', id: '', order: 0, time: 0 }
     }
   }
 }
@@ -222,9 +223,6 @@ export default {
   }
   .add-category-box{
     width: 70%;
-    margin: auto;
-  }
-  .category-list-row{
     margin: auto;
   }
 }
