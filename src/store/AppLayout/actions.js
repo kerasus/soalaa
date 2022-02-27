@@ -1,3 +1,3 @@
-// export function updateDrawer (context, data) {
-//   context.commit('updateDrawer', data)
-// }
+export function updateDrawer (context, data) {
+  context.commit('updateDrawer', data)
+}
