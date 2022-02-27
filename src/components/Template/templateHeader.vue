@@ -19,10 +19,12 @@
   >
     <q-breadcrumbs
       class="breadcrumbs"
-      separator=">"
       separator-color="dark"
       gutter="sm"
     >
+      <template v-slot:separator>
+        <q-icon name="isax:arrow-right-3 " />
+      </template>
         <q-breadcrumbs-el
           v-for="(breadcrumb, index) in headerTitle.path"
           :key="index"
@@ -164,7 +166,9 @@ export default {
 <style lang="scss">
 .breadcrumbs{
   .q-breadcrumbs__separator{
-    font-size: 20px;
+    .q-icon{
+      font-size: 22px;
+    }
   }}
 .drawer-btn{
   .q-btn{
