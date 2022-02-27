@@ -26,7 +26,7 @@
         <q-icon name="isax:arrow-right-3 " />
       </template>
         <q-breadcrumbs-el
-          v-for="(breadcrumb, index) in headerTitle.path"
+          v-for="(breadcrumb, index) in breadcrumbs.path"
           :key="index"
           :icon=breadcrumb.icon
           :label=breadcrumb.title
@@ -72,8 +72,7 @@ export default {
   name: 'templateHeader',
   data () {
     return {
-      windowSize: document.documentElement.clientWidth,
-      addresses: []
+      windowSize: document.documentElement.clientWidth
     }
   },
   mounted () {
@@ -84,7 +83,7 @@ export default {
   },
   computed: {
     ...mapGetters('AppLayout', [
-      'headerTitle',
+      'breadcrumbs',
       'layoutLeftDrawerVisible'
     ])
   },

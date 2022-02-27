@@ -19,7 +19,7 @@ export default function () {
       left: 0,
       right: 0
     },
-    headerTitle: {
+    breadcrumbs: {
       loading: false,
       path: [
         {

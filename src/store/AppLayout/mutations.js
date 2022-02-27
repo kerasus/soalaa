@@ -58,6 +58,6 @@ export function showConfirmDialog (state, newInfo) {
   // }
 }
 
-export function updateHeaderTitle (state, data) {
-  Object.assign(state.headerTitle, data)
+export function breadcrumbs (state, data) {
+  Object.assign(state.breadcrumbs, data)
 }
