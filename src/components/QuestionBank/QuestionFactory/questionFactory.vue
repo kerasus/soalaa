@@ -200,7 +200,7 @@
                 >
                   <span class="pa-2">
                     <router-link
-                      :to="{ name:'question.show'}"
+                      :to="{ name:'Admin.Question.Show'}"
                       style="text-decoration: none;"
                     >
                       <v-icon class="ml-4">
@@ -208,7 +208,7 @@
                       </v-icon>
                     </router-link>
                     <router-link
-                      :to="{ name:'question.edit'}"
+                      :to="{ name:'Admin.Question.Edit'}"
                       style="text-decoration: none;"
                     >
                       <v-icon class="ml-4">

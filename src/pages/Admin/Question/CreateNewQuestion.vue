@@ -68,7 +68,7 @@
         />
         <div class="col-4">
           <q-select
-            v-if="getPageStatus() === 'create'"
+            v-if="getPageStatus() === 'Create'"
             v-model="currentQuestion.author"
             label="طراحان"
             dense
@@ -102,7 +102,7 @@
       />
       <!-- -------------------------- status --------------------------->
       <div
-        v-if="getPageStatus() === 'edit'"
+        v-if="getPageStatus() === 'Edit'"
         class="q-my-10"
       >
         <StatusComponent
@@ -183,15 +183,15 @@ export default {
       temp: null,
       pageStatuses: [
         {
-          title: 'show',
+          title: 'Show',
           state: false
         },
         {
-          title: 'create',
+          title: 'Create',
           state: false
         },
         {
-          title: 'edit',
+          title: 'Edit',
           state: false
         }
       ],
@@ -294,7 +294,7 @@ export default {
     this.setPageStatus()
     this.checkUrl()
     this.getQuestionStatus()
-    if (this.getPageStatus() === 'create') {
+    if (this.getPageStatus() === 'Create') {
       this.showPageDialog()
     } else {
       this.setMainChoicesInOtherModes()
@@ -377,16 +377,16 @@ export default {
       //       color: 'green',
       //       icon: 'thumb_up'
       //     })
-      //     this.$router.push({ name: 'question.show', params: { question_id: this.$route.params.question_id } })
+      //     this.$router.push({ name: 'Admin.Question.Show', params: { question_id: this.$route.params.question_id } })
       //   })
     },
 
     navBarAction_cancel () {
-      this.$router.push({ name: 'question.show', params: { question_id: this.$route.params.question_id } })
+      this.$router.push({ name: 'Admin.Question.Show', params: { question_id: this.$route.params.question_id } })
     },
 
     navBarAction_edit () {
-      this.$router.push({ name: 'question.edit', params: { question_id: this.$route.params.question_id } })
+      this.$router.push({ name: 'Admin.Question.Edit', params: { question_id: this.$route.params.question_id } })
       this.setPageStatus()
     },
 
@@ -421,7 +421,7 @@ export default {
       axios.post(API_ADDRESS.question.create, formData)
         .then((response) => {
           const questionId = response.data.data.id
-          this.$router.push({ name: 'question.show', params: { question_id: questionId } })
+          this.$router.push({ name: 'Admin.Question.Show', params: { question_id: questionId } })
           this.$store.dispatch('loading/overlayLoading', { loading: false, message: '' })
         }).catch(() => {
           this.$store.dispatch('loading/overlayLoading', { loading: false, message: '' })
@@ -429,7 +429,7 @@ export default {
     },
 
     setPageStatus () {
-      const title = this.$route.name.replace('question.', '')
+      const title = this.$route.name.replace('Admin.Question.', '')
       this.pageStatuses.forEach(item => {
         item.state = item.title === title
       })
@@ -454,13 +454,13 @@ export default {
     },
 
     checkUrl () {
-      this.edit_status = (this.getPageStatus() === 'create' || this.getPageStatus() === 'edit')
+      this.edit_status = (this.getPageStatus() === 'Create' || this.getPageStatus() === 'Edit')
       const that = this
       const loadExamListPromise = this.loadExamList()
       const loadSubcategoriesPromise = this.loadSubcategories()
       Promise.all([loadExamListPromise, loadSubcategoriesPromise])
         .then(() => {
-          if (that.getPageStatus() === 'create') {
+          if (that.getPageStatus() === 'Create') {
             that.currentQuestion = new Question(that.questionData)
             that.loading = false
             // if (that.currentQuestion.choices === null) {
@@ -486,7 +486,7 @@ export default {
     },
 
     attachQuestion (item) {
-      if (this.getPageStatus() === 'create') {
+      if (this.getPageStatus() === 'Create') {
         this.attachQuestionOnCreateMode(item)
       } else {
         this.attachQuestionOnEditMode(item)
@@ -591,7 +591,7 @@ export default {
           if (!confirm) {
             return
           }
-          if (this.getPageStatus() === 'create') {
+          if (this.getPageStatus() === 'Create') {
             that.detachQuestionOnCreateMode(item)
           } else {
             that.detachQuestionOnEditMode(item)
@@ -633,16 +633,16 @@ export default {
     },
 
     showImgComponentStatus () {
-      if (this.getPageStatus() === 'create') {
+      if (this.getPageStatus() === 'Create') {
         return this.questionType === 'typeImage'
       }
       return this.doesPhotosExist()
     },
 
     showQuestionComponentStatus () {
-      if (this.getPageStatus() === 'create') {
+      if (this.getPageStatus() === 'Create') {
         return this.questionType === 'typeText'
-      } else if (this.getPageStatus() === 'show') {
+      } else if (this.getPageStatus() === 'Show') {
         return this.checkTextCondition()
       }
       // in edit page
@@ -658,9 +658,9 @@ export default {
             that.currentQuestion = new Question(response.data.data)
             that.fucking = 'new text'
             if (that.currentQuestion.type.value === 'psychometric') {
-              if (that.getPageStatus() === 'edit') {
+              if (that.getPageStatus() === 'Edit') {
                 that.$router.push({ name: 'question.mbti.edit', params: { question_id: that.$route.params.question_id } })
-              } else if (that.getPageStatus() === 'show') {
+              } else if (that.getPageStatus() === 'Show') {
                 that.$router.push({ name: 'question.mbti.show', params: { question_id: that.$route.params.question_id } })
               }
             }
@@ -779,7 +779,7 @@ export default {
       this.checkNavbarVisibilityOnCreatPage()
     },
     goToMBTIPage () {
-      this.$router.push({ name: 'question.mbti.create' })
+      this.$router.push({ name: 'Admin.Question.MBTI.Create' })
     },
     setInsertedQuestions () {
       this.$refs.qlayout.getContent()
@@ -808,8 +808,8 @@ export default {
             color: 'green',
             icon: 'thumb_up'
           })
-          window.open('/question/create', '_blank').focus()
-          this.$router.push({ name: 'question.show', params: { question_id: questionId } })
+          window.open('Admin.Question.Create', '_blank').focus()
+          this.$router.push({ name: 'Admin.Question.Show', params: { question_id: questionId } })
         })
     },
 
@@ -828,7 +828,7 @@ export default {
     },
 
     setUploadImgStatus () {
-      this.upload_img_status = (this.getPageStatus() === 'create')
+      this.upload_img_status = (this.getPageStatus() === 'Create')
     },
 
     setMainChoicesInCreateMode (statusId) {
@@ -854,7 +854,7 @@ export default {
     },
 
     checkNavbarVisibility () {
-      if (this.getPageStatus() === 'create') {
+      if (this.getPageStatus() === 'Create') {
         return this.NavbarVisibilityOnCreatPage
       }
       return true
@@ -862,7 +862,7 @@ export default {
 
     checkNavbarVisibilityOnCreatPage () {
       this.NavbarVisibilityOnCreatPage = true
-      if (this.$route.name === 'question.create') {
+      if (this.$route.name === 'Admin.Question.Create') {
         this.currentQuestion.author.push({ full_name: this.$store.getters['Auth/user'].full_name, id: this.$store.getters['Auth/user'].id })
         console.log(this.currentQuestion.author)
       }

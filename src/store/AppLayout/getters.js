@@ -18,6 +18,6 @@ export function ColumnsWidth (state) {
   return state.ColumnsWidth
 }
 
-export function headerTitle (state) {
-  return state.headerTitle
+export function breadcrumbs (state) {
+  return state.breadcrumbs
 }
