@@ -55,7 +55,7 @@
             </div>
           </div>
         </q-card-section>
-        <q-card-section class="flex">
+        <q-card-section>
           <div
             class="category-list"
             v-if="inputs[examCategoriesIndex] && inputs[examCategoriesIndex].value.length === 0">

@@ -56,7 +56,7 @@
               </div>
             </div>
           </q-card-section>
-          <q-card-section class="flex">
+          <q-card-section>
             <div
               class="category-list"
               v-if="inputs[examCategoriesIndex] && inputs[examCategoriesIndex].value.length === 0">
@@ -220,7 +220,6 @@ export default {
   .category-list{
     display: flex;
     padding: 20px;
-    width: 60%;
     margin: auto;
     .alert{
       height: 40px;
@@ -228,10 +227,6 @@ export default {
       text-align: center;
       padding: 10px;
     }
-  }
-  .add-category-box{
-    width: 70%;
-    margin: auto;
   }
 }
 </style>
