@@ -13,16 +13,7 @@ function middlewarePipeline (context, middlewares, index) {
     middleware({ ...context, next: nextMiddleware })
   }
 }
-// function getRouteWithParent (routeNode, toName) {
-//   const routes = routeNode.children
-//   const parent = routeWithParent.route
-//   while (true) {
-//     array.unshift(parent.breadcrumbs)
-//     parent= parent.route
-//     if (parent.route != null)break;
-//
-//   }
-// }
+
 function getRouteWithParent (routeNode, toName) {
   const routes = routeNode.children
   for (const routeIndex in routes) {
@@ -63,10 +54,7 @@ function createBreadcrumbsFromRouteWithParent (routeWithParent) {
 
 export default boot(({ router, store }) => {
   router.beforeEach((to, from, next) => {
-    // console.log('to.name: ', to.name)
-    // console.log('router.options.routes: ', router.options.routes)
     const routeWithParent = getRouteWithParent({ children: router.options.routes }, to.name)
-    // console.log('createBreadcrumbsFromRouteWithParent (routeWithParent)', createBreadcrumbsFromRouteWithParent(routeWithParent))
     store.commit('AppLayout/updateBreadcrumbs', {
       path: createBreadcrumbsFromRouteWithParent(routeWithParent)
     })
