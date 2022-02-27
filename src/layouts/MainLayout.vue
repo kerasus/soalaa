@@ -1,5 +1,5 @@
 <template>
-  <quasar-template-builder v-model:value="properties">
+  <quasar-template-builder v-model:value="properties" @onResize="resize">
     <template #header>
       <template-header/>
     </template>
@@ -23,11 +23,7 @@ export default {
   components: { SideMenuDashboard, QuasarTemplateBuilder, templateHeader },
   data () {
     return {
-      leftDrawerOpen: false,
       user: new User(),
-      windowSize: document.documentElement.clientWidth,
-      showBtn: false,
-      tab: 'home',
       properties: {
         layoutView: 'lHh Lpr lFf',
         layoutHeader: true,
@@ -36,7 +32,6 @@ export default {
         layoutHeaderElevated: false,
         layoutHeaderBordered: false,
         layoutLeftDrawer: true,
-        layoutLeftDrawerBehavior: '',
         layoutLeftDrawerVisible: false,
         layoutLeftDrawerOverlay: false,
         layoutLeftDrawerElevated: false,
@@ -51,31 +46,6 @@ export default {
       }
     }
   },
-  mounted () {
-    window.addEventListener('resize', this.getDimensions)
-  },
-  unmounted () {
-    window.removeEventListener('resize', this.getDimensions)
-  },
-  computed: {
-    // eslint-disable-next-line vue/return-in-computed-property
-    drawerSize () {
-      if (this.windowSize > 1023) {
-        return 325
-      } else if (this.windowSize < 1024 && this.windowSize > 349) {
-        return 280 && this.$store.commit('AppLayout/updateLayoutLeftDrawerBehavior', 'mobile')
-      } else if (this.windowSize < 350) {
-        return 242
-      }
-    },
-    drawerBehavior () {
-      if (this.windowSize > 1023) {
-        return this.$store.commit('AppLayout/updateLayoutLeftDrawerBehavior', 'desktop')
-      } else {
-        return this.$store.commit('AppLayout/updateLayoutLeftDrawerBehavior', 'mobile')
-      }
-    }
-  },
   created () {
     // const AppLayout = JSON.parse(localStorage.getItem('AppLayout'))
     // if (AppLayout) {
@@ -86,31 +56,26 @@ export default {
     // } else {
     //   // localStorage.setItem('AppLayout', JSON.stringify(this.properties))
     // }
-    this.properties.layoutLeftDrawerBehavior = this.drawerBehavior
-    this.$store.commit('AppLayout/updateLayoutLeftDrawerWidth', this.drawerSize)
-  },
-  watch: {
-    windowSize () {
-      console.log(this.drawerSize)
-      if (this.windowSize > 1023) {
-        this.layoutLeftDrawerWidth = 325
-      } else if (this.windowSize < 1024 && this.windowSize > 349) {
-        this.layoutLeftDrawerWidth = 280
-      } else if (this.windowSize < 350) {
-        this.layoutLeftDrawerWidth = 242
-      }
-    }
   },
   methods: {
-    // getDimensions () {
-    //   this.windowSize = document.documentElement.clientWidth
-    // },
     getUser () {
       this.user = this.$store.getters['Auth/user']
       return this.user
     },
     logOut () {
       return this.$store.dispatch('Auth/logOut')
+    },
+    resize (val) {
+      if (val.width > 1023) {
+        this.$store.commit('AppLayout/updateLayoutLeftDrawerWidth', 325)
+        this.$store.commit('AppLayout/updateLayoutLeftDrawerBehavior', 'desktop') && this.$store.commit('AppLayout/updateLayoutRightDrawerBehavior', 'desktop')
+      } else if (val.width > 349) {
+        this.$store.commit('AppLayout/updateLayoutLeftDrawerWidth', 280)
+        this.$store.commit('AppLayout/updateLayoutLeftDrawerBehavior', 'mobile') && this.$store.commit('AppLayout/updateLayoutRightDrawerBehavior', 'mobile')
+      } else {
+        this.$store.commit('AppLayout/updateLayoutLeftDrawerWidth', 242)
+        this.$store.commit('AppLayout/updateLayoutLeftDrawerBehavior', 'mobile') && this.$store.commit('AppLayout/updateLayoutRightDrawerBehavior', 'mobile')
+      }
     }
   }
 }
