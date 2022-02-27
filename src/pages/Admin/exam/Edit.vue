@@ -228,5 +228,9 @@ export default {
       padding: 10px;
     }
   }
+  .add-category-box{
+    width: 70%;
+    margin: auto;
+  }
 }
 </style>
