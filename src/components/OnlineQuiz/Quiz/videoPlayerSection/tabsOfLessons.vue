@@ -12,9 +12,6 @@
         align="justify"
       >
       </q-tabs>
-
-<!--      <q-separator></q-separator>-->
-
       <q-tab-panels v-model="tab" animated>
         <q-tab-panel name="Lessons" class="q-pa-none">
 
@@ -34,6 +31,7 @@
                   :key="index"
                   :name="item.sub_category_id"
                   :label="item.sub_category"
+                  :id="'lessonTab' + index"
                   @click="onVideoTabChange(index)"
                 ></q-tab>
               </q-tabs>
@@ -52,28 +50,35 @@
                   :key="index"
                   :name="item.sub_category_id"
                 >
-                  <div class="current-panel-title q-mb-md">{{ currentVideoContent.title }}</div>
-                  <div class="answers-video-group">
-                    <div class="timestamp-box">
-                      <div class="timestamp">زمانکوب ها</div>
-                      <q-list dense>
-                        <q-item
-                          clickable
-                          v-ripple
-                          v-for="(currentVideoItem, i) in currentVideoContent.timepoints"
-                          :key="i"
-                          @click="playTimePoint(i)"
-                        >
-                          <q-item-section>{{ currentVideoItem.title }}</q-item-section>
-                        </q-item>
-                      </q-list>
-                    </div>
-                    <div class="video-box">
-                      <video
-                          :ref="'videoPlayer'+index"
+                  <div v-if="currentVideoContent">
+                    <div class="current-panel-title q-mb-md">{{ currentVideoContent.title }}</div>
+                    <div class="answers-video-group">
+                      <div class="timestamp-box">
+                        <div class="timestamp">زمانکوب ها</div>
+                        <q-list dense>
+                          <q-item
+                            clickable
+                            v-ripple
+                            v-for="(currentVideoItem, i) in currentVideoContent.timepoints"
+                            :key="i"
+                            @click="playTimePoint(i)"
+                          >
+                            <q-item-section>{{ currentVideoItem.title }}</q-item-section>
+                          </q-item>
+                        </q-list>
+                      </div>
+                      <div class="video-box">
+                        <video
+                          :ref="'videoPlayer'+ index"
                           class="video-js vjs-default-skin vjs-16-9 vjs-fluid vjs-big-play-centered vjs-show-big-play-button-on-pause"
                         />
+                      </div>
                     </div>
+                  </div>
+                  <div v-else>
+                    <q-banner inline-actions class="text-white bg-red">
+                      ویدیویی منتشر نشده
+                    </q-banner>
                   </div>
                 </q-tab-panel>
               </q-tab-panels>
@@ -84,7 +89,6 @@
       </q-tab-panels>
     </q-card>
     </div>
-    <button @click="log">log</button>
   </div>
 </template>
 <script>
@@ -170,24 +174,14 @@ export default {
       videoLesson: null
     }
   },
-  created () {
-    console.log('this.report', this.report)
-    this.loadFirstVideoTab()
-    // this.report.sub_category[0].video_url: Array
-  },
+  created () {},
   mounted () {
-    setTimeout(() => {
-      this.innerTab = this.report.sub_category[0].sub_category_id
-    }, 2000)
+    this.$nextTick(() => {
+      this.loadFirstVideoTab()
+    })
   },
   methods: {
-    log (n) {
-      console.log('this.innerTab = this.report.sub_category[0].sub_category', this.innerTab = this.report.sub_category[0].sub_category_id)
-      // console.log('logged', n)
-    },
     getContent (contentId, sub_categoryIndex) {
-      console.log('getContent contentId', contentId)
-      console.log('getContent sub_categoryIndex', sub_categoryIndex)
       const that = this
       this.alaaContent.show(contentId)
         .then((response) => {
@@ -206,7 +200,7 @@ export default {
       const that = this
       this.player = videojs(that.$refs['videoPlayer' + sub_categoryIndex][0], this.options,
         function onPlayerReady () {
-          console.log('onPlayerReady', this)
+          // console.log('onPlayerReady', this)
         })
       this.updateTimepointsHeights(sub_categoryIndex)
       this.updateVideoSrc(srcs)
@@ -221,7 +215,6 @@ export default {
       this.timepointsHeights = this.$refs['videoPlayer' + sub_categoryIndex][0].clientHeight
     },
     playTimePoint (index) {
-      console.log('playTimePoint index', index)
       this.player.pause()
       this.player.currentTime(this.currentVideoContent.timepoints[index].time)
       this.player.play()
@@ -240,11 +233,12 @@ export default {
       return updatedSrcs
     },
     loadFirstVideoTab () {
-      console.log('loadFirstVideoTab')
+      // Todo : i need loading here
+      this.currentVideoContent = '0'
+      document.getElementById('lessonTab0').click()
       this.onVideoTabChange(0)
     },
     onVideoTabChange (tabIndex) {
-      console.log('tabIndex', tabIndex)
       if (this.player) {
         this.player.pause()
       }
@@ -351,8 +345,8 @@ export default {
   left: -4.5em #{"/* rtl:ignore */"};
   transition: left 0s #{"/* rtl:ignore */"};
 }
-[dir="rtl"] .video-js .vjs-play-progress::before {
-  left: 0;
+.video-js .vjs-play-progress::before {
+  left: initial #{"/* rtl:ignore */"} !important;
   right: -0.5em #{"/* rtl:ignore */"};
 }
 .tabs-of-lessons .timestamp-box {
