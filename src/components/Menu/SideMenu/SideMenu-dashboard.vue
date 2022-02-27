@@ -72,7 +72,7 @@
               <q-item
                 v-for="(subItem , i) in item.children"
                 :key="i"
-                :to="subItem.to"
+                :to="{ name: subItem.routeName }"
                 class="list-child-item"
                 exact-active-class="active-route"
               >
@@ -135,9 +135,9 @@ export default {
           routeName: null,
           active: false,
           children: [
-            { displayName: 'ثبت سوال', to: '/question/create', name: 'user.exam', active: false },
-            { displayName: 'کارخانه سوال', to: '/question/list', name: 'question.list', active: false },
-            { displayName: 'بانک سوال', to: '/questions', name: 'question-bank', active: false }
+            { displayName: 'ثبت سوال', routeName: 'Admin.Question.Create', active: false },
+            { displayName: 'کارخانه سوال', routeName: 'Admin.Question.Factory', active: false },
+            { displayName: 'بانک سوال', routeName: 'Admin.Question.Bank', active: false }
           ]
         },
         {
@@ -146,8 +146,8 @@ export default {
           routeName: null,
           active: false,
           children: [
-            { displayName: 'ساخت آزمون', to: '/exam/create', name: 'Admin.Exam.Creat', active: false },
-            { displayName: 'لیست آزمون ها', to: '/exam', name: 'Admin.Exam.Index', active: false }
+            { displayName: 'ساخت آزمون', routeName: 'Admin.Exam.Create', active: false },
+            { displayName: 'لیست آزمون ها', routeName: 'Admin.Exam.Index', active: false }
           ]
         },
         {

@@ -205,7 +205,7 @@ export default {
     },
     editExamReport (id) {
       this.$router.push({
-        name: 'edit-exam-report',
+        name: 'Admin.Exam.Report.Edit',
         params: {
           id: id
         }
@@ -228,7 +228,7 @@ export default {
     },
     editCoefficient (id) {
       this.$router.push({
-        name: 'coefficient.edit',
+        name: 'Admin.Exam.Coefficient.Edit',
         params: {
           id: id
         }
@@ -248,7 +248,7 @@ export default {
     },
     showLessonsList (id, title) {
       this.$router.push({
-        name: 'onlineQuiz.exams.lessons',
+        name: 'Admin.Exam.Lessons',
         params: {
           quizId: id,
           quizTitle: title
@@ -257,7 +257,7 @@ export default {
     },
     goExamResult (id) {
       this.$router.push({
-        name: 'exam.results',
+        name: 'Admin.Exam.AllResults',
         params: {
           id: id
         }

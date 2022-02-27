@@ -40,7 +40,7 @@ function createBreadcrumbsFromRouteWithParent (routeWithParent) {
   if (routeWithParent.route) {
     const array = createBreadcrumbsFromRouteWithParent(routeWithParent.route)
     if (routeWithParent.parent.breadcrumbs) {
-      array.push(routeWithParent.parent.breadcrumbs)
+      array.unshift(routeWithParent.parent.breadcrumbs)
     }
     return array
   } else {
@@ -54,10 +54,10 @@ function createBreadcrumbsFromRouteWithParent (routeWithParent) {
 
 export default boot(({ router, store }) => {
   router.beforeEach((to, from, next) => {
-    console.log('to.name: ', to.name)
-    console.log('router.options.routes: ', router.options.routes)
     const routeWithParent = getRouteWithParent({ children: router.options.routes }, to.name)
-    console.log('createBreadcrumbsFromRouteWithParent (routeWithParent)', createBreadcrumbsFromRouteWithParent(routeWithParent))
+    store.commit('AppLayout/updateBreadcrumbs', {
+      path: createBreadcrumbsFromRouteWithParent(routeWithParent)
+    })
     // Now you need to add your authentication logic here, like calling an API endpoint
     if (!to.meta.middlewares) {
       return next()

@@ -17,23 +17,23 @@
     class="right-side"
     :class="{'col-6': windowSize > 1023, 'col-12': windowSize < 350}"
   >
-    <template
-      v-for="(breadcrumb, index) in headerTitle.path"
-      :key="index"
+    <q-breadcrumbs
+      class="breadcrumbs"
+      separator-color="dark"
+      gutter="sm"
     >
-      <span v-if="!getRoute(breadcrumb.route)"
-            class="address-bar"
-      >
-        {{ breadcrumb.title }}
-      </span>
-      <router-link
-        v-else
-        :to="getRoute(breadcrumb.route)"
-        class="address-bar"
-      >
-        {{ breadcrumb.title }}
-      </router-link>
-    </template>
+      <template v-slot:separator>
+        <q-icon name="isax:arrow-right-3 " />
+      </template>
+        <q-breadcrumbs-el
+          v-for="(breadcrumb, index) in breadcrumbs.path"
+          :key="index"
+          :icon=breadcrumb.icon
+          :label=breadcrumb.title
+          :to="getRoute(breadcrumb.route)"
+          class="q-breadcrumbs-el"
+        />
+    </q-breadcrumbs>
   </div>
   <div
     class="left-side"
@@ -72,8 +72,7 @@ export default {
   name: 'templateHeader',
   data () {
     return {
-      windowSize: document.documentElement.clientWidth,
-      addresses: []
+      windowSize: document.documentElement.clientWidth
     }
   },
   mounted () {
@@ -84,7 +83,7 @@ export default {
   },
   computed: {
     ...mapGetters('AppLayout', [
-      'headerTitle',
+      'breadcrumbs',
       'layoutLeftDrawerVisible'
     ])
   },
@@ -102,7 +101,6 @@ export default {
       if (!route) {
         return false
       }
-
       if (route.name) {
         return { name: route.name }
       } else if (route.path) {
@@ -115,7 +113,7 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss" scoped >
 .drawer-btn{
   display: none;
   @media screen and (max-width: 1023px){
@@ -137,21 +135,16 @@ export default {
   @media screen and (max-width: 349px){
     margin-left: 0;
   }
-  .address-bar {
-    font-size: 18px;
-    font-weight: 500;
-    color: #23263B;
-    &:nth-child(2) {
+  .breadcrumbs{
+    &:deep(> *) {
+      font-style: normal;
+      font-weight: bold;
       font-size: 16px;
-    }
-    &::after {
-      content: ">";
-      margin: 0 10px;
-    }
-
-    &:last-child {
-      &::after {
-        content: none;
+      line-height: 31px;
+      text-align: right;
+      color: #23263B;
+      div:first-child  {
+        font-size: 18px;
       }
     }
   }
@@ -170,6 +163,12 @@ export default {
 }
 </style>
 <style lang="scss">
+.breadcrumbs{
+  .q-breadcrumbs__separator{
+    .q-icon{
+      font-size: 22px;
+    }
+  }}
 .drawer-btn{
   .q-btn{
     flex-direction: row !important;
