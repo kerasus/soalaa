@@ -1,5 +1,5 @@
 <template>
-  <div class="bg-secondary side-menu-main-layout">
+  <div class="bg-primary side-menu-main-layout">
     <div class="side-logo">
       <div class="logo-image">
         <q-img
