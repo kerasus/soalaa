@@ -1,8 +1,8 @@
-const lumenServer = process.env.VUE_APP_LUMEN_INTERNAL_API_SERVER
-const authServer = process.env.VUE_APP_AUTH_INTERNAL_API_SERVER
-
+const lumenServer = process.env.AAA_API_SERVER
+const authServer = process.env.AUTH_API_SERVER
 const API_ADDRESS = {
-  socket: process.env.VUE_APP_SOCKET_TARGET_API_SERVER,
+  // socket: process.env.VUE_APP_SOCKET_TARGET_API_SERVER,
+  socket: 'https://office.alaatv.com:501',
   server: {
     lumen: lumenServer,
     auth: authServer
@@ -20,61 +20,63 @@ const API_ADDRESS = {
     show_user: authServer + '/getUserFor3a'
   },
   set: {
-    base: authServer + '/set',
+    base: authServer + '/set'
   },
   content: {
-    base: authServer + '/c',
+    base: authServer + '/c'
   },
   option: {
     base: lumenServer + '/option'
   },
+  log: {
+    base: lumenServer + '/activity-log',
+    addComment (id) {
+      return lumenServer + '/activity-log/' + id + '/comment'
+    }
+  },
   exam: {
-    showExam: (examId) => lumenServer + '/exam/' + examId,
     editExam: lumenServer + '/exam',
-    copyCoefficient: lumenServer + '/exam-question/zirgorooh/copy',
     sendAnswers: lumenServer + '/temp-exam/answer/choice',
-    sendAnswerSheetPhoto: lumenServer + '/temp-exam/scan',
-    sendScannedAnswers: lumenServer + '/temp-exam/scan/import',
-    sendAnswersAfterExam: lumenServer + '/temp-exam/answer/choice/v2',
     sendStatus: lumenServer + '/temp-exam/answer/status',
     sendBookmark: lumenServer + '/temp-exam/answer/bookmark',
     sendUnBookmark: lumenServer + '/temp-exam/answer/unbookmark',
     userExamsList: lumenServer + '/examAndUser',
     takhminRotbe: lumenServer + '/exam-report/rankSimulator',
     analysisVideo: lumenServer + '/exam-question/attach/sub-category',
-    getAnalysisVideo (exam_id) { return lumenServer + '/exam-question/videos/' + exam_id },
-    examReportIndex (type) { return lumenServer + '/exam-report/index/' + type },
-    pdf (exam_id) { return lumenServer + '/exam-question/booklet-file/' +exam_id },
-    base (page_number, pagination = true) {
-      if (pagination) {
-        if (page_number) {
-          return lumenServer + '/exam?with_pagination=1&page=' + page_number
-        } else {
-          return lumenServer + '/exam'
-        }
+    getAnalysisVideo (examId) {
+      return lumenServer + '/exam-question/videos/' + examId
+    },
+    examReportIndex (type) {
+      return lumenServer + '/exam-report/index/' + type
+    },
+    pdf (examId) {
+      return lumenServer + '/exam-question/booklet-file/' + examId
+    },
+    base (pageNumber) {
+      if (pageNumber) {
+        return lumenServer + '/exam?with_pagination=1&page=' + pageNumber
       } else {
-        return lumenServer + '/exam?with_pagination=0'
+        return lumenServer + '/exam'
       }
     },
-    generateExamFile (exam_id, with_answer) {
-      const baseFileRoute = lumenServer + '/exam-question/file/' + exam_id
-      return with_answer ? (baseFileRoute + '/with_answer') : baseFileRoute
+    generateExamFile (examId, withAnswer) {
+      const baseFileRoute = lumenServer + '/exam-question/file/' + examId
+      return withAnswer ? (baseFileRoute + '/with_answer') : baseFileRoute
     },
-    getAnswerOfUser (user_exam_id) {
-      return lumenServer + '/temp-exam/answer/'+user_exam_id
+    getAnswerOfUser (userExamId) {
+      return lumenServer + '/temp-exam/answer/' + userExamId
     },
-    getAllAnswerOfUser (user_exam_id) {
-      return lumenServer + '/temp-exam/allAnswer/'+user_exam_id
+    getAllAnswerOfUser (userExamId) {
+      return lumenServer + '/temp-exam/allAnswer/' + userExamId
     },
-    getSubCategoriesWithPermissions (exam_id) {
-      return lumenServer + '/exam-question/show/sub-categories/'+ exam_id
+    getSubCategoriesWithPermissions (examId) {
+      return lumenServer + '/exam-question/show/sub-categories/' + examId
     },
-    getAnswerOfUserWithCorrect (user_exam_id) {
-      return lumenServer + '/temp-exam/answer/'+user_exam_id+'/withCorrect'
+    getAnswerOfUserWithCorrect (userExamId) {
+      return lumenServer + '/temp-exam/answer/' + userExamId + '/withCorrect'
     },
     registerExam: lumenServer + '/user/registerExam',
     examUser: lumenServer + '/exam-user',
-    examUserAfterExam: lumenServer + '/exam-user/show',
     examQuestion (quizId) {
       return lumenServer + '/exam-question/attach/show/' + quizId
     },
@@ -86,14 +88,8 @@ const API_ADDRESS = {
         return lumenServer + '/exam/config/' + examId
       }
     },
-    examBookletUpload (exam_id) {
-      return lumenServer + '/exam-question/booklet-file/' + exam_id
-    }
-  },
-  log: {
-    base: lumenServer + '/activity-log',
-    addComment (id) {
-      return lumenServer + '/activity-log/' + id + '/comment'
+    examBookletUpload (examId) {
+      return lumenServer + '/exam-question/booklet-file/' + examId
     }
   },
   question: {
@@ -105,7 +101,7 @@ const API_ADDRESS = {
       }
 
       if (typeof page !== 'undefined') {
-        page = '&page='+page
+        page = '&page=' + page
       } else {
         page = ''
       }
@@ -113,7 +109,7 @@ const API_ADDRESS = {
       if (queryParam.length > 0) {
         queryParam = queryParam.substr(1)
       }
-      return lumenServer + '/question?'+queryParam
+      return lumenServer + '/question?' + queryParam
     },
     status: {
       base: lumenServer + '/question/statuses',
@@ -126,11 +122,11 @@ const API_ADDRESS = {
         if (!pagination) {
           pagination = 0
         }
-        return lumenServer + '/activity-log?subject_id='+questionId+'&subject=question&with_pagination=0'
-      },
+        return lumenServer + '/activity-log?subject_id=' + questionId + '&subject=question&title=update&description=update_question_status&with_pagination=0'
+      }
     },
     base: lumenServer + '/exam-question/attach',
-    createAndAttach: () => lumenServer + '/exam-question/attach/' ,
+    createAndAttach: () => lumenServer + '/exam-question/attach/',
     create: lumenServer + '/question',
     attachSubCategoryToQuestion: lumenServer + '/exam-question/attach/sub-category',
     updateQuestion (questionId) {
@@ -138,19 +134,16 @@ const API_ADDRESS = {
     },
     attach: lumenServer + '/exam-question/attach/v2',
     detach (questionId) {
-      return lumenServer + '/exam-question/detach/'+questionId
+      return lumenServer + '/exam-question/detach/' + questionId
     },
     delete (questionId) {
-      return lumenServer + '/question/'+questionId
+      return lumenServer + '/question/' + questionId
     },
     getCurrentQuestion (questionId) {
       return lumenServer + '/question/' + questionId
     },
     confirm (questionId) {
       return lumenServer + '/question/confirm/' + questionId
-    },
-    unconfirm (questionId) {
-      return lumenServer + '/question/unconfirm/' + questionId
     },
     uploadImage (questionId) {
       return lumenServer + '/question/upload/' + questionId
@@ -160,8 +153,7 @@ const API_ADDRESS = {
     base: lumenServer + '/sub-category',
     update (id) {
       return lumenServer + '/sub-category/' + id
-    },
-    updateOrder: lumenServer + '/exam-question/update/order/sub-category'
+    }
   },
   questionCategory: {
     base: lumenServer + '/category',
@@ -169,9 +161,9 @@ const API_ADDRESS = {
       return lumenServer + '/category/' + id
     }
   },
-  subGroups : {
-    base (exam_id) {
-      return lumenServer + '/exam-question/zirgorooh/' + exam_id
+  subGroups: {
+    base (examId) {
+      return lumenServer + '/exam-question/zirgorooh/' + examId
     },
     all () {
       return lumenServer + '/option?with_pagination=0&type=zirgorooh_type'

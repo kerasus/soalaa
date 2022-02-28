@@ -1,35 +1,42 @@
 <template>
-  <v-row>
-    <v-col
+  <div class="row">
+    <div
       v-if="editStatus"
-      cols="12"
+      class="col-12"
     >
-      <vue-tiptap-katex
-        ref="tiptap"
-        :loading="loading"
-        :options="{ bubbleMenu: false, floatingMenu: false, poem: true, reading: true, persianKeyboard: true, mathliveOptions: { smartFence: false }, uploadServer: { url: imageUrl, headers: { Authorization: 'Bearer ' + $store.getters['Auth/accessToken'] } } }"
-      />
-    </v-col>
-    <!-- eslint-disable vue/no-v-html -->
-    <v-col v-else>
+<!--      <vue-tiptap-katex-->
+<!--        ref="tiptap"-->
+<!--        :loading="loading"-->
+<!--        :access-token="$store.getters['Auth/accessToken']"-->
+<!--        :upload-utl="imageUrl"-->
+<!--        :options="{ bubbleMenu: false, floatingMenu: false, poem: true, reading: true, persianKeyboard: true }"-->
+<!--      />-->
+    </div>
+    <div v-else>
       <vue-katex :input="html" />
-    </v-col>
-  </v-row>
+    </div>
+
+  </div>
 </template>
 
 <script>
-import VueKatex from '@/components/VueKatex'
-import VueTiptapKatex from 'vue-tiptap-katex'
-import API_ADDRESS from "@/api/Addresses";
+
+import API_ADDRESS from 'src/api/Addresses'
+// import VueTiptapKatex from 'vue3-tiptap-katex'
+import VueKatex from 'components/VueKatex'
+
+// replacement
+// eslint-disable-next-line import/named
+import { ref } from 'vue'
 
 export default {
   name: 'QuestionField',
   components: {
-    VueTiptapKatex,
+    // VueTiptapKatex,
     VueKatex
   },
   props: {
-    value: {
+    editorValue: {
       default: '',
       type: String
     },
@@ -46,10 +53,12 @@ export default {
       type: String
     }
   },
-  data() {
+  data () {
     return {
+      value: ref('What you see is <b>what</b> you get.'),
       html: '',
-      loading: false,
+      test: 'test data',
+      loading: false
     }
   },
   computed: {
@@ -58,17 +67,29 @@ export default {
     }
   },
   created () {
+    this.value = this.editorValue
     this.loading = true
     this.getHtmlValueFromValueProp()
+    // console.log('_________________________________________________________________________')
+    // console.log('question field value:', this.value)
+    // console.log('question field :', this.label)
+    // console.log('question field editStatus:', this.editStatus)
+    // console.log('question field questionId:', this.questionId)
+    // console.log('_________________________________________________________________________')
+  },
+  watch: {
   },
   mounted () {
     if (this.$refs.tiptap) {
-      this.$refs.tiptap.setContent(this.html)
+      // ToDo : vue-tiptap-katex in incompatible with vue 3 (right now)
+      // this.$refs.tiptap.setContent(this.html)
+      console.log('this.$refs.tiptap.setContent(this.html)')
     }
   },
   methods: {
     getContent () {
-      this.$emit('input', this.$refs.tiptap.getContent())
+      console.log('this.editorValue :', this.value)
+      this.$emit('questionData', this.value)
     },
     getHtmlValueFromValueProp () {
       let html = this.value
@@ -77,7 +98,7 @@ export default {
       }
       this.html = html
       this.loading = false
-    },
+    }
   }
 }
 </script>
@@ -86,10 +107,6 @@ export default {
 </style>
 
 <style>
-.katex * {
-  font-family: KaTeX_Main;
-}
-
 #mathfield .ML__cmr,
 .katex .mtight {
   font-family: IRANSans;
@@ -101,6 +118,4 @@ export default {
 .tiptap-plus-container.focused {
   border: solid 1px #dedede;
 }
-
 </style>
-
