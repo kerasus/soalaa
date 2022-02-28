@@ -370,6 +370,22 @@ export default {
   left: -4.5em #{"/* rtl:ignore */"};
   transition: left 0s #{"/* rtl:ignore */"};
 }
+.vjs-quality-selector {
+  .vjs-menu-button {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    width: 100%;
+  }
+  .vjs-icon-placeholder {
+    font-family: 'VideoJS';
+    font-weight: normal;
+    font-style: normal;
+    &::before {
+      content: '\f110';
+    }
+  }
+}
 .video-js .vjs-play-progress::before {
   left: initial #{"/* rtl:ignore */"} !important;
   right: -0.5em #{"/* rtl:ignore */"};
