@@ -80,6 +80,25 @@
                       ویدیویی منتشر نشده
                     </q-banner>
                   </div>
+                  <div class="row videoPlayer-pages-box" v-if="currentVideoContent">
+                    <div class="col">
+                      <div
+                        class="flex flex-center"
+                        dir="ltr"
+                      >
+                        <q-btn
+                          v-for="(video, alaaVideoIndex) in alaaVideos"
+                          :key="alaaVideoIndex"
+                          outline
+                          rounded
+                          class="videoPlayer-pages-btn"
+                          @click="getContent(video.id)"
+                        >
+                          {{ alaaVideoIndex + 1 }}
+                        </q-btn>
+                      </div>
+                    </div>
+                  </div>
                 </q-tab-panel>
               </q-tab-panels>
             </template>
@@ -299,6 +318,13 @@ export default {
     padding-right: 10px;
     color: rgba(0, 0, 0, 0.6);
   }
+  .videoPlayer-pages-box {
+    margin-top: 15px;
+  }
+  .videoPlayer-pages-btn {
+    color : #666666;
+    margin-right: 10px #{"/* rtl:ignore */"};
+  }
 }
 @media only screen and (max-width: 1330px) {
   .tabs-of-lessons .timestamp-box {
@@ -377,6 +403,7 @@ export default {
   }
   .q-tabs {
     background-color: #f1f1f1;
+    margin-top: 34px;
   }
   .q-tab {
     background-color: #ebeaea;
@@ -420,6 +447,9 @@ export default {
     flex-direction: column;
     .q-splitter__panel {
       width: 100% !important;
+    }
+    .q-tabs {
+      margin-top: 0px;
     }
   }
   .tabs-of-lessons {

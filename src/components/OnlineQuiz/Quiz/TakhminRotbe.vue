@@ -382,15 +382,15 @@ export default {
 
 <style lang="scss" scoped >
     .subColsPaddingRight {
-        padding-right: 5px;
+        padding-right: 5px #{"/* rtl:ignore */"};
     }
 
     .subColsPaddingBottom {
-        padding-bottom: 3px
+        padding-bottom: 3px;
     }
 
     .firstColPadding {
-        padding-right: 5px;
+        padding-right: 5px #{"/* rtl:ignore */"};
     }
 
     .wrapper {
@@ -415,7 +415,7 @@ export default {
         font-weight: normal;
         font-size: 40px;
         color: rgba(51, 51, 51, 1);
-        display: flow-root;
+        display: flow-root #{"/* rtl:ignore */"};
     }
 
     .cardTitle {
@@ -430,20 +430,20 @@ export default {
         font-weight: normal;
         font-size: 18px;
         color: rgba(0, 0, 0, 1);
-        place-content: space-evenly;
+        place-content: space-evenly #{"/* rtl:ignore */"};
     }
 
     .tableTitle {
-        margin-right: 30px;
+        margin-right: 15px #{"/* rtl:ignore */"};
         white-space: nowrap;
         line-height: 34px;
         margin-top: -9px;
-        text-align: right;
+        text-align: right #{"/* rtl:ignore */"};
         font-family: IRANSans;
         font-style: normal;
         font-weight: normal;
         font-size: 16px;
-        color: rgba(102, 102, 102, 1);
+        color: #2a2a2a;
         width: 100%;
 
     }
