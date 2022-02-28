@@ -7,92 +7,105 @@
             <q-btn class="full-width" label="تخمین رتبه" @click="sendData" style="background-color: #00bcd4; color: #fffaee"/>
           </div>
           <div class="col col-md-7 col-12 default-result-table">
-            <span class="tableTitle col-12">
-                  جدول عملکرد دروس
-            </span>
-            <q-table
-              :rows="takhminReport.sub_category"
-              :columns="columns1"
-              row-key="name"
-              color="amber"
-              hide-bottom
-              flat
-              :rows-per-page-options="[0]"
-            >
-              <template v-slot:body="props">
-                <q-tr :props="props">
-                  <q-td key="sub_category" :props="props">
-                    {{ props.row.sub_category }}
-                  </q-td>
-                  <q-td key="right_answer" :props="props">
-<!--                    {{ props.row.right_answer }}-->
-                      <q-input
-                        type="number"
-                        v-model="answerCounts[props.row.sub_category_id].correct"
-                        debounce="500"
-                        :rules="[numberRule]"
-                        @change="calcPercent(props.row.sub_category_id, $event.target)"
-                        dense
-                        autofocus
-                      />
-                  </q-td>
-                  <q-td key="wrong_answer" :props="props">
-<!--                    {{ props.row.wrong_answer }}-->
-                      <q-input
-                        type="number"
-                        v-model="answerCounts[props.row.sub_category_id].incorrect"
-                        debounce="500"
-                        :rules="[numberRule]"
-                        @change="calcPercent(props.row.sub_category_id, $event.target)"
-                        dense
-                        autofocus
-                      />
-                  </q-td>
-                  <q-td key="percent" :props="props">
-<!--                    {{ props.row.percent }}-->
-                      <q-input
-                        type="number"
-                        v-model="percents[props.row.sub_category_id]"
-                        :rules="[numberRule, percentRule]"
-                        @change="resetAnswerCount(props.row.sub_category_id)"
-                        dense
-                        autofocus
-                      />
-                  </q-td>
-                  <q-td key="rank_city" :props="props">
-                    {{ props.row.rank_city }}
-                  </q-td>
-                  <q-td key="rank_province" :props="props">
-                    {{ props.row.rank_province }}
-                  </q-td>
-                  <q-td key="rank_country" :props="props">
-                    {{ props.row.rank_country }}
-                  </q-td>
-                  <q-td key="taraaz" :props="props">
-                    {{ props.row.taraaz }}
-                  </q-td>
-                </q-tr>
-              </template>
-            </q-table>
+            <div class="row default-resultTable-row">
+              <div class="col default-resultTable-col">
+                <span class="tableTitle col-12">
+                      جدول عملکرد دروس
+                </span>
+                <br>
+                <br>
+                <q-table
+                  :rows="takhminReport.sub_category"
+                  :columns="columns1"
+                  row-key="name"
+                  color="amber"
+                  hide-bottom
+                  flat
+                  :rows-per-page-options="[0]"
+                >
+                  <template v-slot:body="props">
+                    <q-tr :props="props">
+                      <q-td key="sub_category" :props="props">
+                        {{ props.row.sub_category }}
+                      </q-td>
+                      <q-td key="right_answer" :props="props">
+    <!--                    {{ props.row.right_answer }}-->
+                          <q-input
+                            type="number"
+                            v-model="answerCounts[props.row.sub_category_id].correct"
+                            debounce="500"
+                            :rules="[numberRule]"
+                            @change="calcPercent(props.row.sub_category_id, $event.target)"
+                            dense
+                            autofocus
+                          />
+                      </q-td>
+                      <q-td key="wrong_answer" :props="props">
+    <!--                    {{ props.row.wrong_answer }}-->
+                          <q-input
+                            type="number"
+                            v-model="answerCounts[props.row.sub_category_id].incorrect"
+                            debounce="500"
+                            :rules="[numberRule]"
+                            @change="calcPercent(props.row.sub_category_id, $event.target)"
+                            dense
+                            autofocus
+                          />
+                      </q-td>
+                      <q-td key="percent" :props="props">
+    <!--                    {{ props.row.percent }}-->
+                          <q-input
+                            type="number"
+                            v-model="percents[props.row.sub_category_id]"
+                            :rules="[numberRule, percentRule]"
+                            @change="resetAnswerCount(props.row.sub_category_id)"
+                            dense
+                            autofocus
+                          />
+                      </q-td>
+                      <q-td key="rank_city" :props="props">
+                        {{ props.row.rank_city }}
+                      </q-td>
+                      <q-td key="rank_province" :props="props">
+                        {{ props.row.rank_province }}
+                      </q-td>
+                      <q-td key="rank_country" :props="props">
+                        {{ props.row.rank_country }}
+                      </q-td>
+                      <q-td key="taraaz" :props="props">
+                        {{ props.row.taraaz }}
+                      </q-td>
+                    </q-tr>
+                  </template>
+                </q-table>
+              </div>
+            </div>
           </div>
           <div
-            class="col col-md-5 col-12 firstColPadding"
+            class="col col-md-5 col-12 default-result-table"
           >
-            <span class="tableTitle col-12">
-                  نتیجه در زیر گروه ها
-            </span>
-            <q-table
-              :rows="takhminReport.zirgorooh"
-              :columns="columns2"
-              row-key="name"
-              color="amber"
-              hide-bottom
-              flat
-              :rows-per-page-options="[0]"
-            ></q-table>
+            <div class="row default-result-table default-resultTable-row">
+              <div class="col default-resultTable-col">
+                  <span class="tableTitle col-12">
+                        نتیجه در زیر گروه ها
+                  </span>
+                  <br>
+                  <br>
+                  <q-table
+                    :rows="takhminReport.zirgorooh"
+                    :columns="columns2"
+                    row-key="name"
+                    color="amber"
+                    hide-bottom
+                    flat
+                    :rows-per-page-options="[0]"
+                  ></q-table>
+              </div>
+            </div>
             <div class="row final-report-scoreboard">
-              <div class="col col-12 subColsPaddingBottom default-resultTable-row" >
-                <q-card class=" default-result-card">
+              <div class="col col-12 row default-resultTable-row">
+                <div class="col default-resultTable-col" >
+                <q-card class="default-result-card">
                   <div class="row">
                     <div class="col card-title-section text-center">
                       ماکزمیم تراز کل زیر گروه
@@ -107,7 +120,9 @@
                   </span>
                 </q-card>
               </div>
-              <div class="col col-12 subColsPaddingBottom subColsPaddingRight">
+              </div>
+              <div class="col col-12 row default-resultTable-row">
+                <div class="col default-resultTable-col">
                 <q-card class="default-result-card">
                     <div class="row card-title-section">
                       <div class="col col-4 text-center">
@@ -128,6 +143,7 @@
                     </div>
                   </span>
                 </q-card>
+              </div>
               </div>
             </div>
           </div>
@@ -221,8 +237,6 @@ export default {
           position: 'top'
         })
         this.percents[subcategoryId] = 0
-        // todo: vue.set
-        // Vue.set(this.percents, subcategoryId, 0)
       }
 
       this.prepareTakhmineRotbeReport()
@@ -237,8 +251,6 @@ export default {
                     isNaN(this.answerCounts[subcategoryId].incorrect)
       ) {
         this.percents[subcategoryId] = 0
-        // todo: vue.set
-        // Vue.set(this.percents, subcategoryId, 0)
         return false
       }
 
@@ -251,8 +263,6 @@ export default {
           position: 'top'
         })
         this.percents[subcategoryId] = 0
-        // todo: vue.set
-        // Vue.set(this.percents, subcategoryId, 0)
         return false
       }
 
@@ -265,8 +275,6 @@ export default {
           position: 'top'
         })
         this.percents[subcategoryId] = 0
-        // todo: vue.set
-        // Vue.set(this.percents, subcategoryId, 0)
         return false
       }
 
@@ -287,8 +295,6 @@ export default {
         calculated = 0
       }
       this.percents[subcategoryId] = calculated
-      // todo: vue.set
-      // Vue.set(this.percents, subcategoryId, calculated)
 
       this.prepareTakhmineRotbeReport()
     },
@@ -375,27 +381,6 @@ export default {
 </script>
 
 <style lang="scss" scoped >
-    .takhmin-rotbe {
-      .proceeds-table , .default-result-table{
-        .q-table__container {
-          border-radius: 20px;
-        }
-        .q-table {
-          border: 1px solid #ececec;
-          thead tr {
-            background-color: #ffecb4;
-            border-radius: 20px;
-            color: rgba(62, 57, 43, 0.96);
-          }
-          tbody tr:nth-of-type(2n) {
-            background-color: rgba(0, 0, 0, 0.02);
-          }
-          tbody td {
-            font-size: 0.875rem;
-          }
-        }
-      }
-    }
     .subColsPaddingRight {
         padding-right: 5px;
     }
@@ -471,65 +456,30 @@ export default {
         margin-top: 10px;
         border-radius: 15px;
     }
-
-    .v-card > *:last-child:not(.v-btn):not(.v-chip) {
-        border-bottom-left-radius: 0 !important;
-        border-bottom-right-radius: 0 !important;
-
-    }
-
-    .v-card > *:first-child:not(.v-btn):not(.v-chip), .v-card > .v-card__progress + *:not(.v-btn):not(.v-chip) {
-        border-top-left-radius: 0 !important;
-        border-top-right-radius: 0 !important;
-    }
-
-    .dataTable {
-        margin-top: 20px;
-        width: 100%;
-        border-radius: 15px;
-        margin: auto;
-    }
-
-    .v-data-table > thead {
-        background-color: rgba(255, 193, 7, 0.3) !important;
-    }
-
-    .v-data-table > thead th:first-child {
-        border-radius: 0 20px 0 0 !important;
-    }
-
-    .v-data-table > thead th:last-child {
-        border-radius: 20px 0 0 0 !important;
-    }
-
-    .v-data-table > tbody tr:nth-of-type(even) {
-        background-color: rgba(0, 0, 0, 0.04) !important;
-    }
-
-    .v-data-table > thead tr th {
-        width: 125px !important;
-        text-align: center !important;
-    }
-
-    .v-data-table > .v-data-table__wrapper > table {
-        width: 96%;
-        border-spacing: 0;
-        margin: auto;
-    }
-
-    .v-card > *[data-v-338241d2]:first-child:not(.v-btn):not(.v-chip), .v-card > .v-card__progress + *[data-v-338241d2]:not(.v-btn):not(.v-chip) {
-        border-top-left-radius: 15px !important;
-        border-top-right-radius: 15px !important;
-        border-bottom-left-radius: 0 !important;
-        border-bottom-right-radius: 0 !important;
-    }
 </style>
 
-<style>
-    .final-report-scoreboard .v-card__title.cardTitle {
-        padding: 0 10px;
-        font-size: 14px;
+<style lang="scss">
+    .takhmin-rotbe {
+  .default-result-table{
+    .q-table__container {
+      border-radius: 20px;
     }
+    .q-table {
+      border: 1px solid #ececec;
+      thead tr {
+        background-color: #ffecb4;
+        border-radius: 20px;
+        color: rgba(62, 57, 43, 0.96);
+      }
+      tbody tr:nth-of-type(2n) {
+        background-color: rgba(0, 0, 0, 0.02);
+      }
+      tbody td {
+        font-size: 0.875rem;
+      }
+    }
+  }
+}
     .final-report-scoreboard .cardContent {
         font-size: 22px;
     }
