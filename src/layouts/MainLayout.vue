@@ -47,15 +47,8 @@ export default {
     }
   },
   created () {
-    // const AppLayout = JSON.parse(localStorage.getItem('AppLayout'))
-    // if (AppLayout) {
-    //   console.log(this.properties)
-    //   console.log('if')
-    //   this.properties = AppLayout
-    //   console.log(this.properties)
-    // } else {
-    //   // localStorage.setItem('AppLayout', JSON.stringify(this.properties))
-    // }
+    const localData = this.$store.getters['AppLayout/appLayout']
+    Object.assign(this.properties, localData)
   },
   methods: {
     getUser () {

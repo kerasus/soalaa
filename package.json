@@ -36,7 +36,7 @@
     "quasar": "^2.5.5",
     "quasar-crud": "^0.2.2",
     "quasar-form-builder": "^0.1.2",
-    "quasar-template-builder": "^1.0.3",
+    "quasar-template-builder": "^1.0.4",
     "socket.io-client": "^4.4.0",
     "turndown": "^7.1.1",
     "video.js": "^7.17.0",

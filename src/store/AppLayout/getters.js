@@ -21,3 +21,7 @@ export function ColumnsWidth (state) {
 export function breadcrumbs (state) {
   return state.breadcrumbs
 }
+
+export function appLayout (state) {
+  return state.appLayout
+}
