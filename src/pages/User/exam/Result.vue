@@ -198,7 +198,6 @@ export default {
       const user_exam_id = this.$route.params.user_exam_id
       const exam_id = this.$route.params.exam_id
       const examData = new ExamData()
-      console.log('examData---------', examData)
       examData.getUserExamWithCorrectAnswers(user_exam_id, exam_id)
         .loadQuestionsFromFile()
         .getUserExamData(user_exam_id)
