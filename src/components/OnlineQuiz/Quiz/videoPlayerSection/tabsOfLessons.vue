@@ -83,7 +83,6 @@
                 </q-tab-panel>
               </q-tab-panels>
             </template>
-
           </q-splitter>
         </q-tab-panel>
       </q-tab-panels>

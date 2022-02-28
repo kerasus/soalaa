@@ -18,46 +18,78 @@
               hide-bottom
               flat
               :rows-per-page-options="[0]"
-            ></q-table>
-<!--              <template v-slot:item.percent="props">-->
-<!--                <v-text-field-->
-<!--                  v-model="percents[props.item.sub_category_id]"-->
-<!--                  :rules="[numberRule, percentRule]"-->
-<!--                  @input.native="resetAnswerCount(props.item.sub_category_id)"-->
-<!--                />-->
-<!--              </template>-->
-<!--              <template v-slot:item.right_answer="props">-->
-<!--                <v-text-field-->
-<!--                  v-model="answerCounts[props.item.sub_category_id].correct"-->
-<!--                  :rules="[numberRule]"-->
-<!--                  @input.native="calcPercent(props.item.sub_category_id, $event.target)"-->
-<!--                />-->
-<!--              </template>-->
-<!--              <template v-slot:item.wrong_answer="props">-->
-<!--                <v-text-field-->
-<!--                  v-model="answerCounts[props.item.sub_category_id].incorrect"-->
-<!--                  :rules="[numberRule]"-->
-<!--                  @input.native="calcPercent(props.item.sub_category_id, $event.target)"-->
-<!--                />-->
-<!--              </template>-->
+            >
+              <template v-slot:body="props">
+                <q-tr :props="props">
+                  <q-td key="sub_category" :props="props">
+                    {{ props.row.sub_category }}
+                  </q-td>
+                  <q-td key="right_answer" :props="props">
+<!--                    {{ props.row.right_answer }}-->
+                      <q-input
+                        type="number"
+                        v-model="answerCounts[props.row.sub_category_id].correct"
+                        debounce="500"
+                        :rules="[numberRule]"
+                        @change="calcPercent(props.row.sub_category_id, $event.target)"
+                        dense
+                        autofocus
+                      />
+                  </q-td>
+                  <q-td key="wrong_answer" :props="props">
+<!--                    {{ props.row.wrong_answer }}-->
+                      <q-input
+                        type="number"
+                        v-model="answerCounts[props.row.sub_category_id].incorrect"
+                        debounce="500"
+                        :rules="[numberRule]"
+                        @change="calcPercent(props.row.sub_category_id, $event.target)"
+                        dense
+                        autofocus
+                      />
+                  </q-td>
+                  <q-td key="percent" :props="props">
+<!--                    {{ props.row.percent }}-->
+                      <q-input
+                        type="number"
+                        v-model="percents[props.row.sub_category_id]"
+                        :rules="[numberRule, percentRule]"
+                        @change="resetAnswerCount(props.row.sub_category_id)"
+                        dense
+                        autofocus
+                      />
+                  </q-td>
+                  <q-td key="rank_city" :props="props">
+                    {{ props.row.rank_city }}
+                  </q-td>
+                  <q-td key="rank_province" :props="props">
+                    {{ props.row.rank_province }}
+                  </q-td>
+                  <q-td key="rank_country" :props="props">
+                    {{ props.row.rank_country }}
+                  </q-td>
+                  <q-td key="taraaz" :props="props">
+                    {{ props.row.taraaz }}
+                  </q-td>
+                </q-tr>
+              </template>
+            </q-table>
           </div>
           <div
             class="col col-md-5 col-12 firstColPadding"
           >
-<!--            <v-data-table-->
-<!--              hide-default-footer-->
-<!--              :headers="headers2"-->
-<!--              :header-props="{sortByText: 'ترتیب'}"-->
-<!--              :items="takhminReport.zirgorooh"-->
-<!--              :items-per-page="5"-->
-<!--              class="elevation-1 dataTable dataTableHeight2"-->
-<!--            >-->
-<!--              <template v-slot:top>-->
-<!--                <span class="tableTitle">-->
-<!--                  نتیجه در زیر گروه ها-->
-<!--                </span>-->
-<!--              </template>-->
-<!--            </v-data-table>-->
+            <span class="tableTitle col-12">
+                  نتیجه در زیر گروه ها
+            </span>
+            <q-table
+              :rows="takhminReport.zirgorooh"
+              :columns="columns2"
+              row-key="name"
+              color="amber"
+              hide-bottom
+              flat
+              :rows-per-page-options="[0]"
+            ></q-table>
             <div class="row final-report-scoreboard">
               <div class="col col-12 subColsPaddingBottom default-resultTable-row" >
                 <q-card class=" default-result-card">
@@ -88,8 +120,6 @@
                         رتبه در شهر
                       </div>
                     </div>
-<!--                  </v-card-title>-->
-
                   <span class="cardContent">
                     <div class="row">
                       <div class="col col-4 text-center">{{ takhminReport.main.rank_country }}</div>
@@ -109,11 +139,9 @@
 
 <script>
 /* eslint-disable camelcase */
-// todo: vue.set
-// import Vue from 'vue'
 import axios from 'axios'
 import API_ADDRESS from 'src/api/Addresses'
-// import Assistant from "@/plugins/assistant";
+// import Assistant from 'src/plugins/assistant'
 export default {
   name: 'TakhminRotbe',
   props: {
@@ -124,9 +152,9 @@ export default {
       }
     }
   },
-  // props: ['report'],
   data () {
     return {
+      name: '',
       numberRule: v => {
         if (!isNaN(v) && v !== ' ' && v !== '') return true
         return 'مقدار وارد شده عدد نیست.'
@@ -144,18 +172,18 @@ export default {
           taraaz: 0
         },
         sub_category: [],
-        zirgorooh: {}
+        zirgorooh: []
       },
       percents: {},
       answerCounts: {},
       columns1: [
-        {
-          name: 'index',
-          align: 'center',
-          label: 'ردیف',
-          field: row => row.index,
-          sortable: true
-        },
+        // {
+        //   name: 'index',
+        //   align: 'center',
+        //   label: 'ردیف',
+        //   field: row => row.index,
+        //   sortable: true
+        // },
         { name: 'sub_category', label: 'درس', field: row => row.sub_category, align: 'center', sortable: false },
         { name: 'right_answer', label: ' تعداد درست', field: row => row.right_answer, align: 'center', sortable: true },
         { name: 'wrong_answer', label: ' تعداد غلط', field: row => row.wrong_answer, align: 'center', sortable: true },
@@ -165,36 +193,19 @@ export default {
         { name: 'rank_country', label: 'رتبه در کشور', field: row => row.rank_country, align: 'center', sortable: false },
         { name: 'taraaz', label: ' تراز', field: row => row.taraaz, align: 'center', sortable: true }
       ],
-      headers1: [
-        { text: 'درس', value: 'sub_category', align: 'center', sortable: false },
-        { text: 'تعداد درست', value: 'right_answer', align: 'center', sortable: true },
-        { text: ' تعداد غلط', value: 'wrong_answer', align: 'center', sortable: true },
-        { text: ' درصد', value: 'percent', align: 'center', sortable: true },
-        { text: 'رتبه در شهر', value: 'rank_city', align: 'center', sortable: false },
-        { text: 'رتبه در استان', value: 'rank_province', align: 'center', sortable: false },
-        { text: 'رتبه در کشور', value: 'rank_country', align: 'center', sortable: false },
-        { text: ' تراز', value: 'taraaz', align: 'center', sortable: true }
-      ],
-      headers2: [
-        {
-          text: 'زیر گروه',
-          align: 'center',
-          sortable: true,
-          value: 'title'
-        },
-        { text: 'درصد خام', value: 'percent', align: 'center', sortable: true },
-        { text: 'تراز', value: 'taraaz', align: 'center', sortable: true },
-        { text: ' رتبه شهر', value: 'rank_city', align: 'center', sortable: true },
-        { text: ' رتبه استان', value: 'rank_province', align: 'center', sortable: true },
-        { text: ' رتبه کشور', value: 'rank_country', align: 'center', sortable: true }
+      columns2: [
+        { name: 'title', label: 'زیر گروه', field: row => row.title, align: 'center', sortable: true },
+        { name: 'percent', label: 'درصد خام', field: row => row.percent, align: 'center', sortable: true },
+        { name: 'taraaz', label: ' تراز', field: row => row.taraaz, align: 'center', sortable: true },
+        { name: 'rank_city', label: 'رتبه شهر', field: row => row.rank_city, align: 'center', sortable: true },
+        { name: 'rank_province', label: 'رتبه استان', field: row => row.rank_province, align: 'center', sortable: true },
+        { name: 'rank_country', label: 'رتبه کشور', field: row => row.rank_country, align: 'center', sortable: true }
       ]
     }
   },
-  created () {
-    this.prepareTakhmineRotbeReport(true)
-  },
+  created () {},
   mounted () {
-    console.log('TakhminRotbe----------', this.takhminReport)
+    this.prepareTakhmineRotbeReport(true)
   },
   methods: {
     resetAnswerCount (subcategoryId) {
@@ -204,12 +215,12 @@ export default {
       }
 
       if (this.percents[subcategoryId] < -33.33 || this.percents[subcategoryId] > 100) {
-        this.$notify({
-          group: 'notifs',
-          title: 'توجه!',
-          text: 'درصد می بایست در بازه 33.33- درصد تا 100 درصد باشد.',
-          type: 'error'
+        this.$q.notify({
+          type: 'negative',
+          message: 'درصد می بایست در بازه 33.33- درصد تا 100 درصد باشد.',
+          position: 'top'
         })
+        this.percents[subcategoryId] = 0
         // todo: vue.set
         // Vue.set(this.percents, subcategoryId, 0)
       }
@@ -225,6 +236,7 @@ export default {
                     this.answerCounts[subcategoryId].incorrect === null ||
                     isNaN(this.answerCounts[subcategoryId].incorrect)
       ) {
+        this.percents[subcategoryId] = 0
         // todo: vue.set
         // Vue.set(this.percents, subcategoryId, 0)
         return false
@@ -233,12 +245,12 @@ export default {
       if (correct < 0 || incorrect < 0) {
         this.answerCounts[subcategoryId].correct = 0
         this.answerCounts[subcategoryId].incorrect = 0
-        this.$notify({
-          group: 'notifs',
-          title: 'توجه!',
-          text: 'تعداد موارد درست و غلط نباید منفی باشد',
-          type: 'error'
+        this.$q.notify({
+          type: 'negative',
+          message: 'تعداد موارد درست و غلط نباید منفی باشد',
+          position: 'top'
         })
+        this.percents[subcategoryId] = 0
         // todo: vue.set
         // Vue.set(this.percents, subcategoryId, 0)
         return false
@@ -247,12 +259,12 @@ export default {
       if (correct + incorrect > totalQuestions) {
         this.answerCounts[subcategoryId].correct = 0
         this.answerCounts[subcategoryId].incorrect = 0
-        this.$notify({
-          group: 'notifs',
-          title: 'توجه!',
-          text: 'مجموع گزینه های درست و غلط نباید بیشتر از ' + totalQuestions + ' باشد.',
-          type: 'error'
+        this.$q.notify({
+          type: 'negative',
+          message: 'مجموع گزینه های درست و غلط نباید بیشتر از ' + totalQuestions + ' باشد.',
+          position: 'top'
         })
+        this.percents[subcategoryId] = 0
         // todo: vue.set
         // Vue.set(this.percents, subcategoryId, 0)
         return false
@@ -264,7 +276,6 @@ export default {
       const correct = parseInt(this.answerCounts[subcategoryId].correct),
         incorrect = parseInt(this.answerCounts[subcategoryId].incorrect),
         totalQuestions = parseInt(this.answerCounts[subcategoryId].totalQuestions)
-
       if (!this.calcValidate(subcategoryId, correct, incorrect, totalQuestions)) {
         this.prepareTakhmineRotbeReport()
         return
@@ -275,13 +286,13 @@ export default {
       if (isNaN(calculated)) {
         calculated = 0
       }
+      this.percents[subcategoryId] = calculated
       // todo: vue.set
       // Vue.set(this.percents, subcategoryId, calculated)
 
       this.prepareTakhmineRotbeReport()
     },
     prepareTakhmineRotbeReport (resetPercents) {
-      console.log('this.report', this.report)
       const that = this,
         takhminReport = JSON.parse(JSON.stringify(this.report))
       takhminReport.main.percent = 0
@@ -308,29 +319,26 @@ export default {
           that.answerCounts[item.sub_category_id] = { correct: 0, incorrect: 0, totalQuestions: item.total_answer }
         })
       }
-      // todo: vue.set
-      // Vue.set(this, 'takhminReport', takhminReport)
+      this.takhminReport = takhminReport
     },
     validateSendData () {
       let status = true
       for (const subcategoryId in this.percents) {
         let percent = this.percents[subcategoryId]
         if (isNaN(percent)) {
-          this.$notify({
-            group: 'notifs',
-            title: 'توجه!',
-            text: 'مقدار صحیحی برای درصد وارد نشده است.',
-            type: 'error'
+          this.$q.notify({
+            type: 'negative',
+            message: 'مقدار صحیحی برای درصد وارد نشده است.',
+            position: 'top'
           })
           status = false
         }
         percent = parseInt(percent)
         if (percent > 100 || percent < -33.33) {
-          this.$notify({
-            group: 'notifs',
-            title: 'توجه!',
-            text: 'درصد می بایست در بازه 33.33- درصد تا 100 درصد باشد.',
-            type: 'error'
+          this.$q.notify({
+            type: 'negative',
+            message: 'درصد می بایست در بازه 33.33- درصد تا 100 درصد باشد.',
+            position: 'top'
           })
           status = false
         }
@@ -339,7 +347,6 @@ export default {
       return status
     },
     sendData () {
-      console.log('TakhminRotbe----------', this.takhminReport)
       if (!this.validateSendData()) {
         return
       }
