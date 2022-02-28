@@ -61,3 +61,9 @@ export function showConfirmDialog (state, newInfo) {
 export function updateBreadcrumbs (state, data) {
   Object.assign(state.breadcrumbs, data)
 }
+
+export function updateAppLayout (state, data) {
+  const storage = JSON.parse(localStorage.getItem('vuex'))
+  Object.assign(storage.AppLayout, data)
+  Object.assign(state.appLayout, storage.AppLayout)
+}

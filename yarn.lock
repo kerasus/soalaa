@@ -8445,10 +8445,10 @@ quasar-form-builder@^0.1.6:
     quasar "^2.0.0"
     vue "^3.0.0"
 
-quasar-template-builder@^1.0.3:
-  version "1.0.3"
-  resolved "https://registry.yarnpkg.com/quasar-template-builder/-/quasar-template-builder-1.0.3.tgz#44393741afd9fb92889da9574d249e17be13d11a"
-  integrity sha512-iuqanziicLj1h5cRfdqhQer7WNKckK1Q2M2gsnRiOR5Ah3ONRy2LEvZQSAUzMHqhw7edT+UM/lbQz69taciqaw==
+quasar-template-builder@^1.0.4:
+  version "1.0.4"
+  resolved "https://registry.yarnpkg.com/quasar-template-builder/-/quasar-template-builder-1.0.4.tgz#e3463f9aa9f2b33ba58ed5fd792d07dc798d20d2"
+  integrity sha512-T9xUQZtr9iwMsyN+8CMLh2Q+5R/W+aqGYmY6bWtiUQlQ2A0ogojF3wFo8RI3QIHxW697PxI5kXAmZPSTWhrw6Q==
   dependencies:
     "@babel/eslint-parser" "^7.16.5"
     "@quasar/extras" "^1.0.0"
