@@ -1,24 +1,11 @@
 <template>
   <div>
-    <v-row>
-      <v-col>
-        <p class="mt-2 font-weight-medium">
-          سابقه
-        </p>
-      </v-col>
-      <v-col class="text-left align-center">
-        <v-icon
-          class="ml-4"
-          @click="closeLogPanel"
-        >
-          mdi-close
-        </v-icon>
-      </v-col>
-    </v-row>
-    <v-card
+    <p class="logList-title" >
+      سابقه
+    </p>
+    <q-card
       flat
       class="rounded-card"
-      max-height="1600"
     >
       <div class="logList">
         <log-item
@@ -28,23 +15,23 @@
           @addComment="addComment"
         />
       </div>
-    </v-card>
+    </q-card>
   </div>
 </template>
 
 <script>
-import LogItem from "@/components/QuestionBank/EditQuestion/Log/LogItem/LogItem";
-import {LogList} from "@/models/Log";
+import LogItem from 'src/components/QuestionBank/EditQuestion/Log/LogItem/LogItem'
+import { LogList } from 'src/models/Log'
 
 export default {
-  name: "LogList",
+  name: 'LogList',
   components: {
     LogItem
   },
   props: {
     logs: {
       type: LogList,
-      default() {
+      default () {
         return new LogList([
           {
             causer: {
@@ -202,20 +189,15 @@ export default {
             created_at: '32131538546'
           }
         ])
-      },
+      }
     }
   },
-  data() {
+  data () {
     return {}
   },
   methods: {
     addComment (eventData) {
       this.$emit('addComment', eventData)
-    },
-    closeLogPanel(){
-      this.saveBtnCols = 6
-      this.cancelBtnCols = 6
-      this.$emit('logPanelClosed');
     }
   }
 }
@@ -223,11 +205,16 @@ export default {
 </script>
 
 <style scoped>
+.logList-title {
+  font-size: 16px;
+  margin-top: 20px;
+}
 .logList {
   width: 100%;
 }
 .rounded-card{
   border-radius: 10px;
   overflow-y: auto;
+  max-height: 1600px;
 }
 </style>
