@@ -21,6 +21,9 @@ export function ColumnsWidth (state) {
 export function breadcrumbs (state) {
   return state.breadcrumbs
 }
+export function breadLoading (state) {
+  return state.breadcrumbs.loading
+}
 
 export function appLayout (state) {
   return state.appLayout
