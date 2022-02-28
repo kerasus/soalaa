@@ -61,3 +61,6 @@ export function showConfirmDialog (state, newInfo) {
 export function updateBreadcrumbs (state, data) {
   Object.assign(state.breadcrumbs, data)
 }
+export function updateLoading (state, data) {
+  state.breadcrumbs.loading = data
+}

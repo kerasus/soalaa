@@ -1,3 +1,4 @@
+
 export function drawer (state) {
   return state.drawer
 }
@@ -20,4 +21,7 @@ export function ColumnsWidth (state) {
 
 export function breadcrumbs (state) {
   return state.breadcrumbs
+}
+export function breadLoading (state) {
+  return state.breadcrumbs.loading
 }

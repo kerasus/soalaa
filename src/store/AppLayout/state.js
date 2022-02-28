@@ -20,6 +20,7 @@ export default function () {
       right: 0
     },
     breadcrumbs: {
+      visible: '',
       loading: false,
       path: [
         {

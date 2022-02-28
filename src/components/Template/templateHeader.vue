@@ -17,7 +17,13 @@
     class="right-side"
     :class="{'col-6': windowSize > 1023, 'col-12': windowSize < 350}"
   >
+    <q-skeleton
+    v-if="!breadcrumbs"
+    width="100px"
+    height="30px"
+    />
     <q-breadcrumbs
+      v-else
       class="breadcrumbs"
       separator-color="dark"
       gutter="sm"
@@ -25,14 +31,22 @@
       <template v-slot:separator>
         <q-icon name="isax:arrow-right-3 " />
       </template>
-        <q-breadcrumbs-el
-          v-for="(breadcrumb, index) in breadcrumbs.path"
-          :key="index"
-          :icon=breadcrumb.icon
-          :label=breadcrumb.title
-          :to="getRoute(breadcrumb.route)"
-          class="q-breadcrumbs-el"
+      <q-breadcrumbs-el
+        v-for="(breadcrumb, index) in breadcrumbs.path"
+        :key="index"
+      >
+        <q-skeleton
+          v-if="breadLoading"
+          width="100px"
         />
+          <q-breadcrumbs-el
+            v-else
+            :icon=breadcrumb.icon
+            :label=breadcrumb.title
+            :to="getRoute(breadcrumb.route)"
+            class="q-breadcrumbs-el"
+          />
+      </q-breadcrumbs-el>
     </q-breadcrumbs>
   </div>
   <div
@@ -77,6 +91,7 @@ export default {
   },
   mounted () {
     window.addEventListener('resize', this.getDimensions)
+    this.$store.commit('AppLayout/updateLoading', false)
   },
   unmounted () {
     window.removeEventListener('resize', this.getDimensions)
@@ -84,11 +99,14 @@ export default {
   computed: {
     ...mapGetters('AppLayout', [
       'breadcrumbs',
+      'breadLoading',
       'layoutLeftDrawerVisible'
     ])
   },
   methods: {
     ...mapMutations('AppLayout', [
+      'updateBreadcrumbs',
+      'updateLoading',
       'updateLayoutLeftDrawerVisible'
     ]),
     getDimensions () {
@@ -99,7 +117,7 @@ export default {
     },
     getRoute (route) {
       if (!route) {
-        return false
+        return
       }
       if (route.name) {
         return { name: route.name }
