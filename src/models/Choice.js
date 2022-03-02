@@ -96,6 +96,23 @@ class ChoiceList extends Collection {
     getSelected () {
         return this.list.find((item) => item.active)
     }
+
+    getLastOrder () {
+        let order = 1
+        this.list.forEach(choice => {
+            if (choice.order > order) {
+                order = choice.order
+            }
+        })
+
+        return order
+    }
+
+    addEmptyChoice () {
+        const lastOrder = this.getLastOrder()
+        const newChoice = new Choice({order: lastOrder + 1})
+        this.list.push(newChoice)
+    }
 }
 
 export { Choice, ChoiceList }
