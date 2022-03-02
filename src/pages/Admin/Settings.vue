@@ -207,6 +207,7 @@
                   map-options
                   emit-value
                   :options="drawerBehaviorOptions"
+                  option-value="value"
                   options-cover
                   style="max-width: 200px"
                 />
@@ -271,7 +272,7 @@
 </template>
 
 <script>
-import { mapGetters, mapMutations } from 'vuex'
+import { mapGetters, mapMutations, mapActions } from 'vuex'
 import {
   mdiMenu, mdiViewDashboard, mdiCog, mdiPlayCircleOutline
 } from '@quasar/extras/mdi-v5'
@@ -285,104 +286,158 @@ export default {
     'pick.header': function (newValue) {
       this.updateLayoutHeader(newValue)
       this.updateLayoutHeaderVisible(newValue)
+      this.localStorageData.layoutHeader = newValue
     },
     'play.header': function (newValue) {
       if (this.layoutHeader) {
         this.updateLayoutHeaderVisible(newValue)
+        this.localStorageData.layoutHeaderVisible = newValue
       }
     },
     'cfg.headerReveal': function (newValue) {
       this.updateLayoutHeaderReveal(newValue)
+      this.localStorageData.layoutHeaderReveal = newValue
     },
     'cfg.headerSep': function (newValue) {
       if (newValue === 'elevated') {
         this.updateLayoutHeaderElevated(true)
+        this.localStorageData.layoutHeaderElevated = true
         this.updateLayoutHeaderBordered(false)
+        this.localStorageData.layoutHeaderBordered = false
       } else if (newValue === 'bordered') {
         this.updateLayoutHeaderElevated(false)
+        this.localStorageData.layoutHeaderElevated = false
         this.updateLayoutHeaderBordered(true)
+        this.localStorageData.layoutHeaderBordered = true
       } else if (newValue === 'none') {
         this.updateLayoutHeaderElevated(false)
+        this.localStorageData.layoutHeaderElevated = false
         this.updateLayoutHeaderBordered(false)
+        this.localStorageData.layoutHeaderBordered = false
       }
     },
     'pick.left': function (newValue) {
       this.updateLayoutLeftDrawer(newValue)
+      this.localStorageData.layoutLeftDrawer = newValue
       this.updateLayoutLeftDrawerVisible(newValue)
+      this.localStorageData.layoutLeftDrawerVisible = newValue
     },
     'play.left': function (newValue) {
       if (this.layoutLeftDrawer) {
         this.updateLayoutLeftDrawerVisible(newValue)
+        this.localStorageData.layoutLeftDrawerVisible = newValue
       }
     },
     'cfg.leftBehavior': function (newValue) {
       this.updateLayoutLeftDrawerBehavior(newValue)
+      this.localStorageData.layoutLeftDrawerBehavior = newValue
       if (newValue === 'mobile') {
-        this.layoutLeftDrawerVisible = false
+        this.updateLayoutLeftDrawerVisible(false)
+        this.localStorageData.layoutLeftDrawerVisible = false
       } else if (newValue === 'default' || newValue === 'desktop') {
-        this.layoutLeftDrawerVisible = true
+        this.updateLayoutLeftDrawerVisible(true)
+        this.localStorageData.layoutLeftDrawerVisible = true
       }
     },
     'cfg.leftOverlay': function (newValue) {
       this.updateLayoutLeftDrawerOverlay(newValue)
+      this.localStorageData.layoutLeftDrawerOverlay = newValue
     },
     'cfg.leftSep': function (newValue) {
       if (newValue === 'elevated') {
         this.updateLayoutLeftDrawerElevated(true)
+        this.localStorageData.layoutLeftDrawerElevated = true
         this.updateLayoutLeftDrawerBordered(false)
+        this.localStorageData.layoutLeftDrawerBordered = false
       } else if (newValue === 'bordered') {
         this.updateLayoutLeftDrawerElevated(false)
+        this.localStorageData.layoutLeftDrawerElevated = false
         this.updateLayoutLeftDrawerBordered(true)
+        this.localStorageData.layoutLeftDrawerBordered = true
+      } else if (newValue === 'none') {
+        this.updateLayoutLeftDrawerElevated(false)
+        this.localStorageData.layoutLeftDrawerElevated = false
+        this.updateLayoutLeftDrawerBordered(false)
+        this.localStorageData.layoutLeftDrawerBordered = false
       }
     },
     'pick.right': function (newValue) {
       this.updateLayoutRightDrawer(newValue)
+      this.localStorageData.layoutRightDrawer = newValue
       this.updateLayoutRightDrawerVisible(newValue)
+      this.localStorageData.layoutRightDrawerVisible = newValue
     },
     'play.right': function (newValue) {
       if (this.layoutRightDrawer) {
         this.updateLayoutRightDrawerVisible(newValue)
+        this.localStorageData.layoutRightDrawerVisible = newValue
       }
     },
     'cfg.rightBehavior': function (newValue) {
       this.updateLayoutRightDrawerBehavior(newValue)
+      this.localStorageData.layoutRightDrawerBehavior = newValue
       if (newValue === 'mobile') {
-        this.layoutRightDrawerVisible = false
+        this.updateLayoutRightDrawerVisible(false)
+        this.localStorageData.layoutRightDrawerVisible = false
       } else if (newValue === 'default' || newValue === 'desktop') {
-        this.layoutRightDrawerVisible = true
+        this.updateLayoutRightDrawerVisible(true)
+        this.localStorageData.layoutRightDrawerVisible = true
       }
     },
     'cfg.rightOverlay': function (newValue) {
       this.updateLayoutRightDrawerOverlay(newValue)
+      this.localStorageData.layoutRightDrawerOverlay = newValue
     },
     'cfg.rightSep': function (newValue) {
       if (newValue === 'elevated') {
         this.updateLayoutRightDrawerElevated(true)
+        this.localStorageData.layoutRightDrawerElevated = true
         this.updateLayoutRightDrawerBordered(false)
+        this.localStorageData.layoutRightDrawerBordered = false
       } else if (newValue === 'bordered') {
         this.updateLayoutRightDrawerElevated(false)
+        this.localStorageData.layoutRightDrawerElevated = false
         this.updateLayoutRightDrawerBordered(true)
+        this.localStorageData.layoutRightDrawerBordered = true
+      } else if (newValue === 'none') {
+        this.updateLayoutRightDrawerElevated(false)
+        this.localStorageData.layoutRightDrawerElevated = false
+        this.updateLayoutRightDrawerBordered(false)
+        this.localStorageData.layoutRightDrawerBordered = false
       }
     },
     'pick.footer': function (newValue) {
       this.updateLayoutFooter(newValue)
+      this.localStorageData.layoutFooter = newValue
       this.updateLayoutFooterVisible(newValue)
+      this.localStorageData.layoutFooterVisible = newValue
     },
     'play.footer': function (newValue) {
       if (this.layoutFooter) {
         this.updateLayoutFooterVisible(newValue)
+        this.localStorageData.layoutFooterVisible = newValue
       }
     },
     'cfg.footerReveal': function (newValue) {
       this.updateLayoutFooterReveal(newValue)
+      this.localStorageData.layoutFooterReveal = newValue
     },
     'cfg.footerSep': function (newValue) {
       if (newValue === 'elevated') {
         this.updateLayoutFooterElevated(true)
+        this.localStorageData.layoutFooterElevated = true
         this.updateLayoutFooterBordered(false)
+        this.localStorageData.layoutFooterBordered = false
       } else if (newValue === 'bordered') {
         this.updateLayoutFooterElevated(false)
-        this.updateLayoutFooterBordered(true)
+        this.localStorageData.layoutFooterElevated = false
+        this.updateLayoutRightDrawerBordered(true)
+        this.localStorageData.layoutFooterBordered = true
+      } else if (newValue === 'none') {
+        this.updateLayoutFooterElevated(false)
+        this.localStorageData.layoutFooterElevated = false
+        this.updateLayoutRightDrawerBordered(false)
+        this.localStorageData.layoutFooterBordered = false
       }
     },
     layoutView: function () {
@@ -398,10 +453,18 @@ export default {
       this.cfg.headerReveal = newValue
     },
     layoutHeaderElevated: function (newValue) {
-      this.cfg.headerSep = newValue
+      if (newValue) {
+        this.cfg.headerSep = 'Elevated'
+      } else if (!newValue && !this.layoutHeaderBordered) {
+        this.cfg.headerSep = 'None'
+      }
     },
     layoutHeaderBordered: function (newValue) {
-      this.cfg.headerSep = newValue
+      if (newValue) {
+        this.cfg.headerSep = 'Bordered'
+      } else if (!newValue && !this.layoutHeaderElevated) {
+        this.cfg.headerSep = 'None'
+      }
     },
     layoutLeftDrawer: function (newValue) {
       this.pick.left = newValue
@@ -418,10 +481,18 @@ export default {
       this.cfg.leftOverlay = newValue
     },
     layoutLeftDrawerElevated: function (newValue) {
-      this.cfg.leftSep = newValue
+      if (newValue) {
+        this.cfg.leftSep = 'Elevated'
+      } else if (!newValue && !this.layoutLeftDrawerBordered) {
+        this.cfg.leftSep = 'None'
+      }
     },
     layoutLeftDrawerBordered: function (newValue) {
-      this.cfg.leftSep = newValue
+      if (newValue) {
+        this.cfg.leftSep = 'Bordered'
+      } else if (!newValue && !this.layoutLeftDrawerElevated) {
+        this.cfg.leftSep = 'None'
+      }
     },
     layoutRightDrawer: function (newValue) {
       this.pick.right = newValue
@@ -438,10 +509,18 @@ export default {
       this.cfg.rightOverlay = newValue
     },
     layoutRightDrawerElevated: function (newValue) {
-      this.cfg.rightSep = newValue
+      if (newValue) {
+        this.cfg.rightSep = 'Elevated'
+      } else if (!newValue && !this.layoutRightDrawerElevated) {
+        this.cfg.rightSep = 'None'
+      }
     },
     layoutRightDrawerBordered: function (newValue) {
-      this.cfg.rightSep = newValue
+      if (newValue) {
+        this.cfg.rightSep = 'Bordered'
+      } else if (!newValue && !this.layoutRightDrawerBordered) {
+        this.cfg.rightSep = 'None'
+      }
     },
     layoutFooter: function (newValue) {
       this.pick.footer = newValue
@@ -453,10 +532,24 @@ export default {
       this.cfg.footerReveal = newValue
     },
     layoutFooterElevated: function (newValue) {
-      this.cfg.footerSep = newValue
+      if (newValue) {
+        this.cfg.footerSep = 'Elevated'
+      } else if (!newValue && !this.layoutRightDrawerBordered) {
+        this.cfg.footerSep = 'None'
+      }
     },
     layoutFooterBordered: function (newValue) {
-      this.cfg.footerSep = newValue
+      if (newValue) {
+        this.cfg.footerSep = 'Bordered'
+      } else if (!newValue && !this.layoutRightDrawerElevated) {
+        this.cfg.footerSep = 'None'
+      }
+    },
+    localStorageData: {
+      deep: true,
+      handler (newValue) {
+        this.$store.commit('AppLayout/updateAppLayout', newValue)
+      }
     }
   },
   methods: {
@@ -484,6 +577,9 @@ export default {
       'updateLayoutFooterReveal',
       'updateLayoutFooterElevated',
       'updateLayoutFooterBordered'
+    ]),
+    ...mapActions('AppLayout', [
+      'updateStore'
     ]),
     initialData () {
       this.mdiMenu = mdiMenu
@@ -586,7 +682,8 @@ export default {
         left: false,
         right: false,
         scroll: false
-      }
+      },
+      localStorageData: {}
     }
   },
   computed: {
@@ -613,7 +710,8 @@ export default {
       'layoutFooterVisible',
       'layoutFooterReveal',
       'layoutFooterElevated',
-      'layoutFooterBordered'
+      'layoutFooterBordered',
+      'appLayout'
     ]),
     isContracted () {
       return this.$q.screen.lt.sm === true || (
