@@ -37,9 +37,9 @@ export default {
     passedTime: '00:00:00',
     remainTime: false
   }),
-  created () {
-    this.updateWindowSize()
-  },
+  // created () {
+  //   this.updateWindowSize()
+  // },
   mounted () {
     const that = this
     this.interval = setInterval(() => {
