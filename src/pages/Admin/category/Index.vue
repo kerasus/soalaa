@@ -88,12 +88,6 @@ export default {
       inputs: []
     }
   },
-  created () {
-    this.$axios.get(this.api)
-      .then(res => {
-        console.log(res)
-      })
-  },
   methods: {
     getRemoveMessage (row) {
       const title = row.title

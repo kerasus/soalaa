@@ -7,40 +7,122 @@
     :show-route-param-key="showRouteParamKey"
     :index-route-name="indexRouteName"
     :show-route-name="showRouteName"
-  />
-  <portlet>
-    <template #title>
-      اضافه کردن دفترچه
-    </template>
-    <template #toolbar>
-      <q-btn flat round icon="add" @click="addCategory">
-        <q-tooltip>
-          اضافه کردن
-        </q-tooltip>
-      </q-btn>
-    </template>
-    <template #content>
+  >
+<!--    <form-builder-separator/>-->
+    <template #after-form-builder >
       <q-card class="category-card">
-        <form-builder v-model:value="categoryOptions"/>
-        <form-builder v-model:value="categoryList"/>
+        <q-card-section>
+          <h6 class="category-header q-ma-md">لیست دفترچه ها</h6>
+        </q-card-section>
+        <q-separator/>
+        <q-card-section class="flex">
+          <div class="row bg-grey-3 add-category-box">
+            <q-select
+              class="q-pa-md col-md-4"
+              v-model="category"
+              :value="category"
+              label="دفترچه"
+              :options="categoryOptions"
+              option-value="categoryOptions"
+              option-label="title"
+              emit-value
+              map-options
+              :disable="totalCategory"
+            />
+            <q-input
+              class="q-pa-md col-md-3"
+              v-model="category.order"
+              label="ترتیب"
+              :disable="totalCategory"
+            />
+            <q-input
+              class="q-pa-md col-md-3"
+              v-model="category.time"
+              label="زمان"
+              :disable="totalCategory"
+            />
+            <div class="q-pa-md col-md-2 flex">
+              <q-btn
+                class="q-ma-md"
+                icon="add"
+                color="green"
+                flat
+                dense
+                fab-mini
+                :disable="totalCategory"
+                @click="addCategory"
+              />
+            </div>
+          </div>
+        </q-card-section>
+        <q-card-section>
+          <div
+            class="category-list"
+            v-if="inputs[examCategoriesIndex] && inputs[examCategoriesIndex].value.length === 0">
+            <p class="bg-red-2 alert">در حال حاضر دفترچه ای به آزمون اضافه نشده است !</p>
+          </div>
+          <div
+            v-if="inputs[examCategoriesIndex] && inputs[examCategoriesIndex].value.length > 0"
+            class="row category-list-row"
+          >
+            <div
+              v-for="(category , index) in inputs[examCategoriesIndex].value"
+              :key="index"
+              class="row col-md-12"
+            >
+              <q-select
+                class="q-pa-md col-md-4"
+                v-model="category.title"
+                :value="category.id"
+                label="دفترچه"
+                :options="categoryOptions"
+                option-value="categoryOptions"
+                option-label="title"
+                emit-value
+                map-options
+              />
+              <q-input
+                class="q-pa-md col-md-3"
+                v-model="category.order"
+                label="ترتیب"
+              />
+              <q-input
+                class="q-pa-md col-md-3"
+                v-model="category.time"
+                label="زمان"
+              />
+              <div class="q-pa-md col-md-2 flex">
+                <q-btn
+                  class="q-ma-md"
+                  icon="close"
+                  color="red"
+                  flat
+                  dense
+                  fab-mini
+                  @click="deleteCategory(category.id)"
+                />
+              </div>
+            </div>
+          </div>
+        </q-card-section>
       </q-card>
+
     </template>
-  </portlet>
+  </entity-create>
 </template>
 
 <script>
-import { EntityCreate, Portlet } from 'quasar-crud'
+import { EntityCreate } from 'quasar-crud'
 import API_ADDRESS from 'src/api/Addresses'
-import { FormBuilder } from 'quasar-form-builder'
 
 export default {
   name: 'Create',
-  components: { EntityCreate, FormBuilder, Portlet },
+  components: { EntityCreate },
   data () {
     return {
       expanded: true,
       api: API_ADDRESS.exam.base(),
-      entityIdKeyInResponse: 'id',
+      entityIdKeyInResponse: 'data.id',
       showRouteParamKey: 'id',
       showRouteName: 'Admin.Exam.Show',
       indexRouteName: 'Admin.Exam.Index',
@@ -53,7 +135,7 @@ export default {
           label: ' انتخاب نوع آزمون',
           col: 'col-md-6',
           options: [],
-          optionValue: 'value',
+          optionValue: 'id',
           optionLabel: 'value'
         },
         { type: 'dateTime', name: 'start_at', responseKey: 'data.start_at', label: ' زمان شروع', col: 'col-md-4' },
@@ -64,30 +146,28 @@ export default {
         { type: 'Checkbox', name: 'is_register_open', responseKey: 'data.is_register_open', label: 'ثبت نام باز است.', col: 'col-md-4', value: false },
         { type: 'Checkbox', name: 'is_open', responseKey: 'data.is_open', label: 'شرکت در آزمون باز است.', col: 'col-md-4', value: false },
         { type: 'Checkbox', name: 'confirm', responseKey: 'data.confirm', label: 'تولید خودکار کارنامه', col: 'col-md-4', value: false },
-        { type: 'Checkbox', name: 'generate_questions_automatically', responseKey: 'data.generate_questions_automatically', label: 'تولید خودکار سوال', col: 'col-md-4', value: false }
+        { type: 'Checkbox', name: 'generate_questions_automatically', responseKey: 'data.generate_questions_automatically', label: 'تولید خودکار سوال', col: 'col-md-4', value: false },
+        { type: 'hidden', name: 'categories', responseKey: 'data.categories', value: [] },
+        { type: 'hidden', name: 'photo', responseKey: 'data.photo', value: 'https://cdn.alaatv.com/upload/images/slideShow/home-slide-yalda-festival_20201219075413.jpg?w=1843&h=719' }
       ],
       categoryOptions: [
-        {
-          type: 'Select',
-          name: 'category',
-          label: 'category',
-          col: 'col-md-4',
-          options: [],
-          optionValue: 'id',
-          optionLabel: 'title'
-        },
-        { type: 'input', name: 'time', label: 'زمان', col: 'col-md-4' },
-        { type: 'input', name: 'order', label: 'ترتیب', col: 'col-md-4', value: 0 }
+        { title: 'دفترچه سؤالات عمومی', id: '60b7858d743940688b23c7f3' },
+        { title: 'دفترچه سؤالات اختصاصی', id: '60b7858d743940688b23c7f4' }
       ],
       typeOptions: [],
-      categories: [],
-      categoryList: [],
-      dataForSend: []
+      category: { title: '', id: '', order: 0, time: 0 }
     }
   },
   created () {
     this.getType()
-    this.getCategories()
+  },
+  computed: {
+    examCategoriesIndex () {
+      return this.inputs.findIndex(item => item.name === 'categories')
+    },
+    totalCategory () {
+      return this.inputs[this.examCategoriesIndex].value && this.inputs[this.examCategoriesIndex].value.length >= 2
+    }
   },
   methods: {
     getType () {
@@ -104,44 +184,16 @@ export default {
         })
         .catch(() => {})
     },
-    getCategories () {
-      this.$axios.get(API_ADDRESS.questionCategory.base)
-        .then((response) => {
-          this.categories = response.data.data
-          this.categoryOptions.forEach(input => {
-            if (input.name === 'category') {
-              this.categories.forEach(category => {
-                input.options.push(category)
-              })
-            }
-          })
-        })
-        .catch(() => {})
+    deleteCategory (id) {
+      const index = this.inputs[this.examCategoriesIndex].value.findIndex(item => item.id === id)
+      this.inputs[this.examCategoriesIndex].value.splice(index, 1)
     },
-    // TODO => next method needs to fix
     addCategory () {
-      const selectInput = this.categoryOptions.find(element => element.name === 'category')
-      const category = this.categories.find(item => item.id === selectInput.value)
-      const selectedCategoryTime = this.categoryOptions.find(element => element.name === 'time')
-      const selectedCategoryOrder = this.categoryOptions.find(element => element.name === 'order')
-      this.categoryList[0] = selectInput
-      this.categoryList[1] = selectedCategoryTime
-      this.categoryList[2] = selectedCategoryOrder
-      console.log(this.categoryList)
-      this.dataForSend.push({
-        id: category.id,
-        time: selectedCategoryTime.value,
-        order: selectedCategoryOrder.value,
-        title: category.title
-      })
-    },
-    sendData () {
-      this.inputs.forEach(input => {
-        if (input.name === 'type_id') {
-          const type = this.typeOptions.find(element => element.value === input.value)
-          input.value = type.id
-        }
-      })
+      if (this.totalCategory) {
+        return
+      }
+      this.inputs[this.examCategoriesIndex].value = this.inputs[this.examCategoriesIndex].value.concat(this.category)
+      this.category = { title: '', id: '', order: 0, time: 0 }
     }
   }
 }
@@ -149,12 +201,29 @@ export default {
 
 <style lang="scss" scoped>
 .category-card{
-  padding: 16px;
-  margin: 16px;
   display: flex;
   flex-direction: column;
-  .add-btn{
+  .category-header{
+    margin: auto;
+  }
+  .add-btn {
     float: right;
+  }
+  .category-list{
+    display: flex;
+    padding: 20px;
+    width: 60%;
+    margin: auto;
+    .alert{
+      height: 40px;
+      margin: auto;
+      text-align: center;
+      padding: 10px;
+    }
+  }
+  .add-category-box{
+    width: 70%;
+    margin: auto;
   }
 }
 </style>

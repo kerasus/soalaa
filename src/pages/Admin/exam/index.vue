@@ -27,14 +27,6 @@
                     v-ripple:yellow
                     clickable
                     manual-focus
-                    @click="editExam(inputData.props.row.id)"
-                  >
-                    <q-item-section> ویرایش آزمون</q-item-section>
-                  </q-item>
-                  <q-item
-                    v-ripple:yellow
-                    clickable
-                    manual-focus
                     @click="editExamReport(inputData.props.row.id)"
                   >
                     <q-item-section>ویرایش کارنامه</q-item-section>
@@ -184,7 +176,8 @@ export default {
         data: 'data',
         total: 'meta.total',
         currentPage: 'meta.current_page',
-        perPage: 'meta.per_page'
+        perPage: 'meta.per_page',
+        pageKey: 'page'
       }
     }
   },
@@ -212,7 +205,7 @@ export default {
     },
     editExamReport (id) {
       this.$router.push({
-        name: 'edit-exam-report',
+        name: 'Admin.Exam.Report.Edit',
         params: {
           id: id
         }
@@ -235,7 +228,7 @@ export default {
     },
     editCoefficient (id) {
       this.$router.push({
-        name: 'coefficient.edit',
+        name: 'Admin.Exam.Coefficient.Edit',
         params: {
           id: id
         }
@@ -255,7 +248,7 @@ export default {
     },
     showLessonsList (id, title) {
       this.$router.push({
-        name: 'onlineQuiz.exams.lessons',
+        name: 'Admin.Exam.Lessons',
         params: {
           quizId: id,
           quizTitle: title
@@ -264,7 +257,7 @@ export default {
     },
     goExamResult (id) {
       this.$router.push({
-        name: 'exam.results',
+        name: 'Admin.Exam.AllResults',
         params: {
           id: id
         }
