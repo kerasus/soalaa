@@ -187,9 +187,7 @@ export default {
       ]
     }
   },
-  created () {
-    console.log('dksjfhdsujfv;kjfvn;ks', this.report.zirgorooh)
-  },
+  created () {},
   computed: {
     shamsiDate () {
       return (date) => {

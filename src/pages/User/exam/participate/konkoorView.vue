@@ -128,19 +128,17 @@ export default {
     }
   },
   watch: {
-    // 'windowSize.y': function () {
-    //   this.setHeights()
-    // },
-    // 'windowSize.x': function () {
-    //   this.$store.commit('AppLayout/updateDrawer', false)
-    // }
+    'windowSize.y': function () {
+      this.setHeights()
+    },
+    'windowSize.x': function () {
+      this.$store.commit('AppLayout/updateLayoutLeftDrawerVisible', false)
+    }
   },
   created () {
     this.getUser()
-    this.updateWindowSize()
     this.startExamProcess()
   },
-  // TODO => check store updateAppBarAndDrawer
   mounted () {
     this.setHeights()
     if (this.currentQuestion) {
@@ -150,10 +148,10 @@ export default {
         this.loadFirstQuestion()
       }
     }
-    // this.changeAppBarAndDrawer(false)
+    this.changeAppBarAndDrawer(false)
   },
   unmounted () {
-    // this.changeAppBarAndDrawer(true)
+    this.changeAppBarAndDrawer(true)
   },
   methods: {
     getUser () {
@@ -247,7 +245,7 @@ export default {
       }
     },
     changeAppBarAndDrawer (state) {
-      this.$store.commit('AppLayout/updateAppBarAndDrawer', state)
+      this.$store.dispatch('AppLayout/updateAppBarAndDrawer', state)
     },
     changeCurrentQuestionIfScrollingIsDone () {
       if (this.timePassedSinceLastScroll >= 1000) {
@@ -312,7 +310,6 @@ export default {
       this.scrollTo(questionId)
       this.changeQuestion(questionId)
     },
-    // TODO => check store updateAppBarAndDrawer
     view () {
       if (this.windowSize.x > 959) {
         this.changeAppBarAndDrawer(false)

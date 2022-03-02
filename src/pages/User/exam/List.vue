@@ -198,22 +198,6 @@ export default {
   }),
   created () {
     this.getExams()
-    this.$store.commit('AppLayout/updateHeaderTitle', {
-      path: [
-        {
-          title: 'داشبورد',
-          route: {
-            path: 'subCategory'
-          }
-        },
-        {
-          title: 'داشبورد2',
-          route: {
-            name: 'user.exam.list'
-          }
-        }
-      ]
-    })
   },
   watch: {
     loadingList () {
@@ -225,7 +209,7 @@ export default {
     }
   },
   mounted () {
-    this.$store.commit('AppLayout/updateAppBarAndDrawer', true)
+    this.$store.dispatch('AppLayout/updateAppBarAndDrawer', true)
     this.disconnectSocket()
   },
   methods: {
