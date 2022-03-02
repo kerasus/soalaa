@@ -1,7 +1,7 @@
 <template>
   <div
     ref="bubbleSheet"
-    class="bubbleSheet-body"
+    class="row bubbleSheet-body"
     :class="{
       'bubble-sheet': true,
       'questions-list': true,
@@ -12,7 +12,7 @@
     <div
       v-for="(group, index) in questionsInGroups"
       :key="index"
-      class="col question-group"
+      class="col col-auto question-group"
     >
       <div
         v-for="question in group"
@@ -216,6 +216,7 @@ export default {
 
 <style lang="scss" scoped>
 .bubbleSheet-body {
+  background-color: #f1f1f1;
   &.pasokh-nameh {
     .choice-in-list {
       position: relative;
