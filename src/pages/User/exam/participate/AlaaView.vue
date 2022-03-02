@@ -207,14 +207,14 @@ export default {
       })
     },
     changeAppBarAndDrawer (state) {
-      this.$store.commit('AppLayout/updateAppBarAndDrawer', state)
+      this.$store.dispatch('AppLayout/updateAppBarAndDrawer', state)
     },
     showAppBar () {
-      this.$store.commit('AppLayout/updateAppBar', true)
+      this.$store.commit('AppLayout/updateLayoutHeaderVisible', true)
     },
     updateDrawerBasedOnWindowSize () {
       if (this.windowSize.x > 1263) {
-        this.$store.commit('AppLayout/updateDrawer', true)
+        this.$store.commit('AppLayout/updateLayoutLeftDrawerVisible', true)
       }
     }
   }

@@ -1,3 +1,4 @@
-export function updateDrawer (context, data) {
-  context.commit('updateDrawer', data)
+export function updateAppBarAndDrawer (context, newInfo) {
+  this.commit('updateLayoutHeaderVisible', newInfo)
+  this.commit('updateLayoutLeftDrawerVisible', newInfo)
 }

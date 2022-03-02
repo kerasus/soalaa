@@ -867,7 +867,7 @@ const mixinQuiz = {
           params: { quizId: this.quiz.id, questNumber: questionNumber }
         })
       } else if (type === 'konkoor') {
-        this.$store.commit('AppLayout/updateDrawer', false)
+        this.$store.commit('AppLayout/updateLayoutLeftDrawerVisible', false)
         setTimeout(() => {
           this.$router.push({ name: 'konkoorView', params: { quizId: this.quiz.id } })
         }, 200)

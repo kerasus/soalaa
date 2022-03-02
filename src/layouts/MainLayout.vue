@@ -59,6 +59,7 @@ export default {
       return this.$store.dispatch('Auth/logOut')
     },
     resize (val) {
+      this.$store.commit('AppLayout/updateWindowSize', val)
       if (val.width > 1023) {
         this.$store.commit('AppLayout/updateLayoutLeftDrawerWidth', 325)
         this.$store.commit('AppLayout/updateLayoutLeftDrawerBehavior', 'desktop') && this.$store.commit('AppLayout/updateLayoutRightDrawerBehavior', 'desktop')
