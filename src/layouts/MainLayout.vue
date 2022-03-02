@@ -2,6 +2,13 @@
   <quasar-template-builder v-model:value="properties" @onResize="resize">
     <template #header>
       <template-header/>
+      <q-linear-progress
+        v-if="$store.getters['loading/loading']"
+        color="primary"
+        reverse
+        class="q-mt-sm"
+        indeterminate
+      />
     </template>
     <template #left-drawer>
       <side-menu-dashboard />
