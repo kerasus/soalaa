@@ -197,6 +197,12 @@
         }
     }
 
+     @media only screen and (min-width: 700px) {
+       .timeCArdMob {
+         margin-left: 6%;
+         width: 50%;
+       }
+     }
 
     .remainingTimeText {
         margin-right: 10px
