@@ -91,7 +91,7 @@ export default {
   },
   mounted () {
     window.addEventListener('resize', this.getDimensions)
-    this.$store.commit('AppLayout/updateLoading', false)
+    this.$store.commit('AppLayout/updateBreadcrumbLoading', false)
   },
   unmounted () {
     window.removeEventListener('resize', this.getDimensions)
@@ -106,7 +106,7 @@ export default {
   methods: {
     ...mapMutations('AppLayout', [
       'updateBreadcrumbs',
-      'updateLoading',
+      'updateBreadcrumbLoading',
       'updateLayoutLeftDrawerVisible'
     ]),
     getDimensions () {
