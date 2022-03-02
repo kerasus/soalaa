@@ -18,17 +18,17 @@
             <v-card-actions>
               <v-spacer />
               <v-btn
-                color="amber lighten-1"
-                text
-                @click="setQuestionTypeText"
+                  color="amber lighten-1"
+                  text
+                  @click="setQuestionTypeText"
               >
                 تایپ سوال
               </v-btn>
               <v-spacer class="mx-10" />
               <v-btn
-                color="amber lighten-1"
-                text
-                @click="setQuestionTypeImage"
+                  color="amber lighten-1"
+                  text
+                  @click="setQuestionTypeImage"
               >
                 آپلود فایل
               </v-btn>
@@ -370,6 +370,7 @@ export default {
               text: 'ویرایش با موفقیت انجام شد',
               type: 'success'
             })
+            this.$store.commit('AppLayout/updateOverlay', {show: false, loading: false, text: ''})
             this.$router.push({name: 'question.show', params: {question_id: this.$route.params.question_id}})
           })
     },
@@ -434,6 +435,7 @@ export default {
         });
       } else {
         this.updateAnswersPhotos()
+        this.$store.commit('AppLayout/updateOverlay', {show: false, loading: false})
       }
     },
 
@@ -460,6 +462,7 @@ export default {
         });
       } else {
         this.save()
+        this.$store.commit('AppLayout/updateOverlay', {show: false, loading: false, text: ''})
       }
     },
 
@@ -813,13 +816,11 @@ export default {
       this.dialog = false
       this.checkNavbarVisibilityOnCreatPage()
     },
-
     setQuestionTypeImage() {
       this.questionType = 'typeImage'
       this.dialog = false
       this.checkNavbarVisibilityOnCreatPage()
     },
-
     setInsertedQuestions() {  //یاس
       if (this.$refs.qlayout.getContent() === false) {
         return

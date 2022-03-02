@@ -147,7 +147,6 @@
           />
         </v-col>
         <v-col
-          v-if="!examProp.id"
           :cols="6"
         >
           <v-btn @click="addCategory">

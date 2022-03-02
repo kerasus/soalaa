@@ -69,10 +69,12 @@
                 سوال
                 {{ $route.params.questNumber }}
               </p>
+              <!-- eslint-disable -->
               <p
                 class="statement"
                 v-html="currentQuestion.statement"
               />
+              <!-- eslint-enable -->
               <div
                 class="choices"
                 :class="{
@@ -106,19 +108,23 @@
                       />
                     </div>
                   </div>
+                  <!-- eslint-disable -->
                   <p
                     v-if="stringMeanThumbUpOrDown(choice.title) === 'ThumbUp' || stringMeanThumbUpOrDown(choice.title) === 'ThumbDown'"
                     v-html="choice.title"
                   />
+                  <!-- eslint-enable -->
                   <div
                     v-else
                     class="choice-rect"
                     @click="choiceClick(choice.id)"
                   >
+                    <!-- eslint-disable -->
                     <div
                       class="choice-inner-rect"
                       v-html="choice.title"
                     />
+                    <!-- eslint-enable -->
                   </div>
                 </div>
                 <v-overlay :value="loading">

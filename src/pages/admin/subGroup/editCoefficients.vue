@@ -3,23 +3,29 @@
     <v-row>
       <v-col>
         <v-text-field
-            v-model="sourceExamInfoForCopyCoefficient.id"
-            :loading="sourceExamInfoForCopyCoefficient.loading"
-            :disabled="sourceExamInfoForCopyCoefficient.loading"
-            label="شناسه درس جهت کپی کردن ضرایب"
-            hide-details="auto"
-            class="mb-2"
+          v-model="sourceExamInfoForCopyCoefficient.id"
+          :loading="sourceExamInfoForCopyCoefficient.loading"
+          :disabled="sourceExamInfoForCopyCoefficient.loading"
+          label="شناسه درس جهت کپی کردن ضرایب"
+          hide-details="auto"
+          class="mb-2"
         >
           <v-icon
-              slot="append"
-              color="green"
-              @click="getExamInfo"
+            slot="append"
+            color="green"
+            @click="getExamInfo"
           >
             mdi-eye
           </v-icon>
         </v-text-field>
         <br>
-        <v-btn v-if="sourceExamInfoForCopyCoefficient.title" block color="cyan" dark @click="copyCoefficient">
+        <v-btn
+          v-if="sourceExamInfoForCopyCoefficient.title"
+          block
+          color="cyan"
+          dark
+          @click="copyCoefficient"
+        >
           کپی کردن ضرایب آزمون {
           {{ sourceExamInfoForCopyCoefficient.title }}
           }
