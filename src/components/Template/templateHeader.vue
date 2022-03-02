@@ -97,16 +97,22 @@ export default {
     toggleLeftDrawer () {
       this.updateLayoutLeftDrawerVisible(true)
     },
-    getRoute (route) {
+    hasRoute (route) {
       if (!route) {
         return false
+      }
+      return !!(route.name || route.path)
+    },
+    getRoute (route) {
+      if (!this.hasRoute(route)) {
+        return { name: null }
       }
       if (route.name) {
         return { name: route.name }
       } else if (route.path) {
         return { path: route.path }
       } else {
-        return false
+        return { name: null }
       }
     }
   }
