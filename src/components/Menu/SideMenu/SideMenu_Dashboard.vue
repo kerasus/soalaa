@@ -72,6 +72,16 @@
           />
         </template>
       </v-list-group>
+
+
+      <a href="https://nodes.alaatv.com/aaa/bubble_sheet.png" target="_blank" style="text-decoration: none;">
+        <v-list-item>
+          <v-list-item-title>
+            دانلود پاسخبرگ کلیدی
+          </v-list-item-title>
+        </v-list-item>
+      </a>
+
     </v-list-item-group>
     <v-list-item-group
       v-if="user.has_admin_permission"
