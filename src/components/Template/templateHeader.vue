@@ -18,7 +18,7 @@
     :class="{'col-6': windowSize > 1023, 'col-12': windowSize < 350}"
   >
     <q-skeleton
-    v-if="!breadcrumbs"
+    v-if="!breadcrumbs.path"
     width="100px"
     height="30px"
     />
@@ -36,7 +36,7 @@
         :key="index"
       >
         <q-skeleton
-          v-if="breadLoading"
+          v-if="breadcrumbLoading"
           width="100px"
         />
           <q-breadcrumbs-el
@@ -99,7 +99,7 @@ export default {
   computed: {
     ...mapGetters('AppLayout', [
       'breadcrumbs',
-      'breadLoading',
+      'breadcrumbLoading',
       'layoutLeftDrawerVisible'
     ])
   },
