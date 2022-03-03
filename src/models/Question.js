@@ -163,7 +163,7 @@ class Question extends Model {
             // this.rendered_descriptive_answer = convert(this.descriptive_answer)
             // this.rendered_statement = md.render(this.statement)
         }
-        if (this.choices.list.length === 0) {
+        if (false && this.choices.list.length === 0) {
             const choices = [
                 {
                     id: 1,
