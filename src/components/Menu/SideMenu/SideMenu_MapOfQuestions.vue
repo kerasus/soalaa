@@ -10,8 +10,8 @@
     </div>
     <q-list class="questions-list">
       <div
-        v-for="(categoryItem, index) in quiz.categories.list"
-        :key="index"
+        v-for="(categoryItem) in quiz.categories.list"
+        :key="'category-'+categoryItem.id"
         class="menu-body"
       >
         <q-item class="category-item">
@@ -22,8 +22,8 @@
           </q-item-section>
         </q-item>
         <q-expansion-item
-          v-for="(subcategoryItem, index) in categoryItem.sub_categories.list"
-          :key="'subcategory-'+index"
+          v-for="(subcategoryItem) in categoryItem.sub_categories.list"
+          :key="'subcategory-'+subcategoryItem.id"
           flat
           group
           dense

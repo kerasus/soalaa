@@ -21,7 +21,7 @@
 <script>
 import pcTimer from 'src/components/OnlineQuiz/Quiz/timer/pcTimer'
 import mobileTimer from 'src/components/OnlineQuiz/Quiz/timer/mobileTimer'
-import { mixinWindowSize, mixinQuiz } from 'src/mixin/Mixins'
+import { mixinQuiz } from 'src/mixin/Mixins'
 import Time from 'src/plugins/time'
 import Assistant from 'src/plugins/assistant'
 export default {
@@ -30,16 +30,13 @@ export default {
     pcTimer,
     mobileTimer
   },
-  mixins: [mixinWindowSize, mixinQuiz],
+  mixins: [mixinQuiz],
   data: () => ({
     currentCat: null,
     interval: null,
     passedTime: '00:00:00',
     remainTime: false
   }),
-  // created () {
-  //   this.updateWindowSize()
-  // },
   mounted () {
     const that = this
     this.interval = setInterval(() => {
@@ -51,6 +48,11 @@ export default {
   },
   unmounted () {
     clearInterval(this.interval)
+  },
+  computed: {
+    windowSize () {
+      return this.$store.getters['AppLayout/windowSize']
+    }
   },
   methods: {
     passEvent (value) {

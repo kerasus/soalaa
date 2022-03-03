@@ -1,7 +1,12 @@
 <template>
   <quasar-template-builder v-model:value="properties" @onResize="resize">
     <template #header>
-      <template-header/>
+      <div v-if="$route.name === 'onlineQuiz.alaaView'" class="header">
+        <online-quiz-template-header/>
+      </div>
+      <div v-else  class="header">
+        <template-header/>
+      </div>
       <q-linear-progress
         v-if="$store.getters['loading/loading']"
         color="primary"
@@ -31,9 +36,10 @@ import sideMenuMapOfQuestions from 'components/Menu/SideMenu/SideMenu_MapOfQuest
 import { User } from 'src/models/User'
 import { QuasarTemplateBuilder } from 'quasar-template-builder'
 import templateHeader from 'components/Template/templateHeader'
+import onlineQuizTemplateHeader from 'components/Template/onlineQuizTemplateHeader'
 
 export default {
-  components: { SideMenuDashboard, sideMenuMapOfQuestions, QuasarTemplateBuilder, templateHeader },
+  components: { SideMenuDashboard, sideMenuMapOfQuestions, QuasarTemplateBuilder, templateHeader, onlineQuizTemplateHeader },
   data () {
     return {
       user: new User(),
@@ -90,6 +96,9 @@ export default {
 
 <style lang="scss" scoped>
 .main-layout-header {
+  .header{
+    width: 100%;
+  }
 
 }
 
