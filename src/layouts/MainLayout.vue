@@ -2,6 +2,13 @@
   <quasar-template-builder v-model:value="properties" @onResize="resize">
     <template #header>
       <template-header/>
+      <q-linear-progress
+        v-if="$store.getters['loading/loading']"
+        color="primary"
+        reverse
+        class="q-mt-sm"
+        indeterminate
+      />
     </template>
     <template #left-drawer>
       <side-menu-dashboard />
@@ -59,6 +66,7 @@ export default {
       return this.$store.dispatch('Auth/logOut')
     },
     resize (val) {
+      this.$store.commit('AppLayout/updateWindowSize', val)
       if (val.width > 1023) {
         this.$store.commit('AppLayout/updateLayoutLeftDrawerWidth', 325)
         this.$store.commit('AppLayout/updateLayoutLeftDrawerBehavior', 'desktop') && this.$store.commit('AppLayout/updateLayoutRightDrawerBehavior', 'desktop')

@@ -175,7 +175,7 @@ export default {
   created () {
     this.drawer = false
     this.appBar = false
-    this.$store.commit('AppLayout/updateAppBarAndDrawer', false)
+    this.$store.dispatch('AppLayout/updateAppBarAndDrawer', false)
   },
   updated () {
     this.$store.dispatch('loading/overlayLoading', false)
