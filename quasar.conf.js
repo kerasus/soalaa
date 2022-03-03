@@ -134,7 +134,12 @@ module.exports = configure(function (ctx) {
     },
     // https://v2.quasar.dev/quasar-cli/quasar-conf-js#Property%3A-framework
     framework: {
-      config: {},
+      config: {
+        notify: {
+          timeout: 5000,
+          position: 'top-left'
+        }
+      },
 
       iconSet: 'material-icons', // Quasar icon set
       lang: 'fa', // Quasar language pack (en-US)
