@@ -1,34 +1,43 @@
 <template>
-  <div
-    class="map-of-questions"
-  >
-    <div
-      :style="{ 'padding-bottom': '100px' }"
-    >
+  <div class="map-of-questions">
+    <div class="side-logo">
+      <div class="logo-image">
+        <q-img
+          src="https://3a.alaatv.com/img/logo-1.png"
+          width="150px"
+        />
+      </div>
+    </div>
+    <q-list class="questions-list">
       <div
-        v-for="(categoryItem) in quiz.categories.list"
-        :key="'category-'+categoryItem.id"
+        v-for="(categoryItem, index) in quiz.categories.list"
+        :key="index"
+        class="menu-body"
       >
-        <q-btn
-          flat
-          class="categoryItem"
-        >
-          {{ categoryItem.title }}
-        </q-btn>
+        <q-item class="category-item">
+          <q-item-section class="category-item-section">
+            <q-item-label class="category-item-label">
+              {{ categoryItem.title }}
+            </q-item-label>
+          </q-item-section>
+        </q-item>
         <q-expansion-item
-          v-for="(subcategoryItem) in categoryItem.sub_categories.list"
-          :key="'subcategory-'+subcategoryItem.id"
+          v-for="(subcategoryItem, index) in categoryItem.sub_categories.list"
+          :key="'subcategory-'+index"
           flat
           group
           dense
           :label="subcategoryItem.title"
+          :header-class="'lessons-expansion'"
         >
           <div
-            v-for="(question) in getQuestionsOfSubcategory(subcategoryItem.id)"
-            :key="'question-'+question.id"
+            v-for="(question, index) in getQuestionsOfSubcategory(subcategoryItem.id)"
+            :key="index"
+            class="expansion-items"
           >
             <q-btn
               flat
+              class="questions-btn"
               :class="{ active: currentQuestion.id === question.id }"
               block
               @click="changeQuestion(question.id)"
@@ -54,23 +63,19 @@
             </q-btn>
           </div>
         </q-expansion-item>
-        <div class="end-exam">
-          <SendAnswers/>
-        </div>
       </div>
+    </q-list>
+    <div class="end-exam">
+      <SendAnswers/>
     </div>
   </div>
 </template>
+
 <script>
 import ExamData from 'src/assets/js/ExamData'
 import mixinQuiz from 'src/mixin/Quiz'
 import SendAnswers from 'components/Menu/SideMenu/SendAnswers'
 import Time from 'src/plugins/time'
-// import Vue from 'vue'
-// import VueConfirmDialog from 'vue-confirm-dialog'
-
-// Vue.use(VueConfirmDialog)
-// Vue.component('vue-confirm-dialog', VueConfirmDialog.default)
 
 export default {
   name: 'SideMenuMapOfQuestions',
@@ -136,83 +141,111 @@ export default {
 }
 </script>
 
-<style>
+<style lang="scss" scoped>
 .map-of-questions {
-  min-height: 42px !important;
-  width: 80%;
-  height: calc(100% - 200px);
-  margin: 0 10%;
+  height: 100%;
   display: flex;
+  align-items: center;
   flex-direction: column;
-  justify-content: space-between;
+  background-color: white;
+
+  .side-logo {
+    display: flex;
+    height: 167px;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 50px;
+    @media screen and (max-width: 1439px) {
+      height: 136px;
+    }
+    @media screen and (max-width: 1023px) {
+      height: 100px;
+    }
+    @media screen and (max-width: 349px) {
+      height: 110px;
+    }
+
+    .logo-image {
+      width: 140px;
+      height: 95px;
+      @media screen and (max-width: 1439px) {
+        height: 76px;
+      }
+      @media screen and (max-width: 1023px) {
+        width: 100px;
+        height: 50px;
+      }
+
+      .q-img__container {
+        width: 140px;
+        height: 95px;
+        @media screen and (max-width: 1439px) {
+          height: 76px;
+        }
+        @media screen and (max-width: 1023px) {
+          width: 100px;
+          height: 50px;
+        }
+      }
+    }
+  }
+
+  .questions-list {
+    max-width: 260px;
+
+    .menu-body {
+      margin-bottom: 40px;
+
+      .category-item {
+        .category-item-section {
+          .category-item-label {
+            display: flex;
+            color: #666;
+            height: 36px;
+            font-size: 20px;
+            margin: auto;
+          }
+        }
+      }
+
+      .expansion-items {
+        display: flex;
+
+        .questions-btn {
+          margin: auto;
+          color: #666;
+
+          &.active {
+            color: var(--accent-1);
+          }
+        }
+      }
+    }
+
+    margin-bottom: 100px;
+  }
+
+  .end-exam {
+    position: sticky;
+    display: flex;
+    justify-content: center;
+    bottom: 0;
+    width: 240px;
+    z-index: 5;
+    background: #fff;
+  }
 }
+</style>
 
-.end-exam {
-  position: absolute;
-  display: flex;
-  justify-content: center;
-  bottom: 0;
-  width: 240px;
-  z-index: 5;
-  background: #fff;
-  padding: 40px 0;
-}
-
-.map-of-questions .q-expansion-item .q-expansion-item__container {
-  transition: all ease-in-out 0.3ms;
-  padding: 5px 24px;
-
-}
-
-.map-of-questions .q-expansion-item--expanded .q-item {
-  background: var(--primary-1);
-  border-radius: 40px;
-  min-height: 42px !important;
-  max-height: 42px !important;
-  padding: 5px 24px;
-  color: white;
-}
-
-.map-of-questions .q-expansion-item__content {
-  color: #666;
-  padding: 16px 16px;
-}
-
-.map-of-questions .q-expansion-item .q-btn__content {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-}
-
-.map-of-questions .q-btn {
-  background: var(--surface-1) !important;
-}
-
-.map-of-questions .q-expansion-item__container .q-expansion-item__content .active {
-  color: var(--accent-1) !important;
-}
-
-.question-container .question-answers .answer-box,
-.map-of-questions .q-expansion-item .q-expansion-item__content .q-btn {
-  padding: 0px 8px;
-  width: 100%;
-  font-size: 0.87rem;
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-}
-
-.map-of-questions .categoryItem.q-btn {
-  display: flex;
-  color: #666;
-  height: 36px;
-  width: 100%;
-  padding: 0px 24px;
-  font-size: 1.2rem;
-  margin-top: 50px;
-}
-
-.map-of-questions .q-expansion-item .q-item {
-  font-size: 1.2rem;
+<style lang="scss">
+.map-of-questions {
+  .questions-list {
+    .menu-body {
+      .lessons-expansion {
+        font-size: 18px !important;
+        padding: 8px 30px !important;
+      }
+    }
+  }
 }
 </style>
