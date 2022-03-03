@@ -121,7 +121,6 @@ import hotkeys from 'videojs-hotkeys'
 import Assistant from 'src/plugins/assistant'
 import { AlaaSet } from 'src/models/AlaaSet'
 import { AlaaContent } from 'src/models/AlaaContent'
-import { mixinWindowSize } from 'src/mixin/Mixins'
 
 export default {
   name: 'tabsOfLessons',
@@ -133,9 +132,6 @@ export default {
       }
     }
   },
-  mixins: [
-    mixinWindowSize
-  ],
   data () {
     return {
       tab: 'Lessons',
