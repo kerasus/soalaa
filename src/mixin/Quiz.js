@@ -1,15 +1,13 @@
-import Assistant from 'src/plugins/assistant'
-import Time from 'src/plugins/time'
-import { QuestSubcategory, QuestSubcategoryList } from '../models/QuestSubcategory'
+import process from 'process'
 import axios from 'axios'
 import API_ADDRESS from 'src/api/Addresses'
-import { Exam } from 'src/models/Exam'
-import { QuestCategoryList } from 'src/models/QuestCategory'
-// todo : jquery
-import $ from 'jquery'
-import { QuestionList } from 'src/models/Question'
-import ExamData from 'src/assets/js/ExamData'
+import Assistant from 'src/plugins/assistant'
 import SocketConnection from 'src/plugins/socket'
+import Time from 'src/plugins/time'
+import ExamData from 'src/assets/js/ExamData'
+import { Exam } from 'src/models/Exam'
+import { QuestSubcategory, QuestSubcategoryList } from '../models/QuestSubcategory'
+import { QuestCategoryList } from 'src/models/QuestCategory'
 
 const mixinQuiz = {
   computed: {
@@ -132,78 +130,76 @@ const mixinQuiz = {
           })
       })
 
-      return
-
       // eslint-disable-next-line no-unreachable
-      this.socket.on('connect', () => {
-        const engine = this.socket.io.engine
-        // console.log('engine.transport.name', engine.transport.name) // in most cases, prints "polling"
-
-        // console.log(this.socket.connected) // true
-        // this.onSocketStatusChange('socket connected')
-        // this.isConnected = true
-
-        engine.on('connecting', () => {
-          // this.onSocketStatusChange('on connection')
-        })
-        engine.on('reconnect', () => {
-          this.socket.emit('socket.event.reconnect:log', 'socket.event.reconnect:log')
-          // // client
-          // this.socket.emit("test", dataToSend, function(err, success) {
-          // })
-        })
-        engine.on('disconnect', () => {
-          // this.onSocketStatusChange('Socket to break off')
-          // this.isConnected = false
-        })
-        engine.on('connect_failed', () => {
-          // this.onSocketStatusChange('connection failed')
-        })
-        engine.on('question.file-link:update', (data) => {
-          const questionsFileUrl = data.questionFileLink
-          const that = this
-          this.reloadQuestionFile(questionsFileUrl, 'onlineQuiz.alaaView', this.$route.params.quizId)
-            .then(() => {
-              that.isRtl = !that.isLtrString(that.currentQuestion.statement)
-              that.$store.commit('AppLayout/updateOverlay', { show: false, loading: false, text: '' })
-              if (callbacks && callbacks['question.file-link:update'] && callbacks['question.file-link:update'].afterReload) {
-                callbacks['question.file-link:update'].afterReload()
-              }
-            })
-            .catch((error) => {
-              Assistant.reportErrors(error)
-              that.$notify({
-                group: 'notifs',
-                title: 'توجه!',
-                text: 'مشکلی در دریافت اطلاعات آژمون رخ داده است. لطفا دوباره امتحان کنید.',
-                type: 'error'
-              })
-              that.$router.push({ name: 'user.exam.list' })
-            })
-        })
-
-        engine.once('upgrade', () => {
-          // called when the transport is upgraded (i.e. from HTTP long-polling to WebSocket)
-          // console.log(engine.transport.name) // in most cases, prints "websocket"
-        })
-
-        //
-        // engine.on("packet", ({ type, data }) => {
-        //     // called for each packet received
-        // })
-        //
-        // engine.on("packetCreate", ({ type, data }) => {
-        //     // called for each packet sent
-        // })
-        //
-        // engine.on("drain", () => {
-        //     // called when the write buffer is drained
-        // })
-        //
-        // engine.on("close", (reason) => {
-        //     // called when the underlying connection is closed
-        // })
-      })
+      // this.socket.on('connect', () => {
+      //   const engine = this.socket.io.engine
+      //   // console.log('engine.transport.name', engine.transport.name) // in most cases, prints "polling"
+      //
+      //   // console.log(this.socket.connected) // true
+      //   // this.onSocketStatusChange('socket connected')
+      //   // this.isConnected = true
+      //
+      //   engine.on('connecting', () => {
+      //     // this.onSocketStatusChange('on connection')
+      //   })
+      //   engine.on('reconnect', () => {
+      //     this.socket.emit('socket.event.reconnect:log', 'socket.event.reconnect:log')
+      //     // // client
+      //     // this.socket.emit("test", dataToSend, function(err, success) {
+      //     // })
+      //   })
+      //   engine.on('disconnect', () => {
+      //     // this.onSocketStatusChange('Socket to break off')
+      //     // this.isConnected = false
+      //   })
+      //   engine.on('connect_failed', () => {
+      //     // this.onSocketStatusChange('connection failed')
+      //   })
+      //   engine.on('question.file-link:update', (data) => {
+      //     const questionsFileUrl = data.questionFileLink
+      //     const that = this
+      //     this.reloadQuestionFile(questionsFileUrl, 'onlineQuiz.alaaView', this.$route.params.quizId)
+      //       .then(() => {
+      //         that.isRtl = !that.isLtrString(that.currentQuestion.statement)
+      //         that.$store.commit('AppLayout/updateOverlay', { show: false, loading: false, text: '' })
+      //         if (callbacks && callbacks['question.file-link:update'] && callbacks['question.file-link:update'].afterReload) {
+      //           callbacks['question.file-link:update'].afterReload()
+      //         }
+      //       })
+      //       .catch((error) => {
+      //         Assistant.reportErrors(error)
+      //         that.$notify({
+      //           group: 'notifs',
+      //           title: 'توجه!',
+      //           text: 'مشکلی در دریافت اطلاعات آژمون رخ داده است. لطفا دوباره امتحان کنید.',
+      //           type: 'error'
+      //         })
+      //         that.$router.push({ name: 'user.exam.list' })
+      //       })
+      //   })
+      //
+      //   engine.once('upgrade', () => {
+      //     // called when the transport is upgraded (i.e. from HTTP long-polling to WebSocket)
+      //     // console.log(engine.transport.name) // in most cases, prints "websocket"
+      //   })
+      //
+      //   //
+      //   // engine.on("packet", ({ type, data }) => {
+      //   //     // called for each packet received
+      //   // })
+      //   //
+      //   // engine.on("packetCreate", ({ type, data }) => {
+      //   //     // called for each packet sent
+      //   // })
+      //   //
+      //   // engine.on("drain", () => {
+      //   //     // called when the write buffer is drained
+      //   // })
+      //   //
+      //   // engine.on("close", (reason) => {
+      //   //     // called when the underlying connection is closed
+      //   // })
+      // })
     },
     sendUserQuestionsDataToServer (examId, examUserId, finishExam) {
       const answers = this.getUserAnswers(examId)
@@ -891,33 +887,6 @@ const mixinQuiz = {
             Assistant.reportErrors({ location: 'GetExamDataFroParticipate' })
             reject(error)
           })
-      })
-    },
-    getQuestionsOfExam (questionsFileUrl) {
-      return new Promise(function (resolve, reject) {
-        if (!questionsFileUrl) {
-          Assistant.handleAxiosError('exam file url is not set')
-          // eslint-disable-next-line prefer-promise-reject-errors
-          reject(null)
-          return
-        }
-
-        $.ajax({
-          type: 'GET',
-          url: questionsFileUrl,
-          accept: 'application/json; charset=utf-8',
-          dataType: 'json',
-          success: function (data) {
-            resolve(new QuestionList(data))
-          },
-          error: function (jqXHR, textStatus, errorThrown) {
-            Assistant.reportErrors({ location: 'GetQuestionsOfExam', message: "can't get exam file", data: { jqXHR, textStatus, errorThrown } })
-            Assistant.handleAxiosError("can't get exam file")
-            // eslint-disable-next-line prefer-promise-reject-errors
-            reject({ jqXHR, textStatus, errorThrown })
-          }
-        }
-        )
       })
     }
   }
