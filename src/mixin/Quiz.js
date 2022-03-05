@@ -294,7 +294,7 @@ const mixinQuiz = {
       return this.$store.getters['quiz/quiz']
     },
     getCurrentExamQuestionIndexes () {
-      if (window.currentExamQuestionIndexes) {
+      if (window.currentExamQuestionIndexes && window.currentExamQuestionIndexes.length) {
         return window.currentExamQuestionIndexes
       }
       window.currentExamQuestionIndexes = JSON.parse(window.localStorage.getItem('currentExamQuestionIndexes'))
@@ -428,7 +428,7 @@ const mixinQuiz = {
           examData.loadQuestionsFromFile()
         } else {
           userExamId = that.quiz.user_exam_id
-          that.loadCurrentQuestion(viewType)
+          // that.loadCurrentQuestion(viewType)
         }
         examData.getUserExamData(userExamId)
           .run()
