@@ -2,16 +2,16 @@ const mixinDrawer = {
   computed: {
     drawer: {
       get () {
-        return this.$store.getters['AppLayout/drawer']
+        return this.$store.getters['AppLayout/layoutLeftDrawer']
       },
       set (newInfo) {
-        this.$store.commit('AppLayout/updateDrawer', newInfo)
+        this.$store.commit('AppLayout/updateLayoutLeftDrawerVisible', newInfo)
       }
     }
   },
   methods: {
     toggleDrawer () {
-      this.$store.commit('AppLayout/updateDrawer', !this.$store.getters['AppLayout/drawer'])
+      this.$store.commit('AppLayout/updateLayoutLeftDrawerVisible', !this.$store.getters['AppLayout/layoutLeftDrawerVisible'])
     }
   }
 }

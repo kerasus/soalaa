@@ -285,7 +285,6 @@ export default {
   watch: {
     'pick.header': function (newValue) {
       this.updateLayoutHeader(newValue)
-      this.updateLayoutHeaderVisible(newValue)
       this.localStorageData.layoutHeader = newValue
     },
     'play.header': function (newValue) {
@@ -319,8 +318,6 @@ export default {
     'pick.left': function (newValue) {
       this.updateLayoutLeftDrawer(newValue)
       this.localStorageData.layoutLeftDrawer = newValue
-      this.updateLayoutLeftDrawerVisible(newValue)
-      this.localStorageData.layoutLeftDrawerVisible = newValue
     },
     'play.left': function (newValue) {
       if (this.layoutLeftDrawer) {
@@ -364,8 +361,6 @@ export default {
     'pick.right': function (newValue) {
       this.updateLayoutRightDrawer(newValue)
       this.localStorageData.layoutRightDrawer = newValue
-      this.updateLayoutRightDrawerVisible(newValue)
-      this.localStorageData.layoutRightDrawerVisible = newValue
     },
     'play.right': function (newValue) {
       if (this.layoutRightDrawer) {
@@ -409,14 +404,16 @@ export default {
     'pick.footer': function (newValue) {
       this.updateLayoutFooter(newValue)
       this.localStorageData.layoutFooter = newValue
-      this.updateLayoutFooterVisible(newValue)
-      this.localStorageData.layoutFooterVisible = newValue
     },
     'play.footer': function (newValue) {
       if (this.layoutFooter) {
         this.updateLayoutFooterVisible(newValue)
         this.localStorageData.layoutFooterVisible = newValue
       }
+    },
+    'play.scroll': function (newValue) {
+      this.updateLayoutInjectDrawerOnScrolling(newValue)
+      this.localStorageData.layoutInjectDrawerOnScrolling = newValue
     },
     'cfg.footerReveal': function (newValue) {
       this.updateLayoutFooterReveal(newValue)
@@ -545,6 +542,9 @@ export default {
         this.cfg.footerSep = 'None'
       }
     },
+    layoutInjectDrawerOnScrolling: function (newValue) {
+      this.play.scroll = newValue
+    },
     localStorageData: {
       deep: true,
       handler (newValue) {
@@ -576,7 +576,8 @@ export default {
       'updateLayoutFooterVisible',
       'updateLayoutFooterReveal',
       'updateLayoutFooterElevated',
-      'updateLayoutFooterBordered'
+      'updateLayoutFooterBordered',
+      'updateLayoutInjectDrawerOnScrolling'
     ]),
     ...mapActions('AppLayout', [
       'updateStore'
@@ -711,7 +712,8 @@ export default {
       'layoutFooterReveal',
       'layoutFooterElevated',
       'layoutFooterBordered',
-      'appLayout'
+      'appLayout',
+      'layoutInjectDrawerOnScrolling'
     ]),
     isContracted () {
       return this.$q.screen.lt.sm === true || (

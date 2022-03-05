@@ -92,7 +92,7 @@ export default {
     lessonsList: new QuestSubcategoryList()
   }),
   created () {
-    this.$store.commit('AppLayout/updateDrawer', true)
+    this.$store.commit('AppLayout/updateLayoutLeftDrawerVisible', true)
   },
   mounted () {
     this.loadLessons()

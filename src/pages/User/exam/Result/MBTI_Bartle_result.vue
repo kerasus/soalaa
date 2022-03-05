@@ -312,7 +312,7 @@ export default {
     }
   },
   created () {
-    this.$store.commit('AppLayout/updateDrawer', true)
+    this.$store.commit('AppLayout/updateLayoutLeftDrawerVisible', true)
     window.currentExamQuestions = null
     window.currentExamQuestionIndexes = null
     this.$store.dispatch('loading/overlayLoading', { loading: true, message: '' })
