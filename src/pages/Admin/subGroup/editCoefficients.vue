@@ -1,6 +1,37 @@
 <template>
   <div class="row ">
     <div class="col-md-12 q-pa-sm">
+      <q-input
+        v-model="sourceExamInfoForCopyCoefficient.id"
+        :loading="sourceExamInfoForCopyCoefficient.loading"
+        :disabled="sourceExamInfoForCopyCoefficient.loading"
+        label="شناسه آزمون جهت کپی کردن ضرایب"
+        class="q-mb-md"
+      >
+        <q-btn
+          color="green"
+          @click="getExamInfo"
+          icon="mdi-eye"
+          size="md"
+          flat
+          rounded
+          fab-mini
+        />
+      </q-input>
+      <br>
+      <q-btn
+        class="copy-coefficient"
+        v-if="sourceExamInfoForCopyCoefficient.title"
+        block
+        color="cyan"
+        dark
+        @click="copyCoefficient"
+      >
+        کپی کردن ضرایب آزمون {
+        {{ sourceExamInfoForCopyCoefficient.title }}
+        }
+        روی این آزمون
+      </q-btn>
       <p class="coefficient-title">
         {{examTitle}}
       </p>
@@ -183,7 +214,7 @@
   <div class="row">
     <div class="col-md-12 q-pa-sm">
       <q-btn
-        class="full-width"
+        class="confirm-btn"
         color="green"
         dark
         block
@@ -217,7 +248,8 @@ export default {
       startDate: '',
       finishDate: '',
       examId: null,
-      loading: false
+      loading: false,
+      sourceExamInfoForCopyCoefficient: new Exam()
     }
   },
   computed: {
@@ -251,6 +283,7 @@ export default {
   },
   methods: {
     getData () {
+      this.getExamDateTime()
       this.getExamInfo()
       this.getCategories()
       this.getSubCategoryList()
@@ -258,6 +291,20 @@ export default {
       this.getAllSubGroup()
     },
     getExamInfo () {
+      if (!this.sourceExamInfoForCopyCoefficient.id || this.$route.params.exam_id === this.sourceExamInfoForCopyCoefficient.id) {
+        return
+      }
+      this.sourceExamInfoForCopyCoefficient.loading = true
+      this.$axios.get(API_ADDRESS.exam.showExam(this.sourceExamInfoForCopyCoefficient.id))
+        .then((response) => {
+          this.sourceExamInfoForCopyCoefficient = new Exam(response.data.data)
+          this.sourceExamInfoForCopyCoefficient.loading = false
+        })
+        .catch(() => {
+          this.sourceExamInfoForCopyCoefficient.loading = false
+        })
+    },
+    getExamDateTime () {
       this.loading = true
       this.$axios.get(API_ADDRESS.exam.base())
         .then((response) => {
@@ -266,6 +313,24 @@ export default {
           this.examTitle = examInfo.title
           this.startDate = examInfo.shamsiDate('start_at').dateTime
           this.finishDate = examInfo.shamsiDate('finish_at').dateTime
+        })
+    },
+    copyCoefficient () {
+      if (!this.sourceExamInfoForCopyCoefficient.title) {
+        return
+      }
+      this.sourceExamInfoForCopyCoefficient.loading = true
+      this.$axios.put(API_ADDRESS.exam.copyCoefficient, {
+        source_exam_id: this.sourceExamInfoForCopyCoefficient.id,
+        destination_exam_id: this.$route.params.exam_id
+      })
+        .then(() => {
+          this.sourceExamInfoForCopyCoefficient = new Exam()
+          this.sourceExamInfoForCopyCoefficient.loading = false
+          this.getData()
+        })
+        .catch(() => {
+          this.sourceExamInfoForCopyCoefficient.loading = false
         })
     },
     getCategories () {
@@ -350,7 +415,10 @@ export default {
 .exam-date-part{
   margin: 30px;
 }
-
+.copy-coefficient{
+  width: 100%;
+  font-size: 16px;
+}
 .coefficient-title{
   margin: 20px;
   font-weight: 500;
@@ -369,5 +437,10 @@ export default {
   margin-right: 10px;
   position: relative;
   top: 8px;
+}
+.confirm-btn{
+  width: 100%;
+  height: 52px;
+  font-size: 18px;
 }
 </style>
