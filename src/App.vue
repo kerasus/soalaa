@@ -128,8 +128,6 @@
 
       <notifications group="notifs" />
       <router-view :key="$route.name + ($route.params.quizId || '') + ($route.params.questNumber || '')" />
-
-      <vue-confirm-dialog />
     </v-main>
     <v-overlay
       :opacity="0.5"
@@ -146,13 +144,13 @@
 </template>
 
 <script>
-import './assets/Fonts/Flaticons/css/uicons-regular-rounded.css'
-import './assets/Fonts/Flaticons/css/uicons-bold-rounded.css'
-import VueConfirmDialog from 'vue-confirm-dialog'
-import {mixinAuth, mixinQuiz, mixinDrawer, mixinWindowSize} from '@/mixin/Mixins'
 import '@/assets/scss/app.scss'
 import '@/assets/scss/font.scss'
 import '@mdi/font/css/materialdesignicons.css'
+import './assets/Fonts/Flaticons/css/uicons-regular-rounded.css'
+import './assets/Fonts/Flaticons/css/uicons-bold-rounded.css'
+import {mixinAuth, mixinQuiz, mixinDrawer, mixinWindowSize} from '@/mixin/Mixins'
+
 import {
   SideMenu_Dashboard,
   SideMenu_MapOfQuestions,
@@ -164,7 +162,6 @@ import {
 export default {
   name: 'App',
   components: {
-    VueConfirmDialog,
     TopMenu_OnlineQuiz,
     TopMenu_Dashboard,
     SideMenu_Dashboard,
