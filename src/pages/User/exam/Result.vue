@@ -151,7 +151,7 @@ import PersonalResult from 'src/components/OnlineQuiz/Quiz/resultTables/personal
 import BubbleSheet from 'src/components/OnlineQuiz/Quiz/bubbleSheet/bubbleSheet'
 import Assistant from 'src/plugins/assistant'
 import { AlaaSet } from 'src/models/AlaaSet'
-import { mixinAuth, mixinQuiz, mixinWindowSize } from 'src/mixin/Mixins'
+import { mixinAuth, mixinQuiz } from 'src/mixin/Mixins'
 import { AlaaContent } from 'src/models/AlaaContent'
 import StatisticResult from 'src/components/OnlineQuiz/Quiz/resultTables/statisticResult'
 import TakhminRotbe from 'src/components/OnlineQuiz/Quiz/TakhminRotbe'
@@ -163,8 +163,7 @@ export default {
   components: { TabsOfLessons, TakhminRotbe, StatisticResult, BubbleSheet, Info, PersonalResult },
   mixins: [
     mixinAuth,
-    mixinQuiz,
-    mixinWindowSize
+    mixinQuiz
   ],
   data: () => ({
     tab: null,
