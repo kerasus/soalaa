@@ -216,7 +216,6 @@ const mixinQuiz = {
         const examData = new ExamData()
         window.currentExamQuestions = null
         window.currentExamQuestionIndexes = null
-        // that.$store.commit('loading/overlay', { loading: true, message: '' })
         examData.getExamDataAndParticipate(examId)
         examData.loadQuestionsFromFile()
         examData.getUserExamData(userExamId)
@@ -420,8 +419,6 @@ const mixinQuiz = {
         if (that.needToLoadQuizData()) {
           that.saveCurrentExamQuestions([])
           that.$store.commit('quiz/cleanCurrentQuestion')
-          // window.currentExamQuestions = null
-          // window.currentExamQuestionIndexes = null
           that.bookletsDialog = true
           that.$store.commit('loading/overlay', true)
           examData.getExamDataAndParticipate(examId)
@@ -616,8 +613,6 @@ const mixinQuiz = {
         const examData = new ExamData()
         that.saveCurrentExamQuestions([])
         that.$store.commit('cleanCurrentQuestion')
-        // window.currentExamQuestions = null
-        // window.currentExamQuestionIndexes = null
         that.bookletsDialog = true
         that.$store.commit('AppLayout/updateOverlay', { show: true, loading: true, text: '' })
         examData.getExamData(examId)
