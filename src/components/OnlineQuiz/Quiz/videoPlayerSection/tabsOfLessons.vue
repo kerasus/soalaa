@@ -117,11 +117,10 @@ import 'video.js/dist/video-js.css'
 require('@silvermine/videojs-quality-selector')(videojs)
 import fa from 'video.js/dist/lang/fa.json'
 // eslint-disable-next-line no-unused-vars
-import hotkeys from 'videojs-hotkeys'
+// import hotkeys from 'videojs-hotkeys'
 import Assistant from 'src/plugins/assistant'
 import { AlaaSet } from 'src/models/AlaaSet'
 import { AlaaContent } from 'src/models/AlaaContent'
-import { mixinWindowSize } from 'src/mixin/Mixins'
 
 export default {
   name: 'tabsOfLessons',
@@ -133,9 +132,6 @@ export default {
       }
     }
   },
-  mixins: [
-    mixinWindowSize
-  ],
   data () {
     return {
       tab: 'Lessons',

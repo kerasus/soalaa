@@ -96,7 +96,7 @@
 <script>
 import 'src/assets/scss/markdownKatex.scss'
 import Item from 'src/components/OnlineQuiz/Quiz/question/questionField'
-import { mixinAuth, mixinQuiz, mixinUserActionOnQuestion, mixinWindowSize } from 'src/mixin/Mixins'
+import { mixinAuth, mixinQuiz, mixinUserActionOnQuestion } from 'src/mixin/Mixins'
 import Timer from 'src/components/OnlineQuiz/Quiz/timer/timer'
 import BubbleSheet from 'src/components/OnlineQuiz/Quiz/bubbleSheet/bubbleSheet'
 import { Exam } from 'src/models/Exam'
@@ -111,7 +111,7 @@ export default {
     BubbleSheet,
     Item
   },
-  mixins: [mixinAuth, mixinQuiz, mixinUserActionOnQuestion, mixinWindowSize],
+  mixins: [mixinAuth, mixinQuiz, mixinUserActionOnQuestion],
   data () {
     return {
       user: null,
@@ -152,6 +152,11 @@ export default {
   },
   unmounted () {
     this.changeAppBarAndDrawer(true)
+  },
+  computed: {
+    windowSize () {
+      return this.$store.getters['AppLayout/windowSize']
+    }
   },
   methods: {
     getUser () {
