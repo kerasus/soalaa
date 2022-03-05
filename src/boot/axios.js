@@ -2,7 +2,7 @@ import { boot } from 'quasar/wrappers'
 import axios from 'axios'
 import { Notify } from 'quasar'
 
-const AxiosError = (function () {
+const AxiosHooks = (function () {
   let $notify = null
 
   function setNotifyInstance ($q) {
@@ -12,7 +12,7 @@ const AxiosError = (function () {
     $notify = $q.notify
   }
 
-  function handle (error, router) {
+  function handleErrors (error, router, store) {
     let messages = []
     if (!error || !error.response) {
       return
@@ -24,7 +24,7 @@ const AxiosError = (function () {
       messages.push('موردی یافت نشد.')
     } else if (statusCode === 401) {
       messages.push('ابتدا وارد سامانه شوید.')
-      redirectToLogin(router)
+      deAuthorizeUser(router, store)
     } else if (error.response.data.errors) {
       for (const [key, value] of Object.entries(error.response.data.errors)) {
         if (typeof value === 'string') {
@@ -38,10 +38,7 @@ const AxiosError = (function () {
 
     toastMessages(messages)
   }
-  function redirectToLogin (router) {
-    axios.defaults.headers.common.Authorization = ''
-    router.push({ name: 'login' })
-  }
+
   function toastMessages (messages) {
     messages.forEach((item) => {
       if ($notify) {
@@ -64,6 +61,17 @@ const AxiosError = (function () {
     })
   }
 
+  function deAuthorizeUser (router, store) {
+    store.dispatch('Auth/logOut')
+
+    const loginRouteName = 'login'
+    if (router.history.current.name === loginRouteName) {
+      return
+    }
+
+    router.push({ name: loginRouteName })
+  }
+
   function getMessagesFromArrayWithRecursion (array) {
     if (array) {
       if (Array.isArray(array)) {
@@ -74,7 +82,7 @@ const AxiosError = (function () {
   }
 
   return {
-    handle,
+    handleErrors,
     setNotifyInstance
   }
 }())
@@ -103,9 +111,9 @@ export default boot(({ app, store, router }) => {
   // ^ ^ ^ this will allow you to use this.$api (for Vue Options API form)
   //       so you can easily perform requests against your app's API
 
-  AxiosError.setNotifyInstance(app.config.globalProperties.$q)
+  AxiosHooks.setNotifyInstance(app.config.globalProperties.$q)
   axios.interceptors.response.use(undefined, function (error) {
-    AxiosError.handle(error, router)
+    AxiosHooks.handleErrors(error, router, store)
     return Promise.reject(error)
   })
 
