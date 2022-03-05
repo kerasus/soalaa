@@ -762,7 +762,6 @@ const mixinQuiz = {
     getQuestionIndexById (questionId) {
       const currentExamQuestionIndexes = this.getCurrentExamQuestionIndexes()
       for (const index in currentExamQuestionIndexes) {
-        console.log(index)
         if (currentExamQuestionIndexes[index] === questionId) {
           return index
         }
