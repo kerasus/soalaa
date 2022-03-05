@@ -288,7 +288,9 @@ export default {
       this.changeQuestion(firstInViewQuestion.id, 'onlineQuiz.konkoorView')
     },
     scrollTo (questionId) {
-      const questionIndex = this.getQuestionIndexById(questionId)
+      const questionIndex = parseInt(this.getQuestionIndexById(questionId))
+      console.log(typeof questionIndex)
+      console.log(this.scroller)
       this.$refs.scroller.scrollTo(questionIndex)
       for (let i = 1; i < 4; i++) {
         setTimeout(() => {
