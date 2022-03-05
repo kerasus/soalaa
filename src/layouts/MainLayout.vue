@@ -1,10 +1,10 @@
 <template>
   <quasar-template-builder v-model:value="properties" @onResize="resize">
     <template #header>
-      <div v-if="$route.name === 'onlineQuiz.alaaView'" class="header">
+      <div v-if="$route.name === 'onlineQuiz.alaaView'" class="header row">
         <online-quiz-template-header/>
       </div>
-      <div v-else  class="header">
+      <div v-else  class="header row">
         <template-header/>
       </div>
       <q-linear-progress
