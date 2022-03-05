@@ -2,8 +2,17 @@ import { boot } from 'quasar/wrappers'
 import axios from 'axios'
 import { Notify } from 'quasar'
 
-const AxiosError = (function () {
-  function handle (error, router) {
+const AxiosHooks = (function () {
+  let $notify = null
+
+  function setNotifyInstance ($q) {
+    if (!$q.notify) {
+      return
+    }
+    $notify = $q.notify
+  }
+
+  function handleErrors (error, router, store) {
     let messages = []
     if (!error || !error.response) {
       return
@@ -15,9 +24,9 @@ const AxiosError = (function () {
       messages.push('موردی یافت نشد.')
     } else if (statusCode === 401) {
       messages.push('ابتدا وارد سامانه شوید.')
-      redirectToLogin(router)
-    } else if (error.response.data) {
-      for (const [key, value] of Object.entries(error.response.data)) {
+      deAuthorizeUser(router, store)
+    } else if (error.response.data.errors) {
+      for (const [key, value] of Object.entries(error.response.data.errors)) {
         if (typeof value === 'string') {
           messages.push(value)
         } else {
@@ -29,21 +38,38 @@ const AxiosError = (function () {
 
     toastMessages(messages)
   }
-  function redirectToLogin (router) {
-    axios.defaults.headers.common.Authorization = ''
-    router.push({ name: 'login' })
-  }
+
   function toastMessages (messages) {
     messages.forEach((item) => {
-      Notify.create({
-        type: 'negative',
-        color: 'negative',
-        timeout: 5000,
-        position: 'top',
-        message: item,
-        icon: 'report_problem'
-      })
+      if ($notify) {
+        $notify({
+          type: 'negative',
+          color: 'negative',
+          message: item,
+          icon: 'report_problem'
+        })
+      } else {
+        Notify.create({
+          type: 'negative',
+          color: 'negative',
+          timeout: 5000,
+          position: 'top',
+          message: item,
+          icon: 'report_problem'
+        })
+      }
     })
+  }
+
+  function deAuthorizeUser (router, store) {
+    store.dispatch('Auth/logOut')
+
+    const loginRouteName = 'login'
+    if (router.history.current.name === loginRouteName) {
+      return
+    }
+
+    router.push({ name: loginRouteName })
   }
 
   function getMessagesFromArrayWithRecursion (array) {
@@ -56,7 +82,8 @@ const AxiosError = (function () {
   }
 
   return {
-    handle
+    handleErrors,
+    setNotifyInstance
   }
 }())
 
@@ -84,8 +111,9 @@ export default boot(({ app, store, router }) => {
   // ^ ^ ^ this will allow you to use this.$api (for Vue Options API form)
   //       so you can easily perform requests against your app's API
 
+  AxiosHooks.setNotifyInstance(app.config.globalProperties.$q)
   axios.interceptors.response.use(undefined, function (error) {
-    AxiosError.handle(error, router)
+    AxiosHooks.handleErrors(error, router, store)
     return Promise.reject(error)
   })
 
