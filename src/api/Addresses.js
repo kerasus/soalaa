@@ -35,7 +35,9 @@ const API_ADDRESS = {
     }
   },
   exam: {
+    showExam: (examId) => lumenServer + '/exam/' + examId,
     editExam: lumenServer + '/exam',
+    copyCoefficient: lumenServer + '/exam-question/zirgorooh/copy',
     sendAnswers: lumenServer + '/temp-exam/answer/choice',
     sendStatus: lumenServer + '/temp-exam/answer/status',
     sendBookmark: lumenServer + '/temp-exam/answer/bookmark',
