@@ -1,70 +1,83 @@
 <template>
-<div
-  :style="{'width':'240px','height': '36px' }">
-  <q-btn
-    v-if="quiz.id"
-    :color="'#4caf50'"
-    :style="{ backgroundColor: '#4caf50 !important' }"
-    class=" end-exam-btn full-width"
-    @click="getConfirmation"
+  <div
+    :style="{'width':'240px'}"
+    class="send-answer-box"
   >
-    ارسال پاسخنامه
-  </q-btn>
-  <q-dialog
-    v-model="confirmationBubbleSheet"
-    persistent
-    maximized
-    transition-show="slide-up"
-    transition-hide="slide-down"
-  >
-    <q-card class="">
-      <q-bar class="bg-blue text-white q-pa-lg">
-        <div>
-         پاسخنامه کاربر
-        </div>
-        <q-space></q-space>
-        <q-btn dense flat icon="close" v-close-popup>
-          <q-tooltip class="bg-white text-blue">بستن </q-tooltip>
-        </q-btn>
-      </q-bar>
-      <q-card-section>
-        <q-card flat>
-          <q-card-section>
-            از ارسال پاسخ ها اطمینان دارید؟
-          </q-card-section>
-          <q-card-section>
-            <q-btn
-              flat style="color: #585858"
-              @click="confirmationBubbleSheet = false"
-            >
-              ادامه میدم
-            </q-btn>
-            <q-btn
-              flat
-              color="secondary"
-              @click="confirmSendingAllAnswers"
-            >
-              ثبت میکنم
-            </q-btn>
-          </q-card-section>
-        </q-card>
-      </q-card-section>
+    <q-btn
+      v-if="quiz.id"
+      :color="'#4caf50'"
+      :style="{ backgroundColor: '#4caf50 !important' }"
+      class=" end-exam-btn full-width"
+      @click="getConfirmation"
+    >
+      ارسال پاسخنامه
+    </q-btn>
+    <q-btn
+      v-if="quiz.id"
+      :color="'#4caf50'"
+      :style="{ backgroundColor: '#4caf50 !important'}"
+      class=" end-exam-btn full-width"
+      @click="showSendAnswerPhotoDialog"
+    >
+      آپلود برگه پاسخنامه
+    </q-btn>
+    <q-dialog
+      v-model="confirmationBubbleSheet"
+      persistent
+      maximized
+      transition-show="slide-up"
+      transition-hide="slide-down"
+    >
+      <q-card class="">
+        <q-bar class="bg-blue text-white q-pa-lg">
+          <div>
+            پاسخنامه کاربر
+          </div>
+          <q-space></q-space>
+          <q-btn dense flat icon="close" v-close-popup>
+            <q-tooltip class="bg-white text-blue">بستن</q-tooltip>
+          </q-btn>
+        </q-bar>
+        <q-card-section>
+          <q-card flat>
+            <q-card-section>
+              از ارسال پاسخ ها اطمینان دارید؟
+            </q-card-section>
+            <q-card-section>
+              <q-btn
+                flat style="color: #585858"
+                @click="confirmationBubbleSheet = false"
+              >
+                ادامه میدم
+              </q-btn>
+              <q-btn
+                flat
+                color="secondary"
+                @click="confirmSendingAllAnswers"
+              >
+                ثبت میکنم
+              </q-btn>
+            </q-card-section>
+          </q-card>
+        </q-card-section>
 
-      <q-card-section>
-        <bubble-sheet
-          :info="{ type: 'pasokh-nameh' }"
-          delay-time="0"
-        />
-      </q-card-section>
-    </q-card>
-  </q-dialog>
-</div>
+        <q-card-section>
+          <bubble-sheet
+            :info="{ type: 'pasokh-nameh' }"
+            delay-time="0"
+          />
+        </q-card-section>
+      </q-card>
+    </q-dialog>
+  </div>
 </template>
 
 <script>
 import BubbleSheet from 'components/OnlineQuiz/Quiz/bubbleSheet/bubbleSheet'
 import ExamData from 'assets/js/ExamData'
 import mixinQuiz from 'src/mixin/Quiz'
+import { Exam } from 'src/models/Exam'
+
 export default {
   name: 'SendAnswers',
   mixins: [mixinQuiz],
@@ -74,7 +87,9 @@ export default {
   },
   data: () => ({
     confirmationBubbleSheet: false,
-    confirmationBtnLoading: false
+    confirmationBtnLoading: false,
+    bubbleSheetDialogExam: new Exam(),
+    bubbleSheetDialog: false
   }),
   methods: {
     async getConfirmation () {
@@ -116,11 +131,21 @@ export default {
         .catch(erroe => {
           console.log('erroe : ', erroe)
         })
+    },
+    showSendAnswerPhotoDialog () {
+      this.bubbleSheetDialog = true
+      this.bubbleSheetDialogExam = this.quiz
     }
   }
 }
 </script>
 
-<style scoped>
-
+<style lang="scss" scoped>
+.send-answer-box {
+  .end-exam-btn {
+    &:first-child {
+      margin: 20px 0;
+    }
+  }
+}
 </style>

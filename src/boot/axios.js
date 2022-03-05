@@ -3,6 +3,15 @@ import axios from 'axios'
 import { Notify } from 'quasar'
 
 const AxiosError = (function () {
+  let $notify = null
+
+  function setNotifyInstance ($q) {
+    if (!$q.notify) {
+      return
+    }
+    $notify = $q.notify
+  }
+
   function handle (error, router) {
     let messages = []
     if (!error || !error.response) {
@@ -16,8 +25,8 @@ const AxiosError = (function () {
     } else if (statusCode === 401) {
       messages.push('ابتدا وارد سامانه شوید.')
       redirectToLogin(router)
-    } else if (error.response.data) {
-      for (const [key, value] of Object.entries(error.response.data)) {
+    } else if (error.response.data.errors) {
+      for (const [key, value] of Object.entries(error.response.data.errors)) {
         if (typeof value === 'string') {
           messages.push(value)
         } else {
@@ -35,14 +44,23 @@ const AxiosError = (function () {
   }
   function toastMessages (messages) {
     messages.forEach((item) => {
-      Notify.create({
-        type: 'negative',
-        color: 'negative',
-        timeout: 5000,
-        position: 'top',
-        message: item,
-        icon: 'report_problem'
-      })
+      if ($notify) {
+        $notify({
+          type: 'negative',
+          color: 'negative',
+          message: item,
+          icon: 'report_problem'
+        })
+      } else {
+        Notify.create({
+          type: 'negative',
+          color: 'negative',
+          timeout: 5000,
+          position: 'top',
+          message: item,
+          icon: 'report_problem'
+        })
+      }
     })
   }
 
@@ -56,7 +74,8 @@ const AxiosError = (function () {
   }
 
   return {
-    handle
+    handle,
+    setNotifyInstance
   }
 }())
 
@@ -84,6 +103,7 @@ export default boot(({ app, store, router }) => {
   // ^ ^ ^ this will allow you to use this.$api (for Vue Options API form)
   //       so you can easily perform requests against your app's API
 
+  AxiosError.setNotifyInstance(app.config.globalProperties.$q)
   axios.interceptors.response.use(undefined, function (error) {
     AxiosError.handle(error, router)
     return Promise.reject(error)
