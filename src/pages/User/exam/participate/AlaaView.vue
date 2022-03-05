@@ -153,7 +153,7 @@
 <script>
 import Choice from 'src/components/OnlineQuiz/Quiz/Choice'
 import Timer from 'src/components/OnlineQuiz/Quiz/timer/timer'
-import { mixinAuth, mixinQuiz, mixinUserActionOnQuestion, mixinDrawer, mixinWindowSize } from 'src/mixin/Mixins'
+import { mixinAuth, mixinQuiz, mixinUserActionOnQuestion, mixinDrawer } from 'src/mixin/Mixins'
 import Assistant from 'src/plugins/assistant'
 import VueKatex from 'components/VueKatex'
 
@@ -164,7 +164,7 @@ export default {
     VueKatex,
     Timer
   },
-  mixins: [mixinAuth, mixinQuiz, mixinUserActionOnQuestion, mixinDrawer, mixinWindowSize],
+  mixins: [mixinAuth, mixinQuiz, mixinUserActionOnQuestion, mixinDrawer],
   data () {
     return {
       isRtl: false
@@ -178,6 +178,11 @@ export default {
   },
   unmounted () {
     this.changeAppBarAndDrawer(false)
+  },
+  computed: {
+    windowSize () {
+      return this.$store.getters['AppLayout/windowSize']
+    }
   },
   methods: {
     startExamProcess () {
@@ -207,14 +212,14 @@ export default {
       })
     },
     changeAppBarAndDrawer (state) {
-      this.$store.commit('AppLayout/updateAppBarAndDrawer', state)
+      this.$store.dispatch('AppLayout/updateAppBarAndDrawer', state)
     },
     showAppBar () {
-      this.$store.commit('AppLayout/updateAppBar', true)
+      this.$store.commit('AppLayout/updateLayoutHeaderVisible', true)
     },
     updateDrawerBasedOnWindowSize () {
       if (this.windowSize.x > 1263) {
-        this.$store.commit('AppLayout/updateDrawer', true)
+        this.$store.commit('AppLayout/updateLayoutLeftDrawerVisible', true)
       }
     }
   }

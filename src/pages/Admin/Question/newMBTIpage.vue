@@ -554,12 +554,12 @@ export default {
       this.imgSrc = src
       this.questionColsNumber = 7
       this.uploadImgColsNumber.show = true
-      this.$store.commit('AppLayout/updateDrawer', false)
+      this.$store.commit('AppLayout/updateLayoutLeftDrawerVisible', false)
     },
 
     makeShowImgPanelInvisible () {
       this.uploadImgColsNumber.show = false
-      this.$store.commit('AppLayout/updateDrawer', true)
+      this.$store.commit('AppLayout/updateLayoutLeftDrawerVisible', true)
       if (this.currentQuestion.logs.list.length > 0) {
         this.questionColsNumber = 9
       } else {
