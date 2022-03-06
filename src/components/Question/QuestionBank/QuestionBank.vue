@@ -312,7 +312,7 @@
 <script>
 import QuestionCard from 'src/components/Question/QuestionBank/QuestionCard'
 import API_ADDRESS from 'src/api/Addresses'
-import $ from 'jquery'
+import axios from 'axios'
 
 export default {
   name: 'QuestionBank',
@@ -359,24 +359,42 @@ export default {
     getData () {
       const that = this
       that.loading = true
-      $.ajax({
-        type: 'GET',
-        url: 'https://cdn.alaatv.com/upload/knowledgeTree.json',
-        accept: 'application/json; charset=utf-8',
-        dataType: 'json',
-        success (response) {
-          that.initialData = response
+      axios.get('https://cdn.alaatv.com/upload/knowledgeTree.json', {
+        transformRequest: (data, headers) => {
+          delete headers.common.Authorization
+          return data
+        }
+      })
+        .then(response => {
+          that.initialData = response.data
           that.loading = false
-        },
-        error () {
+        })
+        .catch(() => {
           that.loading = false
           this.$q.notify({
             message: 'فیلتر مورد نظر شما یافت نشد!',
             position: top,
             type: 'negative'
           })
-        }
-      })
+        })
+      // $.ajax({
+      //   type: 'GET',
+      //   url: 'https://cdn.alaatv.com/upload/knowledgeTree.json',
+      //   accept: 'application/json; charset=utf-8',
+      //   dataType: 'json',
+      //   success (response) {
+      //     that.initialData = response
+      //     that.loading = false
+      //   },
+      //   error () {
+      //     that.loading = false
+      //     this.$q.notify({
+      //       message: 'فیلتر مورد نظر شما یافت نشد!',
+      //       position: top,
+      //       type: 'negative'
+      //     })
+      //   }
+      // })
       // this.$axios.get('/cdn/upload/knowledgeTree.json', {
       //   headers: {
       //     accept: 'application/json; charset=utf-8',
