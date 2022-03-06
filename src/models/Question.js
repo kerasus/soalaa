@@ -164,35 +164,35 @@ class Question extends Model {
       // this.rendered_descriptive_answer = convert(this.descriptive_answer)
       // this.rendered_statement = md.render(this.statement)
     }
-    if (this.choices.list.length === 0) {
-      const choices = [
-        {
-          id: 1,
-          title: '',
-          order: 1,
-          answer: false
-        },
-        {
-          id: 2,
-          title: '',
-          order: 2,
-          answer: false
-        },
-        {
-          id: 3,
-          title: '',
-          order: 3,
-          answer: false
-        },
-        {
-          id: 4,
-          title: '',
-          order: 4,
-          answer: false
-        }
-      ]
-      this.choices = new ChoiceList(choices)
-    }
+    // if (this.choices.list.length === 0) {
+    //   const choices = [
+    //     {
+    //       id: 1,
+    //       title: '',
+    //       order: 1,
+    //       answer: false
+    //     },
+    //     {
+    //       id: 2,
+    //       title: '',
+    //       order: 2,
+    //       answer: false
+    //     },
+    //     {
+    //       id: 3,
+    //       title: '',
+    //       order: 3,
+    //       answer: false
+    //     },
+    //     {
+    //       id: 4,
+    //       title: '',
+    //       order: 4,
+    //       answer: false
+    //     }
+    //   ]
+    //   this.choices = new ChoiceList(choices)
+    // }
   }
 
   convertToMarkdownKatex1 (string) {

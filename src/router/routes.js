@@ -80,11 +80,22 @@ const routes = [
               },
               {
                 path: 'create',
-                name: 'Admin.Question.Create',
-                component: () => (import('pages/Admin/Question/CreateNewQuestion')),
+                component: () => import('layouts/AdminLayout.vue'),
                 meta: {
                   middlewares: [auth]
-                }
+                },
+                children: [
+                  {
+                    path: 'text',
+                    name: 'Admin.Question.Create.Text',
+                    component: () => (import('pages/Admin/Question/CreateText'))
+                  },
+                  {
+                    path: 'image',
+                    name: 'Admin.Question.Create.Image',
+                    component: () => (import('pages/Admin/Question/CreateImage'))
+                  }
+                ]
               },
               {
                 path: 'mbti/create',

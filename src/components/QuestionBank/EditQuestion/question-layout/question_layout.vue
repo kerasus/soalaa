@@ -19,9 +19,18 @@
         @questionData="getData"
       />
     </div>
+    <q-btn
+      v-if="question.choices.list.length > 0 && status"
+      dark
+      class="full-width q-mb-md"
+      label="حذف تمام گزینه ها"
+      color="pink"
+      @click="removeAllChoice"
+    />
+    <br>
     <div
       v-for="(item, index) in question.choices.list"
-      :key="index"
+      :key="item.order"
       class="row question-layout-options"
       :class="status ? 'q-mb-md   question-options bg-white': '  question-options'"
     >
@@ -64,8 +73,8 @@
       <div class="col-lg-10 answer-editor test">
         <div class="test2">
           <question_field
-            :ref="'choice' + (index + 1)"
-            :key="'choices' + (index + 1) + domKey"
+            :ref="'choice' + (item.order)"
+            :key="'choices' + (item.order) + domKey"
             v-model="item.title"
             :edit-status="status"
             :question-id="question.id ? question.id : 'null'"
@@ -73,7 +82,24 @@
           />
         </div>
       </div>
+      <q-btn
+        v-if="status"
+        class="btn-delete-choice"
+        dense
+        color="pink"
+        icon="mdi-close"
+        @click="removeChoice(item.order)"
+      />
     </div>
+
+    <q-btn
+      v-if="status"
+      class="full-width q-mb-md q-mt-md"
+      label="افزودن گزینه جدید"
+      dark
+      color="green"
+      @click="addChoice"
+    />
     <!-- ------------------------- answer -------------------------------  -->
     <div class="question-answer">
       <div style="margin-bottom: 25px;">
@@ -84,6 +110,7 @@
           ref="descriptive"
           :key="'descriptive_answer' + domKey"
           v-model="question.descriptive_answer"
+          @value="console.log('ttttttttttttttttt', event)"
           :question-id="question.id ? question.id : 'null'"
           :edit-status="status"
           placeholder="پاسخ تشریحی"
@@ -147,14 +174,26 @@ export default {
     console.log('MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMmm', this.cq)
   },
   methods: {
+    removeChoice (order) {
+      const index = this.question.choices.list.findIndex(item => item.order === order)
+      this.question.choices.list.splice(index, 1)
+      this.updateQuestion()
+    },
+    addChoice () {
+      this.question.choices.addEmptyChoice()
+      this.updateQuestion()
+    },
+    removeAllChoice () {
+      this.question.choices.list = []
+      this.updateQuestion()
+    },
     getContent () {
-      console.log('getContent in lay out')
       this.$refs.questionStatement.getContent()
       this.$refs.descriptive.getContent()
-      this.$refs.choice1.getContent()
-      this.$refs.choice2.getContent()
-      this.$refs.choice3.getContent()
-      this.$refs.choice4.getContent()
+      this.$refs.choice1[0].getContent()
+      this.$refs.choice2[0].getContent()
+      this.$refs.choice3[0].getContent()
+      this.$refs.choice4[0].getContent()
       this.updateQuestion()
     },
     getData (val) {
@@ -177,6 +216,19 @@ export default {
 </script>
 
 <style scoped lang="scss">
+.btn-delete-choice {
+  position: absolute;
+  right: -10px;
+  top: -10px;
+}
+
+.question-layout-options {
+  position: relative;
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
 .test{
   //border:1px solid red;
 }
