@@ -96,7 +96,7 @@
     </v-row>
 
     <v-btn
-        v-if="status"
+        v-if="status && canShowChoices"
         dark
         block
         color="success"
@@ -132,6 +132,11 @@ export default {
   name: 'QuestionLayout',
   components: {
     question_field,
+  },
+  computed: {
+    canShowChoices () {
+      return this.question.type.value === 'konkur' || this.question.type.value === 'psychometric' || this.question.type.value === null
+    }
   },
   props: {
     value: {
