@@ -1,18 +1,6 @@
-export function updateDrawer (state, newInfo) {
-  state.drawer = newInfo
-}
-
-export function updateAppBar (state, newInfo) {
-  state.appBar = newInfo
-}
-
-export function updateAppBarAndDrawer (state, newInfo) {
-  this.commit('AppLayout/updateAppBar', newInfo)
-  this.commit('AppLayout/updateDrawer', newInfo)
-}
-
 export function updateWindowSize (state, newInfo) {
-  state.windowSize = newInfo
+  state.windowSize.x = newInfo.width
+  state.windowSize.y = newInfo.height
 }
 
 export function updateBubbleSize (state, newInfo) {
@@ -60,4 +48,13 @@ export function showConfirmDialog (state, newInfo) {
 
 export function updateBreadcrumbs (state, data) {
   Object.assign(state.breadcrumbs, data)
+}
+export function updateBreadcrumbLoading (state, data) {
+  state.breadcrumbs.loading = data
+}
+
+export function updateAppLayout (state, data) {
+  const storage = JSON.parse(localStorage.getItem('vuex'))
+  Object.assign(storage.AppLayout, data)
+  Object.assign(state.appLayout, storage.AppLayout)
 }

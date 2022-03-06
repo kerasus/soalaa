@@ -269,7 +269,7 @@ export default {
     getUserInfo () {
       this.userData = this.user
       this.getUserData()
-      this.$store.dispatch('AppLayout/updateDrawer', false)
+      this.$store.commit('AppLayout/updateLayoutLeftDrawerVisible', false)
     },
 
     checkVerify () {

@@ -19,7 +19,9 @@ export default function () {
       left: 0,
       right: 0
     },
+    appLayout: {},
     breadcrumbs: {
+      visible: '',
       loading: false,
       path: [
         {

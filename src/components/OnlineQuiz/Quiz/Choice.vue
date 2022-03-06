@@ -2,7 +2,7 @@
   <div class="answer-box"
     @click="answerClicked"
   >
-    <div :class="{ 'answer-sheet': true, active: isSelected }">
+    <div :class="{ 'answer-sheet': true, active: isSelected , 'bg-deep-purple-1': isSelected }">
       <div class="answer-text renderedPanel"
       >
         <vue-katex
@@ -54,10 +54,10 @@ export default {
         font-size: 40px;
     }
     .answer-sheet.active .theme--light.q-input--selection-controls.q-input--is-disabled:not(.q-input--indeterminate) .q-icon {
-        color: #fbc10c !important;
+        color: #d1c4e9 !important;
     }
     .answer-sheet.active {
-        box-shadow: 0 3px 5px -1px rgba(255, 191, 7, 0.10), 0 5px 8px 0 rgba(255, 191, 7, 0.06), 0 1px 14px 0 rgba(255, 191, 7, 0.02) !important;
+        box-shadow: 0 3px 5px -1px rgba(150, 144, 228, 0.3), 0 5px 8px 0 rgba(150, 144, 228, 0.06), 0 1px 14px 0 rgba(150, 144, 228, 0.02) !important;
     }
 
     .answer-sheet p {
@@ -99,7 +99,7 @@ export default {
       max-width: 100%;
     }
     .answer-sheet.active {
-        background: #fffaee;
+        /*background: #fffaee;*/
     }
 
     .answer-text {
