@@ -4,13 +4,11 @@
       v-if="editStatus"
       class="col-12"
     >
-<!--      <vue-tiptap-katex-->
-<!--        ref="tiptap"-->
-<!--        :loading="loading"-->
-<!--        :access-token="$store.getters['Auth/accessToken']"-->
-<!--        :upload-utl="imageUrl"-->
-<!--        :options="{ bubbleMenu: false, floatingMenu: false, poem: true, reading: true, persianKeyboard: true }"-->
-<!--      />-->
+      <vue-tiptap-katex
+        ref="tiptap"
+        :loading="loading"
+        :options="{ bubbleMenu: false, floatingMenu: false, poem: true, reading: true, persianKeyboard: true }"
+      />
     </div>
     <div v-else>
       <vue-katex :input="html" />
@@ -22,7 +20,7 @@
 <script>
 
 import API_ADDRESS from 'src/api/Addresses'
-// import VueTiptapKatex from 'vue3-tiptap-katex'
+import VueTiptapKatex from 'vue3-tiptap-katex'
 import VueKatex from 'components/VueKatex'
 
 // replacement
@@ -32,7 +30,7 @@ import { ref } from 'vue'
 export default {
   name: 'QuestionField',
   components: {
-    // VueTiptapKatex,
+    VueTiptapKatex,
     VueKatex
   },
   props: {
@@ -81,15 +79,13 @@ export default {
   },
   mounted () {
     if (this.$refs.tiptap) {
-      // ToDo : vue-tiptap-katex in incompatible with vue 3 (right now)
-      // this.$refs.tiptap.setContent(this.html)
-      console.log('this.$refs.tiptap.setContent(this.html)')
+      this.$refs.tiptap.setContent(this.html)
     }
   },
   methods: {
     getContent () {
-      console.log('this.editorValue :', this.value)
-      this.$emit('questionData', this.value)
+      console.log('value', this.$refs.tiptap.getContent())
+      this.$emit('update:modelValue', this.$refs.tiptap.getContent())
     },
     getHtmlValueFromValueProp () {
       let html = this.value
