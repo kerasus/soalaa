@@ -10,6 +10,9 @@ RUN npm ci
 # Copy rest of the files
 COPY . .
 
+# eslint
+RUN npm run lint
+
 # Build the project
 RUN npm run build
 

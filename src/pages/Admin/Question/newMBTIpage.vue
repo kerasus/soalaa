@@ -256,12 +256,12 @@ export default {
             color: 'green',
             icon: 'thumb_up'
           })
-          this.$router.push({ name: 'question.show', params: { question_id: this.$route.params.question_id } })
+          this.$router.push({ name: 'Admin.Question.Show', params: { question_id: this.$route.params.question_id } })
         })
     },
 
     navBarAction_cancel () {
-      this.$router.push({ name: 'question.show', params: { question_id: this.$route.params.question_id } })
+      this.$router.push({ name: 'Admin.Question.Show', params: { question_id: this.$route.params.question_id } })
     },
 
     navBarAction_edit () {
@@ -299,7 +299,7 @@ export default {
       axios.post(API_ADDRESS.question.create, formData)
         .then((response) => {
           const questionId = response.data.data.id
-          this.$router.push({ name: 'question.show', params: { question_id: questionId } })
+          this.$router.push({ name: 'Admin.Question.Show', params: { question_id: questionId } })
           this.$store.dispatch('loading/overlayLoading', { loading: false, message: '' })
         }).catch(() => {
           this.$store.dispatch('loading/overlayLoading', { loading: false, message: '' })
@@ -554,12 +554,12 @@ export default {
       this.imgSrc = src
       this.questionColsNumber = 7
       this.uploadImgColsNumber.show = true
-      this.$store.commit('AppLayout/updateDrawer', false)
+      this.$store.commit('AppLayout/updateLayoutLeftDrawerVisible', false)
     },
 
     makeShowImgPanelInvisible () {
       this.uploadImgColsNumber.show = false
-      this.$store.commit('AppLayout/updateDrawer', true)
+      this.$store.commit('AppLayout/updateLayoutLeftDrawerVisible', true)
       if (this.currentQuestion.logs.list.length > 0) {
         this.questionColsNumber = 9
       } else {

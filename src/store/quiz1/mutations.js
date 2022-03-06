@@ -227,7 +227,9 @@ export function leaveQuestion (state, questionId) {
     return item.end
   })
 }
-
+export function cleanCurrentQuestion (state) {
+  state.currentQuestion = new Question()
+}
 export function updateCurrentQuestion (state, newInfo) {
   const oldQuestionId = (!state.currentQuestion) ? false : Assistant.getId(state.currentQuestion.id)
   const newQuestionId = Assistant.getId(newInfo.newQuestionId)

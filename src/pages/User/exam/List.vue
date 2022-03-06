@@ -134,6 +134,27 @@
                       >
                         مشاهده نتایج
                       </q-btn>
+                      <template v-if="item.booklet_url">
+                        <q-btn
+                          v-for="(booklet, bookletIndex) in item.booklet_url.filter( bookletItem => !!bookletItem.questions_booklet_url)"
+                          :key="'questions_booklet_url-'+bookletIndex"
+                          style="color: #ffc107"
+                          flat
+                          @click="downloadBooklet(booklet.questions_booklet_url)"
+                        >
+                          {{ booklet.category_title }}
+                        </q-btn>
+                        <q-btn
+                          v-for="(booklet, bookletIndex) in item.booklet_url.filter( bookletItem => !!bookletItem.descriptive_answers_booklet_url)"
+                          :key="'descriptive_answers_booklet_url-'+bookletIndex"
+                          style="color: #00b5e6"
+                          flat
+                          @click="downloadBooklet(booklet.descriptive_answers_booklet_url)"
+                        >
+                          پاسخ
+                          {{ booklet.category_title }}
+                        </q-btn>
+                      </template>
                       <q-btn
                         v-if="!!item.holding_status"
                         style="color: #ffc107"
@@ -157,6 +178,7 @@
 <script>
 import { Exam, ExamList } from 'src/models/Exam'
 import { mixinAuth, mixinQuiz } from 'src/mixin/Mixins'
+import API_ADDRESS from 'src/api/Addresses'
 // import ProgressLinear from 'src/components/ProgressLinear'
 // import VueConfirmDialog from 'vue-confirm-dialog'
 // import { createApp } from 'vue'
@@ -188,7 +210,8 @@ export default {
     }
   },
   mounted () {
-    this.$store.commit('AppLayout/updateAppBarAndDrawer', true)
+    this.$store.dispatch('AppLayout/updateAppBarAndDrawer', true)
+    this.disconnectSocket()
   },
   methods: {
     goToResult (exam) {
@@ -231,10 +254,13 @@ export default {
     getExams () {
       const that = this
       this.loadingList = true
-      this.user.getUserExams()
-        .then((exams) => {
-          that.exams = exams
-          that.loadingList = false
+      // this.user.getUserExams()
+      this.$axios.get(API_ADDRESS.exam.userExamsList)
+        .then((response) => {
+          this.user.exams = new ExamList(response.data.data.exams)
+          this.user.exams.loading = false
+          this.exams = new ExamList(response.data.data.exams)
+          this.loadingList = false
         })
         .catch(() => {
           that.loadingList = false
@@ -284,6 +310,9 @@ export default {
           })
           this.getExams()
         })
+    },
+    downloadBooklet (bookletUrl) {
+      window.open(bookletUrl, '_blank').focus()
     }
   }
 }

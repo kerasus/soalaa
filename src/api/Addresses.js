@@ -1,8 +1,5 @@
-const lumenServer = '/3a/api/v1'
-// const lumenServer = process.env.VUE_APP_LUMEN_INTERNAL_API_SERVER
-// // const lumenRabbitMQ = process.env.VUE_APP_LUMEN_RABBIT_MQ_API_SERVER
-const authServer = '/alaa/api/v2'
-// const authServer = process.env.VUE_APP_AUTH_INTERNAL_API_SERVER
+const lumenServer = process.env.AAA_API_SERVER
+const authServer = process.env.AUTH_API_SERVER
 const API_ADDRESS = {
   // socket: process.env.VUE_APP_SOCKET_TARGET_API_SERVER,
   socket: 'https://office.alaatv.com:501',
@@ -38,7 +35,9 @@ const API_ADDRESS = {
     }
   },
   exam: {
+    showExam: (examId) => lumenServer + '/exam/' + examId,
     editExam: lumenServer + '/exam',
+    copyCoefficient: lumenServer + '/exam-question/zirgorooh/copy',
     sendAnswers: lumenServer + '/temp-exam/answer/choice',
     sendStatus: lumenServer + '/temp-exam/answer/status',
     sendBookmark: lumenServer + '/temp-exam/answer/bookmark',

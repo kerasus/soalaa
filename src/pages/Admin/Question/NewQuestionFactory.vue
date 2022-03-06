@@ -130,14 +130,14 @@
               <q-btn
                 color="grey-8"
                 flat
-                :to="{ name:'question.show', params: { question_id: item.id }}"
+                :to="{ name:'Admin.Question.Show', params: { question_id: item.id }}"
                 icon="mdi-eye-outline"
                 class="btn-style"
               />
               <q-btn
                 color="grey-8"
                 flat
-                :to="{ name:'question.edit', params: { question_id: item.id }}"
+                :to="{ name:'Admin.Question.Edit', params: { question_id: item.id }}"
                 icon="mdi-pencil-outline"
                 class="btn-style"
               />

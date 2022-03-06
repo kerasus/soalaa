@@ -1,5 +1,5 @@
 <template>
-  <div class="bg-secondary side-menu-main-layout">
+  <div class="bg-primary side-menu-main-layout">
     <div class="side-logo">
       <div class="logo-image">
         <q-img
@@ -34,12 +34,12 @@
               <q-item
                 clickable
                 v-ripple:deep-purple
-                active="false"
+                :active="false"
                 active-class="active-route"
               >
                 <q-item-section class="item-list-expansion">
                   <span class="item-list-expansion-title">
-                    {{examPlan.name}}
+                    {{ examPlan.name }}
                   </span>
                 </q-item-section>
               </q-item>
@@ -72,10 +72,9 @@
               <q-item
                 v-for="(subItem , i) in item.children"
                 :key="i"
-                :to="subItem.to"
+                :to="{ name: subItem.routeName }"
                 class="list-child-item"
                 exact-active-class="active-route"
-                @click="clickedChildItem(item.title, subItem.displayName)"
               >
                 <q-item-section
                   class="list-child-section"
@@ -89,12 +88,11 @@
         </q-expansion-item>
         <q-item
           v-else
-          :to="item.path"
+          :to="(item.routeName) ? {name: item.routeName} : null"
           class="item-list"
           :class="{ 'alone-item': !item.children.length}"
           v-model="clickedItem"
           exact-active-class="active-route"
-          @click="selectedItem(item)"
         >
           <div class="section-title">
             <q-item-section class="list-section title-icon" avatar>
@@ -127,79 +125,70 @@ export default {
         {
           title: 'داشبورد',
           icon: 'isax:home',
-          path: '/',
-          name: 'dashboard',
+          routeName: 'dashboard',
           active: false,
           children: []
         },
         {
           title: 'سوال',
           icon: 'isax:bank',
-          path: '',
-          name: '',
+          routeName: null,
           active: false,
           children: [
-            { displayName: 'ثبت سوال', to: '/question/create', name: 'user.exam', active: false },
-            { displayName: 'کارخانه سوال', to: '/question/list', name: 'question.list', active: false },
-            { displayName: 'بانک سوال', to: '/questions', name: 'question-bank', active: false }
+            { displayName: 'ثبت سوال', routeName: 'Admin.Question.Create', active: false },
+            { displayName: 'کارخانه سوال', routeName: 'Admin.Question.Factory', active: false },
+            { displayName: 'بانک سوال', routeName: 'Admin.Question.Bank', active: false }
           ]
         },
         {
           title: 'آزمون',
           icon: 'isax:task-square',
-          path: '',
-          name: '',
+          routeName: null,
           active: false,
           children: [
-            { displayName: 'ساخت آزمون', to: '/exam/create', name: 'Admin.Exam.Creat', active: false },
-            { displayName: 'لیست آزمون ها', to: '/exam', name: 'Admin.Exam.Index', active: false }
+            { displayName: 'ساخت آزمون', routeName: 'Admin.Exam.Create', active: false },
+            { displayName: 'لیست آزمون ها', routeName: 'Admin.Exam.Index', active: false }
           ]
         },
         {
           title: 'درخت دانش',
           icon: 'isax:tree',
-          path: '/knowledgeTree',
-          name: 'knowledgeTree',
+          routeName: 'Admin.KnowledgeTree.tree',
           active: false,
           children: []
         },
         {
           title: 'لیست دروس',
           icon: 'isax:book',
-          path: '/subCategory',
-          name: 'Admin.subCategory.Index',
+          routeName: 'Admin.subCategory.Index',
           active: false,
           children: []
         },
         {
           title: 'لیست دفترچه ها',
           icon: 'isax:book',
-          path: '/category',
-          name: 'Admin.Category.Index',
+          routeName: 'Admin.Category.Index',
           active: false,
           children: []
         },
         {
           title: 'گزارشات',
           icon: 'isax:graph',
-          path: '',
-          name: '',
+          routeName: null,
           active: false,
           children: []
         },
         {
           title: 'تنظیمات',
           icon: 'isax:setting-2',
-          path: '/settings',
-          name: 'Admin.Settings',
+          routeName: 'Admin.Settings',
           active: false,
           children: []
         },
         {
           title: 'سوالات متداول',
           icon: 'isax:message-question',
-          path: '/faq',
-          name: 'faq',
+          routeName: 'faq',
           active: false,
           children: []
         }
@@ -253,26 +242,7 @@ export default {
       ]
     }
   },
-  created () {
-    this.titlesList.forEach(title => {
-      if (this.$route.name === title.name) {
-        this.selectedItem(title)
-      } else if (title.children.length) {
-        title.children.forEach(child => {
-          if (this.$route.name === child.name) {
-            this.clickedChildItem(title.title, child.displayName)
-          }
-        })
-      }
-    })
-  },
   methods: {
-    selectedItem (item) {
-      this.$store.commit('AppLayout/updateHeaderTitleName', item.title)
-    },
-    clickedChildItem (item, child) {
-      this.$store.commit('AppLayout/updateHeaderTitlePath', [item, child])
-    },
     logOut () {
       return this.$store.dispatch('Auth/logOut')
     }
@@ -424,15 +394,18 @@ export default {
           }
         }
       }
-      .side-expansion-list{
-        &.top-expansion{
+
+      .side-expansion-list {
+        &.top-expansion {
           margin-bottom: 10px;
         }
-        .expansion-body{
+
+        .expansion-body {
           display: flex;
           margin-left: 8px;
         }
-        .q-expansion-item__content{
+
+        .q-expansion-item__content {
           .vertical-separator {
             margin: 6px 9px 9px 9px;
             @media screen and (max-width: 349px) {
@@ -442,25 +415,29 @@ export default {
         }
 
         .q-list {
-        &.list-expansion {
-          margin-bottom: 0;
-          .item-list-expansion {
-            height: 30px;
-            margin: 5px;
-            .item-list-expansion-title {
-              justify-content: start;
+          &.list-expansion {
+            margin-bottom: 0;
+
+            .item-list-expansion {
+              height: 30px;
+              margin: 5px;
+
+              .item-list-expansion-title {
+                justify-content: start;
+              }
             }
-          }
-          .top-expansion-separator{
-            margin: 0 40px 5px 40px;
-            @media screen and (max-width: 1439px) {
-              margin: 0 30px 5px 30px;
+
+            .top-expansion-separator {
+              margin: 0 40px 5px 40px;
+              @media screen and (max-width: 1439px) {
+                margin: 0 30px 5px 30px;
+              }
+              @media screen and (max-width: 349px) {
+                margin: 0 45px 5px 45px;
+              }
             }
-            @media screen and (max-width: 349px) {
-              margin: 0 45px 5px 45px;
-            }
-          }
-          .list-child-item {
+
+            .list-child-item {
               height: 30px;
               justify-content: right;
               margin-bottom: 8px;
@@ -488,6 +465,7 @@ export default {
           }
         }
       }
+
       .active-route {
         background-color: #8075DC;
 
@@ -531,9 +509,11 @@ export default {
     @media screen and (max-width: 349px) {
       margin: 0 30px 30px 30px;
     }
-    &:hover{
-      background-color: rgba(255,255,255,0.1);
+
+    &:hover {
+      background-color: rgba(255, 255, 255, 0.1);
     }
+
     .q-avatar {
       height: 22px;
       width: 22px;
@@ -547,7 +527,7 @@ export default {
 .side-menu-main-layout {
   .q-expansion-item__container {
     .q-item {
-      display: flex ;
+      display: flex;
       padding: 0 10px !important;
 
     }

@@ -13,11 +13,10 @@
             class="infoCard content-center"
         >
           <div
-            class="row"
-            style="height: 50% ;margin: inherit;"
+            class="row main-tabs"
           >
             <div
-              class="col col-12 col-xl-3 col-sm-6 exam-title"
+              class="col col-12 col-xl-3 col-sm-6 exam-title default-result-padding"
             >
               نتیجه
               {{ quiz.title }}
@@ -25,20 +24,20 @@
             </div>
             <div
                 v-if="report"
-                class="col col-6 col-xl-1 col-sm-3"
+                class="col col-6 col-xl-1 col-sm-3 default-result-padding"
             >
               شهر:
               {{ report.location.city }}
             </div>
             <div
                 v-if="report"
-                class="col col-6 col-xl-1 col-sm-3"
+                class="col col-6 col-xl-1 col-sm-3 default-result-padding"
             >
               استان:
               {{ report.location.province }}
             </div>
             <div
-                class="col col-12 col-xl-7"
+                class="col col-12 col-xl-7 default-result-tabs-title"
                 :style="{ padding: '0 12px' }"
             >
               <q-tabs
@@ -63,7 +62,7 @@
     </div>
     <div class="row wrap justify-center">
       <div class="col">
-        <q-tab-panels v-model="tab" animated>
+        <q-tab-panels v-model="tab" animated swipeable>
           <q-tab-panel name="result">
             <PersonalResult :report="report"/>
           </q-tab-panel>
@@ -91,7 +90,7 @@
                     class="row download-row"
                 >
                   <div
-                    class="col col-md-6"
+                    class="col col-12 col-sm-6"
                   >
                     <div
                         v-if="item.descriptive_answers_url"
@@ -113,7 +112,7 @@
                     </div>
                   </div>
                   <div
-                    class="col col-md-6"
+                    class="col col-12 col-sm-6"
                   >
                     <div
                         v-if="item.questions_url"
@@ -138,132 +137,6 @@
           </q-tab-panel>
           <q-tab-panel name="videos" class="video-tab">
             <tabs-of-lessons :report="report" />
-<!--            <v-tabs-->
-<!--                v-if="report"-->
-<!--                color="#ffc107"-->
-<!--                :vertical="windowSize.x > 960"-->
-<!--                center-active-->
-<!--                show-arrows-->
-<!--                grow-->
-<!--                @change="onVideoTabChange"-->
-<!--            >-->
-<!--              <v-tabs-slider :color="windowSize.x > 960 ? 'transparent' : 'yellow'"/>-->
-<!--              <v-tab-->
-<!--                  v-for="(item, index) in report.sub_category"-->
-<!--                  :key="index"-->
-<!--              >-->
-<!--                {{ item.sub_category }}-->
-<!--              </v-tab>-->
-<!--              <q-tab-panel-->
-<!--                  v-for="(item, index) in report.sub_category"-->
-<!--                  :key="item.sub_category"-->
-<!--                  class="pt-5"-->
-<!--              >-->
-<!--                <v-alert-->
-<!--                    v-if="!currentVideo"-->
-<!--                    dense-->
-<!--                    outlined-->
-<!--                    text-->
-<!--                    type="info"-->
-<!--                >-->
-<!--                  منتشر نشده-->
-<!--                </v-alert>-->
-<!--                <v-alert-->
-<!--                    v-if="currentVideo"-->
-<!--                    class="text-center"-->
-<!--                >-->
-<!--                  {{ currentVideo.title }}-->
-<!--                </v-alert>-->
-<!--                &lt;!&ndash;                                <p v-if="!currentVideo" class="coming-soon" :style="{ 'margin-top': '50px'}">منتشر نشده</p>&ndash;&gt;-->
-<!--                &lt;!&ndash;                                <p v-if="currentVideo" class="video-title">{{ currentVideo.title }}</p>&ndash;&gt;-->
-<!--                <div-->
-<!--                  class="row"-->
-<!--                  v-if="currentVideo"-->
-<!--                >-->
-<!--                  <div-->
-<!--                    class="col"-->
-<!--                  >-->
-<!--                    <div-->
-<!--                      class="row q-gutter-none"-->
-<!--                    >-->
-<!--                      <div-->
-<!--                          class="col col-md-3 vjs-playlist"-->
-<!--                          :style="{ height: timepointsHeights+'px'}"-->
-<!--                      >-->
-<!--                        <v-card-->
-<!--                            class="mx-auto"-->
-<!--                            tile-->
-<!--                        >-->
-<!--                          <v-list-->
-<!--                              dense-->
-<!--                              shaped-->
-<!--                          >-->
-<!--                            <v-subheader>زمان کوب ها</v-subheader>-->
-<!--                            <v-list-item-group-->
-<!--                                v-model="selectedTimepoint"-->
-<!--                                color="primary"-->
-<!--                            >-->
-<!--                              <v-list-item-->
-<!--                                  v-for="(currentVideoItem, i) in currentVideo.timepoints"-->
-<!--                                  :key="i"-->
-<!--                              >-->
-<!--                                <v-list-item-content>-->
-<!--                                  <v-list-item-title-->
-<!--                                      v-text="currentVideoItem.title"-->
-<!--                                  />-->
-<!--                                </v-list-item-content>-->
-<!--                              </v-list-item>-->
-<!--                            </v-list-item-group>-->
-<!--                          </v-list>-->
-<!--                        </v-card>-->
-<!--                      </div>-->
-<!--                      <div-->
-<!--                        class="col col-md-9"-->
-<!--                      >-->
-<!--                        <video-->
-<!--                            :ref="'videoPlayer'+index"-->
-<!--                            class="video-js vjs-default-skin vjs-16-9 vjs-fluid"-->
-<!--                        />-->
-<!--                      </div>-->
-<!--                    </div>-->
-<!--                  </div>-->
-<!--                </div>-->
-<!--                <div-->
-<!--                  class="row"-->
-<!--                  v-if="currentVideo"-->
-<!--                >-->
-<!--                  <div-->
-<!--                    class="col"-->
-<!--                  >-->
-<!--                    <div-->
-<!--                        class="d-flex flex-row justify-center"-->
-<!--                        dir="ltr"-->
-<!--                    >-->
-<!--                      <v-btn-->
-<!--                          v-for="(video, alaaVideoIndex) in alaaVideos"-->
-<!--                          :key="alaaVideoIndex"-->
-<!--                          outlined-->
-<!--                          icon-->
-<!--                          :style="{ margin: '0 5px' }"-->
-<!--                          @click="getContent(video.id)"-->
-<!--                      >-->
-<!--                        {{ alaaVideoIndex + 1 }}-->
-<!--                      </v-btn>-->
-<!--                    </div>-->
-<!--                  </div>-->
-<!--                </div>-->
-
-<!--                &lt;!&ndash;                                <video v-if="currentVideo"&ndash;&gt;-->
-<!--                &lt;!&ndash;                                       :src="currentVideo.file.video[1].link"&ndash;&gt;-->
-<!--                &lt;!&ndash;                                       type="video/mp4"&ndash;&gt;-->
-<!--                &lt;!&ndash;                                       controls&ndash;&gt;-->
-<!--                &lt;!&ndash;                                       :poster="currentVideo.photo"&ndash;&gt;-->
-<!--                &lt;!&ndash;                                       :width="'60%'"&ndash;&gt;-->
-<!--                &lt;!&ndash;                                       class="video-player"&ndash;&gt;-->
-<!--                &lt;!&ndash;                                       :title="currentVideo.title"&ndash;&gt;-->
-<!--                &lt;!&ndash;                                />&ndash;&gt;-->
-<!--              </q-tab-panel>-->
-<!--            </v-tabs>-->
           </q-tab-panel>
         </q-tab-panels>
       </div>
@@ -273,31 +146,24 @@
 
 <script>
 /* eslint-disable camelcase */
-
-import videojs from 'video.js'
-import 'video.js/dist/video-js.css'
-import '@silvermine/videojs-quality-selector/dist/css/quality-selector.css'
 import Info from 'src/components/OnlineQuiz/Quiz/resultTables/info'
 import PersonalResult from 'src/components/OnlineQuiz/Quiz/resultTables/personalResult'
 import BubbleSheet from 'src/components/OnlineQuiz/Quiz/bubbleSheet/bubbleSheet'
 import Assistant from 'src/plugins/assistant'
 import { AlaaSet } from 'src/models/AlaaSet'
-import { mixinAuth, mixinQuiz, mixinWindowSize } from 'src/mixin/Mixins'
+import { mixinAuth, mixinQuiz } from 'src/mixin/Mixins'
 import { AlaaContent } from 'src/models/AlaaContent'
 import StatisticResult from 'src/components/OnlineQuiz/Quiz/resultTables/statisticResult'
 import TakhminRotbe from 'src/components/OnlineQuiz/Quiz/TakhminRotbe'
 import ExamData from 'src/assets/js/ExamData'
 import TabsOfLessons from 'components/OnlineQuiz/Quiz/videoPlayerSection/tabsOfLessons'
-// The following registers the plugin with `videojs`
-require('@silvermine/videojs-quality-selector')(videojs)
 
 export default {
   name: 'Result',
   components: { TabsOfLessons, TakhminRotbe, StatisticResult, BubbleSheet, Info, PersonalResult },
   mixins: [
     mixinAuth,
-    mixinQuiz,
-    mixinWindowSize
+    mixinQuiz
   ],
   data: () => ({
     tab: null,
@@ -307,45 +173,30 @@ export default {
     alaaSet: new AlaaSet(),
     alaaContent: new AlaaContent(),
     alaaVideos: null,
-    currentVideo: null,
     report: null,
-    player: null,
     tab2: null,
     innerTab: 'innerMails',
     splitterModel: 20
   }),
-  watch: {
-    selectedTimepoint () {
-      this.playTimePoint()
-    },
-    tab () {
-      if (!this.player) {
-        return
-      }
-      this.player.pause()
-    }
-  },
   created () {
     // console.log('report.exams_booklet', this.report.exams_booklet)
     this.getUserData()
     window.currentExamQuestions = null
     window.currentExamQuestionIndexes = null
-    this.getExamData() // moved from mounted to created after migration
   },
   mounted () {
-    // this.getExamData() ----------- was used here before migration
+    this.getExamData()
+    // setTimeout(() => { this.tab = 'result' }, 2000)
   },
   methods: {
     getExamData () {
-      // TODO : refactor NEEDED , used in created which probably not the best place to use
+      // ToDo : loading: false not working
+      // this.$store.dispatch('loading/overlayLoading', { loading: true, message: '' })
+      // this.$store.dispatch('loading/overlayLoading', { loading: false, message: '' })
       const that = this
       const user_exam_id = this.$route.params.user_exam_id
       const exam_id = this.$route.params.exam_id
-
-      this.$store.dispatch('loading/overlayLoading', { loading: true, message: '' })
-
       const examData = new ExamData()
-      console.log('examData---------', examData)
       examData.getUserExamWithCorrectAnswers(user_exam_id, exam_id)
         .loadQuestionsFromFile()
         .getUserExamData(user_exam_id)
@@ -355,70 +206,26 @@ export default {
           // save questions in localStorage
           that.saveCurrentExamQuestions(examData.exam.questions.list)
           // save exam info in vuex store (remove questions of exam then save in store)
-          that.$store.commit('updateQuiz', examData.exam)
-          that.$store.commit('mergeDbAnswersIntoLocalstorage', {
+          that.$store.commit('quiz/updateQuiz', examData.exam)
+          that.$store.commit('quiz/mergeDbAnswersIntoLocalstorage', {
             dbAnswers: examData.userExamData,
             exam_id: examData.exam.id
           })
           that.report = examData.studentReport
           that.loadKarname(examData.studentReport)
-          that.$store.dispatch('loading/overlayLoading', { loading: false, message: '' })
+          this.tab = 'result'
+          // that.$store.dispatch('loading/overlayLoading', { loading: false, message: '' })
         })
         .catch((error) => {
           that.$store.dispatch('loading/overlayLoading', { loading: false, message: '' })
           that.goToExamList()
           console.log(error)
-
-          that.$notify({
-            group: 'notifs',
-            title: 'توجه!',
-            text: 'مشکلی در دریافت اطلاعات کارنامه رخ داده است.',
-            type: 'error'
+          this.$q.notify({
+            type: 'negative',
+            message: 'مشکلی در دریافت اطلاعات کارنامه رخ داده است.',
+            position: 'top'
           })
         })
-    },
-    initVideoJs (srcs, sub_categoryIndex) {
-      if (!this.$refs['videoPlayer' + sub_categoryIndex]) {
-        return
-      }
-      const that = this
-      this.player = videojs(that.$refs['videoPlayer' + sub_categoryIndex][0], {
-        language: 'fa',
-        controls: true
-      },
-      function onPlayerReady () {
-        console.log('onPlayerReady', this)
-      })
-      this.player.controlBar.addChild('QualitySelector')
-      this.updateTimepointsHeights(sub_categoryIndex)
-      this.updateVideoSrc(srcs)
-    },
-    updateVideoSrc (srcs) {
-      const updatedSrcs = this.getVideoSrcs(srcs)
-      this.player.pause()
-      this.player.src(updatedSrcs)
-      this.player.load()
-    },
-    updateTimepointsHeights (sub_categoryIndex) {
-      this.timepointsHeights = this.$refs['videoPlayer' + sub_categoryIndex][0].clientHeight
-    },
-    playTimePoint () {
-      this.player.pause()
-      this.player.currentTime(this.currentVideo.timepoints[this.selectedTimepoint].time)
-      this.player.play()
-    },
-    getVideoSrcs (srcs) {
-      const updatedSrcs = []
-      srcs.forEach(video => {
-        updatedSrcs.push({
-          src: video.link,
-          type: 'video/' + video.ext,
-          res: video.res,
-          default: (video.res === '240p'),
-          label: video.caption
-        })
-      })
-      return updatedSrcs
     },
     goToExamList () {
       if (this.$route.name !== 'user.exam.list') {
@@ -429,7 +236,6 @@ export default {
       this.loadSubCategory(report)
       this.loadZirGrooh(report.zirgorooh)
       this.loadBest(report.best)
-      this.loadFirstVideoTab()
       report.main.taraaz = parseFloat(report.main.taraaz).toFixed(0)
     },
     loadBest (best) {
@@ -468,7 +274,6 @@ export default {
       const that = this
       this.alaaContent.show(contentId)
         .then((response) => {
-          console.log(response.data.data)
           that.currentVideo = response.data.data
           that.initVideoJs(that.currentVideo.file.video, sub_categoryIndex)
         })
@@ -490,33 +295,6 @@ export default {
         .catch(() => {
           that.alaaSet.loading = false
         })
-    },
-    loadFirstVideoTab () {
-      this.onVideoTabChange(0)
-    },
-    onVideoTabChange (tabIndex) {
-      if (this.player) {
-        this.player.pause()
-      }
-      if (this.report && this.report.sub_category[tabIndex].video_url[0]) {
-        const parsed = this.report.sub_category[tabIndex].video_url[0].split('/')
-        let contentId = parsed[parsed.length - 1]
-        if (contentId === '') {
-          contentId = parsed[parsed.length - 2]
-        }
-        this.alaaVideos = []
-        this.report.sub_category[tabIndex].video_url.forEach(item => {
-          const parsedd = item.split('/')
-          let contentIdd = parsedd[parsedd.length - 1]
-          if (contentIdd === '') {
-            contentIdd = parsedd[parsedd.length - 2]
-          }
-          this.alaaVideos.push({ id: contentIdd })
-        })
-        this.getContent(contentId, tabIndex)
-      } else {
-        this.currentVideo = null
-      }
     }
   }
 }
@@ -533,7 +311,17 @@ export default {
     padding: 12px 0px;
   }
   .result-tabs{
-    width: 50%;
+    //width: 50%;
+  }
+  .main-tabs {
+    font-size: 16px;
+  }
+  .default-result-padding {
+    padding: 12px;
+  }
+  .default-result-tabs-title {
+    max-width: 700px;
+    color: rgba(0, 0, 0, 0.54);
   }
   .download-box {
     .download-title {
@@ -552,17 +340,6 @@ export default {
       }
     }
   }
-}
-.vjs-menu-button-popup .vjs-menu {
-  left: auto;
-  right: 0;
-}
-
-.vjs-player {
-}
-
-.vjs-playlist {
-  overflow: auto;
 }
 
 @media only screen and (min-width: 960px) {
@@ -597,13 +374,22 @@ export default {
     padding-right: 0;
   }
 }
+@media only screen and (max-width: 670px) {
+  .exam-results .main-tabs {
+    .q-tabs--horizontal {
+      padding-left: 30px;
+      padding-right: 30px;
+    }
+  }
+}
 
 .text-center {
   direction: ltr;
 }
 
 .tab-title {
-  margin: 16px;
+  margin: 25px;
+  font-size: 16px;
 }
 
 .download-box {
@@ -645,5 +431,9 @@ export default {
 
 .video-title {
   margin-top: 20px;
+}
+/*TODO : TEMP */
+.q-tab-panel {
+  padding: 0;
 }
 </style>

@@ -1,26 +1,25 @@
 <template>
-  <div>
-    <div class="d-flex justify-center">
-      <v-col>
-        <v-row class=" d-flex justify-center">
-          <v-data-table
-            hide-default-footer
-            :headers="headers"
-            :header-props="{sortByText: 'ترتیب'}"
-            :items="dataTable"
-            :items-per-page="15"
-            class="elevation-1 dataTable"
-          />
-        </v-row>
-        <v-row>
-          <v-col>
+  <div class="statistic-result">
+      <div class="row justify-center">
+        <div class="col col-12 col-md-9 default-result-table statistic-result-table d-flex justify-center">
+          <q-table
+            :rows="dataTable"
+            :columns="columns1"
+            row-key="name"
+            color="amber"
+            hide-bottom
+            flat
+            :rows-per-page-options="[0]"
+          ></q-table>
+        </div>
+        <div class="col-12 row">
+          <div class="col">
             <div :style="{ 'max-width': '100%'}">
               <highcharts :options="chartOptions" />
             </div>
-          </v-col>
-        </v-row>
-      </v-col>
-    </div>
+          </div>
+        </div>
+      </div>
   </div>
 </template>
 
@@ -34,22 +33,23 @@ export default {
   data () {
     return {
       dataTable: [],
-      headers: [
+      columns1: [
         {
-          text: 'ردیف',
+          name: 'index',
           align: 'center',
-          sortable: false,
-          value: 'index'
+          label: 'ردیف',
+          field: row => row.index,
+          sortable: true
         },
-        { text: 'درس', value: 'sub_category', align: 'center', sortable: true },
-        { text: 'درصد', value: 'percent', align: 'center', sortable: true },
-        { text: 'میانگین درصد نفرات برتر', value: 'top_ranks_percent_mean', align: 'center', sortable: true },
-        { text: ' تراز', value: 'taraaz', align: 'center', sortable: true },
-        { text: ' میانگین تراز نفرات برتر', value: 'top_ranks_taraaz_mean', align: 'center', sortable: true },
-        { text: 'رتبه در شهر', value: 'rank_city', align: 'center', sortable: false },
-        { text: 'رتبه در استان', value: 'rank_province', align: 'center', sortable: false },
-        { text: 'رتبه در کشور', value: 'rank_country', align: 'center', sortable: true },
-        { text: 'میانگین درصد', value: 'average', align: 'center', sortable: true }
+        { name: 'sub_category', label: 'درس', field: row => row.sub_category, align: 'center', sortable: true },
+        { name: 'percent', label: 'درصد', field: row => row.percent, align: 'center', sortable: true },
+        { name: 'top_ranks_percent_mean', label: 'میانگین درصد نفرات برتر', field: row => row.top_ranks_percent_mean, align: 'center', sortable: true },
+        { name: 'taraaz', label: 'تراز', field: row => row.taraaz, align: 'center', sortable: true },
+        { name: 'top_ranks_taraaz_mean', label: 'میانگین تراز نفرات برتر', field: row => row.top_ranks_taraaz_mean, align: 'center', sortable: true },
+        { name: 'rank_city', label: 'رتبه در شهر', field: row => row.rank_city, align: 'center', sortable: false },
+        { name: 'rank_province', label: 'رتبه در استان', field: row => row.rank_province, align: 'center', sortable: false },
+        { name: 'rank_country', label: 'رتبه در کشور', field: row => row.rank_country, align: 'center', sortable: true },
+        { name: 'average', label: 'میانگین درصد', field: row => row.average, align: 'center', sortable: true }
       ],
       chartOptions: {
         series: [
@@ -150,54 +150,41 @@ export default {
 }
 </script>
 
+<style lang="scss">
+.statistic-result {
+  background-color: #f1f1f1;
+  padding-top: 20px;
+
+  .default-result-table {
+    .q-table__container {
+      border-radius: 20px;
+    }
+
+    .q-table {
+      border: 1px solid #ececec;
+
+      thead tr {
+        background-color: #ffecb4;
+        border-radius: 20px;
+        color: rgba(62, 57, 43, 0.96);
+      }
+
+      tbody tr:nth-of-type(2n) {
+        background-color: rgba(0, 0, 0, 0.02);
+      }
+
+      tbody td {
+        font-size: 0.875rem;
+      }
+    }
+  }
+  .statistic-result-table {
+    margin-bottom: 20px;
+  }
+}
+</style>
 <style scoped>
-    .infoCard {
-        margin-top: 10px;
-        width: 90%;
-        border-radius: 15px;
-    }
-
-    .v-card > *:last-child:not(.v-btn):not(.v-chip) {
-        border-bottom-left-radius: 0 !important;
-        border-bottom-right-radius: 0 !important;
-
-    }
-
-    .v-card > *:first-child:not(.v-btn):not(.v-chip), .v-card > .v-card__progress + *:not(.v-btn):not(.v-chip) {
-        border-top-left-radius: 0 !important;
-        border-top-right-radius: 0 !important;
-    }
-
-    .dataTable {
-        margin-top: 20px;
-        height: 100%;
-        width: 90%;
-        border-radius: 15px
-    }
-
-    .v-data-table >>> thead {
-        background-color: rgba(255, 193, 7, 0.3) !important;
-    }
-
-    .v-data-table >>> thead th:first-child {
-        border-radius: 0 20px 0 0 !important;
-    }
-
-    .v-data-table >>> thead th:last-child {
-        border-radius: 20px 0 0 0 !important;
-    }
-
-    .v-data-table >>> tbody tr:nth-of-type(even) {
-        background-color: rgba(0, 0, 0, 0.04) !important;
-    }
-
-    .v-data-table >>> .v-data-table__wrapper > table {
-        width: 96%;
-        border-spacing: 0;
-        margin: auto;
-    }
-    .v-data-table >>> thead tr th {
-        width: 125px!important;
-        text-align: center!important;
-    }
+.q-tab-panels {
+  background: #f1f1f1;
+}
 </style>

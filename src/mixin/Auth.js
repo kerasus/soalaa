@@ -1,3 +1,5 @@
+import API_ADDRESS from 'src/api/Addresses'
+
 const mixinAuth = {
   computed: {
     user: {
@@ -12,9 +14,10 @@ const mixinAuth = {
   methods: {
     getUserData (callbasck) {
       const that = this
-      this.user.getUserData()
-        .then((user) => {
-          that.$store.commit('Auth/updateUser', user)
+      // this.user.getUserData()
+      this.$axios.get(API_ADDRESS.user.show_user)
+        .then((response) => {
+          that.$store.commit('Auth/updateUser', response.data.data)
           if (typeof callbasck === 'function') {
             callbasck()
           }

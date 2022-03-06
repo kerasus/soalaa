@@ -17,13 +17,37 @@
     class="right-side"
     :class="{'col-6': windowSize > 1023, 'col-12': windowSize < 350}"
   >
-        <span
-          v-for="(address, index) in addresses"
-          :key="index"
-          class="address-bar"
-        >
-        {{ address }}
-      </span>
+    <q-skeleton
+    v-if="!breadcrumbs.path"
+    width="100px"
+    height="30px"
+    />
+    <q-breadcrumbs
+      v-else
+      class="breadcrumbs"
+      separator-color="dark"
+      gutter="sm"
+    >
+      <template v-slot:separator>
+        <q-icon name="isax:arrow-right-3 " />
+      </template>
+      <q-breadcrumbs-el
+        v-for="(breadcrumb, index) in breadcrumbs.path"
+        :key="index"
+      >
+        <q-skeleton
+          v-if="breadcrumbLoading"
+          width="100px"
+        />
+          <q-breadcrumbs-el
+            v-else
+            :icon=breadcrumb.icon
+            :label=breadcrumb.title
+            :to="getRoute(breadcrumb.route)"
+            class="q-breadcrumbs-el"
+          />
+      </q-breadcrumbs-el>
+    </q-breadcrumbs>
   </div>
   <div
     class="left-side"
@@ -51,8 +75,7 @@
       dir="ltr"
       dense
       unelevated
-    >
-    </q-btn-dropdown>
+    />
   </div>
 </template>
 
@@ -63,52 +86,58 @@ export default {
   name: 'templateHeader',
   data () {
     return {
-      windowSize: document.documentElement.clientWidth,
-      addresses: []
+      windowSize: document.documentElement.clientWidth
     }
   },
   mounted () {
     window.addEventListener('resize', this.getDimensions)
+    this.$store.commit('AppLayout/updateBreadcrumbLoading', false)
   },
   unmounted () {
     window.removeEventListener('resize', this.getDimensions)
   },
   computed: {
     ...mapGetters('AppLayout', [
-      'headerTitleName',
-      'headerTitlePath',
-      'headerShowTitle',
+      'breadcrumbs',
+      'breadcrumbLoading',
       'layoutLeftDrawerVisible'
     ])
   },
-  watch: {
-    headerTitleName (newValue) {
-      this.addresses = []
-      this.addresses.push(newValue)
-    },
-    headerTitlePath (newValue) {
-      this.addresses = newValue
-    }
-  },
   methods: {
     ...mapMutations('AppLayout', [
-      'updateHeaderTitleName',
-      'updateHeaderTitlePath',
-      'updateHeaderShowTitle',
-      'updateHeaderTitleCentered',
+      'updateBreadcrumbs',
+      'updateBreadcrumbLoading',
       'updateLayoutLeftDrawerVisible'
     ]),
     getDimensions () {
       this.windowSize = document.documentElement.clientWidth
     },
     toggleLeftDrawer () {
-      this.layoutLeftDrawerVisible = !this.layoutLeftDrawerVisible
+      this.updateLayoutLeftDrawerVisible(true)
+    },
+    hasRoute (route) {
+      if (!route) {
+        return
+      }
+      return !!(route.name || route.path)
+    },
+    getRoute (route) {
+      if (!this.hasRoute(route)) {
+        return { name: null }
+      }
+      if (route.name) {
+        return { name: route.name }
+      } else if (route.path) {
+        return { path: route.path }
+      } else {
+        return { name: null }
+      }
     }
   }
 }
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss" scoped >
 .drawer-btn{
   display: none;
   @media screen and (max-width: 1023px){
@@ -130,28 +159,23 @@ export default {
   @media screen and (max-width: 349px){
     margin-left: 0;
   }
-  .address-bar {
-    font-size: 18px;
-    font-weight: 500;
-    color: #23263B;
-    &:nth-child(2) {
+  .breadcrumbs{
+    &:deep(> *) {
+      font-style: normal;
+      font-weight: bold;
       font-size: 16px;
-    }
-    &::after {
-      content: ">";
-      margin: 0 10px;
-    }
-
-    &:last-child {
-      &::after {
-        content: none;
+      line-height: 31px;
+      text-align: right;
+      color: #23263B;
+      div:first-child  {
+        font-size: 18px;
       }
     }
   }
 }
 .left-side {
   display: flex;
-  justify-content: end;
+  justify-content: flex-end;
   @media screen and (max-width: 1023px){
     position: absolute;
     right: 30px;
@@ -163,6 +187,12 @@ export default {
 }
 </style>
 <style lang="scss">
+.breadcrumbs{
+  .q-breadcrumbs__separator{
+    .q-icon{
+      font-size: 22px;
+    }
+  }}
 .drawer-btn{
   .q-btn{
     flex-direction: row !important;
