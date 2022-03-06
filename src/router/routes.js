@@ -1,14 +1,8 @@
 import { auth } from './middleware/middleware'
 
 const routes = [
-  // {
-  //   path: '/template',
-  //   component: () => import('components/Template/TemplateBuilder')
-  // },
-
   {
     path: '/',
-    name: 'home',
     component: () => import('layouts/MainLayout.vue'),
     breadcrumbs: { title: 'خانه', icon: 'home', route: { name: 'dashboard' } },
     children: [

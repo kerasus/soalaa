@@ -96,7 +96,7 @@
 <script>
 import 'src/assets/scss/markdownKatex.scss'
 import Item from 'src/components/OnlineQuiz/Quiz/question/questionField'
-import { mixinAuth, mixinQuiz, mixinUserActionOnQuestion, mixinWindowSize } from 'src/mixin/Mixins'
+import { mixinAuth, mixinQuiz, mixinUserActionOnQuestion } from 'src/mixin/Mixins'
 import Timer from 'src/components/OnlineQuiz/Quiz/timer/timer'
 import BubbleSheet from 'src/components/OnlineQuiz/Quiz/bubbleSheet/bubbleSheet'
 import { Exam } from 'src/models/Exam'
@@ -111,10 +111,9 @@ export default {
     BubbleSheet,
     Item
   },
-  mixins: [mixinAuth, mixinQuiz, mixinUserActionOnQuestion, mixinWindowSize],
+  mixins: [mixinAuth, mixinQuiz, mixinUserActionOnQuestion],
   data () {
     return {
-      user: null,
       quizData: new Exam(),
       item: Item,
       lastTimeScrollRange: { start: 0, end: 29 },
@@ -128,19 +127,17 @@ export default {
     }
   },
   watch: {
-    // 'windowSize.y': function () {
-    //   this.setHeights()
-    // },
-    // 'windowSize.x': function () {
-    //   this.$store.commit('AppLayout/updateDrawer', false)
-    // }
+    'windowSize.y': function () {
+      this.setHeights()
+    },
+    'windowSize.x': function () {
+      this.$store.commit('AppLayout/updateLayoutLeftDrawerVisible', false)
+    }
   },
   created () {
     this.getUser()
-    this.updateWindowSize()
     this.startExamProcess()
   },
-  // TODO => check store updateAppBarAndDrawer
   mounted () {
     this.setHeights()
     if (this.currentQuestion) {
@@ -150,25 +147,27 @@ export default {
         this.loadFirstQuestion()
       }
     }
-    // this.changeAppBarAndDrawer(false)
+    this.changeAppBarAndDrawer(false)
   },
   unmounted () {
-    // this.changeAppBarAndDrawer(true)
+    this.changeAppBarAndDrawer(true)
+  },
+  computed: {
+    windowSize () {
+      return this.$store.getters['AppLayout/windowSize']
+    }
   },
   methods: {
     getUser () {
-      this.user = this.$store.getters['Auth/user']
+      // this.user = this.$store.getters['Auth/user']
       return this.user
     },
     startExamProcess () {
       const that = this
       this.startExam(this.$route.params.quizId, 'onlineQuiz.KonkoorView')
         .then(() => {
-          if (!this.questions.length) {
-            that.$router.push({ name: 'user.exam.list' })
-          }
-          // that.loadFirstActiveQuestionIfNeed()
-          that.$store.dispatch('loading/overlayLoading', { loading: false, message: '' })
+          that.$store.commit('AppLayout/updateOverlay', { show: false, loading: false, text: '' })
+          that.questions = that.getCurrentExamQuestionsInArray()
           const callbacks = {
             'question.file-link:update': {
               afterReload () {
@@ -180,7 +179,6 @@ export default {
         })
         .catch((error) => {
           Assistant.reportErrors(error)
-          console.log('error :', error)
           that.$q.notify({
             message: 'مشکلی در دریافت اطلاعات آزمون رخ داده است. لطفا دوباره امتحان کنید.',
             type: 'negative',
@@ -247,7 +245,7 @@ export default {
       }
     },
     changeAppBarAndDrawer (state) {
-      this.$store.commit('AppLayout/updateAppBarAndDrawer', state)
+      this.$store.dispatch('AppLayout/updateAppBarAndDrawer', state)
     },
     changeCurrentQuestionIfScrollingIsDone () {
       if (this.timePassedSinceLastScroll >= 1000) {
@@ -285,11 +283,16 @@ export default {
       this.changeQuestion(firstInViewQuestion.id, 'onlineQuiz.konkoorView')
     },
     scrollTo (questionId) {
+      if (!this.$refs.scroller) {
+        return
+      }
       const questionIndex = this.getQuestionIndexById(questionId)
       this.$refs.scroller.scrollTo(questionIndex)
       for (let i = 1; i < 4; i++) {
         setTimeout(() => {
-          this.$refs.scroller.scrollTo(questionIndex)
+          if (this.$refs.scroller) {
+            this.$refs.scroller.scrollTo(questionIndex)
+          }
         },
         333 * i)
       }
@@ -312,7 +315,6 @@ export default {
       this.scrollTo(questionId)
       this.changeQuestion(questionId)
     },
-    // TODO => check store updateAppBarAndDrawer
     view () {
       if (this.windowSize.x > 959) {
         this.changeAppBarAndDrawer(false)

@@ -1,45 +1,44 @@
 <template>
-  <q-card
-    class="infoCard infoText align-content-center"
-    flat
+  <div
+    class="infoCard infoText"
   >
-    <div class="row infoHeight">
-      <div class="col infoCols">
+    <div class="infoHeight">
+      <div class="infoCols">
         نام و نام خانوادگی :
         {{ user.first_name }}
         {{ user.last_name }}
       </div>
-      <div class="col infoCols">
+      <div class="infoCols">
         رشته :
         {{ user.major.title }}
       </div>
-      <div class="col infoCols">
+      <div class="infoCols">
         مقطع :
         {{ user.grade.title }}
       </div>
       <div
         v-if="user.province"
-        class="col infoCols"
+        class="infoCols"
       >
         استان :
         {{ user.province.title }}
       </div>
       <div
         v-if="user.city"
-        class="col infoCols"
+        class=" infoCols"
       >
         شهر :
         {{ user.city.title }}
       </div>
       <div
         v-if="user.school"
-        class="col infoCols"
+        class=" infoCols"
       >
         مدرسه :
         {{ user.school }}
       </div>
     </div>
-  </q-card>
+  </div>
 </template>
 
 <script>
@@ -62,16 +61,25 @@ export default {
     .infoHeight{
         height: 50%;
         margin: inherit;
+        display: flex;
+        width: 100%;
+        flex-direction: row;
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: space-between;
+        padding-right: 12px;
+        padding-left: 12px;
     }
     .infoText{
         white-space: nowrap;
         line-height: 34px;
         margin-top: -9px;
-        text-align: right #{"/* rtl:ignore */"};
+        //text-align: right #{"/* rtl:ignore */"};
         font-family: IRANSans,sans-serif;
         font-style: normal;
         font-weight: normal;
         font-size: 16px;
         color: rgba(102,102,102,1);
+        background-color: #fff;
     }
 </style>
