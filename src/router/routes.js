@@ -166,6 +166,14 @@ const routes = [
         meta: {
           middlewares: [auth]
         }
+      },
+      {
+        path: '/onlineQuiz/konkoorView/:quizId',
+        name: 'konkoorView',
+        component: () => import('pages/User/exam/participate/konkoorView'),
+        meta: {
+          middlewares: [auth]
+        }
       }
     ]
   },
@@ -187,16 +195,6 @@ const routes = [
     path: '/onlineQuiz/mbti_bartle/:quizId/:questNumber',
     name: 'onlineQuiz.mbtiBartle',
     component: () => import('pages/User/exam/participate/MBTI_Bartle'),
-    meta: {
-      middlewares: [auth]
-    }
-  },
-  {
-    // path: '/konkoorView/:quizId',
-    path: '/onlineQuiz/konkoorView/:quizId',
-    name: 'konkoorView',
-    component: () => import('pages/User/exam/participate/konkoorView'),
-    // component: () => import('src/components/Menu/topMenu/onlineQuizTopMenu'),
     meta: {
       middlewares: [auth]
     }

@@ -101,10 +101,18 @@
             :class="{active: getAnsweredChoiceId() === choice.id, ltr: isRtl}"
             @click="clickOnAnswer({ questionId: source.id, choiceId: choice.id})"
           >
-            <vue-katex
-              :input="(choiceNumber[index]) + choice.title"
-              :ltr="isLtrQuestion"
-            />
+           <div class="choice-inside">
+             <q-icon
+               class="check-icon col"
+               color="green"
+               size="20px"
+               name="check"
+             />
+             <vue-katex
+               :input="(choiceNumber[index]) + choice.title"
+               :ltr="isLtrQuestion"
+             />
+           </div>
           </q-item-section>
         </q-item>
       </q-list>
@@ -316,23 +324,21 @@ export default {
           cursor: pointer;
           transition: all ease-in-out 0.3s;
           padding: 0;
+          .choice-inside{
+            display: flex;
+            flex-direction: row;
+            width: 100%;
+          }
           &:hover {
             background: #e1e1e1;
           }
           &.active{
-            &:before {
-              background-color: yellow;
-              content: "\F012C";
-              display: inline-block;
-              font: normal normal normal 24px/1 "Material Design Icons";
-              text-rendering: auto;
-              line-height: inherit;
-              -webkit-font-smoothing: antialiased;
-              -moz-osx-font-smoothing: grayscale;
-              margin-left: 10px;
-              color: #4caf50;
-              font-size: 20px;
+            .check-icon{
+              display: block;
             }
+          }
+          .check-icon{
+            display: none;
           }
         }
       }
