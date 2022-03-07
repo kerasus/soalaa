@@ -15,7 +15,7 @@ export default {
   },
   computed: {
     comp () {
-      return defineAsyncComponent(() => import(`components/Question/QuestionPage/Create/textMode/questionTypes/${this.component.componentName}.vue`))
+      return defineAsyncComponent(() => import(`components/Question/QuestionPage/Create/textMode/questionTypes/${this.component.componentName}/${this.component.componentName}.vue`))
     }
   }
 }

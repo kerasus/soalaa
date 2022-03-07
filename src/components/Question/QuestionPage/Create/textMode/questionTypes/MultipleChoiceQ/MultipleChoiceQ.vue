@@ -51,7 +51,7 @@
 </template>
 
 <script>
-import MultipleChAnswer from 'components/Question/QuestionPage/Create/textMode/questionTypes/MultipleChAnswer'
+import MultipleChAnswer from 'components/Question/QuestionPage/Create/textMode/questionTypes/MultipleChoiceQ/subComponents/MultipleChAnswer'
 export default {
   name: 'MultipleChoiceQ',
   components: {
