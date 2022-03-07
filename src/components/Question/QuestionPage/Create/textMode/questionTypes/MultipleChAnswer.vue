@@ -27,7 +27,7 @@
     <div class="col-6 answer-box">
       <q-card class="col-6 default-questions-card">
         <q-card-section class="default-Qcard-title">
-          <q-radio dense v-model="choice" val="choice2" label="گزینه 1" color="primary"/>
+          <q-radio dense v-model="choice" val="choice2" label="گزینه 2" color="primary"/>
         </q-card-section>
         <q-separator inset />
         <q-card-section>
@@ -51,7 +51,7 @@
     <div class="col-6 answer-box">
       <q-card class="col-6 default-questions-card">
         <q-card-section class="default-Qcard-title">
-          <q-radio dense v-model="choice" val="choice3" label="گزینه 1" color="primary"/>
+          <q-radio dense v-model="choice" val="choice3" label="گزینه 3" color="primary"/>
         </q-card-section>
         <q-separator inset />
         <q-card-section>
@@ -75,7 +75,7 @@
     <div class="col-6 answer-box">
       <q-card class="col-6 default-questions-card">
         <q-card-section class="default-Qcard-title">
-          <q-radio dense v-model="choice" val="choice4" label="گزینه 1" color="primary"/>
+          <q-radio dense v-model="choice" val="choice4" label="گزینه 4" color="primary"/>
         </q-card-section>
         <q-separator inset />
         <q-card-section>
@@ -111,25 +111,33 @@ export default {
 </script>
 <style scoped lang="scss">
 .multiple-choice-Answer {
+  :nth-child(2n){
+    padding-right: 12px #{"/* rtl:ignore */"};
+  }
+  :nth-child(2n+1){
+    padding-left: 12px #{"/* rtl:ignore */"};
+  }
   .answer-box {
     padding-top: 12px;
     padding-bottom: 12px;
     :nth-child(2n){
-      margin-right: 12px #{"/* rtl:ignore */"};
+      padding-right: 0px #{"/* rtl:ignore */"};
     }
     :nth-child(2n+1){
-      margin-left: 12px #{"/* rtl:ignore */"};
-    }
-    .default-questions-card {
-      :nth-child(2n){
-        margin-right: 0px #{"/* rtl:ignore */"};
-      }
-      :nth-child(2n+1){
-        margin-left: 0px #{"/* rtl:ignore */"};
-      }
+      padding-left: 0px #{"/* rtl:ignore */"};
     }
     .q-separator--horizontal-inset {
       margin-right: 16px #{"/* rtl:ignore */"} !important ;
+    }
+
+  }
+}
+</style>
+<style lang="scss">
+.multiple-choice-Answer {
+  .answer-box {
+    .q-radio__inner {
+      margin-left: 7px #{"/* rtl:ignore */"} !important;
     }
   }
 }

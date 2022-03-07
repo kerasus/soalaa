@@ -104,10 +104,12 @@ export default {
   background: #FFFFFF;
   box-shadow: -2px -4px 10px rgba(255, 255, 255, 0.6), 2px 4px 10px rgba(112, 108, 162, 0.05) #{"/* rtl:ignore */"};
   border-radius: 30px;
+  .q-card__section {
+    padding: 15px 20px !important;
+  }
   .default-Qcard-title {
     font-size: 14px;
     line-height: 24px;
-    padding: 15px 20px;
   }
   .default-Qcard-box {
     align-items: last baseline;
@@ -118,7 +120,7 @@ export default {
       text-align: left #{"/* rtl:ignore */"};
       .q-img {
         border-radius: 0px 0px 1px 20px #{"/* rtl:ignore */"};
-        padding: 0;
+        padding: 0 !important;
         .q-img__image {
           padding: 0 !important;
         }
