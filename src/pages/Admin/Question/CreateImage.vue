@@ -35,7 +35,7 @@
 import uploadImage from '../../../components/Question/QuestionPage/UploadImage'
 export default {
   name: 'CreateImage',
-  components: { uploadImage },
+  components: { uploadImage }
 }
 </script>
 

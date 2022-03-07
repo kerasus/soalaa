@@ -1,3 +1,4 @@
+/* eslint-disable */
 <template>
   <div class="image-upload-parent">
     <p style="color: #23263b; font-size: 16px; font-weight: 500">{{ title }}</p>
@@ -9,6 +10,7 @@
 </template>
 
 <script>
+/* eslint-disable */
 import { Question } from '../../../models/Question.js'
 import vueFilePond from 'vue-filepond'
 import 'filepond/dist/filepond.min.css'
@@ -34,7 +36,7 @@ export default {
             <p style="color: #8075DC">انتخاب فایل </p>
           </div>
         </div>
-      `,
+      `
     }
   },
   props: {
