@@ -103,7 +103,7 @@ export default {
       }
     },
     sendAnswer () {
-      return this.sendUserQuestionsDataToServer(this.quiz.id, this.quiz.user_exam_id, false)
+      return this.sendUserQuestionsDataToServerAndFinishExam(this.quiz.id, this.quiz.user_exam_id, false)
     },
     async getBackEndRes () {
       try {
@@ -124,7 +124,7 @@ export default {
       }
     },
     confirmSendingAllAnswers () {
-      this.sendUserQuestionsDataToServer(this.quiz.id, this.quiz.user_exam_id, false)
+      this.sendUserQuestionsDataToServerAndFinishExam(this.quiz.id, this.quiz.user_exam_id, false)
         .then(response => {
           this.confirmationBubbleSheet = true
         })
