@@ -103,24 +103,23 @@
       </div>
     </v-app-bar>
     <v-main>
-
       <v-snackbar
-          :timeout="-1"
-          :value="updateExists && false"
-          centered
-          bottom
-          color="deep-purple accent-4"
-          elevation="24"
+        :timeout="-1"
+        :value="updateExists && false"
+        centered
+        bottom
+        color="deep-purple accent-4"
+        elevation="24"
       >
         جهت بروزرسانی لطفا صفحه را
         رفرش
         کنید
         <template v-slot:action="{ attrs }">
           <v-btn
-              color="white"
-              text
-              v-bind="attrs"
-              @click="refreshApp"
+            color="white"
+            text
+            v-bind="attrs"
+            @click="refreshApp"
           >
             رفرش
           </v-btn>
@@ -129,8 +128,6 @@
 
       <notifications group="notifs" />
       <router-view :key="$route.name + ($route.params.quizId || '') + ($route.params.questNumber || '')" />
-
-      <vue-confirm-dialog />
     </v-main>
     <v-overlay
       :opacity="0.5"
@@ -147,15 +144,13 @@
 </template>
 
 <script>
-import Vue from 'vue'
-import './assets/Fonts/Flaticons/css/uicons-regular-rounded.css'
-import './assets/Fonts/Flaticons/css/uicons-bold-rounded.css'
-import Time from '@/plugins/time'
-import VueConfirmDialog from 'vue-confirm-dialog'
-import {mixinAuth, mixinQuiz, mixinDrawer, mixinWindowSize} from '@/mixin/Mixins'
 import '@/assets/scss/app.scss'
 import '@/assets/scss/font.scss'
 import '@mdi/font/css/materialdesignicons.css'
+import './assets/Fonts/Flaticons/css/uicons-regular-rounded.css'
+import './assets/Fonts/Flaticons/css/uicons-bold-rounded.css'
+import {mixinAuth, mixinQuiz, mixinDrawer, mixinWindowSize} from '@/mixin/Mixins'
+
 import {
   SideMenu_Dashboard,
   SideMenu_MapOfQuestions,
@@ -163,7 +158,6 @@ import {
   TopMenu_Dashboard
 } from '@/components/Menu/Menus'
 
-Vue.component('vue-confirm-dialog', VueConfirmDialog.default)
 
 export default {
   name: 'App',

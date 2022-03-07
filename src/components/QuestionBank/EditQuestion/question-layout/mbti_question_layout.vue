@@ -3,57 +3,57 @@
   <div class=" ma-4 question-layout">
     <div class="question ">
       <div
-          v-if="status"
-          class="mb-5 "
+        v-if="status"
+        class="mb-5 "
       >
         تایپ سوال
       </div>
       <question_field
-          ref="questionStatement"
-          :key="'statement' + domKey"
-          v-model="question.statement"
-          class="mb-10"
-          :edit-status="status"
-          placeholder="صورت سوال"
-          :question-id="value.id ? value.id : 'null'"
-          @input="updateQuestion"
+        ref="questionStatement"
+        :key="'statement' + domKey"
+        v-model="question.statement"
+        class="mb-10"
+        :edit-status="status"
+        placeholder="صورت سوال"
+        :question-id="value.id ? value.id : 'null'"
+        @input="updateQuestion"
       />
     </div>
     <v-row
-        v-for="(item, index) in question.choices.list"
-        :key="index"
-        class="question-layout-options"
-        :class="status ? 'mb-6   question-options white': '  question-o' +
+      v-for="(item, index) in question.choices.list"
+      :key="index"
+      class="question-layout-options"
+      :class="status ? 'mb-6   question-options white': '  question-o' +
         'ptions'"
     >
       <v-col class="col-2">
-      <v-row>
-      <v-col :class="status ?'col-10' :'col-10'">
+        <v-row>
+          <v-col :class="status ?'col-10' :'col-10'">
             <v-autocomplete
-                v-model="item.answer"
-                :items="mbti_value"
-                label="انتخاب مقدار"
-                dense
-                outlined
-                rounded
-                :disabled="!status"
-                @change="updateQuestion"
+              v-model="item.answer"
+              :items="mbti_value"
+              label="انتخاب مقدار"
+              dense
+              outlined
+              rounded
+              :disabled="!status"
+              @change="updateQuestion"
             />
-      </v-col>
-        <v-col class="col-1">
-          {{ (index + 1) + ') ' }}
-        </v-col>
-      </v-row>
+          </v-col>
+          <v-col class="col-1">
+            {{ (index + 1) + ') ' }}
+          </v-col>
+        </v-row>
       </v-col>
       <v-col class="answer-editor col-10">
         <div>
           <question_field
-              :ref="'choice' + (index + 1)"
-              :key="'choices' + (index + 1) + domKey"
-              v-model="item.title"
-              :edit-status="status"
-              :question-id="value.id ? value.id : 'null'"
-              @input="updateQuestion"
+            :ref="'choice' + (index + 1)"
+            :key="'choices' + (index + 1) + domKey"
+            v-model="item.title"
+            :edit-status="status"
+            :question-id="value.id ? value.id : 'null'"
+            @input="updateQuestion"
           />
         </div>
       </v-col>

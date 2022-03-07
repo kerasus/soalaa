@@ -73,6 +73,15 @@
         </template>
       </v-list-group>
 
+
+      <a href="https://nodes.alaatv.com/aaa/bubble_sheet.png" target="_blank" style="text-decoration: none;">
+        <v-list-item>
+          <v-list-item-title>
+            دانلود پاسخبرگ کلیدی
+          </v-list-item-title>
+        </v-list-item>
+      </a>
+
     </v-list-item-group>
     <v-list-item-group
       v-if="user.has_admin_permission"
@@ -187,14 +196,14 @@ export default {
         displayName: 'لیست دفترچه ها',
         to: { name: 'category.edit' }
       },
-      // {
-      //   displayName: 'لیست زیرگروه ها',
-      //   to: { name: 'subGroup.edit' }
-      // },
       {
         displayName: 'اضافه کردن سوالات MBTI',
         to: { name: 'question.mbti.create' }
       }
+      // {
+      //   displayName: 'لیست زیرگروه ها',
+      //   to: { name: 'subGroup.edit' }
+      // },
     ],
     educationList: [
       // {

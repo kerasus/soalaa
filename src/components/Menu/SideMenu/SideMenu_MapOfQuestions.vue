@@ -1,6 +1,6 @@
 <template>
   <v-sheet class="map-of-questions">
-    <div :style="{ 'padding-bottom': '100px' }">
+    <div :style="{ 'padding-bottom': '120px' }">
       <div
         v-for="(categoryItem) in quiz.categories.list"
         :key="'category-'+categoryItem.id"
@@ -80,7 +80,17 @@
       >
         ارسال پاسخنامه
       </v-btn>
-      <br>
+      <v-btn
+        v-if="false"
+        :color="'#4caf50'"
+        :style="{ backgroundColor: '#4caf50 !important' }"
+        dark
+        block
+        class="end-exam-btn mt-5"
+        @click="showSendAnswerPhotoDialog"
+      >
+        آپلود برگه پاسخنامه
+      </v-btn>
       <br>
       <br>
       <br>
@@ -143,28 +153,40 @@
         <BubbleSheet
           :info="{ type: 'pasokh-nameh' }"
           delay-time="0"
+          class="confirmationBubbleSheet"
         />
       </v-card>
     </v-dialog>
+
+
+    <send-answer-photo
+        :exam="bubbleSheetDialogExam"
+        :dialog-status="bubbleSheetDialog"
+        @closeDialog="bubbleSheetDialog = false"
+    />
+
   </v-sheet>
 </template>
 
 <script>
     import mixinQuiz from '@/mixin/Quiz'
     import Time from "@/plugins/time";
-    import Vue from 'vue'
     import VueConfirmDialog from 'vue-confirm-dialog'
     import BubbleSheet from '@/components/OnlineQuiz/Quiz/BubbleSheet/BubbleSheet'
     import ExamData from "@/assets/js/ExamData";
-
-    Vue.use(VueConfirmDialog)
-    Vue.component('vue-confirm-dialog', VueConfirmDialog.default)
+    import {Exam} from "@/models/Exam";
+    import SendAnswerPhoto from "@/pages/user/exam/SendAnswerPhoto";
 
     export default {
         name: 'SideMenuMapOfQuestions',
-        components: {BubbleSheet},
+        components: {BubbleSheet, SendAnswerPhoto, VueConfirmDialog},
         mixins: [mixinQuiz],
         data: () => ({
+
+          bubbleSheetDialogExam: new Exam(),
+          bubbleSheetDialog: false,
+
+
             confirmationBubbleSheet: false,
             confirmationBtnLoading: false,
             currentCat: null,
@@ -176,6 +198,12 @@
             }, 1000)
         },
         methods: {
+
+          showSendAnswerPhotoDialog () {
+            this.bubbleSheetDialog = true
+            this.bubbleSheetDialogExam = this.quiz
+          },
+
             getUserQuestionData (questionId) {
                 if (!this.quiz.id || !questionId || !this.userQuizListData[this.quiz.id]) {
                     return false
@@ -332,5 +360,11 @@
 }
 .map-of-questions .v-expansion-panel .v-expansion-panel-header {
     font-size: 1.2rem;
+}
+</style>
+
+<style scoped>
+.confirmationBubbleSheet {
+  margin-bottom: 0;
 }
 </style>

@@ -95,12 +95,12 @@
         <v-row>
           <v-col>
             <BubbleSheet
-                :key="bubbleSheetKey"
-                :info="{ type: 'pasokh-barg' }"
-                :delay-time="0"
-                @clickChoice="choiceClicked"
-                @scrollTo="scrollTo"
-                :submitAnswers="false"
+              :key="bubbleSheetKey"
+              :info="{ type: 'pasokh-barg' }"
+              :delay-time="0"
+              :submit-answers="false"
+              @clickChoice="choiceClicked"
+              @scrollTo="scrollTo"
             />
           </v-col>
         </v-row>

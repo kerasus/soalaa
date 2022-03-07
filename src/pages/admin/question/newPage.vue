@@ -18,17 +18,17 @@
             <v-card-actions>
               <v-spacer />
               <v-btn
-                color="amber lighten-1"
-                text
-                @click="setQuestionTypeText"
+                  color="amber lighten-1"
+                  text
+                  @click="setQuestionTypeText"
               >
                 تایپ سوال
               </v-btn>
               <v-spacer class="mx-10" />
               <v-btn
-                color="amber lighten-1"
-                text
-                @click="setQuestionTypeImage"
+                  color="amber lighten-1"
+                  text
+                  @click="setQuestionTypeImage"
               >
                 آپلود فایل
               </v-btn>
@@ -160,7 +160,6 @@ import {QuestionStatusList} from "@/models/QuestionStatus";
 import axios from 'axios'
 import ShowImgBottomMode from "@/components/QuestionBank/EditQuestion/ShowImg/ShowImgBottomMode";
 
-
 export default {
   name: 'NewPage',
   components: {
@@ -256,6 +255,7 @@ export default {
       dialog: false,
       questionType: '',
       optionQuestionId: null,
+      optionDescriptiveQuestionId: null,
       showImgBottomMode : false,
       isImgPanelSideModeVisible : false,
       isLogListVisible : true
@@ -276,6 +276,7 @@ export default {
     axios.get(API_ADDRESS.option.base + '?type=question_type')
         .then(function (response) {
           const optionQuestion = response.data.data.find(item => (item.value==='konkur'))
+          const optionDescriptiveQuestion = response.data.data.find(item => (item.value==='descriptive'))
           if (!optionQuestion) {
             // beterek
             return this.$notify({
@@ -285,6 +286,7 @@ export default {
             })
           }
           that.optionQuestionId = optionQuestion.id
+          that.optionDescriptiveQuestionId = optionDescriptiveQuestion.id
           that.loading = false
         })
         .catch(function (error) {
@@ -370,6 +372,7 @@ export default {
               text: 'ویرایش با موفقیت انجام شد',
               type: 'success'
             })
+            this.$store.commit('AppLayout/updateOverlay', {show: false, loading: false, text: ''})
             this.$router.push({name: 'question.show', params: {question_id: this.$route.params.question_id}})
           })
     },
@@ -434,6 +437,7 @@ export default {
         });
       } else {
         this.updateAnswersPhotos()
+        this.$store.commit('AppLayout/updateOverlay', {show: false, loading: false})
       }
     },
 
@@ -460,6 +464,7 @@ export default {
         });
       } else {
         this.save()
+        this.$store.commit('AppLayout/updateOverlay', {show: false, loading: false, text: ''})
       }
     },
 
@@ -813,20 +818,23 @@ export default {
       this.dialog = false
       this.checkNavbarVisibilityOnCreatPage()
     },
-
     setQuestionTypeImage() {
       this.questionType = 'typeImage'
       this.dialog = false
       this.checkNavbarVisibilityOnCreatPage()
     },
-
     setInsertedQuestions() {  //یاس
       if (this.$refs.qlayout.getContent() === false) {
         return
       }
       this.setCurrentQuestionExams()
       // console.log('currentQuestion.exam :',currentQuestion.exams)
-      this.currentQuestion.type_id = this.optionQuestionId
+      if (this.currentQuestion.choices.list.length > 0) {
+        this.currentQuestion.type_id = this.optionQuestionId
+      } else {
+        this.currentQuestion.type_id = this.optionDescriptiveQuestionId
+      }
+
       this.currentQuestion
           .create()
           .then((response) => {
@@ -843,8 +851,10 @@ export default {
               text: 'ثبت با موفقیت انجام شد',
               type: 'success'
             })
-            if(window.open('/question/create', '_blank')) window.open('/question/create', '_blank').focus()
             this.$router.push({name: 'question.show', params: {question_id: questionId}})
+            if(window.open('/question/create', '_blank')) {
+              window.open('/question/create', '_blank').focus()
+            }
           })
     },
 

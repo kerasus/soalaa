@@ -163,7 +163,7 @@ class Question extends Model {
             // this.rendered_descriptive_answer = convert(this.descriptive_answer)
             // this.rendered_statement = md.render(this.statement)
         }
-        if (this.choices.list.length === 0) {
+        if (false && this.choices.list.length === 0) {
             const choices = [
                 {
                     id: 1,
@@ -351,7 +351,7 @@ class Question extends Model {
             let failedAnswersArray = dataToSendObject.failedAnswersArray
 
             if (!socket) {
-
+            // if (true) {
                 data = axios.post(API_ADDRESS.exam.sendAnswers, {exam_user_id, questions: answerArray})
                     .then(function (response) {
                         if (failedAnswersArray.length > 0 && response.status === 200) {
