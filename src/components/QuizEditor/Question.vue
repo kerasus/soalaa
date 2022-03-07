@@ -111,9 +111,11 @@
         <p v-else>
           ({{ getSubCategoryName }}) ({{ source.order }}) -  صورت سوال :
         </p>
-        <v-img
-          :src="source.statement_photo"
-        />
+        <div v-for="statement_photo in source.statement_photo">
+          <v-img
+              :src="statement_photo"
+          />
+        </div>
       </v-col>
     </v-row>
     <v-row
