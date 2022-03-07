@@ -47,14 +47,17 @@
         </div>
       </q-card-section>
     </q-card>
+    <QuestionDetails/>
   </div>
 </template>
 
 <script>
 import MultipleChAnswer from 'components/Question/QuestionPage/Create/textMode/questionTypes/MultipleChoiceQ/subComponents/MultipleChAnswer'
+import QuestionDetails from 'components/Question/QuestionPage/Create/textMode/QuestionDetails'
 export default {
   name: 'MultipleChoiceQ',
   components: {
+    QuestionDetails,
     MultipleChAnswer
   },
   data () {
