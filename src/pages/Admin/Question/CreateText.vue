@@ -40,7 +40,6 @@ export default {
   },
   methods: {
     chosenComponent (cName) {
-      console.log('cName', cName)
       const that = this
       this.componentsNames.forEach(function (item) {
         if (item.tabName === cName) {
@@ -49,7 +48,6 @@ export default {
         }
       })
       this.forceRerenderComponent()
-      console.log('currentComponent', this.currentComponent)
     },
     forceRerenderComponent () {
       this.componentKey += 1
