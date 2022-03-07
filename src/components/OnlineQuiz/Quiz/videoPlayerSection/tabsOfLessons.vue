@@ -32,6 +32,7 @@
                   :name="item.sub_category_id"
                   :label="item.sub_category"
                   :id="'lessonTab' + index"
+                  :disable="tabPanelDisabled"
                   @click="onVideoTabChange(index)"
                 ></q-tab>
               </q-tabs>
@@ -99,6 +100,13 @@
                       </div>
                     </div>
                   </div>
+                  <q-inner-loading
+                    :showing="loadingVisibility"
+                    label="لطفا کمی صبر کنید..."
+                    color="primary"
+                    class="tabLessons-inner-loading"
+                    label-style="font-size: 1.1em"
+                  />
                 </q-tab-panel>
               </q-tab-panels>
             </template>
@@ -121,7 +129,6 @@ import hotkeys from 'videojs-hotkeys'
 import Assistant from 'src/plugins/assistant'
 import { AlaaSet } from 'src/models/AlaaSet'
 import { AlaaContent } from 'src/models/AlaaContent'
-import { mixinWindowSize } from 'src/mixin/Mixins'
 
 export default {
   name: 'tabsOfLessons',
@@ -133,12 +140,11 @@ export default {
       }
     }
   },
-  mixins: [
-    mixinWindowSize
-  ],
   data () {
     return {
       tab: 'Lessons',
+      loadingVisibility: false,
+      tabPanelDisabled: false,
       innerTab: this.report.sub_category[0].sub_category,
       splitterModel: 20,
       player: null,
@@ -257,6 +263,13 @@ export default {
       this.onVideoTabChange(0)
     },
     onVideoTabChange (tabIndex) {
+      this.loadingVisibility = true
+      this.tabPanelDisabled = true
+      const that = this
+      setTimeout(() => {
+        that.loadingVisibility = false
+        that.tabPanelDisabled = false
+      }, 1000)
       if (this.player) {
         this.player.pause()
       }
@@ -279,6 +292,7 @@ export default {
       } else {
         this.currentVideoContent = null
       }
+      // this.loadingVisibility = false
     }
   },
   computed: {
@@ -432,6 +446,9 @@ export default {
   .q-splitter__after .q-tab-panels {
     background-color: #fff;
     border-radius: 25px;
+  }
+  .tabLessons-inner-loading {
+    background: rgba(119, 119, 119, 0.4);
   }
 }
 @media only screen and (min-width: 1330px) {
