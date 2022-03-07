@@ -81,7 +81,7 @@
         ارسال پاسخنامه
       </v-btn>
       <v-btn
-        v-if="true"
+        v-if="false"
         :color="'#4caf50'"
         :style="{ backgroundColor: '#4caf50 !important' }"
         dark
