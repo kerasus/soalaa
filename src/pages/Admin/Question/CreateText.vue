@@ -1,9 +1,7 @@
 <template>
   <div class="createQ-text-container">
     <Navbar @chosenComponent="chosenComponent"/>
-<!--    <Transition name="slide-fade">-->
-      <DynamicComponent :component1="currentComponent"/>
-<!--    </Transition>-->
+    <DynamicComponent :component="currentComponent" :key="componentKey"/>
   </div>
 </template>
 
@@ -36,24 +34,27 @@ export default {
       currentComponent: {
         componentName: 'MultipleChoiceQ',
         tabName: 'تستی'
-      }
+      },
+      componentKey: 0
     }
   },
   methods: {
     chosenComponent (cName) {
       console.log('cName', cName)
       const that = this
-      this.componentsNames.forEach(function (item, index) {
+      this.componentsNames.forEach(function (item) {
         if (item.tabName === cName) {
           that.currentComponent.componentName = item.componentName
           that.currentComponent.tabName = item.tabName
         }
       })
+      this.forceRerenderComponent()
       console.log('currentComponent', this.currentComponent)
+    },
+    forceRerenderComponent () {
+      this.componentKey += 1
     }
-  },
-  computed: {},
-  watch () {}
+  }
 }
 </script>
 
