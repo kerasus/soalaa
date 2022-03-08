@@ -148,7 +148,6 @@
 <script>
 import './assets/Fonts/Flaticons/css/uicons-regular-rounded.css'
 import './assets/Fonts/Flaticons/css/uicons-bold-rounded.css'
-import VueConfirmDialog from 'vue-confirm-dialog'
 import {mixinAuth, mixinQuiz, mixinDrawer, mixinWindowSize} from '@/mixin/Mixins'
 import '@/assets/scss/app.scss'
 import '@/assets/scss/font.scss'
@@ -164,7 +163,6 @@ import {
 export default {
   name: 'App',
   components: {
-    VueConfirmDialog,
     TopMenu_OnlineQuiz,
     TopMenu_Dashboard,
     SideMenu_Dashboard,

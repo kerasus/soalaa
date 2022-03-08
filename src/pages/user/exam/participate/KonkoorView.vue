@@ -208,7 +208,6 @@
 </template>
 
 <script>
-    import VueConfirmDialog from 'vue-confirm-dialog'
     import {Exam} from '@/models/Exam'
     import Assistant from '@/plugins/assistant'
     import {DynamicScroller, DynamicScrollerItem} from 'vue-virtual-scroller'
@@ -232,7 +231,6 @@
             BubbleSheet,
             DynamicScroller,
             DynamicScrollerItem,
-          VueConfirmDialog,
           SendAnswerPhoto,
             BookletsDialog,
             Item

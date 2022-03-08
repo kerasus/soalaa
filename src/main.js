@@ -7,6 +7,10 @@ import Axios from '@/plugins/axios'
 import VueNotification from 'vue-notification'
 import VueGtag from 'vue-gtag'
 import './registerServiceWorker'
+import VueConfirmDialog from 'vue-confirm-dialog'
+
+Vue.use(VueConfirmDialog)
+Vue.component('vue-confirm-dialog', VueConfirmDialog.default)
 
 Vue.use(VueGtag, {
   config: {
