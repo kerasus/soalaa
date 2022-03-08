@@ -71,7 +71,6 @@ export default {
     }
   },
   created () {
-    console.log('created MainLayout')
     const localData = this.$store.getters['AppLayout/appLayout']
     Object.assign(this.properties, localData)
   },
