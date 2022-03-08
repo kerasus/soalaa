@@ -128,6 +128,8 @@
 
       <notifications group="notifs" />
       <router-view :key="$route.name + ($route.params.quizId || '') + ($route.params.questNumber || '')" />
+
+      <vue-confirm-dialog />
     </v-main>
     <v-overlay
       :opacity="0.5"
