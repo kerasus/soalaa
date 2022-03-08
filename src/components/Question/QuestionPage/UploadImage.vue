@@ -5,6 +5,11 @@
     <file-pond
       :allow-multiple="true"
       :labelIdle="dropAreaHTML"
+      accepted-file-types="image/jpeg, image/png"
+      :name="fieldKey + '[0]'"
+      :server="serverConfig"
+      instantUpload="false"
+      v-model:files="files"
     />
   </div>
 </template>
@@ -36,7 +41,14 @@ export default {
             <p style="color: #8075DC">انتخاب فایل </p>
           </div>
         </div>
-      `
+      `,
+      serverConfig: {
+        url: '/3a/api/v1/question',
+        headers: {
+          Authorization: 'Bearer ' + this.$store.getters['Auth/accessToken']
+        }
+      },
+      files: []
     }
   },
   props: {
@@ -45,7 +57,7 @@ export default {
       default: new Question(),
       required: false
     },
-    key: {
+    fieldKey: {
       type: String,
       default: '',
       required: false
