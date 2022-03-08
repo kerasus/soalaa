@@ -1,46 +1,59 @@
 <template>
-  <entity-show
-    v-model:value="inputs"
-    title="اطلاعات آزمون"
-    :api="api"
-    :entity-id-key="entityIdKey"
-    :entity-param-key="entityParamKey"
-    :edit-route-name="editRouteName"
-    :index-route-name="indexRouteName"
-  >
-    <template #after-form-builder >
-      <div
-        v-for="(category , index) in inputs[examCategoriesIndex].value"
-        :key="index"
-        class="row"
-      >
-        <q-select
-          class="q-pa-md col-md-4"
-          v-model="category.title"
-          :value="category.id"
-          label="دفترچه"
-          :options="inputs[examCategoriesIndex].value"
-          option-value="title"
-          option-label="title"
-          emit-value
-          map-options
-          disable
-        />
-        <q-input
-          class="q-pa-md col-md-3"
-          v-model="category.order"
-          label="ترتیب"
-          disable
-        />
-        <q-input
-          class="q-pa-md col-md-3"
-          v-model="category.time"
-          label="زمان"
-          disable
-        />
-      </div>
-    </template>
-  </entity-show>
+  <div>
+    <div class="row justify-end q-pr-lg">
+        <q-btn
+          round
+          color="primary"
+          unelevated
+          @click="goBack"
+        >
+          <i class="fi-rr-angle-left row" />
+        </q-btn>
+    </div>
+    <entity-show
+      v-model:value="inputs"
+      title="اطلاعات آزمون"
+      :api="api"
+      :entity-id-key="entityIdKey"
+      :entity-param-key="entityParamKey"
+      :edit-route-name="editRouteName"
+      :index-route-name="indexRouteName"
+    >
+      <template #after-form-builder >
+        <div
+          v-for="(category , index) in inputs[examCategoriesIndex].value"
+          :key="index"
+          class="row"
+        >
+          <q-select
+            class="q-pa-md col-md-4"
+            v-model="category.title"
+            :value="category.id"
+            label="دفترچه"
+            :options="inputs[examCategoriesIndex].value"
+            option-value="title"
+            option-label="title"
+            emit-value
+            map-options
+            disable
+          />
+          <q-input
+            class="q-pa-md col-md-3"
+            v-model="category.order"
+            label="ترتیب"
+            disable
+          />
+          <q-input
+            class="q-pa-md col-md-3"
+            v-model="category.time"
+            label="زمان"
+            disable
+          />
+        </div>
+      </template>
+    </entity-show>
+  </div>
+
 </template>
 
 <script>
@@ -90,7 +103,11 @@ export default {
       return this.inputs.findIndex(item => item.name === 'categories')
     }
   },
-  methods: {}
+  methods: {
+    goBack () {
+      this.$router.push('/admin/exam')
+    }
+  }
 }
 </script>
 
