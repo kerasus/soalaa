@@ -24,7 +24,12 @@
       </div>
     </template>
     <template #content>
-      <router-view :key="$route.name"/>
+      <router-view v-slot="{ Component }">
+        <keep-alive>
+          <component :is="Component" :key="$route.fullPath" />
+        </keep-alive>
+      </router-view>
+<!--      <router-view :key="$route.name"/>-->
     </template>
   </quasar-template-builder>
 </template>
@@ -66,6 +71,7 @@ export default {
     }
   },
   created () {
+    console.log('created MainLayout')
     const localData = this.$store.getters['AppLayout/appLayout']
     Object.assign(this.properties, localData)
   },

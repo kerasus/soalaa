@@ -1,111 +1,127 @@
 <template>
-  <div class="upload-file">
-    <div
-      v-for="(item, index) in questionCategories.list"
-      :key="index"
-      class="row upload-file-side"
-      style="width: 400px"
-    >
-      <div class="col">
-        <q-file
-          :ref="item.id + 'questionFile'"
-          v-model="item.questionFile"
-          accept=".pdf"
-          color="orange"
-          :label="'فایل سوالات ' + item.title"
-          filled
-          :disable="item.questions_booklet || item.loading.question ? true : false"
-          @update:model-value="addFiles (item.questionFile, item, 'question')"
+  <div class="upload-file-container">
+    <div class="row justify-around q-mb-lg">
+      <div class="col-7 q-px-lg text-right">
+        <q-btn
+          round
+          color="primary"
+          unelevated
+          @click="goBack"
         >
-          <template v-slot:append>
-            <q-icon
-              v-if="!item.loading.question"
-              name="cancel"
-              @click="deleteFile (item, 'questionFile', 'question')"
-              class="cursor-pointer"
-            />
-          </template>
-        </q-file>
-        <div class="buttons-block">
-          <q-btn
-            class="full-width upload-file-btn"
-            dense
-            flat
-            color="blue"
-            icon-right="cloud_upload"
-            label="آپلود"
-            :loading="item.loading.question"
-            :disabled="item.questions_booklet || !item.canUpload['question']"
-            @click="upload(item, 'questionFile', 'questions_booklet', 'question')"
-          />
-          <a
-            v-if="item.questions_booklet"
-            :href="item.questions_booklet"
-            target="_blank"
-            :style="{ textDecoration: 'none'}"
+          <i class="fi-rr-angle-left row" />
+        </q-btn>
+      </div>
+
+    </div>
+    <div class="upload-file">
+      <div
+        v-for="(item, index) in questionCategories.list"
+        :key="index"
+        class="row upload-file-side"
+        style="width: 400px"
+      >
+        <div class="col">
+          <q-file
+            :ref="item.id + 'questionFile'"
+            v-model="item.questionFile"
+            accept=".pdf"
+            color="orange"
+            :label="'فایل سوالات ' + item.title"
+            filled
+            :disable="item.questions_booklet || item.loading.question ? true : false"
+            @update:model-value="addFiles (item.questionFile, item, 'question')"
           >
+            <template v-slot:append>
+              <q-icon
+                v-if="!item.loading.question"
+                name="cancel"
+                @click="deleteFile (item, 'questionFile', 'question')"
+                class="cursor-pointer"
+              />
+            </template>
+          </q-file>
+          <div class="buttons-block">
             <q-btn
               class="full-width upload-file-btn"
               dense
-              color="orange"
               flat
-              icon-right="file_download"
-              label="دانلود"
+              color="blue"
+              icon-right="cloud_upload"
+              label="آپلود"
+              :loading="item.loading.question"
+              :disabled="item.questions_booklet || !item.canUpload['question']"
+              @click="upload(item, 'questionFile', 'questions_booklet', 'question')"
             />
-          </a>
-        </div>
-        <br>
-        <q-file
-          :ref="item.id + 'answerFile'"
-          v-model="item.answerFile"
-          accept=".pdf"
-          color="orange"
-          :label="'فایل پاسخ ' + item.title"
-          filled
-          :disable="item.descriptive_answers_booklet || item.loading.answer ? true :false"
-          @update:model-value="addFiles (item.questionFile, item, 'answer')"
-        >
-          <template v-if="item.answerFile" v-slot:append>
-            <q-icon
-              v-if="!item.loading.answer"
-              name="cancel"
-              @click="deleteFile (item, 'answerFile', 'answer')"
-              class="cursor-pointer"
-            />
-          </template>
-        </q-file>
-        <div class="buttons-block">
-          <q-btn
-            dense
-            class="full-width upload-file-btn"
-            color="blue"
-            flat
-            icon-right="cloud_upload"
-            label="آپلود"
-            :loading="item.loading.answer"
-            :disabled="item.descriptive_answers_booklet || !item.canUpload['answer']"
-            @click="upload(item, 'answerFile', 'descriptive_answers_booklet','answer')"
-          />
-          <a
-            v-if="item.descriptive_answers_booklet"
-            :href="item.descriptive_answers_booklet"
-            target="_blank"
-            :style="{ textDecoration: 'none' }"
+            <a
+              v-if="item.questions_booklet"
+              :href="item.questions_booklet"
+              target="_blank"
+              :style="{ textDecoration: 'none'}"
+            >
+              <q-btn
+                class="full-width upload-file-btn"
+                dense
+                color="orange"
+                flat
+                icon-right="file_download"
+                label="دانلود"
+              />
+            </a>
+          </div>
+          <br>
+          <q-file
+            :ref="item.id + 'answerFile'"
+            v-model="item.answerFile"
+            accept=".pdf"
+            color="orange"
+            :label="'فایل پاسخ ' + item.title"
+            filled
+            :disable="item.descriptive_answers_booklet || item.loading.answer ? true :false"
+            @update:model-value="addFiles (item.questionFile, item, 'answer')"
           >
+            <template v-if="item.answerFile" v-slot:append>
+              <q-icon
+                v-if="!item.loading.answer"
+                name="cancel"
+                @click="deleteFile (item, 'answerFile', 'answer')"
+                class="cursor-pointer"
+              />
+            </template>
+          </q-file>
+          <div class="buttons-block">
             <q-btn
-              class="full-width upload-file-btn"
               dense
-              color="orange"
+              class="full-width upload-file-btn"
+              color="blue"
               flat
-              icon-right="file_download"
-              label="دانلود"
+              icon-right="cloud_upload"
+              label="آپلود"
+              :loading="item.loading.answer"
+              :disabled="item.descriptive_answers_booklet || !item.canUpload['answer']"
+              @click="upload(item, 'answerFile', 'descriptive_answers_booklet','answer')"
             />
-          </a>
+            <a
+              v-if="item.descriptive_answers_booklet"
+              :href="item.descriptive_answers_booklet"
+              target="_blank"
+              :style="{ textDecoration: 'none' }"
+            >
+              <q-btn
+                class="full-width upload-file-btn"
+                dense
+                color="orange"
+                flat
+                icon-right="file_download"
+                label="دانلود"
+              />
+            </a>
+          </div>
         </div>
       </div>
+      <br>
     </div>
-    <br>
   </div>
+
 </template>
 
 <script>
@@ -136,6 +152,9 @@ export default {
     this.getData()
   },
   methods: {
+    goBack () {
+      this.$router.push('/admin/exam')
+    },
     getData () {
       this.$axios.get(API_ADDRESS.questionCategory.base)
         .then(response => {
@@ -222,7 +241,11 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.upload-file-container{
+  width: 100%;
+}
 .upload-file {
+  justify-content: center;
   display: flex;
   flex-direction: row;
 

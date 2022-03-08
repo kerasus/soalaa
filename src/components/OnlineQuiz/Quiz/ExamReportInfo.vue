@@ -4,6 +4,18 @@
       <div class="col-6">
         <div class="row">
           <div class="col-12">
+            <div class="row justify-end">
+              <q-btn
+                round
+                color="primary"
+                unelevated
+                @click="goBack"
+              >
+                <i class="fi-rr-angle-left row" />
+              </q-btn>
+            </div>
+          </div>
+          <div class="col-12">
             <q-input
               v-model="exam.report_config.maximum_question_answered"
               type="number"
@@ -118,6 +130,9 @@ export default {
     this.overlayLoading()
   },
   methods: {
+    goBack () {
+      this.$router.push('/admin/exam')
+    },
     overlayLoading () {
       if (this.exam.loading) {
         this.$store.dispatch('loading/overlayLoading', true)
