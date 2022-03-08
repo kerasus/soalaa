@@ -146,12 +146,13 @@
 </template>
 
 <script>
-import './assets/Fonts/Flaticons/css/uicons-regular-rounded.css'
-import './assets/Fonts/Flaticons/css/uicons-bold-rounded.css'
-import {mixinAuth, mixinQuiz, mixinDrawer, mixinWindowSize} from '@/mixin/Mixins'
 import '@/assets/scss/app.scss'
 import '@/assets/scss/font.scss'
 import '@mdi/font/css/materialdesignicons.css'
+import './assets/Fonts/Flaticons/css/uicons-regular-rounded.css'
+import './assets/Fonts/Flaticons/css/uicons-bold-rounded.css'
+import {mixinAuth, mixinQuiz, mixinDrawer, mixinWindowSize} from '@/mixin/Mixins'
+
 import {
   SideMenu_Dashboard,
   SideMenu_MapOfQuestions,
