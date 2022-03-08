@@ -7,8 +7,7 @@
       <vue-tiptap-katex
         ref="tiptap"
         :loading="loading"
-        :server="{ url: imageUrl, headers: { Authentication: 'Bearer ' + $store.getters['Auth/accessToken'] } }"
-        :options="{ bubbleMenu: false, floatingMenu: false, poem: true, reading: true, persianKeyboard: true, mathliveOptions: { smartFence: false } }"
+        :options="{ bubbleMenu: false, floatingMenu: false, poem: true, reading: true, persianKeyboard: true, onResizeEnd: onResizeEnd ,mathliveOptions: { smartFence: false }, uploadServer: { url: imageUrl, headers: { Authorization: 'Bearer ' + $store.getters['Auth/accessToken'] } } }"
       />
     </v-col>
     <!-- eslint-disable vue/no-v-html -->
@@ -68,6 +67,9 @@ export default {
     }
   },
   methods: {
+    onResizeEnd (url, width, height) {
+      return url.split('?w=')[0] + '?w=' + width + '&h=' + height
+    },
     getContent () {
       this.$emit('input', this.$refs.tiptap.getContent())
     },

@@ -203,7 +203,6 @@
 
 <script>
 import Vue from 'vue'
-import VueConfirmDialog from 'vue-confirm-dialog'
 import {Exam} from '@/models/Exam'
 import Assistant from '@/plugins/assistant'
 import {DynamicScroller, DynamicScrollerItem} from 'vue-virtual-scroller'
@@ -218,8 +217,6 @@ import '@/assets/scss/markdownKatex.scss'
 import 'vue-virtual-scroller/dist/vue-virtual-scroller.css'
 // import ExamData from "@/assets/js/ExamData";
 
-Vue.use(VueConfirmDialog)
-Vue.component('vue-confirm-dialog', VueConfirmDialog.default)
 
 export default {
   name: 'KonkoorView',

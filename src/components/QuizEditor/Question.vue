@@ -157,17 +157,13 @@
 </template>
 
 <script>
-import Vue from 'vue'
 import {mixinQuiz, mixinWindowSize} from '@/mixin/Mixins'
 import $ from "jquery";
 import API_ADDRESS from "@/api/Addresses"
-import VueConfirmDialog from 'vue-confirm-dialog'
 import axios from 'axios'
 import {QuestSubcategoryList} from "@/models/QuestSubcategory";
 import VueKatex from '@/components/VueKatex'
 
-Vue.use(VueConfirmDialog)
-Vue.component('vue-confirm-dialog', VueConfirmDialog.default)
 
 export default {
   name: 'Item',
