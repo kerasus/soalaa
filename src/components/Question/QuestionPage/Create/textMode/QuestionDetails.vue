@@ -145,12 +145,15 @@ export default {
     .detail-box-last {
       padding-right: 0px #{"/* rtl:ignore */"};
       width: 200px;
-      margin-right: 132px #{"/* rtl:ignore */"};
+      //margin-right: 132px #{"/* rtl:ignore */"};
     }
     .detail-box-last-of-row {
       padding-left: 0px #{"/* rtl:ignore */"};
       margin-top: 43px;
       text-align: end;
+      display: flex;
+      align-items: center;
+      justify-content: center;
       .default-detail-btn {
         width: 144px;
         height: 40px;
