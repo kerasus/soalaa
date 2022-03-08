@@ -79,10 +79,10 @@ export default {
     },
     resize (val) {
       this.$store.commit('AppLayout/updateWindowSize', val)
-      if (val.width > 1023) {
+      if (val.width > 1439) {
         this.$store.commit('AppLayout/updateLayoutLeftDrawerWidth', 325)
         this.$store.commit('AppLayout/updateLayoutLeftDrawerBehavior', 'desktop') && this.$store.commit('AppLayout/updateLayoutRightDrawerBehavior', 'desktop')
-      } else if (val.width > 349) {
+      } else if (val.width > 599) {
         this.$store.commit('AppLayout/updateLayoutLeftDrawerWidth', 280)
         this.$store.commit('AppLayout/updateLayoutLeftDrawerBehavior', 'mobile') && this.$store.commit('AppLayout/updateLayoutRightDrawerBehavior', 'mobile')
       } else {
@@ -115,16 +115,16 @@ export default {
   display: flex;
   flex-direction: row;
   padding: 60px 100px 24px 76px;
-  @media screen and (max-width: 1439px) {
+  @media screen and (max-width: 1919px) {
     padding: 30px 30px 24px 0;
   }
-  @media screen and (max-width: 1023px) {
+  @media screen and (max-width: 1439px) {
     padding: 20px 30px 18px 30px !important;
   }
-  @media screen and (max-width: 599px) {
+  @media screen and (max-width: 1023px) {
     padding: 20px 30px 20px 20px;
   }
-  @media screen and (max-width: 349px) {
+  @media screen and (max-width: 599px) {
     padding: 24px 16px 14px 16px !important;
     :nth-child(1) {
       order: 1;
@@ -138,7 +138,7 @@ export default {
   }
 
   .right-side {
-    @media screen and (max-width: 1023px) {
+    @media screen and (max-width: 1439px) {
     }
   }
 }
