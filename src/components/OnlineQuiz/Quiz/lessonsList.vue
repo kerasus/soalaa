@@ -99,7 +99,7 @@ export default {
   },
   methods: {
     goBack () {
-      this.$router.push('/exam')
+      this.$router.push('/admin/exam')
     },
     async loadLessons () {
       this.lessonsList.loading = true
