@@ -8,12 +8,11 @@
           size="10px"
           round
           dark-percentage
-          color="white"
+          color="primary"
           @click="goBack"
         >
           <q-icon
             name="mdi-chevron-left"
-            color="black"
             size="sm"
           />
         </q-btn>

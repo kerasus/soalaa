@@ -2,21 +2,7 @@
   <div class="d-flex justify-center">
     <div class="row justify-center q-mt-lg">
       <div class="col-6">
-        <div class="row justify-end">
-          <q-btn
-            class="q-mx-sm float-right"
-            size="10px"
-            round
-            dark-percentage
-            color="white"
-            @click="goBack"
-          >
-            <q-icon
-              name="mdi-chevron-left"
-              color="black"
-              size="sm"
-            />
-          </q-btn>
+        <div class="row">
           <div class="col-12">
             <div class="row justify-end">
               <q-btn
