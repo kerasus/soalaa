@@ -155,23 +155,23 @@ export default {
     align-items: center;
     justify-content: center;
     margin-bottom: 50px;
-    @media screen and (max-width: 1439px) {
+    @media screen and (max-width: 1919px) {
       height: 136px;
     }
-    @media screen and (max-width: 1023px) {
+    @media screen and (max-width: 1439px) {
       height: 100px;
     }
-    @media screen and (max-width: 349px) {
+    @media screen and (max-width: 599px) {
       height: 110px;
     }
 
     .logo-image {
       width: 140px;
       height: 95px;
-      @media screen and (max-width: 1439px) {
+      @media screen and (max-width: 1919px) {
         height: 76px;
       }
-      @media screen and (max-width: 1023px) {
+      @media screen and (max-width: 1439px) {
         width: 100px;
         height: 50px;
       }
@@ -179,10 +179,10 @@ export default {
       .q-img__container {
         width: 140px;
         height: 95px;
-        @media screen and (max-width: 1439px) {
+        @media screen and (max-width: 1919px) {
           height: 76px;
         }
-        @media screen and (max-width: 1023px) {
+        @media screen and (max-width: 1439px) {
           width: 100px;
           height: 50px;
         }

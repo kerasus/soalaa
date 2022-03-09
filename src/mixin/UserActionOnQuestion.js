@@ -43,9 +43,9 @@ const mixinUserActionOnQuestion = {
     getUserQuestionDataFromLocalstorage (userExamData, questionId) {
       // find question
       const userQuestionData = userExamData[questionId]
-      const dataToSendFailedAnswers = this.$store.state.failedListAnswerData
-      const dataToSendFailedStatus = this.$store.state.failedListStatusData
-      const dataToSendFailedBookmark = this.$store.state.failedListBookmarkData
+      const dataToSendFailedAnswers = this.$store.state.quiz.failedListAnswerData
+      const dataToSendFailedStatus = this.$store.state.quiz.failedListStatusData
+      const dataToSendFailedBookmark = this.$store.state.quiz.failedListBookmarkData
       // set data from localstorage of user
       const dataToSendAnswer = {
         question_id: questionId,
@@ -98,11 +98,10 @@ const mixinUserActionOnQuestion = {
         newAnsweredChoiceId = null
       } else if (oldStatus === 'x') {
         const newState = ''
-        this.$store.commit('quiz/changeQuestionStatus', {
-          exam_id: examId,
-          question_id: questionId,
-          status: newState
-        })
+        data.newStatus = newState
+        const newUserQuestionData = JSON.parse(JSON.stringify(userQuestionData))
+        newUserQuestionData.status = oldStatus
+        this.userActionOnQuestion_status(data, examId, questionId, newUserQuestionData)
       }
       this.$store.commit('quiz/changeQuestionSelectChoice', {
         exam_id: examId,
@@ -130,12 +129,13 @@ const mixinUserActionOnQuestion = {
       if (oldQuestion && newStatus === oldStatus) {
         newStatus = ''
       } else if (newStatus === 'x') {
-        const newuserQuestionData = JSON.parse(JSON.stringify(userQuestionData))
-        newuserQuestionData.status = newStatus
-        data.choiceId = null
-        this.userActionOnQuestion_answer(data, examId, questionId, newuserQuestionData)
+        this.$store.commit('quiz/changeQuestionSelectChoice', {
+          exam_id: examId,
+          question_id: questionId,
+          answered_choice_id: null
+        })
       }
-      this.$store.commit('changeQuestion_Status', {
+      this.$store.commit('quiz/changeQuestionStatus', {
         exam_id: examId,
         question_id: questionId,
         status: newStatus
