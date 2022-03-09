@@ -123,28 +123,39 @@ export function changeQuestionRefreshQuestionObject (state, payload) {
   const examId = payload.exam_id
   const questionId = payload.question_id
   if (!state.userQuizListData[examId]) {
-    // TODO --> 'vue.set'
     state.userQuizListData[examId] = {}
   }
   if (!state.userQuizListData[examId][questionId]) {
-    // TODO --> 'vue.set'
     state.userQuizListData[examId][questionId] = {}
   }
 }
 
 export function changeQuestionBookmark (state, payload) {
+  const offline = !navigator.onLine
   const examId = payload.exam_id
   const questionId = payload.question_id
   if (!examId || !questionId) {
     return
   }
   this.commit('quiz/changeQuestionRefreshQuestionObject', payload)
-  // TODO --> 'vue.set'
+  let changeBookmarkedAt = Time.now()
+  if (payload.change_bookmarked_at) {
+    changeBookmarkedAt = payload.change_bookmarked_at
+  }
+  state.userQuizListData[examId][questionId].change_bookmarked_at = changeBookmarkedAt
   state.userQuizListData[examId][questionId].bookmarked = payload.bookmarked
+
+  if (offline) {
+    const failedListBookmarkDataObject = { question_id: questionId, bookmarked: payload.bookmarked, selected_at: changeBookmarkedAt }
+    state.failedListBookmarkData.push(failedListBookmarkDataObject)
+    state.failedListBookmarkData = [...new Map(state.failedListBookmarkData.map(v => [v.question_id, v])).values()]
+  }
 }
 
 export function changeQuestionSelectChoice (state, payload) {
+  const offline = !navigator.onLine
   const examId = payload.exam_id
+  const choiceId = payload.answered_choice_id
   const questionId = payload.question_id
   if (!examId || !questionId) {
     return
@@ -155,24 +166,34 @@ export function changeQuestionSelectChoice (state, payload) {
     answeredAt = payload.selected_at
     return answeredAt
   }
-
-  // TODO --> 'vue.set'
-  // Vue.set(state.userQuizListData[examId][questionId], 'answered_at', answeredAt)
-  // Vue.set(state.userQuizListData[examId][questionId], 'answered_choice_id', payload.answered_choice_id)
   state.userQuizListData[examId][questionId].answered_at = answeredAt
   state.userQuizListData[examId][questionId].answered_choice_id = payload.answered_choice_id
+  if (offline) {
+    const failedListAnswerDataObject = { choice_id: choiceId, question_id: questionId, selected_at: answeredAt }
+    state.failedListAnswerData.push(failedListAnswerDataObject)
+    state.failedListAnswerData = [...new Map(state.failedListAnswerData.map(v => [v.question_id, v])).values()]
+  }
 }
 
 export function changeQuestionStatus (state, payload) {
+  const offline = !navigator.onLine
   const examId = payload.exam_id
   const questionId = payload.question_id
   if (!examId || !questionId) {
     return
   }
   this.commit('quiz/changeQuestionRefreshQuestionObject', payload)
-  // TODO --> 'vue.set'
+  let changeStatusAt = Time.now()
+  if (payload.change_status_at) {
+    changeStatusAt = payload.change_status_at
+  }
+  state.userQuizListData[examId][questionId].change_status_at = changeStatusAt
   state.userQuizListData[examId][questionId].status = payload.status
-  // Vue.set(state.userQuizListData[examId][questionId], 'status', payload.status)
+  if (offline) {
+    const failedListStatusDataObject = { question_id: questionId, status: payload.status, selected_at: changeStatusAt }
+    state.failedListStatusData.push(failedListStatusDataObject)
+    state.failedListStatusData = [...new Map(state.failedListStatusData.map(v => [v.question_id, v])).values()]
+  }
 }
 
 export function setUserQuizListData (state, payload) {
@@ -181,8 +202,7 @@ export function setUserQuizListData (state, payload) {
   if (!examId || !questionId) {
     return
   }
-  this.commit('quiz/changeQuestionRefreshQuestionObject', payload)
-  // TODO --> 'vue.set'
+  this.commit('changeQuestionRefreshQuestionObject', payload)
   state.userQuizListData[examId][questionId] = {
     answered_at: payload.answered_at,
     answered_choice_id: payload.answered_choice_id,

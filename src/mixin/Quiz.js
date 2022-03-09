@@ -201,7 +201,7 @@ const mixinQuiz = {
       //   // })
       // })
     },
-    sendUserQuestionsDataToServer (examId, examUserId, finishExam) {
+    sendUserQuestionsDataToServerAndFinishExam (examId, examUserId, finishExam) {
       const answers = this.getUserAnswers(examId)
 
       return axios.post(API_ADDRESS.exam.sendAnswers, { exam_user_id: examUserId, finish: finishExam, questions: answers })
@@ -297,14 +297,11 @@ const mixinQuiz = {
         return window.currentExamQuestionIndexes
       }
       window.currentExamQuestionIndexes = JSON.parse(window.localStorage.getItem('currentExamQuestionIndexes'))
-      // return window.currentExamQuestionIndexes
       return JSON.parse(window.localStorage.getItem('currentExamQuestionIndexes'))
     },
     setCurrentExamQuestions (currentExamQuestions) {
       window.currentExamQuestions = currentExamQuestions
       window.localStorage.setItem('currentExamQuestions', JSON.stringify(currentExamQuestions))
-      // this.currentExamQuestions = Object.freeze(currentExamQuestions)
-      // Vue.set(this, 'currentExamQuestions', Object.freeze(currentExamQuestions))
     },
     setCurrentExamQuestionIndexes (currentExamQuestionIndexes) {
       window.localStorage.setItem('currentExamQuestionIndexes', JSON.stringify(currentExamQuestionIndexes))
@@ -397,11 +394,11 @@ const mixinQuiz = {
       })
       return currentExamQuestionsArray
     },
-    getQuestionsOfSubcategory (subcatId) {
+    getQuestionsOfSubcategory (subCatId) {
       const currentExamQuestions = this.getCurrentExamQuestions()
       const currentExamQuestionsArray = []
       for (const questionId in currentExamQuestions) {
-        if (Assistant.getId(currentExamQuestions[questionId].sub_category.id) === Assistant.getId(subcatId)) {
+        if (Assistant.getId(currentExamQuestions[questionId].sub_category.id) === Assistant.getId(subCatId)) {
           currentExamQuestionsArray.push(currentExamQuestions[questionId])
         }
       }
@@ -582,23 +579,6 @@ const mixinQuiz = {
     hasExamDataOnThisDeviseStorage (examId) {
       return !!this.userQuizListData[examId]
     },
-    sendUserQuestionsDataToServerAndFinishExam (examId, examUserId) {
-      const userExamData = this.userQuizListData[examId]
-      const answers = []
-      for (const questionId in userExamData) {
-        if (userExamData[questionId].answered_at) {
-          answers.push({
-            question_id: questionId,
-            choice_id: userExamData[questionId].answered_choice_id,
-            selected_at: (!userExamData[questionId].answered_at) ? null : userExamData[questionId].answered_at,
-            bookmarked: userExamData[questionId].bookmarked,
-            status: userExamData[questionId].status,
-            check_in_times: userExamData[questionId].check_in_times
-          })
-        }
-      }
-      return axios.post(API_ADDRESS.exam.sendAnswers, { exam_user_id: examUserId, finish: true, questions: answers })
-    },
     syncUserAnswersWithDBAndSendAnswersToServerInExamTime (examId, examUserId, finishExam) {
       const answers = this.getUserAnswers(examId)
 
@@ -612,9 +592,9 @@ const mixinQuiz = {
       return new Promise(function (resolve, reject) {
         const examData = new ExamData()
         that.saveCurrentExamQuestions([])
-        that.$store.commit('cleanCurrentQuestion')
+        that.$store.commit('quiz/cleanCurrentQuestion')
         that.bookletsDialog = true
-        that.$store.commit('AppLayout/updateOverlay', { show: true, loading: true, text: '' })
+        that.$store.commit('loading/overlay', { loading: true, text: '' })
         examData.getExamData(examId)
         examData.loadQuestionsFromFile()
         examData.getUserExamData()
@@ -667,9 +647,11 @@ const mixinQuiz = {
       const persianRegex = /[\u0600-\u06FF]/
       return !string.match(persianRegex)
     },
-    answerClicked (data) {
+    answerClicked (data, sendData = true, callback) {
       const questionId = data.questionId
-      return this.userActionOnQuestion(questionId, 'answer', { choiceId: data.choiceId })
+
+      const socket = (this.useSocket) ? this.socket : false
+      return this.userActionOnQuestion(questionId, 'answer', { choiceId: data.choiceId }, socket, sendData, callback)
     },
     changeBookmark (questionId) {
       return this.userActionOnQuestion(questionId, 'bookmark')
