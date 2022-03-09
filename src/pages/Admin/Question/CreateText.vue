@@ -2,8 +2,9 @@
   <div class="createQ-text-container">
     <Navbar @chosenComponent="chosenComponent"/>
     <DynamicComponent
-      v-bind="dynamicComponentProps"
+      :component="currentComponent"
       :key="componentKey"
+      :allProps="allProps"
     />
   </div>
 </template>
@@ -11,6 +12,7 @@
 <script>
 import Navbar from 'components/Question/QuestionPage/Create/textMode/Navbar'
 import DynamicComponent from 'components/Question/QuestionPage/Create/textMode/questionTypes/DynamicComponent'
+import { Question } from 'src/models/Question'
 export default {
   name: 'CreateText',
   components: {
@@ -35,10 +37,22 @@ export default {
         }
       ],
       componentKey: 0,
-      dynamicComponentProps: {
-        component: {
-          componentName: 'MultipleChoiceQ',
-          tabName: 'تستی'
+      currentComponent: {
+        componentName: 'MultipleChoiceQ',
+        tabName: 'تستی'
+      },
+      allProps: {
+        cq: {
+          type: Question,
+          default: () => new Question()
+        },
+        modelValue: {
+          type: Question,
+          default: () => new Question()
+        },
+        status: {
+          type: Boolean,
+          default: () => false
         }
       }
     }
@@ -48,8 +62,8 @@ export default {
       const that = this
       this.componentsNames.forEach(function (item) {
         if (item.tabName === cName) {
-          that.dynamicComponentProps.component.componentName = item.componentName
-          that.dynamicComponentProps.component.tabName = item.tabName
+          that.currentComponent.componentName = item.componentName
+          that.currentComponent.tabName = item.tabName
         }
       })
       this.forceRerenderComponent()

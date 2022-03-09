@@ -253,9 +253,7 @@ export default {
       mode: ''
     }
   },
-  updated () {
-
-  },
+  updated () {},
   unmounted () {
     window.onbeforeunload = null
   },

@@ -137,6 +137,9 @@ export default {
       that.domKey = Date.now()
     }, 100)
   },
+  mounted () {
+    console.log('this.$props--------', this.$props)
+  },
   updated () {
     this.question = this.modelValue
   },
