@@ -7,7 +7,20 @@
       <vue-tiptap-katex
         ref="tiptap"
         :loading="loading"
-        :options="{ bubbleMenu: false, floatingMenu: false, poem: true, reading: true, persianKeyboard: true, onResizeEnd: onResizeEnd ,mathliveOptions: { smartFence: false }, uploadServer: { url: imageUrl, headers: { Authorization: 'Bearer ' + $store.getters['Auth/accessToken'] } } }"
+        :options="{
+          bubbleMenu: false,
+          floatingMenu: false,
+          poem: true,
+          reading: true,
+          persianKeyboard: true,
+          onResizeEnd: onResizeEnd,
+          mathliveOptions: { smartFence: false },
+          uploadServer: {
+            url: imageUrl,
+            instantUpload: true,
+            headers: { Authorization: 'Bearer ' + $store.getters['Auth/accessToken'] }
+          }
+        }"
       />
     </v-col>
     <!-- eslint-disable vue/no-v-html -->
