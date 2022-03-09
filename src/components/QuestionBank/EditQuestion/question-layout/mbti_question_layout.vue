@@ -1,74 +1,83 @@
 <template>
   <!-- ------------------------- question -------------------------------  -->
-  <div class=" ma-4 question-layout">
+  <div class="question-layout">
     <div class="question ">
       <div
-        v-if="status"
-        class="mb-5 "
+          v-if="status"
+          style="margin-bottom: 20px"
       >
         تایپ سوال
       </div>
       <question_field
-        ref="questionStatement"
-        :key="'statement' + domKey"
-        v-model="question.statement"
-        class="mb-10"
-        :edit-status="status"
-        placeholder="صورت سوال"
-        :question-id="value.id ? value.id : 'null'"
-        @input="updateQuestion"
+          ref="questionStatement"
+          :key="'statement' + domKey"
+          v-model="question.statement"
+          class="q-mb-lg"
+          :edit-status="status"
+          placeholder="صورت سوال"
+          :question-id="value.id ? value.id : 'null'"
+          @input="updateQuestion"
       />
     </div>
-    <v-row
-      v-for="(item, index) in question.choices.list"
-      :key="index"
-      class="question-layout-options"
-      :class="status ? 'mb-6   question-options white': '  question-o' +
+    <div
+        v-for="(item, index) in question.choices.list"
+        :key="index"
+        class="row question-layout-options"
+        :class="status ? 'q-mb-md  question-options white': '  question-o' +
         'ptions'"
     >
-      <v-col class="col-2">
-        <v-row>
-          <v-col :class="status ?'col-10' :'col-10'">
-            <v-autocomplete
-              v-model="item.answer"
-              :items="mbti_value"
-              label="انتخاب مقدار"
-              dense
-              outlined
-              rounded
-              :disabled="!status"
-              @change="updateQuestion"
-            />
-          </v-col>
-          <v-col class="col-1">
-            {{ (index + 1) + ') ' }}
-          </v-col>
-        </v-row>
-      </v-col>
-      <v-col class="answer-editor col-10">
+      <div class="col-2">
+      <div class="row">
+      <div :class="status ?'col-10' :'col-10'">
+<!--        Todo : v-autocomplete -->
+        <q-select
+        :options="mbtiValue"
+        option-label="text"
+        option-value="value"
+        v-model="item.answer"
+        />
+<!--            <v-autocomplete-->
+<!--                v-model="item.answer"-->
+<!--                :items="mbti_value"-->
+<!--                label="انتخاب مقدار"-->
+<!--                dense-->
+<!--                outlined-->
+<!--                rounded-->
+<!--                :disabled="!status"-->
+<!--                @change="updateQuestion"-->
+<!--            />-->
+      </div>
+        <div class="col-1">
+          {{ (index + 1) + ') ' }}
+        </div>
+      </div>
+      </div>
+      <div class="answer-editor col-10">
         <div>
           <question_field
-            :ref="'choice' + (index + 1)"
-            :key="'choices' + (index + 1) + domKey"
-            v-model="item.title"
-            :edit-status="status"
-            :question-id="value.id ? value.id : 'null'"
-            @input="updateQuestion"
+              :ref="'choice' + (index + 1)"
+              :key="'choices' + (index + 1) + domKey"
+              v-model="item.title"
+              :edit-status="status"
+              :question-id="value.id ? value.id : 'null'"
+              @input="updateQuestion"
           />
         </div>
-      </v-col>
-    </v-row>
+      </div>
+    </div>
   </div>
   <!-- ------------------------- answer -------------------------------  -->
 </template>
 <script>
-import {Question} from '@/models/Question'
-import question_field from '@/components/Question/questionField'
+import { Question } from 'src/models/Question'
+// ToDo eslint
+// eslint-disable-next-line camelcase
+import question_field from 'components/Question/questionField'
 
 export default {
   name: 'MbtiQuestionLayout',
   components: {
-    question_field,
+    question_field
   },
   props: {
     value: {
@@ -78,13 +87,13 @@ export default {
     status: {
       type: Boolean,
       default: false
-    },
+    }
   },
-  data() {
+  data () {
     return {
       question: new Question(),
       domKey: Date.now(),
-      mbti_value: [
+      mbtiValue: [
         {
           text: 'bartle-s',
           value: 'socializer'
@@ -141,32 +150,32 @@ export default {
       this.question = this.value
     }
   },
-  created() {
+  created () {
     this.question = this.value
-    let that = this
+    const that = this
     setTimeout(() => {
       that.domKey = Date.now()
     }, 100)
   },
   methods: {
-    getContent() {
+    getContent () {
       console.log('test', this.$refs)
       this.$refs.questionStatement.getContent()
       this.$refs.choice1[0].getContent()
       this.$refs.choice2[0].getContent()
       this.updateQuestion()
     },
-    updateQuestion() {
+    updateQuestion () {
       console.log('this.question', this.question)
       this.$emit('input', this.question)
     },
-    clicked(order) {
+    clicked (order) {
       this.question.choices.list.forEach(item => {
-        item.answer = item.order === order;
+        item.answer = item.order === order
       })
       this.updateQuestion()
     }
-  },
+  }
 }
 </script>
 

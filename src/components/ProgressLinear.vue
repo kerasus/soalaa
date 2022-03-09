@@ -11,12 +11,13 @@
 </template>
 
 <script>
-    export default {
-        name: "ProgressLinear",
-        props: [
-            'active'
-        ]
-    }
+//       ToDo : ProgressLinear
+export default {
+  name: 'ProgressLinear',
+  props: [
+    'active'
+  ]
+}
 </script>
 
 <style scoped>

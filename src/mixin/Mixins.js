@@ -1,7 +1,7 @@
-import mixinQuiz from '@/mixin/Quiz'
-import mixinDrawer from '@/mixin/Drawer'
-import mixinWindowSize from '@/mixin/WindowSize'
-import mixinUserActionOnQuestion from '@/mixin/UserActionOnQuestion'
-import mixinAuth from '@/mixin/Auth'
+import mixinAuth from '../mixin/Auth'
+import mixinQuiz from '../mixin/Quiz'
+import mixinUserActionOnQuestion from '../mixin/UserActionOnQuestion'
+import mixinDrawer from '../mixin/Drawer'
+import mixinSetIcons from '../mixin/setIcons'
 
-export { mixinAuth, mixinQuiz, mixinDrawer, mixinWindowSize, mixinUserActionOnQuestion }
+export { mixinAuth, mixinQuiz, mixinUserActionOnQuestion, mixinDrawer, mixinSetIcons }

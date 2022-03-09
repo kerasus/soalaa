@@ -1,51 +1,39 @@
 <template>
   <div class="log-item">
-    <v-container class="log-container">
-      <v-row no-gutters>
-        <v-col cols="1">
-          <v-icon>
-            mdi-circle-medium
-          </v-icon>
-        </v-col>
-        <v-col>
-          <v-row justify="space-between">
-            <v-col cols="10">
+    <div class="log-container">
+      <div class="row q-gutter-none" >
+        <div class="col col-1">
+          <q-icon name="mdi-circle-medium" style="font-size: 2em; color: rgba(0, 0, 0, 0.54);"/>
+        </div>
+        <div class="col">
+          <div class="row justify-between">
+            <div class="col col-10">
               <div>
                 به‌روزشده توسط
                 <span class="log-editor">{{ log.causer.full_name }}</span>
                 در
                 <span class="log-date">{{ log.shamsiDate('created_at').dateTime }}</span>
               </div>
-            </v-col>
-            <v-col class="eye-icon">
-              <v-icon>
-                mdi-eye-outline
-              </v-icon>
-            </v-col>
-          </v-row>
-          <div
-            v-if="log.properties.old.status || log.properties.new.status"
-            class="log-status"
-          >
-            وضعیت
-            <template v-if="log.properties.old.status">
-              از
-              <v-chip
-                color="orange"
-                text-color="white"
-              >
-                {{ log.properties.old.status.display_title }}
-              </v-chip>
-            </template>
-            <template v-if="log.properties.new.status">
-              به
-              <v-chip
-                color="red"
-                text-color="white"
-              >
-                {{ log.properties.new.status.display_title }}
-              </v-chip>
-            </template>
+            </div>
+            <div class="eye-icon">
+              <q-icon name="mdi-eye-outline" style="font-size: 2em; color: rgba(0, 0, 0, 0.54);"/>
+            </div>
+          </div>
+          <div class="log-status">
+            وضعیت از
+            <q-chip dense color="orange"
+                    text-color="white"
+                    size="sm"
+                    :label="log.properties.old.status.display_title"
+            />
+            به
+            <q-chip
+              dense
+              color="red"
+              text-color="white"
+              size="sm"
+              :label="log.properties.new.status.display_title"
+            />
             تغییر یافت.
           </div>
           <div
@@ -64,52 +52,49 @@
               </div>
             </div>
           </div>
-          <v-btn
+          <q-btn
             v-if="!canComment"
-            block
-            color="primary"
-            height="20"
-            class="mt-3"
+            color="blue"
+            class="full-width log-comment-btn"
+            label="افزودن کامنت"
+            size="sm"
             @click="canComment = true"
-          >
-            افزودن کامنت
-          </v-btn>
-          <v-textarea
+          />
+          <q-input
             v-if="canComment"
             v-model="commentText"
-            outlined
-            rounded
-            class="mt-3"
+            filled
+            type="textarea"
+            class="q-mt-md"
           />
-          <v-btn
+          <q-btn
             v-if="canComment"
-            color="primary"
-            block
-            height="20"
+            color="blue"
+            class="full-width log-comment-btn"
+            label="ارسال کامنت"
+            size="sm"
             @click="addComment"
-          >
-            ارسال کامنت
-          </v-btn>
-        </v-col>
-      </v-row>
-    </v-container>
+          />
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
-import {Log} from "@/models/Log";
+import { Log } from 'src/models/Log'
 
 export default {
-  name: "LogItem",
+  name: 'LogItem',
   props: {
     log: {
-      default() {
+      default () {
         return new Log()
       },
       type: Log
     }
   },
-  data() {
+  data () {
     return {
       canComment: false,
       commentText: ''
@@ -132,7 +117,9 @@ export default {
 }
 
 .log-container {
-  padding: 30px 12px 12px 36px;
+  border-radius: 10px;
+  background-color: white;
+  padding: 30px 12px 12px 12px;
 }
 
 .log-editor {
@@ -141,6 +128,11 @@ export default {
 
 .log-date {
   text-decoration: underline;
+}
+
+.log-comment-btn{
+  height: 20px;
+  margin-top: 20px;
 }
 
 .eye-icon {

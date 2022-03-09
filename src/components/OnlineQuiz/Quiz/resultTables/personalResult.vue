@@ -1,261 +1,252 @@
 <template>
-  <v-container
-    fluid
+  <div
     class="personal-results"
   >
-    <v-row v-if="report">
-      <v-col
-        md="7"
-        cols="12"
+    <div
+      class="row"
+      v-if="report"
+    >
+      <div
+        class="col col-12 col-md-7"
       >
-        <v-row>
-          <v-col>
-            <v-data-table
-              hide-default-footer
-              :headers="headers1"
-              :header-props="{sortByText: 'ترتیب'}"
-              :items="report.sub_category"
-              :items-per-page="15"
-              class="elevation-1"
-            >
-              <template v-slot:top>
-                <br>
-                <span class="tableTitle">
+        <div class="row proceeds-table default-resultTable-row">
+          <div class="col lessons-proceeds default-resultTable-col">
+            <br>
+            <span class="tableTitle col-12">
                   جدول عملکرد دروس
-                </span>
-                <br>
-                <br>
-              </template>
-            </v-data-table>
-          </v-col>
-        </v-row>
-        <v-row>
-          <v-col>
-            <v-data-table
-              hide-default-footer
-              :headers="headers3"
-              class="elevation-1 mb-2"
-              :items="[report.exam_user]"
-            >
-              <template v-slot:item.created_at="{ item }">
-                {{ shamsiDate(item.created_at) }}
-              </template>
-              <template v-slot:item.accept_at="{ item }">
-                {{ shamsiDate(item.accept_at) }}
-              </template>
-            </v-data-table>
-          </v-col>
-        </v-row>
-      </v-col>
-      <v-col
-        md="5"
-        cols="12"
+            </span>
+            <br>
+            <br>
+            <q-table
+              :rows="report.sub_category"
+              :columns="columns1"
+              row-key="name"
+              color="amber"
+              hide-bottom
+              flat
+              :rows-per-page-options="[0]"
+            ></q-table>
+          </div>
+        </div>
+        <div class="row default-result-table default-resultTable-row">
+          <div class="col default-resultTable-col">
+            <q-table
+              :rows="[report.exam_user]"
+              :columns="columns3"
+              row-key="name"
+              color="amber"
+              hide-bottom
+              flat
+              :rows-per-page-options="[0]"
+            ></q-table>
+          </div>
+        </div>
+      </div>
+      <div
+        class="col col-md-5 col-12"
       >
-        <v-row>
-          <v-col>
-            <v-data-table
-              hide-default-footer
-              :headers="headers2"
-              :header-props="{sortByText: 'ترتیب'}"
-              :items="report.zirgorooh"
-              :items-per-page="5"
-              class="elevation-1"
-            >
-              <template v-slot:top>
-                <br>
-                <span class="tableTitle ">
+        <div class="row default-result-table default-resultTable-row">
+          <div class="col default-resultTable-col">
+            <br>
+            <span class="tableTitle ">
                   نتیجه در زیر گروه ها
-                </span>
-                <br>
-                <br>
-              </template>
-            </v-data-table>
-          </v-col>
-        </v-row>
-        <v-row>
-          <v-col class="card-col">
+            </span>
+            <br>
+            <br>
+            <q-table
+              :rows="report.zirgorooh"
+              :columns="columns2"
+              row-key="name"
+              color="amber"
+              hide-bottom
+              flat
+              :rows-per-page-options="[0]"
+            ></q-table>
+          </div>
+        </div>
+        <div class="row default-resultTable-row">
+          <div class="col card-col default-resultTable-col">
             <div class="card-parent elevation-1">
-              <v-card :elevation="0">
-                <v-card-title>
-                  <v-row>
-                    <v-col>
+              <q-card class="default-result-card" >
+                <q-card-section class="card-title-section">
+                  <div class="row">
+                    <div class="col text-center">
                       تعداد کل شرکت کنندگان
-                    </v-col>
-                    <v-col>
+                    </div>
+                    <div class="col text-center">
                       ماکزمیم تراز کل زیر گروه
-                    </v-col>
-                  </v-row>
-                </v-card-title>
-
-                <span>
-                  <v-row>
-                    <v-col>
+                    </div>
+                  </div>
+                </q-card-section>
+                <q-card-section>
+                  <div class="row">
+                    <div class="col text-center">
                       {{ report.n_normal_participants }}
-                    </v-col>
-                    <v-col>
+                    </div>
+                    <div class="col text-center">
                       {{ report.main.taraaz }}
-                    </v-col>
-                  </v-row>
-                </span>
-              </v-card>
+                    </div>
+                  </div>
+                </q-card-section>
+              </q-card>
             </div>
-          </v-col>
-        </v-row>
-        <v-row>
-          <v-col class="card-col">
+          </div>
+        </div>
+        <div class="row default-resultTable-row">
+          <div class="col card-col default-resultTable-col">
             <div class="card-parent elevation-1">
-              <v-card
-                class="mb-2"
-                :elevation="0"
+              <q-card
+                class="mb-2 default-result-card"
               >
-                <v-card-title>
-                  <v-row>
-                    <v-col :cols="(report.main.rank_school) ? 3 : 4">
+                <q-card-section class="card-title-section">
+                  <div class="row">
+                    <div class="col text-center" :class="[(report.main.rank_school) ? 'col-3' : 'col-4']">
                       رتبه کل کشوری
-                    </v-col>
-                    <v-col :cols="(report.main.rank_school) ? 3 : 4">
+                    </div>
+                    <div class="col text-center" :class="[(report.main.rank_school) ? 'col-3' : 'col-4']">
                       رتبه در استان
-                    </v-col>
-                    <v-col :cols="(report.main.rank_school) ? 3 : 4">
+                    </div>
+                    <div class="col text-center" :class="[(report.main.rank_school) ? 'col-3' : 'col-4']">
                       رتبه در شهر
-                    </v-col>
-                    <v-col
+                    </div>
+                    <div
+                      class="col col-3 text-center"
                       v-if="report.main.rank_school"
-                      cols="3"
                     >
                       رتبه در مدرسه
-                    </v-col>
-                  </v-row>
-                </v-card-title>
-
-                <span>
-                  <v-row>
-                    <v-col :cols="(report.main.rank_school) ? 3 : 4">{{ report.main.rank_country }}</v-col>
-                    <v-col :cols="(report.main.rank_school) ? 3 : 4">{{ report.main.rank_province }}</v-col>
-                    <v-col :cols="(report.main.rank_school) ? 3 : 4">{{ report.main.rank_city }}</v-col>
-                    <v-col
+                    </div>
+                  </div>
+                </q-card-section>
+                <q-card-section>
+                  <div class="row">
+                    <div class="col text-center" :class="[(report.main.rank_school) ? 'col-3' : 'col-4']">{{ report.main.rank_country }}</div>
+                    <div class="col text-center" :class="[(report.main.rank_school) ? 'col-3' : 'col-4']">{{ report.main.rank_province }}</div>
+                    <div class="col text-center" :class="[(report.main.rank_school) ? 'col-3' : 'col-4']">{{ report.main.rank_city }}</div>
+                    <div
+                      class="col col-3 text-center"
                       v-if="report.main.rank_school"
-                      cols="3"
-                    >{{ report.main.rank_school }}</v-col>
-                  </v-row>
-                </span>
-              </v-card>
+                    >{{ report.main.rank_school }}</div>
+                  </div>
+                </q-card-section>
+              </q-card>
             </div>
-          </v-col>
-        </v-row>
-      </v-col>
-    </v-row>
-  </v-container>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </template>
 
 <script>
-    import moment from 'moment-jalaali'
-    export default {
-        name : 'PersonalResult',
-        props: ['report'],
-        data() {
-            return {
-                headers1: [
-                    {
-                        text    : 'ردیف',
-                        align   : 'center',
-                        sortable: true,
-                        value   : 'index',
-                    },
-                    {text: 'درس', value: 'sub_category', align: 'center', sortable: false},
-                    {text: ' تعداد کل', value: 'total_answer', align: 'center', sortable: false},
-                    {text: ' تعداد درست', value: 'right_answer', align: 'center', sortable: false},
-                    {text: ' تعداد غلط', value: 'wrong_answer', align: 'center', sortable: false},
-                    {text: ' تعداد نزده', value: 'empty', align: 'center', sortable: false},
-                    {text: ' درصد', value: 'percent', align: 'center', sortable: true},
-                    {text: ' تراز', value: 'taraaz', align: 'center', sortable: true},
-                ],
-                headers2: [
-                    {
-                        text    : 'زیر گروه',
-                        align   : 'center',
-                        sortable: true,
-                        value   : 'title'
-                    },
-                    {text: 'درصد خام', value: 'percent', align: 'center', sortable: true,},
-                    {text: 'تراز', value: 'taraaz', align: 'center', sortable: true,},
-                    {text: ' رتبه شهر', value: 'rank_city', align: 'center', sortable: true,},
-                    {text: ' رتبه استان', value: 'rank_province', align: 'center', sortable: true,},
-                    {text: ' رتبه کشور', value: 'rank_country', align: 'center', sortable: true,},
-                ],
-                headers3: [
-                    {
-                        text    : 'زمان شروع آزمون',
-                        align   : 'center',
-                        sortable: false,
-                        value   : 'created_at'
-                    },
-                    {text: 'زمان مجاز آزمون', value: 'accept_at', align: 'center', sortable: false,},
-                ],
-            }
+import moment from 'moment-jalaali'
+export default {
+  name: 'PersonalResult',
+  props: ['report'],
+  data () {
+    return {
+
+      columns1: [
+        {
+          name: 'index',
+          align: 'center',
+          label: 'ردیف',
+          field: row => row.index,
+          sortable: true
         },
-        computed: {
-            shamsiDate() {
-                return (date) => {
-                    return  moment(date, 'YYYY/M/D HH:mm:ss').format('jYYYY/jM/jD HH:mm:ss')
-                }
-            }
-        }
+        { name: 'sub_category', label: 'درس', field: row => row.sub_category, align: 'center', sortable: false },
+        { name: 'total_answer', label: ' تعداد کل', field: row => row.total_answer, align: 'center', sortable: false },
+        { name: 'right_answer', label: ' تعداد درست', field: row => row.right_answer, align: 'center', sortable: false },
+        { name: 'wrong_answer', label: ' تعداد غلط', field: row => row.wrong_answer, align: 'center', sortable: false },
+        { name: 'empty', label: ' تعداد نزده', field: row => row.empty, align: 'center', sortable: false },
+        { name: 'percent', label: ' درصد', field: row => row.percent, align: 'center', sortable: true },
+        { name: 'taraaz', label: ' تراز', field: row => row.taraaz, align: 'center', sortable: true }
+      ],
+      columns2: [
+        {
+          name: 'title',
+          label: 'زیر گروه',
+          align: 'center',
+          sortable: true,
+          field: row => row.title
+        },
+        { name: 'percent', label: 'درصد خام', field: row => row.percent, align: 'center', sortable: true },
+        { name: 'taraaz', label: 'تراز', field: row => row.taraaz, align: 'center', sortable: true },
+        { name: 'rank_city', label: ' رتبه شهر', field: row => row.rank_city, align: 'center', sortable: true },
+        { name: 'rank_province', label: ' رتبه استان', field: row => row.rank_province, align: 'center', sortable: true },
+        { name: 'rank_country', label: ' رتبه کشور', field: row => row.rank_country, align: 'center', sortable: true }
+      ],
+      columns3: [
+        {
+          name: 'created_at',
+          align: 'center',
+          label: 'زمان شروع آزمون',
+          field: row => row.created_at,
+          sortable: false
+        },
+        { name: 'accept_at', label: 'زمان مجاز آزمون', field: row => row.accept_at, align: 'center', sortable: false }
+      ]
     }
+  },
+  created () {},
+  computed: {
+    shamsiDate () {
+      return (date) => {
+        return moment(date, 'YYYY/M/D HH:mm:ss').format('jYYYY/jM/jD HH:mm:ss')
+      }
+    }
+  }
+}
 </script>
 
-<style>
-    .personal-results .v-data-table tbody tr:nth-of-type(2n) {
-        background-color: rgba(0,0,0,.04);
-    }
+<style lang="scss">
+.default-resultTable-row {
+  padding: 12px;
+}
+.default-resultTable-col {
+  padding: 20px;
+  background-color: #fff;
+  box-shadow: 0 2px 1px -1px rgba(0, 0, 0, 0.2), 0 1px 1px 0 rgba(0, 0, 0, 0.14), 0 1px 3px 0 rgba(0, 0, 0, 0.12) !important;
+}
+.default-result-card {
+  border-radius: 20px;
+  border: 1px solid #ececec;
+  color: rgba(0,0,0,.87);
+  font-size: 16px;
+  box-shadow: none;
+}
+.card-title-section {
+  background: rgba(255,193,7,.3);
+  color: rgba(0,0,0,.6);
+  font-size: 14px;
+  font-weight: 700;
+  padding: 8px;
+}
 
-    .personal-results .v-data-table thead {
-        background-color: rgba(255,193,7,.3);
-    }
-
-    .personal-results .v-data-table .v-data-table__wrapper {
-        border-radius: 20px;
-        border: 1px solid #ececec;
-    }
-
-    .personal-results .v-data-table {
-        padding: 20px 20px;
+    .personal-results {
+      background-color: #f1f1f1;
+      .proceeds-table ,  .default-result-table{
+        .q-table__container {
+          border-radius: 20px;
+        }
+        .q-table {
+          border: 1px solid #ececec;
+          thead tr {
+            background-color: #ffecb4;
+            border-radius: 20px;
+            color: rgba(62, 57, 43, 0.96);
+          }
+          tbody tr:nth-of-type(2n) {
+            background-color: rgba(0, 0, 0, 0.02);
+          }
+          tbody td {
+            font-size: 0.875rem;
+          }
+        }
+      }
     }
 
     .personal-results .tableTitle {
-        margin-right: 15px;
-    }
-
-    .personal-results .card-parent {
-        padding: 20px;
-        background: #fff;
-        border-radius: 4px;
-    }
-
-    .personal-results .v-card {
-        border-radius: 20px;
-        border: 1px solid #ececec;
-    }
-
-    .personal-results .v-card__title {
-        background: rgba(255,193,7,.3);
-        color: #00000099;
-        font-size: 14px;
-        font-weight: bold;
-        padding: 8px;
-    }
-
-    .personal-results .v-card .col {
-        text-align: center;
-    }
-
-    .personal-results .v-card span .row {
-        height: 64px;
-    }
-
-    .personal-results .v-card span .col {
-        display: flex;
-        justify-content: center;
-        align-items: center;
+        margin-right: 15px #{"/* rtl:ignore */"};
+        font-size: 16px;
     }
 </style>
