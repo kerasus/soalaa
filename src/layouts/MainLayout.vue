@@ -1,10 +1,10 @@
 <template>
   <quasar-template-builder v-model:value="properties" @onResize="resize">
     <template #header>
-      <div v-if="$route.name === 'onlineQuiz.alaaView'" class="header row">
+      <div v-if="$route.name === 'onlineQuiz.alaaView'" class="header-inside row">
         <online-quiz-template-header/>
       </div>
-      <div v-else  class="header row">
+      <div v-else  class="header-inside row">
         <template-header/>
       </div>
       <q-linear-progress
@@ -16,10 +16,10 @@
       />
     </template>
     <template #left-drawer>
-      <div v-if="$route.name === 'onlineQuiz.alaaView'">
+      <div class="drawer-inside" v-if="$route.name === 'onlineQuiz.alaaView'">
         <sideMenuMapOfQuestions/>
       </div>
-      <div v-else>
+      <div class="drawer-inside" v-else>
         <side-menu-dashboard/>
       </div>
     </template>
@@ -101,7 +101,7 @@ export default {
 
 <style lang="scss" scoped>
 .main-layout-header {
-  .header{
+  .header-inside{
     width: 100%;
   }
 
@@ -111,6 +111,9 @@ export default {
 }
 
 .main-layout-left-drawer {
+  .drawer-inside{
+    height: 100%;
+  }
 }
 </style>
 
