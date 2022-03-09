@@ -32,8 +32,8 @@
 </template>
 
 <script>
-import uploadImage from '../../../components/Question/QuestionPage/UploadImage'
-import { Question } from '../../../models/Question'
+import uploadImage from 'src/components/Question/QuestionPage/UploadImage'
+import { Question } from 'src/models/Question'
 
 export default {
   name: 'CreateImage',

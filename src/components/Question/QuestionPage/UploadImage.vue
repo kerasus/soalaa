@@ -1,4 +1,3 @@
-/* eslint-disable */
 <template>
   <div class="image-upload-parent">
     <p style="color: #23263b; font-size: 16px; font-weight: 500">{{ title }}</p>
@@ -7,7 +6,6 @@
 </template>
 
 <script>
-/* eslint-disable */
 import { Question } from 'src/models/Question'
 import * as FilePond from 'filepond'
 import 'filepond/dist/filepond.min.css'
@@ -33,14 +31,8 @@ export default {
       pond: FilePond.create({
         allowMultiple: true,
         name: 'filepond',
-        labelIdle: dropAreaHTML,
+        labelIdle: dropAreaHTML
       }),
-      serverConfig: {
-        url: '/3a/api/v1/question',
-        headers: {
-          Authorization: 'Bearer ' + this.$store.getters['Auth/accessToken']
-        }
-      },
       question: new Question()
     }
   },
@@ -61,27 +53,16 @@ export default {
       required: false
     }
   },
-  components: {
-  },
-  methods: {
-  },
   mounted () {
     document.getElementById('filepond-wrapper-' + this.fieldKey).appendChild(this.pond.element)
     this.question = this.value
     document.addEventListener('FilePond:addfile', () => {
-      console.log('addFile')
-      this.question[this.fieldKey] = this.pond.getFiles().map(({file}) => file)
+      this.question[this.fieldKey] = this.pond.getFiles().map(({ file }) => file)
       this.$emit('input', this.question)
     })
   }
 }
 </script>
-
-<style scoped lang="scss">
-.image-upload-parent {
-
-}
-</style>
 
 <style lang="scss">
 .drop-area-parent {
