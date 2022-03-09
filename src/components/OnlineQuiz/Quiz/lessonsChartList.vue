@@ -87,7 +87,7 @@ import API_ADDRESS from 'src/api/Addresses'
 import { QuestSubcategoryList } from 'src/models/QuestSubcategory'
 
 export default {
-  name: 'LessonsList',
+  name: 'LessonsChartList',
   data: () => ({
     lessonsList: new QuestSubcategoryList()
   }),
