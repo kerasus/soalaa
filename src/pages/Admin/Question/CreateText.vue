@@ -1,13 +1,18 @@
 <template>
   <div class="createQ-text-container">
     <Navbar @chosenComponent="chosenComponent"/>
-    <DynamicComponent :component="currentComponent" :key="componentKey"/>
+    <DynamicComponent
+      :component="currentComponent"
+      :key="componentKey"
+      :allProps="allProps"
+    />
   </div>
 </template>
 
 <script>
 import Navbar from 'components/Question/QuestionPage/Create/textMode/Navbar'
 import DynamicComponent from 'components/Question/QuestionPage/Create/textMode/questionTypes/DynamicComponent'
+import { Question } from 'src/models/Question'
 export default {
   name: 'CreateText',
   components: {
@@ -31,11 +36,25 @@ export default {
           tabName: 'ام بی تی آی'
         }
       ],
+      componentKey: 0,
       currentComponent: {
         componentName: 'MultipleChoiceQ',
         tabName: 'تستی'
       },
-      componentKey: 0
+      allProps: {
+        cq: {
+          type: Question,
+          default: () => new Question()
+        },
+        modelValue: {
+          type: Question,
+          default: () => new Question()
+        },
+        status: {
+          type: Boolean,
+          default: () => false
+        }
+      }
     }
   },
   methods: {

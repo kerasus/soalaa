@@ -124,7 +124,7 @@
 <script>
 import { Question } from 'src/models/Question'
 // eslint-disable-next-line camelcase
-import question_field from 'src/components/Question/questionField'
+import question_field from 'components/Question/QuestionPage/QuestionField.vue'
 
 export default {
   name: 'QuestionLayout',

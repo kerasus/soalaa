@@ -16,7 +16,6 @@
 
   </div>
 </template>
-
 <script>
 
 import API_ADDRESS from 'src/api/Addresses'
@@ -61,33 +60,32 @@ export default {
   },
   computed: {
     imageUrl () {
+      console.log('imageUrl')
       return API_ADDRESS.question.uploadImage(this.questionId)
     }
   },
   created () {
+    console.log('created')
     this.value = this.editorValue
     this.loading = true
     this.getHtmlValueFromValueProp()
-    // console.log('_________________________________________________________________________')
-    // console.log('question field value:', this.value)
-    // console.log('question field :', this.label)
-    // console.log('question field editStatus:', this.editStatus)
-    // console.log('question field questionId:', this.questionId)
-    // console.log('_________________________________________________________________________')
   },
   watch: {
   },
   mounted () {
+    console.log('mounted')
     if (this.$refs.tiptap) {
       this.$refs.tiptap.setContent(this.html)
     }
   },
   methods: {
     getContent () {
+      console.log('getContent')
       console.log('value', this.$refs.tiptap.getContent())
       this.$emit('update:modelValue', this.$refs.tiptap.getContent())
     },
     getHtmlValueFromValueProp () {
+      console.log('getHtmlValueFromValueProp')
       let html = this.value
       if (html === null || typeof html === 'undefined') {
         html = ''
