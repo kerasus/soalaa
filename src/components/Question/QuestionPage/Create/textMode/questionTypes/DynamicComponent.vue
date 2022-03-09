@@ -1,5 +1,8 @@
 <template>
-  <component :is="comp"></component>
+  <component
+    :is="comp"
+    v-bind="allPropsNeeded"
+  ></component>
 </template>
 <script>
 import { defineAsyncComponent } from 'vue'
@@ -11,7 +14,9 @@ export default {
     }
   },
   data () {
-    return {}
+    return {
+      allPropsNeeded: {}
+    }
   },
   computed: {
     comp () {

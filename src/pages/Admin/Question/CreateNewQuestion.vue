@@ -168,7 +168,6 @@ export default {
   },
   data () {
     return {
-      fucking: '',
       selectedAuthors: [],
       authors: [
         {
@@ -715,7 +714,6 @@ export default {
         .then((response) => {
           if (response.data.data) {
             that.currentQuestion = new Question(response.data.data)
-            that.fucking = 'new text'
             if (that.currentQuestion.type.value === 'psychometric') {
               if (that.getPageStatus() === 'Edit') {
                 that.$router.push({ name: 'question.mbti.edit', params: { question_id: that.$route.params.question_id } })
@@ -724,7 +722,6 @@ export default {
               }
             }
             that.temp = that.currentQuestion
-            that.testMitra = 'hi babe'
             that.checkTextCondition()
             that.getLogs()
             that.trueChoiceIndex = that.currentQuestion.choices.list.findIndex((item) => item.answer)

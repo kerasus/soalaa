@@ -1,7 +1,10 @@
 <template>
   <div class="createQ-text-container">
     <Navbar @chosenComponent="chosenComponent"/>
-    <DynamicComponent :component="currentComponent" :key="componentKey"/>
+    <DynamicComponent
+      v-bind="dynamicComponentProps"
+      :key="componentKey"
+    />
   </div>
 </template>
 
@@ -31,11 +34,13 @@ export default {
           tabName: 'ام بی تی آی'
         }
       ],
-      currentComponent: {
-        componentName: 'MultipleChoiceQ',
-        tabName: 'تستی'
-      },
-      componentKey: 0
+      componentKey: 0,
+      dynamicComponentProps: {
+        component: {
+          componentName: 'MultipleChoiceQ',
+          tabName: 'تستی'
+        }
+      }
     }
   },
   methods: {
@@ -43,8 +48,8 @@ export default {
       const that = this
       this.componentsNames.forEach(function (item) {
         if (item.tabName === cName) {
-          that.currentComponent.componentName = item.componentName
-          that.currentComponent.tabName = item.tabName
+          that.dynamicComponentProps.component.componentName = item.componentName
+          that.dynamicComponentProps.component.tabName = item.tabName
         }
       })
       this.forceRerenderComponent()
