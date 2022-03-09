@@ -13,7 +13,7 @@
           poem: true,
           reading: true,
           persianKeyboard: true,
-          onResizeEnd: onResizeEnd ,
+          onResizeEnd: onResizeEnd,
           mathliveOptions: { smartFence: false },
           uploadServer: {
             url: imageUrl,
