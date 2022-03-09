@@ -9169,10 +9169,10 @@
   "resolved" "https://registry.npmjs.org/qs/-/qs-6.9.6.tgz"
   "version" "6.9.6"
 
-"quasar-crud@^0.2.5":
-  "integrity" "sha512-8/8RUnPtqWt/x47VOHUTCj1irKLNGrJjXFBYHeCgvl4Z4oGa6/LTkIySwly5B/C18Cc4nUhuwnZ3uFmSEsz8FA=="
-  "resolved" "https://registry.npmjs.org/quasar-crud/-/quasar-crud-0.2.5.tgz"
-  "version" "0.2.5"
+"quasar-crud@^0.2.6":
+  "integrity" "sha512-CIwsbicrAgcvBDuT1ZFkrfanYbaJNWdETb4aC2h56SF0vritIy2co4AHFtRbOTq//eHStMK5gPzNr9UoekrZ2A=="
+  "resolved" "https://registry.npmjs.org/quasar-crud/-/quasar-crud-0.2.6.tgz"
+  "version" "0.2.6"
   dependencies:
     "@babel/eslint-parser" "^7.16.5"
     "@quasar/extras" "^1.0.0"
@@ -9180,15 +9180,15 @@
     "core-js" "^3.6.5"
     "moment-jalaali" "^0.9.4"
     "quasar" "^2.0.0"
-    "quasar-form-builder" "^0.1.8"
+    "quasar-form-builder" "^0.1.9"
     "standard" "^16.0.4"
     "vue" "^3.0.0"
     "vue-router" "4"
 
-"quasar-form-builder@^0.1.8":
-  "integrity" "sha512-ZdfJqGkTOImFCDv0S0PBCjI1hVS8E5Go76D6twcBr2lY+9hjB0j0zQJXVDdR/jq0v01kGd+k6MV5jt3NhTT9hw=="
-  "resolved" "https://registry.npmjs.org/quasar-form-builder/-/quasar-form-builder-0.1.8.tgz"
-  "version" "0.1.8"
+"quasar-form-builder@^0.1.9":
+  "integrity" "sha512-jG/oSZtVeEHZzga0kEywl7Owk+/gAxZP6rBzx68lwrwSeXFuzFgQGLuBOB1qLUN39STZPU2ysMA64QpR+MmKJg=="
+  "resolved" "https://registry.npmjs.org/quasar-form-builder/-/quasar-form-builder-0.1.9.tgz"
+  "version" "0.1.9"
   dependencies:
     "@quasar/extras" "^1.0.0"
     "core-js" "^3.6.5"
