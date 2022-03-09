@@ -35,7 +35,7 @@ module.exports = configure(function (ctx) {
       'flatIcon.css',
       '../../public/fonts/Iconsax/style.css'
       // 'src/assets/scss/app.scss',
-      // 'src/assets/scss/font.scss'
+      // 'src/assets/scss/IRANSansFont.scss'
     ],
 
     // https://github.com/quasarframework/quasar/tree/dev/extras

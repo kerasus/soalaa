@@ -1,5 +1,15 @@
 <template>
-  <div class="row ">
+  <div class="row justify-end">
+    <div class="row q-mr-lg">
+      <q-btn
+        round
+        color="primary"
+        unelevated
+        @click="goBack"
+      >
+        <i class="fi-rr-angle-left row" />
+      </q-btn>
+    </div>
     <div class="col-md-12 q-pa-sm">
       <q-input
         v-model="sourceExamInfoForCopyCoefficient.id"
@@ -282,6 +292,9 @@ export default {
     }
   },
   methods: {
+    goBack () {
+      this.$router.push('/admin/exam')
+    },
     getData () {
       this.getExamDateTime()
       this.getExamInfo()
