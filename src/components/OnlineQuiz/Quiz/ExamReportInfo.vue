@@ -18,6 +18,18 @@
             />
           </q-btn>
           <div class="col-12">
+            <div class="row justify-end">
+              <q-btn
+                round
+                color="primary"
+                unelevated
+                @click="goBack"
+              >
+                <i class="fi-rr-angle-left row" />
+              </q-btn>
+            </div>
+          </div>
+          <div class="col-12">
             <q-input
               v-model="exam.report_config.maximum_question_answered"
               type="number"

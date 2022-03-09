@@ -1,5 +1,15 @@
 <template>
   <div>
+    <div class="row justify-end q-pr-lg">
+      <q-btn
+        round
+        color="primary"
+        unelevated
+        @click="goBack"
+      >
+        <i class="fi-rr-angle-left row" />
+      </q-btn>
+    </div>
     <entity-edit
       v-model:value="inputs"
       title="ویرایش اطلاعات آزمون"
@@ -168,6 +178,10 @@ export default {
     this.api += '/' + this.$route.params.id
   },
   methods: {
+    goBack () {
+      const url = '/admin/exam/' + this.$route.params.id
+      this.$router.push(url)
+    },
     getCategories (response, setNewInputData) {
       if (!response) {
         return
