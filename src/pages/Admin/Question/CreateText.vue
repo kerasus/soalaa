@@ -6,6 +6,7 @@
       :key="componentKey"
       :allProps="allProps"
     />
+    <QuestionDetails/>
   </div>
 </template>
 
@@ -13,11 +14,13 @@
 import Navbar from 'components/Question/QuestionPage/Create/textMode/Navbar'
 import DynamicComponent from 'components/Question/QuestionPage/Create/textMode/questionTypes/DynamicComponent'
 import { Question } from 'src/models/Question'
+import QuestionDetails from 'components/Question/QuestionPage/Create/textMode/QuestionDetails'
 export default {
   name: 'CreateText',
   components: {
     DynamicComponent,
-    Navbar
+    Navbar,
+    QuestionDetails
   },
   props: {},
   data () {
