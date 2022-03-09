@@ -1,29 +1,77 @@
 <template>
   <div class="multiple-choice-Q">
     <q-card class="question-card default-questions-card">
+<!--      <q-btn-->
+<!--        v-if="question.choices.list.length > 0 && status"-->
+<!--        dark-->
+<!--        class="full-width q-mb-md"-->
+<!--        label="حذف تمام گزینه ها"-->
+<!--        color="pink"-->
+<!--        @click="removeAllChoice"-->
+<!--      />-->
       <q-card-section class="question default-Qcard-title">
         <div>صورت سوال</div>
       </q-card-section>
       <q-separator inset />
       <q-card-section>
         <div class="row justify-between question-box default-Qcard-box">
-          <div class="col-10 question-txt default-Qcard-txt">
-            شناخت فراوان جامعه و متخصصان را می طلبد،لازم است، و برای شرایط فعلی تکنولوژی مورد نیاز، و کاربردهای متنوع با هدف بهبود ابزارهای کاربردی می باشد، کتابهای زیادی در شصت و سه درصد گذشته حال و آینده،لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ، و با استفاده از طراحان گرافیک است، چاپگرها و متون بلکه روزنامه و مجله در ستون و سطرآنچنان که
-          </div>
-          <div class="col-2 question-img default-Qcard-img">
-            <q-img
-              :src="url"
-              spinner-color="primary"
-              spinner-size="30px"
-              style="height: 96px; width: 96px"
-            >
-            </q-img>
-          </div>
+          <QuestionField
+            ref="questionStatement"
+            :key="'statement' + domKey"
+            v-model="question.statement"
+            :edit-status="true"
+            :question-id="question.id ? question.id : 'null'"
+            @questionData="getData"
+          />
+<!--          <div class="col-10 question-txt default-Qcard-txt">-->
+<!--            شناخت فراوان جامعه و متخصصان را می طلبد،لازم است، و برای شرایط فعلی تکنولوژی مورد نیاز، و کاربردهای متنوع با هدف بهبود ابزارهای کاربردی می باشد، کتابهای زیادی در شصت و سه درصد گذشته حال و آینده،لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ، و با استفاده از طراحان گرافیک است، چاپگرها و متون بلکه روزنامه و مجله در ستون و سطرآنچنان که-->
+<!--          </div>-->
+<!--          <div class="col-2 question-img default-Qcard-img">-->
+<!--            <q-img-->
+<!--              :src="url"-->
+<!--              spinner-color="primary"-->
+<!--              spinner-size="30px"-->
+<!--              style="height: 96px; width: 96px"-->
+<!--            >-->
+<!--            </q-img>-->
+<!--          </div>-->
         </div>
       </q-card-section>
     </q-card>
     <div class="multiple-choice-A">
-      <MultipleChAnswer/>
+      <div class="row multiple-choice-Answer">
+        <div
+          class="col-6 answer-box"
+          v-for="(item, index) in question.choices.list"
+          :key="item.order"
+        >
+          <q-card class="col-6 default-questions-card">
+            <q-card-section class="default-Qcard-title">
+              <q-radio
+                dense
+                v-model="choice"
+                :val="'choice' + (index + 1)"
+                :label="'گزینه' + (index + 1)"
+                color="primary"
+                @click="clicked(item.order)"
+              />
+            </q-card-section>
+            <q-separator inset />
+            <q-card-section>
+              <div class="row justify-between default-Qcard-box">
+                <QuestionField
+                  :ref="'choice' + (item.order)"
+                  :key="'choices' + (item.order) + domKey"
+                  v-model="item.title"
+                  :question-id="question.id ? question.id : 'null'"
+                  :edit-status="true"
+                  @questionData="getData"
+                />
+              </div>
+            </q-card-section>
+          </q-card>
+        </div>
+      </div>
     </div>
     <q-card class="default-questions-card">
       <q-card-section class="default-Qcard-title">
@@ -32,18 +80,14 @@
       <q-separator inset />
       <q-card-section>
         <div class="row justify-between default-Qcard-box">
-          <div class="col-9 default-Qcard-txt">
-            شناخت فراوان جامعه و متخصصان را می طلبد،لازم است، و برای شرایط فعلی تکنولوژی مورد نیاز، و کاربردهای متنوع با هدف بهبود ابزارهای کاربردی می باشد، کتابهای زیادی در شصت و سه درصد گذشته حال و آینده،لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ، و با استفاده از طراحان گرافیک است، چاپگرها و متون بلکه روزنامه و مجله در ستون و سطرآنچنان که
-          </div>
-          <div class="col-3 default-Qcard-img">
-            <q-img
-              :src="url"
-              spinner-color="primary"
-              spinner-size="30px"
-              style="height: 96px; width: 96px"
-            >
-            </q-img>
-          </div>
+          <QuestionField
+            ref="descriptive"
+            :key="'descriptive_answer' + domKey"
+            v-model="question.descriptive_answer"
+            :question-id="question.id ? question.id : 'null'"
+            :edit-status="true"
+            @questionData="getData"
+          />
         </div>
       </q-card-section>
     </q-card>
@@ -52,17 +96,84 @@
 </template>
 
 <script>
-import MultipleChAnswer from 'components/Question/QuestionPage/Create/textMode/questionTypes/MultipleChoiceQ/subComponents/MultipleChAnswer'
 import QuestionDetails from 'components/Question/QuestionPage/Create/textMode/QuestionDetails'
+import QuestionField from 'components/Question/QuestionPage/QuestionField.vue'
+import { Question } from 'src/models/Question'
 export default {
   name: 'MultipleChoiceQ',
   components: {
-    QuestionDetails,
-    MultipleChAnswer
+    QuestionField,
+    QuestionDetails
+  },
+  props: {
+    cq: {
+      type: Question,
+      default: () => new Question()
+    },
+    modelValue: {
+      type: Question,
+      default: () => new Question()
+    },
+    status: {
+      type: Boolean,
+      default: () => false
+    }
   },
   data () {
     return {
-      url: 'https://placeimg.com/500/300/nature'
+      domKey: Date.now(),
+      question: new Question(),
+      choice: ''
+    }
+  },
+  watch: {
+    editorValue: function () {
+      this.question = this.modelValue
+    }
+  },
+  created () {
+    const that = this
+    setTimeout(() => {
+      that.domKey = Date.now()
+    }, 100)
+  },
+  updated () {
+    this.question = this.modelValue
+  },
+  methods: {
+    removeChoice (order) {
+      const index = this.question.choices.list.findIndex(item => item.order === order)
+      this.question.choices.list.splice(index, 1)
+      this.updateQuestion()
+    },
+    addChoice () {
+      this.question.choices.addEmptyChoice()
+      this.updateQuestion()
+    },
+    removeAllChoice () {
+      this.question.choices.list = []
+      this.updateQuestion()
+    },
+    getContent () {
+      this.$refs.questionStatement.getContent()
+      this.$refs.descriptive.getContent()
+      this.$refs.choice1[0].getContent()
+      this.$refs.choice2[0].getContent()
+      this.$refs.choice3[0].getContent()
+      this.$refs.choice4[0].getContent()
+      this.updateQuestion()
+    },
+    getData (val) {
+      this.editorValue = val
+    },
+    updateQuestion () {
+      this.$emit('updateQuestion', this.question)
+    },
+    clicked (order) {
+      this.question.choices.list.forEach(item => {
+        item.answer = item.order === order
+      })
+      this.updateQuestion()
     }
   }
 }
@@ -101,6 +212,28 @@ export default {
     }
   }
 }
+.multiple-choice-Answer {
+  :nth-child(2n){
+    padding-right: 12px #{"/* rtl:ignore */"};
+  }
+  :nth-child(2n+1){
+    padding-left: 12px #{"/* rtl:ignore */"};
+  }
+  .answer-box {
+    padding-top: 12px;
+    padding-bottom: 12px;
+    :nth-child(2n){
+      padding-right: 0px #{"/* rtl:ignore */"};
+    }
+    :nth-child(2n+1){
+      padding-left: 0px #{"/* rtl:ignore */"};
+    }
+    .q-separator--horizontal-inset {
+      margin-right: 16px #{"/* rtl:ignore */"} !important ;
+    }
+
+  }
+}
 </style>
 <style lang="scss">
 .default-questions-card {
@@ -128,6 +261,13 @@ export default {
           padding: 0 !important;
         }
       }
+    }
+  }
+}
+.multiple-choice-Answer {
+  .answer-box {
+    .q-radio__inner {
+      margin-left: 7px #{"/* rtl:ignore */"} !important;
     }
   }
 }
