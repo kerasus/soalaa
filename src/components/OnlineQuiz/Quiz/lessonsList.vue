@@ -65,7 +65,7 @@
                   </q-btn>
                 </q-input>
               </div>
-              <div class="row">
+              <div class="row q-pt-sm">
                 <div class="col-6">
                   <q-btn
                     :style="{ 'width':'90%' , 'height':'90%' }"
@@ -164,7 +164,6 @@ export default {
         exam_id: this.$route.params.quizId
       })
         .then((response) => {
-          console.log(response)
           subcategory.loading = false
         })
         .catch(() => {
