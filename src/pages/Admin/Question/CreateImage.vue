@@ -1,7 +1,7 @@
 <template>
-  <div className="page-container">
-    <div className="row">
-      <div className="col flex justify-between">
+  <div class="page-container">
+    <div class="row">
+      <div class="col flex justify-between">
         <span>
           برای ثبت سوال جدید میتوانید تصویر صورت سوال را در این صفحه آپلود کنید یا به صورت مستقیم آن ها را تایپ کنید
           <q-btn
@@ -15,20 +15,19 @@
         <q-btn
           label="تایپ سوال"
           color="primary"
-          className="change-type"
+          class="change-type"
           unelevated
         />
       </div>
     </div>
-    <div className="row">
-      <div className="col">
+    <div class="row">
+      <div class="col-6">
         <upload-image v-model="question" title="صورت سوال" field-key="statement_photo"/>
       </div>
-      <div className="col">
+      <div class="col-6">
         <upload-image v-model="question" title="پاسخ سوال" field-key="answer_photo"/>
       </div>
     </div>
-    <div className="row">test</div>
   </div>
 </template>
 
