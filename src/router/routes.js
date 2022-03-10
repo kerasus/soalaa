@@ -39,6 +39,7 @@ const routes = [
               { name: 'Admin.Exam.Coefficient.Edit', path: ':id/coefficient/edit', component: () => import('src/pages/Admin/subGroup/editCoefficients.vue') },
               { name: 'Admin.Exam.Report.Edit', path: ':id/edit-exam-report', component: () => import('pages/Admin/exam/edit/editExamReport') },
               { name: 'Admin.Exam.Lessons', path: 'lessons/:quizId/:quizTitle', component: () => import('src/pages/Admin/exam/lessons.vue') },
+              { name: 'Admin.Exam.Lessons.List', path: 'lessons/:quizId/chart', component: () => import('src/pages/Admin/exam/lessonsChart.vue') },
 
               {
                 path: '/results/mbti_bartle/:exam_id/:user_exam_id',
@@ -166,6 +167,14 @@ const routes = [
         meta: {
           middlewares: [auth]
         }
+      },
+      {
+        path: '/onlineQuiz/konkoorView/:quizId',
+        name: 'konkoorView',
+        component: () => import('pages/User/exam/participate/konkoorView'),
+        meta: {
+          middlewares: [auth]
+        }
       }
     ]
   },
@@ -187,16 +196,6 @@ const routes = [
     path: '/onlineQuiz/mbti_bartle/:quizId/:questNumber',
     name: 'onlineQuiz.mbtiBartle',
     component: () => import('pages/User/exam/participate/MBTI_Bartle'),
-    meta: {
-      middlewares: [auth]
-    }
-  },
-  {
-    // path: '/konkoorView/:quizId',
-    path: '/onlineQuiz/konkoorView/:quizId',
-    name: 'konkoorView',
-    component: () => import('pages/User/exam/participate/konkoorView'),
-    // component: () => import('src/components/Menu/topMenu/onlineQuizTopMenu'),
     meta: {
       middlewares: [auth]
     }

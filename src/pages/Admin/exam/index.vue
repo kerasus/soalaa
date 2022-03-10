@@ -102,6 +102,7 @@
                     v-ripple:yellow
                     clickable
                     manual-focus
+                    @click="showLessonsChartList(inputData.props.row.id, inputData.props.row.title)"
                   >
                     <q-item-section>کارنامه سرگروه</q-item-section>
                   </q-item>
@@ -249,6 +250,15 @@ export default {
     showLessonsList (id, title) {
       this.$router.push({
         name: 'Admin.Exam.Lessons',
+        params: {
+          quizId: id,
+          quizTitle: title
+        }
+      })
+    },
+    showLessonsChartList (id, title) {
+      this.$router.push({
+        name: 'Admin.Exam.Lessons.List',
         params: {
           quizId: id,
           quizTitle: title
