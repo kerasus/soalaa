@@ -58,7 +58,7 @@ export default {
     this.question = this.value
     document.addEventListener('FilePond:addfile', () => {
       this.question[this.fieldKey] = this.pond.getFiles().map(({ file }) => file)
-      this.$emit('input', this.question)
+      this.$emit('update:modelValue', this.question)
     })
   }
 }

@@ -25,7 +25,7 @@
         <upload-image v-model="question" title="صورت سوال" field-key="statement_photo"/>
       </div>
       <div class="col-6">
-        <upload-image v-model="question" title="پاسخ سوال" field-key="answer_photo"/>
+        <upload-image v-model="question" title="پاسخ سوال" field-key="answer_photos"/>
       </div>
     </div>
   </div>
