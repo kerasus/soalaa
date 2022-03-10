@@ -490,12 +490,10 @@ export default {
         item.state = item.title === title
       })
     },
-
     getPageStatus () {
       const target = this.pageStatuses.find(item => item.state)
       return (target) ? target.title : false
     },
-
     getQuestionStatus () {
       const that = this
       const list = this.questionStatuses.list
@@ -505,7 +503,8 @@ export default {
           that.questionStatusId_draft = list.find(item => item.title === 'draft').id
           that.questionStatusId_pending_to_type = list.find(item => item.title === 'pending_to_type').id
         })
-        .catch(() => {
+        .catch(function (error) {
+          console.log(error)
         })
     },
 

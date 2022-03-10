@@ -91,19 +91,16 @@
         </div>
       </q-card-section>
     </q-card>
-    <QuestionDetails/>
   </div>
 </template>
 
 <script>
-import QuestionDetails from 'components/Question/QuestionPage/Create/textMode/QuestionDetails'
 import QuestionField from 'components/Question/QuestionPage/QuestionField.vue'
 import { Question } from 'src/models/Question'
 export default {
   name: 'MultipleChoiceQ',
   components: {
-    QuestionField,
-    QuestionDetails
+    QuestionField
   },
   props: {
     cq: {
