@@ -92,7 +92,7 @@
                     :style="{ 'width':'90%' , 'height':'90%' }"
                     dark-percentage
                     color="blue"
-                    @click="redirect(item)"
+                    @click="goVideoSet(item.id)"
                   >
                     <q-icon
                       name="mdi-video"
@@ -152,6 +152,16 @@ export default {
     },
     redirect (link) {
       console.log(link)
+    },
+    goVideoSet (id) {
+      this.$router.push({
+        name: 'Admin.Exam.video.set',
+        params: {
+          subcategory_id: id,
+          examId: this.$route.params.quizId,
+          quizTitle: this.$route.params.quizTitle
+        }
+      })
     },
     updateOrder (subcategory) {
       if (subcategory.order === null) {
