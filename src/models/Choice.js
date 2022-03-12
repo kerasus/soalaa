@@ -108,9 +108,21 @@ class ChoiceList extends Collection {
         return order
     }
 
+    getNewId () {
+        let id = 1
+        this.list.forEach(choice => {
+            if (choice.id > id) {
+                id = choice.id
+            }
+        })
+
+        return id
+    }
+
     addEmptyChoice () {
         const lastOrder = this.getLastOrder()
-        const newChoice = new Choice({order: lastOrder + 1})
+        const newId = this.getNewId()
+        const newChoice = new Choice({order: lastOrder + 1, id: newId + 1})
         this.list.push(newChoice)
     }
 }
