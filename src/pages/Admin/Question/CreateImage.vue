@@ -16,6 +16,7 @@
           label="تایپ سوال"
           color="primary"
           class="change-type"
+          to="/question/create/text"
           unelevated
         />
       </div>
@@ -28,16 +29,23 @@
         <upload-image v-model="question" title="پاسخ سوال" field-key="answer_photos"/>
       </div>
     </div>
+    <div class="row">
+      <div class="col">
+        <question-details />
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
 import uploadImage from 'src/components/Question/QuestionPage/UploadImage'
 import { Question } from 'src/models/Question'
-
+import QuestionDetails from 'components/Question/QuestionPage/Create/textMode/QuestionDetails'
+import { AdminActionOnQuestion } from 'src/mixin/Mixins'
 export default {
   name: 'CreateImage',
-  components: { uploadImage },
+  components: { uploadImage, QuestionDetails },
+  mixins: [AdminActionOnQuestion],
   data () {
     return {
       question: new Question()

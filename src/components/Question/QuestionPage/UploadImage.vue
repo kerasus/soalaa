@@ -31,9 +31,20 @@ export default {
       pond: FilePond.create({
         allowMultiple: true,
         name: 'filepond',
-        labelIdle: dropAreaHTML
+        labelIdle: dropAreaHTML,
+        files: this.files,
+        server: this.server
       }),
-      question: new Question()
+      question: new Question(),
+      files: [{
+        source: 'https://nodes.alaatv.com/aaa/questionPhotos/Screenshot%202022-03-02%20124323-4377851.jpg',
+        options: {
+          type: 'local'
+        }
+      }],
+      server: {
+        load: this.load
+      }
     }
   },
   props: {
@@ -60,6 +71,16 @@ export default {
       this.question[this.fieldKey] = this.pond.getFiles().map(({ file }) => file)
       this.$emit('update:modelValue', this.question)
     })
+  },
+  methods: {
+    load: (source, load, error, progress, abort, headers) => {
+      const myRequest = new Request(source)
+      fetch(myRequest).then(function (response) {
+        response.blob().then(function (myBlob) {
+          load(myBlob)
+        })
+      })
+    }
   }
 }
 </script>
