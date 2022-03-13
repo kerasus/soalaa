@@ -28,7 +28,7 @@ const AxiosHooks = (function () {
     } else if (error.response.data.errors) {
       for (const [value] of Object.entries(error.response.data.errors)) {
         if (typeof value === 'string') {
-          messages.push(value)
+          messages.push(error.response.data.errors[value])
         } else {
           messages = messages.concat(getMessagesFromArrayWithRecursion(value))
         }

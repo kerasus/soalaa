@@ -1,4 +1,19 @@
 <template>
+      <div
+        class="set-video-back-btn q-mx-auto "
+        :style="{'max-width':'800px'}"
+      >
+    <q-btn
+    round
+    color="primary"
+    unelevated
+    @click="goBack"
+     >
+
+    <i class="fi-rr-angle-left row" />
+    </q-btn>
+
+    </div>
     <q-card
       class="set-video q-mx-auto q-pa-0"
       :style="{'max-width':'800px'}"
@@ -167,6 +182,15 @@ export default {
     addVideo () {
       this.videos.push('')
     },
+    goBack () {
+      this.$router.push({
+        name: 'Admin.Exam.Lessons',
+        params: {
+          quizId: this.$route.params.examId,
+          quizTitle: this.$route.params.quizTitle
+        }
+      })
+    },
     removeVideo (index) {
       this.videos.splice(index, 1)
     },
@@ -186,6 +210,11 @@ export default {
 </script>
 
 <style lang="scss">
+.set-video-back-btn {
+  display:flex;
+  padding-bottom: 8px;
+  justify-content: flex-end;
+}
 .set-video{
   box-shadow: 0px 3px 1px -2px rgba(0, 0, 0, 0), 0px 2px 2px 0px rgba(0, 0, 0, 0.14), 0px 1px 5px 0px rgba(0, 0, 0, 0.12);
   .q-card__section--vert{
@@ -207,7 +236,6 @@ export default {
     }
   }
 }
-
 </style>
 
 <style scoped>
