@@ -214,7 +214,7 @@ export default {
 }
 .set-video-back-btn {
   display:flex;
-  padding-bottom: 8px;
+  padding-bottom: 12px;
   justify-content: flex-end;
   max-width: 800px;
 }
