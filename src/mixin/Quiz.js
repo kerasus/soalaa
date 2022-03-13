@@ -125,7 +125,7 @@ const mixinQuiz = {
                         that.$notify({
                             group: 'notifs',
                             title: 'توجه!',
-                            text: 'مشکلی در دریافت اطلاعات آژمون رخ داده است. لطفا دوباره امتحان کنید.',
+                            text: 'مشکلی در دریافت اطلاعات آزمون رخ داده است. لطفا دوباره امتحان کنید.',
                             type: 'error'
                         })
                         that.$router.push({name: 'user.exam.list'})
@@ -174,7 +174,7 @@ const mixinQuiz = {
                             that.$notify({
                                 group: 'notifs',
                                 title: 'توجه!',
-                                text: 'مشکلی در دریافت اطلاعات آژمون رخ داده است. لطفا دوباره امتحان کنید.',
+                                text: 'مشکلی در دریافت اطلاعات آزمون رخ داده است. لطفا دوباره امتحان کنید.',
                                 type: 'error'
                             })
                             that.$router.push({name: 'user.exam.list'})
