@@ -188,7 +188,6 @@
       </v-col>
     </v-row>
     <send-answer-photo
-      :questions="questions"
       :exam="bubbleSheetDialogExam"
       :dialog-status="bubbleSheetDialog"
       @closeDialog="bubbleSheetDialog = false"
@@ -200,13 +199,9 @@
 import {Exam, ExamList} from "@/models/Exam";
 import {mixinAuth, mixinQuiz} from '@/mixin/Mixins'
 import ProgressLinear from "@/components/ProgressLinear";
-import VueConfirmDialog from 'vue-confirm-dialog'
 import SendAnswerPhoto from "@/pages/user/exam/SendAnswerPhoto";
 import Vue from 'vue'
-import {Question} from "@/models/Question";
 
-Vue.use(VueConfirmDialog)
-Vue.component('vue-confirm-dialog', VueConfirmDialog.default)
 
 export default {
   name: 'List',
@@ -218,8 +213,7 @@ export default {
     exams: new ExamList(),
     loadingList: false,
     bubbleSheetDialog: false,
-    bubbleSheetDialogExam: new Exam(),
-    questions: []
+    bubbleSheetDialogExam: new Exam()
   }),
   created() {
     this.getExams()

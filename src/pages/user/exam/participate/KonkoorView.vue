@@ -115,6 +115,14 @@
       >
         ارسال پاسخنامه
       </v-btn>
+      <v-btn
+        class="end-exam-btn end-exam-btn-with-send-photo"
+        :loading="confirmationBtnLoading"
+        :disabled="confirmationBtnLoading"
+        @click="showSendAnswerPhotoDialog"
+      >
+        ارسال تصویر پاسخنامه
+      </v-btn>
       <v-col :class="{ 'high-z-index': timerIsOpen }">
         <Timer
           :daftarche="'عمومی'"
@@ -190,12 +198,16 @@
         />
       </v-card>
     </v-dialog>
+
+    <send-answer-photo
+        :exam="bubbleSheetDialogExam"
+        :dialog-status="bubbleSheetDialog"
+        @closeDialog="bubbleSheetDialog = false"
+    />
   </v-container>
 </template>
 
 <script>
-    import Vue from 'vue'
-    import VueConfirmDialog from 'vue-confirm-dialog'
     import {Exam} from '@/models/Exam'
     import Assistant from '@/plugins/assistant'
     import {DynamicScroller, DynamicScrollerItem} from 'vue-virtual-scroller'
@@ -205,13 +217,11 @@
     import {TopMenu_OnlineQuiz} from '@/components/Menu/Menus'
     import BookletsDialog from '@/components/OnlineQuiz/Quiz/BookletsDialog'
     import {mixinAuth, mixinQuiz, mixinUserActionOnQuestion, mixinWindowSize} from '@/mixin/Mixins'
+    import SendAnswerPhoto from "@/pages/user/exam/SendAnswerPhoto";
 
     import '@/assets/scss/markdownKatex.scss'
     import 'vue-virtual-scroller/dist/vue-virtual-scroller.css'
     import ExamData from "@/assets/js/ExamData";
-
-    Vue.use(VueConfirmDialog)
-    Vue.component('vue-confirm-dialog', VueConfirmDialog.default)
 
     export default {
         name: 'KonkoorView',
@@ -221,12 +231,17 @@
             BubbleSheet,
             DynamicScroller,
             DynamicScrollerItem,
+          SendAnswerPhoto,
             BookletsDialog,
             Item
         },
         mixins: [mixinAuth, mixinQuiz, mixinUserActionOnQuestion, mixinWindowSize],
         data() {
             return {
+
+              bubbleSheetDialogExam: new Exam(),
+              bubbleSheetDialog: false,
+
                 quizData: new Exam(),
                 item: Item,
                 lastTimeScrollRange: {start: 0, end: 29},
@@ -300,6 +315,12 @@
             this.changeAppBarAndDrawer(true)
         },
         methods: {
+
+          showSendAnswerPhotoDialog () {
+            this.bubbleSheetDialog = true
+            this.bubbleSheetDialogExam = this.quiz
+          },
+
             loadFirstActiveQuestionIfNeed() {
                 let activeCcategory = this.quiz.getFirstActiveCategory()
                 if (!activeCcategory) {
@@ -553,6 +574,11 @@
         box-shadow: 0px 3px 3px -2px rgb(0 0 0 / 20%), 0px 3px 4px 0px rgb(0 0 0 / 14%), 0px 1px 8px 0px rgb(0 0 0 / 12%);
         width: 200px;
         border-radius: 20px 20px 0 0;
+        right: 0;
+    }
+
+    .end-exam-btn.end-exam-btn-with-send-photo{
+      right: 220px;
     }
 
     .lesson {

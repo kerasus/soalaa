@@ -18,9 +18,21 @@
         :question-id="value.id ? value.id : 'null'"
       />
     </div>
+
+    <v-btn
+        v-if="question.choices.list.length > 0 && status"
+        dark
+        block
+        color="pink"
+        @click="removeAllChoice"
+    >
+      حذف تمام گزینه ها
+    </v-btn>
+    <br>
+
     <v-row
       v-for="(item, index) in question.choices.list"
-      :key="index"
+      :key="item.order"
       class="question-layout-options"
       :class="status ? 'mb-6   question-options white': '  question-options'"
     >
@@ -58,15 +70,40 @@
       <v-col class="answer-editor col-11">
         <div>
           <question_field
-            :ref="'choice' + (index + 1)"
-            :key="'choices' + (index + 1) + domKey"
-            v-model="item.title"
-            :edit-status="status"
-            :question-id="value.id ? value.id : 'null'"
+              :ref="'choice' + (item.order)"
+              :key="'choices' + (item.order) + domKey"
+              v-model="item.title"
+              :edit-status="status"
+              :question-id="value.id ? value.id : 'null'"
           />
         </div>
       </v-col>
+
+      <v-btn
+          v-if="status"
+          fab
+          dark
+          small
+          color="pink"
+          class="btn-delete-choice"
+          @click="removeChoice(item.order)"
+      >
+        <v-icon dark>
+          mdi-close
+        </v-icon>
+      </v-btn>
+
     </v-row>
+
+    <v-btn
+        v-if="status && canShowChoices"
+        dark
+        block
+        color="success"
+        @click="addChoice"
+    >
+      افزودن گزینه جدید
+    </v-btn>
     <!-- ------------------------- answer -------------------------------  -->
     <div class="mb-5 question-answer ">
       <div class="mb-5">
@@ -86,6 +123,7 @@
     </div>
   </div>
 </template>
+
 <script>
 import {Question} from '@/models/Question'
 import question_field from '@/components/Question/questionField'
@@ -94,6 +132,11 @@ export default {
   name: 'QuestionLayout',
   components: {
     question_field,
+  },
+  computed: {
+    canShowChoices () {
+      return this.question.type.value === 'konkur' || this.question.type.value === 'psychometric' || this.question.type.value === null
+    }
   },
   props: {
     value: {
@@ -124,14 +167,29 @@ export default {
     }, 100)
   },
   methods: {
+    addChoice() {
+      this.question.choices.addEmptyChoice()
+      this.updateQuestion()
+    },
+    removeAllChoice() {
+      this.question.choices.list = []
+      this.updateQuestion()
+    },
+    removeChoice(order) {
+      const index = this.question.choices.list.findIndex( item => item.order === order)
+      this.question.choices.list.splice(index, 1)
+      this.updateQuestion()
+    },
     getContent() {
-      console.log(this.$refs)
       this.$refs.questionStatement.getContent()
       this.$refs.descriptive.getContent()
-      this.$refs.choice1[0].getContent()
-      this.$refs.choice2[0].getContent()
-      this.$refs.choice3[0].getContent()
-      this.$refs.choice4[0].getContent()
+      this.question.choices.list.forEach( choice => {
+        this.$refs['choice'+choice.order][0].getContent()
+      })
+      // this.$refs.choice1[0].getContent()
+      // this.$refs.choice2[0].getContent()
+      // this.$refs.choice3[0].getContent()
+      // this.$refs.choice4[0].getContent()
       this.updateQuestion()
     },
     updateQuestion() {
@@ -148,11 +206,16 @@ export default {
 </script>
 
 <style scoped>
+.btn-delete-choice {
+  position: absolute;
+  left: -10px;
+  top: -10px;
+}
 .question-layout-options {
+  position: relative;
   display: flex;
   align-items: center;
   margin-bottom: 10px;
-
 }
 
 .question-options {

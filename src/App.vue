@@ -146,15 +146,13 @@
 </template>
 
 <script>
-import Vue from 'vue'
-import './assets/Fonts/Flaticons/css/uicons-regular-rounded.css'
-import './assets/Fonts/Flaticons/css/uicons-bold-rounded.css'
-import Time from '@/plugins/time'
-import VueConfirmDialog from 'vue-confirm-dialog'
-import {mixinAuth, mixinQuiz, mixinDrawer, mixinWindowSize} from '@/mixin/Mixins'
 import '@/assets/scss/app.scss'
 import '@/assets/scss/font.scss'
 import '@mdi/font/css/materialdesignicons.css'
+import './assets/Fonts/Flaticons/css/uicons-regular-rounded.css'
+import './assets/Fonts/Flaticons/css/uicons-bold-rounded.css'
+import {mixinAuth, mixinQuiz, mixinDrawer, mixinWindowSize} from '@/mixin/Mixins'
+
 import {
   SideMenu_Dashboard,
   SideMenu_MapOfQuestions,
@@ -162,7 +160,6 @@ import {
   TopMenu_Dashboard
 } from '@/components/Menu/Menus'
 
-Vue.component('vue-confirm-dialog', VueConfirmDialog.default)
 
 export default {
   name: 'App',
