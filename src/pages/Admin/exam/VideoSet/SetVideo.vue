@@ -6,145 +6,112 @@
       <q-card-section
       class="q-pa-0"
       >
-        <q-toolbar
-          class="set-video-toolbar bg-deep-purple-11  q-mx-auto"
-          :style="{'height' : '64px'}"
-          dark
+        <transition
+          appear
+          enter-active-class="animated fadeIn"
+          leave-active-class="animated fadeOut"
         >
-          <q-toolbar-title>
-            {{ ' آزمون داخل 98 ریاضی 4K سری سوم: دین و زندگی ' }}
-          </q-toolbar-title>
+          <q-toolbar
+            class="set-video-toolbar bg-deep-purple-11  q-mx-auto"
+            :style="{'height' : '64px'}"
+            dark
+          >
+            <q-toolbar-title v-if="selectedSubCategory">
+              {{ $route.params.quizTitle + ': ' + selectedSubCategory.title }}
+            </q-toolbar-title>
 
-          <q-space />
-          <q-btn
-            color="white"
-            flat
-            round
-            @click="addVideo"
-            icon="mdi-plus"
-          >
-            <q-tooltip
-              anchor="top middle"
-              :offset="[20,33]"
+            <q-space />
+            <q-btn
+              color="white"
+              flat
+              round
+              @click="addVideo"
+              icon="mdi-plus"
             >
-              <span>لینک جدید</span>
-            </q-tooltip>
-          </q-btn>
-          <q-btn
-            color="white"
-            flat
-            round
-            @click="saveVideos"
-            icon="mdi-check"
-          >
-            <q-tooltip
-              anchor="top middle"
-              :offset="[20,33]"
-            >
-              <span>ثبت</span>
-            </q-tooltip>
-          </q-btn>
-
-        </q-toolbar>
-        <q-list
-        >
-<!--          v-for="(item, index) in videos"-->
-<!--          :key="index"-->
-          <q-item
-            bordered
-          >
-            <q-item-section>
-              <q-input
-                v-model="videos[index]"
-                dir="ltr"
-                outlined
-                dense
-                :style="{ 'max-width': '650px' }"
-              />
-            </q-item-section>
-            <q-item-section avatar>
-              <q-btn
-                color="primary"
-                flat
-                round
-                icon="mdi-play-box-outline"
+              <q-tooltip
+                anchor="top middle"
+                :offset="[20,33]"
               >
-                <a
-                  :href="item"
-                  target="_blank"
+                <span>لینک جدید</span>
+              </q-tooltip>
+            </q-btn>
+            <q-btn
+              color="white"
+              flat
+              round
+              @click="saveVideos"
+              icon="mdi-check"
+            >
+              <q-tooltip
+                anchor="top middle"
+                :offset="[20,33]"
+              >
+                <span>ثبت</span>
+              </q-tooltip>
+            </q-btn>
+            <q-inner-loading
+              :showing="loading"
+              color="primary"
+              dark
+              label-class="text-teal"
+              label-style="font-size: 1.1em"
+            />
+          </q-toolbar>
+        </transition>
+          <q-list
+            v-for="(item, index) in videos"
+            :key="index"
+          >
+            <q-item
+              bordered
+            >
+              <q-item-section>
+                <q-input
+                  v-model="videos[index]"
+                  type="url"
+                  outlined
+                  dense
+                  :style="{ 'max-width': '650px' }"
                 />
-                <q-tooltip
-                  anchor="top middle"
-                  :offset="[20,33]"
+              </q-item-section>
+              <q-item-section avatar>
+                <q-btn
+                  color="primary"
+                  flat
+                  round
+                  icon="mdi-play-box-outline"
                 >
-                  <span>مشاهده کانتنت</span>
-                </q-tooltip>
-              </q-btn>
-            </q-item-section>
-            <q-item-section avatar>
-              <q-btn
-                color="red"
-                flat
-                round
-                @click="removeVideo(index)"
-                icon="mdi-close"
-              >
-                <q-tooltip
-                  anchor="top middle"
-                  :offset="[20,33]"
+                  <a
+                    :href="item"
+                    target="_blank"
+                  />
+                  <q-tooltip
+                    anchor="top middle"
+                    :offset="[20,33]"
+                  >
+                    <span>مشاهده کانتنت</span>
+                  </q-tooltip>
+                </q-btn>
+              </q-item-section>
+              <q-item-section avatar>
+                <q-btn
+                  color="red"
+                  flat
+                  round
+                  @click="removeVideo(index)"
+                  icon="mdi-close"
                 >
-                  <span>حذف لینک</span>
-                </q-tooltip>
-              </q-btn>
-            </q-item-section>
-          </q-item>
-          <q-item
-            bordered
-          >
-            <q-item-section>
-              <q-input
-                v-model="videos[index]"
-                dir="ltr"
-                outlined
-                dense
-                :style="{ 'max-width': '650px' }"
-              />
-            </q-item-section>
-            <q-item-section avatar>
-              <q-btn
-                color="primary"
-                flat
-                round
-                icon="mdi-play-box-outline"
-              >
-                <q-tooltip
-                  anchor="top middle"
-                  :offset="[20,33]"
-                >
-                  <span>مشاهده کانتنت</span>
-                </q-tooltip>
-              </q-btn>
-            </q-item-section>
-            <q-item-section avatar>
-              <q-btn
-                color="red"
-                flat
-                round
-                @click="removeVideo(index)"
-                icon="mdi-close"
-              >
-                <q-tooltip
-                  anchor="top middle"
-                  :offset="[20,33]"
-                >
-                  <span>حذف لینک</span>
-                </q-tooltip>
-              </q-btn>
-            </q-item-section>
-          </q-item>
-        </q-list>
+                  <q-tooltip
+                    anchor="top middle"
+                    :offset="[20,33]"
+                  >
+                    <span>حذف لینک</span>
+                  </q-tooltip>
+                </q-btn>
+              </q-item-section>
+            </q-item>
+          </q-list>
       </q-card-section>
-
     </q-card>
 </template>
 
@@ -167,20 +134,18 @@ export default {
 
   },
   mounted () {
-    this.selectedSubCategory = this.subCategoriesList.list.find(item => item.id === this.$route.params.subcategory_id)
     this.loadSubcategories()
-    this.getCurrentVideos()
   },
   created () {
     this.loading = true
   },
   methods: {
     getCurrentVideos () {
-      console.log(this.subCategoriesList)
       this.$axios.get(API_ADDRESS.exam.getAnalysisVideo(this.$route.params.examId))
         .then(response => {
-          console.log(this.subCategoriesList.list)
           this.selectedSubCategory = this.subCategoriesList.list.find(item => item.id === this.$route.params.subcategory_id)
+          response.data.data.forEach(item => {
+          })
           if (response.data.data.find(item => item.sub_category.id === this.selectedSubCategory.id).videos) {
             this.videos = response.data.data.find(item => item.sub_category.id === this.selectedSubCategory.id).videos
           }
@@ -207,11 +172,13 @@ export default {
       this.videos.splice(index, 1)
     },
     loadSubcategories () {
-      this.subCategoriesList.fetch()
+      const that = this
+      that.$axios.get(that.subCategoriesList.baseRoute)
         .then((response) => {
-          this.selectedSubCategory = this.subCategoriesList.list.find(item => item.id === this.$route.params.subcategory_id)
-          this.subCategoriesList = new QuestSubcategoryList(response.data.data)
-          this.loading = false
+          that.subCategoriesList = new QuestSubcategoryList(response.data.data)
+          that.selectedSubCategory = that.subCategoriesList.list.find(item => item.id === that.$route.params.subcategory_id)
+          that.loading = false
+          this.getCurrentVideos()
         })
     }
 
