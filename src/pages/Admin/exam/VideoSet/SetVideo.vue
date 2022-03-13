@@ -221,7 +221,7 @@ export default {
 .set-video{
   box-shadow: 0px 3px 1px -2px rgba(0, 0, 0, 0), 0px 2px 2px 0px rgba(0, 0, 0, 0.14), 0px 1px 5px 0px rgba(0, 0, 0, 0.12);
   .q-card__section--vert{
-    padding: 0px 0px 12px 0px;
+    padding: 0px 0px 4px 0px;
     .q-item{
       padding-bottom: 16px;
       .q-item__section--avatar{
