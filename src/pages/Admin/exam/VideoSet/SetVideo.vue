@@ -1,8 +1,7 @@
 <template>
-      <div
-        class="set-video-back-btn q-mx-auto "
-        :style="{'max-width':'800px'}"
-      >
+     <div
+       class="set-video-back-btn q-mx-auto "
+     >
     <q-btn
     round
     color="primary"
@@ -47,7 +46,7 @@
                 anchor="top middle"
                 :offset="[20,33]"
               >
-                <span>لینک جدید</span>
+                <span class="smallFontSize">لینک جدید</span>
               </q-tooltip>
             </q-btn>
             <q-btn
@@ -61,7 +60,7 @@
                 anchor="top middle"
                 :offset="[20,33]"
               >
-                <span>ثبت</span>
+                <span class="smallFontSize">ثبت</span>
               </q-tooltip>
             </q-btn>
             <q-inner-loading
@@ -102,7 +101,7 @@
                     anchor="top middle"
                     :offset="[20,33]"
                   >
-                    <span>مشاهده کانتنت</span>
+                    <span class="smallFontSize">مشاهده کانتنت</span>
                   </q-tooltip>
                 </q-btn>
               </q-item-section>
@@ -118,7 +117,7 @@
                     anchor="top middle"
                     :offset="[20,33]"
                   >
-                    <span>حذف لینک</span>
+                    <span class="smallFontSize" >حذف لینک</span>
                   </q-tooltip>
                 </q-btn>
               </q-item-section>
@@ -210,10 +209,14 @@ export default {
 </script>
 
 <style lang="scss">
+.smallFontSize {
+  font-size: 13px;
+}
 .set-video-back-btn {
   display:flex;
   padding-bottom: 8px;
   justify-content: flex-end;
+  max-width: 800px;
 }
 .set-video{
   box-shadow: 0px 3px 1px -2px rgba(0, 0, 0, 0), 0px 2px 2px 0px rgba(0, 0, 0, 0.14), 0px 1px 5px 0px rgba(0, 0, 0, 0.12);
