@@ -213,6 +213,7 @@ export default {
   }
 }
 .q-menu {
+  // I'm in charge of this one and did this on purpose, if you need to change this please let me know.TU
   background: #FFFFFF;
   border-radius: 10px;
 }

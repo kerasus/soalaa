@@ -2,7 +2,7 @@
   <div class="question-txtMode-navbar">
     <div class="fit row wrap justify-between">
       <div class="col-auto">
-        <div class="question-type row  items-center">
+        <div class="question-type row items-center">
           <div class="col">نوع سوال</div>
           <div>
             <q-tabs
@@ -43,20 +43,36 @@
 </template>
 
 <script>
+import AdminActionOnQuestion from 'src/mixin/AdminActionOnQuestion'
+import { Question } from 'src/models/Question'
 export default {
   name: 'Navbar',
+  props: {
+    value: {
+      type: Question,
+      default () {
+        return new Question()
+      }
+    }
+  },
   data () {
     return {
       questionTab: 'تستی',
       componentTabs: ['تستی', 'تشریحی', 'ام بی تی آی']
     }
   },
+  mixins: [
+    AdminActionOnQuestion
+  ],
   mounted () {
     this.chooseComponent(this.componentTabs[0])
+    // console.log('optionQuestionId', this.optionQuestionId)
   },
   methods: {
     chooseComponent (cName) {
-      this.$emit('chosenComponent', cName)
+      const question = this.value
+      question.type = cName
+      this.$emit('modelValue', question)
     }
   }
 }
