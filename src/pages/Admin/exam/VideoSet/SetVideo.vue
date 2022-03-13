@@ -80,11 +80,9 @@
                   flat
                   round
                   icon="mdi-play-box-outline"
+                  :href="item"
+                  target="_blank"
                 >
-                  <a
-                    :href="item"
-                    target="_blank"
-                  />
                   <q-tooltip
                     anchor="top middle"
                     :offset="[20,33]"
@@ -152,16 +150,17 @@ export default {
         })
     },
     saveVideos () {
-      this.$axios.post(API_ADDRESS.exam.analysisVideo, {
-        video: this.videos,
-        sub_category_id: this.selectedSubCategory.id,
-        exams: [{ exam_id: this.$route.params.exam_id }]
-      })
+      this.$axios.post(API_ADDRESS.exam.analysisVideo,
+        {
+          video: this.videos,
+          sub_category_id: this.selectedSubCategory.id,
+          exams: [{ exam_id: this.$route.params.examId }]
+        })
         .then(() => {
-          this.$notify({
+          this.$q.notify({
+            message: 'اطلاعات ثبت شد.',
             group: 'notifs',
-            text: 'اطلاعات ثبت شد.',
-            type: 'success'
+            type: 'positive'
           })
         })
     },
