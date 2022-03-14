@@ -10,6 +10,7 @@ import { QuestionStatus } from '../models/QuestionStatus'
 import { LogList } from '../models/Log'
 // eslint-disable-next-line import/named
 import { createApp } from 'vue'
+import { QuestionType } from '../models/QuestionType'
 if (!window.app) {
 // window.app
   window.app = createApp({})
@@ -39,11 +40,13 @@ class Question extends Model {
       },
       {
         key: 'type',
-        default: {
-          id: null,
-          type: null, // question_type
-          value: null // psychometric
-        }
+        relatedModel: QuestionType
+        // default: {
+        //   id: null,
+        //   type: null, // question_type
+        //   value: null, // psychometric
+        //   name: null
+        // }
       },
       {
         key: 'isInView',

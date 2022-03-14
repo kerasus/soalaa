@@ -1,6 +1,9 @@
 <template>
   <div class="createQ-text-container">
-    <Navbar @chosenComponent="chosenComponent"/>
+    <Navbar
+      @chosenComponent="chosenComponent"
+      v-model="currentQuestion"
+    />
     <DynamicComponent
       :component="currentComponent"
       :key="componentKey"
@@ -15,6 +18,7 @@ import Navbar from 'components/Question/QuestionPage/Create/textMode/Navbar'
 import DynamicComponent from 'components/Question/QuestionPage/Create/textMode/questionTypes/DynamicComponent'
 import { Question } from 'src/models/Question'
 import QuestionDetails from 'components/Question/QuestionPage/Create/textMode/QuestionDetails'
+import AdminActionOnQuestion from 'src/mixin/AdminActionOnQuestion'
 export default {
   name: 'CreateText',
   components: {
@@ -22,6 +26,9 @@ export default {
     Navbar,
     QuestionDetails
   },
+  mixins: [
+    AdminActionOnQuestion
+  ],
   props: {},
   data () {
     return {
@@ -44,6 +51,7 @@ export default {
         componentName: 'MultipleChoiceQ',
         tabName: 'تستی'
       },
+      currentQuestion: new Question(),
       allProps: {
         cq: {
           type: Question,
@@ -59,6 +67,9 @@ export default {
         }
       }
     }
+  },
+  mounted () {
+    this.getQuestionType()
   },
   methods: {
     chosenComponent (cName) {

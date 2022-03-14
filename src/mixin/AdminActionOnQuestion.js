@@ -27,6 +27,7 @@ const AdminActionOnQuestion = {
             })
           }
           that.optionQuestionId = optionQuestion.id
+          console.log('optionQuestion', optionQuestion)
         })
         .catch(function (error) {
           console.log(error)
