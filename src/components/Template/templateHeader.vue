@@ -36,7 +36,7 @@
         :key="index"
       >
         <q-skeleton
-          v-if="breadcrumbLoading"
+          v-if="breadcrumb.loading"
           width="100px"
         />
           <q-breadcrumbs-el
@@ -87,6 +87,9 @@ export default {
   data () {
     return {
     }
+  },
+  created () {
+    console.log(this.breadcrumbs.path)
   },
   mounted () {
     this.$store.commit('AppLayout/updateBreadcrumbLoading', false)

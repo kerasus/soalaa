@@ -108,6 +108,8 @@ export default {
     examId: null
   }),
   created () {
+    const path = this.$store.getters['AppLayout/breadcrumbs'].path[1].loading
+    console.log(path)
     this.examId = this.$route.params.idd
     const that = this
     axios.get(API_ADDRESS.option.base + '?type=exam_type')

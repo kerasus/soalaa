@@ -24,8 +24,6 @@ export default function () {
       visible: '',
       loading: false,
       path: [
-        {
-        }
       ]
     }
   }
