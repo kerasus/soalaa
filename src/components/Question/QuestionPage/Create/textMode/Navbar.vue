@@ -2,7 +2,7 @@
   <div class="question-txtMode-navbar">
     <div class="fit row wrap justify-between">
       <div class="col-auto">
-        <div class="question-type row items-center">
+        <div class="question-type row items-center relative-position">
           <div class="col">نوع سوال</div>
           <div>
             <q-tabs
@@ -18,12 +18,18 @@
                 v-for="(item, index) in componentTabs.list"
                 :key="index"
                 class="question-type-tab"
-                :name="item.id"
+                :name="item.value"
                 :label="item.tabName"
                 @click="chooseComponent(item)"
               />
             </q-tabs>
           </div>
+          <q-inner-loading
+            :showing="loading"
+            color="primary"
+            class="QComponents-inner-loading"
+            label-style="font-size: 1.1em"
+          />
         </div>
       </div>
       <div class="col-auto">
@@ -50,43 +56,43 @@ import { TypeList } from 'src/models/QuestionType'
 export default {
   name: 'Navbar',
   props: {
-    value: {
-      type: Question,
+    componentTabs: {
+      type: TypeList,
       default () {
-        return new Question()
+        return new TypeList()
+      }
+    },
+    loading: {
+      type: Boolean,
+      default () {
+        return false
       }
     }
   },
   data () {
     return {
-      questionTab: 'تستی',
-      // componentTabs: ['تستی', 'تشریحی', 'ام بی تی آی']
-      componentTabs: new TypeList()
+      questionTab: 'konkur'
+    }
+  },
+  inject: {
+    currentQuestion: {
+      from: 'currentQuestion', // this is optional if using the same key for injection
+      default: new Question()
     }
   },
   mixins: [
     AdminActionOnQuestion
   ],
-  created () {
-    // this.getQuestionType()
-  },
-  mounted () {
-    this.$nextTick(() => {
-      this.getQuestionType()
-      console.log('this.chooseComponent(this.componentTabs.list[0])')
-      // this.chooseComponent(this.componentTabs.list[0])
-    })
-    // console.log('optionQuestionId', this.optionQuestionId)
-  },
+  created () {},
+  mounted () {},
   methods: {
     chooseComponent (item) {
-      console.log('this.value', this.value)
-      console.log('this.componentTabs', this.componentTabs)
-      console.log('item', item)
-      const question = this.value
-      question.type = item.componentName
-      this.questionTab = item.tabName
-      this.$emit('modelValue', question)
+      this.currentQuestion.type = item
+    }
+  },
+  watch: {
+    componentTabs: function () {
+      this.chooseComponent(this.componentTabs.list[0])
     }
   }
 }
@@ -95,6 +101,8 @@ export default {
 <style scoped lang="scss">
 .question-txtMode-navbar{
   .question-type {
+    min-width: 315px;
+    min-height: 30px;
     .question-type-tabs {
       height: 30px;
       background: #FFFFFF;
@@ -128,6 +136,9 @@ export default {
 }
 </style>
 <style lang="scss">
+.QComponents-inner-loading{
+  background-color: #ccc6c65c;
+}
 .question-txtMode-navbar {
   .question-type {
     .question-type-tabs {

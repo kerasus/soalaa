@@ -20,10 +20,11 @@ const AdminActionOnQuestion = {
   methods: {
     getQuestionType () {
       const that = this
+      this.componentTabs.loading = true
       axios.get(API_ADDRESS.option.base + '?type=question_type')
         .then(function (response) {
           that.componentTabs = new TypeList(response.data.data)
-          console.log('componentTabs', that.componentTabs)
+          that.currentComponent = that.componentTabs.list[0]
           const optionQuestion = response.data.data.find(item => (item.value === 'konkur'))
           if (!optionQuestion) {
             return this.$q.notify({
@@ -32,10 +33,11 @@ const AdminActionOnQuestion = {
             })
           }
           that.optionQuestionId = optionQuestion.id
-          console.log('optionQuestion', optionQuestion)
+          that.componentTabs.loading = false
         })
         .catch(function (error) {
           console.log(error)
+          that.componentTabs.loading = false
         })
     },
     getQuestionStatus () {

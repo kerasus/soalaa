@@ -135,7 +135,7 @@ export default {
     }, 100)
   },
   mounted () {
-    console.log('this.$props--------', this.$props)
+    // console.log('this.$props--------', this.$props)
   },
   updated () {
     this.question = this.modelValue
