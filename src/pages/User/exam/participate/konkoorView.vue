@@ -5,7 +5,6 @@
         id="questions"
         ref="questionsColumn"
         class="col-md-5 right-side"
-        :style="{ height: windowSize.y }"
       >
         <q-virtual-scroll
           class="konkoor-view-scroll"
@@ -127,9 +126,9 @@ export default {
     }
   },
   watch: {
-    'windowSize.y': function () {
-      this.setHeights()
-    },
+    // 'windowSize.y': function () {
+    //   this.setHeights()
+    // },
     'windowSize.x': function () {
       this.$store.commit('AppLayout/updateLayoutLeftDrawerVisible', false)
     }
@@ -139,7 +138,7 @@ export default {
     this.startExamProcess()
   },
   mounted () {
-    this.setHeights()
+    // this.setHeights()
     if (this.currentQuestion) {
       if (this.currentQuestion.id) {
         this.scrollTo(this.currentQuestion.id)
@@ -166,7 +165,7 @@ export default {
       const that = this
       this.startExam(this.$route.params.quizId, 'onlineQuiz.KonkoorView')
         .then(() => {
-          that.$store.commit('AppLayout/updateOverlay', { show: false, loading: false, text: '' })
+          // that.$store.commit('AppLayout/updateOverlay', { show: false, loading: false, text: '' })
           that.questions = that.getCurrentExamQuestionsInArray()
           const callbacks = {
             'question.file-link:update': {
@@ -324,14 +323,14 @@ export default {
           params: { quizId: this.$route.params.quizId, questNumber: 1 }
         })
       }
-    },
-    setHeights () {
-      this.$refs.questionsColumn.style.height = this.windowSize.y + 'px'
-      if (this.$refs.scroller.$el) {
-        this.$refs.scroller.$el.style.height = this.windowSize.y + 'px'
-      }
-      this.$refs.leftSideList.style.height = (this.windowSize.y - 24) + 'px'
     }
+    // setHeights () {
+    //   this.$refs.questionsColumn.style.height = this.windowSize.y + 'px'
+    //   if (this.$refs.scroller.$el) {
+    //     this.$refs.scroller.$el.style.height = this.windowSize.y + 'px'
+    //   }
+    //   this.$refs.leftSideList.style.height = (this.windowSize.y - 24) + 'px'
+    // }
   }
 }
 </script>
