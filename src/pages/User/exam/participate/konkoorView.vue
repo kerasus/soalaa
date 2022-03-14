@@ -32,7 +32,6 @@
       </div>
       <div class="col-md-7">
         <div
-          ref="leftSideList"
           class="row left-side"
         >
           <div class="col bubbleSheet-top">
@@ -54,39 +53,40 @@
               <top-menu/>
             </q-btn-dropdown>
           </div>
-          <div class="col bubbleSheet-bottom">
-            <BubbleSheet
-              :info="{ type: 'pasokh-barg'}"
-              :delay-time="0"
-              :questions="questions"
-              @clickChoice="choiceClicked"
-              @scrollTo="scrollTo"
-            />
+          <div
+            ref="leftSideList"
+            class="col bubbleSheet-bottom"
+          >
+              <BubbleSheet
+                :info="{ type: 'pasokh-barg'}"
+                :delay-time="0"
+                :questions="questions"
+                @clickChoice="choiceClicked"
+                @scrollTo="scrollTo"
+              />
+            <div class="row timer-row">
+              <q-btn
+                v-if="false"
+                class="end-exam-btn"
+                @click="getConfirmation"
+              >
+                ارسال پاسخنامه
+              </q-btn>
+              <div
+                class="col"
+                :class="{ 'high-z-index': timerIsOpen}"
+              >
+                <Timer
+                  :daftarche="'عمومی'"
+                  :quiz-started-at="1607963897"
+                  :daftarche-end-time="1607999897"
+                  :height="100"
+                  @timerOpen="timerOpen"
+                />
+              </div>
+            </div>
           </div>
         </div>
-      </div>
-    </div>
-    <div
-      class="row timer-row"
-    >
-      <q-btn
-        v-if="false"
-        class="end-exam-btn"
-        @click="getConfirmation"
-      >
-        ارسال پاسخنامه
-      </q-btn>
-      <div
-        class="col"
-        :class="{ 'high-z-index': timerIsOpen}"
-      >
-        <Timer
-          :daftarche="'عمومی'"
-          :quiz-started-at="1607963897"
-          :daftarche-end-time="1607999897"
-          :height="100"
-          @timerOpen="timerOpen"
-        />
       </div>
     </div>
   </div>
@@ -101,6 +101,8 @@ import BubbleSheet from 'src/components/OnlineQuiz/Quiz/bubbleSheet/bubbleSheet'
 import { Exam } from 'src/models/Exam'
 import Assistant from 'src/plugins/assistant'
 import TopMenu from 'src/components/Menu/topMenu/onlineQuizTopMenu'
+import { ref } from 'vue'
+import { mapGetters } from 'vuex'
 
 export default {
   name: 'konkoorView',
@@ -122,23 +124,28 @@ export default {
       renderedQuestions: { startIndex: 0, endIndex: 0 },
       questions: [],
       inView: [],
-      timerIsOpen: false
+      timerIsOpen: false,
+      scroller: ref(null),
+      leftSideList: ref(null)
     }
   },
   watch: {
-    // 'windowSize.y': function () {
-    //   this.setHeights()
-    // },
     'windowSize.x': function () {
-      this.$store.commit('AppLayout/updateLayoutLeftDrawerVisible', false)
+      this.view()
+    },
+    'windowSize.y': function () {
+      this.setHeights()
     }
   },
   created () {
-    this.getUser()
-    this.startExamProcess()
   },
   mounted () {
-    // this.setHeights()
+    if (this.$route.name === 'konkoorView') {
+      this.changeAppBarAndDrawer(false)
+    }
+    this.startExamProcess()
+    this.setHeights()
+    this.view()
     if (this.currentQuestion) {
       if (this.currentQuestion.id) {
         this.scrollTo(this.currentQuestion.id)
@@ -146,26 +153,21 @@ export default {
         this.loadFirstQuestion()
       }
     }
-    this.changeAppBarAndDrawer(false)
   },
   unmounted () {
     this.changeAppBarAndDrawer(true)
   },
   computed: {
-    windowSize () {
-      return this.$store.getters['AppLayout/windowSize']
-    }
+    ...mapGetters('AppLayout', [
+      'windowSize'
+    ])
   },
   methods: {
-    getUser () {
-      // this.user = this.$store.getters['Auth/user']
-      return this.user
-    },
     startExamProcess () {
       const that = this
+      // this.updateOverlay(true)
       this.startExam(this.$route.params.quizId, 'onlineQuiz.KonkoorView')
         .then(() => {
-          // that.$store.commit('AppLayout/updateOverlay', { show: false, loading: false, text: '' })
           that.questions = that.getCurrentExamQuestionsInArray()
           const callbacks = {
             'question.file-link:update': {
@@ -175,14 +177,11 @@ export default {
             }
           }
           that.setSocket(that.$store.getters['Auth/accessToken'], that.quiz.id, callbacks)
+          // this.updateOverlay(false)
         })
         .catch((error) => {
           Assistant.reportErrors(error)
-          that.$q.notify({
-            message: 'مشکلی در دریافت اطلاعات آزمون رخ داده است. لطفا دوباره امتحان کنید.',
-            type: 'negative',
-            position: 'top'
-          })
+          // this.updateOverlay(false)
           that.$router.push({ name: 'user.exam.list' })
         })
     },
@@ -244,7 +243,9 @@ export default {
       }
     },
     changeAppBarAndDrawer (state) {
-      this.$store.dispatch('AppLayout/updateAppBarAndDrawer', state)
+      this.$store.commit('AppLayout/updateLayoutHeader', state)
+      this.$store.commit('AppLayout/updateLayoutLeftDrawer', state)
+      this.$store.commit('AppLayout/updateLayoutRightDrawerVisible', state)
     },
     changeCurrentQuestionIfScrollingIsDone () {
       if (this.timePassedSinceLastScroll >= 1000) {
@@ -323,14 +324,17 @@ export default {
           params: { quizId: this.$route.params.quizId, questNumber: 1 }
         })
       }
+    },
+    setHeights () {
+      if (this.$refs.scroller.$el) {
+        this.$refs.scroller.$el.style.height = this.windowSize.y + 'px'
+      }
+      this.$refs.leftSideList.style.height = (this.windowSize.y - 127) + 'px'
+    },
+    updateOverlay (value) {
+      this.$store.dispatch('loading/overlayLoading', { loading: value })
+      console.log(value)
     }
-    // setHeights () {
-    //   this.$refs.questionsColumn.style.height = this.windowSize.y + 'px'
-    //   if (this.$refs.scroller.$el) {
-    //     this.$refs.scroller.$el.style.height = this.windowSize.y + 'px'
-    //   }
-    //   this.$refs.leftSideList.style.height = (this.windowSize.y - 24) + 'px'
-    // }
   }
 }
 </script>
@@ -379,30 +383,33 @@ export default {
 
     .bubbleSheet-bottom {
       padding: 12px;
-    }
-  }
+      .sheets{
+        height: 100%;
+      }
+      .timer-row {
+        width: calc(58% - 150px);
+        position: fixed;
+        bottom: 0;
+        right: 100px;
 
-  .timer-row {
-    width: calc(58% - 150px);
-    position: fixed;
-    bottom: 0;
-    right: 100px;
+        .end-exam-btn {
+          position: absolute;
+          bottom: 0;
+          background: rgb(76, 175, 80) !important;
+          color: #fff;
+          font-weight: bold;
+          font-size: 16px;
+          height: 103px !important;
+          box-shadow: 0px 3px 3px -2px rgb(0 0 0 / 20%), 0px 3px 4px 0px rgb(0 0 0 / 14%), 0px 1px 8px 0px rgb(0 0 0 / 12%);
+          width: 200px;
+          border-radius: 20px 20px 0 0;
+        }
 
-    .end-exam-btn {
-      position: absolute;
-      bottom: 0;
-      background: rgb(76, 175, 80) !important;
-      color: #fff;
-      font-weight: bold;
-      font-size: 16px;
-      height: 103px !important;
-      box-shadow: 0px 3px 3px -2px rgb(0 0 0 / 20%), 0px 3px 4px 0px rgb(0 0 0 / 14%), 0px 1px 8px 0px rgb(0 0 0 / 12%);
-      width: 200px;
-      border-radius: 20px 20px 0 0;
-    }
+        .high-z-index {
+          z-index: 3;
+        }
+      }
 
-    .high-z-index {
-      z-index: 3;
     }
   }
 }

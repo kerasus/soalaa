@@ -19,17 +19,18 @@
       <div class="drawer-inside" v-if="$route.name === 'onlineQuiz.alaaView'">
         <sideMenuMapOfQuestions/>
       </div>
-      <div class="drawer-inside" v-else>
+      <div v-else>
         <side-menu-dashboard/>
       </div>
     </template>
     <template #content>
-      <router-view v-slot="{ Component }">
-        <keep-alive>
-          <component :is="Component" :key="$route.fullPath" />
-        </keep-alive>
-      </router-view>
-<!--      <router-view :key="$route.name"/>-->
+      <div class="content-inside">
+        <router-view v-slot="{ Component }">
+          <keep-alive :exclude="['konkoorView', 'alaaView']">
+            <component :is="Component" :key="$route.fullPath" />
+          </keep-alive>
+        </router-view>
+      </div>
     </template>
   </quasar-template-builder>
 </template>
@@ -85,7 +86,7 @@ export default {
     resize (val) {
       this.$store.commit('AppLayout/updateWindowSize', val)
       if (val.width > 1439) {
-        this.$store.commit('AppLayout/updateLayoutLeftDrawerWidth', 325)
+        this.$store.commit('AppLayout/updateLayoutLeftDrawerWidth', 314)
         this.$store.commit('AppLayout/updateLayoutLeftDrawerBehavior', 'desktop') && this.$store.commit('AppLayout/updateLayoutRightDrawerBehavior', 'desktop')
       } else if (val.width > 599) {
         this.$store.commit('AppLayout/updateLayoutLeftDrawerWidth', 280)
@@ -108,6 +109,10 @@ export default {
 }
 
 .main-layout-container {
+}
+.content-inside {
+  height: 100vh;
+  overflow: auto;
 }
 
 .main-layout-left-drawer {
