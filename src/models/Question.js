@@ -133,7 +133,6 @@ class Question extends Model {
         { key: 'statement' },
         { key: 'descriptive_answer' },
         { key: 'sub_category_id' },
-        { key: 'exams' },
         { key: 'type_id' },
         { key: 'author' },
         {
