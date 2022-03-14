@@ -40,6 +40,7 @@ const routes = [
               { name: 'Admin.Exam.Report.Edit', path: ':id/edit-exam-report', component: () => import('pages/Admin/exam/edit/editExamReport') },
               { name: 'Admin.Exam.Lessons', path: 'lessons/:quizId/:quizTitle', component: () => import('src/pages/Admin/exam/lessons.vue') },
               { name: 'Admin.Exam.Lessons.List', path: 'lessons/:quizId/chart', component: () => import('src/pages/Admin/exam/lessonsChart.vue') },
+              { name: 'Admin.Exam.video.set', path: '/video/set/:examId/:subcategory_id/:quizTitle', component: () => import('src/pages/Admin/exam/VideoSet/SetVideo.vue') },
 
               {
                 path: '/results/mbti_bartle/:exam_id/:user_exam_id',
