@@ -8,12 +8,11 @@
           size="10px"
           round
           dark-percentage
-          color="white"
+          color="primary"
           @click="goBack"
         >
           <q-icon
             name="mdi-chevron-left"
-            color="black"
             size="sm"
           />
         </q-btn>
@@ -39,39 +38,72 @@
           >
             <td>{{ item.title }}</td>
             <td class="actionsColumn">
-              <q-btn
-                v-if="item.permissions.view"
-                class="q-mx-sm"
-                size="12px"
-                round
-                dark-percentage
-                @click="redirect(item)"
-                color="green">
-                <q-icon
-                  name="mdi-notebook-outline"
-                  size="sm"
-                />
-                <q-tooltip anchor="top middle" self="bottom middle" :offset="[10, 10]">
-                  <span class="smallFontSize">مشاهده سوالات دروس</span>
-                </q-tooltip>
-              </q-btn>
-              <q-btn
-                v-if="item.permissions.view"
-                class="q-mx-sm"
-                size="12px"
-                round
-                dark-percentage
-                color="blue"
-                @click="redirect(item)"
-              >
-                <q-icon
-                  name="mdi-video"
-                  size="sm"
-                />
-                <q-tooltip anchor="top middle" self="bottom middle" :offset="[10, 10]">
-                  <span class="smallFontSize">ثبت ویدئو تحلیل</span>
-                </q-tooltip>
-              </q-btn>
+              <div>
+                <q-input
+                  v-if="item.permissions.view"
+                  v-model="item.order"
+                  type="number"
+                  :loading="item.loading"
+                  :disabled="item.loading"
+                  label="ترتیب درس"
+                  hide-details="auto"
+                  class="mb-2"
+                >
+                  <q-btn
+                    class="q-mx-sm float-right"
+                    size="1px"
+                    fab-mini
+                    dark-percentage
+                    color="primary"
+                    flat
+                    @click="updateOrder(item)"
+                  >
+                    <q-icon
+                    name="mdi-pencil"
+                    size="sm"
+                    />
+                  </q-btn>
+                </q-input>
+              </div>
+              <div class="row">
+                <div class="col-6">
+                  <q-btn
+                    :style="{ 'width':'90%' , 'height':'90%' }"
+                    v-if="item.permissions.view"
+                    class="q-mx-sm"
+                    size="12px"
+                    dark-percentage
+                    @click="redirect(item)"
+                    color="green">
+                    <q-icon
+                      name="mdi-notebook-outline"
+                      size="sm"
+                    />
+                    <q-tooltip anchor="top middle" self="bottom middle" :offset="[10, 10]">
+                      <span class="smallFontSize">مشاهده سوالات دروس</span>
+                    </q-tooltip>
+                  </q-btn>
+                </div>
+                <div class="col-6">
+                  <q-btn
+                    v-if="item.permissions.view"
+                    class="q-mx-sm"
+                    size="12px"
+                    :style="{ 'width':'90%' , 'height':'90%' }"
+                    dark-percentage
+                    color="blue"
+                    @click="redirect(item)"
+                  >
+                    <q-icon
+                      name="mdi-video"
+                      size="sm"
+                    />
+                    <q-tooltip anchor="top middle" self="bottom middle" :offset="[10, 10]">
+                      <span class="smallFontSize">ثبت ویدئو تحلیل</span>
+                    </q-tooltip>
+                  </q-btn>
+                </div>
+              </div>
             </td>
           </tr>
           </tbody>
@@ -106,7 +138,6 @@ export default {
       try {
         const response = await this.getLessons()
         this.lessonsList.loading = false
-        console.log(response)
         this.lessonsList = new QuestSubcategoryList(response.data.data, {
           meta: response.data.meta,
           links: response.data.links
@@ -121,6 +152,25 @@ export default {
     },
     redirect (link) {
       console.log(link)
+    },
+    updateOrder (subcategory) {
+      if (subcategory.order === null) {
+        return
+      }
+      subcategory.loading = true
+      axios.post(API_ADDRESS.questionSubcategory.updateOrder, {
+        sub_category_id: subcategory.id,
+        order: subcategory.order,
+        exam_id: this.$route.params.quizId
+      })
+        .then((response) => {
+          console.log(response)
+          subcategory.loading = false
+        })
+        .catch(() => {
+          subcategory.loading = false
+          subcategory.order = null
+        })
     }
   }
 }
