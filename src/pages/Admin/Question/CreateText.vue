@@ -19,6 +19,7 @@ import DynamicComponent from 'components/Question/QuestionPage/Create/textMode/q
 import { Question } from 'src/models/Question'
 import QuestionDetails from 'components/Question/QuestionPage/Create/textMode/QuestionDetails'
 import AdminActionOnQuestion from 'src/mixin/AdminActionOnQuestion'
+import { QuestionType } from 'src/models/QuestionType'
 export default {
   name: 'CreateText',
   components: {
@@ -32,6 +33,7 @@ export default {
   props: {},
   data () {
     return {
+      questionType: new QuestionType(),
       componentsNames: [
         {
           componentName: 'MultipleChoiceQ',
