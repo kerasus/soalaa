@@ -5,6 +5,8 @@ import { QuestionStatusList } from 'src/models/QuestionStatus'
 import { Question } from 'src/models/Question'
 import { ExamList } from 'src/models/Exam'
 import { QuestSubcategoryList } from 'src/models/QuestSubcategory'
+// eslint-disable-next-line no-unused-vars
+import { QuestionType, TypeList } from 'src/models/QuestionType'
 const AdminActionOnQuestion = {
   data () {
     return {
@@ -20,6 +22,8 @@ const AdminActionOnQuestion = {
       const that = this
       axios.get(API_ADDRESS.option.base + '?type=question_type')
         .then(function (response) {
+          that.componentTabs = new TypeList(response.data.data)
+          console.log('componentTabs', that.componentTabs)
           const optionQuestion = response.data.data.find(item => (item.value === 'konkur'))
           if (!optionQuestion) {
             return this.$q.notify({

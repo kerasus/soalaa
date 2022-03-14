@@ -6,6 +6,7 @@
           <div class="col">نوع سوال</div>
           <div>
             <q-tabs
+              v-if="componentTabs.list[0]"
               v-model="questionTab"
               no-caps
               dense
@@ -14,11 +15,11 @@
               class="col question-type-tabs"
             >
               <q-tab
-                v-for="(item, index) in componentTabs"
+                v-for="(item, index) in componentTabs.list"
                 :key="index"
                 class="question-type-tab"
-                :name="item"
-                :label="item"
+                :name="item.id"
+                :label="item.tabName"
                 @click="chooseComponent(item)"
               />
             </q-tabs>
@@ -45,6 +46,7 @@
 <script>
 import AdminActionOnQuestion from 'src/mixin/AdminActionOnQuestion'
 import { Question } from 'src/models/Question'
+import { TypeList } from 'src/models/QuestionType'
 export default {
   name: 'Navbar',
   props: {
@@ -58,20 +60,32 @@ export default {
   data () {
     return {
       questionTab: 'تستی',
-      componentTabs: ['تستی', 'تشریحی', 'ام بی تی آی']
+      // componentTabs: ['تستی', 'تشریحی', 'ام بی تی آی']
+      componentTabs: new TypeList()
     }
   },
   mixins: [
     AdminActionOnQuestion
   ],
+  created () {
+    // this.getQuestionType()
+  },
   mounted () {
-    this.chooseComponent(this.componentTabs[0])
+    this.$nextTick(() => {
+      this.getQuestionType()
+      console.log('this.chooseComponent(this.componentTabs.list[0])')
+      // this.chooseComponent(this.componentTabs.list[0])
+    })
     // console.log('optionQuestionId', this.optionQuestionId)
   },
   methods: {
-    chooseComponent (cName) {
+    chooseComponent (item) {
+      console.log('this.value', this.value)
+      console.log('this.componentTabs', this.componentTabs)
+      console.log('item', item)
       const question = this.value
-      question.type = cName
+      question.type = item.componentName
+      this.questionTab = item.tabName
       this.$emit('modelValue', question)
     }
   }
