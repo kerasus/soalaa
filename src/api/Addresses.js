@@ -155,7 +155,8 @@ const API_ADDRESS = {
     base: lumenServer + '/sub-category',
     update (id) {
       return lumenServer + '/sub-category/' + id
-    }
+    },
+    updateOrder: lumenServer + '/exam-question/update/order/sub-category'
   },
   questionCategory: {
     base: lumenServer + '/category',
