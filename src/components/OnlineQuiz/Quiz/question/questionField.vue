@@ -139,11 +139,11 @@ export default {
       type: Boolean,
       default: true
     },
-    questionsColumn: { // here is: {uid: 'unique_1', text: 'abc'}
-      default () {
-        return null
-      }
-    },
+    // questionsColumn: { // here is: {uid: 'unique_1', text: 'abc'}
+    //   default () {
+    //     return null
+    //   }
+    // },
     source: { // here is: {uid: 'unique_1', text: 'abc'}
       default () {
         return {}
@@ -182,10 +182,13 @@ export default {
       const persianRegex = /[\u0600-\u06FF]/
       return string.match(persianRegex)
     },
+    windowSize () {
+      return this.$store.getters['AppLayout/windowSize']
+    },
     choiceClass () {
       const source = this.source
       const largestChoice = this.getLargestChoice(source.choices)
-      const largestChoiceWidth = this.questionsColumn.clientWidth / largestChoice
+      const largestChoiceWidth = this.windowSize.x / largestChoice
       if (largestChoiceWidth < 12) {
         return 'col-md-12'
       }
