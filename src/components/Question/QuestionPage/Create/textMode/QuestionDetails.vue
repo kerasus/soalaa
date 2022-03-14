@@ -54,15 +54,45 @@
           class="save-btn default-detail-btn"
         />
       </div>
+<!--      <div class="detail-box detail-box-last" :class="[imgPanelVisibility ? 'col-6' : 'col-3']">-->
+<!--        <div class="detail-box-title ">رشته</div>-->
+<!--        <q-select borderless v-model="model" :options="options" />-->
+<!--      </div>-->
+      <div class="detail-box detail-box-first" :class="[imgPanelVisibility ? 'col-6' : 'col-3']">
+        <div class="detail-box-title">آزمون</div>
+        <q-select borderless v-model="selectedExam" :options="exams.list" option-label="title" />
+      </div>
+      <div class="detail-box detail-box-first" :class="[imgPanelVisibility ? 'col-6' : 'col-3']">
+        <div class="detail-box-title">درس</div>
+        <q-select borderless v-model="selectedLesson" :options="lessons.list" option-label="title" />
+      </div>
       <div class="detail-box detail-box-last" :class="[imgPanelVisibility ? 'col-6' : 'col-3']">
-        <div class="detail-box-title ">رشته</div>
-        <q-select borderless v-model="model" :options="options" />
+        <div class="detail-box-title">ترتیب</div>
+        <q-input borderless v-model="order" type="number" />
+      </div>
+      <q-btn icon="mdi-plus" @click="attach"></q-btn>
+    </div>
+    <div v-if="value.exams" :key="value.exams.list.length">
+      <div v-for="(item, index) in value.exams.list" :key="index" class="flex row">
+        <div class="detail-box detail-box-first" :class="[imgPanelVisibility ? 'col-6' : 'col-3']">
+          {{ item.title }}
+        </div>
+        <div class="detail-box detail-box-first" :class="[imgPanelVisibility ? 'col-6' : 'col-3']">
+          {{ getLessonById(item.sub_category_id).title }}
+        </div>
+        <div class="detail-box detail-box-last" :class="[imgPanelVisibility ? 'col-6' : 'col-3']">
+          {{ item.order }}
+        </div>
       </div>
     </div>
   </div>
 </template>
 
 <script>
+import { Question } from 'src/models/Question'
+import { Exam, ExamList } from 'src/models/Exam'
+import { QuestSubcategoryList } from 'src/models/QuestSubcategory'
+
 export default {
   name: 'QuestionDetails',
   props: {
@@ -71,6 +101,18 @@ export default {
       default () {
         return false
       }
+    },
+    exams: { // possible removal for attach exam
+      type: ExamList,
+      default: new ExamList()
+    },
+    lessons: { // possible removal for attach exam
+      type: QuestSubcategoryList,
+      default: new QuestSubcategoryList()
+    },
+    value: {
+      type: Question,
+      default: new Question()
     }
   },
   data () {
@@ -81,7 +123,28 @@ export default {
       ],
       text: '',
       draftBtnLoading: false,
-      saveBtnLoading: false
+      saveBtnLoading: false,
+      selectedExam: null,
+      selectedLesson: null,
+      order: null
+    }
+  },
+  methods: {
+    attach () { // possible removal for attach exam
+      const question = this.value
+      const exam = this.selectedExam
+      exam.sub_category_id = this.selectedLesson.id
+      exam.order = this.order
+      if (!question.exams) {
+        question.exams = new ExamList()
+      }
+      question.exams.list.push(new Exam(exam))
+      this.$emit('update:modelValue', question)
+    }
+  },
+  computed: {
+    getLessonById () {
+      return id => this.lessons.list.find(item => item.id === id)
     }
   }
 }

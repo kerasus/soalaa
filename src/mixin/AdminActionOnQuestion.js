@@ -11,7 +11,8 @@ const AdminActionOnQuestion = {
       optionQuestionId: '',
       questionStatusId_draft: null,
       questionStatusId_pending_to_type: null,
-      examList: new ExamList()
+      examList: new ExamList(),
+      subCategoriesList: new QuestSubcategoryList()
     }
   },
   methods: {
@@ -47,7 +48,7 @@ const AdminActionOnQuestion = {
     },
     loadExamList () {
       const that = this
-      return new ExamList().fetch()
+      this.$axios.get(API_ADDRESS.exam.base())
         .then((response) => {
           that.examList = new ExamList(response.data.data)
         })
@@ -111,7 +112,7 @@ const AdminActionOnQuestion = {
         })
     },
     loadSubcategories () {
-      return this.subCategoriesList.fetch()
+      return this.$axios.get(API_ADDRESS.questionSubcategory.base)
         .then((response) => {
           this.subCategoriesList = new QuestSubcategoryList(response.data.data)
         })

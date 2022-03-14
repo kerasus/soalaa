@@ -31,7 +31,11 @@
     </div>
     <div class="row">
       <div class="col">
-        <question-details />
+        <question-details
+          v-model="question"
+          :exams="examList"
+          :lessons="subCategoriesList"
+        />
       </div>
     </div>
   </div>
@@ -50,6 +54,10 @@ export default {
     return {
       question: new Question()
     }
+  },
+  mounted () {
+    this.loadExamList()
+    this.loadSubcategories()
   }
 }
 </script>
