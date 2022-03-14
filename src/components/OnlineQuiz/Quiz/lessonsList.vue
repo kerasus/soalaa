@@ -5,16 +5,12 @@
         <span>{{ $route.params.quizTitle }}</span>
         <q-btn
           class="q-mx-sm float-right"
-          size="10px"
           round
           dark-percentage
           color="primary"
           @click="goBack"
         >
-          <q-icon
-            name="mdi-chevron-left"
-            size="sm"
-          />
+          <i class="fi-rr-angle-left row" />
         </q-btn>
       </div>
     </div>
@@ -65,7 +61,7 @@
                   </q-btn>
                 </q-input>
               </div>
-              <div class="row">
+              <div class="row q-pt-sm">
                 <div class="col-6">
                   <q-btn
                     :style="{ 'width':'90%' , 'height':'90%' }"
@@ -92,7 +88,7 @@
                     :style="{ 'width':'90%' , 'height':'90%' }"
                     dark-percentage
                     color="blue"
-                    @click="redirect(item)"
+                    @click="goVideoSet(item.id)"
                   >
                     <q-icon
                       name="mdi-video"
@@ -153,6 +149,16 @@ export default {
     redirect (link) {
       console.log(link)
     },
+    goVideoSet (id) {
+      this.$router.push({
+        name: 'Admin.Exam.video.set',
+        params: {
+          subcategory_id: id,
+          examId: this.$route.params.quizId,
+          quizTitle: this.$route.params.quizTitle
+        }
+      })
+    },
     updateOrder (subcategory) {
       if (subcategory.order === null) {
         return
@@ -164,7 +170,6 @@ export default {
         exam_id: this.$route.params.quizId
       })
         .then((response) => {
-          console.log(response)
           subcategory.loading = false
         })
         .catch(() => {

@@ -26,7 +26,8 @@ const AxiosHooks = (function () {
       messages.push('ابتدا وارد سامانه شوید.')
       deAuthorizeUser(router, store)
     } else if (error.response.data.errors) {
-      for (const [value] of Object.entries(error.response.data.errors)) {
+      for (const [key, value] of Object.entries(error.response.data.errors)) {
+        console.log('key', key)
         if (typeof value === 'string') {
           messages.push(value)
         } else {

@@ -75,11 +75,13 @@
         </div>
       </div>
     </div>
+    <q-resize-observer @resize="getBoxSize"/>
   </div>
 </template>
 
 <script>
 import moment from 'moment-jalaali'
+import { ref } from 'vue'
 import { mixinQuiz, mixinUserActionOnQuestion } from 'src/mixin/Mixins'
 
 export default {
@@ -102,12 +104,13 @@ export default {
   data: () => ({
     showDateOfAnsweredAt: false,
     overlay: false,
-    boxSize: 600
+    boxSize: {
+      width: 600,
+      height: 600
+    },
+    bubbleSheet: ref(null)
   }),
   computed: {
-    bubbleSize () {
-      return this.$store.getters['AppLayout/bubbleSize']
-    },
     questionsInGroups () {
       const groups = []
       const chunk = 10
@@ -119,10 +122,30 @@ export default {
         }
       } else {
         array = this.questions
-        for (let i = 0, j = 200; i < j; i += chunk) {
+        for (let i = 0, j = 300; i < j; i += chunk) {
           groups.push(array.slice(i, i + chunk))
         }
       }
+      // groups.pop()
+      // groups.pop()
+      // groups.pop()
+      // groups.pop()
+      // groups.pop()
+      // groups.pop()
+      // groups.pop()
+      // groups.pop()
+      // groups.pop()
+      // groups.pop()
+      // groups.push(groups[0])
+      // groups.push(groups[0])
+      // groups.push(groups[0])
+      // groups.push(groups[0])
+      // groups.push(groups[0])
+      // groups.push(groups[0])
+      // groups.push(groups[0])
+      // groups.push(groups[0])
+      // groups.push(groups[0])
+      // groups.push(groups[0])
       return groups
     }
   },
@@ -132,13 +155,6 @@ export default {
     }
   },
   mounted () {
-    const that = this
-    setTimeout(() => {
-      if (that.$refs.bubbleSheet) {
-        that.$refs.bubbleSheet.style.height = that.questionListHeight() - 24 + 'px'
-      }
-      that.overlay = false
-    }, this.delayTime)
     this.checkForShowDateOfAnsweredAt()
   },
   watch: {
@@ -149,8 +165,34 @@ export default {
         this.$store.dispatch('loading/overlayLoading', false)
       }
     }
+    // boxSize: {
+    //   deep: true,
+    //   handler () {
+    //     // console.log('watch', this.boxSize)
+    //     this.setBubbleSheetHeight()
+    //   }
+    // }
   },
   methods: {
+    setBubbleSheetHeight () {
+      const that = this
+      setTimeout(() => {
+        if (that.$refs.bubbleSheet) {
+          that.$refs.bubbleSheet.style.height = that.sheetsListHeight() - 24 + 'px'
+        }
+        that.overlay = false
+      }, this.delayTime)
+    },
+    sheetsListHeight () {
+      // box is a col-7 with 12px padding
+      this.boxSize.width = this.boxSize.width - 24
+      this.boxSize.height = this.boxSize.height - 24
+      const horizontalGroupAmounts = Math.floor(this.boxSize.width / 140)
+      console.log('horizontalGroupAmounts', horizontalGroupAmounts)
+      const verticalGroupAmount = Math.ceil(this.questionsInGroups.length / horizontalGroupAmounts)
+      console.log('verticalGroupAmount', verticalGroupAmount)
+      return verticalGroupAmount * 182 + 24
+    },
     showAnsweredAt (answeredAt) {
       let formatString = 'HH:mm:ss'
       if (this.showDateOfAnsweredAt) {
@@ -161,6 +203,7 @@ export default {
     checkForShowDateOfAnsweredAt () {
       let dateTime = ''
       const that = this
+      console.log(this.questionsInGroups)
       this.questionsInGroups.forEach(groupItem => {
         groupItem.forEach(questionItem => {
           const userQuestionData = that.getUserQuestionData(questionItem.id)
@@ -203,12 +246,11 @@ export default {
     clickQuestionNumber (questionId) {
       this.$emit('scrollTo', questionId)
     },
-    questionListHeight () {
-      // box is a col-7 with 12px padding
-      this.boxSize = this.$refs.bubbleSheet.clientWidth - 24
-      const horizontalGroupAmounts = Math.floor(this.boxSize / 140)
-      const verticalGroupAmount = Math.ceil(this.questionsInGroups.length / horizontalGroupAmounts)
-      return verticalGroupAmount * 185 + 24
+    getBoxSize (val) {
+      if (val) {
+        this.boxSize = val
+        this.setBubbleSheetHeight()
+      }
     }
   }
 }
@@ -216,7 +258,6 @@ export default {
 
 <style lang="scss" scoped>
 .bubbleSheet-body {
-  background-color: #f1f1f1;
   &.pasokh-nameh {
     .choice-in-list {
       position: relative;
@@ -268,10 +309,12 @@ export default {
           background: #888;
         }
       }
+
       .question-number-in-list {
         position: relative;
         width: 24%;
         cursor: pointer;
+
         &.circle {
           &:after {
             content: "\F0130";
@@ -321,6 +364,10 @@ export default {
         }
       }
     }
+  }
+
+  .none-question-in-list {
+    display: none;
   }
 }
 

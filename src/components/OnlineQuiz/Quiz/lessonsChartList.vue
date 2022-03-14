@@ -5,16 +5,12 @@
         <span>{{ $route.params.quizTitle }}</span>
         <q-btn
           class="q-mx-sm float-right"
-          size="10px"
           round
           dark-percentage
           color="primary"
           @click="goBack"
         >
-          <q-icon
-            name="mdi-chevron-left"
-            size="sm"
-          />
+          <i class="fi-rr-angle-left row" />
         </q-btn>
       </div>
     </div>
