@@ -2,15 +2,14 @@
      <div
        class="set-video-back-btn q-mx-auto "
      >
-    <q-btn
-    round
-    color="primary"
-    unelevated
-    @click="goBack"
-     >
-
-    <i class="fi-rr-angle-left row" />
-    </q-btn>
+       <q-btn
+         class="q-mx-sm float-right"
+         round
+         dark-percentage
+         color="primary"
+         @click="goBack"
+         icon="isax:arrow-left-2"
+       />
 
     </div>
     <q-card
