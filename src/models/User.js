@@ -176,21 +176,21 @@ class User extends Model {
     })
   }
 
-  registerExam (exam_id) {
-    const that = this
-    return new Promise(function (resolve, reject) {
-      that.create({
-        exam_id
-      }, API_ADDRESS.exam.registerExam)
-        .then((response) => {
-          resolve(response)
-        })
-        .catch((error) => {
-          Assistant.reportErrors({ location: 'models/User.js -> registerExam()' })
-          reject(error)
-        })
-    })
-  }
+  // registerExam (exam_id) {
+  //   const that = this
+  //   return new Promise(function (resolve, reject) {
+  //     that.create({
+  //       exam_id
+  //     }, API_ADDRESS.exam.registerExam)
+  //       .then((response) => {
+  //         resolve(response)
+  //       })
+  //       .catch((error) => {
+  //         Assistant.reportErrors({ location: 'models/User.js -> registerExam()' })
+  //         reject(error)
+  //       })
+  //   })
+  // }
 
   getUsrExamByExamId (userExamId) {
     return this.exams.list.find((item) => Assistant.getId(item.user_exam_id) === userExamId)
