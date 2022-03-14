@@ -1,54 +1,39 @@
-/* eslint-disable */
 <template>
   <div class="image-upload-parent">
     <p style="color: #23263b; font-size: 16px; font-weight: 500">{{ title }}</p>
-    <file-pond
-      :allow-multiple="true"
-      :labelIdle="dropAreaHTML"
-      accepted-file-types="image/jpeg, image/png"
-      :name="fieldKey + '[0]'"
-      :server="serverConfig"
-      instantUpload="false"
-      v-model:files="files"
-    />
+    <div :id="'filepond-wrapper-' + this.fieldKey" />
   </div>
 </template>
 
 <script>
-/* eslint-disable */
-import { Question } from '../../../models/Question.js'
-import vueFilePond from 'vue-filepond'
+import { Question } from 'src/models/Question'
+import * as FilePond from 'filepond'
 import 'filepond/dist/filepond.min.css'
-import 'filepond-plugin-image-preview/dist/filepond-plugin-image-preview.min.css'
-import FilePondPluginFileValidateType from 'filepond-plugin-file-validate-type'
+import 'filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css'
 import FilePondPluginImagePreview from 'filepond-plugin-image-preview'
+FilePond.registerPlugin(FilePondPluginImagePreview)
 
-const FilePond = vueFilePond(
-  FilePondPluginFileValidateType,
-  FilePondPluginImagePreview
-)
-
-export default {
-  name: 'UploadImage',
-  data () {
-    return {
-      dropAreaHTML: `
+const dropAreaHTML = `
         <div class="drop-area-parent">
           <div class="drop-area">
             <i class="q-icon isax isax-gallery-add" style="font-size: 48px; color: #dedede; margin-bottom: 12px; margin-top: 24px;" aria-hidden="true" role="presentation"></i>
             <p>عکس مورد نظر را اینجا رها کنید</p>
             <p><span class="vertical-line"></span>یا<span class="vertical-line"></span></p>
-            <p style="color: #8075DC">انتخاب فایل </p>
+            <p style="color: #8075DC; cursor: pointer">انتخاب فایل </p>
           </div>
         </div>
-      `,
-      serverConfig: {
-        url: '/3a/api/v1/question',
-        headers: {
-          Authorization: 'Bearer ' + this.$store.getters['Auth/accessToken']
-        }
-      },
-      files: []
+      `
+
+export default {
+  name: 'UploadImage',
+  data () {
+    return {
+      pond: FilePond.create({
+        allowMultiple: true,
+        name: 'filepond',
+        labelIdle: dropAreaHTML
+      }),
+      question: new Question()
     }
   },
   props: {
@@ -68,17 +53,16 @@ export default {
       required: false
     }
   },
-  components: {
-    FilePond,
+  mounted () {
+    document.getElementById('filepond-wrapper-' + this.fieldKey).appendChild(this.pond.element)
+    this.question = this.value
+    document.addEventListener('FilePond:addfile', () => {
+      this.question[this.fieldKey] = this.pond.getFiles().map(({ file }) => file)
+      this.$emit('input', this.question)
+    })
   }
 }
 </script>
-
-<style scoped lang="scss">
-.image-upload-parent {
-
-}
-</style>
 
 <style lang="scss">
 .drop-area-parent {
