@@ -16,6 +16,12 @@ const AdminActionOnQuestion = {
     }
   },
   methods: {
+    createQuestion (question) {
+      this.$axios.post(API_ADDRESS.question.createAndAttach(), question)
+        .then(response => {
+          console.log(response.data)
+        })
+    },
     getQuestionType () {
       const that = this
       axios.get(API_ADDRESS.option.base + '?type=question_type')

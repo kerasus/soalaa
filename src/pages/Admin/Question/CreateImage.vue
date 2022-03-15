@@ -35,6 +35,7 @@
           v-model="question"
           :exams="examList"
           :lessons="subCategoriesList"
+          @save="createQuestion(question)"
         />
       </div>
     </div>

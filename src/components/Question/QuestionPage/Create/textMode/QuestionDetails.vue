@@ -52,6 +52,7 @@
           color="primary"
           label="ذخیره سوال"
           class="save-btn default-detail-btn"
+          @click="saveQuestion"
         />
       </div>
 <!--      <div class="detail-box detail-box-last" :class="[imgPanelVisibility ? 'col-6' : 'col-3']">-->
@@ -140,6 +141,9 @@ export default {
       }
       question.exams.list.push(new Exam(exam))
       this.$emit('update:modelValue', question)
+    },
+    saveQuestion () {
+      this.$emit('save')
     }
   },
   computed: {
