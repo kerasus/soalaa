@@ -5,7 +5,7 @@
           round
           color="primary"
           unelevated
-          @click="goBack"
+          @click= this.$router.go(-1)
         >
           <i class="fi-rr-angle-left row" />
         </q-btn>
@@ -101,11 +101,6 @@ export default {
   computed: {
     examCategoriesIndex () {
       return this.inputs.findIndex(item => item.name === 'categories')
-    }
-  },
-  methods: {
-    goBack () {
-      this.$router.push('/admin/exam')
     }
   }
 }

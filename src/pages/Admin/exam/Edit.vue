@@ -5,7 +5,7 @@
         round
         color="primary"
         unelevated
-        @click="goBack"
+        @click= this.$router.go(-1)
       >
         <i class="fi-rr-angle-left row" />
       </q-btn>
@@ -178,10 +178,6 @@ export default {
     this.api += '/' + this.$route.params.id
   },
   methods: {
-    goBack () {
-      const url = '/admin/exam/' + this.$route.params.id
-      this.$router.push(url)
-    },
     getCategories (response, setNewInputData) {
       if (!response) {
         return

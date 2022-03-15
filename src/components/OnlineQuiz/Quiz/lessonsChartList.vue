@@ -8,7 +8,7 @@
           round
           dark-percentage
           color="primary"
-          @click="goBack"
+          @click= this.$router.go(-1)
         >
           <i class="fi-rr-angle-left row" />
         </q-btn>
@@ -93,9 +93,6 @@ export default {
     this.loadLessons()
   },
   methods: {
-    goBack () {
-      this.$router.push('/admin/exam')
-    },
     async loadLessons () {
       this.lessonsList.loading = true
       try {

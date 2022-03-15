@@ -6,7 +6,7 @@
           round
           color="primary"
           unelevated
-          @click="goBack"
+          @click= this.$router.go(-1)
         >
           <i class="fi-rr-angle-left row" />
         </q-btn>
@@ -297,9 +297,6 @@ export default {
   },
 
   methods: {
-    goBack () {
-      this.$router.push('/admin/exam')
-    },
     getUserFormData () {
       this.showLoading()
       this.$axios.get(API_ADDRESS.user.formData)
