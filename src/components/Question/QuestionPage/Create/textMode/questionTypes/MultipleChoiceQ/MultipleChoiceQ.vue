@@ -116,6 +116,12 @@ export default {
       default: () => false
     }
   },
+  inject: {
+    currentQuestion: {
+      from: 'currentQuestion', // this is optional if using the same key for injection
+      default: new Question()
+    }
+  },
   data () {
     return {
       domKey: Date.now(),
@@ -134,9 +140,7 @@ export default {
       that.domKey = Date.now()
     }, 100)
   },
-  mounted () {
-    console.log('this.$props--------', this.$props)
-  },
+  mounted () {},
   updated () {
     this.question = this.modelValue
   },
@@ -231,11 +235,11 @@ export default {
     .q-separator--horizontal-inset {
       margin-right: 16px #{"/* rtl:ignore */"} !important ;
     }
-
   }
 }
 </style>
 <style lang="scss">
+// USED IN MANY OTHER COMPONENTS
 .default-questions-card {
   background: #FFFFFF;
   box-shadow: -2px -4px 10px rgba(255, 255, 255, 0.6), 2px 4px 10px rgba(112, 108, 162, 0.05) #{"/* rtl:ignore */"};

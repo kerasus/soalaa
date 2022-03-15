@@ -43,10 +43,10 @@ class QuestionType extends Model {
   }
 }
 
-class typeList extends Collection {
+class TypeList extends Collection {
   model () {
     return QuestionType
   }
 }
 
-export { QuestionType, typeList }
+export { QuestionType, TypeList }
