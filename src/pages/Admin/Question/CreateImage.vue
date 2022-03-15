@@ -59,6 +59,11 @@ export default {
   mounted () {
     this.loadExamList()
     this.loadSubcategories()
+  },
+  provide () {
+    return {
+      question: this.question
+    }
   }
 }
 </script>

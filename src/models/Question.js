@@ -134,7 +134,11 @@ class Question extends Model {
     const that = this
     this.apiResource = {
       fields: [
+        { key: 'id' },
+        { key: 'title' },
         { key: 'statement' },
+        { key: 'statement_photo' },
+        { key: 'order' },
         { key: 'descriptive_answer' },
         { key: 'sub_category_id' },
         { key: 'type_id' },
@@ -143,6 +147,12 @@ class Question extends Model {
           key: 'choices',
           value: function () {
             return that.choices.list
+          }
+        },
+        {
+          key: 'exams',
+          value: function () {
+            return that.exams.list
           }
         },
         {

@@ -19,7 +19,7 @@ const AdminActionOnQuestion = {
   },
   methods: {
     createQuestion (question) {
-      this.$axios.post(API_ADDRESS.question.createAndAttach(), question)
+      this.$axios.post(API_ADDRESS.question.create, question)
         .then(response => {
           console.log(response.data)
         })
