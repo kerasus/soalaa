@@ -13,7 +13,6 @@
             v-model="question.statement"
             :edit-status="true"
             :question-id="question.id ? question.id : 'null'"
-            @questionData="getData"
           />
         </div>
       </q-card-section>
@@ -31,7 +30,6 @@
             v-model="question.descriptive_answer"
             :question-id="question.id ? question.id : 'null'"
             :edit-status="true"
-            @questionData="getData"
           />
         </div>
       </q-card-section>
