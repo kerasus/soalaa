@@ -10,7 +10,9 @@
       :key="componentKey"
       :allProps="allProps"
     />
+    <AttachExam/>
     <QuestionDetails/>
+    <CommentBox/>
   </div>
 </template>
 
@@ -21,9 +23,13 @@ import { Question } from 'src/models/Question'
 import QuestionDetails from 'components/Question/QuestionPage/Create/textMode/QuestionDetails'
 import AdminActionOnQuestion from 'src/mixin/AdminActionOnQuestion'
 import { QuestionType, TypeList } from 'src/models/QuestionType'
+import AttachExam from 'components/Question/QuestionPage/AttachExam'
+import CommentBox from 'components/Question/QuestionPage/CommentBox'
 export default {
   name: 'CreateText',
   components: {
+    CommentBox,
+    AttachExam,
     DynamicComponent,
     Navbar,
     QuestionDetails
