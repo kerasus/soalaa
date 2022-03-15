@@ -75,8 +75,8 @@ export default {
     }
   },
   inject: {
-    currentQuestion: {
-      from: 'currentQuestion', // this is optional if using the same key for injection
+    question: {
+      from: 'question', // this is optional if using the same key for injection
       default: new Question()
     }
   },
@@ -87,7 +87,7 @@ export default {
   mounted () {},
   methods: {
     chooseComponent (item) {
-      this.currentQuestion.type = item
+      this.question.type = item
     }
   },
   watch: {

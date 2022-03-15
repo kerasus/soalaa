@@ -38,21 +38,21 @@ export default {
       componentTabs: new TypeList(),
       componentKey: 0,
       currentComponent: null,
-      currentQuestion: new Question(),
+      question: new Question(),
       allProps: {}
     }
   },
   provide () {
     return {
-      currentQuestion: this.currentQuestion
+      question: this.question
     }
   },
   mounted () {
     this.getQuestionType()
   },
   methods: {
-    chosenComponent (currentQuestion) {
-      this.currentComponent = currentQuestion.type
+    chosenComponent (question) {
+      this.currentComponent = question.type
       this.forceRerenderComponent()
     },
     forceRerenderComponent () {
@@ -60,7 +60,7 @@ export default {
     }
   },
   watch: {
-    currentQuestion: {
+    question: {
       handler (newValue, oldValue) {
         this.chosenComponent(newValue)
       },

@@ -108,7 +108,13 @@ class ChoiceList extends Collection {
     return order
   }
 
-  addEmptyChoice () {
+  addEmptyChoices (index) {
+    for (let i = 0; i < index; i++) {
+      this.addOneEmptyChoice()
+    }
+  }
+
+  addOneEmptyChoice () {
     const lastOrder = this.getLastOrder()
     const newChoice = new Choice({ order: lastOrder + 1 })
     this.list.push(newChoice)
