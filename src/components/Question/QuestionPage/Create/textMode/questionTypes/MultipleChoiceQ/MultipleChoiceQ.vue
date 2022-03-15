@@ -21,7 +21,6 @@
             v-model="question.statement"
             :edit-status="true"
             :question-id="question.id ? question.id : 'null'"
-            @questionData="getData"
           />
 <!--          <div class="col-10 question-txt default-Qcard-txt">-->
 <!--            شناخت فراوان جامعه و متخصصان را می طلبد،لازم است، و برای شرایط فعلی تکنولوژی مورد نیاز، و کاربردهای متنوع با هدف بهبود ابزارهای کاربردی می باشد، کتابهای زیادی در شصت و سه درصد گذشته حال و آینده،لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ، و با استفاده از طراحان گرافیک است، چاپگرها و متون بلکه روزنامه و مجله در ستون و سطرآنچنان که-->
@@ -65,7 +64,6 @@
                   v-model="item.title"
                   :question-id="question.id ? question.id : 'null'"
                   :edit-status="true"
-                  @questionData="getData"
                 />
               </div>
             </q-card-section>
@@ -81,12 +79,11 @@
       <q-card-section>
         <div class="row justify-between default-Qcard-box">
           <QuestionField
-            ref="descriptive"
+            ref="descriptiveA"
             :key="'descriptive_answer' + domKey"
             v-model="question.descriptive_answer"
             :question-id="question.id ? question.id : 'null'"
             :edit-status="true"
-            @questionData="getData"
           />
         </div>
       </q-card-section>
@@ -118,7 +115,7 @@ export default {
   },
   inject: {
     currentQuestion: {
-      from: 'currentQuestion', // this is optional if using the same key for injection
+      from: 'question', // this is optional if using the same key for injection
       default: new Question()
     }
   },
@@ -139,6 +136,7 @@ export default {
     setTimeout(() => {
       that.domKey = Date.now()
     }, 100)
+    this.question.choices.addEmptyChoices(4)
   },
   mounted () {},
   updated () {
