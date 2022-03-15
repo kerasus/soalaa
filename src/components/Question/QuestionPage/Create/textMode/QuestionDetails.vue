@@ -115,6 +115,12 @@ export default {
       default: new Question()
     }
   },
+  inject: {
+    currentQuestion: {
+      from: 'currentQuestion', // this is optional if using the same key for injection
+      default: new Question()
+    }
+  },
   data () {
     return {
       model: '',
