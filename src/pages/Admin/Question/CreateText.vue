@@ -1,10 +1,11 @@
 <template>
   <div class="createQ-text-container">
     <Navbar
-      @chosenComponent="chosenComponent"
-      v-model="currentQuestion"
+      :componentTabs="componentTabs"
+      :loading="componentTabs.loading"
     />
     <DynamicComponent
+      v-if="currentComponent"
       :component="currentComponent"
       :key="componentKey"
       :allProps="allProps"
@@ -19,6 +20,7 @@ import DynamicComponent from 'components/Question/QuestionPage/Create/textMode/q
 import { Question } from 'src/models/Question'
 import QuestionDetails from 'components/Question/QuestionPage/Create/textMode/QuestionDetails'
 import AdminActionOnQuestion from 'src/mixin/AdminActionOnQuestion'
+import { QuestionType, TypeList } from 'src/models/QuestionType'
 export default {
   name: 'CreateText',
   components: {
@@ -32,58 +34,37 @@ export default {
   props: {},
   data () {
     return {
-      componentsNames: [
-        {
-          componentName: 'MultipleChoiceQ',
-          tabName: 'تستی'
-        },
-        {
-          componentName: 'DescriptiveQ',
-          tabName: 'تشریحی'
-        },
-        {
-          componentName: 'MBTIQ',
-          tabName: 'ام بی تی آی'
-        }
-      ],
+      questionType: new QuestionType(),
+      componentTabs: new TypeList(),
       componentKey: 0,
-      currentComponent: {
-        componentName: 'MultipleChoiceQ',
-        tabName: 'تستی'
-      },
+      currentComponent: null,
       currentQuestion: new Question(),
-      allProps: {
-        cq: {
-          type: Question,
-          default: () => new Question()
-        },
-        modelValue: {
-          type: Question,
-          default: () => new Question()
-        },
-        status: {
-          type: Boolean,
-          default: () => false
-        }
-      }
+      allProps: {}
+    }
+  },
+  provide () {
+    return {
+      currentQuestion: this.currentQuestion
     }
   },
   mounted () {
     this.getQuestionType()
   },
   methods: {
-    chosenComponent (cName) {
-      const that = this
-      this.componentsNames.forEach(function (item) {
-        if (item.tabName === cName) {
-          that.currentComponent.componentName = item.componentName
-          that.currentComponent.tabName = item.tabName
-        }
-      })
+    chosenComponent (currentQuestion) {
+      this.currentComponent = currentQuestion.type
       this.forceRerenderComponent()
     },
     forceRerenderComponent () {
       this.componentKey += 1
+    }
+  },
+  watch: {
+    currentQuestion: {
+      handler (newValue, oldValue) {
+        this.chosenComponent(newValue)
+      },
+      deep: true
     }
   }
 }

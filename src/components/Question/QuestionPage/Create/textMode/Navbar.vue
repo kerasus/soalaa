@@ -2,10 +2,11 @@
   <div class="question-txtMode-navbar">
     <div class="fit row wrap justify-between">
       <div class="col-auto">
-        <div class="question-type row items-center">
+        <div class="question-type row items-center relative-position">
           <div class="col">نوع سوال</div>
           <div>
             <q-tabs
+              v-if="componentTabs.list[0]"
               v-model="questionTab"
               no-caps
               dense
@@ -14,15 +15,21 @@
               class="col question-type-tabs"
             >
               <q-tab
-                v-for="(item, index) in componentTabs"
+                v-for="(item, index) in componentTabs.list"
                 :key="index"
                 class="question-type-tab"
-                :name="item"
-                :label="item"
+                :name="item.value"
+                :label="item.tabName"
                 @click="chooseComponent(item)"
               />
             </q-tabs>
           </div>
+          <q-inner-loading
+            :showing="loading"
+            color="primary"
+            class="QComponents-inner-loading"
+            label-style="font-size: 1.1em"
+          />
         </div>
       </div>
       <div class="col-auto">
@@ -45,34 +52,47 @@
 <script>
 import AdminActionOnQuestion from 'src/mixin/AdminActionOnQuestion'
 import { Question } from 'src/models/Question'
+import { TypeList } from 'src/models/QuestionType'
 export default {
   name: 'Navbar',
   props: {
-    value: {
-      type: Question,
+    componentTabs: {
+      type: TypeList,
       default () {
-        return new Question()
+        return new TypeList()
+      }
+    },
+    loading: {
+      type: Boolean,
+      default () {
+        return false
       }
     }
   },
   data () {
     return {
-      questionTab: 'تستی',
-      componentTabs: ['تستی', 'تشریحی', 'ام بی تی آی']
+      questionTab: 'konkur'
+    }
+  },
+  inject: {
+    currentQuestion: {
+      from: 'currentQuestion', // this is optional if using the same key for injection
+      default: new Question()
     }
   },
   mixins: [
     AdminActionOnQuestion
   ],
-  mounted () {
-    this.chooseComponent(this.componentTabs[0])
-    // console.log('optionQuestionId', this.optionQuestionId)
-  },
+  created () {},
+  mounted () {},
   methods: {
-    chooseComponent (cName) {
-      const question = this.value
-      question.type = cName
-      this.$emit('modelValue', question)
+    chooseComponent (item) {
+      this.currentQuestion.type = item
+    }
+  },
+  watch: {
+    componentTabs: function () {
+      this.chooseComponent(this.componentTabs.list[0])
     }
   }
 }
@@ -81,6 +101,8 @@ export default {
 <style scoped lang="scss">
 .question-txtMode-navbar{
   .question-type {
+    min-width: 315px;
+    min-height: 30px;
     .question-type-tabs {
       height: 30px;
       background: #FFFFFF;
@@ -114,6 +136,9 @@ export default {
 }
 </style>
 <style lang="scss">
+.QComponents-inner-loading{
+  background-color: #ccc6c65c;
+}
 .question-txtMode-navbar {
   .question-type {
     .question-type-tabs {

@@ -11,6 +11,7 @@ import { LogList } from '../models/Log'
 // eslint-disable-next-line import/named
 import { createApp } from 'vue'
 import { QuestionType } from '../models/QuestionType'
+import { AttachedExamList } from '../models/AttachedExam'
 if (!window.app) {
 // window.app
   window.app = createApp({})
@@ -32,7 +33,10 @@ class Question extends Model {
       { key: 'in_active_category' },
       { key: 'photo' },
       { key: 'order' },
-      { key: 'exams' },
+      {
+        key: 'exams',
+        relatedModel: AttachedExamList
+      },
       { key: 'type_id' },
       {
         key: 'author',
