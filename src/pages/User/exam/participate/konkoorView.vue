@@ -355,49 +355,47 @@ export default {
       }
     }
   }
-  .left-side {
-      .konkoor-view-navbar {
-        display: flex;
-        justify-content: space-between;
-        padding: 0 40px;
 
-        .dropdown-button {
-          padding: 0;
-          direction: rtl;
-        }
+  .left-side {
+    .konkoor-view-navbar {
+      display: flex;
+      justify-content: space-between;
+      padding: 0 40px;
+
+      .dropdown-button {
+        padding: 0;
+        direction: rtl;
       }
+    }
 
     .bubbleSheet-warpper {
-      height: calc( 100vh - 40px - 103px);
+      height: calc(100vh - 40px - 103px);
     }
-      //.bubbleSheet-bottom {
-      //  padding: 12px;
-      //  max-height: calc(100vh - 40px);
-      //  .timer-row {
-      //    width: calc(58% - 150px);
-      //    position: fixed;
-      //    bottom: 0;
-      //    right: 100px;
-      //
-      //    .end-exam-btn {
-      //      position: absolute;
-      //      bottom: 0;
-      //      background: rgb(76, 175, 80) !important;
-      //      color: #fff;
-      //      font-weight: bold;
-      //      font-size: 16px;
-      //      height: 103px !important;
-      //      box-shadow: 0px 3px 3px -2px rgb(0 0 0 / 20%), 0px 3px 4px 0px rgb(0 0 0 / 14%), 0px 1px 8px 0px rgb(0 0 0 / 12%);
-      //      width: 200px;
-      //      border-radius: 20px 20px 0 0;
-      //    }
-      //
-      //    .high-z-index {
-      //      z-index: 3;
-      //    }
-      //  }
-      //}
+
+    .timer-row {
+      width: calc(58% - 150px);
+      position: fixed;
+      bottom: 0;
+      right: 100px;
+
+      .end-exam-btn {
+        position: absolute;
+        bottom: 0;
+        background: rgb(76, 175, 80) !important;
+        color: #fff;
+        font-weight: bold;
+        font-size: 16px;
+        height: 103px !important;
+        box-shadow: 0px 3px 3px -2px rgb(0 0 0 / 20%), 0px 3px 4px 0px rgb(0 0 0 / 14%), 0px 1px 8px 0px rgb(0 0 0 / 12%);
+        width: 200px;
+        border-radius: 20px 20px 0 0;
+      }
+
+      .high-z-index {
+        z-index: 3;
+      }
     }
+  }
 
 }
 </style>
