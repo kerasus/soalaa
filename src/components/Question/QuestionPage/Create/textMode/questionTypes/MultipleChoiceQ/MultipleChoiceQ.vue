@@ -235,11 +235,11 @@ export default {
     .q-separator--horizontal-inset {
       margin-right: 16px #{"/* rtl:ignore */"} !important ;
     }
-
   }
 }
 </style>
 <style lang="scss">
+// USED IN MANY OTHER COMPONENTS
 .default-questions-card {
   background: #FFFFFF;
   box-shadow: -2px -4px 10px rgba(255, 255, 255, 0.6), 2px 4px 10px rgba(112, 108, 162, 0.05) #{"/* rtl:ignore */"};
