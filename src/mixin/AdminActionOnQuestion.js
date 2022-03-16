@@ -19,7 +19,8 @@ const AdminActionOnQuestion = {
   },
   methods: {
     createQuestion (question) {
-      this.$axios.post(API_ADDRESS.question.create, question)
+      question.apiResource.sendType = 'form-data'
+      this.$axios.post(API_ADDRESS.question.create, question.loadApiResource())
         .then(response => {
           console.log(response.data)
         })
