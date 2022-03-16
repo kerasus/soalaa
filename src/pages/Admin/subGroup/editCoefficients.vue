@@ -2,13 +2,13 @@
   <div class="row justify-end">
     <div class="row q-mr-lg">
       <q-btn
+        class="q-mx-sm float-right"
         round
+        dark-percentage
         color="primary"
-        unelevated
         @click= this.$router.go(-1)
-      >
-        <i class="fi-rr-angle-left row" />
-      </q-btn>
+        icon="isax:arrow-left-2"
+      />
     </div>
     <div class="col-md-12 q-pa-sm">
       <q-input

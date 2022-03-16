@@ -1,14 +1,14 @@
 <template>
   <div>
     <div class="row justify-end q-pr-lg">
-        <q-btn
-          round
-          color="primary"
-          unelevated
-          @click= this.$router.go(-1)
-        >
-          <i class="fi-rr-angle-left row" />
-        </q-btn>
+      <q-btn
+        class="q-mx-sm float-right"
+        round
+        dark-percentage
+        color="primary"
+        @click= this.$router.go(-1)
+        icon="isax:arrow-left-2"
+      />
     </div>
     <entity-show
       v-model:value="inputs"
