@@ -63,6 +63,8 @@
 </template>
 
 <script>
+import { Question } from 'src/models/Question'
+
 export default {
   name: 'QuestionDetails',
   props: {
@@ -71,6 +73,12 @@ export default {
       default () {
         return false
       }
+    }
+  },
+  inject: {
+    question: {
+      from: 'question', // this is optional if using the same key for injection
+      default: new Question()
     }
   },
   data () {

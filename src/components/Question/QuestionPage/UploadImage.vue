@@ -35,7 +35,6 @@ export default {
         files: this.files,
         server: this.server
       }),
-      question: new Question(),
       files: [{
         source: 'https://nodes.alaatv.com/aaa/questionPhotos/Screenshot%202022-03-02%20124323-4377851.jpg',
         options: {
@@ -48,11 +47,6 @@ export default {
     }
   },
   props: {
-    value: {
-      type: Question,
-      default: new Question(),
-      required: false
-    },
     fieldKey: {
       type: String,
       default: '',
@@ -66,10 +60,8 @@ export default {
   },
   mounted () {
     document.getElementById('filepond-wrapper-' + this.fieldKey).appendChild(this.pond.element)
-    this.question = this.value
     document.addEventListener('FilePond:addfile', () => {
       this.question[this.fieldKey] = this.pond.getFiles().map(({ file }) => file)
-      this.$emit('update:modelValue', this.question)
     })
   },
   methods: {
@@ -80,6 +72,12 @@ export default {
           load(myBlob)
         })
       })
+    }
+  },
+  inject: {
+    question: {
+      from: 'question', // this is optional if using the same key for injection
+      default: new Question()
     }
   }
 }

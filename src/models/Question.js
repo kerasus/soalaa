@@ -134,11 +134,20 @@ class Question extends Model {
     const that = this
     this.apiResource = {
       fields: [
+        { key: 'id' },
+        { key: 'title' },
         { key: 'statement' },
+        { key: 'statement_photo' },
+        { key: 'answer_photos' },
+        { key: 'order' },
+        { key: 'selected_at' },
+        { key: 'answer' },
         { key: 'descriptive_answer' },
         { key: 'sub_category_id' },
         { key: 'type_id' },
         { key: 'author' },
+        { key: 'type' },
+        { key: 'sub_category' },
         {
           key: 'choices',
           value: function () {
@@ -146,15 +155,27 @@ class Question extends Model {
           }
         },
         {
-          key: 'recommended_time',
+          key: 'exams',
           value: function () {
-            return that.recommendedTime
+            return that.exams.list
           }
         },
         {
           key: 'level',
           value: function () {
             return that.difficulty
+          }
+        },
+        {
+          key: 'checking_times',
+          value: function () {
+            return that.checking_times.list
+          }
+        },
+        {
+          key: 'logs',
+          value: function () {
+            return that.logs.list
           }
         }
       ]
