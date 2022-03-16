@@ -353,7 +353,7 @@ export default {
         })
     },
     getSubCategoryList () {
-      this.subCategoriesList.fetch()
+      this.$axios.get(this.subCategoriesList.baseRoute)
         .then((response) => {
           this.subCategoriesList = new QuestSubcategoryList(response.data.data)
         })
@@ -408,6 +408,11 @@ export default {
       })
         .then((response) => {
           that.subGroups = response.data.data
+          this.$q.notify({
+            message: 'اطلاعات ثبت شد.',
+            group: 'notifs',
+            type: 'positive'
+          })
         })
     }
   }
