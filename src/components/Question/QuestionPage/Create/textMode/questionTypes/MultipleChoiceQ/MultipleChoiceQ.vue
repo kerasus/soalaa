@@ -95,17 +95,11 @@ export default {
     QuestionField
   },
   props: {
-    cq: {
-      type: Question,
-      default: () => new Question()
-    },
-    modelValue: {
-      type: Question,
-      default: () => new Question()
-    },
-    status: {
+    setContentToQuestion: {
       type: Boolean,
-      default: () => false
+      default () {
+        return false
+      }
     }
   },
   inject: {
@@ -121,15 +115,26 @@ export default {
       choice: ''
     }
   },
-  watch: {},
+  watch: {
+    setContentToQuestion: function (val) {
+      if (val) {
+        this.getContent()
+      }
+    }
+  },
   created () {
     const that = this
     setTimeout(() => {
       that.domKey = 'Date.now()'
     }, 100)
+    this.question.choices.list = []
     this.question.choices.addEmptyChoices(4)
   },
-  mounted () {},
+  mounted () {
+    this.$nextTick(() => {
+      this.question.loading = false
+    })
+  },
   updated () {
     // this.question1 = this.modelValue
   },
@@ -145,13 +150,13 @@ export default {
       this.question.choices.list = []
     },
     getContent () {
-      this.$refs.questionStatement.getContent()
-      this.$refs.descriptive.getContent()
-      this.$refs.choice1[0].getContent()
-      this.$refs.choice2[0].getContent()
-      this.$refs.choice3[0].getContent()
-      this.$refs.choice4[0].getContent()
-      this.updateQuestion()
+      this.question.statement = this.$refs.questionStatement.getContent()
+      this.question.statement = this.$refs.descriptive.getContent()
+      console.log('this.question', this.question)
+      // this.$refs.choice1[0].getContent()
+      // this.$refs.choice2[0].getContent()
+      // this.$refs.choice3[0].getContent()
+      // this.$refs.choice4[0].getContent()
     },
     updateQuestion () {
       this.$emit('updateQuestion', this.question)

@@ -144,9 +144,6 @@ export default {
 }
 </style>
 <style lang="scss">
-.QComponents-inner-loading{
-  background-color: #ccc6c65c;
-}
 .question-txtMode-navbar {
   .question-type {
     .question-type-tabs {

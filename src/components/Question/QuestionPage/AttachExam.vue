@@ -79,6 +79,11 @@ export default {
       order: null
     }
   },
+  mounted () {
+    this.$nextTick(() => {
+      this.question.exams.loading = false
+    })
+  },
   methods: {
     attach () { // possible removal for attach exam
       const question = this.value
@@ -121,7 +126,7 @@ export default {
   }
   .detail-box-last-of-row-1 {
     display: flex ;
-    //align-items: end ;
+    align-items: flex-end;
     margin-bottom: 2px ;
   }
 

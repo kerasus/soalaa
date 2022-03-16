@@ -25,13 +25,17 @@ const AdminActionOnQuestion = {
           console.log(response.data)
         })
     },
+    setAllQuestionLoadings () {
+      this.componentTabs.loading = true
+      this.question.loading = true
+      this.question.exams.loading = true
+    },
     getQuestionType () {
       const that = this
-      this.componentTabs.loading = true
       axios.get(API_ADDRESS.option.base + '?type=question_type')
         .then(function (response) {
           that.componentTabs = new TypeList(response.data.data)
-          // DEFAULT VALUE/TAB IS konkur
+          // todo : DEFAULT VALUE/TAB IS konkur
           that.question.type = that.componentTabs.list[0]
           const optionQuestion = response.data.data.find(item => (item.value === 'konkur'))
           if (!optionQuestion) {
@@ -40,7 +44,6 @@ const AdminActionOnQuestion = {
               color: 'negative'
             })
           }
-          that.optionQuestionId = optionQuestion.id
           that.componentTabs.loading = false
         })
         .catch(function (error) {

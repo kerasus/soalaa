@@ -4,17 +4,36 @@
       :componentTabs="componentTabs"
       :loading="componentTabs.loading"
     />
-    <component
-      v-if="question.type"
-      :is="comp"
-      v-bind="allProps"
-    />
-    <attach-exam/>
-    <div class="attach-btn row">
-      <question-details class="col-9"/>
-      <btn-box class="col-3"/>
+    <div class="relative-position">
+      <component
+        v-if="question.type"
+        :is="getComponent"
+        v-bind="allProps"
+      />
+      <q-inner-loading
+        :showing="question.loading"
+        color="primary"
+        class="QComponents-inner-loading"
+        label-style="font-size: 1.1em"
+      />
     </div>
-    <comment-box/>
+    <div class="relative-position">
+      <attach-exam/>
+      <div class="attach-btn row">
+        <question-details class="col-9"/>
+        <btn-box
+          class="col-3"
+          @saveQuestion="setQuestionContents"
+        />
+      </div>
+      <comment-box/>
+      <q-inner-loading
+        :showing="question.exams.loading"
+        color="primary"
+        class="QComponents-inner-loading"
+        label-style="font-size: 1.1em"
+      />
+    </div>
   </div>
 </template>
 
@@ -52,7 +71,9 @@ export default {
       questionType: new QuestionType(),
       componentTabs: new TypeList(),
       question: new Question(),
-      allProps: {}
+      allProps: {
+        setContentToQuestion: false
+      }
     }
   },
   provide () {
@@ -61,6 +82,7 @@ export default {
     }
   },
   mounted () {
+    this.setAllQuestionLoadings()
     this.getQuestionType()
   },
   methods: {
@@ -75,10 +97,13 @@ export default {
       if (cName === 'MBTIQ') {
         return 'm-b-t-i-q'
       }
+    },
+    setQuestionContents () {
+      this.allProps.setContentToQuestion = true
     }
   },
   computed: {
-    comp () {
+    getComponent () {
       // updates even if properties inside are updated
       return this.chosenComponent(this.question.type)
     }
@@ -112,5 +137,10 @@ export default {
 .slide-fade-leave-to {
   transform: translateX(20px);
   opacity: 0;
+}
+</style>
+<style lang="scss">
+.QComponents-inner-loading{
+  background-color: #a6a6a65c;
 }
 </style>
