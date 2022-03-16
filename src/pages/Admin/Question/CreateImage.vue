@@ -31,12 +31,12 @@
     </div>
     <div class="row">
       <div class="col">
-        <question-details
-          v-model="question"
-          :exams="examList"
-          :lessons="subCategoriesList"
-          @save="createQuestion(question)"
-        />
+        <AttachExam />
+        <div class="attach-btn row">
+          <QuestionDetails class="col-9"/>
+          <BtnBox class="col-3"/>
+        </div>
+        <CommentBox />
       </div>
     </div>
   </div>
@@ -47,9 +47,13 @@ import uploadImage from 'src/components/Question/QuestionPage/UploadImage'
 import { Question } from 'src/models/Question'
 import QuestionDetails from 'components/Question/QuestionPage/Create/textMode/QuestionDetails'
 import { AdminActionOnQuestion } from 'src/mixin/Mixins'
+import AttachExam from 'components/Question/QuestionPage/AttachExam'
+import CommentBox from 'components/Question/QuestionPage/CommentBox'
+import BtnBox from 'components/Question/QuestionPage/BtnBox'
+
 export default {
   name: 'CreateImage',
-  components: { uploadImage, QuestionDetails },
+  components: { uploadImage, QuestionDetails, AttachExam, CommentBox, BtnBox },
   mixins: [AdminActionOnQuestion],
   data () {
     return {
