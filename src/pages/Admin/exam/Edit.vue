@@ -2,13 +2,13 @@
   <div>
     <div class="row justify-end q-pr-lg">
       <q-btn
+        class="q-mx-sm float-right"
         round
+        dark-percentage
         color="primary"
-        unelevated
         @click="goBack"
-      >
-        <i class="fi-rr-angle-left row" />
-      </q-btn>
+        icon="isax:arrow-left-2"
+      />
     </div>
     <entity-edit
       v-model:value="inputs"

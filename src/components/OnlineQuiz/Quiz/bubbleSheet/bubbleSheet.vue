@@ -1,39 +1,43 @@
 <template>
   <div
-    ref="bubbleSheet"
-    class="row bubbleSheet-body"
-    :class="{
-      'bubble-sheet': true,
-      'questions-list': true,
-      'pasokh-nameh': info.type === 'pasokh-nameh',
-      'pasokh-barg': info.type === 'pasokh-barg',
-    }"
+    class="bubbleSheet"
   >
     <div
-      v-for="(group, index) in questionsInGroups"
-      :key="index"
-      class="col col-auto question-group"
+      ref="bubbleSheet"
+      class="row bubbleSheet-body q-col-gutter"
+      :class="{
+        'bubble-sheet': true,
+        'questions-list': true,
+        'pasokh-nameh': info.type === 'pasokh-nameh',
+        'pasokh-barg': info.type === 'pasokh-barg',
+      }"
     >
       <div
-        v-for="question in group"
-        :key="question.id"
-        class="question-in-list"
+        v-for="(group, index) in questionsInGroups"
+        :key="index"
+        class="col col-auto question-group"
+        :class="{'none-question-in-list': !group.length}"
       >
         <div
-          :class="{
+          v-for="question in group"
+          :key="question.id"
+          class="question-in-list"
+        >
+          <div
+            :class="{
             'question-number-in-list': true,
             circle: getUserQuestionData(question.id) && getUserQuestionData(question.id).status === 'o',
             cross: getUserQuestionData(question.id) && getUserQuestionData(question.id).status === 'x',
             bookmark: getUserQuestionData(question.id) && getUserQuestionData(question.id).bookmarked
           }"
-          @click="ClickQuestionNumber(question.id)"
-        >
+            @click="ClickQuestionNumber(question.id)"
+          >
           <span v-if="getUserQuestionData(question.id)">
             {{ getQuestionNumberFromId(question.id) }}
-            <q-tooltip
-              v-if="getUserQuestionData(question.id)=== true"
-              anchor="bottom middle"
-            >
+                                                                                                           <q-tooltip
+                                                                                                             v-if="getUserQuestionData(question.id)=== true"
+                                                                                                             anchor="bottom middle"
+                                                                                                           >
               <span>
               <q-icon
                 v-if="showDateOfAnsweredAt"
@@ -46,42 +50,43 @@
             </span>
             </q-tooltip>
           </span>
-          <span v-else>
+            <span v-else>
             {{ getQuestionNumberFromId(question.id) }}
           </span>
-        </div>
-        <div
-          v-for="choice in question.choices.list"
-          :key="choice.id"
-          :class="{
+          </div>
+          <div
+            v-for="choice in question.choices.list"
+            :key="choice.id"
+            :class="{
             'choice-in-list': true,
             active: getUserQuestionData(question.id) && choice.id === getUserQuestionData(question.id).answered_choice_id,
             answer: choice.answer
           }"
-          @click="AnswerClicked({ questionId: question.id, choiceId: choice.id})"
-        >
-          <q-icon
-            v-if="info.type === 'pasokh-nameh' && choice.answer"
-            size="12"
-            icon="mdi-check"
-            :color="getUserQuestionData(question.id) && choice.id === getUserQuestionData(question.id).answered_choice_id ? '#fff' : '#00c753'"
-          />
-          <q-icon
-            v-if="info.type === 'pasokh-nameh' && getUserQuestionData(question.id) && choice.id === getUserQuestionData(question.id).answered_choice_id && !choice.answer"
-            size="12"
-            icon="mdi-close"
-            color="#fff"
-          />
+            @click="AnswerClicked({ questionId: question.id, choiceId: choice.id})"
+          >
+            <q-icon
+              v-if="info.type === 'pasokh-nameh' && choice.answer"
+              size="12"
+              icon="mdi-check"
+              :color="getUserQuestionData(question.id) && choice.id === getUserQuestionData(question.id).answered_choice_id ? '#fff' : '#00c753'"
+            />
+            <q-icon
+              v-if="info.type === 'pasokh-nameh' && getUserQuestionData(question.id) && choice.id === getUserQuestionData(question.id).answered_choice_id && !choice.answer"
+              size="12"
+              icon="mdi-close"
+              color="#fff"
+            />
+          </div>
         </div>
       </div>
+      <q-resize-observer @resize="setBubbleSheetDimensions"/>
     </div>
-    <q-resize-observer @resize="getBoxSize"/>
   </div>
 </template>
 
 <script>
-import moment from 'moment-jalaali'
 import { ref } from 'vue'
+import moment from 'moment-jalaali'
 import { mixinQuiz, mixinUserActionOnQuestion } from 'src/mixin/Mixins'
 
 export default {
@@ -104,9 +109,9 @@ export default {
   data: () => ({
     showDateOfAnsweredAt: false,
     overlay: false,
-    boxSize: {
-      width: 600,
-      height: 600
+    bubbleSheetDimensions: {
+      x: 0,
+      y: 0
     },
     bubbleSheet: ref(null)
   }),
@@ -126,32 +131,7 @@ export default {
           groups.push(array.slice(i, i + chunk))
         }
       }
-      // groups.pop()
-      // groups.pop()
-      // groups.pop()
-      // groups.pop()
-      // groups.pop()
-      // groups.pop()
-      // groups.pop()
-      // groups.pop()
-      // groups.pop()
-      // groups.pop()
-      // groups.push(groups[0])
-      // groups.push(groups[0])
-      // groups.push(groups[0])
-      // groups.push(groups[0])
-      // groups.push(groups[0])
-      // groups.push(groups[0])
-      // groups.push(groups[0])
-      // groups.push(groups[0])
-      // groups.push(groups[0])
-      // groups.push(groups[0])
       return groups
-    }
-  },
-  created () {
-    if (this.delayTime === 0) {
-      this.overlay = true
     }
   },
   mounted () {
@@ -165,13 +145,6 @@ export default {
         this.$store.dispatch('loading/overlayLoading', false)
       }
     }
-    // boxSize: {
-    //   deep: true,
-    //   handler () {
-    //     // console.log('watch', this.boxSize)
-    //     this.setBubbleSheetHeight()
-    //   }
-    // }
   },
   methods: {
     setBubbleSheetHeight () {
@@ -185,13 +158,15 @@ export default {
     },
     sheetsListHeight () {
       // box is a col-7 with 12px padding
-      this.boxSize.width = this.boxSize.width - 24
-      this.boxSize.height = this.boxSize.height - 24
-      const horizontalGroupAmounts = Math.floor(this.boxSize.width / 140)
-      console.log('horizontalGroupAmounts', horizontalGroupAmounts)
-      const verticalGroupAmount = Math.ceil(this.questionsInGroups.length / horizontalGroupAmounts)
-      console.log('verticalGroupAmount', verticalGroupAmount)
-      return verticalGroupAmount * 182 + 24
+      const boxXPadding = 2 * 12
+      const boxYPadding = 2 * 12
+      const bubbleGroupWidth = 140
+      const bubbleGroupHeight = 182
+      const width = this.bubbleSheetDimensions.x - boxXPadding
+      const horizontalGroupAmounts = Math.ceil(width / bubbleGroupWidth)
+      const verticalGroupCount = Math.ceil(this.questionsInGroups.length / horizontalGroupAmounts)
+      this.overlay = false
+      return (verticalGroupCount * bubbleGroupHeight) + boxYPadding
     },
     showAnsweredAt (answeredAt) {
       let formatString = 'HH:mm:ss'
@@ -203,7 +178,6 @@ export default {
     checkForShowDateOfAnsweredAt () {
       let dateTime = ''
       const that = this
-      console.log(this.questionsInGroups)
       this.questionsInGroups.forEach(groupItem => {
         groupItem.forEach(questionItem => {
           const userQuestionData = that.getUserQuestionData(questionItem.id)
@@ -246,128 +220,137 @@ export default {
     clickQuestionNumber (questionId) {
       this.$emit('scrollTo', questionId)
     },
-    getBoxSize (val) {
-      if (val) {
-        this.boxSize = val
-        this.setBubbleSheetHeight()
+    setBubbleSheetDimensions (val) {
+      if (!val) {
+        return
       }
+
+      this.bubbleSheetDimensions.x = val.width
+      this.setBubbleSheetHeight()
     }
   }
 }
 </script>
 
 <style lang="scss" scoped>
-.bubbleSheet-body {
-  &.pasokh-nameh {
-    .choice-in-list {
-      position: relative;
-      cursor: auto;
-
-      &.answer {
-        border: solid 1px #00c753;
-        background-color: #00c753;
-      }
-
-      &.active {
-        border: solid 1px #ff4243;
-        background-color: #ff4243;
-      }
-    }
-  }
-
-  &.questions-list {
-    direction: rtl;
-    display: flex;
-    flex-direction: column;
-    flex-wrap: wrap;
-    align-items: center;
-  }
-
-  .question-group {
-    background: #fff;
-    border-radius: 10px;
-    margin: 5px;
-    padding: 5px 10px;
-    width: 130px;
-    font-size: 11px;
-    max-height: 175px;
-
-    .question-in-list {
-      margin: 2px 0;
-      display: flex;
-      flex-direction: row;
-      height: 14px;
-
+.bubbleSheet {
+  height: 100%;
+  overflow: auto;
+  padding: 12px;
+  .bubbleSheet-body {
+    height: 910px;
+    //max-height: calc(100vh - 150px);
+    &.pasokh-nameh {
       .choice-in-list {
-        width: 19%;
-        margin: 2px;
-        border-radius: 6px;
-        border: 1px solid #ffda6a;
-        cursor: pointer;
+        position: relative;
+        cursor: auto;
+
+        &.answer {
+          border: solid 1px #00c753;
+          background-color: #00c753;
+        }
 
         &.active {
-          background: #888;
+          border: solid 1px #ff4243;
+          background-color: #ff4243;
         }
       }
+    }
 
-      .question-number-in-list {
-        position: relative;
-        width: 24%;
-        cursor: pointer;
+    &.questions-list {
+      direction: rtl;
+      display: flex;
+      flex-direction: column;
+      flex-wrap: wrap;
+      align-items: center;
+    }
 
-        &.circle {
-          &:after {
-            content: "\F0130";
-            position: absolute;
-            font: normal normal normal 24px/1 "Material Design Icons";
-            text-rendering: auto;
-            line-height: inherit;
-            -webkit-font-smoothing: antialiased;
-            -moz-osx-font-smoothing: grayscale;
-            color: #ffda6a;
-            right: -13px;
-            font-size: 14px;
-            top: -5px;
+    .question-group {
+      background: #fff;
+      border-radius: 10px;
+      margin: 5px;
+      padding: 5px 10px;
+      width: 130px;
+      font-size: 11px;
+      max-height: 175px;
+
+      .question-in-list {
+        margin: 2px 0;
+        display: flex;
+        flex-direction: row;
+        height: 14px;
+
+        .choice-in-list {
+          width: 19%;
+          margin: 2px;
+          border-radius: 6px;
+          border: 1px solid #ffda6a;
+          cursor: pointer;
+
+          &.active {
+            background: #888;
           }
         }
 
-        &.cross {
-          &:after {
-            content: "\F0156";
-            position: absolute;
-            font: normal normal normal 24px/1 "Material Design Icons";
-            text-rendering: auto;
-            line-height: inherit;
-            -webkit-font-smoothing: antialiased;
-            -moz-osx-font-smoothing: grayscale;
-            color: red;
-            right: -13px;
-            font-size: 14px;
-            top: -5px;
-          }
-        }
+        .question-number-in-list {
+          position: relative;
+          width: 24%;
+          cursor: pointer;
 
-        &.bookmark {
-          &::before {
-            content: "\F00C3";
-            position: absolute;
-            font: normal normal normal 24px/1 "Material Design Icons";
-            text-rendering: auto;
-            line-height: inherit;
-            -webkit-font-smoothing: antialiased;
-            -moz-osx-font-smoothing: grayscale;
-            color: #2196F3;
-            right: -13px;
-            font-size: 14px;
-            top: -5px;
+          &.circle {
+            &:after {
+              content: "\F0130";
+              position: absolute;
+              font: normal normal normal 24px/1 "Material Design Icons";
+              text-rendering: auto;
+              line-height: inherit;
+              -webkit-font-smoothing: antialiased;
+              -moz-osx-font-smoothing: grayscale;
+              color: #ffda6a;
+              right: -13px;
+              font-size: 14px;
+              top: -5px;
+            }
+          }
+
+          &.cross {
+            &:after {
+              content: "\F0156";
+              position: absolute;
+              font: normal normal normal 24px/1 "Material Design Icons";
+              text-rendering: auto;
+              line-height: inherit;
+              -webkit-font-smoothing: antialiased;
+              -moz-osx-font-smoothing: grayscale;
+              color: red;
+              right: -13px;
+              font-size: 14px;
+              top: -5px;
+            }
+          }
+
+          &.bookmark {
+            &::before {
+              content: "\F00C3";
+              position: absolute;
+              font: normal normal normal 24px/1 "Material Design Icons";
+              text-rendering: auto;
+              line-height: inherit;
+              -webkit-font-smoothing: antialiased;
+              -moz-osx-font-smoothing: grayscale;
+              color: #2196F3;
+              right: -13px;
+              font-size: 14px;
+              top: -5px;
+            }
           }
         }
       }
     }
-  }
 
-  .none-question-in-list {
-    display: none;
+    .none-question-in-list {
+      display: none;
+    }
   }
 }
 
