@@ -349,9 +349,8 @@ class Question extends Model {
         if (type === 'answer') {
             let answerArray = dataToSendObject.answerArray
             let failedAnswersArray = dataToSendObject.failedAnswersArray
-
-            // if (!socket) {
-            if (true) {
+            if (!socket) {
+            // if (true) {
                 data = axios.post(API_ADDRESS.exam.sendAnswers, {exam_user_id, questions: answerArray})
                     .then(function (response) {
                         if (failedAnswersArray.length > 0 && response.status === 200) {
