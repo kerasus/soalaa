@@ -131,18 +131,18 @@ export default {
   },
   mounted () {},
   updated () {
-    this.question1 = this.modelValue
+    // this.question1 = this.modelValue
   },
   methods: {
     removeChoice (order) {
-      const index = this.question1.choices.list.findIndex(item => item.order === order)
-      this.question1.choices.list.splice(index, 1)
+      const index = this.question.choices.list.findIndex(item => item.order === order)
+      this.question.choices.list.splice(index, 1)
     },
     addChoice () {
-      this.question1.choices.addOneEmptyChoice()
+      this.question.choices.addOneEmptyChoice()
     },
     removeAllChoice () {
-      this.question1.choices.list = []
+      this.question.choices.list = []
     },
     getContent () {
       this.$refs.questionStatement.getContent()
@@ -154,10 +154,10 @@ export default {
       this.updateQuestion()
     },
     updateQuestion () {
-      this.$emit('updateQuestion', this.question1)
+      this.$emit('updateQuestion', this.question)
     },
     clicked (order) {
-      this.question1.choices.list.forEach(item => {
+      this.question.choices.list.forEach(item => {
         item.answer = item.order === order
       })
     }

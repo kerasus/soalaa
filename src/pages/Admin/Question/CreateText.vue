@@ -51,7 +51,6 @@ export default {
     return {
       questionType: new QuestionType(),
       componentTabs: new TypeList(),
-      componentKey: 0,
       question: new Question(),
       allProps: {}
     }
