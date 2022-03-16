@@ -9,9 +9,8 @@
           dark-percentage
           color="primary"
           @click="goBack"
-        >
-          <i class="fi-rr-angle-left row" />
-        </q-btn>
+          icon="isax:arrow-left-2"
+        />
       </div>
     </div>
     <div class="col-12">
