@@ -39,21 +39,21 @@
           </div>
         </div>
       </div>
-      <div class="detail-box detail-box-last-of-row" :class="[imgPanelVisibility ? 'col-6' : 'col-3']">
-        <q-btn
-          unelevated
-          :loading="draftBtnLoading"
-          label="پیش نویس"
-          class="draft-btn default-detail-btn"
-        ></q-btn>
-        <q-btn
-          unelevated
-          :loading="saveBtnLoading"
-          color="primary"
-          label="ذخیره سوال"
-          class="save-btn default-detail-btn"
-        />
-      </div>
+<!--      <div class="detail-box detail-box-last-of-row" :class="[imgPanelVisibility ? 'col-6' : 'col-3']">-->
+<!--        <q-btn-->
+<!--          unelevated-->
+<!--          :loading="draftBtnLoading"-->
+<!--          label="پیش نویس"-->
+<!--          class="draft-btn default-detail-btn"-->
+<!--        ></q-btn>-->
+<!--        <q-btn-->
+<!--          unelevated-->
+<!--          :loading="saveBtnLoading"-->
+<!--          color="primary"-->
+<!--          label="ذخیره سوال"-->
+<!--          class="save-btn default-detail-btn"-->
+<!--        />-->
+<!--      </div>-->
       <div class="detail-box detail-box-last" :class="[imgPanelVisibility ? 'col-6' : 'col-3']">
         <div class="detail-box-title ">رشته</div>
         <q-select borderless v-model="model" :options="options" />
@@ -121,7 +121,7 @@ export default {
       padding-left: 12px #{"/* rtl:ignore */"};
       .input-container {
         .input-box {
-          width: 91%;
+          width: 88%;
         }
         .icon-box {
           width: 40px;

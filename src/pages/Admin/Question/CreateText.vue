@@ -11,7 +11,10 @@
       :allProps="allProps"
     />
     <AttachExam/>
-    <QuestionDetails/>
+    <div class="attach-btn row">
+      <QuestionDetails class="col-9"/>
+      <BtnBox class="col-3"/>
+    </div>
     <CommentBox/>
   </div>
 </template>
@@ -25,9 +28,11 @@ import AdminActionOnQuestion from 'src/mixin/AdminActionOnQuestion'
 import { QuestionType, TypeList } from 'src/models/QuestionType'
 import AttachExam from 'components/Question/QuestionPage/AttachExam'
 import CommentBox from 'components/Question/QuestionPage/CommentBox'
+import BtnBox from 'components/Question/QuestionPage/BtnBox'
 export default {
   name: 'CreateText',
   components: {
+    BtnBox,
     CommentBox,
     AttachExam,
     DynamicComponent,
