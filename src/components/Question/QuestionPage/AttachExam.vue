@@ -180,11 +180,11 @@ export default {
 
     .detail-box-last-of-row {
       padding-left: 0px #{"/* rtl:ignore */"};
-      //margin-top: 43px;
-      //text-align: end;
-      //display: flex;
-      //align-items: center;
-      //justify-content: center;
+      margin-top: 43px;
+      text-align: end;
+      display: flex;
+      align-items: center;
+      justify-content: center;
 
       .default-detail-btn {
         width: 144px;
