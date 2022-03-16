@@ -20,7 +20,6 @@
                 class="question-type-tab"
                 :name="item.value"
                 :label="item.tabName"
-                @click="chooseComponent(item)"
               />
             </q-tabs>
           </div>
@@ -52,7 +51,8 @@
 <script>
 import AdminActionOnQuestion from 'src/mixin/AdminActionOnQuestion'
 import { Question } from 'src/models/Question'
-import { TypeList } from 'src/models/QuestionType'
+import { QuestionType, TypeList } from 'src/models/QuestionType'
+
 export default {
   name: 'Navbar',
   props: {
@@ -87,12 +87,20 @@ export default {
   mounted () {},
   methods: {
     chooseComponent (item) {
-      this.question.type = item
+      this.question.type = new QuestionType({
+        value: item
+      })
     }
   },
   watch: {
     componentTabs: function () {
-      this.chooseComponent(this.componentTabs.list[0])
+      // this.chooseComponent(this.componentTabs.list[0])
+    },
+    questionTab: {
+      handler (newValue, oldValue) {
+        this.chooseComponent(newValue)
+      },
+      deep: true
     }
   }
 }

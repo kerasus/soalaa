@@ -31,7 +31,8 @@ const AdminActionOnQuestion = {
       axios.get(API_ADDRESS.option.base + '?type=question_type')
         .then(function (response) {
           that.componentTabs = new TypeList(response.data.data)
-          that.currentComponent = that.componentTabs.list[0]
+          // DEFAULT VALUE/TAB IS konkur
+          that.question.type = that.componentTabs.list[0]
           const optionQuestion = response.data.data.find(item => (item.value === 'konkur'))
           if (!optionQuestion) {
             return this.$q.notify({

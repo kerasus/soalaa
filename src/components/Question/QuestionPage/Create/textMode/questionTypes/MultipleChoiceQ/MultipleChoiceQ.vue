@@ -19,9 +19,6 @@
           <QuestionField
             ref="questionStatement"
             :key="'statement' + domKey"
-            v-model="question.statement"
-            :edit-status="true"
-            :question-id="question.id ? question.id : 'null'"
           />
 <!--          <div class="col-10 question-txt default-Qcard-txt">-->
 <!--            شناخت فراوان جامعه و متخصصان را می طلبد،لازم است، و برای شرایط فعلی تکنولوژی مورد نیاز، و کاربردهای متنوع با هدف بهبود ابزارهای کاربردی می باشد، کتابهای زیادی در شصت و سه درصد گذشته حال و آینده،لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ، و با استفاده از طراحان گرافیک است، چاپگرها و متون بلکه روزنامه و مجله در ستون و سطرآنچنان که-->
@@ -39,7 +36,10 @@
       </q-card-section>
     </q-card>
     <div class="multiple-choice-A">
-      <div class="row multiple-choice-Answer">
+      <div
+        v-if="question.choices.list[0]"
+        class="row multiple-choice-Answer"
+      >
         <div
           class="col-6 answer-box"
           v-for="(item, index) in question.choices.list"
@@ -62,9 +62,6 @@
                 <QuestionField
                   :ref="'choice' + (item.order)"
                   :key="'choices' + (item.order) + domKey"
-                  v-model="item.title"
-                  :question-id="question.id ? question.id : 'null'"
-                  :edit-status="true"
                 />
               </div>
             </q-card-section>
@@ -82,9 +79,6 @@
           <QuestionField
             ref="descriptiveA"
             :key="'descriptive_answer' + domKey"
-            v-model="question.descriptive_answer"
-            :question-id="question.id ? question.id : 'null'"
-            :edit-status="true"
           />
         </div>
       </q-card-section>
@@ -115,7 +109,7 @@ export default {
     }
   },
   inject: {
-    currentQuestion: {
+    question: {
       from: 'question', // this is optional if using the same key for injection
       default: new Question()
     }
@@ -123,36 +117,32 @@ export default {
   data () {
     return {
       domKey: Date.now(),
-      question: new Question(),
+      question1: new Question(),
       choice: ''
     }
   },
-  watch: {
-    editorValue: function () {
-      this.question = this.modelValue
-    }
-  },
+  watch: {},
   created () {
     const that = this
     setTimeout(() => {
-      that.domKey = Date.now()
+      that.domKey = 'Date.now()'
     }, 100)
     this.question.choices.addEmptyChoices(4)
   },
   mounted () {},
   updated () {
-    this.question = this.modelValue
+    this.question1 = this.modelValue
   },
   methods: {
     removeChoice (order) {
-      const index = this.question.choices.list.findIndex(item => item.order === order)
-      this.question.choices.list.splice(index, 1)
+      const index = this.question1.choices.list.findIndex(item => item.order === order)
+      this.question1.choices.list.splice(index, 1)
     },
     addChoice () {
-      this.question.choices.addOneEmptyChoice()
+      this.question1.choices.addOneEmptyChoice()
     },
     removeAllChoice () {
-      this.question.choices.list = []
+      this.question1.choices.list = []
     },
     getContent () {
       this.$refs.questionStatement.getContent()
@@ -163,14 +153,11 @@ export default {
       this.$refs.choice4[0].getContent()
       this.updateQuestion()
     },
-    getData (val) {
-      this.editorValue = val
-    },
     updateQuestion () {
-      this.$emit('updateQuestion', this.question)
+      this.$emit('updateQuestion', this.question1)
     },
     clicked (order) {
-      this.question.choices.list.forEach(item => {
+      this.question1.choices.list.forEach(item => {
         item.answer = item.order === order
       })
     }

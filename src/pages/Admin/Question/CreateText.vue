@@ -1,25 +1,26 @@
 <template>
   <div class="createQ-text-container">
-    <Navbar
+    <navbar
       :componentTabs="componentTabs"
       :loading="componentTabs.loading"
     />
-    <DynamicComponent
-      v-if="currentComponent"
-      :component="currentComponent"
-      :key="componentKey"
-      :allProps="allProps"
+    <component
+      v-if="question.type"
+      :is="comp"
+      v-bind="allProps"
     />
-    <AttachExam/>
+    <attach-exam/>
     <div class="attach-btn row">
-      <QuestionDetails class="col-9"/>
-      <BtnBox class="col-3"/>
+      <question-details class="col-9"/>
+      <btn-box class="col-3"/>
     </div>
-    <CommentBox/>
+    <comment-box/>
   </div>
 </template>
 
 <script>
+/* eslint-disable no-var */
+import { defineAsyncComponent } from 'vue'
 import Navbar from 'components/Question/QuestionPage/Create/textMode/Navbar'
 import DynamicComponent from 'components/Question/QuestionPage/Create/textMode/questionTypes/DynamicComponent'
 import { Question } from 'src/models/Question'
@@ -32,6 +33,9 @@ import BtnBox from 'components/Question/QuestionPage/BtnBox'
 export default {
   name: 'CreateText',
   components: {
+    DescriptiveQ: defineAsyncComponent(() => import('components/Question/QuestionPage/Create/textMode/questionTypes/DescriptiveQ/DescriptiveQ')),
+    MultipleChoiceQ: defineAsyncComponent(() => import('components/Question/QuestionPage/Create/textMode/questionTypes/MultipleChoiceQ/MultipleChoiceQ')),
+    MBTIQ: defineAsyncComponent(() => import('components/Question/QuestionPage/Create/textMode/questionTypes/MBTIQ/MBTIQ')),
     BtnBox,
     CommentBox,
     AttachExam,
@@ -48,7 +52,6 @@ export default {
       questionType: new QuestionType(),
       componentTabs: new TypeList(),
       componentKey: 0,
-      currentComponent: null,
       question: new Question(),
       allProps: {}
     }
@@ -62,18 +65,29 @@ export default {
     this.getQuestionType()
   },
   methods: {
-    chosenComponent (question) {
-      this.currentComponent = question.type
-      this.forceRerenderComponent()
-    },
-    forceRerenderComponent () {
-      this.componentKey += 1
+    chosenComponent (questionType) {
+      const cName = questionType.componentName
+      if (cName === 'MultipleChoiceQ') {
+        return 'multiple-choice-q'
+      }
+      if (cName === 'DescriptiveQ') {
+        return 'descriptive-q'
+      }
+      if (cName === 'MBTIQ') {
+        return 'm-b-t-i-q'
+      }
+    }
+  },
+  computed: {
+    comp () {
+      // updates even if properties inside are updated
+      return this.chosenComponent(this.question.type)
     }
   },
   watch: {
     question: {
       handler (newValue, oldValue) {
-        this.chosenComponent(newValue)
+        // console.log('question', newValue)
       },
       deep: true
     }
