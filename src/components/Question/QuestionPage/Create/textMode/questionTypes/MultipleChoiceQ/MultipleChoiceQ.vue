@@ -1,5 +1,6 @@
 <template>
   <div class="multiple-choice-Q">
+    <button @click="addChoice">addChoice</button>
     <q-card class="question-card default-questions-card">
 <!--      <q-btn-->
 <!--        v-if="question.choices.list.length > 0 && status"-->
@@ -146,15 +147,12 @@ export default {
     removeChoice (order) {
       const index = this.question.choices.list.findIndex(item => item.order === order)
       this.question.choices.list.splice(index, 1)
-      this.updateQuestion()
     },
     addChoice () {
-      this.question.choices.addEmptyChoice()
-      this.updateQuestion()
+      this.question.choices.addOneEmptyChoice()
     },
     removeAllChoice () {
       this.question.choices.list = []
-      this.updateQuestion()
     },
     getContent () {
       this.$refs.questionStatement.getContent()
@@ -175,7 +173,6 @@ export default {
       this.question.choices.list.forEach(item => {
         item.answer = item.order === order
       })
-      this.updateQuestion()
     }
   }
 }
