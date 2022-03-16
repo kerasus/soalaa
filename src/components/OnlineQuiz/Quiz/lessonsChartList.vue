@@ -8,7 +8,7 @@
           round
           dark-percentage
           color="primary"
-          @click="goBack"
+          @click= this.$router.go(-1)
           icon="isax:arrow-left-2"
         />
       </div>
@@ -92,9 +92,6 @@ export default {
     this.loadLessons()
   },
   methods: {
-    goBack () {
-      this.$router.push('/admin/exam')
-    },
     async loadLessons () {
       this.lessonsList.loading = true
       try {
