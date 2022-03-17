@@ -14,6 +14,7 @@
           color="primary"
           label="ذخیره سوال"
           class="save-btn default-detail-btn"
+          @click="saveQuestion"
         />
       </div>
     </div>
@@ -40,6 +41,11 @@ export default {
       text: '',
       draftBtnLoading: false,
       saveBtnLoading: false
+    }
+  },
+  methods: {
+    saveQuestion () {
+      this.$emit('saveQuestion')
     }
   }
 }

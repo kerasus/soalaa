@@ -44,6 +44,12 @@ export default defineComponent({
   body.body--light {
     background: #f1f1f1
   }
+  .default-notify-class {
+    font-size: 18px;
+    /*width: 30%;*/
+    text-align: center;
+    padding: 10px 16PX;
+  }
   /*body.body--dark {*/
   /*  background: #000*/
   /*}*/

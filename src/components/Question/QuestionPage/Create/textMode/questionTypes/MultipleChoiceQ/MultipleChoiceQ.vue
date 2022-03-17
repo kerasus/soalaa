@@ -1,15 +1,13 @@
 <template>
   <div class="multiple-choice-Q">
-    <button @click="addChoice">addChoice</button>
+    <q-btn
+      v-if="question.choices.list.length > 0"
+      dark
+      class="full-width q-mb-md removeAllChoice-btn"
+      label="اضافه کردن سوال جدید"
+      @click="addChoice"
+    />
     <q-card class="question-card default-questions-card">
-<!--      <q-btn-->
-<!--        v-if="question.choices.list.length > 0 && status"-->
-<!--        dark-->
-<!--        class="full-width q-mb-md"-->
-<!--        label="حذف تمام گزینه ها"-->
-<!--        color="pink"-->
-<!--        @click="removeAllChoice"-->
-<!--      />-->
       <q-card-section class="question default-Qcard-title">
         <div>صورت سوال</div>
       </q-card-section>
@@ -19,9 +17,6 @@
           <QuestionField
             ref="questionStatement"
             :key="'statement' + domKey"
-            v-model="question.statement"
-            :edit-status="true"
-            :question-id="question.id ? question.id : 'null'"
           />
 <!--          <div class="col-10 question-txt default-Qcard-txt">-->
 <!--            شناخت فراوان جامعه و متخصصان را می طلبد،لازم است، و برای شرایط فعلی تکنولوژی مورد نیاز، و کاربردهای متنوع با هدف بهبود ابزارهای کاربردی می باشد، کتابهای زیادی در شصت و سه درصد گذشته حال و آینده،لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ، و با استفاده از طراحان گرافیک است، چاپگرها و متون بلکه روزنامه و مجله در ستون و سطرآنچنان که-->
@@ -39,7 +34,10 @@
       </q-card-section>
     </q-card>
     <div class="multiple-choice-A">
-      <div class="row multiple-choice-Answer">
+      <div
+        v-if="question.choices.list[0]"
+        class="row multiple-choice-Answer"
+      >
         <div
           class="col-6 answer-box"
           v-for="(item, index) in question.choices.list"
@@ -55,6 +53,14 @@
                 color="primary"
                 @click="clicked(item.order)"
               />
+              <q-btn
+                push
+                color="primary"
+                text-color="white"
+                label="حذف گزینه"
+                @click="removeChoice(item.order)"
+                :class="{ 'example-fab-animate--hover': shakeRemoveBtn }"
+              />
             </q-card-section>
             <q-separator inset />
             <q-card-section>
@@ -62,9 +68,6 @@
                 <QuestionField
                   :ref="'choice' + (item.order)"
                   :key="'choices' + (item.order) + domKey"
-                  v-model="item.title"
-                  :question-id="question.id ? question.id : 'null'"
-                  :edit-status="true"
                 />
               </div>
             </q-card-section>
@@ -82,9 +85,6 @@
           <QuestionField
             ref="descriptiveA"
             :key="'descriptive_answer' + domKey"
-            v-model="question.descriptive_answer"
-            :question-id="question.id ? question.id : 'null'"
-            :edit-status="true"
           />
         </div>
       </q-card-section>
@@ -101,21 +101,15 @@ export default {
     QuestionField
   },
   props: {
-    cq: {
-      type: Question,
-      default: () => new Question()
-    },
-    modelValue: {
-      type: Question,
-      default: () => new Question()
-    },
-    status: {
+    setContentToQuestion: {
       type: Boolean,
-      default: () => false
+      default () {
+        return false
+      }
     }
   },
   inject: {
-    currentQuestion: {
+    question: {
       from: 'question', // this is optional if using the same key for injection
       default: new Question()
     }
@@ -123,48 +117,60 @@ export default {
   data () {
     return {
       domKey: Date.now(),
-      question: new Question(),
-      choice: ''
+      question1: new Question(),
+      choice: '',
+      shakeRemoveBtn: false
     }
   },
   watch: {
-    editorValue: function () {
-      this.question = this.modelValue
+    setContentToQuestion: function (val) {
+      if (val) {
+        this.getContent()
+      }
     }
   },
   created () {
     const that = this
     setTimeout(() => {
-      that.domKey = Date.now()
+      that.domKey = 'Date.now()'
     }, 100)
+    this.question.choices.list = []
     this.question.choices.addEmptyChoices(4)
   },
-  mounted () {},
+  mounted () {
+    this.$nextTick(() => {
+      this.question.loading = false
+    })
+  },
   updated () {
-    this.question = this.modelValue
+    // this.question1 = this.modelValue
   },
   methods: {
     removeChoice (order) {
+      this.shakeRemoveBtn = false
+      if (this.question.choices.list.length < 3) {
+        this.$q.notify({
+          message: 'شما نمیتوانید کمتر از 2 گزینه داشته باشید!',
+          color: 'negative',
+          icon: 'report_problem'
+        })
+        this.shakeRemoveBtn = true
+        return
+      }
       const index = this.question.choices.list.findIndex(item => item.order === order)
       this.question.choices.list.splice(index, 1)
     },
     addChoice () {
       this.question.choices.addOneEmptyChoice()
     },
-    removeAllChoice () {
-      this.question.choices.list = []
-    },
     getContent () {
-      this.$refs.questionStatement.getContent()
-      this.$refs.descriptive.getContent()
-      this.$refs.choice1[0].getContent()
-      this.$refs.choice2[0].getContent()
-      this.$refs.choice3[0].getContent()
-      this.$refs.choice4[0].getContent()
-      this.updateQuestion()
-    },
-    getData (val) {
-      this.editorValue = val
+      this.question.statement = this.$refs.questionStatement.getContent()
+      this.question.answer = this.$refs.descriptive.getContent()
+      console.log('this.question', this.question)
+      // this.$refs.choice1[0].getContent()
+      // this.$refs.choice2[0].getContent()
+      // this.$refs.choice3[0].getContent()
+      // this.$refs.choice4[0].getContent()
     },
     updateQuestion () {
       this.$emit('updateQuestion', this.question)
@@ -186,6 +192,11 @@ export default {
   line-height: 28px;
   color: #23263B;
   text-align: right #{"/* rtl:ignore */"};
+  .removeAllChoice-btn {
+    color: #FFFFFF;
+    background: #9690E4;
+    border-radius: 10px;
+  }
   .multiple-choice-A {
     padding-top: 12px;
     padding-bottom: 12px;
@@ -267,6 +278,13 @@ export default {
   .answer-box {
     .q-radio__inner {
       margin-left: 7px #{"/* rtl:ignore */"} !important;
+    }
+  }
+  .default-Qcard-title{
+    justify-content: space-between;
+    display: flex;
+    .q-btn {
+      padding: 4px 16px !important;
     }
   }
 }

@@ -12,9 +12,10 @@ const AdminActionOnQuestion = {
     return {
       optionQuestionId: '',
       questionStatusId_draft: null,
-      questionStatusId_pending_to_type: null,
-      examList: new ExamList(),
-      subCategoriesList: new QuestSubcategoryList()
+      questionStatusId_pending_to_type: null
+      // ,
+      // examList: new ExamList(),
+      // subCategoriesList: new QuestSubcategoryList()
     }
   },
   methods: {
@@ -25,13 +26,18 @@ const AdminActionOnQuestion = {
           console.log(response.data)
         })
     },
+    setAllQuestionLoadings () {
+      this.componentTabs.loading = true
+      this.question.loading = true
+      this.question.exams.loading = true
+    },
     getQuestionType () {
       const that = this
-      this.componentTabs.loading = true
       axios.get(API_ADDRESS.option.base + '?type=question_type')
         .then(function (response) {
           that.componentTabs = new TypeList(response.data.data)
-          that.currentComponent = that.componentTabs.list[0]
+          // todo : DEFAULT VALUE/TAB IS konkur
+          that.question.type = that.componentTabs.list[0]
           const optionQuestion = response.data.data.find(item => (item.value === 'konkur'))
           if (!optionQuestion) {
             return this.$q.notify({
@@ -39,7 +45,6 @@ const AdminActionOnQuestion = {
               color: 'negative'
             })
           }
-          that.optionQuestionId = optionQuestion.id
           that.componentTabs.loading = false
         })
         .catch(function (error) {
@@ -55,15 +60,6 @@ const AdminActionOnQuestion = {
           that.questionStatuses = new QuestionStatusList(response.data.data)
           that.questionStatusId_draft = list.find(item => item.title === 'draft').id
           that.questionStatusId_pending_to_type = list.find(item => item.title === 'pending_to_type').id
-        })
-        .catch(() => {
-        })
-    },
-    loadExamList () {
-      const that = this
-      this.$axios.get(API_ADDRESS.exam.base())
-        .then((response) => {
-          that.examList = new ExamList(response.data.data)
         })
         .catch(() => {
         })
@@ -125,9 +121,21 @@ const AdminActionOnQuestion = {
         })
     },
     loadSubcategories () {
+      const that = this
       return this.$axios.get(API_ADDRESS.questionSubcategory.base)
         .then((response) => {
-          this.subCategoriesList = new QuestSubcategoryList(response.data.data)
+          that.subCategoriesList = new QuestSubcategoryList(response.data.data)
+          console.log('this.subCategoriesList', this.subCategoriesList)
+        })
+        .catch(() => {
+        })
+    },
+    loadExamList () {
+      const that = this
+      this.$axios.get(API_ADDRESS.exam.base())
+        .then((response) => {
+          that.examList = new ExamList(response.data.data)
+          console.log('that.examList', that.examList)
         })
         .catch(() => {
         })

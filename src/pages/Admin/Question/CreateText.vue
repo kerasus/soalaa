@@ -1,25 +1,48 @@
 <template>
   <div class="createQ-text-container">
-    <Navbar
+    <navbar
       :componentTabs="componentTabs"
       :loading="componentTabs.loading"
     />
-    <DynamicComponent
-      v-if="currentComponent"
-      :component="currentComponent"
-      :key="componentKey"
-      :allProps="allProps"
-    />
-    <AttachExam/>
-    <div class="attach-btn row">
-      <QuestionDetails class="col-9"/>
-      <BtnBox class="col-3"/>
+    <div class="relative-position">
+      <component
+        v-if="question.type"
+        :is="getComponent"
+        v-bind="allProps"
+      />
+      <q-inner-loading
+        :showing="question.loading"
+        color="primary"
+        class="QComponents-inner-loading"
+        label-style="font-size: 1.1em"
+      />
     </div>
-    <CommentBox/>
+    <div class="relative-position">
+      <attach-exam
+        :exams="examList"
+        :lessons="subCategoriesList"
+      />
+      <div class="attach-btn row">
+        <question-details class="col-9"/>
+        <btn-box
+          class="col-3"
+          @saveQuestion="setQuestionContents"
+        />
+      </div>
+      <comment-box/>
+      <q-inner-loading
+        :showing="question.exams.loading"
+        color="primary"
+        class="QComponents-inner-loading"
+        label-style="font-size: 1.1em"
+      />
+    </div>
   </div>
 </template>
 
 <script>
+/* eslint-disable no-var */
+import { defineAsyncComponent } from 'vue'
 import Navbar from 'components/Question/QuestionPage/Create/textMode/Navbar'
 import DynamicComponent from 'components/Question/QuestionPage/Create/textMode/questionTypes/DynamicComponent'
 import { Question } from 'src/models/Question'
@@ -29,9 +52,15 @@ import { QuestionType, TypeList } from 'src/models/QuestionType'
 import AttachExam from 'components/Question/QuestionPage/AttachExam'
 import CommentBox from 'components/Question/QuestionPage/CommentBox'
 import BtnBox from 'components/Question/QuestionPage/BtnBox'
+import { ExamList } from 'src/models/Exam'
+import { QuestSubcategoryList } from 'src/models/QuestSubcategory'
+// import API_ADDRESS from 'src/api/Addresses'
 export default {
   name: 'CreateText',
   components: {
+    DescriptiveQ: defineAsyncComponent(() => import('components/Question/QuestionPage/Create/textMode/questionTypes/DescriptiveQ/DescriptiveQ')),
+    MultipleChoiceQ: defineAsyncComponent(() => import('components/Question/QuestionPage/Create/textMode/questionTypes/MultipleChoiceQ/MultipleChoiceQ')),
+    MBTIQ: defineAsyncComponent(() => import('components/Question/QuestionPage/Create/textMode/questionTypes/MBTIQ/MBTIQ')),
     BtnBox,
     CommentBox,
     AttachExam,
@@ -47,10 +76,12 @@ export default {
     return {
       questionType: new QuestionType(),
       componentTabs: new TypeList(),
-      componentKey: 0,
-      currentComponent: null,
       question: new Question(),
-      allProps: {}
+      allProps: {
+        setContentToQuestion: false
+      },
+      examList: new ExamList(),
+      subCategoriesList: new QuestSubcategoryList()
     }
   },
   provide () {
@@ -59,21 +90,38 @@ export default {
     }
   },
   mounted () {
+    this.setAllQuestionLoadings()
     this.getQuestionType()
+    this.loadExamList()
+    this.loadSubcategories()
   },
   methods: {
-    chosenComponent (question) {
-      this.currentComponent = question.type
-      this.forceRerenderComponent()
+    chosenComponent (questionType) {
+      const cName = questionType.componentName
+      if (cName === 'MultipleChoiceQ') {
+        return 'multiple-choice-q'
+      }
+      if (cName === 'DescriptiveQ') {
+        return 'descriptive-q'
+      }
+      if (cName === 'MBTIQ') {
+        return 'm-b-t-i-q'
+      }
     },
-    forceRerenderComponent () {
-      this.componentKey += 1
+    setQuestionContents () {
+      this.allProps.setContentToQuestion = true
+    }
+  },
+  computed: {
+    getComponent () {
+      // updates even if properties inside are updated
+      return this.chosenComponent(this.question.type)
     }
   },
   watch: {
     question: {
       handler (newValue, oldValue) {
-        this.chosenComponent(newValue)
+        // console.log('question', newValue)
       },
       deep: true
     }
@@ -100,4 +148,30 @@ export default {
   transform: translateX(20px);
   opacity: 0;
 }
+</style>
+<style lang="scss">
+.QComponents-inner-loading{
+  background-color: #a6a6a65c;
+}
+</style>
+<style lang="sass">
+.example-fab-animate,
+.q-fab:hover .example-fab-animate--hover
+  animation: example-fab-animate 0.82s cubic-bezier(.36,.07,.19,.97) both
+  transform: translate3d(0, 0, 0)
+  backface-visibility: hidden
+  perspective: 1000px
+
+@keyframes example-fab-animate
+  10%, 90%
+    transform: translate3d(-1px, 0, 0)
+
+  20%, 80%
+    transform: translate3d(2px, 0, 0)
+
+  30%, 50%, 70%
+    transform: translate3d(-4px, 0, 0)
+
+  40%, 60%
+    transform: translate3d(4px, 0, 0)
 </style>
