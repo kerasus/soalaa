@@ -122,6 +122,14 @@ module.exports = configure(function (ctx) {
             '^/3a/api/v1': ''
           }
         },
+        '/tree/api/v1': {
+          target: process.env.TREE_API_SERVER,
+          changeOrigin: true,
+          secure: false,
+          pathRewrite: {
+            '^/tree/api/v1': ''
+          }
+        },
         '/cdn': {
           target: 'https://cdn.alaatv.com',
           changeOrigin: true,
