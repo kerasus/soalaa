@@ -35,7 +35,7 @@ module.exports = configure(function (ctx) {
       'flatIcon.css',
       '../../public/fonts/Iconsax/style.css'
       // 'src/assets/scss/app.scss',
-      // 'src/assets/scss/font.scss'
+      // 'src/assets/scss/IRANSansFont.scss'
     ],
 
     // https://github.com/quasarframework/quasar/tree/dev/extras
@@ -120,6 +120,14 @@ module.exports = configure(function (ctx) {
           secure: false,
           pathRewrite: {
             '^/3a/api/v1': ''
+          }
+        },
+        '/tree/api/v1': {
+          target: process.env.TREE_API_SERVER,
+          changeOrigin: true,
+          secure: false,
+          pathRewrite: {
+            '^/tree/api/v1': ''
           }
         },
         '/cdn': {

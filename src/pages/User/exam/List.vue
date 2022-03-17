@@ -267,8 +267,7 @@ export default {
         })
     },
     registerExam (exam) {
-      // window.location.href = exam.alcaa_product_link
-      this.user.registerExam(exam.id)
+      this.$axios.post(API_ADDRESS.exam.registerExam, { exam_id: exam.id })
         .then((response) => {
           if (response.data.data.redirect_url) {
             window.location.href = response.data.data.redirect_url
