@@ -1,15 +1,13 @@
 <template>
   <div class="multiple-choice-Q">
-    <button @click="addChoice">addChoice</button>
+    <q-btn
+      v-if="question.choices.list.length > 0"
+      dark
+      class="full-width q-mb-md removeAllChoice-btn"
+      label="حذف تمام گزینه ها"
+      @click="removeAllChoice"
+    />
     <q-card class="question-card default-questions-card">
-<!--      <q-btn-->
-<!--        v-if="question.choices.list.length > 0 && status"-->
-<!--        dark-->
-<!--        class="full-width q-mb-md"-->
-<!--        label="حذف تمام گزینه ها"-->
-<!--        color="pink"-->
-<!--        @click="removeAllChoice"-->
-<!--      />-->
       <q-card-section class="question default-Qcard-title">
         <div>صورت سوال</div>
       </q-card-section>
@@ -54,6 +52,13 @@
                 :label="'گزینه' + (index + 1)"
                 color="primary"
                 @click="clicked(item.order)"
+              />
+              <q-btn
+                push
+                color="primary"
+                text-color="white"
+                label="حذف گزینه"
+                @click="removeChoice(item.order)"
               />
             </q-card-section>
             <q-separator inset />
@@ -178,6 +183,11 @@ export default {
   line-height: 28px;
   color: #23263B;
   text-align: right #{"/* rtl:ignore */"};
+  .removeAllChoice-btn {
+    color: #FFFFFF;
+    background: #9690E4;
+    border-radius: 10px;
+  }
   .multiple-choice-A {
     padding-top: 12px;
     padding-bottom: 12px;
@@ -259,6 +269,13 @@ export default {
   .answer-box {
     .q-radio__inner {
       margin-left: 7px #{"/* rtl:ignore */"} !important;
+    }
+  }
+  .default-Qcard-title{
+    justify-content: space-between;
+    display: flex;
+    .q-btn {
+      padding: 4px 16px !important;
     }
   }
 }
