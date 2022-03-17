@@ -4,7 +4,7 @@
       v-if="question.choices.list.length > 0"
       dark
       class="full-width q-mb-md removeAllChoice-btn"
-      label="اضافه کردن سوال جدید"
+      label="اضافه کردن گزینه جدید"
       @click="addChoice"
     />
     <q-card class="question-card default-questions-card">
@@ -15,7 +15,7 @@
       <q-card-section>
         <div class="row justify-between question-box default-Qcard-box">
           <QuestionField
-            ref="questionStatement"
+            ref="tiptap-questionStatement"
             :key="'statement' + domKey"
           />
 <!--          <div class="col-10 question-txt default-Qcard-txt">-->
@@ -49,7 +49,7 @@
                 dense
                 v-model="choice"
                 :val="'choice' + (index + 1)"
-                :label="'گزینه' + (index + 1)"
+                :label="'گزینه ' + (index + 1)"
                 color="primary"
                 @click="clicked(item.order)"
               />
@@ -66,7 +66,7 @@
             <q-card-section>
               <div class="row justify-between default-Qcard-box">
                 <QuestionField
-                  :ref="'choice' + (item.order)"
+                  :ref="'tiptapChoice' + (item.order)"
                   :key="'choices' + (item.order) + domKey"
                 />
               </div>
@@ -83,7 +83,7 @@
       <q-card-section>
         <div class="row justify-between default-Qcard-box">
           <QuestionField
-            ref="descriptiveA"
+            ref="tiptap-descriptiveA"
             :key="'descriptive_answer' + domKey"
           />
         </div>
@@ -164,13 +164,21 @@ export default {
       this.question.choices.addOneEmptyChoice()
     },
     getContent () {
-      this.question.statement = this.$refs.questionStatement.getContent()
-      this.question.answer = this.$refs.descriptive.getContent()
+      // const that = this
+      console.log('this.$refs', this.$refs)
+      this.question.choices.list[0] = this.$refs.tiptapChoice2[0].getContent()
+      this.question.choices.list[1] = this.$refs.tiptapChoice3[0].getContent()
+      this.question.choices.list[2] = this.$refs.tiptapChoice4[0].getContent()
+      this.question.choices.list[3] = this.$refs.tiptapChoice5[0].getContent()
+      // Object.keys(this.$refs).forEach(
+      //   function (element, index) {
+      //     if (element.includes('tiptapChoice')) {
+      //       console.log('element', element[0].getContent())
+      //       // that.question.choices.list[index] = element.getContent()
+      //     }
+      //   }
+      // )
       console.log('this.question', this.question)
-      // this.$refs.choice1[0].getContent()
-      // this.$refs.choice2[0].getContent()
-      // this.$refs.choice3[0].getContent()
-      // this.$refs.choice4[0].getContent()
     },
     updateQuestion () {
       this.$emit('updateQuestion', this.question)
