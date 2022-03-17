@@ -18,7 +18,10 @@
       />
     </div>
     <div class="relative-position">
-      <attach-exam/>
+      <attach-exam
+        :exams="examList"
+        :lessons="subCategoriesList"
+      />
       <div class="attach-btn row">
         <question-details class="col-9"/>
         <btn-box
@@ -49,6 +52,9 @@ import { QuestionType, TypeList } from 'src/models/QuestionType'
 import AttachExam from 'components/Question/QuestionPage/AttachExam'
 import CommentBox from 'components/Question/QuestionPage/CommentBox'
 import BtnBox from 'components/Question/QuestionPage/BtnBox'
+import { ExamList } from 'src/models/Exam'
+import { QuestSubcategoryList } from 'src/models/QuestSubcategory'
+// import API_ADDRESS from 'src/api/Addresses'
 export default {
   name: 'CreateText',
   components: {
@@ -73,7 +79,9 @@ export default {
       question: new Question(),
       allProps: {
         setContentToQuestion: false
-      }
+      },
+      examList: new ExamList(),
+      subCategoriesList: new QuestSubcategoryList()
     }
   },
   provide () {
@@ -84,6 +92,8 @@ export default {
   mounted () {
     this.setAllQuestionLoadings()
     this.getQuestionType()
+    this.loadExamList()
+    this.loadSubcategories()
   },
   methods: {
     chosenComponent (questionType) {
@@ -143,4 +153,25 @@ export default {
 .QComponents-inner-loading{
   background-color: #a6a6a65c;
 }
+</style>
+<style lang="sass">
+.example-fab-animate,
+.q-fab:hover .example-fab-animate--hover
+  animation: example-fab-animate 0.82s cubic-bezier(.36,.07,.19,.97) both
+  transform: translate3d(0, 0, 0)
+  backface-visibility: hidden
+  perspective: 1000px
+
+@keyframes example-fab-animate
+  10%, 90%
+    transform: translate3d(-1px, 0, 0)
+
+  20%, 80%
+    transform: translate3d(2px, 0, 0)
+
+  30%, 50%, 70%
+    transform: translate3d(-4px, 0, 0)
+
+  40%, 60%
+    transform: translate3d(4px, 0, 0)
 </style>

@@ -4,8 +4,8 @@
       v-if="question.choices.list.length > 0"
       dark
       class="full-width q-mb-md removeAllChoice-btn"
-      label="حذف تمام گزینه ها"
-      @click="removeAllChoice"
+      label="اضافه کردن سوال جدید"
+      @click="addChoice"
     />
     <q-card class="question-card default-questions-card">
       <q-card-section class="question default-Qcard-title">
@@ -59,6 +59,7 @@
                 text-color="white"
                 label="حذف گزینه"
                 @click="removeChoice(item.order)"
+                :class="{ 'example-fab-animate--hover': shakeRemoveBtn }"
               />
             </q-card-section>
             <q-separator inset />
@@ -117,7 +118,8 @@ export default {
     return {
       domKey: Date.now(),
       question1: new Question(),
-      choice: ''
+      choice: '',
+      shakeRemoveBtn: false
     }
   },
   watch: {
@@ -145,18 +147,25 @@ export default {
   },
   methods: {
     removeChoice (order) {
+      this.shakeRemoveBtn = false
+      if (this.question.choices.list.length < 3) {
+        this.$q.notify({
+          message: 'شما نمیتوانید کمتر از 2 گزینه داشته باشید!',
+          color: 'negative',
+          icon: 'report_problem'
+        })
+        this.shakeRemoveBtn = true
+        return
+      }
       const index = this.question.choices.list.findIndex(item => item.order === order)
       this.question.choices.list.splice(index, 1)
     },
     addChoice () {
       this.question.choices.addOneEmptyChoice()
     },
-    removeAllChoice () {
-      this.question.choices.list = []
-    },
     getContent () {
       this.question.statement = this.$refs.questionStatement.getContent()
-      this.question.statement = this.$refs.descriptive.getContent()
+      this.question.answer = this.$refs.descriptive.getContent()
       console.log('this.question', this.question)
       // this.$refs.choice1[0].getContent()
       // this.$refs.choice2[0].getContent()

@@ -137,7 +137,9 @@ module.exports = configure(function (ctx) {
       config: {
         notify: {
           timeout: 5000,
-          position: 'top-left'
+          position: 'top',
+          // multiLine: true,
+          classes: 'default-notify-class'
         }
       },
 
