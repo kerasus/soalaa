@@ -2,13 +2,13 @@
   <div>
     <div class="row justify-end q-pr-lg">
       <q-btn
+        class="q-mx-sm float-right"
         round
+        dark-percentage
         color="primary"
-        unelevated
-        @click="goBack"
-      >
-        <i class="fi-rr-angle-left row" />
-      </q-btn>
+        @click= this.$router.go(-1)
+        icon="isax:arrow-left-2"
+      />
     </div>
     <entity-edit
       v-model:value="inputs"
@@ -175,13 +175,12 @@ export default {
     }
   },
   created () {
+    this.$store.commit('AppLayout/updateLastBreadcrumb', {
+      loading: true
+    })
     this.api += '/' + this.$route.params.id
   },
   methods: {
-    goBack () {
-      const url = '/admin/exam/' + this.$route.params.id
-      this.$router.push(url)
-    },
     getCategories (response, setNewInputData) {
       if (!response) {
         return
@@ -202,6 +201,7 @@ export default {
               })
             }
           })
+          this.addBreadcrumb()
         })
         .catch(() => {
         })
@@ -216,6 +216,13 @@ export default {
       }
       this.inputs[this.examCategoriesIndex].value = this.inputs[this.examCategoriesIndex].value.concat(this.category)
       this.category = { title: '', id: '', order: 0, time: 0 }
+    },
+    addBreadcrumb () {
+      const inputsIndex = this.inputs.findIndex(item => item.name === 'title')
+      this.$store.commit('AppLayout/updateLastBreadcrumb', {
+        loading: false,
+        title: 'ویرایش ' + this.inputs[inputsIndex].value
+      })
     }
   }
 }
