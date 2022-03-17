@@ -1,5 +1,17 @@
 <template>
   <div class="row justify-center">
+    <div class="col-9">
+      <div class="back-btn-container">
+        <q-btn
+          class="q-mx-sm float-right"
+          round
+          dark-percentage
+          color="primary"
+          @click= this.$router.go(-1)
+          icon="isax:arrow-left-2"
+        />
+      </div>
+    </div>
     <div class="col-9 ">
       <div class="row q-mb-xl justify-center ">
         <div class="col-12 col-md-3 col-sm-3  q-pr-md">
@@ -52,7 +64,7 @@
         <div class="col-12 col-md-3 col-sm-3 filter-btn  q-px-md">
           <q-btn
             rounded
-            color="blue-8"
+            color="indigo-11"
             @click="DoFilter"
             style="width: 150px"
           >
@@ -62,7 +74,7 @@
         <div class="col-12 col-md-3 col-sm-3 filter-btn  q-px-md">
           <q-btn
             rounded
-            color="amber-8"
+            color="amber-6"
             :loading="fileLoading"
             @click="getExcel"
             style="width: 150px"
@@ -73,7 +85,7 @@
         <div class="col-12 col-md-3 col-sm-3 filter-btn q-px-md">
           <q-btn
             rounded
-            :color="file_url ? 'yellow-6':'grey'"
+            :color="file_url ? 'light-green-6':'grey'"
             :text-color="file_url ? 'grey-14':'white'"
             type="a"
             :href="file_url"
@@ -94,7 +106,7 @@
       >
         <q-tabs
           v-model="tabs"
-          class="bg-deep-purple-14 text-white shadow-2"
+          class="bg-primary text-white shadow-2"
           content-class="tabs-content"
         >
           <q-tab name="rank">
@@ -392,10 +404,11 @@ export default {
   }
 }
 </script>
-
 <style lang="scss" scoped>
-.test{
-  border: 1px solid red;
+.back-btn-container{
+  width: 100%;
+  display: flex;
+  justify-content: flex-end;
 }
 .bordered-right {
   border-right: solid 1px #d7d7d7;

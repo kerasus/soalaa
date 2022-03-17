@@ -1,10 +1,10 @@
 <template>
   <quasar-template-builder v-model:value="properties" @onResize="resize">
     <template #header>
-      <div v-if="$route.name === 'onlineQuiz.alaaView'" class="header">
+      <div v-if="$route.name === 'onlineQuiz.alaaView'" class="header-inside row">
         <online-quiz-template-header/>
       </div>
-      <div v-else  class="header">
+      <div v-else  class="header-inside row">
         <template-header/>
       </div>
       <q-linear-progress
@@ -14,9 +14,10 @@
         class="q-mt-sm"
         indeterminate
       />
+      <q-resize-observer @resize="setHeaderDimension"/>
     </template>
     <template #left-drawer>
-      <div v-if="$route.name === 'onlineQuiz.alaaView'">
+      <div class="drawer-inside" v-if="$route.name === 'onlineQuiz.alaaView'">
         <sideMenuMapOfQuestions/>
       </div>
       <div v-else>
@@ -24,7 +25,13 @@
       </div>
     </template>
     <template #content>
-      <router-view :key="$route.name"/>
+      <div ref="contentInside" class="content-inside">
+        <router-view v-slot="{ Component }">
+          <keep-alive :exclude="['konkoorView', 'alaaView']">
+            <component :is="Component" :key="$route.fullPath" />
+          </keep-alive>
+        </router-view>
+      </div>
     </template>
   </quasar-template-builder>
 </template>
@@ -33,16 +40,15 @@
 
 import SideMenuDashboard from 'components/Menu/SideMenu/SideMenu-dashboard'
 import sideMenuMapOfQuestions from 'components/Menu/SideMenu/SideMenu_MapOfQuestions'
-import { User } from 'src/models/User'
 import { QuasarTemplateBuilder } from 'quasar-template-builder'
 import templateHeader from 'components/Template/templateHeader'
 import onlineQuizTemplateHeader from 'components/Template/onlineQuizTemplateHeader'
+import { ref } from 'vue'
 
 export default {
   components: { SideMenuDashboard, sideMenuMapOfQuestions, QuasarTemplateBuilder, templateHeader, onlineQuizTemplateHeader },
   data () {
     return {
-      user: new User(),
       properties: {
         layoutView: 'lHh Lpr lFf',
         layoutHeader: true,
@@ -62,7 +68,8 @@ export default {
         layoutHeaderCustomClass: 'main-layout-header row',
         layoutLeftDrawerCustomClass: 'main-layout-left-drawer',
         layoutPageContainerCustomClass: 'main-layout-container'
-      }
+      },
+      contentInside: ref(0)
     }
   },
   created () {
@@ -70,19 +77,15 @@ export default {
     Object.assign(this.properties, localData)
   },
   methods: {
-    getUser () {
-      this.user = this.$store.getters['Auth/user']
-      return this.user
-    },
-    logOut () {
-      return this.$store.dispatch('Auth/logOut')
+    setHeaderDimension (value) {
+      this.$refs.contentInside.style.height = 'calc(100vh +' + value.height + 'px'
     },
     resize (val) {
       this.$store.commit('AppLayout/updateWindowSize', val)
-      if (val.width > 1023) {
-        this.$store.commit('AppLayout/updateLayoutLeftDrawerWidth', 325)
+      if (val.width > 1439) {
+        this.$store.commit('AppLayout/updateLayoutLeftDrawerWidth', 314)
         this.$store.commit('AppLayout/updateLayoutLeftDrawerBehavior', 'desktop') && this.$store.commit('AppLayout/updateLayoutRightDrawerBehavior', 'desktop')
-      } else if (val.width > 349) {
+      } else if (val.width > 599) {
         this.$store.commit('AppLayout/updateLayoutLeftDrawerWidth', 280)
         this.$store.commit('AppLayout/updateLayoutLeftDrawerBehavior', 'mobile') && this.$store.commit('AppLayout/updateLayoutRightDrawerBehavior', 'mobile')
       } else {
@@ -96,7 +99,7 @@ export default {
 
 <style lang="scss" scoped>
 .main-layout-header {
-  .header{
+  .header-inside{
     width: 100%;
   }
 
@@ -104,8 +107,15 @@ export default {
 
 .main-layout-container {
 }
+.content-inside {
+  height: calc(100vh - );
+  overflow: auto;
+}
 
 .main-layout-left-drawer {
+  .drawer-inside{
+    height: 100%;
+  }
 }
 </style>
 
@@ -115,16 +125,16 @@ export default {
   display: flex;
   flex-direction: row;
   padding: 60px 100px 24px 76px;
-  @media screen and (max-width: 1439px) {
+  @media screen and (max-width: 1919px) {
     padding: 30px 30px 24px 0;
   }
-  @media screen and (max-width: 1023px) {
+  @media screen and (max-width: 1439px) {
     padding: 20px 30px 18px 30px !important;
   }
-  @media screen and (max-width: 599px) {
+  @media screen and (max-width: 1023px) {
     padding: 20px 30px 20px 20px;
   }
-  @media screen and (max-width: 349px) {
+  @media screen and (max-width: 599px) {
     padding: 24px 16px 14px 16px !important;
     :nth-child(1) {
       order: 1;
@@ -138,7 +148,7 @@ export default {
   }
 
   .right-side {
-    @media screen and (max-width: 1023px) {
+    @media screen and (max-width: 1439px) {
     }
   }
 }

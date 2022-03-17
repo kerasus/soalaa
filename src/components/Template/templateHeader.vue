@@ -1,7 +1,7 @@
 <template>
   <div
     class="drawer-btn"
-    :class="{'col-6': windowSize < 350}"
+    :class="{'col-6': windowSize.x < 599}"
   >
     <q-btn
       class="toolbar-button"
@@ -15,30 +15,34 @@
   </div>
   <div
     class="right-side"
-    :class="{'col-6': windowSize > 1023, 'col-12': windowSize < 350}"
+    :class="{'col-6': windowSize.x > 1439, 'col-12': windowSize.x < 599}"
   >
-    <q-skeleton
-    v-if="!breadcrumbs.path"
-    width="100px"
-    height="30px"
-    />
-    <q-breadcrumbs
-      v-else
-      class="breadcrumbs"
-      separator-color="dark"
-      gutter="sm"
+    <div
+      v-if="breadcrumbsVisibility"
     >
-      <template v-slot:separator>
-        <q-icon name="isax:arrow-right-3 " />
-      </template>
-      <q-breadcrumbs-el
-        v-for="(breadcrumb, index) in breadcrumbs.path"
-        :key="index"
+      <q-skeleton
+        v-if="!breadcrumbs.path"
+        width="100px"
+        height="10px"
+      />
+      <q-breadcrumbs
+        v-else
+        class="breadcrumbs"
+        separator-color="dark"
+        gutter="sm"
       >
-        <q-skeleton
-          v-if="breadcrumbLoading"
-          width="100px"
-        />
+        <template v-slot:separator>
+          <q-icon name="isax:arrow-right-3 "/>
+        </template>
+        <q-breadcrumbs-el
+          v-for="(breadcrumb, index) in breadcrumbs.path"
+          :key="index"
+        >
+          <q-skeleton
+            v-if="breadcrumb.loading"
+            width="100px"
+            height="10px"
+          />
           <q-breadcrumbs-el
             v-else
             :icon=breadcrumb.icon
@@ -46,12 +50,14 @@
             :to="getRoute(breadcrumb.route)"
             class="q-breadcrumbs-el"
           />
-      </q-breadcrumbs-el>
-    </q-breadcrumbs>
+        </q-breadcrumbs-el>
+      </q-breadcrumbs>
+
+    </div>
   </div>
   <div
     class="left-side"
-    :class="{'col-6': windowSize < 350, 'col-6': windowSize > 1023}">
+    :class="{'col-6': windowSize.x < 599, 'col-6': windowSize.x > 1439}">
     <q-btn-dropdown
       class="toolbar-button"
       content-class="profile-menu"
@@ -85,33 +91,28 @@ import { mapGetters, mapMutations } from 'vuex'
 export default {
   name: 'templateHeader',
   data () {
-    return {
-      windowSize: document.documentElement.clientWidth
-    }
+    return {}
   },
   mounted () {
-    window.addEventListener('resize', this.getDimensions)
     this.$store.commit('AppLayout/updateBreadcrumbLoading', false)
-  },
-  unmounted () {
-    window.removeEventListener('resize', this.getDimensions)
+    this.$store.commit('AppLayout/updateVisibilityBreadcrumb', true)
   },
   computed: {
     ...mapGetters('AppLayout', [
+      'breadcrumbsVisibility',
       'breadcrumbs',
       'breadcrumbLoading',
-      'layoutLeftDrawerVisible'
+      'layoutLeftDrawerVisible',
+      'windowSize'
     ])
   },
   methods: {
     ...mapMutations('AppLayout', [
+      'updateVisibilityBreadcrumb',
       'updateBreadcrumbs',
       'updateBreadcrumbLoading',
       'updateLayoutLeftDrawerVisible'
     ]),
-    getDimensions () {
-      this.windowSize = document.documentElement.clientWidth
-    },
     toggleLeftDrawer () {
       this.updateLayoutLeftDrawerVisible(true)
     },
@@ -137,29 +138,31 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped >
-.drawer-btn{
+<style lang="scss" scoped>
+.drawer-btn {
   display: none;
-  @media screen and (max-width: 1023px){
+  @media screen and (max-width: 1439px) {
     display: block;
   }
-  @media screen and (max-width: 349px){
+  @media screen and (max-width: 599px) {
     margin-bottom: 10px;
   }
 }
+
 .right-side {
   display: flex;
   align-items: center;
-  @media screen and (max-width: 1023px){
+  @media screen and (max-width: 1439px) {
     margin-left: 78px;
   }
-  @media screen and (max-width: 599px){
+  @media screen and (max-width: 1023px) {
     margin-left: 42px;
   }
-  @media screen and (max-width: 349px){
+  @media screen and (max-width: 599px) {
     margin-left: 0;
   }
-  .breadcrumbs{
+
+  .breadcrumbs {
     &:deep(> *) {
       font-style: normal;
       font-weight: bold;
@@ -167,37 +170,46 @@ export default {
       line-height: 31px;
       text-align: right;
       color: #23263B;
-      div:first-child  {
+
+      div:first-child {
         font-size: 18px;
       }
     }
   }
 }
+
 .left-side {
   display: flex;
   justify-content: flex-end;
-  @media screen and (max-width: 1023px){
+  @media screen and (max-width: 1439px) {
     position: absolute;
     right: 30px;
   }
-  @media screen and (max-width: 349px){
+  @media screen and (max-width: 599px) {
     right: 16px;
     margin-bottom: 10px;
   }
 }
 </style>
 <style lang="scss">
-.breadcrumbs{
-  .q-breadcrumbs__separator{
-    .q-icon{
+.breadcrumbs {
+  .q-breadcrumbs__separator {
+    .q-icon {
       font-size: 22px;
     }
-  }}
-.drawer-btn{
-  .q-btn{
-    flex-direction: row !important;
   }
 }
+
+.drawer-btn {
+  .q-btn {
+    flex-direction: row !important;
+
+    &.toolbar-button {
+      margin-left: 0 !important;
+    }
+  }
+}
+
 .q-btn {
   &.toolbar-button {
     margin-left: 12px;
@@ -207,6 +219,7 @@ export default {
     border-radius: 16px;
   }
 }
+
 .left-side {
   .q-btn {
     &.toolbar-button {

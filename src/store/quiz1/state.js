@@ -6,6 +6,9 @@ export default function () {
     quiz: ref(null),
     userQuizListData: ref({}),
     currentQuestion: ref(null),
-    currentExamFrozenQuestions: ref(null)
+    currentExamFrozenQuestions: ref(null),
+    failedListAnswerData: ref([]),
+    failedListStatusData: ref([]),
+    failedListBookmarkData: ref([])
   }
 }

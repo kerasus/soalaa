@@ -19,103 +19,104 @@
         در حال حاضر امکان مشاهده سوالات این دفترچه امکان پذیر نمی باشد
       </q-card-section>
     </q-card>
-    <q-markup-table
+    <div
       v-if="(considerActiveCategory && source.in_active_category) || !considerActiveCategory"
-      wrap-cells
-      separator="none"
-      class="question-table"
+      class="question-box"
       :class="{ 'current-question': this.currentQuestion.id === source.id, ltr: isLtrQuestion}"
     >
-      <thead>
-      <tr>
-        <th class="table-head">
-          <p
-            :id="'question' + source.id"
-            class="question-body"
-            :class="{ ltr: isRtl }"
-          >
-<!--            {{source.order + ') ' + source.statement}}-->
-                        <vue-katex
-                          :input="source.order + ') ' + source.statement"
-                        />
-          </p>
-          <div
-            class="question-icons"
-            :style="{ float: isRtlString ? 'left' : 'right' }"
-          >
-              <q-btn
-                v-if="getChoiceStatus() !== 'o'"
-                text-color="grey"
-                icon="mdi-checkbox-blank-circle-outline"
-                flat
-                fab-mini
-                @click="changeStatus(source.id, 'o')"
-              />
-              <q-btn
-                v-else
-                icon="mdi-checkbox-blank-circle"
-                text-color="yellow"
-                flat
-                fab-mini
-                @click="changeStatus(source.id, 'o')"
-              />
-              <q-btn
-                v-if="getChoiceStatus() === 'x'"
-                text-color="red"
-                icon="mdi-close"
-                flat
-                fab-mini
-                @click="changeStatus(source.id ,'x')"
-              />
-              <q-btn
-                v-else
-                text-color="grey"
-                icon="mdi-close"
-                flat
-                fab-mini
-                @click="changeStatus(source.id ,'x')"
-              />
-              <q-btn
-                v-if="getChoiceBookmark()"
-                text-color="blue"
-                icon="mdi-bookmark"
-                flat
-                fab-mini
-                @click="changeBookmark(source.id)"
-              />
-              <q-btn
-                v-else
-                text-color="grey"
-                icon="mdi-bookmark-outline"
-                flat
-                fab-mini
-                @click="changeBookmark(source.id)"
-              />
-          </div>
-        </th>
-      </tr>
-      </thead>
-      <tbody class="table-body">
-      <tr class="choices q-tr--no-hover">
-        <td
+      <div class="question-head">
+        <p
+          :id="'question' + source.id"
+          class="question-body"
+          :class="{ ltr: isRtl }"
+        >
+          <vue-katex
+            :input="source.order + ') ' + source.statement"
+          />
+        </p>
+        <div
+          class="question-icons"
+          :style="{ float: isRtlString ? 'left' : 'right' }"
+        >
+          <q-btn
+            v-if="getChoiceStatus() !== 'o'"
+            text-color="grey"
+            icon="mdi-checkbox-blank-circle-outline"
+            flat
+            fab-mini
+            @click="changeStatus(source.id, 'o')"
+          />
+          <q-btn
+            v-else
+            icon="mdi-checkbox-blank-circle"
+            text-color="yellow"
+            flat
+            fab-mini
+            @click="changeStatus(source.id, 'o')"
+          />
+          <q-btn
+            v-if="getChoiceStatus() === 'x'"
+            text-color="red"
+            icon="mdi-close"
+            flat
+            fab-mini
+            @click="changeStatus(source.id ,'x')"
+          />
+          <q-btn
+            v-else
+            text-color="grey"
+            icon="mdi-close"
+            flat
+            fab-mini
+            @click="changeStatus(source.id ,'x')"
+          />
+          <q-btn
+            v-if="getChoiceBookmark()"
+            text-color="blue"
+            icon="mdi-bookmark"
+            flat
+            fab-mini
+            @click="changeBookmark(source.id)"
+          />
+          <q-btn
+            v-else
+            text-color="grey"
+            icon="mdi-bookmark-outline"
+            flat
+            fab-mini
+            @click="changeBookmark(source.id)"
+          />
+        </div>
+      </div>
+      <q-list class="choices-box row">
+        <q-item
           v-for="(choice, index) in source.choices.list"
           :key="choice.id"
-          ref="choices"
-          class="choice col-md-3"
-          :class="{active: getAnsweredChoiceId() === choice.id, ltr: isRtl}"
-          @click="clickOnAnswer({ questionId: source.id, choiceId: choice.id})"
+          class="choices"
+          :class="choiceClass"
         >
-<!--          <div-->
-<!--            v-html="choiceNumber[index] + choice.title"-->
-<!--          />-->
-                    <vue-katex
-                      :input="(choiceNumber[index]) + choice.title"
-                      :ltr="isLtrQuestion"
-                    />
-        </td>
-      </tr>
-      </tbody>
-    </q-markup-table>
+          <q-item-section
+            ref="choices"
+            class="choice"
+            :class="{active: getAnsweredChoiceId() === choice.id, ltr: isRtl}"
+            @click="clickOnAnswer({ questionId: source.id, choiceId: choice.id})"
+          >
+           <div class="choice-inside">
+             <q-icon
+               class="check-icon col"
+               color="green"
+               size="20px"
+               name="check"
+             />
+             <vue-katex
+               :input="(choiceNumber[index]) + choice.title"
+               :ltr="isLtrQuestion"
+             />
+           </div>
+          </q-item-section>
+        </q-item>
+      </q-list>
+    </div>
   </div>
 </template>
 
@@ -138,11 +139,11 @@ export default {
       type: Boolean,
       default: true
     },
-    questionsColumn: { // here is: {uid: 'unique_1', text: 'abc'}
-      default () {
-        return null
-      }
-    },
+    // questionsColumn: { // here is: {uid: 'unique_1', text: 'abc'}
+    //   default () {
+    //     return null
+    //   }
+    // },
     source: { // here is: {uid: 'unique_1', text: 'abc'}
       default () {
         return {}
@@ -160,6 +161,8 @@ export default {
         3: '4) '
       }
     }
+  },
+  created () {
   },
   computed: {
     isLtrQuestion () {
@@ -179,20 +182,23 @@ export default {
       const persianRegex = /[\u0600-\u06FF]/
       return string.match(persianRegex)
     },
+    windowSize () {
+      return this.$store.getters['AppLayout/windowSize']
+    },
     choiceClass () {
       const source = this.source
       const largestChoice = this.getLargestChoice(source.choices)
-      const largestChoiceWidth = this.questionsColumn.clientWidth / largestChoice
+      const largestChoiceWidth = this.windowSize.x / largestChoice
       if (largestChoiceWidth < 12) {
-        return 12
+        return 'col-md-12'
       }
       if (largestChoiceWidth < 24) {
-        return 6
+        return 'col-md-6'
       }
       if (largestChoiceWidth < 48) {
-        return 3
+        return 'col-md-3'
       }
-      return 3
+      return 'col-md-3'
     }
   },
   mounted () {
@@ -290,12 +296,12 @@ export default {
       background-color: #fb8c00;
     }
   }
-  .question-table {
+  .question-box {
     padding: 10px 10px 10px 30px;
     &.current-question {
       background-color: #fffaee;
     }
-    .table-head{
+    .question-head{
       display: flex;
       flex-direction: row;
       justify-content: space-between;
@@ -310,43 +316,40 @@ export default {
         justify-content: space-around;
       }
     }
-    .table-body{
+    .choices-box{
       .choices {
         display: flex;
-        flex-direction: column;
+        flex-direction: row;
         .choice{
-         height: auto;
+          display: flex;
+          flex-direction: row;
+          height: auto;
           cursor: pointer;
           transition: all ease-in-out 0.3s;
           padding: 0;
+          .choice-inside{
+            display: flex;
+            flex-direction: row;
+            width: 100%;
+          }
           &:hover {
             background: #e1e1e1;
           }
           &.active{
-            &:before {
-              content: "\F012C";
-              display: inline-block;
-              font: normal normal normal 24px/1 "Material Design Icons";
-              text-rendering: auto;
-              line-height: inherit;
-              -webkit-font-smoothing: antialiased;
-              -moz-osx-font-smoothing: grayscale;
-              margin-left: 10px;
-              color: #4caf50;
-              font-size: 20px;
+            .check-icon{
+              display: block;
             }
+          }
+          .check-icon{
+            display: none;
           }
         }
       }
     }
-    &.q-table__card {
-      box-shadow: none;
-      border-radius: 0;
-    }
   }
   .ltr {
     direction: rtl;
-    &.question-table{
+    &.question-box{
       padding: 10px 20px;
     }
     &.choice{
@@ -362,8 +365,8 @@ export default {
 
 <style lang="scss">
 .question-field{
-  .question-table{
-    .table-head{
+  .question-box{
+    .question-head{
       .question-icons{
         .q-btn--fab-mini {
           padding: 0;

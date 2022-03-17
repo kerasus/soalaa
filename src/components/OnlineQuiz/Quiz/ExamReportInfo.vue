@@ -4,6 +4,18 @@
       <div class="col-6">
         <div class="row">
           <div class="col-12">
+            <div class="row justify-end">
+              <q-btn
+                class="q-mx-sm float-right"
+                round
+                dark-percentage
+                color="primary"
+                @click= this.$router.go(-1)
+                icon="isax:arrow-left-2"
+              />
+            </div>
+          </div>
+          <div class="col-12">
             <q-input
               v-model="exam.report_config.maximum_question_answered"
               type="number"
@@ -93,9 +105,13 @@ export default {
     items: [],
     loading: true,
     examItem: new Exam(),
-    examId: null
+    examId: null,
+    examTitle: null + 'ویرایش'
   }),
   created () {
+    this.$store.commit('AppLayout/updateLastBreadcrumb', {
+      loading: true
+    })
     this.examId = this.$route.params.idd
     const that = this
     axios.get(API_ADDRESS.option.base + '?type=exam_type')
@@ -123,7 +139,12 @@ export default {
         this.$store.dispatch('loading/overlayLoading', true)
       }
     },
-
+    addBreadcrumb () {
+      this.$store.commit('AppLayout/updateLastBreadcrumb', {
+        loading: false,
+        title: 'ویرایش ' + this.examTitle
+      })
+    },
     getExam (id) {
       this.$store.dispatch('loading/linearLoading', true)
       const that = this
@@ -132,6 +153,12 @@ export default {
           that.examList = new ExamList(response.data.data)
           that.exam = new Exam(that.examList.list.find(item => item.id === id))
           that.$store.dispatch('loading/linearLoading', false)
+          response.data.data.forEach(item => {
+            if (item.id === that.$route.params.id) {
+              that.examTitle = item.title
+            }
+          })
+          that.addBreadcrumb()
         })
     },
     save () {

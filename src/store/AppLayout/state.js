@@ -21,11 +21,9 @@ export default function () {
     },
     appLayout: {},
     breadcrumbs: {
-      visible: '',
+      visible: true,
       loading: false,
       path: [
-        {
-        }
       ]
     }
   }
