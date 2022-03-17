@@ -31,7 +31,7 @@
             dark
           >
             <q-toolbar-title v-if="selectedSubCategory">
-              {{ $route.params.quizTitle + ': ' + selectedSubCategory.title }}
+              {{quizTitle + ': ' + selectedSubCategory.title }}
             </q-toolbar-title>
 
             <q-space />
@@ -131,27 +131,34 @@
 
 import { QuestSubcategoryList } from 'src/models/QuestSubcategory'
 import API_ADDRESS from 'src/api/Addresses'
+import { mixinGetQuizData } from 'src/mixin/Mixins'
 
 export default {
   name: 'SetVideo',
   data: () => {
     return {
+      quizTitle: '',
       subCategoriesList: new QuestSubcategoryList(),
       loading: true,
       selectedSubCategory: null,
       videos: []
     }
   },
-  watch: {
-
-  },
+  mixins: [mixinGetQuizData],
   mounted () {
     this.loadSubcategories()
   },
   created () {
     this.loading = true
+    this.getQuizTitle()
   },
   methods: {
+    async getQuizTitle () {
+      const res = await this.getQuizData(this.$route.params.examId)
+      if (res.data.data) {
+        this.quizTitle = res.data.data.title
+      }
+    },
     getCurrentVideos () {
       this.$axios.get(API_ADDRESS.exam.getAnalysisVideo(this.$route.params.examId))
         .then(response => {
@@ -182,13 +189,7 @@ export default {
       this.videos.push('')
     },
     goBack () {
-      this.$router.push({
-        name: 'Admin.Exam.Lessons',
-        params: {
-          quizId: this.$route.params.examId,
-          quizTitle: this.$route.params.quizTitle
-        }
-      })
+      this.$router.go(-1)
     },
     removeVideo (index) {
       this.videos.splice(index, 1)

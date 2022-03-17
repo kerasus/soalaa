@@ -25,6 +25,19 @@
     </template>
     <template #content>
       <div class="content-inside">
+        <q-dialog v-model="confirmDialogData.show" persistent>
+          <q-card class="q-pa-md q-pb-none">
+            <q-card-section >
+              <q-icon name="warning" color="warning" size="2rem" />
+              {{confirmDialogData.message}}
+            </q-card-section>
+            <q-separator />
+            <q-card-actions align="right" class="q-pb-none">
+              <q-btn color="green" flat  @click="confirmDialogData.callback(true)" v-close-popup >بله</q-btn>
+              <q-btn color="red" flat  @click="confirmDialogData.callback(false)" v-close-popup >خیر</q-btn>
+            </q-card-actions>
+          </q-card>
+        </q-dialog>
         <router-view v-slot="{ Component }">
           <keep-alive :exclude="['konkoorView', 'alaaView']">
             <component :is="Component" :key="$route.fullPath" />
@@ -36,7 +49,6 @@
 </template>
 
 <script>
-
 import SideMenuDashboard from 'components/Menu/SideMenu/SideMenu-dashboard'
 import sideMenuMapOfQuestions from 'components/Menu/SideMenu/SideMenu_MapOfQuestions'
 import { User } from 'src/models/User'
@@ -69,6 +81,11 @@ export default {
         layoutLeftDrawerCustomClass: 'main-layout-left-drawer',
         layoutPageContainerCustomClass: 'main-layout-container'
       }
+    }
+  },
+  computed: {
+    confirmDialogData () {
+      return this.$store.getters['AppLayout/confirmDialog']
     }
   },
   created () {

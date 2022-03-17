@@ -3,10 +3,8 @@ export default function () {
     drawer: false,
     confirmDialog: {
       show: false,
-      message: 'اطمینان دارید؟',
-      button: {
-        no: 'خیر',
-        yes: 'بله'
+      message: '',
+      buttons: {
       }
     },
     windowSize: {
