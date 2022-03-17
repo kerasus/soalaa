@@ -72,7 +72,7 @@
 import { Question } from 'src/models/Question'
 // ToDo eslint
 // eslint-disable-next-line camelcase
-import question_field from 'components/Question/questionField'
+import question_field from 'components/Question/QuestionPage/QuestionField.vue'
 
 export default {
   name: 'MbtiQuestionLayout',

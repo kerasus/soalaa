@@ -168,7 +168,6 @@ export default {
   },
   data () {
     return {
-      fucking: '',
       selectedAuthors: [],
       authors: [
         {
@@ -254,9 +253,7 @@ export default {
       mode: ''
     }
   },
-  updated () {
-
-  },
+  updated () {},
   unmounted () {
     window.onbeforeunload = null
   },
@@ -366,19 +363,78 @@ export default {
     },
 
     navBarAction_save () {
-      this.$refs.qlayout.getContent()
+      if (this.$refs.qlayout.getContent() === false) {
+        return
+      }
+      this.updateStatementPhotos()
+    },
+
+    updateStatementPhotos () {
+      this.setCurrentQuestionExams()
+      this.$store.commit('AppLayout/updateOverlay', { show: true, loading: true, text: 'کمی صبر کنید...' })
+      const formData = new FormData()
+      let needUpdate = false
+      this.currentQuestion.statement_photo.forEach((item, key) => {
+        if (typeof item !== 'string') {
+          formData.append('files[' + key + ']', item)
+          needUpdate = true
+        }
+      })
+      if (needUpdate) {
+        axios.post('/3a/api/v1/question/statement_photo/' + this.currentQuestion.id, formData)
+          .then((response) => {
+            this.currentQuestion = new Question(response.data.data)
+            this.$store.commit('AppLayout/updateOverlay', { show: false, loading: false, text: '' })
+            this.updateAnswersPhotos()
+          }).catch(() => {
+            this.$store.commit('AppLayout/updateOverlay', { show: false, loading: false, text: '' })
+          })
+      } else {
+        this.updateAnswersPhotos()
+        this.$store.commit('AppLayout/updateOverlay', { show: false, loading: false })
+      }
+    },
+
+    updateAnswersPhotos () {
+      this.setCurrentQuestionExams()
+      this.$store.commit('AppLayout/updateOverlay', { show: true, loading: true, text: 'کمی صبر کنید...' })
+      const formData = new FormData()
+      let needUpdate = false
+      this.currentQuestion.answer_photos.forEach((item, key) => {
+        if (typeof item !== 'string') {
+          needUpdate = true
+          formData.append('files[' + key + ']', item)
+        }
+      })
+      if (needUpdate) {
+        axios.post('/3a/api/v1/question/answer_photo/' + this.currentQuestion.id, formData)
+          .then((response) => {
+            this.currentQuestion = new Question(response.data.data)
+            this.$store.commit('AppLayout/updateOverlay', { show: false, loading: false, text: '' })
+            this.save()
+          }).catch(() => {
+            this.$store.commit('AppLayout/updateOverlay', { show: false, loading: false, text: '' })
+          })
+      } else {
+        this.save()
+        this.$store.commit('AppLayout/updateOverlay', { show: false, loading: false, text: '' })
+      }
+    },
+
+    save () {
       const currentQuestion = this.currentQuestion
       currentQuestion.type_id = this.optionQuestionId
-      // currentQuestion.update(API_ADDRESS.question.updateQuestion(currentQuestion.id))
-      //   .then((res) => {
-      //     console.log('res in navbar save action ', res)
-      //     this.$q.notify({
-      //       message: 'ویرایش با موفقیت انجام شد',
-      //       color: 'green',
-      //       icon: 'thumb_up'
-      //     })
-      //     this.$router.push({ name: 'Admin.Question.Show', params: { question_id: this.$route.params.question_id } })
-      //   })
+      currentQuestion.update(API_ADDRESS.question.updateQuestion(currentQuestion.id))
+        .then(() => {
+          this.$notify({
+            group: 'notifs',
+            title: 'توجه',
+            text: 'ویرایش با موفقیت انجام شد',
+            type: 'success'
+          })
+          this.$store.commit('AppLayout/updateOverlay', { show: false, loading: false, text: '' })
+          this.$router.push({ name: 'question.show', params: { question_id: this.$route.params.question_id } })
+        })
     },
 
     navBarAction_cancel () {
@@ -434,12 +490,10 @@ export default {
         item.state = item.title === title
       })
     },
-
     getPageStatus () {
       const target = this.pageStatuses.find(item => item.state)
       return (target) ? target.title : false
     },
-
     getQuestionStatus () {
       const that = this
       const list = this.questionStatuses.list
@@ -449,7 +503,8 @@ export default {
           that.questionStatusId_draft = list.find(item => item.title === 'draft').id
           that.questionStatusId_pending_to_type = list.find(item => item.title === 'pending_to_type').id
         })
-        .catch(() => {
+        .catch(function (error) {
+          console.log(error)
         })
     },
 
@@ -656,7 +711,6 @@ export default {
         .then((response) => {
           if (response.data.data) {
             that.currentQuestion = new Question(response.data.data)
-            that.fucking = 'new text'
             if (that.currentQuestion.type.value === 'psychometric') {
               if (that.getPageStatus() === 'Edit') {
                 that.$router.push({ name: 'question.mbti.edit', params: { question_id: that.$route.params.question_id } })
@@ -665,7 +719,6 @@ export default {
               }
             }
             that.temp = that.currentQuestion
-            that.testMitra = 'hi babe'
             that.checkTextCondition()
             that.getLogs()
             that.trueChoiceIndex = that.currentQuestion.choices.list.findIndex((item) => item.answer)
@@ -686,6 +739,7 @@ export default {
 
     updateQuestion (eventData) {
       this.currentQuestion = new Question(eventData)
+      console.log('question updated', this.currentQuestion, eventData)
     //  window.app.set(this, 'currentQuestion', new Question(eventData))
     },
 
