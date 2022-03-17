@@ -175,8 +175,11 @@ const API_ADDRESS = {
   },
   tree: {
     base: treeServer + '/tree',
-    getNode (nodeId) {
+    getNodeById (nodeId) {
       return treeServer + '/tree/' + nodeId
+    },
+    getNodeByType (nodeType) {
+      return treeServer + '/tree?type=' + nodeType
     }
   }
 }
