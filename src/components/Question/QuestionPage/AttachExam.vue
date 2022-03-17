@@ -4,15 +4,34 @@
     <div class="details-container-1 default-details-container row">
       <div class="detail-box detail-box-first" :class="[imgPanelVisibility ? 'col-6' : 'col-3']">
         <div class="detail-box-title">نام آزمون</div>
-        <q-select borderless v-model="model" :options="options"/>
+        <q-select
+          borderless
+          v-model="selectedExam"
+          :options="exams.list"
+          option-value="exam_id"
+          option-label="title"
+          :rules="selectorRules"
+        />
       </div>
       <div class="detail-box" :class="[imgPanelVisibility ? 'col-6' : 'col-3']">
         <div class="detail-box-title">درس</div>
-        <q-select borderless v-model="model" :options="options"/>
+        <q-select
+          borderless
+          v-model="selectedLesson"
+          :options="lessons.list"
+          option-value="id"
+          option-label="title"
+          :rules="selectorRules"
+        />
       </div>
       <div class="detail-box" :class="[imgPanelVisibility ? 'col-6' : 'col-3']">
         <div class="detail-box-title">ترتیب</div>
-        <q-input borderless v-model="order" type="number" />
+        <q-input
+          borderless
+          v-model="order"
+          type="number"
+          :rules="numberRules"
+        />
       </div>
 <!--      <div class="detail-box detail-box-last" :class="[imgPanelVisibility ? 'col-6' : 'col-3']">-->
 <!--        <div class="detail-box-title">درجه سختی</div>-->
@@ -27,7 +46,19 @@
           @click="attach"
         ></q-btn>
       </div>
-<!--      <q-btn icon="mdi-plus" ></q-btn>-->
+    </div>
+    <div v-if="exams" :key="question.exams.list.length">
+      <div v-for="(item, index) in question.exams.list" :key="index" class="flex row">
+        <div class="detail-box detail-box-first" :class="[imgPanelVisibility ? 'col-6' : 'col-3']">
+          {{ item.title }}
+        </div>
+        <div class="detail-box detail-box-first" :class="[imgPanelVisibility ? 'col-6' : 'col-3']">
+          {{ getLessonById(item.sub_category_id).title }}
+        </div>
+        <div class="detail-box detail-box-last" :class="[imgPanelVisibility ? 'col-6' : 'col-3']">
+          {{ item.order }}
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -53,10 +84,6 @@ export default {
     lessons: { // possible removal for attach exam
       type: QuestSubcategoryList,
       default: new QuestSubcategoryList()
-    },
-    value: {
-      type: Question,
-      default: new Question()
     }
   },
   inject: {
@@ -65,23 +92,39 @@ export default {
       default: new Question()
     }
   },
+  created () {},
   data () {
     return {
-      model: '',
-      options: [
-        'سه‌آ - دی ماه 1402', 'سه‌آ - دی ماه 1403', 'سه‌آ - دی ماه 1404', 'سه‌آ - دی ماه 1405', 'سه‌آ - دی ماه 1406'
-      ],
       text: '',
       draftBtnLoading: false,
       saveBtnLoading: false,
       selectedExam: null,
       selectedLesson: null,
-      order: null
+      order: null,
+      numberRules: [
+        v => v !== null || 'پر کردن این فیلد الزامی است.',
+        v => Number.isInteger(parseInt(v)) || 'یک عدد وارد کنید.'
+      ],
+      selectorRules: [
+        v => v !== null || 'پر کردن این فیلد الزامی است.'
+      ]
     }
+  },
+  mounted () {
+    this.$nextTick(() => {
+      this.question.exams.loading = false
+    })
   },
   methods: {
     attach () { // possible removal for attach exam
-      const question = this.value
+      console.log('this.numberRules', this.numberRules)
+      // this.numberRules.validate()
+      // this.selectorRules.validate()
+      // if (this.numberRules.hasError || this.selectorRules.hasError) {
+      //   // form has error
+      //   return
+      // }
+      const question = this.question
       const exam = this.selectedExam
       exam.sub_category_id = this.selectedLesson.id
       exam.order = this.order
@@ -89,7 +132,7 @@ export default {
         question.exams = new ExamList()
       }
       question.exams.list.push(new Exam(exam))
-      this.$emit('update:modelValue', question)
+      this.$emit('examAttached', question)
     }
   },
   computed: {
@@ -121,7 +164,7 @@ export default {
   }
   .detail-box-last-of-row-1 {
     display: flex ;
-    align-items: end ;
+    align-items: flex-end;
     margin-bottom: 2px ;
   }
 

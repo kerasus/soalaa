@@ -14,7 +14,7 @@ class QuestionType extends Model {
       },
       {
         key: 'type',
-        default: null
+        default: 'question_type'
       },
       {
         key: 'value',
