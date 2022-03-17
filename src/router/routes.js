@@ -4,7 +4,7 @@ const routes = [
   {
     path: '/',
     component: () => import('layouts/MainLayout.vue'),
-    breadcrumbs: { title: 'خانه', icon: 'home', route: { name: 'dashboard' } },
+    breadcrumbs: { title: 'خانه', loading: false, icon: 'home', route: { name: 'dashboard' } },
     children: [
       {
         path: '',
@@ -25,21 +25,22 @@ const routes = [
           {
             path: 'exam',
             component: () => import('layouts/AdminLayout.vue'),
-            breadcrumbs: { title: 'آزمون', color: '', route: { name: 'Admin.Exam.Index' } },
+            breadcrumbs: { title: 'آزمون', color: '', loading: false, route: { name: 'Admin.Exam.Index' } },
             meta: {
               middlewares: [auth]
             },
             children: [
-              { name: 'Admin.Exam.Index', path: '', component: () => import('pages/Admin/exam/index'), breadcrumbs: { title: 'لیست آزمون ها' } },
+              { name: 'Admin.Exam.Index', path: '', component: () => import('pages/Admin/exam/index'), breadcrumbs: { title: 'لیست آزمون ها', loading: false } },
               { name: 'Admin.Exam.Create', path: 'create', component: () => import('pages/Admin/exam/Create') },
               { name: 'Admin.Exam.Show', path: ':id', component: () => import('pages/Admin/exam/Show'), breadcrumbs: { title: 'مشاهده آزمون' } },
               { name: 'Admin.Exam.Edit', path: ':id/edit', component: () => import('pages/Admin/exam/Edit'), breadcrumbs: { title: 'ویرایش آزمون' } },
               { name: 'Admin.Exam.Upload', path: ':id/upload', component: () => import('pages/Admin/exam/Upload') },
               { name: 'Admin.Exam.AllResults', path: 'results/:id', component: () => import('pages/Admin/exam/results') },
               { name: 'Admin.Exam.Coefficient.Edit', path: ':id/coefficient/edit', component: () => import('src/pages/Admin/subGroup/editCoefficients.vue') },
-              { name: 'Admin.Exam.Report.Edit', path: ':id/edit-exam-report', component: () => import('pages/Admin/exam/edit/editExamReport') },
+              { name: 'Admin.Exam.Report.Edit', path: ':id/edit-exam-report', component: () => import('pages/Admin/exam/edit/editExamReport'), breadcrumbs: { title: 'ویرایش کارنامه', loading: false } },
               { name: 'Admin.Exam.Lessons', path: 'lessons/:quizId/:quizTitle', component: () => import('src/pages/Admin/exam/lessons.vue') },
               { name: 'Admin.Exam.Lessons.List', path: 'lessons/:quizId/chart', component: () => import('src/pages/Admin/exam/lessonsChart.vue') },
+              { name: 'Admin.Exam.video.set', path: '/video/set/:examId/:subcategory_id/:quizTitle', component: () => import('src/pages/Admin/exam/VideoSet/SetVideo.vue') },
 
               {
                 path: '/results/mbti_bartle/:exam_id/:user_exam_id',

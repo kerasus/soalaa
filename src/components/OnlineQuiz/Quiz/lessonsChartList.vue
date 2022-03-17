@@ -5,17 +5,12 @@
         <span>{{ $route.params.quizTitle }}</span>
         <q-btn
           class="q-mx-sm float-right"
-          size="10px"
           round
           dark-percentage
           color="primary"
-          @click="goBack"
-        >
-          <q-icon
-            name="mdi-chevron-left"
-            size="sm"
-          />
-        </q-btn>
+          @click= this.$router.go(-1)
+          icon="isax:arrow-left-2"
+        />
       </div>
     </div>
     <div class="col-12">
@@ -97,9 +92,6 @@ export default {
     this.loadLessons()
   },
   methods: {
-    goBack () {
-      this.$router.push('/admin/exam')
-    },
     async loadLessons () {
       this.lessonsList.loading = true
       try {

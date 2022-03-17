@@ -24,6 +24,9 @@ export function breadcrumbs (state) {
 export function breadcrumbLoading (state) {
   return state.breadcrumbs.loading
 }
+export function breadcrumbsVisibility (state) {
+  return state.breadcrumbs.visible
+}
 
 export function appLayout (state) {
   return state.appLayout
