@@ -129,7 +129,7 @@ const API_ADDRESS = {
       }
     },
     base: lumenServer + '/exam-question/attach',
-    createAndAttach: () => lumenServer + '/exam-question/attach/',
+    createAndAttach: () => lumenServer + '/attacexam-question/h/',
     create: lumenServer + '/question',
     attachSubCategoryToQuestion: lumenServer + '/exam-question/attach/sub-category',
     updateQuestion (questionId) {
@@ -175,8 +175,11 @@ const API_ADDRESS = {
   },
   tree: {
     base: treeServer + '/tree',
-    getNode (nodeId) {
+    getNodeById (nodeId) {
       return treeServer + '/tree/' + nodeId
+    },
+    getNodeByType (nodeType) {
+      return treeServer + '/tree?type=' + nodeType
     }
   }
 }
