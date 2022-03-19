@@ -1,98 +1,95 @@
 <template>
-  <q-layout>
-  <q-page>
-    <q-tree
-      :nodes="simple"
-      node-key="uid"
-      ref="tree"
-      label-key="name"
-      @lazy-load="onLazyLoadTree"
+  <q-btn class="q-ma-lg" label="add node" color="green" @click="createNode('6232ecfb2012ae19f05331f2', 'node 2.2', 2)"/>
+  <q-btn class="q-ma-lg" label="get node" color="orange" @click="getNode('6232ecfb2012ae19f05331f2')"/>
+  <q-tree
+    :nodes="nodes"
+    node-key="id"
+    ref="tree"
+    label-key="title"
+    @lazy-load="onLazyLoadTree"
+  >
+    <template v-slot:default-header="prop ">
+      <!--        <q-icon :name= "prop.node.icon "></q-icon>-->
+      {{ prop.node.title }}
+      <q-icon @click.stop @keypress.stop class="edit-btn " name="edit " @click="openEditMenu(prop.node) "/>
+    </template>
+  </q-tree>
+  <q-dialog v-model="editDialog " persistent>
+    <q-card class="q-pa-md ">
+      <q-btn flat icon="close " color="red " v-close-popup @click="editDialog = false "/>
+      <q-tabs
+        v-model="tab "
+        narrow-indicator
+        dense
+        align="justify "
+      >
+        <q-tab class="text-purple " name="edit " icon="edit " label="ویرایش "/>
+        <q-tab class="text-orange " name="addNew " icon="add " label="اضافه کردن گره جدید "/>
+        <q-tab class="text-red " name="delete " icon="delete " label="حذف "/>
+      </q-tabs>
+      <q-tab-panels v-model="tab " animated>
+        <q-tab-panel name="edit ">
+          <q-input
+            filled
+            v-model="newName "
+            label="نام جدید "
+            lazy-rules
+            :rules="[ val => val && val.length > 0 || 'Please type something'] "
+          />
+          <q-btn
+            text
+            color="green "
+            :loading="loading "
+            @click="saveClicked() "
+          >
+            ثبت
+          </q-btn>
+        </q-tab-panel>
 
-    >
-      <template v-slot:default-header="prop">
-        <!--        <q-icon :name="prop.node.icon"></q-icon>-->
-        {{ prop.node.name }}
-        <q-icon  @click.stop @keypress.stop class="edit-btn" name="edit" @click="openEditMenu(prop.node)" />
-      </template>
-    </q-tree>
-    <q-dialog v-model="editDialog" persistent>
-      <q-card class="q-pa-md">
-        <q-btn flat icon="close" color="red" v-close-popup @click="editDialog = false"/>
-        <q-tabs
-          v-model="tab"
-          narrow-indicator
-          dense
-          align="justify"
-        >
-          <q-tab class="text-purple" name="edit" icon="edit" label="ویرایش" />
-          <q-tab class="text-orange" name="addNew" icon="add" label="اضافه کردن گره جدید" />
-          <q-tab class="text-red" name="delete" icon="delete" label="حذف" />
-        </q-tabs>
-        <q-tab-panels v-model="tab" animated>
-          <q-tab-panel name="edit">
-            <q-input
-              filled
-              v-model="newName"
-              label="نام جدید"
-              lazy-rules
-              :rules="[ val => val && val.length > 0 || 'Please type something']"
-            />
-            <q-btn
-              text
-              color="green"
-              :loading="loading"
-              @click="saveClicked()"
-            >
-              ثبت
-            </q-btn>
-          </q-tab-panel>
-
-          <q-tab-panel name="addNew">
-            <q-input
-              filled
-              v-model="newName"
-              label="نام جدید"
-              lazy-rules
-              :rules="[ val => val && val.length > 0 || 'Please type something']"
-            />
-            <q-btn
-              text
-              color="green"
-              :loading="loading"
-              @click="addClicked()"
-            >
-              اضافه شود
-            </q-btn>
-          </q-tab-panel>
-          <q-tab-panel name="delete">
-            <div class="text-subtitle1">آیا از حذف گرۀ " {{ selectedNode.name }}" اطمینان دارید؟</div>
-            <q-btn
-              color="red"
-              :loading="loading"
-              @click="deleteNode"
-              class="q-mt-md"
-            >
-              حذف
-            </q-btn>
-          </q-tab-panel>
-        </q-tab-panels>
-      </q-card>
-    </q-dialog>
-  </q-page>
-  </q-layout>
+        <q-tab-panel name="addNew ">
+          <q-input
+            filled
+            v-model="newName "
+            label="نام جدید "
+            lazy-rules
+            :rules="[ val => val && val.length > 0 || 'Please type something'] "
+          />
+          <q-btn
+            text
+            color="green "
+            :loading="loading "
+            @click="addClicked() "
+          >
+            اضافه شود
+          </q-btn>
+        </q-tab-panel>
+        <q-tab-panel name="delete ">
+          <div class="text-subtitle1 ">آیا از حذف گرۀ " {{ selectedNode.name }} " اطمینان دارید؟</div>
+          <q-btn
+            color="red "
+            :loading="loading "
+            @click="deleteNode "
+            class="q-mt-md "
+          >
+            حذف
+          </q-btn>
+        </q-tab-panel>
+      </q-tab-panels>
+    </q-card>
+  </q-dialog>
 </template>
 
 <script>
 import { defineComponent } from 'vue'
 import MontaData from 'assets/MontaData'
+import API_ADDRESS from 'src/api/Addresses'
 
 export default defineComponent({
   name: 'PageIndex',
-  created () {
-    this.changeTreeDate()
-  },
   data: () => {
     return {
+      nodes: [],
+      copy: {},
       simple: [],
       tab: 'edit',
       loading: false,
@@ -101,6 +98,13 @@ export default defineComponent({
       selectedNode: {},
       editDialog: false
     }
+  },
+  created () {
+    this.getTopicList('6232e6482012ae19f05331d9')
+    // this.getTopicList('6231a80df413466ba80fea05')
+    // this.createNode()
+    // this.getTopicList('test')
+    // this.changeTreeDate()
   },
   methods: {
     openEditMenu (node) {
@@ -118,16 +122,11 @@ export default defineComponent({
       if (arr.length > 0) {
         const parentUid = arr.join('-')
         const getParentNode = await this.$refs.tree.getNodeByKey(parentUid)
-        console.log('main', this.simple, nodeUid)
-        console.log('parentUid :', parentUid)
-        console.log('nodeUid :', nodeUid)
-        console.log('getParentNode :', getParentNode)
         if (getParentNode) {
           getParentNode.children = getParentNode.children.filter(node => node.uid !== nodeUid)
         }
         this.editDialog = false
       } else {
-        console.log(this.simple, nodeUid)
         this.simple.filter(node => node.uid !== nodeUid)
       }
       this.editDialog = false
@@ -135,7 +134,6 @@ export default defineComponent({
     async addClicked () {
       const uid = this.selectedNode.uid
       const getNode = this.$refs.tree.getNodeByKey(uid)
-      // console.log('get node :', getNode)
       const arr = uid.split(':')
       await arr.pop()
       const newId = Date.now()
@@ -166,6 +164,16 @@ export default defineComponent({
         }, 2000)
       })
     },
+    createNode (id, title, order) {
+      // parent =>id = '6232e6482012ae19f05331d9'... children =>
+      // type = 'test'
+      this.$axios.post(API_ADDRESS.tree.base, { parent_id: id, title: title, order: order })
+        .then(response => {
+          console.log('createNode', response)
+        }).catch(err => {
+          console.log(err)
+        })
+    },
     async changeTreeDate () {
       this.simple = []
       // level -> grade -> major -> moduleGroup -> subModuleGroup -> module -> topic
@@ -173,7 +181,6 @@ export default defineComponent({
       await this.setGrade()
       await this.setMajor()
       await this.setModule()
-      console.log('finish')
       // this.setAllTopics()
     },
     setLevel (levelLevel) {
@@ -416,15 +423,93 @@ export default defineComponent({
         })
       })
     },
-    getTopicList (moduleId) {
-      return MontaData.topic.filter(item => item.moduleId === moduleId)
+    getTopicList (id) {
+      // 6231a80df413466ba80fea05
+      // this.$axios.post(API_ADDRESS.tree.base, { parent_id: '', title: 'hi', order: 1 })
+      // typ= 'test'
+
+      // let treeData = {
+      //   id: '6228770896b7db62fa11ba10',
+      //   title: '2شیمی',
+      //   parent: {
+      //     id: '622763df96b7db62fa11b9fd',
+      //     title: '1شیمی'
+      //   },
+      //   ancestors: [
+      //     {
+      //       id: '622763df96b7db62fa11b9fd',
+      //       title: '1شیمی'
+      //     }
+      //   ],
+      //   order: 14,
+      //   children: [
+      //     {
+      //       id: '6228772796b7db62fa11ba11',
+      //       title: '3شیمی',
+      //       parent: {
+      //         id: '6228770896b7db62fa11ba10',
+      //         title: '2شیمی'
+      //       },
+      //       ancestors: [
+      //         {
+      //           id: '622763df96b7db62fa11b9fd',
+      //           title: '1شیمی'
+      //         },
+      //         {
+      //           id: '6228770896b7db62fa11ba10',
+      //           title: '2شیمی'
+      //         }
+      //       ],
+      //       order: 14,
+      //       updated_at: '2022-03-09 13:15:11',
+      //       created_at: '2022-03-09 13:15:11'
+      //     },
+      //     {
+      //       id: '6228783f96b7db62fa11ba12',
+      //       title: '3شیمی',
+      //       parent: {
+      //         id: '6228770896b7db62fa11ba10',
+      //         title: '2شیمی'
+      //       },
+      //       ancestors: [
+      //         {
+      //           id: '622763df96b7db62fa11b9fd',
+      //           title: '1شیمی'
+      //         },
+      //         {
+      //           id: '6228770896b7db62fa11ba10',
+      //           title: '2شیمی'
+      //         }
+      //       ],
+      //       order: 16,
+      //       updated_at: '2022-03-09 13:19:51',
+      //       created_at: '2022-03-09 13:19:51'
+      //     }
+      //   ],
+      //   updated_at: '2022-03-09 13:14:40',
+      //   created_at: '2022-03-09 13:14:40'
+      // }
+      const treeData = { title: '', id: '', parent: null, children: [], lazy: true }
+      this.$axios.get(API_ADDRESS.tree.getNodeById(id))
+        .then(response => {
+          const apiData = response.data.data
+          console.log(apiData)
+          treeData.title = apiData.title
+          treeData.id = apiData.id
+          treeData.parent = apiData.parent
+          treeData.children = apiData.children
+          treeData.lazy = true
+          this.nodes.push(treeData)
+          this.copy = treeData
+          return this.nodes
+        }).catch(err => {
+          console.log(err)
+        })
     },
     getTreeFromTopicList (topicList, parentUid) {
       const tree = []
-      // console.log('topicList getTreeFromTopicList:',topicList)
       topicList.forEach((topic, topicIndex) => {
         if (!topic.parentTopicId) {
-          // console.log('!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1')
           topic.uid = parentUid + '-' + 'topic:' + topic.id
           topic.type = 'topic'
           topic.children = []
@@ -437,7 +522,6 @@ export default defineComponent({
       return tree
     },
     addTopicToParent (tree, childTopic) {
-      // console.log('addTopicToParent *************************************8', tree)
       tree.forEach(topicNode => {
         if (topicNode.id === childTopic.parentTopicId) {
           if (!topicNode.children) {
@@ -459,22 +543,49 @@ export default defineComponent({
       })
       return false
     },
+    addNodeToTree (node) {
+      const tree = []
+      if (node.children) {
+        if (node.children.length) {
+          console.log('sfdhyfj')
+          node.children.forEach(child => {
+            tree.push({ title: child.title, id: child.id, parent: node.id, children: [], lazy: true })
+          })
+        } else {
+          this.getTopicList(node.id)
+          console.log('lkjlkjkljkljl', this.copy)
+          tree.push(this.copy)
+        }
+      }
+      console.log('tree', tree)
+      return tree
+    },
     onLazyLoadTree ({ node, key, done, fail }) {
-      // console.log('onLazyLoadTree node :', node)
-      const topicList = this.getTopicList(node.id)
-      const tree = this.getTreeFromTopicList(topicList, node.uid)
-      done(tree)
+      const nodes = this.addNodeToTree(node)
+      console.log('done')
+      done(nodes)
+    },
+    getNode (id) {
+      this.$axios.get(API_ADDRESS.tree.getNodeById(id))
+        .then(res => {
+          console.log('getNode res', res)
+          console.log('node', this.getTopicList(id))
+        }).catch(err => {
+          console.log('getNode err', err)
+        })
     }
   }
 })
 </script>
-<style scoped lang="scss">
-.edit-btn{
+<style scoped lang='scss'>
+.edit-btn {
   color: transparent;
-  &:hover{
+
+  &:hover {
     color: #f18305;
   }
 }
+
 .active {
   display: block;
 }

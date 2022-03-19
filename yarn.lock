@@ -5650,6 +5650,11 @@ getpass@^0.1.1:
   dependencies:
     assert-plus "^1.0.0"
 
+github-markdown-css@^5.0.0:
+  version "5.1.0"
+  resolved "https://registry.yarnpkg.com/github-markdown-css/-/github-markdown-css-5.1.0.tgz#a96281cd90a8969e3c13b9d3ca6a733a523a00a6"
+  integrity sha512-QLtORwHHtUHhPMHu7i4GKfP6Vx5CWZn+NKQXe+cBhslY1HEt0CTEkP4d/vSROKV0iIJSpl4UtlQ16AD8C6lMug==
+
 glob-parent@^3.1.0:
   version "3.1.0"
   resolved "https://registry.npmjs.org/glob-parent/-/glob-parent-3.1.0.tgz"
@@ -11244,9 +11249,9 @@ vue-upload-component@^2.8.22:
   resolved "https://registry.npmjs.org/vue-upload-component/-/vue-upload-component-2.8.22.tgz"
   integrity sha512-AJpETqiZrgqs8bwJQpWTFrRg3i6s7cUodRRZVnb1f94Jvpd0YYfzGY4zluBqPmssNSkUaYu7EteXaK8aW17Osw==
 
-vue-upload-component@^3.1.2:
+vue-upload-component@^3.0.50:
   version "3.1.2"
-  resolved "https://registry.npmjs.org/vue-upload-component/-/vue-upload-component-3.1.2.tgz"
+  resolved "https://registry.yarnpkg.com/vue-upload-component/-/vue-upload-component-3.1.2.tgz#9ba050f408781b008a16cb8bfaadbcf07eab68fa"
   integrity sha512-z7/98xhNbLecTf09ZyJp0QKH6RMoVH3ojBrWYonPPHQ6qodQf0qVV81+vnB94cFVWpR/mb+F+dMN2p04K14ouw==
 
 vue3-drag-resize@^2.0.5:
