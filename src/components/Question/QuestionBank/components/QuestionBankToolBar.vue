@@ -49,12 +49,30 @@
         </div>
         <div class="col-4 question-level-box" >
         <div class="row">
-          <div class="col" >
-         <p class="question-level"> سخت</p>
-         <p class="question-level"> متوسط</p>
-         <p class="question-level">  آسان</p>
+          <div class="col-3 question-levels" >
+            <div class="row">
+              <span
+                class="question-level-circles"
+                style="background-color:red"
+              />
+              <p class="question-level"> سخت</p>
+            </div>
+            <div class="row">
+              <span
+                class="question-level-circles"
+                style="background-color:orange"
+              />
+              <p class="question-level"> متوسط</p>
+            </div>
+            <div class="row">
+              <span
+                class="question-level-circles"
+                style="background-color:deepskyblue"
+              />
+              <p class="question-level">  آسان</p>
+            </div>
           </div>
-          <div class="col" > </div>
+          <div class="col question-levels-chart" > </div>
         </div>
         </div>
         <div class="col-3 deactivate-all">
@@ -180,6 +198,25 @@ export default {
       }
     }
     .question-level-box{
+      .question-levels{
+        .question-level-circles{
+          margin-right: 5px;
+          width: 20px;
+          height: 20px;
+          border-radius: 10px;
+        }
+        .question-level{
+          width: 39px;
+          height: 24px;
+          font-style: normal;
+          font-weight: 400;
+          font-size: 14px;
+          line-height: 24px;
+          color: #23263B;
+        }
+      }
+      .question-levels-chart{
+      }
     }
     .deactivate-all {
       display: flex;
