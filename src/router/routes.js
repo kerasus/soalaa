@@ -76,7 +76,7 @@ const routes = [
               },
               {
                 path: 'create',
-                component: () => import('layouts/AdminLayout.vue'),
+                component: () => import('layouts/QuestionLayouts/CreateQLayout.vue'),
                 meta: {
                   middlewares: [auth]
                 },
@@ -84,7 +84,24 @@ const routes = [
                   {
                     path: 'text',
                     name: 'Admin.Question.Create.Text',
-                    component: () => (import('pages/Admin/Question/CreateText'))
+                    component: () => import('layouts/QuestionLayouts/CreateTextLayout.vue'),
+                    children: [
+                      {
+                        path: 'mbti',
+                        name: 'Admin.Question.Create.Text.MBTI',
+                        component: () => import('components/Question/QuestionPage/Create/textMode/questionTypes/MBTIQ/MBTIQ.vue')
+                      },
+                      {
+                        path: 'descriptive',
+                        name: 'Admin.Question.Create.Image.Descriptive',
+                        component: () => import('components/Question/QuestionPage/Create/textMode/questionTypes/DescriptiveQ/DescriptiveQ.vue')
+                      },
+                      {
+                        path: 'multipleChoice',
+                        name: 'Admin.Question.Create.Image.MultipleChoice',
+                        component: () => import('components/Question/QuestionPage/Create/textMode/questionTypes/MultipleChoiceQ/MultipleChoiceQ.vue')
+                      }
+                    ]
                   },
                   {
                     path: 'image',
@@ -94,17 +111,9 @@ const routes = [
                 ]
               },
               {
-                path: 'mbti/create',
-                name: 'Admin.Question.MBTI.Create',
-                component: () => (import('pages/Admin/Question/newMBTIpage')),
-                meta: {
-                  middlewares: [auth]
-                }
-              },
-              {
-                path: ':question_id/show',
+                path: ':question_id',
                 name: 'Admin.Question.Show',
-                component: () => (import('pages/Admin/Question/CreateNewQuestion')),
+                component: () => (import('pages/Admin/Question/Show')),
                 meta: {
                   middlewares: [auth]
                 }
@@ -112,7 +121,7 @@ const routes = [
               {
                 path: ':question_id/edit',
                 name: 'Admin.Question.Edit',
-                component: () => (import('pages/Admin/Question/CreateNewQuestion')),
+                component: () => (import('pages/Admin/Question/Edit')),
                 meta: {
                   middlewares: [auth]
                 }

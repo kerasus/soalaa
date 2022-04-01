@@ -135,7 +135,7 @@ export default {
           routeName: null,
           active: false,
           children: [
-            { displayName: 'ثبت سوال', routeName: 'Admin.Question.Create', active: false },
+            { displayName: 'ثبت سوال', routeName: 'Admin.Question.Create.Image', active: false },
             { displayName: 'کارخانه سوال', routeName: 'Admin.Question.Factory', active: false },
             { displayName: 'بانک سوال', routeName: 'Admin.Question.Bank', active: false }
           ]
