@@ -76,7 +76,8 @@ const routes = [
               },
               {
                 path: 'create',
-                component: () => import('layouts/QuestionLayouts/CreateQLayout.vue'),
+                // component: () => import('layouts/QuestionLayouts/CreateQLayout.vue'),
+                component: () => import('layouts/AdminLayout.vue'),
                 meta: {
                   middlewares: [auth]
                 },
@@ -85,21 +86,22 @@ const routes = [
                     path: 'text',
                     name: 'Admin.Question.Create.Text',
                     component: () => import('layouts/QuestionLayouts/CreateTextLayout.vue'),
+                    // component: () => import('layouts/AdminLayout.vue'),
                     children: [
                       {
                         path: 'mbti',
                         name: 'Admin.Question.Create.Text.MBTI',
-                        component: () => import('components/Question/QuestionPage/Create/textMode/questionTypes/MBTIQ/MBTIQ.vue')
+                        component: () => import('components/Question/QuestionPage/Create/textMode/questionTypes/MBTIQ/MBTIQTest.vue')
                       },
                       {
                         path: 'descriptive',
-                        name: 'Admin.Question.Create.Image.Descriptive',
-                        component: () => import('components/Question/QuestionPage/Create/textMode/questionTypes/DescriptiveQ/DescriptiveQ.vue')
+                        name: 'Admin.Question.Create.Text.Descriptive',
+                        component: () => import('components/Question/QuestionPage/Create/textMode/questionTypes/DescriptiveQ/DescriptiveQTest.vue')
                       },
                       {
                         path: 'multipleChoice',
-                        name: 'Admin.Question.Create.Image.MultipleChoice',
-                        component: () => import('components/Question/QuestionPage/Create/textMode/questionTypes/MultipleChoiceQ/MultipleChoiceQ.vue')
+                        name: 'Admin.Question.Create.Text.MultipleChoice',
+                        component: () => import('components/Question/QuestionPage/Create/textMode/questionTypes/MultipleChoiceQ/MultipleChoiceQTest.vue')
                       }
                     ]
                   },
