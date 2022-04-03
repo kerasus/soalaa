@@ -7,7 +7,7 @@
          round
          dark-percentage
          color="primary"
-         @click="goBack"
+         @click=this.$router.go(-1)
          icon="isax:arrow-left-2"
        />
 
@@ -179,15 +179,6 @@ export default {
     },
     addVideo () {
       this.videos.push('')
-    },
-    goBack () {
-      this.$router.push({
-        name: 'Admin.Exam.Lessons',
-        params: {
-          quizId: this.$route.params.examId,
-          quizTitle: this.$route.params.quizTitle
-        }
-      })
     },
     removeVideo (index) {
       this.videos.splice(index, 1)

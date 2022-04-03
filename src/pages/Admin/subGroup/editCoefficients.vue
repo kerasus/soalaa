@@ -6,7 +6,7 @@
         round
         dark-percentage
         color="primary"
-        @click="goBack"
+        @click= this.$router.go(-1)
         icon="isax:arrow-left-2"
       />
     </div>
@@ -292,9 +292,6 @@ export default {
     }
   },
   methods: {
-    goBack () {
-      this.$router.push('/admin/exam')
-    },
     getData () {
       this.getExamDateTime()
       this.getExamInfo()
