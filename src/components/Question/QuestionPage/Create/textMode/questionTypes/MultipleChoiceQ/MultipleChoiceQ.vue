@@ -1,5 +1,6 @@
 <template>
   <div class="multiple-choice-Q">
+    <button @click="getContent">getContent</button>
     <q-btn
       v-if="question.choices.list.length > 0"
       dark
@@ -66,8 +67,8 @@
             <q-card-section>
               <div class="row justify-between default-Qcard-box">
                 <QuestionField
-                  :ref="'tiptapChoice' + (item.order)"
-                  :key="'choices' + (item.order) + domKey"
+                  :ref="'tiptapChoice' + index"
+                  :key="'choices' + index + domKey"
                 />
               </div>
             </q-card-section>
@@ -95,6 +96,8 @@
 <script>
 import QuestionField from 'components/Question/QuestionPage/QuestionField.vue'
 import { Question } from 'src/models/Question'
+import { Choice } from 'src/models/Choice'
+// import ref from 'v'
 export default {
   name: 'MultipleChoiceQ',
   components: {
@@ -165,11 +168,24 @@ export default {
     },
     getContent () {
       // const that = this
-      console.log('this.$refs', this.$refs)
-      this.question.choices.list[0] = this.$refs.tiptapChoice2[0].getContent()
-      this.question.choices.list[1] = this.$refs.tiptapChoice3[0].getContent()
-      this.question.choices.list[2] = this.$refs.tiptapChoice4[0].getContent()
-      this.question.choices.list[3] = this.$refs.tiptapChoice5[0].getContent()
+      console.log('tiptapChoice0[0].getContent()', this.$refs)
+      for (let i = 0; i < this.question.choices.list.length; i++) {
+        this.question.choices.list[i] = new Choice({
+          answer: this.$refs.tiptapChoice0[i].getContent()
+        })
+      }
+      this.question.choices.list[0] = new Choice({
+        answer: this.$refs.tiptapChoice0[0].getContent()
+      })
+      this.question.choices.list[1] = new Choice({
+        answer: this.$refs.tiptapChoice1[0].getContent()
+      })
+      this.question.choices.list[2] = new Choice({
+        answer: this.$refs.tiptapChoice2[0].getContent()
+      })
+      this.question.choices.list[3] = new Choice({
+        answer: this.$refs.tiptapChoice3[0].getContent()
+      })
       // Object.keys(this.$refs).forEach(
       //   function (element, index) {
       //     if (element.includes('tiptapChoice')) {
