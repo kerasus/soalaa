@@ -1,7 +1,6 @@
 <template>
-  <q-btn class="q-ma-lg" label="add node" color="green" @click="createNode('6232ecfb2012ae19f05331f2', 'node 2.2', 2)"/>
-  <q-btn class="q-ma-lg" label="get node" color="orange" @click="getNode('6232ecfb2012ae19f05331f2')"/>
   <q-tree
+    class="q-ma-lg"
     :nodes="nodes"
     node-key="id"
     ref="tree"
@@ -30,11 +29,10 @@
       <q-tab-panels v-model="tab " animated>
         <q-tab-panel name="edit ">
           <q-input
+            class="q-ma-md"
             filled
             v-model="newName "
             label="نام جدید "
-            lazy-rules
-            :rules="[ val => val && val.length > 0 || 'Please type something'] "
           />
           <q-btn
             text
@@ -48,11 +46,16 @@
 
         <q-tab-panel name="addNew ">
           <q-input
+            class="q-ma-md"
             filled
-            v-model="newName "
+            v-model="newName"
             label="نام جدید "
-            lazy-rules
-            :rules="[ val => val && val.length > 0 || 'Please type something'] "
+          />
+          <q-input
+            class="q-ma-md"
+            filled
+            v-model="newOrder"
+            label="ترتیب جدید "
           />
           <q-btn
             text
@@ -81,7 +84,6 @@
 
 <script>
 import { defineComponent } from 'vue'
-import MontaData from 'assets/MontaData'
 import API_ADDRESS from 'src/api/Addresses'
 
 export default defineComponent({
@@ -95,23 +97,30 @@ export default defineComponent({
       loading: false,
       vModelSelected: [],
       newName: '',
+      newOrder: 1,
       selectedNode: {},
       editDialog: false
     }
   },
   created () {
-    this.getTopicList('6232e6482012ae19f05331d9')
-    // this.getTopicList('6231a80df413466ba80fea05')
-    // this.createNode()
-    // this.getTopicList('test')
-    // this.changeTreeDate()
+    this.getRootNodeByType('test')
   },
   methods: {
+    createNode (parentId, title, order, callback) {
+      this.$axios.post(API_ADDRESS.tree.base, { parent_id: parentId, title: title, order: order })
+        .then(response => {
+          if (callback) {
+            callback(response)
+          }
+        }).catch(err => {
+          console.log(err)
+        })
+    },
     openEditMenu (node) {
       this.newName = ''
       this.selectedNode = {
-        uid: node.uid,
-        name: node.name
+        id: node.id,
+        title: node.title
       }
       this.editDialog = true
     },
@@ -131,448 +140,92 @@ export default defineComponent({
       }
       this.editDialog = false
     },
-    async addClicked () {
-      const uid = this.selectedNode.uid
-      const getNode = this.$refs.tree.getNodeByKey(uid)
-      const arr = uid.split(':')
-      await arr.pop()
-      const newId = Date.now()
-      arr.push(newId)
-      const newUid = arr.join(':')
-      await getNode.children.unshift({
-        id: newId,
-        uid: newUid,
-        type: 'level',
-        icon: 'school',
-        name: this.newName,
-        children: []
+    addClicked () {
+      const id = this.selectedNode.id
+      const getNode = this.$refs.tree.getNodeByKey(id)
+      this.createNode(id, this.newName, this.newOrder, (response) => {
+        console.log('response', response)
+        getNode.children.unshift({
+          id: response.data.data.id,
+          uid: response.data.data.id,
+          type: response.data.data.type,
+          title: response.data.data.title,
+          parent: response.data.data.parent.id,
+          // icon: 'school',
+          children: [],
+          lazy: true
+        })
+        // { title: apiData.title, id: apiData.id, parent: apiData.parent, children: apiData.children, lazy: true }
+        this.editDialog = false
       })
-      this.editDialog = false
+      // console.log('getNode', getNode)
+      // const arr = id.split(':')
+      // console.log('arr', arr)
+      // arr.pop()
+      // const newId = Date.now()
+      // arr.push(newId)
+      // const newUid = arr.join(':')
+      // getNode.children.unshift({
+      //   id: newId,
+      //   uid: newUid,
+      //   type: 'level',
+      //   icon: 'school',
+      //   name: this.newName,
+      //   children: []
+      // })
+      // this.editDialog = false
     },
     async saveClicked () {
       this.loading = true
-      await this.fakeReq()
       const node = this.$refs.tree.getNodeByKey(this.selectedNode.uid)
       node.name = this.newName
       this.loading = false
       this.editDialog = false
     },
-    fakeReq () {
-      return new Promise(resolve => {
-        setTimeout(() => {
-          resolve()
-        }, 2000)
-      })
-    },
-    createNode (id, title, order) {
-      // parent =>id = '6232e6482012ae19f05331d9'... children =>
-      // type = 'test'
-      this.$axios.post(API_ADDRESS.tree.base, { parent_id: id, title: title, order: order })
+    getRootNodeByType (type) {
+      this.$axios.get(API_ADDRESS.tree.getNodeByType(type))
         .then(response => {
-          console.log('createNode', response)
+          const apiData = response.data.data
+          this.nodes.push({ title: apiData.title, id: apiData.id, parent: apiData.parent, children: apiData.children, lazy: true })
         }).catch(err => {
           console.log(err)
         })
     },
-    async changeTreeDate () {
-      this.simple = []
-      // level -> grade -> major -> moduleGroup -> subModuleGroup -> module -> topic
-      await this.setLevel(this.simple)
-      await this.setGrade()
-      await this.setMajor()
-      await this.setModule()
-      // this.setAllTopics()
-    },
-    setLevel (levelLevel) {
-      MontaData.level.forEach(item => {
-        levelLevel.push({
-          id: item.id,
-          uid: this.getUid(item.id),
-          type: 'level',
-          icon: 'school',
-          name: item.name,
-          children: []
-        })
-      })
-    },
-    setGrade () {
-      this.simple.forEach(level => {
-        MontaData.grade.forEach(grade => {
-          if (grade.levelId === level.id) {
-            level.children.push({
-              id: grade.id,
-              uid: this.getUid(level.id, grade.id),
-              type: 'grade',
-              icon: 'square_foot',
-              name: grade.name,
-              levelId: grade.levelId,
-              children: []
-            })
-          }
-        })
-      })
-    },
-    setMajor () {
-      const majors = [
-        {
-          id: 60,
-          name: 'رياضي'
-        },
-        {
-          id: 61,
-          name: 'تجربي'
-        },
-        {
-          id: 62,
-          name: 'انساني'
-        }
-      ]
-      const dabestan1Majors = [{
-        id: 52,
-        name: 'دبستان سه سال اول'
-      }]
-      const dabestan2Majors = [{
-        id: 53,
-        name: 'دبستان سه سال دوم'
-      }]
-      const dabirestanMajors = [{
-        id: 56,
-        name: 'دبيرستان سه سال اول'
-      }]
-
-      const dabestan1Index = this.simple.findIndex(level => level.id === 10)
-      const dabestan2Index = this.simple.findIndex(level => level.id === 20)
-      const dabirestanIndex = this.simple.findIndex(level => level.id === 50)
-      const levelIndex = this.simple.findIndex(level => level.id === 60)
-      const pishdaneshgahiIndex = this.simple.findIndex(level => level.id === 70)
-
-      // دبستان سه سال اول
-      const dabestan1Grade1Index = this.simple[dabestan1Index].children.findIndex(grade => grade.id === 1)
-      this.simple[dabestan1Index].children[dabestan1Grade1Index].children = this.getMajorsUid(dabestan1Majors, this.simple[dabestan2Index].id, 1)
-      const dabestan1Grade2Index = this.simple[dabestan1Index].children.findIndex(grade => grade.id === 2)
-      this.simple[dabestan1Index].children[dabestan1Grade2Index].children = this.getMajorsUid(dabestan1Majors, this.simple[dabestan2Index].id, 2)
-
-      // دبستان سه سال دوم
-      const dabestan2Grade3Index = this.simple[dabestan2Index].children.findIndex(grade => grade.id === 3)
-      this.simple[dabestan2Index].children[dabestan2Grade3Index].children = this.getMajorsUid(dabestan2Majors, this.simple[dabestan2Index].id, 3)
-      const dabestan1Grade5Index = this.simple[dabestan2Index].children.findIndex(grade => grade.id === 5)
-      this.simple[dabestan2Index].children[dabestan1Grade5Index].children = this.getMajorsUid(dabestan2Majors, this.simple[dabestan2Index].id, 5)
-      const dabestan1Grade6Index = this.simple[dabestan2Index].children.findIndex(grade => grade.id === 6)
-      this.simple[dabestan2Index].children[dabestan1Grade6Index].children = this.getMajorsUid(dabestan2Majors, this.simple[dabestan2Index].id, 6)
-
-      // دبيرستان سه سال اول
-      const dabirestan1Grade7Index = this.simple[dabirestanIndex].children.findIndex(grade => grade.id === 7)
-      this.simple[dabirestanIndex].children[dabirestan1Grade7Index].children = this.getMajorsUid(dabirestanMajors, this.simple[dabirestanIndex].id, 7)
-      const dabirestan1Grade8Index = this.simple[dabirestanIndex].children.findIndex(grade => grade.id === 8)
-      this.simple[dabirestanIndex].children[dabirestan1Grade8Index].children = this.getMajorsUid(dabirestanMajors, this.simple[dabirestanIndex].id, 8)
-      const dabirestan1Grade9Index = this.simple[dabirestanIndex].children.findIndex(grade => grade.id === 9)
-      this.simple[dabirestanIndex].children[dabirestan1Grade9Index].children = this.getMajorsUid(dabirestanMajors, this.simple[dabirestanIndex].id, 9)
-
-      // // پیش دانشگاهی
-      const pishdaneshgahiGrade4Index = this.simple[pishdaneshgahiIndex].children.findIndex(grade => grade.id === 4)
-      this.simple[pishdaneshgahiIndex].children[pishdaneshgahiGrade4Index].children = this.getMajorsUid(majors, this.simple[pishdaneshgahiIndex].id, 4)
-
-      // 10
-      const dahomIndex = this.simple[levelIndex].children.findIndex(grade => grade.id === 10)
-      this.simple[levelIndex].children[dahomIndex].children = this.getMajorsUid(majors, this.simple[levelIndex].id, 10)
-      // 11
-      const yazdahomIndex = this.simple[levelIndex].children.findIndex(grade => grade.id === 11)
-      this.simple[levelIndex].children[yazdahomIndex].children = this.getMajorsUid(majors, this.simple[levelIndex].id, 11)
-      // 12
-      const davazdahomIndex = this.simple[levelIndex].children.findIndex(grade => grade.id === 12)
-      this.simple[levelIndex].children[davazdahomIndex].children = this.getMajorsUid(majors, this.simple[levelIndex].id, 12)
-    },
-    getMajorsUid (majors, levelId, gradeId) {
-      const newMajors = JSON.parse(JSON.stringify(majors))
-      newMajors.forEach(major => {
-        major.uid = this.getUid(levelId, gradeId, major.id)
-        major.type = 'major'
-        major.icon = 'history_edu'
-        major.children = []
-      })
-
-      return newMajors
-    },
-    setModule () {
-      this.simple.forEach(level => {
-        level.children.forEach(grade => {
-          grade.children.forEach(major => {
-            const majorModuleGradeList = this.getMajorModuleGradeList(major.id, grade.id)
-            majorModuleGradeList.forEach(majorModuleGrade => {
-              const module = this.getModule(majorModuleGrade.moduleId)
-              if (module) {
-                let moduleGroupOfMajorChildren = this.getModuleGroupFromMajorChildren(major.children, module.moduleGroupId)
-                const majorHasModuleGroup = !!moduleGroupOfMajorChildren
-                if (!majorHasModuleGroup) {
-                  const moduleGroup = this.getModuleGroup(module.moduleGroupId)
-                  const uid = this.getUid(level.id, grade.id, major.id, moduleGroup.id)
-                  const moduleGroupNode = {
-                    id: moduleGroup.id,
-                    uid: uid,
-                    type: 'moduleGroup',
-                    icon: 'category',
-                    name: moduleGroup.name,
-                    children: []
-                  }
-                  major.children.push(moduleGroupNode)
-                  moduleGroupOfMajorChildren = moduleGroupNode
-                }
-                const subModuleGroupList = this.getSubModuleGroupList(module.moduleGroupId)
-                subModuleGroupList.forEach(subModuleGroup => {
-                  let subModuleGroupOfModuleGroupChildren = this.getSubModuleGroupFromModuleGroupChildren(moduleGroupOfMajorChildren.children, subModuleGroup.id)
-                  const ModuleGroupHasSubModuleGroup = !!subModuleGroupOfModuleGroupChildren
-                  if (!ModuleGroupHasSubModuleGroup) {
-                    const uid = this.getUid(level.id, grade.id, major.id, moduleGroupOfMajorChildren.id, subModuleGroup.id)
-                    const subModuleGroupNode = {
-                      id: subModuleGroup.id,
-                      uid: uid,
-                      type: 'subModuleGroup',
-                      icon: 'subdirectory_arrow_left',
-                      name: subModuleGroup.name,
-                      moduleGroupId: subModuleGroup.moduleGroupId,
-                      children: []
-                    }
-                    moduleGroupOfMajorChildren.children.push(subModuleGroupNode)
-                    subModuleGroupOfModuleGroupChildren = subModuleGroupNode
-                  }
-
-                  const hasModule = !!subModuleGroupOfModuleGroupChildren.children.find(moduleItem => moduleItem.id === module.id)
-                  if (!hasModule) {
-                    const uid = this.getUid(level.id, grade.id, major.id, moduleGroupOfMajorChildren.id, subModuleGroup.id, module.id)
-                    subModuleGroupOfModuleGroupChildren.children.push({
-                      id: module.id,
-                      uid: uid,
-                      lazy: true,
-                      type: 'module',
-                      icon: 'menu_book',
-                      name: module.name,
-                      moduleGroupId: module.moduleGroupId,
-                      subModuleGroupId: module.subModuleGroupId,
-                      isCommon: module.isCommon,
-                      isDisabled: module.isDisabled,
-                      hasOnlineContents: module.hasOnlineContents,
-                      children: []
-                    })
-                  }
-                })
-                // let indexOfModuleGroupOfMajorChildren = this.getIndexOfModuleGroupFromMajorChildren(major.children, module.moduleGroupId)
-                // major.children[indexOfModuleGroupOfMajorChildren] = moduleGroupOfMajorChildren
-              } else {
-                // ToDo: save failed list
-              }
-            })
-          })
-        })
-      })
-    },
-    getUid (levelId, gradeId, majorId, moduleGroupId, subModuleGroupId, moduleId) {
-      let uid = ''
-      if (levelId) {
-        uid += 'l:' + levelId
-      }
-      if (gradeId) {
-        uid += '-g:' + gradeId
-      }
-      if (majorId) {
-        uid += '-mj:' + majorId
-      }
-      if (moduleGroupId) {
-        uid += '-mg:' + moduleGroupId
-      }
-      if (subModuleGroupId) {
-        uid += '-sm:' + subModuleGroupId
-      }
-      if (moduleId) {
-        uid += '-mo:' + moduleId
-      }
-
-      return uid
-    },
-    getModuleGroupFromMajorChildren (majorChildren, moduleGroupId) {
-      return majorChildren.find(moduleGroup => moduleGroup.id === moduleGroupId)
-    },
-    getSubModuleGroupFromModuleGroupChildren (moduleGroupChildren, subModuleGroupId) {
-      return moduleGroupChildren.find(subModuleGroup => subModuleGroup.id === subModuleGroupId)
-    },
-    getMajorModuleGradeList (majorId, gradeId) {
-      return MontaData.majorModuleGrade.filter(item => item.majorId === majorId && item.grade === gradeId)
-    },
-    getModule (moduleId) {
-      return MontaData.module.find(item => item.id === moduleId)
-    },
-    getModuleGroup (moduleGroupId) {
-      return MontaData.moduleGroup.find(item => item.id === moduleGroupId)
-    },
-    getSubModuleGroupList (moduleGroupId) {
-      return MontaData.subModuleGroup.filter(item => item.moduleGroupId === moduleGroupId)
-    },
-    setAllTopics () {
-      this.simple.forEach(level => {
-        level.children.forEach(grade => {
-          grade.children.forEach(major => {
-            major.children.forEach(moduleGroup => {
-              moduleGroup.children.forEach(subModuleGroup => {
-                subModuleGroup.children.forEach(module => {
-                  const topicList = this.getTopicList(module.id)
-                  const tree = this.getTreeFromTopicList(topicList)
-                  module.children = tree
-                })
-              })
-            })
-          })
-        })
-      })
-    },
-    getTopicList (id) {
-      // 6231a80df413466ba80fea05
-      // this.$axios.post(API_ADDRESS.tree.base, { parent_id: '', title: 'hi', order: 1 })
-      // typ= 'test'
-
-      // let treeData = {
-      //   id: '6228770896b7db62fa11ba10',
-      //   title: '2شیمی',
-      //   parent: {
-      //     id: '622763df96b7db62fa11b9fd',
-      //     title: '1شیمی'
-      //   },
-      //   ancestors: [
-      //     {
-      //       id: '622763df96b7db62fa11b9fd',
-      //       title: '1شیمی'
-      //     }
-      //   ],
-      //   order: 14,
-      //   children: [
-      //     {
-      //       id: '6228772796b7db62fa11ba11',
-      //       title: '3شیمی',
-      //       parent: {
-      //         id: '6228770896b7db62fa11ba10',
-      //         title: '2شیمی'
-      //       },
-      //       ancestors: [
-      //         {
-      //           id: '622763df96b7db62fa11b9fd',
-      //           title: '1شیمی'
-      //         },
-      //         {
-      //           id: '6228770896b7db62fa11ba10',
-      //           title: '2شیمی'
-      //         }
-      //       ],
-      //       order: 14,
-      //       updated_at: '2022-03-09 13:15:11',
-      //       created_at: '2022-03-09 13:15:11'
-      //     },
-      //     {
-      //       id: '6228783f96b7db62fa11ba12',
-      //       title: '3شیمی',
-      //       parent: {
-      //         id: '6228770896b7db62fa11ba10',
-      //         title: '2شیمی'
-      //       },
-      //       ancestors: [
-      //         {
-      //           id: '622763df96b7db62fa11b9fd',
-      //           title: '1شیمی'
-      //         },
-      //         {
-      //           id: '6228770896b7db62fa11ba10',
-      //           title: '2شیمی'
-      //         }
-      //       ],
-      //       order: 16,
-      //       updated_at: '2022-03-09 13:19:51',
-      //       created_at: '2022-03-09 13:19:51'
-      //     }
-      //   ],
-      //   updated_at: '2022-03-09 13:14:40',
-      //   created_at: '2022-03-09 13:14:40'
-      // }
-      const treeData = { title: '', id: '', parent: null, children: [], lazy: true }
+    getLeafNodeById (id, done, fail) {
       this.$axios.get(API_ADDRESS.tree.getNodeById(id))
         .then(response => {
           const apiData = response.data.data
-          console.log(apiData)
-          treeData.title = apiData.title
-          treeData.id = apiData.id
-          treeData.parent = apiData.parent
-          treeData.children = apiData.children
-          treeData.lazy = true
-          this.nodes.push(treeData)
-          this.copy = treeData
-          return this.nodes
+          const tree = []
+          apiData.children.forEach(child => {
+            tree.push({ title: child.title, id: child.id, parent: apiData.id, children: [], lazy: true })
+          })
+          done(tree)
         }).catch(err => {
           console.log(err)
+          if (fail) {
+            fail()
+          }
         })
     },
-    getTreeFromTopicList (topicList, parentUid) {
-      const tree = []
-      topicList.forEach((topic, topicIndex) => {
-        if (!topic.parentTopicId) {
-          topic.uid = parentUid + '-' + 'topic:' + topic.id
-          topic.type = 'topic'
-          topic.children = []
-          tree.push(topic)
-        } else {
-          this.addTopicToParent(tree, topic)
-        }
-      })
-
-      return tree
-    },
-    addTopicToParent (tree, childTopic) {
-      tree.forEach(topicNode => {
-        if (topicNode.id === childTopic.parentTopicId) {
-          if (!topicNode.children) {
-            topicNode.children = []
-          }
-          childTopic.uid = topicNode.uid + '-' + 'topic:' + childTopic.id
-          childTopic.type = 'topic'
-          childTopic.children = []
-          topicNode.children.push(childTopic)
-          return true
-        } else {
-          if (topicNode.children && topicNode.children.length > 0) {
-            const result = this.addTopicToParent(topicNode.children, childTopic)
-            if (result) {
-              return true
-            }
-          }
-        }
-      })
-      return false
-    },
-    addNodeToTree (node) {
-      const tree = []
-      if (node.children) {
-        if (node.children.length) {
-          console.log('sfdhyfj')
-          node.children.forEach(child => {
-            tree.push({ title: child.title, id: child.id, parent: node.id, children: [], lazy: true })
-          })
-        } else {
-          this.getTopicList(node.id)
-          console.log('lkjlkjkljkljl', this.copy)
-          tree.push(this.copy)
-        }
+    showChildOfNode (node, key, done, fail) {
+      if (node.children && node.children.length) {
+        this.showChildOfNodeFromCache(node, key, done, fail)
+      } else {
+        this.showChildOfNodeFromServer(node, key, done, fail)
       }
-      console.log('tree', tree)
-      return tree
+    },
+    showChildOfNodeFromCache (node, key, done, fail) {
+      const tree = []
+      node.children.forEach(child => {
+        tree.push({ title: child.title, id: child.id, parent: node.id, children: [], lazy: true })
+      })
+      done(tree)
+    },
+    showChildOfNodeFromServer (node, key, done, fail) {
+      this.getLeafNodeById(node.id, done, fail)
     },
     onLazyLoadTree ({ node, key, done, fail }) {
-      const nodes = this.addNodeToTree(node)
-      console.log('done')
-      done(nodes)
-    },
-    getNode (id) {
-      this.$axios.get(API_ADDRESS.tree.getNodeById(id))
-        .then(res => {
-          console.log('getNode res', res)
-          console.log('node', this.getTopicList(id))
-        }).catch(err => {
-          console.log('getNode err', err)
-        })
+      this.showChildOfNode(node, key, done, fail)
     }
   }
 })
