@@ -27,17 +27,16 @@ const AdminActionOnQuestion = {
         })
     },
     setAllQuestionLoadings () {
-      this.componentTabs.loading = true
-      this.question.loading = true
-      this.question.exams.loading = true
+      this.question.type.loading = true
+      // Todo : Temp
+      // this.question.loading = true
+      // this.question.exams.loading = true
     },
     getQuestionType () {
       const that = this
       axios.get(API_ADDRESS.option.base + '?type=question_type')
         .then(function (response) {
           that.componentTabs = new TypeList(response.data.data)
-          // todo : DEFAULT VALUE/TAB IS konkur
-          that.question.type = that.componentTabs.list[0]
           const optionQuestion = response.data.data.find(item => (item.value === 'konkur'))
           if (!optionQuestion) {
             return this.$q.notify({
@@ -45,12 +44,39 @@ const AdminActionOnQuestion = {
               color: 'negative'
             })
           }
-          that.componentTabs.loading = false
+          that.setCurrentQType()
+          that.qTabLoading = false
         })
         .catch(function (error) {
           console.log(error)
           that.componentTabs.loading = false
         })
+    },
+    readRouteName () {
+      return this.$route.name
+    },
+    doesHaveQType () {
+      return !!this.readRouteName().includes('.Text.')
+    },
+    getCurrentQType () {
+      const currentRoute = this.$route.name
+      const txtToRemove = 'Admin.Question.Create.Text.'
+      return currentRoute.replace(txtToRemove, '')
+    },
+    setCurrentQType () {
+      if (this.doesHaveQType()) {
+        const currentType = this.getCurrentQType()
+        let cValue = ''
+        if (currentType === 'MBTI') {
+          cValue = 'psychometric'
+        } else if (currentType === 'Descriptive') {
+          cValue = 'descriptive'
+        } else if (currentType === 'MultipleChoice') {
+          cValue = 'konkur'
+        }
+        this.question.type = this.componentTabs.list.find(item => (item.value === cValue))
+        this.setInitialType()
+      }
     },
     getQuestionStatus () {
       const that = this
@@ -125,7 +151,7 @@ const AdminActionOnQuestion = {
       return this.$axios.get(API_ADDRESS.questionSubcategory.base)
         .then((response) => {
           that.subCategoriesList = new QuestSubcategoryList(response.data.data)
-          console.log('this.subCategoriesList', this.subCategoriesList)
+          // console.log('this.subCategoriesList', this.subCategoriesList)
         })
         .catch(() => {
         })
@@ -135,7 +161,7 @@ const AdminActionOnQuestion = {
       this.$axios.get(API_ADDRESS.exam.base())
         .then((response) => {
           that.examList = new ExamList(response.data.data)
-          console.log('that.examList', that.examList)
+          // console.log('that.examList', that.examList)
         })
         .catch(() => {
         })

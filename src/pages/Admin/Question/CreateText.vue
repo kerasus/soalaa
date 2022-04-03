@@ -1,15 +1,15 @@
 <template>
-  <div class="createQ-text-container">
+  <div class="createQ-text">
     <navbar
       :componentTabs="componentTabs"
       :loading="componentTabs.loading"
     />
     <div class="relative-position">
-      <component
-        v-if="question.type"
-        :is="getComponent"
-        v-bind="allProps"
-      />
+<!--      <component-->
+<!--        v-if="question.type"-->
+<!--        :is="getComponent"-->
+<!--        v-bind="allProps"-->
+<!--      />-->
       <q-inner-loading
         :showing="question.loading"
         color="primary"
@@ -42,9 +42,9 @@
 
 <script>
 /* eslint-disable no-var */
-import { defineAsyncComponent } from 'vue'
+// import { defineAsyncComponent } from 'vue'
 import Navbar from 'components/Question/QuestionPage/Create/textMode/Navbar'
-import DynamicComponent from 'components/Question/QuestionPage/Create/textMode/questionTypes/DynamicComponent'
+// import DynamicComponent from 'components/Question/QuestionPage/Create/textMode/questionTypes/DynamicComponent'
 import { Question } from 'src/models/Question'
 import QuestionDetails from 'components/Question/QuestionPage/Create/textMode/QuestionDetails'
 import AdminActionOnQuestion from 'src/mixin/AdminActionOnQuestion'
@@ -58,13 +58,13 @@ import { QuestSubcategoryList } from 'src/models/QuestSubcategory'
 export default {
   name: 'CreateText',
   components: {
-    DescriptiveQ: defineAsyncComponent(() => import('components/Question/QuestionPage/Create/textMode/questionTypes/DescriptiveQ/DescriptiveQ')),
-    MultipleChoiceQ: defineAsyncComponent(() => import('components/Question/QuestionPage/Create/textMode/questionTypes/MultipleChoiceQ/MultipleChoiceQ')),
-    MBTIQ: defineAsyncComponent(() => import('components/Question/QuestionPage/Create/textMode/questionTypes/MBTIQ/MBTIQ')),
+    // DescriptiveQ: defineAsyncComponent(() => import('components/Question/QuestionPage/Create/textMode/questionTypes/DescriptiveQ/DescriptiveQ')),
+    // MultipleChoiceQ: defineAsyncComponent(() => import('components/Question/QuestionPage/Create/textMode/questionTypes/MultipleChoiceQ/MultipleChoiceQ')),
+    // MBTIQ: defineAsyncComponent(() => import('components/Question/QuestionPage/Create/textMode/questionTypes/MBTIQ/MBTIQ')),
     BtnBox,
     CommentBox,
     AttachExam,
-    DynamicComponent,
+    // DynamicComponent,
     Navbar,
     QuestionDetails
   },
@@ -83,6 +83,10 @@ export default {
       examList: new ExamList(),
       subCategoriesList: new QuestSubcategoryList()
     }
+  },
+  created () {
+    // console.log(this.$route, 'this.$route')
+    // console.log(this.$router, 'this.$router')
   },
   provide () {
     return {
@@ -130,11 +134,6 @@ export default {
 </script>
 
 <style scoped lang="scss">
-.createQ-text-container {
-  padding: 40px 100px;
-  display: flex;
-  flex-direction: column;
-}
 .slide-fade-enter-active {
    transition: all 0.3s ease-out;
  }
