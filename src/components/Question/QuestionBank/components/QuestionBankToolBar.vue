@@ -1,35 +1,35 @@
 <template>
   <q-card class="question-Bank-ToolBar theme-v1-box-shadow">
-    <q-card-section class="toolbar-card q-pa-0">
-      <div class="toolbar-card-actions">
-        <div class="toolbar-btn">
-          <q-btn class="delete-choices-btn" flat>
-            حذف انتخاب ها
-          </q-btn>
-          <q-btn class="add-to-btn" flat>
-            <q-icon name="isax:add">
-            </q-icon>
-            <span>
+    <q-expansion-item
+      expand-icon-toggle
+      expand-icon="isax:arrow-down-1"
+      class="justify-between"
+    >
+      <template v-slot:header>
+        <q-card-section class="toolbar-card q-pa-0">
+          <div class="toolbar-card-actions">
+            <div class="toolbar-btn">
+              <q-btn class="delete-choices-btn" flat>
+                حذف انتخاب ها
+              </q-btn>
+              <q-btn class="add-to-btn" flat>
+                <q-icon name="isax:add">
+                </q-icon>
+                <span>
             افزودن به
           </span>
-          </q-btn>
-        </div>
-        <div class="toolbar-checkbox">
-          <q-checkbox class="choices-checkbox" label="انتخاب همه" v-model="checkBox"></q-checkbox>
-        </div>
-        <div class="choices-number">
-          35
-          <span class="choices-number-title">سوال انتخاب شده</span>
-        </div>
-      </div>
-      <div class="more-section">
-        <q-btn flat class="more-btn">
-          بیشتر
-          <q-icon name="isax:arrow-down-1" size="16px" style="margin-right: 10px">
-          </q-icon>
-        </q-btn>
-      </div>
-    </q-card-section>
+              </q-btn>
+            </div>
+            <div class="toolbar-checkbox">
+              <q-checkbox class="choices-checkbox" label="انتخاب همه" v-model="checkBox"></q-checkbox>
+            </div>
+            <div class="choices-number">
+              35
+              <span class="choices-number-title">سوال انتخاب شده</span>
+            </div>
+          </div>
+        </q-card-section>
+      </template>
     <q-card-section class="q-pa-0 toolbar-detail ">
       <div class="row">
         <div class="col-5 question-choose">
@@ -82,6 +82,7 @@
         </div>
       </div>
     </q-card-section>
+    </q-expansion-item>
   </q-card>
 </template>
 
@@ -100,6 +101,9 @@ export default {
 
 <style lang="scss" scoped>
 .question-Bank-ToolBar {
+  .q-item-type{
+    justify-content: space-between;
+  }
   .toolbar-card {
     display: flex;
     justify-content: space-between;
@@ -158,10 +162,6 @@ export default {
       }
     }
 
-    .more-section {
-      align-items: center;
-      display: flex;
-    }
   }
   .toolbar-detail {
     .question-choose {
@@ -315,8 +315,44 @@ export default {
   }
 }
 </style>
-<style>
-.more-section .q-btn {
-  padding: 0 3px;
+<style lang="scss">
+.question-Bank-ToolBar {
+  .q-item-type{
+    justify-content: space-between;
+  }
+  .q-expansion-item--collapsed{
+    .q-item__section {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      &:before{
+        content: 'بیشتر';
+      }
+      i{
+        margin-top: 0;
+        margin-left: 10px;
+      }
+      .q-expansion-item__toggle-focus{
+        display: none;
+      }
+    }
+  }
+  .q-expansion-item--expanded {
+    .q-item__section {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      &:before{
+        content: 'بستن';
+      }
+      i{
+        margin-top: 0;
+        margin-left: 10px;
+      }
+      .q-expansion-item__toggle-focus{
+        display: none;
+      }
+    }
+  }
 }
 </style>
