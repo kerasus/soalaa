@@ -7,12 +7,12 @@
 </template>
 
 <script>
-export default {
-  created () {
-    console.log('AdminLayout created')
-  },
-  mounted () {
-    console.log('AdminLayout mounted')
-  }
-}
+// export default {
+//   created () {
+//     console.log('AdminLayout created')
+//   },
+//   mounted () {
+//     console.log('AdminLayout mounted')
+//   }
+// }
 </script>
