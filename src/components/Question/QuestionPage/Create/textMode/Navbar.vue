@@ -99,12 +99,12 @@ export default {
     }
   },
   watch: {
-    questionTab: {
-      handler (newValue, oldValue) {
-        console.log('this.questionTab CHANGED', newValue)
-      },
-      deep: true
-    }
+    // questionTab: {
+    //   handler (newValue, oldValue) {
+    //     console.log('this.questionTab CHANGED', newValue)
+    //   },
+    //   deep: true
+    // }
   }
 }
 </script>

@@ -33,7 +33,6 @@ const AdminActionOnQuestion = {
       // this.question.exams.loading = true
     },
     getQuestionType () {
-      console.log('getQuestionType')
       const that = this
       axios.get(API_ADDRESS.option.base + '?type=question_type')
         .then(function (response) {
@@ -73,7 +72,7 @@ const AdminActionOnQuestion = {
     },
     setCurrentQuestionType () {
       if (this.doesHaveQuestionType()) {
-        console.log('this.getCurrentQuestionType()', this.getCurrentQuestionType())
+        // console.log('this.getCurrentQuestionType()', this.getCurrentQuestionType())
         const currentType = this.getCurrentQuestionType()
         let cValue = ''
         if (currentType === 'MBTI') {
@@ -84,7 +83,7 @@ const AdminActionOnQuestion = {
           cValue = 'konkur'
         }
         this.question.type = this.componentTabs.list.find(item => (item.value === cValue))
-        console.log('this.question.type before nav', this.question.type.componentName)
+        // console.log('this.question.type before nav', this.question.type.componentName)
         // this.setInitialType()
       }
     },
