@@ -6,7 +6,7 @@
           <div class="col">نوع سوال</div>
           <div>
             <q-tabs
-              v-if="componentTabs.list[0]"
+              v-if="componentTabs.list[0] && !qTabLoading"
               v-model="questionTab"
               no-caps
               dense
@@ -20,15 +20,17 @@
                 class="question-type-tab"
                 :name="item.value"
                 :label="item.tabName"
+                @click="chooseComponent(item.value)"
               />
             </q-tabs>
+            <q-skeleton
+              v-if="qTabLoading"
+              type="QToolbar"
+              width="268px"
+              height="30px"
+              class="q-ml-md"
+            />
           </div>
-          <q-inner-loading
-            :showing="loading"
-            color="primary"
-            class="QComponents-inner-loading"
-            label-style="font-size: 1.1em"
-          />
         </div>
       </div>
       <div class="col-auto">
@@ -55,23 +57,12 @@ import { QuestionType, TypeList } from 'src/models/QuestionType'
 
 export default {
   name: 'Navbar',
-  props: {
-    componentTabs: {
-      type: TypeList,
-      default () {
-        return new TypeList()
-      }
-    },
-    loading: {
-      type: Boolean,
-      default () {
-        return false
-      }
-    }
-  },
+  props: {},
   data () {
     return {
-      questionTab: 'konkur'
+      questionTab: '',
+      componentTabs: new TypeList(),
+      qTabLoading: false
     }
   },
   inject: {
@@ -83,25 +74,46 @@ export default {
   mixins: [
     AdminActionOnQuestion
   ],
-  created () {},
-  mounted () {},
+  created () {
+    console.log('Navbar created')
+    this.qTabLoading = true
+  },
+  mounted () {
+    console.log('Navbar mounted')
+    this.getQuestionType()
+  },
   methods: {
     chooseComponent (item) {
       this.question.type = new QuestionType({
         value: item
       })
+      const cName = this.question.type.componentName
+      if (cName === 'MultipleChoiceQ') {
+        this.$router.push({ name: 'Admin.Question.Create.Text.MultipleChoice' })
+      } else if (cName === 'DescriptiveQ') {
+        this.$router.push({ name: 'Admin.Question.Create.Text.Descriptive' })
+      } else if (cName === 'MBTIQ') {
+        this.$router.push({ name: 'Admin.Question.Create.Text.MBTI' })
+      }
+      setTimeout(() => {
+        location.reload()
+      }, 1000)
+    },
+    setInitialType () {
+      this.questionTab = this.question.type.value
     }
   },
   watch: {
     componentTabs: function () {
       // this.chooseComponent(this.componentTabs.list[0])
-    },
-    questionTab: {
-      handler (newValue, oldValue) {
-        this.chooseComponent(newValue)
-      },
-      deep: true
     }
+    // ,
+    // questionTab: {
+    //   handler (newValue, oldValue) {
+    //     this.chooseComponent(newValue)
+    //   },
+    //   deep: true
+    // }
   }
 }
 </script>
