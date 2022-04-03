@@ -55,6 +55,7 @@ const routes = [
 
           {
             path: '/question',
+            breadcrumbs: { title: 'سوالات', loading: false },
             component: () => import('layouts/AdminLayout.vue'),
             meta: {
               middlewares: [auth]
@@ -76,8 +77,9 @@ const routes = [
               },
               {
                 path: 'create',
-                // component: () => import('layouts/QuestionLayouts/CreateQLayout.vue'),
-                component: () => import('layouts/AdminLayout.vue'),
+                breadcrumbs: { title: 'ساخت سوال', loading: false },
+                component: () => import('layouts/QuestionLayouts/CreateQuestionLayout.vue'),
+                // component: () => import('layouts/AdminLayout.vue'),
                 meta: {
                   middlewares: [auth]
                 },
@@ -85,36 +87,62 @@ const routes = [
                   {
                     path: 'text',
                     name: 'Admin.Question.Create.Text',
-                    component: () => import('layouts/QuestionLayouts/CreateTextLayout.vue'),
+                    breadcrumbs: { title: 'سوال متنی', loading: false },
+                    component: () => import('layouts/QuestionLayouts/CreateDefaultLayout.vue'),
                     // component: () => import('layouts/AdminLayout.vue'),
                     children: [
                       {
                         path: 'mbti',
                         name: 'Admin.Question.Create.Text.MBTI',
+                        breadcrumbs: { title: 'ام بی تی آی', loading: false },
                         component: () => import('components/Question/QuestionPage/Create/textMode/questionTypes/MBTIQ/MBTIQTest.vue')
                       },
                       {
                         path: 'descriptive',
                         name: 'Admin.Question.Create.Text.Descriptive',
+                        breadcrumbs: { title: 'تشریحی', loading: false },
                         component: () => import('components/Question/QuestionPage/Create/textMode/questionTypes/DescriptiveQ/DescriptiveQTest.vue')
                       },
                       {
                         path: 'multipleChoice',
                         name: 'Admin.Question.Create.Text.MultipleChoice',
+                        breadcrumbs: { title: 'تستی', loading: false },
                         component: () => import('components/Question/QuestionPage/Create/textMode/questionTypes/MultipleChoiceQ/MultipleChoiceQTest.vue')
                       }
                     ]
                   },
                   {
-                    path: 'image',
+                    path: 'image/',
                     name: 'Admin.Question.Create.Image',
-                    component: () => (import('pages/Admin/Question/CreateImage'))
+                    breadcrumbs: { title: 'آپلود عکس', loading: false },
+                    component: () => (import('pages/Admin/Question/CreateImage')),
+                    children: [
+                      {
+                        path: 'mbti',
+                        name: 'Admin.Question.Create.Image.MBTI',
+                        breadcrumbs: { title: 'ام بی تی آی', loading: false },
+                        component: () => import('pages/Admin/Question/CreateImage')
+                      },
+                      {
+                        path: 'descriptive',
+                        name: 'Admin.Question.Create.Image.Descriptive',
+                        breadcrumbs: { title: 'تشریحی', loading: false },
+                        component: () => import('pages/Admin/Question/CreateImage')
+                      },
+                      {
+                        path: 'multipleChoice',
+                        name: 'Admin.Question.Create.Image.MultipleChoice',
+                        breadcrumbs: { title: 'تستی', loading: false },
+                        component: () => import('pages/Admin/Question/CreateImage')
+                      }
+                    ]
                   }
                 ]
               },
               {
                 path: ':question_id',
                 name: 'Admin.Question.Show',
+                breadcrumbs: { title: 'مشاهده سوال', loading: false },
                 component: () => (import('pages/Admin/Question/Show')),
                 meta: {
                   middlewares: [auth]
@@ -123,6 +151,7 @@ const routes = [
               {
                 path: ':question_id/edit',
                 name: 'Admin.Question.Edit',
+                breadcrumbs: { title: 'ویرایش سوال', loading: false },
                 component: () => (import('pages/Admin/Question/Edit')),
                 meta: {
                   middlewares: [auth]

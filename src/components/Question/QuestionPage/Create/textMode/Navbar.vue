@@ -14,14 +14,17 @@
               :breakpoint="0"
               class="col question-type-tabs"
             >
-              <q-tab
+              <q-route-tab
                 v-for="(item, index) in componentTabs.list"
                 :key="index"
                 class="question-type-tab"
                 :name="item.value"
                 :label="item.tabName"
-                @click="chooseComponent(item.value)"
+                :to="getCurrentRoute(item.componentName)"
               />
+<!--
+                @click="chooseComponent(item.value)"
+ to="/alarms"-->
             </q-tabs>
             <q-skeleton
               v-if="qTabLoading"
@@ -53,7 +56,7 @@
 <script>
 import AdminActionOnQuestion from 'src/mixin/AdminActionOnQuestion'
 import { Question } from 'src/models/Question'
-import { QuestionType, TypeList } from 'src/models/QuestionType'
+import { TypeList } from 'src/models/QuestionType'
 
 export default {
   name: 'Navbar',
@@ -82,38 +85,26 @@ export default {
     console.log('Navbar mounted')
     this.getQuestionType()
   },
+  computed: {},
   methods: {
-    chooseComponent (item) {
-      this.question.type = new QuestionType({
-        value: item
-      })
-      const cName = this.question.type.componentName
-      if (cName === 'MultipleChoiceQ') {
-        this.$router.push({ name: 'Admin.Question.Create.Text.MultipleChoice' })
-      } else if (cName === 'DescriptiveQ') {
-        this.$router.push({ name: 'Admin.Question.Create.Text.Descriptive' })
-      } else if (cName === 'MBTIQ') {
-        this.$router.push({ name: 'Admin.Question.Create.Text.MBTI' })
+    getCurrentRoute (componentName) {
+      const currentQuestionMode = this.getCurrentQuestionMode()
+      if (componentName === 'MultipleChoiceQ') {
+        return { name: 'Admin.Question.Create.' + currentQuestionMode + '.MultipleChoice' }
+      } else if (componentName === 'DescriptiveQ') {
+        return { name: 'Admin.Question.Create.' + currentQuestionMode + '.Descriptive' }
+      } else if (componentName === 'MBTIQ') {
+        return { name: 'Admin.Question.Create.' + currentQuestionMode + '.MBTI' }
       }
-      setTimeout(() => {
-        location.reload()
-      }, 1000)
-    },
-    setInitialType () {
-      this.questionTab = this.question.type.value
     }
   },
   watch: {
-    componentTabs: function () {
-      // this.chooseComponent(this.componentTabs.list[0])
+    questionTab: {
+      handler (newValue, oldValue) {
+        console.log('this.questionTab CHANGED', newValue)
+      },
+      deep: true
     }
-    // ,
-    // questionTab: {
-    //   handler (newValue, oldValue) {
-    //     this.chooseComponent(newValue)
-    //   },
-    //   deep: true
-    // }
   }
 }
 </script>
