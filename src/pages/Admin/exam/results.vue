@@ -3,13 +3,13 @@
     <div class="col-9">
       <div class="back-btn-container">
         <q-btn
+          class="q-mx-sm float-right"
           round
+          dark-percentage
           color="primary"
-          unelevated
-          @click="goBack"
-        >
-          <i class="fi-rr-angle-left row" />
-        </q-btn>
+          @click= this.$router.go(-1)
+          icon="isax:arrow-left-2"
+        />
       </div>
     </div>
     <div class="col-9 ">
@@ -297,9 +297,6 @@ export default {
   },
 
   methods: {
-    goBack () {
-      this.$router.push('/admin/exam')
-    },
     getUserFormData () {
       this.showLoading()
       this.$axios.get(API_ADDRESS.user.formData)

@@ -10,6 +10,8 @@ import { QuestionStatus } from '../models/QuestionStatus'
 import { LogList } from '../models/Log'
 // eslint-disable-next-line import/named
 import { createApp } from 'vue'
+import { QuestionType } from '../models/QuestionType'
+import { AttachedExamList } from '../models/AttachedExam'
 if (!window.app) {
 // window.app
   window.app = createApp({})
@@ -31,7 +33,10 @@ class Question extends Model {
       { key: 'in_active_category' },
       { key: 'photo' },
       { key: 'order' },
-      { key: 'exams' },
+      {
+        key: 'exams',
+        relatedModel: AttachedExamList
+      },
       { key: 'type_id' },
       {
         key: 'author',
@@ -39,11 +44,13 @@ class Question extends Model {
       },
       {
         key: 'type',
-        default: {
-          id: null,
-          type: null, // question_type
-          value: null // psychometric
-        }
+        relatedModel: QuestionType
+        // default: {
+        //   id: null,
+        //   type: null, // question_type
+        //   value: null, // psychometric
+        //   name: null
+        // }
       },
       {
         key: 'isInView',
@@ -127,12 +134,20 @@ class Question extends Model {
     const that = this
     this.apiResource = {
       fields: [
+        { key: 'id' },
+        { key: 'title' },
         { key: 'statement' },
+        { key: 'statement_photo' },
+        { key: 'answer_photos' },
+        { key: 'order' },
+        { key: 'selected_at' },
+        { key: 'answer' },
         { key: 'descriptive_answer' },
         { key: 'sub_category_id' },
-        { key: 'exams' },
         { key: 'type_id' },
         { key: 'author' },
+        { key: 'type' },
+        { key: 'sub_category' },
         {
           key: 'choices',
           value: function () {
@@ -140,15 +155,27 @@ class Question extends Model {
           }
         },
         {
-          key: 'recommended_time',
+          key: 'exams',
           value: function () {
-            return that.recommendedTime
+            return that.exams.list
           }
         },
         {
           key: 'level',
           value: function () {
             return that.difficulty
+          }
+        },
+        {
+          key: 'checking_times',
+          value: function () {
+            return that.checking_times.list
+          }
+        },
+        {
+          key: 'logs',
+          value: function () {
+            return that.logs.list
           }
         }
       ]
@@ -164,36 +191,35 @@ class Question extends Model {
       // this.rendered_descriptive_answer = convert(this.descriptive_answer)
       // this.rendered_statement = md.render(this.statement)
     }
-    // eslint-disable-next-line no-constant-condition
-    if (false && this.choices.list.length === 0) {
-      const choices = [
-        {
-          id: 1,
-          title: '',
-          order: 1,
-          answer: false
-        },
-        {
-          id: 2,
-          title: '',
-          order: 2,
-          answer: false
-        },
-        {
-          id: 3,
-          title: '',
-          order: 3,
-          answer: false
-        },
-        {
-          id: 4,
-          title: '',
-          order: 4,
-          answer: false
-        }
-      ]
-      this.choices = new ChoiceList(choices)
-    }
+    // if (this.choices.list.length === 0) {
+    //   const choices = [
+    //     {
+    //       id: 1,
+    //       title: '',
+    //       order: 1,
+    //       answer: false
+    //     },
+    //     {
+    //       id: 2,
+    //       title: '',
+    //       order: 2,
+    //       answer: false
+    //     },
+    //     {
+    //       id: 3,
+    //       title: '',
+    //       order: 3,
+    //       answer: false
+    //     },
+    //     {
+    //       id: 4,
+    //       title: '',
+    //       order: 4,
+    //       answer: false
+    //     }
+    //   ]
+    //   this.choices = new ChoiceList(choices)
+    // }
   }
 
   convertToMarkdownKatex1 (string) {
