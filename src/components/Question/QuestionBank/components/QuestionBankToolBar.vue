@@ -3,7 +3,6 @@
     <q-expansion-item
       expand-icon-toggle
       expand-icon="isax:arrow-down-1"
-      class="justify-between"
     >
       <template v-slot:header>
         <q-card-section class="toolbar-card q-pa-0">
