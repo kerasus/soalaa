@@ -16,7 +16,7 @@
           label="تایپ سوال"
           color="primary"
           class="change-type"
-          to="/question/create/text"
+          to="/question/create/text/multipleChoice"
           unelevated
         />
       </div>
