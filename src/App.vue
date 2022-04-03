@@ -2,7 +2,9 @@
   <router-view />
 </template>
 <script>
-import '../src/assets/scss/font.scss'
+import 'src/assets/scss/IranyekanFont.scss'
+// import '../public/fonts/iranyekan/css/style.css'
+
 import { mixinSetIcons } from './mixin/Mixins.js'
 // import 'material-icons/material-icons.css'
 import { defineComponent } from 'vue'
@@ -39,10 +41,17 @@ export default defineComponent({
     --error-3: #f44336;
   }
   * {
-    font-family: 'IRANSans', 'Arial', '-apple-system', 'Helvetica Neue', Helvetica, sans-serif ;
+    /*font-family: 'iranyekan', 'Arial', '-apple-system', 'Helvetica Neue', Helvetica, sans-serif ;*/
+    font-family: iranyekan , 'Arial', '-apple-system', 'Helvetica Neue', Helvetica, sans-serif ;
   }
   body.body--light {
     background: #f1f1f1
+  }
+  .default-notify-class {
+    font-size: 18px;
+    /*width: 30%;*/
+    text-align: center;
+    padding: 10px 16PX;
   }
   /*body.body--dark {*/
   /*  background: #000*/

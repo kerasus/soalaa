@@ -135,7 +135,7 @@ export default {
           routeName: null,
           active: false,
           children: [
-            { displayName: 'ثبت سوال', routeName: 'Admin.Question.Create', active: false },
+            { displayName: 'ثبت سوال', routeName: 'Admin.Question.Create.Image', active: false },
             { displayName: 'کارخانه سوال', routeName: 'Admin.Question.Factory', active: false },
             { displayName: 'بانک سوال', routeName: 'Admin.Question.Bank', active: false }
           ]
@@ -258,19 +258,19 @@ export default {
   min-height: 840px;
   border-radius: 30px;
   margin: 40px 24px;
-  @media screen and (max-width: 1439px) {
+  @media screen and (max-width: 1919px) {
     width: 260px;
     min-height: 740px;
     margin: 30px 30px 30px 24px;
   }
-  @media screen and (max-width: 1023px) {
+  @media screen and (max-width: 1439px) {
     margin: 0 !important;
     border-radius: 0;
     width: 280px;
     min-height: 680px;
     height: 100%;
   }
-  @media screen and (max-width: 349px) {
+  @media screen and (max-width: 599px) {
     width: 242px;
   }
 
@@ -279,23 +279,23 @@ export default {
     height: 167px;
     align-items: center;
     justify-content: center;
-    @media screen and (max-width: 1439px) {
+    @media screen and (max-width: 1919px) {
       height: 136px;
     }
-    @media screen and (max-width: 1023px) {
+    @media screen and (max-width: 1439px) {
       height: 100px;
     }
-    @media screen and (max-width: 349px) {
+    @media screen and (max-width: 599px) {
       height: 110px;
     }
 
     .logo-image {
       width: 140px;
       height: 95px;
-      @media screen and (max-width: 1439px) {
+      @media screen and (max-width: 1919px) {
         height: 76px;
       }
-      @media screen and (max-width: 1023px) {
+      @media screen and (max-width: 1439px) {
         width: 100px;
         height: 50px;
       }
@@ -303,10 +303,10 @@ export default {
       .q-img__container {
         width: 140px;
         height: 95px;
-        @media screen and (max-width: 1439px) {
+        @media screen and (max-width: 1919px) {
           height: 76px;
         }
-        @media screen and (max-width: 1023px) {
+        @media screen and (max-width: 1439px) {
           width: 100px;
           height: 50px;
         }
@@ -319,22 +319,22 @@ export default {
 
     &.side-menu-list {
       margin: 0 24px 109px 24px;
-      @media screen and (max-width: 1439px) {
+      @media screen and (max-width: 1919px) {
         margin: 0 24px 34px 24px;
       }
-      @media screen and (max-width: 1023px) {
+      @media screen and (max-width: 1439px) {
         margin: 0 21px 26px 21px;
       }
-      @media screen and (max-width: 349px) {
+      @media screen and (max-width: 599px) {
         margin: 0 18px 8px 18px;
       }
 
       .top-separator {
         margin: 0 40px 32px 40px;
-        @media screen and (max-width: 1439px) {
+        @media screen and (max-width: 1919px) {
           margin: 0 30px 25px 30px;
         }
-        @media screen and (max-width: 349px) {
+        @media screen and (max-width: 1439px) {
           margin: 0 45px 22px 45px;
         }
       }
@@ -408,7 +408,7 @@ export default {
         .q-expansion-item__content {
           .vertical-separator {
             margin: 6px 9px 9px 9px;
-            @media screen and (max-width: 349px) {
+            @media screen and (max-width: 599px) {
               margin: 0 10px 12px 10px;
             }
           }
@@ -432,7 +432,7 @@ export default {
               @media screen and (max-width: 1439px) {
                 margin: 0 30px 5px 30px;
               }
-              @media screen and (max-width: 349px) {
+              @media screen and (max-width: 599px) {
                 margin: 0 45px 5px 45px;
               }
             }
@@ -444,10 +444,10 @@ export default {
               width: 157px;
               border-radius: 10px;
               padding: 0 14px;
-              @media screen and (max-width: 1023px) {
+              @media screen and (max-width: 1439px) {
                 width: 148px;
               }
-              @media screen and (max-width: 349px) {
+              @media screen and (max-width: 599px) {
                 width: 160px;
                 margin-bottom: 5px;
                 padding: 0 10px 0 12px;
@@ -503,10 +503,10 @@ export default {
     align-items: center;
     padding: 0 14px 0 10px;
     margin: 0 0 36px 27px;
-    @media screen and (max-width: 1023px) {
+    @media screen and (max-width: 1439px) {
       margin: 0 31px 33px 31px;
     }
-    @media screen and (max-width: 349px) {
+    @media screen and (max-width: 599px) {
       margin: 0 30px 30px 30px;
     }
 

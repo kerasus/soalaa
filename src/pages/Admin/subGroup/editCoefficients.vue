@@ -1,5 +1,15 @@
 <template>
-  <div class="row ">
+  <div class="row justify-end">
+    <div class="row q-mr-lg">
+      <q-btn
+        class="q-mx-sm float-right"
+        round
+        dark-percentage
+        color="primary"
+        @click= this.$router.go(-1)
+        icon="isax:arrow-left-2"
+      />
+    </div>
     <div class="col-md-12 q-pa-sm">
       <q-input
         v-model="sourceExamInfoForCopyCoefficient.id"
@@ -340,7 +350,7 @@ export default {
         })
     },
     getSubCategoryList () {
-      this.subCategoriesList.fetch()
+      this.$axios.get(this.subCategoriesList.baseRoute)
         .then((response) => {
           this.subCategoriesList = new QuestSubcategoryList(response.data.data)
         })
@@ -395,6 +405,11 @@ export default {
       })
         .then((response) => {
           that.subGroups = response.data.data
+          this.$q.notify({
+            message: 'اطلاعات ثبت شد.',
+            group: 'notifs',
+            type: 'positive'
+          })
         })
     }
   }

@@ -16,26 +16,59 @@
           label="تایپ سوال"
           color="primary"
           class="change-type"
+          to="/question/create/text/multipleChoice"
           unelevated
         />
       </div>
     </div>
     <div class="row">
-      <div class="col">
-        <upload-image title="صورت سوال" />
+      <div class="col-6">
+        <upload-image v-model="question" title="صورت سوال" field-key="statement_photo"/>
       </div>
+      <div class="col-6">
+        <upload-image v-model="question" title="پاسخ سوال" field-key="answer_photos"/>
+      </div>
+    </div>
+    <div class="row">
       <div class="col">
-        <upload-image title="پاسخ سوال" />
+        <AttachExam />
+        <div class="attach-btn row">
+          <QuestionDetails class="col-9"/>
+          <BtnBox class="col-3"/>
+        </div>
+        <CommentBox />
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import uploadImage from '../../../components/Question/QuestionPage/UploadImage'
+import uploadImage from 'src/components/Question/QuestionPage/UploadImage'
+import { Question } from 'src/models/Question'
+import QuestionDetails from 'components/Question/QuestionPage/Create/textMode/QuestionDetails'
+import { AdminActionOnQuestion } from 'src/mixin/Mixins'
+import AttachExam from 'components/Question/QuestionPage/AttachExam'
+import CommentBox from 'components/Question/QuestionPage/CommentBox'
+import BtnBox from 'components/Question/QuestionPage/BtnBox'
+
 export default {
   name: 'CreateImage',
-  components: { uploadImage },
+  components: { uploadImage, QuestionDetails, AttachExam, CommentBox, BtnBox },
+  mixins: [AdminActionOnQuestion],
+  data () {
+    return {
+      question: new Question()
+    }
+  },
+  mounted () {
+    this.loadExamList()
+    this.loadSubcategories()
+  },
+  provide () {
+    return {
+      question: this.question
+    }
+  }
 }
 </script>
 

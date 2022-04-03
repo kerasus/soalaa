@@ -176,9 +176,6 @@ export default {
     this.updateDrawerBasedOnWindowSize()
     this.startExamProcess()
   },
-  unmounted () {
-    this.changeAppBarAndDrawer(false)
-  },
   computed: {
     windowSize () {
       return this.$store.getters['AppLayout/windowSize']
@@ -210,9 +207,6 @@ export default {
           quizId: this.$route.params.quizId
         }
       })
-    },
-    changeAppBarAndDrawer (state) {
-      this.$store.dispatch('AppLayout/updateAppBarAndDrawer', state)
     },
     showAppBar () {
       this.$store.commit('AppLayout/updateLayoutHeaderVisible', true)

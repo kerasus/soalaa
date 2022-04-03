@@ -63,7 +63,8 @@ export default {
       return this.user
     },
     toggleLeftDrawer () {
-      this.$store.commit('AppLayout/updateLayoutLeftDrawerVisible', true)
+      const visibility = this.$store.getters['AppLayout/layoutLeftDrawerVisible']
+      return this.$store.commit('AppLayout/updateLayoutLeftDrawerVisible', !visibility)
     }
   }
 }

@@ -1,5 +1,6 @@
 const lumenServer = process.env.AAA_API_SERVER
 const authServer = process.env.AUTH_API_SERVER
+const treeServer = process.env.TREE_API_SERVER
 const API_ADDRESS = {
   // socket: process.env.VUE_APP_SOCKET_TARGET_API_SERVER,
   socket: 'https://office.alaatv.com:501',
@@ -128,7 +129,7 @@ const API_ADDRESS = {
       }
     },
     base: lumenServer + '/exam-question/attach',
-    createAndAttach: () => lumenServer + '/exam-question/attach/',
+    createAndAttach: () => lumenServer + '/attacexam-question/h/',
     create: lumenServer + '/question',
     attachSubCategoryToQuestion: lumenServer + '/exam-question/attach/sub-category',
     updateQuestion (questionId) {
@@ -155,7 +156,8 @@ const API_ADDRESS = {
     base: lumenServer + '/sub-category',
     update (id) {
       return lumenServer + '/sub-category/' + id
-    }
+    },
+    updateOrder: lumenServer + '/exam-question/update/order/sub-category'
   },
   questionCategory: {
     base: lumenServer + '/category',
@@ -169,6 +171,15 @@ const API_ADDRESS = {
     },
     all () {
       return lumenServer + '/option?with_pagination=0&type=zirgorooh_type'
+    }
+  },
+  tree: {
+    base: treeServer + '/tree',
+    getNodeById (nodeId) {
+      return treeServer + '/tree/' + nodeId
+    },
+    getNodeByType (nodeType) {
+      return treeServer + '/tree?type=' + nodeType
     }
   }
 }

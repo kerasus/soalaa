@@ -1,7 +1,6 @@
 <template>
   <div class="row">
     <div
-      v-if="editStatus"
       class="col-12"
     >
       <vue-tiptap-katex
@@ -10,18 +9,11 @@
         :options="{ bubbleMenu: false, floatingMenu: false, poem: true, reading: true, persianKeyboard: true }"
       />
     </div>
-    <div v-else>
-      <vue-katex :input="html" />
-    </div>
-
   </div>
 </template>
-
 <script>
 
-import API_ADDRESS from 'src/api/Addresses'
 import VueTiptapKatex from 'vue3-tiptap-katex'
-import VueKatex from 'components/VueKatex'
 
 // replacement
 // eslint-disable-next-line import/named
@@ -30,8 +22,7 @@ import { ref } from 'vue'
 export default {
   name: 'QuestionField',
   components: {
-    VueTiptapKatex,
-    VueKatex
+    VueTiptapKatex
   },
   props: {
     editorValue: {
@@ -40,14 +31,6 @@ export default {
     },
     label: {
       default: '',
-      type: String
-    },
-    editStatus: {
-      default: false,
-      type: Boolean
-    },
-    questionId: {
-      required: true,
       type: String
     }
   },
@@ -59,21 +42,11 @@ export default {
       loading: false
     }
   },
-  computed: {
-    imageUrl () {
-      return API_ADDRESS.question.uploadImage(this.questionId)
-    }
-  },
+  computed: {},
   created () {
     this.value = this.editorValue
     this.loading = true
     this.getHtmlValueFromValueProp()
-    // console.log('_________________________________________________________________________')
-    // console.log('question field value:', this.value)
-    // console.log('question field :', this.label)
-    // console.log('question field editStatus:', this.editStatus)
-    // console.log('question field questionId:', this.questionId)
-    // console.log('_________________________________________________________________________')
   },
   watch: {
   },
@@ -85,7 +58,7 @@ export default {
   methods: {
     getContent () {
       console.log('value', this.$refs.tiptap.getContent())
-      this.$emit('update:modelValue', this.$refs.tiptap.getContent())
+      // this.$emit('update:modelValue', this.$refs.tiptap.getContent())
     },
     getHtmlValueFromValueProp () {
       let html = this.value
