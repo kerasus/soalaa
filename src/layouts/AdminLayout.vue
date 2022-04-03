@@ -5,3 +5,14 @@
     </keep-alive>
   </router-view>
 </template>
+
+<script>
+export default {
+  created () {
+    console.log('AdminLayout created')
+  },
+  mounted () {
+    console.log('AdminLayout mounted')
+  }
+}
+</script>

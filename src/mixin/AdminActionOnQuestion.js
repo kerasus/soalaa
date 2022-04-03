@@ -33,6 +33,7 @@ const AdminActionOnQuestion = {
       // this.question.exams.loading = true
     },
     getQuestionType () {
+      console.log('getQuestionType')
       const that = this
       axios.get(API_ADDRESS.option.base + '?type=question_type')
         .then(function (response) {
@@ -44,7 +45,7 @@ const AdminActionOnQuestion = {
               color: 'negative'
             })
           }
-          that.setCurrentQType()
+          that.setCurrentQuestionType()
           that.qTabLoading = false
         })
         .catch(function (error) {
@@ -55,17 +56,25 @@ const AdminActionOnQuestion = {
     readRouteName () {
       return this.$route.name
     },
-    doesHaveQType () {
-      return !!this.readRouteName().includes('.Text.')
+    doesHaveQuestionType () {
+      return !!(this.readRouteName().includes('.Text') || this.readRouteName().includes('.Image'))
     },
-    getCurrentQType () {
+    getCurrentQuestionType () {
       const currentRoute = this.$route.name
-      const txtToRemove = 'Admin.Question.Create.Text.'
+      const txtToRemove = 'Admin.Question.Create.' + this.getCurrentQuestionMode() + '.'
       return currentRoute.replace(txtToRemove, '')
     },
-    setCurrentQType () {
-      if (this.doesHaveQType()) {
-        const currentType = this.getCurrentQType()
+    getCurrentQuestionMode () {
+      if (this.readRouteName().includes('.Text')) {
+        return 'Text'
+      } else if (this.readRouteName().includes('.Image')) {
+        return 'Image'
+      }
+    },
+    setCurrentQuestionType () {
+      if (this.doesHaveQuestionType()) {
+        console.log('this.getCurrentQuestionType()', this.getCurrentQuestionType())
+        const currentType = this.getCurrentQuestionType()
         let cValue = ''
         if (currentType === 'MBTI') {
           cValue = 'psychometric'
@@ -75,7 +84,8 @@ const AdminActionOnQuestion = {
           cValue = 'konkur'
         }
         this.question.type = this.componentTabs.list.find(item => (item.value === cValue))
-        this.setInitialType()
+        console.log('this.question.type before nav', this.question.type.componentName)
+        // this.setInitialType()
       }
     },
     getQuestionStatus () {

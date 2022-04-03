@@ -29,31 +29,38 @@
         <upload-image v-model="question" title="پاسخ سوال" field-key="answer_photos"/>
       </div>
     </div>
-    <div class="row">
-      <div class="col">
-        <AttachExam />
-        <div class="attach-btn row">
-          <QuestionDetails class="col-9"/>
-          <BtnBox class="col-3"/>
-        </div>
-        <CommentBox />
-      </div>
-    </div>
+<!--    <div class="row">-->
+<!--      <div class="col">-->
+<!--        <AttachExam />-->
+<!--        <div class="attach-btn row">-->
+<!--          <QuestionDetails class="col-9"/>-->
+<!--          <BtnBox class="col-3"/>-->
+<!--        </div>-->
+<!--        <CommentBox />-->
+<!--      </div>-->
+<!--    </div>-->
   </div>
 </template>
 
 <script>
 import uploadImage from 'src/components/Question/QuestionPage/UploadImage'
 import { Question } from 'src/models/Question'
-import QuestionDetails from 'components/Question/QuestionPage/Create/textMode/QuestionDetails'
+// import QuestionDetails from 'components/Question/QuestionPage/Create/textMode/QuestionDetails'
 import { AdminActionOnQuestion } from 'src/mixin/Mixins'
-import AttachExam from 'components/Question/QuestionPage/AttachExam'
-import CommentBox from 'components/Question/QuestionPage/CommentBox'
-import BtnBox from 'components/Question/QuestionPage/BtnBox'
+// import AttachExam from 'components/Question/QuestionPage/AttachExam'
+// import CommentBox from 'components/Question/QuestionPage/CommentBox'
+// import BtnBox from 'components/Question/QuestionPage/BtnBox'
 
 export default {
   name: 'CreateImage',
-  components: { uploadImage, QuestionDetails, AttachExam, CommentBox, BtnBox },
+  components: {
+    uploadImage
+    // ,
+    // QuestionDetails,
+    // AttachExam,
+    // CommentBox,
+    // BtnBox
+  },
   mixins: [AdminActionOnQuestion],
   data () {
     return {
@@ -74,7 +81,8 @@ export default {
 
 <style scoped lang="scss">
 .page-container {
-  padding: 40px 100px;
+  //padding: 40px 100px;
+  padding-top: 20px;
   display: flex;
   flex-direction: column;
 
