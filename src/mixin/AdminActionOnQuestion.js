@@ -20,8 +20,21 @@ const AdminActionOnQuestion = {
   },
   methods: {
     createQuestion (question) {
-      question.apiResource.sendType = 'form-data'
-      this.$axios.post(API_ADDRESS.question.create, question.loadApiResource())
+      const formData = new FormData()
+      // formData.append('status_id', statusId);
+      question.statement_photo.forEach((item, key) => {
+        formData.append('statement_photo[' + key + ']', item)
+      })
+      question.answer_photos.forEach((item, key) => {
+        formData.append('answer_photos[' + key + ']', item)
+      })
+      this.currentQuestion.exams.forEach((item, key) => {
+        formData.append('exams[' + key + '][id]', item.id)
+        formData.append('exams[' + key + '][order]', item.order)
+        formData.append('exams[' + key + '][sub_category_id]', item.sub_category_id)
+      })
+      // formData.append('type_id', this.optionQuestionId)
+      this.$axios.post(API_ADDRESS.question.create, formData)
         .then(response => {
           console.log(response.data)
         })
