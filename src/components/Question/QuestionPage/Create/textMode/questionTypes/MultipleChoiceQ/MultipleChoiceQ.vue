@@ -1,10 +1,11 @@
 <template>
   <div class="multiple-choice-Q">
+    <button @click="getContent">getContent</button>
     <q-btn
       v-if="question.choices.list.length > 0"
       dark
       class="full-width q-mb-md removeAllChoice-btn"
-      label="اضافه کردن سوال جدید"
+      label="اضافه کردن گزینه جدید"
       @click="addChoice"
     />
     <q-card class="question-card default-questions-card">
@@ -15,7 +16,7 @@
       <q-card-section>
         <div class="row justify-between question-box default-Qcard-box">
           <QuestionField
-            ref="questionStatement"
+            ref="tiptapQuestionStatement"
             :key="'statement' + domKey"
           />
 <!--          <div class="col-10 question-txt default-Qcard-txt">-->
@@ -49,9 +50,9 @@
                 dense
                 v-model="choice"
                 :val="'choice' + (index + 1)"
-                :label="'گزینه' + (index + 1)"
+                :label="'گزینه ' + (index + 1)"
                 color="primary"
-                @click="clicked(item.order)"
+                @click="choiceClicked(item.order)"
               />
               <q-btn
                 push
@@ -66,8 +67,8 @@
             <q-card-section>
               <div class="row justify-between default-Qcard-box">
                 <QuestionField
-                  :ref="'choice' + (item.order)"
-                  :key="'choices' + (item.order) + domKey"
+                  :ref="'tiptapChoice' + index"
+                  :key="'choices' + index + domKey"
                 />
               </div>
             </q-card-section>
@@ -83,7 +84,7 @@
       <q-card-section>
         <div class="row justify-between default-Qcard-box">
           <QuestionField
-            ref="descriptiveA"
+            ref="tiptapDescriptiveAnswer"
             :key="'descriptive_answer' + domKey"
           />
         </div>
@@ -117,9 +118,9 @@ export default {
   data () {
     return {
       domKey: Date.now(),
-      question1: new Question(),
       choice: '',
-      shakeRemoveBtn: false
+      shakeRemoveBtn: false,
+      defaultRefName: 'tiptap'
     }
   },
   watch: {
@@ -134,18 +135,19 @@ export default {
     setTimeout(() => {
       that.domKey = 'Date.now()'
     }, 100)
-    this.question.choices.list = []
-    this.question.choices.addEmptyChoices(4)
+    this.setDefaultChoices()
   },
   mounted () {
     this.$nextTick(() => {
       this.question.loading = false
     })
   },
-  updated () {
-    // this.question1 = this.modelValue
-  },
+  updated () {},
   methods: {
+    setDefaultChoices () {
+      this.question.choices.list = []
+      this.question.choices.addEmptyChoices(4)
+    },
     removeChoice (order) {
       this.shakeRemoveBtn = false
       if (this.question.choices.list.length < 3) {
@@ -159,23 +161,36 @@ export default {
       }
       const index = this.question.choices.list.findIndex(item => item.order === order)
       this.question.choices.list.splice(index, 1)
+      this.question.choices.reorder()
     },
     addChoice () {
       this.question.choices.addOneEmptyChoice()
     },
     getContent () {
-      this.question.statement = this.$refs.questionStatement.getContent()
-      this.question.answer = this.$refs.descriptive.getContent()
+      const that = this
+      if (this.validateContent()) {
+        this.question.statement = this.getContentOfQuestionParts('QuestionStatement')
+        this.question.choices.list.forEach(function (item, index) {
+          item.title = that.getContentOfChoice(index)
+          // toDo : the line bellow is none related and temporary
+          item.id = index
+        })
+        this.question.descriptive_answer = this.getContentOfQuestionParts('DescriptiveAnswer')
+      }
       console.log('this.question', this.question)
-      // this.$refs.choice1[0].getContent()
-      // this.$refs.choice2[0].getContent()
-      // this.$refs.choice3[0].getContent()
-      // this.$refs.choice4[0].getContent()
     },
-    updateQuestion () {
-      this.$emit('updateQuestion', this.question)
+    getContentOfChoice (index) {
+      return this.$refs[this.defaultRefName + 'Choice' + index][0].getContent()
     },
-    clicked (order) {
+    getContentOfQuestionParts (name) {
+      return this.$refs[this.defaultRefName + name].getContent()
+    },
+    validateContent () {
+      // let status = false
+      // return status
+    },
+    updateQuestion () {},
+    choiceClicked (order) {
       this.question.choices.list.forEach(item => {
         item.answer = item.order === order
       })
