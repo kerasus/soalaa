@@ -8,32 +8,36 @@
       label="اضافه کردن گزینه جدید"
       @click="addChoice"
     />
-    <q-card class="question-card default-questions-card">
-      <q-card-section class="question default-Qcard-title">
-        <div>صورت سوال</div>
-      </q-card-section>
-      <q-separator inset />
-      <q-card-section>
-        <div class="row justify-between question-box default-Qcard-box">
-          <QuestionField
-            ref="tiptapQuestionStatement"
-            :key="'statement' + domKey"
-          />
-<!--          <div class="col-10 question-txt default-Qcard-txt">-->
-<!--            شناخت فراوان جامعه و متخصصان را می طلبد،لازم است، و برای شرایط فعلی تکنولوژی مورد نیاز، و کاربردهای متنوع با هدف بهبود ابزارهای کاربردی می باشد، کتابهای زیادی در شصت و سه درصد گذشته حال و آینده،لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ، و با استفاده از طراحان گرافیک است، چاپگرها و متون بلکه روزنامه و مجله در ستون و سطرآنچنان که-->
-<!--          </div>-->
-<!--          <div class="col-2 question-img default-Qcard-img">-->
-<!--            <q-img-->
-<!--              :src="url"-->
-<!--              spinner-color="primary"-->
-<!--              spinner-size="30px"-->
-<!--              style="height: 96px; width: 96px"-->
-<!--            >-->
-<!--            </q-img>-->
-<!--          </div>-->
-        </div>
-      </q-card-section>
-    </q-card>
+    <div>
+      <q-card
+        class="question-card default-questions-card"
+      >
+        <q-card-section class="question default-Qcard-title">
+          <div>صورت سوال</div>
+        </q-card-section>
+        <q-separator inset />
+        <q-card-section>
+          <div class="row justify-between question-box default-Qcard-box">
+            <QuestionField
+              ref="tiptapQuestionStatement"
+              :key="'statement' + domKey"
+            />
+            <!--          <div class="col-10 question-txt default-Qcard-txt">-->
+            <!--            شناخت فراوان جامعه و متخصصان را می طلبد،لازم است، و برای شرایط فعلی تکنولوژی مورد نیاز، و کاربردهای متنوع با هدف بهبود ابزارهای کاربردی می باشد، کتابهای زیادی در شصت و سه درصد گذشته حال و آینده،لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ، و با استفاده از طراحان گرافیک است، چاپگرها و متون بلکه روزنامه و مجله در ستون و سطرآنچنان که-->
+            <!--          </div>-->
+            <!--          <div class="col-2 question-img default-Qcard-img">-->
+            <!--            <q-img-->
+            <!--              :src="url"-->
+            <!--              spinner-color="primary"-->
+            <!--              spinner-size="30px"-->
+            <!--              style="height: 96px; width: 96px"-->
+            <!--            >-->
+            <!--            </q-img>-->
+            <!--          </div>-->
+          </div>
+        </q-card-section>
+      </q-card>
+    </div>
     <div class="multiple-choice-A">
       <div
         v-if="question.choices.list[0]"
@@ -44,7 +48,9 @@
           v-for="(item, index) in question.choices.list"
           :key="item.order"
         >
-          <q-card class="col-6 default-questions-card">
+          <q-card
+            class="col-6 default-questions-card"
+          >
             <q-card-section class="default-Qcard-title">
               <q-radio
                 dense
@@ -76,43 +82,84 @@
         </div>
       </div>
     </div>
-    <q-card class="default-questions-card">
-      <q-card-section class="default-Qcard-title">
-        <div>پاسخ تشریحی</div>
-      </q-card-section>
-      <q-separator inset />
-      <q-card-section>
-        <div class="row justify-between default-Qcard-box">
-          <QuestionField
-            ref="tiptapDescriptiveAnswer"
-            :key="'descriptive_answer' + domKey"
-          />
+    <div>
+<!--      <q-skeleton-->
+<!--        v-if="loading"-->
+<!--        type="QInput"-->
+<!--        style="min-height: 220px; border-radius: 30px;"-->
+<!--      />-->
+      <q-card
+        class="default-questions-card"
+      >
+        <q-card-section class="default-Qcard-title">
+          <div>پاسخ تشریحی</div>
+        </q-card-section>
+        <q-separator inset />
+        <q-card-section>
+          <div class="row justify-between default-Qcard-box">
+            <QuestionField
+              ref="tiptapDescriptiveAnswer"
+              :key="'descriptive_answer' + domKey"
+            />
         </div>
-      </q-card-section>
+        </q-card-section>
     </q-card>
+    </div>
+  </div>
+  <div class="relative-position">
+    <attach-exam
+      :exams="examList"
+      :lessons="subCategoriesList"
+    />
+    <div class="attach-btn row">
+      <question-details class="col-9"/>
+      <btn-box
+        class="col-3"
+        @saveQuestion="saveQuestion"
+      />
+    </div>
+    <comment-box/>
+    <q-inner-loading
+      :showing="question.exams.loading"
+      color="primary"
+      class="QComponents-inner-loading"
+      label-style="font-size: 1.1em"
+    />
   </div>
 </template>
 
 <script>
+import AttachExam from 'components/Question/QuestionPage/AttachExam'
+import CommentBox from 'components/Question/QuestionPage/CommentBox'
+import QuestionDetails from 'components/Question/QuestionPage/Create/textMode/QuestionDetails'
+import BtnBox from 'components/Question/QuestionPage/BtnBox'
 import QuestionField from 'components/Question/QuestionPage/QuestionField.vue'
 import { Question } from 'src/models/Question'
+import AdminActionOnQuestion from 'src/mixin/AdminActionOnQuestion'
+import { QuestSubcategoryList } from 'src/models/QuestSubcategory'
+import { ExamList } from 'src/models/Exam'
 export default {
   name: 'MultipleChoiceQ',
   components: {
-    QuestionField
+    QuestionField,
+    BtnBox,
+    CommentBox,
+    AttachExam,
+    QuestionDetails
   },
+  mixins: [
+    AdminActionOnQuestion
+  ],
   props: {
     setContentToQuestion: {
       type: Boolean,
       default () {
         return false
       }
-    }
-  },
-  inject: {
-    question: {
-      from: 'question', // this is optional if using the same key for injection
-      default: new Question()
+    },
+    loading: {
+      default: false,
+      type: Boolean
     }
   },
   data () {
@@ -120,7 +167,19 @@ export default {
       domKey: Date.now(),
       choice: '',
       shakeRemoveBtn: false,
-      defaultRefName: 'tiptap'
+      defaultRefName: 'tiptap',
+      dynamicMassage: '',
+      question: new Question(),
+      subCategoriesList: new QuestSubcategoryList(),
+      examList: new ExamList(),
+      allProps: {
+        loading: false
+      }
+    }
+  },
+  provide () {
+    return {
+      question: this.question
     }
   },
   watch: {
@@ -138,12 +197,17 @@ export default {
     this.setDefaultChoices()
   },
   mounted () {
+    this.loadExamList()
+    this.loadSubcategories()
     this.$nextTick(() => {
-      this.question.loading = false
+      this.setAllQuestionLoadings()
     })
   },
   updated () {},
   methods: {
+    saveQuestion () {
+      // this.allProps.setContentToQuestion = true
+    },
     setDefaultChoices () {
       this.question.choices.list = []
       this.question.choices.addEmptyChoices(4)
@@ -185,11 +249,48 @@ export default {
     getContentOfQuestionParts (name) {
       return this.$refs[this.defaultRefName + name].getContent()
     },
-    validateContent () {
-      // let status = false
-      // return status
+    validateContentOfChoice () {
+      const that = this
+      let status = true
+      this.question.choices.list.forEach(function (item, index) {
+        if (!that.getContentOfChoice(index)) {
+          status = false
+        }
+      })
+      return status
     },
-    updateQuestion () {},
+    validateContent () {
+      let status = true
+      const that = this
+      // eslint-disable-next-line
+      let errors = []
+      if (!this.getContentOfQuestionParts('QuestionStatement')) {
+        errors.push(this.getErrorMessage('صورت سوال'))
+        status = false
+      }
+      if (!this.validateContentOfChoice()) {
+        const ChoiceMassage = 'لطفا پاسخ تمامی سوالات را درج کنید'
+        errors.push(ChoiceMassage)
+        status = false
+      }
+      if (!this.getContentOfQuestionParts('DescriptiveAnswer')) {
+        errors.push(this.getErrorMessage('پاسخ تشریحی'))
+        status = false
+      }
+      if (!status) {
+        errors.forEach(function (item) {
+          that.$q.notify({
+            message: item,
+            color: 'negative',
+            icon: 'report_problem'
+          })
+        })
+      }
+      return status
+    },
+    getErrorMessage (dynamicWord) {
+      return 'لطفا فیلد ' + dynamicWord + ' را پر کنید'
+    },
     choiceClicked (order) {
       this.question.choices.list.forEach(item => {
         item.answer = item.order === order
