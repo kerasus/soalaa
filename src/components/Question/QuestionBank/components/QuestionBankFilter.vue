@@ -30,20 +30,28 @@
         </div>
       </div>
     </q-card>
-    <div class="filter-options-section" v-for="item in filterOptions" :key="item">
+    <div class="filter-options-section"
+         v-for="item in filterOptions" :key="item">
       <q-card class="theme-v1-box-shadow q-pa-none">
         <q-card-section class="q-pa-none">
-          <div class="filter-option-container">
-            <div class="filter-option-title">
-              {{ item }}
-            </div>
-            <q-card-actions class="filter-option-drop-down-btn q-pa-none">
-              <q-btn flat rounded size="14px">
-                <q-icon name="isax:arrow-down-1">
-                </q-icon>
-              </q-btn>
-            </q-card-actions>
-          </div>
+          <q-expansion-item
+            expand-icon="isax:arrow-down-1"
+          >
+              <template v-slot:header>
+                <div class="filter-option-container " >
+                <div class="filter-option-title">
+                  {{ item }}
+                </div>
+                </div>
+              </template>
+            <q-card>
+              <q-card-section>
+                Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quidem, eius reprehenderit eos corrupti
+                commodi magni quaerat ex numquam, dolorum officiis modi facere maiores architecto suscipit iste
+                eveniet doloribus ullam aliquid.
+              </q-card-section>
+            </q-card>
+          </q-expansion-item>
         </q-card-section>
       </q-card>
     </div>
@@ -146,6 +154,7 @@ export default {
   margin-bottom: 16px;
 
   .filter-option-container {
+    width: 500px;
     display: flex;
     padding: 20px 24px 20px 24px;
     justify-content: space-between;
@@ -189,6 +198,16 @@ export default {
 @media only screen and (max-width: 599px) {
   .filter-card-container {
     padding: 20px 0 16px 16px !important;
+  }
+}
+</style>
+
+<style lang="scss">
+.filter-options-section {
+  .q-expansion-item__container{
+    .q-focus-helper{
+      background: none !important;
+    }
   }
 }
 </style>

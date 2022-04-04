@@ -5,10 +5,9 @@
         <div class="search-box col">
           <q-card-actions>
             <div class="search-box">
-              <q-input standout="pink text-white" v-model="searchInput" label="جستجو در سوالات سه آ">
+              <q-input  v-model="searchInput" label="جستجو در سوالات سه آ">
                 <template v-slot:append>
-                  <q-icon v-if="text === ''" name="search" />
-                  <q-icon v-else name="clear" class="cursor-pointer" @click="text = ''" />
+                  <q-icon name="search" />
                 </template>
               </q-input>
             </div>
@@ -21,15 +20,12 @@
             rounded
             outlined
             v-model="searchInput"
-            :options="options"
             label="جدیدترین"
           >
             <template v-slot:append>
               <q-icon
-                v-if="model !== null"
                 class="cursor-pointer"
                 name="clear"
-                @click.stop="model = null"
               />
             </template>
           </q-select>
