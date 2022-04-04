@@ -137,7 +137,7 @@ export default {
   components: { VueKatex },
   data () {
     return {
-      choiceClickedStyle: null,
+      choiceClickedStyle: 0,
       info: [
         {
           name: 'شیمی دهم'
