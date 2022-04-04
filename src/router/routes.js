@@ -112,30 +112,10 @@ const routes = [
                     ]
                   },
                   {
-                    path: 'image/',
+                    path: 'image/:questionType',
                     name: 'Admin.Question.Create.Image',
                     breadcrumbs: { title: 'آپلود عکس', loading: false },
-                    component: () => (import('pages/Admin/Question/CreateImage')),
-                    children: [
-                      {
-                        path: 'mbti',
-                        name: 'Admin.Question.Create.Image.MBTI',
-                        breadcrumbs: { title: 'ام بی تی آی', loading: false },
-                        component: () => import('pages/Admin/Question/CreateImage')
-                      },
-                      {
-                        path: 'descriptive',
-                        name: 'Admin.Question.Create.Image.Descriptive',
-                        breadcrumbs: { title: 'تشریحی', loading: false },
-                        component: () => import('pages/Admin/Question/CreateImage')
-                      },
-                      {
-                        path: 'multipleChoice',
-                        name: 'Admin.Question.Create.Image.MultipleChoice',
-                        breadcrumbs: { title: 'تستی', loading: false },
-                        component: () => import('pages/Admin/Question/CreateImage')
-                      }
-                    ]
+                    component: () => (import('pages/Admin/Question/CreateImage'))
                   }
                 ]
               },

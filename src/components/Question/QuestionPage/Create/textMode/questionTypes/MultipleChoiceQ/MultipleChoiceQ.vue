@@ -1,6 +1,6 @@
 <template>
   <div class="multiple-choice-Q">
-    <button @click="getContent">getContent</button>
+<!--    <button @click="getContent">getContent</button>-->
     <q-btn
       v-if="question.choices.list.length > 0"
       dark
