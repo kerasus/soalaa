@@ -78,11 +78,11 @@ export default {
     AdminActionOnQuestion
   ],
   created () {
-    console.log('Navbar created')
+    // console.log('Navbar created')
     this.qTabLoading = true
   },
   mounted () {
-    console.log('Navbar mounted')
+    // console.log('Navbar mounted')
     this.getQuestionType()
   },
   computed: {},
