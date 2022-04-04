@@ -47,8 +47,8 @@
         </div>
       </div>
       <div class="choice-section row">
-        <div class="choice-column col-3" v-for="(item, index) in hh.data.choices" :key="index">
-          <div v-ripple="{background: '#4CAF50'}" :class="'choice choice-' + index+1 + ' relative-position'" :style="choiceClickedStyle" @click="choiceClicked">{{ index + 1 }}</div>
+        <div class="choice-column col-3" v-for="(item) in hh.data.choices" :key="item.id">
+          <div v-ripple="{}" :class="'choice ' + 'choice-' + item.id + ' relative-position'" @click="choiceClicked(item.id)">{{ item.id }}</div>
           <div class="answer-text">
             <vue-katex :input="item.title" />
           </div>
@@ -108,6 +108,18 @@
       </div>
     </q-card-section>
   </q-card>
+  <div class=" question-bank-pagination q-pa-lg flex flex-center">
+    <q-pagination
+      active-color="primary"
+      outline
+      direction-links
+      v-model="choiceClickedStyle"
+      color="black"
+      :max="10"
+      :max-pages="6"
+      boundary-numbers
+    />
+  </div>
 </template>
 
 <script>
@@ -234,9 +246,9 @@ export default {
     }
   },
   methods: {
-    choiceClicked () {
-      this.choiceClickedStyle = {
-        background: '#4CAF50'
+    choiceClicked (id) {
+      if (this.choiceWasClicked) {
+        this.choiceIsClicked = false
       }
     }
   },
@@ -245,7 +257,7 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss" >
 .question-bank-content {
   padding: 24px;
 
@@ -501,6 +513,15 @@ export default {
         }
       }
     }
+  }
+}
+.question-bank-pagination{
+  .q-btn--actionable{
+    width: 35px;
+    height: 35px;
+    background: #FFFFFF;
+    border-radius: 12px;
+    margin-right: 3px;
   }
 }
 </style>
