@@ -116,13 +116,21 @@ class ChoiceList extends Collection {
 
   sortByOrder () {
     this.changeOrderToInt()
+    this.reorder()
     return this.sortByKey('order')
+  }
+
+  reorder () {
+    this.list.forEach((choice, index) => {
+      choice.order = index
+    })
   }
 
   addEmptyChoices (index) {
     for (let i = 0; i < index; i++) {
       this.addOneEmptyChoice()
     }
+    this.reorder()
   }
 
   addOneEmptyChoice () {
@@ -130,7 +138,6 @@ class ChoiceList extends Collection {
     const newChoice = new Choice({ order: lastOrder + 1 })
     this.list.push(newChoice)
     this.sortByOrder()
-    // this.list = this.list.concat(newChoice)
   }
 }
 
