@@ -78,24 +78,57 @@ export default {
     AdminActionOnQuestion
   ],
   created () {
+    this.getQuestionType()
     // console.log('Navbar created')
     this.qTabLoading = true
   },
   mounted () {
     // console.log('Navbar mounted')
-    this.getQuestionType()
   },
   computed: {},
   methods: {
     getCurrentRoute (componentName) {
       const currentQuestionMode = this.getCurrentQuestionMode()
-      if (componentName === 'MultipleChoiceQ') {
-        return { name: 'Admin.Question.Create.' + currentQuestionMode + '.MultipleChoice' }
-      } else if (componentName === 'DescriptiveQ') {
-        return { name: 'Admin.Question.Create.' + currentQuestionMode + '.Descriptive' }
-      } else if (componentName === 'MBTIQ') {
-        return { name: 'Admin.Question.Create.' + currentQuestionMode + '.MBTI' }
+      if (currentQuestionMode === 'Text') {
+        if (componentName === 'MultipleChoiceQ') {
+          return { name: 'Admin.Question.Create.' + currentQuestionMode + '.MultipleChoice' }
+        } else if (componentName === 'DescriptiveQ') {
+          return { name: 'Admin.Question.Create.' + currentQuestionMode + '.Descriptive' }
+        } else if (componentName === 'MBTIQ') {
+          return { name: 'Admin.Question.Create.' + currentQuestionMode + '.MBTI' }
+        }
+      } else {
+        if (componentName === 'MultipleChoiceQ') {
+          return {
+            name: 'Admin.Question.Create.' + currentQuestionMode,
+            params: {
+              questionType: 'multipleChoice'
+            }
+          }
+        } else if (componentName === 'DescriptiveQ') {
+          return {
+            name: 'Admin.Question.Create.' + currentQuestionMode,
+            params: {
+              questionType: 'descriptive'
+            }
+          }
+        } else if (componentName === 'MBTIQ') {
+          return {
+            name: 'Admin.Question.Create.' + currentQuestionMode,
+            params: {
+              questionType: 'mbti'
+            }
+          }
+        }
       }
+    },
+    test () {
+      this.$router.push({
+        name: 'konkoorView',
+        params: {
+          quizId: this.$route.params.quizId
+        }
+      })
     }
   },
   watch: {

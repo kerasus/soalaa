@@ -53,6 +53,7 @@ const AdminActionOnQuestion = {
               color: 'negative'
             })
           }
+          // console.log('this.$route', this.$route)
           that.setCurrentQuestionType()
           that.qTabLoading = false
         })
@@ -61,16 +62,25 @@ const AdminActionOnQuestion = {
           that.qTabLoading = false
         })
     },
+    readRouteFullPath () {
+      return this.$route.fullPath
+    },
     readRouteName () {
       return this.$route.name
     },
-    doesHaveQuestionType () {
-      return !!(this.readRouteName().includes('.Text') || this.readRouteName().includes('.Image'))
+    doesHaveQuestionMode () {
+      return !!(this.readRouteFullPath().includes('text') || this.readRouteFullPath().includes('image'))
     },
     getCurrentQuestionType () {
-      const currentRoute = this.$route.name
-      const txtToRemove = 'Admin.Question.Create.' + this.getCurrentQuestionMode() + '.'
-      return currentRoute.replace(txtToRemove, '')
+      const currentRouteName = this.readRouteName()
+      const currentRouteFullPath = this.readRouteFullPath()
+      if (this.getCurrentQuestionMode() === 'Text') {
+        const txtToRemove = 'Admin.Question.Create.Text.'
+        return currentRouteName.replace(txtToRemove, '')
+      } else {
+        const txtToRemove = '/question/create/image/'
+        return currentRouteFullPath.replace(txtToRemove, '')
+      }
     },
     getCurrentQuestionMode () {
       if (this.readRouteName().includes('.Text')) {
@@ -80,7 +90,7 @@ const AdminActionOnQuestion = {
       }
     },
     setCurrentQuestionType () {
-      if (this.doesHaveQuestionType()) {
+      if (this.doesHaveQuestionMode()) {
         // console.log('this.getCurrentQuestionType()', this.getCurrentQuestionType())
         const currentType = this.getCurrentQuestionType()
         let cValue = ''
