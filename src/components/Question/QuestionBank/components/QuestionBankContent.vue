@@ -47,67 +47,87 @@
         </div>
       </div>
       <div class="choice-section row">
-        <div class="choice-column col-3" v-for="(item, index) in hh.data.choices" :key="index">
-          <div v-ripple="{background: '#4CAF50'}" :class="'choice choice-' + index+1 + ' relative-position'" :style="choiceClickedStyle" @click="choiceClicked">{{ index + 1 }}</div>
+        <div class="choice-column col-3" v-for="(item) in hh.data.choices" :key="item.id">
+          <div v-ripple="{}" :class="'choice ' + 'choice-' + item.id + ' relative-position'" @click="choiceClicked(item.id)">{{ item.id }}</div>
           <div class="answer-text">
             <vue-katex :input="item.title" />
           </div>
         </div>
       </div>
-      <div class="question-actions">
-        <div class="edit-and-add">
-          <div class="add-btn">
-            <q-btn flat class="edit-and-add-btn">
-              <q-icon name="isax:add"></q-icon>
-            </q-btn>
-          </div>
-          <div class="edit-btn">
-            <q-btn flat class="edit-and-add-btn">
-              <q-icon name="isax:edit-2"></q-icon>
-            </q-btn>
-          </div>
-        </div>
-        <div class="question-actions-content">
-          <div class="question-actions-btn">
-            <div class="rating">
-              <div class="voters-number">
-                (90)
+      <div class="question-actions-container">
+        <q-expansion-item
+        expand-icon-toggle
+        expand-icon="isax:arrow-down-1"
+      >
+        <template v-slot:header>
+          <div class="question-actions">
+            <div class="edit-and-add">
+              <div class="add-btn">
+                <q-btn flat class="edit-and-add-btn">
+                  <q-icon name="isax:add"></q-icon>
+                </q-btn>
               </div>
-              <div class="rate-number">
-                4.5
-              </div>
-              <div class="star">
-                <q-icon class="star-icon" name="mdi-star" size="16px"></q-icon>
+              <div class="edit-btn">
+                <q-btn flat class="edit-and-add-btn">
+                  <q-icon name="isax:edit-2"></q-icon>
+                </q-btn>
               </div>
             </div>
-            <div class="comments">
-              <q-btn flat dense rounded>
-                <div class="comment-number">19</div>
-                <q-icon class="comment-icon" name="isax:message-text" size="16px" style="color: #65677F">
-                  </q-icon>
-              </q-btn>
-            </div>
-            <div class="report">
-              <q-btn flat dense rounded>
-                <div class="report-title">
-                  گزارش خطا
+            <div class="question-actions-content">
+              <div class="question-actions-btn">
+                <div class="rating">
+                  <div class="voters-number">
+                    (90)
+                  </div>
+                  <div class="rate-number">
+                    4.5
+                  </div>
+                  <div class="star">
+                    <q-icon class="star-icon" name="mdi-star" size="16px"></q-icon>
+                  </div>
                 </div>
-                <q-icon class="report-icon" name="isax:danger" size="16px" style="color: #65677F"></q-icon>
-              </q-btn>
+                <div class="comments">
+                  <q-btn flat dense rounded>
+                    <div class="comment-number">19</div>
+                    <q-icon class="comment-icon" name="isax:message-text" size="16px" style="color: #65677F">
+                    </q-icon>
+                  </q-btn>
+                </div>
+                <div class="report">
+                  <q-btn flat dense rounded>
+                    <div class="report-title">
+                      گزارش خطا
+                    </div>
+                    <q-icon class="report-icon" name="isax:danger" size="16px" style="color: #65677F"></q-icon>
+                  </q-btn>
+                </div>
+              </div>
             </div>
           </div>
-          <div class="answer-show">
-            <q-btn flat rounded dense class="answer-show-btn">
-              <div class="show-title">
-                نمایش پاسخ تشریحی
-              </div>
-              <q-icon name="isax:arrow-down-1"></q-icon>
-            </q-btn>
-          </div>
-        </div>
+        </template>
+        <q-card>
+          <q-card-section>
+            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quidem, eius reprehenderit eos corrupti
+            commodi magni quaerat ex numquam, dolorum officiis modi facere maiores architecto suscipit iste
+            eveniet doloribus ullam aliquid.
+          </q-card-section>
+        </q-card>
+      </q-expansion-item>
       </div>
     </q-card-section>
   </q-card>
+  <div class=" question-bank-pagination q-pa-lg flex flex-center">
+    <q-pagination
+      active-color="primary"
+      outline
+      direction-links
+      v-model="choiceClickedStyle"
+      color="black"
+      :max="10"
+      :max-pages="6"
+      boundary-numbers
+    />
+  </div>
 </template>
 
 <script>
@@ -117,7 +137,7 @@ export default {
   components: { VueKatex },
   data () {
     return {
-      choiceClickedStyle: null,
+      choiceClickedStyle: 0,
       info: [
         {
           name: 'شیمی دهم'
@@ -234,9 +254,9 @@ export default {
     }
   },
   methods: {
-    choiceClicked () {
-      this.choiceClickedStyle = {
-        background: '#4CAF50'
+    choiceClicked (id) {
+      if (this.choiceWasClicked) {
+        this.choiceIsClicked = false
       }
     }
   },
@@ -245,10 +265,8 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss" >
 .question-bank-content {
-  padding: 24px;
-
   .question-info-section {
     display: flex;
     justify-content: space-between;
@@ -406,101 +424,136 @@ export default {
     }
   }
 
-  .question-actions {
-    display: flex;
-    justify-content: space-between;
-
-    .edit-and-add {
-      display: flex;
-
-      .add-btn {
-        margin-right: 16px;
+  .question-actions-container{
+    .q-item-type{
+      justify-content: space-between;
+    }
+    .q-expansion-item--collapsed{
+      .q-item__section {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        &:before{
+          content: 'نمایش پاسخ تشریحی';
+        }
+        i{
+          margin-top: 0;
+          margin-left: 10px;
+        }
+        .q-expansion-item__toggle-focus{
+          display: none;
+        }
       }
     }
-
-    .question-actions-content {
-      display: flex;
-      margin-top: 9px;
-      .question-actions-btn {
+    .q-expansion-item--expanded {
+      .q-item__section {
         display: flex;
-        .rating {
+        flex-direction: row;
+        align-items: center;
+        &:before{
+          content: 'بستن پاسخ تشریحی';
+        }
+        i{
+          margin-top: 0;
+          margin-left: 10px;
+        }
+        .q-expansion-item__toggle-focus{
+          display: none;
+        }
+      }
+    }
+    .question-actions {
+      display: flex;
+      justify-content: space-between;
+      width: 775px;
+
+      .edit-and-add {
+        display: flex;
+
+        .add-btn {
+          margin-right: 16px;
+        }
+      }
+
+      .question-actions-content {
+        display: flex;
+        margin-top: 9px;
+        .question-actions-btn {
           display: flex;
-          align-items: center;
-          margin-right: 24px;
-          .voters-number {
-            margin-top: 1px;
-            font-style: normal;
-            font-weight: 400;
-            font-size: 10px;
-            line-height: 17px;
-            color: #65677F;
-            opacity: 0.5;
+          .rating {
+            display: flex;
+            align-items: center;
+            margin-right: 24px;
+            .voters-number {
+              margin-top: 1px;
+              font-style: normal;
+              font-weight: 400;
+              font-size: 10px;
+              line-height: 17px;
+              color: #65677F;
+              opacity: 0.5;
+            }
+            .rate-number {
+              margin: 1px 0 0 2px;
+              font-style: normal;
+              font-weight: 400;
+              font-size: 12px;
+              line-height: 21px;
+              text-align: center;
+              color: #65677F;
+            }
+            .star {
+              .star-icon {
+                margin: 0 0 4px 6px;
+                color: #FFCA28;
+              }
+            }
           }
-          .rate-number {
-            margin: 1px 0 0 2px;
-            font-style: normal;
-            font-weight: 400;
-            font-size: 12px;
-            line-height: 21px;
-            text-align: center;
-            color: #65677F;
+
+          .comments {
+            display: flex;
+            align-items: center;
+            margin-right: 24px;
+
+            .comment-number {
+              font-size: 12px;
+              color: #65677F;
+            }
+            .comment-icon {
+              margin: 0 0 2px 5px;
+            }
           }
-          .star {
-            .star-icon {
-              margin: 0 0 4px 6px;
-              color: #FFCA28;
+
+          .report {
+            display: flex;
+            align-items: center;
+            margin-right: 30px;
+
+            .report-title {
+              font-style: normal;
+              font-weight: 400;
+              font-size: 12px;
+              line-height: 21px;
+              color: #65677F;
+            }
+            .report-icon {
+              margin: 0 0 3px 7px;
             }
           }
         }
 
-        .comments {
-          display: flex;
-          align-items: center;
-          margin-right: 24px;
-
-          .comment-number {
-            font-size: 12px;
-            color: #65677F;
-          }
-          .comment-icon {
-            margin: 0 0 2px 5px;
-          }
-        }
-
-        .report {
-          display: flex;
-          align-items: center;
-          margin-right: 30px;
-
-          .report-title {
-            font-style: normal;
-            font-weight: 400;
-            font-size: 12px;
-            line-height: 21px;
-            color: #65677F;
-          }
-          .report-icon {
-            margin: 0 0 3px 7px;
-          }
-        }
-      }
-
-      .answer-show {
-        display: flex;
-        align-items: center;
-        .answer-show-btn {
-          padding: 0 3px;
-          height: 30px;
-          .show-title {
-            font-style: normal;
-            font-weight: 500;
-            font-size: 14px;
-            line-height: 24px;
-            color: #23263B;
-          }
-        }
       }
     }
+
+  }
+}
+.question-bank-pagination{
+  .q-btn--actionable{
+    width: 35px;
+    height: 35px;
+    background: #FFFFFF;
+    border-radius: 12px;
+    margin-right: 3px;
   }
 }
 </style>
