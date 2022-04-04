@@ -1,21 +1,16 @@
 import API_ADDRESS from 'src/api/Addresses'
-// import Assistant from 'src/plugins/assistant'
 import axios from 'axios'
 import { QuestionStatusList } from 'src/models/QuestionStatus'
 import { Question } from 'src/models/Question'
 import { ExamList } from 'src/models/Exam'
 import { QuestSubcategoryList } from 'src/models/QuestSubcategory'
-// eslint-disable-next-line no-unused-vars
-import { QuestionType, TypeList } from 'src/models/QuestionType'
+import { TypeList } from 'src/models/QuestionType'
 const AdminActionOnQuestion = {
   data () {
     return {
       optionQuestionId: '',
       questionStatusId_draft: null,
       questionStatusId_pending_to_type: null
-      // ,
-      // examList: new ExamList(),
-      // subCategoriesList: new QuestSubcategoryList()
     }
   },
   methods: {
@@ -40,10 +35,23 @@ const AdminActionOnQuestion = {
         })
     },
     setAllQuestionLoadings () {
-      this.question.type.loading = true
+      this.question.loading = true
+      // this.question.type.loading = true
       // Todo : Temp
-      // this.question.loading = true
       // this.question.exams.loading = true
+    },
+    addComment (eventData) {
+      axios.post(API_ADDRESS.log.addComment(eventData.logId), { comment: eventData.text })
+        .then(response => {
+          // iterating over the array to find the log that has changed
+          for (let i = 0; i < this.currentQuestion.logs.list.length; i++) {
+            if (this.currentQuestion.logs.list[i].id === eventData.logId) {
+              // setting the new log using Vue.set so that the component notices the change
+              this.currentQuestion.logs.list[i] = new Log(response.data.data)
+              Vue.set(this.currentQuestion, 'logs', new LogList(this.currentQuestion.logs))
+            }
+          }
+        })
     },
     getQuestionType () {
       const that = this
@@ -62,7 +70,7 @@ const AdminActionOnQuestion = {
         })
         .catch(function (error) {
           console.log(error)
-          that.componentTabs.loading = false
+          that.qTabLoading = false
         })
     },
     readRouteName () {

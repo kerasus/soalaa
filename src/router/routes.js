@@ -56,7 +56,7 @@ const routes = [
           {
             path: '/question',
             breadcrumbs: { title: 'سوالات', loading: false },
-            component: () => import('layouts/AdminLayout.vue'),
+            component: () => import('layouts/bareLayout.vue'),
             meta: {
               middlewares: [auth]
             },
@@ -88,7 +88,7 @@ const routes = [
                     path: 'text',
                     name: 'Admin.Question.Create.Text',
                     breadcrumbs: { title: 'سوال متنی', loading: false },
-                    component: () => import('layouts/QuestionLayouts/CreateDefaultLayout.vue'),
+                    component: () => import('layouts/bareLayout.vue'),
                     // component: () => import('layouts/AdminLayout.vue'),
                     children: [
                       {
