@@ -1,6 +1,13 @@
 <template>
   <div class="Descriptive-Q">
 <!--        <button @click="getContent">getContent</button>-->
+    <q-linear-progress
+      v-if="this.question.loading"
+      size="md"
+      indeterminate
+      rounded
+      color="primary"
+    />
     <q-card class="question-card default-questions-card">
       <q-card-section class="question default-Qcard-title">
         <div>صورت سوال</div>
@@ -95,9 +102,7 @@ export default {
       dynamicMassage: '',
       subCategoriesList: new QuestSubcategoryList(),
       examList: new ExamList(),
-      allProps: {
-        loading: false
-      }
+      loading: true
     }
   },
   created () {
@@ -107,10 +112,11 @@ export default {
     }, 100)
   },
   mounted () {
-    this.loadExamList()
-    this.loadSubcategories()
     this.$nextTick(() => {
       this.setAllQuestionLoadings()
+      this.loadExamList()
+      this.loadSubcategories()
+      this.disableAllQuestionLoadings()
     })
   },
   methods: {
