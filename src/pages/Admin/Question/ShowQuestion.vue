@@ -40,7 +40,7 @@ import QuestionDetails from 'components/Question/QuestionPage/Create/textMode/Qu
 import AdminActionOnQuestion from 'src/mixin/AdminActionOnQuestion'
 import { QuestionType, TypeList } from 'src/models/QuestionType'
 import AttachExam from 'components/Question/QuestionPage/AttachExam'
-import CommentBox from 'components/Question/QuestionPage/CommentBox'
+import CommentBox from 'components/Question/QuestionPage/StatusChange'
 import BtnBox from 'components/Question/QuestionPage/BtnBox'
 import { ExamList } from 'src/models/Exam'
 import { QuestSubcategoryList } from 'src/models/QuestSubcategory'
