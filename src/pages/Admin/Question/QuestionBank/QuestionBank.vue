@@ -2,7 +2,7 @@
   <div class="main-container">
     <div class="row">
       <div class="col-12 question-bank-header">
-        <QuestionSearchHeader/>
+        <QuestionBankHeader/>
       </div>
       <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-xs-12 question-bank-filter">
         <QuestionFilter/>
@@ -26,7 +26,7 @@
 </template>
 
 <script>
-import QuestionSearchHeader from 'components/Question/QuestionBank/QuestionSearchHeader'
+import QuestionBankHeader from 'components/Question/QuestionBank/components/QuestionBankHeader'
 import QuestionToolBar from 'components/Question/QuestionBank/QuestionToolBar'
 import QuestionFilter from 'components/Question/QuestionBank/QuestionFilter'
 import QuestionItem from 'components/Question/QuestionBank/QuestionItem'
@@ -35,7 +35,7 @@ import { Question, QuestionList } from 'src/models/Question'
 
 export default {
   name: 'QuestionBank',
-  components: { QuestionSearchHeader, QuestionToolBar, QuestionFilter, QuestionItem, PageInation },
+  components: { QuestionBankHeader, QuestionToolBar, QuestionFilter, QuestionItem, PageInation },
   data () {
     return {
       loadingQuestion: new Question(),
