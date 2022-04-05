@@ -5,7 +5,13 @@
         <div class="number-and-info">
           <div class="question-number">
             <div class="question-number-title">
-              سوال 123456789
+              سوال
+              <template v-if="question.loading">
+                ...
+              </template>
+              <template v-else>
+                {{ question.id }}
+              </template>
             </div>
           </div>
           <div class="question-info">
@@ -20,11 +26,18 @@
         </div>
         <div class="level-and-source">
           <div class="question-level">
-            <div class="level">
+            <div v-if="questionLvl === 1" class="level">
               آسان
             </div>
-            <div class="level-circles" v-for="item in 3" :key="item">
+            <div v-if="questionLvl === 2" class="level">
+              متوسط
             </div>
+            <div v-if="questionLvl === 3" class="level">
+              سخت
+            </div>
+            <div class="level-circles" :class="{'hard' : questionLvlHard}"></div>
+            <div class="level-circles" :class="{'medium' : questionLvlMedium}"></div>
+            <div class="level-circles" :class="{'easy' : questionLvlEasy}"></div>
           </div>
           <div class="question-source">
             <div class="source-name-date">
@@ -43,11 +56,11 @@
       <div class="question-section">
         <div class="question-icon"></div>
         <div class="question">
-          <vue-katex :input="hh.data.statement" />
+          <vue-katex :input="question.statement" />
         </div>
       </div>
       <div class="choice-section row">
-        <div class="choice-column col-3" v-for="(item , index) in hh.data.choices" :key="index">
+        <div class="choice-column col-3" v-for="(item , index) in question.choices.list" :key="index">
           <div
             v-if="item.answer === false"
             class="choice false"
@@ -67,107 +80,204 @@
       </div>
       <div class="question-actions-container">
         <q-expansion-item
-        expand-icon-toggle
-        expand-icon="isax:arrow-down-1"
-      >
-        <template v-slot:header>
-          <div class="question-actions">
-            <div class="edit-and-add">
-              <div class="add-btn">
-                <q-btn flat class="edit-and-add-btn">
-                  <q-icon name="isax:add"></q-icon>
-                </q-btn>
-              </div>
-              <div class="edit-btn">
-                <q-btn flat class="edit-and-add-btn">
-                  <q-icon name="isax:edit-2"></q-icon>
-                </q-btn>
-              </div>
-            </div>
-            <div class="question-actions-content">
-              <div class="question-actions-btn">
-                <div class="rating">
-                  <div class="voters-number">
-                    (90)
-                  </div>
-                  <div class="rate-number">
-                    4.5
-                  </div>
-                  <div class="star">
-                    <q-icon class="star-icon" name="mdi-star" size="16px"></q-icon>
-                  </div>
-                </div>
-                <div class="comments">
-                  <q-btn flat dense rounded>
-                    <div class="comment-number">19</div>
-                    <q-icon class="comment-icon" name="isax:message-text" size="16px" style="color: #65677F">
-                    </q-icon>
+          expand-icon-toggle
+          expand-icon="isax:arrow-down-1"
+        >
+          <template v-slot:header>
+            <div class="question-actions">
+              <div class="edit-and-add">
+                <div class="add-btn">
+                  <q-btn flat class="edit-and-add-btn">
+                    <q-icon name="isax:add"></q-icon>
                   </q-btn>
                 </div>
-                <div class="report">
-                  <q-btn flat dense rounded>
-                    <div class="report-title">
-                      گزارش خطا
-                    </div>
-                    <q-icon class="report-icon" name="isax:danger" size="16px" style="color: #65677F"></q-icon>
+                <div class="edit-btn">
+                  <q-btn flat class="edit-and-add-btn">
+                    <q-icon name="isax:edit-2"></q-icon>
                   </q-btn>
                 </div>
               </div>
-            </div>
-          </div>
-        </template>
-        <q-card>
-          <q-card-section class="answer-section">
-            <div class="row">
-              <div class="answer-description col-8">
-                <q-card flat class="answer-description-card">
-                  <q-card-section class="answer-description-content">
-                    <div class="question-answer-choice" v-for="item in hh.data.choices" :key="item">
-                <span v-if="item.answer === true" class="question-answer-choice-title">
-                  گزینه یک
-                </span>
+              <div class="question-actions-content">
+                <div class="question-actions-btn">
+                  <div class="rating">
+                    <div class="voters-number">
+                      (90)
                     </div>
-                    <div class="question-answer-description">
-                      لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک است چاپگرها و متون بلکه روزنامه و مجله در ستون و سطرآنچنان که لازم است و برای شرایط فعلی تکنولوژی مورد نیاز و کاربردهای متنوع با هدف بهبود ابزارهای کاربردی می باشد کتابهای زیادی در شصت و سه درصد گذشته حال و آینده شناخت فراوان جامعه و متخصصان را می طلبد تا با نرم افزارها شناخت بیشتری را برای طراحان رایانه ای علی الخصوص طراحان خلاقی
+                    <div class="rate-number">
+                      4.5
                     </div>
-                  </q-card-section>
-                </q-card>
-              </div>
-              <div class="answer-description-video col-4">
-                <div class="video"></div>
-                <div class="title">
-                  پاسخنامه ویدیویی - محمد امین نباخته
+                    <div class="star">
+                      <q-icon class="star-icon" name="mdi-star" size="16px"></q-icon>
+                    </div>
+                  </div>
+                  <div class="comments">
+                    <q-btn flat dense rounded>
+                      <div class="comment-number">19</div>
+                      <q-icon class="comment-icon" name="isax:message-text" size="16px" style="color: #65677F">
+                      </q-icon>
+                    </q-btn>
+                  </div>
+                  <div class="report">
+                    <q-btn flat dense rounded>
+                      <div class="report-title">
+                        گزارش خطا
+                      </div>
+                      <q-icon class="report-icon" name="isax:danger" size="16px" style="color: #65677F"></q-icon>
+                    </q-btn>
+                  </div>
                 </div>
               </div>
             </div>
-          </q-card-section>
-        </q-card>
-      </q-expansion-item>
+          </template>
+          <q-card>
+            <q-card-section class="answer-section">
+              <div class="row">
+                <div class="answer-description col-8">
+                  <q-card flat class="answer-description-card">
+                    <q-card-section class="answer-description-content">
+                      <div class="question-answer-choice">
+                      <span v-if="trueChoice" class="question-answer-choice-title">
+                        گزینه
+                        {{ trueChoice.getOrderTitle('abjad') }}
+                      </span>
+                      </div>
+                      <div class="question-answer-description">
+                        لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک است چاپگرها و متون بلکه روزنامه و مجله در ستون و سطرآنچنان که لازم است و برای شرایط فعلی تکنولوژی مورد نیاز و کاربردهای متنوع با هدف بهبود ابزارهای کاربردی می باشد کتابهای زیادی در شصت و سه درصد گذشته حال و آینده شناخت فراوان جامعه و متخصصان را می طلبد تا با نرم افزارها شناخت بیشتری را برای طراحان رایانه ای علی الخصوص طراحان خلاقی
+                      </div>
+                    </q-card-section>
+                  </q-card>
+                </div>
+                <div class="answer-description-video col-4">
+                  <div class="video"></div>
+                  <div class="title">
+                    پاسخنامه ویدیویی - محمد امین نباخته
+                  </div>
+                </div>
+              </div>
+            </q-card-section>
+          </q-card>
+        </q-expansion-item>
       </div>
     </q-card-section>
   </q-card>
-  <div class=" question-bank-pagination q-pa-lg flex flex-center">
-    <q-pagination
-      active-color="primary"
-      outline
-      direction-links
-      v-model="choiceClickedStyle"
-      color="black"
-      :max="10"
-      :max-pages="6"
-      boundary-numbers
-    />
-  </div>
 </template>
 
 <script>
 import VueKatex from 'components/VueKatex'
+import { Question } from 'src/models/Question'
+
 export default {
-  name: 'QuestionBankContent',
+  name: 'QuestionItem',
   components: { VueKatex },
+  props: {
+    question: {
+      type: Question,
+      default: new Question({
+        id: '621ef885b641336a1a63e827',
+        statement: '<p dir="auto">با توجه به شکل مقابل، حاصل$(A-B)-(C\\cup B)$کدام است؟</p><p dir="auto"><span style="display: inline-block; height: 209px;"><img src="https://nodes.alaatv.com/aaa/questionPhotos/Screenshot%202022-03-02%20124323-4377851.jpg" width="238" height="209" style="margin-bottom: -1px;"></span></p>',
+        choices: [
+          {
+            id: 1,
+            title: '<p dir="auto" style="text-align: right">${}{}{}{}{}\\lbrace1\\enspace,\\enspace2\\rbrace$</p>',
+            answer: true,
+            order: 1
+          },
+          {
+            id: 2,
+            title: '<p dir="auto" style="text-align: right">$\\lbrace1\\enspace,\\enspace2\\enspace,\\enspace5\\rbrace$</p>',
+            answer: false,
+            order: 2
+          },
+          {
+            id: 3,
+            title: '<p dir="auto" style="text-align: right">$\\lbrace1\\enspace,\\enspace2\\enspace,\\enspace4\\rbrace$</p>',
+            answer: false,
+            order: 3
+          },
+          {
+            id: 4,
+            title: '<p dir="auto" style="text-align: right">$\\lbrace1\\enspace,\\enspace2\\enspace,\\enspace3\\rbrace$</p>',
+            answer: false,
+            order: 4
+          }
+        ],
+        exams: [
+          {
+            sub_category: {
+              id: '60b7875428f350277f04c5f9',
+              title: 'ریاضی',
+              category_id: '60b7858d743940688b23c7f4'
+            },
+            exam_id: '621ef66118e75a12f147e6ad',
+            order: 1,
+            exam: {
+              id: '621ef66118e75a12f147e6ad',
+              title: 'پاورتست ریاضی دهم',
+              holding_status: null,
+              start_at: '2022-02-20 08:14:00',
+              finish_at: '2022-05-21 08:14:00',
+              photo: 'https://cdn.alaatv.com/upload/images/slideShow/home-slide-yalda-festival_20201219075413.jpg?w=1843&h=719',
+              delay_time: 50,
+              n_questions: 352,
+              enable: false,
+              updated_at: '2022-03-02 14:48:39',
+              created_at: '2022-03-02 08:15:21',
+              generate_questions_automatically: null,
+              confirm: false,
+              report_config: [],
+              holding_config: {
+                randomize_questions: false
+              },
+              alaa_product_link: null,
+              type: {
+                id: '6225f4828044517f52500c02',
+                type: 'exam_type',
+                value: 'konkur',
+                updated_at: '2022-03-07 15:33:14',
+                created_at: '2022-03-07 15:33:14'
+              },
+              user_exam_id: null,
+              is_free: null,
+              is_register_open: false,
+              is_open: false
+            }
+          }
+        ],
+        level: 1,
+        photos: [
+          'https://nodes.alaatv.com/test/questionPhotos/Screenshot%202022-03-02%20124323-4377851.jpg'
+        ],
+        author: [],
+        confirmers: [],
+        confirmed: false,
+        descriptive_answer: '<p dir="auto">$C\\cup B=\\lbrace3\\enspace,\\enspace4\\enspace,\\enspace5\\enspace,\\enspace6\\enspace,\\enspace7\\enspace,\\enspace8\\enspace,\\enspace9\\rbrace\\enspace,\\enspace A-B=\\lbrace1\\enspace,\\enspace2\\enspace,\\enspace5\\rbrace$</p><p dir="auto">$\\Rightarrow(A-B)-(C\\cup B)=\\lbrace1\\enspace,\\enspace2\\enspace,\\enspace5\\rbrace-\\lbrace3\\enspace,\\enspace4\\enspace,\\enspace5\\enspace,\\enspace6\\enspace,\\enspace7\\enspace,\\enspace8\\enspace,\\enspace9\\rbrace=\\lbrace1\\enspace,\\enspace2\\rbrace$</p>',
+        statement_photo: [
+          'https://nodes.alaatv.com/test/questionStatements/621ef885b641336a1a63e827/4-9215387.png'
+        ],
+        answer_photos: [
+          'https://nodes.alaatv.com/test/questionStatements/621ef885b641336a1a63e827/4-5219480.jpg'
+        ],
+        status: {
+          id: '60c7102418e65826bc7da378',
+          title: 'typed',
+          display_title: 'تایپ شده',
+          updated_at: '2021-06-14 12:45:32',
+          created_at: '2021-06-14 12:45:32'
+        },
+        type: {
+          value: 'konkur'
+        },
+        tags: null,
+        updated_at: '2022-03-02 12:43:48',
+        created_at: '2022-03-02 08:24:29'
+      })
+    }
+  },
   data () {
     return {
-      choiceClickedStyle: 0,
+      questionLvlHard: false,
+      questionLvlMedium: false,
+      questionLvlEasy: false,
       info: [
         {
           name: 'شیمی دهم'
@@ -178,112 +288,25 @@ export default {
         {
           name: 'ساختار اتم'
         }
-      ],
-      question: '',
-      hh: {
-        data: {
-          id: '621ef885b641336a1a63e827',
-          statement: '<p dir="auto">با توجه به شکل مقابل، حاصل$(A-B)-(C\\cup B)$کدام است؟</p><p dir="auto"><span style="display: inline-block; height: 209px;"><img src="https://nodes.alaatv.com/aaa/questionPhotos/Screenshot%202022-03-02%20124323-4377851.jpg" width="238" height="209" style="margin-bottom: -1px;"></span></p>',
-          choices: [
-            {
-              id: 1,
-              title: '<p dir="auto" style="text-align: right">${}{}{}{}{}\\lbrace1\\enspace,\\enspace2\\rbrace$</p>',
-              answer: true,
-              order: 1
-            },
-            {
-              id: 2,
-              title: '<p dir="auto" style="text-align: right">$\\lbrace1\\enspace,\\enspace2\\enspace,\\enspace5\\rbrace$</p>',
-              answer: false,
-              order: 2
-            },
-            {
-              id: 3,
-              title: '<p dir="auto" style="text-align: right">$\\lbrace1\\enspace,\\enspace2\\enspace,\\enspace4\\rbrace$</p>',
-              answer: false,
-              order: 3
-            },
-            {
-              id: 4,
-              title: '<p dir="auto" style="text-align: right">$\\lbrace1\\enspace,\\enspace2\\enspace,\\enspace3\\rbrace$</p>',
-              answer: false,
-              order: 4
-            }
-          ],
-          exams: [
-            {
-              sub_category: {
-                id: '60b7875428f350277f04c5f9',
-                title: 'ریاضی',
-                category_id: '60b7858d743940688b23c7f4'
-              },
-              exam_id: '621ef66118e75a12f147e6ad',
-              order: 1,
-              exam: {
-                id: '621ef66118e75a12f147e6ad',
-                title: 'پاورتست ریاضی دهم',
-                holding_status: null,
-                start_at: '2022-02-20 08:14:00',
-                finish_at: '2022-05-21 08:14:00',
-                photo: 'https://cdn.alaatv.com/upload/images/slideShow/home-slide-yalda-festival_20201219075413.jpg?w=1843&h=719',
-                delay_time: 50,
-                n_questions: 352,
-                enable: false,
-                updated_at: '2022-03-02 14:48:39',
-                created_at: '2022-03-02 08:15:21',
-                generate_questions_automatically: null,
-                confirm: false,
-                report_config: [],
-                holding_config: {
-                  randomize_questions: false
-                },
-                alaa_product_link: null,
-                type: {
-                  id: '6225f4828044517f52500c02',
-                  type: 'exam_type',
-                  value: 'konkur',
-                  updated_at: '2022-03-07 15:33:14',
-                  created_at: '2022-03-07 15:33:14'
-                },
-                user_exam_id: null,
-                is_free: null,
-                is_register_open: false,
-                is_open: false
-              }
-            }
-          ],
-          level: 1,
-          photos: [
-            'https://nodes.alaatv.com/test/questionPhotos/Screenshot%202022-03-02%20124323-4377851.jpg'
-          ],
-          author: [],
-          confirmers: [],
-          confirmed: false,
-          descriptive_answer: '<p dir="auto">$C\\cup B=\\lbrace3\\enspace,\\enspace4\\enspace,\\enspace5\\enspace,\\enspace6\\enspace,\\enspace7\\enspace,\\enspace8\\enspace,\\enspace9\\rbrace\\enspace,\\enspace A-B=\\lbrace1\\enspace,\\enspace2\\enspace,\\enspace5\\rbrace$</p><p dir="auto">$\\Rightarrow(A-B)-(C\\cup B)=\\lbrace1\\enspace,\\enspace2\\enspace,\\enspace5\\rbrace-\\lbrace3\\enspace,\\enspace4\\enspace,\\enspace5\\enspace,\\enspace6\\enspace,\\enspace7\\enspace,\\enspace8\\enspace,\\enspace9\\rbrace=\\lbrace1\\enspace,\\enspace2\\rbrace$</p>',
-          statement_photo: [
-            'https://nodes.alaatv.com/test/questionStatements/621ef885b641336a1a63e827/4-9215387.png'
-          ],
-          answer_photos: [
-            'https://nodes.alaatv.com/test/questionStatements/621ef885b641336a1a63e827/4-5219480.jpg'
-          ],
-          status: {
-            id: '60c7102418e65826bc7da378',
-            title: 'typed',
-            display_title: 'تایپ شده',
-            updated_at: '2021-06-14 12:45:32',
-            created_at: '2021-06-14 12:45:32'
-          },
-          type: {
-            value: 'konkur'
-          },
-          tags: null,
-          updated_at: '2022-03-02 12:43:48',
-          created_at: '2022-03-02 08:24:29'
-        }
-      }
+      ]
+    }
+  },
+  created () {
+    if (this.questionLvl === 1) {
+      this.questionLvlEasy = true
+    } else if (this.questionLvl === 2) {
+      this.questionLvlMedium = true
+    } else {
+      this.questionLvlHard = true
     }
   },
   computed: {
+    trueChoice () {
+      return this.question.choices.getSelected()
+    },
+    questionLvl () {
+      return this.question.level
+    }
   },
   methods: {
   }
@@ -369,6 +392,15 @@ export default {
           width: 20px;
           height: 20px;
           background: #F4F5F6;
+        }
+        .easy {
+          background: #8ED6FF;
+        }
+        .medium {
+          background: #FFCA28 ;
+        }
+        .hard {
+          background: #DA5F5C;
         }
       }
 
@@ -543,7 +575,7 @@ export default {
     .question-actions {
       display: flex;
       justify-content: space-between;
-      width: 775px;
+      width: 870px;
 
       .edit-and-add {
         display: flex;
@@ -555,7 +587,7 @@ export default {
 
       .question-actions-content {
         display: flex;
-        margin-top: 9px;
+        margin-top: 5px;
         .question-actions-btn {
           display: flex;
           .rating {

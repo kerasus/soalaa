@@ -1,5 +1,8 @@
 <template>
   <q-card class="question-Bank-ToolBar theme-v1-box-shadow">
+    <q-btn @click="addMathQ">add math question</q-btn>
+    <q-btn @click="addArabicQ">add arabic question</q-btn>
+    <q-btn @click="addChemQ">add chem question</q-btn>
     <q-expansion-item
       expand-icon-toggle
       expand-icon="isax:arrow-down-1"
@@ -23,7 +26,7 @@
               <q-checkbox class="choices-checkbox" label="انتخاب همه" v-model="checkBox"></q-checkbox>
             </div>
             <div class="choices-number">
-              35
+              {{ this.choicesNumber }}
               <span class="choices-number-title">سوال انتخاب شده</span>
             </div>
           </div>
@@ -38,7 +41,7 @@
           <q-card-actions class="chosen-question-items">
             <div v-for="item in filters" :key="item" class="filter-items">
               <div class="items-title">
-                {{ item.title }}
+                 {{ item.title }}: {{ item.amount }}
               </div>
               <div class="items-action">
                 <q-btn flat rounded size="xs" @click="deleteFilter(item.id)">
@@ -62,9 +65,9 @@
             <div>آسان</div>
           </div>
         </div>
-        <div class="deactivate-all">
+        <q-btn rounded flat class="deactivate-all">
           غیر فعال کردن همه
-        </div>
+        </q-btn>
       </div>
     </q-card-section>
     </q-expansion-item>
@@ -76,33 +79,60 @@ export default {
   name: 'QuestionBankToolBar',
   data () {
     return {
+      choicesNumber: 0,
+      arabicNum: 0,
+      chemNum: 0,
+      mathNum: 0,
       filters: [{
-        title: 'شیمی دهم',
-        id: 1
+        title: 'شیمی',
+        id: 1,
+        amount: this.chemNum
       },
       {
-        title: 'فصل یک',
-        id: 2
+        title: 'ریاضی',
+        id: 2,
+        amount: this.mathNum
       },
       {
-        title: 'فیلتر شماره یک',
-        id: 3
+        title: 'دینی',
+        id: 3,
+        amount: 55
       },
       {
-        title: 'فیلتر شماره دو',
-        id: 4
+        title: 'ادبیات',
+        id: 4,
+        amount: 24
       },
       {
-        title: 'تستی',
-        id: 5
+        title: 'عربی',
+        id: 5,
+        amount: this.arabicNum
       }
       ],
       checkBox: false
     }
   },
+  computed: {
+  },
   methods: {
     deleteFilter (id) {
       this.filters = this.filters.filter(e => e.id !== id)
+    },
+    addQuestion () {
+      this.choicesNumber += 1
+    },
+    addArabicQ () {
+      this.arabicNum += 1
+      console.log(this.arabicNum)
+      this.addQuestion()
+    },
+    addMathQ () {
+      this.mathNum += 1
+      this.addQuestion()
+    },
+    addChemQ () {
+      this.chemNum += 1
+      this.addQuestion()
     }
   }
 }
@@ -207,12 +237,40 @@ export default {
         }
       }
       .question-level-chart {
-
+        .chart-titles {
+          font-style: normal;
+          font-weight: 400;
+          font-size: 14px;
+          line-height: 24px;
+          color: #23263B;
+          display: flex;
+          align-items: center;
+          .titles-icon {
+            width: 13px;
+            height: 13px;
+            border-radius: 50%;
+            margin-right: 4px;
+          }
+          .hard {
+            background-color: #DA5F5C;
+          }
+          .medium {
+            background-color: #FFCA28;
+          }
+          .easy {
+            background-color: #8ED6FF;
+          }
+        }
       }
       .deactivate-all {
+        font-style: normal;
+        font-weight: 500;
+        font-size: 14px;
+        line-height: 24px;
+        color: #9690E4;
         position: absolute;
-        bottom: 0;
-        right: 0;
+        bottom: 16px;
+        right: 24px;
       }
     }
   }
@@ -294,7 +352,7 @@ export default {
 @media only screen and (max-width: 599px) {
   .question-Bank-ToolBar {
     .toolbar-card {
-      background-image: url('../../../../../public/img/QuestionBank/toolbar-back-ground.png');
+      background-image: url('../../../../public/img/QuestionBank/toolbar-back-ground.png');
     }
   }
 }
