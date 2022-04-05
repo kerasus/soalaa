@@ -14,6 +14,7 @@
         class="q-mt-sm"
         indeterminate
       />
+      <q-resize-observer @resize="setHeaderDimension"/>
     </template>
     <template #left-drawer>
       <div class="drawer-inside" v-if="$route.name === 'onlineQuiz.alaaView'">
@@ -24,7 +25,7 @@
       </div>
     </template>
     <template #content>
-      <div class="content-inside">
+      <div ref="contentInside" class="content-inside">
         <q-dialog v-model="confirmDialogData.show" persistent>
           <q-card class="q-pa-md q-pb-none">
             <q-card-section >
@@ -51,16 +52,15 @@
 <script>
 import SideMenuDashboard from 'components/Menu/SideMenu/SideMenu-dashboard'
 import sideMenuMapOfQuestions from 'components/Menu/SideMenu/SideMenu_MapOfQuestions'
-import { User } from 'src/models/User'
 import { QuasarTemplateBuilder } from 'quasar-template-builder'
 import templateHeader from 'components/Template/templateHeader'
 import onlineQuizTemplateHeader from 'components/Template/onlineQuizTemplateHeader'
+import { ref } from 'vue'
 
 export default {
   components: { SideMenuDashboard, sideMenuMapOfQuestions, QuasarTemplateBuilder, templateHeader, onlineQuizTemplateHeader },
   data () {
     return {
-      user: new User(),
       properties: {
         layoutView: 'lHh Lpr lFf',
         layoutHeader: true,
@@ -80,7 +80,8 @@ export default {
         layoutHeaderCustomClass: 'main-layout-header row',
         layoutLeftDrawerCustomClass: 'main-layout-left-drawer',
         layoutPageContainerCustomClass: 'main-layout-container'
-      }
+      },
+      contentInside: ref(0)
     }
   },
   computed: {
@@ -93,12 +94,8 @@ export default {
     Object.assign(this.properties, localData)
   },
   methods: {
-    getUser () {
-      this.user = this.$store.getters['Auth/user']
-      return this.user
-    },
-    logOut () {
-      return this.$store.dispatch('Auth/logOut')
+    setHeaderDimension (value) {
+      this.$refs.contentInside.style.height = 'calc(100vh +' + value.height + 'px'
     },
     resize (val) {
       this.$store.commit('AppLayout/updateWindowSize', val)
@@ -128,7 +125,7 @@ export default {
 .main-layout-container {
 }
 .content-inside {
-  height: 100vh;
+  height: calc(100vh - );
   overflow: auto;
 }
 

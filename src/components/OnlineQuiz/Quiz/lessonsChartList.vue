@@ -8,10 +8,9 @@
           round
           dark-percentage
           color="primary"
-          @click="goBack"
-        >
-          <i class="fi-rr-angle-left row" />
-        </q-btn>
+          @click= this.$router.go(-1)
+          icon="isax:arrow-left-2"
+        />
       </div>
     </div>
     <div class="col-12">
@@ -93,9 +92,6 @@ export default {
     this.loadLessons()
   },
   methods: {
-    goBack () {
-      this.$router.push('/admin/exam')
-    },
     async loadLessons () {
       this.lessonsList.loading = true
       try {

@@ -5,7 +5,10 @@
     <div :class="{ 'answer-sheet': true, active: isSelected , 'bg-deep-purple-1': isSelected }">
       <div class="answer-text renderedPanel"
       >
-        <vue-katex :input="choice.title" :ltr="!isRtl" />
+        <vue-katex
+          :input="choice.title"
+          :ltr="!isRtl"
+        />
       </div>
       <div class="answer-checkbox">
         <q-checkbox
