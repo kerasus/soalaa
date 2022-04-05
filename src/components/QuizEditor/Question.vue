@@ -76,24 +76,41 @@
           <q-icon
             class="fi fi-rr-delete document icon-style"
             @click="deleteQuestion()"
-          />
+          >
+            <q-tooltip>
+              حذف سوال از پایگاه داده
+            </q-tooltip>
+          </q-icon>
         </div>
         <div v-if="options">
           <q-icon
             class="fi fi-rr-cross-small icon-style"
-            @click="detachQuestion()" />
+            @click="detachQuestion()"
+          >
+            <q-tooltip>
+              حذف سوال از آزمون
+            </q-tooltip>
+          </q-icon>
         </div>
         <div v-if="options">
           <q-icon
             class="fi fi-rr-pencil icon-style"
             @click="redirectToEditPage"
-          ></q-icon>
+          >
+            <q-tooltip>
+             ویرایش سوال
+            </q-tooltip>
+          </q-icon>
         </div>
         <div v-if="options">
           <q-icon
             class="fi fi-rr-copy icon-style"
             @click="copyIdToClipboard(source.id)"
-          />
+          >
+            <q-tooltip>
+             کپی شناسه سوال
+            </q-tooltip>
+          </q-icon>
         </div>
         <div v-if="options"></div>
         <q-toggle
@@ -101,7 +118,11 @@
           :loading="confirmLoading"
           @update:model-value="confirmQuestion"
           color="primary"
-        />
+        >
+          <q-tooltip>
+            تایید سوال
+          </q-tooltip>
+        </q-toggle>
         <slot
           name="chartDetail"
         />
@@ -386,24 +407,30 @@ export default {
           no: 'خیر',
           yes: 'بله'
         },
-        callback: (confirm) => {
+        callback: async (confirm) => {
           if (!confirm) {
-            this.$store.commit('AppLayout/showConfirmDialog', {
-              show: false
-            })
-            return
-          }
-          this.$axios.post(API_ADDRESS.question.detach(this.source.id), {
-            exams: [this.examId]
-          })
-            .then((res) => {
-              console.log('after reQ', res)
+            this.closeConfirmModal()
+          } else {
+            try {
+              this.closeConfirmModal()
+              const res = await this.detachQuestionReq()
+              console.log('res :', res)
               this.$emit('reloadPage')
-              this.$store.commit('AppLayout/showConfirmDialog', {
-                show: false
-              })
-            })
+            } catch (e) {
+              this.closeConfirmModal()
+            }
+          }
         }
+      })
+    },
+    detachQuestionReq () {
+      return this.$axios.post(API_ADDRESS.question.detach(this.source.id), {
+        exams: [this.examId]
+      })
+    },
+    closeConfirmModal () {
+      this.$store.commit('AppLayout/showConfirmDialog', {
+        show: false
       })
     },
     deleteQuestion () {
@@ -416,19 +443,18 @@ export default {
         },
         callback: (confirm) => {
           if (!confirm) {
-            this.$store.commit('AppLayout/showConfirmDialog', {
-              show: false
-            })
+            this.closeConfirmModal()
             return
           }
           this.$axios.delete(API_ADDRESS.question.delete(this.source.id), {
             exams: [this.examId]
           })
             .then(() => {
-              this.$store.commit('AppLayout/showConfirmDialog', {
-                show: false
-              })
+              this.closeConfirmModal()
               this.$emit('reloadPage')
+            })
+            .catch((e) => {
+              this.closeConfirmModal()
             })
         }
       })

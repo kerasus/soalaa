@@ -1,5 +1,5 @@
 <template>
-  <div class="test">
+  <div>
     <div class="row justify-end q-pr-lg">
       <q-btn
         round
@@ -22,7 +22,7 @@
               <div class="row items-center">
                 <div class="col-8">
                   <q-btn-toggle
-                    v-model="toggleBtnModel"
+                    v-model="questionFilterMethod"
                     unelevated
                     no-caps
                     toggle-color="primary"
@@ -62,6 +62,7 @@
             style="max-height: calc(100vh - 250px);"
             ref="scroller"
             :items="filteredQuestions"
+            :key="questionListKey"
             @virtual-scroll="onScroll"
           >
             <template v-slot="{ item, index }">
@@ -121,6 +122,7 @@ export default {
   mixins: [mixinAuth, mixinQuiz],
   data () {
     return {
+      questionListKey: 0,
       options: {
         bookmark: false,
         copy: false,
@@ -129,7 +131,6 @@ export default {
         editQuestion: false,
         switch: false
       },
-      toggleBtnModel: 'not-filtered',
       splitterModel: 50,
       subCategoriesList: new QuestSubcategoryList(),
       questionFilterMethod: 'not-filtered',
@@ -159,12 +160,14 @@ export default {
   },
   computed: {
     filteredQuestions () {
+      console.log('filteredQuestions', this.questionFilterMethod)
       this.quizData.questions.list.forEach((item, index) => {
         item.questNumber = index + 1
       })
       if (this.questionFilterMethod === 'not-confirmed-at-all') {
         return this.quizData.questions.list.filter(item => item.confirmers.length === 0)
       } else if (this.questionFilterMethod === 'not-confirmed-by-me') {
+        console.log('not-confirmed-by-me')
         return this.quizData.questions.list.filter(item => item.confirmed === false)
       } else {
         return this.quizData.questions.list
@@ -214,13 +217,11 @@ export default {
               type: 'positive'
             })
           }
-          // that.quiz.sub_categories = new QuestSubcategoryList(response.data)
           that.quizData.sub_categories = new QuestSubcategoryList(response.data.data)
           const questions = quizResponse.data.data
           that.sortQuestions(questions)
           that.quizData.questions = new QuestionList(questions)
-          // that.quiz = new Exam(that.quizData)
-          that.QuIzDaTa = new Exam(that.quizData)
+          this.questionListKey = Date.now()
         })
     },
     scrollTo (questionId, questionNumber) {
@@ -308,11 +309,6 @@ export default {
   border-radius: 15px;
   box-shadow: -2px -4px 10px rgba(255, 255, 255, 0.6), 2px 4px 10px rgba(54, 90, 145, 0.05);
 }
-.test{
-  //background-color: #eccccc;
-  height: 100%;
-}
-
 </style>
 <style>
 .content-inside{
