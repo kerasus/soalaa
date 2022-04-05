@@ -63,7 +63,7 @@
 
 <script>
 import AttachExam from 'components/Question/QuestionPage/AttachExam'
-import CommentBox from 'components/Question/QuestionPage/CommentBox'
+import CommentBox from 'components/Question/QuestionPage/StatusChange'
 import QuestionDetails from 'components/Question/QuestionPage/Create/textMode/QuestionDetails'
 import BtnBox from 'components/Question/QuestionPage/BtnBox'
 import QuestionField from 'components/Question/QuestionPage/QuestionField.vue'
