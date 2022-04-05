@@ -1,5 +1,6 @@
 <template>
   <div class="Descriptive-Q">
+<!--        <button @click="getContent">getContent</button>-->
     <q-card class="question-card default-questions-card">
       <q-card-section class="question default-Qcard-title">
         <div>صورت سوال</div>
@@ -8,11 +9,8 @@
       <q-card-section>
         <div class="row justify-between question-box default-Qcard-box">
           <QuestionField
-            ref="questionStatement"
+            ref="tiptapQuestionStatement"
             :key="'statement' + domKey"
-            v-model="question.statement"
-            :edit-status="true"
-            :question-id="question.id ? question.id : 'null'"
           />
         </div>
       </q-card-section>
@@ -25,56 +23,81 @@
       <q-card-section>
         <div class="row justify-between default-Qcard-box">
           <QuestionField
-            ref="descriptive"
+            ref="tiptapDescriptiveAnswer"
             :key="'descriptive_answer' + domKey"
-            v-model="question.descriptive_answer"
-            :question-id="question.id ? question.id : 'null'"
-            :edit-status="true"
           />
         </div>
       </q-card-section>
     </q-card>
   </div>
+  <div class="relative-position">
+    <attach-exam
+      :exams="examList"
+      :lessons="subCategoriesList"
+    />
+    <div class="attach-btn row">
+      <question-details class="col-9"/>
+      <btn-box
+        class="col-3"
+        @saveQuestion="saveQuestion"
+      />
+    </div>
+    <comment-box/>
+    <q-inner-loading
+      :showing="question.exams.loading"
+      color="primary"
+      class="QComponents-inner-loading"
+      label-style="font-size: 1.1em"
+    />
+  </div>
 </template>
 
 <script>
+import AttachExam from 'components/Question/QuestionPage/AttachExam'
+import CommentBox from 'components/Question/QuestionPage/CommentBox'
+import QuestionDetails from 'components/Question/QuestionPage/Create/textMode/QuestionDetails'
+import BtnBox from 'components/Question/QuestionPage/BtnBox'
 import QuestionField from 'components/Question/QuestionPage/QuestionField.vue'
 import { Question } from 'src/models/Question'
+import AdminActionOnQuestion from 'src/mixin/AdminActionOnQuestion'
+import { QuestSubcategoryList } from 'src/models/QuestSubcategory'
+import { ExamList } from 'src/models/Exam'
+
 export default {
   name: 'DescriptiveQ',
   components: {
-    QuestionField
+    QuestionField,
+    BtnBox,
+    CommentBox,
+    AttachExam,
+    QuestionDetails
   },
+  mixins: [
+    AdminActionOnQuestion
+  ],
   props: {
-    cq: {
-      type: Question,
-      default: () => new Question()
-    },
-    modelValue: {
-      type: Question,
-      default: () => new Question()
-    },
     status: {
       type: Boolean,
       default: () => false
     }
   },
-  inject: {
-    currentQuestion: {
-      from: 'currentQuestion', // this is optional if using the same key for injection
-      default: new Question()
+  provide () {
+    return {
+      question: this.question
     }
   },
   data () {
     return {
       domKey: Date.now(),
       question: new Question(),
-      choice: ''
-    }
-  },
-  watch: {
-    editorValue: function () {
-      this.question = this.modelValue
+      choice: '',
+      defaultRefName: 'tiptap',
+      dynamicMassage: '',
+      subCategoriesList: new QuestSubcategoryList(),
+      examList: new ExamList(),
+      allProps: {
+        loading: false
+      }
     }
   },
   created () {
@@ -83,44 +106,56 @@ export default {
       that.domKey = Date.now()
     }, 100)
   },
-  mounted () {},
-  updated () {
-    this.question = this.modelValue
+  mounted () {
+    this.loadExamList()
+    this.loadSubcategories()
+    this.$nextTick(() => {
+      this.setAllQuestionLoadings()
+    })
   },
   methods: {
-    removeChoice (order) {
-      const index = this.question.choices.list.findIndex(item => item.order === order)
-      this.question.choices.list.splice(index, 1)
-      this.updateQuestion()
-    },
-    addChoice () {
-      this.question.choices.addEmptyChoice()
-      this.updateQuestion()
-    },
-    removeAllChoice () {
-      this.question.choices.list = []
-      this.updateQuestion()
+    saveQuestion () {
+      // this.allProps.setContentToQuestion = true
     },
     getContent () {
-      this.$refs.questionStatement.getContent()
-      this.$refs.descriptive.getContent()
-      this.$refs.choice1[0].getContent()
-      this.$refs.choice2[0].getContent()
-      this.$refs.choice3[0].getContent()
-      this.$refs.choice4[0].getContent()
-      this.updateQuestion()
+      if (this.validateContent()) {
+        this.question.statement = this.getContentOfQuestionParts('QuestionStatement')
+        this.question.descriptive_answer = this.getContentOfQuestionParts('DescriptiveAnswer')
+      }
+      console.log('this.question', this.question)
     },
-    getData (val) {
-      this.editorValue = val
+    getContentOfChoice (index) {
+      return this.$refs[this.defaultRefName + 'Choice' + index][0].getContent()
     },
-    updateQuestion () {
-      this.$emit('updateQuestion', this.question)
+    getContentOfQuestionParts (name) {
+      return this.$refs[this.defaultRefName + name].getContent()
     },
-    clicked (order) {
-      this.question.choices.list.forEach(item => {
-        item.answer = item.order === order
-      })
-      this.updateQuestion()
+    validateContent () {
+      let status = true
+      const that = this
+      // eslint-disable-next-line
+      let errors = []
+      if (!this.getContentOfQuestionParts('QuestionStatement')) {
+        errors.push(this.getErrorMessage('صورت سوال'))
+        status = false
+      }
+      if (!this.getContentOfQuestionParts('DescriptiveAnswer')) {
+        errors.push(this.getErrorMessage('پاسخ تشریحی'))
+        status = false
+      }
+      if (!status) {
+        errors.forEach(function (item) {
+          that.$q.notify({
+            message: item,
+            color: 'negative',
+            icon: 'report_problem'
+          })
+        })
+      }
+      return status
+    },
+    getErrorMessage (dynamicWord) {
+      return 'لطفا فیلد ' + dynamicWord + ' را پر کنید'
     }
   }
 }

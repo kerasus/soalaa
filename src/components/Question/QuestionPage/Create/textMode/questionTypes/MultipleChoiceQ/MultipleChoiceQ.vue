@@ -66,8 +66,8 @@
                 text-color="white"
                 label="حذف گزینه"
                 @click="removeChoice(item.order)"
-                :class="{ 'example-fab-animate--hover': shakeRemoveBtn }"
               />
+<!--              :class="{ 'example-fab-animate--hover' }"-->
             </q-card-section>
             <q-separator inset />
             <q-card-section>
@@ -151,12 +151,6 @@ export default {
     AdminActionOnQuestion
   ],
   props: {
-    setContentToQuestion: {
-      type: Boolean,
-      default () {
-        return false
-      }
-    },
     loading: {
       default: false,
       type: Boolean
@@ -166,7 +160,6 @@ export default {
     return {
       domKey: Date.now(),
       choice: '',
-      shakeRemoveBtn: false,
       defaultRefName: 'tiptap',
       dynamicMassage: '',
       question: new Question(),
@@ -180,13 +173,6 @@ export default {
   provide () {
     return {
       question: this.question
-    }
-  },
-  watch: {
-    setContentToQuestion: function (val) {
-      if (val) {
-        this.getContent()
-      }
     }
   },
   created () {
@@ -213,14 +199,12 @@ export default {
       this.question.choices.addEmptyChoices(4)
     },
     removeChoice (order) {
-      this.shakeRemoveBtn = false
       if (this.question.choices.list.length < 3) {
         this.$q.notify({
           message: 'شما نمیتوانید کمتر از 2 گزینه داشته باشید!',
           color: 'negative',
           icon: 'report_problem'
         })
-        this.shakeRemoveBtn = true
         return
       }
       const index = this.question.choices.list.findIndex(item => item.order === order)
@@ -275,6 +259,11 @@ export default {
       }
       if (!this.getContentOfQuestionParts('DescriptiveAnswer')) {
         errors.push(this.getErrorMessage('پاسخ تشریحی'))
+        status = false
+      }
+      if (!this.choice) {
+        const ChoiceMassage = 'لطفا گزینه صحیح را درج کنید'
+        errors.push(ChoiceMassage)
         status = false
       }
       if (!status) {
