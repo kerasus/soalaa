@@ -28,6 +28,9 @@ const AdminActionOnQuestion = {
       // Todo : Temp
       // this.question.exams.loading = true
     },
+    disableAllQuestionLoadings () {
+      this.question.loading = false
+    },
     addComment (eventData) {
       axios.post(API_ADDRESS.log.addComment(eventData.logId), { comment: eventData.text })
         .then(response => {
