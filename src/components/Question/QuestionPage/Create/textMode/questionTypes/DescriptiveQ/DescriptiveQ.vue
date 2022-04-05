@@ -49,7 +49,9 @@
         @saveQuestion="saveQuestion"
       />
     </div>
-    <comment-box/>
+    <comment-box
+      :statuses="questionStatuses"
+    />
     <q-inner-loading
       :showing="question.exams.loading"
       color="primary"
@@ -69,6 +71,7 @@ import { Question } from 'src/models/Question'
 import AdminActionOnQuestion from 'src/mixin/AdminActionOnQuestion'
 import { QuestSubcategoryList } from 'src/models/QuestSubcategory'
 import { ExamList } from 'src/models/Exam'
+import { QuestionStatusList } from 'src/models/QuestionStatus'
 
 export default {
   name: 'DescriptiveQ',
@@ -102,6 +105,7 @@ export default {
       dynamicMassage: '',
       subCategoriesList: new QuestSubcategoryList(),
       examList: new ExamList(),
+      questionStatuses: new QuestionStatusList(),
       loading: true
     }
   },
@@ -116,6 +120,7 @@ export default {
       this.setAllQuestionLoadings()
       this.loadExamList()
       this.loadSubcategories()
+      this.getQuestionStatus()
       this.disableAllQuestionLoadings()
     })
   },

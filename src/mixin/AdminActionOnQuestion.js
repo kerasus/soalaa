@@ -35,11 +35,11 @@ const AdminActionOnQuestion = {
       axios.post(API_ADDRESS.log.addComment(eventData.logId), { comment: eventData.text })
         .then(response => {
           // iterating over the array to find the log that has changed
-          for (let i = 0; i < this.currentQuestion.logs.list.length; i++) {
-            if (this.currentQuestion.logs.list[i].id === eventData.logId) {
+          for (let i = 0; i < this.question.logs.list.length; i++) {
+            if (this.question.logs.list[i].id === eventData.logId) {
               // setting the new log using Vue.set so that the component notices the change
-              this.currentQuestion.logs.list[i] = new Log(response.data.data)
-              // Vue.set(this.currentQuestion, 'logs', new LogList(this.currentQuestion.logs))
+              this.question.logs.list[i] = new Log(response.data.data)
+              // Vue.set(this.question, 'logs', new LogList(this.question.logs))
             }
           }
         })
@@ -111,61 +111,55 @@ const AdminActionOnQuestion = {
     },
     getQuestionStatus () {
       const that = this
-      const list = this.questionStatuses.list
-      return that.questionStatuses.fetch()
-        .then((response) => {
+      // const list = this.questionStatuses.list
+      // that.questionStatuses
+      return this.$axios.get(API_ADDRESS.question.status.base)
+        .then(function (response) {
           that.questionStatuses = new QuestionStatusList(response.data.data)
-          that.questionStatusId_draft = list.find(item => item.title === 'draft').id
-          that.questionStatusId_pending_to_type = list.find(item => item.title === 'pending_to_type').id
         })
-        .catch(() => {
+        .catch(function (error) {
+          console.log(error)
         })
     },
-    loadCurrentQuestionData () {
+    loadQuestionData () {
       const that = this
-      this.currentQuestion.show(null, API_ADDRESS.question.updateQuestion(this.$route.params.question_id))
+      this.question.show(null, API_ADDRESS.question.updateQuestion(this.$route.params.question_id))
         .then((response) => {
           if (response.data.data) {
-            that.currentQuestion = new Question(response.data.data)
-            if (that.currentQuestion.type.value === 'psychometric') {
-              if (that.getPageStatus() === 'Edit') {
-                that.$router.push({ name: 'question.mbti.edit', params: { question_id: that.$route.params.question_id } })
-              } else if (that.getPageStatus() === 'Show') {
-                that.$router.push({ name: 'question.mbti.show', params: { question_id: that.$route.params.question_id } })
-              }
-            }
-            that.temp = that.currentQuestion
-            that.checkTextCondition()
-            that.getLogs()
-            that.trueChoiceIndex = that.currentQuestion.choices.list.findIndex((item) => item.answer)
-            that.updateAttachList(response.data.data.exams)
-            this.loading = false
+            that.question = new Question(response.data.data)
+            // that.checkTextCondition()
+            // that.getLogs()
+            // that.trueChoiceIndex = that.question.choices.list.findIndex((item) => item.answer)
+            // that.updateAttachList(response.data.data.exams)
           }
+        })
+        .catch((er) => {
+          console.log(er)
         })
     },
     checkTextCondition () {
-      return !!this.currentQuestion.statement
+      return !!this.question.statement
     },
     setInsertedQuestions () {
       this.$refs.qlayout.getContent()
-      const currentQuestion = this.currentQuestion
+      const question = this.question
       // set exams
-      currentQuestion.exams = this.selectedQuizzes.map(item => {
+      question.exams = this.selectedQuizzes.map(item => {
         return {
           id: item.exam.id,
           sub_category_id: item.sub_category.id,
           order: item.order
         }
       })
-      currentQuestion.type_id = this.optionQuestionId
-      currentQuestion
+      question.type_id = this.optionQuestionId
+      question
         .create()
         .then((response) => {
           this.$store.dispatch('loading/overlayLoading', { loading: false, message: '' })
           const questionId = response.data.data.id
           this.questionType = 'typeText'
-          this.currentQuestion.statement = ''
-          this.currentQuestion.choices.list.forEach((item) => {
+          this.question.statement = ''
+          this.question.choices.list.forEach((item) => {
             item.title = ''
           })
           this.$q.notify({
