@@ -123,7 +123,7 @@ const routes = [
                 path: ':question_id',
                 name: 'Admin.Question.Show',
                 breadcrumbs: { title: 'مشاهده سوال', loading: false },
-                component: () => (import('pages/Admin/Question/Show')),
+                component: () => (import('pages/Admin/Question/ShowQuestion')),
                 meta: {
                   middlewares: [auth]
                 }
@@ -132,7 +132,7 @@ const routes = [
                 path: ':question_id/edit',
                 name: 'Admin.Question.Edit',
                 breadcrumbs: { title: 'ویرایش سوال', loading: false },
-                component: () => (import('pages/Admin/Question/Edit')),
+                component: () => (import('pages/Admin/Question/EditQuestion')),
                 meta: {
                   middlewares: [auth]
                 }
