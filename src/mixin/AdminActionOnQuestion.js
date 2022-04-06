@@ -23,7 +23,6 @@ const AdminActionOnQuestion = {
       this.getQuestionStatus()
     },
     createQuestion (question) {
-      console.log('createQuestion', question)
       // const that = this
       // Todo : for createImg
       // question.apiResource.sendType = 'form-data'
@@ -32,7 +31,14 @@ const AdminActionOnQuestion = {
       // .loadApiResource()
       axios.post(API_ADDRESS.question.base, question)
         .then(response => {
-          console.log(response.data)
+          // console.log(response.data)
+          this.$q.notify({
+            message: 'ثبت با موفقیت انجام شد',
+            color: 'green',
+            icon: 'thumb_up'
+          })
+          // window.open('Admin.Question.Create', '_blank').focus()
+          this.$router.push({ name: 'Admin.Question.Show', params: { question_id: response.data.data.id } })
           this.$store.dispatch('loading/overlayLoading', false)
         })
         .catch(er => {
@@ -108,13 +114,19 @@ const AdminActionOnQuestion = {
     getCurrentQuestionType () {
       // const currentRouteName = this.readRouteName()
       const currentRouteFullPath = this.readRouteFullPath()
-      if (this.getCurrentQuestionMode() === 'Text') {
-        const txtToRemove = '/question/create/text/'
-        return currentRouteFullPath.replace(txtToRemove, '')
-      } else {
-        const txtToRemove = '/question/create/image/'
-        return currentRouteFullPath.replace(txtToRemove, '')
+      let txtToRemove = '/question/create/text/'
+      if (this.getCurrentQuestionMode() === 'Image') {
+        txtToRemove = '/question/create/image/'
       }
+      return currentRouteFullPath.replace(txtToRemove, '')
+    },
+    getCurrentQuestionId () {
+      const currentRouteFullPath = this.readRouteFullPath()
+      const txtToRemove = '/question/'
+      if (currentRouteFullPath.includes('edit')) {
+        currentRouteFullPath.replace('edit', '')
+      }
+      return currentRouteFullPath.replace(txtToRemove, '')
     },
     getCurrentQuestionMode () {
       if (this.readRouteName().includes('.Text')) {
@@ -136,6 +148,8 @@ const AdminActionOnQuestion = {
         }
         question.type = allTypes.list.find(item => (item.value === currentValue))
         question.type_id = question.type.id
+      } else {
+        console.log('getCurrentQuestionId', this.getCurrentQuestionId())
       }
     },
     getQuestionStatus () {
@@ -196,7 +210,7 @@ const AdminActionOnQuestion = {
             color: 'green',
             icon: 'thumb_up'
           })
-          window.open('Admin.Question.Create', '_blank').focus()
+          // window.open('Admin.Question.Create', '_blank').focus()
           this.$router.push({ name: 'Admin.Question.Show', params: { question_id: questionId } })
         })
     },
