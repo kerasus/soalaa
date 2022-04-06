@@ -121,92 +121,101 @@
         </template>
       </div>
       <template v-if="!question.loading">
-        <div class="question-actions-container">
-          <q-expansion-item
-            expand-icon-toggle
-            expand-icon="isax:arrow-down-1"
-          >
-            <template v-slot:header>
-              <div class="question-actions">
-                <div class="edit-and-add">
-                  <div class="add-btn">
-                    <q-btn flat class="edit-and-add-btn">
-                      <q-icon name="isax:add"></q-icon>
-                    </q-btn>
+      <div class="question-actions-container">
+        <q-expansion-item
+        expand-icon-toggle
+        expand-icon="isax:arrow-down-1"
+      >
+        <template v-slot:header>
+          <div class="question-actions">
+            <div class="edit-and-add">
+              <div class="add-btn">
+                <q-btn flat class="edit-and-add-btn">
+                  <q-icon name="isax:add"></q-icon>
+                </q-btn>
+              </div>
+              <div class="edit-btn">
+                <q-btn flat class="edit-and-add-btn">
+                  <q-icon name="isax:edit-2"></q-icon>
+                </q-btn>
+              </div>
+            </div>
+            <div class="question-actions-content">
+              <div class="question-actions-btn">
+                <div class="rating">
+                  <div class="voters-number">
+                    (90)
                   </div>
-                  <div class="edit-btn">
-                    <q-btn flat class="edit-and-add-btn">
-                      <q-icon name="isax:edit-2"></q-icon>
-                    </q-btn>
+                  <div class="rate-number">
+                    4.5
+                  </div>
+                  <div class="star">
+                    <q-icon class="star-icon" name="mdi-star" size="16px"></q-icon>
                   </div>
                 </div>
-                <div class="question-actions-content">
-                  <div class="question-actions-btn">
-                    <div class="rating">
-                      <div class="voters-number">
-                        (90)
-                      </div>
-                      <div class="rate-number">
-                        4.5
-                      </div>
-                      <div class="star">
-                        <q-icon class="star-icon" name="mdi-star" size="16px"></q-icon>
-                      </div>
+                <div class="comments">
+                  <q-btn flat dense rounded>
+                    <div class="comment-number">19</div>
+                    <q-icon class="comment-icon" name="isax:message-text" size="16px" style="color: #65677F">
+                    </q-icon>
+                  </q-btn>
+                </div>
+                <div class="report">
+                  <q-btn flat dense rounded>
+                    <div class="report-title">
+                      گزارش خطا
                     </div>
-                    <div class="comments">
-                      <q-btn flat dense rounded>
-                        <div class="comment-number">19</div>
-                        <q-icon class="comment-icon" name="isax:message-text" size="16px" style="color: #65677F">
-                        </q-icon>
-                      </q-btn>
-                    </div>
-                    <div class="report">
-                      <q-btn flat dense rounded>
-                        <div class="report-title">
-                          گزارش خطا
-                        </div>
-                        <q-icon class="report-icon" name="isax:danger" size="16px" style="color: #65677F"></q-icon>
-                      </q-btn>
-                    </div>
-                  </div>
+                    <q-icon class="report-icon" name="isax:danger" size="16px" style="color: #65677F"></q-icon>
+                  </q-btn>
                 </div>
               </div>
-            </template>
-            <q-card>
-              <q-card-section class="answer-section">
-                <div class="row">
-                  <div class="answer-description col-8">
-                    <q-card flat class="answer-description-card">
-                      <q-card-section class="answer-description-content">
-                        <div class="question-answer-choice">
-                      <span v-if="trueChoice" class="question-answer-choice-title">
-                        گزینه
-                        {{ trueChoice.getOrderTitle() }}
-                      </span>
-                        </div>
-                        <div class="question-answer-description">
-                          {{ question.answer }}
-                        </div>
-                      </q-card-section>
-                    </q-card>
-                  </div>
-                  <div class="answer-description-video col-4">
-                    <div class="video"></div>
-                    <div class="title">
-                      پاسخنامه ویدیویی - محمد امین نباخته
+            </div>
+          </div>
+        </template>
+        <q-card>
+          <q-card-section class="answer-section">
+            <div class="row">
+              <div class="answer-description col-8">
+                <q-card flat class="answer-description-card">
+                  <q-card-section class="answer-description-content">
+                    <div class="question-answer-choice">
+                <span v-if="trueChoice" class="question-answer-choice-title">
+                  گزینه
+                  {{ trueChoice.getOrderTitle() }}
+                </span>
                     </div>
-                  </div>
+                    <div class="question-answer-description">
+                      {{ question.answer }}
+                    </div>
+                  </q-card-section>
+                </q-card>
+              </div>
+              <div class="answer-description-video col-4">
+                <div class="video">
+                  <video ref="videoPlayer" id="my-video" dir="ltr"
+                         class="video-js vjs-fluid vjs-big-play-centered vjs-show-big-play-button-on-pause">
+                  </video>
                 </div>
-              </q-card-section>
-            </q-card>
-          </q-expansion-item>
-        </div>
+                <div class="title">
+                  پاسخنامه ویدیویی - محمد امین نباخته
+                </div>
+              </div>
+            </div>
+          </q-card-section>
+        </q-card>
+      </q-expansion-item>
+      </div>
       </template>
     </q-card-section>
   </q-card>
 </template>
 
 <script>
+import videojs from 'video.js'
+
+require('video.js/dist/video-js.css')
+require('@silvermine/videojs-quality-selector')(videojs)
+require('@silvermine/videojs-quality-selector/dist/css/quality-selector.css')
 import VueKatex from 'components/VueKatex'
 import { Question } from 'src/models/Question'
 
@@ -252,6 +261,16 @@ export default {
     },
     questionLvl () {
       return this.question.inputData.level
+    }
+  },
+  mounted () {
+    this.player = videojs(this.$refs.videoPlayer, this.options, function onPlayerReady () {
+      console.log('onPlayerReady', this)
+    })
+  },
+  beforeUnmount () {
+    if (this.player) {
+      this.player.dispose()
     }
   },
   methods: {
