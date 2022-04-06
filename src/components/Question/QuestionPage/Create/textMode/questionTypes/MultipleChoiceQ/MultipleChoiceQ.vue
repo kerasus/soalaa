@@ -197,6 +197,7 @@ export default {
   methods: {
     saveQuestion () {
       if (this.getContent()) {
+        this.question.author.push({ full_name: this.$store.getters['Auth/user'].full_name, id: this.$store.getters['Auth/user'].id })
         const question = {
           author: this.question.author,
           choices: this.question.choices.list,

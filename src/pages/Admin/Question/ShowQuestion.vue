@@ -1,6 +1,12 @@
 <template>
-  <div class="editQ-text-container">
+  <div class="showQ-text-container">
     <div class="relative-position">
+      <q-linear-progress
+        v-if="question.loading"
+        indeterminate
+        color="primary"
+        class="q-mt-sm"
+      />
       <component
         v-if="question.type"
         :is="getComponent"
@@ -11,16 +17,6 @@
       <attach-exam
         :exams="examList"
         :lessons="subCategoriesList"
-      />
-      <div class="attach-btn row">
-        <question-details class="col-9"/>
-        <btn-box
-          class="col-3"
-          @saveQuestion="setQuestionContents"
-        />
-      </div>
-      <comment-box
-        :statuses="questionStatuses"
       />
       <q-inner-loading
         :showing="question.exams.loading"
@@ -55,7 +51,6 @@ export default {
     BtnBox,
     CommentBox,
     AttachExam,
-    // DynamicComponent,
     QuestionDetails
   },
   mixins: [
@@ -76,14 +71,20 @@ export default {
     }
   },
   created () {
-    this.getQuestionType(this.question)
+    this.enableLoading()
+    this.getPageReady()
+    this.getQuestionById(this.getCurrentQuestionId())
   },
   provide () {
     return {
       question: this.question
     }
   },
-  mounted () {},
+  mounted () {
+    this.$nextTick(() => {
+      this.disableLoading()
+    })
+  },
   methods: {
     chosenComponent () {
       console.log('this.question.type.componentName', this.question.type.componentName)
@@ -100,6 +101,12 @@ export default {
     },
     setQuestionContents () {
       this.allProps.setContentToQuestion = true
+    },
+    enableLoading () {
+      this.question.loading = true
+    },
+    disableLoading () {
+      this.question.loading = false
     }
   },
   computed: {
