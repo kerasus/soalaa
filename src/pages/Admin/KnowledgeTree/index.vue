@@ -1,12 +1,10 @@
 <template>
   <tree
     @ticked="test"
-    @selectedNode=""
     ref="tree"
     tick-strategy="strict"
     :editable="true"
     :get-node-by-id="getNodeById"
-    :new-node=""
   />
 </template>
 
@@ -40,13 +38,13 @@ export default {
   methods: {
     test (value) {
       console.log('ticked', value)
-    },
-    getSelectedNode (node) {
-      this.selectedNode = node
-    },
-    getNewNodeData () {
-      this.createNode(this.selectedNode.id)
     }
+    // getSelectedNode (node) {
+    //   this.selectedNode = node
+    // },
+    // getNewNodeData () {
+    //   this.createNode(this.selectedNode.id)
+    // }
   }
 }
 </script>

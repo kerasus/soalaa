@@ -206,27 +206,27 @@ export default {
         })
     },
 
-    addNode (callback) {
-      const id = this.selectedNode.id
-      const getNode = this.$refs.tree.getNodeByKey(id)
-      // this.$emit('inputsData', { this.newName , this.newOrder })
-      if (callback) {
-        getNode.children.unshift(new TreeNode({
-          id: this.newNode.data.data.id,
-          type: this.newNode.data.data.type,
-          title: this.newNode.data.data.title,
-          parent: this.newNode.data.data.parent.id
-        }))
-        this.editDialog = false
-      }
-      // getNode.children.unshift(new TreeNode({
-      //   id: this.newNode.data.data.id,
-      //   type: this.newNode.data.data.type,
-      //   title: this.newNode.data.data.title,
-      //   parent: this.newNode.data.data.parent.id
-      // }))
-      // this.editDialog = false
-    },
+    // addNode (callback) {
+    //   const id = this.selectedNode.id
+    //   const getNode = this.$refs.tree.getNodeByKey(id)
+    //   // this.$emit('inputsData', { this.newName , this.newOrder })
+    //   if (callback) {
+    //     getNode.children.unshift(new TreeNode({
+    //       id: this.newNode.data.data.id,
+    //       type: this.newNode.data.data.type,
+    //       title: this.newNode.data.data.title,
+    //       parent: this.newNode.data.data.parent.id
+    //     }))
+    //     this.editDialog = false
+    //   }
+    //   // getNode.children.unshift(new TreeNode({
+    //   //   id: this.newNode.data.data.id,
+    //   //   type: this.newNode.data.data.type,
+    //   //   title: this.newNode.data.data.title,
+    //   //   parent: this.newNode.data.data.parent.id
+    //   // }))
+    //   // this.editDialog = false
+    // },
 
     openEditMenu (node) {
       this.newName = ''
