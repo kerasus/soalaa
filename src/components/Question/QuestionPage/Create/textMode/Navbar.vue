@@ -65,6 +65,29 @@ export default {
     return {
       questionTab: '',
       componentTabs: new TypeList(),
+      test: new TypeList([
+        {
+          id: '6225f4828044517f52500c04',
+          type: 'question_type',
+          value: 'konkur',
+          updated_at: '2022-03-07 15:33:14',
+          created_at: '2022-03-07 15:33:14'
+        },
+        {
+          id: '6225f4828044517f52500c05',
+          type: 'question_type',
+          value: 'psychometric',
+          updated_at: '2022-03-07 15:33:14',
+          created_at: '2022-03-07 15:33:14'
+        },
+        {
+          id: '6225f4828044517f52500c06',
+          type: 'question_type',
+          value: 'descriptive',
+          updated_at: '2022-03-07 15:33:14',
+          created_at: '2022-03-07 15:33:14'
+        }
+      ]),
       qTabLoading: false
     }
   },
@@ -78,11 +101,11 @@ export default {
     AdminActionOnQuestion
   ],
   created () {
-    this.getQuestionType()
     // console.log('Navbar created')
     this.qTabLoading = true
   },
   mounted () {
+    this.getQuestionType()
     // console.log('Navbar mounted')
   },
   computed: {},
@@ -121,15 +144,16 @@ export default {
           }
         }
       }
-    },
-    test () {
-      this.$router.push({
-        name: 'konkoorView',
-        params: {
-          quizId: this.$route.params.quizId
-        }
-      })
     }
+    // ,
+    // test () {
+    //   this.$router.push({
+    //     name: 'konkoorView',
+    //     params: {
+    //       quizId: this.$route.params.quizId
+    //     }
+    //   })
+    // }
   },
   watch: {
     // questionTab: {

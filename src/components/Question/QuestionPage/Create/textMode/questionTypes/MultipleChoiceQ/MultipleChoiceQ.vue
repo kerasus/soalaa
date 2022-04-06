@@ -192,13 +192,34 @@ export default {
       this.loadExamList()
       this.loadSubcategories()
       this.getQuestionStatus()
+      this.setCurrentQuestionType()
       this.disableAllQuestionLoadings()
     })
   },
   updated () {},
   methods: {
     saveQuestion () {
-      // this.allProps.setContentToQuestion = true
+      if (this.getContent()) {
+        this.question.exams.list = [
+          {
+            id: '622ae211d1a3433f16636253',
+            order: '503',
+            sub_category_id: '60b7875428f350277f04c5e7'
+          }
+        ]
+        // const question = {
+        //   ...this.question,
+        //
+        //   exams: [
+        //     {
+        //       id: '622ae211d1a3433f16636253',
+        //       order: '503',
+        //       sub_category_id: '60b7875428f350277f04c5e7'
+        //     }
+        //   ]
+        // }
+        this.createQuestion(this.question)
+      }
     },
     setDefaultChoices () {
       this.question.choices.list = []
@@ -222,6 +243,7 @@ export default {
     },
     getContent () {
       const that = this
+      let status = false
       if (this.validateContent()) {
         this.question.statement = this.getContentOfQuestionParts('QuestionStatement')
         this.question.choices.list.forEach(function (item, index) {
@@ -230,8 +252,10 @@ export default {
           item.id = index
         })
         this.question.descriptive_answer = this.getContentOfQuestionParts('DescriptiveAnswer')
+        console.log('this.question', this.question)
+        status = true
       }
-      console.log('this.question', this.question)
+      return status
     },
     getContentOfChoice (index) {
       return this.$refs[this.defaultRefName + 'Choice' + index][0].getContent()
@@ -263,10 +287,10 @@ export default {
         errors.push(ChoiceMassage)
         status = false
       }
-      if (!this.getContentOfQuestionParts('DescriptiveAnswer')) {
-        errors.push(this.getErrorMessage('پاسخ تشریحی'))
-        status = false
-      }
+      // if (!this.getContentOfQuestionParts('DescriptiveAnswer')) {
+      //   errors.push(this.getErrorMessage('پاسخ تشریحی'))
+      //   status = false
+      // }
       if (!this.choice) {
         const ChoiceMassage = 'لطفا گزینه صحیح را درج کنید'
         errors.push(ChoiceMassage)

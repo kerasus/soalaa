@@ -4,7 +4,7 @@ import { QuestionStatusList } from 'src/models/QuestionStatus'
 import { Question } from 'src/models/Question'
 import { ExamList } from 'src/models/Exam'
 import { QuestSubcategoryList } from 'src/models/QuestSubcategory'
-import { TypeList } from 'src/models/QuestionType'
+import { QuestionType, TypeList } from 'src/models/QuestionType'
 import { Log } from 'src/models/Log'
 const AdminActionOnQuestion = {
   data () {
@@ -16,10 +16,37 @@ const AdminActionOnQuestion = {
   },
   methods: {
     createQuestion (question) {
-      question.apiResource.sendType = 'form-data'
-      this.$axios.post(API_ADDRESS.question.create, question.loadApiResource())
+      console.log('createQuestion', question)
+      // const that = this
+      // Todo : for createImg
+      // question.apiResource.sendType = 'form-data'
+      this.$store.dispatch('loading/overlayLoading', true)
+      this.$store.dispatch('loading/overlayLoading', false)
+      // .loadApiResource()
+      axios.post(API_ADDRESS.question.base, question)
         .then(response => {
           console.log(response.data)
+          this.$store.dispatch('loading/overlayLoading', false)
+        })
+        .catch(er => {
+          console.log(er)
+          this.$store.dispatch('loading/overlayLoading', false)
+        })
+    },
+    saveQuestion () {
+      const that = this
+      this.$store.dispatch('loading/overlayLoading', { loading: true, message: '' })
+      const currentQuestion = this.currentQuestion
+      this.question.type_id = this.optionQuestionId
+      currentQuestion.update(API_ADDRESS.question.updateQuestion(currentQuestion.id))
+        .then(() => {
+          this.$q.notify({
+            message: 'ویرایش با موفقیت انجام شد',
+            color: 'green',
+            icon: 'thumb_up'
+          })
+          that.$store.dispatch('loading/overlayLoading', { loading: true, message: '' })
+          this.$router.push({ name: 'Admin.Question.Show', params: { question_id: this.$route.params.question_id } })
         })
     },
     setAllQuestionLoadings () {
@@ -56,8 +83,7 @@ const AdminActionOnQuestion = {
               color: 'negative'
             })
           }
-          // console.log('this.$route', this.$route)
-          that.setCurrentQuestionType()
+          that.setCurrentQuestionType(that.componentTabs)
           that.qTabLoading = false
         })
         .catch(function (error) {
@@ -92,9 +118,9 @@ const AdminActionOnQuestion = {
         return 'Image'
       }
     },
-    setCurrentQuestionType () {
+    setCurrentQuestionType (componentTabs) {
       if (this.doesHaveQuestionMode()) {
-        // console.log('this.getCurrentQuestionType()', this.getCurrentQuestionType())
+        // console.log('this.getCurrentQuestionType()')
         const currentType = this.getCurrentQuestionType()
         let cValue = ''
         if (currentType === 'MBTI') {
@@ -104,9 +130,14 @@ const AdminActionOnQuestion = {
         } else if (currentType === 'MultipleChoice') {
           cValue = 'konkur'
         }
-        this.question.type = this.componentTabs.list.find(item => (item.value === cValue))
-        // console.log('this.question.type before nav', this.question.type.componentName)
-        // this.setInitialType()
+        if (componentTabs) {
+          this.question.type = componentTabs.list.find(item => (item.value === cValue))
+        } else {
+          this.question.type = new QuestionType({
+            value: cValue
+          })
+        }
+        this.question.type_id = this.question.type.id
       }
     },
     getQuestionStatus () {
