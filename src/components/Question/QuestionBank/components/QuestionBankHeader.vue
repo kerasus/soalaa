@@ -2,12 +2,18 @@
   <q-card class="theme-v1-box-shadow">
     <q-card-section>
       <div class="row search-section">
-        <div class="search-box col">
+        <div class="search-box-container col">
           <q-card-actions>
             <div class="search-box">
-              <q-input  v-model="searchInput" label="جستجو در سوالات سه آ">
+              <q-input
+                v-model="searchInput"
+                filled
+                label="جستجو در سوال ها...">
                 <template v-slot:append>
-                  <q-icon name="search" />
+                  <q-btn
+                    flat
+                    rounded
+                    icon="isax:search-normal" />
                 </template>
               </q-input>
             </div>
@@ -15,19 +21,11 @@
         </div>
         <div class="select-box col">
           <q-select
-            style="width: 250px"
+            filled
             dropdown-icon="isax:arrow-down-1"
-            rounded
-            outlined
             v-model="searchInput"
             label="جدیدترین"
           >
-            <template v-slot:append>
-              <q-icon
-                class="cursor-pointer"
-                name="clear"
-              />
-            </template>
           </q-select>
         </div>
       </div>
@@ -49,25 +47,64 @@ export default {
 
 <style lang="scss" scoped>
   .search-section {
-    .search-box{
+    .search-box-container{
       display: flex;
-      .search-title {
-        align-self: center;
-      }
       .search-box {
         height: 64px;
+        width: 300px;
+        .q-field__inner{
+          .q-field__control{
+            border-radius: 15px;
+          }
+        }
       }
     }
     .select-box{
       display: flex;
       justify-content: flex-end;
       align-items: center;
-      .q-select .q-field__label{
+      .q-select {
+        .q-field__label{
+          font-style: normal;
+          font-weight: 400;
+          font-size: 14px;
+          line-height: 24px
+        }
+      }
+    }
+    }
+</style>
+<style lang="scss">
+.search-section {
+  .search-box-container{
+    .search-box {
+      .q-field__inner{
+        .q-field__control{
+          border-radius: 15px;
+          .q-field__label{
+            font-style: normal;
+            font-weight: 400;
+            font-size: 14px;
+            line-height: 24px;
+          }
+        }
+      }
+    }
+  }
+  .select-box{
+    .q-select {
+      width: 250px;
+      .q-field__control{
+        border-radius: 15px;
+      }
+      .q-field__label{
         font-style: normal;
         font-weight: 400;
         font-size: 14px;
         line-height: 24px
       }
     }
-    }
+  }
+}
+
 </style>

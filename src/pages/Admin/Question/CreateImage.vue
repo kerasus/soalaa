@@ -85,11 +85,10 @@ export default {
       subCategoriesList: new QuestSubcategoryList()
     }
   },
-  mounted () {
-    this.loadExamList()
-    this.loadSubcategories()
-    this.setCurrentQuestionType()
+  created () {
+    this.getPageReady()
   },
+  mounted () {},
   provide () {
     return {
       question: this.question

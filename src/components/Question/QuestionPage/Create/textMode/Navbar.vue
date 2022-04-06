@@ -22,9 +22,6 @@
                 :label="item.tabName"
                 :to="getCurrentRoute(item.componentName)"
               />
-<!--
-                @click="chooseComponent(item.value)"
- to="/alarms"-->
             </q-tabs>
             <q-skeleton
               v-if="qTabLoading"
@@ -63,9 +60,9 @@ export default {
   props: {},
   data () {
     return {
+      question: new Question(),
       questionTab: '',
-      componentTabs: new TypeList(),
-      test: new TypeList([
+      componentTabs: new TypeList([
         {
           id: '6225f4828044517f52500c04',
           type: 'question_type',
@@ -91,22 +88,16 @@ export default {
       qTabLoading: false
     }
   },
-  inject: {
-    question: {
-      from: 'question', // this is optional if using the same key for injection
-      default: new Question()
-    }
-  },
   mixins: [
     AdminActionOnQuestion
   ],
   created () {
-    // console.log('Navbar created')
     this.qTabLoading = true
   },
   mounted () {
-    this.getQuestionType()
-    // console.log('Navbar mounted')
+    this.$nextTick(() => {
+      this.qTabLoading = false
+    })
   },
   computed: {},
   methods: {
@@ -145,24 +136,8 @@ export default {
         }
       }
     }
-    // ,
-    // test () {
-    //   this.$router.push({
-    //     name: 'konkoorView',
-    //     params: {
-    //       quizId: this.$route.params.quizId
-    //     }
-    //   })
-    // }
   },
-  watch: {
-    // questionTab: {
-    //   handler (newValue, oldValue) {
-    //     console.log('this.questionTab CHANGED', newValue)
-    //   },
-    //   deep: true
-    // }
-  }
+  watch: {}
 }
 </script>
 

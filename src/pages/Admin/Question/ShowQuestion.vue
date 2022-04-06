@@ -47,7 +47,7 @@ import { QuestSubcategoryList } from 'src/models/QuestSubcategory'
 import { QuestionStatusList } from 'src/models/QuestionStatus'
 // import API_ADDRESS from 'src/api/Addresses'
 export default {
-  name: 'EditQuestion',
+  name: 'ShowQuestion',
   components: {
     DescriptiveQ: defineAsyncComponent(() => import('components/Question/QuestionPage/Show/questionTypes/DescriptiveQ/DescriptiveQ')),
     MultipleChoiceQ: defineAsyncComponent(() => import('components/Question/QuestionPage/Show/questionTypes/MultipleChoiceQ/MultipleChoiceQ')),
@@ -76,27 +76,18 @@ export default {
     }
   },
   created () {
-    // console.log(this.$route, 'this.$route')
-    // console.log(this.$router, 'this.$router')
+    this.getQuestionType(this.question)
   },
   provide () {
     return {
       question: this.question
     }
   },
-  mounted () {
-    this.$nextTick(() => {
-      this.setAllQuestionLoadings()
-      this.loadExamList()
-      this.loadSubcategories()
-      this.getQuestionStatus()
-      this.disableAllQuestionLoadings()
-    })
-  },
+  mounted () {},
   methods: {
     chosenComponent () {
-      const cName = 'MultipleChoiceQ'
-      // const cName = this.question.type.componentName
+      console.log('this.question.type.componentName', this.question.type.componentName)
+      const cName = this.question.type.componentName
       if (cName === 'MultipleChoiceQ') {
         return 'multiple-choice-q'
       }

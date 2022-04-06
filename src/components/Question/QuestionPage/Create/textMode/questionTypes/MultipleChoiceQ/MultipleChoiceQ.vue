@@ -185,41 +185,36 @@ export default {
       that.domKey = 'Date.now()'
     }, 100)
     this.setDefaultChoices()
-    console.log('create multip')
+    this.getPageReady()
   },
   mounted () {
     this.$nextTick(() => {
-      this.setAllQuestionLoadings()
-      this.loadExamList()
-      this.loadSubcategories()
-      this.getQuestionStatus()
-      this.setCurrentQuestionType()
-      this.disableAllQuestionLoadings()
+      // this.setAllQuestionLoadings()
+      // this.disableAllQuestionLoadings()
     })
   },
   updated () {},
   methods: {
     saveQuestion () {
       if (this.getContent()) {
-        this.question.exams.list = [
-          {
-            id: '622ae211d1a3433f16636253',
-            order: '503',
-            sub_category_id: '60b7875428f350277f04c5e7'
-          }
-        ]
-        // const question = {
-        //   ...this.question,
-        //
-        //   exams: [
-        //     {
-        //       id: '622ae211d1a3433f16636253',
-        //       order: '503',
-        //       sub_category_id: '60b7875428f350277f04c5e7'
-        //     }
-        //   ]
-        // }
-        this.createQuestion(this.question)
+        const question = {
+          author: this.question.author,
+          choices: this.question.choices.list,
+          exams: [
+            {
+              id: '622ae211d1a3433f16636253',
+              order: '2003',
+              sub_category_id: '60b7875428f350277f04c5e7'
+            }
+          ],
+          descriptive_answer: this.question.descriptive_answer,
+          statement: this.question.statement,
+          level: 1,
+          sub_category_id: 1,
+          recommended_time: 0,
+          type_id: this.question.type_id
+        }
+        this.createQuestion(question)
       }
     },
     setDefaultChoices () {
@@ -253,7 +248,7 @@ export default {
           item.id = index
         })
         this.question.descriptive_answer = this.getContentOfQuestionParts('DescriptiveAnswer')
-        console.log('this.question', this.question)
+        // console.log('this.question', this.question)
         status = true
       }
       return status
@@ -293,7 +288,7 @@ export default {
       //   status = false
       // }
       if (!this.choice) {
-        const ChoiceMassage = 'لطفا گزینه صحیح را درج کنید'
+        const ChoiceMassage = 'لطفا گزینه صحیح را ثبت کنید'
         errors.push(ChoiceMassage)
         status = false
       }
