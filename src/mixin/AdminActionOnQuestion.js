@@ -38,12 +38,32 @@ const AdminActionOnQuestion = {
             icon: 'thumb_up'
           })
           // window.open('Admin.Question.Create', '_blank').focus()
-          this.$router.push({ name: 'Admin.Question.Show', params: { question_id: response.data.data.id } })
+          this.redirectToShowPage(response.data.data.id)
           this.$store.dispatch('loading/overlayLoading', false)
         })
         .catch(er => {
           console.log(er.message)
           this.$store.dispatch('loading/overlayLoading', false)
+        })
+    },
+    getQuestionById (questionId) {
+      const that = this
+      axios.get(API_ADDRESS.question.show(questionId))
+        .then(function (response) {
+          that.question = new Question(response.data.data)
+          console.log(that.question)
+          // const types = new TypeList(response.data.data)
+          // const optionQuestion = response.data.data.find(item => (item.value === 'konkur'))
+          // if (!optionQuestion) {
+          //   return this.$q.notify({
+          //     message: ' API با مشکل مواجه شد!',
+          //     color: 'negative'
+          //   })
+          // }
+          // that.setCurrentQuestionType(question, types)
+        })
+        .catch(function (error) {
+          console.log(error)
         })
     },
     saveQuestion () {
@@ -70,6 +90,9 @@ const AdminActionOnQuestion = {
     },
     disableAllQuestionLoadings () {
       this.question.loading = false
+    },
+    redirectToShowPage (questionId) {
+      this.$router.push({ name: 'Admin.Question.Show', params: { question_id: questionId } })
     },
     addComment (eventData) {
       axios.post(API_ADDRESS.log.addComment(eventData.logId), { comment: eventData.text })
@@ -148,8 +171,6 @@ const AdminActionOnQuestion = {
         }
         question.type = allTypes.list.find(item => (item.value === currentValue))
         question.type_id = question.type.id
-      } else {
-        console.log('getCurrentQuestionId', this.getCurrentQuestionId())
       }
     },
     getQuestionStatus () {
