@@ -203,7 +203,7 @@ export default {
           exams: [
             {
               id: '622ae211d1a3433f16636253',
-              order: '2001',
+              order: '2003',
               sub_category_id: '60b7875428f350277f04c5e7'
             }
           ],
@@ -248,7 +248,7 @@ export default {
           item.id = index
         })
         this.question.descriptive_answer = this.getContentOfQuestionParts('DescriptiveAnswer')
-        console.log('this.question', this.question)
+        // console.log('this.question', this.question)
         status = true
       }
       return status
