@@ -211,34 +211,6 @@ const routes = [
     ]
   },
   {
-    path: '/test1',
-    component: () => import('layouts/test1.vue'),
-    children: [
-      {
-        path: 'test2',
-        component: () => import('layouts/test2.vue'),
-        children: [
-          {
-            name: 'testa',
-            path: 'a',
-            component: () => import('layouts/pageA.vue'),
-            meta: {
-              middlewares: [auth]
-            }
-          },
-          {
-            name: 'testb',
-            path: 'b',
-            component: () => import('layouts/pageB.vue'),
-            meta: {
-              middlewares: [auth]
-            }
-          }
-        ]
-      }
-    ]
-  },
-  {
     path: '/login',
     name: 'login',
     component: () => import('pages/Auth/Login.vue')
