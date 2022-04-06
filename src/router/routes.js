@@ -159,7 +159,12 @@ const routes = [
             ]
           },
 
-          { name: 'Admin.KnowledgeTree.tree', path: 'knowledge-tree', component: () => import('pages/Admin/KnowledgeTree/index') },
+          {
+            name: 'Admin.KnowledgeTree.tree',
+            path: 'knowledge-tree',
+            component: () => import('pages/Admin/KnowledgeTree/index'),
+            breadcrumbs: { title: 'درخت دانش' }
+          },
           { name: 'Admin.Settings', path: 'settings', component: () => import('pages/Admin/Settings'), breadcrumbs: { title: 'تنظیمات' } }
         ]
       },
