@@ -67,11 +67,10 @@ export default {
       question: new Question()
     }
   },
-  mounted () {
-    this.loadExamList()
-    this.loadSubcategories()
-    this.setCurrentQuestionType()
+  created () {
+    this.getPageReady()
   },
+  mounted () {},
   provide () {
     return {
       question: this.question

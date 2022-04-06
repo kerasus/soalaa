@@ -114,15 +114,16 @@ export default {
     setTimeout(() => {
       that.domKey = Date.now()
     }, 100)
+    this.getPageReady()
   },
   mounted () {
-    this.$nextTick(() => {
-      this.setAllQuestionLoadings()
-      this.loadExamList()
-      this.loadSubcategories()
-      this.getQuestionStatus()
-      this.disableAllQuestionLoadings()
-    })
+    // this.$nextTick(() => {
+    //   this.setAllQuestionLoadings()
+    //   this.loadExamList()
+    //   this.loadSubcategories()
+    //   this.getQuestionStatus()
+    //   this.disableAllQuestionLoadings()
+    // })
   },
   methods: {
     saveQuestion () {
