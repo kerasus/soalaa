@@ -52,10 +52,6 @@ class TreeNode extends Model {
 
     return null
   }
-
-  test () {
-    console.log('hi')
-  }
 }
 class TreeNodeList extends Collection {
   model () {

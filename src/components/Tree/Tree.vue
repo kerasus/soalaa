@@ -77,7 +77,7 @@
             text
             color="green "
             :loading="loading "
-            @click="addClicked() "
+            @click="addNode() "
           >
             اضافه شود
           </q-btn>
@@ -120,6 +120,9 @@ export default {
     getNodeById: {
       type: Function,
       default: (id, done, fail, callback) => {}
+    },
+    newNode: {
+      type: Object
     }
   },
   data: () => {
@@ -139,22 +142,18 @@ export default {
   },
   emits: ['ticked'],
   methods: {
-    tickedNode (target) {
-      // this.$emit('ticked', this.nodes.find(target))
-      // const tickedNodes = []
-      target = target.map(id => {
-        return this.nodes[0].findNode(id)
-        // tickedNodes.push(this.nodes.find(id))
-      })
-      console.log(target)
-      // this.$emit('ticked', { target, nodes: tickedNodes })
-      // this.$emit('ticked', { target, nodes: this.nodes })
-    },
-    // mixin
     createRoot (nodeData) {
       const treeNodeData = new TreeNode(nodeData)
       treeNodeData.children = (new TreeNodeList(treeNodeData.children)).list
       this.nodes = [treeNodeData]
+    },
+
+    tickedNode (target) {
+      const tickedNodes = []
+      target.forEach(id => {
+        tickedNodes.push(this.nodes[0].findNode(id))
+      })
+      this.$emit('ticked', tickedNodes)
     },
 
     loadChildOfNode (node, done) {
@@ -172,6 +171,7 @@ export default {
         this.showChildOfNodeFromServer(node, key, done, fail)
       }
     },
+
     showChildOfNodeFromCache (node, key, done, fail) {
       const tree = []
       node.children.forEach(child => {
@@ -179,9 +179,11 @@ export default {
       })
       done(tree)
     },
+
     showChildOfNodeFromServer (node, key, done, fail) {
       this.getNodeById(node.id, done, fail, this.loadChildOfNode)
     },
+
     editNode (id) {
       const node = this.$refs.tree.getNodeByKey(this.selectedNode.id)
       console.log('n', node)
@@ -192,6 +194,7 @@ export default {
           node.name = this.newName
         })
     },
+    // mixin
     createNode (parentId, title, order, callback) {
       this.$axios.post(API_ADDRESS.tree.base, { parent_id: parentId, title: title, order: order })
         .then(response => {
@@ -202,42 +205,29 @@ export default {
           console.log(err)
         })
     },
-    addClicked () {
+
+    addNode (callback) {
       const id = this.selectedNode.id
       const getNode = this.$refs.tree.getNodeByKey(id)
-      this.createNode(id, this.newName, this.newOrder, (response) => {
+      // this.$emit('inputsData', { this.newName , this.newOrder })
+      if (callback) {
         getNode.children.unshift(new TreeNode({
-          id: response.data.data.id,
-          uid: response.data.data.id,
-          type: response.data.data.type,
-          title: response.data.data.title,
-          parent: response.data.data.parent.id
-          // icon: 'school',
+          id: this.newNode.data.data.id,
+          type: this.newNode.data.data.type,
+          title: this.newNode.data.data.title,
+          parent: this.newNode.data.data.parent.id
         }))
         this.editDialog = false
-      })
-      // const arr = id.split(':')
-      // arr.pop()
-      // const newId = Date.now()
-      // arr.push(newId)
-      // const newUid = arr.join(':')
-      // getNode.children.unshift({
-      //   id: newId,
-      //   uid: newUid,
-      //   type: 'level',
-      //   icon: 'school',
-      //   name: this.newName,
-      //   children: []
-      // })
+      }
+      // getNode.children.unshift(new TreeNode({
+      //   id: this.newNode.data.data.id,
+      //   type: this.newNode.data.data.type,
+      //   title: this.newNode.data.data.title,
+      //   parent: this.newNode.data.data.parent.id
+      // }))
       // this.editDialog = false
     },
-    async saveClicked () {
-      this.loading = true
-      const node = this.$refs.tree.getNodeByKey(this.selectedNode.uid)
-      node.name = this.newName
-      this.loading = false
-      this.editDialog = false
-    },
+
     openEditMenu (node) {
       this.newName = ''
       this.newOrder = 1
@@ -245,23 +235,8 @@ export default {
         id: node.id,
         title: node.title
       }
+      this.$emit('selectedNode', this.selectedNode)
       this.editDialog = true
-    },
-    async deleteNode () {
-      const nodeUid = this.selectedNode.uid
-      const arr = nodeUid.split('-')
-      await arr.pop()
-      if (arr.length > 0) {
-        const parentUid = arr.join('-')
-        const getParentNode = await this.$refs.tree.getNodeByKey(parentUid)
-        if (getParentNode) {
-          getParentNode.children = getParentNode.children.filter(node => node.uid !== nodeUid)
-        }
-        this.editDialog = false
-      } else {
-        this.simple.filter(node => node.uid !== nodeUid)
-      }
-      this.editDialog = false
     }
   }
 }
