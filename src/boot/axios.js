@@ -25,6 +25,13 @@ const AxiosHooks = (function () {
     } else if (statusCode === 401) {
       messages.push('ابتدا وارد سامانه شوید.')
       deAuthorizeUser(router, store)
+    } else if (error.response.data.error) {
+      for (const [key, value] of Object.entries(error.response.data.error)) {
+        console.log('key', key)
+        if (typeof value === 'string') {
+          messages.push(value)
+        }
+      }
     } else if (error.response.data.errors) {
       for (const [key, value] of Object.entries(error.response.data.errors)) {
         console.log('key', key)
