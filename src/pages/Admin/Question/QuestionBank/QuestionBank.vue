@@ -18,7 +18,7 @@
           </template>
         </div>
         <div class="pageInation">
-          <page-ination/>
+          <page-ination :meta="paginationMeta"/>
         </div>
       </div>
     </div>
@@ -32,6 +32,7 @@ import QuestionFilter from 'components/Question/QuestionBank/QuestionFilter'
 import QuestionItem from 'components/Question/QuestionBank/QuestionItem'
 import PageInation from 'components/Question/QuestionBank/PageInation'
 import { Question, QuestionList } from 'src/models/Question'
+import axios from 'axios'
 
 export default {
   name: 'QuestionBank',
@@ -39,15 +40,29 @@ export default {
   data () {
     return {
       loadingQuestion: new Question(),
-      questions: new QuestionList()
+      questions: new QuestionList(),
+      paginationMeta: null
     }
   },
   created () {
     this.loadingQuestion.loading = true
-    // this.questions.loading = true
+    this.questions.loading = true
+    this.getQuestionData()
   },
   methods: {
-
+    getQuestionData () {
+      const that = this
+      axios.get('https://office.alaatv.com:800/api/v1/question/search-monta')
+        .then(function (response) {
+          that.paginationMeta = response.data.meta
+          that.questions = new QuestionList(response.data.data)
+          console.log(that.questions)
+          that.questions.loading = false
+        })
+        .catch(function (error) {
+          console.log(error)
+        })
+    }
   }
 }
 </script>
@@ -79,6 +94,9 @@ export default {
 
 .question-bank-toolbar {
   padding-bottom: 24px;
+}
+.question-bank-content {
+  margin-bottom: 16px;
 }
 @media only screen and (max-width: 1919px) {
   .main-container {

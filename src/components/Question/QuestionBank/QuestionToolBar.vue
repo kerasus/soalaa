@@ -1,8 +1,5 @@
 <template>
   <q-card class="question-Bank-ToolBar theme-v1-box-shadow">
-    <q-btn @click="addMathQ">add math question</q-btn>
-    <q-btn @click="addArabicQ">add arabic question</q-btn>
-    <q-btn @click="addChemQ">add chem question</q-btn>
     <q-expansion-item
       expand-icon-toggle
       expand-icon="isax:arrow-down-1"
@@ -80,18 +77,15 @@ export default {
   data () {
     return {
       choicesNumber: 0,
-      arabicNum: 0,
-      chemNum: 0,
-      mathNum: 0,
       filters: [{
         title: 'شیمی',
         id: 1,
-        amount: this.chemNum
+        amount: 3
       },
       {
         title: 'ریاضی',
         id: 2,
-        amount: this.mathNum
+        amount: 55
       },
       {
         title: 'دینی',
@@ -106,7 +100,7 @@ export default {
       {
         title: 'عربی',
         id: 5,
-        amount: this.arabicNum
+        amount: 23
       }
       ],
       checkBox: false
@@ -117,22 +111,6 @@ export default {
   methods: {
     deleteFilter (id) {
       this.filters = this.filters.filter(e => e.id !== id)
-    },
-    addQuestion () {
-      this.choicesNumber += 1
-    },
-    addArabicQ () {
-      this.arabicNum += 1
-      console.log(this.arabicNum)
-      this.addQuestion()
-    },
-    addMathQ () {
-      this.mathNum += 1
-      this.addQuestion()
-    },
-    addChemQ () {
-      this.chemNum += 1
-      this.addQuestion()
     }
   }
 }

@@ -29,13 +29,27 @@ class Choice extends Model {
     const number = {
       1: 'یک',
       2: 'دو',
-      3: 'سه'
+      3: 'سه',
+      4: 'چهار',
+      5: 'پنج',
+      6: 'شش',
+      7: 'هفت',
+      8: 'هشت',
+      9: 'نه',
+      10: 'ده'
     }
 
     const abjad = {
       1: 'الف',
       2: 'ب',
-      3: 'ج'
+      3: 'ج',
+      4: 'د',
+      5: 'ه',
+      6: 'ز',
+      7: 'ص',
+      8: 'ط',
+      9: 'چ',
+      10: 'غ'
     }
 
     return (type === 'number') ? number[this.order] : abjad[this.order]
