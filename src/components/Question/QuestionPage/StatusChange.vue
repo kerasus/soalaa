@@ -4,7 +4,14 @@
     <div class="details-container-2 default-details-container row">
       <div class="detail-box detail-box-first" :class="[imgPanelVisibility ? 'col-6' : 'col-3']">
         <div class="detail-box-title">تعییر وضعیت</div>
-        <q-select borderless v-model="model" :options="options"/>
+        <q-select
+          borderless
+          v-model="selectedStatus"
+          :options="statuses.list"
+          option-value="id"
+          option-label="display_title"
+          :rules="selectorRules"
+        />
       </div>
       <div class="detail-box" :class="[imgPanelVisibility ? 'col-6' : 'col-3']">
         <div class="detail-box-title">افزودن کامنت</div>
@@ -25,8 +32,7 @@
 
 <script>
 import { Question } from 'src/models/Question'
-import { Exam, ExamList } from 'src/models/Exam'
-import { QuestSubcategoryList } from 'src/models/QuestSubcategory'
+import { QuestionStatusList } from 'src/models/QuestionStatus'
 
 export default {
   name: 'CommentBox',
@@ -37,17 +43,9 @@ export default {
         return false
       }
     },
-    exams: { // possible removal for attach exam
-      type: ExamList,
-      default: new ExamList()
-    },
-    lessons: { // possible removal for attach exam
-      type: QuestSubcategoryList,
-      default: new QuestSubcategoryList()
-    },
-    value: {
-      type: Question,
-      default: new Question()
+    statuses: { // possible removal for attach exam
+      type: QuestionStatusList,
+      default: new QuestionStatusList()
     }
   },
   inject: {
@@ -65,23 +63,14 @@ export default {
       text: '',
       draftBtnLoading: false,
       saveBtnLoading: false,
-      selectedExam: null,
-      selectedLesson: null,
-      order: null
+      selectedStatus: null,
+      order: null,
+      selectorRules: [
+        v => v !== null || 'پر کردن این فیلد الزامی است.'
+      ]
     }
   },
   methods: {
-    attach () { // possible removal for attach exam
-      const question = this.value
-      const exam = this.selectedExam
-      exam.sub_category_id = this.selectedLesson.id
-      exam.order = this.order
-      if (!question.exams) {
-        question.exams = new ExamList()
-      }
-      question.exams.list.push(new Exam(exam))
-      this.$emit('update:modelValue', question)
-    }
   },
   computed: {
     getLessonById () {

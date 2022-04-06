@@ -1,20 +1,10 @@
 <template>
-  <div class="createQ-text">
-    <navbar
-      :componentTabs="componentTabs"
-      :loading="componentTabs.loading"
-    />
+  <div class="editQ-text-container">
     <div class="relative-position">
-<!--      <component-->
-<!--        v-if="question.type"-->
-<!--        :is="getComponent"-->
-<!--        v-bind="allProps"-->
-<!--      />-->
-      <q-inner-loading
-        :showing="question.loading"
-        color="primary"
-        class="QComponents-inner-loading"
-        label-style="font-size: 1.1em"
+      <component
+        v-if="question.type"
+        :is="getComponent"
+        v-bind="allProps"
       />
     </div>
     <div class="relative-position">
@@ -29,7 +19,9 @@
           @saveQuestion="setQuestionContents"
         />
       </div>
-      <comment-box/>
+      <comment-box
+        :statuses="questionStatuses"
+      />
       <q-inner-loading
         :showing="question.exams.loading"
         color="primary"
@@ -42,9 +34,7 @@
 
 <script>
 /* eslint-disable no-var */
-// import { defineAsyncComponent } from 'vue'
-import Navbar from 'components/Question/QuestionPage/Create/textMode/Navbar'
-// import DynamicComponent from 'components/Question/QuestionPage/Create/textMode/questionTypes/DynamicComponent'
+import { defineAsyncComponent } from 'vue'
 import { Question } from 'src/models/Question'
 import QuestionDetails from 'components/Question/QuestionPage/Create/textMode/QuestionDetails'
 import AdminActionOnQuestion from 'src/mixin/AdminActionOnQuestion'
@@ -54,18 +44,18 @@ import CommentBox from 'components/Question/QuestionPage/StatusChange'
 import BtnBox from 'components/Question/QuestionPage/BtnBox'
 import { ExamList } from 'src/models/Exam'
 import { QuestSubcategoryList } from 'src/models/QuestSubcategory'
+import { QuestionStatusList } from 'src/models/QuestionStatus'
 // import API_ADDRESS from 'src/api/Addresses'
 export default {
-  name: 'CreateText',
+  name: 'ShowQuestion',
   components: {
-    // DescriptiveQ: defineAsyncComponent(() => import('components/Question/QuestionPage/Create/textMode/questionTypes/DescriptiveQ/DescriptiveQ')),
-    // MultipleChoiceQ: defineAsyncComponent(() => import('components/Question/QuestionPage/Create/textMode/questionTypes/MultipleChoiceQ/MultipleChoiceQ')),
-    // MBTIQ: defineAsyncComponent(() => import('components/Question/QuestionPage/Create/textMode/questionTypes/MBTIQ/MBTIQ')),
+    DescriptiveQ: defineAsyncComponent(() => import('components/Question/QuestionPage/Show/questionTypes/DescriptiveQ/DescriptiveQ')),
+    MultipleChoiceQ: defineAsyncComponent(() => import('components/Question/QuestionPage/Show/questionTypes/MultipleChoiceQ/MultipleChoiceQ')),
+    MBTIQ: defineAsyncComponent(() => import('components/Question/QuestionPage/Show/questionTypes/MBTIQ/MBTIQ')),
     BtnBox,
     CommentBox,
     AttachExam,
     // DynamicComponent,
-    Navbar,
     QuestionDetails
   },
   mixins: [
@@ -81,27 +71,23 @@ export default {
         setContentToQuestion: false
       },
       examList: new ExamList(),
-      subCategoriesList: new QuestSubcategoryList()
+      subCategoriesList: new QuestSubcategoryList(),
+      questionStatuses: new QuestionStatusList()
     }
   },
   created () {
-    // console.log(this.$route, 'this.$route')
-    // console.log(this.$router, 'this.$router')
+    this.getQuestionType(this.question)
   },
   provide () {
     return {
       question: this.question
     }
   },
-  mounted () {
-    this.setAllQuestionLoadings()
-    this.getQuestionType()
-    this.loadExamList()
-    this.loadSubcategories()
-  },
+  mounted () {},
   methods: {
-    chosenComponent (questionType) {
-      const cName = questionType.componentName
+    chosenComponent () {
+      console.log('this.question.type.componentName', this.question.type.componentName)
+      const cName = this.question.type.componentName
       if (cName === 'MultipleChoiceQ') {
         return 'multiple-choice-q'
       }
@@ -134,43 +120,9 @@ export default {
 </script>
 
 <style scoped lang="scss">
-.slide-fade-enter-active {
-   transition: all 0.3s ease-out;
- }
-
-.slide-fade-leave-active {
-  transition: all 0.3s cubic-bezier(1, 0.5, 0.8, 1);
+.showQ-text-container {
+  padding: 40px 100px;
+  display: flex;
+  flex-direction: column;
 }
-
-.slide-fade-enter-from,
-.slide-fade-leave-to {
-  transform: translateX(20px);
-  opacity: 0;
-}
-</style>
-<style lang="scss">
-.QComponents-inner-loading{
-  background-color: #a6a6a65c;
-}
-</style>
-<style lang="sass">
-.example-fab-animate,
-.q-fab:hover .example-fab-animate--hover
-  animation: example-fab-animate 0.82s cubic-bezier(.36,.07,.19,.97) both
-  transform: translate3d(0, 0, 0)
-  backface-visibility: hidden
-  perspective: 1000px
-
-@keyframes example-fab-animate
-  10%, 90%
-    transform: translate3d(-1px, 0, 0)
-
-  20%, 80%
-    transform: translate3d(2px, 0, 0)
-
-  30%, 50%, 70%
-    transform: translate3d(-4px, 0, 0)
-
-  40%, 60%
-    transform: translate3d(4px, 0, 0)
 </style>
