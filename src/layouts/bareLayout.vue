@@ -1,11 +1,11 @@
 <template>
-  <router-view v-slot="{ Component }">
-      <component :is="Component" :key="$route.fullPath" />
-  </router-view>
+  <Router :exclude="['MultipleChoiceQ', 'MBTIQ']" />
 </template>
 
 <script>
+import Router from 'src/router/Router'
 export default {
+  components: { Router },
   created () {
     // console.log('bareLayout created')
   },

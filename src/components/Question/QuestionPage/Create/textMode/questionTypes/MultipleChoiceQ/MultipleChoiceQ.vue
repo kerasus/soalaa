@@ -185,6 +185,7 @@ export default {
       that.domKey = 'Date.now()'
     }, 100)
     this.setDefaultChoices()
+    console.log('create multip')
   },
   mounted () {
     this.$nextTick(() => {
