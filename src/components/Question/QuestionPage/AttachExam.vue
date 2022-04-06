@@ -118,12 +118,14 @@ export default {
   methods: {
     attach () { // possible removal for attach exam
       console.log('this.numberRules', this.numberRules)
-      // this.numberRules.validate()
-      // this.selectorRules.validate()
-      // if (this.numberRules.hasError || this.selectorRules.hasError) {
-      //   // form has error
-      //   return
-      // }
+      if (!this.selectedLesson || !this.selectedExam || !this.order) {
+        this.$q.notify({
+          message: 'لطفا فیلد های مشخصات آزمون را پر کنید',
+          color: 'negative',
+          icon: 'report_problem'
+        })
+        return
+      }
       const question = this.question
       const exam = this.selectedExam
       exam.sub_category_id = this.selectedLesson.id
