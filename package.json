@@ -40,6 +40,7 @@
     "socket.io-client": "^4.4.1",
     "turndown": "^7.1.1",
     "video.js": "^7.17.0",
+    "videojs-brand": "^0.0.4",
     "videojs-hotkeys": "^0.2.27",
     "vue-filepond": "^7.0.2",
     "vue-i18n": "^9.1.9",

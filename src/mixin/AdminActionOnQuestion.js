@@ -4,6 +4,7 @@ import { QuestionStatusList } from 'src/models/QuestionStatus'
 import { Question } from 'src/models/Question'
 import { ExamList } from 'src/models/Exam'
 import { QuestSubcategoryList } from 'src/models/QuestSubcategory'
+// eslint-disable-next-line no-unused-vars
 import { QuestionType, TypeList } from 'src/models/QuestionType'
 import { Log } from 'src/models/Log'
 const AdminActionOnQuestion = {
@@ -15,8 +16,13 @@ const AdminActionOnQuestion = {
     }
   },
   methods: {
+    getPageReady () {
+      this.getQuestionType(this.question)
+      this.loadExamList()
+      this.loadSubcategories()
+      this.getQuestionStatus()
+    },
     createQuestion (question) {
-      console.log('createQuestion', question)
       // const that = this
       // Todo : for createImg
       // question.apiResource.sendType = 'form-data'
@@ -25,11 +31,18 @@ const AdminActionOnQuestion = {
       // .loadApiResource()
       axios.post(API_ADDRESS.question.base, question)
         .then(response => {
-          console.log(response.data)
+          // console.log(response.data)
+          this.$q.notify({
+            message: 'ثبت با موفقیت انجام شد',
+            color: 'green',
+            icon: 'thumb_up'
+          })
+          // window.open('Admin.Question.Create', '_blank').focus()
+          this.$router.push({ name: 'Admin.Question.Show', params: { question_id: response.data.data.id } })
           this.$store.dispatch('loading/overlayLoading', false)
         })
         .catch(er => {
-          console.log(er)
+          console.log(er.message)
           this.$store.dispatch('loading/overlayLoading', false)
         })
     },
@@ -91,11 +104,11 @@ const AdminActionOnQuestion = {
           }
         })
     },
-    getQuestionType () {
+    getQuestionType (question) {
       const that = this
       axios.get(API_ADDRESS.option.base + '?type=question_type')
         .then(function (response) {
-          that.componentTabs = new TypeList(response.data.data)
+          const types = new TypeList(response.data.data)
           const optionQuestion = response.data.data.find(item => (item.value === 'konkur'))
           if (!optionQuestion) {
             return this.$q.notify({
@@ -103,12 +116,10 @@ const AdminActionOnQuestion = {
               color: 'negative'
             })
           }
-          that.setCurrentQuestionType(that.componentTabs)
-          that.qTabLoading = false
+          that.setCurrentQuestionType(question, types)
         })
         .catch(function (error) {
           console.log(error)
-          that.qTabLoading = false
         })
     },
     readRouteFullPath () {
@@ -121,15 +132,21 @@ const AdminActionOnQuestion = {
       return !!(this.readRouteFullPath().includes('text') || this.readRouteFullPath().includes('image'))
     },
     getCurrentQuestionType () {
-      const currentRouteName = this.readRouteName()
+      // const currentRouteName = this.readRouteName()
       const currentRouteFullPath = this.readRouteFullPath()
-      if (this.getCurrentQuestionMode() === 'Text') {
-        const txtToRemove = 'Admin.Question.Create.Text.'
-        return currentRouteName.replace(txtToRemove, '')
-      } else {
-        const txtToRemove = '/question/create/image/'
-        return currentRouteFullPath.replace(txtToRemove, '')
+      let txtToRemove = '/question/create/text/'
+      if (this.getCurrentQuestionMode() === 'Image') {
+        txtToRemove = '/question/create/image/'
       }
+      return currentRouteFullPath.replace(txtToRemove, '')
+    },
+    getCurrentQuestionId () {
+      const currentRouteFullPath = this.readRouteFullPath()
+      const txtToRemove = '/question/'
+      if (currentRouteFullPath.includes('edit')) {
+        currentRouteFullPath.replace('edit', '')
+      }
+      return currentRouteFullPath.replace(txtToRemove, '')
     },
     getCurrentQuestionMode () {
       if (this.readRouteName().includes('.Text')) {
@@ -138,26 +155,21 @@ const AdminActionOnQuestion = {
         return 'Image'
       }
     },
-    setCurrentQuestionType (componentTabs) {
+    setCurrentQuestionType (question, allTypes) {
       if (this.doesHaveQuestionMode()) {
-        // console.log('this.getCurrentQuestionType()')
         const currentType = this.getCurrentQuestionType()
-        let cValue = ''
-        if (currentType === 'MBTI') {
-          cValue = 'psychometric'
-        } else if (currentType === 'Descriptive') {
-          cValue = 'descriptive'
-        } else if (currentType === 'MultipleChoice') {
-          cValue = 'konkur'
+        let currentValue = ''
+        if (currentType === 'mbti') {
+          currentValue = 'psychometric'
+        } else if (currentType === 'descriptive') {
+          currentValue = 'descriptive'
+        } else if (currentType === 'multipleChoice') {
+          currentValue = 'konkur'
         }
-        if (componentTabs) {
-          this.question.type = componentTabs.list.find(item => (item.value === cValue))
-        } else {
-          this.question.type = new QuestionType({
-            value: cValue
-          })
-        }
-        this.question.type_id = this.question.type.id
+        question.type = allTypes.list.find(item => (item.value === currentValue))
+        question.type_id = question.type.id
+      } else {
+        console.log('getCurrentQuestionId', this.getCurrentQuestionId())
       }
     },
     getQuestionStatus () {
@@ -218,7 +230,7 @@ const AdminActionOnQuestion = {
             color: 'green',
             icon: 'thumb_up'
           })
-          window.open('Admin.Question.Create', '_blank').focus()
+          // window.open('Admin.Question.Create', '_blank').focus()
           this.$router.push({ name: 'Admin.Question.Show', params: { question_id: questionId } })
         })
     },
@@ -233,10 +245,10 @@ const AdminActionOnQuestion = {
         })
     },
     loadExamList () {
-      const that = this
+      // const that = this
       this.$axios.get(API_ADDRESS.exam.base())
         .then((response) => {
-          that.examList = new ExamList(response.data.data)
+          this.examList = new ExamList(response.data.data)
           // console.log('that.examList', that.examList)
         })
         .catch(() => {
