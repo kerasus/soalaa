@@ -151,6 +151,31 @@ export default {
 </script>
 
 <style lang="scss">
+#my-video .vjs-big-play-button {
+  border: none;
+  width: 80px;
+  height: 80px;
+  line-height: 2em;
+  top: 50%;
+  margin-left: -1em;
+  color: #fff;
+  background-color: #FFB74D;
+  box-shadow: -2px -4px 10px rgba(255, 255, 255, 0.6), 2px 4px 10px rgba(112, 108, 162, 0.05);
+  font-size: 52px;
+  border-radius:20px;
+  -moz-border-radius:100px;
+  -webkit-border-radius:100px;
+  margin-top: -0.817em;
+}
+.video-js .vjs-big-play-button .vjs-icon-placeholder:before {
+  content: "\f4cd";
+  left: -12px;
+  top: -10px;
+  font-size: 110px;
+  font-family: iconsax;
+  border: none !important;
+  box-shadow: none !important;
+}
 .vjs-brand-container{
   .vjs-brand-container-link{
     img{
