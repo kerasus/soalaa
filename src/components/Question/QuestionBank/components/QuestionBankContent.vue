@@ -47,8 +47,19 @@
         </div>
       </div>
       <div class="choice-section row">
-        <div class="choice-column col-3" v-for="(item) in hh.data.choices" :key="item.id">
-          <div v-ripple="{}" :class="'choice ' + 'choice-' + item.id + ' relative-position'" @click="choiceClicked(item.id)">{{ item.id }}</div>
+        <div class="choice-column col-3" v-for="(item , index) in hh.data.choices" :key="index">
+          <div
+            v-if="item.answer === false"
+            class="choice false"
+          >
+            {{ item.id }}
+          </div>
+          <div
+            v-if="item.answer === true"
+            class="choice true"
+          >
+            {{ item.id }}
+          </div>
           <div class="answer-text">
             <vue-katex :input="item.title" />
           </div>
@@ -106,10 +117,33 @@
           </div>
         </template>
         <q-card>
-          <q-card-section>
-            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quidem, eius reprehenderit eos corrupti
-            commodi magni quaerat ex numquam, dolorum officiis modi facere maiores architecto suscipit iste
-            eveniet doloribus ullam aliquid.
+          <q-card-section class="answer-section">
+            <div class="row">
+              <div class="answer-description col-8">
+                <q-card flat class="answer-description-card">
+                  <q-card-section class="answer-description-content">
+                    <div class="question-answer-choice" v-for="item in hh.data.choices" :key="item">
+                <span v-if="item.answer === true" class="question-answer-choice-title">
+                  گزینه یک
+                </span>
+                    </div>
+                    <div class="question-answer-description">
+                      لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک است چاپگرها و متون بلکه روزنامه و مجله در ستون و سطرآنچنان که لازم است و برای شرایط فعلی تکنولوژی مورد نیاز و کاربردهای متنوع با هدف بهبود ابزارهای کاربردی می باشد کتابهای زیادی در شصت و سه درصد گذشته حال و آینده شناخت فراوان جامعه و متخصصان را می طلبد تا با نرم افزارها شناخت بیشتری را برای طراحان رایانه ای علی الخصوص طراحان خلاقی
+                    </div>
+                  </q-card-section>
+                </q-card>
+              </div>
+              <div class="answer-description-video col-4">
+                <div class="video">
+                  <video ref="videoPlayer" id="my-video" dir="ltr"
+                         class="video-js vjs-fluid vjs-big-play-centered vjs-show-big-play-button-on-pause">
+                  </video>
+                </div>
+                <div class="title">
+                  پاسخنامه ویدیویی - محمد امین نباخته
+                </div>
+              </div>
+            </div>
           </q-card-section>
         </q-card>
       </q-expansion-item>
@@ -131,6 +165,11 @@
 </template>
 
 <script>
+import videojs from 'video.js'
+
+require('video.js/dist/video-js.css')
+require('@silvermine/videojs-quality-selector')(videojs)
+require('@silvermine/videojs-quality-selector/dist/css/quality-selector.css')
 import VueKatex from 'components/VueKatex'
 export default {
   name: 'QuestionBankContent',
@@ -253,14 +292,19 @@ export default {
       }
     }
   },
-  methods: {
-    choiceClicked (id) {
-      if (this.choiceWasClicked) {
-        this.choiceIsClicked = false
-      }
+  computed: {
+  },
+  mounted () {
+    this.player = videojs(this.$refs.videoPlayer, this.options, function onPlayerReady () {
+      console.log('onPlayerReady', this)
+    })
+  },
+  beforeUnmount () {
+    if (this.player) {
+      this.player.dispose()
     }
   },
-  computed: {
+  methods: {
   }
 }
 </script>
@@ -409,7 +453,6 @@ export default {
         align-items: center;
       }
       .choice {
-        cursor: pointer;
         margin-bottom: 16px;
         margin-right: 10px;
         border-radius: 50%;
@@ -420,7 +463,61 @@ export default {
         background: #9690E4;
         box-shadow: -2px -4px 10px rgba(255, 255, 255, 0.6), 2px 4px 10px rgba(112, 108, 162, 0.05);
       }
+      .false {
+        background: #9690E4;
+      }
 
+      .true {
+        background: #4CAF50;
+      }
+    }
+  }
+
+  .answer-section {
+    padding: 24px 10px;
+    .answer-description {
+      .answer-description-card {
+        font-style: normal;
+        font-weight: 400;
+        font-size: 14px;
+        line-height: 24px;
+        color: #23263B;
+        background: #F4F5F6;
+        border-radius: 20px;
+        .answer-description-content {
+          .question-answer-choice {
+            margin-bottom: 10px;
+            .question-answer-choice-title {
+              padding: 0 10px;
+              font-style: normal;
+              font-weight: 400;
+              font-size: 14px;
+              line-height: 24px;
+              color: #FFFFFF;
+              background: #4CAF50;
+              border-radius: 12px;
+            }
+          }
+        }
+      }
+    }
+    .answer-description-video {
+      padding: 0 0 0 16px;
+      .video {
+        width: 320px;
+        height: 180px;
+        background: #F4F5F6;
+        border-radius: 20px;
+      }
+      .title {
+        padding-top: 8px;
+        padding-left: 10px;
+        font-style: normal;
+        font-weight: 400;
+        font-size: 14px;
+        line-height: 24px;
+        color: #23263B;
+      }
     }
   }
 
