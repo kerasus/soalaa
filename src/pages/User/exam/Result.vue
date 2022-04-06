@@ -206,8 +206,8 @@ export default {
           // save questions in localStorage
           that.saveCurrentExamQuestions(examData.exam.questions.list)
           // save exam info in vuex store (remove questions of exam then save in store)
-          that.$store.commit('quiz/updateQuiz', examData.exam)
-          that.$store.commit('quiz/mergeDbAnswersIntoLocalstorage', {
+          that.$store.commit('Exam/updateQuiz', examData.exam)
+          that.$store.commit('Exam/mergeDbAnswersIntoLocalstorage', {
             dbAnswers: examData.userExamData,
             exam_id: examData.exam.id
           })
