@@ -72,7 +72,7 @@ export default {
     doActionsOnChangeCategory (newCat) {
       if (!newCat || !this.currentCat || Assistant.getId(newCat.id) !== Assistant.getId(this.currentCat.id)) {
         this.currentCat = newCat
-        this.$store.commit('quiz/setActiveStateOfExamCategories')
+        this.$store.commit('Exam/setActiveStateOfExamCategories')
         if (this.currentCat) {
           this.goToCategory(this.currentCat.id)
           Time.setStateOfQuestionsBasedOnActiveCategory(this.quiz, this.getCurrentExamQuestions())
@@ -83,7 +83,7 @@ export default {
     setExamAcceptAtIsPassedWhenAllCategoryIsPassed () {
       const newCat = Time.getCurrentCategoryAcceptAt(this.quiz.categories)
       if (!newCat && this.quiz.categories.length > 0) {
-        this.$store.commit('quiz/setExamAcceptAtIsPassed')
+        this.$store.commit('Exam/setExamAcceptAtIsPassed')
       }
     }
   }

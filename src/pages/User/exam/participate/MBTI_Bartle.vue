@@ -309,7 +309,7 @@ export default {
       this.$store.dispatch('loading/overlayLoading', true)
       const that = this
       const isLastQuestion = this.isLastQuestion()
-      const answerClickedPromise = this.answerClicked({ choiceId: id, questionId: this.currentQuestion.id })
+      const answerClickedPromise = this.answerClicked({ choiceId: id, questionId: this.currentQuestion.id }, true)
       answerClickedPromise.then((response) => {
         const targetQuestion = response.data.data.find(item => (
           this.currentQuestion.id !== null &&
@@ -363,7 +363,7 @@ export default {
           //   text: 'اطلاعات آزمون شما ثبت شد.',
           //   type: 'success'
           // })
-          that.$store.commit('quiz/clearExamData', that.quiz.id)
+          that.$store.commit('Exam/clearExamData', that.quiz.id)
           that.tryAgainDialog = false
           that.$router.push({ name: 'mbtiBartle.result', params: { exam_id: this.quiz.id.toString(), user_exam_id: this.quiz.user_exam_id.toString() } })
         })

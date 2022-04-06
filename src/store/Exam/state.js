@@ -9,6 +9,7 @@ export default function () {
     currentExamFrozenQuestions: ref(null),
     failedListAnswerData: ref([]),
     failedListStatusData: ref([]),
-    failedListBookmarkData: ref([])
+    failedListBookmarkData: ref([]),
+    failedListUnBookmarkData: ref([])
   }
 }
