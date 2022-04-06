@@ -134,7 +134,11 @@
                 </q-card>
               </div>
               <div class="answer-description-video col-4">
-                <div class="video"></div>
+                <div class="video">
+                  <video ref="videoPlayer" id="my-video" dir="ltr"
+                         class="video-js vjs-fluid vjs-big-play-centered vjs-show-big-play-button-on-pause">
+                  </video>
+                </div>
                 <div class="title">
                   پاسخنامه ویدیویی - محمد امین نباخته
                 </div>
@@ -161,6 +165,11 @@
 </template>
 
 <script>
+import videojs from 'video.js'
+
+require('video.js/dist/video-js.css')
+require('@silvermine/videojs-quality-selector')(videojs)
+require('@silvermine/videojs-quality-selector/dist/css/quality-selector.css')
 import VueKatex from 'components/VueKatex'
 export default {
   name: 'QuestionBankContent',
@@ -284,6 +293,16 @@ export default {
     }
   },
   computed: {
+  },
+  mounted () {
+    this.player = videojs(this.$refs.videoPlayer, this.options, function onPlayerReady () {
+      console.log('onPlayerReady', this)
+    })
+  },
+  beforeUnmount () {
+    if (this.player) {
+      this.player.dispose()
+    }
   },
   methods: {
   }
