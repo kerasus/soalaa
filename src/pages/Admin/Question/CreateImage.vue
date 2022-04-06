@@ -29,6 +29,7 @@
         <upload-image v-model="question" title="پاسخ سوال" field-key="answer_photos"/>
       </div>
     </div>
+    <AttachExam :exams="examList" :lessons="subCategoriesList" />
 <!--    <div class="row">-->
 <!--      <div class="col">-->
 <!--        <AttachExam />-->
@@ -47,14 +48,17 @@ import uploadImage from 'src/components/Question/QuestionPage/UploadImage'
 import { Question } from 'src/models/Question'
 // import QuestionDetails from 'components/Question/QuestionPage/Create/textMode/QuestionDetails'
 import { AdminActionOnQuestion } from 'src/mixin/Mixins'
-// import AttachExam from 'components/Question/QuestionPage/AttachExam'
+import AttachExam from 'components/Question/QuestionPage/AttachExam'
+import { ExamList } from 'src/models/Exam'
+import { QuestSubcategoryList } from 'src/models/QuestSubcategory'
 // import CommentBox from 'components/Question/QuestionPage/CommentBox'
 // import BtnBox from 'components/Question/QuestionPage/BtnBox'
 
 export default {
   name: 'CreateImage',
   components: {
-    uploadImage
+    uploadImage,
+    AttachExam
     // ,
     // QuestionDetails,
     // AttachExam,
@@ -64,7 +68,9 @@ export default {
   mixins: [AdminActionOnQuestion],
   data () {
     return {
-      question: new Question()
+      question: new Question(),
+      examList: new ExamList(),
+      subCategoriesList: new QuestSubcategoryList()
     }
   },
   mounted () {

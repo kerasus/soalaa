@@ -24,7 +24,7 @@ const AdminActionOnQuestion = {
       question.answer_photos.forEach((item, key) => {
         formData.append('answer_photos[' + key + ']', item)
       })
-      this.currentQuestion.exams.forEach((item, key) => {
+      this.currentQuestion.exams.list.forEach((item, key) => {
         formData.append('exams[' + key + '][id]', item.id)
         formData.append('exams[' + key + '][order]', item.order)
         formData.append('exams[' + key + '][sub_category_id]', item.sub_category_id)
