@@ -53,7 +53,7 @@ export default {
   }
 
   .question-bank-filter {
-    padding-right: 20px;
+    padding-right: 24px;
   }
 
   .question-bank-toolbar {
@@ -62,7 +62,7 @@ export default {
   @media only screen and (max-width: 1919px) {
     .main-container {
       padding-left: 0;
-      padding-right: 30px;
+      padding-right: 24px;
     }
   }
   @media only screen and (max-width: 1439px) {

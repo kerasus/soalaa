@@ -47,77 +47,136 @@
         </div>
       </div>
       <div class="choice-section row">
-        <div class="choice-column col-3" v-for="(item, index) in hh.data.choices" :key="index">
-          <div v-ripple="{background: '#4CAF50'}" :class="'choice choice-' + index+1 + ' relative-position'" :style="choiceClickedStyle" @click="choiceClicked">{{ index + 1 }}</div>
+        <div class="choice-column col-3" v-for="(item , index) in hh.data.choices" :key="index">
+          <div
+            v-if="item.answer === false"
+            class="choice false"
+          >
+            {{ item.id }}
+          </div>
+          <div
+            v-if="item.answer === true"
+            class="choice true"
+          >
+            {{ item.id }}
+          </div>
           <div class="answer-text">
             <vue-katex :input="item.title" />
           </div>
         </div>
       </div>
-      <div class="question-actions">
-        <div class="edit-and-add">
-          <div class="add-btn">
-            <q-btn flat class="edit-and-add-btn">
-              <q-icon name="isax:add"></q-icon>
-            </q-btn>
-          </div>
-          <div class="edit-btn">
-            <q-btn flat class="edit-and-add-btn">
-              <q-icon name="isax:edit-2"></q-icon>
-            </q-btn>
-          </div>
-        </div>
-        <div class="question-actions-content">
-          <div class="question-actions-btn">
-            <div class="rating">
-              <div class="voters-number">
-                (90)
+      <div class="question-actions-container">
+        <q-expansion-item
+        expand-icon-toggle
+        expand-icon="isax:arrow-down-1"
+      >
+        <template v-slot:header>
+          <div class="question-actions">
+            <div class="edit-and-add">
+              <div class="add-btn">
+                <q-btn flat class="edit-and-add-btn">
+                  <q-icon name="isax:add"></q-icon>
+                </q-btn>
               </div>
-              <div class="rate-number">
-                4.5
-              </div>
-              <div class="star">
-                <q-icon class="star-icon" name="mdi-star" size="16px"></q-icon>
+              <div class="edit-btn">
+                <q-btn flat class="edit-and-add-btn">
+                  <q-icon name="isax:edit-2"></q-icon>
+                </q-btn>
               </div>
             </div>
-            <div class="comments">
-              <q-btn flat dense rounded>
-                <div class="comment-number">19</div>
-                <q-icon class="comment-icon" name="isax:message-text" size="16px" style="color: #65677F">
-                  </q-icon>
-              </q-btn>
-            </div>
-            <div class="report">
-              <q-btn flat dense rounded>
-                <div class="report-title">
-                  گزارش خطا
+            <div class="question-actions-content">
+              <div class="question-actions-btn">
+                <div class="rating">
+                  <div class="voters-number">
+                    (90)
+                  </div>
+                  <div class="rate-number">
+                    4.5
+                  </div>
+                  <div class="star">
+                    <q-icon class="star-icon" name="mdi-star" size="16px"></q-icon>
+                  </div>
                 </div>
-                <q-icon class="report-icon" name="isax:danger" size="16px" style="color: #65677F"></q-icon>
-              </q-btn>
+                <div class="comments">
+                  <q-btn flat dense rounded>
+                    <div class="comment-number">19</div>
+                    <q-icon class="comment-icon" name="isax:message-text" size="16px" style="color: #65677F">
+                    </q-icon>
+                  </q-btn>
+                </div>
+                <div class="report">
+                  <q-btn flat dense rounded>
+                    <div class="report-title">
+                      گزارش خطا
+                    </div>
+                    <q-icon class="report-icon" name="isax:danger" size="16px" style="color: #65677F"></q-icon>
+                  </q-btn>
+                </div>
+              </div>
             </div>
           </div>
-          <div class="answer-show">
-            <q-btn flat rounded dense class="answer-show-btn">
-              <div class="show-title">
-                نمایش پاسخ تشریحی
+        </template>
+        <q-card>
+          <q-card-section class="answer-section">
+            <div class="row">
+              <div class="answer-description col-8">
+                <q-card flat class="answer-description-card">
+                  <q-card-section class="answer-description-content">
+                    <div class="question-answer-choice" v-for="item in hh.data.choices" :key="item">
+                <span v-if="item.answer === true" class="question-answer-choice-title">
+                  گزینه یک
+                </span>
+                    </div>
+                    <div class="question-answer-description">
+                      لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ و با استفاده از طراحان گرافیک است چاپگرها و متون بلکه روزنامه و مجله در ستون و سطرآنچنان که لازم است و برای شرایط فعلی تکنولوژی مورد نیاز و کاربردهای متنوع با هدف بهبود ابزارهای کاربردی می باشد کتابهای زیادی در شصت و سه درصد گذشته حال و آینده شناخت فراوان جامعه و متخصصان را می طلبد تا با نرم افزارها شناخت بیشتری را برای طراحان رایانه ای علی الخصوص طراحان خلاقی
+                    </div>
+                  </q-card-section>
+                </q-card>
               </div>
-              <q-icon name="isax:arrow-down-1"></q-icon>
-            </q-btn>
-          </div>
-        </div>
+              <div class="answer-description-video col-4">
+                <div class="video">
+                  <video ref="videoPlayer" id="my-video" dir="ltr"
+                         class="video-js vjs-fluid vjs-big-play-centered vjs-show-big-play-button-on-pause">
+                  </video>
+                </div>
+                <div class="title">
+                  پاسخنامه ویدیویی - محمد امین نباخته
+                </div>
+              </div>
+            </div>
+          </q-card-section>
+        </q-card>
+      </q-expansion-item>
       </div>
     </q-card-section>
   </q-card>
+  <div class=" question-bank-pagination q-pa-lg flex flex-center">
+    <q-pagination
+      active-color="primary"
+      outline
+      direction-links
+      v-model="choiceClickedStyle"
+      color="black"
+      :max="10"
+      :max-pages="6"
+      boundary-numbers
+    />
+  </div>
 </template>
 
 <script>
+import videojs from 'video.js'
+
+require('video.js/dist/video-js.css')
+require('@silvermine/videojs-quality-selector')(videojs)
+require('@silvermine/videojs-quality-selector/dist/css/quality-selector.css')
 import VueKatex from 'components/VueKatex'
 export default {
   name: 'QuestionBankContent',
   components: { VueKatex },
   data () {
     return {
-      choiceClickedStyle: null,
+      choiceClickedStyle: 0,
       info: [
         {
           name: 'شیمی دهم'
@@ -233,22 +292,25 @@ export default {
       }
     }
   },
-  methods: {
-    choiceClicked () {
-      this.choiceClickedStyle = {
-        background: '#4CAF50'
-      }
+  computed: {
+  },
+  mounted () {
+    this.player = videojs(this.$refs.videoPlayer, this.options, function onPlayerReady () {
+      console.log('onPlayerReady', this)
+    })
+  },
+  beforeUnmount () {
+    if (this.player) {
+      this.player.dispose()
     }
   },
-  computed: {
+  methods: {
   }
 }
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss" >
 .question-bank-content {
-  padding: 24px;
-
   .question-info-section {
     display: flex;
     justify-content: space-between;
@@ -391,7 +453,6 @@ export default {
         align-items: center;
       }
       .choice {
-        cursor: pointer;
         margin-bottom: 16px;
         margin-right: 10px;
         border-radius: 50%;
@@ -402,105 +463,194 @@ export default {
         background: #9690E4;
         box-shadow: -2px -4px 10px rgba(255, 255, 255, 0.6), 2px 4px 10px rgba(112, 108, 162, 0.05);
       }
+      .false {
+        background: #9690E4;
+      }
 
+      .true {
+        background: #4CAF50;
+      }
     }
   }
 
-  .question-actions {
-    display: flex;
-    justify-content: space-between;
-
-    .edit-and-add {
-      display: flex;
-
-      .add-btn {
-        margin-right: 16px;
+  .answer-section {
+    padding: 24px 10px;
+    .answer-description {
+      .answer-description-card {
+        font-style: normal;
+        font-weight: 400;
+        font-size: 14px;
+        line-height: 24px;
+        color: #23263B;
+        background: #F4F5F6;
+        border-radius: 20px;
+        .answer-description-content {
+          .question-answer-choice {
+            margin-bottom: 10px;
+            .question-answer-choice-title {
+              padding: 0 10px;
+              font-style: normal;
+              font-weight: 400;
+              font-size: 14px;
+              line-height: 24px;
+              color: #FFFFFF;
+              background: #4CAF50;
+              border-radius: 12px;
+            }
+          }
+        }
       }
     }
+    .answer-description-video {
+      padding: 0 0 0 16px;
+      .video {
+        width: 320px;
+        height: 180px;
+        background: #F4F5F6;
+        border-radius: 20px;
+      }
+      .title {
+        padding-top: 8px;
+        padding-left: 10px;
+        font-style: normal;
+        font-weight: 400;
+        font-size: 14px;
+        line-height: 24px;
+        color: #23263B;
+      }
+    }
+  }
 
-    .question-actions-content {
-      display: flex;
-      margin-top: 9px;
-      .question-actions-btn {
+  .question-actions-container{
+    .q-item-type{
+      justify-content: space-between;
+    }
+    .q-expansion-item--collapsed{
+      .q-item__section {
         display: flex;
-        .rating {
+        flex-direction: row;
+        align-items: center;
+        &:before{
+          content: 'نمایش پاسخ تشریحی';
+        }
+        i{
+          margin-top: 0;
+          margin-left: 10px;
+        }
+        .q-expansion-item__toggle-focus{
+          display: none;
+        }
+      }
+    }
+    .q-expansion-item--expanded {
+      .q-item__section {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        &:before{
+          content: 'بستن پاسخ تشریحی';
+        }
+        i{
+          margin-top: 0;
+          margin-left: 10px;
+        }
+        .q-expansion-item__toggle-focus{
+          display: none;
+        }
+      }
+    }
+    .question-actions {
+      display: flex;
+      justify-content: space-between;
+      width: 775px;
+
+      .edit-and-add {
+        display: flex;
+
+        .add-btn {
+          margin-right: 16px;
+        }
+      }
+
+      .question-actions-content {
+        display: flex;
+        margin-top: 9px;
+        .question-actions-btn {
           display: flex;
-          align-items: center;
-          margin-right: 24px;
-          .voters-number {
-            margin-top: 1px;
-            font-style: normal;
-            font-weight: 400;
-            font-size: 10px;
-            line-height: 17px;
-            color: #65677F;
-            opacity: 0.5;
+          .rating {
+            display: flex;
+            align-items: center;
+            margin-right: 24px;
+            .voters-number {
+              margin-top: 1px;
+              font-style: normal;
+              font-weight: 400;
+              font-size: 10px;
+              line-height: 17px;
+              color: #65677F;
+              opacity: 0.5;
+            }
+            .rate-number {
+              margin: 1px 0 0 2px;
+              font-style: normal;
+              font-weight: 400;
+              font-size: 12px;
+              line-height: 21px;
+              text-align: center;
+              color: #65677F;
+            }
+            .star {
+              .star-icon {
+                margin: 0 0 4px 6px;
+                color: #FFCA28;
+              }
+            }
           }
-          .rate-number {
-            margin: 1px 0 0 2px;
-            font-style: normal;
-            font-weight: 400;
-            font-size: 12px;
-            line-height: 21px;
-            text-align: center;
-            color: #65677F;
+
+          .comments {
+            display: flex;
+            align-items: center;
+            margin-right: 24px;
+
+            .comment-number {
+              font-size: 12px;
+              color: #65677F;
+            }
+            .comment-icon {
+              margin: 0 0 2px 5px;
+            }
           }
-          .star {
-            .star-icon {
-              margin: 0 0 4px 6px;
-              color: #FFCA28;
+
+          .report {
+            display: flex;
+            align-items: center;
+            margin-right: 30px;
+
+            .report-title {
+              font-style: normal;
+              font-weight: 400;
+              font-size: 12px;
+              line-height: 21px;
+              color: #65677F;
+            }
+            .report-icon {
+              margin: 0 0 3px 7px;
             }
           }
         }
 
-        .comments {
-          display: flex;
-          align-items: center;
-          margin-right: 24px;
-
-          .comment-number {
-            font-size: 12px;
-            color: #65677F;
-          }
-          .comment-icon {
-            margin: 0 0 2px 5px;
-          }
-        }
-
-        .report {
-          display: flex;
-          align-items: center;
-          margin-right: 30px;
-
-          .report-title {
-            font-style: normal;
-            font-weight: 400;
-            font-size: 12px;
-            line-height: 21px;
-            color: #65677F;
-          }
-          .report-icon {
-            margin: 0 0 3px 7px;
-          }
-        }
-      }
-
-      .answer-show {
-        display: flex;
-        align-items: center;
-        .answer-show-btn {
-          padding: 0 3px;
-          height: 30px;
-          .show-title {
-            font-style: normal;
-            font-weight: 500;
-            font-size: 14px;
-            line-height: 24px;
-            color: #23263B;
-          }
-        }
       }
     }
+
+  }
+}
+.question-bank-pagination{
+  .q-btn--actionable{
+    width: 35px;
+    height: 35px;
+    background: #FFFFFF;
+    border-radius: 12px;
+    margin-right: 3px;
   }
 }
 </style>
