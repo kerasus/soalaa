@@ -16,14 +16,14 @@ const mixinQuiz = {
     },
     quiz: {
       get () {
-        return this.$store.getters['quiz/quiz']
+        return this.$store.getters['Exam/quiz']
       },
       set (newInfo) {
-        this.$store.commit('quiz/updateQuiz', newInfo)
+        this.$store.commit('Exam/updateQuiz', newInfo)
       }
     },
     userQuizListData () {
-      return this.$store.getters['quiz/userQuizListData']
+      return this.$store.getters['Exam/userQuizListData']
     },
     userQuestionData () {
       return (questionId) => {
@@ -35,14 +35,14 @@ const mixinQuiz = {
       }
     },
     currentExamFrozenQuestions () {
-      return this.$store.getters('quiz/currentExamFrozenQuestions')
+      return this.$store.getters['Exam/currentExamFrozenQuestions']
     },
     currentQuestion: {
       get () {
-        return this.$store.getters['quiz/currentQuestion']
+        return this.$store.getters['Exam/currentQuestion']
       },
       set (newInfo) {
-        this.$store.commit('quiz/updateCurrentQuestion', {
+        this.$store.commit('Exam/updateCurrentQuestion', {
           newQuestionId: newInfo.id,
           currentExamQuestions: this.getCurrentExamQuestions()
         })
@@ -75,6 +75,7 @@ const mixinQuiz = {
     return {
       bookletsDialog: false,
       useSocket: true,
+      socketTimeout: 2000,
       socket: null,
       considerActiveCategoryAndSubcategory: false
     }
@@ -91,6 +92,22 @@ const mixinQuiz = {
       if (!this.socket.connected) {
         this.socket.connect()
       }
+    },
+    sendDataBySocket (socket, channel, payload) {
+      return new Promise((resolve, reject) => {
+        socket.timeout(this.socketTimeout).emit(channel, payload, (socketError, serverResponse) => {
+          if (socketError) {
+            socket.disconnect()
+            socket.connect()
+            reject(socketError)
+          }
+          if (!serverResponse || serverResponse.error) {
+            reject(serverResponse)
+          } else {
+            resolve(serverResponse)
+          }
+        })
+      })
     },
     disconnectSocket () {
       if (!this.useSocket || !this.socket) {
@@ -230,16 +247,17 @@ const mixinQuiz = {
               Time.setStateOfExamCategories(examData.exam.categories, ACTIVE_ALL_CATEGORIES_IN_EXAM)
               const currentExamQuestions = that.getCurrentExamQuestions()
               Time.setStateOfQuestionsBasedOnActiveCategory(examData.exam, currentExamQuestions)
-              that.$store.commit('quiz/updateQuiz', examData.exam)
+              that.$store.commit('Exam/updateQuiz', examData.exam)
               that.setCurrentExamQuestions(currentExamQuestions)
               that.loadCurrentQuestion(viewType)
               // examData.exam = that.quiz
               that.reloadCurrentQuestion(viewType)
 
-              that.$store.commit('quiz/mergeDbAnswersIntoLocalstorage', {
+              that.$store.commit('Exam/mergeDbAnswersIntoLocalstorage', {
                 dbAnswers: examData.userExamData,
                 exam_id: examData.exam.id
               })
+              setTimeout(that.refreshFailedLists(examData.exam.id), 0)
               resolve(result)
             } catch (error) {
               console.error(error)
@@ -290,7 +308,7 @@ const mixinQuiz = {
       return this.userQuizListData[quizId][questionId]
     },
     getCurrentExam () {
-      return this.$store.getters['quiz/quiz']
+      return this.$store.getters['Exam/quiz']
     },
     getCurrentExamQuestionIndexes () {
       if (window.currentExamQuestionIndexes && window.currentExamQuestionIndexes.length) {
@@ -415,7 +433,7 @@ const mixinQuiz = {
         const examData = new ExamData()
         if (that.needToLoadQuizData()) {
           that.saveCurrentExamQuestions([])
-          that.$store.commit('quiz/cleanCurrentQuestion')
+          that.$store.commit('Exam/cleanCurrentQuestion')
           that.bookletsDialog = true
           that.$store.commit('loading/overlay', true)
           examData.getExamDataAndParticipate(examId)
@@ -437,17 +455,18 @@ const mixinQuiz = {
                 Time.setStateOfExamCategories(examData.exam.categories, ACTIVE_ALL_CATEGORIES_IN_EXAM)
                 const currentExamQuestions = that.getCurrentExamQuestions()
                 Time.setStateOfQuestionsBasedOnActiveCategory(examData.exam, currentExamQuestions)
-                that.$store.commit('quiz/updateQuiz', examData.exam)
+                that.$store.commit('Exam/updateQuiz', examData.exam)
                 that.setCurrentExamQuestions(currentExamQuestions)
                 that.loadCurrentQuestion(viewType)
                 that.reloadCurrentQuestion(viewType)
               } else {
                 examData.exam = that.quiz
               }
-              that.$store.commit('quiz/mergeDbAnswersIntoLocalstorage', {
+              that.$store.commit('Exam/mergeDbAnswersIntoLocalstorage', {
                 dbAnswers: examData.userExamData,
                 exam_id: examData.exam.id
               })
+              setTimeout(that.refreshFailedLists(examData.exam.id), 0)
               resolve(result)
             } catch (error) {
               console.error(error)
@@ -499,7 +518,7 @@ const mixinQuiz = {
             examDataWithQuestions.id = examId
           }
 
-          // that.$store.commit('quiz/updateQuiz', examDataWithQuestions)
+          // that.$store.commit('Exam/updateQuiz', examDataWithQuestions)
         }
         that.loadExamExtraData(that.quiz, viewType)
         if (viewType !== 'results') {
@@ -516,7 +535,7 @@ const mixinQuiz = {
               // eslint-disable-next-line prefer-promise-reject-errors
               reject()
             }
-            that.$store.commit('quiz/mergeDbAnswersIntoLocalstorage', {
+            that.$store.commit('Exam/mergeDbAnswersIntoLocalstorage', {
               dbAnswers: response.data,
               exam_id: that.quiz.id
             })
@@ -550,7 +569,7 @@ const mixinQuiz = {
         this.setCurrentExamQuestions(currentExamQuestions)
       }
 
-      this.$store.commit('quiz/updateQuiz', quiz)
+      this.$store.commit('Exam/updateQuiz', quiz)
     },
     getQuestNumber () {
       let questNumber = this.$route.params.questNumber
@@ -592,7 +611,7 @@ const mixinQuiz = {
       return new Promise(function (resolve, reject) {
         const examData = new ExamData()
         that.saveCurrentExamQuestions([])
-        that.$store.commit('quiz/cleanCurrentQuestion')
+        that.$store.commit('Exam/cleanCurrentQuestion')
         that.bookletsDialog = true
         that.$store.commit('loading/overlay', { loading: true, text: '' })
         examData.getExamData(examId)
@@ -654,10 +673,12 @@ const mixinQuiz = {
       return this.userActionOnQuestion(questionId, 'answer', { choiceId: data.choiceId }, socket, sendData, callback)
     },
     changeBookmark (questionId) {
-      return this.userActionOnQuestion(questionId, 'bookmark')
+      const socket = (this.useSocket) ? this.socket : false
+      return this.userActionOnQuestion(questionId, 'bookmark', null, socket)
     },
     changeStatus (questionId, newStatus) {
-      return this.userActionOnQuestion(questionId, 'status', { newStatus })
+      const socket = (this.useSocket) ? this.socket : false
+      return this.userActionOnQuestion(questionId, 'status', { newStatus }, socket)
     },
     getQuestionNumberFromIndex (index) {
       index = parseInt(index)
@@ -816,7 +837,7 @@ const mixinQuiz = {
         }
       }
 
-      this.$store.commit('quiz/updateCurrentQuestion', {
+      this.$store.commit('Exam/updateCurrentQuestion', {
         newQuestionId: currentQuestion.id,
         currentExamQuestions: this.getCurrentExamQuestions(),
         mandatory

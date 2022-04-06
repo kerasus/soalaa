@@ -29,41 +29,66 @@
         <upload-image v-model="question" title="پاسخ سوال" field-key="answer_photos"/>
       </div>
     </div>
-    <div class="row">
-      <div class="col">
-        <AttachExam />
-        <div class="attach-btn row">
-          <QuestionDetails class="col-9"/>
-          <BtnBox class="col-3"/>
-        </div>
-        <CommentBox />
-      </div>
+    <AttachExam :exams="examList" :lessons="subCategoriesList" />
+    <div class="attach-btn row">
+      <question-details class="col-9"/>
+      <btn-box
+        class="col-3"
+        @saveQuestion="createQuestionImage(question)"
+      />
     </div>
+    <comment-box/>
+<!--    <div class="row">-->
+<!--      <div class="col">-->
+<!--        <AttachExam />-->
+<!--        <div class="attach-btn row">-->
+<!--          <QuestionDetails class="col-9"/>-->
+<!--          <BtnBox class="col-3"/>-->
+<!--        </div>-->
+<!--        <CommentBox />-->
+<!--      </div>-->
+<!--    </div>-->
   </div>
 </template>
 
 <script>
 import uploadImage from 'src/components/Question/QuestionPage/UploadImage'
 import { Question } from 'src/models/Question'
+import BtnBox from 'components/Question/QuestionPage/BtnBox'
 import QuestionDetails from 'components/Question/QuestionPage/Create/textMode/QuestionDetails'
+import CommentBox from 'components/Question/QuestionPage/StatusChange'
+
+// import QuestionDetails from 'components/Question/QuestionPage/Create/textMode/QuestionDetails'
 import { AdminActionOnQuestion } from 'src/mixin/Mixins'
 import AttachExam from 'components/Question/QuestionPage/AttachExam'
-import CommentBox from 'components/Question/QuestionPage/CommentBox'
-import BtnBox from 'components/Question/QuestionPage/BtnBox'
+import { ExamList } from 'src/models/Exam'
+import { QuestSubcategoryList } from 'src/models/QuestSubcategory'
+// import CommentBox from 'components/Question/QuestionPage/CommentBox'
+// import BtnBox from 'components/Question/QuestionPage/BtnBox'
 
 export default {
   name: 'CreateImage',
-  components: { uploadImage, QuestionDetails, AttachExam, CommentBox, BtnBox },
+  components: {
+    uploadImage,
+    AttachExam,
+    // ,
+    QuestionDetails,
+    // AttachExam,
+    CommentBox,
+    BtnBox
+  },
   mixins: [AdminActionOnQuestion],
   data () {
     return {
-      question: new Question()
+      question: new Question(),
+      examList: new ExamList(),
+      subCategoriesList: new QuestSubcategoryList()
     }
   },
-  mounted () {
-    this.loadExamList()
-    this.loadSubcategories()
+  created () {
+    this.getPageReady()
   },
+  mounted () {},
   provide () {
     return {
       question: this.question
@@ -74,7 +99,8 @@ export default {
 
 <style scoped lang="scss">
 .page-container {
-  padding: 40px 100px;
+  //padding: 40px 100px;
+  padding-top: 20px;
   display: flex;
   flex-direction: column;
 
