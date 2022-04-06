@@ -65,6 +65,29 @@ export default {
     return {
       questionTab: '',
       componentTabs: new TypeList(),
+      test: new TypeList([
+        {
+          id: '6225f4828044517f52500c04',
+          type: 'question_type',
+          value: 'konkur',
+          updated_at: '2022-03-07 15:33:14',
+          created_at: '2022-03-07 15:33:14'
+        },
+        {
+          id: '6225f4828044517f52500c05',
+          type: 'question_type',
+          value: 'psychometric',
+          updated_at: '2022-03-07 15:33:14',
+          created_at: '2022-03-07 15:33:14'
+        },
+        {
+          id: '6225f4828044517f52500c06',
+          type: 'question_type',
+          value: 'descriptive',
+          updated_at: '2022-03-07 15:33:14',
+          created_at: '2022-03-07 15:33:14'
+        }
+      ]),
       qTabLoading: false
     }
   },
@@ -82,21 +105,55 @@ export default {
     this.qTabLoading = true
   },
   mounted () {
-    // console.log('Navbar mounted')
     this.getQuestionType()
+    // console.log('Navbar mounted')
   },
   computed: {},
   methods: {
     getCurrentRoute (componentName) {
       const currentQuestionMode = this.getCurrentQuestionMode()
-      if (componentName === 'MultipleChoiceQ') {
-        return { name: 'Admin.Question.Create.' + currentQuestionMode + '.MultipleChoice' }
-      } else if (componentName === 'DescriptiveQ') {
-        return { name: 'Admin.Question.Create.' + currentQuestionMode + '.Descriptive' }
-      } else if (componentName === 'MBTIQ') {
-        return { name: 'Admin.Question.Create.' + currentQuestionMode + '.MBTI' }
+      if (currentQuestionMode === 'Text') {
+        if (componentName === 'MultipleChoiceQ') {
+          return { name: 'Admin.Question.Create.' + currentQuestionMode + '.MultipleChoice' }
+        } else if (componentName === 'DescriptiveQ') {
+          return { name: 'Admin.Question.Create.' + currentQuestionMode + '.Descriptive' }
+        } else if (componentName === 'MBTIQ') {
+          return { name: 'Admin.Question.Create.' + currentQuestionMode + '.MBTI' }
+        }
+      } else {
+        if (componentName === 'MultipleChoiceQ') {
+          return {
+            name: 'Admin.Question.Create.' + currentQuestionMode,
+            params: {
+              questionType: 'multipleChoice'
+            }
+          }
+        } else if (componentName === 'DescriptiveQ') {
+          return {
+            name: 'Admin.Question.Create.' + currentQuestionMode,
+            params: {
+              questionType: 'descriptive'
+            }
+          }
+        } else if (componentName === 'MBTIQ') {
+          return {
+            name: 'Admin.Question.Create.' + currentQuestionMode,
+            params: {
+              questionType: 'mbti'
+            }
+          }
+        }
       }
     }
+    // ,
+    // test () {
+    //   this.$router.push({
+    //     name: 'konkoorView',
+    //     params: {
+    //       quizId: this.$route.params.quizId
+    //     }
+    //   })
+    // }
   },
   watch: {
     // questionTab: {

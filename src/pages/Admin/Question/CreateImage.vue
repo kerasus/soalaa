@@ -76,6 +76,7 @@ export default {
   mounted () {
     this.loadExamList()
     this.loadSubcategories()
+    this.setCurrentQuestionType()
   },
   provide () {
     return {
