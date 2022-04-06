@@ -72,7 +72,7 @@
           />
         </div>
         <!----------------- admin actions ---------------->
-        <div v-if="options">
+        <div v-if="options.deleteQuestionFromDb">
           <q-icon
             class="fi fi-rr-delete document icon-style"
             @click="deleteQuestion()"
@@ -82,7 +82,7 @@
             </q-tooltip>
           </q-icon>
         </div>
-        <div v-if="options">
+        <div v-if="options.detachQuestion">
           <q-icon
             class="fi fi-rr-cross-small icon-style"
             @click="detachQuestion()"
@@ -92,7 +92,7 @@
             </q-tooltip>
           </q-icon>
         </div>
-        <div v-if="options">
+        <div v-if="options.editQuestion">
           <q-icon
             class="fi fi-rr-pencil icon-style"
             @click="redirectToEditPage"
@@ -102,7 +102,7 @@
             </q-tooltip>
           </q-icon>
         </div>
-        <div v-if="options">
+        <div v-if="options.copy">
           <q-icon
             class="fi fi-rr-copy icon-style"
             @click="copyIdToClipboard(source.id)"
@@ -112,10 +112,17 @@
             </q-tooltip>
           </q-icon>
         </div>
-        <div v-if="options"></div>
+        <div v-if="options.switch">
+          <q-circular-progress
+            v-if="confirmLoading"
+            indeterminate
+            :thickness="0.3"
+            size="20px"
+            color="primary"
+          />
         <q-toggle
+          v-else
           v-model="source.confirmed"
-          :loading="confirmLoading"
           @update:model-value="confirmQuestion"
           color="primary"
         >
@@ -123,9 +130,11 @@
             تایید سوال
           </q-tooltip>
         </q-toggle>
+
         <slot
           name="chartDetail"
         />
+        </div>
       </div>
     </div>
     <div class="question-section">
@@ -232,6 +241,12 @@ export default {
       default () {
         return []
       }
+    },
+    questionListOptions: {
+      type: Object,
+      default () {
+        return {}
+      }
     }
   },
   data () {
@@ -240,11 +255,11 @@ export default {
         checkQuestion: false,
         markQuestion: false,
         bookmark: false,
-        copy: false,
-        deleteQuestion: false,
-        deleteQuestionFromDb: false,
-        editQuestion: false,
-        switch: false
+        copy: true,
+        detachQuestion: true,
+        deleteQuestionFromDb: true,
+        editQuestion: true,
+        switch: true
       },
       isLtr: false,
       confirmLoading: false,
@@ -261,6 +276,7 @@ export default {
   },
   created () {
     this.source = this.sourcee
+    Object.assign(this.options, this.questionListOptions)
   },
   computed: {
     getSubCategoryName () {
@@ -334,12 +350,10 @@ export default {
     async confirmUser () {
       try {
         const response = await this.sendConfirmReq()
-        console.log(response)
         this.source.confirmed = response.data.data.confirmed
         this.source.confirmers = response.data.data.confirmers
         this.confirmLoading = false
       } catch (e) {
-        console.log(e)
         this.source.confirmed = !this.source.confirmed
         this.confirmLoading = false
       }
@@ -347,7 +361,6 @@ export default {
     async unConfirmUser () {
       try {
         const response = await this.sendUnConfirmReq()
-        console.log('unconfirm :', response)
         this.source.confirmed = response.data.data.confirmed
         this.source.confirmers = response.data.data.confirmers
         this.confirmLoading = false
@@ -413,8 +426,7 @@ export default {
           } else {
             try {
               this.closeConfirmModal()
-              const res = await this.detachQuestionReq()
-              console.log('res :', res)
+              await this.detachQuestionReq()
               this.$emit('reloadPage')
             } catch (e) {
               this.closeConfirmModal()

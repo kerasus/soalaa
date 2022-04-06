@@ -74,6 +74,7 @@
                 <q-item-section>
                   <question
                     :sourcee="item"
+                    :questionListOptions="questionsOptions"
                     :consider-active-category="false"
                     :questions-column="$refs.questionsColumn"
                     :exam-id="$route.params.quizId"
@@ -93,6 +94,7 @@
           <BubbleSheet
             ref="bubbleSheetC"
             :delay-time="0"
+            :questions="filteredQuestions"
             :info="{ type: 'pasokh-barg' }"
             @clickChoice="choiceClicked"
             @scrollTo="scrollTo"
@@ -122,6 +124,13 @@ export default {
   mixins: [mixinAuth, mixinQuiz],
   data () {
     return {
+      questionsOptions: {
+        copy: true,
+        detachQuestion: true,
+        deleteQuestionFromDb: true,
+        editQuestion: true,
+        switch: true
+      },
       questionListKey: 0,
       options: {
         bookmark: false,
@@ -160,18 +169,20 @@ export default {
   },
   computed: {
     filteredQuestions () {
-      console.log('filteredQuestions', this.questionFilterMethod)
       this.quizData.questions.list.forEach((item, index) => {
         item.questNumber = index + 1
       })
+      let newList
       if (this.questionFilterMethod === 'not-confirmed-at-all') {
-        return this.quizData.questions.list.filter(item => item.confirmers.length === 0)
+        newList = this.quizData.questions.list.filter(item => item.confirmers.length === 0)
       } else if (this.questionFilterMethod === 'not-confirmed-by-me') {
-        console.log('not-confirmed-by-me')
-        return this.quizData.questions.list.filter(item => item.confirmed === false)
+        newList = this.quizData.questions.list.filter(item => item.confirmed === false)
       } else {
-        return this.quizData.questions.list
+        newList = this.quizData.questions.list
       }
+      // eslint-disable-next-line vue/no-side-effects-in-computed-properties
+      this.questionListKey = Date.now()
+      return newList
     }
   },
   methods: {

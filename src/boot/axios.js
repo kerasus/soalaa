@@ -114,7 +114,6 @@ export default boot(({ app, store, router }) => {
   AxiosHooks.setNotifyInstance(app.config.globalProperties.$q)
   axios.interceptors.response.use(undefined, function (error) {
     AxiosHooks.handleErrors(error, router, store)
-    console.log('after handle err ', error)
     return Promise.reject(error)
   })
 
