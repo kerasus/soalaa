@@ -214,7 +214,6 @@ export default {
           recommended_time: 0,
           type_id: this.question.type_id
         }
-        // this.createQuestion(this.question)
         this.createQuestion(question)
       }
     },
