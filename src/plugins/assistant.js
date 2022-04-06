@@ -119,8 +119,13 @@ const Assistant = (function () {
     }
   }
 
+  function isOnline () {
+    return window.navigator.onLine
+  }
+
   return {
     getId,
+    isOnline,
     reportErrors,
     handleAxiosError
   }
