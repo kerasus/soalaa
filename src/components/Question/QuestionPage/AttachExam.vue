@@ -110,7 +110,8 @@ export default {
       ],
       selectorRules: [
         v => v !== null || 'پر کردن این فیلد الزامی است.'
-      ]
+      ],
+      questionData: this.question
     }
   },
   mounted () {
