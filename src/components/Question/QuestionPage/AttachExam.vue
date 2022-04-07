@@ -47,8 +47,8 @@
         ></q-btn>
       </div>
     </div>
-    <div v-if="exams" :key="question.exams.list.length">
-      <div v-for="(item, index) in question.exams.list" :key="index" class="flex row">
+    <div v-if="exams" :key="questionData.exams.list.length">
+      <div v-for="(item, index) in questionData.exams.list" :key="index" class="flex row">
         <div class="detail-box detail-box-first" :class="[imgPanelVisibility ? 'col-6' : 'col-3']">
           {{ item.title }}
         </div>
@@ -110,7 +110,8 @@ export default {
       ],
       selectorRules: [
         v => v !== null || 'پر کردن این فیلد الزامی است.'
-      ]
+      ],
+      questionData: this.question
     }
   },
   mounted () {
