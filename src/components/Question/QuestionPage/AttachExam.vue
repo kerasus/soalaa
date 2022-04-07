@@ -58,6 +58,9 @@
         <div class="detail-box detail-box-last" :class="[imgPanelVisibility ? 'col-6' : 'col-3']">
           {{ item.order }}
         </div>
+        <div class="detail-box detail-box-last" :class="[imgPanelVisibility ? 'col-6' : 'col-3']">
+          <q-btn unelevated icon="mdi-delete" class="draft-btn default-detail-btn" @click="detach(item)" />
+        </div>
       </div>
     </div>
   </div>
@@ -135,6 +138,9 @@ export default {
       }
       question.exams.list.push(new Exam(exam))
       this.$emit('examAttached', question)
+    },
+    detach (item) {
+      this.$emit('detach', item)
     }
   },
   computed: {

@@ -96,10 +96,15 @@ const AdminActionOnQuestion = {
         formData.append('exams[' + key + '][order]', item.order)
         formData.append('exams[' + key + '][sub_category_id]', item.sub_category_id)
       })
-      // formData.append('type_id', this.optionQuestionId)
+      formData.append('type_id', question.type_id)
       this.$axios.post(API_ADDRESS.question.create, formData)
         .then(response => {
-          console.log(response.data)
+          this.$router.push({
+            name: 'Admin.Question.Show',
+            params: {
+              question_id: response.data.data.id
+            }
+          })
         })
     },
     setAllQuestionLoadings () {
@@ -107,6 +112,15 @@ const AdminActionOnQuestion = {
       // this.question.type.loading = true
       // Todo : Temp
       // this.question.exams.loading = true
+    },
+    detachUnsavedExam (exam) {
+      this.question.exams.list = this.question.exams.list.filter(item => item.id !== exam.id)
+    },
+    detachSavedExam (exam) {
+      this.$axios.post(API_ADDRESS.question.detach(this.question.id), [exam])
+        .then(response => {
+          console.log(response.data.data)
+        })
     },
     disableAllQuestionLoadings () {
       this.question.loading = false
