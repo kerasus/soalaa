@@ -99,12 +99,7 @@ const AdminActionOnQuestion = {
       formData.append('type_id', question.type_id)
       this.$axios.post(API_ADDRESS.question.create, formData)
         .then(response => {
-          this.$router.push({
-            name: 'Admin.Question.Show',
-            params: {
-              question_id: response.data.data.id
-            }
-          })
+          this.redirectToShowPage(response.data.data.id)
         })
     },
     setAllQuestionLoadings () {

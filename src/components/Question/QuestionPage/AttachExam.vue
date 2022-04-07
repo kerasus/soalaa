@@ -47,10 +47,12 @@
         ></q-btn>
       </div>
     </div>
+    {{question.exams}}
     <div v-if="exams" :key="question.exams.list.length">
       <div v-for="(item, index) in question.exams.list" :key="index" class="flex row">
+        test
         <div class="detail-box detail-box-first" :class="[imgPanelVisibility ? 'col-6' : 'col-3']">
-          {{ item.title }}
+          {{ item.title ? item.title : item.exam.title }}
         </div>
         <div class="detail-box detail-box-first" :class="[imgPanelVisibility ? 'col-6' : 'col-3']">
           {{ getLessonById(item.sub_category_id).title }}
