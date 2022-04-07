@@ -62,6 +62,26 @@ const AdminActionOnQuestion = {
           this.$router.push({ name: 'Admin.Question.Show', params: { question_id: this.$route.params.question_id } })
         })
     },
+    createQuestionImage (question) {
+      const formData = new FormData()
+      // formData.append('status_id', statusId);
+      question.statement_photo.forEach((item, key) => {
+        formData.append('statement_photo[' + key + ']', item)
+      })
+      question.answer_photos.forEach((item, key) => {
+        formData.append('answer_photos[' + key + ']', item)
+      })
+      question.exams.list.forEach((item, key) => {
+        formData.append('exams[' + key + '][id]', item.id)
+        formData.append('exams[' + key + '][order]', item.order)
+        formData.append('exams[' + key + '][sub_category_id]', item.sub_category_id)
+      })
+      // formData.append('type_id', this.optionQuestionId)
+      this.$axios.post(API_ADDRESS.question.create, formData)
+        .then(response => {
+          console.log(response.data)
+        })
+    },
     setAllQuestionLoadings () {
       this.question.loading = true
       // this.question.type.loading = true

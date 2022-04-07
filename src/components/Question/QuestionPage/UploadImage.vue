@@ -59,6 +59,7 @@ export default {
     }
   },
   mounted () {
+    document.getElementById('filepond-wrapper-' + this.fieldKey).innerHTML = ''
     document.getElementById('filepond-wrapper-' + this.fieldKey).appendChild(this.pond.element)
     document.addEventListener('FilePond:addfile', () => {
       this.question[this.fieldKey] = this.pond.getFiles().map(({ file }) => file)
