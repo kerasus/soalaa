@@ -113,7 +113,7 @@ export default {
         await examData.getExamDataAndParticipate(this.quiz.id)
         await examData.getUserExamData(this.quiz.user_exam_id).run()
         if (examData.exam) {
-          that.$store.commit('quiz/mergeDbAnswersIntoLocalstorage', {
+          that.$store.commit('Exam/mergeDbAnswersIntoLocalstorage', {
             dbAnswers: examData.userExamData,
             exam_id: examData.exam.id
           })

@@ -58,6 +58,7 @@ export default {
   methods: {
     getContent () {
       console.log('value', this.$refs.tiptap.getContent())
+      return this.$refs.tiptap.getContent()
       // this.$emit('update:modelValue', this.$refs.tiptap.getContent())
     },
     getHtmlValueFromValueProp () {

@@ -1,7 +1,6 @@
 <template>
-  <Router :exclude="['Edit' , 'editExamReport', 'MultipleChoiceQ', 'MBTIQ']" />
+    <Router :exclude="['MultipleChoiceQ', 'MBTIQ']" />
 </template>
-
 <script>
 import Router from 'src/router/Router'
 export default {
