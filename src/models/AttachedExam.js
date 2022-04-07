@@ -7,7 +7,11 @@ class AttachedExam extends Model {
       { key: 'title' },
       { key: 'display_title' },
       { key: 'created_at' },
-      { key: 'updated_at' }
+      { key: 'updated_at' },
+      { key: 'exam' },
+      { key: 'exam_id' },
+      { key: 'order' },
+      { key: 'sub_category' }
     ])
   }
 }

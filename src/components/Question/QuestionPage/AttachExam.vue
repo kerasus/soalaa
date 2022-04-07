@@ -50,7 +50,7 @@
     <div v-if="exams" :key="questionData.exams.list.length">
       <div v-for="(item, index) in questionData.exams.list" :key="index" class="flex row">
         <div class="detail-box detail-box-first" :class="[imgPanelVisibility ? 'col-6' : 'col-3']">
-          {{ item.title }}
+          {{ item.title ? item.title : item.exam.title }}
         </div>
         <div class="detail-box detail-box-first" :class="[imgPanelVisibility ? 'col-6' : 'col-3']">
           {{ getLessonById(item.sub_category_id).title }}
