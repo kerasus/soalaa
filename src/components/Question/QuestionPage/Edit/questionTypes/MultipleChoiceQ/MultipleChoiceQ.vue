@@ -1,6 +1,6 @@
 <template>
   <div class="multiple-choice-Q">
-<!--    <button @click="getContent">getContent</button>-->
+    <!--    <button @click="getContent">getContent</button>-->
     <q-btn
       v-if="question.choices.list.length > 0"
       dark
@@ -67,7 +67,7 @@
                 label="حذف گزینه"
                 @click="removeChoice(item.order)"
               />
-<!--              :class="{ 'example-fab-animate--hover' }"-->
+              <!--              :class="{ 'example-fab-animate--hover' }"-->
             </q-card-section>
             <q-separator inset />
             <q-card-section>
@@ -83,11 +83,11 @@
       </div>
     </div>
     <div>
-<!--      <q-skeleton-->
-<!--        v-if="loading"-->
-<!--        type="QInput"-->
-<!--        style="min-height: 220px; border-radius: 30px;"-->
-<!--      />-->
+      <!--      <q-skeleton-->
+      <!--        v-if="loading"-->
+      <!--        type="QInput"-->
+      <!--        style="min-height: 220px; border-radius: 30px;"-->
+      <!--      />-->
       <q-card
         class="default-questions-card"
       >
@@ -101,40 +101,14 @@
               ref="tiptapDescriptiveAnswer"
               :key="'descriptive_answer' + domKey"
             />
-        </div>
+          </div>
         </q-card-section>
-    </q-card>
+      </q-card>
     </div>
-  </div>
-  <div class="relative-position">
-    <attach-exam
-      :exams="examList"
-      :lessons="subCategoriesList"
-    />
-    <div class="attach-btn row">
-      <question-details class="col-9"/>
-      <btn-box
-        class="col-3"
-        @saveQuestion="saveQuestion"
-      />
-    </div>
-    <comment-box
-      :statuses="questionStatuses"
-    />
-    <q-inner-loading
-      :showing="question.exams.loading"
-      color="primary"
-      class="QComponents-inner-loading"
-      label-style="font-size: 1.1em"
-    />
   </div>
 </template>
 
 <script>
-import AttachExam from 'components/Question/QuestionPage/AttachExam'
-import CommentBox from 'components/Question/QuestionPage/StatusChange'
-import QuestionDetails from 'components/Question/QuestionPage/Create/textMode/QuestionDetails'
-import BtnBox from 'components/Question/QuestionPage/BtnBox'
 import QuestionField from 'components/Question/QuestionPage/QuestionField.vue'
 import { Question } from 'src/models/Question'
 import AdminActionOnQuestion from 'src/mixin/AdminActionOnQuestion'
@@ -144,11 +118,7 @@ import { QuestionStatusList } from 'src/models/QuestionStatus'
 export default {
   name: 'MultipleChoiceQ',
   components: {
-    QuestionField,
-    BtnBox,
-    CommentBox,
-    AttachExam,
-    QuestionDetails
+    QuestionField
   },
   mixins: [
     AdminActionOnQuestion
@@ -165,7 +135,6 @@ export default {
       choice: '',
       defaultRefName: 'tiptap',
       dynamicMassage: '',
-      question: new Question(),
       subCategoriesList: new QuestSubcategoryList(),
       examList: new ExamList(),
       questionStatuses: new QuestionStatusList(),
@@ -174,9 +143,10 @@ export default {
       }
     }
   },
-  provide () {
-    return {
-      question: this.question
+  inject: {
+    question: {
+      from: 'question', // this is optional if using the same key for injection
+      default: new Question()
     }
   },
   created () {
@@ -185,37 +155,16 @@ export default {
       that.domKey = 'Date.now()'
     }, 100)
     this.setDefaultChoices()
-    this.getPageReady()
   },
   mounted () {
     this.$nextTick(() => {
-      // this.setAllQuestionLoadings()
-      // this.disableAllQuestionLoadings()
+      this.disableAllQuestionLoadings()
     })
   },
   updated () {},
   methods: {
     saveQuestion () {
-      if (this.getContent()) {
-        const question = {
-          author: this.question.author,
-          choices: this.question.choices.list,
-          exams: [
-            {
-              id: '622ae211d1a3433f16636253',
-              order: '2003',
-              sub_category_id: '60b7875428f350277f04c5e7'
-            }
-          ],
-          descriptive_answer: this.question.descriptive_answer,
-          statement: this.question.statement,
-          level: 1,
-          sub_category_id: 1,
-          recommended_time: 0,
-          type_id: this.question.type_id
-        }
-        this.createQuestion(question)
-      }
+      // this.allProps.setContentToQuestion = true
     },
     setDefaultChoices () {
       this.question.choices.list = []
@@ -239,7 +188,6 @@ export default {
     },
     getContent () {
       const that = this
-      let status = false
       if (this.validateContent()) {
         this.question.statement = this.getContentOfQuestionParts('QuestionStatement')
         this.question.choices.list.forEach(function (item, index) {
@@ -248,10 +196,8 @@ export default {
           item.id = index
         })
         this.question.descriptive_answer = this.getContentOfQuestionParts('DescriptiveAnswer')
-        // console.log('this.question', this.question)
-        status = true
       }
-      return status
+      console.log('this.question', this.question)
     },
     getContentOfChoice (index) {
       return this.$refs[this.defaultRefName + 'Choice' + index][0].getContent()
@@ -283,12 +229,12 @@ export default {
         errors.push(ChoiceMassage)
         status = false
       }
-      // if (!this.getContentOfQuestionParts('DescriptiveAnswer')) {
-      //   errors.push(this.getErrorMessage('پاسخ تشریحی'))
-      //   status = false
-      // }
+      if (!this.getContentOfQuestionParts('DescriptiveAnswer')) {
+        errors.push(this.getErrorMessage('پاسخ تشریحی'))
+        status = false
+      }
       if (!this.choice) {
-        const ChoiceMassage = 'لطفا گزینه صحیح را ثبت کنید'
+        const ChoiceMassage = 'لطفا گزینه صحیح را درج کنید'
         errors.push(ChoiceMassage)
         status = false
       }

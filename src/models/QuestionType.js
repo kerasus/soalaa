@@ -1,13 +1,13 @@
 import { Collection, Model } from 'js-abstract-model'
-import API_ADDRESS from '../api/Addresses'
+// import API_ADDRESS from '../api/Addresses'
 
 class QuestionType extends Model {
   constructor (data) {
     super(data, [
-      {
-        key: 'baseRoute',
-        default: API_ADDRESS.question.base + '?type=question_type'
-      },
+      // {
+      //   key: 'baseRoute',
+      //   default: API_ADDRESS.question.base + '?type=question_type'
+      // },
       {
         key: 'id',
         default: null
