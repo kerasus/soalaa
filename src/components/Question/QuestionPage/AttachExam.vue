@@ -47,10 +47,8 @@
         ></q-btn>
       </div>
     </div>
-    {{question.exams}}
-    <div v-if="exams" :key="question.exams.list.length">
-      <div v-for="(item, index) in question.exams.list" :key="index" class="flex row">
-        test
+    <div v-if="exams" :key="questionData.exams.list.length">
+      <div v-for="(item, index) in questionData.exams.list" :key="index" class="flex row">
         <div class="detail-box detail-box-first" :class="[imgPanelVisibility ? 'col-6' : 'col-3']">
           {{ item.title ? item.title : item.exam.title }}
         </div>
