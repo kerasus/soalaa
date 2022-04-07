@@ -5,20 +5,20 @@ import Assistant from 'src/plugins/assistant'
 const mixinUserActionOnQuestion = {
   methods: {
     userActionOnQuestion (questionId, actionType, data, socket, sendData) {
-      const examId = this.quiz.id
+      const userExamId = this.quiz.user_exam_id
       const examUserId = this.quiz.user_exam_id
-      const userExamData = this.userQuizListData[examId]
+      const userExamData = this.userQuizListData[userExamId]
 
-      this.changeLocalDataBasedOnUserAction(actionType, data, examId, questionId)
+      this.changeLocalDataBasedOnUserAction(actionType, data, userExamId, questionId)
 
       if (typeof sendData === 'undefined' || sendData === true) {
-        return this.sendUserQuestionsDataToServer(examId, examUserId, userExamData, questionId, actionType, socket)
+        return this.sendUserQuestionsDataToServer(userExamId, examUserId, userExamData, questionId, actionType, socket)
       }
       return false
     },
-    changeLocalDataBasedOnUserAction (actionType, data, examId, questionId) {
+    changeLocalDataBasedOnUserAction (actionType, data, userExamId, questionId) {
       this.$store.commit('Exam/createEmptyQuestionIfNotExistInLocal', {
-        exam_id: examId,
+        user_exam_id: userExamId,
         question_id: questionId
       })
       this.$store.commit('Exam/updateCurrentQuestion', {
@@ -26,15 +26,15 @@ const mixinUserActionOnQuestion = {
         currentExamQuestions: this.getCurrentExamQuestions()
       })
 
-      const userExamData = this.userQuizListData[examId]
+      const userExamData = this.userQuizListData[userExamId]
       const userQuestionData = userExamData[questionId]
 
       if (actionType === 'answer') {
-        this.userActionOnQuestion_answer(data, examId, questionId, userQuestionData)
+        this.userActionOnQuestion_answer(data, userExamId, questionId, userQuestionData)
       } else if (actionType === 'bookmark') {
-        this.userActionOnQuestion_bookmark(examId, questionId, userQuestionData)
+        this.userActionOnQuestion_bookmark(userExamId, questionId, userQuestionData)
       } else if (actionType === 'status') {
-        this.userActionOnQuestion_status(data, examId, questionId, userQuestionData)
+        this.userActionOnQuestion_status(data, userExamId, questionId, userQuestionData)
       }
 
       this.$store.commit('Exam/updateUserQuizListDataExam', this.userQuizListData)
@@ -107,12 +107,12 @@ const mixinUserActionOnQuestion = {
       this.$store.commit('Exam/resetBookmarkFailedList')
       this.$store.commit('Exam/resetUnBookmarkFailedList')
     },
-    refreshFailedLists (examId) {
+    refreshFailedLists (userExamId) {
       this.clearFailedList()
-      this.updateFailedList(examId, 'answer')
-      this.updateFailedList(examId, 'status')
-      this.updateFailedList(examId, 'bookmark')
-      this.updateFailedList(examId, 'unBookmark')
+      this.updateFailedList(userExamId, 'answer')
+      this.updateFailedList(userExamId, 'status')
+      this.updateFailedList(userExamId, 'bookmark')
+      this.updateFailedList(userExamId, 'unBookmark')
     },
     getIndexedServerAnswerKey (type) {
       switch (type) {
@@ -155,8 +155,8 @@ const mixinUserActionOnQuestion = {
       const localSelectedAt = userExam[questionId][localSelectedAtKey]
       return (serverSelectedAt && localSelectedAt && Time.diff(localSelectedAt, serverSelectedAt))
     },
-    updateFailedList (examId, type) {
-      const userExam = this.userQuizListData[examId]
+    updateFailedList (userExamId, type) {
+      const userExam = this.userQuizListData[userExamId]
 
       for (const [key] of Object.entries(userExam)) {
         if (key === 'indexedServerAnswers') {
@@ -235,7 +235,7 @@ const mixinUserActionOnQuestion = {
         dataToSendBookmark
       }
     },
-    sendUserQuestionsDataToServer (examId, examUserId, userExamData, questionId, actionType, socket) {
+    sendUserQuestionsDataToServer (userExamId, examUserId, userExamData, questionId, actionType, socket) {
       const userQuestionDataFromLocalstorage = this.getUserQuestionDataFromLocalstorage(userExamData, questionId)
       // let online = Assistant.isOnline()
       // send data
@@ -244,32 +244,32 @@ const mixinUserActionOnQuestion = {
       // }
 
       if (actionType === 'answer') {
-        return this.sendUserActionToServer('answer', examId, examUserId, {
+        return this.sendUserActionToServer('answer', userExamId, examUserId, {
           answerArray: userQuestionDataFromLocalstorage.dataToSendAnswer,
           failedAnswersArray: userQuestionDataFromLocalstorage.dataToSendFailedAnswers
         }, questionId, socket)
       }
       if (actionType === 'bookmark') {
         if (userQuestionDataFromLocalstorage.userQuestionData.bookmarked) {
-          return this.sendUserActionToServer('bookmark', examId, examUserId, {
+          return this.sendUserActionToServer('bookmark', userExamId, examUserId, {
             bookmark: userQuestionDataFromLocalstorage.dataToSendBookmark,
             failedBookmarksArray: userQuestionDataFromLocalstorage.dataToSendFailedBookmark
           }, questionId, socket)
         } else {
-          return this.sendUserActionToServer('unBookmark', examId, examUserId, {
+          return this.sendUserActionToServer('unBookmark', userExamId, examUserId, {
             bookmark: userQuestionDataFromLocalstorage.dataToSendBookmark,
             failedBookmarksArray: userQuestionDataFromLocalstorage.dataToSendFailedBookmark
           }, questionId, socket)
         }
       }
       if (actionType === 'status') {
-        return this.sendUserActionToServer('status', examId, examUserId, {
+        return this.sendUserActionToServer('status', userExamId, examUserId, {
           status: userQuestionDataFromLocalstorage.dataToSendStatus,
           failedStatusArray: userQuestionDataFromLocalstorage.dataToSendFailedStatus
         }, questionId, socket)
       }
     },
-    userActionOnQuestion_answer (data, examId, questionId, userQuestionData) {
+    userActionOnQuestion_answer (data, userExamId, questionId, userQuestionData) {
       const oldStatus = userQuestionData.status
       const oldAnsweredChoiceId = userQuestionData.answered_choice_id
       let newAnsweredChoiceId = data.choiceId
@@ -280,24 +280,24 @@ const mixinUserActionOnQuestion = {
         data.newStatus = newState
         const newuserQuestionData = JSON.parse(JSON.stringify(userQuestionData))
         newuserQuestionData.status = oldStatus
-        this.userActionOnQuestion_status(data, examId, questionId, newuserQuestionData)
+        this.userActionOnQuestion_status(data, userExamId, questionId, newuserQuestionData)
       }
       this.$store.commit('Exam/changeQuestionSelectChoice', {
-        exam_id: examId,
+        user_exam_id: userExamId,
         question_id: questionId,
         answered_choice_id: newAnsweredChoiceId
       })
     },
-    userActionOnQuestion_bookmark (examId, questionId, userQuestionData) {
+    userActionOnQuestion_bookmark (userExamId, questionId, userQuestionData) {
       const oldBookmarked = userQuestionData.bookmarked
       const newBookmark = !(oldBookmarked)
       this.$store.commit('Exam/changeQuestionBookmark', {
-        exam_id: examId,
+        user_exam_id: userExamId,
         question_id: questionId,
         bookmarked: newBookmark
       })
     },
-    userActionOnQuestion_status (data, examId, questionId, userQuestionData) {
+    userActionOnQuestion_status (data, userExamId, questionId, userQuestionData) {
       let newStatus = data.newStatus
       const oldQuestion = userQuestionData
       const oldStatus = (!oldQuestion) ? false : oldQuestion.status
@@ -307,10 +307,10 @@ const mixinUserActionOnQuestion = {
         const newuserQuestionData = JSON.parse(JSON.stringify(userQuestionData))
         newuserQuestionData.status = newStatus
         data.choiceId = null
-        this.userActionOnQuestion_answer(data, examId, questionId, newuserQuestionData)
+        this.userActionOnQuestion_answer(data, userExamId, questionId, newuserQuestionData)
       }
       this.$store.commit('Exam/changeQuestionStatus', {
-        exam_id: examId,
+        user_exam_id: userExamId,
         question_id: questionId,
         status: newStatus
       })
@@ -455,10 +455,10 @@ const mixinUserActionOnQuestion = {
     },
 
     getSendPayload (type, questionId) {
-      const examId = this.quiz.id
+      const userExamId = this.quiz.user_exam_id
       const examUserId = this.quiz.user_exam_id
-      const userExamData = this.userQuizListData[examId]
-      if (!questionId || !examId || !examUserId || !userExamData) {
+      const userExamData = this.userQuizListData[userExamId]
+      if (!questionId || !userExamId || !examUserId || !userExamData) {
         return false
       }
       const userQuestionData = userExamData[questionId]
@@ -512,7 +512,7 @@ const mixinUserActionOnQuestion = {
       }
     },
 
-    sendUserActionToServer (type, examId, examUserId, dataToSendObject, questionId, socket) {
+    sendUserActionToServer (type, userExamId, examUserId, dataToSendObject, questionId, socket) {
       const payload = this.getSendPayload(type, questionId)
       let address = null
       let channel = null
