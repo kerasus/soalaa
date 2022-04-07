@@ -173,17 +173,17 @@ class ExamData {
       if (!userExamId) {
         userExamId = that.exam.user_exam_id
       }
-      if (navigator.onLine) {
-        axios.get(API_ADDRESS.exam.getAllAnswerOfUser(userExamId))
-          .then(response => {
-            that.userExamData = response.data
-            resolve(response)
-          })
-          .catch(error => {
-            console.log(error)
-            reject(error)
-          })
-      }
+      // if (navigator.onLine) {
+      axios.get(API_ADDRESS.exam.getAllAnswerOfUser(userExamId))
+        .then(response => {
+          that.userExamData = response.data
+          resolve(response)
+        })
+        .catch(error => {
+          console.log(error)
+          reject(error)
+        })
+      // }
     })
     )
     return this

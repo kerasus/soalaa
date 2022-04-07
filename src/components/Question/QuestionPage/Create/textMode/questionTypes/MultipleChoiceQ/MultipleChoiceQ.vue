@@ -55,7 +55,7 @@
               <q-radio
                 dense
                 v-model="choice"
-                :val="'choice' + (index + 1)"
+                :val="'choice' + index"
                 :label="'گزینه ' + (index + 1)"
                 color="primary"
                 @click="choiceClicked(item.order)"

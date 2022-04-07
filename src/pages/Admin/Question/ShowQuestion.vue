@@ -31,7 +31,7 @@
 
 <script>
 /* eslint-disable no-var */
-import { defineAsyncComponent } from 'vue'
+import { computed, defineAsyncComponent } from 'vue'
 import { Question } from 'src/models/Question'
 import QuestionDetails from 'components/Question/QuestionPage/Create/textMode/QuestionDetails'
 import AdminActionOnQuestion from 'src/mixin/AdminActionOnQuestion'
@@ -63,9 +63,7 @@ export default {
       questionType: new QuestionType(),
       componentTabs: new TypeList(),
       question: new Question(),
-      allProps: {
-        setContentToQuestion: false
-      },
+      allProps: {},
       examList: new ExamList(),
       subCategoriesList: new QuestSubcategoryList(),
       questionStatuses: new QuestionStatusList()
@@ -73,12 +71,13 @@ export default {
   },
   created () {
     this.enableLoading()
-    this.getPageReady()
+    // this.getPageReady()
     this.getQuestionById(this.getCurrentQuestionId())
+    this.loadExamList()
   },
   provide () {
     return {
-      question: this.question
+      question: computed(() => this.question)
     }
   },
   mounted () {
@@ -119,7 +118,7 @@ export default {
   watch: {
     question: {
       handler (newValue, oldValue) {
-        // console.log('question', newValue)
+        console.log('question', newValue)
       },
       deep: true
     }

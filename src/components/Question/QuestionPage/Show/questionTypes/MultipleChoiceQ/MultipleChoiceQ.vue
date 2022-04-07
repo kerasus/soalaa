@@ -1,40 +1,18 @@
 <template>
   <div class="multiple-choice-Q">
     <q-card class="question-card default-questions-card">
-<!--      <q-btn-->
-<!--        v-if="question.choices.list.length > 0 && status"-->
-<!--        dark-->
-<!--        class="full-width q-mb-md"-->
-<!--        label="حذف تمام گزینه ها"-->
-<!--        color="pink"-->
-<!--        @click="removeAllChoice"-->
-<!--      />-->
       <q-card-section class="question default-Qcard-title">
         <div>صورت سوال</div>
       </q-card-section>
       <q-separator inset />
       <q-card-section>
-        <div class="row justify-between question-box default-Qcard-box">
-          <QuestionField
-            ref="questionStatement"
-            :key="'statement' + domKey"
-            v-model="question.statement"
-            :edit-status="true"
-            :question-id="question.id ? question.id : 'null'"
-            @questionData="getData"
+        <div
+          v-if="question.statement"
+          class="row justify-between question-box default-Qcard-box"
+        >
+          <vue-katex
+            :input="question.statement"
           />
-<!--          <div class="col-10 question-txt default-Qcard-txt">-->
-<!--            شناخت فراوان جامعه و متخصصان را می طلبد،لازم است، و برای شرایط فعلی تکنولوژی مورد نیاز، و کاربردهای متنوع با هدف بهبود ابزارهای کاربردی می باشد، کتابهای زیادی در شصت و سه درصد گذشته حال و آینده،لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ، و با استفاده از طراحان گرافیک است، چاپگرها و متون بلکه روزنامه و مجله در ستون و سطرآنچنان که-->
-<!--          </div>-->
-<!--          <div class="col-2 question-img default-Qcard-img">-->
-<!--            <q-img-->
-<!--              :src="url"-->
-<!--              spinner-color="primary"-->
-<!--              spinner-size="30px"-->
-<!--              style="height: 96px; width: 96px"-->
-<!--            >-->
-<!--            </q-img>-->
-<!--          </div>-->
         </div>
       </q-card-section>
     </q-card>
@@ -49,23 +27,18 @@
             <q-card-section class="default-Qcard-title">
               <q-radio
                 dense
+                disable
                 v-model="choice"
-                :val="'choice' + (index + 1)"
-                :label="'گزینه' + (index + 1)"
+                :val="'choice' + index"
+                :label="'گزینه ' + (index + 1)"
                 color="primary"
-                @click="clicked(item.order)"
               />
             </q-card-section>
             <q-separator inset />
             <q-card-section>
               <div class="row justify-between default-Qcard-box">
-                <QuestionField
-                  :ref="'choice' + (item.order)"
-                  :key="'choices' + (item.order) + domKey"
-                  v-model="item.title"
-                  :question-id="question.id ? question.id : 'null'"
-                  :edit-status="true"
-                  @questionData="getData"
+                <vue-katex
+                  :input="item.title"
                 />
               </div>
             </q-card-section>
@@ -80,14 +53,9 @@
       <q-separator inset />
       <q-card-section>
         <div class="row justify-between default-Qcard-box">
-          <QuestionField
-            ref="descriptive"
-            :key="'descriptive_answer' + domKey"
-            v-model="question.descriptive_answer"
-            :question-id="question.id ? question.id : 'null'"
-            :edit-status="true"
-            @questionData="getData"
-          />
+<!--          <vue-katex-->
+<!--            :input="question.descriptive_answer"-->
+<!--          />-->
         </div>
       </q-card-section>
     </q-card>
@@ -95,37 +63,24 @@
 </template>
 
 <script>
-import QuestionField from 'components/Question/QuestionPage/QuestionField.vue'
 import { Question } from 'src/models/Question'
+import VueKatex from 'components/VueKatex'
 export default {
-  name: 'MultipleChoiceQ',
+  name: 'MultipleChoiceShowQ',
   components: {
-    QuestionField
+    VueKatex
   },
-  props: {
-    cq: {
-      type: Question,
-      default: () => new Question()
-    },
-    modelValue: {
-      type: Question,
-      default: () => new Question()
-    },
-    status: {
-      type: Boolean,
-      default: () => false
-    }
-  },
+  props: {},
   data () {
     return {
       domKey: Date.now(),
-      question: new Question(),
       choice: ''
     }
   },
-  watch: {
-    editorValue: function () {
-      this.question = this.modelValue
+  inject: {
+    question: {
+      from: 'question', // this is optional if using the same key for injection
+      default: new Question()
     }
   },
   created () {
@@ -133,47 +88,14 @@ export default {
     setTimeout(() => {
       that.domKey = Date.now()
     }, 100)
+    this.setChoice()
   },
-  mounted () {
-    // console.log('this.$props--------', this.$props)
-  },
-  updated () {
-    this.question = this.modelValue
-  },
+  mounted () {},
+  updated () {},
   methods: {
-    removeChoice (order) {
-      const index = this.question.choices.list.findIndex(item => item.order === order)
-      this.question.choices.list.splice(index, 1)
-      this.updateQuestion()
-    },
-    addChoice () {
-      this.question.choices.addEmptyChoice()
-      this.updateQuestion()
-    },
-    removeAllChoice () {
-      this.question.choices.list = []
-      this.updateQuestion()
-    },
-    getContent () {
-      this.$refs.questionStatement.getContent()
-      this.$refs.descriptive.getContent()
-      this.$refs.choice1[0].getContent()
-      this.$refs.choice2[0].getContent()
-      this.$refs.choice3[0].getContent()
-      this.$refs.choice4[0].getContent()
-      this.updateQuestion()
-    },
-    getData (val) {
-      this.editorValue = val
-    },
-    updateQuestion () {
-      this.$emit('updateQuestion', this.question)
-    },
-    clicked (order) {
-      this.question.choices.list.forEach(item => {
-        item.answer = item.order === order
-      })
-      this.updateQuestion()
+    setChoice () {
+      const choiceIndex = this.question.choices.list.findIndex((item) => item.answer === true)
+      this.choice = 'choice' + choiceIndex
     }
   }
 }
