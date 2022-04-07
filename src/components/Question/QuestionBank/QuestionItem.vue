@@ -38,13 +38,13 @@
               <q-skeleton v-for="item in 3" :key="item" class="level-circles"></q-skeleton>
             </template>
             <template v-else>
-              <div v-if="questionLvl === 1" class="level">
+              <div v-if="questionLvl === 1 || questionLvl === 2" class="level">
                 آسان
               </div>
-              <div v-if="questionLvl === 2" class="level">
+              <div v-if="questionLvl === 3 || questionLvl === 4" class="level">
                 متوسط
               </div>
-              <div v-if="questionLvl === 3" class="level">
+              <div v-if="questionLvl === 5" class="level">
                 سخت
               </div>
               <div class="level-circles" :class="{'hard' : questionLvlHard}"></div>
@@ -59,8 +59,8 @@
                 <q-skeleton type="text" class="source-date float-right" width="40px" height="20px"/>
               </template>
               <template v-else>
-                <div class="source-name">سازمان سنجش</div>
-                <div class="source-date">99-1400</div>
+                <div class="source-name">{{ this.origins.origin.name }}</div>
+                <div class="source-date" v-if="this.origins.publishYear">{{ this.origins.publishYear.title }}</div>
               </template>
             </div>
             <template v-if="question.loading">
@@ -94,7 +94,7 @@
       <div class="choice-section row">
         <template v-if="question.loading">
           <div class="choice-column col-3" v-for="item in 4" :key="item">
-            <div class="choice false" style="margin-bottom: 2px">
+            <div class="question-choice false" style="margin-bottom: 2px">
               {{ item }}
             </div>
             <q-skeleton type="text" width="100px" height="25px"/>
@@ -104,13 +104,13 @@
           <div class="choice-column col-3" v-for="(item , index) in question.choices.list" :key="index">
             <div
               v-if="item.answer === false"
-              class="choice false"
+              class="question-choice false"
             >
               {{ item.order }}
             </div>
             <div
               v-if="item.answer === true"
-              class="choice true"
+              class="question-choice true"
             >
               {{ item.order }}
             </div>
@@ -218,6 +218,10 @@ export default {
     question: {
       type: Question,
       default: new Question()
+    },
+    origins: {
+      type: Object,
+      default: null
     }
   },
   data () {
@@ -239,28 +243,36 @@ export default {
     }
   },
   created () {
-    if (this.questionLvl === 1) {
-      this.questionLvlEasy = true
-    } else if (this.questionLvl === 2) {
-      this.questionLvlMedium = true
-    } else {
-      this.questionLvlHard = true
-    }
+    this.setQuestionLevelColor()
+  },
+  mounted () {
   },
   computed: {
     trueChoice () {
       return this.question.choices.getSelected()
     },
     questionLvl () {
-      return this.question.inputData.level
+      if (this.question.source_data.difficultyLevel) {
+        return this.question.source_data.difficultyLevel.value
+      }
+      return null
     }
   },
   methods: {
+    setQuestionLevelColor () {
+      if (this.questionLvl === 1 || this.questionLvl === 2) {
+        this.questionLvlEasy = true
+      } else if (this.questionLvl === 5) {
+        this.questionLvlHard = true
+      } else {
+        this.questionLvlMedium = true
+      }
+    }
   }
 }
 </script>
 
-<style lang="scss" >
+<style lang="scss">
 .question-bank-content {
   .question-info-section {
     display: flex;
@@ -413,15 +425,13 @@ export default {
       .answer-text {
         align-items: center;
       }
-      .choice {
-        margin-bottom: 16px;
+      .question-choice {
         margin-right: 10px;
         border-radius: 50%;
         text-align: center;
         color: #ffffff;
         width: 20px;
         height: 20px;
-        background: #9690E4;
         box-shadow: -2px -4px 10px rgba(255, 255, 255, 0.6), 2px 4px 10px rgba(112, 108, 162, 0.05);
       }
       .false {
@@ -491,6 +501,7 @@ export default {
         display: flex;
         flex-direction: row;
         align-items: center;
+        color: #23263B;
         &:before{
           content: 'نمایش پاسخ تشریحی';
         }
@@ -585,7 +596,6 @@ export default {
           .report {
             display: flex;
             align-items: center;
-            margin-right: 30px;
 
             .report-title {
               font-style: normal;
@@ -603,15 +613,6 @@ export default {
       }
     }
 
-  }
-}
-.question-bank-pagination{
-  .q-btn--actionable{
-    width: 35px;
-    height: 35px;
-    background: #FFFFFF;
-    border-radius: 12px;
-    margin-right: 3px;
   }
 }
 </style>

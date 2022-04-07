@@ -14,7 +14,7 @@
         <div class="question-bank-content">
           <question-item v-if="questions.loading" :question="loadingQuestion"/>
           <template v-else>
-            <question-item v-for="question in questions.list" :key="question.id" :question="question"/>
+            <question-item v-for="question in questions.list" :key="question.id" :question="question" :origins="question.source_data.origins.questionOriginList[0]"/>
           </template>
         </div>
         <div class="pageInation">
@@ -57,7 +57,6 @@ export default {
           that.paginationMeta = response.data.meta
           that.questions = new QuestionList(response.data.data)
           console.log(that.questions)
-          that.questions.loading = false
         })
         .catch(function (error) {
           console.log(error)

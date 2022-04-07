@@ -1,13 +1,13 @@
-import process from 'process'
 import axios from 'axios'
+import process from 'process'
 import API_ADDRESS from 'src/api/Addresses'
+import Time from 'src/plugins/time'
 import Assistant from 'src/plugins/assistant'
 import SocketConnection from 'src/plugins/socket'
-import Time from 'src/plugins/time'
 import ExamData from 'src/assets/js/ExamData'
 import { Exam } from 'src/models/Exam'
-import { QuestSubcategory, QuestSubcategoryList } from '../models/QuestSubcategory'
 import { QuestCategoryList } from 'src/models/QuestCategory'
+import { QuestSubcategory, QuestSubcategoryList } from '../models/QuestSubcategory'
 
 const mixinQuiz = {
   computed: {
@@ -27,7 +27,8 @@ const mixinQuiz = {
     },
     userQuestionData () {
       return (questionId) => {
-        let questionData = this.userQuizListData[this.quiz.id][questionId]
+        let questionData = this.getUserQuestionData(undefined, questionId)
+        // let questionData = this.userQuizListData[this.quiz.user_exam_id][questionId]
         if (!questionData) {
           questionData = this.getCurrentExamQuestions(false)[questionId]
         }
@@ -218,10 +219,10 @@ const mixinQuiz = {
       //   // })
       // })
     },
-    sendUserQuestionsDataToServerAndFinishExam (examId, examUserId, finishExam) {
-      const answers = this.getUserAnswers(examId)
+    sendUserQuestionsDataToServerAndFinishExam (userExamId, finishExam) {
+      const answers = this.getUserAnswers(userExamId)
 
-      return axios.post(API_ADDRESS.exam.sendAnswers, { exam_user_id: examUserId, finish: finishExam, questions: answers })
+      return axios.post(API_ADDRESS.exam.sendAnswers, { exam_user_id: userExamId, finish: finishExam, questions: answers })
     },
     reloadQuestionFile (questionsFileUrl, viewType, examId) {
       if (!Assistant.getId(examId)) {
@@ -229,13 +230,12 @@ const mixinQuiz = {
       }
       const that = this
       return new Promise(function (resolve, reject) {
-        const userExamId = undefined
         const examData = new ExamData()
         window.currentExamQuestions = null
         window.currentExamQuestionIndexes = null
         examData.getExamDataAndParticipate(examId)
         examData.loadQuestionsFromFile()
-        examData.getUserExamData(userExamId)
+        examData.getUserExamData()
           .run()
           .then((result) => {
             try {
@@ -250,14 +250,13 @@ const mixinQuiz = {
               that.$store.commit('Exam/updateQuiz', examData.exam)
               that.setCurrentExamQuestions(currentExamQuestions)
               that.loadCurrentQuestion(viewType)
-              // examData.exam = that.quiz
               that.reloadCurrentQuestion(viewType)
 
               that.$store.commit('Exam/mergeDbAnswersIntoLocalstorage', {
                 dbAnswers: examData.userExamData,
                 exam_id: examData.exam.id
               })
-              setTimeout(that.refreshFailedLists(examData.exam.id), 0)
+              setTimeout(() => { that.refreshFailedLists(examData.exam.user_exam_id) }, 0)
               resolve(result)
             } catch (error) {
               console.error(error)
@@ -290,22 +289,22 @@ const mixinQuiz = {
       }
       return questionId
     },
-    getUserQuestionData (quizId, questionId) {
+    getUserQuestionData (userExamId, questionId) {
       if (typeof questionId === 'undefined') {
         questionId = this.currentQuestion.id
       }
-      if (typeof quizId === 'undefined') {
-        quizId = this.quiz.id
+      if (typeof userExamId === 'undefined') {
+        userExamId = this.quiz.user_exam_id
       }
       if (
-        !quizId ||
+        !userExamId ||
         !questionId ||
         !this.userQuizListData ||
-        !this.userQuizListData[quizId]
+        !this.userQuizListData[userExamId]
       ) {
         return false
       }
-      return this.userQuizListData[quizId][questionId]
+      return this.userQuizListData[userExamId][questionId]
     },
     getCurrentExam () {
       return this.$store.getters['Exam/quiz']
@@ -353,8 +352,8 @@ const mixinQuiz = {
       this.modifyCurrentExamQuestions(currentExamQuestions)
       this.setCurrentExamQuestions(currentExamQuestions)
     },
-    getUserAnswers (examId) {
-      const userExamData = this.userQuizListData[examId]
+    getUserAnswers (userExamId) {
+      const userExamData = this.userQuizListData[userExamId]
       const answers = []
 
       for (const questionId in userExamData) {
@@ -464,9 +463,9 @@ const mixinQuiz = {
               }
               that.$store.commit('Exam/mergeDbAnswersIntoLocalstorage', {
                 dbAnswers: examData.userExamData,
-                exam_id: examData.exam.id
+                user_exam_id: examData.exam.user_exam_id
               })
-              setTimeout(that.refreshFailedLists(examData.exam.id), 0)
+              setTimeout(() => { that.refreshFailedLists(examData.exam.user_exam_id) }, 0)
               resolve(result)
             } catch (error) {
               console.error(error)
@@ -485,70 +484,6 @@ const mixinQuiz = {
     },
     needToLoadQuizData () {
       return (!Assistant.getId(this.quiz.id) || !Assistant.getId(this.quiz.user_exam_id) || Assistant.getId(this.$route.params.quizId) !== Assistant.getId(this.quiz.id))
-    },
-    participateExam (examId, viewType) {
-      const that = this
-      return new Promise(function (resolve, reject) {
-        that.user.loadExamDataFroParticipate(examId)
-          .then(({ userExamForParticipate }) => {
-            that.loadExam(userExamForParticipate, viewType)
-              .then(() => {
-                resolve()
-              })
-              .catch((error) => {
-                Assistant.reportErrors({ location: 'mixin/Quiz.js -> loadExam()' })
-                reject(error)
-              })
-          })
-          .catch((error) => {
-            that.$router.push({ name: 'user.exam.list' })
-            Assistant.reportErrors({ location: 'mixin/Quiz.js -> participateExam()' })
-            reject(error)
-          })
-      })
-    },
-    loadExam (examDataWithQuestions, viewType, examId) {
-      const that = this
-      return new Promise(function (resolve, reject) {
-        if (examDataWithQuestions) {
-          // save questions in localStorage
-          that.saveCurrentExamQuestions(examDataWithQuestions.questions.list)
-          // save exam info in vuex store (remove questions of exam then save in store)
-          if (examId) {
-            examDataWithQuestions.id = examId
-          }
-
-          // that.$store.commit('Exam/updateQuiz', examDataWithQuestions)
-        }
-        that.loadExamExtraData(that.quiz, viewType)
-        if (viewType !== 'results') {
-          that.loadCurrentQuestion(viewType)
-        }
-        // if (examDataWithQuestions) {
-        that.quiz.getAnswerOfUserInExam()
-          .then((response) => {
-            if (!Assistant.getId(that.quiz.id)) {
-              Assistant.reportErrors({
-                location: 'mixin/Quiz.js -> loadExam() -> quiz.getAnswerOfUserInExam()',
-                message: 'quiz.id not set'
-              })
-              // eslint-disable-next-line prefer-promise-reject-errors
-              reject()
-            }
-            that.$store.commit('Exam/mergeDbAnswersIntoLocalstorage', {
-              dbAnswers: response.data,
-              exam_id: that.quiz.id
-            })
-            resolve()
-          })
-          .catch((error) => {
-            Assistant.reportErrors({ location: 'mixin/Quiz.js -> loadExam()' })
-            reject(error)
-          })
-        // } else {
-        //     resolve()
-        // }
-      })
     },
     setQuestionsLtr (question) {
       question.ltr = !this.isLtrString(question.statement)
@@ -595,65 +530,16 @@ const mixinQuiz = {
       }
       this.changeQuestion(questionId, viewType)
     },
-    hasExamDataOnThisDeviseStorage (examId) {
-      return !!this.userQuizListData[examId]
+    hasExamDataOnThisDeviseStorage (userExamId) {
+      return !!this.userQuizListData[userExamId]
     },
-    syncUserAnswersWithDBAndSendAnswersToServerInExamTime (examId, examUserId, finishExam) {
-      const answers = this.getUserAnswers(examId)
+    syncUserAnswersWithDBAndSendAnswersToServerInExamTime (userExamId, examUserId, finishExam) {
+      const answers = this.getUserAnswers(userExamId)
 
       return axios.post(API_ADDRESS.exam.sendAnswers, { exam_user_id: examUserId, finish: finishExam, questions: answers })
     },
-    showExamAfterExamTime (examId, viewType) {
-      if (!Assistant.getId(examId)) {
-        return
-      }
-      const that = this
-      return new Promise(function (resolve, reject) {
-        const examData = new ExamData()
-        that.saveCurrentExamQuestions([])
-        that.$store.commit('Exam/cleanCurrentQuestion')
-        that.bookletsDialog = true
-        that.$store.commit('loading/overlay', { loading: true, text: '' })
-        examData.getExamData(examId)
-        examData.loadQuestionsFromFile()
-        examData.getUserExamData()
-          .run()
-          .then((result) => {
-            try {
-              // save questions in localStorage
-              that.saveCurrentExamQuestions(examData.exam.questions.list)
-              // save exam info in vuex store (remove questions of exam then save in store)
-              examData.exam.loadSubcategoriesOfCategories()
-              Time.setStateOfExamCategories(examData.exam.categories, true)
-              const currentExamQuestions = that.getCurrentExamQuestions()
-              Time.setStateOfQuestionsBasedOnActiveCategory(examData.exam, currentExamQuestions)
-              that.$store.commit('updateQuiz', examData.exam)
-              that.setCurrentExamQuestions(currentExamQuestions)
-              that.loadCurrentQuestion(viewType)
-              that.reloadCurrentQuestion(viewType)
-
-              that.$store.commit('mergeDbAnswersIntoLocalstorage', {
-                dbAnswers: examData.userExamData,
-                exam_id: examData.exam.id
-              })
-              resolve(result)
-            } catch (error) {
-              console.error(error)
-              that.$router.push({ name: 'user.exam.list' })
-              reject(error)
-            }
-          })
-          .catch((error) => {
-            reject(error)
-            that.$router.push({ name: 'user.exam.list' })
-          })
-          .finally(() => {
-            that.$store.commit('AppLayout/updateOverlay', { show: false, loading: false, text: '' })
-          })
-      })
-    },
-    syncUserAnswersWithDBAndSendAnswersToServerAfterExamTime (examId, examUserId, finishExam) {
-      const answers = this.getUserAnswers(examId)
+    syncUserAnswersWithDBAndSendAnswersToServerAfterExamTime (userExamId, examUserId, finishExam) {
+      const answers = this.getUserAnswers(userExamId)
 
       return axios.post(API_ADDRESS.exam.sendAnswersAfterExam, { exam_user_id: examUserId, finish: finishExam, questions: answers })
     },

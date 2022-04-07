@@ -223,22 +223,22 @@ export default {
       const countOfQuestions = Object.keys(this.currentExamQuestions).length
       if (
         this.userQuizListData &&
-          this.userQuizListData[this.quiz.id]
+          this.userQuizListData[this.quiz.user_exam_id]
       ) {
         let answeredQuestionsCount = 0
         const tstArr = []
-        const checkedQuestionIds = Object.keys(this.userQuizListData[this.quiz.id])
+        const checkedQuestionIds = Object.keys(this.userQuizListData[this.quiz.user_exam_id])
         checkedQuestionIds.forEach(item => {
           if (
             that.userQuizListData &&
-              that.userQuizListData[that.quiz.id] &&
-              that.userQuizListData[that.quiz.id][item] &&
-              that.userQuizListData[that.quiz.id][item].answered_choice_id &&
-              that.userQuizListData[that.quiz.id][item].answered_choice_id.toString()
+              that.userQuizListData[that.quiz.user_exam_id] &&
+              that.userQuizListData[that.quiz.user_exam_id][item] &&
+              that.userQuizListData[that.quiz.user_exam_id][item].answered_choice_id &&
+              that.userQuizListData[that.quiz.user_exam_id][item].answered_choice_id.toString()
           ) {
             answeredQuestionsCount++
           } else {
-            tstArr.push(that.userQuizListData[that.quiz.id][item])
+            tstArr.push(that.userQuizListData[that.quiz.user_exam_id][item])
           }
         })
 
@@ -255,7 +255,7 @@ export default {
       // console.log('getUnansweredQuestionBehind ')
       if (
         this.userQuizListData &&
-          this.userQuizListData[this.quiz.id]
+          this.userQuizListData[this.quiz.user_exam_id]
       ) {
         const that = this
         const currentExamQuestionIndexes = this.getCurrentExamQuestionIndexes()
@@ -269,16 +269,16 @@ export default {
             const questionId = currentExamQuestionIndexes[questIndex]
             if (
               !that.userQuizListData ||
-                !that.userQuizListData[that.quiz.id] ||
-                !that.userQuizListData[that.quiz.id][questionId] ||
-                !that.userQuizListData[that.quiz.id][questionId].answered_choice_id ||
-                !that.userQuizListData[that.quiz.id][questionId].answered_choice_id.toString() ||
-                typeof that.userQuizListData[that.quiz.id][questionId].answered_choice_id === 'undefined' ||
-                that.userQuizListData[that.quiz.id][questionId].answered_choice_id === null
+                !that.userQuizListData[that.quiz.user_exam_id] ||
+                !that.userQuizListData[that.quiz.user_exam_id][questionId] ||
+                !that.userQuizListData[that.quiz.user_exam_id][questionId].answered_choice_id ||
+                !that.userQuizListData[that.quiz.user_exam_id][questionId].answered_choice_id.toString() ||
+                typeof that.userQuizListData[that.quiz.user_exam_id][questionId].answered_choice_id === 'undefined' ||
+                that.userQuizListData[that.quiz.user_exam_id][questionId].answered_choice_id === null
             ) {
               unansweredQuestion = currentExamQuestions[questionId]
             } else {
-              tstArr.push(that.userQuizListData[that.quiz.id][questionId])
+              tstArr.push(that.userQuizListData[that.quiz.user_exam_id][questionId])
             }
           }
         })
@@ -356,14 +356,14 @@ export default {
     },
     sendAnswersAndFinishExam () {
       const that = this
-      this.sendUserQuestionsDataToServerAndFinishExam(this.quiz.id, this.quiz.user_exam_id)
+      this.sendUserQuestionsDataToServerAndFinishExam(this.quiz.user_exam_id)
         .then(() => {
           // that.$notify({
           //   group: 'notifs',
           //   text: 'اطلاعات آزمون شما ثبت شد.',
           //   type: 'success'
           // })
-          that.$store.commit('Exam/clearExamData', that.quiz.id)
+          that.$store.commit('Exam/clearExamData', that.quiz.user_exam_id)
           that.tryAgainDialog = false
           that.$router.push({ name: 'mbtiBartle.result', params: { exam_id: this.quiz.id.toString(), user_exam_id: this.quiz.user_exam_id.toString() } })
         })
