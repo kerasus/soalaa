@@ -51,7 +51,6 @@ const AdminActionOnQuestion = {
       axios.get(API_ADDRESS.question.show(questionId))
         .then(function (response) {
           that.question = new Question(response.data.data)
-          console.log(that.question)
           // const types = new TypeList(response.data.data)
           // const optionQuestion = response.data.data.find(item => (item.value === 'konkur'))
           // if (!optionQuestion) {
