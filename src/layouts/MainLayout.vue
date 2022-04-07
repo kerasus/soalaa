@@ -26,11 +26,7 @@
     </template>
     <template #content>
       <div ref="contentInside" class="content-inside">
-        <router-view v-slot="{ Component }">
-          <keep-alive :exclude="['konkoorView', 'alaaView']">
-            <component :is="Component" :key="$route.fullPath" />
-          </keep-alive>
-        </router-view>
+        <Router :exclude="['konkoorView', 'alaaView', 'MultipleChoiceQ', 'MBTIQ']" />
       </div>
     </template>
   </quasar-template-builder>
@@ -44,9 +40,10 @@ import { QuasarTemplateBuilder } from 'quasar-template-builder'
 import templateHeader from 'components/Template/templateHeader'
 import onlineQuizTemplateHeader from 'components/Template/onlineQuizTemplateHeader'
 import { ref } from 'vue'
+import Router from 'src/router/Router'
 
 export default {
-  components: { SideMenuDashboard, sideMenuMapOfQuestions, QuasarTemplateBuilder, templateHeader, onlineQuizTemplateHeader },
+  components: { Router, SideMenuDashboard, sideMenuMapOfQuestions, QuasarTemplateBuilder, templateHeader, onlineQuizTemplateHeader },
   data () {
     return {
       properties: {

@@ -82,11 +82,45 @@ const AdminActionOnQuestion = {
           this.$router.push({ name: 'Admin.Question.Show', params: { question_id: this.$route.params.question_id } })
         })
     },
+    createQuestionImage (question) {
+      const formData = new FormData()
+      // formData.append('status_id', statusId);
+      question.statement_photo.forEach((item, key) => {
+        formData.append('statement_photo[' + key + ']', item)
+      })
+      question.answer_photos.forEach((item, key) => {
+        formData.append('answer_photos[' + key + ']', item)
+      })
+      question.exams.list.forEach((item, key) => {
+        formData.append('exams[' + key + '][id]', item.id)
+        formData.append('exams[' + key + '][order]', item.order)
+        formData.append('exams[' + key + '][sub_category_id]', item.sub_category_id)
+      })
+      formData.append('type_id', question.type_id)
+      this.$axios.post(API_ADDRESS.question.create, formData)
+        .then(response => {
+          this.$router.push({
+            name: 'Admin.Question.Show',
+            params: {
+              question_id: response.data.data.id
+            }
+          })
+        })
+    },
     setAllQuestionLoadings () {
       this.question.loading = true
       // this.question.type.loading = true
       // Todo : Temp
       // this.question.exams.loading = true
+    },
+    detachUnsavedExam (exam) {
+      this.question.exams.list = this.question.exams.list.filter(item => item.id !== exam.id)
+    },
+    detachSavedExam (exam) {
+      this.$axios.post(API_ADDRESS.question.detach(this.question.id), [exam])
+        .then(response => {
+          console.log(response.data.data)
+        })
     },
     disableAllQuestionLoadings () {
       this.question.loading = false

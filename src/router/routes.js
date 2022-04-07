@@ -64,7 +64,7 @@ const routes = [
               {
                 path: '',
                 name: 'Admin.Question.Bank',
-                component: () => import('pages/Admin/Question/QuestionBank/list'),
+                component: () => import('pages/Admin/Question/QuestionBank/QuestionBank'),
                 meta: { middlewares: [auth] }
               },
               {

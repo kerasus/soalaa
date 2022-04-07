@@ -17,6 +17,7 @@
       <attach-exam
         :exams="examList"
         :lessons="subCategoriesList"
+        @detach="detachSavedExam"
       />
       <q-inner-loading
         :showing="question.exams.loading"

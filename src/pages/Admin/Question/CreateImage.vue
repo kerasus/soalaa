@@ -29,6 +29,15 @@
         <upload-image v-model="question" title="پاسخ سوال" field-key="answer_photos"/>
       </div>
     </div>
+    <AttachExam :exams="examList" :lessons="subCategoriesList" @detach="detachUnsavedExam" />
+    <div class="attach-btn row">
+      <question-details class="col-9"/>
+      <btn-box
+        class="col-3"
+        @saveQuestion="createQuestionImage(question)"
+      />
+    </div>
+    <comment-box/>
 <!--    <div class="row">-->
 <!--      <div class="col">-->
 <!--        <AttachExam />-->
@@ -45,26 +54,35 @@
 <script>
 import uploadImage from 'src/components/Question/QuestionPage/UploadImage'
 import { Question } from 'src/models/Question'
+import BtnBox from 'components/Question/QuestionPage/BtnBox'
+import QuestionDetails from 'components/Question/QuestionPage/Create/textMode/QuestionDetails'
+import CommentBox from 'components/Question/QuestionPage/StatusChange'
+
 // import QuestionDetails from 'components/Question/QuestionPage/Create/textMode/QuestionDetails'
 import { AdminActionOnQuestion } from 'src/mixin/Mixins'
-// import AttachExam from 'components/Question/QuestionPage/AttachExam'
+import AttachExam from 'components/Question/QuestionPage/AttachExam'
+import { ExamList } from 'src/models/Exam'
+import { QuestSubcategoryList } from 'src/models/QuestSubcategory'
 // import CommentBox from 'components/Question/QuestionPage/CommentBox'
 // import BtnBox from 'components/Question/QuestionPage/BtnBox'
 
 export default {
   name: 'CreateImage',
   components: {
-    uploadImage
+    uploadImage,
+    AttachExam,
     // ,
-    // QuestionDetails,
+    QuestionDetails,
     // AttachExam,
-    // CommentBox,
-    // BtnBox
+    CommentBox,
+    BtnBox
   },
   mixins: [AdminActionOnQuestion],
   data () {
     return {
-      question: new Question()
+      question: new Question(),
+      examList: new ExamList(),
+      subCategoriesList: new QuestSubcategoryList()
     }
   },
   created () {
