@@ -33,12 +33,12 @@
         dense
         align="justify "
       >
-        <q-tab class="text-purple " name="edit " icon="edit " label="ویرایش "/>
-        <q-tab class="text-orange " name="addNew " icon="add " label="اضافه کردن گره جدید "/>
+        <q-tab class="text-purple " name="edit " icon="editNode" label="ویرایش "/>
+        <q-tab class="text-orange " name="createNewNode" icon="add " label="اضافه کردن گره جدید "/>
         <q-tab class="text-red " name="delete " icon="delete " label="حذف "/>
       </q-tabs>
       <q-tab-panels v-model="tab " animated>
-        <q-tab-panel name="edit ">
+        <q-tab-panel name="editNode">
           <q-input
             class="q-ma-md"
             filled
@@ -60,7 +60,7 @@
             ثبت
           </q-btn>
         </q-tab-panel>
-        <q-tab-panel name="addNew ">
+        <q-tab-panel name="createNewNode">
           <q-input
             class="q-ma-md"
             filled
@@ -97,9 +97,7 @@
     </q-card>
   </q-dialog>
 </template>
-
 <script>
-import API_ADDRESS from 'src/api/Addresses'
 import { TreeNode, TreeNodeList } from 'src/models/TreeNode'
 
 export default {
@@ -115,25 +113,34 @@ export default {
     },
     requestHandler: {
       type: Function,
-      default: () => {}
+      default: () => {
+      }
     },
     getNodeById: {
       type: Function,
-      default: (id, done, fail, callback) => {}
+      default: (id, done, fail, callback) => {
+      }
     },
-    newNode: {
+    newNodeData: {
       type: Object
+    },
+    addNewNode: {
+      type: Function,
+      default: () => {
+      }
+    },
+    editNode: {
+      type: Function,
+      default: () => {
+      }
     }
   },
   data: () => {
     return {
       ticked: [],
       nodes: [],
-      copy: {},
-      simple: [],
       tab: 'edit',
       loading: false,
-      vModelSelected: [],
       newName: '',
       newOrder: 1,
       selectedNode: {},
@@ -184,50 +191,32 @@ export default {
       this.getNodeById(node.id, done, fail, this.loadChildOfNode)
     },
 
-    editNode (id) {
+    edit () {
       const node = this.$refs.tree.getNodeByKey(this.selectedNode.id)
-      console.log('n', node)
-      this.$axios.get(API_ADDRESS.tree.getNodeById(id))
+      this.editNode(node.id)
         .then(response => {
           console.log(response)
           // const apiData = response.data.data
           node.name = this.newName
         })
     },
-    // mixin
-    createNode (parentId, title, order, callback) {
-      this.$axios.post(API_ADDRESS.tree.base, { parent_id: parentId, title: title, order: order })
-        .then(response => {
-          if (callback) {
-            callback(response)
-          }
-        }).catch(err => {
-          console.log(err)
-        })
+
+    addNode () {
+      const id = this.selectedNode.id
+      const getNode = this.$refs.tree.getNodeByKey(id)
+      this.$emit('newData', { title: this.newName, order: this.newOrder })
+      const newNodeData = this.addNewNode()
+      console.log('add', newNodeData)
+      if (newNodeData) {
+        getNode.children.unshift(new TreeNode({
+          id: newNodeData.data.data.id,
+          type: newNodeData.data.data.type,
+          title: newNodeData.data.data.title,
+          parent: newNodeData.data.data.parent.id
+        }))
+        this.editDialog = false
+      }
     },
-
-    // addNode (callback) {
-    //   const id = this.selectedNode.id
-    //   const getNode = this.$refs.tree.getNodeByKey(id)
-    //   // this.$emit('inputsData', { this.newName , this.newOrder })
-    //   if (callback) {
-    //     getNode.children.unshift(new TreeNode({
-    //       id: this.newNode.data.data.id,
-    //       type: this.newNode.data.data.type,
-    //       title: this.newNode.data.data.title,
-    //       parent: this.newNode.data.data.parent.id
-    //     }))
-    //     this.editDialog = false
-    //   }
-    //   // getNode.children.unshift(new TreeNode({
-    //   //   id: this.newNode.data.data.id,
-    //   //   type: this.newNode.data.data.type,
-    //   //   title: this.newNode.data.data.title,
-    //   //   parent: this.newNode.data.data.parent.id
-    //   // }))
-    //   // this.editDialog = false
-    // },
-
     openEditMenu (node) {
       this.newName = ''
       this.newOrder = 1
@@ -242,17 +231,19 @@ export default {
 }
 </script>
 <style scoped lang='scss'>
-.q-tree{
-  display: inline-block;
-  .node-title{
-    &:hover {
+  .q-tree {
+    display: inline-block;
+
+    .node-title {
+      &:hover {
+        .edit-btn {
+          color: #f18305;
+        }
+      }
+
       .edit-btn {
-        color: #f18305;
+        color: transparent;
       }
     }
-    .edit-btn {
-      color: transparent;
-    }
   }
-}
 </style>

@@ -1,16 +1,20 @@
 <template>
   <tree
     @ticked="test"
+    @selected-node="getSelectedNode"
+    @new-data="getNewNodeData"
     ref="tree"
     tick-strategy="strict"
     :editable="true"
     :get-node-by-id="getNodeById"
+    :add-new-node="addNode"
+    :editNode="edit"
   />
 </template>
 
 <script>
 import { mixinTree } from 'src/mixin/Mixins'
-import Tree from 'components/Tree/Tree'
+import Tree from 'src/components/Tree/Tree'
 // import API_ADDRESS from 'src/api/Addresses'
 
 export default {
@@ -38,13 +42,25 @@ export default {
   methods: {
     test (value) {
       console.log('ticked', value)
+    },
+    getSelectedNode (node) {
+      this.selectedNode = node
+    },
+    addNode () {
+      console.log('index')
+      console.log('selectedNode', this.selectedNode)
+      console.log('newNode', this.newNode)
+      this.createNode(this.selectedNode.id, this.newNode.title, this.newNode.order, (response) => {
+        console.log('response', response)
+        return response
+      })
+    },
+    getNewNodeData (newNode) {
+      this.newNode = newNode
+    },
+    edit () {
+      this.editNode(this.selectedNode)
     }
-    // getSelectedNode (node) {
-    //   this.selectedNode = node
-    // },
-    // getNewNodeData () {
-    //   this.createNode(this.selectedNode.id)
-    // }
   }
 }
 </script>

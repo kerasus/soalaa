@@ -180,6 +180,9 @@ const API_ADDRESS = {
     },
     getNodeByType (nodeType) {
       return treeServer + '/tree?type=' + nodeType
+    },
+    editNode (id) {
+      return treeServer + id
     }
   }
 }

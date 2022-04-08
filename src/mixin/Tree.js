@@ -50,6 +50,15 @@ const mixinTree = {
             console.log(err)
           })
       })
+    },
+
+    editNode (id) {
+      this.$axios.put(API_ADDRESS.tree.editNode(id))
+        .then(res => {
+          console.log(res)
+        }).catch(err => {
+          console.log(err)
+        })
     }
   }
 }
