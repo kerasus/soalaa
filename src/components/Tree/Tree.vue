@@ -31,7 +31,6 @@
         v-model="tab "
         narrow-indicator
         dense
-        align="justify "
       >
         <q-tab class="text-purple" name="editNode" icon="edit" label="ویرایش "/>
         <q-tab class="text-orange" name="createNewNode" icon="add" label="اضافه کردن گره جدید "/>
@@ -123,7 +122,7 @@ export default {
     },
     editNode: {
       type: Function,
-      default: () => {
+      default: (callback) => {
       }
     }
   },
@@ -188,7 +187,22 @@ export default {
 
     edit () {
       this.inputsValue({ title: this.editedTitle, order: this.editedOrder })
-      this.editNode()
+      this.editNode((res) => {
+        if (res) {
+          const id = this.selectedNode.id
+          const node = this.$refs.tree.getNodeByKey(id)
+          console.log(node)
+          node.name = this.editedTitle
+          this.editDialog = false
+        }
+      })
+      // .then(() => {
+      //   const id = this.selectedNode.id
+      //   const node = this.$refs.tree.getNodeByKey(id)
+      //   console.log(node)
+      //   node.name = this.editedTitle
+      //   this.editDialog = false
+      // })
     },
 
     addNode () {
@@ -203,8 +217,8 @@ export default {
           title: newNodeData.data.data.title,
           parent: newNodeData.data.data.parent.id
         }))
-        this.editDialog = false
       }
+      this.editDialog = false
     },
 
     inputsValue (newData) {
