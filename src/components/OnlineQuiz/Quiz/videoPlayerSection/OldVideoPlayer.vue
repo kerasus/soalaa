@@ -1,76 +1,76 @@
 <template>
   <div class="vPlayer" id="videoPlayer">
     <div id="videoPlayer-timeStamp" dir="rtl" style="font-family: 'serif', IRANSans;">
-<!--      <v-navigation-drawer-->
-<!--        right-->
-<!--        v-model="drawer"-->
-<!--        absolute-->
-<!--        :height="calcTheHeight"-->
-<!--        :width="calcTheWidth"-->
-<!--        temporary-->
-<!--        v-show="videoIsPlaying"-->
-<!--        hide-overlay-->
-<!--      >-->
-<!--        <v-list-item>-->
+      <!--      <v-navigation-drawer-->
+      <!--        right-->
+      <!--        v-model="drawer"-->
+      <!--        absolute-->
+      <!--        :height="calcTheHeight"-->
+      <!--        :width="calcTheWidth"-->
+      <!--        temporary-->
+      <!--        v-show="videoIsPlaying"-->
+      <!--        hide-overlay-->
+      <!--      >-->
+      <!--        <v-list-item>-->
 
-<!--          <i class="fi-sr-bookmark"></i>-->
-<!--          <v-list-item-title>زمانکوب ها</v-list-item-title>-->
-<!--          &lt;!&ndash; <v-btn-->
-<!--              icon-->
-<!--              @click.stop="drawer = false"-->
-<!--          >-->
-<!--              <v-icon>mdi-chevron-right</v-icon>-->
-<!--          </v-btn> &ndash;&gt;-->
-<!--        </v-list-item>-->
-<!--        <v-divider color="rgba(255, 255, 255, 0.6)"></v-divider>-->
-<!--        <v-list-->
-<!--          nav-->
-<!--          dense-->
-<!--        >-->
-<!--          <v-list-item-group-->
+      <!--          <i class="fi-sr-bookmark"></i>-->
+      <!--          <v-list-item-title>زمانکوب ها</v-list-item-title>-->
+      <!--          &lt;!&ndash; <v-btn-->
+      <!--              icon-->
+      <!--              @click.stop="drawer = false"-->
+      <!--          >-->
+      <!--              <v-icon>mdi-chevron-right</v-icon>-->
+      <!--          </v-btn> &ndash;&gt;-->
+      <!--        </v-list-item>-->
+      <!--        <v-divider color="rgba(255, 255, 255, 0.6)"></v-divider>-->
+      <!--        <v-list-->
+      <!--          nav-->
+      <!--          dense-->
+      <!--        >-->
+      <!--          <v-list-item-group-->
 
-<!--          >-->
-<!--            <v-list-item-->
-<!--              v-for="(timeStamp,index) in timePoints"-->
-<!--              :key="index"-->
-<!--              @click="activate(timeStamp.time)"-->
-<!--            >-->
-<!--              <v-list-item-title>{{ timeStamp.title }}</v-list-item-title>-->
-<!--              <v-list-item-action>-->
-<!--                <v-list-item-action-text>-->
-<!--                  <v-menu bottom left>-->
-<!--                    <template v-slot:activator="{ }">-->
-<!--                      <v-btn-->
-<!--                        class="video-box-icon-button"-->
-<!--                        icon-->
-<!--                        @click.stop="toggleFavorite(timeStamp.id , $event)"-->
-<!--                        :loading="timeStamp.loading"-->
-<!--                      >-->
+      <!--          >-->
+      <!--            <v-list-item-->
+      <!--              v-for="(timeStamp,index) in timePoints"-->
+      <!--              :key="index"-->
+      <!--              @click="activate(timeStamp.time)"-->
+      <!--            >-->
+      <!--              <v-list-item-title>{{ timeStamp.title }}</v-list-item-title>-->
+      <!--              <v-list-item-action>-->
+      <!--                <v-list-item-action-text>-->
+      <!--                  <v-menu bottom left>-->
+      <!--                    <template v-slot:activator="{ }">-->
+      <!--                      <v-btn-->
+      <!--                        class="video-box-icon-button"-->
+      <!--                        icon-->
+      <!--                        @click.stop="toggleFavorite(timeStamp.id , $event)"-->
+      <!--                        :loading="timeStamp.loading"-->
+      <!--                      >-->
 
-<!--                        &lt;!&ndash;fi-sr-bookmark  &ndash;&gt;-->
-<!--                        <span-->
-<!--                          class='bookmark-button'-->
-<!--                          :class="{ 'is-favorite': timeStamp.isFavored , 'is-not-favorite': !timeStamp.isFavored }"-->
-<!--                        ></span>-->
-<!--                      </v-btn>-->
-<!--                    </template>-->
-<!--                  </v-menu>-->
-<!--                </v-list-item-action-text>-->
-<!--              </v-list-item-action>-->
-<!--            </v-list-item>-->
-<!--          </v-list-item-group>-->
-<!--        </v-list>-->
-<!--      </v-navigation-drawer>-->
+      <!--                        &lt;!&ndash;fi-sr-bookmark  &ndash;&gt;-->
+      <!--                        <span-->
+      <!--                          class='bookmark-button'-->
+      <!--                          :class="{ 'is-favorite': timeStamp.isFavored , 'is-not-favorite': !timeStamp.isFavored }"-->
+      <!--                        ></span>-->
+      <!--                      </v-btn>-->
+      <!--                    </template>-->
+      <!--                  </v-menu>-->
+      <!--                </v-list-item-action-text>-->
+      <!--              </v-list-item-action>-->
+      <!--            </v-list-item>-->
+      <!--          </v-list-item-group>-->
+      <!--        </v-list>-->
+      <!--      </v-navigation-drawer>-->
       <!-- timestamp[0] -->
       <transition name="fade">
-<!--        <v-btn-->
-<!--          v-show="videoIsPlaying"-->
-<!--          color="rgba(0, 0, 0, 0.6)"-->
-<!--          class="white&#45;&#45;text vPlayer-drawer-btn"-->
-<!--          @click.stop="drawer = true"-->
-<!--        >-->
-<!--          <span class='vPlayer-timestamp-icon'></span>-->
-<!--        </v-btn>-->
+        <!--        <v-btn-->
+        <!--          v-show="videoIsPlaying"-->
+        <!--          color="rgba(0, 0, 0, 0.6)"-->
+        <!--          class="white&#45;&#45;text vPlayer-drawer-btn"-->
+        <!--          @click.stop="drawer = true"-->
+        <!--        >-->
+        <!--          <span class='vPlayer-timestamp-icon'></span>-->
+        <!--        </v-btn>-->
       </transition>
     </div>
     <video ref="videoPlayer" id="my-video" dir="ltr"

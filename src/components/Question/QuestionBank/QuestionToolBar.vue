@@ -23,62 +23,48 @@
               <q-checkbox class="choices-checkbox" label="انتخاب همه" v-model="checkBox"></q-checkbox>
             </div>
             <div class="choices-number">
-              35
+              {{ this.choicesNumber }}
               <span class="choices-number-title">سوال انتخاب شده</span>
             </div>
           </div>
         </q-card-section>
       </template>
-    <q-card-section class="q-pa-0 toolbar-detail ">
-      <div class="row">
-        <div class="col-5 question-choose">
-          <div class="question-choose-header row"> سوالات انتخاب شده:</div>
-          <div class="question-choose-selected row">
-            <div v-for="item in filters" :key="item" class="filter-items row">
+    <q-card-section class="q-pa-0 toolbar-detail">
+      <div class="toolbar-detail-container row">
+        <div class="chosen-questions col-5">
+          <div class="chosen-question-title">
+            سوالات انتخاب شده:
+          </div>
+          <q-card-actions class="chosen-question-items">
+            <div v-for="item in filters" :key="item" class="filter-items">
               <div class="items-title">
-                {{ item }}
+                 {{ item.title }}: {{ item.amount }}
               </div>
               <div class="items-action">
-                <q-btn flat rounded size="xs">
+                <q-btn flat rounded size="xs" @click="deleteFilter(item.id)">
                   <q-icon name="mdi-close"></q-icon>
                 </q-btn>
               </div>
             </div>
+          </q-card-actions>
+        </div>
+        <div class="question-level-chart col-7">
+          <div class="chart-titles">
+            <div class="titles-icon hard"></div>
+            <div>سخت</div>
+          </div>
+          <div class="chart-titles">
+            <div class="titles-icon medium"></div>
+            <div>متوسط</div>
+          </div>
+          <div class="chart-titles">
+            <div class="titles-icon easy"></div>
+            <div>آسان</div>
           </div>
         </div>
-        <div class="col-4 question-level-box" >
-        <div class="row">
-          <div class="col-3 question-levels" >
-            <div class="row">
-              <span
-                class="question-level-circles"
-                style="background-color:red"
-              />
-              <p class="question-level"> سخت</p>
-            </div>
-            <div class="row">
-              <span
-                class="question-level-circles"
-                style="background-color:orange"
-              />
-              <p class="question-level"> متوسط</p>
-            </div>
-            <div class="row">
-              <span
-                class="question-level-circles"
-                style="background-color:deepskyblue"
-              />
-              <p class="question-level">  آسان</p>
-            </div>
-          </div>
-          <div class="col question-levels-chart" > </div>
-        </div>
-        </div>
-        <div class="col-3 deactivate-all">
-          <div class="deactivate-all-title">
-            غیر فعال کردن همه
-          </div>
-        </div>
+        <q-btn rounded flat class="deactivate-all">
+          غیر فعال کردن همه
+        </q-btn>
       </div>
     </q-card-section>
     </q-expansion-item>
@@ -90,11 +76,43 @@ export default {
   name: 'QuestionBankToolBar',
   data () {
     return {
-      filters: ['شیمی دهم', 'فصل یک', 'تستی', 'فیلتر شماره یک', 'فیلتر شماره دو'],
+      choicesNumber: 0,
+      filters: [{
+        title: 'شیمی',
+        id: 1,
+        amount: 3
+      },
+      {
+        title: 'ریاضی',
+        id: 2,
+        amount: 55
+      },
+      {
+        title: 'دینی',
+        id: 3,
+        amount: 55
+      },
+      {
+        title: 'ادبیات',
+        id: 4,
+        amount: 24
+      },
+      {
+        title: 'عربی',
+        id: 5,
+        amount: 23
+      }
+      ],
       checkBox: false
     }
   },
-  methods: {}
+  computed: {
+  },
+  methods: {
+    deleteFilter (id) {
+      this.filters = this.filters.filter(e => e.id !== id)
+    }
+  }
 }
 </script>
 
@@ -105,6 +123,7 @@ export default {
   }
   .toolbar-card {
     display: flex;
+    min-width: 900px;
     justify-content: space-between;
     padding: 17px 40px 17px 40px;
 
@@ -163,71 +182,73 @@ export default {
 
   }
   .toolbar-detail {
-    .question-choose {
-      .question-choose-header {
-        width: 122px;
-        height: 24px;
-        font-style: normal;
-        font-weight: 500;
-        font-size: 14px;
-        line-height: 24px;
-      }
+    .toolbar-detail-container {
+      .chosen-questions {
+        .chosen-question-title {
+          font-style: normal;
+          font-weight: 500;
+          font-size: 14px;
+          line-height: 24px;
+          color: #23263B;
+        }
+        .chosen-question-items {
+          .filter-items {
+            margin-right: 8px;
+            margin-bottom: 8px;
+            background: #F4F5F6;
+            border-radius: 11px;
+            display: flex;
 
-      .question-choose-selected {
-        .filter-items {
-          margin-right: 8px;
-          margin-bottom: 8px;
-          background: #F4F5F6;
-          border-radius: 11px;
-          display: flex;
+            .items-title {
+              font-style: normal;
+              font-weight: normal;
+              font-size: 12px;
+              line-height: 21px;
+              color: #23263B;
+              padding: 2px 0 0 9px;
+            }
 
-          .items-title {
-            font-style: normal;
-            font-weight: normal;
-            font-size: 12px;
-            line-height: 21px;
-            color: #23263B;
-            padding: 2px 0 0 9px;
-          }
-
-          .items-action {
-            padding: 1px 1px 0 3px;
+            .items-action {
+              padding: 1px 1px 0 3px;
+            }
           }
         }
       }
-    }
-    .question-level-box{
-      .question-levels{
-        .question-level-circles{
-          margin-right: 5px;
-          width: 20px;
-          height: 20px;
-          border-radius: 10px;
-        }
-        .question-level{
-          width: 39px;
-          height: 24px;
+      .question-level-chart {
+        .chart-titles {
           font-style: normal;
           font-weight: 400;
           font-size: 14px;
           line-height: 24px;
           color: #23263B;
+          display: flex;
+          align-items: center;
+          .titles-icon {
+            width: 13px;
+            height: 13px;
+            border-radius: 50%;
+            margin-right: 4px;
+          }
+          .hard {
+            background-color: #DA5F5C;
+          }
+          .medium {
+            background-color: #FFCA28;
+          }
+          .easy {
+            background-color: #8ED6FF;
+          }
         }
       }
-      .question-levels-chart{
-      }
-    }
-    .deactivate-all {
-      display: flex;
-      justify-content: flex-end;
-      align-items: flex-end;
-      .deactivate-all-title {
+      .deactivate-all {
         font-style: normal;
         font-weight: 500;
         font-size: 14px;
         line-height: 24px;
         color: #9690E4;
-
+        position: absolute;
+        bottom: 16px;
+        right: 24px;
       }
     }
   }
@@ -309,7 +330,7 @@ export default {
 @media only screen and (max-width: 599px) {
   .question-Bank-ToolBar {
     .toolbar-card {
-      background-image: url('../../../../../public/img/QuestionBank/toolbar-back-ground.png');
+      background-image: url('../../../../public/img/QuestionBank/toolbar-back-ground.png');
     }
   }
 }

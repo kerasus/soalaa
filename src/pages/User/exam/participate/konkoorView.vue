@@ -9,7 +9,8 @@
           class="konkoor-view-scroll"
           ref="scroller"
           :items="questions"
-          virtual-scroll-slice-size="70"
+          :virtual-scroll-item-size="450"
+          :virtual-scroll-slice-size="5"
           @virtual-scroll="onScroll"
         >
           <template v-slot="{ item, index }">
@@ -203,7 +204,7 @@ export default {
       const that = this
       this.quiz.sendAnswersAndFinishExam()
         .then(() => {
-          that.$store.commit('quiz/clearExamData', that.quiz.id)
+          that.$store.commit('Exam/clearExamData', that.quiz.user_exam_id)
           that.$q.notify({
             message: 'اطلاعات آزمون شما ثبت شد.',
             type: 'positive'
@@ -258,16 +259,22 @@ export default {
         })
       }, 1000)
     },
-    onScroll (startIndex, endIndex) {
-      this.updateLtr()
-      this.renderedQuestions = { startIndex, endIndex }
-      if (this.scrollState === 'not scrolling') {
-        this.setIntervalCallback = setInterval(() => {
-          this.changeCurrentQuestionIfScrollingIsDone()
-        }, 250)
-        this.scrollState = 'scrolling'
+    onScroll (details) {
+      if (!this.questions[details.index]) {
+        return
       }
-      this.timePassedSinceLastScroll = 0
+      this.changeQuestion(this.questions[details.index].id, 'onlineQuiz.konkoorView')
+
+      // startIndex, endIndex
+      // this.updateLtr()
+      // this.renderedQuestions = { startIndex, endIndex }
+      // if (this.scrollState === 'not scrolling') {
+      //   this.setIntervalCallback = setInterval(() => {
+      //     this.changeCurrentQuestionIfScrollingIsDone()
+      //   }, 250)
+      //   this.scrollState = 'scrolling'
+      // }
+      // this.timePassedSinceLastScroll = 0
     },
     changeCurrentQuestionToFirstQuestionInView () {
       const firstInViewQuestion = this.getFirstInViewQuestionNumber()

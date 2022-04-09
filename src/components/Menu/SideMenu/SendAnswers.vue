@@ -4,7 +4,7 @@
     class="send-answer-box"
   >
     <q-btn
-      v-if="quiz.id"
+      v-if="quiz.user_exam_id"
       :color="'#4caf50'"
       :style="{ backgroundColor: '#4caf50 !important' }"
       class=" end-exam-btn full-width"
@@ -13,7 +13,7 @@
       ارسال پاسخنامه
     </q-btn>
     <q-btn
-      v-if="quiz.id"
+      v-if="quiz.user_exam_id"
       :color="'#4caf50'"
       :style="{ backgroundColor: '#4caf50 !important'}"
       class=" end-exam-btn full-width"
@@ -103,7 +103,7 @@ export default {
       }
     },
     sendAnswer () {
-      return this.sendUserQuestionsDataToServerAndFinishExam(this.quiz.id, this.quiz.user_exam_id, false)
+      return this.sendUserQuestionsDataToServerAndFinishExam(this.quiz.user_exam_id, false)
     },
     async getBackEndRes () {
       try {
@@ -113,7 +113,7 @@ export default {
         await examData.getExamDataAndParticipate(this.quiz.id)
         await examData.getUserExamData(this.quiz.user_exam_id).run()
         if (examData.exam) {
-          that.$store.commit('quiz/mergeDbAnswersIntoLocalstorage', {
+          that.$store.commit('Exam/mergeDbAnswersIntoLocalstorage', {
             dbAnswers: examData.userExamData,
             exam_id: examData.exam.id
           })
@@ -124,7 +124,7 @@ export default {
       }
     },
     confirmSendingAllAnswers () {
-      this.sendUserQuestionsDataToServerAndFinishExam(this.quiz.id, this.quiz.user_exam_id, false)
+      this.sendUserQuestionsDataToServerAndFinishExam(this.quiz.user_exam_id, false)
         .then(response => {
           this.confirmationBubbleSheet = true
         })

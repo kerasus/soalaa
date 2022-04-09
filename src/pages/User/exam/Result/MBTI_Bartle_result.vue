@@ -340,8 +340,8 @@ export default {
         questions = examData.exam.questions.list
         that.saveCurrentExamQuestions(examData.exam.questions.list)
         // save exam info in vuex store (remove questions of exam then save in store)
-        that.$store.commit('quiz/updateQuiz', examData.exam)
-        that.$store.commit('quiz/mergeDbAnswersIntoLocalstorage', {
+        that.$store.commit('Exam/updateQuiz', examData.exam)
+        that.$store.commit('Exam/mergeDbAnswersIntoLocalstorage', {
           dbAnswers: examData.userExamData,
           exam_id: examData.exam.id
         })
@@ -386,7 +386,7 @@ export default {
       this.result = finalAnswer
       this.$store.dispatch('loading/overlayLoading', { loading: false, message: '' })
 
-      this.$store.commit('quiz/setPsychometricAnswer', finalAnswer)
+      this.$store.commit('Exam/setPsychometricAnswer', finalAnswer)
     },
     getMbtiBg (type) {
       if (!mbtiData.mbtiType[type]) {
