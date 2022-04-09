@@ -4,7 +4,7 @@
 
 <script>
 export default {
-  name: 'DescriptiveQ',
+  name: 'DescriptiveEditQuestion',
   data () {
     return {}
   }

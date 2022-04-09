@@ -1,10 +1,11 @@
 <template>
   <div class="showQ-text-container">
     <q-linear-progress
-      v-if="question.loading"
+      v-if="this.question.loading"
+      size="md"
       indeterminate
+      rounded
       color="primary"
-      class="q-mt-sm"
     />
     <navbar
       :mode="'show'"
@@ -33,6 +34,7 @@
       </div>
     </div>
     <div class="relative-position">
+      <question-details class="col-9"/>
       <attach-exam
         :exams="examList"
         :lessons="subCategoriesList"
@@ -90,14 +92,17 @@ export default {
       examList: new ExamList(),
       subCategoriesList: new QuestSubcategoryList(),
       questionStatuses: new QuestionStatusList(),
-      isPanelOpened: false
+      isPanelOpened: false,
+      allTypes: new TypeList()
     }
   },
   created () {
     this.enableLoading()
     // this.getPageReady()
-    this.getQuestionById(this.getCurrentQuestionId())
+    this.getQuestionTypeForTypeId(this.question)
+    // this.setAllQuestionLoadings()
     this.loadSubcategories()
+    // this.getQuestionById(this.getCurrentQuestionId())
     this.loadExamList()
   },
   provide () {

@@ -205,7 +205,7 @@ export default {
           exams: [
             {
               id: '622ae211d1a3433f16636253',
-              order: '2004',
+              order: '2006',
               sub_category_id: '60b7875428f350277f04c5e7'
             }
           ],
@@ -271,6 +271,15 @@ export default {
       })
       return status
     },
+    validateAnswerOfChoice () {
+      let status = false
+      this.question.choices.list.forEach(function (item, index) {
+        if (item.answer) {
+          status = true
+        }
+      })
+      return status
+    },
     validateContent () {
       let status = true
       const that = this
@@ -290,6 +299,11 @@ export default {
       //   status = false
       // }
       if (!this.choice) {
+        const ChoiceMassage = 'لطفا گزینه صحیح را ثبت کنید'
+        errors.push(ChoiceMassage)
+        status = false
+      }
+      if (!this.validateAnswerOfChoice()) {
         const ChoiceMassage = 'لطفا گزینه صحیح را ثبت کنید'
         errors.push(ChoiceMassage)
         status = false
