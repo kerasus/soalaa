@@ -8,23 +8,26 @@
     />
     <navbar
       :mode="'show'"
-      @panelClicked="openImgPanel"
+      @panelClicked="openCloseImgPanel"
     />
     <div class="relative-position">
       <div
-        class="row"
+        :class="{ 'row': isPanelOpened }"
       >
         <component
           v-if="question.type"
           :is="getComponent"
           v-bind="allProps"
-          class="col-9"
+          :class="{ 'col-7': isPanelOpened }"
         />
         <div
           v-if="isPanelOpened"
-          class="col-3"
+          class="col-5"
+          style="padding-right: 24px;padding-top: 30px;"
         >
-          <image-panel/>
+          <image-panel
+            @closePanelBtnClicked="openCloseImgPanel"
+          />
         </div>
       </div>
     </div>
@@ -127,8 +130,8 @@ export default {
     disableLoading () {
       this.question.loading = false
     },
-    openImgPanel () {
-      this.isPanelOpened = true
+    openCloseImgPanel () {
+      this.isPanelOpened = !this.isPanelOpened
     }
   },
   computed: {
