@@ -6,7 +6,7 @@ import { ExamList } from 'src/models/Exam'
 import { QuestSubcategoryList } from 'src/models/QuestSubcategory'
 // eslint-disable-next-line no-unused-vars
 import { QuestionType, TypeList } from 'src/models/QuestionType'
-import { Log } from 'src/models/Log'
+import { Log, LogList } from 'src/models/Log'
 const AdminActionOnQuestion = {
   data () {
     return {
@@ -233,7 +233,20 @@ const AdminActionOnQuestion = {
           question.type_id = item.id
         }
       })
+      this.getLogs(question.id)
       // console.log('setQuestionTypeBasedOnId question', question)
+    },
+    getLogs (questionId) {
+      const that = this
+      axios.get(API_ADDRESS.question.log.base(questionId))
+        .then(function (response) {
+          console.log('response.data.data', response.data.data)
+          that.question.logs = new LogList(response.data.data)
+          console.log('this.question.logs', that.question.logs)
+        })
+        .catch(function (error) {
+          console.log(error)
+        })
     },
     getQuestionStatus () {
       const that = this

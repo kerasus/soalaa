@@ -8,6 +8,12 @@
       class="rounded-card"
     >
       <div class="logList">
+        <div
+          v-for="(item, index) in logs.list"
+          :key="index"
+        >
+          {{item}}
+        </div>
         <log-item
           v-for="(item, index) in logs.list"
           :key="index"
