@@ -107,6 +107,7 @@ const AdminActionOnQuestion = {
       // Todo : Temp
       // this.question.exams.loading = true
     },
+    // ToDo Jasmine should do it exam hamaro pak mikone id yeksan agar exam yeki bashe pak mikone
     detachUnsavedExam (exam) {
       this.question.exams.list = this.question.exams.list.filter(item => item.id !== exam.id && item.sub_category_id === exam.sub_category_id)
     },
