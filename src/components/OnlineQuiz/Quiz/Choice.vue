@@ -36,7 +36,7 @@ export default {
   props: ['choice', 'questionId', 'isRtl'],
   computed: {
     isSelected () {
-      return this.getUserQuestionData(this.quiz.id, this.questionId) && this.choice.id === this.getUserQuestionData(this.quiz.id, this.questionId).answered_choice_id
+      return this.getUserQuestionData(this.quiz.user_exam_id, this.questionId) && this.choice.id === this.getUserQuestionData(this.quiz.user_exam_id, this.questionId).answered_choice_id
     }
   },
   methods: {

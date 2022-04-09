@@ -33,7 +33,7 @@ export default {
       const that = this
       this.quiz.sendAnswersAndFinishExam()
         .then(() => {
-          that.$store.commit('clearExamData', that.quiz.id)
+          that.$store.commit('clearExamData', that.quiz.user_exam_id)
           that.$q.notify({
             message: 'اطلاعات آزمون شما ثبت شد.',
             type: 'positive'
