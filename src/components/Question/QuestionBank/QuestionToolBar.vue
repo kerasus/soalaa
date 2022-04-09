@@ -134,7 +134,7 @@ export default {
             innerSize: '98%',
             startAngle: -200,
             endAngle: 360,
-            borderWidth: 10,
+            borderWidth: 13,
             center: ['50%', '50%'],
             size: '110%',
             borderColor: null,
