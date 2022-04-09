@@ -55,7 +55,7 @@
             text
             color="green "
             :loading="loading "
-            @click="editNode(selectedNode.id) "
+            @click="edit"
           >
             ثبت
           </q-btn>
@@ -186,12 +186,8 @@ export default {
 
     edit () {
       const node = this.$refs.tree.getNodeByKey(this.selectedNode.id)
-      this.editNode(node.id)
-        .then(response => {
-          console.log(response)
-          // const apiData = response.data.data
-          node.name = this.newName
-        })
+      console.log('edit', node.id)
+      this.editNode()
     },
 
     addNode () {
@@ -221,9 +217,13 @@ export default {
       this.$emit('selectedNode', this.selectedNode)
       this.editDialog = true
     },
+
     setNodesTicked (keys, state) {
-      console.log('this.ticked', this.ticked)
-      this.$refs.tree.setTicked(keys, state)
+      if (state) {
+        this.$refs.tree.setTicked(keys, state)
+      } else {
+        this.$refs.tree.setTicked(keys, false)
+      }
     }
   }
 }
