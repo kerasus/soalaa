@@ -10,6 +10,7 @@
     :add-new-node="addNode"
     :editNode="edit"
   />
+<!--  <q-btn v-for="(t, k) in testArr" :key="k" :label="t" @click="test2"/>-->
 </template>
 
 <script>
@@ -28,6 +29,7 @@ export default {
       selectedNode: {},
       editDialog: false,
       newNode: {}
+      // testArr: []
     }
   },
   mixins: [mixinTree],
@@ -42,7 +44,14 @@ export default {
   methods: {
     test (value) {
       console.log('ticked', value)
+      this.testArr = []
+      value.forEach(val => {
+        this.testArr.push(val.id)
+      })
     },
+    // test2 (id) {
+    //   this.setTicked('tree', id, false)
+    // },
     getSelectedNode (node) {
       this.selectedNode = node
     },

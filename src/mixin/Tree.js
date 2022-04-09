@@ -59,6 +59,10 @@ const mixinTree = {
         }).catch(err => {
           console.log(err)
         })
+    },
+
+    setTicked (refKey, key, state) {
+      this.$refs[refKey].setNodesTicked(key, state)
     }
   }
 }

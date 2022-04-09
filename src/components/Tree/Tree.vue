@@ -10,7 +10,7 @@
     @update:ticked="tickedNode"
     @lazy-load="getChildOfNode"
   >
-    <template v-slot:default-header="prop ">
+    <template v-slot:default-header="prop" >
       <span class="node-title">
         {{ prop.node.title }}
         <q-icon
@@ -33,9 +33,9 @@
         dense
         align="justify "
       >
-        <q-tab class="text-purple " name="edit " icon="editNode" label="ویرایش "/>
-        <q-tab class="text-orange " name="createNewNode" icon="add " label="اضافه کردن گره جدید "/>
-        <q-tab class="text-red " name="delete " icon="delete " label="حذف "/>
+        <q-tab class="text-purple" name="editNode" icon="edit" label="ویرایش "/>
+        <q-tab class="text-orange" name="createNewNode" icon="add" label="اضافه کردن گره جدید "/>
+        <q-tab class="text-red" name="delete" icon="delete" label="حذف "/>
       </q-tabs>
       <q-tab-panels v-model="tab " animated>
         <q-tab-panel name="editNode">
@@ -101,7 +101,7 @@
 import { TreeNode, TreeNodeList } from 'src/models/TreeNode'
 
 export default {
-  name: 'TreeStructure',
+  name: 'Tree',
   props: {
     tickStrategy: {
       type: String,
@@ -111,18 +111,10 @@ export default {
       type: Boolean,
       default: false
     },
-    requestHandler: {
-      type: Function,
-      default: () => {
-      }
-    },
     getNodeById: {
       type: Function,
       default: (id, done, fail, callback) => {
       }
-    },
-    newNodeData: {
-      type: Object
     },
     addNewNode: {
       type: Function,
@@ -138,6 +130,7 @@ export default {
   data: () => {
     return {
       ticked: [],
+      completeTickedNode: [],
       nodes: [],
       tab: 'edit',
       loading: false,
@@ -147,7 +140,7 @@ export default {
       editDialog: false
     }
   },
-  emits: ['ticked'],
+  emits: ['ticked', 'selectedNode', 'newData'],
   methods: {
     createRoot (nodeData) {
       const treeNodeData = new TreeNode(nodeData)
@@ -156,11 +149,11 @@ export default {
     },
 
     tickedNode (target) {
-      const tickedNodes = []
+      this.completeTickedNode = []
       target.forEach(id => {
-        tickedNodes.push(this.nodes[0].findNode(id))
+        this.completeTickedNode.push(this.nodes[0].findNode(id))
       })
-      this.$emit('ticked', tickedNodes)
+      this.$emit('ticked', this.completeTickedNode)
     },
 
     loadChildOfNode (node, done) {
@@ -217,6 +210,7 @@ export default {
         this.editDialog = false
       }
     },
+
     openEditMenu (node) {
       this.newName = ''
       this.newOrder = 1
@@ -226,6 +220,10 @@ export default {
       }
       this.$emit('selectedNode', this.selectedNode)
       this.editDialog = true
+    },
+    setNodesTicked (keys, state) {
+      console.log('this.ticked', this.ticked)
+      this.$refs.tree.setTicked(keys, state)
     }
   }
 }
