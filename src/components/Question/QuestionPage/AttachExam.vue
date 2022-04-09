@@ -47,7 +47,8 @@
         ></q-btn>
       </div>
     </div>
-    <div v-if="exams" :key="questionData.exams.list.length">
+    <div v-if="question.exams.list" :key="questionData.exams.list.length">
+      {{question.exams.list}}
       <div v-for="(item, index) in questionData.exams.list" :key="index" class="flex row">
         <div class="detail-box detail-box-first" :class="[imgPanelVisibility ? 'col-6' : 'col-3']">
           {{ item.title ? item.title : item.exam.title }}
@@ -91,7 +92,7 @@ export default {
   },
   inject: {
     question: {
-      from: 'question', // this is optional if using the same key for injection
+      from: 'providedQuestion', // this is optional if using the same key for injection
       default: new Question()
     }
   },

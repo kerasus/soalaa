@@ -2,7 +2,10 @@
   <div class="question-txtMode-navbar">
     <div class="fit row wrap justify-between">
       <div class="col-auto">
-        <div class="question-type row items-center relative-position">
+        <div
+          v-if="mode === 'create'"
+          class="question-type row items-center relative-position"
+        >
           <div class="col">نوع سوال</div>
           <div>
             <q-tabs
@@ -35,15 +38,21 @@
       </div>
       <div class="col-auto">
         <div
-          v-ripple.early
-          class="relative-position container bg-primary text-black flex flex-center question-pics"
+          v-if="!(mode === 'create')"
+          class="question-img-btn"
         >
-          <q-img
-            src="/img/img-panel-btn.png"
-            spinner-color="white"
-            class="question-pics-img"
-          />
-          <div class="text-white text-center question-pics-txt">تصاویر سوال</div>
+          <div
+            v-ripple.early
+            class="relative-position container bg-primary text-black flex flex-center question-pics"
+            @click="panelClicked"
+          >
+            <q-img
+              src="/img/img-panel-btn.png"
+              spinner-color="white"
+              class="question-pics-img"
+            />
+            <div class="text-white text-center question-pics-txt">تصاویر سوال</div>
+          </div>
         </div>
       </div>
     </div>
@@ -57,7 +66,14 @@ import { TypeList } from 'src/models/QuestionType'
 
 export default {
   name: 'Navbar',
-  props: {},
+  props: {
+    mode: {
+      type: String,
+      default () {
+        return 'create'
+      }
+    }
+  },
   data () {
     return {
       question: new Question(),
@@ -99,8 +115,16 @@ export default {
       this.qTabLoading = false
     })
   },
-  computed: {},
+  computed: {
+    doesHaveImage () {
+      // return !!()
+      return null
+    }
+  },
   methods: {
+    panelClicked () {
+      this.$emit('panelClicked')
+    },
     getCurrentRoute (componentName) {
       const currentQuestionMode = this.getCurrentQuestionMode()
       if (currentQuestionMode === 'Text') {

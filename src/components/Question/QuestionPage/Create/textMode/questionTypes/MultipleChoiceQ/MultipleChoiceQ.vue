@@ -141,6 +141,7 @@ import AdminActionOnQuestion from 'src/mixin/AdminActionOnQuestion'
 import { QuestSubcategoryList } from 'src/models/QuestSubcategory'
 import { ExamList } from 'src/models/Exam'
 import { QuestionStatusList } from 'src/models/QuestionStatus'
+import { computed } from 'vue'
 export default {
   name: 'MultipleChoiceQ',
   components: {
@@ -176,7 +177,7 @@ export default {
   },
   provide () {
     return {
-      question: this.question
+      providedQuestion: computed(() => this.question)
     }
   },
   created () {
@@ -204,7 +205,7 @@ export default {
           exams: [
             {
               id: '622ae211d1a3433f16636253',
-              order: '2003',
+              order: '2004',
               sub_category_id: '60b7875428f350277f04c5e7'
             }
           ],
