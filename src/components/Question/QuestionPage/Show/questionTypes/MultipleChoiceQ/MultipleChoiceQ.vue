@@ -17,7 +17,10 @@
       </q-card-section>
     </q-card>
     <div class="multiple-choice-A">
-      <div class="row multiple-choice-Answer">
+      <div
+        v-if="question.choices.list.length"
+        class="row multiple-choice-Answer"
+      >
         <div
           class="col-6 answer-box"
           v-for="(item, index) in question.choices.list"
@@ -46,16 +49,19 @@
         </div>
       </div>
     </div>
-    <q-card class="default-questions-card">
+    <q-card
+      v-if="question.descriptive_answer"
+      class="default-questions-card"
+    >
       <q-card-section class="default-Qcard-title">
         <div>پاسخ تشریحی</div>
       </q-card-section>
       <q-separator inset />
       <q-card-section>
         <div class="row justify-between default-Qcard-box">
-<!--          <vue-katex-->
-<!--            :input="question.descriptive_answer"-->
-<!--          />-->
+          <vue-katex
+            :input="question.descriptive_answer"
+          />
         </div>
       </q-card-section>
     </q-card>
@@ -73,21 +79,16 @@ export default {
   props: {},
   data () {
     return {
-      domKey: Date.now(),
       choice: ''
     }
   },
   inject: {
     question: {
-      from: 'question', // this is optional if using the same key for injection
+      from: 'providedQuestion', // this is optional if using the same key for injection
       default: new Question()
     }
   },
   created () {
-    const that = this
-    setTimeout(() => {
-      that.domKey = Date.now()
-    }, 100)
     this.setChoice()
   },
   mounted () {},
