@@ -57,6 +57,10 @@ export default {
     },
     imgPanelModeChanged () {
       this.$emit('imgPanelModeChanged')
+      this.$q.notify({
+        message: 'این قابلیت بزودی اضافه خواهد شد...',
+        color: 'primary'
+      })
     }
   }
 }
