@@ -56,7 +56,7 @@ const mixinTree = {
       })
     },
 
-    editNode (id) {
+    editNode (id, title, order) {
       this.$axios.put(API_ADDRESS.tree.editNode(id))
         .then(res => {
           console.log(res)

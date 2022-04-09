@@ -185,8 +185,6 @@ export default {
     },
 
     edit () {
-      const node = this.$refs.tree.getNodeByKey(this.selectedNode.id)
-      console.log('edit', node.id)
       this.editNode()
     },
 
@@ -195,7 +193,6 @@ export default {
       const getNode = this.$refs.tree.getNodeByKey(id)
       this.$emit('newData', { title: this.newName, order: this.newOrder })
       const newNodeData = this.addNewNode()
-      console.log('add', newNodeData)
       if (newNodeData) {
         getNode.children.unshift(new TreeNode({
           id: newNodeData.data.data.id,

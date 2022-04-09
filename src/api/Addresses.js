@@ -182,7 +182,7 @@ const API_ADDRESS = {
       return treeServer + '/tree?type=' + nodeType
     },
     editNode (id) {
-      return treeServer + id
+      return treeServer + '/tree/' + id
     }
   }
 }

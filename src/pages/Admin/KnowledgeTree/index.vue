@@ -8,7 +8,7 @@
     :editable="true"
     :get-node-by-id="getNodeById"
     :add-new-node="addNode"
-    :editNode="edit"
+    :edit-node="edit"
   />
 <!--  <q-btn v-for="(t, k) in testArr" :key="k" :label="t" @click="test2"/>-->
 </template>
@@ -56,9 +56,6 @@ export default {
       this.selectedNode = node
     },
     addNode () {
-      console.log('index')
-      console.log('selectedNode', this.selectedNode)
-      console.log('newNode', this.newNode)
       this.createNode(this.selectedNode.id, this.newNode.title, this.newNode.order, (response) => {
         console.log('response', response)
         return response
@@ -68,7 +65,7 @@ export default {
       this.newNode = newNode
     },
     edit () {
-      this.editNode(this.selectedNode)
+      this.editNode(this.selectedNode.id)
     }
   }
 }
