@@ -36,7 +36,11 @@
             سوالات انتخاب شده:
           </div>
           <q-card-actions class="chosen-question-items">
-            <div v-for="item in filters" :key="item" class="filter-items">
+            <div
+              v-for="item in filters"
+              :key="item"
+              class="filter-items"
+            >
               <div class="items-title">
                  {{ item.title }}: {{ item.amount }}
               </div>
@@ -48,23 +52,32 @@
             </div>
           </q-card-actions>
         </div>
-        <div class="question-level-chart col-7">
-          <div class="chart-titles">
-            <div class="titles-icon hard"></div>
-            <div>سخت</div>
-          </div>
-          <div class="chart-titles">
-            <div class="titles-icon medium"></div>
-            <div>متوسط</div>
-          </div>
-          <div class="chart-titles">
-            <div class="titles-icon easy"></div>
-            <div>آسان</div>
-          </div>
+        <div class="question-level-chart col-5 justify-center flex q-pl-lg">
+            <div class="row">
+                <div class="col-4">
+                  <div class="chart-titles">
+                    <q-badge class="titles-icon hard" rounded  />
+                    <div>سخت</div>
+                  </div>
+                  <div class="chart-titles">
+                    <q-badge class="titles-icon medium" rounded></q-badge>
+                    <div>متوسط</div>
+                  </div>
+                  <div class="chart-titles">
+                    <q-badge class="titles-icon easy" rounded ></q-badge>
+                    <div>آسان</div>
+                  </div>
+                </div>
+                <div class="question-highchart col-8 q-pl-xs">
+                  <highcharts :options="chartOptions" />
+                </div>
+            </div>
         </div>
-        <q-btn rounded flat class="deactivate-all">
-          غیر فعال کردن همه
-        </q-btn>
+        <div class="col-2" >
+          <q-btn rounded flat class="deactivate-all">
+            غیر فعال کردن همه
+          </q-btn>
+        </div>
       </div>
     </q-card-section>
     </q-expansion-item>
@@ -72,37 +85,85 @@
 </template>
 
 <script>
+import { Chart } from 'highcharts-vue'
 export default {
+  components: { highcharts: Chart },
   name: 'QuestionBankToolBar',
   data () {
     return {
       choicesNumber: 0,
-      filters: [{
-        title: 'شیمی',
-        id: 1,
-        amount: 3
-      },
-      {
-        title: 'ریاضی',
-        id: 2,
-        amount: 55
-      },
-      {
-        title: 'دینی',
-        id: 3,
-        amount: 55
-      },
-      {
-        title: 'ادبیات',
-        id: 4,
-        amount: 24
-      },
-      {
-        title: 'عربی',
-        id: 5,
-        amount: 23
-      }
+      filters: [
+        {
+          title: 'شیمی',
+          id: 1,
+          amount: 3
+        },
+        {
+          title: 'ریاضی',
+          id: 2,
+          amount: 55
+        },
+        {
+          title: 'دینی',
+          id: 3,
+          amount: 55
+        },
+        {
+          title: 'ادبیات',
+          id: 4,
+          amount: 24
+        },
+        {
+          title: 'عربی',
+          id: 5,
+          amount: 23
+        }
       ],
+      chartOptions: {
+        chart: {
+          height: '90',
+          width: '110',
+          type: 'pie',
+          plotShadow: false
+        },
+        credits: {
+          enabled: false
+        },
+        plotOptions: {
+          pie: {
+            innerSize: '98%',
+            startAngle: -200,
+            endAngle: 360,
+            borderWidth: 10,
+            center: ['50%', '50%'],
+            size: '110%',
+            borderColor: null,
+            slicedOffset: 0,
+            dataLabels: {
+              connectorWidth: 0
+            }
+          }
+        },
+        title: {
+          y: 28,
+          style: {
+            useHTML: true
+          },
+          verticalAlign: 'middle',
+          floating: true,
+          text: '<span  class="title-1"> ۳۵</span> <span dy="-8"class="title-2">سوال</span>'
+        },
+        series: [{
+          id: 'idData',
+          name: 'Data',
+          data: [
+            { name: '', y: 190000.00, color: '#FFCA28' },
+            { name: '', y: 150000.00, color: '#8ED6FF' },
+            { name: '', y: 240000.00, color: '#DA5F5C' }
+
+          ]
+        }]
+      },
       checkBox: false
     }
   },
@@ -226,7 +287,6 @@ export default {
           .titles-icon {
             width: 13px;
             height: 13px;
-            border-radius: 50%;
             margin-right: 4px;
           }
           .hard {
@@ -371,6 +431,31 @@ export default {
       }
       .q-expansion-item__toggle-focus{
         display: none;
+      }
+    }
+  }
+  .toolbar-detail{
+    .toolbar-detail-container{
+      .question-level-chart{
+        .question-highchart{
+          .title-1{
+            font-weight: 700;
+            font-size: 24px;
+            line-height: 20px;
+            text-align: center;
+            color: #23263B;
+          }
+          .title-2{
+            font-weight: 400;
+            font-size: 14px;
+            line-height:20px;
+            text-align: center;
+            color: #23263B;
+          }
+          .highcharts-container{
+            height: 180px;
+          }
+        }
       }
     }
   }
