@@ -35,7 +35,7 @@
 
 <script>
 /* eslint-disable no-var */
-import { defineAsyncComponent } from 'vue'
+import { computed, defineAsyncComponent } from 'vue'
 import { Question } from 'src/models/Question'
 import QuestionDetails from 'components/Question/QuestionPage/Create/textMode/QuestionDetails'
 import AdminActionOnQuestion from 'src/mixin/AdminActionOnQuestion'
@@ -82,7 +82,7 @@ export default {
   },
   provide () {
     return {
-      question: this.question
+      providedQuestion: computed(() => this.question)
     }
   },
   mounted () {

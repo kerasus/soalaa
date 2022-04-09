@@ -72,6 +72,7 @@ import AdminActionOnQuestion from 'src/mixin/AdminActionOnQuestion'
 import { QuestSubcategoryList } from 'src/models/QuestSubcategory'
 import { ExamList } from 'src/models/Exam'
 import { QuestionStatusList } from 'src/models/QuestionStatus'
+import { computed } from 'vue'
 
 export default {
   name: 'DescriptiveQ',
@@ -93,7 +94,7 @@ export default {
   },
   provide () {
     return {
-      question: this.question
+      providedQuestion: computed(() => this.question)
     }
   },
   data () {

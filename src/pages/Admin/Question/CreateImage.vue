@@ -57,7 +57,7 @@ import { Question } from 'src/models/Question'
 import BtnBox from 'components/Question/QuestionPage/BtnBox'
 import QuestionDetails from 'components/Question/QuestionPage/Create/textMode/QuestionDetails'
 import CommentBox from 'components/Question/QuestionPage/StatusChange'
-
+import { computed } from 'vue'
 // import QuestionDetails from 'components/Question/QuestionPage/Create/textMode/QuestionDetails'
 import { AdminActionOnQuestion } from 'src/mixin/Mixins'
 import AttachExam from 'components/Question/QuestionPage/AttachExam'
@@ -91,7 +91,7 @@ export default {
   mounted () {},
   provide () {
     return {
-      question: this.question
+      providedQuestion: computed(() => this.question)
     }
   }
 }
