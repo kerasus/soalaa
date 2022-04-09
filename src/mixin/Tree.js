@@ -7,7 +7,11 @@ const mixinTree = {
         this.getRootNode(nodeType)
           .then(response => {
             const node = response.data.data
-            this.$refs[refKey].createRoot({
+            let treeComponent = this.$refs[refKey]
+            if (!treeComponent.createRoot) {
+              treeComponent = this.$refs[refKey][0]
+            }
+            treeComponent.createRoot({
               title: node.title,
               id: node.id,
               order: node.order,
