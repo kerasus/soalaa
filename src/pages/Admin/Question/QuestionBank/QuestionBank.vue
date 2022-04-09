@@ -5,7 +5,7 @@
         <QuestionBankHeader/>
       </div>
       <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-xs-12 question-bank-filter">
-        <QuestionFilter/>
+        <QuestionFilter @delete-filter="filterItem"/>
       </div>
       <div class="col-xl-9 col-lg-9 col-md-9 col-sm-12 col-xs-12">
         <div class="question-bank-toolbar">
@@ -17,8 +17,13 @@
             <question-item v-for="question in questions.list" :key="question.id" :question="question" :origins="question.source_data.origins.questionOriginList[0]"/>
           </template>
         </div>
-        <div class="pageInation">
-          <page-ination :meta="paginationMeta"/>
+
+        <div class="pagination">
+          <pagination
+            :meta="paginationMeta"
+            :disable="disablePagination"
+            @updateCurrentPage="updatePage"
+          />
         </div>
       </div>
     </div>
@@ -26,22 +31,44 @@
 </template>
 
 <script>
+import API_ADDRESS from 'src/api/Addresses'
 import QuestionBankHeader from 'components/Question/QuestionBank/components/QuestionBankHeader'
 import QuestionToolBar from 'components/Question/QuestionBank/QuestionToolBar'
 import QuestionFilter from 'components/Question/QuestionBank/QuestionFilter'
 import QuestionItem from 'components/Question/QuestionBank/QuestionItem'
-import PageInation from 'components/Question/QuestionBank/PageInation'
+import pagination from 'components/Question/QuestionBank/Pagination'
 import { Question, QuestionList } from 'src/models/Question'
 import axios from 'axios'
 
 export default {
   name: 'QuestionBank',
-  components: { QuestionBankHeader, QuestionToolBar, QuestionFilter, QuestionItem, PageInation },
+  components: { QuestionBankHeader, QuestionToolBar, QuestionFilter, QuestionItem, pagination },
   data () {
     return {
       loadingQuestion: new Question(),
       questions: new QuestionList(),
-      paginationMeta: null
+      disablePagination: false,
+      filterQuestions: {
+        majorId: null,
+        levelId: null,
+        gradeId: null,
+        moduleGroupId: null,
+        majorGroupId: null,
+        moduleId: null,
+        originId: null,
+        publishYearId: null,
+        difficultyLevelId: null
+      },
+      paginationMeta: {
+        current_page: 1,
+        from: 0,
+        last_page: 1,
+        links: [],
+        path: '',
+        per_page: 0,
+        to: 0,
+        total: 0
+      }
     }
   },
   created () {
@@ -50,9 +77,27 @@ export default {
     this.getQuestionData()
   },
   methods: {
+    updatePage (page) {
+      const that = this
+      this.questions.loading = true
+      this.disablePagination = true
+      this.$axios.get(API_ADDRESS.question.indexMontaPaginate(page), {
+        params: this.filterQuestions
+      })
+        .then(response => {
+          that.questions = new QuestionList(response.data.data)
+          this.disablePagination = false
+        })
+        .catch(function (error) {
+          console.log(error)
+        })
+    },
+    filterItem (filter) {
+      console.log('Filter Deleted !!!', filter)
+    },
     getQuestionData () {
       const that = this
-      axios.get('https://office.alaatv.com:800/api/v1/question/search-monta')
+      axios.get(API_ADDRESS.question.indexMonta)
         .then(function (response) {
           that.paginationMeta = response.data.meta
           that.questions = new QuestionList(response.data.data)

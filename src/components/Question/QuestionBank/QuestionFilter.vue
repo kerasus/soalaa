@@ -21,7 +21,7 @@
                 {{ item.title }}
               </div>
               <div class="items-action">
-                <q-btn flat rounded size="xs" @click="deleteFilter(item.id)">
+                <q-btn flat rounded size="xs" @click="deleteFilterObject(item)">
                   <q-icon name="mdi-close"></q-icon>
                 </q-btn>
               </div>
@@ -44,13 +44,13 @@
                 </div>
                 </div>
               </template>
-            <q-card>
-              <q-card-section>
-                Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quidem, eius reprehenderit eos corrupti
-                commodi magni quaerat ex numquam, dolorum officiis modi facere maiores architecto suscipit iste
-                eveniet doloribus ullam aliquid.
-              </q-card-section>
-            </q-card>
+            <tree
+                  class="filter-tree"
+                  @ticked="tickedData"
+                  ref="tree"
+                  tick-strategy="strict"
+                  :get-node-by-id="getNodeById"
+            />
           </q-expansion-item>
         </q-card-section>
       </q-card>
@@ -59,45 +59,37 @@
 </template>
 
 <script>
+import { mixinTree } from 'src/mixin/Mixins'
+import Tree from 'components/Tree/Tree'
+
 export default {
   name: 'QuestionBankFilter',
   data () {
     return {
-      filters: [{
-        title: 'شیمی دهم',
-        id: 1
-      },
-      {
-        title: 'فصل یک',
-        id: 2
-      },
-      {
-        title: 'فیلتر شماره یک',
-        id: 3
-      },
-      {
-        title: 'فیلتر شماره دو',
-        id: 4
-      },
-      {
-        title: 'تستی',
-        id: 5
-      }
-      ],
+      filters: [],
       filterOptions: ['درس و مبحث', 'نوع سوال', 'طراح سوال', 'تاریخ تالیف']
     }
   },
+  mixins: [mixinTree],
+  components: { Tree },
+  created () {
+    this.showTree('tree', 'test')
+      .then(() => {})
+      .catch(err => {
+        console.log(err)
+      })
+  },
   methods: {
-    deleteFilter (id) {
-      this.filters = this.filters.filter(e => e.id !== id)
+    tickedData (data) {
+      this.filters = data
+      console.log(this.filters)
     },
-    deleteAllFilters () {
-      this.filters = []
+    deleteFilterObject (item) {
+      this.$emit('deleteFilter', item)
     }
   }
 }
 </script>
-
 <style lang="scss" scoped>
 .filter-card-container {
   padding: 20px 23px 16px 24px;
@@ -201,7 +193,6 @@ export default {
   }
 }
 </style>
-
 <style lang="scss">
 .filter-options-section {
   .q-expansion-item__container{
