@@ -27,12 +27,19 @@ class Question extends Model {
       { key: '_id' },
       { key: 'title' },
       { key: 'index' },
-      { key: 'statement' },
+      {
+        key: 'statement',
+        default: ''
+      },
       { key: 'statement_photo' },
       { key: 'rendered_statement' },
       { key: 'in_active_category' },
       { key: 'photo' },
       { key: 'order' },
+      {
+        key: 'source_data',
+        default: {}
+      },
       {
         key: 'exams',
         relatedModel: AttachedExamList
@@ -66,7 +73,10 @@ class Question extends Model {
         key: 'logs',
         relatedModel: LogList
       },
-      { key: 'answer' },
+      {
+        key: 'answer',
+        default: ''
+      },
       {
         key: 'answer_photos',
         default: []

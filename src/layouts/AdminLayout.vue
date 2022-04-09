@@ -1,7 +1,10 @@
 <template>
-  <router-view v-slot="{ Component }">
-    <keep-alive :exclude="['Edit' , 'editExamReport']">
-      <component :is="Component" :key="$route.fullPath" />
-    </keep-alive>
-  </router-view>
+  <Router :exclude="['Edit' , 'editExamReport', 'MultipleChoiceQ', 'MBTIQ']" />
 </template>
+
+<script>
+import Router from 'src/router/Router'
+export default {
+  components: { Router }
+}
+</script>

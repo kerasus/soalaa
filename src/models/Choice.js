@@ -1,7 +1,4 @@
 import { Model, Collection } from 'js-abstract-model'
-// import md from '../plugins/Markdown'
-import TurndownService from 'turndown/lib/turndown.browser.umd'
-// import convertToMarkdownKatex from '../plugins/ConvertToMarkdownKatex'
 
 class Choice extends Model {
   constructor (data) {
@@ -28,63 +25,34 @@ class Choice extends Model {
     }
   }
 
-  convertToMarkdownKatex1 (string) {
-    if (!string) {
-      return string
+  getOrderTitle (type = 'number') {
+    const number = {
+      1: 'یک',
+      2: 'دو',
+      3: 'سه',
+      4: 'چهار',
+      5: 'پنج',
+      6: 'شش',
+      7: 'هفت',
+      8: 'هشت',
+      9: 'نه',
+      10: 'ده'
     }
-    string = string.replace(/\n/g, '<br>')
 
-    TurndownService.prototype.escape = function (string) {
-      const escapes = [
-        [/\s\$/g, '$'],
-        [/\$\s/g, '$'],
-        [/\{align\*\}/g, '{cases}']
-        // [/\\/g, '\\\\'],
-        // [/\*/g, '\\*'],
-        // [/^-/g, '\\-'],
-        // [/^\+ /g, '\\+ '],
-        // [/^(=+)/g, '\\$1'],
-        // [/^(#{1,6}) /g, '\\$1 '],
-        // [/`/g, '\\`'],
-        // [/^~~~/g, '\\~~~'],
-        // [/\[/g, '\\['],
-        // [/\]/g, '\\]'],
-        // [/^>/g, '\\>'],
-        // [/_/g, '\\_'],
-        // [/^(\d+)\. /g, '$1\\. ']
-      ]
-      return escapes.reduce(function (accumulator, escape) {
-        return accumulator.replace(escape[0], escape[1])
-      }, string)
+    const abjad = {
+      1: 'الف',
+      2: 'ب',
+      3: 'ج',
+      4: 'د',
+      5: 'ه',
+      6: 'ز',
+      7: 'ص',
+      8: 'ط',
+      9: 'چ',
+      10: 'غ'
     }
-    // create an instance of Turndown service
-    const turndownService = new TurndownService({
-      // rules: COMMONMARK_RULES,
-      headingStyle: 'setext',
-      hr: '* * *',
-      bulletListMarker: '*',
-      codeBlockStyle: 'indented',
-      fence: '```',
-      emDelimiter: '_',
-      strongDelimiter: '**',
-      linkStyle: 'inlined',
-      linkReferenceStyle: 'full',
-      br: '  ',
-      blankReplacement: function (content, node) {
-        return node.isBlock ? '\n\n' : ''
-      },
-      keepReplacement: function (content, node) {
-        return node.isBlock ? '\n\n' + node.outerHTML + '\n\n' : node.outerHTML
-      },
-      defaultReplacement: function (content, node) {
-        return node.isBlock ? '\n\n' + content + '\n\n' : content
-      }
-    })
-    // turndownService.keep(['$'])
 
-    // convert HTML to Markdown
-    return turndownService.turndown(string)
-    // return string
+    return (type === 'number') ? number[this.order] : abjad[this.order]
   }
 }
 
@@ -94,7 +62,7 @@ class ChoiceList extends Collection {
   }
 
   getSelected () {
-    return this.list.find((item) => item.active)
+    return this.list.find((item) => (item.active || item.answer))
   }
 
   getLastOrder () {
@@ -108,17 +76,36 @@ class ChoiceList extends Collection {
     return order
   }
 
+  changeOrderToInt () {
+    this.list.forEach((item, index, choices) => {
+      choices[index].order = parseInt(choices[index].order)
+    })
+  }
+
+  sortByOrder () {
+    this.changeOrderToInt()
+    this.reorder()
+    return this.sortByKey('order')
+  }
+
+  reorder () {
+    this.list.forEach((choice, index) => {
+      choice.order = index
+    })
+  }
+
   addEmptyChoices (index) {
     for (let i = 0; i < index; i++) {
       this.addOneEmptyChoice()
     }
+    this.reorder()
   }
 
   addOneEmptyChoice () {
     const lastOrder = this.getLastOrder()
     const newChoice = new Choice({ order: lastOrder + 1 })
     this.list.push(newChoice)
-    // this.list = this.list.concat(newChoice)
+    this.sortByOrder()
   }
 }
 
