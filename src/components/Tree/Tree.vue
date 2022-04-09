@@ -42,13 +42,13 @@
           <q-input
             class="q-ma-md"
             filled
-            v-model="newName "
+            v-model="editedTitle "
             label="نام جدید "
           />
           <q-input
             class="q-ma-md"
             filled
-            v-model="newOrder"
+            v-model="editedOrder"
             label="ترتیب جدید "
           />
           <q-btn
@@ -64,7 +64,7 @@
           <q-input
             class="q-ma-md"
             filled
-            v-model="newName"
+            v-model="newTitle"
             label="نام "
           />
           <q-input
@@ -83,7 +83,7 @@
           </q-btn>
         </q-tab-panel>
         <q-tab-panel name="delete ">
-          <div class="text-subtitle1 ">آیا از حذف گرۀ " {{ selectedNode.name }} " اطمینان دارید؟</div>
+          <div class="text-subtitle1 ">آیا از حذف گرۀ " {{ selectedNode.title }} " اطمینان دارید؟</div>
           <q-btn
             color="red "
             :loading="loading "
@@ -134,8 +134,10 @@ export default {
       nodes: [],
       tab: 'edit',
       loading: false,
-      newName: '',
+      newTitle: '',
       newOrder: 1,
+      editedTitle: '',
+      editedOrder: 1,
       selectedNode: {},
       editDialog: false
     }
@@ -185,13 +187,14 @@ export default {
     },
 
     edit () {
+      this.inputsValue({ title: this.editedTitle, order: this.editedOrder })
       this.editNode()
     },
 
     addNode () {
       const id = this.selectedNode.id
       const getNode = this.$refs.tree.getNodeByKey(id)
-      this.$emit('newData', { title: this.newName, order: this.newOrder })
+      this.inputsValue({ title: this.newTitle, order: this.newOrder })
       const newNodeData = this.addNewNode()
       if (newNodeData) {
         getNode.children.unshift(new TreeNode({
@@ -204,13 +207,18 @@ export default {
       }
     },
 
+    inputsValue (newData) {
+      this.$emit('newData', { title: newData.title, order: newData.order })
+    },
+
     openEditMenu (node) {
-      this.newName = ''
-      this.newOrder = 1
       this.selectedNode = {
         id: node.id,
-        title: node.title
+        title: node.title,
+        order: node.order
       }
+      this.editedTitle = this.selectedNode.title
+      this.editedOrder = this.selectedNode.order
       this.$emit('selectedNode', this.selectedNode)
       this.editDialog = true
     },

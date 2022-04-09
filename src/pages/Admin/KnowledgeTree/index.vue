@@ -65,7 +65,7 @@ export default {
       this.newNode = newNode
     },
     edit () {
-      this.editNode(this.selectedNode.id)
+      this.editNode(this.selectedNode.id, this.newNode.title, this.newNode.order)
     }
   }
 }
