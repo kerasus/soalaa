@@ -47,14 +47,14 @@
         ></q-btn>
       </div>
     </div>
-    <div v-if="question.exams.list" :key="questionData.exams.list.length">
-      {{question.exams.list}}
-      <div v-for="(item, index) in questionData.exams.list" :key="index" class="flex row">
+    <div v-if="exams && lessons.list.length" :key="question.exams.list.length">
+      <div v-for="(item, index) in question.exams.list" :key="index" class="flex row">
+
         <div class="detail-box detail-box-first" :class="[imgPanelVisibility ? 'col-6' : 'col-3']">
           {{ item.title ? item.title : item.exam.title }}
         </div>
         <div class="detail-box detail-box-first" :class="[imgPanelVisibility ? 'col-6' : 'col-3']">
-          {{ getLessonById(item.sub_category_id).title }}
+          {{ getLessonTitleById(item) }}
         </div>
         <div class="detail-box detail-box-last" :class="[imgPanelVisibility ? 'col-6' : 'col-3']">
           {{ item.order }}
@@ -96,7 +96,9 @@ export default {
       default: new Question()
     }
   },
-  created () {},
+  created () {
+    console.log(this.question)
+  },
   data () {
     return {
       text: '',
@@ -119,6 +121,7 @@ export default {
     this.$nextTick(() => {
       this.question.exams.loading = false
     })
+    console.log(this.question)
   },
   methods: {
     attach () { // possible removal for attach exam
@@ -143,11 +146,13 @@ export default {
     },
     detach (item) {
       this.$emit('detach', item)
-    }
-  },
-  computed: {
-    getLessonById () {
-      return id => this.lessons.list.find(item => item.id === id)
+    },
+    getLessonTitleById (exam) {
+      const target = this.lessons.list.find(item => item.id === exam.sub_category_id || (exam.sub_category && item.id === exam.sub_category.id))
+      if (!target) {
+        return ''
+      }
+      return target.title
     }
   }
 }

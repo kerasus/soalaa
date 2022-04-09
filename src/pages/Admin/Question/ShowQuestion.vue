@@ -97,6 +97,7 @@ export default {
     this.enableLoading()
     // this.getPageReady()
     this.getQuestionById(this.getCurrentQuestionId())
+    this.loadSubcategories()
     this.loadExamList()
   },
   provide () {

@@ -108,12 +108,18 @@ const AdminActionOnQuestion = {
       // this.question.exams.loading = true
     },
     detachUnsavedExam (exam) {
-      this.question.exams.list = this.question.exams.list.filter(item => item.id !== exam.id)
+      this.question.exams.list = this.question.exams.list.filter(item => item.id !== exam.id && item.sub_category_id === exam.sub_category_id)
     },
     detachSavedExam (exam) {
-      this.$axios.post(API_ADDRESS.question.detach(this.question.id), [exam])
+      this.$axios.post(API_ADDRESS.question.detach(this.question.id), {
+        detaches: [{
+          exam_id: exam.exam.id,
+          order: exam.order,
+          sub_category_id: exam.sub_category.id
+        }]
+      })
         .then(response => {
-          console.log(response.data.data)
+          this.question = new Question(response.data.data)
         })
     },
     disableAllQuestionLoadings () {
