@@ -57,6 +57,14 @@
         label-style="font-size: 1.1em"
       />
     </div>
+    <div
+      v-if="question.logs && question.logs.list && question.logs.list.length > 0"
+    >
+      <log-list-component
+        :logs="question.logs"
+        @addComment="addComment"
+      />
+    </div>
   </div>
 </template>
 
@@ -75,6 +83,8 @@ import { ExamList } from 'src/models/Exam'
 import { QuestSubcategoryList } from 'src/models/QuestSubcategory'
 import { QuestionStatusList } from 'src/models/QuestionStatus'
 import ImagePanel from 'components/Question/QuestionPage/ImagePanel'
+import LogListComponent from 'components/QuestionBank/EditQuestion/Log/LogList'
+// import { Log, LogList } from 'src/models/Log'
 // import API_ADDRESS from 'src/api/Addresses'
 export default {
   name: 'EditQuestion',
@@ -87,7 +97,8 @@ export default {
     BtnBox,
     CommentBox,
     AttachExam,
-    QuestionDetails
+    QuestionDetails,
+    LogListComponent
   },
   mixins: [
     AdminActionOnQuestion
