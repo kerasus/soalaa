@@ -26,6 +26,7 @@
           style="padding-right: 24px;padding-top: 30px;"
         >
           <image-panel
+            :mode="'show'"
             @closePanelBtnClicked="openCloseImgPanel"
           />
         </div>

@@ -40,12 +40,12 @@
 export default {
   name: 'ImagePanel',
   props: {
-    // mode: {
-    //   type: String,
-    //   default () {
-    //     return 'create'
-    //   }
-    // }
+    mode: {
+      type: String,
+      default () {
+        return 'show'
+      }
+    }
   },
   components: {},
   data () {
