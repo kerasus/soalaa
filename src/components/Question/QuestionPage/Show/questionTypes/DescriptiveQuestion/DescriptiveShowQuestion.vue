@@ -46,7 +46,7 @@
 import { Question } from 'src/models/Question'
 import VueKatex from 'components/VueKatex'
 export default {
-  name: 'DescriptiveShowQ',
+  name: 'DescriptiveShowQuestion',
   components: {
     VueKatex
   },

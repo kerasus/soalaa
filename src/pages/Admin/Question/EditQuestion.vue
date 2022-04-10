@@ -86,9 +86,9 @@ export default {
   components: {
     ImagePanel,
     Navbar,
-    DescriptiveQ: defineAsyncComponent(() => import('components/Question/QuestionPage/Edit/questionTypes/DescriptiveQ/DescriptiveQ')),
-    MultipleChoiceQ: defineAsyncComponent(() => import('components/Question/QuestionPage/Edit/questionTypes/MultipleChoiceQ/MultipleChoiceQ')),
-    MBTIQ: defineAsyncComponent(() => import('components/Question/QuestionPage/Edit/questionTypes/MBTIQ/MBTIQ')),
+    DescriptiveEditQuestion: defineAsyncComponent(() => import('components/Question/QuestionPage/Edit/questionTypes/DescriptiveQuestion/DescriptiveEditQuestion')),
+    MultipleChoiceEditQuestion: defineAsyncComponent(() => import('components/Question/QuestionPage/Edit/questionTypes/MultipleChoiceQuestion/MultipleChoiceEditQuestion')),
+    MBTIEditQuestion: defineAsyncComponent(() => import('components/Question/QuestionPage/Edit/questionTypes/MBTIQuestion/MBTIEditQuestion')),
     BtnBox,
     StatusChange,
     AttachExam,
@@ -130,13 +130,13 @@ export default {
     chosenComponent () {
       const cName = this.question.type.componentName
       if (cName === 'MultipleChoiceQ') {
-        return 'multiple-choice-q'
+        return 'multiple-choice-edit-question'
       }
       if (cName === 'DescriptiveQ') {
-        return 'descriptive-q'
+        return 'descriptive-edit-question'
       }
       if (cName === 'MBTIQ') {
-        return 'm-b-t-i-q'
+        return 'm-b-t-i-edit-question'
       }
     },
     setQuestionContents () {
