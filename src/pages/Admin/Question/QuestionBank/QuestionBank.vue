@@ -1,7 +1,7 @@
 <template>
   <div class="main-container">
     <div class="row">
-      <div class="col-12 question-bank-header">
+      <div ref="header" class="col-12 question-bank-header">
         <QuestionBankHeader/>
       </div>
       <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-xs-12 question-bank-filter">
@@ -14,7 +14,7 @@
         <div class="question-bank-content">
           <question-item v-if="questions.loading" :question="loadingQuestion"/>
           <template v-else>
-            <question-item v-for="question in questions.list" :key="question.id" :question="question" :origins="question.source_data.origins.questionOriginList[0]"/>
+            <question-item v-for="question in questions.list" :key="question.id" :question="question"/>
           </template>
         </div>
 
@@ -38,7 +38,6 @@ import QuestionFilter from 'components/Question/QuestionBank/QuestionFilter'
 import QuestionItem from 'components/Question/QuestionBank/QuestionItem'
 import pagination from 'components/Question/QuestionBank/Pagination'
 import { Question, QuestionList } from 'src/models/Question'
-import axios from 'axios'
 
 export default {
   name: 'QuestionBank',
@@ -72,39 +71,32 @@ export default {
     }
   },
   created () {
-    this.loadingQuestion.loading = true
-    this.questions.loading = true
     this.getQuestionData()
   },
   methods: {
     updatePage (page) {
-      const that = this
-      this.questions.loading = true
-      this.disablePagination = true
-      this.$axios.get(API_ADDRESS.question.indexMontaPaginate(page), {
-        params: this.filterQuestions
-      })
-        .then(response => {
-          that.questions = new QuestionList(response.data.data)
-          this.disablePagination = false
-        })
-        .catch(function (error) {
-          console.log(error)
-        })
+      this.getQuestionData(page)
     },
     filterItem (filter) {
       console.log('Filter Deleted !!!', filter)
     },
-    getQuestionData () {
-      const that = this
-      axios.get(API_ADDRESS.question.indexMonta)
-        .then(function (response) {
-          that.paginationMeta = response.data.meta
-          that.questions = new QuestionList(response.data.data)
-          console.log(that.questions)
+    getQuestionData (page) {
+      if (!page) {
+        page = 1
+      }
+      this.loadingQuestion.loading = true
+      this.questions.loading = true
+      this.$axios.get(API_ADDRESS.question.index([], page))
+        .then((response) => {
+          this.questions = new QuestionList(response.data.data)
+          this.paginationMeta = response.data.meta
+          this.loadingQuestion.loading = false
+          this.questions.loading = false
         })
         .catch(function (error) {
           console.log(error)
+          this.loadingQuestion.loading = false
+          this.questions.loading = false
         })
     }
   }

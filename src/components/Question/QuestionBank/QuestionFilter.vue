@@ -45,7 +45,6 @@
                 </div>
               </template>
             <tree
-                  class="filter-tree"
                   @ticked="tickedData"
                   ref="tree"
                   tick-strategy="strict"

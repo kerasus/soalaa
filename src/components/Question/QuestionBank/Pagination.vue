@@ -1,5 +1,6 @@
 <template>
   <div class="question-bank-pagination q-pa-lg flex flex-center">
+    {{ this.checkedStyle }}
     <q-pagination
       active-color="primary"
       outline
@@ -7,7 +8,7 @@
       v-model="checkedStyle"
       color="black"
       :max="meta.last_page"
-      :max-pages="6"
+      :max-pages="7"
       boundary-numbers
       @update:model-value="updatePage"
       :disable="disable"
@@ -41,12 +42,12 @@ export default {
   },
   data () {
     return {
-      checkedStyle: 0,
+      checkedStyle: 1,
       disableValue: false
     }
   },
   mounted () {
-    console.log(this.meta)
+    console.log(this.checkedStyle)
   },
   methods: {
     updatePage (val) {
