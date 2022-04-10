@@ -1,7 +1,7 @@
 <template>
   <div class="editQ-text-container">
     <q-linear-progress
-      v-if="this.question.loading"
+      v-if="loadingState"
       size="md"
       indeterminate
       rounded
@@ -51,12 +51,6 @@
       <status-change
         :statuses="questionStatuses"
         @update="changeStatus"
-      />
-      <q-inner-loading
-        :showing="question.exams.loading"
-        color="primary"
-        class="QComponents-inner-loading"
-        label-style="font-size: 1.1em"
       />
     </div>
     <div
@@ -115,12 +109,12 @@ export default {
       subCategoriesList: new QuestSubcategoryList(),
       questionStatuses: new QuestionStatusList(),
       isPanelOpened: false,
-      allTypes: new TypeList()
+      allTypes: new TypeList(),
+      totalLoading: false
     }
   },
   created () {
     this.enableLoading()
-    // this.getPageReady()
     this.getQuestionTypeForTypeId(this.question)
     this.loadExamList()
     this.loadSubcategories()
@@ -131,11 +125,7 @@ export default {
       providedQuestion: computed(() => this.question)
     }
   },
-  mounted () {
-    this.$nextTick(() => {
-      this.disableLoading()
-    })
-  },
+  mounted () {},
   methods: {
     chosenComponent () {
       const cName = this.question.type.componentName
@@ -156,10 +146,10 @@ export default {
       this.$refs.currentEditComponent.saveQuestion()
     },
     enableLoading () {
-      this.question.loading = true
+      this.totalLoading = true
     },
     disableLoading () {
-      this.question.loading = false
+      this.totalLoading = false
     },
     openCloseImgPanel () {
       this.isPanelOpened = !this.isPanelOpened

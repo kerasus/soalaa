@@ -1,7 +1,7 @@
 <template>
   <div class="showQ-text-container">
     <q-linear-progress
-      v-if="this.question.loading"
+      v-if="loadingState"
       size="md"
       indeterminate
       rounded
@@ -81,7 +81,6 @@ export default {
     BtnBox,
     CommentBox,
     AttachExam,
-    // QuestionDetails,
     LogListComponent
   },
   mixins: [
@@ -98,7 +97,8 @@ export default {
       subCategoriesList: new QuestSubcategoryList(),
       questionStatuses: new QuestionStatusList(),
       isPanelOpened: false,
-      allTypes: new TypeList()
+      allTypes: new TypeList(),
+      totalLoading: false
     }
   },
   created () {

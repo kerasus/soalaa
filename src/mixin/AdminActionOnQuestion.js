@@ -15,6 +15,11 @@ const AdminActionOnQuestion = {
       questionStatusId_pending_to_type: null
     }
   },
+  computed: {
+    loadingState () {
+      return !!(this.totalLoading || this.examList.loading || this.subCategoriesList.loading || this.questionStatuses.loading)
+    }
+  },
   methods: {
     getPageReady () {
       this.getQuestionType(this.question)
@@ -51,19 +56,12 @@ const AdminActionOnQuestion = {
       this.$axios.get(API_ADDRESS.question.show(questionId))
         .then(function (response) {
           that.question = new Question(response.data.data)
-          // const types = new TypeList(response.data.data)
-          // const optionQuestion = response.data.data.find(item => (item.value === 'konkur'))
-          // if (!optionQuestion) {
-          //   return this.$q.notify({
-          //     message: ' API با مشکل مواجه شد!',
-          //     color: 'negative'
-          //   })
-          // }
-          // that.setCurrentQuestionType(question, types)
           that.setQuestionTypeBasedOnId(that.question, types)
+          that.disableLoading()
         })
         .catch(function (error) {
           console.log(error)
+          that.disableLoading()
         })
     },
     updateQuestion (question) {
@@ -197,9 +195,7 @@ const AdminActionOnQuestion = {
       return currentRouteFullPath.replace(txtToRemove, '')
     },
     getCurrentQuestionId () {
-      if (this.$route.params.question_id) {
-        return this.$route.params.question_id
-      }
+      return this.$route.params.question_id
     },
     getCurrentQuestionMode () {
       if (this.readRouteName().includes('.Text')) {
@@ -259,48 +255,10 @@ const AdminActionOnQuestion = {
         .then((response) => {
           if (response.data.data) {
             that.question = new Question(response.data.data)
-            // that.checkTextCondition()
-            // that.getLogs()
-            // that.trueChoiceIndex = that.question.choices.list.findIndex((item) => item.answer)
-            // that.updateAttachList(response.data.data.exams)
           }
         })
         .catch((er) => {
           console.log(er)
-        })
-    },
-    checkTextCondition () {
-      return !!this.question.statement
-    },
-    setInsertedQuestions () {
-      this.$refs.qlayout.getContent()
-      const question = this.question
-      // set exams
-      question.exams = this.selectedQuizzes.map(item => {
-        return {
-          id: item.exam.id,
-          sub_category_id: item.sub_category.id,
-          order: item.order
-        }
-      })
-      question.type_id = this.optionQuestionId
-      question
-        .create()
-        .then((response) => {
-          this.$store.dispatch('loading/overlayLoading', { loading: false, message: '' })
-          const questionId = response.data.data.id
-          this.questionType = 'typeText'
-          this.question.statement = ''
-          this.question.choices.list.forEach((item) => {
-            item.title = ''
-          })
-          this.$q.notify({
-            message: 'ثبت با موفقیت انجام شد',
-            color: 'green',
-            icon: 'thumb_up'
-          })
-          // window.open('Admin.Question.Create', '_blank').focus()
-          this.$router.push({ name: 'Admin.Question.Show', params: { question_id: questionId } })
         })
     },
     loadSubcategories () {
@@ -309,20 +267,17 @@ const AdminActionOnQuestion = {
         .then((response) => {
           this.subCategoriesList = new QuestSubcategoryList(response.data.data)
           this.subCategoriesList.loading = false
-          // console.log('this.subCategoriesList', this.subCategoriesList)
         })
         .catch(() => {
           this.subCategoriesList.loading = false
         })
     },
     loadExamList () {
-      // const that = this
       this.examList.loading = true
       this.$axios.get(API_ADDRESS.exam.base())
         .then((response) => {
           this.examList = new ExamList(response.data.data)
           this.examList.loading = false
-          // console.log('that.examList', that.examList)
         })
         .catch(() => {
           this.examList.loading = false

@@ -11,6 +11,7 @@
           option-value="id"
           option-label="display_title"
           :rules="selectorRules"
+          :loading="statuses.loading"
         />
       </div>
       <div class="detail-box" :class="[imgPanelVisibility ? 'col-6' : 'col-3']">
@@ -20,7 +21,7 @@
       <div class="detail-box detail-box-last-of-row" :class="[imgPanelVisibility ? 'col-6' : 'col-3']">
         <q-btn
           unelevated
-          :loading="saveBtnLoading"
+          :loading="statuses.loading"
           color="primary"
           label="ذخیره"
           class="save-btn default-detail-btn"
