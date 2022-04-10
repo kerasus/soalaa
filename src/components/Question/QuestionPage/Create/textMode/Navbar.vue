@@ -2,7 +2,10 @@
   <div class="question-txtMode-navbar">
     <div class="fit row wrap justify-between">
       <div class="col-auto">
-        <div class="question-type row items-center relative-position">
+        <div
+          v-if="mode === 'create'"
+          class="question-type row items-center relative-position"
+        >
           <div class="col">نوع سوال</div>
           <div>
             <q-tabs
@@ -14,13 +17,13 @@
               :breakpoint="0"
               class="col question-type-tabs"
             >
-              <q-tab
+              <q-route-tab
                 v-for="(item, index) in componentTabs.list"
                 :key="index"
                 class="question-type-tab"
                 :name="item.value"
                 :label="item.tabName"
-                @click="chooseComponent(item.value)"
+                :to="getCurrentRoute(item.componentName)"
               />
             </q-tabs>
             <q-skeleton
@@ -35,15 +38,21 @@
       </div>
       <div class="col-auto">
         <div
-          v-ripple.early
-          class="relative-position container bg-primary text-black flex flex-center question-pics"
+          v-if="!(mode === 'create')"
+          class="question-img-btn"
         >
-          <q-img
-            src="/img/img-panel-btn.png"
-            spinner-color="white"
-            class="question-pics-img"
-          />
-          <div class="text-white text-center question-pics-txt">تصاویر سوال</div>
+          <div
+            v-ripple.early
+            class="relative-position container bg-primary text-black flex flex-center question-pics"
+            @click="panelClicked"
+          >
+            <q-img
+              src="/img/img-panel-btn.png"
+              spinner-color="white"
+              class="question-pics-img"
+            />
+            <div class="text-white text-center question-pics-txt">تصاویر سوال</div>
+          </div>
         </div>
       </div>
     </div>
@@ -53,68 +62,106 @@
 <script>
 import AdminActionOnQuestion from 'src/mixin/AdminActionOnQuestion'
 import { Question } from 'src/models/Question'
-import { QuestionType, TypeList } from 'src/models/QuestionType'
+import { TypeList } from 'src/models/QuestionType'
 
 export default {
   name: 'Navbar',
-  props: {},
-  data () {
-    return {
-      questionTab: '',
-      componentTabs: new TypeList(),
-      qTabLoading: false
+  props: {
+    mode: {
+      type: String,
+      default () {
+        return 'create'
+      }
     }
   },
-  inject: {
-    question: {
-      from: 'question', // this is optional if using the same key for injection
-      default: new Question()
+  data () {
+    return {
+      question: new Question(),
+      questionTab: '',
+      componentTabs: new TypeList([
+        {
+          id: '6225f4828044517f52500c04',
+          type: 'question_type',
+          value: 'konkur',
+          updated_at: '2022-03-07 15:33:14',
+          created_at: '2022-03-07 15:33:14'
+        },
+        {
+          id: '6225f4828044517f52500c05',
+          type: 'question_type',
+          value: 'psychometric',
+          updated_at: '2022-03-07 15:33:14',
+          created_at: '2022-03-07 15:33:14'
+        },
+        {
+          id: '6225f4828044517f52500c06',
+          type: 'question_type',
+          value: 'descriptive',
+          updated_at: '2022-03-07 15:33:14',
+          created_at: '2022-03-07 15:33:14'
+        }
+      ]),
+      qTabLoading: false
     }
   },
   mixins: [
     AdminActionOnQuestion
   ],
   created () {
-    console.log('Navbar created')
     this.qTabLoading = true
   },
   mounted () {
-    console.log('Navbar mounted')
-    this.getQuestionType()
+    this.$nextTick(() => {
+      this.qTabLoading = false
+    })
+  },
+  computed: {
+    doesHaveImage () {
+      // return !!()
+      return null
+    }
   },
   methods: {
-    chooseComponent (item) {
-      this.question.type = new QuestionType({
-        value: item
-      })
-      const cName = this.question.type.componentName
-      if (cName === 'MultipleChoiceQ') {
-        this.$router.push({ name: 'Admin.Question.Create.Text.MultipleChoice' })
-      } else if (cName === 'DescriptiveQ') {
-        this.$router.push({ name: 'Admin.Question.Create.Text.Descriptive' })
-      } else if (cName === 'MBTIQ') {
-        this.$router.push({ name: 'Admin.Question.Create.Text.MBTI' })
-      }
-      setTimeout(() => {
-        location.reload()
-      }, 1000)
+    panelClicked () {
+      this.$emit('panelClicked')
     },
-    setInitialType () {
-      this.questionTab = this.question.type.value
+    getCurrentRoute (componentName) {
+      const currentQuestionMode = this.getCurrentQuestionMode()
+      if (currentQuestionMode === 'Text') {
+        if (componentName === 'MultipleChoiceQ') {
+          return { name: 'Admin.Question.Create.' + currentQuestionMode + '.MultipleChoice' }
+        } else if (componentName === 'DescriptiveQ') {
+          return { name: 'Admin.Question.Create.' + currentQuestionMode + '.Descriptive' }
+        } else if (componentName === 'MBTIQ') {
+          return { name: 'Admin.Question.Create.' + currentQuestionMode + '.MBTI' }
+        }
+      } else {
+        if (componentName === 'MultipleChoiceQ') {
+          return {
+            name: 'Admin.Question.Create.' + currentQuestionMode,
+            params: {
+              questionType: 'multipleChoice'
+            }
+          }
+        } else if (componentName === 'DescriptiveQ') {
+          return {
+            name: 'Admin.Question.Create.' + currentQuestionMode,
+            params: {
+              questionType: 'descriptive'
+            }
+          }
+        } else if (componentName === 'MBTIQ') {
+          return {
+            name: 'Admin.Question.Create.' + currentQuestionMode,
+            params: {
+              questionType: 'mbti'
+            }
+          }
+        }
+      }
     }
   },
-  watch: {
-    componentTabs: function () {
-      // this.chooseComponent(this.componentTabs.list[0])
-    }
-    // ,
-    // questionTab: {
-    //   handler (newValue, oldValue) {
-    //     this.chooseComponent(newValue)
-    //   },
-    //   deep: true
-    // }
-  }
+  watch: {}
 }
 </script>
 

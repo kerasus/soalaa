@@ -69,10 +69,11 @@
           <div class="expansion-body">
             <q-separator dark size="2px" vertical class="vertical-separator"/>
             <q-list class="list-expansion">
+<!--              Todo : toxic Traits!!!!!-->
               <q-item
                 v-for="(subItem , i) in item.children"
                 :key="i"
-                :to="{ name: subItem.routeName }"
+                :to="{ name: subItem.routeName, params: subItem.params }"
                 class="list-child-item"
                 exact-active-class="active-route"
               >
@@ -135,7 +136,15 @@ export default {
           routeName: null,
           active: false,
           children: [
-            { displayName: 'ثبت سوال', routeName: 'Admin.Question.Create.Image', active: false },
+            {
+              displayName: 'ثبت سوال',
+              routeName: 'Admin.Question.Create.Image',
+              params: {
+                questionType: 'multipleChoice'
+              },
+              active: false
+            },
+            // { displayName: 'ثبت سوال', routeName: 'a', active: false },
             { displayName: 'کارخانه سوال', routeName: 'Admin.Question.Factory', active: false },
             { displayName: 'بانک سوال', routeName: 'Admin.Question.Bank', active: false }
           ]

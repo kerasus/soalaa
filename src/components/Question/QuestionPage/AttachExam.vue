@@ -47,16 +47,20 @@
         ></q-btn>
       </div>
     </div>
-    <div v-if="exams" :key="question.exams.list.length">
+    <div v-if="exams && lessons.list.length" :key="question.exams.list.length">
       <div v-for="(item, index) in question.exams.list" :key="index" class="flex row">
+
         <div class="detail-box detail-box-first" :class="[imgPanelVisibility ? 'col-6' : 'col-3']">
-          {{ item.title }}
+          {{ item.title ? item.title : item.exam.title }}
         </div>
         <div class="detail-box detail-box-first" :class="[imgPanelVisibility ? 'col-6' : 'col-3']">
-          {{ getLessonById(item.sub_category_id).title }}
+          {{ getLessonTitleById(item) }}
         </div>
         <div class="detail-box detail-box-last" :class="[imgPanelVisibility ? 'col-6' : 'col-3']">
           {{ item.order }}
+        </div>
+        <div class="detail-box detail-box-last" :class="[imgPanelVisibility ? 'col-6' : 'col-3']">
+          <q-btn unelevated icon="mdi-delete" class="draft-btn default-detail-btn" @click="detach(item)" />
         </div>
       </div>
     </div>
@@ -88,11 +92,13 @@ export default {
   },
   inject: {
     question: {
-      from: 'question', // this is optional if using the same key for injection
+      from: 'providedQuestion', // this is optional if using the same key for injection
       default: new Question()
     }
   },
-  created () {},
+  created () {
+    console.log(this.question)
+  },
   data () {
     return {
       text: '',
@@ -107,13 +113,15 @@ export default {
       ],
       selectorRules: [
         v => v !== null || 'پر کردن این فیلد الزامی است.'
-      ]
+      ],
+      questionData: this.question
     }
   },
   mounted () {
     this.$nextTick(() => {
       this.question.exams.loading = false
     })
+    console.log(this.question)
   },
   methods: {
     attach () { // possible removal for attach exam
@@ -135,11 +143,16 @@ export default {
       }
       question.exams.list.push(new Exam(exam))
       this.$emit('examAttached', question)
-    }
-  },
-  computed: {
-    getLessonById () {
-      return id => this.lessons.list.find(item => item.id === id)
+    },
+    detach (item) {
+      this.$emit('detach', item)
+    },
+    getLessonTitleById (exam) {
+      const target = this.lessons.list.find(item => item.id === exam.sub_category_id || (exam.sub_category && item.id === exam.sub_category.id))
+      if (!target) {
+        return ''
+      }
+      return target.title
     }
   }
 }
