@@ -79,6 +79,17 @@ const AdminActionOnQuestion = {
           this.redirectToShowPage(response.data.data.id)
         })
     },
+    changeStatus (newStatus) {
+      const that = this
+      axios.post(API_ADDRESS.question.status.changeStatus(this.$route.params.question_id), {
+        status_id: newStatus.changeState.id,
+        comment: newStatus.commentAdded
+      })
+        .then((response) => {
+          that.question.status = response.data.data.status
+          that.getLogs(that.question.id)
+        })
+    },
     createQuestionImage (question) {
       const formData = new FormData()
       // formData.append('status_id', statusId);
@@ -240,9 +251,7 @@ const AdminActionOnQuestion = {
       const that = this
       axios.get(API_ADDRESS.question.log.base(questionId))
         .then(function (response) {
-          console.log('response.data.data', response.data.data)
           that.question.logs = new LogList(response.data.data)
-          console.log('this.question.logs', that.question.logs)
         })
         .catch(function (error) {
           console.log(error)

@@ -6,7 +6,7 @@
         <div class="detail-box-title">تعییر وضعیت</div>
         <q-select
           borderless
-          v-model="selectedStatus"
+          v-model="newStatus.changeState"
           :options="statuses.list"
           option-value="id"
           option-label="display_title"
@@ -15,7 +15,7 @@
       </div>
       <div class="detail-box" :class="[imgPanelVisibility ? 'col-6' : 'col-3']">
         <div class="detail-box-title">افزودن کامنت</div>
-        <q-input borderless v-model="order" type="text" />
+        <q-input borderless v-model="newStatus.commentAdded" type="text" />
       </div>
       <div class="detail-box detail-box-last-of-row" :class="[imgPanelVisibility ? 'col-6' : 'col-3']">
         <q-btn
@@ -23,7 +23,8 @@
           :loading="saveBtnLoading"
           color="primary"
           label="ذخیره"
-          class="save-btn default-detail-btn "
+          class="save-btn default-detail-btn"
+          @click="sendStatus"
         />
       </div>
     </div>
@@ -35,7 +36,7 @@ import { Question } from 'src/models/Question'
 import { QuestionStatusList } from 'src/models/QuestionStatus'
 
 export default {
-  name: 'CommentBox',
+  name: 'StatusChange',
   props: {
     imgPanelVisibility: {
       type: Boolean,
@@ -57,9 +58,7 @@ export default {
   data () {
     return {
       model: '',
-      options: [
-        'سه‌آ - دی ماه 1402', 'سه‌آ - دی ماه 1403', 'سه‌آ - دی ماه 1404', 'سه‌آ - دی ماه 1405', 'سه‌آ - دی ماه 1406'
-      ],
+      options: [],
       text: '',
       draftBtnLoading: false,
       saveBtnLoading: false,
@@ -67,10 +66,19 @@ export default {
       order: null,
       selectorRules: [
         v => v !== null || 'پر کردن این فیلد الزامی است.'
-      ]
+      ],
+      newStatus: {
+        changeState: null,
+        commentAdded: null
+      }
     }
   },
   methods: {
+    sendStatus () {
+      this.$emit('update', this.newStatus)
+      this.newStatus.changeState = ''
+      this.newStatus.commentAdded = null
+    }
   },
   computed: {
     getLessonById () {

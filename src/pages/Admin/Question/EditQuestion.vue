@@ -49,6 +49,7 @@
       </div>
       <comment-box
         :statuses="questionStatuses"
+        @update="changeStatus"
       />
       <q-inner-loading
         :showing="question.exams.loading"
@@ -121,8 +122,9 @@ export default {
     this.enableLoading()
     // this.getPageReady()
     this.getQuestionTypeForTypeId(this.question)
-    this.setAllQuestionLoadings()
     this.loadExamList()
+    this.loadSubcategories()
+    this.getQuestionStatus()
   },
   provide () {
     return {

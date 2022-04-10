@@ -49,7 +49,7 @@
         @saveQuestion="saveQuestion"
       />
     </div>
-    <comment-box
+    <status-change
       :statuses="questionStatuses"
     />
     <q-inner-loading
@@ -63,7 +63,7 @@
 
 <script>
 import AttachExam from 'components/Question/QuestionPage/AttachExam'
-import CommentBox from 'components/Question/QuestionPage/StatusChange'
+import StatusChange from 'components/Question/QuestionPage/StatusChange'
 import QuestionDetails from 'components/Question/QuestionPage/Create/textMode/QuestionDetails'
 import BtnBox from 'components/Question/QuestionPage/BtnBox'
 import QuestionField from 'components/Question/QuestionPage/QuestionField.vue'
@@ -79,7 +79,7 @@ export default {
   components: {
     QuestionField,
     BtnBox,
-    CommentBox,
+    StatusChange,
     AttachExam,
     QuestionDetails
   },
