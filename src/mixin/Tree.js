@@ -68,7 +68,6 @@ const mixinTree = {
         this.$axios.put(API_ADDRESS.tree.editNode(id), { title: title, order: order })
           .then(res => {
             resolve(res)
-            console.log(res)
           }).catch(err => {
             reject(err)
             console.log(err)
