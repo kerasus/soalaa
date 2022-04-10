@@ -112,7 +112,7 @@ export default {
   },
   mounted () {
     this.$nextTick(() => {
-      this.disableLoading()
+      // this.disableLoading()
     })
   },
   methods: {
