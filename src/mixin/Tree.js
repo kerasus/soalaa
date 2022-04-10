@@ -56,22 +56,27 @@ const mixinTree = {
             if (callback) {
               callback(response)
             }
+            resolve(response)
           }).catch(err => {
-            console.log(err)
+            reject(err)
           })
       })
     },
 
     editNode (id, title, order) {
-      this.$axios.put(API_ADDRESS.tree.editNode(id), { title: title, order: order })
-        .then(res => {
-          console.log(res)
-        }).catch(err => {
-          console.log(err)
-        })
+      return new Promise((resolve, reject) => {
+        this.$axios.put(API_ADDRESS.tree.editNode(id), { title: title, order: order })
+          .then(res => {
+            resolve(res)
+            console.log(res)
+          }).catch(err => {
+            reject(err)
+            console.log(err)
+          })
+      })
     },
 
-    setTicked (refKey, key, state) {
+    setTickedMode (refKey, key, state) {
       this.$refs[refKey].setNodesTicked(key, state)
     }
   }
