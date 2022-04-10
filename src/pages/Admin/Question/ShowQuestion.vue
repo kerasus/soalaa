@@ -34,7 +34,7 @@
       </div>
     </div>
     <div class="relative-position">
-      <question-details class="col-9"/>
+<!--      <question-details class="col-9"/>-->
       <attach-exam
         :exams="examList"
         :lessons="subCategoriesList"
@@ -57,7 +57,7 @@
 import { computed, defineAsyncComponent } from 'vue'
 import { Question } from 'src/models/Question'
 import Navbar from 'components/Question/QuestionPage/Create/textMode/Navbar'
-import QuestionDetails from 'components/Question/QuestionPage/Create/textMode/QuestionDetails'
+// import QuestionDetails from 'components/Question/QuestionPage/Create/textMode/QuestionDetails'
 import AdminActionOnQuestion from 'src/mixin/AdminActionOnQuestion'
 import { QuestionType, TypeList } from 'src/models/QuestionType'
 import AttachExam from 'components/Question/QuestionPage/AttachExam'
@@ -80,7 +80,7 @@ export default {
     BtnBox,
     CommentBox,
     AttachExam,
-    QuestionDetails,
+    // QuestionDetails,
     LogListComponent
   },
   mixins: [
