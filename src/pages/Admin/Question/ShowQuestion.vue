@@ -40,12 +40,14 @@
         :lessons="subCategoriesList"
         @detach="detachSavedExam"
       />
-      <q-inner-loading
-        :showing="question.exams.loading"
-        color="primary"
-        class="QComponents-inner-loading"
-        label-style="font-size: 1.1em"
-      />
+      <div
+        v-if="question.logs && question.logs.list && question.logs.list.length > 0"
+      >
+        <log-list-component
+          :logs="question.logs"
+          @addComment="addComment"
+        />
+      </div>
     </div>
   </div>
 </template>
@@ -65,6 +67,7 @@ import { ExamList } from 'src/models/Exam'
 import { QuestSubcategoryList } from 'src/models/QuestSubcategory'
 import { QuestionStatusList } from 'src/models/QuestionStatus'
 import ImagePanel from 'components/Question/QuestionPage/ImagePanel'
+import LogListComponent from 'components/QuestionBank/EditQuestion/Log/LogList'
 // import API_ADDRESS from 'src/api/Addresses'
 export default {
   name: 'ShowQuestion',
@@ -77,7 +80,8 @@ export default {
     BtnBox,
     CommentBox,
     AttachExam,
-    QuestionDetails
+    QuestionDetails,
+    LogListComponent
   },
   mixins: [
     AdminActionOnQuestion
