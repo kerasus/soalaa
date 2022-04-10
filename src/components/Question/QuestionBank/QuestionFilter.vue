@@ -45,10 +45,10 @@
                 </div>
               </template>
             <tree
-                  @ticked="tickedData"
-                  ref="tree"
-                  tick-strategy="strict"
-                  :get-node-by-id="getNodeById"
+              @ticked="tickedData"
+              ref="tree"
+              tick-strategy="strict"
+              :get-node-by-id="getNodeById"
             />
           </q-expansion-item>
         </q-card-section>
@@ -72,16 +72,20 @@ export default {
   mixins: [mixinTree],
   components: { Tree },
   created () {
-    this.showTree('tree', 'test')
+    this.showTree('tree', this.getRootNode('test'))
       .then(() => {})
       .catch(err => {
         console.log(err)
       })
   },
   methods: {
-    tickedData (data) {
-      this.filters = data
-      console.log(this.filters)
+    tickedData (value) {
+      this.filters = value
+      console.log('ticked', value)
+      this.testArr = []
+      value.forEach(val => {
+        this.testArr.push(val.id)
+      })
     },
     deleteFilterObject (item) {
       this.$emit('deleteFilter', item)

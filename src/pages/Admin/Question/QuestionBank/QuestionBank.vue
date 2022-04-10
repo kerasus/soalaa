@@ -5,7 +5,7 @@
         <QuestionBankHeader/>
       </div>
       <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-xs-12 question-bank-filter">
-        <QuestionFilter @delete-filter="filterItem"/>
+        <QuestionFilter ref="filter" @delete-filter="deleteFilterItem"/>
       </div>
       <div class="col-xl-9 col-lg-9 col-md-9 col-sm-12 col-xs-12">
         <div class="question-bank-toolbar">
@@ -77,8 +77,9 @@ export default {
     updatePage (page) {
       this.getQuestionData(page)
     },
-    filterItem (filter) {
-      console.log('Filter Deleted !!!', filter)
+    deleteFilterItem (filter) {
+      console.log('Filter Deleted !!!', filter.id)
+      this.$refs.filter.setTicked('tree', filter.id, false)
     },
     getQuestionData (page) {
       if (!page) {
