@@ -138,6 +138,9 @@ const AdminActionOnQuestion = {
     redirectToShowPage (questionId) {
       this.$router.push({ name: 'Admin.Question.Show', params: { question_id: questionId } })
     },
+    redirectToEditPage () {
+      this.$router.push({ name: 'Admin.Question.Edit', params: { question_id: this.$route.params.question_id } })
+    },
     addComment (eventData) {
       axios.post(API_ADDRESS.log.addComment(eventData.logId), { comment: eventData.text })
         .then(response => {
@@ -210,12 +213,9 @@ const AdminActionOnQuestion = {
       return currentRouteFullPath.replace(txtToRemove, '')
     },
     getCurrentQuestionId () {
-      let currentRouteFullPath = this.readRouteFullPath()
-      const txtToRemove = '/question/'
-      if (currentRouteFullPath.includes('edit')) {
-        currentRouteFullPath = currentRouteFullPath.replace('/edit', '')
+      if (this.$route.params.question_id) {
+        return this.$route.params.question_id
       }
-      return currentRouteFullPath.replace(txtToRemove, '')
     },
     getCurrentQuestionMode () {
       if (this.readRouteName().includes('.Text')) {

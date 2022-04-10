@@ -117,25 +117,39 @@ export default {
     }, 100)
     this.getPageReady()
   },
-  mounted () {
-    // this.$nextTick(() => {
-    //   this.setAllQuestionLoadings()
-    //   this.loadExamList()
-    //   this.loadSubcategories()
-    //   this.getQuestionStatus()
-    //   this.disableAllQuestionLoadings()
-    // })
-  },
+  mounted () {},
   methods: {
     saveQuestion () {
-      // this.allProps.setContentToQuestion = true
+      if (this.getContent()) {
+        this.question.author.push({ full_name: this.$store.getters['Auth/user'].full_name, id: this.$store.getters['Auth/user'].id })
+        const question = {
+          author: this.question.author,
+          choices: this.question.choices.list,
+          exams: [
+            {
+              id: '622ae211d1a3433f16636253',
+              order: '2007',
+              sub_category_id: '60b7875428f350277f04c5e7'
+            }
+          ],
+          descriptive_answer: this.question.descriptive_answer,
+          statement: this.question.statement,
+          level: 1,
+          sub_category_id: 1,
+          recommended_time: 0,
+          type_id: this.question.type_id
+        }
+        this.createQuestion(question)
+      }
     },
     getContent () {
+      let status = false
       if (this.validateContent()) {
         this.question.statement = this.getContentOfQuestionParts('QuestionStatement')
         this.question.descriptive_answer = this.getContentOfQuestionParts('DescriptiveAnswer')
+        status = true
       }
-      console.log('this.question', this.question)
+      return status
     },
     getContentOfChoice (index) {
       return this.$refs[this.defaultRefName + 'Choice' + index][0].getContent()
