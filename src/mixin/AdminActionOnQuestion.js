@@ -67,7 +67,7 @@ const AdminActionOnQuestion = {
         })
     },
     updateQuestion (question) {
-      // const that = this
+      const that = this
       // this.$store.dispatch('loading/overlayLoading', { loading: true, message: '' })
       axios.put(API_ADDRESS.question.update(question.id), question)
         .then((response) => {
@@ -76,7 +76,7 @@ const AdminActionOnQuestion = {
             color: 'green',
             icon: 'thumb_up'
           })
-          this.redirectToShowPage(response.data.data.id)
+          that.redirectToShowPage(response.data.data.id)
         })
     },
     changeStatus (newStatus) {
@@ -137,7 +137,6 @@ const AdminActionOnQuestion = {
     },
     redirectToShowPage (questionId) {
       this.$router.push({ name: 'Admin.Question.Show', params: { question_id: questionId } })
-      location.reload()
     },
     redirectToEditPage () {
       this.$router.push({ name: 'Admin.Question.Edit', params: { question_id: this.$route.params.question_id } })

@@ -95,7 +95,6 @@ export default {
   methods: {
     saveQuestion () {
       if (this.getContent()) {
-        // console.log('this.question', this.question)
         const question = {
           ...this.question,
           choices: this.question.choices.list,
