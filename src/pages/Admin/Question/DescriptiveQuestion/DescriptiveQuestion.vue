@@ -63,7 +63,7 @@
 </template>
 
 <script>
-import AttachExam from 'components/Question/QuestionPage/AttachExam'
+import AttachExam from 'components/Question/QuestionPage/AttachExam/AttachExam'
 import StatusChange from 'components/Question/QuestionPage/StatusChange'
 import QuestionDetails from 'components/Question/QuestionPage/Create/textMode/QuestionDetails'
 import BtnBox from 'components/Question/QuestionPage/BtnBox'

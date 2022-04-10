@@ -35,10 +35,10 @@
           :rules="numberRules"
         />
       </div>
-<!--      <div class="detail-box detail-box-last" :class="[imgPanelVisibility ? 'col-6' : 'col-3']">-->
-<!--        <div class="detail-box-title">درجه سختی</div>-->
-<!--        <q-select borderless v-model="model" :options="options"/>-->
-<!--      </div>-->
+      <!--      <div class="detail-box detail-box-last" :class="[imgPanelVisibility ? 'col-6' : 'col-3']">-->
+      <!--        <div class="detail-box-title">درجه سختی</div>-->
+      <!--        <q-select borderless v-model="model" :options="options"/>-->
+      <!--      </div>-->
       <div class="detail-box detail-box-last-of-row-1" :class="[imgPanelVisibility ? 'col-6' : 'col-3']">
         <q-btn
           unelevated
@@ -75,7 +75,7 @@ import { ExamList } from 'src/models/Exam'
 import { QuestSubcategoryList } from 'src/models/QuestSubcategory'
 
 export default {
-  name: 'AttachExam',
+  name: 'AttachExamModal',
   props: {
     imgPanelVisibility: {
       type: Boolean,
