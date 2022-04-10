@@ -148,6 +148,9 @@ const API_ADDRESS = {
     confirm (questionId) {
       return lumenServer + '/question/confirm/' + questionId
     },
+    unconfirm (questionId) {
+      return lumenServer + '/question/unconfirm/' + questionId
+    },
     uploadImage (questionId) {
       return lumenServer + '/question/upload/' + questionId
     }
@@ -180,6 +183,9 @@ const API_ADDRESS = {
     },
     getNodeByType (nodeType) {
       return treeServer + '/tree?type=' + nodeType
+    },
+    editNode (id) {
+      return treeServer + '/tree/' + id
     }
   }
 }
