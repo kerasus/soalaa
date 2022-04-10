@@ -77,7 +77,13 @@ const mixinTree = {
     },
 
     setTickedMode (refKey, key, state) {
-      this.$refs[refKey].setNodesTicked(key, state)
+      const ref = (this.$refs[refKey] && this.$refs[refKey][0] && this.$refs[refKey][0].$el) ? this.$refs[refKey][0]
+        : (this.$refs[refKey] && this.$refs[refKey].$el) ? this.$refs[refKey]
+            : null
+      if (!ref) {
+        return
+      }
+      ref.setNodesTicked(key, state)
     }
   }
 }
