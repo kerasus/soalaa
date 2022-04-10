@@ -5,6 +5,9 @@ export function drawer (state) {
 export function appBar (state) {
   return state.appBar
 }
+export function confirmDialog (state) {
+  return state.confirmDialog
+}
 
 export function windowSize (state) {
   return state.windowSize
