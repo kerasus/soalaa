@@ -95,19 +95,19 @@ const routes = [
                         path: 'mbti',
                         name: 'Admin.Question.Create.Text.MBTI',
                         breadcrumbs: { title: 'ام بی تی آی', loading: false },
-                        component: () => import('components/Question/QuestionPage/Create/textMode/questionTypes/MBTIQ/MBTIQ.vue')
+                        component: () => import('pages/Admin/Question/MBTIQuestion/MBTIQuestion.vue')
                       },
                       {
                         path: 'descriptive',
                         name: 'Admin.Question.Create.Text.Descriptive',
                         breadcrumbs: { title: 'تشریحی', loading: false },
-                        component: () => import('components/Question/QuestionPage/Create/textMode/questionTypes/DescriptiveQ/DescriptiveQ.vue')
+                        component: () => import('pages/Admin/Question/DescriptiveQuestion/DescriptiveQuestion.vue')
                       },
                       {
                         path: 'multipleChoice',
                         name: 'Admin.Question.Create.Text.MultipleChoice',
                         breadcrumbs: { title: 'تستی', loading: false },
-                        component: () => import('components/Question/QuestionPage/Create/textMode/questionTypes/MultipleChoiceQ/MultipleChoiceQ.vue')
+                        component: () => import('pages/Admin/Question/MultipleChoiceQuestion/MultipleChoiceQuestion.vue')
                       }
                     ]
                   },

@@ -58,9 +58,9 @@ import { QuestSubcategoryList } from 'src/models/QuestSubcategory'
 export default {
   name: 'CreateText',
   components: {
-    // DescriptiveQ: defineAsyncComponent(() => import('components/Question/QuestionPage/Create/textMode/questionTypes/DescriptiveQ/DescriptiveQ')),
-    // MultipleChoiceQ: defineAsyncComponent(() => import('components/Question/QuestionPage/Create/textMode/questionTypes/MultipleChoiceQ/MultipleChoiceQ')),
-    // MBTIQ: defineAsyncComponent(() => import('components/Question/QuestionPage/Create/textMode/questionTypes/MBTIQ/MBTIQ')),
+    // DescriptiveQuestion: defineAsyncComponent(() => import('components/Question/QuestionPage/Create/textMode/questionTypes/DescriptiveQuestion/DescriptiveQuestion')),
+    // MultipleChoiceQuestion: defineAsyncComponent(() => import('components/Question/QuestionPage/Create/textMode/questionTypes/MultipleChoiceQuestion/MultipleChoiceQuestion')),
+    // MBTIQuestion: defineAsyncComponent(() => import('components/Question/QuestionPage/Create/textMode/questionTypes/MBTIQuestion/MBTIQuestion')),
     BtnBox,
     CommentBox,
     AttachExam,
