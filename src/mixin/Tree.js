@@ -2,9 +2,9 @@ import API_ADDRESS from 'src/api/Addresses'
 
 const mixinTree = {
   methods: {
-    showTree (refKey, nodeType) {
+    showTree (refKey, callback) {
       return new Promise((resolve, reject) => {
-        this.getRootNode(nodeType)
+        callback
           .then(response => {
             const node = response.data.data
             let treeComponent = this.$refs[refKey]
@@ -30,17 +30,23 @@ const mixinTree = {
       return this.$axios.get(API_ADDRESS.tree.getNodeByType(nodeType))
     },
 
+    getNode (id) {
+      return this.$axios.get(API_ADDRESS.tree.getNodeById(id))
+    },
+
     getNodeById (id, done, fail, loadChildOfNode) {
-      this.$axios.get(API_ADDRESS.tree.getNodeById(id))
-        .then(response => {
-          const node = response.data.data
-          loadChildOfNode(node, done)
-        }).catch(err => {
-          console.log(err)
-          if (fail) {
-            fail()
-          }
-        })
+      return new Promise((resolve, reject) => {
+        this.getNode(id)
+          .then(response => {
+            const node = response.data.data
+            resolve(loadChildOfNode(node, done))
+          }).catch(err => {
+            console.log(err)
+            if (fail) {
+              reject(fail())
+            }
+          })
+      })
     },
 
     createNode (parentId, title, order, callback) {
@@ -54,6 +60,19 @@ const mixinTree = {
             console.log(err)
           })
       })
+    },
+
+    editNode (id, title, order) {
+      this.$axios.put(API_ADDRESS.tree.editNode(id), { title: title, order: order })
+        .then(res => {
+          console.log(res)
+        }).catch(err => {
+          console.log(err)
+        })
+    },
+
+    setTicked (refKey, key, state) {
+      this.$refs[refKey].setNodesTicked(key, state)
     }
   }
 }
