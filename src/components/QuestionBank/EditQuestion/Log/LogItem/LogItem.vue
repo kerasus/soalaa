@@ -1,13 +1,11 @@
 <template>
   <div class="log-item">
-    {{ log }}
     <div class="log-container">
       <div class="row q-gutter-none" >
         <div class="col col-1">
           <q-icon name="mdi-circle-medium" style="font-size: 2em; color: rgba(0, 0, 0, 0.54);"/>
         </div>
         <div class="col">
-          {{log.causer.full_name}}
           <div class="row justify-between">
             <div class="col col-10">
               <div>
@@ -25,90 +23,69 @@
             v-if="log.properties.old.status || log.properties.new.status"
             class="log-status"
           >
-            وضعیت
-            <template v-if="log.properties.old.status">
+              وضعیت
+              <template v-if="log.properties.old.status">
               از
-              <v-chip
-                color="orange"
-                text-color="white"
-              >
-                {{ log.properties.old.status.display_title }}
-              </v-chip>
-            </template>
-            <template v-if="log.properties.new.status">
+                <q-chip
+                  v-if="log.properties.old.status && log.properties.old.status.display_title"
+                  dense
+                  color="orange"
+                  text-color="white"
+                  size="sm"
+                  :label="log.properties.old.status.display_title"
+                />
+              </template>
+              <template v-if="log.properties.new.status">
               به
-              <v-chip
-                color="red"
-                text-color="white"
-              >
-                {{ log.properties.new.status.display_title }}
-              </v-chip>
-            </template>
-            تغییر یافت.
+                <q-chip
+                  dense
+                  color="red"
+                  text-color="white"
+                  size="sm"
+                  :label="log.properties.new.status.display_title"
+                />
+              تغییر یافت.
+              </template>
           </div>
-
           <div
-            class="log-status"
+            v-for="(comment, index) in log.comments.list"
+            :key="index"
           >
-                        وضعیت از
-            <q-chip
-              v-if="log.properties.old.status && log.properties.old.status.display_title"
-              dense
-              color="orange"
-              text-color="white"
-              size="sm"
-              :label="log.properties.old.status.display_title"
-            />
+            <div class="log-author">
+              {{ comment.user.full_name }}:
+            </div>
+            <div class="log-comment">
+              <div class="comment-text">
+                {{ comment.comment }}
+              </div>
+              <div class="comment-date">
+                {{ comment.shamsiDate('created_at').dateTime }}
+              </div>
+            </div>
           </div>
-<!--            به-->
-<!--            <q-chip-->
-<!--              dense-->
-<!--              color="red"-->
-<!--              text-color="white"-->
-<!--              size="sm"-->
-<!--              :label="log.properties.new.status.display_title"-->
-<!--            />-->
-<!--            تغییر یافت.-->
-<!--          </div>-->
-<!--          <div-->
-<!--            v-for="(comment, index) in log.comments.list"-->
-<!--            :key="index"-->
-<!--          >-->
-<!--            <div class="log-author">-->
-<!--              {{ comment.user.full_name }}:-->
-<!--            </div>-->
-<!--            <div class="log-comment">-->
-<!--              <div class="comment-text">-->
-<!--                {{ comment.comment }}-->
-<!--              </div>-->
-<!--              <div class="comment-date">-->
-<!--                {{ comment.shamsiDate('created_at').dateTime }}-->
-<!--              </div>-->
-<!--            </div>-->
-<!--          </div>-->
-<!--          <q-btn-->
-<!--            v-if="!canComment"-->
-<!--            color="blue"-->
-<!--            class="full-width log-comment-btn"-->
-<!--            label="افزودن کامنت"-->
-<!--            size="sm"-->
-<!--            @click="canComment = true"-->
-<!--          />-->
-<!--          <q-input-->
-<!--            v-if="canComment"-->
-<!--            v-model="commentText"-->
-<!--            filled-->
-<!--            type="textarea"-->
-<!--            class="q-mt-md"-->
-<!--          />-->
-<!--          <q-btn-->
-<!--            v-if="canComment"-->
-<!--            color="blue"-->
-<!--            class="full-width log-comment-btn"-->
-<!--            label="ارسال کامنت"-->
-<!--            size="sm"-->
-<!--            @click="addComment"-->
-<!--          />-->
+          <q-btn
+            v-if="!canComment"
+            color="blue"
+            class="full-width log-comment-btn"
+            label="افزودن کامنت"
+            size="sm"
+            @click="canComment = true"
+          />
+          <q-input
+            v-if="canComment"
+            v-model="commentText"
+            filled
+            type="textarea"
+            class="q-mt-md"
+          />
+          <q-btn
+            v-if="canComment"
+            color="blue"
+            class="full-width log-comment-btn"
+            label="ارسال کامنت"
+            size="sm"
+            @click="addComment"
+          />
         </div>
       </div>
     </div>
