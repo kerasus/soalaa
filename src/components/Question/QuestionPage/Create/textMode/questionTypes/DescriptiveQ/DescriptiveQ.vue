@@ -41,6 +41,7 @@
     <attach-exam
       :exams="examList"
       :lessons="subCategoriesList"
+      :buffer="true"
     />
     <div class="attach-btn row">
       <question-details class="col-9"/>
@@ -121,17 +122,20 @@ export default {
   methods: {
     saveQuestion () {
       if (this.getContent()) {
+        const exams = []
+        this.question.exams.list.forEach(item => {
+          exams.push({
+            id: item.exam_id,
+            exam_id: item.exam_id,
+            sub_category_id: item.sub_category_id,
+            order: item.order
+          })
+        })
         this.question.author.push({ full_name: this.$store.getters['Auth/user'].full_name, id: this.$store.getters['Auth/user'].id })
         const question = {
           author: this.question.author,
           choices: this.question.choices.list,
-          exams: [
-            {
-              id: '622ae211d1a3433f16636253',
-              order: '2007',
-              sub_category_id: '60b7875428f350277f04c5e7'
-            }
-          ],
+          exams: exams,
           descriptive_answer: this.question.descriptive_answer,
           statement: this.question.statement,
           level: 1,
@@ -245,5 +249,47 @@ export default {
 }
 </style>
 <style lang="scss">
-
+// USED IN MANY OTHER COMPONENTS
+.default-questions-card {
+  background: #FFFFFF;
+  box-shadow: -2px -4px 10px rgba(255, 255, 255, 0.6), 2px 4px 10px rgba(112, 108, 162, 0.05) #{"/* rtl:ignore */"};
+  border-radius: 30px;
+  .q-card__section {
+    padding: 15px 20px !important;
+  }
+  .default-Qcard-title {
+    font-size: 14px;
+    line-height: 24px;
+  }
+  .default-Qcard-box {
+    align-items: last baseline;
+    font-weight: normal;
+    font-size: 14px;
+    line-height: 24px;
+    .default-Qcard-img {
+      text-align: left #{"/* rtl:ignore */"};
+      .q-img {
+        border-radius: 0px 0px 1px 20px #{"/* rtl:ignore */"};
+        padding: 0 !important;
+        .q-img__image {
+          padding: 0 !important;
+        }
+      }
+    }
+  }
+}
+.multiple-choice-Answer {
+  .answer-box {
+    .q-radio__inner {
+      margin-left: 7px #{"/* rtl:ignore */"} !important;
+    }
+  }
+  .default-Qcard-title{
+    justify-content: space-between;
+    display: flex;
+    .q-btn {
+      padding: 4px 16px !important;
+    }
+  }
+}
 </style>

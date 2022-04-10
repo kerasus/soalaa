@@ -1,5 +1,4 @@
 import API_ADDRESS from 'src/api/Addresses'
-import axios from 'axios'
 import { QuestionStatusList } from 'src/models/QuestionStatus'
 import { Question } from 'src/models/Question'
 import { ExamList } from 'src/models/Exam'
@@ -7,6 +6,7 @@ import { QuestSubcategoryList } from 'src/models/QuestSubcategory'
 // eslint-disable-next-line no-unused-vars
 import { QuestionType, TypeList } from 'src/models/QuestionType'
 import { Log, LogList } from 'src/models/Log'
+import { AttachedExamList } from 'src/models/AttachedExam'
 const AdminActionOnQuestion = {
   data () {
     return {
@@ -29,7 +29,7 @@ const AdminActionOnQuestion = {
       this.$store.dispatch('loading/overlayLoading', true)
       this.$store.dispatch('loading/overlayLoading', false)
       // .loadApiResource()
-      axios.post(API_ADDRESS.question.base, question)
+      this.$axios.post(API_ADDRESS.question.base, question)
         .then(response => {
           // console.log(response.data)
           this.$q.notify({
@@ -48,7 +48,7 @@ const AdminActionOnQuestion = {
     },
     getQuestionById (questionId, question, types) {
       const that = this
-      axios.get(API_ADDRESS.question.show(questionId))
+      this.$axios.get(API_ADDRESS.question.show(questionId))
         .then(function (response) {
           that.question = new Question(response.data.data)
           // const types = new TypeList(response.data.data)
@@ -69,7 +69,7 @@ const AdminActionOnQuestion = {
     updateQuestion (question) {
       const that = this
       // this.$store.dispatch('loading/overlayLoading', { loading: true, message: '' })
-      axios.put(API_ADDRESS.question.update(question.id), question)
+      this.$axios.put(API_ADDRESS.question.update(question.id), question)
         .then((response) => {
           this.$q.notify({
             message: 'ویرایش با موفقیت انجام شد',
@@ -81,7 +81,7 @@ const AdminActionOnQuestion = {
     },
     changeStatus (newStatus) {
       const that = this
-      axios.post(API_ADDRESS.question.status.changeStatus(this.$route.params.question_id), {
+      this.$axios.post(API_ADDRESS.question.status.changeStatus(this.$route.params.question_id), {
         status_id: newStatus.changeState.id,
         comment: newStatus.commentAdded
       })
@@ -116,22 +116,6 @@ const AdminActionOnQuestion = {
       // Todo : Temp
       // this.question.exams.loading = true
     },
-    // ToDo Jasmine should do it exam hamaro pak mikone id yeksan agar exam yeki bashe pak mikone
-    detachUnsavedExam (exam) {
-      this.question.exams.list = this.question.exams.list.filter(item => item.id !== exam.id && item.sub_category_id === exam.sub_category_id)
-    },
-    detachSavedExam (exam) {
-      this.$axios.post(API_ADDRESS.question.detach(this.question.id), {
-        detaches: [{
-          exam_id: exam.exam.id,
-          order: exam.order,
-          sub_category_id: exam.sub_category.id
-        }]
-      })
-        .then(response => {
-          this.question = new Question(response.data.data)
-        })
-    },
     disableAllQuestionLoadings () {
       this.question.loading = false
     },
@@ -142,7 +126,7 @@ const AdminActionOnQuestion = {
       this.$router.push({ name: 'Admin.Question.Edit', params: { question_id: this.$route.params.question_id } })
     },
     addComment (eventData) {
-      axios.post(API_ADDRESS.log.addComment(eventData.logId), { comment: eventData.text })
+      this.$axios.post(API_ADDRESS.log.addComment(eventData.logId), { comment: eventData.text })
         .then(response => {
           // iterating over the array to find the log that has changed
           for (let i = 0; i < this.question.logs.list.length; i++) {
@@ -156,7 +140,7 @@ const AdminActionOnQuestion = {
     },
     getQuestionType (question) {
       const that = this
-      axios.get(API_ADDRESS.option.base + '?type=question_type')
+      this.$axios.get(API_ADDRESS.option.base + '?type=question_type')
         .then(function (response) {
           const types = new TypeList(response.data.data)
           const optionQuestion = response.data.data.find(item => (item.value === 'konkur'))
@@ -178,7 +162,7 @@ const AdminActionOnQuestion = {
     },
     getQuestionTypeForTypeId (question) {
       const that = this
-      axios.get(API_ADDRESS.option.base + '?type=question_type')
+      this.$axios.get(API_ADDRESS.option.base + '?type=question_type')
         .then(function (response) {
           const types = new TypeList(response.data.data)
           const optionQuestion = response.data.data.find(item => (item.value === 'konkur'))
@@ -249,7 +233,7 @@ const AdminActionOnQuestion = {
     },
     getLogs (questionId) {
       const that = this
-      axios.get(API_ADDRESS.question.log.base(questionId))
+      this.$axios.get(API_ADDRESS.question.log.base(questionId))
         .then(function (response) {
           that.question.logs = new LogList(response.data.data)
         })
@@ -320,23 +304,47 @@ const AdminActionOnQuestion = {
         })
     },
     loadSubcategories () {
-      const that = this
+      this.subCategoriesList.loading = true
       return this.$axios.get(API_ADDRESS.questionSubcategory.base)
         .then((response) => {
-          that.subCategoriesList = new QuestSubcategoryList(response.data.data)
+          this.subCategoriesList = new QuestSubcategoryList(response.data.data)
+          this.subCategoriesList.loading = false
           // console.log('this.subCategoriesList', this.subCategoriesList)
         })
         .catch(() => {
+          this.subCategoriesList.loading = false
         })
     },
     loadExamList () {
       // const that = this
+      this.examList.loading = true
       this.$axios.get(API_ADDRESS.exam.base())
         .then((response) => {
           this.examList = new ExamList(response.data.data)
+          this.examList.loading = false
           // console.log('that.examList', that.examList)
         })
         .catch(() => {
+          this.examList.loading = false
+        })
+    },
+    attachExam (data) {
+      this.$axios.post(API_ADDRESS.question.attach, {
+        exam_id: data.exam.id,
+        sub_category_id: data.sub_category.id,
+        question_id: this.question.id,
+        order: data.order
+      })
+        .then(response => {
+          this.question.exams = new AttachedExamList(response.data.data.exams)
+        })
+    },
+    detachExam (data) {
+      this.$axios.post(API_ADDRESS.question.detach(this.question.id), {
+        detaches: [data]
+      })
+        .then(response => {
+          this.question.exams = new AttachedExamList(response.data.data.exams)
         })
     }
   }

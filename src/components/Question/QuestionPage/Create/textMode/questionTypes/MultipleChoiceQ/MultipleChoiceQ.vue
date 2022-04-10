@@ -110,6 +110,7 @@
     <attach-exam
       :exams="examList"
       :lessons="subCategoriesList"
+      :buffer="true"
     />
     <div class="attach-btn row">
       <question-details class="col-9"/>
@@ -198,17 +199,20 @@ export default {
   methods: {
     saveQuestion () {
       if (this.getContent()) {
+        const exams = []
+        this.question.exams.list.forEach(item => {
+          exams.push({
+            id: item.exam_id,
+            exam_id: item.exam_id,
+            sub_category_id: item.sub_category_id,
+            order: item.order
+          })
+        })
         this.question.author.push({ full_name: this.$store.getters['Auth/user'].full_name, id: this.$store.getters['Auth/user'].id })
         const question = {
           author: this.question.author,
           choices: this.question.choices.list,
-          exams: [
-            {
-              id: '622ae211d1a3433f16636253',
-              order: '2006',
-              sub_category_id: '60b7875428f350277f04c5e7'
-            }
-          ],
+          exams: exams,
           descriptive_answer: this.question.descriptive_answer,
           statement: this.question.statement,
           level: 1,
@@ -330,6 +334,7 @@ export default {
   }
 }
 </script>
+
 <style scoped lang="scss">
 .multiple-choice-Q {
   padding-top: 35px;
@@ -391,6 +396,7 @@ export default {
   }
 }
 </style>
+
 <style lang="scss">
 // USED IN MANY OTHER COMPONENTS
 .default-questions-card {

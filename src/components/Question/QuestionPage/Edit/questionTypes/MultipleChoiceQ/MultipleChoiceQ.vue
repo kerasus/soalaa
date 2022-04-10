@@ -153,7 +153,6 @@ export default {
     },
     saveQuestion () {
       if (this.getContent()) {
-        // console.log('this.question', this.question)
         const question = {
           ...this.question,
           choices: this.question.choices.list,
@@ -189,7 +188,6 @@ export default {
           item.id = index
         })
         this.question.descriptive_answer = this.getContentOfQuestionParts('DescriptiveAnswer')
-        // console.log('this.question', this.question)
         status = true
       }
       return status

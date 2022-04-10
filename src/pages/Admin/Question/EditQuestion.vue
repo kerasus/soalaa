@@ -38,7 +38,8 @@
       <attach-exam
         :exams="examList"
         :lessons="subCategoriesList"
-        @detach="detachSavedExam"
+        @attach="attachExam"
+        @detach="detachExam"
       />
       <div class="attach-btn row">
         <question-details class="col-9"/>
@@ -47,7 +48,7 @@
           @saveQuestion="saveQuestion"
         />
       </div>
-      <comment-box
+      <status-change
         :statuses="questionStatuses"
         @update="changeStatus"
       />
@@ -70,6 +71,7 @@
 </template>
 
 <script>
+// detachUnsavedExam
 /* eslint-disable no-var */
 import { computed, defineAsyncComponent } from 'vue'
 import { Question } from 'src/models/Question'
@@ -78,15 +80,13 @@ import QuestionDetails from 'components/Question/QuestionPage/Create/textMode/Qu
 import AdminActionOnQuestion from 'src/mixin/AdminActionOnQuestion'
 import { QuestionType, TypeList } from 'src/models/QuestionType'
 import AttachExam from 'components/Question/QuestionPage/AttachExam'
-import CommentBox from 'components/Question/QuestionPage/StatusChange'
+import StatusChange from 'components/Question/QuestionPage/StatusChange'
 import BtnBox from 'components/Question/QuestionPage/BtnBox'
 import { ExamList } from 'src/models/Exam'
 import { QuestSubcategoryList } from 'src/models/QuestSubcategory'
 import { QuestionStatusList } from 'src/models/QuestionStatus'
 import ImagePanel from 'components/Question/QuestionPage/ImagePanel'
 import LogListComponent from 'components/QuestionBank/EditQuestion/Log/LogList'
-// import { Log, LogList } from 'src/models/Log'
-// import API_ADDRESS from 'src/api/Addresses'
 export default {
   name: 'EditQuestion',
   components: {
@@ -96,7 +96,7 @@ export default {
     MultipleChoiceQ: defineAsyncComponent(() => import('components/Question/QuestionPage/Edit/questionTypes/MultipleChoiceQ/MultipleChoiceQ')),
     MBTIQ: defineAsyncComponent(() => import('components/Question/QuestionPage/Edit/questionTypes/MBTIQ/MBTIQ')),
     BtnBox,
-    CommentBox,
+    StatusChange,
     AttachExam,
     QuestionDetails,
     LogListComponent

@@ -29,7 +29,11 @@
         <upload-image v-model="question" title="پاسخ سوال" field-key="answer_photos"/>
       </div>
     </div>
-    <AttachExam :exams="examList" :lessons="subCategoriesList" @detach="detachUnsavedExam" />
+    <attach-exam
+      :exams="examList"
+      :lessons="subCategoriesList"
+      :buffer="true"
+    />
     <div class="attach-btn row">
       <question-details class="col-9"/>
       <btn-box

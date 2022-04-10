@@ -38,7 +38,8 @@
       <attach-exam
         :exams="examList"
         :lessons="subCategoriesList"
-        @detach="detachSavedExam"
+        @attach="attachExam"
+        @detach="detachExam"
       />
       <div
         v-if="question.logs && question.logs.list && question.logs.list.length > 0"
