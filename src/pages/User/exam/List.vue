@@ -7,7 +7,7 @@
     <!--    <vue-confirm-dialog />-->
     <div class="fit row wrap justify-center items-start content-start"
     >
-      <div class="col col-9">
+      <div class="col col-9 examList-container">
         <!--        ToDo : ProgressLinear-->
         <!--        <progress-linear :active="loadingList" />-->
         <q-banner
@@ -23,15 +23,14 @@
             <div class="row table-header"
                  style="padding-bottom: 12px;"
             >
-              <div class="col col-3"
-                   style="padding-right: 24px;"
+              <div class="col col-1"/>
+              <div class="col col-3 text-center examList-title-text"
               >
-                عنوان
+                عنوان آزمون
               </div>
-              <div class="col col-2"
-                   style="padding-right: 24px;"
+              <div class="col col-3 text-center examList-title-text"
               >
-                زمان شروع آزمون
+                شروع آزمون
               </div>
               <div class="col col-2"
                    v-if="false"
@@ -44,11 +43,11 @@
               >
                 میزان تاخیر مجاز
               </div>
-              <div class="col col-7"
-                   style="padding-right: 40px;"
+              <div class="col col-4 text-center examList-title-text"
               >
                 عملیات
               </div>
+              <div class="col col-1"/>
             </div>
             <div class="row exam-info-bar"
                  v-for="item in exams.list"
@@ -63,16 +62,17 @@
                   class="d-flex exam-list-sheet"
                 >
                   <div class="row table-row justify-center">
-                    <div class="col col-12 col-md-3 pr-7 justify-center"
+                    <div class="col col-1"/>
+                    <div class="col col-12 col-md-3 pr-7 justify-center text-center examList-content-text"
                     >
                       {{ item.title }}
                     </div>
-                    <div class="col col-12 col-md-2"
+                    <div class="col col-12 col-md-3 text-center examList-content-text"
                     >
-                      <span class="d-inline-block-md d-none">
-                        زمان شروع آزمون:
+                      {{ item.shamsiDate('start_at').time }}
+                      <span class="examList-start-date">
+                        {{ item.shamsiDate('start_at').date }}
                       </span>
-                      {{ item.shamsiDate('start_at').dateTime }}
                     </div>
                     <div class="col col-12 col-md-2"
                          v-if="false"
@@ -91,19 +91,21 @@
                       {{ item.delay_time }}
                       دقیقه
                     </div>
-                    <div class="col col-12 col-md-7"
+                    <div class="col col-12 col-md-4 examList-action-section"
                     >
                       <q-btn
                         v-if="item.exam_actions.can_register"
-                        style="color: #00c753"
+                        class="exam-action-big-btn exam-btn-text"
+                        style="background: #4CAF50"
                         flat
                         @click="registerExam(item)"
                       >
-                        ثبت نام
+                        ثبت نام در آزمون
                       </q-btn>
                       <q-btn
                         v-if="item.exam_actions.can_start"
-                        style="color: #ffc107"
+                        class="exam-action-big-btn exam-btn-text"
+                        style="background: #9690E4"
                         flat
                         @click="goToParticipateExamPage(item)"
                       >
@@ -111,8 +113,8 @@
                       </q-btn>
                       <q-btn
                         v-if="item.exam_actions.can_continue"
-                        color="purple"
-                        style="color: purple"
+                        class="exam-action-medium-btn exam-btn-text"
+                        style="background: #9690E4"
                         flat
                         @click="continueExam(item)"
                       >
@@ -128,7 +130,8 @@
                       </q-btn>
                       <q-btn
                         v-if="item.exam_actions.can_see_report"
-                        style="color: #00b5e6"
+                        class="exam-action-medium-btn exam-btn-text"
+                        style="background: #FFB74D"
                         flat
                         @click="goToResult(item)"
                       >
@@ -136,23 +139,39 @@
                       </q-btn>
                       <template v-if="item.booklet_url">
                         <q-btn
-                          v-for="(booklet, bookletIndex) in item.booklet_url.filter( bookletItem => !!bookletItem.questions_booklet_url)"
-                          :key="'questions_booklet_url-'+bookletIndex"
-                          style="color: #ffc107"
+                          :key="'questions_booklet_url-'+1"
+                          class="exam-action-small-btn exam-btn-text"
+                          style="background: #71C5F4"
                           flat
-                          @click="downloadBooklet(booklet.questions_booklet_url)"
+                          @click="downloadBooklet(item.booklet_url[1].questions_booklet_url)"
                         >
-                          {{ booklet.category_title }}
                         </q-btn>
                         <q-btn
-                          v-for="(booklet, bookletIndex) in item.booklet_url.filter( bookletItem => !!bookletItem.descriptive_answers_booklet_url)"
-                          :key="'descriptive_answers_booklet_url-'+bookletIndex"
-                          style="color: #00b5e6"
+                          :key="'questions_booklet_url-'+1"
+                          class="exam-action-small-btn exam-btn-text"
+                          style="background: #F67D7A"
+
                           flat
-                          @click="downloadBooklet(booklet.descriptive_answers_booklet_url)"
+                          @click="downloadBooklet(item.booklet_url[1].descriptive_answers_booklet_url)"
                         >
-                          پاسخ
-                          {{ booklet.category_title }}
+                        </q-btn>
+                        <q-btn
+                          :key="'questions_booklet_url-'+0"
+                          class="exam-action-small-btn exam-btn-text"
+                          style="background: #F67D7A"
+
+                          flat
+                          @click="downloadBooklet(item.booklet_url[0].questions_booklet_url)"
+                        >
+                        </q-btn>
+                        <q-btn
+                          :key="'questions_booklet_url-'+0"
+                          class="exam-action-small-btn exam-btn-text"
+                          style="background: #F67D7A"
+
+                          flat
+                          @click="downloadBooklet(item.booklet_url[0].descriptive_answers_booklet_url)"
+                        >
                         </q-btn>
                       </template>
                       <q-btn
@@ -164,6 +183,7 @@
                         {{ item.holding_status }}
                       </q-btn>
                     </div>
+                    <div class="col col-1"/>
                   </div>
                 </div>
               </div>
@@ -319,7 +339,9 @@ export default {
 
 <style scoped>
 .exam-list-sheet {
-  background: var(--surface-1);;
+  background: #FFFFFF;
+  box-shadow: -2px -4px 10px rgba(255, 255, 255, 0.6), 2px 4px 10px rgba(112, 108, 162, 0.05);
+  border-radius: 20px;
   min-height: 50px;
 }
 
@@ -349,10 +371,69 @@ export default {
 }
 
 .exam-info-bar .col {
-  padding: 6px 12px;
+  padding: 12px 0;
+}
+
+.exam-info-bar .q-btn__content {
+  padding: 0;
 }
 
 .table-row {
   align-items: center;
+}
+</style>
+
+<style lang="scss" scoped>
+.examList-container {
+  width: 88.2%;
+  .exam-info-bar {
+    .examList-title-text {
+      font-style: normal;
+      font-weight: 500;
+      font-size: 16px;
+      line-height: 28px;
+      color: #65677F;
+    }
+    .examList-content-text {
+      font-style: normal;
+      font-weight: 400;
+      font-size: 14px;
+      line-height: 24px;
+      color: #23263B;
+    }
+    .examList-action-section {
+      display: flex;
+      justify-content: center;
+      .exam-btn-text {
+        font-style: normal;
+        font-weight: 500;
+        font-size: 14px;
+        line-height: 24px;
+        display: flex;
+        align-items: center;
+        text-align: center;
+        color: #FFFFFF;
+      }
+      .exam-action-big-btn {
+        width: 208px;
+        height: 40px;
+        border-radius: 10px;
+      }
+      .exam-action-medium-btn {
+        padding: 0;
+        width: 96px;
+        height: 40px;
+        border-radius: 10px;
+        margin-right: 16px;
+      }
+      .exam-action-small-btn {
+        width: 40px;
+        height: 40px;
+        border-radius: 10px;
+        margin-right: 16px;
+      }
+
+    }
+  }
 }
 </style>
