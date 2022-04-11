@@ -97,6 +97,9 @@ const API_ADDRESS = {
   },
   question: {
     indexMonta: lumenServer + '/question/search-monta',
+    bank: {
+      page: (page) => lumenServer + '/exam-question/attach/show/6245afa20569e1374540cb88?page=' + page
+    },
     index (statuses, page) {
       statuses = statuses.join('&statuses[]=')
       if (statuses) {
