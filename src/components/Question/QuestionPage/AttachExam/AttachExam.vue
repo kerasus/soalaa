@@ -1,7 +1,8 @@
 <template>
   <div class="exam-details">
-    <button @click="alert = true">alert</button>
-    <q-dialog v-model="alert">
+    <button @click="modal = true">modal</button>
+
+    <q-dialog v-model="modal">
       <q-card class="attach-exam-card">
         <q-card-section>
           <div class="question-details">
@@ -53,18 +54,19 @@
               </div>
             </div>
             <div class="box-title title-show-exams">آزمون‌های تعریف شده</div>
-            <div class="flex row exam-result-box">
-              <div class="col-6 exam-result-title">
-                آزمون
+            <div class="attached-exam-box">
+              <div class="flex row exam-result-box">
+                <div class="col-6 exam-result-title">
+                  آزمون
+                </div>
+                <div class="col-3 exam-result-title">
+                  درس
+                </div>
+                <div class="col-1 exam-result-title">
+                  ترتیب
+                </div>
               </div>
-              <div class="col-3 exam-result-title">
-                درس
-              </div>
-              <div class="col-1 exam-result-title">
-                ترتیب
-              </div>
-            </div>
-            <div v-if="exams && lessons.list.length" :key="question.exams.list.length">
+              <div v-if="exams && lessons.list.length" :key="question.exams.list.length">
             <div v-for="(item, index) in question.exams.list" :key="index" class="flex row attached-exam">
               <div class="detail-box exam-result attached-exam-title  detail-box-first col-7">
                 {{ item.exam.title }}
@@ -86,6 +88,15 @@
               </div>
             </div>
           </div>
+            </div>
+          </div>
+          <div class="text-right close-btn-box" >
+            <q-btn
+              class="close-btn"
+              label="بستن"
+              color="primary"
+              @click="modal = false"
+            />
           </div>
         </q-card-section>
       </q-card>
@@ -145,7 +156,7 @@ export default {
         v => v !== null || 'پر کردن این فیلد الزامی است.'
       ],
       questionData: this.question,
-      alert: false
+      modal: false
     }
   },
   methods: {
@@ -220,6 +231,11 @@ export default {
   line-height: 28px;
   text-align: right #{"/* rtl:ignore */"};
   color: #23263B;
+  .attached-exam-box {
+    margin-bottom: 10px;
+    max-height: 216px;
+    overflow: scroll;
+  }
   .title-show-exams {
     margin-top: 40px;
   }
@@ -231,6 +247,7 @@ export default {
     line-height: 24px;
     color: #65677F;
     margin-bottom: 16px;
+    min-width: 58px;
   }
   .exam-result-box {
     margin-top: 16px;
@@ -390,6 +407,18 @@ export default {
         color: #FFFFFF;
       }
     }
+  }
+}
+.close-btn-box {
+  .close-btn {
+    color: #FFFFFF;
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 24px;
+    background: #9690E4;
+    border-radius: 10px;
+    width: 96px;
+    height: 40px;
   }
 }
 </style>
