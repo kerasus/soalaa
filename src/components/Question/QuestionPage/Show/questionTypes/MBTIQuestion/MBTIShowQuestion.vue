@@ -4,7 +4,7 @@
 
 <script>
 export default {
-  name: 'MBTIQ',
+  name: 'MBTIShowQuestion',
   data () {
     return {}
   }
