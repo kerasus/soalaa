@@ -128,14 +128,17 @@ const API_ADDRESS = {
         if (!pagination) {
           pagination = 0
         }
-        return lumenServer + '/activity-log?subject_id=' + questionId + '&subject=question&title=update&description=update_question_status&with_pagination=0'
+        return lumenServer + '/activity-log?subject_id=' + questionId + '&subject=question&with_pagination=0'
       }
     },
     base: lumenServer + '/exam-question/attach',
     createAndAttach: () => lumenServer + '/attacexam-question/h/',
     create: lumenServer + '/question',
     attachSubCategoryToQuestion: lumenServer + '/exam-question/attach/sub-category',
-    updateQuestion (questionId) {
+    update (questionId) {
+      return lumenServer + '/question/' + questionId
+    },
+    show (questionId) {
       return lumenServer + '/question/' + questionId
     },
     attach: lumenServer + '/exam-question/attach/v2',
