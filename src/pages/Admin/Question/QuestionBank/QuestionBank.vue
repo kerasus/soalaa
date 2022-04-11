@@ -35,7 +35,7 @@ import API_ADDRESS from 'src/api/Addresses'
 import QuestionBankHeader from 'components/Question/QuestionBank/components/QuestionBankHeader'
 import QuestionToolBar from 'components/Question/QuestionBank/QuestionToolBar'
 import QuestionFilter from 'components/Question/QuestionBank/QuestionFilter'
-import QuestionItem from 'components/Question/QuestionBank/QuestionItem'
+import QuestionItem from 'components/Question/QuestionItem/QuestionItem'
 import pagination from 'components/Question/QuestionBank/Pagination'
 import { Question, QuestionList } from 'src/models/Question'
 
@@ -105,11 +105,6 @@ export default {
 </script>
 
 <style>
-
-.theme-v1-box-shadow {
-  box-shadow: -2px -4px 10px rgba(255, 255, 255, 0.6), 2px 4px 10px rgba(112, 108, 162, 0.05);
-  border-radius: 20px;
-}
 
 .main-container {
   padding: 0 100px 0 96px;
