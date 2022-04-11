@@ -35,7 +35,7 @@ import API_ADDRESS from 'src/api/Addresses'
 import QuestionBankHeader from 'components/Question/QuestionBank/components/QuestionBankHeader'
 import QuestionToolBar from 'components/Question/QuestionBank/QuestionToolBar'
 import QuestionFilter from 'components/Question/QuestionBank/QuestionFilter'
-import QuestionItem from 'components/Question/QuestionBank/QuestionItem'
+import QuestionItem from 'components/Question/QuestionItem/QuestionItem'
 import pagination from 'components/Question/QuestionBank/Pagination'
 import { Question, QuestionList } from 'src/models/Question'
 
