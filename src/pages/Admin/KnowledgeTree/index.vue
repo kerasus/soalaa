@@ -1,14 +1,12 @@
 <template>
   <tree
     @ticked="test"
-    @selected-node="getSelectedNode"
-    @new-data="getNewNodeData"
     ref="tree"
     tick-strategy="strict"
     :editable="true"
     :get-node-by-id="getNodeById"
-    :add-new-node="addNode"
-    :edit-node="edit"
+    :add-new-node="createNode"
+    :edit-node="editNode"
   />
 <!--  <q-btn v-for="(t, k) in testArr" :key="k" :label="t" @click="test2"/>-->
 </template>
@@ -16,7 +14,6 @@
 <script>
 import { mixinTree } from 'src/mixin/Mixins'
 import Tree from 'src/components/Tree/Tree'
-// import API_ADDRESS from 'src/api/Addresses'
 
 export default {
   name: 'PageIndex',
@@ -49,25 +46,10 @@ export default {
       value.forEach(val => {
         this.testArr.push(val.id)
       })
-    },
-    // test2 (id) {
-    //   this.setTicked('tree', id, false)
-    // },
-    getSelectedNode (node) {
-      this.selectedNode = node
-    },
-    addNode () {
-      this.createNode(this.selectedNode.id, this.newNode.title, this.newNode.order, (response) => {
-        console.log('response', response)
-        return response
-      })
-    },
-    getNewNodeData (newNode) {
-      this.newNode = newNode
-    },
-    edit () {
-      this.editNode(this.selectedNode.id, this.newNode.title, this.newNode.order)
     }
+    // test2 (id) {
+    //   this.setTickedMode('tree', id, false)
+    // },
   }
 }
 </script>

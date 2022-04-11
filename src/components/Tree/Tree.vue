@@ -10,15 +10,14 @@
     @update:ticked="tickedNode"
     @lazy-load="getChildOfNode"
   >
-    <template v-slot:default-header="prop" >
+    <template v-slot:default-header="prop">
       <span class="node-title">
         {{ prop.node.title }}
         <q-icon
-          :v-if="editable"
+          :class="editable ? 'edit-btn': 'none-edit-btn'"
+          name="edit"
           @click.stop
           @keypress.stop
-          class="edit-btn"
-          name="edit"
           @click="openEditMenu(prop.node) "
         />
       </span>
@@ -34,7 +33,6 @@
       >
         <q-tab class="text-purple" name="editNode" icon="edit" label="ویرایش "/>
         <q-tab class="text-orange" name="createNewNode" icon="add" label="اضافه کردن گره جدید "/>
-        <q-tab class="text-red" name="delete" icon="delete" label="حذف "/>
       </q-tabs>
       <q-tab-panels v-model="tab " animated>
         <q-tab-panel name="editNode">
@@ -51,7 +49,6 @@
             label="ترتیب جدید "
           />
           <q-btn
-            text
             color="green "
             :loading="loading "
             @click="edit"
@@ -73,23 +70,11 @@
             label="ترتیب "
           />
           <q-btn
-            text
             color="green "
             :loading="loading "
             @click="addNode() "
           >
             اضافه شود
-          </q-btn>
-        </q-tab-panel>
-        <q-tab-panel name="delete ">
-          <div class="text-subtitle1 ">آیا از حذف گرۀ " {{ selectedNode.title }} " اطمینان دارید؟</div>
-          <q-btn
-            color="red "
-            :loading="loading "
-            @click="deleteNode "
-            class="q-mt-md "
-          >
-            حذف
           </q-btn>
         </q-tab-panel>
       </q-tab-panels>
@@ -117,13 +102,11 @@ export default {
     },
     addNewNode: {
       type: Function,
-      default: () => {
-      }
+      default: (ParentId, title, order, callback) => {}
     },
     editNode: {
       type: Function,
-      default: (callback) => {
-      }
+      default: (id, title, order, callback) => {}
     }
   },
   data: () => {
@@ -141,7 +124,7 @@ export default {
       editDialog: false
     }
   },
-  emits: ['ticked', 'selectedNode', 'newData'],
+  emits: ['ticked'],
   methods: {
     createRoot (nodeData) {
       const treeNodeData = new TreeNode(nodeData)
@@ -186,43 +169,31 @@ export default {
     },
 
     edit () {
-      this.inputsValue({ title: this.editedTitle, order: this.editedOrder })
-      this.editNode((res) => {
-        if (res) {
+      this.editNode(this.selectedNode.id, this.editedTitle, this.editedOrder)
+        .then(() => {
           const id = this.selectedNode.id
           const node = this.$refs.tree.getNodeByKey(id)
-          console.log(node)
-          node.name = this.editedTitle
+          node.title = this.editedTitle
+          node.order = this.editedOrder
           this.editDialog = false
-        }
-      })
-      // .then(() => {
-      //   const id = this.selectedNode.id
-      //   const node = this.$refs.tree.getNodeByKey(id)
-      //   console.log(node)
-      //   node.name = this.editedTitle
-      //   this.editDialog = false
-      // })
+        }).catch(err => {
+          console.log(err)
+        })
     },
 
     addNode () {
       const id = this.selectedNode.id
       const getNode = this.$refs.tree.getNodeByKey(id)
-      this.inputsValue({ title: this.newTitle, order: this.newOrder })
-      const newNodeData = this.addNewNode()
-      if (newNodeData) {
-        getNode.children.unshift(new TreeNode({
-          id: newNodeData.data.data.id,
-          type: newNodeData.data.data.type,
-          title: newNodeData.data.data.title,
-          parent: newNodeData.data.data.parent.id
-        }))
-      }
-      this.editDialog = false
-    },
-
-    inputsValue (newData) {
-      this.$emit('newData', { title: newData.title, order: newData.order })
+      this.addNewNode(id, this.newTitle, this.newOrder)
+        .then(response => {
+          getNode.children.unshift(new TreeNode({
+            id: response.data.data.id,
+            type: response.data.data.type,
+            title: response.data.data.title,
+            parent: response.data.data.parent.id
+          }))
+          this.editDialog = false
+        })
     },
 
     openEditMenu (node) {
@@ -233,7 +204,6 @@ export default {
       }
       this.editedTitle = this.selectedNode.title
       this.editedOrder = this.selectedNode.order
-      this.$emit('selectedNode', this.selectedNode)
       this.editDialog = true
     },
 
@@ -257,9 +227,11 @@ export default {
           color: #f18305;
         }
       }
-
       .edit-btn {
         color: transparent;
+      }
+      .none-edit-btn{
+        display: none;
       }
     }
   }

@@ -49,7 +49,7 @@ import { Question } from 'src/models/Question'
 import QuestionDetails from 'components/Question/QuestionPage/Create/textMode/QuestionDetails'
 import AdminActionOnQuestion from 'src/mixin/AdminActionOnQuestion'
 import { QuestionType, TypeList } from 'src/models/QuestionType'
-import AttachExam from 'components/Question/QuestionPage/AttachExam'
+import AttachExam from 'components/Question/QuestionPage/AttachExam/AttachExam'
 import CommentBox from 'components/Question/QuestionPage/StatusChange'
 import BtnBox from 'components/Question/QuestionPage/BtnBox'
 import { ExamList } from 'src/models/Exam'
@@ -58,9 +58,9 @@ import { QuestSubcategoryList } from 'src/models/QuestSubcategory'
 export default {
   name: 'CreateText',
   components: {
-    // DescriptiveQ: defineAsyncComponent(() => import('components/Question/QuestionPage/Create/textMode/questionTypes/DescriptiveQ/DescriptiveQ')),
-    // MultipleChoiceQ: defineAsyncComponent(() => import('components/Question/QuestionPage/Create/textMode/questionTypes/MultipleChoiceQ/MultipleChoiceQ')),
-    // MBTIQ: defineAsyncComponent(() => import('components/Question/QuestionPage/Create/textMode/questionTypes/MBTIQ/MBTIQ')),
+    // DescriptiveQuestion: defineAsyncComponent(() => import('components/Question/QuestionPage/Create/textMode/questionTypes/DescriptiveQuestion/DescriptiveQuestion')),
+    // MultipleChoiceQuestion: defineAsyncComponent(() => import('components/Question/QuestionPage/Create/textMode/questionTypes/MultipleChoiceQuestion/MultipleChoiceQuestion')),
+    // MBTIQuestion: defineAsyncComponent(() => import('components/Question/QuestionPage/Create/textMode/questionTypes/MBTIQuestion/MBTIQuestion')),
     BtnBox,
     CommentBox,
     AttachExam,
