@@ -32,7 +32,7 @@
                 />
               </div>
               <div class="col-5">
-                <div class="detail-box">
+                <div class="detail-box box-order">
                   <div class="detail-box-title">ترتیب</div>
                   <q-input
                     borderless
@@ -42,10 +42,6 @@
                   />
                 </div>
               </div>
-              <!--      <div class="detail-box detail-box-last" :class="[imgPanelVisibility ? 'col-6' : 'col-3']">-->
-              <!--        <div class="detail-box-title">درجه سختی</div>-->
-              <!--        <q-select borderless v-model="model" :options="options"/>-->
-              <!--      </div>-->
               <div class="detail-box detail-box-last-of-row-1" :class="[imgPanelVisibility ? 'col-6' : 'col-4']">
                 <q-btn
                   unelevated
@@ -56,20 +52,37 @@
                 />
               </div>
             </div>
+            <div class="box-title title-show-exams">آزمون‌های تعریف شده</div>
+            <div class="flex row exam-result-box">
+              <div class="col-6 exam-result-title">
+                آزمون
+              </div>
+              <div class="col-3 exam-result-title">
+                درس
+              </div>
+              <div class="col-1 exam-result-title">
+                ترتیب
+              </div>
+            </div>
             <div v-if="exams && lessons.list.length" :key="question.exams.list.length">
-            <div v-for="(item, index) in question.exams.list" :key="index" class="flex row">
-
-              <div class="detail-box detail-box-first" :class="[imgPanelVisibility ? 'col-6' : 'col-3']">
+            <div v-for="(item, index) in question.exams.list" :key="index" class="flex row attached-exam">
+              <div class="detail-box exam-result attached-exam-title  detail-box-first col-7">
                 {{ item.exam.title }}
               </div>
-              <div class="detail-box detail-box-first" :class="[imgPanelVisibility ? 'col-6' : 'col-3']">
+              <div class="detail-box exam-result detail-box-first col-3">
                 {{ item.sub_category.title }}
               </div>
-              <div class="detail-box detail-box-last" :class="[imgPanelVisibility ? 'col-6' : 'col-3']">
+              <div class="detail-box exam-result order-exam-title detail-box-last col-1">
                 {{ item.order }}
               </div>
-              <div class="detail-box detail-box-last" :class="[imgPanelVisibility ? 'col-6' : 'col-3']">
-                <q-btn unelevated icon="mdi-delete" class="draft-btn default-detail-btn" @click="detach(item)" />
+              <div class="detail-box detach-box detail-box-last col-1">
+                <q-btn
+                  unelevated
+                  icon="isax:trash"
+                  class="detach-btn
+                   default-detail-btn"
+                  @click="detach(item)"
+                />
               </div>
             </div>
           </div>
@@ -115,9 +128,7 @@ export default {
       default: new Question()
     }
   },
-  created () {
-    this.alert = true
-  },
+  created () {},
   data () {
     return {
       text: '',
@@ -190,6 +201,10 @@ export default {
 
 <style scoped lang="scss">
 .q-dialog {
+  .q-dialog__inner--minimized > div {
+    min-width: 720px;
+    height: 600px;
+  }
   .attach-exam-card {
     background: #FFFFFF;
     border-radius: 15px;
@@ -205,6 +220,60 @@ export default {
   line-height: 28px;
   text-align: right #{"/* rtl:ignore */"};
   color: #23263B;
+  .title-show-exams {
+    margin-top: 40px;
+  }
+  .exam-result {
+    background: #F4F5F6;
+    border-radius: 10px;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 24px;
+    color: #65677F;
+    margin-bottom: 16px;
+  }
+  .exam-result-box {
+    margin-top: 16px;
+    margin-bottom: 8px;
+    :first-child {
+      margin-left: 0px !important;
+    }
+    .exam-result-title {
+      font-weight: 400;
+      font-size: 12px;
+      line-height: 21px;
+      margin-left: 10px;
+      color: #9092A7;
+    }
+  }
+  .attached-exam {
+    align-items: center;
+    .attached-exam-title {
+      width: 320px;
+      text-overflow: ellipsis;
+      overflow: hidden;
+      white-space: nowrap;
+      margin-left: 0px !important;
+    }
+    .detach-box {
+      margin-left: 16px;
+      margin-bottom: 16px;
+      color: #E86562;
+    }
+    .detach-btn {
+      background: #F4F5F6;
+      border-radius: 10px;
+      width: 40px;
+      height: 40px;
+    }
+    .exam-result {
+      padding: 8px 16px;
+      margin-left: 16px;
+    }
+    .order-exam-title {
+      padding: 8px;
+    }
+  }
   //.q-card .attach-exam-card {
   //  background: #FFFFFF;
   //  border-radius: 15px;
@@ -214,7 +283,7 @@ export default {
   //}
   .default-details-container {
     .detail-box {
-      margin-top: 10px;
+      margin-top: 16px;
 
       .detail-box-title {
         margin-bottom: 5px;
@@ -237,23 +306,26 @@ export default {
 
   .details-container-1 {
     .detail-box {
-      padding-right: 12px #{"/* rtl:ignore */"};
-      padding-left: 12px #{"/* rtl:ignore */"};
+      padding-right: 0px;
+      padding-left: 0px;
+    }
+    .box-order {
+      padding-left: 32px;
     }
 
     .detail-box-first {
-      padding-right: 0px #{"/* rtl:ignore */"};
+      padding-left: 0px;
     }
 
     .detail-box-last {
-      padding-left: 0px #{"/* rtl:ignore */"};
+      padding-right: 0px;
     }
   }
 
   .details-container-2 {
     .detail-box {
-      padding-right: 12px #{"/* rtl:ignore */"};
-      padding-left: 12px #{"/* rtl:ignore */"};
+      padding-right: 0px ;
+      padding-left: 0px ;
 
       .input-container {
         .input-box {
@@ -332,12 +404,17 @@ export default {
     }
   }
   .default-details-container {
+    .box-order {
+      .q-field {
+        width: 165px;
+      }
+    }
     .detail-box {
       .q-field__control {
         height: 42px;
       }
       .q-field {
-        background: #FFFFFF;
+        background: #F4F5F6 !important;
         border-radius: 10px;
         line-height: 24px;
         height: 40px;
@@ -348,6 +425,9 @@ export default {
         .q-field__inner {
           padding-right: 16px;
           padding-left: 16px;
+        }
+        .q-field__bottom {
+          top: 15px;
         }
       }
       .q-field--auto-height .q-field__native {
