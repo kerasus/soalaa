@@ -276,11 +276,11 @@ export default {
       type: Object,
       default () {
         return {
-          copy: true,
-          detachQuestion: true,
-          deleteQuestionFromDb: true,
-          editQuestion: true,
-          switch: true
+          copy: false,
+          detachQuestion: false,
+          deleteQuestionFromDb: false,
+          editQuestion: false,
+          switch: false
         }
       }
     }
