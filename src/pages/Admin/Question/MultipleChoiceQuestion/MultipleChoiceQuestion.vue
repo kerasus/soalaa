@@ -110,6 +110,7 @@
     <attach-exam
       :exams="examList"
       :lessons="subCategoriesList"
+      :buffer="true"
     />
     <div class="attach-btn row">
       <question-details class="col-9"/>
@@ -118,7 +119,7 @@
         @saveQuestion="saveQuestion"
       />
     </div>
-    <comment-box
+    <status-change
       :statuses="questionStatuses"
     />
     <q-inner-loading
@@ -131,8 +132,8 @@
 </template>
 
 <script>
-import AttachExam from 'components/Question/QuestionPage/AttachExam'
-import CommentBox from 'components/Question/QuestionPage/StatusChange'
+import AttachExam from 'components/Question/QuestionPage/AttachExam/AttachExam'
+import StatusChange from 'components/Question/QuestionPage/StatusChange'
 import QuestionDetails from 'components/Question/QuestionPage/Create/textMode/QuestionDetails'
 import BtnBox from 'components/Question/QuestionPage/BtnBox'
 import QuestionField from 'components/Question/QuestionPage/QuestionField.vue'
@@ -147,7 +148,7 @@ export default {
   components: {
     QuestionField,
     BtnBox,
-    CommentBox,
+    StatusChange,
     AttachExam,
     QuestionDetails
   },
@@ -198,17 +199,20 @@ export default {
   methods: {
     saveQuestion () {
       if (this.getContent()) {
+        const exams = []
+        this.question.exams.list.forEach(item => {
+          exams.push({
+            id: item.exam_id,
+            exam_id: item.exam_id,
+            sub_category_id: item.sub_category_id,
+            order: item.order
+          })
+        })
         this.question.author.push({ full_name: this.$store.getters['Auth/user'].full_name, id: this.$store.getters['Auth/user'].id })
         const question = {
           author: this.question.author,
           choices: this.question.choices.list,
-          exams: [
-            {
-              id: '622ae211d1a3433f16636253',
-              order: '2004',
-              sub_category_id: '60b7875428f350277f04c5e7'
-            }
-          ],
+          exams: exams,
           descriptive_answer: this.question.descriptive_answer,
           statement: this.question.statement,
           level: 1,
@@ -271,6 +275,15 @@ export default {
       })
       return status
     },
+    validateAnswerOfChoice () {
+      let status = false
+      this.question.choices.list.forEach(function (item, index) {
+        if (item.answer) {
+          status = true
+        }
+      })
+      return status
+    },
     validateContent () {
       let status = true
       const that = this
@@ -290,6 +303,11 @@ export default {
       //   status = false
       // }
       if (!this.choice) {
+        const ChoiceMassage = 'لطفا گزینه صحیح را ثبت کنید'
+        errors.push(ChoiceMassage)
+        status = false
+      }
+      if (!this.validateAnswerOfChoice()) {
         const ChoiceMassage = 'لطفا گزینه صحیح را ثبت کنید'
         errors.push(ChoiceMassage)
         status = false
@@ -316,6 +334,7 @@ export default {
   }
 }
 </script>
+
 <style scoped lang="scss">
 .multiple-choice-Q {
   padding-top: 35px;
@@ -377,6 +396,7 @@ export default {
   }
 }
 </style>
+
 <style lang="scss">
 // USED IN MANY OTHER COMPONENTS
 .default-questions-card {

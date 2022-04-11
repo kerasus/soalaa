@@ -19,22 +19,33 @@
               <q-icon name="mdi-eye-outline" style="font-size: 2em; color: rgba(0, 0, 0, 0.54);"/>
             </div>
           </div>
-          <div class="log-status">
-            وضعیت از
-            <q-chip dense color="orange"
-                    text-color="white"
-                    size="sm"
-                    :label="log.properties.old.status.display_title"
-            />
-            به
-            <q-chip
-              dense
-              color="red"
-              text-color="white"
-              size="sm"
-              :label="log.properties.new.status.display_title"
-            />
-            تغییر یافت.
+          <div
+            v-if="log.properties.old.status || log.properties.new.status"
+            class="log-status"
+          >
+              وضعیت
+              <template v-if="log.properties.old.status">
+              از
+                <q-chip
+                  v-if="log.properties.old.status && log.properties.old.status.display_title"
+                  dense
+                  color="orange"
+                  text-color="white"
+                  size="sm"
+                  :label="log.properties.old.status.display_title"
+                />
+              </template>
+              <template v-if="log.properties.new.status">
+              به
+                <q-chip
+                  dense
+                  color="red"
+                  text-color="white"
+                  size="sm"
+                  :label="log.properties.new.status.display_title"
+                />
+              تغییر یافت.
+              </template>
           </div>
           <div
             v-for="(comment, index) in log.comments.list"
@@ -88,10 +99,10 @@ export default {
   name: 'LogItem',
   props: {
     log: {
+      type: Log,
       default () {
         return new Log()
-      },
-      type: Log
+      }
     }
   },
   data () {
