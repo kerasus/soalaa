@@ -6,7 +6,7 @@
 </template>
 
 <script>
-import QuestionItem from './QuestionItem'
+import QuestionItem from '../QuestionItem/QuestionItem'
 import { Question, QuestionList } from 'src/models/Question'
 export default {
   name: 'QuestionList',

@@ -25,6 +25,7 @@ module.exports = configure(function (ctx) {
     boot: [
       'i18n',
       'axios',
+      'appConfig',
       'middleware',
       'breadcrumbs'
     ],

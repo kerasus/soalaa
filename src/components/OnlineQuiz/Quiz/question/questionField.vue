@@ -210,7 +210,7 @@ export default {
   },
   methods: {
     getChoiceStatus () {
-      const userQuestionData = this.getUserQuestionData(this.quiz.id, this.source.id)
+      const userQuestionData = this.getUserQuestionData(this.quiz.user_exam_id, this.source.id)
       if (!userQuestionData) {
         return false
       }
@@ -219,24 +219,24 @@ export default {
     getChoiceBookmark () {
       if (
         !this.userQuizListData ||
-        !this.userQuizListData[this.quiz.id] ||
-        !this.userQuizListData[this.quiz.id][this.source.id]
+        !this.userQuizListData[this.quiz.user_exam_id] ||
+        !this.userQuizListData[this.quiz.user_exam_id][this.source.id]
       ) {
         return false
       }
 
-      return this.userQuizListData[this.quiz.id][this.source.id].bookmarked
+      return this.userQuizListData[this.quiz.user_exam_id][this.source.id].bookmarked
     },
     getAnsweredChoiceId () {
       if (
         !this.userQuizListData ||
-        !this.userQuizListData[this.quiz.id] ||
-        !this.userQuizListData[this.quiz.id][this.source.id]
+        !this.userQuizListData[this.quiz.user_exam_id] ||
+        !this.userQuizListData[this.quiz.user_exam_id][this.source.id]
       ) {
         return false
       }
 
-      return this.userQuizListData[this.quiz.id][this.source.id].answered_choice_id
+      return this.userQuizListData[this.quiz.user_exam_id][this.source.id].answered_choice_id
     },
     inView (payload) {
       this.$emit('inView', {

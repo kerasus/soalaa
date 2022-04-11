@@ -2,7 +2,10 @@
   <div class="question-txtMode-navbar">
     <div class="fit row wrap justify-between">
       <div class="col-auto">
-        <div class="question-type row items-center relative-position">
+        <div
+          v-if="mode === 'create'"
+          class="question-type row items-center relative-position"
+        >
           <div class="col">نوع سوال</div>
           <div>
             <q-tabs
@@ -32,18 +35,35 @@
             />
           </div>
         </div>
+        <div
+          v-if="mode === 'show'"
+        >
+          <q-btn
+            unelevated
+            color="primary"
+            label="ویرایش سوال"
+            class="save-btn default-detail-btn"
+            @click="redirectToEditPage"
+          />
+        </div>
       </div>
       <div class="col-auto">
         <div
-          v-ripple.early
-          class="relative-position container bg-primary text-black flex flex-center question-pics"
+          v-if="!(mode === 'create')"
+          class="question-img-btn row"
         >
-          <q-img
-            src="/img/img-panel-btn.png"
-            spinner-color="white"
-            class="question-pics-img"
-          />
-          <div class="text-white text-center question-pics-txt">تصاویر سوال</div>
+          <div
+            v-ripple.early
+            class="relative-position container bg-primary text-black flex flex-center question-pics"
+            @click="panelClicked"
+          >
+            <q-img
+              src="/img/img-panel-btn.png"
+              spinner-color="white"
+              class="question-pics-img"
+            />
+            <div class="text-white text-center question-pics-txt">تصاویر سوال</div>
+          </div>
         </div>
       </div>
     </div>
@@ -57,7 +77,14 @@ import { TypeList } from 'src/models/QuestionType'
 
 export default {
   name: 'Navbar',
-  props: {},
+  props: {
+    mode: {
+      type: String,
+      default () {
+        return 'create'
+      }
+    }
+  },
   data () {
     return {
       question: new Question(),
@@ -99,8 +126,16 @@ export default {
       this.qTabLoading = false
     })
   },
-  computed: {},
+  computed: {
+    doesHaveImage () {
+      // return !!()
+      return null
+    }
+  },
   methods: {
+    panelClicked () {
+      this.$emit('panelClicked')
+    },
     getCurrentRoute (componentName) {
       const currentQuestionMode = this.getCurrentQuestionMode()
       if (currentQuestionMode === 'Text') {
@@ -180,6 +215,19 @@ export default {
 </style>
 <style lang="scss">
 .question-txtMode-navbar {
+  .default-detail-btn {
+    width: 144px;
+    height: 40px;
+    border-radius: 10px;
+    font-size: 14px;
+    line-height: 24px;
+    text-align: center;
+  }
+  .save-btn {
+    background: #9690E4;
+    font-weight: 500;
+    color: #FFFFFF;
+  }
   .question-type {
     .question-type-tabs {
       .q-tab {

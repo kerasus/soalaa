@@ -22,13 +22,13 @@ export function updateUserQuizListDataExam (state, newInfo) {
 
 export function mergeDbAnswersIntoLocalstorage (state, payload) {
   const serverAnswers = payload.dbAnswers
-  const examId = Assistant.getId(payload.exam_id)
+  const userExamId = Assistant.getId(payload.user_exam_id)
 
-  if (!examId) {
+  if (!userExamId) {
     return
   }
-  if (!state.userQuizListData[examId]) {
-    state.userQuizListData[examId] = {}
+  if (!state.userQuizListData[userExamId]) {
+    state.userQuizListData[userExamId] = {}
   }
 
   function merge (serverCollection, localSelectedAtKey, changeLocalDataFunction) {
@@ -37,14 +37,14 @@ export function mergeDbAnswersIntoLocalstorage (state, payload) {
       if (!questionId) {
         return
       }
-      if (!state.userQuizListData[examId]) {
-        state.userQuizListData[examId] = {}
+      if (!state.userQuizListData[userExamId]) {
+        state.userQuizListData[userExamId] = {}
       }
-      if (!state.userQuizListData[examId][questionId]) {
-        state.userQuizListData[examId][questionId] = {}
+      if (!state.userQuizListData[userExamId][questionId]) {
+        state.userQuizListData[userExamId][questionId] = {}
       }
       const serverSelectedAt = item.selected_at
-      const localSelectedAt = state.userQuizListData[examId][questionId][localSelectedAtKey]
+      const localSelectedAt = state.userQuizListData[userExamId][questionId][localSelectedAtKey]
       if (
         (serverSelectedAt && localSelectedAt && Time.diff(serverSelectedAt, localSelectedAt) > 0) ||
         !localSelectedAt
@@ -64,7 +64,7 @@ export function mergeDbAnswersIntoLocalstorage (state, payload) {
 
     return indexed
   }
-  state.userQuizListData[examId].indexedServerAnswers = {
+  state.userQuizListData[userExamId].indexedServerAnswers = {
     choices: convertToIndexedDb(serverAnswers.choices),
     bookmarks: convertToIndexedDb(serverAnswers.bookmarks),
     statuses: convertToIndexedDb(serverAnswers.statuses)
@@ -73,33 +73,34 @@ export function mergeDbAnswersIntoLocalstorage (state, payload) {
 
   // merge choices
   merge(serverAnswers.choices, 'answered_at', (serverItem, questionId) => {
-    const checkInTimes = state.userQuizListData[examId][questionId].check_in_times || []
-    state.userQuizListData[examId][questionId].answered_at = serverItem.selected_at
-    state.userQuizListData[examId][questionId].answered_choice_id = serverItem.choice_id
-    state.userQuizListData[examId][questionId].check_in_times = checkInTimes
+    const checkInTimes = state.userQuizListData[userExamId][questionId].check_in_times || []
+    state.userQuizListData[userExamId][questionId].answered_at = serverItem.selected_at
+    state.userQuizListData[userExamId][questionId].answered_choice_id = serverItem.choice_id
+    state.userQuizListData[userExamId][questionId].check_in_times = checkInTimes
   })
 
   // merge bookmarks
   merge(serverAnswers.bookmarks, 'change_bookmarked_at', (serverItem, questionId) => {
-    state.userQuizListData[examId][questionId].bookmarked = serverItem.bookmark
-    state.userQuizListData[examId][questionId].change_bookmarked_at = serverItem.selected_at
+    state.userQuizListData[userExamId][questionId].bookmarked = serverItem.bookmark
+    state.userQuizListData[userExamId][questionId].change_bookmarked_at = serverItem.selected_at
   })
 
   // merge statuses
   merge(serverAnswers.statuses, 'change_status_at', (serverItem, questionId) => {
-    state.userQuizListData[examId][questionId].status = serverItem.status
-    state.userQuizListData[examId][questionId].change_status_at = serverItem.selected_at
+    state.userQuizListData[userExamId][questionId].status = serverItem.status
+    state.userQuizListData[userExamId][questionId].change_status_at = serverItem.selected_at
   })
 }
 
 export function createEmptyQuestionIfNotExistInLocal (state, payload) {
-  const examId = payload.exam_id
+  // const examId = payload.exam_id
+  const userExamId = Assistant.getId(payload.user_exam_id)
   const questionId = payload.question_id
-  if (!state.userQuizListData[examId]) {
-    state.userQuizListData[examId] = {}
+  if (!state.userQuizListData[userExamId]) {
+    state.userQuizListData[userExamId] = {}
   }
-  if (!state.userQuizListData[examId][questionId]) {
-    state.userQuizListData[examId][questionId] = {}
+  if (!state.userQuizListData[userExamId][questionId]) {
+    state.userQuizListData[userExamId][questionId] = {}
   }
 }
 
@@ -107,13 +108,24 @@ export function resetStatusFailedList (state) {
   state.failedListStatusData = []
 }
 
-export function removeFromStatusFailedList (state, payload) {
+function removeFromFailedList (state, payload, key) {
   const questionId = payload
-  const target = state.failedListStatusData.findIndex(item => item.question_id === questionId)
+  const questions = key === 'failedListAnswerData' ? state[key].questions : state[key]
+  const target = questions.findIndex(item => item.question_id === questionId)
   if (target === -1) {
     return
   }
-  state.failedListStatusData.splice(target, 1)
+  questions.splice(target, 1)
+}
+
+export function removeFromStatusFailedList (state, payload) {
+  removeFromFailedList(state, payload, 'failedListStatusData')
+  // const questionId = payload
+  // const target = state.failedListStatusData.findIndex(item => item.question_id === questionId)
+  // if (target === -1) {
+  //   return
+  // }
+  // state.failedListStatusData.splice(target, 1)
 }
 
 export function pushToStatusFailedList (state, payload) {
@@ -125,12 +137,13 @@ export function resetBookmarkFailedList (state) {
 }
 
 export function removeFromBookmarkFailedList (state, payload) {
-  const questionId = payload
-  const target = state.failedListBookmarkData.findIndex(item => item.question_id === questionId)
-  if (target === -1) {
-    return
-  }
-  state.failedListBookmarkData.splice(target, 1)
+  removeFromFailedList(state, payload, 'failedListBookmarkData')
+  // const questionId = payload
+  // const target = state.failedListBookmarkData.findIndex(item => item.question_id === questionId)
+  // if (target === -1) {
+  //   return
+  // }
+  // state.failedListBookmarkData.splice(target, 1)
 }
 
 export function pushToBookmarkFailedList (state, payload) {
@@ -142,12 +155,13 @@ export function resetUnBookmarkFailedList (state) {
 }
 
 export function removeFromUnBookmarkFailedList (state, payload) {
-  const questionId = payload
-  const target = state.failedListUnBookmarkData.findIndex(item => item.question_id === questionId)
-  if (target === -1) {
-    return
-  }
-  state.failedListUnBookmarkData.splice(target, 1)
+  removeFromFailedList(state, payload, 'failedListUnBookmarkData')
+  // const questionId = payload
+  // const target = state.failedListUnBookmarkData.findIndex(item => item.question_id === questionId)
+  // if (target === -1) {
+  //   return
+  // }
+  // state.failedListUnBookmarkData.splice(target, 1)
 }
 
 export function pushToUnBookmarkFailedList (state, payload) {
@@ -162,12 +176,13 @@ export function resetAnswerFailedList (state) {
 }
 
 export function removeFromAnswerFailedList (state, payload) {
-  const questionId = payload
-  const target = state.failedListAnswerData.questions.findIndex(item => item.question_id === questionId)
-  if (target === -1) {
-    return
-  }
-  state.failedListAnswerData.questions.splice(target, 1)
+  removeFromFailedList(state, payload, 'failedListAnswerData')
+  // const questionId = payload
+  // const target = state.failedListAnswerData.questions.findIndex(item => item.question_id === questionId)
+  // if (target === -1) {
+  //   return
+  // }
+  // state.failedListAnswerData.questions.splice(target, 1)
 }
 
 export function pushToAnswerFailedList (state, payload) {
@@ -176,9 +191,9 @@ export function pushToAnswerFailedList (state, payload) {
 }
 
 export function changeQuestionBookmark (state, payload) {
-  const examId = payload.exam_id
+  const userExamId = payload.user_exam_id
   const questionId = payload.question_id
-  if (!examId || !questionId) {
+  if (!userExamId || !questionId) {
     return
   }
   this.commit('Exam/createEmptyQuestionIfNotExistInLocal', payload)
@@ -186,14 +201,14 @@ export function changeQuestionBookmark (state, payload) {
   if (payload.change_bookmarked_at) {
     changeBookmarkedAt = payload.change_bookmarked_at
   }
-  state.userQuizListData[examId][questionId].change_bookmarked_at = changeBookmarkedAt
-  state.userQuizListData[examId][questionId].bookmarked = payload.bookmarked
+  state.userQuizListData[userExamId][questionId].change_bookmarked_at = changeBookmarkedAt
+  state.userQuizListData[userExamId][questionId].bookmarked = payload.bookmarked
 }
 
 export function changeQuestionSelectChoice (state, payload) {
-  const examId = payload.exam_id
+  const userExamId = payload.user_exam_id
   const questionId = payload.question_id
-  if (!examId || !questionId) {
+  if (!userExamId || !questionId) {
     return
   }
   this.commit('Exam/createEmptyQuestionIfNotExistInLocal', payload)
@@ -201,14 +216,14 @@ export function changeQuestionSelectChoice (state, payload) {
   if (payload.selected_at) {
     answeredAt = payload.selected_at
   }
-  state.userQuizListData[examId][questionId].answered_at = answeredAt
-  state.userQuizListData[examId][questionId].answered_choice_id = payload.answered_choice_id
+  state.userQuizListData[userExamId][questionId].answered_at = answeredAt
+  state.userQuizListData[userExamId][questionId].answered_choice_id = payload.answered_choice_id
 }
 
 export function changeQuestionStatus (state, payload) {
-  const examId = payload.exam_id
+  const userExamId = payload.user_exam_id
   const questionId = payload.question_id
-  if (!examId || !questionId) {
+  if (!userExamId || !questionId) {
     return
   }
   this.commit('Exam/createEmptyQuestionIfNotExistInLocal', payload)
@@ -216,25 +231,25 @@ export function changeQuestionStatus (state, payload) {
   if (payload.change_status_at) {
     changeStatusAt = payload.change_status_at
   }
-  state.userQuizListData[examId][questionId].change_status_at = changeStatusAt
-  state.userQuizListData[examId][questionId].status = payload.status
+  state.userQuizListData[userExamId][questionId].change_status_at = changeStatusAt
+  state.userQuizListData[userExamId][questionId].status = payload.status
 }
 
-export function setUserQuizListData (state, payload) {
-  const examId = Assistant.getId(payload.exam_id)
-  const questionId = Assistant.getId(payload.question_id)
-  if (!examId || !questionId) {
-    return
-  }
-  this.commit('Exam/createEmptyQuestionIfNotExistInLocal', payload)
-  state.userQuizListData[examId][questionId] = {
-    answered_at: payload.answered_at,
-    answered_choice_id: payload.answered_choice_id,
-    check_in_times: payload.check_in_times,
-    bookmarked: payload.bookmarked,
-    status: payload.status
-  }
-}
+// export function setUserQuizListData (state, payload) {
+//   const examId = Assistant.getId(payload.exam_id)
+//   const questionId = Assistant.getId(payload.question_id)
+//   if (!examId || !questionId) {
+//     return
+//   }
+//   this.commit('Exam/createEmptyQuestionIfNotExistInLocal', payload)
+//   state.userQuizListData[examId][questionId] = {
+//     answered_at: payload.answered_at,
+//     answered_choice_id: payload.answered_choice_id,
+//     check_in_times: payload.check_in_times,
+//     bookmarked: payload.bookmarked,
+//     status: payload.status
+//   }
+// }
 
 export function setQuiz (state, newInfo) {
   state.quiz = newInfo
@@ -270,16 +285,16 @@ export function setCurrentQuestion (state, newInfo) {
   state.currentQuestion = new Question(newInfo)
 }
 
-export function clearExamData (state, examId) {
-  delete state.userQuizListData[examId]
+export function clearExamData (state, userExamId) {
+  delete state.userQuizListData[userExamId]
 }
 
 export function checkIfQuestionExistInUserQuizListData (state, questionId) {
-  if (!state.userQuizListData[state.quiz.id]) {
-    state.userQuizListData[state.quiz.id] = {}
+  if (!state.userQuizListData[state.quiz.user_exam_id]) {
+    state.userQuizListData[state.quiz.user_exam_id] = {}
   }
-  if (!state.userQuizListData[state.quiz.id][questionId]) {
-    state.userQuizListData[state.quiz.id][questionId] = {}
+  if (!state.userQuizListData[state.quiz.user_exam_id][questionId]) {
+    state.userQuizListData[state.quiz.user_exam_id][questionId] = {}
   }
 }
 
@@ -287,22 +302,22 @@ export function enterQuestion (state, questionId) {
   // this.commit('Exam/checkIfQuestionExistInUserQuizListData', questionId)
 
   this.commit('Exam/checkIfQuestionExistInUserQuizListData', questionId)
-  if (!state.userQuizListData[state.quiz.id][questionId].check_in_times) {
-    state.userQuizListData[state.quiz.id][questionId].check_in_times = []
+  if (!state.userQuizListData[state.quiz.user_exam_id][questionId].check_in_times) {
+    state.userQuizListData[state.quiz.user_exam_id][questionId].check_in_times = []
   }
-  const checkInTimes = state.userQuizListData[state.quiz.id][questionId].check_in_times
+  const checkInTimes = state.userQuizListData[state.quiz.user_exam_id][questionId].check_in_times
   checkInTimes.push({ start: Time.now(), end: null })
-  state.userQuizListData[state.quiz.id][questionId].check_in_times = checkInTimes
+  state.userQuizListData[state.quiz.user_exam_id][questionId].check_in_times = checkInTimes
 }
 
 export function leaveQuestion (state, questionId) {
   this.commit('Exam/checkIfQuestionExistInUserQuizListData', questionId)
-  const checkInTimes = state.userQuizListData[state.quiz.id][questionId].check_in_times
+  const checkInTimes = state.userQuizListData[state.quiz.user_exam_id][questionId].check_in_times
   if (!checkInTimes || checkInTimes.length === 0) {
     return
   }
-  state.userQuizListData[state.quiz.id][questionId].check_in_times[state.userQuizListData[state.quiz.id][questionId].check_in_times.length - 1].end = Time.now()
-  state.userQuizListData[state.quiz.id][questionId].check_in_times = state.userQuizListData[state.quiz.id][questionId].check_in_times.filter((item) => {
+  state.userQuizListData[state.quiz.user_exam_id][questionId].check_in_times[state.userQuizListData[state.quiz.user_exam_id][questionId].check_in_times.length - 1].end = Time.now()
+  state.userQuizListData[state.quiz.user_exam_id][questionId].check_in_times = state.userQuizListData[state.quiz.user_exam_id][questionId].check_in_times.filter((item) => {
     return item.end
   })
 }
@@ -314,7 +329,7 @@ export function cleanCurrentQuestion (state) {
 export function updateCurrentQuestion (state, newInfo) {
   const oldQuestionId = (!state.currentQuestion) ? false : Assistant.getId(state.currentQuestion.id)
   const newQuestionId = Assistant.getId(newInfo.newQuestionId)
-  if (!state.quiz || newQuestionId === oldQuestionId || !Assistant.getId(state.quiz.id)) {
+  if (!state.quiz || newQuestionId === oldQuestionId || !Assistant.getId(state.quiz.user_exam_id)) {
     return
   }
   const currentExamQuestions = newInfo.currentExamQuestions
@@ -326,7 +341,7 @@ export function updateCurrentQuestion (state, newInfo) {
     this.commit('Exam/enterQuestion', newQuestionId)
   }
   if (oldQuestionId) {
-    let currentQuizData = state.userQuizListData[state.quiz.id]
+    let currentQuizData = state.userQuizListData[state.quiz.user_exam_id]
     if (!currentQuizData) {
       currentQuizData = {
         examId: state.currentQuestion.id,
@@ -338,13 +353,13 @@ export function updateCurrentQuestion (state, newInfo) {
 
   if (
     state.userQuizListData &&
-    state.userQuizListData[state.quiz.id] &&
-    state.userQuizListData[state.quiz.id][currentQuestion.id] &&
-    typeof state.userQuizListData[state.quiz.id][currentQuestion.id].answered_choice_id !== 'undefined' &&
-    state.userQuizListData[state.quiz.id][currentQuestion.id].answered_choice_id !== null
+    state.userQuizListData[state.quiz.user_exam_id] &&
+    state.userQuizListData[state.quiz.user_exam_id][currentQuestion.id] &&
+    typeof state.userQuizListData[state.quiz.user_exam_id][currentQuestion.id].answered_choice_id !== 'undefined' &&
+    state.userQuizListData[state.quiz.user_exam_id][currentQuestion.id].answered_choice_id !== null
   ) {
     currentQuestion.choices.list.forEach((item, index) => {
-      if (item.id.toString() === state.userQuizListData[state.quiz.id][currentQuestion.id].answered_choice_id.toString()) {
+      if (item.id.toString() === state.userQuizListData[state.quiz.user_exam_id][currentQuestion.id].answered_choice_id.toString()) {
         currentQuestion.choices.list[index].active = true
       }
     })
@@ -369,13 +384,13 @@ export function updateCurrentExamFrozenQuestions (state, newInfo) {
   state.currentExamFrozenQuestions = newInfo
 }
 
-export function changeQuestionRefreshQuestionObject (state, payload) {
-  const examId = payload.exam_id
-  const questionId = payload.question_id
-  if (!state.userQuizListData[examId]) {
-    state.userQuizListData[examId] = {}
-  }
-  if (!state.userQuizListData[examId][questionId]) {
-    state.userQuizListData[examId][questionId] = {}
-  }
-}
+// export function changeQuestionRefreshQuestionObject (state, payload) {
+//   const examId = payload.exam_id
+//   const questionId = payload.question_id
+//   if (!state.userQuizListData[examId]) {
+//     state.userQuizListData[examId] = {}
+//   }
+//   if (!state.userQuizListData[examId][questionId]) {
+//     state.userQuizListData[examId][questionId] = {}
+//   }
+// }
