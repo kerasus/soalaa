@@ -31,7 +31,7 @@
       <v-btn
         v-if="showOptions"
         icon
-        @click="changeStatus(source.id, 'o')"
+        @click="changeStatus(source.id, 'o', appSocket)"
       >
         <v-icon
           v-if="getChoiceStatus() === 'o'"
@@ -51,7 +51,7 @@
       <v-btn
         v-if="showOptions"
         icon
-        @click="changeStatus(source.id ,'x')"
+        @click="changeStatus(source.id ,'x', appSocket)"
       >
         <v-icon
           :color="getChoiceStatus() === 'x' ? 'red' : '#888'"
@@ -63,7 +63,7 @@
       <v-btn
         v-if="showOptions"
         icon
-        @click="changeBookmark(source.id)"
+        @click="changeBookmark(source.id, appSocket)"
       >
         <v-icon
           v-if="getChoiceBookmark()"
@@ -127,6 +127,10 @@
       },
         mixins: [mixinQuiz, mixinUserActionOnQuestion],
         props: {
+            appSocket: {
+              type: Object,
+              default: null
+            },
             index: { // index of current source
                 type: Number
             },
@@ -244,7 +248,7 @@
                 })
             },
             answerClickedd(payload) {
-                this.answerClicked(payload, this.showOptions)
+                this.answerClicked(payload, this.showOptions, () => {}, this.appSocket)
             },
             intersectionObserver(entries) {
                 this.source.isInView = entries[0].intersectionRatio >= 0.75
