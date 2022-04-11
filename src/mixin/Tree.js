@@ -2,12 +2,16 @@ import API_ADDRESS from 'src/api/Addresses'
 
 const mixinTree = {
   methods: {
-    showTree (refKey, nodeType) {
+    showTree (refKey, callback) {
       return new Promise((resolve, reject) => {
-        this.getRootNode(nodeType)
+        callback
           .then(response => {
             const node = response.data.data
-            this.$refs[refKey].createRoot({
+            let treeComponent = this.$refs[refKey]
+            if (!treeComponent.createRoot) {
+              treeComponent = this.$refs[refKey][0]
+            }
+            treeComponent.createRoot({
               title: node.title,
               id: node.id,
               order: node.order,
@@ -26,17 +30,23 @@ const mixinTree = {
       return this.$axios.get(API_ADDRESS.tree.getNodeByType(nodeType))
     },
 
+    getNode (id) {
+      return this.$axios.get(API_ADDRESS.tree.getNodeById(id))
+    },
+
     getNodeById (id, done, fail, loadChildOfNode) {
-      this.$axios.get(API_ADDRESS.tree.getNodeById(id))
-        .then(response => {
-          const node = response.data.data
-          loadChildOfNode(node, done)
-        }).catch(err => {
-          console.log(err)
-          if (fail) {
-            fail()
-          }
-        })
+      return new Promise((resolve, reject) => {
+        this.getNode(id)
+          .then(response => {
+            const node = response.data.data
+            resolve(loadChildOfNode(node, done))
+          }).catch(err => {
+            console.log(err)
+            if (fail) {
+              reject(fail())
+            }
+          })
+      })
     },
 
     createNode (parentId, title, order, callback) {
@@ -46,10 +56,33 @@ const mixinTree = {
             if (callback) {
               callback(response)
             }
+            resolve(response)
           }).catch(err => {
+            reject(err)
+          })
+      })
+    },
+
+    editNode (id, title, order) {
+      return new Promise((resolve, reject) => {
+        this.$axios.put(API_ADDRESS.tree.editNode(id), { title: title, order: order })
+          .then(res => {
+            resolve(res)
+          }).catch(err => {
+            reject(err)
             console.log(err)
           })
       })
+    },
+
+    setTickedMode (refKey, key, state) {
+      const ref = (this.$refs[refKey] && this.$refs[refKey][0] && this.$refs[refKey][0].$el) ? this.$refs[refKey][0]
+        : (this.$refs[refKey] && this.$refs[refKey].$el) ? this.$refs[refKey]
+            : null
+      if (!ref) {
+        return
+      }
+      ref.setNodesTicked(key, state)
     }
   }
 }

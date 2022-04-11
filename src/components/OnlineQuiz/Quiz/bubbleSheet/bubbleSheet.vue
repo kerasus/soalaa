@@ -198,10 +198,10 @@ export default {
       if (typeof questionId === 'undefined') {
         questionId = this.currentQuestion.id
       }
-      if (!this.quiz.id || !questionId || !this.userQuizListData[this.quiz.id]) {
+      if (!this.quiz.user_exam_id || !questionId || !this.userQuizListData[this.quiz.user_exam_id]) {
         return false
       }
-      return this.userQuizListData[this.quiz.id][questionId]
+      return this.userQuizListData[this.quiz.user_exam_id][questionId]
     },
     AnswerClicked (payload) {
       if (this.info.type !== 'pasokh-nameh') {

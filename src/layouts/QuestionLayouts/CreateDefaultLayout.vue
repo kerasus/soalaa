@@ -1,7 +1,9 @@
 <template>
-    <router-view v-slot="{ Component }">
-      <keep-alive>
-        <component :is="Component" :key="$route.fullPath" />
-      </keep-alive>
-    </router-view>
+    <Router :exclude="['MultipleChoiceQ', 'MBTIQ']" />
 </template>
+<script>
+import Router from 'src/router/Router'
+export default {
+  components: { Router }
+}
+</script>

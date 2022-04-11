@@ -3,6 +3,7 @@
 </template>
 <script>
 import 'src/assets/scss/IranyekanFont.scss'
+import 'src/css/customThem.scss'
 // import '../public/fonts/iranyekan/css/style.css'
 
 import { mixinSetIcons } from './mixin/Mixins.js'
@@ -17,6 +18,7 @@ export default defineComponent({
 })
 </script>
 <style>
+#F4F5F6
   :root {
     --background-1: #fff;
     --background-2: #f5f5f5;

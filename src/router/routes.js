@@ -38,9 +38,9 @@ const routes = [
               { name: 'Admin.Exam.AllResults', path: 'results/:id', component: () => import('pages/Admin/exam/results') },
               { name: 'Admin.Exam.Coefficient.Edit', path: ':id/coefficient/edit', component: () => import('src/pages/Admin/subGroup/editCoefficients.vue') },
               { name: 'Admin.Exam.Report.Edit', path: ':id/edit-exam-report', component: () => import('pages/Admin/exam/edit/editExamReport'), breadcrumbs: { title: 'ویرایش کارنامه', loading: false } },
-              { name: 'Admin.Exam.Lessons', path: 'lessons/:quizId/:quizTitle', component: () => import('src/pages/Admin/exam/lessons.vue') },
+              { name: 'Admin.Exam.Lessons', path: 'lessons/:quizId', component: () => import('src/pages/Admin/exam/lessons.vue') },
               { name: 'Admin.Exam.Lessons.List', path: 'lessons/:quizId/chart', component: () => import('src/pages/Admin/exam/lessonsChart.vue') },
-              { name: 'Admin.Exam.video.set', path: '/video/set/:examId/:subcategory_id/:quizTitle', component: () => import('src/pages/Admin/exam/VideoSet/SetVideo.vue') },
+              { name: 'Admin.Exam.video.set', path: '/video/set/:examId/:subcategory_id', component: () => import('src/pages/Admin/exam/VideoSet/SetVideo.vue') },
 
               {
                 path: '/results/mbti_bartle/:exam_id/:user_exam_id',
@@ -95,19 +95,19 @@ const routes = [
                         path: 'mbti',
                         name: 'Admin.Question.Create.Text.MBTI',
                         breadcrumbs: { title: 'ام بی تی آی', loading: false },
-                        component: () => import('components/Question/QuestionPage/Create/textMode/questionTypes/MBTIQ/MBTIQ.vue')
+                        component: () => import('pages/Admin/Question/MBTIQuestion/MBTIQuestion.vue')
                       },
                       {
                         path: 'descriptive',
                         name: 'Admin.Question.Create.Text.Descriptive',
                         breadcrumbs: { title: 'تشریحی', loading: false },
-                        component: () => import('components/Question/QuestionPage/Create/textMode/questionTypes/DescriptiveQ/DescriptiveQ.vue')
+                        component: () => import('pages/Admin/Question/DescriptiveQuestion/DescriptiveQuestion.vue')
                       },
                       {
                         path: 'multipleChoice',
                         name: 'Admin.Question.Create.Text.MultipleChoice',
                         breadcrumbs: { title: 'تستی', loading: false },
-                        component: () => import('components/Question/QuestionPage/Create/textMode/questionTypes/MultipleChoiceQ/MultipleChoiceQ.vue')
+                        component: () => import('pages/Admin/Question/MultipleChoiceQuestion/MultipleChoiceQuestion.vue')
                       }
                     ]
                   },
@@ -187,6 +187,12 @@ const routes = [
         path: '/onlineQuiz/results/:exam_id/:user_exam_id',
         name: 'user.exam.results',
         component: () => import('pages/User/exam/Result'),
+        middleware: [auth]
+      },
+      {
+        path: '/onlineQuiz/exams/lesson/:quizId/:lessonId',
+        name: 'onlineQuiz.exams.lessons.details',
+        component: () => import('pages/Admin/exam/LessonDetails'),
         middleware: [auth]
       },
       {

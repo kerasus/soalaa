@@ -26,27 +26,36 @@
     </template>
     <template #content>
       <div ref="contentInside" class="content-inside">
-        <router-view v-slot="{ Component }">
-          <keep-alive :exclude="['konkoorView', 'alaaView']">
-            <component :is="Component" :key="$route.fullPath" />
-          </keep-alive>
-        </router-view>
+        <q-dialog v-model="confirmDialogData.show" persistent>
+          <q-card class="q-pa-md q-pb-none">
+            <q-card-section >
+              <q-icon name="warning" color="warning" size="2rem" />
+              {{confirmDialogData.message}}
+            </q-card-section>
+            <q-separator />
+            <q-card-actions align="right" class="q-pb-none">
+              <q-btn color="green" flat  @click="confirmDialogData.callback(true)" v-close-popup >بله</q-btn>
+              <q-btn color="red" flat  @click="confirmDialogData.callback(false)" v-close-popup >خیر</q-btn>
+            </q-card-actions>
+          </q-card>
+        </q-dialog>
+        <Router :exclude="['konkoorView', 'alaaView', 'MultipleChoiceQ', 'MBTIQ']" />
       </div>
     </template>
   </quasar-template-builder>
 </template>
 
 <script>
-
 import SideMenuDashboard from 'components/Menu/SideMenu/SideMenu-dashboard'
 import sideMenuMapOfQuestions from 'components/Menu/SideMenu/SideMenu_MapOfQuestions'
 import { QuasarTemplateBuilder } from 'quasar-template-builder'
 import templateHeader from 'components/Template/templateHeader'
 import onlineQuizTemplateHeader from 'components/Template/onlineQuizTemplateHeader'
 import { ref } from 'vue'
+import Router from 'src/router/Router'
 
 export default {
-  components: { SideMenuDashboard, sideMenuMapOfQuestions, QuasarTemplateBuilder, templateHeader, onlineQuizTemplateHeader },
+  components: { Router, SideMenuDashboard, sideMenuMapOfQuestions, QuasarTemplateBuilder, templateHeader, onlineQuizTemplateHeader },
   data () {
     return {
       properties: {
@@ -70,6 +79,11 @@ export default {
         layoutPageContainerCustomClass: 'main-layout-container'
       },
       contentInside: ref(0)
+    }
+  },
+  computed: {
+    confirmDialogData () {
+      return this.$store.getters['AppLayout/confirmDialog']
     }
   },
   created () {
