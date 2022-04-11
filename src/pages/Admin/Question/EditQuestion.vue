@@ -150,9 +150,6 @@ export default {
     },
     disableLoading () {
       this.totalLoading = false
-    },
-    openCloseImgPanel () {
-      this.isPanelOpened = !this.isPanelOpened
     }
   },
   computed: {

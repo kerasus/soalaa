@@ -1,86 +1,82 @@
 <template>
-  <div class="question-details">
+  <div class="exam-details">
+    <button @click="alert = true">alert</button>
     <q-dialog v-model="alert">
-      <q-card>
+      <q-card class="attach-exam-card">
         <q-card-section>
-          <div class="text-h6">Alert</div>
-        </q-card-section>
+          <div class="question-details">
+            <div class="box-title">اضافه کردن به آزمون</div>
+            <div class="details-container-1 default-details-container row">
+              <div class="col-12 detail-box detail-box-first">
+                <div class="detail-box-title">آزمون</div>
+                <q-select
+                  borderless
+                  v-model="selectedExam"
+                  :options="exams.list"
+                  option-value="exam_id"
+                  option-label="title"
+                  :rules="selectorRules"
+                  :loading="exams.loading"
+                />
+              </div>
+              <div class="col-3 detail-box">
+                <div class="detail-box-title">درس</div>
+                <q-select
+                  borderless
+                  v-model="selectedLesson"
+                  :options="lessons.list"
+                  option-value="id"
+                  option-label="title"
+                  :rules="selectorRules"
+                  :loading="lessons.loading"
+                />
+              </div>
+              <div class="col-5">
+                <div class="detail-box">
+                  <div class="detail-box-title">ترتیب</div>
+                  <q-input
+                    borderless
+                    v-model="order"
+                    type="number"
+                    :rules="numberRules"
+                  />
+                </div>
+              </div>
+              <!--      <div class="detail-box detail-box-last" :class="[imgPanelVisibility ? 'col-6' : 'col-3']">-->
+              <!--        <div class="detail-box-title">درجه سختی</div>-->
+              <!--        <q-select borderless v-model="model" :options="options"/>-->
+              <!--      </div>-->
+              <div class="detail-box detail-box-last-of-row-1" :class="[imgPanelVisibility ? 'col-6' : 'col-4']">
+                <q-btn
+                  unelevated
+                  :loading="draftBtnLoading"
+                  label="افزودن"
+                  class="attach-btn default-detail-btn"
+                  @click="attach"
+                />
+              </div>
+            </div>
+            <div v-if="exams && lessons.list.length" :key="question.exams.list.length">
+            <div v-for="(item, index) in question.exams.list" :key="index" class="flex row">
 
-        <q-card-section class="q-pt-none">
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Rerum repellendus sit voluptate voluptas eveniet porro. Rerum blanditiis perferendis totam, ea at omnis vel numquam exercitationem aut, natus minima, porro labore.
+              <div class="detail-box detail-box-first" :class="[imgPanelVisibility ? 'col-6' : 'col-3']">
+                {{ item.exam.title }}
+              </div>
+              <div class="detail-box detail-box-first" :class="[imgPanelVisibility ? 'col-6' : 'col-3']">
+                {{ item.sub_category.title }}
+              </div>
+              <div class="detail-box detail-box-last" :class="[imgPanelVisibility ? 'col-6' : 'col-3']">
+                {{ item.order }}
+              </div>
+              <div class="detail-box detail-box-last" :class="[imgPanelVisibility ? 'col-6' : 'col-3']">
+                <q-btn unelevated icon="mdi-delete" class="draft-btn default-detail-btn" @click="detach(item)" />
+              </div>
+            </div>
+          </div>
+          </div>
         </q-card-section>
-
-        <q-card-actions align="right">
-          <q-btn flat label="OK" color="primary" v-close-popup />
-        </q-card-actions>
       </q-card>
     </q-dialog>
-    <div class="box-title">مشخصات سوال</div>
-    <div class="details-container-1 default-details-container row">
-      <div class="detail-box detail-box-first" :class="[imgPanelVisibility ? 'col-6' : 'col-3']">
-        <div class="detail-box-title">آزمون</div>
-        <q-select
-          borderless
-          v-model="selectedExam"
-          :options="exams.list"
-          option-value="exam_id"
-          option-label="title"
-          :rules="selectorRules"
-          :loading="exams.loading"
-        />
-      </div>
-      <div class="detail-box" :class="[imgPanelVisibility ? 'col-6' : 'col-3']">
-        <div class="detail-box-title">درس</div>
-        <q-select
-          borderless
-          v-model="selectedLesson"
-          :options="lessons.list"
-          option-value="id"
-          option-label="title"
-          :rules="selectorRules"
-          :loading="lessons.loading"
-        />
-      </div>
-      <div class="detail-box" :class="[imgPanelVisibility ? 'col-6' : 'col-3']">
-        <div class="detail-box-title">ترتیب</div>
-        <q-input
-          borderless
-          v-model="order"
-          type="number"
-          :rules="numberRules"
-        />
-      </div>
-<!--      <div class="detail-box detail-box-last" :class="[imgPanelVisibility ? 'col-6' : 'col-3']">-->
-<!--        <div class="detail-box-title">درجه سختی</div>-->
-<!--        <q-select borderless v-model="model" :options="options"/>-->
-<!--      </div>-->
-      <div class="detail-box detail-box-last-of-row-1" :class="[imgPanelVisibility ? 'col-6' : 'col-3']">
-        <q-btn
-          unelevated
-          :loading="draftBtnLoading"
-          icon="mdi-plus"
-          class="draft-btn default-detail-btn"
-          @click="attach"
-        />
-      </div>
-    </div>
-    <div v-if="exams && lessons.list.length" :key="question.exams.list.length">
-      <div v-for="(item, index) in question.exams.list" :key="index" class="flex row">
-
-        <div class="detail-box detail-box-first" :class="[imgPanelVisibility ? 'col-6' : 'col-3']">
-          {{ item.exam.title }}
-        </div>
-        <div class="detail-box detail-box-first" :class="[imgPanelVisibility ? 'col-6' : 'col-3']">
-          {{ item.sub_category.title }}
-        </div>
-        <div class="detail-box detail-box-last" :class="[imgPanelVisibility ? 'col-6' : 'col-3']">
-          {{ item.order }}
-        </div>
-        <div class="detail-box detail-box-last" :class="[imgPanelVisibility ? 'col-6' : 'col-3']">
-          <q-btn unelevated icon="mdi-delete" class="draft-btn default-detail-btn" @click="detach(item)" />
-        </div>
-      </div>
-    </div>
   </div>
 </template>
 
@@ -193,15 +189,29 @@ export default {
 </script>
 
 <style scoped lang="scss">
+.q-dialog {
+  .attach-exam-card {
+    background: #FFFFFF;
+    border-radius: 15px;
+    .q-card__section--vert {
+          padding: 30px;
+    }
+  }
+}
 .question-details {
-  margin-top: 40px;
   font-style: normal;
   font-weight: 500;
   font-size: 16px;
   line-height: 28px;
   text-align: right #{"/* rtl:ignore */"};
   color: #23263B;
-
+  //.q-card .attach-exam-card {
+  //  background: #FFFFFF;
+  //  border-radius: 15px;
+  //  .q-card__section--vert {
+  //    padding: 30px;
+  //  }
+  //}
   .default-details-container {
     .detail-box {
       margin-top: 10px;
@@ -215,6 +225,14 @@ export default {
     display: flex ;
     align-items: flex-end;
     margin-bottom: 2px ;
+    justify-content: flex-end;
+    .attach-btn {
+      background-color: #FFB74D;
+      color: #FFFFFF;
+      border-radius: 10px;
+      width: 106px;
+      height: 40px;
+    }
   }
 
   .details-container-1 {
@@ -295,7 +313,7 @@ export default {
       }
 
       .save-btn {
-        background: #9690E4;
+        background: #FFB74D;
         font-weight: 500;
         color: #FFFFFF;
       }
@@ -306,6 +324,13 @@ export default {
 
 <style lang="scss">
 .question-details {
+  .q-card .attach-exam-card {
+    background: #FFFFFF;
+    border-radius: 15px;
+    .q-card__section--vert {
+      padding: 30px;
+    }
+  }
   .default-details-container {
     .detail-box {
       .q-field__control {
