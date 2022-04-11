@@ -14,7 +14,7 @@
         <div class="question-bank-content">
           <question-item v-if="questions.loading" :question="loadingQuestion"/>
           <template v-else>
-            <question-item v-for="question in questions.list" :key="question.id" :question="question" :origins="question.source_data.origins.questionOriginList[0]"/>
+            <question-item v-for="question in questions.list" :key="question.id" :question="question"/>
           </template>
         </div>
         <div class="pageInation">
@@ -29,7 +29,7 @@
 import QuestionBankHeader from 'components/Question/QuestionBank/components/QuestionBankHeader'
 import QuestionToolBar from 'components/Question/QuestionBank/QuestionToolBar'
 import QuestionFilter from 'components/Question/QuestionBank/QuestionFilter'
-import QuestionItem from 'components/Question/QuestionBank/QuestionItem'
+import QuestionItem from 'components/Question/QuestionItem/QuestionItem'
 import PageInation from 'components/Question/QuestionBank/PageInation'
 import { Question, QuestionList } from 'src/models/Question'
 import axios from 'axios'
@@ -52,7 +52,9 @@ export default {
   methods: {
     getQuestionData () {
       const that = this
-      axios.get('https://office.alaatv.com:800/api/v1/question/search-monta')
+      axios.post('https://office.alaatv.com:800/api/v1/exam-question/attach/show/5ffdeb30077f6b34e529bc3a', {
+        sub_category: ['60b7875428f350277f04c5e9']
+      })
         .then(function (response) {
           that.paginationMeta = response.data.meta
           that.questions = new QuestionList(response.data.data)
@@ -68,10 +70,10 @@ export default {
 
 <style>
 
-.theme-v1-box-shadow {
-  box-shadow: -2px -4px 10px rgba(255, 255, 255, 0.6), 2px 4px 10px rgba(112, 108, 162, 0.05);
-  border-radius: 20px;
-}
+/*.theme-v1-box-shadow {*/
+/*  box-shadow: -2px -4px 10px rgba(255, 255, 255, 0.6), 2px 4px 10px rgba(112, 108, 162, 0.05);*/
+/*  border-radius: 20px;*/
+/*}*/
 
 .main-container {
   padding: 0 100px 0 96px;
