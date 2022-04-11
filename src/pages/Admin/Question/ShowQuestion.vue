@@ -1,10 +1,11 @@
 <template>
   <div class="showQ-text-container">
     <q-linear-progress
-      v-if="question.loading"
+      v-if="loadingState"
+      size="md"
       indeterminate
+      rounded
       color="primary"
-      class="q-mt-sm"
     />
     <navbar
       :mode="'show'"
@@ -33,17 +34,21 @@
       </div>
     </div>
     <div class="relative-position">
+<!--      <question-details class="col-9"/>-->
       <attach-exam
         :exams="examList"
         :lessons="subCategoriesList"
-        @detach="detachSavedExam"
+        @attach="attachExam"
+        @detach="detachExam"
       />
-      <q-inner-loading
-        :showing="question.exams.loading"
-        color="primary"
-        class="QComponents-inner-loading"
-        label-style="font-size: 1.1em"
-      />
+      <div
+        v-if="question.logs && question.logs.list && question.logs.list.length > 0"
+      >
+        <log-list-component
+          :logs="question.logs"
+          @addComment="addComment"
+        />
+      </div>
     </div>
   </div>
 </template>
@@ -53,29 +58,30 @@
 import { computed, defineAsyncComponent } from 'vue'
 import { Question } from 'src/models/Question'
 import Navbar from 'components/Question/QuestionPage/Create/textMode/Navbar'
-import QuestionDetails from 'components/Question/QuestionPage/Create/textMode/QuestionDetails'
+// import QuestionDetails from 'components/Question/QuestionPage/Create/textMode/QuestionDetails'
 import AdminActionOnQuestion from 'src/mixin/AdminActionOnQuestion'
 import { QuestionType, TypeList } from 'src/models/QuestionType'
-import AttachExam from 'components/Question/QuestionPage/AttachExam'
+import AttachExam from 'components/Question/QuestionPage/AttachExam/AttachExam'
 import CommentBox from 'components/Question/QuestionPage/StatusChange'
 import BtnBox from 'components/Question/QuestionPage/BtnBox'
 import { ExamList } from 'src/models/Exam'
 import { QuestSubcategoryList } from 'src/models/QuestSubcategory'
 import { QuestionStatusList } from 'src/models/QuestionStatus'
 import ImagePanel from 'components/Question/QuestionPage/ImagePanel'
+import LogListComponent from 'components/QuestionBank/EditQuestion/Log/LogList'
 // import API_ADDRESS from 'src/api/Addresses'
 export default {
   name: 'ShowQuestion',
   components: {
     ImagePanel,
     Navbar,
-    DescriptiveQ: defineAsyncComponent(() => import('components/Question/QuestionPage/Show/questionTypes/DescriptiveQ/DescriptiveQ')),
-    MultipleChoiceQ: defineAsyncComponent(() => import('components/Question/QuestionPage/Show/questionTypes/MultipleChoiceQ/MultipleChoiceQ')),
-    MBTIQ: defineAsyncComponent(() => import('components/Question/QuestionPage/Show/questionTypes/MBTIQ/MBTIQ')),
+    DescriptiveShowQuestion: defineAsyncComponent(() => import('components/Question/QuestionPage/Show/questionTypes/DescriptiveQuestion/DescriptiveShowQuestion')),
+    MultipleChoiceShowQuestion: defineAsyncComponent(() => import('components/Question/QuestionPage/Show/questionTypes/MultipleChoiceQuestion/MultipleChoiceShowQuestion')),
+    MBTIShowQuestion: defineAsyncComponent(() => import('components/Question/QuestionPage/Show/questionTypes/MBTIQuestion/MBTIShowQuestion')),
     BtnBox,
     CommentBox,
     AttachExam,
-    QuestionDetails
+    LogListComponent
   },
   mixins: [
     AdminActionOnQuestion
@@ -90,14 +96,18 @@ export default {
       examList: new ExamList(),
       subCategoriesList: new QuestSubcategoryList(),
       questionStatuses: new QuestionStatusList(),
-      isPanelOpened: false
+      isPanelOpened: false,
+      allTypes: new TypeList(),
+      totalLoading: false
     }
   },
   created () {
     this.enableLoading()
     // this.getPageReady()
-    this.getQuestionById(this.getCurrentQuestionId())
+    this.getQuestionTypeForTypeId(this.question)
+    // this.setAllQuestionLoadings()
     this.loadSubcategories()
+    // this.getQuestionById(this.getCurrentQuestionId())
     this.loadExamList()
   },
   provide () {
@@ -107,20 +117,20 @@ export default {
   },
   mounted () {
     this.$nextTick(() => {
-      this.disableLoading()
+      // this.disableLoading()
     })
   },
   methods: {
     chosenComponent () {
       const cName = this.question.type.componentName
       if (cName === 'MultipleChoiceQ') {
-        return 'multiple-choice-q'
+        return 'multiple-choice-show-question'
       }
       if (cName === 'DescriptiveQ') {
-        return 'descriptive-q'
+        return 'descriptive-show-question'
       }
       if (cName === 'MBTIQ') {
-        return 'm-b-t-i-q'
+        return 'm-b-t-i-show-question'
       }
     },
     setQuestionContents () {
@@ -158,5 +168,50 @@ export default {
   padding: 40px 100px;
   display: flex;
   flex-direction: column;
+}
+</style>
+<style lang="scss">
+// USED IN MANY OTHER COMPONENTS
+.default-questions-card {
+  background: #FFFFFF;
+  box-shadow: -2px -4px 10px rgba(255, 255, 255, 0.6), 2px 4px 10px rgba(112, 108, 162, 0.05) #{"/* rtl:ignore */"};
+  border-radius: 30px;
+  .q-card__section {
+    padding: 15px 20px !important;
+  }
+  .default-Qcard-title {
+    font-size: 14px;
+    line-height: 24px;
+  }
+  .default-Qcard-box {
+    align-items: last baseline;
+    font-weight: normal;
+    font-size: 14px;
+    line-height: 24px;
+    .default-Qcard-img {
+      text-align: left #{"/* rtl:ignore */"};
+      .q-img {
+        border-radius: 0px 0px 1px 20px #{"/* rtl:ignore */"};
+        padding: 0 !important;
+        .q-img__image {
+          padding: 0 !important;
+        }
+      }
+    }
+  }
+}
+.multiple-choice-Answer {
+  .answer-box {
+    .q-radio__inner {
+      margin-left: 7px #{"/* rtl:ignore */"} !important;
+    }
+  }
+  .default-Qcard-title{
+    justify-content: space-between;
+    display: flex;
+    .q-btn {
+      padding: 4px 16px !important;
+    }
+  }
 }
 </style>

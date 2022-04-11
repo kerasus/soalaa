@@ -1,6 +1,5 @@
 <template>
   <div class="multiple-choice-Q">
-    <!--    <button @click="getContent">getContent</button>-->
     <q-btn
       v-if="question.choices.list.length > 0"
       dark
@@ -17,45 +16,37 @@
         </q-card-section>
         <q-separator inset />
         <q-card-section>
-          <div class="row justify-between question-box default-Qcard-box">
+          <div
+            v-if="question.statement"
+            class="row justify-between question-box default-Qcard-box"
+          >
             <QuestionField
               ref="tiptapQuestionStatement"
               :key="'statement' + domKey"
+              :editorValue="question.statement"
             />
-            <!--          <div class="col-10 question-txt default-Qcard-txt">-->
-            <!--            شناخت فراوان جامعه و متخصصان را می طلبد،لازم است، و برای شرایط فعلی تکنولوژی مورد نیاز، و کاربردهای متنوع با هدف بهبود ابزارهای کاربردی می باشد، کتابهای زیادی در شصت و سه درصد گذشته حال و آینده،لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ، و با استفاده از طراحان گرافیک است، چاپگرها و متون بلکه روزنامه و مجله در ستون و سطرآنچنان که-->
-            <!--          </div>-->
-            <!--          <div class="col-2 question-img default-Qcard-img">-->
-            <!--            <q-img-->
-            <!--              :src="url"-->
-            <!--              spinner-color="primary"-->
-            <!--              spinner-size="30px"-->
-            <!--              style="height: 96px; width: 96px"-->
-            <!--            >-->
-            <!--            </q-img>-->
-            <!--          </div>-->
           </div>
         </q-card-section>
       </q-card>
     </div>
     <div class="multiple-choice-A">
       <div
-        v-if="question.choices.list[0]"
+        v-if="question.choices.list.length"
         class="row multiple-choice-Answer"
       >
         <div
-          class="col-6 answer-box"
+          class="col-12 answer-box"
           v-for="(item, index) in question.choices.list"
           :key="item.order"
         >
           <q-card
-            class="col-6 default-questions-card"
+            class="col-12 default-questions-card"
           >
             <q-card-section class="default-Qcard-title">
               <q-radio
                 dense
                 v-model="choice"
-                :val="'choice' + (index + 1)"
+                :val="'choice' + index"
                 :label="'گزینه ' + (index + 1)"
                 color="primary"
                 @click="choiceClicked(item.order)"
@@ -67,7 +58,6 @@
                 label="حذف گزینه"
                 @click="removeChoice(item.order)"
               />
-              <!--              :class="{ 'example-fab-animate--hover' }"-->
             </q-card-section>
             <q-separator inset />
             <q-card-section>
@@ -75,6 +65,7 @@
                 <QuestionField
                   :ref="'tiptapChoice' + index"
                   :key="'choices' + index + domKey"
+                  :editor-value="item.title"
                 />
               </div>
             </q-card-section>
@@ -83,12 +74,8 @@
       </div>
     </div>
     <div>
-      <!--      <q-skeleton-->
-      <!--        v-if="loading"-->
-      <!--        type="QInput"-->
-      <!--        style="min-height: 220px; border-radius: 30px;"-->
-      <!--      />-->
       <q-card
+        v-if="question.descriptive_answer"
         class="default-questions-card"
       >
         <q-card-section class="default-Qcard-title">
@@ -100,6 +87,7 @@
             <QuestionField
               ref="tiptapDescriptiveAnswer"
               :key="'descriptive_answer' + domKey"
+              :editor-value="question.descriptive_answer"
             />
           </div>
         </q-card-section>
@@ -116,7 +104,7 @@ import { QuestSubcategoryList } from 'src/models/QuestSubcategory'
 import { ExamList } from 'src/models/Exam'
 import { QuestionStatusList } from 'src/models/QuestionStatus'
 export default {
-  name: 'MultipleChoiceQ',
+  name: 'MultipleChoiceEditQuestion',
   components: {
     QuestionField
   },
@@ -154,21 +142,24 @@ export default {
     setTimeout(() => {
       that.domKey = 'Date.now()'
     }, 100)
-    this.setDefaultChoices()
+    this.setChoice()
   },
-  mounted () {
-    this.$nextTick(() => {
-      this.disableAllQuestionLoadings()
-    })
-  },
+  mounted () {},
   updated () {},
   methods: {
-    saveQuestion () {
-      // this.allProps.setContentToQuestion = true
+    setChoice () {
+      const choiceIndex = this.question.choices.list.findIndex((item) => item.answer === true)
+      this.choice = 'choice' + choiceIndex
     },
-    setDefaultChoices () {
-      this.question.choices.list = []
-      this.question.choices.addEmptyChoices(4)
+    saveQuestion () {
+      if (this.getContent()) {
+        const question = {
+          ...this.question,
+          choices: this.question.choices.list,
+          type_id: this.question.type_id
+        }
+        this.updateQuestion(question)
+      }
     },
     removeChoice (order) {
       if (this.question.choices.list.length < 3) {
@@ -188,6 +179,7 @@ export default {
     },
     getContent () {
       const that = this
+      let status = false
       if (this.validateContent()) {
         this.question.statement = this.getContentOfQuestionParts('QuestionStatement')
         this.question.choices.list.forEach(function (item, index) {
@@ -196,8 +188,9 @@ export default {
           item.id = index
         })
         this.question.descriptive_answer = this.getContentOfQuestionParts('DescriptiveAnswer')
+        status = true
       }
-      console.log('this.question', this.question)
+      return status
     },
     getContentOfChoice (index) {
       return this.$refs[this.defaultRefName + 'Choice' + index][0].getContent()
@@ -211,6 +204,15 @@ export default {
       this.question.choices.list.forEach(function (item, index) {
         if (!that.getContentOfChoice(index)) {
           status = false
+        }
+      })
+      return status
+    },
+    validateAnswerOfChoice () {
+      let status = false
+      this.question.choices.list.forEach(function (item, index) {
+        if (item.answer) {
+          status = true
         }
       })
       return status
@@ -229,15 +231,20 @@ export default {
         errors.push(ChoiceMassage)
         status = false
       }
-      if (!this.getContentOfQuestionParts('DescriptiveAnswer')) {
-        errors.push(this.getErrorMessage('پاسخ تشریحی'))
-        status = false
-      }
       if (!this.choice) {
-        const ChoiceMassage = 'لطفا گزینه صحیح را درج کنید'
+        const ChoiceMassage = 'لطفا گزینه صحیح را ثبت کنید'
         errors.push(ChoiceMassage)
         status = false
       }
+      if (!this.validateAnswerOfChoice()) {
+        const ChoiceMassage = 'لطفا گزینه صحیح را ثبت کنید'
+        errors.push(ChoiceMassage)
+        status = false
+      }
+      // if (!this.getContentOfQuestionParts('DescriptiveAnswer')) {
+      //   errors.push(this.getErrorMessage('پاسخ تشریحی'))
+      //   status = false
+      // }
       if (!status) {
         errors.forEach(function (item) {
           that.$q.notify({
@@ -300,12 +307,6 @@ export default {
   }
 }
 .multiple-choice-Answer {
-  :nth-child(2n){
-    padding-right: 12px #{"/* rtl:ignore */"};
-  }
-  :nth-child(2n+1){
-    padding-left: 12px #{"/* rtl:ignore */"};
-  }
   .answer-box {
     padding-top: 12px;
     padding-bottom: 12px;

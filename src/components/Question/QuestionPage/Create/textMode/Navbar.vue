@@ -35,11 +35,22 @@
             />
           </div>
         </div>
+        <div
+          v-if="mode === 'show'"
+        >
+          <q-btn
+            unelevated
+            color="primary"
+            label="ویرایش سوال"
+            class="save-btn default-detail-btn"
+            @click="redirectToEditPage"
+          />
+        </div>
       </div>
       <div class="col-auto">
         <div
           v-if="!(mode === 'create')"
-          class="question-img-btn"
+          class="question-img-btn row"
         >
           <div
             v-ripple.early
@@ -204,6 +215,19 @@ export default {
 </style>
 <style lang="scss">
 .question-txtMode-navbar {
+  .default-detail-btn {
+    width: 144px;
+    height: 40px;
+    border-radius: 10px;
+    font-size: 14px;
+    line-height: 24px;
+    text-align: center;
+  }
+  .save-btn {
+    background: #9690E4;
+    font-weight: 500;
+    color: #FFFFFF;
+  }
   .question-type {
     .question-type-tabs {
       .q-tab {
