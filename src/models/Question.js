@@ -126,7 +126,10 @@ class Question extends Model {
         default: []
       },
       { key: 'created_at' },
-      { key: 'updated_at' }
+      { key: 'updated_at' },
+
+      // ToDo: remove this
+      { key: 'source_data' }
     ])
 
     if (this.id) {
