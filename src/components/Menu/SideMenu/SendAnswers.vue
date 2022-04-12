@@ -108,7 +108,7 @@ export default {
     async getBackEndRes () {
       try {
         const that = this
-        const examData = new ExamData()
+        const examData = new ExamData(this.$axios)
         console.log('this.quiz :', this.quiz)
         await examData.getExamDataAndParticipate(this.quiz.id)
         await examData.getUserExamData(this.quiz.user_exam_id).run()
