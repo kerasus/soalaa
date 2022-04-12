@@ -1,7 +1,26 @@
 <template>
   <div class="exam-details">
-    <button @click="modal = true">modal</button>
-
+    <div class="exam-details-title">شناسنامه سوال</div>
+    <div class="exam-details-all-boxes">
+      <div class="details-container-2 default-details-container row">
+      <div class="detail-box col-4">
+        <div class="detail-box-title">آزمون ها</div>
+        <div class="input-container flex">
+          <div class="input-box">
+            <q-input v-model="definedExamsTitle" dense />
+          </div>
+          <div class="icon-box">
+            <q-btn
+              unelevated
+              icon="isax:add-square"
+              class="open-modal-btn default-detail-btn"
+              @click="modal = true"
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+    </div>
     <q-dialog v-model="modal">
       <q-card class="attach-exam-card">
         <q-card-section>
@@ -159,6 +178,15 @@ export default {
       modal: false
     }
   },
+  computed: {
+    definedExamsTitle () {
+      let number = this.question.exams.list.length
+      if (number.toString() === '0') {
+        number = '00'
+      }
+      return number + ' آزمون تعریف شده'
+    }
+  },
   methods: {
     attach () {
       if (!this.selectedLesson || !this.selectedExam || !this.order) {
@@ -224,6 +252,15 @@ export default {
     }
   }
 }
+.exam-details{
+  margin-top: 40px;
+  .exam-details-title {
+    font-weight: 500;
+    font-size: 16px;
+    line-height: 28px;
+    color: #23263B;
+  }
+}
 .question-details {
   font-style: normal;
   font-weight: 500;
@@ -233,7 +270,7 @@ export default {
   color: #23263B;
   .attached-exam-box {
     margin-bottom: 10px;
-    max-height: 216px;
+    height: 216px;
     overflow: scroll;
   }
   .title-show-exams {
@@ -424,56 +461,184 @@ export default {
 </style>
 
 <style lang="scss">
-.question-details {
-  .q-card .attach-exam-card {
-    background: #FFFFFF;
-    border-radius: 15px;
-    .q-card__section--vert {
-      padding: 30px;
+.exam-details {
+  .exam-details-all-boxes {
+    .details-container-2 {
+      .detail-box {
+        .detail-box-title {
+          font-weight: 500;
+          font-size: 16px;
+          line-height: 28px;
+          color: #23263B;
+          margin-top: 5px;
+        }
+        .input-container {
+          margin-top: 5px;
+          .input-box {
+            width: 50%;
+          }
+          .icon-box {
+            width: 40px;
+            height: 40px;
+            background: #FFFFFF;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-left: 16px ;
+            color: #65677F ;
+            .default-detail-btn {
+              width: 40px;
+              height: 40px;
+              border-radius: 10px;
+              font-size: 14px;
+              line-height: 24px;
+              text-align: center;
+            }
+            .question-details-subject-img {
+              height: 24px;
+              max-width: 24px;
+            }
+          }
+        }
+      }
+      .open-modal-btn {}
+      .detail-box-first {
+        padding-right: 0px #{"/* rtl:ignore */"};
+      }
+      .detail-box-last {
+        padding-right: 0px #{"/* rtl:ignore */"};
+        width: 200px;
+        //margin-right: 132px #{"/* rtl:ignore */"};
+      }
+      .detail-box-last-of-row {
+        padding-left: 0px #{"/* rtl:ignore */"};
+        margin-top: 43px;
+        text-align: end;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        .default-detail-btn {
+          width: 144px;
+          height: 40px;
+          border-radius: 10px;
+          font-size: 14px;
+          line-height: 24px;
+          text-align: center;
+        }
+        .draft-btn {
+          background: #FFFFFF;
+          margin-left: 16px #{"/* rtl:ignore */"};
+          font-weight: normal;
+          color: #23263B;
+        }
+        .save-btn {
+          background: #9690E4;
+          font-weight: 500;
+          color: #FFFFFF;
+        }
+      }
+    }
+    .default-details-container {
+      .detail-box {
+        .q-field {
+          background: #FFFFFF;
+          border-radius: 10px;
+          line-height: 24px;
+          height: 40px;
+          min-height: 40px;
+          .q-field__marginal {
+            height: 40px;
+          }
+          .q-field__inner {
+            padding-right: 16px;
+            padding-left: 16px;
+          }
+        }
+        .q-field--auto-height .q-field__native {
+          min-height: 40px;
+          color: #65677F;
+        }
+        .q-field--auto-height .q-field__control, .q-field--auto-height .q-field__native {
+          min-height: 40px;
+          color: #65677F;
+        }
+        .q-field__control::before, .q-field__control::after {
+          display: none;
+        }
+        .q-field__native, .q-field__prefix, .q-field__suffix, .q-field__input {
+          color: #65677F;
+        }
+      }
     }
   }
-  .default-details-container {
-    .box-order {
-      .q-field {
-        width: 165px;
+}
+.attach-exam-card {
+  .question-details {
+    .q-card .attach-exam-card {
+      background: #FFFFFF;
+      border-radius: 15px;
+
+      .q-card__section--vert {
+        padding: 30px;
       }
     }
-    .detail-box {
-      .q-field__control {
-        height: 42px;
+
+    //.attach-exam-card {
+    .default-details-container {
+      .box-order {
+        .q-field {
+          width: 165px;
+        }
       }
-      .q-field {
-        background: #F4F5F6 !important;
-        border-radius: 10px;
-        line-height: 24px;
-        height: 40px;
-        min-height: 40px;
-        .q-field__marginal {
+
+      .detail-box {
+        .q-field__control {
+          height: 42px;
+        }
+
+        .q-field {
+          background: #F4F5F6 !important;
+          border-radius: 10px;
+          line-height: 24px;
           height: 40px;
+          min-height: 40px;
+
+          .q-field__marginal {
+            height: 40px;
+          }
+
+          .q-field__inner {
+            padding-right: 16px;
+            padding-left: 16px;
+          }
+
+          .q-field__bottom {
+            top: 15px;
+          }
         }
-        .q-field__inner {
-          padding-right: 16px;
-          padding-left: 16px;
+
+        .q-field--auto-height .q-field__native {
+          min-height: 40px;
+          color: #65677F;
         }
-        .q-field__bottom {
-          top: 15px;
+
+        .q-field--auto-height .q-field__control, .q-field--auto-height .q-field__native {
+          min-height: 40px;
+          color: #65677F;
         }
-      }
-      .q-field--auto-height .q-field__native {
-        min-height: 40px;
-        color: #65677F;
-      }
-      .q-field--auto-height .q-field__control, .q-field--auto-height .q-field__native {
-        min-height: 40px;
-        color: #65677F;
-      }
-      .q-field__control::before, .q-field__control::after {
-        display: none;
-      }
-      .q-field__native, .q-field__prefix, .q-field__suffix, .q-field__input {
-        color: #65677F;
+
+        .q-field__control::before, .q-field__control::after {
+          display: none;
+        }
+
+        .q-field__native, .q-field__prefix, .q-field__suffix, .q-field__input {
+          color: #65677F;
+        }
       }
     }
+
+    //}
   }
 }
 .q-menu {
