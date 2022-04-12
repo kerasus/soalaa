@@ -89,14 +89,13 @@
 </template>
 
 <script>
+import BubbleSheet from 'src/components/OnlineQuiz/Quiz/bubbleSheet/bubbleSheet'
 import Question from 'src/components/QuizEditor/Question'
-import QuestionItem from 'components/Question/QuestionItem/QuestionItem'
 import { mixinAuth, mixinQuiz } from 'src/mixin/Mixins'
 import { QuestSubcategoryList } from 'src/models/QuestSubcategory'
 import { QuestionList } from 'src/models/Question'
 import { Exam } from 'src/models/Exam'
 import API_ADDRESS from 'src/api/Addresses'
-import { copyToClipboard } from 'quasar'
 
 export default {
   name: 'LessonDetails',
