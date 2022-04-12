@@ -6,7 +6,7 @@
     node-key="id"
     ref="tree"
     icon="isax:minus-square"
-    control-color="customGreen"
+    control-color="orange"
     label-key="title"
     :tick-strategy="tickStrategy"
     v-model:ticked="ticked"
