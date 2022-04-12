@@ -466,9 +466,6 @@ export default {
         line-height: 24px;
         text-align: center;
       }
-
-
-
       .draft-btn {
         background: #FFFFFF;
         margin-left: 16px #{"/* rtl:ignore */"};
