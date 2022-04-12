@@ -2004,8 +2004,7 @@ export default {
       return x
     },
     onClickChoose (event) {
-      this.$emit('chooseClick', event.id)
-      console.log(event.id)
+      this.$emit('chooseClick', event.category_id)
     }
   }
 }
