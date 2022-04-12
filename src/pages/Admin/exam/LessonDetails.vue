@@ -65,16 +65,8 @@
             dense
           >
             <q-item-section>
-              <question
-                :sourcee="item"
-                :questionListOptions="questionsOptions"
-                :consider-active-category="false"
-                :questions-column="$refs.questionsColumn"
-                :exam-id="$route.params.quizId"
-                :sub-category="quizData.sub_categories"
-                @reloadPage="reload"
-              />
               <question-item
+                pageStrategy="lesson-detail"
                 :question="item"
                 :confirmLoading="confirmQLoading"
                 :questionListOptions="questionsOptions"
@@ -82,7 +74,10 @@
                 :questions-column="$refs.questionsColumn"
                 :exam-id="$route.params.quizId"
                 :sub-category="quizData.sub_categories"
-                @adminActions="doAdminActions"
+                @detachQuestion="detachQuestion"
+                @deleteQuestion="deleteQuestion"
+                @copyIdToClipboard="copyIdToClipboard"
+                @confirmQuestion="confirmQuestion"
               />
             </q-item-section>
           </q-item>
@@ -106,7 +101,6 @@ import { copyToClipboard } from 'quasar'
 export default {
   name: 'LessonDetails',
   components: {
-    Question,
     QuestionItem
   },
   mixins: [mixinAuth, mixinQuiz],
@@ -175,9 +169,6 @@ export default {
     }
   },
   methods: {
-    doAdminActions (action, data) {
-      this[action](data)
-    },
     detachQuestion (questionId) {
       this.$store.dispatch('AppLayout/showConfirmDialog', {
         show: true,
