@@ -58,7 +58,7 @@ module.exports = configure(function (ctx) {
     // Full list of options: https://v2.quasar.dev/quasar-cli/quasar-conf-js#Property%3A-build
     build: {
       vueRouterMode: 'history', // available values: 'hash', 'history'
-
+      productName: 'آزمون آنلاین آلاء',
       // transpile: false,
       // Add dependencies for transpiling with Babel (Array of string/regex)
       // (from node_modules, which are by default not transpiled).
@@ -113,6 +113,11 @@ module.exports = configure(function (ctx) {
 
           // This will make sure that the hosting test app is pointing to only one instance of vue.
           vue: path.resolve('./node_modules/vue')
+        }
+
+        cfg.watchOptions = {
+          aggregateTimeout: 200,
+          poll: 1000
         }
       }
     },
