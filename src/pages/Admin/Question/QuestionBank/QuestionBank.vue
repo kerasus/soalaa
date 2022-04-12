@@ -1,11 +1,11 @@
 <template>
   <div class="main-container">
     <div class="row">
-      <div class="col-12 question-bank-header">
+      <div ref="header" class="col-12 question-bank-header">
         <QuestionBankHeader/>
       </div>
       <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-xs-12 question-bank-filter">
-        <QuestionFilter/>
+        <QuestionFilter ref="filter" @delete-filter="deleteFilterItem"/>
       </div>
       <div class="col-xl-9 col-lg-9 col-md-9 col-sm-12 col-xs-12">
         <div class="question-bank-toolbar">
@@ -14,11 +14,16 @@
         <div class="question-bank-content">
           <question-item v-if="questions.loading" :question="loadingQuestion"/>
           <template v-else>
-            <question-item v-for="question in questions.list" :key="question.id" :question="question" :origins="question.source_data.origins.questionOriginList[0]"/>
+            <question-item v-for="question in questions.list" :key="question.id" :question="question"/>
           </template>
         </div>
-        <div class="pageInation">
-          <page-ination :meta="paginationMeta"/>
+
+        <div class="pagination">
+          <pagination
+            :meta="paginationMeta"
+            :disable="disablePagination"
+            @updateCurrentPage="updatePage"
+          />
         </div>
       </div>
     </div>
@@ -26,40 +31,73 @@
 </template>
 
 <script>
+import API_ADDRESS from 'src/api/Addresses'
 import QuestionBankHeader from 'components/Question/QuestionBank/components/QuestionBankHeader'
 import QuestionToolBar from 'components/Question/QuestionBank/QuestionToolBar'
 import QuestionFilter from 'components/Question/QuestionBank/QuestionFilter'
-import QuestionItem from 'components/Question/QuestionBank/QuestionItem'
-import PageInation from 'components/Question/QuestionBank/PageInation'
+import QuestionItem from 'components/Question/QuestionItem/QuestionItem'
+import pagination from 'components/Question/QuestionBank/Pagination'
 import { Question, QuestionList } from 'src/models/Question'
-import axios from 'axios'
 
 export default {
   name: 'QuestionBank',
-  components: { QuestionBankHeader, QuestionToolBar, QuestionFilter, QuestionItem, PageInation },
+  components: { QuestionBankHeader, QuestionToolBar, QuestionFilter, QuestionItem, pagination },
   data () {
     return {
       loadingQuestion: new Question(),
       questions: new QuestionList(),
-      paginationMeta: null
+      disablePagination: false,
+      filterQuestions: {
+        majorId: null,
+        levelId: null,
+        gradeId: null,
+        moduleGroupId: null,
+        majorGroupId: null,
+        moduleId: null,
+        originId: null,
+        publishYearId: null,
+        difficultyLevelId: null
+      },
+      paginationMeta: {
+        current_page: 1,
+        from: 0,
+        last_page: 1,
+        links: [],
+        path: '',
+        per_page: 0,
+        to: 0,
+        total: 0
+      }
     }
   },
   created () {
-    this.loadingQuestion.loading = true
-    this.questions.loading = true
     this.getQuestionData()
   },
   methods: {
-    getQuestionData () {
-      const that = this
-      axios.get('https://office.alaatv.com:800/api/v1/question/search-monta')
-        .then(function (response) {
-          that.paginationMeta = response.data.meta
-          that.questions = new QuestionList(response.data.data)
-          console.log(that.questions)
+    updatePage (page) {
+      this.getQuestionData(page)
+    },
+    deleteFilterItem (filter) {
+      console.log('Filter Deleted !!!', filter.id)
+      this.$refs.filter.setTicked('tree', filter.id, false)
+    },
+    getQuestionData (page) {
+      if (!page) {
+        page = 1
+      }
+      this.loadingQuestion.loading = true
+      this.questions.loading = true
+      this.$axios.get(API_ADDRESS.question.index([], page))
+        .then((response) => {
+          this.questions = new QuestionList(response.data.data)
+          this.paginationMeta = response.data.meta
+          this.loadingQuestion.loading = false
+          this.questions.loading = false
         })
         .catch(function (error) {
           console.log(error)
+          this.loadingQuestion.loading = false
+          this.questions.loading = false
         })
     }
   }
@@ -67,11 +105,6 @@ export default {
 </script>
 
 <style>
-
-.theme-v1-box-shadow {
-  box-shadow: -2px -4px 10px rgba(255, 255, 255, 0.6), 2px 4px 10px rgba(112, 108, 162, 0.05);
-  border-radius: 20px;
-}
 
 .main-container {
   padding: 0 100px 0 96px;

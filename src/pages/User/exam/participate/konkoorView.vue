@@ -88,7 +88,6 @@
 </template>
 
 <script>
-import 'src/assets/scss/markdownKatex.scss'
 import Item from 'src/components/OnlineQuiz/Quiz/question/questionField'
 import { mixinAuth, mixinQuiz, mixinUserActionOnQuestion } from 'src/mixin/Mixins'
 import Timer from 'src/components/OnlineQuiz/Quiz/timer/timer'
@@ -98,6 +97,8 @@ import Assistant from 'src/plugins/assistant'
 import TopMenu from 'src/components/Menu/topMenu/onlineQuizTopMenu'
 import { ref } from 'vue'
 import { mapGetters } from 'vuex'
+
+import 'src/assets/scss/markdownKatex.scss'
 
 export default {
   name: 'konkoorView',
