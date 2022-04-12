@@ -1,5 +1,7 @@
 <template>
-  <router-view />
+  <div id="q-app">
+    <router-view />
+  </div>
 </template>
 <script>
 import 'src/assets/scss/IranyekanFont.scss'

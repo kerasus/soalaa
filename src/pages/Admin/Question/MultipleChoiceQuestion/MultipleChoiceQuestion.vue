@@ -110,6 +110,7 @@
     <attach-exam
       :exams="examList"
       :lessons="subCategoriesList"
+      :categories="categoryList"
       :buffer="true"
     />
     <div class="attach-btn row">
@@ -143,6 +144,7 @@ import { QuestSubcategoryList } from 'src/models/QuestSubcategory'
 import { ExamList } from 'src/models/Exam'
 import { QuestionStatusList } from 'src/models/QuestionStatus'
 import { computed } from 'vue'
+import { QuestCategoryList } from 'src/models/QuestCategory'
 export default {
   name: 'MultipleChoiceQ',
   components: {
@@ -171,6 +173,7 @@ export default {
       subCategoriesList: new QuestSubcategoryList(),
       examList: new ExamList(),
       questionStatuses: new QuestionStatusList(),
+      categoryList: new QuestCategoryList(),
       allProps: {
         loading: false
       }
