@@ -39,7 +39,7 @@ const Axios = (function () {
   }
   function synchronizeTimeAfterResponse () {
     axios.interceptors.response.use(function (response) {
-      if (response.config.url.indexOf(process.env.VUE_APP_LUMEN_INTERNAL_API_SERVER) === 0) {
+      if (response.config.url.indexOf('/3a/api/v1') === 0) {
         Time.synchronizeTimeWithData(response)
       }
       return Promise.resolve(response)
