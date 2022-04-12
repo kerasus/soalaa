@@ -34,8 +34,8 @@
             </q-card-section>
             <q-separator />
             <q-card-actions align="right" class="q-pb-none">
-              <q-btn color="green" flat  @click="confirmDialogData.callback(true)" v-close-popup >بله</q-btn>
-              <q-btn color="red" flat  @click="confirmDialogData.callback(false)" v-close-popup >خیر</q-btn>
+              <q-btn color="green" flat  @click="confirmDialogAction(true)" v-close-popup >بله</q-btn>
+              <q-btn color="red" flat  @click="confirmDialogAction(false)" v-close-popup >خیر</q-btn>
             </q-card-actions>
           </q-card>
         </q-dialog>
@@ -91,6 +91,14 @@ export default {
     Object.assign(this.properties, localData)
   },
   methods: {
+    confirmDialogAction (data) {
+      if (this.confirmDialogData) this.confirmDialogData.callback(data)
+      else {
+        this.$store.commit('AppLayout/showConfirmDialog', {
+          show: false
+        })
+      }
+    },
     setHeaderDimension (value) {
       this.$refs.contentInside.style.height = 'calc(100vh +' + value.height + 'px'
     },
