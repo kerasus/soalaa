@@ -2,8 +2,11 @@
   <q-tree
     class="q-ma-lg"
     :nodes="nodes"
+    no-nodes-label="درختی ایجاد نشده است!"
     node-key="id"
     ref="tree"
+    icon="isax:minus-square"
+    control-color="customGreen"
     label-key="title"
     :tick-strategy="tickStrategy"
     v-model:ticked="ticked"
@@ -23,9 +26,17 @@
       </span>
     </template>
   </q-tree>
+    <q-btn
+      v-if="editable && nodes && !nodes.length"
+      label="ساخت درخت"
+      @click="toggleMenu(true)"
+      icon="add"
+      color="green"
+      flat
+    />
   <q-dialog v-model="editDialog " persistent>
     <q-card class="q-pa-md ">
-      <q-btn flat icon="close " color="red " v-close-popup @click="editDialog = false "/>
+      <q-btn flat icon="close " color="red " v-close-popup @click="toggleMenu(false)" />
       <q-tabs
         v-model="tab "
         narrow-indicator
@@ -88,7 +99,6 @@ export default {
   name: 'Tree',
   props: {
     tickStrategy: {
-      type: String,
       default: 'none'
     },
     editable: {
@@ -114,7 +124,7 @@ export default {
       ticked: [],
       completeTickedNode: [],
       nodes: [],
-      tab: 'edit',
+      tab: 'createNewNode',
       loading: false,
       newTitle: '',
       newOrder: 1,
@@ -213,6 +223,10 @@ export default {
       } else {
         this.$refs.tree.setTicked(keys, false)
       }
+    },
+
+    toggleMenu (state) {
+      this.editDialog = state
     }
   }
 }
@@ -234,5 +248,59 @@ export default {
         display: none;
       }
     }
+    .q-checkbox{
+      &.q-tree__tickbox {
+        color: blue !important;
+      }
+    }
+  }
+</style>
+<style lang='scss'>
+  .q-tree {
+    display: inline-block;
+
+    .node-title {
+      &:hover {
+        .edit-btn {
+          color: #f18305;
+        }
+      }
+      .edit-btn {
+        color: transparent;
+      }
+      .none-edit-btn{
+        display: none;
+      }
+    }
+  }
+
+  .q-tree__node:after {
+    right: auto;
+    left: -13px;
+    top: -3px;
+    bottom: -22px;
+    //opacity: 0.2;
+    border-left: 2px solid #d5d6da;
+  }
+
+  .q-tree__node-header::before {
+    border-bottom: 0 !important;
+    left: -35px;
+    //opacity: 0.2;
+    border-left: 2px solid #d5d6da;
+  }
+  .q-checkbox--dense .q-checkbox__inner.q-checkbox__inner--falsy{
+    color: #65677F !important;
+  }
+  .q-checkbox{
+    margin-right: 8px;
+  }
+  .q-checkbox__bg{
+    border-radius: 5px;
+    border: 1px solid;
+  }
+  .q-icon{
+    font-size: 20px;
+    margin-right: 8px;
   }
 </style>
