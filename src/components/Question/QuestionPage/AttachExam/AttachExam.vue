@@ -39,19 +39,31 @@
                   :loading="exams.loading"
                 />
               </div>
+              <div class="col-4 detail-box detail-box-first">
+                <div class="detail-box-title ">دفترچه</div>
+                <q-select
+                  borderless
+                  v-model="selectedCategory"
+                  :options="categories.list"
+                  option-value="id"
+                  option-label="title"
+                  :rules="selectorRules"
+                  :loading="categories.loading"
+                />
+              </div>
               <div class="col-3 detail-box">
                 <div class="detail-box-title">درس</div>
                 <q-select
                   borderless
                   v-model="selectedLesson"
-                  :options="lessons.list"
+                  :options="subCategoriesFilteredList"
                   option-value="id"
                   option-label="title"
                   :rules="selectorRules"
                   :loading="lessons.loading"
                 />
               </div>
-              <div class="col-5">
+              <div class="col-3">
                 <div class="detail-box box-order">
                   <div class="detail-box-title">ترتیب</div>
                   <q-input
@@ -62,7 +74,7 @@
                   />
                 </div>
               </div>
-              <div class="detail-box detail-box-last-of-row-1" :class="[imgPanelVisibility ? 'col-6' : 'col-4']">
+              <div class="detail-box detail-box-last-of-row-1 col-2">
                 <q-btn
                   unelevated
                   :loading="draftBtnLoading"
@@ -127,6 +139,7 @@
 import { Question } from 'src/models/Question'
 import { ExamList } from 'src/models/Exam'
 import { QuestSubcategoryList } from 'src/models/QuestSubcategory'
+import { QuestCategoryList } from 'src/models/QuestCategory'
 
 export default {
   name: 'AttachExam',
@@ -150,6 +163,12 @@ export default {
     lessons: { // possible removal for attach exam
       type: QuestSubcategoryList,
       default: new QuestSubcategoryList()
+    },
+    categories: {
+      default () {
+        return new QuestCategoryList()
+      },
+      type: QuestCategoryList
     }
   },
   inject: {
@@ -166,6 +185,7 @@ export default {
       saveBtnLoading: false,
       selectedExam: null,
       selectedLesson: null,
+      selectedCategory: null,
       order: null,
       numberRules: [
         v => v !== null || 'پر کردن این فیلد الزامی است.',
@@ -175,7 +195,8 @@ export default {
         v => v !== null || 'پر کردن این فیلد الزامی است.'
       ],
       questionData: this.question,
-      modal: false
+      modal: false,
+      categoryDisability: false
     }
   },
   computed: {
@@ -185,6 +206,12 @@ export default {
         number = '00'
       }
       return number + ' آزمون تعریف شده'
+    },
+    subCategoriesFilteredList () {
+      if (this.selectedCategory) {
+        return this.lessons.list.filter(item => item.category_id === this.selectedCategory.id)
+      }
+      return []
     }
   },
   methods: {
@@ -213,6 +240,7 @@ export default {
         })
       }
       this.selectedLesson = ''
+      this.selectedCategory = ''
       this.selectedExam = ''
       this.order = '0'
     },
@@ -233,6 +261,14 @@ export default {
         return ''
       }
       return target.title
+    }
+  },
+  watch: {
+    selectedCategory: {
+      handler () {
+        this.selectedLesson = ''
+      },
+      deep: true
     }
   }
 }
@@ -271,7 +307,7 @@ export default {
   .attached-exam-box {
     margin-bottom: 10px;
     height: 216px;
-    overflow: scroll;
+    overflow: auto;
   }
   .title-show-exams {
     margin-top: 40px;
@@ -361,10 +397,10 @@ export default {
   .details-container-1 {
     .detail-box {
       padding-right: 0px;
-      padding-left: 0px;
+      padding-left: 10px;
     }
     .box-order {
-      padding-left: 32px;
+      //padding-left: 32px;
     }
 
     .detail-box-first {
@@ -430,7 +466,6 @@ export default {
         line-height: 24px;
         text-align: center;
       }
-
       .draft-btn {
         background: #FFFFFF;
         margin-left: 16px #{"/* rtl:ignore */"};
@@ -588,7 +623,7 @@ export default {
     .default-details-container {
       .box-order {
         .q-field {
-          width: 165px;
+          width: 155px;
         }
       }
 

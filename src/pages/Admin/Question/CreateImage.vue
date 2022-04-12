@@ -32,6 +32,7 @@
     <attach-exam
       :exams="examList"
       :lessons="subCategoriesList"
+      :categories="categoryList"
       :buffer="true"
     />
     <div class="attach-btn row">
@@ -70,6 +71,7 @@ import AttachExam from 'components/Question/QuestionPage/AttachExam/AttachExam'
 import { ExamList } from 'src/models/Exam'
 import { QuestSubcategoryList } from 'src/models/QuestSubcategory'
 import { QuestionStatusList } from 'src/models/QuestionStatus'
+import { QuestCategoryList } from 'src/models/QuestCategory'
 // import CommentBox from 'components/Question/QuestionPage/CommentBox'
 // import BtnBox from 'components/Question/QuestionPage/BtnBox'
 
@@ -90,7 +92,8 @@ export default {
       question: new Question(),
       examList: new ExamList(),
       subCategoriesList: new QuestSubcategoryList(),
-      questionStatuses: new QuestionStatusList()
+      questionStatuses: new QuestionStatusList(),
+      categoryList: new QuestCategoryList()
     }
   },
   created () {

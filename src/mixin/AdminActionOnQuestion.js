@@ -7,6 +7,7 @@ import { QuestSubcategoryList } from 'src/models/QuestSubcategory'
 import { QuestionType, TypeList } from 'src/models/QuestionType'
 import { Log, LogList } from 'src/models/Log'
 import { AttachedExamList } from 'src/models/AttachedExam'
+import { QuestCategoryList } from 'src/models/QuestCategory'
 const AdminActionOnQuestion = {
   data () {
     return {
@@ -24,6 +25,7 @@ const AdminActionOnQuestion = {
     getPageReady () {
       this.getQuestionType(this.question)
       this.loadExamList()
+      this.loadCategories()
       this.loadSubcategories()
       this.getQuestionStatus()
     },
@@ -281,6 +283,18 @@ const AdminActionOnQuestion = {
         })
         .catch(() => {
           this.examList.loading = false
+        })
+    },
+    loadCategories () {
+      const that = this
+      this.categoryList.loading = true
+      this.$axios.get(API_ADDRESS.questionCategory.base)
+        .then((response) => {
+          that.categoryList = new QuestCategoryList(response.data.data)
+          that.categoryList.loading = false
+        })
+        .catch(() => {
+          that.categoryList.loading = false
         })
     },
     attachExam (data) {
