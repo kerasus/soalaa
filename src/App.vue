@@ -7,6 +7,7 @@
 import 'src/assets/scss/IranyekanFont.scss'
 import 'src/css/customThem.scss'
 import 'src/css/Theme/theme.scss'
+
 // import '../public/fonts/iranyekan/css/style.css'
 
 import { mixinSetIcons } from './mixin/Mixins.js'
