@@ -1,3 +1,4 @@
+import process from 'process'
 const lumenServer = process.env.AAA_API_SERVER
 const authServer = process.env.AUTH_API_SERVER
 const treeServer = process.env.TREE_API_SERVER
@@ -97,6 +98,9 @@ const API_ADDRESS = {
   },
   question: {
     indexMonta: lumenServer + '/question/search-monta',
+    bank: {
+      page: (page) => lumenServer + '/exam-question/attach/show/6245afa20569e1374540cb88?page=' + page
+    },
     index (statuses, page) {
       statuses = statuses.join('&statuses[]=')
       if (statuses) {
@@ -151,6 +155,9 @@ const API_ADDRESS = {
     confirm (questionId) {
       return lumenServer + '/question/confirm/' + questionId
     },
+    unconfirm (questionId) {
+      return lumenServer + '/question/unconfirm/' + questionId
+    },
     uploadImage (questionId) {
       return lumenServer + '/question/upload/' + questionId
     }
@@ -183,6 +190,9 @@ const API_ADDRESS = {
     },
     getNodeByType (nodeType) {
       return treeServer + '/tree?type=' + nodeType
+    },
+    editNode (id) {
+      return treeServer + '/tree/' + id
     }
   }
 }

@@ -1,5 +1,6 @@
 <template>
   <q-card class="theme-v1-box-shadow">
+    <q-resize-observer @resize="setChoiceCol"/>
     <q-card-section class="question-bank-content">
       <div class="question-info-section">
         <div class="number-and-info">
@@ -38,18 +39,14 @@
               <q-skeleton v-for="item in 3" :key="item" class="level-circles"></q-skeleton>
             </template>
             <template v-else>
-              <div v-if="questionLvl === 1" class="level">
-                آسان
+              <div class="level">
+                {{ questionLevelClasses[questionLvl].title }}
               </div>
-              <div v-if="questionLvl === 2" class="level">
-                متوسط
-              </div>
-              <div v-if="questionLvl === 3" class="level">
-                سخت
-              </div>
-              <div class="level-circles" :class="{'hard' : questionLvlHard}"></div>
-              <div class="level-circles" :class="{'medium' : questionLvlMedium}"></div>
-              <div class="level-circles" :class="{'easy' : questionLvlEasy}"></div>
+              <div v-for="item in 3"
+                   :key="item"
+                   class="level-circles"
+                   :class="item === questionLvl ?  questionLevelClasses[questionLvl].class : ''"
+              />
             </template>
           </div>
           <div class="question-source">
@@ -60,7 +57,7 @@
               </template>
               <template v-else>
                 <div class="source-name">سازمان سنجش</div>
-                <div class="source-date">99-1400</div>
+                <div class="source-date">99 - 1400</div>
               </template>
             </div>
             <template v-if="question.loading">
@@ -73,6 +70,37 @@
           <div v-if="!question.loading" class="more-option">
             <q-btn flat dense rounded style="color: #65677F">
               <q-icon name="mdi-dots-vertical"></q-icon>
+              <q-menu class="menu-content">
+                <q-list style="min-width: 100px">
+                  <q-item clickable v-ripple class="list-item">
+                    <q-item-section>حذف از پایگاه داده</q-item-section>
+                    <q-item-section avatar>
+                      <q-icon
+                        class="fi fi-rr-delete document icon-style"
+                        @click="emitAdminActions('deleteQuestion')"
+                      />
+                    </q-item-section>
+                  </q-item>
+                  <q-item clickable v-ripple>
+                    <q-item-section>حذف سوال از آزمون</q-item-section>
+                    <q-item-section avatar>
+                      <q-icon
+                        class="fi fi-rr-cross-small icon-style"
+                        @click="emitAdminActions('detachQuestion')"
+                      />
+                    </q-item-section>
+                  </q-item>
+                  <q-item clickable v-ripple>
+                    <q-item-section>کپی شناسه سوال</q-item-section>
+                    <q-item-section avatar>
+                      <q-icon
+                        class="fi fi-rr-copy icon-style"
+                        @click="emitAdminActions('copyIdToClipboard')"
+                      />
+                    </q-item-section>
+                  </q-item>
+                </q-list>
+              </q-menu>
             </q-btn>
           </div>
         </div>
@@ -87,144 +115,209 @@
             <q-skeleton width="30%" height="200px" style="border-radius: 10px"/>
           </template>
           <template v-else>
-            <vue-katex :input="question.statement" />
+            <vue-katex :input="question.statement"/>
           </template>
         </div>
       </div>
       <div class="choice-section row">
         <template v-if="question.loading">
           <div class="choice-column col-3" v-for="item in 4" :key="item">
-            <div class="choice false" style="margin-bottom: 2px">
+            <div class="question-choice false" style="margin-bottom: 2px">
               {{ item }}
             </div>
             <q-skeleton type="text" width="100px" height="25px"/>
           </div>
         </template>
         <template v-else>
-          <div class="choice-column col-3" v-for="(item , index) in question.choices.list" :key="index">
-            <div
-              v-if="item.answer === false"
-              class="choice false"
-            >
-              {{ item.order }}
-            </div>
-            <div
-              v-if="item.answer === true"
-              class="choice true"
-            >
-              {{ item.order }}
-            </div>
-            <div class="answer-text">
-              <vue-katex :input="item.title"/>
-            </div>
-          </div>
+          <QuestionChoice
+            ref="questionChoice"
+            class=" col-lg-3 col-md-3 col-sm-12"
+            :class="questionCol"
+            v-for="(item , index) in question.choices.list"
+            :questionData="item" :key="index">
+          </QuestionChoice>
         </template>
       </div>
       <template v-if="!question.loading">
-      <div class="question-actions-container">
-        <q-expansion-item
-        expand-icon-toggle
-        expand-icon="isax:arrow-down-1"
-      >
-        <template v-slot:header>
-          <div class="question-actions">
-            <div class="edit-and-add">
-              <div class="add-btn">
-                <q-btn flat class="edit-and-add-btn">
-                  <q-icon name="isax:add"></q-icon>
-                </q-btn>
-              </div>
-              <div class="edit-btn">
-                <q-btn flat class="edit-and-add-btn">
-                  <q-icon name="isax:edit-2"></q-icon>
-                </q-btn>
-              </div>
-            </div>
-            <div class="question-actions-content">
-              <div class="question-actions-btn">
-                <div class="rating">
-                  <div class="voters-number">
-                    (90)
+        <div class="question-actions-container">
+          <q-expansion-item
+            expand-icon-toggle
+            expand-icon="isax:arrow-down-1"
+          >
+            <template v-slot:header>
+              <div class="question-actions">
+                <div class="edit-and-add">
+                  <div class="add-btn">
+                    <q-btn flat class="edit-and-add-btn">
+                      <q-icon name="isax:add"></q-icon>
+                    </q-btn>
                   </div>
-                  <div class="rate-number">
-                    4.5
-                  </div>
-                  <div class="star">
-                    <q-icon class="star-icon" name="mdi-star" size="16px"></q-icon>
+                  <div class="edit-btn">
+                    <q-btn flat class="edit-and-add-btn">
+                      <q-icon name="isax:edit-2"></q-icon>
+                    </q-btn>
                   </div>
                 </div>
-                <div class="comments">
-                  <q-btn flat dense rounded>
-                    <div class="comment-number">19</div>
-                    <q-icon class="comment-icon" name="isax:message-text" size="16px" style="color: #65677F">
-                    </q-icon>
-                  </q-btn>
-                </div>
-                <div class="report">
-                  <q-btn flat dense rounded>
-                    <div class="report-title">
-                      گزارش خطا
+                <div class="question-actions-content">
+                  <div class="question-actions-btn">
+                    <div class="rating">
+                      <div class="voters-number">
+                        (90)
+                      </div>
+                      <div class="rate-number">
+                        4.5
+                      </div>
+                      <div class="star">
+                        <q-icon class="star-icon" name="mdi-star" size="16px"></q-icon>
+                      </div>
                     </div>
-                    <q-icon class="report-icon" name="isax:danger" size="16px" style="color: #65677F"></q-icon>
-                  </q-btn>
+                    <div class="comments">
+                      <q-btn flat dense rounded>
+                        <div class="comment-number">19</div>
+                        <q-icon class="comment-icon" name="isax:message-text" size="16px" style="color: #65677F">
+                        </q-icon>
+                      </q-btn>
+                    </div>
+                    <div class="report">
+                      <q-btn flat dense rounded @click="reportProblemDialog.show = true">
+                        <div class="report-title">
+                          گزارش خطا
+                        </div>
+                        <q-icon class="report-icon" name="isax:danger" size="16px" style="color: #65677F"></q-icon>
+                      </q-btn>
+                    </div>
+                  </div>
                 </div>
               </div>
-            </div>
-          </div>
-        </template>
-        <q-card>
-          <q-card-section class="answer-section">
-            <div class="row">
-              <div class="answer-description col-8">
-                <q-card flat class="answer-description-card">
-                  <q-card-section class="answer-description-content">
-                    <div class="question-answer-choice">
+            </template>
+            <q-card>
+              <q-card-section class="answer-section">
+                <div class="row">
+                  <div class="answer-description col-8">
+                    <q-card flat class="answer-description-card">
+                      <q-card-section class="answer-description-content">
+                        <div class="question-answer-choice">
                 <span v-if="trueChoice" class="question-answer-choice-title">
                   گزینه
                   {{ trueChoice.getOrderTitle() }}
                 </span>
+                        </div>
+                        <div class="question-answer-description">
+                          {{ question.answer }}
+                        </div>
+                      </q-card-section>
+                    </q-card>
+                  </div>
+                  <div class="answer-description-video col-4">
+                    <div class="video">
                     </div>
-                    <div class="question-answer-description">
-                      {{ question.answer }}
+                    <div class="title">
+                      پاسخنامه ویدیویی - محمد امین نباخته
                     </div>
-                  </q-card-section>
-                </q-card>
-              </div>
-              <div class="answer-description-video col-4">
-                <div class="video">
+                  </div>
                 </div>
-                <div class="title">
-                  پاسخنامه ویدیویی - محمد امین نباخته
-                </div>
-              </div>
-            </div>
-          </q-card-section>
-        </q-card>
-      </q-expansion-item>
-      </div>
+              </q-card-section>
+            </q-card>
+          </q-expansion-item>
+        </div>
       </template>
     </q-card-section>
   </q-card>
+  <q-dialog v-model="reportProblemDialog.show">
+    <q-card flat class="report-problem-dialog">
+      <q-btn flat v-close-popup round dense icon="close" class="close-btn" />
+      <div class="title-style text-center">گزارش خطا</div>
+      <q-card-section class="problem-type q-pa-none">
+        <div class="title-style">
+          نوع خطا
+        </div>
+        <q-select
+          filled
+          dense
+          dropdown-icon="isax:arrow-down-1"
+          bg-color="alaa3A"
+          v-model="reportProblemDialog.problemType"
+          :options="reportProblemDialog.problems"
+          label="پاسخ نادرست"/>
+      </q-card-section>
+      <q-card-section class="problem-description q-pa-none">
+        <div class="title-style">
+          توضیحات
+        </div>
+        <q-input
+          v-model="reportProblemDialog.description"
+          filled
+          solo
+          type="textarea"
+        />
+      </q-card-section>
+      <q-card-actions align="right" class="action-box q-pa-none">
+        <q-btn unelevated label="انصراف" class="cancel btn-style" v-close-popup/>
+        <q-btn unelevated label="ثبت" color="primary" class="btn-style" v-close-popup/>
+      </q-card-actions>
+    </q-card>
+  </q-dialog>
 </template>
 
 <script>
 import VueKatex from 'components/VueKatex'
 import { Question } from 'src/models/Question'
+import QuestionChoice from 'components/Question/QuestionItem/QuestionChoice'
 
 export default {
   name: 'QuestionItem',
-  components: { VueKatex },
+  components: { VueKatex, QuestionChoice },
   props: {
     question: {
       type: Question,
       default: new Question()
+    },
+    listOptions: {
+      type: Object,
+      default () {
+        return {
+          copy: false,
+          detachQuestion: false,
+          deleteQuestionFromDb: false,
+          editQuestion: false,
+          switch: false
+        }
+      }
     }
   },
   data () {
     return {
+      questionCol: '',
       questionLvlHard: false,
       questionLvlMedium: false,
       questionLvlEasy: false,
+      questionLevelClasses: {
+        1: {
+          lvl: 1,
+          class: 'easy',
+          title: 'آسان'
+        },
+        2: {
+          lvl: 1,
+          class: 'easy',
+          title: 'آسان'
+        },
+        3: {
+          lvl: 2,
+          class: 'medium',
+          title: 'متوسط'
+        },
+        4: {
+          lvl: 2,
+          class: 'medium',
+          title: 'متوسط'
+        },
+        5: {
+          lvl: 3,
+          class: 'hard',
+          title: 'سخت'
+        }
+      },
       info: [
         {
           name: 'شیمی دهم'
@@ -235,27 +328,69 @@ export default {
         {
           name: 'ساختار اتم'
         }
-      ]
+      ],
+      reportProblemDialog: {
+        show: false,
+        problemType: '',
+        problems: [],
+        description: ''
+      }
     }
   },
   created () {
-    if (this.questionLvl === 1) {
-      this.questionLvlEasy = true
-    } else if (this.questionLvl === 2) {
-      this.questionLvlMedium = true
-    } else {
-      this.questionLvlHard = true
-    }
+  },
+  mounted () {
+    this.setChoiceCol()
   },
   computed: {
     trueChoice () {
       return this.question.choices.getSelected()
     },
     questionLvl () {
-      return this.question.inputData.level
+      if (this.question.source_data.difficultyLevel) {
+        return this.question.source_data.difficultyLevel.value
+      }
+      return 1
     }
   },
   methods: {
+    setChoiceCol () {
+      const el = this.$refs.questionChoice
+      if (!el) {
+        return
+      }
+      el.forEach(choice => {
+        if (choice.$el.clientWidth > 900) {
+          return null
+        }
+        if (!this.isSingleLine(choice.$el)) {
+          this.questionCol = 'col-lg-6 col-sm-6'
+          this.$nextTick(() => {
+            this.checkLines(choice.$el)
+          })
+        }
+      })
+    },
+    checkLines (el) {
+      if (!this.isSingleLine(el)) {
+        this.questionCol = 'col-lg-12 col-sm-12'
+      }
+    },
+
+    isSingleLine (choiceBoxElement) {
+      const height = this.getElementHeight(choiceBoxElement)
+      const choiceContentLineHeight = 40
+      return height <= choiceContentLineHeight
+    },
+    getElementHeight (choiceBoxElement) {
+      const choiceContentElement = choiceBoxElement.childNodes[1]
+      const computed = getComputedStyle(choiceContentElement)
+      const padding = parseInt(computed.paddingTop) + parseInt(computed.paddingBottom)
+      return choiceBoxElement.clientHeight - padding
+    },
+    emitAdminActions (action, data) {
+      this.$emit(action, data)
+    }
   }
 }
 </script>
@@ -341,12 +476,15 @@ export default {
           height: 20px;
           background: #F4F5F6;
         }
+
         .easy {
           background: #8ED6FF;
         }
+
         .medium {
-          background: #FFCA28 ;
+          background: #FFCA28;
         }
+
         .hard {
           background: #DA5F5C;
         }
@@ -376,6 +514,14 @@ export default {
 
       .more-option {
         margin-left: 19px;
+        .menu-content{
+          .list-item{
+            .icon-style{
+              color: #23263B;
+              font-size: 15px;
+            }
+          }
+        }
       }
     }
   }
@@ -410,32 +556,16 @@ export default {
     .choice-column {
       display: flex;
       align-items: center;
+
       .answer-text {
         align-items: center;
-      }
-      .choice {
-        margin-bottom: 16px;
-        margin-right: 10px;
-        border-radius: 50%;
-        text-align: center;
-        color: #ffffff;
-        width: 20px;
-        height: 20px;
-        background: #9690E4;
-        box-shadow: -2px -4px 10px rgba(255, 255, 255, 0.6), 2px 4px 10px rgba(112, 108, 162, 0.05);
-      }
-      .false {
-        background: #9690E4;
-      }
-
-      .true {
-        background: #4CAF50;
       }
     }
   }
 
   .answer-section {
     padding: 24px 10px;
+
     .answer-description {
       .answer-description-card {
         font-style: normal;
@@ -445,9 +575,11 @@ export default {
         color: #23263B;
         background: #F4F5F6;
         border-radius: 20px;
+
         .answer-description-content {
           .question-answer-choice {
             margin-bottom: 10px;
+
             .question-answer-choice-title {
               padding: 0 10px;
               font-style: normal;
@@ -462,14 +594,17 @@ export default {
         }
       }
     }
+
     .answer-description-video {
       padding: 0 0 0 16px;
+
       .video {
         width: 320px;
         height: 180px;
         background: #F4F5F6;
         border-radius: 20px;
       }
+
       .title {
         padding-top: 8px;
         padding-left: 10px;
@@ -482,44 +617,52 @@ export default {
     }
   }
 
-  .question-actions-container{
-    .q-item-type{
+  .question-actions-container {
+    .q-item-type {
       justify-content: space-between;
     }
-    .q-expansion-item--collapsed{
+
+    .q-expansion-item--collapsed {
       .q-item__section {
         display: flex;
         flex-direction: row;
         align-items: center;
-        &:before{
+        color: #23263B;
+        &:before {
           content: 'نمایش پاسخ تشریحی';
         }
-        i{
+        i {
           margin-top: 0;
           margin-left: 10px;
         }
-        .q-expansion-item__toggle-focus{
+
+        .q-expansion-item__toggle-focus {
           display: none;
         }
       }
     }
+
     .q-expansion-item--expanded {
       .q-item__section {
         display: flex;
         flex-direction: row;
         align-items: center;
-        &:before{
+
+        &:before {
           content: 'بستن پاسخ تشریحی';
         }
-        i{
+
+        i {
           margin-top: 0;
           margin-left: 10px;
         }
-        .q-expansion-item__toggle-focus{
+
+        .q-expansion-item__toggle-focus {
           display: none;
         }
       }
     }
+
     .question-actions {
       display: flex;
       justify-content: space-between;
@@ -536,12 +679,15 @@ export default {
       .question-actions-content {
         display: flex;
         margin-top: 5px;
+
         .question-actions-btn {
           display: flex;
+
           .rating {
             display: flex;
             align-items: center;
             margin-right: 24px;
+
             .voters-number {
               margin-top: 1px;
               font-style: normal;
@@ -551,6 +697,7 @@ export default {
               color: #65677F;
               opacity: 0.5;
             }
+
             .rate-number {
               margin: 1px 0 0 2px;
               font-style: normal;
@@ -560,6 +707,7 @@ export default {
               text-align: center;
               color: #65677F;
             }
+
             .star {
               .star-icon {
                 margin: 0 0 4px 6px;
@@ -577,6 +725,7 @@ export default {
               font-size: 12px;
               color: #65677F;
             }
+
             .comment-icon {
               margin: 0 0 2px 5px;
             }
@@ -585,7 +734,6 @@ export default {
           .report {
             display: flex;
             align-items: center;
-            margin-right: 30px;
 
             .report-title {
               font-style: normal;
@@ -594,6 +742,7 @@ export default {
               line-height: 21px;
               color: #65677F;
             }
+
             .report-icon {
               margin: 0 0 3px 7px;
             }
@@ -605,15 +754,48 @@ export default {
 
   }
 }
-.question-bank-pagination{
-  .q-btn--actionable{
-    width: 35px;
-    height: 35px;
-    background: #FFFFFF;
-    border-radius: 12px;
-    margin-right: 3px;
+
+.report-problem-dialog {
+  position: relative;
+  .close-btn{
+    position: absolute;
+    top:12px;
+    left:12px;
+    z-index: 1000000;
+  }
+  border-radius: 15px;
+  padding: 24px;
+
+  .title-style {
+    font-weight: 500;
+    font-size: 16px;
+    line-height: 28px;
+    color: #23263B;
+    margin-bottom: 8px;
+  }
+
+  .problem-type {
+    margin-top:10px;
+    width: 300px;
+  }
+  .problem-description {
+    margin-top:16px;
+  }
+
+  .action-box {
+    margin-top:20px;
+    .btn-style {
+      border-radius: 10px;
+      color: #23263B;
+      width: 96px;
+      height: 40px;
+    }
+    .cancel {
+      background-color: #F4F5F6;
+    }
   }
 }
+
 </style>
 
 <style scoped>

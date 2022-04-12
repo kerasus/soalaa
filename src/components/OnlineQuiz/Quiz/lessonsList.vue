@@ -2,7 +2,7 @@
   <div class="row">
     <div class="col-12">
       <div class="tableSize">
-        <span>{{ $route.params.quizTitle }}</span>
+        <span>{{  quizTitle }}</span>
         <q-btn
           class="q-mx-sm float-right"
           round
@@ -68,7 +68,7 @@
                     class="q-mx-sm"
                     size="12px"
                     dark-percentage
-                    @click="redirect(item)"
+                    @click="redirectTo(item)"
                     color="green">
                     <q-icon
                       name="mdi-notebook-outline"
@@ -112,19 +112,29 @@
 import axios from 'axios'
 import API_ADDRESS from 'src/api/Addresses'
 import { QuestSubcategoryList } from 'src/models/QuestSubcategory'
+import { mixinAuth, mixinGetQuizData, mixinQuiz } from 'src/mixin/Mixins'
 
 export default {
   name: 'LessonsList',
   data: () => ({
-    lessonsList: new QuestSubcategoryList()
+    lessonsList: new QuestSubcategoryList(),
+    quizTitle: ''
   }),
+  mixins: [mixinAuth, mixinQuiz, mixinGetQuizData],
   created () {
     this.$store.commit('AppLayout/updateLayoutLeftDrawerVisible', true)
+    this.getQuizTitle()
   },
   mounted () {
     this.loadLessons()
   },
   methods: {
+    async getQuizTitle () {
+      const res = await this.getQuizData(this.$route.params.quizId)
+      if (res.data.data) {
+        this.quizTitle = res.data.data.title
+      }
+    },
     goBack () {
       this.$router.push('/admin/exam')
     },
@@ -157,6 +167,10 @@ export default {
           quizTitle: this.$route.params.quizTitle
         }
       })
+    },
+    redirectTo (link) {
+      const quizId = this.$route.params.quizId
+      this.$router.push('/onlineQuiz/exams/lesson/' + quizId + '/' + link.id)
     },
     updateOrder (subcategory) {
       if (subcategory.order === null) {

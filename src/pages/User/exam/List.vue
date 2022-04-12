@@ -122,7 +122,7 @@
                         v-if="item.exam_actions.can_submit_answer"
                         style="color: #ffc107"
                         flat
-                        @click="getConfirmation(item.id, item.user_exam_id)"
+                        @click="getConfirmation(item.user_exam_id)"
                       >
                         ثبت پاسخنامه ذخیره شده در سیستم
                       </q-btn>
@@ -228,7 +228,7 @@ export default {
       }
       this.$router.push({ name: routeName, params: { quizId: exam.id, questNumber: 1 } })
     },
-    getConfirmation (examId, examUserId) {
+    getConfirmation (userExamId) {
       const that = this
       this.$store.commit('AppLayout/showConfirmDialog', {
         message: 'مطمئنی؟ نتیجه شما پس از تایید، ثبت و رتبه شما محاسبه خواهد شد و به اندازه میانگین درصدهای شما، کد تخفیف همه محصولات آلاء برای شما ارسال خواهد شد. مثلا اگر میانگین درصدهای شما 60% باشد یک کد تخفیف 60% دریافت خواهید کرد',
@@ -240,7 +240,7 @@ export default {
           if (!confirm) {
             return
           }
-          that.sendAnswersAndFinishExam(examId, examUserId)
+          that.sendAnswersAndFinishExam(userExamId)
         }
       })
     },
@@ -281,8 +281,8 @@ export default {
           }
         })
     },
-    sendAnswersAndFinishExam (examId, examUserId) {
-      if (!this.hasExamDataOnThisDeviseStorage(examId)) {
+    sendAnswersAndFinishExam (userExamId) {
+      if (!this.hasExamDataOnThisDeviseStorage(userExamId)) {
         this.$q.notify({
           type: 'negative',
           message: 'در این سیستم پاسخنامه شما ثبت نشده است. لطفا از سیستمی که با آن در آزمون شرکت کرده اید استفاده کنید و این دکمه را بزنید.',
@@ -291,14 +291,14 @@ export default {
         return
       }
       const that = this
-      this.sendUserQuestionsDataToServerAndFinishExam(examId, examUserId)
+      this.sendUserQuestionsDataToServerAndFinishExam(userExamId)
         .then(() => {
           that.$q.notify({
             type: 'positive',
             message: 'اطلاعات آزمون شما ثبت شد.',
             position: 'top'
           })
-          that.$store.commit('clearExamData', examId)
+          that.$store.commit('Exam/clearExamData', userExamId)
           that.$router.push({ name: 'user.exam.list' })
         })
         .catch(() => {
