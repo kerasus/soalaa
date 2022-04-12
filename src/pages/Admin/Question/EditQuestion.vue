@@ -38,6 +38,7 @@
       <attach-exam
         :exams="examList"
         :lessons="subCategoriesList"
+        :categories="categoryList"
         @attach="attachExam"
         @detach="detachExam"
       />
@@ -65,7 +66,6 @@
 </template>
 
 <script>
-// detachUnsavedExam
 /* eslint-disable no-var */
 import { computed, defineAsyncComponent } from 'vue'
 import { Question } from 'src/models/Question'
@@ -81,6 +81,7 @@ import { QuestSubcategoryList } from 'src/models/QuestSubcategory'
 import { QuestionStatusList } from 'src/models/QuestionStatus'
 import ImagePanel from 'components/Question/QuestionPage/ImagePanel'
 import LogListComponent from 'components/QuestionBank/EditQuestion/Log/LogList'
+import { QuestCategoryList } from 'src/models/QuestCategory'
 export default {
   name: 'EditQuestion',
   components: {
@@ -108,6 +109,7 @@ export default {
       examList: new ExamList(),
       subCategoriesList: new QuestSubcategoryList(),
       questionStatuses: new QuestionStatusList(),
+      categoryList: new QuestCategoryList(),
       isPanelOpened: false,
       allTypes: new TypeList(),
       totalLoading: false
@@ -118,6 +120,7 @@ export default {
     this.getQuestionTypeForTypeId(this.question)
     this.loadExamList()
     this.loadSubcategories()
+    this.loadCategories()
     this.getQuestionStatus()
   },
   provide () {
@@ -150,9 +153,6 @@ export default {
     },
     disableLoading () {
       this.totalLoading = false
-    },
-    openCloseImgPanel () {
-      this.isPanelOpened = !this.isPanelOpened
     }
   },
   computed: {

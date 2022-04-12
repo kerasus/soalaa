@@ -1,4 +1,3 @@
-import axios from 'axios'
 import process from 'process'
 import API_ADDRESS from 'src/api/Addresses'
 import Time from 'src/plugins/time'
@@ -222,7 +221,7 @@ const mixinQuiz = {
     sendUserQuestionsDataToServerAndFinishExam (userExamId, finishExam) {
       const answers = this.getUserAnswers(userExamId)
 
-      return axios.post(API_ADDRESS.exam.sendAnswers, { exam_user_id: userExamId, finish: finishExam, questions: answers })
+      return this.$axios.post(API_ADDRESS.exam.sendAnswers, { exam_user_id: userExamId, finish: finishExam, questions: answers })
     },
     reloadQuestionFile (questionsFileUrl, viewType, examId) {
       if (!Assistant.getId(examId)) {
@@ -536,12 +535,12 @@ const mixinQuiz = {
     syncUserAnswersWithDBAndSendAnswersToServerInExamTime (userExamId, examUserId, finishExam) {
       const answers = this.getUserAnswers(userExamId)
 
-      return axios.post(API_ADDRESS.exam.sendAnswers, { exam_user_id: examUserId, finish: finishExam, questions: answers })
+      return this.$axios.post(API_ADDRESS.exam.sendAnswers, { exam_user_id: examUserId, finish: finishExam, questions: answers })
     },
     syncUserAnswersWithDBAndSendAnswersToServerAfterExamTime (userExamId, examUserId, finishExam) {
       const answers = this.getUserAnswers(userExamId)
 
-      return axios.post(API_ADDRESS.exam.sendAnswersAfterExam, { exam_user_id: examUserId, finish: finishExam, questions: answers })
+      return this.$axios.post(API_ADDRESS.exam.sendAnswersAfterExam, { exam_user_id: examUserId, finish: finishExam, questions: answers })
     },
     isLtrString (string) {
       if (!string) {
@@ -756,7 +755,7 @@ const mixinQuiz = {
 
     getExamUserData (examId) {
       return new Promise(function (resolve, reject) {
-        axios.post(API_ADDRESS.exam.examUser, { examId })
+        this.$axios.post(API_ADDRESS.exam.examUser, { examId })
           .then((response) => {
             const userExamForParticipate = new Exam()
             userExamForParticipate.id = Assistant.getId(response.data.data.exam_id)

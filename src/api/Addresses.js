@@ -1,3 +1,4 @@
+import process from 'process'
 const lumenServer = process.env.AAA_API_SERVER
 const authServer = process.env.AUTH_API_SERVER
 const treeServer = process.env.TREE_API_SERVER
