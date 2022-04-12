@@ -228,8 +228,8 @@ const mixinQuiz = {
         return
       }
       const that = this
-      return new Promise(function (resolve, reject) {
-        const examData = new ExamData()
+      return new Promise((resolve, reject) => {
+        const examData = new ExamData(this.$axios)
         window.currentExamQuestions = null
         window.currentExamQuestionIndexes = null
         examData.getExamDataAndParticipate(examId)
@@ -426,9 +426,9 @@ const mixinQuiz = {
         return
       }
       const that = this
-      return new Promise(function (resolve, reject) {
+      return new Promise((resolve, reject) => {
         let userExamId
-        const examData = new ExamData()
+        const examData = new ExamData(this.$axios)
         if (that.needToLoadQuizData()) {
           that.saveCurrentExamQuestions([])
           that.$store.commit('Exam/cleanCurrentQuestion')
@@ -754,7 +754,7 @@ const mixinQuiz = {
     },
 
     getExamUserData (examId) {
-      return new Promise(function (resolve, reject) {
+      return new Promise((resolve, reject) => {
         this.$axios.post(API_ADDRESS.exam.examUser, { examId })
           .then((response) => {
             const userExamForParticipate = new Exam()

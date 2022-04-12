@@ -1,4 +1,3 @@
-import axios from 'axios'
 import API_ADDRESS from 'src/api/Addresses'
 import Assistant from 'src/plugins/assistant'
 import { Exam } from 'src/models/Exam'
@@ -53,7 +52,8 @@ class ShuffleQuestions {
 }
 
 class ExamData {
-  constructor () {
+  constructor (axios) {
+    this.$axios = axios
     this.commands = []
     this.questionsFileUrl = null
     this.exam = null
@@ -86,7 +86,7 @@ class ExamData {
       } else if (!that.questionsFileUrl && !questionsFileUrl) {
         that.questionsFileUrl = that.exam.questions_file_url
       }
-      axios.get(that.questionsFileUrl, {
+      this.$axios.get(that.questionsFileUrl, {
         transformRequest: (data, headers) => {
           delete headers.common.Authorization
           return data
@@ -119,7 +119,7 @@ class ExamData {
       if (!userExamId) {
         userExamId = that.exam.user_exam_id
       }
-      axios.get(API_ADDRESS.exam.getAnswerOfUserWithCorrect(userExamId))
+      this.$axios.get(API_ADDRESS.exam.getAnswerOfUserWithCorrect(userExamId))
         .then(response => {
           that.exam = new Exam()
           if (examId) {
@@ -150,7 +150,7 @@ class ExamData {
       if (!userExamId) {
         userExamId = that.exam.user_exam_id
       }
-      axios.get(API_ADDRESS.exam.report.getReport(userExamId))
+      this.$axios.get(API_ADDRESS.exam.report.getReport(userExamId))
         .then(response => {
           that.studentReport = response.data.data
           resolve(response)
@@ -174,7 +174,7 @@ class ExamData {
         userExamId = that.exam.user_exam_id
       }
       // if (navigator.onLine) {
-      axios.get(API_ADDRESS.exam.getAllAnswerOfUser(userExamId))
+      this.$axios.get(API_ADDRESS.exam.getAllAnswerOfUser(userExamId))
         .then(response => {
           that.userExamData = response.data
           resolve(response)
@@ -199,7 +199,7 @@ class ExamData {
       if (!examId) {
         examId = that.exam.id
       }
-      axios.post(API_ADDRESS.exam.examUser, { exam_id: examId })
+      this.$axios.post(API_ADDRESS.exam.examUser, { exam_id: examId })
         .then(response => {
           that.exam = new Exam()
           // ToDo: attention on user_exam_id and exam_id
@@ -233,7 +233,7 @@ class ExamData {
       if (!examId) {
         examId = that.exam.id
       }
-      axios.get(API_ADDRESS.exam.examUserAfterExam + '?exam_id=' + examId)
+      this.$axios.get(API_ADDRESS.exam.examUserAfterExam + '?exam_id=' + examId)
         .then(response => {
           that.exam = new Exam()
           // ToDo: attention on user_exam_id and exam_id
