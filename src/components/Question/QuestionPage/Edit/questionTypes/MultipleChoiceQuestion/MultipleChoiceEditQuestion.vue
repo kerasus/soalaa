@@ -103,6 +103,7 @@ import AdminActionOnQuestion from 'src/mixin/AdminActionOnQuestion'
 import { QuestSubcategoryList } from 'src/models/QuestSubcategory'
 import { ExamList } from 'src/models/Exam'
 import { QuestionStatusList } from 'src/models/QuestionStatus'
+import { QuestCategoryList } from 'src/models/QuestCategory'
 export default {
   name: 'MultipleChoiceEditQuestion',
   components: {
@@ -126,6 +127,7 @@ export default {
       subCategoriesList: new QuestSubcategoryList(),
       examList: new ExamList(),
       questionStatuses: new QuestionStatusList(),
+      categoryList: new QuestCategoryList(),
       allProps: {
         loading: false
       }
