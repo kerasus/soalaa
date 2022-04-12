@@ -1,5 +1,5 @@
 <template>
-  <q-card :class="isSelected ? 'selected' : 'custom_card'">
+  <q-card class="custom-card" :class="{isSelected : 'selected'}">
     <q-resize-observer @resize="setChoiceCol"/>
     <q-card-section class="question-bank-content">
       <div class="question-info-section">
@@ -218,7 +218,7 @@
                   :outline="isSelected"
                   color="primary"
                   class="edit-and-add-btn"
-                  @clic="selectQuestion"
+                  @clic="selectQuestion(!this.isSelected)"
                   :icon="isSelected ? 'isax:minus' : 'isax:add'" />
               </div>
               <div v-if="listConfig.editQuestion" class="edit-btn">
@@ -325,25 +325,24 @@ export default {
       type: Object,
       default () {
         return {
-          copy: false,
-          detachQuestion: false,
-          deleteQuestionFromDb: false,
-          editQuestion: false,
-          switch: false
+          copy: true,
+          detachQuestion: true,
+          deleteQuestionFromDb: true,
+          editQuestion: true
         }
       }
     },
     confirmLoading: {
       type: Boolean,
-      default: () => false
+      default: false
     },
     isSelected: {
       type: Boolean,
-      default: () => false
+      default: false
     },
     pageStrategy: {
       type: String,
-      default: () => ''
+      default: ''
     }
   },
   data () {
@@ -352,35 +351,35 @@ export default {
       expanded: false,
       questionLevel: 1,
       listConfig: {
-        questionId: false,
-        questionLevel: false,
-        questionSource: false,
-        questionInfo: false,
+        questionId: true,
+        questionLevel: true,
+        questionSource: true,
+        questionInfo: true,
+        editQuestion: true,
+        selectQuestion: true,
+        reportProblem: true,
+        questionRate: true,
+        questionComment: true,
+        descriptiveAnswer: true,
         menu: {
           show: true,
           items: {
             copy: true,
             detachQuestion: true,
-            deleteQuestionFromDb: true
+            deleteQuestionFromDb: true,
+            confirmQuestion: true
           }
-        },
-        editQuestion: true,
-        switch: false,
-        selectQuestion: true,
-        reportProblem: true,
-        questionRate: true,
-        questionComment: true,
-        descriptiveAnswer: true
+        }
       },
       questionCol: '',
       questionLevelClasses: {
         1: {
-          lvl: 1,
+          lvl: 3,
           class: 'easy',
           title: 'آسان'
         },
         2: {
-          lvl: 1,
+          lvl: 3,
           class: 'easy',
           title: 'آسان'
         },
@@ -395,7 +394,7 @@ export default {
           title: 'متوسط'
         },
         5: {
-          lvl: 3,
+          lvl: 1,
           class: 'hard',
           title: 'سخت'
         }
@@ -440,21 +439,72 @@ export default {
         }
       })
     },
-    selectQuestion () {
-      this.$emit('selectQuestion', !this.isSelected, this.question)
+    selectQuestion (data) {
+      this.$emit('selectQuestion', data, this.question)
     },
     setQuestionLevel () {
-      this.questionLevel = 5
+      this.questionLevel = 3
     },
     setPageConfig () {
       this.applyPageStrategy()
       this.applyListConfig()
     },
     applyPageStrategy () {
-
+      if (!this.pageStrategy) return
+      let source = {}
+      source = this.pageMode()
+      this.listConfig = Object.assign(this.listConfig, source)
+    },
+    pageMode () {
+      if (this.pageStrategy === 'question-bank') {
+        return {
+          questionId: true,
+          questionLevel: true,
+          questionSource: true,
+          questionInfo: true,
+          editQuestion: true,
+          selectQuestion: true,
+          reportProblem: true,
+          questionRate: true,
+          questionComment: true,
+          descriptiveAnswer: true,
+          menu: {
+            show: true,
+            items: {
+              copy: true,
+              detachQuestion: true,
+              deleteQuestionFromDb: true,
+              confirmQuestion: true
+            }
+          }
+        }
+      }
+      if (this.pageStrategy === 'lesson-detail') {
+        return {
+          questionId: true,
+          questionLevel: true,
+          questionSource: true,
+          questionInfo: true,
+          editQuestion: true,
+          selectQuestion: true,
+          reportProblem: true,
+          questionRate: true,
+          questionComment: true,
+          descriptiveAnswer: true,
+          menu: {
+            show: true,
+            items: {
+              copy: false,
+              detachQuestion: true,
+              deleteQuestionFromDb: true,
+              confirmQuestion: true
+            }
+          }
+        }
+      }
     },
     applyListConfig () {
-
+      this.listConfig = Object.assign(this.listConfig, this.listOptions)
     },
     setChoiceCol () {
       const el = this.$refs.questionChoice
@@ -491,15 +541,15 @@ export default {
       return choiceBoxElement.clientHeight - padding
     },
     emitAdminActions (action, data) {
-      this.$emit('adminActions', action, data)
+      this.$emit(action, data)
     }
   }
 }
 </script>
 
 <style lang="scss">
-.test {
-  background-color: #f1bbbb;
+.custom-card{
+margin-bottom: 16px;
 }
 .selected{
   background: #F4F5F6;
