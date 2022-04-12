@@ -24,7 +24,12 @@
               </q-btn>
             </div>
             <div class="toolbar-checkbox">
-              <q-checkbox class="choices-checkbox" label="انتخاب همه" v-bind:="checkBox" @click="selectAllQuestions"/>
+              <q-checkbox
+                class="choices-checkbox"
+                label="انتخاب همه"
+                v-bind:="checkBox"
+                @click="selectAllQuestions">
+              </q-checkbox>
             </div>
             <div class="choices-number">
               {{ this.numberOfQuestions() }}
