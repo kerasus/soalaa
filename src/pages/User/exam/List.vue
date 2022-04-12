@@ -121,12 +121,14 @@
                         ادامه آزمون
                       </q-btn>
                       <q-btn
-                        v-if="item.exam_actions.can_submit_answer"
-                        style="color: #ffc107"
+                                            v-if="item.exam_actions.can_submit_answer"
+                      class="exam-action-big-btn exam-btn-text"
+                        style="background: #FFB74D"
                         flat
                         @click="getConfirmation(item.user_exam_id)"
                       >
-                        ثبت پاسخنامه ذخیره شده در سیستم
+                        <q-icon name="isax:tick-circle" size="20px" style="margin-left: 3px;"/>
+                        ثبت پاسخنامه ذخیره شده
                       </q-btn>
                       <q-btn
                         v-if="item.exam_actions.can_see_report"
@@ -145,15 +147,23 @@
                           flat
                           @click="downloadBooklet(item.booklet_url[1].questions_booklet_url)"
                         >
+                          <q-tooltip anchor="top middle" self="bottom middle" class="examList-btn-tooltip text-body2">
+                            دفترچه عمومی
+                          </q-tooltip>
+                          <q-icon name="isax:book-1"/>
                         </q-btn>
                         <q-btn
                           :key="'questions_booklet_url-'+1"
                           class="exam-action-small-btn exam-btn-text"
-                          style="background: #F67D7A"
+                          style="background: #71C5F4"
 
                           flat
                           @click="downloadBooklet(item.booklet_url[1].descriptive_answers_booklet_url)"
                         >
+                          <q-tooltip anchor="top middle" self="bottom middle" class="examList-btn-tooltip text-body2">
+                            پاسخ دفترچه عمومی
+                          </q-tooltip>
+                          <q-icon name="isax:note-2"/>
                         </q-btn>
                         <q-btn
                           :key="'questions_booklet_url-'+0"
@@ -163,6 +173,10 @@
                           flat
                           @click="downloadBooklet(item.booklet_url[0].questions_booklet_url)"
                         >
+                          <q-tooltip anchor="top middle" self="bottom middle" class="examList-btn-tooltip text-body2">
+                            دفترچه اختصاصی
+                          </q-tooltip>
+                          <q-icon name="isax:book-1"/>
                         </q-btn>
                         <q-btn
                           :key="'questions_booklet_url-'+0"
@@ -172,6 +186,10 @@
                           flat
                           @click="downloadBooklet(item.booklet_url[0].descriptive_answers_booklet_url)"
                         >
+                          <q-tooltip anchor="top middle" self="bottom middle" class="examList-btn-tooltip text-body2">
+                            پاسخ دفترچه اختصاصی
+                          </q-tooltip>
+                          <q-icon name="isax:note-2"/>
                         </q-btn>
                       </template>
                       <q-btn
@@ -180,6 +198,7 @@
                         flat
                         disabled
                       >
+                        <q-icon name="isax:info-circle" size="20px" style="margin-left: 3px;"/>
                         {{ item.holding_status }}
                       </q-btn>
                     </div>
@@ -431,8 +450,8 @@ export default {
         height: 40px;
         border-radius: 10px;
         margin-right: 16px;
+        .examList-btn-tooltip {}
       }
-
     }
   }
 }
