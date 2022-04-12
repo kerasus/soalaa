@@ -14,7 +14,7 @@ COPY . .
 RUN npm run lint
 
 # Build the project
-RUN npm run build
+RUN npm run build:pwa
 
 
 FROM nginx:stable-alpine as production-build
