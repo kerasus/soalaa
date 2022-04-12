@@ -10,15 +10,14 @@
     @update:ticked="tickedNode"
     @lazy-load="getChildOfNode"
   >
-    <template v-slot:default-header="prop ">
+    <template v-slot:default-header="prop">
       <span class="node-title">
         {{ prop.node.title }}
         <q-icon
-          :v-if="editable"
+          :class="editable ? 'edit-btn': 'none-edit-btn'"
+          name="edit"
           @click.stop
           @keypress.stop
-          class="edit-btn"
-          name="edit"
           @click="openEditMenu(prop.node) "
         />
       </span>
@@ -31,40 +30,37 @@
         v-model="tab "
         narrow-indicator
         dense
-        align="justify "
       >
-        <q-tab class="text-purple " name="edit " icon="edit " label="ویرایش "/>
-        <q-tab class="text-orange " name="addNew " icon="add " label="اضافه کردن گره جدید "/>
-        <q-tab class="text-red " name="delete " icon="delete " label="حذف "/>
+        <q-tab class="text-purple" name="editNode" icon="edit" label="ویرایش "/>
+        <q-tab class="text-orange" name="createNewNode" icon="add" label="اضافه کردن گره جدید "/>
       </q-tabs>
       <q-tab-panels v-model="tab " animated>
-        <q-tab-panel name="edit ">
+        <q-tab-panel name="editNode">
           <q-input
             class="q-ma-md"
             filled
-            v-model="newName "
+            v-model="editedTitle "
             label="نام جدید "
           />
           <q-input
             class="q-ma-md"
             filled
-            v-model="newOrder"
+            v-model="editedOrder"
             label="ترتیب جدید "
           />
           <q-btn
-            text
             color="green "
             :loading="loading "
-            @click="editNode(selectedNode.id) "
+            @click="edit"
           >
             ثبت
           </q-btn>
         </q-tab-panel>
-        <q-tab-panel name="addNew ">
+        <q-tab-panel name="createNewNode">
           <q-input
             class="q-ma-md"
             filled
-            v-model="newName"
+            v-model="newTitle"
             label="نام "
           />
           <q-input
@@ -74,7 +70,6 @@
             label="ترتیب "
           />
           <q-btn
-            text
             color="green "
             :loading="loading "
             @click="addNode() "
@@ -82,28 +77,15 @@
             اضافه شود
           </q-btn>
         </q-tab-panel>
-        <q-tab-panel name="delete ">
-          <div class="text-subtitle1 ">آیا از حذف گرۀ " {{ selectedNode.name }} " اطمینان دارید؟</div>
-          <q-btn
-            color="red "
-            :loading="loading "
-            @click="deleteNode "
-            class="q-mt-md "
-          >
-            حذف
-          </q-btn>
-        </q-tab-panel>
       </q-tab-panels>
     </q-card>
   </q-dialog>
 </template>
-
 <script>
-import API_ADDRESS from 'src/api/Addresses'
 import { TreeNode, TreeNodeList } from 'src/models/TreeNode'
 
 export default {
-  name: 'TreeStructure',
+  name: 'Tree',
   props: {
     tickStrategy: {
       type: String,
@@ -113,29 +95,31 @@ export default {
       type: Boolean,
       default: false
     },
-    requestHandler: {
-      type: Function,
-      default: () => {}
-    },
     getNodeById: {
       type: Function,
-      default: (id, done, fail, callback) => {}
+      default: (id, done, fail, callback) => {
+      }
     },
-    newNode: {
-      type: Object
+    addNewNode: {
+      type: Function,
+      default: (ParentId, title, order, callback) => {}
+    },
+    editNode: {
+      type: Function,
+      default: (id, title, order, callback) => {}
     }
   },
   data: () => {
     return {
       ticked: [],
+      completeTickedNode: [],
       nodes: [],
-      copy: {},
-      simple: [],
       tab: 'edit',
       loading: false,
-      vModelSelected: [],
-      newName: '',
+      newTitle: '',
       newOrder: 1,
+      editedTitle: '',
+      editedOrder: 1,
       selectedNode: {},
       editDialog: false
     }
@@ -149,11 +133,11 @@ export default {
     },
 
     tickedNode (target) {
-      const tickedNodes = []
+      this.completeTickedNode = []
       target.forEach(id => {
-        tickedNodes.push(this.nodes[0].findNode(id))
+        this.completeTickedNode.push(this.nodes[0].findNode(id))
       })
-      this.$emit('ticked', tickedNodes)
+      this.$emit('ticked', this.completeTickedNode)
     },
 
     loadChildOfNode (node, done) {
@@ -184,75 +168,71 @@ export default {
       this.getNodeById(node.id, done, fail, this.loadChildOfNode)
     },
 
-    editNode (id) {
-      const node = this.$refs.tree.getNodeByKey(this.selectedNode.id)
-      console.log('n', node)
-      this.$axios.get(API_ADDRESS.tree.getNodeById(id))
-        .then(response => {
-          console.log(response)
-          // const apiData = response.data.data
-          node.name = this.newName
-        })
-    },
-    // mixin
-    createNode (parentId, title, order, callback) {
-      this.$axios.post(API_ADDRESS.tree.base, { parent_id: parentId, title: title, order: order })
-        .then(response => {
-          if (callback) {
-            callback(response)
-          }
+    edit () {
+      this.editNode(this.selectedNode.id, this.editedTitle, this.editedOrder)
+        .then(() => {
+          const id = this.selectedNode.id
+          const node = this.$refs.tree.getNodeByKey(id)
+          node.title = this.editedTitle
+          node.order = this.editedOrder
+          this.editDialog = false
         }).catch(err => {
           console.log(err)
         })
     },
 
-    // addNode (callback) {
-    //   const id = this.selectedNode.id
-    //   const getNode = this.$refs.tree.getNodeByKey(id)
-    //   // this.$emit('inputsData', { this.newName , this.newOrder })
-    //   if (callback) {
-    //     getNode.children.unshift(new TreeNode({
-    //       id: this.newNode.data.data.id,
-    //       type: this.newNode.data.data.type,
-    //       title: this.newNode.data.data.title,
-    //       parent: this.newNode.data.data.parent.id
-    //     }))
-    //     this.editDialog = false
-    //   }
-    //   // getNode.children.unshift(new TreeNode({
-    //   //   id: this.newNode.data.data.id,
-    //   //   type: this.newNode.data.data.type,
-    //   //   title: this.newNode.data.data.title,
-    //   //   parent: this.newNode.data.data.parent.id
-    //   // }))
-    //   // this.editDialog = false
-    // },
+    addNode () {
+      const id = this.selectedNode.id
+      const getNode = this.$refs.tree.getNodeByKey(id)
+      this.addNewNode(id, this.newTitle, this.newOrder)
+        .then(response => {
+          getNode.children.unshift(new TreeNode({
+            id: response.data.data.id,
+            type: response.data.data.type,
+            title: response.data.data.title,
+            parent: response.data.data.parent.id
+          }))
+          this.editDialog = false
+        })
+    },
 
     openEditMenu (node) {
-      this.newName = ''
-      this.newOrder = 1
       this.selectedNode = {
         id: node.id,
-        title: node.title
+        title: node.title,
+        order: node.order
       }
-      this.$emit('selectedNode', this.selectedNode)
+      this.editedTitle = this.selectedNode.title
+      this.editedOrder = this.selectedNode.order
       this.editDialog = true
+    },
+
+    setNodesTicked (keys, state) {
+      if (state) {
+        this.$refs.tree.setTicked(keys, state)
+      } else {
+        this.$refs.tree.setTicked(keys, false)
+      }
     }
   }
 }
 </script>
 <style scoped lang='scss'>
-.q-tree{
-  display: inline-block;
-  .node-title{
-    &:hover {
+  .q-tree {
+    display: inline-block;
+
+    .node-title {
+      &:hover {
+        .edit-btn {
+          color: #f18305;
+        }
+      }
       .edit-btn {
-        color: #f18305;
+        color: transparent;
+      }
+      .none-edit-btn{
+        display: none;
       }
     }
-    .edit-btn {
-      color: transparent;
-    }
   }
-}
 </style>

@@ -1,3 +1,4 @@
+import process from 'process'
 import moment from 'moment'
 import { getServerDate } from '@nodeguy/server-date'
 import Assistant from '../plugins/assistant'
@@ -8,7 +9,7 @@ const Time = (function () {
     const { date, offset, uncertainty } = await getServerDate({
       fetchSample: async () => {
         const requestDate = new Date()
-        const url = process.env.VUE_APP_LUMEN_INTERNAL_GET_TIME_SERVER
+        const url = process.env.GET_TIME_SERVER
         const { headers, ok, statusText } = await fetch(url, {
           cache: 'no-store',
           method: 'HEAD'

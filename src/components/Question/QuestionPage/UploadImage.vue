@@ -77,7 +77,7 @@ export default {
   },
   inject: {
     question: {
-      from: 'question', // this is optional if using the same key for injection
+      from: 'providedQuestion', // this is optional if using the same key for injection
       default: new Question()
     }
   }

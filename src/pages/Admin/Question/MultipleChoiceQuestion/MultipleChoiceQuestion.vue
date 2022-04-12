@@ -1,6 +1,6 @@
 <template>
   <div class="multiple-choice-Q">
-    <!--    <button @click="getContent">getContent</button>-->
+<!--    <button @click="getContent">getContent</button>-->
     <q-btn
       v-if="question.choices.list.length > 0"
       dark
@@ -55,7 +55,7 @@
               <q-radio
                 dense
                 v-model="choice"
-                :val="'choice' + (index + 1)"
+                :val="'choice' + index"
                 :label="'گزینه ' + (index + 1)"
                 color="primary"
                 @click="choiceClicked(item.order)"
@@ -67,7 +67,7 @@
                 label="حذف گزینه"
                 @click="removeChoice(item.order)"
               />
-              <!--              :class="{ 'example-fab-animate--hover' }"-->
+<!--              :class="{ 'example-fab-animate--hover' }"-->
             </q-card-section>
             <q-separator inset />
             <q-card-section>
@@ -83,11 +83,11 @@
       </div>
     </div>
     <div>
-      <!--      <q-skeleton-->
-      <!--        v-if="loading"-->
-      <!--        type="QInput"-->
-      <!--        style="min-height: 220px; border-radius: 30px;"-->
-      <!--      />-->
+<!--      <q-skeleton-->
+<!--        v-if="loading"-->
+<!--        type="QInput"-->
+<!--        style="min-height: 220px; border-radius: 30px;"-->
+<!--      />-->
       <q-card
         class="default-questions-card"
       >
@@ -101,24 +101,58 @@
               ref="tiptapDescriptiveAnswer"
               :key="'descriptive_answer' + domKey"
             />
-          </div>
+        </div>
         </q-card-section>
-      </q-card>
+    </q-card>
     </div>
+  </div>
+  <div class="relative-position">
+    <attach-exam
+      :exams="examList"
+      :lessons="subCategoriesList"
+      :categories="categoryList"
+      :buffer="true"
+    />
+    <div class="attach-btn row">
+      <question-details class="col-9"/>
+      <btn-box
+        class="col-3"
+        @saveQuestion="saveQuestion"
+      />
+    </div>
+    <status-change
+      :statuses="questionStatuses"
+    />
+    <q-inner-loading
+      :showing="question.exams.loading"
+      color="primary"
+      class="QComponents-inner-loading"
+      label-style="font-size: 1.1em"
+    />
   </div>
 </template>
 
 <script>
+import AttachExam from 'components/Question/QuestionPage/AttachExam/AttachExam'
+import StatusChange from 'components/Question/QuestionPage/StatusChange'
+import QuestionDetails from 'components/Question/QuestionPage/Create/textMode/QuestionDetails'
+import BtnBox from 'components/Question/QuestionPage/BtnBox'
 import QuestionField from 'components/Question/QuestionPage/QuestionField.vue'
 import { Question } from 'src/models/Question'
 import AdminActionOnQuestion from 'src/mixin/AdminActionOnQuestion'
 import { QuestSubcategoryList } from 'src/models/QuestSubcategory'
 import { ExamList } from 'src/models/Exam'
 import { QuestionStatusList } from 'src/models/QuestionStatus'
+import { computed } from 'vue'
+import { QuestCategoryList } from 'src/models/QuestCategory'
 export default {
   name: 'MultipleChoiceQ',
   components: {
-    QuestionField
+    QuestionField,
+    BtnBox,
+    StatusChange,
+    AttachExam,
+    QuestionDetails
   },
   mixins: [
     AdminActionOnQuestion
@@ -135,18 +169,19 @@ export default {
       choice: '',
       defaultRefName: 'tiptap',
       dynamicMassage: '',
+      question: new Question(),
       subCategoriesList: new QuestSubcategoryList(),
       examList: new ExamList(),
       questionStatuses: new QuestionStatusList(),
+      categoryList: new QuestCategoryList(),
       allProps: {
         loading: false
       }
     }
   },
-  inject: {
-    question: {
-      from: 'question', // this is optional if using the same key for injection
-      default: new Question()
+  provide () {
+    return {
+      providedQuestion: computed(() => this.question)
     }
   },
   created () {
@@ -155,16 +190,41 @@ export default {
       that.domKey = 'Date.now()'
     }, 100)
     this.setDefaultChoices()
+    this.getPageReady()
   },
   mounted () {
     this.$nextTick(() => {
-      this.disableAllQuestionLoadings()
+      // this.setAllQuestionLoadings()
+      // this.disableAllQuestionLoadings()
     })
   },
   updated () {},
   methods: {
     saveQuestion () {
-      // this.allProps.setContentToQuestion = true
+      if (this.getContent()) {
+        const exams = []
+        this.question.exams.list.forEach(item => {
+          exams.push({
+            id: item.exam_id,
+            exam_id: item.exam_id,
+            sub_category_id: item.sub_category_id,
+            order: item.order
+          })
+        })
+        this.question.author.push({ full_name: this.$store.getters['Auth/user'].full_name, id: this.$store.getters['Auth/user'].id })
+        const question = {
+          author: this.question.author,
+          choices: this.question.choices.list,
+          exams: exams,
+          descriptive_answer: this.question.descriptive_answer,
+          statement: this.question.statement,
+          level: 1,
+          sub_category_id: 1,
+          recommended_time: 0,
+          type_id: this.question.type_id
+        }
+        this.createQuestion(question)
+      }
     },
     setDefaultChoices () {
       this.question.choices.list = []
@@ -188,6 +248,7 @@ export default {
     },
     getContent () {
       const that = this
+      let status = false
       if (this.validateContent()) {
         this.question.statement = this.getContentOfQuestionParts('QuestionStatement')
         this.question.choices.list.forEach(function (item, index) {
@@ -196,8 +257,10 @@ export default {
           item.id = index
         })
         this.question.descriptive_answer = this.getContentOfQuestionParts('DescriptiveAnswer')
+        // console.log('this.question', this.question)
+        status = true
       }
-      console.log('this.question', this.question)
+      return status
     },
     getContentOfChoice (index) {
       return this.$refs[this.defaultRefName + 'Choice' + index][0].getContent()
@@ -211,6 +274,15 @@ export default {
       this.question.choices.list.forEach(function (item, index) {
         if (!that.getContentOfChoice(index)) {
           status = false
+        }
+      })
+      return status
+    },
+    validateAnswerOfChoice () {
+      let status = false
+      this.question.choices.list.forEach(function (item, index) {
+        if (item.answer) {
+          status = true
         }
       })
       return status
@@ -229,12 +301,17 @@ export default {
         errors.push(ChoiceMassage)
         status = false
       }
-      if (!this.getContentOfQuestionParts('DescriptiveAnswer')) {
-        errors.push(this.getErrorMessage('پاسخ تشریحی'))
+      // if (!this.getContentOfQuestionParts('DescriptiveAnswer')) {
+      //   errors.push(this.getErrorMessage('پاسخ تشریحی'))
+      //   status = false
+      // }
+      if (!this.choice) {
+        const ChoiceMassage = 'لطفا گزینه صحیح را ثبت کنید'
+        errors.push(ChoiceMassage)
         status = false
       }
-      if (!this.choice) {
-        const ChoiceMassage = 'لطفا گزینه صحیح را درج کنید'
+      if (!this.validateAnswerOfChoice()) {
+        const ChoiceMassage = 'لطفا گزینه صحیح را ثبت کنید'
         errors.push(ChoiceMassage)
         status = false
       }
@@ -260,6 +337,7 @@ export default {
   }
 }
 </script>
+
 <style scoped lang="scss">
 .multiple-choice-Q {
   padding-top: 35px;
@@ -321,6 +399,7 @@ export default {
   }
 }
 </style>
+
 <style lang="scss">
 // USED IN MANY OTHER COMPONENTS
 .default-questions-card {

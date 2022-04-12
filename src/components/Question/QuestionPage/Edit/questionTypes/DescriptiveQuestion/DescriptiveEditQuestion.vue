@@ -1,6 +1,5 @@
 <template>
   <div class="Descriptive-Q">
-<!--        <button @click="getContent">getContent</button>-->
     <q-linear-progress
       v-if="this.question.loading"
       size="md"
@@ -14,15 +13,22 @@
       </q-card-section>
       <q-separator inset />
       <q-card-section>
-        <div class="row justify-between question-box default-Qcard-box">
+        <div
+          v-if="question.statement"
+          class="row justify-between question-box default-Qcard-box"
+        >
           <QuestionField
             ref="tiptapQuestionStatement"
             :key="'statement' + domKey"
+            :editorValue="question.statement"
           />
         </div>
       </q-card-section>
     </q-card>
-    <q-card class="default-questions-card Descriptive-A">
+      <q-card
+        v-if="question.descriptive_answer"
+        class="default-questions-card Descriptive-A"
+      >
       <q-card-section class="default-Qcard-title">
         <div>پاسخ تشریحی</div>
       </q-card-section>
@@ -32,55 +38,27 @@
           <QuestionField
             ref="tiptapDescriptiveAnswer"
             :key="'descriptive_answer' + domKey"
+            :editor-value="question.descriptive_answer"
           />
         </div>
       </q-card-section>
     </q-card>
   </div>
-  <div class="relative-position">
-    <attach-exam
-      :exams="examList"
-      :lessons="subCategoriesList"
-    />
-    <div class="attach-btn row">
-      <question-details class="col-9"/>
-      <btn-box
-        class="col-3"
-        @saveQuestion="saveQuestion"
-      />
-    </div>
-    <comment-box
-      :statuses="questionStatuses"
-    />
-    <q-inner-loading
-      :showing="question.exams.loading"
-      color="primary"
-      class="QComponents-inner-loading"
-      label-style="font-size: 1.1em"
-    />
-  </div>
 </template>
 
 <script>
-import AttachExam from 'components/Question/QuestionPage/AttachExam'
-import CommentBox from 'components/Question/QuestionPage/StatusChange'
-import QuestionDetails from 'components/Question/QuestionPage/Create/textMode/QuestionDetails'
-import BtnBox from 'components/Question/QuestionPage/BtnBox'
 import QuestionField from 'components/Question/QuestionPage/QuestionField.vue'
 import { Question } from 'src/models/Question'
 import AdminActionOnQuestion from 'src/mixin/AdminActionOnQuestion'
 import { QuestSubcategoryList } from 'src/models/QuestSubcategory'
 import { ExamList } from 'src/models/Exam'
 import { QuestionStatusList } from 'src/models/QuestionStatus'
+import { QuestCategoryList } from 'src/models/QuestCategory'
 
 export default {
-  name: 'DescriptiveQ',
+  name: 'DescriptiveEditQuestion',
   components: {
-    QuestionField,
-    BtnBox,
-    CommentBox,
-    AttachExam,
-    QuestionDetails
+    QuestionField
   },
   mixins: [
     AdminActionOnQuestion
@@ -91,22 +69,22 @@ export default {
       default: () => false
     }
   },
-  provide () {
-    return {
-      question: this.question
+  inject: {
+    question: {
+      from: 'providedQuestion', // this is optional if using the same key for injection
+      default: new Question()
     }
   },
   data () {
     return {
       domKey: Date.now(),
-      question: new Question(),
-      choice: '',
       defaultRefName: 'tiptap',
       dynamicMassage: '',
       subCategoriesList: new QuestSubcategoryList(),
       examList: new ExamList(),
       questionStatuses: new QuestionStatusList(),
-      loading: true
+      categoryList: new QuestCategoryList(),
+      loading: false
     }
   },
   created () {
@@ -114,30 +92,27 @@ export default {
     setTimeout(() => {
       that.domKey = Date.now()
     }, 100)
-    this.getPageReady()
   },
-  mounted () {
-    // this.$nextTick(() => {
-    //   this.setAllQuestionLoadings()
-    //   this.loadExamList()
-    //   this.loadSubcategories()
-    //   this.getQuestionStatus()
-    //   this.disableAllQuestionLoadings()
-    // })
-  },
+  mounted () {},
   methods: {
     saveQuestion () {
-      // this.allProps.setContentToQuestion = true
+      if (this.getContent()) {
+        const question = {
+          ...this.question,
+          choices: this.question.choices.list,
+          type_id: this.question.type_id
+        }
+        this.updateQuestion(question)
+      }
     },
     getContent () {
+      let status = false
       if (this.validateContent()) {
         this.question.statement = this.getContentOfQuestionParts('QuestionStatement')
         this.question.descriptive_answer = this.getContentOfQuestionParts('DescriptiveAnswer')
+        status = true
       }
-      console.log('this.question', this.question)
-    },
-    getContentOfChoice (index) {
-      return this.$refs[this.defaultRefName + 'Choice' + index][0].getContent()
+      return status
     },
     getContentOfQuestionParts (name) {
       return this.$refs[this.defaultRefName + name].getContent()
@@ -228,7 +203,4 @@ export default {
 
   }
 }
-</style>
-<style lang="scss">
-
 </style>
