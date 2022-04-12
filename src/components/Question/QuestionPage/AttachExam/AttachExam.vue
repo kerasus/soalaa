@@ -7,7 +7,7 @@
         <div class="detail-box-title">آزمون ها</div>
         <div class="input-container flex">
           <div class="input-box">
-            <q-input v-model="definedExamsTitle" dense />
+            <q-input v-model="definedExamsTitle" dense disable/>
           </div>
           <div class="icon-box">
             <q-btn
