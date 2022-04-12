@@ -187,8 +187,8 @@ export default {
       this.question.choices.list = []
       this.updateQuestion()
     },
-      name: 'LogList',
-getContent () {
+    name: 'LogList',
+    getContent () {
       this.$refs.questionStatement.getContent()
       this.$refs.descriptive.getContent()
       this.$refs.choice1[0].getContent()
