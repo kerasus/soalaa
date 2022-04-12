@@ -141,9 +141,6 @@ export default {
     },
     disableLoading () {
       this.question.loading = false
-    },
-    openCloseImgPanel () {
-      this.isPanelOpened = !this.isPanelOpened
     }
   },
   computed: {

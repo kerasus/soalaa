@@ -301,6 +301,9 @@ const AdminActionOnQuestion = {
         .then(response => {
           this.question.exams = new AttachedExamList(response.data.data.exams)
         })
+    },
+    openCloseImgPanel () {
+      this.isPanelOpened = !this.isPanelOpened
     }
   }
 }

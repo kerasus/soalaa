@@ -1,86 +1,125 @@
 <template>
-  <div class="question-details">
-    <q-dialog v-model="alert">
-      <q-card>
+  <div class="exam-details">
+    <div class="exam-details-title">شناسنامه سوال</div>
+    <div class="exam-details-all-boxes">
+      <div class="details-container-2 default-details-container row">
+      <div class="detail-box col-4">
+        <div class="detail-box-title">آزمون ها</div>
+        <div class="input-container flex">
+          <div class="input-box">
+            <q-input v-model="definedExamsTitle" dense disable/>
+          </div>
+          <div class="icon-box">
+            <q-btn
+              unelevated
+              icon="isax:add-square"
+              class="open-modal-btn default-detail-btn"
+              @click="modal = true"
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+    </div>
+    <q-dialog v-model="modal">
+      <q-card class="attach-exam-card">
         <q-card-section>
-          <div class="text-h6">Alert</div>
+          <div class="question-details">
+            <div class="box-title">اضافه کردن به آزمون</div>
+            <div class="details-container-1 default-details-container row">
+              <div class="col-12 detail-box detail-box-first">
+                <div class="detail-box-title">آزمون</div>
+                <q-select
+                  borderless
+                  v-model="selectedExam"
+                  :options="exams.list"
+                  option-value="exam_id"
+                  option-label="title"
+                  :rules="selectorRules"
+                  :loading="exams.loading"
+                />
+              </div>
+              <div class="col-3 detail-box">
+                <div class="detail-box-title">درس</div>
+                <q-select
+                  borderless
+                  v-model="selectedLesson"
+                  :options="lessons.list"
+                  option-value="id"
+                  option-label="title"
+                  :rules="selectorRules"
+                  :loading="lessons.loading"
+                />
+              </div>
+              <div class="col-5">
+                <div class="detail-box box-order">
+                  <div class="detail-box-title">ترتیب</div>
+                  <q-input
+                    borderless
+                    v-model="order"
+                    type="number"
+                    :rules="numberRules"
+                  />
+                </div>
+              </div>
+              <div class="detail-box detail-box-last-of-row-1" :class="[imgPanelVisibility ? 'col-6' : 'col-4']">
+                <q-btn
+                  unelevated
+                  :loading="draftBtnLoading"
+                  label="افزودن"
+                  class="attach-btn default-detail-btn"
+                  @click="attach"
+                />
+              </div>
+            </div>
+            <div class="box-title title-show-exams">آزمون‌های تعریف شده</div>
+            <div class="attached-exam-box">
+              <div class="flex row exam-result-box">
+                <div class="col-6 exam-result-title">
+                  آزمون
+                </div>
+                <div class="col-3 exam-result-title">
+                  درس
+                </div>
+                <div class="col-1 exam-result-title">
+                  ترتیب
+                </div>
+              </div>
+              <div v-if="exams && lessons.list.length" :key="question.exams.list.length">
+            <div v-for="(item, index) in question.exams.list" :key="index" class="flex row attached-exam">
+              <div class="detail-box exam-result attached-exam-title  detail-box-first col-7">
+                {{ item.exam.title }}
+              </div>
+              <div class="detail-box exam-result detail-box-first col-3">
+                {{ item.sub_category.title }}
+              </div>
+              <div class="detail-box exam-result order-exam-title detail-box-last col-1">
+                {{ item.order }}
+              </div>
+              <div class="detail-box detach-box detail-box-last col-1">
+                <q-btn
+                  unelevated
+                  icon="isax:trash"
+                  class="detach-btn
+                   default-detail-btn"
+                  @click="detach(item)"
+                />
+              </div>
+            </div>
+          </div>
+            </div>
+          </div>
+          <div class="text-right close-btn-box" >
+            <q-btn
+              class="close-btn"
+              label="بستن"
+              color="primary"
+              @click="modal = false"
+            />
+          </div>
         </q-card-section>
-
-        <q-card-section class="q-pt-none">
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Rerum repellendus sit voluptate voluptas eveniet porro. Rerum blanditiis perferendis totam, ea at omnis vel numquam exercitationem aut, natus minima, porro labore.
-        </q-card-section>
-
-        <q-card-actions align="right">
-          <q-btn flat label="OK" color="primary" v-close-popup />
-        </q-card-actions>
       </q-card>
     </q-dialog>
-    <div class="box-title">مشخصات سوال</div>
-    <div class="details-container-1 default-details-container row">
-      <div class="detail-box detail-box-first" :class="[imgPanelVisibility ? 'col-6' : 'col-3']">
-        <div class="detail-box-title">آزمون</div>
-        <q-select
-          borderless
-          v-model="selectedExam"
-          :options="exams.list"
-          option-value="exam_id"
-          option-label="title"
-          :rules="selectorRules"
-          :loading="exams.loading"
-        />
-      </div>
-      <div class="detail-box" :class="[imgPanelVisibility ? 'col-6' : 'col-3']">
-        <div class="detail-box-title">درس</div>
-        <q-select
-          borderless
-          v-model="selectedLesson"
-          :options="lessons.list"
-          option-value="id"
-          option-label="title"
-          :rules="selectorRules"
-          :loading="lessons.loading"
-        />
-      </div>
-      <div class="detail-box" :class="[imgPanelVisibility ? 'col-6' : 'col-3']">
-        <div class="detail-box-title">ترتیب</div>
-        <q-input
-          borderless
-          v-model="order"
-          type="number"
-          :rules="numberRules"
-        />
-      </div>
-<!--      <div class="detail-box detail-box-last" :class="[imgPanelVisibility ? 'col-6' : 'col-3']">-->
-<!--        <div class="detail-box-title">درجه سختی</div>-->
-<!--        <q-select borderless v-model="model" :options="options"/>-->
-<!--      </div>-->
-      <div class="detail-box detail-box-last-of-row-1" :class="[imgPanelVisibility ? 'col-6' : 'col-3']">
-        <q-btn
-          unelevated
-          :loading="draftBtnLoading"
-          icon="mdi-plus"
-          class="draft-btn default-detail-btn"
-          @click="attach"
-        />
-      </div>
-    </div>
-    <div v-if="exams && lessons.list.length" :key="question.exams.list.length">
-      <div v-for="(item, index) in question.exams.list" :key="index" class="flex row">
-
-        <div class="detail-box detail-box-first" :class="[imgPanelVisibility ? 'col-6' : 'col-3']">
-          {{ item.exam.title }}
-        </div>
-        <div class="detail-box detail-box-first" :class="[imgPanelVisibility ? 'col-6' : 'col-3']">
-          {{ item.sub_category.title }}
-        </div>
-        <div class="detail-box detail-box-last" :class="[imgPanelVisibility ? 'col-6' : 'col-3']">
-          {{ item.order }}
-        </div>
-        <div class="detail-box detail-box-last" :class="[imgPanelVisibility ? 'col-6' : 'col-3']">
-          <q-btn unelevated icon="mdi-delete" class="draft-btn default-detail-btn" @click="detach(item)" />
-        </div>
-      </div>
-    </div>
   </div>
 </template>
 
@@ -119,9 +158,7 @@ export default {
       default: new Question()
     }
   },
-  created () {
-    this.alert = true
-  },
+  created () {},
   data () {
     return {
       text: '',
@@ -138,7 +175,16 @@ export default {
         v => v !== null || 'پر کردن این فیلد الزامی است.'
       ],
       questionData: this.question,
-      alert: false
+      modal: false
+    }
+  },
+  computed: {
+    definedExamsTitle () {
+      let number = this.question.exams.list.length
+      if (number.toString() === '0') {
+        number = '00'
+      }
+      return number + ' آزمون تعریف شده'
     }
   },
   methods: {
@@ -193,18 +239,105 @@ export default {
 </script>
 
 <style scoped lang="scss">
-.question-details {
+.q-dialog {
+  .q-dialog__inner--minimized > div {
+    min-width: 720px;
+    height: 600px;
+  }
+  .attach-exam-card {
+    background: #FFFFFF;
+    border-radius: 15px;
+    .q-card__section--vert {
+          padding: 30px;
+    }
+  }
+}
+.exam-details{
   margin-top: 40px;
+  .exam-details-title {
+    font-weight: 500;
+    font-size: 16px;
+    line-height: 28px;
+    color: #23263B;
+  }
+}
+.question-details {
   font-style: normal;
   font-weight: 500;
   font-size: 16px;
   line-height: 28px;
   text-align: right #{"/* rtl:ignore */"};
   color: #23263B;
-
+  .attached-exam-box {
+    margin-bottom: 10px;
+    height: 216px;
+    overflow: scroll;
+  }
+  .title-show-exams {
+    margin-top: 40px;
+  }
+  .exam-result {
+    background: #F4F5F6;
+    border-radius: 10px;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 24px;
+    color: #65677F;
+    margin-bottom: 16px;
+    min-width: 58px;
+  }
+  .exam-result-box {
+    margin-top: 16px;
+    margin-bottom: 8px;
+    :first-child {
+      margin-left: 0px !important;
+    }
+    .exam-result-title {
+      font-weight: 400;
+      font-size: 12px;
+      line-height: 21px;
+      margin-left: 10px;
+      color: #9092A7;
+    }
+  }
+  .attached-exam {
+    align-items: center;
+    .attached-exam-title {
+      width: 320px;
+      text-overflow: ellipsis;
+      overflow: hidden;
+      white-space: nowrap;
+      margin-left: 0px !important;
+    }
+    .detach-box {
+      margin-left: 16px;
+      margin-bottom: 16px;
+      color: #E86562;
+    }
+    .detach-btn {
+      background: #F4F5F6;
+      border-radius: 10px;
+      width: 40px;
+      height: 40px;
+    }
+    .exam-result {
+      padding: 8px 16px;
+      margin-left: 16px;
+    }
+    .order-exam-title {
+      padding: 8px;
+    }
+  }
+  //.q-card .attach-exam-card {
+  //  background: #FFFFFF;
+  //  border-radius: 15px;
+  //  .q-card__section--vert {
+  //    padding: 30px;
+  //  }
+  //}
   .default-details-container {
     .detail-box {
-      margin-top: 10px;
+      margin-top: 16px;
 
       .detail-box-title {
         margin-bottom: 5px;
@@ -215,27 +348,38 @@ export default {
     display: flex ;
     align-items: flex-end;
     margin-bottom: 2px ;
+    justify-content: flex-end;
+    .attach-btn {
+      background-color: #FFB74D;
+      color: #FFFFFF;
+      border-radius: 10px;
+      width: 106px;
+      height: 40px;
+    }
   }
 
   .details-container-1 {
     .detail-box {
-      padding-right: 12px #{"/* rtl:ignore */"};
-      padding-left: 12px #{"/* rtl:ignore */"};
+      padding-right: 0px;
+      padding-left: 0px;
+    }
+    .box-order {
+      padding-left: 32px;
     }
 
     .detail-box-first {
-      padding-right: 0px #{"/* rtl:ignore */"};
+      padding-left: 0px;
     }
 
     .detail-box-last {
-      padding-left: 0px #{"/* rtl:ignore */"};
+      padding-right: 0px;
     }
   }
 
   .details-container-2 {
     .detail-box {
-      padding-right: 12px #{"/* rtl:ignore */"};
-      padding-left: 12px #{"/* rtl:ignore */"};
+      padding-right: 0px ;
+      padding-left: 0px ;
 
       .input-container {
         .input-box {
@@ -295,51 +439,206 @@ export default {
       }
 
       .save-btn {
-        background: #9690E4;
+        background: #FFB74D;
         font-weight: 500;
         color: #FFFFFF;
       }
     }
   }
 }
+.close-btn-box {
+  .close-btn {
+    color: #FFFFFF;
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 24px;
+    background: #9690E4;
+    border-radius: 10px;
+    width: 96px;
+    height: 40px;
+  }
+}
 </style>
 
 <style lang="scss">
-.question-details {
-  .default-details-container {
-    .detail-box {
-      .q-field__control {
-        height: 42px;
+.exam-details {
+  .exam-details-all-boxes {
+    .details-container-2 {
+      .detail-box {
+        .detail-box-title {
+          font-weight: 500;
+          font-size: 16px;
+          line-height: 28px;
+          color: #23263B;
+          margin-top: 5px;
+        }
+        .input-container {
+          margin-top: 5px;
+          .input-box {
+            width: 50%;
+          }
+          .icon-box {
+            width: 40px;
+            height: 40px;
+            background: #FFFFFF;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-left: 16px ;
+            color: #65677F ;
+            .default-detail-btn {
+              width: 40px;
+              height: 40px;
+              border-radius: 10px;
+              font-size: 14px;
+              line-height: 24px;
+              text-align: center;
+            }
+            .question-details-subject-img {
+              height: 24px;
+              max-width: 24px;
+            }
+          }
+        }
       }
-      .q-field {
-        background: #FFFFFF;
-        border-radius: 10px;
-        line-height: 24px;
-        height: 40px;
-        min-height: 40px;
-        .q-field__marginal {
+      .open-modal-btn {}
+      .detail-box-first {
+        padding-right: 0px #{"/* rtl:ignore */"};
+      }
+      .detail-box-last {
+        padding-right: 0px #{"/* rtl:ignore */"};
+        width: 200px;
+        //margin-right: 132px #{"/* rtl:ignore */"};
+      }
+      .detail-box-last-of-row {
+        padding-left: 0px #{"/* rtl:ignore */"};
+        margin-top: 43px;
+        text-align: end;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        .default-detail-btn {
+          width: 144px;
           height: 40px;
+          border-radius: 10px;
+          font-size: 14px;
+          line-height: 24px;
+          text-align: center;
         }
-        .q-field__inner {
-          padding-right: 16px;
-          padding-left: 16px;
+        .draft-btn {
+          background: #FFFFFF;
+          margin-left: 16px #{"/* rtl:ignore */"};
+          font-weight: normal;
+          color: #23263B;
         }
-      }
-      .q-field--auto-height .q-field__native {
-        min-height: 40px;
-        color: #65677F;
-      }
-      .q-field--auto-height .q-field__control, .q-field--auto-height .q-field__native {
-        min-height: 40px;
-        color: #65677F;
-      }
-      .q-field__control::before, .q-field__control::after {
-        display: none;
-      }
-      .q-field__native, .q-field__prefix, .q-field__suffix, .q-field__input {
-        color: #65677F;
+        .save-btn {
+          background: #9690E4;
+          font-weight: 500;
+          color: #FFFFFF;
+        }
       }
     }
+    .default-details-container {
+      .detail-box {
+        .q-field {
+          background: #FFFFFF;
+          border-radius: 10px;
+          line-height: 24px;
+          height: 40px;
+          min-height: 40px;
+          .q-field__marginal {
+            height: 40px;
+          }
+          .q-field__inner {
+            padding-right: 16px;
+            padding-left: 16px;
+          }
+        }
+        .q-field--auto-height .q-field__native {
+          min-height: 40px;
+          color: #65677F;
+        }
+        .q-field--auto-height .q-field__control, .q-field--auto-height .q-field__native {
+          min-height: 40px;
+          color: #65677F;
+        }
+        .q-field__control::before, .q-field__control::after {
+          display: none;
+        }
+        .q-field__native, .q-field__prefix, .q-field__suffix, .q-field__input {
+          color: #65677F;
+        }
+      }
+    }
+  }
+}
+.attach-exam-card {
+  .question-details {
+    .q-card .attach-exam-card {
+      background: #FFFFFF;
+      border-radius: 15px;
+
+      .q-card__section--vert {
+        padding: 30px;
+      }
+    }
+
+    //.attach-exam-card {
+    .default-details-container {
+      .box-order {
+        .q-field {
+          width: 165px;
+        }
+      }
+
+      .detail-box {
+        .q-field__control {
+          height: 42px;
+        }
+
+        .q-field {
+          background: #F4F5F6 !important;
+          border-radius: 10px;
+          line-height: 24px;
+          height: 40px;
+          min-height: 40px;
+
+          .q-field__marginal {
+            height: 40px;
+          }
+
+          .q-field__inner {
+            padding-right: 16px;
+            padding-left: 16px;
+          }
+
+          .q-field__bottom {
+            top: 15px;
+          }
+        }
+
+        .q-field--auto-height .q-field__native {
+          min-height: 40px;
+          color: #65677F;
+        }
+
+        .q-field--auto-height .q-field__control, .q-field--auto-height .q-field__native {
+          min-height: 40px;
+          color: #65677F;
+        }
+
+        .q-field__control::before, .q-field__control::after {
+          display: none;
+        }
+
+        .q-field__native, .q-field__prefix, .q-field__suffix, .q-field__input {
+          color: #65677F;
+        }
+      }
+    }
+
+    //}
   }
 }
 .q-menu {
