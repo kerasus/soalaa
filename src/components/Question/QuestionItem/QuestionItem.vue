@@ -337,9 +337,9 @@ export default {
       type: Boolean,
       default: () => false
     },
-    selectedQuestionLit: {
-      type: Array,
-      default: () => []
+    isSelected: {
+      type: Boolean,
+      default: () => false
     },
     pageStrategy: {
       type: String,
@@ -348,7 +348,6 @@ export default {
   },
   data () {
     return {
-      isSelected: false,
       confirmQuestion: false,
       expanded: false,
       questionLevel: 1,
@@ -442,7 +441,7 @@ export default {
       })
     },
     selectQuestion () {
-      this.$emit('selectQuestion', !this.isSelected, this.question.id)
+      this.$emit('selectQuestion', !this.isSelected, this.question)
     },
     setQuestionLevel () {
       this.questionLevel = 5
