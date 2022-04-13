@@ -19,7 +19,7 @@
               :key="question.id"
               :question="question"
               :isSelected="isSelected(question.id)"
-              @selectQuestion="QuestionDecreaseIncrease"
+              @checkSelect="QuestionDecreaseIncrease"
             />
           </template>
         </div>
