@@ -71,10 +71,12 @@ import { QuestionStatusList } from 'src/models/QuestionStatus'
 import ImagePanel from 'components/Question/QuestionPage/ImagePanel'
 import LogListComponent from 'components/QuestionBank/EditQuestion/Log/LogList'
 import { QuestCategoryList } from 'src/models/QuestCategory'
+import FloatingImagePanel from 'components/Question/FloatingImagePanel'
 // import API_ADDRESS from 'src/api/Addresses'
 export default {
   name: 'ShowQuestion',
   components: {
+    FloatingImagePanel,
     ImagePanel,
     Navbar,
     DescriptiveShowQuestion: defineAsyncComponent(() => import('components/Question/QuestionPage/Show/questionTypes/DescriptiveQuestion/DescriptiveShowQuestion')),

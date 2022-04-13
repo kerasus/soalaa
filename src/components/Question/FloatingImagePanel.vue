@@ -1,16 +1,39 @@
 <template>
   <div class="main">
     <div class="popup">
-      <div class="popup-header">Clickطظز ظسز here to move</div>
-      <p>Move</p>
-      <p>this</p>
-      <p>DIV</p>
-    </div>
-    <div class="popup">
-      <div class="popup-header noselect">Click here to move</div>
-      <p>Move</p>
-      <p>this</p>
-      <p>DIV</p>
+      <div class="popup-header">
+        <q-card
+          class="question-card default-questions-card image-panel-box"
+        >
+          <q-card-section class="image-panel-header default-Qcard-title row justify-between">
+            <q-btn
+              class="close-panel-btn"
+              icon="isax:close-circle"
+              color="white"
+              text-color="accent"
+              dense
+              unelevated
+              rounded
+              @click="closePanelBtnClicked"
+            />
+            <q-btn
+              class="change-mode-btn"
+              color="white"
+              text-color="accent"
+              label="تغییر حالت"
+              flat
+              rounded
+              unelevated
+              @click="imgPanelModeChanged"
+            />
+          </q-card-section>
+          <div>
+            <q-card-section>
+              ***********IMAGES*******
+            </q-card-section>
+          </div>
+        </q-card>
+      </div>
     </div>
   </div>
 </template>
@@ -32,6 +55,12 @@ export default {
     initResizeElement()
   },
   methods: {
+    closePanelBtnClicked () {
+      // this.$emit('closePanelBtnClicked')
+    },
+    imgPanelModeChanged () {
+      this.$emit('imgPanelModeChanged')
+    }
   }
 }
 </script>
@@ -40,11 +69,9 @@ export default {
   direction: rtl !important;
 }
 .popup {
-  z-index: 9;
-  background-color: #f1f1f1;
-  border: 1px solid #d3d3d3;
+  z-index: 9999;
   text-align: center;
-  min-height: 150px;
+  min-height: 100px;
   min-width: 300px;
 }
 
@@ -57,11 +84,10 @@ export default {
 }
 
 .popup-header {
-  padding: 10px;
   cursor: move;
-  z-index: 10;
-  background-color: #2196f3;
-  color: #fff;
+  z-index: 10000;
+  height: 100%;
+  width: 100%;
 }
 
 /*Resizeable*/
