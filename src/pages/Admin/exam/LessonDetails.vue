@@ -90,7 +90,6 @@
 
 <script>
 import Question from 'src/components/QuizEditor/Question'
-import QuestionItem from 'components/Question/QuestionItem/QuestionItem'
 import { mixinAuth, mixinQuiz } from 'src/mixin/Mixins'
 import { QuestSubcategoryList } from 'src/models/QuestSubcategory'
 import { QuestionList } from 'src/models/Question'
@@ -124,14 +123,10 @@ export default {
         editQuestion: false,
         switch: false
       },
-      splitterModel: 50,
       subCategoriesList: new QuestSubcategoryList(),
       questionFilterMethod: 'not-filtered',
-      bubbleSheet: 800,
-      dragging: false,
       quizData: new Exam(),
       item: Question,
-      lastTimeScrollRange: { start: 0, end: 29 },
       scrollState: 'not scrolling',
       timePassedSinceLastScroll: 0,
       setIntervalCallback: null,
@@ -143,7 +138,6 @@ export default {
         'دارای غلط تایپی'
       ],
       inView: [],
-      windowVisible: true,
       questionSearchNumber: 0,
       firstQuestionOrder: 0
     }
