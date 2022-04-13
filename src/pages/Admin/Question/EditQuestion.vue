@@ -28,8 +28,10 @@
           style="padding-right: 24px;padding-top: 30px;"
         >
           <image-panel
+            :editable="true"
             :mode="'edit'"
             @closePanelBtnClicked="openCloseImgPanel"
+            @deleteImage="deleteImage"
           />
         </div>
       </div>
@@ -81,6 +83,7 @@ import { ExamList } from 'src/models/Exam'
 import { QuestSubcategoryList } from 'src/models/QuestSubcategory'
 import { QuestionStatusList } from 'src/models/QuestionStatus'
 import LogListComponent from 'components/QuestionBank/EditQuestion/Log/LogList'
+import API_ADDRESS from 'src/api/Addresses'
 import { QuestCategoryList } from 'src/models/QuestCategory'
 import ImagePanel from 'components/Question/QuestionPage/ImagePanel'
 export default {
@@ -131,6 +134,15 @@ export default {
   },
   mounted () {},
   methods: {
+    deleteImage (image) {
+      this.$axios.delete(API_ADDRESS.question.deletePhoto(image.type, this.question.id), {
+        data: {
+          url: image.src
+        }
+      }).then(response => {
+        this.question = new Question(response.data.data)
+      })
+    },
     chosenComponent () {
       const cName = this.question.type.componentName
       if (cName === 'MultipleChoiceQ') {
