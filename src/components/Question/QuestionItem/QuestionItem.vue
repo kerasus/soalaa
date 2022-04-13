@@ -140,7 +140,7 @@
           </q-chip>
         </div>
       <div class="question-section">
-        <div class="question-icon order-last"/>
+        <div :class="isLtrQuestion() ? 'question-icon order-last' : 'question-icon'"/>
         <div class="question">
           <template v-if="question.loading">
             <q-skeleton type="text" width="99%" height="30px"/>
@@ -153,7 +153,7 @@
           </template>
         </div>
       </div>
-      <div class="choice-section row">
+      <div class="choice-section row" :class="isLtrQuestion()? 'ltr-choice-section' : ''">
         <template v-if="question.loading">
           <div class="choice-column col-3" v-for="item in 4" :key="item">
             <div class="question-choice false" style="margin-bottom: 2px">
@@ -162,12 +162,14 @@
             <q-skeleton type="text" width="100px" height="25px"/>
           </div>
         </template>
-        <template v-if="question.choices">
+        <template v-else
+        >
           <QuestionChoice
             ref="questionChoice"
             class=" col-lg-3 col-md-3 col-sm-12"
             :class="questionCol"
-            v-for="(item , index) in  checkForLtr"
+            :dir="isLtrQuestion()? 'ltr':''"
+            v-for="(item , index) in this.question.choices.list"
             :questionData="item" :key="index">
           </QuestionChoice>
         </template>
@@ -175,7 +177,7 @@
       <div class="expansion-section">
         <q-expansion-item
           v-if="listConfig.descriptiveAnswer"
-          v-model="expanded"
+          v-model="descriptiveAnswerExpanded"
           header-class="hideExpansionHeader"
         >
           <q-card>
@@ -261,9 +263,9 @@
                 <q-btn
                   flat
                   v-if="listConfig.descriptiveAnswer"
-                  :icon-right="expanded? 'isax:arrow-up-2' : 'isax:arrow-down-1'"
-                  :label="expanded?  '  بستن پاسخ تشریحی' : 'نمایش پاسخ تشریحی'"
-                  @click="expanded = !expanded"
+                  :icon-right="descriptiveAnswerExpanded? 'isax:arrow-up-2' : 'isax:arrow-down-1'"
+                  :label="descriptiveAnswerExpanded?  '  بستن پاسخ تشریحی' : 'نمایش پاسخ تشریحی'"
+                  @click="descriptiveAnswerExpanded = !descriptiveAnswerExpanded"
                 />
               </div>
             </div>
@@ -348,8 +350,9 @@ export default {
   },
   data () {
     return {
+      questionChoiceList: [],
       confirmQuestion: false,
-      expanded: false,
+      descriptiveAnswerExpanded: false,
       questionLevel: 1,
       listConfig: {
         questionId: false,
@@ -425,21 +428,23 @@ export default {
   mounted () {
     this.setChoiceCol()
     this.setQuestionLevel()
-    console.log('is ltr :', this.isLtrQuestion())
+    this.setQuestionList()
   },
   computed: {
     trueChoice () {
       return this.question.choices.getSelected()
-    },
-    checkForLtr () {
-      if (!this.question.choices) return
-      if (this.isLtrQuestion) {
-        return this.question.choices.list.slice().reverse()
-      }
-      return this.question.choices
     }
   },
   methods: {
+    setQuestionList () {
+      console.log('setQuestionList')
+      if (this.isLtrQuestion()) {
+        this.questionChoiceList = this.question.choices.list.slice().reverse()
+        return
+      }
+      console.log('after if')
+      this.questionChoiceList = this.question.choices.list
+    },
     isLtrQuestion () {
       const string = this.question.statement
       if (!string) {
@@ -564,7 +569,7 @@ export default {
 }
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .selected{
   background: #F4F5F6;
   box-shadow: 1px 1px 2px rgba(255, 255, 255, 0.3), -1px -1px 2px rgba(112, 108, 161, 0.05), inset -8px 8px 20px rgba(112, 108, 161, 0.1), inset 8px -8px 20px rgba(112, 108, 161, 0.1), inset -8px -8px 10px rgba(255, 255, 255, 0.9), inset 8px 8px 13px rgba(112, 108, 161, 0.15) #{"/* rtl:ignore */"} !important;
@@ -702,14 +707,12 @@ export default {
       }
     }
   }
-
   .question-section {
     display: flex;
     margin-top: 33px;
 
     .question-icon {
-      margin-top: 7px;
-      margin-right: 10px;
+      margin: 7px 10px 0 10px;
       width: 10px;
       height: 10px;
       background: #9690E4;
@@ -725,7 +728,9 @@ export default {
       color: #23263B;
     }
   }
-
+  .choice-section.row.ltr-choice-section {
+    direction: ltr #{"/* rtl:ignore */"} !important;
+  }
   .choice-section {
     padding: 20px 0 0 20px;
     margin-bottom: 45px;
@@ -797,36 +802,6 @@ export default {
   .question-actions-container {
     .q-item-type {
       justify-content: space-between;
-    }
-
-    .q-expansion-item--collapsed {
-      .q-item__section {
-        display: flex;
-        flex-direction: row;
-        align-items: center;
-        color: #23263B;
-
-        &:before {
-          content: 'نمایش پاسخ تشریحی';
-        }
-
-        i {
-          margin-top: 0;
-          margin-left: 10px;
-        }
-
-        .q-expansion-item__toggle-focus {
-          display: none;
-        }
-      }
-    }
-
-    .q-expansion-item--expanded {
-      .q-item__section {
-        display: flex;
-        flex-direction: row;
-        align-items: center;
-      }
     }
 
     .question-actions {
