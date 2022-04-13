@@ -28,6 +28,7 @@
         >
           <image-panel
             :mode="'show'"
+            :editable="false"
             @closePanelBtnClicked="openCloseImgPanel"
           />
         </div>
