@@ -1,3 +1,6 @@
+@import "customVariables";
+@import 'src/css/Theme/colors';
+
 // Quasar SCSS (& Sass) Variables
 // --------------------------------------------------
 // To customize the look and feel of this app, you can override
@@ -13,14 +16,4 @@
 // Tip: Use the "Theme Builder" on Quasar's documentation website.
 
 //$primary   : #1976D2; default
-
-$primary   : #9690E4; // for 3A
-$accent    : #65677F;
-$alaa3A : #ffc107;
-$dark      : #1D1D1D;
-$positive  : #4caf50;
-$negative  : #f44336;
-$info      : #31CCEC;
-$warning   : #F2C037;
-$success : #4caf50;
 

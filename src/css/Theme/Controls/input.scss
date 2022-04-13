@@ -1,0 +1,18 @@
+@import 'src/css/Theme/colors';
+@import 'src/css/Theme/sizes';
+
+.q-field--filled {
+  .q-field__inner{
+    .q-field__control{
+      background-color : $customGray;
+      border-radius: $radius-15 ;
+      .q-field__append{
+        .q-icon{
+          color: $customBlack;
+          font-size: 20px;
+          padding: 7px;
+        }
+      }
+    }
+  }
+}

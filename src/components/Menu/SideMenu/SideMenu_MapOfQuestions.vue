@@ -14,7 +14,7 @@
         :key="'category-'+categoryItem.id"
         class="menu-body"
       >
-        <q-item class="category-item">
+        <q-item v-if="categoryItem.is_active" class="category-item">
           <q-item-section class="category-item-section">
             <q-item-label class="category-item-label">
               {{ categoryItem.title }}
@@ -93,10 +93,10 @@ export default {
   },
   methods: {
     getUserQuestionData (questionId) {
-      if (!this.quiz.id || !questionId || !this.userQuizListData[this.quiz.id]) {
+      if (!this.quiz.user_exam_id || !questionId || !this.userQuizListData[this.quiz.user_exam_id]) {
         return false
       }
-      return this.userQuizListData[this.quiz.id][questionId]
+      return this.userQuizListData[this.quiz.user_exam_id][questionId]
     },
     getConfirmation () {
       const that = this
@@ -116,14 +116,14 @@ export default {
     },
     sendAnswersAndFinishExam () {
       const that = this
-      this.sendUserQuestionsDataToServerAndFinishExam(this.quiz.id, this.quiz.user_exam_id)
+      this.sendUserQuestionsDataToServerAndFinishExam(this.quiz.user_exam_id)
         .then(() => {
           // that.$notify({
           //   group: 'notifs',
           //   text: 'اطلاعات آزمون شما ثبت شد.',
           //   type: 'success'
           // })
-          that.$store.commit('clearExamData', that.quiz.id)
+          that.$store.commit('clearExamData', that.quiz.user_exam_id)
           that.$router.push({ name: 'user.exam.list' })
         })
         .catch(() => {
