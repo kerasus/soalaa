@@ -52,11 +52,6 @@ export default {
       .search-box {
         height: 64px;
         width: 300px;
-        .q-field__inner{
-          .q-field__control{
-            border-radius: 15px;
-          }
-        }
       }
     }
     .select-box{
