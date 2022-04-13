@@ -68,15 +68,25 @@
   </div>
   <image-side-panel
     :mode="mode"
+    v-if="!floatPanelMode"
     @closePanelBtnClicked="closePanelBtnClicked"
+    @imgPanelModeChanged="changeToFloatingMode"
   />
-  <floating-image-panel :src="selectedImageSrc"/>
+  <floating-image-panel
+    :src="selectedImageSrc"
+    v-if="floatPanelMode"
+    @closePanelBtnClicked="closePanelBtnClicked"
+    @imgPanelModeChanged="changeToSideMode"
+  />
 </template>
 
 <script>
 import { Question } from 'src/models/Question'
 import * as FilePond from 'filepond'
 import 'filepond/dist/filepond.min.css'
+import 'filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css'
+import FilePondPluginImagePreview from 'filepond-plugin-image-preview'
+FilePond.registerPlugin(FilePondPluginImagePreview)
 
 const dropAreaHTML = `
         <div class="drop-area-parent">
@@ -135,6 +145,7 @@ export default {
   },
   data () {
     return {
+      floatPanelMode: false,
       pond_statement: FilePond.create({
         allowMultiple: true,
         name: 'filepond',
@@ -175,12 +186,22 @@ export default {
       //   message: 'این قابلیت بزودی اضافه خواهد شد...',
       //   color: 'primary'
       // })
+    },
+    changeToSideMode () {
+      console.log('changeToSideMode')
+      this.floatPanelMode = false
+    },
+    changeToFloatingMode () {
+      this.floatPanelMode = true
     }
   }
 }
 </script>
 
 <style lang="scss">
+.hidePanel {
+  display: none;
+}
 .question-image-panel {
   .image-panel-box {
     height: 600px;
