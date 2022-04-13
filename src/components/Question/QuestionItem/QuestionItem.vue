@@ -425,7 +425,6 @@ export default {
   mounted () {
     this.setChoiceCol()
     this.setQuestionLevel()
-    this.setQuestionList()
   },
   computed: {
     trueChoice () {
@@ -433,15 +432,6 @@ export default {
     }
   },
   methods: {
-    setQuestionList () {
-      console.log('setQuestionList')
-      if (this.isLtrQuestion()) {
-        this.questionChoiceList = this.question.choices.list.slice().reverse()
-        return
-      }
-      console.log('after if')
-      this.questionChoiceList = this.question.choices.list
-    },
     isLtrQuestion () {
       const string = this.question.statement
       if (!string) {
