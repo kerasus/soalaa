@@ -37,7 +37,11 @@
                 <q-btn class="delete-btn" round color="red" icon="mdi-delete" size="xs" @click="deleteImage({ src: item, type: 'statement_photo' })" />
                 <img :src="item" @click="selectImage(item)" />
               </div>
-              <div v-if="editable">
+              <div v-for="(item, index) in question.added_statement_photos" :key="index" class="q-image">
+                <q-btn class="delete-btn" round color="red" icon="mdi-delete" size="xs" @click="deleteUnsavedImage({ file: item, type: 'added_statement_photos' })" />
+                <img :src="getUrl(item)" @click="selectImage(getUrl(item))" />
+              </div>
+              <div v-if="editable" style="margin-right: 50px">
                 <div id="filepond-wrapper-statement" />
               </div>
               <p v-if="!editable && (!question.statement_photo || question.statement_photo.length === 0)">وجود ندارد</p>
@@ -48,7 +52,7 @@
                 <q-btn class="delete-btn" round color="red" icon="mdi-delete" size="xs" @click="deleteImage({ src: item, type: 'answer_photo' })" />
                 <img :src="item" @click="selectImage(item)" />
               </div>
-              <div v-if="editable">
+              <div v-if="editable" style="margin-right: 50px">
                 <div id="filepond-wrapper-answer" />
               </div>
               <p v-if="!editable && (!question.answer_photos || question.answer_photos.length === 0)">وجود ندارد</p>
@@ -64,9 +68,6 @@
 import { Question } from 'src/models/Question'
 import * as FilePond from 'filepond'
 import 'filepond/dist/filepond.min.css'
-import 'filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css'
-import FilePondPluginImagePreview from 'filepond-plugin-image-preview'
-FilePond.registerPlugin(FilePondPluginImagePreview)
 
 const dropAreaHTML = `
         <div class="drop-area-parent">
@@ -123,9 +124,7 @@ export default {
       pond_statement: FilePond.create({
         allowMultiple: true,
         name: 'filepond',
-        labelIdle: dropAreaHTML,
-        allowImagePreview: false,
-        imagePreviewMinHeight: 200
+        labelIdle: dropAreaHTML
       }),
       pond_answer: FilePond.create({
         allowMultiple: true,
@@ -136,6 +135,14 @@ export default {
     }
   },
   methods: {
+    deleteUnsavedImage (object) {
+      this.question[object.type] = this.question[object.type].filter(file => {
+        return file.name !== object.file.name
+      })
+    },
+    getUrl (file) {
+      return URL.createObjectURL(file)
+    },
     deleteImage (image) {
       this.$emit('deleteImage', image)
     },
@@ -163,6 +170,10 @@ export default {
   }
   .change-mode-btn {
     margin-right: 60px;
+  }
+
+  .filepond--list-scroller {
+    display: none;
   }
 }
 

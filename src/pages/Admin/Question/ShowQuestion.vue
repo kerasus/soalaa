@@ -39,6 +39,7 @@
       <attach-exam
         :exams="examList"
         :lessons="subCategoriesList"
+        :categories="categoryList"
         @attach="attachExam"
         @detach="detachExam"
       />
@@ -70,6 +71,7 @@ import { QuestSubcategoryList } from 'src/models/QuestSubcategory'
 import { QuestionStatusList } from 'src/models/QuestionStatus'
 import ImagePanel from 'components/Question/QuestionPage/ImagePanel'
 import LogListComponent from 'components/QuestionBank/EditQuestion/Log/LogList'
+import { QuestCategoryList } from 'src/models/QuestCategory'
 // import API_ADDRESS from 'src/api/Addresses'
 export default {
   name: 'ShowQuestion',
@@ -97,6 +99,7 @@ export default {
       examList: new ExamList(),
       subCategoriesList: new QuestSubcategoryList(),
       questionStatuses: new QuestionStatusList(),
+      categoryList: new QuestCategoryList(),
       isPanelOpened: false,
       allTypes: new TypeList(),
       totalLoading: false
@@ -108,6 +111,7 @@ export default {
     this.getQuestionTypeForTypeId(this.question)
     // this.setAllQuestionLoadings()
     this.loadSubcategories()
+    this.loadCategories()
     // this.getQuestionById(this.getCurrentQuestionId())
     this.loadExamList()
   },
@@ -142,9 +146,6 @@ export default {
     },
     disableLoading () {
       this.question.loading = false
-    },
-    openCloseImgPanel () {
-      this.isPanelOpened = !this.isPanelOpened
     }
   },
   computed: {

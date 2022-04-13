@@ -70,7 +70,8 @@ export default {
           finalMatch = match.slice(2, -2)
         }
         return katex.renderToString(finalMatch, {
-          throwOnError: false
+          throwOnError: false,
+          strict: 'warn'
         })
       })
       return string

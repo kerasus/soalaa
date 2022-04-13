@@ -5,13 +5,15 @@
     tick-strategy="strict"
     :editable="true"
     :get-node-by-id="getNodeById"
+    :add-new-node="createNode"
+    :edit-node="editNode"
   />
+<!--  <q-btn v-for="(t, k) in testArr" :key="k" :label="t" @click="test2"/>-->
 </template>
 
 <script>
 import { mixinTree } from 'src/mixin/Mixins'
-import Tree from 'components/Tree/Tree'
-// import API_ADDRESS from 'src/api/Addresses'
+import Tree from 'src/components/Tree/Tree'
 
 export default {
   name: 'PageIndex',
@@ -24,12 +26,14 @@ export default {
       selectedNode: {},
       editDialog: false,
       newNode: {}
+      // testArr: []
     }
   },
   mixins: [mixinTree],
   components: { Tree },
   created () {
-    this.showTree('tree', 'test')
+    // this.showTree('tree', this.getNode('6232e6482012ae19f05331d9'))
+    this.showTree('tree', this.getRootNode('test'))
       .then(() => {})
       .catch(err => {
         console.log(err)
@@ -38,13 +42,14 @@ export default {
   methods: {
     test (value) {
       console.log('ticked', value)
+      this.testArr = []
+      value.forEach(val => {
+        this.testArr.push(val.id)
+      })
     }
-    // getSelectedNode (node) {
-    //   this.selectedNode = node
+    // test2 (id) {
+    //   this.setTickedMode('tree', id, false)
     // },
-    // getNewNodeData () {
-    //   this.createNode(this.selectedNode.id)
-    // }
   }
 }
 </script>

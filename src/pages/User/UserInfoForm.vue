@@ -326,12 +326,12 @@ export default {
     getUserData () {
       const that = this
       this.user.loading = true
-      this.user.getUserData()
-        .then((user) => {
-          // console.log('user in get user data :', user)
+      // this.user.getUserData()
+      this.$axios.get(API_ADDRESS.user.show_user)
+        .then((response) => {
           this.user.loading = false
           that.getUserFormData()
-          that.$store.commit('Auth/updateUser', user)
+          that.$store.commit('Auth/updateUser', response.data.data)
           this.canRedirect()
         })
       // .catch(e => {
