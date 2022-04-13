@@ -1,5 +1,5 @@
 <template>
-  <q-card :class="isSelected ? 'selected' : 'custom_card'">
+  <q-card class="custom-card" :class="{isSelected :'selected'}">
     <q-resize-observer @resize="setChoiceCol"/>
     <q-card-section class="question-bank-content">
       <div class="question-info-section">
@@ -140,7 +140,7 @@
           </q-chip>
         </div>
       <div class="question-section">
-        <div class="question-icon"></div>
+        <div class="question-icon order-last"/>
         <div class="question">
           <template v-if="question.loading">
             <q-skeleton type="text" width="99%" height="30px"/>
@@ -162,12 +162,12 @@
             <q-skeleton type="text" width="100px" height="25px"/>
           </div>
         </template>
-        <template v-else>
+        <template v-if="question.choices">
           <QuestionChoice
             ref="questionChoice"
             class=" col-lg-3 col-md-3 col-sm-12"
             :class="questionCol"
-            v-for="(item , index) in question.choices.list"
+            v-for="(item , index) in  checkForLtr"
             :questionData="item" :key="index">
           </QuestionChoice>
         </template>
@@ -218,7 +218,7 @@
                   :outline="isSelected"
                   color="primary"
                   class="edit-and-add-btn"
-                  @clic="selectQuestion"
+                  @clic="selectQuestion(!isSelected)"
                   :icon="isSelected ? 'isax:minus' : 'isax:add'" />
               </div>
               <div v-if="listConfig.editQuestion" class="edit-btn">
@@ -325,25 +325,25 @@ export default {
       type: Object,
       default () {
         return {
-          copy: false,
-          detachQuestion: false,
-          deleteQuestionFromDb: false,
-          editQuestion: false,
-          switch: false
+          copy: true,
+          detachQuestion: true,
+          deleteQuestionFromDb: true,
+          editQuestion: true,
+          switch: true
         }
       }
     },
     confirmLoading: {
       type: Boolean,
-      default: () => false
+      default: false
     },
     isSelected: {
       type: Boolean,
-      default: () => false
+      default: false
     },
     pageStrategy: {
       type: String,
-      default: () => ''
+      default: ''
     }
   },
   data () {
@@ -356,6 +356,13 @@ export default {
         questionLevel: false,
         questionSource: false,
         questionInfo: false,
+        editQuestion: true,
+        switch: false,
+        selectQuestion: true,
+        reportProblem: true,
+        questionRate: true,
+        questionComment: true,
+        descriptiveAnswer: true,
         menu: {
           show: true,
           items: {
@@ -363,24 +370,17 @@ export default {
             detachQuestion: true,
             deleteQuestionFromDb: true
           }
-        },
-        editQuestion: true,
-        switch: false,
-        selectQuestion: true,
-        reportProblem: true,
-        questionRate: true,
-        questionComment: true,
-        descriptiveAnswer: true
+        }
       },
       questionCol: '',
       questionLevelClasses: {
         1: {
-          lvl: 1,
+          lvl: 3,
           class: 'easy',
           title: 'آسان'
         },
         2: {
-          lvl: 1,
+          lvl: 3,
           class: 'easy',
           title: 'آسان'
         },
@@ -395,7 +395,7 @@ export default {
           title: 'متوسط'
         },
         5: {
-          lvl: 3,
+          lvl: 1,
           class: 'hard',
           title: 'سخت'
         }
@@ -425,13 +425,29 @@ export default {
   mounted () {
     this.setChoiceCol()
     this.setQuestionLevel()
+    console.log('is ltr :', this.isLtrQuestion())
   },
   computed: {
     trueChoice () {
       return this.question.choices.getSelected()
+    },
+    checkForLtr () {
+      if (!this.question.choices) return
+      if (this.isLtrQuestion) {
+        return this.question.choices.list.slice().reverse()
+      }
+      return this.question.choices
     }
   },
   methods: {
+    isLtrQuestion () {
+      const string = this.question.statement
+      if (!string) {
+        return false
+      }
+      const persianRegex = /[\u0600-\u06FF]/
+      return !string.match(persianRegex)
+    },
     redirectToEditPage () {
       this.$router.push({
         name: 'Admin.Question.Edit',
@@ -440,8 +456,8 @@ export default {
         }
       })
     },
-    selectQuestion () {
-      this.$emit('selectQuestion', !this.isSelected, this.question)
+    selectQuestion (data) {
+      this.$emit('selectQuestion', data, this.question)
     },
     setQuestionLevel () {
       this.questionLevel = 5
@@ -451,10 +467,61 @@ export default {
       this.applyListConfig()
     },
     applyPageStrategy () {
-
+      if (!this.pageStrategy) return
+      let source = {}
+      source = this.pageMode()
+      this.listConfig = Object.assign(this.listConfig, source)
+    },
+    pageMode () {
+      if (this.pageStrategy === 'question-bank') {
+        return {
+          questionId: true,
+          questionLevel: true,
+          questionSource: true,
+          questionInfo: true,
+          editQuestion: true,
+          selectQuestion: true,
+          reportProblem: true,
+          questionRate: true,
+          questionComment: true,
+          descriptiveAnswer: true,
+          menu: {
+            show: true,
+            items: {
+              copy: true,
+              detachQuestion: true,
+              deleteQuestionFromDb: true,
+              confirmQuestion: true
+            }
+          }
+        }
+      }
+      if (this.pageStrategy === 'lesson-detail') {
+        return {
+          questionId: true,
+          questionLevel: true,
+          questionSource: true,
+          questionInfo: true,
+          editQuestion: true,
+          selectQuestion: true,
+          reportProblem: true,
+          questionRate: true,
+          questionComment: true,
+          descriptiveAnswer: true,
+          menu: {
+            show: true,
+            items: {
+              copy: false,
+              detachQuestion: true,
+              deleteQuestionFromDb: true,
+              confirmQuestion: true
+            }
+          }
+        }
+      }
     },
     applyListConfig () {
-
+      this.listConfig = Object.assign(this.listConfig, this.listOptions)
     },
     setChoiceCol () {
       const el = this.$refs.questionChoice
@@ -491,20 +558,20 @@ export default {
       return choiceBoxElement.clientHeight - padding
     },
     emitAdminActions (action, data) {
-      this.$emit('adminActions', action, data)
+      this.$emit(action, data)
     }
   }
 }
 </script>
 
 <style lang="scss">
-.test {
-  background-color: #f1bbbb;
-}
 .selected{
   background: #F4F5F6;
   box-shadow: 1px 1px 2px rgba(255, 255, 255, 0.3), -1px -1px 2px rgba(112, 108, 161, 0.05), inset -8px 8px 20px rgba(112, 108, 161, 0.1), inset 8px -8px 20px rgba(112, 108, 161, 0.1), inset -8px -8px 10px rgba(255, 255, 255, 0.9), inset 8px 8px 13px rgba(112, 108, 161, 0.15) #{"/* rtl:ignore */"} !important;
   border-radius: 20px;
+}
+.custom-card{
+  margin-bottom:16px
 }
 .question-bank-content {
   .question-info-section {
