@@ -62,6 +62,7 @@
     :mode="mode"
     @closePanelBtnClicked="closePanelBtnClicked"
   />
+  <floating-image-panel/>
 </template>
 
 <script>
@@ -81,9 +82,11 @@ const dropAreaHTML = `
       `
 
 import ImageSidePanel from 'components/Question/QuestionPage/ImageSidePanel'
+import FloatingImagePanel from 'components/Question/FloatingImagePanel'
 export default {
   name: 'ImagePanel',
   components: {
+    FloatingImagePanel,
     ImageSidePanel
   },
   props: {

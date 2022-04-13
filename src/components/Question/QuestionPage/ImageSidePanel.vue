@@ -2,10 +2,6 @@
   <div
     class="question-image-panel"
   >
-    <floating-image-panel
-      @imgPanelModeChanged="imgPanelModeChanged"
-      :class="{ 'floatMode': floatMode }"
-    />
     <q-card
       class="question-card default-questions-card image-panel-box"
     >
@@ -41,7 +37,6 @@
 </template>
 
 <script>
-import FloatingImagePanel from 'components/Question/FloatingImagePanel'
 export default {
   name: 'ImageSidePanel',
   props: {
@@ -52,9 +47,7 @@ export default {
       }
     }
   },
-  components: {
-    FloatingImagePanel
-  },
+  components: {},
   data () {
     return {
       floatMode: false
