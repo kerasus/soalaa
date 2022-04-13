@@ -1,5 +1,5 @@
 <template>
-  <q-card :class="isSelected ? 'selected' : 'custom_card'">
+  <q-card class="custom-card" :class="{isSelected :'selected'}">
     <q-resize-observer @resize="setChoiceCol"/>
     <q-card-section class="question-bank-content">
       <div class="question-info-section">
@@ -140,7 +140,7 @@
           </q-chip>
         </div>
       <div class="question-section">
-        <div class="question-icon"></div>
+        <div :class="isLtrQuestion() ? 'question-icon order-last' : 'question-icon'"/>
         <div class="question">
           <template v-if="question.loading">
             <q-skeleton type="text" width="99%" height="30px"/>
@@ -153,7 +153,7 @@
           </template>
         </div>
       </div>
-      <div class="choice-section row">
+      <div class="choice-section row" :class="isLtrQuestion()? 'ltr-choice-section' : ''">
         <template v-if="question.loading">
           <div class="choice-column col-3" v-for="item in 4" :key="item">
             <div class="question-choice false" style="margin-bottom: 2px">
@@ -162,12 +162,14 @@
             <q-skeleton type="text" width="100px" height="25px"/>
           </div>
         </template>
-        <template v-else>
+        <template v-else
+        >
           <QuestionChoice
             ref="questionChoice"
             class=" col-lg-3 col-md-3 col-sm-12"
             :class="questionCol"
-            v-for="(item , index) in question.choices.list"
+            :dir="isLtrQuestion()? 'ltr':''"
+            v-for="(item , index) in this.question.choices.list"
             :questionData="item" :key="index">
           </QuestionChoice>
         </template>
@@ -175,37 +177,34 @@
       <div class="expansion-section">
         <q-expansion-item
           v-if="listConfig.descriptiveAnswer"
-          v-model="expanded"
+          v-model="descriptiveAnswerExpanded"
           header-class="hideExpansionHeader"
         >
-          <q-card>
-            <q-card-section class="answer-section">
-              <div class="row">
-                <div class="answer-description col-8">
-                  <q-card flat class="answer-description-card">
-                    <q-card-section class="answer-description-content">
-                      <div class="question-answer-choice">
-                <span v-if="trueChoice" class="question-answer-choice-title">
-                  گزینه
-                  {{ trueChoice.getOrderTitle() }}
-                </span>
-                      </div>
-                      <div class="question-answer-description">
-                        {{ question.answer }}
-                      </div>
-                    </q-card-section>
-                  </q-card>
+          <div  class="answer-section">
+            <div class="answer-description" :class=" false ? 'normal-width' : 'full-width'">
+              <q-card flat class="answer-description-card" >
+                <div class="question-answer-choice">
+                  <span v-if="this.question.choices.getSelected()" class="question-answer-choice-title">
+                     گزینه
+                     {{this.question.choices.getSelected().order}}
+                  </span>
                 </div>
-                <div class="answer-description-video col-4">
-                  <div class="video">
-                  </div>
-                  <div class="title">
-                    پاسخنامه ویدیویی - محمد امین نباخته
-                  </div>
+                <div v-if="question.descriptive_answer" class="question-answer-description">
+                  {{ question.descriptive_answer }}
                 </div>
+                <p v-else>
+                 پاسخ تشریحی ندارد.
+                </p>
+              </q-card>
+            </div>
+            <div v-if="true" class=" answer-description-video">
+              <div class="video">
               </div>
-            </q-card-section>
-          </q-card>
+              <div class="title text-center">
+                پاسخنامه ویدیویی - محمد امین نباخته
+              </div>
+            </div>
+          </div>
         </q-expansion-item>
       </div>
       <template v-if="!question.loading">
@@ -218,7 +217,7 @@
                   :outline="isSelected"
                   color="primary"
                   class="edit-and-add-btn"
-                  @clic="selectQuestion"
+                  @click="selectQuestion(!isSelected)"
                   :icon="isSelected ? 'isax:minus' : 'isax:add'" />
               </div>
               <div v-if="listConfig.editQuestion" class="edit-btn">
@@ -261,9 +260,9 @@
                 <q-btn
                   flat
                   v-if="listConfig.descriptiveAnswer"
-                  :icon-right="expanded? 'isax:arrow-up-2' : 'isax:arrow-down-1'"
-                  :label="expanded?  '  بستن پاسخ تشریحی' : 'نمایش پاسخ تشریحی'"
-                  @click="expanded = !expanded"
+                  :icon-right="descriptiveAnswerExpanded? 'isax:arrow-up-2' : 'isax:arrow-down-1'"
+                  :label="descriptiveAnswerExpanded?  '  بستن پاسخ تشریحی' : 'نمایش پاسخ تشریحی'"
+                  @click="descriptiveAnswerExpanded = !descriptiveAnswerExpanded"
                 />
               </div>
             </div>
@@ -325,37 +324,45 @@ export default {
       type: Object,
       default () {
         return {
-          copy: false,
-          detachQuestion: false,
-          deleteQuestionFromDb: false,
-          editQuestion: false,
-          switch: false
+          copy: true,
+          detachQuestion: true,
+          deleteQuestionFromDb: true,
+          editQuestion: true,
+          switch: true
         }
       }
     },
     confirmLoading: {
       type: Boolean,
-      default: () => false
+      default: false
     },
     isSelected: {
       type: Boolean,
-      default: () => false
+      default: false
     },
     pageStrategy: {
       type: String,
-      default: () => ''
+      default: ''
     }
   },
   data () {
     return {
+      questionChoiceList: [],
       confirmQuestion: false,
-      expanded: false,
+      descriptiveAnswerExpanded: false,
       questionLevel: 1,
       listConfig: {
         questionId: false,
         questionLevel: false,
         questionSource: false,
         questionInfo: false,
+        editQuestion: true,
+        switch: false,
+        selectQuestion: true,
+        reportProblem: true,
+        questionRate: true,
+        questionComment: true,
+        descriptiveAnswer: true,
         menu: {
           show: true,
           items: {
@@ -363,24 +370,17 @@ export default {
             detachQuestion: true,
             deleteQuestionFromDb: true
           }
-        },
-        editQuestion: true,
-        switch: false,
-        selectQuestion: true,
-        reportProblem: true,
-        questionRate: true,
-        questionComment: true,
-        descriptiveAnswer: true
+        }
       },
       questionCol: '',
       questionLevelClasses: {
         1: {
-          lvl: 1,
+          lvl: 3,
           class: 'easy',
           title: 'آسان'
         },
         2: {
-          lvl: 1,
+          lvl: 3,
           class: 'easy',
           title: 'آسان'
         },
@@ -395,7 +395,7 @@ export default {
           title: 'متوسط'
         },
         5: {
-          lvl: 3,
+          lvl: 1,
           class: 'hard',
           title: 'سخت'
         }
@@ -432,6 +432,14 @@ export default {
     }
   },
   methods: {
+    isLtrQuestion () {
+      const string = this.question.statement
+      if (!string) {
+        return false
+      }
+      const persianRegex = /[\u0600-\u06FF]/
+      return !string.match(persianRegex)
+    },
     redirectToEditPage () {
       this.$router.push({
         name: 'Admin.Question.Edit',
@@ -440,8 +448,8 @@ export default {
         }
       })
     },
-    selectQuestion () {
-      this.$emit('selectQuestion', !this.isSelected, this.question)
+    selectQuestion (data) {
+      this.$emit('checkSelect', data, this.question)
     },
     setQuestionLevel () {
       this.questionLevel = 5
@@ -451,10 +459,61 @@ export default {
       this.applyListConfig()
     },
     applyPageStrategy () {
-
+      if (!this.pageStrategy) return
+      let source = {}
+      source = this.pageMode()
+      this.listConfig = Object.assign(this.listConfig, source)
+    },
+    pageMode () {
+      if (this.pageStrategy === 'question-bank') {
+        return {
+          questionId: true,
+          questionLevel: true,
+          questionSource: true,
+          questionInfo: true,
+          editQuestion: true,
+          selectQuestion: true,
+          reportProblem: true,
+          questionRate: true,
+          questionComment: true,
+          descriptiveAnswer: true,
+          menu: {
+            show: true,
+            items: {
+              copy: true,
+              detachQuestion: true,
+              deleteQuestionFromDb: true,
+              confirmQuestion: true
+            }
+          }
+        }
+      }
+      if (this.pageStrategy === 'lesson-detail') {
+        return {
+          questionId: true,
+          questionLevel: true,
+          questionSource: true,
+          questionInfo: true,
+          editQuestion: true,
+          selectQuestion: true,
+          reportProblem: true,
+          questionRate: true,
+          questionComment: true,
+          descriptiveAnswer: true,
+          menu: {
+            show: true,
+            items: {
+              copy: false,
+              detachQuestion: true,
+              deleteQuestionFromDb: true,
+              confirmQuestion: true
+            }
+          }
+        }
+      }
     },
     applyListConfig () {
-
+      this.listConfig = Object.assign(this.listConfig, this.listOptions)
     },
     setChoiceCol () {
       const el = this.$refs.questionChoice
@@ -491,20 +550,29 @@ export default {
       return choiceBoxElement.clientHeight - padding
     },
     emitAdminActions (action, data) {
-      this.$emit('adminActions', action, data)
+      this.$emit(action, data)
     }
   }
 }
 </script>
 
-<style lang="scss">
-.test {
-  background-color: #f1bbbb;
+<style lang="scss" scoped>
+.test{
+  background: #6ea5dc;
+}
+.test3{
+  background: #e1246c;
+}
+.test2{
+  background: #efe471;
 }
 .selected{
   background: #F4F5F6;
   box-shadow: 1px 1px 2px rgba(255, 255, 255, 0.3), -1px -1px 2px rgba(112, 108, 161, 0.05), inset -8px 8px 20px rgba(112, 108, 161, 0.1), inset 8px -8px 20px rgba(112, 108, 161, 0.1), inset -8px -8px 10px rgba(255, 255, 255, 0.9), inset 8px 8px 13px rgba(112, 108, 161, 0.15) #{"/* rtl:ignore */"} !important;
   border-radius: 20px;
+}
+.custom-card{
+  margin-bottom:16px
 }
 .question-bank-content {
   .question-info-section {
@@ -635,14 +703,12 @@ export default {
       }
     }
   }
-
   .question-section {
     display: flex;
     margin-top: 33px;
 
     .question-icon {
-      margin-top: 7px;
-      margin-right: 10px;
+      margin: 7px 10px 0 10px;
       width: 10px;
       height: 10px;
       background: #9690E4;
@@ -658,7 +724,9 @@ export default {
       color: #23263B;
     }
   }
-
+  .choice-section.row.ltr-choice-section {
+    direction: ltr #{"/* rtl:ignore */"} !important;
+  }
   .choice-section {
     padding: 20px 0 0 20px;
     margin-bottom: 45px;
@@ -672,12 +740,12 @@ export default {
       }
     }
   }
-
   .answer-section {
     padding: 24px 10px;
-
+    display: flex;
     .answer-description {
       .answer-description-card {
+        padding: 24px;
         font-style: normal;
         font-weight: 400;
         font-size: 14px;
@@ -685,11 +753,8 @@ export default {
         color: #23263B;
         background: #F4F5F6;
         border-radius: 20px;
-
-        .answer-description-content {
           .question-answer-choice {
             margin-bottom: 10px;
-
             .question-answer-choice-title {
               padding: 0 10px;
               font-style: normal;
@@ -701,20 +766,23 @@ export default {
               border-radius: 12px;
             }
           }
-        }
+
+      }
+      .normal-width{
+        width: calc(100% - 336px);
+      }
+      .full-width{
+        width: 100%;
       }
     }
-
     .answer-description-video {
-      padding: 0 0 0 16px;
-
-      .video {
-        width: 320px;
+      .video{
+        margin: 0 0 0 16px;
+        min-width: 320px;
         height: 180px;
         background: #F4F5F6;
         border-radius: 20px;
       }
-
       .title {
         padding-top: 8px;
         padding-left: 10px;
@@ -726,40 +794,9 @@ export default {
       }
     }
   }
-
   .question-actions-container {
     .q-item-type {
       justify-content: space-between;
-    }
-
-    .q-expansion-item--collapsed {
-      .q-item__section {
-        display: flex;
-        flex-direction: row;
-        align-items: center;
-        color: #23263B;
-
-        &:before {
-          content: 'نمایش پاسخ تشریحی';
-        }
-
-        i {
-          margin-top: 0;
-          margin-left: 10px;
-        }
-
-        .q-expansion-item__toggle-focus {
-          display: none;
-        }
-      }
-    }
-
-    .q-expansion-item--expanded {
-      .q-item__section {
-        display: flex;
-        flex-direction: row;
-        align-items: center;
-      }
     }
 
     .question-actions {
@@ -846,7 +883,6 @@ export default {
 
   }
 }
-
 .report-problem-dialog {
   position: relative;
 
@@ -889,6 +925,91 @@ export default {
 
     .cancel {
       background-color: #F4F5F6;
+    }
+  }
+}
+@media only screen and (max-width: 1919px) {
+  .question-bank-content{
+    .answer-section {
+      padding: 24px 10px;
+      display: flex;
+      .answer-description {
+        .answer-description-card {
+          padding: 24px;
+          font-style: normal;
+          font-weight: 400;
+          font-size: 14px;
+          line-height: 24px;
+          color: #23263B;
+          background: #F4F5F6;
+          border-radius: 20px;
+          .question-answer-choice {
+            margin-bottom: 10px;
+            .question-answer-choice-title {
+              padding: 0 10px;
+              font-style: normal;
+              font-weight: 400;
+              font-size: 14px;
+              line-height: 24px;
+              color: #FFFFFF;
+              background: #4CAF50;
+              border-radius: 12px;
+            }
+          }
+
+        }
+        .normal-width{
+          width: calc(100% - 260px);
+        }
+        .full-width{
+          width: 100%;
+        }
+      }
+      .answer-description-video {
+        .video{
+          margin: 0 0 0 20px;
+          min-width: 240px;
+          height: 135px;
+        }
+        .title {
+          padding-top: 10px;
+        }
+      }
+    }
+  }
+}
+
+@media only screen and (max-width: 1920px) {
+
+}
+@media only screen and (max-width: 600px) {
+  .question-bank-content{
+    .answer-section {
+      padding: 24px 10px;
+      display: flex;
+      .answer-description {
+        .answer-description-card {
+          .question-answer-choice {
+            margin-bottom: 10px;
+          }
+        }
+        .normal-width{
+          width: calc(100% - 286px);
+        }
+        .full-width{
+          width: 100%;
+        }
+      }
+      .answer-description-video {
+        .video{
+          margin: 0 0 0 20px;
+          min-width: 286px;
+          height: 161px;
+        }
+        .title {
+          padding-top: 12px;
+        }
+      }
     }
   }
 }
