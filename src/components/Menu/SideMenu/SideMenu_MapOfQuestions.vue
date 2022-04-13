@@ -14,7 +14,7 @@
         :key="'category-'+categoryItem.id"
         class="menu-body"
       >
-        <q-item class="category-item">
+        <q-item v-if="categoryItem.is_active" class="category-item">
           <q-item-section class="category-item-section">
             <q-item-label class="category-item-label">
               {{ categoryItem.title }}

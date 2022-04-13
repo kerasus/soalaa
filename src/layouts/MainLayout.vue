@@ -20,7 +20,7 @@
       <div class="drawer-inside" v-if="$route.name === 'onlineQuiz.alaaView'">
         <sideMenuMapOfQuestions/>
       </div>
-      <div v-else>
+      <div class="drawer-inside" v-else>
         <side-menu-dashboard/>
       </div>
     </template>
@@ -132,7 +132,6 @@ export default {
 .main-layout-container {
 }
 .content-inside {
-  height: calc(100vh - );
   overflow: auto;
 }
 
