@@ -2,8 +2,8 @@
   <div class="answer-box"
     @click="answerClicked"
   >
-    <div :class="{ 'answer-sheet': true, active: isSelected , 'bg-deep-purple-1': isSelected }">
-      <div class="answer-text renderedPanel"
+    <div class="answer-sheet" :class="{ active: isSelected , 'bg-deep-purple-1': isSelected, 'ltr' : !isRtl }">
+      <div class="answer-text renderedPanel" :class="{'ltr' : !isRtl}"
       >
         <vue-katex
           :input="choice.title"
@@ -95,11 +95,22 @@ export default {
         padding-left: 30px;
         display: block;
     }
+    .answer-text.ltr {
+        height: max-content;
+        width: 100%;
+        color: #777;
+        padding-left: 0;
+        padding-right: 30px;
+        display: block;
+    }
     .answer-text .mesra {
       max-width: 100%;
     }
     .answer-sheet.active {
         /*background: #fffaee;*/
+    }
+    .answer-sheet.ltr {
+        direction: rtl;
     }
 
     .answer-text {
