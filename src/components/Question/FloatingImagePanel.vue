@@ -28,8 +28,8 @@
             />
           </q-card-section>
           <div>
-            <q-card-section>
-              ***********IMAGES*******
+            <q-card-section v-if="src">
+              <img :src="src">
             </q-card-section>
           </div>
         </q-card>
@@ -60,6 +60,12 @@ export default {
     },
     imgPanelModeChanged () {
       this.$emit('imgPanelModeChanged')
+    }
+  },
+  props: {
+    src: {
+      required: false,
+      default: ''
     }
   }
 }
