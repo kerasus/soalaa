@@ -1969,9 +1969,9 @@ export default {
     },
     questionLvl () {
       return {
-        hard: this.questions.list.filter(question => question.source_data.difficultyLevelId === '10').length,
-        medium: this.questions.list.filter(question => question.source_data.difficultyLevelId === '20').length,
-        easy: this.questions.list.filter(question => question.source_data.difficultyLevelId === '30').length
+        hard: this.questions.list.filter(question => question.level === '1').length,
+        medium: this.questions.list.filter(question => question.level === '2').length,
+        easy: this.questions.list.filter(question => question.level === '3').length
       }
     }
   },
