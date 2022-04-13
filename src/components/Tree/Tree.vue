@@ -5,7 +5,7 @@
     no-nodes-label="درختی ایجاد نشده است!"
     node-key="id"
     ref="tree"
-    control-color="orange"
+    control-color="secondary"
     label-key="title"
     icon="isax:add-square"
     :tick-strategy="tickStrategy"
@@ -238,6 +238,7 @@ export default {
     display: inline-block;
 
     .node-title {
+      color: var(--3a-TextPrimary);
       &:hover {
         .edit-btn {
           color: #f18305;
@@ -248,39 +249,29 @@ export default {
       }
       .none-edit-btn{
         display: none;
-      }
-    }
-    .q-checkbox{
-      &.q-tree__tickbox {
-        color: blue !important;
       }
     }
   }
 </style>
 <style lang='scss'>
-.q-tree__arrow, .q-tree__arrow--rotate {
-  transform: none !important;
-  transition: none !important;
-}
-.q-tree .q-tree__node--parent .q-tree__node-header .q-icon.q-tree__arrow--rotate:before {
-  content: "\eb21";
-}
-  .q-tree {
+.q-tree {
     display: inline-block;
-
-    .node-title {
-      &:hover {
-        .edit-btn {
-          color: #f18305;
+  .q-tree__node--parent {
+    .q-tree__node-header{
+      .q-icon{
+        &.q-tree__arrow, &.q-tree__arrow--rotate {
+          transform: none !important;
+          transition: none !important;
+        }
+        &.q-tree__arrow--rotate {
+          &:before{
+            content: "\eb21";
+          }
         }
       }
-      .edit-btn {
-        color: transparent;
-      }
-      .none-edit-btn{
-        display: none;
-      }
+
     }
+  }
   }
 
   .q-tree__node:after {
@@ -288,7 +279,6 @@ export default {
     left: -13px;
     top: 0;
     bottom: -31px;
-    //opacity: 0.2;
     border-left: 2px solid #d5d6da;
   }
 
@@ -296,21 +286,7 @@ export default {
     border-bottom: 0 !important;
     left: -35px;
     bottom: 2px;
-    //opacity: 0.2;
     border-left: 2px solid #d5d6da;
   }
-  .q-checkbox--dense .q-checkbox__inner.q-checkbox__inner--falsy{
-    color: #65677F !important;
-  }
-  .q-checkbox{
-    margin-right: 8px;
-  }
-  .q-checkbox__bg{
-    border-radius: 5px;
-    border: 1px solid;
-  }
-  .q-icon{
-    font-size: 20px;
-    margin-right: 8px;
-  }
+
 </style>
