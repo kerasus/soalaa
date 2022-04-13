@@ -65,16 +65,8 @@
             dense
           >
             <q-item-section>
-              <question
-                :sourcee="item"
-                :questionListOptions="questionsOptions"
-                :consider-active-category="false"
-                :questions-column="$refs.questionsColumn"
-                :exam-id="$route.params.quizId"
-                :sub-category="quizData.sub_categories"
-                @reloadPage="reload"
-              />
               <question-item
+                pageStrategy="lesson-detail"
                 :question="item"
                 :confirmLoading="confirmQLoading"
                 :questionListOptions="questionsOptions"
@@ -82,7 +74,10 @@
                 :questions-column="$refs.questionsColumn"
                 :exam-id="$route.params.quizId"
                 :sub-category="quizData.sub_categories"
-                @adminActions="doAdminActions"
+                @detachQuestion="detachQuestion"
+                @deleteQuestion="deleteQuestion"
+                @copyIdToClipboard="copyIdToClipboard"
+                @confirmQuestion="confirmQuestion"
               />
             </q-item-section>
           </q-item>
@@ -95,18 +90,17 @@
 
 <script>
 import Question from 'src/components/QuizEditor/Question'
-import QuestionItem from 'components/Question/QuestionItem/QuestionItem'
 import { mixinAuth, mixinQuiz } from 'src/mixin/Mixins'
 import { QuestSubcategoryList } from 'src/models/QuestSubcategory'
 import { QuestionList } from 'src/models/Question'
 import { Exam } from 'src/models/Exam'
 import API_ADDRESS from 'src/api/Addresses'
+import QuestionItem from 'components/Question/QuestionItem/QuestionItem'
 import { copyToClipboard } from 'quasar'
 
 export default {
   name: 'LessonDetails',
   components: {
-    Question,
     QuestionItem
   },
   mixins: [mixinAuth, mixinQuiz],
@@ -129,14 +123,10 @@ export default {
         editQuestion: false,
         switch: false
       },
-      splitterModel: 50,
       subCategoriesList: new QuestSubcategoryList(),
       questionFilterMethod: 'not-filtered',
-      bubbleSheet: 800,
-      dragging: false,
       quizData: new Exam(),
       item: Question,
-      lastTimeScrollRange: { start: 0, end: 29 },
       scrollState: 'not scrolling',
       timePassedSinceLastScroll: 0,
       setIntervalCallback: null,
@@ -148,7 +138,6 @@ export default {
         'دارای غلط تایپی'
       ],
       inView: [],
-      windowVisible: true,
       questionSearchNumber: 0,
       firstQuestionOrder: 0
     }
@@ -175,9 +164,6 @@ export default {
     }
   },
   methods: {
-    doAdminActions (action, data) {
-      this[action](data)
-    },
     detachQuestion (questionId) {
       this.$store.dispatch('AppLayout/showConfirmDialog', {
         show: true,
