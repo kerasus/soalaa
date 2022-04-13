@@ -9,6 +9,7 @@
     label-key="title"
     icon="isax:add-square"
     :tick-strategy="tickStrategy"
+    v-model:ticked="ticked"
     @update:ticked="tickedNode"
     @lazy-load="getChildOfNode"
   >
@@ -122,6 +123,7 @@ export default {
   },
   data: () => {
     return {
+      ticked: [],
       completeTickedNode: [],
       nodes: [],
       tab: 'createNewNode',
