@@ -255,24 +255,26 @@ export default {
 </style>
 <style lang='scss'>
 .q-tree {
-    display: inline-block;
   .q-tree__node--parent {
-    .q-tree__node-header{
-      .q-icon{
+    .q-tree__node-header {
+      .q-icon {
+        font-size: 20px;
+        margin-right: 8px;
+
         &.q-tree__arrow, &.q-tree__arrow--rotate {
           transform: none !important;
           transition: none !important;
         }
+
         &.q-tree__arrow--rotate {
-          &:before{
+          &:before {
             content: "\eb21";
           }
         }
       }
-
     }
   }
-  }
+}
 
   .q-tree__node:after {
     right: auto;
