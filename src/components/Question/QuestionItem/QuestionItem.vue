@@ -217,7 +217,7 @@
                   :outline="isSelected"
                   color="primary"
                   class="edit-and-add-btn"
-                  @clic="selectQuestion(!isSelected)"
+                  @click="selectQuestion(!isSelected)"
                   :icon="isSelected ? 'isax:minus' : 'isax:add'" />
               </div>
               <div v-if="listConfig.editQuestion" class="edit-btn">
@@ -449,7 +449,7 @@ export default {
       })
     },
     selectQuestion (data) {
-      this.$emit('selectQuestion', data, this.question)
+      this.$emit('checkSelect', data, this.question)
     },
     setQuestionLevel () {
       this.questionLevel = 5
