@@ -19,88 +19,94 @@
           <thead>
           <tr>
             <th class="text-left">
-              عنوان
+             عنوان دفترچه
             </th>
             <th class="text-left">
+              عنوان درس
+            </th>
+            <th class="text-center">
               عملیات
             </th>
           </tr>
           </thead>
           <tbody>
-          <tr
-            v-for="item in lessonsList.list"
-            :key="item.id"
-          >
-            <td>{{ item.title }}</td>
-            <td class="actionsColumn">
-              <div>
-                <q-input
-                  v-if="item.permissions.view"
-                  v-model="item.order"
-                  type="number"
-                  :loading="item.loading"
-                  :disabled="item.loading"
-                  label="ترتیب درس"
-                  hide-details="auto"
-                  class="mb-2"
-                >
-                  <q-btn
-                    class="q-mx-sm float-right"
-                    size="1px"
-                    fab-mini
-                    dark-percentage
-                    color="primary"
-                    flat
-                    @click="updateOrder(item)"
+          <template v-for="lesson in lessonsList.list">
+            <tr
+              v-for="subcategory in lesson.inputData.sub_categories"
+              :key="subcategory.id"
+            >
+              <td>{{ lesson.title }}</td>
+              <td>{{ subcategory.title }}</td>
+              <td class="actionsColumn">
+                <div>
+                  <q-input
+                    v-if="subcategory.permissions.view"
+                    v-model="lesson.order"
+                    type="number"
+                    :loading="lesson.loading"
+                    :disabled="lesson.loading"
+                    label="ترتیب درس"
+                    hide-details="auto"
+                    class="mb-2"
                   >
-                    <q-icon
-                    name="mdi-pencil"
-                    size="sm"
-                    />
-                  </q-btn>
-                </q-input>
-              </div>
-              <div class="row q-pt-sm">
-                <div class="col-6">
-                  <q-btn
-                    :style="{ 'width':'90%' , 'height':'90%' }"
-                    v-if="item.permissions.view"
-                    class="q-mx-sm"
-                    size="12px"
-                    dark-percentage
-                    @click="redirectTo(item)"
-                    color="green">
-                    <q-icon
-                      name="mdi-notebook-outline"
-                      size="sm"
-                    />
-                    <q-tooltip anchor="top middle" self="bottom middle" :offset="[10, 10]">
-                      <span class="smallFontSize">مشاهده سوالات دروس</span>
-                    </q-tooltip>
-                  </q-btn>
+                    <q-btn
+                      class="q-mx-sm float-right"
+                      size="1px"
+                      fab-mini
+                      dark-percentage
+                      color="primary"
+                      flat
+                      @click="updateOrder(lesson)"
+                    >
+                      <q-icon
+                        name="mdi-pencil"
+                        size="sm"
+                      />
+                    </q-btn>
+                  </q-input>
                 </div>
-                <div class="col-6">
-                  <q-btn
-                    v-if="item.permissions.view"
-                    class="q-mx-sm"
-                    size="12px"
-                    :style="{ 'width':'90%' , 'height':'90%' }"
-                    dark-percentage
-                    color="blue"
-                    @click="goVideoSet(item.id)"
-                  >
-                    <q-icon
-                      name="mdi-video"
-                      size="sm"
-                    />
-                    <q-tooltip anchor="top middle" self="bottom middle" :offset="[10, 10]">
-                      <span class="smallFontSize">ثبت ویدئو تحلیل</span>
-                    </q-tooltip>
-                  </q-btn>
+                <div class="row q-pt-sm">
+                  <div class="col-6">
+                    <q-btn
+                      v-if="subcategory.permissions.view"
+                      :style="{ 'width':'90%' , 'height':'90%' }"
+                      class="q-mx-sm"
+                      size="12px"
+                      dark-percentage
+                      @click="redirectTo(subcategory)"
+                      color="green">
+                      <q-icon
+                        name="mdi-notebook-outline"
+                        size="sm"
+                      />
+                      <q-tooltip anchor="top middle" self="bottom middle" :offset="[10, 10]">
+                        <span class="smallFontSize">مشاهده سوالات دروس</span>
+                      </q-tooltip>
+                    </q-btn>
+                  </div>
+                  <div class="col-6">
+                    <q-btn
+                      v-if="subcategory.permissions.view"
+                      class="q-mx-sm"
+                      size="12px"
+                      :style="{ 'width':'90%' , 'height':'90%' }"
+                      dark-percentage
+                      color="blue"
+                      @click="goVideoSet(subcategory.id)"
+                    >
+                      <q-icon
+                        name="mdi-video"
+                        size="sm"
+                      />
+                      <q-tooltip anchor="top middle" self="bottom middle" :offset="[10, 10]">
+                        <span class="smallFontSize">ثبت ویدئو تحلیل</span>
+                      </q-tooltip>
+                    </q-btn>
+                  </div>
                 </div>
-              </div>
-            </td>
-          </tr>
+              </td>
+            </tr>
+          </template>
           </tbody>
         </template>
       </q-markup-table>
