@@ -25,7 +25,6 @@
           v-if="isPanelOpened"
           class="col-5"
           style="padding-right: 24px;padding-top: 30px;"
-          :class="{ 'panel-float-mode': isPanelOpened }"
         >
           <image-panel
             :mode="'show'"
@@ -71,7 +70,7 @@ import BtnBox from 'components/Question/QuestionPage/BtnBox'
 import { ExamList } from 'src/models/Exam'
 import { QuestSubcategoryList } from 'src/models/QuestSubcategory'
 import { QuestionStatusList } from 'src/models/QuestionStatus'
-import ImagePanel from 'components/Question/QuestionPage/ImagePanel'
+import ImagePanel from 'components/Question/QuestionPage/ImageSidePanel'
 import LogListComponent from 'components/QuestionBank/EditQuestion/Log/LogList'
 import FloatingImagePanel from 'components/Question/FloatingImagePanel'
 // import API_ADDRESS from 'src/api/Addresses'
