@@ -42,19 +42,6 @@
         @saveQuestion="createQuestionImage(question)"
       />
     </div>
-    <comment-box
-      :statuses="questionStatuses"
-    />
-<!--    <div class="row">-->
-<!--      <div class="col">-->
-<!--        <AttachExam />-->
-<!--        <div class="attach-btn row">-->
-<!--          <QuestionDetails class="col-9"/>-->
-<!--          <BtnBox class="col-3"/>-->
-<!--        </div>-->
-<!--        <CommentBox />-->
-<!--      </div>-->
-<!--    </div>-->
   </div>
 </template>
 
@@ -63,27 +50,20 @@ import uploadImage from 'src/components/Question/QuestionPage/UploadImage'
 import { Question } from 'src/models/Question'
 import BtnBox from 'components/Question/QuestionPage/BtnBox'
 import QuestionDetails from 'components/Question/QuestionPage/Create/textMode/QuestionDetails'
-import CommentBox from 'components/Question/QuestionPage/StatusChange'
 import { computed } from 'vue'
-// import QuestionDetails from 'components/Question/QuestionPage/Create/textMode/QuestionDetails'
 import { AdminActionOnQuestion } from 'src/mixin/Mixins'
 import AttachExam from 'components/Question/QuestionPage/AttachExam/AttachExam'
 import { ExamList } from 'src/models/Exam'
 import { QuestSubcategoryList } from 'src/models/QuestSubcategory'
 import { QuestionStatusList } from 'src/models/QuestionStatus'
 import { QuestCategoryList } from 'src/models/QuestCategory'
-// import CommentBox from 'components/Question/QuestionPage/CommentBox'
-// import BtnBox from 'components/Question/QuestionPage/BtnBox'
 
 export default {
   name: 'CreateImage',
   components: {
     uploadImage,
     AttachExam,
-    // ,
     QuestionDetails,
-    // AttachExam,
-    CommentBox,
     BtnBox
   },
   mixins: [AdminActionOnQuestion],

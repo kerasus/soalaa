@@ -43,6 +43,10 @@
         @attach="attachExam"
         @detach="detachExam"
       />
+      <status-change
+        :statuses="questionStatuses"
+        @update="changeStatus"
+      />
       <div
         v-if="question.logs && question.logs.list && question.logs.list.length > 0"
       >
@@ -64,7 +68,7 @@ import Navbar from 'components/Question/QuestionPage/Create/textMode/Navbar'
 import AdminActionOnQuestion from 'src/mixin/AdminActionOnQuestion'
 import { QuestionType, TypeList } from 'src/models/QuestionType'
 import AttachExam from 'components/Question/QuestionPage/AttachExam/AttachExam'
-import CommentBox from 'components/Question/QuestionPage/StatusChange'
+import StatusChange from 'components/Question/QuestionPage/StatusChange'
 import BtnBox from 'components/Question/QuestionPage/BtnBox'
 import { ExamList } from 'src/models/Exam'
 import { QuestSubcategoryList } from 'src/models/QuestSubcategory'
@@ -82,7 +86,7 @@ export default {
     MultipleChoiceShowQuestion: defineAsyncComponent(() => import('components/Question/QuestionPage/Show/questionTypes/MultipleChoiceQuestion/MultipleChoiceShowQuestion')),
     MBTIShowQuestion: defineAsyncComponent(() => import('components/Question/QuestionPage/Show/questionTypes/MBTIQuestion/MBTIShowQuestion')),
     BtnBox,
-    CommentBox,
+    StatusChange,
     AttachExam,
     LogListComponent
   },
@@ -107,12 +111,10 @@ export default {
   },
   created () {
     this.enableLoading()
-    // this.getPageReady()
     this.getQuestionTypeForTypeId(this.question)
-    // this.setAllQuestionLoadings()
+    this.getQuestionStatus()
     this.loadSubcategories()
     this.loadCategories()
-    // this.getQuestionById(this.getCurrentQuestionId())
     this.loadExamList()
   },
   provide () {
