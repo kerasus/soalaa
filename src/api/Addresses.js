@@ -97,7 +97,7 @@ const API_ADDRESS = {
     }
   },
   question: {
-    deletePhoto (type, id) {
+    photo (type, id) {
       return lumenServer + '/question/' + type + '/' + id
     },
     indexMonta: lumenServer + '/question/search-monta',

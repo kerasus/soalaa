@@ -134,7 +134,7 @@ export default {
   mounted () {},
   methods: {
     deleteImage (image) {
-      this.$axios.delete(API_ADDRESS.question.deletePhoto(image.type, this.question.id), {
+      this.$axios.delete(API_ADDRESS.question.photo(image.type, this.question.id), {
         data: {
           url: image.src
         }
