@@ -66,18 +66,6 @@
       </div>
     </q-card>
   </div>
-  <image-side-panel
-    :mode="mode"
-    v-if="!floatPanelMode"
-    @closePanelBtnClicked="closePanelBtnClicked"
-    @imgPanelModeChanged="changeToFloatingMode"
-  />
-  <floating-image-panel
-    :src="selectedImageSrc"
-    v-if="floatPanelMode"
-    @closePanelBtnClicked="closePanelBtnClicked"
-    @imgPanelModeChanged="changeToSideMode"
-  />
 </template>
 
 <script>
@@ -96,14 +84,9 @@ const dropAreaHTML = `
         </div>
       `
 
-import ImageSidePanel from 'components/Question/QuestionPage/ImageSidePanel'
-import FloatingImagePanel from 'components/Question/FloatingImagePanel'
 export default {
   name: 'ImagePanel',
-  components: {
-    FloatingImagePanel,
-    ImageSidePanel
-  },
+  components: {},
   props: {
     mode: {
       type: String,
@@ -182,19 +165,12 @@ export default {
       this.$emit('closePanelBtnClicked')
     },
     imgPanelModeChanged () {
-      this.floatMode = !this.floatMode
-      this.$emit('imgPanelModeChanged')
-      // this.$q.notify({
-      //   message: 'این قابلیت بزودی اضافه خواهد شد...',
-      //   color: 'primary'
-      // })
-    },
-    changeToSideMode () {
-      console.log('changeToSideMode')
-      this.floatPanelMode = false
-    },
-    changeToFloatingMode () {
-      this.floatPanelMode = true
+      // this.floatMode = !this.floatMode
+      // this.$emit('imgPanelModeChanged')
+      this.$q.notify({
+        message: 'این قابلیت بزودی اضافه خواهد شد...',
+        color: 'primary'
+      })
     }
   }
 }
