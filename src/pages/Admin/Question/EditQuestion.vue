@@ -66,6 +66,7 @@
 </template>
 
 <script>
+// detachUnsavedExam
 /* eslint-disable no-var */
 import { computed, defineAsyncComponent } from 'vue'
 import { Question } from 'src/models/Question'
@@ -79,9 +80,9 @@ import BtnBox from 'components/Question/QuestionPage/BtnBox'
 import { ExamList } from 'src/models/Exam'
 import { QuestSubcategoryList } from 'src/models/QuestSubcategory'
 import { QuestionStatusList } from 'src/models/QuestionStatus'
-import ImagePanel from 'components/Question/QuestionPage/ImagePanel'
 import LogListComponent from 'components/QuestionBank/EditQuestion/Log/LogList'
 import { QuestCategoryList } from 'src/models/QuestCategory'
+import ImagePanel from 'components/Question/QuestionPage/ImagePanel'
 export default {
   name: 'EditQuestion',
   components: {
