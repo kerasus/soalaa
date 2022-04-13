@@ -204,7 +204,7 @@ export default {
         order: subcategory.order,
         exam_id: this.$route.params.quizId
       })
-          .then((response) => {
+          .then(() => {
             subcategory.loading = false
           })
           .catch(() => {
