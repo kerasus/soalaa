@@ -38,7 +38,7 @@
                 <img :src="item" @click="selectImage(item)" />
               </div>
               <div v-for="(item, index) in question.added_statement_photos" :key="index" class="q-image">
-                <q-btn class="delete-btn" round color="red" icon="mdi-delete" size="xs" @click="deleteUnsavedImage({ file: item, type: 'added_statement_photos' })" />
+                <q-btn :loading="true" class="delete-btn" round color="red" icon="mdi-delete" size="xs" />
                 <img :src="getUrl(item)" @click="selectImage(getUrl(item))" />
               </div>
               <div v-if="editable" style="margin-right: 50px">
@@ -53,7 +53,7 @@
                 <img :src="item" @click="selectImage(item)" />
               </div>
               <div v-for="(item, index) in question.added_answer_photos" :key="index" class="q-image">
-                <q-btn class="delete-btn" round color="red" icon="mdi-delete" size="xs" @click="deleteUnsavedImage({ file: item, type: 'added_answer_photos' })" />
+                <q-btn :loading="true" class="delete-btn" round color="red" icon="mdi-delete" size="xs" />
                 <img :src="getUrl(item)" @click="selectImage(getUrl(item))" />
               </div>
               <div v-if="editable" style="margin-right: 50px">
@@ -129,11 +129,15 @@ export default {
       document.getElementById('filepond-wrapper-statement').appendChild(this.pond_statement.element)
       document.addEventListener('FilePond:addfile', () => {
         this.question.added_statement_photos = this.pond_statement.getFiles().map(({ file }) => file)
+        this.pond_statement.removeFile()
+        this.$emit('uploadStatement')
       })
       document.getElementById('filepond-wrapper-answer').innerHTML = ''
       document.getElementById('filepond-wrapper-answer').appendChild(this.pond_answer.element)
       document.addEventListener('FilePond:addfile', () => {
         this.question.added_answer_photos = this.pond_answer.getFiles().map(({ file }) => file)
+        this.pond_answer.removeFile()
+        this.$emit('uploadAnswer')
       })
     }
   },
@@ -160,13 +164,11 @@ export default {
     }
   },
   methods: {
-    deleteUnsavedImage (object) {
-      console.log('oomad', object.file)
-      this.question[object.type] = this.question[object.type].filter(file => {
-        console.log(file, object.file, file.name !== object.file.name)
-        return file.name !== object.file.name
-      })
-    },
+    // deleteUnsavedImage (object) {
+    //   this.question[object.type] = this.question[object.type].filter(file => {
+    //     return file.name !== object.file.name
+    //   })
+    // },
     getUrl (file) {
       return URL.createObjectURL(file)
     },
