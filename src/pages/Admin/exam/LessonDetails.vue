@@ -10,120 +10,109 @@
         <i class="fi-rr-angle-left row" />
       </q-btn>
     </div>
-    <q-splitter
-      v-model="splitterModel"
-      separator-class="bg-primary"
-      separator-style="width: 5px"
-      style="height: 100%"
-    >
-      <template v-slot:before>
-        <div class="q-pa-md">
-            <q-card class="top-menu q-pa-lg">
-              <div class="row items-center">
-                <div class="col-8">
-                  <q-btn-toggle
-                    v-model="questionFilterMethod"
-                    unelevated
-                    no-caps
-                    toggle-color="primary"
-                    color="white"
-                    text-color="black"
-                    :options="[
+    <div class="q-pa-md">
+      <q-card class="top-menu q-pa-lg">
+        <div class="row items-center">
+          <div class="col-8">
+            <q-btn-toggle
+              v-model="questionFilterMethod"
+              unelevated
+              no-caps
+              toggle-color="primary"
+              color="white"
+              text-color="black"
+              :options="[
                   {label: 'نمایش همه', value:'not-filtered'},
                   {label: ' کلا تایید نشده', value:'not-confirmed-at-all'},
                   {label: 'من تایید نکردم', value:'not-confirmed-by-me'}
                    ]"
-                  />
-                </div>
-                <div class="col-4">
-                  <div class="search-box">
-                    <div>
-                      <q-input
-                        v-model.number="questionSearchNumber"
-                        type="number"
-                        outlined
-                        dense
-                        label="شماره سوال"
-                      >
-                        <template v-slot:append>
-                          <div @click="scrollToQuestion">
-                            <i class="fi fi-rr-search search-icon cursor-pointer"></i>
-                          </div>
-                        </template>
-                      </q-input>
+            />
+          </div>
+          <div class="col-4">
+            <div class="search-box">
+              <div>
+                <q-input
+                  v-model.number="questionSearchNumber"
+                  type="number"
+                  outlined
+                  dense
+                  label="شماره سوال"
+                >
+                  <template v-slot:append>
+                    <div @click="scrollToQuestion">
+                      <i class="fi fi-rr-search search-icon cursor-pointer"></i>
                     </div>
-                    <i class="fi fi-rr-refresh refresh-icon cursor-pointer q-ml-md" @click="reload" ></i>
-                  </div>
-                </div>
+                  </template>
+                </q-input>
               </div>
-            </q-card>
-          <q-virtual-scroll
-            class="konkoor-view-scroll q-mt-md"
-            style="max-height: calc(100vh - 250px);"
-            ref="scroller"
-            :items="filteredQuestions"
-            :key="questionListKey"
-            @virtual-scroll="onScroll"
+              <i class="fi fi-rr-refresh refresh-icon cursor-pointer q-ml-md" @click="reload" ></i>
+            </div>
+          </div>
+        </div>
+      </q-card>
+      <q-virtual-scroll
+        class="konkoor-view-scroll q-mt-md"
+        style="max-height: calc(100vh - 250px);"
+        ref="scroller"
+        :items="filteredQuestions"
+        :key="questionListKey"
+        @virtual-scroll="onScroll"
+      >
+        <template v-slot="{ item, index }">
+          <q-item
+            class="question-field"
+            :key="index"
+            dense
           >
-            <template v-slot="{ item, index }">
-              <q-item
-                class="question-field"
-                :key="index"
-                dense
-              >
-                <q-item-section>
-                  <question
-                    :sourcee="item"
-                    :questionListOptions="questionsOptions"
-                    :consider-active-category="false"
-                    :questions-column="$refs.questionsColumn"
-                    :exam-id="$route.params.quizId"
-                    :sub-category="quizData.sub_categories"
-                    @reloadPage="reload"
-                  />
-                </q-item-section>
-              </q-item>
-            </template>
-          </q-virtual-scroll>
+            <q-item-section>
+              <question
+                :sourcee="item"
+                :questionListOptions="questionsOptions"
+                :consider-active-category="false"
+                :questions-column="$refs.questionsColumn"
+                :exam-id="$route.params.quizId"
+                :sub-category="quizData.sub_categories"
+                @reloadPage="reload"
+              />
+              <question-item
+                :question="item"
+                :confirmLoading="confirmQLoading"
+                :questionListOptions="questionsOptions"
+                :consider-active-category="false"
+                :questions-column="$refs.questionsColumn"
+                :exam-id="$route.params.quizId"
+                :sub-category="quizData.sub_categories"
+                @adminActions="doAdminActions"
+              />
+            </q-item-section>
+          </q-item>
+        </template>
+      </q-virtual-scroll>
 
-        </div>
-      </template>
-
-      <template v-slot:after>
-        <div class="q-pa-md">
-          <BubbleSheet
-            ref="bubbleSheetC"
-            :delay-time="0"
-            :questions="filteredQuestions"
-            :info="{ type: 'pasokh-barg' }"
-            @clickChoice="choiceClicked"
-            @scrollTo="scrollTo"
-          />
-        </div>
-      </template>
-
-    </q-splitter>
+    </div>
   </div>
 </template>
 
 <script>
-import BubbleSheet from 'src/components/OnlineQuiz/Quiz/bubbleSheet/bubbleSheet'
 import Question from 'src/components/QuizEditor/Question'
+import QuestionItem from 'components/Question/QuestionItem/QuestionItem'
 import { mixinAuth, mixinQuiz } from 'src/mixin/Mixins'
 import { QuestSubcategoryList } from 'src/models/QuestSubcategory'
 import { QuestionList } from 'src/models/Question'
 import { Exam } from 'src/models/Exam'
 import API_ADDRESS from 'src/api/Addresses'
+import { copyToClipboard } from 'quasar'
 
 export default {
   name: 'LessonDetails',
   components: {
-    BubbleSheet,
-    Question
+    Question,
+    QuestionItem
   },
   mixins: [mixinAuth, mixinQuiz],
   data () {
     return {
+      confirmQLoading: false,
       questionsOptions: {
         copy: true,
         detachQuestion: true,
@@ -186,6 +175,106 @@ export default {
     }
   },
   methods: {
+    doAdminActions (action, data) {
+      this[action](data)
+    },
+    detachQuestion (questionId) {
+      this.$store.dispatch('AppLayout/showConfirmDialog', {
+        show: true,
+        message: 'از حذف سوال از آزمون اطمینان دارید؟',
+        buttons: {
+          no: 'خیر',
+          yes: 'بله'
+        },
+        callback: async (confirm) => {
+          if (!confirm) {
+            this.closeConfirmModal()
+          } else {
+            try {
+              this.closeConfirmModal()
+              await this.detachQuestionReq(questionId)
+              this.reload()
+            } catch (e) {
+              this.closeConfirmModal()
+            }
+          }
+        }
+      })
+    },
+    closeConfirmModal () {
+      this.$store.commit('AppLayout/showConfirmDialog', {
+        show: false
+      })
+    },
+    detachQuestionReq (questionId) {
+      return this.$axios.post(API_ADDRESS.question.detach(questionId), {
+        exams: [this.examId]
+      })
+    },
+    deleteQuestion (questionId) {
+      this.$store.dispatch('AppLayout/showConfirmDialog', {
+        show: true,
+        message: 'از حذف کامل سوال از پایگاه داد و حذف از تمامی آزمون ها اطمینان دارید؟',
+        buttons: {
+          no: 'خیر',
+          yes: 'بله'
+        },
+        callback: async (confirm) => {
+          if (!confirm) {
+            this.closeConfirmModal()
+            return
+          }
+          try {
+            this.closeConfirmModal()
+            await this.deleteQuestionReq(questionId)
+            this.reload()
+          } catch (e) {
+            this.reload()
+            this.closeConfirmModal()
+          }
+        }
+      })
+    },
+    deleteQuestionReq (questionId) {
+      return this.$axios.delete(API_ADDRESS.question.delete(questionId), {
+        exams: [this.examId]
+      })
+    },
+    copyIdToClipboard (data) {
+      copyToClipboard(data)
+    },
+    confirmQuestion (question) {
+      this.confirmLoading = true
+      question.confirmed ? this.unConfirmUser(question) : this.confirmUser(question)
+    },
+    async confirmUser (question) {
+      try {
+        const response = await this.sendConfirmReq(question)
+        question.confirmed = response.data.data.confirmed
+        question.confirmers = response.data.data.confirmers
+        this.confirmLoading = false
+      } catch (e) {
+        question.confirmed = !question.confirmed
+        this.confirmLoading = false
+      }
+    },
+    async unConfirmUser (question) {
+      try {
+        const response = await this.sendUnConfirmReq(question)
+        question.confirmed = response.data.data.confirmed
+        question.confirmers = response.data.data.confirmers
+        this.confirmLoading = false
+      } catch (e) {
+        question.confirmed = !question.confirmed
+        this.confirmLoading = false
+      }
+    },
+    sendUnConfirmReq (question) {
+      return this.$axios.get(API_ADDRESS.question.unconfirm(question.id))
+    },
+    sendConfirmReq (question) {
+      return this.$axios.get(API_ADDRESS.question.confirm(question.id))
+    },
     scrollToQuestion () {
       this.scrollTo(null, this.questionSearchNumber)
     },
@@ -308,7 +397,7 @@ export default {
   display: flex;
   align-items: center;
   .search-icon{
-  display: flex;
+    display: flex;
   }
   .refresh-icon{
     display: flex;
