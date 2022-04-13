@@ -39,7 +39,7 @@
             </q-card-actions>
           </q-card>
         </q-dialog>
-        <Router :exclude="['konkoorView', 'alaaView', 'MultipleChoiceQ', 'MBTIQ']" />
+        <Router :include="keepAliveComponents" />
       </div>
     </template>
   </quasar-template-builder>
@@ -53,11 +53,13 @@ import templateHeader from 'components/Template/templateHeader'
 import onlineQuizTemplateHeader from 'components/Template/onlineQuizTemplateHeader'
 import { ref } from 'vue'
 import Router from 'src/router/Router'
+import KeepAliveComponents from 'assets/js/KeepAliveComponents'
 
 export default {
   components: { Router, SideMenuDashboard, sideMenuMapOfQuestions, QuasarTemplateBuilder, templateHeader, onlineQuizTemplateHeader },
   data () {
     return {
+      keepAliveComponents: KeepAliveComponents,
       properties: {
         layoutView: 'lHh Lpr lFf',
         layoutHeader: true,

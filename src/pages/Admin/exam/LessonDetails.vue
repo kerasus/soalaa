@@ -90,6 +90,7 @@
 
 <script>
 import Question from 'src/components/QuizEditor/Question'
+import QuestionItem from 'components/Question/QuestionItem/QuestionItem'
 import { mixinAuth, mixinQuiz } from 'src/mixin/Mixins'
 import { QuestSubcategoryList } from 'src/models/QuestSubcategory'
 import { QuestionList } from 'src/models/Question'
