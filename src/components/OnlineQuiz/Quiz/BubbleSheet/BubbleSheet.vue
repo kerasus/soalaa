@@ -116,6 +116,10 @@
       mixinUserActionOnQuestion
     ],
     props: {
+      appSocket: {
+        type: Object,
+        default: null
+      },
       submitAnswers: {
         default: true
       },
@@ -232,7 +236,7 @@
       },
       AnswerClicked(payload) {
         if (this.info.type !== 'pasokh-nameh') {
-          this.answerClicked(payload, false)
+          this.answerClicked(payload, true, () => {}, this.appSocket)
           this.clickChoice(payload.questionId)
         }
       },

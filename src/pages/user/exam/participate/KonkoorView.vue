@@ -29,6 +29,7 @@
               :data-index="index"
             >
               <Item
+                :app-socket="socket"
                 :source="item"
                 :questions-column="$refs.questionsColumn"
                 @inView="test"
@@ -97,6 +98,7 @@
         <v-row>
           <v-col>
             <BubbleSheet
+              :app-socket="socket"
               :info="{ type: 'pasokh-barg' }"
               :delay-time="0"
               @clickChoice="choiceClicked"
