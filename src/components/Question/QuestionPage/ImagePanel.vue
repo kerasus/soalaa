@@ -173,6 +173,10 @@ export default {
   .change-mode-btn {
     margin-right: 60px;
   }
+
+  .filepond--list-scroller {
+    display: none;
+  }
 }
 
 .main-image {
@@ -199,5 +203,9 @@ export default {
       }
     }
   }
+}
+
+.main-image {
+  width: 100%;
 }
 </style>
