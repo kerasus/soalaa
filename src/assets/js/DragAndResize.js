@@ -57,7 +57,6 @@ function initDragElement () {
   }
 
   function getHeader (element) {
-    console.log('element.getElementsByClassName(\'popup-header\')', element.getElementsByClassName('popup'))
     const headerItems = element.getElementsByClassName('popup-header')
 
     if (headerItems.length === 1) {
