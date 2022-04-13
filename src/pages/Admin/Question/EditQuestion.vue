@@ -117,7 +117,6 @@ export default {
       questionStatuses: new QuestionStatusList(),
       categoryList: new QuestCategoryList(),
       isPanelOpened: false,
-      allTypes: new TypeList(),
       totalLoading: false
     }
   },
