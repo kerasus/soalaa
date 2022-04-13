@@ -2,6 +2,10 @@
   <div
     class="question-image-panel"
   >
+    <floating-image-panel
+      @imgPanelModeChanged="imgPanelModeChanged"
+      :class="{ 'floatMode': floatMode }"
+    />
     <q-card
       class="question-card default-questions-card image-panel-box"
     >
@@ -37,6 +41,7 @@
 </template>
 
 <script>
+import FloatingImagePanel from 'components/Question/FloatingImagePanel'
 export default {
   name: 'ImagePanel',
   props: {
@@ -47,20 +52,25 @@ export default {
       }
     }
   },
-  components: {},
+  components: {
+    FloatingImagePanel
+  },
   data () {
-    return {}
+    return {
+      floatMode: false
+    }
   },
   methods: {
     closePanelBtnClicked () {
       this.$emit('closePanelBtnClicked')
     },
     imgPanelModeChanged () {
+      this.floatMode = !this.floatMode
       this.$emit('imgPanelModeChanged')
-      this.$q.notify({
-        message: 'این قابلیت بزودی اضافه خواهد شد...',
-        color: 'primary'
-      })
+      // this.$q.notify({
+      //   message: 'این قابلیت بزودی اضافه خواهد شد...',
+      //   color: 'primary'
+      // })
     }
   }
 }
@@ -74,5 +84,10 @@ export default {
   .change-mode-btn {
     margin-right: 60px;
   }
+}
+</style>
+<style scoped>
+.floatMode {
+  visibility: hidden;
 }
 </style>

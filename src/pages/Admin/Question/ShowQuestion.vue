@@ -25,6 +25,7 @@
           v-if="isPanelOpened"
           class="col-5"
           style="padding-right: 24px;padding-top: 30px;"
+          :class="{ 'panel-float-mode': isPanelOpened }"
         >
           <image-panel
             :mode="'show'"
@@ -49,6 +50,9 @@
           @addComment="addComment"
         />
       </div>
+<!--      <div class="floating-image-panel">-->
+<!--        -->
+<!--      </div>-->
     </div>
   </div>
 </template>
@@ -69,10 +73,12 @@ import { QuestSubcategoryList } from 'src/models/QuestSubcategory'
 import { QuestionStatusList } from 'src/models/QuestionStatus'
 import ImagePanel from 'components/Question/QuestionPage/ImagePanel'
 import LogListComponent from 'components/QuestionBank/EditQuestion/Log/LogList'
+import FloatingImagePanel from 'components/Question/FloatingImagePanel'
 // import API_ADDRESS from 'src/api/Addresses'
 export default {
   name: 'ShowQuestion',
   components: {
+    FloatingImagePanel,
     ImagePanel,
     Navbar,
     DescriptiveShowQuestion: defineAsyncComponent(() => import('components/Question/QuestionPage/Show/questionTypes/DescriptiveQuestion/DescriptiveShowQuestion')),
@@ -165,6 +171,9 @@ export default {
   padding: 40px 100px;
   display: flex;
   flex-direction: column;
+}
+.panel-float-mode{
+  visibility: hidden;
 }
 </style>
 <style lang="scss">
