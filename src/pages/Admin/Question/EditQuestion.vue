@@ -32,6 +32,8 @@
             :mode="'edit'"
             @closePanelBtnClicked="openCloseImgPanel"
             @deleteImage="deleteImage"
+            @uploadStatement="updateStatementPhoto(question)"
+            @uploadAnswer="updateAnswerPhoto(question)"
           />
         </div>
       </div>

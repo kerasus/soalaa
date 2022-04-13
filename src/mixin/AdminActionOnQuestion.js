@@ -66,27 +66,29 @@ const AdminActionOnQuestion = {
           that.disableLoading()
         })
     },
-    updateStatementPhoto (question) {
-      if (question.added_statement_photos && question.added_statement_photos.length) {
+    updateStatementPhoto () {
+      if (this.question.added_statement_photos && this.question.added_statement_photos.length) {
         const formData = new FormData()
-        this.currentQuestion.added_statement_photos.forEach((item, key) => {
+        this.question.added_statement_photos.forEach((item, key) => {
           formData.append('files[' + key + ']', item)
         })
-        this.$axios.post(API_ADDRESS.question.photo('statement_photo', question.id))
+        this.$axios.post(API_ADDRESS.question.photo('statement_photo', this.question.id), formData)
           .then(res => {
-            console.log(res.data.data)
+            this.question = new Question(res.data.data)
+            this.question.added_statement_photos = []
           })
       }
     },
-    updateAnswerPhoto (question) {
-      if (question.added_answer_photos && question.added_answer_photos.length) {
+    updateAnswerPhoto () {
+      if (this.question.added_answer_photos && this.question.added_answer_photos.length) {
         const formData = new FormData()
         this.currentQuestion.added_answer_photos.forEach((item, key) => {
           formData.append('files[' + key + ']', item)
         })
-        this.$axios.post(API_ADDRESS.question.photo('statement_photo', question.id))
+        this.$axios.post(API_ADDRESS.question.photo('statement_photo', this.question.id), formData)
           .then(res => {
-            console.log(res.data.data)
+            this.question = new Question(res.data.data)
+            this.question.added_answer_photos = []
           })
       }
     },
