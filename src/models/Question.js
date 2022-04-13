@@ -37,6 +37,10 @@ class Question extends Model {
       { key: 'photo' },
       { key: 'order' },
       {
+        key: 'source_data',
+        default: {}
+      },
+      {
         key: 'exams',
         relatedModel: AttachedExamList
       },

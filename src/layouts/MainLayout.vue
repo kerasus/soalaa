@@ -26,14 +26,26 @@
     </template>
     <template #content>
       <div ref="contentInside" class="content-inside">
-        <Router :exclude="['konkoorView', 'alaaView', 'MultipleChoiceQ', 'MBTIQ']" />
+        <q-dialog v-model="confirmDialogData.show" persistent>
+          <q-card class="q-pa-md q-pb-none">
+            <q-card-section >
+              <q-icon name="warning" color="warning" size="2rem" />
+              {{confirmDialogData.message}}
+            </q-card-section>
+            <q-separator />
+            <q-card-actions align="right" class="q-pb-none">
+              <q-btn color="green" flat  @click="confirmDialogAction(true)" v-close-popup >بله</q-btn>
+              <q-btn color="red" flat  @click="confirmDialogAction(false)" v-close-popup >خیر</q-btn>
+            </q-card-actions>
+          </q-card>
+        </q-dialog>
+        <Router :include="keepAliveComponents" />
       </div>
     </template>
   </quasar-template-builder>
 </template>
 
 <script>
-
 import SideMenuDashboard from 'components/Menu/SideMenu/SideMenu-dashboard'
 import sideMenuMapOfQuestions from 'components/Menu/SideMenu/SideMenu_MapOfQuestions'
 import { QuasarTemplateBuilder } from 'quasar-template-builder'
@@ -41,11 +53,13 @@ import templateHeader from 'components/Template/templateHeader'
 import onlineQuizTemplateHeader from 'components/Template/onlineQuizTemplateHeader'
 import { ref } from 'vue'
 import Router from 'src/router/Router'
+import KeepAliveComponents from 'assets/js/KeepAliveComponents'
 
 export default {
   components: { Router, SideMenuDashboard, sideMenuMapOfQuestions, QuasarTemplateBuilder, templateHeader, onlineQuizTemplateHeader },
   data () {
     return {
+      keepAliveComponents: KeepAliveComponents,
       properties: {
         layoutView: 'lHh Lpr lFf',
         layoutHeader: true,
@@ -69,11 +83,24 @@ export default {
       contentInside: ref(0)
     }
   },
+  computed: {
+    confirmDialogData () {
+      return this.$store.getters['AppLayout/confirmDialog']
+    }
+  },
   created () {
     const localData = this.$store.getters['AppLayout/appLayout']
     Object.assign(this.properties, localData)
   },
   methods: {
+    confirmDialogAction (data) {
+      if (this.confirmDialogData) this.confirmDialogData.callback(data)
+      else {
+        this.$store.commit('AppLayout/showConfirmDialog', {
+          show: false
+        })
+      }
+    },
     setHeaderDimension (value) {
       this.$refs.contentInside.style.height = 'calc(100vh +' + value.height + 'px'
     },

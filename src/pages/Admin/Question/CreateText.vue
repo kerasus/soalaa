@@ -98,6 +98,7 @@ export default {
     this.getQuestionType()
     this.loadExamList()
     this.loadSubcategories()
+    this.loadCategories()
   },
   methods: {
     chosenComponent (questionType) {

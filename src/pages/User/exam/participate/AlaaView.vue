@@ -1,5 +1,4 @@
 <template>
-
   <div class="row quiz-page"
        :style="{ height: '100%'}">
     <div class="col " :style="{ 'min-height': '100%' }">
@@ -38,14 +37,14 @@
                   @click="changeStatus(currentQuestion.id, 'o')"
                 >
                   <q-icon
-                    v-if="!getUserQuestionData(quiz.id, currentQuestion.id) || getUserQuestionData(quiz.id, currentQuestion.id).status !== 'o'"
+                    v-if="!getUserQuestionData(quiz.user_exam_id, currentQuestion.id) || getUserQuestionData(quiz.user_exam_id, currentQuestion.id).status !== 'o'"
                     :style="{ 'width':'24px','height': '24px' }"
                     color="grey-7"
                     size="30px"
                     name="mdi-checkbox-blank-circle-outline"
                   />
                   <q-icon
-                    v-if="getUserQuestionData(quiz.id, currentQuestion.id) && getUserQuestionData(quiz.id, currentQuestion.id).status === 'o'"
+                    v-if="getUserQuestionData(quiz.user_exam_id, currentQuestion.id) && getUserQuestionData(quiz.user_exam_id, currentQuestion.id).status === 'o'"
                     color="amber"
                     size="30px"
                     name="mdi-checkbox-blank-circle"
@@ -59,7 +58,7 @@
                 >
                   <q-icon
                     size="30px"
-                    :color="getUserQuestionData(quiz.id, currentQuestion.id) && getUserQuestionData(quiz.id, currentQuestion.id).status === 'x' ? 'red' : 'grey-7'"
+                    :color="getUserQuestionData(quiz.user_exam_id, currentQuestion.id) && getUserQuestionData(quiz.user_exam_id, currentQuestion.id).status === 'x' ? 'red' : 'grey-7'"
                     name="mdi-close"
                   />
                 </q-btn>
@@ -70,13 +69,13 @@
                   @click="changeBookmark(currentQuestion.id)"
                 >
                   <q-icon
-                    v-if="!getUserQuestionData(quiz.id, currentQuestion.id) || !getUserQuestionData(quiz.id, currentQuestion.id).bookmarked"
+                    v-if="!getUserQuestionData(quiz.user_exam_id, currentQuestion.id) || !getUserQuestionData(quiz.user_exam_id, currentQuestion.id).bookmarked"
                     size="30px"
                     color="grey-7"
                     name="mdi-bookmark-outline"
                   />
                   <q-icon
-                    v-if="getUserQuestionData(quiz.id, currentQuestion.id) && getUserQuestionData(quiz.id, currentQuestion.id).bookmarked"
+                    v-if="getUserQuestionData(quiz.user_exam_id, currentQuestion.id) && getUserQuestionData(quiz.user_exam_id, currentQuestion.id).bookmarked"
                     flat
                     color="blue-6"
                     size="30px"
