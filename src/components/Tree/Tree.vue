@@ -5,11 +5,10 @@
     no-nodes-label="درختی ایجاد نشده است!"
     node-key="id"
     ref="tree"
-    icon="isax:minus-square"
     control-color="orange"
     label-key="title"
+    icon="isax:add-square"
     :tick-strategy="tickStrategy"
-    v-model:ticked="ticked"
     @update:ticked="tickedNode"
     @lazy-load="getChildOfNode"
   >
@@ -94,7 +93,9 @@
 </template>
 <script>
 import { TreeNode, TreeNodeList } from 'src/models/TreeNode'
-
+// "\e90b"
+// "\eb21"
+// 'iconsax' !important
 export default {
   name: 'Tree',
   props: {
@@ -121,7 +122,6 @@ export default {
   },
   data: () => {
     return {
-      ticked: [],
       completeTickedNode: [],
       nodes: [],
       tab: 'createNewNode',
@@ -256,6 +256,13 @@ export default {
   }
 </style>
 <style lang='scss'>
+.q-tree__arrow, .q-tree__arrow--rotate {
+  transform: none !important;
+  transition: none !important;
+}
+.q-tree .q-tree__node--parent .q-tree__node-header .q-icon.q-tree__arrow--rotate:before {
+  content: "\eb21";
+}
   .q-tree {
     display: inline-block;
 
@@ -277,8 +284,8 @@ export default {
   .q-tree__node:after {
     right: auto;
     left: -13px;
-    top: -3px;
-    bottom: -22px;
+    top: 0;
+    bottom: -31px;
     //opacity: 0.2;
     border-left: 2px solid #d5d6da;
   }
@@ -286,6 +293,7 @@ export default {
   .q-tree__node-header::before {
     border-bottom: 0 !important;
     left: -35px;
+    bottom: 2px;
     //opacity: 0.2;
     border-left: 2px solid #d5d6da;
   }
