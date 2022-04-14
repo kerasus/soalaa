@@ -2,6 +2,38 @@ import { boot } from 'quasar/wrappers'
 import axios from 'axios'
 import { Notify } from 'quasar'
 
+const AjaxResponseMessages = (function () {
+  const messageMap = {
+    0: 'مشکلی پیش آمده است. مجدد تلاش کنید.',
+    400: 'ابتدا وارد سامانه شوید.',
+    401: 'ابتدا وارد سامانه شوید.',
+    1: 'پیش از این در این آزمون ثبت نام انجام شده است.',
+    2: 'زمان آزمون فرا نرسیده است',
+    3: 'ثبت نام در این آزمون انجام نشده است.',
+    4: 'دانش آموز برای این آزمون ثبت نام نکرده است.',
+    5: 'نتیجه آزمونی برای این آزمون وجود ندارد.',
+    6: 'پاسخنامه داوطلب پیش از این ارسال شده است.',
+    7: 'زمان پاسخگویی قبل از شروع آزمون است.',
+    8: 'آزمون متعلق به کاربر نیست.',
+    13: 'سوالات آزمون آماده نشده است.',
+    14: 'آزمون بسته شده است.',
+    17: 'ثبت درس تکراری در یک دفترچه امکان پذیر نیست.'
+  }
+
+  function isCustomMessage (statusCode) {
+    return !!(messageMap[statusCode.toString()])
+  }
+
+  function getMessage (statusCode) {
+    return messageMap[statusCode]
+  }
+
+  return {
+    isCustomMessage,
+    getMessage
+  }
+}())
+
 const AxiosHooks = (function () {
   let $notify = null
 
@@ -25,7 +57,10 @@ const AxiosHooks = (function () {
     } else if (statusCode === 401) {
       messages.push('ابتدا وارد سامانه شوید.')
       deAuthorizeUser(router, store)
-    } else if (error.response.data.error) {
+    } else if (error.response.data.error && AjaxResponseMessages.isCustomMessage(error.response.data.error.code)) {
+      console.log('error.response.data.error.code', AjaxResponseMessages.getMessage(error.response.data.error.code))
+      messages.push(AjaxResponseMessages.getMessage(error.response.data.error.code))
+    } else if (error.response.data.error && !AjaxResponseMessages.isCustomMessage(error.response.data.error.code)) {
       for (const [key, value] of Object.entries(error.response.data.error)) {
         console.log('key', key)
         if (typeof value === 'string') {

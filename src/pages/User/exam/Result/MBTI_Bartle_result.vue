@@ -330,7 +330,7 @@ export default {
     let questions = []
     const that = this
 
-    const examData = new ExamData()
+    const examData = new ExamData(this.$axios)
     examData.getUserExamWithCorrectAnswers(userExamId, examId)
       .loadQuestionsFromFile()
       .getUserExamData(userExamId)

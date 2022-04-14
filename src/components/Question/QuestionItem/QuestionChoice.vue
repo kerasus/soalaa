@@ -38,8 +38,7 @@ export default {
   .answer-text{
   }
   .question-choice-number {
-    margin-right: 10px;
-    margin-top: 3px;
+    margin:3px 10px 0 10px;
     border-radius: 50%;
     text-align: center;
     color: #ffffff;
