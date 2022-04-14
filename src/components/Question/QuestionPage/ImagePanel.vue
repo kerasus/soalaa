@@ -165,25 +165,29 @@ export default {
       this.$emit('closePanelBtnClicked')
     },
     imgPanelModeChanged () {
-      // this.floatMode = !this.floatMode
-      // this.$emit('imgPanelModeChanged')
-      this.$q.notify({
-        message: 'این قابلیت بزودی اضافه خواهد شد...',
-        color: 'primary'
-      })
+      this.floatMode = !this.floatMode
+      this.$emit('imgPanelModeChanged')
+      // this.$q.notify({
+      //   message: 'این قابلیت بزودی اضافه خواهد شد...',
+      //   color: 'primary'
+      // })
     }
   }
 }
 </script>
 
 <style lang="scss">
-.hidePanel {
-  display: none;
-}
 .question-image-panel {
   .image-panel-box {
     height: 600px;
     overflow-x: scroll;
+    border-radius: 30px;
+  }
+  .image-panel-header {
+    position: sticky;
+    top: 0;
+    z-index: 9999;
+    background-color: #fff;
   }
   .change-mode-btn {
     margin-right: 60px;

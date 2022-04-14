@@ -13,19 +13,12 @@
     />
     <div class="relative-position">
       <div
-        :class="{ 'row': isPanelOpened }"
+        :class="{ 'row reverse': (isPanelOpened && !imgFloatMode) }"
       >
-        <component
-          v-if="question.type"
-          :is="getComponent"
-          v-bind="allProps"
-          :class="{ 'col-7': isPanelOpened }"
-          ref="currentEditComponent"
-        />
         <div
           v-if="isPanelOpened"
-          class="col-5"
-          style="padding-right: 24px;padding-top: 30px;"
+          class="image-panel"
+          :class="{ 'col-5 image-panel-side-mode': !imgFloatMode }"
         >
           <image-panel
             :editable="true"
@@ -34,8 +27,16 @@
             @deleteImage="deleteImage"
             @uploadStatement="updateStatementPhoto(question)"
             @uploadAnswer="updateAnswerPhoto(question)"
+            @imgPanelModeChanged="changeImagePAnelMode"
           />
         </div>
+        <component
+          v-if="question.type"
+          :is="getComponent"
+          v-bind="allProps"
+          :class="{ 'col-7': !imgFloatMode}"
+          ref="currentEditComponent"
+        />
       </div>
     </div>
     <div class="relative-position">
@@ -117,6 +118,7 @@ export default {
       questionStatuses: new QuestionStatusList(),
       categoryList: new QuestCategoryList(),
       isPanelOpened: false,
+      imgFloatMode: false,
       totalLoading: false
     }
   },
@@ -135,6 +137,9 @@ export default {
   },
   mounted () {},
   methods: {
+    changeImagePAnelMode () {
+      this.imgFloatMode = !this.imgFloatMode
+    },
     deleteImage (image) {
       this.$axios.delete(API_ADDRESS.question.photo(image.type, this.question.id), {
         data: {
@@ -191,6 +196,12 @@ export default {
   padding: 40px 100px;
   display: flex;
   flex-direction: column;
+}
+.image-panel-side-mode {
+  padding-left: 24px;
+}
+.image-panel {
+  padding-top: 30px;
 }
 </style>
 <style lang="scss">
