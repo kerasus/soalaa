@@ -11,9 +11,13 @@
 
 export default {
   data: () => ({
-    name: ''
+    name: '',
+    test: [
+      'a', 'b', 'c', 'd', 'e'
+    ]
   }),
   created () {
+    console.log(this.test.slice().reverse())
   },
   computed: {
   },

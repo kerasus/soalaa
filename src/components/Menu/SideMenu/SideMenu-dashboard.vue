@@ -280,7 +280,7 @@ export default {
     height: 100%;
   }
   @media screen and (max-width: 599px) {
-    width: 242px;
+    width: 100%;
   }
 
   .side-logo {
@@ -506,7 +506,7 @@ export default {
     font-weight: 500;
     cursor: pointer;
     height: 40px !important;
-    width: 232px;
+    //width: 232px;
     border-radius: 14px;
     display: flex;
     align-items: center;
@@ -517,6 +517,7 @@ export default {
     }
     @media screen and (max-width: 599px) {
       margin: 0 30px 30px 30px;
+      //padding: 0 0 0 10px;
     }
 
     &:hover {
