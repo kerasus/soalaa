@@ -12,6 +12,7 @@ const mixinUserActionOnQuestion = {
       this.changeLocalDataBasedOnUserAction(actionType, data, userExamId, questionId)
 
       if (typeof sendData === 'undefined' || sendData === true) {
+        console.log('test')
         return this.sendUserQuestionsDataToServer(userExamId, examUserId, userExamData, questionId, actionType, socket)
       }
       return false
