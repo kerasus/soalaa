@@ -69,7 +69,6 @@ export default {
     },
 
     getEnter (targetRefKey) {
-      console.log(targetRefKey)
       this.$refs[targetRefKey].focus()
     },
 
