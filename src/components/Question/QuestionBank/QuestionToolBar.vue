@@ -45,20 +45,16 @@
               سوالات انتخاب شده:
             </div>
             <q-card-actions class="chosen-question-items">
-              <div
+              <q-chip
                 v-for="item in countOfSelectedSubCategory"
                 :key="item"
                 class="filter-items"
+                icon-remove="mdi-close"
+                removable
+                @remove="onRemoveChoose(item)"
               >
-                <div class="items-title">
-                  {{ item.title }}: {{ item.selectedQuestionsCount }}
-                </div>
-                <div class="items-action">
-                  <q-btn flat rounded size="xs" @click="onClickChoose(item)">
-                    <q-icon name="mdi-close"></q-icon>
-                  </q-btn>
-                </div>
-              </div>
+                {{ item.title }}: {{ item.selectedQuestionsCount }}
+              </q-chip>
             </q-card-actions>
           </div>
           <div class="question-level-chart col-5 justify-center flex q-pl-lg">
@@ -476,7 +472,7 @@ export default {
         },
         {
           sub_category: {
-            id: '60b7875428f350277f04c5ec',
+            id: '60b7885428f350277f04c5ec',
             title: 'هندسه',
             category_id: '60b7858d743940688b23c7f4',
             updated_at: '2021-06-02 17:57:48'
@@ -1969,9 +1965,9 @@ export default {
     },
     questionLvl () {
       return {
-        hard: this.questions.list.filter(question => question.level === '1').length,
-        medium: this.questions.list.filter(question => question.level === '2').length,
-        easy: this.questions.list.filter(question => question.level === '3').length
+        hard: this.questions.list.filter(question => question.level === 1).length,
+        medium: this.questions.list.filter(question => question.level === 2).length,
+        easy: this.questions.list.filter(question => question.level === 3).length
       }
     }
   },
@@ -2003,8 +1999,8 @@ export default {
       const x = this.questionLvl.hard + this.questionLvl.medium + this.questionLvl.easy
       return x
     },
-    onClickChoose (event) {
-      this.$emit('chooseClick', event.category_id)
+    onRemoveChoose (event) {
+      this.$emit('RemoveChoose', event.category_id)
     }
   }
 }
@@ -2012,15 +2008,12 @@ export default {
 
 <style lang="scss" scoped>
 .question-Bank-ToolBar {
-  .q-item-type {
-    justify-content: space-between;
-  }
 
   .toolbar-card {
     display: flex;
     min-width: 900px;
     justify-content: space-between;
-    padding: 17px 40px 17px 40px;
+    padding: 0px 0px 0px 0px;
 
     .toolbar-card-actions {
       width: 90%;
@@ -2031,17 +2024,13 @@ export default {
         display: flex;
 
         .delete-choices-btn {
-          background-color: #F4F5F6;
+          background-color: var(--3a-Neutral2);
           color: #23263B;
-          border-radius: 10px;
           width: 144px;
           height: 40px;
         }
 
         .add-to-btn {
-          background-color: #9690E4;
-          color: #ffffff;
-          border-radius: 10px;
           width: 144px;
           height: 40px;
           margin-left: 20px;
@@ -2051,11 +2040,11 @@ export default {
       .toolbar-checkbox {
         align-items: center;
         display: flex;
-        margin-left: 14.1%;
+        margin-left: 18.6%;
       }
 
       .choices-number {
-        margin-left: 6.4%;
+        margin-left: 8%;
         align-items: center;
         display: flex;
         font-style: normal;
@@ -2092,22 +2081,7 @@ export default {
           .filter-items {
             margin-right: 8px;
             margin-bottom: 8px;
-            background: #F4F5F6;
-            border-radius: 11px;
             display: flex;
-
-            .items-title {
-              font-style: normal;
-              font-weight: normal;
-              font-size: 12px;
-              line-height: 21px;
-              color: #23263B;
-              padding: 2px 0 0 9px;
-            }
-
-            .items-action {
-              padding: 1px 1px 0 3px;
-            }
           }
         }
       }
@@ -2239,8 +2213,15 @@ export default {
 </style>
 <style lang="scss">
 .question-Bank-ToolBar {
-  .q-item-type {
-    justify-content: space-between;
+  .q-expansion-item{
+      padding: 0;
+    .q-item-type {
+      justify-content: space-between;
+      padding: 23px 43px 23px 40px;
+      .q-item__section{
+        padding-right: 0;
+      }
+    }
   }
 
   .q-expansion-item--collapsed {
