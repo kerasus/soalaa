@@ -150,7 +150,7 @@
                           >
                             <q-list>
                               <q-item
-                                v-if="item.booklet_url[1].questions_booklet_url"
+                                v-if="item.booklet_url[1]"
                                 clickable
                                 @click="downloadBooklet(item.booklet_url[1].questions_booklet_url)"
                               >
@@ -159,12 +159,12 @@
                                   class="exam-btn-text">
                                   <span class="exam-list-menu-title">
                                     <q-icon name="isax:book-1" size="20px"/>
-                                    دفترچه عمومی
+                                    {{ item.booklet_url[1].category_title }}
                                   </span>
                                 </q-item-section>
                               </q-item>
                               <q-item
-                                v-if="item.booklet_url[1].descriptive_answers_booklet_url"
+                                v-if="item.booklet_url[1]"
                                 clickable
                                 @click="downloadBooklet(item.booklet_url[1].descriptive_answers_booklet_url)"
                               >
@@ -174,13 +174,13 @@
                                 >
                                   <span class="exam-list-menu-title">
                                     <q-icon name="isax:note-2" size="20px"/>
-                                    پاسخ دفترچه عمومی
+                                     پاسخ {{ item.booklet_url[1].category_title }}
                                   </span>
                                 </q-item-section>
                               </q-item>
                               <q-separator/>
                               <q-item
-                                v-if="item.booklet_url[0].questions_booklet_url"
+                                v-if="item.booklet_url[0]"
                                 clickable
                                 @click="downloadBooklet(item.booklet_url[0].questions_booklet_url)"
                               >
@@ -190,12 +190,12 @@
                                 >
                                   <span class="exam-list-menu-title">
                                     <q-icon name="isax:book-1" size="20px"/>
-                                    دفترچه اختصاصی
+                                    {{ item.booklet_url[0].category_title }}
                                   </span>
                                 </q-item-section>
                               </q-item>
                               <q-item
-                                v-if="item.booklet_url[0].descriptive_answers_booklet_url"
+                                v-if="item.booklet_url[0]"
                                 clickable
                                 @click="downloadBooklet(item.booklet_url[0].descriptive_answers_booklet_url)"
                               >
@@ -205,12 +205,11 @@
                                 >
                                   <span class="exam-list-menu-title">
                                     <q-icon name="isax:note-2" size="20px"/>
-                                    پاسخ دفترچه اختصاصی
+                                    پاسخ {{ item.booklet_url[0].category_title }}
                                   </span>
                                 </q-item-section>
                               </q-item>
                             </q-list>
-
                           </q-menu>
                         </q-btn>
                       </template>
