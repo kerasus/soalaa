@@ -76,11 +76,16 @@ export default {
       categoryList: new QuestCategoryList()
     }
   },
-  created () {},
-  updated () {
+  beforeRouteUpdate () {
     this.getPageReady()
   },
-  mounted () {},
+  created () {
+    this.getPageReady()
+  },
+  updated () {
+  },
+  mounted () {
+  },
   provide () {
     return {
       providedQuestion: computed(() => this.question)
