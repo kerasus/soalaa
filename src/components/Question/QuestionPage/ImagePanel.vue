@@ -66,17 +66,15 @@
       </div>
     </q-card>
   </div>
-  <image-side-panel
-    :mode="mode"
-    @closePanelBtnClicked="closePanelBtnClicked"
-  />
-  <floating-image-panel :src="selectedImageSrc"/>
 </template>
 
 <script>
 import { Question } from 'src/models/Question'
 import * as FilePond from 'filepond'
 import 'filepond/dist/filepond.min.css'
+import 'filepond-plugin-image-preview/dist/filepond-plugin-image-preview.css'
+import FilePondPluginImagePreview from 'filepond-plugin-image-preview'
+FilePond.registerPlugin(FilePondPluginImagePreview)
 
 const dropAreaHTML = `
         <div class="drop-area-parent">
@@ -86,14 +84,9 @@ const dropAreaHTML = `
         </div>
       `
 
-import ImageSidePanel from 'components/Question/QuestionPage/ImageSidePanel'
-import FloatingImagePanel from 'components/Question/FloatingImagePanel'
 export default {
   name: 'ImagePanel',
-  components: {
-    FloatingImagePanel,
-    ImageSidePanel
-  },
+  components: {},
   props: {
     mode: {
       type: String,
@@ -139,6 +132,7 @@ export default {
   },
   data () {
     return {
+      floatPanelMode: false,
       pond_statement: FilePond.create({
         allowMultiple: true,
         name: 'filepond',
@@ -171,18 +165,21 @@ export default {
       this.$emit('closePanelBtnClicked')
     },
     imgPanelModeChanged () {
-      this.floatMode = !this.floatMode
-      this.$emit('imgPanelModeChanged')
-      // this.$q.notify({
-      //   message: 'این قابلیت بزودی اضافه خواهد شد...',
-      //   color: 'primary'
-      // })
+      // this.floatMode = !this.floatMode
+      // this.$emit('imgPanelModeChanged')
+      this.$q.notify({
+        message: 'این قابلیت بزودی اضافه خواهد شد...',
+        color: 'primary'
+      })
     }
   }
 }
 </script>
 
 <style lang="scss">
+.hidePanel {
+  display: none;
+}
 .question-image-panel {
   .image-panel-box {
     height: 600px;
