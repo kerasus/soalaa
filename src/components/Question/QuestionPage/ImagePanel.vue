@@ -34,11 +34,11 @@
             صورت سوال
             <div class="statement-images">
               <div v-for="(item, index) in question.statement_photo" :key="index" class="q-image">
-                <q-btn class="delete-btn" round color="red" icon="mdi-delete" size="xs" @click="deleteImage({ src: item, type: 'statement_photo' })" />
+                <q-btn v-if="editable" class="delete-btn" round color="red" icon="mdi-delete" size="xs" @click="deleteImage({ src: item, type: 'statement_photo' })" />
                 <img :src="item" @click="selectImage(item)" />
               </div>
               <div v-for="(item, index) in question.added_statement_photos" :key="index" class="q-image">
-                <q-btn :loading="true" class="delete-btn" round color="red" icon="mdi-delete" size="xs" />
+                <q-btn v-if="editable" :loading="true" class="delete-btn" round color="red" icon="mdi-delete" size="xs" />
                 <img :src="getUrl(item)" @click="selectImage(getUrl(item))" />
               </div>
               <div v-if="editable" style="margin-right: 50px">
