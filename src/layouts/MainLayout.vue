@@ -17,10 +17,10 @@
       <q-resize-observer @resize="setHeaderDimension"/>
     </template>
     <template #left-drawer>
-      <div class="drawer-inside" v-if="$route.name === 'onlineQuiz.alaaView'">
+      <div class="drawer-inside-of-MapOfQuestions" v-if="$route.name === 'onlineQuiz.alaaView'">
         <sideMenuMapOfQuestions/>
       </div>
-      <div v-else>
+      <div class="drawer-inside" v-else>
         <side-menu-dashboard/>
       </div>
     </template>
@@ -132,12 +132,11 @@ export default {
 .main-layout-container {
 }
 .content-inside {
-  height: calc(100vh - );
   overflow: auto;
 }
 
 .main-layout-left-drawer {
-  .drawer-inside{
+  .drawer-inside-of-MapOfQuestions{
     height: 100%;
   }
 }

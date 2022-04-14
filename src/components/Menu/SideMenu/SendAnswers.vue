@@ -8,12 +8,14 @@
       :color="'#4caf50'"
       :style="{ backgroundColor: '#4caf50 !important' }"
       class=" end-exam-btn full-width"
+      :loading="confirmationBtnLoading"
+      :disabled="confirmationBtnLoading"
       @click="getConfirmation"
     >
       ارسال پاسخنامه
     </q-btn>
     <q-btn
-      v-if="quiz.user_exam_id"
+      v-if="false && quiz.user_exam_id"
       :color="'#4caf50'"
       :style="{ backgroundColor: '#4caf50 !important'}"
       class=" end-exam-btn full-width"
@@ -93,14 +95,29 @@ export default {
   }),
   methods: {
     async getConfirmation () {
-      try {
-        this.confirmationBubbleSheet = true
-        this.confirmationBtnLoading = true
-        await this.sendAnswer()
-        await this.getBackEndRes()
-      } catch (err) {
-        this.confirmationBtnLoading = false
-      }
+      this.confirmationBtnLoading = true
+      this.syncUserAnswersWithDBAndSendAnswersToServerInExamTime(this.quiz.user_exam_id, false)
+        .then(() => {
+          const examData = new ExamData()
+          examData.getUserExamData(this.quiz.user_exam_id)
+            .run()
+            .then(() => {
+              this.$store.commit('mergeDbAnswersIntoLocalstorage', {
+                dbAnswers: examData.userExamData,
+                exam_id: examData.exam.id
+              })
+              this.confirmationBubbleSheet = true
+              this.confirmationBtnLoading = false
+            })
+            .catch(() => {
+              this.confirmationBubbleSheet = true
+              this.confirmationBtnLoading = false
+            })
+        })
+        .catch(() => {
+          this.confirmationBubbleSheet = true
+          this.confirmationBtnLoading = false
+        })
     },
     sendAnswer () {
       return this.sendUserQuestionsDataToServerAndFinishExam(this.quiz.user_exam_id, false)
@@ -126,6 +143,7 @@ export default {
     confirmSendingAllAnswers () {
       this.sendUserQuestionsDataToServerAndFinishExam(this.quiz.user_exam_id, false)
         .then(response => {
+          this.$router.push({ name: 'user.exam.list' })
           this.confirmationBubbleSheet = true
         })
         .catch(erroe => {
