@@ -20,7 +20,7 @@
           name="userName"
           v-model="username"
           label="شماره همراه"
-          @keydown="getEnter"
+          @keydown.enter="getEnter('pass')"
         >
           <template v-slot:before>
             <q-icon name="person"></q-icon>
@@ -33,7 +33,7 @@
           name="pass"
           v-model="password"
           label="رمز"
-          @keydown="getEnter"
+          @keydown.enter="login"
           type="password">
           <template v-slot:before>
             <q-icon name="lock"></q-icon>
@@ -68,12 +68,9 @@ export default {
       return this.$store.getters['Auth/accessToken']
     },
 
-    getEnter (e) {
-      const actions = {
-        pass: () => this.login(),
-        userName: () => this.$refs.pass.focus()
-      }
-      if (e.keyCode === 13) actions[e.originalTarget.name].call()
+    getEnter (targetRefKey) {
+      console.log(targetRefKey)
+      this.$refs[targetRefKey].focus()
     },
 
     redirectTo () {
