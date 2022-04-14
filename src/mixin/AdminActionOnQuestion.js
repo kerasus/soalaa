@@ -13,7 +13,8 @@ const AdminActionOnQuestion = {
     return {
       optionQuestionId: '',
       questionStatusId_draft: null,
-      questionStatusId_pending_to_type: null
+      questionStatusId_pending_to_type: null,
+      allTypes: new TypeList()
     }
   },
   computed: {
@@ -126,7 +127,7 @@ const AdminActionOnQuestion = {
         formData.append('answer_photos[' + key + ']', item)
       })
       question.exams.list.forEach((item, key) => {
-        formData.append('exams[' + key + '][id]', item.id)
+        formData.append('exams[' + key + '][id]', item.exam_id)
         formData.append('exams[' + key + '][order]', item.order)
         formData.append('exams[' + key + '][sub_category_id]', item.sub_category_id)
       })

@@ -24,7 +24,7 @@
           flat
           rounded
           unelevated
-          @click="imgPanelModeChanged"
+          @click="ChangeImgPanelMode"
         />
       </q-card-section>
       <div>
@@ -57,13 +57,9 @@ export default {
     closePanelBtnClicked () {
       this.$emit('closePanelBtnClicked')
     },
-    imgPanelModeChanged () {
-      this.floatMode = !this.floatMode
+    ChangeImgPanelMode () {
+      console.log('ChangeImgPanelMode')
       this.$emit('imgPanelModeChanged')
-      // this.$q.notify({
-      //   message: 'این قابلیت بزودی اضافه خواهد شد...',
-      //   color: 'primary'
-      // })
     }
   }
 }

@@ -7,16 +7,6 @@
         >
           <q-card-section class="image-panel-header default-Qcard-title row justify-between">
             <q-btn
-              class="close-panel-btn"
-              icon="isax:close-circle"
-              color="white"
-              text-color="accent"
-              dense
-              unelevated
-              rounded
-              @click="closePanelBtnClicked"
-            />
-            <q-btn
               class="change-mode-btn"
               color="white"
               text-color="accent"
@@ -25,6 +15,16 @@
               rounded
               unelevated
               @click="imgPanelModeChanged"
+            />
+            <q-btn
+              class="close-panel-btn"
+              icon="isax:close-circle"
+              color="white"
+              text-color="accent"
+              dense
+              unelevated
+              rounded
+              @click="closePanelBtnClicked"
             />
           </q-card-section>
           <div>
@@ -43,6 +43,7 @@
 import { initDragElement, initResizeElement } from 'src/assets/js/DragAndResize.js'
 
 export default {
+  name: 'FloatingImagePanel',
   data: () => ({
     name: ''
   }),
@@ -56,7 +57,7 @@ export default {
   },
   methods: {
     closePanelBtnClicked () {
-      // this.$emit('closePanelBtnClicked')
+      this.$emit('closePanelBtnClicked')
     },
     imgPanelModeChanged () {
       this.$emit('imgPanelModeChanged')
@@ -72,7 +73,8 @@ export default {
 </script>
 <style>
 .main {
-  direction: rtl !important;
+  direction: rtl ;
+  background: #00bcd4;
 }
 .popup {
   z-index: 9999;
@@ -92,7 +94,7 @@ export default {
 .popup-header {
   cursor: move;
   z-index: 10000;
-  height: 100%;
+  /*height: 100%;*/
   width: 100%;
 }
 
