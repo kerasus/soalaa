@@ -228,8 +228,8 @@ const mixinQuiz = {
         return
       }
       const that = this
-      return new Promise(function (resolve, reject) {
-        const examData = new ExamData()
+      return new Promise((resolve, reject) => {
+        const examData = new ExamData(this.$axios)
         window.currentExamQuestions = null
         window.currentExamQuestionIndexes = null
         examData.getExamDataAndParticipate(examId)
@@ -422,13 +422,14 @@ const mixinQuiz = {
       return currentExamQuestionsArray
     },
     startExam (examId, viewType) {
+      console.log('startExam')
       if (!Assistant.getId(examId)) {
         return
       }
       const that = this
-      return new Promise(function (resolve, reject) {
+      return new Promise((resolve, reject) => {
         let userExamId
-        const examData = new ExamData()
+        const examData = new ExamData(this.$axios)
         if (that.needToLoadQuizData()) {
           that.saveCurrentExamQuestions([])
           that.$store.commit('Exam/cleanCurrentQuestion')
@@ -438,7 +439,6 @@ const mixinQuiz = {
           examData.loadQuestionsFromFile()
         } else {
           userExamId = that.quiz.user_exam_id
-          // that.loadCurrentQuestion(viewType)
         }
         examData.getUserExamData(userExamId)
           .run()
@@ -480,6 +480,22 @@ const mixinQuiz = {
             that.$store.commit('loading/overlay', false)
           })
       })
+    },
+    getLatestUserAnswersFromServer () {
+      const examData = new ExamData(this.$axios)
+      examData.getUserExamData(this.quiz.user_exam_id)
+        .run()
+        .then((result) => {
+          try {
+            this.$store.commit('Exam/mergeDbAnswersIntoLocalstorage', {
+              dbAnswers: examData.userExamData,
+              user_exam_id: this.quiz.user_exam_id
+            })
+            setTimeout(() => { this.refreshFailedLists(this.quiz.user_exam_id) }, 0)
+          } catch (error) {
+            console.error(error)
+          }
+        })
     },
     needToLoadQuizData () {
       return (!Assistant.getId(this.quiz.id) || !Assistant.getId(this.quiz.user_exam_id) || Assistant.getId(this.$route.params.quizId) !== Assistant.getId(this.quiz.id))
@@ -532,15 +548,15 @@ const mixinQuiz = {
     hasExamDataOnThisDeviseStorage (userExamId) {
       return !!this.userQuizListData[userExamId]
     },
-    syncUserAnswersWithDBAndSendAnswersToServerInExamTime (userExamId, examUserId, finishExam) {
-      const answers = this.getUserAnswers(userExamId)
+    syncUserAnswersWithDBAndSendAnswersToServerInExamTime (userExamId, finishExam) {
+      const questions = this.getUserAnswers(userExamId)
 
-      return this.$axios.post(API_ADDRESS.exam.sendAnswers, { exam_user_id: examUserId, finish: finishExam, questions: answers })
+      return this.$axios.post(API_ADDRESS.exam.sendAnswers, { exam_user_id: userExamId, finish: finishExam, questions })
     },
-    syncUserAnswersWithDBAndSendAnswersToServerAfterExamTime (userExamId, examUserId, finishExam) {
-      const answers = this.getUserAnswers(userExamId)
+    syncUserAnswersWithDBAndSendAnswersToServerAfterExamTime (userExamId, finishExam) {
+      const questions = this.getUserAnswers(userExamId)
 
-      return this.$axios.post(API_ADDRESS.exam.sendAnswersAfterExam, { exam_user_id: examUserId, finish: finishExam, questions: answers })
+      return this.$axios.post(API_ADDRESS.exam.sendAnswersAfterExam, { exam_user_id: userExamId, finish: finishExam, questions })
     },
     isLtrString (string) {
       if (!string) {
@@ -680,6 +696,7 @@ const mixinQuiz = {
       }
     },
     goToNextQuestion (viewType) {
+      console.log('goToNextQuestion')
       const question = this.getNextQuestion(this.currentQuestion.id)
       if (!question) {
         return
@@ -695,6 +712,7 @@ const mixinQuiz = {
       this.changeQuestion(question.id, viewType)
     },
     changeQuestion (id, viewType, mandatory) {
+      console.log('changeQuestion')
       if (Assistant.getId(this.currentQuestion.id) === Assistant.getId(id)) {
         return
       }
@@ -732,6 +750,7 @@ const mixinQuiz = {
       }
     },
     loadExamPageByViewType (examId, questNumber, viewType) {
+      console.log('loadExamPageByViewType')
       if (!viewType) {
         viewType = 'onlineQuiz.alaaView'
       }
@@ -754,7 +773,7 @@ const mixinQuiz = {
     },
 
     getExamUserData (examId) {
-      return new Promise(function (resolve, reject) {
+      return new Promise((resolve, reject) => {
         this.$axios.post(API_ADDRESS.exam.examUser, { examId })
           .then((response) => {
             const userExamForParticipate = new Exam()

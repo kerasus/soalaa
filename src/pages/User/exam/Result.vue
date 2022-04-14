@@ -196,7 +196,7 @@ export default {
       const that = this
       const user_exam_id = this.$route.params.user_exam_id
       const exam_id = this.$route.params.exam_id
-      const examData = new ExamData()
+      const examData = new ExamData(this.$axios)
       examData.getUserExamWithCorrectAnswers(user_exam_id, exam_id)
         .loadQuestionsFromFile()
         .getUserExamData(user_exam_id)

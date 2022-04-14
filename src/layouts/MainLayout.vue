@@ -17,10 +17,10 @@
       <q-resize-observer @resize="setHeaderDimension"/>
     </template>
     <template #left-drawer>
-      <div class="drawer-inside" v-if="$route.name === 'onlineQuiz.alaaView'">
+      <div class="drawer-inside-of-MapOfQuestions" v-if="$route.name === 'onlineQuiz.alaaView'">
         <sideMenuMapOfQuestions/>
       </div>
-      <div v-else>
+      <div class="drawer-inside" v-else>
         <side-menu-dashboard/>
       </div>
     </template>
@@ -39,7 +39,7 @@
             </q-card-actions>
           </q-card>
         </q-dialog>
-        <Router :exclude="['konkoorView', 'alaaView', 'MultipleChoiceQ', 'MBTIQ']" :include="keepAlivesComponents" />
+        <Router :include="keepAliveComponents" />
       </div>
     </template>
   </quasar-template-builder>
@@ -53,12 +53,13 @@ import templateHeader from 'components/Template/templateHeader'
 import onlineQuizTemplateHeader from 'components/Template/onlineQuizTemplateHeader'
 import { ref } from 'vue'
 import Router from 'src/router/Router'
-import KeepAlivesComponents from 'src/assets/js/KeepAlivesComponents'
+import KeepAliveComponents from 'assets/js/KeepAliveComponents'
 
 export default {
   components: { Router, SideMenuDashboard, sideMenuMapOfQuestions, QuasarTemplateBuilder, templateHeader, onlineQuizTemplateHeader },
   data () {
     return {
+      keepAliveComponents: KeepAliveComponents,
       properties: {
         layoutView: 'lHh Lpr lFf',
         layoutHeader: true,
@@ -79,8 +80,7 @@ export default {
         layoutLeftDrawerCustomClass: 'main-layout-left-drawer',
         layoutPageContainerCustomClass: 'main-layout-container'
       },
-      contentInside: ref(0),
-      keepAlivesComponents: KeepAlivesComponents
+      contentInside: ref(0)
     }
   },
   computed: {
@@ -132,12 +132,11 @@ export default {
 .main-layout-container {
 }
 .content-inside {
-  height: calc(100vh - );
   overflow: auto;
 }
 
 .main-layout-left-drawer {
-  .drawer-inside{
+  .drawer-inside-of-MapOfQuestions{
     height: 100%;
   }
 }
