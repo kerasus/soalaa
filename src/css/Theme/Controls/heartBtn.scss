@@ -1,0 +1,26 @@
+.heart-btn {
+  &.q-btn {
+    width: 15px;
+    padding: 0;
+    min-width: 15px;
+    min-height: 15px;
+    &.q-btn--fab-mini {
+      .q-icon {
+        font-size: 15px;
+      }
+    }
+    &.q-btn--active{
+      background-color: transparent !important;
+    }
+    .q-focus-helper {
+      background-color: transparent !important;
+
+    }
+    &.empty-heart{
+      .q-icon {
+        color: var(--3a-TextSecondary);
+      }
+    }
+  }
+}
+// <q-btn fab-mini class="heart-btn fill-heart empty-heart" icon="isax:heart" flat/>
