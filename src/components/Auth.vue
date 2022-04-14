@@ -1,55 +1,50 @@
 <template>
-  <div id="q-app ">
-    <div class="row justify-center items-center fullscreen q-px-lg">
-      <div class="col-5" >
-        <q-card v-if="!userLogin" class="my-card q-mt-auto shadow-6">
-          <q-card-section class="row bg-blue-8 text-white justify-between">
-            <div class="row justify-center items-center text-h6">
-              <q-img src="img/3a-logo.png" alt="3a-logo" width="20px" />
-              <p class="q-ml-md q-mb-none">ورود</p>
-            </div>
-            <q-avatar>
-              <img src="img/alaa-logo.png" alt="logo">
-            </q-avatar>
-          </q-card-section>
-          <q-linear-progress v-if="loadingList" color="warning" class="q-mt-sm" />
-          <q-separator></q-separator>
-          <div class="q-pa-lg">
-            <q-input
-              bottom-slots
-              color="blue-8"
-              ref="userName"
-              name="userName"
-              v-model="username"
-               label="شماره همراه"
-              @keydown="getEnter"
-               >
-              <template v-slot:before>
-                <q-icon name="person"></q-icon>
-              </template>
-            </q-input>
-            <q-input
-              color="blue-8"
-              bottom-slots
-              ref="pass"
-              name="pass"
-              v-model="password"
-              label="رمز"
-              @keydown="getEnter"
-              type="password">
-              <template v-slot:before>
-                <q-icon name="lock"></q-icon>
-              </template>
-            </q-input>
-            <q-card-actions align="left">
-              <q-btn  style="width: 80px" color="blue-8" label="ورود" @click="login"/>
-            </q-card-actions>
-          </div>
-        </q-card>
+  <div class="login-page row flex">
+    <q-card v-if="!userLogin" class="col-lg-4 col-md-5 col-sm-6 col-xs-10 login-card my-card shadow-6">
+      <q-card-section class="row bg-blue-8 text-white justify-between">
+        <div class="row login-header-right-side justify-center items-center">
+          <q-img class="login-alaa-logo" src="img/3a-logo.png" alt="3a-logo"/>
+          <p class="login-entry-title q-ml-md q-mb-none">ورود</p>
+        </div>
+        <q-avatar>
+          <img src="img/alaa-logo.png" alt="logo">
+        </q-avatar>
+      </q-card-section>
+      <q-linear-progress v-if="loadingList" color="warning" class="q-mt-sm"/>
+      <q-separator></q-separator>
+      <div class="q-pa-lg">
+        <q-input
+          bottom-slots
+          color="blue-8"
+          ref="userName"
+          name="userName"
+          v-model="username"
+          label="شماره همراه"
+          @keydown="getEnter"
+        >
+          <template v-slot:before>
+            <q-icon name="person"></q-icon>
+          </template>
+        </q-input>
+        <q-input
+          color="blue-8"
+          bottom-slots
+          ref="pass"
+          name="pass"
+          v-model="password"
+          label="رمز"
+          @keydown="getEnter"
+          type="password">
+          <template v-slot:before>
+            <q-icon name="lock"></q-icon>
+          </template>
+        </q-input>
+        <q-card-actions align="left">
+          <q-btn style="width: 80px" color="blue-8" label="ورود" @click="login"/>
+        </q-card-actions>
       </div>
-    </div>
+    </q-card>
   </div>
-
 </template>
 
 <script>
@@ -143,6 +138,19 @@ export default {
 }
 </script>
 
-<style scoped>
-
+<style lang="scss" scoped>
+.login-page{
+  height: 100vh;
+  .login-card{
+    margin: auto;
+    .login-header-right-side{
+      .login-alaa-logo{
+        width: 20px;
+      }
+      .login-entry-title{
+        font-size: 20px;
+      }
+    }
+  }
+}
 </style>
