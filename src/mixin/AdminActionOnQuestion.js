@@ -177,7 +177,6 @@ const AdminActionOnQuestion = {
               color: 'negative'
             })
           }
-          console.log('that.doesHaveQuestionMode()', that.doesHaveQuestionMode())
           if (that.doesHaveQuestionMode()) {
             that.setCurrentQuestionType(question, types)
           } else {
@@ -235,7 +234,6 @@ const AdminActionOnQuestion = {
       }
     },
     setCurrentQuestionType (question, allTypes) {
-      console.log('this.getCurrentQuestionType()', this.getCurrentQuestionType())
       const currentType = this.getCurrentQuestionType()
       let currentValue = ''
       if (currentType === 'mbti') {

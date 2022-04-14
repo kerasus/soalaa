@@ -76,8 +76,8 @@ export default {
       categoryList: new QuestCategoryList()
     }
   },
-  created () {
-    console.log('created')
+  created () {},
+  updated () {
     this.getPageReady()
   },
   mounted () {},
