@@ -34,7 +34,7 @@
             صورت سوال
             <div class="statement-images">
               <div v-for="(item, index) in question.statement_photo" :key="index" class="q-image">
-                <q-btn class="delete-btn" round color="red" icon="mdi-delete" size="xs" @click="deleteImage({ src: item, type: 'statement_photo' })" />
+                <q-btn v-if="editable" class="delete-btn" round color="red" icon="mdi-delete" size="xs" @click="deleteImage({ src: item, type: 'statement_photo' })" />
                 <img :src="item" @click="selectImage(item)" />
               </div>
               <div v-for="(item, index) in question.added_statement_photos" :key="index" class="q-image">
@@ -49,7 +49,7 @@
             پاسخ سوال
             <div class="answer-images">
               <div v-for="(item, index) in question.answer_photos" :key="index" class="q-image">
-                <q-btn class="delete-btn" round color="red" icon="mdi-delete" size="xs" @click="deleteImage({ src: item, type: 'answer_photo' })" />
+                <q-btn v-if="editable" class="delete-btn" round color="red" icon="mdi-delete" size="xs" @click="deleteImage({ src: item, type: 'answer_photo' })" />
                 <img :src="item" @click="selectImage(item)" />
               </div>
               <div v-for="(item, index) in question.added_answer_photos" :key="index" class="q-image">
