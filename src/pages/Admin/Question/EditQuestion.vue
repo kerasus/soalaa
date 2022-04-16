@@ -202,6 +202,9 @@ export default {
 }
 .image-panel {
   padding-top: 30px;
+  position: sticky;
+  top: 0;
+  z-index: 9999;
 }
 </style>
 <style lang="scss">

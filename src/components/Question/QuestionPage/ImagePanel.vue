@@ -4,6 +4,7 @@
   >
     <q-card
       class="question-card default-questions-card image-panel-box"
+      :class="{'float-panel-box' : isPanelFloat }"
     >
       <q-card-section class="image-panel-header default-Qcard-title row justify-between">
         <q-btn
@@ -165,12 +166,13 @@ export default {
       this.$emit('closePanelBtnClicked')
     },
     imgPanelModeChanged () {
-      this.floatMode = !this.floatMode
+      this.floatPanelMode = !this.floatPanelMode
       this.$emit('imgPanelModeChanged')
-      // this.$q.notify({
-      //   message: 'این قابلیت بزودی اضافه خواهد شد...',
-      //   color: 'primary'
-      // })
+    }
+  },
+  computed: {
+    isPanelFloat () {
+      return !!(this.floatPanelMode)
     }
   }
 }
@@ -182,6 +184,9 @@ export default {
     height: 600px;
     overflow-x: scroll;
     border-radius: 30px;
+  }
+  .float-panel-box {
+    height: 450px;
   }
   .image-panel-header {
     position: sticky;
