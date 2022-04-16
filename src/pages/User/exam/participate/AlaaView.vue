@@ -164,24 +164,7 @@ export default {
     Timer
   },
   mixins: [mixinAuth, mixinQuiz, mixinUserActionOnQuestion, mixinDrawer],
-  beforeRouteEnter () {
-    console.log('AlaaView beforeRouteEnter')
-  },
-  beforeRouteLeave () {
-    console.log('AlaaView beforeRouteLeave')
-  },
-  beforeRouteUpdate () {
-    console.log('AlaaView beforeRouteUpdate')
-    this.getLatestUserAnswersFromServer()
-  },
-  activated () {
-    console.log('AlaaView activated')
-  },
-  updated () {
-    console.log('AlaaView updated')
-  },
   mounted () {
-    console.log('AlaaView mounted')
     this.updateOverlay(true)
     this.showAppBar()
     this.updateDrawerBasedOnWindowSize()

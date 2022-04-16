@@ -31,7 +31,7 @@
           :class="{ ltr: isRtl }"
         >
           <vue-katex
-            :input="source.order + ') ' + source.statement"
+            :input="(source.index + 1) + ') ' + source.statement"
           />
         </p>
         <div
