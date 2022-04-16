@@ -15,6 +15,7 @@
 <script>
 import videojs from 'video.js'
 import videojsBrand from 'videojs-brand'
+import fa from 'video.js/dist/lang/fa.json'
 import { PlayerSourceList } from 'src/models/PlayerSource'
 require('video.js/dist/video-js.css')
 require('@silvermine/videojs-quality-selector')(videojs)
@@ -61,6 +62,9 @@ export default {
           }
         },
         language: 'fa',
+        languages: {
+          fa
+        },
         autoplay: false,
         controls: true,
         playbackRates: [0.25, 0.5, 1, 1.5, 2],
