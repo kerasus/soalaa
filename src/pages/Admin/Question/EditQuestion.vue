@@ -13,25 +13,30 @@
     />
     <div class="relative-position">
       <div
-        :class="{ 'row': isPanelOpened }"
+        :class="{ 'row reverse': (isPanelOpened && !imgFloatMode) }"
       >
+        <div
+          v-if="isPanelOpened"
+          class="image-panel"
+          :class="{ 'col-5 image-panel-side-mode': !imgFloatMode , 'image-panel-float-mode' : imgFloatMode }"
+        >
+          <image-panel
+            :editable="true"
+            :mode="'edit'"
+            @closePanelBtnClicked="openCloseImgPanel"
+            @deleteImage="deleteImage"
+            @uploadStatement="updateStatementPhoto(question)"
+            @uploadAnswer="updateAnswerPhoto(question)"
+            @imgPanelModeChanged="changeImagePAnelMode"
+          />
+        </div>
         <component
           v-if="question.type"
           :is="getComponent"
           v-bind="allProps"
-          :class="{ 'col-7': isPanelOpened }"
+          :class="{ 'col-7': !imgFloatMode}"
           ref="currentEditComponent"
         />
-        <div
-          v-if="isPanelOpened"
-          class="col-5"
-          style="padding-right: 24px;padding-top: 30px;"
-        >
-          <image-panel
-            :mode="'edit'"
-            @closePanelBtnClicked="openCloseImgPanel"
-          />
-        </div>
       </div>
     </div>
     <div class="relative-position">
@@ -66,6 +71,7 @@
 </template>
 
 <script>
+// detachUnsavedExam
 /* eslint-disable no-var */
 import { computed, defineAsyncComponent } from 'vue'
 import { Question } from 'src/models/Question'
@@ -79,9 +85,10 @@ import BtnBox from 'components/Question/QuestionPage/BtnBox'
 import { ExamList } from 'src/models/Exam'
 import { QuestSubcategoryList } from 'src/models/QuestSubcategory'
 import { QuestionStatusList } from 'src/models/QuestionStatus'
-import ImagePanel from 'components/Question/QuestionPage/ImagePanel'
 import LogListComponent from 'components/QuestionBank/EditQuestion/Log/LogList'
+import API_ADDRESS from 'src/api/Addresses'
 import { QuestCategoryList } from 'src/models/QuestCategory'
+import ImagePanel from 'components/Question/QuestionPage/ImagePanel'
 export default {
   name: 'EditQuestion',
   components: {
@@ -111,7 +118,7 @@ export default {
       questionStatuses: new QuestionStatusList(),
       categoryList: new QuestCategoryList(),
       isPanelOpened: false,
-      allTypes: new TypeList(),
+      imgFloatMode: false,
       totalLoading: false
     }
   },
@@ -130,6 +137,18 @@ export default {
   },
   mounted () {},
   methods: {
+    changeImagePAnelMode () {
+      this.imgFloatMode = !this.imgFloatMode
+    },
+    deleteImage (image) {
+      this.$axios.delete(API_ADDRESS.question.photo(image.type, this.question.id), {
+        data: {
+          url: image.src
+        }
+      }).then(response => {
+        this.question = new Question(response.data.data)
+      })
+    },
     chosenComponent () {
       const cName = this.question.type.componentName
       if (cName === 'MultipleChoiceQ') {
@@ -177,6 +196,18 @@ export default {
   padding: 40px 100px;
   display: flex;
   flex-direction: column;
+}
+.image-panel-side-mode {
+  position: static;
+  padding-left: 24px;
+}
+.image-panel-float-mode {
+  position: sticky;
+  top: 0;
+  z-index: 9999;
+}
+.image-panel {
+  padding-top: 30px;
 }
 </style>
 <style lang="scss">
