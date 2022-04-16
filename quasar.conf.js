@@ -152,6 +152,14 @@ module.exports = configure(function (ctx) {
             '^/tree/api/v1': ''
           }
         },
+        '/tag/api/v1': {
+          target: process.env.TAG_API_SERVER,
+          changeOrigin: true,
+          secure: false,
+          pathRewrite: {
+            '^/tag/api/v1': ''
+          }
+        },
         '/cdn': {
           target: 'https://cdn.alaatv.com',
           changeOrigin: true,
