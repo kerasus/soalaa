@@ -57,9 +57,9 @@
               </q-chip>
             </q-card-actions>
           </div>
-          <div class="question-level-chart col-5 justify-center flex q-pl-lg">
+          <div class="question-level-chart col-5 justify-center flex">
             <div class="row">
-              <div class="col-4">
+              <div class="col-4 q-pt-sm q-pl-xs">
                 <div class="chart-titles">
                   <q-badge class="titles-icon hard" rounded/>
                   <div>سخت</div>
@@ -73,7 +73,7 @@
                   <div>آسان</div>
                 </div>
               </div>
-              <div class="question-highchart col-8 q-pl-xs">
+              <div class="question-highchart col-8 ">
                 <highcharts :options="chartOptions"/>
               </div>
             </div>
@@ -1907,7 +1907,7 @@ export default {
     return {
       chartOptions: {
         chart: {
-          height: '90',
+          height: '95',
           width: '110',
           type: 'pie',
           plotShadow: false
@@ -1921,8 +1921,8 @@ export default {
             startAngle: -200,
             endAngle: 360,
             borderWidth: 13,
-            center: ['50%', '50%'],
-            size: '110%',
+            center: ['50%', '52%'],
+            size: '112%',
             borderColor: null,
             slicedOffset: 0,
             dataLabels: {
@@ -2269,7 +2269,9 @@ export default {
   .toolbar-detail {
     .toolbar-detail-container {
       .question-level-chart {
+        padding-left: 100px;
         .question-highchart {
+          padding-left: 15px;
           .title-1 {
             text-space: 20px;
             font-weight: 700;
