@@ -1,6 +1,7 @@
 <template>
   <div
     class="question-image-panel"
+    :class="{'question-image-float-panel' : isPanelFloat }"
   >
     <q-card
       class="question-card default-questions-card image-panel-box"
@@ -178,7 +179,7 @@ export default {
 }
 </script>
 
-<style lang="scss">
+<style scoped lang="scss">
 .question-image-panel {
   .image-panel-box {
     height: 600px;
@@ -187,6 +188,9 @@ export default {
   }
   .float-panel-box {
     height: 450px;
+    .q-card {
+      box-shadow: rgba(50, 50, 93, 0.25) 0px 13px 27px -5px, rgba(0, 0, 0, 0.3) 0px 8px 16px -8px;
+    }
   }
   .image-panel-header {
     position: sticky;
@@ -232,4 +236,12 @@ export default {
 .main-image {
   width: 100%;
 }
+</style>
+<style lang="scss">
+.question-image-float-panel {
+    .q-card {
+      box-shadow: rgba(50, 50, 93, 0.25) 0px 13px 27px -5px, rgba(0, 0, 0, 0.3) 0px 8px 16px -8px;
+    }
+  }
+
 </style>
