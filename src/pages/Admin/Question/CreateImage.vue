@@ -36,7 +36,7 @@
       :buffer="true"
     />
     <div class="attach-btn row">
-      <question-details class="col-9"/>
+      <question-identifier class="col-9"/>
       <btn-box
         class="col-3"
         @saveQuestion="createQuestionImage(question)"
@@ -49,7 +49,6 @@
 import uploadImage from 'src/components/Question/QuestionPage/UploadImage'
 import { Question } from 'src/models/Question'
 import BtnBox from 'components/Question/QuestionPage/BtnBox'
-import QuestionDetails from 'components/Question/QuestionPage/Create/textMode/QuestionDetails'
 import { computed } from 'vue'
 import { AdminActionOnQuestion } from 'src/mixin/Mixins'
 import AttachExam from 'components/Question/QuestionPage/AttachExam/AttachExam'
@@ -57,13 +56,14 @@ import { ExamList } from 'src/models/Exam'
 import { QuestSubcategoryList } from 'src/models/QuestSubcategory'
 import { QuestionStatusList } from 'src/models/QuestionStatus'
 import { QuestCategoryList } from 'src/models/QuestCategory'
+import QuestionIdentifier from 'components/Question/QuestionPage/QuestionIdentifier'
 
 export default {
   name: 'CreateImage',
   components: {
+    QuestionIdentifier,
     uploadImage,
     AttachExam,
-    QuestionDetails,
     BtnBox
   },
   mixins: [AdminActionOnQuestion],

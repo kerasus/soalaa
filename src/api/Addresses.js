@@ -2,6 +2,8 @@ import process from 'process'
 const lumenServer = process.env.AAA_API_SERVER
 const authServer = process.env.AUTH_API_SERVER
 const treeServer = process.env.TREE_API_SERVER
+// eslint-disable-next-line no-unused-vars
+const tagServer = process.env.TAG_API_SERVER
 const API_ADDRESS = {
   // socket: process.env.VUE_APP_SOCKET_TARGET_API_SERVER,
   socket: 'https://office.alaatv.com:501',

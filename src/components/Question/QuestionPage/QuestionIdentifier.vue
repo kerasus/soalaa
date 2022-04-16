@@ -1,78 +1,96 @@
 <template>
   <div class="question-details">
-<!--    <div class="box-title">مشخصات سوال</div>-->
-<!--    <div class="details-container-1 default-details-container row">-->
-<!--      <div class="detail-box detail-box-first" :class="[imgPanelVisibility ? 'col-6' : 'col-3']">-->
-<!--        <div class="detail-box-title">نام آزمون</div>-->
-<!--        <q-select borderless v-model="model" :options="options" />-->
-<!--      </div>-->
-<!--      <div class="detail-box" :class="[imgPanelVisibility ? 'col-6' : 'col-3']">-->
-<!--        <div class="detail-box-title">طراح سوال</div>-->
-<!--        <q-select borderless v-model="model" :options="options" />-->
-<!--      </div>-->
-<!--      <div class="detail-box" :class="[imgPanelVisibility ? 'col-6' : 'col-3']">-->
-<!--        <div class="detail-box-title">تاریخ تالیف</div>-->
-<!--        <q-select borderless v-model="model" :options="options" />-->
-<!--      </div>-->
-<!--      <div class="detail-box detail-box-last" :class="[imgPanelVisibility ? 'col-6' : 'col-3']">-->
-<!--        <div class="detail-box-title">درجه سختی</div>-->
-<!--        <q-select borderless v-model="model" :options="options" />-->
-<!--      </div>-->
-<!--    </div>-->
+    <div class="box-title">شناسنامه سوال</div>
     <div class="details-container-2 default-details-container row">
-      <div class="detail-box detail-box-first" :class="[imgPanelVisibility ? 'col-6' : 'col-3']">
-        <div class="detail-box-title">پایه</div>
-        <q-select borderless v-model="model" :options="options" />
+      <div class="detail-box col-3" style="padding-right:0;">
+        <div class="detail-box-title">طراح سوال</div>
+        <q-select borderless v-model="questionAuthor" :options="questionAuthors" />
       </div>
-      <div class="detail-box" :class="[imgPanelVisibility ? 'col-6' : 'col-6']">
+      <div class="detail-box col-3">
+        <div class="detail-box-title">تاریخ تالیف</div>
+        <q-select borderless v-model="authorshipDate" :options="authorshipDates" />
+      </div>
+      <div class="detail-box col-3">
+        <div class="detail-box-title">درجه سختی</div>
+        <q-select borderless v-model="questionLevel" :options="levels" />
+      </div>
+      <attach-exam
+        class="col-3"
+        :exams="exams"
+        :lessons="lessons"
+        :categories="categories"
+        @attach="emitAttachExam"
+        @detach="emitDetachExam"
+      />
+      <div class="detail-box detail-box-first col-3">
+        <div class="detail-box-title">پایه تحصیلی</div>
+        <q-select borderless v-model="grade" :options="grades" />
+      </div>
+      <div class="detail-box col-3">
+        <div class="detail-box-title ">رشته تحصیلی</div>
+        <q-select borderless v-model="major" :options="majors" />
+      </div>
+      <div class="detail-box col-6">
         <div class="detail-box-title">مبحث</div>
         <div class="input-container flex">
-          <div class="icon-box">
-            <q-img
-              src="/img/question-details-subject.png"
-              spinner-color="primary"
-              class="question-details-subject-img"
-            />
-          </div>
           <div class="input-box">
-            <q-input v-model="text" dense />
+            <q-input v-model="lesson" dense />
+          </div>
+          <div class="icon-box">
+            <q-btn
+              unelevated
+              icon="isax:tree"
+              class="open-modal-btn default-detail-btn"
+              @click="test "
+            />
           </div>
         </div>
       </div>
-<!--      <div class="detail-box detail-box-last-of-row" :class="[imgPanelVisibility ? 'col-6' : 'col-3']">-->
-<!--        <q-btn-->
-<!--          unelevated-->
-<!--          :loading="draftBtnLoading"-->
-<!--          label="پیش نویس"-->
-<!--          class="draft-btn default-detail-btn"-->
-<!--        ></q-btn>-->
-<!--        <q-btn-->
-<!--          unelevated-->
-<!--          :loading="saveBtnLoading"-->
-<!--          color="primary"-->
-<!--          label="ذخیره سوال"-->
-<!--          class="save-btn default-detail-btn"-->
-<!--        />-->
-<!--      </div>-->
-      <div class="detail-box detail-box-last" :class="[imgPanelVisibility ? 'col-6' : 'col-3']">
-        <div class="detail-box-title ">رشته</div>
-        <q-select borderless v-model="model" :options="options" />
-      </div>
     </div>
   </div>
+  <question-tree-modal />
 </template>
 
 <script>
 import { Question } from 'src/models/Question'
+import { ExamList } from 'src/models/Exam'
+import { QuestSubcategoryList } from 'src/models/QuestSubcategory'
+import { QuestCategoryList } from 'src/models/QuestCategory'
+import AttachExam from 'components/Question/QuestionPage/AttachExam/AttachExam'
+import QuestionTreeModal from 'components/Question/QuestionPage/QuestionTreeModal'
 
 export default {
-  name: 'QuestionDetails',
+  name: 'QuestionIdentifier',
+  components: {
+    QuestionTreeModal,
+    AttachExam
+  },
   props: {
     imgPanelVisibility: {
       type: Boolean,
       default () {
         return false
       }
+    },
+    buffer: {
+      type: Boolean,
+      default () {
+        return false
+      }
+    },
+    exams: { // possible removal for attach exam
+      type: ExamList,
+      default: new ExamList()
+    },
+    lessons: { // possible removal for attach exam
+      type: QuestSubcategoryList,
+      default: new QuestSubcategoryList()
+    },
+    categories: {
+      default () {
+        return new QuestCategoryList()
+      },
+      type: QuestCategoryList
     }
   },
   inject: {
@@ -81,13 +99,43 @@ export default {
       default: new Question()
     }
   },
+  methods: {
+    test () {
+      console.log('gdegghghhet', this.mitra)
+      this.mitra = !this.mitra
+    },
+    emitAttachExam (item) {
+      this.$emit('attach', item)
+    },
+    emitDetachExam (item) {
+      this.$emit('detach', item)
+    }
+  },
   data () {
     return {
-      model: '',
-      options: [
+      mitra: false,
+      modal: '',
+      questionAuthor: '',
+      authorshipDate: '',
+      questionAuthors: [
+        'سازمان سنجش - دی ماه 1402', 'سازمان سنجش - دی ماه 1403', 'سازمان سنجش - دی ماه 1404', 'سازمان سنجش - دی ماه 1405', 'سازمان سنجش - دی ماه 1406'
+      ],
+      authorshipDates: [
         'سه‌آ - دی ماه 1402', 'سه‌آ - دی ماه 1403', 'سه‌آ - دی ماه 1404', 'سه‌آ - دی ماه 1405', 'سه‌آ - دی ماه 1406'
       ],
-      text: '',
+      questionLevel: '',
+      grades: [
+        'دهم', 'یازدهم', 'دوازدهم'
+      ],
+      grade: '',
+      majors: [
+        'ریاضی', 'تجربی', 'انسانی'
+      ],
+      major: '',
+      levels: [
+        'آسان', 'متوسط', 'سخت'
+      ],
+      lesson: '',
       draftBtnLoading: false,
       saveBtnLoading: false
     }
@@ -123,13 +171,22 @@ export default {
       padding-left: 0px #{"/* rtl:ignore */"};
     }
   }
+  .default-detail-btn {
+    color: #65677F;
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    font-size: 14px;
+    line-height: 24px;
+    text-align: center;
+  }
   .details-container-2 {
     .detail-box {
       padding-right: 12px #{"/* rtl:ignore */"};
       padding-left: 12px #{"/* rtl:ignore */"};
       .input-container {
         .input-box {
-          width: 88%;
+          width: 91%;
         }
         .icon-box {
           width: 40px;
@@ -139,7 +196,7 @@ export default {
           display: flex;
           align-items: center;
           justify-content: center;
-          margin-left: 16px #{"/* rtl:ignore */"};
+          margin-left: 16px  ;
           .question-details-subject-img {
             height: 24px;
             max-width: 24px;
@@ -162,14 +219,6 @@ export default {
       display: flex;
       align-items: center;
       justify-content: center;
-      .default-detail-btn {
-        width: 144px;
-        height: 40px;
-        border-radius: 10px;
-        font-size: 14px;
-        line-height: 24px;
-        text-align: center;
-      }
       .draft-btn {
         background: #FFFFFF;
         margin-left: 16px #{"/* rtl:ignore */"};
