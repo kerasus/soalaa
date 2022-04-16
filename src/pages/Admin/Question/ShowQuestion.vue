@@ -18,7 +18,7 @@
         <div
           v-if="isPanelOpened"
           class="image-panel"
-          :class="{ 'col-5 image-panel-side-mode': !imgFloatMode }"
+          :class="{ 'col-5 image-panel-side-mode': !imgFloatMode , 'image-panel-float-mode' : imgFloatMode }"
         >
           <image-panel
             :mode="'show'"
@@ -178,13 +178,16 @@ export default {
   flex-direction: column;
 }
 .image-panel-side-mode {
+   position: static;
    padding-left: 24px;
  }
-.image-panel {
-  padding-top: 30px;
+.image-panel-float-mode {
   position: sticky;
   top: 0;
   z-index: 9999;
+}
+.image-panel {
+  padding-top: 30px;
 }
 </style>
 <style lang="scss">
