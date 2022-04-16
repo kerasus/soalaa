@@ -62,7 +62,7 @@
                   class="d-flex exam-list-sheet"
                 >
                   <div class="row table-row justify-center">
-                    <div class="col col-1"/>
+                    <div class="col col-1 exam-list-empty-col"/>
                     <div class="col col-12 col-md-3 pr-7 justify-center text-center examList-content-text"
                     >
                       {{ item.title }}
@@ -111,85 +111,106 @@
                       >
                         شروع آزمون
                       </q-btn>
+                      <div class="exam-list-exam-actions">
+                        <q-btn
+                          v-if="item.exam_actions.can_continue"
+                          class="exam-action-medium-btn exam-btn-text"
+                          style="background: #9690E4"
+                          unelevated
+                          @click="continueExam(item)"
+                        >
+                          ادامه آزمون
+                        </q-btn>
+                        <q-btn
+                          v-if="item.exam_actions.can_see_report"
+                          class="exam-action-medium-btn exam-btn-text exam-show-result"
+                          style="background: #FFB74D"
+                          unelevated
+                          @click="goToResult(item)"
+                        >
+                          مشاهده نتایج
+                        </q-btn>
+                      </div>
                       <q-btn
-                        v-if="item.exam_actions.can_continue"
-                        class="exam-action-medium-btn exam-btn-text"
-                        style="background: #9690E4"
-                        flat
-                        @click="continueExam(item)"
-                      >
-                        ادامه آزمون
-                      </q-btn>
-                      <q-btn
-                                            v-if="item.exam_actions.can_submit_answer"
-                      class="exam-action-big-btn exam-btn-text"
+                        v-if="item.exam_actions.can_submit_answer"
+                        class="exam-action-big-btn exam-btn-text"
                         style="background: #FFB74D"
-                        flat
+                        unelevated
                         @click="getConfirmation(item.user_exam_id)"
                       >
                         <q-icon name="isax:tick-circle" size="20px" style="margin-left: 3px;"/>
                         ثبت پاسخنامه ذخیره شده
                       </q-btn>
-                      <q-btn
-                        v-if="item.exam_actions.can_see_report"
-                        class="exam-action-medium-btn exam-btn-text"
-                        style="background: #FFB74D"
-                        flat
-                        @click="goToResult(item)"
-                      >
-                        مشاهده نتایج
-                      </q-btn>
                       <template v-if="item.booklet_url">
-                        <q-btn
-                          :key="'questions_booklet_url-'+1"
-                          class="exam-action-small-btn exam-btn-text"
-                          style="background: #71C5F4"
-                          flat
-                          @click="downloadBooklet(item.booklet_url[1].questions_booklet_url)"
-                        >
-                          <q-tooltip anchor="top middle" self="bottom middle" class="examList-btn-tooltip text-body2">
-                            دفترچه عمومی
-                          </q-tooltip>
-                          <q-icon name="isax:book-1"/>
-                        </q-btn>
-                        <q-btn
-                          :key="'questions_booklet_url-'+1"
-                          class="exam-action-small-btn exam-btn-text"
-                          style="background: #71C5F4"
-
-                          flat
-                          @click="downloadBooklet(item.booklet_url[1].descriptive_answers_booklet_url)"
-                        >
-                          <q-tooltip anchor="top middle" self="bottom middle" class="examList-btn-tooltip text-body2">
-                            پاسخ دفترچه عمومی
-                          </q-tooltip>
-                          <q-icon name="isax:note-2"/>
-                        </q-btn>
-                        <q-btn
-                          :key="'questions_booklet_url-'+0"
-                          class="exam-action-small-btn exam-btn-text"
-                          style="background: #F67D7A"
-
-                          flat
-                          @click="downloadBooklet(item.booklet_url[0].questions_booklet_url)"
-                        >
-                          <q-tooltip anchor="top middle" self="bottom middle" class="examList-btn-tooltip text-body2">
-                            دفترچه اختصاصی
-                          </q-tooltip>
-                          <q-icon name="isax:book-1"/>
-                        </q-btn>
-                        <q-btn
-                          :key="'questions_booklet_url-'+0"
-                          class="exam-action-small-btn exam-btn-text"
-                          style="background: #F67D7A"
-
-                          flat
-                          @click="downloadBooklet(item.booklet_url[0].descriptive_answers_booklet_url)"
-                        >
-                          <q-tooltip anchor="top middle" self="bottom middle" class="examList-btn-tooltip text-body2">
-                            پاسخ دفترچه اختصاصی
-                          </q-tooltip>
-                          <q-icon name="isax:note-2"/>
+                        <q-btn class="exam-list-menu-btn exam-action-big-btn  exam-btn-text" unelevated label="لیست دفترچه ها" style="background: #71C5F4">
+                          <q-menu
+                            fit
+                            transition-show="flip-right"
+                            transition-hide="flip-left"
+                          >
+                            <q-list>
+                              <q-item
+                                v-if="item.booklet_url[1]"
+                                clickable
+                                @click="downloadBooklet(item.booklet_url[1].questions_booklet_url)"
+                              >
+                                <q-item-section
+                                  :key="'questions_booklet_url-'+1"
+                                  class="exam-btn-text">
+                                  <span class="exam-list-menu-title">
+                                    <q-icon name="isax:book-1" size="20px"/>
+                                    {{ item.booklet_url[1].category_title }}
+                                  </span>
+                                </q-item-section>
+                              </q-item>
+                              <q-item
+                                v-if="item.booklet_url[1]"
+                                clickable
+                                @click="downloadBooklet(item.booklet_url[1].descriptive_answers_booklet_url)"
+                              >
+                                <q-item-section
+                                  :key="'questions_booklet_url-'+1"
+                                  class="exam-btn-text"
+                                >
+                                  <span class="exam-list-menu-title">
+                                    <q-icon name="isax:note-2" size="20px"/>
+                                     پاسخ {{ item.booklet_url[1].category_title }}
+                                  </span>
+                                </q-item-section>
+                              </q-item>
+                              <q-separator/>
+                              <q-item
+                                v-if="item.booklet_url[0]"
+                                clickable
+                                @click="downloadBooklet(item.booklet_url[0].questions_booklet_url)"
+                              >
+                                <q-item-section
+                                  :key="'questions_booklet_url-'+0"
+                                  class="exam-btn-text"
+                                >
+                                  <span class="exam-list-menu-title">
+                                    <q-icon name="isax:book-1" size="20px"/>
+                                    {{ item.booklet_url[0].category_title }}
+                                  </span>
+                                </q-item-section>
+                              </q-item>
+                              <q-item
+                                v-if="item.booklet_url[0]"
+                                clickable
+                                @click="downloadBooklet(item.booklet_url[0].descriptive_answers_booklet_url)"
+                              >
+                                <q-item-section
+                                  :key="'questions_booklet_url-'+0"
+                                  class="exam-btn-text"
+                                >
+                                  <span class="exam-list-menu-title">
+                                    <q-icon name="isax:note-2" size="20px"/>
+                                    پاسخ {{ item.booklet_url[0].category_title }}
+                                  </span>
+                                </q-item-section>
+                              </q-item>
+                            </q-list>
+                          </q-menu>
                         </q-btn>
                       </template>
                       <q-btn
@@ -202,7 +223,7 @@
                         {{ item.holding_status }}
                       </q-btn>
                     </div>
-                    <div class="col col-1"/>
+                    <div class="col col-1 exam-list-empty-col"/>
                   </div>
                 </div>
               </div>
@@ -357,6 +378,23 @@ export default {
 </script>
 
 <style scoped>
+.exam-list-menu-btn {
+  border-radius: 10px;
+}
+.exam-list-menu-title {
+  color: #65677F;
+  font-style: normal;
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 24px;
+  display: flex;
+  align-items: center;
+  text-align: center;
+}
+.exam-list-menu-title i {
+  padding-right: 10px;
+}
+
 .exam-list-sheet {
   background: #FFFFFF;
   box-shadow: -2px -4px 10px rgba(255, 255, 255, 0.6), 2px 4px 10px rgba(112, 108, 162, 0.05);
@@ -423,6 +461,9 @@ export default {
     .examList-action-section {
       display: flex;
       justify-content: center;
+      .exam-list-exam-actions {
+        display: flex;
+      }
       .exam-btn-text {
         font-style: normal;
         font-weight: 500;
@@ -445,12 +486,103 @@ export default {
         border-radius: 10px;
         margin-right: 16px;
       }
-      .exam-action-small-btn {
-        width: 40px;
-        height: 40px;
-        border-radius: 10px;
-        margin-right: 16px;
-        .examList-btn-tooltip {}
+    }
+  }
+}
+@media only screen and (max-width: 1599px){
+  .examList-container{
+    .exam-info-bar {
+      .examList-action-section {
+        display: grid;
+        .exam-list-exam-actions {
+          justify-content: center;
+          margin-bottom: 8px;
+        }
+        .exam-action-medium-btn {
+          margin-right: 0;
+        }
+        .exam-show-result {
+          margin-left: 16px;
+        }
+      }
+    }
+  }
+}
+@media only screen and (max-width: 1439px) {
+  .examList-container{
+    .exam-info-bar {
+      .examList-action-section {
+        display: flex;
+        .exam-list-exam-actions {
+          justify-content: center;
+          margin-bottom: 0;
+        }
+        .exam-action-medium-btn {
+          margin-right: 16px;
+        }
+        .exam-show-result {
+          margin-left: 0;
+        }
+      }
+    }
+  }
+}
+@media only screen and (max-width: 1214px){
+  .examList-container{
+    .exam-info-bar {
+      .examList-action-section {
+        display: grid;
+        .exam-list-exam-actions {
+          justify-content: center;
+          margin-bottom: 8px;
+        }
+        .exam-action-medium-btn {
+          margin-right: 0;
+        }
+        .exam-show-result {
+          margin-left: 16px;
+        }
+      }
+    }
+  }
+}
+@media only screen and (max-width: 1023px) {
+  .examList-container{
+    .exam-info-bar {
+      .examList-action-section {
+        display: flex;
+        .exam-list-exam-actions {
+          justify-content: center;
+          margin-bottom: 0;
+        }
+        .exam-action-medium-btn {
+          margin-right: 16px;
+        }
+        .exam-show-result {
+          margin-left: 0;
+        }
+      }
+    }
+  }
+  .exam-list-empty-col {
+    display: none;
+  }
+}
+@media only screen and (max-width: 600px){
+  .examList-container{
+    .exam-info-bar {
+      .examList-action-section {
+        display: grid;
+        .exam-list-exam-actions {
+          justify-content: center;
+          margin-bottom: 8px;
+        }
+        .exam-action-medium-btn {
+          margin-right: 0;
+        }
+        .exam-show-result {
+          margin-left: 16px;
+        }
       }
     }
   }
