@@ -1,5 +1,4 @@
 <template>
-  <div>
     <div class="row justify-end q-pr-lg">
       <q-btn
         round
@@ -10,7 +9,7 @@
         <i class="fi-rr-angle-left row" />
       </q-btn>
     </div>
-    <div class="q-pa-md">
+    <div class=" test q-pa-sm">
       <q-card class="top-menu q-pa-lg">
         <div class="row items-center">
           <div class="col-8">
@@ -60,7 +59,7 @@
       >
         <template v-slot="{ item, index }">
           <q-item
-            class="question-field"
+            class="question-field no-padding"
             :key="index"
             dense
           >
@@ -83,9 +82,7 @@
           </q-item>
         </template>
       </q-virtual-scroll>
-
     </div>
-  </div>
 </template>
 
 <script>
@@ -394,6 +391,9 @@ export default {
 .top-menu{
   border-radius: 15px;
   box-shadow: -2px -4px 10px rgba(255, 255, 255, 0.6), 2px 4px 10px rgba(54, 90, 145, 0.05);
+}
+.test{
+  background-color: rgba(219, 112, 147, 0.56);
 }
 </style>
 <style>
