@@ -1,7 +1,6 @@
 <template>
   <div class="multiple-choice-Q">
     <q-btn
-      v-if="question.choices.list.length > 0"
       dark
       class="full-width q-mb-md removeAllChoice-btn"
       label="اضافه کردن گزینه جدید"
@@ -17,7 +16,6 @@
         <q-separator inset />
         <q-card-section>
           <div
-            v-if="question.statement"
             class="row justify-between question-box default-Qcard-box"
           >
             <QuestionField
@@ -31,7 +29,6 @@
     </div>
     <div class="multiple-choice-A">
       <div
-        v-if="question.choices.list.length"
         class="row multiple-choice-Answer"
       >
         <div
@@ -75,7 +72,6 @@
     </div>
     <div>
       <q-card
-        v-if="question.descriptive_answer"
         class="default-questions-card"
       >
         <q-card-section class="default-Qcard-title">
@@ -182,16 +178,16 @@ export default {
     getContent () {
       const that = this
       let status = false
-      if (this.validateContent()) {
-        this.question.statement = this.getContentOfQuestionParts('QuestionStatement')
-        this.question.choices.list.forEach(function (item, index) {
-          item.title = that.getContentOfChoice(index)
-          // toDo : the line bellow is none related and temporary
-          item.id = index
-        })
-        this.question.descriptive_answer = this.getContentOfQuestionParts('DescriptiveAnswer')
-        status = true
-      }
+      // if (this.validateContent()) {
+      this.question.statement = this.getContentOfQuestionParts('QuestionStatement')
+      this.question.choices.list.forEach(function (item, index) {
+        item.title = that.getContentOfChoice(index)
+        // toDo : the line bellow is none related and temporary
+        item.id = index
+      })
+      this.question.descriptive_answer = this.getContentOfQuestionParts('DescriptiveAnswer')
+      status = true
+      // }
       return status
     },
     getContentOfChoice (index) {
