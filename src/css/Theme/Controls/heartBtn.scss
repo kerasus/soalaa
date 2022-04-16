@@ -21,6 +21,10 @@
         color: var(--3a-TextSecondary);
       }
     }
+    &.fill-heart{
+      color: var(--3a-Sem2);
+    }
   }
 }
-// <q-btn fab-mini class="heart-btn fill-heart empty-heart" icon="isax:heart" flat/>
+// <q-btn fab-mini class="heart-btn empty-heart" icon="isax:heart" flat/>
+// <q-btn fab-mini class="heart-btn fill-heart" icon="isax:heart5" flat/>
