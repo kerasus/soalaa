@@ -4,31 +4,29 @@
     font-weight: 500;
     line-height: 24px;
     display: flex;
+    padding: 0;
     align-items: center;
     text-align: center;
+    &.q-btn--outline::before {
+      border: 2px solid currentColor;
+      box-sizing: border-box;
+      filter: drop-shadow(-2px -4px 10px rgba(255, 255, 255, 0.6)) drop-shadow(2px 4px 10px rgba(112, 108, 162, 0.05));
+    }
+    .q-btn__content {
+      margin: 8px;
+    }
   }
+
   .btn-sm {
-    padding: 8px 13px 8px 15px;
+    padding: 0 5px 0 7px;
     font-size: 14px;
 
   }
   .btn-md {
-    padding: 8px 38px 8px 38px;
+    padding: 0 30px;
     font-size: 14px;
   }
   .btn-lg {
-    padding: 10px 81px 10px 81px;
+    padding: 2px 73px 2px 73px;
     font-size: 16px;
-  }
-  .btn-with-icon {
-    font-size: 16px;
-    width: 40px;
-    max-height: 40px;
-    min-height: 40px;
-    padding: 0;
-    &.q-btn--outline::before {
-      border: 2px solid #9690E4;
-      box-sizing: border-box;
-      filter: drop-shadow(-2px -4px 10px rgba(255, 255, 255, 0.6)) drop-shadow(2px 4px 10px rgba(112, 108, 162, 0.05));
-    }
   }
