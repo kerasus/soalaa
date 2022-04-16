@@ -15,17 +15,17 @@
           </q-card-actions>
         </div>
         <div>
-          <q-card-actions class="q-pa-none">
-            <div v-for="item in filters" :key="item" class="filter-items">
-              <div class="items-title">
-                {{ item.title }}
-              </div>
-              <div class="items-action">
-                <q-btn flat rounded size="xs" @click="deleteFilterObject(item)">
-                  <q-icon name="mdi-close"></q-icon>
-                </q-btn>
-              </div>
-            </div>
+          <q-card-actions class="filter-container q-pa-none">
+            <q-chip
+              v-for="item in filters"
+              :key="item"
+              class="filter-items"
+              icon-remove="mdi-close"
+              removable
+              @remove="deleteFilterObject(item)"
+            >
+              {{ item }}
+            </q-chip>
           </q-card-actions>
         </div>
       </div>
@@ -65,7 +65,7 @@ export default {
   name: 'QuestionBankFilter',
   data () {
     return {
-      filters: [],
+      filters: ['درس و مبحث', 'نوع سوال', 'طراح سوال', 'تاریخ تالیف'],
       filterOptions: ['درس و مبحث', 'نوع سوال', 'طراح سوال', 'تاریخ تالیف']
     }
   },
@@ -94,10 +94,10 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
+
 .filter-card-container {
   padding: 20px 23px 16px 24px;
   margin-bottom: 24px;
-
   .filter-header {
     padding-bottom: 11px;
     display: flex;
@@ -122,29 +122,15 @@ export default {
       }
     }
   }
-
-  .filter-items {
-    margin-right: 8px;
-    margin-bottom: 8px;
-    background: #F4F5F6;
-    border-radius: 11px;
-    display: flex;
-
-    .items-title {
-      font-style: normal;
-      font-weight: normal;
-      font-size: 12px;
-      line-height: 21px;
-      color: #23263B;
-      padding: 2px 0 0 9px;
-    }
-
-    .items-action {
-      padding: 1px 1px 0 3px;
+  .filter-container{
+    .filter-items {
+      margin-right: 4px;
+      margin-bottom: 4px;
+      display: flex;
     }
   }
-}
 
+}
 .filter-options-section {
   margin-bottom: 16px;
 
@@ -196,6 +182,7 @@ export default {
   }
 }
 </style>
+
 <style lang="scss">
 .filter-options-section {
   .q-expansion-item__container{
