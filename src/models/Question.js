@@ -114,7 +114,7 @@ class Question extends Model {
         default: 0
       },
       {
-        key: 'difficulty',
+        key: 'level',
         default: 1
       },
       {
@@ -171,12 +171,6 @@ class Question extends Model {
           key: 'exams',
           value: function () {
             return that.exams.list
-          }
-        },
-        {
-          key: 'level',
-          value: function () {
-            return that.difficulty
           }
         },
         {
