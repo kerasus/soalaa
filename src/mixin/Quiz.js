@@ -422,7 +422,6 @@ const mixinQuiz = {
       return currentExamQuestionsArray
     },
     startExam (examId, viewType) {
-      console.log('startExam')
       if (!Assistant.getId(examId)) {
         return
       }
@@ -696,7 +695,6 @@ const mixinQuiz = {
       }
     },
     goToNextQuestion (viewType) {
-      console.log('goToNextQuestion')
       const question = this.getNextQuestion(this.currentQuestion.id)
       if (!question) {
         return
@@ -712,7 +710,6 @@ const mixinQuiz = {
       this.changeQuestion(question.id, viewType)
     },
     changeQuestion (id, viewType, mandatory) {
-      console.log('changeQuestion')
       if (Assistant.getId(this.currentQuestion.id) === Assistant.getId(id)) {
         return
       }
@@ -750,7 +747,6 @@ const mixinQuiz = {
       }
     },
     loadExamPageByViewType (examId, questNumber, viewType) {
-      console.log('loadExamPageByViewType')
       if (!viewType) {
         viewType = 'onlineQuiz.alaaView'
       }
