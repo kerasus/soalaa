@@ -60,7 +60,7 @@
       <q-radio
         v-for="item in radioBtnVals"
         :key="item"
-        v-model="shape"
+        v-model="person"
         :checked-icon="item.icon"
         :val="item.val"/>
     </div>
@@ -73,7 +73,7 @@ export default {
   name: 'test',
   data () {
     return {
-      shape: 'line',
+      person: 'neo',
       btnStyle: [
         {
           class: 'first-type',
