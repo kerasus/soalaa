@@ -294,7 +294,7 @@ export default {
       }
 
     }
-    .question-box , .answer-box, .multiple-answer-box{
+    .question-box , .answer-box, .multiple-answer-box {
       background-color: var(--3a-Neutral2);
       margin: 16px 8px;
       border: 1px solid var(--3a-Neutral1);
@@ -304,9 +304,6 @@ export default {
       }
     }
   }
-}
-.custom-card{
-  padding-bottom: 100px;
 }
 </style>
 
