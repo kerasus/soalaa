@@ -14,7 +14,6 @@
       <q-separator inset />
       <q-card-section>
         <div
-          v-if="question.statement"
           class="row justify-between question-box default-Qcard-box"
         >
           <QuestionField
@@ -26,7 +25,6 @@
       </q-card-section>
     </q-card>
       <q-card
-        v-if="question.descriptive_answer"
         class="default-questions-card Descriptive-A"
       >
       <q-card-section class="default-Qcard-title">
@@ -96,14 +94,14 @@ export default {
   mounted () {},
   methods: {
     saveQuestion () {
-      if (this.getContent()) {
-        const question = {
-          ...this.question,
-          choices: this.question.choices.list,
-          type_id: this.question.type_id
-        }
-        this.updateQuestion(question)
+      // if (this.getContent()) {
+      const question = {
+        ...this.question,
+        choices: this.question.choices.list,
+        type_id: this.question.type_id
       }
+      this.updateQuestion(question)
+      // }
     },
     getContent () {
       let status = false

@@ -1,18 +1,25 @@
 <template>
   <div class="createQ-text-container">
     <navbar />
-    <Router :exclude="['MultipleChoiceQ', 'MBTIQ']" />
+    <Router :include="keepAliveComponents" />
   </div>
 </template>
 
 <script>
 import Navbar from 'components/Question/QuestionPage/Create/textMode/Navbar'
 import Router from 'src/router/Router'
+import KeepAliveComponents from 'assets/js/KeepAliveComponents'
+
 export default {
-  name: 'CreateTextLayout',
+  name: 'CreateLayout',
   components: {
     Router,
     Navbar
+  },
+  data () {
+    return {
+      keepAliveComponents: KeepAliveComponents
+    }
   }
 }
 </script>
