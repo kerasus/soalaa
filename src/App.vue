@@ -5,7 +5,6 @@
 </template>
 <script>
 import 'src/assets/scss/IranyekanFont.scss'
-import 'src/css/customTheme.scss'
 import 'src/css/Theme/theme.scss'
 
 import { mixinSetIcons } from './mixin/Mixins.js'
