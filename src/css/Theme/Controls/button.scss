@@ -1,5 +1,4 @@
   .q-btn {
-    border-radius: 10px;
     font-style: normal;
     font-weight: 500;
     line-height: 24px;
@@ -15,7 +14,9 @@
       margin: 8px;
     }
   }
-
+  .q-btn:not(.q-btn--rounded) {
+    border-radius: 10px;
+  }
   .btn-sm {
     padding: 0 5px 0 7px;
     font-size: 14px;
