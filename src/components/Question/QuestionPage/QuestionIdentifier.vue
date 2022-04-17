@@ -4,15 +4,33 @@
     <div class="details-container-2 default-details-container row">
       <div class="detail-box col-3" style="padding-right:0;">
         <div class="detail-box-title">طراح سوال</div>
-        <q-select borderless v-model="questionAuthor" :options="questionAuthors" />
+        <q-select
+          borderless
+          option-value="id"
+          option-label="title"
+          v-model="questionAuthor"
+          :options="questionAuthors"
+        />
       </div>
       <div class="detail-box col-3">
         <div class="detail-box-title">تاریخ تالیف</div>
-        <q-select borderless v-model="authorshipDate" :options="authorshipDates" />
+        <q-select
+          borderless
+          option-value="id"
+          option-label="title"
+          v-model="authorshipDate"
+          :options="authorshipDates"
+        />
       </div>
       <div class="detail-box col-3">
         <div class="detail-box-title">درجه سختی</div>
-        <q-select borderless v-model="questionLevel" :options="levels" />
+        <q-select
+          borderless
+          option-value="id"
+          option-label="title"
+          v-model="questionLevel"
+          :options="levels"
+        />
       </div>
       <attach-exam
         class="col-3"
@@ -24,17 +42,29 @@
       />
       <div class="detail-box detail-box-first col-3">
         <div class="detail-box-title">پایه تحصیلی</div>
-        <q-select borderless v-model="grade" :options="grades" />
+        <q-select
+          borderless
+          option-value="id"
+          option-label="title"
+          v-model="grade"
+          :options="grades"
+        />
       </div>
       <div class="detail-box col-3">
         <div class="detail-box-title ">رشته تحصیلی</div>
-        <q-select borderless v-model="major" :options="majors" />
+        <q-select
+          borderless
+          option-value="id"
+          option-label="title"
+          v-model="major"
+          :options="majors"
+        />
       </div>
       <div class="detail-box col-6">
         <div class="detail-box-title">مبحث</div>
         <div class="input-container flex">
           <div class="input-box">
-            <q-input v-model="lesson" dense />
+            <q-input v-model="lesson" dense disable/>
           </div>
           <div class="icon-box">
             <q-btn
@@ -82,11 +112,11 @@ export default {
         return false
       }
     },
-    exams: { // possible removal for attach exam
+    exams: {
       type: ExamList,
       default: new ExamList()
     },
-    lessons: { // possible removal for attach exam
+    lessons: {
       type: QuestSubcategoryList,
       default: new QuestSubcategoryList()
     },
@@ -117,22 +147,85 @@ export default {
       questionAuthor: '',
       authorshipDate: '',
       questionAuthors: [
-        'سازمان سنجش - دی ماه 1402', 'سازمان سنجش - دی ماه 1403', 'سازمان سنجش - دی ماه 1404', 'سازمان سنجش - دی ماه 1405', 'سازمان سنجش - دی ماه 1406'
+        {
+          id: 'skadlfksdjfnkkhjks543djf',
+          title: 'سازمان سنجش 1'
+        },
+        {
+          id: 'skadlfksdjfnk63546s543djf',
+          title: 'سازمان سنجش 2'
+        },
+        {
+          id: 'skadlfdfgdfgdffdksdjfnks543djf',
+          title: 'سازمان سنجش 3'
+        },
+        {
+          id: 'sk;sdljflsdkf56465adlfksdjfnks543djf',
+          title: 'سازمان سنجش 4'
+        }
       ],
       authorshipDates: [
-        'سه‌آ - دی ماه 1402', 'سه‌آ - دی ماه 1403', 'سه‌آ - دی ماه 1404', 'سه‌آ - دی ماه 1405', 'سه‌آ - دی ماه 1406'
+        {
+          id: 'skadlfksdjfnkkhjks543djf',
+          title: 'دی ماه 1402'
+        },
+        {
+          id: 'skadlfksdjfnk63546s543djf',
+          title: 'دی ماه 1403'
+        },
+        {
+          id: 'skadlfdfgdfgdffdksdjfnks543djf',
+          title: 'دی ماه 1404'
+        },
+        {
+          id: 'sk;sdljflsdkf56465adlfksdjfnks543djf',
+          title: 'دی ماه 1405'
+        }
       ],
       questionLevel: '',
       grades: [
-        'دهم', 'یازدهم', 'دوازدهم'
+        {
+          id: 'skadlf1111ks543djf',
+          title: 'دهم'
+        },
+        {
+          id: 'ska7777746s543djf',
+          title: 'یازدهم'
+        },
+        {
+          id: 'skad9999jfnks543djf',
+          title: 'دوازدهم'
+        }
       ],
       grade: '',
       majors: [
-        'ریاضی', 'تجربی', 'انسانی'
+        {
+          id: 'ska6666555ks543djf',
+          title: 'ریاضی'
+        },
+        {
+          id: 'skadl454546s543djf',
+          title: 'تجربی'
+        },
+        {
+          id: 'skadlfd54554jfnks543djf',
+          title: 'انسانی'
+        }
       ],
       major: '',
       levels: [
-        'آسان', 'متوسط', 'سخت'
+        {
+          id: 'skadlfk6546sdjfnkkhjks543djf',
+          title: 'آسان'
+        },
+        {
+          id: '656adlfksdjfnk63546s543djf',
+          title: 'متوسط'
+        },
+        {
+          id: 'skadlfdfgdf564564sdjfnks543djf',
+          title: 'سخت'
+        }
       ],
       lesson: '',
       draftBtnLoading: false,

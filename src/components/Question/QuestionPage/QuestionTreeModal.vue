@@ -47,11 +47,12 @@
                 flat
                 label="حذف همه"
                 color="primary"
+                @click="deleteAllNodes"
               />
             </div>
             <div class="tree-chips-box">
               <q-chip
-                v-for="item in AllNodes"
+                v-for="item in allNodes"
                 :key="item"
                 class="tree-chips"
                 icon-remove="mdi-close"
@@ -94,20 +95,20 @@ export default {
       default () {
         return [
           {
-            id: 'skadlfksdjfnks543djf',
+            id: 'skadlfkfgvsdjfnks543djf',
+            title: 'درس یکم : پر پرواز 1 - معنی آیات'
+          },
+          {
+            id: 'skadlfksdffjfnks543djf',
             title: 'درس دوم : پر پرواز 1 - معنی آیات'
           },
           {
-            id: 'skadlfksdjfnks543djf',
-            title: 'درس دوم : پر پرواز 1 - معنی آیات'
+            id: 'skadlfksdjfssanks543djf',
+            title: 'درس سوم : پر پرواز 1 - معنی آیات'
           },
           {
-            id: 'skadlfksdjfnks543djf',
-            title: 'درس دوم : پر پرواز 1 - معنی آیات'
-          },
-          {
-            id: 'skadlfksdjfnks543djf',
-            title: 'درس دوم : پر پرواز 1 - معنی آیات'
+            id: 'skadlfksdjffdenks543djf',
+            title: 'درس چهارم : پر پرواز 1 - معنی آیات'
           }
         ]
       }
@@ -140,13 +141,15 @@ export default {
     return {
       lessonName: '',
       groupName: '',
-      AllNodes: [],
+      allNodes: [],
+      allNodesIds: [],
       loading: false,
       newName: '',
       newOrder: 1,
       selectedNode: {},
       editDialog: false,
       newNode: {}
+
       // testArr: []
     }
   },
@@ -164,15 +167,21 @@ export default {
   },
   methods: {
     addToNodes (value) {
-      console.log('ticked', value)
-      this.AllNodes = []
+      this.allNodes = []
+      this.allNodesIds = []
       value.forEach(val => {
-        // this.AllNodes.push(val.id)
-        this.AllNodes.push(val)
+        this.allNodesIds.push(val.id)
+        this.allNodes.push(val)
       })
     },
     removeNode (item) {
       this.setTickedMode('tree', item.id, false)
+    },
+    removeAllNodes () {
+      this.setTickedMode('tree', this.allNodesIds, false)
+    },
+    deleteAllNodes () {
+      this.removeAllNodes()
     }
   }
 }

@@ -348,7 +348,8 @@ const AdminActionOnQuestion = {
       if (!this.isPanelOpened) {
         this.imgFloatMode = false
       }
-    }
+    },
+    setNodesList () {}
   }
 }
 
