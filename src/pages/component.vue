@@ -8,6 +8,7 @@
       :key="item"
     >
       <q-btn
+        unelevated
         v-if="item.class === 'second-type'"
         :color="item.color"
         class="q-mr-xl"
@@ -26,6 +27,7 @@
       :key="item"
     >
       <q-btn
+        unelevated
         v-if="item.class === 'first-type'"
         :color="item.color"
         class="q-mr-xl"
