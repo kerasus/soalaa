@@ -1,54 +1,348 @@
 <template>
-  <q-dialog
-    modal-value=""
-    @update:model-value="$emit('hi')"
-  >
-  <q-card>
-      <q-card-section>
-        <div class="text-h6">Alert</div>
-      </q-card-section>
-
-      <q-card-section class="q-pt-none">
-        Lorem ipsum dolor sit amet consectetur adipisicing elit. Rerum repellendus sit voluptate voluptas eveniet porro. Rerum blanditiis perferendis totam, ea at omnis vel numquam exercitationem aut, natus minima, porro labore.
-      </q-card-section>
-
-      <q-card-actions align="right">
-        <q-btn flat label="OK" color="primary" v-close-popup />
-      </q-card-actions>
-    </q-card>
-  </q-dialog>
+  <q-card class="tree-card">
+    <div class="fit row wrap">
+      <div class="choose-tree-box question-details col-6">
+          <div class="details-container-2 default-details-container">
+            <div class="detail-box" style="padding-right:0;">
+              <div class="detail-box-title" style="padding-bottom: 9px;">گروه درس</div>
+              <q-select
+                filled
+                dense
+                dropdown-icon="isax:arrow-down-1"
+                v-model="groupName"
+                option-value="id"
+                option-label="title"
+                :options="groupsList"
+              />
+            </div>
+            <div class="detail-box">
+              <div class="detail-box-title">نام درس</div>
+              <q-select
+                filled
+                dense
+                dropdown-icon="isax:arrow-down-1"
+                v-model="lessonName"
+                option-value="id"
+                option-label="title"
+                :options="lessonsList"
+              />
+            </div>
+            <div class="question-tree">
+              <tree
+                @ticked="addToNodes"
+                ref="tree"
+                tick-strategy="strict"
+                :get-node-by-id="getNodeById"
+              />
+            </div>
+          </div>
+        </div>
+      <div class="tree-result-box question-details col-6 ">
+        <div class="details-container-2 default-details-container ">
+          <div class="detail-box" style="padding-right:0;">
+            <div class="box-btn-title flex justify-between">
+              <div class="detail-box-title">انتخاب ها</div>
+              <q-btn
+                class="delete-all-btn"
+                flat
+                label="حذف همه"
+                color="primary"
+              />
+            </div>
+            <div class="tree-chips-box">
+              <q-chip
+                v-for="item in AllNodes"
+                :key="item"
+                class="tree-chips"
+                icon-remove="mdi-close"
+                removable
+                @remove="removeNode(item)"
+              >
+                {{ item.title }}
+              </q-chip>
+            </div>
+          </div>
+        </div>
+        <div class="close-btn-box text-left" >
+          <q-btn
+            class="close-btn"
+            label="بستن"
+            color="primary"
+            v-close-popup
+          />
+        </div>
+      </div>
+    </div>
+  </q-card>
 </template>
 <script>
 
+import Tree from 'components/Tree/Tree'
+import mixinTree from 'src/mixin/Tree'
+
 export default {
   name: 'QuestionTreeModal',
+  components: {
+    Tree
+  },
+  mixins: [
+    mixinTree
+  ],
+  props: {
+    lessonsList: {
+      type: Array,
+      default () {
+        return [
+          {
+            id: 'skadlfksdjfnks543djf',
+            title: 'درس دوم : پر پرواز 1 - معنی آیات'
+          },
+          {
+            id: 'skadlfksdjfnks543djf',
+            title: 'درس دوم : پر پرواز 1 - معنی آیات'
+          },
+          {
+            id: 'skadlfksdjfnks543djf',
+            title: 'درس دوم : پر پرواز 1 - معنی آیات'
+          },
+          {
+            id: 'skadlfksdjfnks543djf',
+            title: 'درس دوم : پر پرواز 1 - معنی آیات'
+          }
+        ]
+      }
+    },
+    groupsList: {
+      type: Array,
+      default () {
+        return [
+          {
+            id: 'skadlfksdjfnkkhjks543djf',
+            title: 'دین و زندگی 1'
+          },
+          {
+            id: 'skadlfksdjfnk63546s543djf',
+            title: 'دین و زندگی 2'
+          },
+          {
+            id: 'skadlfdfgdfgdffdksdjfnks543djf',
+            title: 'دین و زندگی 3'
+          },
+          {
+            id: 'sk;sdljflsdkf56465adlfksdjfnks543djf',
+            title: 'دین و زندگی 4'
+          }
+        ]
+      }
+    }
+  },
   data () {
     return {
+      lessonName: '',
+      groupName: '',
+      AllNodes: [],
+      loading: false,
+      newName: '',
+      newOrder: 1,
+      selectedNode: {},
+      editDialog: false,
+      newNode: {}
+      // testArr: []
     }
   },
   created () {
+    this.showTree('tree', this.getRootNode('test'))
+      .then(() => {})
+      .catch(err => {
+        console.log(err)
+      })
   },
   computed: {
 
   },
   mounted () {
   },
-  methods: {}
-  // props: {
-  //   questionTreeDialog: {
-  //     type: Boolean,
-  //     default () {
-  //       return false
-  //     }
-  //   },
-  //   modelValue: {
-  //     type: Boolean,
-  //     default () {
-  //       return false
-  //     }
-  //   }
-  // }
+  methods: {
+    addToNodes (value) {
+      console.log('ticked', value)
+      this.AllNodes = []
+      value.forEach(val => {
+        // this.AllNodes.push(val.id)
+        this.AllNodes.push(val)
+      })
+    },
+    removeNode (item) {
+      this.setTickedMode('tree', item.id, false)
+    }
+  }
 }
 </script>
 <style scoped lang="scss">
+.close-btn-box {
+  padding-top: 30px;
+  .close-btn {
+    color: #FFFFFF;
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 24px;
+    background: #9690E4;
+    border-radius: 10px;
+    width: 96px;
+    height: 40px;
+    margin: auto 0 auto auto;
+  }
+}
+.question-details {
+  font-style: normal;
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 28px;
+  text-align: right #{"/* rtl:ignore */"};
+  color: #23263B;
+  .tree-chips-box {
+    height: 412px;
+    background: #F4F5F6;
+    border-radius: 10px;
+    padding: 16px;
+    .tree-chips {
+      background: #FFFFFF;
+      margin-right: 10px;
+    }
+  }
+  .question-tree {
+    height: 296px;
+    overflow-x: scroll;
+    margin-top: 2px;
+  }
+  .default-details-container {
+    .detail-box {
+      margin-top: 10px;
+      .detail-box-title, .delete-all-btn {
+        margin-bottom: 5px;
+      }
+    }
+  }
+  .details-container-1 {
+    .detail-box {
+      padding-right: 12px #{"/* rtl:ignore */"};
+      padding-left: 12px #{"/* rtl:ignore */"};
+    }
+    .detail-box-first {
+      padding-right: 0px #{"/* rtl:ignore */"};
+    }
+    .detail-box-last {
+      padding-left: 0px #{"/* rtl:ignore */"};
+    }
+  }
+  .default-detail-btn {
+    color: #65677F;
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    font-size: 14px;
+    line-height: 24px;
+    text-align: center;
+  }
+  .details-container-2 {
+    .detail-box {
+      .input-container {
+        .input-box {
+          width: 91%;
+        }
+        .icon-box {
+          width: 40px;
+          height: 40px;
+          background: #FFFFFF;
+          border-radius: 10px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          margin-left: 16px  ;
+          .question-details-subject-img {
+            height: 24px;
+            max-width: 24px;
+          }
+        }
+      }
+    }
+    .detail-box-first {
+      padding-right: 0px #{"/* rtl:ignore */"};
+    }
+    .detail-box-last {
+      padding-right: 0px #{"/* rtl:ignore */"};
+      width: 200px;
+      //margin-right: 132px #{"/* rtl:ignore */"};
+    }
+    .detail-box-last-of-row {
+      padding-left: 0px #{"/* rtl:ignore */"};
+      margin-top: 43px;
+      text-align: end;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      .draft-btn {
+        background: #FFFFFF;
+        margin-left: 16px #{"/* rtl:ignore */"};
+        font-weight: normal;
+        color: #23263B;
+      }
+      .save-btn {
+        background: #9690E4;
+        font-weight: 500;
+        color: #FFFFFF;
+      }
+    }
+  }
+}
+@media screen and (min-width: 1240px) {
+  .choose-tree-box {
+    padding-right: 15px;
+  }
+  .tree-result-box {
+    padding-left: 15px;
+  }
+}
+</style>
+<style lang="scss">
+.tree-card {
+  .question-details {
+    .default-details-container {
+      .detail-box {
+        .q-field {
+          background: #FFFFFF;
+          border-radius: 10px;
+          line-height: 24px;
+          height: 40px;
+          min-height: 40px;
+          .q-field__marginal {
+            height: 40px;
+          }
+          .q-field__inner {
+            padding-right: 0 !important;
+            padding-left: 0 !important;
+          }
+        }
+        .q-field--auto-height .q-field__native {
+          min-height: 40px;
+          color: #65677F;
+        }
+        .q-field--auto-height .q-field__control, .q-field--auto-height .q-field__native {
+          min-height: 40px;
+          color: #65677F;
+        }
+        .q-field__control::before, .q-field__control::after {
+          display: none;
+        }
+        .q-field__native, .q-field__prefix, .q-field__suffix, .q-field__input {
+          color: #65677F;
+        }
+      }
+    }
+  }
+}
+.q-menu {
+  // I'm in charge of this one and did this on purpose, if you need to change this please let me know.TU
+  background: #FFFFFF;
+  border-radius: 10px;
+}
 </style>

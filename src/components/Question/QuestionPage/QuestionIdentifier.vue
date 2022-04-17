@@ -41,14 +41,18 @@
               unelevated
               icon="isax:tree"
               class="open-modal-btn default-detail-btn"
-              @click="test "
+              @click="modal = true"
             />
           </div>
         </div>
       </div>
     </div>
+    <q-dialog
+      v-model="modal"
+    >
+      <question-tree-modal />
+    </q-dialog>
   </div>
-  <question-tree-modal />
 </template>
 
 <script>
@@ -100,10 +104,6 @@ export default {
     }
   },
   methods: {
-    test () {
-      console.log('gdegghghhet', this.mitra)
-      this.mitra = !this.mitra
-    },
     emitAttachExam (item) {
       this.$emit('attach', item)
     },
@@ -113,8 +113,7 @@ export default {
   },
   data () {
     return {
-      mitra: false,
-      modal: '',
+      modal: false,
       questionAuthor: '',
       authorshipDate: '',
       questionAuthors: [
@@ -143,6 +142,13 @@ export default {
 }
 </script>
 <style scoped lang="scss">
+.q-card {
+  min-width: 830px;
+  height: 580px;
+  background: #FFFFFF;
+  border-radius: 15px;
+  padding: 30px;
+}
 .question-details {
   margin-top: 40px;
   font-style: normal;
@@ -236,38 +242,38 @@ export default {
 </style>
 <style lang="scss">
 .question-details {
-  .default-details-container {
-    .detail-box {
-      .q-field {
-        background: #FFFFFF;
-        border-radius: 10px;
-        line-height: 24px;
-        height: 40px;
-        min-height: 40px;
-        .q-field__marginal {
+    .default-details-container {
+      .detail-box {
+        .q-field {
+          background: #FFFFFF;
+          border-radius: 10px;
+          line-height: 24px;
           height: 40px;
+          min-height: 40px;
+          .q-field__marginal {
+            height: 40px;
+          }
+          .q-field__inner {
+            padding-right: 16px;
+            padding-left: 16px;
+          }
         }
-        .q-field__inner {
-          padding-right: 16px;
-          padding-left: 16px;
+        .q-field--auto-height .q-field__native {
+          min-height: 40px;
+          color: #65677F;
         }
-      }
-      .q-field--auto-height .q-field__native {
-        min-height: 40px;
-        color: #65677F;
-      }
-      .q-field--auto-height .q-field__control, .q-field--auto-height .q-field__native {
-        min-height: 40px;
-        color: #65677F;
-      }
-      .q-field__control::before, .q-field__control::after {
-        display: none;
-      }
-      .q-field__native, .q-field__prefix, .q-field__suffix, .q-field__input {
-        color: #65677F;
+        .q-field--auto-height .q-field__control, .q-field--auto-height .q-field__native {
+          min-height: 40px;
+          color: #65677F;
+        }
+        .q-field__control::before, .q-field__control::after {
+          display: none;
+        }
+        .q-field__native, .q-field__prefix, .q-field__suffix, .q-field__input {
+          color: #65677F;
+        }
       }
     }
-  }
 }
 .q-menu {
   // I'm in charge of this one and did this on purpose, if you need to change this please let me know.TU
