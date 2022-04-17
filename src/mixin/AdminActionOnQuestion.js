@@ -14,7 +14,10 @@ const AdminActionOnQuestion = {
       optionQuestionId: '',
       questionStatusId_draft: null,
       questionStatusId_pending_to_type: null,
-      allTypes: new TypeList()
+      allTypes: new TypeList(),
+      gradesList: null,
+      lessonGroupList: null,
+      lessonsList: null
     }
   },
   computed: {
@@ -349,7 +352,29 @@ const AdminActionOnQuestion = {
         this.imgFloatMode = false
       }
     },
-    setNodesList () {}
+    setNodesList () {},
+    getGradesList () {
+      this.getRootNode('test').then(response => {
+        this.gradesList = response.data.data.children
+      })
+    },
+    getLessonGroupList (item) {
+      this.getNode(item.id).then(response => {
+        this.lessonGroupList = response.data.data.children
+      })
+    },
+    getLessonsList (item) {
+      this.getNode(item.id).then(response => {
+        this.lessonsList = response.data.data.children
+      })
+    }
+    // showTreeModalNode (item) {
+    //   this.showTree('tree', this.getNode(item.id))
+    //     .then(() => {})
+    //     .catch(err => {
+    //       console.log(err)
+    //     })
+    // }
   }
 }
 

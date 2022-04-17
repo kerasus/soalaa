@@ -47,7 +47,8 @@
           option-value="id"
           option-label="title"
           v-model="grade"
-          :options="grades"
+          :options="gradesList"
+          @update:model-value="gradeSelected"
         />
       </div>
       <div class="detail-box col-3">
@@ -72,6 +73,7 @@
               icon="isax:tree"
               class="open-modal-btn default-detail-btn"
               @click="modal = true"
+              :disable="!doesHaveGroups"
             />
           </div>
         </div>
@@ -80,7 +82,12 @@
     <q-dialog
       v-model="modal"
     >
-      <question-tree-modal />
+      <question-tree-modal
+        :lessons-list="lessonsList"
+        :groups-list="groupsList"
+        @groupSelected="groupSelected"
+        @lessonSelected="lessonSelected"
+      />
     </q-dialog>
   </div>
 </template>
@@ -100,12 +107,6 @@ export default {
     AttachExam
   },
   props: {
-    imgPanelVisibility: {
-      type: Boolean,
-      default () {
-        return false
-      }
-    },
     buffer: {
       type: Boolean,
       default () {
@@ -125,20 +126,30 @@ export default {
         return new QuestCategoryList()
       },
       type: QuestCategoryList
+    },
+    lessonsList: {
+      type: Array,
+      default () {
+        return []
+      }
+    },
+    groupsList: {
+      type: Array,
+      default () {
+        return []
+      }
+    },
+    gradesList: {
+      type: Array,
+      default () {
+        return []
+      }
     }
   },
   inject: {
     question: {
       from: 'providedQuestion', // this is optional if using the same key for injection
       default: new Question()
-    }
-  },
-  methods: {
-    emitAttachExam (item) {
-      this.$emit('attach', item)
-    },
-    emitDetachExam (item) {
-      this.$emit('detach', item)
     }
   },
   data () {
@@ -230,6 +241,28 @@ export default {
       lesson: '',
       draftBtnLoading: false,
       saveBtnLoading: false
+    }
+  },
+  computed: {
+    doesHaveGroups () {
+      return !!(this.groupsList && this.groupsList.length > 0)
+    }
+  },
+  methods: {
+    emitAttachExam (item) {
+      this.$emit('attach', item)
+    },
+    emitDetachExam (item) {
+      this.$emit('detach', item)
+    },
+    gradeSelected (item) {
+      this.$emit('gradeSelected', item)
+    },
+    groupSelected (item) {
+      this.$emit('groupSelected', item)
+    },
+    lessonSelected (item) {
+      this.$emit('lessonSelected', item)
     }
   }
 }

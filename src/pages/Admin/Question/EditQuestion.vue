@@ -46,6 +46,11 @@
           :exams="examList"
           :lessons="subCategoriesList"
           :categories="categoryList"
+          :gradesList="gradesList"
+          :groups-list="lessonGroupList"
+          :lessons-list="lessonsList"
+          @gradeSelected="getLessonGroupList"
+          @groupSelected="getLessonsList"
           @attach="attachExam"
           @detach="detachExam"
         />
@@ -89,6 +94,7 @@ import API_ADDRESS from 'src/api/Addresses'
 import { QuestCategoryList } from 'src/models/QuestCategory'
 import ImagePanel from 'components/Question/QuestionPage/ImagePanel'
 import QuestionIdentifier from 'components/Question/QuestionPage/QuestionIdentifier'
+import mixinTree from 'src/mixin/Tree'
 export default {
   name: 'EditQuestion',
   components: {
@@ -104,7 +110,8 @@ export default {
     LogListComponent
   },
   mixins: [
-    AdminActionOnQuestion
+    AdminActionOnQuestion,
+    mixinTree
   ],
   props: {},
   data () {
@@ -129,6 +136,7 @@ export default {
     this.loadSubcategories()
     this.loadCategories()
     this.getQuestionStatus()
+    this.getGradesList()
   },
   provide () {
     return {

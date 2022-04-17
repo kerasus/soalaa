@@ -4,7 +4,7 @@
       <div class="choose-tree-box question-details col-6">
           <div class="details-container-2 default-details-container">
             <div class="detail-box" style="padding-right:0;">
-              <div class="detail-box-title" style="padding-bottom: 9px;">گروه درس</div>
+              <div class="detail-box-title" style="padding-bottom: 9px;" >گروه درس</div>
               <q-select
                 filled
                 dense
@@ -13,6 +13,7 @@
                 option-value="id"
                 option-label="title"
                 :options="groupsList"
+                @update:model-value="groupSelected"
               />
             </div>
             <div class="detail-box">
@@ -25,6 +26,8 @@
                 option-value="id"
                 option-label="title"
                 :options="lessonsList"
+                :disable="!doesHaveLessons"
+                @update:model-value="lessonSelected"
               />
             </div>
             <div class="question-tree">
@@ -93,47 +96,49 @@ export default {
     lessonsList: {
       type: Array,
       default () {
-        return [
-          {
-            id: 'skadlfkfgvsdjfnks543djf',
-            title: 'درس یکم : پر پرواز 1 - معنی آیات'
-          },
-          {
-            id: 'skadlfksdffjfnks543djf',
-            title: 'درس دوم : پر پرواز 1 - معنی آیات'
-          },
-          {
-            id: 'skadlfksdjfssanks543djf',
-            title: 'درس سوم : پر پرواز 1 - معنی آیات'
-          },
-          {
-            id: 'skadlfksdjffdenks543djf',
-            title: 'درس چهارم : پر پرواز 1 - معنی آیات'
-          }
-        ]
+        return []
+        // return [
+        //   {
+        //     id: 'skadlfkfgvsdjfnks543djf',
+        //     title: 'درس یکم : پر پرواز 1 - معنی آیات'
+        //   },
+        //   {
+        //     id: 'skadlfksdffjfnks543djf',
+        //     title: 'درس دوم : پر پرواز 1 - معنی آیات'
+        //   },
+        //   {
+        //     id: 'skadlfksdjfssanks543djf',
+        //     title: 'درس سوم : پر پرواز 1 - معنی آیات'
+        //   },
+        //   {
+        //     id: 'skadlfksdjffdenks543djf',
+        //     title: 'درس چهارم : پر پرواز 1 - معنی آیات'
+        //   }
+        // ]
       }
     },
     groupsList: {
       type: Array,
       default () {
-        return [
-          {
-            id: 'skadlfksdjfnkkhjks543djf',
-            title: 'دین و زندگی 1'
-          },
-          {
-            id: 'skadlfksdjfnk63546s543djf',
-            title: 'دین و زندگی 2'
-          },
-          {
-            id: 'skadlfdfgdfgdffdksdjfnks543djf',
-            title: 'دین و زندگی 3'
-          },
-          {
-            id: 'sk;sdljflsdkf56465adlfksdjfnks543djf',
-            title: 'دین و زندگی 4'
-          }
-        ]
+        return []
+        // return [
+        //   {
+        //     id: 'skadlfksdjfnkkhjks543djf',
+        //     title: 'دین و زندگی 1'
+        //   },
+        //   {
+        //     id: 'skadlfksdjfnk63546s543djf',
+        //     title: 'دین و زندگی 2'
+        //   },
+        //   {
+        //     id: 'skadlfdfgdfgdffdksdjfnks543djf',
+        //     title: 'دین و زندگی 3'
+        //   },
+        //   {
+        //     id: 'sk;sdljflsdkf56465adlfksdjfnks543djf',
+        //     title: 'دین و زندگی 4'
+        //   }
+        // ]
       }
     }
   },
@@ -149,19 +154,13 @@ export default {
       selectedNode: {},
       editDialog: false,
       newNode: {}
-
-      // testArr: []
     }
   },
-  created () {
-    this.showTree('tree', this.getRootNode('test'))
-      .then(() => {})
-      .catch(err => {
-        console.log(err)
-      })
-  },
+  created () {},
   computed: {
-
+    doesHaveLessons () {
+      return !!(this.lessonsList && this.lessonsList.length > 0)
+    }
   },
   mounted () {
   },
@@ -182,6 +181,20 @@ export default {
     },
     deleteAllNodes () {
       this.removeAllNodes()
+    },
+    groupSelected (item) {
+      this.$emit('groupSelected', item)
+    },
+    lessonSelected (item) {
+      this.$emit('lessonSelected', item)
+      this.showTreeModalNode(item)
+    },
+    showTreeModalNode (item) {
+      this.showTree('tree', this.getNode(item.id))
+        .then(() => {})
+        .catch(err => {
+          console.log(err)
+        })
     }
   }
 }
