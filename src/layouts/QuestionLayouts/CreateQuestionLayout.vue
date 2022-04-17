@@ -26,7 +26,7 @@ export default {
 
 <style scoped lang="scss">
 .createQ-text-container {
-  padding: 40px 100px;
+  padding: 40px 71px 40px 100px;
   display: flex;
   flex-direction: column;
 }
