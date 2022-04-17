@@ -4,11 +4,11 @@
 .q-field--filled {
   .q-field__inner{
     .q-field__control{
-      background-color : $customGray;
-      border-radius: $radius-15 ;
+      background-color : var(--3a-Neutral3);
+      border-radius: $radius-15;
       .q-field__append{
         .q-icon{
-          color: $customBlack;
+          color: var(--3a-TextPrimary);
           font-size: 20px;
           padding: 7px;
         }
