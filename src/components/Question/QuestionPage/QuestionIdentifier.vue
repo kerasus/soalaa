@@ -1,5 +1,7 @@
 <template>
   <div class="question-details">
+    <button @click="getTagsTitles(this.questionAuthor)">getTagsTitles</button>
+<!--    <button @click="getIdentifierData">getIdentifierData</button>-->
     <div class="box-title">شناسنامه سوال</div>
     <div class="details-container-2 default-details-container row">
       <div class="detail-box col-3" style="padding-right:0;">
@@ -80,12 +82,12 @@
       </div>
     </div>
       <question-tree-modal
-        v-model="dialogValue"
+        v-model:dialogValue="dialogValue"
+        v-model:lessonsField="lesson"
         :lessons-list="lessonsList"
         :groups-list="groupsList"
         @groupSelected="groupSelected"
         @lessonSelected="lessonSelected"
-        @updateNodesField="updateLessonsTextField"
       />
   </div>
 </template>
@@ -144,6 +146,13 @@ export default {
       }
     }
   },
+  emits: [
+    'groupSelected',
+    'lessonSelected',
+    'gradeSelected',
+    'attach',
+    'attach'
+  ],
   inject: {
     question: {
       from: 'providedQuestion', // this is optional if using the same key for injection
@@ -237,6 +246,7 @@ export default {
         }
       ],
       lesson: [],
+      identifierData: [],
       draftBtnLoading: false,
       saveBtnLoading: false
     }
@@ -262,12 +272,33 @@ export default {
     lessonSelected (item) {
       this.$emit('lessonSelected', item)
     },
-    updateLessonsTextField (allNodes) {
-      console.log('allNodes', allNodes)
-      allNodes.forEach((item) => {
-        this.lesson.push(item.title)
-      })
+    getIdentifierData () {
+      this.identifierData.push(...this.getTagsTitles(this.lesson))
+      this.identifierData.push(...this.getTagsTitles(this.grade))
+      this.identifierData.push(...this.getTagsTitles(this.major))
+      this.identifierData.push(...this.getTagsTitles(this.authorshipDate))
+      this.identifierData.push(...this.getTagsTitles(this.questionAuthor))
+      this.identifierData.push(...this.getTagsTitles(this.questionLevel))
+      console.log('this.identifierData', this.identifierData)
+    },
+    getTagsTitles (tag) {
+      const finalArray = []
+      console.log('tag', tag)
+      if (Array.isArray(tag)) {
+        tag.forEach(item => {
+          finalArray.push(item.title)
+        })
+      } else {
+        finalArray.push(tag.title)
+      }
+      return finalArray
     }
+  },
+  watch: {
+    // lesson (newVal) {
+    //   console.log('lesson parent', newVal)
+    //   // this.updateNodesField()
+    // }
   }
 }
 </script>

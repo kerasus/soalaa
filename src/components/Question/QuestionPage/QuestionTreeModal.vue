@@ -12,8 +12,7 @@
                 filled
                 dense
                 dropdown-icon="isax:arrow-down-1"
-                v-model="groupName"
-                option-value="id"
+                v-model="group"
                 option-label="title"
                 :options="groupsList"
                 @update:model-value="groupSelected"
@@ -25,8 +24,7 @@
                 filled
                 dense
                 dropdown-icon="isax:arrow-down-1"
-                v-model="lessonName"
-                option-value="id"
+                v-model="lesson"
                 option-label="title"
                 :options="lessonsList"
                 :disable="!doesHaveLessons"
@@ -35,10 +33,11 @@
             </div>
             <div class="question-tree">
               <tree
-                @ticked="addToNodes"
+                @ticked="updateNodes"
                 ref="tree"
                 tick-strategy="strict"
                 :get-node-by-id="getNodeById"
+                @lazy-loaded="syncAllCheckedIds"
               />
             </div>
           </div>
@@ -109,17 +108,26 @@ export default {
         return []
       }
     },
-    modelValue: {
+    dialogValue: {
       type: Boolean
+    },
+    lessonsField: {
+      type: Array
     }
   },
-  emits: ['update:modelValue'],
+  emits: [
+    'groupSelected',
+    'lessonSelected',
+    'update:dialogValue',
+    'update:lessonsField'
+  ],
   data () {
     return {
-      lessonName: '',
-      groupName: '',
+      lesson: '',
+      group: '',
       allNodes: [],
       allNodesIds: [],
+      selectedNodesIDs: [],
       loading: false,
       newName: '',
       newOrder: 1,
@@ -130,7 +138,7 @@ export default {
   },
   created () {},
   updated () {
-    console.log('QuestionTreeModal updated')
+    // console.log('QuestionTreeModal updated')
   },
   computed: {
     doesHaveLessons () {
@@ -138,29 +146,43 @@ export default {
     },
     modal: {
       get () {
-        return this.modelValue
+        return this.dialogValue
       },
       set (value) {
-        this.$emit('update:modelValue', value)
+        this.$emit('update:dialogValue', value)
+      }
+    },
+    lessonsTitle: {
+      get () {
+        return this.lessonsField
+      },
+      set (value) {
+        this.$emit('update:lessonsField', value)
       }
     }
   },
   mounted () {
   },
   methods: {
-    addToNodes (value) {
-      this.allNodes = []
-      this.allNodesIds = []
+    updateNodes (value) {
+      this.allNodes = value
+      const nodesTitles = []
+      const nodesId = []
       value.forEach(val => {
-        this.allNodesIds.push(val.id)
-        this.allNodes.push(val)
+        nodesId.push(val.id)
+        nodesTitles.push(val.title)
       })
+      this.lessonsTitle = nodesTitles
+      this.selectedNodesIDs = nodesId
+    },
+    isNodeNew (item) {
+      return !(this.allNodes.includes(item))
     },
     removeNode (item) {
       this.setTickedMode('tree', item.id, false)
     },
     removeAllNodes () {
-      this.setTickedMode('tree', this.allNodesIds, false)
+      this.setTickedMode('tree', this.selectedNodesIDs, false)
     },
     deleteAllNodes () {
       this.removeAllNodes()
@@ -179,8 +201,30 @@ export default {
           console.log(err)
         })
     },
-    updateNodesField () {
-      this.$emit('updateNodesField', this.allNodes)
+    syncAllCheckedIds (childNodes) {
+      const selectedNodesInThisChild = []
+      childNodes.forEach(node => {
+        this.allNodesIds.forEach(item => {
+          if (item === node.id) {
+            selectedNodesInThisChild.push(item)
+          }
+        })
+      })
+      this.$refs.tree.setNodesTicked(selectedNodesInThisChild, true)
+    },
+    getModalData () {
+      return this.lessonsTitle
+    }
+  },
+  watch: {
+    modal (newVal) {
+      if (!newVal) {
+        this.allNodesIds = this.selectedNodesIDs
+        return
+      }
+      if (this.lesson) {
+        this.showTreeModalNode(this.lesson)
+      }
     }
   }
 }
