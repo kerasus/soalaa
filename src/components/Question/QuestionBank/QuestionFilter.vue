@@ -1,6 +1,6 @@
 <template>
   <div>
-    <q-card class="theme-v1-box-shadow q-pa-none">
+    <q-card class="custom-card q-pa-none">
       <div class="filter-card-container">
         <div class="filter-header">
           <q-card-section class="header-title-container q-pa-none">
@@ -32,7 +32,7 @@
     </q-card>
     <div class="filter-options-section"
          v-for="item in filterOptions" :key="item">
-      <q-card class="theme-v1-box-shadow q-pa-none">
+      <q-card class="custom-card q-pa-none">
         <q-card-section class="q-pa-none">
           <q-expansion-item
             expand-icon="isax:arrow-down-1"

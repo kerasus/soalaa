@@ -1,5 +1,5 @@
 <template>
-  <q-card class="theme-v1-box-shadow">
+  <q-card class="custom-card">
     <q-card-section>
       <div class="row search-section">
         <div class="search-box-container col">
