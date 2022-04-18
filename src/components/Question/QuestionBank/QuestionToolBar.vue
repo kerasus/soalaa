@@ -1,13 +1,13 @@
 <template>
-  <q-card class="question-Bank-ToolBar theme-v1-box-shadow">
+  <q-card class="question-Bank-ToolBar custom-card">
     <q-expansion-item
       expand-icon-toggle
       expand-icon="isax:arrow-down-1"
     >
       <template v-slot:header>
         <q-card-section class="toolbar-card q-pa-0">
-          <div class="toolbar-card-actions">
-            <div class="toolbar-btn">
+          <div class="row toolbar-card-actions">
+            <div class="col-xl-5 col-lg-6 col-md-6 col-sm-4 toolbar-btn">
               <q-btn
                 class="delete-choices-btn"
                 @click=deleteAllChoose()
@@ -23,7 +23,7 @@
           </span>
               </q-btn>
             </div>
-            <div class="toolbar-checkbox">
+            <div class="col-xl-2 col-lg-3 col-md-3 col-sm-4 toolbar-checkbox">
               <q-checkbox
                 class="choices-checkbox"
                 label="انتخاب همه"
@@ -31,7 +31,7 @@
                 @click="selectAllQuestions">
               </q-checkbox>
             </div>
-            <div class="choices-number">
+            <div class="col-xl-3 col-lg-3 col-md-3 col-sm-4 choices-number">
               {{ this.numberOfQuestions() }}
               <span class="choices-number-title">سوال انتخاب شده</span>
             </div>
@@ -40,7 +40,7 @@
       </template>
       <q-card-section class="q-pa-0 toolbar-detail">
         <div class="toolbar-detail-container row">
-          <div class="chosen-questions col-5">
+          <div class="chosen-questions col-xl-6 col-lg-6 col-md-6 col-sm-7 ">
             <div class="chosen-question-title">
               سوالات انتخاب شده:
             </div>
@@ -51,13 +51,13 @@
                 class="filter-items"
                 icon-remove="mdi-close"
                 removable
-                @remove="onRemoveChoose(item)"
+                @remove="RemoveSelectedChoice(item)"
               >
                 {{ item.title }}: {{ item.selectedQuestionsCount }}
               </q-chip>
             </q-card-actions>
           </div>
-          <div class="question-level-chart col-5 justify-center flex">
+          <div class="question-level-chart col-xl-4 col-lg-4 col-md-4 col-sm-5  justify-center flex">
             <div class="row">
               <div class="col-4 q-pt-sm q-pl-xs">
                 <div class="chart-titles">
@@ -78,10 +78,23 @@
               </div>
             </div>
           </div>
-          <div class="col-2">
-            <q-btn rounded flat class="deactivate-all">
-              غیر فعال کردن همه
-            </q-btn>
+          <div class="question-deActive col-xl col-md-2 col-sm-12">
+            <div class=" delete-all">
+              <q-btn
+                @click=deleteAllChoose()
+                rounded
+                flat
+              >
+                حذف انتخاب ها
+              </q-btn>
+            </div>
+            <div class="deactivate-all">
+              <q-btn
+                rounded
+                flat >
+                غیر فعال کردن همه
+              </q-btn>
+            </div>
           </div>
         </div>
       </q-card-section>
@@ -278,7 +291,7 @@ export default {
           descriptive_answer: null,
           type: 'konkur',
           id: '60a5fa09f55154475e62d523',
-          level: 1,
+          level: 2,
           photos: [],
           authors: [],
           confirmers: [],
@@ -463,7 +476,7 @@ export default {
           descriptive_answer: null,
           type: 'konkur',
           id: '60a5fa09f55154475e62d524',
-          level: 1,
+          level: 3,
           photos: [],
           authors: [],
           confirmers: [],
@@ -648,7 +661,7 @@ export default {
           descriptive_answer: null,
           type: 'konkur',
           id: '60a5fa09f55154475e62d525',
-          level: 1,
+          level: 3,
           photos: [],
           authors: [],
           confirmers: [],
@@ -833,7 +846,7 @@ export default {
           descriptive_answer: null,
           type: 'konkur',
           id: '60a5fa09f55154475e62d526',
-          level: 1,
+          level: 3,
           photos: [],
           authors: [],
           confirmers: [],
@@ -1007,7 +1020,7 @@ export default {
           descriptive_answer: null,
           type: 'konkur',
           id: '60a5fa09f55154475e62d527',
-          level: 1,
+          level: 2,
           photos: [],
           authors: [],
           confirmers: [],
@@ -1181,7 +1194,7 @@ export default {
           descriptive_answer: null,
           type: 'konkur',
           id: '60a5fa09f55154475e62d528',
-          level: 1,
+          level: 2,
           photos: [],
           authors: [],
           confirmers: [],
@@ -1355,7 +1368,7 @@ export default {
           descriptive_answer: null,
           type: 'konkur',
           id: '60a5fa09f55154475e62d529',
-          level: 1,
+          level: 2,
           photos: [],
           authors: [],
           confirmers: [],
@@ -1915,10 +1928,17 @@ export default {
         credits: {
           enabled: false
         },
+        tooltip: {
+          formatter: function () {
+            const point = this.point
+            console.log(point)
+            return '<b>' + point.name + ':' + '&nbsp' + '<b>' + point.y + '&nbsp' + 'عدد'
+          }
+        },
         plotOptions: {
           pie: {
             innerSize: '98%',
-            startAngle: -200,
+            startAngle: -250,
             endAngle: 360,
             borderWidth: 13,
             center: ['50%', '52%'],
@@ -1941,7 +1961,6 @@ export default {
         },
         series: [{
           id: 'idData',
-          name: 'Data',
           data: []
         }]
       }
@@ -1984,9 +2003,9 @@ export default {
     },
     setDifficultyLevelsChart () {
       this.chartOptions.series[0].data = [
-        { name: '', y: this.questionLvl.medium, color: '#FFCA28' },
-        { name: '', y: this.questionLvl.easy, color: '#8ED6FF' },
-        { name: '', y: this.questionLvl.hard, color: '#DA5F5C' }
+        { name: 'متوسط', y: this.questionLvl.medium, color: '#FFCA28' },
+        { name: 'آسان', y: this.questionLvl.easy, color: '#8ED6FF' },
+        { name: 'سخت', y: this.questionLvl.hard, color: '#DA5F5C' }
       ]
     },
     deleteFilter (id) {
@@ -1999,8 +2018,8 @@ export default {
       const x = this.questionLvl.hard + this.questionLvl.medium + this.questionLvl.easy
       return x
     },
-    onRemoveChoose (event) {
-      this.$emit('RemoveChoose', event.category_id)
+    RemoveSelectedChoice (event) {
+      this.$emit('RemoveChoice', event.category_id)
     }
   }
 }
@@ -2008,15 +2027,14 @@ export default {
 
 <style lang="scss" scoped>
 .question-Bank-ToolBar {
-
   .toolbar-card {
     display: flex;
-    min-width: 900px;
+    min-width: 85%;
     justify-content: space-between;
     padding: 0px 0px 0px 0px;
 
     .toolbar-card-actions {
-      width: 90%;
+      width: 100%;
       display: flex;
 
       .toolbar-btn {
@@ -2025,12 +2043,13 @@ export default {
 
         .delete-choices-btn {
           background-color: var(--3a-Neutral2);
-          color: #23263B;
           width: 144px;
           height: 40px;
         }
 
         .add-to-btn {
+          background-color: var(--3a-Primary);
+          color: #FFFFFF;
           width: 144px;
           height: 40px;
           margin-left: 20px;
@@ -2040,11 +2059,11 @@ export default {
       .toolbar-checkbox {
         align-items: center;
         display: flex;
-        margin-left: 18.6%;
+        margin-left: 12.6%;
       }
 
       .choices-number {
-        margin-left: 8%;
+        margin-left: 4%;
         align-items: center;
         display: flex;
         font-style: normal;
@@ -2070,6 +2089,8 @@ export default {
     .toolbar-detail-container {
       .chosen-questions {
         .chosen-question-title {
+          padding-left: 4px;
+          padding-bottom: 16px;
           font-style: normal;
           font-weight: 500;
           font-size: 14px;
@@ -2078,6 +2099,7 @@ export default {
         }
 
         .chosen-question-items {
+          padding: 0;
           .filter-items {
             margin-right: 8px;
             margin-bottom: 8px;
@@ -2115,98 +2137,24 @@ export default {
           }
         }
       }
-
-      .deactivate-all {
-        font-style: normal;
-        font-weight: 500;
-        font-size: 14px;
-        line-height: 24px;
-        color: #9690E4;
-        position: absolute;
-        bottom: 16px;
-        right: 24px;
-      }
-    }
-  }
-}
-
-@media only screen and (max-width: 1919px) {
-  .question-Bank-ToolBar {
-    .toolbar-card {
-      padding: 17px 24px 17px 24px;
-
-      .toolbar-card-actions {
-        .toolbar-btn {
-          .add-to-btn {
-            margin-left: 16px;
-          }
+      .question-deActive{
+        display: flex;
+        align-items: flex-end;
+        justify-content: flex-end;
+        .deactivate-all {
+          padding: 0;
+          color: #9690E4;
         }
-
-        .toolbar-checkbox {
-          margin-left: 7.75%;
-        }
-
-        .choices-number {
-          margin-left: 5.25%;
+        .delete-all{
+          display: none;
+          padding: 0;
+          font-style: normal;
+          font-weight: 500;
+          font-size: 14px;
+          line-height: 24px;
+          color: #9690E4;
         }
       }
-    }
-  }
-
-}
-
-@media only screen and (max-width: 1439px) {
-  .question-Bank-ToolBar {
-    .toolbar-card {
-      padding: 10px 20px 10px 20px;
-
-      .toolbar-card-actions {
-        .toolbar-checkbox {
-          margin-left: 1.7%;
-        }
-
-        .choices-number {
-          margin-left: 2.6%;
-        }
-      }
-    }
-  }
-}
-
-@media only screen and (max-width: 1024px) {
-  .question-Bank-ToolBar {
-    .toolbar-card {
-      padding: 10px 16px 10px 16px;
-
-      .toolbar-card-actions {
-        width: 85%;
-
-        .toolbar-btn {
-          .delete-choices-btn {
-            display: none;
-          }
-
-          .add-to-btn {
-            margin-left: 0;
-          }
-        }
-
-        .toolbar-checkbox {
-          margin-left: 1.4%;
-        }
-
-        .choices-number {
-          margin-left: 3.6%;
-        }
-      }
-    }
-  }
-}
-
-@media only screen and (max-width: 599px) {
-  .question-Bank-ToolBar {
-    .toolbar-card {
-      background-image: url('../../../../public/img/QuestionBank/toolbar-back-ground.png');
     }
   }
 }
@@ -2217,9 +2165,16 @@ export default {
       padding: 0;
     .q-item-type {
       justify-content: space-between;
-      padding: 23px 43px 23px 40px;
+      padding: 15px 43px 15px 40px;
       .q-item__section{
         padding-right: 0;
+      }
+    }
+    .q-expansion-item__container{
+      .q-expansion-item__content{
+        .q-card__section{
+          padding: 0px 40px 16px 40px;
+        }
       }
     }
   }
@@ -2269,7 +2224,7 @@ export default {
   .toolbar-detail {
     .toolbar-detail-container {
       .question-level-chart {
-        padding-left: 100px;
+        padding-left: 30px;
         .question-highchart {
           padding-left: 15px;
           .title-1 {
@@ -2294,7 +2249,207 @@ export default {
           }
         }
       }
+      .question-deActive{
+        .deactivate-all{
+          .q-btn{
+            padding: 0;
+          }
+        }
+      }
     }
   }
 }
+
+@media only screen and (max-width: 1919px) {
+  .question-Bank-ToolBar {
+    .q-expansion-item{
+      .q-expansion-item__container{
+        .q-item-type {
+          padding: 15px 27px 15px 24px;
+          .toolbar-card{
+            min-width: 90%;
+            .toolbar-card-actions {
+              .toolbar-btn {
+                .add-to-btn {
+                  margin-left: 20px;
+                }
+              }
+
+              .toolbar-checkbox {
+                margin-left: 0%;
+                display: grid;
+                justify-items: center;
+                .choices-checkbox{
+                  margin-right: 0;
+                  padding-right: 15px;
+                }
+              }
+
+              .choices-number {
+                margin-left: 0;
+                padding-left: 5px;
+              }
+            }
+          }
+          .q-item__section{
+            min-width: 69px;
+          }
+        }
+        .q-expansion-item__content{
+          .q-card__section{
+            padding: 0px 24px 16px 24px;
+            .toolbar-detail-container{
+              .chosen-questions{
+                .chosen-question-items{
+                    max-width: 400px;
+                }
+              }
+              .question-level-chart{
+                padding-left: 0px;
+              }
+              .question-deActive{
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+@media only screen and (max-width: 1439px) {
+  .question-Bank-ToolBar {
+    .q-expansion-item{
+      .q-expansion-item__container{
+        .q-item-type {
+          padding: 8px 23px 8px 20px;
+          .toolbar-card{
+            .toolbar-card-actions {
+              .toolbar-btn {
+                .add-to-btn {
+                  margin-left: 16px;
+                }
+              }
+
+              .toolbar-checkbox {
+                margin-left: 0;
+                .choices-checkbox{
+                  padding-right: 6px;
+                }
+              }
+
+              .choices-number {
+                padding-left: 0;
+                padding-right: 10px;
+                .choices-number-title{
+                  margin-left: 6px;
+                }
+              }
+            }
+          }
+          .q-item__section{
+            min-width: 77px;
+          }
+        }
+        .q-expansion-item__content{
+          .q-card__section{
+            padding: 0px 24px 16px 20px;
+            .toolbar-detail-container{
+              .chosen-questions{
+                .chosen-question-items{
+                  max-width: 368px;
+                }
+              }
+              .question-level-chart{
+                padding-left: 6px;
+                .question-highchart{
+                  padding-left: 10px;
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+@media only screen and (max-width: 1023px) {
+  .question-Bank-ToolBar {
+    .q-expansion-item{
+      .q-expansion-item__container{
+        .q-item-type {
+          padding: 8px 19px 8px 0px;
+          .toolbar-card{
+            min-width: 87%;
+            .toolbar-card-actions {
+              .toolbar-btn {
+                .add-to-btn {
+                  margin-left: 16px;
+                }
+                .delete-choices-btn{
+                  display: none;
+                }
+              }
+
+              .toolbar-checkbox {
+                .choices-checkbox{
+                  margin-right: 0;
+                }
+              }
+
+              .choices-number {
+                .choices-number-title{
+                  margin-left: 4px;
+                }
+              }
+            }
+          }
+          .q-item__section{
+            min-width: 69px;
+          }
+        }
+        .q-expansion-item__content{
+          .q-card__section{
+            padding: 0px 0px 8px 16px;
+            .toolbar-detail-container{
+              .chosen-questions{
+                .chosen-question-title{
+                  padding-bottom: 12px;
+                }
+                .chosen-question-items{
+                  max-width: 368px;
+                }
+              }
+              .question-level-chart{
+                padding-left: 0px;
+                .question-highchart{
+                  padding-left: 16px;
+                }
+              }
+              .question-deActive{
+                order: -1 ;
+                justify-content: flex-start;
+                .delete-all{
+                  display: block;
+                  padding-right: 24px;
+                  .q-btn{
+                    padding: 0;
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+@media only screen and (max-width: 599px) {
+  .question-Bank-ToolBar {
+    .toolbar-card {
+      background-image: url('../../../../public/img/QuestionBank/toolbar-back-ground.png');
+    }
+  }
+}
+
 </style>
