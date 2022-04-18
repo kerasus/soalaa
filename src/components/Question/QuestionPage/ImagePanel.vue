@@ -1,9 +1,11 @@
 <template>
   <div
     class="question-image-panel"
+    :class="{'question-image-float-panel' : isPanelFloat }"
   >
     <q-card
       class="question-card default-questions-card image-panel-box"
+      :class="{'float-panel-box' : isPanelFloat }"
     >
       <q-card-section class="image-panel-header default-Qcard-title row justify-between">
         <q-btn
@@ -165,25 +167,36 @@ export default {
       this.$emit('closePanelBtnClicked')
     },
     imgPanelModeChanged () {
-      // this.floatMode = !this.floatMode
-      // this.$emit('imgPanelModeChanged')
-      this.$q.notify({
-        message: 'این قابلیت بزودی اضافه خواهد شد...',
-        color: 'primary'
-      })
+      this.floatPanelMode = !this.floatPanelMode
+      this.$emit('imgPanelModeChanged')
+    }
+  },
+  computed: {
+    isPanelFloat () {
+      return !!(this.floatPanelMode)
     }
   }
 }
 </script>
 
-<style lang="scss">
-.hidePanel {
-  display: none;
-}
+<style scoped lang="scss">
 .question-image-panel {
   .image-panel-box {
     height: 600px;
     overflow-x: scroll;
+    border-radius: 30px;
+  }
+  .float-panel-box {
+    height: 450px;
+    .q-card {
+      box-shadow: rgba(50, 50, 93, 0.25) 0px 13px 27px -5px, rgba(0, 0, 0, 0.3) 0px 8px 16px -8px;
+    }
+  }
+  .image-panel-header {
+    position: sticky;
+    top: 0;
+    z-index: 9999;
+    background-color: #fff;
   }
   .change-mode-btn {
     margin-right: 60px;
@@ -223,4 +236,12 @@ export default {
 .main-image {
   width: 100%;
 }
+</style>
+<style lang="scss">
+.question-image-float-panel {
+    .q-card {
+      box-shadow: rgba(50, 50, 93, 0.25) 0px 13px 27px -5px, rgba(0, 0, 0, 0.3) 0px 8px 16px -8px;
+    }
+  }
+
 </style>

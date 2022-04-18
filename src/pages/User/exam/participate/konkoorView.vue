@@ -388,7 +388,7 @@ export default {
       this.changeQuestion(questionId)
     },
     view () {
-      if (this.windowSize.x > 959) {
+      if (this.windowSize.x > 1024) {
         this.changeAppBarAndDrawer(false)
       } else {
         this.$router.push({

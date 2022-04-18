@@ -345,6 +345,9 @@ const AdminActionOnQuestion = {
     },
     openCloseImgPanel () {
       this.isPanelOpened = !this.isPanelOpened
+      if (!this.isPanelOpened) {
+        this.imgFloatMode = false
+      }
     }
   }
 }

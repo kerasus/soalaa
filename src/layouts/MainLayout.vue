@@ -132,7 +132,7 @@ export default {
 .main-layout-container {
 }
 .content-inside {
-  overflow: auto;
+  //overflow: auto;
 }
 
 .main-layout-left-drawer {
