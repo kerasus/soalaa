@@ -52,7 +52,7 @@
         />
       </div>
       <div class="detail-box col-3">
-        <div class="detail-box-title ">رشته تحصیلی</div>
+        <div class="detail-box-title">رشته تحصیلی</div>
         <q-select
           borderless
           option-value="id"
@@ -72,23 +72,21 @@
               unelevated
               icon="isax:tree"
               class="open-modal-btn default-detail-btn"
-              @click="modal = true"
+              @click="dialogValue = true"
               :disable="!doesHaveGroups"
             />
           </div>
         </div>
       </div>
     </div>
-    <q-dialog
-      v-model="modal"
-    >
       <question-tree-modal
+        v-model="dialogValue"
         :lessons-list="lessonsList"
         :groups-list="groupsList"
         @groupSelected="groupSelected"
         @lessonSelected="lessonSelected"
+        @updateNodesField="updateLessonsTextField"
       />
-    </q-dialog>
   </div>
 </template>
 
@@ -154,7 +152,7 @@ export default {
   },
   data () {
     return {
-      modal: false,
+      dialogValue: false,
       questionAuthor: '',
       authorshipDate: '',
       questionAuthors: [
@@ -238,7 +236,7 @@ export default {
           title: 'سخت'
         }
       ],
-      lesson: '',
+      lesson: [],
       draftBtnLoading: false,
       saveBtnLoading: false
     }
@@ -263,6 +261,12 @@ export default {
     },
     lessonSelected (item) {
       this.$emit('lessonSelected', item)
+    },
+    updateLessonsTextField (allNodes) {
+      console.log('allNodes', allNodes)
+      allNodes.forEach((item) => {
+        this.lesson.push(item.title)
+      })
     }
   }
 }

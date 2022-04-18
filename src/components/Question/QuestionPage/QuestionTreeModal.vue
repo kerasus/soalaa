@@ -1,4 +1,7 @@
 <template>
+  <q-dialog
+    v-model="modal"
+  >
   <q-card class="tree-card">
     <div class="fit row wrap">
       <div class="choose-tree-box question-details col-6">
@@ -78,6 +81,7 @@
       </div>
     </div>
   </q-card>
+  </q-dialog>
 </template>
 <script>
 
@@ -97,51 +101,19 @@ export default {
       type: Array,
       default () {
         return []
-        // return [
-        //   {
-        //     id: 'skadlfkfgvsdjfnks543djf',
-        //     title: 'درس یکم : پر پرواز 1 - معنی آیات'
-        //   },
-        //   {
-        //     id: 'skadlfksdffjfnks543djf',
-        //     title: 'درس دوم : پر پرواز 1 - معنی آیات'
-        //   },
-        //   {
-        //     id: 'skadlfksdjfssanks543djf',
-        //     title: 'درس سوم : پر پرواز 1 - معنی آیات'
-        //   },
-        //   {
-        //     id: 'skadlfksdjffdenks543djf',
-        //     title: 'درس چهارم : پر پرواز 1 - معنی آیات'
-        //   }
-        // ]
       }
     },
     groupsList: {
       type: Array,
       default () {
         return []
-        // return [
-        //   {
-        //     id: 'skadlfksdjfnkkhjks543djf',
-        //     title: 'دین و زندگی 1'
-        //   },
-        //   {
-        //     id: 'skadlfksdjfnk63546s543djf',
-        //     title: 'دین و زندگی 2'
-        //   },
-        //   {
-        //     id: 'skadlfdfgdfgdffdksdjfnks543djf',
-        //     title: 'دین و زندگی 3'
-        //   },
-        //   {
-        //     id: 'sk;sdljflsdkf56465adlfksdjfnks543djf',
-        //     title: 'دین و زندگی 4'
-        //   }
-        // ]
       }
+    },
+    modelValue: {
+      type: Boolean
     }
   },
+  emits: ['update:modelValue'],
   data () {
     return {
       lessonName: '',
@@ -157,9 +129,20 @@ export default {
     }
   },
   created () {},
+  updated () {
+    console.log('QuestionTreeModal updated')
+  },
   computed: {
     doesHaveLessons () {
       return !!(this.lessonsList && this.lessonsList.length > 0)
+    },
+    modal: {
+      get () {
+        return this.modelValue
+      },
+      set (value) {
+        this.$emit('update:modelValue', value)
+      }
     }
   },
   mounted () {
@@ -195,6 +178,9 @@ export default {
         .catch(err => {
           console.log(err)
         })
+    },
+    updateNodesField () {
+      this.$emit('updateNodesField', this.allNodes)
     }
   }
 }
@@ -213,6 +199,13 @@ export default {
     height: 40px;
     margin: auto 0 auto auto;
   }
+}
+.q-card {
+  min-width: 830px;
+  height: 580px;
+  background: #FFFFFF;
+  border-radius: 15px;
+  padding: 30px;
 }
 .question-details {
   font-style: normal;
@@ -326,6 +319,11 @@ export default {
 }
 </style>
 <style lang="scss">
+.q-dialog {
+  .q-dialog__inner--minimized > div {
+    max-width: none;
+  }
+}
 .tree-card {
   .question-details {
     .default-details-container {
