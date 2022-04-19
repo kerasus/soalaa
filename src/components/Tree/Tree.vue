@@ -149,7 +149,11 @@ export default {
     tickedNode (target) {
       this.completeTickedNode = []
       target.forEach(id => {
-        this.completeTickedNode.push(this.nodes[0].findNode(id))
+        const node = this.nodes[0].findNode(id)
+        if (!node) {
+          return
+        }
+        this.completeTickedNode.push(node)
       })
       this.$emit('ticked', this.completeTickedNode)
     },

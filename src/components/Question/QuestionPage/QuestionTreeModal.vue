@@ -111,7 +111,7 @@ export default {
     dialogValue: {
       type: Boolean
     },
-    lessonsField: {
+    subjectsField: {
       type: Array
     }
   },
@@ -119,7 +119,7 @@ export default {
     'groupSelected',
     'lessonSelected',
     'update:dialogValue',
-    'update:lessonsField'
+    'update:subjectsField'
   ],
   data () {
     return {
@@ -152,28 +152,37 @@ export default {
         this.$emit('update:dialogValue', value)
       }
     },
-    lessonsTitle: {
+    ChosenSubjects: {
       get () {
-        return this.lessonsField
+        return this.subjectsField
       },
       set (value) {
-        this.$emit('update:lessonsField', value)
+        this.$emit('update:subjectsField', value)
       }
     }
   },
   mounted () {
   },
   methods: {
-    updateNodes (value) {
-      this.allNodes = value
-      const nodesTitles = []
+    updateNodes (values) {
+      this.allNodes = values
+      console.log('@ticked', this.allNodes)
       const nodesId = []
-      value.forEach(val => {
+      values.forEach(val => {
         nodesId.push(val.id)
-        nodesTitles.push(val.title)
       })
-      this.lessonsTitle = nodesTitles
       this.selectedNodesIDs = nodesId
+    },
+    hasNewNodeAdded (value) {
+      const newNodes = []
+      value.forEach(val => {
+        if (!(this.ChosenSubjects.some(item => item.id === val.id))) {
+          newNodes.push(val)
+        }
+      })
+      // console.log('newNodes', newNodes)
+      // console.log('this.ChosenSubjects', this.ChosenSubjects)
+      // this.ChosenSubjects.push(...newNodes)
     },
     isNodeNew (item) {
       return !(this.allNodes.includes(item))
@@ -189,10 +198,13 @@ export default {
     },
     groupSelected (item) {
       this.$emit('groupSelected', item)
+      this.lesson = ''
     },
     lessonSelected (item) {
-      this.$emit('lessonSelected', item)
-      this.showTreeModalNode(item)
+      if (this.lesson) {
+        this.$emit('lessonSelected', item)
+        this.showTreeModalNode(item)
+      }
     },
     showTreeModalNode (item) {
       this.showTree('tree', this.getNode(item.id))
@@ -201,19 +213,19 @@ export default {
           console.log(err)
         })
     },
-    syncAllCheckedIds (childNodes) {
-      const selectedNodesInThisChild = []
-      childNodes.forEach(node => {
-        this.allNodesIds.forEach(item => {
-          if (item === node.id) {
-            selectedNodesInThisChild.push(item)
-          }
-        })
-      })
-      this.$refs.tree.setNodesTicked(selectedNodesInThisChild, true)
+    updateChosenSubjects () {
+      this.ChosenSubjects = this.allNodes
     },
-    getModalData () {
-      return this.lessonsTitle
+    syncAllCheckedIds (childNodes) {
+      console.log('@lazy-loaded', childNodes)
+      const selectedNodesIds = this.ChosenSubjects.map(item => item.id)
+      // this.ChosenSubjects.forEach(item => {
+      //   selectedNodesIds.push(item.id)
+      // })
+      console.log('setNodesTicked', selectedNodesIds)
+      if (selectedNodesIds.length > 0) {
+        this.$refs.tree.setNodesTicked(selectedNodesIds, true)
+      }
     }
   },
   watch: {

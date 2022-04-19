@@ -67,7 +67,7 @@
         <div class="detail-box-title">مبحث</div>
         <div class="input-container flex">
           <div class="input-box">
-            <q-input v-model="lesson" dense disable/>
+            <q-input v-model="getLessonTitle" dense disable/>
           </div>
           <div class="icon-box">
             <q-btn
@@ -83,7 +83,7 @@
     </div>
       <question-tree-modal
         v-model:dialogValue="dialogValue"
-        v-model:lessonsField="lesson"
+        v-model:subjectsField="allSubjects"
         :lessons-list="lessonsList"
         :groups-list="groupsList"
         @groupSelected="groupSelected"
@@ -150,6 +150,7 @@ export default {
     'groupSelected',
     'lessonSelected',
     'gradeSelected',
+    'tags-collected',
     'attach',
     'attach'
   ],
@@ -245,13 +246,488 @@ export default {
           title: 'سخت'
         }
       ],
-      lesson: [],
+      subjectsFieldText: [],
+      allSubjects: [
+        {
+          crud: {
+            headers: {}
+          },
+          apiResource: null,
+          inputData: {
+            id: '625c1e35be79da15860b2373',
+            title: '1.1.1.1',
+            order: 1,
+            parent: '62528387d2b15f2dc722f673'
+          },
+          warn: {
+            mode: false,
+            keys: []
+          },
+          editMode: false,
+          loading: false,
+          props: [
+            {
+              key: 'id'
+            },
+            {
+              key: 'title'
+            },
+            {
+              key: 'parent'
+            },
+            {
+              key: 'ancestors',
+              default: []
+            },
+            {
+              key: 'type'
+            },
+            {
+              key: 'updated_at'
+            },
+            {
+              key: 'created_at'
+            },
+            {
+              key: 'children',
+              default: []
+            },
+            {
+              key: 'lazy',
+              default: true
+            },
+            {
+              key: 'order'
+            },
+            {
+              key: 'treeNodes'
+            }
+          ],
+          id: '625c1e35be79da15860b2373',
+          title: '1.1.1.1',
+          parent: '62528387d2b15f2dc722f673',
+          ancestors: [],
+          type: null,
+          updated_at: null,
+          created_at: null,
+          children: [],
+          lazy: true,
+          order: 1,
+          treeNodes: null
+        },
+        {
+          crud: {
+            headers: {}
+          },
+          apiResource: null,
+          inputData: {
+            id: '625c1e3dbe79da15860b2374',
+            title: '1.1.1.2',
+            order: 1,
+            parent: '62528387d2b15f2dc722f673'
+          },
+          warn: {
+            mode: false,
+            keys: []
+          },
+          editMode: false,
+          loading: false,
+          props: [
+            {
+              key: 'id'
+            },
+            {
+              key: 'title'
+            },
+            {
+              key: 'parent'
+            },
+            {
+              key: 'ancestors',
+              default: []
+            },
+            {
+              key: 'type'
+            },
+            {
+              key: 'updated_at'
+            },
+            {
+              key: 'created_at'
+            },
+            {
+              key: 'children',
+              default: []
+            },
+            {
+              key: 'lazy',
+              default: true
+            },
+            {
+              key: 'order'
+            },
+            {
+              key: 'treeNodes'
+            }
+          ],
+          id: '625c1e3dbe79da15860b2374',
+          title: '1.1.1.2',
+          parent: '62528387d2b15f2dc722f673',
+          ancestors: [],
+          type: null,
+          updated_at: null,
+          created_at: null,
+          children: [],
+          lazy: true,
+          order: 1,
+          treeNodes: null
+        }
+        // {
+        //   crud: {
+        //     headers: {}
+        //   },
+        //   apiResource: null,
+        //   inputData: {
+        //     id: '625c1e47be79da15860b2375',
+        //     title: '1.1.1.3',
+        //     order: 1,
+        //     parent: '62528387d2b15f2dc722f673'
+        //   },
+        //   warn: {
+        //     mode: false,
+        //     keys: []
+        //   },
+        //   editMode: false,
+        //   loading: false,
+        //   props: [
+        //     {
+        //       key: 'id'
+        //     },
+        //     {
+        //       key: 'title'
+        //     },
+        //     {
+        //       key: 'parent'
+        //     },
+        //     {
+        //       key: 'ancestors',
+        //       default: []
+        //     },
+        //     {
+        //       key: 'type'
+        //     },
+        //     {
+        //       key: 'updated_at'
+        //     },
+        //     {
+        //       key: 'created_at'
+        //     },
+        //     {
+        //       key: 'children',
+        //       default: []
+        //     },
+        //     {
+        //       key: 'lazy',
+        //       default: true
+        //     },
+        //     {
+        //       key: 'order'
+        //     },
+        //     {
+        //       key: 'treeNodes'
+        //     }
+        //   ],
+        //   id: '625c1e47be79da15860b2375',
+        //   title: '1.1.1.3',
+        //   parent: '62528387d2b15f2dc722f673',
+        //   ancestors: [],
+        //   type: null,
+        //   updated_at: null,
+        //   created_at: null,
+        //   children: [
+        //     {
+        //       crud: {
+        //         headers: {}
+        //       },
+        //       apiResource: null,
+        //       inputData: {
+        //         id: '625c1e53be79da15860b2376',
+        //         title: '1.1.1.5',
+        //         parent: '625c1e47be79da15860b2375'
+        //       },
+        //       warn: {
+        //         mode: false,
+        //         keys: []
+        //       },
+        //       editMode: false,
+        //       loading: false,
+        //       props: [
+        //         {
+        //           key: 'id'
+        //         },
+        //         {
+        //           key: 'title'
+        //         },
+        //         {
+        //           key: 'parent'
+        //         },
+        //         {
+        //           key: 'ancestors',
+        //           default: []
+        //         },
+        //         {
+        //           key: 'type'
+        //         },
+        //         {
+        //           key: 'updated_at'
+        //         },
+        //         {
+        //           key: 'created_at'
+        //         },
+        //         {
+        //           key: 'children',
+        //           default: []
+        //         },
+        //         {
+        //           key: 'lazy',
+        //           default: true
+        //         },
+        //         {
+        //           key: 'order'
+        //         },
+        //         {
+        //           key: 'treeNodes'
+        //         }
+        //       ],
+        //       id: '625c1e53be79da15860b2376',
+        //       title: '1.1.1.5',
+        //       parent: '625c1e47be79da15860b2375',
+        //       ancestors: [],
+        //       type: null,
+        //       updated_at: null,
+        //       created_at: null,
+        //       children: [],
+        //       lazy: true,
+        //       order: null,
+        //       treeNodes: null
+        //     },
+        //     {
+        //       crud: {
+        //         headers: {}
+        //       },
+        //       apiResource: null,
+        //       inputData: {
+        //         id: '625c1e5bbe79da15860b2377',
+        //         title: '1.1.1.4',
+        //         parent: '625c1e47be79da15860b2375'
+        //       },
+        //       warn: {
+        //         mode: false,
+        //         keys: []
+        //       },
+        //       editMode: false,
+        //       loading: false,
+        //       props: [
+        //         {
+        //           key: 'id'
+        //         },
+        //         {
+        //           key: 'title'
+        //         },
+        //         {
+        //           key: 'parent'
+        //         },
+        //         {
+        //           key: 'ancestors',
+        //           default: []
+        //         },
+        //         {
+        //           key: 'type'
+        //         },
+        //         {
+        //           key: 'updated_at'
+        //         },
+        //         {
+        //           key: 'created_at'
+        //         },
+        //         {
+        //           key: 'children',
+        //           default: []
+        //         },
+        //         {
+        //           key: 'lazy',
+        //           default: true
+        //         },
+        //         {
+        //           key: 'order'
+        //         },
+        //         {
+        //           key: 'treeNodes'
+        //         }
+        //       ],
+        //       id: '625c1e5bbe79da15860b2377',
+        //       title: '1.1.1.4',
+        //       parent: '625c1e47be79da15860b2375',
+        //       ancestors: [],
+        //       type: null,
+        //       updated_at: null,
+        //       created_at: null,
+        //       children: [],
+        //       lazy: true,
+        //       order: null,
+        //       treeNodes: null
+        //     }
+        //   ],
+        //   lazy: true,
+        //   order: 1,
+        //   treeNodes: null
+        // },
+        // {
+        //   crud: {
+        //     headers: {}
+        //   },
+        //   apiResource: null,
+        //   inputData: {
+        //     id: '625c1e53be79da15860b2376',
+        //     title: '1.1.1.5',
+        //     parent: '625c1e47be79da15860b2375'
+        //   },
+        //   warn: {
+        //     mode: false,
+        //     keys: []
+        //   },
+        //   editMode: false,
+        //   loading: false,
+        //   props: [
+        //     {
+        //       key: 'id'
+        //     },
+        //     {
+        //       key: 'title'
+        //     },
+        //     {
+        //       key: 'parent'
+        //     },
+        //     {
+        //       key: 'ancestors',
+        //       default: []
+        //     },
+        //     {
+        //       key: 'type'
+        //     },
+        //     {
+        //       key: 'updated_at'
+        //     },
+        //     {
+        //       key: 'created_at'
+        //     },
+        //     {
+        //       key: 'children',
+        //       default: []
+        //     },
+        //     {
+        //       key: 'lazy',
+        //       default: true
+        //     },
+        //     {
+        //       key: 'order'
+        //     },
+        //     {
+        //       key: 'treeNodes'
+        //     }
+        //   ],
+        //   id: '625c1e53be79da15860b2376',
+        //   title: '1.1.1.5',
+        //   parent: '625c1e47be79da15860b2375',
+        //   ancestors: [],
+        //   type: null,
+        //   updated_at: null,
+        //   created_at: null,
+        //   children: [],
+        //   lazy: true,
+        //   order: null,
+        //   treeNodes: null
+        // },
+        // {
+        //   crud: {
+        //     headers: {}
+        //   },
+        //   apiResource: null,
+        //   inputData: {
+        //     id: '625c1e5bbe79da15860b2377',
+        //     title: '1.1.1.4',
+        //     parent: '625c1e47be79da15860b2375'
+        //   },
+        //   warn: {
+        //     mode: false,
+        //     keys: []
+        //   },
+        //   editMode: false,
+        //   loading: false,
+        //   props: [
+        //     {
+        //       key: 'id'
+        //     },
+        //     {
+        //       key: 'title'
+        //     },
+        //     {
+        //       key: 'parent'
+        //     },
+        //     {
+        //       key: 'ancestors',
+        //       default: []
+        //     },
+        //     {
+        //       key: 'type'
+        //     },
+        //     {
+        //       key: 'updated_at'
+        //     },
+        //     {
+        //       key: 'created_at'
+        //     },
+        //     {
+        //       key: 'children',
+        //       default: []
+        //     },
+        //     {
+        //       key: 'lazy',
+        //       default: true
+        //     },
+        //     {
+        //       key: 'order'
+        //     },
+        //     {
+        //       key: 'treeNodes'
+        //     }
+        //   ],
+        //   id: '625c1e5bbe79da15860b2377',
+        //   title: '1.1.1.4',
+        //   parent: '625c1e47be79da15860b2375',
+        //   ancestors: [],
+        //   type: null,
+        //   updated_at: null,
+        //   created_at: null,
+        //   children: [],
+        //   lazy: true,
+        //   order: null,
+        //   treeNodes: null
+        // }
+      ],
       identifierData: [],
       draftBtnLoading: false,
       saveBtnLoading: false
     }
   },
   computed: {
+    getLessonTitle () {
+      const fieldText = []
+      this.allSubjects.forEach(val => {
+        fieldText.push(val.title)
+      })
+      return fieldText
+    },
     doesHaveGroups () {
       return !!(this.groupsList && this.groupsList.length > 0)
     }
@@ -276,7 +752,7 @@ export default {
       this.$emit('tags-collected', allTags)
     },
     getIdentifierData () {
-      this.identifierData.push(...this.getTagsTitles(this.lesson))
+      this.identifierData.push(...this.getTagsTitles(this.subjectsFieldText))
       this.identifierData.push(...this.getTagsTitles(this.grade))
       this.identifierData.push(...this.getTagsTitles(this.major))
       this.identifierData.push(...this.getTagsTitles(this.authorshipDate))
