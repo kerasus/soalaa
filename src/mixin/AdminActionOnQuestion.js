@@ -367,14 +367,16 @@ const AdminActionOnQuestion = {
       this.getNode(item.id).then(response => {
         this.lessonsList = response.data.data.children
       })
+    },
+    setTags (allTags) {
+      this.$axios.put(API_ADDRESS.tags.setTags(this.question.id), allTags)
+        .then(response => {
+          console.log(response.data.data)
+        })
+        .catch((er) => {
+          console.log(er)
+        })
     }
-    // showTreeModalNode (item) {
-    //   this.showTree('tree', this.getNode(item.id))
-    //     .then(() => {})
-    //     .catch(err => {
-    //       console.log(err)
-    //     })
-    // }
   }
 }
 

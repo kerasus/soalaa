@@ -53,6 +53,7 @@
           @groupSelected="getLessonsList"
           @attach="attachExam"
           @detach="detachExam"
+          @tags-collected="setTags"
         />
       </div>
       <btn-box

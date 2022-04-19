@@ -1,6 +1,6 @@
 <template>
   <div class="question-details">
-    <button @click="getTagsTitles(this.questionAuthor)">getTagsTitles</button>
+    <button @click="getIdentifierData">getTagsTitles</button>
 <!--    <button @click="getIdentifierData">getIdentifierData</button>-->
     <div class="box-title">شناسنامه سوال</div>
     <div class="details-container-2 default-details-container row">
@@ -272,6 +272,9 @@ export default {
     lessonSelected (item) {
       this.$emit('lessonSelected', item)
     },
+    setTags (allTags) {
+      this.$emit('tags-collected', allTags)
+    },
     getIdentifierData () {
       this.identifierData.push(...this.getTagsTitles(this.lesson))
       this.identifierData.push(...this.getTagsTitles(this.grade))
@@ -280,13 +283,16 @@ export default {
       this.identifierData.push(...this.getTagsTitles(this.questionAuthor))
       this.identifierData.push(...this.getTagsTitles(this.questionLevel))
       console.log('this.identifierData', this.identifierData)
+      this.setTags(this.identifierData)
     },
     getTagsTitles (tag) {
       const finalArray = []
-      console.log('tag', tag)
+      if (!tag) {
+        return []
+      }
       if (Array.isArray(tag)) {
         tag.forEach(item => {
-          finalArray.push(item.title)
+          finalArray.push(item)
         })
       } else {
         finalArray.push(tag.title)
