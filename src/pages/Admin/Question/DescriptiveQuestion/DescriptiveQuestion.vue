@@ -45,7 +45,7 @@
       :buffer="true"
     />
     <div class="attach-btn row">
-      <question-details class="col-9"/>
+      <question-identifier class="col-9"/>
       <btn-box
         class="col-3"
         @saveQuestion="saveQuestion"
@@ -62,7 +62,6 @@
 
 <script>
 import AttachExam from 'components/Question/QuestionPage/AttachExam/AttachExam'
-import QuestionDetails from 'components/Question/QuestionPage/Create/textMode/QuestionDetails'
 import BtnBox from 'components/Question/QuestionPage/BtnBox'
 import QuestionField from 'components/Question/QuestionPage/QuestionField.vue'
 import { Question } from 'src/models/Question'
@@ -72,14 +71,15 @@ import { ExamList } from 'src/models/Exam'
 import { QuestionStatusList } from 'src/models/QuestionStatus'
 import { computed } from 'vue'
 import { QuestCategoryList } from 'src/models/QuestCategory'
+import QuestionIdentifier from 'components/Question/QuestionPage/QuestionIdentifier'
 
 export default {
   name: 'DescriptiveQ',
   components: {
+    QuestionIdentifier,
     QuestionField,
     BtnBox,
-    AttachExam,
-    QuestionDetails
+    AttachExam
   },
   mixins: [
     AdminActionOnQuestion

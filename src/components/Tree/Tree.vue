@@ -136,7 +136,9 @@ export default {
       editDialog: false
     }
   },
-  emits: ['ticked'],
+  created () {},
+  mounted () {},
+  emits: ['ticked', 'lazy-loaded'],
   methods: {
     createRoot (nodeData) {
       const treeNodeData = new TreeNode(nodeData)
@@ -158,6 +160,7 @@ export default {
         tree.push(new TreeNode({ id: child.id, title: child.title, parent: node.id }))
       })
       done(tree)
+      this.$emit('lazy-loaded', tree)
     },
 
     getChildOfNode ({ node, key, done, fail }) {
@@ -174,6 +177,7 @@ export default {
         tree.push(new TreeNode({ id: child.id, title: child.title, order: child.order, parent: node.id }))
       })
       done(tree)
+      this.$emit('lazy-loaded', tree)
     },
 
     showChildOfNodeFromServer (node, key, done, fail) {
@@ -220,11 +224,10 @@ export default {
     },
 
     setNodesTicked (keys, state) {
-      if (state) {
-        this.$refs.tree.setTicked(keys, state)
-      } else {
-        this.$refs.tree.setTicked(keys, false)
+      if (!state) {
+        state = false
       }
+      this.$refs.tree.setTicked(keys, state)
     },
 
     toggleMenu (state) {

@@ -40,20 +40,26 @@
       </div>
     </div>
     <div class="relative-position">
-      <attach-exam
-        :exams="examList"
-        :lessons="subCategoriesList"
-        :categories="categoryList"
-        @attach="attachExam"
-        @detach="detachExam"
-      />
       <div class="attach-btn row">
-        <question-details class="col-9"/>
-        <btn-box
-          class="col-3"
-          @saveQuestion="saveQuestion"
+        <question-identifier
+          class="col-12"
+          :exams="examList"
+          :lessons="subCategoriesList"
+          :categories="categoryList"
+          :gradesList="gradesList"
+          :groups-list="lessonGroupList"
+          :lessons-list="lessonsList"
+          @gradeSelected="getLessonGroupList"
+          @groupSelected="getLessonsList"
+          @attach="attachExam"
+          @detach="detachExam"
+          @tags-collected="setTags"
         />
       </div>
+      <btn-box
+        class="col-12"
+        @saveQuestion="saveQuestion"
+      />
       <status-change
         :statuses="questionStatuses"
         @update="changeStatus"
@@ -76,7 +82,6 @@
 import { computed, defineAsyncComponent } from 'vue'
 import { Question } from 'src/models/Question'
 import Navbar from 'components/Question/QuestionPage/Create/textMode/Navbar'
-import QuestionDetails from 'components/Question/QuestionPage/Create/textMode/QuestionDetails'
 import AdminActionOnQuestion from 'src/mixin/AdminActionOnQuestion'
 import { QuestionType, TypeList } from 'src/models/QuestionType'
 import AttachExam from 'components/Question/QuestionPage/AttachExam/AttachExam'
@@ -89,9 +94,12 @@ import LogListComponent from 'components/QuestionBank/EditQuestion/Log/LogList'
 import API_ADDRESS from 'src/api/Addresses'
 import { QuestCategoryList } from 'src/models/QuestCategory'
 import ImagePanel from 'components/Question/QuestionPage/ImagePanel'
+import QuestionIdentifier from 'components/Question/QuestionPage/QuestionIdentifier'
+import mixinTree from 'src/mixin/Tree'
 export default {
   name: 'EditQuestion',
   components: {
+    QuestionIdentifier,
     ImagePanel,
     Navbar,
     DescriptiveEditQuestion: defineAsyncComponent(() => import('components/Question/QuestionPage/Edit/questionTypes/DescriptiveQuestion/DescriptiveEditQuestion')),
@@ -100,11 +108,11 @@ export default {
     BtnBox,
     StatusChange,
     AttachExam,
-    QuestionDetails,
     LogListComponent
   },
   mixins: [
-    AdminActionOnQuestion
+    AdminActionOnQuestion,
+    mixinTree
   ],
   props: {},
   data () {
@@ -129,6 +137,7 @@ export default {
     this.loadSubcategories()
     this.loadCategories()
     this.getQuestionStatus()
+    this.getGradesList()
   },
   provide () {
     return {
