@@ -128,36 +128,36 @@ module.exports = configure(function (ctx) {
       port: 8082,
       open: true, // opens browser window automatically
       proxy: {
-        '/alaa/api/v2': {
+        [process.env.AUTH_API]: {
           target: process.env.AUTH_API_SERVER,
           changeOrigin: true,
           secure: false,
           pathRewrite: {
-            '^/alaa/api/v2': ''
+            ['^' + process.env.AUTH_API]: ''
           }
         },
-        '/3a/api/v1': {
+        [process.env.AAA_API]: {
           target: process.env.AAA_API_SERVER,
           changeOrigin: true,
           secure: false,
           pathRewrite: {
-            '^/3a/api/v1': ''
+            ['^' + process.env.AAA_API]: ''
           }
         },
-        '/tree/api/v1': {
+        [process.env.TREE_API]: {
           target: process.env.TREE_API_SERVER,
           changeOrigin: true,
           secure: false,
           pathRewrite: {
-            '^/tree/api/v1': ''
+            ['^' + process.env.TREE_API]: ''
           }
         },
-        '/tag/api/v1': {
+        [process.env.TAG_API]: {
           target: process.env.TAG_API_SERVER,
           changeOrigin: true,
           secure: false,
           pathRewrite: {
-            '^/tag/api/v1': ''
+            ['^' + process.env.TAG_API]: ''
           }
         },
         '/cdn': {
