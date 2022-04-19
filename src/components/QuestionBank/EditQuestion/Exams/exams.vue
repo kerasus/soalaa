@@ -30,12 +30,31 @@
         </v-col>
         <v-col
           class="choose-lesson"
-          cols="4"
+          cols="2"
+        >
+          <v-autocomplete
+            v-model="chooseCategory"
+            :rules="selectorRules"
+            :items="categories.list"
+            item-text="title"
+            item-value="id"
+            label="انتخاب دفترچه"
+            dense
+            rounded
+            solo
+            flat
+          />
+        </v-col>
+        
+        <v-col
+          class="choose-lesson"
+          cols="2"
         >
           <v-autocomplete
             v-model="chooseLesson"
             :rules="selectorRules"
-            :items="subCategories.list"
+            :items="subCategoriesFilteredList"
+            :disabled="subCategoryDisability"
             item-text="title"
             item-value="id"
             label="انتخاب درس"
@@ -194,6 +213,12 @@ export default {
       },
       type: Object
     },
+    categories: {
+      default: () => {
+        return []
+      },
+      type: Object
+    },
     loading: {
       default: () => {
         return false
@@ -216,7 +241,18 @@ export default {
       ],
       selectorRules:[
         v => v.length > 0 || 'پر کردن این فیلد الزامی است.',
-      ]
+      ],
+      chooseCategory: '',
+      subCategoryDisability: true
+    }
+  },
+  computed:{
+    subCategoriesFilteredList() {
+      if (this.chooseCategory) {
+        this.subCategoryDisability = false
+        return this.subCategories.list.filter(item => item.category_id === this.chooseCategory)
+      }
+      return []
     }
   },
   methods: {

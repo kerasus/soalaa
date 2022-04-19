@@ -81,7 +81,7 @@
         ارسال پاسخنامه
       </v-btn>
       <v-btn
-        v-if="true"
+        v-if="false"
         :color="'#4caf50'"
         :style="{ backgroundColor: '#4caf50 !important' }"
         dark
@@ -171,7 +171,6 @@
 <script>
     import mixinQuiz from '@/mixin/Quiz'
     import Time from "@/plugins/time";
-    import VueConfirmDialog from 'vue-confirm-dialog'
     import BubbleSheet from '@/components/OnlineQuiz/Quiz/BubbleSheet/BubbleSheet'
     import ExamData from "@/assets/js/ExamData";
     import {Exam} from "@/models/Exam";
@@ -179,7 +178,7 @@
 
     export default {
         name: 'SideMenuMapOfQuestions',
-        components: {BubbleSheet, SendAnswerPhoto, VueConfirmDialog},
+        components: {BubbleSheet, SendAnswerPhoto},
         mixins: [mixinQuiz],
         data: () => ({
 

@@ -29,6 +29,7 @@
               :data-index="index"
             >
               <Item
+                :app-socket="socket"
                 :source="item"
                 :questions-column="$refs.questionsColumn"
                 @inView="test"
@@ -97,6 +98,7 @@
         <v-row>
           <v-col>
             <BubbleSheet
+              :app-socket="socket"
               :info="{ type: 'pasokh-barg' }"
               :delay-time="0"
               @clickChoice="choiceClicked"
@@ -208,7 +210,6 @@
 </template>
 
 <script>
-    import VueConfirmDialog from 'vue-confirm-dialog'
     import {Exam} from '@/models/Exam'
     import Assistant from '@/plugins/assistant'
     import {DynamicScroller, DynamicScrollerItem} from 'vue-virtual-scroller'
@@ -232,7 +233,6 @@
             BubbleSheet,
             DynamicScroller,
             DynamicScrollerItem,
-          VueConfirmDialog,
           SendAnswerPhoto,
             BookletsDialog,
             Item
@@ -300,7 +300,7 @@
                 that.$notify({
                   group: 'notifs',
                   title: 'توجه!',
-                  text: 'مشکلی در دریافت اطلاعات آژمون رخ داده است. لطفا دوباره امتحان کنید.',
+                  text: 'مشکلی در دریافت اطلاعات آزمون رخ داده است. لطفا دوباره امتحان کنید.',
                   type: 'error'
                 })
                 // ToDo: uncomment
