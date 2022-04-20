@@ -57,7 +57,7 @@
             </div>
             <div class="tree-chips-box">
               <q-chip
-                v-for="item in allNodes"
+                v-for="item in currentTreeNode"
                 :key="item"
                 class="tree-chips"
                 icon-remove="mdi-close"
@@ -112,7 +112,7 @@ export default {
       type: Boolean
     },
     subjectsField: {
-      type: Array
+      type: Object
     }
   },
   emits: [
@@ -133,13 +133,13 @@ export default {
       newOrder: 1,
       selectedNode: {},
       editDialog: false,
-      newNode: {}
+      newNode: {},
+      currentTreeNode: [],
+      treeHasChanged: false
     }
   },
   created () {},
-  updated () {
-    // console.log('QuestionTreeModal updated')
-  },
+  updated () {},
   computed: {
     doesHaveLessons () {
       return !!(this.lessonsList && this.lessonsList.length > 0)
@@ -152,7 +152,7 @@ export default {
         this.$emit('update:dialogValue', value)
       }
     },
-    ChosenSubjects: {
+    chosenSubjects: {
       get () {
         return this.subjectsField
       },
@@ -165,27 +165,8 @@ export default {
   },
   methods: {
     updateNodes (values) {
-      this.allNodes = values
-      console.log('@ticked', this.allNodes)
-      const nodesId = []
-      values.forEach(val => {
-        nodesId.push(val.id)
-      })
-      this.selectedNodesIDs = nodesId
-    },
-    hasNewNodeAdded (value) {
-      const newNodes = []
-      value.forEach(val => {
-        if (!(this.ChosenSubjects.some(item => item.id === val.id))) {
-          newNodes.push(val)
-        }
-      })
-      // console.log('newNodes', newNodes)
-      // console.log('this.ChosenSubjects', this.ChosenSubjects)
-      // this.ChosenSubjects.push(...newNodes)
-    },
-    isNodeNew (item) {
-      return !(this.allNodes.includes(item))
+      this.currentTreeNode = values
+      this.selectedNodesIDs = values.map(item => item.id)
     },
     removeNode (item) {
       this.setTickedMode('tree', item.id, false)
@@ -197,14 +178,14 @@ export default {
       this.removeAllNodes()
     },
     groupSelected (item) {
+      this.updateChosenSubjects()
       this.$emit('groupSelected', item)
       this.lesson = ''
     },
-    lessonSelected (item) {
-      if (this.lesson) {
-        this.$emit('lessonSelected', item)
-        this.showTreeModalNode(item)
-      }
+    lessonSelected (lesson) {
+      this.selectWantedTree(lesson)
+      this.$emit('lessonSelected', lesson)
+      this.showTreeModalNode(lesson)
     },
     showTreeModalNode (item) {
       this.showTree('tree', this.getNode(item.id))
@@ -213,29 +194,52 @@ export default {
           console.log(err)
         })
     },
-    updateChosenSubjects () {
-      this.ChosenSubjects = this.allNodes
+    selectWantedTree (lesson) {
+      if (this.chosenSubjects[lesson.id] && this.chosenSubjects[lesson.id].nodes) {
+        this.switchToSelectedTree(lesson.id)
+        return
+      }
+      this.createNewDataTree(lesson.id)
     },
-    syncAllCheckedIds (childNodes) {
-      console.log('@lazy-loaded', childNodes)
-      const selectedNodesIds = this.ChosenSubjects.map(item => item.id)
-      // this.ChosenSubjects.forEach(item => {
-      //   selectedNodesIds.push(item.id)
-      // })
-      console.log('setNodesTicked', selectedNodesIds)
-      if (selectedNodesIds.length > 0) {
-        this.$refs.tree.setNodesTicked(selectedNodesIds, true)
+    createNewDataTree (lessonId) {
+      this.chosenSubjects[lessonId] = {}
+      this.chosenSubjects[lessonId].nodes = []
+    },
+    switchToSelectedTree (lessonId) {
+      this.currentTreeNode = this.chosenSubjects[lessonId].nodes
+    },
+    updateChosenSubjects () {
+      if (this.lesson) {
+        this.chosenSubjects[this.lesson.id].nodes = this.currentTreeNode
+      }
+    },
+    syncAllCheckedIds () {
+      if (this.lesson) {
+        const selectedNodesIds = this.chosenSubjects[this.lesson.id].nodes.map(item => item.id)
+        // this.chosenSubjects.forEach(item => {
+        //   selectedNodesIds.push(item.id)
+        // })
+        if (selectedNodesIds.length > 0) {
+          this.$refs.tree.setNodesTicked(selectedNodesIds, true)
+        }
       }
     }
   },
   watch: {
     modal (newVal) {
       if (!newVal) {
-        this.allNodesIds = this.selectedNodesIDs
+        this.updateChosenSubjects()
+        this.treeHasChanged = false
         return
       }
       if (this.lesson) {
         this.showTreeModalNode(this.lesson)
+      }
+    },
+    lesson (newVal) {
+      if (newVal && newVal !== '') {
+        this.treeHasChanged = true
+        this.updateChosenSubjects()
       }
     }
   }
