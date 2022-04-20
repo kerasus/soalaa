@@ -1,12 +1,11 @@
 <script  defer>
-import VueKatex from 'components/VueKatex'
 import { Question } from 'src/models/Question'
-import QuestionChoice from 'components/Question/QuestionItem/QuestionChoice'
+import question from './Question'
 // import VideoPlayer from 'components/VideoPlayer'
 
 export default {
   name: 'QuestionItem',
-  components: { VueKatex, QuestionChoice },
+  components: { question },
   props: {
     question: {
       type: Question,
@@ -115,7 +114,6 @@ export default {
     this.setPageConfig()
   },
   mounted () {
-    this.setChoiceCol()
     this.setQuestionLevel()
   },
   computed: {
@@ -207,42 +205,7 @@ export default {
     applyListConfig () {
       this.listConfig = Object.assign(this.listConfig, this.listOptions)
     },
-    setChoiceCol () {
-      const el = this.$refs.questionChoice
 
-      if (!el) {
-        return
-      }
-      el.forEach(choice => {
-        if (window.innerWidth < 1024) {
-          return null
-        }
-        if (!this.isSingleLine(choice.$el)) {
-          this.questionCol = 'col-lg-6 col-sm-6'
-          this.$nextTick(() => {
-            this.checkLines(choice.$el)
-          })
-        }
-      })
-    },
-    checkLines (el) {
-      if (!this.isSingleLine(el)) {
-        this.questionCol = 'col-lg-12 col-sm-12'
-      }
-    },
-
-    isSingleLine (choiceBoxElement) {
-      const choiceContentElement = choiceBoxElement.childNodes[1]
-      const computed = getComputedStyle(choiceContentElement)
-      const height = this.getElementHeight(choiceBoxElement, computed)
-      // 16 => margin-bottom
-      const choiceContentLineHeight = parseInt(computed.lineHeight) + 16
-      return height <= choiceContentLineHeight
-    },
-    getElementHeight (choiceBoxElement, computed) {
-      const padding = parseInt(computed.paddingTop) + parseInt(computed.paddingBottom)
-      return choiceBoxElement.clientHeight - padding
-    },
     emitAdminActions (action, data) {
       this.$emit(action, data)
     }
@@ -387,37 +350,14 @@ export default {
       <div class="question-section">
         <div :class="isLtrQuestion() ? 'question-icon order-last' : 'question-icon'"/>
         <div class="question">
-          <template v-if="question.loading">
-            <q-skeleton type="text" width="99%" height="30px"/>
-            <q-skeleton type="text" width="99%" height="30px"/>
-            <q-skeleton type="text" width="50%" height="30px"/>
-            <q-skeleton width="30%" height="200px" style="border-radius: 10px"/>
-          </template>
-          <template v-else>
-            <vue-katex :input="question.statement"/>
-          </template>
+          <question
+            :question="question"
+          />
+
         </div>
       </div>
       <div class="choice-section row" :class="isLtrQuestion()? 'ltr-choice-section' : ''">
-        <template v-if="question.loading">
-          <div class="choice-column col-3" v-for="item in 4" :key="item">
-            <div class="question-choice false" style="margin-bottom: 2px">
-              {{ item }}
-            </div>
-            <q-skeleton type="text" width="100px" height="25px"/>
-          </div>
-        </template>
-        <template v-else>
-          <QuestionChoice
-            id="test"
-            ref="questionChoice"
-            class=" col-lg-3 col-md-3 col-sm-12"
-            :class="questionCol"
-            :dir="isLtrQuestion()? 'ltr':''"
-            v-for="(choice , index) in question.choices.list"
-            :choice="choice" :key="index">
-          </QuestionChoice>
-        </template>
+
       </div>
       <div class="expansion-section">
         <q-expansion-item
