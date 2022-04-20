@@ -31,7 +31,8 @@ export default {
       pond: FilePond.create({
         allowMultiple: true,
         name: 'filepond',
-        labelIdle: dropAreaHTML
+        labelIdle: dropAreaHTML,
+        instantUpload: false
       })
     }
   },
@@ -113,4 +114,15 @@ export default {
 .filepond--credits {
   display: none;
 }
+
+.image-upload-parent {
+  .filepond--image-preview-wrapper {
+    .filepond--image-preview {
+      .filepond--image-clip {
+        direction: rtl !important;
+      }
+    }
+  }
+}
+
 </style>
