@@ -404,7 +404,7 @@ export default {
   methods: {
     getExcel () {
       let fileUrl = ''
-      axios.get('/3a/api/v1/exam?excel_export=1')
+      axios.get(API_ADDRESS.exam.exportExcel)
           .then( response => {
             fileUrl = response.data.data.export_file_url
             this.download('exams-list', fileUrl)
