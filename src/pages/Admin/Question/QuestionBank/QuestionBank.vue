@@ -9,7 +9,9 @@
       </div>
       <div class="col-xl-9 col-lg-9 col-md-9 col-sm-12 col-xs-12">
         <div class="question-bank-toolbar">
-          <QuestionToolBar />
+          <QuestionToolBar
+            @RemoveChoose="RemoveChoose"
+          />
         </div>
         <div class="question-bank-content">
           <question-item v-if="questions.loading" :question="loadingQuestion" />
@@ -83,6 +85,10 @@ export default {
     this.getQuestionData()
   },
   methods: {
+    RemoveChoose (subcategoryId) {
+      console.log(subcategoryId)
+      return subcategoryId
+    },
     isSelected (questionId) {
       const target = this.selectedQuestions.find(question => question.id === questionId)
       return !!target

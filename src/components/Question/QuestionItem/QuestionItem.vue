@@ -1,35 +1,27 @@
 <template>
-  <q-card class="custom-card" :class="{isSelected :'selected'}">
+  <q-card class="custom-card" :class="{'selected':isSelected}">
     <q-resize-observer @resize="setChoiceCol"/>
-    <q-card-section class="question-bank-content">
-      <div class="question-info-section">
-        <div class="number-and-info">
-          <div v-if="listConfig.questionId" class="question-number">
-            <div class="question-number-title">
-              سوال
-              <template v-if="question.loading">
-                <q-skeleton type="text" width="40px" class="q-ml-xs"/>
-              </template>
-              <template v-else>
-                {{ question.id }}
-              </template>
-            </div>
-          </div>
-          <div v-if="listConfig.questionInfo" class="question-info">
-            <div class="info-part" v-for="(item, index) in info" :key="index">
-              <template v-if="question.loading">
-                <q-skeleton class="info-title" type="text" width="80px"/>
-              </template>
-              <template v-else>
-                <div class="info-title">
-                  {{ item.name }}
-                </div>
-              </template>
-              <div class="info-circle-icon" v-if="index !== info.length - 1">
-              </div>
-            </div>
-          </div>
-        </div>
+    <q-card-section class="question-bank-content ">
+      <div class="question-info-section row justify-between full-width">
+       <div class="id-info-section ">
+         <div v-if="listConfig.questionId">
+           <q-skeleton v-if="question.loading" type="text" width="110px" class="q-ml-xs"/>
+           <q-chip v-else class="id-chip q-mr-lg">
+             سوال
+             <span class="id-style q-pl-sm">{{ question.id }}</span>
+           </q-chip>
+         </div>
+         <div v-if="listConfig.questionInfo" class="question-info">
+           <div class="info-part" v-for="(item, index) in info" :key="index">
+             <q-skeleton v-if="question.loading" class="info-title" type="text" width="80px"/>
+               <div v-else class="info-title">
+                 {{ item.name }}
+               </div>
+               <div class="info-circle-icon" v-if="index !== info.length - 1">
+             </div>
+           </div>
+         </div>
+       </div>
         <div class="level-and-source">
           <div v-if="listConfig.questionLevel" class="question-level">
             <template v-if="question.loading">
@@ -199,6 +191,7 @@
             </div>
             <div v-if="true" class=" answer-description-video">
               <div class="video">
+<!--                <video-player/>-->
               </div>
               <div class="title text-center">
                 پاسخنامه ویدیویی - محمد امین نباخته
@@ -259,6 +252,7 @@
                 </div>
                 <q-btn
                   flat
+                  class="no-padding"
                   v-if="listConfig.descriptiveAnswer"
                   :icon-right="descriptiveAnswerExpanded? 'isax:arrow-up-2' : 'isax:arrow-down-1'"
                   :label="descriptiveAnswerExpanded?  '  بستن پاسخ تشریحی' : 'نمایش پاسخ تشریحی'"
@@ -311,6 +305,7 @@
 import VueKatex from 'components/VueKatex'
 import { Question } from 'src/models/Question'
 import QuestionChoice from 'components/Question/QuestionItem/QuestionChoice'
+// import VideoPlayer from 'components/VideoPlayer'
 
 export default {
   name: 'QuestionItem',
@@ -452,7 +447,7 @@ export default {
       this.$emit('checkSelect', data, this.question)
     },
     setQuestionLevel () {
-      this.questionLevel = 5
+      this.questionLevel = 1
     },
     setPageConfig () {
       this.applyPageStrategy()
@@ -575,47 +570,22 @@ export default {
   margin-bottom:16px
 }
 .question-bank-content {
+  padding: 24px;
   .question-info-section {
-    display: flex;
-    justify-content: space-between;
-
-    .number-and-info {
+    .id-info-section{
       display: flex;
-      align-items: center;
-      width: 50%;
-
-      .question-number {
-        height: 21px;
-        margin-right: 2.35%;
-        background: #F4F5F6;
-        border-radius: 12px;
-
-        .question-number-title {
-          display: flex;
-          font-style: normal;
-          font-weight: 400;
-          font-size: 12px;
-          line-height: 21px;
-          color: #23263B;
-          padding: 0 8px;
-        }
-      }
-
       .question-info {
         display: flex;
-
         .info-part {
           display: flex;
           align-items: center;
-
+          height: 22px;
           .info-title {
-            font-style: normal;
             font-weight: 400;
             font-size: 12px;
             line-height: 21px;
             color: #23263B;
           }
-
           .info-circle-icon {
             border-radius: 50%;
             margin: 0 6px;
@@ -630,12 +600,9 @@ export default {
 
     .level-and-source {
       display: flex;
-      align-items: center;
-
       .question-level {
         margin-right: 60px;
         display: flex;
-        align-items: center;
 
         .level {
           margin-right: 10px;
@@ -671,7 +638,7 @@ export default {
       .question-source {
         display: flex;
         align-items: center;
-
+        margin-top:-8px;
         .source-name-date {
           margin-right: 10px;
           text-align: end;
@@ -705,7 +672,7 @@ export default {
   }
   .question-section {
     display: flex;
-    margin-top: 33px;
+    margin-top: 25px;
 
     .question-icon {
       margin: 7px 10px 0 10px;
@@ -728,8 +695,8 @@ export default {
     direction: ltr #{"/* rtl:ignore */"} !important;
   }
   .choice-section {
-    padding: 20px 0 0 20px;
-    margin-bottom: 45px;
+    padding: 4px 0 0 10px;
+    margin-bottom: 40px;
 
     .choice-column {
       display: flex;
@@ -863,7 +830,7 @@ export default {
           .report {
             display: flex;
             align-items: center;
-            margin-right: 24px;
+            margin-right: 41px;
             .report-title {
               font-style: normal;
               font-weight: 400;
@@ -930,6 +897,21 @@ export default {
 }
 @media only screen and (max-width: 1919px) {
   .question-bank-content{
+    .question-info-section{
+      position: relative;
+      .id-info-section{
+        flex-direction: column;
+        .id-chip{
+          margin-bottom: 20px;
+        }
+      }
+      .level-and-source {
+          position: absolute;
+          top:0;
+          right:0;
+      }
+    }
+
     .answer-section {
       padding: 24px 10px;
       display: flex;
@@ -982,6 +964,22 @@ export default {
 @media only screen and (max-width: 1920px) {
 
 }
+@media only screen and (max-width: 1023px) {
+.question-bank-content{
+  padding: 20px 16px;
+  .question-info-section{
+    .id-info-section{
+      .id-chip{
+      }
+    }
+    .level-and-source {
+      .question-level{
+        margin-right: 16px;
+      }
+    }
+  }
+}
+}
 @media only screen and (max-width: 600px) {
   .question-bank-content{
     .answer-section {
@@ -1008,6 +1006,34 @@ export default {
         }
         .title {
           padding-top: 12px;
+        }
+      }
+    }
+    .question-info-section{
+      .id-info-section{
+        .id-chip{
+          max-width: 109px;
+          .id-style {
+            overflow: hidden;
+            text-overflow: ellipsis;
+          }
+        }
+        .question-info{
+          flex-direction: column;
+          .info-part{
+            .info-title{
+              order: 2;
+            }
+          }
+        }
+      }
+      .level-and-source {
+        .question-level{
+          margin-right: 16px;
+        }
+        .question-source{
+          position: absolute;
+          top: 34px
         }
       }
     }

@@ -1,7 +1,8 @@
 import process from 'process'
-const lumenServer = process.env.AAA_API_SERVER
-const authServer = process.env.AUTH_API_SERVER
-const treeServer = process.env.TREE_API_SERVER
+const lumenServer = process.env.AAA_API
+const authServer = process.env.AUTH_API
+const treeServer = process.env.TREE_API
+const tagServer = process.env.TAG_API
 const API_ADDRESS = {
   // socket: process.env.VUE_APP_SOCKET_TARGET_API_SERVER,
   socket: 'https://office.alaatv.com:501',
@@ -97,6 +98,9 @@ const API_ADDRESS = {
     }
   },
   question: {
+    photo (type, id) {
+      return lumenServer + '/question/' + type + '/' + id
+    },
     indexMonta: lumenServer + '/question/search-monta',
     bank: {
       page: (page) => lumenServer + '/exam-question/attach/show/6245afa20569e1374540cb88?page=' + page
@@ -193,6 +197,11 @@ const API_ADDRESS = {
     },
     editNode (id) {
       return treeServer + '/tree/' + id
+    }
+  },
+  tags: {
+    setTags (questionId) {
+      return tagServer + '/id/soalaQestion/' + questionId
     }
   }
 }
