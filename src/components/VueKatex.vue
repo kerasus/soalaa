@@ -102,7 +102,7 @@ export default {
 
     .katex {
       /*rtl:ignore*/
-      //direction: ltr !important;
+      direction: ltr !important;
       /*rtl:ignore*/
     }
 
