@@ -9,6 +9,8 @@
 /* eslint-env node */
 const ESLintPlugin = require('eslint-webpack-plugin')
 const { configure } = require('quasar/wrappers')
+const CopyWebpackPlugin = require('copy-webpack-plugin')
+
 const path = require('path')
 
 module.exports = configure(function (ctx) {
@@ -119,6 +121,16 @@ module.exports = configure(function (ctx) {
           aggregateTimeout: 200,
           poll: 1000
         }
+
+        cfg.plugins.push(new CopyWebpackPlugin({
+          patterns: [
+            {
+              // from: './src-pwa/firebase-messaging-sw.js',
+              from: path.resolve('./src-pwa/firebase-messaging-sw.js'),
+              to: path.resolve('./dist/pwa/firebase-messaging-sw.js')
+            }
+          ]
+        }))
       }
     },
 
