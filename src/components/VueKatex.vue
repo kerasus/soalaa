@@ -59,6 +59,7 @@ export default {
     },
     computedKatex () {
       let string = this.input
+      string = string.replaceAll(/&lt;/g, '<').replaceAll(/&gt;/g, '>').replaceAll('&amp;', '&')
       const regex = /((\\\[((?! ).){1}((?!\$).)*?((?! ).){1}\\\])|(\$((?! ).){1}((?!\$).)*?((?! ).){1}\$))/gms
       string = string.replace(regex, (match) => {
         let finalMatch
