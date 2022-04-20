@@ -101,7 +101,9 @@ export default {
     width: 100%;
 
     .katex {
-      direction: ltr;
+      /*rtl:ignore*/
+      //direction: ltr !important;
+      /*rtl:ignore*/
     }
 
     table {
