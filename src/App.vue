@@ -48,7 +48,6 @@ export default defineComponent({
 </script>
 
 <style>
-#F4F5F6
   :root {
 
   }
