@@ -91,7 +91,7 @@
             <div class="deactivate-all">
               <q-btn
                 rounded
-                flat >
+                flat>
                 غیر فعال کردن همه
               </q-btn>
             </div>
@@ -101,44 +101,118 @@
     </q-expansion-item>
   </q-card>
   <q-page-sticky class="pageSticky lg-hide" position="bottom">
-        <div class="shapes flex ">
-          <div class="circle">
+    <div class="shapes flex ">
+      <div class="circle">
+        <q-btn
+          class="openDialouge"
+          round
+          :icon="this.dialougeExpanded? 'isax:arrow-down-1' : 'isax:arrow-up-2'"
+          @click="this.dialougeExpanded = !this.dialougeExpanded"
+        />
+      </div>
+      <div class="top-style">
+        <div class="top-style-right">
+          <div class="near-circle"></div>
+          <div class="near-btn">
+            <div class="near-btn-top"></div>
+          </div>
+        </div>
+        <div class="top-style-left">
+          <div class="near-btn">
+            <div class="near-btn-top"></div>
+          </div>
+          <div class="near-circle">
+          </div>
+        </div>
+      </div>
+      <div class="stickyFeatures">
+        <div class="toolbar-btn">
+          <div class="delete-choices-btn-container">
             <q-btn
-              class="openDialouge"
-              round
-              :icon="this.dialougeExpanded? 'isax:arrow-up-2' : 'isax:arrow-down-1'"
-              @click="this.dialougeExpanded = true"
-            />
+              class="delete-choices-btn"
+              @click=deleteAllChoose()
+              flat
+            >
+              حذف انتخاب ها
+            </q-btn>
           </div>
-          <div class="top-style" >
-            <div class="top-style-right">
-              <div class="near-circle"></div>
-              <div class="near-btn">
-                <div class="near-btn-top"></div>
-              </div>
-            </div>
-            <div class="top-style-left">
-              <div class="near-btn">
-                <div class="near-btn-top"></div>
-              </div>
-              <div class="near-circle">
-              </div>
+          <div class="add-to-btn-container">
+            <q-btn class="add-to-btn" flat>
+              <q-icon name="isax:add">
+              </q-icon>
+              <span>
+            افزودن به
+          </span>
+            </q-btn>
+          </div>
+        </div>
+        <div class="toolbar-checkBox-number">
+          <div class="toolbar-checkbox-container">
+            <div class="toolbar-checkbox">
+              <q-checkbox
+                class="choices-checkbox"
+                label="انتخاب همه"
+                v-bind:="checkBox"
+                @click="selectAllQuestions">
+              </q-checkbox>
             </div>
           </div>
-          <div class="shape-1 col"></div>
+          <div class="choices-number-container">
+            <div class="choices-number">
+              {{ this.numberOfQuestions() }}
+              <span class="choices-number-title">سوال انتخاب شده</span>
+            </div>
+          </div>
         </div>
-    <q-dialog v-model="dialougeExpanded">
-      <q-card class="dialogeCard" style="width: 318px">
-        <div class="dialogHeader">
-          <div class="dialogTitle"> </div>
-          <div class="dialogBtn"> </div>
-        </div>
-        <div class="dialogChip">ww</div>
-        <div class="dialogChart"> sd</div>
-      </q-card>
-      <div style="min-height: 20px"></div>
-    </q-dialog>
+
+      </div>
+    </div>
   </q-page-sticky>
+  <q-dialog class="dialogueCard" v-model="dialougeExpanded">
+    <q-card class="dialogueCardContainer">
+      <div class="dialogHeader">
+        <div class="dialogTitle"> سوالات انتخاب شده:</div>
+        <div class="dialogBtn">
+          <q-btn
+            rounded
+            flat>
+            غیر فعال کردن همه
+          </q-btn>
+        </div>
+      </div>
+      <div class="dialogChip">
+        <q-chip
+          class="filter-items"
+          v-for="item in countOfSelectedSubCategory"
+          :key="item"
+          icon-remove="mdi-close"
+          removable
+          @remove="RemoveSelectedChoice(item)"
+        >
+          {{ item.title }}: {{ item.selectedQuestionsCount }}
+        </q-chip>
+      </div>
+      <div class="dialogChart">
+        <div class="dialogChartTitles">
+          <div class="chart-titles">
+            <q-badge class="titles-icon hard" rounded/>
+            <div>سخت</div>
+          </div>
+          <div class="chart-titles">
+            <q-badge class="titles-icon medium" rounded></q-badge>
+            <div>متوسط</div>
+          </div>
+          <div class="chart-titles">
+            <q-badge class="titles-icon easy" rounded></q-badge>
+            <div>آسان</div>
+          </div>
+        </div>
+        <div class="dialogHighchart">
+          <highcharts :options="chartOptions"/>
+        </div>
+      </div>
+    </q-card>
+  </q-dialog>
 </template>
 
 <script>
@@ -2140,6 +2214,7 @@ export default {
 
         .chosen-question-items {
           padding: 0;
+
           .filter-items {
             margin-right: 8px;
             margin-bottom: 8px;
@@ -2177,15 +2252,18 @@ export default {
           }
         }
       }
-      .question-deActive{
+
+      .question-deActive {
         display: flex;
         align-items: flex-end;
         justify-content: flex-end;
+
         .deactivate-all {
           padding: 0;
           color: #9690E4;
         }
-        .delete-all{
+
+        .delete-all {
           display: none;
           padding: 0;
           font-style: normal;
@@ -2198,146 +2276,316 @@ export default {
     }
   }
 }
-.pageSticky{
-  display: none;
-  z-index: 1000;
-    .shapes{
-      height: 122px;
-      position: relative;
-      width: 100vw;
-      align-items: flex-end;
+
+.dialogueCard {
+  .dialogueCardContainer {
+    bottom: 20px;
+    width: 318px;
+    background: #FFFFFF;
+    border-radius: 25px;
+
+    .dialogHeader {
       display: flex;
-      .circle{
+      justify-content: space-between;
+      flex-direction: row;
+      padding: 16px 4px 20px 20px;
+
+      .dialogTitle {
+        display: flex;
         align-items: center;
-        display: flex;
-        justify-content: center;
-        position: absolute;
-        top: -26px;
-        box-sizing: border-box;
-        height: 36px;
-        width: 36px;
-        border-radius: 50%;
-        right: calc(50% - 18px);
-        .openDialouge{
-          min-width: 36px;
-          min-height: 36px;
-          border-radius: 50%;
-          color: white;
-          background-color: var(--3a-Primary) ;
-          z-index: 10000;
-        }
+        font-style: normal;
+        font-weight: 500;
+        font-size: 14px;
+        line-height: 24px;
+        color: #23263B;
       }
-      .top-style{
-        display: flex;
-        width: 100%;
-        & > div {
+
+      .dialogBtn {
+        font-style: normal;
+        font-weight: 500;
+        font-size: 12px;
+        line-height: 21px;
+        color: #9690E4;
+      }
+    }
+
+    .dialogChip {
+      padding: 0 16px 12px 16px;
+
+      .filter-items {
+        margin-right: 2px;
+        margin-bottom: 8px;
+      }
+    }
+
+    .dialogChart {
+      padding-bottom: 20px;
+      display: flex;
+      justify-content: center;
+
+      .dialogChartTitles {
+        padding-top: 8px;
+        padding-right: 15px;
+
+        .chart-titles {
+          font-style: normal;
+          font-weight: 400;
+          font-size: 14px;
+          line-height: 24px;
+          color: #23263B;
           display: flex;
-          width: 50%;
-          height: 18px;
-          &.top-style-left .near-circle {
-            position: relative;
-            width: 100%;
-            height: 100%;
-            background-color: var(--3a-Primary);
-            border-top-right-radius: 20px;
+          align-items: center;
+
+          .titles-icon {
+            width: 13px;
+            height: 13px;
+            margin-right: 4px;
           }
-          &.top-style-left .near-btn {
-            position: relative;
-            width: 37px;
-            height: 100%;
-            &:after {
-              content: " ";
-              position: absolute;
-              width: 26px;
-              height: 95px;
-              background: transparent;
-              top: -78px;
-              box-shadow: -2px 30px 0px -3px var(--3a-Primary);
-              border-radius: 0px 0 25px 0;
-              left: -2px;
-            }
-            .near-btn-top {
-              position: absolute;
-              width: 28px;
-              height: 27px;
-              border-radius: 100%;
-              top: 0px;
-              background: var(--3a-Primary);
-              left: 17px;
-            }
+
+          .hard {
+            background-color: #DA5F5C;
           }
-          &.top-style-right .near-circle {
-            position: relative;
-            width: 100%;
-            height: 100%;
-            background-color: var(--3a-Primary);
-            border-top-left-radius: 20px;
+
+          .medium {
+            background-color: #FFCA28;
           }
-          &.top-style-right .near-btn {
-            position: relative;
-            width: 37px;
-            height: 100%;
-            &:after {
-              content: " ";
-              position: absolute;
-              width: 26px;
-              height: 95px;
-              background: transparent;
-              top: -78px;
-              box-shadow: 2px 30px 0px -3px var(--3a-Primary);
-              border-radius: 0px 0 0 25px;
-              right: -2px;
-            }
-            .near-btn-top {
-              position: absolute;
-              width: 28px;
-              height: 27px;
-              border-radius: 100%;
-              top: 0px;
-              background: var(--3a-Primary);
-              right: 17px;
+
+          .easy {
+            background-color: #8ED6FF;
+          }
+        }
+      }
+
+      .dialogHighchart {
+
+      }
+    }
+  }
+}
+
+.pageSticky {
+  display: none;
+  z-index: 6001;
+
+  .shapes {
+    height: 122px;
+    position: relative;
+    width: 100vw;
+    align-items: flex-end;
+    display: flex;
+
+    .circle {
+      align-items: center;
+      display: flex;
+      justify-content: center;
+      position: absolute;
+      top: -26px;
+      box-sizing: border-box;
+      height: 36px;
+      width: 36px;
+      border-radius: 50%;
+      right: calc(50% - 18px);
+
+      .openDialouge {
+        min-width: 36px;
+        min-height: 36px;
+        border-radius: 50%;
+        color: white;
+        background-color: var(--3a-Primary);
+        z-index: 10000;
+      }
+    }
+
+    .top-style {
+      display: flex;
+      width: 100%;
+
+      & > div {
+        display: flex;
+        width: 50%;
+        height: 18px;
+
+        &.top-style-left .near-circle {
+          position: relative;
+          width: 100%;
+          height: 100%;
+          background-color: var(--3a-Primary);
+          border-top-right-radius: 20px;
+        }
+
+        &.top-style-left .near-btn {
+          position: relative;
+          width: 37px;
+          height: 100%;
+
+          &:after {
+            content: " ";
+            position: absolute;
+            width: 26px;
+            height: 95px;
+            background: transparent;
+            top: -78px;
+            box-shadow: -2px 30px 0px -3px var(--3a-Primary);
+            border-radius: 0px 0 25px 0;
+            left: -2px;
+          }
+
+          .near-btn-top {
+            position: absolute;
+            width: 28px;
+            height: 27px;
+            border-radius: 100%;
+            top: 0px;
+            background: var(--3a-Primary);
+            left: 17px;
+          }
+        }
+
+        &.top-style-right .near-circle {
+          position: relative;
+          width: 100%;
+          height: 100%;
+          background-color: var(--3a-Primary);
+          border-top-left-radius: 20px;
+        }
+
+        &.top-style-right .near-btn {
+          position: relative;
+          width: 37px;
+          height: 100%;
+
+          &:after {
+            content: " ";
+            position: absolute;
+            width: 26px;
+            height: 95px;
+            background: transparent;
+            top: -78px;
+            box-shadow: 2px 30px 0px -3px var(--3a-Primary);
+            border-radius: 0px 0 0 25px;
+            right: -2px;
+          }
+
+          .near-btn-top {
+            position: absolute;
+            width: 28px;
+            height: 27px;
+            border-radius: 100%;
+            top: 0px;
+            background: var(--3a-Primary);
+            right: 17px;
+          }
+        }
+      }
+    }
+
+    .stickyFeatures {
+      min-width: 100%;
+      height: 204px;
+      background-color: var(--3a-Primary);
+      padding: 14px 32px 16px 18px;
+
+      .toolbar-btn {
+        display: flex;
+        justify-content: space-around;
+        padding-bottom: 4px;
+
+        .delete-choices-btn-container {
+          .delete-choices-btn {
+            border: 1px solid #E86562;
+            background: #FFFFFF;
+            font-style: normal;
+            font-weight: 400;
+            font-size: 14px;
+            line-height: 24px;
+            text-align: center;
+            color: #E86562;
+          }
+        }
+
+        .add-to-btn-container {
+          .add-to-btn {
+            background: #FFB74D;
+            font-style: normal;
+            font-weight: 500;
+            font-size: 14px;
+            line-height: 24px;
+            text-align: center;
+            color: #FFFFFF;
+          }
+        }
+      }
+
+      .toolbar-checkBox-number {
+        display: flex;
+        justify-content: space-around;
+        .toolbar-checkbox-container {
+          padding-right: 30px;
+
+          .toolbar-checkbox {
+            font-style: normal;
+            font-weight: 400;
+            font-size: 14px;
+            line-height: 24px;
+            text-align: right;
+            color: #FFFFFF;
+          }
+        }
+
+        .choices-number-container {
+          transform: translate(6px,0px);
+          display: flex;
+          align-items: center;
+          .choices-number{
+            font-style: normal;
+            font-weight: 400;
+            font-size: 14px;
+            line-height: 24px;
+            color: #FFFFFF;
+            .choices-number-title {
+              margin-left: 5px;
             }
           }
         }
       }
-      .shape-1{
-        min-width: 100%;
-        height: 204px;
-        background-color: var(--3a-Primary);
-      }
     }
-    .dialogeCard{
-      background: #FFFFFF;
-      border-radius: 25px;
-    }
+  }
+
 }
-@media only screen and (max-width: 599px){
-  .pageSticky{
+
+@media only screen and (max-width: 599px) {
+  .question-Bank-ToolBar{
+    display: none;
+  }
+  .pageSticky {
     display: block;
-    z-index: 1000;
   }
 }
 </style>
 
 <style lang="scss">
 .question-Bank-ToolBar {
-  .q-expansion-item{
-      padding: 0;
+  .q-expansion-item {
+    padding: 0;
+
     .q-item-type {
       justify-content: space-between;
       padding: 15px 43px 15px 40px;
-      .q-item__section{
+
+      .q-item__section {
         padding-right: 0;
       }
     }
-    .q-expansion-item__container{
-      .q-expansion-item__content{
-        .q-card__section{
+
+    .q-expansion-item__container {
+      .q-expansion-item__content {
+        .q-card__section {
           padding: 0px 40px 16px 40px;
         }
       }
     }
   }
+
   .q-expansion-item--collapsed {
     .q-item__section {
       display: flex;
@@ -2358,6 +2606,7 @@ export default {
       }
     }
   }
+
   .q-expansion-item--expanded {
     .q-item__section {
       display: flex;
@@ -2378,14 +2627,14 @@ export default {
       }
     }
   }
+
   .toolbar-detail {
     .toolbar-detail-container {
       .question-level-chart {
         padding-left: 30px;
+
         .question-highchart {
-          padding-left: 15px;
           .title-1 {
-            text-space: 20px;
             font-weight: 700;
             font-size: 24px;
             line-height: 20px;
@@ -2400,15 +2649,12 @@ export default {
             text-align: center;
             color: #23263B;
           }
-
-          .highcharts-container {
-            height: 180px;
-          }
         }
       }
-      .question-deActive{
-        .deactivate-all{
-          .q-btn{
+
+      .question-deActive {
+        .deactivate-all {
+          .q-btn {
             padding: 0;
           }
         }
@@ -2419,12 +2665,14 @@ export default {
 
 @media only screen and (max-width: 1919px) {
   .question-Bank-ToolBar {
-    .q-expansion-item{
-      .q-expansion-item__container{
+    .q-expansion-item {
+      .q-expansion-item__container {
         .q-item-type {
           padding: 15px 27px 15px 24px;
-          .toolbar-card{
+
+          .toolbar-card {
             min-width: 90%;
+
             .toolbar-card-actions {
               .toolbar-btn {
                 .add-to-btn {
@@ -2436,7 +2684,8 @@ export default {
                 margin-left: 0%;
                 display: grid;
                 justify-items: center;
-                .choices-checkbox{
+
+                .choices-checkbox {
                   margin-right: 0;
                   padding-right: 15px;
                 }
@@ -2448,23 +2697,28 @@ export default {
               }
             }
           }
-          .q-item__section{
+
+          .q-item__section {
             min-width: 69px;
           }
         }
-        .q-expansion-item__content{
-          .q-card__section{
+
+        .q-expansion-item__content {
+          .q-card__section {
             padding: 0px 24px 16px 24px;
-            .toolbar-detail-container{
-              .chosen-questions{
-                .chosen-question-items{
-                    max-width: 400px;
+
+            .toolbar-detail-container {
+              .chosen-questions {
+                .chosen-question-items {
+                  max-width: 400px;
                 }
               }
-              .question-level-chart{
+
+              .question-level-chart {
                 padding-left: 0px;
               }
-              .question-deActive{
+
+              .question-deActive {
               }
             }
           }
@@ -2473,13 +2727,15 @@ export default {
     }
   }
 }
+
 @media only screen and (max-width: 1439px) {
   .question-Bank-ToolBar {
-    .q-expansion-item{
-      .q-expansion-item__container{
+    .q-expansion-item {
+      .q-expansion-item__container {
         .q-item-type {
           padding: 8px 23px 8px 20px;
-          .toolbar-card{
+
+          .toolbar-card {
             .toolbar-card-actions {
               .toolbar-btn {
                 .add-to-btn {
@@ -2489,7 +2745,8 @@ export default {
 
               .toolbar-checkbox {
                 margin-left: 0;
-                .choices-checkbox{
+
+                .choices-checkbox {
                   padding-right: 6px;
                 }
               }
@@ -2497,28 +2754,34 @@ export default {
               .choices-number {
                 padding-left: 0;
                 padding-right: 10px;
-                .choices-number-title{
+
+                .choices-number-title {
                   margin-left: 6px;
                 }
               }
             }
           }
-          .q-item__section{
+
+          .q-item__section {
             min-width: 77px;
           }
         }
-        .q-expansion-item__content{
-          .q-card__section{
+
+        .q-expansion-item__content {
+          .q-card__section {
             padding: 0px 24px 16px 20px;
-            .toolbar-detail-container{
-              .chosen-questions{
-                .chosen-question-items{
+
+            .toolbar-detail-container {
+              .chosen-questions {
+                .chosen-question-items {
                   max-width: 368px;
                 }
               }
-              .question-level-chart{
+
+              .question-level-chart {
                 padding-left: 6px;
-                .question-highchart{
+
+                .question-highchart {
                   padding-left: 10px;
                 }
               }
@@ -2529,66 +2792,79 @@ export default {
     }
   }
 }
+
 @media only screen and (max-width: 1023px) {
   .question-Bank-ToolBar {
-    .q-expansion-item{
-      .q-expansion-item__container{
+    .q-expansion-item {
+      .q-expansion-item__container {
         .q-item-type {
           padding: 8px 19px 8px 0px;
-          .toolbar-card{
+
+          .toolbar-card {
             min-width: 87%;
+
             .toolbar-card-actions {
               .toolbar-btn {
                 .add-to-btn {
                   margin-left: 16px;
                 }
-                .delete-choices-btn{
+
+                .delete-choices-btn {
                   display: none;
                 }
               }
 
               .toolbar-checkbox {
-                .choices-checkbox{
+                .choices-checkbox {
                   margin-right: 0;
                 }
               }
 
               .choices-number {
-                .choices-number-title{
+                .choices-number-title {
                   margin-left: 4px;
                 }
               }
             }
           }
-          .q-item__section{
+
+          .q-item__section {
             min-width: 69px;
           }
         }
-        .q-expansion-item__content{
-          .q-card__section{
+
+        .q-expansion-item__content {
+          .q-card__section {
             padding: 0px 0px 8px 16px;
-            .toolbar-detail-container{
-              .chosen-questions{
-                .chosen-question-title{
+
+            .toolbar-detail-container {
+              .chosen-questions {
+                .chosen-question-title {
                   padding-bottom: 12px;
                 }
-                .chosen-question-items{
+
+                .chosen-question-items {
                   max-width: 368px;
                 }
               }
-              .question-level-chart{
+
+              .question-level-chart {
                 padding-left: 0px;
-                .question-highchart{
+
+                .question-highchart {
                   padding-left: 16px;
                 }
               }
-              .question-deActive{
-                order: -1 ;
+
+              .question-deActive {
+                order: -1;
                 justify-content: flex-start;
-                .delete-all{
+
+                .delete-all {
                   display: block;
                   padding-right: 24px;
-                  .q-btn{
+
+                  .q-btn {
                     padding: 0;
                   }
                 }
@@ -2600,10 +2876,48 @@ export default {
     }
   }
 }
+
 @media only screen and (max-width: 599px) {
-  .question-Bank-ToolBar {
-    .toolbar-card {
+  .dialogueCard {
+    .dialogueCardContainer {
+      .dialogChart {
+        .dialogHighchart {
+          .title-1 {
+            font-weight: 700;
+            font-size: 24px;
+            line-height: 20px;
+            text-align: center;
+            color: #23263B;
+          }
+
+          .title-2 {
+            font-weight: 400;
+            font-size: 14px;
+            line-height: 20px;
+            text-align: center;
+            color: #23263B;
+          }
+        }
+      }
     }
+  }
+  .pageSticky {
+    .shapes {
+      .stickyFeatures {
+        .toolbar-checkBox-number {
+          .toolbar-checkbox-container {
+            .toolbar-checkbox {
+              .choices-checkbox {
+                .q-checkbox__inner--indet {
+                  color: white;
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+
   }
 }
 
