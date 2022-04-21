@@ -100,6 +100,45 @@
       </q-card-section>
     </q-expansion-item>
   </q-card>
+  <q-page-sticky class="pageSticky lg-hide" position="bottom">
+        <div class="shapes flex ">
+          <div class="circle">
+            <q-btn
+              class="openDialouge"
+              round
+              :icon="this.dialougeExpanded? 'isax:arrow-up-2' : 'isax:arrow-down-1'"
+              @click="this.dialougeExpanded = true"
+            />
+          </div>
+          <div class="top-style" >
+            <div class="top-style-right">
+              <div class="near-circle"></div>
+              <div class="near-btn">
+                <div class="near-btn-top"></div>
+              </div>
+            </div>
+            <div class="top-style-left">
+              <div class="near-btn">
+                <div class="near-btn-top"></div>
+              </div>
+              <div class="near-circle">
+              </div>
+            </div>
+          </div>
+          <div class="shape-1 col"></div>
+        </div>
+    <q-dialog v-model="dialougeExpanded">
+      <q-card class="dialogeCard" style="width: 318px">
+        <div class="dialogHeader">
+          <div class="dialogTitle"> </div>
+          <div class="dialogBtn"> </div>
+        </div>
+        <div class="dialogChip">ww</div>
+        <div class="dialogChart"> sd</div>
+      </q-card>
+      <div style="min-height: 20px"></div>
+    </q-dialog>
+  </q-page-sticky>
 </template>
 
 <script>
@@ -1918,6 +1957,7 @@ export default {
   },
   data () {
     return {
+      dialougeExpanded: false,
       chartOptions: {
         chart: {
           height: '95',
@@ -2158,7 +2198,127 @@ export default {
     }
   }
 }
+.pageSticky{
+  display: none;
+  z-index: 1000;
+    .shapes{
+      height: 122px;
+      position: relative;
+      width: 100vw;
+      align-items: flex-end;
+      display: flex;
+      .circle{
+        align-items: center;
+        display: flex;
+        justify-content: center;
+        position: absolute;
+        top: -26px;
+        box-sizing: border-box;
+        height: 36px;
+        width: 36px;
+        border-radius: 50%;
+        right: calc(50% - 18px);
+        .openDialouge{
+          min-width: 36px;
+          min-height: 36px;
+          border-radius: 50%;
+          color: white;
+          background-color: var(--3a-Primary) ;
+          z-index: 10000;
+        }
+      }
+      .top-style{
+        display: flex;
+        width: 100%;
+        & > div {
+          display: flex;
+          width: 50%;
+          height: 18px;
+          &.top-style-left .near-circle {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            background-color: var(--3a-Primary);
+            border-top-right-radius: 20px;
+          }
+          &.top-style-left .near-btn {
+            position: relative;
+            width: 37px;
+            height: 100%;
+            &:after {
+              content: " ";
+              position: absolute;
+              width: 26px;
+              height: 95px;
+              background: transparent;
+              top: -78px;
+              box-shadow: -2px 30px 0px -3px var(--3a-Primary);
+              border-radius: 0px 0 25px 0;
+              left: -2px;
+            }
+            .near-btn-top {
+              position: absolute;
+              width: 28px;
+              height: 27px;
+              border-radius: 100%;
+              top: 0px;
+              background: var(--3a-Primary);
+              left: 17px;
+            }
+          }
+          &.top-style-right .near-circle {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            background-color: var(--3a-Primary);
+            border-top-left-radius: 20px;
+          }
+          &.top-style-right .near-btn {
+            position: relative;
+            width: 37px;
+            height: 100%;
+            &:after {
+              content: " ";
+              position: absolute;
+              width: 26px;
+              height: 95px;
+              background: transparent;
+              top: -78px;
+              box-shadow: 2px 30px 0px -3px var(--3a-Primary);
+              border-radius: 0px 0 0 25px;
+              right: -2px;
+            }
+            .near-btn-top {
+              position: absolute;
+              width: 28px;
+              height: 27px;
+              border-radius: 100%;
+              top: 0px;
+              background: var(--3a-Primary);
+              right: 17px;
+            }
+          }
+        }
+      }
+      .shape-1{
+        min-width: 100%;
+        height: 204px;
+        background-color: var(--3a-Primary);
+      }
+    }
+    .dialogeCard{
+      background: #FFFFFF;
+      border-radius: 25px;
+    }
+}
+@media only screen and (max-width: 599px){
+  .pageSticky{
+    display: block;
+    z-index: 1000;
+  }
+}
 </style>
+
 <style lang="scss">
 .question-Bank-ToolBar {
   .q-expansion-item{
@@ -2178,7 +2338,6 @@ export default {
       }
     }
   }
-
   .q-expansion-item--collapsed {
     .q-item__section {
       display: flex;
@@ -2199,7 +2358,6 @@ export default {
       }
     }
   }
-
   .q-expansion-item--expanded {
     .q-item__section {
       display: flex;
@@ -2220,7 +2378,6 @@ export default {
       }
     }
   }
-
   .toolbar-detail {
     .toolbar-detail-container {
       .question-level-chart {
@@ -2443,11 +2600,9 @@ export default {
     }
   }
 }
-
 @media only screen and (max-width: 599px) {
   .question-Bank-ToolBar {
     .toolbar-card {
-      background-image: url('../../../../public/img/QuestionBank/toolbar-back-ground.png');
     }
   }
 }
