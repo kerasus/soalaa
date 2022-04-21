@@ -131,17 +131,9 @@ export default {
     return {
       lesson: '',
       group: '',
-      allNodesFromTree: [],
-      allNodesIds: [],
       selectedNodesIDs: [],
       loading: false,
-      newName: '',
-      newOrder: 1,
-      selectedNode: {},
-      editDialog: false,
-      newNode: {},
-      currentTreeNode: [],
-      treeHasChanged: false
+      currentTreeNode: []
     }
   },
   created () {},
@@ -184,7 +176,6 @@ export default {
   },
   methods: {
     updateNodes (values) {
-      // console.log('updateNodes', values)
       this.selectWantedTree(this.lesson)
       this.nodesUpdatedFromTree = values
       this.currentTreeNode = values
@@ -192,7 +183,6 @@ export default {
     },
     removeNode (node) {
       if (this.nodesUpdatedFromTree.find(item => item.id === node.id)) {
-        // console.log('setTickedMode')
         this.setTickedMode('tree', node.id, false)
       }
       this.removeNodeFromChosenSubjects(node)
@@ -222,14 +212,8 @@ export default {
       this.showTreeModalNode(lesson)
     },
     showTreeModalNode (item) {
-      // console.log('showTreeModalNode')
       this.showTree('tree', this.getNode(item.id))
-        .then((res) => {
-          // console.log('res', res)
-          // if (this.chosenSubjects[this.lesson.id] && this.chosenSubjects[this.lesson.id].nodes) {
-          //   console.log('switchToSelectedTree')
-          //   this.switchToSelectedTree(this.lesson.id)
-          // }
+        .then(() => {
           this.syncAllCheckedIds()
         })
         .catch(err => {
@@ -248,25 +232,18 @@ export default {
       this.chosenSubjects[lessonId].nodes = []
     },
     switchToSelectedTree (lessonId) {
-      // console.log('this.chosenSubjects[lessonId].nodes', this.chosenSubjects[lessonId].nodes)
       this.currentTreeNode = this.chosenSubjects[lessonId].nodes
-      // this.syncAllRemovedNodes()
     },
     updateChosenSubjects () {
       if (this.lesson.id) {
         this.chosenSubjects[this.lesson.id].nodes = this.currentTreeNode
       }
     },
-    syncAllRemovedNodes () {
-      console.log('syncAllRemovedNodes')
-    },
     syncAllCheckedIds () {
       if (this.lesson && this.chosenSubjects[this.lesson.id]) {
         const selectedNodesIds = this.chosenSubjects[this.lesson.id].nodes.map(item => item.id)
         if (selectedNodesIds.length > 0) {
-          // this.$refs.tree.clearAllTickedNodes()
           this.$refs.tree.setNodesTicked(selectedNodesIds, true)
-          // console.log('syncAllCheckedIds', selectedNodesIds)
         }
       }
     }
@@ -274,8 +251,6 @@ export default {
   watch: {
     modal (newVal) {
       if (!newVal) {
-        // this.updateChosenSubjects()
-        this.treeHasChanged = false
         return
       }
       if (this.lesson) {
@@ -328,6 +303,7 @@ export default {
   color: #23263B;
   .tree-chips-box {
     height: 412px;
+    max-width: 367px;
     background: #F4F5F6;
     border-radius: 10px;
     padding: 16px;
