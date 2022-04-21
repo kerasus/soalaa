@@ -55,9 +55,14 @@
                 @click="deleteAllNodes"
               />
             </div>
-            <div class="tree-chips-box">
+            <div
+              class="tree-chips-box"
+            >
+              <div
+                v-if="getAllSubjects[0]"
+              >
               <q-chip
-                v-for="item in currentTreeNode"
+                v-for="item in getAllSubjects"
                 :key="item"
                 class="tree-chips"
                 icon-remove="mdi-close"
@@ -66,6 +71,7 @@
               >
                 {{ item.title }}
               </q-chip>
+              </div>
             </div>
           </div>
         </div>
@@ -125,7 +131,7 @@ export default {
     return {
       lesson: '',
       group: '',
-      allNodes: [],
+      allNodesFromTree: [],
       allNodesIds: [],
       selectedNodesIDs: [],
       loading: false,
@@ -141,6 +147,19 @@ export default {
   created () {},
   updated () {},
   computed: {
+    getAllSubjects () {
+      const fieldText = []
+      if (Object.keys(this.chosenSubjects).length !== 0) {
+        for (const key in this.chosenSubjects) {
+          if (this.chosenSubjects[key].nodes && this.chosenSubjects[key].nodes.length > 0) {
+            this.chosenSubjects[key].nodes.forEach(val => {
+              fieldText.push(val)
+            })
+          }
+        }
+      }
+      return fieldText
+    },
     doesHaveLessons () {
       return !!(this.lessonsList && this.lessonsList.length > 0)
     },
@@ -165,31 +184,54 @@ export default {
   },
   methods: {
     updateNodes (values) {
+      // console.log('updateNodes', values)
+      this.selectWantedTree(this.lesson)
+      this.nodesUpdatedFromTree = values
       this.currentTreeNode = values
       this.selectedNodesIDs = values.map(item => item.id)
     },
-    removeNode (item) {
-      this.setTickedMode('tree', item.id, false)
+    removeNode (node) {
+      if (this.nodesUpdatedFromTree.find(item => item.id === node.id)) {
+        // console.log('setTickedMode')
+        this.setTickedMode('tree', node.id, false)
+      }
+      this.removeNodeFromChosenSubjects(node)
     },
     removeAllNodes () {
       this.setTickedMode('tree', this.selectedNodesIDs, false)
+      this.chosenSubjects = {}
     },
     deleteAllNodes () {
       this.removeAllNodes()
     },
+    removeNodeFromChosenSubjects (node) {
+      for (const key in this.chosenSubjects) {
+        this.chosenSubjects[key].nodes.forEach((value, index) => {
+          if (value.id === node.id) {
+            this.chosenSubjects[key].nodes.splice(index, 1)
+          }
+        })
+      }
+    },
     groupSelected (item) {
-      this.updateChosenSubjects()
       this.$emit('groupSelected', item)
       this.lesson = ''
     },
     lessonSelected (lesson) {
-      this.selectWantedTree(lesson)
       this.$emit('lessonSelected', lesson)
       this.showTreeModalNode(lesson)
     },
     showTreeModalNode (item) {
+      // console.log('showTreeModalNode')
       this.showTree('tree', this.getNode(item.id))
-        .then(() => {})
+        .then((res) => {
+          // console.log('res', res)
+          // if (this.chosenSubjects[this.lesson.id] && this.chosenSubjects[this.lesson.id].nodes) {
+          //   console.log('switchToSelectedTree')
+          //   this.switchToSelectedTree(this.lesson.id)
+          // }
+          this.syncAllCheckedIds()
+        })
         .catch(err => {
           console.log(err)
         })
@@ -206,21 +248,25 @@ export default {
       this.chosenSubjects[lessonId].nodes = []
     },
     switchToSelectedTree (lessonId) {
+      // console.log('this.chosenSubjects[lessonId].nodes', this.chosenSubjects[lessonId].nodes)
       this.currentTreeNode = this.chosenSubjects[lessonId].nodes
+      // this.syncAllRemovedNodes()
     },
     updateChosenSubjects () {
-      if (this.lesson) {
+      if (this.lesson.id) {
         this.chosenSubjects[this.lesson.id].nodes = this.currentTreeNode
       }
     },
+    syncAllRemovedNodes () {
+      console.log('syncAllRemovedNodes')
+    },
     syncAllCheckedIds () {
-      if (this.lesson) {
+      if (this.lesson && this.chosenSubjects[this.lesson.id]) {
         const selectedNodesIds = this.chosenSubjects[this.lesson.id].nodes.map(item => item.id)
-        // this.chosenSubjects.forEach(item => {
-        //   selectedNodesIds.push(item.id)
-        // })
         if (selectedNodesIds.length > 0) {
+          // this.$refs.tree.clearAllTickedNodes()
           this.$refs.tree.setNodesTicked(selectedNodesIds, true)
+          // console.log('syncAllCheckedIds', selectedNodesIds)
         }
       }
     }
@@ -228,7 +274,7 @@ export default {
   watch: {
     modal (newVal) {
       if (!newVal) {
-        this.updateChosenSubjects()
+        // this.updateChosenSubjects()
         this.treeHasChanged = false
         return
       }
@@ -236,10 +282,16 @@ export default {
         this.showTreeModalNode(this.lesson)
       }
     },
+    currentTreeNode (newVal) {
+      // console.log('currentTreeNode', newVal)
+      if (newVal.length > 0) {
+        this.updateChosenSubjects()
+      }
+    },
     lesson (newVal) {
       if (newVal && newVal !== '') {
-        this.treeHasChanged = true
-        this.updateChosenSubjects()
+        // this.syncAllCheckedIds()
+        // this.updateChosenSubjects()
       }
     }
   }
