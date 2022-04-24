@@ -1,15 +1,11 @@
 <template>
-  <div class="col-12 row">
-    <div
-      class="col-12"
-    >
-      <vue-tiptap-katex
-        ref="tiptap"
-        :loading="loading"
-        :options="{ bubbleMenu: false, floatingMenu: false, poem: true, reading: true, persianKeyboard: true }"
-      />
-    </div>
-  </div>
+    <div class="type-section">
+          <vue-tiptap-katex
+            ref="tiptap"
+            :loading="loading"
+            :options="{ bubbleMenu: false, floatingMenu: false, poem: true, reading: true, persianKeyboard: true }"
+          />
+        </div>
 </template>
 <script>
 
@@ -73,10 +69,22 @@ export default {
 }
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
+.type-section {
+  background-color: var(--3a-Neutral2);
+  border: 1px solid var(--3a-Neutral1);
+  border-radius: 16px;
+}
+
 </style>
 
-<style>
+<style lang="scss">
+.type-section {
+  .tiptap-header {
+    border-radius: 16px 16px 0 0;
+    background-color: var(--3a-Neutral3);
+  }
+}
 #mathfield .ML__cmr,
 .katex .mtight {
   font-family: IRANSans;
