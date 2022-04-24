@@ -331,11 +331,14 @@ const AdminActionOnQuestion = {
       this.$axios.post(API_ADDRESS.question.attach, {
         exam_id: data.exam.id,
         sub_category_id: data.sub_category.id,
-        question_id: this.question.id,
+        ...(this.question.id) && { question_id: this.question.id },
         order: data.order
       })
         .then(response => {
           this.question.exams = new AttachedExamList(response.data.data.exams)
+        })
+        .catch((er) => {
+          console.log(er)
         })
     },
     detachExam (data) {
@@ -344,6 +347,9 @@ const AdminActionOnQuestion = {
       })
         .then(response => {
           this.question.exams = new AttachedExamList(response.data.data.exams)
+        })
+        .catch((er) => {
+          console.log(er)
         })
     },
     openCloseImgPanel () {
