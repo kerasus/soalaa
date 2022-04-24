@@ -1,47 +1,35 @@
 <template>
-  <div class="Descriptive-Q">
-    <q-linear-progress
-      v-if="this.question.loading"
-      size="md"
-      indeterminate
-      rounded
-      color="primary"
-    />
-    <q-card class="question-card default-questions-card">
-      <q-card-section class="question default-Qcard-title">
-        <div>صورت سوال</div>
-      </q-card-section>
-      <q-separator inset />
-      <q-card-section>
-        <div
-          class="row justify-between question-box default-Qcard-box"
-        >
-          <QuestionField
-            ref="tiptapQuestionStatement"
-            :key="'statement' + domKey"
-            :editorValue="question.statement"
-          />
-        </div>
-      </q-card-section>
-    </q-card>
-      <q-card
-        class="default-questions-card Descriptive-A"
-      >
-      <q-card-section class="default-Qcard-title">
-        <div>پاسخ تشریحی</div>
-      </q-card-section>
-      <q-separator inset />
-      <q-card-section>
-        <div class="row justify-between default-Qcard-box">
-          <QuestionField
-            ref="tiptapDescriptiveAnswer"
-            :key="'descriptive_answer' + domKey"
-            :editor-value="question.descriptive_answer"
-          />
-        </div>
-      </q-card-section>
-    </q-card>
-  </div>
+  <q-linear-progress
+    v-if="this.question.loading"
+    size="md"
+    indeterminate
+    rounded
+    color="primary"
+  />
+  <q-card class="edit-question-main-card custom-card">
+    <q-card-section class="main-card-section question">
+      <div class="card-section-header">
+        <span>صورت سوال</span>
+      </div>
+      <div class="question-box">
+        <QuestionField
+          ref="tiptapQuestionStatement"
+          :key="'statement' + domKey"
+          :editorValue="question.statement"
+        />
+      </div>
+    </q-card-section>
+    <q-card-section class="main-card-section long-answer">
+      <div class="card-section-header">پاسخ تشریحی</div>
+      <div class="answer-box">
+        <QuestionField
+          ref="tiptapDescriptiveAnswer"
+          :key="'descriptive_answer' + domKey"
+          :editor-value="question.descriptive_answer"
+        />
+      </div>
+    </q-card-section>
+  </q-card>
 </template>
 
 <script>
@@ -147,6 +135,34 @@ export default {
 </script>
 
 <style scoped lang="scss">
+.edit-question-main-card {
+  margin-top: 43px;
+  margin-bottom: 40px;
+  .main-card-section {
+    .card-section-header {
+      display: flex;
+      font-size: 16px;
+      color: black;
+      margin: 8px 18px 0;
+      align-items: center;
+      @media screen and (max-width: 1024px) {
+        margin: 8px 0;
+      }
+      .save-btn {
+        &:deep(.q-icon){
+          order: 1;
+        }
+      }
+
+    }
+    .question-box , .answer-box {
+      margin: 16px 8px;
+      @media screen and (max-width: 1024px) {
+        margin: 16px 0;
+      }
+    }
+  }
+}
 .Descriptive-Q {
   padding-top: 35px;
   font-style: normal;
