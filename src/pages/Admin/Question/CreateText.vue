@@ -23,7 +23,7 @@
         :lessons="subCategoriesList"
       />
       <div class="attach-btn row">
-        <question-details class="col-9"/>
+        <question-identifier class="col-9"/>
         <btn-box
           class="col-3"
           @saveQuestion="setQuestionContents"
@@ -46,7 +46,6 @@
 import Navbar from 'components/Question/QuestionPage/Create/textMode/Navbar'
 // import DynamicComponent from 'components/Question/QuestionPage/Create/textMode/questionTypes/DynamicComponent'
 import { Question } from 'src/models/Question'
-import QuestionDetails from 'components/Question/QuestionPage/Create/textMode/QuestionDetails'
 import AdminActionOnQuestion from 'src/mixin/AdminActionOnQuestion'
 import { QuestionType, TypeList } from 'src/models/QuestionType'
 import AttachExam from 'components/Question/QuestionPage/AttachExam/AttachExam'
@@ -54,19 +53,16 @@ import CommentBox from 'components/Question/QuestionPage/StatusChange'
 import BtnBox from 'components/Question/QuestionPage/BtnBox'
 import { ExamList } from 'src/models/Exam'
 import { QuestSubcategoryList } from 'src/models/QuestSubcategory'
+import QuestionIdentifier from 'components/Question/QuestionPage/QuestionIdentifier'
 // import API_ADDRESS from 'src/api/Addresses'
 export default {
   name: 'CreateText',
   components: {
-    // DescriptiveQuestion: defineAsyncComponent(() => import('components/Question/QuestionPage/Create/textMode/questionTypes/DescriptiveQuestion/DescriptiveQuestion')),
-    // MultipleChoiceQuestion: defineAsyncComponent(() => import('components/Question/QuestionPage/Create/textMode/questionTypes/MultipleChoiceQuestion/MultipleChoiceQuestion')),
-    // MBTIQuestion: defineAsyncComponent(() => import('components/Question/QuestionPage/Create/textMode/questionTypes/MBTIQuestion/MBTIQuestion')),
+    QuestionIdentifier,
     BtnBox,
     CommentBox,
     AttachExam,
-    // DynamicComponent,
-    Navbar,
-    QuestionDetails
+    Navbar
   },
   mixins: [
     AdminActionOnQuestion

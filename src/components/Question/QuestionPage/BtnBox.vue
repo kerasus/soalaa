@@ -53,7 +53,6 @@ export default {
 
 <style scoped lang="scss">
 .question-details {
-  margin-top: 40px;
   font-style: normal;
   font-weight: 500;
   font-size: 16px;
@@ -76,7 +75,7 @@ export default {
       text-align: end;
       display: flex;
       align-items: center;
-      justify-content: center;
+      justify-content: flex-end;
       width: 100%;
       .default-detail-btn {
         width: 144px;
