@@ -38,6 +38,7 @@
         :exams="exams"
         :lessons="lessons"
         :categories="categories"
+        :buffer="buffer"
         @attach="emitAttachExam"
         @detach="emitDetachExam"
       />
