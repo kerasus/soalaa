@@ -29,16 +29,25 @@
         <upload-image v-model="question" title="پاسخ سوال" field-key="answer_photos"/>
       </div>
     </div>
-    <attach-exam
-      :exams="examList"
-      :lessons="subCategoriesList"
-      :categories="categoryList"
-      :buffer="true"
-    />
-    <div class="attach-btn row">
-      <question-identifier class="col-9"/>
+    <div class="relative-position">
+      <div class="attach-btn row">
+        <question-identifier
+          class="col-12"
+          :exams="examList"
+          :lessons="subCategoriesList"
+          :categories="categoryList"
+          :gradesList="gradesList"
+          :groups-list="lessonGroupList"
+          :lessons-list="lessonsList"
+          @gradeSelected="getLessonGroupList"
+          @groupSelected="getLessonsList"
+          @attach="attachExam"
+          @detach="detachExam"
+          @tags-collected="setTags"
+        />
+      </div>
       <btn-box
-        class="col-3"
+        class="col-12"
         @saveQuestion="createQuestionImage(question)"
       />
     </div>
@@ -51,22 +60,23 @@ import { Question } from 'src/models/Question'
 import BtnBox from 'components/Question/QuestionPage/BtnBox'
 import { computed } from 'vue'
 import { AdminActionOnQuestion } from 'src/mixin/Mixins'
-import AttachExam from 'components/Question/QuestionPage/AttachExam/AttachExam'
 import { ExamList } from 'src/models/Exam'
 import { QuestSubcategoryList } from 'src/models/QuestSubcategory'
 import { QuestionStatusList } from 'src/models/QuestionStatus'
 import { QuestCategoryList } from 'src/models/QuestCategory'
 import QuestionIdentifier from 'components/Question/QuestionPage/QuestionIdentifier'
-
+import mixinTree from 'src/mixin/Tree'
 export default {
   name: 'CreateImage',
   components: {
     QuestionIdentifier,
     uploadImage,
-    AttachExam,
     BtnBox
   },
-  mixins: [AdminActionOnQuestion],
+  mixins: [
+    AdminActionOnQuestion,
+    mixinTree
+  ],
   data () {
     return {
       question: new Question(),
@@ -81,6 +91,7 @@ export default {
   },
   created () {
     this.getPageReady()
+    this.getGradesList()
   },
   updated () {
   },
