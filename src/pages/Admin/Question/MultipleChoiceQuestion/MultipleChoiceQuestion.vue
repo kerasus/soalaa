@@ -3,7 +3,6 @@
     <q-card-section class="main-card-section question">
       <div class="card-section-header">
         <span>صورت سوال</span>
-        <q-btn label="ویرایش گزینه ها" flat color="primary"/>
       </div>
       <div class="question-box">
         <QuestionField
@@ -30,6 +29,7 @@
             color="primary"
             @click="choiceClicked(item.order)"
           />
+          <q-btn label="حذف گزینه" flat color="primary" @click="removeChoice(item.order)"/>
         </div>
         <div class="multiple-answer-box">
           <QuestionField
@@ -295,10 +295,7 @@ export default {
 
     }
     .question-box , .answer-box, .multiple-answer-box {
-      background-color: var(--3a-Neutral2);
       margin: 16px 8px;
-      border: 1px solid var(--3a-Neutral1);
-      border-radius: 16px;
       @media screen and (max-width: 1024px) {
         margin: 16px 0;
       }
@@ -308,14 +305,14 @@ export default {
 </style>
 
 <style lang="scss">
-.create-question-main-card {
-  .main-card-section {
-      .tiptap-header {
-        border-radius: 16px 16px 0 0;
-        background-color: var(--3a-Neutral3);
-      }
-  }
-}
+//.create-question-main-card {
+//  .main-card-section {
+//      .tiptap-header {
+//        border-radius: 16px 16px 0 0;
+//        background-color: var(--3a-Neutral3);
+//      }
+//  }
+//}
 
 </style>
 
