@@ -14,7 +14,10 @@ const AdminActionOnQuestion = {
       optionQuestionId: '',
       questionStatusId_draft: null,
       questionStatusId_pending_to_type: null,
-      allTypes: new TypeList()
+      allTypes: new TypeList(),
+      gradesList: null,
+      lessonGroupList: null,
+      lessonsList: null
     }
   },
   computed: {
@@ -348,6 +351,31 @@ const AdminActionOnQuestion = {
       if (!this.isPanelOpened) {
         this.imgFloatMode = false
       }
+    },
+    setNodesList () {},
+    getGradesList () {
+      this.getRootNode('test').then(response => {
+        this.gradesList = response.data.data.children
+      })
+    },
+    getLessonGroupList (item) {
+      this.getNode(item.id).then(response => {
+        this.lessonGroupList = response.data.data.children
+      })
+    },
+    getLessonsList (item) {
+      this.getNode(item.id).then(response => {
+        this.lessonsList = response.data.data.children
+      })
+    },
+    setTags (allTags) {
+      this.$axios.put(API_ADDRESS.tags.setTags(this.question.id), allTags)
+        .then(response => {
+          console.log(response.data.data)
+        })
+        .catch((er) => {
+          console.log(er)
+        })
     }
   }
 }
