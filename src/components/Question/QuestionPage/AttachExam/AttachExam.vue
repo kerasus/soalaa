@@ -276,7 +276,7 @@ export default {
 <style scoped lang="scss">
 .q-dialog {
   .q-dialog__inner--minimized > div {
-    min-width: 720px;
+    width: 720px;
     height: 600px;
   }
   .attach-exam-card {
