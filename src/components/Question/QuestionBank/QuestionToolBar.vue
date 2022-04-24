@@ -2251,6 +2251,9 @@ export default {
             background-color: #8ED6FF;
           }
         }
+        .question-highchart{
+          padding-left: 13px;
+        }
       }
 
       .question-deActive {
@@ -2631,8 +2634,6 @@ export default {
   .toolbar-detail {
     .toolbar-detail-container {
       .question-level-chart {
-        padding-left: 30px;
-
         .question-highchart {
           .title-1 {
             font-weight: 700;
@@ -2780,7 +2781,6 @@ export default {
 
               .question-level-chart {
                 padding-left: 6px;
-
                 .question-highchart {
                   padding-left: 10px;
                 }
