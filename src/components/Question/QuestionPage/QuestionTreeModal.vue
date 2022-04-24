@@ -35,6 +35,7 @@
               <tree
                 @ticked="updateNodes"
                 ref="tree"
+                :key="treeKey"
                 tick-strategy="strict"
                 :get-node-by-id="getNodeById"
                 @lazy-loaded="syncAllCheckedIds"
@@ -133,7 +134,9 @@ export default {
       group: '',
       selectedNodesIDs: [],
       loading: false,
-      currentTreeNode: []
+      currentTreeNode: [],
+      lastTreeNodes: [],
+      treeKey: 0
     }
   },
   created () {},
@@ -212,6 +215,7 @@ export default {
       this.showTreeModalNode(lesson)
     },
     showTreeModalNode (item) {
+      this.treeKey += 1
       this.showTree('tree', this.getNode(item.id))
         .then(() => {
           this.syncAllCheckedIds()
@@ -258,16 +262,9 @@ export default {
       }
     },
     currentTreeNode (newVal) {
-      // console.log('currentTreeNode', newVal)
-      if (newVal.length > 0) {
-        this.updateChosenSubjects()
-      }
-    },
-    lesson (newVal) {
-      if (newVal && newVal !== '') {
-        // this.syncAllCheckedIds()
-        // this.updateChosenSubjects()
-      }
+      // if (newVal.length > 0) {
+      this.updateChosenSubjects()
+      // }
     }
   }
 }

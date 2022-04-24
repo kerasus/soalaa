@@ -292,6 +292,8 @@ export default {
       this.lessonsTitles = fieldText
     },
     getIdentifierData () {
+      this.updateLessonsTitles()
+      this.identifierData.push(...this.lessonsTitles)
       this.identifierData.push(...this.getTagsTitles(this.subjectsFieldText))
       this.identifierData.push(...this.getTagsTitles(this.grade))
       this.identifierData.push(...this.getTagsTitles(this.major))
