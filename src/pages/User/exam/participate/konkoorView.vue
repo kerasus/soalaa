@@ -64,8 +64,9 @@
       </div>
       <div class="row timer-row">
         <q-btn
-          v-if="false"
           class="end-exam-btn"
+          :loading="confirmationBtnLoading"
+          :disabled="confirmationBtnLoading"
           @click="getConfirmation"
         >
           ارسال پاسخنامه
@@ -84,6 +85,54 @@
         </div>
       </div>
     </div>
+    <q-dialog
+      v-model="confirmationBubbleSheet"
+      persistent
+      maximized
+      transition-show="slide-up"
+      transition-hide="slide-down"
+    >
+      <q-card class="">
+        <q-bar class="bg-blue text-white q-pa-lg">
+          <div>
+            پاسخنامه کاربر
+          </div>
+          <q-space></q-space>
+          <q-btn dense flat icon="close" v-close-popup>
+            <q-tooltip class="bg-white text-blue">بستن</q-tooltip>
+          </q-btn>
+        </q-bar>
+        <q-card-section>
+          <q-card flat>
+            <q-card-section>
+              از ارسال پاسخ ها اطمینان دارید؟
+            </q-card-section>
+            <q-card-section>
+              <q-btn
+                flat style="color: #585858"
+                @click="confirmationBubbleSheet = false"
+              >
+                ادامه میدم
+              </q-btn>
+              <q-btn
+                flat
+                color="secondary"
+                @click="confirmSendingAllAnswers"
+              >
+                ثبت میکنم
+              </q-btn>
+            </q-card-section>
+          </q-card>
+        </q-card-section>
+
+        <q-card-section>
+          <bubble-sheet
+            :info="{ type: 'pasokh-nameh' }"
+            delay-time="0"
+          />
+        </q-card-section>
+      </q-card>
+    </q-dialog>
   </div>
 </template>
 
@@ -99,6 +148,7 @@ import { ref } from 'vue'
 import { mapGetters } from 'vuex'
 
 import 'src/assets/scss/markdownKatex.scss'
+import ExamData from 'assets/js/ExamData'
 
 export default {
   name: 'konkoorView',
@@ -120,6 +170,8 @@ export default {
       renderedQuestions: { startIndex: 0, endIndex: 0 },
       questions: [],
       inView: [],
+      confirmationBubbleSheet: false,
+      confirmationBtnLoading: false,
       timerIsOpen: false,
       scroller: ref(null),
       leftSideList: ref(null)
@@ -185,21 +237,39 @@ export default {
       this.timerIsOpen = value
     },
     getConfirmation () {
-      const that = this
-      // TODO --> conrim in store should be fix
-      this.$store.commit('AppLayout/showConfirmDialog', {
-        message: 'از ارسال پاسخ ها اطمینان دارید؟',
-        button: {
-          no: 'ادامه میدم',
-          yes: 'ثبت میکنم'
-        },
-        callback: (confirm) => {
-          if (!confirm) {
-            return
-          }
-          that.sendAnswersAndFinishExam()
-        }
-      })
+      this.confirmationBtnLoading = true
+      this.syncUserAnswersWithDBAndSendAnswersToServerInExamTime(this.quiz.user_exam_id, false)
+        .then(() => {
+          const examData = new ExamData()
+          examData.getUserExamData(this.quiz.user_exam_id)
+            .run()
+            .then(() => {
+              this.$store.commit('mergeDbAnswersIntoLocalstorage', {
+                dbAnswers: examData.userExamData,
+                exam_id: examData.exam.id
+              })
+              this.confirmationBubbleSheet = true
+              this.confirmationBtnLoading = false
+            })
+            .catch(() => {
+              this.confirmationBubbleSheet = true
+              this.confirmationBtnLoading = false
+            })
+        })
+        .catch(() => {
+          this.confirmationBubbleSheet = true
+          this.confirmationBtnLoading = false
+        })
+    },
+    confirmSendingAllAnswers () {
+      this.syncUserAnswersWithDBAndSendAnswersToServerInExamTime(this.quiz.user_exam_id, false)
+        .then(() => {
+          this.$router.push({ name: 'user.exam.list' })
+          this.confirmationBubbleSheet = true
+        })
+        .catch(erroe => {
+          console.log('erroe : ', erroe)
+        })
     },
     sendAnswersAndFinishExam () {
       const that = this
@@ -318,7 +388,7 @@ export default {
       this.changeQuestion(questionId)
     },
     view () {
-      if (this.windowSize.x > 959) {
+      if (this.windowSize.x > 1024) {
         this.changeAppBarAndDrawer(false)
       } else {
         this.$router.push({
@@ -359,6 +429,9 @@ export default {
       .question-field {
         &.q-item {
           padding: 0;
+        }
+        &:deep(.reading-duplicate) {
+          display: none;
         }
       }
     }

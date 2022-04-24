@@ -438,7 +438,6 @@ const mixinQuiz = {
           examData.loadQuestionsFromFile()
         } else {
           userExamId = that.quiz.user_exam_id
-          // that.loadCurrentQuestion(viewType)
         }
         examData.getUserExamData(userExamId)
           .run()
@@ -480,6 +479,22 @@ const mixinQuiz = {
             that.$store.commit('loading/overlay', false)
           })
       })
+    },
+    getLatestUserAnswersFromServer () {
+      const examData = new ExamData(this.$axios)
+      examData.getUserExamData(this.quiz.user_exam_id)
+        .run()
+        .then((result) => {
+          try {
+            this.$store.commit('Exam/mergeDbAnswersIntoLocalstorage', {
+              dbAnswers: examData.userExamData,
+              user_exam_id: this.quiz.user_exam_id
+            })
+            setTimeout(() => { this.refreshFailedLists(this.quiz.user_exam_id) }, 0)
+          } catch (error) {
+            console.error(error)
+          }
+        })
     },
     needToLoadQuizData () {
       return (!Assistant.getId(this.quiz.id) || !Assistant.getId(this.quiz.user_exam_id) || Assistant.getId(this.$route.params.quizId) !== Assistant.getId(this.quiz.id))
@@ -532,15 +547,15 @@ const mixinQuiz = {
     hasExamDataOnThisDeviseStorage (userExamId) {
       return !!this.userQuizListData[userExamId]
     },
-    syncUserAnswersWithDBAndSendAnswersToServerInExamTime (userExamId, examUserId, finishExam) {
-      const answers = this.getUserAnswers(userExamId)
+    syncUserAnswersWithDBAndSendAnswersToServerInExamTime (userExamId, finishExam) {
+      const questions = this.getUserAnswers(userExamId)
 
-      return this.$axios.post(API_ADDRESS.exam.sendAnswers, { exam_user_id: examUserId, finish: finishExam, questions: answers })
+      return this.$axios.post(API_ADDRESS.exam.sendAnswers, { exam_user_id: userExamId, finish: finishExam, questions })
     },
-    syncUserAnswersWithDBAndSendAnswersToServerAfterExamTime (userExamId, examUserId, finishExam) {
-      const answers = this.getUserAnswers(userExamId)
+    syncUserAnswersWithDBAndSendAnswersToServerAfterExamTime (userExamId, finishExam) {
+      const questions = this.getUserAnswers(userExamId)
 
-      return this.$axios.post(API_ADDRESS.exam.sendAnswersAfterExam, { exam_user_id: examUserId, finish: finishExam, questions: answers })
+      return this.$axios.post(API_ADDRESS.exam.sendAnswersAfterExam, { exam_user_id: userExamId, finish: finishExam, questions })
     },
     isLtrString (string) {
       if (!string) {

@@ -3,12 +3,12 @@
     <div
       name="question-choice-number"
       class="question-choice-number"
-      :class="questionData.answer ? 'correct-answer' : 'wrong-answer'"
+      :class="choice.answer ? 'correct-answer' : 'wrong-answer'"
     >
-      {{ questionData.order }}
+      {{ choice.number }}
     </div>
     <div name="answer-text" class="answer-text">
-      <vue-katex :input="questionData.title"/>
+      <vue-katex :input="choice.title"/>
     </div>
   </div>
 
@@ -23,7 +23,7 @@ export default {
   },
   name: 'QuestionChoice',
   props: {
-    questionData: {
+    choice: {
       types: '',
       default: ''
     }
@@ -35,11 +35,12 @@ export default {
 .choice-box{
   display: flex;
   align-items: flex-start;
+  margin-bottom: 18px;
   .answer-text{
+    line-height: 24px;
   }
   .question-choice-number {
-    margin-right: 10px;
-    margin-top: 3px;
+    margin:3px 10px 0 10px;
     border-radius: 50%;
     text-align: center;
     color: #ffffff;
@@ -52,6 +53,11 @@ export default {
   }
   .wrong-answer {
     background: #9690E4;
+  }
+}
+@media only screen and (max-width: 599px){
+  .choice-box{
+    margin-bottom: -7px;
   }
 }
 

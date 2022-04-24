@@ -117,7 +117,7 @@
                   <choice
                     :question-id="currentQuestion.id"
                     :choice="item"
-                    :is-rtl="isRtl"
+                    :is-rtl="!isLtrString(item.title)"
                     @answerClicked="answerClicked"
                   />
                 </div>
@@ -164,10 +164,21 @@ export default {
     Timer
   },
   mixins: [mixinAuth, mixinQuiz, mixinUserActionOnQuestion, mixinDrawer],
-  data () {
-    return {
-      isRtl: false
-    }
+  beforeRouteEnter () {
+    // console.log('AlaaView beforeRouteEnter')
+  },
+  beforeRouteLeave () {
+    // console.log('AlaaView beforeRouteLeave')
+  },
+  beforeRouteUpdate () {
+    // console.log('AlaaView beforeRouteUpdate')
+    this.getLatestUserAnswersFromServer()
+  },
+  activated () {
+    // console.log('AlaaView activated')
+  },
+  updated () {
+    // console.log('AlaaView updated')
   },
   mounted () {
     this.updateOverlay(true)
@@ -184,7 +195,6 @@ export default {
     startExamProcess () {
       this.startExam(this.$route.params.quizId, 'onlineQuiz.alaaView')
         .then(() => {
-          this.isRtl = !this.isLtrString(this.currentQuestion.statement)
           this.setSocket(this.$store.getters['Auth/accessToken'], this.quiz.id)
           if (!this.getCurrentExamQuestionsInArray().length) {
             this.$router.push({ name: 'user.exam.list' })

@@ -114,7 +114,7 @@ class Question extends Model {
         default: 0
       },
       {
-        key: 'difficulty',
+        key: 'level',
         default: 1
       },
       {
@@ -130,7 +130,10 @@ class Question extends Model {
         default: []
       },
       { key: 'created_at' },
-      { key: 'updated_at' }
+      { key: 'updated_at' },
+
+      // ToDo: remove this
+      { key: 'source_data' }
     ])
 
     if (this.id) {
@@ -168,12 +171,6 @@ class Question extends Model {
           key: 'exams',
           value: function () {
             return that.exams.list
-          }
-        },
-        {
-          key: 'level',
-          value: function () {
-            return that.difficulty
           }
         },
         {

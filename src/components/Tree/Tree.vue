@@ -5,9 +5,9 @@
     no-nodes-label="درختی ایجاد نشده است!"
     node-key="id"
     ref="tree"
-    icon="isax:minus-square"
-    control-color="orange"
+    control-color="secondary"
     label-key="title"
+    icon="isax:add-square"
     :tick-strategy="tickStrategy"
     v-model:ticked="ticked"
     @update:ticked="tickedNode"
@@ -94,7 +94,9 @@
 </template>
 <script>
 import { TreeNode, TreeNodeList } from 'src/models/TreeNode'
-
+// "\e90b"
+// "\eb21"
+// 'iconsax' !important
 export default {
   name: 'Tree',
   props: {
@@ -134,7 +136,9 @@ export default {
       editDialog: false
     }
   },
-  emits: ['ticked'],
+  created () {},
+  mounted () {},
+  emits: ['ticked', 'lazy-loaded'],
   methods: {
     createRoot (nodeData) {
       const treeNodeData = new TreeNode(nodeData)
@@ -156,6 +160,7 @@ export default {
         tree.push(new TreeNode({ id: child.id, title: child.title, parent: node.id }))
       })
       done(tree)
+      this.$emit('lazy-loaded', tree)
     },
 
     getChildOfNode ({ node, key, done, fail }) {
@@ -172,6 +177,7 @@ export default {
         tree.push(new TreeNode({ id: child.id, title: child.title, order: child.order, parent: node.id }))
       })
       done(tree)
+      this.$emit('lazy-loaded', tree)
     },
 
     showChildOfNodeFromServer (node, key, done, fail) {
@@ -218,11 +224,10 @@ export default {
     },
 
     setNodesTicked (keys, state) {
-      if (state) {
-        this.$refs.tree.setTicked(keys, state)
-      } else {
-        this.$refs.tree.setTicked(keys, false)
+      if (!state) {
+        state = false
       }
+      this.$refs.tree.setTicked(keys, state)
     },
 
     toggleMenu (state) {
@@ -236,6 +241,7 @@ export default {
     display: inline-block;
 
     .node-title {
+      color: var(--3a-TextPrimary);
       &:hover {
         .edit-btn {
           color: #f18305;
@@ -246,61 +252,46 @@ export default {
       }
       .none-edit-btn{
         display: none;
-      }
-    }
-    .q-checkbox{
-      &.q-tree__tickbox {
-        color: blue !important;
       }
     }
   }
 </style>
 <style lang='scss'>
-  .q-tree {
-    display: inline-block;
+.q-tree {
+  .q-tree__node--parent {
+    .q-tree__node-header {
+      .q-icon {
+        font-size: 20px;
+        margin-right: 8px;
 
-    .node-title {
-      &:hover {
-        .edit-btn {
-          color: #f18305;
+        &.q-tree__arrow, &.q-tree__arrow--rotate {
+          transform: none !important;
+          transition: none !important;
         }
-      }
-      .edit-btn {
-        color: transparent;
-      }
-      .none-edit-btn{
-        display: none;
+
+        &.q-tree__arrow--rotate {
+          &:before {
+            content: "\eb21";
+          }
+        }
       }
     }
   }
+}
 
   .q-tree__node:after {
     right: auto;
     left: -13px;
-    top: -3px;
-    bottom: -22px;
-    //opacity: 0.2;
+    top: 0;
+    bottom: -31px;
     border-left: 2px solid #d5d6da;
   }
 
   .q-tree__node-header::before {
     border-bottom: 0 !important;
     left: -35px;
-    //opacity: 0.2;
+    bottom: 2px;
     border-left: 2px solid #d5d6da;
   }
-  .q-checkbox--dense .q-checkbox__inner.q-checkbox__inner--falsy{
-    color: #65677F !important;
-  }
-  .q-checkbox{
-    margin-right: 8px;
-  }
-  .q-checkbox__bg{
-    border-radius: 5px;
-    border: 1px solid;
-  }
-  .q-icon{
-    font-size: 20px;
-    margin-right: 8px;
-  }
+
 </style>

@@ -9,12 +9,21 @@
       </div>
       <div class="col-xl-9 col-lg-9 col-md-9 col-sm-12 col-xs-12">
         <div class="question-bank-toolbar">
-          <QuestionToolBar/>
+          <QuestionToolBar
+            @RemoveChoose="RemoveChoose"
+          />
         </div>
         <div class="question-bank-content">
-          <question-item v-if="questions.loading" :question="loadingQuestion"/>
+          <question-item v-if="questions.loading" :question="loadingQuestion" />
           <template v-else>
-            <question-item v-for="question in questions.list" :key="question.id" :question="question"/>
+            <question-item
+              v-for="question in questions.list"
+              :key="question.id"
+              :question="question"
+              :isSelected="isSelected(question.id)"
+              pageStrategy="question-bank"
+              @checkSelect="QuestionDecreaseIncrease"
+            />
           </template>
         </div>
 
@@ -44,6 +53,9 @@ export default {
   components: { QuestionBankHeader, QuestionToolBar, QuestionFilter, QuestionItem, pagination },
   data () {
     return {
+      selectedQuestions: [],
+      test: false,
+      questionId: [],
       loadingQuestion: new Question(),
       questions: new QuestionList(),
       disablePagination: false,
@@ -74,6 +86,31 @@ export default {
     this.getQuestionData()
   },
   methods: {
+    RemoveChoose (subcategoryId) {
+      console.log(subcategoryId)
+      return subcategoryId
+    },
+    isSelected (questionId) {
+      const target = this.selectedQuestions.find(question => question.id === questionId)
+      return !!target
+    },
+    QuestionDecreaseIncrease (selected, question) {
+      if (selected) {
+        this.addQuestionToSelectedList(question)
+      } else {
+        this.deleteQuestionFromSelectedList(question)
+      }
+    },
+    addQuestionToSelectedList (question) {
+      this.selectedQuestions.push(question)
+    },
+    deleteQuestionFromSelectedList (question) {
+      const target = this.selectedQuestions.findIndex(questionItem => questionItem.id === question.id)
+      if (target === -1) {
+        return
+      }
+      this.selectedQuestions.splice(target, 1)
+    },
     updatePage (page) {
       this.getQuestionData(page)
     },
