@@ -10,7 +10,7 @@
       <div class="col-xl-9 col-lg-9 col-md-9 col-sm-12 col-xs-12">
         <div class="question-bank-toolbar">
           <QuestionToolBar
-            @RemoveChoose="RemoveChoose"
+            @RemoveChoice="RemoveChoice"
           />
         </div>
         <div class="question-bank-content">
@@ -85,7 +85,7 @@ export default {
     this.getQuestionData()
   },
   methods: {
-    RemoveChoose (subcategoryId) {
+    RemoveChoice (subcategoryId) {
       console.log(subcategoryId)
       return subcategoryId
     },
