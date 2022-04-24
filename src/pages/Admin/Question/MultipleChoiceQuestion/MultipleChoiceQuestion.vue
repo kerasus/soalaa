@@ -305,18 +305,6 @@ export default {
 }
 </style>
 
-<style lang="scss">
-//.create-question-main-card {
-//  .main-card-section {
-//      .tiptap-header {
-//        border-radius: 16px 16px 0 0;
-//        background-color: var(--3a-Neutral3);
-//      }
-//  }
-//}
-
-</style>
-
 <!--<style scoped lang="scss">-->
 <!--.create-question-main-card {-->
 <!--  margin-top: 43px;-->

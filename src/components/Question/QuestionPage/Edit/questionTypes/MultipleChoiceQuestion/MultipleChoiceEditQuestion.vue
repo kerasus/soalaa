@@ -49,8 +49,7 @@
       </q-card-section>
     <q-card-section class="row main-card-section">
         <div class="col-12">
-          <div class="card-section-header full-width justify-between">
-          <div>
+          <div class="card-section-header">
             <q-btn
               class="icon-type"
               icon="isax:add-square5"
@@ -59,15 +58,6 @@
               @click="addChoice"
             />
             <span>گزینه جدید</span>
-          </div>
-            <q-btn
-              class="save-btn"
-              label="تایید و ذخیره"
-              icon="check"
-              color="positive"
-              flat
-              rtl
-            />
           </div>
         </div>
       </q-card-section>
@@ -286,59 +276,59 @@ export default {
     }
   }
 }
-.multiple-choice-Q {
-  padding-top: 35px;
-  font-style: normal;
-  font-weight: 500;
-  font-size: 16px;
-  line-height: 28px;
-  color: #23263B;
-  text-align: right #{"/* rtl:ignore */"};
-  .removeAllChoice-btn {
-    color: #FFFFFF;
-    background: #9690E4;
-    border-radius: 10px;
-  }
-  .multiple-choice-A {
-    padding-top: 12px;
-    padding-bottom: 12px;
-  }
-  .question-card {
-    .question {
-      font-size: 14px;
-      line-height: 24px;
-      padding: 15px 20px;
-    }
-    .question-box {
-      align-items: last baseline;
-      font-weight: normal;
-      font-size: 14px;
-      line-height: 24px;
-      .question-img {
-        text-align: left #{"/* rtl:ignore */"};
-        .q-img {
-          border-radius: 0px 0px 1px 20px #{"/* rtl:ignore */"};
-          padding: 0;
-        }
-      }
-    }
-  }
-}
-.multiple-choice-Answer {
-  .answer-box {
-    padding-top: 12px;
-    padding-bottom: 12px;
-    :nth-child(2n){
-      padding-right: 0px #{"/* rtl:ignore */"};
-    }
-    :nth-child(2n+1){
-      padding-left: 0px #{"/* rtl:ignore */"};
-    }
-    .q-separator--horizontal-inset {
-      margin-right: 16px #{"/* rtl:ignore */"} !important ;
-    }
-  }
-}
+//.multiple-choice-Q {
+//  padding-top: 35px;
+//  font-style: normal;
+//  font-weight: 500;
+//  font-size: 16px;
+//  line-height: 28px;
+//  color: #23263B;
+//  text-align: right #{"/* rtl:ignore */"};
+//  .removeAllChoice-btn {
+//    color: #FFFFFF;
+//    background: #9690E4;
+//    border-radius: 10px;
+//  }
+//  .multiple-choice-A {
+//    padding-top: 12px;
+//    padding-bottom: 12px;
+//  }
+//  .question-card {
+//    .question {
+//      font-size: 14px;
+//      line-height: 24px;
+//      padding: 15px 20px;
+//    }
+//    .question-box {
+//      align-items: last baseline;
+//      font-weight: normal;
+//      font-size: 14px;
+//      line-height: 24px;
+//      .question-img {
+//        text-align: left #{"/* rtl:ignore */"};
+//        .q-img {
+//          border-radius: 0px 0px 1px 20px #{"/* rtl:ignore */"};
+//          padding: 0;
+//        }
+//      }
+//    }
+//  }
+//}
+//.multiple-choice-Answer {
+//  .answer-box {
+//    padding-top: 12px;
+//    padding-bottom: 12px;
+//    :nth-child(2n){
+//      padding-right: 0px #{"/* rtl:ignore */"};
+//    }
+//    :nth-child(2n+1){
+//      padding-left: 0px #{"/* rtl:ignore */"};
+//    }
+//    .q-separator--horizontal-inset {
+//      margin-right: 16px #{"/* rtl:ignore */"} !important ;
+//    }
+//  }
+//}
 </style>
 <style lang="scss">
 //// USED IN MANY OTHER COMPONENTS
