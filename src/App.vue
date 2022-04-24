@@ -8,34 +8,34 @@ import 'src/assets/scss/IranyekanFont.scss'
 import 'src/css/customTheme.scss'
 import 'src/css/Theme/theme.scss'
 
-import { mixinSetIcons } from './mixin/Mixins.js'
 // import 'material-icons/material-icons.css'
 import { defineComponent } from 'vue'
+
 export default defineComponent({
   name: 'App',
-  mixins: [mixinSetIcons],
   data: () => ({
     refreshing: false,
     registration: null,
     updateExists: false
   }),
   created () {
-    // Listen for our custom event from the SW registration
-    document.addEventListener('swUpdated', this.updateAvailable, { once: true })
-
-    if (navigator && navigator.serviceWorker) {
-      // Prevent multiple refreshes
-      navigator.serviceWorker.addEventListener('controllerchange', () => {
-        if (this.refreshing) return
-        this.refreshing = true
-        // Here the actual reload of the page occurs
-        // window.location.reload()
-      })
-    }
-
-    this.setIcons()
+    this.setServiceWorker()
   },
   methods: {
+    setServiceWorker () {
+      // Listen for our custom event from the SW registration
+      document.addEventListener('swUpdated', this.updateAvailable, { once: true })
+
+      if (navigator && navigator.serviceWorker) {
+        // Prevent multiple refreshes
+        navigator.serviceWorker.addEventListener('controllerchange', () => {
+          if (this.refreshing) return
+          this.refreshing = true
+          // Here the actual reload of the page occurs
+          // window.location.reload()
+        })
+      }
+    },
     updateAvailable (event) {
       this.registration = event.detail
       this.updateExists = true
@@ -43,8 +43,8 @@ export default defineComponent({
   }
 })
 </script>
+
 <style>
-#F4F5F6
   :root {
 
   }

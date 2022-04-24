@@ -1,9 +1,8 @@
 <template>
   <div class="exam-details">
-    <div class="exam-details-title">شناسنامه سوال</div>
     <div class="exam-details-all-boxes">
       <div class="details-container-2 default-details-container row">
-      <div class="detail-box col-4">
+      <div class="detail-box">
         <div class="detail-box-title">آزمون ها</div>
         <div class="input-container flex">
           <div class="input-box">
@@ -289,7 +288,6 @@ export default {
   }
 }
 .exam-details{
-  margin-top: 40px;
   .exam-details-title {
     font-weight: 500;
     font-size: 16px;
@@ -373,7 +371,7 @@ export default {
   //}
   .default-details-container {
     .detail-box {
-      margin-top: 16px;
+      margin-top: 5px;
 
       .detail-box-title {
         margin-bottom: 5px;
@@ -500,6 +498,7 @@ export default {
   .exam-details-all-boxes {
     .details-container-2 {
       .detail-box {
+        width: 100%;
         .detail-box-title {
           font-weight: 500;
           font-size: 16px;
@@ -510,7 +509,8 @@ export default {
         .input-container {
           margin-top: 5px;
           .input-box {
-            width: 50%;
+            //width: initial;
+            width: 78%;
           }
           .icon-box {
             width: 40px;

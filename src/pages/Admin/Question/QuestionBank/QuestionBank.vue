@@ -21,6 +21,7 @@
               :key="question.id"
               :question="question"
               :isSelected="isSelected(question.id)"
+              pageStrategy="question-bank"
               @checkSelect="QuestionDecreaseIncrease"
             />
           </template>

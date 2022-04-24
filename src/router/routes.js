@@ -16,6 +16,15 @@ const routes = [
         }
       },
       {
+        path: 'component',
+        name: 'component',
+        component: () => import('src/pages/component'),
+        breadcrumbs: { title: 'component' },
+        meta: {
+          middlewares: [auth]
+        }
+      },
+      {
         path: 'admin',
         component: () => import('layouts/AdminLayout.vue'),
         meta: {
