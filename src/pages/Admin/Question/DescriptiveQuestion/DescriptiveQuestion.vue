@@ -47,6 +47,7 @@
         :gradesList="gradesList"
         :groups-list="lessonGroupList"
         :lessons-list="lessonsList"
+        :buffer="true"
         @gradeSelected="getLessonGroupList"
         @groupSelected="getLessonsList"
         @attach="attachExam"

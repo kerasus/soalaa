@@ -223,11 +223,6 @@ export default {
         })
         return
       }
-      this.$emit('attach', {
-        exam: this.selectedExam,
-        sub_category: this.selectedLesson,
-        order: this.order
-      })
       if (this.buffer) {
         this.question.exams.addItem({
           id: Date.now(),
@@ -237,6 +232,12 @@ export default {
           // sub_category_id: this.selectedLesson.id,
           order: this.order
         })
+      } else {
+        this.$emit('attach', {
+          exam: this.selectedExam,
+          sub_category: this.selectedLesson,
+          order: this.order
+        })
       }
       this.selectedLesson = ''
       this.selectedCategory = ''
@@ -244,14 +245,14 @@ export default {
       this.order = '0'
     },
     detach (item) {
-      this.$emit('detach', item)
-
       if (this.buffer) {
         // this.question.exams.remove(item.id)
         const itemIndex = this.question.exams.list.findIndex(i => (i.id === item.id))
         if (itemIndex !== -1) {
           this.question.exams.list.splice(itemIndex, 1)
         }
+      } else {
+        this.$emit('detach', item)
       }
     },
     getLessonTitleById (exam) {
@@ -276,7 +277,7 @@ export default {
 <style scoped lang="scss">
 .q-dialog {
   .q-dialog__inner--minimized > div {
-    min-width: 720px;
+    width: 720px;
     height: 600px;
   }
   .attach-exam-card {
