@@ -107,30 +107,30 @@
     </div>
   </div>
   <div class="relative-position">
-    <attach-exam
-      :exams="examList"
-      :lessons="subCategoriesList"
-      :categories="categoryList"
-      :buffer="true"
-    />
     <div class="attach-btn row">
-      <question-identifier class="col-9"/>
-      <btn-box
-        class="col-3"
-        @saveQuestion="saveQuestion"
+      <question-identifier
+        class="col-12"
+        :exams="examList"
+        :lessons="subCategoriesList"
+        :categories="categoryList"
+        :gradesList="gradesList"
+        :groups-list="lessonGroupList"
+        :lessons-list="lessonsList"
+        @gradeSelected="getLessonGroupList"
+        @groupSelected="getLessonsList"
+        @attach="attachExam"
+        @detach="detachExam"
+        @tags-collected="setTags"
       />
     </div>
-    <q-inner-loading
-      :showing="question.exams.loading"
-      color="primary"
-      class="QComponents-inner-loading"
-      label-style="font-size: 1.1em"
+    <btn-box
+      class="col-12"
+      @saveQuestion="saveQuestion"
     />
   </div>
 </template>
 
 <script>
-import AttachExam from 'components/Question/QuestionPage/AttachExam/AttachExam'
 import BtnBox from 'components/Question/QuestionPage/BtnBox'
 import QuestionField from 'components/Question/QuestionPage/QuestionField.vue'
 import { Question } from 'src/models/Question'
@@ -141,16 +141,17 @@ import { QuestionStatusList } from 'src/models/QuestionStatus'
 import { computed } from 'vue'
 import { QuestCategoryList } from 'src/models/QuestCategory'
 import QuestionIdentifier from 'components/Question/QuestionPage/QuestionIdentifier'
+import mixinTree from 'src/mixin/Tree'
 export default {
   name: 'MultipleChoiceQ',
   components: {
     QuestionIdentifier,
     QuestionField,
-    BtnBox,
-    AttachExam
+    BtnBox
   },
   mixins: [
-    AdminActionOnQuestion
+    AdminActionOnQuestion,
+    mixinTree
   ],
   props: {
     loading: {
@@ -186,6 +187,7 @@ export default {
     }, 100)
     this.setDefaultChoices()
     this.getPageReady()
+    this.getGradesList()
   },
   mounted () {
     this.$nextTick(() => {
