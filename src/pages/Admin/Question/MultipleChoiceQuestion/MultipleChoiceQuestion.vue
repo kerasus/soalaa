@@ -21,6 +21,13 @@
         :key="item.order"
       >
         <div class="card-section-header">
+          <q-btn
+            class="icon-type"
+            icon="isax:close-square5"
+            color="negative"
+            flat
+            @click="removeChoice(item.order)"
+          />
           <q-radio
             dense
             v-model="choice"
@@ -29,7 +36,6 @@
             color="primary"
             @click="choiceClicked(item.order)"
           />
-          <q-btn label="حذف گزینه" flat color="primary" @click="removeChoice(item.order)"/>
         </div>
         <div class="multiple-answer-box">
           <QuestionField
@@ -286,7 +292,6 @@ export default {
   .main-card-section {
     .card-section-header {
       display: flex;
-      justify-content: space-between;
       font-size: 16px;
       color: black;
       margin: 8px 18px 0;
