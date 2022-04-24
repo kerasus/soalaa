@@ -1,7 +1,6 @@
 <template>
   <div class="question-details">
-    <button @click="getIdentifierData">getTagsTitles</button>
-<!--    <button @click="getIdentifierData">getIdentifierData</button>-->
+<!--    <button @click="getIdentifierData">getTagsTitles</button>-->
     <div class="box-title">شناسنامه سوال</div>
     <div class="details-container-2 default-details-container row">
       <div class="detail-box col-3" style="padding-right:0;">
