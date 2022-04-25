@@ -35,6 +35,7 @@
               <tree
                 @ticked="updateNodes"
                 ref="tree"
+                :key="treeKey"
                 tick-strategy="strict"
                 :get-node-by-id="getNodeById"
                 @lazy-loaded="syncAllCheckedIds"
@@ -55,9 +56,14 @@
                 @click="deleteAllNodes"
               />
             </div>
-            <div class="tree-chips-box">
+            <div
+              class="tree-chips-box"
+            >
+              <div
+                v-if="getAllSubjects[0]"
+              >
               <q-chip
-                v-for="item in allNodes"
+                v-for="item in getAllSubjects"
                 :key="item"
                 class="tree-chips"
                 icon-remove="mdi-close"
@@ -66,6 +72,7 @@
               >
                 {{ item.title }}
               </q-chip>
+              </div>
             </div>
           </div>
         </div>
@@ -111,36 +118,43 @@ export default {
     dialogValue: {
       type: Boolean
     },
-    lessonsField: {
-      type: Array
+    subjectsField: {
+      type: Object
     }
   },
   emits: [
     'groupSelected',
     'lessonSelected',
     'update:dialogValue',
-    'update:lessonsField'
+    'update:subjectsField'
   ],
   data () {
     return {
       lesson: '',
       group: '',
-      allNodes: [],
-      allNodesIds: [],
       selectedNodesIDs: [],
       loading: false,
-      newName: '',
-      newOrder: 1,
-      selectedNode: {},
-      editDialog: false,
-      newNode: {}
+      currentTreeNode: [],
+      lastTreeNodes: [],
+      treeKey: 0
     }
   },
   created () {},
-  updated () {
-    // console.log('QuestionTreeModal updated')
-  },
+  updated () {},
   computed: {
+    getAllSubjects () {
+      const fieldText = []
+      if (Object.keys(this.chosenSubjects).length !== 0) {
+        for (const key in this.chosenSubjects) {
+          if (this.chosenSubjects[key].nodes && this.chosenSubjects[key].nodes.length > 0) {
+            this.chosenSubjects[key].nodes.forEach(val => {
+              fieldText.push(val)
+            })
+          }
+        }
+      }
+      return fieldText
+    },
     doesHaveLessons () {
       return !!(this.lessonsList && this.lessonsList.length > 0)
     },
@@ -152,79 +166,105 @@ export default {
         this.$emit('update:dialogValue', value)
       }
     },
-    lessonsTitle: {
+    chosenSubjects: {
       get () {
-        return this.lessonsField
+        return this.subjectsField
       },
       set (value) {
-        this.$emit('update:lessonsField', value)
+        this.$emit('update:subjectsField', value)
       }
     }
   },
   mounted () {
   },
   methods: {
-    updateNodes (value) {
-      this.allNodes = value
-      const nodesTitles = []
-      const nodesId = []
-      value.forEach(val => {
-        nodesId.push(val.id)
-        nodesTitles.push(val.title)
-      })
-      this.lessonsTitle = nodesTitles
-      this.selectedNodesIDs = nodesId
+    updateNodes (values) {
+      this.selectWantedTree(this.lesson)
+      this.nodesUpdatedFromTree = values
+      this.currentTreeNode = values
+      this.selectedNodesIDs = values.map(item => item.id)
     },
-    isNodeNew (item) {
-      return !(this.allNodes.includes(item))
-    },
-    removeNode (item) {
-      this.setTickedMode('tree', item.id, false)
+    removeNode (node) {
+      if (this.nodesUpdatedFromTree.find(item => item.id === node.id)) {
+        this.setTickedMode('tree', node.id, false)
+      }
+      this.removeNodeFromChosenSubjects(node)
     },
     removeAllNodes () {
       this.setTickedMode('tree', this.selectedNodesIDs, false)
+      this.chosenSubjects = {}
     },
     deleteAllNodes () {
       this.removeAllNodes()
     },
+    removeNodeFromChosenSubjects (node) {
+      for (const key in this.chosenSubjects) {
+        this.chosenSubjects[key].nodes.forEach((value, index) => {
+          if (value.id === node.id) {
+            this.chosenSubjects[key].nodes.splice(index, 1)
+          }
+        })
+      }
+    },
     groupSelected (item) {
       this.$emit('groupSelected', item)
+      this.lesson = ''
     },
-    lessonSelected (item) {
-      this.$emit('lessonSelected', item)
-      this.showTreeModalNode(item)
+    lessonSelected (lesson) {
+      this.$emit('lessonSelected', lesson)
+      this.showTreeModalNode(lesson)
     },
     showTreeModalNode (item) {
+      this.treeKey += 1
       this.showTree('tree', this.getNode(item.id))
-        .then(() => {})
+        .then(() => {
+          this.syncAllCheckedIds()
+        })
         .catch(err => {
           console.log(err)
         })
     },
-    syncAllCheckedIds (childNodes) {
-      const selectedNodesInThisChild = []
-      childNodes.forEach(node => {
-        this.allNodesIds.forEach(item => {
-          if (item === node.id) {
-            selectedNodesInThisChild.push(item)
-          }
-        })
-      })
-      this.$refs.tree.setNodesTicked(selectedNodesInThisChild, true)
+    selectWantedTree (lesson) {
+      if (this.chosenSubjects[lesson.id] && this.chosenSubjects[lesson.id].nodes) {
+        this.switchToSelectedTree(lesson.id)
+        return
+      }
+      this.createNewDataTree(lesson.id)
     },
-    getModalData () {
-      return this.lessonsTitle
+    createNewDataTree (lessonId) {
+      this.chosenSubjects[lessonId] = {}
+      this.chosenSubjects[lessonId].nodes = []
+    },
+    switchToSelectedTree (lessonId) {
+      this.currentTreeNode = this.chosenSubjects[lessonId].nodes
+    },
+    updateChosenSubjects () {
+      if (this.lesson.id) {
+        this.chosenSubjects[this.lesson.id].nodes = this.currentTreeNode
+      }
+    },
+    syncAllCheckedIds () {
+      if (this.lesson && this.chosenSubjects[this.lesson.id]) {
+        const selectedNodesIds = this.chosenSubjects[this.lesson.id].nodes.map(item => item.id)
+        if (selectedNodesIds.length > 0) {
+          this.$refs.tree.setNodesTicked(selectedNodesIds, true)
+        }
+      }
     }
   },
   watch: {
     modal (newVal) {
       if (!newVal) {
-        this.allNodesIds = this.selectedNodesIDs
         return
       }
       if (this.lesson) {
         this.showTreeModalNode(this.lesson)
       }
+    },
+    currentTreeNode (newVal) {
+      // if (newVal.length > 0) {
+      this.updateChosenSubjects()
+      // }
     }
   }
 }
@@ -260,6 +300,7 @@ export default {
   color: #23263B;
   .tree-chips-box {
     height: 412px;
+    max-width: 367px;
     background: #F4F5F6;
     border-radius: 10px;
     padding: 16px;

@@ -1,7 +1,6 @@
 <template>
   <div class="question-details">
-    <button @click="getIdentifierData">getTagsTitles</button>
-<!--    <button @click="getIdentifierData">getIdentifierData</button>-->
+<!--    <button @click="getIdentifierData">getTagsTitles</button>-->
     <div class="box-title">شناسنامه سوال</div>
     <div class="details-container-2 default-details-container row">
       <div class="detail-box col-3" style="padding-right:0;">
@@ -39,6 +38,7 @@
         :exams="exams"
         :lessons="lessons"
         :categories="categories"
+        :buffer="buffer"
         @attach="emitAttachExam"
         @detach="emitDetachExam"
       />
@@ -67,7 +67,7 @@
         <div class="detail-box-title">مبحث</div>
         <div class="input-container flex">
           <div class="input-box">
-            <q-input v-model="lesson" dense disable/>
+            <q-input v-model="lessonsTitles" dense disable/>
           </div>
           <div class="icon-box">
             <q-btn
@@ -83,7 +83,7 @@
     </div>
       <question-tree-modal
         v-model:dialogValue="dialogValue"
-        v-model:lessonsField="lesson"
+        v-model:subjectsField="allSubjects"
         :lessons-list="lessonsList"
         :groups-list="groupsList"
         @groupSelected="groupSelected"
@@ -150,6 +150,7 @@ export default {
     'groupSelected',
     'lessonSelected',
     'gradeSelected',
+    'tags-collected',
     'attach',
     'attach'
   ],
@@ -245,10 +246,12 @@ export default {
           title: 'سخت'
         }
       ],
-      lesson: [],
+      subjectsFieldText: [],
+      allSubjects: {},
       identifierData: [],
       draftBtnLoading: false,
-      saveBtnLoading: false
+      saveBtnLoading: false,
+      lessonsTitles: []
     }
   },
   computed: {
@@ -275,8 +278,23 @@ export default {
     setTags (allTags) {
       this.$emit('tags-collected', allTags)
     },
+    updateLessonsTitles () {
+      const fieldText = []
+      if (Object.keys(this.allSubjects).length !== 0) {
+        for (const key in this.allSubjects) {
+          if (this.allSubjects[key].nodes && this.allSubjects[key].nodes.length > 0) {
+            this.allSubjects[key].nodes.forEach(val => {
+              fieldText.push(val.title)
+            })
+          }
+        }
+      }
+      this.lessonsTitles = fieldText
+    },
     getIdentifierData () {
-      this.identifierData.push(...this.getTagsTitles(this.lesson))
+      this.updateLessonsTitles()
+      this.identifierData.push(...this.lessonsTitles)
+      this.identifierData.push(...this.getTagsTitles(this.subjectsFieldText))
       this.identifierData.push(...this.getTagsTitles(this.grade))
       this.identifierData.push(...this.getTagsTitles(this.major))
       this.identifierData.push(...this.getTagsTitles(this.authorshipDate))
@@ -301,10 +319,12 @@ export default {
     }
   },
   watch: {
-    // lesson (newVal) {
-    //   console.log('lesson parent', newVal)
-    //   // this.updateNodesField()
-    // }
+    allSubjects: {
+      handler () {
+        this.updateLessonsTitles()
+      },
+      deep: true
+    }
   }
 }
 </script>
