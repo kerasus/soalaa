@@ -40,7 +40,7 @@
       </template>
       <q-card-section class="q-pa-0 toolbar-detail">
         <div class="toolbar-detail-container row">
-          <div class="chosen-questions col-xl-6 col-lg-6 col-md-6 col-sm-7 ">
+          <div class="chosen-questions col-xl-6 col-lg-6 col-md-5 col-sm-7 ">
             <div class="chosen-question-title">
               سوالات انتخاب شده:
             </div>
@@ -78,7 +78,7 @@
               </div>
             </div>
           </div>
-          <div class="question-deActive col-xl col-md-2 col-sm-12">
+          <div class="question-deActive col-xl col-lg-2 col-md-3 col-sm-12">
             <div class=" delete-all">
               <q-btn
                 @click=deleteAllChoose()
@@ -90,8 +90,10 @@
             </div>
             <div class="deactivate-all">
               <q-btn
+                style="width: 130px"
                 rounded
-                flat>
+                flat
+              >
                 غیر فعال کردن همه
               </q-btn>
             </div>
@@ -104,6 +106,7 @@
     <div class="shapes flex ">
       <div class="circle">
         <q-btn
+          :style="{'height': '36px' }"
           class="openDialouge"
           round
           :icon="this.dialougeExpanded? 'isax:arrow-down-1' : 'isax:arrow-up-2'"
@@ -2043,10 +2046,16 @@ export default {
           enabled: false
         },
         tooltip: {
+          shared: false,
+          useHTML: true,
+          borderWidth: 0,
+          backgroundColor: 'rgba(255,255,255,0)',
+          shadow: false,
           formatter: function () {
+            console.log(this.series)
             const point = this.point
             console.log(point)
-            return '<b>' + point.name + ':' + '&nbsp' + '<b>' + point.y + '&nbsp' + 'عدد'
+            return '<span class="myTooltip" style="background-color:' + point.color + ';">' + point.y + '&nbsp' + 'سوال' + '</span>'
           }
         },
         plotOptions: {
@@ -2382,7 +2391,7 @@ export default {
       display: flex;
       justify-content: center;
       position: absolute;
-      top: -26px;
+      top: -24px;
       box-sizing: border-box;
       height: 36px;
       width: 36px;
@@ -2390,6 +2399,7 @@ export default {
       right: calc(50% - 18px);
 
       .openDialouge {
+        justify-content: center;
         min-width: 36px;
         min-height: 36px;
         border-radius: 50%;
@@ -2635,6 +2645,16 @@ export default {
     .toolbar-detail-container {
       .question-level-chart {
         .question-highchart {
+          .myTooltip {
+            border-radius: 10px;
+            direction: ltr;
+            color: var( --3a-Neutral3);
+            padding: 5px !important;
+            width: 50px;
+            white-space: normal !important;
+            display: flex;
+            justify-content: center;
+          }
           .title-1 {
             font-weight: 700;
             font-size: 24px;
@@ -2720,6 +2740,9 @@ export default {
               }
 
               .question-deActive {
+                .deactivate-all{
+
+                }
               }
             }
           }
@@ -2882,6 +2905,16 @@ export default {
     .dialogueCardContainer {
       .dialogChart {
         .dialogHighchart {
+          .myTooltip {
+            border-radius: 10px;
+            direction: ltr;
+            color: var( --3a-Neutral3);
+            padding: 5px !important;
+            width: 50px;
+            white-space: normal !important;
+            display: flex;
+            justify-content: center;
+          }
           .title-1 {
             font-weight: 700;
             font-size: 24px;
