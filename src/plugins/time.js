@@ -49,8 +49,7 @@ const Time = (function () {
     console.log(`The server's date is ${date} +/- ${uncertainty} milliseconds. offset:` + offset)
   }
   function now () {
-    window.serverDate = {}
-    if (!window.serverDate.offset) {
+    if (!window.serverDate?.offset) {
       window.serverDate.offset = 0
     }
     const serverDate = new Date(Date.now() + window.serverDate.offset)
