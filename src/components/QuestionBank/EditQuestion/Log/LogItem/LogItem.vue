@@ -1,7 +1,34 @@
 <template>
+  <div class="row log-item-body">
+    <div class="log-item-right">
+      <q-avatar class="log-item-avatar">
+        <img src="https://cdn.quasar.dev/img/avatar.png">
+      </q-avatar>
+      <div class="log-item-status">
+        <span> به‌روزشده توسط</span>
+        <span class="log-editor">{{ ' '+log.causer.full_name }}</span>
+      </div>
+      <span class="log-date">{{ log.shamsiDate('created_at').dateTime }}</span>
+    </div>
+    <div>
+      <q-btn
+        v-if="true"
+        icon="add_comment"
+        class="icon-type log-comment-btn"
+        flat
+        @click="addComment"
+      />
+      <q-btn
+        v-if="true"
+        icon="more_horiz"
+        class="icon-type log-comment-btn"
+        flat
+      />
+    </div>
+  </div>
   <div class="log-item">
     <div class="log-container">
-      <div class="row q-gutter-none" >
+      <div class="row q-gutter-none">
         <div class="col col-1">
           <q-icon name="mdi-circle-medium" style="font-size: 2em; color: rgba(0, 0, 0, 0.54);"/>
         </div>
@@ -122,7 +149,31 @@ export default {
 
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
+.log-item-body{
+  align-items: center;
+  justify-content: space-between;
+  margin: 24px 33px 24px 50px;
+  &:first-child {
+    margin-top: 30px
+  }
+  .log-item-right{
+    display: flex;
+    .log-item-avatar {
+      margin-right: 10px;
+    }
+    .log-item-status {
+       width: 300px;
+    }
+  }
+  .log-comment-btn {
+    &:deep(.q-icon){
+      color: var(--3a-TextSecondary);
+      font-size: 20px;
+    }
+  }
+}
+
 .log-item {
   font-size: 12px;
 }
@@ -139,11 +190,6 @@ export default {
 
 .log-date {
   text-decoration: underline;
-}
-
-.log-comment-btn{
-  height: 20px;
-  margin-top: 20px;
 }
 
 .eye-icon {
