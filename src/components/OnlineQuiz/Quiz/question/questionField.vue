@@ -189,13 +189,13 @@ export default {
       const source = this.source
       const largestChoice = this.getLargestChoice(source.choices)
       const largestChoiceWidth = this.windowSize.x / largestChoice
-      if (largestChoiceWidth < 12) {
+      if (largestChoiceWidth < 24) {
         return 'col-md-12'
       }
-      if (largestChoiceWidth < 24) {
+      if (largestChoiceWidth < 48) {
         return 'col-md-6'
       }
-      if (largestChoiceWidth < 48) {
+      if (largestChoiceWidth < 96) {
         return 'col-md-3'
       }
       return 'col-md-3'

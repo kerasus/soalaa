@@ -179,8 +179,4 @@ export default {
 .main-layout-container {
   background-color: #f1f1f1;
 }
-
-.main-layout-left-drawer {
-  background-color: #f1f1f1;
-}
 </style>
