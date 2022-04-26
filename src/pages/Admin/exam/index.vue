@@ -163,6 +163,13 @@ export default {
             field: row => row.delay_time
           },
           {
+            name: 'delay_time',
+            required: true,
+            label: 'تعداد سوالات',
+            align: 'left',
+            field: row => row.n_questions
+          },
+          {
             name: 'actions',
             required: true,
             label: 'عملیات',
