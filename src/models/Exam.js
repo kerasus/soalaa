@@ -60,6 +60,7 @@ class Exam extends Model {
       { key: 'accept_at' },
       { key: 'created_at' },
       { key: 'finished_at' },
+      { key: 'n_questions' },
       { key: 'is_registered' },
       { key: 'exam_id' },
       {
