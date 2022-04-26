@@ -1,7 +1,6 @@
 import Time from 'src/plugins/time'
 import API_ADDRESS from 'src/api/Addresses'
 import Assistant from 'src/plugins/assistant'
-
 const mixinUserActionOnQuestion = {
   methods: {
     userActionOnQuestion (questionId, actionType, data, socket, sendData) {
@@ -12,6 +11,7 @@ const mixinUserActionOnQuestion = {
       this.changeLocalDataBasedOnUserAction(actionType, data, userExamId, questionId)
 
       if (typeof sendData === 'undefined' || sendData === true) {
+        console.log('test')
         return this.sendUserQuestionsDataToServer(userExamId, examUserId, userExamData, questionId, actionType, socket)
       }
       return false
