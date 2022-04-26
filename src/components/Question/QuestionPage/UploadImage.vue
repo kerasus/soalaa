@@ -32,18 +32,8 @@ export default {
         allowMultiple: true,
         name: 'filepond',
         labelIdle: dropAreaHTML,
-        files: this.files,
-        server: this.server
-      }),
-      files: [{
-        source: 'https://nodes.alaatv.com/aaa/questionPhotos/Screenshot%202022-03-02%20124323-4377851.jpg',
-        options: {
-          type: 'local'
-        }
-      }],
-      server: {
-        load: this.load
-      }
+        instantUpload: false
+      })
     }
   },
   props: {
@@ -124,4 +114,15 @@ export default {
 .filepond--credits {
   display: none;
 }
+
+.image-upload-parent {
+  .filepond--image-preview-wrapper {
+    .filepond--image-preview {
+      .filepond--image-clip {
+        direction: rtl !important;
+      }
+    }
+  }
+}
+
 </style>

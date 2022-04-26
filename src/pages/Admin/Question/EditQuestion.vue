@@ -13,42 +13,53 @@
     />
     <div class="relative-position">
       <div
-        :class="{ 'row': isPanelOpened }"
+        :class="{ 'row reverse': (isPanelOpened && !imgFloatMode) }"
       >
+        <div
+          v-if="isPanelOpened"
+          class="image-panel"
+          :class="{ 'col-5 image-panel-side-mode': !imgFloatMode , 'image-panel-float-mode' : imgFloatMode }"
+        >
+          <image-panel
+            :editable="true"
+            :mode="'edit'"
+            @closePanelBtnClicked="openCloseImgPanel"
+            @deleteImage="deleteImage"
+            @uploadStatement="updateStatementPhoto(question)"
+            @uploadAnswer="updateAnswerPhoto(question)"
+            @imgPanelModeChanged="changeImagePAnelMode"
+          />
+        </div>
         <component
           v-if="question.type"
           :is="getComponent"
           v-bind="allProps"
-          :class="{ 'col-7': isPanelOpened }"
+          :class="{ 'col-7': !imgFloatMode}"
           ref="currentEditComponent"
         />
-        <div
-          v-if="isPanelOpened"
-          class="col-5"
-          style="padding-right: 24px;padding-top: 30px;"
-        >
-          <image-panel
-            :mode="'edit'"
-            @closePanelBtnClicked="openCloseImgPanel"
-          />
-        </div>
       </div>
     </div>
     <div class="relative-position">
-      <attach-exam
-        :exams="examList"
-        :lessons="subCategoriesList"
-        :categories="categoryList"
-        @attach="attachExam"
-        @detach="detachExam"
-      />
       <div class="attach-btn row">
-        <question-details class="col-9"/>
-        <btn-box
-          class="col-3"
-          @saveQuestion="saveQuestion"
+        <question-identifier
+          class="col-12"
+          :exams="examList"
+          :lessons="subCategoriesList"
+          :categories="categoryList"
+          :gradesList="gradesList"
+          :groups-list="lessonGroupList"
+          :lessons-list="lessonsList"
+          @gradeSelected="getLessonGroupList"
+          @groupSelected="getLessonsList"
+          @attach="attachExam"
+          @detach="detachExam"
+          @tags-collected="setTags"
         />
       </div>
+      <btn-box
+        class="col-12"
+        @saveQuestion="saveQuestion"
+      />
       <status-change
         :statuses="questionStatuses"
         @update="changeStatus"
@@ -66,11 +77,11 @@
 </template>
 
 <script>
+// detachUnsavedExam
 /* eslint-disable no-var */
 import { computed, defineAsyncComponent } from 'vue'
 import { Question } from 'src/models/Question'
 import Navbar from 'components/Question/QuestionPage/Create/textMode/Navbar'
-import QuestionDetails from 'components/Question/QuestionPage/Create/textMode/QuestionDetails'
 import AdminActionOnQuestion from 'src/mixin/AdminActionOnQuestion'
 import { QuestionType, TypeList } from 'src/models/QuestionType'
 import AttachExam from 'components/Question/QuestionPage/AttachExam/AttachExam'
@@ -79,12 +90,16 @@ import BtnBox from 'components/Question/QuestionPage/BtnBox'
 import { ExamList } from 'src/models/Exam'
 import { QuestSubcategoryList } from 'src/models/QuestSubcategory'
 import { QuestionStatusList } from 'src/models/QuestionStatus'
-import ImagePanel from 'components/Question/QuestionPage/ImagePanel'
 import LogListComponent from 'components/QuestionBank/EditQuestion/Log/LogList'
+import API_ADDRESS from 'src/api/Addresses'
 import { QuestCategoryList } from 'src/models/QuestCategory'
+import ImagePanel from 'components/Question/QuestionPage/ImagePanel'
+import QuestionIdentifier from 'components/Question/QuestionPage/QuestionIdentifier'
+import mixinTree from 'src/mixin/Tree'
 export default {
   name: 'EditQuestion',
   components: {
+    QuestionIdentifier,
     ImagePanel,
     Navbar,
     DescriptiveEditQuestion: defineAsyncComponent(() => import('components/Question/QuestionPage/Edit/questionTypes/DescriptiveQuestion/DescriptiveEditQuestion')),
@@ -93,11 +108,11 @@ export default {
     BtnBox,
     StatusChange,
     AttachExam,
-    QuestionDetails,
     LogListComponent
   },
   mixins: [
-    AdminActionOnQuestion
+    AdminActionOnQuestion,
+    mixinTree
   ],
   props: {},
   data () {
@@ -111,7 +126,7 @@ export default {
       questionStatuses: new QuestionStatusList(),
       categoryList: new QuestCategoryList(),
       isPanelOpened: false,
-      allTypes: new TypeList(),
+      imgFloatMode: false,
       totalLoading: false
     }
   },
@@ -122,6 +137,7 @@ export default {
     this.loadSubcategories()
     this.loadCategories()
     this.getQuestionStatus()
+    this.getGradesList()
   },
   provide () {
     return {
@@ -130,6 +146,18 @@ export default {
   },
   mounted () {},
   methods: {
+    changeImagePAnelMode () {
+      this.imgFloatMode = !this.imgFloatMode
+    },
+    deleteImage (image) {
+      this.$axios.delete(API_ADDRESS.question.photo(image.type, this.question.id), {
+        data: {
+          url: image.src
+        }
+      }).then(response => {
+        this.question = new Question(response.data.data)
+      })
+    },
     chosenComponent () {
       const cName = this.question.type.componentName
       if (cName === 'MultipleChoiceQ') {
@@ -177,6 +205,18 @@ export default {
   padding: 40px 100px;
   display: flex;
   flex-direction: column;
+}
+.image-panel-side-mode {
+  position: static;
+  padding-left: 24px;
+}
+.image-panel-float-mode {
+  position: sticky;
+  top: 0;
+  z-index: 9999;
+}
+.image-panel {
+  padding-top: 30px;
 }
 </style>
 <style lang="scss">

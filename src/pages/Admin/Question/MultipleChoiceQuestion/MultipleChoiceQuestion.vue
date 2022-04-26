@@ -1,141 +1,80 @@
 <template>
-  <div class="multiple-choice-Q">
-<!--    <button @click="getContent">getContent</button>-->
-    <q-btn
-      v-if="question.choices.list.length > 0"
-      dark
-      class="full-width q-mb-md removeAllChoice-btn"
-      label="اضافه کردن گزینه جدید"
-      @click="addChoice"
-    />
-    <div>
-      <q-card
-        class="question-card default-questions-card"
-      >
-        <q-card-section class="question default-Qcard-title">
-          <div>صورت سوال</div>
-        </q-card-section>
-        <q-separator inset />
-        <q-card-section>
-          <div class="row justify-between question-box default-Qcard-box">
-            <QuestionField
-              ref="tiptapQuestionStatement"
-              :key="'statement' + domKey"
-            />
-            <!--          <div class="col-10 question-txt default-Qcard-txt">-->
-            <!--            شناخت فراوان جامعه و متخصصان را می طلبد،لازم است، و برای شرایط فعلی تکنولوژی مورد نیاز، و کاربردهای متنوع با هدف بهبود ابزارهای کاربردی می باشد، کتابهای زیادی در شصت و سه درصد گذشته حال و آینده،لورم ایپسوم متن ساختگی با تولید سادگی نامفهوم از صنعت چاپ، و با استفاده از طراحان گرافیک است، چاپگرها و متون بلکه روزنامه و مجله در ستون و سطرآنچنان که-->
-            <!--          </div>-->
-            <!--          <div class="col-2 question-img default-Qcard-img">-->
-            <!--            <q-img-->
-            <!--              :src="url"-->
-            <!--              spinner-color="primary"-->
-            <!--              spinner-size="30px"-->
-            <!--              style="height: 96px; width: 96px"-->
-            <!--            >-->
-            <!--            </q-img>-->
-            <!--          </div>-->
-          </div>
-        </q-card-section>
-      </q-card>
-    </div>
-    <div class="multiple-choice-A">
+  <q-card class="create-question-main-card custom-card">
+    <q-card-section class="main-card-section question">
+      <div class="card-section-header">
+        <span>صورت سوال</span>
+      </div>
+      <div class="question-box">
+        <QuestionField
+          ref="tiptapQuestionStatement"
+          :key="'statement' + domKey"
+        />
+      </div>
+    </q-card-section>
+    <q-card-section
+      v-if="question.choices.list[0]"
+      class="row main-card-section multiple-answer"
+    >
       <div
-        v-if="question.choices.list[0]"
-        class="row multiple-choice-Answer"
+        class="col-lg-6 col-12"
+        v-for="(item, index) in question.choices.list"
+        :key="item.order"
       >
-        <div
-          class="col-6 answer-box"
-          v-for="(item, index) in question.choices.list"
-          :key="item.order"
-        >
-          <q-card
-            class="col-6 default-questions-card"
-          >
-            <q-card-section class="default-Qcard-title">
-              <q-radio
-                dense
-                v-model="choice"
-                :val="'choice' + index"
-                :label="'گزینه ' + (index + 1)"
-                color="primary"
-                @click="choiceClicked(item.order)"
-              />
-              <q-btn
-                push
-                color="primary"
-                text-color="white"
-                label="حذف گزینه"
-                @click="removeChoice(item.order)"
-              />
-<!--              :class="{ 'example-fab-animate--hover' }"-->
-            </q-card-section>
-            <q-separator inset />
-            <q-card-section>
-              <div class="row justify-between default-Qcard-box">
-                <QuestionField
-                  :ref="'tiptapChoice' + index"
-                  :key="'choices' + index + domKey"
-                />
-              </div>
-            </q-card-section>
-          </q-card>
+        <div class="card-section-header">
+          <q-radio
+            dense
+            v-model="choice"
+            :val="'choice' + index"
+            :label="'گزینه ' + (index + 1)"
+            color="primary"
+            @click="choiceClicked(item.order)"
+          />
+          <q-btn label="حذف گزینه" flat color="primary" @click="removeChoice(item.order)"/>
+        </div>
+        <div class="multiple-answer-box">
+          <QuestionField
+            :ref="'tiptapChoice' + index"
+            :key="'choices' + index + domKey"
+          />
         </div>
       </div>
-    </div>
-    <div>
-<!--      <q-skeleton-->
-<!--        v-if="loading"-->
-<!--        type="QInput"-->
-<!--        style="min-height: 220px; border-radius: 30px;"-->
-<!--      />-->
-      <q-card
-        class="default-questions-card"
-      >
-        <q-card-section class="default-Qcard-title">
-          <div>پاسخ تشریحی</div>
-        </q-card-section>
-        <q-separator inset />
-        <q-card-section>
-          <div class="row justify-between default-Qcard-box">
-            <QuestionField
-              ref="tiptapDescriptiveAnswer"
-              :key="'descriptive_answer' + domKey"
-            />
-        </div>
-        </q-card-section>
-    </q-card>
-    </div>
-  </div>
+    </q-card-section>
+    <q-card-section class="main-card-section long-answer">
+      <div class="card-section-header">پاسخ تشریحی</div>
+      <div class="answer-box">
+        <QuestionField
+          ref="tiptapDescriptiveAnswer"
+          :key="'descriptive_answer' + domKey"
+        />
+      </div>
+    </q-card-section>
+  </q-card>
   <div class="relative-position">
-    <attach-exam
-      :exams="examList"
-      :lessons="subCategoriesList"
-      :categories="categoryList"
-      :buffer="true"
-    />
     <div class="attach-btn row">
-      <question-details class="col-9"/>
-      <btn-box
-        class="col-3"
-        @saveQuestion="saveQuestion"
+      <question-identifier
+        class="col-12"
+        :exams="examList"
+        :lessons="subCategoriesList"
+        :categories="categoryList"
+        :gradesList="gradesList"
+        :groups-list="lessonGroupList"
+        :lessons-list="lessonsList"
+        :buffer="true"
+        @gradeSelected="getLessonGroupList"
+        @groupSelected="getLessonsList"
+        @attach="attachExam"
+        @detach="detachExam"
+        @tags-collected="setTags"
       />
     </div>
-    <status-change
-      :statuses="questionStatuses"
-    />
-    <q-inner-loading
-      :showing="question.exams.loading"
-      color="primary"
-      class="QComponents-inner-loading"
-      label-style="font-size: 1.1em"
+    <btn-box
+      class="col-12"
+      @saveQuestion="saveQuestion"
     />
   </div>
 </template>
 
 <script>
-import AttachExam from 'components/Question/QuestionPage/AttachExam/AttachExam'
-import StatusChange from 'components/Question/QuestionPage/StatusChange'
-import QuestionDetails from 'components/Question/QuestionPage/Create/textMode/QuestionDetails'
 import BtnBox from 'components/Question/QuestionPage/BtnBox'
 import QuestionField from 'components/Question/QuestionPage/QuestionField.vue'
 import { Question } from 'src/models/Question'
@@ -145,17 +84,18 @@ import { ExamList } from 'src/models/Exam'
 import { QuestionStatusList } from 'src/models/QuestionStatus'
 import { computed } from 'vue'
 import { QuestCategoryList } from 'src/models/QuestCategory'
+import QuestionIdentifier from 'components/Question/QuestionPage/QuestionIdentifier'
+import mixinTree from 'src/mixin/Tree'
 export default {
   name: 'MultipleChoiceQ',
   components: {
+    QuestionIdentifier,
     QuestionField,
-    BtnBox,
-    StatusChange,
-    AttachExam,
-    QuestionDetails
+    BtnBox
   },
   mixins: [
-    AdminActionOnQuestion
+    AdminActionOnQuestion,
+    mixinTree
   ],
   props: {
     loading: {
@@ -191,6 +131,7 @@ export default {
     }, 100)
     this.setDefaultChoices()
     this.getPageReady()
+    this.getGradesList()
   },
   mounted () {
     this.$nextTick(() => {
@@ -339,109 +280,164 @@ export default {
 </script>
 
 <style scoped lang="scss">
-.multiple-choice-Q {
-  padding-top: 35px;
-  font-style: normal;
-  font-weight: 500;
-  font-size: 16px;
-  line-height: 28px;
-  color: #23263B;
-  text-align: right #{"/* rtl:ignore */"};
-  .removeAllChoice-btn {
-    color: #FFFFFF;
-    background: #9690E4;
-    border-radius: 10px;
-  }
-  .multiple-choice-A {
-    padding-top: 12px;
-    padding-bottom: 12px;
-  }
-  .question-card {
-    .question {
-      font-size: 14px;
-      line-height: 24px;
-      padding: 15px 20px;
-    }
-    .question-box {
-      align-items: last baseline;
-      font-weight: normal;
-      font-size: 14px;
-      line-height: 24px;
-      .question-img {
-        text-align: left #{"/* rtl:ignore */"};
-        .q-img {
-          border-radius: 0px 0px 1px 20px #{"/* rtl:ignore */"};
-          padding: 0;
-        }
+.create-question-main-card {
+  margin-top: 43px;
+  margin-bottom: 40px;
+  .main-card-section {
+    .card-section-header {
+      display: flex;
+      justify-content: space-between;
+      font-size: 16px;
+      color: black;
+      margin: 8px 18px 0;
+      @media screen and (max-width: 1024px) {
+        margin: 8px 0;
       }
+
     }
-  }
-}
-.multiple-choice-Answer {
-  :nth-child(2n){
-    padding-right: 12px #{"/* rtl:ignore */"};
-  }
-  :nth-child(2n+1){
-    padding-left: 12px #{"/* rtl:ignore */"};
-  }
-  .answer-box {
-    padding-top: 12px;
-    padding-bottom: 12px;
-    :nth-child(2n){
-      padding-right: 0px #{"/* rtl:ignore */"};
-    }
-    :nth-child(2n+1){
-      padding-left: 0px #{"/* rtl:ignore */"};
-    }
-    .q-separator--horizontal-inset {
-      margin-right: 16px #{"/* rtl:ignore */"} !important ;
+    .question-box , .answer-box, .multiple-answer-box {
+      margin: 16px 8px;
+      @media screen and (max-width: 1024px) {
+        margin: 16px 0;
+      }
     }
   }
 }
 </style>
 
-<style lang="scss">
-// USED IN MANY OTHER COMPONENTS
-.default-questions-card {
-  background: #FFFFFF;
-  box-shadow: -2px -4px 10px rgba(255, 255, 255, 0.6), 2px 4px 10px rgba(112, 108, 162, 0.05) #{"/* rtl:ignore */"};
-  border-radius: 30px;
-  .q-card__section {
-    padding: 15px 20px !important;
-  }
-  .default-Qcard-title {
-    font-size: 14px;
-    line-height: 24px;
-  }
-  .default-Qcard-box {
-    align-items: last baseline;
-    font-weight: normal;
-    font-size: 14px;
-    line-height: 24px;
-    .default-Qcard-img {
-      text-align: left #{"/* rtl:ignore */"};
-      .q-img {
-        border-radius: 0px 0px 1px 20px #{"/* rtl:ignore */"};
-        padding: 0 !important;
-        .q-img__image {
-          padding: 0 !important;
-        }
-      }
-    }
-  }
-}
-.multiple-choice-Answer {
-  .answer-box {
-    .q-radio__inner {
-      margin-left: 7px #{"/* rtl:ignore */"} !important;
-    }
-  }
-  .default-Qcard-title{
-    justify-content: space-between;
-    display: flex;
-    .q-btn {
-      padding: 4px 16px !important;
-    }
-  }
-}
-</style>
+<!--<style scoped lang="scss">-->
+<!--.create-question-main-card {-->
+<!--  margin-top: 43px;-->
+<!--  margin-bottom: 40px;-->
+<!--  .main-card-section {-->
+<!--    .card-section-header{-->
+<!--      font-size: 16px;-->
+<!--      color: black;-->
+<!--      margin: 8px 18px 0;-->
+<!--      @media screen and (max-width: 1024px) {-->
+<!--        margin: 8px 0;-->
+<!--      }-->
+
+<!--    }-->
+<!--    .question-box{-->
+<!--      background-color: var(&#45;&#45;3a-Neutral2);-->
+<!--      margin: 16px 8px;-->
+<!--      border: 1px solid var(&#45;&#45;3a-Neutral1);-->
+<!--      border-radius: 16px;-->
+<!--      @media screen and (max-width: 1024px) {-->
+<!--        margin: 16px 0;-->
+<!--      }-->
+<!--      .tiptap-header{-->
+<!--        border-radius: 16px;-->
+<!--      }-->
+<!--    }-->
+<!--  }-->
+<!--}-->
+<!--.custom-card{-->
+<!--  padding-bottom: 100px;-->
+<!--}-->
+<!--.multiple-choice-Q {-->
+<!--  padding-top: 35px;-->
+<!--  font-style: normal;-->
+<!--  font-weight: 500;-->
+<!--  font-size: 16px;-->
+<!--  line-height: 28px;-->
+<!--  color: #23263B;-->
+<!--  text-align: right #{"/* rtl:ignore */"};-->
+<!--  .removeAllChoice-btn {-->
+<!--    color: #FFFFFF;-->
+<!--    background: #9690E4;-->
+<!--    border-radius: 10px;-->
+<!--  }-->
+<!--  .multiple-choice-A {-->
+<!--    padding-top: 12px;-->
+<!--    padding-bottom: 12px;-->
+<!--  }-->
+<!--  .question-card {-->
+<!--    .question {-->
+<!--      font-size: 14px;-->
+<!--      line-height: 24px;-->
+<!--      padding: 15px 20px;-->
+<!--    }-->
+<!--    .question-box {-->
+<!--      align-items: last baseline;-->
+<!--      font-weight: normal;-->
+<!--      font-size: 14px;-->
+<!--      line-height: 24px;-->
+<!--      .question-img {-->
+<!--        text-align: left #{"/* rtl:ignore */"};-->
+<!--        .q-img {-->
+<!--          border-radius: 0px 0px 1px 20px #{"/* rtl:ignore */"};-->
+<!--          padding: 0;-->
+<!--        }-->
+<!--      }-->
+<!--    }-->
+<!--  }-->
+<!--}-->
+<!--.multiple-choice-Answer {-->
+<!--  :nth-child(2n){-->
+<!--    padding-right: 12px #{"/* rtl:ignore */"};-->
+<!--  }-->
+<!--  :nth-child(2n+1){-->
+<!--    padding-left: 12px #{"/* rtl:ignore */"};-->
+<!--  }-->
+<!--  .answer-box {-->
+<!--    padding-top: 12px;-->
+<!--    padding-bottom: 12px;-->
+<!--    :nth-child(2n){-->
+<!--      padding-right: 0px #{"/* rtl:ignore */"};-->
+<!--    }-->
+<!--    :nth-child(2n+1){-->
+<!--      padding-left: 0px #{"/* rtl:ignore */"};-->
+<!--    }-->
+<!--    .q-separator&#45;&#45;horizontal-inset {-->
+<!--      margin-right: 16px #{"/* rtl:ignore */"} !important ;-->
+<!--    }-->
+<!--  }-->
+<!--}-->
+<!--</style>-->
+<!--<style lang="scss">-->
+<!--// USED IN MANY OTHER COMPONENTS-->
+<!--.default-questions-card {-->
+<!--  background: #FFFFFF;-->
+<!--  box-shadow: -2px -4px 10px rgba(255, 255, 255, 0.6), 2px 4px 10px rgba(112, 108, 162, 0.05) #{"/* rtl:ignore */"};-->
+<!--  border-radius: 30px;-->
+<!--  .q-card__section {-->
+<!--    padding: 15px 20px !important;-->
+<!--  }-->
+<!--  .default-Qcard-title {-->
+<!--    font-size: 14px;-->
+<!--    line-height: 24px;-->
+<!--  }-->
+<!--  .default-Qcard-box {-->
+<!--    align-items: last baseline;-->
+<!--    font-weight: normal;-->
+<!--    font-size: 14px;-->
+<!--    line-height: 24px;-->
+<!--    .default-Qcard-img {-->
+<!--      text-align: left #{"/* rtl:ignore */"};-->
+<!--      .q-img {-->
+<!--        border-radius: 0px 0px 1px 20px #{"/* rtl:ignore */"};-->
+<!--        padding: 0 !important;-->
+<!--        .q-img__image {-->
+<!--          padding: 0 !important;-->
+<!--        }-->
+<!--      }-->
+<!--    }-->
+<!--  }-->
+<!--}-->
+<!--.multiple-choice-Answer {-->
+<!--  .answer-box {-->
+<!--    .q-radio__inner {-->
+<!--      margin-left: 7px #{"/* rtl:ignore */"} !important;-->
+<!--    }-->
+<!--  }-->
+<!--  .default-Qcard-title{-->
+<!--    justify-content: space-between;-->
+<!--    display: flex;-->
+<!--    .q-btn {-->
+<!--      padding: 4px 16px !important;-->
+<!--    }-->
+<!--  }-->
+<!--}-->
+<!--</style>-->

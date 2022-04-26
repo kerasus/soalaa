@@ -13,7 +13,11 @@ const AdminActionOnQuestion = {
     return {
       optionQuestionId: '',
       questionStatusId_draft: null,
-      questionStatusId_pending_to_type: null
+      questionStatusId_pending_to_type: null,
+      allTypes: new TypeList(),
+      gradesList: null,
+      lessonGroupList: null,
+      lessonsList: null
     }
   },
   computed: {
@@ -66,6 +70,32 @@ const AdminActionOnQuestion = {
           that.disableLoading()
         })
     },
+    updateStatementPhoto () {
+      if (this.question.added_statement_photos && this.question.added_statement_photos.length) {
+        const formData = new FormData()
+        this.question.added_statement_photos.forEach((item, key) => {
+          formData.append('files[' + key + ']', item)
+        })
+        this.$axios.post(API_ADDRESS.question.photo('statement_photo', this.question.id), formData)
+          .then(res => {
+            this.question = new Question(res.data.data)
+            this.question.added_statement_photos = []
+          })
+      }
+    },
+    updateAnswerPhoto () {
+      if (this.question.added_answer_photos && this.question.added_answer_photos.length) {
+        const formData = new FormData()
+        this.currentQuestion.added_answer_photos.forEach((item, key) => {
+          formData.append('files[' + key + ']', item)
+        })
+        this.$axios.post(API_ADDRESS.question.photo('statement_photo', this.question.id), formData)
+          .then(res => {
+            this.question = new Question(res.data.data)
+            this.question.added_answer_photos = []
+          })
+      }
+    },
     updateQuestion (question) {
       const that = this
       // this.$store.dispatch('loading/overlayLoading', { loading: true, message: '' })
@@ -100,7 +130,7 @@ const AdminActionOnQuestion = {
         formData.append('answer_photos[' + key + ']', item)
       })
       question.exams.list.forEach((item, key) => {
-        formData.append('exams[' + key + '][id]', item.id)
+        formData.append('exams[' + key + '][id]', item.exam_id)
         formData.append('exams[' + key + '][order]', item.order)
         formData.append('exams[' + key + '][sub_category_id]', item.sub_category_id)
       })
@@ -301,11 +331,14 @@ const AdminActionOnQuestion = {
       this.$axios.post(API_ADDRESS.question.attach, {
         exam_id: data.exam.id,
         sub_category_id: data.sub_category.id,
-        question_id: this.question.id,
+        ...(this.question.id) && { question_id: this.question.id },
         order: data.order
       })
         .then(response => {
           this.question.exams = new AttachedExamList(response.data.data.exams)
+        })
+        .catch((er) => {
+          console.log(er)
         })
     },
     detachExam (data) {
@@ -315,9 +348,40 @@ const AdminActionOnQuestion = {
         .then(response => {
           this.question.exams = new AttachedExamList(response.data.data.exams)
         })
+        .catch((er) => {
+          console.log(er)
+        })
     },
     openCloseImgPanel () {
       this.isPanelOpened = !this.isPanelOpened
+      if (!this.isPanelOpened) {
+        this.imgFloatMode = false
+      }
+    },
+    setNodesList () {},
+    getGradesList () {
+      this.getRootNode('test').then(response => {
+        this.gradesList = response.data.data.children
+      })
+    },
+    getLessonGroupList (item) {
+      this.getNode(item.id).then(response => {
+        this.lessonGroupList = response.data.data.children
+      })
+    },
+    getLessonsList (item) {
+      this.getNode(item.id).then(response => {
+        this.lessonsList = response.data.data.children
+      })
+    },
+    setTags (allTags) {
+      this.$axios.put(API_ADDRESS.tags.setTags(this.question.id), allTags)
+        .then(response => {
+          console.log(response.data.data)
+        })
+        .catch((er) => {
+          console.log(er)
+        })
     }
   }
 }

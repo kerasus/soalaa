@@ -13,43 +13,57 @@
     />
     <div class="relative-position">
       <div
-        :class="{ 'row': isPanelOpened }"
+        :class="{ 'row reverse': (isPanelOpened && !imgFloatMode) }"
       >
+        <div
+          v-if="isPanelOpened"
+          class="image-panel"
+          :class="{ 'col-5 image-panel-side-mode': !imgFloatMode , 'image-panel-float-mode' : imgFloatMode }"
+        >
+          <image-panel
+            :mode="'show'"
+            :editable="false"
+            @closePanelBtnClicked="openCloseImgPanel"
+            @imgPanelModeChanged="changeImagePAnelMode"
+          />
+        </div>
         <component
           v-if="question.type"
           :is="getComponent"
           v-bind="allProps"
           :class="{ 'col-7': isPanelOpened }"
         />
-        <div
-          v-if="isPanelOpened"
-          class="col-5"
-          style="padding-right: 24px;padding-top: 30px;"
-        >
-          <image-panel
-            :mode="'show'"
-            @closePanelBtnClicked="openCloseImgPanel"
-          />
-        </div>
       </div>
     </div>
     <div class="relative-position">
-<!--      <question-details class="col-9"/>-->
-      <attach-exam
-        :exams="examList"
-        :lessons="subCategoriesList"
-        :categories="categoryList"
-        @attach="attachExam"
-        @detach="detachExam"
-      />
-      <div
-        v-if="question.logs && question.logs.list && question.logs.list.length > 0"
-      >
-        <log-list-component
-          :logs="question.logs"
-          @addComment="addComment"
+      <div class="attach-btn row">
+        <question-identifier
+          class="col-12"
+          :exams="examList"
+          :lessons="subCategoriesList"
+          :categories="categoryList"
+          :gradesList="gradesList"
+          :groups-list="lessonGroupList"
+          :lessons-list="lessonsList"
+          @gradeSelected="getLessonGroupList"
+          @groupSelected="getLessonsList"
+          @attach="attachExam"
+          @detach="detachExam"
+          @tags-collected="setTags"
         />
       </div>
+      <status-change
+        :statuses="questionStatuses"
+        @update="changeStatus"
+      />
+    </div>
+    <div
+      v-if="question.logs && question.logs.list && question.logs.list.length > 0"
+    >
+      <log-list-component
+        :logs="question.logs"
+        @addComment="addComment"
+      />
     </div>
   </div>
 </template>
@@ -63,7 +77,7 @@ import Navbar from 'components/Question/QuestionPage/Create/textMode/Navbar'
 import AdminActionOnQuestion from 'src/mixin/AdminActionOnQuestion'
 import { QuestionType, TypeList } from 'src/models/QuestionType'
 import AttachExam from 'components/Question/QuestionPage/AttachExam/AttachExam'
-import CommentBox from 'components/Question/QuestionPage/StatusChange'
+import StatusChange from 'components/Question/QuestionPage/StatusChange'
 import BtnBox from 'components/Question/QuestionPage/BtnBox'
 import { ExamList } from 'src/models/Exam'
 import { QuestSubcategoryList } from 'src/models/QuestSubcategory'
@@ -71,22 +85,26 @@ import { QuestionStatusList } from 'src/models/QuestionStatus'
 import ImagePanel from 'components/Question/QuestionPage/ImagePanel'
 import LogListComponent from 'components/QuestionBank/EditQuestion/Log/LogList'
 import { QuestCategoryList } from 'src/models/QuestCategory'
+import QuestionIdentifier from 'components/Question/QuestionPage/QuestionIdentifier'
+import mixinTree from 'src/mixin/Tree'
 // import API_ADDRESS from 'src/api/Addresses'
 export default {
   name: 'ShowQuestion',
   components: {
+    QuestionIdentifier,
     ImagePanel,
     Navbar,
     DescriptiveShowQuestion: defineAsyncComponent(() => import('components/Question/QuestionPage/Show/questionTypes/DescriptiveQuestion/DescriptiveShowQuestion')),
     MultipleChoiceShowQuestion: defineAsyncComponent(() => import('components/Question/QuestionPage/Show/questionTypes/MultipleChoiceQuestion/MultipleChoiceShowQuestion')),
     MBTIShowQuestion: defineAsyncComponent(() => import('components/Question/QuestionPage/Show/questionTypes/MBTIQuestion/MBTIShowQuestion')),
     BtnBox,
-    CommentBox,
+    StatusChange,
     AttachExam,
     LogListComponent
   },
   mixins: [
-    AdminActionOnQuestion
+    AdminActionOnQuestion,
+    mixinTree
   ],
   props: {},
   data () {
@@ -100,19 +118,18 @@ export default {
       questionStatuses: new QuestionStatusList(),
       categoryList: new QuestCategoryList(),
       isPanelOpened: false,
-      allTypes: new TypeList(),
+      imgFloatMode: false,
       totalLoading: false
     }
   },
   created () {
     this.enableLoading()
-    // this.getPageReady()
     this.getQuestionTypeForTypeId(this.question)
-    // this.setAllQuestionLoadings()
+    this.loadExamList()
     this.loadSubcategories()
     this.loadCategories()
-    // this.getQuestionById(this.getCurrentQuestionId())
-    this.loadExamList()
+    this.getQuestionStatus()
+    this.getGradesList()
   },
   provide () {
     return {
@@ -125,6 +142,9 @@ export default {
     })
   },
   methods: {
+    changeImagePAnelMode () {
+      this.imgFloatMode = !this.imgFloatMode
+    },
     chosenComponent () {
       const cName = this.question.type.componentName
       if (cName === 'MultipleChoiceQ') {
@@ -169,6 +189,18 @@ export default {
   padding: 40px 100px;
   display: flex;
   flex-direction: column;
+}
+.image-panel-side-mode {
+   position: static;
+   padding-left: 24px;
+ }
+.image-panel-float-mode {
+  position: sticky;
+  top: 0;
+  z-index: 9999;
+}
+.image-panel {
+  padding-top: 30px;
 }
 </style>
 <style lang="scss">

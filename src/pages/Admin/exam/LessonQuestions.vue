@@ -1,16 +1,5 @@
 <template>
-  <div>
-    <div class="row justify-end q-pr-lg">
-      <q-btn
-        round
-        color="primary"
-        unelevated
-        @click="this.$router.go(-1)"
-      >
-        <i class="fi-rr-angle-left row" />
-      </q-btn>
-    </div>
-    <div class="q-pa-md">
+    <div class="main-container">
       <q-card class="top-menu q-pa-lg">
         <div class="row items-center">
           <div class="col-8">
@@ -28,7 +17,7 @@
                    ]"
             />
           </div>
-          <div class="col-4">
+          <div class="col-4 flex justify-between">
             <div class="search-box">
               <div>
                 <q-input
@@ -47,11 +36,19 @@
               </div>
               <i class="fi fi-rr-refresh refresh-icon cursor-pointer q-ml-md" @click="reload" ></i>
             </div>
+            <q-btn
+              round
+              color="primary"
+              unelevated
+              @click="this.$router.go(-1)"
+            >
+              <i class="fi-rr-angle-left row" />
+            </q-btn>
           </div>
         </div>
       </q-card>
       <q-virtual-scroll
-        class="konkoor-view-scroll q-mt-md"
+        class="konkoor-view-scroll q-pa-md q-mt-md"
         style="max-height: calc(100vh - 250px);"
         ref="scroller"
         :items="filteredQuestions"
@@ -60,7 +57,7 @@
       >
         <template v-slot="{ item, index }">
           <q-item
-            class="question-field"
+            class="question-field no-padding"
             :key="index"
             dense
           >
@@ -83,9 +80,7 @@
           </q-item>
         </template>
       </q-virtual-scroll>
-
     </div>
-  </div>
 </template>
 
 <script>
@@ -311,19 +306,23 @@ export default {
         })
     },
     scrollTo (questionId, questionNumber) {
+      console.log('scrollTo')
       let questionIndex
       if (questionId) {
         questionIndex = this.getQuestionIndexById(questionId)
       } else {
-        questionIndex = questionNumber - this.firstQuestionOrder
+        // questionIndex = questionNumber - this.firstQuestionOrder
+        questionIndex = questionNumber
       }
-      this.$refs.scroller.scrollTo(questionIndex, 'start-force')
-      for (let i = 1; i < 4; i++) {
-        setTimeout(() => {
-          this.$refs.scroller.scrollTo(questionIndex)
-        },
-        333 * i)
-      }
+      console.log(questionIndex)
+      console.log(this.$refs.scroller)
+      // this.$refs.scroller.scrollTo(questionIndex, 'start-force')
+      // for (let i = 1; i < 4; i++) {
+      //   setTimeout(() => {
+      //     this.$refs.scroller.scrollTo(questionIndex)
+      //   },
+      //   333 * i)
+      // }
     },
     choiceClicked (questionId) {
       this.scrollTo(questionId)
@@ -395,6 +394,17 @@ export default {
   border-radius: 15px;
   box-shadow: -2px -4px 10px rgba(255, 255, 255, 0.6), 2px 4px 10px rgba(54, 90, 145, 0.05);
 }
+.main-container{
+  padding : 10px 40px;
+  @media only screen and (max-width: 1919px){
+    padding : 10px 30px;
+  }
+  @media only screen and (max-width: 599px){
+    padding : 10px 16px;
+  }
+
+}
+
 </style>
 <style>
 .content-inside{
