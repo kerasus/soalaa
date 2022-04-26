@@ -11,6 +11,7 @@
         @click="toggleLeftDrawer"
       />
       <q-btn
+        v-if="windowSize.x > 969"
         class="toolbar-button"
         icon="mdi-dots-grid"
         color="white"
@@ -41,6 +42,7 @@
 
 <script>
 import onlineQuizTopMenu from 'components/Menu/topMenu/onlineQuizTopMenu'
+
 export default {
   name: 'onlineQuizTemplateHeader',
   components: { onlineQuizTopMenu },
@@ -65,6 +67,11 @@ export default {
     toggleLeftDrawer () {
       const visibility = this.$store.getters['AppLayout/layoutLeftDrawerVisible']
       return this.$store.commit('AppLayout/updateLayoutLeftDrawerVisible', !visibility)
+    }
+  },
+  computed: {
+    windowSize () {
+      return this.$store.getters['AppLayout/windowSize']
     }
   }
 }
