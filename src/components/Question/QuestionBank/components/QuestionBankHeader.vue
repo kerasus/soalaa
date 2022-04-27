@@ -1,5 +1,5 @@
 <template>
-  <q-card class="custom-card">
+  <q-card class="headerBankCard custom-card">
     <q-card-section>
       <div class="row search-section">
         <div class="search-box-container col">
@@ -46,12 +46,36 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.headerBankCard{
+  &:deep(.q-card__section){
+    padding: 0;
+  }
   .search-section {
+    padding: 12px 60px 12px 60px;
     .search-box-container{
       display: flex;
+      &:deep(.q-card__actions){
+        padding: 0;
+      }
       .search-box {
-        height: 64px;
         width: 300px;
+        &:deep(.q-field__label){
+          top: 0;
+          padding-left: 7px;
+          font-style: normal;
+          font-weight: 400;
+          font-size: 14px;
+          line-height: 24px;
+        }
+        &:deep(.q-btn-item){
+          height: 36px;
+          width: 36px;
+          justify-content: center;
+        }
+        &:deep(.q-field__control){
+        height: 40px;
+        align-items: center;
+      }
       }
     }
     .select-box{
@@ -59,7 +83,11 @@ export default {
       justify-content: flex-end;
       align-items: center;
       .q-select {
-        .q-field__label{
+        width: 250px;
+        &:deep(.q-field__control){
+          border-radius: 15px;
+        }
+        &:deep(.q-field__label){
           font-style: normal;
           font-weight: 400;
           font-size: 14px;
@@ -67,39 +95,6 @@ export default {
         }
       }
     }
-    }
-</style>
-<style lang="scss">
-.search-section {
-  .search-box-container{
-    .search-box {
-      .q-field__inner{
-        .q-field__control{
-          border-radius: 15px;
-          .q-field__label{
-            font-style: normal;
-            font-weight: 400;
-            font-size: 14px;
-            line-height: 24px;
-          }
-        }
-      }
-    }
-  }
-  .select-box{
-    .q-select {
-      width: 250px;
-      .q-field__control{
-        border-radius: 15px;
-      }
-      .q-field__label{
-        font-style: normal;
-        font-weight: 400;
-        font-size: 14px;
-        line-height: 24px
-      }
-    }
   }
 }
-
 </style>
