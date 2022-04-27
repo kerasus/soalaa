@@ -11,6 +11,8 @@
         <div class="question-bank-toolbar">
           <QuestionToolBar
             @RemoveChoice="RemoveChoice"
+            :selectedQuestions="selectedQuestions"
+            :key="questionListKey"
           />
         </div>
         <div class="question-bank-content">
@@ -53,8 +55,8 @@ export default {
   components: { QuestionBankHeader, QuestionToolBar, QuestionFilter, QuestionItem, pagination },
   data () {
     return {
+      questionListKey: Date.now(),
       selectedQuestions: [],
-      test: false,
       questionId: [],
       loadingQuestion: new Question(),
       questions: new QuestionList(),
@@ -85,6 +87,7 @@ export default {
   created () {
     this.getQuestionData()
   },
+
   methods: {
     RemoveChoice (subcategoryId) {
       console.log(subcategoryId)
@@ -103,6 +106,7 @@ export default {
     },
     addQuestionToSelectedList (question) {
       this.selectedQuestions.push(question)
+      this.questionListKey = Date.now()
     },
     deleteQuestionFromSelectedList (question) {
       const target = this.selectedQuestions.findIndex(questionItem => questionItem.id === question.id)
@@ -110,6 +114,7 @@ export default {
         return
       }
       this.selectedQuestions.splice(target, 1)
+      this.questionListKey = Date.now()
     },
     updatePage (page) {
       this.getQuestionData(page)

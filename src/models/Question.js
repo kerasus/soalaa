@@ -3,15 +3,14 @@ import Time from 'src/plugins/time'
 import { Model, Collection } from 'js-abstract-model'
 import { ChoiceList } from './Choice'
 import { CheckingTimeList } from '../models/CheckingTime'
-import axios from 'axios'
 import API_ADDRESS from '../api/Addresses'
-import TurndownService from 'turndown/lib/turndown.browser.umd'
 import { QuestionStatus } from '../models/QuestionStatus'
 import { LogList } from '../models/Log'
 // eslint-disable-next-line import/named
 import { createApp } from 'vue'
 import { QuestionType } from '../models/QuestionType'
 import { AttachedExamList } from '../models/AttachedExam'
+import { TreeNodeList } from 'src/models/TreeNode'
 if (!window.app) {
 // window.app
   window.app = createApp({})
@@ -85,6 +84,10 @@ class Question extends Model {
       { key: 'rendered_descriptive_answer' },
       { key: 'selected_at' },
       {
+        key: 'tags',
+        relatedModel: TreeNodeList
+      },
+      {
         key: 'choices',
         relatedModel: ChoiceList
       },
@@ -144,6 +147,8 @@ class Question extends Model {
       this.id = this._id
     }
 
+    this.generateFakeData()
+
     const that = this
     this.apiResource = {
       fields: [
@@ -187,106 +192,42 @@ class Question extends Model {
         }
       ]
     }
-
-    if (typeof this.statement === 'string') {
-      this.rendered_statement = (this.statement)
-      // this.rendered_statement = convert(this.statement)
-      // this.rendered_statement = md.render(this.statement)
-    }
-    if (typeof this.descriptive_answer === 'string') {
-      this.rendered_descriptive_answer = (this.descriptive_answer)
-      // this.rendered_descriptive_answer = convert(this.descriptive_answer)
-      // this.rendered_statement = md.render(this.statement)
-    }
-    // if (this.choices.list.length === 0) {
-    //   const choices = [
-    //     {
-    //       id: 1,
-    //       title: '',
-    //       order: 1,
-    //       answer: false
-    //     },
-    //     {
-    //       id: 2,
-    //       title: '',
-    //       order: 2,
-    //       answer: false
-    //     },
-    //     {
-    //       id: 3,
-    //       title: '',
-    //       order: 3,
-    //       answer: false
-    //     },
-    //     {
-    //       id: 4,
-    //       title: '',
-    //       order: 4,
-    //       answer: false
-    //     }
-    //   ]
-    //   this.choices = new ChoiceList(choices)
-    // }
   }
 
-  convertToMarkdownKatex1 (string) {
-    if (!string) {
-      return string
-    }
+  // ToDo: remove this
+  generateFakeData () {
+    this.generateFakeTags()
+    this.generateFakeLevel()
+  }
 
-    string = string.replace(/\n/g, '<br>')
+  generateFakeLevel () {
+    this.level = Math.floor(Math.random() * 3) + 1 // 1 - 3
+  }
 
-    TurndownService.prototype.escape = function (string) {
-      const escapes = [
-        [/\s\$/g, '$'],
-        [/\$\s/g, '$'],
-        [/\{align\*\}/g, '{cases}']
-        // [/\\/g, '\\\\'],
-        // [/\*/g, '\\*'],
-        // [/^-/g, '\\-'],
-        // [/^\+ /g, '\\+ '],
-        // [/^(=+)/g, '\\$1'],
-        // [/^(#{1,6}) /g, '\\$1 '],
-        // [/`/g, '\\`'],
-        // [/^~~~/g, '\\~~~'],
-        // [/\[/g, '\\['],
-        // [/\]/g, '\\]'],
-        // [/^>/g, '\\>'],
-        // [/_/g, '\\_'],
-        // [/^(\d+)\. /g, '$1\\. ']
-      ]
-      return escapes.reduce(function (accumulator, escape) {
-        return accumulator.replace(escape[0], escape[1])
-      }, string)
-    }
-    // create an instance of Turndown service
-    const turndownService = new TurndownService({
-      // rules: COMMONMARK_RULES,
-      headingStyle: 'setext',
-      hr: '* * *',
-      bulletListMarker: '*',
-      codeBlockStyle: 'indented',
-      fence: '```',
-      emDelimiter: '_',
-      strongDelimiter: '**',
-      linkStyle: 'inlined',
-      linkReferenceStyle: 'full',
-      br: '  ',
-      blankReplacement: function (content, node) {
-        return node.isBlock ? '\n\n' : ''
+  generateFakeTags () {
+    this.tags = new TreeNodeList([
+      {
+        title: 'ریاضی',
+        type: 'major'
       },
-      keepReplacement: function (content, node) {
-        return node.isBlock ? '\n\n' + node.outerHTML + '\n\n' : node.outerHTML
+      {
+        title: this.getRandomMajor(),
+        type: 'lesson'
       },
-      defaultReplacement: function (content, node) {
-        return node.isBlock ? '\n\n' + content + '\n\n' : content
+      {
+        title: 'دوازدهم',
+        type: 'grade'
+      },
+      {
+        title: 'فصل یک',
+        type: 'sub-lesson'
       }
-    })
-    // turndownService.keep(['$'])
+    ])
+  }
 
-    // convert HTML to Markdown
-    return turndownService.turndown(string)
-    // return string
+  getRandomMajor () {
+    const lessons = ['شیمی', 'فیزیک', 'دینی', 'زبان', 'ادبیات', 'حسابان', 'منطق', 'گسسته', 'عربی', 'ریاضی']
+    return lessons[Math.floor(Math.random() * lessons.length)]
   }
 
   getAnsweredChoice () {
@@ -376,234 +317,6 @@ class Question extends Model {
 
   actionsWhileSendingData () {
     // Time.synchronizeTime()
-  }
-
-  sendUserActionToServer (type, exam_user_id, dataToSendObject, socket, callback) {
-    // ToDo: returned data
-    let data = null
-    if (type === 'answer') {
-      const answerArray = dataToSendObject.answerArray
-      const failedAnswersArray = dataToSendObject.failedAnswersArray
-
-      // if (!socket) {
-      data = axios.post(API_ADDRESS.exam.sendAnswers, { exam_user_id, questions: [answerArray] })
-        .then(function (response) {
-          if (failedAnswersArray.length > 0 && response.status === 200) {
-            axios.post(API_ADDRESS.exam.sendAnswers, { exam_user_id, questions: [failedAnswersArray] })
-            failedAnswersArray.length = 0
-          }
-          if (callback) {
-            callback(response)
-          }
-        })
-    }
-    // if (!socket) {
-    //   if (true) {
-    //     data = axios.post(API_ADDRESS.exam.sendAnswers, { exam_user_id, questions: answerArray })
-    //       .then(function (response) {
-    //         if (failedAnswersArray.length > 0 && response.status === 200) {
-    //           axios.post(API_ADDRESS.exam.sendAnswers, { exam_user_id, questions: failedAnswersArray })
-    //           failedAnswersArray.length = 0
-    //         }
-    //         if (callback) {
-    //           callback(response)
-    //         }
-    //       })
-    //   } else {
-    //     socket.timeout(10000).emit('question.answer:save', { exam_user_id, questions: answerArray }, (response, err) => {
-    //       if (!err || err.error) {
-    //         data = axios.post(API_ADDRESS.exam.sendAnswers, { exam_user_id, questions: answerArray })
-    //       } else {
-    //         if (failedAnswersArray.length > 0) {
-    //           socket.timeout(10000).emit('question.answer:save', {
-    //             exam_user_id,
-    //             questions: failedAnswersArray
-    //           }, (response, err) => {
-    //             if (!err || err.error) {
-    //               data = axios.post(API_ADDRESS.exam.sendAnswers, { exam_user_id, questions: failedAnswersArray })
-    //                 .then(function () {
-    //                   failedAnswersArray.length = 0
-    //                 })
-    //             } else {
-    //               failedAnswersArray.length = 0
-    //             }
-    //           })
-    //         }
-    //       }
-    //       if (callback) {
-    //         callback(response)
-    //       }
-    //     })
-    //   }
-    // }
-    if (type === 'bookmark') {
-      const failedBookmarksArray = dataToSendObject.failedBookmarksArray.filter(item => item.bookmarked)
-      const question_id = dataToSendObject.bookmark.questionId
-      const selected_at = dataToSendObject.bookmark.selected_at
-      if (!socket) {
-        data = axios.post(API_ADDRESS.exam.sendBookmark, { exam_user_id, question_id, selected_at })
-          .then(function (response) {
-            if (failedBookmarksArray.length > 0 && response.status === 200) {
-              failedBookmarksArray.forEach(failedBookmark => {
-                const question_id = failedBookmark.question_id
-                const selected_at = failedBookmark.selected_at
-                axios.post(API_ADDRESS.exam.sendBookmark, { exam_user_id, question_id, selected_at })
-                  .then(function (response) {
-                    if (response.status === 200) {
-                      const target = dataToSendObject.failedBookmarksArray.findIndex(item => item.question_id === question_id)
-                      dataToSendObject.failedBookmarksArray.splice(target, 1)
-                    }
-                  })
-              })
-            }
-            if (callback) {
-              callback(response)
-            }
-          })
-      } else {
-        socket.timeout(10000).emit('question.bookmark:save', {
-          exam_user_id,
-          question_id,
-          selected_at
-        }, (response, err) => {
-          if (!err || err.error) {
-            data = axios.post(API_ADDRESS.exam.sendBookmark, { exam_user_id, question_id, selected_at })
-          }
-          if (callback) {
-            callback(response)
-          }
-        })
-        const failedBookmarksArray = dataToSendObject.failedBookmarksArray.filter(item => item.bookmarked)
-        failedBookmarksArray.forEach(failedBookmark => {
-          const question_id = failedBookmark.question_id
-          const selected_at = failedBookmark.selected_at
-          axios.post(API_ADDRESS.exam.sendBookmark, { exam_user_id, question_id, selected_at })
-            .then(function (response) {
-              if (response.status === 200) {
-                const target = dataToSendObject.failedBookmarksArray.findIndex(item => item.question_id === question_id)
-                dataToSendObject.failedBookmarksArray.splice(target, 1)
-              }
-              if (callback) {
-                callback(response)
-              }
-            })
-        })
-      }
-    }
-    if (type === 'unBookmark') {
-      const failedBookmarksArray = dataToSendObject.failedBookmarksArray.filter(item => !item.bookmarked)
-      const question_id = dataToSendObject.bookmark.questionId
-      const selected_at = dataToSendObject.bookmark.selected_at
-      if (!socket) {
-        data = axios.post(API_ADDRESS.exam.sendUnBookmark, { exam_user_id, question_id, selected_at })
-          .then(function (response) {
-            if (failedBookmarksArray.length > 0 && response.status === 200) {
-              failedBookmarksArray.forEach(failedBookmark => {
-                const question_id = failedBookmark.question_id
-                const selected_at = failedBookmark.selected_at
-                axios.post(API_ADDRESS.exam.sendUnBookmark, { exam_user_id, question_id, selected_at })
-                  .then(function (response) {
-                    if (response.status === 200) {
-                      const target = dataToSendObject.failedBookmarksArray.findIndex(item => item.question_id === question_id)
-                      dataToSendObject.failedBookmarksArray.splice(target, 1)
-                    }
-                  })
-              })
-            }
-            if (callback) {
-              callback(response)
-            }
-          })
-      } else {
-        socket.timeout(10000).emit('question.bookmark:remove', {
-          exam_user_id,
-          question_id,
-          selected_at
-        }, (response, err) => {
-          if (!err || err.error) {
-            data = axios.post(API_ADDRESS.exam.sendUnBookmark, { exam_user_id, question_id, selected_at })
-          }
-          if (callback) {
-            callback(response)
-          }
-        })
-        const failedBookmarksArray = dataToSendObject.failedBookmarksArray.filter(item => !item.bookmarked)
-        failedBookmarksArray.forEach(failedBookmark => {
-          const question_id = failedBookmark.question_id
-          const selected_at = failedBookmark.selected_at
-          axios.post(API_ADDRESS.exam.sendUnBookmark, { exam_user_id, question_id, selected_at })
-            .then(function (response) {
-              if (response.status === 200) {
-                const target = dataToSendObject.failedBookmarksArray.findIndex(item => item.question_id === question_id)
-                dataToSendObject.failedBookmarksArray.splice(target, 1)
-              }
-              if (callback) {
-                callback(response)
-              }
-            })
-        })
-      }
-    }
-    if (type === 'status') {
-      const failedStatusArray = dataToSendObject.failedStatusArray
-      const question_id = dataToSendObject.status.question_id
-      const status = dataToSendObject.status.status
-      const selected_at = dataToSendObject.status.selected_at
-      if (!socket) {
-        data = axios.post(API_ADDRESS.exam.sendStatus, { exam_user_id, question_id, status, selected_at })
-          .then(function (response) {
-            if (failedStatusArray.length > 0 && response.status === 200) {
-              failedStatusArray.forEach(failedStatus => {
-                const question_id = failedStatus.question_id
-                const status = failedStatus.status
-                const selected_at = failedStatus.selected_at
-                axios.post(API_ADDRESS.exam.sendStatus, { exam_user_id, question_id, status, selected_at })
-                  .then(function (response) {
-                    if (response.status === 200) {
-                      const target = dataToSendObject.failedStatusArray.findIndex(item => item.question_id === question_id)
-                      dataToSendObject.failedStatusArray.splice(target, 1)
-                    }
-                  })
-              })
-            }
-            if (callback) {
-              callback(response)
-            }
-          })
-      } else {
-        socket.timeout(10000).emit('question.status:save', {
-          exam_user_id,
-          question_id,
-          status,
-          selected_at
-        }, (response, err) => {
-          if (!err || err.error) {
-            data = axios.post(API_ADDRESS.exam.sendStatus, { exam_user_id, question_id, status, selected_at })
-          }
-          if (callback) {
-            callback(response)
-          }
-        })
-        const failedStatusArray = dataToSendObject.failedStatusArray
-        failedStatusArray.forEach(failedStatus => {
-          const question_id = failedStatus.question_id
-          const status = failedStatus.status
-          const selected_at = failedStatus.selected_at
-          axios.post(API_ADDRESS.exam.sendStatus, { exam_user_id, question_id, status, selected_at })
-            .then(function (response) {
-              if (response.status === 200) {
-                const target = dataToSendObject.failedStatusArray.findIndex(item => item.question_id === question_id)
-                dataToSendObject.failedStatusArray.splice(target, 1)
-              }
-              if (callback) {
-                callback(response)
-              }
-            })
-        })
-      }
-    }
-    this.actionsWhileSendingData()
-    return data
   }
 }
 
