@@ -4,8 +4,13 @@
       <q-avatar class="log-item-avatar">
         <img src="https://cdn.quasar.dev/img/avatar.png">
       </q-avatar>
+      <div v-for="(message, messageKey) in Object.entries(log.properties.messages)"
+           :key="messageKey"
+      >
+        {{ message[1].message(message[1].values) }}
+      </div>
       <div class="log-item-status">
-        <span> به‌روزشده توسط</span>
+        <span> به‌ روزشده توسط</span>
         <span class="log-editor">{{ ' '+log.causer.full_name }}</span>
       </div>
       <span class="log-date">{{ log.shamsiDate('created_at').dateTime }}</span>

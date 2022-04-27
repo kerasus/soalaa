@@ -33,7 +33,6 @@
                  v-for="(item, index) in logs.list"
                  :key="index"
                  :log="item"
-                 @addComment="addComment"
                />
              </div>
            </q-scroll-area>
