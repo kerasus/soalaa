@@ -311,7 +311,6 @@ export default {
         if (!targetTag || !valueTargetTag) {
           return false
         }
-
         return targetTag.title === valueTargetTag.title
       }) === i)
         .map(question => question.tags.list.find(tag => tag.type === 'lesson'))
@@ -519,7 +518,7 @@ export default {
       display: flex;
       justify-content: space-between;
       flex-direction: row;
-      padding: 16px 4px 20px 20px;
+      padding: 16px 12px 20px 20px;
 
       .dialogTitle {
         display: flex;
@@ -996,7 +995,7 @@ export default {
 
               .choices-number {
                 padding-left: 0;
-                padding-right: 10px;
+                padding-right: 5px;
 
                 .choices-number-title {
                   margin-left: 6px;
