@@ -2,7 +2,7 @@
   <q-card class="headerBankCard custom-card">
     <q-card-section>
       <div class="row search-section">
-        <div class="search-box-container col">
+        <div class="search-box-container col-sm col-xs-12">
           <q-card-actions>
             <div class="search-box">
               <q-input
@@ -19,7 +19,7 @@
             </div>
           </q-card-actions>
         </div>
-        <div class="select-box col">
+        <div class="select-box col-sm  col-xs-6">
           <q-select
             filled
             dropdown-icon="isax:arrow-down-1"
@@ -28,6 +28,14 @@
           >
           </q-select>
         </div>
+        <div class="question-filter-btn col-sm col-xs-6 " >
+          <q-btn
+            class="filter-btn"
+            icon="isax:setting-4"
+            flat
+          />
+        </div>
+
       </div>
     </q-card-section>
   </q-card>
@@ -36,7 +44,6 @@
 <script>
 export default {
   name: 'QuestionBankHeader',
-
   data () {
     return {
       searchInput: null
@@ -60,7 +67,7 @@ export default {
       .search-box {
         width: 300px;
         &:deep(.q-field__label){
-          top: 0;
+          top: 8px;
           padding-left: 7px;
           font-style: normal;
           font-weight: 400;
@@ -83,16 +90,77 @@ export default {
       justify-content: flex-end;
       align-items: center;
       .q-select {
-        width: 250px;
+        width: 160px;
         &:deep(.q-field__control){
-          border-radius: 15px;
+          align-items: center;
+          min-height: 40px;
+          max-height: 40px;
+          padding-left: 20px;
+        }
+        &:deep(.q-field__control-container){
+          padding-top: 0;
         }
         &:deep(.q-field__label){
+          top: 0;
           font-style: normal;
           font-weight: 400;
           font-size: 14px;
           line-height: 24px
         }
+      }
+    }
+    .question-filter-btn{
+      display: none;
+    }
+  }
+}
+@media only screen and (max-width: 1439px) {
+  .headerBankCard{
+    .search-section {
+      padding: 12px 40px 12px 60px;
+    }
+  }
+}
+@media only screen and (max-width: 1023px) {
+  .headerBankCard{
+    .search-section {
+      padding: 16px 16px 16px 18px;
+      .search-box-container{
+        justify-content: center;
+        .search-box{
+          width: 274px;
+        }
+      }
+      .question-filter-btn{
+        order: -1;
+        display: flex;
+        .filter-btn{
+          width: 40px;
+          height: 40px;
+          background: #F4F5F6;
+        }
+        max-width: 40px;
+      }
+      .select-box{
+        max-width: 160px;
+      }
+    }
+  }
+}
+@media only screen and (max-width: 599px) {
+  [dir="rtl"] .headerBankCard{
+    .search-section {
+      padding: 16px;
+      justify-content: space-between;
+      .search-box-container{
+        padding-bottom: 12px;
+        order: -1;
+        .search-box{
+          width: 266px;
+        }
+      }
+      .select-box{
+        min-width: 160px;
       }
     }
   }

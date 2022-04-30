@@ -169,6 +169,7 @@ export default {
 .question-bank-toolbar {
   padding-bottom: 24px;
 }
+
 .question-bank-content {
   margin-bottom: 16px;
 }
@@ -196,7 +197,12 @@ export default {
 }
 @media only screen and (max-width: 1023px) {
   .question-bank-filter {
-    padding-right: 0;
+    padding-right: 0px;
+  }
+}
+@media only screen and (max-width: 599px) {
+  .question-bank-toolbar {
+    padding-bottom: 0;
   }
 }
 </style>
