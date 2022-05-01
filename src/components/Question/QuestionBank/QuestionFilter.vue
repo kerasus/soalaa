@@ -9,9 +9,13 @@
             </div>
           </q-card-section>
           <q-card-actions class="delete-all-container q-pa-none">
-            <q-btn flat rounded color="primary" @click="deleteAllFilters">
-              حذف همه
-            </q-btn>
+            <q-btn
+              flat
+              rounded
+              color="primary"
+              @click="deleteAllFilters"
+              label="حذف همه"
+            />
           </q-card-actions>
         </div>
         <div>
@@ -65,7 +69,7 @@ export default {
   name: 'QuestionBankFilter',
   data () {
     return {
-      filters: ['درس و مبحث', 'نوع سوال', 'طراح سوال', 'تاریخ تالیف'],
+      filters: ['درس و مبحث', 'نوع سوال', 'متنی', 'تاریخ تالیف'],
       filterOptions: ['درس و مبحث', 'نوع سوال', 'طراح سوال', 'تاریخ تالیف']
     }
   },
@@ -96,7 +100,7 @@ export default {
 <style lang="scss" scoped>
 
 .filter-card-container {
-  padding: 20px 23px 16px 24px;
+  padding: 20px 26px 24px 24px;
   margin-bottom: 24px;
   .filter-header {
     padding-bottom: 11px;
@@ -104,10 +108,13 @@ export default {
     justify-content: space-between;
 
     .delete-all-container {
-      font-style: normal;
-      font-weight: normal;
-      font-size: 12px;
-      line-height: 21px;
+      &:deep(.q-btn){
+        font-style: normal;
+        font-weight: normal;
+        font-size: 12px;
+        line-height: 21px;
+        padding: 0;
+      }
       position: relative;
       top: -5px;
     }
@@ -132,6 +139,9 @@ export default {
 
 }
 .filter-options-section {
+  &:deep(.q-focus-helper){
+    background: none !important;
+  }
   margin-bottom: 16px;
 
   .filter-option-container {
@@ -155,13 +165,33 @@ export default {
   }
 }
 
+@media only screen and (max-width: 1919px) {
+  .filter-card-container {
+    padding: 20px 16px 24px 24px;
+  }
+  .filter-header{
+    .delete-all-container{
+
+    }
+    .header-title-container{
+      .header-title{
+        width: 135px;
+        height: 28px;
+
+      }
+    }
+  }
+}
 @media only screen and (max-width: 1439px) {
   .filter-card-container {
-    padding: 16px 16px 8px 16px !important;
+    padding: 16px 16px 14px 14px !important;
 
     .filter-header {
       .delete-all-container {
-        width: 90px;
+        &:deep(.q-btn){
+          height: 32px;
+          width: 68px;
+        }
       }
     }
   }
@@ -169,7 +199,7 @@ export default {
 
 @media only screen and (max-width: 1023px) {
   .filter-card-container {
-    padding: 16px 0 8px 16px !important;
+    padding: 16px !important;
   }
   .filter-options-section {
     display: none;
@@ -178,17 +208,7 @@ export default {
 
 @media only screen and (max-width: 599px) {
   .filter-card-container {
-    padding: 20px 0 16px 16px !important;
-  }
-}
-</style>
-
-<style lang="scss">
-.filter-options-section {
-  .q-expansion-item__container{
-    .q-focus-helper{
-      background: none !important;
-    }
+    padding: 20px 16px 24px 16px !important;
   }
 }
 </style>
