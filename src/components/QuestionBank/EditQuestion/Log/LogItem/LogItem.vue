@@ -1,126 +1,58 @@
 <template>
-  <div class="row log-item-body">
-    <div class="log-item-right">
-      <q-avatar class="log-item-avatar">
-        <img src="https://cdn.quasar.dev/img/avatar.png">
-      </q-avatar>
-      <div v-for="(message, messageKey) in Object.entries(log.properties.messages)"
-           :key="messageKey"
-      >
+  <div class="main-log-item">
+    <div class="row log-item">
+      <div class="col-md-4 col-xs-12 log-item-right-side">
+        <q-avatar
+          class="log-item-avatar"
+          size="24px"
+        >
+          <!--        <img :src="log.causer.photo">-->
+          <img src="https://cdn.quasar.dev/img/avatar.png">
+        </q-avatar>
+        <span class="log-editor">{{log.causer.full_name + ' '}}</span>
+        <span
+          v-for="(message, messageKey) in Object.entries(log.properties.messages)"
+          :key="messageKey"
+        >
         {{ message[1].message(message[1].values) }}
+      </span>
       </div>
-      <div class="log-item-status">
-        <span> به‌ روزشده توسط</span>
-        <span class="log-editor">{{ ' '+log.causer.full_name }}</span>
+      <div class="col-md-2 col-xs-6 log-date-time">
+        <sapn class="log-time">
+          {{ log.shamsiDate('created_at').time }}
+        </sapn>
+        <sapn class="log-date">
+          {{ log.shamsiDate('created_at').date }}
+        </sapn>
       </div>
-      <span class="log-date">{{ log.shamsiDate('created_at').dateTime }}</span>
-    </div>
-    <div>
-      <q-btn
-        v-if="true"
-        icon="add_comment"
-        class="icon-type log-comment-btn"
-        flat
-        @click="addComment"
-      />
-      <q-btn
-        v-if="true"
-        icon="more_horiz"
-        class="icon-type log-comment-btn"
-        flat
-      />
-    </div>
-  </div>
-  <div class="log-item">
-    <div class="log-container">
-      <div class="row q-gutter-none">
-        <div class="col col-1">
-          <q-icon name="mdi-circle-medium" style="font-size: 2em; color: rgba(0, 0, 0, 0.54);"/>
-        </div>
-        <div class="col">
-          <div class="row justify-between">
-            <div class="col col-10">
-              <div>
-                به‌روزشده توسط
-                <span class="log-editor">{{ log.causer.full_name }}</span>
-                در
-                <span class="log-date">{{ log.shamsiDate('created_at').dateTime }}</span>
-              </div>
-            </div>
-            <div class="eye-icon">
-              <q-icon name="mdi-eye-outline" style="font-size: 2em; color: rgba(0, 0, 0, 0.54);"/>
-            </div>
-          </div>
-          <div
-            v-if="log.properties.old.status || log.properties.new.status"
-            class="log-status"
+      <div class="col-6 log-btn-box">
+        <q-btn
+          v-if="true"
+          icon="add_comment"
+          class="icon-type log-comment-btn"
+          flat
+          @click="addComment"
+        />
+        <q-btn
+          v-if="true"
+          icon="more_horiz"
+          class="icon-type log-comment-btn"
+          flat
+        />
+      </div>
+      <div class="col-12 log-actions">
+        <ul class="actions-list">
+          <li
+            v-for="n in 3"
+            :key="n"
+            class="actions-list-item"
           >
-              وضعیت
-              <template v-if="log.properties.old.status">
-              از
-                <q-chip
-                  v-if="log.properties.old.status && log.properties.old.status.display_title"
-                  dense
-                  color="orange"
-                  text-color="white"
-                  size="sm"
-                  :label="log.properties.old.status.display_title"
-                />
-              </template>
-              <template v-if="log.properties.new.status">
-              به
-                <q-chip
-                  dense
-                  color="red"
-                  text-color="white"
-                  size="sm"
-                  :label="log.properties.new.status.display_title"
-                />
-              تغییر یافت.
-              </template>
-          </div>
-          <div
-            v-for="(comment, index) in log.comments.list"
-            :key="index"
-          >
-            <div class="log-author">
-              {{ comment.user.full_name }}:
-            </div>
-            <div class="log-comment">
-              <div class="comment-text">
-                {{ comment.comment }}
-              </div>
-              <div class="comment-date">
-                {{ comment.shamsiDate('created_at').dateTime }}
-              </div>
-            </div>
-          </div>
-          <q-btn
-            v-if="!canComment"
-            color="blue"
-            class="full-width log-comment-btn"
-            label="افزودن کامنت"
-            size="sm"
-            @click="canComment = true"
-          />
-          <q-input
-            v-if="canComment"
-            v-model="commentText"
-            filled
-            type="textarea"
-            class="q-mt-md"
-          />
-          <q-btn
-            v-if="canComment"
-            color="blue"
-            class="full-width log-comment-btn"
-            label="ارسال کامنت"
-            size="sm"
-            @click="addComment"
-          />
-        </div>
+            hi
+          </li>
+        </ul>
       </div>
     </div>
+    <q-separator size="2px" class="log-list-separator"/>
   </div>
 </template>
 
@@ -155,76 +87,102 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.log-item-body{
-  align-items: center;
-  justify-content: space-between;
-  margin: 24px 33px 24px 50px;
-  &:first-child {
-    margin-top: 30px
-  }
-  .log-item-right{
-    display: flex;
-    .log-item-avatar {
-      margin-right: 10px;
+.main-log-item{
+  .log-item{
+    align-items: center;
+    justify-content: space-between;
+    margin: 24px 24px 0 50px;
+    @media screen and (max-width: 1023px) {
+      margin: 24px 20px 0 34px !important;
     }
-    .log-item-status {
-       width: 300px;
+    @media screen and (max-width: 599px) {
+      margin: 16px 12px 0 16px !important;
     }
-  }
-  .log-comment-btn {
-    &:deep(.q-icon){
+    &:first-child {
+      margin-top: 30px;
+      @media screen and (max-width: 1023px) {
+        margin-top: 26px !important;
+      }
+      @media screen and (max-width: 599px) {
+        margin-top: 22px !important;
+      }
+    }
+    .log-item-right-side {
+      font-size: 14px;
+      color: var(--3a-TextPrimary);
+      @media screen and (max-width: 1023px) {
+        order: 1;
+      }
+      .log-item-avatar {
+        margin-right: 10px;
+      }
+      .log-editor{
+        font-weight: 500;
+        color: var(--3a-Primary);
+      }
+    }
+
+    .log-date-time {
+      display: flex;
+      justify-content: end;
+      font-size: 12px;
+      @media screen and (max-width: 1023px) {
+        justify-content: start;
+      }
       color: var(--3a-TextSecondary);
-      font-size: 20px;
+      .log-date{
+        margin-left: 8px;
+      }
+    }
+
+    .log-btn-box {
+      display: flex;
+      justify-content: end;
+      .log-comment-btn {
+        &:deep(.q-icon){
+          color: var(--3a-TextSecondary);
+          font-size: 20px;
+          @media screen and (max-width: 1023px) {
+            font-size: 16px;
+          }
+        }
+      }
+    }
+
+    .log-actions {
+      order: 2;
+      .actions-list {
+        list-style: none;
+        margin-right: 10px;
+        color: var(--3a-TextSecondary);
+        .actions-list-item {
+          font-size: 14px;
+          &:before {
+            content: "\2022";
+            color: var(--3a-Secondary);
+            font-size: 20px;
+            font-weight: bold;
+            display: inline-block;
+            margin-right: 8px;
+          }
+        }
+      }
     }
   }
-}
 
-.log-item {
-  font-size: 12px;
-}
-
-.log-container {
-  border-radius: 10px;
-  background-color: white;
-  padding: 30px 12px 12px 12px;
-}
-
-.log-editor {
-  color: #4a94dc;
-}
-
-.log-date {
-  text-decoration: underline;
-}
-
-.eye-icon {
-  width: 24px;
-}
-
-.log-status {
-  margin-top: 9px;
-  margin-bottom: 8px;
-}
-
-.v-chip.v-size--default {
-  font-size: 12px;
-  height: 20px;
-}
-
-.log-author {
-  font-size: 10px;
-  margin-bottom: 5px;
-  margin-top: 7px;
-}
-
-.log-comment {
-  padding: 5px 10px 2px 5px;
-  background-color: #fff5d6;
-  border-radius: 10px 0px 10px 10px;
-}
-
-.comment-date {
-  text-align: left;
-  font-size: 8px;
+  &:deep(.q-separator){
+    background-color: var(--3a-Neutral2);
+    width: 95%;
+    margin-left: 50px;
+    margin-right: 30px;
+    @media screen and (max-width: 1023px) {
+      margin-left: 34px;
+      margin-right: 24px;
+    }
+    @media screen and (max-width: 599px) {
+      margin-left: 16px;
+      margin-right: 16px;
+    }
+  }
 }
 </style>
