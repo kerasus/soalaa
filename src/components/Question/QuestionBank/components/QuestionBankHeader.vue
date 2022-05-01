@@ -126,7 +126,8 @@ export default {
     .search-section {
       padding: 16px 16px 16px 18px;
       .search-box-container{
-        justify-content: center;
+        justify-content: flex-start;
+        padding-left: 18px;
         .search-box{
           width: 274px;
         }
@@ -148,15 +149,19 @@ export default {
   }
 }
 @media only screen and (max-width: 599px) {
-  [dir="rtl"] .headerBankCard{
+  .headerBankCard{
     .search-section {
-      padding: 16px;
+      padding: 16px !important;
       justify-content: space-between;
       .search-box-container{
+        padding-left: 0;
+        &:deep(.q-card__actions){
+          width: 100%;
+        }
         padding-bottom: 12px;
         order: -1;
         .search-box{
-          width: 266px;
+          width: 100%;
         }
       }
       .select-box{
