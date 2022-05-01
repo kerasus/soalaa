@@ -20,6 +20,7 @@ class Log extends Model {
         key: 'causer',
         default: {
           id: null,
+          photo: 'https://nodes.alaatv.com/upload/images/profile/default_avatar.jpg',
           full_name: null
         }
       },

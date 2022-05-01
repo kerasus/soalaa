@@ -24,7 +24,10 @@ class User extends Model {
       { key: 'email' },
       { key: 'school' },
       { key: 'user_exam_status' },
-      { key: 'photo' },
+      {
+        key: 'photo',
+        default: 'https://nodes.alaatv.com/upload/images/profile/default_avatar.jpg'
+      },
       { key: 'token' },
       { key: 'has_admin_permission' },
       { key: 'has_educational_permission' },
