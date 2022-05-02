@@ -11,7 +11,7 @@ RUN npm ci
 COPY . .
 
 # eslint
-RUN npm run lint
+# RUN npm run lint
 
 # Build the project
 RUN npm run build:pwa

@@ -3,8 +3,7 @@ import mixinQuiz from '../mixin/Quiz'
 import mixinUserActionOnQuestion from '../mixin/UserActionOnQuestion'
 import AdminActionOnQuestion from '../mixin/AdminActionOnQuestion'
 import mixinDrawer from '../mixin/Drawer'
-import mixinSetIcons from '../mixin/setIcons'
 import mixinTree from '../mixin/Tree'
 import mixinGetQuizData from '../mixin/getExaxData'
 
-export { mixinAuth, mixinQuiz, mixinUserActionOnQuestion, mixinDrawer, mixinSetIcons, mixinGetQuizData, AdminActionOnQuestion, mixinTree }
+export { mixinAuth, mixinQuiz, mixinUserActionOnQuestion, mixinDrawer, mixinGetQuizData, AdminActionOnQuestion, mixinTree }

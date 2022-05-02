@@ -1,9 +1,8 @@
 <template>
   <div class="exam-details">
-    <div class="exam-details-title">شناسنامه سوال</div>
     <div class="exam-details-all-boxes">
       <div class="details-container-2 default-details-container row">
-      <div class="detail-box col-4">
+      <div class="detail-box">
         <div class="detail-box-title">آزمون ها</div>
         <div class="input-container flex">
           <div class="input-box">
@@ -224,11 +223,6 @@ export default {
         })
         return
       }
-      this.$emit('attach', {
-        exam: this.selectedExam,
-        sub_category: this.selectedLesson,
-        order: this.order
-      })
       if (this.buffer) {
         this.question.exams.addItem({
           id: Date.now(),
@@ -238,6 +232,12 @@ export default {
           // sub_category_id: this.selectedLesson.id,
           order: this.order
         })
+      } else {
+        this.$emit('attach', {
+          exam: this.selectedExam,
+          sub_category: this.selectedLesson,
+          order: this.order
+        })
       }
       this.selectedLesson = ''
       this.selectedCategory = ''
@@ -245,14 +245,14 @@ export default {
       this.order = '0'
     },
     detach (item) {
-      this.$emit('detach', item)
-
       if (this.buffer) {
         // this.question.exams.remove(item.id)
         const itemIndex = this.question.exams.list.findIndex(i => (i.id === item.id))
         if (itemIndex !== -1) {
           this.question.exams.list.splice(itemIndex, 1)
         }
+      } else {
+        this.$emit('detach', item)
       }
     },
     getLessonTitleById (exam) {
@@ -277,7 +277,7 @@ export default {
 <style scoped lang="scss">
 .q-dialog {
   .q-dialog__inner--minimized > div {
-    min-width: 720px;
+    width: 720px;
     height: 600px;
   }
   .attach-exam-card {
@@ -289,7 +289,6 @@ export default {
   }
 }
 .exam-details{
-  margin-top: 40px;
   .exam-details-title {
     font-weight: 500;
     font-size: 16px;
@@ -373,7 +372,7 @@ export default {
   //}
   .default-details-container {
     .detail-box {
-      margin-top: 16px;
+      margin-top: 5px;
 
       .detail-box-title {
         margin-bottom: 5px;
@@ -500,6 +499,7 @@ export default {
   .exam-details-all-boxes {
     .details-container-2 {
       .detail-box {
+        width: 100%;
         .detail-box-title {
           font-weight: 500;
           font-size: 16px;
@@ -510,7 +510,8 @@ export default {
         .input-container {
           margin-top: 5px;
           .input-box {
-            width: 50%;
+            //width: initial;
+            width: 78%;
           }
           .icon-box {
             width: 40px;

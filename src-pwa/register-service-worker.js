@@ -1,22 +1,27 @@
 import { register } from 'register-service-worker'
 
-// The ready(), registered(), cached(), updatefound() and updated()
-// events passes a ServiceWorkerRegistration instance in their arguments.
-// ServiceWorkerRegistration: https://developer.mozilla.org/en-US/docs/Web/API/ServiceWorkerRegistration
+// Import the functions you need from the SDKs you need
+// TODO: Add SDKs for Firebase products that you want to use
+// https://firebase.google.com/docs/web/setup#available-libraries
 
 register(process.env.SERVICE_WORKER_FILE, {
   // The registrationOptions object will be passed as the second argument
   // to ServiceWorkerContainer.register()
   // https://developer.mozilla.org/en-US/docs/Web/API/ServiceWorkerContainer/register#Parameter
 
-  // registrationOptions: { scope: './' },
+  registrationOptions: { scope: './' },
 
   ready (/* registration */) {
-    // console.log('Service worker is active.')
+    console.log('Service worker is active.')
     // console.log('##### \n' +
     //   'App is being served from cache by a service worker.\n' +
     //   'For more details, visit https://goo.gl/AFskqB'
     // )
+
+    // const app = initializeApp(firebaseConfig)
+    // const messaging = getMessaging(app)
+
+    // messaging.useServiceWorker(registration) // Your sw (service-worker,js -> custom-service-worker.js)  instead   firebase-messaging-sw.js
   },
 
   registered (/* registration */) {
@@ -53,3 +58,5 @@ register(process.env.SERVICE_WORKER_FILE, {
     // console.error('Error during service worker registration:', err)
   }
 })
+
+register('firebase-messaging-sw.js')

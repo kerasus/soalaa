@@ -14,7 +14,10 @@ const AdminActionOnQuestion = {
       optionQuestionId: '',
       questionStatusId_draft: null,
       questionStatusId_pending_to_type: null,
-      allTypes: new TypeList()
+      allTypes: new TypeList(),
+      gradesList: null,
+      lessonGroupList: null,
+      lessonsList: null
     }
   },
   computed: {
@@ -328,11 +331,14 @@ const AdminActionOnQuestion = {
       this.$axios.post(API_ADDRESS.question.attach, {
         exam_id: data.exam.id,
         sub_category_id: data.sub_category.id,
-        question_id: this.question.id,
+        ...(this.question.id) && { question_id: this.question.id },
         order: data.order
       })
         .then(response => {
           this.question.exams = new AttachedExamList(response.data.data.exams)
+        })
+        .catch((er) => {
+          console.log(er)
         })
     },
     detachExam (data) {
@@ -342,12 +348,40 @@ const AdminActionOnQuestion = {
         .then(response => {
           this.question.exams = new AttachedExamList(response.data.data.exams)
         })
+        .catch((er) => {
+          console.log(er)
+        })
     },
     openCloseImgPanel () {
       this.isPanelOpened = !this.isPanelOpened
       if (!this.isPanelOpened) {
         this.imgFloatMode = false
       }
+    },
+    setNodesList () {},
+    getGradesList () {
+      this.getRootNode('test').then(response => {
+        this.gradesList = response.data.data.children
+      })
+    },
+    getLessonGroupList (item) {
+      this.getNode(item.id).then(response => {
+        this.lessonGroupList = response.data.data.children
+      })
+    },
+    getLessonsList (item) {
+      this.getNode(item.id).then(response => {
+        this.lessonsList = response.data.data.children
+      })
+    },
+    setTags (allTags) {
+      this.$axios.put(API_ADDRESS.tags.setTags(this.question.id), allTags)
+        .then(response => {
+          console.log(response.data.data)
+        })
+        .catch((er) => {
+          console.log(er)
+        })
     }
   }
 }
