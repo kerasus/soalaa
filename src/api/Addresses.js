@@ -155,7 +155,8 @@ const API_ADDRESS = {
     },
     uploadImage (questionId) {
       return lumenServer + '/question/upload/' + questionId
-    }
+    },
+    printQuestions : lumenServer + '/question/export'
   },
   questionSubcategory: {
     base: lumenServer + '/sub-category',
