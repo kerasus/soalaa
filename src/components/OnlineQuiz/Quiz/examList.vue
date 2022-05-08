@@ -83,6 +83,9 @@
       <template v-slot:item.delay_time="{ item }">
         {{ item.delay_time }} دقیقه
       </template>
+      <template v-slot:item.n_questions="{ item }">
+        {{ item.n_questions }} سوال
+      </template>
       <template
         v-slot:item.options="{ item }"
         class="table-options"
@@ -381,6 +384,7 @@ export default {
       {text: 'شروع', value: 'start'},
       {text: 'پایان', value: 'end'},
       {text: 'میزان تاخیر', value: 'delay_time'},
+      {text: 'تعداد سوالات', value: 'n_questions'},
       {text: 'عملیات', value: 'options'}
     ],
     rows: [],
