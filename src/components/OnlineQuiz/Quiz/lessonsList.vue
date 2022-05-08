@@ -176,7 +176,7 @@ export default {
     },
     redirectTo (link) {
       const quizId = this.$route.params.quizId
-      this.$router.push('/onlineQuiz/exams/lesson/' + quizId + '/' + link.id)
+      this.$router.push('/admin/exam/' + quizId + '/' + link.id)
     },
     updateOrder (subcategory) {
       if (subcategory.order === null) {

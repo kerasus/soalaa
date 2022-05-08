@@ -60,6 +60,7 @@ class Exam extends Model {
       { key: 'accept_at' },
       { key: 'created_at' },
       { key: 'finished_at' },
+      { key: 'n_questions' },
       { key: 'is_registered' },
       { key: 'exam_id' },
       {
@@ -222,6 +223,7 @@ class Exam extends Model {
     const subcategoryList = this.sub_categories
     this.categories.list.map((item) => {
       item.getSubcategories(subcategoryList)
+      item.sub_categories.list = item.sub_categories.list.sort((item1, item2) => item1.order > item2.order)
     })
   }
 

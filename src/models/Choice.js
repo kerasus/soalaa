@@ -15,6 +15,7 @@ class Choice extends Model {
         default: false
       },
       { key: 'order' },
+      { key: 'number' },
       { key: 'answered_at' }
     ])
 
@@ -25,8 +26,11 @@ class Choice extends Model {
     }
   }
 
-  getOrderTitle (type = 'number') {
-    const number = {
+  getNumberTitle (type = 'number', number) {
+    if (typeof number === 'undefined') {
+      number = this.number
+    }
+    const numberTitle = {
       1: 'یک',
       2: 'دو',
       3: 'سه',
@@ -39,7 +43,7 @@ class Choice extends Model {
       10: 'ده'
     }
 
-    const abjad = {
+    const abjadTitle = {
       1: 'الف',
       2: 'ب',
       3: 'ج',
@@ -52,11 +56,24 @@ class Choice extends Model {
       10: 'غ'
     }
 
-    return (type === 'number') ? number[this.order] : abjad[this.order]
+    return (type === 'number') ? numberTitle[number] : abjadTitle[number]
   }
 }
 
 class ChoiceList extends Collection {
+  constructor (data, paginateData) {
+    super(data, paginateData)
+    this.setNumbers()
+  }
+
+  setNumbers () {
+    this.changeOrderToInt()
+    this.sortByKey('order')
+    this.list.forEach((choice, index) => {
+      choice.number = index + 1
+    })
+  }
+
   model () {
     return Choice
   }
