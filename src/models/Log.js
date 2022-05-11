@@ -42,47 +42,57 @@ class Log extends Model {
         key: 'log_status',
         default: {
           title: '',
-          actions: []
+          actions: {}
         }
       }
     ])
 
-    this.loadProperties()
+    // this.loadProperties()
 
-    // if (this.properties && (this.properties.new || this.properties.old)) {
-    //   this.setStatus()
-    // }
+    if (this.properties && (this.properties.new || this.properties.old)) {
+      this.loadStatus()
+    }
   }
 
-  loadProperties () {
-    this.loadPropertyType('new')
-    this.loadPropertyType('old')
+  loadStatus () {
+    this.getStatusTitle(this.description)
+    this.loadPropertyChanges('new')
+    this.loadPropertyChanges('old')
   }
 
-  loadPropertyType (type) {
+  getStatusTitle (description) {
+    if (description === 'create_question') {
+      this.log_status.title = 'سوال را ایجاد کرد'
+    } else if (description === 'create_exam') {
+      this.log_status.title = 'آزمون را ایجاد کرد'
+    } else {
+      this.log_status.title = 'تغییراتی ایجاد کرد'
+    }
+  }
+
+  loadPropertyChanges (type) {
     if (!this.properties || !this.properties[type]) {
       return
     }
-
-    this.properties.messages = {}
-
+    this.log_status.actions.message = {}
     Object.entries(this.properties[type]).forEach(prop => {
       const key = prop[0]
-      const propertyValues = this.getPropertyValues(key, this.properties.new[key], this.properties.old[key])
-      this.properties.messages[key] = {
-        message: propertyValues.message,
+      const propertyValues = this.getStatusActions(key, this.properties.new[key], this.properties.old[key])
+      this.log_status.actions = {
+        message: propertyValues.message(this.log_status.actions.values),
         values: propertyValues.values
       }
     })
   }
 
-  getPropertyValues (propertyKey, newPropertyValue, oldPropertyValue) {
+  getStatusActions (propertyKey, newPropertyValue, oldPropertyValue) {
     switch (propertyKey) {
       case 'status':
         return {
+
           message: function (values, callback) {
-            const fromStatus = typeof callback === 'function' ? callback(values.fromStatus) : values.fromStatus
-            const toStatus = typeof callback === 'function' ? callback(values.toStatus) : values.toStatus
+            const fromStatus = values && values.fromStatus ? typeof callback === 'function' ? callback(values.fromStatus) : values.fromStatus : '-'
+            const toStatus = values && values.toStatus ? typeof callback === 'function' ? callback(values.toStatus) : values.toStatus : '-'
             let text = 'وضعیت سوال '
 
             if (oldPropertyValue.display_title) {
@@ -93,7 +103,6 @@ class Log extends Model {
             }
 
             text += 'تغییر کرد.'
-
             return text
           },
           values: {
@@ -104,7 +113,14 @@ class Log extends Model {
       case 'statement':
         return {
           message: function (values, callback) {
-            return 'تغییراتی در صورت سوال ایجاد کرد.'
+            return 'تغییراتی در متن صورت سوال ایجاد شد.'
+          },
+          values: {}
+        }
+      case 'choices':
+        return {
+          message: function (values, callback) {
+            return 'تغییراتی در گزینه های سوال ایجاد شد.'
           },
           values: {}
         }
@@ -130,70 +146,9 @@ class Log extends Model {
         }
     }
   }
-
-  setStatus () {
-    const descriptions = [
-      'update_question',
-      'create_question',
-      'update_question_status',
-      'create_exam',
-      'update_exam',
-      'make_json_file_exam_question',
-      'delete_exam',
-      'delete_question',
-      'create_update_zirgorooh'
-    ]
-    descriptions.forEach(description => {
-      if (description === this.description) {
-        this.setLogTitle(description)
-        this.setLogAction(description)
-      }
-    })
-  }
-
-  setLogTitle (description) {
-    if (description === 'create_question') {
-      this.log_status.title = 'سوال را ایجاد کرد'
-    } else if (description === 'create_exam') {
-      this.log_status.title = 'آزمون را ایجاد کرد'
-    } else {
-      this.log_status.title = 'تغییراتی ایجاد کرد'
-    }
-  }
-
-  setLogAction (description) {
-    let text = ''
-    switch (description) {
-      case 'update_question':
-        this.log_status.actions.push()
-        break
-      case 'create_question':
-        this.log_status.actions.push()
-        break
-      case 'update_question_status':
-        if (this.properties.old || this.properties.new) {
-          if (this.properties.old.status && this.properties.old.status.display_title) {
-            text = 'از ' + this.properties.old.status.display_title
-          }
-          if (this.properties.new.status && this.properties.new.status.display_title) {
-            text += ' به ' + this.properties.new.status.display_title
-          }
-          this.log_status.actions.push('وضعیت سوال ' + text + 'تغییر کرد ')
-        }
-        break
-      case 'create_update_zirgorooh':
-        this.log_status.actions.push()
-        break
-    }
-  }
 }
 
 class LogList extends Collection {
-  // constructor (data, paginateData) {
-  //   super(data, paginateData)
-  //   // this.setNumbers()
-  // }
-
   model () {
     return Log
   }
