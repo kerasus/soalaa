@@ -18,6 +18,7 @@
     "@quasar/extras": "^1.13.5",
     "@silvermine/videojs-quality-selector": "^1.2.5",
     "@xkeshi/image-compressor": "^0.5.3",
+    "autoprefixer": "^10.4.7",
     "axios": "^0.26.1",
     "core-js": "^3.21.1",
     "cropperjs": "^1.5.12",
@@ -52,7 +53,7 @@
   },
   "devDependencies": {
     "@babel/eslint-parser": "^7.17.0",
-    "@quasar/app": "^3.3.3",
+    "@quasar/app-webpack": "^3.5.1",
     "eslint": "^7.12.1",
     "eslint-config-standard": "^16.0.3",
     "eslint-plugin-import": "^2.25.4",
