@@ -9,12 +9,11 @@
           <!--        <img :src="log.causer.photo">-->
           <img src="https://cdn.quasar.dev/img/avatar.png">
         </q-avatar>
-        <span class="log-editor">{{log.causer.full_name + ' '}}</span>
-        <span
-          v-for="(message, messageKey) in Object.entries(log.properties.messages)"
-          :key="messageKey"
-        >
-        {{ message[1].message(message[1].values) }}
+        <span class="log-editor">
+          {{ log.causer.full_name + ' ' }}
+        </span>
+        <span>
+          {{ log.log_status.title }}
       </span>
       </div>
       <div class="col-md-2 col-xs-6 log-date-time">
@@ -43,11 +42,10 @@
       <div class="col-12 log-actions">
         <ul class="actions-list">
           <li
-            v-for="n in 3"
-            :key="n"
+            v-if="log.log_status.actions.message"
             class="actions-list-item"
           >
-            hi
+            {{ log.log_status.actions.message }}
           </li>
         </ul>
       </div>
@@ -75,6 +73,8 @@ export default {
       commentText: ''
     }
   },
+  created () {
+  },
   methods: {
     addComment () {
       this.$emit('addComment', { text: this.commentText, logId: this.log.id })
@@ -87,36 +87,40 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.main-log-item{
-  .log-item{
+.main-log-item {
+  .log-item {
     align-items: center;
     justify-content: space-between;
     margin: 24px 24px 0 50px;
-    @media screen and (max-width: 1023px) {
-      margin: 24px 20px 0 34px !important;
+    @media screen and (max-width: 991px) {
+      margin: 24px 20px 0 34px;
     }
     @media screen and (max-width: 599px) {
-      margin: 16px 12px 0 16px !important;
+      margin: 16px 12px 0 12px !important;
     }
+
     &:first-child {
-      margin-top: 30px;
+      margin-top: 10px;
       @media screen and (max-width: 1023px) {
-        margin-top: 26px !important;
+        margin-top: 6px !important;
       }
       @media screen and (max-width: 599px) {
-        margin-top: 22px !important;
+        margin-top: 2px !important;
       }
     }
+
     .log-item-right-side {
       font-size: 14px;
       color: var(--3a-TextPrimary);
       @media screen and (max-width: 1023px) {
         order: 1;
       }
+
       .log-item-avatar {
         margin-right: 10px;
       }
-      .log-editor{
+
+      .log-editor {
         font-weight: 500;
         color: var(--3a-Primary);
       }
@@ -130,7 +134,8 @@ export default {
         justify-content: start;
       }
       color: var(--3a-TextSecondary);
-      .log-date{
+
+      .log-date {
         margin-left: 8px;
       }
     }
@@ -138,8 +143,9 @@ export default {
     .log-btn-box {
       display: flex;
       justify-content: end;
+
       .log-comment-btn {
-        &:deep(.q-icon){
+        &:deep(.q-icon) {
           color: var(--3a-TextSecondary);
           font-size: 20px;
           @media screen and (max-width: 1023px) {
@@ -151,12 +157,16 @@ export default {
 
     .log-actions {
       order: 2;
+
       .actions-list {
         list-style: none;
         margin-right: 10px;
+        padding-left: 36px;
         color: var(--3a-TextSecondary);
+
         .actions-list-item {
           font-size: 14px;
+
           &:before {
             content: "\2022";
             color: var(--3a-Secondary);
@@ -170,7 +180,7 @@ export default {
     }
   }
 
-  &:deep(.q-separator){
+  &:deep(.q-separator) {
     background-color: var(--3a-Neutral2);
     width: 95%;
     margin-left: 50px;
@@ -180,8 +190,8 @@ export default {
       margin-right: 24px;
     }
     @media screen and (max-width: 599px) {
-      margin-left: 16px;
-      margin-right: 16px;
+      margin-left: 16px !important;
+      margin-right: 16px !important;
     }
   }
 }
