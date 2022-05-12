@@ -1,5 +1,7 @@
 <template>
-   <div class="log-list">
+  <div
+    class="log-list"
+  >
      <q-toolbar class="justify-between">
        <q-tabs
          v-model="tab"
@@ -25,10 +27,10 @@
            <q-scroll-area
              class="scroll-bar"
              tabindex="0"
-             style="height: 480px;"
+             :style="windowSize.x > 991 ? {height: '440px'}: {height: '497px'} "
              visible
            >
-             <div class="logList">
+             <div class="log-list-card">
                <log-item
                  v-for="(item, index) in logs.list"
                  :key="index"
@@ -39,8 +41,11 @@
          </q-card>
        </q-tab-panel>
        <q-tab-panel class="flex" name="comments">
-         <q-card class="log-list-tap-panel custom-card full-width flex">
-           <div class="coming-soon text-h6">حالا حالاها خبری از این بخش نیست :)</div>
+         <q-card
+           class="log-list-tap-panel full-width flex bg-transparent"
+           flat
+         >
+           <div class="coming-soon">حالا حالاها خبری از این بخش نیست :)</div>
          </q-card>
        </q-tab-panel>
      </q-tab-panels>
@@ -69,6 +74,11 @@ export default {
       tab: 'history'
     }
   },
+  computed: {
+    windowSize () {
+      return this.$store.getters['AppLayout/windowSize']
+    }
+  },
   methods: {
     addComment (eventData) {
       this.$emit('addComment', eventData)
@@ -85,19 +95,31 @@ export default {
 
   .scroll-bar {
     &:deep(.q-scrollarea__thumb){
-      margin: 60px 20px;
+      margin: 0 20px;
       width: 6px;
       background-color: var(--3a-Primary);
       opacity: 1;
       border-radius: 4px;
+      @media screen and (max-width: 991px) {
+        margin: 0 10px;
+        width: 4px;
+      }
+      @media screen and (max-width: 599px) {
+        display: none;
+      }
     }
     &:deep(.q-scrollarea__bar){
-      height: 360px;
       width: 6px;
       border-radius: 4px;
-      margin: 60px 20px 0 20px;
+      margin: 0 20px;
       background-color: var(--3a-Neutral2);
       opacity: 1;
+      @media screen and (max-width: 991px) {
+        margin: 0 10px;
+      }
+      @media screen and (max-width: 599px) {
+        display: none;
+      }
     }
     &:deep(.absolute-right){
       left: 0;
@@ -141,8 +163,11 @@ export default {
   }
 
   .log-list-tap-panel {
-    min-height: 200px;
+    padding: 20px 0;
+    box-sizing: border-box;
     .coming-soon {
+      color: var(--3a-TextSecondary);
+      font-size: 16px;
       margin: auto;
     }
   }
@@ -152,20 +177,4 @@ export default {
   }
 }
 
-</style>
-<style scoped>
-.logList-title {
-  font-size: 16px;
-  margin-top: 20px;
-}
-
-.logList {
-  width: 100%;
-}
-
-.rounded-card {
-  border-radius: 10px;
-  overflow-y: auto;
-  max-height: 1600px;
-}
 </style>
