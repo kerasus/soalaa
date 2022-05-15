@@ -156,7 +156,7 @@ export default {
         const question = {
           author: this.question.author,
           choices: this.question.choices.list,
-          exams: exams,
+          exams,
           descriptive_answer: this.question.descriptive_answer,
           statement: this.question.statement,
           level: 1,

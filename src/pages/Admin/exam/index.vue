@@ -199,7 +199,7 @@ export default {
       this.$router.push({
         name: 'Admin.Exam.Show',
         params: {
-          id: id
+          id
         }
       })
     },
@@ -207,7 +207,7 @@ export default {
       this.$router.push({
         name: 'Admin.Exam.Edit',
         params: {
-          id: id
+          id
         }
       })
     },
@@ -215,7 +215,7 @@ export default {
       this.$router.push({
         name: 'Admin.Exam.Report.Edit',
         params: {
-          id: id
+          id
         }
       })
     },
@@ -238,7 +238,7 @@ export default {
       this.$router.push({
         name: 'Admin.Exam.Coefficient.Edit',
         params: {
-          id: id
+          id
         }
       })
     },
@@ -246,7 +246,7 @@ export default {
       this.$router.push({
         name: 'Admin.Exam.Upload',
         params: {
-          id: id
+          id
         }
       })
     },
@@ -276,7 +276,7 @@ export default {
       this.$router.push({
         name: 'Admin.Exam.AllResults',
         params: {
-          id: id
+          id
         }
       })
     }
