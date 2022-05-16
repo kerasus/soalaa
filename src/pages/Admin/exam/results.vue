@@ -384,7 +384,7 @@ export default {
         position: 'center'
       })
       this.$axios.get(API_ADDRESS.exam.examReportIndex('participants'), {
-        params: params
+        params
       })
         .then(response => {
           that.file_url = response.data.data.export_file_url
