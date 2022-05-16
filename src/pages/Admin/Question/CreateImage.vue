@@ -40,11 +40,11 @@
           :groups-list="lessonGroupList"
           :lessons-list="lessonsList"
           :buffer="true"
-          @gradeSelected="getLessonGroupList"
+          @gradeSelected="getLessonsList"
           @groupSelected="getLessonsList"
           @attach="attachExam"
           @detach="detachExam"
-          @tags-collected="setTags"
+          @tags-collected="setTagsOnCreate"
         />
       </div>
       <btn-box

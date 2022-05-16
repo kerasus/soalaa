@@ -1,6 +1,5 @@
 <template>
   <div class="question-details">
-<!--    <button @click="getIdentifierData">getTagsTitles</button>-->
     <div class="box-title">شناسنامه سوال</div>
     <div class="details-container-2 default-details-container row">
       <div class="detail-box col-3" style="padding-right:0;">
@@ -75,12 +74,21 @@
               icon="isax:tree"
               class="open-modal-btn default-detail-btn"
               @click="dialogValue = true"
-              :disable="!doesHaveGroups"
+              :disable="!doesHaveLessons"
             />
           </div>
         </div>
       </div>
     </div>
+    <q-btn
+      unelevated
+      color="primary"
+      class="q-mr-xl btn-md text-right"
+      style="float: left;margin-top: 10px;margin-right: 0px;margin-left: 14px;"
+      @click="getIdentifierData"
+    >
+      ثبت مباحث انتخاب شده
+    </q-btn>
       <question-tree-modal
         v-model:dialogValue="dialogValue"
         v-model:subjectsField="allSubjects"
@@ -257,6 +265,9 @@ export default {
   computed: {
     doesHaveGroups () {
       return !!(this.groupsList && this.groupsList.length > 0)
+    },
+    doesHaveLessons () {
+      return !!(this.lessonsList && this.lessonsList.length > 0)
     }
   },
   methods: {

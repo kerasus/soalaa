@@ -7,16 +7,16 @@
       <div class="choose-tree-box question-details col-6">
           <div class="details-container-2 default-details-container">
             <div class="detail-box" style="padding-right:0;">
-              <div class="detail-box-title" style="padding-bottom: 9px;" >گروه درس</div>
-              <q-select
-                filled
-                dense
-                dropdown-icon="isax:arrow-down-1"
-                v-model="group"
-                option-label="title"
-                :options="groupsList"
-                @update:model-value="groupSelected"
-              />
+<!--              <div class="detail-box-title" style="padding-bottom: 9px;" >گروه درس</div>-->
+<!--              <q-select-->
+<!--                filled-->
+<!--                dense-->
+<!--                dropdown-icon="isax:arrow-down-1"-->
+<!--                v-model="group"-->
+<!--                option-label="title"-->
+<!--                :options="groupsList"-->
+<!--                @update:model-value="groupSelected"-->
+<!--              />-->
             </div>
             <div class="detail-box">
               <div class="detail-box-title">نام درس</div>
@@ -76,7 +76,7 @@
             </div>
           </div>
         </div>
-        <div class="close-btn-box text-left" >
+        <div class="close-btn-box text-right" >
           <q-btn
             class="close-btn"
             label="بستن"
@@ -254,6 +254,7 @@ export default {
   },
   watch: {
     modal (newVal) {
+      this.lesson = ''
       if (!newVal) {
         return
       }
@@ -310,7 +311,7 @@ export default {
     }
   }
   .question-tree {
-    height: 296px;
+    height: 382px;
     overflow-x: scroll;
     margin-top: 2px;
   }
@@ -423,6 +424,7 @@ export default {
             height: 40px;
           }
           .q-field__inner {
+            margin-top: 9px;
             padding-right: 0 !important;
             padding-left: 0 !important;
           }
@@ -430,10 +432,13 @@ export default {
         .q-field--auto-height .q-field__native {
           min-height: 40px;
           color: #65677F;
+          background-color: #f4f5f6;
+
         }
         .q-field--auto-height .q-field__control, .q-field--auto-height .q-field__native {
           min-height: 40px;
           color: #65677F;
+          background-color: #f4f5f6;
         }
         .q-field__control::before, .q-field__control::after {
           display: none;
