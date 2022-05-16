@@ -47,17 +47,15 @@ class Log extends Model {
       }
     ])
 
-    // this.loadProperties()
-
     if (this.properties && (this.properties.new || this.properties.old)) {
-      this.loadStatus()
+      this.loadLogData()
     }
   }
 
-  loadStatus () {
+  loadLogData () {
     this.getStatusTitle(this.description)
-    this.loadPropertyChanges('new')
-    this.loadPropertyChanges('old')
+    this.getStatusActions('new')
+    this.getStatusActions('old')
   }
 
   getStatusTitle (description) {
@@ -70,14 +68,14 @@ class Log extends Model {
     }
   }
 
-  loadPropertyChanges (type) {
+  getStatusActions (type) {
     if (!this.properties || !this.properties[type]) {
       return
     }
     this.log_status.actions.message = {}
     Object.entries(this.properties[type]).forEach(prop => {
       const key = prop[0]
-      const propertyValues = this.getStatusActions(key, this.properties.new[key], this.properties.old[key])
+      const propertyValues = this.getActionsChanges(key, this.properties.new[key], this.properties.old[key])
       this.log_status.actions = {
         message: propertyValues.message(this.log_status.actions.values),
         values: propertyValues.values
@@ -85,7 +83,7 @@ class Log extends Model {
     })
   }
 
-  getStatusActions (propertyKey, newPropertyValue, oldPropertyValue) {
+  getActionsChanges (propertyKey, newPropertyValue, oldPropertyValue) {
     switch (propertyKey) {
       case 'status':
         return {
