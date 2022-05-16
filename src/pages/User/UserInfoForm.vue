@@ -451,7 +451,7 @@ export default {
           err.data.errors[key].forEach(message => {
             this.$q.notify({
               type: 'negative',
-              message: message,
+              message,
               position: 'top'
             })
           })
