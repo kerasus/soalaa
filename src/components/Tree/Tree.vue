@@ -150,9 +150,12 @@ export default {
       this.completeTickedNode = []
       target.forEach(id => {
         const node = this.nodes[0].findNode(id)
+        // console.log('node', node)
         if (!node) {
           return
         }
+        node.parentOfSelectedNode = this.nodes[0].parentOfSelectedNode
+        this.nodes[0].parentOfSelectedNode = []
         this.completeTickedNode.push(node)
       })
       this.$emit('ticked', this.completeTickedNode)
