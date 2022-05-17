@@ -361,7 +361,7 @@ const AdminActionOnQuestion = {
     },
     setNodesList () {},
     getGradesList () {
-      console.log('getGradesList')
+      // console.log('getGradesList')
       this.getRootNode('test').then(response => {
         this.gradesList = response.data.data.children
       })
@@ -374,7 +374,7 @@ const AdminActionOnQuestion = {
     getLessonsList (item) {
       this.getNode(item.id).then(response => {
         this.lessonsList = response.data.data.children
-        console.log('getLessonsList', this.lessonsList)
+        // console.log('getLessonsList', this.lessonsList)
       })
     },
     setTags (allTags) {

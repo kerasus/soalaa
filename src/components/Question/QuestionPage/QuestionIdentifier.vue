@@ -173,6 +173,7 @@ export default {
       dialogValue: false,
       questionAuthor: '',
       authorshipDate: '',
+      finalSelectedNodes: [],
       questionAuthors: [
         {
           id: 'skadlfksdjfnkkhjks543djf',
@@ -256,6 +257,8 @@ export default {
       ],
       subjectsFieldText: [],
       allSubjects: {},
+      allSubjectsFlat: [],
+      lastSelectedNodes: [],
       identifierData: [],
       draftBtnLoading: false,
       saveBtnLoading: false,
@@ -291,20 +294,26 @@ export default {
     },
     updateLessonsTitles () {
       const fieldText = []
+      const flatSelectedNodes = []
       if (Object.keys(this.allSubjects).length !== 0) {
         for (const key in this.allSubjects) {
           if (this.allSubjects[key].nodes && this.allSubjects[key].nodes.length > 0) {
             this.allSubjects[key].nodes.forEach(val => {
               fieldText.push(val.title)
+              flatSelectedNodes.push(val)
             })
           }
         }
       }
+      this.allSubjectsFlat = flatSelectedNodes
       this.lessonsTitles = fieldText
+    },
+    getLastNodesLessonsTitles () {
+      return this.lastSelectedNodes.map(item => item.title)
     },
     getIdentifierData () {
       this.updateLessonsTitles()
-      this.identifierData.push(...this.lessonsTitles)
+      this.identifierData.push(...this.getLastNodesLessonsTitles())
       this.identifierData.push(...this.getTagsTitles(this.subjectsFieldText))
       this.identifierData.push(...this.getTagsTitles(this.grade))
       this.identifierData.push(...this.getTagsTitles(this.major))
@@ -327,12 +336,32 @@ export default {
         finalArray.push(tag.title)
       }
       return finalArray
+    },
+    getUniqueListBy (arr, key) {
+      return [...new Map(arr.map(item => [item[key], item])).values()]
+    },
+    getTheLastSelectedNode () {
+      const foundedNodes = []
+      let cleaned = []
+      this.allSubjectsFlat.forEach((selectedNode) => {
+        selectedNode.parentOfSelectedNode.forEach((parentNode) => {
+          if (this.allSubjectsFlat.find(item => item.id === parentNode.parentId)) {
+            foundedNodes.push(parentNode)
+          }
+        })
+      })
+      cleaned = this.getUniqueListBy(foundedNodes, 'parentId')
+      this.lastSelectedNodes = this.allSubjectsFlat.filter((selectedNode) => {
+        return !(cleaned.find(item => item.parentId === selectedNode.id))
+      })
+      console.log('result', this.lastSelectedNodes)
     }
   },
   watch: {
     allSubjects: {
       handler () {
         this.updateLessonsTitles()
+        this.getTheLastSelectedNode()
       },
       deep: true
     }
