@@ -272,15 +272,6 @@ export default {
       if (newVal.length > 0) {
         this.updateChosenSubjects()
       }
-    },
-    areNodesSynced: {
-      handler (newVal) {
-        if (newVal) {
-          // this.currentTreeNode = this.nodesUpdatedFromTree
-        }
-        console.log('areNodesSynced', newVal)
-      },
-      deep: true
     }
   }
 }
