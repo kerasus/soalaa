@@ -315,7 +315,7 @@ export default {
       this.updateLessonsTitles()
       this.identifierData.push(...this.getLastNodesLessonsTitles())
       this.identifierData.push(...this.getTagsTitles(this.subjectsFieldText))
-      this.identifierData.push(...this.getTagsTitles(this.grade))
+      // this.identifierData.push(...this.getTagsTitles(this.grade))
       this.identifierData.push(...this.getTagsTitles(this.major))
       this.identifierData.push(...this.getTagsTitles(this.authorshipDate))
       this.identifierData.push(...this.getTagsTitles(this.questionAuthor))
