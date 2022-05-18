@@ -401,7 +401,7 @@ const AdminActionOnQuestion = {
           position: 'top'
         })
       }
-      console.log('this.question', this.question)
+      // console.log('this.question', this.question)
     }
   }
 }

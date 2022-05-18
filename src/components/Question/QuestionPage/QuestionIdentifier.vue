@@ -354,7 +354,6 @@ export default {
       this.lastSelectedNodes = this.allSubjectsFlat.filter((selectedNode) => {
         return !(cleaned.find(item => item.parentId === selectedNode.id))
       })
-      console.log('result', this.lastSelectedNodes)
     }
   },
   watch: {
