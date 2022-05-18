@@ -50,6 +50,11 @@
             @remove="navBarAction_remove"
             @logListOpened="showLogList"
           />
+<!--          <v-btn-toggle borderless>-->
+<!--            <v-btn v-for="item in questionTypes" :key="item.id" :value="item.id">-->
+<!--              {{item}}-->
+<!--            </v-btn>-->
+<!--          </v-btn-toggle>-->
           <!-- -------------------------- upload file ---------------------->
           <UploadImg
             v-if="showImgComponentStatus()"
@@ -258,7 +263,8 @@ export default {
       optionDescriptiveQuestionId: null,
       showImgBottomMode : false,
       isImgPanelSideModeVisible : false,
-      isLogListVisible : true
+      isLogListVisible : true,
+      // questionTypes: null
     }
   },
   destroyed() {
@@ -275,6 +281,7 @@ export default {
     let that = this
     axios.get(API_ADDRESS.option.base + '?type=question_type')
         .then(function (response) {
+          // this.questionTypes = response.data.data
           const optionQuestion = response.data.data.find(item => (item.value==='konkur'))
           const optionDescriptiveQuestion = response.data.data.find(item => (item.value==='descriptive'))
           if (!optionQuestion) {
