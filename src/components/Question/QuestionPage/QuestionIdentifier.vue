@@ -344,15 +344,15 @@ export default {
       const foundedNodes = []
       let cleaned = []
       this.allSubjectsFlat.forEach((selectedNode) => {
-        selectedNode.parentOfSelectedNode.forEach((parentNode) => {
-          if (this.allSubjectsFlat.find(item => item.id === parentNode.parentId)) {
+        selectedNode.ancestors.forEach((parentNode) => {
+          if (this.allSubjectsFlat.find(item => item.id === parentNode.id)) {
             foundedNodes.push(parentNode)
           }
         })
       })
-      cleaned = this.getUniqueListBy(foundedNodes, 'parentId')
+      cleaned = this.getUniqueListBy(foundedNodes, 'id')
       this.lastSelectedNodes = this.allSubjectsFlat.filter((selectedNode) => {
-        return !(cleaned.find(item => item.parentId === selectedNode.id))
+        return !(cleaned.find(item => item.id === selectedNode.id))
       })
     }
   },
