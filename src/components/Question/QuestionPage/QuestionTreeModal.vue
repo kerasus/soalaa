@@ -136,7 +136,8 @@ export default {
       loading: false,
       currentTreeNode: [],
       lastTreeNodes: [],
-      treeKey: 0
+      treeKey: 0,
+      areNodesSynced: false
     }
   },
   created () {},
@@ -166,6 +167,7 @@ export default {
         this.$emit('update:dialogValue', value)
       }
     },
+    // main storage
     chosenSubjects: {
       get () {
         return this.subjectsField
@@ -175,13 +177,14 @@ export default {
       }
     }
   },
-  mounted () {
-  },
+  mounted () {},
   methods: {
     updateNodes (values) {
-      this.selectWantedTree(this.lesson)
       this.nodesUpdatedFromTree = values
-      this.currentTreeNode = values
+      // if nodes are synced with response don't update currentTreeNode
+      if (!this.areNodesSynced) {
+        this.currentTreeNode = values
+      }
       this.selectedNodesIDs = values.map(item => item.id)
     },
     removeNode (node) {
@@ -189,6 +192,7 @@ export default {
         this.setTickedMode('tree', node.id, false)
       }
       this.removeNodeFromChosenSubjects(node)
+      this.updateChosenSubjects()
     },
     removeAllNodes () {
       this.setTickedMode('tree', this.selectedNodesIDs, false)
@@ -219,6 +223,7 @@ export default {
       this.showTree('tree', this.getNode(item.id))
         .then(() => {
           this.syncAllCheckedIds()
+          this.selectWantedTree(this.lesson)
         })
         .catch(err => {
           console.log(err)
@@ -243,29 +248,39 @@ export default {
         this.chosenSubjects[this.lesson.id].nodes = this.currentTreeNode
       }
     },
-    syncAllCheckedIds () {
+    syncAllCheckedIds (syncedWithResponse) {
+      if (syncedWithResponse) {
+        this.areNodesSynced = true
+      }
       if (this.lesson && this.chosenSubjects[this.lesson.id]) {
         const selectedNodesIds = this.chosenSubjects[this.lesson.id].nodes.map(item => item.id)
         if (selectedNodesIds.length > 0) {
           this.$refs.tree.setNodesTicked(selectedNodesIds, true)
         }
+        this.areNodesSynced = false
       }
     }
   },
   watch: {
     modal (newVal) {
-      this.lesson = ''
+      this.updateChosenSubjects()
       if (!newVal) {
-        return
-      }
-      if (this.lesson) {
-        this.showTreeModalNode(this.lesson)
+        this.lesson = ''
       }
     },
     currentTreeNode (newVal) {
-      // if (newVal.length > 0) {
-      this.updateChosenSubjects()
-      // }
+      if (newVal.length > 0) {
+        this.updateChosenSubjects()
+      }
+    },
+    areNodesSynced: {
+      handler (newVal) {
+        if (newVal) {
+          // this.currentTreeNode = this.nodesUpdatedFromTree
+        }
+        console.log('areNodesSynced', newVal)
+      },
+      deep: true
     }
   }
 }
