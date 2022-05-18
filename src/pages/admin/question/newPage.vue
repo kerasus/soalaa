@@ -95,6 +95,7 @@
             :status="edit_status"
             :attaches="selectedQuizzes"
             :exam-list="examList"
+            :categories="categories"
             :sub-categories="subCategoriesList"
             :loading="attachLoading"
             @detach="detachQuestion"
@@ -164,6 +165,7 @@ import Assistant from "@/plugins/assistant";
 import {QuestionStatusList} from "@/models/QuestionStatus";
 import axios from 'axios'
 import ShowImgBottomMode from "@/components/QuestionBank/EditQuestion/ShowImg/ShowImgBottomMode";
+import {QuestCategoryList} from "@/models/QuestCategory";
 
 export default {
   name: 'NewPage',
@@ -220,6 +222,7 @@ export default {
       displayEditQuestion: false,
       currentQuestion: new Question(),
       examList: new ExamList(),
+      categories: new QuestCategoryList(),
       subCategoriesList: new QuestSubcategoryList(),
       questionData: {
         statement: '',
@@ -540,7 +543,8 @@ export default {
       let that = this
       const loadExamListPromise = this.loadExamList()
       const loadSubcategoriesPromise = this.loadSubcategories()
-      Promise.all([loadExamListPromise, loadSubcategoriesPromise])
+      const loadCategoriesPromise = this.loadCategories()
+      Promise.all([loadExamListPromise, loadSubcategoriesPromise, loadCategoriesPromise])
           .then(() => {
             if (that.getPageStatus() !== 'create') {
               that.loadCurrentQuestionData()
@@ -763,6 +767,20 @@ export default {
           })
           .catch(() => {
           })
+    },
+
+    loadCategories () {
+      let that = this
+      return new Promise(function(resolve, reject) {
+        axios.get(API_ADDRESS.questionCategory.base)
+            .then((response) => {
+              that.categories = new QuestCategoryList(response.data.data)
+              resolve()
+            })
+            .catch( () => {
+              reject()
+            })
+      })
     },
 
     makeShowImgPanelVisible(src) {

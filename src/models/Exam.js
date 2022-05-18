@@ -58,6 +58,7 @@ class Exam extends Model {
             },
 
             { key: 'start_at' },
+            { key: 'n_questions' },
             { key: 'finish_at' },
             { key: 'accept_at' },
             { key: 'created_at' },

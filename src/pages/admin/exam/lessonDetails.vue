@@ -58,6 +58,22 @@
               من تایید نکردم
             </v-btn>
           </v-btn-toggle>
+          <v-btn
+            class="ma-4"
+            height="48px"
+            depressed
+            dark
+            color="green"
+            text-color="white"
+            :loading="loading"
+            @click="downLoadQuestions"
+          >
+            دانلود سوالات
+            <v-icon dark>
+              mdi-download
+            </v-icon>
+          </v-btn>
+
           <v-spacer />
           <v-text-field
             v-model="questionSearchNumber"
@@ -227,7 +243,8 @@
             ],
             inView: [],
             windowVisible: true,
-            questionSearchNumber: 0
+            questionSearchNumber: 0,
+          loading: false
         }),
         computed: {
             filteredQuestions () {
@@ -451,10 +468,7 @@
             generateReport() {
                 this.$refs.html2Pdf.generatePdf()
             },
-
-
-
-            loadSubCategories (quizResponse, reload) {
+          loadSubCategories (quizResponse, reload) {
                 const that = this
                 this.subCategoriesList.fetch().then((response) => {
                     if (reload) {
@@ -474,7 +488,7 @@
                     that.QuIzDaTa = new Exam(that.quizData)
                 })
             },
-            loadQuizDataAndSubCategories (reload = false) {
+          loadQuizDataAndSubCategories (reload = false) {
                 const that = this
                 axios.post(API_ADDRESS.exam.examQuestion(this.$route.params.quizId), {
                     sub_categories: [this.$route.params.lessonId]
@@ -489,6 +503,38 @@
                 })
 
             },
+          downLoadQuestions () {
+            this.loading = true
+            let fileUrl = ''
+            const questionsList = this.quizData.questions.list
+            const questionsIdList = []
+
+            questionsList.map((question) => {
+              questionsIdList.push(question.id)
+            })
+
+            axios.post(API_ADDRESS.question.printQuestions, {
+              questions: questionsIdList
+            })
+                .then( response => {
+                fileUrl = response.data.data
+                this.download('questions-list', fileUrl)
+                this.loading = false
+            }).catch(err => {
+              this.loading = false
+                console.log(err)
+            })
+          },
+
+          download(fileName, url) {
+            let element = document.createElement('a')
+            element.setAttribute('href', url)
+            element.setAttribute('download', fileName)
+            element.setAttribute('target', '_blank')
+            document.body.appendChild(element)
+            element.click()
+            document.body.removeChild(element)
+          },
         }
     }
 </script>
