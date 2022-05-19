@@ -164,7 +164,7 @@ export default {
     loadChildOfNode (node, done) {
       const tree = []
       node.children.forEach(child => {
-        tree.push(new TreeNode({ id: child.id, title: child.title, parent: node.id }))
+        tree.push(new TreeNode(child))
       })
       done(tree)
       this.$emit('lazy-loaded', tree)
@@ -181,7 +181,7 @@ export default {
     showChildOfNodeFromCache (node, key, done, fail) {
       const tree = []
       node.children.forEach(child => {
-        tree.push(new TreeNode({ id: child.id, title: child.title, order: child.order, parent: node.id }))
+        tree.push(new TreeNode(child))
       })
       done(tree)
       this.$emit('lazy-loaded', tree)
