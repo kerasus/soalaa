@@ -85,6 +85,7 @@
             dense
             :append-icon="'mdi-magnify'"
             @click:append="scrollToQuestion"
+            @keydown.enter="scrollToQuestion"
           />
           <v-btn
             icon
