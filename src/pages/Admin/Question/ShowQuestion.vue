@@ -36,26 +36,34 @@
       </div>
     </div>
     <div class="relative-position">
-<!--      <question-details class="col-9"/>-->
-      <attach-exam
-        :exams="examList"
-        :lessons="subCategoriesList"
-        :categories="categoryList"
-        @attach="attachExam"
-        @detach="detachExam"
-      />
+      <div class="attach-btn row">
+        <question-identifier
+          class="col-12"
+          :exams="examList"
+          :lessons="subCategoriesList"
+          :categories="categoryList"
+          :gradesList="gradesList"
+          :groups-list="lessonGroupList"
+          :lessons-list="lessonsList"
+          @gradeSelected="getLessonsList"
+          @groupSelected="getLessonsList"
+          @attach="attachExam"
+          @detach="detachExam"
+          @tags-collected="setTags"
+        />
+      </div>
       <status-change
         :statuses="questionStatuses"
         @update="changeStatus"
       />
-      <div
-        v-if="question.logs && question.logs.list && question.logs.list.length > 0"
-      >
-        <log-list-component
-          :logs="question.logs"
-          @addComment="addComment"
-        />
-      </div>
+    </div>
+    <div
+      v-if="question.logs && question.logs.list && question.logs.list.length > 0"
+    >
+      <log-list-component
+        :logs="question.logs"
+        @addComment="addComment"
+      />
     </div>
   </div>
 </template>
@@ -77,10 +85,13 @@ import { QuestionStatusList } from 'src/models/QuestionStatus'
 import ImagePanel from 'components/Question/QuestionPage/ImagePanel'
 import LogListComponent from 'components/QuestionBank/EditQuestion/Log/LogList'
 import { QuestCategoryList } from 'src/models/QuestCategory'
+import QuestionIdentifier from 'components/Question/QuestionPage/QuestionIdentifier'
+import mixinTree from 'src/mixin/Tree'
 // import API_ADDRESS from 'src/api/Addresses'
 export default {
   name: 'ShowQuestion',
   components: {
+    QuestionIdentifier,
     ImagePanel,
     Navbar,
     DescriptiveShowQuestion: defineAsyncComponent(() => import('components/Question/QuestionPage/Show/questionTypes/DescriptiveQuestion/DescriptiveShowQuestion')),
@@ -92,7 +103,8 @@ export default {
     LogListComponent
   },
   mixins: [
-    AdminActionOnQuestion
+    AdminActionOnQuestion,
+    mixinTree
   ],
   props: {},
   data () {
@@ -113,10 +125,11 @@ export default {
   created () {
     this.enableLoading()
     this.getQuestionTypeForTypeId(this.question)
-    this.getQuestionStatus()
+    this.loadExamList()
     this.loadSubcategories()
     this.loadCategories()
-    this.loadExamList()
+    this.getQuestionStatus()
+    this.getGradesList()
   },
   provide () {
     return {
@@ -176,6 +189,15 @@ export default {
   padding: 40px 100px;
   display: flex;
   flex-direction: column;
+  @media screen and (max-width: 1919px) {
+    padding: 40px 30px;
+  }
+  @media screen and (max-width: 1023px) {
+    padding: 30px 16px;
+  }
+  @media screen and (max-width: 599px) {
+    padding: 30px 16px;
+  }
 }
 .image-panel-side-mode {
    position: static;

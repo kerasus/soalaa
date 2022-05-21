@@ -8,6 +8,7 @@ import { QuestionType, TypeList } from 'src/models/QuestionType'
 import { Log, LogList } from 'src/models/Log'
 import { AttachedExamList } from 'src/models/AttachedExam'
 import { QuestCategoryList } from 'src/models/QuestCategory'
+import { Notify } from 'quasar'
 const AdminActionOnQuestion = {
   data () {
     return {
@@ -331,11 +332,14 @@ const AdminActionOnQuestion = {
       this.$axios.post(API_ADDRESS.question.attach, {
         exam_id: data.exam.id,
         sub_category_id: data.sub_category.id,
-        question_id: this.question.id,
+        ...(this.question.id) && { question_id: this.question.id },
         order: data.order
       })
         .then(response => {
           this.question.exams = new AttachedExamList(response.data.data.exams)
+        })
+        .catch((er) => {
+          console.log(er)
         })
     },
     detachExam (data) {
@@ -344,6 +348,9 @@ const AdminActionOnQuestion = {
       })
         .then(response => {
           this.question.exams = new AttachedExamList(response.data.data.exams)
+        })
+        .catch((er) => {
+          console.log(er)
         })
     },
     openCloseImgPanel () {
@@ -354,6 +361,7 @@ const AdminActionOnQuestion = {
     },
     setNodesList () {},
     getGradesList () {
+      // console.log('getGradesList')
       this.getRootNode('test').then(response => {
         this.gradesList = response.data.data.children
       })
@@ -366,6 +374,7 @@ const AdminActionOnQuestion = {
     getLessonsList (item) {
       this.getNode(item.id).then(response => {
         this.lessonsList = response.data.data.children
+        // console.log('getLessonsList', this.lessonsList)
       })
     },
     setTags (allTags) {
@@ -376,6 +385,23 @@ const AdminActionOnQuestion = {
         .catch((er) => {
           console.log(er)
         })
+    },
+    setTagsOnCreate (allTags) {
+      this.question.tags = allTags
+      if (allTags && allTags.length > 0) {
+        Notify.create({
+          message: 'ثبت با موفقیت انجام شد',
+          color: 'green',
+          icon: 'thumb_up'
+        })
+      } else {
+        Notify.create({
+          type: 'negative',
+          message: 'مشکلی در ثبت بوجود آمده است',
+          position: 'top'
+        })
+      }
+      // console.log('this.question', this.question)
     }
   }
 }

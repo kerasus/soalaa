@@ -45,12 +45,17 @@ const routes = [
               { name: 'Admin.Exam.Edit', path: ':id/edit', component: () => import('pages/Admin/exam/Edit'), breadcrumbs: { title: 'ویرایش آزمون' } },
               { name: 'Admin.Exam.Upload', path: ':id/upload', component: () => import('pages/Admin/exam/Upload') },
               { name: 'Admin.Exam.AllResults', path: 'results/:id', component: () => import('pages/Admin/exam/results') },
-              { name: 'Admin.Exam.Coefficient.Edit', path: ':id/coefficient/edit', component: () => import('src/pages/Admin/subGroup/editCoefficients.vue') },
-              { name: 'Admin.Exam.Report.Edit', path: ':id/edit-exam-report', component: () => import('pages/Admin/exam/edit/editExamReport'), breadcrumbs: { title: 'ویرایش کارنامه', loading: false } },
+              { name: 'Admin.Exam.Coefficient.Edit', path: ':id/coefficient/edit', component: () => import('src/pages/Admin/exam/editCoefficients.vue') },
+              { name: 'Admin.Exam.Report.Edit', path: ':id/edit-exam-report', component: () => import('pages/Admin/exam/editExamReport'), breadcrumbs: { title: 'ویرایش کارنامه', loading: false } },
               { name: 'Admin.Exam.Lessons', path: 'lessons/:quizId', component: () => import('src/pages/Admin/exam/lessons.vue') },
               { name: 'Admin.Exam.Lessons.List', path: 'lessons/:quizId/chart', component: () => import('src/pages/Admin/exam/lessonsChart.vue') },
-              { name: 'Admin.Exam.video.set', path: '/video/set/:examId/:subcategory_id', component: () => import('src/pages/Admin/exam/VideoSet/SetVideo.vue') },
-
+              { name: 'Admin.Exam.video.set', path: 'video/set/:examId/:subcategory_id', component: () => import('src/pages/Admin/exam/SetVideo.vue') },
+              {
+                path: ':quizId/:lessonId',
+                name: 'exams.lessons.questions',
+                component: () => import('pages/Admin/exam/LessonQuestions'),
+                middleware: [auth]
+              },
               {
                 path: '/results/mbti_bartle/:exam_id/:user_exam_id',
                 name: 'mbtiBartle.result',
@@ -196,12 +201,6 @@ const routes = [
         path: '/onlineQuiz/results/:exam_id/:user_exam_id',
         name: 'user.exam.results',
         component: () => import('pages/User/exam/Result'),
-        middleware: [auth]
-      },
-      {
-        path: '/onlineQuiz/exams/lesson/:quizId/:lessonId',
-        name: 'onlineQuiz.exams.lessons.details',
-        component: () => import('pages/Admin/exam/LessonDetails'),
         middleware: [auth]
       },
       {

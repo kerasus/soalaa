@@ -14,55 +14,57 @@
         :key="'category-'+categoryItem.id"
         class="menu-body"
       >
-        <q-item v-if="categoryItem.is_active" class="category-item">
-          <q-item-section class="category-item-section">
-            <q-item-label class="category-item-label">
-              {{ categoryItem.title }}
-            </q-item-label>
-          </q-item-section>
-        </q-item>
-        <q-expansion-item
-          v-for="(subcategoryItem) in categoryItem.sub_categories.list"
-          :key="'subcategory-'+subcategoryItem.id"
-          flat
-          group
-          dense
-          :label="subcategoryItem.title"
-          :header-class="'lessons-expansion'"
-        >
-          <div
-            v-for="(question, index) in getQuestionsOfSubcategory(subcategoryItem.id)"
-            :key="index"
-            class="expansion-items"
+        <div v-if="categoryItem.is_active">
+          <q-item v-if="categoryItem.is_active" class="category-item">
+            <q-item-section class="category-item-section">
+              <q-item-label class="category-item-label">
+                {{ categoryItem.title }}
+              </q-item-label>
+            </q-item-section>
+          </q-item>
+          <q-expansion-item
+            v-for="(subcategoryItem) in categoryItem.sub_categories.list"
+            :key="'subcategory-'+subcategoryItem.id"
+            flat
+            group
+            dense
+            :label="subcategoryItem.title"
+            :header-class="'lessons-expansion'"
           >
-            <q-btn
-              flat
-              class="questions-btn"
-              :class="{ active: currentQuestion.id === question.id }"
-              block
-              @click="changeQuestion(question.id)"
+            <div
+              v-for="(question, index) in getQuestionsOfSubcategory(subcategoryItem.id)"
+              :key="index"
+              class="expansion-items"
             >
-              تست شماره
-              {{ getQuestionNumberFromIndex(question.index) }}
-              <q-icon
-                v-if="getUserQuestionData(question.id) && getUserQuestionData(question.id).status === 'x'"
-                color="red"
-                name="mdi-close"
-              />
-              <q-icon
-                v-if="getUserQuestionData(question.id) && getUserQuestionData(question.id).status === 'o'"
-                color="yellow"
-                size="15"
-                name="mdi-checkbox-blank-circle"
-              />
-              <q-icon
-                v-if="getUserQuestionData(question.id) && getUserQuestionData(question.id).answered_choice_id"
-                color="green"
-                name="mdi-check"
-              />
-            </q-btn>
-          </div>
-        </q-expansion-item>
+              <q-btn
+                flat
+                class="questions-btn"
+                :class="{ active: currentQuestion.id === question.id }"
+                block
+                @click="changeQuestion(question.id)"
+              >
+                تست شماره
+                {{ getQuestionNumberFromIndex(question.index) }}
+                <q-icon
+                  v-if="getUserQuestionData(question.id) && getUserQuestionData(question.id).status === 'x'"
+                  color="red"
+                  name="mdi-close"
+                />
+                <q-icon
+                  v-if="getUserQuestionData(question.id) && getUserQuestionData(question.id).status === 'o'"
+                  color="yellow"
+                  size="15"
+                  name="mdi-checkbox-blank-circle"
+                />
+                <q-icon
+                  v-if="getUserQuestionData(question.id) && getUserQuestionData(question.id).answered_choice_id"
+                  color="green"
+                  name="mdi-check"
+                />
+              </q-btn>
+            </div>
+          </q-expansion-item>
+        </div>
       </div>
     </q-list>
     <div class="end-exam">

@@ -51,7 +51,7 @@ const mixinTree = {
 
     createNode (parentId, title, order, callback) {
       return new Promise((resolve, reject) => {
-        this.$axios.post(API_ADDRESS.tree.base, { parent_id: parentId, title: title, order: order })
+        this.$axios.post(API_ADDRESS.tree.base, { parent_id: parentId, title, order })
           .then(response => {
             if (callback) {
               callback(response)
@@ -65,7 +65,7 @@ const mixinTree = {
 
     editNode (id, title, order) {
       return new Promise((resolve, reject) => {
-        this.$axios.put(API_ADDRESS.tree.editNode(id), { title: title, order: order })
+        this.$axios.put(API_ADDRESS.tree.editNode(id), { title, order })
           .then(res => {
             resolve(res)
           }).catch(err => {

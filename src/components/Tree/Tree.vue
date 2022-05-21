@@ -149,7 +149,14 @@ export default {
     tickedNode (target) {
       this.completeTickedNode = []
       target.forEach(id => {
-        this.completeTickedNode.push(this.nodes[0].findNode(id))
+        const node = this.nodes[0].findNode(id)
+        // console.log('node', node)
+        if (!node) {
+          return
+        }
+        node.parentOfSelectedNode = this.nodes[0].parentOfSelectedNode
+        this.nodes[0].parentOfSelectedNode = []
+        this.completeTickedNode.push(node)
       })
       this.$emit('ticked', this.completeTickedNode)
     },
@@ -157,7 +164,7 @@ export default {
     loadChildOfNode (node, done) {
       const tree = []
       node.children.forEach(child => {
-        tree.push(new TreeNode({ id: child.id, title: child.title, parent: node.id }))
+        tree.push(new TreeNode(child))
       })
       done(tree)
       this.$emit('lazy-loaded', tree)
@@ -174,7 +181,7 @@ export default {
     showChildOfNodeFromCache (node, key, done, fail) {
       const tree = []
       node.children.forEach(child => {
-        tree.push(new TreeNode({ id: child.id, title: child.title, order: child.order, parent: node.id }))
+        tree.push(new TreeNode(child))
       })
       done(tree)
       this.$emit('lazy-loaded', tree)
