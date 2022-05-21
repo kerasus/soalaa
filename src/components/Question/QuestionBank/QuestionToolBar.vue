@@ -109,8 +109,8 @@
           :style="{'height': '36px' }"
           class="openDialouge"
           round
-          :icon="this.dialougeExpanded? 'isax:arrow-down-1' : 'isax:arrow-up-2'"
-          @click="this.dialougeExpanded = !this.dialougeExpanded"
+          :icon="this.ToolbarDialog? 'isax:arrow-down-1' : 'isax:arrow-up-2'"
+          @click="this.ToolbarDialog = !this.ToolbarDialog"
         />
       </div>
       <div class="top-style">
@@ -171,7 +171,7 @@
       </div>
     </div>
   </q-page-sticky>
-  <q-dialog class="dialogueCard" v-model="dialougeExpanded">
+  <q-dialog class="dialogueCard" v-model="ToolbarDialog">
     <q-card class="dialogueCardContainer">
       <div class="dialogHeader">
         <div class="dialogTitle"> سوالات انتخاب شده:</div>
@@ -240,7 +240,7 @@ export default {
   data () {
     return {
       questions: new QuestionList(),
-      dialougeExpanded: false,
+      ToolbarDialog: false,
       chartOptions: {
         chart: {
           height: '95',

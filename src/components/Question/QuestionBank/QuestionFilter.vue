@@ -1,5 +1,5 @@
-<template>
-  <div>
+ <template>
+  <div >
     <q-card class="custom-card q-pa-none">
       <div class="filter-card-container">
         <div class="filter-header">
@@ -34,36 +34,51 @@
         </div>
       </div>
     </q-card>
-    <div class="filter-options-section"
-         v-for="item in filterOptions" :key="item">
-      <q-card class="custom-card q-pa-none">
-        <q-card-section class="q-pa-none">
-          <q-expansion-item
-            expand-icon="isax:arrow-down-1"
-          >
-              <template v-slot:header>
-                <div class="filter-option-container " >
-                <div class="filter-option-title">
-                  {{ item }}
-                </div>
-                </div>
-              </template>
-            <tree
-              @ticked="tickedData"
-              ref="tree"
-              tick-strategy="strict"
-              :get-node-by-id="getNodeById"
-            />
-          </q-expansion-item>
-        </q-card-section>
-      </q-card>
+    <div
+      class="filter-options-section"
+    >
+      <question-filter-option-mobile
+      header-title="درس و مبحث"
+      >
+        <tree
+          ref="tree"
+          tick-strategy="strict"
+          :get-node-by-id="getNodeById"
+        />
+      </question-filter-option-mobile>
+      <question-filter-option-mobile
+      header-title="نوع سوال"
+      >
+        <tree
+          ref="tree"
+          tick-strategy="strict"
+          :get-node-by-id="getNodeById"
+        />
+      </question-filter-option-mobile>
+      <question-filter-option-mobile
+      header-title="سختی سوال"
+      >
+        <tree
+          ref="tree1"
+          tick-strategy="strict"
+          :get-node-by-id="getNodeById"
+        />
+      </question-filter-option-mobile>
+      <question-filter-option-mobile
+      header-title="تاریخ تالیف"
+      >
+        <div class="q-pa-md">
+          salam
+        </div>
+      </question-filter-option-mobile>
     </div>
   </div>
-</template>
+ </template>
 
 <script>
 import { mixinTree } from 'src/mixin/Mixins'
 import Tree from 'components/Tree/Tree'
+import QuestionFilterOptionMobile from 'components/Question/QuestionBank/QuestionFilterOptionMobile'
 
 export default {
   name: 'QuestionBankFilter',
@@ -74,9 +89,14 @@ export default {
     }
   },
   mixins: [mixinTree],
-  components: { Tree },
+  components: { QuestionFilterOptionMobile, Tree },
   created () {
     this.showTree('tree', this.getRootNode('test'))
+      .then(() => {})
+      .catch(err => {
+        console.log(err)
+      })
+    this.showTree('tree1', this.getRootNode('test'))
       .then(() => {})
       .catch(err => {
         console.log(err)
@@ -137,32 +157,6 @@ export default {
     }
   }
 
-}
-.filter-options-section {
-  &:deep(.q-focus-helper){
-    background: none !important;
-  }
-  margin-bottom: 16px;
-
-  .filter-option-container {
-    width: 500px;
-    display: flex;
-    padding: 20px 24px 20px 24px;
-    justify-content: space-between;
-
-    .filter-option-title {
-      font-style: normal;
-      font-weight: 500;
-      font-size: 16px;
-      line-height: 28px;
-      color: #23263B;
-    }
-
-    .filter-option-drop-down-btn {
-      position: relative;
-      top: -3px;
-    }
-  }
 }
 
 @media only screen and (max-width: 1919px) {

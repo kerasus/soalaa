@@ -30,6 +30,7 @@
         </div>
         <div class="question-filter-btn col-sm col-xs-6 " >
           <q-btn
+            @click="this.FilterOptionDialog = !this.FilterOptionDialog"
             class="filter-btn"
             icon="isax:setting-4"
             flat
@@ -39,13 +40,91 @@
       </div>
     </q-card-section>
   </q-card>
+  <q-dialog
+    class="dialog-filter-card"
+    v-model="FilterOptionDialog"
+    persistent
+    maximized
+    transition-show="slide-right"
+    transition-hide="slide-left"
+  >
+    <q-card class="dialog-filter-card-container">
+      <div class="filter-option-section-container">
+        <div class="filter-header">
+          <div class="filter-header-title"> فیلتر سوالات </div>
+          <div class="close-filter-section">
+          <q-btn
+          flat
+          label="بازگشت"
+          icon-right="isax:arrow-left-2"
+          @click="this.FilterOptionDialog = !this.FilterOptionDialog"
+          />
+          </div>
+        </div>
+        <div class="filter-options">
+          <question-filter-option-mobile
+            header-title="درس و مبحث"
+          >
+            <tree
+              ref="tree"
+              tick-strategy="strict"
+              :get-node-by-id="getNodeById"
+            />
+          </question-filter-option-mobile>
+          <question-filter-option-mobile
+            header-title="نوع سوال"
+          >
+            <tree
+              ref="tree"
+              tick-strategy="strict"
+              :get-node-by-id="getNodeById"
+            />
+          </question-filter-option-mobile>
+          <question-filter-option-mobile
+            header-title="سختی سوال"
+          >
+            <tree
+              ref="tree1"
+              tick-strategy="strict"
+              :get-node-by-id="getNodeById"
+            />
+          </question-filter-option-mobile>
+          <question-filter-option-mobile
+            header-title="تاریخ تالیف"
+          >
+            <div class="q-pa-md">
+              salam
+            </div>
+          </question-filter-option-mobile>
+        </div>
+        <div class="filter-features">
+          <div class="delete-all-filters-container">
+            <q-btn
+              class="delete-all-filters"
+              label="حذف همه"
+            />
+          </div>
+          <div class="set-filters-container">
+            <q-btn
+              label="اعمال فیلتر"
+              class="set-filters"
+            />
+          </div>
+        </div>
+      </div>
+    </q-card>
+  </q-dialog>
 </template>
 
 <script>
+import QuestionFilterOptionMobile from 'components/Question/QuestionBank/QuestionFilterOptionMobile'
 export default {
   name: 'QuestionBankHeader',
+  components: { QuestionFilterOptionMobile },
   data () {
     return {
+      FilterOptionDialog: false,
+      maximizedToggle: true,
       searchInput: null
     }
   }
@@ -144,6 +223,53 @@ export default {
       }
       .select-box{
         max-width: 160px;
+      }
+    }
+  }
+  .dialog-filter-card{
+    .dialog-filter-card-container{
+      background: #F4F5F6;
+      .filter-option-section-container{
+        padding: 20px 30px 40px 30px;
+        .filter-header{
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          margin-bottom: 28px;
+          .filter-header-title{
+            font-weight: 500;
+            font-size: 16px;
+            line-height: 28px;
+            color: #23263B;
+          }
+          .close-filter-section{
+          }
+        }
+        .filter-features{
+          display: flex;
+          .delete-all-filters-container{
+            width: 50%;
+            .delete-all-filters{
+              width: 100%;
+              border: 1px solid #E86562;
+              background: #FFFFFF;
+              font-style: normal;
+              font-weight: 400;
+              font-size: 14px;
+              line-height: 24px;
+              text-align: center;
+              color: #E86562;
+            }
+          }
+          .set-filters-container{
+            width: 50%;
+            .set-filters{
+              width: 100%;
+              background-color: var(--3a-Primary);
+              color: #FFFFFF;
+            }
+          }
+        }
       }
     }
   }
