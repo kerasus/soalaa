@@ -45,7 +45,7 @@
           :gradesList="gradesList"
           :groups-list="lessonGroupList"
           :lessons-list="lessonsList"
-          @gradeSelected="getLessonGroupList"
+          @gradeSelected="getLessonsList"
           @groupSelected="getLessonsList"
           @attach="attachExam"
           @detach="detachExam"
@@ -189,6 +189,15 @@ export default {
   padding: 40px 100px;
   display: flex;
   flex-direction: column;
+  @media screen and (max-width: 1919px) {
+    padding: 40px 30px;
+  }
+  @media screen and (max-width: 1023px) {
+    padding: 30px 16px;
+  }
+  @media screen and (max-width: 599px) {
+    padding: 30px 16px;
+  }
 }
 .image-panel-side-mode {
    position: static;

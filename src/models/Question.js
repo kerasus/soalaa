@@ -375,7 +375,11 @@ class Question extends Model {
   }
 
   actionsWhileSendingData () {
-    // Time.synchronizeTime()
+    console.log('run')
+    Time.synchronizeTime()
+      .then(res => {
+        console.log('res', res)
+      })
   }
 
   sendUserActionToServer (type, exam_user_id, dataToSendObject, socket, callback) {

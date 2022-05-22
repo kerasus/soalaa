@@ -1,6 +1,7 @@
-import { boot } from 'quasar/wrappers'
 import axios from 'axios'
 import { Notify } from 'quasar'
+import Time from 'src/plugins/time'
+import { boot } from 'quasar/wrappers'
 
 const AjaxResponseMessages = (function () {
   const messageMap = {
@@ -154,7 +155,12 @@ export default boot(({ app, store, router }) => {
   //       so you can easily perform requests against your app's API
 
   AxiosHooks.setNotifyInstance(app.config.globalProperties.$q)
-  axios.interceptors.response.use(undefined, function (error) {
+  axios.interceptors.response.use(function (response) {
+    if (response.config.url.indexOf(process.env.AAA_API) === 0) {
+      Time.synchronizeTimeWithData(response)
+    }
+    return Promise.resolve(response)
+  }, function (error) {
     AxiosHooks.handleErrors(error, router, store)
     return Promise.reject(error)
   })

@@ -165,13 +165,13 @@ export default {
   },
   mixins: [mixinAuth, mixinQuiz, mixinUserActionOnQuestion, mixinDrawer],
   beforeRouteEnter () {
-    // console.log('AlaaView beforeRouteEnter')
+    console.log('AlaaView beforeRouteEnter')
   },
   beforeRouteLeave () {
-    // console.log('AlaaView beforeRouteLeave')
+    console.log('AlaaView beforeRouteLeave')
   },
   beforeRouteUpdate () {
-    // console.log('AlaaView beforeRouteUpdate')
+    console.log('AlaaView beforeRouteUpdate')
     this.getLatestUserAnswersFromServer()
   },
   activated () {

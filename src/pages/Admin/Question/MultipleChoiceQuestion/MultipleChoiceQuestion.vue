@@ -21,6 +21,13 @@
         :key="item.order"
       >
         <div class="card-section-header">
+          <q-btn
+            class="icon-type"
+            icon="isax:close-square5"
+            color="negative"
+            flat
+            @click="removeChoice(item.order)"
+          />
           <q-radio
             dense
             v-model="choice"
@@ -29,7 +36,6 @@
             color="primary"
             @click="choiceClicked(item.order)"
           />
-          <q-btn label="حذف گزینه" flat color="primary" @click="removeChoice(item.order)"/>
         </div>
         <div class="multiple-answer-box">
           <QuestionField
@@ -60,11 +66,11 @@
         :groups-list="lessonGroupList"
         :lessons-list="lessonsList"
         :buffer="true"
-        @gradeSelected="getLessonGroupList"
+        @gradeSelected="getLessonsList"
         @groupSelected="getLessonsList"
         @attach="attachExam"
         @detach="detachExam"
-        @tags-collected="setTags"
+        @tags-collected="setTagsOnCreate"
       />
     </div>
     <btn-box
@@ -156,7 +162,7 @@ export default {
         const question = {
           author: this.question.author,
           choices: this.question.choices.list,
-          exams: exams,
+          exams,
           descriptive_answer: this.question.descriptive_answer,
           statement: this.question.statement,
           level: 1,
@@ -286,7 +292,6 @@ export default {
   .main-card-section {
     .card-section-header {
       display: flex;
-      justify-content: space-between;
       font-size: 16px;
       color: black;
       margin: 8px 18px 0;

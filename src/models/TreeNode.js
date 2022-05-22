@@ -10,6 +10,10 @@ class TreeNode extends Model {
         key: 'ancestors',
         default: []
       },
+      {
+        key: 'parentOfSelectedNode',
+        default: []
+      },
       { key: 'type' },
       { key: 'updated_at' },
       { key: 'created_at' },
@@ -29,6 +33,10 @@ class TreeNode extends Model {
     ])
   }
 
+  findParents () {
+
+  }
+
   findNode (nodeId, node) {
     if (!node) {
       node = this
@@ -39,7 +47,15 @@ class TreeNode extends Model {
     }
 
     for (const childNode of node.children) {
+      const isParentRepeated = this.parentOfSelectedNode.find(item => item.parentId === node.id)
+      if (!isParentRepeated && childNode.parent === node.id) {
+        this.parentOfSelectedNode.push({
+          parentId: node.id,
+          parentTitle: node.title
+        })
+      }
       if (childNode.children.length > 0) {
+        // nodeId: the first given node.id
         const result = this.findNode(nodeId, childNode)
         if (result !== null) {
           return result
@@ -49,7 +65,7 @@ class TreeNode extends Model {
         return childNode
       }
     }
-
+    this.parentOfSelectedNode = []
     return null
   }
 }
