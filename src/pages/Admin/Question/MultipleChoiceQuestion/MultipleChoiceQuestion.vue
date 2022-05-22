@@ -65,6 +65,8 @@
         :gradesList="gradesList"
         :groups-list="lessonGroupList"
         :lessons-list="lessonsList"
+        :authorship-dates-list="authorshipDatesList"
+        :question-authors-list="questionAuthorsList"
         :buffer="true"
         @gradeSelected="getLessonsList"
         @groupSelected="getLessonsList"
@@ -138,6 +140,8 @@ export default {
     this.setDefaultChoices()
     this.getPageReady()
     this.getGradesList()
+    this.loadQuestionAuthors()
+    this.loadAuthorshipDates()
   },
   mounted () {
     this.$nextTick(() => {

@@ -18,7 +18,9 @@ const AdminActionOnQuestion = {
       allTypes: new TypeList(),
       gradesList: null,
       lessonGroupList: null,
-      lessonsList: null
+      lessonsList: null,
+      authorshipDatesList: null,
+      questionAuthorsList: null
     }
   },
   computed: {
@@ -365,6 +367,28 @@ const AdminActionOnQuestion = {
       this.getRootNode('test').then(response => {
         this.gradesList = response.data.data.children
       })
+    },
+    loadQuestionAuthors () {
+      this.$axios.get(API_ADDRESS.option.base + '?type=reference_type')
+        .then((response) => {
+          this.questionAuthorsList = response.data.data
+        })
+    },
+    loadAuthorshipDates () {
+      this.$axios.get(API_ADDRESS.option.base + '?type=year_type')
+        .then((response) => {
+          this.authorshipDatesList = response.data.data
+        })
+    },
+    loadMajorList () {
+      this.$axios.get(API_ADDRESS.questionCategory.base)
+        .then((response) => {
+          // that.categoryList = new QuestCategoryList(response.data.data)
+          // that.categoryList.loading = false
+        })
+        .catch(() => {
+          // that.categoryList.loading = false
+        })
     },
     getLessonGroupList (item) {
       this.getNode(item.id).then(response => {

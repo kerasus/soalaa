@@ -3,21 +3,21 @@
     <div class="box-title">شناسنامه سوال</div>
     <div class="details-container-2 default-details-container row">
       <div class="detail-box col-3" style="padding-right:0;">
-        <div class="detail-box-title">طراح سوال</div>
+        <div class="detail-box-title">مرجع</div>
         <q-select
           borderless
           option-value="id"
           option-label="title"
           v-model="questionAuthor"
-          :options="questionAuthors"
+          :options="questionAuthorsList"
         />
       </div>
       <div class="detail-box col-3">
         <div class="detail-box-title">تاریخ تالیف</div>
         <q-select
           borderless
-          option-value="id"
-          option-label="title"
+          option-value="value"
+          option-label="label"
           v-model="authorshipDate"
           :options="authorshipDates"
         />
@@ -25,9 +25,9 @@
       <div class="detail-box col-3">
         <div class="detail-box-title">درجه سختی</div>
         <q-select
+          option-value="value"
+          option-label="label"
           borderless
-          option-value="id"
-          option-label="title"
           v-model="questionLevel"
           :options="levels"
         />
@@ -141,7 +141,25 @@ export default {
         return []
       }
     },
+    majorList: {
+      type: Array,
+      default () {
+        return []
+      }
+    },
     groupsList: {
+      type: Array,
+      default () {
+        return []
+      }
+    },
+    questionAuthorsList: {
+      type: Array,
+      default () {
+        return []
+      }
+    },
+    authorshipDatesList: {
       type: Array,
       default () {
         return []
@@ -194,65 +212,51 @@ export default {
       ],
       authorshipDates: [
         {
-          id: 'skadlfksdjfnkkhjks543djf',
-          title: 'دی ماه 1402'
+          value: 'skadlfksdjfnkkhjks543djf',
+          label: 'دی ماه 1402'
         },
         {
-          id: 'skadlfksdjfnk63546s543djf',
-          title: 'دی ماه 1403'
+          value: 'skadlfksdjfnk63546s543djf',
+          label: 'دی ماه 1403'
         },
         {
-          id: 'skadlfdfgdfgdffdksdjfnks543djf',
-          title: 'دی ماه 1404'
+          value: 'skadlfdfgdfgdffdksdjfnks543djf',
+          label: 'دی ماه 1404'
         },
         {
-          id: 'sk;sdljflsdkf56465adlfksdjfnks543djf',
-          title: 'دی ماه 1405'
+          value: 'sk;sdljflsdkf56465adlfksdjfnks543djf',
+          label: 'دی ماه 1405'
         }
       ],
       questionLevel: '',
-      grades: [
-        {
-          id: 'skadlf1111ks543djf',
-          title: 'دهم'
-        },
-        {
-          id: 'ska7777746s543djf',
-          title: 'یازدهم'
-        },
-        {
-          id: 'skad9999jfnks543djf',
-          title: 'دوازدهم'
-        }
-      ],
       grade: '',
       majors: [
         {
-          id: 'ska6666555ks543djf',
+          id: '1',
           title: 'ریاضی'
         },
         {
-          id: 'skadl454546s543djf',
+          id: '2',
           title: 'تجربی'
         },
         {
-          id: 'skadlfd54554jfnks543djf',
+          id: '3',
           title: 'انسانی'
         }
       ],
       major: '',
       levels: [
         {
-          id: 'skadlfk6546sdjfnkkhjks543djf',
-          title: 'آسان'
+          value: '1',
+          label: 'آسان'
         },
         {
-          id: '656adlfksdjfnk63546s543djf',
-          title: 'متوسط'
+          value: '2',
+          label: 'متوسط'
         },
         {
-          id: 'skadlfdfgdf564564sdjfnks543djf',
-          title: 'سخت'
+          value: '3',
+          label: 'سخت'
         }
       ],
       subjectsFieldText: [],
@@ -316,10 +320,11 @@ export default {
       this.identifierData.push(...this.getLastNodesLessonsTitles())
       this.identifierData.push(...this.getTagsTitles(this.subjectsFieldText))
       // this.identifierData.push(...this.getTagsTitles(this.grade))
+      this.question.major = this.major.id
       this.identifierData.push(...this.getTagsTitles(this.major))
       this.identifierData.push(...this.getTagsTitles(this.authorshipDate))
       this.identifierData.push(...this.getTagsTitles(this.questionAuthor))
-      this.identifierData.push(...this.getTagsTitles(this.questionLevel))
+      this.question.level = this.questionLevel.value
       console.log('this.identifierData', this.identifierData)
       this.setTags(this.identifierData)
     },

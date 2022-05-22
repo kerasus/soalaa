@@ -11,7 +11,7 @@
 </template>
 
 <script>
-import EntityEdit from 'components/Entity/Edit/EntityEdit'
+import { EntityEdit } from 'quasar-crud'
 // import API_ADDRESS from "src/api/Addresses";
 
 export default {
