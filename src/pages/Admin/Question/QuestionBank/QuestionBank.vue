@@ -41,12 +41,12 @@
 
 <script>
 import API_ADDRESS from 'src/api/Addresses'
-import QuestionBankHeader from 'components/Question/QuestionBank/components/QuestionBankHeader'
-import QuestionToolBar from 'components/Question/QuestionBank/QuestionToolBar'
-import QuestionFilter from 'components/Question/QuestionBank/QuestionFilter'
-import QuestionItem from 'components/Question/QuestionItem/QuestionItem'
-import pagination from 'components/Question/QuestionBank/Pagination'
 import { Question, QuestionList } from 'src/models/Question'
+import pagination from 'components/Question/QuestionBank/Pagination'
+import QuestionItem from 'components/Question/QuestionItem/QuestionItem'
+import QuestionFilter from 'components/Question/QuestionBank/QuestionFilter'
+import QuestionToolBar from 'components/Question/QuestionBank/QuestionToolBar'
+import QuestionBankHeader from 'components/Question/QuestionBank/components/QuestionBankHeader'
 
 export default {
   name: 'QuestionBank',
@@ -118,13 +118,24 @@ export default {
       console.log('Filter Deleted !!!', filter.id)
       this.$refs.filter.setTicked('tree', filter.id, false)
     },
+    getFilters () {
+      if (!this.$refs.filter) {
+        return null
+      }
+      const filters = this.$refs.filter.getFilters()
+
+      return {
+        tags: filters.tags.map(tag => tag.id)
+      }
+    },
     getQuestionData (page) {
       if (!page) {
         page = 1
       }
       this.loadingQuestion.loading = true
       this.questions.loading = true
-      this.$axios.get(API_ADDRESS.question.index([], page))
+      console.log('getFilters', this.getFilters())
+      this.$axios.get(API_ADDRESS.question.index(this.getFilters(), page))
         .then((response) => {
           this.questions = new QuestionList(response.data.data)
           this.paginationMeta = response.data.meta

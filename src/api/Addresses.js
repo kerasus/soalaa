@@ -105,22 +105,35 @@ const API_ADDRESS = {
     bank: {
       page: (page) => lumenServer + '/exam-question/attach/show/6245afa20569e1374540cb88?page=' + page
     },
-    index (statuses, page) {
-      statuses = statuses.join('&statuses[]=')
-      if (statuses) {
-        statuses = '&statuses[]=' + statuses
+    index (filters, page) {
+      function getQueryParams (paramKey) {
+        if (!filters) {
+          filters = {}
+        }
+        filters[paramKey] = (typeof filters[paramKey] !== 'undefined') ? filters[paramKey] : []
+        filters[paramKey] = filters[paramKey].join('&' + paramKey + '[]=')
+        if (filters[paramKey]) {
+          filters[paramKey] = '&' + paramKey + '[]=' + filters[paramKey]
+        }
       }
+      getQueryParams('statuses')
+      getQueryParams('years')
+      getQueryParams('reference')
+      getQueryParams('tags')
 
       if (typeof page !== 'undefined') {
         page = '&page=' + page
       } else {
         page = ''
       }
-      let queryParam = statuses + page
+      let queryParam = page
+      Object.keys(filters).forEach(filterKey => {
+        queryParam += filters[filterKey]
+      })
       if (queryParam.length > 0) {
         queryParam = queryParam.substr(1)
       }
-      return lumenServer + '/question?' + queryParam
+      return lumenServer + '/question/bank/search?' + queryParam
     },
     status: {
       base: lumenServer + '/question/statuses',

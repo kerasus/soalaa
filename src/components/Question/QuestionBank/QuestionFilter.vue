@@ -65,6 +65,9 @@ export default {
   name: 'QuestionBankFilter',
   data () {
     return {
+      filtersData: {
+        tags: []
+      },
       filters: ['درس و مبحث', 'نوع سوال', 'طراح سوال', 'تاریخ تالیف'],
       filterOptions: ['درس و مبحث', 'نوع سوال', 'طراح سوال', 'تاریخ تالیف']
     }
@@ -81,14 +84,18 @@ export default {
   methods: {
     tickedData (value) {
       this.filters = value
-      console.log('ticked', value)
       this.testArr = []
+      this.filtersData.tags = []
       value.forEach(val => {
         this.testArr.push(val.id)
+        this.filtersData.tags.push(val)
       })
     },
     deleteFilterObject (item) {
       this.$emit('deleteFilter', item)
+    },
+    getFilters () {
+      return this.filtersData
     }
   }
 }
