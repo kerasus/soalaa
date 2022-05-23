@@ -38,6 +38,18 @@ class Question extends Model {
       { key: 'order' },
       { key: 'major' },
       {
+        key: 'years',
+        default: []
+      },
+      {
+        key: 'reference',
+        default: []
+      },
+      {
+        key: 'designers',
+        default: []
+      },
+      {
         key: 'source_data',
         default: {}
       },

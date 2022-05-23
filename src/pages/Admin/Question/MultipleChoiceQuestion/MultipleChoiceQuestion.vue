@@ -65,6 +65,7 @@
         :gradesList="gradesList"
         :groups-list="lessonGroupList"
         :lessons-list="lessonsList"
+        :major-list="majorList"
         :authorship-dates-list="authorshipDatesList"
         :question-authors-list="questionAuthorsList"
         :buffer="true"
@@ -142,6 +143,7 @@ export default {
     this.getGradesList()
     this.loadQuestionAuthors()
     this.loadAuthorshipDates()
+    this.loadMajorList()
   },
   mounted () {
     this.$nextTick(() => {

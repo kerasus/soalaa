@@ -19,6 +19,7 @@ const AdminActionOnQuestion = {
       gradesList: null,
       lessonGroupList: null,
       lessonsList: null,
+      majorList: null,
       authorshipDatesList: null,
       questionAuthorsList: null
     }
@@ -381,13 +382,9 @@ const AdminActionOnQuestion = {
         })
     },
     loadMajorList () {
-      this.$axios.get(API_ADDRESS.questionCategory.base)
+      this.$axios.get(API_ADDRESS.option.base + '?type=major_type')
         .then((response) => {
-          // that.categoryList = new QuestCategoryList(response.data.data)
-          // that.categoryList.loading = false
-        })
-        .catch(() => {
-          // that.categoryList.loading = false
+          this.majorList = response.data.data
         })
     },
     getLessonGroupList (item) {

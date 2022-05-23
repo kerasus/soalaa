@@ -33,7 +33,7 @@
 
 <script>
 import API_ADDRESS from 'src/api/Addresses'
-import EntityCrud from 'components/EntityCrud'
+import { EntityCrud } from 'quasar-crud'
 
 export default {
   name: 'AuthorshipDates',
@@ -48,10 +48,10 @@ export default {
       allProps: {
         config: {
           api: {
-            show: API_ADDRESS.teleMarketing.show.base,
-            edit: API_ADDRESS.teleMarketing.edit.base,
-            create: API_ADDRESS.teleMarketing.create.base,
-            index: API_ADDRESS.teleMarketing.index.base
+            show: API_ADDRESS.entityCrud.authorshipDates.show,
+            edit: API_ADDRESS.entityCrud.authorshipDates.edit,
+            create: API_ADDRESS.entityCrud.authorshipDates.create,
+            index: API_ADDRESS.entityCrud.authorshipDates.index
           },
           title: {
             show: 'اطلاعات سفارش',
