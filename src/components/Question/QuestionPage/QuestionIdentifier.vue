@@ -6,12 +6,13 @@
         <div class="detail-box-title">مرجع</div>
         <q-select
           borderless
-          option-label="value"
-          option-value="id"
           v-model="questionAuthor"
+          option-value="id"
+          option-label="value"
+          use-input
+          use-chips
+          multiple
           :options="questionAuthorsList"
-          emit-value
-          map-options
         />
       </div>
       <div class="detail-box col-3">
@@ -22,8 +23,9 @@
           option-label="value"
           v-model="authorshipDate"
           :options="authorshipDatesList"
-          emit-value
-          map-options
+          use-input
+          use-chips
+          multiple
         />
       </div>
       <div class="detail-box col-3">
@@ -66,8 +68,9 @@
           option-label="value"
           v-model="major"
           :options="majorList"
-          emit-value
-          map-options
+          use-input
+          use-chips
+          multiple
         />
       </div>
       <div class="detail-box col-6">
@@ -197,8 +200,8 @@ export default {
   data () {
     return {
       dialogValue: false,
-      questionAuthor: '',
-      authorshipDate: '',
+      questionAuthor: null,
+      authorshipDate: null,
       finalSelectedNodes: [],
       questionAuthors: [
         {
@@ -236,8 +239,9 @@ export default {
           label: 'دی ماه 1405'
         }
       ],
-      questionLevel: '',
+      questionLevel: null,
       grade: '',
+      model: null,
       // majors: [
       //   {
       //     id: '1',
@@ -252,7 +256,7 @@ export default {
       //     value: 'انسانی'
       //   }
       // ],
-      major: '',
+      major: null,
       levels: [
         {
           id: '1',
@@ -265,6 +269,20 @@ export default {
         {
           id: '3',
           value: 'سخت'
+        }
+      ],
+      test: [
+        {
+          value: '1',
+          label: 'آسان'
+        },
+        {
+          value: '2',
+          label: 'متوسط'
+        },
+        {
+          value: '3',
+          label: 'سخت'
         }
       ],
       subjectsFieldText: [],
@@ -323,6 +341,9 @@ export default {
     getLastNodesLessonsTitles () {
       return this.lastSelectedNodes.map(item => item.title)
     },
+    // getLastNodesLessonsTitles () {
+    //   return this.lastSelectedNodes.map(item => item.title)
+    // },
     getIdentifierData (setTags) {
       this.updateLessonsTitles()
       this.identifierData.push(...this.getLastNodesLessonsTitles())
