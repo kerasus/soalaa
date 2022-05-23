@@ -32,6 +32,7 @@
     <div class="relative-position">
       <div class="attach-btn row">
         <question-identifier
+          ref="questionIdentifier"
           class="col-12"
           :exams="examList"
           :lessons="subCategoriesList"

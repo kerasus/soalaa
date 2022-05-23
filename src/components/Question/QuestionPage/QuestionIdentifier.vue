@@ -6,30 +6,36 @@
         <div class="detail-box-title">مرجع</div>
         <q-select
           borderless
+          option-label="value"
           option-value="id"
-          option-label="title"
           v-model="questionAuthor"
           :options="questionAuthorsList"
+          emit-value
+          map-options
         />
       </div>
       <div class="detail-box col-3">
         <div class="detail-box-title">تاریخ تالیف</div>
         <q-select
           borderless
-          option-value="value"
-          option-label="label"
+          option-value="id"
+          option-label="value"
           v-model="authorshipDate"
           :options="authorshipDatesList"
+          emit-value
+          map-options
         />
       </div>
       <div class="detail-box col-3">
         <div class="detail-box-title">درجه سختی</div>
         <q-select
-          option-value="value"
-          option-label="label"
+          option-value="id"
+          option-label="value"
           borderless
           v-model="questionLevel"
           :options="levels"
+          emit-value
+          map-options
         />
       </div>
       <attach-exam
@@ -57,9 +63,11 @@
         <q-select
           borderless
           option-value="id"
-          option-label="title"
+          option-label="value"
           v-model="major"
           :options="majorList"
+          emit-value
+          map-options
         />
       </div>
       <div class="detail-box col-6">
@@ -230,33 +238,33 @@ export default {
       ],
       questionLevel: '',
       grade: '',
-      majors: [
-        {
-          id: '1',
-          title: 'ریاضی'
-        },
-        {
-          id: '2',
-          title: 'تجربی'
-        },
-        {
-          id: '3',
-          title: 'انسانی'
-        }
-      ],
+      // majors: [
+      //   {
+      //     id: '1',
+      //     value: 'ریاضی'
+      //   },
+      //   {
+      //     id: '2',
+      //     value: 'تجربی'
+      //   },
+      //   {
+      //     id: '3',
+      //     value: 'انسانی'
+      //   }
+      // ],
       major: '',
       levels: [
         {
-          value: '1',
-          label: 'آسان'
+          id: '1',
+          value: 'آسان'
         },
         {
-          value: '2',
-          label: 'متوسط'
+          id: '2',
+          value: 'متوسط'
         },
         {
-          value: '3',
-          label: 'سخت'
+          id: '3',
+          value: 'سخت'
         }
       ],
       subjectsFieldText: [],
@@ -315,18 +323,24 @@ export default {
     getLastNodesLessonsTitles () {
       return this.lastSelectedNodes.map(item => item.title)
     },
-    getIdentifierData () {
+    getIdentifierData (setTags) {
       this.updateLessonsTitles()
       this.identifierData.push(...this.getLastNodesLessonsTitles())
       this.identifierData.push(...this.getTagsTitles(this.subjectsFieldText))
       // this.identifierData.push(...this.getTagsTitles(this.grade))
-      this.question.major = this.major.id
-      this.identifierData.push(...this.getTagsTitles(this.major))
-      this.identifierData.push(...this.getTagsTitles(this.authorshipDate))
-      this.identifierData.push(...this.getTagsTitles(this.questionAuthor))
-      this.question.level = this.questionLevel.value
+      this.question.major = this.major
+      this.question.years = this.authorshipDate
+      this.question.reference = this.questionAuthor
+      // this.identifierData.push(...this.getTagsTitles(this.major))
+      // this.identifierData.push(...this.getTagsTitles(this.authorshipDate))
+      // this.identifierData.push(...this.getTagsTitles(this.questionAuthor))
+      this.question.level = this.questionLevel
       console.log('this.identifierData', this.identifierData)
-      this.setTags(this.identifierData)
+      if (setTags) {
+        this.setTags(this.identifierData)
+        return
+      }
+      this.question.tags = this.identifierData
     },
     getTagsTitles (tag) {
       const finalArray = []
