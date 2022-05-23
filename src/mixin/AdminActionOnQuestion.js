@@ -103,6 +103,15 @@ const AdminActionOnQuestion = {
     updateQuestion (question) {
       const that = this
       // this.$store.dispatch('loading/overlayLoading', { loading: true, message: '' })
+      this.$refs.questionIdentifier.getIdentifierData(false)
+      question = {
+        ...question,
+        level: (this.question.level) ? this.question.level : 1,
+        reference: [this.question.reference],
+        years: [this.question.years],
+        tags: this.question.tags,
+        major: this.question.major
+      }
       this.$axios.put(API_ADDRESS.question.update(question.id), question)
         .then((response) => {
           this.$q.notify({

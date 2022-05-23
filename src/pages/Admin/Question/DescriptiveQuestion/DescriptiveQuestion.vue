@@ -31,6 +31,7 @@
   <div class="relative-position">
     <div class="attach-btn row">
       <question-identifier
+        ref="questionIdentifier"
         class="col-12"
         :exams="examList"
         :lessons="subCategoriesList"
@@ -129,6 +130,7 @@ export default {
             order: item.order
           })
         })
+        this.$refs.questionIdentifier.getIdentifierData(false)
         this.question.author.push({ full_name: this.$store.getters['Auth/user'].full_name, id: this.$store.getters['Auth/user'].id })
         const question = {
           author: this.question.author,
@@ -136,7 +138,11 @@ export default {
           exams,
           descriptive_answer: this.question.descriptive_answer,
           statement: this.question.statement,
-          level: 1,
+          level: (this.question.level) ? this.question.level : 1,
+          reference: [this.question.reference],
+          years: [this.question.years],
+          tags: this.question.tags,
+          major: this.question.major,
           sub_category_id: 1,
           recommended_time: 0,
           type_id: this.question.type_id
