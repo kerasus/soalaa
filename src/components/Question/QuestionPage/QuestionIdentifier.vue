@@ -19,7 +19,7 @@
           option-value="value"
           option-label="label"
           v-model="authorshipDate"
-          :options="authorshipDates"
+          :options="authorshipDatesList"
         />
       </div>
       <div class="detail-box col-3">
@@ -59,7 +59,7 @@
           option-value="id"
           option-label="title"
           v-model="major"
-          :options="majors"
+          :options="majorList"
         />
       </div>
       <div class="detail-box col-6">

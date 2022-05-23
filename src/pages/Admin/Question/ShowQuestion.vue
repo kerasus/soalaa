@@ -45,6 +45,9 @@
           :gradesList="gradesList"
           :groups-list="lessonGroupList"
           :lessons-list="lessonsList"
+          :major-list="majorList"
+          :authorship-dates-list="authorshipDatesList"
+          :question-authors-list="questionAuthorsList"
           @gradeSelected="getLessonsList"
           @groupSelected="getLessonsList"
           @attach="attachExam"
@@ -130,6 +133,9 @@ export default {
     this.loadCategories()
     this.getQuestionStatus()
     this.getGradesList()
+    this.loadQuestionAuthors()
+    this.loadAuthorshipDates()
+    this.loadMajorList()
   },
   provide () {
     return {

@@ -38,6 +38,9 @@
         :gradesList="gradesList"
         :groups-list="lessonGroupList"
         :lessons-list="lessonsList"
+        :major-list="majorList"
+        :authorship-dates-list="authorshipDatesList"
+        :question-authors-list="questionAuthorsList"
         :buffer="true"
         @gradeSelected="getLessonsList"
         @groupSelected="getLessonsList"
@@ -109,6 +112,9 @@ export default {
     }, 100)
     this.getPageReady()
     this.getGradesList()
+    this.loadQuestionAuthors()
+    this.loadAuthorshipDates()
+    this.loadMajorList()
   },
   mounted () {},
   methods: {
