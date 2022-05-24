@@ -202,60 +202,9 @@ export default {
       dialogValue: false,
       questionAuthor: null,
       authorshipDate: null,
-      finalSelectedNodes: [],
-      questionAuthors: [
-        {
-          id: 'skadlfksdjfnkkhjks543djf',
-          title: 'سازمان سنجش 1'
-        },
-        {
-          id: 'skadlfksdjfnk63546s543djf',
-          title: 'سازمان سنجش 2'
-        },
-        {
-          id: 'skadlfdfgdfgdffdksdjfnks543djf',
-          title: 'سازمان سنجش 3'
-        },
-        {
-          id: 'sk;sdljflsdkf56465adlfksdjfnks543djf',
-          title: 'سازمان سنجش 4'
-        }
-      ],
-      authorshipDates: [
-        {
-          value: 'skadlfksdjfnkkhjks543djf',
-          label: 'دی ماه 1402'
-        },
-        {
-          value: 'skadlfksdjfnk63546s543djf',
-          label: 'دی ماه 1403'
-        },
-        {
-          value: 'skadlfdfgdfgdffdksdjfnks543djf',
-          label: 'دی ماه 1404'
-        },
-        {
-          value: 'sk;sdljflsdkf56465adlfksdjfnks543djf',
-          label: 'دی ماه 1405'
-        }
-      ],
       questionLevel: null,
       grade: '',
       model: null,
-      // majors: [
-      //   {
-      //     id: '1',
-      //     value: 'ریاضی'
-      //   },
-      //   {
-      //     id: '2',
-      //     value: 'تجربی'
-      //   },
-      //   {
-      //     id: '3',
-      //     value: 'انسانی'
-      //   }
-      // ],
       major: null,
       levels: [
         {
@@ -269,20 +218,6 @@ export default {
         {
           id: '3',
           value: 'سخت'
-        }
-      ],
-      test: [
-        {
-          value: '1',
-          label: 'آسان'
-        },
-        {
-          value: '2',
-          label: 'متوسط'
-        },
-        {
-          value: '3',
-          label: 'سخت'
         }
       ],
       subjectsFieldText: [],
@@ -341,20 +276,13 @@ export default {
     getLastNodesLessonsTitles () {
       return this.lastSelectedNodes.map(item => item.title)
     },
-    // getLastNodesLessonsTitles () {
-    //   return this.lastSelectedNodes.map(item => item.title)
-    // },
     getIdentifierData (setTags) {
       this.updateLessonsTitles()
       this.identifierData.push(...this.getLastNodesLessonsTitles())
       this.identifierData.push(...this.getTagsTitles(this.subjectsFieldText))
-      // this.identifierData.push(...this.getTagsTitles(this.grade))
-      this.question.major = this.major
-      this.question.years = this.authorshipDate
-      this.question.reference = this.questionAuthor
-      // this.identifierData.push(...this.getTagsTitles(this.major))
-      // this.identifierData.push(...this.getTagsTitles(this.authorshipDate))
-      // this.identifierData.push(...this.getTagsTitles(this.questionAuthor))
+      this.question.major = this.major.map(item => item.id)
+      this.question.years = this.authorshipDate.map(item => item.id)
+      this.question.reference = this.questionAuthor.map(item => item.id)
       this.question.level = this.questionLevel
       console.log('this.identifierData', this.identifierData)
       if (setTags) {
