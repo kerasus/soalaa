@@ -39,20 +39,20 @@ const API_ADDRESS = {
   },
   entityCrud: {
     authorshipDates: {
-      show: lumenServer + '/option/',
-      edit: lumenServer + '/admin/user/',
+      show: lumenServer + '/option',
+      edit: lumenServer + '/admin/user',
       create: lumenServer + '/option',
       index: lumenServer + '/option?type=year_type&with_pagination=true'
     },
     questionAuthors: {
-      show: lumenServer + '/option/',
-      edit: lumenServer + '/admin/user/',
+      show: lumenServer + '/option',
+      edit: lumenServer + '/admin/user',
       create: lumenServer + '/option',
       index: lumenServer + '/option?type=reference_type&with_pagination=true'
     },
     majors: {
-      show: lumenServer + '/option/',
-      edit: lumenServer + '/admin/user/',
+      show: lumenServer + '/option',
+      edit: lumenServer + '/admin/user',
       create: lumenServer + '/option',
       index: lumenServer + '/option?type=major_type&with_pagination=true'
     }
