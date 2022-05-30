@@ -7,13 +7,15 @@ const mixinTree = {
         callback
           .then(response => {
             const node = response.data.data
-            let treeComponent = this.$refs[refKey]
-            if (!treeComponent.createRoot) {
-              treeComponent = this.$refs[refKey][0]
+            console.log('node', node)
+            const treeComponent = this.$refs[refKey]
+            if (!node || !node.length) {
+              treeComponent.createRoot()
             }
             treeComponent.createRoot({
               title: node.title,
               id: node.id,
+              type: node.type,
               order: node.order,
               parent: node.parent,
               children: node.children
@@ -49,9 +51,9 @@ const mixinTree = {
       })
     },
 
-    createNode (parentId, title, order, callback) {
+    createNode (parentId, type, title, order, callback) {
       return new Promise((resolve, reject) => {
-        this.$axios.post(API_ADDRESS.tree.base, { parent_id: parentId, title, order })
+        this.$axios.post(API_ADDRESS.tree.base, { parent_id: parentId, type: type, title: title, order: order })
           .then(response => {
             if (callback) {
               callback(response)
