@@ -1,6 +1,5 @@
 <template>
   <div class="question-details">
-<!--    <button @click="getIdentifierData">getTagsTitles</button>-->
     <div class="box-title">شناسنامه سوال</div>
     <div class="details-container-2 default-details-container row">
       <div class="detail-box col-3" style="padding-right:0;">
@@ -75,12 +74,21 @@
               icon="isax:tree"
               class="open-modal-btn default-detail-btn"
               @click="dialogValue = true"
-              :disable="!doesHaveGroups"
+              :disable="!doesHaveLessons"
             />
           </div>
         </div>
       </div>
     </div>
+    <q-btn
+      unelevated
+      color="primary"
+      class="q-mr-xl btn-md text-right"
+      style="float: left;margin-top: 10px;margin-right: 0px;margin-left: 14px;"
+      @click="getIdentifierData"
+    >
+      ثبت مباحث انتخاب شده
+    </q-btn>
       <question-tree-modal
         v-model:dialogValue="dialogValue"
         v-model:subjectsField="allSubjects"
@@ -165,6 +173,7 @@ export default {
       dialogValue: false,
       questionAuthor: '',
       authorshipDate: '',
+      finalSelectedNodes: [],
       questionAuthors: [
         {
           id: 'skadlfksdjfnkkhjks543djf',
@@ -248,6 +257,8 @@ export default {
       ],
       subjectsFieldText: [],
       allSubjects: {},
+      allSubjectsFlat: [],
+      lastSelectedNodes: [],
       identifierData: [],
       draftBtnLoading: false,
       saveBtnLoading: false,
@@ -257,6 +268,9 @@ export default {
   computed: {
     doesHaveGroups () {
       return !!(this.groupsList && this.groupsList.length > 0)
+    },
+    doesHaveLessons () {
+      return !!(this.lessonsList && this.lessonsList.length > 0)
     }
   },
   methods: {
@@ -280,22 +294,28 @@ export default {
     },
     updateLessonsTitles () {
       const fieldText = []
+      const flatSelectedNodes = []
       if (Object.keys(this.allSubjects).length !== 0) {
         for (const key in this.allSubjects) {
           if (this.allSubjects[key].nodes && this.allSubjects[key].nodes.length > 0) {
             this.allSubjects[key].nodes.forEach(val => {
               fieldText.push(val.title)
+              flatSelectedNodes.push(val)
             })
           }
         }
       }
+      this.allSubjectsFlat = flatSelectedNodes
       this.lessonsTitles = fieldText
+    },
+    getLastNodesLessonsTitles () {
+      return this.lastSelectedNodes.map(item => item.title)
     },
     getIdentifierData () {
       this.updateLessonsTitles()
-      this.identifierData.push(...this.lessonsTitles)
+      this.identifierData.push(...this.getLastNodesLessonsTitles())
       this.identifierData.push(...this.getTagsTitles(this.subjectsFieldText))
-      this.identifierData.push(...this.getTagsTitles(this.grade))
+      // this.identifierData.push(...this.getTagsTitles(this.grade))
       this.identifierData.push(...this.getTagsTitles(this.major))
       this.identifierData.push(...this.getTagsTitles(this.authorshipDate))
       this.identifierData.push(...this.getTagsTitles(this.questionAuthor))
@@ -316,12 +336,31 @@ export default {
         finalArray.push(tag.title)
       }
       return finalArray
+    },
+    getUniqueListBy (arr, key) {
+      return [...new Map(arr.map(item => [item[key], item])).values()]
+    },
+    getTheLastSelectedNode () {
+      const foundedNodes = []
+      let cleaned = []
+      this.allSubjectsFlat.forEach((selectedNode) => {
+        selectedNode.ancestors.forEach((parentNode) => {
+          if (this.allSubjectsFlat.find(item => item.id === parentNode.id)) {
+            foundedNodes.push(parentNode)
+          }
+        })
+      })
+      cleaned = this.getUniqueListBy(foundedNodes, 'id')
+      this.lastSelectedNodes = this.allSubjectsFlat.filter((selectedNode) => {
+        return !(cleaned.find(item => item.id === selectedNode.id))
+      })
     }
   },
   watch: {
     allSubjects: {
       handler () {
         this.updateLessonsTitles()
+        this.getTheLastSelectedNode()
       },
       deep: true
     }
