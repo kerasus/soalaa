@@ -9,9 +9,6 @@ const mixinTree = {
             const node = response.data.data
             console.log('node', node)
             const treeComponent = this.$refs[refKey]
-            if (!node || !node.length) {
-              treeComponent.createRoot()
-            }
             treeComponent.createRoot({
               title: node.title,
               id: node.id,
