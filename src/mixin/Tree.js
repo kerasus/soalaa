@@ -7,7 +7,6 @@ const mixinTree = {
         callback
           .then(response => {
             const node = response.data.data
-            console.log('node', node)
             const treeComponent = this.$refs[refKey]
             treeComponent.createRoot({
               title: node.title,
