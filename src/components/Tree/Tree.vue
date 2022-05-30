@@ -42,52 +42,84 @@
         narrow-indicator
         dense
       >
-        <q-tab class="text-purple" name="editNode" icon="edit" label="ویرایش "/>
-        <q-tab class="text-orange" name="createNewNode" icon="add" label="اضافه کردن گره جدید "/>
+        <div v-if="editable && nodes && !nodes.length">
+        </div>
+        <div v-else class="flex justify-center full-width" >
+          <q-tab class="text-blue" name="createTree" icon="add" lable="ساخت درخت"/>
+          <q-tab class="text-purple" name="editNode" icon="edit" label="ویرایش "/>
+          <q-tab class="text-orange" name="createNewNode" icon="add" label="اضافه کردن گره جدید "/>
+        </div>
       </q-tabs>
       <q-tab-panels v-model="tab " animated>
-        <q-tab-panel name="editNode">
-          <q-input
-            class="q-ma-md"
-            filled
-            v-model="editedTitle "
-            label="نام جدید "
-          />
-          <q-input
-            class="q-ma-md"
-            filled
-            v-model="editedOrder"
-            label="ترتیب جدید "
-          />
-          <q-btn
-            color="green "
-            :loading="loading "
-            @click="edit"
-          >
-            ثبت
-          </q-btn>
-        </q-tab-panel>
-        <q-tab-panel name="createNewNode">
-          <q-input
-            class="q-ma-md"
-            filled
-            v-model="newTitle"
-            label="نام "
-          />
-          <q-input
-            class="q-ma-md"
-            filled
-            v-model="newOrder"
-            label="ترتیب "
-          />
-          <q-btn
-            color="green "
-            :loading="loading "
-            @click="addNode() "
-          >
-            اضافه شود
-          </q-btn>
-        </q-tab-panel>
+          <q-tab-panel v-if="editable && nodes && nodes.length" name="createTree">
+            <q-input
+              class="q-ma-md"
+              filled
+              v-model="newTitle"
+              label="نام "
+            />
+            <q-input
+              class="q-ma-md"
+              filled
+              v-model="newOrder"
+              label="ترتیب "
+            />
+            <q-input
+              class="q-ma-md"
+              filled
+              v-model="newType"
+              label="type"
+            />
+            <q-btn
+              color="green "
+              :loading="loading "
+              @click="addNode()"
+            >
+              ایجاد
+            </q-btn>
+          </q-tab-panel>
+          <q-tab-panel v-if="editable && nodes && nodes.length" name="editNode">
+            <q-input
+              class="q-ma-md"
+              filled
+              v-model="editedTitle "
+              label="نام جدید "
+            />
+            <q-input
+              class="q-ma-md"
+              filled
+              v-model="editedOrder"
+              label="ترتیب جدید "
+            />
+            <q-btn
+              color="green "
+              :loading="loading "
+              @click="edit"
+            >
+              ثبت
+            </q-btn>
+          </q-tab-panel>
+          <q-tab-panel v-if="editable && nodes && nodes.length" name="createNewNode">
+            <q-input
+              class="q-ma-md"
+              filled
+              v-model="newTitle"
+              label="نام "
+            />
+            <q-input
+              class="q-ma-md"
+              filled
+              v-model="newOrder"
+              label="ترتیب "
+            />
+            <q-btn
+              color="green "
+              :loading="loading "
+              @click="addNode() "
+            >
+              اضافه شود
+            </q-btn>
+          </q-tab-panel>
       </q-tab-panels>
     </q-card>
   </q-dialog>
@@ -130,6 +162,7 @@ export default {
       loading: false,
       newTitle: '',
       newOrder: 1,
+      newType: '',
       editedTitle: '',
       editedOrder: 1,
       selectedNode: {},
@@ -202,15 +235,16 @@ export default {
     },
 
     addNode () {
-      const id = this.selectedNode.id
+      const id = this.selectedNode.id ? this.selectedNode.id : ''
       const getNode = this.$refs.tree.getNodeByKey(id)
-      this.addNewNode(id, this.newTitle, this.newOrder)
+      this.addNewNode(id, this.newType, this.newTitle, this.newOrder)
         .then(response => {
+          console.log(response)
           getNode.children.unshift(new TreeNode({
             id: response.data.data.id,
             type: response.data.data.type,
             title: response.data.data.title,
-            parent: response.data.data.parent.id
+            parent: response.data.data.parent.id ? response.data.data.parent.id : null
           }))
           this.editDialog = false
         })
