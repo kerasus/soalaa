@@ -148,7 +148,7 @@
         <div
           v-if="source.statement_photo && !source.statement"
           class="photo-section">
-          <p v-if="$route.name === 'onlineQuiz.exams.lessons.details'">
+          <p v-if="$route.name === 'exams.lessons.questions'">
             ({{ getSubCategoryName }}) (ترتیب: {{ source.order }})(شماره: {{ source.questNumber }})  -  صورت سوال :
           </p>
           <p v-else>

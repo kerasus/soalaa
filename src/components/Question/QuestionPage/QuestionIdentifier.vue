@@ -1,7 +1,5 @@
 <template>
   <div class="question-details">
-    <button @click="getIdentifierData">getTagsTitles</button>
-<!--    <button @click="getIdentifierData">getIdentifierData</button>-->
     <div class="box-title">شناسنامه سوال</div>
     <div class="details-container-2 default-details-container row">
       <div class="detail-box col-3" style="padding-right:0;">
@@ -39,6 +37,7 @@
         :exams="exams"
         :lessons="lessons"
         :categories="categories"
+        :buffer="buffer"
         @attach="emitAttachExam"
         @detach="emitDetachExam"
       />
@@ -67,7 +66,7 @@
         <div class="detail-box-title">مبحث</div>
         <div class="input-container flex">
           <div class="input-box">
-            <q-input v-model="lesson" dense disable/>
+            <q-input v-model="lessonsTitles" dense disable/>
           </div>
           <div class="icon-box">
             <q-btn
@@ -75,15 +74,24 @@
               icon="isax:tree"
               class="open-modal-btn default-detail-btn"
               @click="dialogValue = true"
-              :disable="!doesHaveGroups"
+              :disable="!doesHaveLessons"
             />
           </div>
         </div>
       </div>
     </div>
+    <q-btn
+      unelevated
+      color="primary"
+      class="q-mr-xl btn-md text-right"
+      style="float: left;margin-top: 10px;margin-right: 0px;margin-left: 14px;"
+      @click="getIdentifierData"
+    >
+      ثبت مباحث انتخاب شده
+    </q-btn>
       <question-tree-modal
         v-model:dialogValue="dialogValue"
-        v-model:lessonsField="lesson"
+        v-model:subjectsField="allSubjects"
         :lessons-list="lessonsList"
         :groups-list="groupsList"
         @groupSelected="groupSelected"
@@ -150,6 +158,7 @@ export default {
     'groupSelected',
     'lessonSelected',
     'gradeSelected',
+    'tags-collected',
     'attach',
     'attach'
   ],
@@ -164,6 +173,7 @@ export default {
       dialogValue: false,
       questionAuthor: '',
       authorshipDate: '',
+      finalSelectedNodes: [],
       questionAuthors: [
         {
           id: 'skadlfksdjfnkkhjks543djf',
@@ -245,15 +255,22 @@ export default {
           title: 'سخت'
         }
       ],
-      lesson: [],
+      subjectsFieldText: [],
+      allSubjects: {},
+      allSubjectsFlat: [],
+      lastSelectedNodes: [],
       identifierData: [],
       draftBtnLoading: false,
-      saveBtnLoading: false
+      saveBtnLoading: false,
+      lessonsTitles: []
     }
   },
   computed: {
     doesHaveGroups () {
       return !!(this.groupsList && this.groupsList.length > 0)
+    },
+    doesHaveLessons () {
+      return !!(this.lessonsList && this.lessonsList.length > 0)
     }
   },
   methods: {
@@ -275,9 +292,30 @@ export default {
     setTags (allTags) {
       this.$emit('tags-collected', allTags)
     },
+    updateLessonsTitles () {
+      const fieldText = []
+      const flatSelectedNodes = []
+      if (Object.keys(this.allSubjects).length !== 0) {
+        for (const key in this.allSubjects) {
+          if (this.allSubjects[key].nodes && this.allSubjects[key].nodes.length > 0) {
+            this.allSubjects[key].nodes.forEach(val => {
+              fieldText.push(val.title)
+              flatSelectedNodes.push(val)
+            })
+          }
+        }
+      }
+      this.allSubjectsFlat = flatSelectedNodes
+      this.lessonsTitles = fieldText
+    },
+    getLastNodesLessonsTitles () {
+      return this.lastSelectedNodes.map(item => item.title)
+    },
     getIdentifierData () {
-      this.identifierData.push(...this.getTagsTitles(this.lesson))
-      this.identifierData.push(...this.getTagsTitles(this.grade))
+      this.updateLessonsTitles()
+      this.identifierData.push(...this.getLastNodesLessonsTitles())
+      this.identifierData.push(...this.getTagsTitles(this.subjectsFieldText))
+      // this.identifierData.push(...this.getTagsTitles(this.grade))
       this.identifierData.push(...this.getTagsTitles(this.major))
       this.identifierData.push(...this.getTagsTitles(this.authorshipDate))
       this.identifierData.push(...this.getTagsTitles(this.questionAuthor))
@@ -298,13 +336,34 @@ export default {
         finalArray.push(tag.title)
       }
       return finalArray
+    },
+    getUniqueListBy (arr, key) {
+      return [...new Map(arr.map(item => [item[key], item])).values()]
+    },
+    getTheLastSelectedNode () {
+      const foundedNodes = []
+      let cleaned = []
+      this.allSubjectsFlat.forEach((selectedNode) => {
+        selectedNode.ancestors.forEach((parentNode) => {
+          if (this.allSubjectsFlat.find(item => item.id === parentNode.id)) {
+            foundedNodes.push(parentNode)
+          }
+        })
+      })
+      cleaned = this.getUniqueListBy(foundedNodes, 'id')
+      this.lastSelectedNodes = this.allSubjectsFlat.filter((selectedNode) => {
+        return !(cleaned.find(item => item.id === selectedNode.id))
+      })
     }
   },
   watch: {
-    // lesson (newVal) {
-    //   console.log('lesson parent', newVal)
-    //   // this.updateNodesField()
-    // }
+    allSubjects: {
+      handler () {
+        this.updateLessonsTitles()
+        this.getTheLastSelectedNode()
+      },
+      deep: true
+    }
   }
 }
 </script>

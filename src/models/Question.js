@@ -316,7 +316,11 @@ class Question extends Model {
   }
 
   actionsWhileSendingData () {
-    // Time.synchronizeTime()
+    console.log('run')
+    Time.synchronizeTime()
+      .then(res => {
+        console.log('res', res)
+      })
   }
 }
 

@@ -163,6 +163,13 @@ export default {
             field: row => row.delay_time
           },
           {
+            name: 'delay_time',
+            required: true,
+            label: 'تعداد سوالات',
+            align: 'left',
+            field: row => row.n_questions
+          },
+          {
             name: 'actions',
             required: true,
             label: 'عملیات',
@@ -192,7 +199,7 @@ export default {
       this.$router.push({
         name: 'Admin.Exam.Show',
         params: {
-          id: id
+          id
         }
       })
     },
@@ -200,7 +207,7 @@ export default {
       this.$router.push({
         name: 'Admin.Exam.Edit',
         params: {
-          id: id
+          id
         }
       })
     },
@@ -208,7 +215,7 @@ export default {
       this.$router.push({
         name: 'Admin.Exam.Report.Edit',
         params: {
-          id: id
+          id
         }
       })
     },
@@ -231,7 +238,7 @@ export default {
       this.$router.push({
         name: 'Admin.Exam.Coefficient.Edit',
         params: {
-          id: id
+          id
         }
       })
     },
@@ -239,7 +246,7 @@ export default {
       this.$router.push({
         name: 'Admin.Exam.Upload',
         params: {
-          id: id
+          id
         }
       })
     },
@@ -269,7 +276,7 @@ export default {
       this.$router.push({
         name: 'Admin.Exam.AllResults',
         params: {
-          id: id
+          id
         }
       })
     }

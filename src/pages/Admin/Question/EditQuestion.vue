@@ -49,7 +49,7 @@
           :gradesList="gradesList"
           :groups-list="lessonGroupList"
           :lessons-list="lessonsList"
-          @gradeSelected="getLessonGroupList"
+          @gradeSelected="getLessonsList"
           @groupSelected="getLessonsList"
           @attach="attachExam"
           @detach="detachExam"
