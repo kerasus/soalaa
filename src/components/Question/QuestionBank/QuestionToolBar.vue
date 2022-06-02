@@ -595,7 +595,7 @@ export default {
 
 .pageSticky {
   display: none;
-  z-index: 6001;
+  z-index: 2999;
 
   .shapes {
     height: 122px;

@@ -49,55 +49,53 @@
     transition-hide="slide-left"
   >
     <q-card class="dialog-filter-card-container">
-      <div class="filter-option-section-container">
-        <div class="filter-header">
-          <div class="filter-header-title"> فیلتر سوالات </div>
-          <div class="close-filter-section">
-          <q-btn
-          flat
-          label="بازگشت"
-          icon-right="isax:arrow-left-2"
-          @click="this.FilterOptionDialog = !this.FilterOptionDialog"
-          />
+      <div class="questions-filter">
+        <div class="filter-headerOption-container">
+          <div class="filter-header">
+            <div class="filter-header-title"> فیلتر سوالات </div>
+            <div class="close-filter-section">
+              <q-btn
+                flat
+                label="بازگشت"
+                icon-right="isax:arrow-left-2"
+                @click="this.FilterOptionDialog = !this.FilterOptionDialog"
+              />
+            </div>
+          </div>
+          <div class="filter-options">
+            <question-filter-option-mobile
+              header-title="درس و مبحث"
+            >
+              salam
+            </question-filter-option-mobile>
+            <question-filter-option-mobile
+              header-title="نوع سوال"
+            >
+              <tree
+                ref="tree"
+                tick-strategy="strict"
+                :get-node-by-id="getNodeById"
+              />
+            </question-filter-option-mobile>
+            <question-filter-option-mobile
+              header-title="سختی سوال"
+            >
+              <tree
+                ref="tree1"
+                tick-strategy="strict"
+                :get-node-by-id="getNodeById"
+              />
+            </question-filter-option-mobile>
+            <question-filter-option-mobile
+              header-title="تاریخ تالیف"
+            >
+              <div>
+                salam
+              </div>
+            </question-filter-option-mobile>
           </div>
         </div>
-        <div class="filter-options">
-          <question-filter-option-mobile
-            header-title="درس و مبحث"
-          >
-            <tree
-              ref="tree"
-              tick-strategy="strict"
-              :get-node-by-id="getNodeById"
-            />
-          </question-filter-option-mobile>
-          <question-filter-option-mobile
-            header-title="نوع سوال"
-          >
-            <tree
-              ref="tree"
-              tick-strategy="strict"
-              :get-node-by-id="getNodeById"
-            />
-          </question-filter-option-mobile>
-          <question-filter-option-mobile
-            header-title="سختی سوال"
-          >
-            <tree
-              ref="tree1"
-              tick-strategy="strict"
-              :get-node-by-id="getNodeById"
-            />
-          </question-filter-option-mobile>
-          <question-filter-option-mobile
-            header-title="تاریخ تالیف"
-          >
-            <div class="q-pa-md">
-              salam
-            </div>
-          </question-filter-option-mobile>
-        </div>
-        <div class="filter-features">
+        <div class="filter-actions">
           <div class="delete-all-filters-container">
             <q-btn
               class="delete-all-filters"
@@ -229,26 +227,33 @@ export default {
   .dialog-filter-card{
     .dialog-filter-card-container{
       background: #F4F5F6;
-      .filter-option-section-container{
+      .questions-filter{
         padding: 20px 30px 40px 30px;
-        .filter-header{
-          display: flex;
-          align-items: center;
-          justify-content: space-between;
-          margin-bottom: 28px;
-          .filter-header-title{
-            font-weight: 500;
-            font-size: 16px;
-            line-height: 28px;
-            color: #23263B;
-          }
-          .close-filter-section{
+        justify-content: space-between;
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+        .filter-headerOption-container{
+          .filter-header{
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 28px;
+            .filter-header-title{
+              font-weight: 500;
+              font-size: 16px;
+              line-height: 28px;
+              color: #23263B;
+            }
+            .close-filter-section{
+            }
           }
         }
-        .filter-features{
+        .filter-actions{
           display: flex;
+          justify-content: space-between;
           .delete-all-filters-container{
-            width: 50%;
+            width: 262px;
             .delete-all-filters{
               width: 100%;
               border: 1px solid #E86562;
@@ -262,7 +267,7 @@ export default {
             }
           }
           .set-filters-container{
-            width: 50%;
+            width: 262px;
             .set-filters{
               width: 100%;
               background-color: var(--3a-Primary);
@@ -292,6 +297,35 @@ export default {
       }
       .select-box{
         min-width: 160px;
+      }
+    }
+  }
+  .dialog-filter-card{
+    .dialog-filter-card-container{
+      .questions-filter{
+        padding: 20px 16px 30px 16px;
+        .filter-headerOption-container{
+          .filter-header{
+            margin-bottom: 32px;
+            .filter-header-title{
+            }
+            .close-filter-section{
+            }
+          }
+        }
+        .filter-actions{
+          .delete-all-filters-container{
+            width: 151px;
+            .delete-all-filters{
+            }
+          }
+          .set-filters-container{
+            width: 151px;
+            .set-filters{
+
+            }
+          }
+        }
       }
     }
   }
