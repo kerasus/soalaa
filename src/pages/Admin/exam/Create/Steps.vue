@@ -3,17 +3,17 @@
     <div class="steps-box col-12 row no-padding items-center">
       <div class="exam-info col-5 flex items-center" :class="{ 'current-step' : this.currentStep === 'create' }">
         <q-icon name="isax:edit" class="icon" />
-        <div class="exam-info-title title">اطلاعات آزمون</div>
-        <div class="line"/>
+        <div class="exam-info-title title " :class="{ 'hidden-mobile' : this.currentStep !== 'create' }">اطلاعات آزمون</div>
+        <div class="line" :class="{ 'border-mobile' : this.currentStep !== 'create' }"/>
       </div>
       <div class="choose-questions col-5 flex items-center" :class="{ 'current-step' : this.currentStep === 'bank-test-component1' }">
         <q-icon name="isax:task-square" class="icon"/>
-        <div class="choose-questions-title title">انتخاب سوال</div>
-        <div class="line"/>
+        <div class="choose-questions-title title" :class="{ 'hidden-mobile' : this.currentStep !== 'bank-test-component1' }">انتخاب سوال</div>
+        <div class="line" :class="{ 'border-mobile' : this.currentStep !== 'bank-test-component1' }"/>
       </div>
       <div class="final-approval col-2 flex items-center" :class="{ 'current-step' : this.currentStep === 'bank-test-component2' }">
         <q-icon name="isax:tick-square" class="icon"/>
-        <div class="final-approval-title">تایید نهایی</div>
+        <div class="final-approval-title" :class="{ 'hidden-mobile' : this.currentStep !== 'bank-test-component2' }">تایید نهایی</div>
       </div>
     </div>
   </div>
@@ -107,6 +107,12 @@ export default {
     .steps-box {
       padding-left: 34px !important;
     }
+  }
+  .hidden-mobile {
+    display: none !important;
+  }
+  .border-mobile{
+    width: calc(100% - 44.65px) !important;
   }
 }
 </style>
