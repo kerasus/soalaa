@@ -109,6 +109,26 @@
 
     </template>
   </entity-create>
+  <div class="btn-box flex justify-end items-center">
+    <q-btn
+      unelevated
+      class="q-mr-xl btn-md"
+      :icon="'isax:arrow-right-3'"
+      style="margin-right: 18px;"
+    >
+      بازگشت
+    </q-btn>
+    <q-btn
+      unelevated
+      color="primary"
+      class="q-mr-xl btn-md"
+      style="margin-right: 18px;"
+      :icon-right="'isax:arrow-left-2'"
+      @click="saveExam"
+    >
+      مرحله بعد
+    </q-btn>
+  </div>
 </template>
 
 <script>
@@ -118,6 +138,9 @@ import API_ADDRESS from 'src/api/Addresses'
 export default {
   name: 'Create',
   components: { EntityCreate },
+  emits: [
+    'btnClicked'
+  ],
   data () {
     return {
       expanded: true,
@@ -194,6 +217,9 @@ export default {
       }
       this.inputs[this.examCategoriesIndex].value = this.inputs[this.examCategoriesIndex].value.concat(this.category)
       this.category = { title: '', id: '', order: 0, time: 0 }
+    },
+    saveExam () {
+      this.$emit('btnClicked', 'BankTestComponent1')
     }
   }
 }
@@ -225,5 +251,8 @@ export default {
     width: 70%;
     margin: auto;
   }
+}
+.btn-box {
+  margin-bottom: 30px;
 }
 </style>

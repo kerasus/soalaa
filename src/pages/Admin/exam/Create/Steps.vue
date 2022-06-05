@@ -6,12 +6,12 @@
         <div class="exam-info-title title">اطلاعات آزمون</div>
         <div class="line"/>
       </div>
-      <div class="choose-questions col-5 flex items-center" :class="{ 'current-step' : this.currentStep === 'question-bank' }">
+      <div class="choose-questions col-5 flex items-center" :class="{ 'current-step' : this.currentStep === 'bank-test-component1' }">
         <q-icon name="isax:task-square" class="icon"/>
         <div class="choose-questions-title title">انتخاب سوال</div>
         <div class="line"/>
       </div>
-      <div class="final-approval col-2 flex items-center" :class="{ 'current-step' : this.currentStep === 'question-bank-final' }">
+      <div class="final-approval col-2 flex items-center" :class="{ 'current-step' : this.currentStep === 'bank-test-component2' }">
         <q-icon name="isax:tick-square" class="icon"/>
         <div class="final-approval-title">تایید نهایی</div>
       </div>
