@@ -1,17 +1,17 @@
 <template>
   <div class="steps row">
     <div class="steps-box col-12 row no-padding items-center">
-      <div class="exam-info col-5 flex items-center current-step">
+      <div class="exam-info col-5 flex items-center" :class="{ 'current-step' : this.currentStep === 'create' }">
         <q-icon name="isax:edit" class="icon" />
         <div class="exam-info-title title">اطلاعات آزمون</div>
-        <div class="line current-step"/>
+        <div class="line"/>
       </div>
-      <div class="choose-questions col-5 flex items-center">
+      <div class="choose-questions col-5 flex items-center" :class="{ 'current-step' : this.currentStep === 'question-bank' }">
         <q-icon name="isax:task-square" class="icon"/>
         <div class="choose-questions-title title">انتخاب سوال</div>
         <div class="line"/>
       </div>
-      <div class="final-approval col-2 flex items-center">
+      <div class="final-approval col-2 flex items-center" :class="{ 'current-step' : this.currentStep === 'question-bank-final' }">
         <q-icon name="isax:tick-square" class="icon"/>
         <div class="final-approval-title">تایید نهایی</div>
       </div>
@@ -20,8 +20,30 @@
 </template>
 
 <script>
+
 export default {
-  name: 'Steps'
+  name: 'Steps',
+  props: {
+    currentComponent: {
+      type: String,
+      default () {
+        return ''
+      }
+    }
+  },
+  emits: [
+    'update:currentComponent'
+  ],
+  computed: {
+    currentStep: {
+      get () {
+        return this.currentComponent
+      },
+      set (value) {
+        this.$emit('update:currentComponent', value)
+      }
+    }
+  }
 }
 </script>
 

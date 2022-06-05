@@ -40,7 +40,12 @@ const routes = [
             },
             children: [
               { name: 'Admin.Exam.Index', path: '', component: () => import('pages/Admin/exam/index'), breadcrumbs: { title: 'لیست آزمون ها', loading: false } },
-              { name: 'Admin.Exam.Create', path: 'create', component: () => import('pages/Admin/exam/Create') },
+              {
+                name: 'Admin.Exam.Create',
+                path: 'create',
+                component: () => import('pages/Admin/exam/Create/ExamCreatePanel'),
+                breadcrumbs: { title: 'ساخت آزمون', loading: false }
+              },
               { name: 'Admin.Exam.Show', path: ':id', component: () => import('pages/Admin/exam/Show'), breadcrumbs: { title: 'مشاهده آزمون' } },
               { name: 'Admin.Exam.Edit', path: ':id/edit', component: () => import('pages/Admin/exam/Edit'), breadcrumbs: { title: 'ویرایش آزمون' } },
               { name: 'Admin.Exam.Upload', path: ':id/upload', component: () => import('pages/Admin/exam/Upload') },
