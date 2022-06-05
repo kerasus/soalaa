@@ -2,6 +2,7 @@
   <steps v-model:currentComponent="currentComponentName"/>
   <component
     :is="getComponent"
+    @btnClicked="changeCurrentComponent"
   />
 </template>
 
@@ -33,6 +34,10 @@ export default {
       const cNameKebabized = this.kebabize(name)
       this.currentComponentName = cNameKebabized
       return cNameKebabized
+    },
+    changeCurrentComponent (val) {
+      this.currentComponent = val
+      // console.log(val)
     }
   },
   computed: {
