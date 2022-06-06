@@ -266,7 +266,7 @@ export default {
   width: 280px;
   min-height: 840px;
   border-radius: 30px;
-  margin: 40px 24px;
+  margin: 40px 0 0 24px;
   @media screen and (max-width: 1919px) {
     width: 260px;
     min-height: 740px;

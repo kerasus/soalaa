@@ -32,7 +32,6 @@ export default {
   mixins: [mixinTree],
   components: { Tree },
   created () {
-    // this.showTree('tree', this.getNode('6232e6482012ae19f05331d9'))
     this.showTree('tree', this.getRootNode('test'))
       .then(() => {})
       .catch(err => {
