@@ -102,6 +102,20 @@ export default {
 </style>
 
 <style>
+#vue-tiptap-katex  .accent {
+  background-color: unset !important;
+  border-color: unset !important;
+}
+
+#vue-tiptap-katex .overline {
+  font-size: inherit !important;
+  font-weight: inherit !important;
+  letter-spacing: inherit !important;
+  line-height: inherit !important;
+  text-transform: unset !important;
+  font-family: inherit !important;
+}
+
 .katex * {
   font-family: KaTeX_Main;
 }
