@@ -4,6 +4,22 @@
     :is="getComponent"
     @btnClicked="changeCurrentComponent"
   />
+  <q-tab-panels v-model="currentTab" animated class="shadow-2 rounded-borders">
+    <q-tab-panel name="mails">
+      <div class="text-h6">Mails</div>
+      Lorem ipsum dolor sit amet consectetur adipisicing elit.
+    </q-tab-panel>
+
+    <q-tab-panel name="alarms">
+      <div class="text-h6">Alarms</div>
+      Lorem ipsum dolor sit amet consectetur adipisicing elit.
+    </q-tab-panel>
+
+    <q-tab-panel name="movies">
+      <div class="text-h6">Movies</div>
+      Lorem ipsum dolor sit amet consectetur adipisicing elit.
+    </q-tab-panel>
+  </q-tab-panels>
 </template>
 
 <script>
@@ -20,7 +36,8 @@ export default {
   data () {
     return {
       currentComponent: 'Create',
-      currentComponentName: 'Create'
+      currentComponentName: 'Create',
+      currentTab: ''
     }
   },
   methods: {
