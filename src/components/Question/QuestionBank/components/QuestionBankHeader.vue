@@ -63,12 +63,12 @@
             </div>
           </div>
           <div class="filter-options">
-            <question-filter-option-mobile
+            <question-filter-expansion
               header-title="درس و مبحث"
             >
               salam
-            </question-filter-option-mobile>
-            <question-filter-option-mobile
+            </question-filter-expansion>
+            <question-filter-expansion
               header-title="نوع سوال"
             >
               <tree
@@ -76,8 +76,8 @@
                 tick-strategy="strict"
                 :get-node-by-id="getNodeById"
               />
-            </question-filter-option-mobile>
-            <question-filter-option-mobile
+            </question-filter-expansion>
+            <question-filter-expansion
               header-title="سختی سوال"
             >
               <tree
@@ -85,14 +85,14 @@
                 tick-strategy="strict"
                 :get-node-by-id="getNodeById"
               />
-            </question-filter-option-mobile>
-            <question-filter-option-mobile
+            </question-filter-expansion>
+            <question-filter-expansion
               header-title="تاریخ تالیف"
             >
               <div>
                 salam
               </div>
-            </question-filter-option-mobile>
+            </question-filter-expansion>
           </div>
         </div>
         <div class="filter-actions">
@@ -115,10 +115,10 @@
 </template>
 
 <script>
-import QuestionFilterOptionMobile from 'components/Question/QuestionBank/QuestionFilterOptionMobile'
+import QuestionFilterExpansion from 'components/Question/QuestionBank/QuestionFilterExpansion'
 export default {
   name: 'QuestionBankHeader',
-  components: { QuestionFilterOptionMobile },
+  components: { QuestionFilterExpansion },
   data () {
     return {
       FilterOptionDialog: false,

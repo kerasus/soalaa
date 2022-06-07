@@ -17,7 +17,7 @@
         <div>
           <q-card-actions class="filter-container q-pa-none">
             <q-chip
-              v-for="item in filters"
+              v-for="item in filtersData.tags"
               :key="item"
               class="filter-items"
               icon-remove="mdi-close"
@@ -30,29 +30,31 @@
         </div>
       </div>
     </q-card>
-    <div class="filter-options-section"
-         v-for="item in filterOptions" :key="item">
-      <q-card class="custom-card q-pa-none">
-        <q-card-section class="q-pa-none">
-          <q-expansion-item
-            expand-icon="isax:arrow-down-1"
+    <div class="filter-options-section">
+          <question-filter-expansion
+            header-title="درس و مبحث"
           >
-              <template v-slot:header>
-                <div class="filter-option-container " >
-                <div class="filter-option-title">
-                  {{ item }}
-                </div>
-                </div>
-              </template>
             <tree
               @ticked="tickedData"
               ref="tree"
               tick-strategy="strict"
               :get-node-by-id="getNodeById"
             />
-          </q-expansion-item>
-        </q-card-section>
-      </q-card>
+          </question-filter-expansion>
+          <question-filter-expansion
+            header-title="مرجع"
+          >
+            <div
+            v-for="(reference , index) in refrences"
+            :key="index"
+            >
+              <q-checkbox
+                v-model= checks
+              >
+                {{reference}}
+              </q-checkbox>
+            </div>
+          </question-filter-expansion>
     </div>
   </div>
 </template>
@@ -60,11 +62,23 @@
 <script>
 import { mixinTree } from 'src/mixin/Mixins'
 import Tree from 'components/Tree/Tree'
+import QuestionFilterExpansion from 'components/Question/QuestionBank/QuestionFilterExpansion'
 
 export default {
   name: 'QuestionBankFilter',
+  props: {
+    refrences: {
+      type: Object,
+      default: () => {
+        return {
+          reference_type: null
+        }
+      }
+    }
+  },
   data () {
     return {
+      check: false,
       filtersData: {
         tags: []
       },
@@ -73,7 +87,7 @@ export default {
     }
   },
   mixins: [mixinTree],
-  components: { Tree },
+  components: { QuestionFilterExpansion, Tree },
   created () {
     this.showTree('tree', this.getRootNode('test'))
       .then(() => {})
@@ -82,13 +96,14 @@ export default {
       })
   },
   methods: {
+    checks (val) {
+      console.log(val)
+    },
     tickedData (value) {
-      this.filters = value
-      this.testArr = []
+      console.log(value)
       this.filtersData.tags = []
       value.forEach(val => {
-        this.testArr.push(val.id)
-        this.filtersData.tags.push(val)
+        this.filtersData.tags.push(val.title)
       })
     },
     deleteFilterObject (item) {
@@ -139,7 +154,6 @@ export default {
 
 }
 .filter-options-section {
-  margin-bottom: 16px;
 
   .filter-option-container {
     width: 500px;

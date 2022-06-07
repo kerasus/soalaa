@@ -5,7 +5,11 @@
         <QuestionBankHeader/>
       </div>
       <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-xs-12 question-bank-filter">
-        <QuestionFilter ref="filter" @delete-filter="deleteFilterItem"/>
+        <QuestionFilter
+          ref="filter"
+          @delete-filter="deleteFilterItem"
+          :refrences = filterQuestions.reference_type
+        />
       </div>
       <div class="col-xl-9 col-lg-9 col-md-9 col-sm-12 col-xs-12">
         <div class="question-bank-toolbar">
@@ -55,14 +59,9 @@ export default {
   components: { QuestionBankHeader, QuestionToolBar, QuestionFilter, QuestionItem, pagination },
   data () {
     return {
-      questionListKey: Date.now(),
-      selectedQuestions: [],
-      questionId: [],
-      loadingQuestion: new Question(),
-      questions: new QuestionList(),
-      disablePagination: false,
       filterQuestions: {
         majorId: null,
+        reference_type: null,
         levelId: null,
         gradeId: null,
         moduleGroupId: null,
@@ -72,6 +71,12 @@ export default {
         publishYearId: null,
         difficultyLevelId: null
       },
+      questionListKey: Date.now(),
+      selectedQuestions: [],
+      questionId: [],
+      loadingQuestion: new Question(),
+      questions: new QuestionList(),
+      disablePagination: false,
       paginationMeta: {
         current_page: 1,
         from: 0,
@@ -86,6 +91,7 @@ export default {
   },
   created () {
     this.getQuestionData()
+    this.getFilterOptions()
   },
 
   methods: {
@@ -151,6 +157,23 @@ export default {
           console.log(error)
           this.loadingQuestion.loading = false
           this.questions.loading = false
+        })
+    },
+    getFilterOptions () {
+      this.$axios.get(API_ADDRESS.option.base)
+        .then((response) => {
+          console.log(response)
+          const filterQs = []
+          response.data.data.forEach(filter => {
+            if (filter.type === 'reference_type') {
+              filterQs.push(filter.value)
+            }
+          })
+          this.filterQuestions.reference_type = filterQs
+          console.log(this.filterQuestions.reference_type)
+        })
+        .catch(function (error) {
+          console.log(error)
         })
     }
   }

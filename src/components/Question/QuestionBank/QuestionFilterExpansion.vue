@@ -25,7 +25,7 @@
 import { mixinTree } from 'src/mixin/Mixins'
 
 export default {
-  name: 'QuestionFilterOptionMobile',
+  name: 'QuestionFilterExpansion',
   data () {
     return {
     }
@@ -38,11 +38,6 @@ export default {
   },
   mixins: [mixinTree],
   created () {
-    this.showTree('tree', this.getRootNode('test'))
-      .then(() => {})
-      .catch(err => {
-        console.log(err)
-      })
   },
   updated () {
   },
@@ -62,13 +57,13 @@ export default {
 </script>
 <style scoped lang="scss">
 .filter-options-section {
+  margin-bottom: 16px;
   &:deep(.q-item--clickable){
     justify-content: space-between;
   }
   &:deep(.q-focus-helper){
     background: none !important;
   }
-  margin-bottom: 16px;
 
   .filter-option-container {
     width: 500px;
