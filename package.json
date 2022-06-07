@@ -14,6 +14,7 @@
     "build:ssr": "quasar build -m ssr"
   },
   "dependencies": {
+    "@kouts/vue-modal": "^2.1.7",
     "@nodeguy/server-date": "^4.0.3",
     "@quasar/extras": "^1.13.6",
     "@silvermine/videojs-quality-selector": "^1.2.5",
@@ -44,6 +45,7 @@
     "videojs-hotkeys": "^0.2.27",
     "vue-filepond": "^7.0.2",
     "vue-i18n": "^9.1.10",
+    "vue-modal": "^1.0.2",
     "vue-upload-component": "^3.0.50",
     "vue3-tiptap-katex": "^1.0.17",
     "vuex": "^4.0.2",
