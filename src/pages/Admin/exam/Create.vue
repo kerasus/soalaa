@@ -109,26 +109,6 @@
 
     </template>
   </entity-create>
-  <div class="btn-box flex justify-end items-center">
-    <q-btn
-      unelevated
-      class="q-mr-xl btn-md"
-      :icon="'isax:arrow-right-3'"
-      style="margin-right: 18px;"
-    >
-      بازگشت
-    </q-btn>
-    <q-btn
-      unelevated
-      color="primary"
-      class="q-mr-xl btn-md"
-      style="margin-right: 18px;"
-      :icon-right="'isax:arrow-left-2'"
-      @click="saveExam"
-    >
-      مرحله بعد
-    </q-btn>
-  </div>
 </template>
 
 <script>
@@ -217,9 +197,6 @@ export default {
       }
       this.inputs[this.examCategoriesIndex].value = this.inputs[this.examCategoriesIndex].value.concat(this.category)
       this.category = { title: '', id: '', order: 0, time: 0 }
-    },
-    saveExam () {
-      this.$emit('btnClicked', 'BankTestComponent1')
     }
   }
 }

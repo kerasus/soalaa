@@ -1,43 +1,58 @@
 <template>
-  <steps v-model:currentComponent="currentComponentName"/>
-  <component
-    :is="getComponent"
-    @btnClicked="changeCurrentComponent"
-  />
-  <q-tab-panels v-model="currentTab" animated class="shadow-2 rounded-borders">
-    <q-tab-panel name="mails">
-      <div class="text-h6">Mails</div>
-      Lorem ipsum dolor sit amet consectetur adipisicing elit.
+  <steps v-model:currentComponent="currentTab"/>
+  <q-tab-panels v-model="currentTab" animated style=" background: #f1f1f1;">
+    <q-tab-panel name="createPage">
+      <create/>
     </q-tab-panel>
-
-    <q-tab-panel name="alarms">
-      <div class="text-h6">Alarms</div>
-      Lorem ipsum dolor sit amet consectetur adipisicing elit.
+    <q-tab-panel name="chooseQuestion">
+      <bank-test-component1/>
     </q-tab-panel>
-
-    <q-tab-panel name="movies">
-      <div class="text-h6">Movies</div>
-      Lorem ipsum dolor sit amet consectetur adipisicing elit.
+    <q-tab-panel name="finalApproval">
+      <bank-test-component2/>
     </q-tab-panel>
   </q-tab-panels>
+  <div class="btn-box flex justify-end items-center">
+    <q-btn
+      unelevated
+      class="q-mr-xl btn-md"
+      :icon="'isax:arrow-right-3'"
+      style="margin-right: 18px;"
+      @click="goToLastStep"
+    >
+      بازگشت
+    </q-btn>
+    <q-btn
+      unelevated
+      color="primary"
+      class="q-mr-xl btn-md"
+      style="margin-right: 18px;"
+      :icon-right="'isax:arrow-left-2'"
+      @click="goToNextStep"
+    >
+      مرحله بعد
+    </q-btn>
+  </div>
 </template>
 
 <script>
 import Steps from 'pages/Admin/exam/Create/Steps'
-import { defineAsyncComponent } from 'vue'
+import Create from 'pages/Admin/exam/Create'
+import BankTestComponent1 from 'pages/Admin/exam/Create/BankTestComponent1'
+import BankTestComponent2 from 'pages/Admin/exam/Create/BankTestComponent2'
 export default {
   name: 'ExamCreatePanel',
   components: {
-    Steps,
-    Create: defineAsyncComponent(() => import('src/pages/Admin/exam/Create')),
-    BankTestComponent1: defineAsyncComponent(() => import('src/pages/Admin/exam/Create/BankTestComponent1')),
-    BankTestComponent2: defineAsyncComponent(() => import('src/pages/Admin/exam/Create/BankTestComponent2'))
+    BankTestComponent2,
+    BankTestComponent1,
+    Create,
+    Steps
   },
   data () {
     return {
       currentComponent: 'Create',
       currentComponentName: 'Create',
-      currentTab: ''
+      currentTab: 'createPage',
+      allTabs: ['createPage', 'chooseQuestion', 'finalApproval']
     }
   },
   methods: {
@@ -52,9 +67,18 @@ export default {
       this.currentComponentName = cNameKebabized
       return cNameKebabized
     },
-    changeCurrentComponent (val) {
-      this.currentComponent = val
+    changeCurrentTab (val) {
+      this.currentTab = val
       // console.log(val)
+    },
+    getCurrentIndexOfStep () {
+      return this.allTabs.indexOf(this.currentTab)
+    },
+    goToLastStep () {
+      this.currentTab = this.allTabs[this.getCurrentIndexOfStep() - 1] || 'createPage'
+    },
+    goToNextStep () {
+      this.currentTab = this.allTabs[this.getCurrentIndexOfStep() + 1] || 'createPage'
     }
   },
   computed: {
