@@ -69,6 +69,7 @@
   <!-- ------------------------- answer -------------------------------  -->
 </template>
 <script>
+/* eslint-disable */
 import { Question } from 'src/models/Question'
 // ToDo eslint
 // eslint-disable-next-line camelcase
