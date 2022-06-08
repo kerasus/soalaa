@@ -49,7 +49,7 @@ const mixinTree = {
 
     createNode (parentId, type, title, order, callback) {
       return new Promise((resolve, reject) => {
-        this.$axios.post(API_ADDRESS.tree.base, { parent_id: parentId, type: type, title: title, order: order })
+        this.$axios.post(API_ADDRESS.tree.base, { parent_id: parentId, type, title, order })
           .then(response => {
             if (callback) {
               callback(response)
