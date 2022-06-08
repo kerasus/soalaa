@@ -128,7 +128,7 @@ export default {
 
     .log-date-time {
       display: flex;
-      justify-content: end;
+      justify-content: flex-end;
       font-size: 12px;
       @media screen and (max-width: 1023px) {
         justify-content: start;
@@ -142,7 +142,7 @@ export default {
 
     .log-btn-box {
       display: flex;
-      justify-content: end;
+      justify-content: flex-end;
 
       .log-comment-btn {
         &:deep(.q-icon) {

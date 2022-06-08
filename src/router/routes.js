@@ -1,5 +1,50 @@
 import { auth } from './middleware/middleware'
-
+function getEntityCrudRouteObject (path, baseRouteName, componentPath, breadcrumbs) {
+  const AllNeededRoutes = [
+    { mode: 'Index', path: '' },
+    { mode: 'Create', path: 'create' },
+    { mode: 'Show', path: ':id' },
+    { mode: 'Edit', path: ':id/edit' }
+  ]
+  const children = []
+  const removedFirstPart = componentPath.split('/')
+  // console.log('removedFirstPart', removedFirstPart[0])
+  AllNeededRoutes.forEach(item => {
+    // Todo : find a way for 'pages/'
+    children.push({ name: baseRouteName + '.' + item.mode, path: item.path, component: () => import('pages/' + componentPath.replace(removedFirstPart[0] + '/', '')) })
+    // Even this is not working
+    // children.push({ name: baseRouteName + '.' + item.mode, path: item.path, component: () => import(removedFirstPart[0] + '/' + componentPath.replace(removedFirstPart[0] + '/', '')) })
+  })
+  return {
+    path,
+    component: () => import('layouts/AdminLayout.vue'),
+    breadcrumbs,
+    children
+  }
+}
+const entityCrudRouteConfigs = [
+  {
+    path: 'authorshipDates',
+    baseRouteName: 'Admin.AuthorshipDates',
+    componentPath: 'pages/Admin/AuthorshipDates',
+    breadcrumbs: { title: 'تاریخ تالیف' }
+  },
+  {
+    path: 'questionAuthors',
+    baseRouteName: 'Admin.QuestionAuthors',
+    componentPath: 'pages/Admin/QuestionAuthors',
+    breadcrumbs: { title: 'مرجع سوال' }
+  },
+  {
+    path: 'majors',
+    baseRouteName: 'Admin.Majors',
+    componentPath: 'pages/Admin/Majors',
+    breadcrumbs: { title: 'مدیریت دسترسی ها' }
+  }
+]
+const allEntityCrudRouteObjects = [
+  ...entityCrudRouteConfigs.map(item => getEntityCrudRouteObject(item.path, item.baseRouteName, item.componentPath, item.breadcrumbs))
+]
 const routes = [
   {
     path: '/',
@@ -181,6 +226,7 @@ const routes = [
               { name: 'Admin.subCategory.Create', path: 'create', component: () => import('pages/Admin/subCategory/Create') }
             ]
           },
+          ...allEntityCrudRouteObjects,
 
           {
             name: 'Admin.KnowledgeTree.tree',

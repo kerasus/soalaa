@@ -122,6 +122,7 @@
   </div>
 </template>
 <script>
+/* eslint-disable */
 import { Question } from 'src/models/Question'
 // eslint-disable-next-line camelcase
 import question_field from 'components/Question/QuestionPage/QuestionField.vue'
