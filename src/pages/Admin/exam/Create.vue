@@ -118,6 +118,9 @@ import API_ADDRESS from 'src/api/Addresses'
 export default {
   name: 'Create',
   components: { EntityCreate },
+  emits: [
+    'btnClicked'
+  ],
   data () {
     return {
       expanded: true,
@@ -127,19 +130,19 @@ export default {
       showRouteName: 'Admin.Exam.Show',
       indexRouteName: 'Admin.Exam.Index',
       inputs: [
-        { type: 'input', name: 'title', responseKey: 'data.title', label: 'عنوان', col: 'col-md-6' },
         {
           type: 'Select',
           name: 'type_id',
           responseKey: 'data.type.value',
-          label: ' انتخاب نوع آزمون',
+          label: ' نوع آزمون',
           col: 'col-md-6',
           options: [],
           optionValue: 'id',
           optionLabel: 'value'
         },
-        { type: 'dateTime', name: 'start_at', responseKey: 'data.start_at', label: ' زمان شروع', col: 'col-md-4' },
-        { type: 'dateTime', name: 'finish_at', responseKey: 'data.finish_at', label: ' زمان پایان', col: 'col-md-4' },
+        { type: 'input', name: 'title', responseKey: 'data.title', label: 'عنوان', col: 'col-md-6' },
+        { type: 'dateTime', name: 'start_at', responseKey: 'data.start_at', label: ' زمان شروع آزمون', col: 'col-md-4' },
+        { type: 'dateTime', name: 'finish_at', responseKey: 'data.finish_at', label: ' زمان پایان آزمون', col: 'col-md-4' },
         { type: 'input', name: 'delay_time', responseKey: 'data.delay_time', label: 'زمان تاخیر(دقیقه)', col: 'col-md-4', value: 0 },
         { type: 'Checkbox', name: 'enable', responseKey: 'data.enable', label: 'فعال', col: 'col-md-4', value: false },
         { type: 'Checkbox', name: 'is_free', responseKey: 'data.is_free', label: 'رایگان', col: 'col-md-4', value: false },
@@ -225,5 +228,8 @@ export default {
     width: 70%;
     margin: auto;
   }
+}
+.btn-box {
+  margin-bottom: 30px;
 }
 </style>
