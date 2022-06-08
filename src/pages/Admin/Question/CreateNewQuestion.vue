@@ -155,6 +155,7 @@ import { QuestionStatusList } from 'src/models/QuestionStatus'
 import axios from 'axios'
 // ToDo : remember import ref for set up mode
 // import { ref } from 'vue'
+/* eslint-disable */
 export default {
   name: 'NewPage',
   components: {

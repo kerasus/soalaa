@@ -18,7 +18,10 @@ const AdminActionOnQuestion = {
       allTypes: new TypeList(),
       gradesList: null,
       lessonGroupList: null,
-      lessonsList: null
+      lessonsList: null,
+      majorList: null,
+      authorshipDatesList: null,
+      questionAuthorsList: null
     }
   },
   computed: {
@@ -100,6 +103,15 @@ const AdminActionOnQuestion = {
     updateQuestion (question) {
       const that = this
       // this.$store.dispatch('loading/overlayLoading', { loading: true, message: '' })
+      this.$refs.questionIdentifier.getIdentifierData(false)
+      question = {
+        ...question,
+        level: (this.question.level) ? this.question.level : 1,
+        reference: [this.question.reference],
+        years: [this.question.years],
+        tags: this.question.tags,
+        major: this.question.major
+      }
       this.$axios.put(API_ADDRESS.question.update(question.id), question)
         .then((response) => {
           this.$q.notify({
@@ -365,6 +377,24 @@ const AdminActionOnQuestion = {
       this.getRootNode('test').then(response => {
         this.gradesList = response.data.data.children
       })
+    },
+    loadQuestionAuthors () {
+      this.$axios.get(API_ADDRESS.option.base + '?type=reference_type')
+        .then((response) => {
+          this.questionAuthorsList = response.data.data
+        })
+    },
+    loadAuthorshipDates () {
+      this.$axios.get(API_ADDRESS.option.base + '?type=year_type')
+        .then((response) => {
+          this.authorshipDatesList = response.data.data
+        })
+    },
+    loadMajorList () {
+      this.$axios.get(API_ADDRESS.option.base + '?type=major_type')
+        .then((response) => {
+          this.majorList = response.data.data
+        })
     },
     getLessonGroupList (item) {
       this.getNode(item.id).then(response => {

@@ -37,6 +37,26 @@ const API_ADDRESS = {
       return lumenServer + '/activity-log/' + id + '/comment'
     }
   },
+  entityCrud: {
+    authorshipDates: {
+      show: lumenServer + '/option/',
+      edit: lumenServer + '/admin/user',
+      create: lumenServer + '/option',
+      index: lumenServer + '/option?type=year_type&with_pagination=true'
+    },
+    questionAuthors: {
+      show: lumenServer + '/option/',
+      edit: lumenServer + '/admin/user',
+      create: lumenServer + '/option',
+      index: lumenServer + '/option?type=reference_type&with_pagination=true'
+    },
+    majors: {
+      show: lumenServer + '/option/',
+      edit: lumenServer + '/admin/user',
+      create: lumenServer + '/option',
+      index: lumenServer + '/option?type=major_type&with_pagination=true'
+    }
+  },
   exam: {
     showExam: (examId) => lumenServer + '/exam/' + examId,
     editExam: lumenServer + '/exam',
