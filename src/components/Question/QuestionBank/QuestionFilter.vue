@@ -130,7 +130,6 @@ export default {
   },
   methods: {
     tickedData (value) {
-      console.log(value)
       this.filtersData.tags = []
       value.forEach(val => {
         if (typeof val === 'string') {
@@ -143,7 +142,7 @@ export default {
     },
     deleteAllFilters () {
       this.filtersData.tags.splice(0, this.filtersData.tags.length)
-      this.referenceFilter.splice(0, this.referenceFilter.length)
+      this.QuestionFilters.splice(0, this.QuestionFilters.length)
     }
   }
 }
