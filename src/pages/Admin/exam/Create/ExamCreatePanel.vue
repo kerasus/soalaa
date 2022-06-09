@@ -2,7 +2,7 @@
   <steps v-model:currentComponent="currentTab"/>
   <q-tab-panels v-model="currentTab" keep-alive animated style=" background: #f1f1f1;">
     <q-tab-panel name="createPage">
-      <create ref="createExam"/>
+      <create-exam-page ref="createExam"/>
     </q-tab-panel>
     <q-tab-panel name="chooseQuestion">
       <bank-test-component1/>
@@ -38,7 +38,7 @@
 import { computed } from 'vue'
 import { Exam } from 'src/models/Exam'
 import Steps from 'pages/Admin/exam/Create/Steps'
-import Create from 'pages/Admin/exam/Create'
+import CreateExamPage from 'pages/Admin/exam/Create/CreateExamPage'
 import BankTestComponent1 from 'pages/Admin/exam/Create/BankTestComponent1'
 import BankTestComponent2 from 'pages/Admin/exam/Create/BankTestComponent2'
 export default {
@@ -46,7 +46,7 @@ export default {
   components: {
     BankTestComponent2,
     BankTestComponent1,
-    Create,
+    CreateExamPage,
     Steps
   },
   data () {
