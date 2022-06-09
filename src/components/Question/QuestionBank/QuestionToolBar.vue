@@ -360,7 +360,8 @@ export default {
       return x
     },
     RemoveSelectedChoice (event) {
-      this.$emit('RemoveChoice', event.category_id)
+      console.log(event)
+      this.$emit('RemoveChoice', event.inputData.category_id)
     }
   }
 }

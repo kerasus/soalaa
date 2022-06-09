@@ -64,6 +64,9 @@ export default {
   &:deep(.q-focus-helper){
     background: none !important;
   }
+  &:deep(.q-expansion-item__content){
+    padding: 0 20px 20px 30px;
+  }
 
   .filter-option-container {
     width: 500px;

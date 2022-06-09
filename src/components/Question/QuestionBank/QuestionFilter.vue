@@ -41,18 +41,52 @@
               :get-node-by-id="getNodeById"
             />
           </question-filter-expansion>
+
           <question-filter-expansion
             header-title="مرجع"
           >
             <div
-            v-for="(reference , index) in refrences"
+            v-for="(reference , index) in filterQuestions.reference_type"
             :key="index"
             >
               <q-checkbox
-                v-model= checks
-              >
-                {{reference}}
-              </q-checkbox>
+                @update:model-value="tickedData"
+                :label="reference.value"
+                :val="reference.value"
+                v-model="QuestionFilters"
+              />
+            </div>
+          </question-filter-expansion>
+
+          <question-filter-expansion
+            header-title="سال انتشار"
+          >
+            <div
+            v-for="(year , index) in filterQuestions.year_type"
+            :key="index"
+            >
+              <q-checkbox
+                @update:model-value="tickedData"
+                :label="year.value"
+                :val="year.value"
+                v-model="QuestionFilters"
+              />
+            </div>
+          </question-filter-expansion>
+
+          <question-filter-expansion
+            header-title="رشته تحصیلی"
+          >
+            <div
+            v-for="(major , index) in filterQuestions.major_type"
+            :key="index"
+            >
+              <q-checkbox
+                @update:model-value="tickedData"
+                :label="major.value"
+                :val="major.value"
+                v-model="QuestionFilters"
+              />
             </div>
           </question-filter-expansion>
     </div>
@@ -67,7 +101,7 @@ import QuestionFilterExpansion from 'components/Question/QuestionBank/QuestionFi
 export default {
   name: 'QuestionBankFilter',
   props: {
-    refrences: {
+    filterQuestions: {
       type: Object,
       default: () => {
         return {
@@ -79,11 +113,10 @@ export default {
   data () {
     return {
       check: false,
+      QuestionFilters: [],
       filtersData: {
         tags: []
-      },
-      filters: ['درس و مبحث', 'نوع سوال', 'طراح سوال', 'تاریخ تالیف'],
-      filterOptions: ['درس و مبحث', 'نوع سوال', 'طراح سوال', 'تاریخ تالیف']
+      }
     }
   },
   mixins: [mixinTree],
@@ -96,21 +129,21 @@ export default {
       })
   },
   methods: {
-    checks (val) {
-      console.log(val)
-    },
     tickedData (value) {
       console.log(value)
       this.filtersData.tags = []
       value.forEach(val => {
-        this.filtersData.tags.push(val.title)
+        if (typeof val === 'string') {
+          this.filtersData.tags.push(val)
+        } else { this.filtersData.tags.push(val.title) }
       })
     },
     deleteFilterObject (item) {
       this.$emit('deleteFilter', item)
     },
-    getFilters () {
-      return this.filtersData
+    deleteAllFilters () {
+      this.filtersData.tags.splice(0, this.filtersData.tags.length)
+      this.referenceFilter.splice(0, this.referenceFilter.length)
     }
   }
 }

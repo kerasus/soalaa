@@ -221,19 +221,23 @@ class Question extends Model {
     this.tags = new TreeNodeList([
       {
         title: 'ریاضی',
-        type: 'major'
+        type: 'major',
+        category_id: '235423523523523'
       },
       {
         title: this.getRandomMajor(),
-        type: 'lesson'
+        type: 'lesson',
+        category_id: '235423523523523'
       },
       {
         title: 'دوازدهم',
-        type: 'grade'
+        type: 'grade',
+        category_id: '235423523523523afdad'
       },
       {
         title: 'فصل یک',
-        type: 'sub-lesson'
+        type: 'sub-lesson',
+        category_id: '235423523523523asdfasdfasd'
       }
     ])
   }

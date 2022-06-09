@@ -8,7 +8,7 @@
         <QuestionFilter
           ref="filter"
           @delete-filter="deleteFilterItem"
-          :refrences = filterQuestions.reference_type
+          :filterQuestions = filterQuestions
         />
       </div>
       <div class="col-xl-9 col-lg-9 col-md-9 col-sm-12 col-xs-12">
@@ -60,16 +60,9 @@ export default {
   data () {
     return {
       filterQuestions: {
-        majorId: null,
-        reference_type: null,
-        levelId: null,
-        gradeId: null,
-        moduleGroupId: null,
-        majorGroupId: null,
-        moduleId: null,
-        originId: null,
-        publishYearId: null,
-        difficultyLevelId: null
+        major_type: [],
+        reference_type: [],
+        year_type: []
       },
       questionListKey: Date.now(),
       selectedQuestions: [],
@@ -96,8 +89,9 @@ export default {
 
   methods: {
     RemoveChoice (subcategoryId) {
-      console.log(subcategoryId)
-      return subcategoryId
+      const puprpose = this.selectedQuestions.find(question => question.id === subcategoryId)
+      this.selectedQuestions.splice(puprpose, 1)
+      console.log(this.selectedQuestions)
     },
     isSelected (questionId) {
       const target = this.selectedQuestions.find(question => question.id === questionId)
@@ -145,7 +139,6 @@ export default {
       }
       this.loadingQuestion.loading = true
       this.questions.loading = true
-      console.log('getFilters', this.getFilters())
       this.$axios.get(API_ADDRESS.question.index(this.getFilters(), page))
         .then((response) => {
           this.questions = new QuestionList(response.data.data)
@@ -162,15 +155,15 @@ export default {
     getFilterOptions () {
       this.$axios.get(API_ADDRESS.option.base)
         .then((response) => {
-          console.log(response)
-          const filterQs = []
-          response.data.data.forEach(filter => {
-            if (filter.type === 'reference_type') {
-              filterQs.push(filter.value)
+          response.data.data.forEach(option => {
+            if (option.type === 'reference_type') {
+              this.filterQuestions.reference_type.push(option)
+            } else if (option.type === 'year_type') {
+              this.filterQuestions.year_type.push(option)
+            } else if (option.type === 'major_type') {
+              this.filterQuestions.major_type.push(option)
             }
           })
-          this.filterQuestions.reference_type = filterQs
-          console.log(this.filterQuestions.reference_type)
         })
         .catch(function (error) {
           console.log(error)
