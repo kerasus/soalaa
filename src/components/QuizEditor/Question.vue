@@ -129,7 +129,7 @@
         :class="{ choice: true, renderedPanel: true, active: choice.answer, ltr: isLtr }"
       >
         <vue-katex
-          :input="(choiceNumber[index]) + choice.title"
+          :input="(index + 1) + ') ' + choice.title"
           :ltr="isLtrQuestion"
         />
       </v-col>

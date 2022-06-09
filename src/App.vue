@@ -152,6 +152,7 @@ import '@mdi/font/css/materialdesignicons.css'
 import './assets/Fonts/Flaticons/css/uicons-regular-rounded.css'
 import './assets/Fonts/Flaticons/css/uicons-bold-rounded.css'
 import {mixinAuth, mixinQuiz, mixinDrawer, mixinWindowSize} from '@/mixin/Mixins'
+import VueConfirmDialog from 'vue-confirm-dialog'
 
 import {
   SideMenu_Dashboard,
@@ -164,6 +165,7 @@ import {
 export default {
   name: 'App',
   components: {
+    VueConfirmDialog,
     TopMenu_OnlineQuiz,
     TopMenu_Dashboard,
     SideMenu_Dashboard,
