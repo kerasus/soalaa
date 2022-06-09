@@ -160,8 +160,6 @@ class Question extends Model {
       this.id = this._id
     }
 
-    this.generateFakeData()
-
     const that = this
     this.apiResource = {
       fields: [
@@ -205,6 +203,7 @@ class Question extends Model {
         }
       ]
     }
+    this.generateFakeData()
   }
 
   // ToDo: remove this

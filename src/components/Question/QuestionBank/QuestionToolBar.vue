@@ -359,9 +359,9 @@ export default {
       const x = this.questionLvl.hard + this.questionLvl.medium + this.questionLvl.easy
       return x
     },
-    RemoveSelectedChoice (event) {
-      console.log(event)
-      this.$emit('RemoveChoice', event.inputData.category_id)
+    RemoveSelectedChoice (selectedTap) {
+      console.log(selectedTap)
+      console.log('this.selectedQuestionsTabs', this.selectedQuestionsTabs)
     }
   }
 }

@@ -14,8 +14,8 @@
       <div class="col-xl-9 col-lg-9 col-md-9 col-sm-12 col-xs-12">
         <div class="question-bank-toolbar">
           <QuestionToolBar
+            v-model:selectedQuestions="selectedQuestions"
             @RemoveChoice="RemoveChoice"
-            :selectedQuestions="selectedQuestions"
             :key="questionListKey"
           />
         </div>
@@ -26,9 +26,8 @@
               v-for="question in questions.list"
               :key="question.id"
               :question="question"
-              :isSelected="isSelected(question.id)"
               pageStrategy="question-bank"
-              @checkSelect="QuestionDecreaseIncrease"
+              @checkSelect="onClickedCheckQuestionBtn"
             />
           </template>
         </div>
@@ -93,16 +92,19 @@ export default {
       const target = this.selectedQuestions.findIndex(question => question.id === subcategoryId)
       this.selectedQuestions.splice(target, 1)
     },
-    isSelected (questionId) {
-      const target = this.selectedQuestions.find(question => question.id === questionId)
-      return !!target
+    toggleQuestionSelected (question) {
+      question.selected = !question.selected
     },
-    QuestionDecreaseIncrease (selected, question) {
-      if (selected) {
+    handleName (question) {
+      if (question.selected) {
         this.addQuestionToSelectedList(question)
       } else {
         this.deleteQuestionFromSelectedList(question)
       }
+    },
+    onClickedCheckQuestionBtn (question) {
+      this.toggleQuestionSelected(question)
+      this.handleName(question)
     },
     addQuestionToSelectedList (question) {
       this.selectedQuestions.push(question)
