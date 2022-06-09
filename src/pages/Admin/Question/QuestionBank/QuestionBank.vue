@@ -89,9 +89,9 @@ export default {
 
   methods: {
     RemoveChoice (subcategoryId) {
-      const target = this.selectedQuestions.find(question => question.id === subcategoryId)
-      this.selectedQuestions.splice(target, 1)
       console.log(this.selectedQuestions)
+      const target = this.selectedQuestions.findIndex(question => question.id === subcategoryId)
+      this.selectedQuestions.splice(target, 1)
     },
     isSelected (questionId) {
       const target = this.selectedQuestions.find(question => question.id === questionId)
