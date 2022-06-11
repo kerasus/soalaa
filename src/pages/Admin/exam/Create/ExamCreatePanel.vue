@@ -85,9 +85,11 @@ export default {
   },
   created () {},
   methods: {
+    // FOR EDUCATIONAL PURPOSES
     camelize (word) {
       return word.replace(/-./g, x => x[1].toUpperCase())
     },
+    // FOR EDUCATIONAL PURPOSES
     kebabize (word) {
       return word.replace(/[A-Z]+(?![a-z])|[A-Z]/g, ($, ofs) => (ofs ? '-' : '') + $.toLowerCase())
     },

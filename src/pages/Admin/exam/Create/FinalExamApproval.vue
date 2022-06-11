@@ -137,13 +137,11 @@ export default {
       }
     },
     reIndexEamQuestions (questionList) {
-      // eslint-disable-next-line no-return-assign
-      const a = questionList.map((item, index) => {
+      questionList.map((item, index) => {
         item.selected = true
         item.index = index
         return true
       })
-      console.log('a', a)
     },
     fakeExamQuestionScenario (questionList) {
       this.reIndexEamQuestions(questionList)
