@@ -32,6 +32,25 @@
       مرحله بعد
     </q-btn>
   </div>
+  <q-dialog v-model="examConfirmedDialog">
+    <q-card flat class="report-problem-dialog">
+      <q-btn flat v-close-popup round dense icon="close" class="close-btn"/>
+      <q-card-section class="problem-type no-padding">
+        <q-icon name="isax:tick-circle" size="110px"/>
+        <div class="title-style text-center" style="padding-bottom: 20px">
+          آزمون شما با موفقیت ثبت شد
+        </div>
+        <q-btn
+          unelevated
+          color="primary"
+          class="btn-lg final-btn"
+          :to="{name :'Admin.Exam.Index'}"
+        >
+          رفتن به صفحه لیست آزمون
+        </q-btn>
+      </q-card-section>
+    </q-card>
+  </q-dialog>
 </template>
 
 <script>
@@ -41,6 +60,7 @@ import Steps from 'pages/Admin/exam/Create/Steps'
 import CreateExamPage from 'pages/Admin/exam/Create/CreateExamPage'
 import BankTestComponent1 from 'pages/Admin/exam/Create/BankTestComponent1'
 import FinalExamApproval from 'pages/Admin/exam/Create/FinalExamApproval'
+import API_ADDRESS from 'src/api/Addresses'
 export default {
   name: 'ExamCreatePanel',
   components: {
@@ -56,7 +76,8 @@ export default {
       currentComponentName: 'Create',
       currentTab: 'createPage',
       allTabs: ['createPage', 'chooseQuestion', 'finalApproval'],
-      isExamDataInitiated: false
+      isExamDataInitiated: false,
+      examConfirmedDialog: false
     }
   },
   provide () {
@@ -89,7 +110,31 @@ export default {
     },
     goToNextStep () {
       this.updateExamData()
-      this.currentTab = this.allTabs[this.getCurrentIndexOfStep() + 1] || 'createPage'
+      const nextStep = this.allTabs[this.getCurrentIndexOfStep() + 1]
+      if (!nextStep) {
+        // this.$store.dispatch('loading/overlayLoading', { loading: true, message: '' })
+        this.createExam().then(res => {
+          // this.$store.dispatch('loading/overlayLoading', { loading: false, message: '' })
+          this.examConfirmedDialog = true
+        }).catch(err => {
+          console.log('err', err)
+          // this.$store.dispatch('loading/overlayLoading', { loading: false, message: '' })
+        })
+        return
+      }
+      this.currentTab = this.allTabs[this.getCurrentIndexOfStep() + 1]
+    },
+    createExam () {
+      console.log('exam', this.exam)
+      return new Promise((resolve, reject) => {
+        this.$axios.post(API_ADDRESS.exam.base())
+          .then(response => {
+            resolve(response)
+          })
+          .catch(error => {
+            reject(error)
+          })
+      })
     },
     updateExamData () {
       if (this.currentTab === 'createPage') {
@@ -110,6 +155,63 @@ export default {
 }
 </script>
 
-<style scoped>
+<style scoped lang="scss">
+.report-problem-dialog {
+  position: relative;
 
+.close-btn {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  z-index: 1000000;
+}
+
+border-radius: 15px;
+padding: 24px;
+
+.title-style {
+  font-style: normal;
+  font-weight: 400;
+  font-size: 18px;
+  line-height: 31px;
+  color: #23263B;
+  margin-bottom: 8px;
+}
+
+.problem-type {
+  display: flex;
+  margin-top: 10px;
+  width: 300px;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  .q-icon {
+    color: #4CAF50;
+    padding-bottom: 28px;
+  }
+  .final-btn {
+    padding-right: 25px;
+    padding-left: 25px;
+  }
+}
+
+.problem-description {
+  margin-top: 16px;
+}
+
+.action-box {
+  margin-top: 20px;
+
+.btn-style {
+  border-radius: 10px;
+  color: #23263B;
+  width: 96px;
+  height: 40px;
+}
+
+.cancel {
+  background-color: #F4F5F6;
+}
+}
+}
 </style>
