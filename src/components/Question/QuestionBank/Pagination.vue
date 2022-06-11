@@ -46,9 +46,6 @@ export default {
       disableValue: false
     }
   },
-  mounted () {
-    console.log(this.checkedStyle)
-  },
   methods: {
     updatePage (val) {
       this.$emit('updateCurrentPage', val)

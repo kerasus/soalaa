@@ -27,10 +27,6 @@ export default {
       type: Boolean,
       default: false
     },
-    isSelected: {
-      type: Boolean,
-      default: false
-    },
     pageStrategy: {
       type: String,
       default: ''
@@ -138,8 +134,8 @@ export default {
         }
       })
     },
-    selectQuestion (data) {
-      this.$emit('checkSelect', data, this.question)
+    selectQuestion () {
+      this.$emit('checkSelect', this.question)
     },
     setQuestionLevel () {
       this.questionLevel = 1
@@ -213,7 +209,7 @@ export default {
 }
 </script>
 <template>
-  <q-card class="custom-card" :class="{'selected':isSelected}">
+  <q-card class="custom-card" :class="{'selected':question.selected}">
     <q-resize-observer @resize="setChoiceCol"/>
     <q-card-section class="question-bank-content ">
       <div class="question-info-section row justify-between full-width">
@@ -399,11 +395,11 @@ export default {
             <div v-if="listConfig.selectQuestion" class="add-btn">
               <q-btn
                 unelevated
-                :outline="isSelected"
+                :outline="question.selected"
                 color="primary"
                 class="btn-style"
-                @click="selectQuestion(!isSelected)"
-                :icon="isSelected ? 'isax:minus' : 'isax:add'"/>
+                @click="selectQuestion"
+                :icon="question.selected ? 'isax:minus' : 'isax:add'"/>
             </div>
             <div v-if="listConfig.editQuestion" class="edit-btn">
               <q-btn

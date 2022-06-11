@@ -8,7 +8,7 @@
     :index-route-name="indexRouteName"
     :show-route-name="showRouteName"
   >
-<!--    <form-builder-separator/>-->
+    <!--    <form-builder-separator/>-->
     <template #after-form-builder >
       <q-card class="category-card">
         <q-card-section>
@@ -118,9 +118,6 @@ import API_ADDRESS from 'src/api/Addresses'
 export default {
   name: 'Create',
   components: { EntityCreate },
-  emits: [
-    'btnClicked'
-  ],
   data () {
     return {
       expanded: true,
@@ -228,8 +225,5 @@ export default {
     width: 70%;
     margin: auto;
   }
-}
-.btn-box {
-  margin-bottom: 30px;
 }
 </style>

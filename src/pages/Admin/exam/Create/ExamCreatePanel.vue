@@ -1,14 +1,14 @@
 <template>
   <steps v-model:currentComponent="currentTab"/>
-  <q-tab-panels v-model="currentTab" animated style=" background: #f1f1f1;">
+  <q-tab-panels v-model="currentTab" keep-alive animated style=" background: #f1f1f1;">
     <q-tab-panel name="createPage">
-      <create/>
+      <create-exam-page ref="createExam"/>
     </q-tab-panel>
     <q-tab-panel name="chooseQuestion">
       <bank-test-component1/>
     </q-tab-panel>
     <q-tab-panel name="finalApproval">
-      <bank-test-component2/>
+      <final-exam-approval/>
     </q-tab-panel>
   </q-tab-panels>
   <div class="btn-box flex justify-end items-center">
@@ -35,26 +35,36 @@
 </template>
 
 <script>
+import { computed } from 'vue'
+import { Exam } from 'src/models/Exam'
 import Steps from 'pages/Admin/exam/Create/Steps'
-import Create from 'pages/Admin/exam/Create'
+import CreateExamPage from 'pages/Admin/exam/Create/CreateExamPage'
 import BankTestComponent1 from 'pages/Admin/exam/Create/BankTestComponent1'
-import BankTestComponent2 from 'pages/Admin/exam/Create/BankTestComponent2'
+import FinalExamApproval from 'pages/Admin/exam/Create/FinalExamApproval'
 export default {
   name: 'ExamCreatePanel',
   components: {
-    BankTestComponent2,
+    FinalExamApproval,
     BankTestComponent1,
-    Create,
+    CreateExamPage,
     Steps
   },
   data () {
     return {
+      exam: new Exam(),
       currentComponent: 'Create',
       currentComponentName: 'Create',
       currentTab: 'createPage',
-      allTabs: ['createPage', 'chooseQuestion', 'finalApproval']
+      allTabs: ['createPage', 'chooseQuestion', 'finalApproval'],
+      isExamDataInitiated: false
     }
   },
+  provide () {
+    return {
+      providedExam: computed(() => this.exam)
+    }
+  },
+  created () {},
   methods: {
     camelize (word) {
       return word.replace(/-./g, x => x[1].toUpperCase())
@@ -78,7 +88,18 @@ export default {
       this.currentTab = this.allTabs[this.getCurrentIndexOfStep() - 1] || 'createPage'
     },
     goToNextStep () {
+      this.updateExamData()
       this.currentTab = this.allTabs[this.getCurrentIndexOfStep() + 1] || 'createPage'
+    },
+    updateExamData () {
+      if (this.currentTab === 'createPage') {
+        const formData = this.$refs.createExam.$refs.EntityCrudFormBuilder.getFormData()
+        if (!this.isExamDataInitiated) {
+          this.exam = new Exam(formData)
+          this.isExamDataInitiated = true
+        }
+        this.exam = Object.assign(this.exam, formData)
+      }
     }
   },
   computed: {

@@ -5,6 +5,9 @@
         <QuestionBankHeader/>
       </div>
       <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-xs-12 question-bank-filter">
+        <div>FOR HASAN :</div>
+        THIS IS WHERE TO PUT THAT EXAM DETAIL COMPONENT
+        <div>INSTEAD OF QuestionFilter</div>
         <QuestionFilter
           ref="filter"
           @delete-filter="deleteFilterItem"
