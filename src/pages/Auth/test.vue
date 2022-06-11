@@ -1,48 +1,61 @@
 <template>
-  <div class="flex justify-center text-center q-mb-lg">
-    <div class="square justify-center"></div>
-    <br/>
+  <div>
+    <h5>THIS COMPONENT IS JUST FOR TEST</h5>
   </div>
 </template>
 
 <script>
-// import API_ADDRESS from 'src/api/Addresses'
-import { mixinTree } from 'src/mixin/Mixins'
-
 export default {
-  data: () => ({
-    name: ''
-  }),
-  mixins: [mixinTree],
+  name: 'Test',
+  components: {},
+  mixins: [],
+  data () {
+    return {
+      testValue: '',
+      testValue1: ''
+    }
+  },
+  props: {
+    testProp: {
+      type: Boolean,
+      default () {
+        return false
+      }
+    }
+  },
+  methods: {},
+  computed: {},
+  beforeRouteEnter () {
+    // console.log('debug beforeRouteEnter')
+  },
+  beforeRouteLeave () {
+    // console.log('debug beforeRouteLeave')
+  },
+  beforeRouteUpdate () {
+    // console.log('debug beforeRouteUpdate')
+  },
+  activated () {
+    // console.log('debug activated')
+  },
+  updated () {
+    // console.log('debug updated')
+  },
   created () {
-    this.showTree('tree', this.getRootNode('test'))
-      .then(() => {})
-      .catch(err => {
-        console.log(err)
-      })
+    // console.log('debug created')
   },
-  computed: {
+  mounted () {
+    // console.log('debug mounted')
   },
-  methods: {
+  watch: {
+    testValue: {
+      handler () {},
+      deep: true
+    },
+    testValue1 (oldVal, newVal) {}
   }
 }
 </script>
+
 <style scoped lang="scss">
-.square{
-  background-color: red;
-  width: 100px;
-  height: 100px;
-  position: relative;
-  &:after{
-     content: " ";
-     position: absolute;
-     width: 26px;
-     height: 95px;
-     background: transparent;
-     top: -78px;
-     box-shadow: -2px 30px 0px -3px var(--3a-Primary);
-     border-radius: 0px 0 25px 0;
-     left: -2px;
-   }
-}
+
 </style>
