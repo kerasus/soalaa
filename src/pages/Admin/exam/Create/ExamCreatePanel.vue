@@ -72,8 +72,6 @@ export default {
   data () {
     return {
       exam: new Exam(),
-      currentComponent: 'Create',
-      currentComponentName: 'Create',
       currentTab: 'createPage',
       allTabs: ['createPage', 'chooseQuestion', 'finalApproval'],
       isExamDataInitiated: false,
@@ -92,15 +90,6 @@ export default {
     },
     kebabize (word) {
       return word.replace(/[A-Z]+(?![a-z])|[A-Z]/g, ($, ofs) => (ofs ? '-' : '') + $.toLowerCase())
-    },
-    getChosenComponent (name) {
-      const cNameKebabized = this.kebabize(name)
-      this.currentComponentName = cNameKebabized
-      return cNameKebabized
-    },
-    changeCurrentTab (val) {
-      this.currentTab = val
-      // console.log(val)
     },
     getCurrentIndexOfStep () {
       return this.allTabs.indexOf(this.currentTab)
@@ -147,11 +136,7 @@ export default {
       }
     }
   },
-  computed: {
-    getComponent () {
-      return this.getChosenComponent(this.currentComponent)
-    }
-  }
+  computed: {}
 }
 </script>
 
