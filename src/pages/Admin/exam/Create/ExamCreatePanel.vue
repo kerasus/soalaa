@@ -8,7 +8,7 @@
       <bank-test-component1/>
     </q-tab-panel>
     <q-tab-panel name="finalApproval">
-      <final-exam-approval/>
+      <final-exam-approval />
     </q-tab-panel>
   </q-tab-panels>
   <div class="btn-box flex justify-end items-center">
