@@ -14,8 +14,8 @@
       <div class="col-xl-9 col-lg-9 col-md-9 col-sm-12 col-xs-12">
         <div class="question-bank-toolbar">
           <QuestionToolBar
-            v-model:selectedQuestions="selectedQuestions"
-            @RemoveChoice="RemoveChoice"
+            :selectedQuestions="selectedQuestions"
+            @remove="RemoveChoice"
             :key="questionListKey"
           />
         </div>
@@ -81,16 +81,25 @@ export default {
       }
     }
   },
+  watch: {
+    selectedQuestions: function () {
+      this.onClickedCheckQuestionBtn()
+    }
+  },
   created () {
     this.getQuestionData()
     this.getFilterOptions()
   },
-
   methods: {
-    RemoveChoice (subcategoryId) {
-      console.log(this.selectedQuestions)
-      const target = this.selectedQuestions.findIndex(question => question.id === subcategoryId)
-      this.selectedQuestions.splice(target, 1)
+    RemoveChoice (title) {
+      const target = this.selectedQuestions.filter(question => !!question.tags.list.find(tag => tag.type === 'lesson' && tag.title === title))
+      if (target.length) {
+        target.forEach(question => {
+          question.selected = !question.selected
+          this.selectedQuestions.splice(question, 1)
+          this.questionListKey = Date.now()
+        })
+      }
     },
     toggleQuestionSelected (question) {
       question.selected = !question.selected
