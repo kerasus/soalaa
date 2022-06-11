@@ -36,7 +36,7 @@ export default {
       default: false
     }
   },
-  emits: ['checkSelect'],
+  emits: ['checkSelect', 'changeOrder'],
   data () {
     return {
       questionChoiceList: [],
@@ -124,7 +124,10 @@ export default {
   },
   methods: {
     changeOrder (mode, question) {
-      console.log('changeOrder', mode)
+      this.$emit('changeOrder', {
+        question,
+        mode
+      })
     },
     isLtrQuestion () {
       const string = this.question.statement

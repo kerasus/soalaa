@@ -21,6 +21,7 @@
               :question="question"
               pageStrategy="question-bank"
               final-approval-mode
+              @changeOrder="changeSelectedQuestionOrder"
               @checkSelect="onClickedCheckQuestionBtn"
             />
           </template>
@@ -77,6 +78,16 @@ export default {
   },
 
   methods: {
+    changeSelectedQuestionOrder (value) {
+      const fromIndex = this.exam.questions.findIndex(item => item.id === value.question.id)
+      let toIndex = fromIndex - 1 // the index before
+      if (value.mode === 'down') {
+        toIndex = fromIndex + 1 // the index after
+      }
+      const element = this.exam.questions.splice(fromIndex, 1)[0]
+      this.exam.questions.splice(toIndex, 0, element)
+      this.reIndexEamQuestions(this.exam.questions)
+    },
     RemoveChoice (subcategoryId) {
       console.log(this.selectedQuestions)
       const target = this.selectedQuestions.findIndex(question => question.id === subcategoryId)
@@ -125,13 +136,17 @@ export default {
         tags: filters.tags.map(tag => tag.id)
       }
     },
-    fakeExamQuestionScenario (questionList) {
+    reIndexEamQuestions (questionList) {
       // eslint-disable-next-line no-return-assign
-      const a = questionList.map(item => item.selected = true)
-      // eslint-disable-next-line no-return-assign
-      questionList.forEach((item, index) => item.index = index)
+      const a = questionList.map((item, index) => {
+        item.selected = true
+        item.index = index
+        return true
+      })
       console.log('a', a)
-      console.log('questionList', questionList)
+    },
+    fakeExamQuestionScenario (questionList) {
+      this.reIndexEamQuestions(questionList)
       this.exam.questions = questionList
     },
     getQuestionData (page) {
