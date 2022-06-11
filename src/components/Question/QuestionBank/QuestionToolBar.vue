@@ -227,7 +227,7 @@ export default {
   name: 'QuestionBankToolBar',
   props: {
     selectedQuestions: {
-      type: QuestionList,
+      type: [Array, QuestionList],
       default: new QuestionList()
     },
     checkBox: {

@@ -1,46 +1,38 @@
 <template>
   <div class="main-container">
     <div class="row">
-      <div ref="header" class="col-12 question-bank-header">
-        <QuestionBankHeader/>
-      </div>
       <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-xs-12 question-bank-filter">
         <div>FOR HASAN :</div>
         THIS IS WHERE TO PUT THAT EXAM DETAIL COMPONENT
         <div>INSTEAD OF QuestionFilter</div>
-        <QuestionFilter
-          ref="filter"
-          @delete-filter="deleteFilterItem"
-          :filterQuestions = filterQuestions
-        />
+<!--        <QuestionFilter-->
+<!--          ref="filter"-->
+<!--          @delete-filter="deleteFilterItem"-->
+<!--          :filterQuestions = filterQuestions-->
+<!--        />-->
       </div>
       <div class="col-xl-9 col-lg-9 col-md-9 col-sm-12 col-xs-12">
-        <div class="question-bank-toolbar">
-          <QuestionToolBar
-            v-model:selectedQuestions="selectedQuestions"
-            @RemoveChoice="RemoveChoice"
-            :key="questionListKey"
-          />
-        </div>
         <div class="question-bank-content">
-          <question-item v-if="questions.loading" :question="loadingQuestion" />
-          <template v-else>
-            <question-item
-              v-for="question in questions.list"
-              :key="question.id"
-              :question="question"
-              pageStrategy="question-bank"
-              @checkSelect="onClickedCheckQuestionBtn"
-            />
-          </template>
-        </div>
-
-        <div class="pagination">
-          <pagination
-            :meta="paginationMeta"
-            :disable="disablePagination"
-            @updateCurrentPage="updatePage"
-          />
+            <question-item v-if="questions.loading" :question="loadingQuestion" />
+            <template v-else-if="exam.questions.length > 0">
+              <q-virtual-scroll
+                ref="scroller"
+                :items="exam.questions"
+                :virtual-scroll-item-size="450"
+                :virtual-scroll-slice-size="5"
+              >
+                <template v-slot="{ item }">
+                  <question-item
+                    :key="item.id"
+                    :question="item"
+                    pageStrategy="question-bank"
+                    final-approval-mode
+                    @changeOrder="changeSelectedQuestionOrder"
+                    @checkSelect="onClickedCheckQuestionBtn"
+                  />
+                </template>
+              </q-virtual-scroll>
+            </template>
         </div>
       </div>
     </div>
@@ -50,15 +42,19 @@
 <script>
 import API_ADDRESS from 'src/api/Addresses'
 import { Question, QuestionList } from 'src/models/Question'
-import pagination from 'components/Question/QuestionBank/Pagination'
 import QuestionItem from 'components/Question/QuestionItem/QuestionItem'
-import QuestionFilter from 'components/Question/QuestionBank/QuestionFilter'
-import QuestionToolBar from 'components/Question/QuestionBank/QuestionToolBar'
-import QuestionBankHeader from 'components/Question/QuestionBank/components/QuestionBankHeader'
+import { Exam } from 'src/models/Exam'
+// import QuestionFilter from 'components/Question/QuestionBank/QuestionFilter'
 
 export default {
-  name: 'QuestionBank',
-  components: { QuestionBankHeader, QuestionToolBar, QuestionFilter, QuestionItem, pagination },
+  name: 'FinalExamApproval',
+  components: { QuestionItem },
+  inject: {
+    exam: {
+      from: 'providedExam', // this is optional if using the same key for injection
+      default: new Exam()
+    }
+  },
   data () {
     return {
       filterQuestions: {
@@ -90,35 +86,45 @@ export default {
   },
 
   methods: {
+    changeSelectedQuestionOrder (value) {
+      const fromIndex = this.exam.questions.findIndex(item => item.id === value.question.id)
+      let toIndex = fromIndex - 1 // the index before
+      if (value.mode === 'down') {
+        toIndex = fromIndex + 1 // the index after
+      }
+      const element = this.exam.questions.splice(fromIndex, 1)[0]
+      this.exam.questions.splice(toIndex, 0, element)
+      this.reIndexEamQuestions(this.exam.questions)
+    },
     RemoveChoice (subcategoryId) {
-      console.log(this.selectedQuestions)
-      const target = this.selectedQuestions.findIndex(question => question.id === subcategoryId)
-      this.selectedQuestions.splice(target, 1)
+      const target = this.exam.questions.findIndex(question => question.id === subcategoryId)
+      this.exam.questions.splice(target, 1)
     },
     toggleQuestionSelected (question) {
       question.selected = !question.selected
     },
-    handleName (question) {
+    handleAddOrDelete (question) {
       if (question.selected) {
         this.addQuestionToSelectedList(question)
       } else {
         this.deleteQuestionFromSelectedList(question)
       }
+      this.reIndexEamQuestions(this.exam.questions)
     },
     onClickedCheckQuestionBtn (question) {
       this.toggleQuestionSelected(question)
-      this.handleName(question)
+      this.handleAddOrDelete(question)
     },
     addQuestionToSelectedList (question) {
-      this.selectedQuestions.push(question)
+      this.exam.questions.push(question)
       this.questionListKey = Date.now()
     },
     deleteQuestionFromSelectedList (question) {
-      const target = this.selectedQuestions.findIndex(questionItem => questionItem.id === question.id)
+      const target = this.exam.questions.findIndex(questionItem => questionItem.id === question.id)
       if (target === -1) {
         return
       }
-      this.selectedQuestions.splice(target, 1)
+      this.exam.questions.splice(target, 1)
       this.questionListKey = Date.now()
     },
     updatePage (page) {
@@ -138,6 +144,17 @@ export default {
         tags: filters.tags.map(tag => tag.id)
       }
     },
+    reIndexEamQuestions (questionList) {
+      questionList.map((item, index) => {
+        item.selected = true
+        item.order = index + 1
+        return true
+      })
+    },
+    fakeExamQuestionScenario (questionList) {
+      this.reIndexEamQuestions(questionList)
+      this.exam.questions = questionList
+    },
     getQuestionData (page) {
       if (!page) {
         page = 1
@@ -147,6 +164,7 @@ export default {
       this.$axios.get(API_ADDRESS.question.index(this.getFilters(), page))
         .then((response) => {
           this.questions = new QuestionList(response.data.data)
+          this.fakeExamQuestionScenario(this.questions.list)
           this.paginationMeta = response.data.meta
           this.loadingQuestion.loading = false
           this.questions.loading = false
@@ -173,6 +191,14 @@ export default {
         .catch(function (error) {
           console.log(error)
         })
+    }
+  },
+  watch: {
+    selectedCategory: {
+      handler () {
+        this.selectedLesson = ''
+      },
+      deep: true
     }
   }
 }
