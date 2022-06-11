@@ -360,8 +360,7 @@ export default {
       return x
     },
     RemoveSelectedChoice (selectedTap) {
-      console.log(selectedTap)
-      console.log('this.selectedQuestionsTabs', this.selectedQuestionsTabs)
+      this.$emit('remove', selectedTap.title)
     }
   }
 }

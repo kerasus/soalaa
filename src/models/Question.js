@@ -203,7 +203,10 @@ class Question extends Model {
         }
       ]
     }
-    this.generateFakeData()
+
+    if (this.tags.list.length === 0) {
+      this.generateFakeData()
+    }
   }
 
   // ToDo: remove this
@@ -251,6 +254,8 @@ class Question extends Model {
       return (item.active === true)
     })
   }
+
+  // ToDo: remove up stuff
 
   isAnswered () {
     const answeredChoice = this.getAnsweredChoice()
