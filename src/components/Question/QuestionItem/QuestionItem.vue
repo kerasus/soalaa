@@ -223,7 +223,7 @@ export default {
 }
 </script>
 <template>
-  <q-card class="custom-card" :class="{'selected':question.selected}">
+  <q-card class="custom-card" :class="{'selected':question.selected && !finalApprovalMode}">
     <q-resize-observer @resize="setChoiceCol"/>
     <q-card-section class="question-bank-content ">
       <div class="question-info-section row justify-between full-width">
@@ -363,7 +363,7 @@ export default {
             unelevated
             color="primary"
             class="btn-style"
-          >{{question.index}}</q-btn>
+          >{{question.index + 1}}</q-btn>
         </div>
         <div :class="isLtrQuestion() ? 'question-icon order-last' : 'question-icon'"/>
 

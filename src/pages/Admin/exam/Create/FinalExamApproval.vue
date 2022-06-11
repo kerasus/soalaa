@@ -89,34 +89,34 @@ export default {
       this.reIndexEamQuestions(this.exam.questions)
     },
     RemoveChoice (subcategoryId) {
-      console.log(this.selectedQuestions)
-      const target = this.selectedQuestions.findIndex(question => question.id === subcategoryId)
-      this.selectedQuestions.splice(target, 1)
+      const target = this.exam.questions.findIndex(question => question.id === subcategoryId)
+      this.exam.questions.splice(target, 1)
     },
     toggleQuestionSelected (question) {
       question.selected = !question.selected
     },
-    handleName (question) {
+    handleAddOrDelete (question) {
       if (question.selected) {
         this.addQuestionToSelectedList(question)
       } else {
         this.deleteQuestionFromSelectedList(question)
       }
+      this.reIndexEamQuestions(this.exam.questions)
     },
     onClickedCheckQuestionBtn (question) {
       this.toggleQuestionSelected(question)
-      this.handleName(question)
+      this.handleAddOrDelete(question)
     },
     addQuestionToSelectedList (question) {
-      this.selectedQuestions.push(question)
+      this.exam.questions.push(question)
       this.questionListKey = Date.now()
     },
     deleteQuestionFromSelectedList (question) {
-      const target = this.selectedQuestions.findIndex(questionItem => questionItem.id === question.id)
+      const target = this.exam.questions.findIndex(questionItem => questionItem.id === question.id)
       if (target === -1) {
         return
       }
-      this.selectedQuestions.splice(target, 1)
+      this.exam.questions.splice(target, 1)
       this.questionListKey = Date.now()
     },
     updatePage (page) {
