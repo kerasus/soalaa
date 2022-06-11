@@ -32,6 +32,7 @@ export default {
       default: ''
     }
   },
+  emits: ['checkSelect'],
   data () {
     return {
       questionChoiceList: [],
