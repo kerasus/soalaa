@@ -8,7 +8,7 @@
       <bank-test-component1/>
     </q-tab-panel>
     <q-tab-panel name="finalApproval">
-      <bank-test-component2/>
+      <final-exam-approval/>
     </q-tab-panel>
   </q-tab-panels>
   <div class="btn-box flex justify-end items-center">
@@ -40,11 +40,11 @@ import { Exam } from 'src/models/Exam'
 import Steps from 'pages/Admin/exam/Create/Steps'
 import CreateExamPage from 'pages/Admin/exam/Create/CreateExamPage'
 import BankTestComponent1 from 'pages/Admin/exam/Create/BankTestComponent1'
-import BankTestComponent2 from 'pages/Admin/exam/Create/BankTestComponent2'
+import FinalExamApproval from 'pages/Admin/exam/Create/FinalExamApproval'
 export default {
   name: 'ExamCreatePanel',
   components: {
-    BankTestComponent2,
+    FinalExamApproval,
     BankTestComponent1,
     CreateExamPage,
     Steps

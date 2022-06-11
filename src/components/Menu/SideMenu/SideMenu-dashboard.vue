@@ -166,7 +166,7 @@ export default {
           routeName: null,
           active: false,
           children: [
-            { displayName: 'ساخت آزمون', routeName: 'Admin.Exam.Create', active: false },
+            { displayName: 'ساخت آزمون', routeName: 'Admin.Exam.Create.AttachQuestion', active: false },
             { displayName: 'لیست آزمون ها', routeName: 'Admin.Exam.Index', active: false }
           ]
         },
