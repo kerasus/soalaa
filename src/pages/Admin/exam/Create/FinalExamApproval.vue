@@ -13,18 +13,26 @@
       </div>
       <div class="col-xl-9 col-lg-9 col-md-9 col-sm-12 col-xs-12">
         <div class="question-bank-content">
-          <question-item v-if="questions.loading" :question="loadingQuestion" />
-          <template v-else-if="exam.questions.length > 0">
-            <question-item
-              v-for="question in exam.questions"
-              :key="question.id"
-              :question="question"
-              pageStrategy="question-bank"
-              final-approval-mode
-              @changeOrder="changeSelectedQuestionOrder"
-              @checkSelect="onClickedCheckQuestionBtn"
-            />
-          </template>
+            <question-item v-if="questions.loading" :question="loadingQuestion" />
+            <template v-else-if="exam.questions.length > 0">
+              <q-virtual-scroll
+                ref="scroller"
+                :items="exam.questions"
+                :virtual-scroll-item-size="450"
+                :virtual-scroll-slice-size="5"
+              >
+                <template v-slot="{ item }">
+                  <question-item
+                    :key="item.id"
+                    :question="item"
+                    pageStrategy="question-bank"
+                    final-approval-mode
+                    @changeOrder="changeSelectedQuestionOrder"
+                    @checkSelect="onClickedCheckQuestionBtn"
+                  />
+                </template>
+              </q-virtual-scroll>
+            </template>
         </div>
       </div>
     </div>
@@ -139,7 +147,7 @@ export default {
     reIndexEamQuestions (questionList) {
       questionList.map((item, index) => {
         item.selected = true
-        item.index = index
+        item.order = index + 1
         return true
       })
     },
@@ -183,6 +191,14 @@ export default {
         .catch(function (error) {
           console.log(error)
         })
+    }
+  },
+  watch: {
+    selectedCategory: {
+      handler () {
+        this.selectedLesson = ''
+      },
+      deep: true
     }
   }
 }

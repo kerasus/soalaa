@@ -1,5 +1,5 @@
 <template>
-  <steps v-model:currentComponent="currentTab"/>
+  <steps v-model:currentComponent="currentTab" @currentStepChanged="changeTab"/>
   <q-tab-panels v-model="currentTab" keep-alive animated style=" background: #f1f1f1;">
     <q-tab-panel name="createPage">
       <create-exam-page ref="createExam"/>
@@ -96,24 +96,35 @@ export default {
     getCurrentIndexOfStep () {
       return this.allTabs.indexOf(this.currentTab)
     },
+    isFinalStep (tab) {
+      return this.allTabs.indexOf(tab) === this.allTabs.length - 1
+    },
+    changeTab (tab) {
+      this.currentTab = tab
+      this.updateExamData()
+    },
     goToLastStep () {
       this.currentTab = this.allTabs[this.getCurrentIndexOfStep() - 1] || 'createPage'
+      this.updateExamData()
     },
     goToNextStep () {
-      this.updateExamData()
       const nextStep = this.allTabs[this.getCurrentIndexOfStep() + 1]
       if (!nextStep) {
-        // this.$store.dispatch('loading/overlayLoading', { loading: true, message: '' })
-        this.createExam().then(res => {
-          // this.$store.dispatch('loading/overlayLoading', { loading: false, message: '' })
-          this.examConfirmedDialog = true
-        }).catch(err => {
-          console.log('err', err)
-          // this.$store.dispatch('loading/overlayLoading', { loading: false, message: '' })
-        })
+        this.setFinalStep()
         return
       }
       this.currentTab = this.allTabs[this.getCurrentIndexOfStep() + 1]
+      this.updateExamData()
+    },
+    setFinalStep () {
+      // this.$store.dispatch('loading/overlayLoading', { loading: true, message: '' })
+      this.createExam().then(res => {
+        // this.$store.dispatch('loading/overlayLoading', { loading: false, message: '' })
+        this.examConfirmedDialog = true
+      }).catch(err => {
+        console.log('err', err)
+        // this.$store.dispatch('loading/overlayLoading', { loading: false, message: '' })
+      })
     },
     createExam () {
       console.log('exam', this.exam)

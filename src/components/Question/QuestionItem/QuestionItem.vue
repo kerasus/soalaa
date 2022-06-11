@@ -123,6 +123,9 @@ export default {
     }
   },
   methods: {
+    onResize () {
+      this.$refs.questionComponent.setChoiceCol()
+    },
     changeOrder (mode, question) {
       this.$emit('changeOrder', {
         question,
@@ -224,7 +227,7 @@ export default {
 </script>
 <template>
   <q-card class="custom-card" :class="{'selected':question.selected && !finalApprovalMode}">
-    <q-resize-observer @resize="setChoiceCol"/>
+    <q-resize-observer @resize="onResize"/>
     <q-card-section class="question-bank-content ">
       <div class="question-info-section row justify-between full-width">
         <div class="id-info-section ">
@@ -363,12 +366,13 @@ export default {
             unelevated
             color="primary"
             class="btn-style"
-          >{{question.index + 1}}</q-btn>
+          >{{question.order}}</q-btn>
         </div>
         <div :class="isLtrQuestion() ? 'question-icon order-last' : 'question-icon'"/>
 
         <div class="question">
           <question
+            ref="questionComponent"
             :question="question"
           />
 
