@@ -202,7 +202,6 @@
 </template>
 
 <script>
-import Vue from 'vue'
 import {Exam} from '@/models/Exam'
 import Assistant from '@/plugins/assistant'
 import {DynamicScroller, DynamicScrollerItem} from 'vue-virtual-scroller'
