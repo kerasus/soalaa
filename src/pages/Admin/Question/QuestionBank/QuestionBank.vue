@@ -92,11 +92,12 @@ export default {
   },
   methods: {
     RemoveChoice (title) {
-      const target = this.selectedQuestions.filter(question => !!question.tags.list.find(tag => tag.type === 'lesson' && tag.title === title))
+      const target = this.selectedQuestions.filter(question => question.tags.list.find(tag => tag.type === 'lesson' && tag.title === title))
+      console.log(target)
       if (target.length) {
         target.forEach(question => {
           question.selected = !question.selected
-          this.selectedQuestions.splice(question, 1)
+          this.selectedQuestions.splice(question.index - 1, 1)
           this.questionListKey = Date.now()
         })
       }
