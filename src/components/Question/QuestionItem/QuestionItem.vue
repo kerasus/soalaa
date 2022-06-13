@@ -112,7 +112,6 @@ export default {
     }
   },
   created () {
-    console.log(this.question)
     this.setPageConfig()
   },
   mounted () {
