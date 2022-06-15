@@ -1,18 +1,50 @@
 <template>
   <div class="main-container">
     <div class="row">
-      <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-xs-12 question-bank-filter">
-        <div>FOR HASAN :</div>
-        THIS IS WHERE TO PUT THAT EXAM DETAIL COMPONENT
-        <div>INSTEAD OF QuestionFilter</div>
-<!--        <QuestionFilter-->
-<!--          ref="filter"-->
-<!--          @delete-filter="deleteFilterItem"-->
-<!--          :filterQuestions = filterQuestions-->
-<!--        />-->
+      <div class="exam-detail-container col-xl-3 col-lg-3 col-md-3 col-sm-12 col-xs-12 ">
+        <q-skeleton v-if="questions.loading" width="330px" height="400px" class="q-ml-xs"/>
+          <div class="exam-detail-content" v-else>
+            <div class="exam-specifications flex justify-between">
+              <div class="header-title"> مشخصات آزمون </div>
+              <div class="exam-title"> آزمون ۱۲۳۴۵۶۷</div>
+            </div>
+            <div class="exam-details">
+              <p> <span class="field">نوع آزمون:</span> جامع</p>
+              <p> <span class="field">عنوان آزمون:</span> آزمون سه آ</p>
+              <p> <span class="field">رشته تحصیلی:</span> دوازدهم</p>
+              <p> <span class="field">پایه تحصیلی:</span> ریاضی</p>
+              <p> <span class="field">شروع آزمون:</span> ۱۶ اسفند ۱۴۰۰ - ساعت ۰۸:۰۰</p>
+              <p> <span class="field">پایان آزمون:</span> ۱۶ اسفند ۱۴۰۰ - ساعت ۰۸:۰۰</p>
+              <p> <span class="field">مدت زمان آزمون:</span> ۲۴۰ دقیقه </p>
+              <p> <span class="field">مدت تاخیر آزمون:</span> ۳۰ دقیقه</p>
+            </div>
+            <div class="selected-questions">
+                <div class="title"> سوالات انتخابی</div>
+                <div> highchart</div>
+            </div>
+            <div class="exam-btns">
+              <q-btn
+                unelevated
+                class="q-mr-xl btn-md"
+                :icon="'isax:arrow-right-3'"
+                style="width: 100%;background: #F4F5F6;margin-bottom: 12px"
+                @click="goToLastStep"
+              >
+                بازگشت
+              </q-btn>
+              <q-btn
+                unelevated
+                color="primary"
+                class="q-mr-xl btn-md"
+                style="width: 100%;"
+              >
+               تایید نهایی
+              </q-btn>
+            </div>
+          </div>
       </div>
-      <div class="col-xl-9 col-lg-9 col-md-9 col-sm-12 col-xs-12">
-        <div class="question-bank-content">
+      <div class="col-xl-9 col-lg-9 col-md-9 col-sm-12 col-xs-12 ">
+        <div class="question-item-content">
             <question-item v-if="questions.loading" :question="loadingQuestion" />
             <template v-else-if="exam.questions.length > 0">
               <q-virtual-scroll
@@ -204,33 +236,70 @@ export default {
 }
 </script>
 
-<style>
+<style scoped lang="scss">
 
 .main-container {
-  padding: 0 100px 0 96px;
+  padding: 0 80px 0 84px;
+  .exam-detail-container{
+    padding-right: 24px;
+    .exam-detail-content{
+      box-shadow: -2px -4px 10px rgba(255, 255, 255, 0.6), 2px 4px 10px rgba(112, 108, 162, 0.05);
+      border-radius: 20px;
+      background: #FFFFFF;
+      padding: 20px 24px 24px 24px;
+      .exam-specifications{
+        padding-bottom: 8px;
+        .header-title{
+          font-style: normal;
+          font-weight: 500;
+          font-size: 16px;
+          line-height: 28px;
+          color: #23263B;
+        }
+        .exam-title{
+          padding: 1px 9px 1px 7px;
+          background: #F4F5F6;
+          border-radius: 10px 12px 12px 10px;
+          font-weight: 400;
+          font-size: 12px;
+          line-height: 21px;
+          color: #23263B;
+        }
+      }
+      .exam-details{
+        margin-bottom: 10px;
+        p{
+          margin-bottom: 4px;
+          font-weight: 400;
+          font-size: 14px;
+          line-height: 24px;
+          color: #23263B;
+        }
+        .field{
+          font-weight: 700;
+          font-size: 14px;
+          line-height: 24px;
+          text-align: right;
+          color: #23263B;
+        }
+      }
+      .selected-questions{
+        margin-bottom: 30px;
+        .title{
+          font-weight: 500;
+          font-size: 16px;
+          line-height: 28px;
+          color: #23263B;
+
+        }
+      }
+    }
+  }
+    .question-item-content {
+      margin-bottom: 16px;
+    }
 }
 
-.q-checkbox__bg {
-  border: 1px solid #65677F;
-  box-sizing: border-box;
-  border-radius: 5px;
-}
-
-.question-bank-header {
-  padding-bottom: 30px;
-}
-
-.question-bank-filter {
-  padding-right: 24px;
-}
-
-.question-bank-toolbar {
-  padding-bottom: 24px;
-}
-
-.question-bank-content {
-  margin-bottom: 16px;
-}
 @media only screen and (max-width: 1919px) {
   .main-container {
     padding-left: 0;
