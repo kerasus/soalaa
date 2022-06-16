@@ -1,17 +1,29 @@
 <template>
   <div class="steps row">
     <div class="steps-box col-12 row no-padding items-center">
-      <div class="exam-info col-5 flex items-center" :class="{ 'current-step' : this.currentStep === 'createPage' }">
+      <div
+        class="exam-info col-5 flex items-center step"
+        :class="{ 'current-step' : this.currentStep === 'createPage' }"
+        @click="changeCurrentStep('createPage')"
+      >
         <q-icon name="isax:edit" class="icon" />
         <div class="exam-info-title title " :class="{ 'hidden-mobile' : this.currentStep !== 'createPage' }">اطلاعات آزمون</div>
         <div class="line" :class="{ 'border-mobile' : this.currentStep !== 'createPage' }"/>
       </div>
-      <div class="choose-questions col-5 flex items-center" :class="{ 'current-step' : this.currentStep === 'chooseQuestion' }">
+      <div
+        class="choose-questions col-5 flex items-center step"
+        :class="{ 'current-step' : this.currentStep === 'chooseQuestion' }"
+        @click="changeCurrentStep('chooseQuestion')"
+      >
         <q-icon name="isax:task-square" class="icon"/>
         <div class="choose-questions-title title" :class="{ 'hidden-mobile' : this.currentStep !== 'chooseQuestion' }">انتخاب سوال</div>
         <div class="line" :class="{ 'border-mobile' : this.currentStep !== 'chooseQuestion' }"/>
       </div>
-      <div class="final-approval col-2 flex items-center" :class="{ 'current-step' : this.currentStep === 'finalApproval' }">
+      <div
+        class="final-approval col-2 flex items-center step"
+        :class="{ 'current-step' : this.currentStep === 'finalApproval' }"
+        @click="changeCurrentStep('finalApproval')"
+      >
         <q-icon name="isax:tick-square" class="icon"/>
         <div class="final-approval-title" :class="{ 'hidden-mobile' : this.currentStep !== 'finalApproval' }">تایید نهایی</div>
       </div>
@@ -32,8 +44,14 @@ export default {
     }
   },
   emits: [
-    'update:currentComponent'
+    'update:currentComponent',
+    'currentStepChanged'
   ],
+  methods: {
+    changeCurrentStep (step) {
+      this.$emit('currentStepChanged', step)
+    }
+  },
   computed: {
     currentStep: {
       get () {
@@ -58,7 +76,9 @@ export default {
   line-height: 28px;
   color: #DEDEDE;
   border-radius: 20px;
-
+  .step {
+    cursor: pointer;
+  }
   .steps-box {
     background: #FFFFFF;
     box-shadow: -2px -4px 10px rgba(255, 255, 255, 0.6), 2px 4px 10px rgba(112, 108, 162, 0.05) #{"/* rtl:ignore */"};

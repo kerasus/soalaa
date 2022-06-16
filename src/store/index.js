@@ -1,7 +1,8 @@
 import { store } from 'quasar/wrappers'
 import { createStore } from 'vuex'
-import createPersistedState from 'vuex-persistedstate'
-// import Auth from 'src/store/module-example/Auth'
+// import createPersistedState from 'vuex-persistedstate'
+import vuejsStorage from '@krasus/vuejs-storage'
+
 import Auth from 'src/store/Auth'
 import loading from 'src/store/loading'
 import AppLayout from 'src/store/AppLayout'
@@ -25,16 +26,28 @@ export default store(function (/* { ssrContext } */) {
       Exam
     },
     plugins: [
-      createPersistedState({
-        storage: window.localStorage,
-        paths: [
+      vuejsStorage({
+        keys: [
           'userQuizListData',
-          'Auth.accessToken',
-          'Auth.user',
+          'Auth',
           'psychometricAnswer',
           'AppLayout'
-        ]
+        ],
+        // keep state.count in localStorage
+        namespace: 'vuex-localstorage',
+        driver: vuejsStorage.drivers.sessionStorage
+        // if you want to use sessionStorage instead of localStorage
       })
+      // createPersistedState({
+      //   storage: window.localStorage,
+      //   paths: [
+      //     'userQuizListData',
+      //     'Auth.accessToken',
+      //     'Auth.user',
+      //     'psychometricAnswer',
+      //     'AppLayout'
+      //   ]
+      // })
     ],
     // enable strict mode (adds overhead!)
     // for dev mode and --debug builds only
