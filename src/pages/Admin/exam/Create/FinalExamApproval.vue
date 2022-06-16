@@ -9,14 +9,14 @@
               <div class="exam-title"> آزمون ۱۲۳۴۵۶۷</div>
             </div>
             <div class="exam-details">
-              <p> <span class="field">نوع آزمون:</span> جامع</p>
-              <p> <span class="field">عنوان آزمون:</span> آزمون سه آ</p>
-              <p> <span class="field">رشته تحصیلی:</span> دوازدهم</p>
-              <p> <span class="field">پایه تحصیلی:</span> ریاضی</p>
-              <p> <span class="field">شروع آزمون:</span> ۱۶ اسفند ۱۴۰۰ - ساعت ۰۸:۰۰</p>
-              <p> <span class="field">پایان آزمون:</span> ۱۶ اسفند ۱۴۰۰ - ساعت ۰۸:۰۰</p>
-              <p> <span class="field">مدت زمان آزمون:</span> ۲۴۰ دقیقه </p>
-              <p> <span class="field">مدت تاخیر آزمون:</span> ۳۰ دقیقه</p>
+              <p> <span class="field">نوع آزمون:</span> {{exam.type_id}}</p>
+              <p> <span class="field">عنوان آزمون:</span> {{ exam.title }}</p>
+              <p> <span class="field">رشته تحصیلی:</span> {{exam.major}}</p>
+              <p> <span class="field">پایه تحصیلی:</span> {{exam.grade}}</p>
+              <p> <span class="field">شروع آزمون:</span> {{exam.start_at}}</p>
+              <p> <span class="field">پایان آزمون:</span> {{exam.finish_at}}</p>
+              <p> <span class="field">مدت زمان آزمون:</span> {{exam.exam_time}} </p>
+              <p> <span class="field">مدت تاخیر آزمون:</span> {{exam.delay_time}}</p>
             </div>
             <div class="selected-questions">
                 <div class="title"> سوالات انتخابی</div>
