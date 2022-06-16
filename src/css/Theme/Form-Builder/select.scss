@@ -8,6 +8,9 @@
         border-radius: 10px;
 
         .q-field__control-container {
+          .q-field__native{
+            padding-left: 10px;
+          }
           .q-field__label {
             padding-left: 10px;
           }
