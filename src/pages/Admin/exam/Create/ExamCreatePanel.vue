@@ -100,12 +100,12 @@ export default {
       return this.allTabs.indexOf(tab) === this.allTabs.length - 1
     },
     changeTab (tab) {
-      this.currentTab = tab
       this.updateExamData()
+      this.currentTab = tab
     },
     goToLastStep () {
-      this.currentTab = this.allTabs[this.getCurrentIndexOfStep() - 1] || 'createPage'
       this.updateExamData()
+      this.currentTab = this.allTabs[this.getCurrentIndexOfStep() - 1] || 'createPage'
     },
     goToNextStep () {
       const nextStep = this.allTabs[this.getCurrentIndexOfStep() + 1]
@@ -113,8 +113,8 @@ export default {
         this.setFinalStep()
         return
       }
-      this.currentTab = this.allTabs[this.getCurrentIndexOfStep() + 1]
       this.updateExamData()
+      this.currentTab = this.allTabs[this.getCurrentIndexOfStep() + 1]
     },
     setFinalStep () {
       // this.$store.dispatch('loading/overlayLoading', { loading: true, message: '' })
@@ -148,6 +148,14 @@ export default {
         this.exam = Object.assign(this.exam, formData)
       }
     }
+  },
+  watch: {
+    /* exam: {
+      handler (val) {
+        console.log(val)
+      },
+      deep: true
+    } */
   },
   computed: {}
 }
