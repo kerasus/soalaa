@@ -5,10 +5,13 @@
       <create-exam-page ref="createExam"/>
     </q-tab-panel>
     <q-tab-panel name="chooseQuestion">
-      <bank-test-component1/>
+      <question-bank/>
     </q-tab-panel>
     <q-tab-panel name="finalApproval">
-      <final-exam-approval />
+      <final-exam-approval
+        @goToLastStep = goToLastStep
+        @goToNextStep = goToNextStep
+      />
     </q-tab-panel>
   </q-tab-panels>
   <div class="btn-box flex justify-end items-center">
@@ -58,14 +61,14 @@ import { computed } from 'vue'
 import { Exam } from 'src/models/Exam'
 import Steps from 'pages/Admin/exam/Create/Steps'
 import CreateExamPage from 'pages/Admin/exam/Create/CreateExamPage'
-import BankTestComponent1 from 'pages/Admin/exam/Create/BankTestComponent1'
 import FinalExamApproval from 'pages/Admin/exam/Create/FinalExamApproval'
 import API_ADDRESS from 'src/api/Addresses'
+import QuestionBank from 'src/pages/Admin/Question/QuestionBank/QuestionBank.vue'
 export default {
   name: 'ExamCreatePanel',
   components: {
+    QuestionBank,
     FinalExamApproval,
-    BankTestComponent1,
     CreateExamPage,
     Steps
   },

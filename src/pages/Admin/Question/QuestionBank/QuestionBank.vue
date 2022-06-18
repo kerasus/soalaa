@@ -52,6 +52,7 @@ import QuestionItem from 'components/Question/QuestionItem/QuestionItem'
 import QuestionFilter from 'components/Question/QuestionBank/QuestionFilter'
 import QuestionToolBar from 'components/Question/QuestionBank/QuestionToolBar'
 import QuestionBankHeader from 'components/Question/QuestionBank/components/QuestionBankHeader'
+import { Exam } from 'src/models/Exam'
 
 export default {
   name: 'QuestionBank',
@@ -81,6 +82,12 @@ export default {
       }
     }
   },
+  inject: {
+    exam: {
+      from: 'providedExam',
+      default: new Exam()
+    }
+  },
   watch: {
     selectedQuestions: function () {
       this.onClickedCheckQuestionBtn()
@@ -104,16 +111,30 @@ export default {
     toggleQuestionSelected (question) {
       question.selected = !question.selected
     },
-    handleName (question) {
+    questionHandle (question) {
       if (question.selected) {
         this.addQuestionToSelectedList(question)
+        this.addQuestionToExam(question)
       } else {
         this.deleteQuestionFromSelectedList(question)
+        this.deleteQuestionFromExam(question)
       }
     },
     onClickedCheckQuestionBtn (question) {
       this.toggleQuestionSelected(question)
-      this.handleName(question)
+      this.questionHandle(question)
+    },
+    addQuestionToExam (question) {
+      if (this.exam.questions.list) {
+        this.exam.questions.list.push(question)
+      } else this.exam.questions.push(question)
+    },
+    deleteQuestionFromExam (question) {
+      const target = this.exam.questions.findIndex(questionItem => questionItem.id === question.id)
+      if (target === -1) {
+        return
+      }
+      this.exam.questions.splice(target, 1)
     },
     addQuestionToSelectedList (question) {
       this.selectedQuestions.push(question)

@@ -37,6 +37,7 @@
                 color="primary"
                 class="q-mr-xl btn-md"
                 style="width: 100%;"
+                @click="goToNextStep"
               >
                تایید نهایی
               </q-btn>
@@ -72,7 +73,7 @@
 </template>
 
 <script>
-import API_ADDRESS from 'src/api/Addresses'
+import moment from 'moment-jalaali'
 import { Question, QuestionList } from 'src/models/Question'
 import QuestionItem from 'components/Question/QuestionItem/QuestionItem'
 import { Exam } from 'src/models/Exam'
@@ -113,11 +114,16 @@ export default {
     }
   },
   created () {
-    this.getQuestionData()
-    this.getFilterOptions()
+    console.log(this.exam)
+    this.getExamQuestions()
+    this.changeTime()
   },
 
   methods: {
+    changeTime () {
+      this.exam.start_at = moment(this.exam.start_at, 'YYYY-M-D HH:mm:ss').format('jYYYY/jMM/jDD HH:mm:ss')
+      this.exam.finish_at = moment(this.exam.finish_at, 'YYYY-M-D HH:mm:ss').format('jYYYY/jMM/jDD HH:mm:ss')
+    },
     changeSelectedQuestionOrder (value) {
       const fromIndex = this.exam.questions.findIndex(item => item.id === value.question.id)
       let toIndex = fromIndex - 1 // the index before
@@ -160,21 +166,7 @@ export default {
       this.questionListKey = Date.now()
     },
     updatePage (page) {
-      this.getQuestionData(page)
-    },
-    deleteFilterItem (filter) {
-      console.log('Filter Deleted !!!', filter.id)
-      this.$refs.filter.setTicked('tree', filter.id, false)
-    },
-    getFilters () {
-      if (!this.$refs.filter) {
-        return null
-      }
-      const filters = this.$refs.filter.getFilters()
-
-      return {
-        tags: filters.tags.map(tag => tag.id)
-      }
+      this.getExamQuestions(page)
     },
     reIndexEamQuestions (questionList) {
       questionList.map((item, index) => {
@@ -187,50 +179,22 @@ export default {
       this.reIndexEamQuestions(questionList)
       this.exam.questions = questionList
     },
-    getQuestionData (page) {
-      if (!page) {
-        page = 1
-      }
-      this.loadingQuestion.loading = true
-      this.questions.loading = true
-      this.$axios.get(API_ADDRESS.question.index(this.getFilters(), page))
-        .then((response) => {
-          this.questions = new QuestionList(response.data.data)
-          this.fakeExamQuestionScenario(this.questions.list)
-          this.paginationMeta = response.data.meta
-          this.loadingQuestion.loading = false
-          this.questions.loading = false
-        })
-        .catch(function (error) {
-          console.log(error)
-          this.loadingQuestion.loading = false
-          this.questions.loading = false
-        })
+    getExamQuestions (page) {
+      this.fakeExamQuestionScenario(this.exam.questions.list)
     },
-    getFilterOptions () {
-      this.$axios.get(API_ADDRESS.option.base)
-        .then((response) => {
-          response.data.data.forEach(option => {
-            if (option.type === 'reference_type') {
-              this.filterQuestions.reference_type.push(option)
-            } else if (option.type === 'year_type') {
-              this.filterQuestions.year_type.push(option)
-            } else if (option.type === 'major_type') {
-              this.filterQuestions.major_type.push(option)
-            }
-          })
-        })
-        .catch(function (error) {
-          console.log(error)
-        })
-    }
-  },
-  watch: {
-    selectedCategory: {
-      handler () {
-        this.selectedLesson = ''
-      },
-      deep: true
+    goToLastStep () {
+      this.$emit('goToLastStep')
+    },
+    goToNextStep () {
+      this.$emit('goToNextStep')
+    },
+    watch: {
+      selectedCategory: {
+        handler () {
+          this.selectedLesson = ''
+        },
+        deep: true
+      }
     }
   }
 }
