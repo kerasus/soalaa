@@ -264,10 +264,6 @@ export default {
 </style>
 
 <style>
-.html-katex > p {
-  direction: inherit;
-}
-
 .html-katex > p:first-child {
   display: inline-block;
 }

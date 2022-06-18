@@ -137,6 +137,12 @@ const router = new VueRouter({
             meta: {middleware: [auth, completeInfo]}
         },
         {
+            path: '/onlineQuiz/exams/lesson/export/:quizId/:lessonId',
+            name: 'onlineQuiz.exams.lessons.export',
+            component: () => lazyLoadView(import('@/pages/admin/questionExport/preview')),
+            meta: {middleware: [auth, completeInfo]}
+        },
+        {
             path: '/onlineQuiz/exams/lesson/karnama/:quizId/:lessonId',
             name: 'onlineQuiz.exams.lessons.Karnama',
             component: () => lazyLoadView(import('@/pages/admin/exam/Karnama')),
