@@ -1,6 +1,6 @@
 <template>
   <steps v-model:currentComponent="currentTab" @currentStepChanged="changeTab"/>
-  <q-tab-panels @before-transition="test" v-model="currentTab" keep-alive animated style=" background: #f1f1f1;">
+  <q-tab-panels v-model="currentTab" keep-alive animated style=" background: #f1f1f1;">
     <q-tab-panel name="createPage">
       <create-exam-page ref="createExam"/>
     </q-tab-panel>
@@ -69,6 +69,7 @@ import CreateExamPage from 'pages/Admin/exam/Create/CreateExamPage'
 import FinalExamApproval from 'pages/Admin/exam/Create/FinalExamApproval'
 import API_ADDRESS from 'src/api/Addresses'
 import QuestionBank from 'pages/Admin/Question/QuestionBank/QuestionBank'
+
 export default {
   name: 'ExamCreatePanel',
   components: {
@@ -83,7 +84,8 @@ export default {
       currentTab: 'createPage',
       allTabs: ['createPage', 'chooseQuestion', 'finalApproval'],
       isExamDataInitiated: false,
-      examConfirmedDialog: false
+      examConfirmedDialog: false,
+      accept: false
     }
   },
   provide () {
@@ -93,9 +95,6 @@ export default {
   },
   created () {},
   methods: {
-    test (newVal, oldVal) {
-      console.log(newVal, oldVal)
-    },
     addQuestionToExam (question) {
       this.exam.questions.list.push(question)
     },
@@ -122,7 +121,7 @@ export default {
     },
     changeTab (tab) {
       this.updateExamData()
-      this.currentTab = tab
+      if (this.accept) { this.currentTab = tab }
     },
     goToLastStep () {
       this.updateExamData()
@@ -159,14 +158,63 @@ export default {
           })
       })
     },
+    showMessagesInNotify (messages, type) {
+      if (!type) {
+        type = 'negative'
+      }
+
+      messages.forEach((message) => {
+        this.$q.notify({
+          type,
+          message
+        })
+      })
+    },
+    checkValues (formDataValues) {
+      const messages = []
+      formDataValues.forEach((item) => {
+        if (item.type !== 'input' && item.type !== 'dateTime') {
+          return
+        }
+        if (typeof item.value !== 'undefined' && item.value !== null && item.value !== 0) {
+          return
+        }
+        messages.push(item.label + ' الزامی است. ')
+      })
+      this.showMessagesInNotify(messages, 'negative')
+    },
+    checkValidate (formDataValues) {
+      for (const [key, input] of Object.entries(formDataValues)) {
+        console.log(key, input)
+        if (input.type === 'input' || input.type === 'dateTime') {
+          if (!input.value || input.value === 'undefined' || input.value === null) {
+            this.accept = false
+            break
+          }
+        }
+      }
+    },
     updateExamData () {
       if (this.currentTab === 'createPage') {
         const formData = this.$refs.createExam.$refs.EntityCrudFormBuilder.getFormData()
-        if (!this.isExamDataInitiated) {
+        const formDataValues = this.$refs.createExam.$refs.EntityCrudFormBuilder.getValues()
+        this.accept = !this.accept
+        this.checkValues(formDataValues)
+        this.checkValidate(formDataValues)
+
+        if (!this.isExamDataInitiated && this.accept) {
           this.exam = new Exam(formData)
           this.isExamDataInitiated = true
+          this.accept = true
         }
         this.exam = Object.assign(this.exam, formData)
+      }
+      if (this.currentTab === 'chooseQuestion' && this.exam.questions.list.length > 0) {
+        this.accept = true
+      } else if (this.currentTab === 'chooseQuestion' && this.exam.questions.list.length === 0) {
+        this.accept = false
+        const messages = ['یه سوال برامون انتخاب کنن اخوی']
+        this.showMessagesInNotify(messages)
       }
     }
   },
@@ -183,6 +231,10 @@ export default {
 </script>
 
 <style scoped lang="scss">
+
+.btn-box {
+  margin-bottom: 30px;
+}
 .report-problem-dialog {
   position: relative;
 
