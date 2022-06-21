@@ -323,6 +323,13 @@ export default {
           .exam-result {
             padding: 0;
             margin-left: 10px;
+            background: #F4F5F6;
+            border-radius: 10px;
+            font-weight: 400;
+            font-size: 14px;
+            line-height: 24px;
+            color: #65677F;
+            margin-bottom: 16px;
           }
           .order-exam-title {
             padding: 8px;
