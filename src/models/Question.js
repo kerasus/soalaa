@@ -212,12 +212,12 @@ class Question extends Model {
   // ToDo: remove this
   generateFakeData () {
     this.generateFakeTags()
-    this.generateFakeLevel()
+    // this.generateFakeLevel()
   }
 
-  generateFakeLevel () {
-    this.level = Math.floor(Math.random() * 3) + 1 // 1 - 3
-  }
+  // generateFakeLevel () {
+  //   this.level = Math.floor(Math.random() * 3) + 1 // 1 - 3
+  // }
 
   generateFakeTags () {
     this.tags = new TreeNodeList([
