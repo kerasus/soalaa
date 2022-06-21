@@ -377,7 +377,4 @@ export default {
   }
 }
 
-.btn-box {
-  margin-bottom: 30px;
-}
 </style>
