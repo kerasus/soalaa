@@ -170,7 +170,7 @@ export default {
           name: 'formBuilderCol',
           col: 'col-md-6',
           value: [
-            { type: 'separator', label: 'تنظیمات آزمون' },
+            { type: 'separator', label: 'توضیحات آزمون' },
             {
               type: 'tiptapEditor',
               name: 'inputEditor',

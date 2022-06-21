@@ -1,14 +1,19 @@
 <template>
   <steps v-model:currentComponent="currentTab" @currentStepChanged="changeTab"/>
-  <q-tab-panels v-model="currentTab" keep-alive animated style=" background: #f1f1f1;">
+  <q-tab-panels @before-transition="test" v-model="currentTab" keep-alive animated style=" background: #f1f1f1;">
     <q-tab-panel name="createPage">
       <create-exam-page ref="createExam"/>
     </q-tab-panel>
     <q-tab-panel name="chooseQuestion">
-      <question-bank/>
+      <question-bank
+        @addQuestionToExam="addQuestionToExam"
+        @deleteQuestionFromExam="deleteQuestionFromExam"
+        v-model="exam.questions.list"
+      />
     </q-tab-panel>
     <q-tab-panel name="finalApproval">
       <final-exam-approval
+        @deleteQuestionFromExam="deleteQuestionFromExam"
         @goToLastStep = goToLastStep
         @goToNextStep = goToNextStep
       />
@@ -63,7 +68,7 @@ import Steps from 'pages/Admin/exam/Create/Steps'
 import CreateExamPage from 'pages/Admin/exam/Create/CreateExamPage'
 import FinalExamApproval from 'pages/Admin/exam/Create/FinalExamApproval'
 import API_ADDRESS from 'src/api/Addresses'
-import QuestionBank from 'src/pages/Admin/Question/QuestionBank/QuestionBank.vue'
+import QuestionBank from 'pages/Admin/Question/QuestionBank/QuestionBank'
 export default {
   name: 'ExamCreatePanel',
   components: {
@@ -88,6 +93,19 @@ export default {
   },
   created () {},
   methods: {
+    test (newVal, oldVal) {
+      console.log(newVal, oldVal)
+    },
+    addQuestionToExam (question) {
+      this.exam.questions.list.push(question)
+    },
+    deleteQuestionFromExam (question) {
+      const target = this.exam.questions.list.findIndex(questionItem => questionItem.id === question.id)
+      if (target === -1) {
+        return
+      }
+      this.exam.questions.list.splice(target, 1)
+    },
     // FOR EDUCATIONAL PURPOSES
     camelize (word) {
       return word.replace(/-./g, x => x[1].toUpperCase())
