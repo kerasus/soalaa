@@ -14,8 +14,11 @@
       <div class="col-xl-9 col-lg-9 col-md-9 col-sm-12 col-xs-12">
         <div class="question-bank-toolbar">
           <QuestionToolBar
+            :check-box="checkBox"
             :selectedQuestions="selectedQuestions"
             @remove="RemoveChoice"
+            @deleteAllQuestions="deleteAllQuestions"
+            @selectAllQuestions="selectAllQuestions"
             :key="questionListKey"
           />
         </div>
@@ -59,6 +62,7 @@ export default {
   components: { QuestionBankHeader, QuestionToolBar, QuestionFilter, QuestionItem, pagination },
   data () {
     return {
+      checkBox: false,
       filterQuestions: {
         major_type: [],
         reference_type: [],
@@ -89,8 +93,15 @@ export default {
     }
   },
   watch: {
-    selectedQuestions: function () {
-      this.onClickedCheckQuestionBtn()
+    'selectedQuestions.length': {
+      handler (newValue, oldValue) {
+        this.exam.questions.list = []
+        // console.log('newValue in b ', newValue, oldValue)
+        // console.log(this.exam.questions.list)
+        this.exam.questions.list = this.selectedQuestions
+        this.questionListKey = Date.now()
+        // console.log('  this.selectedQuestions ', this.selectedQuestions)
+      }
     }
   },
   created () {
@@ -104,6 +115,7 @@ export default {
         target.forEach(question => {
           question.selected = !question.selected
           this.selectedQuestions.splice(question.index - 1, 1)
+          this.deleteQuestionFromExam(question)
           this.questionListKey = Date.now()
         })
       }
@@ -114,10 +126,10 @@ export default {
     questionHandle (question) {
       if (question.selected) {
         this.addQuestionToSelectedList(question)
-        this.addQuestionToExam(question)
+        // this.addQuestionToExam(question)
       } else {
         this.deleteQuestionFromSelectedList(question)
-        this.deleteQuestionFromExam(question)
+        // this.deleteQuestionFromExam(question)
       }
     },
     onClickedCheckQuestionBtn (question) {
@@ -125,29 +137,33 @@ export default {
       this.questionHandle(question)
     },
     addQuestionToExam (question) {
-      if (this.exam.questions.list) {
-        this.exam.questions.list.push(question)
-      } else this.exam.questions.push(question)
+      this.$emit('addQuestionToExam', question)
+      this.questionListKey = Date.now()
     },
     deleteQuestionFromExam (question) {
-      const target = this.exam.questions.findIndex(questionItem => questionItem.id === question.id)
-      if (target === -1) {
-        return
-      }
-      this.exam.questions.splice(target, 1)
+      this.$emit('deleteQuestionFromExam', question)
+      this.questionListKey = Date.now()
     },
     addQuestionToSelectedList (question) {
       this.selectedQuestions.push(question)
+      if (this.selectedQuestions.length === this.questions.list.length) {
+        this.checkBox = true
+      } else this.checkBox = 'maybe'
       this.questionListKey = Date.now()
     },
     deleteQuestionFromSelectedList (question) {
+      if (this.checkBox) {
+        this.checkBox = false
+      }
       const target = this.selectedQuestions.findIndex(questionItem => questionItem.id === question.id)
       if (target === -1) {
         return
       }
       this.selectedQuestions.splice(target, 1)
+      this.deleteQuestionFromExam(question)
       this.questionListKey = Date.now()
     },
+
     updatePage (page) {
       this.getQuestionData(page)
     },
@@ -200,6 +216,38 @@ export default {
         .catch(function (error) {
           console.log(error)
         })
+    },
+    selectAllQuestions () {
+      this.checkBox = !this.checkBox
+      if (this.selectedQuestions.length) {
+        this.questions.list.forEach(question => {
+          question.selected = false
+          this.selectedQuestions.splice(question)
+        })
+      }
+      if (this.checkBox) {
+        this.questions.list.forEach(question => {
+          question.selected = true
+          this.selectedQuestions.push(question)
+        })
+      } else {
+        this.questions.list.forEach(question => {
+          question.selected = false
+          this.selectedQuestions.splice(question)
+        })
+      }
+      // this.questionListKey = Date.now()
+      // console.log(this.checkBox)
+      // console.log(this.selectedQuestions)
+    },
+    deleteAllQuestions () {
+      if (this.checkBox) {
+        this.checkBox = false
+      }
+      this.questions.list.forEach(question => {
+        question.selected = false
+        this.selectedQuestions.splice(question)
+      })
     }
   }
 }
