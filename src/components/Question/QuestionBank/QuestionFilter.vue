@@ -31,64 +31,74 @@
       </div>
     </q-card>
     <div class="filter-options-section">
-          <question-filter-expansion
-            header-title="درس و مبحث"
-          >
-            <tree
-              @ticked="tickedData"
-              ref="tree"
-              tick-strategy="strict"
-              :get-node-by-id="getNodeById"
-            />
-          </question-filter-expansion>
+      <question-filter-expansion
+        header-title="درس و مبحث"
+      >
+        <tree
+          @ticked="tickedData"
+          ref="tree"
+          tick-strategy="strict"
+          :get-node-by-id="getNodeById"
+        />
+      </question-filter-expansion>
 
-          <question-filter-expansion
-            header-title="مرجع"
-          >
-            <div
-            v-for="(reference , index) in filterQuestions.reference_type"
-            :key="index"
-            >
-              <q-checkbox
-                @update:model-value="tickedData"
-                :label="reference.value"
-                :val="reference.value"
-                v-model="QuestionFilters"
-              />
-            </div>
-          </question-filter-expansion>
+      <question-filter-expansion
+        header-title="مرجع"
+      >
+        <div v-if="filterQuestions.reference_type.length">
+        <div
+          v-for="(reference , index) in filterQuestions.reference_type"
+          :key="index"
+        >
+          <q-checkbox
+            @update:model-value="tickedData"
+            :label="reference.value"
+            :val="reference.value"
+            v-model="QuestionFilters"
+          />
+        </div>
+        </div>
+        <div v-else> هیچ مرجعی ایجاد نشده است</div>
+      </question-filter-expansion>
 
-          <question-filter-expansion
-            header-title="سال انتشار"
-          >
-            <div
-            v-for="(year , index) in filterQuestions.year_type"
-            :key="index"
-            >
-              <q-checkbox
-                @update:model-value="tickedData"
-                :label="year.value"
-                :val="year.value"
-                v-model="QuestionFilters"
-              />
-            </div>
-          </question-filter-expansion>
+      <question-filter-expansion
+        header-title="سال انتشار"
+      >
+        <div v-if="filterQuestions.year_type.length">
+        <div
+          v-for="(year , index) in filterQuestions.year_type"
+          :key="index"
+        >
+          <q-checkbox
+            @update:model-value="tickedData"
+            :label="year.value"
+            :val="year.value"
+            v-model="QuestionFilters"
+          />
+        </div>
+        </div>
+    <div v-else> هیچ سال انتشاری ایجاد نشده است</div>
+      </question-filter-expansion>
 
-          <question-filter-expansion
-            header-title="رشته تحصیلی"
-          >
-            <div
+      <question-filter-expansion
+        header-title="رشته تحصیلی"
+      >
+        <div v-if="filterQuestions.major_type.length">
+          <div
             v-for="(major , index) in filterQuestions.major_type"
             :key="index"
-            >
-              <q-checkbox
-                @update:model-value="tickedData"
-                :label="major.value"
-                :val="major.value"
-                v-model="QuestionFilters"
-              />
-            </div>
-          </question-filter-expansion>
+          >
+            <q-checkbox
+              @update:model-value="tickedData"
+              :label="major.value"
+              :val="major.value"
+              v-model="QuestionFilters"
+            />
+          </div>
+        </div>
+        <div v-else> هیچ رشته تحصیلی ایجاد نشده است</div>
+
+      </question-filter-expansion>
     </div>
   </div>
 </template>
@@ -123,7 +133,8 @@ export default {
   components: { QuestionFilterExpansion, Tree },
   created () {
     this.showTree('tree', this.getRootNode('test'))
-      .then(() => {})
+      .then(() => {
+      })
       .catch(err => {
         console.log(err)
       })
@@ -134,7 +145,9 @@ export default {
       value.forEach(val => {
         if (typeof val === 'string') {
           this.filtersData.tags.push(val)
-        } else { this.filtersData.tags.push(val.title) }
+        } else {
+          this.filtersData.tags.push(val.title)
+        }
       })
     },
     deleteFilterObject (item) {
@@ -152,6 +165,7 @@ export default {
 .filter-card-container {
   padding: 20px 23px 16px 24px;
   margin-bottom: 24px;
+
   .filter-header {
     padding-bottom: 11px;
     display: flex;
@@ -176,7 +190,8 @@ export default {
       }
     }
   }
-  .filter-container{
+
+  .filter-container {
     .filter-items {
       margin-right: 4px;
       margin-bottom: 4px;
@@ -185,6 +200,7 @@ export default {
   }
 
 }
+
 .filter-options-section {
 
   .filter-option-container {
@@ -238,8 +254,8 @@ export default {
 
 <style lang="scss">
 .filter-options-section {
-  .q-expansion-item__container{
-    .q-focus-helper{
+  .q-expansion-item__container {
+    .q-focus-helper {
       background: none !important;
     }
   }
