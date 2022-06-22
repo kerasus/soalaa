@@ -1,6 +1,6 @@
 <template>
   <div>
-    <q-card class="theme-v1-box-shadow q-pa-none">
+    <q-card class="custom-card q-pa-none">
       <div class="filter-card-container">
         <div class="filter-header">
           <q-card-section class="header-title-container q-pa-none">
@@ -17,7 +17,7 @@
         <div>
           <q-card-actions class="filter-container q-pa-none">
             <q-chip
-              v-for="item in filters"
+              v-for="item in filtersData.tags"
               :key="item"
               class="filter-items"
               icon-remove="mdi-close"
@@ -30,29 +30,65 @@
         </div>
       </div>
     </q-card>
-    <div class="filter-options-section"
-         v-for="item in filterOptions" :key="item">
-      <q-card class="theme-v1-box-shadow q-pa-none">
-        <q-card-section class="q-pa-none">
-          <q-expansion-item
-            expand-icon="isax:arrow-down-1"
+    <div class="filter-options-section">
+          <question-filter-expansion
+            header-title="درس و مبحث"
           >
-              <template v-slot:header>
-                <div class="filter-option-container " >
-                <div class="filter-option-title">
-                  {{ item }}
-                </div>
-                </div>
-              </template>
             <tree
               @ticked="tickedData"
               ref="tree"
               tick-strategy="strict"
               :get-node-by-id="getNodeById"
             />
-          </q-expansion-item>
-        </q-card-section>
-      </q-card>
+          </question-filter-expansion>
+
+          <question-filter-expansion
+            header-title="مرجع"
+          >
+            <div
+            v-for="(reference , index) in filterQuestions.reference_type"
+            :key="index"
+            >
+              <q-checkbox
+                @update:model-value="tickedData"
+                :label="reference.value"
+                :val="reference.value"
+                v-model="QuestionFilters"
+              />
+            </div>
+          </question-filter-expansion>
+
+          <question-filter-expansion
+            header-title="سال انتشار"
+          >
+            <div
+            v-for="(year , index) in filterQuestions.year_type"
+            :key="index"
+            >
+              <q-checkbox
+                @update:model-value="tickedData"
+                :label="year.value"
+                :val="year.value"
+                v-model="QuestionFilters"
+              />
+            </div>
+          </question-filter-expansion>
+
+          <question-filter-expansion
+            header-title="رشته تحصیلی"
+          >
+            <div
+            v-for="(major , index) in filterQuestions.major_type"
+            :key="index"
+            >
+              <q-checkbox
+                @update:model-value="tickedData"
+                :label="major.value"
+                :val="major.value"
+                v-model="QuestionFilters"
+              />
+            </div>
+          </question-filter-expansion>
     </div>
   </div>
 </template>
@@ -60,17 +96,31 @@
 <script>
 import { mixinTree } from 'src/mixin/Mixins'
 import Tree from 'components/Tree/Tree'
+import QuestionFilterExpansion from 'components/Question/QuestionBank/QuestionFilterExpansion'
 
 export default {
   name: 'QuestionBankFilter',
+  props: {
+    filterQuestions: {
+      type: Object,
+      default: () => {
+        return {
+          reference_type: null
+        }
+      }
+    }
+  },
   data () {
     return {
-      filters: ['درس و مبحث', 'نوع سوال', 'طراح سوال', 'تاریخ تالیف'],
-      filterOptions: ['درس و مبحث', 'نوع سوال', 'طراح سوال', 'تاریخ تالیف']
+      check: false,
+      QuestionFilters: [],
+      filtersData: {
+        tags: []
+      }
     }
   },
   mixins: [mixinTree],
-  components: { Tree },
+  components: { QuestionFilterExpansion, Tree },
   created () {
     this.showTree('tree', this.getRootNode('test'))
       .then(() => {})
@@ -80,15 +130,19 @@ export default {
   },
   methods: {
     tickedData (value) {
-      this.filters = value
-      console.log('ticked', value)
-      this.testArr = []
+      this.filtersData.tags = []
       value.forEach(val => {
-        this.testArr.push(val.id)
+        if (typeof val === 'string') {
+          this.filtersData.tags.push(val)
+        } else { this.filtersData.tags.push(val.title) }
       })
     },
     deleteFilterObject (item) {
       this.$emit('deleteFilter', item)
+    },
+    deleteAllFilters () {
+      this.filtersData.tags.splice(0, this.filtersData.tags.length)
+      this.QuestionFilters.splice(0, this.QuestionFilters.length)
     }
   }
 }
@@ -132,7 +186,6 @@ export default {
 
 }
 .filter-options-section {
-  margin-bottom: 16px;
 
   .filter-option-container {
     width: 500px;

@@ -32,6 +32,7 @@
     <div class="relative-position">
       <div class="attach-btn row">
         <question-identifier
+          ref="questionIdentifier"
           class="col-12"
           :exams="examList"
           :lessons="subCategoriesList"
@@ -39,12 +40,15 @@
           :gradesList="gradesList"
           :groups-list="lessonGroupList"
           :lessons-list="lessonsList"
+          :major-list="majorList"
+          :authorship-dates-list="authorshipDatesList"
+          :question-authors-list="questionAuthorsList"
           :buffer="true"
-          @gradeSelected="getLessonGroupList"
+          @gradeSelected="getLessonsList"
           @groupSelected="getLessonsList"
           @attach="attachExam"
           @detach="detachExam"
-          @tags-collected="setTags"
+          @tags-collected="setTagsOnCreate"
         />
       </div>
       <btn-box
@@ -93,6 +97,9 @@ export default {
   created () {
     this.getPageReady()
     this.getGradesList()
+    this.loadQuestionAuthors()
+    this.loadAuthorshipDates()
+    this.loadMajorList()
   },
   updated () {
   },

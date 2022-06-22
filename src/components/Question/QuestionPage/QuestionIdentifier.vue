@@ -1,16 +1,18 @@
 <template>
   <div class="question-details">
-<!--    <button @click="getIdentifierData">getTagsTitles</button>-->
     <div class="box-title">شناسنامه سوال</div>
     <div class="details-container-2 default-details-container row">
       <div class="detail-box col-3" style="padding-right:0;">
-        <div class="detail-box-title">طراح سوال</div>
+        <div class="detail-box-title">مرجع</div>
         <q-select
           borderless
-          option-value="id"
-          option-label="title"
           v-model="questionAuthor"
-          :options="questionAuthors"
+          option-value="id"
+          option-label="value"
+          use-input
+          use-chips
+          multiple
+          :options="questionAuthorsList"
         />
       </div>
       <div class="detail-box col-3">
@@ -18,19 +20,24 @@
         <q-select
           borderless
           option-value="id"
-          option-label="title"
+          option-label="value"
           v-model="authorshipDate"
-          :options="authorshipDates"
+          :options="authorshipDatesList"
+          use-input
+          use-chips
+          multiple
         />
       </div>
       <div class="detail-box col-3">
         <div class="detail-box-title">درجه سختی</div>
         <q-select
-          borderless
           option-value="id"
-          option-label="title"
+          option-label="value"
+          borderless
           v-model="questionLevel"
           :options="levels"
+          emit-value
+          map-options
         />
       </div>
       <attach-exam
@@ -58,9 +65,12 @@
         <q-select
           borderless
           option-value="id"
-          option-label="title"
+          option-label="value"
           v-model="major"
-          :options="majors"
+          :options="majorList"
+          use-input
+          use-chips
+          multiple
         />
       </div>
       <div class="detail-box col-6">
@@ -75,12 +85,21 @@
               icon="isax:tree"
               class="open-modal-btn default-detail-btn"
               @click="dialogValue = true"
-              :disable="!doesHaveGroups"
+              :disable="!doesHaveLessons"
             />
           </div>
         </div>
       </div>
     </div>
+    <q-btn
+      unelevated
+      color="primary"
+      class="q-mr-xl btn-md text-right"
+      style="float: left;margin-top: 10px;margin-right: 0px;margin-left: 14px;"
+      @click="getIdentifierData"
+    >
+      ثبت مباحث انتخاب شده
+    </q-btn>
       <question-tree-modal
         v-model:dialogValue="dialogValue"
         v-model:subjectsField="allSubjects"
@@ -133,7 +152,25 @@ export default {
         return []
       }
     },
+    majorList: {
+      type: Array,
+      default () {
+        return []
+      }
+    },
     groupsList: {
+      type: Array,
+      default () {
+        return []
+      }
+    },
+    questionAuthorsList: {
+      type: Array,
+      default () {
+        return []
+      }
+    },
+    authorshipDatesList: {
       type: Array,
       default () {
         return []
@@ -163,91 +200,30 @@ export default {
   data () {
     return {
       dialogValue: false,
-      questionAuthor: '',
-      authorshipDate: '',
-      questionAuthors: [
-        {
-          id: 'skadlfksdjfnkkhjks543djf',
-          title: 'سازمان سنجش 1'
-        },
-        {
-          id: 'skadlfksdjfnk63546s543djf',
-          title: 'سازمان سنجش 2'
-        },
-        {
-          id: 'skadlfdfgdfgdffdksdjfnks543djf',
-          title: 'سازمان سنجش 3'
-        },
-        {
-          id: 'sk;sdljflsdkf56465adlfksdjfnks543djf',
-          title: 'سازمان سنجش 4'
-        }
-      ],
-      authorshipDates: [
-        {
-          id: 'skadlfksdjfnkkhjks543djf',
-          title: 'دی ماه 1402'
-        },
-        {
-          id: 'skadlfksdjfnk63546s543djf',
-          title: 'دی ماه 1403'
-        },
-        {
-          id: 'skadlfdfgdfgdffdksdjfnks543djf',
-          title: 'دی ماه 1404'
-        },
-        {
-          id: 'sk;sdljflsdkf56465adlfksdjfnks543djf',
-          title: 'دی ماه 1405'
-        }
-      ],
-      questionLevel: '',
-      grades: [
-        {
-          id: 'skadlf1111ks543djf',
-          title: 'دهم'
-        },
-        {
-          id: 'ska7777746s543djf',
-          title: 'یازدهم'
-        },
-        {
-          id: 'skad9999jfnks543djf',
-          title: 'دوازدهم'
-        }
-      ],
+      questionAuthor: null,
+      authorshipDate: null,
+      questionLevel: null,
       grade: '',
-      majors: [
-        {
-          id: 'ska6666555ks543djf',
-          title: 'ریاضی'
-        },
-        {
-          id: 'skadl454546s543djf',
-          title: 'تجربی'
-        },
-        {
-          id: 'skadlfd54554jfnks543djf',
-          title: 'انسانی'
-        }
-      ],
-      major: '',
+      model: null,
+      major: null,
       levels: [
         {
-          id: 'skadlfk6546sdjfnkkhjks543djf',
-          title: 'آسان'
+          id: '1',
+          value: 'آسان'
         },
         {
-          id: '656adlfksdjfnk63546s543djf',
-          title: 'متوسط'
+          id: '2',
+          value: 'متوسط'
         },
         {
-          id: 'skadlfdfgdf564564sdjfnks543djf',
-          title: 'سخت'
+          id: '3',
+          value: 'سخت'
         }
       ],
       subjectsFieldText: [],
       allSubjects: {},
+      allSubjectsFlat: [],
+      lastSelectedNodes: [],
       identifierData: [],
       draftBtnLoading: false,
       saveBtnLoading: false,
@@ -257,6 +233,9 @@ export default {
   computed: {
     doesHaveGroups () {
       return !!(this.groupsList && this.groupsList.length > 0)
+    },
+    doesHaveLessons () {
+      return !!(this.lessonsList && this.lessonsList.length > 0)
     }
   },
   methods: {
@@ -280,28 +259,37 @@ export default {
     },
     updateLessonsTitles () {
       const fieldText = []
+      const flatSelectedNodes = []
       if (Object.keys(this.allSubjects).length !== 0) {
         for (const key in this.allSubjects) {
           if (this.allSubjects[key].nodes && this.allSubjects[key].nodes.length > 0) {
             this.allSubjects[key].nodes.forEach(val => {
               fieldText.push(val.title)
+              flatSelectedNodes.push(val)
             })
           }
         }
       }
+      this.allSubjectsFlat = flatSelectedNodes
       this.lessonsTitles = fieldText
     },
-    getIdentifierData () {
+    getLastNodesLessonsTitles () {
+      return this.lastSelectedNodes.map(item => item.title)
+    },
+    getIdentifierData (setTags) {
       this.updateLessonsTitles()
-      this.identifierData.push(...this.lessonsTitles)
+      this.identifierData.push(...this.getLastNodesLessonsTitles())
       this.identifierData.push(...this.getTagsTitles(this.subjectsFieldText))
-      this.identifierData.push(...this.getTagsTitles(this.grade))
-      this.identifierData.push(...this.getTagsTitles(this.major))
-      this.identifierData.push(...this.getTagsTitles(this.authorshipDate))
-      this.identifierData.push(...this.getTagsTitles(this.questionAuthor))
-      this.identifierData.push(...this.getTagsTitles(this.questionLevel))
+      this.question.major = this.major.map(item => item.id)
+      this.question.years = this.authorshipDate.map(item => item.id)
+      this.question.reference = this.questionAuthor.map(item => item.id)
+      this.question.level = this.questionLevel
       console.log('this.identifierData', this.identifierData)
-      this.setTags(this.identifierData)
+      if (setTags) {
+        this.setTags(this.identifierData)
+        return
+      }
+      this.question.tags = this.identifierData
     },
     getTagsTitles (tag) {
       const finalArray = []
@@ -316,12 +304,31 @@ export default {
         finalArray.push(tag.title)
       }
       return finalArray
+    },
+    getUniqueListBy (arr, key) {
+      return [...new Map(arr.map(item => [item[key], item])).values()]
+    },
+    getTheLastSelectedNode () {
+      const foundedNodes = []
+      let cleaned = []
+      this.allSubjectsFlat.forEach((selectedNode) => {
+        selectedNode.ancestors.forEach((parentNode) => {
+          if (this.allSubjectsFlat.find(item => item.id === parentNode.id)) {
+            foundedNodes.push(parentNode)
+          }
+        })
+      })
+      cleaned = this.getUniqueListBy(foundedNodes, 'id')
+      this.lastSelectedNodes = this.allSubjectsFlat.filter((selectedNode) => {
+        return !(cleaned.find(item => item.id === selectedNode.id))
+      })
     }
   },
   watch: {
     allSubjects: {
       handler () {
         this.updateLessonsTitles()
+        this.getTheLastSelectedNode()
       },
       deep: true
     }

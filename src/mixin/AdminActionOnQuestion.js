@@ -8,6 +8,7 @@ import { QuestionType, TypeList } from 'src/models/QuestionType'
 import { Log, LogList } from 'src/models/Log'
 import { AttachedExamList } from 'src/models/AttachedExam'
 import { QuestCategoryList } from 'src/models/QuestCategory'
+import { Notify } from 'quasar'
 const AdminActionOnQuestion = {
   data () {
     return {
@@ -17,7 +18,10 @@ const AdminActionOnQuestion = {
       allTypes: new TypeList(),
       gradesList: null,
       lessonGroupList: null,
-      lessonsList: null
+      lessonsList: null,
+      majorList: null,
+      authorshipDatesList: null,
+      questionAuthorsList: null
     }
   },
   computed: {
@@ -99,6 +103,15 @@ const AdminActionOnQuestion = {
     updateQuestion (question) {
       const that = this
       // this.$store.dispatch('loading/overlayLoading', { loading: true, message: '' })
+      this.$refs.questionIdentifier.getIdentifierData(false)
+      question = {
+        ...question,
+        level: (this.question.level) ? this.question.level : 1,
+        reference: [this.question.reference],
+        years: [this.question.years],
+        tags: this.question.tags,
+        major: this.question.major
+      }
       this.$axios.put(API_ADDRESS.question.update(question.id), question)
         .then((response) => {
           this.$q.notify({
@@ -360,9 +373,28 @@ const AdminActionOnQuestion = {
     },
     setNodesList () {},
     getGradesList () {
+      // console.log('getGradesList')
       this.getRootNode('test').then(response => {
         this.gradesList = response.data.data.children
       })
+    },
+    loadQuestionAuthors () {
+      this.$axios.get(API_ADDRESS.option.base + '?type=reference_type')
+        .then((response) => {
+          this.questionAuthorsList = response.data.data
+        })
+    },
+    loadAuthorshipDates () {
+      this.$axios.get(API_ADDRESS.option.base + '?type=year_type')
+        .then((response) => {
+          this.authorshipDatesList = response.data.data
+        })
+    },
+    loadMajorList () {
+      this.$axios.get(API_ADDRESS.option.base + '?type=major_type')
+        .then((response) => {
+          this.majorList = response.data.data
+        })
     },
     getLessonGroupList (item) {
       this.getNode(item.id).then(response => {
@@ -372,6 +404,7 @@ const AdminActionOnQuestion = {
     getLessonsList (item) {
       this.getNode(item.id).then(response => {
         this.lessonsList = response.data.data.children
+        // console.log('getLessonsList', this.lessonsList)
       })
     },
     setTags (allTags) {
@@ -382,6 +415,23 @@ const AdminActionOnQuestion = {
         .catch((er) => {
           console.log(er)
         })
+    },
+    setTagsOnCreate (allTags) {
+      this.question.tags = allTags
+      if (allTags && allTags.length > 0) {
+        Notify.create({
+          message: 'ثبت با موفقیت انجام شد',
+          color: 'green',
+          icon: 'thumb_up'
+        })
+      } else {
+        Notify.create({
+          type: 'negative',
+          message: 'مشکلی در ثبت بوجود آمده است',
+          position: 'top'
+        })
+      }
+      // console.log('this.question', this.question)
     }
   }
 }

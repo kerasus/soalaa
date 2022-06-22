@@ -18,7 +18,7 @@ export default {
           copy: true,
           detachQuestion: true,
           deleteQuestionFromDb: true,
-          editQuestion: true,
+          editQuestion: false,
           switch: true
         }
       }
@@ -27,15 +27,16 @@ export default {
       type: Boolean,
       default: false
     },
-    isSelected: {
-      type: Boolean,
-      default: false
-    },
     pageStrategy: {
       type: String,
       default: ''
+    },
+    finalApprovalMode: {
+      type: Boolean,
+      default: false
     }
   },
+  emits: ['checkSelect', 'changeOrder'],
   data () {
     return {
       questionChoiceList: [],
@@ -122,6 +123,15 @@ export default {
     }
   },
   methods: {
+    onResize () {
+      this.$refs.questionComponent.setChoiceCol()
+    },
+    changeOrder (mode, question) {
+      this.$emit('changeOrder', {
+        question,
+        mode
+      })
+    },
     isLtrQuestion () {
       const string = this.question.statement
       if (!string) {
@@ -138,8 +148,8 @@ export default {
         }
       })
     },
-    selectQuestion (data) {
-      this.$emit('checkSelect', data, this.question)
+    selectQuestion () {
+      this.$emit('checkSelect', this.question)
     },
     setQuestionLevel () {
       this.questionLevel = 1
@@ -155,43 +165,47 @@ export default {
       this.listConfig = Object.assign(this.listConfig, source)
     },
     pageMode () {
-      if (this.pageStrategy === 'question-bank') {
-        return {
-          questionId: true,
-          questionLevel: true,
-          questionSource: true,
-          questionInfo: true,
-          editQuestion: true,
-          selectQuestion: true,
-          reportProblem: true,
-          questionRate: true,
-          questionComment: true,
-          descriptiveAnswer: true,
-          menu: {
-            show: true,
-            items: {
-              copy: false,
-              detachQuestion: true,
-              deleteQuestionFromDb: true,
-              confirmQuestion: true
-            }
+      const baseConf = {
+        questionId: true,
+        questionLevel: true,
+        questionSource: true,
+        questionInfo: true,
+        editQuestion: true,
+        selectQuestion: true,
+        reportProblem: true,
+        questionRate: true,
+        questionComment: true,
+        descriptiveAnswer: true,
+        menu: {
+          show: true,
+          items: {
+            copy: false,
+            detachQuestion: true,
+            deleteQuestionFromDb: true,
+            confirmQuestion: true
           }
         }
+      }
+      const finalConf = {
+        ...baseConf
+      }
+      if (this.pageStrategy === 'question-bank') {
+        // return finalConf
       }
       if (this.pageStrategy === 'lesson-detail') {
-        return {
-          questionId: true,
-          questionLevel: true,
-          questionSource: true,
-          questionInfo: true,
-          editQuestion: true,
-          selectQuestion: true,
-          reportProblem: true,
-          questionRate: true,
-          questionComment: true,
-          descriptiveAnswer: true,
+        // return finalConf
+      }
+      return finalConf
+    },
+    applyListConfig () {
+      let finalConf = {}
+      if (this.finalApprovalMode) {
+        finalConf = {
+          ...this.listOptions,
+          reportProblem: false,
+          editQuestion: false,
           menu: {
-            show: true,
+            show: false,
             items: {
               copy: false,
               detachQuestion: true,
@@ -201,9 +215,8 @@ export default {
           }
         }
       }
-    },
-    applyListConfig () {
-      this.listConfig = Object.assign(this.listConfig, this.listOptions)
+
+      this.listConfig = Object.assign(this.listConfig, finalConf)
     },
 
     emitAdminActions (action, data) {
@@ -213,8 +226,8 @@ export default {
 }
 </script>
 <template>
-  <q-card class="custom-card" :class="{'selected':isSelected}">
-    <q-resize-observer @resize="setChoiceCol"/>
+  <q-card class="custom-card" :class="{'selected':question.selected && !finalApprovalMode}">
+    <q-resize-observer @resize="onResize"/>
     <q-card-section class="question-bank-content ">
       <div class="question-info-section row justify-between full-width">
         <div class="id-info-section ">
@@ -348,9 +361,18 @@ export default {
         </q-chip>
       </div>
       <div class="question-section">
+        <div v-if="finalApprovalMode" class="add-btn question-index">
+          <q-btn
+            unelevated
+            color="primary"
+            class="btn-style"
+          >{{question.order}}</q-btn>
+        </div>
         <div :class="isLtrQuestion() ? 'question-icon order-last' : 'question-icon'"/>
+
         <div class="question">
           <question
+            ref="questionComponent"
             :question="question"
           />
 
@@ -399,11 +421,29 @@ export default {
             <div v-if="listConfig.selectQuestion" class="add-btn">
               <q-btn
                 unelevated
-                :outline="isSelected"
+                :outline="question.selected"
                 color="primary"
                 class="btn-style"
-                @click="selectQuestion(!isSelected)"
-                :icon="isSelected ? 'isax:minus' : 'isax:add'"/>
+                @click="selectQuestion"
+                :icon="question.selected ? 'isax:minus' : 'isax:add'"/>
+            </div>
+            <div v-if="finalApprovalMode" class="add-btn">
+              <q-btn
+                unelevated
+                icon="isax:arrow-up-2"
+                color="primary"
+                class="btn-style"
+                @click="changeOrder('up', question)"
+                />
+            </div>
+            <div v-if="finalApprovalMode" class="add-btn">
+              <q-btn
+                unelevated
+                icon="isax:arrow-down-1"
+                color="primary"
+                class="btn-style"
+                @click="changeOrder('down', question)"
+                />
             </div>
             <div v-if="listConfig.editQuestion" class="edit-btn">
               <q-btn
@@ -508,6 +548,11 @@ export default {
   </q-dialog>
 </template>
 <style lang="scss" scoped>
+.question-index {
+  .q-btn {
+    border-radius: 10px 0px 0px 10px #{"/* rtl:ignore */"};
+  }
+}
 #toggle-icon{
   animation: mymove 2s infinite;
 }

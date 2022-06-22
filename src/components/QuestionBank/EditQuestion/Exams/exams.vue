@@ -141,6 +141,8 @@
 </template>
 
 <script>
+/* eslint-disable */
+
 import axios from 'axios'
 import API_ADDRESS from 'src/api/Addresses'
 import { ExamList } from 'src/models/Exam'

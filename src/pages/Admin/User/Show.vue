@@ -43,10 +43,9 @@
 
 <script>
 import moment from 'moment-jalaali'
-import Portlet from 'components/Portlet'
-import EntityShow from 'components/Entity/Show/EntityShow'
 import API_ADDRESS from 'src/api/Addresses'
 import { ref } from 'vue'
+import { EntityShow, Portlet } from 'quasar-crud'
 
 export default {
   name: 'Show',
@@ -95,7 +94,7 @@ export default {
     async setPotentialDates () {
       const dates = this.potentialDates.map(item => moment(item, 'jYYYY/jM/jD').format('YYYY-MM-DD'))
       this.potentialDatesLoading = true
-      this.$axios.post(API_ADDRESS.user.setPotentialDates, { user_id: this.userId, dates: dates })
+      this.$axios.post(API_ADDRESS.user.setPotentialDates, { user_id: this.userId, dates })
         .then((response) => {
           this.potentialDatesLoading = false
           this.loadPotentialDates(response.data.potential_dates)

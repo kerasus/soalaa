@@ -42,6 +42,7 @@
     <div class="relative-position">
       <div class="attach-btn row">
         <question-identifier
+          ref="questionIdentifier"
           class="col-12"
           :exams="examList"
           :lessons="subCategoriesList"
@@ -49,7 +50,10 @@
           :gradesList="gradesList"
           :groups-list="lessonGroupList"
           :lessons-list="lessonsList"
-          @gradeSelected="getLessonGroupList"
+          :major-list="majorList"
+          :authorship-dates-list="authorshipDatesList"
+          :question-authors-list="questionAuthorsList"
+          @gradeSelected="getLessonsList"
           @groupSelected="getLessonsList"
           @attach="attachExam"
           @detach="detachExam"
@@ -138,6 +142,9 @@ export default {
     this.loadCategories()
     this.getQuestionStatus()
     this.getGradesList()
+    this.loadQuestionAuthors()
+    this.loadAuthorshipDates()
+    this.loadMajorList()
   },
   provide () {
     return {

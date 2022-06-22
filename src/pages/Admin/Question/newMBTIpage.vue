@@ -104,7 +104,7 @@ import API_ADDRESS from 'src/api/Addresses'
 import Assistant from 'src/plugins/assistant'
 import { QuestionStatusList } from 'src/models/QuestionStatus'
 import axios from 'axios'
-
+/* eslint-disable */
 export default {
   name: 'NewMBTIPage',
   components: {

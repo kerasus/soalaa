@@ -21,6 +21,13 @@
         :key="item.order"
       >
         <div class="card-section-header">
+          <q-btn
+            class="icon-type"
+            icon="isax:close-square5"
+            color="negative"
+            flat
+            @click="removeChoice(item.order)"
+          />
           <q-radio
             dense
             v-model="choice"
@@ -29,7 +36,6 @@
             color="primary"
             @click="choiceClicked(item.order)"
           />
-          <q-btn label="حذف گزینه" flat color="primary" @click="removeChoice(item.order)"/>
         </div>
         <div class="multiple-answer-box">
           <QuestionField
@@ -52,6 +58,7 @@
   <div class="relative-position">
     <div class="attach-btn row">
       <question-identifier
+        ref="questionIdentifier"
         class="col-12"
         :exams="examList"
         :lessons="subCategoriesList"
@@ -59,12 +66,15 @@
         :gradesList="gradesList"
         :groups-list="lessonGroupList"
         :lessons-list="lessonsList"
+        :major-list="majorList"
+        :authorship-dates-list="authorshipDatesList"
+        :question-authors-list="questionAuthorsList"
         :buffer="true"
-        @gradeSelected="getLessonGroupList"
+        @gradeSelected="getLessonsList"
         @groupSelected="getLessonsList"
         @attach="attachExam"
         @detach="detachExam"
-        @tags-collected="setTags"
+        @tags-collected="setTagsOnCreate"
       />
     </div>
     <btn-box
@@ -132,6 +142,9 @@ export default {
     this.setDefaultChoices()
     this.getPageReady()
     this.getGradesList()
+    this.loadQuestionAuthors()
+    this.loadAuthorshipDates()
+    this.loadMajorList()
   },
   mounted () {
     this.$nextTick(() => {
@@ -152,14 +165,19 @@ export default {
             order: item.order
           })
         })
+        this.$refs.questionIdentifier.getIdentifierData(false)
         this.question.author.push({ full_name: this.$store.getters['Auth/user'].full_name, id: this.$store.getters['Auth/user'].id })
         const question = {
           author: this.question.author,
           choices: this.question.choices.list,
-          exams: exams,
+          exams,
           descriptive_answer: this.question.descriptive_answer,
           statement: this.question.statement,
-          level: 1,
+          level: (this.question.level) ? this.question.level : 1,
+          reference: this.question.reference,
+          years: this.question.years,
+          tags: this.question.tags,
+          major: this.question.major,
           sub_category_id: 1,
           recommended_time: 0,
           type_id: this.question.type_id
@@ -286,7 +304,6 @@ export default {
   .main-card-section {
     .card-section-header {
       display: flex;
-      justify-content: space-between;
       font-size: 16px;
       color: black;
       margin: 8px 18px 0;

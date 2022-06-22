@@ -26,7 +26,7 @@
       </span>
     </template>
   </q-tree>
-    <q-btn
+  <q-btn
       v-if="editable && nodes && !nodes.length"
       label="ساخت درخت"
       @click="toggleMenu(true)"
@@ -36,17 +36,62 @@
     />
   <q-dialog v-model="editDialog " persistent>
     <q-card class="q-pa-md ">
-      <q-btn flat icon="close " color="red " v-close-popup @click="toggleMenu(false)" />
+      <q-btn flat icon="close " color="red " v-close-popup @click="toggleMenu(false)"/>
       <q-tabs
-        v-model="tab "
+        v-model="tab"
         narrow-indicator
         dense
       >
-        <q-tab class="text-purple" name="editNode" icon="edit" label="ویرایش "/>
-        <q-tab class="text-orange" name="createNewNode" icon="add" label="اضافه کردن گره جدید "/>
+       <q-tab
+         v-if="nodes && !nodes.length"
+         class="text-blue"
+         name="createTree"
+         icon="add" label="ساخت درخت"
+       />
+          <q-tab
+            v-if="nodes && nodes.length"
+            class="text-purple"
+            name="editNode"
+            icon="edit"
+            label="ویرایش "
+          />
+          <q-tab
+            v-if="nodes && nodes.length"
+            class="text-orange"
+            name="createNewNode"
+            icon="add"
+            label="اضافه کردن گره جدید "
+          />
       </q-tabs>
       <q-tab-panels v-model="tab " animated>
-        <q-tab-panel name="editNode">
+        <q-tab-panel v-if="editable && nodes && !nodes.length" name="createTree">
+          <q-input
+            class="q-ma-md"
+            filled
+            v-model="newTitle"
+            label="نام "
+          />
+          <q-input
+            class="q-ma-md"
+            filled
+            v-model="newOrder"
+            label="ترتیب "
+          />
+          <q-input
+            class="q-ma-md"
+            filled
+            v-model="newType"
+            label="type"
+          />
+          <q-btn
+            color="green "
+            :loading="loading "
+            @click="createTree()"
+          >
+             ایجاد درخت
+          </q-btn>
+        </q-tab-panel>
+        <q-tab-panel v-if="editable && nodes && nodes.length" name="editNode">
           <q-input
             class="q-ma-md"
             filled
@@ -67,7 +112,7 @@
             ثبت
           </q-btn>
         </q-tab-panel>
-        <q-tab-panel name="createNewNode">
+        <q-tab-panel v-if="editable && nodes && nodes.length" name="createNewNode">
           <q-input
             class="q-ma-md"
             filled
@@ -92,11 +137,10 @@
     </q-card>
   </q-dialog>
 </template>
+
 <script>
 import { TreeNode, TreeNodeList } from 'src/models/TreeNode'
-// "\e90b"
-// "\eb21"
-// 'iconsax' !important
+
 export default {
   name: 'Tree',
   props: {
@@ -114,11 +158,13 @@ export default {
     },
     addNewNode: {
       type: Function,
-      default: (ParentId, title, order, callback) => {}
+      default: (ParentId, title, order, callback) => {
+      }
     },
     editNode: {
       type: Function,
-      default: (id, title, order, callback) => {}
+      default: (id, title, order, callback) => {
+      }
     }
   },
   data: () => {
@@ -130,18 +176,32 @@ export default {
       loading: false,
       newTitle: '',
       newOrder: 1,
+      newType: '',
       editedTitle: '',
       editedOrder: 1,
       selectedNode: {},
       editDialog: false
     }
   },
-  created () {},
-  mounted () {},
+
+  computed: {
+    tabName () {
+      return this.editable && this.nodes && !this.nodes.length ? 'createTree' : 'createNewNode'
+    }
+  },
+
+  watch: {
+    editDialog () {
+      this.tab = this.tabName
+    }
+  },
+
   emits: ['ticked', 'lazy-loaded'],
+
   methods: {
     createRoot (nodeData) {
-      const treeNodeData = new TreeNode(nodeData)
+      const node = nodeData
+      const treeNodeData = new TreeNode(node)
       treeNodeData.children = (new TreeNodeList(treeNodeData.children)).list
       this.nodes = [treeNodeData]
     },
@@ -150,9 +210,12 @@ export default {
       this.completeTickedNode = []
       target.forEach(id => {
         const node = this.nodes[0].findNode(id)
+        // console.log('node', node)
         if (!node) {
           return
         }
+        node.parentOfSelectedNode = this.nodes[0].parentOfSelectedNode
+        this.nodes[0].parentOfSelectedNode = []
         this.completeTickedNode.push(node)
       })
       this.$emit('ticked', this.completeTickedNode)
@@ -161,7 +224,7 @@ export default {
     loadChildOfNode (node, done) {
       const tree = []
       node.children.forEach(child => {
-        tree.push(new TreeNode({ id: child.id, title: child.title, parent: node.id }))
+        tree.push(new TreeNode(child))
       })
       done(tree)
       this.$emit('lazy-loaded', tree)
@@ -178,7 +241,7 @@ export default {
     showChildOfNodeFromCache (node, key, done, fail) {
       const tree = []
       node.children.forEach(child => {
-        tree.push(new TreeNode({ id: child.id, title: child.title, order: child.order, parent: node.id }))
+        tree.push(new TreeNode(child))
       })
       done(tree)
       this.$emit('lazy-loaded', tree)
@@ -202,15 +265,16 @@ export default {
     },
 
     addNode () {
-      const id = this.selectedNode.id
+      const id = this.selectedNode.id ? this.selectedNode.id : ''
       const getNode = this.$refs.tree.getNodeByKey(id)
-      this.addNewNode(id, this.newTitle, this.newOrder)
+      this.addNewNode(id, this.newType, this.newTitle, this.newOrder)
         .then(response => {
+          console.log(response)
           getNode.children.unshift(new TreeNode({
             id: response.data.data.id,
             type: response.data.data.type,
             title: response.data.data.title,
-            parent: response.data.data.parent.id
+            parent: response.data.data.parent.id ? response.data.data.parent.id : null
           }))
           this.editDialog = false
         })
@@ -240,25 +304,29 @@ export default {
   }
 }
 </script>
-<style scoped lang='scss'>
-  .q-tree {
-    display: inline-block;
 
-    .node-title {
-      color: var(--3a-TextPrimary);
-      &:hover {
-        .edit-btn {
-          color: #f18305;
-        }
-      }
+<style scoped lang='scss'>
+.q-tree {
+  display: inline-block;
+
+  .node-title {
+    color: var(--3a-TextPrimary);
+
+    &:hover {
       .edit-btn {
-        color: transparent;
-      }
-      .none-edit-btn{
-        display: none;
+        color: #f18305;
       }
     }
+
+    .edit-btn {
+      color: transparent;
+    }
+
+    .none-edit-btn {
+      display: none;
+    }
   }
+}
 </style>
 <style lang='scss'>
 .q-tree {
@@ -283,19 +351,19 @@ export default {
   }
 }
 
-  .q-tree__node:after {
-    right: auto;
-    left: -13px;
-    top: 0;
-    bottom: -31px;
-    border-left: 2px solid #d5d6da;
-  }
+.q-tree__node:after {
+  right: auto;
+  left: -13px;
+  top: 0;
+  bottom: -31px;
+  border-left: 2px solid #d5d6da;
+}
 
-  .q-tree__node-header::before {
-    border-bottom: 0 !important;
-    left: -35px;
-    bottom: 2px;
-    border-left: 2px solid #d5d6da;
-  }
+.q-tree__node-header::before {
+  border-bottom: 0 !important;
+  left: -35px;
+  bottom: 2px;
+  border-left: 2px solid #d5d6da;
+}
 
 </style>
