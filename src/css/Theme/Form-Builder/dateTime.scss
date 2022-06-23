@@ -1,0 +1,30 @@
+@import 'src/css/Theme/colors';
+@import 'src/css/Theme/sizes';
+
+
+.form-builder-date-time-col {
+  .q-field{
+    background: #FFFFFF;
+  }
+  .form-calender{
+    border-radius: 10px 0 0 10px;
+    .q-field__inner{
+      .q-field__control{
+        .q-field__prepend{
+          padding-left: 10px;
+        }
+      }
+    }
+  }
+  .time-input-dateTime{
+    border-radius: 0 10px 10px 0;
+    .q-field__inner{
+      .q-field__control{
+        .q-field__append{
+          padding-right: 10px;
+        }
+      }
+    }
+  }
+
+}
