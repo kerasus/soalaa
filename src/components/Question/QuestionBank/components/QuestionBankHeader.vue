@@ -71,20 +71,20 @@
             <question-filter-expansion
               header-title="نوع سوال"
             >
-              <tree
-                ref="tree"
-                tick-strategy="strict"
-                :get-node-by-id="getNodeById"
-              />
+<!--              <tree-->
+<!--                ref="tree"-->
+<!--                tick-strategy="strict"-->
+<!--                :get-node-by-id="getNodeById"-->
+<!--              />-->
             </question-filter-expansion>
             <question-filter-expansion
               header-title="سختی سوال"
             >
-              <tree
-                ref="tree1"
-                tick-strategy="strict"
-                :get-node-by-id="getNodeById"
-              />
+<!--              <tree-->
+<!--                ref="tree1"-->
+<!--                tick-strategy="strict"-->
+<!--                :get-node-by-id="getNodeById"-->
+<!--              />-->
             </question-filter-expansion>
             <question-filter-expansion
               header-title="تاریخ تالیف"

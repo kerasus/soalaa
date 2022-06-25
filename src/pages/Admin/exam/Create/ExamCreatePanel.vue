@@ -6,9 +6,10 @@
     </q-tab-panel>
     <q-tab-panel name="chooseQuestion">
       <question-bank
+        v-model="exam.questions.list"
+        @onFilter="onFilter"
         @addQuestionToExam="addQuestionToExam"
         @deleteQuestionFromExam="deleteQuestionFromExam"
-        v-model="exam.questions.list"
       />
     </q-tab-panel>
     <q-tab-panel name="finalApproval">
@@ -93,8 +94,10 @@ export default {
       providedExam: computed(() => this.exam)
     }
   },
-  created () {},
   methods: {
+    onFilter (filterData) {
+      console.log('filterData', filterData)
+    },
     addQuestionToExam (question) {
       this.exam.questions.list.push(question)
     },
@@ -184,11 +187,11 @@ export default {
       this.showMessagesInNotify(messages, 'negative')
     },
     checkValidate (formDataValues) {
-      for (const [key, input] of Object.entries(formDataValues)) {
-        console.log(key, input)
+      for (const item of Object.entries(formDataValues)) {
+        const input = item[1]
         if (input.type === 'input' || input.type === 'dateTime') {
           if (!input.value || input.value === 'undefined' || input.value === null) {
-            this.accept = false
+            // this.accept = false
             break
           }
         }

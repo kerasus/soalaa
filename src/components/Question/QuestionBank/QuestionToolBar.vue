@@ -154,6 +154,7 @@
           <div class="toolbar-checkbox-container">
             <div class="toolbar-checkbox">
               <q-checkbox
+                v-model="selectAllCheckbox"
                 class="choices-checkbox"
                 label="انتخاب همه"
                 name="checkbox"
@@ -239,6 +240,7 @@ export default {
   },
   data () {
     return {
+      selectAllCheckbox: false,
       checkbox: this.checkBox,
       questions: new QuestionList(),
       ToolbarDialog: false,
@@ -329,6 +331,7 @@ export default {
       }
     }
   },
+  emits: ['selectAllQuestions', 'deleteAllQuestions', 'remove'],
   created () {
     this.setDifficultyLevelsChart()
     this.replaceTitle()

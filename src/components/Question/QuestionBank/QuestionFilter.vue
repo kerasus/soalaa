@@ -23,9 +23,8 @@
               icon-remove="mdi-close"
               removable
               @remove="deleteFilterObject(item)"
-            >
-              {{ item }}
-            </q-chip>
+              v-text="item.title"
+            />
           </q-card-actions>
         </div>
       </div>
@@ -34,7 +33,7 @@
       <question-filter-expansion
         header-title="درس و مبحث"
       >
-        <tree
+        <tree-component
           @ticked="tickedData"
           ref="tree"
           tick-strategy="strict"
@@ -105,7 +104,7 @@
 
 <script>
 import { mixinTree } from 'src/mixin/Mixins'
-import Tree from 'components/Tree/Tree'
+import TreeComponent from 'components/Tree/Tree'
 import QuestionFilterExpansion from 'components/Question/QuestionBank/QuestionFilterExpansion'
 
 export default {
@@ -130,7 +129,7 @@ export default {
     }
   },
   mixins: [mixinTree],
-  components: { QuestionFilterExpansion, Tree },
+  components: { QuestionFilterExpansion, TreeComponent },
   created () {
     this.showTree('tree', this.getRootNode('test'))
       .then(() => {
@@ -140,15 +139,22 @@ export default {
       })
   },
   methods: {
+    getFilters () {
+      return this.filtersData
+    },
+    onUpdateFilterData () {
+      this.$emit('onFilter', this.filtersData)
+    },
     tickedData (value) {
       this.filtersData.tags = []
       value.forEach(val => {
         if (typeof val === 'string') {
           this.filtersData.tags.push(val)
         } else {
-          this.filtersData.tags.push(val.title)
+          this.filtersData.tags.push(val)
         }
       })
+      this.onUpdateFilterData()
     },
     deleteFilterObject (item) {
       this.$emit('deleteFilter', item)
@@ -156,6 +162,7 @@ export default {
     deleteAllFilters () {
       this.filtersData.tags.splice(0, this.filtersData.tags.length)
       this.QuestionFilters.splice(0, this.QuestionFilters.length)
+      this.onUpdateFilterData()
     }
   }
 }

@@ -7,8 +7,9 @@
       <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-xs-12 question-bank-filter">
         <QuestionFilter
           ref="filter"
+          @onFilter="onFilter"
           @delete-filter="deleteFilterItem"
-          :filterQuestions = filterQuestions
+          :filterQuestions="filterQuestions"
         />
       </div>
       <div class="col-xl-9 col-lg-9 col-md-9 col-sm-12 col-xs-12">
@@ -108,7 +109,13 @@ export default {
     this.getQuestionData()
     this.getFilterOptions()
   },
+  emits: ['onFilter'],
   methods: {
+    onFilter (filterData) {
+      this.$emit('onFilter', filterData)
+      const filters = this.getFiltersForRequest(filterData)
+      this.getQuestionData(1, filters)
+    },
     RemoveChoice (title) {
       const target = this.selectedQuestions.filter(question => question.tags.list.find(tag => tag.type === 'lesson' && tag.title === title))
       if (target.length) {
@@ -168,26 +175,20 @@ export default {
       this.getQuestionData(page)
     },
     deleteFilterItem (filter) {
-      console.log('Filter Deleted !!!', filter.id)
-      this.$refs.filter.setTicked('tree', filter.id, false)
+      // this.$refs.filter.setTicked('tree', filter.id, false)
     },
-    getFilters () {
-      if (!this.$refs.filter) {
-        return null
-      }
-      const filters = this.$refs.filter.getFilters()
-
+    getFiltersForRequest (filterData) {
       return {
-        tags: filters.tags.map(tag => tag.id)
+        tags: filterData.tags.map(tag => tag.id)
       }
     },
-    getQuestionData (page) {
+    getQuestionData (page, filters) {
       if (!page) {
         page = 1
       }
       this.loadingQuestion.loading = true
       this.questions.loading = true
-      this.$axios.get(API_ADDRESS.question.index(this.getFilters(), page))
+      this.$axios.get(API_ADDRESS.question.index(filters, page))
         .then((response) => {
           this.questions = new QuestionList(response.data.data)
           this.paginationMeta = response.data.meta
