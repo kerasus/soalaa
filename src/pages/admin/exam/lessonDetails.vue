@@ -68,7 +68,7 @@
             :loading="loading"
             @click="downLoadQuestions"
           >
-            دانلود سوالات
+            پرینت سوالات
             <v-icon dark>
               mdi-download
             </v-icon>
@@ -505,26 +505,29 @@
 
             },
           downLoadQuestions () {
-            this.loading = true
-            let fileUrl = ''
-            const questionsList = this.quizData.questions.list
-            const questionsIdList = []
+            let routeData = this.$router.resolve({name: 'onlineQuiz.exams.lessons.export', params: {quizId: this.$route.params.quizId, lessonId: this.$route.params.lessonId}});
+            window.open(routeData.href, '_blank');
 
-            questionsList.map((question) => {
-              questionsIdList.push(question.id)
-            })
-
-            axios.post(API_ADDRESS.question.printQuestions, {
-              questions: questionsIdList
-            })
-                .then( response => {
-                fileUrl = response.data.data
-                this.download('questions-list', fileUrl)
-                this.loading = false
-            }).catch(err => {
-              this.loading = false
-                console.log(err)
-            })
+            // this.loading = true
+            // let fileUrl = ''
+            // const questionsList = this.quizData.questions.list
+            // const questionsIdList = []
+            //
+            // questionsList.map((question) => {
+            //   questionsIdList.push(question.id)
+            // })
+            //
+            // axios.post(API_ADDRESS.question.printQuestions, {
+            //   questions: questionsIdList
+            // })
+            //     .then( response => {
+            //     fileUrl = response.data.data
+            //     this.download('questions-list', fileUrl)
+            //     this.loading = false
+            // }).catch(err => {
+            //   this.loading = false
+            //     console.log(err)
+            // })
           },
 
           download(fileName, url) {
