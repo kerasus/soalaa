@@ -5,10 +5,18 @@
       <create-exam-page ref="createExam"/>
     </q-tab-panel>
     <q-tab-panel name="chooseQuestion">
-      <bank-test-component1/>
+      <question-bank
+        @addQuestionToExam="addQuestionToExam"
+        @deleteQuestionFromExam="deleteQuestionFromExam"
+        v-model="exam.questions.list"
+      />
     </q-tab-panel>
     <q-tab-panel name="finalApproval">
-      <final-exam-approval />
+      <final-exam-approval
+        @deleteQuestionFromExam="deleteQuestionFromExam"
+        @goToLastStep = goToLastStep
+        @goToNextStep = goToNextStep
+      />
     </q-tab-panel>
   </q-tab-panels>
   <div class="btn-box flex justify-end items-center">
@@ -58,14 +66,15 @@ import { computed } from 'vue'
 import { Exam } from 'src/models/Exam'
 import Steps from 'pages/Admin/exam/Create/Steps'
 import CreateExamPage from 'pages/Admin/exam/Create/CreateExamPage'
-import BankTestComponent1 from 'pages/Admin/exam/Create/BankTestComponent1'
 import FinalExamApproval from 'pages/Admin/exam/Create/FinalExamApproval'
 import API_ADDRESS from 'src/api/Addresses'
+import QuestionBank from 'pages/Admin/Question/QuestionBank/QuestionBank'
+
 export default {
   name: 'ExamCreatePanel',
   components: {
+    QuestionBank,
     FinalExamApproval,
-    BankTestComponent1,
     CreateExamPage,
     Steps
   },
@@ -75,7 +84,8 @@ export default {
       currentTab: 'createPage',
       allTabs: ['createPage', 'chooseQuestion', 'finalApproval'],
       isExamDataInitiated: false,
-      examConfirmedDialog: false
+      examConfirmedDialog: false,
+      accept: false
     }
   },
   provide () {
@@ -85,6 +95,16 @@ export default {
   },
   created () {},
   methods: {
+    addQuestionToExam (question) {
+      this.exam.questions.list.push(question)
+    },
+    deleteQuestionFromExam (question) {
+      const target = this.exam.questions.list.findIndex(questionItem => questionItem.id === question.id)
+      if (target === -1) {
+        return
+      }
+      this.exam.questions.list.splice(target, 1)
+    },
     // FOR EDUCATIONAL PURPOSES
     camelize (word) {
       return word.replace(/-./g, x => x[1].toUpperCase())
@@ -100,12 +120,12 @@ export default {
       return this.allTabs.indexOf(tab) === this.allTabs.length - 1
     },
     changeTab (tab) {
-      this.currentTab = tab
       this.updateExamData()
+      if (this.accept) { this.currentTab = tab }
     },
     goToLastStep () {
-      this.currentTab = this.allTabs[this.getCurrentIndexOfStep() - 1] || 'createPage'
       this.updateExamData()
+      this.currentTab = this.allTabs[this.getCurrentIndexOfStep() - 1] || 'createPage'
     },
     goToNextStep () {
       const nextStep = this.allTabs[this.getCurrentIndexOfStep() + 1]
@@ -113,8 +133,8 @@ export default {
         this.setFinalStep()
         return
       }
-      this.currentTab = this.allTabs[this.getCurrentIndexOfStep() + 1]
       this.updateExamData()
+      this.currentTab = this.allTabs[this.getCurrentIndexOfStep() + 1]
     },
     setFinalStep () {
       // this.$store.dispatch('loading/overlayLoading', { loading: true, message: '' })
@@ -138,22 +158,83 @@ export default {
           })
       })
     },
+    showMessagesInNotify (messages, type) {
+      if (!type) {
+        type = 'negative'
+      }
+
+      messages.forEach((message) => {
+        this.$q.notify({
+          type,
+          message
+        })
+      })
+    },
+    checkValues (formDataValues) {
+      const messages = []
+      formDataValues.forEach((item) => {
+        if (item.type !== 'input' && item.type !== 'dateTime') {
+          return
+        }
+        if (typeof item.value !== 'undefined' && item.value !== null && item.value !== 0) {
+          return
+        }
+        messages.push(item.label + ' الزامی است. ')
+      })
+      this.showMessagesInNotify(messages, 'negative')
+    },
+    checkValidate (formDataValues) {
+      for (const [key, input] of Object.entries(formDataValues)) {
+        console.log(key, input)
+        if (input.type === 'input' || input.type === 'dateTime') {
+          if (!input.value || input.value === 'undefined' || input.value === null) {
+            this.accept = false
+            break
+          }
+        }
+      }
+    },
     updateExamData () {
       if (this.currentTab === 'createPage') {
         const formData = this.$refs.createExam.$refs.EntityCrudFormBuilder.getFormData()
-        if (!this.isExamDataInitiated) {
+        const formDataValues = this.$refs.createExam.$refs.EntityCrudFormBuilder.getValues()
+        this.accept = !this.accept
+        this.checkValues(formDataValues)
+        this.checkValidate(formDataValues)
+
+        if (!this.isExamDataInitiated && this.accept) {
           this.exam = new Exam(formData)
           this.isExamDataInitiated = true
+          this.accept = true
         }
         this.exam = Object.assign(this.exam, formData)
       }
+      if (this.currentTab === 'chooseQuestion' && this.exam.questions.list.length > 0) {
+        this.accept = true
+      } else if (this.currentTab === 'chooseQuestion' && this.exam.questions.list.length === 0) {
+        this.accept = false
+        const messages = ['یه سوال برامون انتخاب کنن اخوی']
+        this.showMessagesInNotify(messages)
+      }
     }
+  },
+  watch: {
+    /* exam: {
+      handler (val) {
+        console.log(val)
+      },
+      deep: true
+    } */
   },
   computed: {}
 }
 </script>
 
 <style scoped lang="scss">
+
+.btn-box {
+  margin-bottom: 30px;
+}
 .report-problem-dialog {
   position: relative;
 

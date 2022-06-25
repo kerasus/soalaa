@@ -27,7 +27,8 @@
               <q-checkbox
                 class="choices-checkbox"
                 label="انتخاب همه"
-                v-bind:="checkBox"
+                v-model="checkbox"
+                indeterminate-value="maybe"
                 @click="selectAllQuestions">
               </q-checkbox>
             </div>
@@ -155,9 +156,8 @@
               <q-checkbox
                 class="choices-checkbox"
                 label="انتخاب همه"
-                v-bind:="checkBox"
-                @click="selectAllQuestions">
-              </q-checkbox>
+                name="checkbox"
+                @click="selectAllQuestions"/>
             </div>
           </div>
           <div class="choices-number-container">
@@ -239,6 +239,7 @@ export default {
   },
   data () {
     return {
+      checkbox: this.checkBox,
       questions: new QuestionList(),
       ToolbarDialog: false,
       chartOptions: {
@@ -360,8 +361,7 @@ export default {
       return x
     },
     RemoveSelectedChoice (selectedTap) {
-      console.log(selectedTap)
-      console.log('this.selectedQuestionsTabs', this.selectedQuestionsTabs)
+      this.$emit('remove', selectedTap.title)
     }
   }
 }

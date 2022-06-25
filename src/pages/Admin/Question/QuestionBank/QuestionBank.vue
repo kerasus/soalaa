@@ -14,8 +14,11 @@
       <div class="col-xl-9 col-lg-9 col-md-9 col-sm-12 col-xs-12">
         <div class="question-bank-toolbar">
           <QuestionToolBar
-            v-model:selectedQuestions="selectedQuestions"
-            @RemoveChoice="RemoveChoice"
+            :check-box="checkBox"
+            :selectedQuestions="selectedQuestions"
+            @remove="RemoveChoice"
+            @deleteAllQuestions="deleteAllQuestions"
+            @selectAllQuestions="selectAllQuestions"
             :key="questionListKey"
           />
         </div>
@@ -52,12 +55,14 @@ import QuestionItem from 'components/Question/QuestionItem/QuestionItem'
 import QuestionFilter from 'components/Question/QuestionBank/QuestionFilter'
 import QuestionToolBar from 'components/Question/QuestionBank/QuestionToolBar'
 import QuestionBankHeader from 'components/Question/QuestionBank/components/QuestionBankHeader'
+import { Exam } from 'src/models/Exam'
 
 export default {
   name: 'QuestionBank',
   components: { QuestionBankHeader, QuestionToolBar, QuestionFilter, QuestionItem, pagination },
   data () {
     return {
+      checkBox: false,
       filterQuestions: {
         major_type: [],
         reference_type: [],
@@ -81,43 +86,84 @@ export default {
       }
     }
   },
+  inject: {
+    exam: {
+      from: 'providedExam',
+      default: new Exam()
+    }
+  },
+  watch: {
+    'selectedQuestions.length': {
+      handler (newValue, oldValue) {
+        this.exam.questions.list = []
+        // console.log('newValue in b ', newValue, oldValue)
+        // console.log(this.exam.questions.list)
+        this.exam.questions.list = this.selectedQuestions
+        this.questionListKey = Date.now()
+        // console.log('  this.selectedQuestions ', this.selectedQuestions)
+      }
+    }
+  },
   created () {
     this.getQuestionData()
     this.getFilterOptions()
   },
-
   methods: {
-    RemoveChoice (subcategoryId) {
-      console.log(this.selectedQuestions)
-      const target = this.selectedQuestions.findIndex(question => question.id === subcategoryId)
-      this.selectedQuestions.splice(target, 1)
+    RemoveChoice (title) {
+      const target = this.selectedQuestions.filter(question => question.tags.list.find(tag => tag.type === 'lesson' && tag.title === title))
+      if (target.length) {
+        target.forEach(question => {
+          question.selected = !question.selected
+          this.selectedQuestions.splice(question.index - 1, 1)
+          this.deleteQuestionFromExam(question)
+          this.questionListKey = Date.now()
+        })
+      }
     },
     toggleQuestionSelected (question) {
       question.selected = !question.selected
     },
-    handleName (question) {
+    questionHandle (question) {
       if (question.selected) {
         this.addQuestionToSelectedList(question)
+        // this.addQuestionToExam(question)
       } else {
         this.deleteQuestionFromSelectedList(question)
+        // this.deleteQuestionFromExam(question)
       }
     },
     onClickedCheckQuestionBtn (question) {
       this.toggleQuestionSelected(question)
-      this.handleName(question)
+      this.questionHandle(question)
+    },
+    addQuestionToExam (question) {
+      this.$emit('addQuestionToExam', question)
+      this.questionListKey = Date.now()
+    },
+    deleteQuestionFromExam (question) {
+      this.$emit('deleteQuestionFromExam', question)
+      this.questionListKey = Date.now()
     },
     addQuestionToSelectedList (question) {
       this.selectedQuestions.push(question)
+      if (this.selectedQuestions.length === this.questions.list.length) {
+        this.checkBox = true
+      } else this.checkBox = 'maybe'
       this.questionListKey = Date.now()
     },
     deleteQuestionFromSelectedList (question) {
+      if (this.checkBox) {
+        this.checkBox = false
+      }
       const target = this.selectedQuestions.findIndex(questionItem => questionItem.id === question.id)
       if (target === -1) {
         return
       }
       this.selectedQuestions.splice(target, 1)
+      this.deleteQuestionFromExam(question)
       this.questionListKey = Date.now()
     },
+
     updatePage (page) {
       this.getQuestionData(page)
     },
@@ -170,6 +216,38 @@ export default {
         .catch(function (error) {
           console.log(error)
         })
+    },
+    selectAllQuestions () {
+      this.checkBox = !this.checkBox
+      if (this.selectedQuestions.length) {
+        this.questions.list.forEach(question => {
+          question.selected = false
+          this.selectedQuestions.splice(question)
+        })
+      }
+      if (this.checkBox) {
+        this.questions.list.forEach(question => {
+          question.selected = true
+          this.selectedQuestions.push(question)
+        })
+      } else {
+        this.questions.list.forEach(question => {
+          question.selected = false
+          this.selectedQuestions.splice(question)
+        })
+      }
+      // this.questionListKey = Date.now()
+      // console.log(this.checkBox)
+      // console.log(this.selectedQuestions)
+    },
+    deleteAllQuestions () {
+      if (this.checkBox) {
+        this.checkBox = false
+      }
+      this.questions.list.forEach(question => {
+        question.selected = false
+        this.selectedQuestions.splice(question)
+      })
     }
   }
 }

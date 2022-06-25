@@ -20,7 +20,6 @@
 </template>
 
 <script>
-// import API_ADDRESS from 'src/api/Addresses'
 
 import { mixinTree } from 'src/mixin/Mixins'
 
@@ -44,14 +43,6 @@ export default {
   computed: {
   },
   methods: {
-    tickedData (value) {
-      this.filters = value
-      console.log('ticked', value)
-      this.testArr = []
-      value.forEach(val => {
-        this.testArr.push(val.id)
-      })
-    }
   }
 }
 </script>
