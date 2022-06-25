@@ -17,6 +17,7 @@ class TreeNode extends Model {
       { key: 'type' },
       { key: 'updated_at' },
       { key: 'created_at' },
+      { key: 'number_of_children' },
       {
         key: 'children',
         default: []
@@ -31,6 +32,10 @@ class TreeNode extends Model {
       }
 
     ])
+
+    if (this.number_of_children !== null && this.number_of_children === 0) {
+      this.lazy = false
+    }
   }
 
   findParents () {

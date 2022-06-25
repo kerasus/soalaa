@@ -17,13 +17,13 @@
         <div>
           <q-card-actions class="filter-container q-pa-none">
             <q-chip
-              v-for="item in filtersData.tags"
+              v-for="item in selectedFiltersTitle"
               :key="item"
               class="filter-items"
               icon-remove="mdi-close"
               removable
               @remove="deleteFilterObject(item)"
-              v-text="item.title"
+              v-text="item"
             />
           </q-card-actions>
         </div>
@@ -44,58 +44,52 @@
       <question-filter-expansion
         header-title="مرجع"
       >
-        <div v-if="filterQuestions.reference_type.length">
-        <div
-          v-for="(reference , index) in filterQuestions.reference_type"
-          :key="index"
-        >
-          <q-checkbox
-            @update:model-value="tickedData"
-            :label="reference.value"
-            :val="reference.value"
-            v-model="QuestionFilters"
-          />
-        </div>
-        </div>
-        <div v-else> هیچ مرجعی ایجاد نشده است</div>
+        <q-option-group
+          type="checkbox"
+          @update:model-value="onChangeReference"
+          :options="filterQuestions.reference_type.map(option => {
+            return {
+              label: option.value,
+              value: option
+            }
+          })"
+          v-model="selectedReference"
+        />
+        <div v-if="filterQuestions.reference_type.length === 0"> هیچ مرجعی ایجاد نشده است</div>
       </question-filter-expansion>
 
       <question-filter-expansion
         header-title="سال انتشار"
       >
-        <div v-if="filterQuestions.year_type.length">
-        <div
-          v-for="(year , index) in filterQuestions.year_type"
-          :key="index"
-        >
-          <q-checkbox
-            @update:model-value="tickedData"
-            :label="year.value"
-            :val="year.value"
-            v-model="QuestionFilters"
-          />
-        </div>
-        </div>
-    <div v-else> هیچ سال انتشاری ایجاد نشده است</div>
+        <q-option-group
+          type="checkbox"
+          @update:model-value="onChangeYears"
+          :options="filterQuestions.year_type.map(option => {
+            return {
+              label: option.value,
+              value: option
+            }
+          })"
+          v-model="selectedYears"
+        />
+        <div v-if="filterQuestions.year_type.length === 0"> هیچ سال انتشاری ایجاد نشده است</div>
       </question-filter-expansion>
 
       <question-filter-expansion
         header-title="رشته تحصیلی"
       >
-        <div v-if="filterQuestions.major_type.length">
-          <div
-            v-for="(major , index) in filterQuestions.major_type"
-            :key="index"
-          >
-            <q-checkbox
-              @update:model-value="tickedData"
-              :label="major.value"
-              :val="major.value"
-              v-model="QuestionFilters"
-            />
-          </div>
-        </div>
-        <div v-else> هیچ رشته تحصیلی ایجاد نشده است</div>
+        <q-option-group
+          type="checkbox"
+          @update:model-value="onChangeMajors"
+          :options="filterQuestions.major_type.map(option => {
+            return {
+              label: option.value,
+              value: option
+            }
+          })"
+          v-model="selectedMajors"
+        />
+        <div v-if="filterQuestions.major_type.length === 0"> هیچ رشته تحصیلی ایجاد نشده است</div>
 
       </question-filter-expansion>
     </div>
@@ -122,10 +116,28 @@ export default {
   data () {
     return {
       check: false,
-      QuestionFilters: [],
+      selectedReference: [],
+      selectedYears: [],
+      selectedMajors: [],
+      selectedTags: [],
       filtersData: {
         tags: []
       }
+    }
+  },
+  computed: {
+    selectedFiltersTitle () {
+      const filtersDataKey = Object.keys(this.filtersData)
+      const titles = []
+      filtersDataKey.forEach(key => {
+        const filterGroup = this.filtersData[key]
+        filterGroup.forEach(filterItem => {
+          const title = filterItem.title ? filterItem.title : filterItem.value
+          titles.push(title)
+        })
+      })
+
+      return titles
     }
   },
   mixins: [mixinTree],
@@ -145,16 +157,30 @@ export default {
     onUpdateFilterData () {
       this.$emit('onFilter', this.filtersData)
     },
-    tickedData (value) {
-      this.filtersData.tags = []
-      value.forEach(val => {
-        if (typeof val === 'string') {
-          this.filtersData.tags.push(val)
-        } else {
-          this.filtersData.tags.push(val)
-        }
-      })
+    changeFilterData (key, value) {
+      this.filtersData[key] = value
       this.onUpdateFilterData()
+    },
+    onChangeReference (value) {
+      this.changeFilterData('reference', value)
+    },
+    onChangeYears (value) {
+      this.changeFilterData('years', value)
+    },
+    onChangeMajors (value) {
+      this.changeFilterData('majors', value)
+    },
+    tickedData (value) {
+      this.changeFilterData('tags', value)
+      // this.filtersData.tags = value
+      // value.forEach(val => {
+      //   if (typeof val === 'string') {
+      //     this.filtersData.tags.push(val)
+      //   } else {
+      //     this.filtersData.tags.push(val)
+      //   }
+      // })
+      // this.onUpdateFilterData()
     },
     deleteFilterObject (item) {
       this.$emit('deleteFilter', item)

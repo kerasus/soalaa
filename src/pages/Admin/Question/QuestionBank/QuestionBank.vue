@@ -5,7 +5,7 @@
         <QuestionBankHeader/>
       </div>
       <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-xs-12 question-bank-filter">
-        <QuestionFilter
+        <question-filter
           ref="filter"
           @onFilter="onFilter"
           @delete-filter="deleteFilterItem"
@@ -97,11 +97,8 @@ export default {
     'selectedQuestions.length': {
       handler (newValue, oldValue) {
         this.exam.questions.list = []
-        // console.log('newValue in b ', newValue, oldValue)
-        // console.log(this.exam.questions.list)
         this.exam.questions.list = this.selectedQuestions
         this.questionListKey = Date.now()
-        // console.log('  this.selectedQuestions ', this.selectedQuestions)
       }
     }
   },
@@ -179,7 +176,10 @@ export default {
     },
     getFiltersForRequest (filterData) {
       return {
-        tags: filterData.tags.map(tag => tag.id)
+        tags: (filterData.tags) ? filterData.tags.map(item => item.id) : [],
+        years: (filterData.years) ? filterData.years.map(item => item.id) : [],
+        majors: (filterData.majors) ? filterData.majors.map(item => item.id) : [],
+        reference: (filterData.reference) ? filterData.reference.map(item => item.id) : []
       }
     },
     getQuestionData (page, filters) {
@@ -237,9 +237,6 @@ export default {
           this.selectedQuestions.splice(question)
         })
       }
-      // this.questionListKey = Date.now()
-      // console.log(this.checkBox)
-      // console.log(this.selectedQuestions)
     },
     deleteAllQuestions () {
       if (this.checkBox) {
