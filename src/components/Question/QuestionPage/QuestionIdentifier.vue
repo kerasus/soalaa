@@ -280,16 +280,18 @@ export default {
       this.updateLessonsTitles()
       this.identifierData.push(...this.getLastNodesLessonsTitles())
       this.identifierData.push(...this.getTagsTitles(this.subjectsFieldText))
-      this.question.major = this.major.map(item => item.id)
-      this.question.years = this.authorshipDate.map(item => item.id)
-      this.question.reference = this.questionAuthor.map(item => item.id)
+
+      this.question.major = (this.major) ? this.major.map(item => item.id) : []
+      this.question.years = (this.authorshipDate) ? this.authorshipDate.map(item => item.id) : []
+      this.question.reference = (this.questionAuthor) ? this.questionAuthor.map(item => item.id) : []
       this.question.level = this.questionLevel
-      console.log('this.identifierData', this.identifierData)
+      this.question.tags = this.lastSelectedNodes
+
       if (setTags) {
         this.setTags(this.identifierData)
-        return
+        // return
       }
-      this.question.tags = this.identifierData
+      // this.question.tags = this.identifierData
     },
     getTagsTitles (tag) {
       const finalArray = []

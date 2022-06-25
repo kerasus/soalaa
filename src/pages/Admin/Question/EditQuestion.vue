@@ -181,6 +181,7 @@ export default {
       this.allProps.setContentToQuestion = true
     },
     saveQuestion () {
+      this.setQuestionIdentifierData()
       this.$refs.currentEditComponent.saveQuestion()
     },
     enableLoading () {

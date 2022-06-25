@@ -132,14 +132,16 @@ export default {
       this.choice = 'choice' + choiceIndex
     },
     saveQuestion () {
-      if (this.getContent()) {
-        const question = {
-          ...this.question,
-          choices: this.question.choices.list,
-          type_id: this.question.type_id
-        }
-        this.updateQuestion(question)
+      if (!this.getContent()) {
+        return
       }
+
+      const question = {
+        ...this.question,
+        choices: this.question.choices.list,
+        type_id: this.question.type_id
+      }
+      this.updateQuestion(question)
     },
     removeChoice (order) {
       if (this.question.choices.list.length < 3) {
