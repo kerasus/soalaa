@@ -38,7 +38,7 @@
     "process": "^0.11.10",
     "quasar": "^2.7.1",
     "quasar-app-extension-firebase-messaging": "^0.1.1",
-    "quasar-crud": "^0.2.31",
+    "quasar-crud": "^0.2.32",
     "quasar-form-builder": "^0.1.21",
     "quasar-template-builder": "^1.0.6",
     "socket.io-client": "^4.5.0",
