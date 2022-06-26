@@ -115,7 +115,7 @@ const AdminActionOnQuestion = {
         level: (this.question.level) ? this.question.level : 1,
         // reference: [this.question.reference],
         // years: this.question.years,
-        tags: this.question.tags,
+        tags: this.question.tags.list.map(tag => tag.id),
         major: this.question.major
       }
       this.$axios.put(API_ADDRESS.question.update(question.id), question)

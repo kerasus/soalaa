@@ -180,7 +180,7 @@ export default {
         reference: this.question.reference,
         years: this.question.years,
         tags: this.question.tags.map(item => item.id),
-        major: this.question.major,
+        majors: this.question.majors,
         sub_category_id: 1,
         recommended_time: 0,
         type_id: this.question.type_id

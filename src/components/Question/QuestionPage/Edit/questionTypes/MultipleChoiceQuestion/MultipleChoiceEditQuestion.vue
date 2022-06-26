@@ -139,7 +139,8 @@ export default {
       const question = {
         ...this.question,
         choices: this.question.choices.list,
-        type_id: this.question.type_id
+        // type_id: this.question.type_id
+        tags: this.question.tags.list.map(tag => tag.id)
       }
       this.updateQuestion(question)
     },

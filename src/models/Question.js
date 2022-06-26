@@ -35,7 +35,8 @@ class Question extends Model {
       { key: 'in_active_category' },
       { key: 'photo' },
       { key: 'order' },
-      { key: 'major' },
+      { key: 'major' }, // ToDo: must remove
+      { key: 'majors' },
       {
         key: 'years',
         default: []
