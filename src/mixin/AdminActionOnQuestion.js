@@ -44,7 +44,7 @@ const AdminActionOnQuestion = {
       this.$store.dispatch('loading/overlayLoading', true)
       this.$store.dispatch('loading/overlayLoading', false)
       // .loadApiResource()
-      this.$axios.post(API_ADDRESS.question.base, question)
+      this.$axios.post(API_ADDRESS.question.create, question)
         .then(response => {
           // console.log(response.data)
           this.$q.notify({
@@ -100,16 +100,22 @@ const AdminActionOnQuestion = {
           })
       }
     },
+    setQuestionIdentifierData () {
+      if (!this.$refs.questionIdentifier) {
+        return
+      }
+      this.$refs.questionIdentifier.getIdentifierData(false)
+    },
     updateQuestion (question) {
       const that = this
       // this.$store.dispatch('loading/overlayLoading', { loading: true, message: '' })
-      this.$refs.questionIdentifier.getIdentifierData(false)
+      // this.$refs.questionIdentifier.getIdentifierData(false)
       question = {
         ...question,
         level: (this.question.level) ? this.question.level : 1,
-        reference: [this.question.reference],
-        years: [this.question.years],
-        tags: this.question.tags,
+        // reference: [this.question.reference],
+        // years: this.question.years,
+        tags: this.question.tags.list.map(tag => tag.id),
         major: this.question.major
       }
       this.$axios.put(API_ADDRESS.question.update(question.id), question)
@@ -417,7 +423,7 @@ const AdminActionOnQuestion = {
         })
     },
     setTagsOnCreate (allTags) {
-      this.question.tags = allTags
+      // this.question.tags = allTags
       if (allTags && allTags.length > 0) {
         Notify.create({
           message: 'ثبت با موفقیت انجام شد',

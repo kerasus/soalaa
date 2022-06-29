@@ -239,10 +239,10 @@ export default {
             </q-chip>
           </div>
           <div v-if="listConfig.questionInfo" class="question-info">
-            <div class="info-part" v-for="(item, index) in info" :key="index">
+            <div class="info-part" v-for="(item, index) in question.tags.list" :key="index">
               <q-skeleton v-if="question.loading" class="info-title" type="text" width="80px"/>
               <div v-else class="info-title">
-                {{ item.name }}
+                {{ item.title }}
               </div>
               <div class="info-circle-icon" :class="{'last-circle':index === info.length - 1}">
               </div>

@@ -1,7 +1,7 @@
 <template>
   <div class="login-page row flex">
     <q-card v-if="!userLogin" class="col-lg-4 col-md-5 col-sm-6 col-xs-10 login-card my-card shadow-6">
-      <q-card-section class="row bg-blue-8 text-white justify-between">
+      <q-card-section class="row bg-primary text-white justify-between">
         <div class="row login-header-right-side justify-center items-center">
           <q-img class="login-alaa-logo" src="img/3a-logo.png" alt="3a-logo"/>
           <p class="login-entry-title q-ml-md q-mb-none">ورود</p>
@@ -40,7 +40,7 @@
           </template>
         </q-input>
         <q-card-actions align="left">
-          <q-btn style="width: 80px" color="blue-8" label="ورود" @click="login"/>
+          <q-btn class="full-width" color="primary" label="ورود" @click="login"/>
         </q-card-actions>
       </div>
     </q-card>

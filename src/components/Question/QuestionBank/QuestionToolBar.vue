@@ -27,7 +27,8 @@
               <q-checkbox
                 class="choices-checkbox"
                 label="انتخاب همه"
-                v-bind:="checkBox"
+                v-model="checkbox"
+                indeterminate-value="maybe"
                 @click="selectAllQuestions">
               </q-checkbox>
             </div>
@@ -153,11 +154,11 @@
           <div class="toolbar-checkbox-container">
             <div class="toolbar-checkbox">
               <q-checkbox
+                v-model="selectAllCheckbox"
                 class="choices-checkbox"
                 label="انتخاب همه"
-                v-bind:="checkBox"
-                @click="selectAllQuestions">
-              </q-checkbox>
+                name="checkbox"
+                @click="selectAllQuestions"/>
             </div>
           </div>
           <div class="choices-number-container">
@@ -239,6 +240,8 @@ export default {
   },
   data () {
     return {
+      selectAllCheckbox: false,
+      checkbox: this.checkBox,
       questions: new QuestionList(),
       ToolbarDialog: false,
       chartOptions: {
@@ -328,6 +331,7 @@ export default {
       }
     }
   },
+  emits: ['selectAllQuestions', 'deleteAllQuestions', 'remove'],
   created () {
     this.setDifficultyLevelsChart()
     this.replaceTitle()
@@ -360,8 +364,7 @@ export default {
       return x
     },
     RemoveSelectedChoice (selectedTap) {
-      console.log(selectedTap)
-      console.log('this.selectedQuestionsTabs', this.selectedQuestionsTabs)
+      this.$emit('remove', selectedTap.title)
     }
   }
 }
