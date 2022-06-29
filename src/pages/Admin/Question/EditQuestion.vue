@@ -44,6 +44,7 @@
         <question-identifier
           ref="questionIdentifier"
           class="col-12"
+          editable
           :exams="examList"
           :lessons="subCategoriesList"
           :categories="categoryList"

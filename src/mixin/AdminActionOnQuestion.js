@@ -66,6 +66,27 @@ const AdminActionOnQuestion = {
       this.$axios.get(API_ADDRESS.question.show(questionId))
         .then(function (response) {
           that.question = new Question(response.data.data)
+          // setFAKETagData
+          // that.question.tags.list = [
+          //   {
+          //     title: 'درس 1',
+          //     id: '62833f6f8646a96d49065562',
+          //     ancestors: [
+          //       { id: '6281fb9e2f1bafe99f050334', title: 'درخت دانش' },
+          //       { id: '6281fbeb2f1bafe99f050336', title: 'پایه دوازدهم' },
+          //       { id: '6281fbfd2f1bafe99f050337', title: 'حسابان ۲' }
+          //     ]
+          //   },
+          //   {
+          //     title: 'موضوع فیلان',
+          //     id: '6281fc922f1bafe99f050344',
+          //     ancestors: [
+          //       { id: '6281fb9e2f1bafe99f050334', title: 'درخت دانش' },
+          //       { id: '6281fbeb2f1bafe99f050336', title: 'پایه دوازدهم' },
+          //       { id: '6281fbfd2f1bafe99f050337', title: 'حسابان ۲' }
+          //     ]
+          //   }
+          // ]
           that.setQuestionTypeBasedOnId(that.question, types)
           that.disableLoading()
         })
