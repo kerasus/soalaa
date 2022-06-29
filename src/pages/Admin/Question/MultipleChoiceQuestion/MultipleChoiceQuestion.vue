@@ -59,6 +59,7 @@
     <div class="attach-btn row">
       <question-identifier
         ref="questionIdentifier"
+        editable
         class="col-12"
         :exams="examList"
         :lessons="subCategoriesList"
