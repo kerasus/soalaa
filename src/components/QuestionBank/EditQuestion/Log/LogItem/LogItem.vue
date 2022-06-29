@@ -17,12 +17,12 @@
       </span>
       </div>
       <div class="col-md-2 col-xs-6 log-date-time">
-        <sapn class="log-time">
+        <span class="log-time">
           {{ log.shamsiDate('created_at').time }}
-        </sapn>
-        <sapn class="log-date">
+        </span>
+        <span class="log-date">
           {{ log.shamsiDate('created_at').date }}
-        </sapn>
+        </span>
       </div>
       <div class="col-6 log-btn-box">
         <q-btn
