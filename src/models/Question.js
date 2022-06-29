@@ -205,9 +205,9 @@ class Question extends Model {
       ]
     }
 
-    if (this.tags.list.length === 0) {
-      this.generateFakeData()
-    }
+    // if (this.tags.list.length === 0) {
+    //   this.generateFakeData()
+    // }
   }
 
   // ToDo: remove this
