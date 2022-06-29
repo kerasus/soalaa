@@ -6,8 +6,8 @@
           class="log-item-avatar"
           size="24px"
         >
-          <!--        <img :src="log.causer.photo">-->
-          <img src="https://cdn.quasar.dev/img/avatar.png">
+                  <img :src="log.causer.photo">
+<!--          <img src="https://cdn.quasar.dev/img/avatar.png">-->
         </q-avatar>
         <span class="log-editor">
           {{ log.causer.full_name + ' ' }}
