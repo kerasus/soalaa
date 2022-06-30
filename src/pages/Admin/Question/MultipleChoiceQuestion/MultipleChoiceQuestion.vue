@@ -180,7 +180,7 @@ export default {
         level: (this.question.level) ? this.question.level : 1,
         reference: this.question.reference,
         years: this.question.years,
-        tags: this.question.tags.map(item => item.id),
+        tags: this.question.tags.list.map(item => item.id),
         majors: this.question.majors,
         sub_category_id: 1,
         recommended_time: 0,
