@@ -13,6 +13,7 @@
           use-chips
           multiple
           :options="questionAuthorsList"
+          :disable="!editable"
         />
       </div>
       <div class="detail-box col-3">
@@ -26,6 +27,7 @@
           use-input
           use-chips
           multiple
+          :disable="!editable"
         />
       </div>
       <div class="detail-box col-3">
@@ -38,6 +40,7 @@
           :options="levels"
           emit-value
           map-options
+          :disable="!editable"
         />
       </div>
       <attach-exam
@@ -58,6 +61,7 @@
           v-model="grade"
           :options="gradesList"
           @update:model-value="gradeSelected"
+          :disable="!editable"
         />
       </div>
       <div class="detail-box col-3">
@@ -71,6 +75,7 @@
           use-input
           use-chips
           multiple
+          :disable="!editable"
         />
       </div>
       <div class="detail-box col-6">
@@ -85,22 +90,23 @@
               icon="isax:tree"
               class="open-modal-btn default-detail-btn"
               @click="dialogValue = true"
-              :disable="!doesHaveLessons"
+              :disable="!isTreeModalAvailable"
             />
           </div>
         </div>
       </div>
     </div>
-    <q-btn
-      unelevated
-      color="primary"
-      class="q-mr-xl btn-md text-right"
-      style="float: left;margin-top: 10px;margin-right: 0px;margin-left: 14px;"
-      @click="getIdentifierData"
-    >
-      ثبت مباحث انتخاب شده
-    </q-btn>
+<!--    <q-btn-->
+<!--      unelevated-->
+<!--      color="primary"-->
+<!--      class="q-mr-xl btn-md text-right"-->
+<!--      style="float: left;margin-top: 10px;margin-right: 0px;margin-left: 14px;"-->
+<!--      @click="getIdentifierData"-->
+<!--    >-->
+<!--      ثبت مباحث انتخاب شده-->
+<!--    </q-btn>-->
     <question-tree-modal
+      ref="questionTreeModal"
       v-model:dialogValue="dialogValue"
       v-model:subjectsField="allSubjects"
       :lessons-list="lessonsList"
@@ -116,7 +122,7 @@ import { Question } from 'src/models/Question'
 import { ExamList } from 'src/models/Exam'
 import { QuestSubcategoryList } from 'src/models/QuestSubcategory'
 import { QuestCategoryList } from 'src/models/QuestCategory'
-import { TreeNodeList } from 'src/models/TreeNode'
+import { TreeNode, TreeNodeList } from 'src/models/TreeNode'
 import AttachExam from 'components/Question/QuestionPage/AttachExam/AttachExam'
 import QuestionTreeModal from 'components/Question/QuestionPage/QuestionTreeModal'
 
@@ -128,6 +134,12 @@ export default {
   },
   props: {
     buffer: {
+      type: Boolean,
+      default () {
+        return false
+      }
+    },
+    editable: {
       type: Boolean,
       default () {
         return false
@@ -237,6 +249,9 @@ export default {
     },
     doesHaveLessons () {
       return !!(this.lessonsList && this.lessonsList.length > 0)
+    },
+    isTreeModalAvailable () {
+      return this.doesHaveLessons && this.editable
     }
   },
   watch: {
@@ -257,6 +272,32 @@ export default {
       this.questionAuthor = this.question.reference
       this.majors = this.question.majors
       this.questionLevel = this.question.level.toString()
+      if (this.question.tags.list[0]) {
+        this.fillGradeFromResponse()
+        this.fillLessonFromResponse()
+        this.fillAllSubjectsFromResponse()
+      }
+    },
+    fillGradeFromResponse () {
+      this.grade = new TreeNode(this.question.tags.list[0].ancestors[1])
+      this.gradeSelected(this.grade)
+    },
+    fillLessonFromResponse () {
+      const firstTag = this.question.tags.list[0]
+      const lesson = firstTag.ancestors[firstTag.ancestors.length - 1]
+      // this.$refs.questionTreeModal.lesson = new TreeNode(lesson)
+      this.$refs.questionTreeModal.lessonSelected(lesson)
+    },
+    fillAllSubjectsFromResponse () {
+      this.question.tags.list.forEach((tag, index) => {
+        const lastAncestors = tag.ancestors[tag.ancestors.length - 1]
+        if (!this.allSubjects[lastAncestors.id]) {
+          this.allSubjects[lastAncestors.id] = {
+            nodes: []
+          }
+        }
+        Object.assign(this.allSubjects[lastAncestors.id].nodes, { [index]: { ...tag } })
+      })
     },
     emitAttachExam (item) {
       this.$emit('attach', item)
