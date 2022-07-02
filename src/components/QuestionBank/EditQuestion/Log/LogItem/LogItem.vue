@@ -6,8 +6,8 @@
           class="log-item-avatar"
           size="24px"
         >
-          <!--        <img :src="log.causer.photo">-->
-          <img src="https://cdn.quasar.dev/img/avatar.png">
+                  <img :src="log.causer.photo">
+<!--          <img src="https://cdn.quasar.dev/img/avatar.png">-->
         </q-avatar>
         <span class="log-editor">
           {{ log.causer.full_name + ' ' }}
@@ -17,12 +17,12 @@
       </span>
       </div>
       <div class="col-md-2 col-xs-6 log-date-time">
-        <sapn class="log-time">
+        <span class="log-time">
           {{ log.shamsiDate('created_at').time }}
-        </sapn>
-        <sapn class="log-date">
+        </span>
+        <span class="log-date">
           {{ log.shamsiDate('created_at').date }}
-        </sapn>
+        </span>
       </div>
       <div class="col-6 log-btn-box">
         <q-btn
@@ -128,7 +128,7 @@ export default {
 
     .log-date-time {
       display: flex;
-      justify-content: end;
+      justify-content: flex-end;
       font-size: 12px;
       @media screen and (max-width: 1023px) {
         justify-content: start;
@@ -142,7 +142,7 @@ export default {
 
     .log-btn-box {
       display: flex;
-      justify-content: end;
+      justify-content: flex-end;
 
       .log-comment-btn {
         &:deep(.q-icon) {

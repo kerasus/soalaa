@@ -69,7 +69,6 @@
           <div class="expansion-body">
             <q-separator dark size="2px" vertical class="vertical-separator"/>
             <q-list class="list-expansion">
-<!--              Todo : toxic Traits!!!!!-->
               <q-item
                 v-for="(subItem , i) in item.children"
                 :key="i"
@@ -150,12 +149,24 @@ export default {
           ]
         },
         {
+          title: 'ویژگی سوال',
+          icon: 'isax:bank',
+          routeName: null,
+          active: false,
+          children: [
+            { displayName: 'مرجع سوال', routeName: 'Admin.QuestionAuthors.Index', active: false },
+            // { displayName: 'معلفان سوال', routeName: 'Admin.QuestionAuthors.Index', active: false },
+            { displayName: 'تاریخ تالیف', routeName: 'Admin.AuthorshipDates.Index', active: false },
+            { displayName: 'رشته تحصیلی', routeName: 'Admin.Majors.Index', active: false }
+          ]
+        },
+        {
           title: 'آزمون',
           icon: 'isax:task-square',
           routeName: null,
           active: false,
           children: [
-            { displayName: 'ساخت آزمون', routeName: 'Admin.Exam.Create', active: false },
+            { displayName: 'ساخت آزمون', routeName: 'Admin.Exam.Create.AttachQuestion', active: false },
             { displayName: 'لیست آزمون ها', routeName: 'Admin.Exam.Index', active: false }
           ]
         },
@@ -266,7 +277,7 @@ export default {
   width: 280px;
   min-height: 840px;
   border-radius: 30px;
-  margin: 40px 24px;
+  margin: 40px 0 0 24px;
   @media screen and (max-width: 1919px) {
     width: 260px;
     min-height: 740px;

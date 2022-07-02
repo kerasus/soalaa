@@ -37,6 +37,26 @@ const API_ADDRESS = {
       return lumenServer + '/activity-log/' + id + '/comment'
     }
   },
+  entityCrud: {
+    authorshipDates: {
+      show: lumenServer + '/option/',
+      edit: lumenServer + '/admin/user',
+      create: lumenServer + '/option',
+      index: lumenServer + '/option?type=year_type&with_pagination=true'
+    },
+    questionAuthors: {
+      show: lumenServer + '/option/',
+      edit: lumenServer + '/admin/user',
+      create: lumenServer + '/option',
+      index: lumenServer + '/option?type=reference_type&with_pagination=true'
+    },
+    majors: {
+      show: lumenServer + '/option/',
+      edit: lumenServer + '/admin/user',
+      create: lumenServer + '/option',
+      index: lumenServer + '/option?type=major_type&with_pagination=true'
+    }
+  },
   exam: {
     showExam: (examId) => lumenServer + '/exam/' + examId,
     editExam: lumenServer + '/exam',
@@ -106,7 +126,7 @@ const API_ADDRESS = {
       page: (page) => lumenServer + '/exam-question/attach/show/6245afa20569e1374540cb88?page=' + page
     },
     index (filters, page) {
-      function getQueryParams (paramKey) {
+      function setQueryParams (paramKey) {
         if (!filters) {
           filters = {}
         }
@@ -116,16 +136,18 @@ const API_ADDRESS = {
           filters[paramKey] = '&' + paramKey + '[]=' + filters[paramKey]
         }
       }
-      getQueryParams('statuses')
-      getQueryParams('years')
-      getQueryParams('reference')
-      getQueryParams('tags')
+      setQueryParams('statuses')
+      setQueryParams('years')
+      setQueryParams('majors')
+      setQueryParams('reference')
+      setQueryParams('tags')
 
       if (typeof page !== 'undefined') {
         page = '&page=' + page
       } else {
         page = ''
       }
+
       let queryParam = page
       Object.keys(filters).forEach(filterKey => {
         queryParam += filters[filterKey]

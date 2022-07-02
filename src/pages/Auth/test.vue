@@ -1,26 +1,61 @@
 <template>
-  <div class="text-center q-mb-lg">
-    debug page
-    <br/>
-    don't forget rollback your code
+  <div>
+    <h5>THIS COMPONENT IS JUST FOR TEST</h5>
   </div>
 </template>
 
 <script>
-// import API_ADDRESS from 'src/api/Addresses'
-
 export default {
-  data: () => ({
-    name: ''
-  }),
+  name: 'Test',
+  components: {},
+  mixins: [],
+  data () {
+    return {
+      testValue: '',
+      testValue1: ''
+    }
+  },
+  props: {
+    testProp: {
+      type: Boolean,
+      default () {
+        return false
+      }
+    }
+  },
+  methods: {},
+  computed: {},
+  beforeRouteEnter () {
+    // console.log('debug beforeRouteEnter')
+  },
+  beforeRouteLeave () {
+    // console.log('debug beforeRouteLeave')
+  },
+  beforeRouteUpdate () {
+    // console.log('debug beforeRouteUpdate')
+  },
+  activated () {
+    // console.log('debug activated')
+  },
+  updated () {
+    // console.log('debug updated')
+  },
   created () {
+    // console.log('debug created')
   },
-  computed: {
+  mounted () {
+    // console.log('debug mounted')
   },
-  methods: {
+  watch: {
+    testValue: {
+      handler () {},
+      deep: true
+    },
+    testValue1 (oldVal, newVal) {}
   }
 }
 </script>
-<style scoped>
+
+<style scoped lang="scss">
 
 </style>

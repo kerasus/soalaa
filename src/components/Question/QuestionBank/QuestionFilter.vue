@@ -1,6 +1,6 @@
 <template>
   <div>
-    <q-card class="theme-v1-box-shadow q-pa-none">
+    <q-card class="custom-card q-pa-none">
       <div class="filter-card-container">
         <div class="filter-header">
           <q-card-section class="header-title-container q-pa-none">
@@ -17,85 +17,178 @@
         <div>
           <q-card-actions class="filter-container q-pa-none">
             <q-chip
-              v-for="item in filters"
+              v-for="item in selectedFiltersTitle"
               :key="item"
               class="filter-items"
               icon-remove="mdi-close"
               removable
               @remove="deleteFilterObject(item)"
-            >
-              {{ item }}
-            </q-chip>
+              v-text="item"
+            />
           </q-card-actions>
         </div>
       </div>
     </q-card>
-    <div class="filter-options-section"
-         v-for="item in filterOptions" :key="item">
-      <q-card class="theme-v1-box-shadow q-pa-none">
-        <q-card-section class="q-pa-none">
-          <q-expansion-item
-            expand-icon="isax:arrow-down-1"
-          >
-              <template v-slot:header>
-                <div class="filter-option-container " >
-                <div class="filter-option-title">
-                  {{ item }}
-                </div>
-                </div>
-              </template>
-            <tree
-              @ticked="tickedData"
-              ref="tree"
-              tick-strategy="strict"
-              :get-node-by-id="getNodeById"
-            />
-          </q-expansion-item>
-        </q-card-section>
-      </q-card>
+    <div class="filter-options-section">
+      <question-filter-expansion
+        header-title="درس و مبحث"
+      >
+        <tree-component
+          @ticked="tickedData"
+          ref="tree"
+          tick-strategy="strict"
+          :get-node-by-id="getNodeById"
+        />
+      </question-filter-expansion>
+
+      <question-filter-expansion
+        header-title="مرجع"
+      >
+        <q-option-group
+          type="checkbox"
+          @update:model-value="onChangeReference"
+          :options="filterQuestions.reference_type.map(option => {
+            return {
+              label: option.value,
+              value: option
+            }
+          })"
+          v-model="selectedReference"
+        />
+        <div v-if="filterQuestions.reference_type.length === 0"> هیچ مرجعی ایجاد نشده است</div>
+      </question-filter-expansion>
+
+      <question-filter-expansion
+        header-title="سال انتشار"
+      >
+        <q-option-group
+          type="checkbox"
+          @update:model-value="onChangeYears"
+          :options="filterQuestions.year_type.map(option => {
+            return {
+              label: option.value,
+              value: option
+            }
+          })"
+          v-model="selectedYears"
+        />
+        <div v-if="filterQuestions.year_type.length === 0"> هیچ سال انتشاری ایجاد نشده است</div>
+      </question-filter-expansion>
+
+      <question-filter-expansion
+        header-title="رشته تحصیلی"
+      >
+        <q-option-group
+          type="checkbox"
+          @update:model-value="onChangeMajors"
+          :options="filterQuestions.major_type.map(option => {
+            return {
+              label: option.value,
+              value: option
+            }
+          })"
+          v-model="selectedMajors"
+        />
+        <div v-if="filterQuestions.major_type.length === 0"> هیچ رشته تحصیلی ایجاد نشده است</div>
+
+      </question-filter-expansion>
     </div>
   </div>
 </template>
 
 <script>
 import { mixinTree } from 'src/mixin/Mixins'
-import Tree from 'components/Tree/Tree'
+import TreeComponent from 'components/Tree/Tree'
+import QuestionFilterExpansion from 'components/Question/QuestionBank/QuestionFilterExpansion'
 
 export default {
   name: 'QuestionBankFilter',
+  props: {
+    filterQuestions: {
+      type: Object,
+      default: () => {
+        return {
+          reference_type: null
+        }
+      }
+    }
+  },
   data () {
     return {
+      check: false,
+      selectedReference: [],
+      selectedYears: [],
+      selectedMajors: [],
+      selectedTags: [],
       filtersData: {
         tags: []
-      },
-      filters: ['درس و مبحث', 'نوع سوال', 'طراح سوال', 'تاریخ تالیف'],
-      filterOptions: ['درس و مبحث', 'نوع سوال', 'طراح سوال', 'تاریخ تالیف']
+      }
+    }
+  },
+  computed: {
+    selectedFiltersTitle () {
+      const filtersDataKey = Object.keys(this.filtersData)
+      const titles = []
+      filtersDataKey.forEach(key => {
+        const filterGroup = this.filtersData[key]
+        filterGroup.forEach(filterItem => {
+          const title = filterItem.title ? filterItem.title : filterItem.value
+          titles.push(title)
+        })
+      })
+
+      return titles
     }
   },
   mixins: [mixinTree],
-  components: { Tree },
+  components: { QuestionFilterExpansion, TreeComponent },
   created () {
     this.showTree('tree', this.getRootNode('test'))
-      .then(() => {})
+      .then(() => {
+      })
       .catch(err => {
         console.log(err)
       })
   },
   methods: {
+    getFilters () {
+      return this.filtersData
+    },
+    onUpdateFilterData () {
+      this.$emit('onFilter', this.filtersData)
+    },
+    changeFilterData (key, value) {
+      this.filtersData[key] = value
+      this.onUpdateFilterData()
+    },
+    onChangeReference (value) {
+      this.changeFilterData('reference', value)
+    },
+    onChangeYears (value) {
+      this.changeFilterData('years', value)
+    },
+    onChangeMajors (value) {
+      this.changeFilterData('majors', value)
+    },
     tickedData (value) {
-      this.filters = value
-      this.testArr = []
-      this.filtersData.tags = []
-      value.forEach(val => {
-        this.testArr.push(val.id)
-        this.filtersData.tags.push(val)
-      })
+      this.changeFilterData('tags', value)
+      // this.filtersData.tags = value
+      // value.forEach(val => {
+      //   if (typeof val === 'string') {
+      //     this.filtersData.tags.push(val)
+      //   } else {
+      //     this.filtersData.tags.push(val)
+      //   }
+      // })
+      // this.onUpdateFilterData()
     },
     deleteFilterObject (item) {
       this.$emit('deleteFilter', item)
     },
-    getFilters () {
-      return this.filtersData
+    deleteAllFilters () {
+      this.filtersData.tags.splice(0, this.filtersData.tags.length)
+      this.QuestionFilters.splice(0, this.QuestionFilters.length)
+      this.onUpdateFilterData()
     }
   }
 }
@@ -105,6 +198,7 @@ export default {
 .filter-card-container {
   padding: 20px 23px 16px 24px;
   margin-bottom: 24px;
+
   .filter-header {
     padding-bottom: 11px;
     display: flex;
@@ -129,7 +223,8 @@ export default {
       }
     }
   }
-  .filter-container{
+
+  .filter-container {
     .filter-items {
       margin-right: 4px;
       margin-bottom: 4px;
@@ -138,8 +233,8 @@ export default {
   }
 
 }
+
 .filter-options-section {
-  margin-bottom: 16px;
 
   .filter-option-container {
     width: 500px;
@@ -192,8 +287,8 @@ export default {
 
 <style lang="scss">
 .filter-options-section {
-  .q-expansion-item__container{
-    .q-focus-helper{
+  .q-expansion-item__container {
+    .q-focus-helper {
       background: none !important;
     }
   }
