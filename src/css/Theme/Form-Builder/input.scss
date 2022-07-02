@@ -1,12 +1,8 @@
-
-
 .form-builder-input-col {
   .q-input {
+    @include global-input;
     .q-field__inner {
       .q-field__control {
-        background: #FFFFFF;
-        border-radius: 10px;
-
         .q-field__control-container {
           .q-field__native {
             padding: 30px 20px 8px 20px;
@@ -26,5 +22,5 @@
       }
     }
   }
-
 }
+

@@ -1,22 +1,12 @@
-@import 'src/css/Theme/colors';
-@import 'src/css/Theme/sizes';
-
 .q-field--filled {
   &.backGround-gray-input {
-    .q-field__inner{
-      .q-field__control{
+    @include global-input;
+    .q-field__inner {
+      .q-field__control {
         background-color : var(--3a-Neutral2);
-        border-radius: $radius-15;
-        .q-field__append{
-          .q-icon{
-            color: var(--3a-TextPrimary);
-            font-size: 20px;
-            padding: 7px;
-          }
-        }
       }
     }
   }
 }
-
+//q-field row no-wrap items-start q-field--standard q-input q-field--float q-field--labeled q-field--highlighted
 //      <q-input filled class="backGround-gray-input"/>
