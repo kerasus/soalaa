@@ -170,7 +170,7 @@ export default {
           name: 'formBuilderCol',
           col: 'col-md-6',
           value: [
-            { type: 'separator', label: 'توضیحات آزمون' },
+            { type: 'separator', label: 'توضیحات آزمون', size: '0', separatorType: 'none' },
             {
               type: 'tiptapEditor',
               name: 'inputEditor',
@@ -198,7 +198,7 @@ export default {
           name: 'formBuilderCol',
           col: 'col-md-6',
           value: [
-            { type: 'separator', label: 'تنظیمات آزمون' },
+            { type: 'separator', label: 'تنظیمات آزمون', separatorType: 'none' },
             {
               type: 'formBuilder',
               name: 'formBuilderColSetting',
@@ -272,7 +272,7 @@ export default {
             }
           ]
         },
-        { type: 'separator', label: 'توضیحات شما، قبل از شروع آزمون برای کاربران به نمایش در می آید', col: 'col-md-12' },
+        { type: 'separator', label: 'توضیحات شما، قبل از شروع آزمون برای کاربران به نمایش در می آید', col: 'col-md-12', separatorType: 'none' },
         { type: 'hidden', name: 'categories', responseKey: 'data.categories', value: [] },
         {
           type: 'hidden',

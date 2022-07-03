@@ -1,9 +1,17 @@
-@import 'src/css/Theme/colors';
 
 .form-builder-tiptapEditor-col{
    .tiptap-plus-container{
-     background-color: var(--3a-Neutral2);
-     border: 1px solid var(--3a-Neutral1);
-     border-radius: 16px;
+     background-color: var(--3a-Neutral3);
+     border-radius: 20px;
    }
+
+  .tiptap-plus {
+    .tiptap-header {
+      border-radius: 20px 20px 0 0;
+      background-color: var(--3a-Neutral3);
+      border-bottom: 1px solid var(--3a-Neutral1);
+      margin: 24px;
+      padding: 0;
+    }
+  }
  }
