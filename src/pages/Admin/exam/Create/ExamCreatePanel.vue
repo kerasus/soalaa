@@ -1,65 +1,71 @@
 <template>
-  <steps v-model:currentComponent="currentTab" @currentStepChanged="changeTab"/>
-  <q-tab-panels v-model="currentTab" keep-alive animated style=" background: #f1f1f1;">
-    <q-tab-panel name="createPage">
-      <create-exam-page ref="createExam"/>
-    </q-tab-panel>
-    <q-tab-panel name="chooseQuestion">
-      <question-bank
-        v-model="exam.questions.list"
-        @onFilter="onFilter"
-        @addQuestionToExam="addQuestionToExam"
-        @deleteQuestionFromExam="deleteQuestionFromExam"
-      />
-    </q-tab-panel>
-    <q-tab-panel name="finalApproval">
-      <final-exam-approval
-        @deleteQuestionFromExam="deleteQuestionFromExam"
-        @goToLastStep = goToLastStep
-        @goToNextStep = goToNextStep
-      />
-    </q-tab-panel>
-  </q-tab-panels>
-  <div class="btn-box flex justify-end items-center">
-    <q-btn
-      unelevated
-      class="q-mr-xl btn-md"
-      :icon="'isax:arrow-right-3'"
-      style="margin-right: 18px;"
-      @click="goToLastStep"
-    >
-      بازگشت
-    </q-btn>
-    <q-btn
-      unelevated
-      color="primary"
-      class="q-mr-xl btn-md"
-      style="margin-right: 18px;"
-      :icon-right="'isax:arrow-left-2'"
-      @click="goToNextStep"
-    >
-      مرحله بعد
-    </q-btn>
-  </div>
-  <q-dialog v-model="examConfirmedDialog">
-    <q-card flat class="report-problem-dialog">
-      <q-btn flat v-close-popup round dense icon="close" class="close-btn"/>
-      <q-card-section class="problem-type no-padding">
-        <q-icon name="isax:tick-circle" size="110px"/>
-        <div class="title-style text-center" style="padding-bottom: 20px">
-          آزمون شما با موفقیت ثبت شد
-        </div>
+  <div class="exam-create-page">
+    <div class="exam-create-panel">
+      <steps v-model:currentComponent="currentTab" @currentStepChanged="changeTab"/>
+      <q-tab-panels v-model="currentTab" keep-alive animated style=" background: #f1f1f1;">
+        <q-tab-panel name="createPage">
+          <create-exam-page ref="createExam"/>
+        </q-tab-panel>
+        <q-tab-panel name="chooseQuestion">
+          <question-bank
+            v-model="exam.questions.list"
+            @onFilter="onFilter"
+            @addQuestionToExam="addQuestionToExam"
+            @deleteQuestionFromExam="deleteQuestionFromExam"
+          />
+        </q-tab-panel>
+        <q-tab-panel name="finalApproval">
+          <final-exam-approval
+            @deleteQuestionFromExam="deleteQuestionFromExam"
+            @goToLastStep = goToLastStep
+            @goToNextStep = goToNextStep
+          />
+        </q-tab-panel>
+      </q-tab-panels>
+      <div class="btn-box flex justify-end items-center">
+        <q-btn
+          unelevated
+          color="white"
+          text-color="black"
+          class="q-mr-xl btn-md"
+          :icon="'isax:arrow-right-3'"
+          style="margin-right: 18px;"
+          @click="goToLastStep"
+        >
+          بازگشت
+        </q-btn>
         <q-btn
           unelevated
           color="primary"
-          class="btn-lg final-btn"
-          :to="{name :'Admin.Exam.Index'}"
+          class="q-mr-xl btn-md"
+          style="margin-right: 18px;"
+          :icon-right="'isax:arrow-left-2'"
+          @click="goToNextStep"
         >
-          رفتن به صفحه لیست آزمون
+          مرحله بعد
         </q-btn>
-      </q-card-section>
-    </q-card>
-  </q-dialog>
+      </div>
+      <q-dialog v-model="examConfirmedDialog">
+        <q-card flat class="report-problem-dialog">
+          <q-btn flat v-close-popup round dense icon="close" class="close-btn"/>
+          <q-card-section class="problem-type no-padding">
+            <q-icon name="isax:tick-circle" size="110px"/>
+            <div class="title-style text-center" style="padding-bottom: 20px">
+              آزمون شما با موفقیت ثبت شد
+            </div>
+            <q-btn
+              unelevated
+              color="primary"
+              class="btn-lg final-btn"
+              :to="{name :'Admin.Exam.Index'}"
+            >
+              رفتن به صفحه لیست آزمون
+            </q-btn>
+          </q-card-section>
+        </q-card>
+      </q-dialog>
+    </div>
+  </div>
 </template>
 
 <script>
@@ -234,66 +240,92 @@ export default {
 </script>
 
 <style scoped lang="scss">
-
-.btn-box {
-  margin-bottom: 30px;
-}
-.report-problem-dialog {
-  position: relative;
-
-.close-btn {
-  position: absolute;
-  top: 12px;
-  left: 12px;
-  z-index: 1000000;
-}
-
-border-radius: 15px;
-padding: 24px;
-
-.title-style {
-  font-style: normal;
-  font-weight: 400;
-  font-size: 18px;
-  line-height: 31px;
-  color: #23263B;
-  margin-bottom: 8px;
-}
-
-.problem-type {
+.exam-create-page {
   display: flex;
-  margin-top: 10px;
-  width: 300px;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  .q-icon {
-    color: #4CAF50;
-    padding-bottom: 28px;
+  .exam-create-panel {
+    width: 1416px;
+    margin: auto;
+    .q-tab-panel {
+      padding: 32px 0 0 0;
+    }
+    @media screen and (max-width: 1919px) {
+      width: 100%;
+      .q-tab-panel {
+        padding: 32px 30px 0 0;
+      }
+    }
+    @media screen and (max-width: 1439px) {
+      .q-tab-panel {
+        padding: 30px 30px 0 30px !important;
+      }
+    }
+    @media screen and (max-width: 599px) {
+      .q-tab-panel {
+        padding: 16px 16px 0 16px !important;
+      }
+    }
+    .btn-box {
+      margin-bottom: 30px;
+    }
+    .report-problem-dialog {
+      position: relative;
+
+      .close-btn {
+        position: absolute;
+        top: 12px;
+        left: 12px;
+        z-index: 1000000;
+      }
+
+      border-radius: 15px;
+      padding: 24px;
+
+      .title-style {
+        font-style: normal;
+        font-weight: 400;
+        font-size: 18px;
+        line-height: 31px;
+        color: #23263B;
+        margin-bottom: 8px;
+      }
+
+      .problem-type {
+        display: flex;
+        margin-top: 10px;
+        width: 300px;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        .q-icon {
+          color: #4CAF50;
+          padding-bottom: 28px;
+        }
+        .final-btn {
+          padding-right: 25px;
+          padding-left: 25px;
+        }
+      }
+
+      .problem-description {
+        margin-top: 16px;
+      }
+
+      .action-box {
+        margin-top: 20px;
+
+        .btn-style {
+          border-radius: 10px;
+          color: #23263B;
+          width: 96px;
+          height: 40px;
+        }
+
+        .cancel {
+          background-color: #F4F5F6;
+        }
+      }
+    }
   }
-  .final-btn {
-    padding-right: 25px;
-    padding-left: 25px;
-  }
-}
 
-.problem-description {
-  margin-top: 16px;
-}
-
-.action-box {
-  margin-top: 20px;
-
-.btn-style {
-  border-radius: 10px;
-  color: #23263B;
-  width: 96px;
-  height: 40px;
-}
-
-.cancel {
-  background-color: #F4F5F6;
-}
-}
 }
 </style>

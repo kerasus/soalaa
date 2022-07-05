@@ -253,10 +253,6 @@ export default {
 
 <style>
 
-.main-container {
-  padding: 0 100px 0 96px;
-}
-
 .q-checkbox__bg {
   border: 1px solid #65677F;
   box-sizing: border-box;

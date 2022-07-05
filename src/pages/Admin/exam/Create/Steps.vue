@@ -68,8 +68,6 @@ export default {
 <style scoped lang="scss">
 .steps {
   height: 64px;
-  padding-right: 100px;
-  padding-left: 76px;
   font-style: normal;
   font-weight: 500;
   font-size: 16px;

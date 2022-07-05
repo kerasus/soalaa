@@ -1,6 +1,12 @@
 
-.form-builder-tiptapEditor-col{
-   .tiptap-plus-container{
+.form-builder-tiptapEditor-col {
+  padding: 8px 12px 0 12px ;
+  &:deep(p) {
+    &:first-child {
+      margin-bottom: 0 ;
+    }
+  }
+  .tiptap-plus-container {
      background-color: var(--3a-Neutral3);
      border-radius: 20px;
    }
