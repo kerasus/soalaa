@@ -8,6 +8,7 @@
               <q-input
                 v-model="searchInput"
                 filled
+                class="backGround-gray-input"
                 label="جستجو در سوال ها...">
                 <template v-slot:append>
                   <q-btn
@@ -25,6 +26,7 @@
             dropdown-icon="isax:arrow-down-1"
             v-model="searchInput"
             label="جدیدترین"
+            class="backGround-gray-input"
           >
           </q-select>
         </div>
@@ -156,35 +158,35 @@ export default {
           width: 36px;
           justify-content: center;
         }
-        &:deep(.q-field__control){
-        height: 40px;
-        align-items: center;
-      }
+      //  &:deep(.q-field__control){
+      //  height: 40px;
+      //  align-items: center;
+      //}
       }
     }
     .select-box{
       display: flex;
       justify-content: flex-end;
       align-items: center;
-      .q-select {
-        width: 160px;
-        &:deep(.q-field__control){
-          align-items: center;
-          min-height: 40px;
-          max-height: 40px;
-          padding-left: 20px;
-        }
-        &:deep(.q-field__control-container){
-          padding-top: 0;
-        }
-        &:deep(.q-field__label){
-          top: 0;
-          font-style: normal;
-          font-weight: 400;
-          font-size: 14px;
-          line-height: 24px
-        }
-      }
+      //.q-select {
+      //  width: 160px;
+      //  &:deep(.q-field__control){
+      //    align-items: center;
+      //    min-height: 40px;
+      //    max-height: 40px;
+      //    padding-left: 20px;
+      //  }
+      //  &:deep(.q-field__control-container){
+      //    padding-top: 0;
+      //  }
+      //  &:deep(.q-field__label){
+      //    top: 0;
+      //    font-style: normal;
+      //    font-weight: 400;
+      //    font-size: 14px;
+      //    line-height: 24px
+      //  }
+      //}
     }
     .question-filter-btn{
       display: none;

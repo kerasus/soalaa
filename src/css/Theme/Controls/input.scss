@@ -1,7 +1,7 @@
 @mixin global-input {
     .q-field__inner {
+      border-radius: 10px;
       .q-field__control {
-        background-color : var(--3a-Neutral3);
         border-radius: 10px;
         height: 40px;
         min-height: 0;
@@ -10,12 +10,10 @@
           min-height: 0;
           padding: 8px 20px;
           .q-icon {
-            color: var(--3a-TextPrimary);
             font-size: 20px;
           }
         }
         .q-field__native, .q-field__prefix, .q-field__suffix, .q-field__input {
-          background: var(--3a-Neutral3);
           border-radius: 10px;
           padding: 8px 24px;
 
@@ -25,11 +23,28 @@
         }
         .q-field__label {
           font-size: 14px;
-          color: var(--3a-TextSecondary);
           font-weight: 400;
           line-height: 24px;
           margin: -8px 24px;
         }
       }
     }
+}
+
+
+
+.q-field__inner {
+  background-color: var(--3a-Neutral3);
+
+  .q-field__control {
+    .q-field__append {
+      .q-icon {
+        color: var(--3a-TextPrimary);
+      }
+    }
+
+    .q-field__label {
+      color: var(--3a-TextSecondary);
+    }
+  }
 }
