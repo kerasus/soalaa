@@ -550,7 +550,7 @@ export default {
 <style lang="scss" scoped>
 .question-index {
   .q-btn {
-    border-radius: 10px 0px 0px 10px #{"/* rtl:ignore */"};
+    border-radius: 10px 0;
   }
 }
 #toggle-icon{
@@ -582,7 +582,7 @@ export default {
 }
 
 .question-bank-content {
-  padding: 24px;
+  padding: 24px 32px;
 
   .question-info-section {
     .id-info-section {
