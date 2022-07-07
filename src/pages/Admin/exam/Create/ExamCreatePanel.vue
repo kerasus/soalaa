@@ -156,7 +156,6 @@ export default {
       })
     },
     createExam () {
-      console.log('exam', this.exam)
       return new Promise((resolve, reject) => {
         this.$axios.post(API_ADDRESS.exam.base())
           .then(response => {

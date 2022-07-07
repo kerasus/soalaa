@@ -16,6 +16,7 @@ export default {
   components: { EntityCrudFormBuilder },
   data () {
     return {
+      model: 'one',
       expanded: true,
       api: API_ADDRESS.exam.base(),
       entityIdKeyInResponse: 'data.id',
@@ -28,7 +29,29 @@ export default {
           name: 'formBuilderCol',
           col: 'col-12',
           value: [
-            { type: 'Select', name: 'type_id', responseKey: 'data.type.value', label: ' نوع آزمون', col: 'col-md-3 col-sm-6', options: [], optionValue: 'value', optionLabel: 'value' },
+            { type: 'separator', label: 'نوع آزمون', separatorType: 'none', col: 'col-md-1' },
+            {
+              type: 'toggleButton',
+              name: 'exam_type',
+              responseKey: 'data.exam_type',
+              col: 'col-md-2 col-sm-6',
+              ripple: false,
+              value: 1,
+              color: 'white',
+              toggleColor: 'primary',
+              toggleTextColor: 'white',
+              textColor: 'black',
+              options: [{ label: 'عادی', value: 1 }, { label: 'جامع', value: 2 }]
+            // {
+            //   "0": {
+            //     "id": "6225f4828044517f52500c02",
+            //     "type": "exam_type",
+            //     "value": "konkur",
+            //     "updated_at": "2022-03-07 15:33:14",
+            //     "created_at": "2022-03-07 15:33:14"
+            //   }
+            // }
+            },
             { type: 'hidden', name: 'space', col: 'col-md-9 col-sm-6' }
           ]
         },
@@ -47,7 +70,7 @@ export default {
           col: 'col-12 col-md-3 col-sm-6',
           value: [
             { type: 'separator', label: 'نوع سوالات', size: '0', separatorType: 'none', col: 'col-12' },
-            { type: 'input', name: 'questionType', responseKey: 'data.questionType', label: 'نوع سوالات', col: 'col-12', icon: 'isax:arrow-right-3' }
+            { type: 'select', name: 'question_type', responseKey: 'data.question_type', options: [{ label: 'konkur', value: '6225f4828044517f52500c04' }, { label: 'psychometric', value: '6225f4828044517f52500c05' }, { label: 'descriptive', value: '6225f4828044517f52500c06' }], col: 'col-12', icon: 'isax:arrow-right-3' }
           ]
         },
         {
@@ -56,7 +79,7 @@ export default {
           col: 'col-12 col-md-3 col-sm-6',
           value: [
             { type: 'separator', label: 'رشته تحصیلی', size: '0', separatorType: 'none', col: 'col-12' },
-            { type: 'input', name: 'major', responseKey: 'data.major', label: 'رشته تحصیلی', col: 'col-12' }
+            { type: 'select', name: 'zirgorooh_type', responseKey: 'data.zirgorooh_type', options: [{ label: 'زیرگروه1', value: '6225f4828044517f52500c07' }, { label: 'زیرگروه2', value: '6225f4828044517f52500c08' }], col: 'col-12' }
           ]
         },
         {
@@ -65,7 +88,7 @@ export default {
           col: 'col-12 col-md-3 col-sm-6',
           value: [
             { type: 'separator', label: 'پایه تحصیلی', size: '0', separatorType: 'none', col: 'col-12' },
-            { type: 'input', name: 'grade', responseKey: 'data.grade', label: 'پایه تحصیلی', col: 'col-12' }
+            { type: 'select', name: 'booklet_type', responseKey: 'data.booklet_type', options: [{ label: '1', value: '6225f4828044517f52500c0d' }, { label: '2', value: '6225f4828044517f52500c0c' }], col: 'col-12' }
           ]
         },
         {
@@ -74,8 +97,7 @@ export default {
           col: 'col-12 col-md-3 col-sm-6',
           value: [
             { type: 'separator', label: 'زمان شروع آزمون', size: '0', separatorType: 'none', col: 'col-12' },
-            // { type: 'dateTime', name: 'start_at', responseKey: 'data.start_at', label: ' زمان شروع آزمون', col: 'col-12' },
-            { type: 'input', name: 'delay_time', responseKey: 'data.delay_time', label: 'زمان تاخیر(دقیقه)', col: 'col-12', value: 0 }
+            { type: 'dateTime', name: 'start_at', responseKey: 'data.start_at', label: ' زمان شروع آزمون', col: 'col-12', calendarIcon: 'isax:calendar-1' }
           ]
         },
         {
@@ -84,7 +106,8 @@ export default {
           col: 'col-12 col-md-3 col-sm-6',
           value: [
             { type: 'separator', label: 'زمان تاخیر(دقیقه)', size: '0', separatorType: 'none', col: 'col-12' },
-            { type: 'input', name: 'delay_time', responseKey: 'data.delay_time', label: 'زمان تاخیر(دقیقه)', col: 'col-12', value: 0 }
+            { type: 'dateTime', name: 'finish_at', responseKey: 'data.finish_at', label: ' زمان شروع آزمون', col: 'col-12' }
+
           ]
         },
         {
@@ -287,19 +310,22 @@ export default {
   &:deep(.editor-box div p) {
    margin-bottom: 0;
   }
-  &:deep(.editor-section row) {
-   background: red;
+  &:deep(.editor-section .row) {
+    height: 100%;
   }
   &:deep(.form-builder .form-builder-col) {
     background: var(--3a-Neutral3);
     border-radius: 20px;
     padding: 0;
   }
-  .form-builder-tiptapEditor-col {
-    &:deep(p) {
-      margin-bottom: 0 !important;
+  &:deep(.form-builder-tiptapEditor-col div) {
+    &:first-child {
+      height: 100%;
     }
   }
+  //&:deep(.tiptap-plus-container) {
+  //    height: 100%;
+  //}
 
 }
 

@@ -2,10 +2,11 @@
     .q-field__inner {
       border-radius: 10px;
       .q-field__control {
+        color: transparent;
         border-radius: 10px;
         height: 40px;
         min-height: 0;
-        .q-field__append {
+        .q-field__append , .q-field__prepend {
           height: 40px;
           min-height: 0;
           padding: 8px 20px;
@@ -28,15 +29,20 @@
           margin: -8px 24px;
         }
       }
+
     }
 }
 
 
+.q-field--focused {
+  border: none;
+}
 
 .q-field__inner {
-  background-color: var(--3a-Neutral3);
-
   .q-field__control {
+    background-color: var(--3a-Neutral3);
+    .q-field__native, .q-field__prefix, .q-field__suffix, .q-field__input {
+    }
     .q-field__append {
       .q-icon {
         color: var(--3a-TextPrimary);

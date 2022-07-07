@@ -1,27 +1,35 @@
 .form-builder-date-time-col {
-  .q-field {
-    background: #FFFFFF;
-  }
+  padding: 8px 12px 15px 12px;
 
   .form-calender {
     border-radius: 10px 0 0 10px;
 
-    .q-icon {
-      background: var(--3a-Primary);
-      width: 40px;
-      border-radius: 12px;
-      height: 40px;
-      color: white;
-      &:after {
-          content: "\e98f";
-          font-size: 20px;
-      }
-    }
+    @include global-input;
 
     .q-field__inner {
       .q-field__control {
+        border-radius: 25px 0 0 25px;
+
         .q-field__prepend {
-          padding-left: 10px;
+          padding: 10px;
+          background: var(--3a-Primary);
+          border-radius: 50%;
+
+        }
+
+        .q-field__append {
+          &.q-anchor--skip {
+            display: none
+          }
+        }
+
+        .q-field__native, .q-field__prefix, .q-field__suffix, .q-field__input {
+          border-radius: 10px;
+
+        }
+
+        .q-field__label {
+          margin: -8px 8px;
         }
       }
     }
@@ -29,17 +37,21 @@
 
   .time-input-dateTime {
     border-radius: 0 10px 10px 0;
-    //@include global-input;
+    @include global-input;
+
     .q-field__inner {
       .q-field__control {
+        border-radius: 0 10px 10px 0;
+
         .q-field__append {
           padding-right: 10px;
+
+          &.q-anchor--skip {
+            display: none
+          }
         }
       }
     }
   }
-
-  .material-icons {
-    font-size: 0;
-  }
 }
+
