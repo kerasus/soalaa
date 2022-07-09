@@ -29,28 +29,19 @@ export default {
           name: 'formBuilderCol',
           col: 'col-12',
           value: [
-            { type: 'separator', label: 'نوع آزمون', separatorType: 'none', col: 'col-md-1' },
+            { type: 'separator', label: 'نوع آزمون', separatorType: 'none', col: 'exam-type-separator' },
             {
               type: 'toggleButton',
               name: 'exam_type',
               responseKey: 'data.exam_type',
-              col: 'col-md-2 col-sm-6',
+              col: 'exam-type-toggle-button',
               ripple: false,
-              value: 1,
+              value: '6225f4828044517f52500c03',
               color: 'white',
               toggleColor: 'primary',
               toggleTextColor: 'white',
               textColor: 'black',
-              options: [{ label: 'عادی', value: 1 }, { label: 'جامع', value: 2 }]
-            // {
-            //   "0": {
-            //     "id": "6225f4828044517f52500c02",
-            //     "type": "exam_type",
-            //     "value": "konkur",
-            //     "updated_at": "2022-03-07 15:33:14",
-            //     "created_at": "2022-03-07 15:33:14"
-            //   }
-            // }
+              options: [{ label: 'عادی', value: '6225f4828044517f52500c02' }, { label: 'جامع', value: '6225f4828044517f52500c03' }]
             },
             { type: 'hidden', name: 'space', col: 'col-md-9 col-sm-6' }
           ]
@@ -260,6 +251,11 @@ export default {
   created () {
     this.getType()
   },
+  mounted () {
+    // const element = document.getElementsByClassName('')
+    // console.log(element)
+    // element.classList.remove('.col')
+  },
   computed: {
     examCategoriesIndex () {
       return this.inputs.findIndex(item => item.name === 'categories')
@@ -323,9 +319,9 @@ export default {
       height: 100%;
     }
   }
-  //&:deep(.tiptap-plus-container) {
-  //    height: 100%;
-  //}
+  &:deep(.exam-type-toggle-button) {
+    padding-bottom: 0 !important;
+  }
 
 }
 
