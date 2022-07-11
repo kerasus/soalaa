@@ -247,15 +247,15 @@ export default {
       },
       {
         name: 'دوازدهم تجربی',
-        link: 'https://nodes.alaatv.com/aaa/pdf/1401_plan_tajrobi_davazdahom.pdf'
+        link: 'https://nodes.alaatv.com/aaa/pdf/1401_plan_tajrobi_davazdahom_edit.pdf'
       },
       {
         name: 'دوازدهم ریاضی',
-        link: 'https://nodes.alaatv.com/aaa/pdf/1401_plan_riyazi_davazdahom2.pdf'
+        link: 'https://nodes.alaatv.com/aaa/pdf/1401_plan_riyazi_davazdahom_edit.pdf'
       },
       {
         name: 'دوازدهم انسانی',
-        link: 'https://nodes.alaatv.com/aaa/pdf/1401_plan_ensani_davazdahom.pdf'
+        link: 'https://nodes.alaatv.com/aaa/pdf/1401_plan_ensani_davazdahom_edit.pdf'
       },
       {
         divider: true

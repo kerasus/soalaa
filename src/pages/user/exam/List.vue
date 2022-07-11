@@ -197,15 +197,17 @@
 
 <script>
 import {Exam, ExamList} from "@/models/Exam";
+import VueConfirmDialog from 'vue-confirm-dialog'
 import {mixinAuth, mixinQuiz} from '@/mixin/Mixins'
 import ProgressLinear from "@/components/ProgressLinear";
 import SendAnswerPhoto from "@/pages/user/exam/SendAnswerPhoto";
-import Vue from 'vue'
+
+
 
 
 export default {
   name: 'List',
-  components: {SendAnswerPhoto, ProgressLinear},
+  components: {VueConfirmDialog, SendAnswerPhoto, ProgressLinear},
   mixins: [mixinAuth, mixinQuiz],
   data: () => ({
     preventStartExam: false,

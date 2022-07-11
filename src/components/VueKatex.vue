@@ -56,8 +56,11 @@ export default {
     }, 1000)
   },
   created () {
-    // this.rtl = !this.isLtrString(this.input)
-    this.loadLocalInput(this.input)
+    if (this.input === null || typeof this.input === 'undefined') {
+      this.loadLocalInput('this.input')
+    } else {
+      this.loadLocalInput(this.input)
+    }
   },
   methods: {
     loadLocalInput (newVal) {
@@ -73,6 +76,7 @@ export default {
       this.localInput = this.localInput.replaceAll(' \\]', ' \\]')
       this.localInput = this.localInput.replaceAll(' $', '$')
       this.localInput = this.localInput.replaceAll('$ ', '$')
+      this.localInput = this.localInput.replaceAll('\\colon ', ':')
       this.localInput = this.localInput.replace(regex, (match) => {
         let finalMatch
         if (match.includes('$$')) {
@@ -95,6 +99,20 @@ export default {
 </script>
 
 <style lang="scss">
+.html-katex .accent {
+  background-color: unset !important;
+  border-color: unset !important;
+}
+
+.html-katex .overline {
+  font-size: inherit !important;
+  font-weight: inherit !important;
+  letter-spacing: inherit !important;
+  line-height: inherit !important;
+  text-transform: unset !important;
+  font-family: inherit !important;
+}
+
   .katex * {
     font-family: KaTeX_Main;
   }
@@ -246,10 +264,6 @@ export default {
 </style>
 
 <style>
-.html-katex > p {
-  direction: inherit;
-}
-
 .html-katex > p:first-child {
   display: inline-block;
 }

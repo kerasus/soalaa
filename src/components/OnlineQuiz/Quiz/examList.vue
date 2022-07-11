@@ -40,6 +40,18 @@
         <upload-answers :exam_id="selectedExam" />
       </v-sheet>
     </v-dialog>
+    <div class="download">
+      <v-btn
+        class="download-excel ma-4"
+        x-large
+        dark
+        color="green"
+        @click="getExcel"
+      >
+        دانلود فایل اکسل لیست آزمون ها
+        <v-icon>mdi-file-download</v-icon>
+      </v-btn>
+    </div>
     <v-progress-linear
       color="#ffc107"
       absolute
@@ -70,6 +82,9 @@
       </template>
       <template v-slot:item.delay_time="{ item }">
         {{ item.delay_time }} دقیقه
+      </template>
+      <template v-slot:item.n_questions="{ item }">
+        {{ item.n_questions }} سوال
       </template>
       <template
         v-slot:item.options="{ item }"
@@ -353,6 +368,7 @@ import API_ADDRESS from "@/api/Addresses";
 Vue.use(Toasted)
 import Axios from "axios";
 import UploadAnswers from "@/components/OnlineQuiz/Quiz/uploadAnswers";
+import axios from "axios";
 
 export default {
   name: 'ExamList',
@@ -368,6 +384,7 @@ export default {
       {text: 'شروع', value: 'start'},
       {text: 'پایان', value: 'end'},
       {text: 'میزان تاخیر', value: 'delay_time'},
+      {text: 'تعداد سوالات', value: 'n_questions'},
       {text: 'عملیات', value: 'options'}
     ],
     rows: [],
@@ -389,6 +406,25 @@ export default {
     // this.getExams()
   },
   methods: {
+    getExcel () {
+      let fileUrl = ''
+      axios.get(API_ADDRESS.exam.exportExcel)
+          .then( response => {
+            fileUrl = response.data.data.export_file_url
+            this.download('exams-list', fileUrl)
+          }).catch(err => {
+        console.log('err', err)
+      })
+    },
+    download(fileName, url) {
+      let element = document.createElement('a')
+      element.setAttribute('href', url)
+      element.setAttribute('download', fileName)
+      element.setAttribute('target', '_blank')
+      document.body.appendChild(element)
+      element.click()
+      document.body.removeChild(element)
+    },
     goToResult(exam) {
       if (exam.type.value === 'psychometric') {
         this.$router.push({name: 'psychology.results', params: {examId: exam.id}})
@@ -475,7 +511,15 @@ export default {
 }
 
 </style>
-<style scoped>
+<style scoped lang="scss">
+.exam-list {
+  .download{
+    display: flex;
+    width: 100%;
+    justify-content: end;
+  }
+}
+
 .theme--light.v-list-item:not(.v-list-item--active):not(.v-list-item--disabled) {
   display: flex;
   flex-direction: column;
