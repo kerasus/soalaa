@@ -24,25 +24,26 @@
           />
         </div>
         <div class="question-bank-content">
-          <question-item v-if="questions.loading" :question="loadingQuestion" />
-          <template v-else>
-            <question-item
-              v-for="question in questions.list"
-              :key="question.id"
-              :question="question"
-              pageStrategy="question-bank"
-              @checkSelect="onClickedCheckQuestionBtn"
-            />
-          </template>
+          <question-item />
+<!--          <question-item v-if="questions.loading" :question="loadingQuestion" />-->
+<!--          <template v-else>-->
+<!--            <question-item-->
+<!--              v-for="question in questions.list"-->
+<!--              :key="question.id"-->
+<!--              :question="question"-->
+<!--              pageStrategy="question-bank"-->
+<!--              @checkSelect="onClickedCheckQuestionBtn"-->
+<!--            />-->
+<!--          </template>-->
         </div>
 
-        <div class="pagination">
-          <pagination
-            :meta="paginationMeta"
-            :disable="disablePagination"
-            @updateCurrentPage="updatePage"
-          />
-        </div>
+<!--        <div class="pagination">-->
+<!--          <pagination-->
+<!--            :meta="paginationMeta"-->
+<!--            :disable="disablePagination"-->
+<!--            @updateCurrentPage="updatePage"-->
+<!--          />-->
+<!--        </div>-->
       </div>
     </div>
   </div>
@@ -51,7 +52,7 @@
 <script>
 import API_ADDRESS from 'src/api/Addresses'
 import { Question, QuestionList } from 'src/models/Question'
-import pagination from 'components/Question/QuestionBank/Pagination'
+// import pagination from 'components/Question/QuestionBank/Pagination'
 import QuestionItem from 'components/Question/QuestionItem/QuestionItem'
 import QuestionFilter from 'components/Question/QuestionBank/QuestionFilter'
 import QuestionToolBar from 'components/Question/QuestionBank/QuestionToolBar'
@@ -60,7 +61,7 @@ import { Exam } from 'src/models/Exam'
 
 export default {
   name: 'QuestionBank',
-  components: { QuestionBankHeader, QuestionToolBar, QuestionFilter, QuestionItem, pagination },
+  components: { QuestionBankHeader, QuestionToolBar, QuestionFilter, QuestionItem },
   data () {
     return {
       checkBox: false,
@@ -188,18 +189,18 @@ export default {
       }
       this.loadingQuestion.loading = true
       this.questions.loading = true
-      this.$axios.get(API_ADDRESS.question.index(filters, page))
-        .then((response) => {
-          this.questions = new QuestionList(response.data.data)
-          this.paginationMeta = response.data.meta
-          this.loadingQuestion.loading = false
-          this.questions.loading = false
-        })
-        .catch(function (error) {
-          console.log(error)
-          this.loadingQuestion.loading = false
-          this.questions.loading = false
-        })
+      // this.$axios.get(API_ADDRESS.question.index(filters, page))
+      //   .then((response) => {
+      //     this.questions = new QuestionList(response.data.data)
+      //     this.paginationMeta = response.data.meta
+      //     this.loadingQuestion.loading = false
+      //     this.questions.loading = false
+      //   })
+      //   .catch(function (error) {
+      //     console.log(error)
+      //     this.loadingQuestion.loading = false
+      //     this.questions.loading = false
+      //   })
     },
     getFilterOptions () {
       this.$axios.get(API_ADDRESS.option.base)
@@ -249,6 +250,7 @@ export default {
     }
   }
 }
+
 </script>
 
 <style>

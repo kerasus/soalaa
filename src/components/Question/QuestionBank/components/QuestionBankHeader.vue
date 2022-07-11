@@ -1,5 +1,5 @@
 <template>
-  <q-card class="header-card" flat>
+  <q-card class="filter-card custom-card" flat>
     <q-card-section class="search-section">
       <q-input
         v-model="searchInput"
@@ -124,11 +124,10 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.header-card {
+.filter-card {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-  border-radius: 20px;
   padding: 12px 60px;
   &:deep(.q-card__section) {
     padding: 0;
