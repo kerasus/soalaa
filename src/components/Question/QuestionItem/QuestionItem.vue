@@ -1,115 +1,104 @@
 <template>
-  <q-card class="question-card custom-card" :class="{'selected':question.selected && !finalApprovalMode}">
-    <q-resize-observer @resize="onResize"/>
+  <q-card class="question-card custom-card" :class="{ 'selected': question.selected && !finalApprovalMode }">
+    <q-resize-observer @resize="onResize" />
+
     <q-card-section class="question-card-header">
-      <div v-if="listConfig.questionId" class="question-card-chip">
-        <q-skeleton v-if="question.loading" type="text" width="110px"/>
-        <q-chip>
-          سوال
-          <span class="chip-dynamic-text">{{ question.id }}</span>
-        </q-chip>
-      </div>
-      <div v-if="listConfig.questionInfo" class="question-tags">
-        <div class="tag" v-for="(item, index) in question.tags.list" :key="index">
-          <q-skeleton v-if="question.loading" class="info-title" type="text" width="80px"/>
-          <div v-else class="tag-title">
-            {{ item.title }}
-          </div>
-          <div class="tag-circle"/>
+      <div class="question-titles">
+        <div v-if="listConfig.questionId" class="question-card-chip">
+          <q-chip>
+            سوال
+            <q-skeleton v-if="question.loading" class="chip-dynamic-text" type="text" width="110px" />
+            <span class="chip-dynamic-text">{{ question.id }}</span>
+          </q-chip>
         </div>
+
+        <div v-if="listConfig.questionInfo" class="question-tags">
+          <div class="tag" v-for="(item, index) in question.tags.list" :key="index">
+            <q-skeleton v-if="question.loading" class="info-title" type="text" width="80px" />
+            <div v-else class="tag-title">
+              {{ item.title }}
+            </div>
+            <div class="tag-circle" />
+          </div>
+        </div>
+
       </div>
 
-      <div class="level-and-source">
+      <div class="question-details">
         <div v-if="listConfig.questionLevel" class="question-level">
-          <template v-if="question.loading">
-            <div class="level">
-              <q-skeleton type="text" width="40px" height="25px" class="q-ml-xs"/>
+          <div v-if="question.loading" class="level-skeleton">
+            <div class="level-text">
+              <q-skeleton type="text" width="40px" height="25px" class="q-ml-xs" />
             </div>
             <q-skeleton v-for="item in 3" :key="item" class="level-circles"></q-skeleton>
-          </template>
-          <template v-else>
-            <div class="level">
+          </div>
+          <div v-else class="level-content">
+            <div class="level-text">
               {{ questionLevelClasses[questionLevel].title }}
             </div>
-            <div v-for="item in 3"
-                 :key="item"
-                 class="level-circles"
-                 :class="item === questionLevelClasses[questionLevel].lvl ?  questionLevelClasses[questionLevel].class : ''"
-            />
-          </template>
+            <div v-for="item in 3" :key="item" class="level-circles"
+              :class="item === questionLevelClasses[questionLevel].lvl ? questionLevelClasses[questionLevel].class : ''">
+            </div>
+          </div>
         </div>
-        <div v-if=" listConfig.questionSource" class="question-source">
-          <div class="source-name-date">
-            <template v-if="question.loading ">
-              <q-skeleton type="text" class="source-name" width="90px" height="30px"/>
-              <q-skeleton type="text" class="source-date float-right" width="40px" height="20px"/>
-            </template>
-            <template v-else>
+
+        <div v-if="listConfig.questionSource" class="question-source">
+          <div v-if="question.loading" class="source-skeleton">
+            <div class="source-text">
+              <q-skeleton type="text" class="source-name" width="90px" height="30px" />
+              <q-skeleton type="text" class="source-date" width="40px" height="20px" />
+            </div>
+            <div class="source-avatar">
+              <q-skeleton type="QAvatar" size="36px" />
+            </div>
+          </div>
+          <div v-else class="source-content">
+            <div class="source-text">
               <div class="source-name">سازمان سنجش</div>
               <div class="source-date">99 - 1400</div>
-            </template>
+            </div>
+            <div class="source-avatar">
+              <q-avatar size="36px">
+                <img src="https://cdn.quasar.dev/img/avatar.png">
+              </q-avatar>
+            </div>
           </div>
-          <template v-if="question.loading">
-            <q-skeleton class="source-avatar"/>
-          </template>
-          <template v-else>
-            <div class="source-avatar"></div>
-          </template>
         </div>
+
         <div v-if="!question.loading" class="more-option">
-          <q-btn v-if="listConfig.menu.show" icon="mdi-dots-vertical no-padding" flat dense rounded
-                 style="color: #65677F">
+          <q-btn v-if="listConfig.menu.show" icon="mdi-dots-vertical no-padding" flat dense rounded>
             <!--   ---------------------------------------------------------------------------------------------------------------------------------------------- -->
             <q-menu class="menu-content">
               <q-list style="min-width: 100px">
                 <q-item v-if="listConfig.menu.items.deleteQuestionFromDb" clickable class="list-item"
-                        @click="emitAdminActions('deleteQuestion',question.id)">
+                  @click="emitAdminActions('deleteQuestion', question.id)">
                   <q-item-section>حذف از پایگاه داده</q-item-section>
                   <q-item-section side>
-                    <q-icon
-                      size="20px"
-                      class="fi fi-rr-delete document"
-                    />
+                    <q-icon size="20px" class="fi fi-rr-delete document" />
                   </q-item-section>
                 </q-item>
                 <q-item v-if="listConfig.menu.items.detachQuestion" clickable
-                        @click="emitAdminActions('detachQuestion',question.id)">
+                  @click="emitAdminActions('detachQuestion', question.id)">
                   <q-item-section>حذف سوال از آزمون</q-item-section>
                   <q-item-section side>
-                    <q-icon
-                      size="20px"
-                      class="fi fi-rr-cross-small icon-style"
-                    />
+                    <q-icon size="20px" class="fi fi-rr-cross-small icon-style" />
                   </q-item-section>
                 </q-item>
                 <q-item v-if="listConfig.menu.items.copy" clickable
-                        @click="emitAdminActions('copyIdToClipboard',question.id)">
+                  @click="emitAdminActions('copyIdToClipboard', question.id)">
                   <q-item-section>کپی شناسه سوال</q-item-section>
                   <q-item-section side>
-                    <q-icon
-                      size="20px"
-                      class="fi fi-rr-copy"
-                    />
+                    <q-icon size="20px" class="fi fi-rr-copy" />
                   </q-item-section>
                 </q-item>
                 <q-item tag="label">
                   <q-item-section>
                     <q-item-label>تایید سوال</q-item-label>
                   </q-item-section>
-                  <q-circular-progress
-                    v-if="confirmLoading"
-                    indeterminate
-                    :thickness="0.3"
-                    size="20px"
-                    color="primary"
-                  />
-                  <q-toggle
-                    v-else
-                    class="menu-toggle"
-                    v-model="confirmQuestion"
-                    @update:model-value="emitAdminActions('confirmQuestion',question)"
-                    color="primary"
-                  />
+                  <q-circular-progress v-if="confirmLoading" indeterminate :thickness="0.3" size="20px"
+                    color="primary" />
+                  <q-toggle v-else class="menu-toggle" v-model="confirmQuestion"
+                    @update:model-value="emitAdminActions('confirmQuestion', question)" color="primary" />
                 </q-item>
               </q-list>
             </q-menu>
@@ -118,215 +107,158 @@
       </div>
     </q-card-section>
 
-    <q-card-section>
-
-    </q-card-section>
-    <q-card-section>
-
-    </q-card-section>
-    <q-card-section>
-
-    </q-card-section>
-
-    <q-card-section class="question-bank-content">
-
-      <div
-        v-if="question.confirmers.length"
-        class="avatar-section grid-item">
+    <q-card-section class="question-approved">
+      <div v-if="question.confirmers.length" class="avatar-section grid-item">
         تایید شده توسط :
-        <q-chip
-          v-for="(item, index) in question.confirmers"
-          :key="index"
-          color="grey-2">
+        <q-chip v-for="(item, index) in question.confirmers" :key="index" class="approved-section" color="grey-2">
           <q-avatar color="grey-5">
-            <q-img :src="item.photo"/>
+            <q-img :src="item.photo" />
           </q-avatar>
           {{ item.first_name + ' ' + item.last_name }}
         </q-chip>
       </div>
-      <div class="question-section">
-        <div v-if="finalApprovalMode" class="add-btn question-index">
-          <q-btn
-            unelevated
-            color="primary"
-            class="btn-style"
-          >{{question.order}}</q-btn>
-        </div>
-        <div :class="isLtrQuestion() ? 'question-icon order-last' : 'question-icon'"/>
+    </q-card-section>
 
-        <div class="question">
-          <question
-            ref="questionComponent"
-            :question="question"
-          />
+    <q-card-section class="question-section">
+      <div v-if="finalApprovalMode" class="add-btn question-index">
+        <q-btn unelevated color="primary" class="question-item-button">{{ question.order }}</q-btn>
+      </div>
+      <div :class="isLtrQuestion() ? 'question-icon order-last' : 'question-icon'" />
 
-        </div>
+      <div class="question">
+        <question ref="questionComponent" :question="question" />
       </div>
-      <div class="choice-section row" :class="isLtrQuestion()? 'ltr-choice-section' : ''">
 
+    </q-card-section>
+
+    <q-card-section>
+      <div class="choice-section row" :class="isLtrQuestion() ? 'ltr-choice-section' : ''">
       </div>
-      <div class="expansion-section">
-        <q-expansion-item
-          v-if="listConfig.descriptiveAnswer"
-          v-model="descriptiveAnswerExpanded"
-          header-class="hideExpansionHeader"
-        >
-          <div class="answer-section">
-            <div class="answer-description" :class=" false ? 'normal-width' : 'full-width'">
-              <q-card flat class="answer-description-card">
-                <div class="question-answer-choice">
-                  <span v-if="this.question.choices.getSelected()" class="question-answer-choice-title">
-                     گزینه
-                     {{ this.question.choices.getSelected().getNumberTitle() }}
-                  </span>
-                </div>
-                <div v-if="question.descriptive_answer" class="question-answer-description">
-                  {{ question.descriptive_answer }}
-                </div>
-                <p v-else>
-                  پاسخ تشریحی ندارد.
-                </p>
-              </q-card>
-            </div>
-            <div v-if="true" class=" answer-description-video">
-              <div class="video">
-                <!--                <video-player/>-->
-              </div>
-              <div class="title text-center">
-                پاسخنامه ویدیویی - محمد امین نباخته
-              </div>
-            </div>
-          </div>
-        </q-expansion-item>
-      </div>
-      <template v-if="!question.loading">
-        <div class="actions-section">
-          <div class="edit-add">
-            <div v-if="listConfig.selectQuestion" class="add-btn">
-              <q-btn
-                unelevated
-                :outline="question.selected"
-                color="primary"
-                class="btn-style"
-                @click="selectQuestion"
-                :icon="question.selected ? 'isax:minus' : 'isax:add'"/>
-            </div>
-            <div v-if="finalApprovalMode" class="add-btn">
-              <q-btn
-                unelevated
-                icon="isax:arrow-up-2"
-                color="primary"
-                class="btn-style"
-                @click="changeOrder('up', question)"
-              />
-            </div>
-            <div v-if="finalApprovalMode" class="add-btn">
-              <q-btn
-                unelevated
-                icon="isax:arrow-down-1"
-                color="primary"
-                class="btn-style"
-                @click="changeOrder('down', question)"
-              />
-            </div>
-            <div v-if="listConfig.editQuestion" class="edit-btn">
-              <q-btn
-                unelevated
-                color="primary"
-                icon="isax:edit-2"
-                class="btn-style"
-                @click="redirectToEditPage"/>
-            </div>
-          </div>
-          <div class="rate-report-comment-answer">
-            <div class="rate-report-comment flex">
-              <div v-if="listConfig.questionRate" class="rating">
-                <div class="voters-number">
-                  (90)
-                </div>
-                <div class="rate-number">
-                  4.5
-                </div>
-                <div class="star">
-                  <q-icon class="star-icon" name="mdi-star" size="16px"/>
-                </div>
-              </div>
-              <div v-if="listConfig.questionComment" class="comments">
-                <q-btn flat dense rounded>
-                  <div class="comment-number">19</div>
-                  <q-icon class="comment-icon" name="isax:message-text" size="16px" style="color: #65677F">
-                  </q-icon>
-                </q-btn>
-              </div>
-              <div v-if="listConfig.reportProblem" class="report">
-                <q-btn flat dense rounded @click="reportProblemDialog.show = true">
-                  <span class="report-title">
-                    گزارش خطا
-                  </span>
-                  <q-icon class="report-icon" name="isax:danger" size="16px" style="color: #65677F"/>
-                </q-btn>
-              </div>
-            </div>
-            <!--            <div-->
-            <!--              class="show-descriptive"-->
-            <!--              v-if="listConfig.descriptiveAnswer"-->
-            <!--              @click="descriptiveAnswerExpanded = !descriptiveAnswerExpanded">-->
-            <!--              {{descriptiveAnswerExpanded?  'بستن پاسخ تشریحی' : 'نمایش پاسخ تشریحی'}}-->
-            <!--              <q-icon id="toggle-icon" name="isax:arrow-down-1" ></q-icon>-->
-            <!--            </div>-->
-            <q-btn
-              flat
-              role="presentation"
-              class="no-padding"
-              v-if="listConfig.descriptiveAnswer"
-              :icon-right="descriptiveAnswerExpanded? 'isax:arrow-up-2' : 'isax:arrow-down-1'"
-              @click="descriptiveAnswerExpanded = !descriptiveAnswerExpanded"
-            >
-              <template v-slot:default>
-                <span class="q-pr-sm" v-if="descriptiveAnswerExpanded">
-                 بستن پاسخ تشریحی
+    </q-card-section>
+
+    <q-card-section class="answer-section">
+      <q-expansion-item v-if="listConfig.descriptiveAnswer" v-model="descriptiveAnswerExpanded"
+        header-class="hideExpansionHeader">
+        <div class="answer-content">
+          <div class="answer-description" :class="false ? 'normal-width' : 'full-width'">
+            <q-card flat class="answer-description-card">
+              <div class="question-answer-choice">
+                <span v-if="this.question.choices.getSelected()" class="question-answer-choice-title">
+                  گزینه
+                  {{ this.question.choices.getSelected().getNumberTitle() }}
                 </span>
-                <div v-else class="q-pr-sm" >
-                  <span class="xs-hide">نمایش </span>
-                  <span> پاسخ تشریحی</span>
-                </div>
-              </template>
+              </div>
+              <div v-if="question.descriptive_answer" class="question-answer-description">
+                {{ question.descriptive_answer }}
+              </div>
+              <p v-else>
+                پاسخ تشریحی ندارد.
+              </p>
+            </q-card>
+          </div>
+          <div v-if="true" class=" answer-description-video">
+            <div class="video">
+              <!--                <video-player/>-->
+            </div>
+            <div class="title text-center">
+              پاسخنامه ویدیویی - محمد امین نباخته
+            </div>
+          </div>
+        </div>
+      </q-expansion-item>
+    </q-card-section>
+
+    <q-card-section v-if="!question.loading" class="question-footer-section">
+      <div class="edit-add">
+        <div v-if="listConfig.selectQuestion">
+          <q-btn unelevated :outline="question.selected" color="primary" class="question-item-button"
+            @click="selectQuestion" :icon="question.selected ? 'isax:minus' : 'isax:add'" />
+        </div>
+        <div v-if="finalApprovalMode">
+          <q-btn unelevated icon="isax:arrow-up-2" color="primary" class="question-item-button"
+            @click="changeOrder('up', question)" />
+        </div>
+        <div v-if="finalApprovalMode">
+          <q-btn unelevated icon="isax:arrow-down-1" color="primary" class="question-item-button"
+            @click="changeOrder('down', question)" />
+        </div>
+        <div v-if="listConfig.editQuestion">
+          <q-btn unelevated color="primary" icon="isax:edit-2" class="question-item-button"
+            @click="redirectToEditPage" />
+        </div>
+      </div>
+      <div class="rate-report-comment-answer">
+        <div class="rate-report-comment flex">
+          <div v-if="listConfig.questionRate" class="rating">
+            <div class="voters-number">
+              (90)
+            </div>
+            <div class="rate-number">
+              4.5
+            </div>
+            <div class="star">
+              <q-icon class="star-icon" name="mdi-star" size="16px" />
+            </div>
+          </div>
+          <div v-if="listConfig.questionComment" class="comments">
+            <q-btn flat dense rounded>
+              <div class="comment-number">19</div>
+              <q-icon class="comment-icon" name="isax:message-text" size="16px" style="color: #65677F">
+              </q-icon>
+            </q-btn>
+          </div>
+          <div v-if="listConfig.reportProblem" class="report">
+            <q-btn flat dense rounded @click="reportProblemDialog.show = true">
+              <span class="report-title">
+                گزارش خطا
+              </span>
+              <q-icon class="report-icon" name="isax:danger" size="16px" style="color: #65677F" />
             </q-btn>
           </div>
         </div>
-      </template>
+        <!--            <div-->
+        <!--              class="show-descriptive"-->
+        <!--              v-if="listConfig.descriptiveAnswer"-->
+        <!--              @click="descriptiveAnswerExpanded = !descriptiveAnswerExpanded">-->
+        <!--              {{descriptiveAnswerExpanded?  'بستن پاسخ تشریحی' : 'نمایش پاسخ تشریحی'}}-->
+        <!--              <q-icon id="toggle-icon" name="isax:arrow-down-1" ></q-icon>-->
+        <!--            </div>-->
+        <q-btn flat role="presentation" class="no-padding" v-if="listConfig.descriptiveAnswer"
+          :icon-right="descriptiveAnswerExpanded ? 'isax:arrow-up-2' : 'isax:arrow-down-1'"
+          @click="descriptiveAnswerExpanded = !descriptiveAnswerExpanded">
+          <template v-slot:default>
+            <span class="q-pr-sm" v-if="descriptiveAnswerExpanded">
+              بستن پاسخ تشریحی
+            </span>
+            <div v-else class="q-pr-sm">
+              <span class="xs-hide">نمایش </span>
+              <span> پاسخ تشریحی</span>
+            </div>
+          </template>
+        </q-btn>
+      </div>
     </q-card-section>
   </q-card>
   <q-dialog v-model="reportProblemDialog.show">
     <q-card flat class="report-problem-dialog">
-      <q-btn flat v-close-popup round dense icon="close" class="close-btn"/>
+      <q-btn flat v-close-popup round dense icon="close" class="close-btn" />
       <div class="title-style text-center">گزارش خطا</div>
       <q-card-section class="problem-type no-padding">
         <div class="title-style">
           نوع خطا
         </div>
-        <q-select
-          filled
-          dense
-          dropdown-icon="isax:arrow-down-1"
-          v-model="reportProblemDialog.problemType"
-          :options="reportProblemDialog.problems"
-          label="پاسخ نادرست"/>
+        <q-select filled dense dropdown-icon="isax:arrow-down-1" v-model="reportProblemDialog.problemType"
+          :options="reportProblemDialog.problems" label="پاسخ نادرست" />
       </q-card-section>
       <q-card-section class="problem-description no-padding">
         <div class="title-style">
           توضیحات
         </div>
-        <q-input
-          v-model="reportProblemDialog.description"
-          filled
-          solo
-          type="textarea"
-        />
+        <q-input v-model="reportProblemDialog.description" filled solo type="textarea" />
       </q-card-section>
-      <q-card-actions align="right" class="action-box no-padding">
-        <q-btn unelevated label="انصراف" class="cancel btn-style" v-close-popup/>
-        <q-btn unelevated label="ثبت" color="primary" class="btn-style" v-close-popup/>
+      <q-card-actions class="action-box no-padding">
+        <q-btn unelevated label="انصراف" class="cancel question-item-button" v-close-popup />
+        <q-btn unelevated label="ثبت" color="primary" class="question-item-button" v-close-popup />
       </q-card-actions>
     </q-card>
   </q-dialog>
@@ -563,43 +495,343 @@ export default {
 <style lang="scss" scoped>
 .question-card {
   padding: 24px;
+
   .question-card-header {
     display: flex;
     flex-direction: row;
-    .question-card-chip {
-      .chip-dynamic-text {
-        padding-left: 8px;
-      }
-    }
-    .question-tags {
+    align-items: center;
+    justify-content: space-between;
+
+    .question-titles {
       display: flex;
       flex-direction: row;
-      margin-left: 24px;
-      .tag {
+      align-items: center;
+
+      .question-card-chip {
+        display: flex;
+
+        .chip-dynamic-text {
+          padding-left: 8px;
+        }
+      }
+
+      .question-tags {
         display: flex;
         flex-direction: row;
-        align-items: center;
-        .tag-circle {
-          border-radius: 50%;
-          margin: 0 6px;
-          width: 6px;
-          height: 6px;
-          background: #65677F;
-          opacity: 0.3;
-        }
+        margin-left: 24px;
 
-        &:last-child {
+        .tag {
+          display: flex;
+          flex-direction: row;
+          align-items: center;
+
           .tag-circle {
-            display: none;
+            border-radius: 50%;
+            margin: 0 6px;
+            width: 6px;
+            height: 6px;
+            background: #65677F;
+            opacity: 0.3;
+          }
+
+          &:last-child {
+            .tag-circle {
+              display: none;
+            }
+          }
+
+        }
+      }
+    }
+
+    .question-details {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+
+      .question-level {
+        display: flex;
+
+        .level-content,
+        .level-skeleton {
+          display: flex;
+
+          .level-text {
+            margin-right: 10px;
+          }
+
+          .level-circles {
+            display: flex;
+            flex-direction: row;
+            margin-right: 5px;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            background: #F4F5F6;
+          }
+        }
+      }
+
+      .question-source {
+        margin-left: 55px;
+
+        .source-content,
+        .source-skeleton {
+          display: flex;
+
+          .source-text {
+            .source-date {
+              text-align: end;
+            }
+          }
+
+          .source-avatar {
+            margin-left: 10px;
+            display: flex;
+            align-items: center;
           }
         }
 
       }
+
+      .more-option {
+        margin-left: 24px;
+
+        &:deep(.q-btn .q-btn__content) {
+          margin: 0;
+          width: 28px;
+        }
+      }
+    }
+
+  }
+
+  .question-approved {
+    .approved-section {
+      margin-right: 5px;
+      height: 35px;
+      padding: 0 20px;
     }
   }
 
-  &:deep(.q-card__section) {
-    padding: 0;
+  .answer-section {
+    .answer-content {
+      padding: 24px 10px;
+      display: flex;
+
+      .answer-description {
+        .answer-description-card {
+          padding: 24px;
+          font-style: normal;
+          font-weight: 400;
+          font-size: 14px;
+          line-height: 24px;
+          color: #23263B;
+          background: #F4F5F6;
+          border-radius: 20px;
+
+          .question-answer-choice {
+            margin-bottom: 10px;
+
+            .question-answer-choice-title {
+              padding: 0 10px;
+              font-style: normal;
+              font-weight: 400;
+              font-size: 14px;
+              line-height: 24px;
+              color: #FFFFFF;
+              background: #4CAF50;
+              border-radius: 12px;
+            }
+          }
+
+        }
+
+        .normal-width {
+          width: calc(100% - 336px);
+        }
+
+        .full-width {
+          width: 100%;
+        }
+      }
+
+      .answer-description-video {
+        .video {
+          margin: 0 0 0 16px;
+          min-width: 320px;
+          height: 180px;
+          background: #F4F5F6;
+          border-radius: 20px;
+        }
+
+        .title {
+          padding-top: 8px;
+          padding-left: 10px;
+          font-style: normal;
+          font-weight: 400;
+          font-size: 14px;
+          line-height: 24px;
+          color: #23263B;
+        }
+      }
+
+      &:deep(.q-item__section) {
+        &:deep(.q-expansion-item__toggle-icon--rotated) {
+          display: none !important;
+        }
+      }
+    }
+
+    &:deep(.q-focus-helper) {
+      background: none !important;
+    }
+
+    &:deep(.q-item .q-item__section .q-icon) {
+      display: none;
+    }
+  }
+
+  .question-footer-section {
+    display: flex;
+    justify-content: space-between;
+
+    .edit-add {
+      display: flex;
+
+      .question-item-button {
+        width: 40px;
+        height: 40px;
+        box-shadow: -2px -4px 10px rgba(255, 255, 255, 0.6), 2px 4px 10px rgba(112, 108, 162, 0.05);
+        border-radius: 13px;
+        margin-right: 10px;
+      }
+    }
+
+    .rate-report-comment-answer {
+      display: flex;
+
+      .rate-report-comment {
+        display: flex;
+
+        .rating {
+          display: flex;
+          align-items: center;
+          margin-right: 24px;
+
+          .voters-number {
+            margin-top: 1px;
+            font-style: normal;
+            font-weight: 400;
+            font-size: 10px;
+            line-height: 17px;
+            color: #65677F;
+            opacity: 0.5;
+          }
+
+          .rate-number {
+            margin: 1px 0 0 2px;
+            font-style: normal;
+            font-weight: 400;
+            font-size: 12px;
+            line-height: 21px;
+            text-align: center;
+            color: #65677F;
+          }
+
+          .star {
+            .star-icon {
+              margin: 0 0 4px 6px;
+              color: #FFCA28;
+            }
+          }
+        }
+
+        .comments {
+          display: flex;
+          align-items: center;
+          margin-right: 24px;
+
+          .comment-number {
+            font-size: 12px;
+            color: #65677F;
+          }
+
+          .comment-icon {
+            margin: 0 0 2px 5px;
+          }
+        }
+
+        .report {
+          display: flex;
+          align-items: center;
+          margin-right: 41px;
+
+          .report-title {
+            font-style: normal;
+            font-weight: 400;
+            font-size: 12px;
+            line-height: 21px;
+            color: #65677F;
+          }
+
+          .report-icon {
+            margin: 0 0 3px 7px;
+          }
+        }
+      }
+
+      .report-problem-dialog {
+        position: relative;
+
+        .close-btn {
+          position: absolute;
+          top: 12px;
+          left: 12px;
+          z-index: 1000000;
+        }
+
+        border-radius: 15px;
+        padding: 24px;
+
+        .title-style {
+          font-weight: 500;
+          font-size: 16px;
+          line-height: 28px;
+          color: #23263B;
+          margin-bottom: 8px;
+        }
+
+        .problem-type {
+          margin-top: 10px;
+          width: 300px;
+        }
+
+        .problem-description {
+          margin-top: 16px;
+        }
+
+        .action-box {
+          margin-top: 20px;
+
+          .btn-style {
+            border-radius: 10px;
+            color: #23263B;
+            width: 96px;
+            height: 40px;
+          }
+
+          .cancel {
+            background-color: #F4F5F6;
+          }
+        }
+      }
+
+      &:deep(.q-card__section) {
+        padding: 0;
+      }
+    }
+
   }
 }
 </style>
