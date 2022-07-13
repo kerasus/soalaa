@@ -32,6 +32,7 @@
     <div class="attach-btn row">
       <question-identifier
         ref="questionIdentifier"
+        editable
         class="col-12"
         :exams="examList"
         :lessons="subCategoriesList"
@@ -141,7 +142,7 @@ export default {
           level: (this.question.level) ? this.question.level : 1,
           reference: this.question.reference,
           years: this.question.years,
-          tags: this.question.tags,
+          tags: this.question.tags.list.map(item => item.id),
           major: this.question.major,
           sub_category_id: 1,
           recommended_time: 0,

@@ -66,6 +66,27 @@ const AdminActionOnQuestion = {
       this.$axios.get(API_ADDRESS.question.show(questionId))
         .then(function (response) {
           that.question = new Question(response.data.data)
+          // setFAKETagData
+          // that.question.tags.list = [
+          //   {
+          //     title: 'درس 1',
+          //     id: '62833f6f8646a96d49065562',
+          //     ancestors: [
+          //       { id: '6281fb9e2f1bafe99f050334', title: 'درخت دانش' },
+          //       { id: '6281fbeb2f1bafe99f050336', title: 'پایه دوازدهم' },
+          //       { id: '6281fbfd2f1bafe99f050337', title: 'حسابان ۲' }
+          //     ]
+          //   },
+          //   {
+          //     title: 'موضوع فیلان',
+          //     id: '6281fc922f1bafe99f050344',
+          //     ancestors: [
+          //       { id: '6281fb9e2f1bafe99f050334', title: 'درخت دانش' },
+          //       { id: '6281fbeb2f1bafe99f050336', title: 'پایه دوازدهم' },
+          //       { id: '6281fbfd2f1bafe99f050337', title: 'حسابان ۲' }
+          //     ]
+          //   }
+          // ]
           that.setQuestionTypeBasedOnId(that.question, types)
           that.disableLoading()
         })
@@ -90,10 +111,10 @@ const AdminActionOnQuestion = {
     updateAnswerPhoto () {
       if (this.question.added_answer_photos && this.question.added_answer_photos.length) {
         const formData = new FormData()
-        this.currentQuestion.added_answer_photos.forEach((item, key) => {
+        this.question.added_answer_photos.forEach((item, key) => {
           formData.append('files[' + key + ']', item)
         })
-        this.$axios.post(API_ADDRESS.question.photo('statement_photo', this.question.id), formData)
+        this.$axios.post(API_ADDRESS.question.photo('answer_photo', this.question.id), formData)
           .then(res => {
             this.question = new Question(res.data.data)
             this.question.added_answer_photos = []
@@ -154,6 +175,40 @@ const AdminActionOnQuestion = {
         formData.append('exams[' + key + '][sub_category_id]', item.sub_category_id)
       })
       formData.append('type_id', question.type_id)
+      this.$refs.questionIdentifier.getIdentifierData(false)
+      formData.append('level', ((question.level) ? question.level : 1))
+      question.author.forEach((item, key) => {
+        formData.append('author[' + key + ']', item)
+      })
+      question.reference.forEach((item, key) => {
+        formData.append('reference[' + key + ']', item)
+      })
+      question.years.forEach((item, key) => {
+        formData.append('years[' + key + ']', item)
+      })
+      question.tags.list.forEach((item, key) => {
+        formData.append('tags[' + key + ']', item.id)
+      })
+      question.majors.forEach((item, key) => {
+        formData.append('majors[' + key + ']', item)
+      })
+      question.years.forEach((item, key) => {
+        formData.append('years[' + key + ']', item)
+      })
+
+      // const sendingQuestion = {
+      //   ...formData,
+      //   author: question.author,
+      //   statement: question.statement,
+      //   level: ,
+      //   reference: question.reference,
+      //   years: question.years,
+      //   tags: ,
+      //   majors: question.majors,
+      //   sub_category_id: 1,
+      //   recommended_time: 0,
+      //   type_id: question.type_id
+      // }
       this.$axios.post(API_ADDRESS.question.create, formData)
         .then(response => {
           this.redirectToShowPage(response.data.data.id)
