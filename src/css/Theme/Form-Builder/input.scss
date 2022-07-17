@@ -1,30 +1,23 @@
+.form-builder-input-col , .form-builder-select-col {
+  padding: 8px 12px 15px 12px;
+  @media screen and (max-width: 1919px) {
+    padding: 8px 10px 15px 10px;
 
-
-.form-builder-input-col {
-  .q-input {
-    .q-field__inner {
-      .q-field__control {
-        background: #FFFFFF;
-        border-radius: 10px;
-
-        .q-field__control-container {
-          .q-field__native {
-            padding: 30px 20px 8px 20px;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            display: -webkit-box;
-            -webkit-line-clamp: 1;
-            line-clamp: 1;
-            -webkit-box-orient: vertical;
-          }
-
-          .q-field__label {
-            padding-left: 10px;
-
-          }
-        }
-      }
-    }
+    //  &:first-child {
+  //    padding-left: 0 !important;
+  //  }
+  //  &:last-child {
+  //    padding-right: 0 !important;
+  //  }
   }
-
+  @media screen and (max-width: 1023px) {
+    padding: 8px 8px 12px 8px;
+  }
+  @media screen and (max-width: 599px) {
+    padding: 8px 8px 10px 8px;
+  }
+  .q-input , .q-select {
+    @include global-input;
+  }
 }
+
