@@ -49,7 +49,7 @@
           />
         </v-col>
         <v-col :cols="12">
-          <v-checkbox
+          <v-text-field
             v-model="exam.report_config.consider_negative_point"
             label="consider_negative_point"
           />
@@ -90,7 +90,6 @@
 <script>
     import {Exam} from "@/models/Exam";
     import axios from "axios";
-    import Assistant from "@/plugins/assistant";
     import API_ADDRESS from "@/api/Addresses";
 
     export default {
