@@ -108,7 +108,7 @@
         @click="answerClickedd({ questionId: source.id, choiceId: choice.id})"
       >
         <vue-katex
-          :input="(choiceNumber[index]) + choice.title"
+          :input="(getChoiceNumber(index)) + choice.title"
           :ltr="isLtrQuestion"
         />
       </v-col>
@@ -156,13 +156,7 @@
             return {
                 isRtl: false,
                 widestChoiceWidth: 0,
-                observer: null,
-                choiceNumber: {
-                    0: '1) ',
-                    1: '2) ',
-                    2: '3) ',
-                    3: '4) '
-                }
+                observer: null
             }
         },
       computed: {
@@ -211,6 +205,9 @@
             this.observer.disconnect();
         },
         methods: {
+        getChoiceNumber (index) {
+          return (index + 1) + ') '
+        },
             getChoiceStatus() {
                 let userQuestionData = this.getUserQuestionData(this.quiz.id, this.source.id)
                 if (!userQuestionData) {
