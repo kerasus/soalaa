@@ -134,7 +134,7 @@ module.exports = configure(function (ctx) {
     // Full list of options: https://v2.quasar.dev/quasar-cli/quasar-conf-js#Property%3A-devServer
     devServer: {
       https: false,
-      port: 8082,
+      port: process.env.NGINX_PORT,
       open: true, // opens browser window automatically
       proxy: {
         [process.env.AUTH_API]: {
