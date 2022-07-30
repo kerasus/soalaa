@@ -5,7 +5,7 @@ const treeServer = process.env.TREE_API
 const tagServer = process.env.TAG_API
 const API_ADDRESS = {
   // socket: process.env.VUE_APP_SOCKET_TARGET_API_SERVER,
-  socket: 'https://office.alaatv.com:501',
+  socket: process.env.SOCKET_SERVER,
   server: {
     lumen: lumenServer,
     auth: authServer
