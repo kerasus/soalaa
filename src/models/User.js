@@ -131,6 +131,9 @@ class User extends Model {
     if (!this.full_name) {
       this.full_name = this.first_name + ' ' + this.last_name
     }
+
+    // TODO: this is for test
+    // this.setDefaultPermission()
   }
 
   setDefaultPermission () {
@@ -192,8 +195,6 @@ class User extends Model {
   }
 
   hasPermission (role) {
-    // TODO: this is for test
-    // this.setDefaultPermission()
     return !!this.permissions.includes(role)
   }
   // registerExam (exam_id) {
