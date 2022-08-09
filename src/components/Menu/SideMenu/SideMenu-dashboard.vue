@@ -132,7 +132,7 @@ export default {
           title: 'داشبورد',
           icon: 'isax:home',
           routeName: 'dashboard',
-          role: 'all',
+          permission: 'all',
           active: false,
           children: []
         },
@@ -140,7 +140,7 @@ export default {
           title: 'سوال',
           icon: 'isax:bank',
           routeName: null,
-          role: 'exam.store',
+          permission: 'exam.store',
           active: false,
           children: [
             {
@@ -159,7 +159,7 @@ export default {
         {
           title: 'ویژگی سوال',
           icon: 'isax:bank',
-          role: 'exam.store',
+          permission: 'exam.store',
           routeName: null,
           active: false,
           children: [
@@ -172,7 +172,7 @@ export default {
         {
           title: 'آزمون',
           icon: 'isax:task-square',
-          role: 'exam.store',
+          permission: 'exam.store',
           routeName: null,
           active: false,
           children: [
@@ -183,7 +183,7 @@ export default {
         {
           title: 'درخت دانش',
           icon: 'isax:tree',
-          role: 'exam.store',
+          permission: 'exam.store',
           routeName: 'Admin.KnowledgeTree.tree',
           active: false,
           children: []
@@ -192,7 +192,7 @@ export default {
           title: 'لیست دروس',
           icon: 'isax:book',
           routeName: 'Admin.subCategory.Index',
-          role: 'exam.store',
+          permission: 'exam.store',
           active: false,
           children: []
         },
@@ -200,14 +200,14 @@ export default {
           title: 'لیست دفترچه ها',
           icon: 'isax:book',
           routeName: 'Admin.Category.Index',
-          role: 'exam.store',
+          permission: 'exam.store',
           active: false,
           children: []
         },
         {
           title: 'گزارشات',
           icon: 'isax:graph',
-          role: 'exam.store',
+          permission: 'exam.store',
           routeName: null,
           active: false,
           children: []
@@ -216,14 +216,14 @@ export default {
           title: 'تنظیمات',
           icon: 'isax:setting-2',
           routeName: 'Admin.Settings',
-          role: 'exam.store',
+          permission: 'exam.store',
           active: false,
           children: []
         },
         {
           title: 'سوالات متداول',
           icon: 'isax:message-question',
-          role: 'all',
+          permission: 'all',
           routeName: 'faq',
           active: false,
           children: []
@@ -292,7 +292,7 @@ export default {
     },
     showMenuItem () {
       return (item) => {
-        return !(this.user.hasPermission(item.role))
+        return !(this.user.hasPermission(item.permission))
       }
     }
   }
