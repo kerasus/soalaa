@@ -118,6 +118,7 @@
         ارسال پاسخنامه
       </v-btn>
       <v-btn
+        v-if="false"
         class="end-exam-btn end-exam-btn-with-send-photo"
         :loading="confirmationBtnLoading"
         :disabled="confirmationBtnLoading"
