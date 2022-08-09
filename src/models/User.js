@@ -58,9 +58,7 @@ class User extends Model {
       },
       {
         key: 'permissions',
-        default: [
-          'exam.store'
-        ]
+        default: []
         // default: [
         //   'exam.store',
         //   'exam.store',
