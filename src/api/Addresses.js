@@ -11,7 +11,7 @@ const API_ADDRESS = {
     auth: authServer
   },
   auth: {
-    login: authServer + '/login'
+    login: lumenServer + '/user/login'
   },
   user: {
     base: authServer + '/user',
