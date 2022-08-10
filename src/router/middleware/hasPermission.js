@@ -1,4 +1,4 @@
-export default function hasPermission(permission) {
+export default function hasPermission (permission) {
   return ({ next, store, to }) => {
     const user = store.getters['Auth/user']
     if (!user.hasPermission(permission)) {
