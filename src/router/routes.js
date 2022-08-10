@@ -1,4 +1,4 @@
-import { auth } from './middleware/middleware'
+import { auth, hasPermission } from './middleware/middleware'
 function getEntityCrudRouteObject (path, baseRouteName, componentPath, breadcrumbs) {
   const AllNeededRoutes = [
     { mode: 'Index', path: '' },
@@ -81,7 +81,7 @@ const routes = [
             component: () => import('layouts/AdminLayout.vue'),
             breadcrumbs: { title: 'آزمون', color: '', loading: false, route: { name: 'Admin.Exam.Index' } },
             meta: {
-              middlewares: [auth]
+              middlewares: [auth, hasPermission('examStore')]
             },
             children: [
               { name: 'Admin.Exam.Index', path: '', component: () => import('pages/Admin/exam/index'), breadcrumbs: { title: 'لیست آزمون ها', loading: false } },
