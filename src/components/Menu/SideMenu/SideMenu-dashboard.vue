@@ -140,7 +140,7 @@ export default {
           title: 'سوال',
           icon: 'isax:bank',
           routeName: null,
-          permission: 'exam.store',
+          permission: 'examStore',
           active: false,
           children: [
             {
@@ -159,7 +159,7 @@ export default {
         {
           title: 'ویژگی سوال',
           icon: 'isax:bank',
-          permission: 'exam.store',
+          permission: 'examStore',
           routeName: null,
           active: false,
           children: [
@@ -172,7 +172,7 @@ export default {
         {
           title: 'آزمون',
           icon: 'isax:task-square',
-          permission: 'exam.store',
+          permission: 'examStore',
           routeName: null,
           active: false,
           children: [
@@ -183,7 +183,7 @@ export default {
         {
           title: 'درخت دانش',
           icon: 'isax:tree',
-          permission: 'exam.store',
+          permission: 'examStore',
           routeName: 'Admin.KnowledgeTree.tree',
           active: false,
           children: []
@@ -192,7 +192,7 @@ export default {
           title: 'لیست دروس',
           icon: 'isax:book',
           routeName: 'Admin.subCategory.Index',
-          permission: 'exam.store',
+          permission: 'examStore',
           active: false,
           children: []
         },
@@ -200,14 +200,14 @@ export default {
           title: 'لیست دفترچه ها',
           icon: 'isax:book',
           routeName: 'Admin.Category.Index',
-          permission: 'exam.store',
+          permission: 'examStore',
           active: false,
           children: []
         },
         {
           title: 'گزارشات',
           icon: 'isax:graph',
-          permission: 'exam.store',
+          permission: 'examStore',
           routeName: null,
           active: false,
           children: []
@@ -216,7 +216,7 @@ export default {
           title: 'تنظیمات',
           icon: 'isax:setting-2',
           routeName: 'Admin.Settings',
-          permission: 'exam.store',
+          permission: 'examStore',
           active: false,
           children: []
         },
@@ -292,7 +292,7 @@ export default {
     },
     showMenuItem () {
       return (item) => {
-        return !(this.user.hasPermission(item.permission))
+        return (item.permission === 'all' || this.user.hasPermission(item.permission))
       }
     }
   }
