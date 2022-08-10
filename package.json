@@ -16,7 +16,7 @@
   "dependencies": {
     "@fullhuman/postcss-purgecss": "^4.1.3",
     "@kouts/vue-modal": "^2.1.7",
-    "@krasus/vuejs-storage": "^3.1.0",
+    "@krasus/vuejs-storage": "^3.1.1",
     "@nodeguy/server-date": "^4.0.3",
     "@quasar/extras": "^1.13.6",
     "@silvermine/videojs-quality-selector": "^1.2.5",
