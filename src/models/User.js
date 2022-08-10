@@ -55,6 +55,75 @@ class User extends Model {
       {
         key: 'updateType',
         default: 'profile'
+      },
+      {
+        key: 'permissions',
+        default: []
+        // default: [
+        //   'exam.store',
+        //   'exam.store',
+        //   'exam.update',
+        //   'exam.index',
+        //   'exam.destroy',
+        //   'exam.confirm',
+        //   'exam.config',
+        //   'exam.show',
+        //   'search.activitylog',
+        //  'comment.activitylog',
+        //   'category.create',
+        //  'category.update',
+        //  'category.index',
+        //  'category.show',
+        //   'examquestion.attach.v2',
+        //   'examquestion.detach',
+        //   'examquestion.attach.subcategory',
+        //   'examquestion.import',
+        //   'examquestion.attach',
+        //   'examquestion.booklet',
+        //   'examquestion.booklet.upload',
+        //   'examquestion.file',
+        //   'examquestion.videos',
+        //   'examquestion.zirgorooh.show',
+        //   'examquestion.zirgorooh',
+        //   'examquestion.zirgorooh.delete',
+        //   'examquestion.attach.show',
+        //   'examquestion.showcategorires',
+        //   'examquestion.zirgorooh.copyzirgorooh',
+        //   'examquestion.shortlink',
+        //   'examreport.index.participants',
+        //   'examreport.index.lessons',
+        //   'option.index',
+        //   'option.store',
+        //   'option.show',
+        //   'option.update',
+        //   'option.delete',
+        //   'question.update',
+        //   'question.upload',
+        //   'question.destroy',
+        //   'question.index',
+        //   'question.confirm',
+        //   'question.unconfirm',
+        //   'question.status',
+        //   'question.statuses',
+        //   'question.show',
+        //   'question.attach.statementphoto',
+        //   'question.attach.answerphoto',
+        //   'question.detach.statementphoto',
+        //   'question.detach.answerphoto',
+        //   'question.export',
+        //   'user.update',
+        //   'user.delete',
+        //   'examuser.show',
+        //   'examuser.finish',
+        //   'exam.attach.category',
+        //   'exam.detach.category',
+        //   'question.store',
+        //   'subcategory.store',
+        //   'subcategory.update',
+        //   'subcategory.show',
+        //   'subcategory.index',
+        //
+        // ]
       }
 
     ])
@@ -62,6 +131,13 @@ class User extends Model {
     if (!this.full_name) {
       this.full_name = this.first_name + ' ' + this.last_name
     }
+
+    // TODO: this is for test
+    // this.setDefaultPermission()
+  }
+
+  setDefaultPermission () {
+    this.permissions = ['exam.store']
   }
 
   getCompletionInfoKeys () {
@@ -118,6 +194,9 @@ class User extends Model {
     return status
   }
 
+  hasPermission (role) {
+    return !!this.permissions.includes(role)
+  }
   // registerExam (exam_id) {
   //   const that = this
   //   return new Promise(function (resolve, reject) {
