@@ -58,9 +58,10 @@ export default {
     username: null,
     password: null
   }),
-  created () {
+  async created () {
     if (this.getToken()) {
-      this.getUserData(() => { this.redirectTo() })
+      await this.getUserData()
+      this.redirectTo()
     }
   },
   methods: {
@@ -115,7 +116,6 @@ export default {
 
     login () {
       this.loadingList = true
-      const that = this
       this.$store.dispatch('Auth/login', {
         mobile: this.username,
         password: this.password
@@ -123,7 +123,7 @@ export default {
         .then(() => {
           this.loadingList = false
           this.$axios.defaults.headers.common.Authorization = 'Bearer ' + this.$store.getters['Auth/accessToken']
-          that.getUserData(() => { this.redirectTo() })
+          this.getUserData().then(() => { this.redirectTo() })
         })
         .catch(err => {
           console.log('in auth :', err)
