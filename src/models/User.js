@@ -72,7 +72,9 @@ class User extends Model {
   }
 
   setDefaultPermission () {
-    this.permissions = ['examStore']
+    this.permissions = [
+      'examStore'
+    ]
   }
 
   getCompletionInfoKeys () {
