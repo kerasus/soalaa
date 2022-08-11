@@ -1,47 +1,47 @@
 <template>
   <div>
-    <entity-show
-      v-model:value="inputs"
-      title="اطلاعات آزمون"
-      :api="api"
-      :entity-id-key="entityIdKey"
-      :entity-param-key="entityParamKey"
-      :edit-route-name="editRouteName"
-      :index-route-name="indexRouteName"
-    >
-      <template #after-form-builder >
-        <div
-          v-for="(category , index) in inputs[examCategoriesIndex].value"
-          :key="index"
-          class="row"
-        >
-          <q-select
-            class="q-pa-md col-md-4"
-            v-model="category.title"
-            :value="category.id"
-            label="دفترچه"
-            :options="inputs[examCategoriesIndex].value"
-            option-value="title"
-            option-label="title"
-            emit-value
-            map-options
-            disable
-          />
-          <q-input
-            class="q-pa-md col-md-3"
-            v-model="category.order"
-            label="ترتیب"
-            disable
-          />
-          <q-input
-            class="q-pa-md col-md-3"
-            v-model="category.time"
-            label="زمان"
-            disable
-          />
-        </div>
-      </template>
-    </entity-show>
+<!--    <entity-show-->
+<!--      v-model:value="inputs"-->
+<!--      title="اطلاعات آزمون"-->
+<!--      :api="api"-->
+<!--      :entity-id-key="entityIdKey"-->
+<!--      :entity-param-key="entityParamKey"-->
+<!--      :edit-route-name="editRouteName"-->
+<!--      :index-route-name="indexRouteName"-->
+<!--    >-->
+<!--      <template #after-form-builder >-->
+<!--        <div-->
+<!--          v-for="(category , index) in inputs[examCategoriesIndex].value"-->
+<!--          :key="index"-->
+<!--          class="row"-->
+<!--        >-->
+<!--          <q-select-->
+<!--            class="q-pa-md col-md-4"-->
+<!--            v-model="category.title"-->
+<!--            :value="category.id"-->
+<!--            label="دفترچه"-->
+<!--            :options="inputs[examCategoriesIndex].value"-->
+<!--            option-value="title"-->
+<!--            option-label="title"-->
+<!--            emit-value-->
+<!--            map-options-->
+<!--            disable-->
+<!--          />-->
+<!--          <q-input-->
+<!--            class="q-pa-md col-md-3"-->
+<!--            v-model="category.order"-->
+<!--            label="ترتیب"-->
+<!--            disable-->
+<!--          />-->
+<!--          <q-input-->
+<!--            class="q-pa-md col-md-3"-->
+<!--            v-model="category.time"-->
+<!--            label="زمان"-->
+<!--            disable-->
+<!--          />-->
+<!--        </div>-->
+<!--      </template>-->
+<!--    </entity-show>-->
     <div class="q-pa-md">
       <q-btn
         color="primary"
@@ -61,7 +61,7 @@
     <div class="q-pt-md">
       <portlet>
         <template v-slot:title >
-          ویرایش کارنامه
+          ویرایش کارنامه آزمون
         </template>
         <template v-slot:content >
           <edit-exam-report/>
@@ -93,7 +93,10 @@
 </template>
 
 <script>
-import { EntityShow, Portlet } from 'quasar-crud'
+import {
+  // EntityShow,
+  Portlet
+} from 'quasar-crud'
 import API_ADDRESS from 'src/api/Addresses'
 import EditExamReport from 'pages/Admin/exam/editExamReport'
 import Upload from 'pages/Admin/exam/Upload'
@@ -102,7 +105,7 @@ import EditCoefficients from 'pages/Admin/exam/editCoefficients'
 export default {
   name: 'Show',
   components: {
-    EntityShow,
+    // EntityShow,
     EditCoefficients,
     Upload,
     EditExamReport,

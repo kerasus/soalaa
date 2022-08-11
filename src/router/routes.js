@@ -1,4 +1,4 @@
-import { auth, hasPermission } from './middleware/middleware'
+import { auth, hasPermission, Permissions } from './middleware/middleware'
 function getEntityCrudRouteObject (path, baseRouteName, componentPath, breadcrumbs) {
   const AllNeededRoutes = [
     { mode: 'Index', path: '' },
@@ -92,7 +92,7 @@ const routes = [
                 component: () => import('pages/Admin/exam/index'),
                 breadcrumbs: { title: 'لیست آزمون ها', loading: false },
                 middlewares: [
-                  hasPermission('examIndex')
+                  Permissions.hasPermission('examIndex')
                 ]
               },
               {
@@ -100,7 +100,7 @@ const routes = [
                 path: 'create',
                 component: () => import('pages/Admin/exam/Create'),
                 middlewares: [
-                  hasPermission('examStore')
+                  Permissions.hasPermission('examStore')
                 ]
               },
               {
@@ -109,7 +109,7 @@ const routes = [
                 component: () => import('pages/Admin/exam/Create/ExamCreatePanel'),
                 breadcrumbs: { title: 'صفحه ساخت آزمون', loading: false },
                 middlewares: [
-                  hasPermission('examStore')
+                  Permissions.hasPermission('examStore')
                 ]
               },
               {
@@ -118,7 +118,7 @@ const routes = [
                 component: () => import('pages/Admin/exam/Show'),
                 breadcrumbs: { title: 'مشاهده آزمون' },
                 middlewares: [
-                  hasPermission('examShow')
+                  Permissions.hasOneOfThese(['examShow', 'examquestionFile', 'examquestionBookletUpload'])
                 ]
               },
               {
@@ -127,7 +127,7 @@ const routes = [
                 component: () => import('pages/Admin/exam/Edit'),
                 breadcrumbs: { title: 'ویرایش آزمون' },
                 middlewares: [
-                  hasPermission('examUpdate')
+                  Permissions.hasPermission('examUpdate')
                 ]
               },
               // { name: 'Admin.Exam.Upload', path: ':id/upload', component: () => import('pages/Admin/exam/Upload') },
@@ -139,7 +139,7 @@ const routes = [
                 path: 'lessons/:quizId',
                 component: () => import('src/pages/Admin/exam/lessons.vue'),
                 middlewares: [
-                  hasPermission('examquestionShowcategorires')
+                  Permissions.hasPermission('examquestionShowcategorires')
                 ]
               },
               {
@@ -147,7 +147,7 @@ const routes = [
                 path: 'lessons/:quizId/chart',
                 component: () => import('src/pages/Admin/exam/lessonsChart.vue'),
                 middlewares: [
-                  // hasPermission('examquestionAttachSubcategory')
+                  // Permissions.hasPermission('examquestionAttachSubcategory')
                 ]
               },
               {
@@ -155,7 +155,7 @@ const routes = [
                 path: 'video/set/:examId/:subcategory_id',
                 component: () => import('src/pages/Admin/exam/SetVideo.vue'),
                 middlewares: [
-                  hasPermission('examquestionAttachSubcategory')
+                  Permissions.hasPermission('examquestionAttachSubcategory')
                 ]
               },
               {
@@ -163,7 +163,7 @@ const routes = [
                 name: 'exams.lessons.questions',
                 component: () => import('pages/Admin/exam/LessonQuestions'),
                 middleware: [
-                  hasPermission('examquestionAttachShow')
+                  Permissions.hasPermission('examquestionAttachShow')
                 ]
               },
               {
@@ -198,7 +198,7 @@ const routes = [
                 meta: {
                   middlewares: [
                     auth,
-                    hasPermission('questionIndex')
+                    Permissions.hasPermission('questionIndex')
                   ]
                 }
               },
@@ -210,7 +210,7 @@ const routes = [
                 meta: {
                   middlewares: [
                     auth,
-                    hasPermission('examquestionAttach')
+                    Permissions.hasPermission('examquestionAttach')
                   ]
                 },
                 children: [
@@ -248,11 +248,11 @@ const routes = [
                     component: () => (import('pages/Admin/Question/CreateImage')),
                     meta: {
                       middlewares: [
-                        hasPermission('questionUpload'),
-                        hasPermission('questionAttachStatementphoto'),
-                        hasPermission('questionAttachAnswerphoto'),
-                        hasPermission('questionDetachStatementphoto'),
-                        hasPermission('questionDetachAnswerphoto')
+                        Permissions.hasPermission('questionUpload'),
+                        Permissions.hasPermission('questionAttachStatementphoto'),
+                        Permissions.hasPermission('questionAttachAnswerphoto'),
+                        Permissions.hasPermission('questionDetachStatementphoto'),
+                        Permissions.hasPermission('questionDetachAnswerphoto')
                       ]
                     }
                   }
@@ -266,7 +266,7 @@ const routes = [
                 meta: {
                   middlewares: [
                     auth,
-                    hasPermission('questionShow')
+                    Permissions.hasPermission('questionShow')
                   ]
                 }
               },
@@ -277,7 +277,7 @@ const routes = [
                 component: () => (import('pages/Admin/Question/EditQuestion')),
                 meta: {
                   middlewares: [
-                    hasPermission('questionUpdate')
+                    Permissions.hasPermission('questionUpdate')
                   ]
                 }
               }
@@ -296,7 +296,7 @@ const routes = [
                 path: '',
                 component: () => import('pages/Admin/category/Index'),
                 middlewares: [
-                  hasPermission('categoryIndex')
+                  Permissions.hasPermission('categoryIndex')
                 ]
               },
               {
@@ -304,7 +304,7 @@ const routes = [
                 path: 'create',
                 component: () => import('pages/Admin/category/Create'),
                 middlewares: [
-                  hasPermission('categoryCreate')
+                  Permissions.hasPermission('categoryCreate')
                 ]
               },
               {
@@ -312,7 +312,7 @@ const routes = [
                 path: ':id',
                 component: () => import('pages/Admin/category/Show'),
                 middlewares: [
-                  hasPermission('categoryShow')
+                  Permissions.hasPermission('categoryShow')
                 ]
               },
               {
@@ -320,7 +320,7 @@ const routes = [
                 path: ':id/edit',
                 component: () => import('pages/Admin/category/Edit'),
                 middlewares: [
-                  hasPermission('categoryUpdate')
+                  Permissions.hasPermission('categoryUpdate')
                 ]
               }
             ]
@@ -367,7 +367,10 @@ const routes = [
         name: 'faq',
         component: () => import('src/pages/CommonQuestions/list'),
         meta: {
-          middleware: [auth]
+          middlewares: [
+            auth
+            // Permissions.hasOneOfThese(['examUpdate', 'examquestionBookletUpload'])
+          ]
         }
       },
       {
@@ -375,7 +378,9 @@ const routes = [
         name: 'onlineQuiz.alaaView',
         component: () => import('pages/User/exam/participate/AlaaView'),
         meta: {
-          middlewares: [auth]
+          middlewares: [auth,
+            hasPermission('examUpdate')
+          ]
         }
       },
       {
