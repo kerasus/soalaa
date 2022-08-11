@@ -35,7 +35,8 @@ class Question extends Model {
       { key: 'in_active_category' },
       { key: 'photo' },
       { key: 'order' },
-      { key: 'major' },
+      { key: 'major' }, // ToDo: must remove
+      { key: 'majors' },
       {
         key: 'years',
         default: []
@@ -204,9 +205,9 @@ class Question extends Model {
       ]
     }
 
-    if (this.tags.list.length === 0) {
-      this.generateFakeData()
-    }
+    // if (this.tags.list.length === 0) {
+    //   this.generateFakeData()
+    // }
   }
 
   // ToDo: remove this

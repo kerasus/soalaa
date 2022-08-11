@@ -1,11 +1,12 @@
 
 .form-builder-Checkbox-col {
-  .q-checkbox__inner--truthy{
-    .q-checkbox__bg{
-      background: #FFB74D;
-      border-radius: 5px;
-      border: 1px solid #FFB74D ;
+  @include global-check-box;
+  .q-checkbox__inner--truthy {
+    .q-checkbox__bg {
+      background: var(--3a-Secondary);
+      border: 1px solid var(--3a-Secondary) !important;
     }
+
   }
 
 }

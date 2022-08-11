@@ -5,13 +5,13 @@ const treeServer = process.env.TREE_API
 const tagServer = process.env.TAG_API
 const API_ADDRESS = {
   // socket: process.env.VUE_APP_SOCKET_TARGET_API_SERVER,
-  socket: 'https://office.alaatv.com:501',
+  socket: process.env.SOCKET_SERVER,
   server: {
     lumen: lumenServer,
     auth: authServer
   },
   auth: {
-    login: authServer + '/login'
+    login: lumenServer + '/user/login'
   },
   user: {
     base: authServer + '/user',
@@ -126,7 +126,7 @@ const API_ADDRESS = {
       page: (page) => lumenServer + '/exam-question/attach/show/6245afa20569e1374540cb88?page=' + page
     },
     index (filters, page) {
-      function getQueryParams (paramKey) {
+      function setQueryParams (paramKey) {
         if (!filters) {
           filters = {}
         }
@@ -136,16 +136,18 @@ const API_ADDRESS = {
           filters[paramKey] = '&' + paramKey + '[]=' + filters[paramKey]
         }
       }
-      getQueryParams('statuses')
-      getQueryParams('years')
-      getQueryParams('reference')
-      getQueryParams('tags')
+      setQueryParams('statuses')
+      setQueryParams('years')
+      setQueryParams('majors')
+      setQueryParams('reference')
+      setQueryParams('tags')
 
       if (typeof page !== 'undefined') {
         page = '&page=' + page
       } else {
         page = ''
       }
+
       let queryParam = page
       Object.keys(filters).forEach(filterKey => {
         queryParam += filters[filterKey]

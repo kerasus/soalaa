@@ -44,6 +44,7 @@
         <question-identifier
           ref="questionIdentifier"
           class="col-12"
+          editable
           :exams="examList"
           :lessons="subCategoriesList"
           :categories="categoryList"
@@ -181,6 +182,7 @@ export default {
       this.allProps.setContentToQuestion = true
     },
     saveQuestion () {
+      this.setQuestionIdentifierData()
       this.$refs.currentEditComponent.saveQuestion()
     },
     enableLoading () {

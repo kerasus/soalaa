@@ -13,6 +13,7 @@
           use-chips
           multiple
           :options="questionAuthorsList"
+          :disable="!editable"
         />
       </div>
       <div class="detail-box col-3">
@@ -26,6 +27,7 @@
           use-input
           use-chips
           multiple
+          :disable="!editable"
         />
       </div>
       <div class="detail-box col-3">
@@ -38,6 +40,7 @@
           :options="levels"
           emit-value
           map-options
+          :disable="!editable"
         />
       </div>
       <attach-exam
@@ -58,6 +61,7 @@
           v-model="grade"
           :options="gradesList"
           @update:model-value="gradeSelected"
+          :disable="!editable"
         />
       </div>
       <div class="detail-box col-3">
@@ -66,11 +70,12 @@
           borderless
           option-value="id"
           option-label="value"
-          v-model="major"
+          v-model="majors"
           :options="majorList"
           use-input
           use-chips
           multiple
+          :disable="!editable"
         />
       </div>
       <div class="detail-box col-6">
@@ -85,29 +90,30 @@
               icon="isax:tree"
               class="open-modal-btn default-detail-btn"
               @click="dialogValue = true"
-              :disable="!doesHaveLessons"
+              :disable="!isTreeModalAvailable"
             />
           </div>
         </div>
       </div>
     </div>
-    <q-btn
-      unelevated
-      color="primary"
-      class="q-mr-xl btn-md text-right"
-      style="float: left;margin-top: 10px;margin-right: 0px;margin-left: 14px;"
-      @click="getIdentifierData"
-    >
-      ثبت مباحث انتخاب شده
-    </q-btn>
-      <question-tree-modal
-        v-model:dialogValue="dialogValue"
-        v-model:subjectsField="allSubjects"
-        :lessons-list="lessonsList"
-        :groups-list="groupsList"
-        @groupSelected="groupSelected"
-        @lessonSelected="lessonSelected"
-      />
+<!--    <q-btn-->
+<!--      unelevated-->
+<!--      color="primary"-->
+<!--      class="q-mr-xl btn-md text-right"-->
+<!--      style="float: left;margin-top: 10px;margin-right: 0px;margin-left: 14px;"-->
+<!--      @click="getIdentifierData"-->
+<!--    >-->
+<!--      ثبت مباحث انتخاب شده-->
+<!--    </q-btn>-->
+    <question-tree-modal
+      ref="questionTreeModal"
+      v-model:dialogValue="dialogValue"
+      v-model:subjectsField="allSubjects"
+      :lessons-list="lessonsList"
+      :groups-list="groupsList"
+      @groupSelected="groupSelected"
+      @lessonSelected="lessonSelected"
+    />
   </div>
 </template>
 
@@ -116,6 +122,7 @@ import { Question } from 'src/models/Question'
 import { ExamList } from 'src/models/Exam'
 import { QuestSubcategoryList } from 'src/models/QuestSubcategory'
 import { QuestCategoryList } from 'src/models/QuestCategory'
+import { TreeNode, TreeNodeList } from 'src/models/TreeNode'
 import AttachExam from 'components/Question/QuestionPage/AttachExam/AttachExam'
 import QuestionTreeModal from 'components/Question/QuestionPage/QuestionTreeModal'
 
@@ -127,6 +134,12 @@ export default {
   },
   props: {
     buffer: {
+      type: Boolean,
+      default () {
+        return false
+      }
+    },
+    editable: {
       type: Boolean,
       default () {
         return false
@@ -205,7 +218,7 @@ export default {
       questionLevel: null,
       grade: '',
       model: null,
-      major: null,
+      majors: null,
       levels: [
         {
           id: '1',
@@ -236,9 +249,56 @@ export default {
     },
     doesHaveLessons () {
       return !!(this.lessonsList && this.lessonsList.length > 0)
+    },
+    isTreeModalAvailable () {
+      return this.doesHaveLessons && this.editable
+    }
+  },
+  watch: {
+    'question.id': function () {
+      this.loadQuestionDataFromResponse()
+    },
+    allSubjects: {
+      handler () {
+        this.updateLessonsTitles()
+        this.getTheLastSelectedNode()
+      },
+      deep: true
     }
   },
   methods: {
+    loadQuestionDataFromResponse () {
+      this.authorshipDate = this.question.years
+      this.questionAuthor = this.question.reference
+      this.majors = this.question.majors
+      this.questionLevel = this.question.level.toString()
+      if (this.question.tags.list[0]) {
+        this.fillGradeFromResponse()
+        this.fillLessonFromResponse()
+        this.fillAllSubjectsFromResponse()
+      }
+    },
+    fillGradeFromResponse () {
+      this.grade = new TreeNode(this.question.tags.list[0].ancestors[1])
+      this.gradeSelected(this.grade)
+    },
+    fillLessonFromResponse () {
+      const firstTag = this.question.tags.list[0]
+      const lesson = firstTag.ancestors[firstTag.ancestors.length - 1]
+      // this.$refs.questionTreeModal.lesson = new TreeNode(lesson)
+      this.$refs.questionTreeModal.lessonSelected(lesson)
+    },
+    fillAllSubjectsFromResponse () {
+      this.question.tags.list.forEach((tag, index) => {
+        const lastAncestors = tag.ancestors[tag.ancestors.length - 1]
+        if (!this.allSubjects[lastAncestors.id]) {
+          this.allSubjects[lastAncestors.id] = {
+            nodes: []
+          }
+        }
+        Object.assign(this.allSubjects[lastAncestors.id].nodes, { [index]: { ...tag } })
+      })
+    },
     emitAttachExam (item) {
       this.$emit('attach', item)
     },
@@ -280,16 +340,18 @@ export default {
       this.updateLessonsTitles()
       this.identifierData.push(...this.getLastNodesLessonsTitles())
       this.identifierData.push(...this.getTagsTitles(this.subjectsFieldText))
-      this.question.major = this.major.map(item => item.id)
-      this.question.years = this.authorshipDate.map(item => item.id)
-      this.question.reference = this.questionAuthor.map(item => item.id)
+
+      this.question.majors = (this.majors) ? this.majors.map(item => item.id) : []
+      this.question.years = (this.authorshipDate) ? this.authorshipDate.map(item => item.id) : []
+      this.question.reference = (this.questionAuthor) ? this.questionAuthor.map(item => item.id) : []
       this.question.level = this.questionLevel
-      console.log('this.identifierData', this.identifierData)
+      this.question.tags = new TreeNodeList(this.lastSelectedNodes)
+
       if (setTags) {
         this.setTags(this.identifierData)
-        return
+        // return
       }
-      this.question.tags = this.identifierData
+      // this.question.tags = this.identifierData
     },
     getTagsTitles (tag) {
       const finalArray = []
@@ -323,15 +385,6 @@ export default {
         return !(cleaned.find(item => item.id === selectedNode.id))
       })
     }
-  },
-  watch: {
-    allSubjects: {
-      handler () {
-        this.updateLessonsTitles()
-        this.getTheLastSelectedNode()
-      },
-      deep: true
-    }
   }
 }
 </script>
@@ -343,6 +396,7 @@ export default {
   border-radius: 15px;
   padding: 30px;
 }
+
 .question-details {
   margin-top: 40px;
   font-style: normal;
@@ -351,26 +405,32 @@ export default {
   line-height: 28px;
   text-align: right #{"/* rtl:ignore */"};
   color: #23263B;
+
   .default-details-container {
     .detail-box {
       margin-top: 10px;
+
       .detail-box-title {
         margin-bottom: 5px;
       }
     }
   }
+
   .details-container-1 {
     .detail-box {
       padding-right: 12px #{"/* rtl:ignore */"};
       padding-left: 12px #{"/* rtl:ignore */"};
     }
+
     .detail-box-first {
       padding-right: 0px #{"/* rtl:ignore */"};
     }
+
     .detail-box-last {
       padding-left: 0px #{"/* rtl:ignore */"};
     }
   }
+
   .default-detail-btn {
     color: #65677F;
     width: 40px;
@@ -380,14 +440,17 @@ export default {
     line-height: 24px;
     text-align: center;
   }
+
   .details-container-2 {
     .detail-box {
       padding-right: 12px #{"/* rtl:ignore */"};
       padding-left: 12px #{"/* rtl:ignore */"};
+
       .input-container {
         .input-box {
           width: 91%;
         }
+
         .icon-box {
           width: 40px;
           height: 40px;
@@ -396,7 +459,8 @@ export default {
           display: flex;
           align-items: center;
           justify-content: center;
-          margin-left: 16px  ;
+          margin-left: 16px;
+
           .question-details-subject-img {
             height: 24px;
             max-width: 24px;
@@ -404,14 +468,17 @@ export default {
         }
       }
     }
+
     .detail-box-first {
       padding-right: 0px #{"/* rtl:ignore */"};
     }
+
     .detail-box-last {
       padding-right: 0px #{"/* rtl:ignore */"};
       width: 200px;
       //margin-right: 132px #{"/* rtl:ignore */"};
     }
+
     .detail-box-last-of-row {
       padding-left: 0px #{"/* rtl:ignore */"};
       margin-top: 43px;
@@ -419,12 +486,14 @@ export default {
       display: flex;
       align-items: center;
       justify-content: center;
+
       .draft-btn {
         background: #FFFFFF;
         margin-left: 16px #{"/* rtl:ignore */"};
         font-weight: normal;
         color: #23263B;
       }
+
       .save-btn {
         background: #9690E4;
         font-weight: 500;
@@ -436,39 +505,46 @@ export default {
 </style>
 <style lang="scss">
 .question-details {
-    .default-details-container {
-      .detail-box {
-        .q-field {
-          background: #FFFFFF;
-          border-radius: 10px;
-          line-height: 24px;
+  .default-details-container {
+    .detail-box {
+      .q-field {
+        background: #FFFFFF;
+        border-radius: 10px;
+        line-height: 24px;
+        height: 40px;
+        min-height: 40px;
+
+        .q-field__marginal {
           height: 40px;
-          min-height: 40px;
-          .q-field__marginal {
-            height: 40px;
-          }
-          .q-field__inner {
-            padding-right: 16px;
-            padding-left: 16px;
-          }
         }
-        .q-field--auto-height .q-field__native {
-          min-height: 40px;
-          color: #65677F;
-        }
-        .q-field--auto-height .q-field__control, .q-field--auto-height .q-field__native {
-          min-height: 40px;
-          color: #65677F;
-        }
-        .q-field__control::before, .q-field__control::after {
-          display: none;
-        }
-        .q-field__native, .q-field__prefix, .q-field__suffix, .q-field__input {
-          color: #65677F;
+
+        .q-field__inner {
+          padding-right: 16px;
+          padding-left: 16px;
         }
       }
+
+      .q-field--auto-height .q-field__native {
+        min-height: 40px;
+        color: #65677F;
+      }
+
+      .q-field--auto-height .q-field__control, .q-field--auto-height .q-field__native {
+        min-height: 40px;
+        color: #65677F;
+      }
+
+      .q-field__control::before, .q-field__control::after {
+        display: none;
+      }
+
+      .q-field__native, .q-field__prefix, .q-field__suffix, .q-field__input {
+        color: #65677F;
+      }
     }
+  }
 }
+
 .q-menu {
   // I'm in charge of this one and did this on purpose, if you need to change this please let me know.TU
   background: #FFFFFF;
