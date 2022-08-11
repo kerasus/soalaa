@@ -130,10 +130,10 @@ const routes = [
                   hasPermission('examUpdate')
                 ]
               },
-              { name: 'Admin.Exam.Upload', path: ':id/upload', component: () => import('pages/Admin/exam/Upload') },
+              // { name: 'Admin.Exam.Upload', path: ':id/upload', component: () => import('pages/Admin/exam/Upload') },
+              // { name: 'Admin.Exam.Coefficient.Edit', path: ':id/coefficient/edit', component: () => import('src/pages/Admin/exam/editCoefficients.vue') },
+              // { name: 'Admin.Exam.Report.Edit', path: ':id/edit-exam-report', component: () => import('pages/Admin/exam/editExamReport'), breadcrumbs: { title: 'ویرایش کارنامه', loading: false } },
               { name: 'Admin.Exam.AllResults', path: 'results/:id', component: () => import('pages/Admin/exam/results') },
-              { name: 'Admin.Exam.Coefficient.Edit', path: ':id/coefficient/edit', component: () => import('src/pages/Admin/exam/editCoefficients.vue') },
-              { name: 'Admin.Exam.Report.Edit', path: ':id/edit-exam-report', component: () => import('pages/Admin/exam/editExamReport'), breadcrumbs: { title: 'ویرایش کارنامه', loading: false } },
               {
                 name: 'Admin.Exam.Lessons',
                 path: 'lessons/:quizId',
