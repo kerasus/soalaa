@@ -59,6 +59,7 @@
     class="left-side"
     :class="{'col-6': windowSize.x < 599, 'col-6': windowSize.x > 1439}">
     <q-btn-dropdown
+      v-if="false"
       class="toolbar-button"
       content-class="profile-menu"
       icon="isax:notification"
@@ -81,7 +82,15 @@
       dir="ltr"
       dense
       unelevated
-    />
+      >
+      <q-list>
+        <q-item clickable v-close-popup @click="logOut">
+          <q-item-section>
+            <q-item-label>خروج</q-item-label>
+          </q-item-section>
+        </q-item>
+      </q-list>
+    </q-btn-dropdown>
   </div>
 </template>
 
@@ -113,6 +122,9 @@ export default {
       'updateBreadcrumbLoading',
       'updateLayoutLeftDrawerVisible'
     ]),
+    logOut () {
+      return this.$store.dispatch('Auth/logOut')
+    },
     toggleLeftDrawer () {
       this.updateLayoutLeftDrawerVisible(true)
     },

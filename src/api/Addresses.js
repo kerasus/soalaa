@@ -3,7 +3,7 @@ const lumenServer = process.env.AAA_API
 const authServer = process.env.AUTH_API
 const API_ADDRESS = {
   // socket: process.env.VUE_APP_SOCKET_TARGET_API_SERVER,
-  socket: 'https://office.alaatv.com:501',
+  socket: process.env.SOCKET_SERVER,
   server: {
     lumen: lumenServer,
     auth: lumenServer

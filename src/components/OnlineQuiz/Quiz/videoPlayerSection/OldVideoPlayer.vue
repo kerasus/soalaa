@@ -294,9 +294,9 @@ export default {
     calcWatchedPercentage (currentTime, duration) {
       const watchedPercentage = ((currentTime / duration) * 100)
       const videoPlayerTimeData = {
-        currentTime: currentTime,
-        duration: duration,
-        watchedPercentage: watchedPercentage
+        currentTime,
+        duration,
+        watchedPercentage
       }
       this.$emit('calcTimeData', videoPlayerTimeData)
     },
