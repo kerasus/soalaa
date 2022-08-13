@@ -1,3 +1,5 @@
 import auth from './auth'
+import hasPermission from './hasPermission'
+import Permissions from './Permission'
 
-export { auth }
+export { auth, hasPermission, Permissions }
