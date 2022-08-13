@@ -196,7 +196,7 @@ export default {
     },
     watch: {
       loading (newValue) {
-        this.$store.commit('loading/loading', newValue)
+        this.$store.dispatch('loading/overlayLoading', newValue)
       }
     }
   },
