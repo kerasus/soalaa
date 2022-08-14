@@ -7,16 +7,16 @@
       <div class="choose-tree-box question-details col-6">
           <div class="details-container-2 default-details-container">
             <div class="detail-box" style="padding-right:0;">
-              <div class="detail-box-title" style="padding-bottom: 9px;" >گروه درس</div>
-              <q-select
-                filled
-                dense
-                dropdown-icon="isax:arrow-down-1"
-                v-model="group"
-                option-label="title"
-                :options="groupsList"
-                @update:model-value="groupSelected"
-              />
+<!--              <div class="detail-box-title" style="padding-bottom: 9px;" >گروه درس</div>-->
+<!--              <q-select-->
+<!--                filled-->
+<!--                dense-->
+<!--                dropdown-icon="isax:arrow-down-1"-->
+<!--                v-model="group"-->
+<!--                option-label="title"-->
+<!--                :options="groupsList"-->
+<!--                @update:model-value="groupSelected"-->
+<!--              />-->
             </div>
             <div class="detail-box">
               <div class="detail-box-title">نام درس</div>
@@ -76,7 +76,7 @@
             </div>
           </div>
         </div>
-        <div class="close-btn-box text-left" >
+        <div class="close-btn-box text-right" >
           <q-btn
             class="close-btn"
             label="بستن"
@@ -136,7 +136,8 @@ export default {
       loading: false,
       currentTreeNode: [],
       lastTreeNodes: [],
-      treeKey: 0
+      treeKey: 0,
+      areNodesSynced: false
     }
   },
   created () {},
@@ -144,13 +145,15 @@ export default {
   computed: {
     getAllSubjects () {
       const fieldText = []
-      if (Object.keys(this.chosenSubjects).length !== 0) {
-        for (const key in this.chosenSubjects) {
-          if (this.chosenSubjects[key].nodes && this.chosenSubjects[key].nodes.length > 0) {
-            this.chosenSubjects[key].nodes.forEach(val => {
-              fieldText.push(val)
-            })
-          }
+      if (Object.keys(this.chosenSubjects).length === 0) {
+        return fieldText
+      }
+
+      for (const key in this.chosenSubjects) {
+        if (this.chosenSubjects[key].nodes && this.chosenSubjects[key].nodes.length > 0) {
+          this.chosenSubjects[key].nodes.forEach(val => {
+            fieldText.push(val)
+          })
         }
       }
       return fieldText
@@ -166,6 +169,7 @@ export default {
         this.$emit('update:dialogValue', value)
       }
     },
+    // main storage
     chosenSubjects: {
       get () {
         return this.subjectsField
@@ -175,13 +179,14 @@ export default {
       }
     }
   },
-  mounted () {
-  },
+  mounted () {},
   methods: {
     updateNodes (values) {
-      this.selectWantedTree(this.lesson)
       this.nodesUpdatedFromTree = values
-      this.currentTreeNode = values
+      // if nodes are synced with response don't update currentTreeNode
+      if (!this.areNodesSynced) {
+        this.currentTreeNode = values
+      }
       this.selectedNodesIDs = values.map(item => item.id)
     },
     removeNode (node) {
@@ -189,6 +194,7 @@ export default {
         this.setTickedMode('tree', node.id, false)
       }
       this.removeNodeFromChosenSubjects(node)
+      this.updateChosenSubjects()
     },
     removeAllNodes () {
       this.setTickedMode('tree', this.selectedNodesIDs, false)
@@ -219,6 +225,7 @@ export default {
       this.showTree('tree', this.getNode(item.id))
         .then(() => {
           this.syncAllCheckedIds()
+          this.selectWantedTree(this.lesson)
         })
         .catch(err => {
           console.log(err)
@@ -243,28 +250,30 @@ export default {
         this.chosenSubjects[this.lesson.id].nodes = this.currentTreeNode
       }
     },
-    syncAllCheckedIds () {
+    syncAllCheckedIds (syncedWithResponse) {
+      if (syncedWithResponse) {
+        this.areNodesSynced = true
+      }
       if (this.lesson && this.chosenSubjects[this.lesson.id]) {
         const selectedNodesIds = this.chosenSubjects[this.lesson.id].nodes.map(item => item.id)
         if (selectedNodesIds.length > 0) {
           this.$refs.tree.setNodesTicked(selectedNodesIds, true)
         }
+        this.areNodesSynced = false
       }
     }
   },
   watch: {
     modal (newVal) {
+      this.updateChosenSubjects()
       if (!newVal) {
-        return
-      }
-      if (this.lesson) {
-        this.showTreeModalNode(this.lesson)
+        this.lesson = ''
       }
     },
     currentTreeNode (newVal) {
-      // if (newVal.length > 0) {
-      this.updateChosenSubjects()
-      // }
+      if (newVal.length > 0) {
+        this.updateChosenSubjects()
+      }
     }
   }
 }
@@ -310,7 +319,7 @@ export default {
     }
   }
   .question-tree {
-    height: 296px;
+    height: 382px;
     overflow-x: scroll;
     margin-top: 2px;
   }
@@ -423,6 +432,7 @@ export default {
             height: 40px;
           }
           .q-field__inner {
+            margin-top: 9px;
             padding-right: 0 !important;
             padding-left: 0 !important;
           }
@@ -430,10 +440,13 @@ export default {
         .q-field--auto-height .q-field__native {
           min-height: 40px;
           color: #65677F;
+          background-color: #f4f5f6;
+
         }
         .q-field--auto-height .q-field__control, .q-field--auto-height .q-field__native {
           min-height: 40px;
           color: #65677F;
+          background-color: #f4f5f6;
         }
         .q-field__control::before, .q-field__control::after {
           display: none;

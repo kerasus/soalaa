@@ -1,12 +1,13 @@
 <template>
-  <template v-if="question.loading">
+  <!-- <template v-if="question.loading">
     <q-skeleton type="text" width="99%" height="30px"/>
     <q-skeleton type="text" width="99%" height="30px"/>
     <q-skeleton type="text" width="50%" height="30px"/>
     <q-skeleton width="30%" height="200px" style="border-radius: 10px"/>
-  </template>
-  <template v-else>
-    <vue-katex :input="question.statement"/>
+  </template> -->
+  <template>
+  <!-- <template v-else> -->
+    <vue-katex input="usydhuifdiuzasl"/>
   </template>
   <template v-if="question.loading">
     <div class="choice-column col-3" v-for="item in 4" :key="item">

@@ -8,6 +8,7 @@ import { QuestionType, TypeList } from 'src/models/QuestionType'
 import { Log, LogList } from 'src/models/Log'
 import { AttachedExamList } from 'src/models/AttachedExam'
 import { QuestCategoryList } from 'src/models/QuestCategory'
+import { Notify } from 'quasar'
 const AdminActionOnQuestion = {
   data () {
     return {
@@ -17,7 +18,10 @@ const AdminActionOnQuestion = {
       allTypes: new TypeList(),
       gradesList: null,
       lessonGroupList: null,
-      lessonsList: null
+      lessonsList: null,
+      majorList: null,
+      authorshipDatesList: null,
+      questionAuthorsList: null
     }
   },
   computed: {
@@ -40,7 +44,7 @@ const AdminActionOnQuestion = {
       this.$store.dispatch('loading/overlayLoading', true)
       this.$store.dispatch('loading/overlayLoading', false)
       // .loadApiResource()
-      this.$axios.post(API_ADDRESS.question.base, question)
+      this.$axios.post(API_ADDRESS.question.create, question)
         .then(response => {
           // console.log(response.data)
           this.$q.notify({
@@ -62,6 +66,27 @@ const AdminActionOnQuestion = {
       this.$axios.get(API_ADDRESS.question.show(questionId))
         .then(function (response) {
           that.question = new Question(response.data.data)
+          // setFAKETagData
+          // that.question.tags.list = [
+          //   {
+          //     title: 'درس 1',
+          //     id: '62833f6f8646a96d49065562',
+          //     ancestors: [
+          //       { id: '6281fb9e2f1bafe99f050334', title: 'درخت دانش' },
+          //       { id: '6281fbeb2f1bafe99f050336', title: 'پایه دوازدهم' },
+          //       { id: '6281fbfd2f1bafe99f050337', title: 'حسابان ۲' }
+          //     ]
+          //   },
+          //   {
+          //     title: 'موضوع فیلان',
+          //     id: '6281fc922f1bafe99f050344',
+          //     ancestors: [
+          //       { id: '6281fb9e2f1bafe99f050334', title: 'درخت دانش' },
+          //       { id: '6281fbeb2f1bafe99f050336', title: 'پایه دوازدهم' },
+          //       { id: '6281fbfd2f1bafe99f050337', title: 'حسابان ۲' }
+          //     ]
+          //   }
+          // ]
           that.setQuestionTypeBasedOnId(that.question, types)
           that.disableLoading()
         })
@@ -86,19 +111,34 @@ const AdminActionOnQuestion = {
     updateAnswerPhoto () {
       if (this.question.added_answer_photos && this.question.added_answer_photos.length) {
         const formData = new FormData()
-        this.currentQuestion.added_answer_photos.forEach((item, key) => {
+        this.question.added_answer_photos.forEach((item, key) => {
           formData.append('files[' + key + ']', item)
         })
-        this.$axios.post(API_ADDRESS.question.photo('statement_photo', this.question.id), formData)
+        this.$axios.post(API_ADDRESS.question.photo('answer_photo', this.question.id), formData)
           .then(res => {
             this.question = new Question(res.data.data)
             this.question.added_answer_photos = []
           })
       }
     },
+    setQuestionIdentifierData () {
+      if (!this.$refs.questionIdentifier) {
+        return
+      }
+      this.$refs.questionIdentifier.getIdentifierData(false)
+    },
     updateQuestion (question) {
       const that = this
       // this.$store.dispatch('loading/overlayLoading', { loading: true, message: '' })
+      // this.$refs.questionIdentifier.getIdentifierData(false)
+      question = {
+        ...question,
+        level: (this.question.level) ? this.question.level : 1,
+        // reference: [this.question.reference],
+        // years: this.question.years,
+        tags: this.question.tags.list.map(tag => tag.id),
+        major: this.question.major
+      }
       this.$axios.put(API_ADDRESS.question.update(question.id), question)
         .then((response) => {
           this.$q.notify({
@@ -135,6 +175,40 @@ const AdminActionOnQuestion = {
         formData.append('exams[' + key + '][sub_category_id]', item.sub_category_id)
       })
       formData.append('type_id', question.type_id)
+      this.$refs.questionIdentifier.getIdentifierData(false)
+      formData.append('level', ((question.level) ? question.level : 1))
+      question.author.forEach((item, key) => {
+        formData.append('author[' + key + ']', item)
+      })
+      question.reference.forEach((item, key) => {
+        formData.append('reference[' + key + ']', item)
+      })
+      question.years.forEach((item, key) => {
+        formData.append('years[' + key + ']', item)
+      })
+      question.tags.list.forEach((item, key) => {
+        formData.append('tags[' + key + ']', item.id)
+      })
+      question.majors.forEach((item, key) => {
+        formData.append('majors[' + key + ']', item)
+      })
+      question.years.forEach((item, key) => {
+        formData.append('years[' + key + ']', item)
+      })
+
+      // const sendingQuestion = {
+      //   ...formData,
+      //   author: question.author,
+      //   statement: question.statement,
+      //   level: ,
+      //   reference: question.reference,
+      //   years: question.years,
+      //   tags: ,
+      //   majors: question.majors,
+      //   sub_category_id: 1,
+      //   recommended_time: 0,
+      //   type_id: question.type_id
+      // }
       this.$axios.post(API_ADDRESS.question.create, formData)
         .then(response => {
           this.redirectToShowPage(response.data.data.id)
@@ -360,9 +434,28 @@ const AdminActionOnQuestion = {
     },
     setNodesList () {},
     getGradesList () {
+      // console.log('getGradesList')
       this.getRootNode('test').then(response => {
         this.gradesList = response.data.data.children
       })
+    },
+    loadQuestionAuthors () {
+      this.$axios.get(API_ADDRESS.option.base + '?type=reference_type')
+        .then((response) => {
+          this.questionAuthorsList = response.data.data
+        })
+    },
+    loadAuthorshipDates () {
+      this.$axios.get(API_ADDRESS.option.base + '?type=year_type')
+        .then((response) => {
+          this.authorshipDatesList = response.data.data
+        })
+    },
+    loadMajorList () {
+      this.$axios.get(API_ADDRESS.option.base + '?type=major_type')
+        .then((response) => {
+          this.majorList = response.data.data
+        })
     },
     getLessonGroupList (item) {
       this.getNode(item.id).then(response => {
@@ -372,6 +465,7 @@ const AdminActionOnQuestion = {
     getLessonsList (item) {
       this.getNode(item.id).then(response => {
         this.lessonsList = response.data.data.children
+        // console.log('getLessonsList', this.lessonsList)
       })
     },
     setTags (allTags) {
@@ -382,6 +476,23 @@ const AdminActionOnQuestion = {
         .catch((er) => {
           console.log(er)
         })
+    },
+    setTagsOnCreate (allTags) {
+      // this.question.tags = allTags
+      if (allTags && allTags.length > 0) {
+        Notify.create({
+          message: 'ثبت با موفقیت انجام شد',
+          color: 'green',
+          icon: 'thumb_up'
+        })
+      } else {
+        Notify.create({
+          type: 'negative',
+          message: 'مشکلی در ثبت بوجود آمده است',
+          position: 'top'
+        })
+      }
+      // console.log('this.question', this.question)
     }
   }
 }

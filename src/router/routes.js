@@ -1,5 +1,50 @@
-import { auth } from './middleware/middleware'
-
+import { auth, hasPermission, Permissions } from './middleware/middleware'
+function getEntityCrudRouteObject (path, baseRouteName, componentPath, breadcrumbs) {
+  const AllNeededRoutes = [
+    { mode: 'Index', path: '' },
+    { mode: 'Create', path: 'create' },
+    { mode: 'Show', path: ':id' },
+    { mode: 'Edit', path: ':id/edit' }
+  ]
+  const children = []
+  const removedFirstPart = componentPath.split('/')
+  // console.log('removedFirstPart', removedFirstPart[0])
+  AllNeededRoutes.forEach(item => {
+    // Todo : find a way for 'pages/'
+    children.push({ name: baseRouteName + '.' + item.mode, path: item.path, component: () => import('pages/' + componentPath.replace(removedFirstPart[0] + '/', '')) })
+    // Even this is not working
+    // children.push({ name: baseRouteName + '.' + item.mode, path: item.path, component: () => import(removedFirstPart[0] + '/' + componentPath.replace(removedFirstPart[0] + '/', '')) })
+  })
+  return {
+    path,
+    component: () => import('layouts/AdminLayout.vue'),
+    breadcrumbs,
+    children
+  }
+}
+const entityCrudRouteConfigs = [
+  {
+    path: 'authorshipDates',
+    baseRouteName: 'Admin.AuthorshipDates',
+    componentPath: 'pages/Admin/AuthorshipDates',
+    breadcrumbs: { title: 'تاریخ تالیف' }
+  },
+  {
+    path: 'questionAuthors',
+    baseRouteName: 'Admin.QuestionAuthors',
+    componentPath: 'pages/Admin/QuestionAuthors',
+    breadcrumbs: { title: 'مرجع سوال' }
+  },
+  {
+    path: 'majors',
+    baseRouteName: 'Admin.Majors',
+    componentPath: 'pages/Admin/Majors',
+    breadcrumbs: { title: 'مدیریت دسترسی ها' }
+  }
+]
+const allEntityCrudRouteObjects = [
+  ...entityCrudRouteConfigs.map(item => getEntityCrudRouteObject(item.path, item.baseRouteName, item.componentPath, item.breadcrumbs))
+]
 const routes = [
   {
     path: '/',
@@ -36,25 +81,90 @@ const routes = [
             component: () => import('layouts/AdminLayout.vue'),
             breadcrumbs: { title: 'آزمون', color: '', loading: false, route: { name: 'Admin.Exam.Index' } },
             meta: {
-              middlewares: [auth]
+              middlewares: [
+                auth
+              ]
             },
             children: [
-              { name: 'Admin.Exam.Index', path: '', component: () => import('pages/Admin/exam/index'), breadcrumbs: { title: 'لیست آزمون ها', loading: false } },
-              { name: 'Admin.Exam.Create', path: 'create', component: () => import('pages/Admin/exam/Create') },
-              { name: 'Admin.Exam.Show', path: ':id', component: () => import('pages/Admin/exam/Show'), breadcrumbs: { title: 'مشاهده آزمون' } },
-              { name: 'Admin.Exam.Edit', path: ':id/edit', component: () => import('pages/Admin/exam/Edit'), breadcrumbs: { title: 'ویرایش آزمون' } },
-              { name: 'Admin.Exam.Upload', path: ':id/upload', component: () => import('pages/Admin/exam/Upload') },
+              {
+                name: 'Admin.Exam.Index',
+                path: '',
+                component: () => import('pages/Admin/exam/index'),
+                breadcrumbs: { title: 'لیست آزمون ها', loading: false },
+                middlewares: [
+                  Permissions.hasPermission('examIndex')
+                ]
+              },
+              {
+                name: 'Admin.Exam.Create',
+                path: 'create',
+                component: () => import('pages/Admin/exam/Create'),
+                middlewares: [
+                  Permissions.hasPermission('examStore')
+                ]
+              },
+              {
+                name: 'Admin.Exam.Create.AttachQuestion',
+                path: 'create/attachQuestion',
+                component: () => import('pages/Admin/exam/Create/ExamCreatePanel'),
+                breadcrumbs: { title: 'صفحه ساخت آزمون', loading: false },
+                middlewares: [
+                  Permissions.hasPermission('examStore')
+                ]
+              },
+              {
+                name: 'Admin.Exam.Show',
+                path: ':id',
+                component: () => import('pages/Admin/exam/Show'),
+                breadcrumbs: { title: 'مشاهده آزمون' },
+                middlewares: [
+                  Permissions.hasOneOfThese(['examShow', 'examquestionFile', 'examquestionBookletUpload'])
+                ]
+              },
+              {
+                name: 'Admin.Exam.Edit',
+                path: ':id/edit',
+                component: () => import('pages/Admin/exam/Edit'),
+                breadcrumbs: { title: 'ویرایش آزمون' },
+                middlewares: [
+                  Permissions.hasPermission('examUpdate')
+                ]
+              },
+              // { name: 'Admin.Exam.Upload', path: ':id/upload', component: () => import('pages/Admin/exam/Upload') },
+              // { name: 'Admin.Exam.Coefficient.Edit', path: ':id/coefficient/edit', component: () => import('src/pages/Admin/exam/editCoefficients.vue') },
+              // { name: 'Admin.Exam.Report.Edit', path: ':id/edit-exam-report', component: () => import('pages/Admin/exam/editExamReport'), breadcrumbs: { title: 'ویرایش کارنامه', loading: false } },
               { name: 'Admin.Exam.AllResults', path: 'results/:id', component: () => import('pages/Admin/exam/results') },
-              { name: 'Admin.Exam.Coefficient.Edit', path: ':id/coefficient/edit', component: () => import('src/pages/Admin/exam/editCoefficients.vue') },
-              { name: 'Admin.Exam.Report.Edit', path: ':id/edit-exam-report', component: () => import('pages/Admin/exam/editExamReport'), breadcrumbs: { title: 'ویرایش کارنامه', loading: false } },
-              { name: 'Admin.Exam.Lessons', path: 'lessons/:quizId', component: () => import('src/pages/Admin/exam/lessons.vue') },
-              { name: 'Admin.Exam.Lessons.List', path: 'lessons/:quizId/chart', component: () => import('src/pages/Admin/exam/lessonsChart.vue') },
-              { name: 'Admin.Exam.video.set', path: 'video/set/:examId/:subcategory_id', component: () => import('src/pages/Admin/exam/SetVideo.vue') },
+              {
+                name: 'Admin.Exam.Lessons',
+                path: 'lessons/:quizId',
+                component: () => import('src/pages/Admin/exam/lessons.vue'),
+                middlewares: [
+                  Permissions.hasPermission('examquestionShowcategorires')
+                ]
+              },
+              {
+                name: 'Admin.Exam.Lessons.List',
+                path: 'lessons/:quizId/chart',
+                component: () => import('src/pages/Admin/exam/lessonsChart.vue'),
+                middlewares: [
+                  // Permissions.hasPermission('examquestionAttachSubcategory')
+                ]
+              },
+              {
+                name: 'Admin.Exam.video.set',
+                path: 'video/set/:examId/:subcategory_id',
+                component: () => import('src/pages/Admin/exam/SetVideo.vue'),
+                middlewares: [
+                  Permissions.hasPermission('examquestionAttachSubcategory')
+                ]
+              },
               {
                 path: ':quizId/:lessonId',
                 name: 'exams.lessons.questions',
                 component: () => import('pages/Admin/exam/LessonQuestions'),
-                middleware: [auth]
+                middleware: [
+                  Permissions.hasPermission('examquestionAttachShow')
+                ]
               },
               {
                 path: '/results/mbti_bartle/:exam_id/:user_exam_id',
@@ -86,7 +196,10 @@ const routes = [
                 name: 'Admin.Question.Factory',
                 component: () => (import('pages/Admin/Question/NewQuestionFactory')),
                 meta: {
-                  middlewares: [auth]
+                  middlewares: [
+                    auth,
+                    Permissions.hasPermission('questionIndex')
+                  ]
                 }
               },
               {
@@ -95,7 +208,10 @@ const routes = [
                 component: () => import('layouts/QuestionLayouts/CreateQuestionLayout.vue'),
                 // component: () => import('layouts/AdminLayout.vue'),
                 meta: {
-                  middlewares: [auth]
+                  middlewares: [
+                    auth,
+                    Permissions.hasPermission('examquestionAttach')
+                  ]
                 },
                 children: [
                   {
@@ -129,7 +245,16 @@ const routes = [
                     path: 'image/:questionType',
                     name: 'Admin.Question.Create.Image',
                     breadcrumbs: { title: 'آپلود عکس', loading: false },
-                    component: () => (import('pages/Admin/Question/CreateImage'))
+                    component: () => (import('pages/Admin/Question/CreateImage')),
+                    meta: {
+                      middlewares: [
+                        Permissions.hasPermission('questionUpload'),
+                        Permissions.hasPermission('questionAttachStatementphoto'),
+                        Permissions.hasPermission('questionAttachAnswerphoto'),
+                        Permissions.hasPermission('questionDetachStatementphoto'),
+                        Permissions.hasPermission('questionDetachAnswerphoto')
+                      ]
+                    }
                   }
                 ]
               },
@@ -139,7 +264,10 @@ const routes = [
                 breadcrumbs: { title: 'مشاهده سوال', loading: false },
                 component: () => (import('pages/Admin/Question/ShowQuestion')),
                 meta: {
-                  middlewares: [auth]
+                  middlewares: [
+                    auth,
+                    Permissions.hasPermission('questionShow')
+                  ]
                 }
               },
               {
@@ -148,7 +276,9 @@ const routes = [
                 breadcrumbs: { title: 'ویرایش سوال', loading: false },
                 component: () => (import('pages/Admin/Question/EditQuestion')),
                 meta: {
-                  middlewares: [auth]
+                  middlewares: [
+                    Permissions.hasPermission('questionUpdate')
+                  ]
                 }
               }
             ]
@@ -161,10 +291,38 @@ const routes = [
               middlewares: [auth]
             },
             children: [
-              { name: 'Admin.Category.Index', path: '', component: () => import('pages/Admin/category/Index') },
-              { name: 'Admin.Category.Create', path: 'create', component: () => import('pages/Admin/category/Create') },
-              { name: 'Admin.Category.Show', path: ':id', component: () => import('pages/Admin/category/Show') },
-              { name: 'Admin.Category.Edit', path: ':id/edit', component: () => import('pages/Admin/category/Edit') }
+              {
+                name: 'Admin.Category.Index',
+                path: '',
+                component: () => import('pages/Admin/category/Index'),
+                middlewares: [
+                  Permissions.hasPermission('categoryIndex')
+                ]
+              },
+              {
+                name: 'Admin.Category.Create',
+                path: 'create',
+                component: () => import('pages/Admin/category/Create'),
+                middlewares: [
+                  Permissions.hasPermission('categoryCreate')
+                ]
+              },
+              {
+                name: 'Admin.Category.Show',
+                path: ':id',
+                component: () => import('pages/Admin/category/Show'),
+                middlewares: [
+                  Permissions.hasPermission('categoryShow')
+                ]
+              },
+              {
+                name: 'Admin.Category.Edit',
+                path: ':id/edit',
+                component: () => import('pages/Admin/category/Edit'),
+                middlewares: [
+                  Permissions.hasPermission('categoryUpdate')
+                ]
+              }
             ]
           },
 
@@ -181,6 +339,7 @@ const routes = [
               { name: 'Admin.subCategory.Create', path: 'create', component: () => import('pages/Admin/subCategory/Create') }
             ]
           },
+          ...allEntityCrudRouteObjects,
 
           {
             name: 'Admin.KnowledgeTree.tree',
@@ -208,7 +367,10 @@ const routes = [
         name: 'faq',
         component: () => import('src/pages/CommonQuestions/list'),
         meta: {
-          middleware: [auth]
+          middlewares: [
+            auth
+            // Permissions.hasOneOfThese(['examUpdate', 'examquestionBookletUpload'])
+          ]
         }
       },
       {
@@ -216,7 +378,9 @@ const routes = [
         name: 'onlineQuiz.alaaView',
         component: () => import('pages/User/exam/participate/AlaaView'),
         meta: {
-          middlewares: [auth]
+          middlewares: [auth,
+            hasPermission('examUpdate')
+          ]
         }
       },
       {

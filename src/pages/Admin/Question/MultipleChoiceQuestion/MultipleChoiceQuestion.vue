@@ -21,6 +21,13 @@
         :key="item.order"
       >
         <div class="card-section-header">
+          <q-btn
+            class="icon-type"
+            icon="isax:close-square5"
+            color="negative"
+            flat
+            @click="removeChoice(item.order)"
+          />
           <q-radio
             dense
             v-model="choice"
@@ -29,7 +36,6 @@
             color="primary"
             @click="choiceClicked(item.order)"
           />
-          <q-btn label="حذف گزینه" flat color="primary" @click="removeChoice(item.order)"/>
         </div>
         <div class="multiple-answer-box">
           <QuestionField
@@ -52,6 +58,8 @@
   <div class="relative-position">
     <div class="attach-btn row">
       <question-identifier
+        ref="questionIdentifier"
+        editable
         class="col-12"
         :exams="examList"
         :lessons="subCategoriesList"
@@ -59,12 +67,15 @@
         :gradesList="gradesList"
         :groups-list="lessonGroupList"
         :lessons-list="lessonsList"
-        :buffer="true"
-        @gradeSelected="getLessonGroupList"
+        :major-list="majorList"
+        :authorship-dates-list="authorshipDatesList"
+        :question-authors-list="questionAuthorsList"
+        buffer
+        @gradeSelected="getLessonsList"
         @groupSelected="getLessonsList"
         @attach="attachExam"
         @detach="detachExam"
-        @tags-collected="setTags"
+        @tags-collected="setTagsOnCreate"
       />
     </div>
     <btn-box
@@ -132,6 +143,9 @@ export default {
     this.setDefaultChoices()
     this.getPageReady()
     this.getGradesList()
+    this.loadQuestionAuthors()
+    this.loadAuthorshipDates()
+    this.loadMajorList()
   },
   mounted () {
     this.$nextTick(() => {
@@ -142,30 +156,37 @@ export default {
   updated () {},
   methods: {
     saveQuestion () {
-      if (this.getContent()) {
-        const exams = []
-        this.question.exams.list.forEach(item => {
-          exams.push({
-            id: item.exam_id,
-            exam_id: item.exam_id,
-            sub_category_id: item.sub_category_id,
-            order: item.order
-          })
-        })
-        this.question.author.push({ full_name: this.$store.getters['Auth/user'].full_name, id: this.$store.getters['Auth/user'].id })
-        const question = {
-          author: this.question.author,
-          choices: this.question.choices.list,
-          exams: exams,
-          descriptive_answer: this.question.descriptive_answer,
-          statement: this.question.statement,
-          level: 1,
-          sub_category_id: 1,
-          recommended_time: 0,
-          type_id: this.question.type_id
-        }
-        this.createQuestion(question)
+      if (!this.getContent()) {
+        return
       }
+
+      const exams = []
+      this.question.exams.list.forEach(item => {
+        exams.push({
+          id: item.exam_id,
+          exam_id: item.exam_id,
+          sub_category_id: item.sub_category_id,
+          order: item.order
+        })
+      })
+      this.$refs.questionIdentifier.getIdentifierData(false)
+      this.question.author.push({ full_name: this.$store.getters['Auth/user'].full_name, id: this.$store.getters['Auth/user'].id })
+      const question = {
+        author: this.question.author,
+        choices: this.question.choices.list,
+        exams,
+        descriptive_answer: this.question.descriptive_answer,
+        statement: this.question.statement,
+        level: (this.question.level) ? this.question.level : 1,
+        reference: this.question.reference,
+        years: this.question.years,
+        tags: this.question.tags.list.map(item => item.id),
+        majors: this.question.majors,
+        sub_category_id: 1,
+        recommended_time: 0,
+        type_id: this.question.type_id
+      }
+      this.createQuestion(question)
     },
     setDefaultChoices () {
       this.question.choices.list = []
@@ -286,7 +307,6 @@ export default {
   .main-card-section {
     .card-section-header {
       display: flex;
-      justify-content: space-between;
       font-size: 16px;
       color: black;
       margin: 8px 18px 0;

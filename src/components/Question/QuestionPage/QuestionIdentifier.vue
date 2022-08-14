@@ -1,16 +1,19 @@
 <template>
   <div class="question-details">
-<!--    <button @click="getIdentifierData">getTagsTitles</button>-->
     <div class="box-title">شناسنامه سوال</div>
     <div class="details-container-2 default-details-container row">
       <div class="detail-box col-3" style="padding-right:0;">
-        <div class="detail-box-title">طراح سوال</div>
+        <div class="detail-box-title">مرجع</div>
         <q-select
           borderless
-          option-value="id"
-          option-label="title"
           v-model="questionAuthor"
-          :options="questionAuthors"
+          option-value="id"
+          option-label="value"
+          use-input
+          use-chips
+          multiple
+          :options="questionAuthorsList"
+          :disable="!editable"
         />
       </div>
       <div class="detail-box col-3">
@@ -18,19 +21,26 @@
         <q-select
           borderless
           option-value="id"
-          option-label="title"
+          option-label="value"
           v-model="authorshipDate"
-          :options="authorshipDates"
+          :options="authorshipDatesList"
+          use-input
+          use-chips
+          multiple
+          :disable="!editable"
         />
       </div>
       <div class="detail-box col-3">
         <div class="detail-box-title">درجه سختی</div>
         <q-select
-          borderless
           option-value="id"
-          option-label="title"
+          option-label="value"
+          borderless
           v-model="questionLevel"
           :options="levels"
+          emit-value
+          map-options
+          :disable="!editable"
         />
       </div>
       <attach-exam
@@ -51,6 +61,7 @@
           v-model="grade"
           :options="gradesList"
           @update:model-value="gradeSelected"
+          :disable="!editable"
         />
       </div>
       <div class="detail-box col-3">
@@ -58,9 +69,13 @@
         <q-select
           borderless
           option-value="id"
-          option-label="title"
-          v-model="major"
-          :options="majors"
+          option-label="value"
+          v-model="majors"
+          :options="majorList"
+          use-input
+          use-chips
+          multiple
+          :disable="!editable"
         />
       </div>
       <div class="detail-box col-6">
@@ -75,20 +90,30 @@
               icon="isax:tree"
               class="open-modal-btn default-detail-btn"
               @click="dialogValue = true"
-              :disable="!doesHaveGroups"
+              :disable="!isTreeModalAvailable"
             />
           </div>
         </div>
       </div>
     </div>
-      <question-tree-modal
-        v-model:dialogValue="dialogValue"
-        v-model:subjectsField="allSubjects"
-        :lessons-list="lessonsList"
-        :groups-list="groupsList"
-        @groupSelected="groupSelected"
-        @lessonSelected="lessonSelected"
-      />
+<!--    <q-btn-->
+<!--      unelevated-->
+<!--      color="primary"-->
+<!--      class="q-mr-xl btn-md text-right"-->
+<!--      style="float: left;margin-top: 10px;margin-right: 0px;margin-left: 14px;"-->
+<!--      @click="getIdentifierData"-->
+<!--    >-->
+<!--      ثبت مباحث انتخاب شده-->
+<!--    </q-btn>-->
+    <question-tree-modal
+      ref="questionTreeModal"
+      v-model:dialogValue="dialogValue"
+      v-model:subjectsField="allSubjects"
+      :lessons-list="lessonsList"
+      :groups-list="groupsList"
+      @groupSelected="groupSelected"
+      @lessonSelected="lessonSelected"
+    />
   </div>
 </template>
 
@@ -97,6 +122,7 @@ import { Question } from 'src/models/Question'
 import { ExamList } from 'src/models/Exam'
 import { QuestSubcategoryList } from 'src/models/QuestSubcategory'
 import { QuestCategoryList } from 'src/models/QuestCategory'
+import { TreeNode, TreeNodeList } from 'src/models/TreeNode'
 import AttachExam from 'components/Question/QuestionPage/AttachExam/AttachExam'
 import QuestionTreeModal from 'components/Question/QuestionPage/QuestionTreeModal'
 
@@ -108,6 +134,12 @@ export default {
   },
   props: {
     buffer: {
+      type: Boolean,
+      default () {
+        return false
+      }
+    },
+    editable: {
       type: Boolean,
       default () {
         return false
@@ -133,7 +165,25 @@ export default {
         return []
       }
     },
+    majorList: {
+      type: Array,
+      default () {
+        return []
+      }
+    },
     groupsList: {
+      type: Array,
+      default () {
+        return []
+      }
+    },
+    questionAuthorsList: {
+      type: Array,
+      default () {
+        return []
+      }
+    },
+    authorshipDatesList: {
       type: Array,
       default () {
         return []
@@ -163,91 +213,30 @@ export default {
   data () {
     return {
       dialogValue: false,
-      questionAuthor: '',
-      authorshipDate: '',
-      questionAuthors: [
-        {
-          id: 'skadlfksdjfnkkhjks543djf',
-          title: 'سازمان سنجش 1'
-        },
-        {
-          id: 'skadlfksdjfnk63546s543djf',
-          title: 'سازمان سنجش 2'
-        },
-        {
-          id: 'skadlfdfgdfgdffdksdjfnks543djf',
-          title: 'سازمان سنجش 3'
-        },
-        {
-          id: 'sk;sdljflsdkf56465adlfksdjfnks543djf',
-          title: 'سازمان سنجش 4'
-        }
-      ],
-      authorshipDates: [
-        {
-          id: 'skadlfksdjfnkkhjks543djf',
-          title: 'دی ماه 1402'
-        },
-        {
-          id: 'skadlfksdjfnk63546s543djf',
-          title: 'دی ماه 1403'
-        },
-        {
-          id: 'skadlfdfgdfgdffdksdjfnks543djf',
-          title: 'دی ماه 1404'
-        },
-        {
-          id: 'sk;sdljflsdkf56465adlfksdjfnks543djf',
-          title: 'دی ماه 1405'
-        }
-      ],
-      questionLevel: '',
-      grades: [
-        {
-          id: 'skadlf1111ks543djf',
-          title: 'دهم'
-        },
-        {
-          id: 'ska7777746s543djf',
-          title: 'یازدهم'
-        },
-        {
-          id: 'skad9999jfnks543djf',
-          title: 'دوازدهم'
-        }
-      ],
+      questionAuthor: null,
+      authorshipDate: null,
+      questionLevel: null,
       grade: '',
-      majors: [
-        {
-          id: 'ska6666555ks543djf',
-          title: 'ریاضی'
-        },
-        {
-          id: 'skadl454546s543djf',
-          title: 'تجربی'
-        },
-        {
-          id: 'skadlfd54554jfnks543djf',
-          title: 'انسانی'
-        }
-      ],
-      major: '',
+      model: null,
+      majors: null,
       levels: [
         {
-          id: 'skadlfk6546sdjfnkkhjks543djf',
-          title: 'آسان'
+          id: '1',
+          value: 'آسان'
         },
         {
-          id: '656adlfksdjfnk63546s543djf',
-          title: 'متوسط'
+          id: '2',
+          value: 'متوسط'
         },
         {
-          id: 'skadlfdfgdf564564sdjfnks543djf',
-          title: 'سخت'
+          id: '3',
+          value: 'سخت'
         }
       ],
       subjectsFieldText: [],
       allSubjects: {},
+      allSubjectsFlat: [],
+      lastSelectedNodes: [],
       identifierData: [],
       draftBtnLoading: false,
       saveBtnLoading: false,
@@ -257,9 +246,59 @@ export default {
   computed: {
     doesHaveGroups () {
       return !!(this.groupsList && this.groupsList.length > 0)
+    },
+    doesHaveLessons () {
+      return !!(this.lessonsList && this.lessonsList.length > 0)
+    },
+    isTreeModalAvailable () {
+      return this.doesHaveLessons && this.editable
+    }
+  },
+  watch: {
+    'question.id': function () {
+      this.loadQuestionDataFromResponse()
+    },
+    allSubjects: {
+      handler () {
+        this.updateLessonsTitles()
+        this.getTheLastSelectedNode()
+      },
+      deep: true
     }
   },
   methods: {
+    loadQuestionDataFromResponse () {
+      this.authorshipDate = this.question.years
+      this.questionAuthor = this.question.reference
+      this.majors = this.question.majors
+      this.questionLevel = this.question.level.toString()
+      if (this.question.tags.list[0]) {
+        this.fillGradeFromResponse()
+        this.fillLessonFromResponse()
+        this.fillAllSubjectsFromResponse()
+      }
+    },
+    fillGradeFromResponse () {
+      this.grade = new TreeNode(this.question.tags.list[0].ancestors[1])
+      this.gradeSelected(this.grade)
+    },
+    fillLessonFromResponse () {
+      const firstTag = this.question.tags.list[0]
+      const lesson = firstTag.ancestors[firstTag.ancestors.length - 1]
+      // this.$refs.questionTreeModal.lesson = new TreeNode(lesson)
+      this.$refs.questionTreeModal.lessonSelected(lesson)
+    },
+    fillAllSubjectsFromResponse () {
+      this.question.tags.list.forEach((tag, index) => {
+        const lastAncestors = tag.ancestors[tag.ancestors.length - 1]
+        if (!this.allSubjects[lastAncestors.id]) {
+          this.allSubjects[lastAncestors.id] = {
+            nodes: []
+          }
+        }
+        Object.assign(this.allSubjects[lastAncestors.id].nodes, { [index]: { ...tag } })
+      })
+    },
     emitAttachExam (item) {
       this.$emit('attach', item)
     },
@@ -280,28 +319,39 @@ export default {
     },
     updateLessonsTitles () {
       const fieldText = []
+      const flatSelectedNodes = []
       if (Object.keys(this.allSubjects).length !== 0) {
         for (const key in this.allSubjects) {
           if (this.allSubjects[key].nodes && this.allSubjects[key].nodes.length > 0) {
             this.allSubjects[key].nodes.forEach(val => {
               fieldText.push(val.title)
+              flatSelectedNodes.push(val)
             })
           }
         }
       }
+      this.allSubjectsFlat = flatSelectedNodes
       this.lessonsTitles = fieldText
     },
-    getIdentifierData () {
+    getLastNodesLessonsTitles () {
+      return this.lastSelectedNodes.map(item => item.title)
+    },
+    getIdentifierData (setTags) {
       this.updateLessonsTitles()
-      this.identifierData.push(...this.lessonsTitles)
+      this.identifierData.push(...this.getLastNodesLessonsTitles())
       this.identifierData.push(...this.getTagsTitles(this.subjectsFieldText))
-      this.identifierData.push(...this.getTagsTitles(this.grade))
-      this.identifierData.push(...this.getTagsTitles(this.major))
-      this.identifierData.push(...this.getTagsTitles(this.authorshipDate))
-      this.identifierData.push(...this.getTagsTitles(this.questionAuthor))
-      this.identifierData.push(...this.getTagsTitles(this.questionLevel))
-      console.log('this.identifierData', this.identifierData)
-      this.setTags(this.identifierData)
+
+      this.question.majors = (this.majors) ? this.majors.map(item => item.id) : []
+      this.question.years = (this.authorshipDate) ? this.authorshipDate.map(item => item.id) : []
+      this.question.reference = (this.questionAuthor) ? this.questionAuthor.map(item => item.id) : []
+      this.question.level = this.questionLevel
+      this.question.tags = new TreeNodeList(this.lastSelectedNodes)
+
+      if (setTags) {
+        this.setTags(this.identifierData)
+        // return
+      }
+      // this.question.tags = this.identifierData
     },
     getTagsTitles (tag) {
       const finalArray = []
@@ -316,14 +366,24 @@ export default {
         finalArray.push(tag.title)
       }
       return finalArray
-    }
-  },
-  watch: {
-    allSubjects: {
-      handler () {
-        this.updateLessonsTitles()
-      },
-      deep: true
+    },
+    getUniqueListBy (arr, key) {
+      return [...new Map(arr.map(item => [item[key], item])).values()]
+    },
+    getTheLastSelectedNode () {
+      const foundedNodes = []
+      let cleaned = []
+      this.allSubjectsFlat.forEach((selectedNode) => {
+        selectedNode.ancestors.forEach((parentNode) => {
+          if (this.allSubjectsFlat.find(item => item.id === parentNode.id)) {
+            foundedNodes.push(parentNode)
+          }
+        })
+      })
+      cleaned = this.getUniqueListBy(foundedNodes, 'id')
+      this.lastSelectedNodes = this.allSubjectsFlat.filter((selectedNode) => {
+        return !(cleaned.find(item => item.id === selectedNode.id))
+      })
     }
   }
 }
@@ -336,6 +396,7 @@ export default {
   border-radius: 15px;
   padding: 30px;
 }
+
 .question-details {
   margin-top: 40px;
   font-style: normal;
@@ -344,26 +405,32 @@ export default {
   line-height: 28px;
   text-align: right #{"/* rtl:ignore */"};
   color: #23263B;
+
   .default-details-container {
     .detail-box {
       margin-top: 10px;
+
       .detail-box-title {
         margin-bottom: 5px;
       }
     }
   }
+
   .details-container-1 {
     .detail-box {
       padding-right: 12px #{"/* rtl:ignore */"};
       padding-left: 12px #{"/* rtl:ignore */"};
     }
+
     .detail-box-first {
       padding-right: 0px #{"/* rtl:ignore */"};
     }
+
     .detail-box-last {
       padding-left: 0px #{"/* rtl:ignore */"};
     }
   }
+
   .default-detail-btn {
     color: #65677F;
     width: 40px;
@@ -373,14 +440,17 @@ export default {
     line-height: 24px;
     text-align: center;
   }
+
   .details-container-2 {
     .detail-box {
       padding-right: 12px #{"/* rtl:ignore */"};
       padding-left: 12px #{"/* rtl:ignore */"};
+
       .input-container {
         .input-box {
           width: 91%;
         }
+
         .icon-box {
           width: 40px;
           height: 40px;
@@ -389,7 +459,8 @@ export default {
           display: flex;
           align-items: center;
           justify-content: center;
-          margin-left: 16px  ;
+          margin-left: 16px;
+
           .question-details-subject-img {
             height: 24px;
             max-width: 24px;
@@ -397,14 +468,17 @@ export default {
         }
       }
     }
+
     .detail-box-first {
       padding-right: 0px #{"/* rtl:ignore */"};
     }
+
     .detail-box-last {
       padding-right: 0px #{"/* rtl:ignore */"};
       width: 200px;
       //margin-right: 132px #{"/* rtl:ignore */"};
     }
+
     .detail-box-last-of-row {
       padding-left: 0px #{"/* rtl:ignore */"};
       margin-top: 43px;
@@ -412,12 +486,14 @@ export default {
       display: flex;
       align-items: center;
       justify-content: center;
+
       .draft-btn {
         background: #FFFFFF;
         margin-left: 16px #{"/* rtl:ignore */"};
         font-weight: normal;
         color: #23263B;
       }
+
       .save-btn {
         background: #9690E4;
         font-weight: 500;
@@ -429,39 +505,46 @@ export default {
 </style>
 <style lang="scss">
 .question-details {
-    .default-details-container {
-      .detail-box {
-        .q-field {
-          background: #FFFFFF;
-          border-radius: 10px;
-          line-height: 24px;
+  .default-details-container {
+    .detail-box {
+      .q-field {
+        background: #FFFFFF;
+        border-radius: 10px;
+        line-height: 24px;
+        height: 40px;
+        min-height: 40px;
+
+        .q-field__marginal {
           height: 40px;
-          min-height: 40px;
-          .q-field__marginal {
-            height: 40px;
-          }
-          .q-field__inner {
-            padding-right: 16px;
-            padding-left: 16px;
-          }
         }
-        .q-field--auto-height .q-field__native {
-          min-height: 40px;
-          color: #65677F;
-        }
-        .q-field--auto-height .q-field__control, .q-field--auto-height .q-field__native {
-          min-height: 40px;
-          color: #65677F;
-        }
-        .q-field__control::before, .q-field__control::after {
-          display: none;
-        }
-        .q-field__native, .q-field__prefix, .q-field__suffix, .q-field__input {
-          color: #65677F;
+
+        .q-field__inner {
+          padding-right: 16px;
+          padding-left: 16px;
         }
       }
+
+      .q-field--auto-height .q-field__native {
+        min-height: 40px;
+        color: #65677F;
+      }
+
+      .q-field--auto-height .q-field__control, .q-field--auto-height .q-field__native {
+        min-height: 40px;
+        color: #65677F;
+      }
+
+      .q-field__control::before, .q-field__control::after {
+        display: none;
+      }
+
+      .q-field__native, .q-field__prefix, .q-field__suffix, .q-field__input {
+        color: #65677F;
+      }
     }
+  }
 }
+
 .q-menu {
   // I'm in charge of this one and did this on purpose, if you need to change this please let me know.TU
   background: #FFFFFF;

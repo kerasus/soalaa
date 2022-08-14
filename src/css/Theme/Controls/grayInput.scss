@@ -1,19 +1,13 @@
-@import 'src/css/Theme/colors';
-@import 'src/css/Theme/sizes';
-
 .q-field--filled {
   &.backGround-gray-input {
-    .q-field__inner{
-      .q-field__control{
-        background-color : var(--3a-Neutral2);
-        border-radius: $radius-15;
-        .q-field__append{
-          .q-icon{
-            color: var(--3a-TextPrimary);
-            font-size: 20px;
-            padding: 7px;
-          }
-        }
+    @include global-input;
+
+    .q-field__inner {
+      background-color: var(--3a-Neutral2);
+
+      .q-field__control {
+        background-color: var(--3a-Neutral2);
+
       }
     }
   }

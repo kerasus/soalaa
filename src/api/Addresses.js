@@ -1,17 +1,15 @@
 import process from 'process'
 const lumenServer = process.env.AAA_API
 const authServer = process.env.AUTH_API
-const treeServer = process.env.TREE_API
-const tagServer = process.env.TAG_API
 const API_ADDRESS = {
   // socket: process.env.VUE_APP_SOCKET_TARGET_API_SERVER,
-  socket: 'https://office.alaatv.com:501',
+  socket: process.env.SOCKET_SERVER,
   server: {
     lumen: lumenServer,
-    auth: authServer
+    auth: lumenServer
   },
   auth: {
-    login: authServer + '/login'
+    login: lumenServer + '/user/login'
   },
   user: {
     base: authServer + '/user',
@@ -35,6 +33,26 @@ const API_ADDRESS = {
     base: lumenServer + '/activity-log',
     addComment (id) {
       return lumenServer + '/activity-log/' + id + '/comment'
+    }
+  },
+  entityCrud: {
+    authorshipDates: {
+      show: lumenServer + '/option/',
+      edit: lumenServer + '/admin/user',
+      create: lumenServer + '/option',
+      index: lumenServer + '/option?type=year_type&with_pagination=true'
+    },
+    questionAuthors: {
+      show: lumenServer + '/option/',
+      edit: lumenServer + '/admin/user',
+      create: lumenServer + '/option',
+      index: lumenServer + '/option?type=reference_type&with_pagination=true'
+    },
+    majors: {
+      show: lumenServer + '/option/',
+      edit: lumenServer + '/admin/user',
+      create: lumenServer + '/option',
+      index: lumenServer + '/option?type=major_type&with_pagination=true'
     }
   },
   exam: {
@@ -105,22 +123,37 @@ const API_ADDRESS = {
     bank: {
       page: (page) => lumenServer + '/exam-question/attach/show/6245afa20569e1374540cb88?page=' + page
     },
-    index (statuses, page) {
-      statuses = statuses.join('&statuses[]=')
-      if (statuses) {
-        statuses = '&statuses[]=' + statuses
+    index (filters, page) {
+      function setQueryParams (paramKey) {
+        if (!filters) {
+          filters = {}
+        }
+        filters[paramKey] = (typeof filters[paramKey] !== 'undefined') ? filters[paramKey] : []
+        filters[paramKey] = filters[paramKey].join('&' + paramKey + '[]=')
+        if (filters[paramKey]) {
+          filters[paramKey] = '&' + paramKey + '[]=' + filters[paramKey]
+        }
       }
+      setQueryParams('statuses')
+      setQueryParams('years')
+      setQueryParams('majors')
+      setQueryParams('reference')
+      setQueryParams('tags')
 
       if (typeof page !== 'undefined') {
         page = '&page=' + page
       } else {
         page = ''
       }
-      let queryParam = statuses + page
+
+      let queryParam = page
+      Object.keys(filters).forEach(filterKey => {
+        queryParam += filters[filterKey]
+      })
       if (queryParam.length > 0) {
         queryParam = queryParam.substr(1)
       }
-      return lumenServer + '/question?' + queryParam
+      return lumenServer + '/question/bank/search?' + queryParam
     },
     status: {
       base: lumenServer + '/question/statuses',
@@ -188,20 +221,20 @@ const API_ADDRESS = {
     }
   },
   tree: {
-    base: treeServer + '/tree',
+    base: lumenServer + '/forrest/tree',
     getNodeById (nodeId) {
-      return treeServer + '/tree/' + nodeId
+      return lumenServer + '/forrest/tree/' + nodeId
     },
     getNodeByType (nodeType) {
-      return treeServer + '/tree?type=' + nodeType
+      return lumenServer + '/forrest/tree?type=' + nodeType
     },
     editNode (id) {
-      return treeServer + '/tree/' + id
+      return lumenServer + '/forrest/tree/' + id
     }
   },
   tags: {
     setTags (questionId) {
-      return tagServer + '/id/soalaQestion/' + questionId
+      return lumenServer + '/id/soalaQestion/' + questionId
     }
   }
 }

@@ -58,53 +58,56 @@
         v-for="(item , index) in titlesList"
         :key="index"
       >
-        <q-expansion-item
-          v-if="item.children.length"
-          :header-style="{fontSize:'16px', height:'40px', borderRadius: '14px'}"
-          :label="item.title"
-          :icon="item.icon"
-          class="side-expansion-list"
-          dark
+        <div
+          v-if="showMenuItem(item)"
         >
-          <div class="expansion-body">
-            <q-separator dark size="2px" vertical class="vertical-separator"/>
-            <q-list class="list-expansion">
-<!--              Todo : toxic Traits!!!!!-->
-              <q-item
-                v-for="(subItem , i) in item.children"
-                :key="i"
-                :to="{ name: subItem.routeName, params: subItem.params }"
-                class="list-child-item"
-                exact-active-class="active-route"
-              >
-                <q-item-section
-                  class="list-child-section"
+          <q-expansion-item
+            v-if="item.children.length"
+            :header-style="{fontSize:'16px', height:'40px', borderRadius: '14px'}"
+            :label="item.title"
+            :icon="item.icon"
+            class="side-expansion-list"
+            dark
+          >
+            <div class="expansion-body">
+              <q-separator dark size="2px" vertical class="vertical-separator"/>
+              <q-list class="list-expansion">
+                <q-item
+                  v-for="(subItem , i) in item.children"
+                  :key="i"
+                  :to="{ name: subItem.routeName, params: subItem.params }"
+                  class="list-child-item"
+                  exact-active-class="active-route"
                 >
-                  {{ subItem.displayName }}
-                </q-item-section>
-                <span class="indicator"/>
-              </q-item>
-            </q-list>
-          </div>
-        </q-expansion-item>
-        <q-item
-          v-else
-          :to="(item.routeName) ? {name: item.routeName} : null"
-          class="item-list"
-          :class="{ 'alone-item': !item.children.length}"
-          v-model="clickedItem"
-          exact-active-class="active-route"
-        >
-          <div class="section-title">
-            <q-item-section class="list-section title-icon" avatar>
-              <q-avatar :icon="item.icon" size="30"/>
-            </q-item-section>
-            <q-item-section class="list-section">
-              {{ item.title }}
-            </q-item-section>
-            <span class="indicator"/>
-          </div>
-        </q-item>
+                  <q-item-section
+                    class="list-child-section"
+                  >
+                    {{ subItem.displayName }}
+                  </q-item-section>
+                  <span class="indicator"/>
+                </q-item>
+              </q-list>
+            </div>
+          </q-expansion-item>
+          <q-item
+            v-else
+            :to="(item.routeName) ? {name: item.routeName} : null"
+            class="item-list"
+            :class="{ 'alone-item': !item.children.length}"
+            v-model="clickedItem"
+            exact-active-class="active-route"
+          >
+            <div class="section-title">
+              <q-item-section class="list-section title-icon" avatar>
+                <q-avatar :icon="item.icon" size="30"/>
+              </q-item-section>
+              <q-item-section class="list-section">
+                {{ item.title }}
+              </q-item-section>
+              <span class="indicator"/>
+            </div>
+          </q-item>
+        </div>
       </div>
     </q-list>
     <div class="log-out" @click="logOut">
@@ -117,6 +120,8 @@
 </template>
 
 <script>
+
+import { User } from 'src/models/User'
 export default {
   name: 'SideMenu-dashboard',
   data () {
@@ -127,6 +132,7 @@ export default {
           title: 'داشبورد',
           icon: 'isax:home',
           routeName: 'dashboard',
+          permission: 'all',
           active: false,
           children: []
         },
@@ -134,6 +140,7 @@ export default {
           title: 'سوال',
           icon: 'isax:bank',
           routeName: null,
+          permission: 'examStore',
           active: false,
           children: [
             {
@@ -150,18 +157,33 @@ export default {
           ]
         },
         {
-          title: 'آزمون',
-          icon: 'isax:task-square',
+          title: 'ویژگی سوال',
+          icon: 'isax:bank',
+          permission: 'examStore',
           routeName: null,
           active: false,
           children: [
-            { displayName: 'ساخت آزمون', routeName: 'Admin.Exam.Create', active: false },
+            { displayName: 'مرجع سوال', routeName: 'Admin.QuestionAuthors.Index', active: false },
+            // { displayName: 'معلفان سوال', routeName: 'Admin.QuestionAuthors.Index', active: false },
+            { displayName: 'تاریخ تالیف', routeName: 'Admin.AuthorshipDates.Index', active: false },
+            { displayName: 'رشته تحصیلی', routeName: 'Admin.Majors.Index', active: false }
+          ]
+        },
+        {
+          title: 'آزمون',
+          icon: 'isax:task-square',
+          permission: 'examStore',
+          routeName: null,
+          active: false,
+          children: [
+            { displayName: 'ساخت آزمون', routeName: 'Admin.Exam.Create.AttachQuestion', active: false },
             { displayName: 'لیست آزمون ها', routeName: 'Admin.Exam.Index', active: false }
           ]
         },
         {
           title: 'درخت دانش',
           icon: 'isax:tree',
+          permission: 'examStore',
           routeName: 'Admin.KnowledgeTree.tree',
           active: false,
           children: []
@@ -170,6 +192,7 @@ export default {
           title: 'لیست دروس',
           icon: 'isax:book',
           routeName: 'Admin.subCategory.Index',
+          permission: 'examStore',
           active: false,
           children: []
         },
@@ -177,12 +200,14 @@ export default {
           title: 'لیست دفترچه ها',
           icon: 'isax:book',
           routeName: 'Admin.Category.Index',
+          permission: 'examStore',
           active: false,
           children: []
         },
         {
           title: 'گزارشات',
           icon: 'isax:graph',
+          permission: 'examStore',
           routeName: null,
           active: false,
           children: []
@@ -191,12 +216,14 @@ export default {
           title: 'تنظیمات',
           icon: 'isax:setting-2',
           routeName: 'Admin.Settings',
+          permission: 'examStore',
           active: false,
           children: []
         },
         {
           title: 'سوالات متداول',
           icon: 'isax:message-question',
+          permission: 'all',
           routeName: 'faq',
           active: false,
           children: []
@@ -255,6 +282,19 @@ export default {
     logOut () {
       return this.$store.dispatch('Auth/logOut')
     }
+  },
+  computed: {
+    user () {
+      if (this.$store.getters['Auth/user']) {
+        return this.$store.getters['Auth/user']
+      }
+      return new User()
+    },
+    showMenuItem () {
+      return (item) => {
+        return (item.permission === 'all' || this.user.hasPermission(item.permission))
+      }
+    }
   }
 }
 </script>
@@ -266,7 +306,7 @@ export default {
   width: 280px;
   min-height: 840px;
   border-radius: 30px;
-  margin: 40px 24px;
+  margin: 40px 0 0 24px;
   @media screen and (max-width: 1919px) {
     width: 260px;
     min-height: 740px;
