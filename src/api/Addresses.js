@@ -221,15 +221,15 @@ const API_ADDRESS = {
     }
   },
   tree: {
-    base: lumenServer + '/tree',
+    base: lumenServer + '/forrest/tree',
     getNodeById (nodeId) {
-      return lumenServer + '/tree/' + nodeId
+      return lumenServer + '/forrest/tree/' + nodeId
     },
     getNodeByType (nodeType) {
-      return lumenServer + '/tree?type=' + nodeType
+      return lumenServer + '/forrest/tree?type=' + nodeType
     },
     editNode (id) {
-      return lumenServer + '/tree/' + id
+      return lumenServer + '/forrest/tree/' + id
     }
   },
   tags: {

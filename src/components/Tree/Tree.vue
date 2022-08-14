@@ -194,10 +194,8 @@ export default {
     editDialog () {
       this.tab = this.tabName
     },
-    watch: {
-      loading (newValue) {
-        this.$store.dispatch('loading/overlayLoading', newValue)
-      }
+    loading (newValue) {
+      this.$store.dispatch('loading/overlayLoading', newValue)
     }
   },
 
