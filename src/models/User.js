@@ -55,6 +55,10 @@ class User extends Model {
       {
         key: 'updateType',
         default: 'profile'
+      },
+      {
+        key: 'permissions',
+        default: []
       }
 
     ])
@@ -62,6 +66,17 @@ class User extends Model {
     if (!this.full_name) {
       this.full_name = this.first_name + ' ' + this.last_name
     }
+
+    // TODO: this is for test
+    this.setDefaultPermission()
+  }
+
+  setDefaultPermission () {
+    this.permissions = [
+      'examStore'
+      // 'examUpdate',
+      // 'examquestionBookletUpload'
+    ]
   }
 
   getCompletionInfoKeys () {
@@ -118,6 +133,9 @@ class User extends Model {
     return status
   }
 
+  hasPermission (permission) {
+    return !!this.permissions.includes(permission)
+  }
   // registerExam (exam_id) {
   //   const that = this
   //   return new Promise(function (resolve, reject) {

@@ -145,13 +145,15 @@ export default {
   computed: {
     getAllSubjects () {
       const fieldText = []
-      if (Object.keys(this.chosenSubjects).length !== 0) {
-        for (const key in this.chosenSubjects) {
-          if (this.chosenSubjects[key].nodes && this.chosenSubjects[key].nodes.length > 0) {
-            this.chosenSubjects[key].nodes.forEach(val => {
-              fieldText.push(val)
-            })
-          }
+      if (Object.keys(this.chosenSubjects).length === 0) {
+        return fieldText
+      }
+
+      for (const key in this.chosenSubjects) {
+        if (this.chosenSubjects[key].nodes && this.chosenSubjects[key].nodes.length > 0) {
+          this.chosenSubjects[key].nodes.forEach(val => {
+            fieldText.push(val)
+          })
         }
       }
       return fieldText

@@ -187,6 +187,7 @@ export default {
     border-radius: 30px;
   }
   .float-panel-box {
+    overflow-x: auto;
     height: 450px;
     .q-card {
       box-shadow: rgba(50, 50, 93, 0.25) 0px 13px 27px -5px, rgba(0, 0, 0, 0.3) 0px 8px 16px -8px;
@@ -242,6 +243,18 @@ export default {
     .q-card {
       box-shadow: rgba(50, 50, 93, 0.25) 0px 13px 27px -5px, rgba(0, 0, 0, 0.3) 0px 8px 16px -8px;
     }
+  .question-image-panel {
+    .image-panel-box {
+      overflow-x: auto;
+    }
   }
-
+}
+.all-images {
+  .filepond--drop-label {
+    .q-icon {
+      background-color: #9690e4;
+      border-radius: 10px;
+    }
+  }
+}
 </style>

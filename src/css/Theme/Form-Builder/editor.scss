@@ -1,0 +1,23 @@
+
+.form-builder-tiptapEditor-col {
+  padding: 8px 12px 0 12px ;
+  &:deep(p) {
+    &:first-child {
+      margin-bottom: 0 ;
+    }
+  }
+  .tiptap-plus-container {
+     background-color: var(--3a-Neutral3);
+     border-radius: 20px;
+   }
+
+  .tiptap-plus {
+    .tiptap-header {
+      border-radius: 20px 20px 0 0;
+      background-color: var(--3a-Neutral3);
+      border-bottom: 1px solid var(--3a-Neutral1);
+      margin: 24px;
+      padding: 0;
+    }
+  }
+ }

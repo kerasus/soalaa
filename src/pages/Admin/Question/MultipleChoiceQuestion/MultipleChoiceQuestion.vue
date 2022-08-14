@@ -59,6 +59,7 @@
     <div class="attach-btn row">
       <question-identifier
         ref="questionIdentifier"
+        editable
         class="col-12"
         :exams="examList"
         :lessons="subCategoriesList"
@@ -69,7 +70,7 @@
         :major-list="majorList"
         :authorship-dates-list="authorshipDatesList"
         :question-authors-list="questionAuthorsList"
-        :buffer="true"
+        buffer
         @gradeSelected="getLessonsList"
         @groupSelected="getLessonsList"
         @attach="attachExam"
@@ -155,35 +156,37 @@ export default {
   updated () {},
   methods: {
     saveQuestion () {
-      if (this.getContent()) {
-        const exams = []
-        this.question.exams.list.forEach(item => {
-          exams.push({
-            id: item.exam_id,
-            exam_id: item.exam_id,
-            sub_category_id: item.sub_category_id,
-            order: item.order
-          })
-        })
-        this.$refs.questionIdentifier.getIdentifierData(false)
-        this.question.author.push({ full_name: this.$store.getters['Auth/user'].full_name, id: this.$store.getters['Auth/user'].id })
-        const question = {
-          author: this.question.author,
-          choices: this.question.choices.list,
-          exams,
-          descriptive_answer: this.question.descriptive_answer,
-          statement: this.question.statement,
-          level: (this.question.level) ? this.question.level : 1,
-          reference: this.question.reference,
-          years: this.question.years,
-          tags: this.question.tags,
-          major: this.question.major,
-          sub_category_id: 1,
-          recommended_time: 0,
-          type_id: this.question.type_id
-        }
-        this.createQuestion(question)
+      if (!this.getContent()) {
+        return
       }
+
+      const exams = []
+      this.question.exams.list.forEach(item => {
+        exams.push({
+          id: item.exam_id,
+          exam_id: item.exam_id,
+          sub_category_id: item.sub_category_id,
+          order: item.order
+        })
+      })
+      this.$refs.questionIdentifier.getIdentifierData(false)
+      this.question.author.push({ full_name: this.$store.getters['Auth/user'].full_name, id: this.$store.getters['Auth/user'].id })
+      const question = {
+        author: this.question.author,
+        choices: this.question.choices.list,
+        exams,
+        descriptive_answer: this.question.descriptive_answer,
+        statement: this.question.statement,
+        level: (this.question.level) ? this.question.level : 1,
+        reference: this.question.reference,
+        years: this.question.years,
+        tags: this.question.tags.list.map(item => item.id),
+        majors: this.question.majors,
+        sub_category_id: 1,
+        recommended_time: 0,
+        type_id: this.question.type_id
+      }
+      this.createQuestion(question)
     },
     setDefaultChoices () {
       this.question.choices.list = []

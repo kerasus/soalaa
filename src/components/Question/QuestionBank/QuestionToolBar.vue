@@ -7,7 +7,7 @@
       <template v-slot:header>
         <q-card-section class="toolbar-card q-pa-0">
           <div class="row toolbar-card-actions">
-            <div class="col-xl-5 col-lg-6 col-md-6 col-sm-4 toolbar-btn">
+            <div class="toolbar-btn">
               <q-btn
                 class="delete-choices-btn"
                 @click=deleteAllChoose()
@@ -23,15 +23,16 @@
           </span>
               </q-btn>
             </div>
-            <div class="col-xl-2 col-lg-3 col-md-3 col-sm-4 toolbar-checkbox">
+            <div class="toolbar-checkbox">
               <q-checkbox
                 class="choices-checkbox"
                 label="انتخاب همه"
-                v-bind:="checkBox"
+                v-model="checkbox"
+                indeterminate-value="maybe"
                 @click="selectAllQuestions">
               </q-checkbox>
             </div>
-            <div class="col-xl-3 col-lg-3 col-md-3 col-sm-4 choices-number">
+            <div class="choices-number">
               {{ this.numberOfQuestions() }}
               <span class="choices-number-title">سوال انتخاب شده</span>
             </div>
@@ -40,7 +41,7 @@
       </template>
       <q-card-section class="q-pa-0 toolbar-detail">
         <div class="toolbar-detail-container row">
-          <div class="chosen-questions col-xl-6 col-lg-6 col-md-5 col-sm-7 ">
+          <div class="chosen-questions">
             <div class="chosen-question-title">
               سوالات انتخاب شده:
             </div>
@@ -57,7 +58,7 @@
               </q-chip>
             </q-card-actions>
           </div>
-          <div class="question-level-chart col-xl-4 col-lg-4 col-md-4 col-sm-5  justify-center flex">
+          <div class="question-level-chart justify-center flex">
             <div class="row">
               <div class="col-4 q-pt-sm q-pl-xs">
                 <div class="chart-titles">
@@ -78,7 +79,7 @@
               </div>
             </div>
           </div>
-          <div class="question-deActive col-xl col-lg-2 col-md-3 col-sm-12">
+          <div class="question-deActive">
             <div class=" delete-all">
               <q-btn
                 @click=deleteAllChoose()
@@ -153,11 +154,11 @@
           <div class="toolbar-checkbox-container">
             <div class="toolbar-checkbox">
               <q-checkbox
+                v-model="selectAllCheckbox"
                 class="choices-checkbox"
                 label="انتخاب همه"
-                v-bind:="checkBox"
-                @click="selectAllQuestions">
-              </q-checkbox>
+                name="checkbox"
+                @click="selectAllQuestions"/>
             </div>
           </div>
           <div class="choices-number-container">
@@ -239,6 +240,8 @@ export default {
   },
   data () {
     return {
+      selectAllCheckbox: false,
+      checkbox: this.checkBox,
       questions: new QuestionList(),
       ToolbarDialog: false,
       chartOptions: {
@@ -328,6 +331,7 @@ export default {
       }
     }
   },
+  emits: ['selectAllQuestions', 'deleteAllQuestions', 'remove'],
   created () {
     this.setDifficultyLevelsChart()
     this.replaceTitle()
@@ -360,8 +364,7 @@ export default {
       return x
     },
     RemoveSelectedChoice (selectedTap) {
-      console.log(selectedTap)
-      console.log('this.selectedQuestionsTabs', this.selectedQuestionsTabs)
+      this.$emit('remove', selectedTap.title)
     }
   }
 }
@@ -369,11 +372,119 @@ export default {
 
 <style lang="scss" scoped>
 .question-Bank-ToolBar {
+
+  &:deep(.q-expansion-item) {
+    padding: 0;
+
+    .q-item-type {
+      justify-content: space-between;
+      padding: 23px 27px 23px 40px;
+
+      .q-item__section {
+        padding-right: 0;
+      }
+    }
+
+    .q-expansion-item__container {
+      .q-expansion-item__content {
+        .q-card__section {
+          padding: 0px 40px 16px 40px;
+        }
+      }
+    }
+  }
+
+  &:deep(.q-expansion-item--collapsed) {
+    .q-item__section {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+
+      &:before {
+        content: 'بیشتر';
+      }
+
+      i {
+        margin-top: 0;
+        margin-left: 10px;
+      }
+
+      .q-expansion-item__toggle-focus {
+        display: none;
+      }
+    }
+  }
+
+  &:deep(.q-expansion-item--expanded) {
+    .q-item__section {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+
+      &:before {
+        content: 'بستن';
+      }
+
+      i {
+        margin-top: 0;
+        margin-left: 10px;
+      }
+
+      .q-expansion-item__toggle-focus {
+        display: none;
+      }
+    }
+  }
+
+  .toolbar-detail {
+    .toolbar-detail-container {
+      .question-level-chart {
+        .question-highchart {
+          &:deep( .myTooltip) {
+            border-radius: 10px;
+            direction: ltr;
+            color: var(--3a-Neutral3);
+            padding: 5px !important;
+            width: 50px;
+            white-space: normal !important;
+            display: flex;
+            justify-content: center;
+          }
+
+          &:deep( .title-1 ) {
+            font-weight: 700;
+            font-size: 24px;
+            line-height: 20px;
+            text-align: center;
+            color: #23263B;
+          }
+
+          &:deep( .title-2) {
+            font-weight: 400;
+            font-size: 14px;
+            line-height: 20px;
+            text-align: center;
+            color: #23263B;
+          }
+
+        }
+      }
+
+      .question-deActive {
+        .deactivate-all {
+          .q-btn {
+            padding: 0;
+          }
+        }
+      }
+    }
+  }
+
   .toolbar-card {
     display: flex;
     min-width: 85%;
     justify-content: space-between;
-    padding: 0px 0px 0px 0px;
+    padding: 0;
 
     .toolbar-card-actions {
       width: 100%;
@@ -401,11 +512,11 @@ export default {
       .toolbar-checkbox {
         align-items: center;
         display: flex;
-        margin-left: 12.6%;
+        margin-left: 50px;
       }
 
       .choices-number {
-        margin-left: 4%;
+        margin-left: 54px;
         align-items: center;
         display: flex;
         font-style: normal;
@@ -429,6 +540,7 @@ export default {
 
   .toolbar-detail {
     .toolbar-detail-container {
+      justify-content: space-between;
       .chosen-questions {
         .chosen-question-title {
           padding-left: 4px;
@@ -479,7 +591,8 @@ export default {
             background-color: #8ED6FF;
           }
         }
-        .question-highchart{
+
+        .question-highchart {
           padding-left: 13px;
         }
       }
@@ -751,6 +864,7 @@ export default {
       .toolbar-checkBox-number {
         display: flex;
         justify-content: space-around;
+
         .toolbar-checkbox-container {
           padding-right: 30px;
 
@@ -765,15 +879,17 @@ export default {
         }
 
         .choices-number-container {
-          transform: translate(6px,0px);
+          transform: translate(6px, 0px);
           display: flex;
           align-items: center;
-          .choices-number{
+
+          .choices-number {
             font-style: normal;
             font-weight: 400;
             font-size: 14px;
             line-height: 24px;
             color: #FFFFFF;
+
             .choices-number-title {
               margin-left: 5px;
             }
@@ -786,7 +902,7 @@ export default {
 }
 
 @media only screen and (max-width: 599px) {
-  .question-Bank-ToolBar{
+  .question-Bank-ToolBar {
     display: none;
   }
   .pageSticky {
@@ -796,112 +912,6 @@ export default {
 </style>
 
 <style lang="scss">
-.question-Bank-ToolBar {
-  .q-expansion-item {
-    padding: 0;
-
-    .q-item-type {
-      justify-content: space-between;
-      padding: 15px 43px 15px 40px;
-
-      .q-item__section {
-        padding-right: 0;
-      }
-    }
-
-    .q-expansion-item__container {
-      .q-expansion-item__content {
-        .q-card__section {
-          padding: 0px 40px 16px 40px;
-        }
-      }
-    }
-  }
-
-  .q-expansion-item--collapsed {
-    .q-item__section {
-      display: flex;
-      flex-direction: row;
-      align-items: center;
-
-      &:before {
-        content: 'بیشتر';
-      }
-
-      i {
-        margin-top: 0;
-        margin-left: 10px;
-      }
-
-      .q-expansion-item__toggle-focus {
-        display: none;
-      }
-    }
-  }
-
-  .q-expansion-item--expanded {
-    .q-item__section {
-      display: flex;
-      flex-direction: row;
-      align-items: center;
-
-      &:before {
-        content: 'بستن';
-      }
-
-      i {
-        margin-top: 0;
-        margin-left: 10px;
-      }
-
-      .q-expansion-item__toggle-focus {
-        display: none;
-      }
-    }
-  }
-
-  .toolbar-detail {
-    .toolbar-detail-container {
-      .question-level-chart {
-        .question-highchart {
-          .myTooltip {
-            border-radius: 10px;
-            direction: ltr;
-            color: var( --3a-Neutral3);
-            padding: 5px !important;
-            width: 50px;
-            white-space: normal !important;
-            display: flex;
-            justify-content: center;
-          }
-          .title-1 {
-            font-weight: 700;
-            font-size: 24px;
-            line-height: 20px;
-            text-align: center;
-            color: #23263B;
-          }
-
-          .title-2 {
-            font-weight: 400;
-            font-size: 14px;
-            line-height: 20px;
-            text-align: center;
-            color: #23263B;
-          }
-        }
-      }
-
-      .question-deActive {
-        .deactivate-all {
-          .q-btn {
-            padding: 0;
-          }
-        }
-      }
-    }
-  }
-}
 
 @media only screen and (max-width: 1919px) {
   .question-Bank-ToolBar {
@@ -959,7 +969,7 @@ export default {
               }
 
               .question-deActive {
-                .deactivate-all{
+                .deactivate-all {
 
                 }
               }
@@ -1023,6 +1033,7 @@ export default {
 
               .question-level-chart {
                 padding-left: 6px;
+
                 .question-highchart {
                   padding-left: 10px;
                 }
@@ -1127,13 +1138,14 @@ export default {
           .myTooltip {
             border-radius: 10px;
             direction: ltr;
-            color: var( --3a-Neutral3);
+            color: var(--3a-Neutral3);
             padding: 5px !important;
             width: 50px;
             white-space: normal !important;
             display: flex;
             justify-content: center;
           }
+
           .title-1 {
             font-weight: 700;
             font-size: 24px;

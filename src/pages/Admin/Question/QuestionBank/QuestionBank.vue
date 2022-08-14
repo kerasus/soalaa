@@ -5,40 +5,45 @@
         <QuestionBankHeader/>
       </div>
       <div class="col-xl-3 col-lg-3 col-md-3 col-sm-12 col-xs-12 question-bank-filter">
-        <QuestionFilter
+        <question-filter
           ref="filter"
+          @onFilter="onFilter"
           @delete-filter="deleteFilterItem"
-          :filterQuestions = filterQuestions
+          :filterQuestions="filterQuestions"
         />
       </div>
       <div class="col-xl-9 col-lg-9 col-md-9 col-sm-12 col-xs-12">
         <div class="question-bank-toolbar">
           <QuestionToolBar
-            v-model:selectedQuestions="selectedQuestions"
-            @RemoveChoice="RemoveChoice"
+            :check-box="checkBox"
+            :selectedQuestions="selectedQuestions"
+            @remove="RemoveChoice"
+            @deleteAllQuestions="deleteAllQuestions"
+            @selectAllQuestions="selectAllQuestions"
             :key="questionListKey"
           />
         </div>
         <div class="question-bank-content">
-          <question-item v-if="questions.loading" :question="loadingQuestion" />
-          <template v-else>
-            <question-item
-              v-for="question in questions.list"
-              :key="question.id"
-              :question="question"
-              pageStrategy="question-bank"
-              @checkSelect="onClickedCheckQuestionBtn"
-            />
-          </template>
+          <question-item />
+<!--          <question-item v-if="questions.loading" :question="loadingQuestion" />-->
+<!--          <template v-else>-->
+<!--            <question-item-->
+<!--              v-for="question in questions.list"-->
+<!--              :key="question.id"-->
+<!--              :question="question"-->
+<!--              pageStrategy="question-bank"-->
+<!--              @checkSelect="onClickedCheckQuestionBtn"-->
+<!--            />-->
+<!--          </template>-->
         </div>
 
-        <div class="pagination">
-          <pagination
-            :meta="paginationMeta"
-            :disable="disablePagination"
-            @updateCurrentPage="updatePage"
-          />
-        </div>
+<!--        <div class="pagination">-->
+<!--          <pagination-->
+<!--            :meta="paginationMeta"-->
+<!--            :disable="disablePagination"-->
+<!--            @updateCurrentPage="updatePage"-->
+<!--          />-->
+<!--        </div>-->
       </div>
     </div>
   </div>
@@ -47,17 +52,19 @@
 <script>
 import API_ADDRESS from 'src/api/Addresses'
 import { Question, QuestionList } from 'src/models/Question'
-import pagination from 'components/Question/QuestionBank/Pagination'
+// import pagination from 'components/Question/QuestionBank/Pagination'
 import QuestionItem from 'components/Question/QuestionItem/QuestionItem'
 import QuestionFilter from 'components/Question/QuestionBank/QuestionFilter'
 import QuestionToolBar from 'components/Question/QuestionBank/QuestionToolBar'
 import QuestionBankHeader from 'components/Question/QuestionBank/components/QuestionBankHeader'
+import { Exam } from 'src/models/Exam'
 
 export default {
   name: 'QuestionBank',
-  components: { QuestionBankHeader, QuestionToolBar, QuestionFilter, QuestionItem, pagination },
+  components: { QuestionBankHeader, QuestionToolBar, QuestionFilter, QuestionItem },
   data () {
     return {
+      checkBox: false,
       filterQuestions: {
         major_type: [],
         reference_type: [],
@@ -81,78 +88,119 @@ export default {
       }
     }
   },
+  inject: {
+    exam: {
+      from: 'providedExam',
+      default: new Exam()
+    }
+  },
+  watch: {
+    'selectedQuestions.length': {
+      handler (newValue, oldValue) {
+        this.exam.questions.list = []
+        this.exam.questions.list = this.selectedQuestions
+        this.questionListKey = Date.now()
+      }
+    }
+  },
   created () {
     this.getQuestionData()
     this.getFilterOptions()
   },
-
+  emits: ['onFilter'],
   methods: {
-    RemoveChoice (subcategoryId) {
-      console.log(this.selectedQuestions)
-      const target = this.selectedQuestions.findIndex(question => question.id === subcategoryId)
-      this.selectedQuestions.splice(target, 1)
+    onFilter (filterData) {
+      this.$emit('onFilter', filterData)
+      const filters = this.getFiltersForRequest(filterData)
+      this.getQuestionData(1, filters)
+    },
+    RemoveChoice (title) {
+      const target = this.selectedQuestions.filter(question => question.tags.list.find(tag => tag.type === 'lesson' && tag.title === title))
+      if (target.length) {
+        target.forEach(question => {
+          question.selected = !question.selected
+          this.selectedQuestions.splice(question.index - 1, 1)
+          this.deleteQuestionFromExam(question)
+          this.questionListKey = Date.now()
+        })
+      }
     },
     toggleQuestionSelected (question) {
       question.selected = !question.selected
     },
-    handleName (question) {
+    questionHandle (question) {
       if (question.selected) {
         this.addQuestionToSelectedList(question)
+        // this.addQuestionToExam(question)
       } else {
         this.deleteQuestionFromSelectedList(question)
+        // this.deleteQuestionFromExam(question)
       }
     },
     onClickedCheckQuestionBtn (question) {
       this.toggleQuestionSelected(question)
-      this.handleName(question)
+      this.questionHandle(question)
+    },
+    addQuestionToExam (question) {
+      this.$emit('addQuestionToExam', question)
+      this.questionListKey = Date.now()
+    },
+    deleteQuestionFromExam (question) {
+      this.$emit('deleteQuestionFromExam', question)
+      this.questionListKey = Date.now()
     },
     addQuestionToSelectedList (question) {
       this.selectedQuestions.push(question)
+      if (this.selectedQuestions.length === this.questions.list.length) {
+        this.checkBox = true
+      } else this.checkBox = 'maybe'
       this.questionListKey = Date.now()
     },
     deleteQuestionFromSelectedList (question) {
+      if (this.checkBox) {
+        this.checkBox = false
+      }
       const target = this.selectedQuestions.findIndex(questionItem => questionItem.id === question.id)
       if (target === -1) {
         return
       }
       this.selectedQuestions.splice(target, 1)
+      this.deleteQuestionFromExam(question)
       this.questionListKey = Date.now()
     },
+
     updatePage (page) {
       this.getQuestionData(page)
     },
     deleteFilterItem (filter) {
-      console.log('Filter Deleted !!!', filter.id)
-      this.$refs.filter.setTicked('tree', filter.id, false)
+      // this.$refs.filter.setTicked('tree', filter.id, false)
     },
-    getFilters () {
-      if (!this.$refs.filter) {
-        return null
-      }
-      const filters = this.$refs.filter.getFilters()
-
+    getFiltersForRequest (filterData) {
       return {
-        tags: filters.tags.map(tag => tag.id)
+        tags: (filterData.tags) ? filterData.tags.map(item => item.id) : [],
+        years: (filterData.years) ? filterData.years.map(item => item.id) : [],
+        majors: (filterData.majors) ? filterData.majors.map(item => item.id) : [],
+        reference: (filterData.reference) ? filterData.reference.map(item => item.id) : []
       }
     },
-    getQuestionData (page) {
+    getQuestionData (page, filters) {
       if (!page) {
         page = 1
       }
       this.loadingQuestion.loading = true
       this.questions.loading = true
-      this.$axios.get(API_ADDRESS.question.index(this.getFilters(), page))
-        .then((response) => {
-          this.questions = new QuestionList(response.data.data)
-          this.paginationMeta = response.data.meta
-          this.loadingQuestion.loading = false
-          this.questions.loading = false
-        })
-        .catch(function (error) {
-          console.log(error)
-          this.loadingQuestion.loading = false
-          this.questions.loading = false
-        })
+      // this.$axios.get(API_ADDRESS.question.index(filters, page))
+      //   .then((response) => {
+      //     this.questions = new QuestionList(response.data.data)
+      //     this.paginationMeta = response.data.meta
+      //     this.loadingQuestion.loading = false
+      //     this.questions.loading = false
+      //   })
+      //   .catch(function (error) {
+      //     console.log(error)
+      //     this.loadingQuestion.loading = false
+      //     this.questions.loading = false
+      //   })
     },
     getFilterOptions () {
       this.$axios.get(API_ADDRESS.option.base)
@@ -170,16 +218,42 @@ export default {
         .catch(function (error) {
           console.log(error)
         })
+    },
+    selectAllQuestions () {
+      this.checkBox = !this.checkBox
+      if (this.selectedQuestions.length) {
+        this.questions.list.forEach(question => {
+          question.selected = false
+          this.selectedQuestions.splice(question)
+        })
+      }
+      if (this.checkBox) {
+        this.questions.list.forEach(question => {
+          question.selected = true
+          this.selectedQuestions.push(question)
+        })
+      } else {
+        this.questions.list.forEach(question => {
+          question.selected = false
+          this.selectedQuestions.splice(question)
+        })
+      }
+    },
+    deleteAllQuestions () {
+      if (this.checkBox) {
+        this.checkBox = false
+      }
+      this.questions.list.forEach(question => {
+        question.selected = false
+        this.selectedQuestions.splice(question)
+      })
     }
   }
 }
+
 </script>
 
 <style>
-
-.main-container {
-  padding: 0 100px 0 96px;
-}
 
 .q-checkbox__bg {
   border: 1px solid #65677F;
