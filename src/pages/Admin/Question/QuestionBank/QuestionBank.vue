@@ -53,7 +53,7 @@
 import API_ADDRESS from 'src/api/Addresses'
 import { Exam } from 'src/models/Exam'
 import { Question, QuestionList } from 'src/models/Question'
-// import pagination from 'components/Question/QuestionBank/Pagination'
+import pagination from 'components/Question/QuestionBank/Pagination'
 import QuestionItem from 'components/Question/QuestionItem/QuestionItem'
 import QuestionFilter from 'components/Question/QuestionBank/QuestionFilter'
 import QuestionToolBar from 'components/Question/QuestionBank/QuestionToolBar'
@@ -61,7 +61,7 @@ import QuestionBankHeader from 'components/Question/QuestionBank/components/Ques
 
 export default {
   name: 'QuestionBank',
-  components: { QuestionBankHeader, QuestionToolBar, QuestionFilter, QuestionItem },
+  components: { QuestionBankHeader, QuestionToolBar, QuestionFilter, QuestionItem, pagination },
   data () {
     return {
       checkBox: false,
