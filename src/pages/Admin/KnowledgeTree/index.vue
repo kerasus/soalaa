@@ -32,11 +32,20 @@ export default {
   mixins: [mixinTree],
   components: { Tree },
   created () {
+    this.loading = true
     this.showTree('tree', this.getRootNode('test'))
-      .then(() => {})
+      .then(() => {
+        this.loading = false
+      })
       .catch(err => {
         console.log(err)
+        this.loading = false
       })
+  },
+  watch: {
+    loading (newValue) {
+      this.$store.dispatch('loading/overlayLoading', newValue)
+    }
   },
   methods: {
     test (value) {

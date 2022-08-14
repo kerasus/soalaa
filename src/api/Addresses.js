@@ -1,14 +1,12 @@
 import process from 'process'
 const lumenServer = process.env.AAA_API
 const authServer = process.env.AUTH_API
-const treeServer = process.env.TREE_API
-const tagServer = process.env.TAG_API
 const API_ADDRESS = {
   // socket: process.env.VUE_APP_SOCKET_TARGET_API_SERVER,
   socket: process.env.SOCKET_SERVER,
   server: {
     lumen: lumenServer,
-    auth: authServer
+    auth: lumenServer
   },
   auth: {
     login: lumenServer + '/user/login'
@@ -223,20 +221,20 @@ const API_ADDRESS = {
     }
   },
   tree: {
-    base: treeServer + '/tree',
+    base: lumenServer + '/forrest/tree',
     getNodeById (nodeId) {
-      return treeServer + '/tree/' + nodeId
+      return lumenServer + '/forrest/tree/' + nodeId
     },
     getNodeByType (nodeType) {
-      return treeServer + '/tree?type=' + nodeType
+      return lumenServer + '/forrest/tree?type=' + nodeType
     },
     editNode (id) {
-      return treeServer + '/tree/' + id
+      return lumenServer + '/forrest/tree/' + id
     }
   },
   tags: {
     setTags (questionId) {
-      return tagServer + '/id/soalaQestion/' + questionId
+      return lumenServer + '/id/soalaQestion/' + questionId
     }
   }
 }
