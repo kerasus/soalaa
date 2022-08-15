@@ -392,7 +392,14 @@ const routes = [
       {
         path: '/landing',
         name: 'landing',
-        component: () => import('pages/User/landing/landing')
+        component: () => import('layouts/LandingLayout'),
+        children: [
+          {
+            path: '',
+            name: 'landing1',
+            component: () => import('pages/User/landing/landing')
+          }
+        ]
       }
     ]
   },
