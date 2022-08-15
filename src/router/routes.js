@@ -1,4 +1,4 @@
-import { auth, hasPermission, Permissions } from './middleware/middleware'
+import { auth, Permissions } from './middleware/middleware'
 function getEntityCrudRouteObject (path, baseRouteName, componentPath, breadcrumbs) {
   const AllNeededRoutes = [
     { mode: 'Index', path: '' },
@@ -378,9 +378,7 @@ const routes = [
         name: 'onlineQuiz.alaaView',
         component: () => import('pages/User/exam/participate/AlaaView'),
         meta: {
-          middlewares: [auth,
-            hasPermission('examUpdate')
-          ]
+          middlewares: [auth]
         }
       },
       {

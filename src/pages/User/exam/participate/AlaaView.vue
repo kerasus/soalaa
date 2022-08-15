@@ -164,21 +164,16 @@ export default {
     Timer
   },
   mixins: [mixinAuth, mixinQuiz, mixinUserActionOnQuestion, mixinDrawer],
-  beforeRouteEnter () {
-    console.log('AlaaView beforeRouteEnter')
-  },
-  beforeRouteLeave () {
-    console.log('AlaaView beforeRouteLeave')
+  data () {
+    return {
+      userExamId: null
+    }
   },
   beforeRouteUpdate () {
-    console.log('AlaaView beforeRouteUpdate')
     this.getLatestUserAnswersFromServer()
   },
-  activated () {
-    // console.log('AlaaView activated')
-  },
-  updated () {
-    // console.log('AlaaView updated')
+  created () {
+    this.userExamId = this.$route.params.quizId
   },
   mounted () {
     this.updateOverlay(true)
@@ -196,7 +191,13 @@ export default {
       this.startExam(this.$route.params.quizId, 'onlineQuiz.alaaView')
         .then(() => {
           this.setSocket(this.$store.getters['Auth/accessToken'], this.quiz.id)
-          if (!this.getCurrentExamQuestionsInArray().length) {
+          if (this.getCurrentExamQuestionsInArray().length === 0) {
+            this.$q.notify({
+              type: 'negative',
+              message: 'مشکلی در دریافت سوالات آزمون رخ داده است.',
+              position: 'top'
+            })
+            this.$store.commit('Exam/clearExamData', this.userExamId)
             this.$router.push({ name: 'user.exam.list' })
           }
           this.updateOverlay(false)

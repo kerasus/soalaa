@@ -86,7 +86,7 @@
           <q-btn
             color="green "
             :loading="loading "
-            @click="createTree()"
+            @click="addNode()"
           >
              ایجاد درخت
           </q-btn>
@@ -193,6 +193,9 @@ export default {
   watch: {
     editDialog () {
       this.tab = this.tabName
+    },
+    loading (newValue) {
+      this.$store.dispatch('loading/overlayLoading', newValue)
     }
   },
 
@@ -252,6 +255,7 @@ export default {
     },
 
     edit () {
+      this.loading = true
       this.editNode(this.selectedNode.id, this.editedTitle, this.editedOrder)
         .then(() => {
           const id = this.selectedNode.id
@@ -259,12 +263,16 @@ export default {
           node.title = this.editedTitle
           node.order = this.editedOrder
           this.editDialog = false
+          this.loading = false
         }).catch(err => {
           console.log(err)
+          this.editDialog = false
+          this.loading = false
         })
     },
 
     addNode () {
+      this.loading = true
       const id = this.selectedNode.id ? this.selectedNode.id : ''
       const getNode = this.$refs.tree.getNodeByKey(id)
       this.addNewNode(id, this.newType, this.newTitle, this.newOrder)
@@ -277,6 +285,10 @@ export default {
             parent: response.data.data.parent.id ? response.data.data.parent.id : null
           }))
           this.editDialog = false
+          this.loading = false
+        }).catch(() => {
+          this.editDialog = false
+          this.loading = false
         })
     },
 
