@@ -1,15 +1,9 @@
 <template>
-  <v-row class="my-3">
-    <v-col
-      md="12"
-      class="not-visible-in-print toolbox"
-    >
-      <v-row>
-        <v-col
-          md="1"
-          class="mr-5"
-        >
-          <v-text-field
+  <div class="row my-3">
+    <div class="not-visible-in-print toolbox col-md-12">
+      <div class="row">
+        <div class="mr-5 col-md-1">
+          <q-input
             v-model="fontSize"
             dense
             outlined
@@ -17,11 +11,9 @@
             type="number"
             @input="updateFontSize"
           />
-        </v-col>
-        <v-col
-          md="1"
-        >
-          <v-text-field
+        </div>
+        <div class="col-md-1">
+          <q-input
             v-model="formulaFontSize"
             dense
             outlined
@@ -29,21 +21,18 @@
             type="number"
             @input="updateFontSize"
           />
-        </v-col>
-      </v-row>
-    </v-col>
-    <v-col
-      md="12"
-      class="print-page"
-    >
-      <v-row
+        </div>
+      </div>
+    </div>
+    <div class="print-page col-md-12">
+      <div
         v-for="(question) in quizData.questions.list"
         :key="question.id"
-        class="question-parent"
+        class="question-parent row"
         :class="{ 'ltr': question.ltr, 'rtl': !question.ltr }"
       >
         <div class="vertical-choice not-visible-in-print">
-          <v-text-field
+          <q-input
             v-model="question.verticalChoice"
             type="number"
             outlined
@@ -53,16 +42,15 @@
         </div>
         <div class="question-box">
           <div class="statement">
-            <v-btn
-              icon
+            <q-btn
               color="blue"
               class="edit-button"
               @click="toggleEditMode(question)"
             >
-              <v-icon color="blue">
+              <q-icon color="blue">
                 mdi-pencil
-              </v-icon>
-            </v-btn>
+              </q-icon>
+            </q-btn>
             <vue-katex
               v-if="!question.editMode"
               :input="question.statement"
@@ -95,16 +83,15 @@
               :key="cIndex"
               class="choice"
             >
-              <v-btn
-                icon
+              <q-btn
                 color="blue"
                 class="edit-button"
                 @click="toggleEditMode(choice)"
               >
-                <v-icon color="blue">
+                <q-icon color="blue">
                   mdi-pencil
-                </v-icon>
-              </v-btn>
+                </q-icon>
+              </q-btn>
               <vue-katex
                 v-if="!choice.editMode"
                 :input="choice.title"
@@ -130,25 +117,23 @@
             </div>
           </div>
         </div>
-      </v-row>
-    </v-col>
-  </v-row>
+      </div>
+    </div>
+  </div>
 </template>
 
 <script>
-import API_ADDRESS from "@/api/Addresses";
-import {QuestionList} from "@/models/Question";
-import axios from "axios";
-import {Exam} from "@/models/Exam";
-import {QuestSubcategoryList} from "@/models/QuestSubcategory";
-import { mixinAuth, mixinQuiz, mixinDrawer } from '@/mixin/Mixins'
-import VueKatex from "@/components/VueKatex";
-import VueTiptapKatex from "vue-tiptap-katex";
-
+import VueTiptapKatex from 'vue3-tiptap-katex'
+import API_ADDRESS from 'src/api/Addresses.js'
+import VueKatex from 'src/components/VueKatex'
+import { Exam } from 'src/models/Exam'
+import { QuestionList } from 'src/models/Question'
+import { QuestSubcategoryList } from 'src/models/QuestSubcategory'
+import { mixinAuth, mixinQuiz, mixinDrawer } from 'src/mixin/Mixins'
 
 export default {
-  name: "QuestionPreview",
-  components: {VueKatex, VueTiptapKatex},
+  name: 'QuestionPreview',
+  components: { VueKatex, VueTiptapKatex },
   mixins: [mixinAuth, mixinQuiz, mixinDrawer],
   data () {
     return {
@@ -162,7 +147,7 @@ export default {
   computed: {
     imageUrl () {
       return API_ADDRESS.question.uploadImage(this.questionId)
-    },
+    }
     // tiptapOptions: {
     //   bubbleMenu: false,
     //   floatingMenu: false,
@@ -217,8 +202,8 @@ export default {
         }
         // that.quiz.sub_categories = new QuestSubcategoryList(response.data)
         that.quizData.sub_categories = new QuestSubcategoryList(response.data.data)
-        let questions = quizResponse.data.data
-        that.sortQuestions (questions)
+        const questions = quizResponse.data.data
+        that.sortQuestions(questions)
         that.quizData.questions = new QuestionList(questions)
         // that.quiz = new Exam(that.quizData)
         that.QuIzDaTa = new Exam(that.quizData)
@@ -227,17 +212,17 @@ export default {
         that.quizData.questions.list.forEach((question, index) => {
           question.verticalChoice = 0
           question.statement = question.statement.replace(regexP, match => match + (index + 1) + ') ')
-          question.ltr = !question.statement.match(persianRegex);
+          question.ltr = !question.statement.match(persianRegex)
           question.editMode = false
           question.statement = question.statement.replace(/<p[^>]*>/g, match => {
-            let el = document.createElement('div')
+            const el = document.createElement('div')
             el.innerHTML = match
             el.children[0].setAttribute('dir', question.ltr ? 'ltr' : 'rtl')
             return el.innerHTML.split('</p>')[0]
           })
           question.choices.list.forEach((choice, cIndex) => {
             choice.title = choice.title.replace(/<p[^>]*>/g, match => {
-              let el = document.createElement('div')
+              const el = document.createElement('div')
               el.innerHTML = match
               el.children[0].setAttribute('dir', question.ltr ? 'ltr' : 'rtl')
               return el.innerHTML.split('</p>')[0]
@@ -250,18 +235,16 @@ export default {
     },
     loadQuizDataAndSubCategories (reload = false) {
       const that = this
-      axios.post(API_ADDRESS.exam.examQuestion(this.$route.params.quizId), {
+      this.$axios.post(API_ADDRESS.exam.examQuestion(this.$route.params.quizId), {
         sub_categories: [this.$route.params.lessonId]
       })
-          .then((response) => {
-            if (response.data.data.length) {
-              that.loadSubCategories(response, reload)
-            } else {
-              this.$router.push({ name: 'onlineQuiz.exams' })
-            }
-
-          })
-
+        .then((response) => {
+          if (response.data.data.length) {
+            that.loadSubCategories(response, reload)
+          } else {
+            this.$router.push({ name: 'onlineQuiz.exams' })
+          }
+        })
     },
     downLoadQuestions () {
       this.loading = true
@@ -269,25 +252,25 @@ export default {
       const questionsList = this.quizData.questions.list
       const questionsIdList = []
 
-      questionsList.map((question) => {
+      questionsList.each((question) => {
         questionsIdList.push(question.id)
       })
 
-      axios.post(API_ADDRESS.question.printQuestions, {
+      this.$axios.post(API_ADDRESS.question.printQuestions, {
         questions: questionsIdList
       })
-          .then( response => {
-            fileUrl = response.data.data
-            this.download('questions-list', fileUrl)
-            this.loading = false
-          }).catch(err => {
-        this.loading = false
-        console.log(err)
-      })
+        .then(response => {
+          fileUrl = response.data.data
+          this.download('questions-list', fileUrl)
+          this.loading = false
+        }).catch(err => {
+          this.loading = false
+          console.log(err)
+        })
     },
 
-    download(fileName, url) {
-      let element = document.createElement('a')
+    download (fileName, url) {
+      const element = document.createElement('a')
       element.setAttribute('href', url)
       element.setAttribute('download', fileName)
       element.setAttribute('target', '_blank')
@@ -295,7 +278,7 @@ export default {
       element.click()
       document.body.removeChild(element)
     },
-    updateLtr() {
+    updateLtr () {
       setTimeout(() => {
         document.querySelectorAll('.katex:not([dir="ltr"])').forEach(item => {
           item.setAttribute('dir', 'ltr')
@@ -387,8 +370,8 @@ export default {
   }
 
   * {
-    -webkit-print-color-adjust: exact !important;
-    color-adjust: exact !important;
+    -webkit-print-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
   }
 
   .question-parent {

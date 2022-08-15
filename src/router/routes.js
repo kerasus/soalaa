@@ -167,6 +167,12 @@ const routes = [
                 ]
               },
               {
+                path: ':quizId/:lessonId/print',
+                name: 'Admin.Exam.Lessons.PrintQuestions',
+                component: () => import('pages/admin/questionExport/preview.vue'),
+                middleware: []
+              },
+              {
                 path: '/results/mbti_bartle/:exam_id/:user_exam_id',
                 name: 'mbtiBartle.result',
                 component: () => import('pages/User/exam/Result/MBTI_Bartle_result'),
@@ -178,7 +184,7 @@ const routes = [
           },
 
           {
-            path: '/question',
+            path: 'question',
             breadcrumbs: { title: 'سوالات', loading: false },
             component: () => import('layouts/bareLayout.vue'),
             meta: {
