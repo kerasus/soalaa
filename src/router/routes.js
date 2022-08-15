@@ -388,6 +388,11 @@ const routes = [
         meta: {
           middlewares: [auth]
         }
+      },
+      {
+        path: '/landing',
+        name: 'landing',
+        component: () => import('pages/User/landing/landing')
       }
     ]
   },
