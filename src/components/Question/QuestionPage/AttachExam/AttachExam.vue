@@ -2,23 +2,23 @@
   <div class="exam-details">
     <div class="exam-details-all-boxes">
       <div class="details-container-2 default-details-container row">
-      <div class="detail-box">
-        <div class="detail-box-title">آزمون ها</div>
-        <div class="input-container flex">
-          <div class="input-box">
-            <q-input v-model="definedExamsTitle" dense disable/>
-          </div>
-          <div class="icon-box">
-            <q-btn
-              unelevated
-              icon="isax:add-square"
-              class="open-modal-btn default-detail-btn"
-              @click="modal = true"
-            />
+        <div class="detail-box">
+          <div class="detail-box-title">آزمون ها</div>
+          <div class="input-container">
+            <div class="input-box">
+              <q-input v-model="definedExamsTitle" dense disable/>
+            </div>
+            <div class="icon-box">
+              <q-btn
+                unelevated
+                icon="isax:add-square"
+                class="open-modal-btn default-detail-btn"
+                @click="modal = true"
+              />
+            </div>
           </div>
         </div>
       </div>
-    </div>
     </div>
     <q-dialog v-model="modal">
       <q-card class="attach-exam-card">
@@ -275,6 +275,10 @@ export default {
 </script>
 
 <style scoped lang="scss">
+.input-container {
+  display: flex;
+  flex-flow: row;
+}
 .q-dialog {
   .q-dialog__inner--minimized > div {
     width: 720px;
