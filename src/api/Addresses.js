@@ -157,7 +157,7 @@ const API_ADDRESS = {
       if (queryParam.length > 0) {
         queryParam = queryParam.substr(1)
       }
-      return lumenServer + '/question/bank/search?' + queryParam
+      return lumenServer + '/question?' + queryParam
     },
     status: {
       base: lumenServer + '/question/statuses',
