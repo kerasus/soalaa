@@ -15,68 +15,11 @@
                 مشاهده
               </q-tooltip>
             </q-btn>
-            <q-btn round flat dense size="md" color="purple" icon="edit">
-              <q-menu
-                class="options-menu"
-                transition-show="jump-down"
-                transition-hide="jump-up"
-                :offset="[170,5]"
-              >
-                <q-list style="min-width: 100px">
-                  <q-item
-                    v-ripple:yellow
-                    clickable
-                    manual-focus
-                    @click="editExamReport(inputData.props.row.id)"
-                  >
-                    <q-item-section>ویرایش کارنامه</q-item-section>
-                  </q-item>
-                  <q-item
-                    v-ripple:yellow
-                    clickable
-                    manual-focus
-                    @click="generateJsonFile(inputData.props.row, false)"
-                  >
-                    <q-item-section>ساخت فایل سوالات</q-item-section>
-                  </q-item>
-                  <q-item
-                    v-ripple:yellow
-                    clickable
-                    manual-focus
-                    @click="generateJsonFile(inputData.props.row, true)"
-                  >
-                    <q-item-section>ساخت فایل سوالات با جواب</q-item-section>
-                  </q-item>
-                  <q-item
-                    v-ripple:yellow
-                    clickable
-                    manual-focus
-                    @click="uploadFile(inputData.props.row.id)"
-                  >
-                    <q-item-section>آپلود فایل سوالات و جواب ها</q-item-section>
-                  </q-item>
-                  <q-item
-                    v-ripple:yellow
-                    clickable
-                    manual-focus
-                    @click="editCoefficient(inputData.props.row.id)"
-                  >
-                    <q-item-section>اصلاح ضرایب</q-item-section>
-                  </q-item>
-                  <q-item
-                    v-ripple:yellow
-                    clickable
-                    manual-focus
-                    @click="showConfirmRemoveDialog(inputData.props.row, 'id', getRemoveMessage(inputData.props.row))"
-                  >
-                    <q-item-section>حذف آزمون</q-item-section>
-                  </q-item>
-                </q-list>
-              </q-menu>
-              <q-tooltip anchor="top middle" self="bottom middle">
-                ویرایش
-              </q-tooltip>
-            </q-btn>
+<!--            <q-btn round flat dense size="md" color="purple" icon="edit" :to="{name:'Admin.Exam.Edit', params: {id: inputData.props.row.id}}">-->
+<!--              <q-tooltip anchor="top middle" self="bottom middle">-->
+<!--                ویرایش-->
+<!--              </q-tooltip>-->
+<!--            </q-btn>-->
             <q-btn round flat dense size="md" color="indigo" icon="auto_stories"  @click="showLessonsList(inputData.props.row.id, inputData.props.row.title)">
               <q-tooltip anchor="top middle" self="bottom middle">
                 مشاهده دروس
@@ -110,6 +53,11 @@
               </q-menu>
               <q-tooltip anchor="top middle" self="bottom middle">
                 مشاهده نتایج
+              </q-tooltip>
+            </q-btn>
+            <q-btn round flat dense size="md" color="red" icon="delete"  @click="showConfirmRemoveDialog(inputData.props.row, 'id', getRemoveMessage(inputData.props.row))">
+              <q-tooltip anchor="top middle" self="bottom middle">
+                حذف آزمون
               </q-tooltip>
             </q-btn>
           </template>

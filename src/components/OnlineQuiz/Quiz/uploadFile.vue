@@ -1,16 +1,6 @@
 <template>
   <div class="upload-file-container">
     <div class="row justify-around q-mb-lg">
-      <div class="col-7 q-px-lg text-right">
-        <q-btn
-          round
-          color="primary"
-          unelevated
-          @click="goBack"
-        >
-          <i class="fi-rr-angle-left row" />
-        </q-btn>
-      </div>
 
     </div>
     <div class="upload-file">

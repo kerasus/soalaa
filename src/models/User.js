@@ -59,66 +59,6 @@ class User extends Model {
       {
         key: 'permissions',
         default: []
-      // {
-      //   "permissions": [
-      //     "examStore",
-      //     "examUpdate",
-      //     "examIndex",
-      //     "examDestroy",
-      //     "examConfirm",
-      //     "examConfig",
-      //     "examShow",
-      //     "examAttachCategory",
-      //     "examDetachCategory",
-      //     "searchActivitylog",
-      //     "commentActivitylog",
-      //     "categoryCreate",
-      //     "categoryUpdate",
-      //     "categoryIndex",
-      //     "categoryShow",
-      //     "examquestionAttachV2",
-      //     "examquestionDetach",
-      //     "examquestionAttachSubcategory",
-      //     "examquestionAttach",
-      //     "examquestionBooklet",
-      //     "examquestionBookletUpload",
-      //     "examquestionFile",
-      //     "examquestionVideos",
-      //     "examquestionZirgoroohShow",
-      //     "examquestionZirgorooh",
-      //     "examquestionZirgoroohDelete",
-      //     "examquestionAttachShow",
-      //     "examquestionShowcategorires",
-      //     "examquestionZirgoroohCopyzirgorooh",
-      //     "examquestionShortlink",
-      //     "examreportIndexParticipants",
-      //     "examreportIndexLessons",
-      //     "optionIndex",
-      //     "optionStore",
-      //     "optionShow",
-      //     "optionUpdate",
-      //     "optionDelete",
-      //     "questionStore",
-      //     "questionUpdate",
-      //     "questionUpload",
-      //     "questionDestroy",
-      //     "questionIndex",
-      //     "questionConfirm",
-      //     "questionUnconfirm",
-      //     "questionStatus",
-      //     "questionStatuses",
-      //     "questionShow",
-      //     "questionAttachStatementphoto",
-      //     "questionAttachAnswerphoto",
-      //     "questionDetachStatementphoto",
-      //     "questionDetachAnswerphoto",
-      //     "questionExport",
-      //     "subcategoryStore",
-      //     "subcategoryUpdate",
-      //     "subcategoryShow",
-      //     "subcategoryIndex"
-      //   ]
-      // }
       }
 
     ])
@@ -132,7 +72,11 @@ class User extends Model {
   }
 
   setDefaultPermission () {
-    this.permissions = ['examStore']
+    this.permissions = [
+      'examStore'
+      // 'examUpdate',
+      // 'examquestionBookletUpload'
+    ]
   }
 
   getCompletionInfoKeys () {
@@ -189,8 +133,8 @@ class User extends Model {
     return status
   }
 
-  hasPermission (role) {
-    return !!this.permissions.includes(role)
+  hasPermission (permission) {
+    return !!this.permissions.includes(permission)
   }
   // registerExam (exam_id) {
   //   const that = this

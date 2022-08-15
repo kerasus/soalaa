@@ -3,18 +3,18 @@
     <div class="row justify-center q-mt-lg">
       <div class="col-6">
         <div class="row">
-          <div class="col-12">
-            <div class="row justify-end">
-              <q-btn
-                class="q-mx-sm float-right"
-                round
-                dark-percentage
-                color="primary"
-                @click= this.$router.go(-1)
-                icon="isax:arrow-left-2"
-              />
-            </div>
-          </div>
+<!--          <div class="col-12">-->
+<!--            <div class="row justify-end">-->
+<!--              <q-btn-->
+<!--                class="q-mx-sm float-right"-->
+<!--                round-->
+<!--                dark-percentage-->
+<!--                color="primary"-->
+<!--                @click= this.$router.go(-1)-->
+<!--                icon="isax:arrow-left-2"-->
+<!--              />-->
+<!--            </div>-->
+<!--          </div>-->
           <div class="col-12">
             <q-input
               v-model="exam.report_config.maximum_question_answered"
@@ -112,7 +112,7 @@ export default {
     this.$store.commit('AppLayout/updateLastBreadcrumb', {
       loading: true
     })
-    this.examId = this.$route.params.idd
+    this.examId = this.$route.params.id
     const that = this
     axios.get(API_ADDRESS.option.base + '?type=exam_type')
       .then(function (response) {
