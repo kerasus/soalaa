@@ -1,10 +1,13 @@
 import process from 'process'
 const lumenServer = process.env.AAA_API
 const authServer = process.env.AUTH_API
+const timeServer = process.env.GET_TIME_SERVER
+const socketServer = process.env.SOCKET_SERVER
 const API_ADDRESS = {
   // socket: process.env.VUE_APP_SOCKET_TARGET_API_SERVER,
-  socket: process.env.SOCKET_SERVER,
+  socket: socketServer,
   server: {
+    time: timeServer,
     lumen: lumenServer,
     auth: lumenServer
   },
