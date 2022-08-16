@@ -59,12 +59,13 @@ export default {
   padding-bottom: 64px;
   background: url("https://nodes.alaatv.com/upload/landing/3a/h1.png");
   background-repeat: no-repeat;
-  background-size: cover;
+  //background-size: cover;
+  background-position: center;
   .introduction {
     margin-top:80px;
     margin-bottom: 85px;
     .title-style {
-      font-family: 'Yekan Bakh';
+      font-family: 'yekanbakh';
       font-style: normal;
       font-weight: 900;
       font-size: 38px;
@@ -74,7 +75,7 @@ export default {
     }
 
     .body-style {
-      font-family: 'Yekan Bakh';
+      font-family: 'yekanbakh';
       font-style: normal;
       font-weight: 500;
       font-size: 16px;
@@ -89,7 +90,7 @@ export default {
       height: 40px;
       background: #FFC107;
       border-radius: 24px;
-      font-family: 'Yekan Bakh';
+      font-family: 'yekanbakh';
       font-style: normal;
       font-weight: 700;
       font-size: 16px;
@@ -123,7 +124,7 @@ export default {
     background-image: url("https://nodes.alaatv.com/upload/landing/3a/h2.png");
     .introduction {
       .title-style {
-        font-family: 'Yekan Bakh';
+        font-family: 'yekanbakh';
         font-style: normal;
         font-weight: 900;
         font-size: 38px;
@@ -133,7 +134,7 @@ export default {
       }
 
       .body-style {
-        font-family: 'Yekan Bakh';
+        font-family: 'yekanbakh';
         font-style: normal;
         font-weight: 500;
         font-size: 16px;
@@ -148,7 +149,7 @@ export default {
         height: 40px;
         background: #FFC107;
         border-radius: 24px;
-        font-family: 'Yekan Bakh';
+        font-family: 'yekanbakh';
         font-style: normal;
         font-weight: 700;
         font-size: 16px;

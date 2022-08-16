@@ -43,7 +43,7 @@ export default {
   padding: 20px 0;
   .nav-item-box {
     .nav-item {
-      font-family: 'Yekan Bakh';
+      font-family: 'yekanbakh';
       font-style: normal;
       font-weight: 500;
       font-size: 20px;
@@ -66,7 +66,7 @@ export default {
     padding: 12px 0;
     .nav-item-box {
       .nav-item {
-        font-family: 'Yekan Bakh';
+        font-family: 'yekanbakh';
         font-style: normal;
         font-weight: 500;
         font-size: 20px;
