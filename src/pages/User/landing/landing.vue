@@ -36,8 +36,20 @@ export default {
 .landing-page{
   background: linear-gradient(-134deg, #EAB311 -52.45%, rgba(255, 255, 255, 0) 48.84%);
   &:deep(.landing-width){
-     width: 1004px;
+     width: 1110px;
      margin: auto;
+    @media screen and (max-width: 1439px) {
+      width: 930px;
+    }
+    @media screen and (max-width: 1023px) {
+      width: 690px;
+    }
+    @media screen and (max-width: 768px) {
+      width: 510px;
+    }
+    @media screen and (max-width: 600px) {
+      width: 100%;
+    }
    }
 
 }
