@@ -2,8 +2,8 @@
   <div class="landing-page">
     <nav-bar class="landing-width" />
     <landing-header  />
-    <why/>
-    <features />
+    <why class="landing-width"/>
+    <features class="landing-width"/>
   </div>
 </template>
 
