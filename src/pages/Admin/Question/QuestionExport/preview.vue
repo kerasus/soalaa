@@ -1,8 +1,9 @@
 <template>
   <div class="row my-3">
     <div class="not-visible-in-print toolbox col-md-12">
-      <div class="row">
-        <div class="mr-5 col-md-1">
+      <div class="row q-col-gutter-md shadow-1 q-pa-md">
+        <div class="col-md-10" />
+        <div class="col-md-1">
           <q-input
             v-model="fontSize"
             dense
@@ -45,12 +46,9 @@
             <q-btn
               color="blue"
               class="edit-button"
+              icon="isax:edit"
               @click="toggleEditMode(question)"
-            >
-              <q-icon color="blue">
-                mdi-pencil
-              </q-icon>
-            </q-btn>
+            />
             <vue-katex
               v-if="!question.editMode"
               :input="question.statement"
@@ -86,12 +84,9 @@
               <q-btn
                 color="blue"
                 class="edit-button"
+                icon="isax:edit"
                 @click="toggleEditMode(choice)"
-              >
-                <q-icon color="blue">
-                  mdi-pencil
-                </q-icon>
-              </q-btn>
+              />
               <vue-katex
                 v-if="!choice.editMode"
                 :input="choice.title"
@@ -125,7 +120,7 @@
 <script>
 import VueTiptapKatex from 'vue3-tiptap-katex'
 import API_ADDRESS from 'src/api/Addresses.js'
-import VueKatex from 'src/components/VueKatex'
+import VueKatex from 'components/VueKatex'
 import { Exam } from 'src/models/Exam'
 import { QuestionList } from 'src/models/Question'
 import { QuestSubcategoryList } from 'src/models/QuestSubcategory'
@@ -186,61 +181,59 @@ export default {
     toggleEditMode (object) {
       object.editMode = !object.editMode
     },
-    loadPages () {
-
-    },
     loadSubCategories (quizResponse, reload) {
       const that = this
-      this.subCategoriesList.fetch().then((response) => {
-        if (reload) {
-          this.$notify({
-            group: 'notifs',
-            title: 'توجه!',
-            text: 'اطلاعات بروزرسانی شد',
-            type: 'success'
-          })
-        }
-        // that.quiz.sub_categories = new QuestSubcategoryList(response.data)
-        that.quizData.sub_categories = new QuestSubcategoryList(response.data.data)
-        const questions = quizResponse.data.data
-        that.sortQuestions(questions)
-        that.quizData.questions = new QuestionList(questions)
-        // that.quiz = new Exam(that.quizData)
-        that.QuIzDaTa = new Exam(that.quizData)
-        const regexP = /<p[^>]*>/
-        const persianRegex = /[\u0600-\u06FF]/
-        that.quizData.questions.list.forEach((question, index) => {
-          question.verticalChoice = 0
-          question.statement = question.statement.replace(regexP, match => match + (index + 1) + ') ')
-          question.ltr = !question.statement.match(persianRegex)
-          question.editMode = false
-          question.statement = question.statement.replace(/<p[^>]*>/g, match => {
-            const el = document.createElement('div')
-            el.innerHTML = match
-            el.children[0].setAttribute('dir', question.ltr ? 'ltr' : 'rtl')
-            return el.innerHTML.split('</p>')[0]
-          })
-          question.choices.list.forEach((choice, cIndex) => {
-            choice.title = choice.title.replace(/<p[^>]*>/g, match => {
+      this.$axios.get(API_ADDRESS.questionSubcategory.base)
+        .then((response) => {
+          this.subCategoriesList.list = response.data.data
+          if (reload) {
+            this.$notify({
+              group: 'notifs',
+              title: 'توجه!',
+              text: 'اطلاعات بروزرسانی شد',
+              type: 'success'
+            })
+          }
+          // that.quiz.sub_categories = new QuestSubcategoryList(response.data)
+          that.quizData.sub_categories = new QuestSubcategoryList(response.data.data)
+          const questions = quizResponse.data.data
+          that.sortQuestions(questions)
+          that.quizData.questions = new QuestionList(questions)
+          // that.quiz = new Exam(that.quizData)
+          that.QuIzDaTa = new Exam(that.quizData)
+          const regexP = /<p[^>]*>/
+          const persianRegex = /[\u0600-\u06FF]/
+          that.quizData.questions.list.forEach((question, index) => {
+            question.verticalChoice = 0
+            question.statement = question.statement.replace(regexP, match => match + (index + 1) + ') ')
+            question.ltr = !question.statement.match(persianRegex)
+            question.editMode = false
+            question.statement = question.statement.replace(/<p[^>]*>/g, match => {
               const el = document.createElement('div')
               el.innerHTML = match
               el.children[0].setAttribute('dir', question.ltr ? 'ltr' : 'rtl')
               return el.innerHTML.split('</p>')[0]
             })
-            choice.editMode = false
-            choice.title = choice.title.replace(regexP, match => match + (cIndex + 1) + ') ')
+            question.choices.list.forEach((choice, cIndex) => {
+              choice.title = choice.title.replace(/<p[^>]*>/g, match => {
+                const el = document.createElement('div')
+                el.innerHTML = match
+                el.children[0].setAttribute('dir', question.ltr ? 'ltr' : 'rtl')
+                return el.innerHTML.split('</p>')[0]
+              })
+              choice.editMode = false
+              choice.title = choice.title.replace(regexP, match => match + (cIndex + 1) + ') ')
+            })
           })
         })
-      })
     },
     loadQuizDataAndSubCategories (reload = false) {
-      const that = this
       this.$axios.post(API_ADDRESS.exam.examQuestion(this.$route.params.quizId), {
         sub_categories: [this.$route.params.lessonId]
       })
         .then((response) => {
           if (response.data.data.length) {
-            that.loadSubCategories(response, reload)
+            this.loadSubCategories(response, reload)
           } else {
             this.$router.push({ name: 'onlineQuiz.exams' })
           }
@@ -304,12 +297,12 @@ export default {
   position: absolute;
   top: 85px;
   direction: rtl;
-  left: 0px;
+  right: 70px;
 }
 
 .toolbox {
   position: fixed;
-  background: #fff;
+  background: #00000042;
   left: 0;
   right: 0;
   top: 0;
@@ -337,7 +330,7 @@ export default {
 }
 
 .question-box {
-  background-image: url('http://neo-server.ir/d/printTemplate-questions.jpg');
+  background-image: url('/img/QuestionBank/printTemplate-questions.jpg');
   width: 1920px;
   height: 1080px;
   background-repeat: no-repeat;

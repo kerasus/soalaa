@@ -78,7 +78,7 @@ const routes = [
         children: [
           {
             path: 'exam',
-            component: () => import('layouts/AdminLayout.vue'),
+            component: () => import('layouts/bareLayout.vue'),
             breadcrumbs: { title: 'آزمون', color: '', loading: false, route: { name: 'Admin.Exam.Index' } },
             meta: {
               middlewares: [
@@ -165,12 +165,6 @@ const routes = [
                 middleware: [
                   Permissions.hasPermission('examquestionAttachShow')
                 ]
-              },
-              {
-                path: ':quizId/:lessonId/print',
-                name: 'Admin.Exam.Lessons.PrintQuestions',
-                component: () => import('pages/admin/questionExport/preview.vue'),
-                middleware: []
               },
               {
                 path: '/results/mbti_bartle/:exam_id/:user_exam_id',
@@ -292,7 +286,7 @@ const routes = [
 
           {
             path: 'category',
-            component: () => import('layouts/AdminLayout.vue'),
+            component: () => import('layouts/bareLayout.vue'),
             meta: {
               middlewares: [auth]
             },
@@ -334,7 +328,7 @@ const routes = [
 
           {
             path: '/subCategory',
-            component: () => import('layouts/AdminLayout.vue'),
+            component: () => import('layouts/bareLayout.vue'),
             meta: {
               middlewares: [auth]
             },
@@ -396,6 +390,12 @@ const routes = [
         }
       }
     ]
+  },
+  {
+    path: '/admin/exam/:quizId/:lessonId/print',
+    name: 'Admin.Exam.Lessons.PrintQuestions',
+    component: () => import('pages/Admin/Question/QuestionExport/preview.vue'),
+    middleware: []
   },
   {
     path: '/login',
