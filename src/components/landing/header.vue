@@ -59,8 +59,7 @@ export default {
   text-align: center;
   padding-bottom: 64px;
   background: url("https://nodes.alaatv.com/upload/landing/3a/h1.png");
-  background-repeat: no-repeat;
-  //background-size: cover;
+  background-repeat: no-repeat !important;
   background-position: center;
 
   .introduction {
@@ -254,8 +253,7 @@ export default {
 }
 @media screen and (max-width: 600px) {
   .landing-header {
-
-    padding-bottom: 40px;
+    padding: 0 15px 40px 15px;
     background: url("https://nodes.alaatv.com/upload/landing/3a/h5.png");
     .introduction {
       padding-top:43px;
@@ -284,19 +282,19 @@ export default {
 
     .video-box {
       width: 100%;
-      height: 200px;
+      min-height: 56.25%;
 
-      .video-btn {
-        width: 150px;
-        height: 56.25%;
-        background: #FFF0C1;
-        border: 2px solid #FFC107;
-        border-radius: 24px;
-
-        .video-icon {
-
-        }
-      }
+      //.video-btn {
+      //  width: 150px;
+      //  height: 56.25%;
+      //  background: #FFF0C1;
+      //  border: 2px solid #FFC107;
+      //  border-radius: 24px;
+      //
+      //  .video-icon {
+      //
+      //  }
+      //}
     }
   }
 }
