@@ -21,7 +21,7 @@
     </div>
     <div class="nav-item-box flex xs-hide">
       <div class="nav-item">آزمون سه‌آ</div>
-      <div class="nav-item q-mx-xl ">شرایط برگزاری آزمون</div>
+      <div class="nav-item middle ">شرایط برگزاری آزمون</div>
       <div class="nav-item">سوالات متداول</div>
     </div>
     <q-btn
@@ -43,12 +43,14 @@ export default {
   padding: 20px 0;
   .nav-item-box {
     .nav-item {
-      font-family: 'yekanbakh';
       font-style: normal;
       font-weight: 500;
       font-size: 20px;
       line-height: 24px;
       color: #474747;
+      &.middle{
+        margin: 0 46px;
+      }
     }
   }
 
@@ -66,23 +68,54 @@ export default {
     padding: 12px 0;
     .nav-item-box {
       .nav-item {
-        font-family: 'yekanbakh';
-        font-style: normal;
-        font-weight: 500;
-        font-size: 20px;
+        font-weight: 700;
+        font-size: 14px;
         line-height: 24px;
-        color: #474747;
+        &.middle{
+          margin: 0 25px;
+        }
+      }
+    }
+  }
+}
+@media  screen and (max-width: 1023px) {
+  .nav-bar {
+    padding: 18px 0;
+    .nav-item-box {
+      .nav-item {
+        &.middle{
+          margin: 0 16px;
+        }
+      }
+    }
+  }
+}
+@media  screen and (max-width: 765px) {
+  .nav-bar {
+    padding: 23px 0;
+    .nav-item-box {
+      .nav-item {
+        font-weight: 700;
+        font-size: 10px;
+        line-height: 24px;
+        &.middle{
+          margin: 0 24px;
+        }
       }
     }
 
     .submit-btn-style {
-      box-sizing: border-box;
-      width: 105px;
-      height: 40px;
-      background: #FFF0C1;
-      border: 2px solid #FEA800;
-      border-radius: 24px;
+      width: 96px;
+      height: 32px;
+      font-weight: 700;
+      font-size: 14px;
+      line-height: 24px;
     }
+  }
+}
+@media  screen and (max-width: 600px) {
+  .nav-bar {
+    padding: 16px 15px;
   }
 }
 

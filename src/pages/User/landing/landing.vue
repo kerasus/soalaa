@@ -4,6 +4,7 @@
     <landing-header  />
     <why class="landing-width"/>
     <features class="landing-width"/>
+    <submit-table />
   </div>
 </template>
 
@@ -12,13 +13,15 @@ import NavBar from 'src/components/landing/NavBar'
 import landingHeader from 'src/components/landing/header'
 import why from 'src/components/landing/why3A'
 import features from 'src/components/landing/3aFeatures'
+import submitTable from 'components/landing/submitTable'
 export default {
   name: 'landing',
   components: {
     landingHeader,
     why,
     features,
-    NavBar
+    NavBar,
+    submitTable
   },
   mounted () {
     this.closeSidBarAndAppbar()
