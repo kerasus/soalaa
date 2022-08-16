@@ -1,4 +1,4 @@
-import { auth, hasPermission, Permissions } from './middleware/middleware'
+import { auth, Permissions } from './middleware/middleware'
 function getEntityCrudRouteObject (path, baseRouteName, componentPath, breadcrumbs) {
   const AllNeededRoutes = [
     { mode: 'Index', path: '' },
@@ -167,6 +167,12 @@ const routes = [
                 ]
               },
               {
+                path: ':quizId/:lessonId/print',
+                name: 'Admin.Exam.Lessons.PrintQuestions',
+                component: () => import('pages/admin/questionExport/preview.vue'),
+                middleware: []
+              },
+              {
                 path: '/results/mbti_bartle/:exam_id/:user_exam_id',
                 name: 'mbtiBartle.result',
                 component: () => import('pages/User/exam/Result/MBTI_Bartle_result'),
@@ -178,7 +184,7 @@ const routes = [
           },
 
           {
-            path: '/question',
+            path: 'question',
             breadcrumbs: { title: 'سوالات', loading: false },
             component: () => import('layouts/bareLayout.vue'),
             meta: {
@@ -378,9 +384,7 @@ const routes = [
         name: 'onlineQuiz.alaaView',
         component: () => import('pages/User/exam/participate/AlaaView'),
         meta: {
-          middlewares: [auth,
-            hasPermission('examUpdate')
-          ]
+          middlewares: [auth]
         }
       },
       {

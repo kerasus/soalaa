@@ -124,21 +124,12 @@
         <q-btn unelevated color="primary" class="question-item-button">{{ question.order }}</q-btn>
       </div>
       <div :class="isLtrQuestion() ? 'question-icon order-last' : 'question-icon'" />
-
       <div class="question">
         <question ref="questionComponent" :question="question" />
       </div>
-
     </q-card-section>
-
-    <q-card-section>
-      <div class="choice-section row" :class="isLtrQuestion() ? 'ltr-choice-section' : ''">
-      </div>
-    </q-card-section>
-
     <q-card-section class="answer-section">
-      <q-expansion-item v-if="listConfig.descriptiveAnswer" v-model="descriptiveAnswerExpanded"
-        header-class="hideExpansionHeader">
+      <q-expansion-item v-model="descriptiveAnswerExpanded" header-class="hideExpansionHeader">
         <div class="answer-content">
           <div class="answer-description" :class="false ? 'normal-width' : 'full-width'">
             <q-card flat class="answer-description-card">
@@ -158,7 +149,7 @@
           </div>
           <div v-if="true" class=" answer-description-video">
             <div class="video">
-              <!--                <video-player/>-->
+              <video-player/>
             </div>
             <div class="title text-center">
               پاسخنامه ویدیویی - محمد امین نباخته
@@ -267,11 +258,11 @@
 <script>
 import { Question } from 'src/models/Question'
 import question from './Question'
-// import VideoPlayer from 'components/VideoPlayer'
+import VideoPlayer from 'components/VideoPlayer'
 
 export default {
   name: 'QuestionItem',
-  components: { question },
+  components: { question, VideoPlayer },
   props: {
     question: {
       type: Question,
@@ -615,6 +606,9 @@ export default {
   }
 
   .answer-section {
+    :deep(.hideExpansionHeader) {
+      display: none;
+    }
     .answer-content {
       padding: 24px 10px;
       display: flex;

@@ -16,6 +16,13 @@
                   {label: 'من تایید نکردم', value:'not-confirmed-by-me'}
                    ]"
             />
+            <q-btn
+              round
+              color="primary"
+              unelevated
+              icon="isax:printer"
+              @click="printQuestions"
+            />
           </div>
           <div class="col-4 flex justify-between">
             <div class="search-box">
@@ -159,6 +166,10 @@ export default {
     }
   },
   methods: {
+    printQuestions () {
+      const routeData = this.$router.resolve({ name: 'Admin.Exam.Lessons.PrintQuestions', params: { quizId: this.$route.params.quizId, lessonId: this.$route.params.lessonId } })
+      window.open(routeData.href, '_blank')
+    },
     detachQuestion (questionId) {
       this.$store.dispatch('AppLayout/showConfirmDialog', {
         show: true,
