@@ -5,10 +5,7 @@
     <q-skeleton type="text" width="50%" height="30px"/>
     <q-skeleton width="30%" height="200px" style="border-radius: 10px"/>
   </template> -->
-  <template>
-  <!-- <template v-else> -->
-    <vue-katex input="usydhuifdiuzasl"/>
-  </template>
+  <vue-katex :input="question.statement"/>
   <template v-if="question.loading">
     <div class="choice-column col-3" v-for="item in 4" :key="item">
       <div class="question-choice false" style="margin-bottom: 2px">

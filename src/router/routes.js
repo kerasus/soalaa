@@ -78,7 +78,7 @@ const routes = [
         children: [
           {
             path: 'exam',
-            component: () => import('layouts/AdminLayout.vue'),
+            component: () => import('layouts/bareLayout.vue'),
             breadcrumbs: { title: 'آزمون', color: '', loading: false, route: { name: 'Admin.Exam.Index' } },
             meta: {
               middlewares: [
@@ -178,7 +178,7 @@ const routes = [
           },
 
           {
-            path: '/question',
+            path: 'question',
             breadcrumbs: { title: 'سوالات', loading: false },
             component: () => import('layouts/bareLayout.vue'),
             meta: {
@@ -286,7 +286,7 @@ const routes = [
 
           {
             path: 'category',
-            component: () => import('layouts/AdminLayout.vue'),
+            component: () => import('layouts/bareLayout.vue'),
             meta: {
               middlewares: [auth]
             },
@@ -328,7 +328,7 @@ const routes = [
 
           {
             path: '/subCategory',
-            component: () => import('layouts/AdminLayout.vue'),
+            component: () => import('layouts/bareLayout.vue'),
             meta: {
               middlewares: [auth]
             },
@@ -390,6 +390,12 @@ const routes = [
         }
       }
     ]
+  },
+  {
+    path: '/admin/exam/:quizId/:lessonId/print',
+    name: 'Admin.Exam.Lessons.PrintQuestions',
+    component: () => import('pages/Admin/Question/QuestionExport/preview.vue'),
+    middleware: []
   },
   {
     path: '/login',
