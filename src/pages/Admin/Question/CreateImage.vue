@@ -16,7 +16,7 @@
           label="تایپ سوال"
           color="primary"
           class="change-type"
-          to="/question/create/text/multipleChoice"
+          :to="{ name: 'Admin.Question.Create.Text.MultipleChoice' }"
           unelevated
         />
       </div>
