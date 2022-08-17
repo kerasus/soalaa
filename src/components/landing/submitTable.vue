@@ -5,48 +5,38 @@
         <tr>
           <th colspan="4" class="mitra">
             <div class="drop-down-btn">
-              <q-btn-dropdown class="dropdown-btn-1 dropdown-btn" unelevated label="Dropdown Button">
-                <q-list>
-                  <q-item clickable v-close-popup @click="onItemClick">
-                    <q-item-section>
-                      <q-item-label>Photos</q-item-label>
-                    </q-item-section>
-                  </q-item>
+              <q-select v-model="model" borderless dropdown-icon="img:https://cdn.quasar.dev/logo-v2/svg/logo.svg"  hide-bottom-space dense :options="options" class="select-1 dropdown-btn q-mr-md">
+                <template v-slot:selected>
+                  <span class="custom-label-prefix"> مقطع تحصیلی: </span>
 
-                  <q-item clickable v-close-popup @click="onItemClick">
-                    <q-item-section>
-                      <q-item-label>Videos</q-item-label>
-                    </q-item-section>
-                  </q-item>
+                  <q-chip
+                    v-if="model"
+                    dense
+                    square
+                    color="white"
+                    text-color="primary"
+                    class="q-my-none q-ml-xs q-mr-none"
+                  >
+                    {{ model.label }}
+                  </q-chip>
+                </template>
+              </q-select>
+              <q-select v-model="model" borderless dropdown-icon="img:https://cdn.quasar.dev/logo-v2/svg/logo.svg"  hide-bottom-space dense :options="options" class="select-2 dropdown-btn">
+                <template v-slot:selected>
+                  <span class="custom-label-prefix"> رشته تحصیلی: </span>
 
-                  <q-item clickable v-close-popup @click="onItemClick">
-                    <q-item-section>
-                      <q-item-label>Articles</q-item-label>
-                    </q-item-section>
-                  </q-item>
-                </q-list>
-              </q-btn-dropdown>
-              <q-btn-dropdown class="dropdown-btn-2 dropdown-btn" unelevated label="Dropdown Button">
-                <q-list>
-                  <q-item clickable v-close-popup @click="onItemClick">
-                    <q-item-section>
-                      <q-item-label>Photos</q-item-label>
-                    </q-item-section>
-                  </q-item>
-
-                  <q-item clickable v-close-popup @click="onItemClick">
-                    <q-item-section>
-                      <q-item-label>Videos</q-item-label>
-                    </q-item-section>
-                  </q-item>
-
-                  <q-item clickable v-close-popup @click="onItemClick">
-                    <q-item-section>
-                      <q-item-label>Articles</q-item-label>
-                    </q-item-section>
-                  </q-item>
-                </q-list>
-              </q-btn-dropdown>
+                  <q-chip
+                    v-if="model"
+                    dense
+                    square
+                    color="white"
+                    text-color="primary"
+                    class="q-my-none q-ml-xs q-mr-none"
+                  >
+                    {{ model.label }}
+                  </q-chip>
+                </template>
+              </q-select>
             </div>
           </th>
         </tr>
@@ -138,7 +128,11 @@ export default {
   name: 'submitTable',
 
   data: () => ({
-    data: []
+    data: [],
+    model: '',
+    options: [{
+      title: ''
+    }]
   }),
   created () {
     for (let i = 0; i < 10; i++) {
@@ -193,17 +187,34 @@ export default {
         &:deep(.q-icon ){
           font-family: 'Material Icons';
         }
-        height: 40px;
-        background: #E9E9E9;
-        border-radius: 24px;
-      }
-      .dropdown-btn-1{
-        width: 231px;
-        margin-right:16px;
-      }
-      .dropdown-btn-2{
-        width: 173px;
+        &:deep(.q-field__control){
+          background: #E9E9E9;
+          border-radius: 24px;
 
+        }
+        &:deep(.q-field__native ){
+          padding: 0 12.5px;
+        }
+        &:deep(.q-field__append ){
+          padding-right: 20px;
+        }
+        .custom-label-prefix{
+          font-style: normal;
+          font-weight: 700;
+          font-size: 16px;
+          line-height: 24px;
+          color: #232323;
+        }
+      }
+      .select-1{
+        &:deep(.q-field__inner){
+          width: 231px;
+        }
+      }
+      .select-2{
+        &:deep(.q-field__inner){
+          width: 173px;
+        }
       }
     }
   }

@@ -1,10 +1,10 @@
 <template>
   <div class="landing-page">
-    <submit-table class="landing-width" />
     <nav-bar class="landing-width" />
     <landing-header  />
     <why class="landing-width"/>
     <features class="landing-width"/>
+    <submit-table class="landing-width" />
 
   </div>
 </template>
