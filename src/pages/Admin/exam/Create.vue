@@ -160,6 +160,7 @@ export default {
   },
   created () {
     this.getType()
+    this.getCategories()
   },
   computed: {
     examCategoriesIndex () {
@@ -184,6 +185,13 @@ export default {
         })
         .catch(() => {})
     },
+    getCategories() {
+      this.$axios.get(API_ADDRESS.questionCategory.base)
+        .then((response) => {
+          this.categoryOptions = response.data.data
+        })
+        .catch(() => {})
+    },
     deleteCategory (id) {
       const index = this.inputs[this.examCategoriesIndex].value.findIndex(item => item.id === id)
       this.inputs[this.examCategoriesIndex].value.splice(index, 1)
@@ -191,6 +199,10 @@ export default {
     addCategory () {
       if (this.totalCategory) {
         return
+      }
+      if (this.category.title.id) {
+        this.category.id = this.category.title.id
+        this.category.title = this.category.title.title
       }
       this.inputs[this.examCategoriesIndex].value = this.inputs[this.examCategoriesIndex].value.concat(this.category)
       this.category = { title: '', id: '', order: 0, time: 0 }

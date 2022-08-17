@@ -77,7 +77,7 @@
                   :value="category.id"
                   label="دفترچه"
                   :options="categoryOptions"
-                  option-value="categoryOptions"
+                  option-value="id"
                   option-label="title"
                   emit-value
                   map-options
@@ -169,6 +169,7 @@ export default {
       loading: true
     })
     this.api += '/' + this.$route.params.id
+    this.getCategoryList()
   },
   methods: {
     getCategories (response, setNewInputData) {
@@ -178,6 +179,13 @@ export default {
       const responseCategories = response.data.categories
       const categoriesIndex = this.inputs.findIndex(item => item.name === 'categories')
       this.inputs[categoriesIndex].value = responseCategories
+    },
+    getCategoryList() {
+      this.$axios.get(API_ADDRESS.questionCategory.base)
+        .then((response) => {
+          this.categoryOptions = response.data.data
+        })
+        .catch(() => {})
     },
     getOptions () {
       this.$axios.get(API_ADDRESS.option.base)
@@ -203,6 +211,10 @@ export default {
     addCategory () {
       if (this.totalCategory) {
         return
+      }
+      if (this.category.title.id) {
+        this.category.id = this.category.title.id
+        this.category.title = this.category.title.title
       }
       this.inputs[this.examCategoriesIndex].value = this.inputs[this.examCategoriesIndex].value.concat(this.category)
       this.category = { title: '', id: '', order: 0, time: 0 }
