@@ -1,30 +1,55 @@
 <template>
   <div class="submit-table ">
-    <div class="drop-down-btn">
-      <q-btn-dropdown label="Dropdown Button">
-        <q-list>
-          <q-item clickable v-close-popup @click="onItemClick">
-            <q-item-section>
-              <q-item-label>Photos</q-item-label>
-            </q-item-section>
-          </q-item>
-
-          <q-item clickable v-close-popup @click="onItemClick">
-            <q-item-section>
-              <q-item-label>Videos</q-item-label>
-            </q-item-section>
-          </q-item>
-
-          <q-item clickable v-close-popup @click="onItemClick">
-            <q-item-section>
-              <q-item-label>Articles</q-item-label>
-            </q-item-section>
-          </q-item>
-        </q-list>
-      </q-btn-dropdown>
-    </div>
     <div class="table-container">
       <table class="table">
+        <tr>
+          <th colspan="4" class="mitra">
+            <div class="drop-down-btn">
+              <q-btn-dropdown class="dropdown-btn-1 dropdown-btn" unelevated label="Dropdown Button">
+                <q-list>
+                  <q-item clickable v-close-popup @click="onItemClick">
+                    <q-item-section>
+                      <q-item-label>Photos</q-item-label>
+                    </q-item-section>
+                  </q-item>
+
+                  <q-item clickable v-close-popup @click="onItemClick">
+                    <q-item-section>
+                      <q-item-label>Videos</q-item-label>
+                    </q-item-section>
+                  </q-item>
+
+                  <q-item clickable v-close-popup @click="onItemClick">
+                    <q-item-section>
+                      <q-item-label>Articles</q-item-label>
+                    </q-item-section>
+                  </q-item>
+                </q-list>
+              </q-btn-dropdown>
+              <q-btn-dropdown class="dropdown-btn-2 dropdown-btn" unelevated label="Dropdown Button">
+                <q-list>
+                  <q-item clickable v-close-popup @click="onItemClick">
+                    <q-item-section>
+                      <q-item-label>Photos</q-item-label>
+                    </q-item-section>
+                  </q-item>
+
+                  <q-item clickable v-close-popup @click="onItemClick">
+                    <q-item-section>
+                      <q-item-label>Videos</q-item-label>
+                    </q-item-section>
+                  </q-item>
+
+                  <q-item clickable v-close-popup @click="onItemClick">
+                    <q-item-section>
+                      <q-item-label>Articles</q-item-label>
+                    </q-item-section>
+                  </q-item>
+                </q-list>
+              </q-btn-dropdown>
+            </div>
+          </th>
+        </tr>
         <tr>
           <th class='table-title'>شماره</th>
           <th class='table-title'>تاریخ</th>
@@ -32,10 +57,16 @@
           <th class='table-title'>ثبت‌نام کامل</th>
         </tr>
         <tr v-for="item in data" :key="item">
-          <td class="number">{{ item.number }}</td>
-          <td class="date">{{ item.date }}</td>
-          <td class="title">{{ item.title }}</td>
-          <td class="submitStatus">{{ item.submitStatus }}</td>
+          <td class="number custom-border">{{ item.number }}</td>
+          <td class="date custom-border">{{ item.date }}</td>
+          <td class="title custom-border">{{ item.title }}</td>
+          <td class="submitStatus custom-border">
+            <div class="flex items-center justify-center" v-if="item.submitStatus">
+              <svg width="21" height="20" viewBox="0 0 21 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path fill-rule="evenodd" clip-rule="evenodd" d="M10.5 20C16.0228 20 20.5 15.5228 20.5 10C20.5 4.47715 16.0228 0 10.5 0C4.97715 0 0.5 4.47715 0.5 10C0.5 15.5228 4.97715 20 10.5 20ZM16.0588 7.50027C16.3351 7.19167 16.3089 6.71752 16.0003 6.44123C15.6917 6.16493 15.2175 6.19113 14.9412 6.49973L11.5721 10.2629C10.8894 11.0254 10.4296 11.5363 10.0365 11.8667C9.66207 12.1814 9.44213 12.25 9.25 12.25C9.05787 12.25 8.83794 12.1814 8.46348 11.8667C8.0704 11.5363 7.61064 11.0254 6.92794 10.2629L6.05877 9.29209C5.78248 8.98349 5.30833 8.9573 4.99973 9.23359C4.69113 9.50988 4.66493 9.98403 4.94123 10.2926L5.84753 11.3049C6.48338 12.0152 7.01374 12.6076 7.49835 13.0149C8.01099 13.4458 8.56393 13.75 9.25 13.75C9.93607 13.75 10.489 13.4458 11.0016 13.0149C11.4863 12.6076 12.0166 12.0152 12.6525 11.3049L16.0588 7.50027Z" fill="#2DBB33"/>
+              </svg>
+            </div>
+          </td>
         </tr>
         <tr>
           <td colspan="3" class="table-footer-pic-box">
@@ -124,35 +155,71 @@ export default {
 
 }
 </script>
-<style>
-.q-btn .q-btn__content {
-  margin: 0;
-}
-</style>
+
 <style scoped lang="scss">
 .submit-table {
   padding: 24px;
-
-  .drop-down-btn {
-    display: flex;
+  &:deep(.q-btn){
+    .q-btn__content {
+      margin: 0;
+    }
   }
-  .table, th, td {
-    padding: 12px 0;
+
+   td {
+    padding: 8px 0;
     background: #FAFAFA;
-    border: 1px solid #DBDBDB;
-    border-collapse: collapse;
     text-align: center;
     font-weight: 500;
     font-size: 14px;
     line-height: 24px;
+
+  }
+  tr{
+    &:nth-child(3){
+      border-top: none;
+      background: red;
+    }
+  }
+  th{
+    padding-top: 8px ;
+  }
+  .mitra{
+    padding: 0;
+    .drop-down-btn {
+      display: flex;
+      border-bottom: none;
+      padding: 16px;
+      .dropdown-btn{
+        &:deep(.q-icon ){
+          font-family: 'Material Icons';
+        }
+        height: 40px;
+        background: #E9E9E9;
+        border-radius: 24px;
+      }
+      .dropdown-btn-1{
+        width: 231px;
+        margin-right:16px;
+      }
+      .dropdown-btn-2{
+        width: 173px;
+
+      }
+    }
   }
 
   .table {
     width: 100%;
-    border-radius: 22px;
+    background: #fafafa;
     color: #232323 !important;
-    background: #FAFAFA;
-    border: 1px solid #DBDBDB;
+    border-width: 2px;
+    //border-color: red;
+    //border-style: solid;
+    border-style: hidden; /* hide standard table (collapsed) border */
+    box-shadow: 0 0 0 2px #DBDBDB;
+    border-collapse: collapse;
+    //border: 2px solid #DBDBDB;
+    border-radius: 22px;
     tr {
       .table-title {
         font-style: normal;
@@ -160,11 +227,17 @@ export default {
         font-size: 16px;
         line-height: 24px;
         color: #232323;
-        border: 1px solid #DBDBDB;
+        border-top: 1px solid #DBDBDB;
+        border-left: 1px solid #DBDBDB;
+      }
+      .custom-border{
+        border-bottom: 1px solid #DBDBDB;
+        border-left: 1px solid #DBDBDB;
       }
 
       .number {
         width: 97px;
+
       }
 
       .date {
@@ -184,6 +257,8 @@ export default {
         background: #FFF2CB;
         border-radius: 0 0 0 22px;
         padding: 0;
+        border-left: 1px solid #DBDBDB;
+        border-left: 1px solid;
 
         .table-footer-container {
           display: grid;
@@ -193,7 +268,8 @@ export default {
             width: 200px;
             align-self: end;
             .img{
-              width: 100% ;
+              width: 100%;
+              border-radius: 0 0 0 22px;
 
             }
 
@@ -223,7 +299,7 @@ export default {
 
       .price-submit-box {
         padding: 0;
-
+        border-radius: 22px;
         .price-submit-in-footer {
 
           .price-box {
@@ -411,5 +487,4 @@ export default {
 
 @media screen and (max-width: 599px) {
 }
-
 </style>
