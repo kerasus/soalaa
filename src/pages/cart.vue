@@ -27,7 +27,7 @@ export default {
                       }
                     ],
                     options: {
-                      className: 'col-md-9 q-pr-md col-sm-12'
+                      className: 'col-md-9 q-pr-md col-xs-12'
                     }
                   },
                   {
@@ -37,7 +37,7 @@ export default {
                       }
                     ],
                     options: {
-                      className: 'col-md-3 q-pl-md col-sm-12'
+                      className: 'col-md-3 q-pl-md col-xs-12'
                     }
                   }
                 ],
