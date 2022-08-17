@@ -1,14 +1,15 @@
 import process from 'process'
 const lumenServer = process.env.AAA_API
 const authServer = process.env.AUTH_API
-const treeServer = process.env.TREE_API
-const tagServer = process.env.TAG_API
+const timeServer = process.env.GET_TIME_SERVER
+const socketServer = process.env.SOCKET_SERVER
 const API_ADDRESS = {
   // socket: process.env.VUE_APP_SOCKET_TARGET_API_SERVER,
-  socket: process.env.SOCKET_SERVER,
+  socket: socketServer,
   server: {
+    time: timeServer,
     lumen: lumenServer,
-    auth: authServer
+    auth: lumenServer
   },
   auth: {
     login: lumenServer + '/user/login'
@@ -58,6 +59,7 @@ const API_ADDRESS = {
     }
   },
   exam: {
+    exportExcel: lumenServer + '/exam?excel_export=1',
     showExam: (examId) => lumenServer + '/exam/' + examId,
     editExam: lumenServer + '/exam',
     copyCoefficient: lumenServer + '/exam-question/zirgorooh/copy',
@@ -155,7 +157,7 @@ const API_ADDRESS = {
       if (queryParam.length > 0) {
         queryParam = queryParam.substr(1)
       }
-      return lumenServer + '/question/bank/search?' + queryParam
+      return lumenServer + '/question?' + queryParam
     },
     status: {
       base: lumenServer + '/question/statuses',
@@ -199,7 +201,8 @@ const API_ADDRESS = {
     },
     uploadImage (questionId) {
       return lumenServer + '/question/upload/' + questionId
-    }
+    },
+    printQuestions: lumenServer + '/question/export'
   },
   questionSubcategory: {
     base: lumenServer + '/sub-category',
@@ -223,20 +226,20 @@ const API_ADDRESS = {
     }
   },
   tree: {
-    base: treeServer + '/tree',
+    base: lumenServer + '/forrest/tree',
     getNodeById (nodeId) {
-      return treeServer + '/tree/' + nodeId
+      return lumenServer + '/forrest/tree/' + nodeId
     },
     getNodeByType (nodeType) {
-      return treeServer + '/tree?type=' + nodeType
+      return lumenServer + '/forrest/tree?type=' + nodeType
     },
     editNode (id) {
-      return treeServer + '/tree/' + id
+      return lumenServer + '/forrest/tree/' + id
     }
   },
   tags: {
     setTags (questionId) {
-      return tagServer + '/id/soalaQestion/' + questionId
+      return lumenServer + '/id/soalaQestion/' + questionId
     }
   }
 }

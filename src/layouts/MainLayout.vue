@@ -68,7 +68,7 @@ export default {
         layoutHeaderElevated: false,
         layoutHeaderBordered: false,
         layoutLeftDrawer: true,
-        layoutLeftDrawerVisible: false,
+        layoutLeftDrawerVisible: true,
         layoutLeftDrawerOverlay: false,
         layoutLeftDrawerElevated: false,
         layoutLeftDrawerBordered: false,

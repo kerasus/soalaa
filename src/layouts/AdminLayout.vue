@@ -1,5 +1,7 @@
 <template>
-  <Router :include="keepAliveComponents" />
+  <div class="admin-layout">
+    <Router :include="keepAliveComponents" />
+  </div>
 </template>
 
 <script>
@@ -14,3 +16,10 @@ export default {
   }
 }
 </script>
+
+<style lang="scss" scoped>
+.admin-layout {
+  padding-right: 50px;
+  padding-left: 50px;
+}
+</style>
