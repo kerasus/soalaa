@@ -1,0 +1,18 @@
+.ltr {
+  direction: ltr !important;
+}
+
+.katex {
+  .katex-html {
+    .overline,
+    .accent {
+      font-size: inherit !important;
+      font-weight: inherit;
+      letter-spacing: inherit !important;
+      line-height: inherit;
+      text-transform: inherit;
+      background-color: transparent !important;
+      border-color: transparent !important;
+    }
+  }
+}
