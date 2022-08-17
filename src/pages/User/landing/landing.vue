@@ -1,6 +1,6 @@
 <template>
   <div class="landing-page">
-    <nav-bar class="landing-width" />
+    <nav-bar />
     <landing-header  />
     <why class="landing-width"/>
     <features class="landing-width"/>

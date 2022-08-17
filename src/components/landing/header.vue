@@ -243,10 +243,6 @@ export default {
         background: #FFF0C1;
         border: 2px solid #FFC107;
         border-radius: 24px;
-
-        .video-icon {
-
-        }
       }
     }
   }
