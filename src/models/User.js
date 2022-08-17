@@ -73,8 +73,8 @@ class User extends Model {
 
   setDefaultPermission () {
     this.permissions = [
-      'examStore'
-      // 'examUpdate',
+      // 'examStore',
+      // 'examUpdate'
       // 'examquestionBookletUpload'
     ]
   }
