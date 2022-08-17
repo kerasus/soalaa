@@ -10,7 +10,7 @@
       <template #table-cell="{inputData, showConfirmRemoveDialog}">
         <q-td :props="inputData.props">
           <template v-if="inputData.props.col.name === 'actions'">
-            <q-btn round flat dense size="md" color="info" icon="info" @click="showExam(inputData.props.row.id)">
+            <q-btn round flat dense size="md" color="info" icon="isax:eye" @click="showExam(inputData.props.row.id)">
               <q-tooltip anchor="top middle" self="bottom middle">
                 مشاهده
               </q-tooltip>
@@ -58,6 +58,11 @@
             <q-btn round flat dense size="md" color="red" icon="delete"  @click="showConfirmRemoveDialog(inputData.props.row, 'id', getRemoveMessage(inputData.props.row))">
               <q-tooltip anchor="top middle" self="bottom middle">
                 حذف آزمون
+              </q-tooltip>
+            </q-btn>
+            <q-btn round flat dense size="md" color="info" icon="info" :to="{name:'Admin.Exam.MoreActions', params: {id: inputData.props.row.id}}">
+              <q-tooltip anchor="top middle" self="bottom middle">
+                عملیات بیشتر
               </q-tooltip>
             </q-btn>
           </template>
