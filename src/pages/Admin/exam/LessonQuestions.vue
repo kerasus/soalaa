@@ -16,6 +16,13 @@
                   {label: 'من تایید نکردم', value:'not-confirmed-by-me'}
                    ]"
             />
+            <q-btn
+              round
+              color="primary"
+              unelevated
+              icon="isax:printer"
+              @click="printQuestions"
+            />
           </div>
           <div class="col-4 flex justify-between">
             <div class="search-box">
@@ -49,7 +56,6 @@
       </q-card>
       <q-virtual-scroll
         class="konkoor-view-scroll q-pa-md q-mt-md"
-        style="max-height: calc(100vh - 250px);"
         ref="scroller"
         :items="filteredQuestions"
         :key="questionListKey"
@@ -57,7 +63,7 @@
       >
         <template v-slot="{ item, index }">
           <q-item
-            class="question-field no-padding"
+            class="question-field no-padding q-mb-md"
             :key="index"
             dense
           >
@@ -159,6 +165,10 @@ export default {
     }
   },
   methods: {
+    printQuestions () {
+      const routeData = this.$router.resolve({ name: 'Admin.Exam.Lessons.PrintQuestions', params: { quizId: this.$route.params.quizId, lessonId: this.$route.params.lessonId } })
+      window.open(routeData.href, '_blank')
+    },
     detachQuestion (questionId) {
       this.$store.dispatch('AppLayout/showConfirmDialog', {
         show: true,
@@ -402,12 +412,8 @@ export default {
   @media only screen and (max-width: 599px){
     padding : 10px 16px;
   }
-
 }
-
-</style>
-<style>
-.content-inside{
-  height: calc(100vh - 110px)!important;
+.konkoor-view-scroll {
+  max-height: calc(100vh - 260px);
 }
 </style>

@@ -13,7 +13,7 @@
         </div>
       </q-card-section>
     <q-card-section
-        v-if="question.choices.list[0]"
+        v-if="question.choices.list.length > 0"
         class="row main-card-section multiple-answer"
       >
         <div
@@ -167,8 +167,6 @@ export default {
       this.question.statement = this.getContentOfQuestionParts('QuestionStatement')
       this.question.choices.list.forEach(function (item, index) {
         item.title = that.getContentOfChoice(index)
-        // toDo : the line bellow is none related and temporary
-        item.id = index
       })
       this.question.descriptive_answer = this.getContentOfQuestionParts('DescriptiveAnswer')
       status = true

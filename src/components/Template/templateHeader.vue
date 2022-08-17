@@ -72,7 +72,16 @@
     >
       <q-badge color="red" rounded floating>3</q-badge>
     </q-btn-dropdown>
+    <q-btn v-if="!user || user.id === null"
+           class="toolbar-button"
+           color="white"
+           text-color="accent"
+           icon="isax:login"
+           dense
+           unelevated
+    />
     <q-btn-dropdown
+      v-if="user && user.id !== null"
       class="toolbar-button"
       content-class="profile-menu"
       icon="isax:user"
@@ -84,6 +93,14 @@
       unelevated
       >
       <q-list>
+        <q-item>
+          <q-item-section>
+            <q-item-label>
+              {{user.first_name}}
+              {{user.last_name}}
+            </q-item-label>
+          </q-item-section>
+        </q-item>
         <q-item clickable v-close-popup @click="logOut">
           <q-item-section>
             <q-item-label>خروج</q-item-label>
@@ -107,6 +124,9 @@ export default {
     this.$store.commit('AppLayout/updateVisibilityBreadcrumb', true)
   },
   computed: {
+    ...mapGetters('Auth', [
+      'user'
+    ]),
     ...mapGetters('AppLayout', [
       'breadcrumbsVisibility',
       'breadcrumbs',

@@ -68,7 +68,7 @@ class User extends Model {
     }
 
     // TODO: this is for test
-    this.setDefaultPermission()
+    // this.setDefaultPermission()
   }
 
   setDefaultPermission () {
