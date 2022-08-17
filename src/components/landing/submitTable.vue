@@ -19,6 +19,20 @@
 
           </q-btn>
         </div>
+        <div class="q-select-mode-tabs">
+          <q-select
+            v-model="activeTab"
+            :options="exams"
+            dropdown-icon="img:https://nodes.alaatv.com/upload/landing/3a/down.png"
+            hide-bottom-space
+            dense
+            color="grey-10"
+            outlined
+            rounded
+            option-label="title"
+          >
+          </q-select>
+        </div>
         <div class="table-description">
           {{ activeTab.des }}
         </div>
@@ -130,7 +144,7 @@
                   <div class="exam-price-box">
                     <span class="discount-tag"> تخفیف٪</span>
                     <span class="main-price"> ۱۸۶٫۰۰۰ </span>
-                    <span class="final-price"> تومان</span>
+                    <span class="main-price"> تومان</span>
                   </div>
                   <div class="final-price-box">
                     <span>۱۱۰٫۰۰۰</span>
@@ -226,6 +240,9 @@ export default {
 }
 
 .submit-table {
+  .q-select-mode-tabs{
+    display: none;
+  }
   .tabs {
     padding: 15px;
     margin-bottom: 31px;
@@ -283,12 +300,9 @@ export default {
       background: #fafafa;
       color: #232323 !important;
       border-width: 2px;
-      //border-color: red;
-      //border-style: solid;
-      border-style: hidden; /* hide standard table (collapsed) border */
+      border-style: hidden;
       box-shadow: 0 0 0 2px #DBDBDB;
       border-collapse: collapse;
-      //border: 2px solid #DBDBDB;
       border-radius: 22px;
       td {
         padding: 8px 0;
@@ -314,7 +328,6 @@ export default {
 
             .dropdown-btn {
               &:deep(.q-icon ) {
-                font-family: 'Material Icons';
                 width: 15px;
                 height: 10px;
               }
@@ -322,7 +335,6 @@ export default {
               &:deep(.q-field__control) {
                 background: #E9E9E9;
                 border-radius: 24px;
-
               }
 
               &:deep(.q-field__native ) {
@@ -536,7 +548,6 @@ export default {
 
 @media screen and (max-width: 1439px) {
   .submit-table {
-    padding: 24px;
 
     .drop-down-btn {
       display: flex;
@@ -568,28 +579,113 @@ export default {
 @media screen and (max-width: 1023px) {
 
   .submit-table {
-    padding: 24px;
+    .table-description {
+      font-size: 14px;
+      line-height: 20px;
+    }
+    .table-box{
+      .table {
+        width: 100%;
 
-    .table {
-      width: 100%;
+        tr {
+          .number {
+          }
 
-      tr {
-        .number {
-        }
+          .date {
 
-        .date {
+          }
 
-        }
+          .title {
+            width: 272px;
+          }
 
-        .title {
-          width: 272px;
-        }
+          .submitStatus {
+            width: 177px;
+          }
+          .table-footer-pic-box {
+            height: 184px;
+            .table-footer-container {
 
-        .submitStatus {
-          width: 177px;
+              .pic-container {
+                width: 160px;
+                align-self: end;
+
+                .img {
+                  width: 100%;
+                  border-radius: 0 0 0 22px;
+
+                }
+
+              }
+
+              .download-box {
+
+                .text-style {
+                  font-size: 16px;
+                  line-height: 24px;
+                  margin-bottom: 15px;
+                }
+
+                .download-btn {
+                  width: 142px;
+                  height: 32px;
+                }
+
+              }
+            }
+          }
+
+          .price-submit-box {
+
+            .price-submit-in-footer {
+
+              .price-box {
+                height: 64px;
+              }
+
+              .submit-box {
+                padding-top:3px ;
+                height: 123px;
+                .exam-price {
+                  font-size: 11px;
+                  margin-bottom: 6px;
+                }
+
+                .exam-price-box {
+                  margin-bottom: 3px;
+
+                  .discount-tag {
+                    padding: 0 8px;
+                    font-size: 10px;
+                    line-height: 16px;
+                  }
+
+                  .main-price {
+                    font-size: 12px;
+                  }
+                }
+
+                .final-price-box {
+                  font-size: 18px;
+                  line-height: 16px;
+                  margin-bottom: 7px;
+                }
+
+                .sub-btn {
+                  width: 145px;
+                  height: 32px;
+
+                  .sub-btn-text {
+                    font-size: 13px;
+                  }
+                }
+              }
+            }
+          }
         }
       }
     }
+
   }
 }
 
@@ -601,34 +697,65 @@ export default {
 
   .submit-table {
     padding: 24px;
+    .table-description {
+      padding: 0;
+      line-height: 18px;
+    }
     .tabs {
       display: none;
+    }
+    .q-select-mode-tabs{
+      display: block;
+      margin-bottom: 16px;
+      &:deep(.q-icon ) {
+        width: 15px;
+        height: 10px;
+      }
+      &:deep(.q-field__native ) {
+        padding: 0 12.5px;
+        font-weight: 900;
+        font-size: 14px;
+        line-height: 24px;
+        color: #2B2B2B;
+      }
+      &:deep(.q-field__control) {
+        background: #FFBD07;
+        border-radius: 24px;
+        border: 1px solid black;
+      }
+      &:deep(.q-field__append ) {
+        padding-right: 20px;
+      }
     }
     .drop-down-btn {
       display: flex;
     }
 
-    .table {
-      width: 100%;
+    .table-box{
+      padding: 0;
+      .table {
+        width: 100%;
 
-      tr {
-        .number {
-          width: 60px;
-        }
+        tr {
+          .number {
+            width: 60px;
+          }
 
-        .date {
-          width: 60px;
-        }
+          .date {
+            width: 60px;
+          }
 
-        .title {
-          width: 164px;
-        }
+          .title {
+            width: 164px;
+          }
 
-        .submitStatus {
-          width: 181px;
+          .submitStatus {
+            width: 181px;
+          }
         }
       }
     }
+
   }
 }
 
