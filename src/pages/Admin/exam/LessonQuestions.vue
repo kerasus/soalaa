@@ -56,7 +56,6 @@
       </q-card>
       <q-virtual-scroll
         class="konkoor-view-scroll q-pa-md q-mt-md"
-        style="max-height: calc(100vh - 250px);"
         ref="scroller"
         :items="filteredQuestions"
         :key="questionListKey"
@@ -64,7 +63,7 @@
       >
         <template v-slot="{ item, index }">
           <q-item
-            class="question-field no-padding"
+            class="question-field no-padding q-mb-md"
             :key="index"
             dense
           >
@@ -413,12 +412,8 @@ export default {
   @media only screen and (max-width: 599px){
     padding : 10px 16px;
   }
-
 }
-
-</style>
-<style>
-.content-inside{
-  height: calc(100vh - 110px)!important;
+.konkoor-view-scroll {
+  max-height: calc(100vh - 260px);
 }
 </style>
