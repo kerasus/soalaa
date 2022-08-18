@@ -7,6 +7,7 @@ export default function () {
       buttons: {
       }
     },
+    templateHeaderType: '',
     windowSize: {
       x: 0,
       y: 0

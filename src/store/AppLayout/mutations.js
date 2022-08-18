@@ -8,6 +8,10 @@ export function updateBubbleSize (state, newInfo) {
   state.bubbleSize = newInfo
 }
 
+export function changeTemplateHeaderType (state, newInfo) {
+  state.templateHeaderType = newInfo
+}
+
 export function showConfirmDialog (state, newInfo) {
   state.confirmDialog = newInfo
 }

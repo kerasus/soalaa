@@ -30,7 +30,8 @@ module.exports = configure(function (ctx) {
       'appConfig',
       'middleware',
       'icon',
-      'breadcrumbs'
+      'breadcrumbs',
+      'initRouteNames'
     ],
 
     // https://v2.quasar.dev/quasar-cli/quasar-conf-js#Property%3A-css
