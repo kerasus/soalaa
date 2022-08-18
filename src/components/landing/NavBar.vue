@@ -55,12 +55,18 @@ export default {
       font-size: 20px;
       line-height: 24px;
       color: #474747;
+      cursor: pointer;
+
       &.middle{
         margin: 0 46px;
       }
     }
   }
-
+  &:deep(.q-btn) {
+    .q-btn__content {
+      margin: 0;
+    }
+  }
   .submit-btn-style {
     box-sizing: border-box;
     width: 105px;
@@ -68,6 +74,7 @@ export default {
     background: #FFF0C1;
     border: 2px solid #FEA800;
     border-radius: 24px;
+
   }
 }
 @media screen and (max-width: 1439px){

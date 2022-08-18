@@ -35,8 +35,10 @@ export default {
   },
   methods: {
     closeSidBarAndAppbar () {
-      this.$store.commit('AppLayout/updateLayoutLeftDrawerVisible', false)
-      this.$store.commit('AppLayout/updateLayoutHeaderVisible', false)
+      setTimeout(() => {
+        this.$store.commit('AppLayout/updateLayoutLeftDrawerVisible', false)
+        this.$store.commit('AppLayout/updateLayoutHeaderVisible', false)
+      }, 50)
     }
   }
 }
