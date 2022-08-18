@@ -1,10 +1,14 @@
+<!--       -----------------------ToDO => change dashboard route name ------------------------ -->
+
 <template>
   <quasar-template-builder v-model:value="properties"
                            @onResize="resize">
     <template #header>
-      <div v-if="$route.name === 'onlineQuiz.alaaView'"
-           class="header-inside row">
-        <online-quiz-template-header />
+      <div v-if="templateHeaderType === 'onlineQuiz.alaaView'" class="header-inside row">
+        <online-quiz-template-header/>
+      </div>
+      <div v-else-if="templateHeaderType === 'dashboard'" class="header-inside row">
+        <user-template-header/>
       </div>
       <div v-else
            class="header-inside row">
@@ -65,6 +69,12 @@
 </template>
 
 <script>
+import SideMenuDashboard from 'components/Menu/SideMenu/SideMenu-dashboard'
+import sideMenuMapOfQuestions from 'components/Menu/SideMenu/SideMenu_MapOfQuestions'
+import { QuasarTemplateBuilder } from 'quasar-template-builder'
+import templateHeader from 'components/Headers/templateHeader'
+import onlineQuizTemplateHeader from 'components/Headers/onlineQuizTemplateHeader'
+import UserTemplateHeader from 'components/Headers/userTemplateHeader'
 import { ref } from 'vue'
 import { QuasarTemplateBuilder } from 'quasar-template-builder'
 import Router from 'src/router/Router'
@@ -76,10 +86,11 @@ import sideMenuMapOfQuestions from 'components/Menu/SideMenu/SideMenu_MapOfQuest
 import onlineQuizTemplateHeader from 'components/Template/onlineQuizTemplateHeader'
 
 export default {
-  components: { Router, SideMenuDashboard, sideMenuMapOfQuestions, QuasarTemplateBuilder, templateHeader, onlineQuizTemplateHeader, Auth },
+  components: { Router, SideMenuDashboard, sideMenuMapOfQuestions, QuasarTemplateBuilder, templateHeader, onlineQuizTemplateHeader, UserTemplateHeader, Auth },
   data () {
     return {
       keepAliveComponents: KeepAliveComponents,
+      templateHeaderType: '',
       properties: {
         layoutView: 'lHh Lpr lFf',
         layoutHeader: true,
@@ -96,7 +107,7 @@ export default {
         layoutPageContainer: true,
         layoutRightDrawer: false,
         layoutFooter: false,
-        layoutHeaderCustomClass: 'main-layout-header row',
+        layoutHeaderCustomClass: '',
         layoutLeftDrawerCustomClass: 'main-layout-left-drawer',
         layoutPageContainerCustomClass: 'main-layout-container'
       },
@@ -121,10 +132,22 @@ export default {
     },
     linearLoading () {
       return this.$store.getters['AppLayout/linearLoading']
+    },
+    getTemplateHeaderType () {
+      return () => {
+        this.$store.dispatch('AppLayout/updateTemplateHeaderType', this.$route.name)
+        // this.$store.commit('AppLayout/updateTemplateHeaderType', this.$route.name)
+        this.templateHeaderType = this.$store.getters['AppLayout/templateHeaderType']
+      }
     }
+  },
+  mounted () {
+    this.$store.commit('AppLayout/updateLayoutLeftDrawerVisible', false)
   },
   created () {
     this.updateLayout()
+    this.getTemplateHeaderType()
+    this.setLayoutCustomClass()
   },
   methods: {
     updateLayout () {
@@ -140,6 +163,13 @@ export default {
     },
     setHeaderDimension (value) {
       this.$refs.contentInside.style.height = 'calc(100vh +' + value.height + 'px'
+    },
+    setLayoutCustomClass () {
+      if (this.templateHeaderType === 'dashboard') {
+        this.properties.layoutHeaderCustomClass = 'user-main-layout-header row'
+        return
+      }
+      this.properties.layoutHeaderCustomClass = 'main-layout-header row'
     },
     resize (val) {
       this.$store.commit('AppLayout/updateWindowSize', val)
@@ -164,6 +194,21 @@ export default {
     width: 100%;
   }
 
+}
+
+:deep(.user-main-layout-header) {
+  background-color: #f1f1f1;
+  display: flex;
+  flex-direction: row;
+  padding-bottom: 24px;
+
+  .header-inside {
+    width: 100%;
+    background: #fff;
+    display: flex;
+    justify-content: center;
+    color: #65677F;
+  }
 }
 
 .main-layout-container {

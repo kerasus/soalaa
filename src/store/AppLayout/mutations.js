@@ -15,6 +15,10 @@ export function updateLoginDialog (state, newInfo) {
   state.loginDialog = newInfo
 }
 
+export function changeTemplateHeaderType (state, newInfo) {
+  state.templateHeaderType = newInfo
+}
+
 export function showConfirmDialog (state, newInfo) {
   state.confirmDialog = newInfo
 }

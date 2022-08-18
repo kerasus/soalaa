@@ -14,3 +14,7 @@ export function showLoginDialog (context, newInfo) {
   this.commit('Auth/updateRedirectTo', redirectTo, { root: true })
   this.commit('AppLayout/updateLoginDialog', true)
 }
+
+export function updateTemplateHeaderType (context, newInfo) {
+  this.commit('AppLayout/changeTemplateHeaderType', newInfo)
+}
