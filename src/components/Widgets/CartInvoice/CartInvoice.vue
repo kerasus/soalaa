@@ -61,7 +61,7 @@
           <p class="payment-title">درگاه پرداخت</p>
 
           <div class="banks-gateway-list row">
-            <div class="bank-gateway-container col-lg-6 col-12">
+            <div class="bank-gateway-container col-lg-6  col-md-12 col-sm-6 col-xs-12">
             <div class="bank-gateway">
               <div class="bank-icon-container">
                 <q-image class="bank-icon"/>
@@ -77,12 +77,11 @@
             </div>
             </div>
 
-          <div class="bank-gateway-container col-lg-6 col-12">
+          <div class="bank-gateway-container col-lg-6  col-md-12 col-sm-6 col-xs-12">
               <div class="bank-gateway">
                 <div class="bank-icon-container">
                   <q-image class="bank-icon"/>
                 </div>
-                <div>
                   <q-radio
                     v-model="selectedBank"
                     val="1"
@@ -90,10 +89,10 @@
                     label="بانک سامان"
                     class="select-bank-radio-button"
                   />
-                </div>
               </div>
           </div>
             </div>
+
           <div class="payment-description">
             <p class="title">توضیحات</p>
 
@@ -106,11 +105,13 @@
             />
           </div>
 
-          <div
-            class="payment-button"
-            @click="payment"
-          >
-            پرداخت و ثبت نهایی
+          <div class="payment-button-container payment-button-container-desktop">
+            <div
+              class="payment-button payment-button-desktop-view"
+              @click="payment"
+            >
+              پرداخت و ثبت نهایی
+            </div>
           </div>
         </div>
 
@@ -155,6 +156,24 @@
         </div>
       </q-card-section>
     </q-card>
+    <div
+      class="payment-button-container"
+    >
+      <div
+        class="final-price price-section"
+      >
+        <div class="title">مبلغ نهایی:</div>
+        <div class="price">{{ total }}
+          <span class="iran-money-unit">تومان</span>
+        </div>
+      </div>
+      <div
+        class="payment-button payment-button-mobile-view"
+        @click="payment"
+      >
+        پرداخت
+      </div>
+    </div>
   </div>
 </template>
 
@@ -170,8 +189,12 @@ export default {
     }
   },
   computed: {
-    isUserLogin() {
+    isUserLogin () {
       return this.$store.getters['Auth/isUserLogin']
+    },
+
+    windowSize () {
+      return this.$store.getters['AppLayout/windowSize']
     }
   },
   methods: {
@@ -188,6 +211,12 @@ export default {
 
 <style lang="scss" scoped>
 .invoice-container {
+  margin-left: 30px;
+
+  @media screen and (max-width: 1023px) {
+    margin-left: 0;
+  }
+
   .invoice-cart {
     display: flex;
     flex-direction: column;
@@ -230,6 +259,8 @@ export default {
       width: 100%;
 
       .iran-money-unit {
+        font-style: normal;
+        font-weight: 400;
         font-size: 14px;
         line-height: 22px;
         margin-left: 6px;
@@ -273,11 +304,22 @@ export default {
       }
 
       &.invoice-coupon-section {
-
         .enter-coupon-code {
           display: flex;
           align-items: center;
           margin-bottom: 20px;
+
+          @media screen and (max-width: 1439px) {
+            margin-bottom: 14px;
+          }
+
+          @media screen and (max-width: 1023px) {
+            margin-bottom: 16px;
+          }
+
+          @media screen and (max-width: 599px) {
+            margin-bottom: 12px;
+          }
 
           .title {
             font-style: normal;
@@ -289,7 +331,7 @@ export default {
             margin-right: 16px;
 
             @media screen and (max-width: 1439px) {
-              margin-right: 14px;
+              margin-right: 4px;
             }
 
             @media screen and (max-width: 1023px) {
@@ -297,24 +339,30 @@ export default {
             }
 
             @media screen and (max-width: 599px) {
+              font-size: 14px;
               margin-right: 14px;
             }
           }
 
           .coupon-input {
+
+            @media screen and (max-width: 1023px) {
+              width: 100%;
+            }
+
             &:deep(.q-field__control) {
               height: 40px;
               border: 1.3px solid #E7ECF4;
               border-radius: 8px;
               padding: 0 16px;
-              max-width: 286px;
-              width: 100%;
+              width: 286px;
 
               @media screen and (max-width: 1439px) {
                 padding: 0 12px;
+                width: 100%;
               }
 
-              @media screen and (max-width: 1024px) {
+              @media screen and (max-width: 1023px) {
                 padding: 0 16px;
               }
 
@@ -325,6 +373,7 @@ export default {
 
             &:deep(.q-field__append) {
               height: 40px;
+              width: 45px;
             }
 
             &:deep(.q-field__label) {
@@ -340,9 +389,13 @@ export default {
             &:deep(.q-btn .q-btn__content) {
               font-style: normal;
               font-weight: 400;
-              font-size: 14px;
+              font-size: 16px;
               line-height: 22px;
               color: #23263B;
+
+              @media screen and (max-width: 1439px) {
+                font-size: 14px;
+              }
             }
 
             &:deep(.q-field__inner .q-field__control:before) {
@@ -404,24 +457,73 @@ export default {
             letter-spacing: -0.03em;
             color: #23263B;
             margin-bottom: 8px;
+
+            @media screen and (max-width: 1439px) {
+              margin-bottom: 6px;
+            }
+
+            @media screen and (max-width: 1023px) {
+              margin-bottom: 8px;
+            }
+
+            @media screen and (max-width: 599px) {
+              margin-bottom: 6px;
+            }
           }
 
           .banks-gateway-list {
             margin-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+
+            @media screen and (max-width: 1439px) {
+              margin-bottom: 8px;
+            }
+
+            @media screen and (max-width: 1023px) {
+              margin-bottom: 16px;
+            }
+
+            @media screen and (max-width: 599px) {
+              margin-bottom: 2px;
+            }
 
             .bank-gateway-container {
+              @media screen and (max-width: 1023px) {
+                padding: 0 6px;
+              }
+
+              @media screen and (max-width: 599px) {
+                padding: 0;
+              }
+
               .bank-gateway {
                 display: flex;
                 justify-content: space-between;
                 align-items: center;
                 box-sizing: border-box;
                 height: 74px;
+                width: 177px;
                 border: 1.3px solid #E7ECF4;
                 border-radius: 8px;
                 padding: 8px;
 
+                @media screen and (max-width: 1439px) {
+                  width: 100%;
+                  margin-bottom: 8px;
+                }
+
+                @media screen and (max-width: 1023px) {
+                  margin-bottom: 0;
+                }
+
+                @media screen and (max-width: 599px) {
+                  margin-bottom: 10px;
+                }
+
                 .bank-icon-container {
-                  width: 58px;
+                  min-width: 58px;
                   height: 58px;
                   background: #F4F3FF;
                   border-radius: 5px;
@@ -429,6 +531,9 @@ export default {
                 }
 
                 .select-bank-radio-button {
+                  width: 100%;
+                  justify-content: space-between;
+
                   &:deep(.q-radio__bg) {
                     color: #E7ECF4;
                   }
@@ -454,6 +559,15 @@ export default {
               line-height: 25px;
               letter-spacing: -0.03em;
               color: #23263B;
+              margin-bottom: 8px;
+
+              @media screen and (max-width: 1439px) {
+                margin-bottom: 6px;
+              }
+
+              @media screen and (max-width: 599px) {
+                font-size: 14px;
+              }
             }
 
             .payment-description-input {
@@ -483,22 +597,6 @@ export default {
                 border: none;
               }
             }
-          }
-
-          .payment-button {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 56px;
-            background: #4CAF50;
-            border-radius: 8px;
-            font-style: normal;
-            font-weight: 600;
-            font-size: 16px;
-            line-height: 25px;
-            letter-spacing: -0.03em;
-            color: #FFFFFF;
-            cursor: pointer;
           }
         }
       }
@@ -576,5 +674,98 @@ export default {
     }
 
   }
+
+  .payment-button-container {
+    &.payment-button-container-desktop {
+      display: flex;
+      @media screen and (max-width: 599px) {
+        display: none;
+      }
+    }
+
+    @media screen and (max-width: 599px) {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      display: flex;
+      justify-content: space-between;
+      padding: 13px 19px;
+      background: #FFFFFF;
+      box-shadow: 0px -6px 10px rgba(112, 108, 161, 0.07);
+      border-radius: 16px 16px 0 0;
+    }
+
+    .final-price {
+      display: none;
+      color: #434765;
+      @media screen and (max-width: 599px) {
+        display: flex;
+      }
+
+      .title {
+        font-style: normal;
+        font-weight: 400;
+        font-size: 14px;
+        line-height: 22px;
+        margin-right: 4px;
+      }
+
+      .price {
+        font-style: normal;
+        font-weight: 600;
+        font-size: 16px;
+        line-height: 25px;
+        letter-spacing: -0.05em;
+      }
+
+      .iran-money-unit {
+        font-style: normal;
+        font-weight: 400;
+        font-size: 12px;
+        line-height: 19px;
+      }
+    }
+
+    .payment-button {
+      justify-content: center;
+      align-items: center;
+      height: 56px;
+      background: #4CAF50;
+      border-radius: 8px;
+      font-style: normal;
+      font-weight: 600;
+      font-size: 16px;
+      line-height: 25px;
+      letter-spacing: -0.03em;
+      color: #FFFFFF;
+      cursor: pointer;
+      width: 100%;
+
+      @media screen and (max-width: 599px) {
+        width: 104px;
+        height: 36px;
+        font-style: normal;
+        font-weight: 600;
+        font-size: 14px;
+        line-height: 22px;
+      }
+
+      &.payment-button-mobile-view {
+        display: none;
+        @media screen and (max-width: 599px) {
+          display: flex;
+        }
+      }
+
+      &.payment-button-desktop-view {
+        display: flex;
+        @media screen and (max-width: 599px) {
+          display: none;
+        }
+      }
+    }
+  }
+
 }
 </style>
