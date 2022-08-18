@@ -1,8 +1,8 @@
 {
-  "name": "3a",
+  "name": "soala",
   "version": "0.0.1",
-  "description": "3A with Quasar framework",
-  "productName": "3A-Quasar",
+  "description": "سوالا",
+  "productName": "سوالا",
   "author": "Ali <aliesmaeeli20@gmail.com>",
   "private": true,
   "scripts": {
