@@ -1,12 +1,15 @@
 <template>
-  <div class="exam-rule-box">
-    <q-img class="dots" src="https://nodes.alaatv.com/upload/landing/3a/3a_2.png"/>
-    <q-img class="logo" src="https://nodes.alaatv.com/upload/landing/3a/3a_1.png"/>
-    <div class="title-s">چگونگی و شرایط برگزاری آزمون سه‌آ</div>
-    <div class="rules" v-for="(rule, index) in rules" :key="index">
-      {{ rule }}
+  <div>
+    <div class="exam-rule-box">
+      <q-img class="dots" src="https://nodes.alaatv.com/upload/landing/3a/3a_2.png"/>
+      <q-img class="logo" src="https://nodes.alaatv.com/upload/landing/3a/3a_1.png"/>
+      <div class="title-s">چگونگی و شرایط برگزاری آزمون سه‌آ</div>
+      <div class="rules" v-for="(rule, index) in rules" :key="index">
+        {{ rule }}
+      </div>
     </div>
   </div>
+
 </template>
 
 <script>
@@ -33,6 +36,7 @@ export default {
   background: linear-gradient(-105.93deg, #D19B06 -10.73%, rgba(255, 255, 255, 0) 257.37%);
   border-radius: 24px;
   position: relative;
+  width: 100%;
 
   .title-s {
     font-style: normal;
@@ -64,6 +68,95 @@ export default {
     position: absolute;
     bottom: 0;
     right: 0;
+  }
+}
+@media  screen and (max-width: 1439px) {
+  .exam-rule-box {
+
+    .rules {
+      font-size: 18px;
+      line-height: 24px;
+      max-width: 566px;
+    }
+
+    .dots {
+
+      right: 361px;
+    }
+  }
+}
+@media  screen and (max-width: 1023px) {
+  .exam-rule-box {
+
+    .title-s {
+      font-size: 28px;
+      line-height: 42px;
+    }
+
+    .rules {
+      font-size: 15px;
+      line-height: 16px;
+      max-width: 566px;
+    }
+
+    .dots {
+      width: 211px;
+      right: 241px;
+    }
+    .logo{
+      width: 112px;
+    }
+  }
+}
+@media  screen and (max-width: 765px) {
+  .exam-rule-box {
+    padding: 24px;
+
+    .title-s {
+      font-size: 24px;
+      line-height: 42px;
+    }
+
+    .rules {
+
+      font-size: 12px;
+      line-height: 16px;
+      max-width: 445px;
+    }
+
+    .dots {
+      width: 173px;
+      right: 168px;
+    }
+    .logo{
+      width: 93px;
+    }
+  }
+}
+@media  screen and (max-width: 599px) {
+  .exam-rule-box {
+    padding: 15px;
+
+    .title-s {
+      font-size: 20px;
+      line-height: 42px;
+      width: 100%;
+      text-align: center;
+    }
+
+    .rules {
+      font-size: 14px;
+      line-height: 16px;
+      max-width: none;
+    }
+
+    .dots {
+      width: 76px;
+      right: calc(50% - 40px);
+    }
+    .logo{
+      width: 80px;
+    }
   }
 }
 

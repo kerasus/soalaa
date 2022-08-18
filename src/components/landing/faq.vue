@@ -28,7 +28,7 @@
             {{ question.answer }}
           </div>
         </q-expansion-item>
-        <q-separator/>
+        <q-separator v-if="index < allQuestions.length - 1"/>
 
       </div>
 
@@ -81,7 +81,7 @@ export default {
 </script>
 <style scoped lang="scss">
 .common-questions {
-
+padding-bottom: 124px;
   .title-s {
     font-style: normal;
     font-weight: 900;
@@ -127,6 +127,7 @@ export default {
         color: #232323;
         padding: 20px;
         background-color: #fafafa;
+        border-radius: 24px;
       }
       .dot{
         background: #232323;
@@ -143,6 +144,63 @@ export default {
     }
   }
 
+}
+@media screen and (max-width: 1439px){
+
+}
+@media screen and (max-width: 1023px){
+  .common-questions {
+    padding-bottom: 39px;
+    .title-s {
+      font-size: 33px;
+      line-height: 31px;
+      text-align: center;
+      margin-bottom: 33px;
+    }
+    .question-body{
+
+      .question-expansion {
+
+        .header-style {
+          font-size: 13px;
+          line-height: 24px;
+        }
+      }
+    }
+
+  }
+}
+@media screen and (max-width: 765px){
+  .common-questions {
+    padding-bottom: 39px;
+    .title-s {
+      font-size: 24px;
+      line-height: 31px;
+      margin-bottom: 24px;
+      margin-top: 33px;
+    }
+  }
+}
+@media screen and (max-width: 599px){
+  .common-questions {
+    padding-bottom: 27px;
+    .title-s {
+      font-size: 20px;
+      line-height: 31px;
+      margin-bottom: 16px;
+      margin-top: 40px;
+    }
+    .question-body{
+
+      .question-expansion {
+        .expansion-card{
+          font-weight: 300;
+          font-size: 11px;
+          line-height: 20px;
+        }
+      }
+    }
+  }
 }
 
 </style>
