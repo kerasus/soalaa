@@ -128,10 +128,7 @@ export default {
   }),
   mixins: [mixinAuth, mixinQuiz, mixinGetQuizData],
   created () {
-    this.$store.commit('AppLayout/updateLayoutLeftDrawerVisible', true)
     this.getQuizTitle()
-  },
-  mounted () {
     this.loadLessons()
   },
   methods: {

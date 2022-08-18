@@ -7,6 +7,7 @@ import Auth from 'src/store/Auth'
 import loading from 'src/store/loading'
 import AppLayout from 'src/store/AppLayout'
 import Exam from 'src/store/Exam'
+import Cart from 'src/store/Cart'
 
 /*
  * If not building with SSR mode, you can
@@ -23,7 +24,8 @@ export default store(function (/* { ssrContext } */) {
       Auth,
       loading,
       AppLayout,
-      Exam
+      Exam,
+      Cart
     },
     plugins: [
       vuejsStorage({
