@@ -5,7 +5,7 @@
         v-model="searchInput"
         filled
         class="backGround-gray-input search-input"
-        label="جستجو در سوال ها..."
+        placeholder="جستجو در سوال ها..."
       >
         <template v-slot:append>
           <q-btn
