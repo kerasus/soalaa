@@ -1,9 +1,13 @@
 <template>
   <div class="landing-page">
-    <nav-bar class="landing-width" />
+    <nav-bar />
     <landing-header  />
-    <why/>
-    <features />
+    <why class="landing-width"/>
+    <features class="landing-width"/>
+    <submit-table class="landing-width" />
+    <exam-rules class="landing-width" />
+    <faq class="landing-width" />
+
   </div>
 </template>
 
@@ -12,21 +16,29 @@ import NavBar from 'src/components/landing/NavBar'
 import landingHeader from 'src/components/landing/header'
 import why from 'src/components/landing/why3A'
 import features from 'src/components/landing/3aFeatures'
+import examRules from 'components/landing/examRules'
+import submitTable from 'components/landing/submitTable'
+import faq from 'components/landing/faq'
 export default {
   name: 'landing',
   components: {
     landingHeader,
     why,
     features,
-    NavBar
+    NavBar,
+    submitTable,
+    examRules,
+    faq
   },
   mounted () {
     this.closeSidBarAndAppbar()
   },
   methods: {
     closeSidBarAndAppbar () {
-      this.$store.commit('AppLayout/updateLayoutLeftDrawerVisible', false)
-      this.$store.commit('AppLayout/updateLayoutHeaderVisible', false)
+      setTimeout(() => {
+        this.$store.commit('AppLayout/updateLayoutLeftDrawerVisible', false)
+        this.$store.commit('AppLayout/updateLayoutHeaderVisible', false)
+      }, 50)
     }
   }
 }
@@ -49,6 +61,7 @@ export default {
     }
     @media screen and (max-width: 600px) {
       width: 100%;
+      padding: 0 16px;
     }
    }
 
