@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="table-section">
     <div class="table-section-title">
       ثبت‌نام آزمون
     </div>
@@ -228,386 +228,194 @@ export default {
 </script>
 
 <style scoped lang="scss">
-
-.table-section-title {
-  font-style: normal;
-  font-weight: 900;
-  font-size: 32px;
-  line-height: 42px;
-  color: #232323;
-  text-align: center;
-  margin-bottom: 28px;
-}
-
-.submit-table {
-  .q-select-mode-tabs{
-    display: none;
-  }
-  .tabs {
-    padding: 15px;
-    margin-bottom: 31px;
-    box-shadow: 0 4px 16px rgba(224, 224, 224, 0.25);
-    display: flex;
-    justify-content: space-between;
-    .exam-btn {
-      border-radius: 24px;
-      height: 38px;
-      padding: 0 10px;
-
-      .btn-text {
-        font-style: normal;
-        font-weight: 500;
-        font-size: 16px;
-        line-height: 22px;
-        text-align: center;
-        color: #232323;
-        opacity: 0.7;
-      }
-    }
-
-    .active-exam-btn {
-      background: #FFBD07;
-      border-radius: 24px;
-
-      .btn-text {
-        font-weight: 900;
-      }
-    }
-  }
-
-  .table-description {
-    padding: 0 27px;
+.table-section{
+  padding-bottom: 64px;
+  .table-section-title {
     font-style: normal;
-    font-weight: 500;
-    font-size: 16px;
-    line-height: 24px;
+    font-weight: 900;
+    font-size: 32px;
+    line-height: 42px;
     color: #232323;
-    margin-bottom: 30px;
+    text-align: center;
+    margin-bottom: 28px;
   }
-  background: #FFFFFF;
-  box-shadow: 0 4px 16px 2px rgba(40, 40, 40, 0.08);
-  border-radius: 24px;
 
-  &:deep(.q-btn) {
-    .q-btn__content {
-      margin: 0;
-    }
-  }
-  .table-box{
-    padding: 0 24px 24px 24px;
-    .table {
-      width: 100%;
-      background: #fafafa;
-      color: #232323 !important;
-      border-width: 2px;
-      border-style: hidden;
-      box-shadow: 0 0 0 2px #DBDBDB;
-      border-collapse: collapse;
-      border-radius: 22px;
-      td {
-        padding: 8px 0;
-        background: #FAFAFA;
-        text-align: center;
-        font-weight: 500;
-        font-size: 14px;
-        line-height: 24px;
-      }
-
-      th {
-        padding-top: 8px;
-      }
-
-      tr {
-
-        .top-of-table {
-          padding: 0;
-          .drop-down-btn {
-            display: flex;
-            border-bottom: none;
-            padding: 16px;
-
-            .dropdown-btn {
-              &:deep(.q-icon ) {
-                width: 15px;
-                height: 10px;
-              }
-
-              &:deep(.q-field__control) {
-                background: #E9E9E9;
-                border-radius: 24px;
-              }
-
-              &:deep(.q-field__native ) {
-                padding: 0 12.5px;
-              }
-
-              &:deep(.q-field__append ) {
-                padding-right: 20px;
-              }
-
-              .custom-label-prefix {
-                font-style: normal;
-                font-weight: 700;
-                font-size: 16px;
-                line-height: 24px;
-                color: #232323;
-              }
-            }
-
-            .select-1 {
-              &:deep(.q-field__inner) {
-                width: 231px;
-              }
-            }
-
-            .select-2 {
-              &:deep(.q-field__inner) {
-                width: 173px;
-              }
-            }
-          }
-        }
-
-        .table-title {
-          font-style: normal;
-          font-weight: 700;
-          font-size: 16px;
-          line-height: 24px;
-          color: #232323;
-          border-top: 1px solid #DBDBDB;
-          border-left: 1px solid #DBDBDB;
-        }
-
-        .custom-border {
-          border-bottom: 1px solid #DBDBDB;
-          border-left: 1px solid #DBDBDB;
-        }
-
-        .number {
-          width: 97px;
-
-        }
-
-        .date {
-          width: 95px;
-        }
-
-        .title {
-          width: 509px;
-        }
-
-        .submitStatus {
-          width: 357px;
-        }
-
-        .table-footer-pic-box {
-          height: 235px;
-          background: #FFF2CB;
-          border-radius: 0 0 0 22px;
-          padding: 0;
-          border-left: 1px solid #DBDBDB;
-          border-left: 1px solid;
-
-          .table-footer-container {
-            display: grid;
-            grid-template-columns: 1fr 2fr;
-            height: 100%;
-
-            .pic-container {
-              width: 200px;
-              align-self: end;
-
-              .img {
-                width: 100%;
-                border-radius: 0 0 0 22px;
-
-              }
-
-            }
-
-            .download-box {
-              align-self: center;
-
-              .text-style {
-                font-style: normal;
-                font-weight: 700;
-                font-size: 18px;
-                line-height: 24px;
-                text-align: center;
-                color: #232323;
-                margin-bottom: 16px;
-              }
-
-              .download-btn {
-                width: 150px;
-                height: 40px;
-                background: #FFF2CB;
-                border: 2px solid #2A2A2A;
-                border-radius: 24px;
-              }
-
-            }
-          }
-        }
-
-        .price-submit-box {
-          padding: 0;
-          border-radius: 22px;
-
-          .price-submit-in-footer {
-
-            .price-box {
-              display: flex;
-              justify-content: center;
-              align-items: center;
-              height: 75px;
-              border-bottom: 1px solid #DBDBDB;
-              background: #F7F7F7;
-
-              .single-price {
-                font-weight: 500;
-                font-size: 11px;
-                line-height: 16px;
-                font-style: normal;
-                padding-bottom: 8px;
-              }
-
-              .price {
-                font-style: normal;
-                font-weight: 700;
-                font-size: 16px;
-                line-height: 16px;
-              }
-            }
-
-            .submit-box {
-              padding-top: 12px;
-              height: 163px;
-
-              .exam-price {
-                font-style: normal;
-                font-weight: 500;
-                font-size: 12px;
-                line-height: 16px;
-                color: #232323;
-                margin-bottom: 12px;
-              }
-
-              .exam-price-box {
-                margin-bottom: 7px;
-
-                .discount-tag {
-                  padding: 4px 8px;
-                  color: #DB1F1F;
-                  background: #FFDEDE;
-                  border-radius: 8px;
-                  margin-right: 4px;
-                }
-
-                .main-price {
-                  font-style: normal;
-                  font-weight: 700;
-                  font-size: 16px;
-                  line-height: 16px;
-                  text-decoration-line: line-through;
-                  color: #DB1F1F;
-                }
-              }
-
-              .final-price-box {
-                font-style: normal;
-                font-weight: 900;
-                font-size: 20px;
-                line-height: 16px;
-                color: #232323;
-                margin-bottom: 12px;
-              }
-
-              .sub-btn {
-                width: 324px;
-                height: 48px;
-                background: #FFBD07;
-                border-radius: 24px;
-
-                .sub-btn-text {
-                  font-style: normal;
-                  font-weight: 700;
-                  font-size: 16px;
-                  line-height: 16px;
-                  color: #2B2B2B;
-                }
-              }
-            }
-          }
-        }
-
-      }
-    }
-  }
-}
-
-@media screen and (max-width: 1439px) {
   .submit-table {
-
-    .drop-down-btn {
+    .q-select-mode-tabs{
+      display: none;
+    }
+    .tabs {
+      padding: 15px;
+      margin-bottom: 31px;
+      box-shadow: 0 4px 16px rgba(224, 224, 224, 0.25);
       display: flex;
-    }
+      justify-content: space-between;
+      .exam-btn {
+        border-radius: 24px;
+        height: 38px;
+        padding: 0 10px;
 
-    .table {
-      width: 100%;
-
-      tr {
-        .number {
+        .btn-text {
+          font-style: normal;
+          font-weight: 500;
+          font-size: 16px;
+          line-height: 22px;
+          text-align: center;
+          color: #232323;
+          opacity: 0.7;
         }
+      }
 
-        .date {
+      .active-exam-btn {
+        background: #FFBD07;
+        border-radius: 24px;
 
-        }
-
-        .title {
-          width: 390px;
-        }
-
-        .submitStatus {
-          width: 297px;
+        .btn-text {
+          font-weight: 900;
         }
       }
     }
-  }
-}
 
-@media screen and (max-width: 1023px) {
-
-  .submit-table {
     .table-description {
-      font-size: 14px;
-      line-height: 20px;
+      padding: 0 27px;
+      font-style: normal;
+      font-weight: 500;
+      font-size: 16px;
+      line-height: 24px;
+      color: #232323;
+      margin-bottom: 30px;
+    }
+    background: #FFFFFF;
+    box-shadow: 0 4px 16px 2px rgba(40, 40, 40, 0.08);
+    border-radius: 24px;
+
+    &:deep(.q-btn) {
+      .q-btn__content {
+        margin: 0;
+      }
     }
     .table-box{
+      padding: 0 24px 24px 24px;
       .table {
         width: 100%;
+        background: #fafafa;
+        color: #232323 !important;
+        border-width: 2px;
+        border-style: hidden;
+        box-shadow: 0 0 0 2px #DBDBDB;
+        border-collapse: collapse;
+        border-radius: 22px;
+        td {
+          padding: 8px 0;
+          background: #FAFAFA;
+          text-align: center;
+          font-weight: 500;
+          font-size: 14px;
+          line-height: 24px;
+        }
+
+        th {
+          padding-top: 8px;
+        }
 
         tr {
+
+          .top-of-table {
+            padding: 0;
+            .drop-down-btn {
+              display: flex;
+              border-bottom: none;
+              padding: 16px;
+
+              .dropdown-btn {
+                &:deep(.q-icon ) {
+                  width: 15px;
+                  height: 10px;
+                }
+
+                &:deep(.q-field__control) {
+                  background: #E9E9E9;
+                  border-radius: 24px;
+                }
+
+                &:deep(.q-field__native ) {
+                  padding: 0 12.5px;
+                }
+
+                &:deep(.q-field__append ) {
+                  padding-right: 20px;
+                }
+
+                .custom-label-prefix {
+                  font-style: normal;
+                  font-weight: 700;
+                  font-size: 16px;
+                  line-height: 24px;
+                  color: #232323;
+                }
+              }
+
+              .select-1 {
+                &:deep(.q-field__inner) {
+                  width: 231px;
+                }
+              }
+
+              .select-2 {
+                &:deep(.q-field__inner) {
+                  width: 173px;
+                }
+              }
+            }
+          }
+
+          .table-title {
+            font-style: normal;
+            font-weight: 700;
+            font-size: 16px;
+            line-height: 24px;
+            color: #232323;
+            border-top: 1px solid #DBDBDB;
+            border-left: 1px solid #DBDBDB;
+          }
+
+          .custom-border {
+            border-bottom: 1px solid #DBDBDB;
+            border-left: 1px solid #DBDBDB;
+          }
+
           .number {
+            width: 97px;
+
           }
 
           .date {
-
+            width: 95px;
           }
 
           .title {
-            width: 272px;
+            width: 509px;
           }
 
           .submitStatus {
-            width: 177px;
+            width: 357px;
           }
+
           .table-footer-pic-box {
-            height: 184px;
+            height: 235px;
+            background: #FFF2CB;
+            border-radius: 0 0 0 22px;
+            padding: 0;
+            border-left: 1px solid #DBDBDB;
+            border-left: 1px solid;
+
             .table-footer-container {
+              display: grid;
+              grid-template-columns: 1fr 2fr;
+              height: 100%;
 
               .pic-container {
-                width: 160px;
+                width: 200px;
                 align-self: end;
 
                 .img {
@@ -619,16 +427,24 @@ export default {
               }
 
               .download-box {
+                align-self: center;
 
                 .text-style {
-                  font-size: 16px;
+                  font-style: normal;
+                  font-weight: 700;
+                  font-size: 18px;
                   line-height: 24px;
-                  margin-bottom: 15px;
+                  text-align: center;
+                  color: #232323;
+                  margin-bottom: 16px;
                 }
 
                 .download-btn {
-                  width: 142px;
-                  height: 32px;
+                  width: 150px;
+                  height: 40px;
+                  background: #FFF2CB;
+                  border: 2px solid #2A2A2A;
+                  border-radius: 24px;
                 }
 
               }
@@ -636,47 +452,237 @@ export default {
           }
 
           .price-submit-box {
+            padding: 0;
+            border-radius: 22px;
 
             .price-submit-in-footer {
 
               .price-box {
-                height: 64px;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                height: 75px;
+                border-bottom: 1px solid #DBDBDB;
+                background: #F7F7F7;
+
+                .single-price {
+                  font-weight: 500;
+                  font-size: 11px;
+                  line-height: 16px;
+                  font-style: normal;
+                  padding-bottom: 8px;
+                }
+
+                .price {
+                  font-style: normal;
+                  font-weight: 700;
+                  font-size: 16px;
+                  line-height: 16px;
+                }
               }
 
               .submit-box {
-                padding-top:3px ;
-                height: 123px;
+                padding-top: 12px;
+                height: 163px;
+
                 .exam-price {
-                  font-size: 11px;
-                  margin-bottom: 6px;
+                  font-style: normal;
+                  font-weight: 500;
+                  font-size: 12px;
+                  line-height: 16px;
+                  color: #232323;
+                  margin-bottom: 12px;
                 }
 
                 .exam-price-box {
-                  margin-bottom: 3px;
+                  margin-bottom: 7px;
 
                   .discount-tag {
-                    padding: 0 8px;
-                    font-size: 10px;
-                    line-height: 16px;
+                    padding: 4px 8px;
+                    color: #DB1F1F;
+                    background: #FFDEDE;
+                    border-radius: 8px;
+                    margin-right: 4px;
                   }
 
                   .main-price {
-                    font-size: 12px;
+                    font-style: normal;
+                    font-weight: 700;
+                    font-size: 16px;
+                    line-height: 16px;
+                    text-decoration-line: line-through;
+                    color: #DB1F1F;
                   }
                 }
 
                 .final-price-box {
-                  font-size: 18px;
+                  font-style: normal;
+                  font-weight: 900;
+                  font-size: 20px;
                   line-height: 16px;
-                  margin-bottom: 7px;
+                  color: #232323;
+                  margin-bottom: 12px;
                 }
 
                 .sub-btn {
-                  width: 145px;
-                  height: 32px;
+                  width: 324px;
+                  height: 48px;
+                  background: #FFBD07;
+                  border-radius: 24px;
 
                   .sub-btn-text {
-                    font-size: 13px;
+                    font-style: normal;
+                    font-weight: 700;
+                    font-size: 16px;
+                    line-height: 16px;
+                    color: #2B2B2B;
+                  }
+                }
+              }
+            }
+          }
+
+        }
+      }
+    }
+  }
+}
+
+@media screen and (max-width: 1439px) {
+  .table-section{
+    .submit-table {
+
+      .drop-down-btn {
+        display: flex;
+      }
+
+      .table {
+        width: 100%;
+
+        tr {
+          .number {
+          }
+
+          .date {
+
+          }
+
+          .title {
+            width: 390px;
+          }
+
+          .submitStatus {
+            width: 297px;
+          }
+        }
+      }
+    }
+  }
+
+}
+
+@media screen and (max-width: 1023px) {
+  .table-section{
+    .submit-table {
+      .table-description {
+        font-size: 14px;
+        line-height: 20px;
+      }
+      .table-box{
+        .table {
+          width: 100%;
+
+          tr {
+            .number {
+            }
+
+            .date {
+
+            }
+
+            .title {
+              width: 272px;
+            }
+
+            .submitStatus {
+              width: 177px;
+            }
+            .table-footer-pic-box {
+              height: 184px;
+              .table-footer-container {
+
+                .pic-container {
+                  width: 160px;
+                  align-self: end;
+
+                  .img {
+                    width: 100%;
+                    border-radius: 0 0 0 22px;
+
+                  }
+
+                }
+
+                .download-box {
+
+                  .text-style {
+                    font-size: 16px;
+                    line-height: 24px;
+                    margin-bottom: 15px;
+                  }
+
+                  .download-btn {
+                    width: 142px;
+                    height: 32px;
+                  }
+
+                }
+              }
+            }
+
+            .price-submit-box {
+
+              .price-submit-in-footer {
+
+                .price-box {
+                  height: 64px;
+                }
+
+                .submit-box {
+                  padding-top:3px ;
+                  height: 123px;
+                  .exam-price {
+                    font-size: 11px;
+                    margin-bottom: 6px;
+                  }
+
+                  .exam-price-box {
+                    margin-bottom: 3px;
+
+                    .discount-tag {
+                      padding: 0 8px;
+                      font-size: 10px;
+                      line-height: 16px;
+                    }
+
+                    .main-price {
+                      font-size: 12px;
+                    }
+                  }
+
+                  .final-price-box {
+                    font-size: 18px;
+                    line-height: 16px;
+                    margin-bottom: 7px;
+                  }
+
+                  .sub-btn {
+                    width: 145px;
+                    height: 32px;
+
+                    .sub-btn-text {
+                      font-size: 13px;
+                    }
                   }
                 }
               }
@@ -684,84 +690,93 @@ export default {
           }
         }
       }
-    }
 
+    }
   }
+
 }
 
 @media screen and (max-width: 765px) {
-  .table-section-title {
-    font-size: 24px;
-    line-height: 42px;
-  }
-
-  .submit-table {
-    padding: 24px;
-    .table-description {
-      padding: 0;
-      line-height: 18px;
-    }
-    .tabs {
-      display: none;
-    }
-    .q-select-mode-tabs{
-      display: block;
-      margin-bottom: 16px;
-      &:deep(.q-icon ) {
-        width: 15px;
-        height: 10px;
-      }
-      &:deep(.q-field__native ) {
-        padding: 0 12.5px;
-        font-weight: 900;
-        font-size: 14px;
-        line-height: 24px;
-        color: #2B2B2B;
-      }
-      &:deep(.q-field__control) {
-        background: #FFBD07;
-        border-radius: 24px;
-        border: 1px solid black;
-      }
-      &:deep(.q-field__append ) {
-        padding-right: 20px;
-      }
-    }
-    .drop-down-btn {
-      display: flex;
+  .table-section{
+    padding-bottom: 56px;
+    .table-section-title {
+      font-size: 24px;
+      line-height: 42px;
     }
 
-    .table-box{
-      padding: 0;
-      .table {
-        width: 100%;
+    .submit-table {
+      padding: 24px;
+      .table-description {
+        padding: 0;
+        line-height: 18px;
+      }
+      .tabs {
+        display: none;
+      }
+      .q-select-mode-tabs{
+        display: block;
+        margin-bottom: 16px;
+        &:deep(.q-icon ) {
+          width: 15px;
+          height: 10px;
+        }
+        &:deep(.q-field__native ) {
+          padding: 0 12.5px;
+          font-weight: 900;
+          font-size: 14px;
+          line-height: 24px;
+          color: #2B2B2B;
+        }
+        &:deep(.q-field__control) {
+          background: #FFBD07;
+          border-radius: 24px;
+          border: 1px solid black;
+        }
+        &:deep(.q-field__append ) {
+          padding-right: 20px;
+        }
+      }
+      .drop-down-btn {
+        display: flex;
+      }
 
-        tr {
-          .number {
-            width: 60px;
-          }
+      .table-box{
+        padding: 0;
+        .table {
+          width: 100%;
 
-          .date {
-            width: 60px;
-          }
+          tr {
+            .number {
+              width: 60px;
+            }
 
-          .title {
-            width: 164px;
-          }
+            .date {
+              width: 60px;
+            }
 
-          .submitStatus {
-            width: 181px;
+            .title {
+              width: 164px;
+            }
+
+            .submitStatus {
+              width: 181px;
+            }
           }
         }
       }
-    }
 
+    }
   }
+
 }
 
 @media screen and (max-width: 599px) {
-  .table-section-title {
-    font-size: 20px;
+  .table-section{
+    padding-bottom: 40px;
+    .table-section-title {
+      font-size: 20px;
+    }
   }
+
 }
 </style>

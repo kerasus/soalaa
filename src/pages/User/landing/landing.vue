@@ -5,6 +5,7 @@
     <why class="landing-width"/>
     <features class="landing-width"/>
     <submit-table class="landing-width" />
+    <exam-rules class="landing-width" />
     <faq class="landing-width" />
 
   </div>
@@ -15,6 +16,7 @@ import NavBar from 'src/components/landing/NavBar'
 import landingHeader from 'src/components/landing/header'
 import why from 'src/components/landing/why3A'
 import features from 'src/components/landing/3aFeatures'
+import examRules from 'components/landing/examRules'
 import submitTable from 'components/landing/submitTable'
 import faq from 'components/landing/faq'
 export default {
@@ -25,6 +27,7 @@ export default {
     features,
     NavBar,
     submitTable,
+    examRules,
     faq
   },
   mounted () {

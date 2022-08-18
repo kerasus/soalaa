@@ -6,25 +6,29 @@
     <div
       class="question-body"
     >
-      <div    v-for="( question , index ) in allQuestions"
-              :key="index">
+      <div v-for="( question , index ) in allQuestions"
+           :key="index">
         <q-expansion-item
           class="question-expansion"
           group="same"
           expand-separator
+          :header-style="{ backgroundColor: '#fafafa' ,borderRadius:' 24px' }"
+          header-class="header-background"
+          style="border-radius: 10px"
+          icon="img:https://nodes.alaatv.com/upload/landing/3a/down.png"
         >
           <template v-slot:header>
             <div class="flex items-center">
               <div class="dot q-mr-sm"/>
-              <span class="header-style"> {{question.question}}</span>
+              <span class="header-style"> {{ question.question }}</span>
             </div>
 
           </template>
           <div class="expansion-card">
-            {{question.answer}}
+            {{ question.answer }}
           </div>
         </q-expansion-item>
-        <q-separator />
+        <q-separator/>
 
       </div>
 
@@ -75,37 +79,38 @@ export default {
   }
 }
 </script>
+<style scoped lang="scss">
+.common-questions {
 
-<style lang="scss" scoped>
-.title-s{
-  font-style: normal;
-  font-weight: 900;
-  font-size: 28px;
-  line-height: 31px;
-  text-align: center;
-  color: #232323;
-  margin-bottom: 24px;
-  margin-top: 64px;
-}
-.common-questions{
-  margin: auto;
-  max-width: 1380px;
-  width: 100%;
+  .title-s {
+    font-style: normal;
+    font-weight: 900;
+    font-size: 28px;
+    line-height: 31px;
+    text-align: center;
+    color: #232323;
+    margin-bottom: 24px;
+    margin-top: 64px;
+  }
   .question-body{
-    padding: 8px;
+    background: #fafafa;
+    border-radius: 24px;
     border: 1px solid #DBDBDB;
     box-shadow: 0 4px 16px 2px rgba(40, 40, 40, 0.08);
-    border-radius: 24px;
-    background: #fafafa;
-    .question-expansion{
-      background-color: #FAFAFA;
-      &:deep(.q-icon){
+    .header-background {
+
+    }
+
+    .question-expansion {
+      &:deep(.q-icon) {
         font-family: 'Material Icons';
       }
       &:deep(.q-item-type){
         justify-content: space-between;
       }
-      .header-style{
+
+      .header-style {
+        padding: 8px 0;
         font-style: normal;
         font-weight: 700;
         font-size: 18px;
@@ -115,18 +120,6 @@ export default {
         align-items: center;
         color: #232323;
       }
-      .dot{
-        background: #232323;
-        width: 5px;
-        height: 5px;
-        border-radius: 5px;
-        display: none;
-      }
-      &:deep(.q-expansion-item--expanded){
-       .dot{
-          display: block;
-        }
-      }
       .expansion-card{
         font-weight: 300;
         font-size: 16px;
@@ -135,14 +128,84 @@ export default {
         padding: 20px;
         background-color: #fafafa;
       }
+      .dot{
+        background: #232323;
+        width: 5px;
+        height: 5px;
+        border-radius: 5px;
+        display: none;
+      }
+      &:deep(.q-expansion-item--expanded){
+          .dot{
+            display: block;
+          }
+      }
     }
   }
+
 }
+
 </style>
-<style lang="scss">
-.question-body{
-  .question-expansion{
-    background-color: #FAFAFA;
-  }
-}
-</style>
+<!--<style lang="scss" scoped>-->
+<!--.title-s{-->
+<!--  font-style: normal;-->
+<!--  font-weight: 900;-->
+<!--  font-size: 28px;-->
+<!--  line-height: 31px;-->
+<!--  text-align: center;-->
+<!--  color: #232323;-->
+<!--  margin-bottom: 24px;-->
+<!--  margin-top: 64px;-->
+<!--}-->
+<!--.common-questions{-->
+<!--  margin: auto;-->
+<!--  max-width: 1380px;-->
+<!--  width: 100%;-->
+<!--  .question-body{-->
+<!--    padding: 8px;-->
+<!--    border: 1px solid #DBDBDB;-->
+<!--    box-shadow: 0 4px 16px 2px rgba(40, 40, 40, 0.08);-->
+<!--    border-radius: 24px;-->
+<!--    background: #fafafa;-->
+<!--    .question-expansion{-->
+<!--      background-color: #FAFAFA;-->
+<!--      &:deep(.q-icon){-->
+<!--        font-family: 'Material Icons';-->
+<!--      }-->
+<!--      &:deep(.q-item-type){-->
+<!--        justify-content: space-between;-->
+<!--      }-->
+<!--      .header-style{-->
+<!--        font-style: normal;-->
+<!--        font-weight: 700;-->
+<!--        font-size: 18px;-->
+<!--        line-height: 24px;-->
+<!--        justify-content: center;-->
+<!--        display: flex;-->
+<!--        align-items: center;-->
+<!--        color: #232323;-->
+<!--      }-->
+<!--      .dot{-->
+<!--        background: #232323;-->
+<!--        width: 5px;-->
+<!--        height: 5px;-->
+<!--        border-radius: 5px;-->
+<!--        display: none;-->
+<!--      }-->
+<!--      &:deep(.q-expansion-item&#45;&#45;expanded){-->
+<!--       .dot{-->
+<!--          display: block;-->
+<!--        }-->
+<!--      }-->
+<!--      .expansion-card{-->
+<!--        font-weight: 300;-->
+<!--        font-size: 16px;-->
+<!--        line-height: 20px;-->
+<!--        color: #232323;-->
+<!--        padding: 20px;-->
+<!--        background-color: #fafafa;-->
+<!--      }-->
+<!--    }-->
+<!--  }-->
+<!--}-->
+<!--</style>-->
