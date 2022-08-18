@@ -89,8 +89,8 @@ export default {
     }
   },
   created () {
-    const localData = this.$store.getters['AppLayout/appLayout']
-    Object.assign(this.properties, localData)
+    // const localData = this.$store.getters['AppLayout/appLayout']
+    // Object.assign(this.properties, localData)
   },
   methods: {
     confirmDialogAction (data) {

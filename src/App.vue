@@ -1,11 +1,7 @@
 <template>
-  <div id="q-app">
-    <router-view />
-  </div>
+  <router-view />
 </template>
 <script>
-
-// import 'material-icons/material-icons.css'
 import { defineComponent } from 'vue'
 
 export default defineComponent({
@@ -41,8 +37,3 @@ export default defineComponent({
 })
 </script>
 
-<style>
-  :root {
-
-  }
-</style>
