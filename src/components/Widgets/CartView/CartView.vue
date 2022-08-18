@@ -33,7 +33,7 @@
           </q-btn>
           <div class="products-container">
             <q-btn unelevated>
-              <div class="link">رفتن به محصول</div>
+              <div class="link">صفحه محصول</div>
             </q-btn>
             <q-btn unelevated class="details-btn">
               <div class="details">
@@ -278,5 +278,65 @@ export default {
 @media screen and (max-width: 600px) {
 }
 @media screen and (max-width: 350px) {
+  .cart-card {
+    padding-bottom: 40px !important;
+    .content {
+      padding-top: 49px !important;
+      .title {
+        position: absolute;
+        top: 12px;
+        left: 12px;
+      }
+      .desc-container {
+        .item {
+          margin-top: 0px !important;
+          margin-bottom: 6px !important;
+        }
+      }
+      .price-container {
+        .previous {
+          margin-right: 13px !important;
+        }
+      }
+    }
+    .actions {
+      .products-container {
+        margin-bottom: 5px !important;
+        margin-right: 0px !important;
+        .details-btn {
+          margin-left: 20px !important;
+        }
+      }
+      .details {
+        margin-left: 0px !important;
+        margin-right: 13px !important;
+      }
+      .link {
+        font-size: 12px !important;
+      }
+      div {
+        font-style: normal;
+        font-weight: 400;
+        font-size: 12px;
+        line-height: 19px;
+      }
+      .trash {
+        margin-left: 13px !important;
+        margin-top: 8px !important;
+      }
+    }
+    .image {
+      width: 72px !important;
+      height: 72px !important;
+      margin-left: 12px !important;
+      margin-right: 8px !important;
+      background-repeat: round !important;
+      border-radius: 0;
+      margin-top: 45px !important;
+    }
+  }
+  :deep(.q-btn .q-btn__content) {
+    margin: 0px !important;
+  }
 }
 </style>
