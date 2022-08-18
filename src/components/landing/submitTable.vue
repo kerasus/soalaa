@@ -38,42 +38,34 @@
         </div>
       </div>
       <div class="table-box">
+<!--        <table-component :table-data="data"/>-->
         <table class="table">
           <tr>
             <th colspan="4" class="top-of-table">
               <div class="drop-down-btn">
-                <q-select v-model="model" borderless
+                <q-select
+                          v-model="selectedGrade"
+                          borderless
+                          option-label="title"
                           dropdown-icon="img:https://nodes.alaatv.com/upload/landing/3a/down.png" hide-bottom-space dense
-                          :options="options" class="select-1 dropdown-btn q-mr-md">
+                          :options="gradeOptions"
+                  class="select-1 dropdown-btn q-mr-md">
                   <template v-slot:selected>
                     <span class="custom-label-prefix"> مقطع تحصیلی: </span>
-                    <q-chip
-                      v-if="model"
-                      dense
-                      square
-                      color="white"
-                      text-color="primary"
-                      class="q-my-none q-ml-xs q-mr-none"
-                    >
-                      {{ model.label }}
-                    </q-chip>
+                      {{ selectedGrade.title }}
                   </template>
                 </q-select>
-                <q-select v-model="model" borderless
+                <q-select v-model="selectedMajor"
+                          borderless
                           dropdown-icon="img:https://nodes.alaatv.com/upload/landing/3a/down.png" hide-bottom-space dense
-                          :options="options" class="select-2 dropdown-btn">
+                          :options="majorOptions"
+                          option-label="title"
+                          class="select-2 dropdown-btn"
+                >
                   <template v-slot:selected>
                     <span class="custom-label-prefix"> رشته تحصیلی: </span>
-                    <q-chip
-                      v-if="model"
-                      dense
-                      square
-                      color="white"
-                      text-color="primary"
-                      class="q-my-none q-ml-xs q-mr-none"
-                    >
-                      {{ model.label }}
-                    </q-chip>
+                      {{ selectedMajor.title }}
+
                   </template>
                 </q-select>
               </div>
@@ -85,7 +77,7 @@
             <th class='table-title'>عنوان</th>
             <th class='table-title'>ثبت‌نام کامل</th>
           </tr>
-          <tr v-for="item in data" :key="item">
+          <tr v-for="item in dataTable" :key="item">
             <td class="number custom-border">{{ item.number }}</td>
             <td class="date custom-border">{{ item.date }}</td>
             <td class="title custom-border">{{ item.title }}</td>
@@ -119,7 +111,7 @@
                       </svg>
                     </div>
                     <span>
-دانلود برنامه آزمون‌
+                        دانلود برنامه آزمون‌
                   </span>
                   </q-btn>
                 </div>
@@ -161,16 +153,17 @@
           </tr>
         </table>
       </div>
+
     </div>
   </div>
 </template>
 
 <script>
-import tableComponent from 'src/components/landing/table'
+// import tableComponent from 'src/components/landing/table'
 export default {
   name: 'submitTable',
   components: {
-    tableComponent
+    // tableComponent
   },
 
   data: () => ({
@@ -201,6 +194,10 @@ export default {
 
       }
     ],
+    selectedGrade: '',
+    gradeOptions: [{ id: 1, title: 'grade1' }, { id: 2, title: 'grade2' }, { id: 3, title: 'grade3' }],
+    majorOptions: [{ id: 1, title: 'major1' }, { id: 2, title: 'major2' }, { id: 3, title: 'major3' }],
+    selectedMajor: '',
     model: '',
     options: [{
       title: ''
@@ -211,12 +208,20 @@ export default {
     for (let i = 0; i < 10; i++) {
       this.data.push(
         {
+          selectedGradeId: 2,
+          activeTabId: 2,
+          selectedMajorId: 2,
           number: i,
           date: i + '/2',
           title: 'عنوان آزمون شماره yek',
           submitStatus: true
         }
       )
+    }
+  },
+  computed: {
+    dataTable() {
+      return this.data.filter(item => (item.selectedGradeId === this.selectedGrade.id && item.activeTabId === this.activeTab.id && item.selectedMajorId === this.selectedMajor.id))
     }
   },
   methods: {

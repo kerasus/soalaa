@@ -533,5 +533,76 @@ export default {
     }
   }
 }
-@media screen and (max-width: 599px){}
+@media screen and (max-width: 599px){
+  .table {
+    width: 100%;
+
+    tr {
+      .number {
+        width: 60px;
+      }
+
+      .date {
+        width: 60px;
+      }
+
+      .title {
+        width: 164px;
+      }
+
+      .submitStatus {
+        width: 181px;
+      }
+
+      .price-submit-box {
+
+        .price-submit-in-footer {
+
+          .price-box {
+            width: 100%;
+            height: 64px;
+          }
+          .submit-box {
+            width: 100%;
+            padding-top:3px ;
+            height: 123px;
+            .exam-price {
+              font-size: 11px;
+              margin-bottom: 6px;
+            }
+
+            .exam-price-box {
+              margin-bottom: 3px;
+
+              .discount-tag {
+                padding: 0 8px;
+                font-size: 10px;
+                line-height: 16px;
+              }
+
+              .main-price {
+                font-size: 12px;
+              }
+            }
+
+            .final-price-box {
+              font-size: 18px;
+              line-height: 16px;
+              margin-bottom: 7px;
+            }
+
+            .sub-btn {
+              width: 145px;
+              height: 32px;
+
+              .sub-btn-text {
+                font-size: 13px;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
 </style>
