@@ -90,7 +90,6 @@ export default {
   data () {
     return {
       keepAliveComponents: KeepAliveComponents,
-      templateHeaderType: '',
       properties: {
         layoutView: 'lHh Lpr lFf',
         layoutHeader: true,
@@ -145,6 +144,8 @@ export default {
     this.$store.commit('AppLayout/updateLayoutLeftDrawerVisible', false)
   },
   created () {
+    this.getTemplateHeaderType()
+    this.setLayoutCustomClass()
     this.updateLayout()
     this.getTemplateHeaderType()
     this.setLayoutCustomClass()
@@ -194,6 +195,21 @@ export default {
     width: 100%;
   }
 
+}
+
+:deep(.user-main-layout-header) {
+  background-color: #f1f1f1;
+  display: flex;
+  flex-direction: row;
+  padding-bottom: 24px;
+
+  .header-inside {
+    width: 100%;
+    background: #fff;
+    display: flex;
+    justify-content: center;
+    color: #65677F;
+  }
 }
 
 :deep(.user-main-layout-header) {
