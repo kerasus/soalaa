@@ -21,3 +21,16 @@
   }
 }
 
+.form-builder-input-col  .q-field--filled {
+  @include global-input;
+
+  .q-field__inner {
+    background-color: var(--3a-Neutral2);
+
+    .q-field__control {
+      background-color: var(--3a-Neutral2);
+
+    }
+  }
+}
+
