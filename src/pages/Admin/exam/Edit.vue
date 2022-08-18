@@ -135,7 +135,7 @@ export default {
       showRouteName: 'Admin.Exam.Show',
       options: null,
       inputs: [
-        { type: 'input', name: 'title', responseKey: 'data.title', label: 'عنوان', col: 'col-md-6' },
+        { type: 'input', name: 'title', responseKey: 'data.title', label: 'عنوان', col: 'col-md-6', placeholder: ' ', filled: true },
         {
           type: 'Select',
           name: 'type_id',
@@ -146,8 +146,8 @@ export default {
           optionValue: 'id',
           optionLabel: 'value'
         },
-        { type: 'dateTime', name: 'start_at', responseKey: 'data.start_at', label: ' زمان شروع', col: 'col-md-4' },
-        { type: 'dateTime', name: 'finish_at', responseKey: 'data.finish_at', label: ' زمان پایان', col: 'col-md-4' },
+        { type: 'dateTime', name: 'start_at', responseKey: 'data.start_at', label: '', col: 'col-md-4', placeholder: 'زمان شروع' },
+        { type: 'dateTime', name: 'finish_at', responseKey: 'data.finish_at', label: '', col: 'col-md-4', placeholder: 'زمان پایان' },
         { type: 'input', name: 'delay_time', responseKey: 'data.delay_time', label: 'زمان تاخیر(دقیقه)', col: 'col-md-4' },
         { type: 'Checkbox', name: 'enable', responseKey: 'data.enable', label: 'فعال', col: 'col-md-4' },
         { type: 'Checkbox', name: 'is_free', responseKey: 'data.is_free', label: 'رایگان', col: 'col-md-4' },

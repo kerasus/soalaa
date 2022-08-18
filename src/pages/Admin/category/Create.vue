@@ -27,7 +27,7 @@ export default {
       showRouteName: 'Admin.Category.Show',
       indexRouteName: 'Admin.Category.Index',
       inputs: [
-        { type: 'input', name: 'title', responseKey: 'title', label: 'عنوان', col: 'col-md-12' }
+        { type: 'input', name: 'title', responseKey: 'title', label: 'عنوان', col: 'col-md-3', placeholder: ' ', filled: true }
       ]
     }
   },
