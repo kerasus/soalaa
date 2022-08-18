@@ -1,5 +1,4 @@
 <template>
-  <div class="nav-bar-position">
     <div class="nav-bar flex items-center justify-between landing-width">
       <div class="logo">
         <svg width="19"
@@ -36,7 +35,6 @@
         @click="showLoginDialog"
       />
     </div>
-  </div>
 
 </template>
 
@@ -52,10 +50,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.nav-bar-position{
-//position: fixed;
-//width: 100%;
-}
 .nav-bar {
   padding: 20px 0;
   .nav-item-box {
@@ -139,7 +133,10 @@ export default {
 }
 @media  screen and (max-width: 600px) {
   .nav-bar {
-    padding: 16px 15px;
+    .logo {
+      margin-top: 16px
+    }
+
   }
 }
 
