@@ -10,14 +10,12 @@
         همه رتبه برتر ها، تو هر آزمون، ابتدا خودشونو با خودشون میسنجن؛ و میدونن هیچ آزمونی به اندازه کنکور مخاطب نداره
         پس درگیر جامعه آماری نمیشن. سه‌آ کامل آنالیزت میکنه و بعد با جامعه آماری کنکور سال پیش، مقایسه‌ت میکنه.
       </div>
-      <q-btn unelevated
-             class="submit-btn"
-             label="ثبت نام آزمون" />
+      <q-btn unelevated class="submit-btn" label="ثبت نام آزمون"/>
     </div>
     <div class="video-box flex items-center justify-center">
       <video-player
         :sources="source"
-        poster="https://nodes.alaatv.com/media/thumbnails/1612/1612012nbhu.jpg" />
+        poster="https://nodes.alaatv.com/media/thumbnails/1612/1612012nbhu.jpg"/>
       <!--      <div class="video-btn flex items-center justify-between q-px-md">-->
       <!--        مشاهده ویدئو-->
       <!--        <div class="video-icon flex items-center">-->
@@ -37,13 +35,21 @@ import { PlayerSourceList } from 'src/models/PlayerSource'
 import VideoPlayer from 'components/VideoPlayer'
 
 export default {
-  name: 'LandingHeader',
+  name: 'header',
   components: {
     VideoPlayer
   },
   data: () => ({
-    source: new PlayerSourceList([{ src: 'https://nodes.alaatv.com/upload/vast/videos/HD_720p/1647426360_1245.mp4' }])
-  })
+    source: new PlayerSourceList([{ src: 'https://nodes.alaatv.com/upload/vast/videos/HD_720p/1647426360_1245.mp4' }]),
+    data: [
+      { link: 'https://nodes.alaatv.com/media/1612/HD_720p/1612005jkiq.mp4', ext: 'mp4', size: null, caption: 'کیفیت عالی', res: '720p' },
+      { link: 'https://nodes.alaatv.com/media/1612/hq/1612005jkiq.mp4', ext: 'mp4', size: null, caption: 'کیفیت بالا', res: '480p' },
+      { link: 'https://nodes.alaatv.com/media/1612/240p/1612005jkiq.mp4', ext: 'mp4', size: null, caption: 'کیفیت متوسط', res: '240p' }
+    ]
+  }),
+  mounted () {
+    console.log('this.source :', this.source)
+  }
 }
 </script>
 

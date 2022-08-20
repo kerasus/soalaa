@@ -65,7 +65,6 @@
                   <template v-slot:selected>
                     <span class="custom-label-prefix"> رشته تحصیلی: </span>
                       {{ selectedMajor.title }}
-
                   </template>
                 </q-select>
               </div>
@@ -197,11 +196,7 @@ export default {
     selectedGrade: '',
     gradeOptions: [{ id: 1, title: 'grade1' }, { id: 2, title: 'grade2' }, { id: 3, title: 'grade3' }],
     majorOptions: [{ id: 1, title: 'major1' }, { id: 2, title: 'major2' }, { id: 3, title: 'major3' }],
-    selectedMajor: '',
-    model: '',
-    options: [{
-      title: ''
-    }]
+    selectedMajor: ''
   }),
   created () {
     this.initPageData()
