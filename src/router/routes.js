@@ -440,6 +440,12 @@ const routes = [
         meta: {
           middlewares: [auth]
         }
+      },
+      {
+        path: '/cart',
+        name: 'cart',
+        component: () => import('pages/cart.vue'),
+        meta: {}
       }
     ]
   },
@@ -461,12 +467,6 @@ const routes = [
     meta: {
       middlewares: [auth]
     }
-  },
-  {
-    path: '/cart',
-    name: 'cart',
-    component: () => import('pages/cart.vue'),
-    meta: {}
   },
   {
     path: '/onlineQuiz/mbti_bartle/:quizId/:questNumber',
