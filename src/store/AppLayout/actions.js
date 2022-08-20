@@ -5,3 +5,7 @@ export function updateAppBarAndDrawer (context, newInfo) {
 export function showConfirmDialog (context, newInfo) {
   this.commit('AppLayout/showConfirmDialog', newInfo)
 }
+
+export function updateTemplateHeaderType (context, newInfo) {
+  this.commit('AppLayout/changeTemplateHeaderType', newInfo)
+}

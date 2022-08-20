@@ -21,6 +21,10 @@ export function ColumnsWidth (state) {
   return state.ColumnsWidth
 }
 
+export function templateHeaderType (state) {
+  return state.templateHeaderType
+}
+
 export function breadcrumbs (state) {
   return state.breadcrumbs
 }
