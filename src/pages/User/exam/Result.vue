@@ -1,16 +1,16 @@
 <template>
   <div class="exam-results">
-<!--    <v-row class="d-flex justify-center">-->
+    <!--    <v-row class="d-flex justify-center">-->
     <div class="row wrap justify-center">
       <div class="col results-info-col">
-        <info/>
+        <info />
       </div>
     </div>
     <div class="row wrap justify-center">
       <div class="col default-col-padding">
         <q-card
-            flat
-            class="infoCard content-center"
+          flat
+          class="infoCard content-center"
         >
           <div
             class="row main-tabs"
@@ -23,22 +23,22 @@
               سه آ
             </div>
             <div
-                v-if="report"
-                class="col col-6 col-xl-1 col-sm-3 default-result-padding"
+              v-if="report"
+              class="col col-6 col-xl-1 col-sm-3 default-result-padding"
             >
               شهر:
               {{ report.location.city }}
             </div>
             <div
-                v-if="report"
-                class="col col-6 col-xl-1 col-sm-3 default-result-padding"
+              v-if="report"
+              class="col col-6 col-xl-1 col-sm-3 default-result-padding"
             >
               استان:
               {{ report.location.province }}
             </div>
             <div
-                class="col col-12 col-xl-7 default-result-tabs-title"
-                :style="{ padding: '0 12px' }"
+              class="col col-12 col-xl-7 default-result-tabs-title"
+              :style="{ padding: '0 12px' }"
             >
               <q-tabs
                 v-model="tab"
@@ -48,12 +48,18 @@
                 align="justify"
                 class="result-tabs"
               >
-                <q-tab name="result" label="کارنامه"></q-tab>
-                <q-tab name="rank" label="تخمین رتبه"></q-tab>
-                <q-tab name="lessons" label="ریزدرس ها"></q-tab>
-                <q-tab name="KeyAnswers" label="پاسخبرگ کلیدی"></q-tab>
-                <q-tab name="descriptiveAnswers" label="پاسخ نامه تشریحی"></q-tab>
-                <q-tab name="videos" label="تحلیل ویدیویی"></q-tab>
+                <q-tab name="result"
+                       label="کارنامه"></q-tab>
+                <q-tab name="rank"
+                       label="تخمین رتبه"></q-tab>
+                <q-tab name="lessons"
+                       label="ریزدرس ها"></q-tab>
+                <q-tab name="KeyAnswers"
+                       label="پاسخبرگ کلیدی"></q-tab>
+                <q-tab name="descriptiveAnswers"
+                       label="پاسخ نامه تشریحی"></q-tab>
+                <q-tab name="videos"
+                       label="تحلیل ویدیویی"></q-tab>
               </q-tabs>
             </div>
           </div>
@@ -62,20 +68,22 @@
     </div>
     <div class="row wrap justify-center">
       <div class="col">
-        <q-tab-panels v-model="tab" animated swipeable>
+        <q-tab-panels v-model="tab"
+                      animated
+                      swipeable>
           <q-tab-panel name="result">
-            <PersonalResult :report="report"/>
+            <PersonalResult :report="report" />
           </q-tab-panel>
           <q-tab-panel name="rank">
-            <takhmin-rotbe :report="report"/>
+            <takhmin-rotbe :report="report" />
           </q-tab-panel>
           <q-tab-panel name="lessons">
-            <StatisticResult :report="report"/>
+            <StatisticResult :report="report" />
           </q-tab-panel>
           <q-tab-panel name="KeyAnswers">
             <BubbleSheet
-                :info="{ type: 'pasokh-nameh' }"
-                delay-time="0"
+              :info="{ type: 'pasokh-nameh' }"
+              delay-time="0"
             />
           </q-tab-panel>
           <q-tab-panel name="descriptiveAnswers">
@@ -85,16 +93,16 @@
               </p>
               <div v-if="report">
                 <div
-                    v-for="(item, index) in report.exams_booklet"
-                    :key="index"
-                    class="row download-row"
+                  v-for="(item, index) in report.exams_booklet"
+                  :key="index"
+                  class="row download-row"
                 >
                   <div
                     class="col col-12 col-sm-6"
                   >
                     <div
-                        v-if="item.descriptive_answers_url"
-                        class="download-box"
+                      v-if="item.descriptive_answers_url"
+                      class="download-box"
                     >
                       <p class="download-title">
                         دانلود پاسخنامه تشریحی {{
@@ -115,8 +123,8 @@
                     class="col col-12 col-sm-6"
                   >
                     <div
-                        v-if="item.questions_url"
-                        class="download-box"
+                      v-if="item.questions_url"
+                      class="download-box"
                     >
                       <p class="download-title">
                         دانلود سوالات {{ item.title }}
@@ -135,7 +143,8 @@
               </div>
             </q-card>
           </q-tab-panel>
-          <q-tab-panel name="videos" class="video-tab">
+          <q-tab-panel name="videos"
+                       class="video-tab">
             <tabs-of-lessons :report="report" />
           </q-tab-panel>
         </q-tab-panels>
@@ -219,7 +228,7 @@ export default {
         .catch((error) => {
           that.$store.dispatch('loading/overlayLoading', { loading: false, message: '' })
           that.goToExamList()
-          console.log(error)
+          console.error(error)
           this.$q.notify({
             type: 'negative',
             message: 'مشکلی در دریافت اطلاعات کارنامه رخ داده است.',

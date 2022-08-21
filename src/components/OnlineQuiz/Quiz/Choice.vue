@@ -1,9 +1,11 @@
 <template>
   <div class="answer-box"
-    @click="answerClicked"
+       @click="answerClicked"
   >
-    <div class="answer-sheet" :class="{ active: isSelected , 'bg-deep-purple-1': isSelected, 'ltr' : !isRtl }">
-      <div class="answer-text renderedPanel" :class="{'ltr' : !isRtl}"
+    <div class="answer-sheet"
+         :class="{ active: isSelected , 'bg-deep-purple-1': isSelected, 'ltr' : !isRtl }">
+      <div class="answer-text renderedPanel"
+           :class="{'ltr' : !isRtl}"
       >
         <vue-katex
           :input="choice.title"
@@ -16,9 +18,9 @@
           @click="answerClicked"
           size="60px"
           v-model="isSelected"
-         />
+        />
       </div>
-  </div>
+    </div>
   </div>
 </template>
 

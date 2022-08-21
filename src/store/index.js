@@ -36,9 +36,9 @@ export default store(function (/* { ssrContext } */) {
           'AppLayout'
         ],
         // keep state.count in localStorage
-        namespace: 'vuex-localstorage',
-        driver: vuejsStorage.drivers.sessionStorage
-        // if you want to use sessionStorage instead of localStorage
+        namespace: 'vuex-localstorage'
+        // if you want to use sessionStorage instead of localStorage:
+        // driver: vuejsStorage.drivers.sessionStorage
       })
       // createPersistedState({
       //   storage: window.localStorage,

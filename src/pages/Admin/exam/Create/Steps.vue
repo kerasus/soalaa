@@ -6,26 +6,34 @@
         :class="{ 'current-step' : this.currentStep === 'createPage' }"
         @click="changeCurrentStep('createPage')"
       >
-        <q-icon name="isax:edit" class="icon" />
-        <div class="exam-info-title title " :class="{ 'hidden-mobile' : this.currentStep !== 'createPage' }">اطلاعات آزمون</div>
-        <div class="line" :class="{ 'border-mobile' : this.currentStep !== 'createPage' }"/>
+        <q-icon name="isax:edit"
+                class="icon" />
+        <div class="exam-info-title title "
+             :class="{ 'hidden-mobile' : this.currentStep !== 'createPage' }">اطلاعات آزمون</div>
+        <div class="line"
+             :class="{ 'border-mobile' : this.currentStep !== 'createPage' }" />
       </div>
       <div
         class="choose-questions col-5 flex items-center step"
         :class="{ 'current-step' : this.currentStep === 'chooseQuestion' }"
         @click="changeCurrentStep('chooseQuestion')"
       >
-        <q-icon name="isax:task-square" class="icon"/>
-        <div class="choose-questions-title title" :class="{ 'hidden-mobile' : this.currentStep !== 'chooseQuestion' }">انتخاب سوال</div>
-        <div class="line" :class="{ 'border-mobile' : this.currentStep !== 'chooseQuestion' }"/>
+        <q-icon name="isax:task-square"
+                class="icon" />
+        <div class="choose-questions-title title"
+             :class="{ 'hidden-mobile' : this.currentStep !== 'chooseQuestion' }">انتخاب سوال</div>
+        <div class="line"
+             :class="{ 'border-mobile' : this.currentStep !== 'chooseQuestion' }" />
       </div>
       <div
         class="final-approval col-2 flex items-center step"
         :class="{ 'current-step' : this.currentStep === 'finalApproval' }"
         @click="changeCurrentStep('finalApproval')"
       >
-        <q-icon name="isax:tick-square" class="icon"/>
-        <div class="final-approval-title" :class="{ 'hidden-mobile' : this.currentStep !== 'finalApproval' }">تایید نهایی</div>
+        <q-icon name="isax:tick-square"
+                class="icon" />
+        <div class="final-approval-title"
+             :class="{ 'hidden-mobile' : this.currentStep !== 'finalApproval' }">تایید نهایی</div>
       </div>
     </div>
   </div>

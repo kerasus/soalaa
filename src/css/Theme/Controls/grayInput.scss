@@ -1,5 +1,5 @@
 .q-field--filled {
-  &.backGround-gray-input {
+  //&.backGround-gray-input {
     @include global-input;
 
     .q-field__inner {
@@ -10,7 +10,7 @@
 
       }
     }
-  }
+  //}
 }
 
 //      <q-input filled class="backGround-gray-input"/>

@@ -13,18 +13,20 @@
         v-for="item in filteredQuestions"
         :key="item.id"
       >
-        <question-card :questionData="item"/>
+        <question-card :questionData="item" />
       </div>
       <template
         v-if="nextPage"
         v-slot:loading
       >
         <div class="row justify-center q-my-md">
-          <q-spinner-dots color="primary" size="40px"/>
+          <q-spinner-dots color="primary"
+                          size="40px" />
         </div>
       </template>
     </q-infinite-scroll>
-    <q-page-sticky expand position="top">
+    <q-page-sticky expand
+                   position="top">
       <q-toolbar class="text-white shadow-3 question-bank-toolbar">
         <div class="row toolbar-selections">
           <div class="col">
@@ -273,7 +275,8 @@
         </div>
         <div class="row toolbar-card-parent">
           <q-card class="toolbar-card">
-            <div class="row toolbar-card-child" no-gutters>
+            <div class="row toolbar-card-child"
+                 no-gutters>
               <div class="col">
                 <q-chip
                   dark

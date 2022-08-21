@@ -1,7 +1,7 @@
 <template>
   <div class="MBTIQ flex justify-center">
     <div>
-    این قسمت بزودی اضافه خواهد شد...
+      این قسمت بزودی اضافه خواهد شد...
     </div>
   </div>
 </template>

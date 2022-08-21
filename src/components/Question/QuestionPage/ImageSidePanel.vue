@@ -58,7 +58,6 @@ export default {
       this.$emit('closePanelBtnClicked')
     },
     ChangeImgPanelMode () {
-      console.log('ChangeImgPanelMode')
       this.$emit('imgPanelModeChanged')
     }
   }

@@ -15,40 +15,41 @@
       <div class="col-4"
            v-if="question.id === null"
       >
-          <div class="row">
-            <div class="col">
-              <div class="row justify-end">
-                <div class="col">
-                  <q-btn
-                    rounded
-                    unelevated
-                    v-ripple
-                    color="green"
-                    class="save-btn-default"
-                    @click="btn_clicked('create')"
-                  >
-                    <span class="save-btn-text-default" >
-                      ذخیره
-                    </span>
-                  </q-btn>
-                </div>
-                <div class="col">
-                  <q-btn
-                    rounded
-                    unelevated
-                    v-ripple
-                    color="white"
-                    text-color="grey-10"
-                    class="draft-btn-default"
-                    @click="btn_clicked('create')"
-                  >
-                  <q-icon class="draft-icon" name="mdi-square-edit-outline" />
-                      پیش نویس
-                  </q-btn>
-                </div>
+        <div class="row">
+          <div class="col">
+            <div class="row justify-end">
+              <div class="col">
+                <q-btn
+                  rounded
+                  unelevated
+                  v-ripple
+                  color="green"
+                  class="save-btn-default"
+                  @click="btn_clicked('create')"
+                >
+                  <span class="save-btn-text-default">
+                    ذخیره
+                  </span>
+                </q-btn>
+              </div>
+              <div class="col">
+                <q-btn
+                  rounded
+                  unelevated
+                  v-ripple
+                  color="white"
+                  text-color="grey-10"
+                  class="draft-btn-default"
+                  @click="btn_clicked('create')"
+                >
+                  <q-icon class="draft-icon"
+                          name="mdi-square-edit-outline" />
+                  پیش نویس
+                </q-btn>
               </div>
             </div>
           </div>
+        </div>
       </div>
       <!---------------------------------edit page-------------------------------->
       <div class="col"
@@ -76,9 +77,9 @@
                   @click="btn_clicked('save')"
 
                 >
-                <span>
-                  ذخیره
-                </span>
+                  <span>
+                    ذخیره
+                  </span>
                 </q-btn>
               </div>
               <div class="col">
@@ -112,7 +113,8 @@
               class="edit-btn-default"
               @click="btn_clicked('edit')"
             >
-              <q-icon class="edit-icon" name="mdi-square-edit-outline" />
+              <q-icon class="edit-icon"
+                      name="mdi-square-edit-outline" />
               ویرایش
             </q-btn>
           </div>

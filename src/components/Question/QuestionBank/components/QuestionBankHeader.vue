@@ -1,11 +1,12 @@
 <template>
-  <q-card class="filter-card custom-card" flat>
+  <q-card class="filter-card custom-card"
+          flat>
     <q-card-section class="search-section">
       <q-input
         v-model="searchInput"
         filled
         class="backGround-gray-input search-input"
-        label="جستجو در سوال ها..."
+        placeholder="جستجو در سوال ها..."
       >
         <template v-slot:append>
           <q-btn
@@ -26,12 +27,12 @@
         class="backGround-gray-input filter-input"
       >
       </q-select>
-<!--      <q-btn-->
-<!--        @click="this.FilterOptionDialog = !this.FilterOptionDialog"-->
-<!--        class="filter-btn"-->
-<!--        icon="isax:setting-4"-->
-<!--        flat-->
-<!--      />-->
+      <!--      <q-btn-->
+      <!--        @click="this.FilterOptionDialog = !this.FilterOptionDialog"-->
+      <!--        class="filter-btn"-->
+      <!--        icon="isax:setting-4"-->
+      <!--        flat-->
+      <!--      />-->
     </q-card-section>
   </q-card>
   <q-dialog
