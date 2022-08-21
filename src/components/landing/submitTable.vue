@@ -1,5 +1,5 @@
 <template>
-  <div class="table-section">
+  <div class="table-section" >
     <div class="table-section-title">
       ثبت‌نام آزمون
     </div>
@@ -154,6 +154,7 @@
       </div>
 
     </div>
+    <q-resize-observer @resize="onResize" />
   </div>
 </template>
 
@@ -220,6 +221,9 @@ export default {
     }
   },
   methods: {
+    onResize(data) {
+      console.log('data :', data)
+    },
     initPageData () {
       this.setFirstExamActive()
     },
