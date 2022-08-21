@@ -408,6 +408,14 @@ const routes = [
         meta: {
           middlewares: [auth]
         }
+      },
+      {
+        path: '/myOrders',
+        name: 'orders',
+        component: () => import('pages/User/Orders/MyOrders')
+        // meta: {
+        //   middlewares: [auth]
+        // }
       }
     ]
   },
