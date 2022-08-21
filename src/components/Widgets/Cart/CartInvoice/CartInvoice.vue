@@ -69,7 +69,7 @@
 
               <q-radio
                 v-model="selectedBank"
-                val="1"
+                val="2"
                 dir="ltr"
                 label="بانک سامان"
                 class="select-bank-radio-button"
@@ -580,6 +580,10 @@ export default {
 
                   &:deep(.q-radio__bg) {
                     color: #E7ECF4;
+                  }
+
+                  &:deep(.q-radio__inner--truthy .q-radio__check) {
+                    color: #FFB74D;
                   }
 
                   &:deep(.q-radio__label) {
