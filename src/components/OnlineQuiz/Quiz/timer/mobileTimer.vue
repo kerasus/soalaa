@@ -71,6 +71,7 @@
             {{ passedTime }}
           </p>
           <p
+            v-if="remainingTime && currentCat"
             class="remainingTimeText"
           >
             دقیقه تا پایان مهلت پاسخگویی
@@ -312,7 +313,7 @@ export default {
     font-size: 2vw;
   }
 }
-@media only screen and (max-width: 601px) {
+@media only screen and (max-width: 600px) {
   .timeCArdMob {
     margin-right: 6%;
     width: 60%;
