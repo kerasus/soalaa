@@ -33,6 +33,7 @@
         unelevated
         class="submit-btn-style"
         label="ثبت نام آزمون"
+        @click="showLoginDialog"
       />
     </div>
   </div>
@@ -41,7 +42,12 @@
 
 <script>
 export default {
-  name: 'NavBar'
+  name: 'NavBar',
+  methods: {
+    showLoginDialog () {
+      this.$store.dispatch('AppLayout/showLoginDialog')
+    }
+  }
 }
 </script>
 

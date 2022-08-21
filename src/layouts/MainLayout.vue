@@ -55,6 +55,9 @@
             </q-card-actions>
           </q-card>
         </q-dialog>
+        <q-dialog v-model="loginDialog">
+          <auth />
+        </q-dialog>
         <Router :include="keepAliveComponents" />
       </div>
     </template>
@@ -62,17 +65,18 @@
 </template>
 
 <script>
-import SideMenuDashboard from 'components/Menu/SideMenu/SideMenu-dashboard'
-import sideMenuMapOfQuestions from 'components/Menu/SideMenu/SideMenu_MapOfQuestions'
-import { QuasarTemplateBuilder } from 'quasar-template-builder'
-import templateHeader from 'components/Template/templateHeader'
-import onlineQuizTemplateHeader from 'components/Template/onlineQuizTemplateHeader'
 import { ref } from 'vue'
+import { QuasarTemplateBuilder } from 'quasar-template-builder'
 import Router from 'src/router/Router'
 import KeepAliveComponents from 'assets/js/KeepAliveComponents'
+import Auth from 'components/Auth'
+import templateHeader from 'components/Template/templateHeader'
+import SideMenuDashboard from 'components/Menu/SideMenu/SideMenu-dashboard'
+import sideMenuMapOfQuestions from 'components/Menu/SideMenu/SideMenu_MapOfQuestions'
+import onlineQuizTemplateHeader from 'components/Template/onlineQuizTemplateHeader'
 
 export default {
-  components: { Router, SideMenuDashboard, sideMenuMapOfQuestions, QuasarTemplateBuilder, templateHeader, onlineQuizTemplateHeader },
+  components: { Router, SideMenuDashboard, sideMenuMapOfQuestions, QuasarTemplateBuilder, templateHeader, onlineQuizTemplateHeader, Auth },
   data () {
     return {
       keepAliveComponents: KeepAliveComponents,
@@ -100,14 +104,24 @@ export default {
     }
   },
   computed: {
+    loginDialog: {
+      get () {
+        return this.$store.getters['AppLayout/loginDialog']
+      },
+      set (newValue) {
+        if (!newValue) {
+          this.$store.commit('AppLayout/updateLoginDialog', false)
+          return
+        }
+        this.$store.dispatch('AppLayout/showLoginDialog')
+      }
+    },
     confirmDialogData () {
       return this.$store.getters['AppLayout/confirmDialog']
     }
   },
   created () {
     this.updateLayout()
-    // const localData = this.$store.getters['AppLayout/appLayout']
-    // Object.assign(this.properties, localData)
   },
   methods: {
     updateLayout () {

@@ -1,5 +1,9 @@
 <template>
-  <auth />
+  <div class="login-page row items-center justify-center">
+    <div class="col-lg-4 col-md-5 col-sm-6 col-xs-10">
+      <auth />
+    </div>
+  </div>
 </template>
 
 <script>
@@ -11,5 +15,7 @@ export default {
 </script>
 
 <style scoped>
-
+.login-page{
+  height: 100vh;
+}
 </style>
