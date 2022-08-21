@@ -145,6 +145,7 @@ const API_ADDRESS = {
       setQueryParams('majors')
       setQueryParams('reference')
       setQueryParams('tags')
+      setQueryParams('level')
 
       if (typeof page !== 'undefined') {
         page = '&page=' + page
