@@ -1,8 +1,8 @@
 {
-  "name": "3a",
+  "name": "soala",
   "version": "0.0.1",
-  "description": "3A with Quasar framework",
-  "productName": "3A-Quasar",
+  "description": "سوالا",
+  "productName": "سوالا",
   "author": "Ali <aliesmaeeli20@gmail.com>",
   "private": true,
   "scripts": {
@@ -38,7 +38,7 @@
     "quasar-app-extension-firebase-messaging": "^0.1.1",
     "quasar-crud": "^0.2.43",
     "quasar-form-builder": "^0.1.34",
-    "quasar-template-builder": "^1.0.10",
+    "quasar-template-builder": "^1.0.12",
     "socket.io-client": "^4.5.1",
     "video.js": "^7.20.1",
     "videojs-brand": "^0.0.4",
