@@ -11,5 +11,5 @@ export function redirectTo (state) {
 }
 
 export function isUserLogin (state) {
-  return new User(state.user).id
+  return !!new User(state.user).id
 }
