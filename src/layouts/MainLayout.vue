@@ -4,25 +4,30 @@
   <quasar-template-builder v-model:value="properties"
                            @onResize="resize">
     <template #header>
-      <div v-if="templateHeaderType === 'quiz'" class="header-inside row">
-        <online-quiz-template-header/>
+      <div v-if="templateHeaderType === 'quiz'"
+           class="header-inside row">
+        <online-quiz-template-header />
       </div>
-      <div v-else-if="templateHeaderType === 'default'" class="user-main-layout-header">
+      <div v-else-if="templateHeaderType === 'default'"
+           class="user-main-layout-header">
         <div class="header-inside row">
-          <user-template-header/>
+          <user-template-header />
         </div>
       </div>
-      <div v-else-if="templateHeaderType === 'panel'" class="main-layout-header row">
-        <template-header/>
+      <div v-else-if="templateHeaderType === 'panel'"
+           class="main-layout-header row">
+        <template-header />
       </div>
       <q-resize-observer @resize="setHeaderDimension" />
     </template>
     <template #left-drawer>
-      <div class="drawer-inside-of-MapOfQuestions" v-if="templateSideBarType === 'quiz'">
-        <sideMenuMapOfQuestions/>
+      <div class="drawer-inside-of-MapOfQuestions"
+           v-if="templateSideBarType === 'quiz'">
+        <sideMenuMapOfQuestions />
       </div>
-      <div class="drawer-inside" v-else-if="templateSideBarType === 'panel'">
-        <side-menu-dashboard/>
+      <div class="drawer-inside"
+           v-else-if="templateSideBarType === 'panel'">
+        <side-menu-dashboard />
       </div>
     </template>
     <template #content>
@@ -135,19 +140,25 @@ export default {
     },
     getTemplateTypes () {
       return () => {
+        this.$store.dispatch('AppLayout/updateTemplateHeaderType', {
+          headerVisibility: true,
+          headerType: 'default',
+          sideBarVisibility: true,
+          sideBarType: 'panel'
+        })
         this.templateHeaderType = this.$store.getters['AppLayout/templateHeaderType']
         this.templateSideBarType = this.$store.getters['AppLayout/templateSideBarType']
-        console.log(this.templateSideBarType)
-        console.log(this.templateHeaderType)
+        // console.log(this.templateSideBarType)
+        // console.log(this.templateHeaderType)
       }
     }
   },
   watch: {
   },
   mounted () {
-    this.getTemplateTypes()
   },
   created () {
+    this.getTemplateTypes()
     this.updateLayout()
     // const localData = this.$store.getters['AppLayout/appLayout']
     // Object.assign(this.properties, localData)
