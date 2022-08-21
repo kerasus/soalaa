@@ -74,6 +74,7 @@ module.exports = {
     "vue/max-attributes-per-line": 'error',
     "vue/html-indent": 'error',
     "vue/html-closing-bracket-spacing": 'error',
+    "no-console": "error",
 
     'vue/multi-word-component-names': 'off',
 
